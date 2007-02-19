@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 21:13:26 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:50:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,10 @@
 package installer::windows::feature;
 
 use installer::existence;
+use installer::exiter;
 use installer::files;
 use installer::globals;
+use installer::worker;
 use installer::windows::idtglobal;
 use installer::windows::language;
 
@@ -207,32 +209,6 @@ sub get_feature_attributes
     return $attributes
 }
 
-##############################################################
-# Searching for Name and Description of language pack
-# modules in Langpack.mlf
-##############################################################
-
-sub get_localized_string
-{
-    my ($featuregid, $onelanguage, $translationfile, $type) = @_;
-
-    my $locallanguage = "";
-    if ( $featuregid =~ /^\s*(\w+)_(.+?)\s*$/ ) { $locallanguage = $2; }
-
-    my $windowslanguage = "";
-    if ( $locallanguage =~ /top/i ) { $windowslanguage = $locallanguage; }
-    else { $windowslanguage = installer::windows::language::get_windows_language($locallanguage); }
-
-    my $searchstring = "";
-    if ( $type eq "Name" ) { $searchstring = "OOO_LANGPACK_NAME_" . $windowslanguage; }
-    else { $searchstring = "OOO_LANGPACK_DESC_" . $windowslanguage; }
-
-    my $language_block = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $translationfile);
-    my $newstring = installer::windows::idtglobal::get_language_string_from_language_block($language_block, $onelanguage, $searchstring);
-
-    return $newstring;
-}
-
 #####################################################################
 # For multilingual installation sets, the language dependent files
 # are advised to the language feature.
@@ -242,8 +218,7 @@ sub change_modules_in_filescollector
 {
     my ($filesref) = @_;
 
-    my $feature = "gid_Module_Dynamic_Language_TOP";
-    push(@installer::globals::multilanguagemodules, $feature);
+    push(@installer::globals::multilanguagemodules, $installer::globals::languagemodulesparent);
 
     my $onefile;
 
@@ -256,7 +231,8 @@ sub change_modules_in_filescollector
         if ( $onefile->{'ismultilingual'} )
         {
             my $officelanguage = $onefile->{'specificlanguage'};
-            $feature = "gid_Module_Dynamic_Language_" . $officelanguage;     # gid_Module_Dynamic_Language_de
+            $officelanguage =~ s/-/_/; # "en-US" to "en_US" (the latter is used in scp)
+            $feature = $installer::globals::languagemodulesbase . $officelanguage;   # "gid_Module_Root_en_US"
             $onefile->{'modules'} = $feature;   # assigning the new language feature !
 
             # Collecting all new feature
@@ -274,23 +250,25 @@ sub change_modules_in_filescollector
 
 sub add_language_pack_feature
 {
-    my ($featuretableref, $translationfile, $onelanguage) = @_;
+    my ($featuretableref, $languagemodules, $onelanguage) = @_;
 
     for ( my $i = 0; $i <= $#installer::globals::languagepackfeature; $i++ )
     {
+        my $gid = $installer::globals::languagepackfeature[$i];
+
+        # $languagemodules contains all modules with flag LANGUAGEMODULE
+        # Now it is time to find the correct feature using the gid.
+        my $onefeature = installer::worker::find_item_by_gid($languagemodules, $gid);
+        if ( $onefeature eq "" ) { installer::exiter::exit_program("ERROR: Language feature not found: $gid !", "add_multilingual_features"); }
+
         my %feature = ();
 
-        my $gid = $installer::globals::languagepackfeature[$i];
-        # Attention: Maximum feature length is 38!
-        installer::windows::idtglobal::shorten_feature_gid(\$gid);
-
-        $feature{'feature'} = $gid;     # "gm_Langpack_de"
+        $feature{'feature'} = get_feature_gid($onefeature);
         $feature{'feature_parent'} = "";
-        $feature{'Title'} = get_localized_string($gid, $onelanguage, $translationfile, "Name");
-        $feature{'Description'} = get_localized_string($gid, $onelanguage, $translationfile, "Description");
-        if ( $installer::globals::ismultilingual ) { $feature{'Display'} = "1"; }
-        else { $feature{'Display'} = "1"; }
-        $feature{'Level'} =  "20";
+        $feature{'Title'} = $onefeature->{'Name'};
+        $feature{'Description'} = $onefeature->{'Description'};
+        $feature{'Display'} = "1";
+        $feature{'Level'} = get_feature_level($onefeature);
         $feature{'Directory_'} =  "INSTALLLOCATION";
         $feature{'Attributes'} =  "8";
 
@@ -309,7 +287,9 @@ sub add_language_pack_feature
         # $onelanguage = "de"
         # $gid = "gm_Langpack_de"
         # -> only include if this is the language specific language name
-        if ( $gid =~ /\_$onelanguage\s*$/) { push(@installer::globals::languagenames, $feature{'Title'}); } # saving all titles in the global variable!
+        my $comparelanguage = $onelanguage;
+        $comparelanguage =~ s/-/_/;
+        if ( $gid =~ /\_$comparelanguage\s*$/) { push(@installer::globals::languagenames, $feature{'Title'}); } # saving all titles in the global variable!
     }
 
 }
@@ -320,34 +300,32 @@ sub add_language_pack_feature
 
 sub add_multilingual_features
 {
-    my ($featuretableref, $translationfile, $onelanguage) = @_;
+    my ($featuretableref, $languagemodules, $onelanguage) = @_;
 
     # Adding the new dynamic language modules, collected in change_modules_in_filescollector
 
-     my $topmodulegid = $installer::globals::multilanguagemodules[0];
-    installer::windows::idtglobal::shorten_feature_gid(\$topmodulegid);
-
     for ( my $i = 0; $i <= $#installer::globals::multilanguagemodules; $i++ )
     {
-        my %feature = ();
-
         my $gid = $installer::globals::multilanguagemodules[$i];
-        # Attention: Maximum feature length is 38!
-        installer::windows::idtglobal::shorten_feature_gid(\$gid);
+
+        # $languagemodules contains all modules with flag LANGUAGEMODULE
+        # Now it is time to find the correct feature using the gid.
+        my $onefeature = installer::worker::find_item_by_gid($languagemodules, $gid);
+        if ( $onefeature eq "" ) { installer::exiter::exit_program("ERROR: Language feature not found: $gid !", "add_multilingual_features"); }
 
         my $deselectable = 1;   # feature can be deselected
         if (( $i == 0 ) || ( $i == 1 )) { $deselectable = 0; } # Toplevel module and english cannot be deselected
 
-        $feature{'feature'} = $gid;
-        if ( $i == 0 ) { $feature{'feature_parent'} = ""; }
-        else { $feature{'feature_parent'} = $topmodulegid; }
-        $feature{'Title'} = get_localized_string($gid, $onelanguage, $translationfile, "Name");
-        $feature{'Description'} = get_localized_string($gid, $onelanguage, $translationfile, "Description");
-        $feature{'Display'} = "4";  # determines order of feature and visibility.
-        $feature{'Level'} =  "20";
-        $feature{'Directory_'} =  "INSTALLLOCATION";
-        if ( $i == 0 ) { $feature{'Attributes'} = "8"; }
-        else { $feature{'Attributes'} =  "10"; }
+        my %feature = ();
+
+        $feature{'feature'} = get_feature_gid($onefeature);
+        $feature{'feature_parent'} = get_feature_parent($onefeature);
+        $feature{'Title'} = $onefeature->{'Name'};
+        $feature{'Description'} = $onefeature->{'Description'};
+        $feature{'Display'} = get_feature_display($onefeature);
+        $feature{'Level'} = get_feature_level($onefeature);
+        $feature{'Directory_'} = get_feature_directory($onefeature);
+        $feature{'Attributes'} = get_feature_attributes($onefeature);
 
         if ( $deselectable == 0 ) { $feature{'Attributes'} = $feature{'Attributes'} + 16; } # making feature not deselectable
 
@@ -404,13 +382,6 @@ sub create_feature_table
 {
     my ($modulesref, $basedir, $languagesarrayref, $allvariableshashref) = @_;
 
-    my $translationfile = "";
-    if (( $installer::globals::languagepack ) || ( $installer::globals::ismultilingual ))
-    {
-        $translationfile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::langpackfilename);
-        replace_variables($translationfile, $allvariableshashref);
-    }
-
     for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
     {
         my $onelanguage = ${$languagesarrayref}[$m];
@@ -418,6 +389,7 @@ sub create_feature_table
         my $infoline;
 
         my @featuretable = ();
+        my @languagefeatures = ();
 
         installer::windows::idtglobal::write_idt_header(\@featuretable, "feature");
 
@@ -436,6 +408,13 @@ sub create_feature_table
 
             if (! (!(( $onefeature->{'ismultilingual'} )) || ( $onefeature->{'specificlanguage'} eq $onelanguage )) )  { next; }
 
+            my $languagefeature = 0;
+            if ( $styles =~ /\bLANGUAGEMODULE\b/ )
+            {
+                push(@languagefeatures, $onefeature);
+                $languagefeature = 1;
+            }
+
             my %feature = ();
 
             $feature{'feature'} = get_feature_gid($onefeature);
@@ -444,26 +423,28 @@ sub create_feature_table
             $feature{'Title'} = $onefeature->{'Name'};
             $feature{'Description'} = $onefeature->{'Description'};
             $feature{'Display'} = get_feature_display($onefeature);
-            $feature{'Level'} =  get_feature_level($onefeature);
-            $feature{'Directory_'} =  get_feature_directory($onefeature);
-            $feature{'Attributes'} =  get_feature_attributes($onefeature);
+            $feature{'Level'} = get_feature_level($onefeature);
+            $feature{'Directory_'} = get_feature_directory($onefeature);
+            $feature{'Attributes'} = get_feature_attributes($onefeature);
 
             my $oneline = $feature{'feature'} . "\t" . $feature{'feature_parent'} . "\t" . $feature{'Title'} . "\t"
                     . $feature{'Description'} . "\t" . $feature{'Display'} . "\t" . $feature{'Level'} . "\t"
                     . $feature{'Directory_'} . "\t" . $feature{'Attributes'} . "\n";
 
-            push(@featuretable, $oneline);
-
-            # collecting all feature in global feature collector
-            if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
+            if ( ! $languagefeature )
             {
-                push(@installer::globals::featurecollector, $feature{'feature'});
+                push(@featuretable, $oneline);
+                # collecting all feature in global feature collector
+                if ( ! installer::existence::exists_in_array($feature{'feature'}, \@installer::globals::featurecollector) )
+                {
+                    push(@installer::globals::featurecollector, $feature{'feature'});
+                }
             }
         }
 
-        if ( $installer::globals::languagepack ) { add_language_pack_feature(\@featuretable, $translationfile, $onelanguage); }
+        if ( $installer::globals::languagepack ) { add_language_pack_feature(\@featuretable, \@languagefeatures, $onelanguage); }
 
-        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack )) { add_multilingual_features(\@featuretable, $translationfile, $onelanguage); }
+        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack )) { add_multilingual_features(\@featuretable, \@languagefeatures, $onelanguage); }
 
         # Saving the file
 
