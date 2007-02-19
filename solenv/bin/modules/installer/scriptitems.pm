@@ -4,9 +4,9 @@
 #
 #   $RCSfile: scriptitems.pm,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-29 16:05:56 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:49:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -426,7 +426,8 @@ sub replace_setup_variables
 
     my $productname = $hashref->{'PRODUCTNAME'};
     my $productversion = $hashref->{'PRODUCTVERSION'};
-    my $userdirproductversion = $hashref->{'USERDIRPRODUCTVERSION'};
+    my $userdirproductversion = "";
+    if ( $hashref->{'USERDIRPRODUCTVERSION'} ) { $userdirproductversion = $hashref->{'USERDIRPRODUCTVERSION'}; }
     my $productkey = $productname . " " . $productversion;
 
     # string "Product Update X"
