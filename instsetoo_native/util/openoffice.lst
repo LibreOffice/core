@@ -5,19 +5,19 @@ OpenOffice
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 2.2
+			PRODUCTVERSION 2.3
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
-			ABOUTBOXPRODUCTVERSION 2.2.0
+			ABOUTBOXPRODUCTVERSION 2.3.0
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
-			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update23.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 2.2.0
+			PACKAGEVERSION 2.3.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -30,7 +30,7 @@ OpenOffice
 			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 8.2.0
+			LIBRARYVERSION 8.3.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			DOWNLOADBANNER	ooobanner.bmp
 			DOWNLOADBITMAP	ooobitmap.bmp
@@ -54,19 +54,19 @@ OpenOffice_wJRE
 		variables
 		{
 			PRODUCTNAME OpenOffice.org
-			PRODUCTVERSION 2.2
+			PRODUCTVERSION 2.3
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
-			ABOUTBOXPRODUCTVERSION 2.2.0
+			ABOUTBOXPRODUCTVERSION 2.3.0
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
-			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update23.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 2.2.0
+			PACKAGEVERSION 2.3.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -79,7 +79,7 @@ OpenOffice_wJRE
 			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 8.2.0
+			LIBRARYVERSION 8.3.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			JAVAPRODUCT 1
 			DOWNLOADBANNER	ooobanner.bmp
@@ -103,19 +103,19 @@ OpenOffice_Dev
 		variables
 		{
 			PRODUCTNAME OOo-dev
-			PRODUCTVERSION 2.2
+			PRODUCTVERSION 2.3
 			PRODUCTEXTENSION
 			LONG_PRODUCTEXTENSION
 			USERDIRPRODUCTVERSION 2
-			ABOUTBOXPRODUCTVERSION 2.2.0
+			ABOUTBOXPRODUCTVERSION 2.3.0
 			REGISTRATIONURL http://www.openoffice.org/welcome/registration20.html
-			UPDATEURL http://update.services.openoffice.org/ProductUpdateService/check.Update
+			UPDATEURL http://update23.services.openoffice.org/ProductUpdateService/check.Update
 			ADD_INCLUDE_FILES cliureversion.mk
 			EVAL
 			FILEFORMATNAME OpenOffice.org
 			FILEFORMATVERSION 1.0
 			WRITERCOMPATIBILITYVERSIONOOO11 OpenOffice.org 1.1
-			PACKAGEVERSION 2.2.0
+			PACKAGEVERSION 2.3.0
 			PACKAGEREVISION {milestone}
 			LICENSENAME LGPL
 			SERVICESPROJEKT 1
@@ -128,7 +128,7 @@ OpenOffice_Dev
 			BETAUPGRADECODE {8BC2B4E7-74CA-4A3A-B431-585A1ABEFA66}
 			CHANGETARGETDIR 1
 			USE_FILEVERSION 1
-			LIBRARYVERSION 8.2.0
+			LIBRARYVERSION 8.3.0
 			PATCHCODEFILE ooo_patchcodes.txt
 			CODEFILENAME codes_ooodev.txt
 			DOWNLOADBANNER	ooobanner.bmp
@@ -181,9 +181,9 @@ OpenOffice_SDK
         variables
         {
             PRODUCTNAME OpenOffice.org
-            PRODUCTVERSION 2.2
+            PRODUCTVERSION 2.3
             POSTVERSIONEXTENSION SDK
-            PACKAGEVERSION 2.2.0
+            PACKAGEVERSION 2.3.0
             PACKAGEREVISION {milestone}
             LICENSENAME LGPL, SISSL
             NOVERSIONINDIRNAME 0
