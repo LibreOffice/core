@@ -4,9 +4,9 @@
 #
 #   $RCSfile: file.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-24 15:35:53 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:50:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -330,6 +330,22 @@ sub get_language_for_file
     return $language;
 }
 
+####################################################################
+# Creating a new KeyPath for components in TemplatesFolder.
+####################################################################
+
+sub generate_registry_keypath
+{
+    my ($onefile) = @_;
+
+    my $keypath = $onefile->{'Name'};
+    $keypath =~ s/\.//g;
+    $keypath = lc($keypath);
+    $keypath = "userreg_" . $keypath;
+
+    return $keypath;
+}
+
 ############################################
 # Creating the file File.idt dynamically
 ############################################
@@ -414,6 +430,19 @@ sub create_files_table
         # Saving the sequence number in a hash with uniquefilename as key.
         # This is used for better performance in "save_packorder"
         $installer::globals::uniquefilenamesequence{$onefile->{'uniquename'}} = $onefile->{'sequencenumber'};
+
+        # Special handling for files in PREDEFINED_OSSHELLNEWDIR. These components
+        # need as KeyPath a RegistryItem in HKCU
+        my $destdir = "";
+        if ( $onefile->{'Dir'} ) { $destdir = $onefile->{'Dir'}; }
+
+        if ( $destdir =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )
+        {
+            my $keypath = generate_registry_keypath($onefile);
+            $onefile->{'userregkeypath'} = $keypath;
+            push(@installer::globals::userregistrycollector, $onefile);
+            $installer::globals::addeduserregitrykeys = 1;
+        }
     }
 
     # putting content from %allfilecomponents to $allfilecomponentsref for later usage
