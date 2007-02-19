@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.80 $
+#   $Revision: 1.81 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 16:23:08 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:48:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -391,7 +391,7 @@ installer::logger::print_message( "... analyzing scpactions ... \n" );
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
 if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1.log", $scpactionsinproductarrayref); }
 
-if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || (( ! $installer::globals::islinuxrpmbuild) && ( ! $installer::globals::issolarispkgbuild )))
+if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isxpdplatform ))
 {
     $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Scpactions($scpactionsinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productscpactions1a.log", $scpactionsinproductarrayref); }
@@ -507,8 +507,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     # and for all other languages languagepacks.
     ############################################################
 
-    my $isfirstrun = 0;
-    my $islastrun = 0;
+    my $isfirstrun = 1;
+    my $islastrun = 1;
 
     if ( $installer::globals::is_unix_multi )
     {
@@ -516,11 +516,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         {
             @installer::globals::logfileinfo = ();  # new logfile array and new logfile name
             installer::logger::copy_globalinfo_into_logfile();
-            $isfirstrun = 1;
             $installer::globals::defaultlanguage = $$languagestringref;
         }
         else    # switching from office installation to language pack
         {
+            $isfirstrun = 0;
             my $infoline = "... creating language pack: $$languagestringref !\n";
             installer::logger::include_header_into_logfile("$infoline");
             installer::logger::print_message( "$infoline" );
@@ -535,13 +535,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             }
         }
 
-        if ( $n == $#installer::globals::languageproducts )
+        if ( $n != $#installer::globals::languageproducts )
         {
-            $islastrun = 1;
+            $islastrun = 0;
         }
     }
-
-    if ( ! $installer::globals::is_unix_multi ) { $islastrun = 1; }
 
     if ( $installer::globals::patch )
     {
@@ -591,7 +589,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     $installer::globals::logfilename = "log_" . $installer::globals::build . "_" . $logminor . "_" . $loglanguagestring . ".log";
 
-    if (( ! $installer::globals::is_unix_multi ) || ( $isfirstrun )) { $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator; }
+    if ( $isfirstrun ) { $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator; }
 
     installer::systemactions::create_directory($loggingdir);
 
@@ -612,7 +610,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::updatepack )
     {
-        if (( ! $installer::globals::is_unix_multi ) || ( $isfirstrun ))
+        if ( $isfirstrun )
         {
             $shipinstalldir = installer::control::determine_ship_directory($languagestringref);
         }
@@ -1060,7 +1058,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::is_simple_packager_project )
     {
-        installer::simplepackage::create_simple_package($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $scpactionsinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariableshashref, $includepatharrayref);
+        installer::simplepackage::create_simple_package($filesinproductlanguageresolvedarrayref, $directoriesforepmarrayref, $scpactionsinproductlanguageresolvedarrayref, $linksinproductlanguageresolvedarrayref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariableshashref, $includepatharrayref, $isfirstrun, $islastrun);
         next; # ! leaving the current loop, because no further packaging required.
     }
 
@@ -1099,7 +1097,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         # Creating directories
         ####################################################
 
-        if (( ! $installer::globals::is_unix_multi ) || ( $isfirstrun ))
+        if ( $isfirstrun )
         {
             $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
         }
@@ -1482,7 +1480,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                 ###########################################
 
                 # creating the xpd file for the package
-                if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild))
+                if ( $installer::globals::isxpdplatform )
                 {
                     if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
                     {
@@ -1524,13 +1522,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             if (( $installer::globals::patch ) && ( $installer::globals::islinuxrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::subdir, $allvariableshashref, $includepatharrayref); }
 
             # Copying the xpd installer into the installation set
-            if (($installer::globals::islinuxrpmbuild) || ($installer::globals::issolarispkgbuild))
+            if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::isxpdplatform ))
             {
-                if ( $allvariableshashref->{'XPDINSTALLER'} )
-                {
-                    installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref);
-                    $installer::globals::addjavainstaller = 0;  # only one java installer possible
-                }
+                installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref);
+                $installer::globals::addjavainstaller = 0;  # only one java installer possible
             }
 
             # Copying the java installer into the installation set
@@ -1716,7 +1711,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
         if ( ! $installer::globals::languagepack )   # the following tables not for language packs
         {
-            # installer::windows::removefile::create_removefile_table($folderitemsinproductlanguageresolvedarrayref, $newidtdir);
+            installer::windows::removefile::create_removefile_table($folderitemsinproductlanguageresolvedarrayref, $newidtdir);
 
             installer::windows::selfreg::create_selfreg_table($filesinproductlanguageresolvedarrayref, $newidtdir);
 
