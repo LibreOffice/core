@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: kz $ $Date: 2006-10-10 11:19:58 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:50:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -258,10 +258,15 @@ sub make_eight_three_conform_with_hash
     my $changed = 0;
     my $saved;
 
-    if (( $inputstring =~ /^\s*(.*?)\.(.*?)\s*$/ ) && ( $pattern eq "file" ))   # files with a dot
+    # if (( $inputstring =~ /^\s*(.*?)\.(.*?)\s*$/ ) && ( $pattern eq "file" )) # files with a dot
+    if (( $inputstring =~ /^\s*(.*)\.(.*?)\s*$/ ) && ( $pattern eq "file" ))    # files with a dot
     {
+        # extension has to be non-greedy, but name is. This is important to find the last dot in the filename
         $name = $1;
         my $extension = $2;
+
+        if ( $name =~ /^\s*(.*?)\s*$/ ) { $name = $1; } # now the name is also non-greedy
+        $name =~ s/\.//g; # no dots in 8+3 conform filename
 
         $namelength = length($name);
         my $extensionlength = length($extension);
