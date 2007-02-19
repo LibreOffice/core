@@ -4,9 +4,9 @@
 #
 #   $RCSfile: languagepack.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:04:19 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:48:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ package installer::languagepack;
 use installer::converter;
 use installer::existence;
 use installer::files;
+use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
 use installer::scpzipfiles;
@@ -97,7 +98,9 @@ sub select_language_items
                 }
 
                 # preparing different modules for Windows Installer language packs
-                if ( $installer::globals::iswindowsbuild ) { $oneitem->{'modules'} = "gid_Module_Langpack_" . $specificlanguage; }
+                my $underlinelanguage = $specificlanguage;
+                $underlinelanguage =~ s/-/_/;
+                if ( $installer::globals::iswindowsbuild ) { $oneitem->{'modules'} = $installer::globals::languagemodulesbase . $underlinelanguage; }
 
                 if (! installer::existence::exists_in_array($oneitem->{'modules'}, \@installer::globals::languagepackfeature))
                 {
