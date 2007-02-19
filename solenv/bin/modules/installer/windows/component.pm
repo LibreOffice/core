@@ -4,9 +4,9 @@
 #
 #   $RCSfile: component.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:36:30 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:49:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -199,6 +199,16 @@ sub get_file_component_attributes
         $attributes = 16;   # font files will not be deinstalled
     }
 
+    if ( $localstyles =~ /\bASSEMBLY\b/ )
+    {
+        $attributes = 0;    # Assembly files cannot run from source
+    }
+
+    if ( $onefile->{'Dir'} =~ /\bPREDEFINED_OSSHELLNEWDIR\b/ )
+    {
+        $attributes = 4;    # Files in shellnew dir must have user registry key as KeyPath
+    }
+
     return $attributes
 }
 
@@ -288,7 +298,12 @@ sub get_component_keypath
 
     my $keypath = $oneitem->{'uniquename'}; # "uniquename", not "Name"
 
-    $oneitem->{'keypath'} = $keypath;       # saving it in the file and registry collection
+    # Special handling for components in PREDEFINED_OSSHELLNEWDIR. These components
+    # need as KeyPath a RegistryItem in HKCU
+    if ( $oneitem->{'userregkeypath'} ) { $keypath = $oneitem->{'userregkeypath'}; }
+
+    # saving it in the file and registry collection
+    $oneitem->{'keypath'} = $keypath;
 
     return $keypath
 }
