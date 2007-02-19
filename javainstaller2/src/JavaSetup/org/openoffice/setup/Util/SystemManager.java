@@ -418,13 +418,32 @@ public class SystemManager {
                 String returnLine = (String) returnVector.get(max-1);
                 returnLine = returnLine.trim();
                 String[] returnArray = returnLine.split("\\s+");
-                // The fourth value is the available disc space
+
                 if ( returnArray.length > 3 ) {
-                    String sizeString = returnArray[3];
-                   // System.err.println("Command: " + command);
-                   // System.err.println("Available disc space: " + size);
-                   // Converting from String to int
-                   size = Integer.parseInt(sizeString);
+
+                    // The fourth value is the available disc space (if the first value is a path)
+                    // Otherwise it can also be the third value, if the first is not a path
+                    String path = returnArray[0];
+
+                    // First value is a path like "/pathA/pathB"
+                    // Also possible is a content "server:/pathA/pathB"
+                    int pos = path.lastIndexOf(":");
+                    if ( pos > -1 ) {
+                        try {
+                            path = path.substring(pos+1, path.length());
+                        } catch (IndexOutOfBoundsException ex) {
+                            System.err.println("Error: Could not evaluate path from " + path);
+                        }
+                    }
+
+                    String sizeString;
+                    if ( path.startsWith("/")) {
+                        sizeString = returnArray[3];
+                    } else {
+                        sizeString = returnArray[2];
+                    }
+                    // Converting from String to int
+                    size = Integer.parseInt(sizeString);
                 }
             }
         }
