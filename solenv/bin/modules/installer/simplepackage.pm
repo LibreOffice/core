@@ -4,9 +4,9 @@
 #
 #   $RCSfile: simplepackage.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-01 13:48:50 $
+#   last change: $Author: rt $ $Date: 2007-02-19 13:49:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -141,34 +141,52 @@ sub create_package
 
 sub create_simple_package
 {
-    my ( $filesref, $dirsref, $scpactionsref, $linksref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariables, $includepatharrayref ) = @_;
+    my ( $filesref, $dirsref, $scpactionsref, $linksref, $loggingdir, $languagestringref, $shipinstalldir, $allsettingsarrayref, $allvariables, $includepatharrayref, $isfirstrun, $islastrun ) = @_;
 
     # Creating directories
-
-    installer::logger::print_message( "... creating installation directory ...\n" );
-
-    installer::logger::include_header_into_logfile("Creating installation directory");
 
     my $current_install_number = "";
     my $infoline = "";
 
-    my $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
+    if ( $isfirstrun )
+    {
+        installer::logger::print_message( "... creating installation directory ...\n" );
+        installer::logger::include_header_into_logfile("Creating installation directory");
 
-    my $installlogdir = installer::systemactions::create_directory_next_to_directory($installdir, "log");
+        $installer::globals::csp_installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
+        $installer::globals::csp_installlogdir = installer::systemactions::create_directory_next_to_directory($installer::globals::csp_installdir, "log");
+    }
+    else
+    {
+        installer::logger::print_message( "... using remembered installation directory ...\n" );
+        installer::logger::include_header_into_logfile("Creating installation directory");
+    }
+
+    my $installdir = $installer::globals::csp_installdir;
+    my $installlogdir = $installer::globals::csp_installlogdir;
 
     # Setting package name (similar to the download name)
     my $packagename = "";
 
     if ( $installer::globals::packageformat eq "archive" )
     {
+        if ( $isfirstrun )
+        {
+            if ( $installer::globals::is_unix_multi )
+                { $installer::globals::csp_languagestring = $installer::globals::unixmultipath; }
+            else
+                { $installer::globals::csp_languagestring = $$languagestringref; }
+        }
+        my $locallanguage = $installer::globals::csp_languagestring;
+
         if ( $allvariables->{'OOODOWNLOADNAME'} )
         {
-            $packagename = installer::download::set_download_filename($languagestringref, $allvariables);
+            $packagename = installer::download::set_download_filename(\$locallanguage, $allvariables);
         }
         else
         {
             $downloadname = installer::ziplist::getinfofromziplist($allsettingsarrayref, "downloadname");
-            $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, $languagestringref);
+            $packagename = installer::download::resolve_variables_in_downloadname($allvariables, $$downloadname, \$locallanguage);
         }
     }
 
@@ -260,8 +278,10 @@ sub create_simple_package
 
     # Analyzing the log file
 
-    installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
-
+    if ( $islastrun )
+    {
+        installer::worker::analyze_and_save_logfile($loggingdir, $installdir, $installlogdir, $allsettingsarrayref, $languagestringref, $current_install_number);
+    }
 }
 
 1;
