@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleToolBox.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 18:19:16 $
+ *  last change: $Author: rt $ $Date: 2007-02-20 14:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,7 @@ import lib.TestParameters;
 import util.AccessibilityTools;
 import util.DesktopTools;
 import util.SOfficeFactory;
+import util.UITools;
 
 
 /**
@@ -89,8 +90,8 @@ public class AccessibleToolBox extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         the_Desk = (XDesktop) UnoRuntime.queryInterface(XDesktop.class,
-                                                        DesktopTools.createDesktop(
-                                                                (XMultiServiceFactory) Param.getMSF()));
+                DesktopTools.createDesktop(
+                (XMultiServiceFactory) Param.getMSF()));
     }
 
     /**
@@ -127,18 +128,17 @@ public class AccessibleToolBox extends TestCase {
      * @see com.sun.star.accessibility.XAccessibleEventBroadcaster
      */
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-                                                    PrintWriter log) {
+            PrintWriter log) {
         log.println("creating a test environment");
 
         if (xTextDoc != null) {
             util.DesktopTools.closeDoc(xTextDoc);
         }
 
-        ;
+        XMultiServiceFactory msf = (XMultiServiceFactory) tParam.getMSF();
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory(
-                                     (XMultiServiceFactory) tParam.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(msf);
 
         try {
             log.println("creating a text document");
@@ -150,20 +150,26 @@ public class AccessibleToolBox extends TestCase {
         }
 
         XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
-                                                           xTextDoc);
+                xTextDoc);
 
         XInterface oObj = null;
 
-        AccessibilityTools at = new AccessibilityTools();
+        UITools oUI = new UITools(msf, aModel);
 
-        XWindow xWindow = at.getCurrentWindow(
-                                  (XMultiServiceFactory) tParam.getMSF(),
-                                  aModel);
+        XWindow xWindow = null;
+        try {
+            xWindow = oUI.getActiveTopWindow();
+        } catch (Exception ex) {
+            ex.printStackTrace(log);
+            throw new StatusException("Couldn't get active top window", ex);
+        }
+
+        AccessibilityTools at = new AccessibilityTools();
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-
         at.printAccessibleTree(log, xRoot, tParam.getBool(util.PropertyName.DEBUG_IS_ACTIVE));
+
         oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.TOOL_BAR);
 
         log.println("ImplementationName: " + util.utils.getImplName(oObj));
@@ -183,11 +189,11 @@ public class AccessibleToolBox extends TestCase {
         util.dbg.printInterfaces(child);
 
         final XAccessibleAction action = (XAccessibleAction) UnoRuntime.queryInterface(
-                                                 XAccessibleAction.class,
-                                                 child);
+                XAccessibleAction.class,
+                child);
 
         tEnv.addObjRelation("EventProducer",
-                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+                new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
             public void fireEvent() {
                 try {
                     action.doAccessibleAction(0);
