@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:16:29 $
+#   last change: $Author: rt $ $Date: 2007-02-20 14:21:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ JARCOMMANDS_TESTS = $(foreach,i,$(SUBDIRS_TESTS) -C $(CLASSDIR) $i)
 JARCOMMANDS_RUNNER = $(foreach,i,$(SUBDIRS_RUNNER) -C $(CLASSDIR) $i)
 
 # --- Targets ------------------------------------------------------
-.IF "$(SOLAR_JAVA)"!=""
+.IF "$(SOLAR_JAVA)"=="TRUE"
 OWNJAR: ALLTAR
 
 
