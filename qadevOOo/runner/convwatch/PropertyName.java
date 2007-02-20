@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyName.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:10:25 $
+ *  last change: $Author: rt $ $Date: 2007-02-20 14:21:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,4 +64,7 @@ public interface PropertyName
     final public static String DOC_COMPARATOR_DB_INFO_STRING =             "DOC_COMPARATOR_DB_INFO_STRING";
 
     final public static String TEMPPATH =                                   "TEMPPATH";
+
+    // set this variable to "true" or "yes" and loadComponentFromURL works with property Hidden=false
+    final public static String OFFICE_VIEWABLE =                           "OFFICE_VIEWABLE";
 }
