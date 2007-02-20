@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicalTestArguments.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 14:10:00 $
+ *  last change: $Author: rt $ $Date: 2007-02-20 14:21:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,6 +284,20 @@ public class GraphicalTestArguments
             else
             {
                 m_sDistinct = sDistinct;
+            }
+            // HIDDEN
+            String sOfficeViewable = (String)param.get(PropertyName.OFFICE_VIEWABLE);
+            if (sOfficeViewable != null)
+            {
+                if (sOfficeViewable.toLowerCase().equals("yes") ||
+                    sOfficeViewable.toLowerCase().equals("true"))
+                {
+                    setViewable();
+                }
+                else
+                {
+                    setHidden();
+                }
             }
         }
 
