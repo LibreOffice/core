@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Toolkit.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-02 18:20:16 $
+ *  last change: $Author: rt $ $Date: 2007-02-20 14:22:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@ import com.sun.star.awt.XWindowPeer;
 import com.sun.star.drawing.XControlShape;
 import com.sun.star.drawing.XShape;
 import com.sun.star.frame.XController;
+import com.sun.star.frame.XModel;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextDocument;
 import com.sun.star.uno.UnoRuntime;
@@ -128,6 +129,8 @@ public class Toolkit extends TestCase {
             throw new StatusException("Couldn't get toolkit", e);
         }
 
+        XModel xModel = (XModel)UnoRuntime.queryInterface(XModel.class, xTextDoc);
+
         log.println("    creating a new environment for toolkit object");
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
@@ -135,6 +138,8 @@ public class Toolkit extends TestCase {
         log.println("Implementation Name: " + utils.getImplName(oObj));
 
         tEnv.addObjRelation("WINPEER", the_win);
+
+        tEnv.addObjRelation("XModel", xModel);
 
 
         // adding relation for XDataTransferProviderAccess
