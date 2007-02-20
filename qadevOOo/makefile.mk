@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:02:07 $
+#   last change: $Author: rt $ $Date: 2007-02-20 14:20:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,10 @@ PRJ=.
 .INCLUDE : ant.mk
 
 TST:
-    echo $(ANT_FLAGS)
-    
+    echo $(SOLAR_JAVA)
+
+.IF "$(SOLAR_JAVA)"=="TRUE"	
 .IF "$(ANT_HOME)"!="NO_ANT_HOME"
 ALLTAR: ANTBUILD
+.ENDIF
 .ENDIF
