@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-21 09:00:33 $
+ *  last change: $Author: hdu $ $Date: 2007-02-21 11:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,6 @@ namespace drawinglayer
             unsigned                                    mbEmphasisMarkAbove : 1;
             unsigned                                    mbEmphasisMarkBelow : 1;
             unsigned                                    mbShadow : 1;
-            unsigned                                    mbOutline : 1;
 
         protected:
             // local decomposition.
@@ -237,8 +236,7 @@ namespace drawinglayer
                 bool bEmphasisMarkAbove = true,
                 bool bEmphasisMarkBelow = false,
                 FontRelief eFontRelief = FONT_RELIEF_NONE,
-                bool bShadow = false,
-                bool bOutline = false);
+                bool bShadow = false);
 
             // get data
             FontUnderline getFontUnderline() const { return meFontUnderline; }
@@ -250,7 +248,6 @@ namespace drawinglayer
             bool getEmphasisMarkAbove() const { return mbEmphasisMarkAbove; }
             bool getEmphasisMarkBelow() const { return mbEmphasisMarkBelow; }
             bool getShadow() const { return mbShadow; }
-            bool getOutline() const { return mbOutline; }
 
             // compare operator
             virtual bool operator==( const BasePrimitive2D& rPrimitive ) const;

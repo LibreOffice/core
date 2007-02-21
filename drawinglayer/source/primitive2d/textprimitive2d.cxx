@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-21 09:00:33 $
+ *  last change: $Author: hdu $ $Date: 2007-02-21 11:28:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -534,8 +534,7 @@ namespace drawinglayer
             bool bEmphasisMarkAbove,
             bool bEmphasisMarkBelow,
             FontRelief eFontRelief,
-            bool bShadow,
-            bool bOutline)
+            bool bShadow)
         :   TextSimplePortionPrimitive2D(rNewTransform, rText, rDXArray, rFontAttributes, rFontColor),
             meFontUnderline(eFontUnderline),
             meFontStrikeout(eFontStrikeout),
@@ -545,8 +544,7 @@ namespace drawinglayer
             mbWordLineMode(bWordLineMode),
             mbEmphasisMarkAbove(bEmphasisMarkAbove),
             mbEmphasisMarkBelow(bEmphasisMarkBelow),
-            mbShadow(bShadow),
-            mbOutline(bOutline)
+            mbShadow(bShadow)
         {
         }
 
@@ -564,8 +562,7 @@ namespace drawinglayer
                     && getEmphasisMarkAbove() == rCompare.getEmphasisMarkAbove()
                     && getEmphasisMarkBelow() == rCompare.getEmphasisMarkBelow()
                     && getFontRelief() == rCompare.getFontRelief()
-                    && getShadow() == rCompare.getShadow()
-                    && getOutline() == rCompare.getOutline());
+                    && getShadow() == rCompare.getShadow());
             }
 
             return false;
