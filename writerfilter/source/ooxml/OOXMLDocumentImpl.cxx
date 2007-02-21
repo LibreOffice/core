@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:26:24 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,11 +83,11 @@ string OOXMLDocumentImpl::getType() const
     return "OOXMLDocumentImpl";
 }
 
-OOXMLDocument::Pointer_t
+OOXMLDocument *
 OOXMLDocumentFactory::createDocument
 (OOXMLStream::Pointer_t pStream)
 {
-    return OOXMLDocument::Pointer_t(new OOXMLDocumentImpl(pStream));
+    return new OOXMLDocumentImpl(pStream);
 }
 
 }

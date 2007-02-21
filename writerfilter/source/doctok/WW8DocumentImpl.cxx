@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:22:54 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1798,10 +1798,10 @@ WW8DocumentFactory::createStream(uno::Reference<uno::XComponentContext> rContext
     return WW8Stream::Pointer_t(new WW8StreamImpl(rContext, rStream));
 }
 
-WW8Document::Pointer_t
+WW8Document *
 WW8DocumentFactory::createDocument(WW8Stream::Pointer_t rpStream)
 {
-    return WW8Document::Pointer_t(new WW8DocumentImpl(rpStream));
+    return new WW8DocumentImpl(rpStream);
 }
 
 doctok::Reference<Properties>::Pointer_t

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Document.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:30:16 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -450,7 +450,7 @@ public:
     createStream(uno::Reference<uno::XComponentContext> rContext,
                  uno::Reference<io::XInputStream> rStream);
 
-    static WW8Document::Pointer_t
+    static WW8Document *
     createDocument(WW8Stream::Pointer_t rpStream);
 };
 }

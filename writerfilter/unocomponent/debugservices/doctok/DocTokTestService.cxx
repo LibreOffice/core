@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokTestService.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-09 16:03:18 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(xContext, xInputStream);
 
-            doctok::WW8Document::Pointer_t pDocument = doctok::WW8DocumentFactory::createDocument(pDocStream);
+            doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
 
 #if 0
         TimeValue t1; osl_getSystemTime(&t1);

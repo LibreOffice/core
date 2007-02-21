@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocument.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:22:15 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ public:
     virtual uno::Reference<io::XInputStream> getInputStream() = 0;
 };
 
-class OOXMLDocument : public doctok::Reference<Stream>
+class WRITERFILTER_DLLPUBLIC OOXMLDocument : public doctok::Reference<Stream>
 {
 public:
     /**
@@ -95,7 +95,7 @@ public:
     createStream(uno::Reference<uno::XComponentContext> rContext,
                  uno::Reference<io::XInputStream> rStream);
 
-    static OOXMLDocument::Pointer_t
+    static OOXMLDocument *
     createDocument(OOXMLStream::Pointer_t pStream);
 };
 }

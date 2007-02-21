@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocTokAnalyzeService.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:26:26 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,9 +223,9 @@ sal_Int32 SAL_CALL AnalyzeService::run
 
                         if (pDocStream.get() != NULL)
                         {
-                            doctok::WW8Document::Pointer_t pDocument =
-                                doctok::WW8DocumentFactory::createDocument
-                                (pDocStream);
+                            doctok::WW8Document::Pointer_t pDocument
+                                (doctok::WW8DocumentFactory::createDocument
+                                (pDocStream));
 
                             doctok::Stream::Pointer_t pAnalyzer =
                                 doctok::createAnalyzer();
