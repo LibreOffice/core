@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:40:38 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 14:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,9 +435,11 @@ OOXMLContext::Pointer_t
     <xsl:value-of select="$classname"/>
     <xsl:text>::element(TokenEnum_t nToken)
 {
+#ifdef DEBUG_OOXML_ELEMENT
     clog &lt;&lt; "-->" &lt;&lt; "</xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text> "&lt;&lt; nToken &lt;&lt; endl;
+#endif
 
     OOXMLContext::Pointer_t pResult;
     </xsl:text>
@@ -480,6 +482,8 @@ OOXMLContext::Pointer_t
          </xsl:if>
        </xsl:for-each>       
        <xsl:text>
+     case OOXML_TOKENS_END:
+         break;
      default:
          pResult = elementFromRefs(nToken);
               break;
@@ -487,9 +491,11 @@ OOXMLContext::Pointer_t
        </xsl:text>
      <xsl:text>
 
+#ifdef DEBUG_OOXML_ELEMENT
     clog &lt;&lt; "&lt;--" &lt;&lt; "</xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text> " &lt;&lt; (pResult.get() != NULL) &lt;&lt; endl;
+#endif
 
     return pResult;
 }
@@ -513,10 +519,12 @@ OOXMLContext::Pointer_t
     <xsl:call-template name="contextparent"/>
     <xsl:text>(rStream)
 {
+#ifdef DEBUG_OOXML_MEMORY
    clog &lt;&lt; "--></xsl:text>
    <xsl:value-of select="$classname"/>
    <xsl:text>" &lt;&lt; endl;
-   </xsl:text>   
+#endif
+</xsl:text>
     <xsl:choose>
       <xsl:when test="$resource/action[@name='start' and @action='startParagraphGroup']">
         <xsl:text>
@@ -556,9 +564,11 @@ OOXMLContext::Pointer_t
       </xsl:when>
     </xsl:choose>
     <xsl:text>
+#ifdef DEBUG_OOXML_MEMORY
    clog &lt;&lt; "&lt;--</xsl:text>
    <xsl:value-of select="$classname"/>
    <xsl:text>" &lt;&lt; endl;
+#endif
 }&#xa;</xsl:text>
   </xsl:template>
 
