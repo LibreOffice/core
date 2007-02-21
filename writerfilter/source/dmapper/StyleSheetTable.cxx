@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:36:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -930,7 +930,7 @@ const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyl
            "Document Map",              0,                //89
            "Plain Text",                0                 //90
         };
-        for( sal_Int32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
+        for( sal_uInt32 nPair = 0; nPair < sizeof(aStyleNamePairs) / sizeof( sal_Char*) / 2; ++nPair)
         {
             //::std::pair<PropertyNameMap_t::iterator,bool> aInsertIt =
                 m_pImpl->m_aStyleNameMap.insert( StringPairMap_t::value_type(

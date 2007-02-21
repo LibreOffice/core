@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:34:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,10 +464,10 @@ void    DomainMapper_Impl::PushProperties(ContextType eId)
         {
             // beginning with the second section group a section has to be inserted
             // into the document
-            SectionPropertyMap* pSectionContext = dynamic_cast< SectionPropertyMap* >( pInsert.get() );
+            SectionPropertyMap* pSectionContext_ = dynamic_cast< SectionPropertyMap* >( pInsert.get() );
             uno::Reference< text::XTextAppendAndConvert >  xTextAppendAndConvert = m_aTextAppendStack.top();
             if(xTextAppendAndConvert.is())
-                pSectionContext->SetStart( xTextAppendAndConvert->getEnd() );
+                pSectionContext_->SetStart( xTextAppendAndConvert->getEnd() );
         }
     }
     m_aPropertyStacks[eId].push( pInsert );
@@ -1702,6 +1702,8 @@ bool lcl_FindInCommand(
     {
     }
 }
+*/
+
 /*-- 11.09.2006 13:16:35---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -1709,6 +1711,7 @@ bool lcl_FindInCommand(
 {
     return m_xTextField.is() || m_xTOC.is() || m_xTC.is() || m_sHyperlinkURL.getLength();
 }
+*/
 /*-- 14.09.2006 12:46:52---------------------------------------------------
 
   -----------------------------------------------------------------------*/

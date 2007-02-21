@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2007-02-21 12:25:06 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -717,11 +717,11 @@ void SectionPropertyMap::CloseSectionGroup( DomainMapper_Impl& rDM_Impl )
         const StyleSheetEntry* pEntry = rDM_Impl.GetStyleSheetTable()->FindStyleSheetByISTD(0);
         if( pEntry )
         {
-            PropertyMap::iterator aElement = pEntry->pProperties->find(rPropNameSupplier.GetName( PROP_CHAR_HEIGHT_ASIAN ));
-            if( aElement != pEntry->pProperties->end())
+            PropertyMap::iterator aElement_ = pEntry->pProperties->find(rPropNameSupplier.GetName( PROP_CHAR_HEIGHT_ASIAN ));
+            if( aElement_ != pEntry->pProperties->end())
             {
                 double fHeight;
-                if( aElement->second >>= fHeight )
+                if( aElement_->second >>= fHeight )
                     nCharWidth = ConversionHelper::convertToMM100( (long)( fHeight * 20.0 + 0.5 ));
             }
         }
