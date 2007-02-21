@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:30:33 $
+#  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:39:01 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ DEFLIB1NAME=godiapi
 
 LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=  \
+    $(SLB)$/ooxml.lib \
     $(SLB)$/doctok.lib \
     $(SLB)$/dmapper.lib \
     $(SLB)$/filter.lib

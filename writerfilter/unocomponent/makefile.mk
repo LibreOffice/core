@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:30:31 $
+#  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:37:01 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,10 +53,11 @@ SHL1TARGET=$(TARGET)
 ODIAPILIB=-lodiapi
 RTFTOKLIB=-lrtftok
 DOCTOKLIB=-ldoctok
+OOXMLLIB=-looxml
 .ELIF "$(GUI)"=="WNT"
 ODIAPILIB=$(LB)$/iodiapi.lib
 RTFTOKLIB=$(LB)$/irtftok.lib
-DOCTOKLIB=$(LB)$/idoctok.lib
+OOXMLLIB=$(LB)$/iooxml.lib
 .ENDIF
 
 SHL1STDLIBS=$(SALLIB)\
@@ -66,14 +67,16 @@ SHL1STDLIBS=$(SALLIB)\
     $(UCBHELPERLIB)\
     $(ODIAPILIB) \
     $(RTFTOKLIB) \
-    $(DOCTOKLIB)
+    $(DOCTOKLIB) \
+    $(OOXMLLIB)
 
 SHL1LIBS=\
     $(SLB)$/debugservices_xxml.lib \
     $(SLB)$/debugservices_rtftok.lib \
     $(SLB)$/debugservices_odsl.lib \
     $(SLB)$/debugservices_rtfsl.lib \
-    $(SLB)$/debugservices_doctok.lib
+    $(SLB)$/debugservices_doctok.lib \
+    $(SLB)$/debugservices_ooxml.lib
 
 SHL1IMPLIB=i$(SHL1TARGET)
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:37 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:36:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,10 @@
 #include <debugservices/doctok/DocTokAnalyzeService.hxx>
 #endif
 
+#ifndef INCLUDED_OOXML_SCANNERTESTSERVICE_HXX
+#include <debugservices/ooxml/OOXMLTestService.hxx>
+#endif
+
 using namespace com::sun::star;
 
 
@@ -97,6 +101,7 @@ static struct ::cppu::ImplementationEntry s_component_entries [] =
     RTFSL_PARSER_COMPONENT_ENTRY, /* debugservices.rtfsl.RTFSLParser */
     DOCTOK_SCANNERTESTSERVICE_COMPONENT_ENTRY, /* debugservices.doctok.ScannerTestService */
     DOCTOK_ANALYZESERVICE_COMPONENT_ENTRY, /* debugservices.doctok.AnalyzeService */
+    OOXML_SCANNERTESTSERVICE_COMPONENT_ENTRY, /* debugservices.ooxml.ScannerTestService */
     { 0, 0, 0, 0, 0, 0 } // terminate with NULL
 };
 
