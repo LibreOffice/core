@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:26:08 $
+#   last change: $Author: rt $ $Date: 2007-02-21 10:50:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,11 @@ LIBCMT=msvcrt.lib
 #LIBCIMT=
 .ELSE
 LIBCST=libc.lib
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBCMT=libcmtd.lib
+.ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmt.lib
+.ENDIF # "$(USE_STLP_DEBUG)" != ""
 LIBCIMT=libcimt.lib
 .ENDIF
 
