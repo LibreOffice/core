@@ -1,0 +1,5 @@
+#!/bin/sh
+xalan -xsl modelpreprocess.xsl -in model.xml > model_processed.xml
+xalan -xsl resourcestokens.xsl -in model_processed.xml > OOXMLtokens.hxx
+xalan -xsl resources.xsl -in model_processed.xml > OOXMLresources.hxx
+xalan -xsl resourcesimpl.xsl -in model_processed.xml > OOXMLresources.cxx
