@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-12-29 07:46:31 $
+ *  last change: $Author: os $ $Date: 2007-02-21 12:25:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ class PropertyMap : public _PropertyMap
         virtual ~PropertyMap();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues();
-    void PropertyMap::Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny );
+    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny );
 
     void insert(const boost::shared_ptr<PropertyMap> pMap);
 

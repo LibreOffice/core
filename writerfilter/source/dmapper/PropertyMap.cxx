@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
+ *  last change: $Author: os $ $Date: 2007-02-21 12:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_STYLE_BREAKTYPE_HPP_
-#include <com/sun/star/style/BreakType.HPP>
+#include <com/sun/star/style/BreakType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
 #include <com/sun/star/text/WritingMode.hpp>
