@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-15 13:17:06 $
+ *  last change: $Author: hdu $ $Date: 2007-02-21 09:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ namespace drawinglayer
             FONT_RELIEF_ENGRAVED
         };
 
-        class TextComplexPortionPrimitive2D : public TextSimplePortionPrimitive2D
+        class TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
         {
         private:
             FontUnderline                               meFontUnderline;
@@ -223,7 +223,7 @@ namespace drawinglayer
             virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            TextComplexPortionPrimitive2D(
+            TextDecoratedPortionPrimitive2D(
                 const basegfx::B2DHomMatrix& rNewTransform,
                 const String& rText,
                 const ::std::vector< double >& rDXArray,

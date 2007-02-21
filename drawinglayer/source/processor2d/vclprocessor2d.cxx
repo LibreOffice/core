@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-13 08:16:41 $
+ *  last change: $Author: hdu $ $Date: 2007-02-21 09:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1046,23 +1046,10 @@ namespace drawinglayer
                     bPrimitiveAccepted = true;
                     Font aFont(primitive2d::getVclFontFromFontAttributes(rTextCandidate.getFontAttributes(), aScale, fRotate));
                     // handle additional font attributes
-                    const primitive2d::TextComplexPortionPrimitive2D* pTCPP =
-                        dynamic_cast<const primitive2d::TextComplexPortionPrimitive2D*>( &rTextCandidate );
+                    const primitive2d::TextDecoratedPortionPrimitive2D* pTCPP =
+                        dynamic_cast<const primitive2d::TextDecoratedPortionPrimitive2D*>( &rTextCandidate );
                     if( pTCPP != NULL )
                     {
-                        // TODO: emulate all text decorations
-#if 0
-                        if( pTCPP->getFontUnderline() != primitive2d::FONT_UNDERLINE_NONE )
-                            aFont.SetUnderline( UNDERLINE_SINGLE );
-
-                        // the compile time assertions make sure that the simple cast
-                        // from primitive2d::FontUnderline to vcl::FontUnderline works
-                        // TODO: test all other primitive2d<->vcl enum mappings
-                        BOOST_STATIC_ASSERT( UNDERLINE_NONE == (FontUnderline)primitive2d::FONT_UNDERLINE_NONE );
-                        BOOST_STATIC_ASSERT( UNDERLINE_SINGLE == (FontUnderline)primitive2d::FONT_UNDERLINE_SINGLE );
-                        BOOST_STATIC_ASSERT( UNDERLINE_BOLDWAVE == (FontUnderline)primitive2d::FONT_UNDERLINE_BOLDWAVE );
-                        FontUnderline eFontUnderline = (FontUnderline)pTCPP->getFontUnderline();
-#else
                         // set Underline attribute
                         FontUnderline eFontUnderline = UNDERLINE_NONE;
                         switch( pTCPP->getFontUnderline() )
@@ -1089,7 +1076,6 @@ namespace drawinglayer
                             case primitive2d::FONT_UNDERLINE_BOLDDASHDOTDOT:eFontUnderline = UNDERLINE_BOLDDASHDOT; break;
                             case primitive2d::FONT_UNDERLINE_BOLDWAVE:  eFontUnderline = UNDERLINE_BOLDWAVE; break;
                         }
-#endif
 
                         if( eFontUnderline != UNDERLINE_NONE )
                         {
@@ -1695,7 +1681,7 @@ namespace drawinglayer
                             switch(pBasePrimitive->getPrimitiveID())
                             {
                                 case Create2DPrimitiveID('2','T','S','i') :
-                                case Create2DPrimitiveID('2','T','C','o') :
+                                case Create2DPrimitiveID('2','T','D','o') :
                                 {
                                     // directdraw of text simple portion
                                     RenderTextSimplePortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(*pBasePrimitive));
