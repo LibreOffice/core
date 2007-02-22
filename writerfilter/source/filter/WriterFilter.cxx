@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WriterFilter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:34 $
+ *  last change: $Author: os $ $Date: 2007-02-22 13:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,28 @@
 #ifndef _WRITERFILTER_HXX
 #include <WriterFilter.hxx>
 #endif
+#ifndef _WRITERFILTER_DETECTION_HXX
+#include <WriterFilterDetection.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
+
+
+/*-- 22.02.2007 12:19:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+WriterFilter::WriterFilter( const uno::Reference< uno::XComponentContext >& rxContext)  :
+    m_xContext( rxContext )
+{
+}
+/*-- 22.02.2007 12:19:23---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+WriterFilter::~WriterFilter()
+{
+}
 
 extern "C"
 {
@@ -51,6 +69,7 @@ extern "C"
 static struct ::cppu::ImplementationEntry s_component_entries [] =
 {
     WriterFilter_createInstance, WriterFilter_getImplementationName, WriterFilter_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0,
+    WriterFilterDetection_createInstance, WriterFilterDetection_getImplementationName, WriterFilterDetection_getSupportedServiceNames, ::cppu::createSingleComponentFactory, 0, 0,
     { 0, 0, 0, 0, 0, 0 } // terminate with NULL
 };
 

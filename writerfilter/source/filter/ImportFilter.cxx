@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImportFilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:33 $
+ *  last change: $Author: os $ $Date: 2007-02-22 13:42:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,9 @@
 #ifndef INCLUDED_WW8_DOCUMENT_HXX
 #include <doctok/WW8Document.hxx>
 #endif
+#ifndef INCLUDED_OOXML_DOCUMENT_HXX
+#include <ooxml/OOXMLDocument.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -64,21 +67,33 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     sal_Int32 nLength = aDescriptor.getLength();
     const beans::PropertyValue * pValue = aDescriptor.getConstArray();
     uno::Reference < io::XInputStream > xInputStream;
+    ::rtl::OUString sFilterName;
     for ( sal_Int32 i = 0 ; i < nLength; i++)
     {
         if ( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "InputStream" ) ) )
             pValue[i].Value >>= xInputStream;
+        else if( pValue[i].Name.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "FilterName" ) ) )
+            pValue[i].Value >>= sFilterName;
     }
     if ( !xInputStream.is() )
     {
         return sal_False;
     }
-    //create the tokenizer and domain mapper
-    doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(m_xContext, xInputStream);
-    doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
-    doctok::Stream::Pointer_t pStream(new dmapper::DomainMapper(m_xContext, m_xDoc));
-    pDocument->resolve(*pStream);
 
+    doctok::Stream::Pointer_t pStream(new dmapper::DomainMapper(m_xContext, m_xDoc));
+    //create the tokenizer and domain mapper
+    if( m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ))
+    {
+        ooxml::OOXMLStream::Pointer_t pDocStream = ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream);
+        ooxml::OOXMLDocument::Pointer_t pDocument = ooxml::OOXMLDocumentFactory::createDocument(pDocStream);
+        pDocument->resolve(*pStream);
+    }
+    else
+    {
+        doctok::WW8Stream::Pointer_t pDocStream = doctok::WW8DocumentFactory::createStream(m_xContext, xInputStream);
+        doctok::WW8Document::Pointer_t pDocument(doctok::WW8DocumentFactory::createDocument(pDocStream));
+        pDocument->resolve(*pStream);
+    }
     return sal_True;
 }
 /*-- 09.06.2006 10:15:20---------------------------------------------------
@@ -96,18 +111,6 @@ void WriterFilter::setTargetDocument( const uno::Reference< lang::XComponent >& 
 {
    m_xDoc = xDoc;
 }
-
-/*-- 09.06.2006 10:15:20---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-OUString WriterFilter::detect( uno::Sequence< beans::PropertyValue >& /*Descriptor*/ )
-   throw( uno::RuntimeException )
-{
-   OUString sTypeName;
-   // TODO: place the detection here
-   return sTypeName;
-}
-
 
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
@@ -139,27 +142,23 @@ OUString WriterFilter_getImplementationName () throw (uno::RuntimeException)
 }
 
 #define SERVICE_NAME1 "com.sun.star.document.ImportFilter"
-#define SERVICE_NAME2 "com.sun.star.document.ExtendedTypeDetection"
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 sal_Bool WriterFilter_supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
 {
-   return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ) ||
-       ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME2 ) ) );
+   return (ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( SERVICE_NAME1 ) ));
 }
 /*-- 09.06.2006 10:15:20---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 uno::Sequence< OUString > WriterFilter_getSupportedServiceNames(  ) throw (uno::RuntimeException)
 {
-   uno::Sequence < OUString > aRet(2);
+   uno::Sequence < OUString > aRet(1);
    OUString* pArray = aRet.getArray();
    pArray[0] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME1 ) );
-   pArray[1] =  OUString ( RTL_CONSTASCII_USTRINGPARAM ( SERVICE_NAME2 ) );
    return aRet;
 }
-#undef SERVICE_NAME2
 #undef SERVICE_NAME1
 
 /*-- 09.06.2006 10:15:20---------------------------------------------------
