@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-21 11:28:48 $
+ *  last change: $Author: hdu $ $Date: 2007-02-22 14:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -333,7 +333,7 @@ namespace drawinglayer
     {
         Primitive2DSequence TextDecoratedPortionPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
         {
-            Primitive2DSequence aRetval(3);
+            Primitive2DSequence aRetval(6);
 
             // First create a simple text primitive and ignore other attributes
             aRetval[0] = new TextSimplePortionPrimitive2D(getTextTransform(), getText(), getDXArray(), getFontAttributes(), getFontColor());
@@ -363,10 +363,15 @@ namespace drawinglayer
 //          const double fLineHeight = aTextLayouter.getTextHeight();
             double fUnderlineOffset = aTextLayouter.getUnderlineOffset();
             double fUnderlineHeight = aTextLayouter.getUnderlineHeight();
-//          const double fStrikeoutOffset = aTextLayouter.getStrikeoutOffset();
             basegfx::tools::B2DLineJoin eLineJoin = basegfx::tools::B2DLINEJOIN_NONE;
             bool bDoubleLine = false;
             bool bWaveLine = false;
+
+            double fTextWidth = 0.0;
+            if( getDXArray().empty() )
+                fTextWidth = aTextLayouter.getTextWidth( getText(), 0/*TODO*/, getText().Len()/*TODO*/ );
+            else
+                fTextWidth = getDXArray().back() * aScale.getX();
 
             // prepare line styles for text decoration lines
             const int* pDashDotArray = NULL;
@@ -441,72 +446,155 @@ namespace drawinglayer
                     bDoubleLine = true;
                     break;
             }
-            double fTextWidth = 0.0;
-            if( getDXArray().empty() )
-                fTextWidth = aTextLayouter.getTextWidth( getText(), 0/*TODO*/, getText().Len()/*TODO*/ );
-            else
-                fTextWidth = getDXArray().back() * aScale.getX();
-            if( bDoubleLine )
+
+            if( fUnderlineHeight > 0 )
             {
-                fUnderlineOffset -= 0.50 * fUnderlineHeight;
-                fUnderlineHeight *= 0.64;
-            }
-            basegfx::B2DPolygon aUnderline;
-            ::basegfx::B2DPoint aPoint( 0.0, fUnderlineOffset );
-            aUnderline.append( aPoint );
-            if( !bWaveLine )
-            {
-                // straight underline
-                aUnderline.append( aPoint + ::basegfx::B2DPoint( fTextWidth, 0.0 ) );
-            }
-            else
-            {
-                // wavy underline
-                basegfx::B2DPolygon& aWavePoly = aUnderline;
-                double fWaveWidth = 4 * fUnderlineHeight;
-                if( getFontUnderline() == primitive2d::FONT_UNDERLINE_SMALLWAVE )
-                    fWaveWidth *= 0.7;
-                const double fWaveHeight = 0.5 * fWaveWidth;
-                const ::basegfx::B2DPoint aCtrlOffset( fWaveWidth * 0.467308, fWaveHeight );
-                for( double fPos = fWaveWidth; fPos < fTextWidth; fPos += fWaveWidth ) {
-                    // create a symmetrical wave using one cubic bezier curve
-                    // with y==0 for {x==0, x==0.5*fW or x==1.0*fW}
-                    // and ymin/ymax at {x=0.25*fW or 0.75*fW}
-                    const int n = aWavePoly.count();
-                    aWavePoly.setControlPointA( n-1, aPoint + aCtrlOffset );
-                    aWavePoly.append(               aPoint += ::basegfx::B2DPoint( fWaveWidth, 0.0 ) );
-                    aWavePoly.setControlPointB( n-1, aPoint - aCtrlOffset );
+                if( bDoubleLine )
+                {
+                    fUnderlineOffset -= 0.50 * fUnderlineHeight;
+                    fUnderlineHeight *= 0.64;
                 }
-                // adjust stroke style
-                eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
-                fUnderlineHeight *= 0.5;
+
+                basegfx::B2DPolygon aUnderline;
+                ::basegfx::B2DPoint aPoint( 0.0, fUnderlineOffset );
+                aUnderline.append( aPoint );
+                if( !bWaveLine )
+                {
+                    // straight underline
+                    aUnderline.append( aPoint + ::basegfx::B2DPoint( fTextWidth, 0.0 ) );
+                }
+                else
+                {
+                    // wavy underline
+                    basegfx::B2DPolygon& aWavePoly = aUnderline;
+                    double fWaveWidth = 4 * fUnderlineHeight;
+                    if( getFontUnderline() == primitive2d::FONT_UNDERLINE_SMALLWAVE )
+                        fWaveWidth *= 0.7;
+                    const double fWaveHeight = 0.5 * fWaveWidth;
+                    const ::basegfx::B2DPoint aCtrlOffset( fWaveWidth * 0.467308, fWaveHeight );
+                    for( double fPos = fWaveWidth; fPos < fTextWidth; fPos += fWaveWidth ) {
+                        // create a symmetrical wave using one cubic bezier curve
+                        // with y==0 for {x==0, x==0.5*fW or x==1.0*fW}
+                        // and ymin/ymax at {x=0.25*fW or 0.75*fW}
+                        const int n = aWavePoly.count();
+                        aWavePoly.setControlPointA( n-1, aPoint + aCtrlOffset );
+                        aWavePoly.append(               aPoint += ::basegfx::B2DPoint( fWaveWidth, 0.0 ) );
+                        aWavePoly.setControlPointB( n-1, aPoint - aCtrlOffset );
+                    }
+                    // adjust stroke style
+                    eLineJoin = basegfx::tools::B2DLINEJOIN_ROUND;
+                    fUnderlineHeight *= 0.5;
+                }
+
+                const basegfx::BColor& rLineColor = getFontColor();
+                attribute::StrokeAttribute aStrokeAttr( rLineColor, fUnderlineHeight, eLineJoin );
+                if( pDashDotArray != NULL )
+                {
+                    ::std::vector< double > aDoubleArray;
+                    for( const int* p = pDashDotArray; *p; ++p )
+                        aDoubleArray.push_back( *p * fUnderlineHeight);
+                    const double fFullDashDotLen = ::std::accumulate(aDoubleArray.begin(), aDoubleArray.end(), 0.0);
+                    aStrokeAttr = attribute::StrokeAttribute( rLineColor,
+                        fUnderlineHeight, eLineJoin, aDoubleArray, fFullDashDotLen );
+                }
+                aUnderline.transform( aUnscaledTransform );
+                aRetval[1] = new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr );
+
+                if( bDoubleLine )
+                {
+                    // add another underline below the first underline
+                    const double fLineDist = (bWaveLine ? 3 : 2) * fUnderlineHeight;
+                    ::basegfx::B2DVector aOffsetVector( 0.0, fLineDist );
+                    aOffsetVector = aUnscaledTransform * aOffsetVector;
+                    basegfx::B2DHomMatrix aOffsetTransform;
+                    aOffsetTransform.translate( aOffsetVector.getX(), aOffsetVector.getY() );
+                    aUnderline.transform( aOffsetTransform );
+                    aRetval[2] = new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr );
+                }
             }
 
-            const basegfx::BColor& rLineColor = getFontColor();
-            attribute::StrokeAttribute aStrokeAttr( rLineColor, fUnderlineHeight, eLineJoin );
-            if( pDashDotArray != NULL )
-            {
-                ::std::vector< double > aDoubleArray;
-                for( const int* p = pDashDotArray; *p; ++p )
-                    aDoubleArray.push_back( *p * fUnderlineHeight);
-                const double fFullDashDotLen = ::std::accumulate(aDoubleArray.begin(), aDoubleArray.end(), 0.0);
-                aStrokeAttr = attribute::StrokeAttribute( rLineColor,
-                    fUnderlineHeight, eLineJoin, aDoubleArray, fFullDashDotLen );
-            }
-            aUnderline.transform( aUnscaledTransform );
-            aRetval[1] = new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr );
+            double fStrikeoutHeight = aTextLayouter.getUnderlineHeight();
+            double fStrikeoutOffset = aTextLayouter.getStrikeoutOffset();
+            eLineJoin = basegfx::tools::B2DLINEJOIN_NONE;
+            bDoubleLine = false;
+            sal_Unicode aStrikeoutChar = '\0';
 
-            if( bDoubleLine )
+            // set Underline attribute
+            switch( getFontStrikeout() )
             {
-                // add another underline below the first underline
-                const double fLineDist = (bWaveLine ? 3 : 2) * fUnderlineHeight;
-                ::basegfx::B2DPoint aOffsetPoint( 0.0, fLineDist );
-                aUnscaledTransform.translate( -aTranslate.getX(), -aTranslate.getY() );
-                aOffsetPoint = aUnscaledTransform * aOffsetPoint;
-                basegfx::B2DHomMatrix aOffsetTransform;
-                aOffsetTransform.translate( aOffsetPoint.getX(), aOffsetPoint.getY() );
-                aUnderline.transform( aOffsetTransform );
-                aRetval[2] = new PolygonStrokePrimitive2D( aUnderline, aStrokeAttr );
+                default:
+                    DBG_WARNING1( "DrawingLayer: Unknown underline attribute (%d)!", getFontUnderline() );
+                    // fall through
+                case primitive2d::FONT_STRIKEOUT_NONE:
+                    fStrikeoutHeight = 0;
+                    break;
+                case primitive2d::FONT_STRIKEOUT_SINGLE:
+                    break;
+                case primitive2d::FONT_STRIKEOUT_DOUBLE:
+                    bDoubleLine = true;
+                    break;
+                case primitive2d::FONT_STRIKEOUT_BOLD:
+                    fStrikeoutHeight *= 2;
+                    break;
+                case primitive2d::FONT_STRIKEOUT_SLASH:
+                    aStrikeoutChar = '/';
+//                  fStrikeoutHeight = 0;
+                    break;
+                case primitive2d::FONT_STRIKEOUT_X:
+                    aStrikeoutChar = 'X';
+//                  fStrikeoutHeight = 0;
+                    break;
+            };
+
+            if( fStrikeoutHeight > 0 )
+            {
+                if( bDoubleLine )
+                {
+                    fStrikeoutOffset -= 0.50 * fStrikeoutHeight;
+                    fStrikeoutHeight *= 0.64;
+                }
+
+                basegfx::B2DPolygon aStrikeoutLine;
+                basegfx::B2DPoint aPoint( 0.0, -fStrikeoutOffset );
+                aStrikeoutLine.append( aPoint );
+                if( 1/*####*/ )
+                {
+                    // straight underline
+                    aStrikeoutLine.append( aPoint + ::basegfx::B2DPoint( fTextWidth, 0.0 ) );
+                }
+
+                const basegfx::BColor& rStrikeoutColor = getFontColor();
+                attribute::StrokeAttribute aStrokeAttr( rStrikeoutColor, fStrikeoutHeight, eLineJoin );
+                aStrikeoutLine.transform( aUnscaledTransform );
+                aRetval[3] = new PolygonStrokePrimitive2D( aStrikeoutLine, aStrokeAttr );
+
+                if( bDoubleLine )
+                {
+                    // add another strikeout below the first strikeout
+                    const double fLineDist = 2 * fStrikeoutHeight;
+                    ::basegfx::B2DVector aOffsetVector( 0.0, -fLineDist );
+                    aOffsetVector = aUnscaledTransform * aOffsetVector;
+                    basegfx::B2DHomMatrix aOffsetTransform;
+                    aOffsetTransform.translate( aOffsetVector.getX(), aOffsetVector.getY() );
+                    aStrikeoutLine.transform( aOffsetTransform );
+                    aRetval[4] = new PolygonStrokePrimitive2D( aStrikeoutLine, aStrokeAttr );
+                }
+            }
+
+            if( aStrikeoutChar != '\0' )
+            {
+                String aString( &aStrikeoutChar, 1 );
+                double fStrikeCharWidth = aTextLayouter.getTextWidth( aString, 0, 1 );
+                double fStrikeCharCount = fTextWidth / fStrikeCharWidth;
+                int nStrikeCharCount = static_cast<int>(fStrikeCharCount + 0.9);
+                for( int i = 1; i < nStrikeCharCount; ++i )
+                    aString += aStrikeoutChar;
+                std::vector<double> aDXArray( nStrikeCharCount );
+                fStrikeCharWidth /= aScale.getX();
+                for( int i = 0; i < nStrikeCharCount; ++i )
+                    aDXArray[i] = (i+1) * fStrikeCharWidth;
+                const basegfx::BColor& rStrikeoutColor = getFontColor();
+                aRetval[5] = new TextSimplePortionPrimitive2D(getTextTransform(), aString, aDXArray, getFontAttributes(), rStrikeoutColor );
             }
 
             // TODO: need to take care of
