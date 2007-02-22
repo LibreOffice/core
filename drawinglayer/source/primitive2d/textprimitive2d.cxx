@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-22 14:32:00 $
+ *  last change: $Author: hdu $ $Date: 2007-02-22 15:11:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,11 +524,11 @@ namespace drawinglayer
                     break;
                 case primitive2d::FONT_STRIKEOUT_SLASH:
                     aStrikeoutChar = '/';
-//                  fStrikeoutHeight = 0;
+                    fStrikeoutHeight = 0;
                     break;
                 case primitive2d::FONT_STRIKEOUT_X:
                     aStrikeoutChar = 'X';
-//                  fStrikeoutHeight = 0;
+                    fStrikeoutHeight = 0;
                     break;
             };
 
