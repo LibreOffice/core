@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-22 14:10:26 $
+ *  last change: $Author: hdu $ $Date: 2007-02-22 14:32:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ namespace drawinglayer
 
             // create primitives for the outlines
             const sal_uInt32 nCount = aB2DPolyPolyVector.size();
-            Primitive2DSequence aRetval;
+            Primitive2DSequence aRetval( nCount );
 
             if( !nCount )
             {
@@ -199,27 +199,18 @@ namespace drawinglayer
             }
             else if( !getFontAttributes().mbOutline )
             {
-                aRetval.realloc(nCount);
                 // for the glyph shapes as color-filled polypolygons
                 for(sal_uInt32 a(0L); a < nCount; a++)
                 {
                     // prepare polypolygon
                     basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
                     rPolyPolygon.transform(aUnscaledTransform);
-
-                    const Primitive2DReference xRef(new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor()));
-                    aRetval[a] = xRef;
+                    aRetval[a] = new PolyPolygonColorPrimitive2D(rPolyPolygon, getFontColor());
                 }
             }
             else
             {
-                // for the glyph outlines as stroked polygons
-                // since there is no primitive for stroked polypolygons
-                int nPolyCount = 0;
-                for(sal_uInt32 a(0L); a < nCount; a++)
-                    nPolyCount += aB2DPolyPolyVector[a].count();
-                aRetval.realloc(nPolyCount);
-
+                // for the glyph shapes as outline-only polypolygons
                 double fStrokeWidth = 1.0 + aScale.getY() * 0.02;
                 if( getFontAttributes().mnWeight > WEIGHT_SEMIBOLD )
                     fStrokeWidth *= 1.4;
@@ -227,16 +218,11 @@ namespace drawinglayer
                     fStrokeWidth *= 0.7;
                 const drawinglayer::attribute::StrokeAttribute aStrokeAttr( getFontColor(),
                     fStrokeWidth, basegfx::tools::B2DLINEJOIN_NONE );
-                for(sal_uInt32 a(0L), b(0L); a < nCount; a++)
+                for(sal_uInt32 a(0L); a < nCount; a++)
                 {
                     basegfx::B2DPolyPolygon& rPolyPolygon = aB2DPolyPolyVector[a];
                     rPolyPolygon.transform(aUnscaledTransform);
-                    for( unsigned i(0L); i < rPolyPolygon.count(); ++i )
-                    {
-                        const basegfx::B2DPolygon& rPolygon = rPolyPolygon.getB2DPolygon(i);
-                        const Primitive2DReference xRef(new PolygonStrokePrimitive2D(rPolygon, aStrokeAttr));
-                        aRetval[b++] = xRef;
-                    }
+                    aRetval[a] = new PolyPolygonStrokePrimitive2D(rPolyPolygon, aStrokeAttr);
                 }
             }
 
@@ -598,7 +584,6 @@ namespace drawinglayer
             }
 
             // TODO: need to take care of
-            // -strikethrough
             // -emphasis mark
             // -relief (embosses/engraved)
             // -shadow
