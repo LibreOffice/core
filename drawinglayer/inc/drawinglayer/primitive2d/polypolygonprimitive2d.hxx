@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:05 $
+ *  last change: $Author: aw $ $Date: 2007-02-22 12:10:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,92 @@
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEATTRIBUTE_HXX
+#include <drawinglayer/attribute/strokeattribute.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_STROKEARROWATTRIBUTE_HXX
+#include <drawinglayer/attribute/strokearrowattribute.hxx>
+#endif
+
+//////////////////////////////////////////////////////////////////////////////
+// PolyPolygonStrokePrimitive2D class
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class PolyPolygonStrokePrimitive2D : public BasePrimitive2D
+        {
+        private:
+            basegfx::B2DPolyPolygon                     maPolyPolygon;
+            attribute::StrokeAttribute                  maStrokeAttribute;
+
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+        public:
+            PolyPolygonStrokePrimitive2D(
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const attribute::StrokeAttribute& rStrokeAttribute);
+
+            // get data
+            basegfx::B2DPolyPolygon getB2DPolyPolygon() const { return maPolyPolygon; }
+            const attribute::StrokeAttribute& getStrokeAttribute() const { return maStrokeAttribute; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+// PolyPolygonStrokeArrowPrimitive2D class
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        class PolyPolygonStrokeArrowPrimitive2D : public PolyPolygonStrokePrimitive2D
+        {
+        private:
+            attribute::StrokeArrowAttribute             maStart;
+            attribute::StrokeArrowAttribute             maEnd;
+
+        protected:
+            // local decomposition.
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
+
+        public:
+            PolyPolygonStrokeArrowPrimitive2D(
+                const basegfx::B2DPolyPolygon& rPolyPolygon,
+                const attribute::StrokeAttribute& rStrokeAttribute,
+                const attribute::StrokeArrowAttribute& rStart,
+                const attribute::StrokeArrowAttribute& rEnd);
+
+            // get data
+            const attribute::StrokeArrowAttribute& getStart() const { return maStart; }
+            const attribute::StrokeArrowAttribute& getEnd() const { return maEnd; }
+
+            // compare operator
+            virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
+
+            // get range
+            virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
+
+            // provide unique ID
+            DeclPrimitrive2DIDBlock()
+        };
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 // PolyPolygonColorPrimitive2D class

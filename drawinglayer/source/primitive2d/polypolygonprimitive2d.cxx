@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
+ *  last change: $Author: aw $ $Date: 2007-02-22 12:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,167 @@
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Primitive2DSequence PolyPolygonStrokePrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
+            const sal_uInt32 nCount(aPolyPolygon.count());
+
+            if(nCount)
+            {
+                Primitive2DSequence aRetval(nCount);
+
+                for(sal_uInt32 a(0L); a < nCount; a++)
+                {
+                    aRetval[a] = Primitive2DReference(new PolygonStrokePrimitive2D(aPolyPolygon.getB2DPolygon(a), getStrokeAttribute()));
+                }
+
+                return aRetval;
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
+        }
+
+        PolyPolygonStrokePrimitive2D::PolyPolygonStrokePrimitive2D(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            const attribute::StrokeAttribute& rStrokeAttribute)
+        :   BasePrimitive2D(),
+            maPolyPolygon(rPolyPolygon),
+            maStrokeAttribute(rStrokeAttribute)
+        {
+        }
+
+        bool PolyPolygonStrokePrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(BasePrimitive2D::operator==(rPrimitive))
+            {
+                const PolyPolygonStrokePrimitive2D& rCompare = (PolyPolygonStrokePrimitive2D&)rPrimitive;
+
+                return (getB2DPolyPolygon() == rCompare.getB2DPolyPolygon()
+                    && getStrokeAttribute() == rCompare.getStrokeAttribute());
+            }
+
+            return false;
+        }
+
+        basegfx::B2DRange PolyPolygonStrokePrimitive2D::getB2DRange(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            // get range of it (subdivided)
+            basegfx::B2DRange aRetval(basegfx::tools::getRange(basegfx::tools::adaptiveSubdivideByAngle(getB2DPolyPolygon())));
+
+            // if width, grow by line width
+            if(getStrokeAttribute().getWidth())
+            {
+                aRetval.grow(getStrokeAttribute().getWidth() / 2.0);
+            }
+
+            return aRetval;
+        }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolyPolygonStrokePrimitive2D, '2','P','P','s')
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
+
+namespace drawinglayer
+{
+    namespace primitive2d
+    {
+        Primitive2DSequence PolyPolygonStrokeArrowPrimitive2D::createLocalDecomposition(const geometry::ViewInformation2D& /*rViewInformation*/) const
+        {
+            const basegfx::B2DPolyPolygon aPolyPolygon(getB2DPolyPolygon());
+            const sal_uInt32 nCount(aPolyPolygon.count());
+
+            if(nCount)
+            {
+                Primitive2DSequence aRetval(nCount);
+
+                for(sal_uInt32 a(0L); a < nCount; a++)
+                {
+                    const basegfx::B2DPolygon aPolygon(aPolyPolygon.getB2DPolygon(a));
+
+                    if(aPolygon.isClosed())
+                    {
+                        // no need for PolygonStrokeArrowPrimitive2D when polygon is closed
+                        aRetval[a] = Primitive2DReference(new PolygonStrokePrimitive2D(aPolygon, getStrokeAttribute()));
+                    }
+                    else
+                    {
+                        aRetval[a] = Primitive2DReference(new PolygonStrokeArrowPrimitive2D(aPolygon, getStrokeAttribute(), getStart(), getEnd()));
+                    }
+                }
+
+                return aRetval;
+            }
+            else
+            {
+                return Primitive2DSequence();
+            }
+        }
+
+        PolyPolygonStrokeArrowPrimitive2D::PolyPolygonStrokeArrowPrimitive2D(
+            const basegfx::B2DPolyPolygon& rPolyPolygon,
+            const attribute::StrokeAttribute& rStrokeAttribute,
+            const attribute::StrokeArrowAttribute& rStart,
+            const attribute::StrokeArrowAttribute& rEnd)
+        :   PolyPolygonStrokePrimitive2D(rPolyPolygon, rStrokeAttribute),
+            maStart(rStart),
+            maEnd(rEnd)
+        {
+        }
+
+        bool PolyPolygonStrokeArrowPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
+        {
+            if(PolyPolygonStrokePrimitive2D::operator==(rPrimitive))
+            {
+                const PolyPolygonStrokeArrowPrimitive2D& rCompare = (PolyPolygonStrokeArrowPrimitive2D&)rPrimitive;
+
+                return (getStart() == rCompare.getStart()
+                    && getEnd() == rCompare.getEnd());
+            }
+
+            return false;
+        }
+
+        basegfx::B2DRange PolyPolygonStrokeArrowPrimitive2D::getB2DRange(const geometry::ViewInformation2D& rViewInformation) const
+        {
+            basegfx::B2DRange aRetval;
+
+            if(getStart().isActive() || getEnd().isActive())
+            {
+                // use decomposition when line start/end is used
+                return BasePrimitive2D::getB2DRange(rViewInformation);
+            }
+            else
+            {
+                // get range from parent
+                return PolyPolygonStrokePrimitive2D::getB2DRange(rViewInformation);
+            }
+        }
+
+        // provide unique ID
+        ImplPrimitrive2DIDBlock(PolyPolygonStrokeArrowPrimitive2D, '2','P','P','A')
+
+    } // end of namespace primitive2d
+} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
