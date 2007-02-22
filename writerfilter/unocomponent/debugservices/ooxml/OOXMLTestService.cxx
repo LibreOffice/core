@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLTestService.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:38:10 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-02-22 17:16:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);
             ooxml::OOXMLStream::Pointer_t pDocStream = ooxml::OOXMLDocumentFactory::createStream(xContext, xInputStream);
 
-            ooxml::OOXMLDocument::Pointer_t pDocument = ooxml::OOXMLDocumentFactory::createDocument(pDocStream);
+            ooxml::OOXMLDocument::Pointer_t pDocument(ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
 
 #if 0
         TimeValue t1; osl_getSystemTime(&t1);

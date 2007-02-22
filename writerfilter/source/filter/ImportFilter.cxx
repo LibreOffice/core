@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImportFilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2007-02-22 13:42:56 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-02-22 17:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ sal_Bool WriterFilter::filter( const uno::Sequence< beans::PropertyValue >& aDes
     if( m_sFilterName.equalsAsciiL ( RTL_CONSTASCII_STRINGPARAM ( "writer_MS_Word_2007" ) ))
     {
         ooxml::OOXMLStream::Pointer_t pDocStream = ooxml::OOXMLDocumentFactory::createStream(m_xContext, xInputStream);
-        ooxml::OOXMLDocument::Pointer_t pDocument = ooxml::OOXMLDocumentFactory::createDocument(pDocStream);
+        ooxml::OOXMLDocument::Pointer_t pDocument(ooxml::OOXMLDocumentFactory::createDocument(pDocStream));
         pDocument->resolve(*pStream);
     }
     else
