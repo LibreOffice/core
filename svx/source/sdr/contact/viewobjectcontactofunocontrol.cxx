@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-16 10:56:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 15:58:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,8 +223,8 @@ namespace sdr { namespace contact {
 
         /** disposes the given control
         */
-        static void disposeControl_nothrow(
-                const Reference< XControl >& _rxControl
+        static void disposeAndClearControl_nothrow(
+                Reference< XControl >& _rxControl
             );
 
     private:
@@ -285,7 +285,7 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    void UnoControlContactHelper::disposeControl_nothrow( const Reference< XControl >& _rxControl )
+    void UnoControlContactHelper::disposeAndClearControl_nothrow( Reference< XControl >& _rxControl )
     {
         try
         {
@@ -295,8 +295,9 @@ namespace sdr { namespace contact {
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "UnoControlContactHelper::disposeControl_nothrow: caught an exception!" );
+            OSL_ENSURE( sal_False, "UnoControlContactHelper::disposeAndClearControl_nothrow: caught an exception!" );
         }
+        _rxControl = NULL;
     }
 
     //====================================================================
@@ -561,6 +562,13 @@ namespace sdr { namespace contact {
         */
         void    positionAndZoomControl() const;
 
+        /** positions the control for a paint onto a given device
+
+            If we do not (yet) have a control, or the control does not belong to the
+            device for which a paint is requested, no positioning happens.
+        */
+        void    positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const;
+
         /** prepares drawing the control for print or print preview
 
             @param _rDevice
@@ -795,6 +803,16 @@ namespace sdr { namespace contact {
         */
         bool impl_ensureControl_nothrow( IPageViewAccess& _rPageView, const OutputDevice& _rDevice );
 
+        /** retrieves the device which a PageView belongs to, starting from its ObjectContactOfPageView
+
+            Since #i72752#, the PaintWindow (and thus the OutputDevice) associated with a PageView is not
+            constant over its lifetime. Instead, during some paint operations, the PaintWindow/OutputDevice
+            might be temporarily patched.
+
+            This method cares for this, by retrieving the very original OutputDevice.
+        */
+        const OutputDevice& imp_getPageViewDevice_nothrow( const ObjectContactOfPageView& _rObjectContact ) const;
+
     private:
         ViewObjectContactOfUnoControl_Impl();                                                     // never implemented
         ViewObjectContactOfUnoControl_Impl( const ViewObjectContactOfUnoControl_Impl& );            // never implemented
@@ -862,7 +880,7 @@ namespace sdr { namespace contact {
 
         // dispose the control
         if ( _bAlsoDisposeControl )
-            UnoControlContactHelper::disposeControl_nothrow( m_xControl );
+            UnoControlContactHelper::disposeAndClearControl_nothrow( m_xControl );
 
         m_xControl.clear();
         m_xContainer.clear();
@@ -911,6 +929,18 @@ namespace sdr { namespace contact {
 
 
     //--------------------------------------------------------------------
+    void ViewObjectContactOfUnoControl_Impl::positionControlForPaint( const DisplayInfo& _rDisplayInfo ) const
+    {
+        if ( !m_xControl.is() )
+            return;
+
+        if ( m_pOutputDeviceForWindow != _rDisplayInfo.GetOutputDevice() )
+            return;
+
+        positionAndZoomControl();
+    }
+
+    //--------------------------------------------------------------------
     void ViewObjectContactOfUnoControl_Impl::positionAndZoomControl() const
     {
         OSL_PRECOND( m_pOutputDeviceForWindow && m_xControl.is(), "ViewObjectContactOfUnoControl_Impl::positionAndZoomControl: no output device or no control!" );
@@ -941,7 +971,7 @@ namespace sdr { namespace contact {
         // 2006-10-24 / #i70604# / frank.schoenheit@sun.com
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
         if ( pPageViewContact )
-            pDeviceForControl = &pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice();
+            pDeviceForControl = &imp_getPageViewDevice_nothrow( *pPageViewContact );
 
         if ( !pDeviceForControl )
             pDeviceForControl = _rDisplayInfo.GetOutputDevice();
@@ -971,8 +1001,22 @@ namespace sdr { namespace contact {
         SdrPageViewAccess aPVAccess( pPageViewContact->GetPageWindow().GetPageView() );
         return impl_ensureControl_nothrow(
             aPVAccess,
-            pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice()
+            imp_getPageViewDevice_nothrow( *pPageViewContact )
         );
+    }
+
+    //--------------------------------------------------------------------
+    const OutputDevice& ViewObjectContactOfUnoControl_Impl::imp_getPageViewDevice_nothrow( const ObjectContactOfPageView& _rObjectContact ) const
+    {
+        // if the PageWindow has a patched PaintWindow, use the original PaintWindow
+        // this ensures that our control is _not_ re-created just because somebody
+        // (temporarily) changed the window to paint onto.
+        // #i72429# / 2007-02-20 / frank.schoenheit@sun.com
+        const SdrPageWindow& rPageWindow( _rObjectContact.GetPageWindow() );
+        if ( rPageWindow.GetOriginalPaintWindow() )
+            return rPageWindow.GetOriginalPaintWindow()->GetOutputDevice();
+
+        return rPageWindow.GetPaintWindow().GetOutputDevice();
     }
 
     //--------------------------------------------------------------------
@@ -993,7 +1037,7 @@ namespace sdr { namespace contact {
             if ( m_xContainer.is() )
                 impl_switchContainerListening_nothrow( false );
             impl_switchControlListening_nothrow( false );
-            UnoControlContactHelper::disposeControl_nothrow( m_xControl );
+            UnoControlContactHelper::disposeAndClearControl_nothrow( m_xControl );
         }
 
         SdrUnoObj* pUnoObject( NULL );
@@ -1099,8 +1143,7 @@ namespace sdr { namespace contact {
         if ( !bSuccess )
         {
             // delete the control which might have been created already
-            UnoControlContactHelper::disposeControl_nothrow( _out_rControl );
-            _out_rControl = NULL;
+            UnoControlContactHelper::disposeAndClearControl_nothrow( _out_rControl );
         }
 
         return _out_rControl.is();
@@ -1516,7 +1559,7 @@ namespace sdr { namespace contact {
 
         ObjectContactOfPageView* pPageViewContact = dynamic_cast< ObjectContactOfPageView* >( &m_pAntiImpl->GetObjectContact() );
         if ( pPageViewContact )
-            return ( _pDevice == &pPageViewContact->GetPageWindow().GetPaintWindow().GetOutputDevice() );
+            return ( _pDevice == &imp_getPageViewDevice_nothrow( *pPageViewContact ) );
 
         DBG_ERROR( "ViewObjectContactOfUnoControl_Impl::belongsToDevice: could not determine the device I belong to!" );
         return false;
@@ -1575,7 +1618,11 @@ namespace sdr { namespace contact {
     {
         VOCGuard aGuard( *m_pImpl );
         m_pImpl->ensureControl();
-        return m_pImpl->getExistentControl();
+        Reference< XControl > xControl = m_pImpl->getExistentControl();
+        Reference< XControlModel > xModel;
+        if ( xControl.is() )
+            xModel = xControl->getModel();
+        return xControl;
     }
 
     //--------------------------------------------------------------------
@@ -1622,10 +1669,7 @@ namespace sdr { namespace contact {
     void ViewObjectContactOfUnoControl::positionControl( DisplayInfo& _rDisplayInfo ) const
     {
         VOCGuard aGuard( *m_pImpl );
-
-        SdrUnoObj* pObject( NULL );
-        if ( const_cast< ViewObjectContactOfUnoControl* >( this )->m_pImpl->initPaint( _rDisplayInfo, pObject ) )
-            m_pImpl->positionAndZoomControl();
+        m_pImpl->positionControlForPaint( _rDisplayInfo );
     }
 
     //--------------------------------------------------------------------
