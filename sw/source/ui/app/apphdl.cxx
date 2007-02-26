@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 12:06:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 15:57:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,7 +726,7 @@ IMPL_LINK( SwMailMergeWizardExecutor, CancelHdl, AbstractMailMergeWizard*, EMPTY
         m_pMMConfig->SetTargetView(0);
     }
     if(m_pMMConfig->GetSourceView())
-        m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame()->Appear();
+        m_pMMConfig->GetSourceView()->GetViewFrame()->GetFrame()->AppearWithUpdate();
 
     m_pMMConfig->Commit();
     delete m_pMMConfig;
