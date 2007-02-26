@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:01:56 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 15:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -469,6 +469,7 @@ LayoutManager::LayoutManager( const Reference< XMultiServiceFactory >& xServiceM
 
 LayoutManager::~LayoutManager()
 {
+    m_aAsyncLayoutTimer.Stop();
 }
 
 // Internal helper function
@@ -3726,6 +3727,10 @@ throw ( RuntimeException )
     if (( m_xDockingAreaAcceptor == xDockingAreaAcceptor ) ||
           !m_xFrame.is() )
         return;
+
+    // IMPORTANT: Be sure to stop layout timer if don't have a docking area acceptor!
+    if ( !xDockingAreaAcceptor.is() )
+        m_aAsyncLayoutTimer.Stop();
 
     sal_Bool bAutomaticToolbars( m_bAutomaticToolbars );
     std::vector< Reference< css::awt::XWindow > > oldDockingAreaWindows;
