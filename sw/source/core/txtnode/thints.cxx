@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:33:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 15:33:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -451,7 +451,13 @@ void SwpHints::BuildPortions( SwTxtNode& rNode, SwTxtAttr& rNewHint, USHORT nMod
             {
                 if ( RES_TXTATR_CHARFMT == (*aIter)->Which() )
                 {
-                    if ( !( SETATTR_DONTREPLACE & nMode ) || bNoLengthAttribute )
+                    // --> FME 2007-02-16 #i74589#
+                    const SwFmtCharFmt& rOtherCharFmt = (*aIter)->GetCharFmt();
+                    const SwFmtCharFmt& rThisCharFmt = rNewHint.GetCharFmt();
+                    const bool bSameCharFmt = rOtherCharFmt.GetCharFmt() == rThisCharFmt.GetCharFmt();
+                    // <--
+
+                    if ( !( SETATTR_DONTREPLACE & nMode ) || bNoLengthAttribute || bSameCharFmt )
                     {
                         // Remove old hint
                         Delete( *aIter );
