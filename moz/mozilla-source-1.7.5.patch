@@ -6783,8 +6783,27 @@
   
   private :
   } ;
-*** misc/mozilla/modules/libpref/src/Makefile.in	2004-01-16 20:22:37.000000000 +0100
---- misc/build/mozilla/modules/libpref/src/Makefile.in	2006-02-24 09:41:55.000000000 +0100
+*** misc/mozilla/mailnews/mime/src/mimeeobj.h	Sat Sep 29 06:07:42 2001
+--- misc/build/mozilla/mailnews/mime/src/mimeeobj.h	Thu Oct  5 15:14:15 2006
+***************
+*** 54,60 ****
+    MimeLeafClass leaf;
+  };
+  
+! extern MimeExternalObjectClass mimeExternalObjectClass;
+  
+  struct MimeExternalObject {
+    MimeLeaf leaf;
+--- 54,60 ----
+    MimeLeafClass leaf;
+  };
+  
+! extern "C" MimeExternalObjectClass mimeExternalObjectClass;
+  
+  struct MimeExternalObject {
+    MimeLeaf leaf;
+*** misc/mozilla/modules/libpref/src/Makefile.in	Sat Jan 17 06:22:37 2004
+--- misc/build/mozilla/modules/libpref/src/Makefile.in	Mon Oct  2 20:20:28 2006
 ***************
 *** 78,84 ****
   PREF_JS_EXPORTS	+= $(srcdir)/init/non-shared.txt
