@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpagewindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:40:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 15:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,8 @@ using namespace ::com::sun::star;
 SdrPageWindow::SdrPageWindow(SdrPageView& rPageView, SdrPaintWindow& rPaintWindow)
 :   mpObjectContact(0L),
     mrPageView(rPageView),
-    mpPaintWindow(&rPaintWindow)
+    mpPaintWindow(&rPaintWindow),
+    mpOriginalPaintWindow(NULL)
 {
 }
 
@@ -283,6 +284,22 @@ SdrPaintInfoRec* SdrPageWindow::ImpCreateNewPageInfoRec(const Rectangle& rDirtyR
 ::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const
 {
     return GetPaintWindow().GetOverlayManager();
+}
+
+void SdrPageWindow::patchPaintWindow(SdrPaintWindow& rPaintWindow)
+{
+    mpOriginalPaintWindow = mpPaintWindow;
+    mpPaintWindow = &rPaintWindow;
+}
+
+void SdrPageWindow::unpatchPaintWindow()
+{
+    DBG_ASSERT(mpOriginalPaintWindow, "SdrPageWindow::unpatchPaintWindow: paint window not patched!" );
+    if ( mpOriginalPaintWindow )
+    {
+        mpPaintWindow = mpOriginalPaintWindow;
+        mpOriginalPaintWindow = NULL;
+    }
 }
 
 void SdrPageWindow::PrepareRedraw(const Region& rReg)
