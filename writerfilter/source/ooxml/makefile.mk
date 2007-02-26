@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.1 $
+#  $Revision: 1.2 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:24:38 $
+#  last change: $Author: hbrinkm $ $Date: 2007-02-26 15:32:41 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@ SLOFILES= \
     $(SLO)$/OOXMLresources.obj \
     $(SLO)$/OOXMLPropertySetImpl.obj \
     $(SLO)$/OOXMLContext.obj \
+    $(SLO)$/NamespaceMapper.obj \
     $(SLO)$/TokenMap.obj \
     $(SLO)$/OOXMLSaxHandler.obj \
     $(SLO)$/OOXMLDocumentImpl.obj \
