@@ -4,9 +4,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:34:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 16:00:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,75 +91,6 @@
 #include "frame.hxx"
 #include "sfxuno.hxx"
 
-/*
-// class SfxPartwinFrame_Impl ------------------------------------------
-
-class SfxPartwinFrame_Impl : public SfxUnoFrame
-{
-public:
-    SfxPopupStatusIndicator*        pIndicator;
-    SfxPartDockWnd_Impl*            pBeamer;
-
-    virtual void     SAL_CALL               initialize(const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & aPeer) throw ( ::com::sun::star::uno::RuntimeException );
-    virtual SfxFrame*               CreateFrame( Window* pParent );
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator >   SAL_CALL     getStatusIndicator(void) throw ( ::com::sun::star::uno::RuntimeException );
-    void                            dispatch_Impl( const ::com::sun::star::util::URL& aURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aArgs );
-};
-
-// -----------------------------------------------------------------------
-::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > SAL_CALL SfxPartwinFrame_Impl::getStatusIndicator(void) throw ( ::com::sun::star::uno::RuntimeException )
-{
-    return pIndicator->GetInterface();
-}
-
-void SfxPartwinFrame_Impl::dispatch_Impl( const ::com::sun::star::util::URL& rURL, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
-{
-    if ( !pBeamer )
-        return;
-
-    if ( rURL.Protocol.compareToAscii(".uno:") == 0 )
-    {
-        if ( rURL.Path.compareToAscii("Reload") == 0)
-        {
-            SfxUnoFrame::dispatch_Impl( rURL, rArgs );
-            if ( pBeamer->IsAutoHide_Impl() )
-                pBeamer->AutoShow_Impl( sal_True );
-            return;
-        }
-    }
-    else
-        SfxUnoFrame::dispatch_Impl( rURL, rArgs );
-
-    if ( rURL.Complete.len() )
-    {
-        if ( pBeamer->IsAutoHide_Impl() )
-            pBeamer->AutoShow_Impl( sal_True );
-    }
-    else
-    {
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xTmp( this );
-        SfxApplication* pApp = SFX_APP();
-        pApp->SetChildWindow( SID_BROWSER, sal_False );
-        pApp->GetBindings().Invalidate( SID_BROWSER );
-    }
-}
-
-
-// -----------------------------------------------------------------------
-void SAL_CALL SfxPartwinFrame_Impl::initialize( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > & aWindow ) throw ( ::com::sun::star::uno::RuntimeException )
-{
-    setName( rtl::OUString::createFromAscii("_partwindow") );
-    SetContainerWindow_Impl( aWindow );
-}
-
-// -----------------------------------------------------------------------
-SfxFrame* SfxPartwinFrame_Impl::CreateFrame( Window* pParent )
-{
-    return NULL;
-}
-
-*/
-
 //****************************************************************************
 // SfxPartChildWnd_Impl
 //****************************************************************************
@@ -185,6 +116,7 @@ SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
     pWindow->SetSizePixel( Size( 175, 175 ) );
 
     ( ( SfxDockingWindow* ) pWindow )->Initialize( pInfo );
+    SetHideNotDelete( TRUE );
 }
 
 SfxPartChildWnd_Impl::~SfxPartChildWnd_Impl()
