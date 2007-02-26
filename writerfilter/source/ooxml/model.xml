@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model>
-<namespace name="a">
+<namespace name="a" url="http://schemas.openxmlformats.org/drawingml/2006/main">
 <grammar xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" ns="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <include href="dml-baseTypes.rng"/>
@@ -4359,7 +4359,7 @@
   <define name="CT_R">
     <optional>
       <element name="rPr">
-        <ref name="CT_RPR"/>
+        <ref name="CT_RPr"/>
       </element>
     </optional>
     <optional>
@@ -14007,4 +14007,46 @@
   <action name="start" action="startCharacterGroup"/>
   <action name="end" action="endCharacterGroup"/>
 </resource>
+<resource name="EG_RPrBase" resource="Properties">
+  <attribute name="rStyle" tokenid="rtf:unused"/>
+  <attribute name="rFonts" tokenid="rtf:unused"/>
+  <attribute name="b" tokenid="rtf:unused"/>
+  <attribute name="bCs" tokenid="rtf:unused"/>
+  <attribute name="i" tokenid="rtf:unused"/>
+  <attribute name="iCs" tokenid="rtf:unused"/>
+  <attribute name="caps" tokenid="rtf:unused"/>
+  <attribute name="smallCaps" tokenid="rtf:unused"/>
+  <attribute name="strike" tokenid="rtf:unused"/>
+  <attribute name="dstrike" tokenid="rtf:unused"/>
+  <attribute name="outline" tokenid="rtf:unused"/>
+  <attribute name="shadow" tokenid="rtf:unused"/>
+  <attribute name="emboss" tokenid="rtf:unused"/>
+  <attribute name="imprint" tokenid="rtf:unused"/>
+  <attribute name="noProof" tokenid="rtf:unused"/>
+  <attribute name="snapToGrid" tokenid="rtf:unused"/>
+  <attribute name="vanish" tokenid="rtf:unused"/>
+  <attribute name="webHidden" tokenid="rtf:unused"/>
+  <attribute name="color" tokenid="rtf:unused"/>
+  <attribute name="spacing" tokenid="rtf:unused"/>
+  <attribute name="w" tokenid="rtf:unused"/>
+  <attribute name="kern" tokenid="rtf:unused"/>
+  <attribute name="position" tokenid="rtf:unused"/>
+  <attribute name="sz" tokenid="rtf:unused"/>
+  <attribute name="szCs" tokenid="rtf:unused"/>
+  <attribute name="highlight" tokenid="rtf:unused"/>
+  <attribute name="u" tokenid="rtf:unused"/>
+  <attribute name="effect" tokenid="rtf:unused"/>
+  <attribute name="bdr" tokenid="rtf:unused"/>
+  <attribute name="shd" tokenid="rtf:unused"/>
+  <attribute name="fitText" tokenid="rtf:unused"/>
+  <attribute name="vertAlign" tokenid="rtf:unused"/>
+  <attribute name="rtl" tokenid="rtf:unused"/>
+  <attribute name="cs" tokenid="rtf:unused"/>
+  <attribute name="em" tokenid="rtf:unused"/>
+  <attribute name="lang" tokenid="rtf:unused"/>
+  <attribute name="eastAsianLayout" tokenid="rtf:unused"/>
+  <attribute name="specVanish" tokenid="rtf:unused"/>
+  <attribute name="oMath" tokenid="rtf:unused"/>
+</resource>
+
 </model>
