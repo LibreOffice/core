@@ -5,9 +5,9 @@
  *
  *  $RCSfile: modelpreprocess.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:25:34 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-26 15:34:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,15 +72,68 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template name="prefixfromurl">
+    <xsl:param name="url"/>
+    <xsl:value-of select="translate(substring-after($url, 'http://'), '/.', '__')"/>
+  </xsl:template>
+
+  <xsl:template name="prefixforgrammar">
+    <xsl:variable name="ns" select="ancestor::rng:grammar/@ns"/>
+    <xsl:call-template name="prefixfromurl">
+      <xsl:with-param name="url" select="$ns"/>
+    </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="nsforgrammar">
+    <xsl:value-of select="ancestor::rng:grammar/@ns"/>
+  </xsl:template>
+
   <xsl:template match="rng:element[@name] | rng:attribute[@name]">
+    <xsl:variable name="prefix">
+      <xsl:choose>
+        <xsl:when test="contains(@name, ':')">
+          <xsl:variable name="myname" select="@name"/>
+          <xsl:call-template name="prefixfromurl">
+            <xsl:with-param name="url" select="string(ancestor::rng:grammar/namespace::*[local-name(.) = substring-before($myname, ':')])"/>
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="prefixforgrammar"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="ns">
+      <xsl:choose>
+        <xsl:when test="contains(@name, ':')">
+          <xsl:variable name="myname" select="@name"/>
+          <xsl:value-of select="string(ancestor::rng:grammar/namespace::*[local-name(.) = substring-before($myname, ':')])"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="nsforgrammar"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
+    <xsl:variable name="localname">
+      <xsl:choose>
+        <xsl:when test="contains(@name, ':')">
+          <xsl:value-of select="substring-after(@name, ':')"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:value-of select="@name"/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:copy>
       <xsl:apply-templates select="@*"/>
       <xsl:attribute name="enumname">
-        <xsl:if test="not(contains(@name, ':'))">
-          <xsl:value-of select="ancestor::namespace/@name"/>
-          <xsl:text>:</xsl:text>
-        </xsl:if>
-        <xsl:value-of select="@name"/>
+        <xsl:value-of select="$prefix"/>
+        <xsl:text>:</xsl:text>
+        <xsl:value-of select="$localname"/>
+      </xsl:attribute>
+      <xsl:attribute name="qname">
+        <xsl:value-of select="$ns"/>
+        <xsl:text>:</xsl:text>
+        <xsl:value-of select="$localname"/>
       </xsl:attribute>
       <xsl:apply-templates/>      
     </xsl:copy>    
@@ -90,6 +143,22 @@
    <xsl:copy>
    <xsl:apply-templates select="@*"/>
    <xsl:apply-templates/>
+   </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="model">
+   <xsl:copy>
+   <xsl:apply-templates select="@*"/>
+   <xsl:apply-templates/>
+   </xsl:copy>
+  </xsl:template>
+
+  <xsl:template match="namespace">
+    <xsl:variable name="ns" select=".//rng:grammar/@ns"/>
+   <xsl:copy>
+     <xsl:apply-templates select="@*"/>
+     <xsl:attribute name="prefix"><xsl:value-of select="translate(substring-after($ns, 'http://schemas.openxmlformats.org/'), '/', '_')"/></xsl:attribute>
+     <xsl:apply-templates/>
    </xsl:copy>
   </xsl:template>
 </xsl:stylesheet>

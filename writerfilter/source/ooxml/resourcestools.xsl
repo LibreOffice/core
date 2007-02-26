@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 14:38:52 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-02-26 15:37:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,6 @@
     xmlns:UML = 'org.omg.xmi.namespace.UML' xml:space="default">
   <xsl:output method="text" />
 
-  <!-- Key all attributes with the same name and same value -->
   <xsl:key name="same-attribute"
            match="rng:attribute" use="@name" />
 
@@ -87,6 +86,16 @@
   <xsl:key name="context-resource"
            match="resource" use="@name"/>
 
+  <!-- 
+       Create name with prefix.
+
+       The result is <prefix>:<name>. 
+
+       Exception: If <name> contains a ':' the prefix is ignored.
+
+       @param prefix    the prefix
+       @param name      the name
+  -->
   <xsl:template name="prefixname">
     <xsl:param name="prefix"/>
     <xsl:param name="name"/>
@@ -102,18 +111,47 @@
     </xsl:choose>
   </xsl:template>
 
+  <!--
+      Create name for element enumeration value.
+
+      The result is
+      
+        OOXML_ELEMENT_<name>
+
+      where all occurrences of ':' are replaced by '_'.
+
+     @param name the name of the element
+  -->
   <xsl:template name="elementname">
     <xsl:param name="name"/>
     <xsl:text>OOXML_ELEMENT_</xsl:text>
     <xsl:value-of select="translate($name, ':', '_')"/>
   </xsl:template>
 
+  <!--
+      Create name for attribute enumeration value.
+
+      The result is
+      
+         OOXML_ATTRIBUTE_<name>
+
+      where all occurrences of ':' are replaced by '_'.
+  -->
   <xsl:template name="attrname">
     <xsl:param name="name"/>
     <xsl:text>OOXML_ATTRIBUTE_</xsl:text>
     <xsl:value-of select="translate($name, ':', '_')"/>
   </xsl:template>
 
+  <!--
+      Create entries in enum definition for elements.
+
+      For each occurrence of rng:element an entry 
+
+               OOXML_ELEMENT_<name> 
+
+      is generated, but only if the element is the first named <name>.
+  -->
   <xsl:template name="enumelement">
     <xsl:param name="prefix"/>
     <xsl:for-each select=".//rng:element[@enumname]">
@@ -151,7 +189,7 @@
           <xsl:text>
     {
         rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
-        <xsl:value-of select="@enumname"/>
+        <xsl:value-of select="@qname"/>
           <xsl:text>"));
         mElementMap[aStr] = </xsl:text>
         <xsl:value-of select="$element"/>
@@ -178,7 +216,7 @@
           <xsl:text>
     {
         rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
-          <xsl:value-of select="@enumname"/>
+          <xsl:value-of select="@qname"/>
           <xsl:text>"));
         mAttributeMap[aStr] = </xsl:text>
           <xsl:value-of select="$attribute"/>
@@ -190,6 +228,15 @@
         </xsl:when>
       </xsl:choose>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="prefixforgrammar">
+    <xsl:variable name="ns" select="ancestor::rng:grammar/@ns"/>
+    <xsl:value-of select="translate(substring-after($ns, 'http://'), '/.', '__')"/>
+  </xsl:template>
+
+  <xsl:template match="*" mode="grammar-prefix">
+    <xsl:call-template name="prefixforgrammar"/>
   </xsl:template>
 
   <xsl:template name="contextname">
@@ -204,17 +251,23 @@
   <xsl:template name="contextnamefordefine">
     <xsl:param name="name"/>
     <xsl:choose>
-      <xsl:when test="string-length($name) = 0">
+      <xsl:when test="$name">
         <xsl:variable name="mydefine" select="key('defines-with-name', $name)"/>
+        <xsl:variable name="myprefix">
+          <xsl:apply-templates select="$mydefine" mode="grammar-prefix"/>
+        </xsl:variable>
         <xsl:call-template name="contextname">
-          <xsl:with-param name="prefix" select="$mydefine/ancestor::namespace/@name"/>
+          <xsl:with-param name="prefix" select="$myprefix"/>
           <xsl:with-param name="name" select="$mydefine/@name"/>
         </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="mydefine" select="key('defines-with-name', @name)"/>
+        <xsl:variable name="myprefix">
+          <xsl:apply-templates select="$mydefine" mode="grammar-prefix"/>
+        </xsl:variable>
         <xsl:call-template name="contextname">
-          <xsl:with-param name="prefix" select="$mydefine/ancestor::namespace/@name"/>
+          <xsl:with-param name="prefix" select="$myprefix"/>
           <xsl:with-param name="name" select="$mydefine/@name"/>
         </xsl:call-template>
       </xsl:otherwise>
@@ -230,12 +283,10 @@
 
   <xsl:template name="contextconstructordecl">
     <xsl:variable name="classname">
-      <xsl:call-template name="contextnamefordefine">
-        <xsl:with-param name="name" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:value-of select="$classname"/>
-    <xsl:text>(Stream &amp; rStream);&#xa;</xsl:text>
+    <xsl:text>(const OOXMLContext &amp; rContext);&#xa;</xsl:text>
   </xsl:template>
 
   <xsl:template name="contextcharactersdecl">
@@ -259,10 +310,7 @@
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
     <xsl:variable name="classname">
-      <xsl:call-template name="contextname">
-        <xsl:with-param name="prefix" select="$prefix"/>
-        <xsl:with-param name="name" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:choose>
       <xsl:when test="$resource = 'Stream'">
@@ -290,9 +338,7 @@ throw (xml::sax::SAXException,uno::RuntimeException)
 
   <xsl:template name="contextdecl">
     <xsl:variable name="classname">
-      <xsl:call-template name="contextnamefordefine">
-        <xsl:with-param name="name" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:text>
 class </xsl:text>
@@ -343,8 +389,7 @@ public:
     <xsl:param name="prefix"/>
     <xsl:for-each select=".//rng:define">
       <xsl:variable name="do">
-        <xsl:call-template name="classfordefine">
-        </xsl:call-template>
+        <xsl:call-template name="classfordefine"/>
       </xsl:variable>
       <xsl:text>
 /* </xsl:text>
@@ -382,10 +427,7 @@ public:
   <xsl:template name="contextrefsimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
-      <xsl:call-template name="contextname">
-        <xsl:with-param name="prefix" select="$prefix"/>
-        <xsl:with-param name="name" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:text>
 OOXMLContext::Pointer_t </xsl:text>
@@ -417,17 +459,14 @@ OOXMLContext::Pointer_t </xsl:text>
       <xsl:call-template name="contextnamefordefine">
         <xsl:with-param name="name" select="$define"/>
       </xsl:call-template>
-      <xsl:text>(mrStream)</xsl:text>
+      <xsl:text>(*this)</xsl:text>
     </xsl:for-each>
   </xsl:template>
 
   <xsl:template name="contextelementimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
-      <xsl:call-template name="contextname">
-        <xsl:with-param name="prefix" select="$prefix"/>
-        <xsl:with-param name="name" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:text>
 OOXMLContext::Pointer_t
@@ -463,7 +502,7 @@ OOXMLContext::Pointer_t
                <xsl:when test="./rng:ref/@name='BUILT_IN_ANY_TYPE'">
                  <xsl:text>
         {
-            OOXMLContext aContext(mrStream);
+            OOXMLContext aContext(*this);
             pResult = aContext.element(nToken);
         }
         break;</xsl:text>
@@ -483,6 +522,7 @@ OOXMLContext::Pointer_t
        </xsl:for-each>       
        <xsl:text>
      case OOXML_TOKENS_END:
+        // prevent warning
          break;
      default:
          pResult = elementFromRefs(nToken);
@@ -505,19 +545,16 @@ OOXMLContext::Pointer_t
   <xsl:template name="contextconstructorimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
-      <xsl:call-template name="contextname">
-        <xsl:with-param name="prefix" select="$prefix"/>
-        <xsl:with-param name="name" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:variable name="resource" select="key('context-resource', @name)"/>
     <xsl:value-of select="$classname"/>
     <xsl:text>::</xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:text>(Stream &amp; rStream)
+    <xsl:text>(const OOXMLContext &amp; rContext)
 : </xsl:text>
     <xsl:call-template name="contextparent"/>
-    <xsl:text>(rStream)
+    <xsl:text>(rContext)
 {
 #ifdef DEBUG_OOXML_MEMORY
    clog &lt;&lt; "--></xsl:text>
@@ -542,10 +579,7 @@ OOXMLContext::Pointer_t
   <xsl:template name="contextdestructorimpl">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
-      <xsl:call-template name="contextname">
-        <xsl:with-param name="prefix" select="$prefix"/>
-        <xsl:with-param name="name" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
     <xsl:variable name="resource" select="key('context-resource', @name)"/>
     <xsl:value-of select="$classname"/>
@@ -576,44 +610,28 @@ OOXMLContext::Pointer_t
     <xsl:call-template name="maincontextrefs">
       <xsl:with-param name="prefix" select="$prefix"/>
     </xsl:call-template>
-    <xsl:for-each select=".//namespace">
-      <xsl:variable name="nsname" select="@name"/>
-      <xsl:for-each select=".//rng:define">
-        <xsl:variable name="do">
-          <xsl:call-template name="classfordefine"/>
-        </xsl:variable>
-        <xsl:variable name="classname">
-          <xsl:call-template name="contextname">
-            <xsl:with-param name="prefix" select="$nsname"/>
-            <xsl:with-param name="name" select="@name"/>
-          </xsl:call-template>
-        </xsl:variable>
-        <xsl:if test="$do = '1'">
-          <xsl:text>
-/* class </xsl:text>
+    <xsl:for-each select=".//rng:define">
+      <xsl:variable name="do">
+        <xsl:call-template name="classfordefine"/>
+      </xsl:variable>
+      <xsl:variable name="classname">
+        <xsl:call-template name="contextnamefordefine"/>
+<!--
+          <xsl:with-param name="name" select="@name"/>
+        </xsl:call-template>
+-->
+      </xsl:variable>
+      <xsl:if test="$do = '1'">
+        <xsl:text>
+/* 
+    class: </xsl:text>
         <xsl:value-of select="$classname"/>
-        <xsl:text>
-   prefix: </xsl:text>
-        <xsl:value-of select="$nsname"/>
-        <xsl:text>
-   element:</xsl:text>
-         <xsl:value-of select="@name"/>
-         <xsl:text>
-     */&#xa;</xsl:text>
-         <xsl:call-template name="contextconstructorimpl">
-           <xsl:with-param name="prefix" select="$nsname"/>
-         </xsl:call-template>
-         <xsl:call-template name="contextdestructorimpl">
-           <xsl:with-param name="prefix" select="$nsname"/>
-         </xsl:call-template>
-         <xsl:call-template name="contextrefsimpl">
-           <xsl:with-param name="prefix" select="$nsname"/>
-         </xsl:call-template>
-         <xsl:call-template name="contextelementimpl">
-           <xsl:with-param name="prefix" select="$nsname"/>
-         </xsl:call-template>
-        </xsl:if>
-      </xsl:for-each>
+        <xsl:text>*/&#xa;</xsl:text>
+        <xsl:call-template name="contextconstructorimpl"/>
+        <xsl:call-template name="contextdestructorimpl"/>
+        <xsl:call-template name="contextrefsimpl"/>
+        <xsl:call-template name="contextelementimpl"/>
+      </xsl:if>
     </xsl:for-each>
   </xsl:template>
 
