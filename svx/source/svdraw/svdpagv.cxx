@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:41:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 15:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,7 +507,7 @@ void SdrPageView::DrawLayer(SdrLayerID nID, OutputDevice* pGivenTarget, sal_uInt
                     pPreparedTarget->RedrawLayer(nPaintMode, &nID, pRedirector);
 
                     // restore the ExistingPageWindow
-                    pPreparedTarget->patchPaintWindow(rExistingPaintWindow);
+                    pPreparedTarget->unpatchPaintWindow();
                 }
                 else
                 {
