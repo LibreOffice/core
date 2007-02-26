@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:27:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-26 16:00:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1478,8 +1478,8 @@ long SfxDockingWindow::Notify( NotifyEvent& rEvt )
 
         // In VCL geht Notify zun"achst an das Fenster selbst,
         // also base class rufen, sonst erf"ahrt der parent nichts
-        if ( rEvt.GetWindow() == this )
-            DockingWindow::Notify( rEvt );
+        // if ( rEvt.GetWindow() == this )  PB: #i74693# not necessary any longer
+        DockingWindow::Notify( rEvt );
         return TRUE;
     }
     else if( rEvt.GetType() == EVENT_KEYINPUT )
