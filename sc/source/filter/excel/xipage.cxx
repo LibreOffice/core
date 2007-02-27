@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipage.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:11:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:27:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -454,10 +454,19 @@ void XclImpPageSettings::Finalize()
 
     ScfUInt16Vec::const_iterator aIt, aEnd;
 
-    for( aIt = maData.maHorPageBreaks.begin(), aEnd = maData.maHorPageBreaks.end(); (aIt != aEnd) && (*aIt <= MAXROW); ++aIt )
-        rDoc.SetRowFlags( static_cast<SCROW>(*aIt), nScTab, rDoc.GetRowFlags( static_cast<SCROW>(*aIt), nScTab ) | CR_MANUALBREAK );
-    for( aIt = maData.maVerPageBreaks.begin(), aEnd = maData.maVerPageBreaks.end(); (aIt != aEnd) && (*aIt <= MAXCOL); ++aIt )
-        rDoc.SetColFlags( static_cast<SCCOL>(*aIt), nScTab, rDoc.GetColFlags( static_cast<SCCOL>(*aIt), nScTab ) | CR_MANUALBREAK );
+    for( aIt = maData.maHorPageBreaks.begin(), aEnd = maData.maHorPageBreaks.end(); aIt != aEnd; ++aIt )
+    {
+        SCROW nScRow = static_cast< SCROW >( *aIt );
+        if( nScRow <= MAXROW )
+            rDoc.SetRowFlags( nScRow, nScTab, rDoc.GetRowFlags( nScRow, nScTab ) | CR_MANUALBREAK );
+    }
+
+    for( aIt = maData.maVerPageBreaks.begin(), aEnd = maData.maVerPageBreaks.end(); aIt != aEnd; ++aIt )
+    {
+        SCCOL nScCol = static_cast< SCCOL >( *aIt );
+        if( nScCol <= MAXCOL )
+            rDoc.SetColFlags( nScCol, nScTab, rDoc.GetColFlags( nScCol, nScTab ) | CR_MANUALBREAK );
+    }
 }
 
 // ============================================================================
