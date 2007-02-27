@@ -4,9 +4,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:35:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,8 +180,8 @@ void __EXPORT ScClient::ObjectAreaChanged()
 
         //  set document modified (SdrModel::SetChanged is not used)
         // TODO/LATER: is there a reason that this code is not executed in Draw?
-        SfxViewShell* pSfxViewSh = GetViewShell();
-        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
+//        SfxViewShell* pSfxViewSh = GetViewShell();
+//        ScTabViewShell* pViewSh = PTR_CAST( ScTabViewShell, pSfxViewSh );
         if (pViewSh)
             pViewSh->GetViewData()->GetDocShell()->SetDrawModified();
     }
