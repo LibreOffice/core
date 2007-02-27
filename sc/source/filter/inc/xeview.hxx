@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:31:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:36:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ private:
 class XclExpPane : public XclExpRecord
 {
 public:
-    explicit            XclExpPane( const XclExpRoot& rRoot, const XclTabViewData& rData );
+    explicit            XclExpPane( const XclTabViewData& rData );
 
 private:
     /** Writes the contents of the PANE record. */
