@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangelst.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:23:03 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:18:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,7 +163,7 @@ void ScRangeList::Join( const ScRange& r, BOOL bIsInList )
     SCROW nRow2 = r.aEnd.Row();
     SCTAB nTab2 = r.aEnd.Tab();
     ScRangePtr pOver = (ScRangePtr) &r;     // fies aber wahr wenn bInList
-    ULONG nOldPos;
+    ULONG nOldPos = 0;
     if ( bIsInList )
     {   // merken um ggbf. zu loeschen bzw. wiederherzustellen
         nOldPos = GetPos( pOver );
@@ -257,9 +257,9 @@ BOOL ScRangeList::operator==( const ScRangeList& r ) const
 
 BOOL ScRangeList::Store( SvStream& rStream ) const
 {
-    BOOL bOk = TRUE;
-    ULONG nCount = Count();
-    ULONG nBytes = sizeof(UINT32) + nCount * sizeof(ScRange);
+//    BOOL bOk = TRUE;
+    ULONG nListCount = Count();
+    ULONG nBytes = sizeof(UINT32) + nListCount * sizeof(ScRange);
     ScWriteHeader aHdr( rStream, nBytes );
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -277,9 +277,9 @@ BOOL ScRangeList::Store( SvStream& rStream ) const
 }
 
 
-BOOL ScRangeList::Load( SvStream& rStream, USHORT nVer )
+BOOL ScRangeList::Load( SvStream& rStream, USHORT /* nVer */ )
 {
-    BOOL bOk = TRUE;
+//    BOOL bOk = TRUE;
     ScReadHeader aHdr( rStream );
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -342,8 +342,8 @@ BOOL ScRangeList::UpdateReference( UpdateRefMode eUpdateRefMode,
 
 ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 {
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
     {
         ScRange* pR = GetObject( j );
         if ( pR->In( rAdr ) )
@@ -355,8 +355,8 @@ ScRange* ScRangeList::Find( const ScAddress& rAdr ) const
 
 ScRange* ScRangeList::Find( const ScRange& rRange ) const
 {
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
     {
         ScRange* pR = GetObject( j );
         if ( *pR == rRange )
@@ -366,10 +366,12 @@ ScRange* ScRangeList::Find( const ScRange& rRange ) const
 }
 
 
-ScRangeList::ScRangeList( const ScRangeList& rList )
+ScRangeList::ScRangeList( const ScRangeList& rList ) :
+    ScRangeListBase(),
+    SvRefBase()
 {
-    ULONG nCount = rList.Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = rList.Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
         Append( *rList.GetObject( j ) );
 }
 
@@ -384,8 +386,8 @@ ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 {
     RemoveAll();
 
-    ULONG nCount = rList.Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = rList.Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
         Append( *rList.GetObject( j ) );
 
     return *this;
@@ -394,8 +396,8 @@ ScRangeList& ScRangeList::operator=(const ScRangeList& rList)
 
 BOOL ScRangeList::Intersects( const ScRange& rRange ) const
 {
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
         if ( GetObject(j)->Intersects( rRange ) )
             return TRUE;
 
@@ -405,8 +407,8 @@ BOOL ScRangeList::Intersects( const ScRange& rRange ) const
 
 BOOL ScRangeList::In( const ScRange& rRange ) const
 {
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
         if ( GetObject(j)->In( rRange ) )
             return TRUE;
 
@@ -417,8 +419,8 @@ BOOL ScRangeList::In( const ScRange& rRange ) const
 ULONG ScRangeList::GetCellCount() const
 {
     ULONG nCellCount = 0;
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
     {
         ScRange* pR = GetObject( j );
         nCellCount += ULONG(pR->aEnd.Col() - pR->aStart.Col() + 1)
@@ -454,7 +456,7 @@ void ScRangePairList::Join( const ScRangePair& r, BOOL bIsInList )
     SCROW nRow2 = r1.aEnd.Row();
     SCTAB nTab2 = r1.aEnd.Tab();
     ScRangePair* pOver = (ScRangePair*) &r;     // fies aber wahr wenn bInList
-    ULONG nOldPos;
+    ULONG nOldPos = 0;
     if ( bIsInList )
     {   // merken um ggbf. zu loeschen bzw. wiederherzustellen
         nOldPos = GetPos( pOver );
@@ -565,13 +567,13 @@ BOOL ScRangePairList::operator==( const ScRangePairList& r ) const
 }
 
 
-BOOL ScRangePairList::Store( SvStream& rStream ) const
+BOOL ScRangePairList::Store( SvStream& /* rStream */ ) const
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     BOOL bOk = TRUE;
     ULONG nCount = Count();
     ULONG nBytes = sizeof(UINT32) + nCount * sizeof(ScRangePair);
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
     ScWriteHeader aHdr( rStream, nBytes );
     rStream << (UINT32) nCount;
     for ( ULONG j = 0; j < nCount && bOk; j++ )
@@ -587,9 +589,9 @@ BOOL ScRangePairList::Store( SvStream& rStream ) const
 }
 
 
-BOOL ScRangePairList::Load( SvStream& rStream, USHORT nVer )
+BOOL ScRangePairList::Load( SvStream& rStream, USHORT /* nVer */ )
 {
-    BOOL bOk = TRUE;
+//    BOOL bOk = TRUE;
     ScReadHeader aHdr( rStream );
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -680,9 +682,9 @@ void ScRangePairList::DeleteOnTab( SCTAB nTab )
 {
     // Delete entries that have the labels (first range) on nTab
 
-    ULONG nCount = Count();
+    ULONG nListCount = Count();
     ULONG nPos = 0;
-    while ( nPos < nCount )
+    while ( nPos < nListCount )
     {
         ScRangePair* pR = GetObject( nPos );
         ScRange aRange = pR->GetRange(0);
@@ -690,7 +692,7 @@ void ScRangePairList::DeleteOnTab( SCTAB nTab )
         {
             Remove( nPos );
             delete pR;
-            nCount = Count();
+            nListCount = Count();
         }
         else
             ++nPos;
@@ -700,8 +702,8 @@ void ScRangePairList::DeleteOnTab( SCTAB nTab )
 
 ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
 {
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
     {
         ScRangePair* pR = GetObject( j );
         if ( pR->GetRange(0).In( rAdr ) )
@@ -713,8 +715,8 @@ ScRangePair* ScRangePairList::Find( const ScAddress& rAdr ) const
 
 ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 {
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
     {
         ScRangePair* pR = GetObject( j );
         if ( pR->GetRange(0) == rRange )
@@ -727,8 +729,8 @@ ScRangePair* ScRangePairList::Find( const ScRange& rRange ) const
 ScRangePairList* ScRangePairList::Clone() const
 {
     ScRangePairList* pNew = new ScRangePairList;
-    ULONG nCount = Count();
-    for ( ULONG j = 0; j < nCount; j++ )
+    ULONG nListCount = Count();
+    for ( ULONG j = 0; j < nListCount; j++ )
     {
         pNew->Append( *GetObject( j ) );
     }
@@ -743,75 +745,75 @@ struct ScRangePairNameSort
 };
 
 
-int
+extern "C" int
 #ifdef WNT
 __cdecl
 #endif
-ScRangePairList::QsortNameCompare( const void* p1, const void* p2 )
+ScRangePairList_QsortNameCompare( const void* p1, const void* p2 )
 {
     const ScRangePairNameSort* ps1 = (const ScRangePairNameSort*)p1;
     const ScRangePairNameSort* ps2 = (const ScRangePairNameSort*)p2;
-    const ScAddress& rPos1 = ps1->pPair->GetRange(0).aStart;
-    const ScAddress& rPos2 = ps2->pPair->GetRange(0).aStart;
+    const ScAddress& rStartPos1 = ps1->pPair->GetRange(0).aStart;
+    const ScAddress& rStartPos2 = ps2->pPair->GetRange(0).aStart;
     String aStr1, aStr2;
     sal_Int32 nComp;
-    if ( rPos1.Tab() == rPos2.Tab() )
+    if ( rStartPos1.Tab() == rStartPos2.Tab() )
         nComp = COMPARE_EQUAL;
     else
     {
-        ps1->pDoc->GetName( rPos1.Tab(), aStr1 );
-        ps2->pDoc->GetName( rPos2.Tab(), aStr2 );
+        ps1->pDoc->GetName( rStartPos1.Tab(), aStr1 );
+        ps2->pDoc->GetName( rStartPos2.Tab(), aStr2 );
         nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
     }
     switch ( nComp )
     {
         case COMPARE_LESS:
             return -1;
-        break;
+        //break;
         case COMPARE_GREATER:
             return 1;
-        break;
+        //break;
         default:
             // gleiche Tabs
-            if ( rPos1.Col() < rPos2.Col() )
+            if ( rStartPos1.Col() < rStartPos2.Col() )
                 return -1;
-            if ( rPos1.Col() > rPos2.Col() )
+            if ( rStartPos1.Col() > rStartPos2.Col() )
                 return 1;
             // gleiche Cols
-            if ( rPos1.Row() < rPos2.Row() )
+            if ( rStartPos1.Row() < rStartPos2.Row() )
                 return -1;
-            if ( rPos1.Row() > rPos2.Row() )
+            if ( rStartPos1.Row() > rStartPos2.Row() )
                 return 1;
             // erste Ecke gleich, zweite Ecke
             {
-                const ScAddress& rPos1 = ps1->pPair->GetRange(0).aEnd;
-                const ScAddress& rPos2 = ps2->pPair->GetRange(0).aEnd;
-                if ( rPos1.Tab() == rPos2.Tab() )
+                const ScAddress& rEndPos1 = ps1->pPair->GetRange(0).aEnd;
+                const ScAddress& rEndPos2 = ps2->pPair->GetRange(0).aEnd;
+                if ( rEndPos1.Tab() == rEndPos2.Tab() )
                     nComp = COMPARE_EQUAL;
                 else
                 {
-                    ps1->pDoc->GetName( rPos1.Tab(), aStr1 );
-                    ps2->pDoc->GetName( rPos2.Tab(), aStr2 );
+                    ps1->pDoc->GetName( rEndPos1.Tab(), aStr1 );
+                    ps2->pDoc->GetName( rEndPos2.Tab(), aStr2 );
                     nComp = ScGlobal::pCollator->compareString( aStr1, aStr2 );
                 }
                 switch ( nComp )
                 {
                     case COMPARE_LESS:
                         return -1;
-                    break;
+                    //break;
                     case COMPARE_GREATER:
                         return 1;
-                    break;
+                    //break;
                     default:
                         // gleiche Tabs
-                        if ( rPos1.Col() < rPos2.Col() )
+                        if ( rEndPos1.Col() < rEndPos2.Col() )
                             return -1;
-                        if ( rPos1.Col() > rPos2.Col() )
+                        if ( rEndPos1.Col() > rEndPos2.Col() )
                             return 1;
                         // gleiche Cols
-                        if ( rPos1.Row() < rPos2.Row() )
+                        if ( rEndPos1.Row() < rEndPos2.Row() )
                             return -1;
-                        if ( rPos1.Row() > rPos2.Row() )
+                        if ( rEndPos1.Row() > rEndPos2.Row() )
                             return 1;
                         return 0;
                 }
@@ -822,28 +824,28 @@ ScRangePairList::QsortNameCompare( const void* p1, const void* p2 )
 }
 
 
-ScRangePair** ScRangePairList::CreateNameSortedArray( ULONG& nCount,
+ScRangePair** ScRangePairList::CreateNameSortedArray( ULONG& nListCount,
         ScDocument* pDoc ) const
 {
-    nCount = Count();
-    DBG_ASSERT( nCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
-        "ScRangePairList::CreateNameSortedArray nCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
+    nListCount = Count();
+    DBG_ASSERT( nListCount * sizeof(ScRangePairNameSort) <= (size_t)~0x1F,
+        "ScRangePairList::CreateNameSortedArray nListCount * sizeof(ScRangePairNameSort) > (size_t)~0x1F" );
     ScRangePairNameSort* pSortArray = (ScRangePairNameSort*)
-        new BYTE [ nCount * sizeof(ScRangePairNameSort) ];
+        new BYTE [ nListCount * sizeof(ScRangePairNameSort) ];
     ULONG j;
-    for ( j=0; j < nCount; j++ )
+    for ( j=0; j < nListCount; j++ )
     {
         pSortArray[j].pPair = GetObject( j );
         pSortArray[j].pDoc = pDoc;
     }
 #if !(defined(ICC ) && defined(OS2))
-    qsort( (void*)pSortArray, nCount, sizeof(ScRangePairNameSort), &ScRangePairList::QsortNameCompare );
+    qsort( (void*)pSortArray, nListCount, sizeof(ScRangePairNameSort), &ScRangePairList_QsortNameCompare );
 #else
-    qsort( (void*)pSortArray, nCount, sizeof(ScRangePairNameSort), ICCQsortRPairCompare );
+    qsort( (void*)pSortArray, nListCount, sizeof(ScRangePairNameSort), ICCQsortRPairCompare );
 #endif
     // ScRangePair Pointer aufruecken
     ScRangePair** ppSortArray = (ScRangePair**)pSortArray;
-    for ( j=0; j < nCount; j++ )
+    for ( j=0; j < nListCount; j++ )
     {
         ppSortArray[j] = pSortArray[j].pPair;
     }
