@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eeimport.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:38:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:56:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,11 +52,11 @@ struct ScEEParseEntry;
 class ScEEImport
 {
 protected:
-    ScRange             aRange;
-    ScDocument*         pDoc;
-    ScEEParser*         pParser;
-    ScTabEditEngine*    pEngine;
-    Table*              pRowHeights;
+    ScRange             maRange;
+    ScDocument*         mpDoc;
+    ScEEParser*         mpParser;
+    ScTabEditEngine*    mpEngine;
+    Table*              mpRowHeights;
 
     BOOL                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                             ScEEParseEntry* );
@@ -68,7 +68,7 @@ public:
     virtual             ~ScEEImport();
 
     ULONG               Read( SvStream& rStream, const String& rBaseURL );
-    ScRange             GetRange()      { return aRange; }
+    ScRange             GetRange()      { return maRange; }
     virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE,
                                         double nOutputFactor = 1.0 );
 };
