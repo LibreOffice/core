@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:07:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,11 +94,11 @@ ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::
                             sal_Int32 nIndex ) :
     ScAccessibleContextBase( rxParent, AccessibleRole::TABLE_CELL ),
     mpViewShell( pViewShell ),
+    mpTextHelper( NULL ),
+    mnIndex( nIndex ),
     maCellPos( rCellPos ),
     mbColumnHeader( bIsColHdr ),
     mbRowHeader( bIsRowHdr ),
-    mnIndex( nIndex ),
-    mpTextHelper( NULL ),
     mpTableInfo( NULL )
 {
     if (mpViewShell)
@@ -189,7 +189,7 @@ uno::Any SAL_CALL ScAccessiblePreviewHeaderCell::getCurrentValue() throw (uno::R
     return aAny;
 }
 
-sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& aNumber )
+sal_Bool SAL_CALL ScAccessiblePreviewHeaderCell::setCurrentValue( const uno::Any& /* aNumber */ )
                                                                 throw (uno::RuntimeException)
 {
     //  it is not possible to set a value
