@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -378,10 +378,10 @@ private:
 
 ScChildrenShapes::ScChildrenShapes(ScAccessibleDocument* pAccessibleDocument, ScTabViewShell* pViewShell, ScSplitPos eSplitPos)
     :
-    mpAccessibleDocument(pAccessibleDocument),
+    mnShapesSelected(0),
     mpViewShell(pViewShell),
-    meSplitPos(eSplitPos),
-    mnShapesSelected(0)
+    mpAccessibleDocument(pAccessibleDocument),
+    meSplitPos(eSplitPos)
 {
     FillSelectionSupplier();
     maZOrderedShapes.push_back(NULL); // add an element which represents the table
@@ -443,7 +443,7 @@ void ScChildrenShapes::SetDrawBroadcaster()
     }
 }
 
-void ScChildrenShapes::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void ScChildrenShapes::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if ( rHint.ISA( SdrHint ) )
     {
@@ -932,8 +932,8 @@ struct SetRelation
     SetRelation(const ScChildrenShapes* pChildrenShapes, const ScAddress* pAddress)
         :
         mpChildrenShapes(pChildrenShapes),
-        mpAddress(pAddress),
-        mpRelationSet(NULL)
+        mpRelationSet(NULL),
+        mpAddress(pAddress)
     {
     }
     void operator() (const ScAccessibleShapeData* pAccShapeData) const
@@ -962,7 +962,7 @@ utl::AccessibleRelationSetHelper* ScChildrenShapes::GetRelationSet(const ScAddre
     return aSetRelation.mpRelationSet;
 }
 
-sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, sal_Bool bCommitChange) const
+sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawing::XShapes>& xShapes, sal_Bool /* bCommitChange */) const
 {
     sal_Bool bResult(sal_False);
     SortedShapes aShapesList;
@@ -987,7 +987,6 @@ sal_Bool ScChildrenShapes::FindSelectedShapesChanges(const uno::Reference<drawin
     ScShapeDataLess aLess;
     std::sort(aShapesList.begin(), aShapesList.end(), aLess);
 
-    SortedShapes::iterator aSortedShapesEndItr = maZOrderedShapes.end();
     SortedShapes::iterator aXShapesItr(aShapesList.begin());
     SortedShapes::const_iterator aXShapesEndItr(aShapesList.end());
     SortedShapes::iterator aDataItr(maZOrderedShapes.begin());
@@ -1330,8 +1329,8 @@ ScAccessibleDocument::ScAccessibleDocument(
     meSplitPos(eSplitPos),
     mpAccessibleSpreadsheet(NULL),
     mpChildrenShapes(NULL),
-    mbCompleteSheetSelected(sal_False),
-    mpTempAccEdit(NULL)
+    mpTempAccEdit(NULL),
+    mbCompleteSheetSelected(sal_False)
 {
     if (pViewShell)
     {
@@ -1395,7 +1394,7 @@ void SAL_CALL ScAccessibleDocument::disposing()
     ScAccessibleDocumentBase::disposing();
 }
 
-void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& Source )
+void SAL_CALL ScAccessibleDocument::disposing( const lang::EventObject& /* Source */ )
         throw (uno::RuntimeException)
 {
     disposing();
@@ -1550,7 +1549,7 @@ void ScAccessibleDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     ScAccessibleDocumentBase::Notify(rBC, rHint);
 }
 
-void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& aEvent )
+void SAL_CALL ScAccessibleDocument::selectionChanged( const lang::EventObject& /* aEvent */ )
         throw (uno::RuntimeException)
 {
     sal_Bool bSelectionChanged(sal_False);
@@ -2148,7 +2147,7 @@ sal_Bool ScAccessibleDocument::IsDefunc(
 }
 
 sal_Bool ScAccessibleDocument::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // what is with document protection or readonly documents?
     return sal_True;
