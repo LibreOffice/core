@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:06:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,8 @@ public:
         ScDPFieldWindow* pDPFieldWindow);
 
     virtual void Init();
+
+    using ScAccessibleContextBase::disposing;
     virtual void SAL_CALL disposing();
 
     void AddField(sal_Int32 nNewIndex);
