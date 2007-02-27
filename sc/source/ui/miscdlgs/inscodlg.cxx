@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inscodlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:06:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,7 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
 
  :  ModalDialog     ( pParent, ScResId( RID_SCDLG_INSCONT ) ),
     //
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnInsAll      ( this, ScResId( BTN_INSALL ) ),
     aBtnInsStrings  ( this, ScResId( BTN_INSSTRINGS ) ),
     aBtnInsNumbers  ( this, ScResId( BTN_INSNUMBERS ) ),
@@ -76,23 +74,25 @@ ScInsertContentsDlg::ScInsertContentsDlg( Window*       pParent,
     aBtnInsNotes    ( this, ScResId( BTN_INSNOTES ) ),
     aBtnInsAttrs    ( this, ScResId( BTN_INSATTRS ) ),
     aBtnInsObjects  ( this, ScResId( BTN_INSOBJECTS ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
+    aFlSep1         ( this, ScResId( FL_SEP1 ) ),
+    aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
     aBtnSkipEmptyCells( this, ScResId(BTN_SKIP_EMPTY ) ),
     aBtnTranspose   ( this, ScResId( BTN_TRANSPOSE ) ),
     aBtnLink        ( this, ScResId( BTN_LINK ) ),
-    aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
+    aFlOperation    ( this, ScResId( FL_OPERATION ) ),
     aRbNoOp         ( this, ScResId( BTN_OP_NOOP ) ),
     aRbAdd          ( this, ScResId( BTN_OP_ADD ) ),
     aRbSub          ( this, ScResId( BTN_OP_SUB  ) ),
     aRbMul          ( this, ScResId( BTN_OP_MUL  ) ),
     aRbDiv          ( this, ScResId( BTN_OP_DIV  ) ),
-    aFlOperation    ( this, ScResId( FL_OPERATION ) ),
+    aFlSep2         ( this, ScResId( FL_SEP2 ) ),
+    aFlMove         ( this, ScResId( FL_MOVE ) ),
     aRbMoveNone     ( this, ScResId( BTN_MV_NONE ) ),
     aRbMoveDown     ( this, ScResId( BTN_MV_DOWN ) ),
     aRbMoveRight    ( this, ScResId( BTN_MV_RIGHT ) ),
-    aFlMove         ( this, ScResId( FL_MOVE ) ),
-    aFlSep1         ( this, ScResId( FL_SEP1 ) ),
-    aFlSep2         ( this, ScResId( FL_SEP2 ) ),
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
     bOtherDoc       ( FALSE ),
     bFillMode       ( FALSE ),
     bChangeTrack    ( FALSE ),
@@ -326,14 +326,14 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScInsertContentsDlg, InsAllHdl, void*, EMPTY_ARG )
+IMPL_LINK( ScInsertContentsDlg, InsAllHdl, void*, EMPTYARG )
 {
     DisableChecks( aBtnInsAll.IsChecked() );
 
     return 0;
 }
 
-IMPL_LINK( ScInsertContentsDlg, LinkBtnHdl, void*, EMPTY_ARG )
+IMPL_LINK( ScInsertContentsDlg, LinkBtnHdl, void*, EMPTYARG )
 {
     TestModes();
 
