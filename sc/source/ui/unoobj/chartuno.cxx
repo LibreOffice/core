@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:36:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ ScChartsObj::~ScChartsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScChartsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScChartsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
 
@@ -345,7 +345,7 @@ uno::Any SAL_CALL ScChartsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xChart);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScChartsObj::getElementType() throw(uno::RuntimeException)
@@ -370,7 +370,7 @@ uno::Any SAL_CALL ScChartsObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xChart);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScChartsObj::getElementNames() throw(uno::RuntimeException)
@@ -441,7 +441,7 @@ ScChartObj::~ScChartObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScChartObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScChartObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
 
@@ -616,7 +616,7 @@ rtl::OUString SAL_CALL ScChartObj::getName() throw(uno::RuntimeException)
     return aChartName;
 }
 
-void SAL_CALL ScChartObj::setName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+void SAL_CALL ScChartObj::setName( const rtl::OUString& /* aName */ ) throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
     throw uno::RuntimeException();      // name cannot be changed
