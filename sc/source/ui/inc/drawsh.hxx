@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:21:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:21:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ protected:
 
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SCID_DRAW_SHELL);
+    SFX_DECL_INTERFACE(SCID_DRAW_SHELL)
 
                     ScDrawShell(ScViewData* pData);
                     ~ScDrawShell();
