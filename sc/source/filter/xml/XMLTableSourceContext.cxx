@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableSourceContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:50:07 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ ScXMLTableSourceContext::~ScXMLTableSourceContext()
 SvXMLImportContext *ScXMLTableSourceContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
