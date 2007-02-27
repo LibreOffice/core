@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfonte.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:53:13 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:51:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,34 +78,36 @@
 
 class ScXMLFontAutoStylePool_Impl: public XMLFontAutoStylePool
 {
-    void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool, const sal_Bool bExportDefaults);
+    void AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const sal_Bool bExportDefaults);
     public:
 
     ScXMLFontAutoStylePool_Impl( ScXMLExport& rExport );
 
 };
 
-void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pPool, const sal_Bool bExportDefaults)
+void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 nIdCount, const SfxItemPool* pItemPool, const sal_Bool bExportDefaults)
 {
     const SfxPoolItem* pItem;
     for( sal_uInt16 i=0; i < nIdCount; ++i )
     {
         sal_uInt16 nWhichId(pWhichIds[i]);
-        if (bExportDefaults && (0 != (pItem = &pPool->GetDefaultItem(nWhichId))))
+        if (bExportDefaults && (0 != (pItem = &pItemPool->GetDefaultItem(nWhichId))))
         {
             const SvxFontItem *pFont((const SvxFontItem *)pItem);
             Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                    pFont->GetFamily(), pFont->GetPitch(),
+                    sal::static_int_cast<sal_Int16>(pFont->GetFamily()),
+                    sal::static_int_cast<sal_Int16>(pFont->GetPitch()),
                     pFont->GetCharSet() );
         }
-        sal_uInt16 nItems(pPool->GetItemCount( nWhichId ));
+        sal_uInt16 nItems(pItemPool->GetItemCount( nWhichId ));
         for( sal_uInt16 j = 0; j < nItems; ++j )
         {
-            if( 0 != (pItem = pPool->GetItem( nWhichId, j ) ) )
+            if( 0 != (pItem = pItemPool->GetItem( nWhichId, j ) ) )
             {
                 const SvxFontItem *pFont((const SvxFontItem *)pItem);
                 Add( pFont->GetFamilyName(), pFont->GetStyleName(),
-                     pFont->GetFamily(), pFont->GetPitch(),
+                     sal::static_int_cast<sal_Int16>(pFont->GetFamily()),
+                     sal::static_int_cast<sal_Int16>(pFont->GetPitch()),
                      pFont->GetCharSet() );
             }
         }
@@ -113,8 +115,8 @@ void ScXMLFontAutoStylePool_Impl::AddFontItems(sal_uInt16* pWhichIds, sal_uInt8 
 }
 
 ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
-    ScXMLExport& rExport ) :
-    XMLFontAutoStylePool( rExport )
+    ScXMLExport& rExportP ) :
+    XMLFontAutoStylePool( rExportP )
 {
     sal_uInt16 aWhichIds[3] = { ATTR_FONT, ATTR_CJK_FONT,
                                 ATTR_CTL_FONT };
@@ -123,12 +125,12 @@ ScXMLFontAutoStylePool_Impl::ScXMLFontAutoStylePool_Impl(
     sal_uInt16 aPageWhichIds[4] = { ATTR_PAGE_HEADERLEFT, ATTR_PAGE_FOOTERLEFT,
                                     ATTR_PAGE_HEADERRIGHT, ATTR_PAGE_FOOTERRIGHT };
 
-    const SfxItemPool* pPool(rExport.GetDocument() ? rExport.GetDocument()->GetPool() : NULL);
-    AddFontItems(aWhichIds, 3, pPool, sal_True);
-    const SfxItemPool* pEditPool(rExport.GetDocument()->GetEditPool());
+    const SfxItemPool* pItemPool(rExportP.GetDocument() ? rExportP.GetDocument()->GetPool() : NULL);
+    AddFontItems(aWhichIds, 3, pItemPool, sal_True);
+    const SfxItemPool* pEditPool(rExportP.GetDocument()->GetEditPool());
     AddFontItems(aEditWhichIds, 3, pEditPool, sal_False);
 
-    SfxStyleSheetIterator* pItr(rExport.GetDocument() ? rExport.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF) : NULL);
+    SfxStyleSheetIterator* pItr(rExportP.GetDocument() ? rExportP.GetDocument()->GetStyleSheetPool()->CreateIterator(SFX_STYLE_FAMILY_PAGE, 0xFFFF) : NULL);
     if(pItr)
     {
         SfxStyleSheetBase* pStyle(pItr->First());
