@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:23:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:57:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,6 @@ class ScIndexMap;
 
 class ScRangeData : public DataObject
 {
-#if defined( ICC ) && defined( OS2 )
-    friend static int _Optlink   ICCQsortNameCompare( const void* a, const void* b);
-#endif
 private:
     String          aName;
     String          aUpperName;         // #i62977# for faster searching (aName is never modified after ctor)
@@ -174,11 +171,6 @@ public:
 
     static void     MakeValidName( String& rName );
     static BOOL     IsNameValid( const String& rName, ScDocument* pDoc );
-#ifdef WNT
-    static int __cdecl  QsortNameCompare( const void*, const void* );
-#else
-    static int      QsortNameCompare( const void*, const void* );
-#endif
 };
 
 inline BOOL ScRangeData::HasType( RangeType nType ) const
@@ -186,9 +178,15 @@ inline BOOL ScRangeData::HasType( RangeType nType ) const
     return ( ( eType & nType ) == nType );
 }
 
+extern "C" int
+#ifdef WNT
+__cdecl
+#endif
+ScRangeData_QsortNameCompare( const void*, const void* );
+
 #if defined( ICC ) && defined( OS2 )
     static int _Optlink  ICCQsortNameCompare( const void* a, const void* b)
-                            { ScRangeData::QsortNameCompare(a,b); }
+                            { return ScRangeData_QsortNameCompare(a,b); }
 #endif
 
 //------------------------------------------------------------------------
@@ -198,6 +196,9 @@ class ScRangeName : public SortedCollection
 private:
     ScDocument* pDoc;
     USHORT nSharedMaxIndex;
+
+    using SortedCollection::Clone;    // calcwarnings: shouldn't be used
+
 public:
     ScRangeName(USHORT nLim = 4, USHORT nDel = 4, BOOL bDup = FALSE,
                 ScDocument* pDocument = NULL) :
@@ -207,8 +208,8 @@ public:
 
     ScRangeName(const ScRangeName& rScRangeName, ScDocument* pDocument);
 
-    virtual DataObject*     Clone(ScDocument* pDoc) const
-                             { return new ScRangeName(*this, pDoc); }
+    virtual DataObject*     Clone(ScDocument* pDocP) const
+                             { return new ScRangeName(*this, pDocP); }
     ScRangeData*            operator[]( const USHORT nIndex) const
                              { return (ScRangeData*)At(nIndex); }
     virtual short           Compare(DataObject* pKey1, DataObject* pKey2) const;
