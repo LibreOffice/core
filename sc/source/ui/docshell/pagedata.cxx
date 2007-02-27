@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:50:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:09:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ void ScPageBreakData::AddPages()
     if ( nUsed > 1 )
     {
         long nPage = pData[0].GetFirstPage();
-        for (USHORT i=0; i+1<nUsed; i++)
+        for (USHORT i=0; sal::static_int_cast<size_t>(i+1)<nUsed; i++)
         {
             nPage += ((long)pData[i].GetPagesX())*pData[i].GetPagesY();
             pData[i+1].SetFirstPage( nPage );
