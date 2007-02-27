@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:34:03 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:42:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,19 +94,19 @@ const SfxItemPropertyMap* lcl_GetSubTotalPropertyMap()
 
     static SfxItemPropertyMap aSubTotalPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_BINDFMT),  0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_CASE),     0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_ENABSORT), 0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_ENUSLIST), 0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_FORMATS),  0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_INSBRK),   0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_ISCASE),   0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_MAXFLD),   0,  &getCppuType((sal_Int32*)0), beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNONAME_SORTASC),  0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_ULIST),    0,  &getBooleanCppuType(),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_UINDEX),   0,  &getCppuType((sal_Int32*)0), 0},
-        {MAP_CHAR_LEN(SC_UNONAME_USINDEX),  0,  &getCppuType((sal_Int32*)0), 0},
-        {0,0,0,0}
+        {MAP_CHAR_LEN(SC_UNONAME_BINDFMT),  0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_CASE),     0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ENABSORT), 0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ENUSLIST), 0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_FORMATS),  0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_INSBRK),   0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ISCASE),   0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_MAXFLD),   0,  &getCppuType((sal_Int32*)0), beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SORTASC),  0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ULIST),    0,  &getBooleanCppuType(),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_UINDEX),   0,  &getCppuType((sal_Int32*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_USINDEX),  0,  &getCppuType((sal_Int32*)0), 0, 0},
+        {0,0,0,0,0,0}
     };
     return aSubTotalPropertyMap_Impl;
 }
@@ -115,16 +115,16 @@ const SfxItemPropertyMap* lcl_GetFilterPropertyMap()
 {
     static SfxItemPropertyMap aFilterPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_CONTHDR),  0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_COPYOUT),  0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_ISCASE),   0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_MAXFLD),   0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNONAME_ORIENT),   0,  &getCppuType((table::TableOrientation*)0),  0},
-        {MAP_CHAR_LEN(SC_UNONAME_OUTPOS),   0,  &getCppuType((table::CellAddress*)0),       0},
-        {MAP_CHAR_LEN(SC_UNONAME_SAVEOUT),  0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_SKIPDUP),  0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_USEREGEX), 0,  &getBooleanCppuType(),                      0},
-        {0,0,0,0}
+        {MAP_CHAR_LEN(SC_UNONAME_CONTHDR),  0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_COPYOUT),  0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ISCASE),   0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_MAXFLD),   0,  &getCppuType((sal_Int32*)0),                beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ORIENT),   0,  &getCppuType((table::TableOrientation*)0),  0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_OUTPOS),   0,  &getCppuType((table::CellAddress*)0),       0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SAVEOUT),  0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SKIPDUP),  0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_USEREGEX), 0,  &getBooleanCppuType(),                      0, 0},
+        {0,0,0,0,0,0}
     };
     return aFilterPropertyMap_Impl;
 }
@@ -133,18 +133,18 @@ const SfxItemPropertyMap* lcl_GetDBRangePropertyMap()
 {
     static SfxItemPropertyMap aDBRangePropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_AUTOFLT),  0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_FLTCRT),   0,  &getCppuType((table::CellRangeAddress*)0),  0},
-        {MAP_CHAR_LEN(SC_UNONAME_FROMSELECT),0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_ISUSER),   0,  &getBooleanCppuType(),           beans::PropertyAttribute::READONLY },
-        {MAP_CHAR_LEN(SC_UNONAME_KEEPFORM), 0,  &getBooleanCppuType(),                      0},
+        {MAP_CHAR_LEN(SC_UNONAME_AUTOFLT),  0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_FLTCRT),   0,  &getCppuType((table::CellRangeAddress*)0),  0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_FROMSELECT),0, &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ISUSER),   0,  &getBooleanCppuType(),           beans::PropertyAttribute::READONLY, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_KEEPFORM), 0,  &getBooleanCppuType(),                      0, 0},
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0), beans::PropertyAttribute::READONLY, 0 },
-        {MAP_CHAR_LEN(SC_UNONAME_MOVCELLS), 0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_REFPERIOD), 0, &getCppuType((sal_Int32*)0),                0},
-        {MAP_CHAR_LEN(SC_UNONAME_STRIPDAT), 0,  &getBooleanCppuType(),                      0},
-        {MAP_CHAR_LEN(SC_UNONAME_USEFLTCRT),0,  &getBooleanCppuType(),                      0},
-        {0,0,0,0}
+        {MAP_CHAR_LEN(SC_UNONAME_MOVCELLS), 0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_REFPERIOD), 0, &getCppuType((sal_Int32*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_STRIPDAT), 0,  &getBooleanCppuType(),                      0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_USEFLTCRT),0,  &getBooleanCppuType(),                      0, 0},
+        {0,0,0,0,0,0}
     };
     return aDBRangePropertyMap_Impl;
 }
@@ -342,9 +342,6 @@ void ScSortDescriptor::FillProperties( uno::Sequence<beans::PropertyValue>& rSeq
 
     //  Uno-Werte zusammensuchen
 
-    table::TableOrientation eOrient =
-        rParam.bByRow ? table::TableOrientation_ROWS : table::TableOrientation_COLUMNS;
-
     table::CellAddress aOutPos;
     aOutPos.Sheet  = rParam.nDestTab;
     aOutPos.Column = rParam.nDestCol;
@@ -405,9 +402,9 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
     sal_Bool bNewSortDescriptor(sal_False);
     const beans::PropertyValue* pPropArray = rSeq.getConstArray();
     long nPropCount = rSeq.getLength();
-    for (long i = 0; i < nPropCount; i++)
+    for (long nProp = 0; nProp < nPropCount; nProp++)
     {
-        const beans::PropertyValue& rProp = pPropArray[i];
+        const beans::PropertyValue& rProp = pPropArray[nProp];
         String aPropName(rProp.Name);
 
         if (aPropName.EqualsAscii( SC_UNONAME_ORIENT ))
@@ -533,8 +530,8 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
 //------------------------------------------------------------------------
 
 ScSubTotalFieldObj::ScSubTotalFieldObj( ScSubTotalDescriptorBase* pDesc, USHORT nP ) :
-    rParent( *pDesc ),
     xRef( pDesc ),          // Objekt festhalten
+    rParent( *pDesc ),
     nPos( nP )
 {
     DBG_ASSERT(pDesc, "ScSubTotalFieldObj: Parent ist 0");
@@ -594,7 +591,7 @@ void SAL_CALL ScSubTotalFieldObj::setSubTotalColumns(
     rParent.GetData(aParam);
 
     UINT32 nColCount = aSubTotalColumns.getLength();
-    if ( nColCount <= SCCOL_MAX )
+    if ( nColCount <= sal::static_int_cast<UINT32>(SCCOL_MAX) )
     {
         SCCOL nCount = static_cast<SCCOL>(nColCount);
         aParam.nSubTotals[nPos] = nCount;
@@ -635,12 +632,12 @@ ScSubTotalDescriptorBase::~ScSubTotalDescriptorBase()
 
 // GetData/PutData hier nur wegen NewInstance-Krempel implementiert...
 
-void ScSubTotalDescriptorBase::GetData( ScSubTotalParam& rParam ) const
+void ScSubTotalDescriptorBase::GetData( ScSubTotalParam& /* rParam */ ) const
 {
     DBG_ERROR("ScSubTotalDescriptorBase::GetData soll nicht gerufen werden");
 }
 
-void ScSubTotalDescriptorBase::PutData( const ScSubTotalParam& rParam )
+void ScSubTotalDescriptorBase::PutData( const ScSubTotalParam& /* rParam */ )
 {
     DBG_ERROR("ScSubTotalDescriptorBase::PutData soll nicht gerufen werden");
 }
@@ -682,7 +679,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
 
     UINT32 nColCount = aSubTotalColumns.getLength();
 
-    if ( nPos < MAXSUBTOTAL && nColCount <= SCCOL_MAX )
+    if ( nPos < MAXSUBTOTAL && nColCount <= sal::static_int_cast<UINT32>(SCCOL_MAX) )
     {
         aParam.bGroupActive[nPos] = TRUE;
         aParam.nField[nPos] = static_cast<SCCOL>(nGroupColumn);
@@ -752,7 +749,7 @@ uno::Any SAL_CALL ScSubTotalDescriptorBase::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xField);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScSubTotalDescriptorBase::getElementType() throw(uno::RuntimeException)
@@ -813,7 +810,7 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
     else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
     {
         sal_Int32 nVal;
-        if ( (aValue >>= nVal) && nVal > MAXSUBTOTAL )
+        if ( (aValue >>= nVal) && nVal > sal::static_int_cast<sal_Int32>(MAXSUBTOTAL) )
         {
             throw lang::IllegalArgumentException();
         }
@@ -866,7 +863,7 @@ sal_Int64 SAL_CALL ScSubTotalDescriptorBase::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -895,7 +892,7 @@ ScSubTotalDescriptorBase* ScSubTotalDescriptorBase::getImplementation(
     ScSubTotalDescriptorBase* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScSubTotalDescriptorBase*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScSubTotalDescriptorBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
@@ -1096,8 +1093,8 @@ void SAL_CALL ScConsolidationDescriptor::setInsertLinks( sal_Bool bInsertLinks )
 //------------------------------------------------------------------------
 
 ScFilterDescriptorBase::ScFilterDescriptorBase(ScDocShell* pDocShell) :
-    pDocSh(pDocShell),
-    aPropSet( lcl_GetFilterPropertyMap() )
+    aPropSet( lcl_GetFilterPropertyMap() ),
+    pDocSh(pDocShell)
 {
     if (pDocSh)
         pDocSh->GetDocument()->AddUnoObject(*this);
@@ -1109,7 +1106,7 @@ ScFilterDescriptorBase::~ScFilterDescriptorBase()
         pDocSh->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScFilterDescriptorBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScFilterDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
@@ -1299,7 +1296,7 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
     else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
     {
         sal_Int32 nVal;
-        if ( (aValue >>= nVal) && nVal > MAXQUERY )
+        if ( (aValue >>= nVal) && nVal > sal::static_int_cast<sal_Int32>(MAXQUERY) )
         {
             throw lang::IllegalArgumentException();
         }
@@ -1378,9 +1375,9 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScFilterDescriptorBase )
 
 //------------------------------------------------------------------------
 
-ScFilterDescriptor::ScFilterDescriptor(ScDocShell* pDocSh)
+ScFilterDescriptor::ScFilterDescriptor(ScDocShell* pDocShell)
     :
-    ScFilterDescriptorBase(pDocSh)
+    ScFilterDescriptorBase(pDocShell)
 {
 }
 
@@ -1405,8 +1402,8 @@ void ScFilterDescriptor::SetParam( const ScQueryParam& rNew )
 
 //------------------------------------------------------------------------
 
-ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDocShell* pDocSh, ScDatabaseRangeObj* pPar) :
-    ScFilterDescriptorBase(pDocSh),
+ScRangeFilterDescriptor::ScRangeFilterDescriptor(ScDocShell* pDocShell, ScDatabaseRangeObj* pPar) :
+    ScFilterDescriptorBase(pDocShell),
     pParent(pPar)
 {
     if (pParent)
@@ -1433,8 +1430,8 @@ void ScRangeFilterDescriptor::PutData( const ScQueryParam& rParam )
 
 //------------------------------------------------------------------------
 
-ScDataPilotFilterDescriptor::ScDataPilotFilterDescriptor(ScDocShell* pDocSh, ScDataPilotDescriptorBase* pPar) :
-    ScFilterDescriptorBase(pDocSh),
+ScDataPilotFilterDescriptor::ScDataPilotFilterDescriptor(ScDocShell* pDocShell, ScDataPilotDescriptorBase* pPar) :
+    ScFilterDescriptorBase(pDocShell),
     pParent(pPar)
 {
     if (pParent)
@@ -1490,7 +1487,7 @@ ScDatabaseRangeObj::~ScDatabaseRangeObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScDatabaseRangeObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDatabaseRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
 
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -1716,10 +1713,11 @@ void ScDatabaseRangeObj::GetSubTotalParam(ScSubTotalParam& rSubTotalParam) const
             if ( rSubTotalParam.bGroupActive[i] )
             {
                 if ( rSubTotalParam.nField[i] >= nFieldStart )
-                    rSubTotalParam.nField[i] -= nFieldStart;
+                    rSubTotalParam.nField[i] = sal::static_int_cast<SCCOL>( rSubTotalParam.nField[i] - nFieldStart );
                 for (SCCOL j=0; j<rSubTotalParam.nSubTotals[i]; j++)
                     if ( rSubTotalParam.pSubTotals[i][j] >= nFieldStart )
-                        rSubTotalParam.pSubTotals[i][j] -= nFieldStart;
+                        rSubTotalParam.pSubTotals[i][j] =
+                            sal::static_int_cast<SCCOL>( rSubTotalParam.pSubTotals[i][j] - nFieldStart );
             }
         }
     }
@@ -1739,9 +1737,9 @@ void ScDatabaseRangeObj::SetSubTotalParam(const ScSubTotalParam& rSubTotalParam)
         {
             if ( aParam.bGroupActive[i] )
             {
-                aParam.nField[i] += nFieldStart;
+                aParam.nField[i] = sal::static_int_cast<SCCOL>( aParam.nField[i] + nFieldStart );
                 for (SCCOL j=0; j<aParam.nSubTotals[i]; j++)
-                    aParam.pSubTotals[i][j] += nFieldStart;
+                    aParam.pSubTotals[i][j] = sal::static_int_cast<SCCOL>( aParam.pSubTotals[i][j] + nFieldStart );
             }
         }
 
@@ -2101,7 +2099,7 @@ ScDatabaseRangesObj::~ScDatabaseRangesObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScDatabaseRangesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDatabaseRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -2206,7 +2204,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDatabaseRangesObj::getElementType() throw(uno::RuntimeException)
@@ -2233,7 +2231,7 @@ uno::Any SAL_CALL ScDatabaseRangesObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xRange);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDatabaseRangesObj::getElementNames()
