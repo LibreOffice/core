@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xerecord.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:55:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:36:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,10 +139,8 @@ public:
     /** @param nRecId  The record ID of this record.
         @param rValue  The value for the record body.
         @param nSize  Record size. Uses sizeof( Type ), if this parameter is omitted. */
-    inline explicit     XclExpValueRecord(
-                            sal_uInt16 nRecId,
-                            const Type& rValue,
-                            sal_Size nSize = sizeof( Type ) );
+    inline explicit     XclExpValueRecord( sal_uInt16 nRecId, const Type& rValue, sal_Size nSize = sizeof( Type ) ) :
+                            XclExpRecord( nRecId, nSize ), maValue( rValue ) {}
 
     /** Returns the value of the record. */
     inline const Type&  GetValue() const { return maValue; }
@@ -151,24 +149,12 @@ public:
 
 private:
     /** Writes the body of the record. */
-    virtual void        WriteBody( XclExpStream& rStrm );
+    inline virtual void WriteBody( XclExpStream& rStrm ) { rStrm << maValue; }
+    // inlining prevents warning in wntmsci10
 
 private:
     Type                maValue;        /// The record data.
 };
-
-template< typename Type >
-inline XclExpValueRecord< Type >::XclExpValueRecord( sal_uInt16 nRecId, const Type& rValue, sal_Size nSize ) :
-    XclExpRecord( nRecId, nSize ),
-    maValue( rValue )
-{
-}
-
-template< typename Type >
-void XclExpValueRecord< Type >::WriteBody( XclExpStream& rStrm )
-{
-    rStrm << maValue;
-}
 
 // ----------------------------------------------------------------------------
 
@@ -250,7 +236,7 @@ public:
 
     /** Returns true, if the passed index points to an exiting record. */
     inline bool         HasRecord( size_t nPos ) const
-                            { return (0 <= nPos) && (nPos < maRecs.size()); }
+                            { return nPos < maRecs.size(); }
     /** Returns reference to an existing record or empty reference on error. */
     inline RecordRefType GetRecord( size_t nPos ) const
                             { return (nPos < maRecs.size()) ? maRecs[ nPos ] : RecordRefType(); }
@@ -288,19 +274,17 @@ public:
     inline void         RemoveAllRecords() { maRecs.clear(); }
 
     /** Writes the complete record list. */
-    virtual void        Save( XclExpStream& rStrm );
+    inline virtual void Save( XclExpStream& rStrm )
+    {
+        // inlining prevents warning in wntmsci10
+        for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
+            (*aIt)->Save( rStrm );
+    }
 
 private:
     typedef ::std::vector< RecordRefType > RecordVec;
     RecordVec           maRecs;
 };
-
-template< typename RecType >
-void XclExpRecordList< RecType >::Save( XclExpStream& rStrm )
-{
-    for( typename RecordVec::iterator aIt = maRecs.begin(), aEnd = maRecs.end(); aIt != aEnd; ++aIt )
-        (*aIt)->Save( rStrm );
-}
 
 // ============================================================================
 
