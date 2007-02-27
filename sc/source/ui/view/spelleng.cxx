@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:08:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,9 @@ bool lclHasString( ScDocument& rDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, const S
 // ----------------------------------------------------------------------------
 
 ScConversionEngineBase::ScConversionEngineBase(
-        SfxItemPool* pEnginePool, ScViewData& rViewData,
+        SfxItemPool* pEnginePoolP, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc ) :
-    ScEditEngineDefaulter( pEnginePool ),
+    ScEditEngineDefaulter( pEnginePoolP ),
     mrViewData( rViewData ),
     mrDocShell( *rViewData.GetDocShell() ),
     mrDoc( *rViewData.GetDocShell()->GetDocument() ),
@@ -117,7 +117,6 @@ bool ScConversionEngineBase::FindNextConversionCell()
 {
     ScMarkData& rMark = mrViewData.GetMarkData();
     ScTabViewShell* pViewShell = mrViewData.GetViewShell();
-    ScSplitPos eWhich = mrViewData.GetActivePart();
     ScBaseCell* pCell = NULL;
     const ScPatternAttr* pPattern = NULL;
     const ScPatternAttr* pLastPattern = NULL;
@@ -331,10 +330,10 @@ void ScConversionEngineBase::FillFromCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
 // ============================================================================
 
 ScSpellingEngine::ScSpellingEngine(
-        SfxItemPool* pEnginePool, ScViewData& rViewData,
+        SfxItemPool* pEnginePoolP, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
         XSpellCheckerRef xSpeller ) :
-    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc )
+    ScConversionEngineBase( pEnginePoolP, rViewData, pUndoDoc, pRedoDoc )
 {
     SetSpeller( xSpeller );
 }
@@ -392,7 +391,7 @@ Window* ScSpellingEngine::GetDialogParent()
                     return pWin;
 
     // fall back to standard dialog parent
-    return mrDocShell.GetDialogParent();
+    return mrDocShell.GetActiveDialogParent();
 }
 
 // ============================================================================
@@ -438,10 +437,10 @@ ScConversionParam::ScConversionParam( ScConversionType eConvType,
 // ----------------------------------------------------------------------------
 
 ScTextConversionEngine::ScTextConversionEngine(
-        SfxItemPool* pEnginePool, ScViewData& rViewData,
+        SfxItemPool* pEnginePoolP, ScViewData& rViewData,
         const ScConversionParam& rConvParam,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc ) :
-    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc ),
+    ScConversionEngineBase( pEnginePoolP, rViewData, pUndoDoc, pRedoDoc ),
     maConvParam( rConvParam )
 {
 }
