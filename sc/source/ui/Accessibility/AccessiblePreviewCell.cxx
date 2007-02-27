@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:06:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,6 @@ void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
     if (rHint.ISA( SfxSimpleHint ))
     {
         const SfxSimpleHint& rRef = (const SfxSimpleHint&)rHint;
-        ULONG nId = rRef.GetId();
         if (rRef.GetId() == SC_HINT_ACC_VISAREACHANGED)
         {
             if (mpTextHelper)
@@ -301,13 +300,13 @@ sal_Bool ScAccessiblePreviewCell::IsDefunc(
 }
 
 sal_Bool ScAccessiblePreviewCell::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     return sal_False;
 }
 
 sal_Bool ScAccessiblePreviewCell::IsOpaque(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // test whether there is a background color
     //! could be moved to ScAccessibleCellBase
@@ -323,7 +322,7 @@ sal_Bool ScAccessiblePreviewCell::IsOpaque(
     return bOpaque;
 }
 
-sal_Bool ScAccessiblePreviewCell::IsSelected(const uno::Reference<XAccessibleStateSet>& rxParentStates)
+sal_Bool ScAccessiblePreviewCell::IsSelected(const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     return sal_False;
 }
