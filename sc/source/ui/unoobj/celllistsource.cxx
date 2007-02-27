@@ -4,9 +4,9 @@
  *
  *  $RCSfile: celllistsource.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:29:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:40:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,6 +190,7 @@ namespace calc
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
         DBG_ASSERT( _nHandle == PROP_HANDLE_RANGE_ADDRESS, "OCellListSource::getFastPropertyValue: invalid handle!" );
             // we only have this one property ....
+        (void)_nHandle;     // avoid warning in product version
 
         _rValue <<= getRangeAddress( );
     }
@@ -337,7 +338,7 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OCellListSource::modified( const EventObject& aEvent ) throw (RuntimeException)
+    void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellListSource, checkConsistency_static );
 
@@ -355,7 +356,7 @@ namespace calc
         {
             try
             {
-                reinterpret_cast< XListEntryListener* >( aIter.next() )->allEntriesChanged( aEvent );
+                static_cast< XListEntryListener* >( aIter.next() )->allEntriesChanged( aEvent );
             }
             catch( const RuntimeException& )
             {
