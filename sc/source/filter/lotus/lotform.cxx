@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotform.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:27:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:38:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,6 +160,7 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
             eParam[ 2 ] = n0Token;      //    -> 2. als Default
         }
             break;
+        default:;
     }
     // ................
 
@@ -229,10 +230,10 @@ void LotusToSc::DoFunc( DefTokenId eOc, BYTE nAnz, const sal_Char* pExtString )
 
 
 void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
-    {
+{
     // Col-Bemachung
     if( nCol & 0x8000 )
-        {
+    {
         rSRD.SetColRel( TRUE );
         if( nCol & 0x0080 )
             nCol |= 0xFF00;
@@ -240,7 +241,7 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
             nCol &= 0x00FF;
         // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCsCOL
         rSRD.nRelCol = static_cast< SCsCOL >( static_cast< sal_Int16 >( nCol ) );
-        }
+    }
     else
     {
         rSRD.SetColRel( FALSE );
@@ -249,11 +250,11 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
 
     // Row-Bemachung
     if( nRow & 0x8000 )
-        {
+    {
         rSRD.SetRowRel( TRUE );
         // vorzeichenrichtige Erweiterung
         switch( eTyp )
-            {
+        {
             // 5432 1098 7654 3210
             // 8421 8421 8421 8421
             //       xxx xxxx xxxx
@@ -273,13 +274,13 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
                 break;
             default:
                 DBG_ERROR( "*LotusToSc::LotusRelToScRel(): etwas vergessen...?" );
-            }
         }
+    }
     else
-        {
+    {
         rSRD.SetRowRel( FALSE );
         switch( eTyp )
-            {
+        {
             // 5432 1098 7654 3210
             // 8421 8421 8421 8421
             //       xxx xxxx xxxx
@@ -293,8 +294,8 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
                 break;
             default:
                 DBG_ERROR( "*LotusToSc::LotusRelToScRel(): etwas vergessen...?" );
-            }
         }
+    }
 
     if( rSRD.IsRowRel() )
         // #i36252# first cast unsigned 16-bit to signed 16-bit, and then to SCsROW
@@ -304,11 +305,11 @@ void LotusToSc::LotusRelToScRel( UINT16 nCol, UINT16 nRow, SingleRefData& rSRD )
 
     if( rSRD.IsRowRel() || rSRD.IsColRel() )
         rSRD.CalcAbsIfRel( aEingPos );
-    }
+}
 
 
 void LotusToSc::ReadSRD( SingleRefData& rSRD, BYTE nRelBit )
-    {
+{
     BYTE            nTab, nCol;
     UINT16          nRow;
 
@@ -330,33 +331,33 @@ void LotusToSc::ReadSRD( SingleRefData& rSRD, BYTE nRelBit )
     rSRD.SetFlag3D( b3D );
 
     rSRD.CalcRelFromAbs( aEingPos );
-    }
+}
 
 
 void LotusToSc::IncToken( TokenId &rParam )
-    {
+{
     aPool << ocOpen << rParam << nAddToken;
     rParam = aPool.Store();
-    }
+}
 
 
 void LotusToSc::DecToken( TokenId &rParam )
-    {
+{
     aPool << ocOpen << rParam << nSubToken;
     rParam = aPool.Store();
-    }
+}
 
 
 void LotusToSc::NegToken( TokenId &rParam )
-    {
+{
     aPool << ocNegSub << ocOpen << rParam << ocClose;
     rParam = aPool.Store();
-    }
+}
 
 
-void LotusToSc::Reset( ScAddress aEingPos )
-    {
-    LotusConverterBase::Reset( aEingPos );
+void LotusToSc::Reset( const ScAddress& rEingPos )
+{
+    LotusConverterBase::Reset( rEingPos );
 
     TokenId nEins = aPool.Store( 1.0 );
 
@@ -367,16 +368,16 @@ void LotusToSc::Reset( ScAddress aEingPos )
     nSubToken = aPool.Store();
 
     n0Token = aPool.Store( 0.0 );
-    }
+}
 
 
 LotusToSc::LotusToSc( SvStream &rStream, CharSet e, BOOL b ) :
     LotusConverterBase( rStream, 128 )
-    {
+{
     eSrcChar = e;
     bWK3 = FALSE;
     bWK123 = b;
-    }
+}
 
 
 typedef FUNC_TYPE ( FuncType1 ) ( BYTE );
@@ -384,7 +385,7 @@ typedef DefTokenId ( FuncType2 ) ( BYTE );
 
 
 ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
-    const FORMULA_TYPE eFT )
+    const FORMULA_TYPE /*eFT*/ )
 {
     BYTE                nOc;
     BYTE                nAnz;
@@ -394,8 +395,7 @@ ConvErr LotusToSc::Convert( const ScTokenArray*& rpErg, INT32& rRest,
     FUNC_TYPE           eType = FT_NOP;
     TokenId             nMerk0;
     DefTokenId          eOc;
-    const BOOL          bRangeName = eFT == FT_RangeName;
-    const sal_Char*     pExtName;
+    const sal_Char*     pExtName = 0;
     RangeNameBufferWK3& rRangeNameBufferWK3 = *pLotusRoot->pRngNmBffWK3;
 
     ComplRefData        aCRD;
