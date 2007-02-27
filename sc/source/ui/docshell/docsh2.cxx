@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:07:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ void ScDocShell::InitItems()
         if ( !aDocument.IsValidAsianCompression() )
         {
             // set compression mode from configuration if not already set (e.g. XML import)
-            aDocument.SetAsianCompression( aAsian.GetCharDistanceCompression() );
+            aDocument.SetAsianCompression( sal::static_int_cast<BYTE>( aAsian.GetCharDistanceCompression() ) );
         }
 
         if ( !aDocument.IsValidAsianKerning() )
