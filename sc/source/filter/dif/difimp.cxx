@@ -4,9 +4,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:46:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,10 +147,8 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
             case T_END:
             case T_UNKNOWN:
                 break;
-#ifdef DBG_UTIL
             default:
-                DBG_ERROR( "*ScImportDif(): enum vergessen!" );
-#endif
+                DBG_ERRORFILE( "ScImportDif - missing enum" );
         }
 
     }
@@ -162,7 +160,6 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
 
         SCCOL               nColCnt = SCCOL_MAX;
         SCROW               nRowCnt = rInsPos.Row();
-        UINT32              nHandleLogic = 0xFFFFFFFF;
         DifAttrCache        aAttrCache( bPlain );
 
         DATASET             eAkt = D_UNKNOWN;
@@ -243,10 +240,8 @@ FltError ScImportDif( SvStream& rIn, ScDocument* pDoc, const ScAddress& rInsPos,
                     break;
                 case D_SYNT_ERROR:
                     break;
-#ifdef DBG_UTIL
                 default:
-                    DBG_ERROR( "*ScImportDif(): enum vergessen!" );
-#endif
+                    DBG_ERROR( "ScImportDif - missing enum" );
             }
         }
 
@@ -340,7 +335,6 @@ TOPIC DifParser::GetNextTopic( void )
     };
 
     STATE                   eS = S_START;
-    BOOL                    bValOverflow = FALSE;
     String                  aLine;
 
     nVector = 0;
@@ -412,11 +406,9 @@ TOPIC DifParser::GetNextTopic( void )
                     aData.Erase();
                 eS = S_END;
                 break;
-#ifdef DBG_UTIL
             case S_END:
-                DBG_ERROR( "+GetNextTopic(): Ende? Gibt's hier nicht!" );
+                DBG_ERRORFILE( "DifParser::GetNextTopic - unexpected state" );
                 break;
-#endif
             case S_UNKNOWN:
                 // 2 Zeilen ueberlesen
                 rIn.ReadUniOrByteStringLine( aLine );
@@ -425,10 +417,8 @@ TOPIC DifParser::GetNextTopic( void )
                 rIn.ReadUniOrByteStringLine( aLine );
                 eS = S_END;
                 break;
-#ifdef DBG_UTIL
             default:
-                DBG_ERROR( "*GetNextTopic((): enum vergessen!" );
-#endif
+                DBG_ERRORFILE( "DifParser::GetNextTopic - missing enum" );
         }
     }
 
@@ -573,7 +563,7 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
     {
     double                  fNewVal = 0.0;
     BOOL                    bNeg = FALSE;
-    double                  fFracPos;
+    double                  fFracPos = 1.0;
     INT32                   nExp = 0;
     BOOL                    bExpNeg = FALSE;
     BOOL                    bExpOverflow = FALSE;
@@ -719,13 +709,11 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
                     eS = S_END;
                 }
                 break;
-#ifdef DBG_UTIL
             case S_END:
-                DBG_ERROR( "*ScanVal(): S_END erreicht!" );
+                DBG_ERRORFILE( "DifParser::ScanFloatVal - unexpected state" );
                 break;
             default:
-                DBG_ERROR( "*ScanVal(): State vergessen!" );
-#endif
+                DBG_ERRORFILE( "DifParser::ScanFloatVal - missing enum" );
         }
         pStart++;
     }
@@ -752,12 +740,12 @@ BOOL DifParser::ScanFloatVal( const sal_Unicode* pStart )
 
 DifColumn::~DifColumn( void )
 {
-    ENTRY*  pAkt = ( ENTRY* ) List::First();
+    ENTRY*  pEntry = ( ENTRY* ) List::First();
 
-    while( pAkt )
+    while( pEntry )
     {
-        delete pAkt;
-        pAkt = ( ENTRY* ) List::Next();
+        delete pEntry;
+        pEntry = ( ENTRY* ) List::Next();
     }
 }
 
@@ -821,13 +809,13 @@ void DifColumn::NewEntry( const SCROW nPos, const UINT32 nNumFormat )
 
 void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab, const ScPatternAttr& rPattAttr )
 {
-    ENTRY*  pAkt = ( ENTRY* ) List::First();
+    ENTRY*  pEntry = ( ENTRY* ) List::First();
 
-    while( pAkt )
+    while( pEntry )
     {
-        rDoc.ApplyPatternAreaTab( nCol, pAkt->nStart, nCol, pAkt->nEnd,
+        rDoc.ApplyPatternAreaTab( nCol, pEntry->nStart, nCol, pEntry->nEnd,
                 nTab, rPattAttr );
-        pAkt = ( ENTRY* ) List::Next();
+        pEntry = ( ENTRY* ) List::Next();
     }
 }
 
@@ -837,19 +825,19 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
     ScPatternAttr   aAttr( rDoc.GetPool() );
     SfxItemSet&     rItemSet = aAttr.GetItemSet();
 
-    ENTRY*          pAkt = ( ENTRY* ) List::First();
+    ENTRY*          pEntry = ( ENTRY* ) List::First();
 
-    while( pAkt )
+    while( pEntry )
         {
-        DBG_ASSERT( pAkt->nNumFormat > 0,
+        DBG_ASSERT( pEntry->nNumFormat > 0,
             "+DifColumn::Apply(): Numberformat darf hier nicht 0 sein!" );
-        rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, pAkt->nNumFormat ) );
+        rItemSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, pEntry->nNumFormat ) );
 
-        rDoc.ApplyPatternAreaTab( nCol, pAkt->nStart, nCol, pAkt->nEnd, nTab, aAttr );
+        rDoc.ApplyPatternAreaTab( nCol, pEntry->nStart, nCol, pEntry->nEnd, nTab, aAttr );
 
         rItemSet.ClearItem();
 
-        pAkt = ( ENTRY* ) List::Next();
+        pEntry = ( ENTRY* ) List::Next();
     }
 }
 
