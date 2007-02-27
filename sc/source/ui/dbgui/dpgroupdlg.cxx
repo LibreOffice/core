@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpgroupdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:22:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:02:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ ScDPDateGroupDlg::ScDPDateGroupDlg( Window* pParent,
 {
     maLbUnits.SetHelpId( HID_SC_DPDATEGROUP_LB );
     ResStringArray aArr( ScResId( STR_UNITS ) );
-    for( USHORT nIdx = 0, nCount = aArr.Count(); nIdx < nCount; ++nIdx )
+    for( USHORT nIdx = 0, nCount = sal::static_int_cast<USHORT>(aArr.Count()); nIdx < nCount; ++nIdx )
         maLbUnits.InsertEntry( aArr.GetString( nIdx ) );
 
     FreeResource();
@@ -322,8 +322,8 @@ ScDPNumGroupInfo ScDPDateGroupDlg::GetGroupInfo() const
     // TODO: error messages in OK event?
     aInfo.Start = maStartHelper.GetValue();
     aInfo.End = maEndHelper.GetValue();
-    long nNumDays = maEdNumDays.GetValue();
-    aInfo.Step = aInfo.DateValues ? nNumDays : 0L;
+    sal_Int64 nNumDays = maEdNumDays.GetValue();
+    aInfo.Step = static_cast<double>( aInfo.DateValues ? nNumDays : 0L );
     if( aInfo.End <= aInfo.Start )
         aInfo.End = aInfo.Start + nNumDays;
 
