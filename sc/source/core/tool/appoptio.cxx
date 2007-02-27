@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:16:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,7 +288,7 @@ void lcl_SetLastFunctions( ScAppOptions& rOpt, const Any& rValue )
             for (long i=0; i<nCount; i++)
                 pUShorts[i] = (USHORT) pArray[i];
 
-            rOpt.SetLRUFuncList( pUShorts, nCount );
+            rOpt.SetLRUFuncList( pUShorts, sal::static_int_cast<USHORT>(nCount) );
 
             delete[] pUShorts;
         }
@@ -350,7 +350,7 @@ void lcl_GetSortList( Any& rDest )
         Sequence<OUString> aSeq( nCount );
         OUString* pArray = aSeq.getArray();
         for (long i=0; i<nCount; i++)
-            pArray[i] = (*pUserList)[i]->GetString();
+            pArray[i] = (*pUserList)[sal::static_int_cast<USHORT>(i)]->GetString();
         rDest <<= aSeq;
     }
     else
@@ -680,11 +680,9 @@ ScAppCfg::ScAppCfg() :
 IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -711,11 +709,9 @@ IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
 IMPL_LINK( ScAppCfg, InputCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetInputPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -739,11 +735,9 @@ IMPL_LINK( ScAppCfg, InputCommitHdl, void *, EMPTYARG )
 IMPL_LINK( ScAppCfg, RevisionCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetRevisionPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -770,11 +764,9 @@ IMPL_LINK( ScAppCfg, RevisionCommitHdl, void *, EMPTYARG )
 IMPL_LINK( ScAppCfg, ContentCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetContentPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -792,11 +784,9 @@ IMPL_LINK( ScAppCfg, ContentCommitHdl, void *, EMPTYARG )
 IMPL_LINK( ScAppCfg, SortListCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetSortListPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -814,11 +804,9 @@ IMPL_LINK( ScAppCfg, SortListCommitHdl, void *, EMPTYARG )
 IMPL_LINK( ScAppCfg, MiscCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetMiscPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
