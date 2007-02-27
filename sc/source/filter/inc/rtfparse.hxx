@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfparse.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:24:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:35:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,10 +51,10 @@ struct ScRTFCellDefault
                             aItemSet( *pPool ), nColOverlap(1) {}
 };
 
-DECLARE_LIST( ScRTFDefaultList, ScRTFCellDefault* );
+DECLARE_LIST( ScRTFDefaultList, ScRTFCellDefault* )
 // Remove: (const unsigned short &) not sufficiently different from (unsigned short)
 // deswegen ULONG, typedef bringt's auch nicht :-(
-SV_DECL_VARARR_SORT( ScRTFColTwips, ULONG, 16, 4);
+SV_DECL_VARARR_SORT( ScRTFColTwips, ULONG, 16, 4)
 
 #else       // SC_RTFPARSE_CXX
 
