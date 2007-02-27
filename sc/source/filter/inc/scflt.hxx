@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:28:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:36:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -557,6 +557,7 @@ public:
     sal_Char            FaceName[32];
 
                         Sc10FontData( const Sc10FontData& rData ) :
+                            DataObject( rData ),
                             Height( rData.Height ),
                             CharSet( rData.CharSet ),
                             PitchAndFamily( rData.PitchAndFamily )
@@ -578,6 +579,8 @@ public:
                         Sc10FontCollection( SvStream& rStream );
     ULONG               GetError() { return nError; }
     Sc10FontData*       At(USHORT nIndex) { return (Sc10FontData*)Collection::At(nIndex); }
+private:
+    using               Collection::At;
 };
 
 
@@ -589,7 +592,8 @@ public :
     sal_Char            Reference[64];
     sal_Char            Reserved[12];
 
-                        Sc10NameData(const Sc10NameData& rData)
+                        Sc10NameData(const Sc10NameData& rData) :
+                            DataObject( rData )
                         {
                             strncpy(Name, rData.Name, sizeof(Name));
                             Name[sizeof(Name)-1] = 0;
@@ -611,6 +615,8 @@ public:
                         Sc10NameCollection(SvStream& rStream);
 ULONG                   GetError() { return nError; }
 Sc10NameData*           At(USHORT nIndex) { return (Sc10NameData*)Collection::At(nIndex); }
+private:
+    using               Collection::At;
 };
 
 
@@ -631,7 +637,8 @@ public:
     USHORT              FormatFlags;
     sal_Char            Reserved[8];
 
-                        Sc10PatternData(const Sc10PatternData& rData)
+                        Sc10PatternData(const Sc10PatternData& rData) :
+                            DataObject( rData )
                         {
                             strncpy(Name, rData.Name, sizeof(Name));
                             Name[sizeof(Name)-1] = 0;
@@ -661,6 +668,8 @@ public:
                         Sc10PatternCollection(SvStream& rStream);
     ULONG               GetError() { return nError; }
     Sc10PatternData*    At(USHORT nIndex) { return (Sc10PatternData*)Collection::At(nIndex); }
+private:
+    using               Collection::At;
 };
 
 
@@ -670,7 +679,8 @@ class Sc10DataBaseData : public DataObject
 public:
     Sc10DataBaseRec     DataBaseRec;
 
-                        Sc10DataBaseData(const Sc10DataBaseData& rData)
+                        Sc10DataBaseData(const Sc10DataBaseData& rData) :
+                            DataObject( rData )
                         {
                             memcpy(&DataBaseRec, &rData.DataBaseRec, sizeof(DataBaseRec));
                         }
@@ -689,6 +699,8 @@ public:
                         Sc10DataBaseCollection(SvStream& rStream);
     ULONG               GetError() { return nError; }
     Sc10DataBaseData*   At(USHORT nIndex) { return (Sc10DataBaseData*)Collection::At(nIndex); }
+private:
+    using               Collection::At;
 };
 
 
@@ -708,8 +720,10 @@ class Sc10PageCollection : public Collection
 public:
                         Sc10PageCollection() : Collection(1,1) {};
     Sc10PageData*       At(USHORT nIndex) { return (Sc10PageData*)Collection::At(nIndex); }
-    USHORT              Insert( const Sc10PageFormat& rData );
+    USHORT              InsertFormat( const Sc10PageFormat& rData );
     void                PutToDoc( ScDocument* pDoc );
+private:
+    using               Collection::At;
 };
 
 
@@ -718,7 +732,6 @@ class ScfStreamProgressBar;
 // Import-Klasse
 class Sc10Import
 {
-    ULONG                   nError;
     SvStream&               rStream;
     ScDocument*             pDoc;
     Sc10Color               TextPalette[16];
@@ -730,6 +743,7 @@ class Sc10Import
     Sc10NameCollection*     pNameCollection;
     Sc10PatternCollection*  pPatternCollection;
     Sc10DataBaseCollection* pDataBaseCollection;
+    ULONG                   nError;
     INT16                   TabCount;
     SCTAB                   nShowTab;
     ScViewOptions           aSc30ViewOpt;
