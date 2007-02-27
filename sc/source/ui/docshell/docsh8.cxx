@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:07:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:08:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,7 +542,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
                 aFieldName.Insert( 'N', 0 );
             String aTmpStr;
             sal_Unicode c;
-            for ( const sal_Unicode* p = aFieldName.GetBuffer(); c = *p; p++ )
+            for ( const sal_Unicode* p = aFieldName.GetBuffer(); ( c = *p ) != 0; p++ )
             {
                 if ( IsAsciiAlpha( c ) || IsAsciiDigit( c ) || c == '_' )
                     aTmpStr += c;
@@ -635,7 +635,7 @@ void lcl_GetColumnTypes( ScDocShell& rDocShell,
             if ( bPrecDefined && nPrecision != nPrec )
             {   // Laenge auf vorgegebene Nachkommastellen anpassen
                 if ( nPrecision )
-                    nLen += nPrecision - nPrec;
+                    nLen = sal::static_int_cast<xub_StrLen>( nLen + ( nPrecision - nPrec ) );
                 else
                     nLen -= nPrec+1;            // auch den . mit raus
             }
@@ -976,7 +976,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
 
             for (nCol=0; nCol<nColCount; nCol++)
             {
-                SCCOL nDocCol = nFirstCol + nCol;
+                SCCOL nDocCol = sal::static_int_cast<SCCOL>( nFirstCol + nCol );
 
                 switch (pColTypes[nCol])
                 {
@@ -1009,8 +1009,6 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
                         xRowUpdate->updateString( nCol+1, aString );
                         if ( nErr == eERR_OK && pColLengths[nCol] < aString.Len() )
                             nErr = SCWARN_EXPORT_DATALOST;
-                        break;
-
                         break;
 
                     case sdbc::DataType::DATE:
