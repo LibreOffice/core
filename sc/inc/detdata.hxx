@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detdata.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:25:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:55:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ public:
 
 typedef ScDetOpData* ScDetOpDataPtr;
 
-SV_DECL_PTRARR_DEL(ScDetOpArr_Impl, ScDetOpDataPtr, SC_DETOP_GROW, SC_DETOP_GROW);
+SV_DECL_PTRARR_DEL(ScDetOpArr_Impl, ScDetOpDataPtr, SC_DETOP_GROW, SC_DETOP_GROW)
 
 class ScDetOpList : public ScDetOpArr_Impl
 {
