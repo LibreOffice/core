@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumark.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:50:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,9 @@
 |*
 \************************************************************************/
 
-FuMarkRect::FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuMarkRect::FuMarkRect(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
-    FuPoor(pViewSh, pWin, pView, pDoc, rReq),
+    FuPoor(pViewSh, pWin, pViewP, pDoc, rReq),
     bVisible(FALSE),
     bStartDrag(FALSE)
 {
@@ -292,7 +292,7 @@ void FuMarkRect::Deactivate()
 |*
 \************************************************************************/
 
-void FuMarkRect::ForcePointer(const MouseEvent* pMEvt)
+void FuMarkRect::ForcePointer(const MouseEvent* /* pMEvt */)
 {
     pViewShell->SetActivePointer( Pointer( POINTER_CHART ) );
 }
