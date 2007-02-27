@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:33:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:41:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@
 //------------------------------------------------------------------
 
 FltError ScExportRTF( SvStream& rStrm, ScDocument* pDoc,
-        const ScRange& rRange, const CharSet eNach )
+        const ScRange& rRange, const CharSet /*eNach*/ )
 {
     ScRTFExport aEx( rStrm, pDoc, rRange );
     return aEx.Write();
