@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:06:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,9 @@ ScMarkData::ScMarkData() :
 }
 
 ScMarkData::ScMarkData(const ScMarkData& rData) :
-    pMultiSel( NULL ),
     aMarkRange( rData.aMarkRange ),
-    aMultiRange( rData.aMultiRange )
+    aMultiRange( rData.aMultiRange ),
+    pMultiSel( NULL )
 {
     bMarked      = rData.bMarked;
     bMultiMarked = rData.bMultiMarked;
@@ -476,11 +476,11 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
 
     //  Welche Zeilen sind markiert?
 
-    BOOL*   bMarked = new BOOL[MAXROW+1];
+    BOOL*   bRowMarked = new BOOL[MAXROW+1];
     SCROW  nRow;
     SCCOL  nCol;
     for (nRow=0; nRow<=MAXROW; nRow++)
-        bMarked[nRow] = FALSE;
+        bRowMarked[nRow] = FALSE;
 
     SCROW nTop, nBottom;
     for (nCol=0; nCol<=MAXCOL; nCol++)
@@ -488,7 +488,7 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
         ScMarkArrayIter aMarkIter( &pMultiSel[nCol] );
         while (aMarkIter.Next( nTop, nBottom ))
             for (nRow=nTop; nRow<=nBottom; nRow++)
-                bMarked[nRow] = TRUE;
+                bRowMarked[nRow] = TRUE;
     }
 
     //  zu Bereichen zusammenfassen
@@ -497,14 +497,14 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
     SCCOLROW nStart = 0;
     while (nStart<=MAXROW)
     {
-        while (nStart<MAXROW && !bMarked[nStart])
+        while (nStart<MAXROW && !bRowMarked[nStart])
             ++nStart;
-        if (bMarked[nStart])
+        if (bRowMarked[nStart])
         {
             SCCOLROW nEnd = nStart;
-            while (nEnd<MAXROW && bMarked[nEnd])
+            while (nEnd<MAXROW && bRowMarked[nEnd])
                 ++nEnd;
-            if (!bMarked[nEnd])
+            if (!bRowMarked[nEnd])
                 --nEnd;
             pRanges[2*nRangeCnt  ] = nStart;
             pRanges[2*nRangeCnt+1] = nEnd;
@@ -515,7 +515,7 @@ SCCOLROW ScMarkData::GetMarkRowRanges( SCCOLROW* pRanges )
             nStart = MAXROW+1;
     }
 
-    delete[] bMarked;
+    delete[] bRowMarked;
     return nRangeCnt;
 }
 
