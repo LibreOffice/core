@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tptable.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:46:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,7 @@ public:
     static  USHORT*     GetRanges       ();
     virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
     virtual void        Reset           ( const SfxItemSet& rCoreSet );
+    using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
     virtual void        DataChanged     ( const DataChangedEvent& rDCEvt );
 
