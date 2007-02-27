@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parclass.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:12:30 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:17:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,144 +66,144 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     // IF() and CHOOSE() are somewhat special, since the ScJumpMatrix is
     // created inside those functions and ConvertMatrixParameters() is not
     // called for them.
-    { ocIf,              {{ Array, Reference, Reference            }}},
+    { ocIf,              {{ Array, Reference, Reference            },   false }},
     { ocChose,           {{ Array, Reference                       },   true }},
     // Other specials.
-    { ocOpen,            {{ Bounds                                 }}},
-    { ocClose,           {{ Bounds                                 }}},
-    { ocSep,             {{ Bounds                                 }}},
-    { ocNoName,          {{ Bounds                                 }}},
-    { ocErrCell,         {{ Bounds                                 }}},
-    { ocStop,            {{ Bounds                                 }}},
-    { ocUnion,           {{ Reference, Reference                   }}},
-    { ocRange,           {{ Reference, Reference                   }}},
+    { ocOpen,            {{ Bounds                                 },   false }},
+    { ocClose,           {{ Bounds                                 },   false }},
+    { ocSep,             {{ Bounds                                 },   false }},
+    { ocNoName,          {{ Bounds                                 },   false }},
+    { ocErrCell,         {{ Bounds                                 },   false }},
+    { ocStop,            {{ Bounds                                 },   false }},
+    { ocUnion,           {{ Reference, Reference                   },   false }},
+    { ocRange,           {{ Reference, Reference                   },   false }},
     // Functions with Value parameters only but not in resource.
-    { ocBackSolver,      {{ Value, Value, Value                    }}},
-    { ocTableOp,         {{ Value, Value, Value, Value, Value      }}},
+    { ocBackSolver,      {{ Value, Value, Value                    },   false }},
+    { ocTableOp,         {{ Value, Value, Value, Value, Value      },   false }},
     // Operators and functions.
-    { ocAdd,             {{ Array, Array                           }}},
-    { ocAmpersand,       {{ Array, Array                           }}},
+    { ocAdd,             {{ Array, Array                           },   false }},
+    { ocAmpersand,       {{ Array, Array                           },   false }},
     { ocAnd,             {{ Reference                              },   true }},
-    { ocAreas,           {{ Reference                              }}},
+    { ocAreas,           {{ Reference                              },   false }},
     { ocAveDev,          {{ Reference                              },   true }},
     { ocAverage,         {{ Reference                              },   true }},
     { ocAverageA,        {{ Reference                              },   true }},
-    { ocCell,            {{ Value, Reference                       }}},
-    { ocColumn,          {{ Reference                              }}},
+    { ocCell,            {{ Value, Reference                       },   false }},
+    { ocColumn,          {{ Reference                              },   false }},
     { ocColumns,         {{ Reference                              },   true }},
-    { ocCorrel,          {{ ForceArray, ForceArray                 }}},
+    { ocCorrel,          {{ ForceArray, ForceArray                 },   false }},
     { ocCount,           {{ Reference                              },   true }},
     { ocCount2,          {{ Reference                              },   true }},
-    { ocCountEmptyCells, {{ Reference                              }}},
-    { ocCountIf,         {{ Reference, Value                       }}},
-    { ocCovar,           {{ ForceArray, ForceArray                 }}},
-    { ocDBAverage,       {{ Reference, Reference, Reference        }}},
-    { ocDBCount,         {{ Reference, Reference, Reference        }}},
-    { ocDBCount2,        {{ Reference, Reference, Reference        }}},
-    { ocDBGet,           {{ Reference, Reference, Reference        }}},
-    { ocDBMax,           {{ Reference, Reference, Reference        }}},
-    { ocDBMin,           {{ Reference, Reference, Reference        }}},
-    { ocDBProduct,       {{ Reference, Reference, Reference        }}},
-    { ocDBStdDev,        {{ Reference, Reference, Reference        }}},
-    { ocDBStdDevP,       {{ Reference, Reference, Reference        }}},
-    { ocDBSum,           {{ Reference, Reference, Reference        }}},
-    { ocDBVar,           {{ Reference, Reference, Reference        }}},
-    { ocDBVarP,          {{ Reference, Reference, Reference        }}},
+    { ocCountEmptyCells, {{ Reference                              },   false }},
+    { ocCountIf,         {{ Reference, Value                       },   false }},
+    { ocCovar,           {{ ForceArray, ForceArray                 },   false }},
+    { ocDBAverage,       {{ Reference, Reference, Reference        },   false }},
+    { ocDBCount,         {{ Reference, Reference, Reference        },   false }},
+    { ocDBCount2,        {{ Reference, Reference, Reference        },   false }},
+    { ocDBGet,           {{ Reference, Reference, Reference        },   false }},
+    { ocDBMax,           {{ Reference, Reference, Reference        },   false }},
+    { ocDBMin,           {{ Reference, Reference, Reference        },   false }},
+    { ocDBProduct,       {{ Reference, Reference, Reference        },   false }},
+    { ocDBStdDev,        {{ Reference, Reference, Reference        },   false }},
+    { ocDBStdDevP,       {{ Reference, Reference, Reference        },   false }},
+    { ocDBSum,           {{ Reference, Reference, Reference        },   false }},
+    { ocDBVar,           {{ Reference, Reference, Reference        },   false }},
+    { ocDBVarP,          {{ Reference, Reference, Reference        },   false }},
     { ocDevSq,           {{ Reference                              },   true }},
-    { ocDiv,             {{ Array, Array                           }}},
-    { ocEqual,           {{ Array, Array                           }}},
-    { ocForecast,        {{ Value, ForceArray, ForceArray          }}},
-    { ocFrequency,       {{ Reference, Reference                   }}},
-    { ocFTest,           {{ ForceArray, ForceArray                 }}},
+    { ocDiv,             {{ Array, Array                           },   false }},
+    { ocEqual,           {{ Array, Array                           },   false }},
+    { ocForecast,        {{ Value, ForceArray, ForceArray          },   false }},
+    { ocFrequency,       {{ Reference, Reference                   },   false }},
+    { ocFTest,           {{ ForceArray, ForceArray                 },   false }},
     { ocGeoMean,         {{ Reference                              },   true }},
     { ocGGT,             {{ Reference                              },   true }},
-    { ocGreater,         {{ Array, Array                           }}},
-    { ocGreaterEqual,    {{ Array, Array                           }}},
-    { ocGrowth,          {{ Reference, Reference, Reference, Value }}},
+    { ocGreater,         {{ Array, Array                           },   false }},
+    { ocGreaterEqual,    {{ Array, Array                           },   false }},
+    { ocGrowth,          {{ Reference, Reference, Reference, Value },   false }},
     { ocHarMean,         {{ Reference                              },   true }},
-    { ocHLookup,         {{ Value, Reference, Value, Value         }}},
-    { ocIKV,             {{ Reference, Value                       }}},
-    { ocIndex,           {{ Reference, Value, Value, Value         }}},
-    { ocIntercept,       {{ ForceArray, ForceArray                 }}},
-    { ocIntersect,       {{ Reference, Reference                   }}},
-    { ocIsRef,           {{ Reference                              }}},
+    { ocHLookup,         {{ Value, Reference, Value, Value         },   false }},
+    { ocIKV,             {{ Reference, Value                       },   false }},
+    { ocIndex,           {{ Reference, Value, Value, Value         },   false }},
+    { ocIntercept,       {{ ForceArray, ForceArray                 },   false }},
+    { ocIntersect,       {{ Reference, Reference                   },   false }},
+    { ocIsRef,           {{ Reference                              },   false }},
     { ocKGV,             {{ Reference                              },   true }},
     { ocKurt,            {{ Reference                              },   true }},
-    { ocLarge,           {{ Reference, Value                       }}},
-    { ocLess,            {{ Array, Array                           }}},
-    { ocLessEqual,       {{ Array, Array                           }}},
-    { ocLookup,          {{ Value, Reference, Reference            }}},
-    { ocMatch,           {{ Value, Reference, Reference            }}},
-    { ocMatDet,          {{ ForceArray                             }}},
-    { ocMatInv,          {{ ForceArray                             }}},
-    { ocMatMult,         {{ ForceArray, ForceArray                 }}},
-    { ocMatTrans,        {{ Array                                  }}}, // strange, but Xcl doesn't force MatTrans array
-    { ocMatValue,        {{ Reference, Value, Value                }}},
+    { ocLarge,           {{ Reference, Value                       },   false }},
+    { ocLess,            {{ Array, Array                           },   false }},
+    { ocLessEqual,       {{ Array, Array                           },   false }},
+    { ocLookup,          {{ Value, Reference, Reference            },   false }},
+    { ocMatch,           {{ Value, Reference, Reference            },   false }},
+    { ocMatDet,          {{ ForceArray                             },   false }},
+    { ocMatInv,          {{ ForceArray                             },   false }},
+    { ocMatMult,         {{ ForceArray, ForceArray                 },   false }},
+    { ocMatTrans,        {{ Array                                  },   false }}, // strange, but Xcl doesn't force MatTrans array
+    { ocMatValue,        {{ Reference, Value, Value                },   false }},
     { ocMax,             {{ Reference                              },   true }},
     { ocMaxA,            {{ Reference                              },   true }},
     { ocMedian,          {{ Reference                              },   true }},
     { ocMin,             {{ Reference                              },   true }},
     { ocMinA,            {{ Reference                              },   true }},
-    { ocMIRR,            {{ Reference, Value, Value                }}},
+    { ocMIRR,            {{ Reference, Value, Value                },   false }},
     { ocModalValue,      {{ ForceArray                             },   true }},
-    { ocMul,             {{ Array, Array                           }}},
+    { ocMul,             {{ Array, Array                           },   false }},
     { ocMultiArea,       {{ Reference                              },   true }},
-    { ocN,               {{ Reference                              }}},
+    { ocN,               {{ Reference                              },   false }},
     { ocNBW,             {{ Value, Reference                       },   true }},
-    { ocNeg,             {{ Array                                  }}},
-    { ocNot,             {{ Array                                  }}},
-    { ocNotEqual,        {{ Array, Array                           }}},
-    { ocOffset,          {{ Reference, Value, Value, Value, Value  }}},
+    { ocNeg,             {{ Array                                  },   false }},
+    { ocNot,             {{ Array                                  },   false }},
+    { ocNotEqual,        {{ Array, Array                           },   false }},
+    { ocOffset,          {{ Reference, Value, Value, Value, Value  },   false }},
     { ocOr,              {{ Reference                              },   true }},
-    { ocPearson,         {{ ForceArray, ForceArray                 }}},
-    { ocPercentile,      {{ Reference, Value                       }}},
-    { ocPercentrank,     {{ Reference, Value                       }}},
-    { ocPow,             {{ Array, Array                           }}},
-    { ocPower,           {{ Array, Array                           }}},
-    { ocProb,            {{ ForceArray, ForceArray, Value, Value   }}},
+    { ocPearson,         {{ ForceArray, ForceArray                 },   false }},
+    { ocPercentile,      {{ Reference, Value                       },   false }},
+    { ocPercentrank,     {{ Reference, Value                       },   false }},
+    { ocPow,             {{ Array, Array                           },   false }},
+    { ocPower,           {{ Array, Array                           },   false }},
+    { ocProb,            {{ ForceArray, ForceArray, Value, Value   },   false }},
     { ocProduct,         {{ Reference                              },   true }},
-    { ocQuartile,        {{ Reference, Value                       }}},
-    { ocRank,            {{ Value, Reference, Value                }}},
-    { ocRGP,             {{ Reference, Reference, Value, Value     }}},
-    { ocRKP,             {{ Reference, Reference, Value, Value     }}},
-    { ocRow,             {{ Reference                              }}},
+    { ocQuartile,        {{ Reference, Value                       },   false }},
+    { ocRank,            {{ Value, Reference, Value                },   false }},
+    { ocRGP,             {{ Reference, Reference, Value, Value     },   false }},
+    { ocRKP,             {{ Reference, Reference, Value, Value     },   false }},
+    { ocRow,             {{ Reference                              },   false }},
     { ocRows,            {{ Reference                              },   true }},
-    { ocRSQ,             {{ ForceArray, ForceArray                 }}},
+    { ocRSQ,             {{ ForceArray, ForceArray                 },   false }},
     { ocSchiefe,         {{ Reference                              },   true }},
-    { ocSlope,           {{ ForceArray, ForceArray                 }}},
-    { ocSmall,           {{ Reference, Value                       }}},
+    { ocSlope,           {{ ForceArray, ForceArray                 },   false }},
+    { ocSmall,           {{ Reference, Value                       },   false }},
     { ocStDev,           {{ Reference                              },   true }},
     { ocStDevA,          {{ Reference                              },   true }},
     { ocStDevP,          {{ Reference                              },   true }},
     { ocStDevPA,         {{ Reference                              },   true }},
-    { ocSTEYX,           {{ ForceArray, ForceArray                 }}},
-    { ocSub,             {{ Array, Array                           }}},
+    { ocSTEYX,           {{ ForceArray, ForceArray                 },   false }},
+    { ocSub,             {{ Array, Array                           },   false }},
     { ocSubTotal,        {{ Value, Reference                       },   true }},
     { ocSum,             {{ Reference                              },   true }},
-    { ocSumIf,           {{ Reference, Value, Reference            }}},
+    { ocSumIf,           {{ Reference, Value, Reference            },   false }},
     { ocSumProduct,      {{ ForceArray                             },   true }},
     { ocSumSQ,           {{ Reference                              },   true }},
-    { ocSumX2MY2,        {{ ForceArray, ForceArray                 }}},
-    { ocSumX2DY2,        {{ ForceArray, ForceArray                 }}},
-    { ocSumXMY2,         {{ ForceArray, ForceArray                 }}},
-    { ocTable,           {{ Reference                              }}},
+    { ocSumX2MY2,        {{ ForceArray, ForceArray                 },   false }},
+    { ocSumX2DY2,        {{ ForceArray, ForceArray                 },   false }},
+    { ocSumXMY2,         {{ ForceArray, ForceArray                 },   false }},
+    { ocTable,           {{ Reference                              },   false }},
     { ocTables,          {{ Reference                              },   true }},
-    { ocTrend,           {{ Reference, Reference, Reference, Value }}},
-    { ocTrimMean,        {{ Reference, Value                       }}},
-    { ocTTest,           {{ ForceArray, ForceArray, Value, Value   }}},
+    { ocTrend,           {{ Reference, Reference, Reference, Value },   false }},
+    { ocTrimMean,        {{ Reference, Value                       },   false }},
+    { ocTTest,           {{ ForceArray, ForceArray, Value, Value   },   false }},
     { ocVar,             {{ Reference                              },   true }},
     { ocVarA,            {{ Reference                              },   true }},
     { ocVarP,            {{ Reference                              },   true }},
     { ocVarPA,           {{ Reference                              },   true }},
-    { ocVLookup,         {{ Value, Reference, Value, Value         }}},
-    { ocZTest,           {{ Reference, Value, Value                }}},
+    { ocVLookup,         {{ Value, Reference, Value, Value         },   false }},
+    { ocZTest,           {{ Reference, Value, Value                },   false }},
     // Excel doubts:
     // ocT: Excel says (and handles) Reference, error? This means no position
     // dependent SingleRef if DoubleRef, and no array calculation, just the
     // upper left corner. We never did that.
-    { ocT, {{ Value }}},
+    { ocT, {{ Value }, false }},
     // The stopper.
-    { ocNone, {{ Bounds }} }
+    { ocNone, {{ Bounds }, false } }
 };
 
 ScParameterClassification::RunData * ScParameterClassification::pData = NULL;
@@ -243,7 +243,7 @@ void ScParameterClassification::Init()
                     if ( pRun->aData.nParam[j] )
                     {
                         eLast = pRun->aData.nParam[j];
-                        pRun->nMinParams = j+1;
+                        pRun->nMinParams = sal::static_int_cast<BYTE>( j+1 );
                     }
                     else
                         pRun->aData.nParam[j] = eLast;
@@ -256,7 +256,7 @@ void ScParameterClassification::Init()
                     if ( !pRun->aData.nParam[j] )
                     {
                         if ( j == 0 || pRun->aData.nParam[j-1] != Bounds )
-                            pRun->nMinParams = j;
+                            pRun->nMinParams = sal::static_int_cast<BYTE>( j );
                         pRun->aData.nParam[j] = Bounds;
                     }
                 }
@@ -296,10 +296,14 @@ ScParameterClassification::Type ScParameterClassification::GetParameterType(
     {
         case ocExternal:
             return GetExternalParameterType( pToken, nParameter);
-        break;
+        //break;
         case ocMacro:
             return Reference;
-        break;
+        //break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     if ( eOp <= SC_OPCODE_LAST_OPCODE_ID )
     {
