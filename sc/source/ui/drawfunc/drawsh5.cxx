@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:34:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:10:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,6 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
     SfxBindings& rBindings = pViewData->GetBindings();
     ScTabView*   pTabView  = pViewData->GetView();
     ScDrawView*  pView     = pTabView->GetScDrawView();
-    Window*      pWin      = pTabView->GetActiveWin();
     const SfxItemSet *pArgs = rReq.GetArgs();
     USHORT nSlotId = rReq.GetSlot();
 
