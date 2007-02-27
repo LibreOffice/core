@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:20:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:33:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@ protected:
     virtual void        ImplDumpHeader();
     virtual void        ImplDumpFooter();
 
+    using               ObjectBase::Construct;
+
 private:
     void                DumpStorageInfo( bool bExtended );
 
@@ -107,9 +109,10 @@ public:
     OleStorageIterator& operator++();
     const SvStorageInfo* operator->() const;
 
-private:
+protected:
     void                Construct( SotStorageRef xStrg );
 
+private:
     virtual bool        ImplIsValid() const;
 
 private:
@@ -133,6 +136,8 @@ protected:
 
     virtual bool        ImplIsValid() const;
 
+    using               StreamObjectBase::Construct;
+
 private:
     SotStorageStreamRef mxStrm;
 };
@@ -151,6 +156,8 @@ protected:
     void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName );
 
     virtual void        ImplDumpBody();
+
+    using               OleStreamObject::Construct;
 
 private:
     void                DumpSection( const String& rGuid, sal_uInt32 nStartPos );
