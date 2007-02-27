@@ -4,9 +4,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:56:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ void ScViewFunctionSet::SetAnchorFlag( BOOL bSet )
     bAnchor = bSet;
 }
 
-BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL bDontSelectAtCursor )
+BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
@@ -643,7 +643,7 @@ BOOL __EXPORT ScViewFunctionSet::IsSelectionAtPoint( const Point& rPointPixel )
     return FALSE;
 }
 
-void __EXPORT ScViewFunctionSet::DeselectAtPoint( const Point& rPointPixel )
+void __EXPORT ScViewFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 {
     //  gibt's nicht
 }
@@ -737,7 +737,7 @@ void __EXPORT ScHeaderFunctionSet::DestroyAnchor()
     bAnchor = FALSE;
 }
 
-BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL bDontSelectAtCursor )
+BOOL __EXPORT ScHeaderFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOOL /* bDontSelectAtCursor */ )
 {
     if ( bDidSwitch )
     {
@@ -854,7 +854,7 @@ BOOL __EXPORT ScHeaderFunctionSet::IsSelectionAtPoint( const Point& rPointPixel 
         return rMark.IsRowMarked( nPosY );
 }
 
-void __EXPORT ScHeaderFunctionSet::DeselectAtPoint( const Point& rPointPixel )
+void __EXPORT ScHeaderFunctionSet::DeselectAtPoint( const Point& /* rPointPixel */ )
 {
 }
 
