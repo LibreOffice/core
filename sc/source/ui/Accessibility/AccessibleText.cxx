@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:43:04 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,8 @@ public:
 ScViewForwarder::ScViewForwarder(ScTabViewShell* pViewShell, ScSplitPos eSplitPos, const ScAddress& rCell)
     :
     mpViewShell(pViewShell),
-    meSplitPos(eSplitPos),
-    maCellPos(rCell)
+    maCellPos(rCell),
+    meSplitPos(eSplitPos)
 {
 }
 
@@ -767,10 +767,10 @@ void ScEditViewForwarder::SetInvalid()
 ScAccessibleCellTextData::ScAccessibleCellTextData(ScTabViewShell* pViewShell,
                             const ScAddress& rP, ScSplitPos eSplitPos)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
-    mpViewShell(pViewShell),
-    meSplitPos(eSplitPos),
     mpViewForwarder(NULL),
     mpEditViewForwarder(NULL),
+    mpViewShell(pViewShell),
+    meSplitPos(eSplitPos),
     mbViewEditEngine(sal_False)
 {
 }
@@ -927,7 +927,7 @@ SvxViewForwarder* ScAccessibleCellTextData::GetViewForwarder()
     return mpViewForwarder;
 }
 
-SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* ScAccessibleCellTextData::GetEditViewForwarder( sal_Bool /* bCreate */ )
 {
     //#102219#; there should no EditViewForwarder be, because the cell is now readonly in this interface
 /*  if (!mpEditViewForwarder)
@@ -1185,7 +1185,7 @@ SvxEditViewForwarder* ScAccessibleEditLineTextData::GetEditViewForwarder( sal_Bo
         mpEditView = pTxtWnd->GetEditView();
         if (!mpEditView && bCreate)
         {
-            if ( !pTxtWnd->IsActive() )
+            if ( !pTxtWnd->IsInputActive() )
             {
                 pTxtWnd->StartEditEngine();
                 pTxtWnd->GrabFocus();
@@ -1255,8 +1255,8 @@ void ScAccessibleEditLineTextData::EndEdit()
 ScAccessiblePreviewCellTextData::ScAccessiblePreviewCellTextData(ScPreviewShell* pViewShell,
                             const ScAddress& rP)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
-    mpViewShell(pViewShell),
-    mpViewForwarder(NULL)
+    mpViewForwarder(NULL),
+    mpViewShell(pViewShell)
 {
 }
 
@@ -1345,8 +1345,8 @@ ScDocShell* ScAccessiblePreviewCellTextData::GetDocShell(ScPreviewShell* pViewSh
 ScAccessiblePreviewHeaderCellTextData::ScAccessiblePreviewHeaderCellTextData(ScPreviewShell* pViewShell,
             const String& rText, const ScAddress& rP, sal_Bool bColHeader, sal_Bool bRowHeader)
     : ScAccessibleCellBaseTextData(GetDocShell(pViewShell), rP),
-    mpViewShell(pViewShell),
     mpViewForwarder(NULL),
+    mpViewShell(pViewShell),
     maText(rText),
     mbColHeader(bColHeader),
     mbRowHeader(bRowHeader)
@@ -1473,13 +1473,13 @@ ScDocShell* ScAccessiblePreviewHeaderCellTextData::GetDocShell(ScPreviewShell* p
 ScAccessibleHeaderTextData::ScAccessibleHeaderTextData(ScPreviewShell* pViewShell,
                             const EditTextObject* pEditObj, sal_Bool bHeader, SvxAdjust eAdjust)
     :
+    mpViewForwarder(NULL),
     mpViewShell(pViewShell),
-    mpEditObj(pEditObj),
-    mbHeader(bHeader),
     mpEditEngine(NULL),
     mpForwarder(NULL),
     mpDocSh(NULL),
-    mpViewForwarder(NULL),
+    mpEditObj(pEditObj),
+    mbHeader(bHeader),
     mbDataValid(sal_False),
     meAdjust(eAdjust)
 {
@@ -1506,7 +1506,7 @@ ScAccessibleTextData* ScAccessibleHeaderTextData::Clone() const
     return new ScAccessibleHeaderTextData(mpViewShell, mpEditObj, mbHeader, meAdjust);
 }
 
-void ScAccessibleHeaderTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAccessibleHeaderTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
@@ -1590,15 +1590,15 @@ SvxViewForwarder* ScAccessibleHeaderTextData::GetViewForwarder()
 ScAccessibleNoteTextData::ScAccessibleNoteTextData(ScPreviewShell* pViewShell,
                             const String& sText, const ScAddress& aCellPos, sal_Bool bMarkNote)
     :
+    mpViewForwarder(NULL),
     mpViewShell(pViewShell),
-    msText(sText),
     mpEditEngine(NULL),
     mpForwarder(NULL),
     mpDocSh(NULL),
-    mpViewForwarder(NULL),
-    mbDataValid(sal_False),
+    msText(sText),
     maCellPos(aCellPos),
-    mbMarkNote(bMarkNote)
+    mbMarkNote(bMarkNote),
+    mbDataValid(sal_False)
 {
     if (pViewShell && pViewShell->GetDocument())
         mpDocSh = (ScDocShell*) pViewShell->GetDocument()->GetDocumentShell();
@@ -1623,7 +1623,7 @@ ScAccessibleTextData* ScAccessibleNoteTextData::Clone() const
     return new ScAccessibleNoteTextData(mpViewShell, msText, maCellPos, mbMarkNote);
 }
 
-void ScAccessibleNoteTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAccessibleNoteTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) )
     {
@@ -1814,7 +1814,7 @@ SvxViewForwarder* ScAccessibleCsvTextData::GetViewForwarder()
     return mpViewForwarder.get();
 }
 
-SvxEditViewForwarder* ScAccessibleCsvTextData::GetEditViewForwarder( sal_Bool bCreate )
+SvxEditViewForwarder* ScAccessibleCsvTextData::GetEditViewForwarder( sal_Bool /* bCreate */ )
 {
     return NULL;
 }
