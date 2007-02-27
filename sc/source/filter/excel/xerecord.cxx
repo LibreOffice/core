@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xerecord.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:00:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:25:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@ XclExpRecordBase::~XclExpRecordBase()
 {
 }
 
-void XclExpRecordBase::Save( XclExpStream& rStrm )
+void XclExpRecordBase::Save( XclExpStream& /*rStrm*/ )
 {
 }
 
@@ -59,8 +59,8 @@ void XclExpRecordBase::SaveRepeated( XclExpStream& rStrm, size_t nCount )
 // ----------------------------------------------------------------------------
 
 XclExpRecord::XclExpRecord( sal_uInt16 nRecId, sal_Size nRecSize ) :
-    mnRecId( nRecId ),
-    mnRecSize( nRecSize )
+    mnRecSize( nRecSize ),
+    mnRecId( nRecId )
 {
 }
 
@@ -74,7 +74,7 @@ void XclExpRecord::SetRecHeader( sal_uInt16 nRecId, sal_Size nRecSize )
     SetRecSize( nRecSize );
 }
 
-void XclExpRecord::WriteBody( XclExpStream& rStrm )
+void XclExpRecord::WriteBody( XclExpStream& /*rStrm*/ )
 {
 }
 
