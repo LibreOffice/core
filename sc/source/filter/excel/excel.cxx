@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:47:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:21:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,8 +199,8 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
 
 
 
-FltError ScExportExcel234( SvStream &aStream, ScDocument *pDoc,
-    ExportFormatExcel eFormat, CharSet eNach )
+FltError ScExportExcel234( SvStream& /*aStream*/, ScDocument* /*pDoc*/,
+    ExportFormatExcel /*eFormat*/, CharSet /*eNach*/ )
 {
     FltError                eRet = eERR_NI;
     return eRet;
