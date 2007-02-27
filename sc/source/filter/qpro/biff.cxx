@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biff.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:30:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:40:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ ScBiffReader::ScBiffReader( SfxMedium & rMedium ) :
     mpStream = rMedium.GetInStream();
     if( mpStream )
     {
-        mpStream->SetBufferSize( 65536 );
+        mpStream->SetBufferSize( 65535 );
         mpStream->SetStreamCharSet( RTL_TEXTENCODING_MS_1252 );
     }
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qpro.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:30:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:40:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@
 #include "biff.hxx"
 #include <tools/stream.hxx>
 
-FltError ScQProReader::readSheet( sal_uInt16 nTab, ScDocument* pDoc, ScQProStyle *pStyle )
+FltError ScQProReader::readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle )
 {
     sal_uInt8  nCol, nDummy;
     sal_uInt16 nRow;
@@ -132,12 +132,12 @@ FltError ScQProReader::readSheet( sal_uInt16 nTab, ScDocument* pDoc, ScQProStyle
 FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc )
 {
     FltError   eRet = eERR_OK;
-    ScQProReader aReader( rMedium, pDoc );
+    ScQProReader aReader( rMedium );
     eRet = aReader.import( pDoc );
     return eRet;
 }
 
-ScQProReader::ScQProReader( SfxMedium &rMedium, ScDocument *pDoc ):
+ScQProReader::ScQProReader( SfxMedium &rMedium ):
     ScBiffReader( rMedium )
 {
 }
@@ -146,8 +146,8 @@ FltError ScQProReader::import( ScDocument *pDoc )
 {
     FltError eRet = eERR_OK;
     sal_uInt16 nVersion;
-    int i = 1 , j = 1;
-    int nTab = 0;
+    sal_uInt16 i = 1, j = 1;
+    SCTAB nTab = 0;
     SetEof( FALSE );
 
     if( !recordsLeft() )
@@ -164,17 +164,20 @@ FltError ScQProReader::import( ScDocument *pDoc )
                 break;
 
             case 0x00ca: // Beginning of sheet
-                if( nTab < 26 )
+                if( nTab <= MAXTAB )
                 {
-                    String aName;
-                    aName.Append( sal_Unicode( 'A' + nTab ) );
-                    if (!nTab)
-                        pDoc->RenameTab( nTab, aName, FALSE, FALSE);
-                    else
-                        pDoc->InsertTab( nTab, aName );
+                    if( nTab < 26 )
+                    {
+                        String aName;
+                        aName.Append( sal_Unicode( 'A' + nTab ) );
+                        if (!nTab)
+                            pDoc->RenameTab( nTab, aName, FALSE, FALSE);
+                        else
+                            pDoc->InsertTab( nTab, aName );
+                    }
+                    eRet = readSheet( nTab, pDoc, pStyleElement );
+                    nTab++;
                 }
-                eRet = readSheet( nTab, pDoc, pStyleElement );
-                nTab++;
                 break;
 
             case 0x0001: // End of file

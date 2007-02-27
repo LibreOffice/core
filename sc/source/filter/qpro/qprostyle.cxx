@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qprostyle.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:31:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:40:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ ScQProStyle::ScQProStyle() :
     rtl_fillMemory (maFontHeight, sizeof (maFontHeight), 0);
 }
 
-void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, sal_uInt8 nTab, sal_uInt16 nStyle )
+void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, SCTAB nTab, sal_uInt16 nStyle )
 {
     ScPatternAttr aPattern(pDoc->GetPool());
     SfxItemSet& rItemSet = aPattern.GetItemSet();
@@ -150,10 +150,10 @@ void ScQProStyle::SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, 
     sal_uInt16 nTmpFnt = maFontRecord[ maFont[ nStyle ] ];
     BOOL bIsBold, bIsItalic, bIsUnderLine, bIsStrikeThrough;
 
-    bIsBold = ( nTmpFnt & 0x0001 );
-    bIsItalic = ( nTmpFnt & 0x0002 );
-    bIsUnderLine = ( nTmpFnt & 0x0004 );
-    bIsStrikeThrough = (nTmpFnt & 0x0020 );
+    bIsBold = ( nTmpFnt & 0x0001 ) != 0;
+    bIsItalic = ( nTmpFnt & 0x0002 ) != 0;
+    bIsUnderLine = ( nTmpFnt & 0x0004 ) != 0;
+    bIsStrikeThrough = (nTmpFnt & 0x0020 ) != 0;
 
     if( bIsBold )
         rItemSet.Put( SvxWeightItem( WEIGHT_BOLD,ATTR_FONT_WEIGHT) );
