@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:49:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:12:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,9 +331,9 @@
 |*
 \************************************************************************/
 
-FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuConstUnoControl::FuConstUnoControl(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
-    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     SFX_REQUEST_ARG( rReq, pInventorItem, SfxUInt32Item, SID_FM_CONTROL_INVENTOR, FALSE );
     SFX_REQUEST_ARG( rReq, pIdentifierItem, SfxUInt16Item, SID_FM_CONTROL_IDENTIFIER, FALSE );
@@ -463,7 +463,7 @@ void FuConstUnoControl::Deactivate()
 }
 
 // #98185# Create default drawing objects via keyboard
-SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstUnoControl::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& rRectangle)
 {
     // case SID_FM_CREATE_CONTROL:
 
