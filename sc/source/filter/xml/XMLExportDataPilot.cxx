@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportDataPilot.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:23:21 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:45:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,6 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOper
 
             return sReturn;
         }
-        break;
         case SC_NOT_EQUAL :
         {
             if (bUseRegularExpressions)
@@ -178,31 +177,22 @@ rtl::OUString ScXMLExportDataPilot::getDPOperatorXML(const ScQueryOp aFilterOper
             else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
         }
-        break;
         case SC_BOTPERC :
             return GetXMLToken(XML_BOTTOM_PERCENT);
-            break;
         case SC_BOTVAL :
             return GetXMLToken(XML_BOTTOM_VALUES);
-            break;
         case SC_GREATER :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-            break;
         case SC_GREATER_EQUAL :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-            break;
         case SC_LESS :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-            break;
         case SC_LESS_EQUAL :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-            break;
         case SC_TOPPERC :
             return GetXMLToken(XML_TOP_PERCENT);
-            break;
         case SC_TOPVAL :
             return GetXMLToken(XML_TOP_VALUES);
-            break;
         default:
             DBG_ERROR("This FilterOperator is not supported.");
     }
@@ -288,7 +278,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
             else if (bOr && !bAnd)
             {
                 SvXMLElementExport aElemOr(rExport, XML_NAMESPACE_TABLE, XML_FILTER_OR, sal_True, sal_True);
-                for (sal_Int32 j = 0; j < nQueryEntryCount; ++j)
+                for (j = 0; j < nQueryEntryCount; ++j)
                 {
                     WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
                 }
@@ -296,7 +286,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
             else if (bAnd && !bOr)
             {
                 SvXMLElementExport aElemAnd(rExport, XML_NAMESPACE_TABLE, XML_FILTER_AND, sal_True, sal_True);
-                for (sal_Int32 j = 0; j < nQueryEntryCount; ++j)
+                for (j = 0; j < nQueryEntryCount; ++j)
                 {
                     WriteDPCondition(aQueryParam.GetEntry(j), aQueryParam.bCaseSens, aQueryParam.bRegExp);
                 }
@@ -315,7 +305,7 @@ void ScXMLExportDataPilot::WriteDPFilter(const ScQueryParam& aQueryParam)
                 }
                 else
                     bOpenAndElement = sal_False;
-                for (sal_Int32 j = 1; j < nQueryEntryCount; ++j)
+                for (j = 1; j < nQueryEntryCount; ++j)
                 {
                     if (aConnection != aQueryParam.GetEntry(j).eConnect)
                     {
@@ -735,7 +725,7 @@ void ScXMLExportDataPilot::WriteGroupDimElements(ScDPSaveDimension* pDim, const 
                             if (pElem)
                             {
                                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_NAME, *pElem);
-                                SvXMLElementExport aElemDPGs(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, sal_True, sal_True);
+                                SvXMLElementExport aElemDPM(rExport, XML_NAMESPACE_TABLE, XML_DATA_PILOT_MEMBER, sal_True, sal_True);
                             }
                         }
                     }
@@ -784,7 +774,7 @@ void ScXMLExportDataPilot::WriteDimensions(ScDPSaveData* pDPSave)
     }
 }
 
-void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocument>& xSpreadDoc)
+void ScXMLExportDataPilot::WriteDataPilots(const uno::Reference <sheet::XSpreadsheetDocument>& /* xSpreadDoc */)
 {
     pDoc = rExport.GetDocument();
     if (pDoc)
