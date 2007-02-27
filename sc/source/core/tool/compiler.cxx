@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 12:10:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:13:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ struct ScArrayStack
     BOOL bTemp;
 };
 
-static sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
+static const sal_Char* pInternal[ 5 ] = { "GAME", "SPEW", "TTT", "STARCALCTEAM", "ANTWORT" };
 
 using namespace ::com::sun::star::i18n;
 /////////////////////////////////////////////////////////////////////////
@@ -1274,7 +1274,7 @@ xub_StrLen ScCompiler::NextSymbol()
     }
     if ( bi18n )
     {
-        nSrcPos += nSpaces;
+        nSrcPos = sal::static_int_cast<xub_StrLen>( nSrcPos + nSpaces );
         String aSymbol;
         USHORT nErr = 0;
         do
@@ -1322,7 +1322,7 @@ xub_StrLen ScCompiler::NextSymbol()
     }
     else
     {
-        nSrcPos = pSrc - pStart;
+        nSrcPos = sal::static_int_cast<xub_StrLen>( pSrc - pStart );
         *pSym = 0;
     }
     if ( bAutoCorrect )
@@ -1431,7 +1431,7 @@ BOOL ScCompiler::IsString()
     register const sal_Unicode* p = cSymbol;
     while ( *p )
         p++;
-    xub_StrLen nLen = p - cSymbol - 1;
+    xub_StrLen nLen = sal::static_int_cast<xub_StrLen>( p - cSymbol - 1 );
     BOOL bQuote = ((cSymbol[0] == '"') && (cSymbol[nLen] == '"'));
     if ((bQuote ? nLen-2 : nLen) > MAXSTRLEN-1)
     {
@@ -1651,10 +1651,10 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                     // recursive..
                     // Furthermore, *this* cell won't be touched, since no RPN exists yet.
                     CellType eType = pCell->GetCellType();
-                    BOOL bOk = (eType == CELLTYPE_FORMULA ?
+                    BOOL bOk = sal::static_int_cast<BOOL>( (eType == CELLTYPE_FORMULA ?
                         ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
                         && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
-                        : TRUE );
+                        : TRUE ) );
                     if ( bOk && pCell->HasStringData() )
                     {
                         String aStr;
@@ -1778,10 +1778,10 @@ BOOL ScCompiler::IsColRowName( const String& rName )
                         break;      // aIter
                 }
                 CellType eType = pCell->GetCellType();
-                BOOL bOk = (eType == CELLTYPE_FORMULA ?
+                BOOL bOk = sal::static_int_cast<BOOL>( (eType == CELLTYPE_FORMULA ?
                     ((ScFormulaCell*)pCell)->GetCode()->GetCodeLen() > 0
                     && ((ScFormulaCell*)pCell)->aPos != aPos    // noIter
-                    : TRUE );
+                    : TRUE ) );
                 if ( bOk && pCell->HasStringData() )
                 {
                     String aStr;
@@ -2054,13 +2054,13 @@ void ScCompiler::AutoCorrectParsedSymbol()
                 for ( int j=0; j<nRefs; j++ )
                 {
                     xub_StrLen nTmp = 0;
-                    xub_StrLen nPos = STRING_NOTFOUND;
+                    xub_StrLen nDotPos = STRING_NOTFOUND;
                     while ( (nTmp = aRef[j].Search( '.', nTmp )) != STRING_NOTFOUND )
-                        nPos = nTmp++;      // the last one counts
-                    if ( nPos != STRING_NOTFOUND )
+                        nDotPos = nTmp++;      // the last one counts
+                    if ( nDotPos != STRING_NOTFOUND )
                     {
-                        aTab[j] = aRef[j].Copy( 0, nPos + 1 );  // with '.'
-                        aRef[j].Erase( 0, nPos + 1 );
+                        aTab[j] = aRef[j].Copy( 0, nDotPos + 1 );  // with '.'
+                        aRef[j].Erase( 0, nDotPos + 1 );
                     }
                     String aOld( aRef[j] );
                     String aStr2;
@@ -2293,7 +2293,7 @@ void ScCompiler::PopTokenArray()
     {
         ScArrayStack* p = pStack;
         pStack = p->pNext;
-        p->pArr->nRefs += pArr->nRefs;
+        p->pArr->nRefs = sal::static_int_cast<short>( p->pArr->nRefs + pArr->nRefs );
         // obtain special RecalcMode from SharedFormula
         if ( pArr->IsRecalcModeAlways() )
             p->pArr->SetRecalcModeAlways();
@@ -3348,13 +3348,13 @@ S lcl_adjval( S& n, T pos, T max, BOOL bRel )
 {
     max++;
     if( bRel )
-        n += pos;
+        n = sal::static_int_cast<S>( n + pos );
     if( n < 0 )
-        n += max;
+        n = sal::static_int_cast<S>( n + max );
     else if( n >= max )
-        n -= max;
+        n = sal::static_int_cast<S>( n - max );
     if( bRel )
-        n -= pos;
+        n = sal::static_int_cast<S>( n - pos );
     return n;
 }
 
@@ -3813,7 +3813,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                 {
                     rRef.nTab = rRef.nRelTab + nOldPosTab;
                     if ( rRef.nTab < 0 )
-                        rRef.nTab += pDoc->GetTableCount();  // was a wrap
+                        rRef.nTab = sal::static_int_cast<SCsTAB>( rRef.nTab + pDoc->GetTableCount() );  // was a wrap
                 }
                 if (nTable <= rRef.nTab)
                     ++rRef.nTab;
@@ -3830,7 +3830,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                     {
                         rRef.nTab = rRef.nRelTab + nOldPosTab;
                         if ( rRef.nTab < 0 )
-                            rRef.nTab += pDoc->GetTableCount();  // was a wrap
+                            rRef.nTab = sal::static_int_cast<SCsTAB>( rRef.nTab + pDoc->GetTableCount() );  // was a wrap
                     }
                     if (nTable <= rRef.nTab)
                         ++rRef.nTab;
@@ -3862,7 +3862,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                     {
                         rRef1.nTab = rRef1.nRelTab + nOldPosTab;
                         if ( rRef1.nTab < 0 )
-                            rRef1.nTab += pDoc->GetTableCount();  // was a wrap
+                            rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + pDoc->GetTableCount() );  // was a wrap
                     }
                     if (nTable <= rRef1.nTab)
                         ++rRef1.nTab;
@@ -3877,7 +3877,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
                         {
                             rRef2.nTab = rRef2.nRelTab + nOldPosTab;
                             if ( rRef2.nTab < 0 )
-                                rRef2.nTab += pDoc->GetTableCount();  // was a wrap
+                                rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab + pDoc->GetTableCount() );  // was a wrap
                         }
                         if (nTable <= rRef2.nTab)
                             ++rRef2.nTab;
@@ -3890,7 +3890,7 @@ ScRangeData* ScCompiler::UpdateInsertTab( SCTAB nTable, BOOL bIsName )
     return pRangeData;
 }
 
-ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove, BOOL bIsName,
+ScRangeData* ScCompiler::UpdateDeleteTab(SCTAB nTable, BOOL /* bIsMove */, BOOL bIsName,
                                  BOOL& rChanged)
 {
     ScRangeData* pRangeData = NULL;
@@ -4200,9 +4200,9 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                 {   // possibly wrap RelName, like lcl_MoveItWrap in refupdat.cxx
                     nTab = rRef1.nRelTab + nPosTab;
                     if ( nTab < 0 )
-                        nTab += nMaxTabMod;
+                        nTab = sal::static_int_cast<SCsTAB>( nTab + nMaxTabMod );
                     else if ( nTab > nMaxTab )
-                        nTab -= nMaxTabMod;
+                        nTab = sal::static_int_cast<SCsTAB>( nTab - nMaxTabMod );
                     rRef1.nRelTab = nTab - nPosTab;
                 }
                 else
@@ -4224,9 +4224,9 @@ ScRangeData* ScCompiler::UpdateMoveTab( SCTAB nOldTab, SCTAB nNewTab,
                     {   // possibly wrap RelName, like lcl_MoveItWrap in refupdat.cxx
                         nTab = rRef2.nRelTab + nPosTab;
                         if ( nTab < 0 )
-                            nTab += nMaxTabMod;
+                            nTab = sal::static_int_cast<SCsTAB>( nTab + nMaxTabMod );
                         else if ( nTab > nMaxTab )
-                            nTab -= nMaxTabMod;
+                            nTab = sal::static_int_cast<SCsTAB>( nTab - nMaxTabMod );
                         rRef2.nRelTab = nTab - nPosTab;
                     }
                     else
