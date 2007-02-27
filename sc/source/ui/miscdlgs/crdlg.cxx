@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:02:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:29:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,9 @@ ScColOrRowDlg::ScColOrRowDlg( Window*       pParent,
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_COLORROW ) ),
         //
+        aFlFrame        ( this, ScResId( FL_FRAME ) ),
         aBtnRows        ( this, ScResId( BTN_GROUP_ROWS ) ),
         aBtnCols        ( this, ScResId( BTN_GROUP_COLS ) ),
-        aFlFrame        ( this, ScResId( FL_FRAME ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) )

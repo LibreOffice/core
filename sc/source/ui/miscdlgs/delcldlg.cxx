@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delcldlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:04:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:30:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,14 +54,14 @@ static BYTE nDelItemChecked=0;
 ScDeleteCellDlg::ScDeleteCellDlg( Window* pParent, BOOL bDisallowCellMove ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DELCELL ) ),
     //
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnCellsUp     ( this, ScResId( BTN_CELLSUP ) ),
     aBtnCellsLeft   ( this, ScResId( BTN_CELLSLEFT ) ),
     aBtnDelRows     ( this, ScResId( BTN_DELROWS ) ),
     aBtnDelCols     ( this, ScResId( BTN_DELCOLS ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) )
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
 
     if (bDisallowCellMove)
