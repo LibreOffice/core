@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabdat.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:04:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:05:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,35 +193,35 @@ long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
     return nRet;
 }
 
-UINT32 ScDPTableData::GetNumberFormat(long nDim)
+UINT32 ScDPTableData::GetNumberFormat(long)
 {
     return 0;           // default format
 }
 
-BOOL ScDPTableData::IsBaseForGroup(long nDim) const
+BOOL ScDPTableData::IsBaseForGroup(long) const
 {
     return FALSE;       // always false
 }
 
-long ScDPTableData::GetGroupBase(long nGroupDim) const
+long ScDPTableData::GetGroupBase(long) const
 {
     return -1;          // always none
 }
 
-BOOL ScDPTableData::IsNumOrDateGroup(long nDim) const
+BOOL ScDPTableData::IsNumOrDateGroup(long) const
 {
     return FALSE;       // always false
 }
 
-BOOL ScDPTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                               const ScDPItemData& rBaseData, long nBaseIndex ) const
+BOOL ScDPTableData::IsInGroup( const ScDPItemData&, long,
+                               const ScDPItemData&, long ) const
 {
     DBG_ERROR("IsInGroup shouldn't be called for non-group data");
     return FALSE;
 }
 
-BOOL ScDPTableData::HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
-                                      const ScDPItemData& rSecondData, long nSecondIndex ) const
+BOOL ScDPTableData::HasCommonElement( const ScDPItemData&, long,
+                                      const ScDPItemData&, long ) const
 {
     DBG_ERROR("HasCommonElement shouldn't be called for non-group data");
     return FALSE;
