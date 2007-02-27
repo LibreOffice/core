@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 14:20:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:53:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,7 +322,6 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             xSourceControl->start();
     }*/
 
-    sal_Bool bFormatError = sal_False;
     try
     {
         xParser->parseStream( aParserInput );
@@ -372,6 +371,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
             DBG_ERROR( aError.GetBuffer() );
 #endif
+            (void)r;    // avoid warning in product version
+
             nReturn = SCERR_IMPORT_FORMAT;
         }
     }
@@ -382,6 +383,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
+        (void)r;    // avoid warning in product version
+
         nReturn = ERRCODE_IO_BROKENPACKAGE;
     }
     catch( io::IOException& r )
@@ -391,6 +394,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
+        (void)r;    // avoid warning in product version
+
         nReturn = SCERR_IMPORT_OPEN;
     }
     catch( uno::Exception& r )
@@ -400,6 +405,8 @@ sal_uInt32 ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiSe
         aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
         DBG_ERROR( aError.GetBuffer() );
 #endif
+        (void)r;    // avoid warning in product version
+
         nReturn = SCERR_IMPORT_UNKNOWN;
     }
 
@@ -666,10 +673,10 @@ sal_Bool ScXMLImportWrapper::Import(sal_Bool bStylesOnly, ErrCode& nError)
             if( xModelSet.is() )
             {
                 uno::Reference< beans::XPropertySetInfo > xModelSetInfo( xModelSet->getPropertySetInfo() );
-                OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
-                if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sPropName) )
+                OUString sBuildPropName( RTL_CONSTASCII_USTRINGPARAM("BuildId" ) );
+                if( xModelSetInfo.is() && xModelSetInfo->hasPropertyByName(sBuildPropName) )
                 {
-                    xModelSet->setPropertyValue( sPropName, xInfoSet->getPropertyValue(sPropName) );
+                    xModelSet->setPropertyValue( sBuildPropName, xInfoSet->getPropertyValue(sBuildPropName) );
                 }
             }
         }
