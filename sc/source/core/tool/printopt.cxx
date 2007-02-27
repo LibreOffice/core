@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:38:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,12 +95,12 @@ inline int ScPrintOptions::operator!=( const ScPrintOptions& rOpt ) const
 
 // -----------------------------------------------------------------------
 
-ScTpPrintItem::ScTpPrintItem( USHORT nWhich ) : SfxPoolItem( nWhich )
+ScTpPrintItem::ScTpPrintItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
 {
 }
 
-ScTpPrintItem::ScTpPrintItem( USHORT nWhich, const ScPrintOptions& rOpt ) :
-    SfxPoolItem ( nWhich ),
+ScTpPrintItem::ScTpPrintItem( USHORT nWhichP, const ScPrintOptions& rOpt ) :
+    SfxPoolItem ( nWhichP ),
     theOptions  ( rOpt )
 {
 }
@@ -190,11 +190,9 @@ ScPrintCfg::ScPrintCfg() :
 void ScPrintCfg::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
