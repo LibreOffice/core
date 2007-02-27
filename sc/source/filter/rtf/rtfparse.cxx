@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfparse.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:33:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:42:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,7 +172,7 @@ void ScRTFParser::ColAdjust()
                 nCol = 0;
             pE->nCol = nCol;
             if ( pE->nColOverlap > 1 )
-                nCol += pE->nColOverlap;        // merged cells mit \clmrg
+                nCol = nCol + pE->nColOverlap;       // merged cells mit \clmrg
             else
             {
                 SeekTwips( pE->nTwips, &nCol );
@@ -236,7 +236,7 @@ IMPL_LINK( ScRTFParser, RTFImportHdl, ImportInfo*, pInfo )
 
 // bei RTF_INTBL bzw. am Anfang von erstem RTF_CELL nach RTF_CELLX wenn es
 // kein RTF_INTBL gab, bad behavior
-void ScRTFParser::NewCellRow( ImportInfo* pInfo )
+void ScRTFParser::NewCellRow( ImportInfo* /*pInfo*/ )
 {
     if ( bNewDef )
     {
@@ -244,7 +244,7 @@ void ScRTFParser::NewCellRow( ImportInfo* pInfo )
         bNewDef = FALSE;
         // rechts nicht buendig? => neue Tabelle
         if ( nLastWidth
-          && (pD = pDefaultList->Last()) && pD->nTwips != nLastWidth )
+          && ((pD = pDefaultList->Last()) != 0) && pD->nTwips != nLastWidth )
         {
             SCCOL n1, n2;
             if ( !( SeekTwips( nLastWidth, &n1 )
@@ -300,7 +300,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
     {
         case RTF_TROWD:         // denotes table row defauls, before RTF_CELLX
         {
-            if ( pD = pDefaultList->Last() )
+            if ( (pD = pDefaultList->Last()) != 0 )
                 nLastWidth = pD->nTwips;
             nColCnt = 0;
             for ( pD = pDefaultList->First(); pD; pD = pDefaultList->Next() )
@@ -375,7 +375,7 @@ void ScRTFParser::ProcToken( ImportInfo* pInfo )
             }
             else
             {   // aktuelle Twips der MergeCell zuweisen
-                if ( pE = pList->Last() )
+                if ( (pE = pList->Last()) != 0 )
                     pE->nTwips = pActDefault->nTwips;
                 // Selection des freifliegenden pActEntry anpassen
                 // Paragraph -1 wg. Textaufbruch in EditEngine waehrend Parse
