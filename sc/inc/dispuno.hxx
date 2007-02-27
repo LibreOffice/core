@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispuno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:32:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:55:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ class ScTabViewShell;
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XStatusListener >* XStatusListenerPtr;
-SV_DECL_PTRARR_DEL( XStatusListenerArr_Impl, XStatusListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XStatusListenerArr_Impl, XStatusListenerPtr, 4, 4 )
 
 
 class ScDispatchProviderInterceptor : public cppu::WeakImplHelper2<
