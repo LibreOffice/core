@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:41:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:46:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ public:
                                 ScMyShapesContainer();
     virtual                     ~ScMyShapesContainer();
 
-                                ScMyIteratorBase::UpdateAddress;
+                                using ScMyIteratorBase::UpdateAddress;
     void                        AddNewShape(const ScMyShape& aShape);
     sal_Bool                    HasShapes() { return !aShapeList.empty(); }
     const ScMyShapeList*        GetShapes() { return &aShapeList; }
@@ -149,7 +149,7 @@ public:
                                 ScMyNoteShapesContainer();
     virtual                     ~ScMyNoteShapesContainer();
 
-                                ScMyIteratorBase::UpdateAddress;
+                                using ScMyIteratorBase::UpdateAddress;
     void                        AddNewNote(const ScMyNoteShape& aNote);
     sal_Bool                    HasNotes() { return !aNoteShapeList.empty(); }
     const ScMyNoteShapeList*    GetNotes() { return &aNoteShapeList; }
@@ -180,7 +180,7 @@ public:
     virtual                     ~ScMyMergedRangesContainer();
     void                        AddRange(const com::sun::star::table::CellRangeAddress aMergedRange);
 
-                                ScMyIteratorBase::UpdateAddress;
+                                using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort(); // + remove doublets
 };
@@ -220,7 +220,7 @@ public:
     inline void                 AddNewAreaLink( const ScMyAreaLink& rAreaLink )
                                     { aAreaLinkList.push_back( rAreaLink ); }
 
-                                ScMyIteratorBase::UpdateAddress;
+                                using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
 };
@@ -246,7 +246,7 @@ public:
     virtual                     ~ScMyEmptyDatabaseRangesContainer();
     void                        AddNewEmptyDatabaseRange(const com::sun::star::table::CellRangeAddress& aCellRangeAddress);
 
-                                ScMyIteratorBase::UpdateAddress;
+                                using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
 };
@@ -282,7 +282,7 @@ public:
                                     const ScRange& rSourceRange,
                                     sal_Bool bHasError );
 
-                                ScMyIteratorBase::UpdateAddress;
+                                using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
 };
@@ -312,7 +312,7 @@ public:
 
     void                        AddOperation( ScDetOpType eOpType, const ScAddress& rPosition, sal_uInt32 nIndex );
 
-                                ScMyIteratorBase::UpdateAddress;
+                                using ScMyIteratorBase::UpdateAddress;
     virtual void                SetCellData( ScMyCell& rMyCell );
     virtual void                Sort();
 };
