@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qprostyle.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 15:50:32 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ class ScQProStyle
 
     public:
     ScQProStyle();
-    void SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, sal_uInt8 nTab, sal_uInt16 nStyle );
+    void SetFormat( ScDocument *pDoc, sal_uInt8 nCol, sal_uInt16 nRow, SCTAB nTab, sal_uInt16 nStyle );
     void setFontRecord( sal_uInt16 nIndex, sal_uInt16 nData, sal_uInt16 nPtSize )
     {
         maFontRecord[ nIndex ] = nData;

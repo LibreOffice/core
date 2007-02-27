@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qpro.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-01-27 15:50:03 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:35:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,10 @@ class ScQProReader : public ScBiffReader
     sal_uInt16 getId() { return mnId; }
     sal_uInt16 getLength() { return mnLength; }
     void readString( String &rString, sal_uInt16 nLength );
-    ScQProReader( SfxMedium &rMedium, ScDocument* pDoc);
+    ScQProReader( SfxMedium &rMedium );
     ~ScQProReader(){ };
     FltError import( ScDocument *pDoc );
-    FltError readSheet( sal_uInt16 ntab, ScDocument* pDoc, ScQProStyle *pStyle );
+    FltError readSheet( SCTAB nTab, ScDocument* pDoc, ScQProStyle *pStyle );
 };
 #endif
 
