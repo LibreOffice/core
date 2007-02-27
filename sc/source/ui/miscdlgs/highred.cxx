@@ -4,9 +4,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:06:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:31:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,18 +87,17 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
         //
-        aEdAssign       ( this, ResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ResId( RB_ASSIGN ), &aEdAssign ),
         aHighlightBox   ( this, ResId( CB_HIGHLIGHT)),
         aFlFilter       ( this, ResId( FL_FILTER)),
+        aFilterCtr      ( this),
         aCbAccept       ( this, ResId( CB_HIGHLIGHT_ACCEPT)),
         aCbReject       ( this, ResId( CB_HIGHLIGHT_REJECT)),
-
         aOkButton       ( this, ResId( BTN_OK ) ),
         aCancelButton   ( this, ResId( BTN_CANCEL ) ),
         aHelpButton     ( this, ResId( BTN_HELP ) ),
+        aEdAssign       ( this, ResId( ED_ASSIGN ) ),
+        aRbAssign       ( this, ResId( RB_ASSIGN ), &aEdAssign ),
         //
-        aFilterCtr      ( this),
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) )
@@ -192,14 +191,14 @@ void __EXPORT ScHighlightChgDlg::Init()
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
 
-void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScHighlightChgDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( aEdAssign.IsVisible() )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(&aEdAssign);
         String aRefStr;
-        rRef.Format( aRefStr, ABS_DREF3D, pDoc );
+        rRef.Format( aRefStr, ABS_DREF3D, pDocP );
         aEdAssign.SetRefString( aRefStr );
         aFilterCtr.SetRange(aRefStr);
     }
@@ -298,9 +297,9 @@ IMPL_LINK( ScHighlightChgDlg, OKBtnHdl, PushButton*, pOKBtn )
         aChangeViewSet.SetShowRejected(aCbReject.IsChecked());
         aChangeViewSet.SetHasComment(aFilterCtr.IsComment());
         aChangeViewSet.SetTheComment(aFilterCtr.GetComment());
-        ScRangeList aRangeList;
-        aRangeList.Parse(aFilterCtr.GetRange(), pDoc);
-        aChangeViewSet.SetTheRangeList(aRangeList);
+        ScRangeList aLocalRangeList;
+        aLocalRangeList.Parse(aFilterCtr.GetRange(), pDoc);
+        aChangeViewSet.SetTheRangeList(aLocalRangeList);
         aChangeViewSet.AdjustDateMode( *pDoc );
         pDoc->SetChangeViewSettings(aChangeViewSet);
         pViewData->GetDocShell()->PostPaintGridAll();
