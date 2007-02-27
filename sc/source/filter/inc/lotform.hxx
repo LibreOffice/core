@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotform.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:21:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:34:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,8 +116,11 @@ public:
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula );
 
-    void                Reset( ScAddress aEingPos );
+    void                Reset( const ScAddress& rEingPos );
     inline void         SetWK3( void );
+
+private:
+    using               LotusConverterBase::Reset;
 };
 
 
