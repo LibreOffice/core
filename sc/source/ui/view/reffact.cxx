@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffact.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 11:43:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:55:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,17 +76,17 @@ SFX_IMPL_CHILDWINDOW(ScArgumentDlgWrapper, SID_OPENDLG_ARGUMENT )
 */
 
 #define IMPL_CHILD_CTOR(Class,sid) \
-    Class::Class( Window*               pParent,                    \
+    Class::Class( Window*               pParentP,                   \
                     USHORT              nId,                        \
                     SfxBindings*        p,                          \
                     SfxChildWinInfo*    pInfo )                     \
-        : SfxChildWindow(pParent, nId)                              \
+        : SfxChildWindow(pParentP, nId)                             \
     {                                                               \
         ScTabViewShell* pViewShell =                                \
             PTR_CAST( ScTabViewShell, SfxViewShell::Current() );    \
         DBG_ASSERT( pViewShell, "missing view shell :-(" );         \
         pWindow = pViewShell ?                                      \
-            pViewShell->CreateRefDialog( p, this, pInfo, pParent, sid ) : NULL; \
+            pViewShell->CreateRefDialog( p, this, pInfo, pParentP, sid ) : NULL;    \
         if (pViewShell && !pWindow)                                             \
             pViewShell->GetViewFrame()->SetChildWindow( nId, FALSE );           \
     }
@@ -184,11 +184,11 @@ static long     nScSimpleRefX;
 static long     nScSimpleRefY;
 static BOOL     bAutoReOpen=TRUE;
 
-ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParent,
+ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParentP,
                                 USHORT              nId,
                                 SfxBindings*        p,
                                 SfxChildWinInfo*    pInfo )
-        : SfxChildWindow(pParent, nId)
+        : SfxChildWindow(pParentP, nId)
 {
     ScTabViewShell* pViewShell =
         PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
@@ -204,7 +204,7 @@ ScSimpleRefDlgWrapper::ScSimpleRefDlgWrapper( Window* pParent,
     pWindow = NULL;
 
     if(bAutoReOpen && pViewShell)
-        pWindow = pViewShell->CreateRefDialog( p, this, pInfo, pParent, WID_SIMPLE_REF);
+        pWindow = pViewShell->CreateRefDialog( p, this, pInfo, pParentP, WID_SIMPLE_REF);
 
     if (!pWindow)
     {
@@ -295,17 +295,17 @@ void ScSimpleRefDlgWrapper::StartRefInput()
 // ScAcceptChgDlgWrapper //Kommentar: sollte in die ViewShell
 //-------------------------------------------------------------------------
 
-ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParent,
+ScAcceptChgDlgWrapper::ScAcceptChgDlgWrapper(   Window* pParentP,
                                             USHORT nId,
                                             SfxBindings* pBindings,
                                             SfxChildWinInfo* pInfo ) :
-                                            SfxChildWindow( pParent, nId )
+                                            SfxChildWindow( pParentP, nId )
 {
         ScTabViewShell* pViewShell =
             PTR_CAST( ScTabViewShell, SfxViewShell::Current() );
         DBG_ASSERT( pViewShell, "missing view shell :-(" );
         pWindow = pViewShell ?
-            new ScAcceptChgDlg( pBindings, this, pParent, pViewShell->GetViewData() ) :
+            new ScAcceptChgDlg( pBindings, this, pParentP, pViewShell->GetViewData() ) :
             NULL;
         if(pWindow!=NULL)
         {
