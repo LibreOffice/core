@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:31:21 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:37:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,13 +165,23 @@ void __EXPORT ScHFPage::ActivatePage( const SfxItemSet& rSet )
 
 //------------------------------------------------------------------
 
-int __EXPORT ScHFPage::DeactivatePage( SfxItemSet* pSet )
+int __EXPORT ScHFPage::DeactivatePage( SfxItemSet* pSetP )
 {
-    if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSet ) )
-        if ( pSet )
-            FillItemSet( *pSet );
+    if ( LEAVE_PAGE == SvxHFPage::DeactivatePage( pSetP ) )
+        if ( pSetP )
+            FillItemSet( *pSetP );
 
     return LEAVE_PAGE;
+}
+
+//------------------------------------------------------------------
+
+void ScHFPage::ActivatePage()
+{
+}
+
+void ScHFPage::DeactivatePage()
+{
 }
 
 //------------------------------------------------------------------
