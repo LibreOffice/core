@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:00:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ BOOL ScGlobal::HasAttrChanged( const SfxItemSet&  rNewAttrs,
                     ? rNewAttrs.Get( nWhich )
                     : rNewAttrs.GetPool()->GetDefaultItem( nWhich );
 
-        bInvalidate = (rNewItem != rOldItem);
+        bInvalidate = sal::static_int_cast<BOOL>(rNewItem != rOldItem);
     }
 
     return bInvalidate;
@@ -823,7 +823,7 @@ void ScGlobal::AddQuotes( String& rString, sal_Unicode cQuote )
     rString.Insert( cQuote, 0 ).Append( cQuote );
 }
 
-void ScGlobal::EraseQuotes( String& rString, sal_Unicode cQuote )
+void ScGlobal::EraseQuotes( String& rString, sal_Unicode /* cQuote */ )
 {
     if( IsQuoted( rString ) )
         rString.Erase( rString.Len() - 1 ).Erase( 0, 1 );
@@ -1193,7 +1193,7 @@ xub_StrLen ScFormulaUtil::GetFunctionStart( const String&   rFormula,
                     if (nParPos > 0)
                         nParPos--;
                 }
-                else if ( !(bFound = ( rFormula.GetChar(nParPos) == '(' ) ) )
+                else if ( (bFound = ( rFormula.GetChar(nParPos) == '(' ) ) == FALSE )
                     nParPos--;
             }
         }
@@ -1208,7 +1208,7 @@ xub_StrLen ScFormulaUtil::GetFunctionStart( const String&   rFormula,
                         nParPos++;
                     nParPos++;
                 }
-                else if ( !(bFound = ( rFormula.GetChar(nParPos) == '(' ) ) )
+                else if ( (bFound = ( rFormula.GetChar(nParPos) == '(' ) ) == FALSE )
                     nParPos++;
             }
         }
@@ -1313,7 +1313,6 @@ xub_StrLen ScFormulaUtil::GetArgStart( const String& rStr, xub_StrLen nStart, US
         return nStart;
 
     short   nParCount   = 0;
-    short   nSemiCount  = 0;
     BOOL    bFound      = FALSE;
 
     while ( !bFound && (nStart < nStrLen) )
