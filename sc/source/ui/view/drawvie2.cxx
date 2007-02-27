@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:53:23 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,12 +54,12 @@ void ScDrawView::UpdateBrowser()
     //  VC's und den Browser dazu gibts nicht mehr...
 }
 
-void ScDrawView::VCAddWin( Window* pWin )
+void ScDrawView::VCAddWin( Window* /* pWin */ )
 {
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
-void ScDrawView::VCRemoveWin( Window* pWin )
+void ScDrawView::VCRemoveWin( Window* /* pWin */ )
 {
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
