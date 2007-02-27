@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:26:32 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:57:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -327,42 +327,42 @@ void lcl_RemoveLineEnd(String& rStr)
 //==================================================================
 
 ScInputHandler::ScInputHandler()
-    :   eMode( SC_INPUT_NONE ),
-        bModified( FALSE ),
-        bFormulaMode( FALSE ),
-        bSelIsRef( FALSE ),
-        bInRangeUpdate( FALSE ),
-        pInputWin( NULL ),
-        pRefViewSh( NULL ),
-        pLastPattern( NULL ),
-        pLastState( NULL ),
-        bLastIsSymbol( FALSE ),
-        bProtected( FALSE ),
-        bTextValid( TRUE ),
-        bCellHasPercentFormat( FALSE ),
-        nValidation( 0 ),
-        nAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
-        aScaleX( 1,1 ),
-        aScaleY( 1,1 ),
-        pTopView( NULL ),
-        pTableView( NULL ),
+    :   pInputWin( NULL ),
         pEngine( NULL ),
-        pEditDefaults( NULL ),
-        pDelayTimer( NULL ),
+        pTableView( NULL ),
+        pTopView( NULL ),
         pColumnData( NULL ),
         pFormulaData( NULL ),
         nTipVisible( 0 ),
         nAutoPos( SCPOS_INVALID ),
         bUseTab( FALSE ),
+        bTextValid( TRUE ),
         nFormSelStart( 0 ),
         nFormSelEnd( 0 ),
         nAutoPar( 0 ),
-        pRangeFindList( NULL ),
+        eMode( SC_INPUT_NONE ),
+        bModified( FALSE ),
+        bSelIsRef( FALSE ),
+        bFormulaMode( FALSE ),
+        bInRangeUpdate( FALSE ),
         bParenthesisShown( FALSE ),
         bCreatingFuncView( FALSE ),
         bInEnterHandler( FALSE ),
         bCommandErrorShown( FALSE ),
-        bInOwnChange( FALSE )
+        bInOwnChange( FALSE ),
+        bProtected( FALSE ),
+        bCellHasPercentFormat( FALSE ),
+        nValidation( 0 ),
+        nAttrAdjust( SVX_HOR_JUSTIFY_STANDARD ),
+        aScaleX( 1,1 ),
+        aScaleY( 1,1 ),
+        pRefViewSh( NULL ),
+        pLastPattern( NULL ),
+        pEditDefaults( NULL ),
+        bLastIsSymbol( FALSE ),
+        pLastState( NULL ),
+        pDelayTimer( NULL ),
+        pRangeFindList( NULL )
 {
     //  The InputHandler is constructed with the view, so SfxViewShell::Current
     //  doesn't have the right view yet. pActiveViewSh is updated in NotifyChange.
@@ -557,7 +557,6 @@ void ScInputHandler::GetFormulaData()
         {
             const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
             ULONG nListCount = pFuncList->GetCount();
-            ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
             for (USHORT i=0; i<nMRUCount; i++)
             {
                 USHORT nId = pMRUList[i];
@@ -1113,7 +1112,7 @@ void ScInputHandler::NextAutoEntry( BOOL bBack )
 xub_StrLen lcl_MatchParenthesis( const String& rStr, xub_StrLen nPos )
 {
     int nDir;
-    sal_Unicode c1, c2;
+    sal_Unicode c1, c2 = 0;
     c1 = rStr.GetChar( nPos );
     switch ( c1 )
     {
@@ -1350,7 +1349,7 @@ void ScInputHandler::ActivateInputWindow( const String&     rText,
                                           const ESelection& rSel )
 {
     if ( pInputWin )
-        if ( !pInputWin->IsActive() )
+        if ( !pInputWin->IsInputActive() )
             pTopView = pInputWin->ActivateEdit( rText, rSel );
 }
 
@@ -1413,7 +1412,7 @@ void ScInputHandler::UpdateAdjust( sal_Unicode cTyped )
     pEditDefaults->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
     pEngine->SetDefaults( *pEditDefaults );
 
-    nEditAdjust = eSvxAdjust;       //! an ViewData setzen oder beim PostEditView
+    nEditAdjust = sal::static_int_cast<USHORT>(eSvxAdjust);     //! set at ViewData or with PostEditView
 
     pEngine->SetVertical( bAsianVertical );
 }
@@ -2434,20 +2433,20 @@ void ScInputHandler::SetReference( const ScRange& rRef, ScDocument* pDoc )
 
     if (pTableView)
     {
-        ESelection aSel = pTableView->GetSelection();
-        if (aSel.nStartPos > aSel.nEndPos && aSel.nStartPara == aSel.nEndPara)
+        ESelection aTabSel = pTableView->GetSelection();
+        if (aTabSel.nStartPos > aTabSel.nEndPos && aTabSel.nStartPara == aTabSel.nEndPara)
         {
-            aSel.Adjust();
-            pTableView->SetSelection(aSel);
+            aTabSel.Adjust();
+            pTableView->SetSelection(aTabSel);
         }
     }
     if (pTopView)
     {
-        ESelection aSel = pTopView->GetSelection();
-        if (aSel.nStartPos > aSel.nEndPos && aSel.nStartPara == aSel.nEndPara)
+        ESelection aTopSel = pTopView->GetSelection();
+        if (aTopSel.nStartPos > aTopSel.nEndPos && aTopSel.nStartPara == aTopSel.nEndPara)
         {
-            aSel.Adjust();
-            pTopView->SetSelection(aSel);
+            aTopSel.Adjust();
+            pTopView->SetSelection(aTopSel);
         }
     }
 
@@ -2915,7 +2914,7 @@ void ScInputHandler::NotifyChange( const ScInputHdlState* pState,
 
     BOOL bRepeat = (pState == pLastState);
     if (!bRepeat && pState && pLastState)
-        bRepeat = (*pState == *pLastState);
+        bRepeat = sal::static_int_cast<BOOL>(*pState == *pLastState);
     if (bRepeat && !bForce)
         return;
 
