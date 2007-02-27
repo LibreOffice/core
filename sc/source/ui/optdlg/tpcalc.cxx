@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpcalc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:16:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:35:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,32 +79,31 @@ ScTpCalcOptions::ScTpCalcOptions( Window*           pParent,
                           ScResId( RID_SCPAGE_CALC ),
                           rCoreAttrs ),
 
-        aBtnCase        ( this, ScResId( BTN_CASE ) ),
-        aBtnCalc        ( this, ScResId( BTN_CALC ) ),
-        aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
-        aBtnRegex       ( this, ScResId( BTN_REGEX ) ),
-        aBtnLookUp      ( this, ScResId( BTN_LOOKUP ) ),
+        aGbZRefs        ( this, ScResId( GB_ZREFS ) ),
         aBtnIterate     ( this, ScResId( BTN_ITERATE ) ),
         aFtSteps        ( this, ScResId( FT_STEPS ) ),
         aEdSteps        ( this, ScResId( ED_STEPS ) ),
         aFtEps          ( this, ScResId( FT_EPS ) ),
         aEdEps          ( this, ScResId( ED_EPS ) ),
-        aGbZRefs        ( this, ScResId( GB_ZREFS ) ),
+        aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
+        aGbDate         ( this, ScResId( GB_DATE ) ),
         aBtnDateStd     ( this, ScResId( BTN_DATESTD ) ),
         aBtnDateSc10    ( this, ScResId( BTN_DATESC10 ) ),
         aBtnDate1904    ( this, ScResId( BTN_DATE1904 ) ),
-
-        aGbDate         ( this, ScResId( GB_DATE ) ),
+        aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
+        aBtnCase        ( this, ScResId( BTN_CASE ) ),
+        aBtnCalc        ( this, ScResId( BTN_CALC ) ),
+        aBtnMatch       ( this, ScResId( BTN_MATCH ) ),
+        aBtnRegex       ( this, ScResId( BTN_REGEX ) ),
+        aBtnLookUp      ( this, ScResId( BTN_LOOKUP ) ),
         aFtPrec         ( this, ScResId( FT_PREC ) ),
         aEdPrec         ( this, ScResId( ED_PREC ) ),
-        aSeparatorFL    ( this, ScResId( FL_SEPARATOR ) ),
-        aHSeparatorFL   ( this, ScResId( FL_H_SEPARATOR ) ),
-        nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) ),
         pOldOptions     ( new ScDocOptions(
                             ((const ScTpCalcItem&)rCoreAttrs.Get(
                                 GetWhich( SID_SCDOCOPTIONS ))).
                                     GetDocOptions() ) ),
-        pLocalOptions   ( new ScDocOptions )
+        pLocalOptions   ( new ScDocOptions ),
+        nWhichCalc      ( GetWhich( SID_SCDOCOPTIONS ) )
 {
     aSeparatorFL.SetStyle( aSeparatorFL.GetStyle() | WB_VERT );
     Init();
@@ -146,7 +145,7 @@ SfxTabPage* __EXPORT ScTpCalcOptions::Create( Window* pParent, const SfxItemSet&
 
 //-----------------------------------------------------------------------
 
-void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& rCoreAttrs )
+void __EXPORT ScTpCalcOptions::Reset( const SfxItemSet& /* rCoreAttrs */ )
 {
     USHORT  d,m,y;
 
@@ -205,7 +204,7 @@ BOOL __EXPORT ScTpCalcOptions::FillItemSet( SfxItemSet& rCoreAttrs )
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSet )
+int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     int nReturn = KEEP_PAGE;
 
@@ -225,8 +224,8 @@ int __EXPORT ScTpCalcOptions::DeactivatePage( SfxItemSet* pSet )
 
         aEdEps.GrabFocus();
     }
-    else if ( pSet )
-        FillItemSet( *pSet );
+    else if ( pSetP )
+        FillItemSet( *pSetP );
 
     return nReturn;
 }
