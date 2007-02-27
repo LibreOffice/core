@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpoutput.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:56:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,14 +357,14 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
     xSource( xSrc ),
     aStartPos( rPos ),
     bDoFilter( bFilter ),
-    bSizesValid( FALSE ),
-    bSizeOverflow( FALSE ),
     bResultsError( FALSE ),
     pColNumFmt( NULL ),
     pRowNumFmt( NULL ),
     nColFmtCount( 0 ),
     nRowFmtCount( 0 ),
-    nSingleNumFmt( 0 )
+    nSingleNumFmt( 0 ),
+    bSizesValid( FALSE ),
+    bSizeOverflow( FALSE )
 {
     nTabStartCol = nMemberStartCol = nDataStartCol = nTabEndCol = 0;
     nTabStartRow = nMemberStartRow = nDataStartRow = nTabEndRow = 0;
@@ -464,6 +464,10 @@ ScDPOutput::ScDPOutput( ScDocument* pD, const uno::Reference<sheet::XDimensionsS
                                         // no check on results for page fields
                                         ++nPageFieldCount;
                                         break;
+                                    default:
+                                    {
+                                        // added to avoid warnings
+                                    }
                                 }
 
                                 // get number formats from data dimensions
