@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlannoi.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:50:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:48:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,16 +83,16 @@ ScXMLAnnotationContext::ScXMLAnnotationContext( ScXMLImport& rImport,
     bDisplay(sal_False),
     bHasTextP(sal_False),
     bHasPos(sal_False),
-    pShapeContext(NULL),
-    pCellContext(pTempCellContext)
+    pCellContext(pTempCellContext),
+    pShapeContext(NULL)
 {
-    uno::Reference<drawing::XShapes> xShapes (GetScImport().GetTables().GetCurrentXShapes());
-    if (xShapes.is())
+    uno::Reference<drawing::XShapes> xLocalShapes (GetScImport().GetTables().GetCurrentXShapes());
+    if (xLocalShapes.is())
     {
         XMLTableShapeImportHelper* pTableShapeImport = (XMLTableShapeImportHelper*)GetScImport().GetShapeImport().get();
         pTableShapeImport->SetAnnotation(this);
         pShapeContext = GetScImport().GetShapeImport()->CreateGroupChildContext(
-            GetScImport(), nPrfx, rLName, xAttrList, xShapes, sal_True);
+            GetScImport(), nPrfx, rLName, xAttrList, xLocalShapes, sal_True);
     }
 
     pCellContext = pTempCellContext;
