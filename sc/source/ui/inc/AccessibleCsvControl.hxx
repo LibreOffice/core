@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:06:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@ public:
                                     ScCsvControl& rControl,
                                     sal_uInt16 nRole );
     virtual                     ~ScAccessibleCsvControl();
+
+    using ScAccessibleContextBase::disposing;
     virtual void SAL_CALL       disposing();
 
     // XAccessibleComponent ---------------------------------------------------
@@ -607,6 +609,8 @@ public:
                                     const String& rCellText,
                                     sal_Int32 nRow, sal_Int32 nColumn );
     virtual                     ~ScAccessibleCsvCell();
+
+    using ScAccessibleCsvControl::disposing;
     virtual void SAL_CALL       disposing();
 
     // XAccessibleComponent ---------------------------------------------------
