@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextPContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:50:21 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:48:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,11 +124,11 @@ ScXMLTextPContext::ScXMLTextPContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xTempAttrList,
                                       ScXMLTableRowCellContext* pTempCellContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    xAttrList(xTempAttrList),
     pTextPContext(NULL),
     pCellContext(pTempCellContext),
-    sOUText(),
     sLName(rLName),
-    xAttrList(xTempAttrList),
+    sOUText(),
     nPrefix(nPrfx),
     bIsOwn(sal_True)
 {
