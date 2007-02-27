@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabres.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:04:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1913,8 +1913,6 @@ void ScDPDataMember::UpdateDataRow( const ScDPResultMember* pRefMember,
     const ScDPDataDimension* pDataChild = GetChildDimension();
     const ScDPResultDimension* pRefChild = pRefMember->GetChildDimension();
 
-    BOOL bIsRoot = ( pResultMember == NULL || pResultMember->GetParentLevel() == NULL );
-
     //  leave space for children even if the DataMember hasn't been initialized
     //  (pDataChild is null then, this happens when no values for it are in this row)
     BOOL bHasChild = ( pRefChild != NULL );
@@ -2518,8 +2516,6 @@ ScDPResultDimension::~ScDPResultDimension()
 
 ScDPResultMember *ScDPResultDimension::FindMember( const ScDPItemData& rData ) const
 {
-    ScDPResultMember *res = NULL;
-
     if( bIsDataLayout )
         return maMemberArray[0];
 
