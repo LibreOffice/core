@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redcom.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:09:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:33:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,10 +176,10 @@ void ScRedComDialog::SelectCell()
     }
 }
 
-IMPL_LINK(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog*, pDlg )
+IMPL_LINK(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog*, pDlgP )
 {
-    if (pDocShell!=NULL && pDlg->GetNote() != aComment )
-        pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
+    if (pDocShell!=NULL && pDlgP->GetNote() != aComment )
+        pDocShell->SetChangeComment( pChangeAction, pDlgP->GetNote());
 
     ReInit(FindPrev(pChangeAction));
     SelectCell();
@@ -187,10 +187,10 @@ IMPL_LINK(ScRedComDialog, PrevHdl, AbstractSvxPostItDialog*, pDlg )
     return 0;
 }
 
-IMPL_LINK(ScRedComDialog, NextHdl, AbstractSvxPostItDialog*, pDlg )
+IMPL_LINK(ScRedComDialog, NextHdl, AbstractSvxPostItDialog*, pDlgP )
 {
-    if ( pDocShell!=NULL && pDlg->GetNote() != aComment )
-        pDocShell->SetChangeComment( pChangeAction, pDlg->GetNote());
+    if ( pDocShell!=NULL && pDlgP->GetNote() != aComment )
+        pDocShell->SetChangeComment( pChangeAction, pDlgP->GetNote());
 
     ReInit(FindNext(pChangeAction));
     SelectCell();

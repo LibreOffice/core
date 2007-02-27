@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simpref.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:09:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:33:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ void ScSimpleRefDlg::Init()
 //----------------------------------------------------------------------------
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
-void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( aEdAssign.IsEnabled() )
     {
@@ -147,10 +147,10 @@ void ScSimpleRefDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         if ( bSingleCell )
         {
             ScAddress aAdr = rRef.aStart;
-            aAdr.Format( aRefStr, SCA_ABS_3D, pDoc );
+            aAdr.Format( aRefStr, SCA_ABS_3D, pDocP );
         }
         else
-            theCurArea.Format( aRefStr, ABS_DREF3D, pDoc );
+            theCurArea.Format( aRefStr, ABS_DREF3D, pDocP );
 
         aEdAssign.SetRefString( aRefStr );
 
