@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adiasync.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:15:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,8 @@
 
 //------------------------------------------------------------------------
 
-#pragma code_seg("SCSTATICS")
-
 ScAddInAsyncs theAddInAsyncTbl;
 static ScAddInAsync aSeekObj;
-
-#pragma code_seg()
 
 
 SV_IMPL_OP_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr );
@@ -130,7 +126,7 @@ ScAddInAsync* ScAddInAsync::Get( ULONG nHandleP )
 void ScAddInAsync::CallBack( ULONG nHandleP, void* pData )
 {
     ScAddInAsync* p;
-    if ( !(p = Get( nHandleP )) )
+    if ( (p = Get( nHandleP )) == NULL )
         return;
     // keiner mehr dran? Unadvice und weg damit
     if ( !p->HasListeners() )
