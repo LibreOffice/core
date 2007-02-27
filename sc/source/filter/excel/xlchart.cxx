@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlchart.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:15:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:28:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,7 +520,7 @@ XclChPropSetHelper::XclChPropSetHelper() :
 
 void XclChPropSetHelper::WriteLineProperties(
         ScfPropertySet& rPropSet, XclChObjectTable& rDashTable,
-        const XclChLineFormat& rLineFmt, XclChPropertyMode ePropMode )
+        const XclChLineFormat& rLineFmt, XclChPropertyMode /*ePropMode*/ )
 {
     namespace cssd = ::com::sun::star::drawing;
 
@@ -586,7 +586,7 @@ void XclChPropSetHelper::WriteLineProperties(
 }
 
 void XclChPropSetHelper::WriteAreaProperties( ScfPropertySet& rPropSet,
-        const XclChAreaFormat& rAreaFmt, XclChPropertyMode ePropMode )
+        const XclChAreaFormat& rAreaFmt, XclChPropertyMode /*ePropMode*/ )
 {
     namespace cssd = ::com::sun::star::drawing;
     if( rAreaFmt.mnPattern == EXC_CHAREAFORMAT_NONE )
