@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collect.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:22:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:13:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,8 @@ Collection::Collection(USHORT nLim, USHORT nDel) :
 }
 
 Collection::Collection(const Collection& rCollection)
-    :   nCount ( 0 ),
+    :   DataObject(),
+        nCount ( 0 ),
         nLimit ( 0 ),
         nDelta ( 0 ),
         pItems ( NULL )
@@ -144,7 +145,7 @@ BOOL Collection::AtInsert(USHORT nIndex, DataObject* pDataObject)
             DataObject** pNewItems = new DataObject*[nLimit + nDelta];
             if (!pNewItems)
                 return FALSE;
-            nLimit += nDelta;
+            nLimit = sal::static_int_cast<USHORT>( nLimit + nDelta );
             memmove(pNewItems, pItems, nCount * sizeof(DataObject*));
             delete[] pItems;
             pItems = pNewItems;
