@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbinsert.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:16:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ __EXPORT ScTbxInsertCtrl::~ScTbxInsertCtrl()
 {
 }
 
-void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
+void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT /* nSID */, SfxItemState eState,
                                               const SfxPoolItem* pState )
 {
     GetToolBox().EnableItem( GetId(), (GetItemState(pState) != SFX_ITEM_DISABLED) );
@@ -107,7 +107,7 @@ void __EXPORT ScTbxInsertCtrl::StateChanged( USHORT nSID, SfxItemState eState,
 
 SfxPopupWindow* __EXPORT ScTbxInsertCtrl::CreatePopupWindow()
 {
-    USHORT nWinResId, nTbxResId;
+//    USHORT nWinResId, nTbxResId;
     USHORT nSlotId = GetSlotId();
     if (nSlotId == SID_TBXCTL_INSERT)
     {
@@ -147,7 +147,7 @@ SfxPopupWindowType __EXPORT ScTbxInsertCtrl::GetPopupWindowType() const
     return nLastSlotId ? SFX_POPUPWINDOW_ONTIMEOUT : SFX_POPUPWINDOW_ONCLICK;
 }
 
-void __EXPORT ScTbxInsertCtrl::Select( BOOL bMod1 )
+void __EXPORT ScTbxInsertCtrl::Select( BOOL /* bMod1 */ )
 {
     SfxViewShell*   pCurSh( SfxViewShell::Current() );
     SfxDispatcher*  pDispatch( 0 );
