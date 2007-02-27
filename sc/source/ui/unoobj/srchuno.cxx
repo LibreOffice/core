@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:46:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:47:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ const SfxItemPropertyMap* lcl_GetSearchPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_SRCHSTYLES),   0,      &getBooleanCppuType(),       0, 0},
         {MAP_CHAR_LEN(SC_UNO_SRCHTYPE),     0,      &getCppuType((sal_Int16*)0), 0, 0}, // enum TableSearch ist weg
         {MAP_CHAR_LEN(SC_UNO_SRCHWORDS),    0,      &getBooleanCppuType(),       0, 0},
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aSearchPropertyMap_Impl;
 }
@@ -242,7 +242,7 @@ sal_Int64 SAL_CALL ScCellSearchObj::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -271,7 +271,7 @@ ScCellSearchObj* ScCellSearchObj::getImplementation(
     ScCellSearchObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScCellSearchObj*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScCellSearchObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
