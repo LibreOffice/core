@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addinlis.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:13:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ void SAL_CALL ScAddInListener::modified( const ::com::sun::star::sheet::ResultEv
 
 // XEventListener
 
-void SAL_CALL ScAddInListener::disposing( const ::com::sun::star::lang::EventObject& Source )
+void SAL_CALL ScAddInListener::disposing( const ::com::sun::star::lang::EventObject& /* Source */ )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
     // hold a ref so this is not deleted at removeResultListener
