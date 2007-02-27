@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:05:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -835,7 +835,7 @@ BOOL lcl_IsBeyond( ScTokenArray* pCode, SCROW nMaxRow )
 {
     ScToken* t;
     pCode->Reset();
-    while ( t = pCode->GetNextReferenceRPN() )  // RPN -> auch in Namen
+    while ( ( t = pCode->GetNextReferenceRPN() ) != NULL )  // RPN -> also in names
         if ( t->GetSingleRef().nRow > nMaxRow ||
                 (t->GetType() == svDoubleRef &&
                 t->GetDoubleRef().Ref2.nRow > nMaxRow) )
@@ -1031,7 +1031,7 @@ void ScFormulaCell::CompileTokenArray( BOOL bNoListening )
 {
     // Noch nicht compiliert?
     if( !pCode->GetLen() && aErgString.Len() )
-        Compile( aErgString, nErgConv );
+        Compile( aErgString, bNoListening, nErgConv );
     else if( bCompile && !pDocument->IsClipOrUndo() && !pCode->GetError() )
     {
         // RPN-Laenge kann sich aendern
@@ -1802,7 +1802,7 @@ ULONG ScFormulaCell::GetStandardFormat( SvNumberFormatter& rFormatter, ULONG nFo
 }
 
 
-void __EXPORT ScFormulaCell::Notify( SvtBroadcaster& rBC, const SfxHint& rHint)
+void __EXPORT ScFormulaCell::Notify( SvtBroadcaster&, const SfxHint& rHint)
 {
     if ( !pDocument->IsInDtorClear() && !pDocument->GetHardRecalcState() )
     {
