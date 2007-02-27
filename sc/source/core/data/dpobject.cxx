@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpobject.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:55:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:03:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,25 +146,22 @@ USHORT lcl_GetDataGetOrientation( const uno::Reference<sheet::XDimensionsSupplie
 
 ScDPObject::ScDPObject( ScDocument* pD ) :
     pDoc( pD ),
-    bAlive( FALSE ),
-    nHeaderRows( 0 ),
-    bAllowMove( FALSE ),
-    bInfoValid( FALSE ),
     pSaveData( NULL ),
     pSheetDesc( NULL ),
     pImpDesc( NULL ),
     pServDesc( NULL ),
     pOutput( NULL ),
-    bSettingsChanged( FALSE )
+    bSettingsChanged( FALSE ),
+    bAlive( FALSE ),
+    bAllowMove( FALSE ),
+    bInfoValid( FALSE ),
+    nHeaderRows( 0 )
 {
 }
 
 ScDPObject::ScDPObject(const ScDPObject& r) :
+    DataObject(),
     pDoc( r.pDoc ),
-    bAlive( FALSE ),
-    nHeaderRows( r.nHeaderRows ),
-    bAllowMove( FALSE ),
-    bInfoValid( r.bInfoValid ),
     pSaveData( NULL ),
     aTableName( r.aTableName ),
     aTableTag( r.aTableTag ),
@@ -173,7 +170,11 @@ ScDPObject::ScDPObject(const ScDPObject& r) :
     pImpDesc( NULL ),
     pServDesc( NULL ),
     pOutput( NULL ),
-    bSettingsChanged( FALSE )
+    bSettingsChanged( FALSE ),
+    bAlive( FALSE ),
+    bAllowMove( FALSE ),
+    bInfoValid( r.bInfoValid ),
+    nHeaderRows( r.nHeaderRows )
 {
     if (r.pSaveData)
         pSaveData = new ScDPSaveData(*r.pSaveData);
@@ -560,8 +561,8 @@ void ScDPObject::UpdateReference( UpdateRefMode eUpdateRefMode,
             SCsROW nDiffY = nRow1 - (SCsROW) pSheetDesc->aSourceRange.aStart.Row();
 
             aNewDesc.aQueryParam = pSheetDesc->aQueryParam;
-            aNewDesc.aQueryParam.nCol1 += nDiffX;
-            aNewDesc.aQueryParam.nCol2 += nDiffX;
+            aNewDesc.aQueryParam.nCol1 = sal::static_int_cast<SCCOL>( aNewDesc.aQueryParam.nCol1 + nDiffX );
+            aNewDesc.aQueryParam.nCol2 = sal::static_int_cast<SCCOL>( aNewDesc.aQueryParam.nCol2 + nDiffX );
             aNewDesc.aQueryParam.nRow1 += nDiffY;   //! used?
             aNewDesc.aQueryParam.nRow2 += nDiffY;   //! used?
             SCSIZE nEC = aNewDesc.aQueryParam.GetEntryCount();
@@ -1161,17 +1162,17 @@ SCSIZE lcl_FillOldFields( PivotField* pFields,
     return nOutCount;
 }
 
-void lcl_SaveOldFieldArr( SvStream& rStream,
-                            const uno::Reference<sheet::XDimensionsSupplier>& xSource,
-                            USHORT nOrient, SCCOL nColAdd, BOOL bAddData )
+void lcl_SaveOldFieldArr( SvStream& /* rStream */,
+                            const uno::Reference<sheet::XDimensionsSupplier>& /* xSource */,
+                            USHORT /* nOrient */, SCCOL /* nColAdd */, BOOL /* bAddData */ )
 {
+#if SC_ROWLIMIT_STREAM_ACCESS
+#error address types changed!
     // PIVOT_MAXFIELD = max. number in old files
     DBG_ASSERT( nOrient != sheet::DataPilotFieldOrientation_PAGE, "lcl_SaveOldFieldArr - do not try to save page fields" );
     PivotField aFields[PIVOT_MAXFIELD];
     SCSIZE nOutCount = lcl_FillOldFields( aFields, xSource, nOrient, nColAdd, bAddData );
 
-#if SC_ROWLIMIT_STREAM_ACCESS
-#error address types changed!
     rStream << nOutCount;
     for (USHORT i=0; i<nOutCount; i++)
     {
@@ -1183,7 +1184,7 @@ void lcl_SaveOldFieldArr( SvStream& rStream,
 #endif
 }
 
-BOOL ScDPObject::StoreNew( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
+BOOL ScDPObject::StoreNew( SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -1237,7 +1238,7 @@ BOOL ScDPObject::StoreNew( SvStream& rStream, ScMultipleWriteHeader& rHdr ) cons
 #endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
-BOOL ScDPObject::LoadNew(SvStream& rStream, ScMultipleReadHeader& rHdr )
+BOOL ScDPObject::LoadNew(SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -1787,7 +1788,7 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
                         sheet::GeneralFunction eFunc = ScDataPilotConversion::FirstFunc( nMask );
                         ScDPSaveDimension* pCurrDim = bFirst ? pDim : rSaveData.DuplicateDimension(pDim->GetName());
                         pCurrDim->SetOrientation( nOrient );
-                        pCurrDim->SetFunction( eFunc );
+                        pCurrDim->SetFunction( sal::static_int_cast<USHORT>(eFunc) );
 
                         if( rFieldRef.ReferenceType == sheet::DataPilotFieldReferenceType::NONE )
                             pCurrDim->SetReferenceValue( 0 );
@@ -1809,7 +1810,7 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
                 for (USHORT nBit=0; nBit<16; nBit++)
                 {
                     if ( nFuncs & nMask )
-                        nFuncArray[nFuncCount++] = ScDataPilotConversion::FirstFunc( nMask );
+                        nFuncArray[nFuncCount++] = sal::static_int_cast<USHORT>(ScDataPilotConversion::FirstFunc( nMask ));
                     nMask *= 2;
                 }
                 pDim->SetSubTotals( nFuncCount, nFuncArray );
@@ -1823,7 +1824,7 @@ void ScDPObject::ConvertOrientation( ScDPSaveData& rSaveData,
     }
 }
 
-void ScDPObject::InitFromOldPivot( const ScPivot& rOld, ScDocument* pDoc, BOOL bSetSource )
+void ScDPObject::InitFromOldPivot( const ScPivot& rOld, ScDocument* pDocP, BOOL bSetSource )
 {
     ScDPSaveData aSaveData;
 
@@ -1833,16 +1834,16 @@ void ScDPObject::InitFromOldPivot( const ScPivot& rOld, ScDocument* pDoc, BOOL b
     rOld.GetParam( aParam, aQuery, aArea );
 
     ConvertOrientation( aSaveData, aParam.aPageArr, aParam.nPageCount,
-                            sheet::DataPilotFieldOrientation_PAGE, pDoc, aArea.nRowStart, aArea.nTab,
+                            sheet::DataPilotFieldOrientation_PAGE, pDocP, aArea.nRowStart, aArea.nTab,
                             uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
     ConvertOrientation( aSaveData, aParam.aColArr, aParam.nColCount,
-                            sheet::DataPilotFieldOrientation_COLUMN, pDoc, aArea.nRowStart, aArea.nTab,
+                            sheet::DataPilotFieldOrientation_COLUMN, pDocP, aArea.nRowStart, aArea.nTab,
                             uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
     ConvertOrientation( aSaveData, aParam.aRowArr, aParam.nRowCount,
-                            sheet::DataPilotFieldOrientation_ROW, pDoc, aArea.nRowStart, aArea.nTab,
+                            sheet::DataPilotFieldOrientation_ROW, pDocP, aArea.nRowStart, aArea.nTab,
                             uno::Reference<sheet::XDimensionsSupplier>(), TRUE );
     ConvertOrientation( aSaveData, aParam.aDataArr, aParam.nDataCount,
-                            sheet::DataPilotFieldOrientation_DATA, pDoc, aArea.nRowStart, aArea.nTab,
+                            sheet::DataPilotFieldOrientation_DATA, pDocP, aArea.nRowStart, aArea.nTab,
                             uno::Reference<sheet::XDimensionsSupplier>(), TRUE,
                             aParam.aColArr, aParam.nColCount, aParam.aRowArr, aParam.nRowCount );
 
