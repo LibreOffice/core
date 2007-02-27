@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:05:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ struct ScSortInfo
     DECL_FIXEDMEMPOOL_NEWDEL( ScSortInfo );
 };
 const USHORT nMemPoolSortInfo = (0x8000 - 64) / sizeof(ScSortInfo);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo, nMemPoolSortInfo, nMemPoolSortInfo );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScSortInfo, nMemPoolSortInfo, nMemPoolSortInfo )
 
 // END OF STATIC DATA -----------------------------------------------------
 
@@ -257,7 +257,7 @@ short ScTable::CompareCell( USHORT nSort,
 {
     short nRes = 0;
 
-    CellType eType1, eType2;
+    CellType eType1 = CELLTYPE_NONE, eType2 = CELLTYPE_NONE;
     if (pCell1)
     {
         eType1 = pCell1->GetCellType();
@@ -303,9 +303,9 @@ short ScTable::CompareCell( USHORT nSort,
                     if (pData)
                     {
                         if ( aSortParam.bCaseSens )
-                            nRes = pData->Compare(aStr1, aStr2);
+                            nRes = sal::static_int_cast<short>( pData->Compare(aStr1, aStr2) );
                         else
-                            nRes = pData->ICompare(aStr1, aStr2);
+                            nRes = sal::static_int_cast<short>( pData->ICompare(aStr1, aStr2) );
                     }
                     else
                         bUserDef = FALSE;
@@ -827,6 +827,10 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
                                     case SUBTOTAL_FUNC_SUM:     nStrId = STR_FUN_TEXT_SUM;      break;
                                     case SUBTOTAL_FUNC_VAR:
                                     case SUBTOTAL_FUNC_VARP:    nStrId = STR_FUN_TEXT_VAR;      break;
+                                    default:
+                                    {
+                                        // added to avoid warnings
+                                    }
                                 }
                             aOutString += ScGlobal::GetRscString( nStrId );
                         }
@@ -877,31 +881,31 @@ BOOL ScTable::DoSubTotals( ScSubTotalParam& rParam )
         SCCOL nResCount         = rParam.nSubTotals[iEntry->nGroupNo];
         SCCOL* nResCols         = rParam.pSubTotals[iEntry->nGroupNo];
         ScSubTotalFunc* eResFunc = rParam.pFunctions[iEntry->nGroupNo];
-        for ( SCCOL i=0; i < nResCount; ++i )
+        for ( SCCOL nResult=0; nResult < nResCount; ++nResult )
         {
-            aRef.Ref1.nCol = nResCols[i];
+            aRef.Ref1.nCol = nResCols[nResult];
             aRef.Ref1.nRow = iEntry->nFuncStart;
-            aRef.Ref2.nCol = nResCols[i];
+            aRef.Ref2.nCol = nResCols[nResult];
             aRef.Ref2.nRow = iEntry->nFuncEnd;
 
             ScTokenArray aArr;
             aArr.AddOpCode( ocSubTotal );
             aArr.AddOpCode( ocOpen );
-            aArr.AddDouble( (double) eResFunc[i] );
+            aArr.AddDouble( (double) eResFunc[nResult] );
             aArr.AddOpCode( ocSep );
             aArr.AddDoubleReference( aRef );
             aArr.AddOpCode( ocClose );
             aArr.AddOpCode( ocStop );
             ScBaseCell* pCell = new ScFormulaCell( pDocument, ScAddress(
-                        nResCols[i], iEntry->nDestRow, nTab), &aArr );
-            PutCell( nResCols[i], iEntry->nDestRow, pCell );
+                        nResCols[nResult], iEntry->nDestRow, nTab), &aArr );
+            PutCell( nResCols[nResult], iEntry->nDestRow, pCell );
 
-            if ( nResCols[i] != nGroupCol[iEntry->nGroupNo] )
+            if ( nResCols[nResult] != nGroupCol[iEntry->nGroupNo] )
             {
-                ApplyStyle( nResCols[i], iEntry->nDestRow, *pStyle );
+                ApplyStyle( nResCols[nResult], iEntry->nDestRow, *pStyle );
 
                 //  Zahlformat loeschen
-                lcl_RemoveNumberFormat( this, nResCols[i], iEntry->nDestRow );
+                lcl_RemoveNumberFormat( this, nResCols[nResult], iEntry->nDestRow );
             }
         }
 
@@ -1008,6 +1012,10 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                 case SC_NOT_EQUAL :
                     bOk = !::rtl::math::approxEqual( nCellVal, rEntry.nVal );
                     break;
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
         }
         else if ( (rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL) ||
@@ -1097,6 +1105,10 @@ BOOL ScTable::ValidQuery(SCROW nRow, const ScQueryParam& rParam,
                             if ( bOk && pbTestEqualCondition && !bTestEqual )
                                 bTestEqual = (nCompare == 0);
                             break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
                 }
             }
@@ -1242,6 +1254,10 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                                 nOffset = nValidCount - 1;
                         }
                         break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
                     ScBaseCell* pCell = ppInfo[nOffset]->pCell;
                     if ( pCell->HasValueData() )
@@ -1265,6 +1281,11 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
                     rEntry.nVal = 0;
                 }
                 delete pArray;
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
             }
         }
     }
@@ -1327,6 +1348,11 @@ SCSIZE ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)
                 case SC_TOPPERC:
                 case SC_BOTPERC:
                     bTopTen = TRUE;
+                    break;
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
         }
     }
@@ -1649,7 +1675,7 @@ BOOL ScTable::CreateQueryParam(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow
     return bValid;
 }
 
-BOOL ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
+BOOL ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW /* nEndRow */ )
 {
     for (SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++)
     {
@@ -1660,7 +1686,7 @@ BOOL ScTable::HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCR
     return TRUE;
 }
 
-BOOL ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow )
+BOOL ScTable::HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL /* nEndCol */, SCROW nEndRow )
 {
     for (SCROW nRow=nStartRow; nRow<=nEndRow; nRow++)
     {
