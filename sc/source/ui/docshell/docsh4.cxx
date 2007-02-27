@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:41:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:07:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,7 +350,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
             if (pReqArgs)
             {
                 ScDocument* pDoc = GetDocument();
-                BOOL bUndo (pDoc->IsUndoEnabled());
+//                BOOL bUndo (pDoc->IsUndoEnabled());
                 const   SfxPoolItem* pItem;
                 String  aChartName, aRangeName;
 
@@ -536,7 +536,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                 if(nSet==LM_ON_DEMAND)
                 {
-                    QueryBox aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                    QueryBox aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                                              ScGlobal::GetRscString(STR_RELOAD_TABLES) );
 
                     nDlgRet=aBox.Execute();
@@ -572,7 +572,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     DBG_ASSERT(pViewSh,"SID_REIMPORT_AFTER_LOAD: keine View");
                     if (pViewSh && pDBColl)
                     {
-                        QueryBox aBox( GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                        QueryBox aBox( GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                                                 ScGlobal::GetRscString(STR_REIMPORT_AFTER_LOAD) );
                         if (aBox.Execute() == RET_YES)
                         {
@@ -673,7 +673,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         if ( !pItem )
                         {
                             // no dialog on playing the macro
-                            WarningBox aBox( pParent ? pParent : GetDialogParent(),
+                            WarningBox aBox( pParent ? pParent : GetActiveDialogParent(),
                                 WinBits(WB_YES_NO | WB_DEF_NO),
                                 ScGlobal::GetRscString( STR_END_REDLINING ) );
                             bDo = ( aBox.Execute() == RET_YES );
@@ -750,7 +750,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if ( nSlot == SID_DOCUMENT_COMPARE )
                     {   //! old changes trace will be lost
-                        WarningBox aBox( GetDialogParent(),
+                        WarningBox aBox( GetActiveDialogParent(),
                             WinBits(WB_YES_NO | WB_DEF_NO),
                             ScGlobal::GetRscString( STR_END_REDLINING ) );
                         if( aBox.Execute() == RET_YES )
@@ -849,7 +849,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         SfxViewFrame* pViewFrm = SfxViewFrame::Current();
                         if (pViewFrm)
                             pViewFrm->ShowChildWindow(ScAcceptChgDlgWrapper::GetChildWindowId(),TRUE); //@51669
-                        SfxBindings* pBindings = GetViewBindings();
+//                        SfxBindings* pBindings = GetViewBindings();
                         if (pBindings)
                             pBindings->Invalidate(FID_CHG_ACCEPT);
 
@@ -932,11 +932,11 @@ void ScDocShell::Execute( SfxRequest& rReq )
 
                                 //! anderen Titel am Dialog setzen
 //CHINA001                              ScNewScenarioDlg* pNewDlg =
-//CHINA001                              new ScNewScenarioDlg( GetDialogParent(), aName, TRUE, bSheetProtected);
+//CHINA001                              new ScNewScenarioDlg( GetActiveDialogParent(), aName, TRUE, bSheetProtected);
                                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( GetDialogParent(), aName, ResId(RID_SCDLG_NEWSCENARIO), TRUE,bSheetProtected);
+                                AbstractScNewScenarioDlg* pNewDlg = pFact->CreateScNewScenarioDlg( GetActiveDialogParent(), aName, ResId(RID_SCDLG_NEWSCENARIO), TRUE,bSheetProtected);
                                 DBG_ASSERT(pNewDlg, "Dialog create fail!");//CHINA001
                                 pNewDlg->SetScenarioData( aName, aComment, aColor, nFlags );
                                 if ( pNewDlg->Execute() == RET_OK )
@@ -1010,7 +1010,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
         String aPassword;
 
         SfxPasswordDialog* pDlg = new SfxPasswordDialog(
-            _pParent ? _pParent : GetDialogParent(), &aText );
+            _pParent ? _pParent : GetActiveDialogParent(), &aText );
         pDlg->SetText( aTitle );
         pDlg->SetMinLen( 1 );
         pDlg->SetHelpId( SID_CHG_PROTECT );
@@ -1035,7 +1035,7 @@ BOOL ScDocShell::ExecuteChangeProtectionDialog( Window* _pParent, BOOL bJustQuer
                 }
                 else
                 {
-                    InfoBox aBox( GetDialogParent(),
+                    InfoBox aBox( GetActiveDialogParent(),
                         String( ScResId( SCSTR_WRONGPASSWORD ) ) );
                     aBox.Execute();
                 }
@@ -1089,7 +1089,7 @@ void ScDocShell::DoRecalc( BOOL bApi )
     }
     if (!bDone)                         // sonst Dokument neu berechnen
     {
-        WaitObject aWaitObj( GetDialogParent() );
+        WaitObject aWaitObj( GetActiveDialogParent() );
         aDocument.CalcFormulaTree();
         if ( pSh )
             pSh->UpdateCharts(TRUE);
@@ -1106,9 +1106,9 @@ void ScDocShell::DoRecalc( BOOL bApi )
     }
 }
 
-void ScDocShell::DoHardRecalc( BOOL bApi )
+void ScDocShell::DoHardRecalc( BOOL /* bApi */ )
 {
-    WaitObject aWaitObj( GetDialogParent() );
+    WaitObject aWaitObj( GetActiveDialogParent() );
     ScTabViewShell* pSh = GetBestViewShell();
     if ( pSh )
     {
@@ -1337,8 +1337,8 @@ void ScDocShell::PageStyleModified( const String& rStyleName, BOOL bApi )
 
         if (bWarn && !bApi)
         {
-            ScWaitCursorOff aWaitOff( GetDialogParent() );
-            InfoBox aInfoBox(GetDialogParent(),
+            ScWaitCursorOff aWaitOff( GetActiveDialogParent() );
+            InfoBox aInfoBox(GetActiveDialogParent(),
                              ScGlobal::GetRscString(STR_PRINT_INVALID_AREA));
             aInfoBox.Execute();
         }
@@ -1387,21 +1387,21 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
                         SfxItemSet&     rStyleSet = pStyleSheet->GetItemSet();
 
-//CHINA001                      ScStyleDlg* pDlg = new ScStyleDlg( GetDialogParent(),
+//CHINA001                      ScStyleDlg* pDlg = new ScStyleDlg( GetActiveDialogParent(),
 //CHINA001                      *pStyleSheet,
 //CHINA001                      RID_SCDLG_STYLES_PAGE );
 //CHINA001
                         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                        SfxAbstractTabDialog* pDlg = pFact->CreateScStyleDlg( GetDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE,ResId(RID_SCDLG_STYLES_PAGE) );
+                        SfxAbstractTabDialog* pDlg = pFact->CreateScStyleDlg( GetActiveDialogParent(), *pStyleSheet, RID_SCDLG_STYLES_PAGE,ResId(RID_SCDLG_STYLES_PAGE) );
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                         if ( pDlg->Execute() == RET_OK )
                         {
                             const SfxItemSet* pOutSet = pDlg->GetOutputItemSet();
 
-                            WaitObject aWait( GetDialogParent() );
+                            WaitObject aWait( GetActiveDialogParent() );
 
                             String aNewName = pStyleSheet->GetName();
                             if ( aNewName != aOldName &&
@@ -1548,7 +1548,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
 
 //CHINA001                      ScHFEditDlg* pDlg
 //CHINA001                      = new ScHFEditDlg( SFX_APP()->GetViewFrame(),
-//CHINA001                      GetDialogParent(),
+//CHINA001                      GetActiveDialogParent(),
 //CHINA001                      rStyleSet,
 //CHINA001                      aStr,
 //CHINA001                      nResId );
@@ -1557,7 +1557,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
                         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
                         SfxAbstractTabDialog* pDlg = pFact->CreateScHFEditDlg( SfxViewFrame::Current(),
-                                                                                GetDialogParent(),
+                                                                                GetActiveDialogParent(),
                                                                                 rStyleSet,
                                                                                 aStr,
                                                                                 ResId(RID_SCDLG_HFEDIT), nResId);
@@ -1583,7 +1583,7 @@ void ScDocShell::ExecutePageStyle( SfxViewShell& rCaller,
     }
 }
 
-void ScDocShell::GetStatePageStyle( SfxViewShell&   rCaller,
+void ScDocShell::GetStatePageStyle( SfxViewShell&   /* rCaller */,
                                     SfxItemSet&     rSet,
                                     SCTAB           nCurTab )
 {
@@ -1679,6 +1679,11 @@ void ScDocShell::PreparePrint( PrintDialog* pPrintDialog, ScMarkData* pMarkData 
             }
             bAllTabs = FALSE;
             break;
+
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if ( !aOptions.GetAllSheets() )      // option "only selected sheets" - also for ALL and RANGE
@@ -1824,7 +1829,10 @@ void ScDocShell::Print( SfxProgress& rProgress, PrintDialog* pPrintDialog,
             break;
 
         //case PRINTDIALOG_ALL:
-        //default:
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if ( !aOptions.GetAllSheets() )      // option "only selected sheets" - also for ALL and RANGE
@@ -2043,7 +2051,7 @@ void ScDocShell::GetSbxState( SfxItemSet &rSet )
         pVisibleSh->GetState( rSet );
 }
 
-void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & rSetup, USHORT nAspect )
+void __EXPORT ScDocShell::Draw( OutputDevice* pDev, const JobSetup & /* rSetup */, USHORT nAspect )
 {
 //  bIsOle = TRUE;      // jetzt ueber den CreateMode
 
