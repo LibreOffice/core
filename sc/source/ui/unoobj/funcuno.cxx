@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:40:24 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:45:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,8 +205,8 @@ BOOL lcl_CopyData( ScDocument* pSrcDoc, const ScRange& rSrcRange,
 //------------------------------------------------------------------------
 
 ScFunctionAccess::ScFunctionAccess() :
-    bInvalid( FALSE ),
-    pOptions( NULL )
+    pOptions( NULL ),
+    bInvalid( FALSE )
 {
     StartListening( *SFX_APP() );       // for SFX_HINT_DEINITIALIZING
 }
@@ -216,7 +216,7 @@ ScFunctionAccess::~ScFunctionAccess()
     delete pOptions;
 }
 
-void ScFunctionAccess::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScFunctionAccess::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) &&
         ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DEINITIALIZING )
@@ -382,7 +382,7 @@ protected:
     bool mbArgError;
     ScDocument* mpDoc;
 public:
-    SimpleVisitor( ScDocument* pDoc ) : mpDoc( pDoc ), mbArgError( false ) {}
+    SimpleVisitor( ScDocument* pDoc ) : mbArgError( false ), mpDoc( pDoc ) {}
     // could possibly just get away with JUST the following overload
     // 1) virtual void visitElem( long& nCol, long& nRow, const double& elem )
     // 2) virtual void visitElem( long& nCol, long& nRow, const rtl::OUString& elem )
@@ -454,7 +454,7 @@ class SequencesContainer
 
 public:
     SequencesContainer( const uno::Any& rArg, ScTokenArray& rTokenArr, long& rDocRow, ScDocument* pDoc ) :
-        mrTokenArr( rTokenArr ), mrDocRow( rDocRow ), mbOverflow(false), mbArgError(false), mpDoc( pDoc )
+        mrDocRow( rDocRow ), mbOverflow(false), mbArgError(false), mpDoc( pDoc ), mrTokenArr( rTokenArr )
     {
         rArg >>= maSeq;
     }
