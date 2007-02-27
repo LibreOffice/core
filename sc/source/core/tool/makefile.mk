@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-04 12:12:09 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:17:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,13 @@ SLOFILES =  \
         $(SLO)$/zforauto.obj
 
 EXCEPTIONSFILES= \
+        $(SLO)$/chartarr.obj \
+        $(SLO)$/compiler.obj \
+        $(SLO)$/interpr1.obj \
+        $(SLO)$/interpr3.obj \
+        $(SLO)$/interpr4.obj \
+        $(SLO)$/interpr5.obj \
+        $(SLO)$/prnsave.obj \
         $(SLO)$/addincol.obj
 
 # [kh] POWERPC compiler problem
