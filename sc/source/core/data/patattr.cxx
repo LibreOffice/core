@@ -4,9 +4,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:06:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:07:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ int __EXPORT ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const
              StrCmp( GetStyleName(), static_cast<const ScPatternAttr&>(rCmp).GetStyleName() ) );
 }
 
-SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, USHORT nVersion ) const
+SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, USHORT /* nVersion */ ) const
 {
     String* pStr;
     BOOL    bHasStyle;
@@ -187,18 +187,18 @@ SfxPoolItem* __EXPORT ScPatternAttr::Create( SvStream& rStream, USHORT nVersion 
     else
         pStr = new String( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
-    SfxItemSet *pSet = new SfxItemSet( *GetItemSet().GetPool(),
+    SfxItemSet *pNewSet = new SfxItemSet( *GetItemSet().GetPool(),
                                        ATTR_PATTERN_START, ATTR_PATTERN_END );
-    pSet->Load( rStream );
+    pNewSet->Load( rStream );
 
-    ScPatternAttr* pPattern = new ScPatternAttr( pSet );
+    ScPatternAttr* pPattern = new ScPatternAttr( pNewSet );
 
     pPattern->pName = pStr;
 
     return pPattern;
 }
 
-SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT nItemVersion) const
+SvStream& __EXPORT ScPatternAttr::Store(SvStream& rStream, USHORT /* nItemVersion */) const
 {
     rStream << (BOOL)TRUE;
 
@@ -874,23 +874,23 @@ void ScPatternAttr::DeleteUnchanged( const ScPatternAttr* pOldAttrs )
     const SfxPoolItem* pThisItem;
     const SfxPoolItem* pOldItem;
 
-    for ( USHORT nWhich=ATTR_PATTERN_START; nWhich<=ATTR_PATTERN_END; nWhich++ )
+    for ( USHORT nSubWhich=ATTR_PATTERN_START; nSubWhich<=ATTR_PATTERN_END; nSubWhich++ )
     {
         //  only items that are set are interesting
-        if ( rThisSet.GetItemState( nWhich, FALSE, &pThisItem ) == SFX_ITEM_SET )
+        if ( rThisSet.GetItemState( nSubWhich, FALSE, &pThisItem ) == SFX_ITEM_SET )
         {
-            SfxItemState eOldState = rOldSet.GetItemState( nWhich, TRUE, &pOldItem );
+            SfxItemState eOldState = rOldSet.GetItemState( nSubWhich, TRUE, &pOldItem );
             if ( eOldState == SFX_ITEM_SET )
             {
                 //  item is set in OldAttrs (or its parent) -> compare pointers
                 if ( pThisItem == pOldItem )
-                    rThisSet.ClearItem( nWhich );
+                    rThisSet.ClearItem( nSubWhich );
             }
             else if ( eOldState != SFX_ITEM_DONTCARE )
             {
                 //  not set in OldAttrs -> compare item value to default item
-                if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nWhich ) )
-                    rThisSet.ClearItem( nWhich );
+                if ( *pThisItem == rThisSet.GetPool()->GetDefaultItem( nSubWhich ) )
+                    rThisSet.ClearItem( nSubWhich );
             }
         }
     }
@@ -1078,7 +1078,6 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
 BOOL ScPatternAttr::IsVisible() const
 {
     const SfxItemSet& rSet = GetItemSet();
-    const SfxItemPool* pPool = rSet.GetPool();
 
     const SfxPoolItem* pItem;
     SfxItemState eState;
@@ -1270,9 +1269,9 @@ const SfxPoolItem& ScPatternAttr::GetItem( USHORT nWhich, const SfxItemSet& rIte
     return rItemSet.Get(nWhich);
 }
 
-const SfxPoolItem& ScPatternAttr::GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const
+const SfxPoolItem& ScPatternAttr::GetItem( USHORT nSubWhich, const SfxItemSet* pCondSet ) const
 {
-    return GetItem( nWhich, GetItemSet(), pCondSet );
+    return GetItem( nSubWhich, GetItemSet(), pCondSet );
 }
 
 //  GetRotateVal testet vorher ATTR_ORIENTATION
