@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpsave.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 12:10:07 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,21 +215,21 @@ void ScDPSaveMember::WriteToSource( const uno::Reference<uno::XInterface>& xMemb
 
 ScDPSaveDimension::ScDPSaveDimension(const String& rName, BOOL bDataLayout) :
     aName( rName ),
+    pLayoutName( NULL ),
+    pSelectedPage( NULL ),
     bIsDataLayout( bDataLayout ),
     bDupFlag( FALSE ),
     nOrientation( sheet::DataPilotFieldOrientation_HIDDEN ),
+    nFunction( sheet::GeneralFunction_AUTO ),
+    nUsedHierarchy( -1 ),
+    nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bSubTotalDefault( TRUE ),
     nSubTotalCount( 0 ),
     pSubTotalFuncs( NULL ),
-    nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
-    nFunction( sheet::GeneralFunction_AUTO ),
-    nUsedHierarchy( -1 ),
     pReferenceValue( NULL ),
     pSortInfo( NULL ),
     pAutoShowInfo( NULL ),
-    pLayoutInfo( NULL ),
-    pLayoutName( NULL ),
-    pSelectedPage( NULL )
+    pLayoutInfo( NULL )
 {
 }
 
@@ -238,12 +238,12 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     bIsDataLayout( r.bIsDataLayout ),
     bDupFlag( r.bDupFlag ),
     nOrientation( r.nOrientation ),
+    nFunction( r.nFunction ),
+    nUsedHierarchy( r.nUsedHierarchy ),
+    nShowEmptyMode( r.nShowEmptyMode ),
     bSubTotalDefault( r.bSubTotalDefault ),
     nSubTotalCount( r.nSubTotalCount ),
-    pSubTotalFuncs( NULL ),
-    nShowEmptyMode( r.nShowEmptyMode ),
-    nFunction( r.nFunction ),
-    nUsedHierarchy( r.nUsedHierarchy )
+    pSubTotalFuncs( NULL )
 {
     if ( nSubTotalCount && r.pSubTotalFuncs )
     {
