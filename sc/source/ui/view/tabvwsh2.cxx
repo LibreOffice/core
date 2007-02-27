@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:58:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,6 @@ void ScTabViewShell::ExecDraw(SfxRequest& rReq)
     MakeDrawLayer();
 
     ScTabView* pTabView = GetViewData()->GetView();
-    SCTAB nTab = GetViewData()->GetTabNo();
     SfxBindings& rBindings = GetViewFrame()->GetBindings();
 
     Window*     pWin    = pTabView->GetActiveWin();
