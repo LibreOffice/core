@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun3.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:23:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 14:01:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,8 +809,8 @@ BOOL ScViewFunc::PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                 bClipOver = TRUE;
     nUndoEndCol -= nClipStartX + nClipSizeX;
     nUndoEndRow -= nClipStartY + nClipSizeY;        // now contains only the difference added by ExtendMerge
-    nUndoEndCol += nEndCol;
-    nUndoEndRow += nEndRow;                         // destination area, expanded for merged cells
+    nUndoEndCol = sal::static_int_cast<SCCOL>( nUndoEndCol + nEndCol );
+    nUndoEndRow = sal::static_int_cast<SCROW>( nUndoEndRow + nEndRow ); // destination area, expanded for merged cells
 
 //  if (nUndoEndCol < nEndCol) nUndoEndCol = nEndCol;
 //  if (nUndoEndRow < nEndRow) nUndoEndRow = nEndRow;
