@@ -4,9 +4,9 @@
  *
  *  $RCSfile: difexp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:46:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -240,6 +240,7 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
                             aOS.AssignAscii( pNumDataERROR );
 
                         break;
+                    default:;
                 }
             }
             else
