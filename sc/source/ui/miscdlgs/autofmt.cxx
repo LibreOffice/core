@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:02:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:29:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -491,11 +491,16 @@ BOOL bIsOlk = FALSE;
 
 AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* pDoc ) :
         Window          ( pParent, rRes ),
+        pCurData        ( NULL ),
         aVD             ( *this ),
         aScriptedText   ( aVD ),
         xBreakIter      ( pDoc->GetBreakIterator() ),
-        pCurData        ( NULL ),
         bFitWidth       ( FALSE ),
+        aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
+        mnLabelColWidth ( (aPrvSize.Width() - 4) / 4 - 12 ),
+        mnDataColWidth1 ( (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 3 ),
+        mnDataColWidth2 ( (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 4 ),
+        mnRowHeight     ( (aPrvSize.Height() - 4) / 5 ),
         aStrJan         ( ScResId( STR_JAN ) ),
         aStrFeb         ( ScResId( STR_FEB ) ),
         aStrMar         ( ScResId( STR_MAR ) ),
@@ -503,11 +508,6 @@ AutoFmtPreview::AutoFmtPreview( Window* pParent, const ResId& rRes, ScDocument* 
         aStrMid         ( ScResId( STR_MID ) ),
         aStrSouth       ( ScResId( STR_SOUTH ) ),
         aStrSum         ( ScResId( STR_SUM ) ),
-        aPrvSize        ( GetSizePixel().Width() - 6, GetSizePixel().Height() - 30 ),
-        mnLabelColWidth ( (aPrvSize.Width() - 4) / 4 - 12 ),
-        mnDataColWidth1 ( (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 3 ),
-        mnDataColWidth2 ( (aPrvSize.Width() - 4 - 2 * mnLabelColWidth) / 4 ),
-        mnRowHeight     ( (aPrvSize.Height() - 4) / 5 ),
         pNumFmt         ( new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), ScGlobal::eLnge ) )
 {
     Init();
@@ -860,10 +860,10 @@ void AutoFmtPreview::Init()
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::CalcCellArray( BOOL bFitWidth )
+void AutoFmtPreview::CalcCellArray( BOOL bFitWidthP )
 {
     maArray.SetXOffset( 2 );
-    maArray.SetAllColWidths( bFitWidth ? mnDataColWidth2 : mnDataColWidth1 );
+    maArray.SetAllColWidths( bFitWidthP ? mnDataColWidth2 : mnDataColWidth1 );
     maArray.SetColWidth( 0, mnLabelColWidth );
     maArray.SetColWidth( 4, mnLabelColWidth );
 
@@ -932,7 +932,7 @@ void AutoFmtPreview::NotifyChange( ScAutoFormatData* pNewData )
 
 //------------------------------------------------------------------------
 
-void AutoFmtPreview::DoPaint( const Rectangle& rRect )
+void AutoFmtPreview::DoPaint( const Rectangle& /* rRect */ )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
