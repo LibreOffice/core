@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:57:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ class ScModule: public SfxModule, public SfxListener
     BOOL                bIsInExecuteDrop;
 
 public:
-                    SFX_DECL_INTERFACE(SCID_APP);
+                    SFX_DECL_INTERFACE(SCID_APP)
 
                     ScModule( SfxObjectFactory* pFact );
     virtual         ~ScModule();
