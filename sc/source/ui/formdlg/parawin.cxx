@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parawin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:58:07 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 
 ScParaWin::ScParaWin(ScAnyRefDlg* pParent,Point aPos):
     TabPage         (pParent,ScResId(RID_SCTAB_PARAMETER)),
+    pFuncDesc       ( NULL ),
     aFtEditDesc     ( this, ScResId( FT_EDITDESC ) ),
     aFtArgName      ( this, ScResId( FT_PARNAME ) ),
     aFtArgDesc      ( this, ScResId( FT_PARDESC ) ),
@@ -89,8 +90,7 @@ ScParaWin::ScParaWin(ScAnyRefDlg* pParent,Point aPos):
     aEdArg4         ( this, ScResId( ED_ARG4 ) ),
     aRefBtn4        ( this, ScResId( RB_ARG4 ) ),
     aSlider         ( this, ScResId( WND_SLIDER ) ),
-    bRefMode        (FALSE),
-    pFuncDesc       ( NULL)
+    bRefMode        (FALSE)
 {
     Image aFxHC( ScResId( IMG_FX_H ) );
     FreeResource();
@@ -122,7 +122,7 @@ void ScParaWin::UpdateArgDesc( USHORT nArg )
     if (nArg==NOT_FOUND) return;
 
     if ( nArgs > 4 )
-        nArg += GetSliderPos();
+        nArg = sal::static_int_cast<USHORT>( nArg + GetSliderPos() );
         //@ nArg += (USHORT)aSlider.GetThumbPos();
 
     if ( (nArgs > 0) && (nArg<nArgs) )
@@ -275,7 +275,7 @@ void ScParaWin::DelParaArray()
 {
     for(int i=0;i<aParaArray.Count();i++)
     {
-        String* pStr=aParaArray[i];
+        String* pStr=aParaArray[sal::static_int_cast<USHORT>(i)];
         delete pStr;
     }
     aParaArray.Remove(0,aParaArray.Count());
@@ -471,7 +471,7 @@ void ScParaWin::SetSliderPos(USHORT nSliderPos)
     if(aSlider.IsVisible() && nOffset!=nSliderPos)
     {
         aSlider.SetThumbPos(nSliderPos);
-        for ( int i=0; i<4; i++ )
+        for ( USHORT i=0; i<4; i++ )
         {
             UpdateArgInput( nSliderPos, i );
         }
@@ -482,7 +482,7 @@ void ScParaWin::SliderMoved()
 {
     USHORT nOffset = GetSliderPos();
 
-    for ( int i=0; i<4; i++ )
+    for ( USHORT i=0; i<4; i++ )
     {
         UpdateArgInput( nOffset, i );
     }
@@ -578,7 +578,7 @@ IMPL_LINK( ScParaWin, GetEdFocusHdl, ArgInput*, pPtr )
 }
 
 
-IMPL_LINK( ScParaWin, ScrollHdl, ScrollBar*, pBar )
+IMPL_LINK( ScParaWin, ScrollHdl, ScrollBar*, EMPTYARG )
 {
     SliderMoved();
 
