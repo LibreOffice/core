@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tptable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:47:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:37:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,17 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
         SfxTabPage( pParent, ScResId( RID_SCPAGE_TABLE ), rCoreAttrs ),
 
+        aFlPageDir          ( this, ScResId( FL_PAGEDIR ) ),
+        aBtnTopDown         ( this, ScResId( BTN_TOPDOWN ) ),
+        aBtnLeftRight       ( this, ScResId( BTN_LEFTRIGHT ) ),
+        aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
+        aImgLeftRight       ( ScResId( IMG_LEFTRIGHT ) ),
+        aImgTopDown         ( ScResId( IMG_TOPDOWN ) ),
+        aImgLeftRightHC     ( ScResId( IMG_LEFTRIGHT_H ) ),
+        aImgTopDownHC       ( ScResId( IMG_TOPDOWN_H ) ),
+        aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
+        aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
+        aFlPrint            ( this, ScResId( FL_PRINT ) ),
         aBtnHeaders         ( this, ScResId( BTN_HEADER ) ),
         aBtnGrid            ( this, ScResId( BTN_GRID ) ),
         aBtnNotes           ( this, ScResId( BTN_NOTES ) ),
@@ -137,17 +148,6 @@ ScTablePage::ScTablePage( Window* pParent, const SfxItemSet& rCoreAttrs ) :
         aBtnDrawings        ( this, ScResId( BTN_DRAWINGS ) ),
         aBtnFormulas        ( this, ScResId( BTN_FORMULAS ) ),
         aBtnNullVals        ( this, ScResId( BTN_NULLVALS ) ),
-        aFlPrint            ( this, ScResId( FL_PRINT ) ),
-        aBtnTopDown         ( this, ScResId( BTN_TOPDOWN ) ),
-        aBtnLeftRight       ( this, ScResId( BTN_LEFTRIGHT ) ),
-        aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
-        aImgTopDown         ( ScResId( IMG_TOPDOWN ) ),
-        aImgLeftRight       ( ScResId( IMG_LEFTRIGHT ) ),
-        aImgTopDownHC       ( ScResId( IMG_TOPDOWN_H ) ),
-        aImgLeftRightHC     ( ScResId( IMG_LEFTRIGHT_H ) ),
-        aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
-        aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
-        aFlPageDir          ( this, ScResId( FL_PAGEDIR ) ),
         aFlScale            ( this, ScResId( FL_SCALE ) ),
         aFtScaleMode        ( this, ScResId( FT_SCALEMODE ) ),
         aLbScaleMode        ( this, ScResId( LB_SCALEMODE ) ),
@@ -320,17 +320,17 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NOTES),
                                      rCoreSet, rOldSet,
                                      aBtnNotes.IsChecked(),
-                                     aBtnNotes.GetSavedValue() );
+                                     aBtnNotes.GetSavedValue() != STATE_NOCHECK );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_GRID),
                                      rCoreSet, rOldSet,
                                      aBtnGrid.IsChecked(),
-                                     aBtnGrid.GetSavedValue() );
+                                     aBtnGrid.GetSavedValue() != STATE_NOCHECK );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_HEADERS),
                                      rCoreSet, rOldSet,
                                      aBtnHeaders.IsChecked(),
-                                     aBtnHeaders.GetSavedValue() );
+                                     aBtnHeaders.GetSavedValue() != STATE_NOCHECK );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_TOPDOWN),
                                      rCoreSet, rOldSet,
@@ -340,12 +340,12 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_FORMULAS),
                                      rCoreSet, rOldSet,
                                      aBtnFormulas.IsChecked(),
-                                     aBtnFormulas.GetSavedValue() );
+                                     aBtnFormulas.GetSavedValue() != STATE_NOCHECK );
 
     bDataChanged |= lcl_PutBoolItem( GetWhich(SID_SCATTR_PAGE_NULLVALS),
                                      rCoreSet, rOldSet,
                                      aBtnNullVals.IsChecked(),
-                                     aBtnNullVals.GetSavedValue() );
+                                     aBtnNullVals.GetSavedValue() != STATE_NOCHECK );
 
     //------------------
     // Erste Druckseite:
@@ -412,10 +412,10 @@ BOOL ScTablePage::FillItemSet( SfxItemSet& rCoreSet )
 
 //------------------------------------------------------------------------
 
-int ScTablePage::DeactivatePage( SfxItemSet* pSet )
+int ScTablePage::DeactivatePage( SfxItemSet* pSetP )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( pSetP )
+        FillItemSet( *pSetP );
 
     return LEAVE_PAGE;
 }
@@ -457,7 +457,7 @@ IMPL_LINK( ScTablePage, PageNoHdl, CheckBox*, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScTablePage, ScaleHdl, ListBox*, pListBox )
+IMPL_LINK( ScTablePage, ScaleHdl, ListBox*, EMPTYARG )
 {
     // controls for "Reduce/enlarge"
     bool bPercent = (aLbScaleMode.GetSelectEntryPos() == SC_TPTABLE_SCALE_PERCENT);
