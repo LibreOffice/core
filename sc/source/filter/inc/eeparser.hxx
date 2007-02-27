@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eeparser.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:55:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:32:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ struct ScHTMLImage
                         ~ScHTMLImage()
                             { if ( pGraphic ) delete pGraphic; }
 };
-DECLARE_LIST( ScHTMLImageList, ScHTMLImage* );
+DECLARE_LIST( ScHTMLImageList, ScHTMLImage* )
 
 struct ScEEParseEntry
 {
@@ -132,7 +132,7 @@ struct ScEEParseEntry
                                 }
                             }
 };
-DECLARE_LIST( ScEEParseList, ScEEParseEntry* );
+DECLARE_LIST( ScEEParseList, ScEEParseEntry* )
 
 
 class EditEngine;
