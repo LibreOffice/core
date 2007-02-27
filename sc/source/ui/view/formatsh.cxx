@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:55:46 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:51:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,6 @@ void __EXPORT ScFormatShell::GetStyleState( SfxItemSet& rSet )
     ScDocument*             pDoc        = GetViewData()->GetDocument();
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
     SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
-    SfxStyleSheetBase*      pStyleSheet = NULL;
 
     BOOL bProtected = FALSE;
     SCTAB nTabCount = pDoc->GetTableCount();
@@ -508,7 +507,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         // Vorlagen zusammen) (#44748#)
                         //      pAttrItem = GetSelectionPattern();
 
-                        ScViewData* pViewData = GetViewData();
+                        // ScViewData* pViewData = GetViewData();
                         SCCOL       nCol = pViewData->GetCurX();
                         SCROW       nRow = pViewData->GetCurY();
                         pAttrItem = pDoc->GetPattern( nCol, nRow, nCurTab );
@@ -722,8 +721,8 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 SvxNumberInfoItem* pNumberInfoItem = NULL;
 
                 SfxStyleFamily  eFam    = pStyleSheet->GetFamily();
-                ScDocument*     pDoc    = GetViewData()->GetDocument();
-                ScDocShell*     pDocSh  = GetViewData()->GetDocShell();
+                // ScDocument*     pDoc    = GetViewData()->GetDocument();
+                // ScDocShell*     pDocSh  = GetViewData()->GetDocShell();
                 //CHINA001 ScStyleDlg*      pDlg    = NULL;
                 SfxAbstractTabDialog* pDlg    = NULL; //CHINA001
                 USHORT          nRsc    = 0;
@@ -929,7 +928,6 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
 {
     ScModule*           pScMod      = SC_MOD();
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    SfxBindings&        rBindings   = pTabViewShell->GetViewFrame()->GetBindings();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
 
@@ -1026,8 +1024,8 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
                     // considered.
                     const SfxItemSet& rOldSet =
                         pTabViewShell->GetSelectionPattern()->GetItemSet();
-                    SfxItemPool* pPool = GetViewData()->GetDocument()->GetPool();
-                    SfxItemSet aNewSet( *pPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
+                    SfxItemPool* pDocPool = GetViewData()->GetDocument()->GetPool();
+                    SfxItemSet aNewSet( *pDocPool, ATTR_PATTERN_START, ATTR_PATTERN_END );
                     aNewSet.Put( *pItem );
                     pTabViewShell->ApplyAttributes( &aNewSet, &rOldSet, TRUE );
                 }
@@ -1150,7 +1148,6 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
     SfxBindings&            rBindings   = pViewData->GetBindings();
     const ScPatternAttr*    pAttrs      = pTabViewShell->GetSelectionPattern();
     const SfxItemSet*       pSet        = rReq.GetArgs();
-    const SfxItemSet*       pReqArgs    = rReq.GetArgs();
     USHORT                  nSlot       = rReq.GetSlot();
     SfxAllItemSet*          pNewSet = 0;
 
@@ -1314,7 +1311,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 //              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_LEFT );
-                break;
+                //break;
 
             case SID_ALIGNRIGHT:
                 rReq.SetSlot( SID_H_ALIGNCELL );
@@ -1324,7 +1321,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 //              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_RIGHT );
-                break;
+                //break;
 
             case SID_ALIGNCENTERHOR:
                 rReq.SetSlot( SID_H_ALIGNCELL );
@@ -1334,7 +1331,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 //              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_CENTER );
-                break;
+                //break;
 
             case SID_ALIGNBLOCK:
                 rReq.SetSlot( SID_H_ALIGNCELL );
@@ -1344,7 +1341,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 //              APPLY_HOR_JUSTIFY( SVX_HOR_JUSTIFY_BLOCK );
-                break;
+                //break;
 
             case SID_ALIGNTOP:
                 rReq.SetSlot( SID_V_ALIGNCELL );
@@ -1354,7 +1351,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 //              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_TOP );
-                break;
+                //break;
 
             case SID_ALIGNBOTTOM:
                 rReq.SetSlot( SID_V_ALIGNCELL );
@@ -1364,7 +1361,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 //              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_BOTTOM );
-                break;
+                //break;
 
             case SID_ALIGNCENTERVER:
                 rReq.SetSlot( SID_V_ALIGNCELL );
@@ -1374,7 +1371,7 @@ void ScFormatShell::ExecuteTextAttr( SfxRequest& rReq )
                 ExecuteSlot( rReq, GetInterface() );
                 return;
 //              APPLY_VER_JUSTIFY( SVX_VER_JUSTIFY_CENTER );
-                break;
+                //break;
 
             default:
             break;
@@ -1666,7 +1663,6 @@ void ScFormatShell::GetAttrState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     const SfxItemSet&    rAttrSet   = pTabViewShell->GetSelectionPattern()->GetItemSet();
-    const SfxItemSet*    pParentSet = rAttrSet.GetParent();
     const SvxBorderLine* pLine      = pTabViewShell->GetDefaultFrameLine();
     const SvxBrushItem&  rBrushItem = (const SvxBrushItem&)rAttrSet.Get( ATTR_BACKGROUND );
     UINT8                nTrans     = rBrushItem.GetColor().GetTransparency();
@@ -1998,22 +1994,9 @@ void ScFormatShell::GetBckColState( SfxItemSet& rSet )
 void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
-    BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
-    SfxApplication* pSfxApp = SFX_APP();
 
-    ScViewData* pViewData   = GetViewData();
+    // ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
-    ScMarkData& rMark       = pViewData->GetMarkData();
-    SCCOL       nPosX       = pViewData->GetCurX();
-    SCROW       nPosY       = pViewData->GetCurY();
-    SCTAB       nTab        = pViewData->GetTabNo();
-    USHORT      nMyId       = 0;
-
-    SCTAB nTabCount = pDoc->GetTableCount();
-    SCTAB nTabSelCount = rMark.GetSelectCount();
-
-
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
