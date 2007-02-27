@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:57:24 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,8 @@ using namespace xmloff::token;
 
 ScXMLCellImportPropertyMapper::ScXMLCellImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
-        SvXMLImport& rImport) :
-    SvXMLImportPropertyMapper( rMapper, rImport )
+        SvXMLImport& rImportP) :
+    SvXMLImportPropertyMapper( rMapper, rImportP )
 {
 }
 
@@ -251,8 +251,8 @@ void ScXMLCellImportPropertyMapper::finished(::std::vector< XMLPropertyState >& 
 
 ScXMLRowImportPropertyMapper::ScXMLRowImportPropertyMapper(
         const UniReference< XMLPropertySetMapper >& rMapper,
-        SvXMLImport& rImport) :
-    SvXMLImportPropertyMapper( rMapper, rImport )
+        SvXMLImport& rImportP) :
+    SvXMLImportPropertyMapper( rMapper, rImportP )
 {
 }
 
@@ -324,8 +324,8 @@ public:
 ScXMLMapContext::ScXMLMapContext(SvXMLImport& rImport, sal_uInt16 nPrfx,
             const OUString& rLName, const Reference< xml::sax::XAttributeList > & xAttrList )
     : SvXMLImportContext( rImport, nPrfx, rLName ),
-    sCondition(),
     sApplyStyle(),
+    sCondition(),
     sBaseCell()
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -556,12 +556,12 @@ XMLTableStyleContext::XMLTableStyleContext( ScXMLImport& rImport,
         const Reference< XAttributeList > & xAttrList,
         SvXMLStylesContext& rStyles, sal_uInt16 nFamily, sal_Bool bDefaultStyle ) :
     XMLPropStyleContext( rImport, nPrfx, rLName, xAttrList, rStyles, nFamily, bDefaultStyle ),
-    sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
     sDataStyleName(),
+    sNumberFormat(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberFormat"))),
     pStyles(&rStyles),
     nNumberFormat(-1),
-    bParentSet(sal_False),
-    bConditionalFormatCreated(sal_False)
+    bConditionalFormatCreated(sal_False),
+    bParentSet(sal_False)
 {
 }
 
@@ -1010,10 +1010,10 @@ SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleChildContext(
 }
 
 SvXMLStyleContext *ScXMLMasterStylesContext::CreateStyleStyleChildContext(
-        sal_uInt16 nFamily,
-        sal_uInt16 nPrefix,
-        const OUString& rLocalName,
-        const Reference< XAttributeList > & xAttrList )
+        sal_uInt16 /* nFamily */,
+        sal_uInt16 /* nPrefix */,
+        const OUString& /* rLocalName */,
+        const Reference< XAttributeList > & /* xAttrList */ )
 {
     return 0;
 }
