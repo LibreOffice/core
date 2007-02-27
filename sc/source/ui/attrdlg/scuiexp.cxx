@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiexp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:15:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:00:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ namespace scui
         //  ScDialogsResMgr::GetResMgr();
         return pFactory;
     }
-};
+}
 
 extern "C"
 {
