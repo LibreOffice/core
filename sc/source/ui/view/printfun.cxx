@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:07:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:55:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,13 +256,13 @@ ScPrintFunc::ScPrintFunc( ScDocShell* pShell, SfxPrinter* pNewPrinter, SCTAB nTa
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
         pUserArea           ( pArea ),
-        pPageData           ( pData ),
-        nTotalPages         ( 0 ),
-        nTabPages           ( 0 ),
         bState              ( FALSE ),
+        bSourceRangeValid   ( FALSE ),
         bPrintCurrentTable  ( FALSE ),
         bMultiArea          ( FALSE ),
-        bSourceRangeValid   ( FALSE )
+        nTabPages           ( 0 ),
+        nTotalPages         ( 0 ),
+        pPageData           ( pData )
 {
     pDev = pPrinter;
     aSrcOffset = pPrinter->PixelToLogic( pPrinter->GetPageOffsetPixel(), MAP_100TH_MM );
@@ -279,13 +279,13 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell, SCTAB nTab,
         nPageStart          ( nPage ),
         nDocPages           ( nDocP ),
         pUserArea           ( pArea ),
-        pPageData           ( NULL ),
-        nTotalPages         ( 0 ),
-        nTabPages           ( 0 ),
         bState              ( FALSE ),
+        bSourceRangeValid   ( FALSE ),
         bPrintCurrentTable  ( FALSE ),
         bMultiArea          ( FALSE ),
-        bSourceRangeValid   ( FALSE )
+        nTabPages           ( 0 ),
+        nTotalPages         ( 0 ),
+        pPageData           ( NULL )
 {
     pDev = pOutDev;
     Construct( pOptions );
@@ -297,10 +297,10 @@ ScPrintFunc::ScPrintFunc( OutputDevice* pOutDev, ScDocShell* pShell,
         pPrinter            ( NULL ),
         pDrawView           ( NULL ),
         pUserArea           ( NULL ),
-        pPageData           ( NULL ),
+        bSourceRangeValid   ( FALSE ),
         bPrintCurrentTable  ( FALSE ),
         bMultiArea          ( FALSE ),
-        bSourceRangeValid   ( FALSE )
+        pPageData           ( NULL )
 {
     pDev = pOutDev;
 
@@ -347,7 +347,7 @@ void ScPrintFunc::FillPageData()
 {
     if (pPageData)
     {
-        USHORT nCount = pPageData->GetCount();
+        USHORT nCount = sal::static_int_cast<USHORT>( pPageData->GetCount() );
         ScPrintRangeData& rData = pPageData->GetData(nCount);       // hochzaehlen
 
         rData.SetPrintRange( ScRange( nStartCol, nStartRow, nPrintTab,
@@ -417,7 +417,7 @@ void lcl_HidePrint( ScTableInfo& rTabInfo, SCCOL nX1, SCCOL nX2 )
 //      -   Ole-Object (DocShell::Draw)
 //      -   Vorschau bei Vorlagen
 
-void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrintFactor,
+void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double /* nPrintFactor */,
                             const Rectangle& rBound, ScViewData* pViewData, BOOL bMetaFile )
 {
     //! nPrintFactor auswerten !!!
@@ -486,7 +486,7 @@ void ScPrintFunc::DrawToDev( ScDocument* pDoc, OutputDevice* pDev, double nPrint
 
     Rectangle aLines;
     ScRange aRange( nX1,nY1,nTab, nX2,nY2,nTab );
-    BOOL bAddLines = pDoc->HasLines( aRange, aLines );
+//    BOOL bAddLines = pDoc->HasLines( aRange, aLines );
 
     long nTwipsSizeX = 0;
     for (SCCOL i=nX1; i<=nX2; i++)
@@ -1167,7 +1167,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
         ePos = GPOS_NONE;
 
     Point aPos;
-    Size aSize = aGrfSize;
+    Size aDrawSize = aGrfSize;
 
     FASTBOOL bDraw = TRUE;
 //  FASTBOOL bRetouche = TRUE;
@@ -1204,7 +1204,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
 
         case GPOS_AREA:
                       aPos = rOrg.TopLeft();
-                      aSize = rOrg.GetSize();
+                      aDrawSize = rOrg.GetSize();
 //                    bRetouche = FALSE;
                       break;
         case GPOS_TILED:
@@ -1265,7 +1265,7 @@ void lcl_DrawGraphic( const SvxBrushItem &rBrush, OutputDevice *pOut, OutputDevi
 
         default: DBG_ASSERT( !pOut, "new Graphic position?" );
     }
-    Rectangle aGrf( aPos,aSize );
+    Rectangle aGrf( aPos,aDrawSize );
     if ( bDraw && aGrf.IsOver( rOut ) )
     {
         lcl_DrawGraphic( *pGraphic, pOut, aGrf, rOut );
@@ -1385,6 +1385,10 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
                         aFrameRect.Right(), aFrameRect.Top()+nShadowY,
                         aFrameRect.Right()+nShadowX, aFrameRect.Bottom()+nShadowY ) );
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 
@@ -1559,12 +1563,12 @@ void ScPrintFunc::LocateArea( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     long nLogStY = aLogPos.Y();
 
     SCCOL nCol;
-    Point aOffset;
+    Point aTwipOffset;
     for (nCol=0; nCol<nX1; nCol++)
-        aOffset.X() -= pDoc->GetColWidth( nCol, nPrintTab );
-    aOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nPrintTab );
+        aTwipOffset.X() -= pDoc->GetColWidth( nCol, nPrintTab );
+    aTwipOffset.Y() -= pDoc->GetRowHeight( 0, nY1-1, nPrintTab );
 
-    Point aMMOffset( aOffset );
+    Point aMMOffset( aTwipOffset );
     aMMOffset.X() = (long)(aMMOffset.X() * HMM_PER_TWIPS);
     aMMOffset.Y() = (long)(aMMOffset.Y() * HMM_PER_TWIPS);
     aMMOffset += Point( nLogStX, nLogStY );
