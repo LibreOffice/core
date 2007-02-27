@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:24:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:54:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,6 +178,8 @@ class ScCondFormatEntry : public ScConditionEntry
     String                  aStyleName;
     ScConditionalFormat*    pParent;
 
+    using ScConditionEntry::operator==;
+
 public:
             ScCondFormatEntry( ScConditionMode eOper,
                                 const String& rExpr1, const String& rExpr2,
@@ -272,7 +274,7 @@ public:
 typedef ScConditionalFormat* ScConditionalFormatPtr;
 
 SV_DECL_PTRARR_SORT(ScConditionalFormats_Impl, ScConditionalFormatPtr,
-                        SC_COND_GROW, SC_COND_GROW);
+                        SC_COND_GROW, SC_COND_GROW)
 
 class ScConditionalFormatList : public ScConditionalFormats_Impl
 {
