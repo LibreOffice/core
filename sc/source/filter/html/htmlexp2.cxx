@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:34:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,12 +61,6 @@
 #include <svtools/urihelper.hxx>
 #endif
 #include <tools/urlobj.hxx>
-
-#if defined(WIN) || defined(WNT)
-#ifndef _SVWIN_H
-#include <tools/svwin.h>
-#endif
-#endif
 
 #include "htmlexp.hxx"
 #include "global.hxx"
@@ -133,7 +127,7 @@ void ScHTMLExport::FillGraphList( const SdrPage* pPage, SCTAB nTab,
                 // All cells empty under object?
                 BOOL bInCell = (pDoc->GetEmptyLinesInBlock(
                     nCol1, nRow1, nTab, nCol2, nRow2, nTab, DIR_TOP )
-                    == (nRow2 - nRow1));    // rows-1 !
+                    == static_cast< SCSIZE >( nRow2 - nRow1 ));    // rows-1 !
                 if ( bInCell )
                 {   // Spacing in spanning cell
                     Rectangle aCellRect = pDoc->GetMMRect(
