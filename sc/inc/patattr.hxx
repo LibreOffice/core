@@ -4,9 +4,9 @@
  *
  *  $RCSfile: patattr.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:48:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,8 @@ public:
 
     virtual int             operator==(const SfxPoolItem& rCmp) const;
 
-    const SfxPoolItem&      GetItem( USHORT nWhich ) const
-                                        { return GetItemSet().Get(nWhich); }
+    const SfxPoolItem&      GetItem( USHORT nWhichP ) const
+                                        { return GetItemSet().Get(nWhichP); }
 
     static const SfxPoolItem& GetItem( USHORT nWhich, const SfxItemSet& rItemSet, const SfxItemSet* pCondSet );
     const SfxPoolItem&      GetItem( USHORT nWhich, const SfxItemSet* pCondSet ) const;
