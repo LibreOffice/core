@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:06:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:58:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,13 +122,13 @@ enum ScNameInputType
 
 SFX_IMPL_CHILDWINDOW(ScInputWindowWrapper,FID_INPUTLINE_STATUS)
 
-ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParent,
+ScInputWindowWrapper::ScInputWindowWrapper( Window*          pParentP,
                                             USHORT           nId,
                                             SfxBindings*     pBindings,
-                                            SfxChildWinInfo* pInfo )
-    :   SfxChildWindow( pParent, nId )
+                                            SfxChildWinInfo* /* pInfo */ )
+    :   SfxChildWindow( pParentP, nId )
 {
-    ScInputWindow* pWin=new ScInputWindow( pParent, pBindings );
+    ScInputWindow* pWin=new ScInputWindow( pParentP, pBindings );
     pWindow = pWin;
 
     pWin->Show();
@@ -165,13 +165,13 @@ ScInputWindow::ScInputWindow( Window* pParent, SfxBindings* pBind ) :
 #endif
         aWndPos         ( this ),
         aTextWindow     ( this ),
+        pInputHdl       ( NULL ),
+        pBindings       ( pBind ),
         aTextOk         ( ScResId( SCSTR_QHELP_BTNOK ) ),       // nicht immer neu aus Resource
         aTextCancel     ( ScResId( SCSTR_QHELP_BTNCANCEL ) ),
         aTextSum        ( ScResId( SCSTR_QHELP_BTNSUM ) ),
         aTextEqual      ( ScResId( SCSTR_QHELP_BTNEQUAL ) ),
-        pBindings       ( pBind ),
-        bIsOkCancelMode ( FALSE ),
-        pInputHdl       ( NULL )
+        bIsOkCancelMode ( FALSE )
 {
     ScModule*        pScMod  = SC_MOD();
     SfxImageManager* pImgMgr = SfxImageManager::GetImageManager( pScMod );
@@ -620,7 +620,7 @@ String __EXPORT ScInputWindow::GetText() const
 EditView* ScInputWindow::ActivateEdit( const String&     rText,
                                        const ESelection& rSel )
 {
-    if ( !aTextWindow.IsActive() )
+    if ( !aTextWindow.IsInputActive() )
     {
         aTextWindow.StartEditEngine();
         aTextWindow.GrabFocus();
@@ -631,9 +631,9 @@ EditView* ScInputWindow::ActivateEdit( const String&     rText,
     return aTextWindow.GetEditView();
 }
 
-BOOL ScInputWindow::IsActive()
+BOOL ScInputWindow::IsInputActive()
 {
-    return aTextWindow.IsActive();
+    return aTextWindow.IsInputActive();
 }
 
 EditView* ScInputWindow::GetEditView()
@@ -926,7 +926,7 @@ void __EXPORT ScTextWnd::Command( const CommandEvent& rCEvt )
     bInputMode = FALSE;
 }
 
-void ScTextWnd::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void ScTextWnd::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
     if ( pEditView )
     {
@@ -1118,7 +1118,7 @@ void ScTextWnd::StartEditEngine()
 
         //  as long as EditEngine and DrawText sometimes differ for CTL text,
         //  repaint now to have the EditEngine's version visible
-        SfxObjectShell* pObjSh = SfxObjectShell::Current();
+//        SfxObjectShell* pObjSh = SfxObjectShell::Current();
         if ( pObjSh && pObjSh->ISA(ScDocShell) )
         {
             ScDocument* pDoc = ((ScDocShell*)pObjSh)->GetDocument();    // any document
@@ -1135,7 +1135,7 @@ void ScTextWnd::StartEditEngine()
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 }
 
-IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, aNotify)
+IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, EMPTYARG)
 {
     if (pEditView && !bInputMode)
     {
@@ -1191,7 +1191,6 @@ void ScTextWnd::SetTextString( const String& rNewString )
 
         long nInvPos = 0;
         long nStartPos = 0;
-        long nYPos = 0;
         long nTextSize = 0;
 
         if (!pEditEngine)
@@ -1273,7 +1272,7 @@ const String& ScTextWnd::GetTextString() const
     return aString;
 }
 
-BOOL ScTextWnd::IsActive()
+BOOL ScTextWnd::IsInputActive()
 {
     return HasFocus();
 }
@@ -1450,7 +1449,7 @@ void ScPosWnd::FillRangeNames()
                 }
 #ifndef ICC
                 qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
-                    &ScRangeData::QsortNameCompare );
+                    &ScRangeData_QsortNameCompare );
 #else
                 qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
                     ICCQsortNameCompare );
@@ -1476,7 +1475,6 @@ void ScPosWnd::FillFunctions()
     {
         const ScFunctionList* pFuncList = ScGlobal::GetStarCalcFunctionList();
         ULONG nListCount = pFuncList->GetCount();
-        ScFunctionMgr* pFuncMgr = ScGlobal::GetStarCalcFunctionMgr();
         for (USHORT i=0; i<nMRUCount; i++)
         {
             USHORT nId = pMRUList[i];
@@ -1502,8 +1500,7 @@ void ScPosWnd::FillFunctions()
     SetText(aFirstName);
 }
 
-void __EXPORT ScPosWnd::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                      const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScPosWnd::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( !bFormulaMode )
     {
