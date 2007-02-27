@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpdimsave.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:53:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:03:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,7 +373,7 @@ ScDPDimensionSaveData::~ScDPDimensionSaveData()
 {
 }
 
-bool ScDPDimensionSaveData::operator==( const ScDPDimensionSaveData& r ) const
+bool ScDPDimensionSaveData::operator==( const ScDPDimensionSaveData& ) const
 {
     return false;
 }
