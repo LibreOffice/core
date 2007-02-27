@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen8.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:42:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:02:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -349,6 +349,10 @@ void ScDocument::ModifyStyleSheet( SfxStyleSheetBase& rStyleSheet,
                         SvxLanguageItem( eNewLang, ATTR_LANGUAGE_FORMAT ) );
             }
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
@@ -462,7 +466,7 @@ BYTE ScDocument::GetEditTextDirection(SCTAB nTab) const
         // else (invalid for EditEngine): keep "default"
     }
 
-    return eRet;
+    return sal::static_int_cast<BYTE>(eRet);
 }
 
 //------------------------------------------------------------------------
@@ -542,9 +546,7 @@ BOOL ScDocument::IdleCalcTextWidth()            // TRUE = demnaechst wieder vers
     pStyle = (ScStyleSheet*)pStylePool->Find( pTable->aPageStyle,
                                               SFX_STYLE_FAMILY_PAGE );
 
-    if ( !pStyle )
-        DBG_ERROR( "Missing StyleSheet :-/" );
-
+    DBG_ASSERT( pStyle, "Missing StyleSheet :-/" );
 
     BOOL bProgress = FALSE;
     if ( pStyle && 0 == GET_SCALEVALUE(pStyle->GetItemSet(),ATTR_PAGE_SCALETOPAGES) )
@@ -1440,7 +1442,7 @@ void ScDocument::UpdateRefAreaLinks( UpdateRefMode eUpdateRefMode,
     }
 }
 
-void ScDocument::SaveAreaLinks(SvStream& rStream) const
+void ScDocument::SaveAreaLinks(SvStream& /* rStream */) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -1530,7 +1532,7 @@ void ScDocument::LoadAreaLinks(SvStream& rStream)
 //------------------------------------------------------------------------
 
 // TimerDelays etc.
-void ScDocument::KeyInput( const KeyEvent& rKEvt )
+void ScDocument::KeyInput( const KeyEvent& )
 {
     if ( pChartListenerCollection->GetCount() )
         pChartListenerCollection->StartTimer();
