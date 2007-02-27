@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:41:21 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:21:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -186,12 +186,17 @@ protected:
 public:
                     TYPEINFO();
 
-                    SFX_DECL_INTERFACE(SCID_DOC_SHELL);
+                    SFX_DECL_INTERFACE(SCID_DOC_SHELL)
                     SFX_DECL_OBJECTFACTORY();
 
                     ScDocShell( const ScDocShell& rDocShell );
                     ScDocShell( SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED );
                     ~ScDocShell();
+
+    using SotObject::GetInterface;
+    using SfxShell::Activate;           // with BOOL bMDI
+    using SfxShell::Deactivate;         // with BOOL bMDI
+    using SfxObjectShell::Print;        // print styles
 
     virtual void    Activate();
     virtual void    Deactivate();
@@ -227,6 +232,8 @@ public:
                                 USHORT nAspect = ASPECT_CONTENT );
 
     virtual void    SetVisArea( const Rectangle & rVisArea );
+
+    using SfxObjectShell::GetVisArea;
     virtual Rectangle GetVisArea( USHORT nAspect ) const;
 
     virtual Printer* GetDocumentPrinter();
@@ -285,7 +292,7 @@ public:
     void            NotifyStyle( const SfxStyleSheetHint& rHint );
     void            DoAutoStyle( const ScRange& rRange, const String& rStyle );
 
-    Window*         GetDialogParent();
+    Window*         GetActiveDialogParent();
     void            ErrorMessage( USHORT nGlobStrId );
     BOOL            IsEditable() const;
 
