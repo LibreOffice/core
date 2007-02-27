@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:45:18 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:06:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ TYPEINIT1( ScDocShell, SfxObjectShell );        // SfxInPlaceObject: kein Type-I
 
 void __EXPORT ScDocShell::FillClass( SvGlobalName* pClassName,
                                         sal_uInt32* pFormat,
-                                        String* pAppName,
+                                        String* /* pAppName */,
                                         String* pFullTypeName,
                                         String* pShortTypeName,
                                         sal_Int32 nFileFormat ) const
@@ -627,7 +627,7 @@ void ScDocShell::AfterXMLLoading(sal_Bool bRet)
     aDocument.DisableIdle( FALSE );
 }
 
-BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
+BOOL ScDocShell::LoadXML( SfxMedium* pLoadMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::LoadXML" );
 
@@ -642,7 +642,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Refer
     // through ScDocShell.
     aDocument.SetXMLFromWrapper( TRUE );
 
-    ScXMLImportWrapper aImport( aDocument, pMedium, xStor );
+    ScXMLImportWrapper aImport( aDocument, pLoadMedium, xStor );
 
     sal_Bool bRet(sal_False);
     ErrCode nError = ERRCODE_NONE;
@@ -652,7 +652,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Refer
         bRet = aImport.Import(sal_True, nError);
 
     if ( nError )
-        pMedium->SetError( nError );
+        pLoadMedium->SetError( nError );
 
     aDocument.SetXMLFromWrapper( FALSE );
     AfterXMLLoading(bRet);
@@ -662,13 +662,13 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, const ::com::sun::star::uno::Refer
     return bRet;
 }
 
-BOOL ScDocShell::SaveXML( SfxMedium* pMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
+BOOL ScDocShell::SaveXML( SfxMedium* pSaveMedium, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStor )
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "sb99857", "ScDocShell::SaveXML" );
 
     aDocument.DisableIdle( TRUE );
 
-    ScXMLImportWrapper aImport( aDocument, pMedium, xStor );
+    ScXMLImportWrapper aImport( aDocument, pSaveMedium, xStor );
     sal_Bool bRet(sal_False);
     if (GetCreateMode() != SFX_CREATE_MODE_ORGANIZER)
         bRet = aImport.Export(sal_False);
@@ -731,8 +731,7 @@ BOOL __EXPORT ScDocShell::Load( SfxMedium& rMedium )
 }
 
 
-void __EXPORT ScDocShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScDocShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if (rHint.ISA(SfxSimpleHint))                               // ohne Parameter
     {
@@ -777,7 +776,7 @@ BOOL __EXPORT ScDocShell::LoadFrom( SfxMedium& rMedium )
 
     ScRefreshTimerProtector( aDocument.GetRefreshTimerControlAddress() );
 
-    WaitObject aWait( GetDialogParent() );
+    WaitObject aWait( GetActiveDialogParent() );
 
     BOOL bRet = FALSE;
 
@@ -1449,7 +1448,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
     ScHorizontalCellIterator aIter( &aDocument, nTab, nStartCol, nStartRow,
         nEndCol, nEndRow );
     ScBaseCell* pCell;
-    while ( pCell = aIter.GetNext( nCol, nRow ) )
+    while ( ( pCell = aIter.GetNext( nCol, nRow ) ) != NULL )
     {
         BOOL bProgress = FALSE;     // only upon line change
         if ( nNextRow < nRow )
@@ -1534,7 +1533,7 @@ void ScDocShell::AsciiSave( SvStream& rStream, const ScImportOptions& rAsciiOpt 
                         ((ScFormulaCell*)pCell)->GetFormula( aString );
                         bString = TRUE;
                     }
-                    else if ( nErrCode = ((ScFormulaCell*)pCell)->GetErrCode() )
+                    else if ( ( nErrCode = ((ScFormulaCell*)pCell)->GetErrCode() ) != 0 )
                     {
                         aString = ScGlobal::GetErrorString( nErrCode );
                         bString = TRUE;
@@ -1799,7 +1798,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
              aFltName.EqualsAscii(pFilterExcel97) || aFltName.EqualsAscii(pFilterEx5Temp) ||
              aFltName.EqualsAscii(pFilterEx95Temp) || aFltName.EqualsAscii(pFilterEx97Temp))
     {
-        WaitObject aWait( GetDialogParent() );
+        WaitObject aWait( GetActiveDialogParent() );
 
         bool bDoSave = true;
         if( ScTabViewShell* pViewShell = GetBestViewShell() )
@@ -1860,7 +1859,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 sItStr = aDefOptions.BuildString();
             }
 
-            WaitObject aWait( GetDialogParent() );
+            WaitObject aWait( GetActiveDialogParent() );
             ScImportOptions aOptions( sItStr );
             AsciiSave( *pStream, aOptions );
             bRet = TRUE;
@@ -1889,7 +1888,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             sCharSet = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
         }
 
-        WaitObject aWait( GetDialogParent() );
+        WaitObject aWait( GetActiveDialogParent() );
 // HACK damit Sba geoffnetes TempFile ueberschreiben kann
         rMed.CloseOutStream();
         BOOL bHasMemo = FALSE;
@@ -1960,7 +1959,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
                 sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
             }
 
-            WaitObject aWait( GetDialogParent() );
+            WaitObject aWait( GetActiveDialogParent() );
             ScExportDif( *pStream, &aDocument, ScAddress(0,0,0),
                 ScGlobal::GetCharsetValue(sItStr) );
             bRet = TRUE;
@@ -1975,7 +1974,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
         {
-            WaitObject aWait( GetDialogParent() );
+            WaitObject aWait( GetActiveDialogParent() );
 
             SCCOL nEndCol;
             SCROW nEndRow;
@@ -1992,7 +1991,7 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if ( pStream )
         {
-            WaitObject aWait( GetDialogParent() );
+            WaitObject aWait( GetActiveDialogParent() );
             ScImportExport aImExport( &aDocument );
             aImExport.SetStreamPath( rMed.GetName() );
             bRet = aImExport.ExportStream( *pStream, rMed.GetBaseURL( true ), SOT_FORMATSTR_ID_HTML );
@@ -2125,15 +2124,13 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
 
 #define __SCDOCSHELL_INIT \
         aDocument       ( SCDOCMODE_DOCUMENT, this ), \
-        pUndoManager    ( NULL ), \
+        aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))), \
+        nPrtToScreenFactor( 1.0 ), \
         pImpl           ( new DocShell_Impl ), \
+        pUndoManager    ( NULL ), \
         bHeaderOn       ( TRUE ), \
         bFooterOn       ( TRUE ), \
-        pDocHelper      ( NULL ), \
-        pAutoStyleList  ( NULL ), \
-        pOldJobSetup    ( NULL ), \
-        pPaintLockData  ( NULL ), \
-        nPrtToScreenFactor( 1.0 ), \
+        bNoInformLost   ( TRUE ), \
         bIsEmpty        ( TRUE ), \
         bIsInUndo       ( FALSE ), \
         bDocumentModifiedPending( FALSE ), \
@@ -2141,14 +2138,19 @@ BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static
         nCanUpdate (com::sun::star::document::UpdateDocMode::ACCORDING_TO_CONFIG), \
         bUpdateEnabled  ( TRUE ), \
         pOldAutoDBRange ( NULL ), \
+        pDocHelper      ( NULL ), \
+        pAutoStyleList  ( NULL ), \
+        pPaintLockData  ( NULL ), \
+        pOldJobSetup    ( NULL ), \
         pModificator    ( NULL )
 
 //------------------------------------------------------------------
 
 ScDocShell::ScDocShell( const ScDocShell& rShell )
-    :   SfxObjectShell( rShell.GetCreateMode() ),
-        aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))),
-        bNoInformLost( TRUE ),
+    :   SvRefBase(),
+        SotObject(),
+        SfxObjectShell( rShell.GetCreateMode() ),
+        SfxListener(),
         __SCDOCSHELL_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
@@ -2177,8 +2179,6 @@ ScDocShell::ScDocShell( const ScDocShell& rShell )
 
 ScDocShell::ScDocShell( SfxObjectCreateMode eMode )
     :   SfxObjectShell( eMode ),
-        aDdeTextFmt(String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("TEXT"))),
-        bNoInformLost( TRUE ),
         __SCDOCSHELL_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScDocShell::ScDocShell" );
@@ -2349,8 +2349,8 @@ void ScDocShell::GetDocStat( ScDocStat& rDocStat )
 
     if ( pPrinter )
         for ( SCTAB i=0; i<rDocStat.nTableCount; i++ )
-            rDocStat.nPageCount +=
-                (USHORT) ScPrintFunc( this, pPrinter, i ).GetTotalPages();
+            rDocStat.nPageCount = sal::static_int_cast<USHORT>( rDocStat.nPageCount +
+                (USHORT) ScPrintFunc( this, pPrinter, i ).GetTotalPages() );
 }
 
 
@@ -2381,7 +2381,7 @@ SfxDocumentInfoDialog* __EXPORT ScDocShell::CreateDocumentInfoDialog(
     return pDlg;
 }
 
-Window* ScDocShell::GetDialogParent()
+Window* ScDocShell::GetActiveDialogParent()
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh )
