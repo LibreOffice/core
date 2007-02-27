@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:57 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:11:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,16 +112,16 @@ ScUnoAddInFuncData::ScUnoAddInFuncData( const String& rNam, const String& rLoc,
                                         long nAC, const ScAddInArgDesc* pAD,
                                         long nCP ) :
     aOriginalName( rNam ),
-    aUpperName( rNam ),
     aLocalName( rLoc ),
+    aUpperName( rNam ),
     aUpperLocal( rLoc ),
     aDescription( rDesc ),
-    nCategory( nCat ),
-    nHelpId( nHelp ),
     xFunction( rFunc ),
     aObject( rO ),
     nArgCount( nAC ),
     nCallerPos( nCP ),
+    nCategory( nCat ),
+    nHelpId( nHelp ),
     bCompInitialized( FALSE )
 {
     if ( nArgCount )
@@ -253,6 +253,10 @@ BOOL lcl_ConvertToDouble( const uno::Any& rAny, double& rOut )
             rAny >>= rOut;
             bRet = TRUE;
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     if (!bRet)
         rOut = 0.0;
@@ -712,8 +716,8 @@ BOOL ScUnoAddInCollection::GetCalcName( const String& rExcelName, String& rRetCa
             if ( nSeqLen )
             {
                 const sheet::LocalizedName* pArray = rSequence.getConstArray();
-                for ( long i=0; i<nSeqLen; i++)
-                    if ( ScGlobal::pCharClass->upper( pArray[i].Name ) == aUpperCmp )
+                for ( long nName=0; nName<nSeqLen; nName++)
+                    if ( ScGlobal::pCharClass->upper( pArray[nName].Name ) == aUpperCmp )
                     {
                         //! store upper case for comparing?
 
@@ -1404,11 +1408,11 @@ BOOL ScUnoAddInCollection::FillFunctionDescFromData( const ScUnoAddInFuncData& r
 
 ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName,
                                 long nParamCount ) :
+    bValidCount( FALSE ),
     nErrCode( errNoCode ),      // before function was called
     bHasString( TRUE ),
     fValue( 0.0 ),
-    pMatrix( NULL ),
-    bValidCount( FALSE )
+    pMatrix( NULL )
 {
     pFuncData = rColl.GetFuncData( rName, true );           // need fully initialized data
     DBG_ASSERT( pFuncData, "Function Data missing" );
@@ -1416,7 +1420,6 @@ ScUnoAddInCall::ScUnoAddInCall( ScUnoAddInCollection& rColl, const String& rName
     {
         long nDescCount = pFuncData->GetArgumentCount();
         const ScAddInArgDesc* pArgs = pFuncData->GetArguments();
-        long nVarCount = 0;
 
         //  is aVarArg sequence needed?
         if ( nParamCount >= nDescCount && nDescCount > 0 &&
