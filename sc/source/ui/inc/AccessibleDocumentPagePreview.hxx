@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:31:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:16:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,11 @@ public:
         ScPreviewShell* pViewShell );
 protected:
     virtual ~ScAccessibleDocumentPagePreview(void);
+
+    using ScAccessibleDocumentBase::IsDefunc;
+
 public:
+    using ScAccessibleContextBase::disposing;
 
      virtual void SAL_CALL disposing();
 
