@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlimp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:26:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:31:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,8 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
 {
     Size aPageSize;
     OutputDevice* pDefaultDev = Application::GetDefaultDevice();
-    const String& aPageStyle = pDoc->GetPageStyle( rRange.aStart.Tab() );
-    ScStyleSheet* pStyleSheet = (ScStyleSheet*)pDoc->
+    const String& aPageStyle = mpDoc->GetPageStyle( rRange.aStart.Tab() );
+    ScStyleSheet* pStyleSheet = (ScStyleSheet*)mpDoc->
         GetStyleSheetPool()->Find( aPageStyle, SFX_STYLE_FAMILY_PAGE );
     if ( pStyleSheet )
     {
@@ -113,9 +113,9 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const String& rBaseURL, const ScR
             SvxPaperInfo::GetPaperSize( SVX_PAPER_A4 ), MapMode( MAP_TWIP ) );
     }
     if( bCalcWidthHeight )
-        pParser = new ScHTMLLayoutParser( pEngine, rBaseURL, aPageSize, pDocP );
+        mpParser = new ScHTMLLayoutParser( mpEngine, rBaseURL, aPageSize, pDocP );
     else
-        pParser = new ScHTMLQueryParser( pEngine, pDocP );
+        mpParser = new ScHTMLQueryParser( mpEngine, pDocP );
 }
 
 
@@ -123,7 +123,7 @@ ScHTMLImport::~ScHTMLImport()
 {
     // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
     // Ist gewaehrleistet, da ScEEImport Basisklasse ist
-    delete (ScHTMLParser*) pParser;     // vor EditEngine!
+    delete (ScHTMLParser*) mpParser;        // vor EditEngine!
 }
 
 
@@ -148,70 +148,70 @@ void ScHTMLImport::WriteToDocument( BOOL bSizeColsRows, double nOutputFactor )
         return;
 
     // set cell borders for HTML table cells
-    pGlobTable->ApplyCellBorders( pDoc, aRange.aStart );
+    pGlobTable->ApplyCellBorders( mpDoc, maRange.aStart );
 
     // correct cell borders for merged cells
     for ( ScEEParseEntry* pEntry = pParser->First(); pEntry; pEntry = pParser->Next() )
     {
         if( (pEntry->nColOverlap > 1) || (pEntry->nRowOverlap > 1) )
         {
-            SCTAB nTab = aRange.aStart.Tab();
-            const ScMergeAttr* pItem = (ScMergeAttr*) pDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
+            SCTAB nTab = maRange.aStart.Tab();
+            const ScMergeAttr* pItem = (ScMergeAttr*) mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_MERGE );
             if( pItem->IsMerged() )
             {
                 SCCOL nColMerge = pItem->GetColMerge();
                 SCROW nRowMerge = pItem->GetRowMerge();
 
                 const SvxBoxItem* pToItem = (const SvxBoxItem*)
-                    pDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
+                    mpDoc->GetAttr( pEntry->nCol, pEntry->nRow, nTab, ATTR_BORDER );
                 SvxBoxItem aNewItem( *pToItem );
                 if( nColMerge > 1 )
                 {
                     const SvxBoxItem* pFromItem = (const SvxBoxItem*)
-                        pDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
+                        mpDoc->GetAttr( pEntry->nCol + nColMerge - 1, pEntry->nRow, nTab, ATTR_BORDER );
                     aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_RIGHT ), BOX_LINE_RIGHT );
                 }
                 if( nRowMerge > 1 )
                 {
                     const SvxBoxItem* pFromItem = (const SvxBoxItem*)
-                        pDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
+                        mpDoc->GetAttr( pEntry->nCol, pEntry->nRow + nRowMerge - 1, nTab, ATTR_BORDER );
                     aNewItem.SetLine( pFromItem->GetLine( BOX_LINE_BOTTOM ), BOX_LINE_BOTTOM );
                 }
-                pDoc->ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );
+                mpDoc->ApplyAttr( pEntry->nCol, pEntry->nRow, nTab, aNewItem );
             }
         }
     }
 
     // create ranges for HTML tables
      // 1 - entire document
-    ScRange aNewRange( aRange.aStart );
+    ScRange aNewRange( maRange.aStart );
     aNewRange.aEnd.IncCol( static_cast<SCsCOL>(pGlobTable->GetDocSize( tdCol )) - 1 );
     aNewRange.aEnd.IncRow( pGlobTable->GetDocSize( tdRow ) - 1 );
-    InsertRangeName( pDoc, ScfTools::GetHTMLDocName(), aNewRange );
+    InsertRangeName( mpDoc, ScfTools::GetHTMLDocName(), aNewRange );
 
     // 2 - all tables
-    InsertRangeName( pDoc, ScfTools::GetHTMLTablesName(), ScRange( aRange.aStart ) );
+    InsertRangeName( mpDoc, ScfTools::GetHTMLTablesName(), ScRange( maRange.aStart ) );
 
     // 3 - single tables
-    SCsCOL nColDiff = (SCsCOL)aRange.aStart.Col();
-    SCsROW nRowDiff = (SCsROW)aRange.aStart.Row();
-    SCsTAB nTabDiff = (SCsTAB)aRange.aStart.Tab();
+    SCsCOL nColDiff = (SCsCOL)maRange.aStart.Col();
+    SCsROW nRowDiff = (SCsROW)maRange.aStart.Row();
+    SCsTAB nTabDiff = (SCsTAB)maRange.aStart.Tab();
 
     ScHTMLTable* pTable = NULL;
     ScHTMLTableId nTableId = SC_HTML_GLOBAL_TABLE;
-    while( pTable = pGlobTable->FindNestedTable( ++nTableId ) )
+    while( (pTable = pGlobTable->FindNestedTable( ++nTableId )) != 0 )
     {
         pTable->GetDocRange( aNewRange );
         aNewRange.Move( nColDiff, nRowDiff, nTabDiff );
         // insert table number as name
-        InsertRangeName( pDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
+        InsertRangeName( mpDoc, ScfTools::GetNameFromHTMLIndex( nTableId ), aNewRange );
         // insert table id as name
         if( pTable->GetTableName().Len() )
         {
             String aName( ScfTools::GetNameFromHTMLName( pTable->GetTableName() ) );
             USHORT nPos;
-            if( !pDoc->GetRangeName()->SearchName( aName, nPos ) )
-                InsertRangeName( pDoc, aName, aNewRange );
+            if( !mpDoc->GetRangeName()->SearchName( aName, nPos ) )
+                InsertRangeName( mpDoc, aName, aNewRange );
         }
     }
 }
