@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:06:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:12:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,9 @@
 |*
 \************************************************************************/
 
-FuDraw::FuDraw(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuDraw::FuDraw(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
-    FuPoor      (pViewSh, pWin, pView, pDoc, rReq),
+    FuPoor      (pViewSh, pWin, pViewP, pDoc, rReq),
     aNewPointer ( POINTER_ARROW ),
     aOldPointer ( POINTER_ARROW )
 {
@@ -104,17 +104,17 @@ void FuDraw::DoModifiers(const MouseEvent& rMEvt)
     //  Alt     = zentrisch
 
     BOOL bShift = rMEvt.IsShift();
-    BOOL bCtrl  = rMEvt.IsMod1();
+//    BOOL bCtrl  = rMEvt.IsMod1();
     BOOL bAlt   = rMEvt.IsMod2();
 
-    ScViewData* pViewData = pViewShell->GetViewData();
-    const ScViewOptions& rOpt = pViewData->GetOptions();
-    const ScGridOptions& rGrid = rOpt.GetGridOptions();
-    BOOL bGridOpt = rGrid.GetUseGridSnap();
+//    ScViewData* pViewData = pViewShell->GetViewData();
+//    const ScViewOptions& rOpt = pViewData->GetOptions();
+//    const ScGridOptions& rGrid = rOpt.GetGridOptions();
+//    BOOL bGridOpt = rGrid.GetUseGridSnap();
 
     BOOL bOrtho     = bShift;
     BOOL bAngleSnap = bShift;
-    BOOL bGridSnap  = ( bGridOpt != bCtrl );        // andere Snap's nicht unterstuetzt
+//    BOOL bGridSnap  = ( bGridOpt != bCtrl );        // andere Snap's nicht unterstuetzt
     BOOL bCenter    = bAlt;
 
     // #i33136#
