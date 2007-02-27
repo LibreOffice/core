@@ -4,9 +4,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:28:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ const SfxItemPropertyMap* lcl_GetAutoFormatMap()
         {MAP_CHAR_LEN(SC_UNONAME_INCJUST),  0,  &::getBooleanCppuType(),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_INCNUM),   0,  &::getBooleanCppuType(),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_INCWIDTH), 0,  &::getBooleanCppuType(),    0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aAutoFormatMap_Impl;
 }
@@ -211,7 +211,7 @@ const SfxItemPropertyMap* lcl_GetAutoFieldMap()
         {MAP_CHAR_LEN(SC_UNONAME_ROTANG),   ATTR_ROTATE_VALUE,      &::getCppuType((const sal_Int32*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_ROTREF),   ATTR_ROTATE_MODE,       &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLVJUS), ATTR_VER_JUSTIFY,       &::getCppuType((const table::CellVertJustify*)0),   0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aAutoFieldMap_Impl;
 }
@@ -524,7 +524,7 @@ sal_Int64 SAL_CALL ScAutoFormatObj::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -553,11 +553,11 @@ ScAutoFormatObj* ScAutoFormatObj::getImplementation(
     ScAutoFormatObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScAutoFormatObj*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScAutoFormatObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
-void ScAutoFormatObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAutoFormatObj::Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ )
 {
     //  spaeter...
 }
@@ -772,7 +772,7 @@ ScAutoFormatFieldObj::~ScAutoFormatFieldObj()
 {
 }
 
-void ScAutoFormatFieldObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAutoFormatFieldObj::Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ )
 {
     //  spaeter...
 }
@@ -832,6 +832,10 @@ void SAL_CALL ScAutoFormatFieldObj::setPropertyValue(
                                 case table::CellOrientation_STACKED:
                                     pData->PutItem( nFieldIndex, SfxBoolItem( ATTR_STACKED, TRUE ) );
                                 break;
+                                default:
+                                {
+                                    // added to avoid warnings
+                                }
                             }
                             bDone = sal_True;
                         }
