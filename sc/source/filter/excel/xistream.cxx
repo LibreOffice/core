@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistream.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:28:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ XclImpBiff5Decrypter* XclImpBiff5Decrypter::OnClone() const
     return new XclImpBiff5Decrypter( *this );
 }
 
-void XclImpBiff5Decrypter::OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize )
+void XclImpBiff5Decrypter::OnUpdate( sal_Size /*nOldStrmPos*/, sal_Size nNewStrmPos, sal_uInt16 nRecSize )
 {
     maCodec.InitCipher();
     maCodec.Skip( (nNewStrmPos + nRecSize) & 0x0F );
@@ -202,7 +202,7 @@ XclImpBiff8Decrypter* XclImpBiff8Decrypter::OnClone() const
     return new XclImpBiff8Decrypter( *this );
 }
 
-void XclImpBiff8Decrypter::OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 nRecSize )
+void XclImpBiff8Decrypter::OnUpdate( sal_Size nOldStrmPos, sal_Size nNewStrmPos, sal_uInt16 /*nRecSize*/ )
 {
     if( nNewStrmPos != nOldStrmPos )
     {
@@ -237,14 +237,14 @@ sal_uInt16 XclImpBiff8Decrypter::OnRead( SvStream& rStrm, sal_uInt8* pnData, sal
         sal_uInt16 nDecBytes = ::std::min< sal_uInt16 >( nBytesLeft, nBlockLeft );
 
         // read the block from stream
-        nRet += static_cast< sal_uInt16 >( rStrm.Read( pnCurrData, nDecBytes ) );
+        nRet = nRet + static_cast< sal_uInt16 >( rStrm.Read( pnCurrData, nDecBytes ) );
         // decode the block inplace
         maCodec.Decode( pnCurrData, nDecBytes, pnCurrData, nDecBytes );
         if( GetOffset( rStrm.Tell() ) == 0 )
             maCodec.InitCipher( GetBlock( rStrm.Tell() ) );
 
         pnCurrData += nDecBytes;
-        nBytesLeft -= nDecBytes;
+        nBytesLeft = nBytesLeft - nDecBytes;
     }
 
     return nRet;
@@ -821,7 +821,7 @@ void XclImpStream::Ignore( sal_Size nBytes )
     {
         sal_uInt16 nReadSize = GetMaxRawReadSize( nBytesLeft );
         mrStrm.SeekRel( nReadSize );
-        mnRawRecLeft -= nReadSize;
+        mnRawRecLeft = mnRawRecLeft - nReadSize;
         nBytesLeft -= nReadSize;
         if( nBytesLeft > 0 )
             JumpToNextContinue();
@@ -898,7 +898,7 @@ String XclImpStream::ReadRawUniString( sal_uInt16 nChars, bool b16Bit )
         *pcEndChar = '\0';
         aRet.Append( pcBuffer );
 
-        nCharsLeft -= nReadSize;
+        nCharsLeft = nCharsLeft - nReadSize;
         if( nCharsLeft > 0 )
             JumpToNextStringContinue( b16Bit );
     }
@@ -946,7 +946,7 @@ void XclImpStream::IgnoreRawUniString( sal_uInt16 nChars, bool b16Bit )
             Ignore( nReadSize );
         }
 
-        nCharsLeft -= nReadSize;
+        nCharsLeft = nCharsLeft - nReadSize;
         if( nCharsLeft > 0 )
             JumpToNextStringContinue( b16Bit );
     }
@@ -1106,7 +1106,7 @@ sal_uInt16 XclImpStream::ReadRawData( void* pData, sal_uInt16 nBytes )
         nRet = mxDecrypter->Read( mrStrm, pData, nBytes );
     else
         nRet = static_cast< sal_uInt16 >( mrStrm.Read( pData, nBytes ) );
-    mnRawRecLeft -= nRet;
+    mnRawRecLeft = mnRawRecLeft - nRet;
     return nRet;
 }
 
