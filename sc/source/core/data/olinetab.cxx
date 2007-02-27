@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olinetab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:06:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:07:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ ScOutlineEntry::ScOutlineEntry( SCCOLROW nNewStart, SCCOLROW nNewSize, BOOL bNew
 }
 
 ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
+    DataObject(),
     nStart  ( rEntry.nStart ),
     nSize   ( rEntry.nSize ),
     bHidden ( rEntry.bHidden ),
@@ -68,7 +69,7 @@ ScOutlineEntry::ScOutlineEntry( const ScOutlineEntry& rEntry ) :
 {
 }
 
-ScOutlineEntry::ScOutlineEntry( SvStream& rStream, ScMultipleReadHeader& rHdr )
+ScOutlineEntry::ScOutlineEntry( SvStream& /* rStream */, ScMultipleReadHeader& rHdr )
 {
     rHdr.StartEntry();
 #if SC_ROWLIMIT_STREAM_ACCESS
@@ -83,7 +84,7 @@ ScOutlineEntry::ScOutlineEntry( SvStream& rStream, ScMultipleReadHeader& rHdr )
     rHdr.EndEntry();
 }
 
-void ScOutlineEntry::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr )
+void ScOutlineEntry::Store( SvStream& /* rStream */, ScMultipleWriteHeader& rHdr )
 {
     rHdr.StartEntry();
 
@@ -163,8 +164,8 @@ USHORT ScOutlineCollection::FindStart( SCCOLROW nMinStart )
     //!                 binaer suchen ?
 
     USHORT nPos = 0;
-    USHORT nCount = GetCount();
-    while ( (nPos<nCount) ? (((ScOutlineEntry*)At(nPos))->GetStart() < nMinStart) : FALSE )
+    USHORT nLocalCount = GetCount();
+    while ( (nPos<nLocalCount) ? (((ScOutlineEntry*)At(nPos))->GetStart() < nMinStart) : FALSE )
         ++nPos;
 
     return nPos;
@@ -601,7 +602,7 @@ BOOL ScOutlineArray::TestInsertSpace( SCSIZE nSize, SCCOLROW nMaxVal ) const
     if (nCount)
     {
         SCCOLROW nEnd = ((ScOutlineEntry*) aCollections[0].At(nCount-1))->GetEnd();
-        return ( nEnd+nSize <= nMaxVal );
+        return ( sal::static_int_cast<SCCOLROW>(nEnd+nSize) <= nMaxVal );
     }
 
     return TRUE;
