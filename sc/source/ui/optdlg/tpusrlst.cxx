@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpusrlst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:17:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,12 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
     :   SfxTabPage      ( pParent,
                           ScResId( RID_SCPAGE_USERLISTS ),
                           rCoreAttrs ),
-        aLbLists        ( this, ScResId( LB_LISTS ) ),
-        aEdEntries      ( this, ScResId( ED_ENTRIES ) ),
-        aEdCopyFrom     ( this, ScResId( ED_COPYFROM ) ),
         aFtLists        ( this, ScResId( FT_LISTS ) ),
+        aLbLists        ( this, ScResId( LB_LISTS ) ),
         aFtEntries      ( this, ScResId( FT_ENTRIES ) ),
+        aEdEntries      ( this, ScResId( ED_ENTRIES ) ),
         aFtCopyFrom     ( this, ScResId( FT_COPYFROM ) ),
+        aEdCopyFrom     ( this, ScResId( ED_COPYFROM ) ),
         aBtnNew         ( this, ScResId( BTN_NEW ) ),
         aBtnAdd         ( this, ScResId( BTN_ADD ) ),
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
@@ -110,11 +110,11 @@ ScTpUserLists::ScTpUserLists( Window*               pParent,
         aStrCopyFrom    ( ScResId( STR_COPYFROM ) ),
         aStrCopyErr     ( ScResId( STR_COPYERR ) ),
         //
-        pRangeUtil      ( new ScRangeUtil ),
         nWhichUserLists ( GetWhich( SID_SCUSERLISTS ) ),
         pUserLists      ( NULL ),
         pDoc            ( NULL ),
         pViewData       ( NULL ),
+        pRangeUtil      ( new ScRangeUtil ),
         bModifyMode     ( FALSE ),
         bCancelMode     ( FALSE ),
         bCopyDone       ( FALSE ),
@@ -291,10 +291,10 @@ BOOL __EXPORT ScTpUserLists::FillItemSet( SfxItemSet& rCoreAttrs )
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScTpUserLists::DeactivatePage( SfxItemSet* pSet )
+int __EXPORT ScTpUserLists::DeactivatePage( SfxItemSet* pSetP )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( pSetP )
+        FillItemSet( *pSetP );
 
     return LEAVE_PAGE;
 }
@@ -361,7 +361,6 @@ void ScTpUserLists::MakeListStr( String& rListStr )
     String  aStr;
 
     xub_StrLen  nLen    = aStr.Len();
-    xub_StrLen  nFound  = 0;
     xub_StrLen  c       = 0;
 
     aInputStr.ConvertLineEnd( LINEEND_LF );
@@ -426,7 +425,9 @@ void ScTpUserLists::AddNewList( const String& rEntriesStr )
     MakeListStr( theEntriesStr );
 
     if ( !pUserLists->Insert( new ScUserListData( theEntriesStr ) ) )
+    {
         DBG_ERROR( "Entry could not be inserted :-/" );
+    }
 }
 
 // -----------------------------------------------------------------------
