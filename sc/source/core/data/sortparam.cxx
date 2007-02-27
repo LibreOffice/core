@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortparam.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:08:18 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:08:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ ScSortParam::ScSortParam()
 
 ScSortParam::ScSortParam( const ScSortParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),
-        bHasHeader(r.bHasHeader),bCaseSens(r.bCaseSens),
-        bByRow(r.bByRow),bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),bIncludePattern(r.bIncludePattern),
+        bHasHeader(r.bHasHeader),bByRow(r.bByRow),bCaseSens(r.bCaseSens),
+        bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),bIncludePattern(r.bIncludePattern),
         bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
         aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm )
@@ -170,8 +170,8 @@ BOOL ScSortParam::operator==( const ScSortParam& rOther ) const
 
 ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld ) :
         nCol1(rSub.nCol1),nRow1(rSub.nRow1),nCol2(rSub.nCol2),nRow2(rSub.nRow2),
-        bHasHeader(TRUE),bCaseSens(rSub.bCaseSens),
-        bByRow(TRUE),bUserDef(rSub.bUserDef),nUserIndex(rSub.nUserIndex),bIncludePattern(rSub.bIncludePattern),
+        bHasHeader(TRUE),bByRow(TRUE),bCaseSens(rSub.bCaseSens),
+        bUserDef(rSub.bUserDef),nUserIndex(rSub.nUserIndex),bIncludePattern(rSub.bIncludePattern),
         bInplace(TRUE),
         nDestTab(0),nDestCol(0),nDestRow(0),
         aCollatorLocale( rOld.aCollatorLocale ), aCollatorAlgorithm( rOld.aCollatorAlgorithm )
@@ -225,10 +225,10 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
 //------------------------------------------------------------------------
 
 ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
-        nCol1(nCol),nRow1(rParam.nRow1),nRow2(rParam.nRow2),nCol2(nCol),
-        bHasHeader(rParam.bHasHeader),bCaseSens(rParam.bCaseSens),
+        nCol1(nCol),nRow1(rParam.nRow1),nCol2(nCol),nRow2(rParam.nRow2),
+        bHasHeader(rParam.bHasHeader),bByRow(TRUE),bCaseSens(rParam.bCaseSens),
 //! TODO: what about Locale and Algorithm?
-        bByRow(TRUE),bUserDef(FALSE),nUserIndex(0),bIncludePattern(FALSE),
+        bUserDef(FALSE),nUserIndex(0),bIncludePattern(FALSE),
         bInplace(TRUE),
         nDestTab(0),nDestCol(0),nDestRow(0)
 {
@@ -252,10 +252,10 @@ void ScSortParam::MoveToDest()
         SCsCOL nDifX = ((SCsCOL) nDestCol) - ((SCsCOL) nCol1);
         SCsROW nDifY = ((SCsROW) nDestRow) - ((SCsROW) nRow1);
 
-        nCol1 += nDifX;
-        nRow1 += nDifY;
-        nCol2 += nDifX;
-        nRow2 += nDifY;
+        nCol1 = sal::static_int_cast<SCCOL>( nCol1 + nDifX );
+        nRow1 = sal::static_int_cast<SCROW>( nRow1 + nDifY );
+        nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nDifX );
+        nRow2 = sal::static_int_cast<SCROW>( nRow2 + nDifY );
         for (USHORT i=0; i<MAXSORT; i++)
             if (bByRow)
                 nField[i] += nDifX;
