@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:54:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:51:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,16 +342,16 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 if (bOk)
                 {
                     //  if string contains WEAK characters, set all fonts
-                    BYTE nScript;
+                    BYTE nSetScript;
                     ScDocument* pDoc = pViewData->GetDocument();
                     if ( pDoc->HasStringWeakCharacters( aString ) )
-                        nScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
+                        nSetScript = SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN | SCRIPTTYPE_COMPLEX;
                     else
-                        nScript = pDoc->GetStringScriptType( aString );
+                        nSetScript = pDoc->GetStringScriptType( aString );
 
                     SfxItemSet aSet( pTableView->GetEmptyItemSet() );
                     SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, GetPool() );
-                    aSetItem.PutItemForScriptType( nScript, aNewItem );
+                    aSetItem.PutItemForScriptType( nSetScript, aNewItem );
                     aSet.Put( aSetItem.GetItemSet(), FALSE );
 
                     //  SetAttribs an der View selektiert ein Wort, wenn nichts selektiert ist
@@ -448,13 +448,13 @@ void ScEditShell::Execute( SfxRequest& rReq )
                     if (aFinder.GetFound())
                     {
                         String aNew = aFinder.GetText();
-                        ESelection aSel( 0,aFinder.GetSelStart(), 0,aFinder.GetSelEnd() );
+                        ESelection aNewSel( 0,aFinder.GetSelStart(), 0,aFinder.GetSelEnd() );
                         pEngine->SetText( aNew );
-                        pTableView->SetSelection( aSel );
+                        pTableView->SetSelection( aNewSel );
                         if ( pTopView )
                         {
                             pTopView->GetEditEngine()->SetText( aNew );
-                            pTopView->SetSelection( aSel );
+                            pTopView->SetSelection( aNewSel );
                         }
                         bOk = TRUE;
 
@@ -538,7 +538,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                         ScGlobal::OpenURL( pURLField->GetURL(), pURLField->GetTargetFrame() );
                     return;
                 }
-                break;
+                //break;
 
         case FN_INSERT_SOFT_HYPHEN:
             lclInsertCharacter( pTableView, pTopView, CHAR_SHY );
@@ -1117,7 +1117,6 @@ void ScEditShell::ExecuteTrans( SfxRequest& rReq )
         EditView* pTableView = pHdl->GetTableView();
         DBG_ASSERT( pTableView, "no EditView" );
 
-        EditEngine* pEngine = pTableView->GetEditEngine();
         pHdl->DataChanging();
 
         pTableView->TransliterateText( nType );
