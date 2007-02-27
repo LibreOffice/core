@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chart2uno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:29:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:41:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ ScChart2DataProvider::~ScChart2DataProvider()
 }
 
 
-void ScChart2DataProvider::Notify( SfxBroadcaster& rBC, const SfxHint& rHint)
+void ScChart2DataProvider::Notify( SfxBroadcaster&, const SfxHint& rHint)
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -109,35 +109,35 @@ ScChart2DataProvider::getDataByRangeRepresentation(
         throw lang::IllegalArgumentException();
     }
     throw uno::RuntimeException();
-    return 0;
+//    return 0;
 }
 
 
 uno::Reference< chart2::XDataSequence> SAL_CALL
 ScChart2DataProvider::getDataSequenceByRangeIdentifier(
-        const ::rtl::OUString& rRangeIdentifier)
+        const ::rtl::OUString& /* rRangeIdentifier */)
             throw( lang::IllegalArgumentException, uno::RuntimeException)
 {
     // FIXME: find and return data sequence that matches rRangeIdentifier
     throw uno::RuntimeException();
-    return 0;
+//    return 0;
 }
 
 
 uno::Reference< chart2::XDataSequence> SAL_CALL
 ScChart2DataProvider::replaceRange(
-        const uno::Reference< chart2::XDataSequence>& rSeq)
+        const uno::Reference< chart2::XDataSequence>& /* rSeq */)
             throw( lang::IllegalArgumentException, uno::RuntimeException)
 {
     // FIXME: real implementation
     throw uno::RuntimeException();
-    return 0;
+//    return 0;
 }
 
 
 void SAL_CALL ScChart2DataProvider::addDataChangeListener(
-        const uno::Reference< chart2::XDataChangeListener>& rListener,
-        const uno::Reference< chart2::XDataSource>& rData)
+        const uno::Reference< chart2::XDataChangeListener>& /* rListener */,
+        const uno::Reference< chart2::XDataSource>& /* rData */)
             throw( uno::RuntimeException)
 {
     // FIXME: real implementation, reuse ScChartListener
@@ -146,8 +146,8 @@ void SAL_CALL ScChart2DataProvider::addDataChangeListener(
 
 
 void SAL_CALL ScChart2DataProvider::removeDataChangeListener(
-        const uno::Reference< chart2::XDataChangeListener>& rListener,
-        const uno::Reference< chart2::XDataSource>& rData)
+        const uno::Reference< chart2::XDataChangeListener>& /* rListener */,
+        const uno::Reference< chart2::XDataSource>& /* rData */)
             throw( lang::IllegalArgumentException, uno::RuntimeException)
 {
     // FIXME: real implementation, reuse ScChartListener
@@ -159,8 +159,8 @@ void SAL_CALL ScChart2DataProvider::removeDataChangeListener(
 
 ScChart2DataSource::ScChart2DataSource( ScDocShell* pDocSh,
         const ScRangeListRef& rRangeList)
-    : pDocShell( pDocSh)
-    , xRanges( rRangeList)
+    : xRanges( rRangeList )
+    , pDocShell( pDocSh )
 {
     if ( pDocShell )
         pDocShell->GetDocument()->AddUnoObject( *this);
@@ -174,7 +174,7 @@ ScChart2DataSource::~ScChart2DataSource()
 }
 
 
-void ScChart2DataSource::Notify( SfxBroadcaster& rBC, const SfxHint& rHint)
+void ScChart2DataSource::Notify( SfxBroadcaster&, const SfxHint& rHint)
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -243,7 +243,7 @@ ScChart2DataSequence::~ScChart2DataSequence()
 }
 
 
-void ScChart2DataSequence::Notify( SfxBroadcaster& rBC, const SfxHint& rHint)
+void ScChart2DataSequence::Notify( SfxBroadcaster&, const SfxHint& rHint)
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -343,7 +343,7 @@ ScChart2DataSequence::getPropertySetInfo() throw( uno::RuntimeException)
 {
     // FIXME: real implementation
     throw uno::RuntimeException();
-    return 0;
+//    return 0;
 }
 
 
@@ -388,8 +388,8 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(
 
 
 void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
-        const ::rtl::OUString& rPropertyName,
-        const uno::Reference< beans::XPropertyChangeListener>& xListener)
+        const ::rtl::OUString& /* rPropertyName */,
+        const uno::Reference< beans::XPropertyChangeListener>& /* xListener */)
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -399,8 +399,8 @@ void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
 
 
 void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
-        const ::rtl::OUString& rPropertyName,
-        const uno::Reference< beans::XPropertyChangeListener>& rListener)
+        const ::rtl::OUString& /* rPropertyName */,
+        const uno::Reference< beans::XPropertyChangeListener>& /* rListener */)
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -410,8 +410,8 @@ void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
 
 
 void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
-        const ::rtl::OUString& rPropertyName,
-        const uno::Reference< beans::XVetoableChangeListener>& rListener)
+        const ::rtl::OUString& /* rPropertyName */,
+        const uno::Reference< beans::XVetoableChangeListener>& /* rListener */)
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
@@ -421,8 +421,8 @@ void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
 
 
 void SAL_CALL ScChart2DataSequence::removeVetoableChangeListener(
-        const ::rtl::OUString& rPropertyName,
-        const uno::Reference< beans::XVetoableChangeListener>& rListener)
+        const ::rtl::OUString& /* rPropertyName */,
+        const uno::Reference< beans::XVetoableChangeListener>& /* rListener */)
             throw( beans::UnknownPropertyException,
                     lang::WrappedTargetException, uno::RuntimeException)
 {
