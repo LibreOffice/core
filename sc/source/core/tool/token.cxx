@@ -4,9 +4,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,32 +63,32 @@
 
 // ImpTokenIterator wird je Interpreter angelegt, mehrfache auch durch
 // SubCode via ScTokenIterator Push/Pop moeglich
-IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 );
+IMPL_FIXEDMEMPOOL_NEWDEL( ImpTokenIterator, 32, 16 )
 
 // Align MemPools on 4k boundaries - 64 bytes (4k is a MUST for OS/2)
 
 // Since RawTokens are temporary for the compiler, don't align on 4k and waste memory.
 // ScRawToken size is FixMembers + MAXSTRLEN ~= 264
-IMPL_FIXEDMEMPOOL_NEWDEL( ScRawToken, 8, 4 );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScRawToken, 8, 4 )
 // Some ScDoubleRawToken, FixMembers + sizeof(double) ~= 16
 const USHORT nMemPoolDoubleRawToken = 0x0400 / sizeof(ScDoubleRawToken);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken, nMemPoolDoubleRawToken, nMemPoolDoubleRawToken );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRawToken, nMemPoolDoubleRawToken, nMemPoolDoubleRawToken )
 
 // Need a whole bunch of ScSingleRefToken
 const USHORT nMemPoolSingleRefToken = (0x4000 - 64) / sizeof(ScSingleRefToken);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken, nMemPoolSingleRefToken, nMemPoolSingleRefToken );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScSingleRefToken, nMemPoolSingleRefToken, nMemPoolSingleRefToken )
 // Need a lot of ScDoubleToken
 const USHORT nMemPoolDoubleToken = (0x3000 - 64) / sizeof(ScDoubleToken);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleToken, nMemPoolDoubleToken, nMemPoolDoubleToken );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleToken, nMemPoolDoubleToken, nMemPoolDoubleToken )
 // Need a lot of ScByteToken
 const USHORT nMemPoolByteToken = (0x3000 - 64) / sizeof(ScByteToken);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScByteToken, nMemPoolByteToken, nMemPoolByteToken );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScByteToken, nMemPoolByteToken, nMemPoolByteToken )
 // Need quite a lot of ScDoubleRefToken
 const USHORT nMemPoolDoubleRefToken = (0x2000 - 64) / sizeof(ScDoubleRefToken);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken, nMemPoolDoubleRefToken, nMemPoolDoubleRefToken );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScDoubleRefToken, nMemPoolDoubleRefToken, nMemPoolDoubleRefToken )
 // Need several ScStringToken
 const USHORT nMemPoolStringToken = (0x1000 - 64) / sizeof(ScStringToken);
-IMPL_FIXEDMEMPOOL_NEWDEL( ScStringToken, nMemPoolStringToken, nMemPoolStringToken );
+IMPL_FIXEDMEMPOOL_NEWDEL( ScStringToken, nMemPoolStringToken, nMemPoolStringToken )
 
 
 // --- helpers --------------------------------------------------------------
@@ -113,7 +113,7 @@ xub_StrLen ScRawToken::GetStrLen( const sal_Unicode* pStr )
     register const sal_Unicode* p = pStr;
     while ( *p )
         p++;
-    return p - pStr;
+    return sal::static_int_cast<xub_StrLen>( p - pStr );
 }
 
 
@@ -232,6 +232,15 @@ void ScRawToken::SetMatrix( ScMatrix* p )
     nRefCnt = 0;
 }
 
+USHORT lcl_ScRawTokenOffset()
+{
+    // offset of sbyte in ScRawToken
+    // offsetof(ScRawToken, sbyte) gives a warning with gcc, because ScRawToken is no POD
+
+    ScRawToken aToken;
+    return static_cast<USHORT>( reinterpret_cast<char*>(&aToken.sbyte) - reinterpret_cast<char*>(&aToken) );
+}
+
 ScRawToken* ScRawToken::Clone() const
 {
     ScRawToken* p;
@@ -244,19 +253,21 @@ ScRawToken* ScRawToken::Clone() const
     }
     else
     {
-        USHORT n = offsetof( ScRawToken, sbyte );
+        static USHORT nOffset = lcl_ScRawTokenOffset();     // offset of sbyte
+        USHORT n = nOffset;
+
         switch( eType )
         {
             case svByte:        n += sizeof(ScRawToken::sbyte); break;
             case svDouble:      n += sizeof(double); break;
-            case svString:      n += GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ); break;
+            case svString:      n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr ) + GetStrLenBytes( 1 ) ); break;
             case svSingleRef:
             case svDoubleRef:   n += sizeof(aRef); break;
             case svMatrix:      n += sizeof(ScMatrix*); break;
             case svIndex:       n += sizeof(USHORT); break;
             case svJump:        n += nJump[ 0 ] * 2 + 2; break;
-            case svExternal:    n += GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ); break;
-            default:            n += *((BYTE*)cStr);    // read in unknown!
+            case svExternal:    n = sal::static_int_cast<USHORT>( n + GetStrLenBytes( cStr+1 ) + GetStrLenBytes( 2 ) ); break;
+            default:            n = sal::static_int_cast<USHORT>( n + *((BYTE*)cStr) );     // read in unknown!
         }
         p = (ScRawToken*) new BYTE[ n ];
         memcpy( p, this, n * sizeof(BYTE) );
@@ -273,40 +284,40 @@ ScToken* ScRawToken::CreateToken() const
     {
         case svByte :
             return new ScByteToken( eOp, sbyte.cByte, sbyte.bHasForceArray );
-        break;
+        //break;
         case svDouble :
             return new ScDoubleToken( eOp, nValue );
-        break;
+        //break;
         case svString :
             return new ScStringToken( eOp, String( cStr ) );
-        break;
+        //break;
         case svSingleRef :
             return new ScSingleRefToken( eOp, aRef.Ref1 );
-        break;
+        //break;
         case svDoubleRef :
             return new ScDoubleRefToken( eOp, aRef );
-        break;
+        //break;
         case svMatrix :
             return new ScMatrixToken( eOp, pMat );
-        break;
+        //break;
         case svIndex :
             return new ScIndexToken( eOp, nIndex );
-        break;
+        //break;
         case svJump :
             return new ScJumpToken( eOp, (short*) nJump );
-        break;
+        //break;
         case svExternal :
             return new ScExternalToken( eOp, sbyte.cByte, String( cStr+1 ) );
-        break;
+        //break;
         case svFAP :
             return new ScFAPToken( eOp, sbyte.cByte, NULL );
-        break;
+        //break;
         case svMissing :
             return new ScMissingToken( eOp );
-        break;
+        //break;
         case svErr :
             return new ScErrToken( eOp );
-        break;
+        //break;
         default:
             // read in unknown!
             return new ScUnknownToken( eOp, GetType(), (BYTE*) cStr );
@@ -417,9 +428,10 @@ BOOL ScToken::IsMatrixFunction() const
         case ocMatInv :
         case ocMatrixUnit :
             return TRUE;
-        break;
         default:
-            ; // nothing, prevent conpiler warning
+        {
+            // added to avoid warnings
+        }
     }
     return FALSE;
 }
@@ -431,43 +443,43 @@ ScToken* ScToken::Clone() const
     {
         case svByte :
             return new ScByteToken( *static_cast<const ScByteToken*>(this) );
-        break;
+        //break;
         case svDouble :
             return new ScDoubleToken( *static_cast<const ScDoubleToken*>(this) );
-        break;
+        //break;
         case svString :
             return new ScStringToken( *static_cast<const ScStringToken*>(this) );
-        break;
+        //break;
         case svSingleRef :
             return new ScSingleRefToken( *static_cast<const ScSingleRefToken*>(this) );
-        break;
+        //break;
         case svDoubleRef :
             return new ScDoubleRefToken( *static_cast<const ScDoubleRefToken*>(this) );
-        break;
+        //break;
         case svMatrix :
             return new ScMatrixToken( *static_cast<const ScMatrixToken*>(this) );
-        break;
+        //break;
         case svIndex :
             return new ScIndexToken( *static_cast<const ScIndexToken*>(this) );
-        break;
+        //break;
         case svJump :
             return new ScJumpToken( *static_cast<const ScJumpToken*>(this) );
-        break;
+        //break;
         case svJumpMatrix :
             return new ScJumpMatrixToken( *static_cast<const ScJumpMatrixToken*>(this) );
-        break;
+        //break;
         case svExternal :
             return new ScExternalToken( *static_cast<const ScExternalToken*>(this) );
-        break;
+        //break;
         case svFAP :
             return new ScFAPToken( *static_cast<const ScFAPToken*>(this) );
-        break;
+        //break;
         case svMissing :
             return new ScMissingToken( *static_cast<const ScMissingToken*>(this) );
-        break;
+        //break;
         case svErr :
             return new ScErrToken( *static_cast<const ScErrToken*>(this) );
-        break;
+        //break;
         default:
             // read in unknown!
             return new ScUnknownToken( *static_cast<const ScUnknownToken*>(this) );
@@ -542,7 +554,9 @@ BOOL ScToken::Is3DRef() const
                 return TRUE;
             break;
         default:
-            ; // nothing, prevent compiler warning
+        {
+            // added to avoid warnings
+        }
     }
     return FALSE;
 }
@@ -563,7 +577,9 @@ BOOL ScToken::IsRPNReferenceAbsName() const
                     return TRUE;
                 break;
             default:
-                ; // nothing, prevent compiler warning
+            {
+                // added to avoid warnings
+            }
         }
     }
     return FALSE;
@@ -578,9 +594,8 @@ BYTE ScToken::GetByte() const
     return 0;
 }
 
-void ScToken::SetByte( BYTE n )
+void ScToken::SetByte( BYTE )
 {
-    n = 0;  // prevent compiler warning
     DBG_ERRORFILE( "ScToken::SetByte: virtual dummy called" );
 }
 
@@ -590,9 +605,8 @@ bool ScToken::HasForceArray() const
     return false;
 }
 
-void ScToken::SetForceArray( bool b )
+void ScToken::SetForceArray( bool )
 {
-    b = 0;  // prevent compiler warning
     DBG_ERRORFILE( "ScToken::SetForceArray: virtual dummy called" );
 }
 
@@ -644,15 +658,13 @@ SingleRefData& ScToken::GetSingleRef2()
     return aDummySingleRef;
 }
 
-void ScToken::CalcAbsIfRel( const ScAddress& rPos )
+void ScToken::CalcAbsIfRel( const ScAddress& /* rPos */ )
 {
-    ScAddress x = rPos; // prevent compiler warning
     DBG_ERRORFILE( "ScToken::CalcAbsIfRel: virtual dummy called" );
 }
 
-void ScToken::CalcRelFromAbs( const ScAddress& rPos )
+void ScToken::CalcRelFromAbs( const ScAddress& /* rPos */ )
 {
-    ScAddress x = rPos; // prevent compiler warning
     DBG_ERRORFILE( "ScToken::CalcRelFromAbs: virtual dummy called" );
 }
 
@@ -668,9 +680,8 @@ USHORT ScToken::GetIndex() const
     return 0;
 }
 
-void ScToken::SetIndex( USHORT n )
+void ScToken::SetIndex( USHORT )
 {
-    n = 0;  // prevent compiler warning
     DBG_ERRORFILE( "ScToken::SetIndex: virtual dummy called" );
 }
 
@@ -853,9 +864,10 @@ ScToken* ScTokenArray::GetNextReference()
             case svSingleRef:
             case svDoubleRef:
                 return t;
-                break;
             default:
-                ; // nothing, prevent compiler warning
+            {
+                // added to avoid warnings
+            }
         }
     }
     return NULL;
@@ -882,9 +894,10 @@ ScToken* ScTokenArray::GetNextReferenceRPN()
             case svSingleRef:
             case svDoubleRef:
                 return t;
-                break;
             default:
-                ; // nothing, prevent compiler warning
+            {
+                // added to avoid warnings
+            }
         }
     }
     return NULL;
@@ -900,9 +913,10 @@ ScToken* ScTokenArray::GetNextReferenceOrName()
             case svDoubleRef:
             case svIndex:
                 return t;
-                break;
             default:
-                ; // nothing, prevent compiler warning
+            {
+                // added to avoid warnings
+            }
         }
     }
     return NULL;
@@ -1247,7 +1261,9 @@ void ScTokenArray::Store( SvStream& rStream, const ScAddress& rPos ) const
                         (*p)->GetDoubleRef().CalcAbsIfRel( rPos );
                     break;
                 default:
-                    ; // nothing, prevent compiler warning
+                {
+                    // added to avoid warnings
+                }
             }
             (*p)->Store( rStream );
         }
@@ -1286,7 +1302,9 @@ void ScTokenArray::Store( SvStream& rStream, const ScAddress& rPos ) const
                             t->GetDoubleRef().CalcAbsIfRel( rPos );
                         break;
                     default:
-                        ; // nothing, prevent compiler warning
+                    {
+                        // added to avoid warnings
+                    }
                 }
                 rStream << (BYTE) 0xFF;
                 t->Store( rStream );
@@ -1536,8 +1554,8 @@ ScToken* ScTokenArray::AddBad( const String& rStr )
 BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
         const ScAddress& rPos, ScDirection eDir )
 {
-    SCCOL nCol;
-    SCROW nRow;
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
     switch ( eDir )
     {
         case DIR_BOTTOM :
@@ -1670,7 +1688,9 @@ BOOL ScTokenArray::GetAdjacentExtendOfOuterFuncRefs( SCCOLROW& nExtend,
                         }
                         break;
                         default:
-                            ; // nothing, prevent compiler warning
+                        {
+                            // added to avoid warnings
+                        }
                     } // switch
                 } // for
                 return bRet;
@@ -1787,7 +1807,9 @@ BOOL ScTokenArray::HasMatrixDoubleRefOps()
                 }
                 break;
                 default:
-                    ; // nothing, prevent compiler warning
+                {
+                    // added to avoid warnings
+                }
             }
             if ( eOp == ocPush || lcl_IsReference( eOp, t->GetType() )  )
                 pStack[sp++] = t;
@@ -1798,7 +1820,7 @@ BOOL ScTokenArray::HasMatrixDoubleRefOps()
             }
             else
             {   // pop parameters, push result
-                sp -= nParams;
+                sp = sal::static_int_cast<short>( sp - nParams );
                 if ( sp < 0 )
                 {
                     DBG_ERROR( "ScTokenArray::HasMatrixDoubleRefOps: sp < 0" );
@@ -1844,7 +1866,9 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
             }
             break;
             default:
-                ; // nothing, prevent compiler warning
+            {
+                // added to avoid warnings
+            }
         }
     }
 }
@@ -1859,7 +1883,9 @@ void ScTokenArray::ReadjustRelative3DReferences( const ScAddress& rOldPos,
  * SetCompileXML() calls and similar bits.
  */
 
-#if OSL_DEBUG_LEVEL > 0
+#if 0
+// static function can't be compiled and not used (warning)
+//#if OSL_DEBUG_LEVEL > 0
 static void DumpTokArr( ScTokenArray *pCode )
 {
     fprintf (stderr, "TokenArr: ");
@@ -1936,16 +1962,16 @@ bool ScMissingContext::AddMissing( ScTokenArray *pNewArr ) const
     {
         case ocFixed:
             return AddDefaultArg( pNewArr, 1, 2.0 );
-            break;
+            //break;
         case ocBetaDist:
         case ocBetaInv:
         case ocRMZ:  // PMT
             return AddDefaultArg( pNewArr, 3, 0.0 );
-            break;
+            //break;
         case ocZinsZ: // IPMT
         case ocKapz:  // PPMT
             return AddDefaultArg( pNewArr, 4, 0.0 );
-            break;
+            //break;
         case ocBW: // PV
         case ocZW: // FV
             bRet |= AddDefaultArg( pNewArr, 2, 0.0 ); // pmt
@@ -1958,7 +1984,7 @@ bool ScMissingContext::AddMissing( ScTokenArray *pNewArr ) const
             break;
         case ocExternal:
             return AddMissingExternal( pNewArr );
-            break;
+            //break;
 
             // --- more complex cases ---
 
@@ -2052,7 +2078,7 @@ ScTokenArray * ScTokenArray::RewriteMissingToPof()
 
 ///////////////////////////////////////////////////////////////////////////
 
-void ScRawToken::Load30( SvStream& rStream )
+void ScRawToken::Load30( SvStream& /* rStream */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -2177,7 +2203,7 @@ void ScRawToken::Load30( SvStream& rStream )
 // Bei unbekannten Tokens steht in cStr (k)ein Pascal-String (cStr[0] = Laenge),
 // der nur gepuffert wird. cStr[0] = GESAMT-Laenge inkl. [0] !!!
 
-void ScRawToken::Load( SvStream& rStream, USHORT nVer )
+void ScRawToken::Load( SvStream& /* rStream */, USHORT /* nVer */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -2317,7 +2343,7 @@ void ScRawToken::Load( SvStream& rStream, USHORT nVer )
 #endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
-void ScToken::Store( SvStream& rStream ) const
+void ScToken::Store( SvStream& /* rStream */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
