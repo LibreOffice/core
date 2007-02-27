@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshb.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:00:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:59:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,9 +345,9 @@ void ScTabViewShell::ExecDrawIns(SfxRequest& rReq)
             {
                 //          Der Server moechte die Clientgrosse verandern
 
-                SfxInPlaceClient* pIPClient = GetIPClient();
+                SfxInPlaceClient* pClient = GetIPClient();
 
-                if ( pIPClient && pIPClient->IsObjectInPlaceActive() )
+                if ( pClient && pClient->IsObjectInPlaceActive() )
                 {
                     const SfxRectangleItem& rRect =
                         (SfxRectangleItem&)rReq.GetArgs()->Get(SID_OBJECTRESIZE);
@@ -457,7 +457,6 @@ void ScTabViewShell::GetDrawInsState(SfxItemSet &rSet)
 {
     BOOL bOle = GetViewFrame()->GetFrame()->IsInPlace();
     BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
-    SfxApplication* pSfxApp = SFX_APP();
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
