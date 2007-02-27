@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc3.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:52:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:49:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -838,13 +838,13 @@ BOOL ScDBFunc::HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& 
                 ScRange aSelRange;
                 if ( GetViewData()->GetSimpleArea( aSelRange ) && aSelRange.aStart == aSelRange.aEnd )
                 {
-                    SCCOL nCol = aSelRange.aStart.Col();
-                    SCROW nRow = aSelRange.aStart.Row();
-                    SCTAB nTab = aSelRange.aStart.Tab();
-                    if ( pDoc->HasValueData( nCol, nRow, nTab ) )
+                    SCCOL nSelCol = aSelRange.aStart.Col();
+                    SCROW nSelRow = aSelRange.aStart.Row();
+                    SCTAB nSelTab = aSelRange.aStart.Tab();
+                    if ( pDoc->HasValueData( nSelCol, nSelRow, nSelTab ) )
                     {
                         ULONG nIndex = static_cast<const SfxUInt32Item*>(pDoc->GetAttr(
-                                        nCol, nRow, nTab, ATTR_VALUE_FORMAT))->GetValue();
+                                        nSelCol, nSelRow, nSelTab, ATTR_VALUE_FORMAT))->GetValue();
                         short nType = pDoc->GetFormatTable()->GetType(nIndex);
                         if ( nType == NUMBERFORMAT_DATE || nType == NUMBERFORMAT_TIME || nType == NUMBERFORMAT_DATETIME )
                         {
