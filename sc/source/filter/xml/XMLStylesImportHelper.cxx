@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesImportHelper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:48:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:46:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,14 +331,14 @@ void ScMyStyleRanges::SetStylesToRanges(const rtl::OUString* pStyleName, ScXMLIm
 
 ScMyStylesImportHelper::ScMyStylesImportHelper(ScXMLImport& rTempImport)
     :
-    bPrevRangeAdded(sal_True),
+    aRowDefaultStyle(aCellStyles.end()),
     rImport(rTempImport),
-    nMaxRanges(0),
-    pPrevStyleName(NULL),
-    pPrevCurrency(NULL),
     pStyleName(NULL),
+    pPrevStyleName(NULL),
     pCurrency(NULL),
-    aRowDefaultStyle(aCellStyles.end())
+    pPrevCurrency(NULL),
+    nMaxRanges(0),
+    bPrevRangeAdded(sal_True)
 {
 }
 
@@ -368,11 +368,11 @@ void ScMyStylesImportHelper::ResetAttributes()
     nCellType = 0;
 }
 
-ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString* pStyleName)
+ScMyStylesSet::iterator ScMyStylesImportHelper::GetIterator(const rtl::OUString* pStyleNameP)
 {
     ScMyStyle aStyle;
-    if (pStyleName)
-        aStyle.sStyleName = *pStyleName;
+    if (pStyleNameP)
+        aStyle.sStyleName = *pStyleNameP;
     else
         DBG_ERROR("here is no stylename given");
     ScMyStylesSet::iterator aItr(aCellStyles.find(aStyle));
@@ -397,11 +397,11 @@ void ScMyStylesImportHelper::AddDefaultRange(const ScRange& rRange)
     {
         SCCOL nStartCol(rRange.aStart.Col());
         SCCOL nEndCol(rRange.aEnd.Col());
-        if (aColDefaultStyles.size() > nStartCol)
+        if (aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nStartCol))
         {
             ScMyStylesSet::iterator aPrevItr(aColDefaultStyles[nStartCol]);
-            DBG_ASSERT(aColDefaultStyles.size() > nEndCol, "to much columns");
-            for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < aColDefaultStyles.size()); ++i)
+            DBG_ASSERT(aColDefaultStyles.size() > sal::static_int_cast<sal_uInt32>(nEndCol), "to much columns");
+            for (SCCOL i = nStartCol + 1; (i <= nEndCol) && (i < sal::static_int_cast<SCCOL>(aColDefaultStyles.size())); ++i)
             {
                 if (aPrevItr != aColDefaultStyles[i])
                 {
@@ -468,6 +468,7 @@ void ScMyStylesImportHelper::AddRange()
 
 void ScMyStylesImportHelper::AddColumnStyle(const rtl::OUString& sStyleName, const sal_Int32 nColumn, const sal_Int32 nRepeat)
 {
+    (void)nColumn;  // avoid warning in product version
     DBG_ASSERT(static_cast<sal_uInt32>(nColumn) == aColDefaultStyles.size(), "some columns are absent");
     ScMyStylesSet::iterator aItr(GetIterator(&sStyleName));
     DBG_ASSERT(aItr != aCellStyles.end(), "no column default style")
@@ -481,16 +482,16 @@ void ScMyStylesImportHelper::SetRowStyle(const rtl::OUString& sStyleName)
     aRowDefaultStyle = GetIterator(&sStyleName);
 }
 
-void ScMyStylesImportHelper::SetAttributes(rtl::OUString* pStyleName,
-    rtl::OUString* pCurrency, const sal_Int16 nCellType)
+void ScMyStylesImportHelper::SetAttributes(rtl::OUString* pStyleNameP,
+    rtl::OUString* pCurrencyP, const sal_Int16 nCellTypeP)
 {
     if (this->pStyleName)
         delete this->pStyleName;
     if (this->pCurrency)
         delete this->pCurrency;
-    this->pStyleName = pStyleName;
-    this->pCurrency = pCurrency;
-    this->nCellType = nCellType;
+    this->pStyleName = pStyleNameP;
+    this->pCurrency = pCurrencyP;
+    this->nCellType = nCellTypeP;
 }
 
 void ScMyStylesImportHelper::AddRange(const ScRange& rRange)
