@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:47:56 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:10:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,8 +95,8 @@ BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
 BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
                                                 SfxItemSet& rOutSet )
 {
-    SfxItemPool* pPool = rArgs.GetPool();
-    SfxItemSet aNewAttr( *pPool,
+    SfxItemPool* pArgPool = rArgs.GetPool();
+    SfxItemSet aNewAttr( *pArgPool,
                             EE_ITEMS_START, EE_ITEMS_END,
                             SID_ATTR_PARA_HYPHENZONE, SID_ATTR_PARA_HYPHENZONE,
                             SID_ATTR_PARA_PAGEBREAK, SID_ATTR_PARA_PAGEBREAK,
@@ -137,7 +137,7 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     return bRet;
 }
 
-void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest &rReq )
+void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
 {
     SdrView* pView = pViewData->GetScDrawView();
     OutlinerView* pOutView = pView->GetTextEditOutlinerView();
