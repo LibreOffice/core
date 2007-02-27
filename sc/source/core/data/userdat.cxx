@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userdat.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:10:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -644,7 +644,7 @@ ScDrawObjData::ScDrawObjData( const ScDrawObjData& r )
 ScDrawObjData::~ScDrawObjData()
 {}
 
-SdrObjUserData* ScDrawObjData::Clone(SdrObject* pObj) const
+SdrObjUserData* ScDrawObjData::Clone(SdrObject*) const
 {
     return new ScDrawObjData( *this );
 }
@@ -672,7 +672,7 @@ __EXPORT ScIMapInfo::~ScIMapInfo()
 {
 }
 
-SdrObjUserData* __EXPORT ScIMapInfo::Clone( SdrObject* pObj ) const
+SdrObjUserData* __EXPORT ScIMapInfo::Clone( SdrObject* ) const
 {
     return new ScIMapInfo( *this );
 }
