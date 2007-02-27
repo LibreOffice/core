@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 11:43:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:07:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -434,7 +434,7 @@ void ScDocShell::InitOptions()          // Fortsetzung von InitNew (CLOOKs)
     aViewOpt.SetHideAutoSpell( bHideAuto );
 
     // zweistellige Jahreszahleneingabe aus Extras->Optionen->Allgemein->Sonstiges
-    aDocOpt.SetYear2000( SFX_APP()->GetMiscConfig()->GetYear2000() );
+    aDocOpt.SetYear2000( sal::static_int_cast<USHORT>( SFX_APP()->GetMiscConfig()->GetYear2000() ) );
 
     aDocument.SetDocOptions( aDocOpt );
     aDocument.SetViewOptions( aViewOpt );
@@ -611,6 +611,10 @@ ScChangeAction* ScDocShell::GetChangeAction( const ScAddress& rPos )
                         case SC_CAT_MOVE :
                             pFoundMove = pAction;
                         break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
                     ++nModified;
                 }
@@ -852,6 +856,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
                     pMove->GetBigRange().MakeRange(), NULL );
             }
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         pThisAction = pThisAction->GetNext();
     }
@@ -1003,6 +1011,10 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
                                 aSourceRange.aStart, TRUE, TRUE, FALSE, FALSE );
                         }
                         break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
                 }
                 const String& rComment = pSourceAction->GetComment();
