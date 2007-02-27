@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiasciiopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:27:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:04:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -474,7 +474,7 @@ IMPL_LINK( ScImportAsciiDlg, CharSetHdl, SvxTextEncodingBox*, pCharSetBox )
 IMPL_LINK( ScImportAsciiDlg, FirstRowHdl, NumericField*, pNumField )
 {
     DBG_ASSERT( pNumField, "ScImportAsciiDlg::FirstRowHdl - missing sender" );
-    maTableBox.Execute( CSVCMD_SETFIRSTIMPORTLINE, pNumField->GetValue() - 1 );
+    maTableBox.Execute( CSVCMD_SETFIRSTIMPORTLINE, sal::static_int_cast<sal_Int32>( pNumField->GetValue() - 1 ) );
     return 0;
 }
 
@@ -486,10 +486,8 @@ IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
     return 0;
 }
 
-IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, pTableBox )
+IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, EMPTYARG )
 {
-    DBG_ASSERT( pTableBox, "ScImportAsciiDlg::UpdateTextHdl - missing sender" );
-
     sal_Int32 nBaseLine = maTableBox.GetFirstVisLine();
     sal_Int32 nRead = maTableBox.GetVisLineCount();
     // If mnRowPosCount==0, this is an initializing call, read ahead for row
