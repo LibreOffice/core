@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangenam.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 12:11:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:18:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@
 // Interner ctor fuer das Suchen nach einem Index
 
 ScRangeData::ScRangeData( USHORT n )
-           : nIndex( n ), pCode( NULL ), bModified( FALSE )
+           : pCode( NULL ), nIndex( n ), bModified( FALSE )
 {}
 
 ScRangeData::ScRangeData( ScDocument* pDok,
@@ -74,11 +74,11 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           BOOL bEnglish ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
+                pCode       ( NULL ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                pCode       ( NULL ),
                 bModified   ( FALSE )
 {
     if (rSymbol.Len() > 0)
@@ -120,11 +120,11 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           RangeType nType ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
+                pCode       ( new ScTokenArray( rArr ) ),
                 aPos        ( rAddress ),
                 eType       ( nType ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                pCode       ( new ScTokenArray( rArr ) ),
                 bModified   ( FALSE )
 {
     if( !pCode->GetError() )
@@ -155,11 +155,11 @@ ScRangeData::ScRangeData( ScDocument* pDok,
                           const ScAddress& rTarget ) :
                 aName       ( rName ),
                 aUpperName  ( ScGlobal::pCharClass->upper( rName ) ),
+                pCode       ( new ScTokenArray ),
                 aPos        ( rTarget ),
                 eType       ( RT_NAME ),
                 pDoc        ( pDok ),
                 nIndex      ( 0 ),
-                pCode       ( new ScTokenArray ),
                 bModified   ( FALSE )
 {
     SingleRefData aRefData;
@@ -173,13 +173,14 @@ ScRangeData::ScRangeData( ScDocument* pDok,
 }
 
 ScRangeData::ScRangeData(const ScRangeData& rScRangeData) :
+    DataObject(),
     aName   (rScRangeData.aName),
     aUpperName  (rScRangeData.aUpperName),
+    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray),      // echte Kopie erzeugen (nicht copy-ctor)
     aPos        (rScRangeData.aPos),
     eType       (rScRangeData.eType),
     pDoc        (rScRangeData.pDoc),
     nIndex      (rScRangeData.nIndex),
-    pCode       (rScRangeData.pCode ? rScRangeData.pCode->Clone() : new ScTokenArray),      // echte Kopie erzeugen (nicht copy-ctor)
     bModified   (rScRangeData.bModified)
 {}
 
@@ -194,7 +195,7 @@ DataObject* ScRangeData::Clone() const
 }
 
 ScRangeData::ScRangeData
-    ( SvStream& rStream, ScMultipleReadHeader& rHdr, USHORT nVer )
+    ( SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */, USHORT /* nVer */ )
            : pCode      ( new ScTokenArray ),
              bModified  (FALSE)
 
@@ -233,7 +234,7 @@ ScRangeData::ScRangeData
 }
 
 BOOL ScRangeData::Store
-    ( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
+    ( SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -261,7 +262,7 @@ BOOL ScRangeData::IsBeyond( SCROW nMaxRow ) const
 
     ScToken* t;
     pCode->Reset();
-    while ( t = pCode->GetNextReference() )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
         if ( t->GetSingleRef().nRow > nMaxRow ||
                 (t->GetType() == svDoubleRef &&
                 t->GetDoubleRef().Ref2.nRow > nMaxRow) )
@@ -283,7 +284,7 @@ void ScRangeData::GuessPosition()
 
     ScToken* t;
     pCode->Reset();
-    while ( t = pCode->GetNextReference() )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         SingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsColRel() && rRef1.nRelCol < nMinCol )
@@ -499,7 +500,7 @@ void ScRangeData::UpdateTabRef(SCTAB nOldTable, USHORT nFlag, SCTAB nNewTable)
     pCode->Reset();
     if( pCode->GetNextReference() )
     {
-        ScRangeData* pRangeData;        // darf nicht dereferenziert werden!!
+        ScRangeData* pRangeData = NULL;     // must not be dereferenced
         BOOL bChanged;
         ScCompiler aComp( pDoc, aPos, *pCode );
         switch (nFlag)
@@ -627,20 +628,20 @@ void ScRangeData::TransferTabRef( SCTAB nOldTab, SCTAB nNewTab )
     aPos.SetTab( nNewTab );
     ScToken* t;
     pCode->Reset();
-    while ( t = pCode->GetNextReference() )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         SingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsTabRel() )
-            rRef1.nTab += nPosDiff;
+            rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + nPosDiff );
         else
-            rRef1.nTab += nTabDiff;
+            rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + nTabDiff );
         if ( t->GetType() == svDoubleRef )
         {
             SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
             if ( rRef2.IsTabRel() )
-                rRef2.nTab += nPosDiff;
+                rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab + nPosDiff );
             else
-                rRef2.nTab += nTabDiff;
+                rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab + nTabDiff );
         }
     }
 }
@@ -653,9 +654,9 @@ void ScRangeData::ReplaceRangeNamesInUse( const ScIndexMap& rMap )
     {
         if ( p->GetOpCode() == ocName )
         {
-            USHORT nIndex = p->GetIndex();
-            USHORT nNewIndex = rMap.Find( nIndex );
-            if ( nIndex != nNewIndex )
+            USHORT nOldIndex = p->GetIndex();
+            USHORT nNewIndex = rMap.Find( nOldIndex );
+            if ( nOldIndex != nNewIndex )
             {
                 p->SetIndex( nNewIndex );
                 bCompile = TRUE;
@@ -684,7 +685,7 @@ void ScRangeData::ValidateTabRefs()
     SCTAB nMaxTab = nMinTab;
     ScToken* t;
     pCode->Reset();
-    while ( t = pCode->GetNextReference() )
+    while ( ( t = pCode->GetNextReference() ) != NULL )
     {
         SingleRefData& rRef1 = t->GetSingleRef();
         if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
@@ -717,31 +718,31 @@ void ScRangeData::ValidateTabRefs()
         aPos.SetTab( aPos.Tab() - nMove );
 
         pCode->Reset();
-        while ( t = pCode->GetNextReference() )
+        while ( ( t = pCode->GetNextReference() ) != NULL )
         {
             SingleRefData& rRef1 = t->GetSingleRef();
             if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
-                rRef1.nTab -= nMove;
+                rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab - nMove );
             if ( t->GetType() == svDoubleRef )
             {
                 SingleRefData& rRef2 = t->GetDoubleRef().Ref2;
                 if ( rRef2.IsTabRel() && !rRef2.IsTabDeleted() )
-                    rRef2.nTab -= nMove;
+                    rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab - nMove );
             }
         }
     }
 }
 
 
-int
+extern "C" int
 #ifdef WNT
 __cdecl
 #endif
-ScRangeData::QsortNameCompare( const void* p1, const void* p2 )
+ScRangeData_QsortNameCompare( const void* p1, const void* p2 )
 {
     return (int) ScGlobal::pCollator->compareString(
-            (*(const ScRangeData**)p1)->aName,
-            (*(const ScRangeData**)p2)->aName );
+            (*(const ScRangeData**)p1)->GetName(),
+            (*(const ScRangeData**)p2)->GetName() );
 }
 
 
