@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:39:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ private:
     void    SetCurrentDoc( const String& rDocName );
 
     ScTabViewShell*         GetTabViewShell() const;
-    ScNavigatorSettings*    GetSettings();
+    ScNavigatorSettings*    GetNavigatorSettings();
     BOOL                    GetViewData();
 
     void    UpdateColumn    ( const SCCOL* pCol = NULL );
@@ -348,6 +348,7 @@ public:
                 ScNavigatorDlg( SfxBindings* pB, SfxChildWindowContext* pCW, Window* pParent );
                 ~ScNavigatorDlg();
 
+    using Window::Notify;
     virtual void    SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
                             const SfxHint& rHint, const TypeId& rHintType );
 
@@ -368,7 +369,7 @@ public:
                                       SfxBindings*      pBindings,
                                       SfxChildWinInfo*  pInfo );
 
-    SFX_DECL_CHILDWINDOW_CONTEXT(ScNavigatorDialogWrapper)
+    SFX_DECL_CHILDWINDOWCONTEXT(ScNavigatorDialogWrapper)
 
     virtual void    Resizing( Size& rSize );
 
