@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:49:19 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ public:
     void                        Remove();
 
     inline sal_uInt16           GetBufferCount() const
-                                    { return (pLast - pBuffer) + 1; }
+                                    { return static_cast< sal_uInt16 >( (pLast - pBuffer) + 1 ); }
     inline void                 GetBufferCopy( sal_uInt16* pDest ) const
                                     { memcpy( pDest, pBuffer, sizeof(sal_uInt16) * GetBufferCount() ); }
 };
@@ -610,6 +610,9 @@ public:
 
     void                        Push( XclExpChTrAction* pNewRec );
     inline XclExpChTrAction*    Pop()   { return (XclExpChTrAction*) Stack::Pop(); }
+
+private:
+    using                       Stack::Push;
 };
 
 //___________________________________________________________________
@@ -624,7 +627,7 @@ private:
 public:
     virtual                     ~XclExpChTrRecordList();
 
-                                List::Count;
+    using                       List::Count;
     void                        Append( ExcRecord* pNewRec );
     void                        Save( XclExpStream& rStrm );
 };
