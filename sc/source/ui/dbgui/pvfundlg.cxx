@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvfundlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:26:18 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:04:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ void ScDPFunctionListBox::FillFunctionNames()
     DBG_ASSERT( !GetEntryCount(), "ScDPFunctionListBox::FillFunctionNames - do not add texts to resource" );
     Clear();
     ResStringArray aArr( ScResId( SCSTR_DPFUNCLISTBOX ) );
-    for( USHORT nIndex = 0, nCount = aArr.Count(); nIndex < nCount; ++nIndex )
+    for( USHORT nIndex = 0, nCount = sal::static_int_cast<USHORT>(aArr.Count()); nIndex < nCount; ++nIndex )
         InsertEntry( aArr.GetString( nIndex ) );
 }
 
@@ -554,7 +554,7 @@ void ScDPSubtotalOptDlg::FillLabelData( ScDPLabelData& rLabelData ) const
 
     rLabelData.maShowInfo.IsEnabled = maCbShow.IsChecked();
     rLabelData.maShowInfo.ShowItemsMode = maLbShowFromWrp.GetControlValue();
-    rLabelData.maShowInfo.ItemCount = maNfShow.GetValue();
+    rLabelData.maShowInfo.ItemCount = sal::static_int_cast<sal_Int32>( maNfShow.GetValue() );
     rLabelData.maShowInfo.DataField = maLbShowUsing.GetSelectEntry();
 
     // *** HIDDEN ITEMS ***
