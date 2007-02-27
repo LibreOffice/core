@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtopt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:29:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,7 @@ void ScFilterOptions::Commit()
     DBG_ERROR("trying to commit changed ScFilterOptions?");
 }
 
-void ScFilterOptions::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void ScFilterOptions::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
 {
     DBG_ERROR("properties have been changed")
 }
