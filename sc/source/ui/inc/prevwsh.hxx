@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:41:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ protected:
 public:
                     TYPEINFO();
 
-                    SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL);
+                    SFX_DECL_INTERFACE(SCID_PREVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScPreviewShell);
 
                     ScPreviewShell( SfxViewFrame*           pViewFrame,
