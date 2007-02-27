@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:17:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,8 +247,8 @@ void ScInterpreter::ScEasterSunday()
         L = (32 + 2 * E + 2 * I - H - K) % 7;
         M = int((N + 11 * H + 22 * L) / 451);
         O = H + L - 7 * M + 114;
-        nDay = O % 31 + 1;
-        nMonth = int(O / 31);
+        nDay = sal::static_int_cast<INT16>( O % 31 + 1 );
+        nMonth = sal::static_int_cast<INT16>( int(O / 31) );
         PushDouble( GetDate( nYear, nMonth, nDay ) );
     }
 }
@@ -906,7 +906,7 @@ void ScInterpreter::ScGDA2()
     double nAbRate = 1.0 - pow(nRest / nWert, 1.0 / nDauer);
     nAbRate = ::rtl::math::approxFloor((nAbRate * 1000.0) + 0.5) / 1000.0;
     double nErsteAbRate = nWert * nAbRate * nMonate / 12.0;
-    double nGda2;
+    double nGda2 = 0.0;
     if (::rtl::math::approxFloor(nPeriode) == 1)
         nGda2 = nErsteAbRate;
     else
@@ -936,11 +936,7 @@ double ScInterpreter::ScInterVDB(double fWert,double fRest,double fDauer,
 
     double fTerm, fLia;
     double fRestwert = fWert - fRest;
-    double fRestwert1 = fRestwert;
     BOOL bNowLia = FALSE;
-    BOOL bFirstFlag=TRUE;
-    BOOL b2Flag=TRUE;
-    double fAbschlag=0;
 
     double fGda;
     ULONG i;
@@ -988,7 +984,7 @@ void ScInterpreter::ScVDB()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 5, 7 ) )
     {
-        double fWert, fRest, fDauer, fAnfang, fEnde, fFaktor, fVdb;
+        double fWert, fRest, fDauer, fAnfang, fEnde, fFaktor, fVdb = 0.0;
         BOOL bFlag;
         if (nParamCount == 7)
             bFlag = GetBool();
@@ -1481,11 +1477,11 @@ void ScInterpreter::ScBackSolver()
                 ScRange aVRange( aValueAdr, aValueAdr );    // fuer SetDirty
                 double fSaveVal; // Original value to be restored later if necessary
                 ScPostIt aNote(pDok);
-                BOOL bHasNote;
+                BOOL bHasNote = FALSE;
 
                 if ( bTempCell )
                 {
-                    if ( bHasNote = (pVCell != NULL) )
+                    if ( ( bHasNote = (pVCell != NULL) ) != FALSE )
                         bHasNote = pVCell->GetNote( aNote );
                     fSaveVal = 0.0;
                     pVCell = new ScValueCell( fSaveVal );
@@ -1683,7 +1679,7 @@ void ScInterpreter::ScIntersect()
     SCCOL nCol2;
     SCROW nRow2;
     SCTAB nTab2;
-    BYTE eStackVar = GetStackType();
+    BYTE eStackVar = sal::static_int_cast<BYTE>( GetStackType() );
     if (eStackVar == svDoubleRef)
         PopDoubleRef(nCol11, nRow11, nTab11, nCol21, nRow21, nTab21);
     else if (eStackVar == svSingleRef)
@@ -1699,7 +1695,7 @@ void ScInterpreter::ScIntersect()
         PushInt(0);
         return;
     }
-    eStackVar = GetStackType();
+    eStackVar = sal::static_int_cast<BYTE>( GetStackType() );
     if (eStackVar == svDoubleRef)
         PopDoubleRef(nCol12, nRow12, nTab12, nCol22, nRow22, nTab22);
     else if (eStackVar == svSingleRef)
@@ -1865,7 +1861,7 @@ void ScInterpreter::ScDde()
         String aTopic = GetString();
         String aAppl  = GetString();
 
-        if (nMode < SC_DDE_DEFAULT || nMode > SC_DDE_TEXT)
+        if (nMode > SC_DDE_TEXT)
             nMode = SC_DDE_DEFAULT;
 
         //  temporary documents (ScFunctionAccess) have no DocShell
@@ -2195,8 +2191,8 @@ void ScInterpreter::ScRoman()
                     }
                     aRoman += pChars[ nIndex ];
                     aRoman += pChars[ nIndex2 ];
-                    nVal += pValues[ nIndex ];
-                    nVal -= pValues[ nIndex2 ];
+                    nVal = sal::static_int_cast<USHORT>( nVal + pValues[ nIndex ] );
+                    nVal = sal::static_int_cast<USHORT>( nVal - pValues[ nIndex2 ] );
                 }
                 else
                 {
@@ -2260,17 +2256,17 @@ void ScInterpreter::ScArabic()
             {
                 if( nDigit1 >= nDigit2 )
                 {
-                    nValue += nDigit1;
+                    nValue = sal::static_int_cast<USHORT>( nValue + nDigit1 );
                     nValidRest %= (nDigit1 * (bIsDec1 ? 5 : 2));
                     bValid = (nValidRest >= nDigit1);
                     if( bValid )
-                        nValidRest -= nDigit1;
+                        nValidRest = sal::static_int_cast<USHORT>( nValidRest - nDigit1 );
                     nCharIndex++;
                 }
                 else if( nDigit1 * 2 != nDigit2 )
                 {
                     USHORT nDiff = nDigit2 - nDigit1;
-                    nValue += nDiff;
+                    nValue = sal::static_int_cast<USHORT>( nValue + nDiff );
                     bValid = (nValidRest >= nDiff);
                     if( bValid )
                         nValidRest = nDigit1 - 1;
