@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuitphfedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:20:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:37:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,24 +114,24 @@ ScHFEditPage::ScHFEditPage( Window*             pParent,
 
     :   SfxTabPage      ( pParent, ScResId( nResId ), rCoreAttrs ),
 
-        aWndLeft        ( this, ScResId( WND_LEFT ), Left ),
-        aWndCenter      ( this, ScResId( WND_CENTER ), Center ),
-        aWndRight       ( this, ScResId( WND_RIGHT ), Right ),
         aFtLeft         ( this, ScResId( FT_LEFT ) ),
+        aWndLeft        ( this, ScResId( WND_LEFT ), Left ),
         aFtCenter       ( this, ScResId( FT_CENTER ) ),
+        aWndCenter      ( this, ScResId( WND_CENTER ), Center ),
         aFtRight        ( this, ScResId( FT_RIGHT ) ),
+        aWndRight       ( this, ScResId( WND_RIGHT ), Right ),
         maFtDefinedHF       ( this, ScResId( FT_HF_DEFINED ) ),
         maLbDefined     ( this, ScResId( LB_DEFINED ) ),
         maFtCustomHF        ( this, ScResId( FT_HF_CUSTOM ) ),
-        aFlInfo         ( this, ScResId( FL_INFO ) ),
-        aFtInfo         ( this, ScResId( FT_INFO ) ),
         aBtnText        ( this, ScResId( BTN_TEXT ) ),
+        aBtnFile        ( this, ScResId( BTN_FILE ) ),
+        aBtnTable       ( this, ScResId( BTN_TABLE ) ),
         aBtnPage        ( this, ScResId( BTN_PAGE ) ),
         aBtnLastPage    ( this, ScResId( BTN_PAGES ) ),
         aBtnDate        ( this, ScResId( BTN_DATE ) ),
         aBtnTime        ( this, ScResId( BTN_TIME ) ),
-        aBtnFile        ( this, ScResId( BTN_FILE ) ),
-        aBtnTable       ( this, ScResId( BTN_TABLE ) ),
+        aFlInfo         ( this, ScResId( FL_INFO ) ),
+        aFtInfo         ( this, ScResId( FT_INFO ) ),
         aPopUpFile      ( ScResId( RID_POPUP_FCOMMAND) ),
         nWhich          ( nWhichId )
 {
@@ -540,13 +540,18 @@ void ScHFEditPage::SetSelectDefinedList()
                 }
             }
             break;
+
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 
     if(eSelectEntry == eEntryCount)
         InsertToDefinedList();
 
-    maLbDefined.SelectEntryPos(eSelectEntry);
+    maLbDefined.SelectEntryPos( sal::static_int_cast<USHORT>( eSelectEntry ) );
 }
 
 bool ScHFEditPage::IsPageEntry(EditEngine*pEngine, EditTextObject* pTextObj)
@@ -664,7 +669,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aPageOfEntry += ScGlobal::GetRscString( STR_HF_OF );
             aPageOfEntry += ' ';
             aWndCenter.GetEditEngine()->QuickInsertText(aPageOfEntry,ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos += aPageOfEntry.Len();
+            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aPageOfEntry.Len() );
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPagesField()), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
@@ -709,7 +714,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             aPageEntry += ' ';
             aWndCenter.GetEditEngine()->QuickInsertText(aPageEntry, ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             aSel.nStartPos = aSel.nEndPos;
-            aSel.nEndPos += aPageEntry.Len();
+            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aPageEntry.Len() );
             aWndCenter.GetEditEngine()->QuickInsertField(SvxFieldItem(SvxPageField()), ESelection(aSel.nEndPara,aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
@@ -739,7 +744,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ++aSel.nEndPos;
             String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
             aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos += aCommaSpace.Len();
+            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.Len() );
             aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxTableField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
@@ -760,7 +765,7 @@ void ScHFEditPage::ProcessDefinedListSel(ScHFEntryId eSel, bool bTravelling)
             ++aSel.nEndPos;
             String aCommaSpace(RTL_CONSTASCII_STRINGPARAM(", "));
             aWndCenter.GetEditEngine()->QuickInsertText(aCommaSpace,ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
-            aSel.nEndPos += aCommaSpace.Len();
+            aSel.nEndPos = sal::static_int_cast<xub_StrLen>( aSel.nEndPos + aCommaSpace.Len() );
             aWndCenter.GetEditEngine()->QuickInsertField( SvxFieldItem(SvxFileField()), ESelection(aSel.nEndPara, aSel.nEndPos, aSel.nEndPara, aSel.nEndPos));
             pTextObj.reset(aWndCenter.GetEditEngine()->CreateTextObject());
             aWndCenter.SetText(*pTextObj);
