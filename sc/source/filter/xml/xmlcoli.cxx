@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcoli.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:21:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:49:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ ScXMLTableColContext::~ScXMLTableColContext()
 SvXMLImportContext *ScXMLTableColContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = 0;
 /*
@@ -241,7 +241,7 @@ ScXMLTableColsContext::ScXMLTableColsContext( ScXMLImport& rImport,
                                                 sAttrName, &aLocalName );
             const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
-            if (nPrfx == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DISPLAY))
+            if (nPrefix == XML_NAMESPACE_TABLE && IsXMLToken(aLocalName, XML_DISPLAY))
             {
                 if (IsXMLToken(sValue, XML_FALSE))
                     bGroupDisplay = sal_False;
@@ -262,7 +262,6 @@ SvXMLImportContext *ScXMLTableColsContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetTableColsElemTokenMap();
-    sal_Bool bHeader = sal_False;
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_COLS_COL_GROUP:
