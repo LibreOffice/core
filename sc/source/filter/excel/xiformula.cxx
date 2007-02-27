@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiformula.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 09:46:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:26:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,8 +78,8 @@ XclImpFmlaCompImpl::XclImpFmlaCompImpl( const XclImpRoot& rRoot ) :
 }
 
 void XclImpFmlaCompImpl::CreateRangeList(
-        ScRangeList& rScRanges, XclFormulaType eType,
-        const XclTokenArray& rXclTokArr, XclImpStream& rStrm )
+        ScRangeList& rScRanges, XclFormulaType /*eType*/,
+        const XclTokenArray& rXclTokArr, XclImpStream& /*rStrm*/ )
 {
     rScRanges.RemoveAll();
 
