@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoutil.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:28:04 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:40:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@
 #include "globstr.hrc"
 #include "global.hxx"
 
-void ScUndoUtil::MarkSimpleBlock( ScDocShell* pDocShell,
+void ScUndoUtil::MarkSimpleBlock( ScDocShell* /* pDocShell */,
                                 SCCOL nStartX, SCROW nStartY, SCTAB nStartZ,
                                 SCCOL nEndX, SCROW nEndY, SCTAB nEndZ )
 {
@@ -104,8 +104,7 @@ ScDBData* ScUndoUtil::GetOldDBData( ScDBData* pUndoData, ScDocument* pDoc, SCTAB
             if ( aName == ScGlobal::GetRscString( STR_DB_NONAME ) )
                 bWasTemp = TRUE;
         }
-        if (!bWasTemp)
-            DBG_ERROR("Undo: DB-Bereich nicht gefunden");
+        DBG_ASSERT(bWasTemp, "Undo: didn't find database range");
 
         USHORT nIndex;
         ScDBCollection* pColl = pDoc->GetDBCollection();
