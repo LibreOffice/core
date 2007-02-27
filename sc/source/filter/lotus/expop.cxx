@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:27:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@
 const USHORT ExportWK1::WK1MAXCOL = 255;
 const USHORT ExportWK1::WK1MAXROW = 8191;
 
-BYTE ExportWK1::GenFormByte( const ScPatternAttr &aAttr )
+BYTE ExportWK1::GenFormByte( const ScPatternAttr& /*aAttr*/ )
 {
     return 0xFF;
 }
@@ -183,7 +183,7 @@ void ExportWK1::Label( const USHORT nCol, const USHORT nRow, const String& rStr,
     if( nAnz > 240 )            // max. 240 Zeichen im String
         nAnz = 240;
 
-    nLaenge += ( USHORT ) nAnz;            // + Stringlaenge
+    nLaenge = nLaenge + ( USHORT ) nAnz;            // + Stringlaenge
 
     aOut << ( USHORT ) 0x0F << nLaenge << GenFormByte( aAttr ) << nCol << nRow << ( sal_Char ) '\'';
                     // ACHTUNG: ZUNAECHST NUR LEFT ALIGNMENT
@@ -273,7 +273,7 @@ inline void ExportWK1::Cursorw12()
 }
 
 
-void ExportWK1::WKString( const USHORT nCol, const USHORT nRow, const ScFormulaCell* pFC, const ScPatternAttr& aAttr )
+void ExportWK1::WKString( const USHORT /*nCol*/, const USHORT /*nRow*/, const ScFormulaCell* /*pFC*/, const ScPatternAttr& /*aAttr*/ )
 {   // (0x33)
     // PREC:    nCol <= WK1MAXCOL, nRow <= WK1MAXROW
 /*  DBG_ASSERT( nCol <= WK1MAXCOL, "ExportWK1::Label(): Col > WK1MAXCOL" );
