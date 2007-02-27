@@ -4,9 +4,9 @@
  *
  *  $RCSfile: foptmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:24:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:03:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
     :   pDlg            ( ptrDlg ),
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData ? ptrViewData->GetDocument() : NULL ),
-        rQueryData      ( refQueryData ),
         rBtnMore        ( refBtnMore ),
         rBtnCase        ( refBtnCase ),
         rBtnRegExp      ( refBtnRegExp ),
@@ -95,7 +94,8 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
         rFtDbArea       ( refFtDbArea ),
         rFlOptions      ( refFlOptions ),
         rStrNoName      ( refStrNoName ),
-        rStrUndefined   ( refStrUndefined )
+        rStrUndefined   ( refStrUndefined ),
+        rQueryData      ( refQueryData )
 {
     Init();
 }
