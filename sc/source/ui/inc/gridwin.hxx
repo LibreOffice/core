@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:53:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:23:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,6 +346,7 @@ private:
     void            GetSelectionRects( ::std::vector< Rectangle >& rPixelRects );
 
 protected:
+    using Window::Resize;
     virtual void    Resize( const Size& rSize );
     virtual void    Paint( const Rectangle& rRect );
     virtual void    KeyInput(const KeyEvent& rKEvt);
@@ -402,6 +403,7 @@ public:
     void            DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                                     ScTableInfo& rTabInfo );
 
+    using Window::Draw;
     void            Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
                         ScUpdateMode eMode = SC_UPDATE_ALL );
 
