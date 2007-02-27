@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:07:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:55:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -317,8 +317,7 @@
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScPreviewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                         const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScPreviewShell::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     BOOL bDataChanged = FALSE;
 
