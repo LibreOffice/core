@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textuno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:49:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ const SfxItemPropertyMap* lcl_GetHdFtPropertyMap()
         SVX_UNOEDIT_FONT_PROPERTIES,
         SVX_UNOEDIT_PARA_PROPERTIES,
         SVX_UNOEDIT_NUMBERING_PROPERTIE,    // for completeness of service ParagraphProperties
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     static BOOL bTwipsSet = FALSE;
 
@@ -215,7 +215,7 @@ sal_Int64 SAL_CALL ScHeaderFooterContentObj::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -244,7 +244,7 @@ ScHeaderFooterContentObj* ScHeaderFooterContentObj::getImplementation(
     ScHeaderFooterContentObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScHeaderFooterContentObj*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScHeaderFooterContentObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
@@ -276,7 +276,7 @@ ScHeaderFooterTextData::~ScHeaderFooterTextData()
     rContentObj.release();
 }
 
-void ScHeaderFooterTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScHeaderFooterTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScHeaderFooterChangedHint ) )
     {
@@ -716,7 +716,7 @@ sal_Int64 SAL_CALL ScCellTextCursor::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return SvxUnoTextCursor::getSomething( rId );
 }
@@ -744,7 +744,7 @@ ScCellTextCursor* ScCellTextCursor::getImplementation( const uno::Reference<uno:
     ScCellTextCursor* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScCellTextCursor*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScCellTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
@@ -820,7 +820,7 @@ sal_Int64 SAL_CALL ScHeaderFooterTextCursor::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return SvxUnoTextCursor::getSomething( rId );
 }
@@ -849,7 +849,7 @@ ScHeaderFooterTextCursor* ScHeaderFooterTextCursor::getImplementation(
     ScHeaderFooterTextCursor* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScHeaderFooterTextCursor*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScHeaderFooterTextCursor*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
@@ -976,9 +976,9 @@ ScCellTextData::ScCellTextData(ScDocShell* pDocSh, const ScAddress& rP) :
     aCellPos( rP ),
     pEditEngine( NULL ),
     pForwarder( NULL ),
+    pOriginalSource( NULL ),
     bDataValid( FALSE ),
     bInUpdate( FALSE ),
-    pOriginalSource( NULL ),
     bDirty( FALSE ),
     bDoUpdate( TRUE )
 {
@@ -1101,11 +1101,11 @@ void ScCellTextData::UpdateData()
         bDirty = TRUE;
 }
 
-void ScCellTextData::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScCellTextData::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Ref-Update
     }
