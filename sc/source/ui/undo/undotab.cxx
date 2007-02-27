@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:29:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:39:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,10 +108,10 @@ ScUndoInsertTab::ScUndoInsertTab( ScDocShell* pNewDocShell,
                                   BOOL bApp,
                                   const String& rNewName) :
     ScSimpleUndo( pNewDocShell ),
-    nTab( nTabNum ),
-    bAppend( bApp ),
     sNewName( rNewName ),
-    pDrawUndo( NULL )
+    pDrawUndo( NULL ),
+    nTab( nTabNum ),
+    bAppend( bApp )
 {
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
     SetChangeTrack();
@@ -206,9 +206,9 @@ ScUndoInsertTables::ScUndoInsertTables( ScDocShell* pNewDocShell,
                                         SCTAB nTabNum,
                                         BOOL bApp,SvStrings *pNewNameList) :
     ScSimpleUndo( pNewDocShell ),
+    pDrawUndo( NULL ),
     nTab( nTabNum ),
-    bAppend( bApp ),
-    pDrawUndo( NULL )
+    bAppend( bApp )
 {
     pNameList = pNewNameList;
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
@@ -223,7 +223,7 @@ __EXPORT ScUndoInsertTables::~ScUndoInsertTables()
     {
         for(int i=0;i<pNameList->Count();i++)
         {
-            pStr=pNameList->GetObject(i);
+            pStr=pNameList->GetObject(sal::static_int_cast<USHORT>(i));
             delete pStr;
         }
         pNameList->Remove(0,pNameList->Count());
@@ -247,8 +247,8 @@ void ScUndoInsertTables::SetChangeTrack()
         ScRange aRange( 0, 0, nTab, MAXCOL, MAXROW, nTab );
         for( int i = 0; i < pNameList->Count(); i++ )
         {
-            aRange.aStart.SetTab( nTab + i );
-            aRange.aEnd.SetTab( nTab + i );
+            aRange.aStart.SetTab( sal::static_int_cast<SCTAB>( nTab + i ) );
+            aRange.aEnd.SetTab( sal::static_int_cast<SCTAB>( nTab + i ) );
             pChangeTrack->AppendInsert( aRange );
             nEndChangeAction = pChangeTrack->GetActionMax();
         }
@@ -268,7 +268,7 @@ void __EXPORT ScUndoInsertTables::Undo()
     SvShorts TheTabs;
     for(int i=0;i<pNameList->Count();i++)
     {
-        TheTabs.Insert(nTab+i,TheTabs.Count());
+        TheTabs.Insert( sal::static_int_cast<short>(nTab+i), TheTabs.Count() );
     }
 
     pViewShell->DeleteTables( TheTabs, FALSE );
@@ -327,7 +327,7 @@ ScUndoDeleteTab::ScUndoDeleteTab( ScDocShell* pNewDocShell,const SvShorts &aTab,
     ScMoveUndo( pNewDocShell, pUndoDocument, pRefData, SC_UNDO_REFLAST )
 {
         for(int i=0;i<aTab.Count();i++)
-            theTabs.Insert(aTab[i],theTabs.Count());
+            theTabs.Insert(aTab[sal::static_int_cast<USHORT>(i)],theTabs.Count());
 
         SetChangeTrack();
 }
@@ -353,8 +353,8 @@ void ScUndoDeleteTab::SetChangeTrack()
         ScRange aRange( 0, 0, 0, MAXCOL, MAXROW, 0 );
         for ( int i = 0; i < theTabs.Count(); i++ )
         {
-            aRange.aStart.SetTab( theTabs[i] );
-            aRange.aEnd.SetTab( theTabs[i] );
+            aRange.aStart.SetTab( theTabs[sal::static_int_cast<USHORT>(i)] );
+            aRange.aEnd.SetTab( theTabs[sal::static_int_cast<USHORT>(i)] );
             pChangeTrack->AppendDeleteRange( aRange, pRefUndoDoc,
                 nTmpChangeAction, nEndChangeAction, (short) i );
         }
@@ -382,43 +382,44 @@ void __EXPORT ScUndoDeleteTab::Undo()
 
     for(i=0;i<theTabs.Count();i++)
     {
-        pRefUndoDoc->GetName( theTabs[i], aName );
+        SCTAB nTab = theTabs[sal::static_int_cast<USHORT>(i)];
+        pRefUndoDoc->GetName( nTab, aName );
 
         bDrawIsInUndo = TRUE;
-        BOOL bOk = pDoc->InsertTab( theTabs[i], aName );
+        BOOL bOk = pDoc->InsertTab( nTab, aName );
         bDrawIsInUndo = FALSE;
         if (bOk)
         {
             //  Ref-Undo passiert in EndUndo
     //      pUndoDoc->UndoToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,FALSE, pDoc );
-            pRefUndoDoc->CopyToDocument(0,0,theTabs[i], MAXCOL,MAXROW,theTabs[i], IDF_ALL,FALSE, pDoc );
+            pRefUndoDoc->CopyToDocument(0,0,nTab, MAXCOL,MAXROW,nTab, IDF_ALL,FALSE, pDoc );
 
             String aOldName;
-            pRefUndoDoc->GetName( theTabs[i], aOldName );
-            pDoc->RenameTab( theTabs[i], aOldName, FALSE );
-            if (pRefUndoDoc->IsLinked(theTabs[i]))
+            pRefUndoDoc->GetName( nTab, aOldName );
+            pDoc->RenameTab( nTab, aOldName, FALSE );
+            if (pRefUndoDoc->IsLinked(nTab))
             {
-                pDoc->SetLink( theTabs[i], pRefUndoDoc->GetLinkMode(theTabs[i]), pRefUndoDoc->GetLinkDoc(theTabs[i]),
-                                    pRefUndoDoc->GetLinkFlt(theTabs[i]), pRefUndoDoc->GetLinkOpt(theTabs[i]),
-                                    pRefUndoDoc->GetLinkTab(theTabs[i]), pRefUndoDoc->GetLinkRefreshDelay(theTabs[i]) );
+                pDoc->SetLink( nTab, pRefUndoDoc->GetLinkMode(nTab), pRefUndoDoc->GetLinkDoc(nTab),
+                                     pRefUndoDoc->GetLinkFlt(nTab), pRefUndoDoc->GetLinkOpt(nTab),
+                                     pRefUndoDoc->GetLinkTab(nTab), pRefUndoDoc->GetLinkRefreshDelay(nTab) );
                 bLink = TRUE;
             }
 
-            if ( pRefUndoDoc->IsScenario(theTabs[i]) )
+            if ( pRefUndoDoc->IsScenario(nTab) )
             {
-                pDoc->SetScenario( theTabs[i], TRUE );
+                pDoc->SetScenario( nTab, TRUE );
                 String aComment;
                 Color  aColor;
                 USHORT nScenFlags;
-                pRefUndoDoc->GetScenarioData( theTabs[i], aComment, aColor, nScenFlags );
-                pDoc->SetScenarioData( theTabs[i], aComment, aColor, nScenFlags );
-                BOOL bActive = pRefUndoDoc->IsActiveScenario( theTabs[i] );
-                pDoc->SetActiveScenario( theTabs[i], bActive );
+                pRefUndoDoc->GetScenarioData( nTab, aComment, aColor, nScenFlags );
+                pDoc->SetScenarioData( nTab, aComment, aColor, nScenFlags );
+                BOOL bActive = pRefUndoDoc->IsActiveScenario( nTab );
+                pDoc->SetActiveScenario( nTab, bActive );
             }
-            pDoc->SetVisible( theTabs[i], pRefUndoDoc->IsVisible( theTabs[i] ) );
+            pDoc->SetVisible( nTab, pRefUndoDoc->IsVisible( nTab ) );
 
-            if ( pRefUndoDoc->IsTabProtected( theTabs[i] ) )
-                pDoc->SetTabProtection( theTabs[i], TRUE, pRefUndoDoc->GetTabPassword( theTabs[i] ) );
+            if ( pRefUndoDoc->IsTabProtected( nTab ) )
+                pDoc->SetTabProtection( nTab, TRUE, pRefUndoDoc->GetTabPassword( nTab ) );
 
             //  Drawing-Layer passiert beim MoveUndo::EndUndo
     //      pDoc->TransferDrawPage(pRefUndoDoc, nTab,nTab);
@@ -437,7 +438,7 @@ void __EXPORT ScUndoDeleteTab::Undo()
 
     for(i=0;i<theTabs.Count();i++)
     {
-        pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[i]) );
+        pDocShell->Broadcast( ScTablesHint( SC_TAB_INSERTED, theTabs[sal::static_int_cast<USHORT>(i)]) );
     }
     SfxApplication* pSfxApp = SFX_APP();                                // Navigator
     pSfxApp->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
@@ -513,10 +514,10 @@ String __EXPORT ScUndoRenameTab::GetComment() const
     return ScGlobal::GetRscString( STR_UNDO_RENAME_TAB );
 }
 
-void ScUndoRenameTab::DoChange( SCTAB nTab, const String& rName ) const
+void ScUndoRenameTab::DoChange( SCTAB nTabP, const String& rName ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->RenameTab( nTab, rName );
+    pDoc->RenameTab( nTabP, rName );
 
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );    // Navigator
 
@@ -540,12 +541,12 @@ void __EXPORT ScUndoRenameTab::Redo()
     DoChange(nTab, sNewName);
 }
 
-void __EXPORT ScUndoRenameTab::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoRenameTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  Repeat macht keinen Sinn
 }
 
-BOOL __EXPORT ScUndoRenameTab::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoRenameTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -563,10 +564,10 @@ ScUndoMoveTab::ScUndoMoveTab( ScDocShell* pNewDocShell,
 {
     int i;
     for(i=0;i<aOldTab.Count();i++)
-            theOldTabs.Insert(aOldTab[i],theOldTabs.Count());
+        theOldTabs.Insert(aOldTab[sal::static_int_cast<USHORT>(i)],theOldTabs.Count());
 
     for(i=0;i<aNewTab.Count();i++)
-            theNewTabs.Insert(aNewTab[i],theNewTabs.Count());
+        theNewTabs.Insert(aNewTab[sal::static_int_cast<USHORT>(i)],theNewTabs.Count());
 }
 
 __EXPORT ScUndoMoveTab::~ScUndoMoveTab()
@@ -589,9 +590,8 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
     {
         for(int i=theNewTabs.Count()-1;i>=0;i--)
         {
-            SCTAB nDestTab = theNewTabs[i];
-            SCTAB nNewTab = theNewTabs[i];
-            SCTAB nOldTab = theOldTabs[i];
+            SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
+            SCTAB nOldTab = theOldTabs[sal::static_int_cast<USHORT>(i)];
             if (nDestTab > MAXTAB)                          // angehaengt ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
@@ -604,9 +604,9 @@ void ScUndoMoveTab::DoChange( BOOL bUndo ) const
     {
         for(int i=0;i<theNewTabs.Count();i++)
         {
-            SCTAB nDestTab = theNewTabs[i];
-            SCTAB nNewTab = theNewTabs[i];
-            SCTAB nOldTab = theOldTabs[i];
+            SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
+            SCTAB nNewTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
+            SCTAB nOldTab = theOldTabs[sal::static_int_cast<USHORT>(i)];
             if (nDestTab > MAXTAB)                          // angehaengt ?
                 nDestTab = pDoc->GetTableCount() - 1;
 
@@ -633,12 +633,12 @@ void __EXPORT ScUndoMoveTab::Redo()
     DoChange( FALSE );
 }
 
-void __EXPORT ScUndoMoveTab::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoMoveTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
         // kein Repeat ! ? !
 }
 
-BOOL __EXPORT ScUndoMoveTab::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoMoveTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -659,10 +659,10 @@ ScUndoCopyTab::ScUndoCopyTab( ScDocShell* pNewDocShell,
 
     int i;
     for(i=0;i<aOldTab.Count();i++)
-            theOldTabs.Insert(aOldTab[i],theOldTabs.Count());
+        theOldTabs.Insert(aOldTab[sal::static_int_cast<USHORT>(i)],theOldTabs.Count());
 
     for(i=0;i<aNewTab.Count();i++)
-            theNewTabs.Insert(aNewTab[i],theNewTabs.Count());
+        theNewTabs.Insert(aNewTab[sal::static_int_cast<USHORT>(i)],theNewTabs.Count());
 }
 
 __EXPORT ScUndoCopyTab::~ScUndoCopyTab()
@@ -698,7 +698,7 @@ void __EXPORT ScUndoCopyTab::Undo()
     int i;
     for(i=theNewTabs.Count()-1;i>=0;i--)
     {
-        SCTAB nDestTab = theNewTabs[i];
+        SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
@@ -712,7 +712,7 @@ void __EXPORT ScUndoCopyTab::Undo()
 
     for(i=theNewTabs.Count()-1;i>=0;i--)
     {
-        SCTAB nDestTab = theNewTabs[i];
+        SCTAB nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
         if (nDestTab > MAXTAB)                          // append?
             nDestTab = pDoc->GetTableCount() - 1;
 
@@ -730,9 +730,9 @@ void __EXPORT ScUndoCopyTab::Redo()
     SCTAB nDestTab = 0;
     for(int i=0;i<theNewTabs.Count();i++)
     {
-        nDestTab = theNewTabs[i];
-        SCTAB nNewTab = theNewTabs[i];
-        SCTAB nOldTab = theOldTabs[i];
+        nDestTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
+        SCTAB nNewTab = theNewTabs[sal::static_int_cast<USHORT>(i)];
+        SCTAB nOldTab = theOldTabs[sal::static_int_cast<USHORT>(i)];
         if (nDestTab > MAXTAB)                          // angehaengt ?
             nDestTab = pDoc->GetTableCount() - 1;
 
@@ -772,12 +772,12 @@ void __EXPORT ScUndoCopyTab::Redo()
 
 }
 
-void __EXPORT ScUndoCopyTab::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoCopyTab::Repeat(SfxRepeatTarget& /* rTarget */)
 {
         // kein Repeat ! ? !
 }
 
-BOOL __EXPORT ScUndoCopyTab::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoCopyTab::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -893,10 +893,10 @@ void ScUndoImportTab::DoChange() const
 {
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     ScDocument* pDoc = pDocShell->GetDocument();
-    SCTAB nCount = pDoc->GetTableCount();
+    SCTAB nTabCount = pDoc->GetTableCount();
     if (pViewShell)
     {
-        if(nTab<nCount)
+        if(nTab<nTabCount)
         {
             pViewShell->SetTabNo(nTab,TRUE);
         }
@@ -1096,12 +1096,12 @@ void __EXPORT ScUndoRemoveLink::Redo()
     DoChange( FALSE );
 }
 
-void __EXPORT ScUndoRemoveLink::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoRemoveLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
 
-BOOL __EXPORT ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoRemoveLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1123,10 +1123,10 @@ __EXPORT ScUndoShowHideTab::~ScUndoShowHideTab()
 {
 }
 
-void ScUndoShowHideTab::DoChange( BOOL bShow ) const
+void ScUndoShowHideTab::DoChange( BOOL bShowP ) const
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    pDoc->SetVisible( nTab, bShow );
+    pDoc->SetVisible( nTab, bShowP );
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     if (pViewShell)
@@ -1227,12 +1227,12 @@ void __EXPORT ScUndoProtect::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoProtect::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoProtect::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
 
-BOOL __EXPORT ScUndoProtect::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoProtect::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;       // gippsnich
 }
@@ -1298,12 +1298,12 @@ void __EXPORT ScUndoPrintRange::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoPrintRange::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoPrintRange::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
 
-BOOL __EXPORT ScUndoPrintRange::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoPrintRange::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;       // gippsnich
 }
@@ -1380,12 +1380,12 @@ void __EXPORT ScUndoScenarioFlags::Redo()
         SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_TABLES_CHANGED ) );
 }
 
-void __EXPORT ScUndoScenarioFlags::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoScenarioFlags::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  Repeat macht keinen Sinn
 }
 
-BOOL __EXPORT ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoScenarioFlags::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1464,11 +1464,11 @@ void ScUndoRenameObject::Redo()
     EndRedo();
 }
 
-void ScUndoRenameObject::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoRenameObject::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL ScUndoRenameObject::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoRenameObject::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1570,7 +1570,7 @@ void __EXPORT ScUndoSetAddressConvention::Redo()
     DoChange( eNewConv );
 }
 
-void __EXPORT ScUndoSetAddressConvention::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoSetAddressConvention::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 #if 0
 // erAck: 2006-09-07T23:00+0200  commented out in CWS scr1c1
