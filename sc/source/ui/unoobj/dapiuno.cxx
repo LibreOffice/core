@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapiuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:22:57 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:42:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ const SfxItemPropertyMap* lcl_GetDataPilotDescriptorBaseMap()
         {MAP_CHAR_LEN(SC_UNO_RPTEMPTY), 0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_ROWGRAND), 0,  &getBooleanCppuType(),  0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SHOWFILT), 0,  &getBooleanCppuType(),  0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aDataPilotDescriptorBaseMap_Impl;
 }
@@ -121,7 +121,7 @@ const SfxItemPropertyMap* lcl_GetDataPilotFieldMap()
         {MAP_CHAR_LEN(SC_UNONAME_SHOWEMPTY),    0,  &getBooleanCppuType(),                              0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SORTINFO),     0,  &getCppuType((sheet::DataPilotFieldSortInfo*)0),    0 | beans::PropertyAttribute::MAYBEVOID, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_USESELPAGE),   0,  &getBooleanCppuType(),                              0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aDataPilotFieldMap_Impl;
 }
@@ -132,7 +132,7 @@ const SfxItemPropertyMap* lcl_GetDataPilotItemMap()
     {
         {MAP_CHAR_LEN(SC_UNONAME_ISHIDDEN),     0,  &getBooleanCppuType(),                              0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_SHOWDETAIL),   0,  &getBooleanCppuType(),                              0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aDataPilotItemMap_Impl;
 }
@@ -201,6 +201,10 @@ USHORT ScDataPilotConversion::FunctionBit( sheet::GeneralFunction eFunc )
         case sheet::GeneralFunction_VAR:        nRet = PIVOT_FUNC_STD_VAR;   break;
         case sheet::GeneralFunction_VARP:       nRet = PIVOT_FUNC_STD_VARP;  break;
         case sheet::GeneralFunction_AUTO:       nRet = PIVOT_FUNC_AUTO;      break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return nRet;
 }
@@ -291,7 +295,7 @@ ScDataPilotTablesObj::~ScDataPilotTablesObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScDataPilotTablesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDataPilotTablesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update
 
@@ -415,12 +419,12 @@ void lcl_SetSaveData(const uno::Reference<container::XIndexAccess>& xFields, ScD
                     uno::Any aAny = xDimProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_ORIENT)));
                     sheet::DataPilotFieldOrientation eOrient;
                     if (aAny >>= eOrient)
-                        pDim->SetOrientation( eOrient );
+                        pDim->SetOrientation( sal::static_int_cast<USHORT>( eOrient ) );
 
                     aAny = xDimProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_FUNCTION)));
                     sheet::GeneralFunction eFunc;
                     if (aAny >>= eFunc)
-                        pDim->SetFunction( eFunc );
+                        pDim->SetFunction( sal::static_int_cast<USHORT>( eFunc ) );
                 }
             }
         }
@@ -447,7 +451,6 @@ void SAL_CALL ScDataPilotTablesObj::insertNewByName( const rtl::OUString& aNewNa
 
         if (pNewObj)
         {
-            ScDocument* pDoc = pDocShell->GetDocument();
             ScRange aOutputRange((SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet,
                                 (SCCOL)aOutputAddress.Column, (SCROW)aOutputAddress.Row, (SCTAB)aOutputAddress.Sheet);
             pNewObj->SetOutRange(aOutputRange);
@@ -533,7 +536,7 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xTable);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDataPilotTablesObj::getElementType() throw(uno::RuntimeException)
@@ -560,7 +563,7 @@ uno::Any SAL_CALL ScDataPilotTablesObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xTable);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDataPilotTablesObj::getElementNames()
@@ -698,7 +701,7 @@ uno::Sequence<sal_Int8> SAL_CALL ScDataPilotDescriptorBase::getImplementationId(
     return aId;
 }
 
-void ScDataPilotDescriptorBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDataPilotDescriptorBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Referenz-Update?
 
@@ -920,32 +923,32 @@ uno::Any SAL_CALL ScDataPilotDescriptorBase::getPropertyValue(const ::rtl::OUStr
     return aRet;
 }
 
-void SAL_CALL ScDataPilotDescriptorBase::addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
-                                const uno::Reference<beans::XPropertyChangeListener >& xListener )
+void SAL_CALL ScDataPilotDescriptorBase::addPropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
+                                const uno::Reference<beans::XPropertyChangeListener >& /* xListener */ )
                                                 throw(beans::UnknownPropertyException,
                                                     lang::WrappedTargetException,
                                                     uno::RuntimeException)
 {
 }
 
-void SAL_CALL ScDataPilotDescriptorBase::removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
-                                const uno::Reference<beans::XPropertyChangeListener >& aListener )
+void SAL_CALL ScDataPilotDescriptorBase::removePropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
+                                const uno::Reference<beans::XPropertyChangeListener >& /* aListener */ )
                                                 throw(beans::UnknownPropertyException,
                                                     lang::WrappedTargetException,
                                                     uno::RuntimeException)
 {
 }
 
-void SAL_CALL ScDataPilotDescriptorBase::addVetoableChangeListener( const ::rtl::OUString& PropertyName,
-                                const uno::Reference<beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ScDataPilotDescriptorBase::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
+                                const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                                 throw(beans::UnknownPropertyException,
                                                     lang::WrappedTargetException,
                                                     uno::RuntimeException)
 {
 }
 
-void SAL_CALL ScDataPilotDescriptorBase::removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
-                                const uno::Reference<beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ScDataPilotDescriptorBase::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
+                                const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                                 throw(beans::UnknownPropertyException,
                                                     lang::WrappedTargetException,
                                                     uno::RuntimeException)
@@ -961,7 +964,7 @@ sal_Int64 SAL_CALL ScDataPilotDescriptorBase::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -990,7 +993,7 @@ ScDataPilotDescriptorBase* ScDataPilotDescriptorBase::getImplementation(
     ScDataPilotDescriptorBase* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScDataPilotDescriptorBase*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScDataPilotDescriptorBase*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
@@ -1065,11 +1068,11 @@ ScDPObject* ScDataPilotTableObj::GetDPObject() const
 
 void ScDataPilotTableObj::SetDPObject( ScDPObject* pDPObject )
 {
-    ScDocShell* pDocShell = GetDocShell();
-    ScDPObject* pDPObj = lcl_GetDPObject(pDocShell, nTab, aName);
-    if ( pDPObj && pDocShell )
+    ScDocShell* pDocSh = GetDocShell();
+    ScDPObject* pDPObj = lcl_GetDPObject(pDocSh, nTab, aName);
+    if ( pDPObj && pDocSh )
     {
-        ScDBDocFunc aFunc(*pDocShell);
+        ScDBDocFunc aFunc(*pDocSh);
         aFunc.DataPilotUpdate( pDPObj, pDPObject, TRUE, TRUE );
     }
 }
@@ -1381,7 +1384,7 @@ BOOL lcl_GetFieldDataByIndex( const com::sun::star::uno::Reference<com::sun::sta
 
     if ( bOk )
     {
-        uno::Reference<beans::XPropertySet> xDim( xIntDims->getByIndex(nDimIndex), uno::UNO_QUERY );
+        xDim.set( xIntDims->getByIndex(nDimIndex), uno::UNO_QUERY );
         uno::Reference<container::XNamed> xDimName( xDim, uno::UNO_QUERY );
         if ( xDimName.is() )
         {
@@ -1413,7 +1416,7 @@ BOOL lcl_GetFieldDataByIndex( const com::sun::star::uno::Reference<com::sun::sta
     return bOk;
 }
 
-BOOL lcl_GetFieldDataByName( ScDPObject* pDPObj, USHORT nType, const rtl::OUString& sName, ScFieldIdentifier& rField )
+BOOL lcl_GetFieldDataByName( ScDPObject* pDPObj, USHORT /* nType */, const rtl::OUString& sName, ScFieldIdentifier& rField )
 {
     // "By name" is always the first match.
     // The name "Data" always refers to the data layout field.
@@ -1436,7 +1439,6 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByIndex_Impl(SCSIZE nIndex) 
 // TODO
     if (pObj)
     {
-        ScDPSaveDimension* pDim = NULL;
         ScFieldIdentifier aSourceIdent;
         BOOL bOk = lcl_GetFieldDataByIndex( pObj->GetSource(), nType, nIndex, aSourceIdent );
 
@@ -1527,8 +1529,6 @@ uno::Sequence<rtl::OUString> SAL_CALL ScDataPilotFieldsObj::getElementNames()
 
     if (pDPObj)
     {
-        ScDocShell* pDocSh = pParent->GetDocShell();
-
         uno::Sequence<rtl::OUString> aSeq(static_cast<sal_Int32>(lcl_GetFieldCount(pDPObj->GetSource(), nType)));
         rtl::OUString* pAry = aSeq.getArray();
         const List& rDimensions = pDPObj->GetSaveData()->GetDimensions();
@@ -1852,10 +1852,10 @@ void ScDataPilotFieldObj::setOrientation(sheet::DataPilotFieldOrientation eNew)
                 pDim = pNewDim;
             }
 
-            pDim->SetOrientation(eNew);
+            pDim->SetOrientation(sal::static_int_cast<USHORT>(eNew));
             pParent->SetDPObject(pDPObj);
 
-            nSourceType = eNew;   // modifying the same object's orientation again doesn't create another duplicate
+            nSourceType = sal::static_int_cast<USHORT>(eNew);   // modifying the same object's orientation again doesn't create another duplicate
         }
     }
 }
@@ -1904,12 +1904,12 @@ void ScDataPilotFieldObj::setFunction(sheet::GeneralFunction eNewFunc)
                     pDim->SetSubTotals( 0, NULL );
                 else
                 {
-                    USHORT nFunc = eNewFunc;
+                    USHORT nFunc = sal::static_int_cast<USHORT>( eNewFunc );
                     pDim->SetSubTotals( 1, &nFunc );
                 }
             }
             else
-                pDim->SetFunction(eNewFunc);
+                pDim->SetFunction( sal::static_int_cast<USHORT>( eNewFunc ) );
             pParent->SetDPObject(pDPObj);
         }
     }
@@ -2672,7 +2672,7 @@ uno::Any SAL_CALL ScDataPilotFieldGroupsObj::getByName( const rtl::OUString& aNa
     else
         throw container::NoSuchElementException();
 
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDataPilotFieldGroupsObj::getElementNames()
@@ -2863,7 +2863,7 @@ uno::Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if (nIndex >= 0 && nIndex < aGroups.size())
+    if (nIndex >= 0 && nIndex < sal::static_int_cast<sal_Int32>(aGroups.size()))
         return uno::makeAny(uno::Reference < container::XNameAccess > (new ScDataPilotFieldGroupObj(aGroups[nIndex])));
     else
         throw lang::IndexOutOfBoundsException();
@@ -3071,7 +3071,7 @@ uno::Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
                                     lang::WrappedTargetException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    if (nIndex >= 0 && nIndex < aGroup.aMembers.size())
+    if (nIndex >= 0 && nIndex < sal::static_int_cast<sal_Int32>(aGroup.aMembers.size()))
         return uno::makeAny(uno::Reference < container::XNamed > (new ScDataPilotFieldGroupItemObj(aGroup.aMembers[nIndex])));
     else
         throw lang::IndexOutOfBoundsException();
@@ -3290,8 +3290,8 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasElements() throw(uno::RuntimeException
 //------------------------------------------------------------------------
 
 ScDataPilotItemObj::ScDataPilotItemObj(ScDataPilotDescriptorBase* pPar, const ScFieldIdentifier& rIdent, SCSIZE nI)
-    : pParent(pPar),
-    aPropSet( lcl_GetDataPilotItemMap() ),
+    : aPropSet( lcl_GetDataPilotItemMap() ),
+    pParent(pPar),
     aSourceIdent(rIdent),
     nIndex(nI)
 {
@@ -3311,7 +3311,6 @@ ScDataPilotItemObj::~ScDataPilotItemObj()
     ScDPObject* pDPObj(pParent->GetDPObject());
     if (pDPObj)
     {
-        ScDPSaveDimension* pDim = NULL;
         uno::Reference<container::XNameAccess> xMembers;
         if (lcl_GetMembers(pParent, aSourceIdent, xMembers))
         {
@@ -3327,7 +3326,7 @@ ScDataPilotItemObj::~ScDataPilotItemObj()
     return sRet;
 }
 
-void SAL_CALL ScDataPilotItemObj::setName( const ::rtl::OUString& aName )
+void SAL_CALL ScDataPilotItemObj::setName( const ::rtl::OUString& /* aName */ )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
 }
@@ -3445,36 +3444,36 @@ void SAL_CALL ScDataPilotItemObj::setPropertyValue( const ::rtl::OUString& aProp
     return aRet;
 }
 
-void SAL_CALL ScDataPilotItemObj::addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+void SAL_CALL ScDataPilotItemObj::addPropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
                                     const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::beans::XPropertyChangeListener >& xListener )
+                                        ::com::sun::star::beans::XPropertyChangeListener >& /* xListener */ )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ScDataPilotItemObj::removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+void SAL_CALL ScDataPilotItemObj::removePropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
                                     const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::beans::XPropertyChangeListener >& aListener )
+                                        ::com::sun::star::beans::XPropertyChangeListener >& /* aListener */ )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ScDataPilotItemObj::addVetoableChangeListener( const ::rtl::OUString& PropertyName,
+void SAL_CALL ScDataPilotItemObj::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
                                     const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                        ::com::sun::star::beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException)
 {
 }
 
-void SAL_CALL ScDataPilotItemObj::removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
+void SAL_CALL ScDataPilotItemObj::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
                                     const ::com::sun::star::uno::Reference<
-                                        ::com::sun::star::beans::XVetoableChangeListener >& aListener )
+                                        ::com::sun::star::beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(::com::sun::star::beans::UnknownPropertyException,
                                     ::com::sun::star::lang::WrappedTargetException,
                                     ::com::sun::star::uno::RuntimeException)
