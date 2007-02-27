@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpview.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:00:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:28:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,8 @@ public:
                                           const SfxItemSet&     rCoreSet );
     virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
     virtual void        Reset           ( const SfxItemSet& rCoreSet );
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
@@ -177,6 +179,8 @@ public:
                                           const SfxItemSet&     rCoreSet );
     virtual BOOL        FillItemSet     ( SfxItemSet& rCoreSet );
     virtual void        Reset           ( const SfxItemSet& rCoreSet );
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage( const SfxItemSet& );
     virtual int         DeactivatePage( SfxItemSet* pSet = 0 );
 
