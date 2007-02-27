@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unitconv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:45:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:19:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,8 @@ void ScUnitConverterData::BuildIndexString( String& rStr,
 #define CFGSTR_UNIT_TO      "ToUnit"
 #define CFGSTR_UNIT_FACTOR  "Factor"
 
-ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDelta ) :
-        StrCollection( nInit, nDelta, FALSE )
+ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDeltaP ) :
+        StrCollection( nInit, nDeltaP, FALSE )
 {
     //  read from configuration - "convert.ini" is no longer used
     //! config item as member to allow change of values
