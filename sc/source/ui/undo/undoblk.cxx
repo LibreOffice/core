@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:47:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,10 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
             else
                 pDoc->InsertCol( aEffRange );
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     ScRange aWorkRange( aEffRange );
@@ -250,6 +254,10 @@ void ScUndoInsertCells::DoChange( const BOOL bUndo )
                 nPaint |= PAINT_LEFT;
             }
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     pDocShell->PostPaint( aWorkRange, nPaint );
     pDocShell->PostDataChanged();
@@ -264,7 +272,7 @@ void __EXPORT ScUndoInsertCells::Undo()
     if ( pPasteUndo )
         pPasteUndo->Undo();     // undo paste first
 
-    WaitObject aWait( pDocShell->GetDialogParent() );       // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginUndo();
     DoChange( TRUE );
     EndUndo();
@@ -272,7 +280,7 @@ void __EXPORT ScUndoInsertCells::Undo()
 
 void __EXPORT ScUndoInsertCells::Redo()
 {
-    WaitObject aWait( pDocShell->GetDialogParent() );       // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginRedo();
     DoChange( FALSE );
     EndRedo();
@@ -387,6 +395,10 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
             else
                 pDoc->DeleteCol( aEffRange );
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     // bei Undo Referenzen wiederherstellen
@@ -446,6 +458,10 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
                 aWorkRange.aEnd.SetRow(MAXROW);
                 nPaint |= PAINT_LEFT;
             }
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     pDocShell->PostPaint( aWorkRange, nPaint, SC_PF_LINES );    //! auf Lines testen
 
@@ -459,7 +475,7 @@ void ScUndoDeleteCells::DoChange( const BOOL bUndo )
 
 void __EXPORT ScUndoDeleteCells::Undo()
 {
-    WaitObject aWait( pDocShell->GetDialogParent() );       // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginUndo();
     DoChange( TRUE );
     EndUndo();
@@ -473,7 +489,7 @@ void __EXPORT ScUndoDeleteCells::Undo()
 
 void __EXPORT ScUndoDeleteCells::Redo()
 {
-    WaitObject aWait( pDocShell->GetDialogParent() );       // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginRedo();
     DoChange( FALSE);
     EndRedo();
@@ -600,7 +616,7 @@ void ScUndoDeleteMulti::SetChangeTrack()
 
 void __EXPORT ScUndoDeleteMulti::Undo()
 {
-    WaitObject aWait( pDocShell->GetDialogParent() );       // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -646,7 +662,7 @@ void __EXPORT ScUndoDeleteMulti::Undo()
 
 void __EXPORT ScUndoDeleteMulti::Redo()
 {
-    WaitObject aWait( pDocShell->GetDialogParent() );       // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( pDocShell->GetActiveDialogParent() );     // wichtig wegen TrackFormulas bei UpdateReference
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
@@ -699,8 +715,8 @@ ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
                 ScDocument* pNewUndoDoc ) :
     ScBlockUndo( pNewDocShell, ScRange(aRange.aStart, aOldEnd), SC_UNDO_AUTOHEIGHT ),
     aMarkData( rMark ),
-    aExtendedRange( aRange ),
-    pUndoDoc( pNewUndoDoc )
+    pUndoDoc( pNewUndoDoc ),
+    aExtendedRange( aRange )
 {
     SetChangeTrack();
 }
@@ -803,7 +819,7 @@ ScUndoPaste::ScUndoPaste( ScDocShell* pNewDocShell,
                 ScDocument* pNewUndoDoc, ScDocument* pNewRedoDoc,
                 USHORT nNewFlags,
                 ScRefUndoData* pRefData,
-                void* pFill1, void* pFill2, void* pFill3,
+                void* /* pFill1 */, void* /* pFill2 */, void* /* pFill3 */,
                 BOOL bRedoIsFilled, const ScUndoPasteOptions* pOptions ) :
     ScBlockUndo( pNewDocShell, ScRange( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ), SC_UNDO_SIMPLE ),
     aMarkData( rMark ),
@@ -887,7 +903,6 @@ void ScUndoPaste::DoChange( const BOOL bUndo )
             BOOL bColInfo = ( aBlockRange.aStart.Row()==0 && aBlockRange.aEnd.Row()==MAXROW );
             BOOL bRowInfo = ( aBlockRange.aStart.Col()==0 && aBlockRange.aEnd.Col()==MAXCOL );
 
-            SCTAB nStartTab = aBlockRange.aStart.Tab();
             pRedoDoc = new ScDocument( SCDOCMODE_UNDO );
             pRedoDoc->InitUndoSelected( pDoc, aMarkData, bColInfo, bRowInfo );
         }
@@ -1261,11 +1276,11 @@ void __EXPORT ScUndoDragDrop::Redo()
     SFX_APP()->Broadcast( SfxSimpleHint( SC_HINT_AREALINKS_CHANGED ) );
 }
 
-void __EXPORT ScUndoDragDrop::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoDragDrop::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoDragDrop::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoDragDrop::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;           // geht nicht
 }
@@ -1475,9 +1490,9 @@ ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
                                             ScDocument* pNewUndoDoc ) :
     ScSimpleUndo( pNewDocShell ),
     aMarkData( rMark ),
-    aRange( rRange ),
+    pUndoDoc( pNewUndoDoc ),
     aStyleName( rName ),
-    pUndoDoc( pNewUndoDoc )
+    aRange( rRange )
 {
     aMarkData.MarkToMulti();
 }
@@ -2137,12 +2152,12 @@ void __EXPORT ScUndoBorder::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoBorder::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoBorder::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //! spaeter (wenn die Funktion aus cellsuno nach docfunc gewandert ist)
 }
 
-BOOL __EXPORT ScUndoBorder::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoBorder::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;   // s.o.
 }
