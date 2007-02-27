@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfedtdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:19:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:36:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,12 +69,12 @@
 
 //==================================================================
 
-ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrame,
+ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrameP,
                           Window*           pParent,
                           const SfxItemSet& rCoreSet,
                           const String&     rPageStyle,
-                          USHORT            nResId )
-    :   SfxTabDialog( pFrame, pParent, ScResId( nResId ), &rCoreSet )
+                          USHORT            nResIdP )
+    :   SfxTabDialog( pFrameP, pParent, ScResId( nResIdP ), &rCoreSet )
 {
     eNumType = ((const SvxPageItem&)rCoreSet.Get(ATTR_PAGE)).GetNumType();
 
@@ -87,7 +87,7 @@ ScHFEditDlg::ScHFEditDlg( SfxViewFrame*     pFrame,
     aTmp += ')';
     SetText( aTmp );
 
-    switch ( nResId )
+    switch ( nResIdP )
     {
         case RID_SCDLG_HFED_HEADER:
         case RID_SCDLG_HFEDIT_HEADER:
@@ -182,7 +182,7 @@ __EXPORT ScHFEditDlg::~ScHFEditDlg()
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScHFEditDlg::PageCreated( USHORT nId, SfxTabPage& rPage )
+void __EXPORT ScHFEditDlg::PageCreated( USHORT /* nId */, SfxTabPage& rPage )
 {
     // kann ja nur ne ScHFEditPage sein...
 
