@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docoptio.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:28:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:15:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,16 +91,16 @@ ScDocOptions::ScDocOptions()
 //------------------------------------------------------------------------
 
 ScDocOptions::ScDocOptions( const ScDocOptions& rCpy )
-        :   bIsIgnoreCase( rCpy.bIsIgnoreCase ),
-            bIsIter( rCpy.bIsIter ),
+        :   fIterEps( rCpy.fIterEps ),
             nIterCount( rCpy.nIterCount ),
-            fIterEps( rCpy.fIterEps ),
             nPrecStandardFormat( rCpy.nPrecStandardFormat ),
             nDay( rCpy.nDay ),
             nMonth( rCpy.nMonth ),
             nYear( rCpy.nYear ),
             nYear2000( rCpy.nYear2000 ),
             nTabDistance( rCpy.nTabDistance ),
+            bIsIgnoreCase( rCpy.bIsIgnoreCase ),
+            bIsIter( rCpy.bIsIter ),
             bCalcAsShown( rCpy.bCalcAsShown ),
             bMatchWholeCell( rCpy.bMatchWholeCell ),
             bDoAutoSpell( rCpy.bDoAutoSpell ),
@@ -218,14 +218,14 @@ void ScDocOptions::ResetDocOptions()
 //      ScTpCalcItem - Daten fuer die CalcOptions-TabPage
 //========================================================================
 
-ScTpCalcItem::ScTpCalcItem( USHORT nWhich ) : SfxPoolItem( nWhich )
+ScTpCalcItem::ScTpCalcItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScTpCalcItem::ScTpCalcItem( USHORT nWhich, const ScDocOptions& rOpt )
-    :   SfxPoolItem ( nWhich ),
+ScTpCalcItem::ScTpCalcItem( USHORT nWhichP, const ScDocOptions& rOpt )
+    :   SfxPoolItem ( nWhichP ),
         theOptions  ( rOpt )
 {
 }
@@ -440,14 +440,12 @@ ScDocCfg::ScDocCfg() :
 IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetCalcPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
     USHORT nDateDay, nDateMonth, nDateYear;
     GetDate( nDateDay, nDateMonth, nDateYear );
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -498,11 +496,9 @@ IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
 IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
