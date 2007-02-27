@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawvie4.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:37:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,8 +161,6 @@ BOOL ScDrawView::BeginDrag( Window* pWindow, const Point& rStartPos )
 
     if ( AreObjectsMarked() )
     {
-        ScModule* pScMod = SC_MOD();
-
         BrkAction();
 
         Rectangle aMarkedRect = GetAllMarkedRect();
@@ -325,10 +323,10 @@ void ScDrawView::SetMarkedOriginalSize()
             {
                 //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
 
-                Fraction aScaleX, aScaleY;
-                CalcNormScale( aScaleX, aScaleY );
-                aDestMap.SetScaleX(aScaleX);
-                aDestMap.SetScaleY(aScaleY);
+                Fraction aNormScaleX, aNormScaleY;
+                CalcNormScale( aNormScaleX, aNormScaleY );
+                aDestMap.SetScaleX(aNormScaleX);
+                aDestMap.SetScaleY(aNormScaleY);
             }
             if (pViewData)
             {
