@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediash.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:26:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:14:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,8 +124,6 @@ void ScMediaShell::ExecuteMedia( SfxRequest& rReq )
     {
         const SfxItemSet*   pArgs = rReq.GetArgs();
         const SfxPoolItem*  pItem;
-        USHORT              nSlot = rReq.GetSlot();
-        BOOL                bGeometryChanged = FALSE;
 
         if( !pArgs || ( SFX_ITEM_SET != pArgs->GetItemState( SID_AVMEDIA_TOOLBOX, FALSE, &pItem ) ) )
             pItem = NULL;
