@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconstr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:11:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,9 +222,9 @@
 |*
 \************************************************************************/
 
-FuConstruct::FuConstruct(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuConstruct::FuConstruct(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
-    FuDraw(pViewSh, pWin, pView, pDoc, rReq)
+    FuDraw(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
 
