@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiimoptdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:07:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:05:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,17 +136,17 @@ ScImportOptionsDlg::ScImportOptionsDlg(
         BOOL                    bImport )
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_IMPORTOPT ) ),
-        aBtnOk      ( this, ScResId( BTN_OK ) ),
-        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
+        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
+        aFtFont     ( this, ScResId( FT_FONT ) ),
+        aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
         aFtFieldSep ( this, ScResId( FT_FIELDSEP ) ),
         aEdFieldSep ( this, ScResId( ED_FIELDSEP ) ),
         aFtTextSep  ( this, ScResId( FT_TEXTSEP ) ),
         aEdTextSep  ( this, ScResId( ED_TEXTSEP ) ),
-        aFtFont     ( this, ScResId( FT_FONT ) ),
-        aLbFont     ( this, ScResId( bAscii ? DDLB_FONT : LB_FONT ) ),
-        aFlFieldOpt ( this, ScResId( FL_FIELDOPT ) ),
         aCbFixed    ( this, ScResId( CB_FIXEDWIDTH ) ),
+        aBtnOk      ( this, ScResId( BTN_OK ) ),
+        aBtnCancel  ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp    ( this, ScResId( BTN_HELP ) ),
         aCbShown    ( this, ScResId( CB_SAVESHOWN ) )
 {
     // im Ctor-Initializer nicht moeglich (MSC kann das nicht):
