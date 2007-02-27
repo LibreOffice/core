@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:16:32 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,14 +65,10 @@
 
 // STATIC DATA -----------------------------------------------------------
 
-#pragma code_seg("SCSTATICS")
-
 #ifdef USE_MEMPOOL
 const USHORT nMemPoolEditCell = (0x1000 - 64) / sizeof(ScNoteCell);
 IMPL_FIXEDMEMPOOL_NEWDEL( ScEditCell, nMemPoolEditCell, nMemPoolEditCell )
 #endif
-
-#pragma code_seg()
 
 // -----------------------------------------------------------------------
 
@@ -379,7 +375,7 @@ BOOL ScFormulaCell::GetMatrixOrigin( ScAddress& rPos ) const
         case MM_FORMULA :
             rPos = aPos;
             return TRUE;
-        break;
+//        break;
         case MM_REFERENCE :
         {
             pCode->Reset();
@@ -533,7 +529,7 @@ USHORT ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
             }
 #endif
             return nEdges;
-            break;
+//            break;
         }
         default:
             return 0;
@@ -619,7 +615,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if (nCol >= nCol1)
             {
-                nCol += nDx;
+                nCol = sal::static_int_cast<SCCOL>( nCol + nDx );
                 if ((SCsCOL) nCol < 0)
                     nCol = 0;
                 else if ( nCol > MAXCOL )
@@ -633,7 +629,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
         {
             if (nRow >= nRow1)
             {
-                nRow += nDy;
+                nRow = sal::static_int_cast<SCROW>( nRow + nDy );
                 if ((SCsROW) nRow < 0)
                     nRow = 0;
                 else if ( nRow > MAXROW )
@@ -648,7 +644,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
             if (nTab >= nTab1)
             {
                 SCTAB nMaxTab = pDocument->GetTableCount() - 1;
-                nTab += nDz;
+                nTab = sal::static_int_cast<SCTAB>( nTab + nDz );
                 if ((SCsTAB) nTab < 0)
                     nTab = 0;
                 else if ( nTab > nMaxTab )
@@ -719,7 +715,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                 ScRangePairList* pColList = pDocument->GetColNameRanges();
                 ScRangePairList* pRowList = pDocument->GetRowNameRanges();
                 pCode->Reset();
-                while ( !bColRowNameCompile && (t = pCode->GetNextColRowName()) )
+                while ( !bColRowNameCompile && (t = pCode->GetNextColRowName()) != NULL )
                 {
                     SingleRefData& rRef = t->GetSingleRef();
                     if ( nDy > 0 && rRef.IsColRel() )
@@ -895,7 +891,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
         pRangeData = aComp.UpdateInsertTab( nTable, FALSE );
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
-            BOOL bChanged;
+            BOOL bRefChanged;
             pDocument->RemoveFromFormulaTree( this );   // update formula count
             delete pCode;
             pCode = new ScTokenArray( *pRangeData->GetCode() );
@@ -904,7 +900,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
             aComp2.UpdateInsertTab( nTable, FALSE );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
-            aComp2.UpdateDeleteTab( nTable, FALSE, TRUE, bChanged );
+            aComp2.UpdateDeleteTab( nTable, FALSE, TRUE, bRefChanged );
             bCompile = TRUE;
         }
         // kein StartListeningTo weil pTab[nTab] noch nicht existiert!
@@ -915,7 +911,7 @@ void ScFormulaCell::UpdateInsertTab(SCTAB nTable)
 
 BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
 {
-    BOOL bChanged = FALSE;
+    BOOL bRefChanged = FALSE;
     BOOL bPosChanged = ( aPos.Tab() > nTable ? TRUE : FALSE );
     pCode->Reset();
     if( pCode->GetNextReferenceRPN() && !pDocument->IsClipOrUndo() )
@@ -926,7 +922,7 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
             aPos.IncTab(-1);
         ScRangeData* pRangeData;
         ScCompiler aComp(pDocument, aPos, *pCode);
-        pRangeData = aComp.UpdateDeleteTab(nTable, bIsMove, FALSE, bChanged);
+        pRangeData = aComp.UpdateDeleteTab(nTable, bIsMove, FALSE, bRefChanged);
         if (pRangeData)                     // Shared Formula gegen echte Formel
         {                                   // austauschen
             pDocument->RemoveFromFormulaTree( this );   // update formula count
@@ -935,12 +931,12 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
             ScCompiler aComp2(pDocument, aPos, *pCode);
             aComp2.CompileTokenArray();
             aComp2.MoveRelWrap();
-            aComp2.UpdateDeleteTab( nTable, FALSE, FALSE, bChanged );
+            aComp2.UpdateDeleteTab( nTable, FALSE, FALSE, bRefChanged );
             // If the shared formula contained a named range/formula containing
             // an absolute reference to a sheet, those have to be readjusted.
             aComp2.UpdateInsertTab( nTable,TRUE );
-            // bChanged kann beim letzten UpdateDeleteTab zurueckgesetzt worden sein
-            bChanged = TRUE;
+            // bRefChanged kann beim letzten UpdateDeleteTab zurueckgesetzt worden sein
+            bRefChanged = TRUE;
             bCompile = TRUE;
         }
         // kein StartListeningTo weil pTab[nTab] noch nicht korrekt!
@@ -948,7 +944,7 @@ BOOL ScFormulaCell::UpdateDeleteTab(SCTAB nTable, BOOL bIsMove)
     else if ( bPosChanged )
         aPos.IncTab(-1);
 
-    return bChanged;
+    return bRefChanged;
 }
 
 void ScFormulaCell::UpdateMoveTab( SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo )
@@ -1106,7 +1102,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
     }
 
     ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : NULL;
-    BOOL bChanged = FALSE;
+    BOOL bRefChanged = FALSE;
     ScToken* t;
 
     ScRangeData* pShared = NULL;
@@ -1119,7 +1115,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             if (pName)
             {
                 if (pName->IsModified())
-                    bChanged = TRUE;
+                    bRefChanged = TRUE;
                 if (pName->HasType(RT_SHAREDMOD))
                     pShared = pName;
             }
@@ -1137,7 +1133,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
             if ( bMod )
             {
                 t->CalcRelFromAbs( aPos );
-                bChanged = TRUE;
+                bRefChanged = TRUE;
             }
         }
     }
@@ -1147,7 +1143,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         pDocument->RemoveFromFormulaTree( this );   // update formula count
         delete pCode;
         pCode = new ScTokenArray( *pShared->GetCode() );
-        bChanged = TRUE;
+        bRefChanged = TRUE;
         pCode->Reset();
         for( t = pCode->GetNextReference(); t; t = pCode->GetNextReference() )
         {
@@ -1167,7 +1163,7 @@ void ScFormulaCell::UpdateTranspose( const ScRange& rSource, const ScAddress& rD
         }
     }
 
-    if (bChanged)
+    if (bRefChanged)
     {
         if (pUndoDoc)
         {
@@ -1190,7 +1186,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
 {
     EndListeningTo( pDocument );
 
-    BOOL bChanged = FALSE;
+    BOOL bRefChanged = FALSE;
     ScToken* t;
     ScRangeData* pShared = NULL;
 
@@ -1203,7 +1199,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
             if (pName)
             {
                 if (pName->IsModified())
-                    bChanged = TRUE;
+                    bRefChanged = TRUE;
                 if (pName->HasType(RT_SHAREDMOD))
                     pShared = pName;
             }
@@ -1221,7 +1217,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
             if ( bMod )
             {
                 t->CalcRelFromAbs( aPos );
-                bChanged = TRUE;
+                bRefChanged = TRUE;
             }
         }
     }
@@ -1231,7 +1227,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         pDocument->RemoveFromFormulaTree( this );   // update formula count
         delete pCode;
         pCode = new ScTokenArray( *pShared->GetCode() );
-        bChanged = TRUE;
+        bRefChanged = TRUE;
         pCode->Reset();
         for( t = pCode->GetNextReference(); t; t = pCode->GetNextReference() )
         {
@@ -1251,7 +1247,7 @@ void ScFormulaCell::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCROW nGrowY
         }
     }
 
-    if (bChanged)
+    if (bRefChanged)
     {
         bCompile = TRUE;
         CompileTokenArray();                // ruft auch StartListeningTo
