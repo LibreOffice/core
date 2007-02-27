@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:17 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:52:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,10 @@ BOOL ScGridWindow::ShowNoteMarker( SCsCOL nPosX, SCsROW nPosY, BOOL bKeyboard )
                             case SC_CAT_MOVE :
                                 pFoundMove = pAction;
                             break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
                         ++nModified;
                     }
