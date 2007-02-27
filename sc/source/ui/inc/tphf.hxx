@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphf.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:58:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,10 @@ protected:
                               const SfxItemSet& rSet,
                               USHORT nSetId );
 
+//    using SvxHFPage::ActivatePage;
+//    using SvxHFPage::DeactivatePage;
+    virtual void    ActivatePage();
+    virtual void    DeactivatePage();
     virtual void    ActivatePage( const SfxItemSet& rSet );
     virtual int     DeactivatePage( SfxItemSet* pSet = 0 );
 
