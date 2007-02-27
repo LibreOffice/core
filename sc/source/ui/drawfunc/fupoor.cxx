@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:13:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,11 +245,11 @@
 |*
 \************************************************************************/
 
-FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuPoor::FuPoor(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq) :
+    pView(pViewP),
     pViewShell(pViewSh),
     pWindow(pWin),
-    pView(pView),
     pDrDoc(pDoc),
     aSfxRequest(rReq),
     pDialog(NULL),
@@ -363,7 +363,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, pTimer )
+IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
 {
     Point aPosPixel = pWindow->GetPointerPosPixel();
 
@@ -410,7 +410,7 @@ BOOL FuPoor::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
+BOOL FuPoor::KeyInput(const KeyEvent& /* rKEvt */)
 {
     BOOL bReturn = FALSE;
 
@@ -551,7 +551,7 @@ void FuPoor::StopDragTimer()
 |*
 \************************************************************************/
 
-SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuPoor::CreateDefaultObject(const sal_uInt16 /* nID */, const Rectangle& /* rRectangle */)
 {
     // empty base implementation
     return 0L;
