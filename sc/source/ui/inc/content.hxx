@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:07:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:20:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,12 +132,14 @@ class ScContentTree : public SvTreeListBox
 
     ScDocument* GetSourceDocument();
 
-    DECL_LINK( DoubleClickHdl, ScContentTree* );
+    DECL_LINK( ContentDoubleClickHdl, ScContentTree* );
     DECL_STATIC_LINK( ScContentTree, ExecDragHdl, void* );
 
 protected:
 //  virtual BOOL    Drop( const DropEvent& rEvt );
 //  virtual BOOL    QueryDrop( DropEvent& rEvt );
+
+    using SvTreeListBox::ExecuteDrop;
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );
