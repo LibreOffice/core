@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsceni.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:54:21 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:52:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,14 +149,14 @@ ScXMLTableScenarioContext::~ScXMLTableScenarioContext()
 SvXMLImportContext *ScXMLTableScenarioContext::CreateChildContext(
         USHORT nPrefix,
         const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList >& xAttrList )
+        const uno::Reference< xml::sax::XAttributeList >& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
 
 void ScXMLTableScenarioContext::EndElement()
 {
-    SCTAB   nCurrTable( GetScImport().GetTables().GetCurrentSheet() );
+    SCTAB nCurrTable( sal::static_int_cast<SCTAB>( GetScImport().GetTables().GetCurrentSheet() ) );
     ScDocument* pDoc(GetScImport().GetDocument());
     if (pDoc)
     {
