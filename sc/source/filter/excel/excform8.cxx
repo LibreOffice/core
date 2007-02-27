@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform8.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:21:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,8 +254,9 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 {                           //  name        size    ext     type
                     case 0x01:              //  Lel         4       -       err
                         aIn.Ignore( 4 );
-                        goto _ocbad;
-                        break;
+                        aPool << ocBad;
+                        aPool >> aStack;
+                    break;
                     case 0x02:              //  Rw          4       -       ref
                     case 0x03:              //  Col         4       -       ref
                     case 0x06:              //  RwV         4       -       val
@@ -288,38 +289,25 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     case 0x0B:              //  RadicalS    13      x       ref
                         aIn.Ignore( 13 );
                         nExtCnt++;
-                        goto _ocbad;
-                        break;
+                        aPool << ocBad;
+                        aPool >> aStack;
+                    break;
                     case 0x0C:              //  RwS         4       x       ref
-                        aIn.Ignore( 4 );
-                        nExtCnt++;
-                        goto _ocbad;
-                        break;
                     case 0x0D:              //  ColS        4       x       ref
-                        aIn.Ignore( 4 );
-                        nExtCnt++;
-                        goto _ocbad;
-                        break;
                     case 0x0E:              //  RwSV        4       x       val
-                        aIn.Ignore( 4 );
-                        nExtCnt++;
-                        goto _ocbad;
-                        break;
                     case 0x0F:              //  ColSV       4       x       val
                         aIn.Ignore( 4 );
                         nExtCnt++;
-                        goto _ocbad;
-                        break;
+                        aPool << ocBad;
+                        aPool >> aStack;
+                    break;
                     case 0x10:              //  RadicalLel  4       -       err
-                        aIn.Ignore( 4 );
-                        goto _ocbad;
-                        break;
                     case 0x1D:              //  SxName      4       -       val
                         aIn.Ignore( 4 );
-//                      goto _ocbad;
-//                      break;
+                        aPool << ocBad;
+                        aPool >> aStack;
+                    break;
                     default:
-                    _ocbad:
                         aPool << ocBad;
                         aPool >> aStack;
                 }
@@ -444,7 +432,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aSRD.SetTabRel( TRUE );
                 aSRD.SetFlag3D( bRangeName );
 
-                ExcelToSc8::ExcRelToScRel( nRow, nCol, aSRD, bRangeName );
+                ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
 
                 switch ( nOp )
                 {
@@ -479,8 +467,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 rSRef1.SetFlag3D( bRangeName );
                 rSRef2.SetFlag3D( bRangeName );
 
-                ExcelToSc8::ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
-                ExcelToSc8::ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRangeName );
+                ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
+                ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRangeName );
 
                 if( IsComplColRange( nColFirst, nColLast ) )
                     SetComplCol( aCRD );
@@ -539,7 +527,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                 aSRD.SetTabRel( TRUE );
                 aSRD.SetFlag3D( bRangeName );
 
-                ExcelToSc8::ExcRelToScRel( nRow, nCol, aSRD, bRNorSF );
+                ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
 
                 aStack << aPool.Store( aSRD );
             }
@@ -559,8 +547,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
-                ExcelToSc8::ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
-                ExcelToSc8::ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
+                ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
+                ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
 
                 if( IsComplColRange( nColFirst, nColLast ) )
                     SetComplCol( aCRD );
@@ -678,7 +666,7 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     aSRD.SetFlag3D( TRUE );
                     aSRD.SetTabRel( FALSE );
 
-                    ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
+                    ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
 
                     switch ( nOp )
                     {
@@ -734,8 +722,8 @@ ConvErr ExcelToSc8::Convert( const ScTokenArray*& rpTokArray, XclImpStream& aIn,
                     rR2.SetFlag3D( nTabFirst != nTabLast );
                     rR2.SetTabRel( FALSE );
 
-                    ExcelToSc8::ExcRelToScRel( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
-                    ExcelToSc8::ExcRelToScRel( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
+                    ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
+                    ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
 
                     if( IsComplColRange( nGrbitCol1, nGrbitCol2 ) )
                         SetComplCol( aCRD );
@@ -934,7 +922,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 aSRD.SetTabRel( TRUE );
                 aSRD.SetFlag3D( bRangeName );
 
-                ExcelToSc8::ExcRelToScRel( nRow, nCol, aSRD, bRangeName );
+                ExcRelToScRel8( nRow, nCol, aSRD, bRangeName );
 
                 rRangeList.Append( aSRD );
             }
@@ -956,8 +944,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 rSRef1.SetFlag3D( bRangeName );
                 rSRef2.SetFlag3D( bRangeName );
 
-                ExcelToSc8::ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
-                ExcelToSc8::ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRangeName );
+                ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRangeName );
+                ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRangeName );
 
                 if( IsComplColRange( nColFirst, nColLast ) )
                     SetComplCol( aCRD );
@@ -1006,7 +994,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                 aSRD.SetTabRel( TRUE );
                 aSRD.SetFlag3D( bRangeName );
 
-                ExcelToSc8::ExcRelToScRel( nRow, nCol, aSRD, bRNorSF );
+                ExcRelToScRel8( nRow, nCol, aSRD, bRNorSF );
 
                 rRangeList.Append( aSRD );
             }
@@ -1026,8 +1014,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 
                 aIn >> nRowFirst >> nRowLast >> nColFirst >> nColLast;
 
-                ExcelToSc8::ExcRelToScRel( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
-                ExcelToSc8::ExcRelToScRel( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
+                ExcRelToScRel8( nRowFirst, nColFirst, aCRD.Ref1, bRNorSF );
+                ExcRelToScRel8( nRowLast, nColLast, aCRD.Ref2, bRNorSF );
 
                 if( IsComplColRange( nColFirst, nColLast ) )
                     SetComplCol( aCRD );
@@ -1068,7 +1056,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                     aSRD.SetFlag3D( TRUE );
                     aSRD.SetTabRel( FALSE );
 
-                    ExcRelToScRel( nRw, nGrbitCol, aSRD, bRangeName );
+                    ExcRelToScRel8( nRw, nGrbitCol, aSRD, bRangeName );
 
                     if( nFirstScTab != nLastScTab )
                     {
@@ -1104,8 +1092,8 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
                     rR2.SetFlag3D( nFirstScTab != nLastScTab );
                     rR2.SetTabRel( FALSE );
 
-                    ExcelToSc8::ExcRelToScRel( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
-                    ExcelToSc8::ExcRelToScRel( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
+                    ExcRelToScRel8( nRw1, nGrbitCol1, aCRD.Ref1, bRangeName );
+                    ExcRelToScRel8( nRw2, nGrbitCol2, aCRD.Ref2, bRangeName );
 
                     if( IsComplColRange( nGrbitCol1, nGrbitCol2 ) )
                         SetComplCol( aCRD );
@@ -1149,7 +1137,7 @@ ConvErr ExcelToSc8::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sa
 
 
 
-void ExcelToSc8::ExcRelToScRel( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, const BOOL bName )
+void ExcelToSc8::ExcRelToScRel8( UINT16 nRow, UINT16 nC, SingleRefData &rSRD, const BOOL bName )
 {
     const BOOL      bColRel = ( nC & 0x4000 ) != 0;
     const BOOL      bRowRel = ( nC & 0x8000 ) != 0;
@@ -1349,9 +1337,9 @@ BOOL ExcelToSc8::GetAbsRefs( ScRangeList& r, XclImpStream& aIn, sal_Size nLen )
                 break;
             case 0x17: // String Constant                       [314 266]
             {
-                UINT8   nLen;
-                aIn >> nLen;
-                aIn.IgnoreUniString( nLen );        // reads Grbit even if nLen==0
+                UINT8 nStrLen;
+                aIn >> nStrLen;
+                aIn.IgnoreUniString( nStrLen );     // reads Grbit even if nLen==0
                 nSeek = 0;
             }
                 break;
