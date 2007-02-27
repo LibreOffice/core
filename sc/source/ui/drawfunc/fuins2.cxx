@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:46 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:12:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,9 +231,9 @@ void lcl_ChartInit2( const uno::Reference < embed::XEmbeddedObject >& aIPObj, Sc
 |*
 \************************************************************************/
 
-FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     if( ! rReq.IsAPI() )
         rReq.Done();
@@ -316,10 +316,10 @@ FuInsertOLE::FuInsertOLE(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
                     if ( aURL.SetURL( aPluginFileDialog.GetPath() ) )
                     {
                         // create a plugin object
-                        ::rtl::OUString aName;
+                        ::rtl::OUString aObjName;
                         SvGlobalName aClassId( SO3_PLUGIN_CLASSID );
                         comphelper::EmbeddedObjectContainer aCnt( xStorage );
-                        xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aName );
+                        xObj = aCnt.CreateEmbeddedObject( aClassId.GetByteSequence(), aObjName );
                         if ( xObj.is() && svt::EmbeddedObjectRef::TryRunningState( xObj ) )
                         {
                             // set properties from dialog
@@ -500,9 +500,9 @@ void FuInsertOLE::Deactivate()
 |*
 \************************************************************************/
 
-FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
            SdrModel* pDoc, SfxRequest& rReq)
-    : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
 
@@ -689,7 +689,7 @@ FuInsertChart::FuInsertChart(ScTabViewShell* pViewSh, Window* pWin, SdrView* pVi
                         // Einfache Selektion in der gleichen Tabelle:
                         // Positionieren 1/2 Spalte rechts
                         // und 1 1/2 Zeilen unterhalb des Starts
-                        ScDocument* pScDoc = pData->GetDocument();
+                        //ScDocument* pScDoc = pData->GetDocument();
                         long x = 0, y = 0;
                         SCCOL i;
                         for( i = 0; i <= nC1; i++ )
