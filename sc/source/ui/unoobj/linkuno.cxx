@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:41:18 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:45:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ const SfxItemPropertyMap* lcl_GetSheetLinkMap()
         {MAP_CHAR_LEN(SC_UNONAME_LINKURL),  0,  &getCppuType((rtl::OUString*)0),    0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_REFDELAY), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_REFPERIOD),    0,  &getCppuType((sal_Int32*)0),        0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aSheetLinkMap_Impl;
 }
@@ -99,7 +99,7 @@ ScSheetLinkObj::~ScSheetLinkObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScSheetLinkObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScSheetLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! notify if links in document are changed
     //  UpdateRef is not needed here
@@ -370,7 +370,7 @@ void ScSheetLinkObj::setFilterOptions(const rtl::OUString& FilterOptions)
 sal_Int32 ScSheetLinkObj::getRefreshDelay(void) const
 {
     ScUnoGuard aGuard;
-    sal_Int32 nRet;
+    sal_Int32 nRet = 0;
     ScTableLink* pLink = GetLink_Impl();
     if (pLink)
         nRet = (sal_Int32) pLink->GetRefreshDelay();
@@ -397,7 +397,7 @@ ScSheetLinksObj::~ScSheetLinksObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScSheetLinksObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScSheetLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -503,7 +503,7 @@ uno::Any SAL_CALL ScSheetLinksObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xLink);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScSheetLinksObj::getElementType() throw(uno::RuntimeException)
@@ -528,7 +528,7 @@ uno::Any SAL_CALL ScSheetLinksObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xLink);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 sal_Bool SAL_CALL ScSheetLinksObj::hasByName( const rtl::OUString& aName )
@@ -626,7 +626,7 @@ ScAreaLinkObj::~ScAreaLinkObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScAreaLinkObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAreaLinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! notify if links in document are changed
     //  UpdateRef is not needed here
@@ -877,7 +877,7 @@ void ScAreaLinkObj::setFilterOptions(const rtl::OUString& FilterOptions)
 sal_Int32 ScAreaLinkObj::getRefreshDelay(void) const
 {
     ScUnoGuard aGuard;
-    sal_Int32 nRet;
+    sal_Int32 nRet = 0;
     ScAreaLink* pLink = lcl_GetAreaLink(pDocShell, nPos);
     if (pLink)
         nRet = (sal_Int32) pLink->GetRefreshDelay();
@@ -940,7 +940,7 @@ ScAreaLinksObj::~ScAreaLinksObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScAreaLinksObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAreaLinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -1038,7 +1038,7 @@ uno::Any SAL_CALL ScAreaLinksObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xLink);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScAreaLinksObj::getElementType() throw(uno::RuntimeException)
@@ -1071,7 +1071,7 @@ ScDDELinkObj::~ScDDELinkObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScDDELinkObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDDELinkObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! notify if links in document are changed
     //  UpdateRef is not needed here
@@ -1111,7 +1111,7 @@ rtl::OUString SAL_CALL ScDDELinkObj::getName() throw(uno::RuntimeException)
     return lcl_BuildDDEName( aAppl, aTopic, aItem );
 }
 
-void SAL_CALL ScDDELinkObj::setName( const rtl::OUString& aName ) throw(uno::RuntimeException)
+void SAL_CALL ScDDELinkObj::setName( const rtl::OUString& /* aName */ ) throw(uno::RuntimeException)
 {
     //  name can't be changed (formulas wouldn't find the link)
     throw uno::RuntimeException();
@@ -1151,7 +1151,7 @@ void SAL_CALL ScDDELinkObj::refresh() throw(uno::RuntimeException)
     if (pDocShell)
     {
         ScDocument* pDoc = pDocShell->GetDocument();
-        BOOL bOk = pDoc->UpdateDdeLink( aAppl, aTopic, aItem );
+        (void)pDoc->UpdateDdeLink( aAppl, aTopic, aItem );
         //! Fehler abfragen
     }
 }
@@ -1211,7 +1211,7 @@ ScDDELinksObj::~ScDDELinksObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScDDELinksObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDDELinksObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -1285,7 +1285,7 @@ uno::Any SAL_CALL ScDDELinksObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xLink);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDDELinksObj::getElementType() throw(uno::RuntimeException)
@@ -1310,7 +1310,7 @@ uno::Any SAL_CALL ScDDELinksObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xLink);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDDELinksObj::getElementNames() throw(uno::RuntimeException)
