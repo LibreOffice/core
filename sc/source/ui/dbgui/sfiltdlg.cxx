@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfiltdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:28:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:05:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,18 +84,18 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_SPEC_FILTER ),
         //
-        _INIT_COMMON_FILTER_RSCOBJS
-        //
         aLbFilterArea   ( this, ScResId( LB_CRITERIA_AREA ) ),
         aFtFilterArea   ( this, ScResId( FT_CRITERIA_AREA ) ),
         aEdFilterArea   ( this, ScResId( ED_CRITERIA_AREA ) ),
         aRbFilterArea   ( this, ScResId( RB_CRITERIA_AREA ), &aEdFilterArea ),
         //
+        _INIT_COMMON_FILTER_RSCOBJS
+        //
+        pOptionsMgr     ( NULL ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( ((const ScQueryItem&)
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
         pOutItem        ( NULL ),
-        pOptionsMgr     ( NULL ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
         pRefInputEdit   ( NULL ),
@@ -252,7 +252,7 @@ BOOL __EXPORT ScSpecialFilterDlg::Close()
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
 
-void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( bRefInputMode && pRefInputEdit )       // Nur moeglich, wenn im Referenz-Editmodus
     {
@@ -262,9 +262,9 @@ void ScSpecialFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         String aRefStr;
 
         if ( pRefInputEdit == &aEdCopyArea)
-            rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDoc );
+            rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP );
         else if ( pRefInputEdit == &aEdFilterArea)
-            rRef.Format( aRefStr, SCR_ABS_3D, pDoc );
+            rRef.Format( aRefStr, SCR_ABS_3D, pDocP );
 
         pRefInputEdit->SetRefString( aRefStr );
     }
@@ -333,7 +333,6 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
         ScAddress       theAdrCopy;
         BOOL            bEditInputOk    = TRUE;
         BOOL            bQueryOk        = FALSE;
-        SCTAB           nCurTab         = pViewData->GetTabNo();
         ScRange         theFilterArea;
 
         if ( aBtnCopyResult.IsChecked() )
