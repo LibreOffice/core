@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olinewin.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:03:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:53:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,7 +198,7 @@ const ScOutlineArray* ScOutlineWindow::GetOutlineArray() const
 const ScOutlineEntry* ScOutlineWindow::GetOutlineEntry( size_t nLevel, size_t nEntry ) const
 {
     const ScOutlineArray* pArray = GetOutlineArray();
-    return pArray ? pArray->GetEntry( nLevel, nEntry ) : NULL;
+    return pArray ? pArray->GetEntry( sal::static_int_cast<USHORT>(nLevel), sal::static_int_cast<USHORT>(nEntry) ) : NULL;
 }
 
 bool ScOutlineWindow::IsHidden( SCCOLROW nColRowIndex ) const
@@ -414,7 +414,7 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
     if ( nLevel == SC_OL_NOLEVEL )
         return false;
 
-    long nLevelPos = GetLevelPos( nLevel );
+//    long nLevelPos = GetLevelPos( nLevel );
     long nEntryMousePos = mbHoriz ? rPos.X() : rPos.Y();
 
     // --- level buttons ---
@@ -434,12 +434,13 @@ bool ScOutlineWindow::ItemHit( const Point& rPos, size_t& rnLevel, size_t& rnEnt
     // --- expand/collapse buttons and expanded lines ---
 
     // search outline entries backwards
-    size_t nEntry = pArray->GetCount( nLevel );
+    size_t nEntry = pArray->GetCount( sal::static_int_cast<USHORT>(nLevel) );
     while ( nEntry )
     {
         --nEntry;
 
-        const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
+        const ScOutlineEntry* pEntry = pArray->GetEntry( sal::static_int_cast<USHORT>(nLevel),
+                                                         sal::static_int_cast<USHORT>(nEntry) );
         SCCOLROW nStart = pEntry->GetStart();
         SCCOLROW nEnd = pEntry->GetEnd();
 
@@ -491,16 +492,16 @@ void ScOutlineWindow::DoFunction( size_t nLevel, size_t nEntry ) const
 {
     ScDBFunc& rFunc = *mrViewData.GetView();
     if ( nEntry == SC_OL_HEADERENTRY )
-        rFunc.SelectLevel( mbHoriz, nLevel );
+        rFunc.SelectLevel( mbHoriz, sal::static_int_cast<USHORT>(nLevel) );
     else
     {
         const ScOutlineEntry* pEntry = GetOutlineEntry( nLevel, nEntry );
         if ( pEntry )
         {
             if ( pEntry->IsHidden() )
-                rFunc.ShowOutline( mbHoriz, nLevel, nEntry );
+                rFunc.ShowOutline( mbHoriz, sal::static_int_cast<USHORT>(nLevel), sal::static_int_cast<USHORT>(nEntry) );
             else
-                rFunc.HideOutline( mbHoriz, nLevel, nEntry );
+                rFunc.HideOutline( mbHoriz, sal::static_int_cast<USHORT>(nLevel), sal::static_int_cast<USHORT>(nEntry) );
         }
     }
 }
@@ -629,7 +630,7 @@ void ScOutlineWindow::HideFocus()
     }
 }
 
-void ScOutlineWindow::Paint( const Rectangle& rRect )
+void ScOutlineWindow::Paint( const Rectangle& /* rRect */ )
 {
     long nEntriesSign = mbMirrorEntries ? -1 : 1;
     long nLevelsSign  = mbMirrorLevels  ? -1 : 1;
@@ -670,9 +671,9 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
     for ( size_t nLevel = 0; nLevel + 1 < nLevelCount; ++nLevel )
     {
         long nLevelPos = GetLevelPos( nLevel );
-        long nEntryPos1, nEntryPos2, nImagePos;
+        long nEntryPos1 = 0, nEntryPos2 = 0, nImagePos = 0;
 
-        size_t nEntryCount = pArray->GetCount( nLevel );
+        size_t nEntryCount = pArray->GetCount( sal::static_int_cast<USHORT>(nLevel) );
         size_t nEntry;
 
         // first draw all lines in the current level
@@ -680,7 +681,8 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
         SetFillColor( maLineColor );
         for ( nEntry = 0; nEntry < nEntryCount; ++nEntry )
         {
-            const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
+            const ScOutlineEntry* pEntry = pArray->GetEntry( sal::static_int_cast<USHORT>(nLevel),
+                                                             sal::static_int_cast<USHORT>(nEntry) );
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd = pEntry->GetEnd();
 
@@ -712,9 +714,10 @@ void ScOutlineWindow::Paint( const Rectangle& rRect )
         {
             --nEntry;
 
-            const ScOutlineEntry* pEntry = pArray->GetEntry( nLevel, nEntry );
+            const ScOutlineEntry* pEntry = pArray->GetEntry( sal::static_int_cast<USHORT>(nLevel),
+                                                             sal::static_int_cast<USHORT>(nEntry) );
             SCCOLROW nStart = pEntry->GetStart();
-            SCCOLROW nEnd = pEntry->GetEnd();
+//            SCCOLROW nEnd = pEntry->GetEnd();
 
             // visible range?
             bool bDraw = (nStartIndex <= nStart) && (nStart <= nEndIndex + 1);
@@ -780,7 +783,7 @@ bool ScOutlineWindow::ImplMoveFocusByEntry( bool bForward, bool bFindVisible )
         return false;
 
     bool bWrapped = false;
-    size_t nEntryCount = pArray->GetCount( mnFocusLevel );
+    size_t nEntryCount = pArray->GetCount( sal::static_int_cast<USHORT>(mnFocusLevel) );
     // #i29530# entry count may be decreased after changing active sheet
     if( mnFocusEntry >= nEntryCount )
         mnFocusEntry = SC_OL_HEADERENTRY;
@@ -831,13 +834,14 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
     }
     else
     {
-        const ScOutlineEntry* pEntry = pArray->GetEntry( mnFocusLevel, mnFocusEntry );
+        const ScOutlineEntry* pEntry = pArray->GetEntry( sal::static_int_cast<USHORT>(mnFocusLevel),
+                                                         sal::static_int_cast<USHORT>(mnFocusEntry) );
         if ( pEntry )
         {
             SCCOLROW nStart = pEntry->GetStart();
             SCCOLROW nEnd = pEntry->GetEnd();
             size_t nNewLevel = mnFocusLevel;
-            size_t nNewEntry;
+            size_t nNewEntry = 0;
 
             bool bFound = false;
             if ( bForward && (mnFocusLevel + 2 < nLevelCount) )
@@ -846,7 +850,7 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
                 nNewLevel = mnFocusLevel + 1;
                 // TODO - change ScOutlineArray interface to size_t usage
                 USHORT nTmpEntry = 0;
-                bFound = pArray->GetEntryIndexInRange( nNewLevel, nStart, nEnd, nTmpEntry );
+                bFound = pArray->GetEntryIndexInRange( sal::static_int_cast<USHORT>(nNewLevel), nStart, nEnd, nTmpEntry );
                 nNewEntry = nTmpEntry;
             }
             else if ( !bForward && (mnFocusLevel > 0) )
@@ -855,7 +859,7 @@ bool ScOutlineWindow::ImplMoveFocusByLevel( bool bForward )
                 nNewLevel = mnFocusLevel - 1;
                 // TODO - change ScOutlineArray interface to size_t usage
                 USHORT nTmpEntry = 0;
-                bFound = pArray->GetEntryIndex( nNewLevel, nStart, nTmpEntry );
+                bFound = pArray->GetEntryIndex( sal::static_int_cast<USHORT>(nNewLevel), nStart, nTmpEntry );
                 nNewEntry = nTmpEntry;
             }
 
