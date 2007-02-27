@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:17:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:59:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,6 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
     SvxFieldItem aURLItem( aURLField );
 
     ScViewData*     pViewData   = GetViewData();
-    ScTabView*      pView       = pViewData->GetView();
     ScModule*       pScMod      = SC_MOD();
     ScInputHandler* pHdl        = pScMod->GetInputHdl( pViewData->GetViewShell() );
 
@@ -237,7 +236,6 @@ void ScTabViewShell::InsertURLField( const String& rName, const String& rURL, co
 
 void ScTabViewShell::ExecSearch( SfxRequest& rReq )
 {
-    SfxBindings&        rBindings   = GetViewFrame()->GetBindings();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
     const SfxPoolItem*  pItem;
@@ -246,7 +244,6 @@ void ScTabViewShell::ExecSearch( SfxRequest& rReq )
     {
         case FID_SEARCH_NOW:
             {
-                const SfxPoolItem* pItem;
                 if ( pReqArgs &&
                      SFX_ITEM_SET == pReqArgs->GetItemState(SID_SEARCH_ITEM, FALSE, &pItem) )
                 {
