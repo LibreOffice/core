@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:33:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:41:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ FltError ScImportRTF( SvStream &rStream, const String& rBaseURL, ScDocument *pDo
 ScRTFImport::ScRTFImport( ScDocument* pDocP, const ScRange& rRange ) :
     ScEEImport( pDocP, rRange )
 {
-    pParser = new ScRTFParser( pEngine );
+    mpParser = new ScRTFParser( mpEngine );
 }
 
 
@@ -73,7 +73,7 @@ ScRTFImport::~ScRTFImport()
 {
     // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
     // Ist gewaehrleistet, da ScEEImport Basisklasse ist
-    delete (ScRTFParser*) pParser;      // vor EditEngine!
+    delete (ScRTFParser*) mpParser;     // vor EditEngine!
 }
 
 
