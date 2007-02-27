@@ -4,9 +4,9 @@
  *
  *  $RCSfile: targuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:48:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ const SfxItemPropertyMap* lcl_GetLinkTargetMap()
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((const uno::Reference<awt::XBitmap>*)0),   beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((const ::rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aLinkTargetMap_Impl;
 }
@@ -115,7 +115,7 @@ ScLinkTargetTypesObj::~ScLinkTargetTypesObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScLinkTargetTypesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScLinkTargetTypesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
         pDocShell = NULL;       // document gone
@@ -135,7 +135,7 @@ uno::Any SAL_CALL ScLinkTargetTypesObj::getByName(const rtl::OUString& aName)
     }
 
     throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetTypesObj::getElementNames(void) throw( uno::RuntimeException )
@@ -184,7 +184,7 @@ ScLinkTargetTypeObj::~ScLinkTargetTypeObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScLinkTargetTypeObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScLinkTargetTypeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) && ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
         pDocShell = NULL;       // document gone
@@ -230,8 +230,8 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL  ScLinkTargetTypeObj::getProp
     return aRef;
 }
 
-void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const rtl::OUString& aPropertyName,
-            const uno::Any& aValue)
+void SAL_CALL ScLinkTargetTypeObj::setPropertyValue(const rtl::OUString& /* aPropertyName */,
+            const uno::Any& /* aValue */)
         throw(  beans::UnknownPropertyException,
                 beans::PropertyVetoException,
                 lang::IllegalArgumentException,
@@ -304,7 +304,7 @@ uno::Any SAL_CALL ScLinkTargetsObj::getByName(const rtl::OUString& aName)
         return uno::makeAny(xProp);
 
     throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScLinkTargetsObj::getElementNames(void) throw( uno::RuntimeException )
