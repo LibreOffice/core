@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:17:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:28:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ sal_Size StreamInput::Read( void* pBuffer, sal_Size nSize )
     return mrStrm.Read( pBuffer, nSize );
 }
 
-void StreamInput::ReadLine( String& rLine, rtl_TextEncoding eEnc )
+void StreamInput::ReadLine( String& /*rLine*/, rtl_TextEncoding /*eEnc*/ )
 {
     DBG_ERRORFILE( "scf::xls::dump::StreamInput::ReadLine - not implemented" );
 }
@@ -404,14 +404,14 @@ void RootObjectBase::Construct( const ObjectBase& rParent, SvStream& rStrm, XclB
 {
     StreamObjectRef xStrmObj( new SvStreamObject( rParent, rStrm ) );
     WrappedStreamObject::Construct( rParent, xStrmObj );
-    ConstructOwn( eBiff );
+    ConstructRootObjBase( eBiff );
 }
 
 void RootObjectBase::Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff )
 {
     StreamObjectRef xStrmObj( new OleStreamObject( rParentStrg, rStrmName ) );
     WrappedStreamObject::Construct( rParentStrg, xStrmObj );
-    ConstructOwn( eBiff );
+    ConstructRootObjBase( eBiff );
 }
 
 void RootObjectBase::Construct( const RootObjectBase& rParent )
@@ -716,7 +716,7 @@ String RootObjectBase::DumpConstValue()
 
 // ----------------------------------------------------------------------------
 
-void RootObjectBase::ConstructOwn( XclBiff eBiff )
+void RootObjectBase::ConstructRootObjBase( XclBiff eBiff )
 {
     if( WrappedStreamObject::ImplIsValid() )
     {
@@ -844,7 +844,7 @@ FormulaObject::FormulaObject( const RootObjectBase& rParent ) :
     mnSize( 0 )
 {
     RootObjectBase::Construct( rParent );
-    ConstructOwn();
+    ConstructFmlaObj();
 }
 
 FormulaObject::~FormulaObject()
@@ -1011,7 +1011,7 @@ void FormulaObject::DumpFormula( const sal_Char* pcName, bool bNameMode )
 
 // private --------------------------------------------------------------------
 
-void FormulaObject::ConstructOwn()
+void FormulaObject::ConstructFmlaObj()
 {
     if( RootObjectBase::ImplIsValid() )
     {
@@ -1233,13 +1233,13 @@ void FormulaObject::DumpTokenRefTabIdxs()
 
 void FormulaObject::DumpIntToken()
 {
-    sal_uInt16 nValue = DumpDec< sal_uInt16 >( "value" );
+    DumpDec< sal_uInt16 >( "value" );
     mxStack->PushOperand( Out().GetLastItemValue() );
 }
 
 void FormulaObject::DumpDoubleToken()
 {
-    double fValue = DumpDec< double >( "value" );
+    DumpDec< double >( "value" );
     mxStack->PushOperand( Out().GetLastItemValue() );
 }
 
@@ -1344,7 +1344,7 @@ void FormulaObject::DumpRefErr3dToken( const String& rTokClass, bool bArea )
     mxStack->PushOperand( aRef, rTokClass );
 }
 
-void FormulaObject::DumpMemFuncToken( const String& rTokClass )
+void FormulaObject::DumpMemFuncToken( const String& /*rTokClass*/ )
 {
     DumpDec< sal_uInt16, sal_uInt8 >( GetBiff() >= EXC_BIFF3, "size" );
 }
@@ -1579,7 +1579,6 @@ void FormulaObject::DumpAddTokenData()
 void FormulaObject::DumpAddDataNlr( size_t nIdx )
 {
     sal_uInt32 nFlags = DumpHex< sal_uInt32 >( "flags", "NLRADDFLAGS" );
-    bool bRel = ::get_flag( nFlags, EXC_TOK_NLR_ADDREL );
     sal_uInt32 nCount = nFlags & EXC_TOK_NLR_ADDMASK;
     String aAddrList;
     for( sal_uInt32 nPos = 0; nPos < nCount; ++nPos )
@@ -1612,7 +1611,7 @@ void FormulaObject::DumpAddDataArray( size_t nIdx )
     mxStack->ReplaceOnTop( CreatePlaceHolder( nIdx ), aOp );
 }
 
-void FormulaObject::DumpAddDataMemArea( size_t nIdx )
+void FormulaObject::DumpAddDataMemArea( size_t /*nIdx*/ )
 {
     DumpRangeList( 0, GetBiff() == EXC_BIFF8 );
 }
@@ -1637,13 +1636,13 @@ RecordStreamObject::~RecordStreamObject()
 void RecordStreamObject::Construct( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff )
 {
     RootObjectBase::Construct( rParent, rStrm, eBiff );
-    ConstructOwn();
+    ConstructRecStrmObj();
 }
 
 void RecordStreamObject::Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff )
 {
     RootObjectBase::Construct( rParentStrg, rStrmName, eBiff );
-    ConstructOwn();
+    ConstructRecStrmObj();
 }
 
 bool RecordStreamObject::ImplIsValid() const
@@ -1704,7 +1703,7 @@ void RecordStreamObject::DumpRepeatedRecordId()
     DumpUnused( 2 );
 }
 
-void RecordStreamObject::ConstructOwn()
+void RecordStreamObject::ConstructRecStrmObj()
 {
     if( RootObjectBase::ImplIsValid() )
     {
@@ -1746,14 +1745,14 @@ void RecordStreamObject::DumpSimpleRecord( const String& rRecData )
 
 WorkbookStreamObject::WorkbookStreamObject( const ObjectBase& rParent, SvStream& rStrm )
 {
-    RecordStreamObject::Construct( rParent, rStrm );
-    ConstructOwn();
+    RecordStreamObject::Construct( rParent, rStrm, EXC_BIFF_UNKNOWN );
+    ConstructWbStrmObj();
 }
 
 WorkbookStreamObject::WorkbookStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName )
 {
-    RecordStreamObject::Construct( rParentStrg, rStrmName );
-    ConstructOwn();
+    RecordStreamObject::Construct( rParentStrg, rStrmName, EXC_BIFF_UNKNOWN );
+    ConstructWbStrmObj();
 }
 
 WorkbookStreamObject::~WorkbookStreamObject()
@@ -2148,7 +2147,6 @@ void WorkbookStreamObject::ImplDumpRecord()
         case EXC_ID3_LABEL:
         {
             sal_uInt16 nXfIdx = DumpCellHeader( nRecId == EXC_ID2_LABEL );
-            sal_uInt16 nFontIdx = GetXfData( nXfIdx );
             rtl_TextEncoding eOldTextEnc = Root().GetTextEncoding();
             Root().SetTextEncoding( GetFontEncoding( nXfIdx ) );
             DumpString( "value", ((nRecId == EXC_ID2_LABEL) && (eBiff <= EXC_BIFF5)) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
@@ -2390,7 +2388,7 @@ void WorkbookStreamObject::ImplPostProcessRecord()
     }
 }
 
-void WorkbookStreamObject::ConstructOwn()
+void WorkbookStreamObject::ConstructWbStrmObj()
 {
     if( IsValid() )
     {
@@ -2543,6 +2541,7 @@ void WorkbookStreamObject::DumpFormatRec()
             WriteEmptyItem( "#fmt" );
             WriteDecItem( "fmt-idx", nFormatIdx );
         break;
+        default:    DBG_ERROR_BIFF();
     }
     String aFormat = DumpString( "format", (GetBiff() <= EXC_BIFF5) ? EXC_STR_8BITLENGTH : EXC_STR_DEFAULT );
     mxFormats->SetName( nFormatIdx, aFormat );
@@ -2597,6 +2596,7 @@ void WorkbookStreamObject::DumpXfRec()
             DumpHex< sal_uInt32 >( "border-color2", "XF-BORDERCOLOR2" );
             DumpHex< sal_uInt16 >( "fill-color", "XF-FILLCOLOR" );
         break;
+        default:    DBG_ERROR_BIFF();
     }
     maXfDatas.push_back( nFontIdx );
 }
@@ -2667,13 +2667,11 @@ void WorkbookStreamObject::DumpObjRec8()
 PivotCacheStreamObject::PivotCacheStreamObject( const ObjectBase& rParent, SvStream& rStrm )
 {
     RecordStreamObject::Construct( rParent, rStrm, EXC_BIFF8 );
-    ConstructOwn();
 }
 
 PivotCacheStreamObject::PivotCacheStreamObject( const OleStorageObject& rParentStrg, const String& rStrmName )
 {
     RecordStreamObject::Construct( rParentStrg, rStrmName, EXC_BIFF8 );
-    ConstructOwn();
 }
 
 PivotCacheStreamObject::~PivotCacheStreamObject()
@@ -2684,7 +2682,6 @@ void PivotCacheStreamObject::ImplDumpRecord()
 {
     XclImpStream& rStrm = GetXclStream();
     sal_uInt16 nRecId = rStrm.GetRecId();
-    sal_Size nRecSize = rStrm.GetRecSize();
 
     switch( nRecId )
     {
@@ -2727,13 +2724,6 @@ void PivotCacheStreamObject::ImplDumpRecord()
         case EXC_ID_SXSTRING:
             DumpString( "value" );
         break;
-    }
-}
-
-void PivotCacheStreamObject::ConstructOwn()
-{
-    if( IsValid() )
-    {
     }
 }
 
