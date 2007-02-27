@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabres.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:03:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,7 +446,7 @@ public:
 //! replace PtrArr with 32-bit array ????
 
 typedef ScDPDataMember* ScDPDataMemberPtr;
-SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW, SC_DP_RES_GROW);
+SV_DECL_PTRARR_DEL(ScDPDataMembers, ScDPDataMemberPtr, SC_DP_RES_GROW, SC_DP_RES_GROW)
 
 
 //  result dimension contains only members
