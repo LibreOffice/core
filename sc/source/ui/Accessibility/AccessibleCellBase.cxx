@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:23:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:54:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,8 +111,8 @@ ScAccessibleCellBase::ScAccessibleCellBase(
         sal_Int32 nIndex)
     :
     ScAccessibleContextBase(rxParent, AccessibleRole::TABLE_CELL),
-    mpDoc(pDoc),
     maCellAddress(rCellAddress),
+    mpDoc(pDoc),
     mnIndex(nIndex)
 {
 }
