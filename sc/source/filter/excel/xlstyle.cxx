@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlstyle.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:29:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -714,11 +714,11 @@ struct XclBuiltInFormat
 
 /** Defines a literal Excel built-in number format. */
 #define EXC_NUMFMT_STRING( nXclNumFmt, pcUtf8 ) \
-    { nXclNumFmt, pcUtf8, NF_NUMBER_STANDARD }
+    { nXclNumFmt, pcUtf8, NF_NUMBER_STANDARD, 0 }
 
 /** Defines an Excel built-in number format that maps to an own built-in format. */
 #define EXC_NUMFMT_OFFSET( nXclNumFmt, eOffset ) \
-    { nXclNumFmt, 0, eOffset }
+    { nXclNumFmt, 0, eOffset, 0 }
 
 /** Defines an Excel built-in number format that is the same as the specified. */
 #define EXC_NUMFMT_REUSE( nXclNumFmt, nXclReuse ) \
@@ -726,7 +726,7 @@ struct XclBuiltInFormat
 
 /** Terminates an Excel built-in number format table. */
 #define EXC_NUMFMT_ENDTABLE() \
-    { EXC_FORMAT_NOTFOUND }
+    { EXC_FORMAT_NOTFOUND, 0, NF_NUMBER_STANDARD, 0 }
 
 // ----------------------------------------------------------------------------
 
