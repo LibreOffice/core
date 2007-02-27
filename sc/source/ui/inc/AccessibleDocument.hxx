@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 09:31:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,9 @@ public:
     DECL_LINK( WindowChildEventListener, VclSimpleEvent* );
 protected:
     virtual ~ScAccessibleDocument(void);
+
+    using ScAccessibleDocumentBase::IsDefunc;
+
 public:
 
      virtual void SAL_CALL disposing();
