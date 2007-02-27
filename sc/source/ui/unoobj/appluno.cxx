@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:17 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:40:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,25 +192,25 @@ static const SfxItemPropertyMap* lcl_GetSettingsPropertyMap()
 {
     static SfxItemPropertyMap aSettingsPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_DOAUTOCP), 0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_ENTERED),  0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_EXPREF),   0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_EXTFMT),   0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_LINKUPD),  0,  &getCppuType((sal_Int16*)0),        0},
-        {MAP_CHAR_LEN(SC_UNONAME_MARKHDR),  0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_METRIC),   0,  &getCppuType((sal_Int16*)0),        0},
-        {MAP_CHAR_LEN(SC_UNONAME_MOVEDIR),  0,  &getCppuType((sal_Int16*)0),        0},
-        {MAP_CHAR_LEN(SC_UNONAME_MOVESEL),  0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_PRALLSH),  0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_PREMPTY),  0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_RANGEFIN), 0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_SCALE),    0,  &getCppuType((sal_Int16*)0),        0},
-        {MAP_CHAR_LEN(SC_UNONAME_STBFUNC),  0,  &getCppuType((sal_Int16*)0),        0},
-        {MAP_CHAR_LEN(SC_UNONAME_ULISTS),   0,  &getCppuType((uno::Sequence<rtl::OUString>*)0), 0},
-        {MAP_CHAR_LEN(SC_UNONAME_PRMETRICS),0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_USETABCOL),0,  &getBooleanCppuType(),              0},
-        {MAP_CHAR_LEN(SC_UNONAME_REPLWARN), 0,  &getBooleanCppuType(),              0},
-        {0,0,0,0}
+        {MAP_CHAR_LEN(SC_UNONAME_DOAUTOCP), 0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ENTERED),  0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_EXPREF),   0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_EXTFMT),   0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_LINKUPD),  0,  &getCppuType((sal_Int16*)0),        0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_MARKHDR),  0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_METRIC),   0,  &getCppuType((sal_Int16*)0),        0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_MOVEDIR),  0,  &getCppuType((sal_Int16*)0),        0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_MOVESEL),  0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_PRALLSH),  0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_PREMPTY),  0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_RANGEFIN), 0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SCALE),    0,  &getCppuType((sal_Int16*)0),        0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_STBFUNC),  0,  &getCppuType((sal_Int16*)0),        0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ULISTS),   0,  &getCppuType((uno::Sequence<rtl::OUString>*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_PRMETRICS),0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_USETABCOL),0,  &getBooleanCppuType(),              0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_REPLWARN), 0,  &getBooleanCppuType(),              0, 0},
+        {0,0,0,0,0,0}
     };
     return aSettingsPropertyMap_Impl;
 }
@@ -245,13 +245,13 @@ static void lcl_WriteInfo( registry::XRegistryKey* pRegistryKey,
 extern "C" {
 
 SAL_DLLPUBLIC_EXPORT void SAL_CALL component_getImplementationEnvironment(
-    const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
+    const sal_Char ** ppEnvTypeName, uno_Environment ** /* ppEnv */ )
 {
     *ppEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
 }
 
 SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
-    void * pServiceManager, registry::XRegistryKey * pRegistryKey )
+    void * /* pServiceManager */, registry::XRegistryKey * pRegistryKey )
 {
     if (pRegistryKey)
     {
@@ -356,7 +356,7 @@ SAL_DLLPUBLIC_EXPORT sal_Bool SAL_CALL component_writeInfo(
 }
 
 SAL_DLLPUBLIC_EXPORT void * SAL_CALL component_getFactory(
-    const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey )
+    const sal_Char * pImplName, void * pServiceManager, void * /* pRegistryKey */ )
 {
     if (!pServiceManager)
         return NULL;
@@ -538,7 +538,7 @@ ScSpreadsheetSettings::~ScSpreadsheetSettings()
 }
 
 uno::Reference<uno::XInterface> SAL_CALL ScSpreadsheetSettings_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
+                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
@@ -755,6 +755,10 @@ uno::Any SAL_CALL ScSpreadsheetSettings::getPropertyValue( const rtl::OUString& 
             case SVX_ZOOM_OPTIMAL:   nZoomVal = SC_ZOOMVAL_OPTIMAL;   break;
             case SVX_ZOOM_WHOLEPAGE: nZoomVal = SC_ZOOMVAL_WHOLEPAGE; break;
             case SVX_ZOOM_PAGEWIDTH: nZoomVal = SC_ZOOMVAL_PAGEWIDTH; break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         aRet <<= (sal_Int16) nZoomVal;
     }
@@ -797,7 +801,7 @@ ScRecentFunctionsObj::~ScRecentFunctionsObj()
 // stuff for exService_...
 
 uno::Reference<uno::XInterface> SAL_CALL ScRecentFunctionsObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
+                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
@@ -878,7 +882,7 @@ ScFunctionListObj::~ScFunctionListObj()
 // stuff for exService_...
 
 uno::Reference<uno::XInterface> SAL_CALL ScFunctionListObj_CreateInstance(
-                        const uno::Reference<lang::XMultiServiceFactory>& rSMgr )
+                        const uno::Reference<lang::XMultiServiceFactory>& /* rSMgr */ )
 {
     ScUnoGuard aGuard;
     ScDLL::Init();
@@ -972,7 +976,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScFunctionListObj::getById( sal_Int
     else
         throw uno::RuntimeException();                  // should not happen
 
-    return uno::Sequence<beans::PropertyValue>(0);
+//    return uno::Sequence<beans::PropertyValue>(0);
 }
 
 // XNameAccess
@@ -1004,7 +1008,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByName( const rtl::OUString& aName )
     else
         throw uno::RuntimeException();                  // should not happen
 
-    return uno::Any();
+//    return uno::Any();
 }
 
 // XIndexAccess
@@ -1043,7 +1047,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
     else
         throw uno::RuntimeException();                  // should not happen
 
-    return uno::Any();
+//    return uno::Any();
 }
 
 // XEnumerationAccess
