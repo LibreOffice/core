@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:03:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,27 +101,27 @@ class ScTabViewShell;
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::sheet::XRangeSelectionListener >* XRangeSelectionListenerPtr;
-SV_DECL_PTRARR_DEL( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XRangeSelectionListenerArr_Impl, XRangeSelectionListenerPtr, 4, 4 )
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::sheet::XRangeSelectionChangeListener >* XRangeSelectionChangeListenerPtr;
-SV_DECL_PTRARR_DEL( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XRangeSelectionChangeListenerArr_Impl, XRangeSelectionChangeListenerPtr, 4, 4 )
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::view::XSelectionChangeListener >* XSelectionChangeListenerPtr;
-SV_DECL_PTRARR_DEL( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XSelectionChangeListenerArr_Impl, XSelectionChangeListenerPtr, 4, 4 )
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::beans::XPropertyChangeListener >* XViewPropertyChangeListenerPtr;
-SV_DECL_PTRARR_DEL( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XViewPropertyChangeListenerArr_Impl, XViewPropertyChangeListenerPtr, 4, 4 )
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::awt::XEnhancedMouseClickHandler >* XMouseClickHandlerPtr;
-SV_DECL_PTRARR_DEL( XMouseClickHandlerArr_Impl, XMouseClickHandlerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XMouseClickHandlerArr_Impl, XMouseClickHandlerPtr, 4, 4 )
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::sheet::XActivationEventListener >* XActivationEventListenerPtr;
-SV_DECL_PTRARR_DEL( XActivationEventListenerArr_Impl, XActivationEventListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XActivationEventListenerArr_Impl, XActivationEventListenerPtr, 4, 4 )
 
 
 //  ScViewPaneBase not derived from OWeakObject
