@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartlis.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:19:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:12:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,8 +74,8 @@ public:
 ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
         const ScRange& rRange ) :
     StrData( rName ),
-    pDoc( pDocP ),
     pUnoData( NULL ),
+    pDoc( pDocP ),
     bUsed( FALSE ),
     bDirty( FALSE ),
     bSeriesRangesScheduled( FALSE )
@@ -87,8 +87,8 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
         const ScRangeListRef& rRangeList ) :
     StrData( rName ),
     aRangeListRef( rRangeList ),
-    pDoc( pDocP ),
     pUnoData( NULL ),
+    pDoc( pDocP ),
     bUsed( FALSE ),
     bDirty( FALSE ),
     bSeriesRangesScheduled( FALSE )
@@ -97,8 +97,9 @@ ScChartListener::ScChartListener( const String& rName, ScDocument* pDocP,
 
 ScChartListener::ScChartListener( const ScChartListener& r ) :
         StrData( r ),
-        pDoc( r.pDoc ),
+        SvtListener(),
         pUnoData( NULL ),
+        pDoc( r.pDoc ),
         bUsed( FALSE ),
         bDirty( r.bDirty ),
         bSeriesRangesScheduled( r.bSeriesRangesScheduled )
@@ -144,7 +145,7 @@ uno::Reference< chart::XChartData > ScChartListener::GetUnoSource() const
     return uno::Reference< chart::XChartData >();
 }
 
-void __EXPORT ScChartListener::Notify( SvtBroadcaster& rBC, const SfxHint& rHint )
+void __EXPORT ScChartListener::Notify( SvtBroadcaster&, const SfxHint& rHint )
 {
     const ScHint* p = PTR_CAST( ScHint, &rHint );
     if( p && (p->GetId() & (SC_HINT_DATACHANGED | SC_HINT_DYING)) )
@@ -366,7 +367,7 @@ void ScChartListenerCollection::StartTimer()
     aTimer.Start();
 }
 
-IMPL_LINK( ScChartListenerCollection, TimerHdl, Timer*, pTimer )
+IMPL_LINK( ScChartListenerCollection, TimerHdl, Timer*, EMPTYARG )
 {
     if ( Application::AnyInput( INPUT_KEYBOARD ) )
     {
