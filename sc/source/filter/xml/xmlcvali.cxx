@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:52:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:50:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ ScXMLContentValidationsContext::ScXMLContentValidationsContext( ScXMLImport& rIm
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // here are no attributes
@@ -255,10 +255,10 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
     sErrorTitle(),
     sErrorMessage(),
     sErrorMessageType(),
-    sCondition(),
     sBaseCellAddress(),
-    bAllowEmptyCell(sal_True),
+    sCondition(),
     nShowList(sheet::TableValidationVisibility::UNSORTED),
+    bAllowEmptyCell(sal_True),
     bDisplayHelp(sal_False),
     bDisplayError(sal_False)
 {
@@ -279,9 +279,9 @@ ScXMLContentValidationContext::ScXMLContentValidationContext( ScXMLImport& rImpo
             break;
             case XML_TOK_CONTENT_VALIDATION_CONDITION:
                 {
-                    sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                    sal_uInt16 nCondPrefix = GetImport().GetNamespaceMap().
                             _GetKeyByAttrName( sValue, &sCondition, sal_False );
-                    if ( nPrefix == XML_NAMESPACE_UNKNOWN || nPrefix == XML_NAMESPACE_NONE )    // #i56720#
+                    if ( nCondPrefix == XML_NAMESPACE_UNKNOWN || nCondPrefix == XML_NAMESPACE_NONE )    // #i56720#
                         sCondition = sValue;
                 }
             break;
@@ -390,8 +390,8 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
     aValidationType = sheet::ValidationType_ANY;    // #b6343997# default if no condition is given
     aOperator = sheet::ConditionOperator_NONE;
 
-    rtl::OUString sCondition(sTempCondition);
-    if (sCondition.getLength())
+    rtl::OUString sLocalCondition(sTempCondition);
+    if (sLocalCondition.getLength())
     {
         // ToDo: erase all blanks in the condition, but not in formulas or strings
         rtl::OUString scell_content(RTL_CONSTASCII_USTRINGPARAM("cell_content"));
@@ -407,9 +407,9 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
         rtl::OUString scell_content_text_length_is_not_between(RTL_CONSTASCII_USTRINGPARAM("cell-content-text-length-is-not-between"));
         sal_Int32 i = 0;
         sal_Bool bAnd(sal_True);
-        while (sCondition[i] != '(' && i < sCondition.getLength())
+        while (sLocalCondition[i] != '(' && i < sLocalCondition.getLength())
             ++i;
-        if (sCondition[i] == '(')
+        if (sLocalCondition[i] == '(')
         {
             if (i != scell_content_text_length.getLength() &&
                 i != scell_content_text_length_is_between.getLength() &&
@@ -418,7 +418,7 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
             {
                 if (i == scell_content_is_time.getLength())
                 {
-                    rtl::OUString sTemp = sCondition.copy(0, i);
+                    rtl::OUString sTemp = sLocalCondition.copy(0, i);
                     if (sTemp == scell_content_is_time)
                         aValidationType = sheet::ValidationType_TIME;
                     else
@@ -428,29 +428,29 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
                     aValidationType = sheet::ValidationType_WHOLE;
                 else if (i == scell_content_is_decimal_number.getLength())
                     aValidationType = sheet::ValidationType_DECIMAL;
-                sCondition = sCondition.copy(i + 2);
-                rtl::OUString sTemp = sCondition.copy(0, 5);
+                sLocalCondition = sLocalCondition.copy(i + 2);
+                rtl::OUString sTemp = sLocalCondition.copy(0, 5);
                 if (sTemp.compareToAscii(" and ") == 0)
-                    sCondition = sCondition.copy(5);
+                    sLocalCondition = sLocalCondition.copy(5);
                 else
                     bAnd = sal_False;
             }
-            if (sCondition.getLength() && bAnd)
+            if (sLocalCondition.getLength() && bAnd)
             {
                 i = 0;
-                while (sCondition[i] != '(' && i < sCondition.getLength())
+                while (sLocalCondition[i] != '(' && i < sLocalCondition.getLength())
                     ++i;
-                if (sCondition[i] == '(')
+                if (sLocalCondition[i] == '(')
                 {
-                    rtl::OUString sTemp = sCondition.copy(0, i);
-                    sCondition = sCondition.copy(i + 1);
+                    rtl::OUString sTemp = sLocalCondition.copy(0, i);
+                    sLocalCondition = sLocalCondition.copy(i + 1);
                     if (i == scell_content_is_between.getLength() ||
                         i == scell_content_text_length_is_between.getLength())
                     {
                         if (sTemp == scell_content_is_in_list)
                         {
                             aValidationType = sheet::ValidationType_LIST;
-                            sFormula1 = sCondition.copy(0, sCondition.getLength() - 1);
+                            sFormula1 = sLocalCondition.copy(0, sLocalCondition.getLength() - 1);
                             aOperator = sheet::ConditionOperator_EQUAL;
                         }
                         else
@@ -458,8 +458,8 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
                             if (i == scell_content_text_length_is_between.getLength())
                                 aValidationType = sheet::ValidationType_TEXT_LEN;
                             aOperator = sheet::ConditionOperator_BETWEEN;
-                            sCondition = sCondition.copy(0, sCondition.getLength() - 1);
-                            SetFormulas(sCondition, sFormula1, sFormula2);
+                            sLocalCondition = sLocalCondition.copy(0, sLocalCondition.getLength() - 1);
+                            SetFormulas(sLocalCondition, sFormula1, sFormula2);
                         }
                     }
                     else if (i == scell_content_is_not_between.getLength() ||
@@ -468,59 +468,59 @@ void ScXMLContentValidationContext::GetCondition(const rtl::OUString& sTempCondi
                         if (i == scell_content_text_length_is_not_between.getLength())
                             aValidationType = sheet::ValidationType_TEXT_LEN;
                         aOperator = sheet::ConditionOperator_NOT_BETWEEN;
-                        sCondition = sCondition.copy(0, sCondition.getLength() - 1);
-                        SetFormulas(sCondition, sFormula1, sFormula2);
+                        sLocalCondition = sLocalCondition.copy(0, sLocalCondition.getLength() - 1);
+                        SetFormulas(sLocalCondition, sFormula1, sFormula2);
                     }
                     else if (i == scell_content.getLength() ||
                         i == scell_content_text_length.getLength())
                     {
                         if (i == scell_content_text_length.getLength())
                             aValidationType = sheet::ValidationType_TEXT_LEN;
-                        sCondition = sCondition.copy(1);
-                        switch (sCondition[0])
+                        sLocalCondition = sLocalCondition.copy(1);
+                        switch (sLocalCondition[0])
                         {
                             case '<' :
                             {
-                                if (sCondition[1] == '=')
+                                if (sLocalCondition[1] == '=')
                                 {
                                     aOperator = sheet::ConditionOperator_LESS_EQUAL;
-                                    sCondition = sCondition.copy(2);
+                                    sLocalCondition = sLocalCondition.copy(2);
                                 }
                                 else
                                 {
                                     aOperator = sheet::ConditionOperator_LESS;
-                                    sCondition = sCondition.copy(1);
+                                    sLocalCondition = sLocalCondition.copy(1);
                                 }
                             }
                             break;
                             case '>' :
                             {
-                                if (sCondition[1] == '=')
+                                if (sLocalCondition[1] == '=')
                                 {
                                     aOperator = sheet::ConditionOperator_GREATER_EQUAL;
-                                    sCondition = sCondition.copy(2);
+                                    sLocalCondition = sLocalCondition.copy(2);
                                 }
                                 else
                                 {
                                     aOperator = sheet::ConditionOperator_GREATER;
-                                    sCondition = sCondition.copy(1);
+                                    sLocalCondition = sLocalCondition.copy(1);
                                 }
                             }
                             break;
                             case '=' :
                             {
                                 aOperator = sheet::ConditionOperator_EQUAL;
-                                sCondition = sCondition.copy(1);
+                                sLocalCondition = sLocalCondition.copy(1);
                             }
                             break;
                             case '!' :
                             {
                                 aOperator = sheet::ConditionOperator_NOT_EQUAL;
-                                sCondition = sCondition.copy(1);
+                                sLocalCondition = sLocalCondition.copy(1);
                             }
                             break;
                         }
-                        sFormula1 = sCondition;
+                        sFormula1 = sLocalCondition;
                     }
                 }
             }
@@ -543,7 +543,6 @@ void ScXMLContentValidationContext::EndElement()
         uno::Sequence<beans::PropertyValue> aValues;
         pEvents->GetEventSequence( sOnError, aValues );
 
-        const beans::PropertyValue* pValues = aValues.getConstArray();
         sal_Int32 nLength = aValues.getLength();
         for( sal_Int32 i = 0; i < nLength; i++ )
         {
@@ -558,7 +557,6 @@ void ScXMLContentValidationContext::EndElement()
     }
 
     ScMyImportValidation aValidation;
-    sal_Int32 nOffset(0);
     aValidation.sName = sName;
     aValidation.sBaseCellAddress = sBaseCellAddress;
     aValidation.sImputTitle = sHelpTitle;
@@ -784,7 +782,7 @@ ScXMLErrorMacroContext::~ScXMLErrorMacroContext()
 SvXMLImportContext *ScXMLErrorMacroContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = NULL;
 
