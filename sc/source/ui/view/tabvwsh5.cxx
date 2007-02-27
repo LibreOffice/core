@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh5.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:13:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:58:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,6 @@ void __EXPORT ScTabViewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         SCTAB nTab = GetViewData()->GetTabNo();
         if ( pHint->GetTab() == nTab )
         {
-            ScDocument* pDoc = GetViewData()->GetDocument();
             SCCOL nCol = pHint->GetCol();
             SCROW nRow = pHint->GetRow();
 #if 0
