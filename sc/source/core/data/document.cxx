@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:16:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:03:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,7 +443,7 @@ BOOL ScDocument::DeleteTab( SCTAB nTab, ScDocument* pRefUndoDoc )
 }
 
 
-BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL bUpdateRef,
+BOOL ScDocument::RenameTab( SCTAB nTab, const String& rName, BOOL /* bUpdateRef */,
         BOOL bExternalDocument )
 {
     BOOL    bValid = FALSE;
@@ -898,13 +898,13 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
     BOOL bOldAutoCalc = GetAutoCalc();
     SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
 
-    if ( ValidCol(nStartCol+nSize) )
+    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {
         DelBroadcastAreasInRange( ScRange(
             ScAddress( nStartCol, nStartRow, nStartTab ),
-            ScAddress( nStartCol+nSize-1, nEndRow, nEndTab ) ) );
+            ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize-1), nEndRow, nEndTab ) ) );
         UpdateBroadcastAreas( URM_INSDEL, ScRange(
-            ScAddress( nStartCol+nSize, nStartRow, nStartTab ),
+            ScAddress( sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nStartTab ),
             ScAddress( MAXCOL, nEndRow, nEndTab )), -static_cast<SCsCOL>(nSize), 0, 0 );
     }
     else
@@ -912,9 +912,9 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
             ScAddress( nStartCol, nStartRow, nStartTab ),
             ScAddress( MAXCOL, nEndRow, nEndTab ) ) );
 
-    if ( ValidCol(nStartCol+nSize) )
+    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {
-        UpdateReference( URM_INSDEL, nStartCol+nSize, nStartRow, nStartTab,
+        UpdateReference( URM_INSDEL, sal::static_int_cast<SCCOL>(nStartCol+nSize), nStartRow, nStartTab,
                          MAXCOL, nEndRow, nEndTab,
                          -static_cast<SCsCOL>(nSize), 0, 0, pRefUndoDoc );
     }
@@ -926,7 +926,7 @@ void ScDocument::DeleteCol(SCROW nStartRow, SCTAB nStartTab, SCROW nEndRow, SCTA
         if (pTab[i])
             pTab[i]->DeleteCol( nStartCol, nStartRow, nEndRow, nSize, pUndoOutline );
 
-    if ( ValidCol(nStartCol+nSize) )
+    if ( ValidCol(sal::static_int_cast<SCCOL>(nStartCol+nSize)) )
     {   // Listeners have been removed in UpdateReference
         for (i=0; i<=MAXTAB; i++)
             if (pTab[i])
@@ -1033,7 +1033,6 @@ BOOL ScDocument::CanFitBlock( const ScRange& rOld, const ScRange& rNew )
     if ( rOld == rNew )
         return TRUE;
 
-    SCTAB nTab = rOld.aStart.Tab();
     BOOL bOk = TRUE;
     BOOL bInsCol,bDelCol,bInsRow,bDelRow;
     ScRange aColRange,aRowRange;
@@ -1505,7 +1504,6 @@ void ScDocument::BroadcastFromClip( SCCOL nCol1, SCROW nRow1,
 {
     if (nInsFlag & IDF_CONTENTS)
     {
-        SCTAB nClipTab = 0;
         for (SCTAB i = 0; i <= MAXTAB; i++)
             if (pTab[i])
                 if (rMark.GetTableSelect(i))
@@ -1590,7 +1588,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                         nDx, nDy, nDz, pCBFCP->pRefUndoDoc, FALSE );
 
                 nClipTab = (nClipTab+nFollow+1) % (MAXTAB+1);
-                i += nFollow;
+                i = sal::static_int_cast<SCTAB>( i + nFollow );
             }
         }
     }
@@ -1600,7 +1598,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
 void ScDocument::CopyNonFilteredFromClip( SCCOL nCol1, SCROW nRow1,
                                     SCCOL nCol2, SCROW nRow2,
                                     const ScMarkData& rMark,
-                                    SCsCOL nDx, SCsROW nDy,
+                                    SCsCOL nDx, SCsROW /* nDy */,
                                     const ScCopyBlockFromClipParams* pCBFCP )
 {
     //  call CopyBlockFromClip for ranges of consecutive non-filtered rows
@@ -1686,12 +1684,12 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     A proper solution would ask the user how to proceed.
                     The adjustment of the indices in the formulas is done later.
                 */
-                ScRangeData* pClipData = (*pClipDoc->pRangeName)[i];
+                ScRangeData* pClipRangeData = (*pClipDoc->pRangeName)[i];
                 USHORT k;
-                if ( pRangeName->SearchName( pClipData->GetName(), k ) )
+                if ( pRangeName->SearchName( pClipRangeData->GetName(), k ) )
                 {
                     pClipRangeNames[i] = NULL;  // range name not inserted
-                    USHORT nOldIndex = pClipData->GetIndex();
+                    USHORT nOldIndex = pClipRangeData->GetIndex();
                     USHORT nNewIndex = ((*pRangeName)[k])->GetIndex();
                     aClipRangeMap.SetPair( i, nOldIndex, nNewIndex );
                     if ( !bRangeNameReplace )
@@ -1699,14 +1697,14 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                 }
                 else
                 {
-                    ScRangeData* pData = new ScRangeData( *pClipData );
+                    ScRangeData* pData = new ScRangeData( *pClipRangeData );
                     pData->SetDocument(this);
                     if ( pRangeName->FindIndex( pData->GetIndex() ) )
                         pData->SetIndex(0);     // need new index, done in Insert
                     if ( pRangeName->Insert( pData ) )
                     {
                         pClipRangeNames[i] = pData;
-                        USHORT nOldIndex = pClipData->GetIndex();
+                        USHORT nOldIndex = pClipRangeData->GetIndex();
                         USHORT nNewIndex = pData->GetIndex();
                         aClipRangeMap.SetPair( i, nOldIndex, nNewIndex );
                         if ( !bRangeNameReplace )
@@ -1716,7 +1714,7 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     {   // must be an overflow
                         delete pData;
                         pClipRangeNames[i] = NULL;
-                        aClipRangeMap.SetPair( i, pClipData->GetIndex(), 0 );
+                        aClipRangeMap.SetPair( i, pClipRangeData->GetIndex(), 0 );
                         bRangeNameReplace = TRUE;
                     }
                 }
@@ -1736,8 +1734,9 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                     pClipDoc->ExtendMerge( pClipDoc->aClipRange.aStart.Col(),
                                             pClipDoc->aClipRange.aStart.Row(),
                                             nThisEndX, nThisEndY, nTab );
-                    nThisEndX -= pClipDoc->aClipRange.aEnd.Col();
-                    nThisEndY -= pClipDoc->aClipRange.aEnd.Row();       // only extra value from ExtendMerge
+                    // only extra value from ExtendMerge
+                    nThisEndX = sal::static_int_cast<SCCOL>( nThisEndX - pClipDoc->aClipRange.aEnd.Col() );
+                    nThisEndY = sal::static_int_cast<SCROW>( nThisEndY - pClipDoc->aClipRange.aEnd.Row() );
                     if ( nThisEndX > nXw )
                         nXw = nThisEndX;
                     if ( nThisEndY > nYw )
@@ -1747,8 +1746,8 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
             SCCOL nDestAddX;
             SCROW nDestAddY;
             pClipDoc->GetClipArea( nDestAddX, nDestAddY, bIncludeFiltered );
-            nXw += nDestAddX;
-            nYw += nDestAddY;                               // ClipArea, plus ExtendMerge value
+            nXw = sal::static_int_cast<SCCOL>( nXw + nDestAddX );
+            nYw = sal::static_int_cast<SCROW>( nYw + nDestAddY );   // ClipArea, plus ExtendMerge value
 
             //  Inhalte entweder komplett oder gar nicht loeschen:
             USHORT nDelFlag = IDF_NONE;
@@ -1835,10 +1834,10 @@ void ScDocument::CopyFromClip( const ScRange& rDestRange, const ScMarkData& rMar
                         pClipRangeNames[i]->ReplaceRangeNamesInUse( aClipRangeMap );
                 }
                 // then update the formulas, they might need the just updated range names
-                SCCOL nC1 = nCol1;
-                SCROW nR1 = nRow1;
-                SCCOL nC2 = nC1 + nXw;
-                SCROW nR2 = nR1 + nYw;
+                nC1 = nCol1;
+                nR1 = nRow1;
+                nC2 = nC1 + nXw;
+                nR2 = nR1 + nYw;
                 do
                 {
                     do
@@ -2899,7 +2898,7 @@ BOOL ScDocument::GetColDefault( SCTAB nTab, SCCOL nCol, SCROW nLastRow, SCROW& n
     return bRet;
 }
 
-BOOL ScDocument::GetRowDefault( SCTAB nTab, SCROW nRow, SCCOL nLastCol, SCCOL& nDefault)
+BOOL ScDocument::GetRowDefault( SCTAB /* nTab */, SCROW /* nRow */, SCCOL /* nLastCol */, SCCOL& /* nDefault */ )
 {
     BOOL bRet(FALSE);
     return bRet;
@@ -4066,10 +4065,10 @@ void ScDocument::ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMark
         else
         {
             SfxItemPoolCache aCache( xPoolHelper->GetDocPool(), pSet );
-            for (SCTAB i=0; i<=MAXTAB; i++)
-                if (pTab[i])
-                    if (rMark.GetTableSelect(i))
-                        pTab[i]->ApplySelectionCache( &aCache, rMark );
+            for (SCTAB nTab=0; nTab<=MAXTAB; nTab++)
+                if (pTab[nTab])
+                    if (rMark.GetTableSelect(nTab))
+                        pTab[nTab]->ApplySelectionCache( &aCache, rMark );
         }
     }
 }
@@ -4269,7 +4268,7 @@ void lcl_RemoveMergeFromStyles( ScStyleSheetPool* pStylePool )
 }
 
 
-BOOL ScDocument::LoadPool( SvStream& rStream, BOOL bLoadRefCounts )
+BOOL ScDocument::LoadPool( SvStream& rStream, BOOL /* bLoadRefCounts */ )
 {
     //  bLoadingDone wird beim Laden des StylePools (ScStyleSheet::GetItemSet) gebraucht
     bLoadingDone = FALSE;
