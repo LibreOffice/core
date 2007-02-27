@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:13:26 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:31:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,19 +53,13 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Files --------------------------------------------------------
 
-CXXFILES =					\
-        htmlexp.cxx			\
-        htmlexp2.cxx        \
-        htmlimp.cxx			\
-        htmlpars.cxx
-
-EXCEPTIONSFILES = \
+SLOFILES =						\
+        $(SLO)$/htmlexp.obj		\
+        $(SLO)$/htmlexp2.obj	\
+        $(SLO)$/htmlimp.obj		\
         $(SLO)$/htmlpars.obj
 
-SLOFILES =					\
-        $(SLO)$/htmlexp.obj	\
-        $(SLO)$/htmlexp2.obj \
-        $(SLO)$/htmlimp.obj	\
+EXCEPTIONSFILES =				\
         $(SLO)$/htmlpars.obj
 
 # --- Targets -------------------------------------------------------
