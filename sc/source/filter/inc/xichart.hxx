@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:21:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:37:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -567,6 +567,9 @@ public:
     void                ConvertTitle( ScfPropertySet& rPropSet ) const;
 
 private:
+    using               XclImpChRoot::ConvertFont;
+
+private:
     XclChText           maData;             /// Contents of the CHTEXT record.
     XclChObjectLink     maObjLink;          /// Link target for this text object.
     XclImpChFrameRef    mxFrame;            /// Text object frame properties (CHFRAME group).
@@ -908,7 +911,7 @@ public:
 
     /** Converts and writes the contained series formatting to the passed chart.
         @param nSeriesIdx  0-based series index used by the chart. */
-    void                Convert( XChartDocRef xChartDoc, size_t nSeriesIdx ) const;
+    void                Convert( XChartDocRef xChartDoc, sal_uInt16 nSeriesIdx ) const;
 
 private:
     /** Reads a CHSOURCELINK record. */
@@ -1306,7 +1309,7 @@ struct XclImpChAxisHelper
                             XclImpChTextRef xTitle,
                             XDiagramRef xDiagram );
 
-    void                Convert( const XclImpChRoot& rRoot );
+    void                Convert();
 };
 
 // ----------------------------------------------------------------------------
