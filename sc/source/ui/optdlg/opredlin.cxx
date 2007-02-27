@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opredlin.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:16:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:35:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,12 +70,12 @@ ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
     : SfxTabPage(pParent, ScResId(RID_SCPAGE_OPREDLINE), rSet),
     aContentFT      ( this, ResId(FT_CONTENT    )),
     aContentColorLB ( this, ResId(CLB_CONTENT   )),
-    aMoveFT         ( this, ResId(FT_MOVE       )),
-    aMoveColorLB    ( this, ResId(CLB_MOVE  )),
-    aInsertFT       ( this, ResId(FT_INSERT )),
-    aInsertColorLB  ( this, ResId(CLB_INSERT    )),
     aRemoveFT       ( this, ResId(FT_REMOVE )),
     aRemoveColorLB  ( this, ResId(CLB_REMOVE    )),
+    aInsertFT       ( this, ResId(FT_INSERT )),
+    aInsertColorLB  ( this, ResId(CLB_INSERT    )),
+    aMoveFT         ( this, ResId(FT_MOVE       )),
+    aMoveColorLB    ( this, ResId(CLB_MOVE  )),
     aChangedGB      ( this, ResId(GB_COLORCHGS)),
     aAuthorStr      (ResId(STR_AUTHOR))
 {
@@ -109,7 +109,7 @@ SfxTabPage* __EXPORT ScRedlineOptionsTabPage::Create( Window* pParent, const Sfx
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& rSet )
+BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     ScAppOptions aAppOptions=SC_MOD()->GetAppOptions();
 
@@ -180,7 +180,7 @@ BOOL __EXPORT ScRedlineOptionsTabPage::FillItemSet( SfxItemSet& rSet )
     Beschreibung:
  -----------------------------------------------------------------------*/
 
-void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
+void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& /* rSet */ )
 {
 
     XColorTable* pColorTbl = XColorTable::GetStdColorTable();
@@ -242,7 +242,7 @@ void __EXPORT ScRedlineOptionsTabPage::Reset( const SfxItemSet& rSet )
 }
 
 
-IMPL_LINK( ScRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
+IMPL_LINK( ScRedlineOptionsTabPage, ColorHdl, ColorListBox *, EMPTYARG )
 {
 /*
     SvxFontPrevWindow *pPrev;
