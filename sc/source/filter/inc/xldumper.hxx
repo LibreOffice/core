@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xldumper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:22:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,8 +279,11 @@ protected:
                             FormatType eFmtType = FORMATTYPE_DEC );
 
     // ------------------------------------------------------------------------
+
+    using               WrappedStreamObject::Construct;
+
 private:
-    void                ConstructOwn( XclBiff eBiff );
+    void                ConstructRootObjBase( XclBiff eBiff );
 
 private:
     typedef ScfRef< XclImpStream > XclImpStreamRef;
@@ -333,6 +336,8 @@ protected:
 
     virtual void        ImplDumpHeader();
     virtual void        ImplDumpFooter();
+
+    using               RootObjectBase::Construct;
 };
 
 // ============================================================================
@@ -359,7 +364,7 @@ public:
 private:
     typedef ::std::stack< String > StringStack;
 
-    inline bool         Check( bool bCond ) { return !(mbError |= !bCond); }
+    inline bool         Check( bool bCond ) { return (mbError |= !bCond) == false; }
 
     const String&       GetString( const StringStack& rStack ) const;
     void                PushUnaryOp( StringStack& rStack, const String& rLOp, const String& rROp );
@@ -393,7 +398,7 @@ protected:
     virtual void        ImplDumpBody();
 
 private:
-    void                ConstructOwn();
+    void                ConstructFmlaObj();
 
     void                DumpFormula( const sal_Char* pcName, sal_uInt16 nSize, bool bNameMode );
     void                DumpFormula( const sal_Char* pcName, bool bNameMode );
@@ -498,8 +503,8 @@ public:
 
 protected:
     inline explicit     RecordStreamObject() {}
-    void                Construct( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff = EXC_BIFF_UNKNOWN );
-    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff = EXC_BIFF_UNKNOWN );
+    void                Construct( const ObjectBase& rParent, SvStream& rStrm, XclBiff eBiff );
+    void                Construct( const OleStorageObject& rParentStrg, const String& rStrmName, XclBiff eBiff );
 
     virtual bool        ImplIsValid() const;
     virtual void        ImplDumpBody();
@@ -514,8 +519,10 @@ protected:
 
     void                DumpRepeatedRecordId();
 
+    using               RootObjectBase::Construct;
+
 private:
-    void                ConstructOwn();
+    void                ConstructRecStrmObj();
 
     void                DumpRecordBody();
     void                DumpSimpleRecord( const String& rRecData );
@@ -543,7 +550,7 @@ protected:
     virtual void        ImplPostProcessRecord();
 
 private:
-    void                ConstructOwn();
+    void                ConstructWbStrmObj();
 
     const XclFontData*  GetFontData( sal_uInt16 nFontIdx ) const;
     sal_uInt16          GetXfData( sal_uInt16 nXfIdx ) const;
@@ -612,9 +619,6 @@ public:
 
 protected:
     virtual void        ImplDumpRecord();
-
-private:
-    void                ConstructOwn();
 };
 
 // ============================================================================
