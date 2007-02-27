@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapesContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:49:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ ScXMLTableShapesContext::ScXMLTableShapesContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // here are no attributes
