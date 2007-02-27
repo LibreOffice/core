@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabopdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:11:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:34:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,7 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_TABOP ),
         //
+        aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aFtFormulaRange     ( this, ScResId( FT_FORMULARANGE ) ),
         aEdFormulaRange     ( this, ScResId( ED_FORMULARANGE ) ),
         aRBFormulaRange     ( this, ScResId( RB_FORMULARANGE ), &aEdFormulaRange ),
@@ -75,22 +76,21 @@ ScTabOpDlg::ScTabOpDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aFtColCell          ( this, ScResId( FT_COLCELL ) ),
         aEdColCell          ( this, ScResId( ED_COLCELL ) ),
         aRBColCell          ( this, ScResId( RB_COLCELL ), &aEdColCell ),
-        aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
+        //
+        theFormulaCell      ( rCursorPos ),
+        pDoc                ( pDocument ),
+        nCurTab             ( theFormulaCell.Tab() ),
+        pEdActive           ( NULL ),
+        bDlgLostFocus       ( FALSE ),
         errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
         errMsgNoColRow      ( ScResId( STR_NOCOLROW ) ),
         errMsgWrongFormula  ( ScResId( STR_WRONGFORMULA ) ),
         errMsgWrongRowCol   ( ScResId( STR_WRONGROWCOL ) ),
         errMsgNoColFormula  ( ScResId( STR_NOCOLFORMULA ) ),
-        errMsgNoRowFormula  ( ScResId( STR_NOROWFORMULA ) ),
-        //
-        pDoc                ( pDocument ),
-        theFormulaCell      ( rCursorPos ),
-        nCurTab             ( theFormulaCell.Tab() ),
-        pEdActive           ( NULL ),
-        bDlgLostFocus       ( FALSE )
+        errMsgNoRowFormula  ( ScResId( STR_NOROWFORMULA ) )
 {
     Init();
     FreeResource();
@@ -158,7 +158,7 @@ void ScTabOpDlg::SetActive()
 
 //----------------------------------------------------------------------------
 
-void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( pEdActive )
     {
@@ -174,17 +174,17 @@ void ScTabOpDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         {
             theFormulaCell.Set( rRef.aStart, false, false, false);
             theFormulaEnd.Set( rRef.aEnd, false, false, false);
-            rRef.Format( aStr, nFmt, pDoc );
+            rRef.Format( aStr, nFmt, pDocP );
         }
         else if ( pEdActive == &aEdRowCell )
         {
             theRowCell.Set( rRef.aStart, false, false, false);
-            rRef.aStart.Format( aStr, nFmt, pDoc );
+            rRef.aStart.Format( aStr, nFmt, pDocP );
         }
         else if ( pEdActive == &aEdColCell )
         {
             theColCell.Set( rRef.aStart, false, false, false);
-            rRef.aStart.Format( aStr, nFmt, pDoc );
+            rRef.aStart.Format( aStr, nFmt, pDocP );
         }
 
         pEdActive->SetRefString( aStr );
@@ -362,7 +362,7 @@ IMPL_LINK( ScTabOpDlg, GetFocusHdl, Control*, pCtrl )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScTabOpDlg, LoseFocusHdl, Control*, pCtrl )
+IMPL_LINK( ScTabOpDlg, LoseFocusHdl, Control*, EMPTYARG )
 {
     bDlgLostFocus = !IsActive();
     return 0;
