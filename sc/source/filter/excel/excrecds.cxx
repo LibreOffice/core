@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:22:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ void ExcRecord::Save( XclExpStream& rStrm )
     XclExpRecord::Save( rStrm );
 }
 
-void ExcRecord::SaveCont( XclExpStream& rStrm )
+void ExcRecord::SaveCont( XclExpStream& /*rStrm*/ )
 {
 }
 
@@ -181,7 +181,7 @@ void ExcRecord::WriteBody( XclExpStream& rStrm )
 
 //--------------------------------------------------------- class ExcEmptyRec -
 
-void ExcEmptyRec::Save( XclExpStream& rStrm )
+void ExcEmptyRec::Save( XclExpStream& /*rStrm*/ )
 {
 }
 
@@ -420,17 +420,17 @@ UINT16 Exc1904::GetNum( void ) const
 //------------------------------------------------------ class ExcBundlesheet -
 
 ExcBundlesheetBase::ExcBundlesheetBase( RootData& rRootData, SCTAB nTab ) :
-    nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTab ) ? 0x0000 : 0x0001 ),
+    nStrPos( STREAM_SEEK_TO_END ),
     nOwnPos( STREAM_SEEK_TO_END ),
-    nStrPos( STREAM_SEEK_TO_END )
+    nGrbit( rRootData.pER->GetTabInfo().IsVisibleTab( nTab ) ? 0x0000 : 0x0001 )
 {
 }
 
 
 ExcBundlesheetBase::ExcBundlesheetBase() :
-    nGrbit( 0x0000 ),
+    nStrPos( STREAM_SEEK_TO_END ),
     nOwnPos( STREAM_SEEK_TO_END ),
-    nStrPos( STREAM_SEEK_TO_END )
+    nGrbit( 0x0000 )
 {
 }
 
@@ -670,6 +670,7 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
             case SC_BOTPERC:
                 nNewFlags = (EXC_AFFLAG_TOP10 | EXC_AFFLAG_TOP10PERC);
             break;
+            default:;
         }
         BOOL bNewTop10 = ::get_flag( nNewFlags, EXC_AFFLAG_TOP10 );
 
@@ -696,6 +697,7 @@ BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
                     case SC_LESS_EQUAL:     nOper = EXC_AFOPER_LESSEQUAL;       break;
                     case SC_GREATER_EQUAL:  nOper = EXC_AFOPER_GREATEREQUAL;    break;
                     case SC_NOT_EQUAL:      nOper = EXC_AFOPER_NOTEQUAL;        break;
+                    default:;
                 }
                 bConflict = !AddCondition( rEntry.eConnect, nType, nOper, fVal, pText );
             }
@@ -728,13 +730,13 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
     BOOL        bFound  = FALSE;
     BOOL        bAdvanced = FALSE;
     ScDBData*   pData   = NULL;
-    ScRange     aRange;
     ScRange     aAdvRange;
     while( (nIndex < rDBColl.GetCount()) && !bFound )
     {
         pData = rDBColl[ nIndex ];
         if( pData )
         {
+            ScRange aRange;
             pData->GetArea( aRange );
             bAdvanced = pData->GetAdvancedQuerySource( aAdvRange );
             bFound = (aRange.aStart.Tab() == nTab) &&
