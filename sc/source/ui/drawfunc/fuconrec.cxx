@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:50:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:11:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,9 +254,9 @@
 |*
 \************************************************************************/
 
-FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuConstRectangle::FuConstRectangle(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
-    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
 
@@ -408,7 +408,7 @@ void FuConstRectangle::Activate()
             break;
     }
 
-    pView->SetCurrentObj(aObjKind);
+    pView->SetCurrentObj(sal::static_int_cast<UINT16>(aObjKind));
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
