@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excscen.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:17:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:32:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ public:
     inline const ExcScenario*   First( void );
     inline const ExcScenario*   Next( void );
 
-    List::Count;
+    using List::Count;
 
     void                        Apply( const XclImpRoot& rRoot );
 };
