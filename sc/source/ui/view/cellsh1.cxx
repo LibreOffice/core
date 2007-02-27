@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh1.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:48:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,6 +261,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             case INS_CELLSRIGHT: aParam='>'; break;
                             case INS_INSROWS: aParam='R'; break;
                             case INS_INSCOLS: aParam='C'; break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
                         rReq.AppendItem( SfxStringItem( FID_INS_CELL, aParam ) );
                         rReq.Done();
@@ -333,6 +337,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             case DEL_CELLSLEFT: aParam='L'; break;
                             case DEL_DELROWS: aParam='R'; break;
                             case DEL_DELCOLS: aParam='C'; break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
                         rReq.AppendItem( SfxStringItem( FID_DELETE_CELL, aParam ) );
                         rReq.Done();
@@ -684,7 +692,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     //  Startwert nur vorbelegen, wenn nur 1 Zeile oder Spalte:
                     if ( nStartCol == nEndCol || nStartRow == nEndRow )
                     {
-                        double fInputEndVal;
+                        double fInputEndVal = 0.0;
                         String aEndStr;
 
                         pDoc->GetInputString( nStartCol, nStartRow, nStartTab, aStartStr);
@@ -892,7 +900,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     if ( nFillCol==nEndCol || nFillRow==nEndRow )
                     {
-                        FillDir eDir;
+                        FillDir eDir = FILL_TO_BOTTOM;
                         SCCOLROW nCount = 0;
 
                         if ( nFillCol==nEndCol )
@@ -990,7 +998,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_OUTLINE_MAKE:
             {
-                BOOL bColumns;
+                BOOL bColumns = FALSE;
                 BOOL bOk = TRUE;
 
                 if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
@@ -1086,7 +1094,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
         case SID_OUTLINE_REMOVE:
             {
-                BOOL bColumns;
+                BOOL bColumns = FALSE;
                 BOOL bOk = TRUE;
 
                 if ( GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
@@ -1298,12 +1306,12 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             {
                                 if ( pOwnClip && pOwnClip->GetDocument()->IsCutMode() )
                                 {
-                                    ScViewData* pViewData = GetViewData();
-                                    if ( pViewData->GetMarkData().GetTableSelect(
-                                            pViewData->GetTabNo() ) )
+                                    ScViewData* pData = GetViewData();
+                                    if ( pData->GetMarkData().GetTableSelect(
+                                            pData->GetTabNo() ) )
                                     {
-                                        SCCOL nPosX = pViewData->GetCurX();
-                                        SCROW nPosY = pViewData->GetCurY();
+                                        SCCOL nPosX = pData->GetCurX();
+                                        SCROW nPosY = pData->GetCurY();
                                         SCCOL nClipStartX, nClipSizeX;
                                         SCROW  nClipStartY, nClipSizeY;
                                         pOwnClip->GetDocument()->GetClipStart( nClipStartX, nClipStartY );
@@ -2175,8 +2183,8 @@ void ScCellShell::ExecuteExternalSource(
         ScRange aLinkRange;
         BOOL bMove = FALSE;
 
-        ScViewData* pViewData = GetViewData();
-        ScMarkData& rMark = pViewData->GetMarkData();
+        ScViewData* pData = GetViewData();
+        ScMarkData& rMark = pData->GetMarkData();
         rMark.MarkToSimple();
         if ( rMark.IsMarked() )
         {
@@ -2184,9 +2192,9 @@ void ScCellShell::ExecuteExternalSource(
             bMove = TRUE;                       // insert/delete cells to fit range
         }
         else
-            aLinkRange = ScRange( pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo() );
+            aLinkRange = ScRange( pData->GetCurX(), pData->GetCurY(), pData->GetTabNo() );
 
-        ScDocFunc aFunc(*pViewData->GetDocShell());
+        ScDocFunc aFunc(*pData->GetDocShell());
         aFunc.InsertAreaLink( _rFile, _rFilter, _rOptions, _rSource,
                                 aLinkRange, _nRefresh, bMove, FALSE );
         _rRequest.Done();
