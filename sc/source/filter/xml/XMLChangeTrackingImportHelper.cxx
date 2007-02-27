@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLChangeTrackingImportHelper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:44:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@ ScMyCellInfo::ScMyCellInfo()
     sFormula(),
     sInputString(),
     fValue(0.0),
-    nType(NUMBERFORMAT_ALL),
-    nMatrixFlag(MM_NONE),
     nMatrixCols(0),
-    nMatrixRows(0)
+    nMatrixRows(0),
+    nType(NUMBERFORMAT_ALL),
+    nMatrixFlag(MM_NONE)
 {
 }
 
@@ -89,10 +89,10 @@ ScMyCellInfo::ScMyCellInfo(ScBaseCell* pTempCell, const rtl::OUString& rFormulaA
     sFormula(rFormula),
     sInputString(rInputString),
     fValue(rValue),
-    nType(nTempType),
-    nMatrixFlag(nTempMatrixFlag),
     nMatrixCols(nTempMatrixCols),
-    nMatrixRows(nTempMatrixRows)
+    nMatrixRows(nTempMatrixRows),
+    nType(nTempType),
+    nMatrixFlag(nTempMatrixFlag)
 {
 }
 
@@ -171,8 +171,8 @@ ScMyBaseAction::~ScMyBaseAction()
 {
 }
 
-ScMyInsAction::ScMyInsAction(const ScChangeActionType nActionType)
-    : ScMyBaseAction(nActionType)
+ScMyInsAction::ScMyInsAction(const ScChangeActionType nActionTypeP)
+    : ScMyBaseAction(nActionTypeP)
 {
 }
 
@@ -180,11 +180,11 @@ ScMyInsAction::~ScMyInsAction()
 {
 }
 
-ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionType)
-    : ScMyBaseAction(nActionType),
+ScMyDelAction::ScMyDelAction(const ScChangeActionType nActionTypeP)
+    : ScMyBaseAction(nActionTypeP),
+    aGeneratedList(),
     pInsCutOff(NULL),
     aMoveCutOffs(),
-    aGeneratedList(),
     nD(0)
 {
 }
@@ -197,8 +197,8 @@ ScMyDelAction::~ScMyDelAction()
 
 ScMyMoveAction::ScMyMoveAction()
     : ScMyBaseAction(SC_CAT_MOVE),
-    pMoveRanges(NULL),
-    aGeneratedList()
+    aGeneratedList(),
+    pMoveRanges(NULL)
 {
 }
 
@@ -231,14 +231,14 @@ ScMyRejAction::~ScMyRejAction()
 }
 
 ScXMLChangeTrackingImportHelper::ScXMLChangeTrackingImportHelper()
-    : sIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX)),
+    : aUsers(),
     aActions(),
-    aUsers(),
-    nMultiSpanned(0),
-    nMultiSpannedSlaveCount(0),
-    pCurrentAction(NULL),
     pDoc(NULL),
     pTrack(NULL),
+    pCurrentAction(NULL),
+    sIDPrefix(RTL_CONSTASCII_USTRINGPARAM(SC_CHANGE_ID_PREFIX)),
+    nMultiSpanned(0),
+    nMultiSpannedSlaveCount(0),
     bChangeTrack(sal_False)
 {
     nPrefixLength = sIDPrefix.getLength();
@@ -282,6 +282,10 @@ void ScXMLChangeTrackingImportHelper::StartChangeAction(const ScChangeActionType
             pCurrentAction = new ScMyRejAction();
         }
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
@@ -352,6 +356,10 @@ void ScXMLChangeTrackingImportHelper::SetPosition(const sal_Int32 nPosition, con
                                         nInt32Max, nInt32Max, nPosition + nCount - 1);
         }
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
@@ -859,6 +867,10 @@ void ScXMLChangeTrackingImportHelper::CreateChangeTrack(ScDocument* pTempDoc)
                     pAction = CreateRejectionAction(static_cast<ScMyRejAction*>(*aItr));
                 }
                 break;
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
 
             if (pAction)
