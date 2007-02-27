@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scuiautofmt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:09:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,35 +82,35 @@ ScAutoFormatDlg::ScAutoFormatDlg( Window*                   pParent,
 
     ModalDialog     ( pParent, ScResId( RID_SCDLG_AUTOFORMAT ) ),
     //
-    aLbFormat       ( this, ScResId( LB_FORMAT ) ),
     aFlFormat       ( this, ScResId( FL_FORMAT ) ),
+    aLbFormat       ( this, ScResId( LB_FORMAT ) ),
     pWndPreview     ( new AutoFmtPreview( this, ScResId( WND_PREVIEW ), pDoc ) ),
-    aBtnNumFormat   ( this, ScResId( BTN_NUMFORMAT ) ),
-    aBtnBorder      ( this, ScResId( BTN_BORDER ) ),
-    aBtnFont        ( this, ScResId( BTN_FONT ) ),
-    aBtnPattern     ( this, ScResId( BTN_PATTERN ) ),
-    aBtnAlignment   ( this, ScResId( BTN_ALIGNMENT ) ),
-    aBtnAdjust      ( this, ScResId( BTN_ADJUST ) ),
-    aFlFormatting   ( this, ScResId( FL_FORMATTING ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) ),
     aBtnAdd         ( this, ScResId( BTN_ADD ) ),
     aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
     aBtnMore        ( this, ScResId( BTN_MORE ) ),
+    aFlFormatting   ( this, ScResId( FL_FORMATTING ) ),
+    aBtnNumFormat   ( this, ScResId( BTN_NUMFORMAT ) ),
+    aBtnBorder      ( this, ScResId( BTN_BORDER ) ),
+    aBtnFont        ( this, ScResId( BTN_FONT ) ),
+    aBtnPattern     ( this, ScResId( BTN_PATTERN ) ),
+    aBtnAlignment   ( this, ScResId( BTN_ALIGNMENT ) ),
+    aBtnAdjust      ( this, ScResId( BTN_ADJUST ) ),
     aBtnRename      ( this, ScResId( BTN_RENAME ) ),
     aStrTitle       ( ScResId( STR_ADD_TITLE ) ),
     aStrLabel       ( ScResId( STR_ADD_LABEL ) ),
-    aStrRename      ( ScResId( STR_RENAME_TITLE ) ),
     aStrClose       ( ScResId( STR_BTN_CLOSE ) ),
     aStrDelTitle    ( ScResId( STR_DEL_TITLE ) ),
     aStrDelMsg      ( ScResId( STR_DEL_MSG ) ) ,
+    aStrRename      ( ScResId( STR_RENAME_TITLE ) ),
     //
-    nIndex          ( 0 ),
-    bFmtInserted    ( FALSE ),
-    bCoreDataChanged( FALSE ),
     pFormat         ( pAutoFormat ),
-    pSelFmtData     ( pSelFormatData )
+    pSelFmtData     ( pSelFormatData ),
+    nIndex          ( 0 ),
+    bCoreDataChanged( FALSE ),
+    bFmtInserted    ( FALSE )
 {
     Init();
     pWndPreview->NotifyChange( (*pFormat)[0] );
@@ -364,7 +364,7 @@ IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, pBtn)
+IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 {
     BOOL bOk = FALSE;
     while( !bOk )
