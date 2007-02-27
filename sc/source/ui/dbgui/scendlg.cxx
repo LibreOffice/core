@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:27:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:04:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,11 @@
 ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit, BOOL bSheetProtected)
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+        aFlName         ( this, ResId( FL_NAME )),
         aEdName         ( this, ScResId( ED_NAME ) ),
+        aFlComment      ( this, ResId( FL_COMMENT ) ),
         aEdComment      ( this, ScResId( ED_COMMENT ) ),
+        aFlOptions      ( this, ResId( FL_OPTIONS ) ),
         aCbShowFrame    ( this, ResId( CB_SHOWFRAME ) ),
         aLbColor        ( this, ResId( LB_COLOR ) ),
         //aCbPrintFrame ( this, ResId( CB_PRINTFRAME ) ),
@@ -78,9 +78,9 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
         //aCbValue      ( this, ResId( CB_VALUE ) ),
         aCbCopyAll      ( this, ResId( CB_COPYALL ) ),
         aCbProtect      ( this, ResId( CB_PROTECT ) ),
-        aFlName         ( this, ResId( FL_NAME )),
-        aFlComment      ( this, ResId( FL_COMMENT ) ),
-        aFlOptions      ( this, ResId( FL_OPTIONS ) ),
+        aBtnOk          ( this, ScResId( BTN_OK ) ),
+        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aDefScenarioName( rName ),
         bIsEdit         ( bEdit )
 {
