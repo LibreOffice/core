@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tool.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:29:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,9 @@
 #include "ftools.hxx"
 #endif
 
+#ifdef WNT
 #pragma optimize("",off)
+#endif
 
 //--------------------------------------------------------- EXTERNE VARIABLEN -
 extern WKTYP                eTyp;           // -> filter.cxx, aktueller Dateityp
@@ -238,10 +240,10 @@ double Snum32ToDouble( UINT32 nValue )
 }
 
 
-FormCache::FormCache( ScDocument* pDoc, BYTE nNewDefaultFormat )
+FormCache::FormCache( ScDocument* pDoc1, BYTE nNewDefaultFormat )
 {   // Default-Format ist 'Default'
     nDefaultFormat = nNewDefaultFormat;
-    pFormTable = pDoc->GetFormatTable();
+    pFormTable = pDoc1->GetFormatTable();
     for( UINT16 nC = 0 ; nC < __nSize ; nC++ )
         bValid[ nC ] = FALSE;
     eLanguage = ScGlobal::eLnge;
@@ -261,9 +263,9 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
     BYTE        nL, nH; // Low-/High-Nibble
     BYTE        nForm = nFormat;
     String      aFormString;
-    sal_Char*   pFormString = NULL;
+    const sal_Char* pFormString = 0;
     INT16       eType = NUMBERFORMAT_ALL;
-    UINT32      nIndex;
+    UINT32      nIndex1;
     UINT32      nHandle;
     BOOL        bDefault = FALSE;
     //void GenerateFormat( aFormString, eType, COUNTRY_SYSTEM, LANGUAGE_SYSTEM,
@@ -281,69 +283,69 @@ SfxUInt32Item* FormCache::NewAttr( BYTE nFormat, BYTE nSt )
     {
         case 0x00:  // Festkommaformat (fixed)
             //fStandard;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, FALSE, FALSE, nL, 1 );
             break;
         case 0x01:  // Exponentdarstellung (scientific notation)
             //fExponent;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_SCIENTIFIC, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, FALSE, FALSE, nL, 1 );
             break;
         case 0x02:  // Waehrungsdarstellung (currency)
             //fMoney;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_CURRENCY, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, FALSE, FALSE, nL, 1 );
             break;
         case 0x03:  // Prozent
             //fPercent;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_PERCENT, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, FALSE, FALSE, nL, 1 );
             break;
         case 0x04:  // Komma
             //fStandard;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, TRUE, FALSE, nL, 1 );
             break;
         case 0x05:  // frei
             //fStandard;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, FALSE, FALSE, nL, 1 );
             break;
         case 0x06:  // frei
             //fStandard;nL;
-            nIndex = pFormTable->GetStandardFormat(
+            nIndex1 = pFormTable->GetStandardFormat(
                 NUMBERFORMAT_NUMBER, eLanguage );
-            pFormTable->GenerateFormat( aFormString, nIndex,
+            pFormTable->GenerateFormat( aFormString, nIndex1,
                 eLanguage, FALSE, FALSE, nL, 1 );
-            nIndex = 0;
+            nIndex1 = 0;
             break;
         case 0x07:  // Spezialformat
             switch( nL )
             {
                 case 0x00:  // +/-
                     //fStandard;nSt;
-                    nIndex = pFormTable->GetStandardFormat(
+                    nIndex1 = pFormTable->GetStandardFormat(
                         NUMBERFORMAT_NUMBER, eLanguage );
-                    pFormTable->GenerateFormat( aFormString, nIndex,
+                    pFormTable->GenerateFormat( aFormString, nIndex1,
                         eLanguage, FALSE, TRUE, nSt, 1 );
                     break;
                 case 0x01:  // generelles Format
                     //fStandard;nSt;
-                    nIndex = pFormTable->GetStandardFormat(
+                    nIndex1 = pFormTable->GetStandardFormat(
                         NUMBERFORMAT_NUMBER, eLanguage );
-                    pFormTable->GenerateFormat( aFormString, nIndex,
+                    pFormTable->GenerateFormat( aFormString, nIndex1,
                         eLanguage, FALSE, FALSE, nSt, 1 );
                     break;
                 case 0x02:  // Datum: Tag, Monat, Jahr
@@ -579,8 +581,6 @@ RangeNameBufferWK3::~RangeNameBufferWK3()
 
 void RangeNameBufferWK3::Add( const String& rOrgName, const ComplRefData& rCRD )
 {
-    static UINT16       nDouble = 0;
-
     String              aScName( rOrgName );
     ScfTools::ConvertToScDefinedName( aScName );
 
