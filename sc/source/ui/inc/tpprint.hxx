@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpprint.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:59:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ public:
     static USHORT*      GetRanges();
     virtual BOOL        FillItemSet( SfxItemSet& rCoreSet );
     virtual void        Reset( const SfxItemSet& rCoreSet );
+    using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
 };
 
