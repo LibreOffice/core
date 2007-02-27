@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:36:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ inline const TokenId TokenStack::Get( void )
     DBG_ASSERT( nPos > 0,
         "*TokenStack::Get(): Leer ist leer, ist leer, ist leer, ist..." );
 
-    register TokenId nRet;
+    TokenId nRet;
 
     if( nPos == 0 )
         nRet = 0;
@@ -314,7 +314,7 @@ inline TokenPool& TokenPool::operator <<( TokenStack& rStack )
 
 inline void TokenPool::operator >>( TokenStack& rStack )
 {
-    register TokenId nId;
+    TokenId nId;
     *this >> nId;
     rStack << nId;
 }
@@ -322,7 +322,7 @@ inline void TokenPool::operator >>( TokenStack& rStack )
 
 inline const TokenId TokenPool::Store( void )
 {
-    register TokenId nId;
+    TokenId nId;
     *this >> nId;
     return nId;
 }
@@ -358,7 +358,7 @@ const inline ScTokenArray* TokenPool::operator []( const TokenId nId )
 
 inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 {
-    register E_TYPE nRet;
+    E_TYPE nRet;
 
     UINT16 nId = (UINT16) rId - 1;
 
@@ -373,7 +373,7 @@ inline E_TYPE TokenPool::GetType( const TokenId& rId ) const
 
 inline const SingleRefData* TokenPool::GetSRD( const TokenId& rId ) const
 {
-    register SingleRefData* pRet;
+    SingleRefData* pRet;
 
     UINT16 nId = (UINT16) rId - 1;
 
