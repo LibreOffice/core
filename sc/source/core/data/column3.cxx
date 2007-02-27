@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:04:13 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ void ScColumn::Insert( SCROW nRow, ScBaseCell* pNewCell )
                     else
                     {
                         nLimit *= 2;
-                        if ( nLimit > MAXROWCOUNT )
+                        if ( nLimit > sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
                             nLimit = MAXROWCOUNT;
                     }
                 }
@@ -180,7 +180,7 @@ void ScColumn::Append( SCROW nRow, ScBaseCell* pCell )
             else
             {
                 nLimit *= 2;
-                if ( nLimit > MAXROWCOUNT )
+                if ( nLimit > sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
                     nLimit = MAXROWCOUNT;
             }
         }
@@ -281,8 +281,8 @@ void ScColumn::DeleteRow( SCROW nStartRow, SCSIZE nSize )
 
     BOOL bFound=FALSE;
     SCROW nEndRow = nStartRow + nSize - 1;
-    SCSIZE nStartIndex;
-    SCSIZE nEndIndex;
+    SCSIZE nStartIndex = 0;
+    SCSIZE nEndIndex = 0;
     SCSIZE i;
 
     for ( i = nFirstIndex; i < nCount && pItems[i].nRow <= nEndRow; i++ )
@@ -421,7 +421,7 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
     else                    // Zellen einzeln durchgehen
     {
         SCSIZE j = nStartIndex;
-        for (SCSIZE i = nStartIndex; i <= nEndIndex; i++)
+        for (i = nStartIndex; i <= nEndIndex; i++)
         {
             BOOL bDelete = FALSE;
             ScBaseCell* pOldCell = pItems[j].pCell;
@@ -448,6 +448,10 @@ void ScColumn::DeleteRange( SCSIZE nStartIndex, SCSIZE nEndIndex, USHORT nDelFla
                     bDelete = ((nDelFlag & IDF_NOTE) != 0) &&
                                 (pOldCell->GetBroadcaster() == NULL);
                     break;
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
 
             if (bDelete)
@@ -554,8 +558,8 @@ void ScColumn::DeleteArea(SCROW nStartRow, SCROW nEndRow, USHORT nDelFlag)
         else
         {
             BOOL bFound=FALSE;
-            SCSIZE nStartIndex;
-            SCSIZE nEndIndex;
+            SCSIZE nStartIndex = 0;
+            SCSIZE nEndIndex = 0;
             for (SCSIZE i = 0; i < nCount; i++)
                 if ((pItems[i].nRow >= nStartRow) && (pItems[i].nRow <= nEndRow))
                 {
@@ -619,6 +623,10 @@ ScFormulaCell* ScColumn::CreateRefCell( ScDocument* pDestDoc, const ScAddress& r
         case CELLTYPE_STRING:
         case CELLTYPE_EDIT:     bMatch = ((nFlags & IDF_STRING) != 0); break;
         case CELLTYPE_FORMULA:  bMatch = ((nFlags & IDF_FORMULA) != 0); break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     if (!bMatch)
         return NULL;
@@ -746,7 +754,6 @@ void ScColumn::CopyFromClip(SCROW nRow1, SCROW nRow2, long nDy,
             //  rows at the beginning may be skipped if filtered rows are left out,
             //  nDestRow may be negative then
 
-            ScBaseCell* pOld = rColumn.pItems[i].pCell;
             ScBaseCell* pNew;
 
             if ( bAsLink )
@@ -895,6 +902,10 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, USHORT nFlags,
                 }
             }
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
     }
 
     if ( !pNew && pSource->GetNotePtr() && ( nFlags & IDF_NOTE ) )
@@ -1001,7 +1012,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         if ( nIndex < nCount && nNextThis == nRow )
             pDest = pItems[nIndex].pCell;
 
-        DBG_ASSERT( pSrc || pDest, "Nanu ??!?" );
+        DBG_ASSERT( pSrc || pDest, "Nanu ?" );
 
         CellType eSrcType  = pSrc  ? pSrc->GetCellType()  : CELLTYPE_NONE;
         CellType eDestType = pDest ? pDest->GetCellType() : CELLTYPE_NONE;
@@ -1230,7 +1241,7 @@ void ScColumn::StartListeningInArea( SCROW nRow1, SCROW nRow2 )
 
 
 //  TRUE = Zahlformat gesetzt
-BOOL ScColumn::SetString( SCROW nRow, SCTAB nTab, const String& rString,
+BOOL ScColumn::SetString( SCROW nRow, SCTAB nTabP, const String& rString,
                           ScAddress::Convention conv )
 {
     BOOL bNumFmtSet = FALSE;
@@ -1241,7 +1252,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTab, const String& rString,
         if (rString.Len() > 0)
         {
             double nVal;
-            sal_uInt32 nIndex, nOldIndex;
+            sal_uInt32 nIndex, nOldIndex = 0;
             sal_Unicode cFirstChar;
             SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
             SfxObjectShell* pDocSh = pDocument->GetDocumentShell();
@@ -1268,7 +1279,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTab, const String& rString,
                     pNewCell = new ScStringCell( rString );
                 else                                            // =Formel
                     pNewCell = new ScFormulaCell( pDocument,
-                        ScAddress( nCol, nRow, nTab ), rString, conv, 0 );
+                        ScAddress( nCol, nRow, nTabP ), rString, conv, 0 );
             }
             else if ( cFirstChar == '\'')                       // 'Text
                 pNewCell = new ScStringCell( rString.Copy(1) );
@@ -1394,7 +1405,7 @@ BOOL ScColumn::SetString( SCROW nRow, SCTAB nTab, const String& rString,
                     }
                     else
                         pDocument->Broadcast( ScHint( SC_HINT_DATACHANGED,
-                            ScAddress( nCol, nRow, nTab ), pNewCell ) );
+                            ScAddress( nCol, nRow, nTabP ), pNewCell ) );
                 }
                 else
                 {
@@ -1419,7 +1430,7 @@ void ScColumn::GetFilterEntries(SCROW nStartRow, SCROW nEndRow, TypedStrCollecti
 {
     SvNumberFormatter* pFormatter = pDocument->GetFormatTable();
     String aString;
-    SCROW nRow;
+    SCROW nRow = 0;
     SCSIZE nIndex;
 
     Search( nStartRow, nIndex );
@@ -1692,7 +1703,7 @@ double ScColumn::GetValue( SCROW nRow ) const
         {
             case CELLTYPE_VALUE:
                 return ((ScValueCell*)pCell)->GetValue();
-                break;
+//                break;
             case CELLTYPE_FORMULA:
                 {
                     if (((ScFormulaCell*)pCell)->IsValue())
@@ -1700,10 +1711,10 @@ double ScColumn::GetValue( SCROW nRow ) const
                     else
                         return 0.0;
                 }
-                break;
+//                break;
             default:
                 return 0.0;
-                break;
+//                break;
         }
     }
     return 0.0;
