@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xichart.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:16:24 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:26:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1114,6 +1114,7 @@ bool XclImpChSourceLink::IsValidValueLink( const XclImpChSourceLink& rValueLink 
         case EXC_CHORIENT_HORIZONTAL:
             bValid = rValueLink.maIntervals == maIntervals;
         break;
+        default:;
     }
     return bValid;
 }
@@ -1132,6 +1133,7 @@ bool XclImpChSourceLink::IsValidCategLink( const XclImpChSourceLink& rCategLink 
         case EXC_CHORIENT_HORIZONTAL:
             bValid = (rCategLink.maMainPos < maMainPos) && (rCategLink.maIntervals == maIntervals);
         break;
+        default:;
     }
     return bValid;
 }
@@ -1151,6 +1153,7 @@ bool XclImpChSourceLink::IsValidTitleLink( const XclImpChSourceLink& rTitleLink 
             case EXC_CHORIENT_SINGLE:       bValid = bValidVer || bValidHor;    break;
             case EXC_CHORIENT_VERTICAL:     bValid = bValidVer;                 break;
             case EXC_CHORIENT_HORIZONTAL:   bValid = bValidHor;                 break;
+            default:;
         }
     }
     return bValid;
@@ -1181,6 +1184,7 @@ void XclImpChSourceLink::JoinRanges( ScRangeList& rScRanges ) const
                     static_cast< SCCOL >( aIt->mnScPos2 ), nScRow, maMainPos.mnScTab ) );
         }
         break;
+        default:;
     }
 }
 
@@ -1208,6 +1212,7 @@ void XclImpChSourceLink::CalcOrientation( const ScRangeList& rScRanges )
                 maMainPos.mnScPos = mnScRow;
                 AppendInterval( mnScCol, rFirstScRange.aEnd.Col() );
             break;
+            default:;
         }
 
         // update with following ranges
@@ -1272,6 +1277,7 @@ void XclImpChSourceLink::AppendColumnRange( SCCOL nScCol, SCROW nScRow1, SCROW n
         case EXC_CHORIENT_HORIZONTAL:
             meOrient = EXC_CHORIENT_COMPLEX;
         break;
+        default:;
     }
 }
 
@@ -1297,6 +1303,7 @@ void XclImpChSourceLink::AppendRowRange( SCCOL nScCol1, SCCOL nScCol2, SCROW nSc
             else
                 meOrient = EXC_CHORIENT_COMPLEX;
         break;
+        default:;
     }
 }
 
@@ -1326,7 +1333,7 @@ void XclImpChSourceLink::AppendInterval( SCCOLROW nScPos1, SCCOLROW nScPos2 )
         DBG_ERRORFILE( "XclImpChSourceLink::AppendInterval - invalid interval" );
 
     // count number of cells
-    mnCells += static_cast< sal_uInt16 >( nScPos2 - nScPos1 + 1 );
+    mnCells = mnCells + static_cast< sal_uInt16 >( nScPos2 - nScPos1 + 1 );
 }
 
 // ----------------------------------------------------------------------------
@@ -1853,6 +1860,7 @@ void XclImpChSeries::AddTitleToValues()
     {
         case EXC_CHORIENT_VERTICAL:     nScPos = mxTitleLink->GetFirstScRow();  break;
         case EXC_CHORIENT_HORIZONTAL:   nScPos = mxTitleLink->GetFirstScCol();  break;
+        default:;
     }
     if( nScPos >= 0 )
     {
@@ -2040,7 +2048,7 @@ ScfPropertySet lclGetPointPropSet( Reference< XDiagram > xDiagram,
 
 } // namespace
 
-void XclImpChSeries::Convert( Reference< XChartDocument > xChartDoc, size_t nSeriesIdx ) const
+void XclImpChSeries::Convert( Reference< XChartDocument > xChartDoc, sal_uInt16 nSeriesIdx ) const
 {
     Reference< XDiagram > xDiagram = xChartDoc->getDiagram();
     DBG_ASSERT( xDiagram.is(), "XclImpChSeries::Convert - no diagram" );
@@ -2166,7 +2174,7 @@ void XclImpChSeries::ReadChSerErrorBar( XclImpStream& rStrm )
         lclAddErrorBar( mxYErrorBar, xErrorBar );
 }
 
-void XclImpChSeries::ReadChEnd( XclImpStream& rStrm )
+void XclImpChSeries::ReadChEnd( XclImpStream& /*rStrm*/ )
 {
     // calculate the orientation of this series
     CalcOrientation();
@@ -2571,7 +2579,7 @@ void XclImpChLegend::Convert( ScfPropertySet& rPropSet ) const
 
 // ----------------------------------------------------------------------------
 
-XclImpChDropBar::XclImpChDropBar( sal_uInt16 nDropBar ) :
+XclImpChDropBar::XclImpChDropBar( sal_uInt16 /*nDropBar*/ ) :
     mnBarDist( 0 )
 {
 }
@@ -3083,7 +3091,7 @@ XclImpChAxisHelper::XclImpChAxisHelper(
 {
 }
 
-void XclImpChAxisHelper::Convert( const XclImpChRoot& rRoot )
+void XclImpChAxisHelper::Convert()
 {
     // axis title
     if( mxTitle.is() )
@@ -3283,7 +3291,7 @@ void XclImpChAxesSet::ConvertXAxis( Reference< XDiagram > xDiagram ) const
             }
         }
     }
-    aHelper.Convert( GetChRoot() );
+    aHelper.Convert();
 }
 
 void XclImpChAxesSet::ConvertYAxis( Reference< XDiagram > xDiagram ) const
@@ -3301,7 +3309,7 @@ void XclImpChAxesSet::ConvertYAxis( Reference< XDiagram > xDiagram ) const
         aHelper.maNameHasMajor = EXC_CHPROP_HASYAXISGRID;
         aHelper.maNameHasMinor = EXC_CHPROP_HASYAXISHELPGRID;
     }
-    aHelper.Convert( GetChRoot() );
+    aHelper.Convert();
 }
 
 void XclImpChAxesSet::ConvertSecYAxis( Reference< XDiagram > xDiagram ) const
@@ -3314,7 +3322,7 @@ void XclImpChAxesSet::ConvertSecYAxis( Reference< XDiagram > xDiagram ) const
         aHelper.maNameHasAxis = EXC_CHPROP_HASSECYAXIS;
         aHelper.maNameHasLabels = EXC_CHPROP_HASSECYAXISDESCR;
     }
-    aHelper.Convert( GetChRoot() );
+    aHelper.Convert();
 }
 
 void XclImpChAxesSet::ConvertZAxis( Reference< XDiagram > xDiagram ) const
@@ -3332,7 +3340,7 @@ void XclImpChAxesSet::ConvertZAxis( Reference< XDiagram > xDiagram ) const
         aHelper.maNameHasMajor = EXC_CHPROP_HASZAXISGRID;
         aHelper.maNameHasMinor = EXC_CHPROP_HASZAXISHELPGRID;
     }
-    aHelper.Convert( GetChRoot() );
+    aHelper.Convert();
 }
 
 void XclImpChAxesSet::ConvertBackground( Reference< XDiagram > xDiagram ) const
@@ -3501,8 +3509,8 @@ bool XclImpChChart::IsStockChart() const
     size_t nSeriesCnt = maValidSeries.size();
 
     return
-        (bPrimHiLo && (nSeriesCnt == (bSecnBar ? (bPrimDrop ? 5 : 4) : (bPrimDrop ? 4 : 3)))) ||
-        (bSecnHiLo && (nSeriesCnt == (bPrimBar ? (bSecnDrop ? 5 : 4) : (bSecnDrop ? 4 : 3))));
+        (bPrimHiLo && (nSeriesCnt == static_cast< size_t >( bSecnBar ? (bPrimDrop ? 5 : 4) : (bPrimDrop ? 4 : 3) ))) ||
+        (bSecnHiLo && (nSeriesCnt == static_cast< size_t >( bPrimBar ? (bSecnDrop ? 5 : 4) : (bSecnDrop ? 4 : 3) )));
 }
 
 bool XclImpChChart::HasAxesSet( sal_uInt16 nAxesSetId ) const
@@ -3846,7 +3854,7 @@ void XclImpChChart::ConvertSeries( Reference< XChartDocument > xChartDoc ) const
 
         // series formatting
         for( aVIt = aVBeg; aVIt != aVEnd; ++aVIt )
-            (*aVIt)->Convert( xChartDoc, aVIt - aVBeg );
+            (*aVIt)->Convert( xChartDoc, static_cast< sal_uInt16 >( aVIt - aVBeg ) );
     }
 }
 
@@ -3879,6 +3887,7 @@ void XclImpChChart::ConvertSeriesOrder( Reference< XChartDocument > xChartDoc ) 
         {
             case EXC_CHORIENT_VERTICAL:     aPropName = EXC_CHPROP_TRANSLATEDCOLS;  break;
             case EXC_CHORIENT_HORIZONTAL:   aPropName = EXC_CHPROP_TRANSLATEDROWS;  break;
+            default:;
         }
 
         if( aPropName.getLength() )
