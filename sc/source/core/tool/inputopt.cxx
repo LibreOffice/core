@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputopt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:30:13 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -270,11 +270,9 @@ ScInputCfg::ScInputCfg() :
 void ScInputCfg::Commit()
 {
     Sequence<OUString> aNames = GetPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -314,7 +312,7 @@ void ScInputCfg::Commit()
     PutProperties(aNames, aValues);
 }
 
-void ScInputCfg::Notify( const Sequence<rtl::OUString>& aPropertyNames )
+void ScInputCfg::Notify( const Sequence<rtl::OUString>& /* aPropertyNames */ )
 {
     DBG_ERROR("properties have been changed")
 }
