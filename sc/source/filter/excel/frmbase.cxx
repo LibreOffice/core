@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmbase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:49:56 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,11 +209,9 @@ const ScRange* _ScRangeListTabs::Next( void )
 
 
 ConverterBase::ConverterBase( UINT16 nNewBuffer ) :
-    aPool(),
-    aStack(),
     aEingPos( 0, 0, 0 ),
-    nBufferSize( nNewBuffer ),
-    eStatus( ConvOK )
+    eStatus( ConvOK ),
+    nBufferSize( nNewBuffer )
 {
     DBG_ASSERT( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
     pBuffer = new sal_Char[ nNewBuffer ];
@@ -243,10 +241,10 @@ ExcelConverterBase::~ExcelConverterBase()
 {
 }
 
-void ExcelConverterBase::Reset( ScAddress aNewEingPos )
+void ExcelConverterBase::Reset( const ScAddress& rEingPos )
 {
     ConverterBase::Reset();
-    aEingPos = aNewEingPos;
+    aEingPos = rEingPos;
 }
 
 void ExcelConverterBase::Reset()
@@ -269,11 +267,11 @@ LotusConverterBase::~LotusConverterBase()
 {
 }
 
-void LotusConverterBase::Reset( INT32 nLen, ScAddress aNewEingPos )
+void LotusConverterBase::Reset( INT32 nLen, const ScAddress& rEingPos )
 {
     ConverterBase::Reset();
     nBytesLeft = nLen;
-    aEingPos = aNewEingPos;
+    aEingPos = rEingPos;
 }
 
 void LotusConverterBase::Reset( INT32 nLen )
@@ -283,10 +281,10 @@ void LotusConverterBase::Reset( INT32 nLen )
     aEingPos.Set( 0, 0, 0 );
 }
 
-void LotusConverterBase::Reset( ScAddress aNewEingPos )
+void LotusConverterBase::Reset( const ScAddress& rEingPos )
 {
     ConverterBase::Reset();
     nBytesLeft = 0;
-    aEingPos = aNewEingPos;
+    aEingPos = rEingPos;
 }
 
