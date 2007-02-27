@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:05:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:05:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,17 +118,17 @@ ScDPSource::ScDPSource( ScDPTableData* pD ) :
     nRowDimCount( 0 ),
     nDataDimCount( 0 ),
     nPageDimCount( 0 ),
+    bColumnGrand( TRUE ),       // default is true
+    bRowGrand( TRUE ),
+    bIgnoreEmptyRows( FALSE ),
+    bRepeatIfEmpty( FALSE ),
     nDupCount( 0 ),
-    bResultOverflow( FALSE ),
     pResData( NULL ),
     pColResRoot( NULL ),
     pRowResRoot( NULL ),
     pColResults( NULL ),
     pRowResults( NULL ),
-    bColumnGrand( TRUE ),       // default is true
-    bRowGrand( TRUE ),
-    bIgnoreEmptyRows( FALSE ),
-    bRepeatIfEmpty( FALSE )
+    bResultOverflow( FALSE )
 {
     pData->SetEmptyFlags( bIgnoreEmptyRows, bRepeatIfEmpty );
 }
@@ -313,7 +313,7 @@ void ScDPSource::SetDupCount( long nNew )
     nDupCount = nNew;
 }
 
-ScDPDimension* ScDPSource::AddDuplicated(long nSource, const String& rNewName)
+ScDPDimension* ScDPSource::AddDuplicated(long /* nSource */, const String& rNewName)
 {
     DBG_ASSERT( pDimensions, "AddDuplicated without dimensions?" );
 
@@ -394,13 +394,13 @@ void SAL_CALL ScDPSource::refresh() throw(uno::RuntimeException)
     disposeData();
 }
 
-void SAL_CALL ScDPSource::addRefreshListener( const uno::Reference<util::XRefreshListener >& l )
+void SAL_CALL ScDPSource::addRefreshListener( const uno::Reference<util::XRefreshListener >& )
                                                 throw(uno::RuntimeException)
 {
     DBG_ERROR("not implemented");   //! exception?
 }
 
-void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRefreshListener >& l )
+void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRefreshListener >& )
                                                 throw(uno::RuntimeException)
 {
     DBG_ERROR("not implemented");   //! exception?
@@ -1029,7 +1029,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
         {MAP_CHAR_LEN(SC_UNO_IGNOREEM), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_REPEATIF), 0,  &getBooleanCppuType(),              0, 0 },     // for sheet data only
         {MAP_CHAR_LEN(SC_UNO_ROWGRAND), 0,  &getBooleanCppuType(),              0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPSourceMap_Impl );
@@ -1149,7 +1149,7 @@ uno::Any SAL_CALL ScDPDimensions::getByName( const rtl::OUString& aName )
         }
 
     throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPDimensions::getElementNames() throw(uno::RuntimeException)
@@ -1282,7 +1282,7 @@ long ScDPDimension::getPosition() const
     return pSource->GetPosition( nDim );
 }
 
-void ScDPDimension::setPosition(long nNew)
+void ScDPDimension::setPosition(long /* nNew */)
 {
     //! ...
 }
@@ -1307,7 +1307,7 @@ long ScDPDimension::getUsedHierarchy() const
     return nUsedHier;
 }
 
-void ScDPDimension::setUsedHierarchy(long nNew)
+void ScDPDimension::setUsedHierarchy(long /* nNew */)
 {
     // #i52547# don't use the incomplete date hierarchy implementation - ignore the call
     // nUsedHier = nNew;
@@ -1406,7 +1406,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
         {MAP_CHAR_LEN(SC_UNO_POSITION), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
         {MAP_CHAR_LEN(SC_UNO_REFVALUE), 0,  &getCppuType((sheet::DataPilotFieldReference*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNO_USEDHIER), 0,  &getCppuType((sal_Int32*)0),                0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPDimensionMap_Impl );
@@ -1435,13 +1435,13 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
     {
         sheet::DataPilotFieldOrientation eEnum;
         if (aValue >>= eEnum)
-            setOrientation( eEnum );
+            setOrientation( sal::static_int_cast<USHORT>(eEnum) );
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_FUNCTION ) )
     {
         sheet::GeneralFunction eEnum;
         if (aValue >>= eEnum)
-            setFunction( eEnum );
+            setFunction( sal::static_int_cast<USHORT>(eEnum) );
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_REFVALUE ) )
         aValue >>= aReferenceValue;
@@ -1597,7 +1597,7 @@ uno::Any SAL_CALL ScDPHierarchies::getByName( const rtl::OUString& aName )
         }
 
     throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPHierarchies::getElementNames() throw(uno::RuntimeException)
@@ -1714,7 +1714,7 @@ uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
     return aRet;
 }
 
-void SAL_CALL ScDPHierarchy::setName( const ::rtl::OUString& rNewName ) throw(uno::RuntimeException)
+void SAL_CALL ScDPHierarchy::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     DBG_ERROR("not implemented");       //! exception?
 }
@@ -1778,7 +1778,7 @@ uno::Any SAL_CALL ScDPLevels::getByName( const rtl::OUString& aName )
         }
 
     throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPLevels::getElementNames() throw(uno::RuntimeException)
@@ -1917,8 +1917,8 @@ void ScDPLevel::EvaluateSortOrder()
 //        case sheet::DataPilotFieldSortMode::MANUAL:
         case sheet::DataPilotFieldSortMode::NAME:
             {
-                ScDPMembers* pMembers = GetMembersObject();
-                long nCount = pMembers->getCount();
+                ScDPMembers* pLocalMembers = GetMembersObject();
+                long nCount = pLocalMembers->getCount();
 
                 DBG_ASSERT( aGlobalOrder.empty(), "sort twice?" );
                 aGlobalOrder.resize( nCount );
@@ -2029,7 +2029,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
     return pSource->GetData()->getDimensionName( nSrcDim );     // (original) dimension name
 }
 
-void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& rNewName ) throw(uno::RuntimeException)
+void SAL_CALL ScDPLevel::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     DBG_ERROR("not implemented");       //! exception?
 }
@@ -2076,7 +2076,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
         {MAP_CHAR_LEN(SC_UNO_SHOWEMPT), 0,  &getBooleanCppuType(),                                   0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SORTING),  0,  &getCppuType((sheet::DataPilotFieldSortInfo*)0),         0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SUBTOTAL), 0,  &getCppuType((uno::Sequence<sheet::GeneralFunction>*)0), 0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPLevelMap_Impl );
@@ -2261,7 +2261,7 @@ uno::Any SAL_CALL ScDPMembers::getByName( const rtl::OUString& aName )
     }
 
     throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException)
@@ -2362,14 +2362,14 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                     nVal = nIndex;              // DayOfWeek is 0-based
                     aName = ScGlobal::pCalendar->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::DAY,
-                        nVal, 0 );
+                        sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
                 else if ( nHier == SC_DAPI_HIERARCHY_QUARTER && nLev == SC_DAPI_LEVEL_MONTH )
                 {
                     nVal = nIndex;              // Month is 0-based
                     aName = ScGlobal::pCalendar->getDisplayName(
                         ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
-                        nVal, 0 );
+                        sal::static_int_cast<sal_Int16>(nVal), 0 );
                 }
                 else
                     nVal = nIndex + 1;          // Quarter, Day, Week are 1-based
@@ -2454,7 +2454,7 @@ String ScDPMember::GetNameStr() const
     return maData.aString;
 }
 
-void SAL_CALL ScDPMember::setName( const ::rtl::OUString& rNewName ) throw(uno::RuntimeException)
+void SAL_CALL ScDPMember::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
 {
     DBG_ERROR("not implemented");       //! exception?
 }
@@ -2492,7 +2492,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
     {
         {MAP_CHAR_LEN(SC_UNO_ISVISIBL), 0,  &getBooleanCppuType(),              0, 0 },
         {MAP_CHAR_LEN(SC_UNO_SHOWDETA), 0,  &getBooleanCppuType(),              0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     static uno::Reference<beans::XPropertySetInfo> aRef =
         new SfxItemPropertySetInfo( aDPMemberMap_Impl );
