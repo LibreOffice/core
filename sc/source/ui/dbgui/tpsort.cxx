@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpsort.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:30:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,15 +128,15 @@ ScTabPageSortFields::ScTabPageSortFields( Window*           pParent,
         aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
         //
-        pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
+        pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
+        pViewData       ( NULL ),
         rSortData       ( ((const ScSortItem&)
                            rArgSet.Get( nWhichSort )).
                                 GetSortData() ),
-        bHasHeader      ( FALSE ),
-        bSortByRows     ( FALSE ),
         nFieldCount     ( 0 ),
-        pViewData       ( NULL )
+        bHasHeader      ( FALSE ),
+        bSortByRows     ( FALSE )
 {
     Init();
     FreeResource();
@@ -202,7 +202,7 @@ SfxTabPage* __EXPORT ScTabPageSortFields::Create( Window*   pParent,
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& rArgSet )
+void __EXPORT ScTabPageSortFields::Reset( const SfxItemSet& /* rArgSet */ )
 {
     bSortByRows = rSortData.bByRow;
     bHasHeader  = rSortData.bHasHeader;
@@ -356,7 +356,7 @@ void __EXPORT ScTabPageSortFields::ActivatePage()
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScTabPageSortFields::DeactivatePage( SfxItemSet* pSet )
+int __EXPORT ScTabPageSortFields::DeactivatePage( SfxItemSet* pSetP )
 {
     if ( pDlg )
     {
@@ -367,8 +367,8 @@ int __EXPORT ScTabPageSortFields::DeactivatePage( SfxItemSet* pSet )
             pDlg->SetByRows( bSortByRows );
     }
 
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( pSetP )
+        FillItemSet( *pSetP );
 
     return SfxTabPage::LEAVE_PAGE;
 }
@@ -379,7 +379,7 @@ void ScTabPageSortFields::DisableField( USHORT nField )
 {
     nField--;
 
-    if ( nField>=0 && nField<=2 )
+    if ( nField<=2 )
     {
         aSortLbArr[nField]   ->Disable();
         aDirBtnArr[nField][0]->Disable();
@@ -394,7 +394,7 @@ void ScTabPageSortFields::EnableField( USHORT nField )
 {
     nField--;
 
-    if ( nField>=0 && nField<=2 )
+    if ( nField<=2 )
     {
         aSortLbArr[nField]   ->Enable();
         aDirBtnArr[nField][0]->Enable();
@@ -420,8 +420,8 @@ void ScTabPageSortFields::FillFieldLists()
             aLbSort2.InsertEntry( aStrUndefined, 0 );
             aLbSort3.InsertEntry( aStrUndefined, 0 );
 
-            SCCOL   nFirstCol   = rSortData.nCol1;
-            SCROW   nFirstRow   = rSortData.nRow1;
+            SCCOL   nFirstSortCol   = rSortData.nCol1;
+            SCROW   nFirstSortRow   = rSortData.nRow1;
             SCTAB   nTab        = pViewData->GetTabNo();
             USHORT  i           = 1;
 
@@ -431,9 +431,9 @@ void ScTabPageSortFields::FillFieldLists()
                 SCCOL   nMaxCol = rSortData.nCol2;
                 SCCOL   col;
 
-                for ( col=nFirstCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
+                for ( col=nFirstSortCol; col<=nMaxCol && i<SC_MAXFIELDS; col++ )
                 {
-                    pDoc->GetString( col, nFirstRow, nTab, aFieldName );
+                    pDoc->GetString( col, nFirstSortRow, nTab, aFieldName );
                     if ( !bHasHeader || (aFieldName.Len() == 0) )
                     {
                         aFieldName  = aStrColumn;
@@ -453,9 +453,9 @@ void ScTabPageSortFields::FillFieldLists()
                 SCROW   nMaxRow = rSortData.nRow2;
                 SCROW   row;
 
-                for ( row=nFirstRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
+                for ( row=nFirstSortRow; row<=nMaxRow && i<SC_MAXFIELDS; row++ )
                 {
-                    pDoc->GetString( nFirstCol, row, nTab, aFieldName );
+                    pDoc->GetString( nFirstSortCol, row, nTab, aFieldName );
                     if ( !bHasHeader || (aFieldName.Len() == 0) )
                     {
                         aFieldName  = aStrRow;
@@ -566,17 +566,17 @@ ScTabPageSortOptions::ScTabPageSortOptions( Window*             pParent,
         aFtAreaLabel    ( this, ScResId( FT_AREA_LABEL ) ),
 //      aFtArea         ( this, ScResId( FT_AREA ) ),
         //
-        aStrColLabel    ( ScResId( STR_COL_LABEL ) ),
         aStrRowLabel    ( ScResId( STR_ROW_LABEL ) ),
+        aStrColLabel    ( ScResId( STR_COL_LABEL ) ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         //
-        pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
         nWhichSort      ( rArgSet.GetPool()->GetWhich( SID_SORT ) ),
         rSortData       ( ((const ScSortItem&)
                           rArgSet.Get( nWhichSort )).GetSortData() ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
+        pDlg            ( (ScSortDlg*)(GetParent()->GetParent()) ),
         pColRes         ( NULL ),
         pColWrap        ( NULL )
 {
@@ -713,7 +713,7 @@ SfxTabPage* __EXPORT ScTabPageSortOptions::Create(
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& rArgSet )
+void __EXPORT ScTabPageSortOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
     if ( rSortData.bUserDef )
     {
@@ -854,7 +854,7 @@ void __EXPORT ScTabPageSortOptions::ActivatePage()
 
 // -----------------------------------------------------------------------
 
-int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSet )
+int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSetP )
 {
     BOOL bPosInputOk = TRUE;
 
@@ -900,8 +900,8 @@ int __EXPORT ScTabPageSortOptions::DeactivatePage( SfxItemSet* pSet )
         pDlg->SetByRows ( aBtnTopDown.IsChecked() );
     }
 
-    if ( pSet && bPosInputOk )
-        FillItemSet( *pSet );
+    if ( pSetP && bPosInputOk )
+        FillItemSet( *pSetP );
 
     return bPosInputOk ? SfxTabPage::LEAVE_PAGE : SfxTabPage::KEEP_PAGE;
 }
