@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undodat.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:27:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,11 +174,11 @@ void __EXPORT ScUndoDoOutline::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoDoOutline::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoDoOutline::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoDoOutline::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoDoOutline::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht
 }
@@ -630,7 +630,6 @@ void __EXPORT ScUndoAutoOutline::Redo()
     BeginRedo();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    ScDocument* pDoc = pDocShell->GetDocument();
 
     SCTAB nTab = aBlockStart.Tab();
     if (pViewShell)
@@ -784,7 +783,6 @@ void __EXPORT ScUndoSubTotals::Redo()
     BeginRedo();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    ScDocument* pDoc = pDocShell->GetDocument();
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -797,11 +795,11 @@ void __EXPORT ScUndoSubTotals::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoSubTotals::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoSubTotals::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoSubTotals::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoSubTotals::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht wegen Spaltennummern
 }
@@ -900,7 +898,6 @@ void __EXPORT ScUndoSort::Redo()
     BeginRedo();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    ScDocument* pDoc = pDocShell->GetDocument();
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -923,11 +920,11 @@ void __EXPORT ScUndoSort::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoSort::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoSort::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoSort::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoSort::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht wegen Spaltennummern
 }
@@ -941,6 +938,7 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
                             const ScRange* pOld, BOOL bSize, const ScRange* pAdvSrc ) :
     ScDBFuncUndo( pNewDocShell, ScRange( rParam.nCol1, rParam.nRow1, nNewTab,
                                          rParam.nCol2, rParam.nRow2, nNewTab ) ),
+    pDrawUndo( NULL ),
     nTab( nNewTab ),
     aQueryParam( rParam ),
     pUndoDoc( pNewUndoDoc ),
@@ -948,8 +946,7 @@ ScUndoQuery::ScUndoQuery( ScDocShell* pNewDocShell, SCTAB nNewTab, const ScQuery
     pUndoDB( pNewUndoDB ),
     bIsAdvanced( FALSE ),
     bDestArea( FALSE ),
-    bDoSize( bSize ),
-    pDrawUndo( NULL )
+    bDoSize( bSize )
 {
     if ( pOld )
     {
@@ -1079,7 +1076,6 @@ void __EXPORT ScUndoQuery::Redo()
     BeginRedo();
 
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
-    ScDocument* pDoc = pDocShell->GetDocument();
 
     SCTAB nVisTab = pViewShell->GetViewData()->GetTabNo();
     if ( nVisTab != nTab )
@@ -1093,11 +1089,11 @@ void __EXPORT ScUndoQuery::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoQuery::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoQuery::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoQuery::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoQuery::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht wegen Spaltennummern
 }
@@ -1165,11 +1161,11 @@ void ScUndoAutoFilter::Redo()
     EndRedo();
 }
 
-void ScUndoAutoFilter::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoAutoFilter::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoAutoFilter::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1201,7 +1197,6 @@ void __EXPORT ScUndoDBData::Undo()
 {
     BeginUndo();
 
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     ScDocument* pDoc = pDocShell->GetDocument();
 
     BOOL bOldAutoCalc = pDoc->GetAutoCalc();
@@ -1220,7 +1215,6 @@ void __EXPORT ScUndoDBData::Redo()
 {
     BeginRedo();
 
-    ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
     ScDocument* pDoc = pDocShell->GetDocument();
 
     BOOL bOldAutoCalc = pDoc->GetAutoCalc();
@@ -1235,11 +1229,11 @@ void __EXPORT ScUndoDBData::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoDBData::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoDBData::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoDBData::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoDBData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;                       // geht nicht
 }
@@ -1807,10 +1801,10 @@ ScUndoDataPilot::ScUndoDataPilot( ScDocShell* pNewDocShell,
                             ScDocument* pOldDoc, ScDocument* pNewDoc,
                             const ScDPObject* pOldObj, const ScDPObject* pNewObj, BOOL bMove ) :
     ScSimpleUndo( pNewDocShell ),
-    pOldDPObject( NULL ),
-    pNewDPObject( NULL ),
     pOldUndoDoc( pOldDoc ),
     pNewUndoDoc( pNewDoc ),
+    pOldDPObject( NULL ),
+    pNewDPObject( NULL ),
     bAllowMove( bMove )
 {
     if (pOldObj)
@@ -1946,12 +1940,12 @@ void __EXPORT ScUndoDataPilot::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoDataPilot::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoDataPilot::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //! allow deletion
 }
 
-BOOL __EXPORT ScUndoDataPilot::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoDataPilot::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     //! allow deletion
     return FALSE;
@@ -1968,8 +1962,8 @@ ScUndoConsolidate::ScUndoConsolidate( ScDocShell* pNewDocShell, const ScArea& rA
                     ScDBData* pData ) :
     ScSimpleUndo( pNewDocShell ),
     aDestArea( rArea ),
-    aParam( rPar ),
     pUndoDoc( pNewUndoDoc ),
+    aParam( rPar ),
     bInsRef( bReference ),
     nInsertCount( nInsCount ),
     pUndoTab( pTab ),
@@ -2101,11 +2095,11 @@ void __EXPORT ScUndoConsolidate::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoConsolidate::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoConsolidate::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoConsolidate::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoConsolidate::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -2118,7 +2112,6 @@ BOOL __EXPORT ScUndoConsolidate::CanRepeat(SfxRepeatTarget& rTarget) const
 void ScUndoChartData::Init()
 {
     ScDocument* pDoc = pDocShell->GetDocument();
-    BOOL bFound = FALSE;;
 
     SchMemChart* pOld = pDoc->FindChartData(aChartName);
     if (pOld)
@@ -2203,11 +2196,11 @@ void __EXPORT ScUndoChartData::Redo()
     EndRedo();
 }
 
-void __EXPORT ScUndoChartData::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoChartData::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL __EXPORT ScUndoChartData::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoChartData::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
