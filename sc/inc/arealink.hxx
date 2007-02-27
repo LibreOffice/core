@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:44:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ public:
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
     DECL_LINK( RefreshHdl, ScAreaLink* );
-    DECL_LINK( EndEditHdl, AbstractScLinkedAreaDlg* );
+    DECL_LINK( AreaEndEditHdl, AbstractScLinkedAreaDlg* );
 };
 
 #endif
