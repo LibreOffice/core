@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -845,7 +845,7 @@ void ScShapeChilds::SetDrawBroadcaster()
     }
 }
 
-void ScShapeChilds::Notify(SfxBroadcaster& rBC, const SfxHint& rHint)
+void ScShapeChilds::Notify(SfxBroadcaster&, const SfxHint& rHint)
 {
     if ( rHint.ISA( SdrHint ) )
     {
@@ -992,9 +992,9 @@ void ScShapeChilds::VisAreaChanged() const
 
     ///=====  IAccessibleParent  ==============================================
 
-sal_Bool ScShapeChilds::ReplaceChild (::accessibility::AccessibleShape* pCurrentChild,
-    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& _rxShape,
-        const long _nIndex, const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo)
+sal_Bool ScShapeChilds::ReplaceChild (::accessibility::AccessibleShape* /* pCurrentChild */,
+    const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& /* _rxShape */,
+        const long /* _nIndex */, const ::accessibility::AccessibleShapeTreeInfo& /* _rShapeTreeInfo */)
         throw (uno::RuntimeException)
 {
     DBG_ERRORFILE("should not be called in the page preview");
@@ -1136,9 +1136,9 @@ uno::Reference<XAccessible> ScShapeChilds::GetForegroundShapeAt(const awt::Point
             xAcc = GetAccShape(*aFindItr);
         else
         {
-            ScShapeChildVec::const_iterator aFindItr = std::find_if(aItr->maControls.begin(), aItr->maControls.end(), ScShapePointFound(rPoint));
-            if (aFindItr != aItr->maControls.end())
-                xAcc = GetAccShape(*aFindItr);
+            ScShapeChildVec::const_iterator aCtrlItr = std::find_if(aItr->maControls.begin(), aItr->maControls.end(), ScShapePointFound(rPoint));
+            if (aCtrlItr != aItr->maControls.end())
+                xAcc = GetAccShape(*aCtrlItr);
             else
                 ++aItr;
         }
