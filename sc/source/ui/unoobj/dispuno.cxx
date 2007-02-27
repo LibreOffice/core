@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispuno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:35:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:43:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ ScDispatchProviderInterceptor::~ScDispatchProviderInterceptor()
         EndListening(*pViewShell);
 }
 
-void ScDispatchProviderInterceptor::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDispatchProviderInterceptor::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -204,7 +204,7 @@ void SAL_CALL ScDispatchProviderInterceptor::setMasterDispatchProvider(
 
 // XEventListener
 
-void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject& Source )
+void SAL_CALL ScDispatchProviderInterceptor::disposing( const lang::EventObject& /* Source */ )
                                 throw(::com::sun::star::uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -245,7 +245,7 @@ ScDispatch::~ScDispatch()
     }
 }
 
-void ScDispatch::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDispatch::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -374,7 +374,7 @@ void SAL_CALL ScDispatch::removeStatusListener(
 
 // XSelectionChangeListener
 
-void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventObject& aEvent )
+void SAL_CALL ScDispatch::selectionChanged( const ::com::sun::star::lang::EventObject& /* aEvent */ )
                                 throw (::com::sun::star::uno::RuntimeException)
 {
     //  currently only called for URL cURLDocDataSource
