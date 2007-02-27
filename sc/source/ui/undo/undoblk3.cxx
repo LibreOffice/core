@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:26:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:39:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,12 +105,12 @@ ScUndoDeleteContents::ScUndoDeleteContents(
         //
     :   ScSimpleUndo( pNewDocShell ),
         //
-        aMarkData   ( rMark ),
         aRange      ( rRange ),
+        aMarkData   ( rMark ),
         pUndoDoc    ( pNewUndoDoc ),
-        bMulti      ( bNewMulti ),  // ueberliquid
+        pDrawUndo   ( NULL ),
         nFlags      ( nNewFlags ),
-        pDrawUndo   ( NULL )
+        bMulti      ( bNewMulti )   // ueberliquid
 {
     if (bObjects)
         pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
@@ -270,13 +270,13 @@ ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
         //
     :   ScSimpleUndo( pNewDocShell ),
         //
-        aMarkData   ( rMark ),
         aRange      ( nStartX, nStartY, nStartZ, nEndX, nEndY, nEndZ ),
+        aMarkData   ( rMark ),
         pUndoDoc    ( pNewUndoDoc ),
-        bMulti      ( bNewMulti ),
-        nSrcTab     ( nSrc ),
         nFlags      ( nFlg ),
         nFunction   ( nFunc ),
+        nSrcTab     ( nSrc ),
+        bMulti      ( bNewMulti ),
         bSkipEmpty  ( bSkip ),
         bAsLink     ( bLink )
 {
@@ -697,7 +697,7 @@ void __EXPORT ScUndoAutoFill::Redo()
 
 //! Tabellen selektieren
 
-    SCCOLROW nCount;
+    SCCOLROW nCount = 0;
     switch (eFillDir)
     {
         case FILL_TO_BOTTOM:
@@ -906,8 +906,8 @@ ScUndoAutoFormat::ScUndoAutoFormat( ScDocShell* pNewDocShell,
         //
     :   ScBlockUndo( pNewDocShell, rRange, bNewSize ? SC_UNDO_MANUALHEIGHT : SC_UNDO_AUTOHEIGHT ),
         //
-        aMarkData   ( rMark ),
         pUndoDoc    ( pNewUndoDoc ),
+        aMarkData   ( rMark ),
         bSize       ( bNewSize ),
         nFormatNo   ( nNewFormatNo )
 {
@@ -1086,8 +1086,8 @@ ScUndoReplace::ScUndoReplace( ScDocShell* pNewDocShell, const ScMarkData& rMark,
         //
     :   ScSimpleUndo( pNewDocShell ),
         //
-        aMarkData   ( rMark ),
         aCursorPos  ( nCurX, nCurY, nCurZ ),
+        aMarkData   ( rMark ),
         aUndoStr    ( rNewUndoStr ),
         pUndoDoc    ( pNewUndoDoc )
 {
@@ -1379,14 +1379,14 @@ void __EXPORT ScUndoTabOp::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoTabOp::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoTabOp::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScUndoTabOp::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoTabOp::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1407,8 +1407,8 @@ ScUndoConversion::ScUndoConversion(
     ScSimpleUndo( pNewDocShell ),
     aMarkData( rMark ),
     aCursorPos( nCurX, nCurY, nCurZ ),
-    aNewCursorPos( nNewX, nNewY, nNewZ ),
     pUndoDoc( pNewUndoDoc ),
+    aNewCursorPos( nNewX, nNewY, nNewZ ),
     pRedoDoc( pNewRedoDoc ),
     maConvParam( rConvParam )
 {
@@ -1551,7 +1551,6 @@ ScUndoRefreshLink::ScUndoRefreshLink( ScDocShell* pNewDocShell,
         pUndoDoc( pNewUndoDoc ),
         pRedoDoc( NULL )
 {
-    ScDocument* pDoc = pDocShell->GetDocument();
 }
 
 
@@ -1659,7 +1658,7 @@ void __EXPORT ScUndoRefreshLink::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRefreshLink::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoRefreshLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
@@ -1667,7 +1666,7 @@ void __EXPORT ScUndoRefreshLink::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoRefreshLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1771,7 +1770,7 @@ void __EXPORT ScUndoInsertAreaLink::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //! ....
 }
@@ -1779,7 +1778,7 @@ void __EXPORT ScUndoInsertAreaLink::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoInsertAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1861,7 +1860,7 @@ void __EXPORT ScUndoRemoveAreaLink::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
@@ -1869,7 +1868,7 @@ void __EXPORT ScUndoRemoveAreaLink::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoRemoveAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
@@ -1907,7 +1906,7 @@ ScUndoUpdateAreaLink::ScUndoUpdateAreaLink( ScDocShell* pShell,
         nNewRefresh ( nNewRD ),
         bWithInsert ( bDoInsert )
 {
-    DBG_ASSERT( aOldRange.aStart == aNewRange.aStart, "AreaLink verschoben ??!??" );
+    DBG_ASSERT( aOldRange.aStart == aNewRange.aStart, "AreaLink verschoben ?" );
 }
 
 
@@ -2029,7 +2028,7 @@ void __EXPORT ScUndoUpdateAreaLink::Redo()
 
 //----------------------------------------------------------------------------
 
-void __EXPORT ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& rTarget)
+void __EXPORT ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //  gippsnich
 }
@@ -2037,7 +2036,7 @@ void __EXPORT ScUndoUpdateAreaLink::Repeat(SfxRepeatTarget& rTarget)
 
 //----------------------------------------------------------------------------
 
-BOOL __EXPORT ScUndoUpdateAreaLink::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL __EXPORT ScUndoUpdateAreaLink::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
