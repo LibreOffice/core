@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:42:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:26:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,7 +258,7 @@ protected:
 public:
                     TYPEINFO();
 
-                    SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL);
+                    SFX_DECL_INTERFACE(SCID_TABVIEW_SHELL)
                     SFX_DECL_VIEWFACTORY(ScTabViewShell);
 
 
@@ -455,6 +455,7 @@ public:
     void    BroadcastAccessibility( const SfxHint &rHint );
     BOOL    HasAccessibilityObjects();
 
+    using ScTabView::ShowCursor;
 };
 
 //==================================================================
