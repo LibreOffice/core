@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refupdat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:43:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ BOOL lcl_MoveStart( R& rRef, U nStart, S nDelta, U nMask )
 {
     BOOL bCut = FALSE;
     if ( rRef >= nStart )
-        rRef += nDelta;
+        rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
         rRef = nStart + nDelta;             //! begrenzen ???
     if ( rRef < 0 )
@@ -74,7 +74,7 @@ BOOL lcl_MoveEnd( R& rRef, U nStart, S nDelta, U nMask )
 {
     BOOL bCut = FALSE;
     if ( rRef >= nStart )
-        rRef += nDelta;
+        rRef = sal::static_int_cast<R>( rRef + nDelta );
     else if ( nDelta < 0 && rRef >= nStart + nDelta )
         rRef = nStart + nDelta - 1;         //! begrenzen ???
     if ( rRef < 0 )
@@ -95,7 +95,7 @@ BOOL lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
 {
     if ( rRef >= nStart && rRef <= nEnd )
     {
-        rRef += nDelta;
+        rRef = sal::static_int_cast<R>( rRef + nDelta );
         return TRUE;
     }
 
@@ -104,7 +104,7 @@ BOOL lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
         if ( rRef >= nStart && rRef <= nEnd + nDelta )
         {
             if ( rRef <= nEnd )
-                rRef += nDelta;                 // verschobener Teil
+                rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
             else
                 rRef -= nEnd - nStart + 1;      // nachruecken
             return TRUE;
@@ -115,7 +115,7 @@ BOOL lcl_MoveReorder( R& rRef, U nStart, U nEnd, S nDelta )
         if ( rRef >= nStart + nDelta && rRef <= nEnd )
         {
             if ( rRef >= nStart )
-                rRef += nDelta;                 // verschobener Teil
+                rRef = sal::static_int_cast<R>( rRef + nDelta );    // in the moved range
             else
                 rRef += nEnd - nStart + 1;      // nachruecken
             return TRUE;
@@ -129,7 +129,7 @@ template< typename R, typename S, typename U >
 BOOL lcl_MoveItCut( R& rRef, S nDelta, U nMask )
 {
     BOOL bCut = FALSE;
-    rRef += nDelta;
+    rRef = sal::static_int_cast<R>( rRef + nDelta );
     if ( rRef < 0 )
     {
         rRef = 0;
@@ -146,7 +146,7 @@ BOOL lcl_MoveItCut( R& rRef, S nDelta, U nMask )
 template< typename R, typename S, typename U >
 void lcl_MoveItWrap( R& rRef, S nDelta, U nMask )
 {
-    rRef += nDelta;
+    rRef = sal::static_int_cast<R>( rRef + nDelta );
     if ( rRef < 0 )
         rRef += nMask+1;
     else if ( rRef > nMask )
@@ -182,22 +182,22 @@ BOOL lcl_MoveRefPart( R& rRef1Val, BOOL& rRef1Del, BOOL bDo1,
         }
         if ( bDel )
         {   // move deleted along
-            rRef1Val += nDelta;
-            rRef2Val += nDelta;
+            rRef1Val = sal::static_int_cast<R>( rRef1Val + nDelta );
+            rRef2Val = sal::static_int_cast<R>( rRef2Val + nDelta );
         }
         else
         {
             if (bDo1)
             {
                 if ( rRef1Del )
-                    rRef1Val += nDelta;
+                    rRef1Val = sal::static_int_cast<R>( rRef1Val + nDelta );
                 else
                     bCut1 = lcl_MoveStart( rRef1Val, nStart, nDelta, nMask );
             }
             if (bDo2)
             {
                 if ( rRef2Del )
-                    rRef2Val += nDelta;
+                    rRef2Val = sal::static_int_cast<R>( rRef2Val + nDelta );
                 else
                     bCut2 = lcl_MoveEnd( rRef2Val, nStart, nDelta, nMask );
             }
@@ -229,11 +229,11 @@ void Expand( R& n1, R& n2, U nStart, S nD )
     //! erst das Ende
     if ( n2 + 1 == nStart )
     {   // am Ende
-        n2 += nD;
+        n2 = sal::static_int_cast<R>( n2 + nD );
         return;
     }
     // am Anfang
-    n1 -= nD;
+    n1 = sal::static_int_cast<R>( n1 - nD );
 }
 
 
@@ -333,7 +333,7 @@ ScRefUpdateRes ScRefUpdate::Update( ScDocument* pDoc, UpdateRefMode eUpdateRefMo
                     (theRow1 >= nRow1) && (theRow2 <= nRow2) )
         {
             SCsTAB nMaxTab = pDoc->GetTableCount() - 1;
-            nMaxTab += nDz;     // auf die neue Anzahl anpassen
+            nMaxTab = sal::static_int_cast<SCsTAB>(nMaxTab + nDz);      // adjust to new count
             BOOL bExp = (bExpand && IsExpand( theTab1, theTab2, nTab1, nDz ));
             bCut1 = lcl_MoveStart( theTab1, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
             bCut2 = lcl_MoveEnd( theTab2, nTab1, nDz, static_cast<SCTAB>(nMaxTab) );
@@ -873,8 +873,8 @@ void ScRefUpdate::DoTranspose( SCsCOL& rCol, SCsROW& rRow, SCsTAB& rTab,
     {
         SCsTAB nNewTab = rTab+nDz;
         SCsTAB nCount = pDoc->GetTableCount();
-        while (nNewTab<0) nNewTab += nCount;
-        while (nNewTab>=nCount) nNewTab -= nCount;
+        while (nNewTab<0) nNewTab = sal::static_int_cast<SCsTAB>( nNewTab + nCount );
+        while (nNewTab>=nCount) nNewTab = sal::static_int_cast<SCsTAB>( nNewTab - nCount );
         rTab = nNewTab;
     }
     DBG_ASSERT( rCol>=rSource.aStart.Col() && rRow>=rSource.aStart.Row(),
@@ -932,12 +932,12 @@ ScRefUpdateRes ScRefUpdate::UpdateGrow( const ScRange& rArea, SCCOL nGrowX, SCRO
 
     if ( bUpdateX )
     {
-        rRef.Ref2.nCol += nGrowX;
+        rRef.Ref2.nCol = sal::static_int_cast<SCsCOL>( rRef.Ref2.nCol + nGrowX );
         eRet = UR_UPDATED;
     }
     if ( bUpdateY )
     {
-        rRef.Ref2.nRow += nGrowY;
+        rRef.Ref2.nRow = sal::static_int_cast<SCsROW>( rRef.Ref2.nRow + nGrowY );
         eRet = UR_UPDATED;
     }
 
