@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xistyle.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,8 @@ void XclImpPalette::ReadPalette( XclImpStream& rStrm )
 {
     sal_uInt16 nCount;
     rStrm >> nCount;
-    DBG_ASSERT( rStrm.GetRecLeft() == 4 * nCount, "XclImpPalette::ReadPalette - size mismatch" );
+    DBG_ASSERT( rStrm.GetRecLeft() == static_cast< sal_Size >( 4 * nCount ),
+        "XclImpPalette::ReadPalette - size mismatch" );
 
     maColorTable.resize( nCount );
     Color aColor;
@@ -1667,7 +1668,8 @@ void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol, SCROW nScRow )
 
 void XclImpXFRangeBuffer::SetMerge( SCCOL nScCol1, SCROW nScRow1, SCCOL nScCol2, SCROW nScRow2 )
 {
-    maMergeList.Append( ScRange( nScCol1, nScRow1, 0, nScCol2, nScRow2, 0 ) );
+    if( (nScCol1 < nScCol2) || (nScRow1 < nScRow2) )
+        maMergeList.Append( ScRange( nScCol1, nScRow1, 0, nScCol2, nScRow2, 0 ) );
 }
 
 void XclImpXFRangeBuffer::Finalize()
