@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeutl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:17:56 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:57:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,11 +92,11 @@ public:
                                   ScRefAddress* pEndPos      = 0,
                                   ScAddress::Details const & rDetails = ScAddress::detailsOOOa1 ) const;
 
-    BOOL    IsRefArea           ( const String& rAreaStr,
-                                  ScDocument*   pDoc,
-                                  SCTAB     nTab,
-                                  String*       pCompleteStr = 0,
-                                  ScRefAddress* pPosTripel   = 0 ) const
+    BOOL    IsRefArea           ( const String&,
+                                  ScDocument*,
+                                  SCTAB,
+                                  String* = 0,
+                                  ScRefAddress* = 0 ) const
                                       { return FALSE; }
 
     BOOL    IsAbsPos            ( const String& rPosStr,
