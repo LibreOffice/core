@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:00:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:29:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ void ScRefEdit::LoseFocus()
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK( ScRefEdit, UpdateHdl, Timer*, pTi )
+IMPL_LINK( ScRefEdit, UpdateHdl, Timer*, EMPTYARG )
 {
     if( pAnyRefDlg )
         pAnyRefDlg->ShowReference( GetText() );
@@ -611,7 +611,7 @@ void ScAnyRefDlg::SetDispatcherLock( BOOL bLock )
 
 //----------------------------------------------------------------------------
 
-void ScAnyRefDlg::ViewShellChanged(ScTabViewShell* pScViewShell)
+void ScAnyRefDlg::ViewShellChanged(ScTabViewShell* /* pScViewShell */)
 {
     lcl_EnableInput( FALSE );
 
@@ -683,7 +683,6 @@ void ScAnyRefDlg::ShowFormulaReference( const XubString& rStr )
         ScViewData* pViewData=ScDocShell::GetViewData();
         if ( pViewData && pRefComp )
         {
-            ScDocument* pDoc=pViewData->GetDocument();
             ScTabViewShell* pTabViewShell=pViewData->GetViewShell();
             SCCOL nCol = pViewData->GetCurX();
             SCROW nRow = pViewData->GetCurY();
@@ -997,7 +996,7 @@ void ScAnyRefDlg::StateChanged( StateChangedType nStateChange )
     }
 }
 
-IMPL_LINK( ScAnyRefDlg, UpdateFocusHdl, Timer*, pTi)
+IMPL_LINK( ScAnyRefDlg, UpdateFocusHdl, Timer*, EMPTYARG )
 {
     if (pActiveWin)
     {
@@ -1008,12 +1007,12 @@ IMPL_LINK( ScAnyRefDlg, UpdateFocusHdl, Timer*, pTi)
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScAnyRefDlg, AccelSelectHdl, Accelerator *, pAccel )
+IMPL_LINK( ScAnyRefDlg, AccelSelectHdl, Accelerator *, pSelAccel )
 {
-    if ( !pAccel )
+    if ( !pSelAccel )
         return 0;
 
-    switch ( pAccel->GetCurKeyCode().GetCode() )
+    switch ( pSelAccel->GetCurKeyCode().GetCode() )
     {
         case KEY_RETURN:
         case KEY_ESCAPE:
