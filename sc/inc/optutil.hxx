@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optutil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:11:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:57:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,11 +73,15 @@ public:
     sal_Bool PutProperties( const com::sun::star::uno::Sequence< rtl::OUString >& rNames,
                             const com::sun::star::uno::Sequence< com::sun::star::uno::Any>& rValues)
                             { return ConfigItem::PutProperties( rNames, rValues ); }
-    sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
-                            { return ConfigItem::EnableNotification( rNames ); }
 
-    com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
-                            { return ConfigItem::GetNodeNames( rNode ); }
+    using ConfigItem::EnableNotification;
+    using ConfigItem::GetNodeNames;
+
+//  sal_Bool EnableNotification(com::sun::star::uno::Sequence< rtl::OUString >& rNames)
+//                          { return ConfigItem::EnableNotification( rNames ); }
+
+//  com::sun::star::uno::Sequence< rtl::OUString > GetNodeNames(rtl::OUString& rNode)
+//                          { return ConfigItem::GetNodeNames( rNode ); }
 };
 
 #endif
