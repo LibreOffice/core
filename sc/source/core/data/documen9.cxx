@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:02:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -283,9 +283,9 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             pDrawLayer->ScAddPage( nTab );      // always add page, with or without the table
             if (pTab[nTab])
             {
-                String aName;
-                pTab[nTab]->GetName(aName);
-                pDrawLayer->ScRenamePage( nTab, aName );
+                String aTabName;
+                pTab[nTab]->GetName(aTabName);
+                pDrawLayer->ScRenamePage( nTab, aTabName );
 
                 pTab[nTab]->SetDrawPageSize();  // #54782# sofort die richtige Groesse
 #if 0
@@ -464,7 +464,7 @@ BOOL ScDocument::HasOLEObjectsInArea( const ScRange& rRange, const ScMarkData* p
 }
 
 
-void ScDocument::StopAnimations( SCTAB nTab, Window* pWin )
+void ScDocument::StopAnimations( SCTAB nTab, Window* /* pWin */ )
 {
     if (!pDrawLayer)
         return;
