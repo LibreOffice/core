@@ -4,9 +4,9 @@
  *
  *  $RCSfile: areasdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:19:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,8 +117,8 @@ ScPrintAreasDlg::ScPrintAreasDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* 
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         //
-        pRefInputEdit   ( &aEdPrintArea ),
         bDlgLostFocus   ( FALSE ),
+        pRefInputEdit   ( &aEdPrintArea ),
         pDoc            ( NULL ),
         pViewData       ( NULL ),
         nCurTab         ( 0 )
@@ -182,7 +182,7 @@ BOOL ScPrintAreasDlg::IsTableLocked() const
 
 //----------------------------------------------------------------------------
 
-void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScPrintAreasDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ )
 {
     if ( pRefInputEdit )
     {
@@ -443,7 +443,7 @@ void ScPrintAreasDlg::Impl_FillLists()
     {
         String          aName;
         String          aSymbol;
-        ScRange         aRange;
+//        ScRange         aRange;
         ScRangeData*    pData = NULL;
 
         for ( USHORT i=0; i<nCount; i++ )
@@ -695,7 +695,7 @@ BOOL lcl_CheckRepeatOne( const String& rStr, BOOL bIsRow, SCCOLROW& rVal )
             {
                 sal_Int32 n = aStr.ToInt32();
 
-                if ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) )
+                if ( ( bStrOk = (n > 0) && ( n <= MAXROWCOUNT ) ) != FALSE )
                     nNum = static_cast<SCCOLROW>(n - 1);
             }
         }
