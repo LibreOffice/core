@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpages.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:55:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:26:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ public:
     virtual void        Reset           ( const SfxItemSet& );
 
 protected:
+    using SfxTabPage::DeactivatePage;
     virtual int         DeactivatePage  ( SfxItemSet* pSet = NULL );
 
 private:

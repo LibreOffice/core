@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbinsert.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:57:32 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ class ScTbxInsertCtrl : public SfxToolBoxControl
 {
     USHORT                  nLastSlotId;
 
+    using SfxToolBoxControl::Select;
     virtual void            Select( BOOL bMod1 = FALSE );
 
 public:
