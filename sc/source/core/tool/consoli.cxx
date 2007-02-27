@@ -4,9 +4,9 @@
  *
  *  $RCSfile: consoli.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:25:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,14 +133,14 @@ ScConsData::ScConsData() :
     bRowByName(FALSE),
     bSubTitles(FALSE),
     nColCount(0),
-    ppColHeaders(NULL),
     nRowCount(0),
-    ppRowHeaders(NULL),
-    ppCount(NULL),
+    ppUsed(NULL),
     ppSum(NULL),
+    ppCount(NULL),
     ppSumSqr(NULL),
     ppRefs(NULL),
-    ppUsed(NULL),
+    ppColHeaders(NULL),
+    ppRowHeaders(NULL),
     nDataCount(0),
     nTitleCount(0),
     ppTitles(NULL),
@@ -422,6 +422,10 @@ void lcl_UpdateArray( ScSubTotalFunc eFunc,
                 rCount += 1.0;
             break;
         }
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
@@ -527,15 +531,15 @@ void ScConsData::AddData( ScDocument* pSrcDoc, SCTAB nTab,
 {
     PutInOrder(nCol1,nCol2);
     PutInOrder(nRow1,nRow2);
-    if ( nCol2 >= nCol1 + nColCount && !bColByName )
+    if ( nCol2 >= sal::static_int_cast<SCCOL>(nCol1 + nColCount) && !bColByName )
     {
         DBG_ASSERT(0,"Bereich zu gross");
-        nCol2 = nCol1 + nColCount - 1;
+        nCol2 = sal::static_int_cast<SCCOL>( nCol1 + nColCount - 1 );
     }
-    if ( nRow2 >= nRow1 + nRowCount && !bRowByName )
+    if ( nRow2 >= sal::static_int_cast<SCROW>(nRow1 + nRowCount) && !bRowByName )
     {
         DBG_ASSERT(0,"Bereich zu gross");
-        nRow2 = nRow1 + nRowCount - 1;
+        nRow2 = sal::static_int_cast<SCROW>( nRow1 + nRowCount - 1 );
     }
 
     SCCOL nCol;
@@ -712,10 +716,10 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
     if (bColByName)
         for (SCSIZE i=0; i<nColCount; i++)
-            pDestDoc->SetString( nStartCol+i, nRow, nTab, *ppColHeaders[i] );
+            pDestDoc->SetString( sal::static_int_cast<SCCOL>(nStartCol+i), nRow, nTab, *ppColHeaders[i] );
     if (bRowByName)
         for (SCSIZE j=0; j<nRowCount; j++)
-            pDestDoc->SetString( nCol, nStartRow+j, nTab, *ppRowHeaders[j] );
+            pDestDoc->SetString( nCol, sal::static_int_cast<SCROW>(nStartRow+j), nTab, *ppRowHeaders[j] );
 
     nCol = nStartCol;
     nRow = nStartRow;
@@ -732,9 +736,11 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                                 ppSum[nArrX][nArrY],
                                                 ppSumSqr[nArrX][nArrY]);
                     if (ppCount[nArrX][nArrY] < 0.0)
-                        pDestDoc->SetError( nCol+nArrX, nRow+nArrY, nTab, errNoValue );
+                        pDestDoc->SetError( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                            sal::static_int_cast<SCROW>(nRow+nArrY), nTab, errNoValue );
                     else
-                        pDestDoc->SetValue( nCol+nArrX, nRow+nArrY, nTab, fVal );
+                        pDestDoc->SetValue( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                            sal::static_int_cast<SCROW>(nRow+nArrY), nTab, fVal );
                 }
     }
 
@@ -784,7 +790,8 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                     ScTokenArray aRefArr;
                                     aRefArr.AddSingleReference(aSRef);
                                     aRefArr.AddOpCode(ocStop);
-                                    ScAddress aDest( nCol+nArrX, nRow+nArrY+nPos, nTab );
+                                    ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                                     sal::static_int_cast<SCROW>(nRow+nArrY+nPos), nTab );
                                     ScBaseCell* pCell = new ScFormulaCell( pDestDoc, aDest, &aRefArr );
                                     pDestDoc->PutCell( aDest.Col(), aDest.Row(), aDest.Tab(), pCell );
                                 }
@@ -792,10 +799,11 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
 
                             //  Summe einfuegen (relativ, nicht 3d)
 
-                            ScAddress aDest( nCol+nArrX, nRow+nArrY+nNeeded, nTab );
+                            ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
+                                             sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );
 
                             aCRef.Ref1.nTab = aCRef.Ref2.nTab = nTab;
-                            aCRef.Ref1.nCol = aCRef.Ref2.nCol = nCol+nArrX;
+                            aCRef.Ref1.nCol = aCRef.Ref2.nCol = sal::static_int_cast<SCsCOL>( nCol+nArrX );
                             aCRef.Ref1.nRow = nRow+nArrY;
                             aCRef.Ref2.nRow = nRow+nArrY+nNeeded-1;
                             aCRef.CalcRelFromAbs( aDest );
