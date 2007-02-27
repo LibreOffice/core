@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undostyl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:27:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:39:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,11 +241,11 @@ void ScUndoModifyStyle::Redo()
     EndRedo();
 }
 
-void ScUndoModifyStyle::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoModifyStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 {
 }
 
-BOOL ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoModifyStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;       // no repeat possible
 }
@@ -302,12 +302,12 @@ void ScUndoApplyPageStyle::Redo()
     EndRedo();
 }
 
-void ScUndoApplyPageStyle::Repeat(SfxRepeatTarget& rTarget)
+void ScUndoApplyPageStyle::Repeat(SfxRepeatTarget& /* rTarget */)
 {
     //! set same page style to current tab
 }
 
-BOOL ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& rTarget) const
+BOOL ScUndoApplyPageStyle::CanRepeat(SfxRepeatTarget& /* rTarget */) const
 {
     return FALSE;
 }
