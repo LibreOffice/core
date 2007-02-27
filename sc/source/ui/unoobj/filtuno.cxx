@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:07:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:45:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ void SAL_CALL ScFilterOptionsObj::setPropertyValues( const uno::Sequence<beans::
 
 // XExecutableDialog
 
-void SAL_CALL ScFilterOptionsObj::setTitle( const ::rtl::OUString& aTitle ) throw(uno::RuntimeException)
+void SAL_CALL ScFilterOptionsObj::setTitle( const ::rtl::OUString& /* aTitle */ ) throw(uno::RuntimeException)
 {
     // not used
 }
@@ -280,7 +280,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
 
 // XImporter
 
-void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& xDoc )
+void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     bExport = sal_False;
@@ -288,7 +288,7 @@ void SAL_CALL ScFilterOptionsObj::setTargetDocument( const uno::Reference<lang::
 
 // XExporter
 
-void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::XComponent>& xDoc )
+void SAL_CALL ScFilterOptionsObj::setSourceDocument( const uno::Reference<lang::XComponent>& /* xDoc */ )
                             throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     bExport = sal_True;
