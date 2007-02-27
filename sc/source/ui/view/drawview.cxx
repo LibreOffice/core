@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:09:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:50:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,11 +110,11 @@ void ScDrawView::Construct()
 
     if (pViewData)
     {
-        SCTAB nTab = pViewData->GetTabNo();
-        ShowSdrPage(GetModel()->GetPage(nTab));
+        SCTAB nViewTab = pViewData->GetTabNo();
+        ShowSdrPage(GetModel()->GetPage(nViewTab));
 
         BOOL bEx = pViewData->GetViewShell()->IsDrawSelMode();
-        BOOL bProt = pDoc->IsTabProtected( nTab ) ||
+        BOOL bProt = pDoc->IsTabProtected( nViewTab ) ||
                      pViewData->GetSfxDocShell()->IsReadOnly();
 
         SdrLayer* pLayer;
