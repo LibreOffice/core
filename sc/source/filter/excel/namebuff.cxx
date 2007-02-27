@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namebuff.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:50:23 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,8 +138,7 @@ UINT16  nShrCnt;
 #endif
 
 
-size_t
-ShrfmlaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
+size_t ShrfmlaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
 {
     // Use something simple, it is just a hash.
     return (static_cast <UINT16> (addr.Row()) << 0) |
@@ -147,10 +146,10 @@ ShrfmlaBuffer::ScAddressHashFunc::operator() (const ScAddress &addr) const
            (static_cast <UINT8> (addr.Tab()) << 24);
 }
 
-static const UINT16 nBase = 16384;  // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
+const size_t nBase = 16384; // Range~ und Shared~ Dingens mit jeweils der Haelfte Ids
 ShrfmlaBuffer::ShrfmlaBuffer( RootData* pRD ) :
     ExcRoot( pRD ),
-    cur_index (nBase)
+    mnCurrIdx (nBase)
 {
 #ifdef DBG_UTIL
     nShrCnt = 0;
@@ -165,18 +164,18 @@ void ShrfmlaBuffer::Store( const ScRange& rRange, const ScTokenArray& rToken )
 {
     String          aName( CreateName( rRange.aStart ) );
 
-    DBG_ASSERT( cur_index <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
+    DBG_ASSERT( mnCurrIdx <= 0xFFFF, "*ShrfmlaBuffer::Store(): Gleich wird mir schlecht...!" );
 
     ScRangeData* pData = new ScRangeData( pExcRoot->pIR->GetDocPtr(), aName, rToken, rRange.aStart, RT_SHARED );
-    pData->SetIndex (cur_index);
+    pData->SetIndex( static_cast< USHORT >( mnCurrIdx ) );
     pExcRoot->pIR->GetNamedRanges().Insert( pData );
-    index_hash[rRange.aStart] = cur_index;
+    index_hash[rRange.aStart] = static_cast< USHORT >( mnCurrIdx );
     index_list.push_front (rRange);
-    cur_index++;
+    ++mnCurrIdx;
 }
 
 
-UINT16 ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
+USHORT ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
 {
     ShrfmlaHash::const_iterator hash = index_hash.find (aAddr);
     if (hash != index_hash.end())
@@ -186,8 +185,8 @@ UINT16 ShrfmlaBuffer::Find( const ScAddress & aAddr ) const
     unsigned int ind = nBase;
     for (ShrfmlaList::const_iterator ptr = index_list.end(); ptr != index_list.begin() ; ind++)
         if ((--ptr)->In (aAddr))
-            return ind;
-    return cur_index;
+            return static_cast< USHORT >( ind );
+    return static_cast< USHORT >( mnCurrIdx );
 }
 
 
