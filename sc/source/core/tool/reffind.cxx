@@ -4,9 +4,9 @@
  *
  *  $RCSfile: reffind.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:23:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,8 +76,8 @@ inline BOOL IsText( BOOL& bQuote, sal_Unicode c )
 ScRefFinder::ScRefFinder(const String& rFormula, ScDocument* pDocument,
              ScAddress::Convention eConvP) :
     aFormula( rFormula ),
-    pDoc( pDocument ),
-    eConv( eConvP )
+    eConv( eConvP ),
+    pDoc( pDocument )
 {
     nSelStart = nSelEnd = nFound = 0;
 }
