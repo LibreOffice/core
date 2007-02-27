@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:06:07 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:42:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -743,13 +743,13 @@ int Sc10PageFormat::operator==( const Sc10PageFormat& rData ) const
 }
 
 
-USHORT Sc10PageCollection::Insert( const Sc10PageFormat& rData )
+USHORT Sc10PageCollection::InsertFormat( const Sc10PageFormat& rData )
 {
     for (USHORT i=0; i<nCount; i++)
         if (At(i)->aPageFormat == rData)
             return i;
 
-    Collection::Insert( new Sc10PageData(rData) );
+    Insert( new Sc10PageData(rData) );
 
     return nCount-1;
 }
@@ -805,7 +805,7 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
             Sc10HeadFootLine* pHeadFootLine = nHeadFoot ? &pPage->FootLine : &pPage->HeadLine;
 
             SfxItemSet aEditAttribs(aEditEngine.GetEmptyItemSet());
-            FontFamily eFam;
+            FontFamily eFam = FAMILY_DONTKNOW;
             switch (pPage->HeadLine.LogFont.lfPitchAndFamily & 0xF0)
             {
                 case ffDontCare:    eFam = FAMILY_DONTKNOW;     break;
@@ -990,11 +990,10 @@ void Sc10PageCollection::PutToDoc( ScDocument* pDoc )
                 //
                 // an allen Tabellen setzen
                 //
-                const SCTAB nLast = pDoc->GetMaxTableNumber();
-                for ( SCTAB i=0; i < nLast; i++ )
+                for ( SCTAB nTab = 0, nTabCount = pDoc->GetTableCount(); nTab < nTabCount; ++nTab )
                 {
-                    pDoc->SetRepeatColRange( i, pRepeatCol );
-                    pDoc->SetRepeatRowRange( i, pRepeatRow );
+                    pDoc->SetRepeatColRange( nTab, pRepeatCol );
+                    pDoc->SetRepeatRowRange( nTab, pRepeatRow );
                 }
             }
 
@@ -1246,7 +1245,7 @@ void Sc10Import::LoadPatternCollection()
             // Font
             if( ( pPattern->FormatFlags & pfFont ) == pfFont )
             {
-                FontFamily eFam;
+                FontFamily eFam = FAMILY_DONTKNOW;
                 switch( pPattern->LogFont.lfPitchAndFamily & 0xF0 )
                 {
                     case ffDontCare   : eFam = FAMILY_DONTKNOW;     break;
@@ -1474,12 +1473,10 @@ void Sc10Import::LoadDataBaseCollection()
 void Sc10Import::LoadTables()
 {
     Sc10PageCollection aPageCollection;
-    USHORT nDisplayMask = 0xFFFF;
-    USHORT nDisplayValue = 0;
 
-    INT16 TabCount;
-    rStream >> TabCount;
-    for (INT16 Tab=0; (Tab < TabCount) && (nError == 0); Tab++)
+    INT16 nTabCount;
+    rStream >> nTabCount;
+    for (INT16 Tab = 0; (Tab < nTabCount) && (nError == 0); Tab++)
     {
         Sc10PageFormat   PageFormat;
         INT16            DataBaseIndex;
@@ -1501,7 +1498,7 @@ void Sc10Import::LoadTables()
         //rStream.Read(&PageFormat, sizeof(PageFormat));
         lcl_ReadPageFormat(rStream, PageFormat);
 
-        USHORT nAt = aPageCollection.Insert(PageFormat);
+        USHORT nAt = aPageCollection.InsertFormat(PageFormat);
         String aPageName = lcl_MakeOldPageStyleFormatName( nAt );
 
         pPrgrsBar->Progress();
@@ -1555,6 +1552,8 @@ void Sc10Import::LoadTables()
 
     /*  wofuer wird das benoetigt? Da in SC 1.0 die Anzeigeflags pro Tabelle gelten und nicht pro View
         Dieses Flag in die ViewOptions eintragen bei Gelegenheit, Sollte der Stephan Olk machen
+        USHORT nDisplayMask = 0xFFFF;
+        USHORT nDisplayValue = 0;
         if (Tab == 0)
             nDisplayValue = Display;
         else
@@ -1708,7 +1707,8 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
     BYTE   CellType;
     USHORT Row;
     rStream >> CellCount;
-    if (static_cast<SCROW>(CellCount) > MAXROW) nError = errUnknownFormat;
+    SCROW nScCount = static_cast< SCROW >( CellCount );
+    if (nScCount > MAXROW) nError = errUnknownFormat;
     for (USHORT i = 0; (i < CellCount) && (nError == 0); i++)
     {
         rStream >> CellType;
@@ -1747,7 +1747,7 @@ void Sc10Import::LoadCol(SCCOL Col, SCTAB Tab)
                 }
                 case ctFormula :
                 {
-                    double Value = ScfTools::ReadLongDouble(rStream);
+                    /*double Value =*/ ScfTools::ReadLongDouble(rStream);
                     BYTE Len;
                     sal_Char s[256];
                     //rStream.Read(&Value, sizeof(Value));
@@ -1814,7 +1814,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         SCROW nEnd;
         USHORT i;
         UINT16 nLimit;
-        UINT16 nValue;
+        UINT16 nValue1;
         Sc10ColData *pColData;
 
         // Font (Name, Groesse)
@@ -1829,7 +1829,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             //if ((nStart <= nEnd) && (aFont.pData[i].Value != 0))
             if ((nStart <= nEnd) && (pColData->Value))
             {
-                FontFamily eFam;
+                FontFamily eFam = FAMILY_DONTKNOW;
                 //Sc10FontData* pFont = pFontCollection->At(aFont.pData[i].Value);
                 Sc10FontData* pFont = pFontCollection->At(pColData->Value);
                 switch (pFont->PitchAndFamily & 0xF0)
@@ -1841,10 +1841,10 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                     case ffScript     : eFam = FAMILY_SCRIPT;       break;
                     case ffDecorative : eFam = FAMILY_DECORATIVE;   break;
                 }
-                ScPatternAttr aPattern(pDoc->GetPool());
-                aPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING));
-                aPattern.GetItemSet().Put(SvxFontHeightItem(Abs(pFont->Height)));
-                pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aPattern);
+                ScPatternAttr aScPattern(pDoc->GetPool());
+                aScPattern.GetItemSet().Put(SvxFontItem(eFam, SC10TOSTRING( pFont->FaceName ), EMPTY_STRING));
+                aScPattern.GetItemSet().Put(SvxFontHeightItem(Abs(pFont->Height)));
+                pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
             }
             nStart = nEnd + 1;
         }
@@ -1863,9 +1863,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         {
             Color TextColor(COL_BLACK);
             lcl_ChangeColor((pColData->Value & 0x000F), TextColor);
-            ScPatternAttr aPattern(pDoc->GetPool());
-            aPattern.GetItemSet().Put(SvxColorItem(TextColor));
-            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aPattern);
+            ScPatternAttr aScPattern(pDoc->GetPool());
+            aScPattern.GetItemSet().Put(SvxColorItem(TextColor));
+            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
         nStart = nEnd + 1;
     }
@@ -1878,19 +1878,19 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
         nEnd = static_cast<SCROW>(pColData->Row);
-        nValue = pColData->Value;
-        if ((nStart <= nEnd) && (nValue))
+        nValue1 = pColData->Value;
+        if ((nStart <= nEnd) && (nValue1))
         {
-            ScPatternAttr aPattern(pDoc->GetPool());
-            if ((nValue & atBold) == atBold)
-             aPattern.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD));
-            if ((nValue & atItalic) == atItalic)
-             aPattern.GetItemSet().Put(SvxPostureItem(ITALIC_NORMAL));
-            if ((nValue & atUnderline) == atUnderline)
-             aPattern.GetItemSet().Put(SvxUnderlineItem(UNDERLINE_SINGLE));
-            if ((nValue & atStrikeOut) == atStrikeOut)
-             aPattern.GetItemSet().Put(SvxCrossedOutItem(STRIKEOUT_SINGLE));
-            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aPattern);
+            ScPatternAttr aScPattern(pDoc->GetPool());
+            if ((nValue1 & atBold) == atBold)
+             aScPattern.GetItemSet().Put(SvxWeightItem(WEIGHT_BOLD));
+            if ((nValue1 & atItalic) == atItalic)
+             aScPattern.GetItemSet().Put(SvxPostureItem(ITALIC_NORMAL));
+            if ((nValue1 & atUnderline) == atUnderline)
+             aScPattern.GetItemSet().Put(SvxUnderlineItem(UNDERLINE_SINGLE));
+            if ((nValue1 & atStrikeOut) == atStrikeOut)
+             aScPattern.GetItemSet().Put(SvxCrossedOutItem(STRIKEOUT_SINGLE));
+            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
         nStart = nEnd + 1;
     }
@@ -1903,54 +1903,54 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
         nEnd = static_cast<SCROW>(pColData->Row);
-        nValue = pColData->Value;
-        if ((nStart <= nEnd) && (nValue))
+        nValue1 = pColData->Value;
+        if ((nStart <= nEnd) && (nValue1))
         {
-            ScPatternAttr aPattern(pDoc->GetPool());
-            USHORT HorJustify = (nValue & 0x000F);
-            USHORT VerJustify = (nValue & 0x00F0) >> 4;
-            USHORT OJustify   = (nValue & 0x0F00) >> 8;
-            USHORT EJustify   = (nValue & 0xF000) >> 12;
+            ScPatternAttr aScPattern(pDoc->GetPool());
+            USHORT HorJustify = (nValue1 & 0x000F);
+            USHORT VerJustify = (nValue1 & 0x00F0) >> 4;
+            USHORT OJustify   = (nValue1 & 0x0F00) >> 8;
+            USHORT EJustify   = (nValue1 & 0xF000) >> 12;
 
             switch (HorJustify)
             {
                 case hjLeft:
-                    aPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_LEFT));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_LEFT));
                     break;
                 case hjCenter:
-                    aPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_CENTER));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_CENTER));
                     break;
                 case hjRight:
-                    aPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT));
+                    aScPattern.GetItemSet().Put(SvxHorJustifyItem(SVX_HOR_JUSTIFY_RIGHT));
                     break;
             }
 
             switch (VerJustify)
             {
                 case vjTop:
-                    aPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_TOP));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_TOP));
                     break;
                 case vjCenter:
-                    aPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_CENTER));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_CENTER));
                     break;
                 case vjBottom:
-                    aPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_BOTTOM));
+                    aScPattern.GetItemSet().Put(SvxVerJustifyItem(SVX_VER_JUSTIFY_BOTTOM));
                     break;
             }
 
             if (OJustify & ojWordBreak)
-                aPattern.GetItemSet().Put(SfxBoolItem(TRUE));
+                aScPattern.GetItemSet().Put(SfxBoolItem(TRUE));
             if (OJustify & ojBottomTop)
-                aPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,9000));
+                aScPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,9000));
             else if (OJustify & ojTopBottom)
-                aPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,27000));
+                aScPattern.GetItemSet().Put(SfxInt32Item(ATTR_ROTATE_VALUE,27000));
 
             INT16 Margin = Max((USHORT)20, (USHORT)(EJustify * 20));
             if (((OJustify & ojBottomTop) == ojBottomTop) || ((OJustify & ojBottomTop) == ojBottomTop))
-                aPattern.GetItemSet().Put(SvxMarginItem(20, Margin, 20, Margin));
+                aScPattern.GetItemSet().Put(SvxMarginItem(20, Margin, 20, Margin));
             else
-                aPattern.GetItemSet().Put(SvxMarginItem(Margin, 20, Margin, 20));
-            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aPattern);
+                aScPattern.GetItemSet().Put(SvxMarginItem(Margin, 20, Margin, 20));
+            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
     nStart = nEnd + 1;
     }
@@ -2039,7 +2039,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         }
         if( ( nStart <= nEnd ) && ( nValue != 0 ) )
         {
-            ScPatternAttr   aPattern(pDoc->GetPool());
+            ScPatternAttr   aScPattern(pDoc->GetPool());
             SvxBorderLine   aLine;
             SvxBoxItem      aBox;
 
@@ -2059,8 +2059,8 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             aLine.SetColor( ColorBottom );
             aBox.SetLine( &aLine, BOX_LINE_BOTTOM );
 
-            aPattern.GetItemSet().Put( aBox );
-            pDoc->ApplyPatternAreaTab( Col, nStart, Col, nEnd, Tab, aPattern );
+            aScPattern.GetItemSet().Put( aBox );
+            pDoc->ApplyPatternAreaTab( Col, nStart, Col, nEnd, Tab, aScPattern );
         }
         nStart = nEnd + 1;
 
@@ -2108,7 +2108,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
 
         lcl_ChangeColor( nRColor, aRColor );
 
-        ScPatternAttr aPattern( pDoc->GetPool() );
+        ScPatternAttr aScPattern( pDoc->GetPool() );
 
         UINT16 nFact;
         BOOL        bSwapCol = FALSE;
@@ -2125,9 +2125,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
         if ( bSetItem )
         {
             if( bSwapCol )
-                aPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ) ) );
+                aScPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aBColor, aRColor, nFact ) ) );
             else
-                aPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ) ) );
+                aScPattern.GetItemSet().Put( SvxBrushItem( GetMixedColor( aRColor, aBColor, nFact ) ) );
         }
         if( aRaster.pData[ nRasterIndex ].Row < aColor.pData[ nColorIndex ].Row )
         {
@@ -2150,7 +2150,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
                 nColorIndex++;
         }
         if( nStart <= nEnd )
-            pDoc->ApplyPatternAreaTab( Col, nStart, Col, nEnd, Tab, aPattern );
+            pDoc->ApplyPatternAreaTab( Col, nStart, Col, nEnd, Tab, aScPattern );
 
         nStart = nEnd + 1;
 
@@ -2176,16 +2176,16 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     for (i=0; i<nLimit; i++, pColData++)
     {
         nEnd = static_cast<SCROW>(pColData->Row);
-        nValue = pColData->Value;
-        if ((nStart <= nEnd) && (nValue))
+        nValue1 = pColData->Value;
+        if ((nStart <= nEnd) && (nValue1))
         {
             ULONG  nKey    = 0;
-            USHORT nFormat = (nValue & 0x00FF);
-            USHORT nInfo   = (nValue & 0xFF00) >> 8;
+            USHORT nFormat = (nValue1 & 0x00FF);
+            USHORT nInfo   = (nValue1 & 0xFF00) >> 8;
             ChangeFormat(nFormat, nInfo, nKey);
-            ScPatternAttr aPattern(pDoc->GetPool());
-            aPattern.GetItemSet().Put(SfxUInt32Item(ATTR_VALUE_FORMAT, (UINT32)nKey));
-            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aPattern);
+            ScPatternAttr aScPattern(pDoc->GetPool());
+            aScPattern.GetItemSet().Put(SfxUInt32Item(ATTR_VALUE_FORMAT, (UINT32)nKey));
+            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
         nStart = nEnd + 1;
     }
@@ -2202,9 +2202,9 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
             BOOL bHFormula = ((aFlag.pData[i].Value & paHideFormula) == paHideFormula);
             BOOL bHCell    = ((aFlag.pData[i].Value & paHideAll) == paHideAll);
             BOOL bHPrint   = ((aFlag.pData[i].Value & paHidePrint) == paHidePrint);
-            ScPatternAttr aPattern(pDoc->GetPool());
-            aPattern.GetItemSet().Put(ScProtectionAttr(bProtect, bHFormula, bHCell, bHPrint));
-            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aPattern);
+            ScPatternAttr aScPattern(pDoc->GetPool());
+            aScPattern.GetItemSet().Put(ScProtectionAttr(bProtect, bHFormula, bHCell, bHPrint));
+            pDoc->ApplyPatternAreaTab(Col, nStart, Col, nEnd, Tab, aScPattern);
         }
         nStart = nEnd + 1;
     }
@@ -2212,7 +2212,6 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     // ZellVorlagen
     nStart = 0;
     nEnd = 0;
-    SCROW Row = 10;
     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
     for (i=0; i<aPattern.Count; i++)
     {
