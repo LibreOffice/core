@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:25:19 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:55:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -142,6 +142,8 @@ private:
     USHORT          nIndex;             // eindeutiger Index fuer Formeln
     BOOL            bAutoFilter;        // AutoFilter? (nicht gespeichert)
     BOOL            bModified;          // wird bei UpdateReference gesetzt/geloescht
+
+    using ScRefreshTimer::operator==;
 
 public:
             ScDBData(const String& rName,
