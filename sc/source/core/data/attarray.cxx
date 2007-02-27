@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:44:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:59:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,6 @@ ScAttrArray::ScAttrArray( SCCOL nNewCol, SCTAB nNewTab, ScDocument* pDoc ) :
     nTab( nNewTab ),
     pDocument( pDoc )
 {
-    ScDocumentPool* pDocPool = pDocument->GetPool();
-
     nCount = nLimit = 1;
     pData = new ScAttrEntry[1];
     if (pData)
@@ -463,7 +461,7 @@ void ScAttrArray::SetPatternArea(SCROW nStartRow, SCROW nEndRow, const ScPattern
                 }
             }
 
-            if ( nInsert < MAXROWCOUNT )
+            if ( nInsert < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
             {   // insert or append new entry
                 if ( nInsert <= nCount )
                 {
@@ -1891,7 +1889,6 @@ BOOL ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
     }
 
     BOOL bFound = FALSE;
-    SCROW nStartRow = nLastData + 1;
 
     //  loop backwards from the end instead of using Search, assuming that
     //  there usually aren't many attributes below the last cell
@@ -2058,7 +2055,7 @@ BOOL ScAttrArray::TestInsertRow( SCSIZE nSize ) const
         //  MAXROW + 1 - nSize  = erste herausgeschobene Zeile
 
         SCSIZE nFirstLost = nCount-1;
-        while ( nFirstLost && pData[nFirstLost-1].nRow >= MAXROW + 1 - nSize )
+        while ( nFirstLost && pData[nFirstLost-1].nRow >= sal::static_int_cast<SCROW>(MAXROW + 1 - nSize) )
             --nFirstLost;
 
         if ( ((const ScMergeFlagAttr&)pData[nFirstLost].pPattern->
@@ -2108,8 +2105,8 @@ void ScAttrArray::InsertRow( SCROW nStartRow, SCSIZE nSize )
             //! ApplyAttr fuer Bereiche !!!
 
         const SfxPoolItem& rDef = pDocument->GetPool()->GetDefaultItem( ATTR_MERGE );
-        for (SCSIZE i=0; i<nSize; i++)
-            pDocument->ApplyAttr( nCol, nStartRow+i, nTab, rDef );
+        for (SCSIZE nAdd=0; nAdd<nSize; nAdd++)
+            pDocument->ApplyAttr( nCol, nStartRow+nAdd, nTab, rDef );
 
         //  im eingefuegten Bereich ist nichts zusammengefasst
     }
@@ -2125,12 +2122,12 @@ void ScAttrArray::DeleteRow( SCROW nStartRow, SCSIZE nSize )
     if (pData)
     {
         BOOL bFirst=TRUE;
-        SCSIZE nStartIndex;
-        SCSIZE nEndIndex;
+        SCSIZE nStartIndex = 0;
+        SCSIZE nEndIndex = 0;
         SCSIZE i;
 
         for ( i = 0; i < nCount-1; i++)
-            if (pData[i].nRow >= nStartRow && pData[i].nRow <= nStartRow+nSize-1)
+            if (pData[i].nRow >= nStartRow && pData[i].nRow <= sal::static_int_cast<SCROW>(nStartRow+nSize-1))
             {
                 if (bFirst)
                 {
@@ -2473,7 +2470,7 @@ BOOL ScAttrArray::SearchStyleRange( SCsROW& rRow, SCsROW& rEndRow,
 //
 
 
-void ScAttrArray::Save( SvStream& rStream ) const
+void ScAttrArray::Save( SvStream& /* rStream */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -2515,7 +2512,7 @@ void ScAttrArray::Save( SvStream& rStream ) const
 }
 
 
-void ScAttrArray::Load( SvStream& rStream )
+void ScAttrArray::Load( SvStream& /* rStream */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
