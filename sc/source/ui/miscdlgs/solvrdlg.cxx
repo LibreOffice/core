@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solvrdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:10:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_SOLVER ),
         //
+        aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aFtFormulaCell      ( this, ScResId( FT_FORMULACELL ) ),
         aEdFormulaCell      ( this, ScResId( ED_FORMULACELL ) ),
         aRBFormulaCell      ( this, ScResId( RB_FORMULACELL ), &aEdFormulaCell ),
@@ -78,21 +79,20 @@ ScSolverDlg::ScSolverDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aFtVariableCell     ( this, ScResId( FT_VARCELL ) ),
         aEdVariableCell     ( this, ScResId( ED_VARCELL ) ),
         aRBVariableCell     ( this, ScResId( RB_VARCELL ), &aEdVariableCell ),
-        aFlVariables        ( this, ScResId( FL_VARIABLES ) ),
         aBtnOk              ( this, ScResId( BTN_OK ) ),
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
-        errMsgInvalidVal    ( ScResId( STR_INVALIDVAL ) ),
+        //
+        theFormulaCell      ( aCursorPos ),
+        theVariableCell     ( aCursorPos ),
+        pDoc                ( pDocument ),
+        nCurTab             ( aCursorPos.Tab() ),
+        pEdActive           ( NULL ),
+        bDlgLostFocus       ( FALSE ),
         errMsgInvalidVar    ( ScResId( STR_INVALIDVAR ) ),
         errMsgInvalidForm   ( ScResId( STR_INVALIDFORM ) ),
         errMsgNoFormula     ( ScResId( STR_NOFORMULA ) ),
-        //
-        pDoc                ( pDocument ),
-        theFormulaCell      ( aCursorPos ),
-        theVariableCell     ( aCursorPos ),
-        nCurTab             ( aCursorPos.Tab() ),
-        pEdActive           ( NULL ),
-        bDlgLostFocus       ( FALSE )
+        errMsgInvalidVal    ( ScResId( STR_INVALIDVAL ) )
 {
     Init();
     FreeResource();
@@ -159,7 +159,7 @@ void ScSolverDlg::SetActive()
 
 //----------------------------------------------------------------------------
 
-void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if( pEdActive )
     {
@@ -172,7 +172,7 @@ void ScSolverDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
                                 ? SCA_ABS
                                 : SCA_ABS_3D;
 
-        aAdr.Format( aStr, nFmt, pDoc );
+        aAdr.Format( aStr, nFmt, pDocP );
         pEdActive->SetRefString( aStr );
 
         if ( pEdActive == &aEdFormulaCell )
@@ -309,7 +309,7 @@ IMPL_LINK( ScSolverDlg, GetFocusHdl, Control*, pCtrl )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScSolverDlg, LoseFocusHdl, Control*, pCtrl )
+IMPL_LINK( ScSolverDlg, LoseFocusHdl, Control*, EMPTYARG )
 {
     bDlgLostFocus = !IsActive();
     return 0;
