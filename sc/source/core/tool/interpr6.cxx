@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr6.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:37:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:17:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,6 @@ double ScInterpreter::GetGammaDist(double x, double alpha, double beta)
         0.179644372368830573,
         -0.139243221690590111E1
     };
-
-    int ipr = 6;
 
     double dx = x;
     double dgamma = gamma;
