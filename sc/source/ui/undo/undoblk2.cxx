@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:26:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,12 +83,12 @@ ScUndoWidthOrHeight::ScUndoWidthOrHeight( ScDocShell* pNewDocShell,
     nStartTab( nNewStartTab ),
     nEndTab( nNewEndTab ),
     pUndoDoc( pNewUndoDoc ),
+    pUndoTab( pNewUndoTab ),
     nRangeCnt( nNewCnt ),
     pRanges( pNewRanges ),
-    pUndoTab( pNewUndoTab ),
-    eMode( eNewMode ),
     nNewSize( nNewSizeTwips ),
     bWidth( bNewWidth ),
+    eMode( eNewMode ),
     pDrawUndo( NULL )
 {
     pDrawUndo = GetSdrUndoAction( pDocShell->GetDocument() );
@@ -181,7 +181,6 @@ void __EXPORT ScUndoWidthOrHeight::Redo()
 {
     BeginRedo();
 
-    ScDocument* pDoc = pDocShell->GetDocument();
     ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell();
 
     BOOL bPaintAll = FALSE;
