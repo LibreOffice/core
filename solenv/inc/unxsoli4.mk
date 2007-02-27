@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-30 08:24:06 $
+#   last change: $Author: vg $ $Date: 2007-02-27 11:48:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,6 @@ MODULES_WITH_WARNINGS := \
     extensions \
     lingu \
     r_tools \
-    sc \
     soldep \
     starmath \
     sw \
