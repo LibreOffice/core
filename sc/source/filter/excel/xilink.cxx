@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xilink.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:10:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:27:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,8 +419,8 @@ void XclImpSupbookTab::CreateAndFillTable( const XclImpRoot& rRoot,
 
 XclImpSupbook::XclImpSupbook( XclImpStream& rStrm ) :
     XclImpRoot( rStrm.GetRoot() ),
-    mnSBTab( EXC_TAB_DELETED ),
-    meType( EXC_SBTYPE_UNKNOWN )
+    meType( EXC_SBTYPE_UNKNOWN ),
+    mnSBTab( EXC_TAB_DELETED )
 {
     sal_uInt16 nSBTabCnt;
     rStrm >> nSBTabCnt;
