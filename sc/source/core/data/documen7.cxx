@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen7.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:52:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -460,7 +460,7 @@ void ScDocument::TrackFormulas( ULONG nHintId )
         do
         {
             ScHint aHint( nHintId, pTrack->aPos, pTrack );
-            if ( pBC = pTrack->GetBroadcaster() )
+            if ( ( pBC = pTrack->GetBroadcaster() ) != NULL )
                 pBC->Broadcast( aHint );
             pBASM->AreaBroadcast( aHint );
             //  Repaint fuer bedingte Formate mit relativen Referenzen:
