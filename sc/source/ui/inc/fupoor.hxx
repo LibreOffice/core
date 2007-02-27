@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fupoor.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:29:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:23:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ private:
     void SetMouseButtonCode(sal_uInt16 nNew) { if(nNew != mnCode) mnCode = nNew; }
     const sal_uInt16 GetMouseButtonCode() const { return mnCode; }
 
-    virtual void Paint(const Rectangle& rRect, Window* pWin) {}
+    virtual void Paint(const Rectangle&, Window*) {}
 
     virtual void DoCut();
     virtual void DoCopy();
@@ -109,7 +109,7 @@ private:
 
     // Mouse- & Key-Events; Returnwert=TRUE: Event wurde bearbeitet
     virtual BOOL KeyInput(const KeyEvent& rKEvt);
-    virtual BOOL MouseMove(const MouseEvent& rMEvt) { return FALSE; }
+    virtual BOOL MouseMove(const MouseEvent&) { return FALSE; }
 
     // #95491# moved from inline to *.cxx
     virtual BOOL MouseButtonUp(const MouseEvent& rMEvt); // { return FALSE; }
