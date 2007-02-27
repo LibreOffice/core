@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectionstate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:08:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
     if( bEqual ) switch( rL.GetSelectionType() )
     {
         case SC_SELECTTYPE_EDITCELL:
-            bEqual &= rL.GetEditSelection().IsEqual( rR.GetEditSelection() );
+            bEqual &= ( rL.GetEditSelection().IsEqual( rR.GetEditSelection() ) != FALSE );
         // run through!
         case SC_SELECTTYPE_SHEET:
             bEqual &= (rL.GetSheetSelection() == rR.GetSheetSelection()) == TRUE;
@@ -91,6 +91,10 @@ bool operator==( const ScSelectionState& rL, const ScSelectionState& rR )
         case SC_SELECTTYPE_NONE:
             bEqual &= rL.GetCellCursor() == rR.GetCellCursor();
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return bEqual;
 }
