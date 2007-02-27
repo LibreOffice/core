@@ -4,9 +4,9 @@
  *
  *  $RCSfile: consdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:17:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:00:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,13 +103,13 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         aFtConsAreas    ( this, ScResId( FT_CONSAREAS ) ),
         aLbConsAreas    ( this, ScResId( LB_CONSAREAS ) ),
 
-        aFtDataArea     ( this, ScResId( FT_DATA_AREA ) ),
         aLbDataArea     ( this, ScResId( LB_DATA_AREA ) ),
+        aFtDataArea     ( this, ScResId( FT_DATA_AREA ) ),
         aEdDataArea     ( this, ScResId( ED_DATA_AREA ) ),
         aRbDataArea     ( this, ScResId( RB_DATA_AREA ), &aEdDataArea ),
 
-        aFtDestArea     ( this, ScResId( FT_DEST_AREA ) ),
         aLbDestArea     ( this, ScResId( LB_DEST_AREA ) ),
+        aFtDestArea     ( this, ScResId( FT_DEST_AREA ) ),
         aEdDestArea     ( this, ScResId( ED_DEST_AREA ) ),
         aRbDestArea     ( this, ScResId( RB_DEST_AREA ), &aEdDestArea ),
 
@@ -124,18 +124,16 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnMore        ( this, ScResId( BTN_MORE ) ),
         aBtnAdd         ( this, ScResId( BTN_ADD ) ),
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
+        aBtnMore        ( this, ScResId( BTN_MORE ) ),
 
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         //
-        nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
         theConsData     ( ((const ScConsolidateItem&)
                            rArgSet.Get( rArgSet.GetPool()->
                                             GetWhich( SID_CONSOLIDATE ) )
                                       ).GetData() ),
-
         pViewData       ( ((ScTabViewShell*)SfxViewShell::Current())->
                                 GetViewData() ),
         pDoc            ( ((ScTabViewShell*)SfxViewShell::Current())->
@@ -143,6 +141,8 @@ ScConsolidateDlg::ScConsolidateDlg( SfxBindings* pB, SfxChildWindow* pCW, Window
         pRangeUtil      ( new ScRangeUtil ),
         pAreaData       ( NULL ),
         nAreaDataCount  ( 0 ),
+        nWhichCons      ( rArgSet.GetPool()->GetWhich( SID_CONSOLIDATE ) ),
+
         pRefInputEdit   ( &aEdDataArea )
 {
     Init();
@@ -296,7 +296,7 @@ void ScConsolidateDlg::FillAreaLists()
 //  neue Selektion im Referenz-Fenster angezeigt wird.
 
 
-void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( pRefInputEdit )
     {
@@ -310,9 +310,9 @@ void ScConsolidateDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
             nFmt |= SCA_TAB2_3D;
 
         if ( pRefInputEdit == &aEdDataArea)
-            rRef.Format( aStr, nFmt, pDoc );
+            rRef.Format( aStr, nFmt, pDocP );
         else if ( pRefInputEdit == &aEdDestArea )
-            rRef.aStart.Format( aStr, nFmt, pDoc );
+            rRef.aStart.Format( aStr, nFmt, pDocP );
 
         pRefInputEdit->SetRefString( aStr );
     }
@@ -416,7 +416,7 @@ IMPL_LINK( ScConsolidateDlg, GetFocusHdl, Control*, pCtr )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConsolidateDlg, OkHdl, void*, p )
+IMPL_LINK( ScConsolidateDlg, OkHdl, void*, EMPTYARG )
 {
     USHORT nDataAreaCount = aLbConsAreas.GetEntryCount();
 
