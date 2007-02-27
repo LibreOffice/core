@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDataPilotControl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,8 @@ public:
         sal_Int32 nIndex);
 
     virtual void Init();
+
+    using ScAccessibleContextBase::disposing;
     virtual void SAL_CALL disposing();
 
     void SetIndex(sal_Int32 nIndex) { mnIndex = nIndex; }
@@ -268,11 +270,11 @@ void ScAccessibleDataPilotControl::RemoveField(sal_Int32 nOldIndex)
         aItr = maChildren.erase(aItr);
 
         ::std::vector < AccessibleWeak >::iterator aEndItr = maChildren.end();
-        uno::Reference< XAccessible > xTempAcc;
+        uno::Reference< XAccessible > xItrAcc;
         while (aItr != aEndItr)
         {
-            xTempAcc = aItr->xWeakAcc;
-            if (xTempAcc.is() && aItr->pAcc)
+            xItrAcc = aItr->xWeakAcc;
+            if (xItrAcc.is() && aItr->pAcc)
                 aItr->pAcc->SetIndex(nOldIndex);
             ++nOldIndex;
             ++aItr;
@@ -595,7 +597,7 @@ void ScAccessibleDataPilotButton::ResetFocused()
     ///=====  XAccessibleComponent  ============================================
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleDataPilotButton::getAccessibleAtPoint(
-        const ::com::sun::star::awt::Point& rPoint )
+        const ::com::sun::star::awt::Point& /* rPoint */ )
         throw (::com::sun::star::uno::RuntimeException)
 {
     return NULL;
@@ -652,7 +654,7 @@ sal_Int32 SAL_CALL ScAccessibleDataPilotButton::getAccessibleChildCount(void)
     return 0;
 }
 
-uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotButton::getAccessibleChild(sal_Int32 nIndex)
+uno::Reference< XAccessible> SAL_CALL ScAccessibleDataPilotButton::getAccessibleChild(sal_Int32 /* nIndex */)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException)
 {
@@ -682,7 +684,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessibleDataPilotButton::getAcc
         pStateSet->AddState(AccessibleStateType::ENABLED);
         pStateSet->AddState(AccessibleStateType::OPAQUE);
         pStateSet->AddState(AccessibleStateType::FOCUSABLE);
-        if (mpDPFieldWindow && (mpDPFieldWindow->GetSelectedField() == mnIndex))
+        if (mpDPFieldWindow && (sal::static_int_cast<sal_Int32>(mpDPFieldWindow->GetSelectedField()) == mnIndex))
             pStateSet->AddState(AccessibleStateType::FOCUSED);
         if (isShowing())
             pStateSet->AddState(AccessibleStateType::SHOWING);
