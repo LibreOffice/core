@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawModelBroadcaster.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:08:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ void SAL_CALL ScDrawModelBroadcaster::removeEventListener( const uno::Reference<
     maEventListeners.removeInterface( xListener );
 }
 
-void ScDrawModelBroadcaster::Notify( SfxBroadcaster& rBC,
+void ScDrawModelBroadcaster::Notify( SfxBroadcaster&,
         const SfxHint& rHint )
 {
     const SdrHint *pSdrHint = PTR_CAST( SdrHint, &rHint );
@@ -99,6 +99,7 @@ void ScDrawModelBroadcaster::Notify( SfxBroadcaster& rBC,
         }
         catch( uno::RuntimeException& r )
         {
+            (void) r;
 #if OSL_DEBUG_LEVEL > 1
             ByteString aError( "Runtime exception caught while notifying shape.:\n" );
             aError += ByteString( String( r.Message), RTL_TEXTENCODING_ASCII_US );
