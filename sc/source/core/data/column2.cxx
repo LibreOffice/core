@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:49:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:00:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,8 +137,8 @@ String lcl_ReadOriginalStringCell( SvStream& rStream, USHORT nVer, CharSet eSyst
 
 void ScColumn::LoadData( SvStream& rStream )
 {
-    SCSIZE      nNewCount;
-    SCROW       nNewRow;
+    SCSIZE      nNewCount = 0;
+    SCROW       nNewRow = 0;
     BYTE        nByte;
     USHORT      nVer = (USHORT) pDocument->GetSrcVersion();
 
@@ -416,14 +416,14 @@ void ScColumn::LoadNotes( SvStream& rStream )
 {
     ScReadHeader aHdr(rStream);
 
-    SCSIZE nNoteCount;
+    SCSIZE nNoteCount = 0;
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
     rStream >> nNoteCount;
 #endif
     for (SCSIZE i=0; i<nNoteCount && rStream.GetError() == SVSTREAM_OK; i++)
     {
-        SCSIZE nPos;
+        SCSIZE nPos = 0;
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
         rStream >> nPos;
@@ -1211,7 +1211,7 @@ USHORT lcl_GetAttribHeight( const ScPatternAttr& rPattern, USHORT nFontHeightId 
 
     if ( nHeight + 240 > ScGlobal::nDefFontHeight )
     {
-        nHeight += ScGlobal::nDefFontHeight;
+        nHeight = sal::static_int_cast<USHORT>( nHeight + ScGlobal::nDefFontHeight );
         nHeight -= 240;
     }
 
@@ -1258,7 +1258,7 @@ void ScColumn::GetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT* pHeight
         }
         else
         {
-            SCROW nRow;
+            SCROW nRow = 0;
             BOOL bStdAllowed = (pPattern->GetCellOrientation() == SVX_ORIENTATION_STANDARD);
             BOOL bStdOnly = FALSE;
             if (bStdAllowed)
@@ -1686,7 +1686,7 @@ USHORT ScColumn::GetErrorData( SCROW nRow ) const
         {
             case CELLTYPE_FORMULA :
                 return ((ScFormulaCell*)pCell)->GetErrCode();
-            break;
+//            break;
             default:
             return 0;
         }
@@ -2069,7 +2069,7 @@ BOOL ScColumn::HasVisibleAttrIn( SCROW nStartRow, SCROW nEndRow ) const
 
 void ScColumn::FindUsed( SCROW nStartRow, SCROW nEndRow, BOOL* pUsed ) const
 {
-    SCROW nRow;
+    SCROW nRow = 0;
     SCSIZE nIndex;
     Search( nStartRow, nIndex );
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
@@ -2210,7 +2210,7 @@ void ScColumn::CompileColRowNameFormula()
 
 void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
 {
-    double nValue;
+    double nValue = 0.0;
     BOOL bVal = FALSE;
     BOOL bCell = TRUE;
     switch (pCell->GetCellType())
@@ -2242,6 +2242,10 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
             bCell = FALSE;
             break;
         // bei Strings nichts
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if (!rData.bError)
@@ -2275,6 +2279,10 @@ void lcl_UpdateSubTotal( ScFunctionData& rData, ScBaseCell* pCell )
                     if (++rData.nCount == 1 || nValue < rData.nVal )
                         rData.nVal = nValue;
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 }
@@ -2333,6 +2341,10 @@ ULONG ScColumn::GetWeightedCount() const
             case CELLTYPE_EDIT:
                 nTotal += 50;
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 
