@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabpages.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:15:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ ScTabPageProtection::ScTabPageProtection( Window*           pParent,
                               rCoreAttrs ),
         //
         aFlProtect          ( this, ScResId( FL_PROTECTION      ) ),
-        aBtnProtect         ( this, ScResId( BTN_PROTECTED      ) ),
         aBtnHideCell        ( this, ScResId( BTN_HIDE_ALL       ) ),
+        aBtnProtect         ( this, ScResId( BTN_PROTECTED      ) ),
         aBtnHideFormula     ( this, ScResId( BTN_HIDE_FORMULAR  ) ),
         aTxtHint            ( this, ScResId( FT_HINT            ) ),
         aFlPrint            ( this, ScResId( FL_PRINT           ) ),
@@ -192,10 +192,10 @@ BOOL __EXPORT ScTabPageProtection::FillItemSet( SfxItemSet& rCoreAttrs )
 
 //------------------------------------------------------------------------
 
-int __EXPORT ScTabPageProtection::DeactivatePage( SfxItemSet* pSet )
+int __EXPORT ScTabPageProtection::DeactivatePage( SfxItemSet* pSetP )
 {
-    if ( pSet )
-        FillItemSet( *pSet );
+    if ( pSetP )
+        FillItemSet( *pSetP );
 
     return LEAVE_PAGE;
 }
