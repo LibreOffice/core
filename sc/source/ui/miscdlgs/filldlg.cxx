@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filldlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:05:23 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,10 +74,10 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_FILLSERIES ) ),
 
         aFlDirection    ( this, ScResId( FL_DIRECTION ) ),
-        aBtnLeft        ( this, ScResId( BTN_LEFT ) ),
+        aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
         aBtnRight       ( this, ScResId( BTN_RIGHT ) ),
         aBtnUp          ( this, ScResId( BTN_TOP ) ),
-        aBtnDown        ( this, ScResId( BTN_BOTTOM ) ),
+        aBtnLeft        ( this, ScResId( BTN_LEFT ) ),
         aFlSep1         ( this, ScResId( FL_SEP1 ) ),
         aFlType         ( this, ScResId( FL_TYPE ) ),
         aBtnArithmetic  ( this, ScResId( BTN_ARITHMETIC ) ),
@@ -93,6 +93,7 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
 
         aFtStartVal     ( this, ScResId( FT_START_VALUE ) ),
         aEdStartVal     ( this, ScResId( ED_START_VALUES ) ),
+        aStartStrVal    ( aStartStr),
         aFtEndVal       ( this, ScResId( FT_END_VALUE ) ),
         aEdEndVal       ( this, ScResId( ED_END_VALUES ) ),
         aFtIncrement    ( this, ScResId( FT_INCREMENT ) ),
@@ -106,7 +107,6 @@ ScFillSeriesDlg::ScFillSeriesDlg( Window*       pParent,
         theFillDir      ( eFillDir ),
         theFillCmd      ( eFillCmd ),
         theFillDateCmd  ( eFillDateCmd ),
-        aStartStrVal    ( aStartStr),
         fIncrement      ( fStep ),
         fEndVal         ( fMax )
 {
@@ -348,7 +348,7 @@ IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
     else if ( aBtnYear.IsChecked() )        theFillDateCmd = FILL_YEAR;
 
     BOOL  bAllOk = TRUE;
-    Edit* pEdWrong;
+    Edit* pEdWrong = NULL;
     if ( !CheckStartVal() )
     {
         bAllOk = FALSE;
