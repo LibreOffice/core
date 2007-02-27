@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:58:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:57:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,12 +339,16 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
 
 
 #define TABVIEW_INIT    \
+            pSelEngine( NULL ),                                             \
             aFunctionSet( &aViewData ),                                     \
+            pHdrSelEng( NULL ),                                             \
             aHdrFunc( &aViewData ),                                         \
-            aHScrollLeft( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),     \
-            aHScrollRight( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),    \
+            pDrawView( NULL ),                                              \
+            bDrawSelMode( FALSE ),                                          \
             aVScrollTop( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ),      \
             aVScrollBottom( pFrameWin, WinBits( WB_VSCROLL | WB_DRAG ) ),   \
+            aHScrollLeft( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),     \
+            aHScrollRight( pFrameWin, WinBits( WB_HSCROLL | WB_DRAG ) ),    \
             aCornerButton( pFrameWin, &aViewData, FALSE ),                  \
             aTopButton( pFrameWin, &aViewData, TRUE ),                      \
             aScrollBarBox( pFrameWin, WB_SIZEABLE ),                        \
@@ -354,19 +358,16 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
             pBrushDocument( NULL ),                                         \
             pDrawBrushSet( NULL ),                                          \
             bLockPaintBrush( FALSE ),                                       \
+            pTimerWindow( NULL ),                                           \
+            nTipVisible( 0 ),                                               \
             bDragging( FALSE ),                                             \
             bIsBlockMode( FALSE ),                                          \
             bBlockNeg( FALSE ),                                             \
             bBlockCols( FALSE ),                                            \
             bBlockRows( FALSE ),                                            \
-            nTipVisible( 0 ),                                               \
-            pDrawView( NULL ),                                              \
-            bDrawSelMode( FALSE ),                                          \
             mfPendingTabBarWidth( -1.0 ),                                   \
+            eZoomType( SVX_ZOOM_PERCENT ),                                  \
             bMinimized( FALSE ),                                            \
-            pTimerWindow( NULL ),                                           \
-            pSelEngine( NULL ),                                             \
-            pHdrSelEng( NULL ),                                             \
             bInUpdateHeader( FALSE ),                                       \
             bInActivatePart( FALSE ),                                       \
             bInZoomUpdate( FALSE ),                                         \
@@ -377,7 +378,6 @@ BOOL lcl_HasRowOutline( const ScViewData& rViewData )
 ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell ) :
             pFrameWin( pParent ),
             aViewData( &rDocSh, pViewShell ),
-            eZoomType( SVX_ZOOM_PERCENT ),
             TABVIEW_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
@@ -388,11 +388,11 @@ ScTabView::ScTabView( Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pView
 ScTabView::ScTabView( Window* pParent, const ScTabView& rScTabView, ScTabViewShell* pViewShell ) :
             pFrameWin( pParent ),
             aViewData( rScTabView.aViewData ),
-            eZoomType( rScTabView.eZoomType ),
             TABVIEW_INIT
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabView::ScTabView" );
 
+    eZoomType = rScTabView.eZoomType;
     aViewData.SetViewShell( pViewShell );
     Init();
 
@@ -429,10 +429,8 @@ void ScTabView::ResetTimer()
     pTimerWindow = NULL;
 }
 
-IMPL_LINK( ScTabView, TimerHdl, Timer*, pTimer )
+IMPL_LINK( ScTabView, TimerHdl, Timer*, EMPTYARG )
 {
-    DBG_ASSERT( pTimer == &aScrollTimer, "Unbekannter Timer" );
-
 //  aScrollTimer.Stop();
     if (pTimerWindow)
         pTimerWindow->MouseMove( aTimerMEvt );
@@ -492,8 +490,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
 
     long nBarX = 0;
     long nBarY = 0;
-    long nOutlineX;
-    long nOutlineY;
+    long nOutlineX = 0;
+    long nOutlineY = 0;
     long nOutPosX;
     long nOutPosY;
 
@@ -562,9 +560,9 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
 
         if (bHScroll)                               // Scrollbars horizontal
         {
-            long nSizeLt;           // linker Scrollbar
-            long nSizeRt;           // rechter Scrollbar
-            long nSizeSp;           // Splitter
+            long nSizeLt = 0;       // left scroll bar
+            long nSizeRt = 0;       // right scroll bar
+            long nSizeSp = 0;       // splitter
 
             switch (aViewData.GetHSplitMode())
             {
@@ -626,8 +624,8 @@ void ScTabView::DoResize( const Point& rOffset, const Size& rSize, BOOL bInner )
 
         if (bVScroll)                               // Scrollbars vertikal
         {
-            long nSizeUp;           // oberer Scrollbar
-            long nSizeSp;           // Splitter
+            long nSizeUp = 0;       // upper scroll bar
+            long nSizeSp = 0;       // splitter
             long nSizeDn;           // unterer Scrollbar
 
             switch (aViewData.GetVSplitMode())
@@ -941,10 +939,9 @@ void ScTabView::RepeatResize( BOOL bUpdateFix )
     //! Border muss neu gesetzt werden ???
 }
 
-void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& rSize )
+void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& /* rSize */ )
 {
     BOOL bScrollBars = aViewData.IsVScrollMode();
-    BOOL bTabControl = aViewData.IsTabMode();
     BOOL bHeaders    = aViewData.IsHeaderMode();
     BOOL bOutlMode   = aViewData.IsOutlineMode();
     BOOL bHOutline   = bOutlMode && lcl_HasColOutline(aViewData);
@@ -975,7 +972,7 @@ void ScTabView::GetBorderSize( SvBorder& rBorder, const Size& rSize )
         ::std::swap( rBorder.Left(), rBorder.Right() );
 }
 
-IMPL_LINK( ScTabView, TabBarResize, void*, EMPTY_ARG )
+IMPL_LINK( ScTabView, TabBarResize, void*, EMPTYARG )
 {
     BOOL bHScrollMode = aViewData.IsHScrollMode();
 
@@ -1076,7 +1073,7 @@ void ScTabView::SetActivePointer( const Pointer& rPointer )
 */
 }
 
-void ScTabView::SetActivePointer( const ResId& rId )
+void ScTabView::SetActivePointer( const ResId& )
 {
     DBG_ERRORFILE( "keine Pointer mit ResId!" );
 }
@@ -1315,6 +1312,10 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                 case SCROLL_LINEDOWN:   eType = SCROLL_LINEUP;      break;
                 case SCROLL_PAGEUP:     eType = SCROLL_PAGEDOWN;    break;
                 case SCROLL_PAGEDOWN:   eType = SCROLL_PAGEUP;      break;
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
         }
         long nDelta = pScroll->GetDelta();
@@ -1366,6 +1367,10 @@ IMPL_LINK( ScTabView, ScrollHdl, ScrollBar*, pScroll )
                     nPrevDragPos = nScrollPos;
                 }
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
 
         if (nDelta)
@@ -1405,7 +1410,7 @@ void ScTabView::ScrollX( long nDeltaX, ScHSplitPos eWhich, BOOL bUpdBars )
     SCTAB nTab = aViewData.GetTabNo();
     while ( ( pDoc->GetColFlags( nNewX, nTab ) & CR_HIDDEN ) &&
             nNewX+nDir >= 0 && nNewX+nDir <= MAXCOL )
-        nNewX += nDir;
+        nNewX = sal::static_int_cast<SCsCOL>( nNewX + nDir );
 
     //  Fixierung
 
