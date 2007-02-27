@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dociter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:32:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:55:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@ public:
                         executed. */
     void            SetStopOnMismatch( BOOL bVal )
                         {
-                            nStopOnMismatch = (bVal ? nStopOnMismatchEnabled :
+                            nStopOnMismatch = sal::static_int_cast<BYTE>(bVal ? nStopOnMismatchEnabled :
                                 nStopOnMismatchDisabled);
                         }
     BOOL            StoppedOnMismatch() const
@@ -281,7 +281,7 @@ public:
                         if an equal match is found. */
     void            SetTestEqualCondition( BOOL bVal )
                         {
-                            nTestEqualCondition = (bVal ?
+                            nTestEqualCondition = sal::static_int_cast<BYTE>(bVal ?
                                 nTestEqualConditionEnabled :
                                 nTestEqualConditionDisabled);
                         }
