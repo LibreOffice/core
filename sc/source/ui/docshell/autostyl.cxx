@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autostyl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:32:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:06:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,10 +111,8 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const String& rStyle1,
     aInitTimer.Start();
 }
 
-IMPL_LINK( ScAutoStyleList, InitHdl, Timer*, pTimer )
+IMPL_LINK( ScAutoStyleList, InitHdl, Timer*, EMPTYARG )
 {
-    DBG_ASSERT( pTimer == &aInitTimer, "wrong timer" );
-
     ULONG nCount = aInitials.Count();
     for (ULONG i=0; i<nCount; i++)
     {
@@ -168,7 +166,6 @@ void ScAutoStyleList::AddEntry( ULONG nTimeout, const ScRange& rRange, const Str
     //  Einfuege-Position suchen
 
     ULONG nPos = LIST_APPEND;
-    BOOL bFound = FALSE;
     for (i=0; i<nCount && nPos == LIST_APPEND; i++)
         if (nTimeout <= ((ScAutoStyleData*) aEntries.GetObject(i))->nTimeout)
             nPos = i;
@@ -198,7 +195,7 @@ void ScAutoStyleList::AdjustEntries( ULONG nDiff )  // Millisekunden
 void ScAutoStyleList::ExecuteEntries()
 {
     ScAutoStyleData* pData;
-    while ((pData = (ScAutoStyleData*) aEntries.GetObject(0)) && pData->nTimeout == 0)
+    while ((pData = (ScAutoStyleData*) aEntries.GetObject(0)) != NULL && pData->nTimeout == 0)
     {
         pDocSh->DoAutoStyle( pData->aRange, pData->aStyle );    //! oder Request ???
 
@@ -229,7 +226,7 @@ void ScAutoStyleList::StartTimer( ULONG nNow )      // Sekunden
 
     ULONG nPos = 0;
     ScAutoStyleData* pData;
-    while ( (pData = (ScAutoStyleData*) aEntries.GetObject(nPos)) && pData->nTimeout == 0 )
+    while ( (pData = (ScAutoStyleData*) aEntries.GetObject(nPos)) != NULL && pData->nTimeout == 0 )
         ++nPos;
 
     if (pData)
@@ -240,10 +237,8 @@ void ScAutoStyleList::StartTimer( ULONG nNow )      // Sekunden
     nTimerStart = nNow;
 }
 
-IMPL_LINK( ScAutoStyleList, TimerHdl, Timer*, pTimer )
+IMPL_LINK( ScAutoStyleList, TimerHdl, Timer*, EMPTYARG )
 {
-    DBG_ASSERT( pTimer == &aTimer, "falscher Timer" );
-
     ULONG nNow = TimeNow();
     AdjustEntries(aTimer.GetTimeout());             // eingestellte Wartezeit
     ExecuteEntries();
