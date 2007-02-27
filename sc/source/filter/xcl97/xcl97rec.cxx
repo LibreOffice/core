@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:23:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:43:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,7 @@ XclMsodrawing_Base::XclMsodrawing_Base( XclEscher& rEscher, sal_Size nInitialSiz
 {
     // for safety's sake add this now
     nStopPos = GetEscherEx()->AddCurrentOffsetToMap();
+    (void)nInitialSize; // avoid compiler warning
     DBG_ASSERT( GetDataLen() == nInitialSize, "XclMsodrawing_Base ctor: do I really own that data?" );
 }
 
@@ -484,7 +485,7 @@ void XclObj::Save( XclExpStream& rStrm )
 }
 
 
-void XclObj::WriteSubRecs( XclExpStream& rStrm )
+void XclObj::WriteSubRecs( XclExpStream& /*rStrm*/ )
 {
 }
 
@@ -657,6 +658,7 @@ sal_uInt8 lcl_GetHorAlignFromItemSet( const SfxItemSet& rItemSet )
         case SVX_ADJUST_CENTER: nHorAlign = EXC_TXO_HOR_CENTER;    break;
         case SVX_ADJUST_RIGHT:  nHorAlign = EXC_TXO_HOR_RIGHT;     break;
         case SVX_ADJUST_BLOCK:  nHorAlign = EXC_TXO_HOR_JUSTIFY;   break;
+        default:;
     }
     return nHorAlign;
 }
@@ -822,7 +824,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     sal_Char        aBuf[ sizeof(UINT32) * 2 + 1 ];
     // FIXME Eeek! Is this just a way to get a unique id?
     UINT32          nPictureId = UINT32(sal_uIntPtr(this) >> 2);
-    sprintf( aBuf, "%08X", nPictureId );        // #100211# - checked
+    sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );        // #100211# - checked
     aStorageName.AppendAscii( aBuf );
     SotStorageRef    xOleStg = pRootStorage->OpenSotStorage( aStorageName,
                             STREAM_READWRITE| STREAM_SHARE_DENYALL );
