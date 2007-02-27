@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputwin.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:33:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:24:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ public:
     void            SetTextString( const String& rString );
     const String&   GetTextString() const;
 
-    BOOL            IsActive();
+    BOOL            IsInputActive();
     EditView*       GetEditView();
 
                         // fuer FunktionsAutopiloten
@@ -187,7 +187,7 @@ public:
 
     void            SetFormulaMode( BOOL bSet );
 
-    BOOL            IsActive();
+    BOOL            IsInputActive();
     EditView*       GetEditView();
     EditView*       ActivateEdit( const String&     rText,
                                   const ESelection& rSel );
