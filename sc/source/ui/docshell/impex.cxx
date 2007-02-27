@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impex.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:30 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:08:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,9 +115,10 @@ class StarBASIC;
 
 
 ScImportExport::ScImportExport( ScDocument* p )
-    : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
-      nSizeLimit( 0 ), bSingle( TRUE ), bAll( TRUE ), bUndo( FALSE ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bAll( TRUE ), bSingle( TRUE ), bUndo( FALSE ),
       bOverflow( FALSE )
 {
     pUndoDoc = NULL;
@@ -128,10 +129,11 @@ ScImportExport::ScImportExport( ScDocument* p )
 
 
 ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
-    : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
+    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
       aRange( rPt ),
-      nSizeLimit( 0 ), bSingle( TRUE ), bAll( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bAll( FALSE ), bSingle( TRUE ), bUndo( BOOL( pDocSh != NULL ) ),
       bOverflow( FALSE )
 {
     pUndoDoc = NULL;
@@ -143,10 +145,11 @@ ScImportExport::ScImportExport( ScDocument* p, const ScAddress& rPt )
 //! ctor with a string (and bSingle=TRUE) is also used for DdeSetData
 
 ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
-    : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
+    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
       aRange( r ),
-      nSizeLimit( 0 ), bSingle( FALSE ), bAll( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bAll( FALSE ), bSingle( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
       bOverflow( FALSE )
 {
     pUndoDoc = NULL;
@@ -160,9 +163,10 @@ ScImportExport::ScImportExport( ScDocument* p, const ScRange& r )
 
 
 ScImportExport::ScImportExport( ScDocument* p, const String& rPos )
-    : pDoc( p ), pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ),
-      nSizeLimit( 0 ), bSingle( TRUE ), bAll( FALSE ), bUndo( BOOL( pDocSh != NULL ) ),
-      cSep( '\t' ), cStr( '"' ), bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+    : pDocSh( PTR_CAST(ScDocShell,p->GetDocumentShell()) ), pDoc( p ),
+      nSizeLimit( 0 ), cSep( '\t' ), cStr( '"' ),
+      bFormulas( FALSE ), bIncludeFiltered( TRUE ),
+      bAll( FALSE ), bSingle( TRUE ), bUndo( BOOL( pDocSh != NULL ) ),
       bOverflow( FALSE )
 {
     pUndoDoc = NULL;
@@ -336,8 +340,8 @@ BOOL ScImportExport::ImportData( SvData& rData )
 
 #endif
 
-BOOL ScImportExport::ImportData( const String& rMimeType,
-                     const ::com::sun::star::uno::Any & rValue )
+BOOL ScImportExport::ImportData( const String& /* rMimeType */,
+                     const ::com::sun::star::uno::Any & /* rValue */ )
 {
     DBG_ASSERT( !this, "Implementation is missing" );
     return FALSE;
@@ -383,7 +387,7 @@ BOOL ScImportExport::ImportString( const ::rtl::OUString& rText, ULONG nFmt )
             return ImportStream( aStrm, String(), nFmt );
             // ImportStream must handle RTL_TEXTENCODING_UNICODE
         }
-        break;
+        //break;
         default:
         {
             rtl_TextEncoding eEnc = gsl_getSystemTextEncoding();
@@ -657,7 +661,7 @@ const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
                     break;
                     case DQM_CONCAT :
                         if ( p0+1 < p )
-                            rString.Append( p0, (p-1) - p0 );   // first part
+                            rString.Append( p0, sal::static_int_cast<xub_StrLen>( (p-1) - p0 ) );  // first part
                         p0 = ++p;       // text of next part starts here
                     break;
                     case DQM_SEPARATE :
@@ -671,7 +675,7 @@ const sal_Unicode* lcl_ScanString( const sal_Unicode* p, String& rString,
                 p++;
         }
         if ( p0 < p )
-            rString.Append( p0, ((*p || *(p-1) == cStr) ? p-1 : p) - p0 );
+            rString.Append( p0, sal::static_int_cast<xub_StrLen>( ((*p || *(p-1) == cStr) ? p-1 : p) - p0 ) );
     } while ( bCont );
     return p;
 }
@@ -744,7 +748,7 @@ BOOL ScImportExport::Text2Doc( SvStream& rStrm )
                     const sal_Unicode* q = p;
                     while( *p && *p != cSep )
                         p++;
-                    aCell.Assign( q, p - q );
+                    aCell.Assign( q, sal::static_int_cast<xub_StrLen>( p - q ) );
                     if( *p )
                         p++;
                 }
@@ -904,41 +908,41 @@ bool lcl_PutString( ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
                 static const String aSeptCorrect( RTL_CONSTASCII_USTRINGPARAM( "SEPT" ) );
                 static const String aSepShortened( RTL_CONSTASCII_USTRINGPARAM( "SEP" ) );
                 uno::Sequence< i18n::CalendarItem > xMonths;
-                sal_Int32 i, nLen;
+                sal_Int32 i, nMonthCount;
                 //  first test all month names from local international
                 xMonths = rCalendar.getMonths();
-                nLen = xMonths.getLength();
-                for (i=0; i<nLen && !nMonth; i++)
+                nMonthCount = xMonths.getLength();
+                for (i=0; i<nMonthCount && !nMonth; i++)
                 {
                     if ( rTransliteration.isEqual( aMStr, xMonths[i].FullName ) ||
                          rTransliteration.isEqual( aMStr, xMonths[i].AbbrevName ) )
-                        nMonth = i+1;
+                        nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                     else if ( i == 8 && rTransliteration.isEqual( aSeptCorrect,
                                 xMonths[i].AbbrevName ) &&
                             rTransliteration.isEqual( aMStr, aSepShortened ) )
                     {   // #102136# correct English abbreviation is SEPT,
                         // but data mostly contains SEP only
-                        nMonth = i+1;
+                        nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                     }
                 }
                 //  if none found, then test english month names
                 if ( !nMonth && pSecondCalendar && pSecondTransliteration )
                 {
                     xMonths = pSecondCalendar->getMonths();
-                    nLen = xMonths.getLength();
-                    for (i=0; i<nLen && !nMonth; i++)
+                    nMonthCount = xMonths.getLength();
+                    for (i=0; i<nMonthCount && !nMonth; i++)
                     {
                         if ( pSecondTransliteration->isEqual( aMStr, xMonths[i].FullName ) ||
                              pSecondTransliteration->isEqual( aMStr, xMonths[i].AbbrevName ) )
                         {
-                            nMonth = i+1;
+                            nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                             bSecondCal = TRUE;
                         }
                         else if ( i == 8 && pSecondTransliteration->isEqual(
                                     aMStr, aSepShortened ) )
                         {   // #102136# correct English abbreviation is SEPT,
                             // but data mostly contains SEP only
-                            nMonth = i+1;
+                            nMonth = sal::static_int_cast<sal_Int16>( i+1 );
                             bSecondCal = TRUE;
                         }
                     }
@@ -1254,7 +1258,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         // Append remaining unquoted and undelimited data (dirty, dirty) to
         // this field.
         if (p > p1)
-            rField.Append( p1, p - p1);
+            rField.Append( p1, sal::static_int_cast<xub_StrLen>( p - p1 ) );
         if( *p )
             p++;
     }
@@ -1263,7 +1267,7 @@ const sal_Unicode* ScImportExport::ScanNextFieldFromString( const sal_Unicode* p
         const sal_Unicode* p0 = p;
         while ( *p && !ScGlobal::UnicodeStrChr( pSeps, *p ) )
             p++;
-        rField.Append( p0, p - p0 );
+        rField.Append( p0, sal::static_int_cast<xub_StrLen>( p - p0 ) );
         if( *p )
             p++;
     }
@@ -1483,7 +1487,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 const sal_Unicode* q = p;
                                 while( *p && *p != ';' )
                                     p++;
-                                aText.Append( q, p-q );
+                                aText.Append( q, sal::static_int_cast<xub_StrLen>( p-q ) );
                             }
                             ScAddress aPos( nCol, nRow, aRange.aStart.Tab() );
                             ScCompiler aComp( pDoc, aPos );
@@ -1537,7 +1541,7 @@ BOOL ScImportExport::Sylk2Doc( SvStream& rStrm )
                                 const sal_Unicode* p0 = p;
                                 while( *p && *p != ';' )
                                     p++;
-                                String aNumber( p0, p - p0 );
+                                String aNumber( p0, sal::static_int_cast<xub_StrLen>( p - p0 ) );
                                 nFormat = aNumber.ToInt32();
                             }
                             break;
@@ -1740,6 +1744,11 @@ BOOL ScImportExport::Doc2Sylk( SvStream& rStrm )
                     }
                     WriteUnicodeOrByteEndl( rStrm );
                     break;
+
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
         }
     }
