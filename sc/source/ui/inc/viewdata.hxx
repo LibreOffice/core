@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:04:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:28:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #define SC_SLIDER_SIZE      2
 #define SC_SMALL3DSHADOW    COL_BLACK
 #define SC_SIZE_NONE        65535
-#define SC_TABSTART_NONE    65535
+const SCCOL SC_TABSTART_NONE = SCCOL_MAX;
 
 #define SC_FILL_NONE        0
 #define SC_FILL_FILL        1
