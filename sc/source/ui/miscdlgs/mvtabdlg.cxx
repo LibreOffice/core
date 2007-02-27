@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mvtabdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:08:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,6 @@ void ScMoveTableDlg::InitDocListBox()
 {
     SfxObjectShell* pSh     = SfxObjectShell::GetFirst();
     ScDocShell*     pScSh   = NULL;
-    ScDocument*     pDoc    = NULL;
     USHORT          nSelPos = 0;
     USHORT          i       = 0;
 
