@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:09:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ class ScMyAddress : public ScAddress
 {
 public:
     ScMyAddress() : ScAddress() {}
-    ScMyAddress(SCCOL nCol, SCROW nRow, SCTAB nTab) : ScAddress(nCol, nRow, nTab) {}
+    ScMyAddress(SCCOL nColP, SCROW nRowP, SCTAB nTabP) : ScAddress(nColP, nRowP, nTabP) {}
     ScMyAddress(const ScAddress& rAddress) : ScAddress(rAddress) {}
 
     sal_Bool operator< ( const ScMyAddress& rAddress ) const
@@ -80,7 +80,12 @@ public:
         ScSplitPos eSplitPos);
 protected:
     virtual ~ScAccessibleSpreadsheet();
+
+    using ScAccessibleTableBase::IsDefunc;
+
 public:
+    using ScAccessibleTableBase::addEventListener;
+    using ScAccessibleTableBase::disposing;
 
      virtual void SAL_CALL disposing();
 
