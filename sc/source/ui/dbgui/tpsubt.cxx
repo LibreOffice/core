@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpsubt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:31:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,22 +71,22 @@ ScTpSubTotalGroup::ScTpSubTotalGroup( Window* pParent, USHORT nResId,
                               ScResId( nResId ),
                               rArgSet ),
             //
-            aLbGroup        ( this, ScResId( LB_GROUP ) ),
-            aLbColumns      ( this, ScResId( WND_COLUMNS ) ),
-            aLbFunctions    ( this, ScResId( LB_FUNCTIONS ) ),
             aFtGroup        ( this, ScResId( FT_GROUP ) ),
+            aLbGroup        ( this, ScResId( LB_GROUP ) ),
             aFtColumns      ( this, ScResId( FT_COLUMNS ) ),
+            aLbColumns      ( this, ScResId( WND_COLUMNS ) ),
             aFtFunctions    ( this, ScResId( FT_FUNCTIONS ) ),
+            aLbFunctions    ( this, ScResId( LB_FUNCTIONS ) ),
             aStrNone        ( ScResId( SCSTR_NONE ) ),
             aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
             //
+            pViewData       ( NULL ),
+            pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
             rSubTotalData   ( ((const ScSubTotalItem&)
                               rArgSet.Get( nWhichSubTotals )).
                                 GetSubTotalData() ),
-            nFieldCount     ( 0 ),
-            pViewData       ( NULL ),
-            pDoc            ( NULL )
+            nFieldCount     ( 0 )
 {
     // Font is correctly initialized by SvTreeListBox ctor
     aLbColumns.SetSelectionMode( SINGLE_SELECTION );
@@ -522,12 +522,12 @@ ScTpSubTotalOptions::ScTpSubTotalOptions( Window*               pParent,
             aBtnUserDef     ( this, ScResId( BTN_USERDEF ) ),
             aLbUserDef      ( this, ScResId( LB_USERDEF ) ),
             //
+            pViewData       ( NULL ),
+            pDoc            ( NULL ),
             nWhichSubTotals ( rArgSet.GetPool()->GetWhich( SID_SUBTOTALS ) ),
             rSubTotalData   ( ((const ScSubTotalItem&)
                               rArgSet.Get( nWhichSubTotals )).
-                                GetSubTotalData() ),
-            pViewData       ( NULL ),
-            pDoc            ( NULL )
+                                GetSubTotalData() )
 {
     Init();
     FreeResource();
@@ -567,7 +567,7 @@ SfxTabPage* __EXPORT ScTpSubTotalOptions::Create( Window*                pParent
 
 // -----------------------------------------------------------------------
 
-void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& rArgSet )
+void __EXPORT ScTpSubTotalOptions::Reset( const SfxItemSet& /* rArgSet */ )
 {
     aBtnPagebreak.Check ( rSubTotalData.bPagebreak );
     aBtnCase.Check      ( rSubTotalData.bCaseSens );
