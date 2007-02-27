@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:27:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:44:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,38 +110,38 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
 {
     static SfxItemPropertyMap aDocOptPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNO_APPLYFMDES),        0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_AREALINKS),         0, &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0},
-        {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0},
-        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0},
-        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0},
-        {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_DDELINKS),          0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
-        {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),        0, &getCppuType((sal_Int16*)0),                              0},
-        {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),         0, &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNO_HASDRAWPAGES),      0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNO_IGNORECASE),        0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_ITERENABLED),       0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),         0, &getCppuType((sal_Int32*)0),                              0},
-        {MAP_CHAR_LEN(SC_UNO_ITEREPSILON),       0, &getCppuType((double*)0),                                 0},
-        {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS),      0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),        0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES),       0, &getCppuType((uno::Reference<sheet::XNamedRanges>*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_DATABASERNG),       0, &getCppuType((uno::Reference<sheet::XDatabaseRanges>*)0), 0},
-        {MAP_CHAR_LEN(SC_UNO_NULLDATE),          0, &getCppuType((util::Date*)0),                             0},
-        {MAP_CHAR_LEN(SC_UNO_ROWLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_SHEETLINKS),        0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0},
-        {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),       0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),       0, &getCppuType((sal_Int16*)0),                              0},
-        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED),      0, &getBooleanCppuType(),                                    0},
-        {MAP_CHAR_LEN(SC_UNO_RUNTIMEUID),        0, &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY},
-        {MAP_CHAR_LEN(SC_UNO_HASVALIDSIGNATURES),0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY},
+        {MAP_CHAR_LEN(SC_UNO_APPLYFMDES),        0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_AREALINKS),         0, &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0, 0},
+        {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
+        {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
+        {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
+        {MAP_CHAR_LEN(SC_UNO_COLLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_DDELINKS),          0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_DEFTABSTOP),        0, &getCppuType((sal_Int16*)0),                              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_FORBIDDEN),         0, &getCppuType((uno::Reference<i18n::XForbiddenCharacters>*)0), beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_HASDRAWPAGES),      0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_IGNORECASE),        0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITERENABLED),       0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITERCOUNT),         0, &getCppuType((sal_Int32*)0),                              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ITEREPSILON),       0, &getCppuType((double*)0),                                 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_LOOKUPLABELS),      0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_MATCHWHOLE),        0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_NAMEDRANGES),       0, &getCppuType((uno::Reference<sheet::XNamedRanges>*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_DATABASERNG),       0, &getCppuType((uno::Reference<sheet::XDatabaseRanges>*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_NULLDATE),          0, &getCppuType((util::Date*)0),                             0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ROWLABELRNG),       0, &getCppuType((uno::Reference<sheet::XLabelRanges>*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHEETLINKS),        0, &getCppuType((uno::Reference<container::XNameAccess>*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SPELLONLINE),       0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),       0, &getCppuType((sal_Int16*)0),                              0, 0},
+        {MAP_CHAR_LEN(SC_UNO_REGEXENABLED),      0, &getBooleanCppuType(),                                    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_RUNTIMEUID),        0, &getCppuType(static_cast< const rtl::OUString * >(0)),    beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_HASVALIDSIGNATURES),0, &getBooleanCppuType(),                                    beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN("BuildId"),                0, &::getCppuType(static_cast< const rtl::OUString * >(0)), 0, 0},
 
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aDocOptPropertyMap_Impl;
 }
@@ -157,7 +157,7 @@ const SfxItemPropertyMap* lcl_GetColumnsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CELLVIS),  0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_OWIDTH),   0,  &getBooleanCppuType(),          0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLWID),  0,  &getCppuType((sal_Int32*)0),    0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aColumnsPropertyMap_Impl;
 }
@@ -175,7 +175,7 @@ const SfxItemPropertyMap* lcl_GetRowsPropertyMap()
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND, &::getCppuType((const sal_Int32*)0), 0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLTRAN), ATTR_BACKGROUND, &::getBooleanCppuType(), 0, MID_GRAPHIC_TRANSPARENT },
         // not sorted, not used with SfxItemPropertyMap::GetByName
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aRowsPropertyMap_Impl;
 }
@@ -514,7 +514,7 @@ bool lcl_ParseTarget( const String& rTarget, ScRange& rTargetRange, Rectangle& r
     ScAddress aAddress;
     ScRangeUtil aRangeUtil;
     SCTAB nNameTab;
-    sal_Int32 nNumeric;
+    sal_Int32 nNumeric = 0;
 
     bool bRangeValid = false;
     bool bRectValid = false;
@@ -644,7 +644,7 @@ BOOL ScModelObj::FillRenderMarkData( const uno::Any& aSelection, ScMarkData& rMa
 
 
 sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
-                                    const uno::Sequence<beans::PropertyValue>& xOptions )
+                                    const uno::Sequence<beans::PropertyValue>& /* xOptions */ )
                                 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -669,7 +669,7 @@ sal_Int32 SAL_CALL ScModelObj::getRendererCount( const uno::Any& aSelection,
 }
 
 uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 nRenderer,
-                                    const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& xOptions )
+                                    const uno::Any& aSelection, const uno::Sequence<beans::PropertyValue>& /* xOptions */ )
                                 throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -713,7 +713,7 @@ uno::Sequence<beans::PropertyValue> SAL_CALL ScModelObj::getRenderer( sal_Int32 
     long nDisplayStart = pPrintFuncCache->GetDisplayStart( nTab );
     long nTabStart = pPrintFuncCache->GetTabStart( nTab );
 
-    long nPrinted = aFunc.DoPrint( aPage, nTabStart, nDisplayStart, FALSE, NULL, NULL );
+    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, FALSE, NULL, NULL );
 
     ScRange aCellRange;
     BOOL bWasCellRange = aFunc.GetLastSourceRange( aCellRange );
@@ -818,7 +818,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nRenderer, const uno::Any& aSelectio
         }
     }
 
-    long nPrinted = aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
+    (void)aFunc.DoPrint( aPage, nTabStart, nDisplayStart, TRUE, NULL, NULL );
 
     //  resolve the hyperlinks for PDF export
 
@@ -1156,7 +1156,7 @@ sheet::GoalResult SAL_CALL ScModelObj::seekGoal(
     aResult.Divergence = DBL_MAX;       // nichts gefunden
     if (pDocShell)
     {
-        WaitObject aWait( pDocShell->GetDialogParent() );
+        WaitObject aWait( pDocShell->GetActiveDialogParent() );
         String aGoalString(aGoalValue);
         ScDocument* pDoc = pDocShell->GetDocument();
         double fValue = 0.0;
@@ -1616,7 +1616,7 @@ sal_Int64 SAL_CALL ScModelObj::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
 
     //  aggregated number formats supplier has XUnoTunnel, too
@@ -1664,7 +1664,7 @@ ScModelObj* ScModelObj::getImplementation( const uno::Reference<uno::XInterface>
     ScModelObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScModelObj*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScModelObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
@@ -1682,7 +1682,7 @@ ScDrawPagesObj::~ScDrawPagesObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScDrawPagesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDrawPagesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -1767,7 +1767,7 @@ uno::Any SAL_CALL ScDrawPagesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xPage);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScDrawPagesObj::getElementType() throw(uno::RuntimeException)
@@ -1796,7 +1796,7 @@ ScTableSheetsObj::~ScTableSheetsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScTableSheetsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScTableSheetsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -2045,7 +2045,7 @@ uno::Any SAL_CALL ScTableSheetsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xSheet);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableSheetsObj::getElementType() throw(uno::RuntimeException)
@@ -2072,7 +2072,7 @@ uno::Any SAL_CALL ScTableSheetsObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xSheet);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableSheetsObj::getElementNames()
@@ -2126,11 +2126,11 @@ ScTableColumnsObj::~ScTableColumnsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScTableColumnsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScTableColumnsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Referenz-Update fuer Tab und Start/Ende
     }
@@ -2224,7 +2224,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xColumn);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableColumnsObj::getElementType() throw(uno::RuntimeException)
@@ -2249,7 +2249,7 @@ uno::Any SAL_CALL ScTableColumnsObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xColumn);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableColumnsObj::getElementNames()
@@ -2300,7 +2300,6 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
         throw uno::RuntimeException();
 
     ScDocFunc aFunc(*pDocShell);
-    ScDocument* pDoc = pDocShell->GetDocument();
     SCCOLROW nColArr[2];
     nColArr[0] = nStartCol;
     nColArr[1] = nEndCol;
@@ -2403,11 +2402,11 @@ ScTableRowsObj::~ScTableRowsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScTableRowsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScTableRowsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Referenz-Update fuer Tab und Start/Ende
     }
@@ -2490,7 +2489,7 @@ uno::Any SAL_CALL ScTableRowsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRow);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableRowsObj::getElementType() throw(uno::RuntimeException)
@@ -2553,7 +2552,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
         if (ScUnoHelpFunctions::GetBoolFromAny( aValue ))
             pDoc->GetRowFlagsArrayModifiable( nTab).OrValue( nStartRow, nEndRow, CR_FILTERED);
         else
-            pDoc->GetRowFlagsArrayModifiable( nTab).AndValue( nStartRow, nEndRow, ~CR_FILTERED);
+            pDoc->GetRowFlagsArrayModifiable( nTab).AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~CR_FILTERED) );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_OHEIGHT ) )
     {
@@ -2663,7 +2662,7 @@ ScSpreadsheetSettingsObj::~ScSpreadsheetSettingsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScSpreadsheetSettingsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScSpreadsheetSettingsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -2684,7 +2683,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScSpreadsheetSettingsObj::getPr
 }
 
 void SAL_CALL ScSpreadsheetSettingsObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -2692,7 +2691,7 @@ void SAL_CALL ScSpreadsheetSettingsObj::setPropertyValue(
     //! muss noch
 }
 
-uno::Any SAL_CALL ScSpreadsheetSettingsObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScSpreadsheetSettingsObj::getPropertyValue( const rtl::OUString& /* aPropertyName */ )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
@@ -2717,7 +2716,7 @@ ScAnnotationsObj::~ScAnnotationsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScAnnotationsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAnnotationsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! nTab bei Referenz-Update anpassen!!!
 
@@ -2841,7 +2840,7 @@ uno::Any SAL_CALL ScAnnotationsObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xAnnotation);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScAnnotationsObj::getElementType() throw(uno::RuntimeException)
@@ -2871,11 +2870,11 @@ ScScenariosObj::~ScScenariosObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScScenariosObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScScenariosObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Referenz-Update fuer Tab und Start/Ende
     }
@@ -3018,7 +3017,7 @@ uno::Any SAL_CALL ScScenariosObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xScen);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScScenariosObj::getElementType() throw(uno::RuntimeException)
@@ -3043,7 +3042,7 @@ uno::Any SAL_CALL ScScenariosObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xScen);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScScenariosObj::getElementNames()
