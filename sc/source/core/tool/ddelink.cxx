@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddelink.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:26:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,8 +77,8 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const String& rA, const String& rT, const 
     aTopic( rT ),
     aItem( rI ),
     nMode( nM ),
-    pResult( NULL ),
-    bNeedUpdate( FALSE )
+    bNeedUpdate( FALSE ),
+    pResult( NULL )
 {
 }
 
@@ -96,8 +96,8 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
     aTopic  ( rOther.aTopic ),
     aItem   ( rOther.aItem ),
     nMode   ( rOther.nMode ),
-    pResult ( NULL ),
-    bNeedUpdate( FALSE )
+    bNeedUpdate( FALSE ),
+    pResult ( NULL )
 {
     if (rOther.pResult)
         pResult = rOther.pResult->Clone();
@@ -106,8 +106,8 @@ ScDdeLink::ScDdeLink( ScDocument* pD, const ScDdeLink& rOther ) :
 ScDdeLink::ScDdeLink( ScDocument* pD, SvStream& rStream, ScMultipleReadHeader& rHdr ) :
     ::sfx2::SvBaseLink(sfx2::LINKUPDATE_ALWAYS,FORMAT_STRING),
     pDoc( pD ),
-    pResult( NULL ),
-    bNeedUpdate( FALSE )
+    bNeedUpdate( FALSE ),
+    pResult( NULL )
 {
     rHdr.StartEntry();
 
