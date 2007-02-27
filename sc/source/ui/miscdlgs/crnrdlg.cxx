@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crnrdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:04:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,9 @@ ScColRowNameRangesDlg::ScColRowNameRangesDlg( SfxBindings* pB,
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnAdd         ( this, ScResId( BTN_ADD ) ),
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
 
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
@@ -421,7 +421,7 @@ void ScColRowNameRangesDlg::AdjustColRowData( const ScRange& rDataRange,BOOL bRe
 #*
 #************************************************************************/
 
-void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScColRowNameRangesDlg::SetReference( const ScRange& rRef, ScDocument* /* pDoc */ )
 {
     if ( pEdActive )
     {
@@ -654,11 +654,11 @@ void ScColRowNameRangesDlg::UpdateRangeData( const String& rRangeStr, BOOL bColN
     }
     aRange.ParseAny( aRefString, pDoc );
 
-    ScRangePair* pPair;
+    ScRangePair* pPair = NULL;
     BOOL bFound = FALSE;
-    if ( bColName && (pPair = xColNameRanges->Find( aRange )) )
+    if ( bColName && (pPair = xColNameRanges->Find( aRange )) != NULL )
         bFound = TRUE;
-    else if ( !bColName && (pPair = xRowNameRanges->Find( aRange )) )
+    else if ( !bColName && (pPair = xRowNameRanges->Find( aRange )) != NULL )
         bFound = TRUE;
 
     if ( bFound )
@@ -792,18 +792,18 @@ IMPL_LINK( ScColRowNameRangesDlg, AddBtnHdl, void *, EMPTYARG )
     {
         ScRange aRange1, aRange2;
         BOOL bOk1;
-        if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc ) & SCA_VALID) == SCA_VALID))
+        if ( (bOk1 = ((aRange1.ParseAny( aNewArea, pDoc ) & SCA_VALID) == SCA_VALID)) != FALSE
           && ((aRange2.ParseAny( aNewData, pDoc ) & SCA_VALID) == SCA_VALID) )
         {
             theCurArea = aRange1;
             AdjustColRowData( aRange2 );
             ScRangePair* pPair;
-            if ( pPair = xColNameRanges->Find( theCurArea ) )
+            if ( ( pPair = xColNameRanges->Find( theCurArea ) ) != NULL )
             {
                 xColNameRanges->Remove( pPair );
                 delete pPair;
             }
-            if ( pPair = xRowNameRanges->Find( theCurArea ) )
+            if ( ( pPair = xRowNameRanges->Find( theCurArea ) ) != NULL )
             {
                 xRowNameRanges->Remove( pPair );
                 delete pPair;
@@ -875,11 +875,11 @@ IMPL_LINK( ScColRowNameRangesDlg, RemoveBtnHdl, void *, EMPTYARG )
 
     aRange.ParseAny( aRefString, pDoc );
 
-    ScRangePair* pPair;
+    ScRangePair* pPair = NULL;
     BOOL bFound = FALSE;
-    if ( bColName && (pPair = xColNameRanges->Find( aRange )) )
+    if ( bColName && (pPair = xColNameRanges->Find( aRange )) != NULL )
         bFound = TRUE;
-    else if ( !bColName && (pPair = xRowNameRanges->Find( aRange )) )
+    else if ( !bColName && (pPair = xRowNameRanges->Find( aRange )) != NULL )
         bFound = TRUE;
     if ( bFound )
     {
@@ -1191,7 +1191,7 @@ IMPL_LINK( ScColRowNameRangesDlg, GetFocusHdl, Control*, pCtrl )
 }
 
 
-IMPL_LINK( ScColRowNameRangesDlg, LoseFocusHdl, Control*, pCtrl )
+IMPL_LINK( ScColRowNameRangesDlg, LoseFocusHdl, Control*, EMPTYARG )
 {
     bDlgLostFocus = !IsActive();
     return 0;
