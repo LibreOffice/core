@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilti.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:53:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:51:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,14 +68,14 @@ ScXMLFilterContext::ScXMLFilterContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDatabaseRangeContext(pTempDatabaseRangeContext),
+    aFilterFields(),
     bSkipDuplicates(sal_False),
+    bCopyOutputData(sal_False),
     bUseRegularExpressions(sal_False),
     bConnectionOr(sal_True),
     bNextConnectionOr(sal_True),
-    bCopyOutputData(sal_False),
-    bConditionSourceRange(sal_False),
-    aFilterFields(),
-    pDatabaseRangeContext(pTempDatabaseRangeContext)
+    bConditionSourceRange(sal_False)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
 
@@ -184,7 +184,7 @@ ScXMLAndContext::ScXMLAndContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                         ScXMLFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
@@ -234,7 +234,7 @@ ScXMLOrContext::ScXMLOrContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                         ScXMLFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
@@ -288,8 +288,8 @@ ScXMLConditionContext::ScXMLConditionContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    bIsCaseSensitive(sal_False),
-    pFilterContext(pTempFilterContext)
+    pFilterContext(pTempFilterContext),
+    bIsCaseSensitive(sal_False)
 {
     sDataType = GetXMLToken(XML_TEXT);
 
@@ -341,7 +341,7 @@ ScXMLConditionContext::~ScXMLConditionContext()
 SvXMLImportContext *ScXMLConditionContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
@@ -419,15 +419,15 @@ ScXMLDPFilterContext::ScXMLDPFilterContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTableContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    pDataPilotTable(pTempDataPilotTableContext),
+    aFilterFields(),
+    nFilterFieldCount(0),
     bSkipDuplicates(sal_False),
+    bCopyOutputData(sal_False),
     bUseRegularExpressions(sal_False),
     bConnectionOr(sal_True),
     bNextConnectionOr(sal_True),
-    bCopyOutputData(sal_False),
-    bConditionSourceRange(sal_False),
-    aFilterFields(),
-    nFilterFieldCount(0),
-    pDataPilotTable(pTempDataPilotTableContext)
+    bConditionSourceRange(sal_False)
 {
     ScDocument* pDoc(GetScImport().GetDocument());
 
@@ -548,7 +548,7 @@ ScXMLDPAndContext::ScXMLDPAndContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                         ScXMLDPFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
@@ -598,7 +598,7 @@ ScXMLDPOrContext::ScXMLDPOrContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                         ScXMLDPFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pFilterContext(pTempFilterContext)
@@ -652,9 +652,9 @@ ScXMLDPConditionContext::ScXMLDPConditionContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDPFilterContext* pTempFilterContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    bIsCaseSensitive(sal_False),
+    pFilterContext(pTempFilterContext),
     sDataType(GetXMLToken(XML_TEXT)),
-    pFilterContext(pTempFilterContext)
+    bIsCaseSensitive(sal_False)
 {
 
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
@@ -705,7 +705,7 @@ ScXMLDPConditionContext::~ScXMLDPConditionContext()
 SvXMLImportContext *ScXMLDPConditionContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
