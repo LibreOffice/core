@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr3.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:34:30 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@ double lcl_IterateInverse( const ScDistFunc& rFunction, double x0, double x1, BO
 
     double x00 = x0;
     double x11 = x1;
-    double fs;
+    double fs = 0.0;
     for (i = 0; i < 100; i++)
     {
         xs = 0.5*(x0+x1);
@@ -984,7 +984,7 @@ void ScInterpreter::ScBinomDist()
                 }
                 else
                 {
-                    double fSum = fFactor;
+                    fSum = fFactor;
                     ULONG max = (ULONG) x;
                     for (ULONG i = 0; i < max && fFactor > 0.0; i++)
                     {
@@ -1300,7 +1300,9 @@ void ScInterpreter::ScHypGeomDist()
         fCDenomVarLower = N - n - 2.0*(M - x) + 1.0;
     }
 
+#ifdef DBG_UTIL
     double fCNumLower = N - n - fCNumVarUpper;
+#endif
     double fCDenomUpper = N - n - M + x + 1.0 - fCDenomVarLower;
 
     double fDNumVarLower = n - M;
@@ -1744,7 +1746,7 @@ void ScInterpreter::ScZTest()
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return;
-    double sigma, mue, x;
+    double sigma = 0.0, mue, x;
     if (nParamCount == 3)
     {
         sigma = GetDouble();
@@ -2246,22 +2248,22 @@ void ScInterpreter::ScKurt()
                     SCSIZE nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            fVal = pMat->GetDouble(i);
+                            fVal = pMat->GetDouble(nElem);
                             fSum += fVal;
-                values.push_back(fVal);
+                            values.push_back(fVal);
                             fCount++;
                         }
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                            if (!pMat->IsString(i))
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
+                            if (!pMat->IsString(nElem))
                             {
-                                fVal = pMat->GetDouble(i);
+                                fVal = pMat->GetDouble(nElem);
                                 fSum += fVal;
-                values.push_back(fVal);
+                                values.push_back(fVal);
                                 fCount++;
                             }
                     }
@@ -2386,9 +2388,9 @@ void ScInterpreter::ScHarMean()
                     SCSIZE nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            double x = pMat->GetDouble(i);
+                            double x = pMat->GetDouble(nElem);
                             if (x > 0.0)
                             {
                                 nVal += 1.0/x;
@@ -2400,10 +2402,10 @@ void ScInterpreter::ScHarMean()
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                            if (!pMat->IsString(i))
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
+                            if (!pMat->IsString(nElem))
                             {
-                                double x = pMat->GetDouble(i);
+                                double x = pMat->GetDouble(nElem);
                                 if (x > 0.0)
                                 {
                                     nVal += 1.0/x;
@@ -2624,22 +2626,22 @@ void ScInterpreter::ScSkew()
                     SCSIZE nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            fVal = pMat->GetDouble(i);
+                            fVal = pMat->GetDouble(nElem);
                             fSum += fVal;
-                values.push_back(fVal);
+                            values.push_back(fVal);
                             fCount++;
                         }
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                            if (!pMat->IsString(i))
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
+                            if (!pMat->IsString(nElem))
                             {
-                                fVal = pMat->GetDouble(i);
+                                fVal = pMat->GetDouble(nElem);
                                 fSum += fVal;
-                values.push_back(fVal);
+                                values.push_back(fVal);
                                 fCount++;
                             }
                     }
@@ -2726,7 +2728,7 @@ void ScInterpreter::ScPercentile()
         {
             SCSIZE nIndex = (SCSIZE)::rtl::math::approxFloor(alpha*(nSize-1));
             double fDiff = alpha*(nSize-1) - ::rtl::math::approxFloor(alpha*(nSize-1));
-            DBG_ASSERT(nIndex >= 0 && nIndex < nSize, "ScPercentile: falscher Index (1)");
+            DBG_ASSERT(nIndex < nSize, "ScPercentile: falscher Index (1)");
             if (fDiff == 0.0)
                 PushDouble(pSortArray[nIndex]);
             else
@@ -2768,7 +2770,7 @@ void ScInterpreter::ScQuartile()
             {
                 SCSIZE nIndex = (SCSIZE)::rtl::math::approxFloor(0.25*(nSize-1));
                 double fDiff = 0.25*(nSize-1) - ::rtl::math::approxFloor(0.25*(nSize-1));
-                DBG_ASSERT(nIndex >= 0 && nIndex < nSize, "ScQuartile: falscher Index (1)");
+                DBG_ASSERT(nIndex < nSize, "ScQuartile: falscher Index (1)");
                 if (fDiff == 0.0)
                     PushDouble(pSortArray[nIndex]);
                 else
@@ -2789,7 +2791,7 @@ void ScInterpreter::ScQuartile()
             {
                 SCSIZE nIndex = (SCSIZE)::rtl::math::approxFloor(0.75*(nSize-1));
                 double fDiff = 0.75*(nSize-1) - ::rtl::math::approxFloor(0.75*(nSize-1));
-                DBG_ASSERT(nIndex >= 0 && nIndex < nSize, "ScQuartile: falscher Index (3)");
+                DBG_ASSERT(nIndex < nSize, "ScQuartile: falscher Index (3)");
                 if (fDiff == 0.0)
                     PushDouble(pSortArray[nIndex]);
                 else
@@ -2819,7 +2821,7 @@ void ScInterpreter::ScModalValue()
         SetNoValue();
     else
     {
-        SCSIZE nMaxIndex, nMax = 1, nCount = 1;
+        SCSIZE nMaxIndex = 0, nMax = 1, nCount = 1;
         double nOldVal = pSortArray[0];
         SCSIZE i;
 
@@ -3035,7 +3037,7 @@ void ScInterpreter::ScTrimMean()
         if (nIndex % 2 != 0)
             nIndex--;
         nIndex /= 2;
-        DBG_ASSERT(nIndex >= 0 && nIndex < nSize, "ScTrimMean: falscher Index");
+        DBG_ASSERT(nIndex < nSize, "ScTrimMean: falscher Index");
         double fSum = 0.0;
         for (SCSIZE i = nIndex; i < nSize-nIndex; i++)
             fSum += pSortArray[i];
@@ -3425,18 +3427,18 @@ void ScInterpreter::ScAveDev()
                     SCSIZE nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            rVal += pMat->GetDouble(i);
+                            rVal += pMat->GetDouble(nElem);
                             rValCount++;
                         }
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
-                            if (!pMat->IsString(i))
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
+                            if (!pMat->IsString(nElem))
                             {
-                                rVal += pMat->GetDouble(i);
+                                rVal += pMat->GetDouble(nElem);
                                 rValCount++;
                             }
                     }
@@ -3493,17 +3495,17 @@ void ScInterpreter::ScAveDev()
                     SCSIZE nCount = pMat->GetElementCount();
                     if (pMat->IsNumeric())
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            rVal += fabs(pMat->GetDouble(i) - nMiddle);
+                            rVal += fabs(pMat->GetDouble(nElem) - nMiddle);
                         }
                     }
                     else
                     {
-                        for (SCSIZE i = 0; i < nCount; i++)
+                        for (SCSIZE nElem = 0; nElem < nCount; nElem++)
                         {
-                            if (!pMat->IsString(i))
-                                rVal += fabs(pMat->GetDouble(i) - nMiddle);
+                            if (!pMat->IsString(nElem))
+                                rVal += fabs(pMat->GetDouble(nElem) - nMiddle);
                         }
                     }
                 }
