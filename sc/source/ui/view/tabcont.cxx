@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabcont.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:08:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,7 +334,7 @@ void ScTabControl::ActivateView(BOOL bActivate)
     USHORT nCurId = GetCurPageId();
     if (!nCurId) return;            // kann vorkommen, wenn bei Excel-Import alles versteckt ist
     USHORT nPage = nCurId - 1;
-    USHORT nCount = GetMaxId();
+//    USHORT nCount = GetMaxId();
 
     /*
     USHORT i;
@@ -409,7 +409,7 @@ void ScTabControl::Command( const CommandEvent& rCEvt )
     }
 }
 
-void ScTabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void ScTabControl::StartDrag( sal_Int8 /* nAction */, const Point& rPosPixel )
 {
     ScModule* pScMod = SC_MOD();
     BOOL bDisable = pScMod->IsFormulaMode() || pScMod->IsModalMode();
@@ -423,10 +423,8 @@ void ScTabControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     }
 }
 
-void ScTabControl::DoDrag( const Region& rRegion )
+void ScTabControl::DoDrag( const Region& /* rRegion */ )
 {
-    ScModule* pScMod = SC_MOD();
-
     ScDocShell* pDocSh = pViewData->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
 
