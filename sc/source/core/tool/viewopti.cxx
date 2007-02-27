@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopti.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:46:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:20:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,14 +371,14 @@ SvxGridItem* ScViewOptions::CreateGridItem( USHORT nId /* = SID_ATTR_GRID_OPTION
 //      ScTpViewItem - Daten fuer die ViewOptions-TabPage
 //========================================================================
 
-ScTpViewItem::ScTpViewItem( USHORT nWhich ) : SfxPoolItem( nWhich )
+ScTpViewItem::ScTpViewItem( USHORT nWhichP ) : SfxPoolItem( nWhichP )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScTpViewItem::ScTpViewItem( USHORT nWhich, const ScViewOptions& rOpt )
-    :   SfxPoolItem ( nWhich ),
+ScTpViewItem::ScTpViewItem( USHORT nWhichP, const ScViewOptions& rOpt )
+    :   SfxPoolItem ( nWhichP ),
         theOptions  ( rOpt )
 {
 }
@@ -716,11 +716,9 @@ ScViewCfg::ScViewCfg() :
 IMPL_LINK( ScViewCfg, LayoutCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -769,11 +767,9 @@ IMPL_LINK( ScViewCfg, LayoutCommitHdl, void *, EMPTYARG )
 IMPL_LINK( ScViewCfg, DisplayCommitHdl, void *, EMPTYARG )
 {
     Sequence<OUString> aNames = GetDisplayPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)
@@ -817,11 +813,9 @@ IMPL_LINK( ScViewCfg, GridCommitHdl, void *, EMPTYARG )
     const ScGridOptions& rGrid = GetGridOptions();
 
     Sequence<OUString> aNames = GetGridPropertyNames();
-    OUString* pNames = aNames.getArray();
     Sequence<Any> aValues(aNames.getLength());
     Any* pValues = aValues.getArray();
 
-    const Type& rType = ::getBooleanCppuType();
     for(int nProp = 0; nProp < aNames.getLength(); nProp++)
     {
         switch(nProp)

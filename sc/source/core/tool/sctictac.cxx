@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sctictac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:44:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,10 +82,10 @@ const int ScTicTacToe::Heuristic_Array[4][4] = {
 
 #ifdef TICTACTOE_SC
 ScTicTacToe::ScTicTacToe( ScDocument* pDocP, const ScAddress& rPos ) :
-        pDoc( pDocP ),
         aPos( rPos ),
-        bInitialized( FALSE ),
-        aStdOut( "Computer plays O, you play X. " )
+        pDoc( pDocP ),
+        aStdOut( "Computer plays O, you play X. " ),
+        bInitialized( FALSE )
 {
 }
 #else
@@ -380,8 +380,8 @@ void ScTicTacToe::PromptHuman()
 
 void ScTicTacToe::DrawPos( int nSquare, const String& rStr )
 {
-    pDoc->SetString( aPos.Col()+(nSquare%3),
-        aPos.Row()+(nSquare/3), aPos.Tab(), rStr );
+    pDoc->SetString( sal::static_int_cast<SCCOL>( aPos.Col()+(nSquare%3) ),
+        sal::static_int_cast<SCROW>( aPos.Row()+(nSquare/3) ), aPos.Tab(), rStr );
 }
 
 
@@ -407,7 +407,7 @@ int ScTicTacToe::GetStatus()
     nTab = aPos.Tab();
     String aStr;
     int nDiffs = 0;
-    int nSquare;
+    int nSquare = 0;
     for ( USHORT j = 0; j < ScTicTacToe_Squares; j++ )
     {
         pDoc->GetString( nCol+(j%3), nRow+(j/3), nTab, aStr );
