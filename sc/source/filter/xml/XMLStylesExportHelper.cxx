@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:47:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,10 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
             case sheet::ValidationType_WHOLE :
                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("cell-content-is-whole-number()"));
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         if (aValidation.aValidationType != sheet::ValidationType_LIST &&
             (aValidation.sFormula1.getLength() ||
@@ -300,6 +304,10 @@ rtl::OUString ScMyValidationsContainer::GetCondition(ScXMLExport& rExport, const
                     case sheet::ConditionOperator_NOT_EQUAL :
                         sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
                 sCondition += aValidation.sFormula1;
             }
@@ -479,6 +487,10 @@ void ScMyValidationsContainer::WriteValidations(ScXMLExport& rExport)
                         }
                     }
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             ++aItr;
@@ -527,10 +539,10 @@ void ScMyDefaultStyles::FillDefaultStyles(const sal_Int32 nTable,
             pDefaults = pColDefaults;
             nLast = nLastCol;
         }
-        sal_Bool bPrevAutoStyle;
+        sal_Bool bPrevAutoStyle(sal_False);
         sal_Bool bIsAutoStyle;
         sal_Bool bResult;
-        sal_Int32 nPrevIndex;
+        sal_Int32 nPrevIndex(0);
         sal_Int32 nIndex;
         sal_Int32 nRepeat(0);
         sal_Int32 nEmptyRepeat(0);
@@ -637,17 +649,17 @@ sal_Bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange) const
 }
 
 ScRowFormatRanges::ScRowFormatRanges()
-    : pRowDefaults(NULL),
+    : aRowFormatRanges(),
+    pRowDefaults(NULL),
     pColDefaults(NULL),
-    aRowFormatRanges(),
     nSize(0)
 {
 }
 
 ScRowFormatRanges::ScRowFormatRanges(const ScRowFormatRanges* pRanges)
-    : pRowDefaults(pRanges->pRowDefaults),
+    : aRowFormatRanges(pRanges->aRowFormatRanges),
+    pRowDefaults(pRanges->pRowDefaults),
     pColDefaults(pRanges->pColDefaults),
-    aRowFormatRanges(pRanges->aRowFormatRanges),
     nSize(pRanges->nSize)
 {
 }
@@ -1155,7 +1167,7 @@ sal_Int32 ScColumnRowStylesBase::GetIndexOfStyleName(const rtl::OUString& rStrin
 
 rtl::OUString* ScColumnRowStylesBase::GetStyleNameByIndex(const sal_Int32 nIndex)
 {
-    if ( nIndex < 0 || nIndex >= aStyleNames.size() )
+    if ( nIndex < 0 || nIndex >= sal::static_int_cast<sal_Int32>( aStyleNames.size() ) )
     {
         // #123981# should no longer happen, use first style then
         DBG_ERRORFILE("GetStyleNameByIndex: invalid index");
@@ -1237,7 +1249,7 @@ ScRowStyles::~ScRowStyles()
 
 void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 {
-    sal_Int16 nSize(aTables.size() - 1);
+    sal_Int32 nSize(aTables.size() - 1);
     if (nTable > nSize)
         for (sal_Int32 i = nSize; i < nTable; ++i)
         {
