@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLEmptyContext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:43:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:45:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ ScXMLEmptyContext::~ScXMLEmptyContext()
 SvXMLImportContext *ScXMLEmptyContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = new ScXMLEmptyContext(GetScImport(), nPrefix, rLName);
 
