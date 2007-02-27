@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:24:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ private:
 
 public:
     TYPEINFO();
-    SFX_DECL_INTERFACE(SCID_EDIT_SHELL);
+    SFX_DECL_INTERFACE(SCID_EDIT_SHELL)
 
                     ScEditShell(EditView* pView, ScViewData* pData);
                     ~ScEditShell();
