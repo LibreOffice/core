@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:20:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,7 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
 
         case CSVCMD_INSERTSPLIT:
             DBG_ASSERT( mbFixedMode, "ScCsvTableBox::CsvCmdHdl::InsertSplit - invalid call" );
-            if( maRuler.GetSplitCount() + 1 < CSV_MAXCOLCOUNT )
+            if( maRuler.GetSplitCount() + 1 < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT) )
             {
                 maRuler.InsertSplit( nParam1 );
                 maGrid.InsertSplit( nParam1 );
@@ -417,6 +417,10 @@ IMPL_LINK( ScCsvTableBox, CsvCmdHdl, ScCsvControl*, pCtrl )
         case CSVCMD_MOVEGRIDCURSOR:
             maData.mnColCursor = ((0 <= nParam1) && (nParam1 < GetPosCount())) ? nParam1 : CSV_POS_INVALID;
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if( maData != aOldData )
