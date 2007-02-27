@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:52:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:33:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ public:
     inline void             Append( const SingleRefData& rSRD );
     inline void             Append( const ComplRefData& rCRD );
 
-    List::Count;
+    using                   List::Count;
     inline BOOL             HasRanges( void ) const;
 
     inline const ScRange*   First( void );
@@ -205,12 +205,12 @@ inline const _ScRangeList* _ScRangeListTabs::GetActList( void ) const
 class ConverterBase
 {
 protected:
-    ConvErr             eStatus;
     TokenPool           aPool;          // User Token + Predefined Token
     TokenStack          aStack;
+    ScAddress           aEingPos;
+    ConvErr             eStatus;
     sal_Char*           pBuffer;        // Universal-Puffer
     UINT16              nBufferSize;    // ...und seine Groesse
-    ScAddress           aEingPos;
 
                         ConverterBase( UINT16 nNewBuffer );
     virtual             ~ConverterBase();
@@ -234,7 +234,7 @@ protected:
 
 public:
     void                Reset();
-    void                Reset( ScAddress aEingPos );
+    void                Reset( const ScAddress& rEingPos );
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, XclImpStream& rStrm, sal_Size nFormulaLen,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
@@ -263,11 +263,14 @@ protected:
 
 public:
     void                Reset( INT32 nLen );
-    void                Reset( INT32 nLen, ScAddress aEingPos );
-    void                Reset( ScAddress aEingPos );
+    void                Reset( INT32 nLen, const ScAddress& rEingPos );
+    void                Reset( const ScAddress& rEingPos );
 
     virtual ConvErr     Convert( const ScTokenArray*& rpErg, INT32& nRest,
                                     const FORMULA_TYPE eFT = FT_CellFormula ) = 0;
+
+protected:
+    using               ConverterBase::Reset;
 };
 
 
