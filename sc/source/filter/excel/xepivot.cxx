@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xepivot.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:16:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:24:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -846,7 +846,7 @@ void XclExpPivotCache::AddGroupFields( const ScDPObject& rDPObj )
     }
 }
 
-void XclExpPivotCache::AddCalcFields( const ScDPObject& rDPObj )
+void XclExpPivotCache::AddCalcFields( const ScDPObject& /*rDPObj*/ )
 {
     // not supported
 }
@@ -946,6 +946,7 @@ String lclGetDataFieldCaption( const String& rFieldName, GeneralFunction eFunc )
         case GeneralFunction_STDEVP:    nResIdx = STR_FUN_TEXT_STDDEV;  break;
         case GeneralFunction_VAR:       nResIdx = STR_FUN_TEXT_VAR;     break;
         case GeneralFunction_VARP:      nResIdx = STR_FUN_TEXT_VAR;     break;
+        default:;
     }
     if( nResIdx )
         aCaption.Assign( ScGlobal::GetRscString( nResIdx ) ).AppendAscii( RTL_CONSTASCII_STRINGPARAM( " - " ) );
@@ -1380,6 +1381,7 @@ void XclExpPivotTable::SetFieldPropertiesFromDim( const ScDPSaveDimension& rSave
             case DataPilotFieldOrientation_DATA:
                 DBG_ERRORFILE( "XclExpPivotTable::SetFieldPropertiesFromDim - called for data field" );
             break;
+            default:;
         }
     }
 }
@@ -1437,7 +1439,7 @@ void XclExpPivotTable::Finalize()
     sal_uInt16& rnXclCol2 = maPTInfo.maOutXclRange.maLast.mnCol;
     sal_uInt16& rnXclRow2 = maPTInfo.maOutXclRange.maLast.mnRow;
     // exclude page fields from output range
-    rnXclRow1 += maPTInfo.mnPageFields;
+    rnXclRow1 = rnXclRow1 + maPTInfo.mnPageFields;
     // exclude filter button from output range
     if( mbFilterBtn )
         ++rnXclRow1;
