@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:05:24 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:54:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,6 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     pDev( pNewDev ),
     pRefDevice( pNewDev ),      // default is output device
     pFmtDevice( pNewDev ),      // default is output device
-    eType( eNewType ),
     mrTabInfo( rTabInfo ),
     pRowInfo( rTabInfo.mpRowInfo ),
     nArrCount( rTabInfo.mnArrCount ),
@@ -192,10 +191,15 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     nY1( nNewY1 ),
     nX2( nNewX2 ),
     nY2( nNewY2 ),
+    eType( eNewType ),
     nPPTX( nPixelPerTwipsX ),
     nPPTY( nPixelPerTwipsY ),
+    pEditObj( NULL ),
+    pViewShell( NULL ),
+    pDrawView( NULL ), // #114135#
     bEditMode( FALSE ),
     bMetaFile( FALSE ),
+    bSingleGrid( FALSE ),
     bPagebreakMode( FALSE ),
     bSolidBackground( FALSE ),
     bUseStyleColor( FALSE ),
@@ -204,16 +208,12 @@ ScOutputData::ScOutputData( OutputDevice* pNewDev, ScOutputType eNewType,
     pValueColor( NULL ),
     pTextColor( NULL ),
     pFormulaColor( NULL ),
-    bSingleGrid( FALSE ),
     aGridColor( COL_BLACK ),
-    bMarkClipped( FALSE ),          // FALSE fuer Drucker/Metafile etc.
     bShowNullValues( TRUE ),
     bShowFormulas( FALSE ),
-    bSnapPixel( FALSE ),
     bShowSpellErrors( FALSE ),
-    pEditObj( NULL ),
-    pViewShell( NULL ),
-    pDrawView( NULL ), // #114135#
+    bMarkClipped( FALSE ),          // FALSE fuer Drucker/Metafile etc.
+    bSnapPixel( FALSE ),
     bAnyRotated( FALSE ),
     bAnyClipped( FALSE )
 {
@@ -611,7 +611,7 @@ void ScOutputData::SetPagebreakMode( ScPageBreakData* pPageData )
     //  gedruckten Bereich markieren
     //  (in FillInfo ist schon alles auf FALSE initialisiert)
 
-    USHORT nRangeCount = pPageData->GetCount();
+    USHORT nRangeCount = sal::static_int_cast<USHORT>(pPageData->GetCount());
     for (USHORT nPos=0; nPos<nRangeCount; nPos++)
     {
         ScRange aRange = pPageData->GetData( nPos ).GetPrintRange();
@@ -1027,6 +1027,10 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
                                     case SVX_SHADOW_BOTTOMLEFT:  eLoc = SVX_SHADOW_BOTTOMRIGHT; break;
                                     case SVX_SHADOW_TOPRIGHT:    eLoc = SVX_SHADOW_TOPLEFT;     break;
                                     case SVX_SHADOW_TOPLEFT:     eLoc = SVX_SHADOW_TOPRIGHT;    break;
+                                    default:
+                                    {
+                                        // added to avoid warnings
+                                    }
                                 }
                             }
 
@@ -1417,8 +1421,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
 
     const ScPatternAttr* pPattern;
     const SfxItemSet*    pCondSet;
-    const ScPatternAttr* pOldPattern = NULL;
-    const SfxItemSet*    pOldCondSet = NULL;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     //  #105733# SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
@@ -1541,6 +1543,10 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
                                 nBotLeft -= nSkew;
                                 nBotRight -= nSkew;
                                 break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
 
                         Point aPoints[4];
@@ -1723,7 +1729,6 @@ void ScOutputData::DrawPageBorder( SCCOL nStartX, SCROW nStartY, SCCOL nEndX, SC
             nPosY += pRowInfo[nArrY].nHeight;
         }
 
-        RowInfo* pThisRowInfo = &pRowInfo[0];
         long nPosX = nScrX;
         for (SCCOL nX=nX1; nX<=nX2; nX++)
         {
@@ -1830,7 +1835,7 @@ void ScOutputData::FindChanged()
                     }
                     if (!pFCell->IsRunning())
                     {
-                        double aVal = pFCell->GetValue();
+                        (void)pFCell->GetValue();
                         if (pFCell->IsChanged())
                         {
                             pThisRowInfo->bChanged = TRUE;
@@ -1967,7 +1972,6 @@ void ScOutputData::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
             nPosY += pRowInfo[nArrY].nHeight;
         }
 
-        RowInfo* pThisRowInfo = &pRowInfo[0];
         long nPosX = nScrX;
         if ( bLayoutRTL )
             nPosX += nMirrorW - 1;      // always in pixels
@@ -2074,7 +2078,6 @@ void ScOutputData::DrawOneChange( SCCOL nRefStartX, SCROW nRefStartY,
             nPosY += pRowInfo[nArrY].nHeight;
         }
 
-        RowInfo* pThisRowInfo = &pRowInfo[0];
         long nPosX = nScrX;
         if ( bLayoutRTL )
             nPosX += nMirrorW - 1;      // always in pixels
@@ -2157,18 +2160,18 @@ void ScOutputData::DrawChangeTrack()
     const ScChangeAction* pAction = pTrack->GetFirst();
     while (pAction)
     {
-        ScChangeActionType eType;
+        ScChangeActionType eActionType;
         if ( pAction->IsVisible() )
         {
-            eType = pAction->GetType();
+            eActionType = pAction->GetType();
             const ScBigRange& rBig = pAction->GetBigRange();
             if ( rBig.aStart.Tab() == nTab )
             {
                 ScRange aRange = rBig.MakeRange();
 
-                if ( eType == SC_CAT_DELETE_ROWS )
+                if ( eActionType == SC_CAT_DELETE_ROWS )
                     aRange.aEnd.SetRow( aRange.aStart.Row() );
-                else if ( eType == SC_CAT_DELETE_COLS )
+                else if ( eActionType == SC_CAT_DELETE_COLS )
                     aRange.aEnd.SetCol( aRange.aStart.Col() );
 
                 if ( aRange.Intersects( aViewRange ) &&
@@ -2177,11 +2180,11 @@ void ScOutputData::DrawChangeTrack()
                     aColorChanger.Update( *pAction );
                     Color aColor( aColorChanger.GetColor() );
                     DrawOneChange( aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(), aRange.aEnd.Row(), aColor, eType );
+                                    aRange.aEnd.Col(), aRange.aEnd.Row(), aColor, sal::static_int_cast<USHORT>(eActionType) );
 
                 }
             }
-            if ( eType == SC_CAT_MOVE &&
+            if ( eActionType == SC_CAT_MOVE &&
                     ((const ScChangeActionMove*)pAction)->
                         GetFromRange().aStart.Tab() == nTab )
             {
@@ -2193,7 +2196,7 @@ void ScOutputData::DrawChangeTrack()
                     aColorChanger.Update( *pAction );
                     Color aColor( aColorChanger.GetColor() );
                     DrawOneChange( aRange.aStart.Col(), aRange.aStart.Row(),
-                                    aRange.aEnd.Col(), aRange.aEnd.Row(), aColor, eType );
+                                    aRange.aEnd.Col(), aRange.aEnd.Row(), aColor, sal::static_int_cast<USHORT>(eActionType) );
                 }
             }
         }
@@ -2290,7 +2293,7 @@ void ScOutputData::AddPDFNotes()
     long nLayoutSign = bLayoutRTL ? -1 : 1;
 
     long nPosY = nScrY;
-    for (SCROW nArrY=1; nArrY+1<nArrCount; nArrY++)     // SCSIZE?
+    for (SCSIZE nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
         if ( pThisRowInfo->bChanged )
