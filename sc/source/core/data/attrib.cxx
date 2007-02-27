@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:18:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:59:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ SfxPoolItem* ScMergeAttr::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, USHORT nVer ) const
+SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, USHORT /* nVer */ ) const
 {
     INT16   nCol;
     INT16   nRow;
@@ -198,7 +198,7 @@ SfxPoolItem* ScMergeAttr::Create( SvStream& rStream, USHORT nVer ) const
 
 //------------------------------------------------------------------------
 
-SvStream& ScMergeAttr::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScMergeAttr::Store( SvStream& rStream, USHORT /* nVer */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -362,10 +362,10 @@ String ScProtectionAttr::GetValueText() const
 SfxItemPresentation ScProtectionAttr::GetPresentation
     (
         SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric,
-        SfxMapUnit ePresMetric,
+        SfxMapUnit /* eCoreMetric */,
+        SfxMapUnit /* ePresMetric */,
         String& rText,
-        const IntlWrapper* pIntl
+        const IntlWrapper* /* pIntl */
     ) const
 {
     String aStrYes  ( ScGlobal::GetRscString(STR_YES) );
@@ -422,7 +422,7 @@ SfxPoolItem* ScProtectionAttr::Clone( SfxItemPool * ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, USHORT n ) const
+SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, USHORT /* n */ ) const
 {
     BOOL bProtect;
     BOOL bHFormula;
@@ -439,7 +439,7 @@ SfxPoolItem* ScProtectionAttr::Create( SvStream& rStream, USHORT n ) const
 
 //------------------------------------------------------------------------
 
-SvStream& ScProtectionAttr::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScProtectionAttr::Store( SvStream& rStream, USHORT /* nVer */ ) const
 {
     rStream << bProtection;
     rStream << bHideFormula;
@@ -504,10 +504,10 @@ SfxPoolItem* ScRangeItem::Clone( SfxItemPool* ) const
 SfxItemPresentation ScRangeItem::GetPresentation
     (
         SfxItemPresentation ePres,
-        SfxMapUnit          eCoreUnit,
-        SfxMapUnit          ePresUnit,
+        SfxMapUnit          /* eCoreUnit */,
+        SfxMapUnit          /* ePresUnit */,
         String&             rText,
-        const IntlWrapper* pIntl
+        const IntlWrapper* /* pIntl */
     ) const
 {
     rText.Erase();
@@ -527,6 +527,11 @@ SfxItemPresentation ScRangeItem::GetPresentation
             rText += aText;
         }
         break;
+
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     return ePres;
@@ -534,14 +539,14 @@ SfxItemPresentation ScRangeItem::GetPresentation
 
 //-----------------------------------------------------------------------
 
-USHORT ScRangeItem::GetVersion( USHORT nFileVersion ) const
+USHORT ScRangeItem::GetVersion( USHORT /* nFileVersion */ ) const
 {
     return 2;
 }
 
 //-----------------------------------------------------------------------
 
-SvStream& ScRangeItem::Store( SvStream& rStrm, USHORT nVer ) const
+SvStream& ScRangeItem::Store( SvStream& rStrm, USHORT /* nVer */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -554,7 +559,7 @@ SvStream& ScRangeItem::Store( SvStream& rStrm, USHORT nVer ) const
 
 //-----------------------------------------------------------------------
 
-SfxPoolItem* ScRangeItem::Create( SvStream& rStream, USHORT nVersion ) const
+SfxPoolItem* ScRangeItem::Create( SvStream& /* rStream */, USHORT /* nVersion */ ) const
 {
     ScRange aNewRange;
     BOOL    nNewFlags = FALSE;
@@ -630,8 +635,8 @@ ScTableListItem::ScTableListItem( const ScTableListItem& rCpy )
 
 // -----------------------------------------------------------------------
 
-ScTableListItem::ScTableListItem( const USHORT nWhich, const List& rList )
-    :   SfxPoolItem ( nWhich ),
+ScTableListItem::ScTableListItem( const USHORT nWhichP, const List& rList )
+    :   SfxPoolItem ( nWhichP ),
         nCount      ( 0 ),
         pTabArr     ( NULL )
 {
@@ -740,10 +745,10 @@ SfxPoolItem* ScTableListItem::Clone( SfxItemPool* ) const
 SfxItemPresentation ScTableListItem::GetPresentation
     (
         SfxItemPresentation ePres,
-        SfxMapUnit          eCoreUnit,
-        SfxMapUnit          ePresUnit,
+        SfxMapUnit          /* eCoreUnit */,
+        SfxMapUnit          /* ePresUnit */,
         String&             rText,
-        const IntlWrapper* pIntl
+        const IntlWrapper* /* pIntl */
     ) const
 {
     const sal_Unicode cDelim = ',';
@@ -771,6 +776,11 @@ SfxItemPresentation ScTableListItem::GetPresentation
         case SFX_ITEM_PRESENTATION_COMPLETE:
             rText.Erase();
             return SFX_ITEM_PRESENTATION_NONE;
+
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     return SFX_ITEM_PRESENTATION_NONE;
@@ -778,7 +788,7 @@ SfxItemPresentation ScTableListItem::GetPresentation
 
 //-----------------------------------------------------------------------
 
-SvStream& ScTableListItem::Store( SvStream& rStrm, USHORT nVer ) const
+SvStream& ScTableListItem::Store( SvStream& rStrm, USHORT /* nVer */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -794,13 +804,13 @@ SvStream& ScTableListItem::Store( SvStream& rStrm, USHORT nVer ) const
 
 //-----------------------------------------------------------------------
 
-SfxPoolItem* ScTableListItem::Create( SvStream& rStrm, USHORT ) const
+SfxPoolItem* ScTableListItem::Create( SvStream& /* rStrm */, USHORT ) const
 {
     ScTableListItem* pNewItem;
     List             aList;
     SCTAB*           p;
-    USHORT           nTabCount;
-    USHORT           nTabNo;
+//    USHORT           nTabCount;
+//    USHORT           nTabNo;
 
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -819,7 +829,7 @@ SfxPoolItem* ScTableListItem::Create( SvStream& rStrm, USHORT ) const
     pNewItem = new ScTableListItem( Which(), aList );
 
     aList.First();
-    while ( p = (SCTAB*)aList.Remove() )
+    while ( ( p = (SCTAB*)aList.Remove() ) != NULL )
         delete p;
 
     return pNewItem;
@@ -859,8 +869,8 @@ void ScTableListItem::SetTableList( const List& rList )
 //      ScPageHFItem - Daten der Kopf-/Fusszeilen
 // -----------------------------------------------------------------------
 
-ScPageHFItem::ScPageHFItem( USHORT nWhich )
-    :   SfxPoolItem ( nWhich ),
+ScPageHFItem::ScPageHFItem( USHORT nWhichP )
+    :   SfxPoolItem ( nWhichP ),
         pLeftArea   ( NULL ),
         pCenterArea ( NULL ),
         pRightArea  ( NULL )
@@ -894,7 +904,7 @@ ScPageHFItem::~ScPageHFItem()
 
 //------------------------------------------------------------------------
 
-BOOL ScPageHFItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
+BOOL ScPageHFItem::QueryValue( uno::Any& rVal, BYTE /* nMemberId */ ) const
 {
     uno::Reference<sheet::XHeaderFooterContent> xContent =
         new ScHeaderFooterContentObj( pLeftArea, pCenterArea, pRightArea );
@@ -903,7 +913,7 @@ BOOL ScPageHFItem::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
     return TRUE;
 }
 
-BOOL ScPageHFItem::PutValue( const uno::Any& rVal, BYTE nMemberId )
+BOOL ScPageHFItem::PutValue( const uno::Any& rVal, BYTE /* nMemberId */ )
 {
     BOOL bRet = FALSE;
     uno::Reference<sheet::XHeaderFooterContent> xContent;
@@ -981,7 +991,7 @@ SfxPoolItem* ScPageHFItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-USHORT ScPageHFItem::GetVersion( USHORT nFileVersion ) const
+USHORT ScPageHFItem::GetVersion( USHORT /* nFileVersion */ ) const
 {
     // 0 = ohne Feldbefehle
     // 1 = Titel bzw. Dateiname mit SvxFileField
@@ -1153,9 +1163,9 @@ public:
     BOOL            ConvertFields();
 };
 
-ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePool,
-            BOOL bDeleteEnginePool ) :
-        ScEditEngineDefaulter( pEnginePool, bDeleteEnginePool ),
+ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePoolP,
+            BOOL bDeleteEnginePoolP ) :
+        ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
         aExtFileId( TYPE( SvxExtFileField ) ),
         nConvPara( 0 ),
         nConvPos( 0 ),
@@ -1164,7 +1174,7 @@ ScFieldChangerEditEngine::ScFieldChangerEditEngine( SfxItemPool* pEnginePool,
 }
 
 String ScFieldChangerEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-            USHORT nPara, USHORT nPos, Color*& rTxtColor, Color*& rFldColor )
+            USHORT nPara, USHORT nPos, Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
     const SvxFieldData* pFieldData = rField.GetField();
     if ( pFieldData && pFieldData->Type() == aExtFileId )
@@ -1207,7 +1217,7 @@ void lcl_StoreOldFields( ScFieldChangerEditEngine& rEngine,
         pArea->Store( rStream );
 }
 
-SvStream& ScPageHFItem::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScPageHFItem::Store( SvStream& rStream, USHORT /* nVer */ ) const
 {
     if ( pLeftArea && pCenterArea && pRightArea )
     {
@@ -1305,15 +1315,15 @@ void ScPageHFItem::SetArea( EditTextObject *pNew, int nArea )
 //  ScViewObjectModeItem - Darstellungsmodus von ViewObjekten
 //-----------------------------------------------------------------------
 
-ScViewObjectModeItem::ScViewObjectModeItem( USHORT nWhich )
-    : SfxEnumItem( nWhich, VOBJ_MODE_SHOW )
+ScViewObjectModeItem::ScViewObjectModeItem( USHORT nWhichP )
+    : SfxEnumItem( nWhichP, VOBJ_MODE_SHOW )
 {
 }
 
 //------------------------------------------------------------------------
 
-ScViewObjectModeItem::ScViewObjectModeItem( USHORT nWhich, ScVObjMode eMode )
-    : SfxEnumItem( nWhich, eMode )
+ScViewObjectModeItem::ScViewObjectModeItem( USHORT nWhichP, ScVObjMode eMode )
+    : SfxEnumItem( nWhichP, sal::static_int_cast<USHORT>(eMode) )
 {
 }
 
@@ -1328,10 +1338,10 @@ ScViewObjectModeItem::~ScViewObjectModeItem()
 SfxItemPresentation ScViewObjectModeItem::GetPresentation
 (
     SfxItemPresentation ePres,
-    SfxMapUnit          eCoreUnit,
-    SfxMapUnit          ePresUnit,
+    SfxMapUnit          /* eCoreUnit */,
+    SfxMapUnit          /* ePresUnit */,
     String&             rText,
-    const IntlWrapper* pIntl
+    const IntlWrapper* /* pIntl */
 )   const
 {
     String  aDel = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM(": "));
@@ -1366,6 +1376,11 @@ SfxItemPresentation ScViewObjectModeItem::GetPresentation
         case SFX_ITEM_PRESENTATION_NAMELESS:
         rText += ScGlobal::GetRscString(STR_VOBJ_MODE_SHOW+GetValue());
         break;
+
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     return ePres;
@@ -1396,7 +1411,7 @@ SfxPoolItem* ScViewObjectModeItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-USHORT ScViewObjectModeItem::GetVersion( USHORT nFileVersion ) const
+USHORT ScViewObjectModeItem::GetVersion( USHORT /* nFileVersion */ ) const
 {
     return 1;
 }
@@ -1424,8 +1439,8 @@ SfxPoolItem* ScViewObjectModeItem::Create(
 //      double
 // -----------------------------------------------------------------------
 
-ScDoubleItem::ScDoubleItem( USHORT nWhich, double nVal )
-    :   SfxPoolItem ( nWhich ),
+ScDoubleItem::ScDoubleItem( USHORT nWhichP, double nVal )
+    :   SfxPoolItem ( nWhichP ),
         nValue  ( nVal )
 {
 }
@@ -1464,7 +1479,7 @@ SfxPoolItem* ScDoubleItem::Clone( SfxItemPool* ) const
 
 //------------------------------------------------------------------------
 
-SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, USHORT nVer ) const
+SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, USHORT /* nVer */ ) const
 {
     double nTmp=0;
     rStream >> nTmp;
@@ -1476,7 +1491,7 @@ SfxPoolItem* ScDoubleItem::Create( SvStream& rStream, USHORT nVer ) const
 
 //------------------------------------------------------------------------
 
-SvStream& ScDoubleItem::Store( SvStream& rStream, USHORT nVer ) const
+SvStream& ScDoubleItem::Store( SvStream& rStream, USHORT /* nVer */ ) const
 {
     rStream << nValue;
 
