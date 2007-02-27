@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldpimp.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-25 11:00:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:50:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -370,7 +370,7 @@ public:
 
 class ScXMLDataPilotFieldReferenceContext : public SvXMLImportContext
 {
-    com::sun::star::sheet::DataPilotFieldReference aReference;
+//    com::sun::star::sheet::DataPilotFieldReference aReference;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -413,7 +413,7 @@ public:
 
 class ScXMLDataPilotDisplayInfoContext : public SvXMLImportContext
 {
-    com::sun::star::sheet::DataPilotFieldAutoShowInfo aInfo;
+//    com::sun::star::sheet::DataPilotFieldAutoShowInfo aInfo;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -431,7 +431,7 @@ public:
 
 class ScXMLDataPilotSortInfoContext : public SvXMLImportContext
 {
-    com::sun::star::sheet::DataPilotFieldSortInfo aInfo;
+//    com::sun::star::sheet::DataPilotFieldSortInfo aInfo;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -449,7 +449,7 @@ public:
 
 class ScXMLDataPilotLayoutInfoContext : public SvXMLImportContext
 {
-    com::sun::star::sheet::DataPilotFieldLayoutInfo aInfo;
+//    com::sun::star::sheet::DataPilotFieldLayoutInfo aInfo;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
