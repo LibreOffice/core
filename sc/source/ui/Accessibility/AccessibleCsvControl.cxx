@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCsvControl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:03:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,7 +195,7 @@ void SAL_CALL ScAccessibleCsvControl::disposing()
 
 // XAccessibleComponent -------------------------------------------------------
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( const AwtPoint& rPoint )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvControl::getAccessibleAtPoint( const AwtPoint& /* rPoint */ )
         throw( RuntimeException )
 {
     ensureAlive();
@@ -248,17 +248,17 @@ void ScAccessibleCsvControl::SendSelectionEvent()
     CommitChange( aEvent );
 }
 
-void ScAccessibleCsvControl::SendTableUpdateEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn, bool bAllRows )
+void ScAccessibleCsvControl::SendTableUpdateEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */, bool /* bAllRows */ )
 {
     DBG_ERRORFILE( "ScAccessibleCsvControl::SendTableUpdateEvent - Illegal call" );
 }
 
-void ScAccessibleCsvControl::SendInsertColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn )
+void ScAccessibleCsvControl::SendInsertColumnEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */ )
 {
     DBG_ERRORFILE( "ScAccessibleCsvControl::SendInsertColumnEvent - Illegal call" );
 }
 
-void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 nFirstColumn, sal_uInt32 nLastColumn )
+void ScAccessibleCsvControl::SendRemoveColumnEvent( sal_uInt32 /* nFirstColumn */, sal_uInt32 /* nLastColumn */ )
 {
     DBG_ERRORFILE( "ScAccessibleCsvControl::SendRemoveColumnEvent - Illegal call" );
 }
@@ -484,7 +484,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getAccessibleChildCount() throw( Runtim
     return 0;
 }
 
-Reference< XAccessible > SAL_CALL ScAccessibleCsvRuler::getAccessibleChild( sal_Int32 nIndex )
+Reference< XAccessible > SAL_CALL ScAccessibleCsvRuler::getAccessibleChild( sal_Int32 /* nIndex */ )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
@@ -553,7 +553,8 @@ sal_Unicode SAL_CALL ScAccessibleCsvRuler::getCharacter( sal_Int32 nIndex )
     return maBuffer.charAt( nIndex );
 }
 
-Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::rtl::OUString >& aRequestedAttributes )
+Sequence< PropertyValue > SAL_CALL ScAccessibleCsvRuler::getCharacterAttributes( sal_Int32 nIndex,
+            const ::com::sun::star::uno::Sequence< ::rtl::OUString >& /* aRequestedAttributes */ )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ScUnoGuard aGuard;
@@ -624,7 +625,7 @@ sal_Int32 SAL_CALL ScAccessibleCsvRuler::getSelectionEnd() throw( RuntimeExcepti
     return -1;
 }
 
-sal_Bool SAL_CALL ScAccessibleCsvRuler::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+sal_Bool SAL_CALL ScAccessibleCsvRuler::setSelection( sal_Int32 /* nStartIndex */, sal_Int32 /* nEndIndex */ )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
@@ -819,7 +820,7 @@ TextSegment SAL_CALL ScAccessibleCsvRuler::getTextBehindIndex( sal_Int32 nIndex,
     return aResult;
 }
 
-sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
+sal_Bool SAL_CALL ScAccessibleCsvRuler::copyText( sal_Int32 /* nStartIndex */, sal_Int32 /* nEndIndex */ )
         throw( IndexOutOfBoundsException, RuntimeException )
 {
     ensureAlive();
@@ -1187,7 +1188,7 @@ Sequence< sal_Int32 > SAL_CALL ScAccessibleCsvGrid::getSelectedAccessibleColumns
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleRowSelected( sal_Int32 nRow )
+sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleRowSelected( sal_Int32 /* nRow */ )
         throw( RuntimeException )
 {
     ensureAlive();
@@ -1226,7 +1227,7 @@ Reference< XAccessible > SAL_CALL ScAccessibleCsvGrid::getAccessibleSummary()
     return NULL;
 }
 
-sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Bool SAL_CALL ScAccessibleCsvGrid::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 nColumn )
         throw( RuntimeException )
 {
     return isAccessibleColumnSelected( nColumn );
