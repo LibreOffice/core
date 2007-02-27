@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: kz $ $Date: 2006-01-31 18:35:45 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:06:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,16 @@ SLOFILES =  \
     $(SLO)$/postit.obj
 
 EXCEPTIONSFILES= \
+    $(SLO)$/autonamecache.obj \
+    $(SLO)$/bcaslot.obj \
+    $(SLO)$/column.obj \
+    $(SLO)$/documen2.obj \
+    $(SLO)$/document.obj \
+    $(SLO)$/dpdimsave.obj \
+    $(SLO)$/dpgroup.obj \
+    $(SLO)$/dptabres.obj \
+    $(SLO)$/table1.obj \
+    $(SLO)$/table3.obj \
     $(SLO)$/postit.obj \
     $(SLO)$/documen3.obj \
     $(SLO)$/documen5.obj \
