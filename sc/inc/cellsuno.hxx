@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:15:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:52:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,11 +236,11 @@ class SvxBoxInfoItem;
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XModifyListener >* XModifyListenerPtr;
-SV_DECL_PTRARR_DEL( XModifyListenerArr_Impl, XModifyListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XModifyListenerArr_Impl, XModifyListenerPtr, 4, 4 )
 
 class ScNamedEntry;
 typedef ScNamedEntry* ScNamedEntryPtr;
-SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( ScNamedEntryArr_Impl, ScNamedEntryPtr, 4, 4 )
 
 
 //  ScCellRangesBase - Basisklasse fuer ScCellRangesObj (mit Index-Access)
@@ -1129,6 +1129,7 @@ public:
                                 sal_Int32 nRight, sal_Int32 nBottom )
                                     throw(::com::sun::star::lang::IndexOutOfBoundsException,
                                         ::com::sun::star::uno::RuntimeException);
+    using ScCellRangeObj::getCellRangeByName;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
                             getCellRangeByName( const ::rtl::OUString& aRange )
                                 throw(::com::sun::star::uno::RuntimeException);
