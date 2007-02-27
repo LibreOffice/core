@@ -4,9 +4,9 @@
  *
  *  $RCSfile: arealink.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:45:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ __EXPORT ScAreaLink::~ScAreaLink()
     delete pImpl;
 }
 
-void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& rEndEditHdl )
+void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& /* rEndEditHdl */ )
 {
     //  use own dialog instead of SvBaseLink::Edit...
     //  DefModalDialogParent setzen, weil evtl. aus der DocShell beim ConvertFrom
@@ -121,7 +121,7 @@ void __EXPORT ScAreaLink::Edit(Window* pParent, const Link& rEndEditHdl )
     AbstractScLinkedAreaDlg* pDlg = pFact->CreateScLinkedAreaDlg( pParent, ResId(RID_SCDLG_LINKAREA));
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     pDlg->InitFromOldLink( aFileName, aFilterName, aOptions, aSourceArea, GetRefreshDelay() );
-    pDlg->StartExecuteModal( LINK( this, ScAreaLink, EndEditHdl ) );
+    pDlg->StartExecuteModal( LINK( this, ScAreaLink, AreaEndEditHdl ) );
 }
 
 void __EXPORT ScAreaLink::DataChanged( const String&,
@@ -151,9 +151,9 @@ void __EXPORT ScAreaLink::DataChanged( const String&,
             aArea = aSourceArea;
 
             // adjust in dialog:
-            String aLinkName;
-            sfx2::MakeLnkName( aLinkName, NULL, aFile, aArea, &aFilter );
-            SetName( aLinkName );
+            String aNewLinkName;
+            sfx2::MakeLnkName( aNewLinkName, NULL, aFile, aArea, &aFilter );
+            SetName( aNewLinkName );
         }
 
         Refresh( aFile, aFilter, aArea, GetRefreshDelay() );
@@ -192,9 +192,9 @@ void ScAreaLink::SetSource(const String& rDoc, const String& rFlt, const String&
     aSourceArea = rArea;
 
     //  also update link name for dialog
-    String aLinkName;
-    sfx2::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
-    SetName( aLinkName );
+    String aNewLinkName;
+    sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+    SetName( aNewLinkName );
 }
 
 BOOL ScAreaLink::IsEqual( const String& rFile, const String& rFilter, const String& rOpt,
@@ -331,8 +331,6 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
     {
         ScDocShellModificator aModificator( *pImpl->m_pDocSh );
 
-        SCCOL nStartX = aDestPos.Col();
-        SCROW nStartY = aDestPos.Row();
         SCCOL nOldEndX = aOldRange.aEnd.Col();
         SCROW nOldEndY = aOldRange.aEnd.Row();
         SCCOL nNewEndX = aNewRange.aEnd.Col();
@@ -502,14 +500,14 @@ BOOL ScAreaLink::Refresh( const String& rNewFile, const String& rNewFilter,
 }
 
 
-IMPL_LINK( ScAreaLink, RefreshHdl, ScAreaLink*, pCaller )
+IMPL_LINK( ScAreaLink, RefreshHdl, ScAreaLink*, EMPTYARG )
 {
     long nRes = Refresh( aFileName, aFilterName, aSourceArea,
         GetRefreshDelay() ) != 0;
     return nRes;
 }
 
-IMPL_LINK( ScAreaLink, EndEditHdl, AbstractScLinkedAreaDlg*, _pDlg )
+IMPL_LINK( ScAreaLink, AreaEndEditHdl, AbstractScLinkedAreaDlg*, _pDlg )
 {
     if ( _pDlg->GetResult() == RET_OK )
     {
@@ -517,9 +515,9 @@ IMPL_LINK( ScAreaLink, EndEditHdl, AbstractScLinkedAreaDlg*, _pDlg )
         Refresh( _pDlg->GetURL(), _pDlg->GetFilter(), _pDlg->GetSource(), _pDlg->GetRefresh() );
 
         //  copy source data from members (set in Refresh) into link name for dialog
-        String aLinkName;
-        sfx2::MakeLnkName( aLinkName, NULL, aFileName, aSourceArea, &aFilterName );
-        SetName( aLinkName );
+        String aNewLinkName;
+        sfx2::MakeLnkName( aNewLinkName, NULL, aFileName, aSourceArea, &aFilterName );
+        SetName( aNewLinkName );
     }
 
     if ( pImpl->m_aEndEditLink.IsSet() )
