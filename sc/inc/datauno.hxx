@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datauno.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:30:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:54:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ struct ScSortParam;
 
 typedef ::com::sun::star::uno::Reference<
             ::com::sun::star::util::XRefreshListener >* XDBRefreshListenerPtr;
-SV_DECL_PTRARR_DEL( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr, 4, 4 );
+SV_DECL_PTRARR_DEL( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr, 4, 4 )
 
 class ScDataUnoConversion
 {
