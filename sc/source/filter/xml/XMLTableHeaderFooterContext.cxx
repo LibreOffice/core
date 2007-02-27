@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableHeaderFooterContext.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:48:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
     sShareContent( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_FTRSHARED : SC_UNO_PAGE_HDRSHARED ) ),
     sContent( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_RIGHTFTRCON : SC_UNO_PAGE_RIGHTHDRCON ) ),
     sContentLeft( OUString::createFromAscii( bFooter ? SC_UNO_PAGE_LEFTFTRCONT : SC_UNO_PAGE_LEFTHDRCONT ) ),
+    bDisplay( sal_True ),
     bInsertContent( sal_True ),
     bLeft( bLft ),
-    bDisplay( sal_True ),
     bContainsLeft(sal_False),
     bContainsRight(sal_False),
     bContainsCenter(sal_False)
@@ -96,7 +96,7 @@ XMLTableHeaderFooterContext::XMLTableHeaderFooterContext( SvXMLImport& rImport, 
         const OUString& rValue(xAttrList->getValueByIndex( i ));
 
         // TODO: use a map here
-        if( XML_NAMESPACE_STYLE == nPrfx )
+        if( XML_NAMESPACE_STYLE == nPrefix )
         {
             if( IsXMLToken(aLName, XML_DISPLAY ) )
                 bDisplay = IsXMLToken(rValue, XML_TRUE);
@@ -235,7 +235,7 @@ TYPEINIT1( XMLHeaderFooterRegionContext, SvXMLImportContext );
 XMLHeaderFooterRegionContext::XMLHeaderFooterRegionContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
                        const OUString& rLName,
                        const uno::Reference<
-                            xml::sax::XAttributeList > & xAttrList,
+                            xml::sax::XAttributeList > & /* xAttrList */,
                        uno::Reference< text::XTextCursor >& xCursor ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xTextCursor ( xCursor )
