@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewutil.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:27:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 14:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -223,6 +223,11 @@ BOOL ScViewUtil::IsActionShown( const ScChangeAction& rAction,
                     return FALSE;
                 }
                 break;
+
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 
