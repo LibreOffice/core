@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcolect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:26:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:14:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,13 +63,13 @@ ScDBData::ScDBData( const String& rName,
     nEndCol     (nCol2),
     nEndRow     (nRow2),
     bByRow      (bByR),
+    bHasHeader  (bHasH),
     bDoSize     (FALSE),
     bKeepFmt    (FALSE),
     bStripData  (FALSE),
-    bHasHeader  (bHasH),
+    bIsAdvanced (FALSE),
     bDBSelection(FALSE),
     nIndex      (0),
-    bIsAdvanced (FALSE),
     bAutoFilter (FALSE),
     bModified   (FALSE)
 {
@@ -96,22 +96,20 @@ ScDBData::ScDBData( const String& rName,
     SetImportParam( aImportParam );
 }
 
-ScDBData::ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr ) :
-                    // nicht in der Datei:
-    bAutoFilter     (FALSE),
-    bModified       (FALSE),
-                    // nicht in alten Versionen:
+ScDBData::ScDBData( SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */ ) :
     bDoSize         (FALSE),
     bKeepFmt        (FALSE),
     bStripData      (FALSE),
-    nIndex          (0),
+    bSortUserDef    (FALSE),
+    nSortUserIndex  (0),
     bIsAdvanced     (FALSE),
+    nSubUserIndex   (0),
     bDBSelection    (FALSE),
     bDBSql          (TRUE),
     nDBType         (ScDbTable),
-    nSubUserIndex   (0),
-    bSortUserDef    (FALSE),
-    nSortUserIndex  (0)
+    nIndex          (0),
+    bAutoFilter     (FALSE),
+    bModified       (FALSE)
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -269,7 +267,7 @@ ScDBData::ScDBData( SvStream& rStream, ScMultipleReadHeader& rHdr ) :
 #endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
-BOOL ScDBData::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
+BOOL ScDBData::Store( SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -387,6 +385,7 @@ BOOL ScDBData::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
 }
 
 ScDBData::ScDBData( const ScDBData& rData ) :
+    DataObject(),
     ScRefreshTimer      ( rData ),
     aName               (rData.aName),
     nTable              (rData.nTable),
@@ -402,11 +401,11 @@ ScDBData::ScDBData( const ScDBData& rData ) :
     bSortCaseSens       (rData.bSortCaseSens),
     bIncludePattern     (rData.bIncludePattern),
     bSortInplace        (rData.bSortInplace),
+    bSortUserDef        (rData.bSortUserDef),
+    nSortUserIndex      (rData.nSortUserIndex),
     nSortDestTab        (rData.nSortDestTab),
     nSortDestCol        (rData.nSortDestCol),
     nSortDestRow        (rData.nSortDestRow),
-    bSortUserDef        (rData.bSortUserDef),
-    nSortUserIndex      (rData.nSortUserIndex),
     aSortLocale         (rData.aSortLocale),
     aSortAlgorithm      (rData.aSortAlgorithm),
     bQueryInplace       (rData.bQueryInplace),
@@ -724,7 +723,7 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     }
     for (i=0; i<MAXSUBTOTAL; i++)
     {
-        nSubField[i] += nDifX;
+        nSubField[i] = sal::static_int_cast<SCCOL>( nSubField[i] + nDifX );
         if (nSubField[i] > nCol2)
         {
             nSubField[i]   = 0;
@@ -1151,7 +1150,7 @@ void ScDBCollection::UpdateReference(UpdateRefMode eUpdateRefMode,
 
         BOOL bDoUpdate = ScRefUpdate::Update( pDoc, eUpdateRefMode,
                                                 nCol1,nRow1,nTab1, nCol2,nRow2,nTab2, nDx,nDy,nDz,
-                                                theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 );
+                                                theCol1,theRow1,theTab1, theCol2,theRow2,theTab2 ) != UR_NOTHING;
         if (bDoUpdate)
             ((ScDBData*)pItems[i])->MoveTo( theTab1, theCol1, theRow1, theCol2, theRow2 );
 
