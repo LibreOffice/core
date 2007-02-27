@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiname.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:11:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,8 @@ XclImpName::XclImpName( XclImpStream& rStrm, sal_uInt16 nXclNameIdx ) :
 
     // 1) *** read data from stream *** ---------------------------------------
 
-    sal_uInt16 nFlags = 0, nFmlaSize, nExtSheet = EXC_NAME_GLOBAL, nXclTab = EXC_NAME_GLOBAL;
-    sal_uInt8 nNameLen, nShortCut;
+    sal_uInt16 nFlags = 0, nFmlaSize = 0, nExtSheet = EXC_NAME_GLOBAL, nXclTab = EXC_NAME_GLOBAL;
+    sal_uInt8 nNameLen = 0, nShortCut;
 
     switch( GetBiff() )
     {
