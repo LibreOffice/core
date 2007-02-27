@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrib.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:23:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:52:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,15 +225,15 @@ private:
     USHORT  nFlags;
 };
 
-inline ScRangeItem::ScRangeItem( const USHORT nWhich )
-    :   SfxPoolItem( nWhich ), nFlags( SCR_INVALID ) // == ungueltige Area
+inline ScRangeItem::ScRangeItem( const USHORT nWhichP )
+    :   SfxPoolItem( nWhichP ), nFlags( SCR_INVALID ) // == ungueltige Area
 {
 }
 
-inline ScRangeItem::ScRangeItem( const USHORT   nWhich,
+inline ScRangeItem::ScRangeItem( const USHORT   nWhichP,
                                  const ScRange& rRange,
                                  const USHORT   nNew )
-    : SfxPoolItem( nWhich ), aRange( rRange ), nFlags( nNew )
+    : SfxPoolItem( nWhichP ), aRange( rRange ), nFlags( nNew )
 {
 }
 
@@ -281,8 +281,8 @@ public:
     SCTAB*  pTabArr;
 };
 
-inline ScTableListItem::ScTableListItem( const USHORT nWhich )
-    : SfxPoolItem(nWhich), nCount(0), pTabArr(NULL)
+inline ScTableListItem::ScTableListItem( const USHORT nWhichP )
+    : SfxPoolItem(nWhichP), nCount(0), pTabArr(NULL)
 {}
 
 //----------------------------------------------------------------------------
