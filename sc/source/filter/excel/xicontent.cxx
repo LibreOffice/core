@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 17:02:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:26:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,6 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     const XclImpRoot& rRoot = rStrm.GetRoot();
     DBG_ASSERT_BIFF( rRoot.GetBiff() == EXC_BIFF8 );
 
-    ScDocument& rDoc = rRoot.GetDoc();
     SfxObjectShell* pDocShell = rRoot.GetDocShell();
 
     XclRange aXclRange( ScAddress::UNINITIALIZED );
@@ -1022,7 +1021,7 @@ XclImpDecrypterRef lclReadFilepass8_Standard( XclImpStream& rStrm )
     return xDecr;
 }
 
-XclImpDecrypterRef lclReadFilepass8_Strong( XclImpStream& rStrm )
+XclImpDecrypterRef lclReadFilepass8_Strong( XclImpStream& /*rStrm*/ )
 {
     // not supported
     return XclImpDecrypterRef();
