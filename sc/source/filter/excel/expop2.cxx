@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expop2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:22:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,6 @@ ExportBiff5::~ExportBiff5()
 
 FltError ExportBiff5::Write()
 {
-    FltError                eRet = eERR_OK;
-
     SfxObjectShell* pDocShell = GetDocShell();
     DBG_ASSERT( pDocShell, "ExportBiff5::Write - no document shell" );
 
