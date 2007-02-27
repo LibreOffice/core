@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notemark.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:02:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:53:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,9 +73,9 @@ ScNoteMarker::ScNoteMarker( Window* pWin, Window* pRight, Window* pBottom, Windo
     aMapMode( rMap ),
     bLeft( bLeftEdge ),
     bByKeyboard( bKeyboard ),
-    bVisible( FALSE ),
     pModel( NULL ),
-    pObject( NULL )
+    pObject( NULL ),
+    bVisible( FALSE )
 {
     aTimer.SetTimeoutHdl( LINK( this, ScNoteMarker, TimeHdl ) );
     aTimer.SetTimeout( bForce ? SC_NOTEMARK_SHORT : SC_NOTEMARK_TIME );
@@ -89,7 +89,7 @@ ScNoteMarker::~ScNoteMarker()
     delete pModel;
 }
 
-IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, pTimer )
+IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, EMPTYARG )
 {
     if (!bVisible)
     {
