@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:44:49 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:41:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,20 +53,11 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        eeimpars.cxx \
-        expbase.cxx \
-        rtfexp.cxx \
-        rtfimp.cxx \
-        rtfparse.cxx
-
-
-
-SLOFILES =  \
-        $(SLO)$/eeimpars.obj \
-        $(SLO)$/expbase.obj \
-        $(SLO)$/rtfexp.obj \
-        $(SLO)$/rtfimp.obj \
+SLOFILES =						\
+        $(SLO)$/eeimpars.obj	\
+        $(SLO)$/expbase.obj		\
+        $(SLO)$/rtfexp.obj		\
+        $(SLO)$/rtfimp.obj		\
         $(SLO)$/rtfparse.obj
 
 # --- Tagets -------------------------------------------------------
