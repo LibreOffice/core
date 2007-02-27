@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:44:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,45 +115,45 @@ long Class::GetResult()                             \
 
 class VclAbstractDialog_Impl : public VclAbstractDialog //add for ScColOrRowDlg
 {
-    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog);
+    DECL_ABSTDLG_BASE(VclAbstractDialog_Impl,Dialog)
 };
 
 class AbstractScImportAsciiDlg_Impl : public AbstractScImportAsciiDlg  //add for ScImportAsciiDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg);
+    DECL_ABSTDLG_BASE(AbstractScImportAsciiDlg_Impl, ScImportAsciiDlg)
     virtual void                        GetOptions( ScAsciiOptions& rOpt );
 };
 
 class AbstractScAutoFormatDlg_Impl : public AbstractScAutoFormatDlg  //add for ScAutoFormatDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl, ScAutoFormatDlg);
+    DECL_ABSTDLG_BASE(AbstractScAutoFormatDlg_Impl, ScAutoFormatDlg)
     virtual USHORT GetIndex() const;
     virtual String GetCurrFormatName();
 };
 
 class AbstractScColRowLabelDlg_Impl : public AbstractScColRowLabelDlg  //add for ScColRowLabelDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl,ScColRowLabelDlg);
+    DECL_ABSTDLG_BASE(AbstractScColRowLabelDlg_Impl,ScColRowLabelDlg)
     virtual BOOL IsCol();
     virtual BOOL IsRow();
 };
 
 class AbstractScDataPilotDatabaseDlg_Impl  :public AbstractScDataPilotDatabaseDlg  //add for ScDataPilotDatabaseDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl, ScDataPilotDatabaseDlg);
+    DECL_ABSTDLG_BASE(AbstractScDataPilotDatabaseDlg_Impl, ScDataPilotDatabaseDlg)
     virtual void    GetValues( ScImportSourceDesc& rDesc );
 };
 
 class AbstractScDataPilotSourceTypeDlg_Impl  :public AbstractScDataPilotSourceTypeDlg  //add for ScDataPilotSourceTypeDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl, ScDataPilotSourceTypeDlg);
+    DECL_ABSTDLG_BASE(AbstractScDataPilotSourceTypeDlg_Impl, ScDataPilotSourceTypeDlg)
     virtual BOOL    IsDatabase() const;
     virtual BOOL    IsExternal() const;
 };
 
 class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg  //add for ScDataPilotServiceDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl, ScDataPilotServiceDlg);
+    DECL_ABSTDLG_BASE(AbstractScDataPilotServiceDlg_Impl, ScDataPilotServiceDlg)
     virtual String  GetServiceName() const;
     virtual String  GetParSource() const;
     virtual String  GetParName() const;
@@ -163,20 +163,20 @@ class AbstractScDataPilotServiceDlg_Impl : public AbstractScDataPilotServiceDlg 
 
 class AbstractScDeleteCellDlg_Impl : public AbstractScDeleteCellDlg  //add for ScDeleteCellDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScDeleteCellDlg_Impl,ScDeleteCellDlg);
+    DECL_ABSTDLG_BASE(AbstractScDeleteCellDlg_Impl,ScDeleteCellDlg)
     virtual DelCellCmd GetDelCellCmd() const;
 };
 
 class AbstractScDeleteContentsDlg_Impl : public AbstractScDeleteContentsDlg  //add for ScDeleteContentsDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDeleteContentsDlg_Impl,ScDeleteContentsDlg);
+    DECL_ABSTDLG_BASE( AbstractScDeleteContentsDlg_Impl,ScDeleteContentsDlg)
     virtual void    DisableObjects();
     virtual USHORT  GetDelContentsCmdBits() const;
 };
 
 class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg  //add for ScFillSeriesDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl, ScFillSeriesDlg);
+    DECL_ABSTDLG_BASE(AbstractScFillSeriesDlg_Impl, ScFillSeriesDlg)
     virtual FillDir     GetFillDir() const;
     virtual FillCmd     GetFillCmd() const;
     virtual FillDateCmd GetFillDateCmd() const;
@@ -189,19 +189,19 @@ class AbstractScFillSeriesDlg_Impl:public AbstractScFillSeriesDlg  //add for ScF
 
 class AbstractScGroupDlg_Impl :  public AbstractScGroupDlg  //add for ScGroupDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScGroupDlg_Impl, ScGroupDlg);
+    DECL_ABSTDLG_BASE( AbstractScGroupDlg_Impl, ScGroupDlg)
     virtual BOOL GetColsChecked() const;
 };
 
 class AbstractScInsertCellDlg_Impl : public AbstractScInsertCellDlg  //add for ScInsertCellDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScInsertCellDlg_Impl, ScInsertCellDlg);
+    DECL_ABSTDLG_BASE( AbstractScInsertCellDlg_Impl, ScInsertCellDlg)
     virtual InsCellCmd GetInsCellCmd() const ;
 };
 
 class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg  //add for ScInsertContentsDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl, ScInsertContentsDlg);
+    DECL_ABSTDLG_BASE(AbstractScInsertContentsDlg_Impl, ScInsertContentsDlg)
     virtual USHORT      GetInsContentsCmdBits() const;
     virtual USHORT      GetFormulaCmdBits() const;
     virtual BOOL        IsSkipEmptyCells() const;
@@ -216,7 +216,7 @@ class AbstractScInsertContentsDlg_Impl : public AbstractScInsertContentsDlg  //a
 
 class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg  //add for ScInsertTableDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScInsertTableDlg_Impl, ScInsertTableDlg);
+    DECL_ABSTDLG_BASE( AbstractScInsertTableDlg_Impl, ScInsertTableDlg)
     virtual BOOL            GetTablesFromFile();
     virtual BOOL            GetTablesAsLink();
     virtual const String*   GetFirstTable( USHORT* pN = NULL );
@@ -229,13 +229,13 @@ class AbstractScInsertTableDlg_Impl : public AbstractScInsertTableDlg  //add for
 
 class AbstractScSelEntryDlg_Impl : public AbstractScSelEntryDlg  //add for ScSelEntryDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScSelEntryDlg_Impl, ScSelEntryDlg );
+    DECL_ABSTDLG_BASE( AbstractScSelEntryDlg_Impl, ScSelEntryDlg )
     virtual String GetSelectEntry() const;
 };
 
 class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg  //add for ScLinkedAreaDlg
 {
-    DECL_ABSTDLG2_BASE( AbstractScLinkedAreaDlg_Impl, ScLinkedAreaDlg);
+    DECL_ABSTDLG2_BASE( AbstractScLinkedAreaDlg_Impl, ScLinkedAreaDlg)
 
     virtual void            InitFromOldLink( const String& rFile, const String& rFilter,
                                         const String& rOptions, const String& rSource,
@@ -249,13 +249,13 @@ class AbstractScLinkedAreaDlg_Impl : public AbstractScLinkedAreaDlg  //add for S
 
 class AbstractScMetricInputDlg_Impl : public AbstractScMetricInputDlg  //add for ScMetricInputDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScMetricInputDlg_Impl, ScMetricInputDlg);
+    DECL_ABSTDLG_BASE( AbstractScMetricInputDlg_Impl, ScMetricInputDlg)
     virtual long GetInputValue( FieldUnit eUnit = FUNIT_TWIP ) const;
 };
 
 class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg  //add for ScMoveTableDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScMoveTableDlg_Impl, ScMoveTableDlg);
+    DECL_ABSTDLG_BASE( AbstractScMoveTableDlg_Impl, ScMoveTableDlg)
     virtual USHORT  GetSelectedDocument     () const;
     virtual USHORT  GetSelectedTable        () const;
     virtual BOOL    GetCopyTable            () const;
@@ -265,58 +265,58 @@ class AbstractScMoveTableDlg_Impl : public AbstractScMoveTableDlg  //add for ScM
 
 class AbstractScNameCreateDlg_Impl : public AbstractScNameCreateDlg  //add for ScNameCreateDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScNameCreateDlg_Impl, ScNameCreateDlg);
+    DECL_ABSTDLG_BASE( AbstractScNameCreateDlg_Impl, ScNameCreateDlg)
     virtual USHORT          GetFlags() const;
 };
 
 class AbstractScNamePasteDlg_Impl : public AbstractScNamePasteDlg  //add for ScNamePasteDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScNamePasteDlg_Impl, ScNamePasteDlg );
+    DECL_ABSTDLG_BASE( AbstractScNamePasteDlg_Impl, ScNamePasteDlg )
     virtual String          GetSelectedName() const;
 };
 
 class AbstractScPivotFilterDlg_Impl : public AbstractScPivotFilterDlg  //add for ScPivotFilterDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScPivotFilterDlg_Impl, ScPivotFilterDlg);
+    DECL_ABSTDLG_BASE( AbstractScPivotFilterDlg_Impl, ScPivotFilterDlg)
     virtual const ScQueryItem&  GetOutputItem();
 };
 
 class AbstractScDPFunctionDlg_Impl : public AbstractScDPFunctionDlg  //add for ScDPFunctionDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPFunctionDlg_Impl, ScDPFunctionDlg);
+    DECL_ABSTDLG_BASE( AbstractScDPFunctionDlg_Impl, ScDPFunctionDlg)
     virtual USHORT GetFuncMask() const;
     virtual ::com::sun::star::sheet::DataPilotFieldReference GetFieldRef() const;
 };
 
 class AbstractScDPSubtotalDlg_Impl : public AbstractScDPSubtotalDlg  //add for ScDPSubtotalDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPSubtotalDlg_Impl, ScDPSubtotalDlg);
+    DECL_ABSTDLG_BASE( AbstractScDPSubtotalDlg_Impl, ScDPSubtotalDlg)
     virtual USHORT GetFuncMask() const;
     virtual void FillLabelData( ScDPLabelData& rLabelData ) const;
 };
 
 class AbstractScDPNumGroupDlg_Impl : public AbstractScDPNumGroupDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPNumGroupDlg_Impl, ScDPNumGroupDlg );
+    DECL_ABSTDLG_BASE( AbstractScDPNumGroupDlg_Impl, ScDPNumGroupDlg )
     virtual ScDPNumGroupInfo GetGroupInfo() const;
 };
 
 class AbstractScDPDateGroupDlg_Impl : public AbstractScDPDateGroupDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPDateGroupDlg_Impl, ScDPDateGroupDlg );
+    DECL_ABSTDLG_BASE( AbstractScDPDateGroupDlg_Impl, ScDPDateGroupDlg )
     virtual ScDPNumGroupInfo GetGroupInfo() const;
     virtual sal_Int32 GetDatePart() const;
 };
 
 class AbstractScDPShowDetailDlg_Impl : public AbstractScDPShowDetailDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScDPShowDetailDlg_Impl, ScDPShowDetailDlg);
+    DECL_ABSTDLG_BASE( AbstractScDPShowDetailDlg_Impl, ScDPShowDetailDlg)
     virtual String GetDimensionName() const;
 };
 
 class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg  //add for ScNewScenarioDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScNewScenarioDlg_Impl, ScNewScenarioDlg );
+    DECL_ABSTDLG_BASE( AbstractScNewScenarioDlg_Impl, ScNewScenarioDlg )
     virtual void SetScenarioData( const String& rName, const String& rComment,
                             const Color& rColor, USHORT nFlags );
 
@@ -326,7 +326,7 @@ class AbstractScNewScenarioDlg_Impl : public AbstractScNewScenarioDlg  //add for
 
 class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowTabDlg
 {
-    DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg);
+    DECL_ABSTDLG_BASE(AbstractScShowTabDlg_Impl,ScShowTabDlg)
     virtual void    Insert( const String& rString, BOOL bSelected );
     virtual USHORT  GetSelectEntryCount() const;
     virtual void SetDescription(const String& rTitle, const String& rFixedText,ULONG nDlgHelpId, ULONG nLbHelpId );
@@ -336,20 +336,20 @@ class AbstractScShowTabDlg_Impl : public AbstractScShowTabDlg  //add for ScShowT
 
 class AbstractScStringInputDlg_Impl :  public AbstractScStringInputDlg  //add for ScStringInputDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg );
+    DECL_ABSTDLG_BASE( AbstractScStringInputDlg_Impl, ScStringInputDlg )
     virtual void GetInputString( String& rString ) const;
 };
 
 class AbstractScImportOptionsDlg_Impl : public AbstractScImportOptionsDlg  //add for ScImportOptionsDlg
 {
-    DECL_ABSTDLG_BASE( AbstractScImportOptionsDlg_Impl, ScImportOptionsDlg);
+    DECL_ABSTDLG_BASE( AbstractScImportOptionsDlg_Impl, ScImportOptionsDlg)
     virtual void GetImportOptions( ScImportOptions& rOptions ) const;
 };
 
 //add for ScAttrDlg , ScHFEditDlg, ScStyleDlg, ScSubTotalDlg, ScCharDlg, ScParagraphDlg, ScValidationDlg, ScSortDlg
 class AbstractTabDialog_Impl : public SfxAbstractTabDialog
 {
-    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog );
+    DECL_ABSTDLG_BASE( AbstractTabDialog_Impl,SfxTabDialog )
     virtual void                SetCurPageId( USHORT nId );
     virtual const SfxItemSet*   GetOutputItemSet() const;
     virtual const USHORT*       GetInputRanges( const SfxItemPool& pItem ); //add by CHINA001
