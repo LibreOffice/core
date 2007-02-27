@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:47:13 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:42:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,16 +53,15 @@ PROJECTPCHSOURCE=..\pch\filt_pch
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES = \
-        $(SLO)$/xcl97rec.obj
-
-SLOFILES =	\
+SLOFILES =									\
         $(SLO)$/xcl97dum.obj				\
         $(SLO)$/xcl97esc.obj				\
         $(SLO)$/xcl97rec.obj				\
         $(SLO)$/XclImpChangeTrack.obj		\
         $(SLO)$/XclExpChangeTrack.obj
 
+EXCEPTIONSFILES =							\
+        $(SLO)$/xcl97rec.obj
 
 # --- Targets -------------------------------------------------------
 
