@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pntlock.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:45:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:09:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,9 +44,9 @@
 
 ScPaintLockData::ScPaintLockData(USHORT nNewMode) :
     nMode( nNewMode ),
-    nParts( 0 ),
     nLevel( 0 ),
     nDocLevel( 0 ),
+    nParts( 0 ),
     bModified( FALSE )
 {
 }
