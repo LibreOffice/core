@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:09:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,37 +128,37 @@ extern BOOL bIsOlk, bOderSo;
 
 ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const String& rNewName,
                     BOOL bColInfo, BOOL bRowInfo ) :
-    pDocument( pDoc ),
     aName( rNewName ),
-    nTab( nNewTab ),
+    bScenario( FALSE ),
     bLayoutRTL( FALSE ),
     bLoadingRTL( FALSE ),
-    bScenario( FALSE ),
-    bActiveScenario( FALSE ),
-    nScenarioFlags( 0 ),
-    aScenarioColor( COL_LIGHTGRAY ),
     nLinkMode( 0 ),
-    pColWidth( NULL ),
-    pColFlags( NULL ),
-    pRowHeight( NULL ),
-    pRowFlags( NULL ),
-    pOutlineTable( NULL ),
-    bVisible( TRUE ),
-    pSearchParam( NULL ),
-    pSearchText ( NULL ),
-    bProtected( FALSE ),
-    nRecalcLvl( 0 ),
+    aPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) ),
     bPageSizeValid( FALSE ),
     nRepeatStartX( SCCOL_REPEAT_NONE ),
     nRepeatStartY( SCROW_REPEAT_NONE ),
-    aPageStyle( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) ),
+    bProtected( FALSE ),
+    pColWidth( NULL ),
+    pRowHeight( NULL ),
+    pColFlags( NULL ),
+    pRowFlags( NULL ),
+    pOutlineTable( NULL ),
     bTableAreaValid( FALSE ),
+    bVisible( TRUE ),
+    nTab( nNewTab ),
+    nRecalcLvl( 0 ),
+    pDocument( pDoc ),
+    pSearchParam( NULL ),
+    pSearchText ( NULL ),
+    pSortCollator( NULL ),
     bPrintEntireSheet( FALSE ),
     pRepeatColRange( NULL ),
     pRepeatRowRange( NULL ),
     nLockCount( 0 ),
     pScenarioRanges( NULL ),
-    pSortCollator( NULL )
+    aScenarioColor( COL_LIGHTGRAY ),
+    nScenarioFlags( 0 ),
+    bActiveScenario( FALSE )
 {
 
     if (bColInfo)
@@ -357,8 +357,8 @@ BOOL ScTable::SetOptimalHeight( SCROW nStartRow, SCROW nEndRow, USHORT nExtra,
         }
     }
 
-    SCROW nRngStart;
-    SCROW nRngEnd;
+    SCROW nRngStart = 0;
+    SCROW nRngEnd = 0;
     USHORT nLast = 0;
     for (SCSIZE i=0; i<nCount; i++)
     {
@@ -504,7 +504,7 @@ BOOL ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, BOOL bNotes ) const
 }
 
 BOOL ScTable::GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
-                                SCCOL& rEndCol, BOOL bNotes ) const
+                                SCCOL& rEndCol, BOOL /* bNotes */ ) const
 {
     BOOL bFound = FALSE;
     SCCOL nMaxX = 0;
@@ -784,11 +784,11 @@ void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY 
         {
             do
             {
-                nNewCol += nMovX;
+                nNewCol = sal::static_int_cast<SCsCOL>( nNewCol + nMovX );
                 bFnd = (nNewCol>=0 && nNewCol<=MAXCOL) ? aCol[nNewCol].HasVisibleDataAt(rRow) : FALSE;
             }
             while (bFnd);
-            nNewCol -= nMovX;
+            nNewCol = sal::static_int_cast<SCsCOL>( nNewCol - nMovX );
 
             if (nNewCol == (SCsCOL)rCol)
                 bThere = FALSE;
@@ -798,7 +798,7 @@ void ScTable::FindAreaPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY 
         {
             do
             {
-                nNewCol += nMovX;
+                nNewCol = sal::static_int_cast<SCsCOL>( nNewCol + nMovX );
                 bFnd = (nNewCol>=0 && nNewCol<=MAXCOL) ? aCol[nNewCol].HasVisibleDataAt(rRow) : TRUE;
             }
             while (!bFnd);
@@ -851,8 +851,8 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
     SCsCOL nCol = rCol;
     SCsROW nRow = rRow;
 
-    nCol += nMovX;
-    nRow += nMovY;
+    nCol = sal::static_int_cast<SCsCOL>( nCol + nMovX );
+    nRow = sal::static_int_cast<SCsROW>( nRow + nMovY );
 
     DBG_ASSERT( !nMovY || !bUnprotected,
                 "GetNextPos mit bUnprotected horizontal nicht implementiert" );
@@ -870,9 +870,9 @@ void ScTable::GetNextPos( SCCOL& rCol, SCROW& rRow, SCsCOL nMovX, SCsROW nMovY,
 
         while ( nRow < 0 || nRow > MAXROW )
         {
-            nCol += static_cast<SCsCOL>(nMovY);
+            nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );
             while ( VALIDCOL(nCol) && pColFlags && (pColFlags[nCol] & CR_HIDDEN) )
-                nCol += static_cast<SCsCOL>(nMovY);     //  #53697# ausgeblendete ueberspringen (s.o.)
+                nCol = sal::static_int_cast<SCsCOL>( nCol + static_cast<SCsCOL>(nMovY) );   //  #53697# skip hidden rows (see above)
             if (nCol < 0)
             {
                 nCol = MAXCOL;
@@ -1056,10 +1056,10 @@ void ScTable::UpdateDrawRef( UpdateRefMode eUpdateRefMode, SCCOL nCol1, SCROW nR
         {
             if ( eUpdateRefMode == URM_MOVE )
             {                                               // source range
-                nCol1 -= nDx;
-                nRow1 -= nDy;
-                nCol2 -= nDx;
-                nRow2 -= nDy;
+                nCol1 = sal::static_int_cast<SCCOL>( nCol1 - nDx );
+                nRow1 = sal::static_int_cast<SCROW>( nRow1 - nDy );
+                nCol2 = sal::static_int_cast<SCCOL>( nCol2 - nDx );
+                nRow2 = sal::static_int_cast<SCROW>( nRow2 - nDy );
             }
             pDrawLayer->MoveArea( nTab, nCol1,nRow1, nCol2,nRow2, nDx,nDy,
                                     (eUpdateRefMode == URM_INSDEL) );
@@ -1252,7 +1252,7 @@ void ScTable::ReplaceRangeNamesInUse(SCCOL nCol1, SCROW nRow1,
 }
 
 void ScTable::ExtendPrintArea( OutputDevice* pDev,
-                    SCCOL nStartCol, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow )
+                    SCCOL /* nStartCol */, SCROW nStartRow, SCCOL& rEndCol, SCROW nEndRow )
 {
     if ( !pColFlags || !pRowFlags )
     {
