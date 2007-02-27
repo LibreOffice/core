@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldwnd.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:23:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:02:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -455,7 +455,7 @@ void ScDPFieldWindow::MoveFieldRel( SCsCOL nDX, SCsROW nDY )
 
 //-------------------------------------------------------------------
 
-void __EXPORT ScDPFieldWindow::Paint( const Rectangle& rRect )
+void __EXPORT ScDPFieldWindow::Paint( const Rectangle& /* rRect */ )
 {
     // #124828# hiding the caption is now done from StateChanged
     Redraw();
@@ -743,6 +743,10 @@ String ScDPFieldWindow::GetDescription() const
         case TYPE_SELECT:
             sDescription = ScResId(STR_ACC_DATAPILOT_SEL_DESCR);
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return sDescription;
 }
