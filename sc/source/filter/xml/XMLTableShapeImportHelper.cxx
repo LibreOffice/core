@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:49:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:47:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,8 +88,8 @@ using namespace xmloff::token;
 XMLTableShapeImportHelper::XMLTableShapeImportHelper(
         ScXMLImport& rImp, SvXMLImportPropertyMapper *pImpMapper ) :
     XMLShapeImportHelper(rImp, rImp.GetModel(), pImpMapper ),
-    bOnTable(sal_False),
-    pAnnotationContext(NULL)
+    pAnnotationContext(NULL),
+    bOnTable(sal_False)
 {
 }
 
@@ -120,7 +120,6 @@ void XMLTableShapeImportHelper::finishShape(
     {
         if (!pAnnotationContext)
         {
-            Rectangle* pRect(NULL);
             sal_Int32 nEndX(-1);
             sal_Int32 nEndY(-1);
             sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
