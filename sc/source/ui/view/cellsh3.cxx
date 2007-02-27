@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:51:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@ void ScCellShell::Execute( SfxRequest& rReq )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     SfxBindings&        rBindings   = pTabViewShell->GetViewFrame()->GetBindings();
-    SfxApplication*     pSfxApp     = SFX_APP();
     ScModule*           pScMod      = SC_MOD();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
@@ -268,7 +267,7 @@ void ScCellShell::Execute( SfxRequest& rReq )
                         {
                             SfxStringItem   aItem( SID_ENTER_STRING, aString );
 
-                            SfxBindings& rBindings = pTabViewShell->GetViewFrame()->GetBindings();
+                            // SfxBindings& rBindings = pTabViewShell->GetViewFrame()->GetBindings();
                             const SfxPoolItem* aArgs[2];
                             aArgs[0] = &aItem;
                             aArgs[1] = NULL;
@@ -476,18 +475,18 @@ void ScCellShell::Execute( SfxRequest& rReq )
 
                         if ( pReqArgs != NULL )
                         {
-                            String aName;
-                            String aComment;
+                            String aArgName;
+                            String aArgComment;
                             const SfxPoolItem* pItem;
                             if ( pReqArgs->GetItemState( SID_SCENARIOS, TRUE, &pItem ) == SFX_ITEM_SET )
-                                aName = ((const SfxStringItem*)pItem)->GetValue();
+                                aArgName = ((const SfxStringItem*)pItem)->GetValue();
                             if ( pReqArgs->GetItemState( SID_NEW_TABLENAME, TRUE, &pItem ) == SFX_ITEM_SET )
-                                aComment = ((const SfxStringItem*)pItem)->GetValue();
+                                aArgComment = ((const SfxStringItem*)pItem)->GetValue();
 
                             aColor = Color( COL_LIGHTGRAY );        // Default
                             nFlags = 0;                             // nicht-TwoWay
 
-                            pTabViewShell->MakeScenario( aName, aComment, aColor, nFlags );
+                            pTabViewShell->MakeScenario( aArgName, aArgComment, aColor, nFlags );
                             if( ! rReq.IsAPI() )
                                 rReq.Done();
                         }
@@ -538,17 +537,18 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_ROW_HEIGHT );
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
-                    pTabViewShell->SetMarkedWidthOrHeight( FALSE, SC_SIZE_DIRECT, HMMToTwips(rUInt16Item.GetValue()) );
+                    pTabViewShell->SetMarkedWidthOrHeight( FALSE, SC_SIZE_DIRECT,
+                                    sal::static_int_cast<USHORT>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
                 else
                 {
-                    ScViewData* pViewData  = GetViewData();
+                    ScViewData* pData      = GetViewData();
                     FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
-                    USHORT      nCurHeight = pViewData->GetDocument()->
-                                                GetRowHeight( pViewData->GetCurY(),
-                                                              pViewData->GetTabNo() );
+                    USHORT      nCurHeight = pData->GetDocument()->
+                                                GetRowHeight( pData->GetCurY(),
+                                                              pData->GetTabNo() );
 //CHINA001                  ScMetricInputDlg* pDlg =
 //CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_ROW_MAN,
 //CHINA001                  nCurHeight,
@@ -590,7 +590,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_ROW_OPT_HEIGHT );
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
-                    pTabViewShell->SetMarkedWidthOrHeight( FALSE, SC_SIZE_OPTIMAL, HMMToTwips(rUInt16Item.GetValue()) );
+                    pTabViewShell->SetMarkedWidthOrHeight( FALSE, SC_SIZE_OPTIMAL,
+                                    sal::static_int_cast<USHORT>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     ScGlobal::nLastRowHeightExtra = rUInt16Item.GetValue();
 
                     if( ! rReq.IsAPI() )
@@ -642,17 +643,18 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_WIDTH );
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
-                    pTabViewShell->SetMarkedWidthOrHeight( TRUE, SC_SIZE_DIRECT, HMMToTwips(rUInt16Item.GetValue()) );
+                    pTabViewShell->SetMarkedWidthOrHeight( TRUE, SC_SIZE_DIRECT,
+                                    sal::static_int_cast<USHORT>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     if( ! rReq.IsAPI() )
                         rReq.Done();
                 }
                 else
                 {
                     FieldUnit   eMetric    = SC_MOD()->GetAppOptions().GetAppMetric();
-                    ScViewData* pViewData  = GetViewData();
-                    USHORT      nCurHeight = pViewData->GetDocument()->
-                                                GetColWidth( pViewData->GetCurX(),
-                                                             pViewData->GetTabNo() );
+                    ScViewData* pData      = GetViewData();
+                    USHORT      nCurHeight = pData->GetDocument()->
+                                                GetColWidth( pData->GetCurX(),
+                                                             pData->GetTabNo() );
 //CHINA001                  ScMetricInputDlg* pDlg =
 //CHINA001                  new ScMetricInputDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_COL_MAN,
 //CHINA001                  nCurHeight,
@@ -694,7 +696,8 @@ void ScCellShell::Execute( SfxRequest& rReq )
                     const SfxUInt16Item&  rUInt16Item = (const SfxUInt16Item&)pReqArgs->Get( FID_COL_OPT_WIDTH );
 
                     // #101390#; the value of the macro is in HMM so use HMMToTwips to convert
-                    pTabViewShell->SetMarkedWidthOrHeight( TRUE, SC_SIZE_OPTIMAL, HMMToTwips(rUInt16Item.GetValue()) );
+                    pTabViewShell->SetMarkedWidthOrHeight( TRUE, SC_SIZE_OPTIMAL,
+                                    sal::static_int_cast<USHORT>( HMMToTwips(rUInt16Item.GetValue()) ) );
                     ScGlobal::nLastColWidthExtra = rUInt16Item.GetValue();
 
                     if( ! rReq.IsAPI() )
