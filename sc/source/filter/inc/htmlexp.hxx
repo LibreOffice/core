@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:32:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,11 +99,11 @@ struct ScHTMLGraphEntry
 
     ScHTMLGraphEntry( SdrObject* pObj, const ScRange& rRange,
         const Size& rSize,  BOOL bIn, const Size& rSpace ) :
-        aRange( rRange ), pObject( pObj ), aSize( rSize ), bInCell( bIn ),
-        aSpace( rSpace ), bWritten( FALSE ) {}
+        aRange( rRange ), aSize( rSize ), aSpace( rSpace ),
+        pObject( pObj ), bInCell( bIn ), bWritten( FALSE ) {}
 };
 
-DECLARE_LIST( ScHTMLGraphList, ScHTMLGraphEntry* );
+DECLARE_LIST( ScHTMLGraphList, ScHTMLGraphEntry* )
 
 #define SC_HTML_FONTSIZES 7
 const short nIndentMax = 23;
