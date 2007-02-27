@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:43:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:48:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,35 +93,35 @@ const SfxItemPropertyMap* lcl_GetViewOptPropertyMap()
 {
     static SfxItemPropertyMap aViewOptPropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(OLD_UNO_COLROWHDR),   0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_GRIDCOLOR),    0,  &getCppuType((sal_Int32*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_COLROWHDR),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_HORSCROLL),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHEETTABS),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_VERTSCROLL),   0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_HIDESPELL),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(OLD_UNO_HORSCROLL),   0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_OUTLSYMB),     0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_VALUEHIGH),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(OLD_UNO_OUTLSYMB),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(OLD_UNO_SHEETTABS),   0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWANCHOR),   0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWCHARTS),   0,  &getCppuType((sal_Int16*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWDRAW),     0,  &getCppuType((sal_Int16*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWFORM),     0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWGRID),     0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWHELP),     0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWNOTES),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWOBJ),      0,  &getCppuType((sal_Int16*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWPAGEBR),   0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWZERO),     0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_SHOWSOLID),    0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(OLD_UNO_VALUEHIGH),   0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(OLD_UNO_VERTSCROLL),  0,  &getBooleanCppuType(),          0},
-        {MAP_CHAR_LEN(SC_UNO_VISAREA),      0,  &getCppuType((awt::Rectangle*)0),   0},
-        {MAP_CHAR_LEN(SC_UNO_ZOOMTYPE),     0,  &getCppuType((sal_Int16*)0),    0},
-        {MAP_CHAR_LEN(SC_UNO_ZOOMVALUE),    0,  &getCppuType((sal_Int16*)0),    0},
-        {0,0,0,0}
+        {MAP_CHAR_LEN(OLD_UNO_COLROWHDR),   0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_GRIDCOLOR),    0,  &getCppuType((sal_Int32*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_COLROWHDR),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_HORSCROLL),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHEETTABS),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_VERTSCROLL),   0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_HIDESPELL),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(OLD_UNO_HORSCROLL),   0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_OUTLSYMB),     0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_VALUEHIGH),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(OLD_UNO_OUTLSYMB),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(OLD_UNO_SHEETTABS),   0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWANCHOR),   0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWCHARTS),   0,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWDRAW),     0,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWFORM),     0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWGRID),     0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWHELP),     0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWNOTES),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWOBJ),      0,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWPAGEBR),   0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWZERO),     0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_SHOWSOLID),    0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(OLD_UNO_VALUEHIGH),   0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(OLD_UNO_VERTSCROLL),  0,  &getBooleanCppuType(),          0, 0},
+        {MAP_CHAR_LEN(SC_UNO_VISAREA),      0,  &getCppuType((awt::Rectangle*)0), 0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ZOOMTYPE),     0,  &getCppuType((sal_Int16*)0),    0, 0},
+        {MAP_CHAR_LEN(SC_UNO_ZOOMVALUE),    0,  &getCppuType((sal_Int16*)0),    0, 0},
+        {0,0,0,0,0,0}
     };
     return aViewOptPropertyMap_Impl;
 }
@@ -156,7 +156,7 @@ ScViewPaneBase::~ScViewPaneBase()
         EndListening(*pViewShell);
 }
 
-void ScViewPaneBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScViewPaneBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -437,22 +437,22 @@ void SAL_CALL ScViewPaneObj::release() throw()
 //  Default-ctor wird fuer SMART_REFLECTION_IMPLEMENTATION gebraucht
 
 ScTabViewObj::ScTabViewObj() :
-    SfxBaseController( NULL ),
     ScViewPaneBase( NULL, SC_VIEWPANE_ACTIVE ),
+    SfxBaseController( NULL ),
     aPropSet( lcl_GetViewOptPropertyMap() ),
-    bDrawSelModeSet(sal_False),
     aMouseClickHandlers( 0 ),
-    aActivationListeners( 0 )
+    aActivationListeners( 0 ),
+    bDrawSelModeSet(sal_False)
 {
 }
 
 ScTabViewObj::ScTabViewObj( ScTabViewShell* pViewSh ) :
-    SfxBaseController( pViewSh ),
     ScViewPaneBase( pViewSh, SC_VIEWPANE_ACTIVE ),
+    SfxBaseController( pViewSh ),
     aPropSet( lcl_GetViewOptPropertyMap() ),
-    bDrawSelModeSet(sal_False),
     aMouseClickHandlers( 0 ),
-    aActivationListeners( 0 )
+    aActivationListeners( 0 ),
+    bDrawSelModeSet(sal_False)
 {
     //! Listening oder so
 }
@@ -522,7 +522,7 @@ void ScTabViewObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     (*aActivationListeners[n])->activeSpreadsheetChanged( aEvent );
                 }
-                catch( uno::Exception e )
+                catch( uno::Exception& )
                 {
                     aActivationListeners.DeleteAndDestroy( n );
                     --n; // because it will be increased again in the loop
@@ -837,10 +837,10 @@ uno::Any SAL_CALL ScTabViewObj::getSelection() throw(uno::RuntimeException)
 
                 for (ULONG i=0; i<nMarkCount; i++)
                 {
-                    SdrObject* pObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
-                    if (pObj)
+                    SdrObject* pDrawObj = rMarkList.GetMark(i)->GetMarkedSdrObj();
+                    if (pDrawObj)
                     {
-                        uno::Reference<drawing::XShape> xShape( pObj->getUnoShape(), uno::UNO_QUERY );
+                        uno::Reference<drawing::XShape> xShape( pDrawObj->getUnoShape(), uno::UNO_QUERY );
                         if (xShape.is())
                             pShapes->add(xShape);
                     }
@@ -988,7 +988,7 @@ uno::Any SAL_CALL ScTabViewObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xPane);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTabViewObj::getElementType() throw(uno::RuntimeException)
@@ -1046,7 +1046,7 @@ ScViewPaneObj* ScTabViewObj::GetObjectByIndex_Impl(USHORT nIndex) const
             bError = TRUE;          // nicht geteilt: nur 0 gueltig
 
         if (!bError)
-            return new ScViewPaneObj( pViewSh, eWhich );
+            return new ScViewPaneObj( pViewSh, sal::static_int_cast<USHORT>(eWhich) );
     }
 
     return NULL;
@@ -1071,7 +1071,6 @@ void SAL_CALL ScTabViewObj::setActiveSheet( const uno::Reference<sheet::XSpreads
 {
     ScUnoGuard aGuard;
 
-    BOOL bDone = FALSE;
     ScTabViewShell* pViewSh = GetViewShell();
     if ( pViewSh && xActiveSheet.is() )
     {
@@ -1116,9 +1115,15 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
             if (pDrawLayer->HasObjects() && (pDrawLayer->GetPageCount() > nTab))
                 pDrawPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nTab));
 
-            if (pDrawPage)
+            SdrView* pDrawView = GetViewShell()->GetSdrView();
+
+            if (pDrawPage && pDrawView)
             {
-                Point aPos = pData->GetActiveWin()->PixelToLogic(rPoint);
+                Window* pActiveWin = pData->GetActiveWin();
+                Point aPos = pActiveWin->PixelToLogic(rPoint);
+
+                USHORT nHitLog = (USHORT) pActiveWin->PixelToLogic(
+                                 Size(pDrawView->GetHitTolerancePixel(),0)).Width();
 
                 sal_uInt32 nCount(pDrawPage->GetObjCount());
                 sal_Bool bFound(sal_False);
@@ -1126,7 +1131,7 @@ uno::Reference< uno::XInterface > ScTabViewObj::GetClickedObject(const Point& rP
                 while (i < nCount && !bFound)
                 {
                     SdrObject* pObj = pDrawPage->GetObj(i);
-                    if (pObj && pObj->IsHit(aPos, -2))
+                    if (pObj && pObj->IsHit(aPos, nHitLog))
                     {
                         xTarget.set(pObj->getUnoShape(), uno::UNO_QUERY);
                         bFound = sal_True;
@@ -1166,7 +1171,7 @@ sal_Bool ScTabViewObj::MousePressed( const awt::MouseEvent& e )
                     if (!(*aMouseClickHandlers[n])->mousePressed( aMouseEvent ))
                         bReturn = sal_True;
                 }
-                catch ( uno::Exception e )
+                catch ( uno::Exception& )
                 {
                     aMouseClickHandlers.DeleteAndDestroy(n);
                     --n; // because it will be increased again in the loop
@@ -1204,7 +1209,7 @@ sal_Bool ScTabViewObj::MouseReleased( const awt::MouseEvent& e )
                     if (!(*aMouseClickHandlers[n])->mouseReleased( aMouseEvent ))
                         bReturn = sal_True;
                 }
-                catch ( uno::Exception e )
+                catch ( uno::Exception& )
                 {
                     aMouseClickHandlers.DeleteAndDestroy(n);
                     --n; // because it will be increased again in the loop
@@ -1232,7 +1237,7 @@ void ScTabViewObj::EndMouseListening()
         {
             (*aMouseClickHandlers[n])->disposing(aEvent);
         }
-        catch ( uno::Exception e )
+        catch ( uno::Exception& )
         {
         }
     }
@@ -1256,7 +1261,7 @@ void ScTabViewObj::EndActivationListening()
         {
             (*aActivationListeners[n])->disposing(aEvent);
         }
-        catch ( uno::Exception e )
+        catch ( uno::Exception& )
         {
         }
     }
@@ -1820,7 +1825,7 @@ uno::Any SAL_CALL ScTabViewObj::getPropertyValue( const rtl::OUString& aProperty
     return aRet;
 }
 
-void SAL_CALL ScTabViewObj::addPropertyChangeListener( const ::rtl::OUString& aPropertyName,
+void SAL_CALL ScTabViewObj::addPropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
                                     const uno::Reference<beans::XPropertyChangeListener >& xListener )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
@@ -1832,7 +1837,7 @@ void SAL_CALL ScTabViewObj::addPropertyChangeListener( const ::rtl::OUString& aP
     aPropertyChgListeners.Insert( pObj, aPropertyChgListeners.Count() );
 }
 
-void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString& aPropertyName,
+void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString& /* aPropertyName */,
                                     const uno::Reference<beans::XPropertyChangeListener >& xListener )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
@@ -1851,16 +1856,16 @@ void SAL_CALL ScTabViewObj::removePropertyChangeListener( const ::rtl::OUString&
     }
 }
 
-void SAL_CALL ScTabViewObj::addVetoableChangeListener( const ::rtl::OUString& PropertyName,
-                                    const uno::Reference<beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ScTabViewObj::addVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
+                                    const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
                                     uno::RuntimeException)
 {
 }
 
-void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const ::rtl::OUString& PropertyName,
-                                    const uno::Reference<beans::XVetoableChangeListener >& aListener )
+void SAL_CALL ScTabViewObj::removeVetoableChangeListener( const ::rtl::OUString& /* PropertyName */,
+                                    const uno::Reference<beans::XVetoableChangeListener >& /* aListener */ )
                                 throw(beans::UnknownPropertyException,
                                     lang::WrappedTargetException,
                                     uno::RuntimeException)
@@ -2043,7 +2048,7 @@ sal_Int64 SAL_CALL ScTabViewObj::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -2071,7 +2076,7 @@ ScTabViewObj* ScTabViewObj::getImplementation( const uno::Reference<uno::XInterf
     ScTabViewObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScTabViewObj*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScTabViewObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
