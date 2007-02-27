@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:16:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:26:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,8 +377,8 @@ XclImpDrawObjBase::XclImpDrawObjBase( const XclImpRoot& rRoot ) :
     mnShapeId( 0 ),
     mnShapeFlags( 0 ),
     mnShapeBlipId( 0 ),
-    mbAreaObj( false ),
     mbValid( true ),
+    mbAreaObj( false ),
     mbInsSdr( true )
 {
 }
@@ -441,7 +441,7 @@ XclImpDrawObjRef XclImpDrawObjBase::ReadObjCmo( XclImpStream& rStrm )
     return xDrawObj;
 }
 
-void XclImpDrawObjBase::ReadSubRecord( XclImpStream& rStrm, sal_uInt16 nSubRecId, sal_uInt16 nSubRecSize )
+void XclImpDrawObjBase::ReadSubRecord( XclImpStream& /*rStrm*/, sal_uInt16 /*nSubRecId*/, sal_uInt16 /*nSubRecSize*/ )
 {
 }
 
@@ -517,7 +517,7 @@ sal_Size XclImpDrawObjBase::DoGetProgressSize() const
     return 1;
 }
 
-void XclImpDrawObjBase::DoProcessSdrObj( SdrObject& rSdrObj ) const
+void XclImpDrawObjBase::DoProcessSdrObj( SdrObject& /*rSdrObj*/ ) const
 {
     // trace if object is not printable
     if( !IsPrintable() )
@@ -658,7 +658,7 @@ ScfPropertySet XclImpControlObjHelper::GetControlPropSet() const
     return ScfPropertySet( mxCtrlModel );
 }
 
-void XclImpControlObjHelper::ConvertSheetLinks( const XclImpRoot& rRoot, SdrObject& rSdrObj ) const
+void XclImpControlObjHelper::ConvertSheetLinks( const XclImpRoot& rRoot, SdrObject& /* rSdrObj */ ) const
 {
     // get service factory from Calc document
     Reference< XMultiServiceFactory > xFactory;
@@ -1275,7 +1275,7 @@ void XclImpOleObj::ReadPictFmla( XclImpStream& rStrm, sal_uInt16 nRecSize )
         else
             maStorageName = EXC_STORAGE_OLE_EMBEDDED;
         sal_Char aBuf[ 2 * sizeof( sal_uInt32 ) + 1 ];
-        sprintf( aBuf, "%08X", nStorageId );    // #100211# - checked
+        sprintf( aBuf, "%08X", static_cast< unsigned int >( nStorageId ) );    // #100211# - checked
         maStorageName.AppendAscii( aBuf );
     }
 }
@@ -1475,7 +1475,7 @@ ScRange XclImpDffManager::GetUsedArea( SCTAB nScTab ) const
 // virtual functions ----------------------------------------------------------
 
 void XclImpDffManager::ProcessClientAnchor2( SvStream& rEscherStrm,
-        DffRecordHeader& rHeader, void* pClientData, DffObjData& rObjData )
+        DffRecordHeader& rHeader, void* /*pClientData*/, DffObjData& rObjData )
 {
     // find the OBJ record data related to the processed shape
     if( XclImpDrawObjBase* pDrawObj = mrObjManager.FindDrawObj( rObjData.rSpHd ).get() )
@@ -1486,7 +1486,7 @@ void XclImpDffManager::ProcessClientAnchor2( SvStream& rEscherStrm,
 }
 
 SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
-        DffObjData& rObjData, void* pClientData, Rectangle& rTextRect, SdrObject* pOldSdrObj )
+        DffObjData& rObjData, void* pClientData, Rectangle& /*rTextRect*/, SdrObject* pOldSdrObj )
 {
     /*  pOldSdrObj passes a generated SdrObject. This function owns this object
         and can modify it. The function has either to return it back to caller
@@ -1590,7 +1590,7 @@ SdrObject* XclImpDffManager::ProcessObj( SvStream& rEscherStrm,
     return xSdrObj.release();
 }
 
-ULONG XclImpDffManager::Calc_nBLIPPos( ULONG nOrgVal, ULONG nStreamPos ) const
+ULONG XclImpDffManager::Calc_nBLIPPos( ULONG /*nOrgVal*/, ULONG nStreamPos ) const
 {
     return nStreamPos + 4;
 }
