@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:07:19 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:13:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,9 +90,9 @@ using namespace com::sun::star;
 |*
 \************************************************************************/
 
-FuSelection::FuSelection(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuSelection::FuSelection(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                SdrModel* pDoc, SfxRequest& rReq ) :
-    FuDraw(pViewSh, pWin, pView, pDoc, rReq),
+    FuDraw(pViewSh, pWin, pViewP, pDoc, rReq),
     bVCAction(FALSE)
 {
 }
@@ -155,8 +155,8 @@ BOOL __EXPORT FuSelection::MouseButtonDown(const MouseEvent& rMEvt)
             const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
             if( rMarkList.GetMarkCount() == 1 )
             {
-                SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                if( pObj && pObj->ISA( SdrCaptionObj )&& pObj->GetLayer() == SC_LAYER_INTERN)
+                SdrObject* pMarkedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                if( pMarkedObj && pMarkedObj->ISA( SdrCaptionObj )&& pMarkedObj->GetLayer() == SC_LAYER_INTERN)
                 {
                     // move using the valid caption handles for note text box.
                     if(pHdl && (pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC))
@@ -556,7 +556,7 @@ void FuSelection::Deactivate()
     /**************************************************************************
     * Hide Cursor
     **************************************************************************/
-    BOOL bShowCursor = FALSE;
+//    BOOL bShowCursor = FALSE;
 //! pOutlinerView = pView->GetOutlinerView(pWindow, bShowCursor);
 
 //  pView->SetDragMode(SDRDRAG_MOVE);
