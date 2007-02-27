@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xecontent.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -582,13 +582,13 @@ private:
     sal_uInt32          mnFontColorId;      /// Font color ID.
     sal_uInt8           mnType;             /// Type of the condition (cell/formula).
     sal_uInt8           mnOperator;         /// Comparison operator for cell type.
+    bool                mbFontUsed;         /// true = Any font attribute used.
     bool                mbHeightUsed;       /// true = Font height used.
     bool                mbWeightUsed;       /// true = Font weight used.
     bool                mbColorUsed;        /// true = Font color used.
     bool                mbUnderlUsed;       /// true = Font underline type used.
     bool                mbItalicUsed;       /// true = Font posture used.
     bool                mbStrikeUsed;       /// true = Font strikeout used.
-    bool                mbFontUsed;         /// true = Any font attribute used.
     bool                mbBorderUsed;       /// true = Border attribute used.
     bool                mbPattUsed;         /// true = Pattern attribute used.
 };
@@ -1107,7 +1107,7 @@ XclExpDV& XclExpDval::SearchOrCreateDv( ULONG nScHandle )
         size_t nFirstPos = 0;
         size_t nLastPos = maDVList.Size() - 1;
         bool bLoop = true;
-        ULONG nCurrScHandle;
+        ULONG nCurrScHandle = ::std::numeric_limits< ULONG >::max();
         while( (nFirstPos <= nLastPos) && bLoop )
         {
             nCurrPos = (nFirstPos + nLastPos) / 2;
@@ -1249,7 +1249,6 @@ void XclExpWebQuery::Save( XclExpStream& rStrm )
 XclExpWebQueryBuffer::XclExpWebQueryBuffer( const XclExpRoot& rRoot )
 {
     SCTAB nScTab = rRoot.GetCurrScTab();
-    ScDocument& rDoc = rRoot.GetDoc();
     SfxObjectShell* pShell = rRoot.GetDocShell();
     if( !pShell ) return;
     ScfPropertySet aModelProp( pShell->GetModel() );
