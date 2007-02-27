@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:46:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:45:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -439,7 +439,6 @@ sal_Bool ScMyEmptyDatabaseRangesContainer::GetFirstAddress( table::CellAddress& 
 void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
 {
     rMyCell.bHasEmptyDatabase = sal_False;
-    sal_Int32 nTable(rMyCell.aCellAddress.Sheet);
     ScMyEmptyDatabaseRangeList::iterator aItr(aDatabaseList.begin());
     if( aItr != aDatabaseList.end() )
     {
@@ -606,6 +605,8 @@ void ScMyDetectiveOpContainer::Sort()
 ScMyCell::ScMyCell() :
     aShapeList(),
     aDetectiveObjVec(),
+    nValidationIndex(-1),
+    bIsAutoStyle( sal_False ),
     bHasShape( sal_False ),
     bIsMergedBase( sal_False ),
     bIsCovered( sal_False ),
@@ -613,16 +614,14 @@ ScMyCell::ScMyCell() :
     bHasEmptyDatabase( sal_False ),
     bHasDetectiveObj( sal_False ),
     bHasDetectiveOp( sal_False ),
-    bIsMatrixBase( sal_False ),
-    bIsMatrixCovered( sal_False ),
-    bHasAnnotation( sal_False ),
-    bIsAutoStyle( sal_False ),
     bIsEditCell( sal_False ),
     bKnowWhetherIsEditCell( sal_False ),
     bHasStringValue( sal_False ),
     bHasDoubleValue( sal_False ),
     bHasXText( sal_False ),
-    nValidationIndex(-1)
+    bIsMatrixBase( sal_False ),
+    bIsMatrixCovered( sal_False ),
+    bHasAnnotation( sal_False )
 {
 }
 
@@ -642,15 +641,15 @@ sal_Bool ScMyExportAnnotation::operator<(const ScMyExportAnnotation& rAnno) cons
 
 
 ScMyNotEmptyCellsIterator::ScMyNotEmptyCellsIterator(ScXMLExport& rTempXMLExport)
-    : rExport(rTempXMLExport),
-    pCellItr(NULL),
-    pShapes(NULL),
+    : pShapes(NULL),
     pNoteShapes(NULL),
+    pEmptyDatabaseRanges(NULL),
     pMergedRanges(NULL),
     pAreaLinks(NULL),
-    pEmptyDatabaseRanges(NULL),
     pDetectiveObj(NULL),
     pDetectiveOp(NULL),
+    rExport(rTempXMLExport),
+    pCellItr(NULL),
     nCurrentTable(SCTAB_MAX)
 {
 }
