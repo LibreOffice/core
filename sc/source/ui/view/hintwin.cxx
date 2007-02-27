@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hintwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:02:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:53:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ ScHintWindow::~ScHintWindow()
 }
 
 
-void __EXPORT ScHintWindow::Paint( const Rectangle& rRect )
+void __EXPORT ScHintWindow::Paint( const Rectangle& /* rRect */ )
 {
     SetFont( aHeadFont );
     DrawText( Point(HINT_MARGIN,HINT_MARGIN), aTitle );
