@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpgroup.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:53:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -417,8 +417,8 @@ ScDPGroupDimension::ScDPGroupDimension( const ScDPGroupDimension& rOther ) :
     nSourceDim( rOther.nSourceDim ),
     nGroupDim( rOther.nGroupDim ),
     aGroupName( rOther.aGroupName ),
-    aItems( rOther.aItems ),
     pDateHelper( NULL ),
+    aItems( rOther.aItems ),
     pCollection( NULL )                 // collection isn't copied - allocated on demand
 {
     if ( rOther.pDateHelper )
@@ -523,8 +523,8 @@ void ScDPGroupDimension::DisposeData()
 // -----------------------------------------------------------------------
 
 ScDPNumGroupDimension::ScDPNumGroupDimension() :
-    pCollection( NULL ),
     pDateHelper( NULL ),
+    pCollection( NULL ),
     bHasNonInteger( false ),
     cDecSeparator( 0 )
 {
@@ -532,8 +532,8 @@ ScDPNumGroupDimension::ScDPNumGroupDimension() :
 
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupInfo& rInfo ) :
     aGroupInfo( rInfo ),
-    pCollection( NULL ),
     pDateHelper( NULL ),
+    pCollection( NULL ),
     bHasNonInteger( false ),
     cDecSeparator( 0 )
 {
@@ -541,8 +541,8 @@ ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupInfo& rInfo ) :
 
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupDimension& rOther ) :
     aGroupInfo( rOther.aGroupInfo ),
-    pCollection( NULL ),                // collection isn't copied - allocated on demand
     pDateHelper( NULL ),
+    pCollection( NULL ),                // collection isn't copied - allocated on demand
     bHasNonInteger( false ),
     cDecSeparator( 0 )
 {
@@ -889,7 +889,7 @@ const TypedStrCollection& ScDPGroupTableData::GetColumnEntries(long nColumn)
 
     if ( nColumn >= nSourceCount )
     {
-        if ( nColumn == nSourceCount + aGroups.size() )     // data layout dimension?
+        if ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )     // data layout dimension?
             nColumn = nSourceCount;                         // index of data layout in source data
         else
         {
@@ -915,7 +915,7 @@ String ScDPGroupTableData::getDimensionName(long nColumn)
 {
     if ( nColumn >= nSourceCount )
     {
-        if ( nColumn == nSourceCount + aGroups.size() )     // data layout dimension?
+        if ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )     // data layout dimension?
             nColumn = nSourceCount;                         // index of data layout in source data
         else
             return aGroups[nColumn - nSourceCount].GetName();
@@ -927,14 +927,14 @@ String ScDPGroupTableData::getDimensionName(long nColumn)
 BOOL ScDPGroupTableData::getIsDataLayoutDimension(long nColumn)
 {
     // position of data layout dimension is moved from source data
-    return ( nColumn == nSourceCount + aGroups.size() );    // data layout dimension?
+    return ( nColumn == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) );    // data layout dimension?
 }
 
 BOOL ScDPGroupTableData::IsDateDimension(long nDim)
 {
     if ( nDim >= nSourceCount )
     {
-        if ( nDim == nSourceCount + aGroups.size() )        // data layout dimension?
+        if ( nDim == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
             nDim = nSourceCount;                            // index of data layout in source data
         else
             nDim = aGroups[nDim - nSourceCount].GetSourceDim();  // look at original dimension
@@ -947,7 +947,7 @@ UINT32 ScDPGroupTableData::GetNumberFormat(long nDim)
 {
     if ( nDim >= nSourceCount )
     {
-        if ( nDim == nSourceCount + aGroups.size() )        // data layout dimension?
+        if ( nDim == sal::static_int_cast<long>( nSourceCount + aGroups.size() ) )        // data layout dimension?
             nDim = nSourceCount;                            // index of data layout in source data
         else
             nDim = aGroups[nDim - nSourceCount].GetSourceDim();  // look at original dimension
@@ -1057,8 +1057,6 @@ void ScDPGroupTableData::FillGroupValues( ScDPItemData* pItemData, long nCount, 
 
 BOOL ScDPGroupTableData::GetNextRow( const ScDPTableIteratorParam& rParam )
 {
-    long nGroupedColumns = aGroups.size();
-
     //
     //  call source with a param containing only dimension numbers valid for source
     //
