@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:20:04 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:34:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,8 +111,8 @@ struct ExcelChartData
     String                  aLastLabel;         // letzter SERIESTEXT-Label
     SfxItemSet*             pAttrs;             // Attribute
     ExcelChartData*         pNext;              // wer weiss schon...
-    SCROW                   nRow1, nRow2;
     SCCOL                   nCol1, nCol2;
+    SCROW                   nRow1, nRow2;
     SCTAB                   nTab1, nTab2;   // Quellbereich
     SCTAB                   nBaseTab;
     UINT32                  nObjNum;
@@ -249,8 +249,7 @@ protected:
 
     // ---------------------------------------------------------------
     void                    Formula( const XclAddress& rXclPos,
-                                UINT16 nXF, UINT16 nFormLen, double &rCurVal,
-                                BYTE nFlag, BOOL bShrFmla );
+                                UINT16 nXF, UINT16 nFormLen, double &rCurVal, BOOL bShrFmla );
                                             //      -> excform.cxx
 
     virtual void            EndSheet( void );
