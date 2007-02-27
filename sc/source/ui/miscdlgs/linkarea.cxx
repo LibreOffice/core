@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkarea.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:48:24 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ String ScLinkedAreaDlg::GetSource()
 ULONG ScLinkedAreaDlg::GetRefresh()
 {
     if ( aBtnReload.IsChecked() )
-        return aNfDelay.GetValue();
+        return sal::static_int_cast<ULONG>( aNfDelay.GetValue() );
     else
         return 0;   // disabled
 }
