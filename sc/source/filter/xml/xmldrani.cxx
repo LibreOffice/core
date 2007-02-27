@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldrani.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:52:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:50:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ ScXMLDatabaseRangesContext::ScXMLDatabaseRangesContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // has no attributes
@@ -150,31 +150,31 @@ ScXMLDatabaseRangeContext::ScXMLDatabaseRangeContext( ScXMLImport& rImport,
                                       const ::com::sun::star::uno::Reference<
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
+    sDatabaseRangeName(ScGlobal::GetRscString(STR_DB_NONAME)),
+    aSortSequence(),
+    eOrientation(table::TableOrientation_ROWS),
     nRefresh(0),
     nSubTotalsUserListIndex(0),
     bContainsSort(sal_False),
     bContainsSubTotal(sal_False),
+    bNative(sal_True),
     bIsSelection(sal_False),
     bKeepFormats(sal_False),
     bMoveCells(sal_False),
     bStripData(sal_False),
-    eOrientation(table::TableOrientation_ROWS),
     bContainsHeader(sal_True),
     bAutoFilter(sal_False),
-    bFilterCopyOutputData(sal_False),
-    bFilterIsCaseSensitive(sal_False),
-    bFilterSkipDuplicates(sal_False),
-    bFilterUseRegularExpressions(sal_False),
-    bFilterConditionSourceRange(sal_False),
     bSubTotalsBindFormatsToContent(sal_False),
     bSubTotalsIsCaseSensitive(sal_False),
     bSubTotalsInsertPageBreaks(sal_False),
     bSubTotalsSortGroups(sal_False),
     bSubTotalsEnabledUserList(sal_False),
     bSubTotalsAscending(sal_True),
-    bNative(sal_True),
-    aSortSequence(),
-    sDatabaseRangeName(ScGlobal::GetRscString(STR_DB_NONAME))
+    bFilterCopyOutputData(sal_False),
+    bFilterIsCaseSensitive(sal_False),
+    bFilterSkipDuplicates(sal_False),
+    bFilterUseRegularExpressions(sal_False),
+    bFilterConditionSourceRange(sal_False)
 {
     nSourceType = sheet::DataImportMode_NONE;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -693,7 +693,6 @@ ScXMLConResContext::ScXMLConResContext( ScXMLImport& rImport,
 {
     rtl::OUString sConRes;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
-    const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDatabaseRangeSourceSQLAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
         rtl::OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -719,7 +718,7 @@ ScXMLConResContext::~ScXMLConResContext()
 SvXMLImportContext *ScXMLConResContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -881,7 +880,7 @@ ScXMLSortGroupsContext::~ScXMLSortGroupsContext()
 SvXMLImportContext *ScXMLSortGroupsContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = 0;
 
@@ -1001,7 +1000,7 @@ ScXMLSubTotalFieldContext::~ScXMLSubTotalFieldContext()
 SvXMLImportContext *ScXMLSubTotalFieldContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = 0;
 
