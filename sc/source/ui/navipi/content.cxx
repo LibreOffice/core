@@ -4,9 +4,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:55:04 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,7 @@ ScContentTree::ScContentTree( Window* pParent, const ResId& rResId ) :
 
     SetNodeDefaultImages();
 
-    SetDoubleClickHdl( LINK( this, ScContentTree, DoubleClickHdl ) );
+    SetDoubleClickHdl( LINK( this, ScContentTree, ContentDoubleClickHdl ) );
 }
 
 ScContentTree::~ScContentTree()
@@ -299,7 +299,7 @@ String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
     return aRet;
 }
 
-IMPL_LINK( ScContentTree, DoubleClickHdl, ScContentTree *, EMPTYARG )
+IMPL_LINK( ScContentTree, ContentDoubleClickHdl, ScContentTree *, EMPTYARG )
 {
     USHORT nType;
     ULONG nChild;
@@ -409,7 +409,7 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
                             Expand( pEntry );
                     }
                     else
-                        DoubleClickHdl(0);      // select content as if double clicked
+                        ContentDoubleClickHdl(0);      // select content as if double clicked
                 }
 
                 bUsed = TRUE;
@@ -433,22 +433,22 @@ void ScContentTree::KeyInput( const KeyEvent& rKEvt )
 //  return pParentWindow->QueryDrop(rEvt);      // Drop auf Navigator
 //}
 
-sal_Int8 ScContentTree::AcceptDrop( const AcceptDropEvent& rEvt )
+sal_Int8 ScContentTree::AcceptDrop( const AcceptDropEvent& /* rEvt */ )
 {
     return DND_ACTION_NONE;
 }
 
-sal_Int8 ScContentTree::ExecuteDrop( const ExecuteDropEvent& rEvt )
+sal_Int8 ScContentTree::ExecuteDrop( const ExecuteDropEvent& /* rEvt */ )
 {
     return DND_ACTION_NONE;
 }
 
-void ScContentTree::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
+void ScContentTree::StartDrag( sal_Int8 /* nAction */, const Point& /* rPosPixel */ )
 {
     DoDrag();
 }
 
-void ScContentTree::DragFinished( sal_Int8 nAction )
+void ScContentTree::DragFinished( sal_Int8 /* nAction */ )
 {
 }
 
@@ -718,7 +718,7 @@ void ScContentTree::GetAreaNames()
             }
 #ifndef ICC
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
-                &ScRangeData::QsortNameCompare );
+                &ScRangeData_QsortNameCompare );
 #else
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
                 ICCQsortNameCompare );
@@ -1080,7 +1080,7 @@ void lcl_DoDragObject( ScDocShell* pSrcShell, const String& rName, USHORT nType,
     {
         BOOL bOle = ( nType == SC_CONTENT_OLEOBJECT );
         BOOL bGraf = ( nType == SC_CONTENT_GRAPHIC );
-        USHORT nDrawId = bOle ? OBJ_OLE2 : ( bGraf ? OBJ_GRAF : OBJ_GRUP );
+        USHORT nDrawId = sal::static_int_cast<USHORT>( bOle ? OBJ_OLE2 : ( bGraf ? OBJ_GRAF : OBJ_GRUP ) );
         SCTAB nTab = 0;
         SdrObject* pObject = pModel->GetNamedObject( rName, nDrawId, nTab );
         if (pObject)
@@ -1484,7 +1484,7 @@ void ScContentTree::SelectDoc(const String& rName)      // rName wie im Menue/Li
 
 void ScContentTree::ApplySettings()
 {
-    const ScNavigatorSettings* pSettings = pParentWindow->GetSettings();
+    const ScNavigatorSettings* pSettings = pParentWindow->GetNavigatorSettings();
     if( pSettings )
     {
         USHORT nRootSel = pSettings->GetRootSelected();
@@ -1519,7 +1519,7 @@ void ScContentTree::ApplySettings()
 
 void ScContentTree::StoreSettings() const
 {
-    ScNavigatorSettings* pSettings = pParentWindow->GetSettings();
+    ScNavigatorSettings* pSettings = pParentWindow->GetNavigatorSettings();
     if( pSettings )
     {
         for( USHORT nEntry = 1; nEntry < SC_CONTENT_COUNT; ++nEntry )
