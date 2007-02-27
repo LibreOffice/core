@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen2.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,7 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 }
 
 
-IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, pTimer )
+IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, EMPTYARG )
 {
     if ( ScDdeLink::IsInUpdate() )      // nicht verschachteln
     {
@@ -1346,7 +1346,7 @@ void ScDocument::SetLostData()
     bLostData = TRUE;
 }
 
-void ScDocument::DeleteNumberFormat( const sal_uInt32* pDelKeys, sal_uInt32 nCount )
+void ScDocument::DeleteNumberFormat( const sal_uInt32* /* pDelKeys */, sal_uInt32 /* nCount */ )
 {
 /*
     for (ULONG i = 0; i < nCount; i++)
@@ -1707,7 +1707,7 @@ ULONG ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
     if (bValid)
     {
-        BOOL bOldAutoCalcSrc;
+        BOOL bOldAutoCalcSrc = FALSE;
         BOOL bOldAutoCalc = GetAutoCalc();
         SetAutoCalc( FALSE );   // Mehrfachberechnungen vermeiden
         SetNoListening( TRUE );
@@ -1910,10 +1910,10 @@ void ScDocument::SetChangeViewSettings(const ScChangeViewSettings& rNew)
 
 ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
 {
-    ScFieldEditEngine* pEditEngine = NULL;
+    ScFieldEditEngine* pNewEditEngine = NULL;
     if (!pCacheFieldEditEngine)
     {
-        pEditEngine = new ScFieldEditEngine( GetEnginePool(),
+        pNewEditEngine = new ScFieldEditEngine( GetEnginePool(),
             GetEditPool(), FALSE );
     }
     else
@@ -1926,10 +1926,10 @@ ScFieldEditEngine* ScDocument::CreateFieldEditEngine()
                 pCacheFieldEditEngine->SetUpdateMode(TRUE);
         }
 
-        pEditEngine = pCacheFieldEditEngine;
+        pNewEditEngine = pCacheFieldEditEngine;
         pCacheFieldEditEngine = NULL;
     }
-    return pEditEngine;
+    return pNewEditEngine;
 }
 
 void ScDocument::DisposeFieldEditEngine(ScFieldEditEngine*& rpEditEngine)
