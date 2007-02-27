@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:19:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:32:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,8 @@ public:
 class XclImpAutoFilterBuffer : private List
 {
 private:
+    using                       List::Insert;
+
     UINT16                      nAFActiveCount;
 
     inline XclImpAutoFilterData* _First()   { return (XclImpAutoFilterData*) List::First(); }
