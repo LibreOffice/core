@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strindlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:34:57 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:33:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,11 @@ ScStringInputDlg::ScStringInputDlg( Window*         pParent,
                                     ULONG nHelpId    ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_STRINPUT ) ),
     //
+    aFtEditTitle    ( this, ScResId( FT_LABEL ) ),
     aEdInput        ( this, ScResId( ED_INPUT ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-    aFtEditTitle    ( this, ScResId( FT_LABEL ) )
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     SetHelpId( nHelpId );
     SetText( rTitle );
