@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview3.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:07:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:57:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,8 +194,6 @@ void ScTabView::ClickCursor( SCCOL nPosX, SCROW nPosY, BOOL bControl )
     {
         DoneRefMode( FALSE );
 
-        SCTAB nTab = aViewData.GetTabNo();
-        ScDocument* pDoc = aViewData.GetDocument();
         if (bControl)
             SC_MOD()->AddRefEntry();
 
@@ -579,16 +577,16 @@ void ScTabView::TestHintWindow()
                 // HintWindow anlegen, bestimmt seine Groesse selbst
                 pInputHintWindow = new ScHintWindow( pFrameWin, aTitle, aMessage );
                 Size aHintSize = pInputHintWindow->GetSizePixel();
-                Size aFrameSize = pFrameWin->GetOutputSizePixel();
+                Size aFrameWinSize = pFrameWin->GetOutputSizePixel();
 
                 // passende Position finden
                 //  erster Versuch: unter dem Cursor
                 Point aHintPos( aPos.X() + nSizeXPix / 2, aPos.Y() + nSizeYPix + 3 );
-                if ( aHintPos.Y() + aHintSize.Height() > aFrameSize.Height() )
+                if ( aHintPos.Y() + aHintSize.Height() > aFrameWinSize.Height() )
                 {
                     // zweiter Versuch: rechts vom Cursor
                     aHintPos = Point( aPos.X() + nSizeXPix + 3, aPos.Y() + nSizeYPix / 2 );
-                    if ( aHintPos.X() + aHintSize.Width() > aFrameSize.Width() )
+                    if ( aHintPos.X() + aHintSize.Width() > aFrameWinSize.Width() )
                     {
                         // dritter Versuch: ueber dem Cursor
                         aHintPos = Point( aPos.X() + nSizeXPix / 2,
@@ -597,18 +595,18 @@ void ScTabView::TestHintWindow()
                         {
                             // oben und unten kein Platz - dann Default und abschneiden
                             aHintPos = Point( aPos.X() + nSizeXPix / 2, aPos.Y() + nSizeYPix + 3 );
-                            aHintSize.Height() = aFrameSize.Height() - aHintPos.Y();
+                            aHintSize.Height() = aFrameWinSize.Height() - aHintPos.Y();
                             pInputHintWindow->SetSizePixel( aHintSize );
                         }
                     }
                 }
 
                 //  X anpassen
-                if ( aHintPos.X() + aHintSize.Width() > aFrameSize.Width() )
-                    aHintPos.X() = aFrameSize.Width() - aHintSize.Width();
+                if ( aHintPos.X() + aHintSize.Width() > aFrameWinSize.Width() )
+                    aHintPos.X() = aFrameWinSize.Width() - aHintSize.Width();
                 //  Y anpassen
-                if ( aHintPos.Y() + aHintSize.Height() > aFrameSize.Height() )
-                    aHintPos.Y() = aFrameSize.Height() - aHintSize.Height();
+                if ( aHintPos.Y() + aHintSize.Height() > aFrameWinSize.Height() )
+                    aHintPos.Y() = aFrameWinSize.Height() - aHintSize.Height();
 
                 pInputHintWindow->SetPosPixel( aHintPos );
                 pInputHintWindow->ToTop();
@@ -1327,6 +1325,10 @@ BOOL ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
         {
             case MOD_NONE:  MoveCursorRel( nDX, nDY, SC_FOLLOW_LINE, bSel );    break;
             case MOD_CTRL:  MoveCursorArea( nDX, nDY, SC_FOLLOW_JUMP, bSel );   break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         // always TRUE to suppress changes of col/row size (ALT+CURSOR)
         return TRUE;
@@ -1341,6 +1343,10 @@ BOOL ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
             case MOD_NONE:  MoveCursorPage( 0, static_cast<SCsCOLROW>(nDX), SC_FOLLOW_FIX, bSel );  break;
             case MOD_ALT:   MoveCursorPage( nDX, 0, SC_FOLLOW_FIX, bSel );  break;
             case MOD_CTRL:  SelectNextTab( nDX );                           break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         return TRUE;
     }
@@ -1354,6 +1360,10 @@ BOOL ScTabView::MoveCursorKeyInput( const KeyEvent& rKeyEvent )
         {
             case MOD_NONE:  MoveCursorEnd( nDX, 0, eMode, bSel );   break;
             case MOD_CTRL:  MoveCursorEnd( nDX, static_cast<SCsCOLROW>(nDX), eMode, bSel ); break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         return TRUE;
     }
@@ -1578,7 +1588,7 @@ void ScTabView::SetTabNo( SCTAB nTab, BOOL bNew, BOOL bExtendSelection )
         FmFormShell* pFormSh = aViewData.GetViewShell()->GetFormShell();
         if (pFormSh)
         {
-            BOOL bAllowed = pFormSh->PrepareClose( TRUE );
+            BOOL bAllowed = sal::static_int_cast<BOOL>( pFormSh->PrepareClose( TRUE ) );
             if (!bAllowed)
             {
                 //! Fehlermeldung? oder macht das die FormShell selber?
@@ -1874,7 +1884,7 @@ void ScTabView::KillEditView( BOOL bNoPaint )
         if ( pInputHdl )
         {
             ScInputWindow* pInputWin = pInputHdl->GetInputWindow();
-            if (pInputWin && pInputWin->IsActive())
+            if (pInputWin && pInputWin->IsInputActive())
                 bGrabFocus = TRUE;
         }
     }
@@ -2197,8 +2207,8 @@ long ScTabView::DoChartSelection( ChartSelectionInfo &rInfo, const SchMemChart& 
             ScRangeListRef xRanges = aArr.GetRangeList();
             if (xRanges.Is())
             {
-                USHORT nCount = xRanges->Count();
-                USHORT i;
+                ULONG nCount = xRanges->Count();
+                ULONG i;
                 if (!bManualColor)
                 {
                     ScBackgroundCollector aColl( aViewData.GetDocument() );
@@ -2225,8 +2235,8 @@ long ScTabView::DoChartSelection( ChartSelectionInfo &rInfo, const SchMemChart& 
                             static_cast<SCSIZE>(rInfo.nCol));
                     if (xRanges.Is())
                     {
-                        USHORT nCount = xRanges->Count();
-                        USHORT i;
+                        ULONG nCount = xRanges->Count();
+                        ULONG i;
                         if (!bManualColor)
                         {
                             ScBackgroundCollector aColl( aViewData.GetDocument() );
@@ -2246,8 +2256,8 @@ long ScTabView::DoChartSelection( ChartSelectionInfo &rInfo, const SchMemChart& 
                             static_cast<SCSIZE>(rInfo.nRow));
                     if (xRanges.Is())
                     {
-                        USHORT nCount = xRanges->Count();
-                        USHORT i;
+                        ULONG nCount = xRanges->Count();
+                        ULONG i;
                         if (!bManualColor)
                         {
                             ScBackgroundCollector aColl( aViewData.GetDocument() );
@@ -2450,14 +2460,14 @@ void ScTabView::PaintLeftArea( SCROW nStartRow, SCROW nEndRow )
 
 //  InvertBlockMark - Block invertieren
 
-void ScTabView::InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
-                                SCCOL nBlockEndX, SCROW nBlockEndY)
+void ScTabView::InvertBlockMark(SCCOL nStartX, SCROW nStartY,
+                                SCCOL nEndX, SCROW nEndY)
 {
     if ( !aViewData.IsActive() )
         return;                                 // invertiert wird nur auf aktiver View
 
-    PutInOrder( nBlockStartX, nBlockEndX );
-    PutInOrder( nBlockStartY, nBlockEndY );
+    PutInOrder( nStartX, nEndX );
+    PutInOrder( nStartY, nEndY );
 
     ScMarkData& rMark = aViewData.GetMarkData();
     ScDocShell* pDocSh = aViewData.GetDocShell();
@@ -2468,7 +2478,7 @@ void ScTabView::InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
     {
         //  if paint is locked, avoid repeated inverting
         //  add repaint areas to paint lock data instead
-        pDocSh->PostPaint( nBlockStartX,nBlockStartY,nTab, nBlockEndX,nBlockEndY,nTab, PAINT_GRID );
+        pDocSh->PostPaint( nStartX,nStartY,nTab, nEndX,nEndY,nTab, PAINT_GRID );
         return;
     }
 
@@ -2478,7 +2488,7 @@ void ScTabView::InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
     BOOL bSingle = rMark.IsMultiMarked();
 #endif
 
-    BOOL bMerge = pDoc->HasAttrib( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab,
+    BOOL bMerge = pDoc->HasAttrib( nStartX, nStartY, nTab, nEndX, nEndY, nTab,
                                     HASATTR_MERGED | HASATTR_OVERLAPPED );
 
     USHORT i;
@@ -2487,7 +2497,7 @@ void ScTabView::InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
         for (i=0; i<4; i++)
             if (pGridWin[i])
                 if (pGridWin[i]->IsVisible())
-                    pGridWin[i]->InvertSimple( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY,
+                    pGridWin[i]->InvertSimple( nStartX, nStartY, nEndX, nEndY,
                                                 bMerge, bBlockNeg );
     }
     else
@@ -2497,12 +2507,12 @@ void ScTabView::InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
                 if (pGridWin[i]->IsVisible())
                 {
                     ScSplitPos ePos = (ScSplitPos) i;
-                    Point aStartPoint = aViewData.GetScrPos( nBlockStartX, nBlockStartY, ePos );
-                    Point aEndPoint = aViewData.GetScrPos( nBlockEndX+1, nBlockEndY+1, ePos );
+                    Point aStartPoint = aViewData.GetScrPos( nStartX, nStartY, ePos );
+                    Point aEndPoint = aViewData.GetScrPos( nEndX+1, nEndY+1, ePos );
                     if ( pDoc->IsLayoutRTL( nTab ) )
                     {
                         long nTemp = aStartPoint.X();
-                        aStartPoint.X() = aEndPoint.X() + 1;    // +1 - excluding start of nBlockEndX+1
+                        aStartPoint.X() = aEndPoint.X() + 1;    // +1 - excluding start of nEndX+1
                         aEndPoint.X() = nTemp;
                     }
                     else
@@ -2528,14 +2538,14 @@ void ScTabView::InvertBlockMark(SCCOL nBlockStartX, SCROW nBlockStartY,
     {
         ScRange aMarkRange;
         rMark.GetMarkArea( aMarkRange );
-        if ( aMarkRange.aStart.Col() <= nBlockStartX && aMarkRange.aEnd.Col() >= nBlockEndX &&
-             aMarkRange.aStart.Row() <= nBlockStartY && aMarkRange.aEnd.Row() >= nBlockEndY )
+        if ( aMarkRange.aStart.Col() <= nStartX && aMarkRange.aEnd.Col() >= nEndX &&
+             aMarkRange.aStart.Row() <= nStartY && aMarkRange.aEnd.Row() >= nEndY )
         {
             bHide = FALSE;              // der ganze Bereich ist markiert
         }
     }
 
-    Rectangle aMMRect = pDoc->GetMMRect(nBlockStartX,nBlockStartY,nBlockEndX,nBlockEndY, nTab);
+    Rectangle aMMRect = pDoc->GetMMRect(nStartX,nStartY,nEndX,nEndY, nTab);
     BOOL bPaint = bHide && pDoc->HasControl( nTab, aMMRect );
 
     if (bPaint)
