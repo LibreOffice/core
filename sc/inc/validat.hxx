@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:25:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:58:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,8 @@ class ScValidationData : public ScConditionEntry
 
     BOOL            DoScript( const ScAddress& rPos, const String& rInput,
                                 ScFormulaCell* pCell, Window* pParent ) const;
+
+    using ScConditionEntry::operator==;
 
 public:
             ScValidationData( ScValidationMode eMode, ScConditionMode eOper,
@@ -188,7 +190,7 @@ private:
 typedef ScValidationData* ScValidationDataPtr;
 
 SV_DECL_PTRARR_SORT(ScValidationEntries_Impl, ScValidationDataPtr,
-                        SC_COND_GROW, SC_COND_GROW);
+                        SC_COND_GROW, SC_COND_GROW)
 
 class ScValidationDataList : public ScValidationEntries_Impl
 {
