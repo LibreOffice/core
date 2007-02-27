@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mtrindlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:07:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:32:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,12 +62,12 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
 
     :   ModalDialog     ( pParent, ScResId( nResId ) ),
         //
+        aFtEditTitle    ( this, ScResId( FT_LABEL ) ),
         aEdValue        ( this, ScResId( ED_VALUE ) ),
         aBtnDefVal      ( this, ScResId( BTN_DEFVAL ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aFtEditTitle    ( this, ScResId( FT_LABEL ) )
+        aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     //SetText( rTitle );
     //
@@ -84,9 +84,9 @@ ScMetricInputDlg::ScMetricInputDlg( Window*         pParent,
     aEdValue.SetFirst           ( aEdValue.Normalize( nFirst ),   FUNIT_TWIP );
     aEdValue.SetSpinSize        ( aEdValue.Normalize( 1 ) / 10 );
     aEdValue.SetValue           ( aEdValue.Normalize( nDefault ), FUNIT_TWIP );
-    nDefaultValue = aEdValue.GetValue();
+    nDefaultValue = sal::static_int_cast<long>( aEdValue.GetValue() );
     aEdValue.SetValue           ( aEdValue.Normalize( nCurrent ), FUNIT_TWIP );
-    nCurrentValue = aEdValue.GetValue();
+    nCurrentValue = sal::static_int_cast<long>( aEdValue.GetValue() );
     aBtnDefVal.Check( nCurrentValue == nDefaultValue );
 
     FreeResource();
@@ -121,7 +121,7 @@ long ScMetricInputDlg::GetInputValue( FieldUnit eUnit ) const
 */
     // erstmal Nachkommastellen abschneiden - nich so doll...
 
-    return aEdValue.Denormalize( aEdValue.GetValue( eUnit ) );
+    return sal::static_int_cast<long>( aEdValue.Denormalize( aEdValue.GetValue( eUnit ) ) );
 }
 
 //------------------------------------------------------------------------
@@ -173,7 +173,7 @@ IMPL_LINK( ScMetricInputDlg, SetDefValHdl, CheckBox *, EMPTYARG )
 {
     if ( aBtnDefVal.IsChecked() )
     {
-        nCurrentValue = aEdValue.GetValue();
+        nCurrentValue = sal::static_int_cast<long>( aEdValue.GetValue() );
         aEdValue.SetValue( nDefaultValue );
     }
     else
