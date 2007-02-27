@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:51:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ void ScCellShell::ExecuteCursor( SfxRequest& rReq )
     rReq.Done();
 }
 
-void ScCellShell::GetStateCursor( SfxItemSet& rSet )
+void ScCellShell::GetStateCursor( SfxItemSet& /* rSet */ )
 {
 }
 
@@ -313,7 +313,6 @@ void ScCellShell::ExecuteMove( SfxRequest& rReq )
 
 void ScCellShell::ExecutePageSel( SfxRequest& rReq )
 {
-    ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     USHORT              nSlotId  = rReq.GetSlot();
     switch ( nSlotId )
     {
