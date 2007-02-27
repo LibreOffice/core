@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlroot.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:22:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:29:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,11 +147,11 @@ XclRootData::XclRootData( XclBiff eBiff, SfxMedium& rMedium,
     maMaxPos( EXC_MAXCOL2, EXC_MAXROW2, EXC_MAXTAB2 ),
     mxFontPropSetHlp( new XclFontPropSetHelper ),
     mxChPropSetHlp( new XclChPropSetHelper ),
+    mxRD( new RootData ),//!
     mnCharWidth( 110 ),
     mnScTab( 0 ),
     mbExport( bExport ),
-    mbHasPassw( false ),
-    mxRD( new RootData )//!
+    mbHasPassw( false )
 {
     // default script type, e.g. for empty cells
     switch( ScGlobal::GetDefaultScriptType() )
@@ -225,6 +225,7 @@ XclRoot::~XclRoot()
 
 XclRoot& XclRoot::operator=( const XclRoot& rRoot )
 {
+    (void)rRoot;    // avoid compiler warning
     // allowed for assignment in derived classes - but test if the same root data is used
     DBG_ASSERT( &mrData == &rRoot.mrData, "XclRoot::operator= - incompatible root data" );
     return *this;
