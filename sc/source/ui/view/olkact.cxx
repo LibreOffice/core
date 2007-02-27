@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olkact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:03:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:53:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,7 +268,7 @@
 
 // -----------------------------------------------------------------------
 
-void ActivateOlk( ScViewData* pViewData )
+void ActivateOlk( ScViewData* /* pViewData */ )
 {
     // Browser fuer Virtual Controls fuellen
     //  VC's und den Browser dazu gibts nicht mehr...
@@ -276,7 +276,7 @@ void ActivateOlk( ScViewData* pViewData )
     //  GetSbxForm gibt's nicht mehr, muss auch nichts mehr angemeldet werden
 }
 
-void DeActivateOlk( ScViewData* pViewData )
+void DeActivateOlk( ScViewData* /* pViewData */ )
 {
     // Browser fuer Virtual Controls fuellen
     //  VC's und den Browser dazu gibts nicht mehr...
