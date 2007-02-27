@@ -4,9 +4,9 @@
  *
  *  $RCSfile: notesuno.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:43:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:46:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@ const SfxItemPropertyMap* lcl_GetAnnotationPropertyMap()
 {
     static SfxItemPropertyMap aAnnotationPropertyMap_Impl[] =
     {
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aAnnotationPropertyMap_Impl;
 }
@@ -129,11 +129,11 @@ ScAnnotationObj::~ScAnnotationObj()
         pUnoText->release();
 }
 
-void ScAnnotationObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAnnotationObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Ref-Update
     }
@@ -160,7 +160,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationObj::getParent() throw(uno:
     return NULL;
 }
 
-void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>& Parent )
+void SAL_CALL ScAnnotationObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
                                     throw(lang::NoSupportException, uno::RuntimeException)
 {
     //  hamma nich
@@ -457,11 +457,11 @@ void ScAnnotationShapeObj::UpdateData()
                         SdrObject* pObj = GetCaptionObj();
                         if (pObj)
                         {
-                            uno::Reference<drawing::XShape> xShape(pObj->getUnoShape(), uno::UNO_QUERY);
-                            if (xShape.is())
+                            uno::Reference<drawing::XShape> xCaptionShape(pObj->getUnoShape(), uno::UNO_QUERY);
+                            if (xCaptionShape.is())
                             {
-                                xShape->setSize(aSize);
-                                xShape->setPosition(aPos);
+                                xCaptionShape->setSize(aSize);
+                                xCaptionShape->setPosition(aPos);
                             }
                             pObj->SetMergedItemSet(aNote.GetItemSet());
                             pObj->ActionChanged();
@@ -507,11 +507,11 @@ ScAnnotationShapeObj::~ScAnnotationShapeObj()
         pUnoText->release();
 }
 
-void ScAnnotationShapeObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAnnotationShapeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( ScUpdateRefHint ) )
     {
-        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
+//        const ScUpdateRefHint& rRef = (const ScUpdateRefHint&)rHint;
 
         //! Ref-Update
     }
@@ -538,7 +538,7 @@ uno::Reference<uno::XInterface> SAL_CALL ScAnnotationShapeObj::getParent() throw
     return NULL;
 }
 
-void SAL_CALL ScAnnotationShapeObj::setParent( const uno::Reference<uno::XInterface>& Parent )
+void SAL_CALL ScAnnotationShapeObj::setParent( const uno::Reference<uno::XInterface>& /* Parent */ )
                                     throw(lang::NoSupportException, uno::RuntimeException)
 {
     //  hamma nich
