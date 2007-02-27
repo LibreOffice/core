@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlocx.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:18:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:29:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,9 +218,9 @@ SdrObject* XclImpOcxConverter::CreateSdrObject( XclImpTbxControlObj& rTbxCtrlObj
 
 sal_Bool XclImpOcxConverter::InsertControl(
         const Reference< XFormComponent >& rxFormComp,
-        const ::com::sun::star::awt::Size& rSize,
+        const ::com::sun::star::awt::Size& /*rSize*/,
         Reference< XShape >* pxShape,
-        BOOL bFloatingCtrl )
+        BOOL /*bFloatingCtrl*/ )
 {
     sal_Bool bRet = sal_False;
 
