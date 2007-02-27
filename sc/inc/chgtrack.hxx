@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:26:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:53:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ public:
                                     {
                                         if ( ppPrev )
                                         {
-                                            if ( *ppPrev = pNext )
+                                            if ( ( *ppPrev = pNext ) != NULL )
                                                 pNext->ppPrev = ppPrev;
                                             ppPrev = NULL;  // not inserted
                                         }
@@ -559,12 +559,12 @@ class ScChangeActionDelMoveEntry : public ScChangeActionLinkEntry
 
 
                                 ScChangeActionDelMoveEntry(
-                                    ScChangeActionDelMoveEntry** ppPrev,
+                                    ScChangeActionDelMoveEntry** ppPrevP,
                                     ScChangeActionMove* pMove,
                                     short nFrom, short nTo )
                                     :   ScChangeActionLinkEntry(
                                             (ScChangeActionLinkEntry**)
-                                                ppPrev,
+                                                ppPrevP,
                                             (ScChangeAction*) pMove ),
                                         nCutOffFrom( nFrom ),
                                         nCutOffTo( nTo )
@@ -740,6 +740,9 @@ class ScChangeActionMove : public ScChangeAction
     virtual BOOL                StoreLinks( SvStream& ) const;
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
 
+protected:
+    using ScChangeAction::GetRefString;
+
 public:
                                 ScChangeActionMove(const ULONG nActionNumber,
                                                 const ScChangeActionState eState,
@@ -798,7 +801,7 @@ class ScChangeActionContent : public ScChangeAction
                                         if ( !ppPrevInSlot )
                                         {
                                             ppPrevInSlot = pp;
-                                            if ( pNextInSlot = *pp )
+                                            if ( ( pNextInSlot = *pp ) != NULL )
                                                 pNextInSlot->ppPrevInSlot = &pNextInSlot;
                                             *pp = this;
                                         }
@@ -807,7 +810,7 @@ class ScChangeActionContent : public ScChangeAction
                                     {
                                         if ( ppPrevInSlot )
                                         {
-                                            if ( *ppPrevInSlot = pNextInSlot )
+                                            if ( ( *ppPrevInSlot = pNextInSlot ) != NULL )
                                                 pNextInSlot->ppPrevInSlot = ppPrevInSlot;
                                             ppPrevInSlot = NULL;    // not inserted
                                         }
@@ -876,6 +879,9 @@ class ScChangeActionContent : public ScChangeAction
     virtual BOOL                Store( SvStream&, ScMultipleWriteHeader& ) const;
     virtual BOOL                StoreLinks( SvStream& ) const;
     virtual BOOL                LoadLinks( SvStream&, ScChangeTrack* );
+
+protected:
+    using ScChangeAction::GetRefString;
 
 public:
 
@@ -1010,7 +1016,7 @@ class ScChangeActionReject : public ScChangeAction
     virtual void                AddContent( ScChangeActionContent* ) {}
     virtual void                DeleteCellEntries() {}
 
-    virtual BOOL                Reject( ScDocument* p ) { return FALSE; }
+    virtual BOOL                Reject( ScDocument* ) { return FALSE; }
 
     virtual const ScChangeTrack*    GetChangeTrack() const { return 0; }
 
@@ -1048,8 +1054,8 @@ struct ScChangeTrackMsgInfo
 };
 
 // MsgQueue fuer Benachrichtigung via ModifiedLink
-DECLARE_QUEUE( ScChangeTrackMsgQueue, ScChangeTrackMsgInfo* );
-DECLARE_STACK( ScChangeTrackMsgStack, ScChangeTrackMsgInfo* );
+DECLARE_QUEUE( ScChangeTrackMsgQueue, ScChangeTrackMsgInfo* )
+DECLARE_STACK( ScChangeTrackMsgStack, ScChangeTrackMsgInfo* )
 
 enum ScChangeTrackMergeState
 {
@@ -1061,7 +1067,7 @@ enum ScChangeTrackMergeState
 
 // zusaetzlich zu pFirst/pNext/pLast/pPrev eine Table, um schnell sowohl
 // per ActionNumber als auch ueber Liste zugreifen zu koennen
-DECLARE_TABLE( ScChangeActionTable, ScChangeAction* );
+DECLARE_TABLE( ScChangeActionTable, ScChangeAction* )
 
 // Intern generierte Actions beginnen bei diesem Wert (fast alle Bits gesetzt)
 // und werden runtergezaehlt, um sich in einer Table wertemaessig nicht mit den
