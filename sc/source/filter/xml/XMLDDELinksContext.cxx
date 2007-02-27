@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLDDELinksContext.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:43:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:44:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,7 @@ ScXMLDDELinksContext::ScXMLDDELinksContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
     // here are no attributes
@@ -115,17 +115,17 @@ ScXMLDDELinkContext::ScXMLDDELinkContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     aDDELinkTable(),
     aDDELinkRow(),
     sApplication(),
     sTopic(),
     sItem(),
-    nMode(SC_DDE_DEFAULT),
     nPosition(-1),
     nColumns(0),
-    nRows(0)
+    nRows(0),
+    nMode(SC_DDE_DEFAULT)
 {
     // here are no attributes
 }
@@ -177,9 +177,9 @@ void ScXMLDDELinkContext::AddCellToRow(const ScDDELinkCell& aCell)
     aDDELinkRow.push_back(aCell);
 }
 
-void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRows)
+void ScXMLDDELinkContext::AddRowsToTable(const sal_Int32 nRowsP)
 {
-    for (sal_Int32 i = 0; i < nRows; ++i)
+    for (sal_Int32 i = 0; i < nRowsP; ++i)
         aDDELinkTable.insert(aDDELinkTable.end(), aDDELinkRow.begin(), aDDELinkRow.end());
     aDDELinkRow.clear();
 }
@@ -269,7 +269,7 @@ ScXMLDDESourceContext::~ScXMLDDESourceContext()
 SvXMLImportContext *ScXMLDDESourceContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
@@ -285,7 +285,7 @@ ScXMLDDETableContext::ScXMLDDETableContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                         ScXMLDDELinkContext* pTempDDELink) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     pDDELink(pTempDDELink)
@@ -355,7 +355,7 @@ ScXMLDDEColumnContext::~ScXMLDDEColumnContext()
 SvXMLImportContext *ScXMLDDEColumnContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
@@ -427,13 +427,13 @@ ScXMLDDECellContext::ScXMLDDECellContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDDELinkContext* pTempDDELink) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pDDELink(pTempDDELink),
     sValue(),
     fValue(),
     nCells(1),
     bString(sal_True),
     bString2(sal_True),
-    bEmpty(sal_True)
+    bEmpty(sal_True),
+    pDDELink(pTempDDELink)
 {
     if( !xAttrList.is() ) return;
 
@@ -483,7 +483,7 @@ ScXMLDDECellContext::~ScXMLDDECellContext()
 SvXMLImportContext *ScXMLDDECellContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     SvXMLImportContext *pContext = new SvXMLImportContext( GetImport(), nPrefix, rLName );
 
