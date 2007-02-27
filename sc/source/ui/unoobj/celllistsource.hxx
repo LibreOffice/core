@@ -4,9 +4,9 @@
  *
  *  $RCSfile: celllistsource.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,8 @@ namespace calc
         OCellListSource(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >& _rxDocument
         );
+
+        using OCellListSource_PBase::getFastPropertyValue;
 
     protected:
         ~OCellListSource( );
