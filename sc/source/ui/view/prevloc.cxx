@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevloc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:06:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:54:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,8 +176,8 @@ void ScPreviewTableInfo::LimitToArea( const Rectangle& rPixelArea )
 //------------------------------------------------------------------
 
 ScPreviewLocationData::ScPreviewLocationData( ScDocument* pDocument, OutputDevice* pWin ) :
-    pDoc( pDocument ),
     pWindow( pWin ),
+    pDoc( pDocument ),
     nDrawRanges( 0 ),
     nPrintTab( 0 )
 {
@@ -514,7 +514,7 @@ BOOL ScPreviewLocationData::GetNoteInRange( const Rectangle& rVisiblePixel, long
         ScPreviewLocationEntry* pEntry = (ScPreviewLocationEntry*)aEntries.GetObject(nListPos);
         if ( pEntry->eType == eType && pEntry->aPixelRect.IsOver( rVisiblePixel ) )
         {
-            if ( nPos == nIndex )
+            if ( nPos == sal::static_int_cast<ULONG>(nIndex) )
             {
                 rCellPos = pEntry->aCellRange.aStart;
                 rNoteRect = pEntry->aPixelRect;
@@ -702,7 +702,6 @@ void ScPreviewLocationData::GetTableInfo( const Rectangle& rVisiblePixel, ScPrev
     //
 
     SCROW nRowCount = 0;
-    SCROW nRow;
     if ( bHasHeaderRow )
         ++nRowCount;
     if ( bHasRepRows )
