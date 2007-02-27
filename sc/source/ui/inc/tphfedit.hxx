@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:58:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:27:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,9 @@ public:
             ScEditWindow( Window* pParent, const ResId& rResId, ScEditWindowLocation eLoc );
             ~ScEditWindow();
 
+    using Control::SetFont;
     void            SetFont( const ScPatternAttr& rPattern );
+    using Control::SetText;
     void            SetText( const EditTextObject& rTextObject );
     EditTextObject* CreateTextObject();
     void            SetCharAttriutes();
