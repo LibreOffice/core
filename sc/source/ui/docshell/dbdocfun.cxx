@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocfun.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:27:32 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:06:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@
 
 // -----------------------------------------------------------------
 
-BOOL ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, BOOL bApi )
+BOOL ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, BOOL /* bApi */ )
 {
 
     ScDocShellModificator aModificator( rDocShell );
@@ -112,7 +112,7 @@ BOOL ScDBDocFunc::AddDBRange( const String& rName, const ScRange& rRange, BOOL b
     return TRUE;
 }
 
-BOOL ScDBDocFunc::DeleteDBRange( const String& rName, BOOL bApi )
+BOOL ScDBDocFunc::DeleteDBRange( const String& rName, BOOL /* bApi */ )
 {
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -147,7 +147,7 @@ BOOL ScDBDocFunc::DeleteDBRange( const String& rName, BOOL bApi )
     return bDone;
 }
 
-BOOL ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew, BOOL bApi )
+BOOL ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew, BOOL /* bApi */ )
 {
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -197,7 +197,7 @@ BOOL ScDBDocFunc::RenameDBRange( const String& rOld, const String& rNew, BOOL bA
     return bDone;
 }
 
-BOOL ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, BOOL bApi )
+BOOL ScDBDocFunc::ModifyDBData( const ScDBData& rNewData, BOOL /* bApi */ )
 {
     BOOL bDone = FALSE;
     ScDocument* pDoc = rDocShell.GetDocument();
@@ -372,7 +372,6 @@ BOOL ScDBDocFunc::RepeatDB( const String& rDBName, BOOL bRecord, BOOL bApi )
 
             if (bRecord)
             {
-                USHORT nDummy;
                 SCTAB nDummyTab;
                 SCCOL nDummyCol;
                 SCROW nDummyRow;
@@ -482,7 +481,7 @@ BOOL ScDBDocFunc::Sort( SCTAB nTab, const ScSortParam& rSortParam,
 
     //      ausfuehren
 
-    WaitObject aWait( rDocShell.GetDialogParent() );
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
     BOOL bRepeatQuery = FALSE;                          // bestehenden Filter wiederholen?
     ScQueryParam aQueryParam;
@@ -737,7 +736,7 @@ BOOL ScDBDocFunc::Query( SCTAB nTab, const ScQueryParam& rQueryParam,
 
     //      ausfuehren
 
-    WaitObject aWait( rDocShell.GetDialogParent() );
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
     BOOL bKeepSub = FALSE;                          // bestehende Teilergebnisse wiederholen?
     ScSubTotalParam aSubTotalParam;
@@ -1004,7 +1003,7 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
         if (pDoc->TestRemoveSubTotals( nTab, rParam ))
         {
             bDelete = TRUE;
-            bOk = ( MessBox( rDocShell.GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+            bOk = ( MessBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                 // "StarCalc" "Daten loeschen?"
                 ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
                 ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_1 ) ).Execute()
@@ -1013,7 +1012,7 @@ BOOL ScDBDocFunc::DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
 
     if (bOk)
     {
-        WaitObject aWait( rDocShell.GetDialogParent() );
+        WaitObject aWait( rDocShell.GetActiveDialogParent() );
         ScDocShellModificator aModificator( rDocShell );
 
         ScSubTotalParam aNewParam( rParam );        // Bereichsende wird veraendert
@@ -1148,7 +1147,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                                         BOOL bRecord, BOOL bApi, BOOL bAllowMove )
 {
     ScDocShellModificator aModificator( rDocShell );
-    WaitObject aWait( rDocShell.GetDialogParent() );
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
     BOOL bDone = FALSE;
     BOOL bUndoSelf = FALSE;
@@ -1315,7 +1314,7 @@ BOOL ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
 
                     if ( !bEmpty )
                     {
-                        QueryBox aBox( rDocShell.GetDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
+                        QueryBox aBox( rDocShell.GetActiveDialogParent(), WinBits(WB_YES_NO | WB_DEF_YES),
                                          ScGlobal::GetRscString(STR_PIVOT_NOTEMPTY) );
                         if (aBox.Execute() == RET_NO)
                         {
@@ -1393,7 +1392,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
 
     ScDocument* pDoc = rDocShell.GetDocument();
     ScDBCollection& rDBColl = *pDoc->GetDBCollection();
-    ScDBData* pData;
+    ScDBData* pData = NULL;
     ScImportParam aImportParam;
     BOOL bFound = FALSE;
     USHORT nCount = rDBColl.GetCount();
@@ -1405,7 +1404,7 @@ void ScDBDocFunc::UpdateImport( const String& rTarget, const String& rDBName,
     }
     if (!bFound)
     {
-        InfoBox aInfoBox(rDocShell.GetDialogParent(),
+        InfoBox aInfoBox(rDocShell.GetActiveDialogParent(),
                     ScGlobal::GetRscString( STR_TARGETNOTFOUND ) );
         aInfoBox.Execute();
         return;
