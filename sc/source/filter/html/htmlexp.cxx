@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlexp.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 10:31:46 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:30:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ extern BOOL bOderSo;
 //========================================================================
 
 FltError ScExportHTML( SvStream& rStrm, const String& rBaseURL, ScDocument* pDoc,
-        const ScRange& rRange, const CharSet eNach, BOOL bAll,
+        const ScRange& rRange, const CharSet /*eNach*/, BOOL bAll,
         const String& rStreamPath, String& rNonConvertibleChars )
 {
     ScHTMLExport aEx( rStrm, rBaseURL, pDoc, rRange, bAll, rStreamPath );
@@ -281,8 +281,8 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
                             const ScRange& rRangeP,
                             BOOL bAllP, const String& rStreamPathP ) :
     ScExportBase( rStrmP, pDocP, rRangeP ),
-    aStreamPath( rStreamPathP ),
     aBaseURL( rBaseURL ),
+    aStreamPath( rStreamPathP ),
     pAppWin( Application::GetDefaultDevice() ),
     pSrcArr( NULL ),
     pDestArr( NULL ),
@@ -291,8 +291,8 @@ ScHTMLExport::ScHTMLExport( SvStream& rStrmP, const String& rBaseURL, ScDocument
     bAll( bAllP ),
     bTabHasGraphics( FALSE ),
     bCalcAsShown( pDocP->GetDocOptions().IsCalcAsShown() ),
-    bTableDataHeight( TRUE ),
-    bTableDataWidth( TRUE )
+    bTableDataWidth( TRUE ),
+    bTableDataHeight( TRUE )
 {
     strcpy( sIndent, sIndentSource );       // #100211# - checked
     sIndent[0] = 0;
@@ -531,7 +531,7 @@ const SfxItemSet& ScHTMLExport::PageDefaults( SCTAB nTab )
                         ScGlobal::GetScriptedWhichID(
                             aHTMLStyle.nDefaultScriptType, ATTR_FONT_HEIGHT
                             )))).GetHeight();
-        aHTMLStyle.nFontSizeNumber = GetFontSizeNumber( aHTMLStyle.nFontHeight );
+        aHTMLStyle.nFontSizeNumber = GetFontSizeNumber( static_cast< USHORT >( aHTMLStyle.nFontHeight ) );
     }
 
     // Page style sheet printer settings, e.g. for background graphics.
@@ -570,7 +570,7 @@ void ScHTMLExport::BorderToStyle( ByteString& rOut, const char* pBorderName,
 
         // color
         char hex[7];
-        snprintf( hex, 7, "%06x", pLine->GetColor().GetRGBColor() );
+        snprintf( hex, 7, "%06x", static_cast< unsigned int >( pLine->GetColor().GetRGBColor() ) );
         hex[6] = 0;
 
         rOut += hex;
@@ -668,10 +668,10 @@ void ScHTMLExport::WriteTables()
     SCCOL           nEndCol;
     SCROW           nEndRow;
     SCTAB           nEndTab;
-    SCCOL           nStartColFix;
-    SCROW           nStartRowFix;
-    SCCOL           nEndColFix;
-    SCROW           nEndRowFix;
+    SCCOL           nStartColFix = 0;
+    SCROW           nStartRowFix = 0;
+    SCCOL           nEndColFix = 0;
+    SCROW           nEndRowFix = 0;
     ScDrawLayer*    pDrawLayer = pDoc->GetDrawLayer();
     if ( bAll )
     {
@@ -807,14 +807,14 @@ void ScHTMLExport::WriteTables()
 
             IncIndent(1); TAG_ON_LF( sHTML_tablerow );
             bTableDataHeight = TRUE;  // height at every first cell of each row
-            for ( SCCOL nCol=nStartCol; nCol<=nEndCol; nCol++ )
+            for ( SCCOL nCol2=nStartCol; nCol2<=nEndCol; nCol2++ )
             {
-                if ( pDoc->GetColFlags( nCol, nTab ) & CR_HIDDEN )
+                if ( pDoc->GetColFlags( nCol2, nTab ) & CR_HIDDEN )
                     continue;   // for
 
-                if ( nCol == nEndCol )
+                if ( nCol2 == nEndCol )
                     IncIndent(-1);
-                WriteCell( nCol, nRow, nTab );
+                WriteCell( nCol2, nRow, nTab );
                 bTableDataHeight = FALSE;
             }
             bTableDataWidth = FALSE;    // widths only in first row
@@ -867,14 +867,12 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         for ( pGraphEntry = aGraphList.First(); pGraphEntry;
               pGraphEntry = aGraphList.Next() )
         {
-
             if ( pGraphEntry->bInCell && pGraphEntry->aRange.In( aPos ) )
             {
                 if ( pGraphEntry->aRange.aStart == aPos )
                     break;  // for
                 else
                     return ;        // ist ein Col/RowSpan, Overlapped
-                break;
             }
         }
     }
@@ -914,7 +912,6 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         aStrTD += '"';
     }
 
-    String      aStr;
     const sal_Char* pChar;
     USHORT nWidthPixel;
     USHORT nHeightPixel;
@@ -923,7 +920,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
     if ( pGraphEntry || rMergeAttr.IsMerged() )
     {
         SCCOL nC, jC;
-        SCROW nR, jR;
+        SCROW nR;
         ULONG v;
         if ( pGraphEntry )
             nC = Max( SCCOL(pGraphEntry->aRange.aEnd.Col() - nCol + 1),
@@ -933,10 +930,10 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
         if ( nC > 1 )
         {
             (((aStrTD += ' ') += sHTML_O_colspan) += '=') += ByteString::CreateFromInt32( nC );
-            nC += nCol;
+            nC = nC + nCol;
             for ( jC=nCol, v=0; jC<nC; jC++ )
                 v += pDoc->GetColWidth( jC, nTab );
-            nWidthPixel = ToPixel( v );
+            nWidthPixel = ToPixel( static_cast< USHORT >( v ) );
         }
         else
             nWidthPixel = ToPixel( pDoc->GetColWidth( nCol, nTab ) );
@@ -951,7 +948,7 @@ void ScHTMLExport::WriteCell( SCCOL nCol, SCROW nRow, SCTAB nTab )
             (((aStrTD += ' ') += sHTML_O_rowspan) += '=') += ByteString::CreateFromInt32( nR );
             nR += nRow;
             v = pDoc->GetRowHeight( nRow, nR-1, nTab );
-            nHeightPixel = ToPixel( v );
+            nHeightPixel = ToPixel( static_cast< USHORT >( v ) );
         }
         else
             nHeightPixel = ToPixel( pDoc->GetRowHeight( nRow, nTab ) );
@@ -1351,7 +1348,7 @@ void ScHTMLExport::MakeCIdURL( String& rURL )
 void ScHTMLExport::IncIndent( short nVal )
 {
     sIndent[nIndent] = '\t';
-    nIndent += nVal;
+    nIndent = nIndent + nVal;
     if ( nIndent < 0 )
         nIndent = 0;
     else if ( nIndent > nIndentMax )
