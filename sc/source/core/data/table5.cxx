@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table5.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:10:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:10:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
             for (nX=0; nX<MAXCOL; nX++)
                 pColFlags[nX] &= ~CR_PAGEBREAK;
-            pRowFlags->AndValue( 0, MAXROW-1, ~CR_PAGEBREAK);
+            pRowFlags->AndValue( 0, MAXROW-1, sal::static_int_cast<BYTE>(~CR_PAGEBREAK) );
 
             return;
         }
@@ -138,7 +138,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
 
     for (nX=0; nX<nStartCol; nX++)
         pColFlags[nX] &= ~CR_PAGEBREAK;
-    pRowFlags->AndValue( 0, nStartRow-1, ~CR_PAGEBREAK);
+    pRowFlags->AndValue( 0, nStartRow-1, sal::static_int_cast<BYTE>(~CR_PAGEBREAK) );
 
     if (nStartCol > 0)
         pColFlags[nStartCol] |= CR_PAGEBREAK;           //! AREABREAK
@@ -179,7 +179,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     }
 
     // Remove all page breaks in range.
-    pRowFlags->AndValue( nStartRow+1, nEndRow, ~CR_PAGEBREAK);
+    pRowFlags->AndValue( nStartRow+1, nEndRow, sal::static_int_cast<BYTE>(~CR_PAGEBREAK) );
     // And set new page breaks.
     BOOL bRepeatRow = ( nRepeatStartY != SCROW_REPEAT_NONE );
     BOOL bRowFound = FALSE;
@@ -216,7 +216,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
             nPageSizeY -= nHeights;
             if (nY <= nRepeatEndY)
             {
-                pRowFlags->AndValue( nY, nRepeatEndY, ~CR_PAGEBREAK);
+                pRowFlags->AndValue( nY, nRepeatEndY, sal::static_int_cast<BYTE>(~CR_PAGEBREAK) );
                 nY = nRepeatEndY + 1;
                 aFlagsIter.Resync( nY);
                 aHeightIter.Resync( nY);
@@ -239,7 +239,7 @@ void ScTable::UpdatePageBreaks( const ScRange* pUserArea )
     {
         pRowFlags->OrValue( nEndRow+1, CR_PAGEBREAK);           //! AREABREAK
         if (nEndRow+2 <= MAXROW)
-            pRowFlags->AndValue( nEndRow+2, MAXROW, ~CR_PAGEBREAK);
+            pRowFlags->AndValue( nEndRow+2, MAXROW, sal::static_int_cast<BYTE>(~CR_PAGEBREAK) );
     }
 }
 
@@ -250,7 +250,7 @@ void ScTable::RemoveManualBreaks()
             pColFlags[nCol] &= ~CR_MANUALBREAK;
 
     if (pRowFlags)
-        pRowFlags->AndValue( 0, MAXROW, ~CR_MANUALBREAK);
+        pRowFlags->AndValue( 0, MAXROW, sal::static_int_cast<BYTE>(~CR_MANUALBREAK) );
 }
 
 BOOL ScTable::HasManualBreaks() const
@@ -370,6 +370,10 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                     case CELLTYPE_FORMULA :
                         ((ScFormulaCell*)pCell)->SetDirty();
                         break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
         }
@@ -403,6 +407,10 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
                         case CELLTYPE_FORMULA :
                             ((ScFormulaCell*)pCell)->SetDirty();
                             break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
                 }
             }
