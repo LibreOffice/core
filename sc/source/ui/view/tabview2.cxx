@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:59:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:57:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,10 +278,12 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         SCTAB       nTab = nCurZ;
 
+#ifdef OLD_SELECTION_PAINT
         SCCOL       nDrawStartCol;
         SCROW       nDrawStartRow;
         SCCOL       nDrawEndCol;
         SCROW       nDrawEndRow;
+#endif
 
         // Set old selection area
         ScUpdateRect aRect( nBlockStartX, nBlockStartY, nOldBlockEndX, nOldBlockEndY );
@@ -383,10 +385,10 @@ void ScTabView::MarkCursor( SCCOL nCurX, SCROW nCurY, SCTAB nCurZ,
 
         // Set new selection area
         aRect.SetNew( nBlockStartX, nBlockStartY, nBlockEndX, nBlockEndY );
-        BOOL bCont;
         rMark.SetMarkArea( ScRange( nBlockStartX, nBlockStartY, nTab, nBlockEndX, nBlockEndY, nTab ) );
 
 #ifdef OLD_SELECTION_PAINT
+        BOOL bCont;
         BOOL bDraw = aRect.GetXorDiff( nDrawStartCol, nDrawStartRow,
                                         nDrawEndCol, nDrawEndRow, bCont );
         if ( bDraw )
@@ -453,7 +455,6 @@ void ScTabView::PaintBlock( BOOL bReset )
     {
         ScRange aMarkRange;
         HideAllCursors();
-        BOOL bWasMulti = bMulti;
         if (bMulti)
         {
             BOOL bFlag = rMark.GetMarkingFlag();
@@ -572,7 +573,7 @@ void ScTabView::SelectAllTables()
 {
     ScDocument* pDoc = aViewData.GetDocument();
     ScMarkData& rMark = aViewData.GetMarkData();
-    SCTAB nTab = aViewData.GetTabNo();
+//    SCTAB nTab = aViewData.GetTabNo();
     SCTAB nCount = pDoc->GetTableCount();
 
     if (nCount>1)
