@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleContextBase.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:06:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,9 @@ public:
 protected:
     virtual ~ScAccessibleContextBase(void);
 public:
+    using WeakAggComponentImplHelperBase::addEventListener;
+    using WeakAggComponentImplHelperBase::removeEventListener;
+
     ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
