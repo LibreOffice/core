@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:16:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,7 +397,7 @@ void ScTable::CopyFromClip(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     if ( pTable->pRowFlags->GetValue(j-nDy) & CR_MANUALSIZE )
                         pRowFlags->OrValue( j, CR_MANUALSIZE);
                     else
-                        pRowFlags->AndValue( j, ~CR_MANUALSIZE);
+                        pRowFlags->AndValue( j, sal::static_int_cast<BYTE>(~CR_MANUALSIZE));
                 }
             }
 
@@ -647,10 +647,10 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                 {
                     // TODO: might need some performance improvement, block
                     // operations instead of single GetValue()/SetValue() calls.
-                    BYTE nFlags = pRowFlags->GetValue(i);
+                    BYTE nThisRowFlags = pRowFlags->GetValue(i);
                     BOOL bChange = pCharts &&
-                        ( pDestTab->pRowFlags->GetValue(i) & CR_HIDDEN ) != ( nFlags & CR_HIDDEN );
-                    pDestTab->pRowFlags->SetValue( i, nFlags);
+                        ( pDestTab->pRowFlags->GetValue(i) & CR_HIDDEN ) != ( nThisRowFlags & CR_HIDDEN );
+                    pDestTab->pRowFlags->SetValue( i, nThisRowFlags );
                     //! Aenderungen zusammenfassen?
                     if (bChange)
                         pCharts->SetRangeDirty(ScRange( 0, i, nTab, MAXCOL, i, nTab ));
@@ -835,10 +835,10 @@ void ScTable::PutCell( const ScAddress& rPos, ULONG nFormatIndex, ScBaseCell* pC
 }
 
 
-BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString )
+BOOL ScTable::SetString( SCCOL nCol, SCROW nRow, SCTAB nTabP, const String& rString )
 {
     if (ValidColRow(nCol,nRow))
-        return aCol[nCol].SetString( nRow, nTab, rString );
+        return aCol[nCol].SetString( nRow, nTabP, rString );
     else
         return FALSE;
 }
@@ -1303,11 +1303,11 @@ void ScTable::FindMaxRotCol( RowInfo* pRowInfo, SCSIZE nArrCount, SCCOL nX1, SCC
                             USHORT nEntryCount = pFormat->Count();
                             for (USHORT nEntry=0; nEntry<nEntryCount; nEntry++)
                             {
-                                String aName = pFormat->GetEntry(nEntry)->GetStyle();
-                                if (aName.Len())
+                                String aStyleName = pFormat->GetEntry(nEntry)->GetStyle();
+                                if (aStyleName.Len())
                                 {
                                     SfxStyleSheetBase* pStyleSheet =
-                                            pStylePool->Find( aName, SFX_STYLE_FAMILY_PARA );
+                                            pStylePool->Find( aStyleName, SFX_STYLE_FAMILY_PARA );
                                     if ( pStyleSheet )
                                     {
                                         FillMaxRot( pRowInfo, nArrCount, nX1, nX2,
@@ -1437,7 +1437,7 @@ BOOL ScTable::IsBlockEditable( SCCOL nCol1, SCROW nRow1, SCCOL nCol2,
         bIsEditable = FALSE;
     else if ( bProtected && !pDocument->IsScenario(nTab) )
     {
-        if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )))
+        if((bIsEditable = !HasAttrib( nCol1, nRow1, nCol2, nRow2, HASATTR_PROTECTED )) != FALSE)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this range is
@@ -1504,7 +1504,7 @@ BOOL ScTable::IsSelectionEditable( const ScMarkData& rMark,
         bIsEditable = FALSE;
     else if ( bProtected && !pDocument->IsScenario(nTab))
     {
-        if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )))
+        if((bIsEditable = !HasAttribSelection( rMark, HASATTR_PROTECTED )) != FALSE)
         {
             // If Sheet is protected and cells are not protected then
             // check the active scenario protect flag if this area is
@@ -1935,7 +1935,7 @@ void ScTable::SetRowHeight( SCROW nRow, USHORT nNewHeight )
 
 
 BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeight,
-                                    double nPPTX,double nPPTY )
+                                    double /* nPPTX */, double nPPTY )
 {
     BOOL bChanged = FALSE;
     if (VALIDROW(nStartRow) && VALIDROW(nEndRow) && pRowHeight)
@@ -1955,7 +1955,6 @@ BOOL ScTable::SetRowHeightRange( SCROW nStartRow, SCROW nEndRow, USHORT nNewHeig
             if (pDrawLayer->HasObjectsInRows( nTab, nStartRow, nEndRow ))
                 bSingle = TRUE;
 
-        SCROW nRow;
         if (bSingle)
         {
             size_t nIndex;
@@ -2024,7 +2023,7 @@ void ScTable::SetManualHeight( SCROW nStartRow, SCROW nEndRow, BOOL bManual )
         if (bManual)
             pRowFlags->OrValue( nStartRow, nEndRow, CR_MANUALSIZE);
         else
-            pRowFlags->AndValue( nStartRow, nEndRow, ~CR_MANUALSIZE);
+            pRowFlags->AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~CR_MANUALSIZE));
     }
     else
         DBG_ERROR("Falsche Zeilennummer oder keine Zeilenflags");
@@ -2293,7 +2292,6 @@ void ScTable::DBShowRow(SCROW nRow, BOOL bShow)
 
 void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
-    SCROW i;
     SCROW nStartRow = nRow1;
     nRecalcLvl++;
     while (nStartRow <= nRow2)
@@ -2319,7 +2317,7 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         }
 
         if (bShow)
-            pRowFlags->AndValue( nStartRow, nEndRow, ~(CR_HIDDEN | CR_FILTERED));
+            pRowFlags->AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~(CR_HIDDEN | CR_FILTERED)) );
         else
             pRowFlags->OrValue( nStartRow, nEndRow, (CR_HIDDEN | CR_FILTERED));
 
@@ -2346,7 +2344,6 @@ void ScTable::DBShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 
 void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
 {
-    SCROW i;
     SCROW nStartRow = nRow1;
     nRecalcLvl++;
     while (nStartRow <= nRow2)
@@ -2372,7 +2369,7 @@ void ScTable::ShowRows(SCROW nRow1, SCROW nRow2, BOOL bShow)
         }
 
         if (bShow)
-            pRowFlags->AndValue( nStartRow, nEndRow, ~(CR_HIDDEN | CR_FILTERED));
+            pRowFlags->AndValue( nStartRow, nEndRow, sal::static_int_cast<BYTE>(~(CR_HIDDEN | CR_FILTERED)) );
         else
             pRowFlags->OrValue( nStartRow, nEndRow, CR_HIDDEN);
 
@@ -2464,7 +2461,7 @@ SCROW ScTable::GetLastFlaggedRow() const
     if ( !pRowFlags )
         return 0;
 
-    SCROW nLastFound = pRowFlags->GetLastAnyBitAccess( 0, ~CR_PAGEBREAK);
+    SCROW nLastFound = pRowFlags->GetLastAnyBitAccess( 0, sal::static_int_cast<BYTE>(~CR_PAGEBREAK) );
     return ValidRow(nLastFound) ? nLastFound : 0;
 }
 
@@ -2488,7 +2485,7 @@ SCROW ScTable::GetLastChangedRow() const
     if ( !pRowFlags )
         return 0;
 
-    SCROW nLastFlags = pRowFlags->GetLastAnyBitAccess( 0, ~CR_PAGEBREAK);
+    SCROW nLastFlags = pRowFlags->GetLastAnyBitAccess( 0, sal::static_int_cast<BYTE>(~CR_PAGEBREAK) );
     if (!ValidRow(nLastFlags))
         nLastFlags = 0;
 
@@ -2680,7 +2677,7 @@ void ScTable::DoAutoOutline( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SC
 
 //  Laden
 
-BOOL ScTable::Load( SvStream& rStream, USHORT nVersion, ScProgress* pProgress )
+BOOL ScTable::Load( SvStream& rStream, USHORT /* nVersion */, ScProgress* /* pProgress */ )
 {
     ScReadHeader aHdr( rStream );
 #if SC_ROWLIMIT_STREAM_ACCESS
@@ -2946,7 +2943,7 @@ void lcl_SaveFlags( SvStream& rStream, BYTE* pValue, USHORT nEnd )
 }
 
 
-void lcl_LoadRange( SvStream& rStream, ScRange** ppRange )
+void lcl_LoadRange( SvStream& /* rStream */, ScRange** ppRange )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -2967,7 +2964,7 @@ void lcl_LoadRange( SvStream& rStream, ScRange** ppRange )
 }
 
 
-void lcl_SaveRange( SvStream& rStream, const ScRange* pRange )
+void lcl_SaveRange( SvStream& /* rStream */, const ScRange* /* pRange */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -2982,7 +2979,7 @@ void lcl_SaveRange( SvStream& rStream, const ScRange* pRange )
 }
 
 
-BOOL ScTable::Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgress ) const
+BOOL ScTable::Save( SvStream& rStream, long& /* rSavedDocCells */, ScProgress* /* pProgress */ ) const
 {
     ScWriteHeader aHdr( rStream );
 #if SC_ROWLIMIT_STREAM_ACCESS
