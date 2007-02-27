@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:07:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:54:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,6 @@ Point ScOutputData::PrePrintDrawingLayer(long nLogStX, long nLogStY )
 {
     Rectangle aRect;
     SCCOL nCol;
-    SCROW nRow;
     Point aOffset;
     long nLayoutSign(bLayoutRTL ? -1 : 1);
 
@@ -214,7 +213,7 @@ void ScOutputData::DrawSelectiveObjects(const sal_uInt16 nLayer, const sal_uInt1
             {
                 // Region aDrawRegion(rRect);
                 // pPageView->DrawLayer(nLayer, aDrawRegion, pDev, nPaintMode);
-                pPageView->DrawLayer(nLayer, pDev, nPaintMode);
+                pPageView->DrawLayer(sal::static_int_cast<SdrLayerID>(nLayer), pDev, nPaintMode);
             }
         }
     }
@@ -437,7 +436,6 @@ void ScOutputData::DrawingSingle(const sal_uInt16 nLayer, const sal_uInt16 nPain
     SCSIZE  nArrY;
     for (nArrY=1; nArrY+1<nArrCount; nArrY++)
     {
-        BOOL bChanged = FALSE;
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
 
         if ( pThisRowInfo->bChanged )
