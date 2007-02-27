@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-03 14:54:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:31:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ ScHTMLLayoutParser::ScHTMLLayoutParser( EditEngine* pEditP, const String& rBaseU
 ScHTMLLayoutParser::~ScHTMLLayoutParser()
 {
     ScHTMLTableStackEntry* pS;
-    while ( pS = aTableStack.Pop() )
+    while ( (pS = aTableStack.Pop()) != 0 )
     {
         if ( pList->GetPos( pS->pCellEntry ) == LIST_ENTRY_NOTFOUND )
             delete pS->pCellEntry;
@@ -417,7 +417,7 @@ void ScHTMLLayoutParser::Adjust()
     {
         if ( pE->nTab < nTab )
         {   // Table beendet
-            if ( pS = aStack.Pop() )
+            if ( (pS = aStack.Pop()) != 0 )
             {
                 nLastCol = pS->nLastCol;
                 nNextRow = pS->nNextRow;
@@ -515,7 +515,7 @@ void ScHTMLLayoutParser::Adjust()
         if ( nRowMax < nRowTmp )
             nRowMax = nRowTmp;
     }
-    while ( pS = aStack.Pop() )
+    while ( (pS = aStack.Pop()) != 0 )
         delete pS;
 }
 
@@ -549,7 +549,7 @@ void ScHTMLLayoutParser::SetWidths()
         USHORT nWidth = nTableWidth / static_cast<USHORT>(nColsPerRow);
         USHORT nOff = nColOffsetStart;
         pLocalColOffset->Remove( (USHORT)0, pLocalColOffset->Count() );
-        for ( nCol = 0; nCol <= nColsPerRow; nCol++, nOff += nWidth )
+        for ( nCol = 0; nCol <= nColsPerRow; ++nCol, nOff = nOff + nWidth )
         {
             MakeColNoRef( pLocalColOffset, nOff, 0, 0, 0 );
         }
@@ -592,12 +592,12 @@ void ScHTMLLayoutParser::SetWidths()
                         {   // try to find a single undefined width
                             USHORT nTotal = 0;
                             BOOL bFound = FALSE;
-                            SCCOL nHere;
+                            SCCOL nHere = 0;
                             SCCOL nStop = Min( static_cast<SCCOL>(nCol + pE->nColOverlap), nColsPerRow );
                             for ( ; nCol < nStop; nCol++ )
                             {
                                 if ( pWidths[nCol] )
-                                    nTotal += pWidths[nCol];
+                                    nTotal = nTotal + pWidths[nCol];
                                 else
                                 {
                                     if ( bFound )
@@ -621,7 +621,7 @@ void ScHTMLLayoutParser::SetWidths()
             for ( nCol = 0; nCol < nColsPerRow; nCol++ )
             {
                 if ( pWidths[nCol] )
-                    nWidths += pWidths[nCol];
+                    nWidths = nWidths + pWidths[nCol];
                 else
                     nUnknown++;
             }
@@ -657,7 +657,7 @@ void ScHTMLLayoutParser::SetWidths()
                     if ( nCol < nColsPerRow )
                     {
                         pE->nOffset = pOffsets[nCol];
-                        nCol += pE->nColOverlap;
+                        nCol = nCol + pE->nColOverlap;
                         if ( nCol > nColsPerRow )
                             nCol = nColsPerRow;
                         pE->nWidth = pOffsets[nCol] - pE->nOffset;
@@ -1283,9 +1283,9 @@ void ScHTMLLayoutParser::TableOff( ImportInfo* pInfo )
                 ModifyOffset( pS->pLocalColOffset, nOldOffset, nNewOffset, nOffsetTolerance );
                 USHORT nTmp = nNewOffset - pE->nOffset - pE->nWidth;
                 pE->nWidth = nNewOffset - pE->nOffset;
-                pS->nTableWidth += nTmp;
+                pS->nTableWidth = pS->nTableWidth + nTmp;
                 if ( pS->nColOffset >= nOldOffset )
-                    pS->nColOffset += nTmp;
+                    pS->nColOffset = pS->nColOffset + nTmp;
             }
 
             nColCnt = pE->nCol + pE->nColOverlap;
@@ -1439,7 +1439,7 @@ void ScHTMLLayoutParser::ColOn( ImportInfo* pInfo )
             {
                 USHORT nVal = GetWidthPixel( pOption );
                 MakeCol( pLocalColOffset, nColOffset, nVal, 0, 0 );
-                nColOffset += nVal;
+                nColOffset = nColOffset + nVal;
             }
             break;
         }
@@ -1552,9 +1552,6 @@ void ScHTMLLayoutParser::FontOn( ImportInfo* pInfo )
 
 void ScHTMLLayoutParser::ProcToken( ImportInfo* pInfo )
 {
-#if OSL_DEBUG_LEVEL > 1
-    HTML_TOKEN_IDS eTokenId = (HTML_TOKEN_IDS)pInfo->nToken;
-#endif
     BOOL bSetLastToken = TRUE;
     switch ( pInfo->nToken )
     {
@@ -2245,7 +2242,7 @@ ScHTMLTable* ScHTMLTable::CloseTable( const ImportInfo& rInfo )
 SCCOLROW ScHTMLTable::GetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos ) const
 {
     const ScSizeVec& rSizes = maSizes[ eOrient ];
-    return (nCellPos < rSizes.size()) ? rSizes[ nCellPos ] : 0;
+    return (static_cast< size_t >( nCellPos ) < rSizes.size()) ? rSizes[ nCellPos ] : 0;
 }
 
 SCCOLROW ScHTMLTable::GetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellBegin, SCCOLROW nCellEnd ) const
@@ -2569,8 +2566,8 @@ void ScHTMLTable::ProcessFormatOptions( SfxItemSet& rItemSet, const ImportInfo& 
 void ScHTMLTable::SetDocSize( ScHTMLOrient eOrient, SCCOLROW nCellPos, SCCOLROW nSize )
 {
     ScSizeVec& rSizes = maSizes[ eOrient ];
-    if( nCellPos >= rSizes.size() )
-        rSizes.resize( nCellPos + 1, 1 );    // expand with minimum height/width == 1
+    if( static_cast< size_t >( nCellPos ) >= rSizes.size() )
+        rSizes.resize( static_cast< size_t >( nCellPos + 1 ), 1 );    // expand with minimum height/width == 1
     if( rSizes[ nCellPos ] < nSize )
         rSizes[ nCellPos ] = nSize;
 }
@@ -2854,9 +2851,6 @@ ScHTMLTable* ScHTMLQueryParser::GetTable( ScHTMLTableId nTableId ) const
 
 void ScHTMLQueryParser::ProcessToken( const ImportInfo& rInfo )
 {
-#if OSL_DEBUG_LEVEL > 1
-    HTML_TOKEN_IDS eTokenId = static_cast< HTML_TOKEN_IDS >( rInfo.nToken );
-#endif
     switch( rInfo.nToken )
     {
 // --- meta data ---
@@ -3007,7 +3001,7 @@ void ScHTMLQueryParser::MetaOn( const ImportInfo& rInfo )
     }
 }
 
-void ScHTMLQueryParser::TitleOn( const ImportInfo& rInfo )
+void ScHTMLQueryParser::TitleOn( const ImportInfo& /*rInfo*/ )
 {
     mbTitleOn = true;
     maTitle.Erase();
@@ -3055,9 +3049,6 @@ void ScHTMLQueryParser::CloseTable( const ImportInfo& rInfo )
 
 IMPL_LINK( ScHTMLQueryParser, HTMLImportHdl, const ImportInfo*, pInfo )
 {
-#if OSL_DEBUG_LEVEL > 1
-    HTML_TOKEN_IDS eTokenId = static_cast< HTML_TOKEN_IDS >( pInfo->nToken );
-#endif
     switch( pInfo->eState )
     {
         case HTMLIMP_START:
