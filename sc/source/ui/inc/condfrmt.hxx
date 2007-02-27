@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condfrmt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:15:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ public:
 
     virtual void    SetReference( const ScRange& rRef, ScDocument* pDoc );
     virtual void    AddRefEntry();
-    virtual BOOL    IsRefInputMode();
+    virtual BOOL    IsRefInputMode() const;
     virtual void    SetActive();
     virtual BOOL    Close();
 
