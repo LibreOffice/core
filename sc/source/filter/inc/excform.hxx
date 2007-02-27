@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:32:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ class ExcelToSc8 : public ExcelToSc
 private:
     const XclImpLinkManager&    rLinkMan;
 
-    void                ExcRelToScRel( UINT16 nRow, UINT16 nCol, SingleRefData&,
+    void                ExcRelToScRel8( UINT16 nRow, UINT16 nCol, SingleRefData&,
                             const BOOL bName );
 
                         // this function must read 2 bytes from stream and adjust <nBytesLeft>
