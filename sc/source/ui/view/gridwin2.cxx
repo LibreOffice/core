@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:56:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,8 +322,6 @@ void ScGridWindow::DoPivotDrop( BOOL bDelete, BOOL bToCols, SCSIZE nDestPos )
             pDest[nDestPos] = aMoveField;
             ++rDestCount;
         }
-
-        ScPivotCollection* pPivotCollection = pViewData->GetDocument()->GetPivotCollection();
 
         BOOL bEmpty = ( nColCount + nRowCount == 0 ||
                         ( nColCount + nRowCount == 1 && nDataCount <= 1 ) );
@@ -787,8 +785,8 @@ USHORT ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
     {
         BOOL bHori = FALSE;
         BOOL bVert = FALSE;
-        SCCOL nHitX;
-        SCROW nHitY;
+        SCCOL nHitX = 0;
+        SCROW nHitY = 0;
 
         long nMouseX = rMouse.X();
         long nMouseY = rMouse.Y();
@@ -822,7 +820,7 @@ USHORT ScGridWindow::HitPageBreak( const Point& rMouse, ScRange* pSource,
 
         if ( bHori || bVert )
         {
-            USHORT nCount = pPageData->GetCount();
+            USHORT nCount = sal::static_int_cast<USHORT>( pPageData->GetCount() );
             for (USHORT nPos=0; nPos<nCount && !nFound; nPos++)
             {
                 ScPrintRangeData& rData = pPageData->GetData(nPos);
