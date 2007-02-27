@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compressedarray.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:28:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:54:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -412,15 +412,15 @@ void ScCompressedArrayIterator<A,D>::Resync( A nPos )
 template< typename A, typename D > class ScSummableCompressedArray : public ScCompressedArray<A,D>
 {
 public:
-                                ScSummableCompressedArray( A nMaxAccess,
+                                ScSummableCompressedArray( A nMaxAccessP,
                                         const D& rValue,
-                                        size_t nDelta = nScCompressedArrayDelta )
-                                    : ScCompressedArray<A,D>( nMaxAccess,
-                                            rValue, nDelta)
+                                        size_t nDeltaP = nScCompressedArrayDelta )
+                                    : ScCompressedArray<A,D>( nMaxAccessP,
+                                            rValue, nDeltaP)
                                     {}
-                                ScSummableCompressedArray( A nMaxAccess,
+                                ScSummableCompressedArray( A nMaxAccessP,
                                         const D* pDataArray, size_t nDataCount )
-                                    : ScCompressedArray<A,D>( nMaxAccess,
+                                    : ScCompressedArray<A,D>( nMaxAccessP,
                                             pDataArray, nDataCount)
                                     {}
 
@@ -455,14 +455,14 @@ public:
 template< typename A, typename D > class ScBitMaskCompressedArray : public ScCompressedArray<A,D>
 {
 public:
-                                ScBitMaskCompressedArray( A nMaxAccess,
+                                ScBitMaskCompressedArray( A nMaxAccessP,
                                         const D& rValue,
-                                        size_t nDelta = nScCompressedArrayDelta )
-                                    : ScCompressedArray<A,D>( nMaxAccess, rValue, nDelta)
+                                        size_t nDeltaP = nScCompressedArrayDelta )
+                                    : ScCompressedArray<A,D>( nMaxAccessP, rValue, nDeltaP)
                                     {}
-                                ScBitMaskCompressedArray( A nMaxAccess,
+                                ScBitMaskCompressedArray( A nMaxAccessP,
                                         const D* pDataArray, size_t nDataCount )
-                                    : ScCompressedArray<A,D>( nMaxAccess,
+                                    : ScCompressedArray<A,D>( nMaxAccessP,
                                             pDataArray, nDataCount)
                                     {}
     void                        AndValue( A nPos, const D& rValueToAnd );
