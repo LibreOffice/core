@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dwfunctr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:12:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,14 +82,14 @@ SFX_IMPL_DOCKINGWINDOW( ScFunctionChildWindow, FID_FUNCTION_BOX )
 #*
 #************************************************************************/
 
-__EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParent,
+__EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParentP,
                                     USHORT nId,
                                     SfxBindings* pBindings,
                                     SfxChildWinInfo* pInfo ) :
-    SfxChildWindow( pParent, nId )
+    SfxChildWindow( pParentP, nId )
 {
     ScFunctionDockWin* pWin = new ScFunctionDockWin( pBindings, this,
-                                        pParent, ScResId( FID_FUNCTION_BOX ) );
+                                        pParentP, ScResId( FID_FUNCTION_BOX ) );
     pWindow = pWin;
 
     eChildAlignment = SFX_ALIGN_RIGHT;
@@ -111,16 +111,16 @@ __EXPORT ScFunctionChildWindow::ScFunctionChildWindow( Window* pParent,
 #*
 #************************************************************************/
 
-ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindings,
+ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindingsP,
                 SfxChildWindow *pCW, Window* pParent, const ResId& rResId ) :
 
-    SfxDockingWindow( pBindings, pCW, pParent, rResId ),
+    SfxDockingWindow( pBindingsP, pCW, pParent, rResId ),
+    aPrivatSplit    ( this, ResId( FT_SPLIT ),SC_SPLIT_VERT),
     aCatBox         ( this, ResId( CB_CAT ) ),
-    aDDFuncList     ( this, ResId( DDLB_FUNC ) ),
     aFuncList       ( this, ResId( LB_FUNC ) ),
+    aDDFuncList     ( this, ResId( DDLB_FUNC ) ),
     aInsertButton   ( this, ResId( IMB_INSERT ) ),
     aFiFuncDesc     ( this, ResId( FI_FUNCDESC ) ),
-    aPrivatSplit    ( this, ResId( FT_SPLIT ),SC_SPLIT_VERT),
     aOldSize        (0,0)
 {
     FreeResource();
@@ -158,7 +158,7 @@ ScFunctionDockWin::ScFunctionDockWin( SfxBindings* pBindings,
 
     Link a3Link=LINK( this, ScFunctionDockWin, SetSplitHdl);
     aPrivatSplit.SetCtrModifiedHdl(a3Link);
-    StartListening( *pBindings, TRUE );
+    StartListening( *pBindingsP, TRUE );
 
     Point aTopLeft=aCatBox.GetPosPixel();
     //String aString=aCatBox.GetEntry( 0)+String("www");
@@ -699,7 +699,7 @@ BOOL __EXPORT ScFunctionDockWin::Close()
 #*  Output:     Das uebergebene Alignment
 #*
 #************************************************************************/
-SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment abla,
+SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment /* abla */,
                                 SfxChildAlignment aChildAlign)
 {
     String aString = String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("ww"));
@@ -764,12 +764,9 @@ SfxChildAlignment __EXPORT ScFunctionDockWin::CheckAlignment(SfxChildAlignment a
 #*  Output:     TRUE
 #*
 #************************************************************************/
-void ScFunctionDockWin::SFX_NOTIFY( SfxBroadcaster& rBC,
-                                         const TypeId& rBCType,
-                                         const SfxHint& rHint,
-                                         const TypeId& rHintType )
+void ScFunctionDockWin::Notify( SfxBroadcaster&, const SfxHint& /* rHint */ )
 {
-    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
+//    const SfxPoolItemHint *pPoolItemHint = PTR_CAST(SfxPoolItemHint, &rHint);
     /*
     if ( pPoolItemHint
          && ( pPoolItemHint->GetObject()->ISA( SvxColorTableItem ) ) )
@@ -888,13 +885,11 @@ void ScFunctionDockWin::UpdateFunctionList()
 #*
 #************************************************************************/
 
-void ScFunctionDockWin::DoEnter(BOOL bOk) //@@ ???
+void ScFunctionDockWin::DoEnter(BOOL /* bOk */) //@@ ???
 {
     String aFirstArgStr;
     String aParaStr;
     String aArgStr;
-    USHORT rStart=0;
-    USHORT rEnd=0;
     String aString=pAllFuncList->GetSelectEntry();
     SfxViewShell* pCurSh = SfxViewShell::Current();
     nArgs=0;
@@ -1035,9 +1030,6 @@ IMPL_LINK( ScFunctionDockWin, SelHdl, ListBox*, pLb )
 
 IMPL_LINK( ScFunctionDockWin, SetSelectionHdl, void*, pCtrl )
 {
-    ScModule* pScMod = SC_MOD();
-    ScFormEditData* pData = pScMod->GetFormEditData();
-
     if ((ImageButton *)pCtrl == &aInsertButton ||
         (ListBox *)pCtrl == &aFuncList)
     {
@@ -1103,7 +1095,7 @@ void ScFunctionDockWin::ToggleFloatingMode()
     aTimer.Start();
 }
 
-IMPL_LINK( ScFunctionDockWin, TimerHdl, Timer*, pTi)
+IMPL_LINK( ScFunctionDockWin, TimerHdl, Timer*, EMPTYARG )
 {
     CheckAlignment(eSfxOldAlignment,eSfxNewAlignment);
     SetSize();
@@ -1147,7 +1139,7 @@ void ScFunctionDockWin::Initialize(SfxChildWinInfo *pInfo)
         aSplitterInitPos.Y()=(USHORT) aStr.ToInt32();
         xub_StrLen n1 = aStr.Search(';');
         aStr.Erase(0, n1+1);
-        USHORT nSelPos=aStr.ToInt32();
+        USHORT nSelPos=sal::static_int_cast<USHORT>( aStr.ToInt32() );
         aCatBox.SelectEntryPos(nSelPos);
         SelHdl(&aCatBox);
 
