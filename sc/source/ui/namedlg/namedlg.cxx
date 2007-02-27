@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:12:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,28 +139,28 @@ ScNameDlg::ScNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
         aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign ),
         //
-        aBtnCriteria    ( this, ScResId( BTN_CRITERIA ) ),
+        aFlType         ( this, ScResId( FL_TYPE ) ),
         aBtnPrintArea   ( this, ScResId( BTN_PRINTAREA ) ),
         aBtnColHeader   ( this, ScResId( BTN_COLHEADER ) ),
+        aBtnCriteria    ( this, ScResId( BTN_CRITERIA ) ),
         aBtnRowHeader   ( this, ScResId( BTN_ROWHEADER ) ),
-        aFlType         ( this, ScResId( FL_TYPE ) ),
         //
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnAdd         ( this, ScResId( BTN_ADD ) ),
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
         //
+        bSaved          (FALSE),
         aStrAdd         ( ScResId( STR_ADD ) ),
         aStrModify      ( ScResId( STR_MODIFY ) ),
         errMsgInvalidSym( ScResId( STR_INVALIDSYMBOL ) ),
-        bSaved          (FALSE),
         //
-        theCursorPos    ( aCursorPos ), // zum Berechnen der Referenzen
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
-        aLocalRangeName ( *(pDoc->GetRangeName()) )
+        aLocalRangeName ( *(pDoc->GetRangeName()) ),
+        theCursorPos    ( aCursorPos )  // zum Berechnen der Referenzen
 {
     pSaveObj = new SaveData;
     Init();
@@ -246,14 +246,14 @@ void ScNameDlg::RefInputDone( BOOL bForced)
 // neue Selektion im Referenz-Edit angezeigt wird.
 
 
-void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( aEdAssign.IsEnabled() )
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart(&aEdAssign);
         String aRefStr;
-        rRef.Format( aRefStr, ABS_DREF3D, pDoc );
+        rRef.Format( aRefStr, ABS_DREF3D, pDocP );
         aEdAssign.SetRefString( aRefStr );
     }
 }
@@ -427,7 +427,6 @@ IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
             {
                 ScRangeData*    pNewEntry   = NULL;
                 RangeType       nType       = RT_NAME;
-                SCTAB           nTab        = pViewData->GetTabNo();
                 USHORT          nFoundAt    = 0;
                 String          theSymbol   = aEdAssign.GetText();
                 String          aStrPos;
