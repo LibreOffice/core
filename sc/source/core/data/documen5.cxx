@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen5.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:52:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,10 @@
 
 
 
+#ifdef WNT
 #pragma optimize("",off)
 #pragma optimize("q",off) // p-code off
+#endif
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -558,7 +560,7 @@ void ScDocument::UpdateChartListenerCollection()
                                     // TODO: handle error
                                 }
 
-                                if ( nId = SotExchange::IsChart( aObjectClassName ) )
+                                if ( ( nId = SotExchange::IsChart( aObjectClassName ) ) != 0 )
                                 {
 //REMOVE                                        BOOL bSO6 = (nId >= SOFFICE_FILEFORMAT_60);
                                     SchMemChart* pChartData = SchDLL::GetChartData(xIPObj);
@@ -599,7 +601,7 @@ void ScDocument::UpdateChartListenerCollection()
                                             pCL->StartListeningTo();
                                             pCL->SetUsed( TRUE );
 
-                                            BOOL bForceSave = FALSE;
+                                            // BOOL bForceSave = FALSE;
 
                                             //  Set ReadOnly flag at MemChart, so Chart knows
                                             //  about the external data in a freshly loaded document.
