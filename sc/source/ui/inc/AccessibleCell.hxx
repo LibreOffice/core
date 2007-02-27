@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:05:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,10 +80,15 @@ public:
         ScAccessibleDocument* pAccDoc);
 
     virtual void Init();
+
+    using ScAccessibleCellBase::disposing;
     virtual void SAL_CALL disposing();
 
 protected:
     virtual ~ScAccessibleCell();
+
+    using ScAccessibleCellBase::IsDefunc;
+
 public:
     ///=====  XInterface  =====================================================
 
