@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmatrix.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:43:30 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ void ScMatrix::SetErrorAtInterpreter( USHORT nError ) const
 //  BYTE type ( CELLTYPE_NONE, CELLTYPE_VALUE, CELLTYPE_STRING ); nothing, double or String
 //
 
-ScMatrix::ScMatrix(SvStream& rStream)
+ScMatrix::ScMatrix(SvStream& /* rStream */)
         : pErrorInterpreter( NULL)
         , nRefCnt(0)
 {
@@ -157,7 +157,7 @@ ScMatrix::ScMatrix(SvStream& rStream)
 #endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
-void ScMatrix::Store(SvStream& rStream) const
+void ScMatrix::Store(SvStream& /* rStream */) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
