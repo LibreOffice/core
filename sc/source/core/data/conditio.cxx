@@ -4,9 +4,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:19:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:00:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,10 +111,19 @@ BOOL lcl_HasRelRef( ScDocument* pDoc, ScTokenArray* pFormula, USHORT nRecursion 
                         case ocTable:   // SHEET() returns own sheet index
                         case ocCell:    // CELL() may return own cell address
                             return TRUE;
-                        break;
+//                        break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
                 }
                 break;
+
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
         }
     }
@@ -130,15 +139,15 @@ ScConditionEntry::ScConditionEntry( const ScConditionEntry& r ) :
     aStrVal2(r.aStrVal2),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
-    bRelRef1(r.bRelRef1),
-    bRelRef2(r.bRelRef2),
     pFormula1(NULL),
     pFormula2(NULL),
+    aSrcPos(r.aSrcPos),
+    aSrcString(r.aSrcString),
     pFCell1(NULL),
     pFCell2(NULL),
     pDoc(r.pDoc),
-    aSrcPos(r.aSrcPos),
-    aSrcString(r.aSrcString),
+    bRelRef1(r.bRelRef1),
+    bRelRef2(r.bRelRef2),
     bFirstRun(TRUE)
 {
     //  ScTokenArray copy ctor erzeugt flache Kopie
@@ -160,15 +169,15 @@ ScConditionEntry::ScConditionEntry( ScDocument* pDocument, const ScConditionEntr
     aStrVal2(r.aStrVal2),
     bIsStr1(r.bIsStr1),
     bIsStr2(r.bIsStr2),
-    bRelRef1(r.bRelRef1),
-    bRelRef2(r.bRelRef2),
     pFormula1(NULL),
     pFormula2(NULL),
+    aSrcPos(r.aSrcPos),
+    aSrcString(r.aSrcString),
     pFCell1(NULL),
     pFCell2(NULL),
     pDoc(pDocument),
-    aSrcPos(r.aSrcPos),
-    aSrcString(r.aSrcString),
+    bRelRef1(r.bRelRef1),
+    bRelRef2(r.bRelRef2),
     bFirstRun(TRUE)
 {
     // echte Kopie der Formeln (fuer Ref-Undo)
@@ -192,14 +201,14 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     nVal2(0.0),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
-    bRelRef1(FALSE),
-    bRelRef2(FALSE),
     pFormula1(NULL),
     pFormula2(NULL),
+    aSrcPos(rPos),
     pFCell1(NULL),
     pFCell2(NULL),
     pDoc(pDocument),
-    aSrcPos(rPos),
+    bRelRef1(FALSE),
+    bRelRef2(FALSE),
     bFirstRun(TRUE)
 {
     Compile( rExpr1, rExpr2, bCompileEnglish, bCompileXML, FALSE );
@@ -216,14 +225,14 @@ ScConditionEntry::ScConditionEntry( ScConditionMode eOper,
     nVal2(0.0),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
-    bRelRef1(FALSE),
-    bRelRef2(FALSE),
     pFormula1(NULL),
     pFormula2(NULL),
+    aSrcPos(rPos),
     pFCell1(NULL),
     pFCell2(NULL),
     pDoc(pDocument),
-    aSrcPos(rPos),
+    bRelRef1(FALSE),
+    bRelRef2(FALSE),
     bFirstRun(TRUE)
 {
     if ( pArr1 )
@@ -287,19 +296,19 @@ ScConditionEntry::~ScConditionEntry()
     delete pFormula2;
 }
 
-ScConditionEntry::ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHdr,
+ScConditionEntry::ScConditionEntry( SvStream& /* rStream */, ScMultipleReadHeader& /* rHdr */,
                                     ScDocument* pDocument ) :
     nVal1(0.0),
     nVal2(0.0),
     bIsStr1(FALSE),
     bIsStr2(FALSE),
-    bRelRef1(FALSE),
-    bRelRef2(FALSE),
     pFormula1(NULL),
     pFormula2(NULL),
     pFCell1(NULL),
     pFCell2(NULL),
     pDoc(pDocument),
+    bRelRef1(FALSE),
+    bRelRef2(FALSE),
     bFirstRun(TRUE)
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
@@ -361,7 +370,7 @@ ScConditionEntry::ScConditionEntry( SvStream& rStream, ScMultipleReadHeader& rHd
 #endif // SC_ROWLIMIT_STREAM_ACCESS
 }
 
-void ScConditionEntry::StoreCondition(SvStream& rStream, ScMultipleWriteHeader& rHdr) const
+void ScConditionEntry::StoreCondition(SvStream& /* rStream */, ScMultipleWriteHeader& /* rHdr */) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -1030,7 +1039,7 @@ String ScConditionEntry::GetExpression( const ScAddress& rCursor, USHORT nIndex,
 
 ScTokenArray* ScConditionEntry::CreateTokenArry( USHORT nIndex ) const
 {
-    ScTokenArray* pRet;
+    ScTokenArray* pRet = NULL;
     ScAddress aAddr;
 
     if ( nIndex==0 )
@@ -1164,7 +1173,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
         {
             pFormula->Reset();
             ScToken* t;
-            while ( t = pFormula->GetNextReference() )
+            while ( ( t = pFormula->GetNextReference() ) != NULL )
             {
                 SingleRefData& rRef1 = t->GetSingleRef();
                 if ( rRef1.IsTabRel() && !rRef1.IsTabDeleted() )
@@ -1200,7 +1209,7 @@ ScAddress ScConditionEntry::GetValidSrcPos() const
     return aValidPos;
 }
 
-void ScConditionEntry::DataChanged( const ScRange* pModified ) const
+void ScConditionEntry::DataChanged( const ScRange* /* pModified */ ) const
 {
     // nix
 }
@@ -1626,7 +1635,8 @@ void ScConditionalFormat::SourceChanged( const ScAddress& rAddr )
 
 //------------------------------------------------------------------------
 
-ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList)
+ScConditionalFormatList::ScConditionalFormatList(const ScConditionalFormatList& rList) :
+    ScConditionalFormats_Impl()
 {
     //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
 
