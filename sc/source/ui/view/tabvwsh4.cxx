@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh4.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:42:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:58:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,8 +236,8 @@ void __EXPORT ScTabViewShell::Activate(BOOL bMDI)
 
         if(pScMod->IsRefDialogOpen())
         {
-            USHORT nCurRefDlgId=pScMod->GetCurRefDlgId();
-            SfxChildWindow* pChildWnd = pThisFrame->GetChildWindow( nCurRefDlgId );
+            USHORT nModRefDlgId=pScMod->GetCurRefDlgId();
+            SfxChildWindow* pChildWnd = pThisFrame->GetChildWindow( nModRefDlgId );
             if ( pChildWnd )
             {
                 ScAnyRefDlg* pRefDlg = (ScAnyRefDlg*)pChildWnd->GetWindow();
@@ -436,7 +436,7 @@ void __EXPORT ScTabViewShell::InnerResizePixel( const Point &rOfs, const Size &r
     else
     {
         SvBorder aBorder;
-           GetBorderSize( aBorder, rSize );
+        GetBorderSize( aBorder, rSize );
         SetBorderPixel( aBorder );
         aNewSize.Width()  += aBorder.Left() + aBorder.Right();
         aNewSize.Height() += aBorder.Top() + aBorder.Bottom();
@@ -561,7 +561,7 @@ void __EXPORT ScTabViewShell::Move()
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::ShowCursor(FASTBOOL bOn)
+void __EXPORT ScTabViewShell::ShowCursor(FASTBOOL /* bOn */)
 {
 /*!!!   ShowCursor wird nicht paarweise wie im gridwin gerufen.
         Der CursorLockCount am Gridwin muss hier direkt auf 0 gesetzt werden
@@ -575,23 +575,23 @@ void __EXPORT ScTabViewShell::ShowCursor(FASTBOOL bOn)
 
 //------------------------------------------------------------------
 
-void __EXPORT ScTabViewShell::WriteUserData(String& rData, BOOL bBrowse)
+void __EXPORT ScTabViewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
 {
     GetViewData()->WriteUserData(rData);
 }
 
-void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool bBrowse )
+void ScTabViewShell::WriteUserDataSequence (uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool /* bBrowse */ )
 {
     GetViewData()->WriteUserDataSequence (rSettings);
 }
 
-void __EXPORT ScTabViewShell::ReadUserData(const String& rData, BOOL bBrowse)
+void __EXPORT ScTabViewShell::ReadUserData(const String& rData, BOOL /* bBrowse */)
 {
     if ( !GetViewData()->GetDocShell()->IsPreview() )
         DoReadUserData( rData );
 }
 
-void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool bBrowse )
+void ScTabViewShell::ReadUserDataSequence (const uno::Sequence < beans::PropertyValue >& rSettings, sal_Bool /* bBrowse */ )
 {
     if ( !GetViewData()->GetDocShell()->IsPreview() )
         DoReadUserDataSequence( rSettings );
@@ -668,7 +668,7 @@ void ScTabViewShell::DoReadUserData( const String& rData )
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::TestFunction( USHORT nPar )
+void ScTabViewShell::TestFunction( USHORT /* nPar */ )
 {
 /*  switch (nPar)
     {
@@ -678,7 +678,7 @@ void ScTabViewShell::TestFunction( USHORT nPar )
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::ExecuteShowNIY( SfxRequest& rReq )
+void ScTabViewShell::ExecuteShowNIY( SfxRequest& /* rReq */ )
 {
     ErrorMessage(STR_BOX_YNI);
 }
@@ -893,7 +893,6 @@ void ScTabViewShell::SetCurSubShell(ObjectSelectionType eOST, BOOL bForce)
 {
     ScViewData* pViewData   = GetViewData();
     ScDocShell* pDocSh      = pViewData->GetDocShell();
-    SfxShell*   pCurSubSh   = NULL;
 
     if(bDontSwitch) return;
 
@@ -1157,14 +1156,14 @@ BOOL ScTabViewShell::IsAuditShell() const
     return ( pAuditingShell && ( GetMySubShell() == pAuditingShell ) );
 }
 
-void ScTabViewShell::SetDrawTextUndo( SfxUndoManager* pUndoMgr )
+void ScTabViewShell::SetDrawTextUndo( SfxUndoManager* pNewUndoMgr )
 {
     // Default: Undo-Manager der DocShell
-    if (!pUndoMgr)
-        pUndoMgr = GetViewData()->GetDocShell()->GetUndoManager();
+    if (!pNewUndoMgr)
+        pNewUndoMgr = GetViewData()->GetDocShell()->GetUndoManager();
 
     if (pDrawTextShell)
-        pDrawTextShell->SetUndoManager(pUndoMgr);
+        pDrawTextShell->SetUndoManager(pNewUndoMgr);
     else
         DBG_ERROR("SetDrawTextUndo ohne DrawTextShell");
 }
@@ -1330,7 +1329,7 @@ void ScTabViewShell::StopEditShell()
 
 // close handler to ensure function of dialog:
 
-IMPL_LINK( ScTabViewShell, SimpleRefClose, String*, pResult )
+IMPL_LINK( ScTabViewShell, SimpleRefClose, String*, EMPTYARG )
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen( TRUE );
     return 0;
@@ -1357,25 +1356,25 @@ ScTabViewObj* lcl_GetViewObj( ScTabViewShell& rShell )
 
 IMPL_LINK( ScTabViewShell, SimpleRefDone, String*, pResult )
 {
-    ScTabViewObj* pImp = lcl_GetViewObj( *this );
-    if ( pImp && pResult )
-        pImp->RangeSelDone( *pResult );
+    ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
+    if ( pImpObj && pResult )
+        pImpObj->RangeSelDone( *pResult );
     return 0;
 }
 
 IMPL_LINK( ScTabViewShell, SimpleRefAborted, String*, pResult )
 {
-    ScTabViewObj* pImp = lcl_GetViewObj( *this );
-    if ( pImp && pResult )
-        pImp->RangeSelAborted( *pResult );
+    ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
+    if ( pImpObj && pResult )
+        pImpObj->RangeSelAborted( *pResult );
     return 0;
 }
 
 IMPL_LINK( ScTabViewShell, SimpleRefChange, String*, pResult )
 {
-    ScTabViewObj* pImp = lcl_GetViewObj( *this );
-    if ( pImp && pResult )
-        pImp->RangeSelChanged( *pResult );
+    ScTabViewObj* pImpObj = lcl_GetViewObj( *this );
+    if ( pImpObj && pResult )
+        pImpObj->RangeSelChanged( *pResult );
     return 0;
 }
 
@@ -1466,7 +1465,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
     {
         bUsed = pScMod->InputKeyEvent( rKEvt );         // Eingabe
         if( !bUsed )
-            bUsed = SfxViewShell::KeyInput( rKEvt );    // Acceleratoren
+            bUsed = sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKEvt ));    // accelerators
     }
     else if( bAnyEdit )
     {
@@ -1506,7 +1505,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
             bUsed = pScMod->InputKeyEvent( rKEvt );     // Eingabe
 
         if( !bUsed )
-            bUsed = SfxViewShell::KeyInput( rKEvt );    // Acceleratoren
+            bUsed = sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKEvt ));    // accelerators
 
         if ( !bUsed && !bIsType && nCode != KEY_RETURN )    // Eingabe nochmal hinterher
             bUsed = pScMod->InputKeyEvent( rKEvt );
@@ -1526,7 +1525,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
             }
         }
         if (!bUsed)
-            bUsed = SfxViewShell::KeyInput( rKEvt );            // Acceleratoren
+            bUsed = sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKEvt ));    // accelerators
 
         //  #74696# during inplace editing, some slots are handled by the
         //  container app and are executed during Window::KeyInput.
@@ -1641,7 +1640,7 @@ BOOL ScTabViewShell::TabKeyInput(const KeyEvent& rKEvt)
 
 BOOL ScTabViewShell::SfxKeyInput(const KeyEvent& rKeyEvent)
 {
-    return SfxViewShell::KeyInput( rKeyEvent );
+    return sal::static_int_cast<BOOL>(SfxViewShell::KeyInput( rKeyEvent ));
 }
 
 FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
@@ -1655,35 +1654,39 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
 //  SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_DISABLE_ACCELS ),
 
 #define __INIT_ScTabViewShell \
-    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ), \
+    eCurOST(OST_NONE),          \
     nDrawSfxId(0),              \
     nCtrlSfxId(USHRT_MAX),      \
-    eCurOST(OST_NONE),          \
     nFormSfxId(USHRT_MAX),      \
-    pCellShell(NULL),           \
-    pPageBreakShell(NULL),      \
     pDrawShell(NULL),           \
-    pDrawFormShell(NULL),       \
-    pOleObjectShell(NULL),      \
-    pChartShell(NULL),          \
-    pGraphicShell(NULL),        \
-    pMediaShell(NULL),          \
     pDrawTextShell(NULL),       \
     pEditShell(NULL),           \
     pPivotShell(NULL),          \
     pAuditingShell(NULL),       \
+    pDrawFormShell(NULL),       \
+    pCellShell(NULL),           \
+    pOleObjectShell(NULL),      \
+    pChartShell(NULL),          \
+    pGraphicShell(NULL),        \
+    pMediaShell(NULL),          \
+    pPageBreakShell(NULL),      \
+    pExtrusionBarShell(NULL),   \
+    pFontworkBarShell(NULL),    \
     pFormShell(NULL),           \
     pInputHandler(NULL),        \
     pCurFrameLine(NULL),        \
-    bActiveChartSh(FALSE),      \
+    aTarget( this ),            \
+    pDialogDPObject(NULL),      \
+    pNavSettings(NULL),         \
     bActiveDrawSh(FALSE),       \
     bActiveDrawTextSh(FALSE),   \
-    bActiveGraphicSh(FALSE),    \
-    bActiveMediaSh(FALSE),      \
     bActivePivotSh(FALSE),      \
     bActiveAuditingSh(FALSE),   \
     bActiveDrawFormSh(FALSE),   \
     bActiveOleObjectSh(FALSE),  \
+    bActiveChartSh(FALSE),      \
+    bActiveGraphicSh(FALSE),    \
+    bActiveMediaSh(FALSE),      \
     bActiveEditSh(FALSE),       \
     bFormShellAtTop(FALSE),     \
     bDontSwitch(FALSE),         \
@@ -1691,14 +1694,9 @@ FASTBOOL __EXPORT ScTabViewShell::KeyInput( const KeyEvent &rKeyEvent )
     bPrintSelected(FALSE),      \
     bReadOnly(FALSE),           \
     pScSbxObject(NULL),         \
-    bChartAreaValid(FALSE),     \
     bChartDlgIsEdit(FALSE),     \
-    pDialogDPObject(NULL),      \
+    bChartAreaValid(FALSE),     \
     nCurRefDlgId(0),            \
-    pNavSettings(NULL),         \
-    aTarget( this ),            \
-    pExtrusionBarShell(NULL),   \
-    pFontworkBarShell(NULL),    \
     pAccessibilityBroadcaster(NULL)
 
 
@@ -1888,8 +1886,9 @@ void ScTabViewShell::Construct( BYTE nForceDesignMode )
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 const ScTabViewShell& rWin ) :
-    __INIT_ScTabViewShell,
-    ScDBFunc( &pViewFrame->GetWindow(), rWin, this )
+    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
+    ScDBFunc( &pViewFrame->GetWindow(), rWin, this ),
+    __INIT_ScTabViewShell
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabViewShell::ScTabViewShell" );
 
@@ -1913,8 +1912,9 @@ ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
 
 ScTabViewShell::ScTabViewShell( SfxViewFrame* pViewFrame,
                                 SfxViewShell* pOldSh ) :
-    __INIT_ScTabViewShell,
-    ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this )
+    SfxViewShell( pViewFrame, SFX_VIEW_MAXIMIZE_FIRST | SFX_VIEW_CAN_PRINT | SFX_VIEW_HAS_PRINTOPTIONS ),
+    ScDBFunc( &pViewFrame->GetWindow(), (ScDocShell&)*pViewFrame->GetObjectShell(), this ),
+    __INIT_ScTabViewShell
 {
     RTL_LOGFILE_CONTEXT_AUTHOR ( aLog, "sc", "nn93723", "ScTabViewShell::ScTabViewShell" );
 
