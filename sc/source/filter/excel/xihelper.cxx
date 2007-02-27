@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xihelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:21:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:26:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -225,7 +225,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
         const XclFormatRunVec& rFormats = rString.GetFormats();
 
         ScEditEngineDefaulter& rEE = (eType == EXC_FONTITEM_NOTE) ?
-            rRoot.GetDoc().GetNoteEngine() : rRoot.GetEditEngine();
+            static_cast< ScEditEngineDefaulter& >( rRoot.GetDoc().GetNoteEngine() ) : rRoot.GetEditEngine();
         rEE.SetText( rString.GetText() );
 
         SfxItemSet aItemSet( rEE.GetEmptyItemSet() );
@@ -613,7 +613,7 @@ void XclImpHFConverter::InsertText()
     {
         ESelection& rSel = GetCurrSel();
         mrEE.QuickInsertText( maCurrText, ESelection( rSel.nEndPara, rSel.nEndPos, rSel.nEndPara, rSel.nEndPos ) );
-        rSel.nEndPos += maCurrText.Len();
+        rSel.nEndPos = rSel.nEndPos + maCurrText.Len();
         maCurrText.Erase();
         UpdateCurrMaxLineHeight();
     }
