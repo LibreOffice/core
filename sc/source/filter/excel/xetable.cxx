@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xetable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:18:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:25:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -299,8 +299,6 @@ bool XclExpTableop::TryExtend( const ScAddress& rScPos, const XclMultipleOpRefs&
     {
         SCCOL nFirstScCol  = static_cast< SCCOL >( maXclRange.maFirst.mnCol );
         SCROW nFirstScRow  = static_cast< SCROW >( maXclRange.maFirst.mnRow );
-        SCCOL nLastScCol   = static_cast< SCCOL >( maXclRange.maLast.mnCol );
-        SCROW nLastScRow   = static_cast< SCROW >( maXclRange.maLast.mnRow );
         SCCOL nColInpScCol = static_cast< SCCOL >( mnColInpXclCol );
         SCROW nColInpScRow = static_cast< SCROW >( mnColInpXclRow );
         SCCOL nRowInpScCol = static_cast< SCCOL >( mnRowInpXclCol );
@@ -535,17 +533,17 @@ bool XclExpCellBase::IsMultiLineText() const
     return false;
 }
 
-bool XclExpCellBase::TryMerge( const XclExpCellBase& rCell )
+bool XclExpCellBase::TryMerge( const XclExpCellBase& /*rCell*/ )
 {
     return false;
 }
 
-void XclExpCellBase::GetBlankXFIndexes( ScfUInt16Vec& rXFIndexes ) const
+void XclExpCellBase::GetBlankXFIndexes( ScfUInt16Vec& /*rXFIndexes*/ ) const
 {
     // default: do nothing
 }
 
-void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes )
+void XclExpCellBase::RemoveUnusedBlankCells( const ScfUInt16Vec& /*rXFIndexes*/ )
 {
     // default: do nothing
 }
@@ -839,6 +837,7 @@ XclExpFormulaCell::XclExpFormulaCell(
             DBG_ASSERT( mxAddRec.is(), "XclExpFormulaCell::XclExpFormulaCell - no matrix found" );
         }
         break;
+        default:;
     }
 
     // no matrix found - try to create shared formula
@@ -974,7 +973,7 @@ void XclExpMultiCellBase::Save( XclExpStream& rStrm )
         nBegXclCol = nEndXclCol;
         while( (aRangeBeg != aEnd) && (aRangeBeg->mnXFIndex == EXC_XF_NOTFOUND) )
         {
-            nBegXclCol += aRangeBeg->mnCount;
+            nBegXclCol = nBegXclCol + aRangeBeg->mnCount;
             ++aRangeBeg;
         }
         // find end of next used XF range
@@ -982,7 +981,7 @@ void XclExpMultiCellBase::Save( XclExpStream& rStrm )
         nEndXclCol = nBegXclCol;
         while( (aRangeEnd != aEnd) && (aRangeEnd->mnXFIndex != EXC_XF_NOTFOUND) )
         {
-            nEndXclCol += aRangeEnd->mnCount;
+            nEndXclCol = nEndXclCol + aRangeEnd->mnCount;
             ++aRangeEnd;
         }
 
@@ -1018,7 +1017,7 @@ sal_uInt16 XclExpMultiCellBase::GetCellCount() const
 {
     sal_uInt16 nCount = 0;
     for( XclExpMultiXFIdDeq::const_iterator aIt = maXFIds.begin(), aEnd = maXFIds.end(); aIt != aEnd; ++aIt )
-        nCount += aIt->mnCount;
+        nCount = nCount + aIt->mnCount;
     return nCount;
 }
 
@@ -1027,7 +1026,7 @@ void XclExpMultiCellBase::AppendXFId( const XclExpMultiXFId& rXFId )
     if( maXFIds.empty() || (maXFIds.back().mnXFId != rXFId.mnXFId) )
         maXFIds.push_back( rXFId );
     else
-        maXFIds.back().mnCount += rXFId.mnCount;
+        maXFIds.back().mnCount = maXFIds.back().mnCount + rXFId.mnCount;
 }
 
 void XclExpMultiCellBase::AppendXFId( const XclExpRoot& rRoot,
@@ -1124,7 +1123,7 @@ void XclExpBlankCell::RemoveUnusedBlankCells( const ScfUInt16Vec& rXFIndexes )
     RemoveUnusedXFIndexes( rXFIndexes );
 }
 
-void XclExpBlankCell::WriteContents( XclExpStream& rStrm, sal_uInt16 nRelCol )
+void XclExpBlankCell::WriteContents( XclExpStream& /*rStrm*/, sal_uInt16 /*nRelCol*/ )
 {
 }
 
@@ -1458,7 +1457,7 @@ void XclExpColinfoBuffer::Finalize( ScfUInt16Vec& rXFIndexes )
         // collect use count of column width
         sal_uInt16 nWidth = xRec->GetColWidth();
         sal_uInt16& rnMapCount = aWidthMap[ nWidth ];
-        rnMapCount += nColCount;
+        rnMapCount = rnMapCount + nColCount;
         if( rnMapCount > nMaxColCount )
         {
             nMaxColCount = rnMapCount;
@@ -1644,7 +1643,7 @@ void XclExpRow::Finalize( const ScfUInt16Vec& rColXFIndexes )
     // *** Find default row format *** ----------------------------------------
 
     ScfUInt16Vec::iterator aCellBeg = aXFIndexes.begin(), aCellEnd = aXFIndexes.end(), aCellIt;
-    ScfUInt16Vec::const_iterator aColBeg = rColXFIndexes.begin(), aColEnd = rColXFIndexes.end(), aColIt;
+    ScfUInt16Vec::const_iterator aColBeg = rColXFIndexes.begin(), aColIt;
 
     // find most used XF index in the row
     typedef ::std::map< sal_uInt16, size_t > XclExpXFIndexMap;
@@ -1738,7 +1737,7 @@ sal_uInt16 XclExpRow::GetFirstFreeXclCol() const
 bool XclExpRow::IsDefaultable() const
 {
     const sal_uInt16 nAllowedFlags = EXC_ROW_DEFAULTFLAGS | EXC_ROW_HIDDEN | EXC_ROW_UNSYNCED;
-    return !::get_flag< sal_uInt16 >( mnFlags, ~nAllowedFlags ) && IsEmpty();
+    return !::get_flag( mnFlags, static_cast< sal_uInt16 >( ~nAllowedFlags ) ) && IsEmpty();
 }
 
 void XclExpRow::DisableIfDefault( const XclExpDefaultRowData& rDefRowData )
