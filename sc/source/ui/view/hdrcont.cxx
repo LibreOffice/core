@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdrcont.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:01:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,14 +76,14 @@ ScHeaderControl::ScHeaderControl( Window* pParent, SelectionEngine* pSelectionEn
                                     SCCOLROW nNewSize, USHORT nNewFlags ) :
             Window      ( pParent ),
             pSelEngine  ( pSelectionEngine ),
-            nSize       ( nNewSize ),
             nFlags      ( nNewFlags ),
             bVertical   ( (nNewFlags & HDR_VERTICAL) != 0 ),
-            bDragging   ( FALSE ),
-            bIgnoreMove ( FALSE ),
+            nSize       ( nNewSize ),
             nMarkStart  ( 0 ),
             nMarkEnd    ( 0 ),
-            bMarkRange  ( FALSE )
+            bMarkRange  ( FALSE ),
+            bDragging   ( FALSE ),
+            bIgnoreMove ( FALSE )
 {
     // --- RTL --- no default mirroring for this window, the spreadsheet itself
     // is also not mirrored
@@ -255,7 +255,6 @@ void __EXPORT ScHeaderControl::Paint( const Rectangle& rRect )
     String              aString;
     USHORT              nBarSize;
     Point               aScrPos;
-    Point               aEndPos;
     Size                aTextSize;
 //  Size                aSize = GetOutputSizePixel();
 
@@ -642,8 +641,8 @@ void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
 
     SetMarking( FALSE );
     bIgnoreMove = FALSE;
-    BOOL bFound;
-    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
+//    BOOL bFound;
+//    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
 
     if ( bDragging )
     {
@@ -659,7 +658,7 @@ void __EXPORT ScHeaderControl::MouseButtonUp( const MouseEvent& rMEvt )
 
         if ( nNewWidth < 0 /* && !IsSelected(nDragNo) */ )
         {
-            SCCOLROW nStart;
+            SCCOLROW nStart = 0;
             SCCOLROW nEnd = nDragNo;
             while (nNewWidth < 0)
             {
@@ -697,7 +696,7 @@ void __EXPORT ScHeaderControl::MouseMove( const MouseEvent& rMEvt )
     }
 
     BOOL bFound;
-    SCCOLROW nHitNo = GetMousePos( rMEvt, bFound );
+    (void)GetMousePos( rMEvt, bFound );
 
     if ( bDragging )
     {
@@ -762,14 +761,16 @@ void __EXPORT ScHeaderControl::Command( const CommandEvent& rCEvt )
 
                 MouseEvent aMEvt( rCEvt.GetMousePosPixel() );
                 BOOL bBorder;
-                USHORT nPos = GetMousePos( aMEvt, bBorder );
+                SCCOLROW nPos = GetMousePos( aMEvt, bBorder );
                 USHORT nTab = pViewData->GetTabNo();
 
                 ScRange aNewRange;
                 if ( bVertical )
-                    aNewRange = ScRange( 0, nPos, nTab, MAXCOL, nPos, nTab );
+                    aNewRange = ScRange( 0, sal::static_int_cast<SCROW>(nPos), nTab,
+                                         MAXCOL, sal::static_int_cast<SCROW>(nPos), nTab );
                 else
-                    aNewRange = ScRange( nPos, 0, nTab, nPos, MAXROW, nTab );
+                    aNewRange = ScRange( sal::static_int_cast<SCCOL>(nPos), 0, nTab,
+                                         sal::static_int_cast<SCCOL>(nPos), MAXROW, nTab );
 
                 // see if any part of the range is already selected
                 BOOL bSelected = FALSE;
@@ -900,16 +901,16 @@ void ScHeaderControl::SelectWindow()
 {
 }
 
-void ScHeaderControl::DrawInvert( long nDragPos )
+void ScHeaderControl::DrawInvert( long /* nDragPos */ )
 {
 }
 
-String ScHeaderControl::GetDragHelp( long nVal )
+String ScHeaderControl::GetDragHelp( long /* nVal */ )
 {
     return EMPTY_STRING;
 }
 
-void ScHeaderControl::SetMarking( BOOL bSet )
+void ScHeaderControl::SetMarking( BOOL /* bSet */ )
 {
 }
 
