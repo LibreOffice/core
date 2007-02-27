@@ -4,9 +4,9 @@
  *
  *  $RCSfile: forbiuno.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:39:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:45:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ ScForbiddenCharsObj::~ScForbiddenCharsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScForbiddenCharsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScForbiddenCharsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
