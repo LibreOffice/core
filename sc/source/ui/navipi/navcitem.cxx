@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navcitem.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:13:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,17 +53,17 @@
 
 //------------------------------------------------------------------------
 
-ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nId,
+ScNavigatorControllerItem::ScNavigatorControllerItem( USHORT          nIdP,
                                                       ScNavigatorDlg& rDlg,
                                                       SfxBindings&    rBindings )
-    :   SfxControllerItem   ( nId, rBindings ),
+    :   SfxControllerItem   ( nIdP, rBindings ),
         rNavigatorDlg       ( rDlg )
 {
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT nSID, SfxItemState eState,
+void __EXPORT ScNavigatorControllerItem::StateChanged( USHORT /* nSID */, SfxItemState /* eState */,
                                                           const SfxPoolItem* pItem )
 {
     switch( GetId() )
