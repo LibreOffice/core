@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun2.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:59:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 14:00:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,7 +131,7 @@ BOOL ScViewFunc::AdjustBlockHeight( BOOL bPaint, ScMarkData* pMarkData )
         {
             SCCOLROW* pOneRange = pRanges;
             BOOL bChanged = FALSE;
-            SCROW nPaintY;
+            SCROW nPaintY = 0;
             for (SCROW nRangeNo=0; nRangeNo<nRangeCnt; nRangeNo++)
             {
                 SCROW nStartNo = *(pOneRange++);
@@ -169,7 +169,7 @@ BOOL ScViewFunc::AdjustRowHeight( SCROW nStartRow, SCROW nEndRow, BOOL bPaint )
     double nPPTY = GetViewData()->GetPPTY();
     Fraction aZoomX = GetViewData()->GetZoomX();
     Fraction aZoomY = GetViewData()->GetZoomY();
-    USHORT nOldPixel;
+    USHORT nOldPixel = 0;
     if (nStartRow == nEndRow)
         nOldPixel = (USHORT) (pDoc->GetRowHeight(nStartRow,nTab) * nPPTY);
 
@@ -305,9 +305,9 @@ BOOL ScViewFunc::GetAutoSumArea( ScRangeList& rRangeList )
         bCol = TRUE;
         nSeekCol = nCol - 1;
     }
-    else if (eSum = lcl_SeekAutoSumData( pDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend ))
+    else if ( (eSum = lcl_SeekAutoSumData( pDoc, nCol, nSeekRow, nTab, DIR_TOP, nExtend )) != ScAutoSumNone )
         bRow = TRUE;
-    else if (eSum = lcl_SeekAutoSumData( pDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend ))
+    else if (( eSum = lcl_SeekAutoSumData( pDoc, nSeekCol, nRow, nTab, DIR_LEFT, nExtend )) != ScAutoSumNone )
         bCol = TRUE;
 
     if ( bCol || bRow )
@@ -494,7 +494,6 @@ void ScViewFunc::EnterBlock( const String& rString, const EditTextObject* pData 
         if ( pItem )
         {   // Numberformat setzen wenn inkompatibel
             // MarkData wurde bereits in PasteFromClip MarkToSimple'ed
-            ScMarkData& rMark = GetViewData()->GetMarkData();
             ScRange aRange;
             rMark.GetMarkArea( aRange );
             ScPatternAttr* pPattern = new ScPatternAttr( pDoc->GetPool() );
@@ -1256,7 +1255,7 @@ void ScViewFunc::SearchAndReplace( const SvxSearchItem* pSearchItem,
     SCCOL nCol = GetViewData()->GetCurX();
     SCROW nRow = GetViewData()->GetCurY();
     SCTAB nTab = GetViewData()->GetTabNo();
-    BOOL bAttrib = pSearchItem->GetPattern();
+//    BOOL bAttrib = pSearchItem->GetPattern();
     USHORT nCommand = pSearchItem->GetCommand();
     BOOL bAllTables = pSearchItem->IsAllTables();
     BOOL* pOldSelectedTables = NULL;
@@ -1791,7 +1790,7 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
         String aOldName;
         for(i=0;i<TheTabs.Count();i++)
         {
-            SCTAB nTab = TheTabs[i];
+            SCTAB nTab = TheTabs[sal::static_int_cast<USHORT>(i)];
             if (i==0)
                 pUndoDoc->InitUndo( pDoc, nTab,nTab, TRUE,TRUE );   // incl. Spalten/Zeilenflags
             else
@@ -1839,10 +1838,10 @@ BOOL ScViewFunc::DeleteTables(const SvShorts &TheTabs, BOOL bRecord )
 
     for(i=TheTabs.Count()-1;i>=0;i--)
     {
-        if (pDoc->DeleteTab( TheTabs[i], pUndoDoc ))
+        if (pDoc->DeleteTab( TheTabs[sal::static_int_cast<USHORT>(i)], pUndoDoc ))
         {
             bDelDone = TRUE;
-            pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[i] ) );
+            pDocSh->Broadcast( ScTablesHint( SC_TAB_DELETED, TheTabs[sal::static_int_cast<USHORT>(i)] ) );
         }
     }
     if (bRecord)
@@ -2264,7 +2263,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
                 ErrorMessage(STR_TABINSERT_ERROR);
                 return;
             }
-            break;
+            //break;
             case 2:
                 ErrorMessage(STR_ABSREFLOST);
             break;
@@ -2327,7 +2326,6 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
 
         ScMarkData& rMark       = GetViewData()->GetMarkData();
         SCTAB       nTabCount   = pDoc->GetTableCount();
-        SCTAB       nTabSelCount = rMark.GetSelectCount();
 
         SvShorts    TheTabs;
         SvShorts    TheDestTabs;
@@ -2366,7 +2364,7 @@ void ScViewFunc::MoveTable( USHORT nDestDocNo, SCTAB nDestTab, BOOL bCopy )
         for(int j=0;j<TheTabNames.Count();j++)
         {
             nTabCount   = pDoc->GetTableCount();
-            pString=TheTabNames[j];
+            pString=TheTabNames[sal::static_int_cast<USHORT>(j)];
             if(!pDoc->GetTable(*pString,nMovTab))
             {
                 nMovTab=nTabCount;
@@ -2620,7 +2618,6 @@ void ScViewFunc::SetSelectionFrameLines( const SvxBorderLine* pLine,
         // none of the lines don't care?
         if( (eItemState != SFX_ITEM_DONTCARE) && (eTLBRState != SFX_ITEM_DONTCARE) && (eBLTRState != SFX_ITEM_DONTCARE) )
         {
-            ScDocument*     pDoc = GetViewData()->GetDocument();
             SfxItemSet*     pOldSet = new SfxItemSet(
                                             *(pDoc->GetPool()),
                                             ATTR_PATTERN_START,
