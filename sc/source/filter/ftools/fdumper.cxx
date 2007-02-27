@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:18:23 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:29:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,11 +727,11 @@ void ConfigItemBase::ReadConfigBlock( SvStream& rStrm )
         rStrm.Seek( nOldPos );
 }
 
-void ConfigItemBase::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData )
+void ConfigItemBase::ImplProcessConfigItemStr( SvStream& /*rStrm*/, const String& /*rKey*/, const String& /*rData*/ )
 {
 }
 
-void ConfigItemBase::ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData )
+void ConfigItemBase::ImplProcessConfigItemInt( SvStream& /*rStrm*/, sal_Int64 /*nKey*/, const String& /*rData*/ )
 {
 }
 
@@ -879,7 +879,7 @@ void NameListBase::ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey
         ConfigItemBase::ImplProcessConfigItemStr( rStrm, rKey, rData );
 }
 
-void NameListBase::ImplProcessConfigItemInt( SvStream& rStrm, sal_Int64 nKey, const String& rData )
+void NameListBase::ImplProcessConfigItemInt( SvStream& /*rStrm*/, sal_Int64 nKey, const String& rData )
 {
     ImplSetName( nKey, rData );
 }
@@ -935,7 +935,7 @@ void ConstList::ImplSetName( sal_Int64 nKey, const String& rName )
     InsertRawName( nKey, rName );
 }
 
-String ConstList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
+String ConstList::ImplGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
 {
     const String* pName = FindRawName( nKey );
     String aName = pName ? *pName : maDefName;
@@ -944,7 +944,7 @@ String ConstList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
     return aName;
 }
 
-String ConstList::ImplGetName( const Config& rCfg, double fValue ) const
+String ConstList::ImplGetNameDbl( const Config& /*rCfg*/, double /*fValue*/ ) const
 {
     return String();
 }
@@ -1014,7 +1014,7 @@ void FlagsList::ImplSetName( sal_Int64 nKey, const String& rName )
     InsertRawName( nKey, rName );
 }
 
-String FlagsList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
+String FlagsList::ImplGetName( const Config& /*rCfg*/, sal_Int64 nKey ) const
 {
     sal_Int64 nFlags = nKey;
     ::set_flag( nFlags, mnIgnore, false );
@@ -1041,7 +1041,7 @@ String FlagsList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
     return aName;
 }
 
-String FlagsList::ImplGetName( const Config& rCfg, double fValue ) const
+String FlagsList::ImplGetNameDbl( const Config& /*rCfg*/, double /*fValue*/ ) const
 {
     return String();
 }
@@ -1115,8 +1115,8 @@ String CombiList::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
             StringHelper::AppendToken( aItem, aValue, SCF_DUMP_ITEMSEP );
             if( rItemFmt.maListName.Len() > 0 )
             {
-                String aName = rCfg.GetName( rItemFmt.maListName, static_cast< sal_Int64 >( nUValue ) );
-                StringHelper::AppendToken( aItem, aName, SCF_DUMP_ITEMSEP );
+                String aValueName = rCfg.GetName( rItemFmt.maListName, static_cast< sal_Int64 >( nUValue ) );
+                StringHelper::AppendToken( aItem, aValueName, SCF_DUMP_ITEMSEP );
             }
             StringHelper::Enclose( aItem, '(', ')' );
             StringHelper::AppendToken( aName, aItem );
@@ -1143,17 +1143,17 @@ UnitConverter::UnitConverter( const ConfigCoreData& rCoreData ) :
 {
 }
 
-void UnitConverter::ImplSetName( sal_Int64 nKey, const String& rName )
+void UnitConverter::ImplSetName( sal_Int64 /*nKey*/, const String& /*rName*/ )
 {
     // nothing to do
 }
 
 String UnitConverter::ImplGetName( const Config& rCfg, sal_Int64 nKey ) const
 {
-    return ImplGetName( rCfg, static_cast< double >( nKey ) );
+    return ImplGetNameDbl( rCfg, static_cast< double >( nKey ) );
 }
 
-String UnitConverter::ImplGetName( const Config& rCfg, double fValue ) const
+String UnitConverter::ImplGetNameDbl( const Config& /*rCfg*/, double fValue ) const
 {
     String aValue;
     StringHelper::AppendDec( aValue, mfFactor * fValue );
@@ -1161,7 +1161,7 @@ String UnitConverter::ImplGetName( const Config& rCfg, double fValue ) const
     return aValue;
 }
 
-void UnitConverter::ImplIncludeList( const NameListBase& rList )
+void UnitConverter::ImplIncludeList( const NameListBase& /*rList*/ )
 {
 }
 
@@ -1306,7 +1306,7 @@ void ConfigCoreData::CreateUnitConverter( const String& rData )
 // ============================================================================
 
 Config::Config( const Config& rParent ) :
-    Base( rParent )
+    Base()  // c'tor needs to be called explicitly to avoid compiler warning
 {
     Construct( rParent );
 }
@@ -1591,7 +1591,10 @@ void Output::StartTable( size_t nColCount, const xub_StrLen* pnColWidths )
     maColPos.push_back( 0 );
     xub_StrLen nColPos = 0;
     for( size_t nCol = 0; nCol < nColCount; ++nCol )
-        maColPos.push_back( nColPos += pnColWidths[ nCol ] );
+    {
+        nColPos = nColPos + pnColWidths[ nCol ];
+        maColPos.push_back( nColPos );
+    }
 }
 
 void Output::Tab()
@@ -2085,6 +2088,7 @@ void InputObjectBase::DumpItem( const ItemFormat& rItemFmt )
         case DATATYPE_UINT64:  DumpValue< sal_uInt64 >( rItemFmt ); break;
         case DATATYPE_FLOAT:   DumpValue< float >( rItemFmt );      break;
         case DATATYPE_DOUBLE:  DumpValue< double >( rItemFmt );     break;
+        default:;
     }
 }
 
