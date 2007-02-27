@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:47:13 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:20:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ private:
 public:
 
     TYPEINFO();
-    SFX_DECL_INTERFACE(SCID_CELL_SHELL);
+    SFX_DECL_INTERFACE(SCID_CELL_SHELL)
 
                 ScCellShell(ScViewData* pData);
     virtual     ~ScCellShell();
