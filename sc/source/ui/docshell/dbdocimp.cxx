@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:34:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:06:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,7 +162,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
             if ( rProp.Value >>= nType )
             {
                 aImParam.bSql = ( nType == sdb::CommandType::COMMAND );
-                aImParam.nType = ( nType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable;
+                aImParam.nType = sal::static_int_cast<BYTE>( ( nType == sdb::CommandType::QUERY ) ? ScDbQuery : ScDbTable );
                 // nType is ignored if bSql is set
             }
         }
@@ -238,7 +238,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
         }
     }
 
-    Window* pWaitWin = rDocShell.GetDialogParent();
+    Window* pWaitWin = rDocShell.GetActiveDialogParent();
     if (pWaitWin)
         pWaitWin->EnterWait();
     ScDocShellModificator aModificator( rDocShell );
@@ -387,7 +387,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                     //  skip rows that are not selected
                     if ( !bDoSelection )
                     {
-                        if ( !(bEnd = !xRowSet->next()) )
+                        if ( (bEnd = !xRowSet->next()) == FALSE )
                             ++nRowsRead;
                     }
                     else
@@ -528,7 +528,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
             //  CopyToDocument also copies styles, Apply... needs separate calls
 
             SCCOL nMinEndCol = Min( rParam.nCol2, nEndCol );    // not too much
-            nMinEndCol += nFormulaCols;                         // only if column count unchanged
+            nMinEndCol = sal::static_int_cast<SCCOL>( nMinEndCol + nFormulaCols );  // only if column count unchanged
             pImportDoc->DeleteAreaTab( 0,0, MAXCOL,MAXROW, nTab, IDF_ATTRIB );
             pDoc->CopyToDocument( rParam.nCol1, rParam.nRow1, nTab,
                                     nMinEndCol, rParam.nRow1, nTab,
@@ -709,7 +709,7 @@ BOOL ScDBDocFunc::DoImport( SCTAB nTab, const ScImportParam& rParam,
                 nErrStringId = STR_MSSG_IMPORTDATA_0;
             aErrorMessage = ScGlobal::GetRscString( nErrStringId );
         }
-        InfoBox aInfoBox( rDocShell.GetDialogParent(), aErrorMessage );
+        InfoBox aInfoBox( rDocShell.GetActiveDialogParent(), aErrorMessage );
         aInfoBox.Execute();
     }
 
