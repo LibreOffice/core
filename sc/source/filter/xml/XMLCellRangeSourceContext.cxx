@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLCellRangeSourceContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:38:57 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ ScXMLCellRangeSourceContext::~ScXMLCellRangeSourceContext()
 SvXMLImportContext *ScXMLCellRangeSourceContext::CreateChildContext(
         USHORT nPrefix,
         const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+        const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
