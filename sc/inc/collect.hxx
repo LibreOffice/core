@@ -4,9 +4,9 @@
  *
  *  $RCSfile: collect.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:27:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,7 @@ friend class StrCollection;
     String aStr;
 public:
                         StrData(const String& rStr) : aStr(rStr) {}
-                        StrData(const StrData& rData) :aStr(rData.aStr) {}
+                        StrData(const StrData& rData) : DataObject(), aStr(rData.aStr) {}
     virtual DataObject* Clone() const;
     const String&       GetString() const { return aStr; }
     // SetString nur, wenn StrData nicht in StrCollection ist! !!!
@@ -178,7 +178,8 @@ public:
                             BOOL bAllStrings );
 
             TypedStrData( const TypedStrData& rCpy )
-                : aStrValue(rCpy.aStrValue),
+                : DataObject(),
+                  aStrValue(rCpy.aStrValue),
                   nValue(rCpy.nValue),
                   nStrType(rCpy.nStrType) {}
 
