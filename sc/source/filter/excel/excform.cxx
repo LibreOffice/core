@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ const UINT16 ExcelToSc::nLastInd = 399;
 void ImportExcel::Formula25()
 {
     XclAddress aXclPos;
-    UINT16  nXF, nFormLen;
+    UINT16  nXF = 0, nFormLen;
     double  fCurVal;
     BYTE    nAttr0, nFlag0;
     BOOL    bShrFmla;
@@ -105,7 +105,7 @@ void ImportExcel::Formula25()
 
     nLastXF = nXF;
 
-    Formula( aXclPos, nXF, nFormLen, fCurVal, nFlag0, bShrFmla );
+    Formula( aXclPos, nXF, nFormLen, fCurVal, bShrFmla );
 }
 
 
@@ -128,12 +128,12 @@ void ImportExcel::Formula4()
 
     nLastXF = nXF;
 
-    Formula( aXclPos, nXF, nFormLen, fCurVal, nFlag0, FALSE );
+    Formula( aXclPos, nXF, nFormLen, fCurVal, FALSE );
 }
 
 
 void ImportExcel::Formula( const XclAddress& rXclPos,
-    UINT16 nXF, UINT16 nFormLen, double& rCurVal, BYTE nFlag, BOOL bShrFmla )
+    UINT16 nXF, UINT16 nFormLen, double& rCurVal, BOOL bShrFmla )
 {
     ConvErr eErr = ConvOK;
 
@@ -141,7 +141,7 @@ void ImportExcel::Formula( const XclAddress& rXclPos,
     if( GetAddressConverter().ConvertAddress( aScPos, rXclPos, GetCurrScTab(), true ) )
     {
         // jetzt steht Lesemarke auf Formel, Laenge in nFormLen
-        const ScTokenArray* pErgebnis;
+        const ScTokenArray* pErgebnis = 0;
         BOOL                bConvert;
 
         pFormConv->Reset( aScPos );
@@ -1314,7 +1314,7 @@ ConvErr ExcelToSc::Convert( _ScRangeListTabs& rRangeList, XclImpStream& aIn, sal
     return eRet;
 }
 
-BOOL ExcelToSc::GetAbsRefs( ScRangeList& rRangeList, XclImpStream& rStrm, sal_Size nLen )
+BOOL ExcelToSc::GetAbsRefs( ScRangeList& /*rRangeList*/, XclImpStream& /*rStrm*/, sal_Size /*nLen*/ )
 {
     DBG_ERRORFILE( "ExcelToSc::GetAbsRefs - not implemented" );
     return false;
