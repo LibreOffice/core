@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:42:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:49:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ struct ScMyImportAnnotation
     SfxItemSet* pItemSet;
     OutlinerParaObject* pOPO;
 
-    ScMyImportAnnotation() : pItemSet(NULL), pOPO(NULL), pRect(NULL) {}
+    ScMyImportAnnotation() : pRect(NULL), pItemSet(NULL), pOPO(NULL) {}
     ~ScMyImportAnnotation();
 };
 
