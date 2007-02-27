@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condfrmt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:26:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,8 +70,6 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
             const ScConditionalFormat* pCurrentFormat )
     :   ScAnyRefDlg         ( pB, pCW, pParent, RID_SCDLG_CONDFORMAT ),
 
-        pDoc                ( pCurDoc ),
-
         aCbxCond1           ( this, ScResId( CBX_COND1 ) ),
         aLbCond11           ( this, ScResId( LB_COND1_1 ) ),
         aLbCond12           ( this, ScResId( LB_COND1_2 ) ),
@@ -111,7 +109,9 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
         aBtnCancel          ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp            ( this, ScResId( BTN_HELP ) ),
         pEdActive           ( NULL ),
-        bDlgLostFocus       ( FALSE )
+        bDlgLostFocus       ( FALSE ),
+
+        pDoc                ( pCurDoc )
 {
     Point aPos;
     String aName;
@@ -257,7 +257,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
                 ;
             else                                    // via Werte
             {
-                aLbCond12.SelectEntryPos( eMode );
+                aLbCond12.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
                     aEdtCond12.SetText( pEntry->GetExpression( aCurPos, 1 ) );
             }
@@ -281,7 +281,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
                 ;
             else                                    // via Werte
             {
-                aLbCond22.SelectEntryPos( eMode );
+                aLbCond22.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
                     aEdtCond22.SetText( pEntry->GetExpression( aCurPos, 1 ) );
             }
@@ -304,7 +304,7 @@ ScConditionalFormatDlg::ScConditionalFormatDlg(
                 ;
             else                                    // via Werte
             {
-                aLbCond32.SelectEntryPos( eMode );
+                aLbCond32.SelectEntryPos( sal::static_int_cast<USHORT>( eMode ) );
                 if ( ( eMode == SC_COND_BETWEEN ) || ( eMode == SC_COND_NOTBETWEEN ) )
                     aEdtCond32.SetText( pEntry->GetExpression( aCurPos, 1 ) );
             }
@@ -337,7 +337,7 @@ __EXPORT ScConditionalFormatDlg::~ScConditionalFormatDlg()
 
 //----------------------------------------------------------------------------
 
-void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( pEdActive )
     {
@@ -345,7 +345,7 @@ void ScConditionalFormatDlg::SetReference( const ScRange& rRef, ScDocument* pDoc
             RefInputStart(pEdActive);
 
         String aStr;
-        rRef.Format( aStr, SCR_ABS_3D, pDoc, pDoc->GetAddressConvention () );
+        rRef.Format( aStr, SCR_ABS_3D, pDocP, pDocP->GetAddressConvention () );
         String aVal( pEdActive->GetText() );
         Selection aSel( pEdActive->GetSelection() );
         aSel.Justify();
@@ -376,7 +376,7 @@ void ScConditionalFormatDlg::AddRefEntry()
 
 //----------------------------------------------------------------------------
 
-BOOL ScConditionalFormatDlg::IsRefInputMode()
+BOOL ScConditionalFormatDlg::IsRefInputMode() const
 {
     return (pEdActive != NULL);
 }
@@ -738,7 +738,7 @@ IMPL_LINK( ScConditionalFormatDlg, GetFocusHdl, Control*, pCtrl )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScConditionalFormatDlg, LoseFocusHdl, Control*, pCtrl )
+IMPL_LINK( ScConditionalFormatDlg, LoseFocusHdl, Control*, EMPTYARG )
 {
     bDlgLostFocus = !IsActive();
     return 0;
