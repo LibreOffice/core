@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:51:24 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:48:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     USHORT nSlotId = rReq.GetSlot();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
-    SfxApplication*     pSfxApp     = SFX_APP();
     ScModule*           pScMod      = SC_MOD();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
@@ -594,15 +593,15 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 
         case SID_OPENDLG_PIVOTTABLE:
             {
-                ScViewData* pViewData = GetViewData();
-                ScDocument* pDoc = pViewData->GetDocument();
+                ScViewData* pData = GetViewData();
+                ScDocument* pDoc = pData->GetDocument();
 
                 ScDPObject* pNewDPObject = NULL;
 
                 // ScPivot is no longer used...
                 ScDPObject* pDPObj = pDoc->GetDPAtCursor(
-                                            pViewData->GetCurX(), pViewData->GetCurY(),
-                                            pViewData->GetTabNo() );
+                                            pData->GetCurX(), pData->GetCurY(),
+                                            pData->GetTabNo() );
                 if ( pDPObj )   // on an existing table?
                 {
                     pNewDPObject = new ScDPObject( *pDPObj );
@@ -616,8 +615,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         pTabViewShell->MarkDataArea( FALSE );
 
                     //  output to cursor position for non-sheet data
-                    ScAddress aDestPos( pViewData->GetCurX(), pViewData->GetCurY(),
-                                            pViewData->GetTabNo() );
+                    ScAddress aDestPos( pData->GetCurX(), pData->GetCurY(),
+                                            pData->GetTabNo() );
 
                     //  first select type of source data
 
@@ -656,7 +655,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         {
                             //CHINA001 ScDataPilotDatabaseDlg* pDataDlg = new ScDataPilotDatabaseDlg(
                             //CHINA001                              pTabViewShell->GetDialogParent() );
-                            ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
+                            //ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
                             AbstractScDataPilotDatabaseDlg* pDataDlg = pFact->CreateScDataPilotDatabaseDlg( pTabViewShell->GetDialogParent(),ResId(RID_SCDLG_DAPIDATA));
@@ -898,8 +897,8 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             bShowHelp = pOldData->GetInput( aHelpTitle, aHelpText );
                             bShowError = pOldData->GetErrMsg( aErrTitle, aErrText, eErrStyle );
 
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_MODE,        eMode ) );
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE,    eOper ) );
+                            aArgSet.Put( SfxAllEnumItem( FID_VALID_MODE,        sal::static_int_cast<USHORT>(eMode) ) );
+                            aArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE,    sal::static_int_cast<USHORT>(eOper) ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE1,      aExpr1 ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_VALUE2,      aExpr2 ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_BLANK,       bBlank ) );
@@ -908,7 +907,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTITLE,   aHelpTitle ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_HELPTEXT,    aHelpText ) );
                             aArgSet.Put( SfxBoolItem(    FID_VALID_SHOWERR,     bShowError ) );
-                            aArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE,    eErrStyle ) );
+                            aArgSet.Put( SfxAllEnumItem( FID_VALID_ERRSTYLE,    sal::static_int_cast<USHORT>(eErrStyle) ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_ERRTITLE,    aErrTitle ) );
                             aArgSet.Put( SfxStringItem(  FID_VALID_ERRTEXT,     aErrText ) );
                         }
@@ -954,7 +953,6 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                         if ( pOutSet->GetItemState( FID_VALID_ERRTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
                             aErrText = ((const SfxStringItem*)pItem)->GetValue();
 
-                        SCTAB nTab = GetViewData()->GetTabNo();
                         ScValidationData aData( eMode, eOper, aExpr1, aExpr2, pDoc, aCursorPos );
                         aData.SetIgnoreBlank( bBlank );
                         aData.SetListType( nListType );
@@ -980,14 +978,14 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
 void __EXPORT ScCellShell::GetDBState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    ScViewData* pViewData   = GetViewData();
-    ScDocShell* pDocSh      = pViewData->GetDocShell();
+    ScViewData* pData       = GetViewData();
+    ScDocShell* pDocSh      = pData->GetDocShell();
     ScDocument* pDoc        = pDocSh->GetDocument();
-    SCCOL       nPosX       = pViewData->GetCurX();
-    SCROW       nPosY       = pViewData->GetCurY();
-    SCTAB       nTab        = pViewData->GetTabNo();
+    SCCOL       nPosX       = pData->GetCurX();
+    SCROW       nPosY       = pData->GetCurY();
+    SCTAB       nTab        = pData->GetTabNo();
 
-    BOOL bAutoFilter;
+    BOOL bAutoFilter = FALSE;
     BOOL bAutoFilterTested = FALSE;
 
     SfxWhichIter aIter(rSet);
