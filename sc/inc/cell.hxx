@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cell.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:15:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,6 +314,7 @@ public:
     ScFormulaCell( ScDocument* pDoc, const ScAddress&,
                    SvStream& rStream, ScMultipleReadHeader& rHdr );
 
+    using ScBaseCell::Clone;
     ScBaseCell*     Clone(ScDocument* pDoc, const ScAddress&,
                             BOOL bNoListening = FALSE ) const;
 
@@ -472,7 +473,7 @@ inline ScBaseCell::ScBaseCell( CellType eNewType ) :
     pNote( NULL ),
     pBroadcaster( NULL ),
     nTextWidth( TEXTWIDTH_DIRTY ),
-    eCellType( eNewType ),
+    eCellType( sal::static_int_cast<BYTE>(eNewType) ),
     nScriptType( SC_SCRIPTTYPE_UNKNOWN )
 {
 }
