@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:27:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:06:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -366,7 +366,7 @@ BOOL ScDocFunc::DetectiveMarkInvalid(SCTAB nTab)
     BOOL bUndo (pDoc->IsUndoEnabled());
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
 
-    Window* pWaitWin = rDocShell.GetDialogParent();
+    Window* pWaitWin = rDocShell.GetActiveDialogParent();
     if (pWaitWin)
         pWaitWin->EnterWait();
     if (bUndo)
@@ -827,7 +827,7 @@ BOOL ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, BOOL bApi 
     return TRUE;
 }
 
-void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
+void ScDocFunc::NotifyInputHandler( const ScAddress& /* rPos */ )
 {
     ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();
     if ( pViewSh && pViewSh->GetViewData()->GetDocShell() == &rDocShell )
@@ -852,7 +852,7 @@ void ScDocFunc::NotifyInputHandler( const ScAddress& rPos )
             SfxItemSet  aItemSet;
 
             ScMyRememberItem(const SfxItemSet& rItemSet, USHORT nTempIndex) :
-                aItemSet(rItemSet), nIndex(nTempIndex) {}
+                nIndex(nTempIndex), aItemSet(rItemSet) {}
         };
 
         typedef ::std::list<ScMyRememberItem*> ScMyRememberItemList;
@@ -907,7 +907,7 @@ BOOL ScDocFunc::PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine, 
         // Set the paragraph attributes back to the EditEngine.
         if (!aRememberItems.empty())
         {
-            ScMyRememberItem* pRememberItem = NULL;
+//            ScMyRememberItem* pRememberItem = NULL;
             ScMyRememberItemList::iterator aItr = aRememberItems.begin();
             while (aItr != aRememberItems.end())
             {
@@ -1326,7 +1326,7 @@ BOOL ScDocFunc::InsertCells( const ScRange& rRange, InsCellCmd eCmd,
     //      ausfuehren
     //
 
-    WaitObject aWait( rDocShell.GetDialogParent() );        // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
 
     ScDocument* pRefUndoDoc = NULL;
     ScRefUndoData* pUndoData = NULL;
@@ -1542,7 +1542,7 @@ BOOL ScDocFunc::DeleteCells( const ScRange& rRange, DelCellCmd eCmd, BOOL bRecor
     //      ausfuehren
     //
 
-    WaitObject aWait( rDocShell.GetDialogParent() );        // wichtig wegen TrackFormulas bei UpdateReference
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );      // wichtig wegen TrackFormulas bei UpdateReference
 
     ScDocument* pUndoDoc = NULL;
     ScDocument* pRefUndoDoc = NULL;
@@ -2022,7 +2022,7 @@ BOOL ScDocFunc::MoveBlock( const ScRange& rSource, const ScAddress& rDestPos,
 BOOL ScDocFunc::InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL bApi )
 {
     BOOL bSuccess = FALSE;
-    WaitObject aWait( rDocShell.GetDialogParent() );
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -2056,9 +2056,9 @@ BOOL ScDocFunc::InsertTable( SCTAB nTab, const String& rName, BOOL bRecord, BOOL
     return bSuccess;
 }
 
-BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL bApi )
+BOOL ScDocFunc::DeleteTable( SCTAB nTab, BOOL bRecord, BOOL /* bApi */ )
 {
-    WaitObject aWait( rDocShell.GetDialogParent() );
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
     ScDocShellModificator aModificator( rDocShell );
 
@@ -2193,7 +2193,7 @@ BOOL ScDocFunc::SetTableVisible( SCTAB nTab, BOOL bVisible, BOOL bApi )
     return TRUE;
 }
 
-BOOL ScDocFunc::SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL bApi )
+BOOL ScDocFunc::SetLayoutRTL( SCTAB nTab, BOOL bRTL, BOOL /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     BOOL bUndo(pDoc->IsUndoEnabled());
@@ -2486,7 +2486,7 @@ BOOL ScDocFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRa
 
 
 BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
-                                BOOL bRecord, BOOL bSetModified, BOOL bApi )
+                                BOOL bRecord, BOOL bSetModified, BOOL /* bApi */ )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -2545,7 +2545,7 @@ BOOL ScDocFunc::InsertPageBreak( BOOL bColumn, const ScAddress& rPos,
 }
 
 BOOL ScDocFunc::RemovePageBreak( BOOL bColumn, const ScAddress& rPos,
-                                BOOL bRecord, BOOL bSetModified, BOOL bApi )
+                                BOOL bRecord, BOOL bSetModified, BOOL /* bApi */ )
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -2657,7 +2657,7 @@ BOOL ScDocFunc::Protect( SCTAB nTab, const String& rPassword, BOOL bApi )
 
 //!     rDocShell.ErrorMessage(...);
 
-        InfoBox aBox( rDocShell.GetDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+        InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
         aBox.Execute();
     }
 
@@ -2694,7 +2694,7 @@ BOOL ScDocFunc::Unprotect( SCTAB nTab, const String& rPassword, BOOL bApi )
     {
 //!     rDocShell.ErrorMessage(...);
 
-        InfoBox aBox( rDocShell.GetDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
+        InfoBox aBox( rDocShell.GetActiveDialogParent(), String( ScResId( SCSTR_WRONGPASSWORD ) ) );
         aBox.Execute();
     }
 
@@ -2841,7 +2841,7 @@ BOOL ScDocFunc::AutoFormat( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( pAutoFormat && nFormatNo < pAutoFormat->GetCount() && aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetDialogParent() );
+        WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
         BOOL bSize = (*pAutoFormat)[nFormatNo]->GetIncludeWidthHeight();
 
@@ -2952,9 +2952,9 @@ BOOL ScDocFunc::EnterMatrix( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetDialogParent() );
+        WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-        ScDocument* pUndoDoc;
+        ScDocument* pUndoDoc = NULL;
 //      if (bRecord)    // immer
         if (bUndo)
         {
@@ -3033,7 +3033,7 @@ BOOL ScDocFunc::TabOp( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetDialogParent() );
+        WaitObject aWait( rDocShell.GetActiveDialogParent() );
         pDoc->SetDirty( rRange );
         if ( bRecord )
         {
@@ -3106,12 +3106,12 @@ BOOL ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetDialogParent() );
+        WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
         ScRange aSourceArea = rRange;
         ScRange aDestArea   = rRange;
 
-        SCCOLROW nCount;
+        SCCOLROW nCount = 0;
         switch (eDir)
         {
             case FILL_TO_BOTTOM:
@@ -3136,12 +3136,12 @@ BOOL ScDocFunc::FillSimple( const ScRange& rRange, const ScMarkData* pTabMark,
         if ( bRecord )
         {
             SCTAB nTabCount = pDoc->GetTableCount();
-            SCTAB nStartTab = aDestArea.aStart.Tab();
+            SCTAB nDestStartTab = aDestArea.aStart.Tab();
 
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
+            pUndoDoc->InitUndo( pDoc, nDestStartTab, nDestStartTab );
             for (SCTAB i=0; i<nTabCount; i++)
-                if (i != nStartTab && aMark.GetTableSelect(i))
+                if (i != nDestStartTab && aMark.GetTableSelect(i))
                     pUndoDoc->AddUndoTab( i, i );
 
             ScRange aCopyRange = aDestArea;
@@ -3207,7 +3207,7 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
     ScEditableTester aTester( pDoc, nStartCol,nStartRow, nEndCol,nEndRow, aMark );
     if ( aTester.IsEditable() )
     {
-        WaitObject aWait( rDocShell.GetDialogParent() );
+        WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
         ScRange aSourceArea = rRange;
         ScRange aDestArea   = rRange;
@@ -3227,16 +3227,16 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
         switch (eDir)
         {
             case FILL_TO_BOTTOM:
-                aSourceArea.aEnd.SetRow( aSourceArea.aEnd.Row() - nCount );
+                aSourceArea.aEnd.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aEnd.Row() - nCount ) );
                 break;
             case FILL_TO_RIGHT:
-                aSourceArea.aEnd.SetCol( aSourceArea.aEnd.Col() - nCount );
+                aSourceArea.aEnd.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aEnd.Col() - nCount ) );
                 break;
             case FILL_TO_TOP:
-                aSourceArea.aStart.SetRow( aSourceArea.aStart.Row() + nCount );
+                aSourceArea.aStart.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aStart.Row() + nCount ) );
                 break;
             case FILL_TO_LEFT:
-                aSourceArea.aStart.SetCol( aSourceArea.aStart.Col() + nCount );
+                aSourceArea.aStart.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aStart.Col() + nCount ) );
                 break;
         }
 
@@ -3244,12 +3244,12 @@ BOOL ScDocFunc::FillSeries( const ScRange& rRange, const ScMarkData* pTabMark,
         if ( bRecord )
         {
             SCTAB nTabCount = pDoc->GetTableCount();
-            SCTAB nStartTab = aDestArea.aStart.Tab();
+            SCTAB nDestStartTab = aDestArea.aStart.Tab();
 
             pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-            pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
+            pUndoDoc->InitUndo( pDoc, nDestStartTab, nDestStartTab );
             for (SCTAB i=0; i<nTabCount; i++)
-                if (i != nStartTab && aMark.GetTableSelect(i))
+                if (i != nDestStartTab && aMark.GetTableSelect(i))
                     pUndoDoc->AddUndoTab( i, i );
 
             pDoc->CopyToDocument(
@@ -3331,26 +3331,26 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
     switch (eDir)
     {
         case FILL_TO_BOTTOM:
-            aDestArea.aEnd.SetRow( aSourceArea.aEnd.Row() + nCount );
+            aDestArea.aEnd.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aEnd.Row() + nCount ) );
             break;
         case FILL_TO_TOP:
-            if (nCount > aSourceArea.aStart.Row())
+            if (nCount > sal::static_int_cast<ULONG>( aSourceArea.aStart.Row() ))
             {
                 DBG_ERROR("FillAuto: Row < 0");
                 nCount = aSourceArea.aStart.Row();
             }
-            aDestArea.aStart.SetRow( aSourceArea.aStart.Row() - nCount );
+            aDestArea.aStart.SetRow( sal::static_int_cast<SCROW>( aSourceArea.aStart.Row() - nCount ) );
             break;
         case FILL_TO_RIGHT:
-            aDestArea.aEnd.SetCol( aSourceArea.aEnd.Col() + nCount );
+            aDestArea.aEnd.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aEnd.Col() + nCount ) );
             break;
         case FILL_TO_LEFT:
-            if (nCount > aSourceArea.aStart.Col())
+            if (nCount > sal::static_int_cast<ULONG>( aSourceArea.aStart.Col() ))
             {
                 DBG_ERROR("FillAuto: Col < 0");
                 nCount = aSourceArea.aStart.Col();
             }
-            aDestArea.aStart.SetCol( aSourceArea.aStart.Col() - nCount );
+            aDestArea.aStart.SetCol( sal::static_int_cast<SCCOL>( aSourceArea.aStart.Col() - nCount ) );
             break;
         default:
             DBG_ERROR("Falsche Richtung bei FillAuto");
@@ -3377,18 +3377,18 @@ BOOL ScDocFunc::FillAuto( ScRange& rRange, const ScMarkData* pTabMark,
         return FALSE;
     }
 
-    WaitObject aWait( rDocShell.GetDialogParent() );
+    WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
     ScDocument* pUndoDoc = NULL;
     if ( bRecord )
     {
         SCTAB nTabCount = pDoc->GetTableCount();
-        SCTAB nStartTab = aDestArea.aStart.Tab();
+        SCTAB nDestStartTab = aDestArea.aStart.Tab();
 
         pUndoDoc = new ScDocument( SCDOCMODE_UNDO );
-        pUndoDoc->InitUndo( pDoc, nStartTab, nStartTab );
+        pUndoDoc->InitUndo( pDoc, nDestStartTab, nDestStartTab );
         for (SCTAB i=0; i<nTabCount; i++)
-            if (i != nStartTab && aMark.GetTableSelect(i))
+            if (i != nDestStartTab && aMark.GetTableSelect(i))
                 pUndoDoc->AddUndoTab( i, i );
 
         pDoc->CopyToDocument(
@@ -3592,7 +3592,7 @@ BOOL ScDocFunc::ModifyRangeNames( const ScRangeName& rNewRanges, BOOL bApi )
     return SetNewRangeNames( new ScRangeName( rNewRanges ), bApi );
 }
 
-BOOL ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, BOOL bApi )     // takes ownership of pNewRanges
+BOOL ScDocFunc::SetNewRangeNames( ScRangeName* pNewRanges, BOOL /* bApi */ )     // takes ownership of pNewRanges
 {
     ScDocShellModificator aModificator( rDocShell );
 
@@ -3647,8 +3647,6 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
             String aContent;
             ScRange( nX1, nY1, nTab, nX2, nY2, nTab ).Format( aContent, SCR_ABS_3D, pDoc );
 
-            ScRangeName* pList = pDoc->GetRangeName();
-
             BOOL bInsert = FALSE;
             USHORT nOldPos;
             if (rList.SearchName( aName, nOldPos ))         // vorhanden ?
@@ -3668,7 +3666,7 @@ void ScDocFunc::CreateOneName( ScRangeName& rList,
                         aMessage += aName;
                         aMessage += aTemplate.GetToken( 1, '#' );
 
-                        short nResult = QueryBox( rDocShell.GetDialogParent(),
+                        short nResult = QueryBox( rDocShell.GetActiveDialogParent(),
                                                     WinBits(WB_YES_NO_CANCEL | WB_DEF_YES),
                                                     aMessage ).Execute();
                         if ( nResult == RET_YES )
@@ -3837,7 +3835,7 @@ BOOL ScDocFunc::InsertNameList( const ScAddress& rStartPos, BOOL bApi )
             }
 #ifndef ICC
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
-                &ScRangeData::QsortNameCompare );
+                &ScRangeData_QsortNameCompare );
 #else
             qsort( (void*)ppSortArray, nValidCount, sizeof(ScRangeData*),
                 ICCQsortNameCompare );
@@ -3893,8 +3891,6 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
     ScDocument* pDoc = rDocShell.GetDocument();
     SCCOL nStartCol = rOldRange.aStart.Col();
     SCROW nStartRow = rOldRange.aStart.Row();
-    SCCOL nNewEndCol = rNewEnd.Col();
-    SCROW nNewEndRow = rNewEnd.Row();
     SCTAB nTab = rOldRange.aStart.Tab();
 
     BOOL bUndo(pDoc->IsUndoEnabled());
@@ -3939,7 +3935,7 @@ BOOL ScDocFunc::ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd
 BOOL ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
                                 const String& rOptions, const String& rSource,
                                 const ScRange& rDestRange, ULONG nRefresh,
-                                BOOL bFitBlock, BOOL bApi )
+                                BOOL bFitBlock, BOOL /* bApi */ )
 {
     //! auch fuer ScViewFunc::InsertAreaLink benutzen!
 
