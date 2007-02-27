@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlimp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:42:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:56:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@ private:
 public:
                         ScHTMLImport( ScDocument* pDoc, const String& rBaseURL, const ScRange& rRange, BOOL bCalcWidthHeight = TRUE );
                         ~ScHTMLImport();
-    const ScHTMLParser* GetParser() const { return (ScHTMLParser*)pParser; }
+    const ScHTMLParser* GetParser() const { return (ScHTMLParser*)mpParser; }
 
     virtual void        WriteToDocument( BOOL bSizeColsRows = FALSE, double nOutputFactor = 1.0 );
 
