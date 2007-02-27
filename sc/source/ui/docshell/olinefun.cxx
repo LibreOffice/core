@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olinefun.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:45:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:08:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,7 +348,7 @@ BOOL ScOutlineDocFunc::AutoOutline( const ScRange& rRange, BOOL bRecord, BOOL bA
 //------------------------------------------------------------------------
 
 BOOL ScOutlineDocFunc::SelectLevel( SCTAB nTab, BOOL bColumns, USHORT nLevel,
-                                    BOOL bRecord, BOOL bPaint, BOOL bApi )
+                                    BOOL bRecord, BOOL bPaint, BOOL /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
 
@@ -631,7 +631,7 @@ BOOL ScOutlineDocFunc::HideMarkedOutlines( const ScRange& rRange, BOOL bRecord, 
 //------------------------------------------------------------------------
 
 BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
-                                    BOOL bRecord, BOOL bPaint, BOOL bApi )
+                                    BOOL bRecord, BOOL bPaint, BOOL /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
@@ -714,7 +714,7 @@ BOOL ScOutlineDocFunc::ShowOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, US
 }
 
 BOOL ScOutlineDocFunc::HideOutline( SCTAB nTab, BOOL bColumns, USHORT nLevel, USHORT nEntry,
-                                    BOOL bRecord, BOOL bPaint, BOOL bApi )
+                                    BOOL bRecord, BOOL bPaint, BOOL /* bApi */ )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if (bRecord && !pDoc->IsUndoEnabled())
