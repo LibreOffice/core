@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seltrans.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:24:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:58:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,6 +267,11 @@ void ScSelectionTransferObj::AddSupportedFormats()
             AddFormat( SOT_FORMAT_BITMAP );
             AddFormat( SOT_FORMAT_GDIMETAFILE );
             break;
+
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
@@ -416,6 +421,10 @@ sal_Bool ScSelectionTransferObj::GetData( const ::com::sun::star::datatransfer::
         case SC_SELTRANS_DRAW_OTHER:
             xSource = GetDrawData();
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if ( xSource.is() )
