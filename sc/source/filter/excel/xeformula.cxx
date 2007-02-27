@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeformula.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:16:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:24:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,8 +155,8 @@ struct XclExpTokenData
 
     inline explicit     XclExpTokenData() : mpScToken( 0 ), mnSpaces( 0 ) {}
     inline bool         Is() const { return mpScToken != 0; }
-    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : svErr; }
-    inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : ocNone; }
+    inline StackVar     GetType() const { return mpScToken ? mpScToken->GetType() : static_cast< StackVar >( svErr ); }
+    inline OpCode       GetOpCode() const { return mpScToken ? mpScToken->GetOpCode() : static_cast< OpCode >( ocNone ); }
 };
 
 // ----------------------------------------------------------------------------
@@ -605,6 +605,7 @@ void XclExpFmlaCompImpl::Init( XclFormulaType eType, const ScTokenArray& rScTokA
             ScCompiler::MoveRelWrap( *mxOwnScTokArr, GetDocPtr(), *pScBasePos );
             // don't remember pScBasePos in mpScBasePos, shared formulas use real relative refs
         break;
+        default:;
     }
 
     if( mbOk )
@@ -1216,6 +1217,7 @@ void XclExpFmlaCompImpl::ProcessFunction( const XclExpTokenData& rTokData, sal_u
             FinishFunction( aFuncData, aTokData.mnSpaces );
             eState = STATE_END;
         break;
+        default:;
     }
 }
 
@@ -1345,10 +1347,10 @@ void XclExpFmlaCompImpl::FinishChooseFunction( XclExpFuncData& rFuncData, sal_uI
     Insert( nJumpArrPos, nJumpArrSize );
     // update positions of parameters and tAttr tokens after jump table insertion
     for( nIdx = 1; nIdx <= nParamCount; ++nIdx )
-        rParamPos[ nIdx ] += nJumpArrSize;
+        rParamPos[ nIdx ] = rParamPos[ nIdx ] + nJumpArrSize;
     for( nIdx = 1; nIdx < nParamCount; ++nIdx )
-        rAttrPos[ nIdx ] += nJumpArrSize;
-    nFuncTokPos += nJumpArrSize;
+        rAttrPos[ nIdx ] = rAttrPos[ nIdx ] + nJumpArrSize;
+    nFuncTokPos = nFuncTokPos + nJumpArrSize;
     // update the tAttr-goto tokens
     for( nIdx = 1; nIdx < nParamCount; ++nIdx )
         // (tAttr-goto tokens contain a value one-less to real distance)
