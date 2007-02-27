@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transobj.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:11:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:58:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,8 +136,8 @@ void ScTransferObj::PaintToDev( OutputDevice* pDev, ScDocument* pDoc, double nPr
 // -----------------------------------------------------------------------
 
 ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDescriptor& rDesc ) :
-    aObjDesc( rDesc ),
     pDoc( pClipDoc ),
+    aObjDesc( rDesc ),
     nDragHandleX( 0 ),
     nDragHandleY( 0 ),
     nDragSourceFlags( 0 ),
@@ -156,8 +156,8 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     SCROW nRow2;
     pDoc->GetClipStart( nCol1, nRow1 );
     pDoc->GetClipArea( nCol2, nRow2, TRUE );    // real source area - include filtered rows
-    nCol2 += nCol1;
-    nRow2 += nRow1;
+    nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nCol1 );
+    nRow2 = sal::static_int_cast<SCROW>( nRow2 + nRow1 );
 
     SCCOL nDummy;
     pDoc->GetClipArea( nDummy, nNonFiltered, FALSE );
