@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:31:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,20 +65,6 @@ static USHORT pValueRanges[] =
 {
     FID_VALID_MODE, FID_VALID_ERRTEXT,
     FID_VALID_LISTTYPE, FID_VALID_LISTTYPE,
-    0
-};
-
-static USHORT pHelpRanges[] =
-{
-    FID_VALIDATION,
-    FID_VALIDATION,
-    0
-};
-
-static USHORT pErrorRanges[] =
-{
-    FID_VALIDATION,
-    FID_VALIDATION,
     0
 };
 
@@ -345,8 +331,10 @@ BOOL ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
         (maCbSort.IsChecked() ? ValidListType::SORTEDASCENDING : ValidListType::UNSORTED) :
         ValidListType::INVISIBLE;
 
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_MODE, lclGetValModeFromPos( maLbAllow.GetSelectEntryPos() ) ) );
-    rArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE, lclGetCondModeFromPos( maLbValue.GetSelectEntryPos() ) ) );
+    rArgSet.Put( SfxAllEnumItem( FID_VALID_MODE, sal::static_int_cast<USHORT>(
+                    lclGetValModeFromPos( maLbAllow.GetSelectEntryPos() ) ) ) );
+    rArgSet.Put( SfxAllEnumItem( FID_VALID_CONDMODE, sal::static_int_cast<USHORT>(
+                    lclGetCondModeFromPos( maLbValue.GetSelectEntryPos() ) ) ) );
     rArgSet.Put( SfxStringItem( FID_VALID_VALUE1, GetFirstFormula() ) );
     rArgSet.Put( SfxStringItem( FID_VALID_VALUE2, GetSecondFormula() ) );
     rArgSet.Put( SfxBoolItem( FID_VALID_BLANK, maCbAllow.IsChecked() ) );
@@ -396,7 +384,7 @@ void ScTPValidationValue::SetSecondFormula( const String& rFmlaStr )
 
 // ----------------------------------------------------------------------------
 
-IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, pListBox )
+IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, EMPTYARG )
 {
     USHORT nLbPos = maLbAllow.GetSelectEntryPos();
     bool bEnable = (nLbPos != SC_VALIDDLG_ALLOW_ANY);
@@ -450,7 +438,7 @@ IMPL_LINK( ScTPValidationValue, SelectHdl, ListBox*, pListBox )
     return 0;
 }
 
-IMPL_LINK( ScTPValidationValue, CheckHdl, CheckBox*, pCheckBox )
+IMPL_LINK( ScTPValidationValue, CheckHdl, CheckBox*, EMPTYARG )
 {
     maCbSort.Enable( maCbShow.IsChecked() );
     return 0;
@@ -468,11 +456,11 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
                           ScResId( TP_VALIDATION_INPUTHELP ),
                           rArgSet ),
         aTsbHelp        ( this, ScResId( TSB_HELP ) ),
+        aFlContent      ( this, ScResId( FL_CONTENT ) ),
         aFtTitle        ( this, ScResId( FT_TITLE ) ),
         aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
         aFtInputHelp    ( this, ScResId( FT_INPUTHELP ) ),
         aEdInputHelp    ( this, ScResId( EDT_INPUTHELP ) ),
-        aFlContent      ( this, ScResId( FL_CONTENT ) ),
 
         mrArgSet            ( rArgSet )
 {
@@ -554,6 +542,7 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
                           ScResId( TP_VALIDATION_ERROR ),
                           rArgSet ),
         aTsbShow        ( this, ScResId( TSB_SHOW ) ),
+        aFlContent      ( this, ScResId( FL_CONTENT ) ),
         aFtAction       ( this, ScResId( FT_ACTION ) ),
         aLbAction       ( this, ScResId( LB_ACTION ) ),
         aBtnSearch      ( this, ScResId( BTN_SEARCH ) ),
@@ -561,7 +550,6 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
         aEdtTitle       ( this, ScResId( EDT_TITLE ) ),
         aFtError        ( this, ScResId( FT_ERROR ) ),
         aEdError        ( this, ScResId( EDT_ERROR ) ),
-        aFlContent      ( this, ScResId( FL_CONTENT ) ),
 
         mrArgSet            ( rArgSet )
 {
@@ -646,7 +634,7 @@ BOOL __EXPORT ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox*, pListBox )
+IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox*, EMPTYARG )
 {
     ScValidErrorStyle eStyle = (ScValidErrorStyle) aLbAction.GetSelectEntryPos();
     BOOL bMacro = ( eStyle == SC_VALERR_MACRO );
@@ -660,7 +648,7 @@ IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox*, pListBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
+IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, EMPTYARG )
 {
     Window* pOld = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
