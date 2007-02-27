@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xelink.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:20:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:24:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -868,7 +868,7 @@ void XclExpExtNameBase::WriteBody( XclExpStream& rStrm )
     WriteAddData( rStrm );
 }
 
-void XclExpExtNameBase::WriteAddData( XclExpStream& rStrm )
+void XclExpExtNameBase::WriteAddData( XclExpStream& /*rStrm*/ )
 {
 }
 
@@ -1494,6 +1494,7 @@ void XclExpLinkManagerImpl5::FindExtSheet(
         FindInternal( nDummyExtSheet, rnLastXclTab, nLastScTab );
     }
 
+    (void)pRefLogEntry;     // avoid compiler warning
     DBG_ASSERT( !pRefLogEntry, "XclExpLinkManagerImpl5::FindExtSheet - fill reflog entry not implemented" );
 }
 
@@ -1504,7 +1505,7 @@ sal_uInt16 XclExpLinkManagerImpl5::FindExtSheet( sal_Unicode cCode )
     return nExtSheet;
 }
 
-void XclExpLinkManagerImpl5::StoreCellRange( const SingleRefData& rRef1, const SingleRefData& rRef2 )
+void XclExpLinkManagerImpl5::StoreCellRange( const SingleRefData& /*rRef1*/, const SingleRefData& /*rRef2*/ )
 {
     // not implemented
 }
@@ -1522,8 +1523,8 @@ bool XclExpLinkManagerImpl5::InsertAddIn(
 }
 
 bool XclExpLinkManagerImpl5::InsertDde(
-        sal_uInt16& rnExtSheet, sal_uInt16& rnExtName,
-        const String& rApplic, const String& rTopic, const String& rItem )
+        sal_uInt16& /*rnExtSheet*/, sal_uInt16& /*rnExtName*/,
+        const String& /*rApplic*/, const String& /*rTopic*/, const String& /*rItem*/ )
 {
     // not implemented
     return false;
@@ -1643,6 +1644,7 @@ void XclExpLinkManagerImpl8::FindExtSheet(
 
 sal_uInt16 XclExpLinkManagerImpl8::FindExtSheet( sal_Unicode cCode )
 {
+    (void)cCode;    // avoid compiler warning
     DBG_ASSERT( (cCode == EXC_EXTSH_OWNDOC) || (cCode == EXC_EXTSH_ADDIN),
         "XclExpLinkManagerImpl8::FindExtSheet - unknown externsheet code" );
     return InsertXti( maSBBuffer.GetXti( EXC_TAB_EXTERNAL, EXC_TAB_EXTERNAL ) );
