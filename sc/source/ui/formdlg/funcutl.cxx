@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcutl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:57:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -900,7 +900,7 @@ long ScEditBox::PreNotify( NotifyEvent& rNEvt )
 #*  Output:     ---
 #*
 #************************************************************************/
-IMPL_LINK( ScEditBox, ChangedHdl, ScEditBox*, pEd )
+IMPL_LINK( ScEditBox, ChangedHdl, ScEditBox*, EMPTYARG )
 {
     if(pMEdit!=NULL)
     {
