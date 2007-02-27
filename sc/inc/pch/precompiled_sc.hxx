@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompiled_sc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 16:17:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,9 @@
 #include <com/sun/star/uno/Sequence.h>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <com/sun/star/uno/Type.hxx>
+#include <config/_prolog.h>
 #include <config/_epilog.h>
 #include <config/_msvc_warnings_off.h>
-#include <config/_prolog.h>
 #include <cppu/macros.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <cstddef>
