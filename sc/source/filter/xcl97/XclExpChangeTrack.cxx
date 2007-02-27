@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:36:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:42:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,14 +529,17 @@ sal_Size XclExpChTrTabId::GetLen() const
 
 // ! does not copy additional actions
 XclExpChTrAction::XclExpChTrAction( const XclExpChTrAction& rCopy ) :
+    ExcRecord( rCopy ),
     sUsername( rCopy.sUsername ),
     aDateTime( rCopy.aDateTime ),
     nIndex( 0 ),
+    pAddAction( 0 ),
+    bAccepted( rCopy.bAccepted ),
     rTabInfo( rCopy.rTabInfo ),
-    pAddAction( NULL ),
     rIdBuffer( rCopy.rIdBuffer ),
     nLength( rCopy.nLength ),
-    nOpCode( rCopy.nOpCode )
+    nOpCode( rCopy.nOpCode ),
+    bForceInfo( rCopy.bForceInfo )
 {
 }
 
@@ -602,11 +605,11 @@ void XclExpChTrAction::SaveCont( XclExpStream& rStrm )
     SaveActionData( rStrm );
 }
 
-void XclExpChTrAction::PrepareSaveAction( XclExpStream& rStrm ) const
+void XclExpChTrAction::PrepareSaveAction( XclExpStream& /*rStrm*/ ) const
 {
 }
 
-void XclExpChTrAction::CompleteSaveAction( XclExpStream& rStrm ) const
+void XclExpChTrAction::CompleteSaveAction( XclExpStream& /*rStrm*/ ) const
 {
 }
 
@@ -706,9 +709,9 @@ XclExpChTrCellContent::XclExpChTrCellContent(
         const XclExpChTrTabIdBuffer& rTabIdBuffer ) :
     XclExpChTrAction( rAction, rRoot, rTabIdBuffer, EXC_CHTR_OP_CELL ),
     XclExpRoot( rRoot ),
-    aPosition( rAction.GetBigRange().MakeRange().aStart ),
-    pOldData( NULL ),
-    pNewData( NULL )
+    pOldData( 0 ),
+    pNewData( 0 ),
+    aPosition( rAction.GetBigRange().MakeRange().aStart )
 {
     sal_uInt32 nDummy32;
     sal_uInt16 nDummy16;
@@ -810,6 +813,7 @@ void XclExpChTrCellContent::GetCellData(
             }
         }
         break;
+        default:;
     }
 }
 
@@ -1231,6 +1235,7 @@ void XclExpChangeTrack::PushActionRecord( const ScChangeAction& rAction )
         case SC_CAT_MOVE:
             pXclAction = new XclExpChTrMoveRange( (const ScChangeActionMove&) rAction, GetRoot(), *pTabIdBuffer, *pTempChangeTrack );
         break;
+        default:;
     }
     if( pXclAction )
         aActionStack.Push( pXclAction );
