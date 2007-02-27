@@ -4,9 +4,9 @@
  *
  *  $RCSfile: instbdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:48:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:32:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,8 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
         aBtnBefore      ( this, ScResId( RB_BEFORE ) ),
         aBtnBehind      ( this, ScResId( RB_BEHIND ) ),
         aFlPos          ( this, ScResId( FL_POSITION ) ),
+        aBtnNew         ( this, ScResId( RB_NEW ) ),
+        aBtnFromFile    ( this, ScResId( RB_FROMFILE ) ),
         aFtCount        ( this, ScResId( FT_COUNT ) ),
         aNfCount        ( this, ScResId( NF_COUNT ) ),
         aFtName         ( this, ScResId( FT_NAME ) ),
@@ -80,8 +82,6 @@ ScInsertTableDlg::ScInsertTableDlg( Window* pParent, ScViewData& rData, SCTAB nT
         aBtnBrowse      ( this, ScResId( BTN_BROWSE ) ),
         aBtnLink        ( this, ScResId( CB_LINK ) ),
         aFlTable        ( this, ScResId( FL_TABLE ) ),
-        aBtnNew         ( this, ScResId( RB_NEW ) ),
-        aBtnFromFile    ( this, ScResId( RB_FROMFILE ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -117,9 +117,6 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
     aNfCount        .SetModifyHdl( LINK( this, ScInsertTableDlg, CountHdl_Impl));
     aBtnOk          .SetClickHdl( LINK( this, ScInsertTableDlg, DoEnterHdl ));
     aBtnBefore.Check();
-
-    ScMarkData& rMark    = rViewData.GetMarkData();
-    SCTAB   nTabSelCount = rMark.GetSelectCount();
 
     aNfCount.SetText( String::CreateFromInt32(nTableCount) );
     aNfCount.SetMax( MAXTAB - rDoc.GetTableCount() + 1 );
@@ -354,7 +351,7 @@ IMPL_LINK( ScInsertTableDlg, DoEnterHdl, PushButton*, EMPTYARG )
     else
     {
         String aErrMsg ( ScGlobal::GetRscString( STR_INVALIDTABNAME ) );
-        USHORT nRet = ErrorBox( this,WinBits( WB_OK | WB_DEF_OK ),aErrMsg).Execute();
+        (void)ErrorBox( this,WinBits( WB_OK | WB_DEF_OK ),aErrMsg).Execute();
     }
     return 0;
 }
