@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowba.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:29:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:49:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ String lcl_MetricString( long nTwips, const String& rText )
     {
         FieldUnit eUserMet = SC_MOD()->GetAppOptions().GetAppMetric();
 
-        long nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FUNIT_TWIP, eUserMet );
+        sal_Int64 nUserVal = MetricField::ConvertValue( nTwips*100, 1, 2, FUNIT_TWIP, eUserMet );
 
         String aStr = rText;
         aStr += ' ';
@@ -230,13 +230,13 @@ BOOL ScColBar::ResizeAllowed()
             !pViewData->GetDocShell()->IsReadOnly();
 }
 
-void ScColBar::DrawInvert( long nDragPos )
+void ScColBar::DrawInvert( long nDragPosP )
 {
-    Rectangle aRect( nDragPos,0, nDragPos+HDR_SLIDERSIZE-1,GetOutputSizePixel().Width()-1 );
+    Rectangle aRect( nDragPosP,0, nDragPosP+HDR_SLIDERSIZE-1,GetOutputSizePixel().Width()-1 );
     Update();
     Invert(aRect);
 
-    pViewData->GetView()->InvertVertical(eWhich,nDragPos);
+    pViewData->GetView()->InvertVertical(eWhich,nDragPosP);
 }
 
 String ScColBar::GetDragHelp( long nVal )
@@ -396,13 +396,13 @@ BOOL ScRowBar::ResizeAllowed()
             !pViewData->GetDocShell()->IsReadOnly();
 }
 
-void ScRowBar::DrawInvert( long nDragPos )
+void ScRowBar::DrawInvert( long nDragPosP )
 {
-    Rectangle aRect( 0,nDragPos, GetOutputSizePixel().Width()-1,nDragPos+HDR_SLIDERSIZE-1 );
+    Rectangle aRect( 0,nDragPosP, GetOutputSizePixel().Width()-1,nDragPosP+HDR_SLIDERSIZE-1 );
     Update();
     Invert(aRect);
 
-    pViewData->GetView()->InvertHorizontal(eWhich,nDragPos);
+    pViewData->GetView()->InvertHorizontal(eWhich,nDragPosP);
 }
 
 String ScRowBar::GetDragHelp( long nVal )
