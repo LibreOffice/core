@@ -4,9 +4,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:49:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,16 +182,16 @@ void XclImpOutlineBuffer::MakeScOutline( void )
         for( BYTE nWorkLevel = 1; nWorkLevel <= nMaxLevel; nWorkLevel++ )
         {
             UINT16  nStartPos       = 0;
-            BYTE    nCurrLevel  = 0;
+            BYTE    nCurrLevel2 = 0;
             BYTE    nPrevLevel  = 0;
 
             for( SCSIZE nC = 0 ; nC <= nLast ; nC++ )
             {
-                nPrevLevel = nCurrLevel;
-                nCurrLevel = pLevel[ nC ];
-                if( (nPrevLevel < nWorkLevel) && (nCurrLevel >= nWorkLevel) )
+                nPrevLevel = nCurrLevel2;
+                nCurrLevel2 = pLevel[ nC ];
+                if( (nPrevLevel < nWorkLevel) && (nCurrLevel2 >= nWorkLevel) )
                     nStartPos = static_cast< sal_uInt16 >( nC );
-                else if( (nPrevLevel >= nWorkLevel) && (nCurrLevel < nWorkLevel) )
+                else if( (nPrevLevel >= nWorkLevel) && (nCurrLevel2 < nWorkLevel) )
                 {
                     if( pOuted[ nC ] && pHidden[ nStartPos ] )
                     {
@@ -399,8 +399,6 @@ ExcScenario::~ExcScenario()
 
 void ExcScenario::Apply( const XclImpRoot& rRoot, const BOOL bLast )
 {
-    UINT32              nNumCells = List::Count();
-
     ScDocument&         r = rRoot.GetDoc();
     ExcScenarioCell*    p = EXCSCFIRST();
     String              aSzenName( *pName );
