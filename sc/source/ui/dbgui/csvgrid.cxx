@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 09:59:30 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:01:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -586,6 +586,10 @@ void ScCsvGrid::ScrollVertRel( ScMoveMode eDir )
         case MOVE_LAST:     nLine = GetMaxLineOffset();     break;
         case MOVE_PREVPAGE: nLine -= GetVisLineCount() - 2; break;
         case MOVE_NEXTPAGE: nLine += GetVisLineCount() - 2; break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     Execute( CSVCMD_SETLINEOFFSET, nLine );
 }
@@ -708,6 +712,10 @@ void ScCsvGrid::MoveCursorRel( ScMoveMode eDir )
                 if( GetFocusColumn() < GetColumnCount() - 1 )
                     MoveCursor( GetFocusColumn() + 1 );
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 }
@@ -754,7 +762,7 @@ void ScCsvGrid::ImplSetTextLineSep(
     const sal_Unicode* pChar = rTextLine.GetBuffer();
     sal_uInt32 nColIx = 0;
 
-    while( *pChar && (nColIx < CSV_MAXCOLCOUNT) )
+    while( *pChar && (nColIx < sal::static_int_cast<sal_uInt32>(CSV_MAXCOLCOUNT)) )
     {
         // scan for next cell text
         pChar = ScImportExport::ScanNextFieldFromString( pChar, aCellText, cTextSep, pSepChars, bMergeSep );
@@ -812,9 +820,9 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine )
     xub_StrLen nStrIx = 0;
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
-        xub_StrLen nChars = static_cast< xub_StrLen >( GetColumnWidth( nColIx ) );
-        rStrVec.push_back( rTextLine.Copy( nStrIx, Max( nChars, CSV_MAXSTRLEN ) ) );
-        nStrIx += nChars;
+        xub_StrLen nColWidth = static_cast< xub_StrLen >( GetColumnWidth( nColIx ) );
+        rStrVec.push_back( rTextLine.Copy( nStrIx, Max( nColWidth, CSV_MAXSTRLEN ) ) );
+        nStrIx = sal::static_int_cast<xub_StrLen>( nStrIx + nColWidth );
     }
     InvalidateGfx();
 }
@@ -1015,7 +1023,7 @@ void ScCsvGrid::DataChanged( const DataChangedEvent& rDCEvt )
     ScCsvControl::DataChanged( rDCEvt );
 }
 
-void ScCsvGrid::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScCsvGrid::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if( rHint.ISA( SfxSimpleHint ) &&
         (static_cast< const SfxSimpleHint& >( rHint ).GetId() == SFX_HINT_COLORS_CHANGED) )
