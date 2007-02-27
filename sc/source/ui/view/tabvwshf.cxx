@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:18:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:59:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,6 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
     {
         case FID_TABLE_VISIBLE:
             {
-                SCTAB nTabNr = pViewData->GetTabNo();
                 String aName;
                 pDoc->GetName( nCurrentTab, aName );
 
@@ -586,13 +585,13 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                         bCpy = pDlg->GetCopyTable();
                         bDoIt = TRUE;
 
-                        String aDocName;
+                        String aFoundDocName;
                         if ( nDoc != SC_DOC_NEW )
                         {
                             ScDocShell* pSh = ScDocShell::GetShellByNum( nDoc );
                             if (pSh)
                             {
-                                aDocName = pSh->GetTitle();
+                                aFoundDocName = pSh->GetTitle();
                                 if ( !pSh->GetDocument()->IsDocEditable() )
                                 {
                                     ErrorMessage(STR_READONLYERR);
@@ -600,7 +599,7 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 }
                             }
                         }
-                        rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aDocName ) );
+                        rReq.AppendItem( SfxStringItem( FID_TAB_MOVE, aFoundDocName ) );
                         //  Tabelle ist 1-basiert, wenn nicht APPEND
                         SCTAB nBasicTab = ( nTab <= MAXTAB ) ? (nTab+1) : nTab;
                         rReq.AppendItem( SfxUInt16Item( FN_PARAM_1, static_cast<sal_uInt16>(nBasicTab) ) );
@@ -671,16 +670,15 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                 {
                     //  handle several sheets
 
-                    SfxUndoManager* pUndoMgr = pDocSh->GetUndoManager();
+                    SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
                     String aUndo = ScGlobal::GetRscString( STR_UNDO_TAB_RTL );
-                    pUndoMgr->EnterListAction( aUndo, aUndo );
+                    pUndoManager->EnterListAction( aUndo, aUndo );
 
-                    SCTAB nTabCount = pDoc->GetTableCount();
                     for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                         if ( rMark.GetTableSelect(nTab) )
                             aFunc.SetLayoutRTL( nTab, bSet, FALSE );
 
-                    pUndoMgr->LeaveListAction();
+                    pUndoManager->LeaveListAction();
                 }
                 else
                     aFunc.SetLayoutRTL( nCurrentTab, bSet, FALSE );
@@ -700,11 +698,7 @@ void ScTabViewShell::GetStateTable( SfxItemSet& rSet )
     ScViewData* pViewData   = GetViewData();
     ScDocument* pDoc        = pViewData->GetDocument();
     ScMarkData& rMark       = GetViewData()->GetMarkData();
-    SCCOL       nPosX       = pViewData->GetCurX();
-    SCROW       nPosY       = pViewData->GetCurY();
     SCTAB       nTab        = pViewData->GetTabNo();
-
-    BOOL bOle = GetViewData()->GetDocShell()->IsOle();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
