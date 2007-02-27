@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlnexpi.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:53:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:51:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ ScXMLNamedExpressionsContext::ScXMLNamedExpressionsContext( ScXMLImport& rImport
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList) :
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ ) :
     SvXMLImportContext( rImport, nPrfx, rLName )
 {
 /*  sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -176,7 +176,7 @@ ScXMLNamedRangeContext::~ScXMLNamedRangeContext()
 SvXMLImportContext *ScXMLNamedRangeContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
 /*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
@@ -237,7 +237,7 @@ ScXMLNamedExpressionContext::~ScXMLNamedExpressionContext()
 SvXMLImportContext *ScXMLNamedExpressionContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
 /*  const SvXMLTokenMap& rTokenMap = GetScImport().GetTableElemTokenMap();
     switch( rTokenMap.Get( nPrefix, rLName ) )
