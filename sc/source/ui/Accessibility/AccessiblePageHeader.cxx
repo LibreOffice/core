@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePageHeader.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:26:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:55:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,6 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         {
             ScHFAreas aOldAreas(maAreas);
             std::for_each(aOldAreas.begin(), aOldAreas.end(), Acquire());
-            sal_Int32 nOldCount(mnChildCount);
             mnChildCount = -1;
             getAccessibleChildCount();
             for (sal_uInt8 i = 0; i < MAX_AREAS; ++i)
