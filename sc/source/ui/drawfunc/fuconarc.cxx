@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconarc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:48:19 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,9 +69,9 @@
 |*
 \************************************************************************/
 
-FuConstArc::FuConstArc( ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuConstArc::FuConstArc( ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq )
-    : FuConstruct( pViewSh, pWin, pView, pDoc, rReq )
+    : FuConstruct( pViewSh, pWin, pViewP, pDoc, rReq )
 {
 }
 
@@ -197,7 +197,7 @@ void FuConstArc::Activate()
             break;
     }
 
-    pView->SetCurrentObj( aObjKind );
+    pView->SetCurrentObj( sal::static_int_cast<UINT16>( aObjKind ) );
 
     aOldPointer = pWindow->GetPointer();
     pViewShell->SetActivePointer( aNewPointer );
