@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpsort.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:59:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,8 @@ public:
 protected:
 // fuer Datenaustausch (sollte noch umgestellt werden!)
 //  virtual void        ActivatePage    ( const SfxItemSet& rSet );
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage    ();
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
@@ -172,6 +174,8 @@ public:
 protected:
 // fuer Datenaustausch (sollte noch umgestellt werden!)
 //  virtual void        ActivatePage    ( const SfxItemSet& rSet );
+    using SfxTabPage::ActivatePage;
+    using SfxTabPage::DeactivatePage;
     virtual void        ActivatePage    ();
     virtual int         DeactivatePage  ( SfxItemSet* pSet = 0);
 
