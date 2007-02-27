@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markarr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:06:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:06:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ void ScMarkArray::SetMarkArea( SCROW nStartRow, SCROW nEndRow, BOOL bMarked )
                 }
             }
 
-            if ( nInsert < MAXROWCOUNT )
+            if ( nInsert < sal::static_int_cast<SCSIZE>(MAXROWCOUNT) )
             {   // insert or append new entry
                 if ( nInsert <= nCount )
                 {
