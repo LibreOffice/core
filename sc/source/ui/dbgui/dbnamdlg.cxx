@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbnamdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:21:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,10 @@ class DBSaveData
 public:
     DBSaveData( Edit& rEd, CheckBox& rHdr, CheckBox& rSize, CheckBox& rFmt,
                             CheckBox& rStrip, ScRange& rArea )
-        : bHeader(FALSE), bSize(FALSE), bFormat(FALSE), bDirty(FALSE),
-          rEdAssign(rEd),
+        : rEdAssign(rEd),
           rBtnHeader(rHdr), rBtnSize(rSize), rBtnFormat(rFmt), rBtnStrip(rStrip),
-          rCurArea(rArea) {}
-
+          rCurArea(rArea),
+          bHeader(FALSE), bSize(FALSE), bFormat(FALSE), bDirty(FALSE) {}
     void Clear();
     void Save();
     void Restore();
@@ -177,9 +176,9 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnAdd         ( this, ScResId( BTN_ADD ) ),
         aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
 
         aStrAdd         ( ScResId( STR_ADD ) ),
@@ -189,8 +188,8 @@ ScDbNameDlg::ScDbNameDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
-        aLocalDbCol     ( *(pDoc->GetDBCollection()) ),
-        bRefInputMode   ( FALSE )
+        bRefInputMode   ( FALSE ),
+        aLocalDbCol     ( *(pDoc->GetDBCollection()) )
 {
     // WB_NOLABEL can't be set in resource...
     aFTSource.SetStyle( aFTSource.GetStyle() | WB_NOLABEL );
@@ -333,7 +332,7 @@ void ScDbNameDlg::SetInfoStrings( const ScDBData* pDBData )
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 //  neue Selektion im Referenz-Fenster angezeigt wird.
 
-void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( aEdAssign.IsEnabled() )
     {
@@ -343,7 +342,7 @@ void ScDbNameDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         theCurArea = rRef;
 
         String aRefStr;
-        theCurArea.Format( aRefStr, ABS_DREF3D, pDoc );
+        theCurArea.Format( aRefStr, ABS_DREF3D, pDocP );
         aEdAssign.SetRefString( aRefStr );
         aBtnHeader.Enable();
         aBtnDoSize.Enable();
