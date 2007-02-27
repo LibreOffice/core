@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:39:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:45:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,17 +64,17 @@ const SfxItemPropertyMap* lcl_GetValidatePropertyMap()
 {
     static SfxItemPropertyMap aValidatePropertyMap_Impl[] =
     {
-        {MAP_CHAR_LEN(SC_UNONAME_ERRALSTY), 0,  &getCppuType((sheet::ValidationAlertStyle*)0),  0},
-        {MAP_CHAR_LEN(SC_UNONAME_ERRMESS),  0,  &getCppuType((rtl::OUString*)0),                0},
-        {MAP_CHAR_LEN(SC_UNONAME_ERRTITLE), 0,  &getCppuType((rtl::OUString*)0),                0},
-        {MAP_CHAR_LEN(SC_UNONAME_IGNOREBL), 0,  &getBooleanCppuType(),                          0},
-        {MAP_CHAR_LEN(SC_UNONAME_INPMESS),  0,  &getCppuType((rtl::OUString*)0),                0},
-        {MAP_CHAR_LEN(SC_UNONAME_INPTITLE), 0,  &getCppuType((rtl::OUString*)0),                0},
-        {MAP_CHAR_LEN(SC_UNONAME_SHOWERR),  0,  &getBooleanCppuType(),                          0},
-        {MAP_CHAR_LEN(SC_UNONAME_SHOWINP),  0,  &getBooleanCppuType(),                          0},
-        {MAP_CHAR_LEN(SC_UNONAME_SHOWLIST), 0,  &getCppuType((sal_Int16*)0),                    0},
-        {MAP_CHAR_LEN(SC_UNONAME_TYPE),     0,  &getCppuType((sheet::ValidationType*)0),        0},
-        {0,0,0,0}
+        {MAP_CHAR_LEN(SC_UNONAME_ERRALSTY), 0,  &getCppuType((sheet::ValidationAlertStyle*)0),  0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ERRMESS),  0,  &getCppuType((rtl::OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_ERRTITLE), 0,  &getCppuType((rtl::OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_IGNOREBL), 0,  &getBooleanCppuType(),                          0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_INPMESS),  0,  &getCppuType((rtl::OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_INPTITLE), 0,  &getCppuType((rtl::OUString*)0),                0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWERR),  0,  &getBooleanCppuType(),                          0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWINP),  0,  &getBooleanCppuType(),                          0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_SHOWLIST), 0,  &getCppuType((sal_Int16*)0),                    0, 0},
+        {MAP_CHAR_LEN(SC_UNONAME_TYPE),     0,  &getCppuType((sheet::ValidationType*)0),        0, 0},
+        {0,0,0,0,0,0}
     };
     return aValidatePropertyMap_Impl;
 }
@@ -101,6 +101,10 @@ sheet::ConditionOperator lcl_ConditionModeToOperator( ScConditionMode eMode )
         case SC_COND_BETWEEN:    eOper = sheet::ConditionOperator_BETWEEN;       break;
         case SC_COND_NOTBETWEEN: eOper = sheet::ConditionOperator_NOT_BETWEEN;   break;
         case SC_COND_DIRECT:     eOper = sheet::ConditionOperator_FORMULA;       break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return eOper;
 }
@@ -119,6 +123,10 @@ ScConditionMode lcl_ConditionOperatorToMode( sheet::ConditionOperator eOper )
         case sheet::ConditionOperator_BETWEEN:       eMode = SC_COND_BETWEEN;    break;
         case sheet::ConditionOperator_NOT_BETWEEN:   eMode = SC_COND_NOTBETWEEN; break;
         case sheet::ConditionOperator_FORMULA:       eMode = SC_COND_DIRECT;     break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return eMode;
 }
@@ -152,7 +160,7 @@ ScTableConditionalFormat::ScTableConditionalFormat(ScDocument* pDoc, ULONG nKey,
                     String aExpr2(pFormatEntry->GetExpression( aPos, 1, 0, bEnglish, bCompileXML ));
                     String aStyle(pFormatEntry->GetStyle());
 
-                    AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, EMPTY_STRING, aStyle );
+                    AddEntry_Impl( sal::static_int_cast<USHORT>(eMode), aExpr1, aExpr2, aPos, EMPTY_STRING, aStyle );
                 }
             }
         }
@@ -188,7 +196,7 @@ ScTableConditionalFormat::~ScTableConditionalFormat()
 {
     ScTableConditionalEntry* pEntry;
     aEntries.First();
-    while ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() )
+    while ( ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() ) != NULL )
         pEntry->release();
 }
 
@@ -277,7 +285,7 @@ void SAL_CALL ScTableConditionalFormat::addNew(
         }
     }
 
-    AddEntry_Impl( eMode, aExpr1, aExpr2, aPos, aPosStr, aStyle );
+    AddEntry_Impl( sal::static_int_cast<USHORT>(eMode), aExpr1, aExpr2, aPos, aPosStr, aStyle );
     DataChanged();
 }
 
@@ -299,7 +307,7 @@ void SAL_CALL ScTableConditionalFormat::clear() throw(uno::RuntimeException)
     ScUnoGuard aGuard;
     ScTableConditionalEntry* pEntry;
     aEntries.First();
-    while ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() )
+    while ( ( pEntry = (ScTableConditionalEntry*)aEntries.Remove() ) != NULL )
         pEntry->release();
 
     DataChanged();
@@ -332,7 +340,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xEntry);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScTableConditionalFormat::getElementType() throw(uno::RuntimeException)
@@ -376,7 +384,7 @@ uno::Any SAL_CALL ScTableConditionalFormat::getByName( const rtl::OUString& aNam
         return uno::makeAny(xEntry);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScTableConditionalFormat::getElementNames()
@@ -415,7 +423,7 @@ sal_Int64 SAL_CALL ScTableConditionalFormat::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -444,7 +452,7 @@ ScTableConditionalFormat* ScTableConditionalFormat::getImplementation(
     ScTableConditionalFormat* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScTableConditionalFormat*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScTableConditionalFormat*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
@@ -500,7 +508,7 @@ void SAL_CALL ScTableConditionalEntry::setOperator( sheet::ConditionOperator nOp
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    nMode = lcl_ConditionOperatorToMode( nOperator );
+    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
     if (pParent)
         pParent->DataChanged();
 }
@@ -590,17 +598,17 @@ ScTableValidationObj::ScTableValidationObj(ScDocument* pDoc, ULONG nKey,
         const ScValidationData* pData = pDoc->GetValidationEntry( nKey );
         if (pData)
         {
-            nMode = pData->GetOperation();
+            nMode = sal::static_int_cast<USHORT>( pData->GetOperation() );
             aSrcPos = pData->GetValidSrcPos();  // #b4974740# valid pos for expressions
             aExpr1 = pData->GetExpression( aSrcPos, 0, 0, bEnglish, bCompileXML );
             aExpr2 = pData->GetExpression( aSrcPos, 1, 0, bEnglish, bCompileXML );
-            nValMode = pData->GetDataMode();
+            nValMode = sal::static_int_cast<USHORT>( pData->GetDataMode() );
             bIgnoreBlank = pData->IsIgnoreBlank();
             nShowList = pData->GetListType();
             bShowInput = pData->GetInput( aInputTitle, aInputMessage );
             ScValidErrorStyle eStyle;
             bShowError = pData->GetErrMsg( aErrorTitle, aErrorMessage, eStyle );
-            nErrorStyle = eStyle;
+            nErrorStyle = sal::static_int_cast<USHORT>( eStyle );
 
             bFound = TRUE;
         }
@@ -675,7 +683,7 @@ void SAL_CALL ScTableValidationObj::setOperator( sheet::ConditionOperator nOpera
                                                 throw(uno::RuntimeException)
 {
     ScUnoGuard aGuard;
-    nMode = lcl_ConditionOperatorToMode( nOperator );
+    nMode = sal::static_int_cast<USHORT>( lcl_ConditionOperatorToMode( nOperator ) );
     DataChanged();
 }
 
@@ -785,6 +793,10 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             case sheet::ValidationType_TEXT_LEN: nValMode = SC_VALID_TEXTLEN; break;
             case sheet::ValidationType_LIST:     nValMode = SC_VALID_LIST;    break;
             case sheet::ValidationType_CUSTOM:   nValMode = SC_VALID_CUSTOM;  break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
     else if ( aString.EqualsAscii( SC_UNONAME_ERRALSTY ) )
@@ -797,6 +809,10 @@ void SAL_CALL ScTableValidationObj::setPropertyValue(
             case sheet::ValidationAlertStyle_WARNING: nErrorStyle = SC_VALERR_WARNING; break;
             case sheet::ValidationAlertStyle_INFO:    nErrorStyle = SC_VALERR_INFO;    break;
             case sheet::ValidationAlertStyle_MACRO:   nErrorStyle = SC_VALERR_MACRO;   break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
     else if ( aString.EqualsAscii( SC_UNONAME_SOURCESTR ) )
@@ -870,7 +886,7 @@ sal_Int64 SAL_CALL ScTableValidationObj::getSomething(
           0 == rtl_compareMemory( getUnoTunnelId().getConstArray(),
                                     rId.getConstArray(), 16 ) )
     {
-        return (sal_Int64)this;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
     }
     return 0;
 }
@@ -899,7 +915,7 @@ ScTableValidationObj* ScTableValidationObj::getImplementation(
     ScTableValidationObj* pRet = NULL;
     uno::Reference<lang::XUnoTunnel> xUT( xObj, uno::UNO_QUERY );
     if (xUT.is())
-        pRet = (ScTableValidationObj*) xUT->getSomething( getUnoTunnelId() );
+        pRet = reinterpret_cast<ScTableValidationObj*>(sal::static_int_cast<sal_IntPtr>(xUT->getSomething(getUnoTunnelId())));
     return pRet;
 }
 
