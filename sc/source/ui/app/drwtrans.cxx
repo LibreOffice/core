@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:06:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:57:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,8 +118,8 @@ using namespace com::sun::star;
 
 ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContainerShell,
                                         const TransferableObjectDescriptor& rDesc ) :
-    aObjDesc( rDesc ),
     pModel( pClipModel ),
+    aObjDesc( rDesc ),
     pBookmark( NULL ),
     bGraphic( FALSE ),
     bGrIsBit( FALSE ),
@@ -204,7 +204,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                     String aUrl = sTmp;
                                     String aAbs;
                                     const SfxMedium* pMedium;
-                                    if (pContainerShell && (pMedium = pContainerShell->GetMedium()))
+                                    if (pContainerShell && (pMedium = pContainerShell->GetMedium()) != NULL)
                                     {
                                         bool bWasAbs = true;
                                         aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
@@ -409,7 +409,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
         {
-            ULONG nOldSwapMode;
+            ULONG nOldSwapMode = 0;
 
             if( pModel )
             {
@@ -500,7 +500,7 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
 }
 
 sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObject, sal_uInt32 nUserObjectId,
-                                        const ::com::sun::star::datatransfer::DataFlavor& rFlavor )
+                                        const ::com::sun::star::datatransfer::DataFlavor& /* rFlavor */ )
 {
     // called from SetObject, put data into stream
 
@@ -680,7 +680,7 @@ void lcl_InitMarks( SdrMarkView& rDest, const SdrMarkView& rSource, SCTAB nTab )
 {
     rDest.ShowSdrPage(rDest.GetModel()->GetPage(nTab));
     SdrPageView* pDestPV = rDest.GetSdrPageView();
-    DBG_ASSERT(pDestPV,"PageView ??!?!");
+    DBG_ASSERT(pDestPV,"PageView ?");
 
     const SdrMarkList& rMarkList = rSource.GetMarkedObjectList();
     ULONG nCount = rMarkList.GetMarkCount();
