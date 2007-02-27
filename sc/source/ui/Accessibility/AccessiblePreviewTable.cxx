@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:26:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:56:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ ScAccessiblePreviewTable::ScAccessiblePreviewTable( const ::com::sun::star::uno:
                             ScPreviewShell* pViewShell, sal_Int32 nIndex ) :
     ScAccessibleContextBase( rxParent, AccessibleRole::TABLE ),
     mpViewShell( pViewShell ),
-    mpTableInfo( NULL ),
-    mnIndex( nIndex )
+    mnIndex( nIndex ),
+    mpTableInfo( NULL )
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);
@@ -436,7 +436,6 @@ sal_Bool SAL_CALL ScAccessiblePreviewTable::isAccessibleSelected( sal_Int32 nRow
 
     FillTableInfo();
 
-    sal_Int32 nRet = 0;
     if ( mpTableInfo && nColumn >= 0 && nRow >= 0 && nColumn < mpTableInfo->GetCols() && nRow < mpTableInfo->GetRows() )
     {
         //  index iterates horizontally
