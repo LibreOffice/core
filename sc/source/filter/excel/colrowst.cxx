@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:17:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ XclImpColRowSettings::XclImpColRowSettings( const XclImpRoot& rRoot ) :
     maRowFlags( MAXROWCOUNT, 0 ),
     mnLastScRow( -1 ),
     mnDefWidth( STD_COL_WIDTH ),
-    mnDefHeight( STD_ROW_HEIGHT ),
+    mnDefHeight( static_cast< sal_uInt16 >( STD_ROW_HEIGHT ) ),
     mnDefRowFlags( EXC_DEFROW_DEFAULTFLAGS ),
     mbHasStdWidthRec( false ),
     mbHasDefHeight( false ),
@@ -136,7 +136,7 @@ void XclImpColRowSettings::SetDefHeight( sal_uInt16 nDefHeight, sal_uInt16 nFlag
     mnDefRowFlags = nFlags;
     if( mnDefHeight == 0 )
     {
-        mnDefHeight = STD_ROW_HEIGHT;
+        mnDefHeight = static_cast< sal_uInt16 >( STD_ROW_HEIGHT );
         ::set_flag( mnDefRowFlags, EXC_DEFROW_HIDDEN );
     }
     mbHasDefHeight = true;
