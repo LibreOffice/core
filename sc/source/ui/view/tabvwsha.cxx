@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:15:57 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:59:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,10 @@ BOOL ScTabViewShell::GetFunction( String& rFuncStr )
         case SUBTOTAL_FUNC_MAX:  nGlobStrId = STR_FUN_TEXT_MAX; break;
         case SUBTOTAL_FUNC_MIN:  nGlobStrId = STR_FUN_TEXT_MIN; break;
         case SUBTOTAL_FUNC_SUM:  nGlobStrId = STR_FUN_TEXT_SUM; break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     if (nGlobStrId)
     {
@@ -254,9 +258,6 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
                 {
                     //  disablen, wenn schon Default eingestellt
 
-                    ScDocShell* pDocSh = GetViewData()->GetDocShell();
-                    ScDocument* pDoc = pDocSh->GetDocument();
-                    SCTAB nTab = GetViewData()->GetTabNo();
                     String aStyleName = pDoc->GetPageStyle( nTab );
                     ScStyleSheetPool* pStylePool = pDoc->GetStyleSheetPool();
                     SfxStyleSheetBase* pStyleSheet = pStylePool->Find( aStyleName,
@@ -335,7 +336,6 @@ void __EXPORT ScTabViewShell::GetState( SfxItemSet& rSet )
 
             case SID_OUTLINE_DELETEALL:
                 {
-                    ScDocument* pDoc = GetViewData()->GetDocument();
                     SCTAB nOlTab = GetViewData()->GetTabNo();
                     ScOutlineTable* pOlTable = pDoc->GetOutlineTable( nOlTab );
                     if (pOlTable == NULL)
@@ -400,7 +400,6 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
 {
     //CHINA001 ScAttrDlg*               pDlg    = NULL;
     SfxAbstractTabDialog * pDlg = NULL; //CHINA001
-    ScDocShell*             pDocSh  = GetViewData()->GetDocShell();
     ScDocument*             pDoc    = GetViewData()->GetDocument();
 
     SvxBoxItem              aLineOuter( ATTR_BORDER );
@@ -593,7 +592,7 @@ void __EXPORT ScTabViewShell::GetSaveState( SfxItemSet& rSet )
 void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 {
     SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoMgr = pSh->GetUndoManager();
+    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
 
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
@@ -603,7 +602,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
     {
         case SID_UNDO:
         case SID_REDO:
-            if ( pUndoMgr )
+            if ( pUndoManager )
             {
                 BOOL bIsUndo = ( nSlot == SID_UNDO );
 
@@ -613,16 +612,16 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
                     nCount = ((const SfxUInt16Item*)pItem)->GetValue();
 
                 // lock paint for more than one cell undo action (not for editing within a cell)
-                BOOL bLockPaint = ( nCount > 1 && pUndoMgr == GetUndoManager() );
+                BOOL bLockPaint = ( nCount > 1 && pUndoManager == GetUndoManager() );
                 if ( bLockPaint )
                     pDocSh->LockPaint();
 
                 for (USHORT i=0; i<nCount; i++)
                 {
                     if ( bIsUndo )
-                        pUndoMgr->Undo(0);
+                        pUndoManager->Undo(0);
                     else
-                        pUndoMgr->Redo(0);
+                        pUndoManager->Redo(0);
                 }
 
                 if ( bLockPaint )
@@ -630,7 +629,6 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 
                 GetViewFrame()->GetBindings().InvalidateAll(sal_False);
             }
-            break;
             break;
 //      default:
 //          GetViewFrame()->ExecuteSlot( rReq );
@@ -640,7 +638,7 @@ void ScTabViewShell::ExecuteUndo(SfxRequest& rReq)
 void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
 {
     SfxShell* pSh = GetViewData()->GetDispatcher().GetShell(0);
-    SfxUndoManager* pUndoMgr = pSh->GetUndoManager();
+    SfxUndoManager* pUndoManager = pSh->GetUndoManager();
 
     SfxWhichIter aIter(rSet);
     USHORT nWhich = aIter.FirstWhich();
@@ -652,14 +650,14 @@ void ScTabViewShell::GetUndoState(SfxItemSet &rSet)
             case SID_GETREDOSTRINGS:
                 {
                     SfxStringListItem aStrLst( nWhich );
-                    if ( pUndoMgr )
+                    if ( pUndoManager )
                     {
                         List* pList = aStrLst.GetList();
                         BOOL bIsUndo = ( nWhich == SID_GETUNDOSTRINGS );
-                        USHORT nCount = bIsUndo ? pUndoMgr->GetUndoActionCount() : pUndoMgr->GetRedoActionCount();
+                        USHORT nCount = bIsUndo ? pUndoManager->GetUndoActionCount() : pUndoManager->GetRedoActionCount();
                         for (USHORT i=0; i<nCount; i++)
-                            pList->Insert( new String( bIsUndo ? pUndoMgr->GetUndoActionComment(i) :
-                                                                 pUndoMgr->GetRedoActionComment(i) ),
+                            pList->Insert( new String( bIsUndo ? pUndoManager->GetUndoActionComment(i) :
+                                                                 pUndoManager->GetRedoActionComment(i) ),
                                            LIST_APPEND );
                     }
                     rSet.Put( aStrLst );
