@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:51:17 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:49:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,27 +174,27 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                                       const sal_Bool bTempIsCovered,
                                       const sal_Int32 nTempRepeatedRows ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    bIsMerged(sal_False),
-    bIsMatrix(sal_False),
-    bHasSubTable(sal_False),
-    bIsCovered(bTempIsCovered),
-    nRepeatedRows(nTempRepeatedRows),
-    bIsEmpty(sal_True),
-    bHasTextImport(sal_False),
-    bIsFirstTextImport(sal_False),
-    pDetectiveObjVec(NULL),
-    pCellRangeSource(NULL),
-    pMyAnnotation(NULL),
     pOUTextValue(NULL),
     pOUTextContent(NULL),
     pOUFormula(NULL),
     pContentValidationName(NULL),
-    nCellType(util::NumberFormat::TEXT),
-    nMergedCols(1),
-    nMergedRows(1),
-    nCellsRepeated(1),
+    pMyAnnotation(NULL),
+    pDetectiveObjVec(NULL),
+    pCellRangeSource(NULL),
     fValue(0.0),
+    nMergedRows(1),
+    nMergedCols(1),
+    nRepeatedRows(nTempRepeatedRows),
+    nCellsRepeated(1),
     rXMLImport((ScXMLImport&)rImport),
+    nCellType(util::NumberFormat::TEXT),
+    bIsMerged(sal_False),
+    bIsMatrix(sal_False),
+    bHasSubTable(sal_False),
+    bIsCovered(bTempIsCovered),
+    bIsEmpty(sal_True),
+    bHasTextImport(sal_False),
+    bIsFirstTextImport(sal_False),
     bSolarMutexLocked(sal_False),
     bFormulaTextResult(sal_False)
 {
@@ -202,7 +202,6 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
     rXMLImport.GetTables().AddColumn(bTempIsCovered);
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     rtl::OUString aLocalName;
-    rtl::OUString sValue;
     rtl::OUString* pStyleName = NULL;
     rtl::OUString* pCurrencySymbol = NULL;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -225,7 +224,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                         {
                             DBG_ASSERT(!pOUFormula, "here should be only one formula");
                             pOUFormula = new rtl::OUString();
-                            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().
+                            sal_uInt16 nFormulaPrefix = GetImport().GetNamespaceMap().
                                     _GetKeyByAttrName( sValue, pOUFormula, sal_False );
                             // #i56720# For any valid namespace, the formula text is the part without
                             // the namespace tag.
@@ -233,7 +232,7 @@ ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,
                             // or no namespace tag (XML_NAMESPACE_NONE) the full text is used.
                             // An invalid namespace can occur from a colon in the formula text if no
                             // namespace tag was added.
-                            if ( nPrefix == XML_NAMESPACE_UNKNOWN || nPrefix == XML_NAMESPACE_NONE )
+                            if ( nFormulaPrefix == XML_NAMESPACE_UNKNOWN || nFormulaPrefix == XML_NAMESPACE_NONE )
                             {
                                 delete pOUFormula;
                                 pOUFormula = new rtl::OUString(sValue);
@@ -490,7 +489,6 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = rXMLImport.GetTableRowCellElemTokenMap();
-    sal_Bool bHeader(sal_False);
     sal_Bool bTextP(sal_False);
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
@@ -510,7 +508,7 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                 }
                 else
                 {
-                    com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+                    // com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
                     if (CellExists(aCellPos))
                     {
                         if (bIsFirstTextImport && !rXMLImport.GetRemoveLastChar())
@@ -548,11 +546,11 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
             rtl::OUString sValue;
             for( sal_Int16 i=0; i < nAttrCount; i++ )
             {
-                sal_uInt16 nPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
+                sal_uInt16 nAttrPrefix = rXMLImport.GetNamespaceMap().GetKeyByAttrName(
                                                     xAttrList->getNameByIndex( i ), &aLocalName );
                 sValue = xAttrList->getValueByIndex( i );
 
-                if (nPrefix == XML_NAMESPACE_TABLE)
+                if (nAttrPrefix == XML_NAMESPACE_TABLE)
                 {
                     if (IsXMLToken(aLocalName, XML_IS_SUB_TABLE))
                         bHasSubTable = IsXMLToken(sValue, XML_TRUE);
@@ -1111,7 +1109,9 @@ void ScXMLTableRowCellContext::EndElement()
                                                 if ( rXMLImport.IsLatinDefaultStyle() )
                                                     pNewCell->SetScriptType( SCRIPTTYPE_LATIN );
                                                 rXMLImport.GetDocument()->PutCell(
-                                                    aCurrentPos.Column, aCurrentPos.Row, aCurrentPos.Sheet,
+                                                    sal::static_int_cast<SCCOL>( aCurrentPos.Column ),
+                                                    sal::static_int_cast<SCROW>( aCurrentPos.Row ),
+                                                    sal::static_int_cast<SCTAB>( aCurrentPos.Sheet ),
                                                     pNewCell );
                                             }
                                             rXMLImport.ProgressBarIncrement(sal_False);
