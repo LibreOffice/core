@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:56:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ IMPL_LINK( ScFuncPage, SelHdl, ListBox*, pLb )
     return 0;
 }
 
-IMPL_LINK( ScFuncPage, DblClkHdl, ListBox*, pLb )
+IMPL_LINK( ScFuncPage, DblClkHdl, ListBox*, EMPTYARG )
 {
     aDoubleClickLink.Call(this);
     return 0;
