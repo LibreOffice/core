@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsorti.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:54:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:52:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,15 +77,15 @@ ScXMLSortContext::ScXMLSortContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDatabaseRangeContext* pTempDatabaseRangeContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    bEnabledUserList(sal_False),
-    bBindFormatsToContent(sal_True),
-    bIsCaseSensitive(sal_False),
-    bCopyOutputData(sal_False),
+    pDatabaseRangeContext(pTempDatabaseRangeContext),
     sCountry(),
     sLanguage(),
     sAlgorithm(),
-    pDatabaseRangeContext(pTempDatabaseRangeContext),
-    nUserListIndex(0)
+    nUserListIndex(0),
+    bCopyOutputData(sal_False),
+    bBindFormatsToContent(sal_True),
+    bIsCaseSensitive(sal_False),
+    bEnabledUserList(sal_False)
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetSortAttrTokenMap());
@@ -243,9 +243,9 @@ ScXMLSortByContext::ScXMLSortByContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLSortContext* pTempSortContext) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    sOrder(GetXMLToken(XML_ASCENDING)),
+    pSortContext(pTempSortContext),
     sDataType(GetXMLToken(XML_AUTOMATIC)),
-    pSortContext(pTempSortContext)
+    sOrder(GetXMLToken(XML_ASCENDING))
 {
     sal_Int16 nAttrCount(xAttrList.is() ? xAttrList->getLength() : 0);
     const SvXMLTokenMap& rAttrTokenMap(GetScImport().GetSortSortByAttrTokenMap());
@@ -285,7 +285,7 @@ ScXMLSortByContext::~ScXMLSortByContext()
 SvXMLImportContext *ScXMLSortByContext::CreateChildContext( USHORT nPrefix,
                                             const ::rtl::OUString& rLName,
                                             const ::com::sun::star::uno::Reference<
-                                          ::com::sun::star::xml::sax::XAttributeList>& xAttrList )
+                                        ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
