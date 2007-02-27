@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:08:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:09:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,11 +72,11 @@ TYPEINIT1(ScStyleSheet, SfxStyleSheet);
 //========================================================================
 
 ScStyleSheet::ScStyleSheet( const String&       rName,
-                            ScStyleSheetPool&   rPool,
+                            ScStyleSheetPool&   rPoolP,
                             SfxStyleFamily      eFamily,
-                            USHORT              nMask )
+                            USHORT              nMaskP )
 
-    :   SfxStyleSheet   ( rName, rPool, eFamily, nMask )
+    :   SfxStyleSheet   ( rName, rPoolP, eFamily, nMaskP )
     , eUsage( UNKNOWN )
 {
 }
@@ -112,6 +112,10 @@ BOOL __EXPORT ScStyleSheet::HasParentSupport () const
     {
         case SFX_STYLE_FAMILY_PARA: bHasParentSupport = TRUE;   break;
         case SFX_STYLE_FAMILY_PAGE: bHasParentSupport = FALSE;  break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     return bHasParentSupport;
@@ -159,8 +163,8 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                     // deshalb werden an dieser Stelle geeignete
                     // Werte eingestellt. (==Standard-Seitenvorlage)
 
-                    SfxItemPool& rPool = GetPool().GetPool();
-                    pSet = new SfxItemSet( rPool,
+                    SfxItemPool& rItemPool = GetPool().GetPool();
+                    pSet = new SfxItemSet( rItemPool,
                                            ATTR_BACKGROUND, ATTR_BACKGROUND,
                                            ATTR_BORDER, ATTR_SHADOW,
                                            ATTR_LRSPACE, ATTR_PAGE_SCALETO,
@@ -188,7 +192,7 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
 
                         SvxSetItem      aHFSetItem(
                                             (const SvxSetItem&)
-                                            rPool.GetDefaultItem(ATTR_PAGE_HEADERSET) );
+                                            rItemPool.GetDefaultItem(ATTR_PAGE_HEADERSET) );
 
                         SfxItemSet&     rHFSet = aHFSetItem.GetItemSet();
                         SvxSizeItem     aHFSizeItem( // 0,5 cm + Abstand
@@ -234,14 +238,14 @@ SfxItemSet& __EXPORT ScStyleSheet::GetItemSet()
                                         FRMDIR_HORI_RIGHT_TOP : FRMDIR_HORI_LEFT_TOP;
                         pSet->Put( SvxFrameDirectionItem( eDirection ), ATTR_WRITINGDIR );
 
-                        rPool.SetPoolDefaultItem( aPageItem );
-                        rPool.SetPoolDefaultItem( aPaperSizeItem );
-                        rPool.SetPoolDefaultItem( aLRSpaceItem );
-                        rPool.SetPoolDefaultItem( aULSpaceItem );
-                        rPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALE, 100 ) );
+                        rItemPool.SetPoolDefaultItem( aPageItem );
+                        rItemPool.SetPoolDefaultItem( aPaperSizeItem );
+                        rItemPool.SetPoolDefaultItem( aLRSpaceItem );
+                        rItemPool.SetPoolDefaultItem( aULSpaceItem );
+                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALE, 100 ) );
                         ScPageScaleToItem aScaleToItem;
-                        rPool.SetPoolDefaultItem( aScaleToItem );
-                        rPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 0 ) );
+                        rItemPool.SetPoolDefaultItem( aScaleToItem );
+                        rItemPool.SetPoolDefaultItem( SfxUInt16Item( ATTR_PAGE_SCALETOPAGES, 0 ) );
                     }
                 }
                 break;
@@ -280,8 +284,7 @@ BOOL __EXPORT ScStyleSheet::IsUsed() const
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScStyleSheet::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                           const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScStyleSheet::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
         if ( ((SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )

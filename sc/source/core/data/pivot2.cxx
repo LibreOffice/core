@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivot2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:07:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,10 @@
 
 
 
+#ifdef WNT
 #pragma optimize("",off)
 #pragma optimize("q",off) // p-code off
+#endif
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -307,7 +309,7 @@ short PivotStrCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
         // Strings vergleichen:
 
         if (pUserData)
-            nResult = pUserData->ICompare(rData1.aStrValue, rData2.aStrValue);
+            nResult = sal::static_int_cast<short>(pUserData->ICompare(rData1.aStrValue, rData2.aStrValue));
         else
         {
             nResult = (short) ScGlobal::pTransliteration->compareString(
