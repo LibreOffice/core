@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:12:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:58:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 {
     SfxViewFrame*       pThisFrame  = GetViewFrame();
     SfxBindings&        rBindings   = pThisFrame->GetBindings();
-    SfxApplication*     pSfxApp     = SFX_APP();
     ScModule*           pScMod      = SC_MOD();
     const SfxItemSet*   pReqArgs    = rReq.GetArgs();
     USHORT              nSlot       = rReq.GetSlot();
@@ -451,7 +450,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 String aStrDocName( ((const SfxStringItem&)pReqArgs->
                                         Get(nSlot)).GetValue() );
 
-                SfxViewFrame*   pFrame = NULL;
+                SfxViewFrame*   pViewFrame = NULL;
                 ScDocShell*     pDocSh = (ScDocShell*)SfxObjectShell::GetFirst();
                 BOOL            bFound = FALSE;
 
@@ -461,16 +460,16 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     if ( pDocSh->GetTitle() == aStrDocName )
                     {
-                        pFrame = SfxViewFrame::GetFirst( pDocSh, TYPE(SfxTopViewFrame) );
-                        bFound = ( NULL != pFrame );
+                        pViewFrame = SfxViewFrame::GetFirst( pDocSh, TYPE(SfxTopViewFrame) );
+                        bFound = ( NULL != pViewFrame );
                     }
 
                     pDocSh = (ScDocShell*)SfxObjectShell::GetNext( *pDocSh );
                 }
 
                 if ( bFound )
-                    if ( pFrame->ISA(SfxTopViewFrame) )
-                        pFrame->GetFrame()->Appear();
+                    if ( pViewFrame->ISA(SfxTopViewFrame) )
+                        pViewFrame->GetFrame()->Appear();
 
                 rReq.Ignore();//XXX wird von SFX erledigt
             }
@@ -607,7 +606,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
         case FID_SCALE:
             {
                 SvxZoomType eOldZoomType = GetZoomType();
-                SvxZoomType eZoomType = eOldZoomType;
+                SvxZoomType eNewZoomType = eOldZoomType;
                 const Fraction& rOldY = GetViewData()->GetZoomY();  // Y wird angezeigt
                 USHORT nOldZoom = (USHORT)(( rOldY.GetNumerator() * 100 )
                                             / rOldY.GetDenominator());
@@ -619,7 +618,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     const SvxZoomItem& rZoomItem = (const SvxZoomItem&)
                                                    pReqArgs->Get(SID_ATTR_ZOOM);
 
-                    eZoomType = rZoomItem.GetType();
+                    eNewZoomType = rZoomItem.GetType();
                     nZoom     = rZoomItem.GetValue();
                 }
                 else
@@ -659,7 +658,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                                                 pDlg->GetOutputItemSet()->
                                                     Get( SID_ATTR_ZOOM );
 
-                        eZoomType = rZoomItem.GetType();
+                        eNewZoomType = rZoomItem.GetType();
                         nZoom     = rZoomItem.GetValue();
                     }
 
@@ -668,22 +667,22 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                 if ( !bCancel )
                 {
-                    if ( eZoomType == SVX_ZOOM_PERCENT )
+                    if ( eNewZoomType == SVX_ZOOM_PERCENT )
                     {
                         if ( nZoom < MINZOOM )  nZoom = MINZOOM;
                         if ( nZoom > MAXZOOM )  nZoom = MAXZOOM;
                     }
                     else
                     {
-                        nZoom = CalcZoom( eZoomType, nOldZoom );
+                        nZoom = CalcZoom( eNewZoomType, nOldZoom );
                         bCancel = nZoom == 0;
                     }
 
-                    switch ( eZoomType )
+                    switch ( eNewZoomType )
                     {
                         case SVX_ZOOM_WHOLEPAGE:
                         case SVX_ZOOM_PAGEWIDTH:
-                            SetZoomType( eZoomType );
+                            SetZoomType( eNewZoomType );
                             break;
 
                         default:
@@ -695,7 +694,6 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 {
                     if (!GetViewData()->IsPagebreakMode())
                     {
-                        ScModule* pScMod = SC_MOD();
                         ScAppOptions aNewOpt = pScMod->GetAppOptions();
                         aNewOpt.SetZoom( nZoom );
                         aNewOpt.SetZoomType( GetZoomType() );
