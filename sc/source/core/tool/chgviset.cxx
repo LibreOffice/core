@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgviset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:22:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:13:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ BOOL ScChangeViewSettings::IsValidComment(const String* pCommentStr) const
         xub_StrLen nStartPos = 0;
         xub_StrLen nEndPos = pCommentStr->Len();
 
-        nTheFlag=pCommentSearcher->SearchFrwrd( *pCommentStr, &nStartPos, &nEndPos);
+        nTheFlag=sal::static_int_cast<BOOL>(pCommentSearcher->SearchFrwrd( *pCommentStr, &nStartPos, &nEndPos));
     }
     return nTheFlag;
 }
@@ -242,6 +242,10 @@ void ScChangeViewSettings::AdjustDateMode( const ScDocument& rDoc )
             aLastDateTime.SetYear( aLastDateTime.GetYear() + 100 );
         }
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
