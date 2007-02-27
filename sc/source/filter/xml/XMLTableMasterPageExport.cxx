@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableMasterPageExport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:49:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,19 +124,19 @@ void XMLTableMasterPageExport::exportHeaderFooter(const com::sun::star::uno::Ref
             {
                 if (sLeft.getLength())
                 {
-                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                    SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_LEFT, sal_True, sal_True );
                     exportHeaderFooterContent( xLeft, sal_False, sal_False );
                 }
                 if (sCenter.getLength())
                 {
-                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                    SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_CENTER, sal_True, sal_True );
                     exportHeaderFooterContent( xCenter, sal_False, sal_False );
                 }
                 if (sRight.getLength())
                 {
-                    SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE,
+                    SvXMLElementExport aSubElem( GetExport(), XML_NAMESPACE_STYLE,
                                                 XML_REGION_RIGHT, sal_True, sal_True );
                     exportHeaderFooterContent( xRight, sal_False, sal_False );
                 }
