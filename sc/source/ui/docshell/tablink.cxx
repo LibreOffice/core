@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:23:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ void __EXPORT ScTableLink::Edit( Window* pParent, const Link& rEndEditHdl )
         Application::SetDefDialogParent(pParent);
 
     bInEdit = TRUE;
-    SvBaseLink::Edit( pParent, LINK( this, ScTableLink, EndEditHdl ) );
+    SvBaseLink::Edit( pParent, LINK( this, ScTableLink, TableEndEditHdl ) );
 }
 
 void __EXPORT ScTableLink::DataChanged( const String&,
@@ -448,13 +448,13 @@ BOOL ScTableLink::Refresh(const String& rNewFile, const String& rNewFilter,
     return TRUE;
 }
 
-IMPL_LINK( ScTableLink, RefreshHdl, ScTableLink*, pCaller )
+IMPL_LINK( ScTableLink, RefreshHdl, ScTableLink*, EMPTYARG )
 {
     long nRes = Refresh( aFileName, aFilterName, NULL, GetRefreshDelay() ) != 0;
     return nRes;
 }
 
-IMPL_LINK( ScTableLink, EndEditHdl, ::sfx2::SvBaseLink*, pLink )
+IMPL_LINK( ScTableLink, TableEndEditHdl, ::sfx2::SvBaseLink*, pLink )
 {
     if ( pImpl->m_aEndEditLink.IsSet() )
         pImpl->m_aEndEditLink.Call( pLink );
