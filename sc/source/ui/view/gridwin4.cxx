@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:57:04 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:52:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,10 +326,9 @@ void ScGridWindow::DoInvertRect( const Rectangle& rPixel )
 
 void __EXPORT ScGridWindow::Paint( const Rectangle& rRect )
 {
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-
     //TODO/LATER: how to get environment? Do we need that?!
     /*
+    ScDocShell* pDocSh = pViewData->GetDocShell();
     SvInPlaceEnvironment* pEnv = pDocSh->GetIPEnv();
     if (pEnv && pEnv->GetRectsChangedLockCount())
     {
@@ -1031,7 +1030,7 @@ void ScGridWindow::DrawPagePreview( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
             pEditEng->SetDefaults( pEditDefaults );
         }
 
-        USHORT nCount = pPageData->GetCount();
+        USHORT nCount = sal::static_int_cast<USHORT>( pPageData->GetCount() );
         for (USHORT nPos=0; nPos<nCount; nPos++)
         {
             ScPrintRangeData& rData = pPageData->GetData(nPos);
@@ -1249,7 +1248,7 @@ void ScGridWindow::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
     SetMapMode(aOld);
 }
 
-void ScGridWindow::DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
+void ScGridWindow::DrawButtons( SCCOL nX1, SCROW /* nY1 */, SCCOL nX2, SCROW /* nY2 */,
                                     ScTableInfo& rTabInfo )
 {
     SCCOL nCol;
