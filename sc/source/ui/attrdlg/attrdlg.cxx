@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:13:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:59:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,11 @@
 #include <sfx2/app.hxx> //CHINA001
 //==================================================================
 
-ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrame,
+ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrameP,
                       Window*           pParent,
                       const SfxItemSet* pCellAttrs )
 
-    :   SfxTabDialog( pFrame,
+    :   SfxTabDialog( pFrameP,
                       pParent,
                       ScResId( RID_SCDLG_ATTR ),
                       pCellAttrs )
@@ -90,7 +90,7 @@ ScAttrDlg::ScAttrDlg( SfxViewFrame*     pFrame,
     if ( aCJKOptions.IsAsianTypographyEnabled() )
     {
         //CHINA001 AddTabPage( TP_ASIAN,    SvxAsianTabPage::Create,        0 );
-        ::CreateTabPage pCreateTabpage = pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN);
+//        ::CreateTabPage pCreateTabpage = pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN);
         DBG_ASSERT(pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN), "GetTabPageCreatorFunc fail!");//CHINA001
         AddTabPage( TP_ASIAN,   pFact->GetTabPageCreatorFunc(RID_SVXPAGE_PARA_ASIAN),       0 );
     }
