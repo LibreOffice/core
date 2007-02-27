@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:13:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,16 +106,21 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         aFtFormula      ( this, ScResId( FT_FORMULA ) ),
         aMEFormula      ( this, ScResId( ED_FORMULA ) ),
         //
+        aBtnMatrix      ( this, ScResId( BTN_MATRIX ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnBackward    ( this, ScResId( BTN_BACKWARD ) ),
         aBtnForward     ( this, ScResId( BTN_FORWARD ) ),
-        aBtnMatrix      ( this, ScResId( BTN_MATRIX ) ),
         aBtnEnd         ( this, ScResId( BTN_END ) ),
         aEdRef          ( this, ScResId( ED_REF) ),
         aRefBtn         ( this, ScResId( RB_REF),&aEdRef ),
         aFtFormResult   ( this, ScResId( FT_FORMULA_RESULT)),
         aWndFormResult  ( this, ScResId( WND_FORMULA_RESULT)),
+        //
+        pTheRefEdit     (NULL),
+        pScTokA         (NULL),
+        pMEdit          (NULL),
+        bUserMatrixFlag (FALSE),
         //
         aTitle1         ( ScResId( STR_TITLE1 ) ),      // lokale Resource
         aTitle2         ( ScResId( STR_TITLE2 ) ),      // lokale Resource
@@ -125,13 +130,9 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         nActivWinId     (0),
         bIsShutDown     (FALSE),
         nEdFocus        (0),
-        nArgs           (0),
-        bUserMatrixFlag (FALSE),
-        pArgArr         (NULL),
         pFuncDesc       (NULL),
-        pScTokA         (NULL),
-        pTheRefEdit     (NULL),
-        pMEdit          (NULL)
+        nArgs           (0),
+        pArgArr         (NULL)
 {
     FreeResource();
     SetText(aTitle1);
@@ -218,13 +219,12 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
             pData->SetInputHandler(pInputHdl);
         }
 
-        String aOldFormula(pScMod->InputGetFormulaStr());
-        pScMod->InputSetSelection( 0, aOldFormula.Len());
+        String aOldFormulaTmp(pScMod->InputGetFormulaStr());
+        pScMod->InputSetSelection( 0, aOldFormulaTmp.Len());
 
         rStrExp=pData->GetUndoStr();
         pScMod->InputReplaceSelection(rStrExp);
         pMEdit->SetText(rStrExp);
-        xub_StrLen nPos=pData->GetFStart();
         pMEdit->SetSelection( pData->GetSelection());
         aMEFormula.UpdateOldSel();
 
@@ -258,7 +258,7 @@ ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
         aCursorPos = ScAddress( nCol, nRow, nTab );
 
         pScMod->InitFormEditData();                             // neu anlegen
-        ScFormEditData* pData = pScMod->GetFormEditData();
+        pData = pScMod->GetFormEditData();
         pData->SetInputHandler(pScMod->GetInputHdl());
         pData->SetDocShell(pViewData->GetDocShell());
 
@@ -431,7 +431,6 @@ ScInputHandler* ScFormulaDlg::GetNextInputHandler(ScDocShell* pDocShell,PtrTabVi
         ScTabViewShell* pViewSh = PTR_CAST(ScTabViewShell,p);
         if(pViewSh!=NULL)
         {
-            Window *pWin=pViewSh->GetWindow();
             pHdl=pViewSh->GetInputHandler();
             if(ppViewSh!=NULL) *ppViewSh=pViewSh;
         }
@@ -580,7 +579,7 @@ void ScFormulaDlg::FillControls()
                 nActiv=i;
                 bFlag=TRUE;
             }
-            nArgPos+=nLength;
+            nArgPos = sal::static_int_cast<xub_StrLen>( nArgPos + nLength );
         }
         aScParaWin.UpdateParas();
 
@@ -838,11 +837,10 @@ void ScFormulaDlg::UpdateFunctionDesc()
 
 // Handler fuer Listboxen
 
-IMPL_LINK( ScFormulaDlg, DblClkHdl, ScFuncPage*, pLb )
+IMPL_LINK( ScFormulaDlg, DblClkHdl, ScFuncPage*, EMPTYARG )
 {
     ScModule* pScMod = SC_MOD();
 
-    USHORT nCat = pScFuncPage->GetCategory();
     USHORT nFunc = pScFuncPage->GetFunction();
 
     //  ex-UpdateLRUList
@@ -1045,10 +1043,8 @@ void ScFormulaDlg::EditFuncParas(xub_StrLen nEditPos)
 }
 
 
-IMPL_LINK( ScFormulaDlg, ScrollHdl, ScParaWin*, pBar )
+IMPL_LINK( ScFormulaDlg, ScrollHdl, ScParaWin*, EMPTYARG )
 {
-    USHORT i = 0;
-
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
     if (!pData) return 0;
@@ -1203,7 +1199,6 @@ IMPL_LINK( ScFormulaDlg, FxHdl, ScParaWin*, pPtr )
         ScFormEditData* pData = pScMod->GetFormEditData();
         if (!pData) return 0;
 
-        BOOL bEmpty = FALSE;
         USHORT nArgNo = aScParaWin.GetActiveLine();
         nEdFocus=nArgNo;
 
@@ -1214,9 +1209,6 @@ IMPL_LINK( ScFormulaDlg, FxHdl, ScParaWin*, pPtr )
 
         String aFormula = pScMod->InputGetFormulaStr();
         xub_StrLen n1 = ScFormulaUtil::GetArgStart( aFormula, nFormulaStrPos, nEdFocus+pData->GetOffset() );
-        xub_StrLen n2 = ScFormulaUtil::GetFunctionEnd( aFormula, n1 );
-
-
 
         pData->SetEdFocus( nEdFocus );
         pData->SaveValues();
@@ -1244,12 +1236,11 @@ IMPL_LINK( ScFormulaDlg, ModifyHdl, ScParaWin*, pPtr )
     return 0;
 }
 
-IMPL_LINK( ScFormulaDlg, FormulaHdl, MultiLineEdit*, pEd )
+IMPL_LINK( ScFormulaDlg, FormulaHdl, MultiLineEdit*, EMPTYARG )
 {
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
     if (!pData) return 0;
-    xub_StrLen nFStart = pData->GetFStart();
 
     bEditFlag=TRUE;
     String      aInputFormula=pScMod->InputGetFormulaStr();
@@ -1315,7 +1306,7 @@ IMPL_LINK( ScFormulaDlg, FormulaHdl, MultiLineEdit*, pEd )
     return 0;
 }
 
-IMPL_LINK( ScFormulaDlg, FormulaCursorHdl, ScEditBox*, pEd )
+IMPL_LINK( ScFormulaDlg, FormulaCursorHdl, ScEditBox*, EMPTYARG )
 {
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
@@ -1407,7 +1398,6 @@ void ScFormulaDlg::UpdateSelection()
 
     USHORT nPos=aScParaWin.GetActiveLine();
 
-    BOOL    bFlag=FALSE;
     for(USHORT i=0;i<nPos;i++)
     {
         xub_StrLen nTmpLength=(pArgArr[i])->Len();
@@ -1590,7 +1580,7 @@ void ScFormulaDlg::SetActive()
 }
 
 void ScFormulaDlg::MakeTree(SvLBoxEntry* pParent,ScToken* pScToken,long Count,
-                            ScTokenArray* pScTokA,ScCompiler*   pComp)
+                            ScTokenArray* pScTokAP, ScCompiler* pCompP)
 {
     if(pScToken!=NULL && Count>0)
     {
@@ -1600,7 +1590,7 @@ void ScFormulaDlg::MakeTree(SvLBoxEntry* pParent,ScToken* pScToken,long Count,
 
         if(nParas>0)
         {
-            pComp->CreateStringFromToken( aResult,pScToken);
+            pCompP->CreateStringFromToken( aResult,pScToken);
 
             SvLBoxEntry* pEntry;
 
@@ -1624,14 +1614,14 @@ void ScFormulaDlg::MakeTree(SvLBoxEntry* pParent,ScToken* pScToken,long Count,
                 }
             }
 
-            MakeTree(pEntry,pScTokA->PrevRPN(),nParas,pScTokA,pComp);
+            MakeTree(pEntry,pScTokAP->PrevRPN(),nParas,pScTokAP,pCompP);
             --Count;
-            pScTokA->NextRPN();
-            MakeTree(pParent,pScTokA->PrevRPN(),Count,pScTokA,pComp);
+            pScTokAP->NextRPN();
+            MakeTree(pParent,pScTokAP->PrevRPN(),Count,pScTokAP,pCompP);
         }
         else
         {
-            pComp->CreateStringFromToken( aResult,pScToken);
+            pCompP->CreateStringFromToken( aResult,pScToken);
 
             if(eOp==ocBad)
             {
@@ -1642,7 +1632,7 @@ void ScFormulaDlg::MakeTree(SvLBoxEntry* pParent,ScToken* pScToken,long Count,
                 pScStructPage->InsertEntry(aResult,pParent,STRUCT_END,0,pScToken);
             }
             --Count;
-            MakeTree(pParent,pScTokA->PrevRPN(),Count,pScTokA,pComp);
+            MakeTree(pParent,pScTokAP->PrevRPN(),Count,pScTokAP,pCompP);
         }
     }
 }
@@ -1664,7 +1654,6 @@ xub_StrLen ScFormulaDlg::GetFunctionPos(xub_StrLen nPos)
     short  nBracketCount=0;
     BOOL   bFlag=FALSE;
     String aFormString=pMEdit->GetText();
-    xub_StrLen nTheEnd=aFormString.Len();
     ScGlobal::pCharClass->toUpper( aFormString );
     if(pScTokA!=NULL)
     {
@@ -1706,7 +1695,7 @@ xub_StrLen ScFormulaDlg::GetFunctionPos(xub_StrLen nPos)
             }
             else
             {
-                nTokPos+=aString.Len();
+                nTokPos = sal::static_int_cast<xub_StrLen>( nTokPos + aString.Len() );
             }
 
             if(eOp==ocOpen)
@@ -1816,7 +1805,7 @@ IMPL_LINK( ScFormulaDlg, StructSelHdl, ScStructPage*, pStruP )
                 if ( pToken == pOrigToken )
                     break;
                 pComp->CreateStringFromToken( aString,pToken);
-                nTokPos+=aString.Len();
+                nTokPos = sal::static_int_cast<xub_StrLen>( nTokPos + aString.Len() );
                 pToken=pScTokA->Next();
             }
             EditThisFunc(nTokPos);
@@ -1888,13 +1877,13 @@ void ScFormulaDlg::SetFocusWin(Window *pWin,ULONG nUniqueId)
     }
 }
 
-IMPL_LINK( ScFormulaDlg, MatrixHdl, CheckBox *, pCb)
+IMPL_LINK( ScFormulaDlg, MatrixHdl, CheckBox *, EMPTYARG )
 {
     bUserMatrixFlag=TRUE;
     return 0;
 }
 
-IMPL_LINK( ScFormulaDlg, FuncSelHdl, ScFuncPage*, pLb )
+IMPL_LINK( ScFormulaDlg, FuncSelHdl, ScFuncPage*, EMPTYARG )
 {
     USHORT nCat = pScFuncPage->GetCategory();
     if ( nCat == LISTBOX_ENTRY_NOTFOUND ) nCat = 0;
@@ -1934,7 +1923,7 @@ IMPL_LINK( ScFormulaDlg, FuncSelHdl, ScFuncPage*, pLb )
     return 0;
 }
 
-IMPL_LINK( ScFormulaDlg, UpdateFocusHdl, Timer*, pTi)
+IMPL_LINK( ScFormulaDlg, UpdateFocusHdl, Timer*, EMPTYARG )
 {
     ScModule* pScMod = SC_MOD();
     ScFormEditData* pData = pScMod->GetFormEditData();
@@ -2044,12 +2033,12 @@ void ScFormulaDlg::HighlightFunctionParas(const String& aFormula)
     ShowReference(aFormula);
 }
 
-void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc*   pFuncDesc)
+void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc* pFuncDescP)
 {
-    if (pFuncDesc && pFuncDesc->nFIndex!=0)
+    if (pFuncDescP && pFuncDescP->nFIndex!=0)
     {
         ScModule* pScMod = SC_MOD();
-        pScMod->InsertEntryToLRUList(pFuncDesc->nFIndex);
+        pScMod->InsertEntryToLRUList(pFuncDescP->nFIndex);
     }
 }
 
