@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2006-01-27 15:51:00 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:40:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,17 +54,11 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-            qpro.cxx        \
-            qproform.cxx \
-            qprostyle.cxx \
-            biff.cxx
-
-SLOFILES = \
-            $(SLO)$/qpro.obj        \
-            $(SLO)$/qproform.obj    \
-            $(SLO)$/qprostyle.obj \
-            $(SLO)$/biff.obj 
+SLOFILES =						\
+        $(SLO)$/qpro.obj		\
+        $(SLO)$/qproform.obj    \
+        $(SLO)$/qprostyle.obj	\
+        $(SLO)$/biff.obj
 
 # --- Tagets -------------------------------------------------------
 
