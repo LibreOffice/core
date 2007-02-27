@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:06:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,8 +87,8 @@ ScColumn::ScColumn() :
     nCount( 0 ),
     nLimit( 0 ),
     pItems( NULL ),
-    pDocument( NULL ),
-    pAttrArray( NULL )
+    pAttrArray( NULL ),
+    pDocument( NULL )
 {
 }
 
@@ -371,8 +371,8 @@ ULONG ScColumn::GetNumberFormat( SCROW nRow ) const
 
 SCsROW ScColumn::ApplySelectionCache( SfxItemPoolCache* pCache, const ScMarkData& rMark )
 {
-    SCROW nTop;
-    SCROW nBottom;
+    SCROW nTop = 0;
+    SCROW nBottom = 0;
     BOOL bFound = FALSE;
 
     if ( rMark.IsMultiMarked() )
@@ -569,7 +569,7 @@ const ScStyleSheet* ScColumn::GetSelectionStyle( const ScMarkData& rMark, BOOL& 
         SCROW nRow;
         SCROW nDummy;
         const ScPatternAttr* pPattern;
-        while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ))
+        while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != NULL)
         {
             pNewStyle = pPattern->GetStyleSheet();
             rFound = TRUE;
@@ -596,7 +596,7 @@ const ScStyleSheet* ScColumn::GetAreaStyle( BOOL& rFound, SCROW nRow1, SCROW nRo
     SCROW nRow;
     SCROW nDummy;
     const ScPatternAttr* pPattern;
-    while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ))
+    while (bEqual && ( pPattern = aAttrIter.Next( nRow, nDummy ) ) != NULL)
     {
         pNewStyle = pPattern->GetStyleSheet();
         rFound = TRUE;
@@ -688,7 +688,9 @@ void ScColumn::ApplyAttr( SCROW nRow, const SfxPoolItem& rAttr )
 #endif
 }
 
+#ifdef WNT
 #pragma optimize ( "", off )
+#endif
 
 
 BOOL ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
@@ -779,7 +781,9 @@ BOOL ScColumn::Search( SCROW nRow, SCSIZE& nIndex ) const
     return bFound;
 }
 
+#ifdef WNT
 #pragma optimize ( "", on )
+#endif
 
 
 ScBaseCell* ScColumn::GetCell( SCROW nRow ) const
@@ -793,7 +797,7 @@ ScBaseCell* ScColumn::GetCell( SCROW nRow ) const
 
 void ScColumn::Resize( SCSIZE nSize )
 {
-    if (nSize > MAXROWCOUNT)
+    if (nSize > sal::static_int_cast<SCSIZE>(MAXROWCOUNT))
         nSize = MAXROWCOUNT;
     if (nSize < nCount)
         nSize = nCount;
@@ -1244,7 +1248,7 @@ BOOL ScColumn::TestInsertRow( SCSIZE nSize ) const
     //  AttrArray only looks for merged cells
 
     if ( pItems && nCount )
-        return ( nSize <= MAXROW &&
+        return ( nSize <= sal::static_int_cast<SCSIZE>(MAXROW) &&
                  pItems[nCount-1].nRow <= MAXROW-(SCROW)nSize && pAttrArray->TestInsertRow( nSize ) );
     else
         return pAttrArray->TestInsertRow( nSize );
@@ -1381,7 +1385,7 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, BOOL bKee
 
     SCSIZE i;
     SCSIZE nBlockCount = 0;
-    SCSIZE nStartIndex, nEndIndex;
+    SCSIZE nStartIndex = 0, nEndIndex = 0;
     for (i = 0; i < nCount; i++)
         if ((pItems[i].nRow >= nRow1) && (pItems[i].nRow <= nRow2))
         {
@@ -1457,7 +1461,7 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
     {
         SCSIZE i;
         SCSIZE nBlockCount = 0;
-        SCSIZE nStartIndex, nEndIndex;
+        SCSIZE nStartIndex = 0, nEndIndex = 0;
         for (i = 0; i < nCount; i++)
             if ((pItems[i].nRow >= nRow1) && (pItems[i].nRow <= nRow2))
             {
@@ -1473,7 +1477,6 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, USHORT nFlags, BOOL bMarke
             ScAddress aAdr( rColumn.nCol, 0, rColumn.nTab );
             for (i = nStartIndex; i <= nEndIndex; i++)
             {
-                ScBaseCell* pOld = pItems[i].pCell;
                 aAdr.SetRow( pItems[i].nRow );
                 ScBaseCell* pNew;
                 if (bAsLink)
@@ -1995,7 +1998,6 @@ BOOL ScColumn::IsRangeNameInUse(SCROW nRow1, SCROW nRow2, USHORT nIndex) const
 void ScColumn::ReplaceRangeNamesInUse(SCROW nRow1, SCROW nRow2,
                                      const ScIndexMap& rMap )
 {
-    BOOL bInUse = FALSE;
     if (pItems)
         for (SCSIZE i = 0; i < nCount; i++)
         {
@@ -2245,7 +2247,7 @@ BOOL ScColumn::HasEditCells(SCROW nStartRow, SCROW nEndRow, SCROW& rFirst) const
 {
     //  used in GetOptimalHeight - ambiguous script type counts as edit cell
 
-    SCROW nRow;
+    SCROW nRow = 0;
     SCSIZE nIndex;
     Search(nStartRow,nIndex);
     while ( (nIndex < nCount) ? ((nRow=pItems[nIndex].nRow) <= nEndRow) : FALSE )
