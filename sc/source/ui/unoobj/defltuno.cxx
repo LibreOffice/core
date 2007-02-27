@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defltuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:34:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:43:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ const SfxItemPropertyMap* lcl_GetDocDefaultsMap()
         {MAP_CHAR_LEN(SC_UNO_CTL_CLOCAL),   ATTR_CTL_FONT_LANGUAGE, &getCppuType((lang::Locale*)0), 0, MID_LANG_LOCALE },
         {MAP_CHAR_LEN(SC_UNO_STANDARDDEC),              0,      &getCppuType((sal_Int16*)0),        0, 0 },
         {MAP_CHAR_LEN(SC_UNO_TABSTOPDIS),               0,      &getCppuType((sal_Int32*)0),        0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aDocDefaultsMap_Impl;
 }
@@ -109,7 +109,7 @@ ScDocDefaultsObj::~ScDocDefaultsObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScDocDefaultsObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScDocDefaultsObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
