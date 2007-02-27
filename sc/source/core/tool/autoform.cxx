@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:17:19 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@
 
 //------------------------------------------------------------------------
 
-sal_Char *linker_dummy = "";
+const sal_Char *linker_dummy = "";
 
 //  Standard-Name ist jetzt STR_STYLENAME_STANDARD (wie Vorlagen)
 //static const sal_Char __FAR_DATA cStandardName[] = "Standard";
@@ -477,13 +477,14 @@ ScAutoFormatData::ScAutoFormatData()
 }
 
 ScAutoFormatData::ScAutoFormatData( const ScAutoFormatData& rData ) :
+        DataObject(),
         aName( rData.aName ),
         nStrResId( rData.nStrResId ),
-        bIncludeValueFormat( rData.bIncludeValueFormat ),
         bIncludeFont( rData.bIncludeFont ),
         bIncludeJustify( rData.bIncludeJustify ),
         bIncludeFrame( rData.bIncludeFrame ),
         bIncludeBackground( rData.bIncludeBackground ),
+        bIncludeValueFormat( rData.bIncludeValueFormat ),
         bIncludeWidthHeight( rData.bIncludeWidthHeight )
 {
     ppDataField = new ScAutoFormatDataField*[ 16 ];
@@ -500,14 +501,14 @@ ScAutoFormatData::~ScAutoFormatData()
 
 ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex )
 {
-    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetField - illegal index" );
+    DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
     DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
 
 const ScAutoFormatDataField& ScAutoFormatData::GetField( USHORT nIndex ) const
 {
-    DBG_ASSERT( (0 <= nIndex) && (nIndex < 16), "ScAutoFormatData::GetField - illegal index" );
+    DBG_ASSERT( nIndex < 16, "ScAutoFormatData::GetField - illegal index" );
     DBG_ASSERT( ppDataField && ppDataField[ nIndex ], "ScAutoFormatData::GetField - no data" );
     return *ppDataField[ nIndex ];
 }
@@ -1136,7 +1137,7 @@ BOOL ScAutoFormat::Save()
         rStream << nVal
                 << (BYTE)2      // Anzahl von Zeichen des Headers incl. diesem
                 << (BYTE)::GetSOStoreTextEncoding(
-                    gsl_getSystemTextEncoding(), rStream.GetVersion() );
+                    gsl_getSystemTextEncoding(), sal::static_int_cast<USHORT>(rStream.GetVersion()) );
 //              << (BYTE)4      // Anzahl von Zeichen des Headers incl. diesem
 //              << (BYTE)::GetStoreCharSet(::GetSystemCharSet())
 //              << (UNIT16)SOFFICE_FILEFORMAT_NOW;
