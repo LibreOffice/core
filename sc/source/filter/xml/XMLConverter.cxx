@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConverter.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ void ScXMLConverter::GetTokenByOffset(
         OUString& rToken,
         const OUString& rString,
         sal_Int32& nOffset,
-        sal_Unicode cQuote )
+        sal_Unicode /* cQuote */ )
 {
     sal_Int32 nLength = rString.getLength();
     if( nOffset >= nLength )
@@ -531,6 +531,10 @@ void ScXMLConverter::GetStringFromFunction(
         case sheet::GeneralFunction_SUM:        sFuncStr = GetXMLToken( XML_SUM );          break;
         case sheet::GeneralFunction_VAR:        sFuncStr = GetXMLToken( XML_VAR );          break;
         case sheet::GeneralFunction_VARP:       sFuncStr = GetXMLToken( XML_VARP );         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     AssignString( rString, sFuncStr, bAppendStr );
 }
@@ -602,6 +606,10 @@ void ScXMLConverter::GetStringFromOrientation(
         case sheet::DataPilotFieldOrientation_DATA:
             sOrientStr = GetXMLToken( XML_DATA );
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     AssignString( rString, sOrientStr, bAppendStr );
 }
@@ -657,6 +665,10 @@ void ScXMLConverter::GetStringFromDetObjType(
         case SC_DETOBJ_TOOTHERTAB:
             sTypeStr = GetXMLToken( XML_TO_ANOTHER_TABLE );
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     AssignString( rString, sTypeStr, bAppendStr );
 }
@@ -732,10 +744,10 @@ void ScXMLConverter::ConvertDateTimeToString(const DateTime& aDateTime, rtl::OUS
     SvXMLUnitConverter::convertDateTime(sDate, aAPIDateTime);
 }
 
-void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* pUnitConverter)
+void ScXMLConverter::ConvertStringToDateTime(const rtl::OUString& sDate, DateTime& aDateTime, SvXMLUnitConverter* /* pUnitConverter */)
 {
     com::sun::star::util::DateTime aAPIDateTime;
-    pUnitConverter->convertDateTime(aAPIDateTime, sDate);
+    SvXMLUnitConverter::convertDateTime(aAPIDateTime, sDate);
     ConvertAPIToCoreDateTime(aAPIDateTime, aDateTime);
 }
 
