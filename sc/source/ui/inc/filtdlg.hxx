@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtdlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:25:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:22:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,9 +113,9 @@ class TypedStrCollection;
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ), \
     aBtnHelp        ( this, ScResId( BTN_HELP ) ), \
     aBtnMore        ( this, ScResId( BTN_MORE ) ), \
+    aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ), \
     aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ), \
-    aStrNone        ( ScResId( SCSTR_NONE ) ), \
-    aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
+    aStrNone        ( ScResId( SCSTR_NONE ) ),
 
 
 //============================================================================
