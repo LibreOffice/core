@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dfa.cl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:33:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:51:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-static char datefunc_Id[]="@(#) StarCalc Datefunc AddIn (c) 1998-2000 Sun Microsystems, Inc.";
+/* static char datefunc_Id[]="@(#) StarCalc Datefunc AddIn (c) 1998-2000 Sun Microsystems, Inc."; */
 
 #include <string.h>
 #include <stdlib.h>
@@ -106,7 +106,7 @@ static USHORT aDaysInMonth[12] = { 31, 28, 31, 30, 31, 30,
  */
 static BOOL IsLeapYear( USHORT nYear )
 {
-    return (((nYear % 4) == 0) && ((nYear % 100) != 0) || ((nYear % 400) == 0));
+    return (BOOL)((((nYear % 4) == 0) && ((nYear % 100) != 0)) || ((nYear % 400) == 0));
 }
 
 
