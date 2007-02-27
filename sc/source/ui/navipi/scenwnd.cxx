@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scenwnd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:16:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -195,11 +195,11 @@ void __EXPORT ScScenarioListBox::LoseFocus()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScScenarioListBox, AccelSelectHdl, Accelerator *, pAccel )
+IMPL_LINK( ScScenarioListBox, AccelSelectHdl, Accelerator *, pSelAccel )
 {
-    if ( !pAccel ) return 0;
+    if ( !pSelAccel ) return 0;
 
-    switch ( pAccel->GetCurKeyCode().GetCode() )
+    switch ( pSelAccel->GetCurKeyCode().GetCode() )
     {
         case KEY_RETURN:
             Select();
