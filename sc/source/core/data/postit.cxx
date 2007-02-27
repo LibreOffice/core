@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:08:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -271,8 +271,6 @@ Rectangle ScPostIt::DefaultRectangle(const ScAddress& rPos) const
     String aText = GetText();
     long nDefWidth = ( aText.Len() > SC_NOTE_SMALLTEXT ) ? 5800 : 2900;
     Size aRectSize( nDefWidth, 1800 );
-
-    long nMaxWidth = aRectSize.Width();
 
     if ( bNegativePage )
         aRectPos.X() -= aRectSize.Width();
