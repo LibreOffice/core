@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:52:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,8 +210,6 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, BOOL bRecord )
     {
         //  Subtotals wiederholen, mit neuer Sortierung
 
-        ScSubTotalParam aSubTotalParam;
-        pDBData->GetSubTotalParam( aSubTotalParam );
         DoSubTotals( aSubTotalParam, bRecord, &rSortParam );
     }
     else
@@ -439,8 +437,6 @@ void ScDBFunc::HideAutoFilter()
 
 BOOL ScDBFunc::ImportData( const ScImportParam& rParam, BOOL bRecord )
 {
-    BOOL bSuccess = FALSE;
-
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScEditableTester aTester( pDoc, GetViewData()->GetTabNo(), rParam.nCol1,rParam.nRow1,
                                                             rParam.nCol2,rParam.nRow2 );
