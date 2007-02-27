@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servobj.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:45:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ ScServerObjectSvtListenerForwarder::~ScServerObjectSvtListenerForwarder()
     //! do NOT access pObj
 }
 
-void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& rBC, const SfxHint& rHint)
+void ScServerObjectSvtListenerForwarder::Notify( SvtBroadcaster& /* rBC */, const SfxHint& rHint)
 {
     pObj->Notify( aBroadcaster, rHint);
 }
@@ -154,7 +154,7 @@ void ScServerObject::EndListeningAll()
 
 BOOL __EXPORT ScServerObject::GetData(
         ::com::sun::star::uno::Any & rData /*out param*/,
-        const String & rMimeType, BOOL bSynchron )
+        const String & rMimeType, BOOL /* bSynchron */ )
 {
     if (!pDocSh)
         return FALSE;
@@ -259,7 +259,7 @@ void __EXPORT ScServerObject::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
         }
         else if (rHint.ISA(SfxSimpleHint))
         {
-            USHORT nId = ((const SfxSimpleHint&)rHint).GetId();
+            ULONG nId = ((const SfxSimpleHint&)rHint).GetId();
             if (nId == SFX_HINT_DYING)
             {
                 //  If the range is being deleted, listening must be restarted
