@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleSpreadsheet.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:26:46 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -782,20 +782,14 @@ void ScAccessibleSpreadsheet::CreateSortedMarkedCells()
 
 void ScAccessibleSpreadsheet::AddMarkedRange(const ScRange& rRange)
 {
-    sal_uInt32 nCount(static_cast<sal_uInt32>(rRange.aEnd.Col() -
-                rRange.aStart.Col() + 1) * (rRange.aEnd.Row() -
-                rRange.aStart.Row() + 1));
-    sal_uInt32 nPos(0);
     for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
     {
         for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
         {
             ScMyAddress aCell(nCol, nRow, maActiveCell.Tab());
             mpSortedMarkedCells->push_back(aCell);
-            ++nPos;
         }
     }
-    DBG_ASSERT(nCount == nPos, "something wents wrong");
 }
 
     //=====  XServiceInfo  ====================================================
@@ -897,7 +891,7 @@ sal_Bool ScAccessibleSpreadsheet::IsDefunc(
 }
 
 sal_Bool ScAccessibleSpreadsheet::IsEditable(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     sal_Bool bProtected(sal_False);
     if (mpDoc && mpDoc->IsTabProtected(maRange.aStart.Tab()))
