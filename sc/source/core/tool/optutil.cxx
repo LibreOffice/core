@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optutil.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:12:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:17:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ void ScLinkConfigItem::SetCommitLink( const Link& rLink )
     aCommitLink = rLink;
 }
 
-void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& aPropertyNames )
+void ScLinkConfigItem::Notify( const com::sun::star::uno::Sequence<rtl::OUString>& /* aPropertyNames */ )
 {
     //! not implemented yet...
 }
