@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xcl97esc.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:22:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -496,7 +496,7 @@ XclEscherClientTextbox::XclEscherClientTextbox( RootData& rRoot,
 }
 
 
-void XclEscherClientTextbox::WriteData( EscherEx& rEx ) const
+void XclEscherClientTextbox::WriteData( EscherEx& /*rEx*/ ) const
 {
     pXclObj->SetText( *rRootData.pER, rTextObj );
 }
