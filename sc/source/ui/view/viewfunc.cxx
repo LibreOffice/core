@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 15:29:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 14:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -352,7 +352,6 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                             BOOL bRecord )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
-    SvNumberFormatter& rFormatter = *pDoc->GetFormatTable();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nSelCount = rMark.GetSelectCount();
@@ -518,7 +517,8 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rS
                         ++nLevel;
                     else if ( eOp == ocClose && nLevel )
                         --nLevel;
-                    if ( nLevel == 0 && pTok->IsFunction() && lcl_AddFunction( aAppOpt, eOp ) )
+                    if ( nLevel == 0 && pTok->IsFunction() &&
+                            lcl_AddFunction( aAppOpt, sal::static_int_cast<USHORT>( eOp ) ) )
                         bOptChanged = TRUE;
                 }
 
@@ -695,9 +695,9 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
             ScTabEditEngine aEngine( *pOldPattern, pDoc->GetEnginePool() );
             aEngine.SetText(*pData);
 
-            ScEditAttrTester aTester( &aEngine );
-            bSimple = !aTester.NeedsObject();
-            bCommon = aTester.NeedsCellAttr();
+            ScEditAttrTester aAttrTester( &aEngine );
+            bSimple = !aAttrTester.NeedsObject();
+            bCommon = aAttrTester.NeedsCellAttr();
 
             // formulas have to be recognized even if they're formatted
             // (but commmon attributes are still collected)
@@ -712,7 +712,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
             if (bCommon)                // Attribute fuer Tabelle
             {
                 pCellAttrs = new ScPatternAttr( *pOldPattern );
-                pCellAttrs->GetFromEditItemSet( &aTester.GetAttribs() );
+                pCellAttrs->GetFromEditItemSet( &aAttrTester.GetAttribs() );
                 //! remove common attributes from EditEngine?
             }
 
@@ -834,9 +834,13 @@ void ScViewFunc::EnterMatrix( const String& rString )
         SCSIZE nSizeX;
         SCSIZE nSizeY;
         aFormCell.GetResultDimensions( nSizeX, nSizeY );
-        if ( nSizeX != 0 && nSizeY != 0 && nCol+nSizeX-1 <= MAXCOL && nRow+nSizeY-1 <= MAXROW )
+        if ( nSizeX != 0 && nSizeY != 0 &&
+             nCol+nSizeX-1 <= sal::static_int_cast<SCSIZE>(MAXCOL) &&
+             nRow+nSizeY-1 <= sal::static_int_cast<SCSIZE>(MAXROW) )
         {
-            ScRange aResult( nCol, nRow, nTab, nCol+nSizeX-1, nRow+nSizeY-1, nTab );
+            ScRange aResult( nCol, nRow, nTab,
+                             sal::static_int_cast<SCCOL>(nCol+nSizeX-1),
+                             sal::static_int_cast<SCROW>(nRow+nSizeY-1), nTab );
             MarkRange( aResult, FALSE );
         }
     }
@@ -2180,7 +2184,6 @@ void ScViewFunc::SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pR
 void ScViewFunc::SetMarkedWidthOrHeight( BOOL bWidth, ScSizeMode eMode, USHORT nSizeTwips,
                                         BOOL bRecord, BOOL bPaint )
 {
-    ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
 
     rMark.MarkToMulti();
@@ -2257,9 +2260,9 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, BOOL bOptimal )
                     USHORT nMargin = rMItem.GetLeftMargin() + rMItem.GetRightMargin();
                     if ( ((const SvxHorJustifyItem&) pPattern->
                             GetItem( ATTR_HOR_JUSTIFY )).GetValue() == SVX_HOR_JUSTIFY_LEFT )
-                        nMargin += ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue();
+                        nMargin = sal::static_int_cast<USHORT>(
+                            nMargin + ((const SfxUInt16Item&)pPattern->GetItem(ATTR_INDENT)).GetValue() );
 
-                    ScDocShell* pDocSh = GetViewData()->GetDocShell();
                     nWidth = (USHORT)(nEdit * pDocSh->GetOutputFactor() / HMM_PER_TWIPS)
                                 + nMargin + STD_EXTRA_WIDTH;
                 }
@@ -2291,9 +2294,9 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, BOOL bOptimal )
         else                        // vergroessern / verkleinern
         {
             if ( eDir == DIR_RIGHT )
-                nWidth += nStepX;
+                nWidth = sal::static_int_cast<USHORT>( nWidth + nStepX );
             else if ( nWidth > nStepX )
-                nWidth -= nStepX;
+                nWidth = sal::static_int_cast<USHORT>( nWidth - nStepX );
             if ( nWidth < nStepX ) nWidth = nStepX;
             if ( nWidth > MAX_COL_WIDTH ) nWidth = MAX_COL_WIDTH;
         }
@@ -2325,9 +2328,9 @@ void ScViewFunc::ModifyCellSize( ScDirection eDir, BOOL bOptimal )
         {
             eMode = SC_SIZE_DIRECT;
             if ( eDir == DIR_BOTTOM )
-                nHeight += nStepY;
+                nHeight = sal::static_int_cast<USHORT>( nHeight + nStepY );
             else if ( nHeight > nStepY )
-                nHeight -= nStepY;
+                nHeight = sal::static_int_cast<USHORT>( nHeight - nStepY );
             if ( nHeight < nStepY ) nHeight = nStepY;
             if ( nHeight > MAX_COL_HEIGHT ) nHeight = MAX_COL_HEIGHT;
             //! MAX_COL_HEIGHT umbenennen in MAX_ROW_HEIGHT in global.hxx !!!!!!
