@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwlayer.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:47:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:05:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,9 @@ BOOL bDrawIsInUndo = FALSE;         //! Member
 
 // -----------------------------------------------------------------------
 
-ScUndoObjData::ScUndoObjData( SdrObject* pObj, const ScAddress& rOS, const ScAddress& rOE,
+ScUndoObjData::ScUndoObjData( SdrObject* pObjP, const ScAddress& rOS, const ScAddress& rOE,
                                                const ScAddress& rNS, const ScAddress& rNE ) :
-    SdrUndoObj( *pObj ),
+    SdrUndoObj( *pObjP ),
     aOldStt( rOS ),
     aOldEnd( rOE ),
     aNewStt( rNS ),
@@ -407,7 +407,7 @@ SdrPage* __EXPORT ScDrawLayer::AllocPage(FASTBOOL bMasterPage)
 {
     //  don't create basic until it is needed
     StarBASIC* pBasic = NULL;
-    ScDrawPage* pPage = new ScDrawPage( *this, pBasic, bMasterPage );
+    ScDrawPage* pPage = new ScDrawPage( *this, pBasic, sal::static_int_cast<BOOL>(bMasterPage) );
     return pPage;
 }
 
@@ -1227,7 +1227,6 @@ void ScDrawLayer::HeightChanged( SCTAB nTab, SCROW nRow, long nDifTwips )
     if (!bAdjustEnabled)
         return;
 
-    SCROW i;
     Rectangle aRect;
     Point aTopLeft;
 
@@ -1666,8 +1665,9 @@ void ScDrawLayer::CopyFromClip( ScDrawLayer* pClipModel, SCTAB nSourceTab, const
                                 SCROW nClipEndY;
                                 pClipDoc->GetClipStart( nClipStartX, nClipStartY );
                                 pClipDoc->GetClipArea( nClipEndX, nClipEndY, TRUE );
-                                nClipEndX += nClipStartX;
-                                nClipEndY += nClipStartY;   // GetClipArea returns the difference
+                                // GetClipArea returns the difference
+                                nClipEndX = sal::static_int_cast<SCCOL>( nClipEndX + nClipStartX );
+                                nClipEndY = sal::static_int_cast<SCROW>( nClipEndY + nClipStartY );
 
                                 aClipRange = ScRange( nClipStartX, nClipStartY, nSourceTab,
                                                         nClipEndX, nClipEndY, nSourceTab );
@@ -1833,21 +1833,21 @@ String ScDrawLayer::GetNewGraphicName( long* pnCounter ) const
     aBase += ' ';
 
     BOOL bThere = TRUE;
-    String aName;
+    String aGraphicName;
     SCTAB nDummy;
     long nId = pnCounter ? *pnCounter : 0;
     while (bThere)
     {
         ++nId;
-        aName = aBase;
-        aName += String::CreateFromInt32( nId );
-        bThere = ( GetNamedObject( aName, 0, nDummy ) != NULL );
+        aGraphicName = aBase;
+        aGraphicName += String::CreateFromInt32( nId );
+        bThere = ( GetNamedObject( aGraphicName, 0, nDummy ) != NULL );
     }
 
     if ( pnCounter )
         *pnCounter = nId;
 
-    return aName;
+    return aGraphicName;
 }
 
 void ScDrawLayer::EnsureGraphicNames()
