@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:56:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -413,7 +413,7 @@ void ScGridWindow::OutlinerViewPaint( const Rectangle& rRect )
                     Rectangle aMinRect;
                     pTextObj->TakeTextEditArea(NULL,NULL,NULL,&aMinRect); // PageView Offset ist 0
                     aEditRect.Union(aMinRect);
-                    bFrame = pTextObj->IsTextFrame();
+                    bFrame = sal::static_int_cast<BOOL>( pTextObj->IsTextFrame() );
                 }
 
                 if ( aEditRect.IsOver( rRect ) )
