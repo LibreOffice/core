@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global2.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:05:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:06:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,7 +238,7 @@ BOOL ScQueryEntry::operator==( const ScQueryEntry& r ) const
     //! pSearchParam und pSearchText nicht vergleichen
 }
 
-void ScQueryEntry::Load( SvStream& rStream )
+void ScQueryEntry::Load( SvStream& /* rStream */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -255,7 +255,7 @@ void ScQueryEntry::Load( SvStream& rStream )
 #endif
 }
 
-void ScQueryEntry::Store( SvStream& rStream ) const
+void ScQueryEntry::Store( SvStream& /* rStream */ ) const
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -292,10 +292,10 @@ ScQueryParam::ScQueryParam()
 
 ScQueryParam::ScQueryParam( const ScQueryParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),nTab(r.nTab),
-        nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
-        bHasHeader(r.bHasHeader),bInplace(r.bInplace),bCaseSens(r.bCaseSens),
+        bHasHeader(r.bHasHeader), bByRow(r.bByRow), bInplace(r.bInplace), bCaseSens(r.bCaseSens),
         bRegExp(r.bRegExp), bMixedComparison(r.bMixedComparison),
-        bDuplicate(r.bDuplicate), bByRow(r.bByRow), bDestPers(r.bDestPers)
+        bDuplicate(r.bDuplicate), bDestPers(r.bDestPers),
+        nDestTab(r.nDestTab), nDestCol(r.nDestCol), nDestRow(r.nDestRow)
 {
     nEntryCount = 0;
 
@@ -439,11 +439,11 @@ void ScQueryParam::MoveToDest()
         SCsROW nDifY = ((SCsROW) nDestRow) - ((SCsROW) nRow1);
         SCsTAB nDifZ = ((SCsTAB) nDestTab) - ((SCsTAB) nTab);
 
-        nCol1 += nDifX;
-        nRow1 += nDifY;
-        nCol2 += nDifX;
-        nRow2 += nDifY;
-        nTab  += nDifZ;
+        nCol1 = sal::static_int_cast<SCCOL>( nCol1 + nDifX );
+        nRow1 = sal::static_int_cast<SCROW>( nRow1 + nDifY );
+        nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nDifX );
+        nRow2 = sal::static_int_cast<SCROW>( nRow2 + nDifY );
+        nTab  = sal::static_int_cast<SCTAB>( nTab  + nDifZ );
         for (USHORT i=0; i<nEntryCount; i++)
             pEntries[i].nField += nDifX;
 
@@ -597,9 +597,9 @@ ScSubTotalParam::ScSubTotalParam()
 
 ScSubTotalParam::ScSubTotalParam( const ScSubTotalParam& r ) :
         nCol1(r.nCol1),nRow1(r.nRow1),nCol2(r.nCol2),nRow2(r.nRow2),
-        bReplace(r.bReplace),bPagebreak(r.bPagebreak),bCaseSens(r.bCaseSens),
+        bRemoveOnly(r.bRemoveOnly),bReplace(r.bReplace),bPagebreak(r.bPagebreak),bCaseSens(r.bCaseSens),
         bDoSort(r.bDoSort),bAscending(r.bAscending),bUserDef(r.bUserDef),nUserIndex(r.nUserIndex),
-        bIncludePattern(r.bIncludePattern),bRemoveOnly(r.bRemoveOnly)
+        bIncludePattern(r.bIncludePattern)
 {
     for (USHORT i=0; i<MAXSUBTOTAL; i++)
     {
@@ -794,10 +794,10 @@ ScConsolidateParam::ScConsolidateParam() :
 //------------------------------------------------------------------------
 
 ScConsolidateParam::ScConsolidateParam( const ScConsolidateParam& r ) :
-        ppDataAreas( NULL ),
         nCol(r.nCol),nRow(r.nRow),nTab(r.nTab),
-        bByCol(r.bByCol),bByRow(r.bByRow),bReferenceData(r.bReferenceData),
-        nDataAreaCount(0),eFunction(r.eFunction)
+        eFunction(r.eFunction),nDataAreaCount(0),
+        ppDataAreas( NULL ),
+        bByCol(r.bByCol),bByRow(r.bByRow),bReferenceData(r.bReferenceData)
 {
     if ( r.nDataAreaCount > 0 )
     {
@@ -903,9 +903,9 @@ void ScConsolidateParam::Load( SvStream& rStream )
 
     ScReadHeader aHdr( rStream );
 
-    BYTE nByte;
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
+    BYTE nByte;
     rStream >> nCol >> nRow >> nTab
             >> bByCol >> bByRow >> bReferenceData >> nByte;
     eFunction = (ScSubTotalFunc) nByte;
@@ -974,12 +974,12 @@ ScPivotParam::ScPivotParam()
 
 ScPivotParam::ScPivotParam( const ScPivotParam& r )
     :   nCol( r.nCol ), nRow( r.nRow ), nTab( r.nTab ),
+        ppLabelArr( NULL ), nLabels(0),
+        nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0),
         bIgnoreEmptyRows(r.bIgnoreEmptyRows),
         bDetectCategories(r.bDetectCategories),
         bMakeTotalCol(r.bMakeTotalCol),
-        bMakeTotalRow(r.bMakeTotalRow),
-        ppLabelArr( NULL ), nLabels(0),
-        nPageCount(0), nColCount(0), nRowCount(0), nDataCount(0)
+        bMakeTotalRow(r.bMakeTotalRow)
 {
     SetLabelData    ( r.ppLabelArr, r.nLabels );
     SetPivotArrays  ( r.aPageArr, r.aColArr, r.aRowArr, r.aDataArr,
