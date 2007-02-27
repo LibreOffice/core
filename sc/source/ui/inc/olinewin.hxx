@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olinewin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:41:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,6 +95,8 @@ public:
 
     /** Scrolls the window content by the specified amount of pixels. */
     void                        ScrollPixel( long nDiff );
+
+    using Window::ShowFocus;
 
 private:
     /** Initializes color and image settings. */
