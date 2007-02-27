@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpshttab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:57:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:04:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,7 @@ UINT32 ScSheetDPData::GetNumberFormat(long nDim)
         //  is queried only once per dimension from ScDPOutput -> no need to cache
 
         ScAddress aPos = pImpl->aRange.aStart;
-        aPos.SetCol( aPos.Col() + nDim );
+        aPos.SetCol( sal::static_int_cast<SCCOL>( aPos.Col() + nDim ) );
         aPos.SetRow( aPos.Row() + 1 );      // below title
         return pImpl->pDoc->GetNumberFormat( aPos );
     }
