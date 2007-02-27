@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:19:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:01:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,10 @@ void ScCsvRuler::MoveCursorRel( ScMoveMode eDir )
                 if( GetRulerCursorPos() < GetPosCount() - 1 )
                     MoveCursor( GetRulerCursorPos() + 1 );
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 }
@@ -168,6 +172,10 @@ void ScCsvRuler::MoveCursorToSplit( ScMoveMode eDir )
             case MOVE_LAST:     nIndex = maSplits.UpperBound( GetPosCount() );              break;
             case MOVE_PREV:     nIndex = maSplits.UpperBound( GetRulerCursorPos() - 1 );    break;
             case MOVE_NEXT:     nIndex = maSplits.LowerBound( GetRulerCursorPos() + 1 );    break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         sal_Int32 nPos = maSplits[ nIndex ];
         if( nPos != CSV_POS_INVALID )
@@ -184,6 +192,10 @@ void ScCsvRuler::ScrollVertRel( ScMoveMode eDir )
         case MOVE_NEXT:     ++nLine;                        break;
         case MOVE_PREVPAGE: nLine -= GetVisLineCount() - 1; break;
         case MOVE_NEXTPAGE: nLine += GetVisLineCount() - 1; break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     Execute( CSVCMD_SETLINEOFFSET, nLine );
 }
@@ -265,6 +277,10 @@ sal_Int32 ScCsvRuler::FindEmptyPos( sal_Int32 nPos, ScMoveMode eDir ) const
             case MOVE_NEXT:
                 while( HasSplit( ++nNewPos ) );
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
     return IsValidSplitPos( nNewPos ) ? nNewPos : CSV_POS_INVALID;
@@ -564,7 +580,7 @@ void ScCsvRuler::ImplDrawRulerDev()
 
     sal_uInt32 nFirst = maSplits.LowerBound( GetFirstVisPos() );
     sal_uInt32 nLast = maSplits.UpperBound( GetLastVisPos() );
-    if( (nFirst != CSV_POS_INVALID) && (nLast != CSV_POS_INVALID) )
+    if( (nFirst != CSV_VEC_NOTFOUND) && (nLast != CSV_VEC_NOTFOUND) )
         for( sal_uInt32 nIndex = nFirst; nIndex <= nLast; ++nIndex )
             ImplDrawSplit( GetSplitPos( nIndex ) );
 }
