@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapidata.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:20:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:01:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,16 +77,16 @@ using namespace com::sun::star;
 ScDataPilotDatabaseDlg::ScDataPilotDatabaseDlg( Window* pParent ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPIDATA ) ),
     //
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aFtDatabase     ( this, ScResId( FT_DATABASE ) ),
     aLbDatabase     ( this, ScResId( LB_DATABASE ) ),
     aFtObject       ( this, ScResId( FT_OBJECT ) ),
     aCbObject       ( this, ScResId( CB_OBJECT ) ),
     aFtType         ( this, ScResId( FT_OBJTYPE ) ),
     aLbType         ( this, ScResId( LB_OBJTYPE ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) )
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     FreeResource();
 
@@ -149,7 +149,7 @@ void ScDataPilotDatabaseDlg::GetValues( ScImportSourceDesc& rDesc )
     rDesc.bNative = ( nSelect == DP_TYPELIST_SQLNAT );
 }
 
-IMPL_LINK( ScDataPilotDatabaseDlg, SelectHdl, ListBox*, pLb )
+IMPL_LINK( ScDataPilotDatabaseDlg, SelectHdl, ListBox*, EMPTYARG )
 {
     FillObjects();
     return 0;
