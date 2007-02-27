@@ -4,9 +4,9 @@
  *
  *  $RCSfile: userlist.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:20:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,6 +86,7 @@ ScUserListData::ScUserListData(const String& rStr) :
 }
 
 ScUserListData::ScUserListData(const ScUserListData& rData) :
+    DataObject(),
     aStr(rData.aStr)
 {
     InitTokens();
@@ -225,13 +226,13 @@ ScUserList::ScUserList(USHORT nLim, USHORT nDel) :
             sal_Int32 i;
             sal_Int32 nLen = xCal.getLength();
             rtl::OUString sStart = xCalendars[j].StartOfWeek;
-            sal_Int16 nStart = nLen;
+            sal_Int16 nStart = sal::static_int_cast<sal_Int16>(nLen);
             while (nStart > 0)
             {
                 if (xCal[--nStart].ID == sStart)
                     break;
             }
-            sal_Int16 nLast = (nStart + nLen - 1) % nLen;
+            sal_Int16 nLast = sal::static_int_cast<sal_Int16>( (nStart + nLen - 1) % nLen );
             for (i = nStart; i != nLast; i = (i+1) % nLen)
             {
                 sDayShort += String( xCal[i].AbbrevName );
