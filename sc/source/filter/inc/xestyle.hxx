@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:41:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:36:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -328,12 +328,12 @@ private:
 
 private:
     typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
-    typedef NfKeywordTable*                         NfKeywordTablePtr;
     typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
+    typedef NfKeywordTable*                         NfKeywordTablePtr;
 
     SvNumberFormatterPtr mxFormatter;   /// Special number formatter for conversion.
-    NfKeywordTablePtr   mpKeywordTable; /// Replacement table.
     XclExpNumFmtVec     maFormatMap;    /// Maps core formats to Excel indexes.
+    NfKeywordTablePtr   mpKeywordTable; /// Replacement table.
     ULONG               mnStdFmt;       /// Key for standard number format.
     sal_uInt16          mnXclOffset;    /// Offset to first user defined format.
 };
@@ -345,9 +345,8 @@ private:
 struct XclExpCellProt : public XclCellProt
 {
     /** Fills the protection attributes from the passed item set.
-        @descr  Fills only the attributes exported in the passed BIFF version.
         @return  true = At least one protection item is set. */
-    bool                FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bStyle = false );
+    bool                FillFromItemSet( const SfxItemSet& rItemSet, bool bStyle = false );
 
 #if 0
     /** Fills the data to the passed fields of a BIFF2 XF record. */
@@ -433,11 +432,10 @@ struct XclExpCellArea : public XclCellArea
     explicit            XclExpCellArea();
 
     /** Fills the area attributes from the passed item set.
-        @descr  Fills only the attributes exported in the passed BIFF version.
         @return  true = At least one area item is set. */
     bool                FillFromItemSet(
                             const SfxItemSet& rItemSet, XclExpPalette& rPalette,
-                            XclBiff eBiff, bool bStyle = false );
+                            bool bStyle = false );
     /** Fills the mn***Color base members from the mn***ColorId members. */
     void                SetFinalColors( const XclExpPalette& rPalette );
 
@@ -526,6 +524,8 @@ protected:  // access for XclExpDefaultXF
     sal_uInt16          mnXclNumFmt;        /// Excel number format index.
 
 private:
+    using               XclXFBase::Equals;
+
     /** Initializes with default values. */
     void                InitDefault();
     /** Fills all members from the passed item set.
