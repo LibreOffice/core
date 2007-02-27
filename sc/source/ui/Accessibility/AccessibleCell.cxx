@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:42:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:53:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,8 @@ ScAccessibleCell::ScAccessibleCell(
     ScAccessibleCellBase(rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
         ::accessibility::AccessibleStaticTextBase(CreateEditSource(pViewShell, rCellAddress, eSplitPos)),
     mpViewShell(pViewShell),
-    meSplitPos(eSplitPos),
-    mpAccDoc(pAccDoc)
+    mpAccDoc(pAccDoc),
+    meSplitPos(eSplitPos)
 {
     if (pViewShell)
         pViewShell->AddAccessibilityObject(*this);
@@ -414,7 +414,7 @@ sal_Bool ScAccessibleCell::IsEditable(
 }
 
 sal_Bool ScAccessibleCell::IsOpaque(
-    const uno::Reference<XAccessibleStateSet>& rxParentStates)
+    const uno::Reference<XAccessibleStateSet>& /* rxParentStates */)
 {
     // test whether there is a background color
     sal_Bool bOpaque(sal_True);
@@ -524,9 +524,9 @@ void ScAccessibleCell::AddRelation(const ScRange& rRange,
         if (pTargetSet)
         {
             sal_uInt32 nPos(0);
-            for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); ++nRow)
+            for (sal_uInt32 nRow = rRange.aStart.Row(); nRow <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Row()); ++nRow)
             {
-                for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); ++nCol)
+                for (sal_uInt32 nCol = rRange.aStart.Col(); nCol <= sal::static_int_cast<sal_uInt32>(rRange.aEnd.Col()); ++nCol)
                 {
                     pTargetSet[nPos] = xTable->getAccessibleCellAt(nRow, nCol);
                     ++nPos;
