@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editutil.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:29:23 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:15:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,8 +266,8 @@ ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
                 BOOL bDeleteEnginePoolP )
             :
             pEnginePool( pEnginePoolP ),
-            bDeleteEnginePool( bDeleteEnginePoolP ),
             pDefaults( NULL ),
+            bDeleteEnginePool( bDeleteEnginePoolP ),
             bDeleteDefaults( FALSE )
 {
 }
@@ -276,8 +276,8 @@ ScEnginePoolHelper::ScEnginePoolHelper( SfxItemPool* pEnginePoolP,
 ScEnginePoolHelper::ScEnginePoolHelper( const ScEnginePoolHelper& rOrg )
             :
             pEnginePool( rOrg.bDeleteEnginePool ? rOrg.pEnginePool->Clone() : rOrg.pEnginePool ),
-            bDeleteEnginePool( rOrg.bDeleteEnginePool ),
             pDefaults( NULL ),
+            bDeleteEnginePool( rOrg.bDeleteEnginePool ),
             bDeleteDefaults( FALSE )
 {
 }
@@ -547,8 +547,8 @@ ScTabEditEngine::ScTabEditEngine( ScDocument* pDoc )
 }
 
 ScTabEditEngine::ScTabEditEngine( const ScPatternAttr& rPattern,
-            SfxItemPool* pEnginePool, SfxItemPool* pTextObjectPool )
-        : ScEditEngineDefaulter( pEnginePool )
+            SfxItemPool* pEnginePoolP, SfxItemPool* pTextObjectPool )
+        : ScEditEngineDefaulter( pEnginePoolP )
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
@@ -580,7 +580,7 @@ String lcl_GetRomanStr( USHORT nNo )
     {
 //      i, ii, iii, iv, v, vi, vii, vii, viii, ix
 //                          (Dummy),1000,500,100,50,10,5,1
-        sal_Char *cRomanArr = "mdclxvi--";  // +2 Dummy-Eintraege !!
+        const sal_Char *cRomanArr = "mdclxvi--";    // +2 Dummy-Eintraege !!
         USHORT nMask = 1000;
         while( nMask )
         {
@@ -631,7 +631,7 @@ String lcl_GetCharStr( USHORT nNo )
         if( !nCalc )
             nCalc = coDiff;
         aStr.Insert( (sal_Unicode)('a' - 1 + nCalc ), 0 );
-        nNo -= nCalc;
+        nNo = sal::static_int_cast<USHORT>( nNo - nCalc );
         if( nNo )
             nNo /= coDiff;
     } while( nNo );
@@ -680,14 +680,14 @@ ScHeaderFieldData::ScHeaderFieldData()
     eNumType = SVX_ARABIC;
 }
 
-ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePool, BOOL bDeleteEnginePool )
-        : ScEditEngineDefaulter( pEnginePool, bDeleteEnginePool )
+ScHeaderEditEngine::ScHeaderEditEngine( SfxItemPool* pEnginePoolP, BOOL bDeleteEnginePoolP )
+        : ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
 }
 
 String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-                                    USHORT nPara, USHORT nPos,
-                                    Color*& rTxtColor, Color*& rFldColor )
+                                    USHORT /* nPara */, USHORT /* nPos */,
+                                    Color*& /* rTxtColor */, Color*& /* rFldColor */ )
 {
     String aRet;
     const SvxFieldData* pFieldData = rField.GetField();
@@ -738,10 +738,10 @@ String __EXPORT ScHeaderEditEngine::CalcFieldValue( const SvxFieldItem& rField,
 //
 //------------------------------------------------------------------------
 
-ScFieldEditEngine::ScFieldEditEngine( SfxItemPool* pEnginePool,
-            SfxItemPool* pTextObjectPool, BOOL bDeleteEnginePool )
+ScFieldEditEngine::ScFieldEditEngine( SfxItemPool* pEnginePoolP,
+            SfxItemPool* pTextObjectPool, BOOL bDeleteEnginePoolP )
         :
-        ScEditEngineDefaulter( pEnginePool, bDeleteEnginePool ),
+        ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP ),
         bExecuteURL( TRUE )
 {
     if ( pTextObjectPool )
@@ -752,8 +752,8 @@ ScFieldEditEngine::ScFieldEditEngine( SfxItemPool* pEnginePool,
 }
 
 String __EXPORT ScFieldEditEngine::CalcFieldValue( const SvxFieldItem& rField,
-                                    USHORT nPara, USHORT nPos,
-                                    Color*& rTxtColor, Color*& rFldColor )
+                                    USHORT /* nPara */, USHORT /* nPos */,
+                                    Color*& rTxtColor, Color*& /* rFldColor */ )
 {
     String aRet;
     const SvxFieldData* pFieldData = rField.GetField();
@@ -808,9 +808,9 @@ void __EXPORT ScFieldEditEngine::FieldClicked( const SvxFieldItem& rField, USHOR
 
 //------------------------------------------------------------------------
 
-ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePool,
-            SfxItemPool* pTextObjectPool, BOOL bDeleteEnginePool ) :
-    ScEditEngineDefaulter( pEnginePool, bDeleteEnginePool )
+ScNoteEditEngine::ScNoteEditEngine( SfxItemPool* pEnginePoolP,
+            SfxItemPool* pTextObjectPool, BOOL bDeleteEnginePoolP ) :
+    ScEditEngineDefaulter( pEnginePoolP, bDeleteEnginePoolP )
 {
     if ( pTextObjectPool )
         SetEditTextObjectPool( pTextObjectPool );
