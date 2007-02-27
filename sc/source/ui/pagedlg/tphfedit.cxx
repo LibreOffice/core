@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:22:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:37:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,10 +229,10 @@ ScEditWindow* GetScEditWindow ()
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
 //CHINA001
-//CHINA001 #define SET_CMD(i,id) \
-//CHINA001 aCmd  = aDel;                            \
-//CHINA001 aCmd += ScGlobal::GetRscString( id );    \
-//CHINA001 aCmd += aDel;                            \
+//CHINA001 #define SET_CMD(i,id) x
+//CHINA001 aCmd  = aDel;                            x
+//CHINA001 aCmd += ScGlobal::GetRscString( id );    x
+//CHINA001 aCmd += aDel;                            x
 //CHINA001 aCmdArr[i] = aCmd;
 //CHINA001
 //CHINA001 // -----------------------------------------------------------------------
@@ -779,7 +779,7 @@ long ScExtIButton::PreNotify( NotifyEvent& rNEvt )
     return ImageButton::PreNotify(rNEvt );
 }
 
-IMPL_LINK( ScExtIButton, TimerHdl, Timer*, pTi)
+IMPL_LINK( ScExtIButton, TimerHdl, Timer*, EMPTYARG )
 {
     StartPopup();
     return 0;
