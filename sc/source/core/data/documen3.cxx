@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen3.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:59:23 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1460,7 +1460,6 @@ Rectangle ScDocument::GetEmbeddedRect() const                       // 1/100 mm
     else
     {
         SCCOL i;
-        SCROW j;
 
         for (i=0; i<aEmbedRange.aStart.Col(); i++)
             aRect.Left() += pTable->GetColWidth(i);
@@ -1794,7 +1793,6 @@ Rectangle ScDocument::GetMMRect( SCCOL nStartCol, SCROW nStartRow,
     }
 
     SCCOL i;
-    SCROW j;
     Rectangle aRect;
 
     for (i=0; i<nStartCol; i++)
