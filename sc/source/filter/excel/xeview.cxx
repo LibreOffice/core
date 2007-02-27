@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:05:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,8 +155,8 @@ void XclExpScl::Shorten( sal_uInt16 nFactor )
 {
     while( (mnNum % nFactor == 0) && (mnDenom % nFactor == 0) )
     {
-        mnNum /= nFactor;
-        mnDenom /= nFactor;
+        mnNum = mnNum / nFactor;
+        mnDenom = mnDenom / nFactor;
     }
 }
 
@@ -168,7 +168,7 @@ void XclExpScl::WriteBody( XclExpStream& rStrm )
 
 // ----------------------------------------------------------------------------
 
-XclExpPane::XclExpPane( const XclExpRoot& rRoot, const XclTabViewData& rData ) :
+XclExpPane::XclExpPane( const XclTabViewData& rData ) :
     XclExpRecord( EXC_ID_PANE, 10 ),
     mnSplitX( rData.mnSplitX ),
     mnSplitY( rData.mnSplitY ),
@@ -392,7 +392,7 @@ void XclExpTabViewSettings::WritePane( XclExpStream& rStrm ) const
 //  #i43553# GCC 3.3 parse error
 //        XclExpPane( GetRoot(), maData ).Save( rStrm );
     {
-        XclExpPane aPane( GetRoot(), maData );
+        XclExpPane aPane( maData );
         aPane.Save( rStrm );
     }
 }
