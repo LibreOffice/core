@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen4.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:04:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:01:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,10 +320,10 @@ BOOL ScDocument::GetNextMarkedCell( SCCOL& rCol, SCROW& rRow, SCTAB nTab,
 BOOL ScDocument::ReplaceStyle(const SvxSearchItem& rSearchItem,
                               SCCOL nCol, SCROW nRow, SCTAB nTab,
                               ScMarkData& rMark,
-                              BOOL bIsUndo)
+                              BOOL bIsUndoP)
 {
     if (pTab[nTab])
-        return pTab[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndo);
+        return pTab[nTab]->ReplaceStyle(rSearchItem, nCol, nRow, rMark, bIsUndoP);
     else
         return FALSE;
 }
@@ -446,6 +446,10 @@ BOOL ScDocument::GetSelectionFunction( ScSubTotalFunc eFunc,
                 else
                     aData.bError = TRUE;
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
 
     if (aData.bError)
@@ -472,9 +476,9 @@ double ScDocument::RoundValueAsShown( double fVal, ULONG nFormat )
                 case NUMBERFORMAT_SCIENTIFIC:   // 1,23e-3 == 0,00123
                 {
                     if ( fVal > 0.0 )
-                        nPrecision -= (short)floor( log10( fVal ) );
+                        nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( fVal ) ) );
                     else if ( fVal < 0.0 )
-                        nPrecision -= (short)floor( log10( -fVal ) );
+                        nPrecision = sal::static_int_cast<short>( nPrecision - (short)floor( log10( -fVal ) ) );
                     break;
                 }
             }
@@ -1131,7 +1135,7 @@ void ScDocument::CompareDocument( ScDocument& rOtherDoc )
             for (nThisRow = 0; nThisRow <= nThisEndRow; nThisRow++)
             {
                 SCROW nOtherRow = pOtherRows[nThisRow];
-                for (SCCOL nThisCol = 0; nThisCol <= nThisEndCol; nThisCol++)
+                for (nThisCol = 0; nThisCol <= nThisEndCol; nThisCol++)
                 {
                     SCCOL nOtherCol = static_cast<SCCOL>(pOtherCols[nThisCol]);
                     ScAddress aThisPos( nThisCol, nThisRow, nThisTab );
