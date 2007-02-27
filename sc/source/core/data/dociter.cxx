@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dociter.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:51:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,16 +231,16 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument,
                                     SCCOL nECol, SCROW nERow, SCTAB nETab,
                                     BOOL bSTotal, BOOL bTextZero ) :
     pDoc( pDocument ),
+    nNumFmtIndex(0),
     nStartCol( nSCol),
     nStartRow( nSRow),
     nStartTab( nSTab ),
     nEndCol( nECol ),
     nEndRow( nERow),
     nEndTab( nETab ),
-    bSubTotal(bSTotal),
     nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-    nNumFmtIndex(0),
     bNumValid( FALSE ),
+    bSubTotal(bSTotal),
     bNextValid( FALSE ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
     bTextAsZero( bTextZero )
@@ -270,16 +270,16 @@ ScValueIterator::ScValueIterator( ScDocument* pDocument,
 ScValueIterator::ScValueIterator( ScDocument* pDocument, const ScRange& rRange,
             BOOL bSTotal, BOOL bTextZero ) :
     pDoc( pDocument ),
+    nNumFmtIndex(0),
     nStartCol( rRange.aStart.Col() ),
     nStartRow( rRange.aStart.Row() ),
     nStartTab( rRange.aStart.Tab() ),
     nEndCol( rRange.aEnd.Col() ),
     nEndRow( rRange.aEnd.Row() ),
     nEndTab( rRange.aEnd.Tab() ),
-    bSubTotal(bSTotal),
     nNumFmtType( NUMBERFORMAT_UNDEFINED ),
-    nNumFmtIndex(0),
     bNumValid( FALSE ),
+    bSubTotal(bSTotal),
     bNextValid( FALSE ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() ),
     bTextAsZero( bTextZero )
@@ -379,7 +379,7 @@ BOOL ScValueIterator::GetThis(double& rValue, USHORT& rErr)
 
                         return TRUE;                                    // gefunden
                     }
-                    break;
+//                    break;
                     case CELLTYPE_FORMULA:
                     {
                         if (!bSubTotal || !((ScFormulaCell*)pCell)->IsSubTotal())
@@ -410,6 +410,10 @@ BOOL ScValueIterator::GetThis(double& rValue, USHORT& rErr)
                         }
                     }
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
         }
@@ -480,11 +484,11 @@ BOOL ScValueIterator::GetNext(double& rValue, USHORT& rErr)
 //------------------------------------------------------------------------
 
 ScQueryValueIterator::ScQueryValueIterator(ScDocument* pDocument, SCTAB nTable, const ScQueryParam& rParam) :
-    pDoc( pDocument ),
-    nTab( nTable),
     aParam (rParam),
-    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
+    pDoc( pDocument ),
     nNumFmtIndex(0),
+    nTab( nTable),
+    nNumFmtType( NUMBERFORMAT_UNDEFINED ),
     bCalcAsShown( pDocument->GetDocOptions().IsCalcAsShown() )
 {
     nCol = aParam.nCol1;
@@ -555,7 +559,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
                             rErr = 0;
                             return TRUE;        // gefunden
                         }
-                        break;
+//                        break;
                     case CELLTYPE_FORMULA:
                         {
                             if (((ScFormulaCell*)pCell)->IsValue())
@@ -582,7 +586,7 @@ BOOL ScQueryValueIterator::GetThis(double& rValue, USHORT& rErr)
         else
             nRow = aParam.nRow2 + 1; // Naechste Spalte
     }
-    return FALSE;
+//    return FALSE;
 }
 
 BOOL ScQueryValueIterator::GetFirst(double& rValue, USHORT& rErr)
@@ -760,9 +764,9 @@ ScBaseCell* ScCellIterator::GetNext()
 
 ScQueryCellIterator::ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
              const ScQueryParam& rParam, BOOL bMod ) :
+    aParam (rParam),
     pDoc( pDocument ),
     nTab( nTable),
-    aParam (rParam),
     nStopOnMismatch( nStopOnMismatchDisabled ),
     nTestEqualCondition( nTestEqualConditionDisabled ),
     bAdvanceQuery( FALSE ),
@@ -958,7 +962,7 @@ BOOL ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
             nFoundCol = GetCol();
             nFoundRow = GetRow();
             nColRowSave = nColRow;
-        } while ( !IsEqualConditionFulfilled() && (pNext = GetNext()) );
+        } while ( !IsEqualConditionFulfilled() && (pNext = GetNext()) != NULL );
         // There may be no pNext but equal condition fulfilled if regular
         // expressions are involved. Keep the found entry and proceed.
         if (!pNext && !IsEqualConditionFulfilled())
@@ -985,6 +989,10 @@ BOOL ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
                     case SC_GREATER_EQUAL :
                         rEntry.eOp = SC_EQUAL;
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             else
@@ -1022,6 +1030,10 @@ BOOL ScQueryCellIterator::FindEqualOrSortedLastInRange( SCCOL& nFoundCol,
                     case SC_GREATER_EQUAL :
                         rEntry.eOp = SC_EQUAL;
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             else
@@ -1124,6 +1136,10 @@ ScBaseCell* ScQueryCellIterator::BinarySearch()
                     fLastInRangeValue =
                         static_cast<ScFormulaCell*>(pCell)->GetValue();
                     break;
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
         }
     }
@@ -1569,7 +1585,7 @@ const ScPatternAttr* ScHorizontalAttrIterator::GetNext( SCCOL& rCol1, SCCOL& rCo
         nCol = nStartCol;           // wieder links anfangen
     }
 
-    return NULL;
+//    return NULL;
 }
 
 //-------------------------------------------------------------------------------
@@ -1676,10 +1692,10 @@ ScDocAttrIterator::ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
                                     SCCOL nCol2, SCROW nRow2) :
     pDoc( pDocument ),
     nTab( nTable ),
-    nCol( nCol1 ),
     nEndCol( nCol2 ),
     nStartRow( nRow1 ),
-    nEndRow( nRow2 )
+    nEndRow( nRow2 ),
+    nCol( nCol1 )
 {
     if ( ValidTab(nTab) && pDoc->pTab[nTab] )
         pColIter = pDoc->pTab[nTab]->aCol[nCol].CreateAttrIterator( nStartRow, nEndRow );
