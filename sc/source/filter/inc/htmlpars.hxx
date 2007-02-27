@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlpars.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 08:27:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ public:
 
 // ============================================================================
 
-SV_DECL_VARARR_SORT( ScHTMLColOffset, ULONG, 16, 4);
+SV_DECL_VARARR_SORT( ScHTMLColOffset, ULONG, 16, 4)
 
 struct ScHTMLTableStackEntry
 {
@@ -115,7 +115,7 @@ struct ScHTMLTableStackEntry
                             {}
                         ~ScHTMLTableStackEntry() {}
 };
-DECLARE_STACK( ScHTMLTableStack, ScHTMLTableStackEntry* );
+DECLARE_STACK( ScHTMLTableStack, ScHTMLTableStackEntry* )
 
 struct ScHTMLAdjustStackEntry
 {
@@ -128,7 +128,7 @@ struct ScHTMLAdjustStackEntry
                             nCurRow( nCRow )
                             {}
 };
-DECLARE_STACK( ScHTMLAdjustStack, ScHTMLAdjustStackEntry* );
+DECLARE_STACK( ScHTMLAdjustStack, ScHTMLAdjustStackEntry* )
 
 
 // ============================================================================
@@ -246,7 +246,7 @@ struct ScHTMLPos
     inline void                 Set( const ScAddress& rAddr )
                                     { Set( rAddr.Col(), rAddr.Row() ); }
     inline void                 Move( SCsCOL nColDiff, SCsROW nRowDiff )
-                                    { mnCol += nColDiff; mnRow += nRowDiff; }
+                                    { mnCol = mnCol + nColDiff; mnRow = mnRow + nRowDiff; }
     inline ScAddress            MakeAddr() const
                                     { return ScAddress( mnCol, mnRow, 0 ); }
 };
@@ -279,7 +279,7 @@ struct ScHTMLSize
     inline void                 Set( SCCOL nCols, SCROW nRows )
                                     { mnCols = nCols; mnRows = nRows; }
     inline void                 Expand( SCsCOL nColDiff, SCsROW nRowDiff )
-                                    { mnCols += nColDiff; mnRows += nRowDiff; }
+                                    { mnCols = mnCols + nColDiff; mnRows = mnRows + nRowDiff; }
 };
 
 inline bool operator==( const ScHTMLSize& rSize1, const ScHTMLSize& rSize2 )
