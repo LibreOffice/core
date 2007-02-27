@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh7.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:41:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:08:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 
 //------------------------------------------------------------------
 
-void ScDocShell::GetDrawObjState( SfxItemSet &rSet )
+void ScDocShell::GetDrawObjState( SfxItemSet & /* rSet */ )
 {
     //  SID_SC_ACTIVEOBJECT (SelectedObject) - removed (old Basic)
 }
