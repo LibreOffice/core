@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 13:51:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ protected:
 public:
     virtual                 ~ExcRecordList();
 
-                            List::Count;
+    using                   List::Count;
 
     inline ExcRecord*       First( void )               { return ( ExcRecord* ) List::First(); }
     inline ExcRecord*       Next( void )                { return ( ExcRecord* ) List::Next(); }
@@ -514,6 +514,8 @@ public:
     XclExpRecordRef     CreateRecord( SCTAB nScTab );
 
 private:
+    using               XclExpRoot::CreateRecord;
+
     typedef ScfRef< ExcAutoFilterRecs >             XclExpTabFilterRef;
     typedef ::std::map< SCTAB, XclExpTabFilterRef > XclExpTabFilterMap;
 
