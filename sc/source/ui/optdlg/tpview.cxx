@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpview.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:18:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,7 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aHandleCB( this,        ResId(CB_HANDLES        )),
     aBigHandleCB( this,     ResId(CB_BIGHANDLES     )),
 
+    aSeparator1FL    (this, ResId(FL_SEPARATOR1 )),
     aDisplayGB( this,   ResId(GB_DISPLAY)),
     aFormulaCB( this,   ResId(CB_FORMULA)),
     aNilCB( this,       ResId(CB_NIL    )),
@@ -97,19 +98,18 @@ ScTpContentOptions::ScTpContentOptions( Window*         pParent,
     aObjectGB( this,    ResId(GB_OBJECT )),
     aObjGrfFT( this,    ResId(FT_OBJGRF )),
     aObjGrfLB( this,    ResId(LB_OBJGRF )),
-
     aDiagramFT( this,   ResId(FT_DIAGRAM)),
     aDiagramLB( this,   ResId(LB_DIAGRAM)),
     aDrawFT( this,      ResId(FT_DRAW   )),
     aDrawLB( this,      ResId(LB_DRAW   )),
+
+    aSeparator2FL    (this, ResId(FL_SEPARATOR2)),
     aWindowGB( this,        ResId(GB_WINDOW         )),
     aRowColHeaderCB(this,   ResId(CB_ROWCOLHEADER   )),
     aHScrollCB( this,       ResId(CB_HSCROLL        )),
     aVScrollCB( this,       ResId(CB_VSCROLL        )),
     aTblRegCB( this,        ResId(CB_TBLREG         )),
     aOutlineCB( this,       ResId(CB_OUTLINE        )),
-    aSeparator1FL    (this, ResId(FL_SEPARATOR1 )),
-    aSeparator2FL    (this, ResId(FL_SEPARATOR2)),
     pLocalOptions(0)
 {
     FreeResource();
@@ -275,10 +275,10 @@ void ScTpContentOptions::ActivatePage( const SfxItemSet& rSet)
 
 --------------------------------------------------*/
 
-int ScTpContentOptions::DeactivatePage( SfxItemSet* pSet )
+int ScTpContentOptions::DeactivatePage( SfxItemSet* pSetP )
 {
-    if(pSet)
-        FillItemSet(*pSet);
+    if(pSetP)
+        FillItemSet(*pSetP);
     return SfxTabPage::LEAVE_PAGE;
 }
 /*-----------------11.01.97 13.43-------------------
@@ -307,7 +307,7 @@ IMPL_LINK( ScTpContentOptions, SelLbObjHdl, ListBox*, pLb )
 
 IMPL_LINK( ScTpContentOptions, CBHdl, CheckBox*, pBtn )
 {
-    ScViewOption eOption;
+    ScViewOption eOption = VOPT_FORMULAS;
     BOOL         bChecked = pBtn->IsChecked();
 
     if (      &aFormulaCB   == pBtn )   eOption = VOPT_FORMULAS;
@@ -432,11 +432,11 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
     aTabFT( this,           ResId( FT_TAB           )),
     aTabMF( this,           ResId( MF_TAB           )),
     aSeparatorFL( this,     ResId( FL_SEPARATOR         )),
+    aLinkGB     (this, ResId(GB_LINK    )),
     aLinkFT(this, ResId(FT_UPDATE_LINKS )),
     aAlwaysRB   (this, ResId(RB_ALWAYS  )),
     aRequestRB  (this, ResId(RB_REQUEST )),
     aNeverRB    (this, ResId(RB_NEVER   )),
-    aLinkGB     (this, ResId(GB_LINK    )),
 
     aOptionsGB( this,       ResId( GB_OPTIONS   )),
     aAlignCB  ( this,       ResId( CB_ALIGN     )),
@@ -475,6 +475,11 @@ ScTpLayoutOptions::ScTpLayoutOptions(   Window* pParent,
                 // nur diese Metriken benutzen
                 USHORT nPos = aUnitLB.InsertEntry( sMetric );
                 aUnitLB.SetEntryData( nPos, (void*)(long)eFUnit );
+            }
+            break;
+            default:
+            {
+                // added to avoid warnings
             }
         }
     }
@@ -520,7 +525,7 @@ BOOL    ScTpLayoutOptions::FillItemSet( SfxItemSet& rCoreSet )
     if(aTabMF.GetText() != aTabMF.GetSavedValue())
     {
         rCoreSet.Put(SfxUInt16Item(SID_ATTR_DEFTABSTOP,
-                    aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP))));
+                    sal::static_int_cast<UINT16>( aTabMF.Denormalize(aTabMF.GetValue(FUNIT_TWIP)) )));
         bRet = TRUE;
     }
 
@@ -646,6 +651,10 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
         case LM_ALWAYS:     aAlwaysRB.  Check();    break;
         case LM_NEVER:      aNeverRB.   Check();    break;
         case LM_ON_DEMAND:  aRequestRB. Check();    break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     if(SFX_ITEM_SET == rCoreSet.GetItemState(SID_SC_INPUT_SELECTION, FALSE, &pItem))
         aAlignCB.Check(((const SfxBoolItem*)pItem)->GetValue());
@@ -692,17 +701,17 @@ void    ScTpLayoutOptions::Reset( const SfxItemSet& rCoreSet )
 
 --------------------------------------------------*/
 
-void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& rCoreSet)
+void    ScTpLayoutOptions::ActivatePage( const SfxItemSet& /* rCoreSet */ )
 {
 }
 /*-----------------11.01.97 12.46-------------------
 
 --------------------------------------------------*/
 
-int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSet )
+int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
 {
-    if(pSet)
-        FillItemSet(*pSet);
+    if(pSetP)
+        FillItemSet(*pSetP);
     return SfxTabPage::LEAVE_PAGE;
 }
 
@@ -717,7 +726,7 @@ IMPL_LINK(ScTpLayoutOptions, MetricHdl, ListBox*, EMPTYARG)
     if(nMPos != USHRT_MAX)
     {
         FieldUnit eFieldUnit = (FieldUnit)(long)aUnitLB.GetEntryData( nMPos );
-        long nVal =
+        sal_Int64 nVal =
             aTabMF.Denormalize( aTabMF.GetValue( FUNIT_TWIP ) );
         ::SetFieldUnit( aTabMF, eFieldUnit );
         aTabMF.SetValue( aTabMF.Normalize( nVal ), FUNIT_TWIP );
