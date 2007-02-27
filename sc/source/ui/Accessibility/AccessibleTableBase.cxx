@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:26:58 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:56:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,21 +260,21 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
     return aSequence;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 nRow )
+sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
     return sal_False;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 nColumn )
+sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
     return sal_False;
 }
 
-uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 nRow, sal_Int32 nColumn )
+uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
                     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
@@ -298,7 +298,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSumma
     return xAccessible;
 }
 
-sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
+sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
     throw (uno::RuntimeException, lang::IndexOutOfBoundsException)
 {
     DBG_ERROR("not implemented yet");
@@ -423,7 +423,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ///=====  XAccessibleSelection  ===========================================
 
 void SAL_CALL
-        ScAccessibleTableBase::selectAccessibleChild( sal_Int32 nChildIndex )
+        ScAccessibleTableBase::selectAccessibleChild( sal_Int32 /* nChildIndex */ )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
 }
@@ -460,7 +460,7 @@ sal_Int32 SAL_CALL
 }
 
 uno::Reference<XAccessible > SAL_CALL
-        ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     uno::Reference < XAccessible > xAccessible;
@@ -468,7 +468,7 @@ uno::Reference<XAccessible > SAL_CALL
 }
 
 void SAL_CALL
-        ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
+        ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
 }
