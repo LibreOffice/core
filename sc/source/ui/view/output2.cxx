@@ -4,9 +4,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:48:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:54:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,21 +177,21 @@ public:
 
 ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, BOOL bPTL) :
     pOutput     ( pData ),
-    bPixelToLogic( bPTL ),
     pPattern    ( NULL ),
     pCondSet    ( NULL ),
-    pMargin     ( NULL ),
-    nOriginalWidth( 0 ),
-    nIndent     ( 0 ),
-    bRotated    ( FALSE ),
+    eAttrOrient ( SVX_ORIENTATION_STANDARD ),
     eAttrHorJust( SVX_HOR_JUSTIFY_STANDARD ),
     eAttrVerJust( SVX_VER_JUSTIFY_BOTTOM ),
-    eAttrOrient ( SVX_ORIENTATION_STANDARD ),
+    pMargin     ( NULL ),
+    nIndent     ( 0 ),
+    bRotated    ( FALSE ),
+    nOriginalWidth( 0 ),
+    pLastCell   ( NULL ),
+    nValueFormat( 0 ),
     bLineBreak  ( FALSE ),
     bRepeat     ( FALSE ),
     bShrink     ( FALSE ),
-    nValueFormat( 0 ),
-    pLastCell   ( NULL )
+    bPixelToLogic( bPTL )
 {
     pFormatter = pData->pDoc->GetFormatTable();
 
@@ -375,7 +375,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Zahlenformat
 
-    ULONG nOld = nValueFormat;
+//    ULONG nOld = nValueFormat;
     nValueFormat = pPattern->GetNumberFormat( pFormatter, pCondSet );
 
 /*  s.u.
@@ -644,6 +644,10 @@ void ScOutputData::SetSyntaxColor( Font* pFont, ScBaseCell* pCell )
             case CELLTYPE_FORMULA:
                 pFont->SetColor( *pFormulaColor );
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 }
@@ -673,6 +677,10 @@ void ScOutputData::SetEditSyntaxColor( EditEngine& rEngine, ScBaseCell* pCell )
             case CELLTYPE_FORMULA:
                 aColor = *pFormulaColor;
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         lcl_SetEditColor( rEngine, aColor );
     }
@@ -921,9 +929,9 @@ BOOL ScOutputData::IsEmptyCellText( RowInfo* pThisRowInfo, SCCOL nX, SCROW nY )
     return bEmpty;
 }
 
-void ScOutputData::GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTab, ScBaseCell*& rpCell )
+void ScOutputData::GetVisibleCell( SCCOL nCol, SCROW nRow, SCTAB nTabP, ScBaseCell*& rpCell )
 {
-    pDoc->GetCell( nCol, nRow, nTab, rpCell );
+    pDoc->GetCell( nCol, nRow, nTabP, rpCell );
     if ( rpCell && IsEmptyCellText( NULL, nCol, nRow ) )
         rpCell = NULL;
 }
@@ -1065,7 +1073,7 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
     {
         long nColWidth = ( nCellX+i <= nX2 ) ?
                 pRowInfo[0].pCellInfo[nCellX+i+1].nWidth :
-                (long) ( pDoc->GetColWidth( nCellX+i, nTab ) * nPPTX );
+                (long) ( pDoc->GetColWidth( sal::static_int_cast<SCCOL>(nCellX+i), nTab ) * nPPTX );
         nMergeSizeX += nColWidth;
     }
     long nMergeSizeY = 0;
@@ -1115,6 +1123,10 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, long nPosX, long nPosY
                 nLeftMissing = nMissing / 2;
                 nRightMissing = nMissing - nLeftMissing;
                 break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
 
         // nLeftMissing, nRightMissing are logical, eHorJust values are visual
@@ -1228,7 +1240,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
     BOOL bWasIdleDisabled = pDoc->IsIdleDisabled();
     pDoc->DisableIdle( TRUE );
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
-    UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
+//    UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
 
     ScDrawStringsVars aVars( this, bPixelToLogic );
 
@@ -1245,7 +1257,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
 
     SCCOL nLastContentCol = MAXCOL;
     if ( nX2 < MAXCOL )
-        nLastContentCol -= pDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT );
+        nLastContentCol = sal::static_int_cast<SCCOL>(
+            nLastContentCol - pDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT ) );
     SCCOL nLoopStartX = nX1;
     if ( nX1 > 0 )
         --nLoopStartX;          // start before nX1 for rest of long text to the left
@@ -1268,7 +1281,7 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
         if ( pThisRowInfo->bChanged )
         {
             SCROW nY = pThisRowInfo->nRowNo;
-            long nCellHeight = (long) pThisRowInfo->nHeight;
+//            long nCellHeight = (long) pThisRowInfo->nHeight;
             long nPosX = nInitPosX;
             if ( nLoopStartX < nX1 )
                 nPosX -= pRowInfo[0].pCellInfo[nLoopStartX+1].nWidth * nLayoutSign;
@@ -1451,7 +1464,8 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                     nNeededWidth = aVars.GetTextSize().Width() + nTotalMargin;
                     // GetOutputArea gives justfied rectangles
                     GetOutputArea( nX, nArrY, nPosX, nPosY, nCellX, nCellY, nNeededWidth,
-                                    *pPattern, eOutHorJust, bCellIsValue || bRepeat || bShrink, bBreak, FALSE,
+                                    *pPattern, sal::static_int_cast<USHORT>(eOutHorJust),
+                                    bCellIsValue || bRepeat || bShrink, bBreak, FALSE,
                                     aAlignRect, aClipRect, bLeftClip, bRightClip );
 
                     if ( bShrink )
@@ -1611,6 +1625,10 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                             (long) ( aVars.GetLeftTotal() * nPPTX ) -
                                             (long) ( aVars.GetMargin()->GetRightMargin() * nPPTX ) ) / 2;
                                 break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
 
                         long nTestClipHeight = aVars.GetTextSize().Height();
@@ -1639,6 +1657,10 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                     nTestClipHeight += Abs( nTop - nBot );
                                 }
                                 break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
 
                         if ( nTestClipHeight > nOutHeight )
@@ -1696,6 +1718,10 @@ void ScOutputData::DrawStrings( BOOL bPixelToLogic )
                                 nJustPosY += aVars.GetTextSize().Height();
                                 nJustPosX += aVars.GetAscent();
                                 break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
 
                         // When clipping, the visible part is now completely defined by the alignment,
@@ -1821,6 +1847,10 @@ BOOL lcl_SafeIsValue( ScBaseCell* pCell )
                     bRet = TRUE;
             }
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return bRet;
 }
@@ -1978,7 +2008,7 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
 
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
-    UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
+//    UINT32 nMinHeight = aMinSize.Height() / 200;                // 1/2 Pixel
 
     SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
 
@@ -2011,13 +2041,14 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
     //! store nLastContentCol as member!
     SCCOL nLastContentCol = MAXCOL;
     if ( nX2 < MAXCOL )
-        nLastContentCol -= pDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT );
+        nLastContentCol = sal::static_int_cast<SCCOL>(
+            nLastContentCol - pDoc->GetEmptyLinesInBlock( nX2+1, nY1, nTab, MAXCOL, nY2, nTab, DIR_RIGHT ) );
 
     long nRowPosY = nScrY;
     for (SCSIZE nArrY=0; nArrY+1<nArrCount; nArrY++)            // 0 fuer Reste von zusammengefassten
     {
         RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-        long nCellHeight = (long) pThisRowInfo->nHeight;
+//        long nCellHeight = (long) pThisRowInfo->nHeight;
         if (nArrY==1) nRowPosY = nScrY;                         // vorher wird einzeln berechnet
 
         if ( pThisRowInfo->bChanged || nArrY==0 )
@@ -2074,8 +2105,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                     if ( bDoCell && bEditMode && nCellX == nEditCol && nCellY == nEditRow )
                         bDoCell = FALSE;
 
-                    const ScPatternAttr* pPattern;
-                    const SfxItemSet* pCondSet;
+                    const ScPatternAttr* pPattern = NULL;
+                    const SfxItemSet* pCondSet = NULL;
                     if (bDoCell)
                     {
                         if ( nCellY == nY && nCellX >= nX1 && nCellX <= nX2 &&
@@ -2127,7 +2158,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             lcl_ClearEdit( *pEngine );      // also calls SetUpdateMode(FALSE)
 
 
-                        BOOL bVisChanged = FALSE;
                         BOOL bCellIsValue = lcl_SafeIsValue(pCell);
 
                         SvxCellHorJustify eHorJust = (SvxCellHorJustify)((const SvxHorJustifyItem&)
@@ -2239,7 +2269,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
 
                                 //! handle nArrY == 0
                                 GetOutputArea( nXForPos, nArrYForPos, nPosX, nPosY, nCellX, nCellY, 0,
-                                                *pPattern, eOutHorJust, bCellIsValue, TRUE, FALSE,
+                                                *pPattern, sal::static_int_cast<USHORT>(eOutHorJust),
+                                                bCellIsValue, TRUE, FALSE,
                                                 aAlignRect, aClipRect, bLeftClip, bRightClip );
 
                                 //! special ScEditUtil handling if formatting for printer
@@ -2513,14 +2544,16 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                             {
                                 // for break, the first GetOutputArea call is sufficient
                                 GetOutputArea( nXForPos, nArrYForPos, nPosX, nPosY, nCellX, nCellY, nNeededPixel,
-                                                *pPattern, eOutHorJust, bCellIsValue || bRepeat || bShrink, FALSE, FALSE,
+                                                *pPattern, sal::static_int_cast<USHORT>(eOutHorJust),
+                                                bCellIsValue || bRepeat || bShrink, FALSE, FALSE,
                                                 aAlignRect, aClipRect, bLeftClip, bRightClip );
 
                                 if ( bShrink )
                                 {
                                     BOOL bWidth = ( eOrient == SVX_ORIENTATION_STANDARD && !bAsianVertical );
                                     ShrinkEditEngine( *pEngine, aAlignRect,
-                                        nLeftM, nTopM, nRightM, nBottomM, bWidth, eOrient, 0, bPixelToLogic,
+                                        nLeftM, nTopM, nRightM, nBottomM, bWidth,
+                                        sal::static_int_cast<USHORT>(eOrient), 0, bPixelToLogic,
                                         nEngineWidth, nEngineHeight, nNeededPixel, bLeftClip, bRightClip );
                                 }
 
@@ -2754,11 +2787,11 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                         {
                                             pEngine->SetUpdateMode( FALSE );
 
-                                            SvxAdjust eSvxAdjust =
+                                            SvxAdjust eEditAdjust =
                                                 (eHorJust==SVX_HOR_JUSTIFY_CENTER) ?
                                                     SVX_ADJUST_CENTER : SVX_ADJUST_RIGHT;
                                             pEngine->SetDefaultItem(
-                                                SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
+                                                SvxAdjustItem( eEditAdjust, EE_PARA_JUST ) );
 
                                             // #55142# reset adjustment for the next cell
                                             pOldPattern = NULL;
@@ -3090,8 +3123,6 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
                             if ( bMerged )                              // Zusammengefasst
                             {
-                                const ScMergeAttr* pMerge =
-                                        (ScMergeAttr*)&pPattern->GetItem(ATTR_MERGE);
                                 SCCOL nCountX = pMerge->GetColMerge();
                                 for (SCCOL i=1; i<nCountX; i++)
                                     nOutWidth += (long) ( pDoc->GetColWidth(nX+i,nTab) * nPPTX );
@@ -3369,7 +3400,8 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                     nNeededWidth =  pRefDevice->LogicToPixel(Size(nNeededWidth,0)).Width();
 
                                 GetOutputArea( nX, nArrY, nCellStartX, nPosY, nCellX, nCellY, nNeededWidth,
-                                                *pPattern, eOutHorJust, FALSE, FALSE, TRUE,
+                                                *pPattern, sal::static_int_cast<USHORT>(eOutHorJust),
+                                                FALSE, FALSE, TRUE,
                                                 aAlignRect, aClipRect, bLeftClip, bRightClip );
 
                                 if ( bShrink )
@@ -3382,14 +3414,14 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
 
                                     // always do height
                                     ShrinkEditEngine( *pEngine, aAlignRect, nLeftM, nTopM, nRightM, nBottomM,
-                                        FALSE, eOrient, nAttrRotate, bPixelToLogic,
+                                        FALSE, sal::static_int_cast<USHORT>(eOrient), nAttrRotate, bPixelToLogic,
                                         nEngineWidth, nEngineHeight, nNeededPixel, bLeftClip, bRightClip );
 
                                     if ( eRotMode == SVX_ROTATE_MODE_STANDARD )
                                     {
                                         // do width only if rotating within the cell (standard mode)
                                         ShrinkEditEngine( *pEngine, aAlignRect, nLeftM, nTopM, nRightM, nBottomM,
-                                            TRUE, eOrient, nAttrRotate, bPixelToLogic,
+                                            TRUE, sal::static_int_cast<USHORT>(eOrient), nAttrRotate, bPixelToLogic,
                                             nEngineWidth, nEngineHeight, nNeededPixel, bLeftClip, bRightClip );
                                     }
 
