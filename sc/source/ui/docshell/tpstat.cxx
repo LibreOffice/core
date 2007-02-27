@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpstat.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:46:19 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:10:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,13 +61,13 @@ SfxTabPage* __EXPORT ScDocStatPage::Create( Window *pParent, const SfxItemSet& r
 
 ScDocStatPage::ScDocStatPage( Window *pParent, const SfxItemSet& rSet )
     :   SfxTabPage( pParent, ScResId(RID_SCPAGE_STAT), rSet ),
+        aFlInfo         ( this, ScResId( FL_INFO ) ),
         aFtTablesLbl    ( this, ScResId( FT_TABLES_LBL ) ),
         aFtTables       ( this, ScResId( FT_TABLES ) ),
         aFtCellsLbl     ( this, ScResId( FT_CELLS_LBL ) ),
         aFtCells        ( this, ScResId( FT_CELLS ) ),
         aFtPagesLbl     ( this, ScResId( FT_PAGES_LBL ) ),
-        aFtPages        ( this, ScResId( FT_PAGES ) ),
-        aFlInfo         ( this, ScResId( FL_INFO ) )
+        aFtPages        ( this, ScResId( FT_PAGES ) )
 {
     ScDocShell* pDocSh = PTR_CAST( ScDocShell, SfxObjectShell::Current() );
     ScDocStat   aDocStat;
@@ -93,14 +93,14 @@ __EXPORT ScDocStatPage::~ScDocStatPage()
 
 //------------------------------------------------------------------------
 
-BOOL __EXPORT ScDocStatPage::FillItemSet( SfxItemSet& rSet )
+BOOL __EXPORT ScDocStatPage::FillItemSet( SfxItemSet& /* rSet */ )
 {
     return FALSE;
 }
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScDocStatPage::Reset( const SfxItemSet& rSet )
+void __EXPORT ScDocStatPage::Reset( const SfxItemSet& /* rSet */ )
 {
 }
 
