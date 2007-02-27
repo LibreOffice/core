@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:27:13 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:38:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ FltError ScExportLotus123( SvStream& aStream, ScDocument* pDoc, ExportFormatLotu
             break;
         case ExpWK3:
             return eERR_NI;
-            break;
         default:
             return eERR_NI;
     }
