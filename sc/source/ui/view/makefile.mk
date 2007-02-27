@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:00:34 $
+#   last change: $Author: vg $ $Date: 2007-02-27 13:53:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,12 @@ SLOFILES =  \
 .ENDIF
 
 EXCEPTIONSFILES= \
+    $(SLO)$/dbfunc3.obj \
+    $(SLO)$/gridwin.obj \
+    $(SLO)$/invmerge.obj \
+    $(SLO)$/output2.obj \
+    $(SLO)$/pfuncache.obj \
+    $(SLO)$/spelldialog.obj \
     $(SLO)$/cellsh1.obj \
     $(SLO)$/drawvie4.obj \
     $(SLO)$/formatsh.obj \
