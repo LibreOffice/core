@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:27:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:38:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,7 +248,7 @@ void LotAttrCol::SetAttr( const SCROW nRow, const ScPatternAttr& rAttr )
 }
 
 
-void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const BOOL bClear )
+void LotAttrCol::Apply( const SCCOL nColNum, const SCTAB nTabNum, const BOOL /*bClear*/ )
 {
     ScDocument*     pDoc = pLotusRoot->pDoc;
     ENTRY*          pAkt = ( ENTRY* ) List::First();
