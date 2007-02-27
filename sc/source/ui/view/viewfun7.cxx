@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun7.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:52:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 14:01:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,11 +138,11 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if (aPos.Y() < 0) aPos.Y() = 0;
     }
 
-    ScDrawView* pDrawView = GetScDrawView();
+    ScDrawView* pScDrawView = GetScDrawView();
     if (bGroup)
-        pDrawView->BegUndo( ScGlobal::GetRscString( STR_UNDO_PASTE ) );
+        pScDrawView->BegUndo( ScGlobal::GetRscString( STR_UNDO_PASTE ) );
 
-    BOOL bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pDrawView->GetModel() );
+    BOOL bSameDoc = ( pDragEditView && pDragEditView->GetModel() == pScDrawView->GetModel() );
     if (bSameDoc)
     {
             // lokal kopieren - incl. Charts
@@ -154,7 +154,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
             // innerhalb einer Page verschieben?
 
         if ( bPasteIsMove &&
-                pDrawView->GetSdrPageView()->GetPage() ==
+                pScDrawView->GetSdrPageView()->GetPage() ==
                 pDragEditView->GetSdrPageView()->GetPage() )
         {
             if ( nDiffX != 0 || nDiffY != 0 )
@@ -162,8 +162,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         }
         else
         {
-            SdrModel* pModel = pDragEditView->GetModel();
-            SdrPage* pDestPage = pModel->GetPage( static_cast<sal_uInt16>(GetViewData()->GetTabNo()) );
+            SdrModel* pDrawModel = pDragEditView->GetModel();
+            SdrPage* pDestPage = pDrawModel->GetPage( static_cast<sal_uInt16>(GetViewData()->GetTabNo()) );
             DBG_ASSERT(pDestPage,"nanu, Page?");
 
             SdrMarkList aMark = pDragEditView->GetMarkedObjectList();
@@ -175,21 +175,21 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
                 // #116235#
                 SdrObject* pNeuObj=pObj->Clone();
-                //SdrObject* pNeuObj=pObj->Clone(pDestPage,pModel);
+                //SdrObject* pNeuObj=pObj->Clone(pDestPage,pDrawModel);
 
                 if (pNeuObj!=NULL)
                 {
-                    pNeuObj->SetModel(pModel);
+                    pNeuObj->SetModel(pDrawModel);
                     pNeuObj->SetPage(pDestPage);
 
                     //  #68787# copy graphics within the same model - always needs new name
                     if ( pNeuObj->ISA(SdrGrafObj) && !bPasteIsMove )
-                        pNeuObj->SetName(((ScDrawLayer*)pModel)->GetNewGraphicName());
+                        pNeuObj->SetName(((ScDrawLayer*)pDrawModel)->GetNewGraphicName());
 
                     if (nDiffX!=0 || nDiffY!=0)
                         pNeuObj->NbcMove(Size(nDiffX,nDiffY));
                     pDestPage->InsertObject( pNeuObj );
-                    pDrawView->AddUndo(new SdrUndoInsertObj( *pNeuObj ));
+                    pScDrawView->AddUndo(new SdrUndoInsertObj( *pNeuObj ));
 
                     //  Chart braucht nicht mehr getrennt behandelt zu werden,
                     //  weil es seine Daten jetzt selber hat
@@ -223,7 +223,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         if ( !bSameDocClipboard )
             GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( TRUE );
 
-        pDrawView->Paste( *pModel, aPos, NULL, nOptions );
+        pScDrawView->Paste( *pModel, aPos, NULL, nOptions );
 
         if ( !bSameDocClipboard )
             GetViewData()->GetDocument()->SetPastingDrawFromOtherDoc( FALSE );
@@ -232,7 +232,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
         // controls must be on SC_LAYER_CONTROLS
 
         SCTAB nTab = GetViewData()->GetTabNo();
-        SdrPage* pPage = pDrawView->GetModel()->GetPage(static_cast<sal_uInt16>(nTab));
+        SdrPage* pPage = pScDrawView->GetModel()->GetPage(static_cast<sal_uInt16>(nTab));
         DBG_ASSERT(pPage,"Page?");
         if (pPage)
         {
@@ -252,8 +252,8 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
 
     if (bGroup)
     {
-        pDrawView->GroupMarked();
-        pDrawView->EndUndo();
+        pScDrawView->GroupMarked();
+        pScDrawView->EndUndo();
     }
 
     if (pRef)
@@ -264,7 +264,7 @@ void ScViewFunc::PasteDraw( const Point& rLogicPos, SdrModel* pModel,
     // example, a chart.  SetDrawShellOrSub() would only work for D&D in the
     // same document but not if inserting from the clipboard, therefore
     // MarkListHasChanged() is what we need.
-    pDrawView->MarkListHasChanged();
+    pScDrawView->MarkListHasChanged();
 
 }
 
@@ -369,7 +369,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
                                 const String& rFile, const String& rFilter )
 {
     MakeDrawLayer();
-    ScDrawView* pDrawView = GetScDrawView();
+    ScDrawView* pScDrawView = GetScDrawView();
 
     Point aPos( rPos );
     Window* pWin = GetActiveWin();
@@ -381,7 +381,7 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
             //  Pixel-Korrektur beruecksichtigen, damit Bitmap auf dem Bildschirm stimmt
 
         Fraction aScaleX, aScaleY;
-        pDrawView->CalcNormScale( aScaleX, aScaleY );
+        pScDrawView->CalcNormScale( aScaleX, aScaleY );
         aDestMap.SetScaleX(aScaleX);
         aDestMap.SetScaleY(aScaleY);
     }
@@ -400,12 +400,12 @@ BOOL ScViewFunc::PasteGraphic( const Point& rPos, const Graphic& rGraphic,
 
     //  #49961# Pfad wird nicht mehr als Name der Grafik gesetzt
 
-    ScDrawLayer* pLayer = (ScDrawLayer*) pDrawView->GetModel();
+    ScDrawLayer* pLayer = (ScDrawLayer*) pScDrawView->GetModel();
     String aName = pLayer->GetNewGraphicName();                 // "Grafik x"
     pGrafObj->SetName(aName);
 
     // nicht markieren wenn Ole
-    pDrawView->InsertObjectSafe(pGrafObj, *pDrawView->GetSdrPageView());
+    pScDrawView->InsertObjectSafe(pGrafObj, *pScDrawView->GetSdrPageView());
 
     // #118522# SetGraphicLink has to be used after inserting the object,
     // otherwise an empty graphic is swapped in and the contact stuff crashes.
@@ -421,13 +421,13 @@ BOOL ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGrap
     BOOL bRet = FALSE;
     SdrGrafObj* pNewGrafObj = NULL;
 
-    ScDrawView* pDrawView = GetScDrawView();
-    if ( pDrawView && pPickObj )
+    ScDrawView* pScDrawView = GetScDrawView();
+    if ( pScDrawView && pPickObj )
     {
         /**********************************************************************
         * Objekt neu attributieren
         **********************************************************************/
-        SdrPageView* pPV = pDrawView->GetSdrPageView();
+        SdrPageView* pPV = pScDrawView->GetSdrPageView();
         if (pPickObj->ISA(SdrGrafObj))
         {
             /******************************************************************
@@ -436,9 +436,9 @@ BOOL ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGrap
             pNewGrafObj = (SdrGrafObj*) pPickObj->Clone();
             pNewGrafObj->SetGraphic(rGraphic);
 
-            pDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-            pDrawView->ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj);
-            pDrawView->EndUndo();
+            pScDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            pScDrawView->ReplaceObjectAtView(pPickObj, *pPV, pNewGrafObj);
+            pScDrawView->EndUndo();
 
             bRet = TRUE;
         }
@@ -447,12 +447,12 @@ BOOL ScViewFunc::ApplyGraphicToObject( SdrObject* pPickObj, const Graphic& rGrap
             /******************************************************************
             * Das Objekt wird mit der Graphik gefuellt
             ******************************************************************/
-            //pDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
-            pDrawView->AddUndo(new SdrUndoAttrObj(*pPickObj));
-            //pDrawView->EndUndo();
+            //pScDrawView->BegUndo(ScGlobal::GetRscString(STR_UNDO_DRAGDROP));
+            pScDrawView->AddUndo(new SdrUndoAttrObj(*pPickObj));
+            //pScDrawView->EndUndo();
 
             XOBitmap aXOBitmap( rGraphic.GetBitmap() );
-            SfxItemSet aSet( pDrawView->GetModel()->GetItemPool(),
+            SfxItemSet aSet( pScDrawView->GetModel()->GetItemPool(),
                                 XATTR_FILLSTYLE, XATTR_FILLBITMAP );
             aSet.Put(XFillStyleItem(XFILL_BITMAP));
             aSet.Put(XFillBitmapItem(String(), aXOBitmap));
