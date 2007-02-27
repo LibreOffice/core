@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlformula.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 14:04:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,14 +463,14 @@ public:
 
 inline sal_uInt8 XclTokenArrayHelper::GetTokenId( sal_uInt8 nBaseId, sal_uInt8 nTokenClass )
 {
-    DBG_ASSERT( !::get_flag< sal_uInt8 >( nBaseId, ~EXC_TOKID_MASK ), "XclTokenArrayHelper::GetTokenId - invalid token ID" );
-    DBG_ASSERT( !::get_flag< sal_uInt8 >( nTokenClass, ~EXC_TOKCLASS_MASK ), "XclTokenArrayHelper::GetTokenId - invalid token class" );
+    DBG_ASSERT( !::get_flag( nBaseId, static_cast< sal_uInt8 >( ~EXC_TOKID_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token ID" );
+    DBG_ASSERT( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::GetTokenId - invalid token class" );
     return nBaseId | nTokenClass;
 }
 
 inline void XclTokenArrayHelper::ChangeTokenClass( sal_uInt8& rnTokenId, sal_uInt8 nTokenClass )
 {
-    DBG_ASSERT( !::get_flag< sal_uInt8 >( nTokenClass, ~EXC_TOKCLASS_MASK ), "XclTokenArrayHelper::ChangeTokenClass - invalid token class" );
+    DBG_ASSERT( !::get_flag( nTokenClass, static_cast< sal_uInt8 >( ~EXC_TOKCLASS_MASK ) ), "XclTokenArrayHelper::ChangeTokenClass - invalid token class" );
     ::set_flag( rnTokenId, EXC_TOKCLASS_MASK, false );
     ::set_flag( rnTokenId, nTokenClass );
 }
