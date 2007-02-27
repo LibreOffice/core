@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:19:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:23:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -572,7 +572,6 @@ void ImportExcel::Externname25( void )
 {
     UINT32      nRes;
     UINT16      nOpt;
-    UINT16      nLenExpr = 0;
 
     aIn >> nOpt >> nRes;
 
@@ -601,8 +600,9 @@ void ImportExcel::Colwidth( void )
 
     aIn >> nColFirst >> nColLast >> nColWidth;
 
-    if( nColLast > MAXCOL )
-        nColLast = static_cast<UINT16>(MAXCOL);
+//! TODO: add a check for the unlikely case of changed MAXCOL (-> XclImpAddressConverter)
+//   if( nColLast > MAXCOL )
+//       nColLast = static_cast<UINT16>(MAXCOL);
 
     USHORT nScWidth = XclTools::GetScColumnWidth( nColWidth, GetCharWidth() );
     pColRowBuff->SetWidthRange( nColFirst, nColLast, nScWidth );
@@ -917,23 +917,18 @@ void ImportExcel::Rstring( void )
 
 void ImportExcel::Cellmerging()
 {
-    sal_uInt16 nCount, nRow1, nRow2, nCol1, nCol2;
-    aIn >> nCount;
+    XclImpAddressConverter& rAddrConv = GetAddressConverter();
+    SCTAB nScTab = GetCurrScTab();
 
-    DBG_ASSERT( aIn.GetRecLeft() >= (sal_Size)(nCount * 8), "ImportExcel8::Cellmerging - wrong record size" );
-
-    while( nCount-- )
+    sal_uInt16 nCount;
+    maStrm >> nCount;
+    for( sal_uInt16 nIdx = 0; (nIdx < nCount) && (maStrm.GetRecLeft() >= 8); ++nIdx )
     {
-        aIn >> nRow1 >> nRow2 >> nCol1 >> nCol2;
-        bTabTruncated |= (nRow1 > static_cast<sal_uInt16>(MAXROW)) || (nRow2 > static_cast<sal_uInt16>(MAXROW)) || (nCol1 > static_cast<sal_uInt16>(MAXCOL)) || (nCol2 > static_cast<sal_uInt16>(MAXCOL));
-        if( (nRow1 <= static_cast<sal_uInt16>(MAXROW)) && (nCol1 <= static_cast<sal_uInt16>(MAXCOL)) )
-        {
-            nRow2 = Min( nRow2, static_cast<sal_uInt16>( MAXROW ) );
-            nCol2 = Min( nCol2, static_cast<sal_uInt16>( MAXCOL ) );
-            GetXFRangeBuffer().SetMerge( static_cast<SCCOL>(nCol1), static_cast<SCROW>(nRow1), static_cast<SCCOL>(nCol2), static_cast<SCROW>(nRow2) );
-        }
-        else
-            GetTracer().TraceInvalidRow(GetCurrScTab(), nRow1 > static_cast<sal_uInt16>(MAXROW) ? nRow1 : nRow2, MAXROW);
+        XclRange aXclRange;
+        maStrm >> aXclRange;    // 16-bit rows and columns
+        ScRange aScRange( ScAddress::UNINITIALIZED );
+        if( rAddrConv.ConvertRange( aScRange, aXclRange, nScTab, nScTab, true ) )
+            GetXFRangeBuffer().SetMerge( aScRange.aStart.Col(), aScRange.aStart.Row(), aScRange.aEnd.Col(), aScRange.aEnd.Row() );
     }
 }
 
