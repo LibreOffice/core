@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:42:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:55:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,7 +380,6 @@ void ScPreviewShell::UpdateScrollBars()
 
 IMPL_LINK (ScPreviewShell,ScrollHandler, ScrollBar* ,pScroll )
 {
-    long nDelta = pScroll->GetDelta();
     long nPos = pScroll->GetThumbPos();
 
     BOOL bHoriz = ( pScroll == pHorScroll );
@@ -434,7 +433,7 @@ USHORT __EXPORT ScPreviewShell::SetPrinter( SfxPrinter *pNewPrinter, USHORT nDif
 PrintDialog* __EXPORT ScPreviewShell::CreatePrintDialog( Window* pParent )
 {
     pDocShell->GetDocument()->SetPrintOptions();    // Optionen aus OFA am Printer setzen
-    SfxPrinter* pPrinter = GetPrinter();
+    (void)GetPrinter();
 
     const long   nCurPage    = pPreview->GetPageNo()+1;
     const long   nDocPageMax = pPreview->GetTotalPages();
@@ -639,6 +638,10 @@ void __EXPORT ScPreviewShell::Execute( SfxRequest& rReq )
                         case SVX_ZOOM_PAGEWIDTH:
                             nZoom = pPreview->GetOptimalZoom(TRUE);
                             break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
 
                     pPreview->SetZoom( nZoom );
@@ -782,7 +785,7 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     //  eNumType kennt der Dialog selber
 }
 
-void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL bBrowse)
+void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL /* bBrowse */)
 {
     //  nZoom
     //  nPageNo
@@ -792,7 +795,7 @@ void __EXPORT ScPreviewShell::WriteUserData(String& rData, BOOL bBrowse)
     rData += String::CreateFromInt32(pPreview->GetPageNo());
 }
 
-void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL bBrowse)
+void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL /* bBrowse */)
 {
     xub_StrLen nCount = rData.GetTokenCount();
     if (nCount)
@@ -804,7 +807,7 @@ void __EXPORT ScPreviewShell::ReadUserData(const String& rData, BOOL bBrowse)
     }
 }
 
-void __EXPORT ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool bBrowse )
+void __EXPORT ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
 {
     rSeq.realloc(3);
     beans::PropertyValue* pSeq = rSeq.getArray();
@@ -822,7 +825,7 @@ void __EXPORT ScPreviewShell::WriteUserDataSequence(uno::Sequence < beans::Prope
     }
 }
 
-void __EXPORT ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool bBrowse )
+void __EXPORT ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::PropertyValue >& rSeq, sal_Bool /* bBrowse */)
 {
     sal_Int32 nCount(rSeq.getLength());
     if (nCount)
@@ -928,7 +931,7 @@ void ScPreviewShell::RemoveAccessibilityObject( SfxListener& rObject )
     if (pAccessibilityBroadcaster)
         rObject.EndListening( *pAccessibilityBroadcaster );
     else
-        DBG_ERROR("kein Accessibility-Broadcaster??!?");
+        DBG_ERROR("kein Accessibility-Broadcaster?");
 }
 
 void ScPreviewShell::BroadcastAccessibility( const SfxHint &rHint )
