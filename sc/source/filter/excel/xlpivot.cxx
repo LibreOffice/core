@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlpivot.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:22:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,8 +304,8 @@ XclExpStream& operator<<( XclExpStream& rStrm, const XclPCNumGroupInfo& rInfo )
 // Base class for pivot cache fields ==========================================
 
 XclPCField::XclPCField( XclPCFieldType eFieldType, sal_uInt16 nFieldIdx ) :
-    mnFieldIdx( nFieldIdx ),
-    meFieldType( eFieldType )
+    meFieldType( eFieldType ),
+    mnFieldIdx( nFieldIdx )
 {
 }
 
@@ -528,6 +528,7 @@ void XclPTFieldInfo::AddApiOrient( DataPilotFieldOrientation eOrient )
         case DataPilotFieldOrientation_COLUMN:  mnAxes |= EXC_SXVD_AXIS_COL;    break;
         case DataPilotFieldOrientation_PAGE:    mnAxes |= EXC_SXVD_AXIS_PAGE;   break;
         case DataPilotFieldOrientation_DATA:    mnAxes |= EXC_SXVD_AXIS_DATA;   break;
+        default:;
     }
 }
 
