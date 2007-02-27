@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 12:10:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode *start,
                       bool allow_3d )
 {
     String aTabName;
-    SCTAB  nTab;
+    SCTAB  nTab = 0;
     const sal_Unicode *p = start;
 
     //pAddr->SetTab( 0 );
@@ -186,7 +186,7 @@ lcl_XL_ParseSheetRef( const sal_Unicode *start,
         if( *p != '!' &&( !allow_3d || *p != ':' ) )
             return start;
 
-        aTabName.Append( start, p - start );
+        aTabName.Append( start, sal::static_int_cast<xub_StrLen>( p - start ) );
     }
 
     if( pDoc )
@@ -247,7 +247,7 @@ lcl_ScRange_Parse_XL_Header( ScRange& r,
             p = ScGlobal::UnicodeStrChr( start+1, ']' );
             if( p == NULL )
                 return start;
-            rExternDocName.Append( start+1, p-(start+1) );
+            rExternDocName.Append( start+1, sal::static_int_cast<xub_StrLen>( p-(start+1) ) );
         }
 
         rExternDocName = ScGlobal::GetAbsDocName( rExternDocName,
@@ -338,7 +338,7 @@ lcl_r1c1_get_col( const sal_Unicode* p,
         return NULL;
 
     p++;
-    if( (isRelative = (*p == '[') ) )
+    if( (isRelative = (*p == '[') ) != false )
         p++;
     n = sal_Unicode_strtol( p, &pEnd );
     if( NULL == pEnd )
@@ -365,7 +365,7 @@ lcl_r1c1_get_col( const sal_Unicode* p,
 
     if( n < 0 || n >= MAXCOLCOUNT )
         return NULL;
-    pAddr->SetCol( static_cast<SCROW>( n ) );
+    pAddr->SetCol( static_cast<SCCOL>( n ) );
     *nFlags |= SCA_VALID_COL;
 
     return pEnd;
@@ -383,7 +383,7 @@ lcl_r1c1_get_row( const sal_Unicode* p,
         return NULL;
 
     p++;
-    if( (isRelative = (*p == '[') ) )
+    if( (isRelative = (*p == '[') ) != false )
         p++;
     n = sal_Unicode_strtol( p, &pEnd );
     if( NULL == pEnd )
@@ -519,9 +519,9 @@ lcl_a1_get_col( const sal_Unicode* p, ScAddress* pAddr, USHORT* nFlags )
     if( !CharClass::isAsciiAlpha( *p ) )
         return NULL;
 
-    nCol = toupper( char(*p++) ) - 'A';
+    nCol = sal::static_int_cast<SCCOL>( toupper( char(*p++) ) - 'A' );
     while (nCol <= MAXCOL && CharClass::isAsciiAlpha(*p))
-        nCol = ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A';
+        nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A' );
     if( nCol > MAXCOL || CharClass::isAsciiAlpha( *p ) )
         return NULL;
 
@@ -740,9 +740,9 @@ lcl_ScAddress_Parse_OOo( BOOL& bExternal, const sal_Unicode* p,
 
         if (CharClass::isAsciiAlpha( *p ))
         {
-            nCol = toupper( char(*p++) ) - 'A';
+            nCol = sal::static_int_cast<SCCOL>( toupper( char(*p++) ) - 'A' );
             while (nCol < MAXCOL && CharClass::isAsciiAlpha(*p))
-                nCol = ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A';
+                nCol = sal::static_int_cast<SCCOL>( ((nCol + 1) * 26) + toupper( char(*p++) ) - 'A' );
         }
         else
             nBits = 0;
@@ -969,10 +969,10 @@ lcl_ScRange_Parse_OOo( ScRange &aRange, const String& r, ScDocument* pDoc )
         sal_Unicode* p = aTmp.GetBufferAccess();
         p[ nPos ] = 0;
         BOOL bExternal = FALSE;
-        if( (nRes1 = lcl_ScAddress_Parse_OOo( bExternal, p, pDoc, aRange.aStart ) ) )
+        if( (nRes1 = lcl_ScAddress_Parse_OOo( bExternal, p, pDoc, aRange.aStart ) ) != 0 )
         {
             aRange.aEnd = aRange.aStart;  // die Tab _muss_ gleich sein, so ist`s weniger Code
-            if ( (nRes2 = lcl_ScAddress_Parse_OOo( bExternal, p + nPos+ 1, pDoc, aRange.aEnd ) ) )
+            if ( (nRes2 = lcl_ScAddress_Parse_OOo( bExternal, p + nPos+ 1, pDoc, aRange.aEnd ) ) != 0 )
             {
                 if ( bExternal && aRange.aStart.Tab() != aRange.aEnd.Tab() )
                     nRes2 &= ~SCA_VALID_TAB;    // #REF!
@@ -1186,7 +1186,7 @@ lcl_a1_append_c ( String &r, int nCol, bool bIsAbs )
 {
     if( bIsAbs )
         r += '$';
-    ColToAlpha( r, nCol );
+    ColToAlpha( r, sal::static_int_cast<SCCOL>(nCol) );
 }
 
 static inline void
@@ -1651,7 +1651,7 @@ void ColToAlpha( rtl::OUStringBuffer& rBuf, SCCOL nCol )
             SCCOL nC = nCol % 26;
             aStr += static_cast<sal_Unicode>( 'A' +
                     static_cast<sal_uInt16>(nC));
-            nCol -= nC;
+            nCol = sal::static_int_cast<SCCOL>( nCol - nC );
             nCol = nCol / 26 - 1;
         }
         aStr += static_cast<sal_Unicode>( 'A' +
@@ -1668,7 +1668,7 @@ bool AlphaToCol( SCCOL& rCol, const String& rStr)
     xub_StrLen nStop = rStr.Len();
     xub_StrLen nPos = 0;
     sal_Unicode c;
-    while (nResult <= MAXCOL && nPos < nStop && (c = rStr.GetChar( nPos)) &&
+    while (nResult <= MAXCOL && nPos < nStop && (c = rStr.GetChar( nPos)) != 0 &&
             CharClass::isAsciiAlpha(c))
     {
         if (nPos > 0)
