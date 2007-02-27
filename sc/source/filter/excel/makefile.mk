@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 12:11:38 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:23:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,13 +121,41 @@ NOOPTFILES = \
 .ENDIF
 
 EXCEPTIONSFILES = \
+        $(SLO)$/excdoc.obj					\
         $(SLO)$/excobj.obj					\
+        $(SLO)$/excrecds.obj				\
+        $(SLO)$/namebuff.obj				\
         $(SLO)$/xecontent.obj				\
+        $(SLO)$/xeescher.obj				\
+        $(SLO)$/xeformula.obj				\
         $(SLO)$/xehelper.obj				\
+        $(SLO)$/xelink.obj					\
+        $(SLO)$/xename.obj					\
+        $(SLO)$/xepage.obj					\
+        $(SLO)$/xepivot.obj					\
+        $(SLO)$/xestring.obj				\
+        $(SLO)$/xestyle.obj					\
+        $(SLO)$/xetable.obj					\
+        $(SLO)$/xeview.obj					\
         $(SLO)$/xichart.obj					\
+        $(SLO)$/xicontent.obj				\
+        $(SLO)$/xiescher.obj				\
+        $(SLO)$/xihelper.obj				\
+        $(SLO)$/xilink.obj					\
+        $(SLO)$/xipage.obj					\
+        $(SLO)$/xipivot.obj					\
+        $(SLO)$/xistream.obj				\
+        $(SLO)$/xistring.obj				\
+        $(SLO)$/xistyle.obj					\
+        $(SLO)$/xladdress.obj				\
         $(SLO)$/xiescher.obj				\
         $(SLO)$/xlchart.obj					\
+        $(SLO)$/xldumper.obj				\
+        $(SLO)$/xlformula.obj				\
         $(SLO)$/xlocx.obj					\
+        $(SLO)$/xlpivot.obj					\
+        $(SLO)$/xlstyle.obj					\
+        $(SLO)$/xlview.obj					\
         $(SLO)$/XclExpCharts.obj
 
 # --- Targets -------------------------------------------------------
