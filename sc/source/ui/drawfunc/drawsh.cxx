@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:24:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,7 +347,6 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
 {
     USHORT              nSlot       = rReq.GetSlot();
     Window*             pWin        = pViewData->GetActiveWin();
-    Window*             pDlgParent  = pViewData->GetDialogParent();
 //  SfxViewFrame*       pViewFrame  = SfxViewShell::Current()->GetViewFrame(); //!!! koennte knallen
     ScDrawView*         pView       = pViewData->GetScDrawView();
     SdrModel*           pDoc        = pViewData->GetDocument()->GetDrawLayer();
@@ -595,7 +594,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     delete pDlg;
 }
 
-void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT nTabPage )
+void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
 {
     ScDrawView* pView       = pViewData->GetScDrawView();
     BOOL        bHasMarked  = pView->AreObjectsMarked();
