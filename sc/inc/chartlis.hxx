@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chartlis.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:26:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:53:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,8 @@ private:
 
                     // not implemented
     ScChartListenerCollection& operator=( const ScChartListenerCollection& );
+
+    using StrCollection::operator==;
 
 public:
                     ScChartListenerCollection( ScDocument* pDoc );
