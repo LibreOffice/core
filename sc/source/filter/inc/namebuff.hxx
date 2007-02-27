@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,18 +194,18 @@ class ShrfmlaBuffer : public ExcRoot
     {
         size_t operator() (const ScAddress &addr) const;
     };
-    typedef std::hash_map <ScAddress, UINT16, ScAddressHashFunc> ShrfmlaHash;
+    typedef std::hash_map <ScAddress, USHORT, ScAddressHashFunc> ShrfmlaHash;
     typedef std::list <ScRange>                                  ShrfmlaList;
 
     ShrfmlaHash  index_hash;
     ShrfmlaList  index_list;
-    unsigned int cur_index;
+    size_t                  mnCurrIdx;
 
 public:
                             ShrfmlaBuffer( RootData* pRD );
     virtual                 ~ShrfmlaBuffer();
     void                    Store( const ScRange& rRange, const ScTokenArray& );
-    UINT16                  Find (const ScAddress & rAddress ) const;
+    USHORT                  Find (const ScAddress & rAddress ) const;
 
     static String           CreateName( const ScRange& );
     };
