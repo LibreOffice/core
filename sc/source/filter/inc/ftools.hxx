@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftools.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:23:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -486,9 +486,9 @@ public:
 
     inline Type*        Top() const             { return GetObject( Count() - 1 ); }
 
-                        ScfDelList< Type >::Clear;
-                        ScfDelList< Type >::Count;
-                        ScfDelList< Type >::Empty;
+    using               ScfDelList< Type >::Clear;
+    using               ScfDelList< Type >::Count;
+    using               ScfDelList< Type >::Empty;
 };
 
 // ============================================================================
