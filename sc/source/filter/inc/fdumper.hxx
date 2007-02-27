@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:19:59 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:33:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ public:
         { return ImplGetName( rCfg, static_cast< sal_Int64 >( nKey ) ); }
     /** Returns a display name for the passed double value. */
     inline String       GetName( const Config& rCfg, double fValue ) const
-        { return ImplGetName( rCfg, fValue ); }
+        { return ImplGetNameDbl( rCfg, fValue ); }
 
     /** Returns a map iterator pointing to the first contained name. */
     inline const_iterator begin() const { return maMap.begin(); }
@@ -464,7 +464,7 @@ protected:
     /** Derived classes generate and return the name for the passed key. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const = 0;
     /** Derived classes generate and return the name for the passed double value. */
-    virtual String      ImplGetName( const Config& rCfg, double fValue ) const = 0;
+    virtual String      ImplGetNameDbl( const Config& rCfg, double fValue ) const = 0;
     /** Derived classes insert all names and other settings from the passed list. */
     virtual void        ImplIncludeList( const NameListBase& rList ) = 0;
 
@@ -506,7 +506,7 @@ protected:
     /** Returns the name for the passed key, or the default name, if key is not contained. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const;
     /** Returns the name for the passed double value. */
-    virtual String      ImplGetName( const Config& rCfg, double fValue ) const;
+    virtual String      ImplGetNameDbl( const Config& rCfg, double fValue ) const;
     /** Inserts all names from the passed list. */
     virtual void        ImplIncludeList( const NameListBase& rList );
 
@@ -555,7 +555,7 @@ protected:
     /** Returns the name for the passed key. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const;
     /** Returns the name for the passed double value. */
-    virtual String      ImplGetName( const Config& rCfg, double fValue ) const;
+    virtual String      ImplGetNameDbl( const Config& rCfg, double fValue ) const;
     /** Inserts all flags from the passed list. */
     virtual void        ImplIncludeList( const NameListBase& rList );
 
@@ -604,7 +604,7 @@ protected:
     /** Returns the converted value with appended unit name. */
     virtual String      ImplGetName( const Config& rCfg, sal_Int64 nKey ) const;
     /** Returns the converted value with appended unit name. */
-    virtual String      ImplGetName( const Config& rCfg, double fValue ) const;
+    virtual String      ImplGetNameDbl( const Config& rCfg, double fValue ) const;
     /** Empty implementation. */
     virtual void        ImplIncludeList( const NameListBase& rList );
 
@@ -659,7 +659,7 @@ protected:
     virtual void        ImplProcessConfigItemStr( SvStream& rStrm, const String& rKey, const String& rData );
 
 private:
-    void                ConstructOwn();
+    void                ConstructCfgCoreData();
 
     bool                ReadConfigFile( const String& rFileUrl );
     template< typename ListType >
@@ -1258,6 +1258,9 @@ protected:
     Type1               DumpValue( bool bType1, const ItemFormat& rItemFmt );
 
     // ------------------------------------------------------------------------
+
+    using               ObjectBase::Construct;
+
 private:
     InputRef            mxIn;
 };
@@ -1398,6 +1401,8 @@ protected:
     virtual void        ImplDumpFooter();
     virtual void        ImplDumpExtendedHeader();
 
+    using               InputObjectBase::Construct;
+
 private:
     void                DumpStreamInfo( bool bExtended );
 
@@ -1420,6 +1425,8 @@ public:
 protected:
     inline explicit     SvStreamObject() {}
     void                Construct( const ObjectBase& rParent, SvStream& rStrm );
+
+    using               StreamObjectBase::Construct;
 };
 
 typedef ScfRef< SvStreamObject > SvStreamObjectRef;
@@ -1432,12 +1439,13 @@ public:
     explicit            WrappedStreamObject( const ObjectBase& rParent, StreamObjectRef xStrmObj );
     virtual             ~WrappedStreamObject();
 
-
 protected:
     inline explicit     WrappedStreamObject() {}
     void                Construct( const ObjectBase& rParent, StreamObjectRef xStrmObj );
 
     virtual bool        ImplIsValid() const;
+
+    using               StreamObjectBase::Construct;
 
 private:
     StreamObjectRef     mxStrmObj;
@@ -1476,6 +1484,8 @@ protected:
 
     virtual bool        ImplIsValid() const;
 
+    using               InputObjectBase::Construct;
+
 private:
     NameListRef         mxRecNames;
     bool                mbShowRecPos;
@@ -1499,6 +1509,8 @@ protected:
     inline explicit     DumperBase() {}
     void                Construct( ConfigRef xConfig, CoreDataRef xCore );
     void                Construct( ConfigRef xConfig, SfxMedium& rMedium, SfxObjectShell* pDocShell );
+
+    using               ObjectBase::Construct;
 
 private:
     typedef ScfRef< SvStream > SvStreamRef;
