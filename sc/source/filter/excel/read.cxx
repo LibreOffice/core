@@ -4,9 +4,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:15:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ FltError ImportExcel::Read( void )
     XclImpFontBuffer&       rFontBfr        = GetFontBuffer();
     XclImpNumFmtBuffer&     rNumFmtBfr      = GetNumFmtBuffer();
     XclImpXFBuffer&         rXFBfr          = GetXFBuffer();
-    XclImpTabInfo&          rTabInfo        = GetTabInfo();
     XclImpNameManager&      rNameMgr        = GetNameManager();
 
     const BOOL  bWithDrawLayer = pD->GetDrawLayer() != NULL;
@@ -167,6 +166,7 @@ FltError ImportExcel::Read( void )
                     rNumFmtBfr.CreateScFormats();
                     Eof();
                 break;
+                default:;
             };
             eAkt = Z_Ende;
             break;
@@ -579,7 +579,6 @@ FltError ImportExcel::Read( void )
                     case 0x8C:  Country(); break;       // COUNTRY      [  345]
                     // PALETTE follows XFs, but already needed while reading the XFs
                     case 0x92:  rPal.ReadPalette( maStrm );             break;
-                        break;
                 }
             }
                 break;
@@ -837,8 +836,7 @@ FltError ImportExcel8::Read( void )
     XclImpPivotTableManager& rPTableMgr     = GetPivotTableManager();
     XclImpWebQueryBuffer&   rWQBfr          = GetWebQueryBuffer();
 
-    bool bWithDrawLayer = GetDoc().GetDrawLayer() != 0;     // document has drawing layer
-    bool bInUserView = false;                               // true = In USERSVIEW(BEGIN|END) record block.
+    bool bInUserView = false;           // true = In USERSVIEW(BEGIN|END) record block.
 
     enum XclImpReadState
     {
@@ -851,7 +849,7 @@ FltError ImportExcel8::Read( void )
         EXC_STATE_END                   /// Stop reading.
     };
 
-    XclImpReadState eAkt = EXC_STATE_BEFORE_GLOBALS, ePrev = EXC_STATE_BEFORE_GLOBALS;
+    XclImpReadState eAkt = EXC_STATE_BEFORE_GLOBALS;
 
     FltError eLastErr = eERR_OK;
 
@@ -869,8 +867,8 @@ FltError ImportExcel8::Read( void )
                 case EXC_STATE_SHEET_PRE:
                     eAkt = EXC_STATE_SHEET;
                     aIn.SeekGlobalPosition();
-                    continue;
-                break;
+                    continue;   // next iteration in while loop
+//                break;    // unxsols warning: statement unreachable
                 case EXC_STATE_SHEET:
                     Eof();
                     eAkt = EXC_STATE_END;
