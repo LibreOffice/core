@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fillinfo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 11:43:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ inline const SvxBorderLine* GetNullOrLine( const SvxBoxItem* pBox, FillInfoLineP
 
 void lcl_GetMergeRange( SCsCOL nX, SCsROW nY, SCSIZE nArrY,
                             ScDocument* pDoc, RowInfo* pRowInfo,
-                            SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, SCTAB nTab,
+                            SCCOL nX1, SCROW nY1, SCCOL /* nX2 */, SCROW /* nY2 */, SCTAB nTab,
                             SCsCOL& rStartX, SCsROW& rStartY, SCsCOL& rEndX, SCsROW& rEndY )
 {
     CellInfo* pInfo = &pRowInfo[nArrY].pCellInfo[nX+1];
@@ -188,8 +188,6 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
             (const SvxBrushItem*) &pPool->GetDefaultItem( ATTR_BACKGROUND );
     const ScMergeAttr* pDefMerge =
             (const ScMergeAttr*) &pPool->GetDefaultItem( ATTR_MERGE );
-    const SvxBoxItem* pDefLines =
-            (const SvxBoxItem*) &pPool->GetDefaultItem( ATTR_BORDER );
     const SvxShadowItem* pDefShadow =
             (const SvxShadowItem*) &pPool->GetDefaultItem( ATTR_SHADOW );
 
@@ -210,8 +208,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                                 // versteckter erster Zeile / Spalte
     BOOL bPaintMarks = FALSE;
     BOOL bSkipMarks = FALSE;
-    SCCOL nBlockStartX, nBlockEndX;
-    SCROW nBlockEndY, nBlockStartY;
+    SCCOL nBlockStartX = 0, nBlockEndX = 0;
+    SCROW nBlockEndY = 0, nBlockStartY = 0;
     if (pMarkData && pMarkData->IsMarked())
     {
         ScRange aTmpRange;
@@ -677,11 +675,11 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         for (nArrY=0; nArrY<nArrCount; nArrY++)
         {
             RowInfo* pThisRowInfo = &pRowInfo[nArrY];
-            SCsROW nY = nArrY ? pThisRowInfo->nRowNo : ((SCsROW)nY1)-1;
+            nSignedY = nArrY ? pThisRowInfo->nRowNo : ((SCsROW)nY1)-1;
 
             for (nArrX=nX1; nArrX<=nX2+2; nArrX++)                  // links und rechts einer mehr
             {
-                SCsCOL nX = ((SCsCOL) nArrX) - 1;
+                SCsCOL nSignedX = ((SCsCOL) nArrX) - 1;
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nArrX];
 
                 if (pInfo->bMerged || pInfo->bHOverlapped || pInfo->bVOverlapped)
@@ -690,7 +688,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                     SCsROW nStartY;
                     SCsCOL nEndX;
                     SCsROW nEndY;
-                    lcl_GetMergeRange( nX,nY, nArrY, this,pRowInfo, nX1,nY1,nX2,nY2,nTab,
+                    lcl_GetMergeRange( nSignedX,nSignedY, nArrY, this,pRowInfo, nX1,nY1,nX2,nY2,nTab,
                                         nStartX,nStartY, nEndX,nEndY );
                     const ScPatternAttr* pStartPattern = GetPattern( nStartX,nStartY,nTab );
                     const SfxItemSet* pStartCond = GetCondResult( nStartX,nStartY,nTab );
@@ -779,6 +777,10 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                             case SVX_SHADOW_BOTTOMLEFT:  eLoc = SVX_SHADOW_BOTTOMRIGHT; break;
                             case SVX_SHADOW_TOPRIGHT:    eLoc = SVX_SHADOW_TOPLEFT;     break;
                             case SVX_SHADOW_TOPLEFT:     eLoc = SVX_SHADOW_TOPRIGHT;    break;
+                            default:
+                            {
+                                // added to avoid warnings
+                            }
                         }
                     }
 
@@ -872,7 +874,7 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
         }
     }
 
-    rTabInfo.mnArrCount = nArrCount;
+    rTabInfo.mnArrCount = sal::static_int_cast<USHORT>(nArrCount);
     rTabInfo.mbPageMode = bPageMode;
 
     // ========================================================================
@@ -956,7 +958,8 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
 
                 // last visible row
                 USHORT nLastCellInfoY = nCellInfoY;
-                while( (nLastCellInfoY + 1 < nArrCount) && (pRowInfo[ nLastCellInfoY + 1 ].nRowNo <= nLastRealDocRow) )
+                while( (sal::static_int_cast<SCSIZE>(nLastCellInfoY + 1) < nArrCount) &&
+                            (pRowInfo[ nLastCellInfoY + 1 ].nRowNo <= nLastRealDocRow) )
                     ++nLastCellInfoY;
                 SCROW nLastDocRow = (nLastCellInfoY > 0) ? pRowInfo[ nLastCellInfoY ].nRowNo : static_cast< SCROW >( nY1 - 1 );
                 size_t nLastRow = static_cast< size_t >( nLastCellInfoY );
