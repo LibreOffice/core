@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addruno.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:28:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:40:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ ScAddressConversionObj::~ScAddressConversionObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScAddressConversionObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAddressConversionObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA( SfxSimpleHint ) &&
             ((const SfxSimpleHint&)rHint).GetId() == SFX_HINT_DYING )
@@ -126,7 +126,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {0,0,0,0}
+            {0,0,0,0,0,0}
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
         return aRef;
@@ -139,7 +139,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
             {MAP_CHAR_LEN(SC_UNONAME_PERSREPR), 0,  &getCppuType((rtl::OUString*)0),    0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_REFSHEET), 0,  &getCppuType((sal_Int32*)0),        0, 0 },
             {MAP_CHAR_LEN(SC_UNONAME_UIREPR),   0,  &getCppuType((rtl::OUString*)0),    0, 0 },
-            {0,0,0,0}
+            {0,0,0,0,0,0}
         };
         static uno::Reference<beans::XPropertySetInfo> aRef(new SfxItemPropertySetInfo( aPropertyMap ));
         return aRef;
