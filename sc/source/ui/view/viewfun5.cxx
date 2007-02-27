@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:08:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 14:01:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         {
             //  Window MapMode isn't drawing MapMode if DrawingLayer hasn't been created yet
 
-            ScDocument* pDoc = GetViewData()->GetDocument();
             SCTAB nTab = GetViewData()->GetTabNo();
             long nXT = 0;
             for (SCCOL i=0; i<nPosX; i++)
@@ -242,8 +241,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         }
         else
         {
-            uno::Reference < io::XInputStream > xStm;
-            TransferableObjectDescriptor    aObjDesc;
+//            uno::Reference < io::XInputStream > xStm;
+//            TransferableObjectDescriptor    aObjDesc;
 
             if ( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE, aObjDesc ) )
             {
@@ -326,8 +325,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         }
         else
         {
-            ScAddress aPos( nPosX, nPosY, GetViewData()->GetTabNo() );
-            ScImportExport aObj( GetViewData()->GetDocument(), aPos );
+            ScAddress aCellPos( nPosX, nPosY, GetViewData()->GetTabNo() );
+            ScImportExport aObj( GetViewData()->GetDocument(), aCellPos );
 
             ::rtl::OUString aStr;
             SotStorageStreamRef xStream;
@@ -402,7 +401,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             SfxStringItem aDataDesc(SID_SBA_IMPORT, sDataDesc);
 
             ScDocShell* pDocSh = GetViewData()->GetDocShell();
-            ScDocument* pDoc = pDocSh->GetDocument();
             SCTAB nTab = GetViewData()->GetTabNo();
 
             ClickCursor(nPosX, nPosY, FALSE);               // set cursor position
@@ -416,8 +414,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                 sTarget = pDBData->GetName();
             else
             {
-                ScAddress aPos( nPosX,nPosY,nTab );
-                aPos.Format( sTarget, SCA_ABS_3D, pDoc );
+                ScAddress aCellPos( nPosX,nPosY,nTab );
+                aCellPos.Format( sTarget, SCA_ABS_3D, pDoc );
             }
             SfxStringItem aTarget(FN_PARAM_1, sTarget);
 
@@ -449,8 +447,8 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
         if ( ::svx::OColumnTransferable::canExtractColumnDescriptor( aDataHelper.GetDataFlavorExVector(), CTF_COLUMN_DESCRIPTOR | CTF_CONTROL_EXCHANGE ) )
         {
             MakeDrawLayer();
-            ScDrawView* pDrawView = GetScDrawView();
-            SdrObject* pObj = pDrawView->CreateFieldControl( ::svx::OColumnTransferable::extractColumnDescriptor( aDataHelper ) );
+            ScDrawView* pScDrawView = GetScDrawView();
+            SdrObject* pObj = pScDrawView->CreateFieldControl( ::svx::OColumnTransferable::extractColumnDescriptor( aDataHelper ) );
             if (pObj)
             {
                 Point aInsPos = aPos;
@@ -480,7 +478,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                     }
                 }
 
-                pDrawView->InsertObjectSafe(pObj, *pDrawView->GetSdrPageView());
+                pScDrawView->InsertObjectSafe(pObj, *pScDrawView->GetSdrPageView());
 
                 GetViewData()->GetViewShell()->SetDrawShell( TRUE );
                 bRet = TRUE;
@@ -566,7 +564,6 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
             SotStorage aDest( "d:\\test.xls" ); // to see the file
             pStor->CopyTo( &aDest );
 #endif
-            ScDocument* pDoc = GetViewData()->GetDocument();
             ScDocument* pInsDoc = new ScDocument( SCDOCMODE_CLIP );
             SCTAB nSrcTab = 0;      // Biff5 in clipboard: always sheet 0
             pInsDoc->ResetClip( pDoc, nSrcTab );
