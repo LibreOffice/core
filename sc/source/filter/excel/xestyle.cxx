@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:21:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:25:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -966,12 +966,12 @@ XclExpBlindFont::XclExpBlindFont( const XclExpRoot& rRoot ) :
 {
 }
 
-bool XclExpBlindFont::Equals( const XclExpFontData& rFontData, sal_uInt32 nHash ) const
+bool XclExpBlindFont::Equals( const XclExpFontData& /*rFontData*/, sal_uInt32 /*nHash*/ ) const
 {
     return false;
 }
 
-void XclExpBlindFont::Save( XclExpStream& rStrm )
+void XclExpBlindFont::Save( XclExpStream& /*rStrm*/ )
 {
     // do nothing
 }
@@ -1223,8 +1223,8 @@ XclExpNumFmtBuffer::XclExpNumFmtBuffer( const XclExpRoot& rRoot ) :
     /*  Compiler needs a hint, this doesn't work: new NfKeywordTable;
         cannot convert from 'class String *' to 'class String (*)[54]'
         The effective result here is class String (*)[54*1] */
-    mpKeywordTable( new NfKeywordTable[ 1 ] ),
     mxFormatter( new SvNumberFormatter( rRoot.GetDoc().GetServiceManager(), LANGUAGE_ENGLISH_US ) ),
+    mpKeywordTable( new NfKeywordTable[ 1 ] ),
     mnStdFmt( GetFormatter().GetStandardFormat( ScGlobal::eLnge ) )
 {
     switch( GetBiff() )
@@ -1332,7 +1332,7 @@ void XclExpNumFmtBuffer::WriteFormatRecord( XclExpStream& rStrm, const XclExpNum
 
 // XF, STYLE record - Cell formatting =========================================
 
-bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bStyle )
+bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, bool bStyle )
 {
     const ScProtectionAttr& rProtItem = GETITEM( rItemSet, ScProtectionAttr, ATTR_PROTECTION );
     mbLocked = rProtItem.GetProtection();
@@ -1662,7 +1662,7 @@ XclExpCellArea::XclExpCellArea() :
 {
 }
 
-bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, XclBiff eBiff, bool bStyle )
+bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette& rPalette, bool bStyle )
 {
     const SvxBrushItem& rBrushItem = GETITEM( rItemSet, SvxBrushItem, ATTR_BACKGROUND );
     if( rBrushItem.GetColor().GetTransparency() )
@@ -1818,7 +1818,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
     mpItemSet = &rItemSet;
 
     // cell protection
-    mbProtUsed = maProtection.FillFromItemSet( rItemSet, GetBiff(), IsStyleXF() );
+    mbProtUsed = maProtection.FillFromItemSet( rItemSet, IsStyleXF() );
 
     // font
     if( nForceXclFont == EXC_FONT_NOTFOUND )
@@ -1845,7 +1845,7 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_Int16 nScript,
     mbBorderUsed = maBorder.FillFromItemSet( rItemSet, GetPalette(), GetBiff(), IsStyleXF() );
 
     // background area
-    mbAreaUsed = maArea.FillFromItemSet( rItemSet, GetPalette(), GetBiff(), IsStyleXF() );
+    mbAreaUsed = maArea.FillFromItemSet( rItemSet, GetPalette(), IsStyleXF() );
 
     // set all b***Used flags to true in "Default"/"Normal" style
     if( bDefStyle )
