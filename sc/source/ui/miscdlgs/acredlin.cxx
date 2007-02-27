@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:30:56 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:29:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,6 +129,10 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         //
         aAcceptChgCtr           ( this, ResId( CTR_REDLINING ) ),
         //
+        pViewData       ( ptrViewData ),
+        pDoc            ( ptrViewData->GetDocument() ),
+        aLocalRangeName ( *(pDoc->GetRangeName()) ),
+        //
         aStrInsertCols          ( ResId( STR_INSERT_COLS)),
         aStrInsertRows          ( ResId( STR_INSERT_ROWS)),
         aStrInsertTabs          ( ResId( STR_INSERT_TABS)),
@@ -141,15 +145,10 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
         aStrAllAccepted         ( ResId( STR_ACCEPTED   )),
         aStrAllRejected         ( ResId( STR_REJECTED   )),
         aStrNoEntry             ( ResId( STR_NO_ENTRY   )),
-        aStrEmpty               ( ResId( STR_EMPTY      )),
         aStrContentWithChild    ( ResId( STR_CONTENT_WITH_CHILD)),
         aStrChildContent        ( ResId( STR_CHILD_CONTENT)),
         aStrChildOrgContent     ( ResId( STR_CHILD_ORGCONTENT)),
-
-        //
-        pViewData       ( ptrViewData ),
-        pDoc            ( ptrViewData->GetDocument() ),
-        aLocalRangeName ( *(pDoc->GetRangeName()) )
+        aStrEmpty               ( ResId( STR_EMPTY      ))
 {
     FreeResource();
 //  bScAcceptChgDlgIsDead=FALSE;
@@ -327,7 +326,6 @@ void __EXPORT ScAcceptChgDlg::Init()
 
 void ScAcceptChgDlg::ClearView()
 {
-    ULONG nCount=pTheView->GetEntryCount();
     nAcceptCount=0;
     nRejectCount=0;
     pTheView->SetUpdateMode(FALSE);
@@ -430,7 +428,7 @@ BOOL ScAcceptChgDlg::IsValidAction(const ScChangeAction* pScChangeAction)
 }
 
 SvLBoxEntry* ScAcceptChgDlg::InsertChangeAction(const ScChangeAction* pScChangeAction,
-                                                   ScChangeActionState eState,SvLBoxEntry* pParent,
+                                                   ScChangeActionState /* eState */, SvLBoxEntry* pParent,
                                                    BOOL bDelMaster,BOOL bDisabled,ULONG nPos)
 {
     ScChangeTrack* pChanges=pDoc->GetChangeTrack();
@@ -969,8 +967,8 @@ BOOL ScAcceptChgDlg::Close()
 void ScAcceptChgDlg::Resize()
 {
     SfxModelessDialog::Resize();
-    Size aSize=GetOutputSizePixel();
-    aAcceptChgCtr.SetSizePixel(aSize);
+    Size aOutSize=GetOutputSizePixel();
+    aAcceptChgCtr.SetSizePixel(aOutSize);
 }
 
 IMPL_LINK( ScAcceptChgDlg, MinSizeHandle, SvxAcceptChgCtr*, pCtr )
@@ -983,7 +981,7 @@ IMPL_LINK( ScAcceptChgDlg, MinSizeHandle, SvxAcceptChgCtr*, pCtr )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, RefHandle, SvxTPFilter*, pRef )
+IMPL_LINK( ScAcceptChgDlg, RefHandle, SvxTPFilter*, EMPTYARG )
 {
     USHORT nId  =ScSimpleRefDlgWrapper::GetChildWindowId();
 
@@ -1030,9 +1028,9 @@ IMPL_LINK( ScAcceptChgDlg, RefInfoHandle, String*, pResult)
         if(pWnd!=NULL)
         {
             Window* pWin=pWnd->GetWindow();
-            Size aSize=pWin->GetSizePixel();
-            aSize.Width()=GetSizePixel().Width();
-            SetPosSizePixel(pWin->GetPosPixel(),aSize);
+            Size aWinSize=pWin->GetSizePixel();
+            aWinSize.Width()=GetSizePixel().Width();
+            SetPosSizePixel(pWin->GetPosPixel(),aWinSize);
             Invalidate();
         }
         nId = ScAcceptChgDlgWrapper::GetChildWindowId();
@@ -1050,7 +1048,6 @@ IMPL_LINK( ScAcceptChgDlg, FilterHandle, SvxTPFilter*, pRef )
 {
     if(pRef!=NULL)
     {
-        ULONG nTest=pTheView->GetEntryCount();
         ClearView();
         aRangeList.Clear();
         aRangeList.Parse(pTPFilter->GetRange(),pDoc);
@@ -1189,7 +1186,7 @@ void ScAcceptChgDlg::AcceptFiltered()
     }
 }
 
-IMPL_LINK( ScAcceptChgDlg, RejectAllHandle, SvxTPView*, pRef )
+IMPL_LINK( ScAcceptChgDlg, RejectAllHandle, SvxTPView*, EMPTYARG )
 {
     SetPointer(Pointer(POINTER_WAIT));
     bIgnoreMsg=TRUE;
@@ -1221,7 +1218,7 @@ IMPL_LINK( ScAcceptChgDlg, RejectAllHandle, SvxTPView*, pRef )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, pRef )
+IMPL_LINK( ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, EMPTYARG )
 {
     SetPointer(Pointer(POINTER_WAIT));
 
@@ -1250,7 +1247,7 @@ IMPL_LINK( ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, pRef )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, SelectHandle, SvxRedlinTable*, pTable )
+IMPL_LINK( ScAcceptChgDlg, SelectHandle, SvxRedlinTable*, EMPTYARG )
 {
     if(!bNoSelection)
     {
@@ -1530,8 +1527,6 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
                 pEntry->EnableChildsOnDemand(FALSE);
                 pTheView->RemoveEntry(pTheView->FirstChild(pEntry));
 
-                SvLBoxEntry* pParent=NULL;
-                SvLBoxEntry* pOriginal=NULL;
                 if(pEntryData!=NULL)
                 {
                     pScChangeAction=(ScChangeAction*) pEntryData->pData;
@@ -1576,7 +1571,7 @@ IMPL_LINK( ScAcceptChgDlg, ExpandingHandle, SvxRedlinTable*, pTable )
 
 
 void ScAcceptChgDlg::AppendChanges(ScChangeTrack* pChanges,ULONG nStartAction,
-                                   ULONG nEndAction,ULONG nPos)
+                                   ULONG nEndAction, ULONG /* nPos */)
 {
     if(pChanges!=NULL)
     {
@@ -1804,6 +1799,10 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
                 case SC_CTM_CHANGE: //bNeedsUpdate=TRUE;
                                     UpdateEntrys(pChgTrack,nStartAction,nEndAction);
                                     break;
+                default:
+                {
+                    // added to avoid warnings
+                }
             }
         }
         delete pTrackInfo;
@@ -1812,7 +1811,7 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 
     return 0;
 }
-IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, pTi)
+IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, EMPTYARG )
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(TRUE);
     aAcceptChgCtr.ShowFilterPage();
@@ -1821,7 +1820,7 @@ IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, pTi)
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, pTi)
+IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
 {
     ScTabView* pTabView = pViewData->GetView();
 
@@ -1870,7 +1869,7 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, pTi)
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, pCtr)
+IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, EMPTYARG )
 {
 
     const CommandEvent aCEvt(pTheView->GetCommandEvent());
@@ -2051,7 +2050,7 @@ void ScAcceptChgDlg::SetMyStaticData()
 {
 }
 
-IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, pRef )
+IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, EMPTYARG )
 {
     return 0;
 }
