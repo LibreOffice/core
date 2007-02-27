@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:52:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,9 +115,9 @@ void lcl_UpdateHyphenator( Outliner& rOutliner, SdrObject* pObj )
 |*
 \************************************************************************/
 
-FuText::FuText(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuText::FuText(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq) :
-    FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
+    FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq),
     pTextObj(NULL)
 {
 }
@@ -143,8 +143,6 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
 {
     // #95491# remember button state for creation of own MouseEvents
     SetMouseButtonCode(rMEvt.GetButtons());
-
-    BOOL bReturn = FALSE;
 
     if ( pView->MouseButtonDown(rMEvt, pWindow) )
         return (TRUE);                 // Event von der SdrView ausgewertet
@@ -233,8 +231,8 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( rMarkList.GetMarkCount() == 1 )
                 {
-                    SdrObject* pObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
-                    if( pObj && pObj->ISA( SdrCaptionObj) && pObj->GetLayer() == SC_LAYER_INTERN)
+                    SdrObject* pMarkedObj = rMarkList.GetMark( 0 )->GetMarkedSdrObj();
+                    if( pMarkedObj && pMarkedObj->ISA( SdrCaptionObj) && pMarkedObj->GetLayer() == SC_LAYER_INTERN)
                     {
                         if(pHdl->GetKind() != HDL_POLY && pHdl->GetKind() != HDL_CIRC)
                             bDrag = true;
@@ -543,7 +541,7 @@ BOOL __EXPORT FuText::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-void FuText::ForcePointer(const MouseEvent* pMEvt)
+void FuText::ForcePointer(const MouseEvent* /* pMEvt */)
 {
     pViewShell->SetActivePointer( aNewPointer );
 
@@ -878,7 +876,6 @@ SdrObject* FuText::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rR
 
             if(bVertical)
             {
-                SdrTextObj* pText = (SdrTextObj*)pObj;
                 SfxItemSet aSet(pDrDoc->GetItemPool());
 
                 aSet.Put(SdrTextAutoGrowWidthItem(TRUE));
