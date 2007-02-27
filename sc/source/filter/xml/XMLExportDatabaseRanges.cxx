@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:45:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:45:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,8 +187,8 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
     rtl::OUString sDatabaseName;
     rtl::OUString sConRes;
     rtl::OUString sSourceObject;
-    sheet::DataImportMode nSourceType;
-    sal_Bool bNative;
+    sheet::DataImportMode nSourceType = sheet::DataImportMode_NONE;
+    sal_Bool bNative = sal_False;
     for (sal_Int16 i = 0; i < nProperties; ++i)
     {
         if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_DBNAME)))
@@ -249,6 +249,10 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
             rExport.CheckAttrList();
         }
         break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
@@ -263,7 +267,6 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOpera
             else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
         }
-        break;
         case sheet::FilterOperator_NOT_EQUAL :
         {
             if (bUseRegularExpressions)
@@ -271,37 +274,30 @@ rtl::OUString ScXMLExportDatabaseRanges::getOperatorXML(const sheet::FilterOpera
             else
                 return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("!="));
         }
-        break;
         case sheet::FilterOperator_BOTTOM_PERCENT :
             return GetXMLToken(XML_BOTTOM_PERCENT);
-            break;
         case sheet::FilterOperator_BOTTOM_VALUES :
             return GetXMLToken(XML_BOTTOM_VALUES);
-            break;
         case sheet::FilterOperator_EMPTY :
             return GetXMLToken(XML_EMPTY);
-            break;
         case sheet::FilterOperator_GREATER :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">"));
-            break;
         case sheet::FilterOperator_GREATER_EQUAL :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(">="));
-            break;
         case sheet::FilterOperator_LESS :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<"));
-            break;
         case sheet::FilterOperator_LESS_EQUAL :
             return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("<="));
-            break;
         case sheet::FilterOperator_NOT_EMPTY :
             return GetXMLToken(XML_NOEMPTY);
-            break;
         case sheet::FilterOperator_TOP_PERCENT :
             return GetXMLToken(XML_TOP_PERCENT);
-            break;
         case sheet::FilterOperator_TOP_VALUES :
             return GetXMLToken(XML_TOP_VALUES);
-            break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("="));
 }
@@ -457,10 +453,10 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
     uno::Sequence <table::TableSortField> aSortFields;
     sal_Bool bBindFormatsToContent (sal_True);
     sal_Bool bCopyOutputData (sal_False);
-    sal_Bool bIsCaseSensitive (sal_False);
+//    sal_Bool bIsCaseSensitive (sal_False);
     sal_Bool bIsUserListEnabled (sal_False);
     table::CellAddress aOutputPosition;
-    sal_Int32 nUserListIndex;
+    sal_Int32 nUserListIndex = 0;
     sal_Int32 nProperties = aSortProperties.getLength();
     sal_Int32 i;
     for (i = 0; i < nProperties; ++i)
@@ -554,6 +550,10 @@ void ScXMLExportDatabaseRanges::WriteSortDescriptor(const uno::Sequence <beans::
                     case table::TableSortFieldType_NUMERIC :
                         rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATA_TYPE, XML_NUMBER);
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             else
@@ -702,7 +702,7 @@ void ScXMLExportDatabaseRanges::WriteDatabaseRanges(const com::sun::star::uno::R
 
                                     sal_Bool bSortColumns(sal_True);
                                     sal_Bool bFound(sal_False);
-                                    sal_uInt32 nProperty(0);
+                                    sal_Int32 nProperty(0);
                                     while (!bFound && (nProperty < aSortProperties.getLength()))
                                     {
                                         if (aSortProperties[nProperty].Name.compareToAscii(SC_UNONAME_ISSORTCOLUMNS) == 0)
