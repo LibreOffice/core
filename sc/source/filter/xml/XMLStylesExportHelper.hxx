@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:57:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:46:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,8 +135,8 @@ struct ScMyDefaultStyle
     sal_Int32   nRepeat;
     sal_Bool    bIsAutoStyle;
 
-    ScMyDefaultStyle() : nIndex(-1), bIsAutoStyle(sal_True),
-        nRepeat(1) {}
+    ScMyDefaultStyle() : nIndex(-1), nRepeat(1),
+        bIsAutoStyle(sal_True) {}
 };
 
 typedef std::vector<ScMyDefaultStyle> ScMyDefaultStyleList;
@@ -261,7 +261,7 @@ class ScColumnRowStylesBase
 
 public:
     ScColumnRowStylesBase();
-    ~ScColumnRowStylesBase();
+    virtual ~ScColumnRowStylesBase();
 
     virtual void AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields) = 0;
     sal_Int32 AddStyleName(rtl::OUString* pString);
