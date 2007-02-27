@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:57:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:53:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,7 @@ struct ScRawToken
     // Friends that use a temporary ScRawToken on the stack (and therefor need
     // the private dtor) and know what they're doing..
     friend class ScTokenArray;
+    friend USHORT lcl_ScRawTokenOffset();
 private:
     SC_TOKEN_FIX_MEMBERS
 public:
@@ -234,7 +235,7 @@ public:
 
 
         Convention( ScAddress::Convention eConvP );
-        ~Convention();
+        virtual ~Convention();
 
         virtual void MakeRefStr( rtl::OUStringBuffer&   rBuffer,
                                  const ScCompiler&      rCompiler,
@@ -399,7 +400,8 @@ public:
         {
             sal_Unicode c = rStr.GetChar( nPos );
             return c < 128 ?
-                ((pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
+                static_cast<BOOL>(
+                    (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_CHAR_WORD) == SC_COMPILER_C_CHAR_WORD) :
                 ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
         }
 
@@ -410,7 +412,8 @@ public:
         {
             sal_Unicode c = rStr.GetChar( nPos );
             return c < 128 ?
-                ((pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
+                static_cast<BOOL>(
+                    (pConventions[eConv]->mpCharTable[ UINT8(c) ] & SC_COMPILER_C_WORD) == SC_COMPILER_C_WORD) :
                 ScGlobal::pCharClass->isLetterNumeric( rStr, nPos );
         }
 
