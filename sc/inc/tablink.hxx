@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablink.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:44:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:58:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,7 +99,7 @@ public:
     BOOL    IsUsed() const;
 
     DECL_LINK( RefreshHdl, ScTableLink* );
-    DECL_LINK( EndEditHdl, ::sfx2::SvBaseLink* );
+    DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink* );
 };
 
 class ScDocument;
