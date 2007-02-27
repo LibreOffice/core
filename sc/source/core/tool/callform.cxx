@@ -4,9 +4,9 @@
  *
  *  $RCSfile: callform.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:17:47 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:12:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,8 @@
 #ifndef _SV_SVAPP_HXX //autogen
 #include <vcl/svapp.hxx>
 #endif
-#ifndef _VOS_MODULE_HXX_
-#include <vos/module.hxx>
+#ifndef _OSL_MODULE_HXX_
+#include <osl/module.hxx>
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -56,8 +56,6 @@
 #include "callform.hxx"
 #include "global.hxx"
 #include "adiasync.hxx"
-
-using namespace ::vos;
 
 //------------------------------------------------------------------------
 
@@ -156,6 +154,7 @@ FuncData::FuncData(const ModuleData*pModule,
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const FuncData& rData) :
+    DataObject(),
     pModuleData     (rData.pModuleData),
     aInternalName   (rData.aInternalName),
     aFuncName       (rData.aFuncName),
@@ -188,15 +187,15 @@ class ModuleData : public DataObject
 {
 friend class ModuleCollection;
     String      aName;
-    OModule*    pInstance;
+    osl::Module* pInstance;
 public:
-    ModuleData(const String& rStr, OModule* pInst) : aName (rStr), pInstance (pInst) {}
-    ModuleData(const ModuleData& rData) : aName (rData.aName) {pInstance = new OModule(aName);}
+    ModuleData(const String& rStr, osl::Module* pInst) : aName (rStr), pInstance (pInst) {}
+    ModuleData(const ModuleData& rData) : DataObject(), aName (rData.aName) {pInstance = new osl::Module(aName);}
     ~ModuleData() { delete pInstance; }
     virtual DataObject* Clone() const { return new ModuleData(*this); }
 
     const   String&         GetName() const { return aName; }
-            OModule*        GetInstance() const { return pInstance; }
+            osl::Module*    GetInstance() const { return pInstance; }
             void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
@@ -214,11 +213,7 @@ public:
                                           const ModuleData*& rpModule ) const;
 };
 
-#pragma code_seg("SCSTATICS")
-
 static ModuleCollection aModuleCollection;
-
-#pragma code_seg()
 
 //------------------------------------------------------------------------
 
@@ -258,16 +253,16 @@ BOOL InitExternalFunc(const rtl::OUString& rModuleName)
     aNP = rModuleName;
 
     BOOL bRet = FALSE;
-    OModule* pLib = new OModule( aNP );
-    if (pLib->isLoaded())
+    osl::Module* pLib = new osl::Module( aNP );
+    if (pLib->is())
     {
-        FARPROC fpGetCount = (FARPROC)pLib->getSymbol(LIBFUNCNAME(GETFUNCTIONCOUNT));
-        FARPROC fpGetData = (FARPROC)pLib->getSymbol(LIBFUNCNAME(GETFUNCTIONDATA));
+        FARPROC fpGetCount = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(GETFUNCTIONCOUNT));
+        FARPROC fpGetData = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(GETFUNCTIONDATA));
         if ((fpGetCount != NULL) && (fpGetData != NULL))
         {
-            FARPROC fpIsAsync = (FARPROC)pLib->getSymbol(LIBFUNCNAME(ISASYNC));
-            FARPROC fpAdvice = (FARPROC)pLib->getSymbol(LIBFUNCNAME(ADVICE));
-            FARPROC fpSetLanguage = (FARPROC)pLib->getSymbol(LIBFUNCNAME(SETLANGUAGE));
+            FARPROC fpIsAsync = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(ISASYNC));
+            FARPROC fpAdvice = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(ADVICE));
+            FARPROC fpSetLanguage = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(SETLANGUAGE));
             if ( fpSetLanguage )
             {
                 LanguageType eLanguage = Application::GetSettings().GetUILanguage();
@@ -346,8 +341,8 @@ void ExitExternalFunc()
 BOOL FuncData::Call(void** ppParam)
 {
     BOOL bRet = FALSE;
-    OModule* pLib = pModuleData->GetInstance();
-    FARPROC fProc = (FARPROC)pLib->getSymbol(aFuncName);
+    osl::Module* pLib = pModuleData->GetInstance();
+    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(aFuncName);
     if (fProc != NULL)
     {
         switch (nParamCount)
@@ -441,8 +436,8 @@ BOOL FuncData::Call(void** ppParam)
 BOOL FuncData::Advice( AdvData pfCallback )
 {
     BOOL bRet = FALSE;
-    OModule* pLib = pModuleData->GetInstance();
-    FARPROC fProc = (FARPROC)pLib->getSymbol(LIBFUNCNAME(ADVICE));
+    osl::Module* pLib = pModuleData->GetInstance();
+    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(ADVICE));
     if (fProc != NULL)
     {
         ((::Advice)fProc)(nNumber, pfCallback);
@@ -456,8 +451,8 @@ BOOL FuncData::Advice( AdvData pfCallback )
 BOOL FuncData::Unadvice( double nHandle )
 {
     BOOL bRet = FALSE;
-    OModule* pLib = pModuleData->GetInstance();
-    FARPROC fProc = (FARPROC)pLib->getSymbol(LIBFUNCNAME(UNADVICE));
+    osl::Module* pLib = pModuleData->GetInstance();
+    FARPROC fProc = (FARPROC)pLib->getFunctionSymbol(LIBFUNCNAME(UNADVICE));
     if (fProc != NULL)
     {
         ((::Unadvice)fProc)(nHandle);
@@ -481,8 +476,8 @@ BOOL FuncData::GetParamDesc( String& aName, String& aDesc, USHORT nParam )
     BOOL bRet = FALSE;
     if ( nParam <= nParamCount )
     {
-        OModule* pLib = pModuleData->GetInstance();
-        FARPROC fProc = (FARPROC) pLib->getSymbol( LIBFUNCNAME(GETPARAMDESC) );
+        osl::Module* pLib = pModuleData->GetInstance();
+        FARPROC fProc = (FARPROC) pLib->getFunctionSymbol( LIBFUNCNAME(GETPARAMDESC) );
         if ( fProc != NULL )
         {
             sal_Char pcName[256];
