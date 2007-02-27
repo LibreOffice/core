@@ -4,9 +4,9 @@
  *
  *  $RCSfile: address.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:15:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,9 +306,9 @@ public:
     inline void SetInvalid() { nRow = -1; nCol = -1; nTab = -1; }
     inline bool IsValid() const { return (nRow >= 0) && (nCol >= 0) && (nTab >= 0); }
     inline void PutInOrder( ScAddress& r );
-    inline void IncRow( SCsROW n=1 ) { nRow += n; }
-    inline void IncCol( SCsCOL n=1 ) { nCol += n; }
-    inline void IncTab( SCsTAB n=1 ) { nTab += n; }
+    inline void IncRow( SCsROW n=1 ) { nRow = sal::static_int_cast<SCROW>(nRow + n); }
+    inline void IncCol( SCsCOL n=1 ) { nCol = sal::static_int_cast<SCCOL>(nCol + n); }
+    inline void IncTab( SCsTAB n=1 ) { nTab = sal::static_int_cast<SCTAB>(nTab + n); }
     inline void GetVars( SCCOL& nColP, SCROW& nRowP, SCTAB& nTabP ) const
     { nColP = nCol; nRowP = nRow; nTabP = nTab; }
 
