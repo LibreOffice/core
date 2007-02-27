@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuins1.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:51:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,7 +249,6 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
     SdrMediaObj* pObj = new SdrMediaObj( Rectangle( aInsertPos, aSize ) );
 
     pObj->setURL( rMediaURL );
-    ScDrawLayer* pLayer = (ScDrawLayer*) pView->GetModel();
     pView->InsertObjectAtView( pObj, *pPV, bApi ? SDRINSERT_DONTMARK : 0 );
 }
 
@@ -265,10 +264,10 @@ void lcl_InsertMedia( const ::rtl::OUString& rMediaURL, bool bApi,
 
 FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
                                   Window*           pWin,
-                                  SdrView*          pView,
+                                  SdrView*          pViewP,
                                   SdrModel*         pDoc,
                                   SfxRequest&       rReq )
-       : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+       : FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     const SfxItemSet* pReqArgs = rReq.GetArgs();
     const SfxPoolItem* pItem;
@@ -286,7 +285,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
             bAsLink = ((const SfxBoolItem*)pItem)->GetValue();
 
         Graphic aGraphic;
-        USHORT nError = ::LoadGraphic( aFileName, aFilterName, aGraphic, ::GetGrfFilter() );
+        int nError = ::LoadGraphic( aFileName, aFilterName, aGraphic, ::GetGrfFilter() );
         if ( nError == GRFILTER_OK )
         {
             lcl_InsertGraphic( aGraphic, aFileName, aFilterName, bAsLink, TRUE, pViewSh, pWindow, pView );
@@ -299,7 +298,7 @@ FuInsertGraphic::FuInsertGraphic( ScTabViewShell*   pViewSh,
         if( aDlg.Execute() == GRFILTER_OK )
         {
             Graphic aGraphic;
-            USHORT nError = aDlg.GetGraphic(aGraphic);
+            int nError = aDlg.GetGraphic(aGraphic);
             if( nError == GRFILTER_OK )
             {
                 String aFileName = aDlg.GetPath();
@@ -386,10 +385,10 @@ void FuInsertGraphic::Deactivate()
 
 FuInsertMedia::FuInsertMedia( ScTabViewShell*   pViewSh,
                               Window*           pWin,
-                              SdrView*          pView,
+                              SdrView*          pViewP,
                               SdrModel*         pDoc,
                               SfxRequest&       rReq ) :
-    FuPoor(pViewSh, pWin, pView, pDoc, rReq)
+    FuPoor(pViewSh, pWin, pViewP, pDoc, rReq)
 {
     ::rtl::OUString     aURL;
     const SfxItemSet*   pReqArgs = rReq.GetArgs();
