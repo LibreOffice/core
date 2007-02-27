@@ -4,9 +4,9 @@
  *
  *  $RCSfile: op.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:29:18 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,19 +96,19 @@ void NI( SvStream& r, UINT16 n )
 }
 
 
-void OP_BOF( SvStream& r, UINT16 n )
+void OP_BOF( SvStream& r, UINT16 /*n*/ )
 {
     r.SeekRel( 2 );        // Versionsnummer ueberlesen
 }
 
 
-void OP_EOF( SvStream& r, UINT16 n )
+void OP_EOF( SvStream& /*r*/, UINT16 /*n*/ )
 {
     bEOF = TRUE;
 }
 
 
-void OP_Integer( SvStream& r, UINT16 n )
+void OP_Integer( SvStream& r, UINT16 /*n*/ )
 {
     BYTE            nFormat;
     UINT16          nCol, nRow;
@@ -125,7 +125,7 @@ void OP_Integer( SvStream& r, UINT16 n )
 }
 
 
-void OP_Number( SvStream& r, UINT16 n )
+void OP_Number( SvStream& r, UINT16 /*n*/ )
 {
     BYTE            nFormat;
     UINT16          nCol, nRow;
@@ -182,7 +182,7 @@ void OP_Text( SvStream& r, UINT16 n )        // WK3
 }
 
 
-void OP_Formula( SvStream& r, UINT16 n )
+void OP_Formula( SvStream& r, UINT16 /*n*/ )
 {
     BYTE                nFormat;
     UINT16              nCol, nRow, nFormulaSize;
@@ -211,7 +211,7 @@ void OP_Formula( SvStream& r, UINT16 n )
 }
 
 
-void OP_ColumnWidth( SvStream& r, UINT16 n )
+void OP_ColumnWidth( SvStream& r, UINT16 /*n*/ )
 {
     UINT16              nCol, nBreite;
     BYTE                nWidthSpaces;
@@ -232,7 +232,7 @@ void OP_ColumnWidth( SvStream& r, UINT16 n )
 }
 
 
-void OP_NamedRange( SvStream& r, UINT16 n )
+void OP_NamedRange( SvStream& r, UINT16 /*n*/ )
     {
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
     UINT16              nColSt, nRowSt, nColEnd, nRowEnd;
@@ -265,7 +265,7 @@ void OP_NamedRange( SvStream& r, UINT16 n )
 }
 
 
-void OP_SymphNamedRange( SvStream& r, UINT16 n )
+void OP_SymphNamedRange( SvStream& r, UINT16 /*n*/ )
 {
     // POST:    waren Koordinaten ungueltig, wird nicht gespeichert
     UINT16              nColSt, nRowSt, nColEnd, nRowEnd;
@@ -319,7 +319,7 @@ void OP_Margins( SvStream& r, UINT16 n )
 }
 
 
-void OP_HiddenCols( SvStream& r, UINT16 n )
+void OP_HiddenCols( SvStream& r, UINT16 /*n*/ )
 {
     UINT16      nByte, nBit;
     SCCOL       nCount;
@@ -362,7 +362,7 @@ void OP_Window1( SvStream& r, UINT16 n )
 }
 
 
-void OP_Blank( SvStream& r, UINT16 n )
+void OP_Blank( SvStream& r, UINT16 /*n*/ )
 {
     UINT16      nCol, nRow;
     BYTE        nFormat;
@@ -371,13 +371,13 @@ void OP_Blank( SvStream& r, UINT16 n )
     SetFormat( static_cast<SCCOL> (nCol), static_cast<SCROW> (nRow), 0, nFormat, nDezFloat );
 }
 
-void OP_BOF123( SvStream& r, UINT16 n )
+void OP_BOF123( SvStream& r, UINT16 /*n*/ )
 {
     r.SeekRel( 26 );
 }
 
 
-void OP_EOF123( SvStream& r, UINT16 n )
+void OP_EOF123( SvStream& /*r*/, UINT16 /*n*/ )
 {
     bEOF = TRUE;
 }
@@ -398,7 +398,7 @@ void OP_Label123( SvStream& r, UINT16 n )
     delete []pText;
 }
 
-void OP_Number123( SvStream& r, UINT16 n )
+void OP_Number123( SvStream& r, UINT16 /*n*/ )
 {
     BYTE    nCol,nTab;
     UINT16  nRow;
@@ -434,7 +434,7 @@ void OP_Formula123( SvStream& r, UINT16 n )
     pDoc->PutCell( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), static_cast<SCTAB>(nTab), pCell, (BOOL) TRUE );
 }
 
-void OP_IEEENumber123( SvStream& r, UINT16 n)
+void OP_IEEENumber123( SvStream& r, UINT16 /*n*/ )
 {
     BYTE nCol,nTab;
     UINT16 nRow;
@@ -634,7 +634,7 @@ void OP_ApplyPatternArea123( SvStream& rStream )
                         // #126338# apparently, files with invalid index occur in the wild -> don't crash then
                         DBG_ASSERT( loc != aLotusPatternPool.end(), "invalid format index" );
                         if ( loc != aLotusPatternPool.end() )
-                            pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, nTab + i, loc->second );
+                            pDoc->ApplyPatternAreaTab( nCol, nRow, nCol +  nColCount - 1, nRow + nRowCount - 1, static_cast< SCTAB >( nTab + i ), loc->second );
                     }
                 }
                 else
