@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xipivot.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:21:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:27:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,7 @@ void XclImpPCItem::ReadSxdatetime( XclImpStream& rStrm )
 
 void XclImpPCItem::ReadSxempty( XclImpStream& rStrm )
 {
+    (void)rStrm;    // avoid compiler warning
     DBG_ASSERT( rStrm.GetRecSize() == 0, "XclImpPCItem::ReadSxempty - wrong record size" );
     SetEmpty();
 }
@@ -999,7 +1000,7 @@ void XclImpPTField::ConvertRowColField( ScDPSaveData& rSaveData ) const
     DBG_ASSERT( maFieldInfo.mnAxes & EXC_SXVD_AXIS_ROWCOL, "XclImpPTField::ConvertRowColField - no row/column field" );
     // special data orientation field?
     if( maFieldInfo.mnCacheIdx == EXC_SXIVD_DATA )
-        rSaveData.GetDataLayoutDimension()->SetOrientation( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) );
+        rSaveData.GetDataLayoutDimension()->SetOrientation( static_cast< USHORT >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOL ) ) );
     else
         ConvertRCPField( rSaveData );
 }
@@ -1078,7 +1079,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     ScDPSaveDimension& rSaveDim = *rSaveData.GetNewDimensionByName( rFieldName );
 
     // orientation
-    rSaveDim.SetOrientation( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) );
+    rSaveDim.SetOrientation( static_cast< USHORT >( maFieldInfo.GetApiOrient( EXC_SXVD_AXIS_ROWCOLPAGE ) ) );
 
     // general field info
     ConvertFieldInfo( rSaveDim );
@@ -1145,7 +1146,7 @@ void XclImpPTField::ConvertDataFieldInfo( ScDPSaveDimension& rSaveDim, const Xcl
             rSaveDim.SetLayoutName( pVisName );
 
     // aggregation function
-    rSaveDim.SetFunction( rDataInfo.GetApiAggFunc() );
+    rSaveDim.SetFunction( static_cast< USHORT >( rDataInfo.GetApiAggFunc() ) );
 
     // result field reference
     sal_Int32 nRefType = rDataInfo.GetApiRefType();
