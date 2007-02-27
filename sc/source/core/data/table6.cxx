@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table6.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:20:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ void ScTable::ScReplaceTabsStr( String& rStr, const String& rSrch, const String&
         }
         rStr.Erase( nPos, rSrch.Len() );
         rStr.Insert( rRepl, nPos );
-        nPos += rRepl.Len();
+        nPos = sal::static_int_cast<xub_StrLen>( nPos + rRepl.Len() );
     }
 }
 
@@ -226,7 +226,7 @@ BOOL ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 }
                 else
                 {
-                    nStart += sReplStr.Len();
+                    nStart = sal::static_int_cast<xub_StrLen>( nStart + sReplStr.Len() );
                     nEnd = aString.Len();
                 }
 
@@ -309,7 +309,6 @@ BOOL ScTable::Search(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& rRow,
     SCCOL nLastCol;
     SCROW nLastRow;
     GetLastDataPos(nLastCol, nLastRow);
-    USHORT nType = rSearchItem.GetCellType();
     if (!bAll && rSearchItem.GetBackward())
     {
         nCol = Min(nCol, (SCCOL)(nLastCol + 1));
@@ -534,7 +533,7 @@ BOOL ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
             if (!ValidRow(nNextRow))
             {
                 nRow = bBack ? MAXROW : 0;
-                nCol += nAdd;
+                nCol = sal::static_int_cast<SCsCOL>( nCol + nAdd );
             }
             else
             {
