@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapitype.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:21:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:01:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,13 +54,13 @@ using namespace com::sun::star;
 ScDataPilotSourceTypeDlg::ScDataPilotSourceTypeDlg( Window* pParent, BOOL bEnableExternal ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPITYPE ) ),
     //
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnSelection   ( this, ScResId( BTN_SELECTION ) ),
     aBtnDatabase    ( this, ScResId( BTN_DATABASE ) ),
     aBtnExternal    ( this, ScResId( BTN_EXTERNAL ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) )
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     if (!bEnableExternal)
         aBtnExternal.Disable();
@@ -95,9 +95,7 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
                                 const uno::Sequence<rtl::OUString>& rServices ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DAPISERVICE ) ),
     //
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aFtService      ( this, ScResId( FT_SERVICE ) ),
     aLbService      ( this, ScResId( LB_SERVICE ) ),
     aFtSource       ( this, ScResId( FT_SOURCE ) ),
@@ -108,7 +106,9 @@ ScDataPilotServiceDlg::ScDataPilotServiceDlg( Window* pParent,
     aEdUser         ( this, ScResId( ED_USER ) ),
     aFtPasswd       ( this, ScResId( FT_PASSWD ) ),
     aEdPasswd       ( this, ScResId( ED_PASSWD ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) )
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     long nCount = rServices.getLength();
     const rtl::OUString* pArray = rServices.getConstArray();
