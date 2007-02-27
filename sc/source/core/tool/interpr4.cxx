@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr4.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:18:04 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:16:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,18 +123,18 @@ void ScInterpreter::ReplaceCell( ScAddress& rPos )
 
 void ScInterpreter::ReplaceCell( SCCOL& rCol, SCROW& rRow, SCTAB& rTab )
 {
-    ScAddress aPos( rCol, rRow, rTab );
+    ScAddress aCellPos( rCol, rRow, rTab );
     ScInterpreterTableOpParams* pTOp = pDok->aTableOpList.First();
     while (pTOp)
     {
-        if ( aPos == pTOp->aOld1 )
+        if ( aCellPos == pTOp->aOld1 )
         {
             rCol = pTOp->aNew1.Col();
             rRow = pTOp->aNew1.Row();
             rTab = pTOp->aNew1.Tab();
             return ;
         }
-        else if ( aPos == pTOp->aOld2 )
+        else if ( aCellPos == pTOp->aOld2 )
         {
             rCol = pTOp->aNew2.Col();
             rRow = pTOp->aNew2.Row();
@@ -1033,13 +1033,13 @@ BOOL ScInterpreter::PopDoubleRefOrSingleRef( ScAddress& rAdr )
             PopDoubleRef( aRange, TRUE );
             return DoubleRefToPosSingleRef( aRange, rAdr );
         }
-        break;
+        //break;
         case svSingleRef :
         {
             PopSingleRef( rAdr );
             return TRUE;
         }
-        break;
+        //break;
         default:
             Pop();
             SetError( errNoRef );
@@ -1372,8 +1372,8 @@ BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
         {
             SCSIZE nC, nR;
             pJumpMatrix->GetPos( nC, nR);
-            rAdr.SetCol( rRange.aStart.Col() + nC);
-            rAdr.SetRow( rRange.aStart.Row() + nR);
+            rAdr.SetCol( sal::static_int_cast<SCCOL>( rRange.aStart.Col() + nC ) );
+            rAdr.SetRow( sal::static_int_cast<SCROW>( rRange.aStart.Row() + nR ) );
             rAdr.SetTab( rRange.aStart.Tab());
             bOk = rRange.aStart.Col() <= rAdr.Col() && rAdr.Col() <=
                 rRange.aEnd.Col() && rRange.aStart.Row() <= rAdr.Row() &&
@@ -1387,8 +1387,8 @@ BOOL ScInterpreter::DoubleRefToPosSingleRef( const ScRange& rRange, ScAddress& r
     SCCOL nMyCol = aPos.Col();
     SCROW nMyRow = aPos.Row();
     SCTAB nMyTab = aPos.Tab();
-    SCCOL nCol;
-    SCROW nRow;
+    SCCOL nCol = 0;
+    SCROW nRow = 0;
     SCTAB nTab;
     nTab = rRange.aStart.Tab();
     if ( rRange.aStart.Col() <= nMyCol && nMyCol <= rRange.aEnd.Col() )
@@ -1521,10 +1521,10 @@ double ScInterpreter::GetDouble()
 double ScInterpreter::GetDoubleWithDefault(double nDefault)
 {
     bool bMissing = IsMissing();
-    double nResult = GetDouble();
+    double nResultVal = GetDouble();
     if ( bMissing )
-        nResult = nDefault;
-    return nResult;
+        nResultVal = nDefault;
+    return nResultVal;
 }
 
 
@@ -1544,10 +1544,10 @@ const String& ScInterpreter::GetString()
             pFormatter->GetInputLineString(fVal, nIndex, aTempStr);
             return aTempStr;
         }
-        break;
+        //break;
         case svString:
             return PopString();
-        break;
+        //break;
         case svSingleRef:
         {
             ScAddress aAdr;
@@ -1561,7 +1561,7 @@ const String& ScInterpreter::GetString()
             else
                 return EMPTY_STRING;
         }
-        break;
+        //break;
         case svDoubleRef:
         {   // generate position dependent SingleRef
             ScRange aRange;
@@ -1576,7 +1576,7 @@ const String& ScInterpreter::GetString()
             else
                 return EMPTY_STRING;
         }
-        break;
+        //break;
         case svMatrix:
         {
             ScMatrixRef pMat = PopMatrix();
@@ -1665,7 +1665,7 @@ void ScInterpreter::ScDBGet()
     {
         ScBaseCell* pCell;
         ScQueryCellIterator aCellIter(pDok, nTab, aQueryParam);
-        if (pCell = aCellIter.GetFirst())
+        if ( (pCell = aCellIter.GetFirst()) != NULL )
         {
             if (aCellIter.GetNext())
                 SetIllegalArgument();
@@ -1964,7 +1964,7 @@ void ScInterpreter::ScExternal()
             --nPar;     // 0 .. (nParamCount-1)
 
             ScAddInArgumentType eType = aCall.GetArgType( nPar );
-            BYTE nStackType = GetStackType();
+            BYTE nStackType = sal::static_int_cast<BYTE>( GetStackType() );
 
             uno::Any aParam;
             switch (eType)
@@ -2363,7 +2363,7 @@ void ScInterpreter::ScMacro()
     for( short i = nParamCount; i && bOk ; i-- )
     {
         SbxVariable* pPar = refPar->Get( (USHORT) i );
-        BYTE nStackType = GetStackType();
+        BYTE nStackType = sal::static_int_cast<BYTE>( GetStackType() );
         switch( nStackType )
         {
             case svDouble:
@@ -2426,18 +2426,18 @@ void ScInterpreter::ScMacro()
                     SbxDimArrayRef refArray = new SbxDimArray;
                     refArray->AddDim32( 1, static_cast<INT32>(nR) );
                     refArray->AddDim32( 1, static_cast<INT32>(nC) );
-                    for( SCSIZE j = 0; j < nR; j++ )
+                    for( SCSIZE nMatRow = 0; nMatRow < nR; nMatRow++ )
                     {
                         INT32 nIdx[ 2 ];
-                        nIdx[ 0 ] = static_cast<INT32>(j+1);
-                        for( SCSIZE i = 0; i < nC; i++ )
+                        nIdx[ 0 ] = static_cast<INT32>(nMatRow+1);
+                        for( SCSIZE nMatCol = 0; nMatCol < nC; nMatCol++ )
                         {
-                            nIdx[ 1 ] = static_cast<INT32>(i+1);
+                            nIdx[ 1 ] = static_cast<INT32>(nMatCol+1);
                             SbxVariable* p = refArray->Get32( nIdx );
-                            if (pMat->IsString(i, j))
-                                p->PutString( pMat->GetString(i, j) );
+                            if (pMat->IsString(nMatCol, nMatRow))
+                                p->PutString( pMat->GetString(nMatCol, nMatRow) );
                             else
-                                p->PutDouble( pMat->GetDouble(i, j));
+                                p->PutDouble( pMat->GetDouble(nMatCol, nMatRow));
                         }
                     }
                     pPar->PutObject( refArray );
@@ -2951,7 +2951,7 @@ int main()
                 *p++ ^= 0x7F;
         }
     }
-    String aResult;
+    String aFuncResult;
     GameType eGame = SC_GAME_NONE;
     BYTE nParamCount = GetByte();
     if ( nParamCount >= 1 )
@@ -3010,7 +3010,7 @@ int main()
                                     else
                                     {
                                         Square_Type aWinner = pTicTacToe->CalcMove();
-                                        pTicTacToe->GetOutput( aResult );
+                                        pTicTacToe->GetOutput( aFuncResult );
                                         if ( aWinner != pTicTacToe->GetEmpty() )
                                         {
                                             delete pTicTacToe;
@@ -3038,7 +3038,7 @@ int main()
                         oslModule m_tfu = osl_loadModule(rtl::OUString::createFromAscii( SVLIBRARY( "tfu" ) ).pData, SAL_LOADMODULE_NOW);
                         typedef void StartInvader_Type (Window*, ResMgr*);
 
-                        StartInvader_Type *StartInvader = (StartInvader_Type *) osl_getSymbol( m_tfu, rtl::OUString::createFromAscii("StartInvader").pData );
+                        StartInvader_Type *StartInvader = (StartInvader_Type *) osl_getFunctionSymbol( m_tfu, rtl::OUString::createFromAscii("StartInvader").pData );
                         if ( StartInvader )
                             StartInvader( Application::GetDefDialogParent(), ResMgr::CreateResMgr( "tfu" MAKE_NUMSTR(SUPD) ));
                     }
@@ -3046,6 +3046,10 @@ int main()
                     case SC_GAME_FROGGER :
                         //Game();
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
         }
@@ -3053,10 +3057,10 @@ int main()
     // Stack aufraeumen
     while ( nParamCount-- )
         Pop();
-    if ( !aResult.Len() )
+    if ( !aFuncResult.Len() )
         PushString( String( pGames[ eGame ], RTL_TEXTENCODING_ASCII_US ) );
     else
-        PushString( aResult );
+        PushString( aFuncResult );
 }
 
 void ScInterpreter::ScTTT()
@@ -3633,15 +3637,15 @@ StackVar ScInterpreter::Interpret()
                 {
                     // Clear stack. Assumes that every function pushes a
                     // result, may be arbitrary in case of error.
-                    const ScToken* pResult = pStack[ sp - 1 ];
+                    const ScToken* pTempResult = pStack[ sp - 1 ];
                     while ( sp > nStackBase )
                         Pop();
-                    PushTempToken( *pResult );
+                    PushTempToken( *pTempResult );
                 }
             }
         }
 
-        nOldOpCode = eOp;
+        nOldOpCode = sal::static_int_cast<UINT16>( eOp );
     }
 
     // End: obtain result
