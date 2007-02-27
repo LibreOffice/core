@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namecrea.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:08:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,14 @@
 
 ScNameCreateDlg::ScNameCreateDlg( Window * pParent, USHORT nFlags )
     : ModalDialog( pParent, ScResId(RID_SCDLG_NAMES_CREATE) ),
+    aFixedLine      ( this, ScResId( FL_FRAME ) ),
     aTopBox         ( this, ScResId( BTN_TOP ) ),
     aLeftBox        ( this, ScResId( BTN_LEFT ) ),
     aBottomBox      ( this, ScResId( BTN_BOTTOM ) ),
     aRightBox       ( this, ScResId( BTN_RIGHT ) ),
     aOKButton       ( this, ScResId( BTN_OK ) ),
     aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
-    aHelpButton     ( this, ScResId( BTN_HELP ) ),
-    aFixedLine      ( this, ScResId( FL_FRAME ) )
+    aHelpButton     ( this, ScResId( BTN_HELP ) )
 {
     aTopBox.Check   ( (nFlags & NAME_TOP)   ? TRUE : FALSE );
     aLeftBox.Check  ( (nFlags & NAME_LEFT)  ? TRUE : FALSE );
