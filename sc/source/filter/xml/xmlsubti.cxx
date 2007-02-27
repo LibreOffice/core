@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:58:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ ScMyTableData::ScMyTableData(sal_Int32 nSheet, sal_Int32 nCol, sal_Int32 nRow)
         nRealRows(nDefaultRowCount + 1, 0),
         nChangedCols()
 {
-    aTableCellPos.Sheet = nSheet;
+    aTableCellPos.Sheet = sal::static_int_cast<sal_Int16>( nSheet );
     aTableCellPos.Column = nCol;
     aTableCellPos.Row = nRow;
 
@@ -155,7 +155,7 @@ sal_Int32 ScMyTableData::FindNextCol(const sal_Int32 nIndex) const
     return nRealCols[i];
 }
 
-sal_Int32 ScMyTableData::GetRealCols(const sal_Int32 nIndex, const sal_Bool bIsNormal) const
+sal_Int32 ScMyTableData::GetRealCols(const sal_Int32 nIndex, const sal_Bool /* bIsNormal */) const
 {
     return (nIndex < 0) ? 0 : nRealCols[nIndex];
 }
@@ -181,7 +181,6 @@ void ScMyTableData::SetChangedCols(const sal_Int32 nValue)
     ScMysalIntList::iterator endi(nChangedCols.end());
     while ((i != endi) && (*i < nValue))
     {
-        sal_Int32 nTemp = *i;
         ++i;
     }
     if ((i == endi) || (*i != nValue))
@@ -192,12 +191,12 @@ void ScMyTableData::SetChangedCols(const sal_Int32 nValue)
 
 ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     : rImport(rTempImport),
-    nTableCount( 0 ),
-    nCurrentSheet( -1 ),
+    aResizeShapes(rTempImport),
+    nCurrentColStylePos(0),
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 ),
-    aResizeShapes(rTempImport),
-    nCurrentColStylePos(0)
+    nTableCount( 0 ),
+    nCurrentSheet( -1 )
 {
     aTableVec.resize(nDefaultTabCount, NULL);
 }
@@ -243,7 +242,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                 {
                     try
                     {
-                        xSheets->insertNewByName(sTableName, nCurrentSheet);
+                        xSheets->insertNewByName(sTableName, sal::static_int_cast<sal_Int16>(nCurrentSheet));
                     }
                     catch ( uno::RuntimeException& )
                     {
@@ -254,7 +253,7 @@ void ScMyTables::NewSheet(const rtl::OUString& sTableName, const rtl::OUString& 
                             String sTabName(String::CreateFromAscii("Table"));
                             pDoc->CreateValidTabName(sTabName);
                             rtl::OUString sOUTabName(sTabName);
-                            xSheets->insertNewByName(sOUTabName, nCurrentSheet);
+                            xSheets->insertNewByName(sOUTabName, sal::static_int_cast<sal_Int16>(nCurrentSheet));
                             rImport.UnlockSolarMutex();
                         }
                     }
@@ -435,7 +434,7 @@ void ScMyTables::NewRow()
         {
             if (GetRealCellPos().Column > 0)
                 InsertRow();
-            for (sal_Int16 i = nTableCount - 1; i > 0; i--)
+            for (sal_Int16 i = sal::static_int_cast<sal_Int16>(nTableCount - 1); i > 0; i--)
             {
                 sal_Int32 nRow = aTableVec[i - 1]->GetRow();
                 aTableVec[i - 1]->SetRowsPerRow(nRow,
@@ -551,13 +550,12 @@ void ScMyTables::NewColumn(sal_Bool bIsCovered)
                     + LastColSpanned);
             }
         }
-        sal_Int32 nTemp(aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn()));
         if (aTableVec[nTableCount - 1]->GetRealCols(aTableVec[nTableCount - 1]->GetColumn()) > nSpannedCols - 1)
         {
             if ( aTableVec[nTableCount - 1]->GetRow() == 0)
             {
                 InsertColumn();
-                for (sal_Int16 i = nTableCount - 1; i > 0; i--)
+                for (sal_Int16 i = sal::static_int_cast<sal_Int16>(nTableCount - 1); i > 0; i--)
                 {
                     sal_Int32 nColPos = aTableVec[i - 1]->GetColumn() +
                         aTableVec[i]->GetSpannedCols() - 1;
@@ -639,8 +637,8 @@ void ScMyTables::UpdateRowHeights()
     {
         rImport.LockSolarMutex();
         // update automatic row heights
-        SCTAB nTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
-        for (SCTAB i = 0; i < nTableCount; ++i)
+        SCTAB nDocTableCount(rImport.GetDocument() ? rImport.GetDocument()->GetTableCount() : 0);
+        for (SCTAB i = 0; i < nDocTableCount; ++i)
             ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, i );
         rImport.UnlockSolarMutex();
     }
@@ -727,7 +725,7 @@ table::CellAddress ScMyTables::GetRealCellPos()
     }
     aRealCellPos.Row = nRow;
     aRealCellPos.Column = nCol;
-    aRealCellPos.Sheet = nCurrentSheet;
+    aRealCellPos.Sheet = sal::static_int_cast<sal_Int16>(nCurrentSheet);
     return aRealCellPos;
 }
 
@@ -750,7 +748,7 @@ uno::Reference< drawing::XDrawPage > ScMyTables::GetCurrentXDrawPage()
         uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier( xCurrentSheet, uno::UNO_QUERY );
         if( xDrawPageSupplier.is() )
             xDrawPage.set(xDrawPageSupplier->getDrawPage());
-        nCurrentDrawPage = nCurrentSheet;
+        nCurrentDrawPage = sal::static_int_cast<sal_Int16>(nCurrentSheet);
     }
     return xDrawPage;
 }
@@ -762,7 +760,7 @@ uno::Reference< drawing::XShapes > ScMyTables::GetCurrentXShapes()
         xShapes.set(GetCurrentXDrawPage(), uno::UNO_QUERY);
         rImport.GetShapeImport()->startPage(xShapes);
         rImport.GetShapeImport()->pushGroupForSorting ( xShapes );
-        nCurrentXShapes = nCurrentSheet;
+        nCurrentXShapes = sal::static_int_cast<sal_Int16>(nCurrentSheet);
         return xShapes;
     }
     else
@@ -796,7 +794,7 @@ void ScMyTables::AddMatrixRange(sal_Int32 nStartColumn, sal_Int32 nStartRow, sal
     aRange.StartRow = nStartRow;
     aRange.EndColumn = nEndColumn;
     aRange.EndRow = nEndRow;
-    aRange.Sheet = nCurrentSheet;
+    aRange.Sheet = sal::static_int_cast<sal_Int16>(nCurrentSheet);
     ScMatrixRange aMRange(aRange, rFormula);
     aMatrixRangeList.push_back(aMRange);
 }
