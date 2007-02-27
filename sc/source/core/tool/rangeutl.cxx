@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangeutl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:23:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ BOOL ScRangeUtil::IsAbsTabArea( const String&   rAreaStr,
                                 ScDocument*     pDoc,
                                 ScArea***       pppAreas,
                                 USHORT*         pAreaCount,
-                                BOOL            bAcceptCellRef,
+                                BOOL            /* bAcceptCellRef */,
                                 ScAddress::Details const & rDetails ) const
 {
     DBG_ASSERT( pDoc, "Kein Dokument uebergeben!" );
@@ -280,11 +280,11 @@ BOOL ScRangeUtil::MakeRangeFromName (
 {
     BOOL bResult=FALSE;
     ScRangeUtil     aRangeUtil;
-    SCTAB nTab;
-    SCCOL nColStart;
-    SCCOL nColEnd;
-    SCROW nRowStart;
-    SCROW nRowEnd;
+    SCTAB nTab = 0;
+    SCCOL nColStart = 0;
+    SCCOL nColEnd = 0;
+    SCROW nRowStart = 0;
+    SCROW nRowEnd = 0;
 
     if( eScope==RUTL_NAMES )
     {
@@ -406,7 +406,7 @@ BOOL ScArea::operator==( const ScArea& r ) const
 
 //------------------------------------------------------------------------
 
-SvStream& operator>> ( SvStream& rStream, ScArea& rArea )
+SvStream& operator>> ( SvStream& rStream, ScArea& /* rArea */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -421,7 +421,7 @@ SvStream& operator>> ( SvStream& rStream, ScArea& rArea )
 
 //------------------------------------------------------------------------
 
-SvStream& operator<< ( SvStream& rStream, const ScArea& rArea )
+SvStream& operator<< ( SvStream& rStream, const ScArea& /* rArea */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
