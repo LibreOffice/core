@@ -4,9 +4,9 @@
  *
  *  $RCSfile: areasave.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:25:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,7 @@ ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLink& rSource ) :
 }
 
 ScAreaLinkSaver::ScAreaLinkSaver( const ScAreaLinkSaver& rCopy ) :
+    DataObject(),
     aFileName   ( rCopy.aFileName ),
     aFilterName ( rCopy.aFilterName ),
     aOptions    ( rCopy.aOptions ),
@@ -194,8 +195,8 @@ void ScAreaLinkSaveCollection::Restore( ScDocument* pDoc ) const
     if (pLinkManager)
     {
         const ::sfx2::SvBaseLinks& rLinks = pLinkManager->GetLinks();
-        USHORT nCount = GetCount();
-        for (USHORT nPos=0; nPos<nCount; nPos++)
+        USHORT nSaveCount = GetCount();
+        for (USHORT nPos=0; nPos<nSaveCount; nPos++)
         {
             ScAreaLinkSaver* pSaver = (*this)[nPos];
             ScAreaLink* pLink = lcl_FindLink( rLinks, *pSaver );
