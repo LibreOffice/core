@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:46:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:47:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ const SfxItemPropertyMap* lcl_GetShapeMap()
         {MAP_CHAR_LEN(SC_UNONAME_HORIPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_IMAGEMAP), 0, &getCppuType((uno::Reference<container::XIndexContainer>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_VERTPOS), 0, &getCppuType((sal_Int32*)0), 0, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aShapeMap_Impl;
 }
@@ -991,7 +991,7 @@ uno::Any SAL_CALL ScShapeObj::getPropertyDefault( const rtl::OUString& aProperty
 
 // XTextContent
 
-void SAL_CALL ScShapeObj::attach( const uno::Reference<text::XTextRange>& xTextRange )
+void SAL_CALL ScShapeObj::attach( const uno::Reference<text::XTextRange>& /* xTextRange */ )
                                 throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     ScUnoGuard aGuard;
@@ -1218,7 +1218,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getStart() throw(uno::Runt
     else
         throw uno::RuntimeException();
 
-    return uno::Reference<text::XTextRange>();
+//    return uno::Reference<text::XTextRange>();
 }
 
 uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd() throw(uno::RuntimeException)
@@ -1231,7 +1231,7 @@ uno::Reference<text::XTextRange> SAL_CALL ScShapeObj::getEnd() throw(uno::Runtim
     else
         throw uno::RuntimeException();
 
-    return uno::Reference<text::XTextRange>();
+//    return uno::Reference<text::XTextRange>();
 }
 
 rtl::OUString SAL_CALL ScShapeObj::getString() throw(uno::RuntimeException)
@@ -1244,7 +1244,7 @@ rtl::OUString SAL_CALL ScShapeObj::getString() throw(uno::RuntimeException)
     else
         throw uno::RuntimeException();
 
-    return rtl::OUString();
+//    return rtl::OUString();
 }
 
 void SAL_CALL ScShapeObj::setString( const rtl::OUString& aText ) throw(uno::RuntimeException)
