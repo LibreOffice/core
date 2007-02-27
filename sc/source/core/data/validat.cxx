@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:11:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:10:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,8 +391,6 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
         SbMethod* pMethod = (SbMethod*)pVar;
         SbModule* pModule = pMethod->GetModule();
         SbxObject* pObject = pModule->GetParent();
-        StarBASIC* pBasic = PTR_CAST(StarBASIC,pObject);
-        DBG_ASSERT(pBasic, "Kein Basic gefunden!");
         String aMacroStr = pObject->GetName();
         aMacroStr += '.';
         aMacroStr += pModule->GetName();
@@ -415,7 +413,7 @@ BOOL ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
 
         //  1) eingegebener / berechneter Wert
         String aValStr = rInput;
-        double nValue;
+        double nValue = 0.0;
         BOOL bIsValue = FALSE;
         if ( pCell )                // wenn Zelle gesetzt, aus Interpret gerufen
         {
@@ -508,6 +506,10 @@ BOOL ScValidationData::DoError( Window* pParent, const String& rInput,
         case SC_VALERR_INFO:
             nStyle = WB_OK_CANCEL | WB_DEF_OK;
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     MessBox aBox( pParent, WinBits(nStyle), aTitle, aMessage );
@@ -758,9 +760,19 @@ bool ScValidationData::GetRangeFromFormula( ScRange& rRange, const ScAddress& rB
                         }
                     }
                     break;
+
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             break;
+
+            default:
+            {
+                // added to avoid warnings
+            }
         }
     }
 
@@ -912,7 +924,8 @@ bool ScValidationData::IsListValid( ScBaseCell* pCell, const ScAddress& rPos ) c
 // ============================================================================
 // ============================================================================
 
-ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList)
+ScValidationDataList::ScValidationDataList(const ScValidationDataList& rList) :
+    ScValidationEntries_Impl()
 {
     //  fuer Ref-Undo - echte Kopie mit neuen Tokens!
 
