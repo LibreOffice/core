@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documen6.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:52:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:02:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,6 @@ const uno::Reference< i18n::XBreakIterator >& ScDocument::GetBreakIterator()
 
 BOOL ScDocument::HasStringWeakCharacters( const String& rString )
 {
-    BYTE nRet = 0;
     if (rString.Len())
     {
         uno::Reference<i18n::XBreakIterator> xBreakIter = GetBreakIterator();
