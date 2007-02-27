@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleText.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:03:46 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:19:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ public:
 
     virtual ScAccessibleTextData* Clone() const = 0;
 
-    virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) {}
+    virtual void        Notify( SfxBroadcaster& /* rBC */, const SfxHint& /* rHint */ ) {}
 
     virtual SvxTextForwarder* GetTextForwarder() = 0;
     virtual SvxViewForwarder* GetViewForwarder() = 0;
@@ -97,9 +97,9 @@ class ScAccessibleCellBaseTextData : public ScAccessibleTextData,
                                      public ScCellTextData
 {
 public:
-                        ScAccessibleCellBaseTextData(ScDocShell* pDocShell,
+                        ScAccessibleCellBaseTextData(ScDocShell* pDocShellP,
                             const ScAddress& rP)
-                            : ScCellTextData(pDocShell, rP) {}
+                            : ScCellTextData(pDocShellP, rP) {}
     virtual             ~ScAccessibleCellBaseTextData() {}
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) { ScCellTextData::Notify(rBC, rHint); }
 
@@ -141,6 +141,7 @@ private:
     // prevent the using of this method of the base class
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 
+    using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScTabViewShell* pViewShell);
 };
 
@@ -162,7 +163,7 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
 
     virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(sal_Bool bValue) {  }
+    virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
     virtual sal_Bool            IsDirty() const { return sal_False; }
 
     DECL_LINK( NotifyHdl, EENotify* );
@@ -215,7 +216,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
     DECL_LINK( NotifyHdl, EENotify* );
 private:
@@ -225,6 +226,7 @@ private:
     // prevent the using of this method of the base class
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 
+    using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
 
@@ -244,7 +246,7 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
     DECL_LINK( NotifyHdl, EENotify* );
 private:
@@ -257,6 +259,7 @@ private:
     // prevent the using of this method of the base class
     ScSharedCellEditSource* GetOriginalSource() { return NULL; }
 
+    using ScAccessibleCellBaseTextData::GetDocShell;
     ScDocShell* GetDocShell(ScPreviewShell* pViewShell);
 };
 
@@ -276,10 +279,10 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
     virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(sal_Bool bValue) {  }
+    virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
     virtual sal_Bool            IsDirty() const { return sal_False; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
@@ -309,10 +312,10 @@ public:
 
     virtual SvxTextForwarder* GetTextForwarder();
     virtual SvxViewForwarder* GetViewForwarder();
-    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate ) { return NULL; }
+    virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool /* bCreate */ ) { return NULL; }
 
     virtual void                UpdateData() {  }
-    virtual void                SetDoUpdate(sal_Bool bValue) {  }
+    virtual void                SetDoUpdate(sal_Bool /* bValue */) {  }
     virtual sal_Bool            IsDirty() const { return sal_False; }
 private:
     ScPreviewViewForwarder* mpViewForwarder;
@@ -361,7 +364,7 @@ public:
     virtual SvxEditViewForwarder* GetEditViewForwarder( sal_Bool bCreate );
 
     virtual void                UpdateData() {}
-    virtual void                SetDoUpdate( sal_Bool bValue ) {}
+    virtual void                SetDoUpdate( sal_Bool /* bValue */ ) {}
     virtual sal_Bool            IsDirty() const { return sal_False; }
 };
 
