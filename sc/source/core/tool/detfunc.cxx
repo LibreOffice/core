@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detfunc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:05:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:15:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -858,8 +858,6 @@ SdrObject* ScDetectiveFunc::DrawCaption( SCCOL nCol, SCROW nRow, const String& r
 
     if(!bNewNote)
     {
-        const SfxItemSet& rSet = aCellNote.GetItemSet();
-        BOOL bVertical = static_cast<const SvxWritingModeItem&> (rSet.Get (SDRATTR_TEXTDIRECTION)).GetValue() == com::sun::star::text::WritingMode_TB_RL;
         rData.UpdateCaptionSet(aCellNote.GetItemSet());
     }
     SfxItemSet& rAttrSet = rData.GetCaptionSet();
@@ -1473,9 +1471,6 @@ BOOL ScDetectiveFunc::ShowPred( SCCOL nCol, SCROW nRow )
     if (!pModel)
         return FALSE;
 
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
-
     ScDetectiveData aData( pModel );
 
     USHORT nMaxLevel = 0;
@@ -1495,9 +1490,6 @@ BOOL ScDetectiveFunc::ShowSucc( SCCOL nCol, SCROW nRow )
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return FALSE;
-
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
 
     ScDetectiveData aData( pModel );
 
@@ -1519,9 +1511,6 @@ BOOL ScDetectiveFunc::ShowError( SCCOL nCol, SCROW nRow )
     if (!pModel)
         return FALSE;
 
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
-
     ScRange aRange( nCol, nRow, nTab );
     ScAddress aErrPos;
     if ( !HasError( aRange,aErrPos ) )
@@ -1541,9 +1530,6 @@ BOOL ScDetectiveFunc::DeleteSucc( SCCOL nCol, SCROW nRow )
     if (!pModel)
         return FALSE;
 
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
-
     USHORT nLevelCount = FindSuccLevel( nCol, nRow, nCol, nRow, 0, 0 );
     if ( nLevelCount )
         FindSuccLevel( nCol, nRow, nCol, nRow, 0, nLevelCount );            // loeschen
@@ -1556,9 +1542,6 @@ BOOL ScDetectiveFunc::DeletePred( SCCOL nCol, SCROW nRow )
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return FALSE;
-
-    SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(nTab));
-    DBG_ASSERT(pPage,"Page ?");
 
     USHORT nLevelCount = FindPredLevel( nCol, nRow, 0, 0 );
     if ( nLevelCount )
@@ -1778,8 +1761,6 @@ void ScDetectiveFunc::UpdateAllComments()
     ScDrawLayer* pModel = pDoc->GetDrawLayer();
     if (!pModel)
         return;
-
-    ScCommentData aData( pDoc, pModel );
 
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB nObjTab=0; nObjTab<nTabCount; nObjTab++)
@@ -2045,6 +2026,10 @@ void ScDetectiveFunc::InsertObject( ScDetectiveObjType eType,
         case SC_DETOBJ_CIRCLE:
             DrawCircle( rPosition.Col(), rPosition.Row(), aData );
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 }
 
