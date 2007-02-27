@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlconti.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:51:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ ScXMLContentContext::ScXMLContentContext( ScXMLImport& rImport,
                                       USHORT nPrfx,
                                       const ::rtl::OUString& rLName,
                                       const ::com::sun::star::uno::Reference<
-                                      ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
+                                      ::com::sun::star::xml::sax::XAttributeList>& /* xAttrList */,
                                       rtl::OUStringBuffer& sTempValue) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sOUText(),
@@ -88,12 +88,12 @@ SvXMLImportContext *ScXMLContentContext::CreateChildContext( USHORT nPrefix,
         for( sal_Int16 i=0; i < nAttrCount; ++i )
         {
             const rtl::OUString& sAttrName(xAttrList->getNameByIndex( i ));
-            const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
+            const rtl::OUString& sAttrValue(xAttrList->getValueByIndex( i ));
             rtl::OUString aLocalName;
             USHORT nPrfx = GetScImport().GetNamespaceMap().GetKeyByAttrName(
                                                 sAttrName, &aLocalName );
             if ((nPrfx == XML_NAMESPACE_TEXT) && IsXMLToken(aLocalName, XML_C))
-                nRepeat = sValue.toInt32();
+                nRepeat = sAttrValue.toInt32();
         }
         if (nRepeat)
             for (sal_Int32 j = 0; j < nRepeat; ++j)
