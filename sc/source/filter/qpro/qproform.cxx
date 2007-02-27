@@ -4,9 +4,9 @@
  *
  *  $RCSfile: qproform.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:25:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:40:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ void QProToSc::NegToken( TokenId &rParam )
     rParam = aPool.Store();
 }
 
-ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 nLen, const FORMULA_TYPE eFT )
+ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 /*nLen*/, const FORMULA_TYPE /*eFT*/ )
 {
     sal_uInt8 nFmla[ nBufSize ], i, nArg, nArgArray[ nBufSize ];
     sal_Int8 nCol, nPage;
@@ -226,7 +226,7 @@ ConvErr QProToSc::Convert( const ScTokenArray*& pArray, sal_uInt16 nLen, const F
     FUNC_TYPE eType;
     DefTokenId eOc;
     double nFloatArray[ nBufSize ], nFloat;
-    const sal_Char* pExtString;
+    const sal_Char* pExtString = 0;
 
     aCRD.InitFlags();
     aSRD.InitFlags();
@@ -670,7 +670,7 @@ DefTokenId QProToSc::IndexToDLLId( sal_uInt16 nIndex )
 
 const sal_Char* QProToSc::getString( sal_uInt8 nIndex )
 {
-    sal_Char* pExtString;
+    const sal_Char* pExtString = 0;
     switch( nIndex )
     {
         case 57:
