@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preview.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:07:44 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:54:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,22 +102,22 @@ long lcl_GetDisplayStart( SCTAB nTab, ScDocument* pDoc, long* pPages )
 
 ScPreview::ScPreview( Window* pParent, ScDocShell* pDocSh, ScPreviewShell* pViewSh ) :
     Window( pParent ),
-    pDocShell( pDocSh ),
-    pViewShell( pViewSh ),
-    bInPaint( FALSE ),
-    bValid( FALSE ),
-    bStateValid( FALSE ),
-    bLocationValid( FALSE ),
-    bInGetState( FALSE ),
-    pLocationData( NULL ),
-    pDrawView( NULL ),
-    nTabsTested( 0 ),
     nPageNo( 0 ),
     nZoom( 100 ),
+    bValid( FALSE ),
+    nTabsTested( 0 ),
     nTab( 0 ),
-    nTotalPages( 0 ),
     nTabStart( 0 ),
-    nDisplayStart( 0 )
+    nDisplayStart( 0 ),
+    nTotalPages( 0 ),
+    bStateValid( FALSE ),
+    bLocationValid( FALSE ),
+    pLocationData( NULL ),
+    pDrawView( NULL ),
+    bInPaint( FALSE ),
+    bInGetState( FALSE ),
+    pDocShell( pDocSh ),
+    pViewShell( pViewSh )
 {
     SetOutDevViewType( OUTDEV_VIEWTYPE_PRINTPREVIEW ); //#106611#
     SetBackground();
@@ -349,7 +349,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
             DrawRect(Rectangle( 0, 0, aWinSize.Width(), -aOffset.Y() ));
     }
 
-    Size aPageSize;
+    Size aLocalPageSize;
     if ( bValidPage )
     {
         ScPrintOptions aOptions = pScMod->GetPrintOptions();
@@ -382,9 +382,9 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
         if (nPrinted)   // wenn nichts, alles grau zeichnen
         {
-            aPageSize = pPrintFunc->GetPageSize();
-            aPageSize.Width()  = (long) (aPageSize.Width()  * HMM_PER_TWIPS );
-            aPageSize.Height() = (long) (aPageSize.Height() * HMM_PER_TWIPS );
+            aLocalPageSize = pPrintFunc->GetPageSize();
+            aLocalPageSize.Width()  = (long) (aLocalPageSize.Width()  * HMM_PER_TWIPS );
+            aLocalPageSize.Height() = (long) (aLocalPageSize.Height() * HMM_PER_TWIPS );
         }
 
         if (!bStateValid)
@@ -398,8 +398,8 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 
     if ( bDoPrint )
     {
-        long nPageEndX = aPageSize.Width()  - aOffset.X();
-        long nPageEndY = aPageSize.Height() - aOffset.Y();
+        long nPageEndX = aLocalPageSize.Width()  - aOffset.X();
+        long nPageEndY = aLocalPageSize.Height() - aOffset.Y();
         if ( !bValidPage )
             nPageEndX = nPageEndY = 0;
 
@@ -462,7 +462,7 @@ void ScPreview::DoPrint( ScPreviewLocationData* pFillLocation )
 }
 
 
-void __EXPORT ScPreview::Paint( const Rectangle& rRect )
+void __EXPORT ScPreview::Paint( const Rectangle& /* rRect */ )
 {
     DoPrint( NULL );
     pViewShell->UpdateScrollBars();
@@ -575,7 +575,6 @@ void ScPreview::SetZoom(USHORT nNewZoom)
         nNewZoom = 400;
     if (nNewZoom != nZoom)
     {
-        double nFact = nNewZoom / (double) nZoom;
         nZoom = nNewZoom;
 
         //  apply new MapMode and call UpdateScrollBars to update aOffset
@@ -607,24 +606,24 @@ void ScPreview::SetPageNo( long nPage )
 }
 
 
-long ScPreview::GetFirstPage(SCTAB nTab)
+long ScPreview::GetFirstPage(SCTAB nTabP)
 {
-    SCTAB nTabCount = pDocShell->GetDocument()->GetTableCount();
-    if (nTab >= nTabCount)
-        nTab = nTabCount-1;
+    SCTAB nDocTabCount = pDocShell->GetDocument()->GetTableCount();
+    if (nTabP >= nDocTabCount)
+        nTabP = nDocTabCount-1;
 
     long nPage = 0;
-    if (nTab>0)
+    if (nTabP>0)
     {
-        CalcPages( nTab );
+        CalcPages( nTabP );
         UpdateDrawView();       // Tabelle evtl. geaendert
 
-        for (SCTAB i=0; i<nTab; i++)
+        for (SCTAB i=0; i<nTabP; i++)
             nPage += nPages[i];
 
         // bei leerer Tabelle vorhergehende Seite
 
-        if ( nPages[nTab]==0 && nPage > 0 )
+        if ( nPages[nTabP]==0 && nPage > 0 )
             --nPage;
     }
 
@@ -663,11 +662,11 @@ USHORT ScPreview::GetOptimalZoom(BOOL bWidthOnly)
     aWinSize.Width()  -= 2 * aMarginSize.Width();
     aWinSize.Height() -= 2 * aMarginSize.Height();
 
-    Size aPageSize = lcl_GetDocPageSize( pDocShell->GetDocument(), nTab );
-    if ( aPageSize.Width() && aPageSize.Height() )
+    Size aLocalPageSize = lcl_GetDocPageSize( pDocShell->GetDocument(), nTab );
+    if ( aLocalPageSize.Width() && aLocalPageSize.Height() )
     {
-        long nZoomX = (long) ( aWinSize.Width() * 100  / ( aPageSize.Width() * nWinScaleX ));
-        long nZoomY = (long) ( aWinSize.Height() * 100 / ( aPageSize.Height() * nWinScaleY ));
+        long nZoomX = (long) ( aWinSize.Width() * 100  / ( aLocalPageSize.Width() * nWinScaleX ));
+        long nZoomY = (long) ( aWinSize.Height() * 100 / ( aLocalPageSize.Height() * nWinScaleY ));
 
         long nOptimal = nZoomX;
         if (!bWidthOnly && nZoomY<nOptimal)
@@ -771,6 +770,8 @@ void ScPreview::StaticInvalidate()
 
 IMPL_STATIC_LINK( ScPreview, InvalidateHdl, void*, EMPTYARG )
 {
+    (void)pThis;    // avoid warning
+
     StaticInvalidate();
     return 0;
 }
