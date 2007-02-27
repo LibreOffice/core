@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessiblePreviewCell.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:08:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,10 @@ public:
 protected:
     virtual ~ScAccessiblePreviewCell();
 
-public:
+    using ScAccessibleCellBase::IsDefunc;
 
+public:
+    using ScAccessibleCellBase::disposing;
     virtual void SAL_CALL disposing();
 
     ///=====  SfxListener  =====================================================
