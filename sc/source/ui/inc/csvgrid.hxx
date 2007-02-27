@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvgrid.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:18:01 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:20:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -314,6 +314,8 @@ protected:
     virtual void                Command( const CommandEvent& rCEvt );
 
     virtual void                DataChanged( const DataChangedEvent& rDCEvt );
+
+    using Control::Notify;
     virtual void                Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
     // painting ---------------------------------------------------------------
