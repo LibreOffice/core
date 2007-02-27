@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdetect.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 11:34:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,7 +135,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::rtl;
 
-ScFilterDetect::ScFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory )
+ScFilterDetect::ScFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& /* xFactory */ )
 {
 }
 
@@ -234,6 +234,7 @@ static BOOL lcl_MayBeDBase( SvStream& rStream )
             ((nHeaderLen % 2 == 0) && nOneBefore == 0x0d && nEndFlag == 0x00) );
 }
 
+#if 0
 static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
 {
     if ( !pFilter )
@@ -247,6 +248,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
            aName.EqualsAscii("calc_StarOffice_XML_Calc") ||
            aName.EqualsAscii("calc_StarOffice_XML_Calc_Template");
 }
+#endif
 
 ::rtl::OUString SAL_CALL ScFilterDetect::detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& lDescriptor ) throw( ::com::sun::star::uno::RuntimeException )
 {
@@ -336,7 +338,6 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
     bWasReadOnly = pItem && pItem->GetValue();
 
     const SfxFilter* pFilter = 0;
-    String aFilterName;
     String aPrefix = String::CreateFromAscii( "private:factory/" );
     if( aURL.Match( aPrefix ) == aPrefix.Len() )
     {
@@ -359,7 +360,6 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
         aMedium.UseInteractionHandler( TRUE );
 
         BOOL bIsStorage = aMedium.IsStorage();
-        String aFilterName;
         if ( aMedium.GetErrorCode() == ERRCODE_NONE )
         {
             // remember input stream and content and put them into the descriptor later
@@ -672,7 +672,7 @@ static BOOL lcl_IsAnyXMLFilter( const SfxFilter* pFilter )
                             pFilterQPro6
                             };
 
-                        const UINT16 nByteMask = 0xFF;
+                        // const UINT16 nByteMask = 0xFF;
 
                         // suchen Sie jetzt!
                         // ... realisiert ueber 'Mustererkennung'
