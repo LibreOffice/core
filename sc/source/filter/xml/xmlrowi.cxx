@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:54:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:51:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,6 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext(0);
 
     const SvXMLTokenMap& rTokenMap(GetScImport().GetTableRowElemTokenMap());
-    sal_Bool bHeader(sal_False);
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROW_CELL:
@@ -273,7 +272,7 @@ ScXMLTableRowsContext::ScXMLTableRowsContext( ScXMLImport& rImport,
                                                 sAttrName, &aLocalName ));
             const rtl::OUString& sValue(xAttrList->getValueByIndex( i ));
 
-            if ((nPrfx == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_DISPLAY))
+            if ((nPrefix == XML_NAMESPACE_TABLE) && IsXMLToken(aLocalName, XML_DISPLAY))
                 bGroupDisplay = IsXMLToken(sValue, XML_TRUE);
         }
     }
@@ -291,7 +290,6 @@ SvXMLImportContext *ScXMLTableRowsContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext(0);
 
     const SvXMLTokenMap& rTokenMap(GetScImport().GetTableRowsElemTokenMap());
-    sal_Bool bHeader(sal_False);
     switch( rTokenMap.Get( nPrefix, rLName ) )
     {
     case XML_TOK_TABLE_ROWS_ROW_GROUP:
