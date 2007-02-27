@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlbodyi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:51:05 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:49:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,10 +109,10 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
                                                    const ::rtl::OUString& rLName,
                                               const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pChangeTrackingImportHelper(NULL),
+    sPassword(),
     bProtected(sal_False),
     bHadCalculationSettings(sal_False),
-    sPassword()
+    pChangeTrackingImportHelper(NULL)
 {
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; ++i )
@@ -145,8 +145,8 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( USHORT nPrefix,
     SvXMLImportContext *pContext = 0;
 
     const SvXMLTokenMap& rTokenMap = GetScImport().GetBodyElemTokenMap();
-    sal_Bool bOrdered = sal_False;
-    sal_Bool bHeading = sal_False;
+//    sal_Bool bOrdered = sal_False;
+//    sal_Bool bHeading = sal_False;
     switch( rTokenMap.Get( nPrefix, rLocalName ) )
     {
 //  case XML_TOK_TEXT_H:
