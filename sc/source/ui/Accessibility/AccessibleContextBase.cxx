@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:25:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:54:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,9 +105,9 @@ ScAccessibleContextBase::ScAccessibleContextBase(
                                                  const sal_Int16 aRole)
                                                  :
     ScAccessibleContextBaseWeakImpl(m_aMutex),
-    maRole(aRole),
     mxParent(rxParent),
-    mnClientId(0)
+    mnClientId(0),
+    maRole(aRole)
 {
     DBG_CTOR(ScAccessibleContextBase, NULL);
 }
@@ -190,7 +190,7 @@ void SAL_CALL ScAccessibleContextBase::release()
 
 //=====  SfxListener  =====================================================
 
-void ScAccessibleContextBase::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScAccessibleContextBase::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if (rHint.ISA( SfxSimpleHint ) )
     {
@@ -223,7 +223,7 @@ sal_Bool SAL_CALL ScAccessibleContextBase::containsPoint(const awt::Point& rPoin
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleContextBase::getAccessibleAtPoint(
-        const awt::Point& rPoint )
+        const awt::Point& /* rPoint */ )
         throw (uno::RuntimeException)
 {
     DBG_ERROR("not implemented");
@@ -316,7 +316,7 @@ sal_Int32 SAL_CALL
 }
 
 uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleContextBase::getAccessibleChild(sal_Int32 nIndex)
+    ScAccessibleContextBase::getAccessibleChild(sal_Int32 /* nIndex */)
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     DBG_ERROR("should be implemented in the abrevated class");
@@ -515,7 +515,7 @@ void SAL_CALL ScAccessibleContextBase::disposing(
 }
 
 void SAL_CALL ScAccessibleContextBase::notifyEvent(
-        const AccessibleEventObject& aEvent )
+        const AccessibleEventObject& /* aEvent */ )
         throw (uno::RuntimeException)
 {
 }
