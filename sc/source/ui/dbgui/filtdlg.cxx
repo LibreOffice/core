@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:24:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:03:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,39 +87,39 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_FILTER ),
         //
-        _INIT_COMMON_FILTER_RSCOBJS
         aFlCriteria     ( this, ScResId( FL_CRITERIA ) ),
+        aLbField1       ( this, ScResId( LB_FIELD1 ) ),
+        aLbCond1        ( this, ScResId( LB_COND1 ) ),
+        aEdVal1         ( this, ScResId( ED_VAL1 ) ),
+        aLbConnect1     ( this, ScResId( LB_OP1 ) ),
+        aLbField2       ( this, ScResId( LB_FIELD2 ) ),
+        aLbCond2        ( this, ScResId( LB_COND2 ) ),
+        aEdVal2         ( this, ScResId( ED_VAL2 ) ),
+        aLbConnect2     ( this, ScResId( LB_OP2 ) ),
+        aLbField3       ( this, ScResId( LB_FIELD3 ) ),
+        aLbCond3        ( this, ScResId( LB_COND3 ) ),
+        aEdVal3         ( this, ScResId( ED_VAL3 ) ),
         aFtConnect      ( this, ScResId( FT_OP ) ),
         aFtField        ( this, ScResId( FT_FIELD ) ),
         aFtCond         ( this, ScResId( FT_COND ) ),
         aFtVal          ( this, ScResId( FT_VAL ) ),
-        aLbField1       ( this, ScResId( LB_FIELD1 ) ),
-        aLbField2       ( this, ScResId( LB_FIELD2 ) ),
-        aLbField3       ( this, ScResId( LB_FIELD3 ) ),
-        aLbConnect1     ( this, ScResId( LB_OP1 ) ),
-        aLbConnect2     ( this, ScResId( LB_OP2 ) ),
-        aLbCond1        ( this, ScResId( LB_COND1 ) ),
-        aLbCond2        ( this, ScResId( LB_COND2 ) ),
-        aLbCond3        ( this, ScResId( LB_COND3 ) ),
-        aEdVal1         ( this, ScResId( ED_VAL1 ) ),
-        aEdVal2         ( this, ScResId( ED_VAL2 ) ),
-        aEdVal3         ( this, ScResId( ED_VAL3 ) ),
+        _INIT_COMMON_FILTER_RSCOBJS
         aStrEmpty       ( ScResId( SCSTR_EMPTY ) ),
         aStrNotEmpty    ( ScResId( SCSTR_NOTEMPTY ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
         aStrColumn      ( ScResId( SCSTR_COLUMN ) ),
         //
+        pOptionsMgr     ( NULL ),
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( ((const ScQueryItem&)
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        nFieldCount     ( 0 ),
         pOutItem        ( NULL ),
-        pOptionsMgr     ( NULL ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
-        pTimer          ( NULL ),
+        nSrcTab         ( 0 ),
+        nFieldCount     ( 0 ),
         bRefInputMode   ( FALSE ),
-        nSrcTab         ( 0 )
+        pTimer          ( NULL )
 {
     for (USHORT i=0; i<=MAXCOL; i++)
         pEntryLists[i] = NULL;
@@ -309,14 +309,14 @@ BOOL __EXPORT ScFilterDlg::Close()
 // Uebergabe eines mit der Maus selektierten Tabellenbereiches, der dann als
 // neue Selektion im Referenz-Edit angezeigt wird.
 
-void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScFilterDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( bRefInputMode )    // Nur moeglich, wenn im Referenz-Editmodus
     {
         if ( rRef.aStart != rRef.aEnd )
             RefInputStart( &aEdCopyArea );
         String aRefStr;
-        rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDoc );
+        rRef.aStart.Format( aRefStr, SCA_ABS_3D, pDocP );
         aEdCopyArea.SetRefString( aRefStr );
     }
 }
@@ -530,7 +530,7 @@ ScQueryItem* ScFilterDlg::GetOutputItem()
     ScQueryParam    theParam( theQueryData );
     USHORT          nConnect1 = aLbConnect1.GetSelectEntryPos();
     USHORT          nConnect2 = aLbConnect2.GetSelectEntryPos();
-    BOOL            bCopyPosOk;
+    BOOL            bCopyPosOk = FALSE;
     SCSIZE i;
 
     if ( aBtnCopyResult.IsChecked() )
@@ -683,7 +683,7 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, pBtn )
+IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, EMPTYARG )
 {
     if ( aBtnMore.GetState() )
         pTimer->Start();
