@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:41:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  ) throw(::com::sun::star::uno
         return xNameAccess->getByName( aNames.getConstArray()[nIndex] );
 
     throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 // XElementAccess
@@ -370,7 +370,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScPrintSettingsObj::getProperty
 }
 
 void SAL_CALL ScPrintSettingsObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -378,7 +378,7 @@ void SAL_CALL ScPrintSettingsObj::setPropertyValue(
     //! later...
 }
 
-uno::Any SAL_CALL ScPrintSettingsObj::getPropertyValue( const rtl::OUString& aPropertyName )
+uno::Any SAL_CALL ScPrintSettingsObj::getPropertyValue( const rtl::OUString& /* aPropertyName */ )
                 throw(beans::UnknownPropertyException, lang::WrappedTargetException,
                         uno::RuntimeException)
 {
