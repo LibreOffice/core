@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adiasync.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:32:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,12 @@ void CALLTYPE ScAddInAsyncCallBack( double& nHandle, void* pData );
 
 class ScAddInAsync;
 typedef ScAddInAsync* ScAddInAsyncPtr;
-SV_DECL_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr, 4, 4 );
+SV_DECL_PTRARR_SORT( ScAddInAsyncs, ScAddInAsyncPtr, 4, 4 )
 extern ScAddInAsyncs theAddInAsyncTbl;  // in adiasync.cxx
 
 class ScDocument;
 typedef ScDocument* ScAddInDocPtr;
-SV_DECL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr, 1, 1 );
+SV_DECL_PTRARR_SORT( ScAddInDocs, ScAddInDocPtr, 1, 1 )
 
 class String;
 
