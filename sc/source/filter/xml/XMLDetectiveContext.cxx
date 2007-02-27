@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLDetectiveContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:43:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:45:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ ScXMLDetectiveHighlightedContext::~ScXMLDetectiveHighlightedContext()
 SvXMLImportContext *ScXMLDetectiveHighlightedContext::CreateChildContext(
         USHORT nPrefix,
         const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+        const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
@@ -276,7 +276,7 @@ ScXMLDetectiveOperationContext::~ScXMLDetectiveOperationContext()
 SvXMLImportContext *ScXMLDetectiveOperationContext::CreateChildContext(
         USHORT nPrefix,
         const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+        const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
