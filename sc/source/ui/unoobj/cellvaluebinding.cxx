@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellvaluebinding.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:29:36 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,10 +120,10 @@ namespace calc
     OCellValueBinding::OCellValueBinding( const Reference< XSpreadsheetDocument >& _rxDocument, sal_Bool _bListPos )
         :OCellValueBinding_Base( m_aMutex )
         ,OCellValueBinding_PBase( OCellValueBinding_Base::rBHelper )
-        ,m_bListPos( _bListPos )
         ,m_xDocument( _rxDocument )
         ,m_aModifyListeners( m_aMutex )
         ,m_bInitialized( sal_False )
+        ,m_bListPos( _bListPos )
     {
         DBG_CTOR( OCellValueBinding, checkConsistency_static );
 
@@ -204,6 +204,7 @@ namespace calc
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
         DBG_ASSERT( _nHandle == PROP_HANDLE_BOUND_CELL, "OCellValueBinding::getFastPropertyValue: invalid handle!" );
             // we only have this one property ....
+        (void)_nHandle;     // avoid warning in product version
 
         _rValue.clear();
         Reference< XCellAddressable > xCellAddress( m_xCell, UNO_QUERY );
@@ -572,7 +573,7 @@ namespace calc
         {
             try
             {
-                reinterpret_cast< XModifyListener* >( aIter.next() )->modified( aEvent );
+                static_cast< XModifyListener* >( aIter.next() )->modified( aEvent );
             }
             catch( const RuntimeException& )
             {
@@ -586,7 +587,7 @@ namespace calc
     }
 
     //--------------------------------------------------------------------
-    void SAL_CALL OCellValueBinding::modified( const EventObject& aEvent ) throw (RuntimeException)
+    void SAL_CALL OCellValueBinding::modified( const EventObject& /* aEvent */ ) throw (RuntimeException)
     {
         DBG_CHKTHIS( OCellValueBinding, checkConsistency_static );
 
