@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotimpop.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:28:07 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,14 +143,14 @@ void ImportLotus::Columnwidth( UINT16 nRecLen )
 {
     DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Columnwidth(): Record zu kurz!" );
 
-    BYTE    nTab, nWindow2;
+    BYTE    nLTab, nWindow2;
     UINT16  nCnt = ( nRecLen - 4 ) / 2;
 
-    Read( nTab );
+    Read( nLTab );
     Read( nWindow2 );
 
-    if( !pD->HasTable( static_cast<SCTAB> (nTab) ) )
-        pD->MakeTable( static_cast<SCTAB> (nTab) );
+    if( !pD->HasTable( static_cast<SCTAB> (nLTab) ) )
+        pD->MakeTable( static_cast<SCTAB> (nLTab) );
 
     if( !nWindow2 )
     {
@@ -163,7 +163,7 @@ void ImportLotus::Columnwidth( UINT16 nRecLen )
             Read( nCol );
             Read( nSpaces );
             // ACHTUNG: Korrekturfaktor nach 'Augenmass' ermittelt!
-            pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nTab), ( UINT16 ) ( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
+            pD->SetColWidth( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), ( UINT16 ) ( TWIPS_PER_CHAR * 1.28 * nSpaces ) );
 
             nCnt--;
         }
@@ -175,10 +175,10 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
 {
     DBG_ASSERT( nRecLen >= 4, "*ImportLotus::Hiddencolumn(): Record zu kurz!" );
 
-    BYTE    nTab, nWindow2;
+    BYTE    nLTab, nWindow2;
     UINT16  nCnt = ( nRecLen - 4 ) / 2;
 
-    Read( nTab );
+    Read( nLTab );
     Read( nWindow2 );
 
     if( !nWindow2 )
@@ -191,7 +191,7 @@ void ImportLotus::Hiddencolumn( UINT16 nRecLen )
         {
             Read( nCol );
 
-            pD->SetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nTab), pD->GetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nTab) ) | CR_HIDDEN );
+            pD->SetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab), pD->GetColFlags( static_cast<SCCOL> (nCol), static_cast<SCTAB> (nLTab) ) | CR_HIDDEN );
 
             nCnt--;
         }
@@ -318,11 +318,11 @@ void ImportLotus::RowPresentation( UINT16 nRecLen )
 {
     DBG_ASSERT( nRecLen > 4, "*ImportLotus::RowPresentation(): Record zu kurz!" );
 
-    BYTE    nTab, nFlags;
+    BYTE    nLTab, nFlags;
     UINT16  nRow, nHeight;
     UINT16  nCnt = ( nRecLen - 4 ) / 8;
 
-    Read( nTab );
+    Read( nLTab );
     Skip( 1 );
 
     while( nCnt )
@@ -339,9 +339,9 @@ void ImportLotus::RowPresentation( UINT16 nRecLen )
             nHeight *= 20;  // -> 32 * TWIPS
             nHeight /= 32;  // -> TWIPS
 
-            pD->SetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), pD->GetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab) ) | CR_MANUALSIZE );
+            pD->SetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), pD->GetRowFlags( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab) ) | CR_MANUALSIZE );
 
-            pD->SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nTab), nHeight );
+            pD->SetRowHeight( static_cast<SCROW> (nRow), static_cast<SCTAB> (nLTab), nHeight );
         }
 
         nCnt--;
@@ -351,16 +351,16 @@ void ImportLotus::RowPresentation( UINT16 nRecLen )
 
 void ImportLotus::NamedSheet( void )
 {
-    UINT16  nTab;
+    UINT16  nLTab;
     String  aName;
 
-    Read( nTab );
+    Read( nLTab );
     Read( aName );
 
-    if( pD->HasTable( static_cast<SCTAB> (nTab) ) )
-        pD->RenameTab( static_cast<SCTAB> (nTab), aName );
+    if( pD->HasTable( static_cast<SCTAB> (nLTab) ) )
+        pD->RenameTab( static_cast<SCTAB> (nLTab), aName );
     else
-        pD->InsertTab( static_cast<SCTAB> (nTab), aName );
+        pD->InsertTab( static_cast<SCTAB> (nLTab), aName );
 }
 
 
@@ -422,7 +422,7 @@ void ImportLotus::_Row( const UINT16 nRecLen )
     LotAttrWK3      aAttr;
 
     BOOL            bCenter = FALSE;
-    SCCOL           nCenterStart, nCenterEnd;
+    SCCOL           nCenterStart = 0, nCenterEnd = 0;
 
     Read( nRow );
     Read( nHeight );
@@ -471,7 +471,7 @@ void ImportLotus::_Row( const UINT16 nRecLen )
                 }
             }
 
-        nColCnt += static_cast<SCCOL>(nRepeats);
+        nColCnt = nColCnt + static_cast<SCCOL>(nRepeats);
         nColCnt++;
 
         nCntDwn--;
