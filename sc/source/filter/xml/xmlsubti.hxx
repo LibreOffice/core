@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:14:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:53:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,8 +126,8 @@ struct ScMatrixRange
     rtl::OUString sFormula;
     com::sun::star::table::CellRangeAddress aRange;
     ScMatrixRange(const com::sun::star::table::CellRangeAddress& rRange, const rtl::OUString& rFormula) :
-        aRange(rRange),
-        sFormula(rFormula)
+        sFormula(rFormula),
+        aRange(rRange)
     {
     }
 };
