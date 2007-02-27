@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lotus.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:28:56 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:39:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,11 +77,6 @@ FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eS
     // ACHTUNG: QUICK-HACK fuer WK1 / WKS  <->  WK3 / WK4
     if( eRet == 0xFFFFFFFF )
     {
-        SvStream*       pStream = rMedium.GetInStream();
-
-        if( !pStream )
-            return eERR_OPEN;
-
         pStream->Seek( 0UL );
 
         pStream->SetBufferSize( 32768 );
@@ -101,7 +96,7 @@ FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eS
         INetURLObject aURL( rMedium.GetURLObject() );
         aURL.setExtension( CREATE_STRING( "FM3" ) );
         SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ, TRUE );
-        SvStream* pStream = aMedium.GetInStream();
+        pStream = aMedium.GetInStream();
         if ( pStream )
         {
             if( aLotusImport.Read( *pStream ) != eERR_OK )
