@@ -4,9 +4,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:48:23 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,8 +276,15 @@ void ImportExcel::EndChartObj()
 
 ExcelChartData::ExcelChartData( ScDocument* p, const Point& rUL, const Point& rLR, const SCTAB nBT ) :
     aRect( rUL, rLR ),
-    nRow1( SCROW_MAX ), nCol1( SCCOL_MAX ), nTab1( SCTAB_MAX ), nRow2( 0 ), nCol2( 0 ), nTab2( 0 ), pNext( NULL ),
-    nBaseTab( nBT ), nObjNum( 0xFFFFFFFF )
+    pNext( NULL ),
+    nCol1( SCCOL_MAX ),
+    nCol2( 0 ),
+    nRow1( SCROW_MAX ),
+    nRow2( 0 ),
+    nTab1( SCTAB_MAX ),
+    nTab2( 0 ),
+    nBaseTab( nBT ),
+    nObjNum( 0xFFFFFFFF )
 {
     pAttrs = new SfxItemSet( p->GetDrawLayer()->GetItemPool(), SDRATTR_START, SDRATTR_END );
 }
@@ -301,8 +308,8 @@ void ImportExcel::ChartSelection( void )
         // oder eine 3D Area Reference (Opcode 0x3B) (oder auch nicht...)
         UINT8       nOp;
         UINT16      nLink;
-        UINT16      nTab1, nTab2, nRow1, nRow2;
-        UINT16      nCol1, nCol2;
+        UINT16      nTab1 = 0, nTab2 = 0, nRow1 = 0, nRow2 = 0;
+        UINT16      nCol1 = 0, nCol2 = 0;
         BOOL        bValues = FALSE;
 
         aIn >> nOp;
