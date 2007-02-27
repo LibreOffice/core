@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:27:31 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:38:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,13 +102,13 @@ LOTUS_ROOT*         pLotusRoot = NULL;
 std::map<UINT16, ScPatternAttr> aLotusPatternPool;
 
 static FltError
-generate_Opcodes( SvStream& aStream, ScDocument* pDoc,
-                  ScfStreamProgressBar& aPrgrsBar, WKTYP eTyp )
+generate_Opcodes( SvStream& aStream, ScDocument& rDoc,
+                  ScfStreamProgressBar& aPrgrsBar, WKTYP eType )
 {
     OPCODE_FKT *pOps;
     int         nOps;
 
-    switch(eTyp)
+    switch(eType)
     {
         case eWK_1:
         case eWK_2:
@@ -142,7 +142,7 @@ generate_Opcodes( SvStream& aStream, ScDocument* pDoc,
         else if( nOpcode < nOps )
         pOps[ nOpcode ] ( aStream, nLength );
 
-        else if( eTyp == eWK123 &&
+        else if( eType == eWK123 &&
              nOpcode == LOTUS_PATTERN )
             {
         // This is really ugly - needs re-factoring ...
@@ -169,7 +169,7 @@ generate_Opcodes( SvStream& aStream, ScDocument* pDoc,
 
     MemDelete();
 
-    pDoc->CalcAfterLoad();
+    rDoc.CalcAfterLoad();
 
     return eERR_OK;
 }
@@ -197,14 +197,12 @@ WKTYP ScanVersion( SvStream& aStream )
                 return eWK_1;
             else
                 return eWK_UNKNOWN;
-            break;
 
         case 0x0406:
             if( nRecLen == 2 )
                 return eWK_2;
             else
                 return eWK_UNKNOWN;
-            break;
 
         case 0x1000:
             aStream >> nVersNr;
@@ -220,13 +218,11 @@ WKTYP ScanVersion( SvStream& aStream )
                 return eWK123;
             else
                 return eWK_UNKNOWN;
-            break;
         case 0x1005:
             if( nRecLen == 0x1a )
                 return eWK123;
             else
                 return eWK_UNKNOWN;
-            break;
     }
 
     return eWK_UNKNOWN;
@@ -257,7 +253,7 @@ FltError ScImportLotus123old( SvStream& aStream, ScDocument* pDocument, CharSet 
 
     aLotusPatternPool.clear();
 
-    return generate_Opcodes( aStream, pDoc, aPrgrsBar, eTyp );
+    return generate_Opcodes( aStream, *pDoc, aPrgrsBar, eTyp );
 }
 
 
