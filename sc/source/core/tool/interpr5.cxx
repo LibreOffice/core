@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:37:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:16:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ void ScInterpreter::ScGGT()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         double fSign = 1.0;
-        double fx, fy;
+        double fx, fy = 0.0;
         switch (GetStackType())
         {
             case svDouble :
@@ -285,7 +285,7 @@ void ScInterpreter:: ScKGV()
     if ( MustHaveParamCountMin( nParamCount, 1 ) )
     {
         double fSign = 1.0;
-        double fx, fy;
+        double fx, fy = 0.0;
         switch (GetStackType())
         {
             case svDouble :
@@ -762,7 +762,8 @@ void ScInterpreter::ScMatValue()
                         nRow2 - nRow1 >= static_cast<SCROW>(nC) &&
                         nTab1 == nTab2)
                 {
-                    ScAddress aAdr( nCol1 + nR, nRow1 + nC, nTab1 );
+                    ScAddress aAdr( sal::static_int_cast<SCCOL>( nCol1 + nR ),
+                                    sal::static_int_cast<SCROW>( nRow1 + nC ), nTab1 );
                     ScBaseCell* pCell = GetCell( aAdr );
                     if (HasCellValueData(pCell))
                         PushDouble(GetCellValue( aAdr, pCell ));
@@ -952,9 +953,9 @@ static int lcl_LUP_decompose( ScMatrix* mA, const SCSIZE n,
             // elements
             for (SCSIZE i=0; i < n; ++i)
             {
-                double fTmp = mA->GetDouble( i, k);
+                double fMatTmp = mA->GetDouble( i, k);
                 mA->PutDouble( mA->GetDouble( i, kp), i, k);
-                mA->PutDouble( fTmp, i, kp);
+                mA->PutDouble( fMatTmp, i, kp);
             }
         }
         // Compute Schur complement.
@@ -1503,7 +1504,7 @@ void ScInterpreter::ScAdd()
 {
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    double fVal1, fVal2;
+    double fVal1 = 0.0, fVal2 = 0.0;
     short nFmt1, nFmt2;
     nFmt1 = nFmt2 = NUMBERFORMAT_UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
@@ -1698,7 +1699,7 @@ void ScInterpreter::ScSub()
 {
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    double fVal1, fVal2;
+    double fVal1 = 0.0, fVal2 = 0.0;
     short nFmt1, nFmt2;
     nFmt1 = nFmt2 = NUMBERFORMAT_UNDEFINED;
     short nFmtCurrencyType = nCurFmtType;
@@ -1816,7 +1817,7 @@ void ScInterpreter::ScMul()
 {
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    double fVal1, fVal2;
+    double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
     ULONG nFmtCurrencyIndex = nCurFmtIndex;
     if ( GetStackType() == svMatrix )
@@ -1893,7 +1894,7 @@ void ScInterpreter::ScDiv()
 {
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    double fVal1, fVal2;
+    double fVal1 = 0.0, fVal2 = 0.0;
     short nFmtCurrencyType = nCurFmtType;
     ULONG nFmtCurrencyIndex = nCurFmtIndex;
     short nFmtCurrencyType2 = NUMBERFORMAT_UNDEFINED;
@@ -1986,7 +1987,7 @@ void ScInterpreter::ScPow()
 {
     ScMatrixRef pMat1 = NULL;
     ScMatrixRef pMat2 = NULL;
-    double fVal1, fVal2;
+    double fVal1 = 0.0, fVal2 = 0.0;
     if ( GetStackType() == svMatrix )
         pMat2 = GetMatrix();
     else
@@ -2404,7 +2405,7 @@ void ScInterpreter::ScRGP()
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
     SCSIZE nCX, nCY;
     SCSIZE nRX, nRY;
-    SCSIZE M, N;
+    SCSIZE M = 0, N = 0;
     pMatY->GetDimensions(nCY, nRY);
     SCSIZE nCountY = nCY * nRY;
     for ( SCSIZE i = 0; i < nCountY; i++ )
@@ -2823,33 +2824,33 @@ void ScInterpreter::ScRKP()
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
     SCSIZE nCX, nCY;
     SCSIZE nRX, nRY;
-    SCSIZE M, N;
+    SCSIZE M = 0, N = 0;
     pMatY->GetDimensions(nCY, nRY);
     SCSIZE nCountY = nCY * nRY;
-    SCSIZE i;
-    for (i = 0; i < nCountY; i++)
-        if (!pMatY->IsValue(i))
+    SCSIZE nElem;
+    for (nElem = 0; nElem < nCountY; nElem++)
+        if (!pMatY->IsValue(nElem))
         {
             SetIllegalArgument();
             return;
         }
-    for (i = 0; i < nCountY; i++)
+    for (nElem = 0; nElem < nCountY; nElem++)
     {
-        double fVal = pMatY->GetDouble(i);
+        double fVal = pMatY->GetDouble(nElem);
         if (fVal <= 0.0)
         {
             SetIllegalArgument();
             return;
         }
         else
-            pMatY->PutDouble(log(pMatY->GetDouble(i)), i);
+            pMatY->PutDouble(log(pMatY->GetDouble(nElem)), nElem);
     }
     if (pMatX)
     {
         pMatX->GetDimensions(nCX, nRX);
         SCSIZE nCountX = nCX * nRX;
-        for (i = 0; i < nCountX; i++)
-            if (!pMatX->IsValue(i))
+        for (nElem = 0; nElem < nCountX; nElem++)
+            if (!pMatX->IsValue(nElem))
             {
                 SetIllegalArgument();
                 return;
@@ -3239,12 +3240,12 @@ void ScInterpreter::ScTrend()
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
     SCSIZE nCX, nCY;
     SCSIZE nRX, nRY;
-    SCSIZE M, N;
+    SCSIZE M = 0, N = 0;
     pMatY->GetDimensions(nCY, nRY);
     SCSIZE nCountY = nCY * nRY;
-    SCSIZE i;
-    for (i = 0; i < nCountY; i++)
-        if (!pMatY->IsValue(i))
+    SCSIZE nElem;
+    for (nElem = 0; nElem < nCountY; nElem++)
+        if (!pMatY->IsValue(nElem))
         {
             SetIllegalArgument();
             return;
@@ -3253,8 +3254,8 @@ void ScInterpreter::ScTrend()
     {
         pMatX->GetDimensions(nCX, nRX);
         SCSIZE nCountX = nCX * nRX;
-        for (i = 0; i < nCountX; i++)
-            if (!pMatX->IsValue(i))
+        for (nElem = 0; nElem < nCountX; nElem++)
+            if (!pMatX->IsValue(nElem))
             {
                 SetIllegalArgument();
                 return;
@@ -3302,8 +3303,8 @@ void ScInterpreter::ScTrend()
             PushError();
             return;
         }
-        for (i = 1; i <= nCountY; i++)
-            pMatX->PutDouble((double)i, i-1);
+        for (nElem = 1; nElem <= nCountY; nElem++)
+            pMatX->PutDouble((double)nElem, nElem-1);
         nCase = 1;
     }
     SCSIZE nCXN, nRXN;
@@ -3579,27 +3580,27 @@ void ScInterpreter::ScGrowth()
     BYTE nCase;                         // 1 = normal, 2,3 = mehrfach
     SCSIZE nCX, nCY;
     SCSIZE nRX, nRY;
-    SCSIZE M, N;
+    SCSIZE M = 0, N = 0;
     pMatY->GetDimensions(nCY, nRY);
     SCSIZE nCountY = nCY * nRY;
-    SCSIZE i;
-    for (i = 0; i < nCountY; i++)
+    SCSIZE nElem;
+    for (nElem = 0; nElem < nCountY; nElem++)
     {
-        if (!pMatY->IsValue(i))
+        if (!pMatY->IsValue(nElem))
         {
             SetIllegalArgument();
             return;
         }
     }
-    for (i = 0; i < nCountY; i++)
+    for (nElem = 0; nElem < nCountY; nElem++)
     {
-        if (pMatY->GetDouble(i) <= 0.0)
+        if (pMatY->GetDouble(nElem) <= 0.0)
         {
             SetIllegalArgument();
             return;
         }
         else
-            pMatY->PutDouble(log(pMatY->GetDouble(i)), i);
+            pMatY->PutDouble(log(pMatY->GetDouble(nElem)), nElem);
     }
     if (pMatX)
     {
