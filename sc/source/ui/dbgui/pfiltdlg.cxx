@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pfiltdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:25:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:03:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,22 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_PIVOTFILTER ) ),
         //
+        aFlCriteria     ( this, ScResId( FL_CRITERIA ) ),
+        aLbField1       ( this, ScResId( LB_FIELD1 ) ),
+        aLbCond1        ( this, ScResId( LB_COND1 ) ),
+        aEdVal1         ( this, ScResId( ED_VAL1 ) ),
+        aLbConnect1     ( this, ScResId( LB_OP1 ) ),
+        aLbField2       ( this, ScResId( LB_FIELD2 ) ),
+        aLbCond2        ( this, ScResId( LB_COND2 ) ),
+        aEdVal2         ( this, ScResId( ED_VAL2 ) ),
+        aLbConnect2     ( this, ScResId( LB_OP2 ) ),
+        aLbField3       ( this, ScResId( LB_FIELD3 ) ),
+        aLbCond3        ( this, ScResId( LB_COND3 ) ),
+        aEdVal3         ( this, ScResId( ED_VAL3 ) ),
+        aFtConnect      ( this, ScResId( FT_OP ) ),
+        aFtField        ( this, ScResId( FT_FIELD ) ),
+        aFtCond         ( this, ScResId( FT_COND ) ),
+        aFtVal          ( this, ScResId( FT_VAL ) ),
         aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         aBtnCase        ( this, ScResId( BTN_CASE ) ),
         aBtnRegExp      ( this, ScResId( BTN_REGEXP ) ),
@@ -83,25 +99,9 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
         aBtnMore        ( this, ScResId( BTN_MORE ) ),
+        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         aStrNone        ( ScResId( SCSTR_NONE ) ),
-        aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
-        aFlCriteria     ( this, ScResId( FL_CRITERIA ) ),
-        aFtConnect      ( this, ScResId( FT_OP ) ),
-        aFtField        ( this, ScResId( FT_FIELD ) ),
-        aFtCond         ( this, ScResId( FT_COND ) ),
-        aFtVal          ( this, ScResId( FT_VAL ) ),
-        aLbField1       ( this, ScResId( LB_FIELD1 ) ),
-        aLbField2       ( this, ScResId( LB_FIELD2 ) ),
-        aLbField3       ( this, ScResId( LB_FIELD3 ) ),
-        aLbConnect1     ( this, ScResId( LB_OP1 ) ),
-        aLbConnect2     ( this, ScResId( LB_OP2 ) ),
-        aLbCond1        ( this, ScResId( LB_COND1 ) ),
-        aLbCond2        ( this, ScResId( LB_COND2 ) ),
-        aLbCond3        ( this, ScResId( LB_COND3 ) ),
-        aEdVal1         ( this, ScResId( ED_VAL1 ) ),
-        aEdVal2         ( this, ScResId( ED_VAL2 ) ),
-        aEdVal3         ( this, ScResId( ED_VAL3 ) ),
         aStrEmpty       ( ScResId( SCSTR_EMPTY ) ),
         aStrNotEmpty    ( ScResId( SCSTR_NOTEMPTY ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
@@ -110,11 +110,11 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         nWhichQuery     ( rArgSet.GetPool()->GetWhich( SID_QUERY ) ),
         theQueryData    ( ((const ScQueryItem&)
                            rArgSet.Get( nWhichQuery )).GetQueryData() ),
-        nFieldCount     ( 0 ),
         pOutItem        ( NULL ),
         pViewData       ( NULL ),
         pDoc            ( NULL ),
-        nSrcTab         ( nSourceTab )      // ist nicht im QueryParam
+        nSrcTab         ( nSourceTab ),     // ist nicht im QueryParam
+        nFieldCount     ( 0 )
 {
     for (USHORT i=0; i<=MAXCOL; i++)
         pEntryLists[i] = NULL;
@@ -176,7 +176,6 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 
     if ( pViewData && pDoc )
     {
-        ScRangeName*    pRangeNames = pDoc->GetRangeName();
         String          theAreaStr;
         ScRange         theCurArea ( ScAddress( theQueryData.nCol1,
                                                 theQueryData.nRow1,
