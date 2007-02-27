@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:48:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -490,15 +490,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
     BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
     BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
-    SfxApplication* pSfxApp = SFX_APP();
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    ScViewData* pViewData   = GetViewData();
-    ScDocument* pDoc        = pViewData->GetDocument();
-    ScMarkData& rMark       = pViewData->GetMarkData();
-    SCCOL       nPosX       = pViewData->GetCurX();
-    SCROW       nPosY       = pViewData->GetCurY();
-    SCTAB       nTab        = pViewData->GetTabNo();
-    USHORT      nMyId       = 0;
+    ScViewData* pData       = GetViewData();
+    ScDocument* pDoc        = pData->GetDocument();
+    ScMarkData& rMark       = pData->GetMarkData();
+    SCCOL       nPosX       = pData->GetCurX();
+    SCROW       nPosY       = pData->GetCurY();
+    SCTAB       nTab        = pData->GetTabNo();
 
     SCTAB nTabCount = pDoc->GetTableCount();
     SCTAB nTabSelCount = rMark.GetSelectCount();
@@ -524,7 +522,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
             case SID_RANGE_ADDRESS:
                 {
                     ScRange aRange;
-                    if ( pViewData->GetSimpleArea( aRange ) )
+                    if ( pData->GetSimpleArea( aRange ) )
                     {
                         String aStr;
                         USHORT nFlags = SCA_VALID | SCA_TAB_3D;
@@ -744,8 +742,8 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_SELECT_SCENARIO:
                 {
-                    ScDocument* pDoc = GetViewData()->GetDocument();
-                    SCTAB       nTab = GetViewData()->GetTabNo();
+                    // ScDocument* pDoc = GetViewData()->GetDocument();
+                    // SCTAB       nTab = GetViewData()->GetTabNo();
                     List        aList;
 
                     Color   aDummyCol;
@@ -925,13 +923,13 @@ void ScCellShell::GetState(SfxItemSet &rSet)
                             ULONG nCount = aRanges.Count();
                             for (ULONG nPos=0; nPos<nCount && !bEnable; nPos++)
                             {
-                                ScCellIterator aIter( pDoc, *aRanges.GetObject(nPos) );
-                                ScBaseCell* pCell = aIter.GetFirst();
+                                ScCellIterator aCellIter( pDoc, *aRanges.GetObject(nPos) );
+                                ScBaseCell* pCell = aCellIter.GetFirst();
                                 while ( pCell && !bEnable )
                                 {
                                     if ( pCell->GetNotePtr() )
                                         bEnable = TRUE;             // note found
-                                    pCell = aIter.GetNext();
+                                    pCell = aCellIter.GetNext();
                                 }
                             }
                         }
@@ -957,7 +955,7 @@ void ScCellShell::GetState(SfxItemSet &rSet)
 
             case SID_CHINESE_CONVERSION:
             case SID_HANGUL_HANJA_CONVERSION:
-                ScViewUtil::HideDisabledSlot( rSet, pViewData->GetBindings(), nWhich );
+                ScViewUtil::HideDisabledSlot( rSet, pData->GetBindings(), nWhich );
             break;
 
         } // switch ( nWitch )
