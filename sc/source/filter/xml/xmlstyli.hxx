@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyli.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:13:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:53:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,6 +177,9 @@ public:
     XMLPropertyState* FindProperty(const sal_Int16 nContextID);
 
     sal_Int32 GetNumberFormat() { return nNumberFormat; }
+
+private:
+    using XMLPropStyleContext::SetStyle;
 };
 
 class XMLTableStylesContext : public SvXMLStylesContext
