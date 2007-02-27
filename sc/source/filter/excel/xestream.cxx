@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xestream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:01:26 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:25:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -280,12 +280,12 @@ void XclExpStream::UpdateRecSize()
 void XclExpStream::UpdateSizeVars( sal_Size nSize )
 {
     DBG_ASSERT( mnCurrSize + nSize <= mnCurrMaxSize, "XclExpStream::UpdateSizeVars - record overwritten" );
-    mnCurrSize += static_cast< sal_uInt16 >( nSize );
+    mnCurrSize = mnCurrSize + static_cast< sal_uInt16 >( nSize );
 
     if( mnMaxSliceSize > 0 )
     {
         DBG_ASSERT( mnSliceSize + nSize <= mnMaxSliceSize, "XclExpStream::UpdateSizeVars - slice overwritten" );
-        mnSliceSize += static_cast< sal_uInt16 >( nSize );
+        mnSliceSize = mnSliceSize + static_cast< sal_uInt16 >( nSize );
         if( mnSliceSize >= mnMaxSliceSize )
             mnSliceSize = 0;
     }
