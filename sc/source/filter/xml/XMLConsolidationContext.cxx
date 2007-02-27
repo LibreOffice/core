@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLConsolidationContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:41:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ ScXMLConsolidationContext::~ScXMLConsolidationContext()
 SvXMLImportContext *ScXMLConsolidationContext::CreateChildContext(
         USHORT nPrefix,
         const OUString& rLName,
-        const uno::Reference< xml::sax::XAttributeList>& xAttrList )
+        const uno::Reference< xml::sax::XAttributeList>& /* xAttrList */ )
 {
     return new SvXMLImportContext( GetImport(), nPrefix, rLName );
 }
