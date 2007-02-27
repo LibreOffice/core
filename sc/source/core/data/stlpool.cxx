@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:08:43 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:08:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,9 +78,9 @@
 
 //========================================================================
 
-ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPool,
+ScStyleSheetPool::ScStyleSheetPool( SfxItemPool&    rPoolP,
                                     ScDocument*     pDocument )
-    :   SfxStyleSheetPool( rPool ),
+    :   SfxStyleSheetPool( rPoolP ),
         pActualStyleSheet( NULL ),
         pDoc( pDocument ),
         pForceStdName( NULL )
@@ -139,9 +139,9 @@ SfxStyleSheetBase& ScStyleSheetPool::Make( const String& rName,
 SfxStyleSheetBase* __EXPORT ScStyleSheetPool::Create(
                                             const String&   rName,
                                             SfxStyleFamily  eFamily,
-                                            USHORT          nMask )
+                                            USHORT          nMaskP )
 {
-    ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMask );
+    ScStyleSheet* pSheet = new ScStyleSheet( rName, *this, eFamily, nMaskP );
     if ( eFamily == SFX_STYLE_FAMILY_PARA && ScGlobal::GetRscString(STR_STYLENAME_STANDARD) != rName )
         pSheet->SetParent( ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
 
