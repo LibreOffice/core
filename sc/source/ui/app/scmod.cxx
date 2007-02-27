@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 12:12:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,11 +149,10 @@ SFX_IMPL_INTERFACE( ScModule, SfxShell, ScResId(RID_APPTITLE) )
 
 ScModule::ScModule( SfxObjectFactory* pFact ) :
     SfxModule( SfxApplication::CreateResManager( "sc" ), FALSE, pFact, NULL ),
-    bIsWaterCan( FALSE ),
-    bIsInEditCommand( FALSE ),
-    bIsInExecuteDrop( FALSE ),
     pSelTransfer( NULL ),
+    pMessagePool( NULL ),
     pRefInputHandler( NULL ),
+    pTeamDlg( NULL ),
     pViewCfg( NULL ),
     pDocCfg( NULL ),
     pAppCfg( NULL ),
@@ -165,12 +164,13 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
     pAccessOptions( NULL ),
     pCTLOptions( NULL ),
     pUserOptions( NULL ),
-    pTeamDlg( NULL ),
-    nCurRefDlgId( 0 ),
     pErrorHdl( NULL ),
     pSvxErrorHdl( NULL ),
-    pMessagePool( NULL ),
-    pFormEditData( NULL )
+    pFormEditData( NULL ),
+    nCurRefDlgId( 0 ),
+    bIsWaterCan( FALSE ),
+    bIsInEditCommand( FALSE ),
+    bIsInExecuteDrop( FALSE )
 {
     //  im ctor ist der ResManager (DLL-Daten) noch nicht initialisiert!
 
@@ -223,7 +223,7 @@ ScModule::~ScModule()
 
 //------------------------------------------------------------------
 
-void ScModule::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScModule::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
     {
@@ -539,6 +539,10 @@ void ScModule::Execute( SfxRequest& rReq )
                                 rReq.Done();
                             }
                             break;
+                        default:
+                        {
+                            // added to avoid warnings
+                        }
                     }
                 }
             }
@@ -690,7 +694,7 @@ void ScModule::GetState( SfxItemSet& rSet )
                 rSet.Put( SfxUInt16Item( nWhich, GetAppOptions().GetStatusFunc() ) );
                 break;
             case SID_ATTR_METRIC:
-                rSet.Put( SfxUInt16Item( nWhich, GetAppOptions().GetAppMetric() ) );
+                rSet.Put( SfxUInt16Item( nWhich, sal::static_int_cast<UINT16>(GetAppOptions().GetAppMetric()) ) );
                 break;
             case SID_AUTOSPELL_CHECK:
                 {
@@ -701,8 +705,8 @@ void ScModule::GetState( SfxItemSet& rSet )
                     else
                     {
                         USHORT nDummyLang, nDummyCjk, nDummyCtl;
-                        BOOL bDummy;
-                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto, bDummy );
+                        BOOL bDummyHide;
+                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bAuto, bDummyHide );
                     }
                     rSet.Put( SfxBoolItem( nWhich, bAuto ) );
                 }
@@ -719,8 +723,8 @@ void ScModule::GetState( SfxItemSet& rSet )
                     else
                     {
                         USHORT nDummyLang, nDummyCjk, nDummyCtl;
-                        BOOL bDummy;
-                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bDummy, bHide );
+                        BOOL bDummyAuto;
+                        GetSpellSettings( nDummyLang, nDummyCjk, nDummyCtl, bDummyAuto, bHide );
                     }
                     rSet.Put( SfxBoolItem( nWhich, bHide ) );
                 }
@@ -1260,9 +1264,9 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
         if ( pDoc )
         {
-            ScDocOptions aOpt(pDoc->GetDocOptions());
-            aOpt.SetTabDistance(nTabDist);
-            pDoc->SetDocOptions( aOpt );
+            ScDocOptions aDocOpt(pDoc->GetDocOptions());
+            aDocOpt.SetTabDistance(nTabDist);
+            pDoc->SetDocOptions( aDocOpt );
             pDocSh->SetDocumentModified();
             if(pDoc->GetDrawLayer())
                 pDoc->GetDrawLayer()->SetDefaultTabulator(nTabDist);
@@ -1287,7 +1291,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
                     pDoc->SetOnlineSpellPos( ScAddress(0,0,0) );    // vorne anfangen
                 else
                 {
-                    WaitObject aWait( pDocSh->GetDialogParent() );
+                    WaitObject aWait( pDocSh->GetActiveDialogParent() );
                     pDoc->RemoveAutoSpellObj();     //  Edit-Text-Objekte wieder zurueckwandeln
                 }
 
@@ -1403,7 +1407,7 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
 
     if ( pDoc && bCalcAll )
     {
-        WaitObject aWait( pDocSh->GetDialogParent() );
+        WaitObject aWait( pDocSh->GetActiveDialogParent() );
         pDoc->CalcAll();
         if ( pViewSh )
             pViewSh->UpdateCharts( TRUE );
@@ -1443,11 +1447,11 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         {
             if ( pObjSh->Type() == TYPE(ScDocShell) )
             {
-                ScDocShell* pDocSh = ((ScDocShell*)pObjSh);
-                pDocSh->CalcOutputFactor();
-                SCTAB nTabCount = pDocSh->GetDocument()->GetTableCount();
+                ScDocShell* pOneDocSh = ((ScDocShell*)pObjSh);
+                pOneDocSh->CalcOutputFactor();
+                SCTAB nTabCount = pOneDocSh->GetDocument()->GetTableCount();
                 for (SCTAB nTab=0; nTab<nTabCount; nTab++)
-                    pDocSh->AdjustRowHeight( 0, MAXROW, nTab );
+                    pOneDocSh->AdjustRowHeight( 0, MAXROW, nTab );
             }
             pObjSh = SfxObjectShell::GetNext( *pObjSh );
         }
@@ -1457,21 +1461,21 @@ void ScModule::ModifyOptions( const SfxItemSet& rOptSet )
         SfxViewShell* pSh = SfxViewShell::GetFirst( &aScType );
         while ( pSh )
         {
-            ScTabViewShell* pViewSh = (ScTabViewShell*)pSh;
+            ScTabViewShell* pOneViewSh = (ScTabViewShell*)pSh;
 
             //  set ref-device for EditEngine
-            ScInputHandler* pHdl = GetInputHdl(pViewSh);
+            ScInputHandler* pHdl = GetInputHdl(pOneViewSh);
             if (pHdl)
                 pHdl->UpdateRefDevice();
 
             //  update view scale
-            ScViewData* pViewData = pViewSh->GetViewData();
-            pViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY() );
+            ScViewData* pViewData = pOneViewSh->GetViewData();
+            pOneViewSh->SetZoom( pViewData->GetZoomX(), pViewData->GetZoomY() );
 
             //  repaint
-            pViewSh->PaintGrid();
-            pViewSh->PaintTop();
-            pViewSh->PaintLeft();
+            pOneViewSh->PaintGrid();
+            pOneViewSh->PaintTop();
+            pOneViewSh->PaintLeft();
 
             pSh = SfxViewShell::GetNext( *pSh, &aScType );
         }
@@ -1992,7 +1996,7 @@ void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
     }
 }
 
-IMPL_LINK( ScModule, IdleHandler, Timer*, pTimer )
+IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
 {
     if ( Application::AnyInput( INPUT_MOUSEANDKEYBOARD ) )
     {
@@ -2049,7 +2053,7 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, pTimer )
     return 0;
 }
 
-IMPL_LINK( ScModule, SpellTimerHdl, Timer*, pTimer )
+IMPL_LINK( ScModule, SpellTimerHdl, Timer*, EMPTYARG )
 {
     if ( Application::AnyInput( INPUT_KEYBOARD ) )
     {
@@ -2111,7 +2115,7 @@ SfxItemSet*  ScModule::CreateItemSet( USHORT nId )
         //  SFX_APP()->GetOptions( aSet );
 
         pRet->Put( SfxUInt16Item( SID_ATTR_METRIC,
-                        GetAppOptions().GetAppMetric() ) );
+                        sal::static_int_cast<UINT16>(GetAppOptions().GetAppMetric()) ) );
 
         // TP_CALC
         pRet->Put( SfxUInt16Item( SID_ATTR_DEFTABSTOP,
@@ -2222,10 +2226,10 @@ SfxTabPage*  ScModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
             break;
         case RID_OFA_TP_INTERNATIONAL:
         {
-            SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
-            if ( pFact )
+            SfxAbstractDialogFactory* pSfxFact = SfxAbstractDialogFactory::Create();
+            if ( pSfxFact )
             {
-                ::CreateTabPage fnCreatePage = pFact->GetTabPageCreatorFunc( nId );
+                ::CreateTabPage fnCreatePage = pSfxFact->GetTabPageCreatorFunc( nId );
                 if ( fnCreatePage )
                     pRet = (*fnCreatePage)( pParent, rSet );
             }
