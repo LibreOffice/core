@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detdata.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:27:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,7 @@ SV_IMPL_PTRARR( ScDetOpArr_Impl, ScDetOpDataPtr );
 //------------------------------------------------------------------------
 
 ScDetOpList::ScDetOpList(const ScDetOpList& rList) :
+    ScDetOpArr_Impl(),
     bHasAddError( FALSE )
 {
     USHORT nCount = rList.Count();
@@ -99,12 +100,12 @@ void ScDetOpList::UpdateReference( ScDocument* pDoc, UpdateRefMode eUpdateRefMod
     }
 }
 
-void ScDetOpList::Append( ScDetOpData* pData )
+void ScDetOpList::Append( ScDetOpData* pDetOpData )
 {
-    if ( pData->GetOperation() == SCDETOP_ADDERROR )
+    if ( pDetOpData->GetOperation() == SCDETOP_ADDERROR )
         bHasAddError = TRUE;
 
-    Insert( pData, Count() );
+    Insert( pDetOpData, Count() );
 }
 
 
