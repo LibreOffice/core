@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scabstdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-28 16:58:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ ScAbstractDialogFactory* ScAbstractDialogFactory::Create()
 
     if ( aDialogLibrary.is() || aDialogLibrary.load( aStrBuf.makeStringAndClear() ) )
         fp = ( ScAbstractDialogFactory* (__LOADONCALLAPI*)() )
-            aDialogLibrary.getSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
+            aDialogLibrary.getFunctionSymbol( ::rtl::OUString::createFromAscii("CreateDialogFactory") );
     if ( fp )
         return fp();
     return 0;
