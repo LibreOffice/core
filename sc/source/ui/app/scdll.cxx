@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdll.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:49:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:58:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,7 +310,8 @@ void ScDLL::Init()
 
     // Hack: Eingabezeile mit 42 registrieren, damit sie im PlugIn immer sichtbar ist
     ScInputWindowWrapper        ::RegisterChildWindow(42, pMod, SFX_CHILDWIN_TASK|SFX_CHILDWIN_FORCEDOCK);
-    ScNavigatorDialogWrapper    ::RegisterChildWindowContext(pMod);
+    ScNavigatorDialogWrapper    ::RegisterChildWindowContext(
+            sal::static_int_cast<sal_uInt16>(ScTabViewShell::GetInterfaceId()), pMod);
     ScSolverDlgWrapper          ::RegisterChildWindow(FALSE, pMod);
     ScNameDlgWrapper            ::RegisterChildWindow(FALSE, pMod);
     ScPivotLayoutWrapper        ::RegisterChildWindow(FALSE, pMod);
@@ -362,7 +363,7 @@ void ScDLL::Init()
     // ::com::sun::star::form::component::Form-Objekt-Factory eintragen
     FmFormObjFactory();
 
-    pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, pMod->GetAppOptions().GetAppMetric() ) );
+    pMod->PutItem( SfxUInt16Item( SID_ATTR_METRIC, sal::static_int_cast<UINT16>(pMod->GetAppOptions().GetAppMetric()) ) );
 
     //  StarOne Services are now handled in the registry
 }
