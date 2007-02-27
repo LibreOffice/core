@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 20:38:15 $
+#   last change: $Author: vg $ $Date: 2007-02-27 13:03:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,11 @@ SLOFILES =	\
      $(SLO)$/scuiimoptdlg.obj
 
 EXCEPTIONSFILES= \
+    $(SLO)$/csvgrid.obj \
+    $(SLO)$/csvruler.obj \
+    $(SLO)$/csvsplits.obj \
+    $(SLO)$/csvtablebox.obj \
+    $(SLO)$/fieldwnd.obj \
     $(SLO)$/pvlaydlg.obj	\
     $(SLO)$/dapidata.obj
 
