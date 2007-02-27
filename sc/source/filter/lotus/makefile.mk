@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 19:42:27 $
+#   last change: $Author: vg $ $Date: 2007-02-27 12:39:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,35 +53,22 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES =				\
-        filter.cxx		\
-        lotus.cxx		\
-        lotimpop.cxx	\
-        lotread.cxx		\
-        lotform.cxx		\
-        memory.cxx		\
-        op.cxx			\
-        optab.cxx		\
-        tool.cxx		\
-        expop.cxx		\
-        export.cxx		\
-        lotattr.cxx
-
-
-
-SLOFILES =					\
-        $(SLO)$/filter.obj	\
-        $(SLO)$/lotus.obj	\
+SLOFILES =						\
+        $(SLO)$/filter.obj		\
+        $(SLO)$/lotus.obj		\
         $(SLO)$/lotimpop.obj	\
-        $(SLO)$/lotread.obj	\
-        $(SLO)$/lotform.obj	\
-        $(SLO)$/memory.obj	\
-        $(SLO)$/op.obj		\
-        $(SLO)$/optab.obj	\
+        $(SLO)$/lotread.obj		\
+        $(SLO)$/lotform.obj		\
+        $(SLO)$/memory.obj		\
+        $(SLO)$/op.obj			\
+        $(SLO)$/optab.obj		\
         $(SLO)$/tool.obj		\
-        $(SLO)$/expop.obj	\
-        $(SLO)$/export.obj	\
+        $(SLO)$/expop.obj		\
+        $(SLO)$/export.obj		\
         $(SLO)$/lotattr.obj
+
+EXCEPTIONSFILES =				\
+        $(SLO)$/op.obj
 
 # --- Tagets -------------------------------------------------------
 
