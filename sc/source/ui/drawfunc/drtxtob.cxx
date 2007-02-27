@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:47:45 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:10:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,8 +302,6 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_OPEN_HYPERLINK:
             {
-                SdrView* pView = pViewData->GetScDrawView();
-                OutlinerView* pOutView = pView->GetTextEditOutlinerView();
                 if ( pOutView )
                 {
                     const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
@@ -520,7 +518,6 @@ void __EXPORT ScDrawTextObjectBar::ExecuteToggle( SfxRequest &rReq )
 
     SdrView* pView = pViewData->GetScDrawView();
 
-    const SfxItemSet* pArgs = rReq.GetArgs();
     USHORT nSlot = rReq.GetSlot();
 
     SfxItemSet aSet( pView->GetDefaultAttr() );
@@ -609,7 +606,7 @@ void lcl_RemoveFields( OutlinerView& rOutView )
                         pOutliner->QuickInsertText( aFieldText, aFieldSel );
                         if ( nPar == aSel.nEndPara )
                         {
-                            nNewEnd += aFieldText.Len();
+                            nNewEnd = sal::static_int_cast<xub_StrLen>( nNewEnd + aFieldText.Len() );
                             --nNewEnd;
                         }
                     }
@@ -894,6 +891,10 @@ void __EXPORT ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
         case SVX_ADJUST_BLOCK:
             rDestSet.Put( SfxBoolItem( SID_ALIGNBLOCK, TRUE ) );
             break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     // pseudo slots for Format menu
     rDestSet.Put( SfxBoolItem( SID_ALIGN_ANY_LEFT,      eAdj == SVX_ADJUST_LEFT ) );
