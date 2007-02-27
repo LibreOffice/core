@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwshh.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-25 12:27:52 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 14:00:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,13 +60,13 @@ using namespace com::sun::star;
 
 //------------------------------------------------------------------
 
-void ScTabViewShell::ExecuteSbx( SfxRequest& rReq )
+void ScTabViewShell::ExecuteSbx( SfxRequest& /* rReq */ )
 {
     //  SID_RANGE_OFFSET (Offset),
     //  SID_PIVOT_CREATE (DataPilotCreate) - removed (old Basic)
 }
 
-void ScTabViewShell::GetSbxState( SfxItemSet& rSet )
+void ScTabViewShell::GetSbxState( SfxItemSet& /* rSet */ )
 {
     //  SID_RANGE_REGION (CurrentRegion) - removed (old Basic)
 }
@@ -259,7 +259,7 @@ void ScTabViewShell::RemoveAccessibilityObject( SfxListener& rObject )
             pDoc->RemoveUnoObject(rObject);
     }
     else
-        DBG_ERROR("kein Accessibility-Broadcaster??!?");
+        DBG_ERROR("kein Accessibility-Broadcaster?");
 }
 
 void ScTabViewShell::BroadcastAccessibility( const SfxHint &rHint )
