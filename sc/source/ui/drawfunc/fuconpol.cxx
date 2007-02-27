@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuconpol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:50:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,9 +173,9 @@
 |*
 \************************************************************************/
 
-FuConstPolygon::FuConstPolygon(ScTabViewShell* pViewSh, Window* pWin, SdrView* pView,
+FuConstPolygon::FuConstPolygon(ScTabViewShell* pViewSh, Window* pWin, SdrView* pViewP,
                    SdrModel* pDoc, SfxRequest& rReq)
-    : FuConstruct(pViewSh, pWin, pView, pDoc, rReq)
+    : FuConstruct(pViewSh, pWin, pViewP, pDoc, rReq)
 {
 }
 
@@ -203,7 +203,7 @@ BOOL __EXPORT FuConstPolygon::MouseButtonDown(const MouseEvent& rMEvt)
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
     SdrViewEvent aVEvt;
-    SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
+    (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONDOWN, aVEvt);
     if (aVEvt.eEvent == SDREVENT_BEGTEXTEDIT)
     {
         // Texteingabe hier nicht zulassen
@@ -249,7 +249,7 @@ BOOL __EXPORT FuConstPolygon::MouseButtonUp(const MouseEvent& rMEvt)
     BOOL bSimple = FALSE;
 
     SdrViewEvent aVEvt;
-    SdrHitKind eHit = pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
+    (void)pView->PickAnything(rMEvt, SDRMOUSEBUTTONUP, aVEvt);
 
     pView->MouseButtonUp(rMEvt, pWindow);
 
@@ -343,7 +343,7 @@ void FuConstPolygon::Activate()
         break;
     }
 
-    pView->SetCurrentObj(eKind);
+    pView->SetCurrentObj(sal::static_int_cast<UINT16>(eKind));
 
     pView->SetEditMode(SDREDITMODE_CREATE);
 
