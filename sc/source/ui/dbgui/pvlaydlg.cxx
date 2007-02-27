@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:27:30 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:04:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,27 +93,7 @@ void lcl_FillToPivotField( PivotField& rPivotField, const ScDPFuncData& rFuncDat
 ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
                                     const ScDPObject& rDPObject )
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_PIVOT_LAYOUT ),
-        aBtnOk          ( this, ScResId( BTN_OK ) ),
-        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
-        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
-        aBtnOptions     ( this, ScResId( BTN_OPTIONS ) ),
-        aBtnMore        ( this, ScResId( BTN_MORE ) ),
-
-        aFtInfo         ( this, ScResId( FT_INFO ) ),
-        aBtnIgnEmptyRows( this, ScResId( BTN_IGNEMPTYROWS ) ),
-        aBtnDetectCat   ( this, ScResId( BTN_DETECTCAT ) ),
-        aBtnTotalCol    ( this, ScResId( BTN_TOTALCOL ) ),
-        aBtnTotalRow    ( this, ScResId( BTN_TOTALROW ) ),
-        aBtnFilter      ( this, ScResId( BTN_FILTER ) ),
-        aBtnDrillDown   ( this, ScResId( BTN_DRILLDOWN ) ),
-
-        aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
-        aFtOutArea      ( this, ScResId( FT_OUTAREA ) ),
-        aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
-        aRbOutPos       ( this, ScResId( RB_OUTAREA ), &aEdOutPos ),
-        aFlAreas        ( this, ScResId( FL_OUTPUT ) ),
-
+        aFlLayout       ( this, ScResId( FL_LAYOUT ) ),
         aFtPage         ( this, ScResId( FT_PAGE ) ),
         aWndPage        ( this, ScResId( WND_PAGE ),   TYPE_PAGE,   &aFtPage ),
         aFtCol          ( this, ScResId( FT_COL ) ),
@@ -123,9 +103,28 @@ ScDPLayoutDlg::ScDPLayoutDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pPar
         aFtData         ( this, ScResId( FT_DATA ) ),
         aWndData        ( this, ScResId( WND_DATA ),   TYPE_DATA,   &aFtData ),
         aWndSelect      ( this, ScResId( WND_SELECT ), TYPE_SELECT, String(ScResId(STR_SELECT)) ),
-
         aSlider         ( this, ScResId( WND_HSCROLL ) ),
-        aFlLayout       ( this, ScResId( FL_LAYOUT ) ),
+        aFtInfo         ( this, ScResId( FT_INFO ) ),
+
+        aFlAreas        ( this, ScResId( FL_OUTPUT ) ),
+        aLbOutPos       ( this, ScResId( LB_OUTAREA ) ),
+        aFtOutArea      ( this, ScResId( FT_OUTAREA ) ),
+        aEdOutPos       ( this, ScResId( ED_OUTAREA ) ),
+        aRbOutPos       ( this, ScResId( RB_OUTAREA ), &aEdOutPos ),
+        aBtnIgnEmptyRows( this, ScResId( BTN_IGNEMPTYROWS ) ),
+        aBtnDetectCat   ( this, ScResId( BTN_DETECTCAT ) ),
+        aBtnTotalCol    ( this, ScResId( BTN_TOTALCOL ) ),
+        aBtnTotalRow    ( this, ScResId( BTN_TOTALROW ) ),
+        aBtnFilter      ( this, ScResId( BTN_FILTER ) ),
+        aBtnDrillDown   ( this, ScResId( BTN_DRILLDOWN ) ),
+
+        aBtnOk          ( this, ScResId( BTN_OK ) ),
+        aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+        aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+        aBtnRemove      ( this, ScResId( BTN_REMOVE ) ),
+        aBtnOptions     ( this, ScResId( BTN_OPTIONS ) ),
+        aBtnMore        ( this, ScResId( BTN_MORE ) ),
+
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
         aStrNewTable    ( ScResId( SCSTR_NEWTABLE ) ),
 
@@ -172,6 +171,10 @@ ScDPFieldWindow& ScDPLayoutDlg::GetFieldWindow( ScDPFieldType eType )
         case TYPE_ROW:  return aWndRow;
         case TYPE_COL:  return aWndCol;
         case TYPE_DATA: return aWndData;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
     return aWndSelect;
 }
@@ -202,9 +205,9 @@ void __EXPORT ScDPLayoutDlg::Init()
     aBtnMore.SetClickHdl( LINK( this, ScDPLayoutDlg, MoreClickHdl ) );
 
     {
-        Size aSize( Window( this, ScResId( WND_FIELD ) ).GetSizePixel() );
-        OHEIGHT = aSize.Height();
-        OWIDTH  = aSize.Width();
+        Size aFieldSize( Window( this, ScResId( WND_FIELD ) ).GetSizePixel() );
+        OHEIGHT = aFieldSize.Height();
+        OWIDTH  = aFieldSize.Width();
     }
     SSPACE = Window( this, ScResId( WND_FIELD_SPACE ) ).GetSizePixel().Width();
 
@@ -508,6 +511,11 @@ void ScDPLayoutDlg::AddField( size_t nFromIndex, ScDPFieldType eToType, const Po
             toArr = &aDataArr;
             bDataArr = TRUE;
             break;
+
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if (   (toArr->back().get() == NULL)
@@ -605,6 +613,11 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                 fromWnd = &aWndData;
                 fromArr = &aDataArr;
                 break;
+
+            default:
+            {
+                // added to avoid warnings
+            }
         }
 
         switch ( eToType )
@@ -641,6 +654,11 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                 toArr = &aDataArr;
                 bDataArr = TRUE;
                 break;
+
+            default:
+            {
+                // added to avoid warnings
+            }
         }
 
         if ( fromArr && toArr && fromWnd && toWnd )
@@ -735,6 +753,11 @@ void ScDPLayoutDlg::MoveField( ScDPFieldType eFromType, size_t nFromIndex, ScDPF
                 theArr = &aDataArr;
                 bDataArr = TRUE;
                 break;
+
+            default:
+            {
+                // added to avoid warnings
+            }
         }
 
         ScDPFuncData fData( *((*theArr)[nFromIndex]) );
@@ -791,6 +814,10 @@ void ScDPLayoutDlg::RemoveField( ScDPFieldType eFromType, size_t nIndex )
         case TYPE_COL:  pArr = &aColArr;     break;
         case TYPE_ROW:  pArr = &aRowArr;     break;
         case TYPE_DATA: pArr = &aDataArr;    break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if( pArr )
@@ -912,6 +939,10 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
         case TYPE_COL:      pArr = &aColArr;    break;
         case TYPE_ROW:      pArr = &aRowArr;    break;
         case TYPE_DATA:     pArr = &aDataArr;   break;
+        default:
+        {
+            // added to avoid warnings
+        }
     }
 
     if ( pArr )
@@ -976,6 +1007,12 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
                         aWndData.SetFieldText( aStr, nFieldIndex );
                     }
                     delete pDlg;
+                }
+                break;
+
+                default:
+                {
+                    // added to avoid warnings
                 }
             }
         }
@@ -1272,7 +1309,7 @@ BOOL ScDPLayoutDlg::GetPivotArrays(    PivotField*  pPageArr,
 
 //----------------------------------------------------------------------------
 
-void ScDPLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
+void ScDPLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
 {
     if ( bRefInputMode )
     {
@@ -1283,7 +1320,7 @@ void ScDPLayoutDlg::SetReference( const ScRange& rRef, ScDocument* pDoc )
         aAdr.PutInOrder( ScAddress( nEndCol, nEndRow, nEndTab ) );
 */
         String aRefStr;
-        rRef.aStart.Format( aRefStr, STD_FORMAT, pDoc );
+        rRef.aStart.Format( aRefStr, STD_FORMAT, pDocP );
         aEdOutPos.SetRefString( aRefStr );
     }
 }
@@ -1343,17 +1380,17 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
         //SFX_APPWINDOW->Enable();
 
         ScPivotParam    theOutParam;
-        PivotPageFieldArr aPageArr;
-        PivotFieldArr   aColArr;
-        PivotFieldArr   aRowArr;
-        PivotFieldArr   aDataArr;
+        PivotPageFieldArr aPageFieldArr;
+        PivotFieldArr   aColFieldArr;
+        PivotFieldArr   aRowFieldArr;
+        PivotFieldArr   aDataFieldArr;
         USHORT          nPageCount;
         USHORT          nColCount;
         USHORT          nRowCount;
         USHORT          nDataCount;
 
-        BOOL bFit = GetPivotArrays( aPageArr,   aColArr,   aRowArr,   aDataArr,
-                                    nPageCount, nColCount, nRowCount, nDataCount );
+        BOOL bFit = GetPivotArrays( aPageFieldArr, aColFieldArr, aRowFieldArr, aDataFieldArr,
+                                    nPageCount,    nColCount,    nRowCount,    nDataCount );
         if ( bFit )
         {
             ScRange aOutRange( aAdrDest );      // bToNewTable is passed separately
@@ -1368,15 +1405,15 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
             uno::Reference<sheet::XDimensionsSupplier> xSource = xDlgDPObject->GetSource();
 
-            ScDPObject::ConvertOrientation( aSaveData, aPageArr, nPageCount,
+            ScDPObject::ConvertOrientation( aSaveData, aPageFieldArr, nPageCount,
                             sheet::DataPilotFieldOrientation_PAGE,   NULL, 0, 0, xSource, FALSE );
-            ScDPObject::ConvertOrientation( aSaveData, aColArr,  nColCount,
+            ScDPObject::ConvertOrientation( aSaveData, aColFieldArr,  nColCount,
                             sheet::DataPilotFieldOrientation_COLUMN, NULL, 0, 0, xSource, FALSE );
-            ScDPObject::ConvertOrientation( aSaveData, aRowArr,  nRowCount,
+            ScDPObject::ConvertOrientation( aSaveData, aRowFieldArr,  nRowCount,
                             sheet::DataPilotFieldOrientation_ROW,    NULL, 0, 0, xSource, FALSE );
-            ScDPObject::ConvertOrientation( aSaveData, aDataArr, nDataCount,
+            ScDPObject::ConvertOrientation( aSaveData, aDataFieldArr, nDataCount,
                             sheet::DataPilotFieldOrientation_DATA,   NULL, 0, 0, xSource, FALSE,
-                            aColArr, nColCount, aRowArr, nRowCount, aPageArr, nPageCount );
+                            aColFieldArr, nColCount, aRowFieldArr, nRowCount, aPageFieldArr, nPageCount );
 
             for( ScDPLabelDataVec::const_iterator aIt = aLabelDataArr.begin(), aEnd = aLabelDataArr.end(); aIt != aEnd; ++aIt )
             {
@@ -1459,7 +1496,7 @@ IMPL_LINK_INLINE_END( ScDPLayoutDlg, CancelHdl, CancelButton *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScDPLayoutDlg, MoreClickHdl, MoreButton *, pBtn )
+IMPL_LINK( ScDPLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
 {
     if ( aBtnMore.GetState() )
     {
