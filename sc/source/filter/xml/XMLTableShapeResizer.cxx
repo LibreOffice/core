@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:49:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:47:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,8 +72,8 @@
 using namespace ::com::sun::star;
 
 ScMyShapeResizer::ScMyShapeResizer(ScXMLImport& rTempImport)
-    : aShapes(),
-    rImport(rTempImport),
+    : rImport(rTempImport),
+    aShapes(),
     pCollection(NULL)
 {
 }
