@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nameuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:23:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ const SfxItemPropertyMap* lcl_GetNamedRangeMap()
     {
         {MAP_CHAR_LEN(SC_UNO_LINKDISPBIT),  0,  &getCppuType((uno::Reference<awt::XBitmap>*)0), beans::PropertyAttribute::READONLY, 0 },
         {MAP_CHAR_LEN(SC_UNO_LINKDISPNAME), 0,  &getCppuType((rtl::OUString*)0),                beans::PropertyAttribute::READONLY, 0 },
-        {0,0,0,0}
+        {0,0,0,0,0,0}
     };
     return aNamedRangeMap_Impl;
 }
@@ -106,7 +106,7 @@ ScNamedRangeObj::~ScNamedRangeObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScNamedRangeObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScNamedRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Ref-Update interessiert nicht
 
@@ -320,7 +320,7 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScNamedRangeObj::getPropertySet
 }
 
 void SAL_CALL ScNamedRangeObj::setPropertyValue(
-                        const rtl::OUString& aPropertyName, const uno::Any& aValue )
+                        const rtl::OUString& /* aPropertyName */, const uno::Any& /* aValue */ )
                 throw(beans::UnknownPropertyException, beans::PropertyVetoException,
                         lang::IllegalArgumentException, lang::WrappedTargetException,
                         uno::RuntimeException)
@@ -386,7 +386,7 @@ ScNamedRangesObj::~ScNamedRangesObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScNamedRangesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScNamedRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -580,7 +580,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScNamedRangesObj::getElementType() throw(uno::RuntimeException)
@@ -605,7 +605,7 @@ uno::Any SAL_CALL ScNamedRangesObj::getByName( const rtl::OUString& aName )
         return uno::makeAny(xRange);
     else
         throw container::NoSuchElementException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Sequence<rtl::OUString> SAL_CALL ScNamedRangesObj::getElementNames()
@@ -670,7 +670,7 @@ ScLabelRangeObj::~ScLabelRangeObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScLabelRangeObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScLabelRangeObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //! Ref-Update !!!
 
@@ -790,7 +790,7 @@ ScLabelRangesObj::~ScLabelRangesObj()
         pDocShell->GetDocument()->RemoveUnoObject(*this);
 }
 
-void ScLabelRangesObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
+void ScLabelRangesObj::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     //  Referenz-Update interessiert hier nicht
 
@@ -924,7 +924,7 @@ uno::Any SAL_CALL ScLabelRangesObj::getByIndex( sal_Int32 nIndex )
         return uno::makeAny(xRange);
     else
         throw lang::IndexOutOfBoundsException();
-    return uno::Any();
+//    return uno::Any();
 }
 
 uno::Type SAL_CALL ScLabelRangesObj::getElementType() throw(uno::RuntimeException)
