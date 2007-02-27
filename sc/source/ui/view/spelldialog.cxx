@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spelldialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 15:08:25 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:56:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@
 
 SFX_IMPL_CHILDWINDOW( ScSpellDialogChildWindow, SID_SPELL_DIALOG )
 
-ScSpellDialogChildWindow::ScSpellDialogChildWindow( Window* pParent, USHORT nId,
+ScSpellDialogChildWindow::ScSpellDialogChildWindow( Window* pParentP, USHORT nId,
         SfxBindings* pBindings, SfxChildWinInfo* pInfo ) :
-    ::svx::SpellDialogChildWindow( pParent, nId, pBindings, pInfo ),
+    ::svx::SpellDialogChildWindow( pParentP, nId, pBindings, pInfo ),
     mpViewShell( 0 ),
     mpViewData( 0 ),
     mpDocShell( 0 ),
