@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scdlgfact.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:44:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:59:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1404,25 +1404,25 @@ CreateTabPage ScAbstractDialogFactory_Impl::GetTabPageCreatorFunc( USHORT nId )
     {
         case RID_SCPAGE_OPREDLINE :
             return ScRedlineOptionsTabPage::Create;
-            break;
+            //break;
         case    RID_SCPAGE_CALC :
             return ScTpCalcOptions::Create;
-            break;
+            //break;
         case    RID_SCPAGE_PRINT :
             return ScTpPrintOptions::Create;
-            break;
+            //break;
         case    RID_SCPAGE_STAT :
             return ScDocStatPage::Create;
-            break;
+            //break;
         case RID_SCPAGE_USERLISTS :
              return ScTpUserLists::Create;
-             break;
+            //break;
         case RID_SCPAGE_CONTENT :
             return ScTpContentOptions::Create;
-             break;
+            //break;
         case RID_SCPAGE_LAYOUT :
             return ScTpLayoutOptions::Create;
-            break;
+            //break;
 
         default:
             break;
@@ -1437,10 +1437,18 @@ GetTabPageRanges ScAbstractDialogFactory_Impl::GetTabPageRangesFunc( USHORT nId 
     {
     case TP_VALIDATION_VALUES :
             return ScTPValidationValue::GetRanges;
-            break;
+            //break;
         default:
             break;
     }
 
     return 0;
 }
+
+void ScDPFunctionDlg_Dummy()
+{
+    // use ScDPListBoxWrapper to avoid warning (this isn't called)
+    ListBox* pListBox = NULL;
+    ScDPListBoxWrapper aWrapper( *pListBox );
+}
+
