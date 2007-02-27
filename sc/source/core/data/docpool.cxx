@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docpool.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 10:51:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -778,6 +778,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
                 ScGlobal::GetRscString(STR_SCATTR_PAGE_TOPDOWN) :
                 ScGlobal::GetRscString(STR_SCATTR_PAGE_LEFTRIGHT) ;
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         break;
 
@@ -791,6 +795,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         break;
 
@@ -804,6 +812,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         break;
 
@@ -817,6 +829,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         break;
 
@@ -830,6 +846,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         break;
 
@@ -843,6 +863,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
             case SFX_ITEM_PRESENTATION_NAMELESS:
             rText += ((const SfxBoolItem&)rItem).GetValue() ? aStrYes : aStrNo ;
             break;
+            default:
+            {
+                // added to avoid warnings
+            }
         }
         break;
 
@@ -866,6 +890,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
                         rText.Append( aPages );
                     }
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             else
@@ -890,6 +918,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
                     case SFX_ITEM_PRESENTATION_NAMELESS:
                     rText += String::CreateFromInt32( nPagNo );
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             else
@@ -915,6 +947,10 @@ SfxItemPresentation __EXPORT ScDocumentPool::GetPresentation(
                     rText += String::CreateFromInt32( nPercent );
                     rText += '%';
                     break;
+                    default:
+                    {
+                        // added to avoid warnings
+                    }
                 }
             }
             else
