@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inscldlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:06:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:31:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,14 +54,14 @@ static BYTE nInsItemChecked=0;
 ScInsertCellDlg::ScInsertCellDlg( Window* pParent,BOOL bDisallowCellMove) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_INSCELL ) ),
     //
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnCellsDown   ( this, ScResId( BTN_CELLSDOWN ) ),
     aBtnCellsRight  ( this, ScResId( BTN_CELLSRIGHT ) ),
     aBtnInsRows     ( this, ScResId( BTN_INSROWS ) ),
     aBtnInsCols     ( this, ScResId( BTN_INSCOLS ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) )
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) )
 {
     if (bDisallowCellMove)
     {

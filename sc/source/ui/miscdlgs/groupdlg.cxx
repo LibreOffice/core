@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:05:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:31:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,9 @@ ScGroupDlg::ScGroupDlg( Window* pParent,
                         BOOL    bRows ) :
     ModalDialog     ( pParent, ScResId( nResId ) ),
     //
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnRows        ( this, ScResId( BTN_GROUP_ROWS ) ),
     aBtnCols        ( this, ScResId( BTN_GROUP_COLS ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnOk          ( this, ScResId( BTN_OK ) ),
     aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
     aBtnHelp        ( this, ScResId( BTN_HELP ) )

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delcodlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:04:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,7 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
                                           USHORT  nCheckDefaults ) :
     ModalDialog     ( pParent, ScResId( RID_SCDLG_DELCONT ) ),
     //
-    aBtnOk          ( this, ScResId( BTN_OK ) ),
-    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
-    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
+    aFlFrame        ( this, ScResId( FL_FRAME ) ),
     aBtnDelAll      ( this, ScResId( BTN_DELALL ) ),
     aBtnDelStrings  ( this, ScResId( BTN_DELSTRINGS ) ),
     aBtnDelNumbers  ( this, ScResId( BTN_DELNUMBERS ) ),
@@ -71,7 +69,9 @@ ScDeleteContentsDlg::ScDeleteContentsDlg( Window* pParent,
     aBtnDelNotes    ( this, ScResId( BTN_DELNOTES ) ),
     aBtnDelAttrs    ( this, ScResId( BTN_DELATTRS ) ),
     aBtnDelObjects  ( this, ScResId( BTN_DELOBJECTS ) ),
-    aFlFrame        ( this, ScResId( FL_FRAME ) ),
+    aBtnOk          ( this, ScResId( BTN_OK ) ),
+    aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
+    aBtnHelp        ( this, ScResId( BTN_HELP ) ),
     bObjectsDisabled( FALSE )
 {
     if ( nCheckDefaults != 0 )
