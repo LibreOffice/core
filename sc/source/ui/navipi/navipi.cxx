@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 14:15:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:35:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -485,7 +485,7 @@ void __EXPORT CommandToolBox::Click()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( CommandToolBox, ToolBoxDropdownClickHdl, ToolBox*, pBox )
+IMPL_LINK( CommandToolBox, ToolBoxDropdownClickHdl, ToolBox*, EMPTYARG )
 {
     //  Das Popupmenue fuer den Dropmodus muss im Click (Button Down)
     //  statt im Select (Button Up) aufgerufen werden.
@@ -586,7 +586,7 @@ ScNavigatorSettings::ScNavigatorSettings() :
 //  class ScNavigatorDlgWrapper
 //==================================================================
 
-SFX_IMPL_CHILDWINDOW_CONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR, ScTabViewShell )
+SFX_IMPL_CHILDWINDOWCONTEXT( ScNavigatorDialogWrapper, SID_NAVIGATOR )
 
 #define IS_MODE(bit)(((nFlags)&(bit))==(bit))
 
@@ -594,7 +594,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(
                                     Window*          pParent,
                                     USHORT           nId,
                                     SfxBindings*     pBind,
-                                    SfxChildWinInfo* pInfo ) :
+                                    SfxChildWinInfo* /* pInfo */ ) :
         SfxChildWindowContext( nId )
 {
     pNavigator = new ScNavigatorDlg( pBind, this, pParent );
@@ -921,8 +921,7 @@ void ScNavigatorDlg::DoResize()
 
 //------------------------------------------------------------------------
 
-void __EXPORT ScNavigatorDlg::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType,
-                                      const SfxHint& rHint, const TypeId& rHintType )
+void __EXPORT ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
 {
     if ( rHint.ISA(SfxSimpleHint) )
     {
@@ -1172,7 +1171,7 @@ ScTabViewShell* ScNavigatorDlg::GetTabViewShell() const
 
 //------------------------------------------------------------------------
 
-ScNavigatorSettings* ScNavigatorDlg::GetSettings()
+ScNavigatorSettings* ScNavigatorDlg::GetNavigatorSettings()
 {
     //  #95791# Don't store the settings pointer here, because the settings belong to
     //  the view, and the view may be closed while the navigator is open (reload).
