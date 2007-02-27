@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh5.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 13:40:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:07:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ void ScDocShell::ErrorMessage( USHORT nGlobStrId )
 {
     //! StopMarking an der (aktiven) View?
 
-    Window* pParent = GetDialogParent();
+    Window* pParent = GetActiveDialogParent();
     ScWaitCursorOff aWaitOff( pParent );
     BOOL bFocus = pParent && pParent->HasFocus();
 
@@ -109,7 +109,7 @@ BOOL ScDocShell::IsEditable() const
     return !IsReadOnly() || aDocument.IsImportingXML();
 }
 
-void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2 )
+void ScDocShell::DBAreaDeleted( SCTAB nTab, SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW /* nY2 */ )
 {
     ScDocShellModificator aModificator( *this );
     aDocument.RemoveFlagsTab( nX1, nY1, nX2, nY1, nTab, SC_MF_AUTO );
@@ -410,7 +410,7 @@ void ScDocShell::UpdateAllRowHeights()
                                     aProv.GetPPTX(),aProv.GetPPTY(), aZoom,aZoom, FALSE );
 }
 
-void ScDocShell::PivotUpdate( ScPivot* pOldPivot, ScPivot* pNewPivot, BOOL bRecord, BOOL bApi )
+void ScDocShell::PivotUpdate( ScPivot*, ScPivot*, BOOL, BOOL )
 {
     DBG_ERRORFILE("PivotUpdate is obsolete!");
 }
@@ -485,7 +485,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord )
 
     if (bErr)
     {
-        InfoBox aBox( GetDialogParent(),
+        InfoBox aBox( GetActiveDialogParent(),
                 ScGlobal::GetRscString( STR_CONSOLIDATE_ERR1 ) );
         aBox.Execute();
         return;
@@ -493,7 +493,7 @@ void ScDocShell::DoConsolidate( const ScConsolidateParam& rParam, BOOL bRecord )
 
     //      ausfuehren
 
-    WaitObject aWait( GetDialogParent() );
+    WaitObject aWait( GetActiveDialogParent() );
     ScDocShellModificator aModificator( *this );
 
     ScRange aOldDest;
@@ -693,14 +693,14 @@ void ScDocShell::UseScenario( SCTAB nTab, const String& rName, BOOL bRecord )
             }
             else
             {
-                InfoBox aBox(GetDialogParent(),
+                InfoBox aBox(GetActiveDialogParent(),
                     ScGlobal::GetRscString( STR_PROTECTIONERR ) );
                 aBox.Execute();
             }
         }
         else
         {
-            InfoBox aBox(GetDialogParent(),
+            InfoBox aBox(GetActiveDialogParent(),
                 ScGlobal::GetRscString( STR_SCENARIO_NOTFOUND ) );
             aBox.Execute();
         }
