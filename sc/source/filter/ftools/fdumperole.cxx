@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fdumperole.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 13:18:55 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:30:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -446,7 +446,7 @@ void OlePropertyStreamObject::DumpSection( const String& rGuid, sal_uInt32 nStar
     if( StartElement( nStartPos ) )
     {
         // dump section header
-        sal_Int32 nSectSize = DumpDec< sal_Int32 >( "size" );
+        DumpDec< sal_Int32 >( "size" );
         sal_Int32 nPropCount = DumpDec< sal_Int32 >( "property-count" );
 
         // dump table of property positions
