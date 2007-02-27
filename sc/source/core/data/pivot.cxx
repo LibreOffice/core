@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 11:07:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 12:07:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,10 @@
 
 // -----------------------------------------------------------------------
 
+#ifdef WNT
 #pragma optimize("",off)
 #pragma optimize("q",off) // p-code off
-
+#endif
 
 // INCLUDE ---------------------------------------------------------------
 
@@ -214,6 +215,7 @@ ScPivot::ScPivot(ScDocument* pDocument) :
 }
 
 ScPivot::ScPivot(const ScPivot& rPivot):
+    DataObject(),
     pDoc            (rPivot.pDoc),
     aQuery          (rPivot.aQuery),
     bHasHeader      (rPivot.bHasHeader),
@@ -221,10 +223,10 @@ ScPivot::ScPivot(const ScPivot& rPivot):
     bDetectCat      (rPivot.bDetectCat),
     bMakeTotalCol   (rPivot.bMakeTotalCol),
     bMakeTotalRow   (rPivot.bMakeTotalRow),
-    nColNameCount   (0),
-    pColNames       (NULL),
     aName           (rPivot.aName),
     aTag            (rPivot.aTag),
+    nColNameCount   (0),
+    pColNames       (NULL),
     nSrcCol1        (rPivot.nSrcCol1),
     nSrcRow1        (rPivot.nSrcRow1),
     nSrcCol2        (rPivot.nSrcCol2),
@@ -315,7 +317,7 @@ ScPivot* ScPivot::CreateNew() const
     return pNewPivot;
 }
 
-void lcl_LoadFieldArr30( SvStream& rStream, PivotField* pField, USHORT nCount )
+void lcl_LoadFieldArr30( SvStream& /* rStream */, PivotField* /* pField */, USHORT /* nCount */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -330,7 +332,7 @@ void lcl_LoadFieldArr30( SvStream& rStream, PivotField* pField, USHORT nCount )
 #endif
 }
 
-void lcl_LoadFieldArr( SvStream& rStream, PivotField* pField, USHORT nCount )
+void lcl_LoadFieldArr( SvStream& /* rStream */, PivotField* /* pField */, USHORT /* nCount */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -349,7 +351,7 @@ void lcl_LoadFieldArr( SvStream& rStream, PivotField* pField, USHORT nCount )
 #endif
 }
 
-void lcl_SaveFieldArr( SvStream& rStream, const PivotField* pField, USHORT nCount )
+void lcl_SaveFieldArr( SvStream& /* rStream */, const PivotField* /* pField */, USHORT /* nCount */ )
 {
 #if SC_ROWLIMIT_STREAM_ACCESS
 #error address types changed!
@@ -367,7 +369,7 @@ void lcl_SaveFieldArr( SvStream& rStream, const PivotField* pField, USHORT nCoun
 
 //  nach Load muessen Daten neu berechnet werden !
 
-BOOL ScPivot::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
+BOOL ScPivot::Load( SvStream& /* rStream */, ScMultipleReadHeader& rHdr )
 {
     rHdr.StartEntry();
 #if SC_ROWLIMIT_STREAM_ACCESS
@@ -453,7 +455,7 @@ BOOL ScPivot::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
     return TRUE;
 }
 
-BOOL ScPivot::Store( SvStream& rStream, ScMultipleWriteHeader& rHdr ) const
+BOOL ScPivot::Store( SvStream& /* rStream */, ScMultipleWriteHeader& rHdr ) const
 {
     rHdr.StartEntry();
 #if SC_ROWLIMIT_STREAM_ACCESS
@@ -657,15 +659,15 @@ void ScPivot::MoveSrcArea( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab )
         SCsROW nDiffY = nNewRow - (SCsROW) nSrcRow1;
 
         nSrcTab = nNewTab;
-        nSrcCol1 += nDiffX;
-        nSrcCol2 += nDiffX;
-        nSrcRow1 += nDiffY;
-        nSrcRow2 += nDiffY;
+        nSrcCol1 = sal::static_int_cast<SCCOL>( nSrcCol1 + nDiffX );
+        nSrcCol2 = sal::static_int_cast<SCCOL>( nSrcCol2 + nDiffX );
+        nSrcRow1 = sal::static_int_cast<SCROW>( nSrcRow1 + nDiffY );
+        nSrcRow2 = sal::static_int_cast<SCROW>( nSrcRow2 + nDiffY );
 
-        aQuery.nCol1 += nDiffX;
-        aQuery.nCol2 += nDiffX;
-        aQuery.nRow1 += nDiffY;
-        aQuery.nRow2 += nDiffY;
+        aQuery.nCol1 = sal::static_int_cast<SCCOL>( aQuery.nCol1 + nDiffX );
+        aQuery.nCol2 = sal::static_int_cast<SCCOL>( aQuery.nCol2 + nDiffX );
+        aQuery.nRow1 = sal::static_int_cast<SCROW>( aQuery.nRow1 + nDiffY );
+        aQuery.nRow2 = sal::static_int_cast<SCROW>( aQuery.nRow2 + nDiffY );
 
         SCSIZE nEC = aQuery.GetEntryCount();
         for (SCSIZE i=0; i<nEC; i++)
@@ -678,13 +680,13 @@ void ScPivot::MoveSrcArea( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab )
             SCSIZE nR;
             for (nC=0; nC<nColCount; nC++)
                 if (aColArr[nC].nCol != PIVOT_DATA_FIELD)
-                    aColArr[nC].nCol += nDiffX;
+                    aColArr[nC].nCol = sal::static_int_cast<SCsCOL>( aColArr[nC].nCol + nDiffX );
             for (nR=0; nR<nRowCount; nR++)
                 if (aRowArr[nR].nCol != PIVOT_DATA_FIELD)
-                    aRowArr[nR].nCol += nDiffX;
+                    aRowArr[nR].nCol = sal::static_int_cast<SCsCOL>( aRowArr[nR].nCol + nDiffX );
             for (nC=0; nC<nDataCount; nC++)
                 if (aDataArr[nC].nCol != PIVOT_DATA_FIELD)
-                    aDataArr[nC].nCol += nDiffX;
+                    aDataArr[nC].nCol = sal::static_int_cast<SCsCOL>( aDataArr[nC].nCol + nDiffX );
         }
     }
 }
@@ -707,16 +709,16 @@ void ScPivot::MoveDestArea( SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab )
         SCsROW nDiffY = nNewRow - (SCsROW) nDestRow1;
 
         nDestTab = nNewTab;
-        nDestCol1 += nDiffX;
-        nDestRow1 += nDiffY;
+        nDestCol1 = sal::static_int_cast<SCCOL>( nDestCol1 + nDiffX );
+        nDestRow1 = sal::static_int_cast<SCROW>( nDestRow1 + nDiffY );
 
         if (bValidArea)
         {
-            nDestCol2 += nDiffX;
-            nDestRow2 += nDiffY;
+            nDestCol2 = sal::static_int_cast<SCCOL>( nDestCol2 + nDiffX );
+            nDestRow2 = sal::static_int_cast<SCROW>( nDestRow2 + nDiffY );
 
-            nDataStartCol += nDiffX;
-            nDataStartRow += nDiffY;
+            nDataStartCol = sal::static_int_cast<SCCOL>( nDataStartCol + nDiffX );
+            nDataStartRow = sal::static_int_cast<SCROW>( nDataStartRow + nDiffY );
         }
     }
 }
@@ -1072,9 +1074,9 @@ void ScPivot::DrawData()
     SCCOL nTotalCol = nDestCol2;
     SCROW nTotalRow = nDestRow2;
     if (bDataAtCol)
-        nTotalRow -= nDataCount - 1;
+        nTotalRow = sal::static_int_cast<SCROW>( nTotalRow - ( nDataCount - 1 ) );
     else
-        nTotalCol -= nDataCount - 1;
+        nTotalCol = sal::static_int_cast<SCCOL>( nTotalCol - ( nDataCount - 1 ) );
 
                             // Spaltenkoepfe ausgeben und ColRef initialisieren
                             // (String-Collections sind initialisiert)
@@ -1109,14 +1111,15 @@ void ScPivot::DrawData()
     {
         if (!bDataAtCol)
         {
-            for (SCSIZE i=0; i<nDataCount; i++)
+            for (i=0; i<nDataCount; i++)
             {
                 String aLab = *pLabelTotal;
                 aLab += ' ';
                 aLab += *pLabel[lcl_MaskToIndex( aDataArr[i].nFuncMask )];
                 aLab += ' ';
-                aLab += pDataList->GetString(i);
-                pDoc->SetString(nTotalCol+i, nDestRow1 + nFirstLine, nDestTab, aLab);
+                aLab += pDataList->GetString(sal::static_int_cast<USHORT>(i));
+                pDoc->SetString(sal::static_int_cast<SCCOL>(nTotalCol+i),
+                                sal::static_int_cast<SCROW>(nDestRow1 + nFirstLine), nDestTab, aLab);
                 //  Kategorie 6
             }
         }
@@ -1138,13 +1141,13 @@ void ScPivot::DrawData()
     {
         if (bDataAtCol)
         {
-            for (SCSIZE i=0; i<nDataCount; i++)
+            for (i=0; i<nDataCount; i++)
             {
                 String aLab = *pLabelTotal;
                 aLab += ' ';
                 aLab += *pLabel[lcl_MaskToIndex( aDataArr[i].nFuncMask )];
                 aLab += ' ';
-                aLab += pDataList->GetString(i);
+                aLab += pDataList->GetString(sal::static_int_cast<USHORT>(i));
                 pDoc->SetString(nDestCol1, nTotalRow+i, nDestTab, aLab);
                 //  Kategorie 8
             }
@@ -1228,7 +1231,7 @@ BOOL ScPivot::GetRowFieldAtCursor(SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL& rFi
     BOOL bRet = FALSE;
     if (bValidArea)
     {
-        bRet = ( nCol >= nDataStartCol && nCol < nDataStartCol + nRowCount
+        bRet = ( nCol >= nDataStartCol && nCol < sal::static_int_cast<SCCOL>(nDataStartCol + nRowCount)
                 && nRow == nDestRow1 + nFirstLine
                 && nTab == nDestTab );
         if (bRet)
@@ -1458,12 +1461,12 @@ void ScPivot::CalcArea()
     if (bDataAtCol)
     {
         if (nDataCount > 1)
-            nDataStartCol = nDestCol1 + nColCount;
+            nDataStartCol = sal::static_int_cast<SCCOL>(nDestCol1 + nColCount);
         else
-            nDataStartCol = nDestCol1 + Max(static_cast<SCSIZE>(0), nColCount - 1);
+            nDataStartCol = sal::static_int_cast<SCCOL>(nDestCol1 + Max(static_cast<SCSIZE>(0), nColCount - 1));
     }
     else
-        nDataStartCol = nDestCol1 + nColCount;
+        nDataStartCol = sal::static_int_cast<SCCOL>(nDestCol1 + nColCount);
     if (!bDataAtCol)
     {
         if (nDataCount > 1)
@@ -1482,9 +1485,9 @@ void ScPivot::CalcArea()
     {
         nDataColCount = 1;
         if (nDataCount == 1)
-            nDestCol2 = nDestCol1 + nColCount - 1;
+            nDestCol2 = sal::static_int_cast<SCCOL>(nDestCol1 + nColCount - 1);
         else
-            nDestCol2 = nDestCol1 + nColCount;
+            nDestCol2 = sal::static_int_cast<SCCOL>(nDestCol1 + nColCount);
     }
     else
     {
@@ -1515,14 +1518,14 @@ void ScPivot::CalcArea()
         else if (bDataAtCol)
         {
             if (nDataCount > 1)
-                nDestCol2 = nDestCol1 + nColCount + nColLines;
+                nDestCol2 = sal::static_int_cast<SCCOL>(nDestCol1 + nColCount + nColLines);
             else
-                nDestCol2 = nDestCol1 + (nColCount - 1) + nColLines;
+                nDestCol2 = sal::static_int_cast<SCCOL>(nDestCol1 + (nColCount - 1) + nColLines);
             if (!bMakeTotalCol)
                 --nDestCol2;
         }
         else
-            nDestCol2 = nDestCol1 + nColCount + nColLines;
+            nDestCol2 = sal::static_int_cast<SCCOL>(nDestCol1 + nColCount + nColLines);
     }
 
     if (nColCount == 0 || (nColCount==1 && aColArr[0].nCol==PIVOT_DATA_FIELD && nDataCount==1))
@@ -1581,12 +1584,12 @@ void ScPivot::CalcArea()
     else
     {
         if (!bNoRows)
-            nDestCol2 += nDataCount;
+            nDestCol2 = sal::static_int_cast<SCCOL>(nDestCol2 + nDataCount);
         nDestCol2 --;
     }
 }
 
-void ScPivot::SetDataLine(SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE nRIndex)
+void ScPivot::SetDataLine(SCCOL nCol, SCROW nRow, SCTAB /* nTab */, SCSIZE nRIndex)
 {
     SCSIZE nCIndex2;
 
@@ -1595,12 +1598,12 @@ void ScPivot::SetDataLine(SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE nRIndex)
     for (SCSIZE i=0; i < nColIndex; i++)
     {
         SCSIZE nCIndex = pColRef[i].nDataIndex;
-        if (nCIndex != PIVOT_FUNC_REF)
+        if (nCIndex != sal::static_int_cast<SCSIZE>(PIVOT_FUNC_REF))
         {
 //          if ( ppDataArr[nRIndex][nCIndex].GetCount() )
             {
                 SCSIZE nDIndex = ppDataArr[nRIndex][nCIndex].nIndex;
-                SetValue( nCol+i, nRow, ppDataArr[nRIndex][nCIndex], aDataArr[nDIndex].nFuncMask );
+                SetValue( sal::static_int_cast<SCCOL>(nCol+i), nRow, ppDataArr[nRIndex][nCIndex], aDataArr[nDIndex].nFuncMask );
                 //  Kategorie 18
 
                 if (bDataAtCol)
@@ -1613,12 +1616,12 @@ void ScPivot::SetDataLine(SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE nRIndex)
         {
             SubTotal aTotal;
             SCSIZE k = i-1;
-            while ((pColRef[k].nDataIndex == PIVOT_FUNC_REF) && (k > 0))
+            while ((pColRef[k].nDataIndex == sal::static_int_cast<SCSIZE>(PIVOT_FUNC_REF)) && (k > 0))
                 k--;
             for (SCSIZE j=k+1; (j-- > 0) && (pColRef[j].nRecCount > pColRef[i].nRecCount); )
             {
                 nCIndex2 = pColRef[j].nDataIndex;
-                if (nCIndex2 != PIVOT_FUNC_REF)
+                if (nCIndex2 != sal::static_int_cast<SCSIZE>(PIVOT_FUNC_REF))
                 {
                     if ((pColRef[i].nIndex == ppDataArr[nRIndex][nCIndex2].nIndex) ||
                         (pColRef[i].nIndex == SCSIZE_MAX))
@@ -1631,7 +1634,7 @@ void ScPivot::SetDataLine(SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE nRIndex)
             USHORT nFunc = pColRef[i].nFuncMask;
             if (nFunc == PIVOT_FUNC_AUTO)
                 nFunc = aDataArr[nRIndex/nDataMult%nDataCount].nFuncMask;
-            SetValue( nCol+i, nRow, aTotal, nFunc );
+            SetValue( sal::static_int_cast<SCCOL>(nCol+i), nRow, aTotal, nFunc );
             //  Kategorie 19
         }
     }
@@ -1648,17 +1651,17 @@ void ScPivot::SetDataLine(SCCOL nCol, SCROW nRow, SCTAB nTab, SCSIZE nRIndex)
         }
         else
         {
-            SCCOL nTotalCol = nDestCol2 - nDataCount + 1;
+            SCCOL nTotalCol = sal::static_int_cast<SCCOL>(nDestCol2 - nDataCount + 1);
             for (SCSIZE nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
             {
-                SetValue( nTotalCol+nTotCnt, nRow, aGrandTotal[nTotCnt], aDataArr[nTotCnt].nFuncMask );
+                SetValue( sal::static_int_cast<SCCOL>(nTotalCol+nTotCnt), nRow, aGrandTotal[nTotCnt], aDataArr[nTotCnt].nFuncMask );
                 //  Kategorie 21
             }
         }
     }
 }
 
-void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSIZE nIndex, SCSIZE nStartRIndex, SCSIZE nEndRIndex)
+void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB /* nTab */, USHORT nFunc, SCSIZE nIndex, SCSIZE nStartRIndex, SCSIZE nEndRIndex)
 {
     SCSIZE nSubtCount = 0;
     SubTotal aGrandTotal[PIVOT_MAXFIELD];
@@ -1667,7 +1670,7 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSI
     for (SCSIZE i=0; i<nColIndex; i++)
     {
         SCSIZE nCIndex = pColRef[i].nDataIndex;
-        if (nCIndex != PIVOT_FUNC_REF)
+        if (nCIndex != sal::static_int_cast<SCSIZE>(PIVOT_FUNC_REF))
         {
             SubTotal aTotal;
             for (SCSIZE j = nStartRIndex; j < nEndRIndex; j++)
@@ -1696,7 +1699,7 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSI
                 else
                     nThisFunc = aDataArr[nCIndex/nDataMult%nDataCount].nFuncMask;
             }
-            SetValue( nCol+i, nRow, aTotal, nThisFunc );
+            SetValue( sal::static_int_cast<SCCOL>(nCol+i), nRow, aTotal, nThisFunc );
             //  Kategorie 22
         }
         else
@@ -1713,12 +1716,12 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSI
                 SubTotal aTotal;
 
                 SCSIZE k = i-1;
-                while ((pColRef[k].nDataIndex == PIVOT_FUNC_REF) && (k > 0))
+                while ((pColRef[k].nDataIndex == sal::static_int_cast<SCSIZE>(PIVOT_FUNC_REF)) && (k > 0))
                     k--;
                 for (SCSIZE j=k+1; (j-- > 0) && (pColRef[j].nRecCount > pColRef[i].nRecCount); )
                 {
                     nCIndex = pColRef[j].nDataIndex;
-                    if (nCIndex != PIVOT_FUNC_REF)
+                    if (nCIndex != sal::static_int_cast<SCSIZE>(PIVOT_FUNC_REF))
                     {
                         for (SCSIZE nRIndex = nStartRIndex; nRIndex < nEndRIndex; nRIndex++)
                         {
@@ -1738,7 +1741,7 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSI
                     else
                         DBG_ERROR("wat fuer'n Index ???");
                 }
-                SetValue( nCol+i, nRow, aTotal, nThisFunc );
+                SetValue( sal::static_int_cast<SCCOL>(nCol+i), nRow, aTotal, nThisFunc );
                 //  Kategorie 23
             }
         }
@@ -1763,12 +1766,12 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSI
         }
         else
         {
-            SCCOL nTotalCol = nDestCol2 - nDataCount + 1;
+            SCCOL nTotalCol = sal::static_int_cast<SCCOL>(nDestCol2 - nDataCount + 1);
             for (SCSIZE nTotCnt = 0; nTotCnt<nDataCount; nTotCnt++)
             {
                 if (nFunc == PIVOT_FUNC_AUTO)
                     nThisFunc = aDataArr[nTotCnt%nDataCount].nFuncMask;
-                SetValue( nTotalCol+nTotCnt, nRow, aGrandTotal[nTotCnt], nThisFunc );
+                SetValue( sal::static_int_cast<SCCOL>(nTotalCol+nTotCnt), nRow, aGrandTotal[nTotCnt], nThisFunc );
                 //  Kategorie 25
             }
         }
@@ -1777,7 +1780,7 @@ void ScPivot::SetFuncLine(SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nFunc, SCSI
 
 void ScPivot::ColToTable(SCSIZE nField, SCROW& nRow, ScProgress& rProgress)
 {
-    SCCOL nCol = nDestCol1 + nField;
+    SCCOL nCol = sal::static_int_cast<SCCOL>(nDestCol1 + nField);
     if (nColCount == 0)
     {
 //      SetDataLine(nCol + 1, nRow, nDestTab, nRowIndex);
@@ -1816,7 +1819,7 @@ void ScPivot::ColToTable(SCSIZE nField, SCROW& nRow, ScProgress& rProgress)
                         {
                             for (SCSIZE k=0; k < nDataCount; k++)
                             {
-                                String aDataStr = pDataList->GetString(k);  // ist immer String
+                                String aDataStr = pDataList->GetString(sal::static_int_cast<USHORT>(k));    // always String
                                 aLab = aStr;
                                 SCSIZE nFuncType;
                                 if ( j==PIVOT_MAXFUNC )
@@ -1860,7 +1863,7 @@ void ScPivot::ColToTable(SCSIZE nField, SCROW& nRow, ScProgress& rProgress)
         SetFrame(nCol, nRow, nDestCol2, nRow+nCatCount-1);
         for (SCSIZE i = 0; i < nCatCount; i++)
         {
-            String aTmpStr = pColList[nField]->GetString(i);
+            String aTmpStr = pColList[nField]->GetString(sal::static_int_cast<USHORT>(i));
             if (!aTmpStr.Len()) aTmpStr = ScGlobal::GetRscString(STR_EMPTYDATA);
 
             String aPutStr;
@@ -1936,7 +1939,7 @@ void ScPivot::RowToTable(SCSIZE nField, SCCOL& nCol)
                                 aLab += ' ';
                                 aLab += *pLabel[nFuncType];
                                 aLab += ' ';
-                                aLab += pDataList->GetString(k);
+                                aLab += pDataList->GetString(sal::static_int_cast<USHORT>(k));
                                 pDoc->SetString(nCol, nRow, nDestTab, aLab);
                                 //  Kategorie 15
                                 pColRef[nColIndex].nDataIndex = PIVOT_FUNC_REF;
@@ -1974,11 +1977,11 @@ void ScPivot::RowToTable(SCSIZE nField, SCCOL& nCol)
     else if (nField < nRowCount)
     {
         SCSIZE nCatCount = pRowList[nField]->GetCount();
-        SetStyle(nCol, nRow, nCol+nCatCount-1, nRow, PIVOT_STYLE_CATEGORY);
-        SetFrame(nCol, nRow, nCol+nCatCount-1, nDestRow2);
+        SetStyle(nCol, nRow, sal::static_int_cast<SCCOL>(nCol+nCatCount-1), nRow, PIVOT_STYLE_CATEGORY);
+        SetFrame(nCol, nRow, sal::static_int_cast<SCCOL>(nCol+nCatCount-1), nDestRow2);
         for (SCSIZE i = 0; i < nCatCount; i++)
         {
-            String aTmpStr = pRowList[nField]->GetString(i);
+            String aTmpStr = pRowList[nField]->GetString(sal::static_int_cast<USHORT>(i));
             if (!aTmpStr.Len()) aTmpStr = ScGlobal::GetRscString(STR_EMPTYDATA);
 
             String aPutStr;
