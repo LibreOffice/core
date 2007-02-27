@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleEditObject.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:08:02 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 13:17:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,14 @@ public:
 
 protected:
     virtual ~ScAccessibleEditObject();
+
+    using ScAccessibleContextBase::IsDefunc;
+
 public:
+    using ScAccessibleContextBase::addEventListener;
+    using ScAccessibleContextBase::removeEventListener;
+    using ScAccessibleContextBase::disposing;
+
     virtual void SAL_CALL disposing();
 
     virtual void LostFocus();
