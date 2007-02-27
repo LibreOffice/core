@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangelst.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:17:40 $
+ *  last change: $Author: vg $ $Date: 2007-02-27 11:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,9 +50,12 @@
 class ScDocument;
 
 typedef ScRange* ScRangePtr;
-DECLARE_LIST( ScRangeListBase, ScRangePtr );
+DECLARE_LIST( ScRangeListBase, ScRangePtr )
 class ScRangeList : public ScRangeListBase, public SvRefBase
 {
+private:
+    using ScRangeListBase::operator==;
+
 public:
                     ScRangeList() {}
                     ScRangeList( const ScRangeList& rList );
@@ -90,18 +93,11 @@ SV_DECL_IMPL_REF( ScRangeList );
 
 // RangePairList: erster Range (aRange[0]) eigentlicher Range, zweiter
 // Range (aRange[1]) Daten zu diesem Range, z.B. Rows eines ColName
-DECLARE_LIST( ScRangePairListBase, ScRangePair* );
+DECLARE_LIST( ScRangePairListBase, ScRangePair* )
 class ScRangePairList : public ScRangePairListBase, public SvRefBase
 {
-#if defined( ICC ) && defined( OS2 )
-    friend static int _Optlink ICCQsortRPairCompare( const void*, const void*);
-#endif
 private:
-    static int
-#ifdef WNT
-        __cdecl
-#endif
-                    QsortNameCompare( const void*, const void* );
+    using ScRangePairListBase::operator==;
 
 public:
     virtual         ~ScRangePairList();
@@ -125,9 +121,15 @@ public:
 };
 SV_DECL_IMPL_REF( ScRangePairList );
 
+extern "C" int
+#ifdef WNT
+__cdecl
+#endif
+ScRangePairList_QsortNameCompare( const void*, const void* );
+
 #if defined( ICC ) && defined( SC_RANGELST_CXX ) && defined( OS2 )
     static int _Optlink ICCQsortRPairCompare( const void* a, const void* b)
-                    { ScRangePairList::QsortNameCompare(a,b); }
+                    { return ScRangePairList_QsortNameCompare(a,b); }
 #endif
 
 
