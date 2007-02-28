@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:10:27 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,10 +189,8 @@ public:
                                SwCrsrMoveState* = 0 ) const;
 
     virtual void  Paint( const SwRect& ) const;
-    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 #ifndef PRODUCT
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
