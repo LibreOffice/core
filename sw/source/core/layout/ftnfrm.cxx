@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:19:29 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:48:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -332,7 +332,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
     if ( !bValidSize )
     {
         if ( pPage->IsFtnPage() && !GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
-                Grow( LONG_MAX PHEIGHT, FALSE );
+                Grow( LONG_MAX, FALSE );
         else
         {
             //Die Groesse in der VarSize wird durch den Inhalt plus den
@@ -365,10 +365,10 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
             }
             nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
             if ( nDiff > 0 )
-                Shrink( nDiff PHEIGHT );
+                Shrink( nDiff );
             else if ( nDiff < 0 )
             {
-                Grow( -nDiff PHEIGHT );
+                Grow( -nDiff );
                 //Es kann passieren, dass weniger Platz zur Verfuegung steht,
                 //als der bereits der Border benoetigt - die Groesse der
                 //PrtArea wird dann negativ.
@@ -694,7 +694,7 @@ void SwFtnFrm::Cut()
         }
         else
         {   if ( Frm().Height() )
-                pUp->Shrink( Frm().Height() PHEIGHT );
+                pUp->Shrink( Frm().Height() );
             pUp->SetCompletePaint();
             pUp->InvalidatePage();
         }
@@ -2894,9 +2894,9 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
         nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 
     if ( GetFmt()->getIDocumentSettingAccess()->get(IDocumentSettingAccess::BROWSE_MODE) )
-        nMaxFtnHeight += pBody->Grow( LONG_MAX PHEIGHT, TRUE );
+        nMaxFtnHeight += pBody->Grow( LONG_MAX, TRUE );
     if ( IsInSct() )
-        nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX PHEIGHT, TRUE );
+        nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX, TRUE );
 
     if ( nMaxFtnHeight < 0 )
         nMaxFtnHeight = 0;
