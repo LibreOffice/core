@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:43:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,7 +216,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                    ( pNewUpper->IsColBodyFrm() &&
                      !pNewUpper->GetUpper()->GetPrev() &&
                      !pNewUpper->GetUpper()->GetNext() ) ) ) )
-                nSpace += pNewUpper->Grow( LONG_MAX PHEIGHT, TRUE );
+                nSpace += pNewUpper->Grow( LONG_MAX, TRUE );
 
             if ( nMoveAnyway < 3 )
             {
@@ -588,6 +588,10 @@ void SwFrm::MakePos()
                 else
                     (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() +
                                           (pPrv->Frm().*fnRect->fnGetWidth)() );
+
+                // cells may now leave their uppers
+                if( bVert && FRM_CELL & nMyType && !bReverse )
+                    aFrm.Pos().X() -= aFrm.Width() -pPrv->Frm().Width();
             }
             else if( bVert && FRM_NOTE_VERT & nMyType )
             {
@@ -634,6 +638,10 @@ void SwFrm::MakePos()
                     else
                         (aFrm.*fnRect->fnSetPosX)( (aFrm.*fnRect->fnGetLeft)() +
                                           (pPrv->Frm().*fnRect->fnGetWidth)() );
+
+                    // cells may now leave their uppers
+                    if( bVert && FRM_CELL & nMyType && !bReverse )
+                        aFrm.Pos().X() -= aFrm.Width() -pPrv->Frm().Width();
                 }
                 else if( bVert && FRM_NOTE_VERT & nMyType )
                 {
@@ -895,36 +903,49 @@ void SwLayoutFrm::MakeAll()
 
         if ( GetUpper() )
         {
-            if ( !bValidSize )
+            // NEW TABLES
+            if ( IsLeaveUpperAllowed() )
             {
-                //FixSize einstellen, die VarSize wird von Format() nach
-                //Berechnung der PrtArea eingestellt.
-                bValidPrtArea = FALSE;
-                SwTwips nPrtWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
-                if( bVert && ( IsBodyFrm() || IsFtnContFrm() ) )
-                {
-                    SwFrm* pNxt = GetPrev();
-                    while( pNxt && !pNxt->IsHeaderFrm() )
-                        pNxt = pNxt->GetPrev();
-                    if( pNxt )
-                        nPrtWidth -= pNxt->Frm().Height();
-                    pNxt = GetNext();
-                    while( pNxt && !pNxt->IsFooterFrm() )
-                        pNxt = pNxt->GetNext();
-                    if( pNxt )
-                        nPrtWidth -= pNxt->Frm().Height();
-                }
-                const long nDiff = nPrtWidth - (Frm().*fnRect->fnGetWidth)();
-                if( IsNeighbourFrm() && IsRightToLeft() )
-                    (Frm().*fnRect->fnSubLeft)( nDiff );
-                else
-                    (Frm().*fnRect->fnAddRight)( nDiff );
+                if ( !bValidSize )
+                    bValidPrtArea = FALSE;
             }
             else
-            {   // Don't leave your upper
-                const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
-                if( (Frm().*fnRect->fnOverStep)( nDeadLine ) )
-                    bValidSize = FALSE;
+            {
+                if ( !bValidSize )
+                {
+                    //FixSize einstellen, die VarSize wird von Format() nach
+                    //Berechnung der PrtArea eingestellt.
+                    bValidPrtArea = FALSE;
+
+                    SwTwips nPrtWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
+                    if( bVert && ( IsBodyFrm() || IsFtnContFrm() ) )
+                    {
+                        SwFrm* pNxt = GetPrev();
+                        while( pNxt && !pNxt->IsHeaderFrm() )
+                            pNxt = pNxt->GetPrev();
+                        if( pNxt )
+                            nPrtWidth -= pNxt->Frm().Height();
+                        pNxt = GetNext();
+                        while( pNxt && !pNxt->IsFooterFrm() )
+                            pNxt = pNxt->GetNext();
+                        if( pNxt )
+                            nPrtWidth -= pNxt->Frm().Height();
+                    }
+
+                    const long nDiff = nPrtWidth - (Frm().*fnRect->fnGetWidth)();
+
+                    if( IsNeighbourFrm() && IsRightToLeft() )
+                        (Frm().*fnRect->fnSubLeft)( nDiff );
+                    else
+                        (Frm().*fnRect->fnAddRight)( nDiff );
+                }
+                else
+                {
+                    // Don't leave your upper
+                    const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
+                    if( (Frm().*fnRect->fnOverStep)( nDeadLine ) )
+                        bValidSize = FALSE;
+                }
             }
         }
         if ( !bValidSize || !bValidPrtArea )
@@ -1621,7 +1642,7 @@ void SwCntntFrm::MakeAll()
             {
                 long nDiff = -(Frm().*fnRect->fnBottomDist)(
                                         (GetUpper()->*fnRect->fnGetPrtBottom)() );
-                long nReal = GetUpper()->Grow( nDiff PHEIGHT );
+                long nReal = GetUpper()->Grow( nDiff );
                 if( nReal )
                     continue;
             }
@@ -1648,7 +1669,8 @@ void SwCntntFrm::MakeAll()
 
         // Finally, we are able to split table rows. Therefore, bDontMoveMe
         // can be set to FALSE:
-        if( bDontMoveMe && IsInTab() && ( NULL != IsInSplitTableRow() ) )
+        if( bDontMoveMe && IsInTab() &&
+            0 != const_cast<SwCntntFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) )
             bDontMoveMe = FALSE;
 
         if ( bDontMoveMe && (Frm().*fnRect->fnGetHeight)() >
@@ -1658,7 +1680,7 @@ void SwCntntFrm::MakeAll()
             {
                 SwTwips nTmp = (GetUpper()->Prt().*fnRect->fnGetHeight)() -
                                (Prt().*fnRect->fnGetTop)();
-                BOOL bSplit = !GetIndPrev();
+                BOOL bSplit = !IsFwdMoveAllowed();
                 if ( nTmp > 0 && WouldFit( nTmp, bSplit, sal_False ) )
                 {
                     Prepare( PREP_WIDOWS_ORPHANS, 0, FALSE );
