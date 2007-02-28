@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:32:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,8 @@ class SwCursor : public SwPaM
     friend class SwCrsrSaveState;
 
     _SwCursor_SavePos* pSavePos;
-    BYTE nCursorBidiLevel;              // bidi level of the cursor
+    long mnRowSpanOffset;        // required for travelling in tabs with rowspans
+    BYTE nCursorBidiLevel;       // bidi level of the cursor
 
     ULONG FindAll( SwFindParas& , SwDocPositions, SwDocPositions, FindRanges, BOOL& bCancel );
 
@@ -238,6 +239,9 @@ public:
     BYTE GetCrsrBidiLevel() const { return nCursorBidiLevel; }
     void SetCrsrBidiLevel( BYTE nNewLevel ) { nCursorBidiLevel = nNewLevel; }
 
+    long GetCrsrRowSpanOffset() const { return mnRowSpanOffset; }
+    void SetCrsrRowSpanOffset( long nNew ) { mnRowSpanOffset = nNew; }
+
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor )
 };
 
@@ -312,6 +316,8 @@ public:
     // Parke den Tabellen-Cursor auf dem StartNode der Boxen.
     void ParkCrsr();
 
+    bool NewTableSelection();
+    void ActualizeSelection( const SwSelBoxes &rBoxes );
 };
 
 
