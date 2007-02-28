@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cntfrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:18:20 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:44:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,8 @@ protected:
     BOOL MakePrtArea( const SwBorderAttrs & );
 
     virtual void Modify( SfxPoolItem*, SfxPoolItem* );
-    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     SwCntntFrm( SwCntntNode * const );
 
