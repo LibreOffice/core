@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcrsr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:47:16 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,13 +191,13 @@ struct _PercentHdl
 };
 
 SwCursor::SwCursor( const SwPosition &rPos, SwPaM* pRing )
-    : SwPaM( rPos, pRing ), pSavePos( 0 ), nCursorBidiLevel( 0 )
+    : SwPaM( rPos, pRing ), pSavePos( 0 ), nCursorBidiLevel( 0 ), mnRowSpanOffset( 0 )
 {
 }
 
 // @@@ semantic: no copy ctor.
 SwCursor::SwCursor( SwCursor& rCpy )
-    : SwPaM( rCpy ), pSavePos( 0 ), nCursorBidiLevel( rCpy.nCursorBidiLevel )
+    : SwPaM( rCpy ), pSavePos( 0 ), nCursorBidiLevel( rCpy.nCursorBidiLevel ), mnRowSpanOffset( rCpy.mnRowSpanOffset )
 {
 }
 
@@ -552,18 +552,45 @@ FASTBOOL SwCursor::IsSelOvr( int eFlags )
 
 FASTBOOL SwCursor::IsInProtectTable( FASTBOOL bMove, FASTBOOL bChgCrsr )
 {
-    // stehe ich in einer Tabelle ??
     SwCntntNode* pCNd = GetCntntNode();
-    if( !pCNd || pSavePos->nNode == GetPoint()->nNode.GetIndex() ||
-        !pCNd->FindTableNode() ||
-        !pCNd->IsProtect() ||
-        IsReadOnlyAvailable() )
+    if( !pCNd )
         return FALSE;
+
+    // No table, no protected cell:
+    const SwTableNode* pTableNode = pCNd->FindTableNode();
+    if ( !pTableNode )
+        return FALSE;
+
+    // Current position == last save position?
+    if ( pSavePos->nNode == GetPoint()->nNode.GetIndex() )
+        return FALSE;
+
+    // Check for convered cell:
+    bool bInCoveredCell = false;
+    const SwStartNode* pTmpSttNode = pCNd->FindTableBoxStartNode();
+    ASSERT( pTmpSttNode, "In table, therefore I expect to get a SwTableBoxStartNode" )
+    const SwTableBox* pBox = pTableNode->GetTable().GetTblBox( pTmpSttNode->GetIndex() );
+    if ( pBox->getRowSpan() < 1 )
+        bInCoveredCell = true;
+
+    // Positions of covered cells are not acceptable:
+    if ( !bInCoveredCell )
+    {
+        // Position not protected?
+        if ( !pCNd->IsProtect() )
+            return FALSE;
+
+        // Cursor in protected cells allowed?
+        if ( IsReadOnlyAvailable() )
+            return FALSE;
+    }
+
+    // If we reach this point, we are in a protected or covered table cell!
 
     if( !bMove )
     {
         if( bChgCrsr )
-            // dann verbleibe auf der alten Position
+            // restore the last save position
             RestoreSavePos();
         return TRUE;        // Crsr bleibt an der alten Position
     }
@@ -1481,7 +1508,6 @@ FASTBOOL SwCursor::GoSentence( SentenceMoveType eMoveType )
     return bRet;
 }
 
-
 FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
                               BOOL bVisualAllowed,BOOL bSkipHidden, BOOL bInsertCrsr )
 {
@@ -1503,7 +1529,7 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
             SwIndex& rIdx = GetPoint()->nContent;
             xub_StrLen nPos = rIdx.GetIndex();
 
-            SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
+            const SvtCTLOptions& rCTLOptions = SW_MOD()->GetCTLOptions();
             if ( bVisualAllowed && rCTLOptions.IsCTLFontEnabled() &&
                  SvtCTLOptions::MOVEMENT_VISUAL ==
                  rCTLOptions.GetCTLCursorMovement() )
@@ -1547,8 +1573,92 @@ FASTBOOL SwCursor::LeftRight( BOOL bLeft, USHORT nCnt, USHORT nMode,
     else
         fnGo = CRSR_SKIP_CELLS == nMode ? fnGoCntntCells : fnGoCntnt;
 
-    while( nCnt && Move( fnMove, fnGo ) )
+    // ASSERT( not in covered cell )
+
+    while( nCnt )
+    {
+        SwNodeIndex aOldNodeIdx( GetPoint()->nNode );
+
+        bool bSuccess = Move( fnMove, fnGo );
+        if ( !bSuccess )
+            break;
+
+        // If we were located inside a covered cell but our position has been
+        // corrected, we check if the last move has moved the cursor to a different
+        // table cell. In this case we set the cursor to the stored covered position
+        // and redo the move:
+        if ( mnRowSpanOffset )
+        {
+            const SwNode* pOldTabBoxSttNode = aOldNodeIdx.GetNode().FindTableBoxStartNode();
+            const SwTableNode* pOldTabSttNode = pOldTabBoxSttNode ? pOldTabBoxSttNode->FindTableNode() : 0;
+            const SwNode* pNewTabBoxSttNode = GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+            const SwTableNode* pNewTabSttNode = pNewTabBoxSttNode ? pNewTabBoxSttNode->FindTableNode() : 0;
+
+            const bool bCellChanged = pOldTabSttNode && pNewTabSttNode &&
+                                      pOldTabSttNode == pNewTabSttNode &&
+                                      pOldTabBoxSttNode && pNewTabBoxSttNode &&
+                                      pOldTabBoxSttNode != pNewTabBoxSttNode;
+
+            if ( bCellChanged )
+            {
+                // Set cursor to start/end of covered cell:
+                SwTableBox* pTableBox = pOldTabBoxSttNode->GetTblBox();
+                const long nRowSpan = pTableBox->getRowSpan();
+                if ( nRowSpan > 1 )
+                {
+                    pTableBox = & pTableBox->FindEndOfRowSpan( pOldTabSttNode->GetTable(), (USHORT)(pTableBox->getRowSpan() + mnRowSpanOffset ) );
+                    SwNodeIndex& rPtIdx = GetPoint()->nNode;
+                    SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
+                    rPtIdx = aNewIdx;
+
+                    GetDoc()->GetNodes().GoNextSection( &rPtIdx, FALSE, FALSE );
+                    SwCntntNode* pCntntNode = GetCntntNode();
+                    if ( pCntntNode )
+                    {
+                        const xub_StrLen nTmpPos = bLeft ? pCntntNode->Len() : 0;
+                        GetPoint()->nContent.Assign( pCntntNode, nTmpPos );
+
+                        // Redo the move:
+                        bSuccess = Move( fnMove, fnGo );
+                        if ( !bSuccess )
+                            break;
+                    }
+                }
+
+                mnRowSpanOffset = 0;
+            }
+        }
+
+        // Check if I'm inside a covered cell. Correct cursor if necessary and
+        // store covered cell:
+        const SwNode* pTableBoxStartNode = GetPoint()->nNode.GetNode().FindTableBoxStartNode();
+        if ( pTableBoxStartNode )
+        {
+            const SwTableBox* pTableBox = pTableBoxStartNode->GetTblBox();
+            if ( pTableBox->getRowSpan() < 1 )
+            {
+                // Store the row span offset:
+                mnRowSpanOffset = pTableBox->getRowSpan();
+
+                // Move cursor to non-covered cell:
+                const SwTableNode* pTblNd = pTableBoxStartNode->FindTableNode();
+                pTableBox = & pTableBox->FindStartOfRowSpan( pTblNd->GetTable(), USHRT_MAX );
+                 SwNodeIndex& rPtIdx = GetPoint()->nNode;
+                SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
+                rPtIdx = aNewIdx;
+
+                GetDoc()->GetNodes().GoNextSection( &rPtIdx, FALSE, FALSE );
+                SwCntntNode* pCntntNode = GetCntntNode();
+                if ( pCntntNode )
+                {
+                    const xub_StrLen nTmpPos = bLeft ? pCntntNode->Len() : 0;
+                       GetPoint()->nContent.Assign( pCntntNode, nTmpPos );
+                }
+            }
+        }
+
         --nCnt;
+    }
 
     // here come some special rules for visual cursor travelling
     if ( pSttFrm )
@@ -1715,7 +1825,6 @@ FASTBOOL SwCursor::LeftRightMargin( BOOL bLeft, BOOL bAPI )
 {
     Point aPt;
     SwCntntFrm * pFrm = GetCntntNode()->GetFrm( &aPt, GetPoint() );
-    FASTBOOL bRet(FALSE);
 
     // calculate cursor bidi level
     if ( pFrm )
@@ -1768,26 +1877,46 @@ FASTBOOL SwCursor::GoPrevNextCell( BOOL bNext, USHORT nCnt )
     // gibt es auch eine vorherige Celle
     SwCrsrSaveState aSave( *this );
     SwNodeIndex& rPtIdx = GetPoint()->nNode;
-    if( bNext )
-    {
-        while( nCnt-- )
-        {
-            SwNodeIndex aCellIdx( *rPtIdx.GetNode().FindTableBoxStartNode()->
-                                    EndOfSectionNode(), 1 );
-            if( !aCellIdx.GetNode().IsStartNode() )
-                return FALSE;
-            rPtIdx = aCellIdx;
-        }
-    }
-    else
-    {
-        while( nCnt-- )
-        {
-            SwNodeIndex aCellIdx( *rPtIdx.GetNode().FindTableBoxStartNode(),-1);
-            if( !aCellIdx.GetNode().IsEndNode() )
-                return FALSE;
 
-            rPtIdx = *aCellIdx.GetNode().StartOfSectionNode();
+    while( nCnt-- )
+    {
+        const SwNode* pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();
+        const SwTableBox* pTableBox = pTableBoxStartNode->GetTblBox();
+
+        // Check if we have to move the cursor to a covered cell before
+        // proceeding:
+        if ( mnRowSpanOffset )
+        {
+            if ( pTableBox->getRowSpan() > 1 )
+            {
+                pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(), (USHORT)(pTableBox->getRowSpan() + mnRowSpanOffset) );
+                SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
+                rPtIdx = aNewIdx;
+                pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();
+            }
+            mnRowSpanOffset = 0;
+        }
+
+        const SwNode* pTmpNode = bNext ?
+                                 pTableBoxStartNode->EndOfSectionNode() :
+                                 pTableBoxStartNode;
+
+        SwNodeIndex aCellIdx( *pTmpNode, bNext ? 1 : -1 );
+        if(  bNext && !aCellIdx.GetNode().IsStartNode() ||
+            !bNext && !aCellIdx.GetNode().IsEndNode() )
+            return FALSE;
+
+        rPtIdx = bNext ? aCellIdx : SwNodeIndex(*aCellIdx.GetNode().StartOfSectionNode());
+
+        pTableBoxStartNode = rPtIdx.GetNode().FindTableBoxStartNode();
+        pTableBox = pTableBoxStartNode->GetTblBox();
+        if ( pTableBox->getRowSpan() < 1 )
+        {
+            mnRowSpanOffset = pTableBox->getRowSpan();
+            // move cursor to non-covered cell:
+            pTableBox = & pTableBox->FindStartOfRowSpan( pTblNd->GetTable(), USHRT_MAX );
+            SwNodeIndex aNewIdx( *pTableBox->GetSttNd() );
+            rPtIdx = aNewIdx;
         }
     }
 
@@ -2074,6 +2203,57 @@ void SwTableCursor::InsertBox( const SwTableBox& rTblBox )
     SwTableBox* pBox = (SwTableBox*)&rTblBox;
     aSelBoxes.Insert( pBox );
     bChg = TRUE;
+}
+
+bool SwTableCursor::NewTableSelection()
+{
+    bool bRet = false;
+    const SwNode *pStart = GetCntntNode()->FindTableBoxStartNode();
+    const SwNode *pEnd = GetCntntNode(FALSE)->FindTableBoxStartNode();
+    if( pStart && pEnd )
+    {
+        const SwTableNode *pTableNode = pStart->FindTableNode();
+        if( pTableNode == pEnd->FindTableNode() &&
+            pTableNode->GetTable().IsNewModel() )
+        {
+            bRet = true;
+            SwSelBoxes aNew;
+            aNew.Insert( &aSelBoxes );
+            pTableNode->GetTable().CreateSelection( pStart, pEnd, aNew,
+                SwTable::SEARCH_NONE, false );
+            ActualizeSelection( aNew );
+        }
+    }
+    return bRet;
+}
+
+void SwTableCursor::ActualizeSelection( const SwSelBoxes &rNew )
+{
+    USHORT nOld = 0, nNew = 0;
+    while ( nOld < aSelBoxes.Count() && nNew < rNew.Count() )
+    {
+        const SwTableBox* pPOld = *( aSelBoxes.GetData() + nOld );
+        const SwTableBox* pPNew = *( rNew.GetData() + nNew );
+        if( pPOld == pPNew )
+        {   // this box will stay
+            ++nOld;
+            ++nNew;
+        }
+        else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
+            DeleteBox( nOld ); // this box has to go
+        else
+        {
+            InsertBox( *pPNew ); // this is a new one
+            ++nOld;
+            ++nNew;
+        }
+    }
+
+    while( nOld < aSelBoxes.Count() )
+        DeleteBox( nOld ); // some more to delete
+
+    for( ; nNew < rNew.Count(); ++nNew ) // some more to insert
+        InsertBox( **( rNew.GetData() + nNew ) );
 }
 
 FASTBOOL SwTableCursor::IsCrsrMovedUpdt()
