@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.132 $
+ *  $Revision: 1.133 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:31:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:36:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1526,7 +1526,8 @@ public:
                                 sal_uInt16 nCols, SwHoriOrient eAdjust,
                                 const SwTableAutoFmt* pTAFmt = 0,
                                 const SvUShorts* pColArr = 0,
-                                BOOL bCalledFromShell = FALSE );
+                                BOOL bCalledFromShell = FALSE,
+                                BOOL bNewModel = TRUE );
 
     // steht der Index in einer Tabelle, dann returne den TableNode sonst 0
                  SwTableNode* IsIdxInTbl( const SwNodeIndex& rIdx );
@@ -1549,7 +1550,7 @@ public:
     sal_Bool InsertRow( const SwSelBoxes& rBoxes,
                     sal_uInt16 nCnt = 1, sal_Bool bBehind = sal_True );
         // loeschen von Spalten/Zeilen in der Tabelle
-    sal_Bool DeleteRowCol( const SwSelBoxes& rBoxes );
+    sal_Bool DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn = false );
     sal_Bool DeleteRow( const SwCursor& rCursor );
     sal_Bool DeleteCol( const SwCursor& rCursor );
         // teilen / zusammenfassen von Boxen in der Tabelle
