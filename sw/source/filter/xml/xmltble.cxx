@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:00:00 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:55:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -869,7 +869,9 @@ void SwXMLExport::ExportTableAutoStyles( const SwTableNode& rTblNd )
 
 // ---------------------------------------------------------------------
 
-void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
+void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
+                                  sal_uInt16 nColSpan,
+                                  sal_uInt16 nRowSpan,
                                   SwXMLTableInfo_Impl& rTblInfo )
 {
     const SwStartNode *pBoxSttNd = rBox.GetSttNd();
@@ -884,6 +886,14 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
                 AddAttribute( XML_NAMESPACE_TABLE, XML_STYLE_NAME, EncodeStyleName(rName) );
             }
         }
+    }
+
+    if( nRowSpan != 1 )
+    {
+        OUStringBuffer sTmp;
+        sTmp.append( (sal_Int32)nRowSpan );
+        AddAttribute( XML_NAMESPACE_TABLE, XML_NUMBER_ROWS_SPANNED,
+                      sTmp.makeStringAndClear() );
     }
 
     if( nColSpan != 1 )
@@ -1025,6 +1035,15 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
         {
             const SwTableBox *pBox = rBoxes[nBox];
 
+            // NEW TABLES
+            const long nRowSpan = pBox->getRowSpan();
+            if( nRowSpan < 1 )
+            {
+                SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
+                                          XML_COVERED_TABLE_CELL, sal_True,
+                                          sal_False );
+            }
+
             sal_uInt16 nOldCPos = nCPos;
             if( nBox < nBoxes-1U )
                 nCPos += (sal_uInt16)SwWriteTable::GetBoxWidth( pBox );
@@ -1038,7 +1057,10 @@ void SwXMLExport::ExportTableLine( const SwTableLine& rLine,
             ASSERT( bFound, "couldn't find column" );
 
             sal_uInt16 nColSpan = nCol - nOldCol + 1U;
-            ExportTableBox( *pBox, nColSpan, rTblInfo );
+
+            if ( nRowSpan >= 1 )
+                ExportTableBox( *pBox, nColSpan, nRowSpan, rTblInfo );
+
             for( sal_uInt16 i=nOldCol; i<nCol; i++ )
             {
                 SvXMLElementExport aElem( *this, XML_NAMESPACE_TABLE,
