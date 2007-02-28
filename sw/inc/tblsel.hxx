@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:19:35 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,6 +208,7 @@ public:
     //mitbekommen.
     void SaveChartData( const SwTable &rTable );
     void RestoreChartData( const SwTable &rTable );
+    void ClearLineBehind() { pLineBehind = 0; }
 };
 
 
