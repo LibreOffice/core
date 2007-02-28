@@ -4,9 +4,9 @@
  *
  *  $RCSfile: IDocumentContentOperations.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:07:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:36:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,8 @@
         DOC_MOVEDEFAULT = 0x00,
         DOC_MOVEALLFLYS = 0x01,
         DOC_CREATEUNDOOBJ = 0x02,
-        DOC_MOVEREDLINES = 0x04
+        DOC_MOVEREDLINES = 0x04,
+        DOC_NO_DELFRMS = 0x08
     };
 
  public:
