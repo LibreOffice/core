@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:38:51 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:39:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,9 @@
 #endif
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
+#endif
+#ifndef _CELLFRM_HXX
+#include <cellfrm.hxx>
 #endif
 #ifndef _SWTABLE_HXX
 #include <swtable.hxx>
