@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:41:21 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,16 @@
 #ifndef _POOLFMT_HXX
 #include <poolfmt.hxx>
 #endif
+#ifdef PRODUCT
+#define CHECK_TABLE(t)
+#else
+#ifdef DEBUG
+#define CHECK_TABLE(t) (t).CheckConsistency();
+#else
+#define CHECK_TABLE(t)
+#endif
+#endif
+
 
 // Struktur fuer das Mappen von alten und neuen Frame-Formaten an den
 // Boxen und Lines einer Tabelle
@@ -265,6 +275,7 @@ BOOL lcl_CopyTblBox( const SwTableBox*& rpBox, void* pPara )
                             rpBox->GetSttIdx() - pCT->nOldTblSttIdx );
         ASSERT( aNewIdx.GetNode().IsStartNode(), "Index nicht auf einem StartNode" );
         pNewBox = new SwTableBox( pBoxFmt, aNewIdx, pCT->pInsLine );
+        pNewBox->setRowSpan( rpBox->getRowSpan() );
     }
 
     pCT->pInsLine->GetTabBoxes().C40_INSERT( SwTableBox, pNewBox,
@@ -358,6 +369,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
 
     rTbl.SetRowsToRepeat( GetTable().GetRowsToRepeat() );
     rTbl.SetTblChgMode( GetTable().GetTblChgMode() );
+    rTbl.SetTableModel( GetTable().IsNewModel() );
 
     SwDDEFieldType* pDDEType = 0;
     if( IS_TYPE( SwDDETable, &GetTable() ))
@@ -408,6 +420,7 @@ SwTableNode* SwTableNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     if( pDDEType && pDoc->GetRootFrm() )
         pDDEType->IncRefCnt();
 
+    CHECK_TABLE( GetTable() );
     return pTblNd;
 }
 
