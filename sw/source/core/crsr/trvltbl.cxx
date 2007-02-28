@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:52:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,37 +103,57 @@
 FASTBOOL SwCrsrShell::GoNextCell( BOOL bAppendLine )
 {
     FASTBOOL bRet = FALSE;
-    const SwTableNode* pTblNd;
+    const SwTableNode* pTblNd = 0;
     if( IsTableMode() || 0 != ( pTblNd = IsCrsrInTbl() ))
     {
         SwCursor* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
         SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
         bRet = TRUE;
 
+        // Check if we have to move the cursor to a covered cell before
+        // proceeding:
+        const SwNode* pTableBoxStartNode = pCrsr->GetNode()->FindTableBoxStartNode();
+        const SwTableBox* pTableBox = 0;
+
+        if ( pCrsr->GetCrsrRowSpanOffset() )
+        {
+            pTableBox = pTableBoxStartNode->GetTblBox();
+            if ( pTableBox->getRowSpan() > 1 )
+            {
+                if ( !pTblNd )
+                    pTblNd = IsCrsrInTbl();
+                pTableBox = & pTableBox->FindEndOfRowSpan( pTblNd->GetTable(),
+                                                           (USHORT)(pTableBox->getRowSpan() + pCrsr->GetCrsrRowSpanOffset() ) );
+                pTableBoxStartNode = pTableBox->GetSttNd();
+            }
+        }
+
+        SwNodeIndex  aCellStt( *pTableBoxStartNode->EndOfSectionNode(), 1 );
+
         // folgt nach dem EndNode der Cell ein weiterer StartNode, dann
         // gibt es auch eine naechste Celle
-        SwNodeIndex aCellStt( *pCrsr->GetNode()->FindTableBoxStartNode()->
-                                EndOfSectionNode(), 1 );
+
         if( !aCellStt.GetNode().IsStartNode() )
         {
-            if( pCrsr->HasMark() ||
-                (!bAppendLine /*&& IsCrsrReadonly()*/ ))
+            if( pCrsr->HasMark() || !bAppendLine )
                 bRet = FALSE;
             else
             {
                 // auf besonderen Wunsch: keine Line mehr vorhanden, dann
                 // mache doch eine neue:
-                const SwTableBox* pBox = pTblNd->GetTable().GetTblBox(
+                if ( !pTableBox )
+                    pTableBox = pTblNd->GetTable().GetTblBox(
                                     pCrsr->GetPoint()->nNode.GetNode().
                                     StartOfSectionIndex() );
-                ASSERT( pBox, "Box steht nicht in dieser Tabelle" );
+
+                ASSERT( pTableBox, "Box steht nicht in dieser Tabelle" );
                 SwSelBoxes aBoxes;
 
                 //Das Dokument veraendert sich evtl. ohne Action wuerden die Sichten
                 //nichts mitbekommen.
                 ((SwEditShell*)this)->StartAllAction();
                 bRet = pDoc->InsertRow( pTblNd->GetTable().
-                                    SelLineFromBox( pBox, aBoxes, FALSE ));
+                                    SelLineFromBox( pTableBox, aBoxes, FALSE ));
                 ((SwEditShell*)this)->EndAllAction();
             }
         }
@@ -196,6 +216,9 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     if( !pFrm->IsInTab() )
         return FALSE;
 
+    const SwTabFrm* pTabFrm = pFrm->FindTabFrm();
+    const SwTable* pTable = pTabFrm->GetTable();
+
     SET_CURR_SHELL( this );
 
     const SwTableBox* pStt = 0;
@@ -204,8 +227,9 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     // lasse ueber das Layout die Boxen suchen
     SwSelBoxes aBoxes;
     SwTblSearchType eType = bRow ? TBLSEARCH_ROW : TBLSEARCH_COL;
+    const bool bCheckProtected = !IsReadOnlyAvailable();
 
-    if( !IsReadOnlyAvailable() )
+    if( bCheckProtected )
         eType = (SwTblSearchType)(eType | TBLSEARCH_PROTECT);
 
     if ( !bRowSimple )
@@ -219,6 +243,17 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
         pEnd = aBoxes[aBoxes.Count() - 1];
     }
     // --> FME 2004-07-30 #i32329# Enhanced table selection
+    else if ( pTable->IsNewModel() )
+    {
+        const SwShellCrsr *pCrsr = _GetCrsr();
+        SwTable::SearchType eSearchType = bRow ? SwTable::SEARCH_ROW : SwTable::SEARCH_COL;
+        pTable->CreateSelection( *pCrsr, aBoxes, eSearchType, bCheckProtected );
+        if( !aBoxes.Count() )
+            return FALSE;
+
+        pStt = aBoxes[0];
+        pEnd = aBoxes[aBoxes.Count() - 1];
+    }
     else
     {
         const SwShellCrsr *pCrsr = _GetCrsr();
