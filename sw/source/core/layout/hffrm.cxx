@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:19:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                     ColUnlock();
                     if ( nDiff > 0 )
                     {
-                        if ( Grow( nDiff PHEIGHT ) )
+                        if ( Grow( nDiff ) )
                         {
                             pFrm = Lower();
 
@@ -397,7 +397,7 @@ void SwHeadFootFrm::FormatSize(SwTwips nUL, const SwBorderAttrs * pAttrs)
                         }
                     }
                     else
-                        Shrink( -nDiff PHEIGHT );
+                        Shrink( -nDiff );
                     //Schnell auf dem kurzen Dienstweg die Position updaten.
 
                     MakePos();
