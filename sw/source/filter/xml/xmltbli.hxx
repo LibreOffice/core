@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:26:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,7 @@ class SwXMLTableContext : public XMLTextTableContext
 
     sal_Bool            bFirstSection : 1;
     sal_Bool            bRelWidth : 1;
+    sal_Bool            bHasSubTables : 1;
 
     USHORT              nHeaderRows;
     sal_uInt32          nCurRow;
@@ -134,7 +135,7 @@ class SwXMLTableContext : public XMLTextTableContext
                                          sal_uInt32 nCol ) const;
     inline const SwStartNode *GetLastStartNode() const;
     void FixRowSpan( sal_uInt32 nRow, sal_uInt32 nCol, sal_uInt32 nColSpan );
-    void ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol );
+    void ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol, bool bRows );
 
     /** sets the appropriate SwTblBoxFmt at pBox. */
     SwTableBoxFmt* GetSharedBoxFormat(
@@ -201,6 +202,8 @@ public:
 
     virtual ::com::sun::star::uno::Reference <
             ::com::sun::star::text::XTextContent > GetXTextContent() const;
+
+    void SetHasSubTables( sal_Bool bNew ) { bHasSubTables = bNew; }
 };
 
 inline SwXMLTableContext *SwXMLTableContext::GetParentTable() const
