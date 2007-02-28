@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:42:06 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,6 +216,16 @@
 #include <frmsh.hxx>
 #endif
 // <--
+#ifdef PRODUCT
+#define CHECK_TABLE(t)
+#else
+#ifdef DEBUG
+#define CHECK_TABLE(t) (t).CheckConsistency();
+#else
+#define CHECK_TABLE(t)
+#endif
+#endif
+
 
 // #i17764# delete table redlines when modifying the table structure?
 // #define DEL_TABLE_REDLINES 1
@@ -466,7 +476,8 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
                                    USHORT nCols, SwHoriOrient eAdjust,
                                    const SwTableAutoFmt* pTAFmt,
                                    const SvUShorts* pColArr,
-                                   BOOL bCalledFromShell )
+                                   BOOL bCalledFromShell,
+                                   BOOL bNewModel )
 {
     ASSERT( nRows, "Tabelle ohne Zeile?" );
     ASSERT( nCols, "Tabelle ohne Spalten?" );
@@ -561,6 +572,11 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
         }
         nWidth = nLastPos - nSttPos;
     }
+    else if( nCols )
+    {
+        nWidth /= nCols;
+        nWidth *= nCols; // to avoid rounding problems
+    }
     pTableFmt->SetAttr( SwFmtFrmSize( ATT_VAR_SIZE, nWidth ));
     if( !(rInsTblOpts.mnInsMode & tabopts::SPLIT_LAYOUT) )
         pTableFmt->SetAttr( SwFmtLayoutSplit( FALSE ));
@@ -591,6 +607,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     pTableFmt->Add( pNdTbl );       // das Frame-Format setzen
 
     pNdTbl->SetRowsToRepeat( nRowsToRepeat );
+    pNdTbl->SetTableModel( bNewModel );
 
     SvPtrarr aBoxFmtArr( 0, 16 );
     SwTableBoxFmt* pBoxFmt = 0;
@@ -681,6 +698,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTblOpts,
     }
 
     SetModified();
+    CHECK_TABLE( *pNdTbl );
     return pNdTbl;
 }
 
@@ -1502,7 +1520,8 @@ BOOL SwDoc::InsertCol( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     if( DoesUndo() )
     {
         DoUndo( FALSE );
-        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSCOL, rBoxes, *pTblNd, nCnt, bBehind );
+        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSCOL, rBoxes, *pTblNd,
+                                     0, 0, nCnt, bBehind, FALSE );
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
     }
 
@@ -1567,7 +1586,7 @@ BOOL SwDoc::InsertRow( const SwSelBoxes& rBoxes, USHORT nCnt, BOOL bBehind )
     {
         DoUndo( FALSE );
         pUndo = new SwUndoTblNdsChg( UNDO_TABLE_INSROW,rBoxes, *pTblNd,
-                                        nCnt, bBehind );
+                                     0, 0, nCnt, bBehind, FALSE );
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
     }
 
@@ -1727,13 +1746,13 @@ BOOL SwDoc::DeleteCol( const SwCursor& rCursor )
 
     // dann loesche doch die Spalten
     StartUndo(UNDO_COL_DELETE, NULL);
-    BOOL bResult = DeleteRowCol( aBoxes );
+    BOOL bResult = DeleteRowCol( aBoxes, true );
     EndUndo(UNDO_COL_DELETE, NULL);
 
     return bResult;
 }
 
-BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
+BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes, bool bColumn )
 {
     if( ::HasProtectedCells( rBoxes ))
         return FALSE;
@@ -1748,6 +1767,13 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
         return FALSE;
 
     ::ClearFEShellTabCols();
+    SwSelBoxes aSelBoxes;
+    aSelBoxes.Insert(rBoxes.GetData(), rBoxes.Count());
+    SwTable &rTable = pTblNd->GetTable();
+    long nMin = 0;
+    long nMax = 0;
+    if( bColumn && rTable.IsNewModel() )
+        rTable.ExpandColumnSelection( aSelBoxes, nMin, nMax );
 
 #ifdef DEL_TABLE_REDLINES
     lcl_DelRedlines aDelRedl( *pTblNd, TRUE );
@@ -1755,10 +1781,10 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
 
     // soll die gesamte Tabelle geloescht werden ??
     const ULONG nTmpIdx1 = pTblNd->GetIndex();
-    const ULONG nTmpIdx2 = rBoxes[ rBoxes.Count()-1 ]->GetSttNd()->
+    const ULONG nTmpIdx2 = aSelBoxes[ aSelBoxes.Count()-1 ]->GetSttNd()->
                                 EndOfSectionIndex()+1;
-    if( pTblNd->GetTable().GetTabSortBoxes().Count() == rBoxes.Count() &&
-        rBoxes[0]->GetSttIdx()-1 == nTmpIdx1 &&
+    if( pTblNd->GetTable().GetTabSortBoxes().Count() == aSelBoxes.Count() &&
+        aSelBoxes[0]->GetSttIdx()-1 == nTmpIdx1 &&
         nTmpIdx2 == pTblNd->EndOfSectionIndex() )
     {
         BOOL bNewTxtNd = FALSE;
@@ -1897,14 +1923,23 @@ BOOL SwDoc::DeleteRowCol( const SwSelBoxes& rBoxes )
     if( DoesUndo() )
     {
         DoUndo( FALSE );
-        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_DELBOX, rBoxes, *pTblNd, 0, FALSE );
+        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_DELBOX, aSelBoxes, *pTblNd,
+                                     nMin, nMax, 0, FALSE, FALSE );
     }
 
     SwTableFmlUpdate aMsgHnt( &pTblNd->GetTable() );
     aMsgHnt.eFlags = TBL_BOXPTR;
     UpdateTblFlds( &aMsgHnt );
 
-    BOOL bRet = pTblNd->GetTable().DeleteSel( this, rBoxes, pUndo, TRUE );
+    if( rTable.IsNewModel() )
+    {
+        if( bColumn )
+            rTable.PrepareDeleteCol( nMin, nMax );
+        rTable.FindSuperfluousRows( aSelBoxes );
+        if( pUndo )
+            pUndo->ReNewBoxes( aSelBoxes );
+    }
+    BOOL bRet = rTable.DeleteSel( this, aSelBoxes, 0, pUndo, TRUE, TRUE );
     if( bRet )
     {
         SetModified();
@@ -1949,11 +1984,13 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
     SvULongs aNdsCnts;
     SwTableSortBoxes aTmpLst( 0, 5 );
     SwUndoTblNdsChg* pUndo = 0;
-    if( DoesUndo() )
+    BOOL bDoUndo = DoesUndo();
+    if( bDoUndo )
     {
         DoUndo( FALSE );
-        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_SPLIT, rBoxes, *pTblNd, nCnt,
-                                     bVert, bSameHeight );
+        pUndo = new SwUndoTblNdsChg( UNDO_TABLE_SPLIT, rBoxes, *pTblNd, 0, 0,
+                                     nCnt, bVert, bSameHeight );
+
         aTmpLst.Insert( &rTbl.GetTabSortBoxes(), 0, rTbl.GetTabSortBoxes().Count() );
         if( !bVert )
         {
@@ -1982,9 +2019,9 @@ BOOL SwDoc::SplitTbl( const SwSelBoxes& rBoxes, sal_Bool bVert, USHORT nCnt,
         SetFieldsDirty( true, NULL, 0 );
     }
 
+    DoUndo( bDoUndo );
     if( pUndo )
     {
-        DoUndo( TRUE );
         if( bRet )
         {
             ClearRedo();
@@ -2006,14 +2043,19 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
 {
     // pruefe ob vom aktuellen Crsr der SPoint/Mark in einer Tabelle stehen
     SwTableNode* pTblNd = rPam.GetNode()->FindTableNode();
-    if( !pTblNd || pTblNd->GetTable().ISA( SwDDETable ))
+    if( !pTblNd )
         return TBLMERGE_NOSELECTION;
-
-    USHORT nRet = ::CheckMergeSel( rPam );
-    if( TBLMERGE_OK != nRet )
-        return nRet;
-
-    nRet = TBLMERGE_NOSELECTION;
+    SwTable& rTable = pTblNd->GetTable();
+    if( rTable.ISA(SwDDETable) )
+        return TBLMERGE_NOSELECTION;
+    USHORT nRet = TBLMERGE_NOSELECTION;
+    if( !rTable.IsNewModel() )
+    {
+        nRet =::CheckMergeSel( rPam );
+        if( TBLMERGE_OK != nRet )
+            return nRet;
+        nRet = TBLMERGE_NOSELECTION;
+    }
 
     // --> FME 2004-10-08 #i33394#
     StartUndo( UNDO_TABLE_MERGE, NULL );
@@ -2032,11 +2074,11 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
 
     // lasse ueber das Layout die Boxen suchen
     SwSelBoxes aBoxes;
+    SwSelBoxes aMerged;
     SwTableBox* pMergeBox;
-    ::GetMergeSel( rPam, aBoxes, &pMergeBox, pUndo );
 
-    if( 2 > aBoxes.Count() )        // keine gueltigen Boxen gefunden
-    {
+    if( !rTable.PrepareMerge( rPam, aBoxes, aMerged, &pMergeBox, pUndo ) )
+    {   // no cells found to merge
         SetRedlineMode_intern( eOld );
         if( pUndo )
         {
@@ -2078,7 +2120,7 @@ USHORT SwDoc::MergeTbl( SwPaM& rPam )
         aMsgHnt.eFlags = TBL_BOXPTR;
         UpdateTblFlds( &aMsgHnt );
 
-        if( pTblNd->GetTable().Merge( this, aBoxes, pMergeBox, pUndo ))
+        if( pTblNd->GetTable().Merge( this, aBoxes, aMerged, pMergeBox, pUndo ))
         {
             nRet = TBLMERGE_OK;
             SetModified();
@@ -2565,7 +2607,7 @@ void SwDoc::SetTabCols( const SwTabCols &rNew, BOOL bCurRowOnly,
     SetTabCols(rTab, rNew, aOld, pBox, bCurRowOnly );
 }
 
-void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor* pCrsr,
+void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*,
                         const SwCellFrm* pBoxFrm )
 {
     const SwTableBox* pBox;
@@ -2607,6 +2649,9 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
 
     // check for differences between aOld and rNew:
     const USHORT nCount = rNew.Count();
+    const SwTable* pTable = pTab->GetTable();
+    ASSERT( pTable, "My colleague told me, this couldn't happen" );
+
     for ( USHORT i = 0; i <= nCount; ++i )
     {
         const USHORT nIdxStt = bVert ? nCount - i : i - 1;
@@ -2623,6 +2668,14 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
         const long nDiff = nNewRowHeight - nOldRowHeight;
         if ( abs( nDiff ) >= ROWFUZZY )
         {
+            // For the old table model pTxtFrm and pLine will be set for every box.
+            // For the new table model pTxtFrm will be set if the box is not covered,
+            // but the pLine will be set if the box is not an overlapping box
+            // In the new table model the row height can be adjusted,
+            // when both variables are set.
+            SwTxtFrm* pTxtFrm = 0;
+            const SwTableLine* pLine = 0;
+
             // Iterate over all SwCellFrms with Bottom = nOldPos
             const SwFrm* pFrm = pTab->GetNextLayoutLeaf();
             while ( pFrm && pTab->IsAnLower( pFrm ) )
@@ -2639,17 +2692,32 @@ void SwDoc::SetTabRows( const SwTabCols &rNew, BOOL bCurColOnly, const SwCursor*
 
                             if ( pCntnt && pCntnt->IsTxtFrm() )
                             {
-                                const SwTableLine* pLine = ((SwCellFrm*)pFrm)->GetTabBox()->GetUpper();
-                                SwFmtFrmSize aNew( pLine->GetFrmFmt()->GetFrmSize() );
-                                const ULONG nNewSize = (pFrm->Frm().*fnRect->fnGetHeight)() + nDiff;
-                                if ( nNewSize != aNew.GetHeight() )
+                                const SwTableBox* pBox = ((SwCellFrm*)pFrm)->GetTabBox();
+                                const long nRowSpan = pBox->getRowSpan();
+                                if( nRowSpan > 0 ) // Not overlapped
+                                    pTxtFrm = (SwTxtFrm*)pCntnt;
+                                if( nRowSpan < 2 ) // Not overlapping for row height
+                                    pLine = pBox->GetUpper();
+                                if( pLine && pTxtFrm ) // always for old table model
                                 {
-                                    aNew.SetHeight( nNewSize );
-                                    if ( ATT_VAR_SIZE == aNew.GetHeightSizeType() )
-                                        aNew.SetHeightSizeType( ATT_MIN_SIZE );
-                                    const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
-                                    const SwCursor aTmpCrsr( aPos );
-                                    SetRowHeight( aTmpCrsr, aNew );
+                                    // The new row height must not to be calculated from a overlapping box
+                                    SwFmtFrmSize aNew( pLine->GetFrmFmt()->GetFrmSize() );
+                                    const long nNewSize = (pFrm->Frm().*fnRect->fnGetHeight)() + nDiff;
+                                    if( nNewSize != aNew.GetHeight() )
+                                    {
+                                        aNew.SetHeight( nNewSize );
+                                        if ( ATT_VAR_SIZE == aNew.GetHeightSizeType() )
+                                            aNew.SetHeightSizeType( ATT_MIN_SIZE );
+                                        // This position must not be in an overlapped box
+                                        const SwPosition aPos( *((SwTxtFrm*)pCntnt)->GetTxtNode() );
+                                        const SwCursor aTmpCrsr( aPos );
+                                        SetRowHeight( aTmpCrsr, aNew );
+                                        // For the new table model we're done, for the old one
+                                        // there might be another (sub)row to adjust...
+                                        if( pTable->IsNewModel() )
+                                            break;
+                                    }
+                                    pLine = 0;
                                 }
                             }
                         }
@@ -4010,9 +4078,9 @@ BOOL SwDoc::InsCopyOfTbl( SwPosition& rInsPos, const SwSelBoxes& rBoxes,
 
         rInsPos.nContent.Assign( 0, 0 );
 
-        // keine complexe Tabelle ??
-        if( !pSrcTblNd->GetTable().IsTblComplex() &&
-            (bDelCpyDoc || rBoxes.Count() ))
+        // no complex into complex, but copy into or from new model is welcome
+        if( ( !pSrcTblNd->GetTable().IsTblComplex() || pInsTblNd->GetTable().IsNewModel() )
+            && ( bDelCpyDoc || rBoxes.Count() ) )
         {
             // dann die Tabelle "relativ" kopieren
             const SwSelBoxes* pBoxes;
