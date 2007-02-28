@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellfml.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 09:28:17 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,21 +397,30 @@ void SwTableFormula::_MakeFormel( const SwTable& rTbl, String& rNewStr,
         GetBoxes( *pSttBox, *pEndBox, aBoxes );
 
         rNewStr += '(';
+        bool bDelim = false;
         for( USHORT n = 0; n < aBoxes.Count() &&
                            !pCalcPara->rCalc.IsCalcError(); ++n )
         {
-            if( n )
-                rNewStr += cListDelim;
-            rNewStr += pCalcPara->rCalc.GetStrResult(
-                        aBoxes[n]->GetValue( *pCalcPara ), FALSE );
+            const SwTableBox* pTblBox = aBoxes[n];
+            if ( pTblBox->getRowSpan() >= 1 )
+            {
+                if( bDelim )
+                    rNewStr += cListDelim;
+                bDelim = true;
+                rNewStr += pCalcPara->rCalc.GetStrResult(
+                            pTblBox->GetValue( *pCalcPara ), FALSE );
+            }
         }
         rNewStr += ')';
     }
     else if( pSttBox && !pLastBox )         // nur die StartBox ?
                             //JP 12.01.99: und keine EndBox in der Formel!
         // Berechne den Wert der Box
-        rNewStr += pCalcPara->rCalc.GetStrResult(
+        if ( pSttBox->getRowSpan() >= 1 )
+        {
+            rNewStr += pCalcPara->rCalc.GetStrResult(
                             pSttBox->GetValue( *pCalcPara ), FALSE );
+        }
     else
         pCalcPara->rCalc.SetCalcError( CALC_SYNTAX );   // Fehler setzen
     rNewStr += ' ';
