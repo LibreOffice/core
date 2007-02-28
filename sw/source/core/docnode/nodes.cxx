@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nodes.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 11:46:33 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:42:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1732,7 +1732,10 @@ void SwNodes::DelNodes( const SwNodeIndex & rStart, ULONG nCnt )
                 }
             }
             if( pNd->IsCntntNode() )
+            {
                 ((SwCntntNode*)pNd)->InvalidateNumRule();
+                ((SwCntntNode*)pNd)->DelFrms();
+            }
         }
         RemoveNode( nSttIdx, nCnt, TRUE );
 
