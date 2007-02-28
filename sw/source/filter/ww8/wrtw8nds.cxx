@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8nds.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 16:08:03 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2080,6 +2080,8 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
 {
     SwWW8Writer & rWW8Wrt = (SwWW8Writer&)rWrt;
     SwTable& rTbl = rNode.GetTable();
+    const bool bNewTableModel = rTbl.IsNewModel();
+
     const SwFrmFmt *pFmt = rTbl.GetFrmFmt();
     ASSERT(pFmt,"Impossible");
     if (!pFmt)
@@ -2188,12 +2190,17 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
         for( nColCnt = 0, nBox = 0; nBox < nTotal; ++nColCnt )
         {
             ASSERT( nColCnt < rCols.Count(), "Leaving table" );
-            if( !pRowSpans[ nColCnt ] )
+
+            SwWriteTableCell* pCell = rCells[nBox];
+            const bool bProcessCoveredCell = bNewTableModel && 0 == pCell->GetRowSpan();
+
+            if( !pRowSpans[ nColCnt ] || bProcessCoveredCell )
             {
                 // set new BoxPtr
-                SwWriteTableCell* pCell = rCells[nBox++];
+                nBox++;
                 pBoxArr[ nColCnt ] = pCell;
-                pRowSpans[ nColCnt ] = pCell->GetRowSpan();
+                if ( !bProcessCoveredCell )
+                    pRowSpans[ nColCnt ] = pCell->GetRowSpan();
                 for( USHORT nCellSpan = pCell->GetColSpan(), nCS = 1;
                         nCS < nCellSpan; ++nCS, ++nColCnt )
                 {
@@ -2209,7 +2216,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             else if( !nColCnt || pBoxArr[ nColCnt-1 ] != pBoxArr[ nColCnt ] )
                 ++nRealColCnt;
 
-            if( 1 != pRowSpans[ nColCnt ] )
+            if( 1 != pRowSpans[ nColCnt ] && !bNewTableModel )
                 bFixRowHeight = true;
         }
 
@@ -2380,7 +2387,7 @@ Writer& OutWW8_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             if( rWW8Wrt.bWrtWW8 )
             {
                 USHORT nFlags = pBoxArr[ nBox ]->GetRowSpan();
-                if( 1 < nFlags )
+                if( 1 < nFlags || ( bNewTableModel && 0 == nFlags ) )
                 {
                     if( nFlags == pRowSpans[ nBox ] )
                         nFlags = 0x60;      // start a new vert. merge
