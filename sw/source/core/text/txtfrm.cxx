@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:01:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -465,7 +465,7 @@ sal_Bool SwTxtFrm::IsHiddenNow() const
     if( !Frm().Width() && IsValid() && GetUpper()->IsValid() )
                                        //bei Stackueberlauf (StackHack) invalid!
     {
-        ASSERT( false, "SwTxtFrm::IsHiddenNow: thin frame" );
+//        ASSERT( false, "SwTxtFrm::IsHiddenNow: thin frame" );
         return sal_True;
     }
 
