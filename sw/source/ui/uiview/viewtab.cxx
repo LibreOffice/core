@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewtab.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:27:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -882,7 +882,7 @@ void SwView::ExecTabWin( SfxRequest& rReq )
                                                 GetArgs()->Get(nSlot));
 
             BOOL bSect = 0 != (nFrmType & FRMTYPE_COLSECT);
-            if( bSetTabColFromDoc || !bSect && rSh.GetTableFmt() )
+            if( bSetTabRowFromDoc || !bSect && rSh.GetTableFmt() )
             {
                 ASSERT(aColItem.Count(), "ColDesc ist leer!!");
 
