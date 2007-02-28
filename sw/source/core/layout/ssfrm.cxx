@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:24:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -656,7 +656,9 @@ SwLayoutFrm::~SwLayoutFrm()
 
 const SwRect SwFrm::PaintArea() const
 {
-    SwRect aRect( Frm() );
+    // NEW TABLES
+    // Cell frames may not leave their upper:
+    SwRect aRect = IsRowFrm() ? GetUpper()->Frm() : Frm();
     const FASTBOOL bVert = IsVertical();
     SwRectFn fnRect = bVert ? fnRectVert : fnRectHori;
     long nRight = (aRect.*fnRect->fnGetRight)();
