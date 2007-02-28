@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:57 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -704,6 +704,7 @@ int SwCrsrShell::SetCrsr( const Point &rLPt, BOOL bOnlyText )
     const bool bNewInFrontOfLabel = aTmpState.bInFrontOfLabel;
 
     pCrsr->SetCrsrBidiLevel( aTmpState.nCursorBidiLevel );
+    pCrsr->SetCrsrRowSpanOffset( 0 );
 
     if( MV_RIGHTMARGIN == aTmpState.eState )
         eMvState = MV_RIGHTMARGIN;
@@ -1750,6 +1751,8 @@ void SwCrsrShell::Push()
         pCrsrStk->SetMark();
         *pCrsrStk->GetMark() = *pCurCrsr->GetMark();
     }
+
+    pCrsrStk->SetCrsrRowSpanOffset( pCurCrsr->GetCrsrRowSpanOffset() );
 }
 
 /*
@@ -1804,6 +1807,8 @@ FASTBOOL SwCrsrShell::Pop( BOOL bOldCrsr )
             pCurCrsr->DeleteMark();
         *pCurCrsr->GetPoint() = *pOldStk->GetPoint();
         pCurCrsr->GetPtPos() = pOldStk->GetPtPos();
+        pCurCrsr->SetCrsrRowSpanOffset( pOldStk->GetCrsrRowSpanOffset() );
+
         delete pOldStk;
 
         if( !pCurCrsr->IsInProtectTable( TRUE ) &&
