@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:08:42 $
+#   last change: $Author: vg $ $Date: 2007-02-28 16:28:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -262,13 +262,29 @@ ALLTAR : $(BIN)$/so$/soffice_so$(EXECPOST) $(BIN)$/soffice_oo$(EXECPOST)
 
 # create a manifest file with the same name as the
 # office executable file soffice.exe.manifest
+.IF "$(CCNUMVER)" <= "001399999999"
 $(MISC)$/$(TARGET).exe.manifest: template.manifest
    $(COPY) $< $@
+.ELSE
+$(MISC)$/$(TARGET).exe.template.manifest: template.manifest
+   $(COPY) $< $@
+
+$(MISC)$/$(TARGET).exe.linker.manifest: $(BIN)$/$(TARGET)$(EXECPOST)
+   mt.exe -inputresource:$(BIN)$/$(TARGET)$(EXECPOST) -out:$@
+
+$(MISC)$/$(TARGET).exe.manifest: $(MISC)$/$(TARGET).exe.template.manifest $(MISC)$/$(TARGET).exe.linker.manifest
+   mt.exe -manifest $(MISC)$/$(TARGET).exe.linker.manifest $(MISC)$/$(TARGET).exe.template.manifest -out:$@
+.ENDIF
 
 # create a manifest file with the same name as the
-# office executable file soffice.bin.manifest 
+# office executable file soffice.bin.manifest
+.IF "$(CCNUMVER)" <= "001399999999"
 $(MISC)$/$(TARGET).bin.manifest: template.manifest
    $(COPY) $< $@
+.ELSE
+$(MISC)$/$(TARGET).bin.manifest: $(MISC)$/$(TARGET).exe.manifest
+   $(COPY) $(MISC)$/$(TARGET).exe.manifest $@
+.ENDIF
 
 $(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
    $(COPY) $< $@
@@ -286,3 +302,4 @@ $(MISCX)$/$(APP1TARGET).def : makefile.mk
 $(BIN)$/so: makefile.mk
     @echo APP5 : $(APP5TARGET)
     @@-$(MKDIR) $(BIN)$/so
+
