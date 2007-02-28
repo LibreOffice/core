@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:54:17 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:53:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1977,6 +1977,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
     SwRTFWriter & rRTFWrt = (SwRTFWriter&)rWrt;
     const SwTable& rTbl = rNode.GetTable();
     SwTwips nPageSize = 0, nTblOffset = 0;
+    const bool bNewTableModel = rTbl.IsNewModel();
 
 /*
 //!!!!!!!!!!!!! for clipboard create any view if the table is complex !!!
@@ -2069,12 +2070,16 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
         BOOL bFixRowHeight = false;
         for( nColCnt = 0, nBox = 0; nBox < rCells.Count(); ++nColCnt )
         {
-            if( !pRowSpans[ nColCnt ] )
+            SwWriteTableCell* pCell = rCells[ nBox ];
+            const bool bProcessCoveredCell = bNewTableModel && 0 == pCell->GetRowSpan();
+
+            if( !pRowSpans[ nColCnt ] || bProcessCoveredCell )
             {
                 // set new BoxPtr
-                SwWriteTableCell* pCell = rCells[ nBox++ ];
+                nBox++;
                 pBoxArr[ nColCnt ] = pCell;
-                pRowSpans[ nColCnt ] = pCell->GetRowSpan();
+                if ( !bProcessCoveredCell )
+                    pRowSpans[ nColCnt ] = pCell->GetRowSpan();
                 for( USHORT nCellSpan = pCell->GetColSpan(), nCS = 1;
                         nCS < nCellSpan; ++nCS, ++nColCnt )
                 {
@@ -2086,12 +2091,13 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
                     }
                 }
             }
-            if( 1 != pRowSpans[ nColCnt ] )
+            if( 1 != pRowSpans[ nColCnt ] && !bNewTableModel )
                 bFixRowHeight = TRUE;
         }
 
         for( ; nColCnt < rCols.Count() && pRowSpans[ nColCnt ]; ++nColCnt )
             bFixRowHeight = TRUE;
+
         nColCnt = rCols.Count(); // A wrong cellspan-value could cause a nColCnt > rCols.Count()
 
         // Start Tabellendefinition
@@ -2165,7 +2171,7 @@ Writer& OutRTF_SwTblNode(Writer& rWrt, const SwTableNode & rNode)
                 continue;
 
             const SwFrmFmt& rFmt = *pCell->GetBox()->GetFrmFmt();
-            if( 1 < pCell->GetRowSpan() )
+            if( 1 < pCell->GetRowSpan() || 0 == pCell->GetRowSpan() )
                 rWrt.Strm() << ( pCell->GetRowSpan() == pRowSpans[ nBox ]
                                 ? sRTF_CLVMGF
                                 : sRTF_CLVMRG );
