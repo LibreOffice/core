@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltabw.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:12:03 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -354,6 +354,9 @@ void SwHTMLWrtTable::OutTableCell( SwHTMLWriter& rWrt,
     sal_uInt16 nCol = pCell->GetCol();
     sal_uInt16 nRowSpan = pCell->GetRowSpan();
     sal_uInt16 nColSpan = pCell->GetColSpan();
+
+    if ( !nRowSpan )
+        return;
 
     SwWriteTableCol *pCol = aCols[nCol];
 
