@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:23:08 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:48:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1536,7 +1536,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             if( !GetNext() )
                 SetRetouche(); // Dann muessen wir die Retusche selbst uebernehmen
             if( GetUpper() && !GetUpper()->IsFooterFrm() )
-                GetUpper()->Shrink( nDiff PHEIGHT );
+                GetUpper()->Shrink( nDiff );
         }
         if( IsUndersized() )
             bValidPrtArea = TRUE;
@@ -1990,7 +1990,7 @@ BOOL SwSectionFrm::Growable() const
         (Frm().*fnRect->fnGetBottom)() ) > 0 )
         return TRUE;
 
-    return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX PHEIGHT, TRUE ) );
+    return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX, TRUE ) );
 }
 
 /*************************************************************************
@@ -2031,7 +2031,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
             }
             SwTwips nSpace = nGrow;
             if( !bInCalcCntnt && nGrow < nDist && GetUpper() )
-                nGrow += GetUpper()->Grow( LONG_MAX PHEIGHT, TRUE );
+                nGrow += GetUpper()->Grow( LONG_MAX, TRUE );
 
             if( nGrow > nDist )
                 nGrow = nDist;
