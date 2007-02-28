@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:05:14 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@
 //diesem befreundet. So kann der FlowFrm anstelle des this-Pointer mit der
 //Referenz auf den SwFrm arbeiten.
 
-#include "frame.hxx"    //fuer inlines
+//#include "frame.hxx"   //fuer inlines
 
 class SwPageFrm;
 class SwRect;
