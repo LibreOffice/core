@@ -4,9 +4,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:42:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,32 +292,39 @@ WidowsAndOrphans::WidowsAndOrphans( SwTxtFrm *pFrm, const SwTwips nRst,
 
     }
 
-    if ( pFrm->IsInTab() && ( NULL != pFrm->IsInSplitTableRow() ||
-                              NULL != pFrm->IsInFollowFlowRow() ) )
+    if ( bKeep || nWidLines || nOrphLines )
     {
-        // For compatibility reasons, we disable Keep/Widows/Orphans
-        // inside splittable row frames:
-        SwFrm* pTmpFrm = pFrm->GetUpper();
-        while ( !pTmpFrm->IsRowFrm() )
-            pTmpFrm = pTmpFrm->GetUpper();
-        if ( ((SwRowFrm*)pTmpFrm)->IsRowSplitAllowed() )
-        {
-            bKeep = sal_False;
-            nOrphLines = 0;
-            nWidLines = 0;
-        }
-    }
+        bool bResetFlags = false;
 
-    if( pFrm->IsInFtn() && !pFrm->GetIndPrev() &&
-        ( bKeep || nWidLines || nOrphLines ) )
-    {
-        // Innerhalb von Fussnoten gibt es gute Gruende, das Keep-Attribut und
-        // die Widows/Orphans abzuschalten.
-        SwFtnFrm *pFtn = pFrm->FindFtnFrm();
-        sal_Bool bFt = !pFtn->GetAttr()->GetFtn().IsEndNote();
-        if( !pFtn->GetPrev() &&
-            pFtn->FindFtnBossFrm( bFt ) != pFtn->GetRef()->FindFtnBossFrm( bFt )
-            && ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
+        if ( pFrm->IsInTab() )
+        {
+            // For compatibility reasons, we disable Keep/Widows/Orphans
+            // inside splittable row frames:
+            if ( pFrm->GetNextCellLeaf( MAKEPAGE_NONE ) || pFrm->IsInFollowFlowRow() )
+            {
+                const SwFrm* pTmpFrm = pFrm->GetUpper();
+                while ( !pTmpFrm->IsRowFrm() )
+                    pTmpFrm = pTmpFrm->GetUpper();
+                if ( static_cast<const SwRowFrm*>(pTmpFrm)->IsRowSplitAllowed() )
+                    bResetFlags = true;
+            }
+        }
+
+        if( pFrm->IsInFtn() && !pFrm->GetIndPrev() )
+        {
+            // Innerhalb von Fussnoten gibt es gute Gruende, das Keep-Attribut und
+            // die Widows/Orphans abzuschalten.
+            SwFtnFrm *pFtn = pFrm->FindFtnFrm();
+            sal_Bool bFt = !pFtn->GetAttr()->GetFtn().IsEndNote();
+            if( !pFtn->GetPrev() &&
+                pFtn->FindFtnBossFrm( bFt ) != pFtn->GetRef()->FindFtnBossFrm( bFt )
+                && ( !pFrm->IsInSct() || pFrm->FindSctFrm()->MoveAllowed(pFrm) ) )
+            {
+                bResetFlags = true;
+            }
+        }
+
+        if ( bResetFlags )
         {
             bKeep = sal_False;
             nOrphLines = 0;
