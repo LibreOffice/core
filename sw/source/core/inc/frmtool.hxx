@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:20:13 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,8 @@ class SdrMarkList;
 class SwNodeIndex;
 class OutputDevice;
 class SwPageDesc;
+class SwTableBox;
+struct SwFindRowSpanCacheObj;
 
 #if defined(MSC)
 #define MA_FASTCALL __fastcall
