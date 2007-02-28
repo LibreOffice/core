@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:38:50 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:40:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -974,7 +974,9 @@ SwFlyFrmFmt* SwDoc::MakeFlyAndMove( const SwPaM& rPam, const SfxItemSet& rSet,
                 else
                 {
                     rTbl.MakeCopy( this, aPos, *pSelBoxes );
-                    rTbl.DeleteSel( this, *pSelBoxes );
+                    // Don't delete a part of a table with row span!!
+                    // You could delete the content instead -> ToDo
+                    //rTbl.DeleteSel( this, *pSelBoxes, 0, 0, TRUE, TRUE );
                 }
 
                 // wenn Tabelle im Rahmen, dann ohne nachfolgenden TextNode
