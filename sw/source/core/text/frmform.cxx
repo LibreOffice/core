@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:33:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:51:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -493,7 +493,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         {
             if( IsInFtn() && !IsInSct() )
             {
-                SwTwips nReal = Grow( nChgHght PHEIGHT, sal_True );
+                SwTwips nReal = Grow( nChgHght, sal_True );
                 if( nReal < nChgHght )
                 {
                     SwTwips nBot = (*fnRect->fnYInc)( (Frm().*fnRect->fnGetBottom)(),
@@ -513,7 +513,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                 }
             }
 
-            Grow( nChgHght PHEIGHT );
+            Grow( nChgHght );
 
             if ( IsInFly() )
             {
@@ -591,7 +591,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             //Kann sein, dass ich die richtige Grosse habe, der Upper aber zu
             //klein ist und der Upper noch Platz schaffen kann.
             if( ( nRstHeight >= 0 || ( IsInFtn() && IsInSct() ) ) && !bHasToFit )
-                nRstHeight += GetUpper()->Grow( nFrmHeight - nRstHeight PHEIGHT );
+                nRstHeight += GetUpper()->Grow( nFrmHeight - nRstHeight );
             // In spaltigen Bereichen wollen wir moeglichst nicht zu gross werden, damit
             // nicht ueber GetNextSctLeaf weitere Bereiche angelegt werden. Stattdessen
             // schrumpfen wir und notieren bUndersized, damit FormatWidthCols die richtige
@@ -602,8 +602,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                     ( IsInSct() && !FindSctFrm()->MoveAllowed(this) ) )
                 {
                     SetUndersized( sal_True );
-                    Shrink( Min( ( nFrmHeight - nRstHeight), nPrtHeight )
-                                  PHEIGHT );
+                    Shrink( Min( ( nFrmHeight - nRstHeight), nPrtHeight ) );
                 }
                 else
                     SetUndersized( sal_False );
@@ -618,7 +617,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         }
     }
     else
-        Shrink( -nChgHght PHEIGHT );
+        Shrink( -nChgHght );
 
     UNDO_SWAP( this )
 }
@@ -953,7 +952,7 @@ sal_Bool SwTxtFrm::CalcPreps()
 
                 GetFollow()->SetJustWidow( sal_True );
                 GetFollow()->Prepare( PREP_CLEAR );
-                Shrink( nChgHeight PHEIGHT );
+                Shrink( nChgHeight );
                 SwRect &rRepaint = *(pPara->GetRepaint());
 
                 if ( bVert )
