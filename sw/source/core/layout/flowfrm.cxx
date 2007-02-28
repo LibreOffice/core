@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:53:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,8 +599,8 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
     if ( nGrowVal )
     {
         if ( pOldParent && pOldParent->IsBodyFrm() ) //Fuer variable Seitenhoehe beim Browsen
-            pOldParent->Shrink( nGrowVal PHEIGHT );
-        pParent->Grow( nGrowVal PHEIGHT );
+            pOldParent->Shrink( nGrowVal );
+        pParent->Grow( nGrowVal );
     }
 
     if ( pParent->IsFtnFrm() )
@@ -1935,15 +1935,22 @@ BOOL SwFlowFrm::MoveFwd( BOOL bMakePage, BOOL bPageBreak, BOOL bMoveAlways )
             bNoFwd = !pBoss->IsInSct() || ( !pBoss->Lower()->GetNext() &&
                      !pBoss->GetPrev() );
         }
+
         // Allow the MoveFwd even if we do not have an IndPrev in these cases:
         if ( rThis.IsInTab() &&
             ( !rThis.IsTabFrm() ||
                 ( rThis.GetUpper()->IsInTab() &&
                   rThis.GetUpper()->FindTabFrm()->IsFwdMoveAllowed() ) ) &&
-                ( NULL != rThis.IsInSplitTableRow() ) )
+             0 != const_cast<SwFrm&>(rThis).GetNextCellLeaf( MAKEPAGE_NONE ) )
+/*
+              &&
+            // NEW TABLES
+            // Have a look at our main competitor: We don't move inside row span cells:
+            ( !rThis.GetUpper()->IsCellFrm() || !rThis.GetUpper()->IsLeaveUpperAllowed() ) )*/
         {
             bNoFwd = FALSE;
         }
+
         if( bNoFwd )
         {
             //Fuer PageBreak ist das Moven erlaubt, wenn der Frm nicht
