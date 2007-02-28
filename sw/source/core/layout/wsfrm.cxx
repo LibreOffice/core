@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:49:39 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:50:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,9 +132,6 @@
 #ifndef _TABFRM_HXX
 #include <tabfrm.hxx>
 #endif
-#ifndef _SWTABLE_HXX
-#include <swtable.hxx>
-#endif
 #ifndef _HTMLTBL_HXX
 #include <htmltbl.hxx>
 #endif
@@ -173,27 +170,6 @@
 #include <sortedobjs.hxx>
 #endif
 
-#if OSL_DEBUG_LEVEL > 1
-
-static void CheckRootSize( SwFrm *pRoot )
-{
-    SwTwips nHeight = 0;
-    const SwFrm *pPage = pRoot->GetLower();
-    while ( pPage )
-    {
-        if ( pPage->GetPrev() && pPage->GetPrev()->GetLower() )
-            nHeight += DOCUMENTBORDER/2;
-        nHeight += pPage->Frm().Height();
-        pPage = pPage->GetNext();
-    }
-    ASSERT( nHeight == pRoot->Frm().Height(), ":-) Roothoehe verschaetzt.");
-}
-#define CHECKROOTSIZE( pRoot ) ::CheckRootSize( pRoot );
-#else
-#define CHECKROOTSIZE( pRoot )
-#endif
-
-
 /*************************************************************************
 |*
 |*  SwFrm::SwFrm()
@@ -215,13 +191,6 @@ SwFrm::SwFrm( SwModify *pMod ) :
 {
 #ifndef PRODUCT
     bFlag01 = bFlag02 = bFlag03 = bFlag04 = bFlag05 = 0;
-#if OSL_DEBUG_LEVEL > 1
-    static USHORT nStopAt = USHRT_MAX;
-    if ( GetFrmId() == nStopAt )
-    {
-        int bla = 5;
-    }
-#endif
 #endif
 
     ASSERT( pMod, "Kein Frameformat uebergeben." );
@@ -476,14 +445,6 @@ void SwFrm::Prepare( const PrepareHint, const void *, BOOL )
 |*************************************************************************/
 void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 {
-#if (OSL_DEBUG_LEVEL > 1) && !defined(PRODUCT)
-    static USHORT nStop = 0;
-    if ( nStop == GetFrmId() )
-    {
-        int bla = 5;
-    }
-#endif
-
     if ( !pPage )
     {
         pPage = FindPageFrm();
@@ -958,7 +919,7 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     }
 
     if ( Frm().Height() )
-        pParent->Grow( Frm().Height() PHEIGHT );
+        pParent->Grow( Frm().Height() );
 
     if ( Frm().Width() != pParent->Prt().Width() )
         Prepare( PREP_FIXSIZE_CHG );
@@ -1147,7 +1108,7 @@ void SwCntntFrm::Cut()
     Remove();
     if ( pUp )
     {
-        SwSectionFrm *pSct;
+        SwSectionFrm *pSct = 0;
         if ( !pUp->Lower() &&
              ( ( pUp->IsFtnFrm() && !pUp->IsColLocked() ) ||
                ( pUp->IsInSct() &&
@@ -1410,11 +1371,15 @@ SwTwips SwFrm::Grow( SwTwips nDist, BOOL bTst, BOOL bInfo )
             return ((SwSectionFrm*)this)->_Grow( nDist, bTst );
         else
         {
-            if ( IsCellFrm() )
+            const SwCellFrm* pThisCell = dynamic_cast<const SwCellFrm*>(this);
+            if ( pThisCell )
             {
-                SwTabFrm* pTab = FindTabFrm();
-                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) )
-                    return 0;;
+                const SwTabFrm* pTab = FindTabFrm();
+
+                // NEW TABLES
+                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) ||
+                     pThisCell->GetLayoutRowSpan() < 1 )
+                    return 0;
             }
 
             const SwTwips nReal = GrowFrm( nDist, bTst, bInfo );
@@ -1452,11 +1417,15 @@ SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
             return ((SwSectionFrm*)this)->_Shrink( nDist, bTst );
         else
         {
-            if ( IsCellFrm() )
+            const SwCellFrm* pThisCell = dynamic_cast<const SwCellFrm*>(this);
+            if ( pThisCell )
             {
-                SwTabFrm* pTab = FindTabFrm();
-                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) )
-                    return 0;;
+                const SwTabFrm* pTab = FindTabFrm();
+
+                // NEW TABLES
+                if ( ( 0 != pTab->IsVertical() ) != ( 0 != IsVertical() ) ||
+                     pThisCell->GetLayoutRowSpan() < 1 )
+                    return 0;
             }
 
             SWRECTFN( this )
@@ -1465,7 +1434,7 @@ SwTwips SwFrm::Shrink( SwTwips nDist, BOOL bTst, BOOL bInfo )
             nReal -= (Frm().*fnRect->fnGetHeight)();
             if( !bTst )
             {
-                SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
+                const SwTwips nPrtHeight = (Prt().*fnRect->fnGetHeight)();
                 (Prt().*fnRect->fnSetHeight)( nPrtHeight -
                         ( IsCntntFrm() ? nDist : nReal ) );
             }
@@ -1766,7 +1735,6 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
         {
             const SwSortedObjs &rObjs = *pBoss->GetDrawObjs();
             ASSERT( pBoss->IsPageFrm(), "Header/Footer out of page?" );
-            SwPageFrm *pPage = (SwPageFrm*)pBoss;
             for ( USHORT i = 0; i < rObjs.Count(); ++i )
             {
                 SwAnchoredObject* pAnchoredObj = rObjs[i];
@@ -1812,7 +1780,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, BOOL bTst )
 
     @author OD
 */
-void SwFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
+void SwFrm::_ActionOnInvalidation( const InvalidationType )
 {
     // default behaviour is to perform no additional action
 }
@@ -1823,7 +1791,7 @@ void SwFrm::_ActionOnInvalidation( const InvalidationType _nInvalid )
 
     @author OD
 */
-bool SwFrm::_InvalidationAllowed( const InvalidationType _nInvalid ) const
+bool SwFrm::_InvalidationAllowed( const InvalidationType ) const
 {
     // default behaviour is to allow invalidation
     return true;
@@ -2114,8 +2082,8 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
             bool bInvalidate = true;
             const SwRect aRect( Frm() );
             const SwPageFrm* pPage = FindPageFrm();
-            const SwSortedObjs* pSorted;
-            if( pPage && ( pSorted = pPage->GetSortedObjs() ) )
+            const SwSortedObjs* pSorted = pPage ? pPage->GetSortedObjs() : 0;
+            if( pSorted )
             {
                 for ( USHORT i = 0; i < pSorted->Count(); ++i )
                 {
@@ -2407,7 +2375,7 @@ SwLayoutFrm::SwLayoutFrm( SwFrmFmt* pFmt ):
 {
     const SwFmtFrmSize &rFmtSize = pFmt->GetFrmSize();
     if ( rFmtSize.GetHeightSizeType() == ATT_FIX_SIZE )
-        BFIXHEIGHT = TRUE;
+        bFixSize = TRUE;
 }
 
 // --> OD 2004-06-29 #i28701#
@@ -2471,7 +2439,9 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
         return 0;
 
     SWRECTFN( this )
-    SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+    const SwTwips nFrmHeight = (Frm().*fnRect->fnGetHeight)();
+    const SwTwips nFrmPos = Frm().Pos().X();
+
     if ( nFrmHeight > 0 && nDist > (LONG_MAX - nFrmHeight) )
         nDist = LONG_MAX - nFrmHeight;
 
@@ -2512,13 +2482,33 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
                 nReal = AdjustNeighbourhood( nReal, bTst );
             else
             {
-                SwTwips nGrow = 0;
                 if( NA_ADJUST_GROW == nAdjust )
-                    nReal += AdjustNeighbourhood( nReal - nGrow, bTst );
-                if( nGrow < nReal )
-                    nGrow += GetUpper()->Grow( nReal - nGrow, bTst, bInfo );
+                    nReal += AdjustNeighbourhood( nReal, bTst );
+
+                SwTwips nGrow = 0;
+                if( 0 < nReal )
+                {
+                    SwFrm* pToGrow = GetUpper();
+                    // NEW TABLES
+                    // A cell with a row span of > 1 is allowed to grow the
+                    // line containing the end of the row span if it is
+                    // located in the same table frame:
+                    const SwCellFrm* pThisCell = dynamic_cast<const SwCellFrm*>(this);
+                    if ( pThisCell && pThisCell->GetLayoutRowSpan() > 1 )
+                    {
+                        SwCellFrm& rEndCell = const_cast<SwCellFrm&>(pThisCell->FindStartEndOfRowSpanCell( false, true ));
+                        if ( -1 == rEndCell.GetTabBox()->getRowSpan() )
+                            pToGrow = rEndCell.GetUpper();
+                        else
+                            pToGrow = 0;
+                    }
+
+                    nGrow = pToGrow ? pToGrow->Grow( nReal, bTst, bInfo ) : 0;
+                }
+
                 if( NA_GROW_ADJUST == nAdjust && nGrow < nReal )
                     nReal += AdjustNeighbourhood( nReal - nGrow, bTst );
+
                 if ( IsFtnFrm() && (nGrow != nReal) && GetNext() )
                 {
                     //Fussnoten koennen ihre Nachfolger verdraengen.
@@ -2551,13 +2541,13 @@ SwTwips SwLayoutFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
 
     if ( !bTst )
     {
-        if( nReal != nDist && !IsCellFrm() )
+        if( nReal != nDist &&
+            // NEW TABLES
+            ( !IsCellFrm() || static_cast<SwCellFrm*>(this)->GetLayoutRowSpan() > 1 ) )
         {
-            nDist -= nReal;
-            (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)()
-                                          - nDist );
+            (Frm().*fnRect->fnSetHeight)( nFrmHeight + nReal );
             if( bChgPos )
-                Frm().Pos().X() += nDist;
+                Frm().Pos().X() = nFrmPos - nReal;
             bMoveAccFrm = sal_True;
         }
 
@@ -2690,7 +2680,16 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     else
     {
         SwTwips nShrink = nReal;
-        nReal = GetUpper() ? GetUpper()->Shrink( nShrink, bTst, bInfo ) : 0;
+        SwFrm* pToShrink = GetUpper();
+        const SwCellFrm* pThisCell = dynamic_cast<const SwCellFrm*>(this);
+        // NEW TABLES
+        if ( pThisCell && pThisCell->GetLayoutRowSpan() > 1 )
+        {
+            SwCellFrm& rEndCell = const_cast<SwCellFrm&>(pThisCell->FindStartEndOfRowSpanCell( false, true ));
+            pToShrink = rEndCell.GetUpper();
+        }
+
+        nReal = pToShrink ? pToShrink->Shrink( nShrink, bTst, bInfo ) : 0;
         if( ( NA_GROW_ADJUST == nAdjust || NA_ADJUST_GROW == nAdjust )
             && nReal < nShrink )
             AdjustNeighbourhood( nReal - nShrink );
@@ -3373,6 +3372,9 @@ long SwLayoutFrm::CalcRel( const SwFmtFrmSize &rSz, BOOL bWidth ) const
     return nRet;
 }
 
+/*************************************************************************
+|*  Local helpers for SwLayoutFrm::FormatWidthCols()
+|*************************************************************************/
 long MA_FASTCALL lcl_CalcMinColDiff( SwLayoutFrm *pLayFrm )
 {
     long nDiff = 0, nFirstDiff = 0;
@@ -3432,8 +3434,11 @@ BOOL lcl_IsFlyHeightClipped( SwLayoutFrm *pLay )
     return FALSE;
 }
 
+/*************************************************************************
+|*  SwLayoutFrm::FormatWidthCols()
+|*************************************************************************/
 void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
-    const SwTwips nBorder, const SwTwips nMinHeight )
+                                   const SwTwips nBorder, const SwTwips nMinHeight )
 {
     //Wenn Spalten im Spiel sind, so wird die Groesse an der
     //letzten Spalte ausgerichtet.
@@ -3495,7 +3500,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             nMaximum = (Frm().*fnRect->fnGetHeight)() - nBorder +
                        (Frm().*fnRect->fnBottomDist)(
                                         (GetUpper()->*fnRect->fnGetPrtBottom)() );
-            nMaximum += GetUpper()->Grow( LONG_MAX PHEIGHT, TRUE );
+            nMaximum += GetUpper()->Grow( LONG_MAX, TRUE );
             if( nMaximum < nMinimum )
             {
                 if( nMaximum < 0 )
