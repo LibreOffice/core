@@ -4,9 +4,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:23:37 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:37:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -879,7 +879,7 @@ class SwUndoTblNdsChg : public SwUndo
         SwUndoSaveSections* pDelSects;
     } Ptrs;
     SvBools aMvBoxes;       // fuers SplitRow (aufgeteilte Nodes einer Box)
-
+    long nMin, nMax;        // for redo of delete column
     ULONG nSttNode, nCurrBox;
     USHORT nCount, nRelDiff, nAbsDiff, nSetColType;
     BOOL bFlag;
@@ -888,7 +888,8 @@ public:
     SwUndoTblNdsChg( USHORT UndoId,
                     const SwSelBoxes& rBoxes,
                     const SwTableNode& rTblNd,
-                    USHORT nCnt, BOOL bFlg, BOOL bSameHeight = FALSE );
+                    long nMn, long nMx,
+                    USHORT nCnt, BOOL bFlg, BOOL bSameHeight );
 
     // fuer SetColWidth
     SwUndoTblNdsChg( USHORT UndoId, const SwSelBoxes& rBoxes,
@@ -902,6 +903,8 @@ public:
     void SaveNewBoxes( const SwTableNode& rTblNd, const SwTableSortBoxes& rOld,
                        const SwSelBoxes& rBoxes, const SvULongs& rNodeCnts );
     void SaveSection( SwStartNode* pSttNd );
+    void ReNewBoxes( const SwSelBoxes& rBoxes );
+
 
     void SetColWidthParam( ULONG nBoxIdx, USHORT nMode, USHORT nType,
                             SwTwips nAbsDif, SwTwips nRelDif )
