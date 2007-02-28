@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:27:03 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:43:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,7 +902,8 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc, BOOL bIncludingPageFrames )
                 bParkTblCrsr = TRUE;
             }
             else if( !PCURCRSR->HasMark() && PCURCRSR->GetNext() == PCURCRSR &&
-                    !pSrcNd->GetTable().IsTblComplex() )
+                     ( !pSrcNd->GetTable().IsTblComplex() ||
+                       pDestNd->GetTable().IsNewModel() ) )
             {
                 // dann die Tabelle "relativ" kopieren
                 SwTableBox* pBox = pDestNd->GetTable().GetTblBox(
