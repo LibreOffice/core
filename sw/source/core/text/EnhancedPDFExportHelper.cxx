@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedPDFExportHelper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:28:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,11 @@ void* lcl_GetKey( const SwFrm& rFrm )
     else if ( rFrm.IsRowFrm() )
         pKey = (void*)static_cast<const SwRowFrm&>(rFrm).GetTabLine();
     else if ( rFrm.IsCellFrm() )
-        pKey = (void*)static_cast<const SwCellFrm&>(rFrm).GetTabBox();
+    {
+        const SwTabFrm* pTabFrm = rFrm.FindTabFrm();
+        const SwTable* pTable = pTabFrm->GetTable();
+        pKey = (void*) & static_cast<const SwCellFrm&>(rFrm).GetTabBox()->FindStartOfRowSpan( *pTable );
+    }
 
     return pKey;
 }
@@ -328,10 +332,9 @@ bool SwTaggedPDFHelper::CheckReopenTag()
         // - rFrm is a follow flow row (reopen TableRow tag)
         // - rFrm is a cell frame in a follow flow row (reopen TableData tag)
         if ( ( rFrm.IsPageFrm() && static_cast<const SwPageFrm&>(rFrm).GetPrev() ) ||
-             ( rFrm.IsFlowFrm() &&
-              (SwFlowFrm::CastFlowFrm( &rFrm )->IsFollow() ) ) ||
-             ( ( rFrm.IsRowFrm() || rFrm.IsCellFrm() ) &&
-               rFrm.IsInFollowFlowRow() ) )
+             ( rFrm.IsFlowFrm() && (SwFlowFrm::CastFlowFrm( &rFrm )->IsFollow()) ) ||
+             ( rFrm.IsRowFrm() && rFrm.IsInFollowFlowRow() ) ||
+             ( rFrm.IsCellFrm() && const_cast<SwFrm&>(rFrm).GetPrevCellLeaf( MAKEPAGE_NONE ) ) )
         {
             pKeyFrm = &rFrm;
         }
@@ -354,7 +357,10 @@ bool SwTaggedPDFHelper::CheckReopenTag()
 
             ASSERT( aIter != rFrmTagIdMap.end(), "Could not find information to reopen paragraph" )
 
-            sal_Int32 nId = (*aIter).second;
+            sal_Int32 nId = aIter != rFrmTagIdMap.end() ?
+                            (*aIter).second :
+                            vcl::PDFWriter::NonStructElement;
+
             nRestoreCurrentTag = mpPDFExtOutDevData->GetCurrentStructureElement();
             bool bSuccess = mpPDFExtOutDevData->SetCurrentStructureElement( nId );
             ASSERT( bSuccess, "Failed to reopen flow frame tag" )
@@ -412,8 +418,8 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType )
               !(SwFlowFrm::CastFlowFrm( &rFrm )->IsFollow() ) &&
                (SwFlowFrm::CastFlowFrm( &rFrm )->HasFollow() ) ) ||
              ( rFrm.IsTxtFrm() && rFrm.GetDrawObjs() ) ||
-             ( ( rFrm.IsRowFrm() || rFrm.IsCellFrm() ) &&
-               rFrm.IsInSplitTableRow() ) )
+             ( rFrm.IsRowFrm() && rFrm.IsInSplitTableRow() ) ||
+             ( rFrm.IsCellFrm() && const_cast<SwFrm&>(rFrm).GetNextCellLeaf( MAKEPAGE_NONE ) ) )
         {
             pKey = lcl_GetKey( rFrm );
         }
@@ -423,7 +429,7 @@ void SwTaggedPDFHelper::BeginTag( vcl::PDFWriter::StructElement eType )
     ++nEndStructureElement;
 
 #ifndef PRODUCT
-    aStructStack.push_back( eType );
+    aStructStack.push_back( (USHORT)eType );
 #endif
 
     if ( pKey )
@@ -479,6 +485,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         bool bWidth = false;
         bool bHeight = false;
         bool bBox = false;
+        bool bRowSpan = false;
 
         //
         // Check which attributes to set:
@@ -511,7 +518,8 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bPlacement =
                 bWritingMode =
                 bWidth =
-                bHeight = true;
+                bHeight =
+                bRowSpan = true;
                 break;
 
             case vcl::PDFWriter::H1 :
@@ -538,6 +546,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bWidth =
                 bHeight =
                 bBox = true;
+                break;
+
+            default:
                 break;
         }
 
@@ -608,7 +619,7 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
         {
             ASSERT( pFrm->IsTxtFrm(), "Frame type <-> tag attribute mismatch" )
             const SwAttrSet& aSet = static_cast<const SwTxtFrm*>(pFrm)->GetTxtNode()->GetSwAttrSet();
-            const USHORT nAdjust = aSet.GetAdjust().GetAdjust();
+            const USHORT nAdjust = (USHORT)aSet.GetAdjust().GetAdjust();
             if ( SVX_ADJUST_BLOCK == nAdjust || SVX_ADJUST_CENTER == nAdjust ||
                  (  pFrm->IsRightToLeft() && SVX_ADJUST_LEFT == nAdjust ||
                    !pFrm->IsRightToLeft() && SVX_ADJUST_RIGHT == nAdjust ) )
@@ -658,6 +669,17 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                    !static_cast<const SwTabFrm*>(pFrm)->HasFollow() ) )
                 mpPDFExtOutDevData->SetStructureBoundingBox( pFrm->Frm().SVRect() );
         }
+
+        if ( bRowSpan )
+        {
+            const SwCellFrm* pThisCell = dynamic_cast<const SwCellFrm*>(pFrm);
+            if ( pThisCell )
+            {
+                nVal =  pThisCell->GetTabBox()->getRowSpan();
+                if ( nVal > 1 )
+                    mpPDFExtOutDevData->SetStructureAttributeNumerical( vcl::PDFWriter::RowSpan, nVal );
+            }
+        }
     }
 
     /*
@@ -688,6 +710,9 @@ void SwTaggedPDFHelper::SetAttributes( vcl::PDFWriter::StructElement eType )
                 bTextDecorationType =
                 bBaselineShift =
                 bLinkAttribute = true;
+                break;
+
+            default:
                 break;
         }
 
@@ -842,7 +867,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
                 //
                 if ( pNumRule && pNumRule->IsOutlineRule() )
                 {
-                    BYTE nRealLevel = pTxtNd->GetLevel();
+                    BYTE nRealLevel = (BYTE)pTxtNd->GetLevel();
                     nRealLevel = nRealLevel > 5 ? 5 : nRealLevel;
 
                     nPDFType =  vcl::PDFWriter::H1 + nRealLevel;
@@ -860,7 +885,7 @@ void SwTaggedPDFHelper::BeginBlockStructureElements()
 
                     // If pPrevNodeNum is set, we know that pTxtNd and pPrevTxtNd
                     // belong to the same NumRule:
-                    const USHORT nMyLevel = pTxtNd->GetLevel() + 1;
+                    const USHORT nMyLevel = (USHORT)pTxtNd->GetLevel() + 1;
                     USHORT nPreviousLevel = pPrevTxtNd && pPrevTxtNd->IsTxtNode() ?
                         static_cast<SwTxtNode *>(pPrevTxtNd)->GetLevel() + 1 :
                         0;
