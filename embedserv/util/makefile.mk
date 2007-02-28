@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 05:43:19 $
+#   last change: $Author: vg $ $Date: 2007-02-28 16:25:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,7 @@ SHL1STDLIBS=\
         uuid.lib				\
         oleaut32.lib
 
-.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(CCNUMVER)" >= "001300000000" && "$(CCNUMVER)" <= "001399999999"
 SHL1STDLIBS+=\
         advapi32.lib	\
         $(ATL_LIB)$/atls.lib
