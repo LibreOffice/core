@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-16 13:54:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ class SwXMLExport : public SvXMLExport
     void ExportTableFmt( const SwFrmFmt& rFmt, sal_uInt32 nAbsWidth );
 
     void ExportTableColumnStyle( const SwXMLTableColumn_Impl& rCol );
-    void ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan,
+    void ExportTableBox( const SwTableBox& rBox, sal_uInt16 nColSpan, sal_uInt16 nRowSpan,
                          SwXMLTableInfo_Impl& rTblInfo );
     void ExportTableLine( const SwTableLine& rLine,
                           const SwXMLTableLines_Impl& rLines,
