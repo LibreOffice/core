@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:43:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:44:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,16 +40,6 @@
 #include "swtypes.hxx"  // fuer SwTwips
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
-
-#define SZPTR
-#define PHEIGHT
-#define PWIDTH
-#define BFIXHEIGHT bFixSize
-#define PTPTR PointPtr
-#define SIZEPTR SizePtr
-typedef long Size::* SizePtr;
-typedef long Point::* PointPtr;
-
 
 class SwLayoutFrm;
 class SwRootFrm;
@@ -147,7 +137,7 @@ class SwAnchoredObject;
 #define FRMC_NOTXT       15
 
 #define FRM_NEIGHBOUR   0x2004
-#define FRM_NOTE_VERT   0x5a60
+#define FRM_NOTE_VERT   0x7a60
 #define FRM_HEADFOOT    0x0018
 #define FRM_BODYFTNC    0x00a0
 
@@ -438,10 +428,8 @@ protected:
 
 
         //Aendern nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
-    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
 
     SwModify        *GetDep()       { return pRegisteredIn; }
     const SwModify  *GetDep() const { return pRegisteredIn; }
@@ -480,8 +468,7 @@ protected:
     virtual void _ActionOnInvalidation( const InvalidationType _nInvalid );
 
         //Schatten und Umrandung painten
-    void PaintShadow( const SwRect&, SwRect&, const SwPageFrm *,
-                      const SwBorderAttrs& ) const;
+    void PaintShadow( const SwRect&, SwRect&, const SwBorderAttrs& ) const;
 
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.
@@ -493,10 +480,8 @@ public:
     static void     SetCache( SwCache *pNew ) { pCache = pNew;  }
 
         //Aendern die PrtArea-SSize und die FrmSize.
-    SwTwips Shrink( SwTwips, SZPTR
-                    BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    SwTwips Grow  ( SwTwips, SZPTR
-                    BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    SwTwips Shrink( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    SwTwips Grow  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     //Wir brauchen unterschiedliche Methoden (wg. Performance) fuer das
     //Einfuegenin den Layout Baum:
@@ -923,6 +908,13 @@ public:
     inline sal_uInt32 GetFrmId() const { return mnFrmId; }
     inline sal_uInt32 GetLastFrmId() const { return mnLastFrmId; }
     // <--
+
+    // NEW TABELS
+    // Some functions for covered/covering table cells. This way unnessessary
+    // includes can be avoided
+    bool IsLeaveUpperAllowed() const;
+    bool IsCoveredCell() const;
+    bool IsInCoveredCell() const;
 };
 
 inline BOOL SwFrm::IsInDocBody() const
