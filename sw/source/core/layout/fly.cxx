@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:10:54 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:47:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -726,15 +726,17 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
     BOOL bRet = FALSE;
     SwTwips nDiffHeight = Frm().Height();
     if ( rFrmSize.GetHeightSizeType() == ATT_VAR_SIZE )
-        BFIXHEIGHT = bMinHeight = FALSE;
+        bFixSize = bMinHeight = FALSE;
     else
     {
         if ( rFrmSize.GetHeightSizeType() == ATT_FIX_SIZE )
-        {   BFIXHEIGHT = TRUE;
+        {
+            bFixSize = TRUE;
             bMinHeight = FALSE;
         }
         else if ( rFrmSize.GetHeightSizeType() == ATT_MIN_SIZE )
-        {   BFIXHEIGHT = FALSE;
+        {
+            bFixSize = FALSE;
             bMinHeight = TRUE;
         }
         nDiffHeight -= rFrmSize.GetHeight();
@@ -763,7 +765,7 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
         }
         else if ( Lower()->IsNoTxtFrm() )
         {
-            BFIXHEIGHT = TRUE;
+            bFixSize = TRUE;
             bMinHeight = FALSE;
         }
     }
