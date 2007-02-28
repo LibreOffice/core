@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:53:41 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -290,6 +290,7 @@ class HTMLTableCell
     sal_Bool bHasNumFmt : 1;
     sal_Bool bHasValue : 1;
     sal_Bool bNoWrap : 1;
+    sal_Bool mbCovered : 1;
 
 public:
 
@@ -301,7 +302,7 @@ public:
     void Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
               SwVertOrient eVertOri, SvxBrushItem *pBGBrush,
               sal_Bool bHasNumFmt, sal_uInt32 nNumFmt,
-              sal_Bool bHasValue, double nValue, sal_Bool bNoWrap );
+              sal_Bool bHasValue, double nValue, sal_Bool bNoWrap, sal_Bool bCovered );
 
     // Schuetzen einer leeren 1x1-Zelle
     void SetProtected();
@@ -331,6 +332,8 @@ public:
     sal_Bool IsUsed() const { return pContents!=0 || bProtected; }
 
     SwHTMLTableLayoutCell *CreateLayoutInfo();
+
+    sal_Bool IsCovered() const { return mbCovered; }
 };
 
 /*  */
@@ -580,12 +583,6 @@ class HTMLTable
                                 sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
                                 sal_uInt16 nBottomRow, sal_uInt16 nRightCol );
 
-    // Erstellen einer SwTableBox aus den Zellen des Rechtecks
-    // (nTopRow/nLeftCol) inklusive bis (nBottomRow/nRightRow) exklusive
-    SwTableBox *MakeTableBox( SwTableLine *pUpper,
-                              sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
-                              sal_uInt16 nBottomRow, sal_uInt16 nRightCol );
-
     // Erstellen einer SwTableBox aus dem Inhalt einer Zelle
     SwTableBox *MakeTableBox( SwTableLine *pUpper,
                               HTMLTableCnts *pCnts,
@@ -805,7 +802,8 @@ HTMLTableCell::HTMLTableCell():
     eVertOri( VERT_NONE ),
     bProtected(sal_False), bRelWidth( sal_False ),
     bHasNumFmt(sal_False), nNumFmt(0),
-    bHasValue(sal_False), nValue(0)
+    bHasValue(sal_False), nValue(0),
+    mbCovered(sal_False)
 {}
 
 HTMLTableCell::~HTMLTableCell()
@@ -822,7 +820,7 @@ HTMLTableCell::~HTMLTableCell()
 void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCSpan,
                          SwVertOrient eVert, SvxBrushItem *pBrush,
                          sal_Bool bHasNF, sal_uInt32 nNF, sal_Bool bHasV, double nVal,
-                         sal_Bool bNWrap )
+                         sal_Bool bNWrap, sal_Bool bCovered )
 {
     pContents = pCnts;
     nRowSpan = nRSpan;
@@ -837,6 +835,7 @@ void HTMLTableCell::Set( HTMLTableCnts *pCnts, sal_uInt16 nRSpan, sal_uInt16 nCS
     nValue = nVal;
 
     bNoWrap = bNWrap;
+    mbCovered = bCovered;
 }
 
 inline void HTMLTableCell::SetWidth( sal_uInt16 nWdth, sal_Bool bRelWdth )
@@ -1801,9 +1800,6 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
     sal_uInt16 nStartCol = nLeftCol;
     while( nStartCol<nRightCol )
     {
-        for( sal_uInt16 nRow=nTopRow; nRow<nBottomRow; nRow++ )
-            (*pRows)[nRow]->SetSplitable( sal_True );
-
         sal_uInt16 nCol = nStartCol;
         sal_uInt16 nSplitCol = nRightCol;
         sal_Bool bSplitted = sal_False;
@@ -1811,66 +1807,31 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
         {
             ASSERT( nCol < nRightCol, "Zu weit gelaufen" );
 
-            // Kann hinter der aktuellen HTML-Tabellen-Spalte gesplittet
-            // werden? Wenn ja, koennte der enstehende Bereich auch noch
-            // in Zeilen zerlegt werden, wenn man die naechste Spalte
-            // hinzunimmt?
-            sal_Bool bSplit = sal_True;
-            sal_Bool bHoriSplitMayContinue = sal_False;
-            sal_Bool bHoriSplitPossible = sal_False;
-            for( sal_uInt16 nRow=nTopRow; nRow<nBottomRow; nRow++ )
-            {
-                HTMLTableCell *pCell = GetCell(nRow,nCol);
-                // Gibt es in allen vorhergehenden Spalten und der gerade
-                // btrachteten Zeile eine gemeinsame Zeile?
-                sal_Bool bHoriSplit = (*pRows)[nRow]->IsSplitable() &&
-                                  nRow+1 < nBottomRow &&
-                                  1 == pCell->GetRowSpan();
-                (*pRows)[nRow]->SetSplitable( bHoriSplit );
-
-                bSplit &= ( 1 == pCell->GetColSpan() );
-                if( bSplit )
-                {
-                    bHoriSplitPossible |= bHoriSplit;
-
-                    // Gilt das eventuell auch noch, wenn man die naechste
-                    // Spalte hinzunimmt?
-                    bHoriSplit &= (nCol+1 < nRightCol &&
-                                   1 == GetCell(nRow,nCol+1)->GetRowSpan());
-                    bHoriSplitMayContinue |= bHoriSplit;
-                }
-            }
+            HTMLTableCell *pCell = GetCell(nTopRow,nCol);
+            const sal_Bool bSplit = 1 == pCell->GetColSpan();
 
 #ifndef PRODUCT
             if( nCol == nRightCol-1 )
             {
                 ASSERT( bSplit, "Split-Flag falsch" );
-                ASSERT( !bHoriSplitMayContinue,
-                        "HoriSplitMayContinue-Flag falsch" );
-                HTMLTableCell *pCell = GetCell( nTopRow, nStartCol );
-                ASSERT( pCell->GetRowSpan() != (nBottomRow-nTopRow) ||
-                        !bHoriSplitPossible, "HoriSplitPossible-Flag falsch" );
             }
 #endif
-            ASSERT( !bHoriSplitMayContinue || bHoriSplitPossible,
-                    "bHoriSplitMayContinue, aber nicht bHoriSplitPossible" );
-
             if( bSplit )
             {
                 SwTableBox* pBox = 0;
                 HTMLTableCell *pCell = GetCell( nTopRow, nStartCol );
-                if( pCell->GetRowSpan() == (nBottomRow-nTopRow) &&
-                    pCell->GetColSpan() == (nCol+1-nStartCol) )
+                if( pCell->GetColSpan() == (nCol+1-nStartCol) )
                 {
                     // Die HTML-Tabellen-Zellen bilden genau eine Box.
                     // Dann muss hinter der Box gesplittet werden
                     nSplitCol = nCol + 1;
 
-                    // eventuell ist die Zelle noch leer
-                    if( !pCell->GetContents() )
+                    long nBoxRowSpan = pCell->GetRowSpan();
+                    if ( !pCell->GetContents() || pCell->IsCovered() )
                     {
-                        ASSERT( 1==pCell->GetRowSpan(),
-                                "leere Box ist nicht 1 Zeile hoch" );
+                        if ( pCell->IsCovered() )
+                            nBoxRowSpan = -1 * nBoxRowSpan;
+
                         const SwStartNode* pPrevStNd =
                             GetPrevBoxStartNode( nTopRow, nStartCol );
                         HTMLTableCnts *pCnts = new HTMLTableCnts(
@@ -1890,48 +1851,19 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
                                        ->SetContents( pCntsLayoutInfo );
                         }
                     }
+
                     pBox = MakeTableBox( pLine, pCell->GetContents(),
                                          nTopRow, nStartCol,
                                          nBottomRow, nSplitCol );
+
+                    if ( 1 != nBoxRowSpan )
+                        pBox->setRowSpan( nBoxRowSpan );
+
                     bSplitted = sal_True;
                 }
-                else if( bHoriSplitPossible && bHoriSplitMayContinue )
-                {
-                    // Bis hierher lies sich die Box noch in Zeilen zerlegen
-                    // und evetutell gillt das auch noch, wenn man die
-                    // naechste hinzunimmt. Dann suchen wir weiter, merken
-                    // uns aber die Position als moegliche Split-Position.
-                    nSplitCol = nCol + 1;
-                }
-                else
-                {
-                    // Wenn sich die Box bis hier her noch in Zeilen
-                    // zerlegen lies, durch hinzunahmen noch einer
-                    // Spalte aber nicht mehr, dann wird genau hinter
-                    // dieser Splate gesplittet. (#55447#: Das gilt
-                    // insbesondere auch fuer die letzte Spalte).
-                    // Hinter der aktuellen Spalte wurd ausserdem gesplittet,
-                    // wenn bisher noch gar keine andere Split-Position
-                    // gefunden wurde.
-                    // In allen anderen Faellen wird die bisher gemerkte
-                    // Split-Position benutzt.
-                    if( bHoriSplitPossible || nSplitCol > nCol+1 )
-                    {
-                        ASSERT( !bHoriSplitMayContinue,
-                                "bHoriSplitMayContinue==sal_True" );
-                        ASSERT( bHoriSplitPossible || nSplitCol == nRightCol,
-                                "bHoriSplitPossible-Flag sollte gesetzt sein" );
 
-                        nSplitCol = nCol + 1;
-                    }
+                ASSERT( pBox, "Colspan trouble" )
 
-                    // Wenn die enstehende Box nicht mehr in Zeilen zerlegt
-                    // werden kann, wenn man die naechste Spalte hinzunimmt
-                    // muss man ebenfalls Splitten.
-                    pBox = MakeTableBox( pLine, nTopRow, nStartCol,
-                                         nBottomRow, nSplitCol );
-                    bSplitted = sal_True;
-                }
                 if( pBox )
                     rBoxes.C40_INSERT( SwTableBox, pBox, rBoxes.Count() );
             }
@@ -1942,91 +1874,6 @@ SwTableLine *HTMLTable::MakeTableLine( SwTableBox *pUpper,
 
     return pLine;
 }
-
-// Fuellen einer SwTableBox
-// !!! kann noch vereinfacht werden
-SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
-                                     sal_uInt16 nTopRow, sal_uInt16 nLeftCol,
-                                     sal_uInt16 nBottomRow, sal_uInt16 nRightCol )
-{
-    SwTableBox *pBox = new SwTableBox( pBoxFmt, 0, pUpper );
-    FixFrameFmt( pBox, nTopRow, nLeftCol,
-                 nTopRow-nBottomRow, nRightCol-nLeftCol );
-
-    SwTableLines& rLines = pBox->GetTabLines();
-    sal_Bool bSplitted = sal_False;
-
-    while( !bSplitted )
-    {
-        sal_uInt16 nStartRow = nTopRow;
-        sal_uInt16 i;
-
-        for( i = nTopRow; i < nBottomRow; i++ )
-        {
-            // kann hinter der aktuellen HTML-Tabellen-Zeile gesplittet werden?
-            sal_Bool bSplit = sal_True;
-            HTMLTableRow *pRow = (*pRows)[i];
-            for( sal_uInt16 j=nLeftCol; j<nRightCol; j++ )
-            {
-                bSplit = ( 1 == pRow->GetCell(j)->GetRowSpan() );
-                if( !bSplit )
-                    break;
-            }
-            if( bSplit && (nStartRow>nTopRow || i+1<nBottomRow) )
-            {
-                // kein Spezialfall fuer die erste Zeile neotig, da wir hier
-                // in einer Box und nicht in der Tabelle sind
-                SwTableLine *pLine = MakeTableLine( pBox, nStartRow, nLeftCol, i+1, nRightCol );
-
-                rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
-
-                nStartRow = i+1;
-                bSplitted = sal_True;
-            }
-        }
-        if( !bSplitted )
-        {
-            // jetzt muessen wir die Zelle mit Gewalt Teilen
-
-            nStartRow = nTopRow;
-            while( nStartRow < nBottomRow )
-            {
-                sal_uInt16 nMaxRowSpan=0;
-                HTMLTableRow *pStartRow = (*pRows)[nStartRow];
-                HTMLTableCell *pCell;
-                for( i=nLeftCol; i<nRightCol; i++ )
-                    if( ( pCell=pStartRow->GetCell(i),
-                          pCell->GetRowSpan() > nMaxRowSpan ) )
-                        nMaxRowSpan = pCell->GetRowSpan();
-
-                nStartRow += nMaxRowSpan;
-                if( nStartRow<nBottomRow )
-                {
-                    HTMLTableRow *pPrevRow = (*pRows)[nStartRow-1];
-                    for( i=nLeftCol; i<nRightCol; i++ )
-                    {
-                        if( pPrevRow->GetCell(i)->GetRowSpan() > 1 )
-                        {
-                            // Die Inhalte sind in der Zeile darueber (also
-                            // der durch FixRowSpan bearbeiteten) verankert
-                            // und koennen/mussen deshalb in den mit
-                            // ProtectRowSpan bearbeitetebn Zeilen
-                            // geloescht oder kopiert werden
-                            HTMLTableCell *pCell = GetCell( nStartRow, i );
-                            FixRowSpan( nStartRow-1, i, pCell->GetContents() );
-                            ProtectRowSpan( nStartRow, i,
-                                            pCell->GetRowSpan() );
-                        }
-                    }
-                }
-            }
-            // und jetzt nochmal von vorne ...
-        }
-    }
-
-    return pBox;
-}
-
 
 SwTableBox *HTMLTable::MakeTableBox( SwTableLine *pUpper,
                                      HTMLTableCnts *pCnts,
@@ -2401,12 +2248,17 @@ void HTMLTable::InsertCell( HTMLTableCnts *pCnts,
         }
     }
 
-    // die Zellen fuellen
+    // Fill the cells
     for( i=nColSpan; i>0; i-- )
+    {
         for( j=nRowSpan; j>0; j-- )
+        {
+            const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
                 ->Set( pCnts, j, i, eVertOri, pBGBrush,
-                       bHasNumFmt, nNumFmt, bHasValue, nValue, bNoWrap );
+                       bHasNumFmt, nNumFmt, bHasValue, nValue, bNoWrap, bCovered );
+        }
+    }
 
     Size aTwipSz( bRelWidth ? 0 : nWidth, nHeight );
     if( (aTwipSz.Width() || aTwipSz.Height()) && Application::GetDefaultDevice() )
@@ -2629,29 +2481,12 @@ void HTMLTable::_MakeTable( SwTableBox *pBox )
                                  : ((SwTable *)pSwTable)->GetTabLines() );
 
     // jetzt geht's richtig los ...
-    sal_uInt16 nStartRow = 0;
 
     for( sal_uInt16 i=0; i<nRows; i++ )
     {
-        // kann hinter der aktuellen HTML-Tabellen-Zeile gesplittet werden?
-        sal_Bool bSplit = sal_True;
-        HTMLTableRow *pRow = (*pRows)[i];
-        for( sal_uInt16 j=0; j<nCols; j++ )
-        {
-            bSplit = ( 1 == pRow->GetCell(j)->GetRowSpan() );
-            if( !bSplit )
-                break;
-        }
-
-        if( bSplit )
-        {
-            SwTableLine *pLine = MakeTableLine( pBox, nStartRow, 0, i+1, nCols );
-            if( pBox || nStartRow>0 )
-            {
-                rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
-            }
-            nStartRow = i+1;
-        }
+        SwTableLine *pLine = MakeTableLine( pBox, i, 0, i+1, nCols );
+        if( pBox || i > 0 )
+            rLines.C40_INSERT( SwTableLine, pLine, rLines.Count() );
     }
 }
 
