@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:54:15 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:54:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2454,7 +2454,7 @@ void WW8TabDesc::CreateSwTable()
     // da sich die (identischen) Zeilen eines Bandes prima duplizieren lassen
     pTable = pIo->rDoc.InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
-            *pTmpPos, nBands, nDefaultSwCols, eOri );
+            *pTmpPos, nBands, nDefaultSwCols, eOri, 0, 0, FALSE, FALSE );
 
     ASSERT(pTable && pTable->GetFrmFmt(), "insert table failed");
     if (!pTable || !pTable->GetFrmFmt())
@@ -2900,8 +2900,8 @@ void WW8TabDesc::FinishSwTable()
 
                     aPam.GetPoint()->nNode = *pTargetBox->GetSttNd();
                     aPam.GetPoint()->nContent.Assign( 0, 0 );
-
-                    ((SwTable*)pTable)->Merge( &pIo->rDoc, aBoxes, pTargetBox );
+                    SwSelBoxes aDummyBox;
+                    ((SwTable*)pTable)->Merge( &pIo->rDoc, aBoxes, aDummyBox, pTargetBox );
 
                     }
                     break;
