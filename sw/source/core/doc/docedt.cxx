@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docedt.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:37:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:40:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1391,7 +1391,8 @@ bool SwDoc::Move( SwNodeRange& rRange, SwNodeIndex& rPos, SwMoveFlags eMvFlags )
         pSaveInsPos = new SwNodeIndex( rRange.aStart, -1 );
 
     // verschiebe die Nodes
-    if( GetNodes()._MoveNodes( rRange, GetNodes(), rPos ) )
+    BOOL bNoDelFrms = DOC_NO_DELFRMS & eMvFlags;
+    if( GetNodes()._MoveNodes( rRange, GetNodes(), rPos, !bNoDelFrms ) )
     {
         aIdx++;     // wieder auf alte Position
         if( pSaveInsPos )
