@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:34:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,16 @@ class SwTblCalcPara;
 class SwChartLines;
 struct SwPosition;
 class SwNodeIndex;
+class SwNode;
 class SfxPoolItem;
 class SchMemChart;
 class SwUndoTblMerge;
 class SwUndo;
+class SwPaM;
 class SwTableBox_Impl;
 class SwUndoTblCpyTbl;
+class SwBoxSelection;
+struct Parm;
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
@@ -98,6 +102,7 @@ SV_DECL_PTRARR_DEL(SwTableBoxes, SwTableBox*, 25, 50);
 // sortierten Array (fuers rechnen in der Tabelle)
 typedef SwTableBox* SwTableBoxPtr;
 SV_DECL_PTRARR_SORT( SwTableSortBoxes, SwTableBoxPtr, 25, 50 );
+typedef SwTableLine* SwTableLinePtr;
 
 class SwTable: public SwClient           //Client vom FrmFmt
 {
@@ -122,10 +127,21 @@ protected:
     USHORT      nRowsToRepeat;      // number of rows to repeat on every page
 
     BOOL        bModifyLocked   :1;
+    BOOL        bNewModel       :1; // FALSE: old SubTableModel; TRUE: new RowSpanModel
+#ifndef PRODUCT
+    bool bDontChangeModel;  // This is set by functions (like Merge()) to forbid a laet model change
+#endif
 
     BOOL IsModifyLocked(){ return bModifyLocked;}
 
 public:
+    enum SearchType
+    {
+        SEARCH_NONE, // Default: expand to rectangle
+        SEARCH_ROW, // row selection
+        SEARCH_COL  // column selection
+    };
+
     TYPEINFO();
 
     // single argument ctors shall be explicit.
@@ -139,6 +155,20 @@ private:
     SwTable & operator= (const SwTable &);
     // no default ctor.
     SwTable();
+    BOOL OldMerge( SwDoc*, const SwSelBoxes&, SwTableBox*, SwUndoTblMerge* );
+    BOOL OldSplitRow( SwDoc*, const SwSelBoxes&, USHORT, BOOL );
+    BOOL NewMerge( SwDoc*, const SwSelBoxes&, const SwSelBoxes& rMerged,
+                   SwTableBox*, SwUndoTblMerge* );
+    BOOL NewSplitRow( SwDoc*, const SwSelBoxes&, USHORT, BOOL );
+    SwBoxSelection* CollectBoxSelection( const SwPaM& rPam ) const;
+    void InsertSpannedRow( SwDoc* pDoc, USHORT nIdx, USHORT nCnt );
+    BOOL _InsertRow( SwDoc*, const SwSelBoxes&, USHORT nCnt, BOOL bBehind );
+    BOOL NewInsertCol( SwDoc*, const SwSelBoxes& rBoxes, USHORT nCnt, BOOL );
+    void _FindSuperfluousRows( SwSelBoxes& rBoxes, SwTableLine*, SwTableLine* );
+    void AdjustWidths( const long nOld, const long nNew );
+    void NewSetTabCols( Parm &rP, const SwTabCols &rNew, const SwTabCols &rOld,
+                        const SwTableBox *pStart, BOOL bCurRowOnly );
+
 public:
 
     SwHTMLTableLayout *GetHTMLTableLayout() { return pHTMLLayout; }
@@ -150,6 +180,9 @@ public:
 
     void LockModify()   { bModifyLocked = TRUE; }   //Muessen _immer_ paarig
     void UnlockModify() { bModifyLocked = FALSE;}   //benutzt werden!
+
+    void SetTableModel( BOOL bNew ){ bNewModel = bNew; }
+    BOOL IsNewModel() const { return bNewModel; }
 
     USHORT GetRowsToRepeat() const { return Min( GetTabLines().Count(), nRowsToRepeat ); }
     USHORT _GetRowsToRepeat() const { return nRowsToRepeat; }
@@ -170,19 +203,54 @@ public:
     void SetTabCols( const SwTabCols &rNew, const SwTabCols &rOld,
                      const SwTableBox *pStart, BOOL bCurRowOnly );
 
+// The following functions are for new table model only...
+    void CreateSelection(  const SwPaM& rPam, SwSelBoxes& rBoxes,
+        const SearchType eSearchType, bool bProtect ) const;
+    void CreateSelection( const SwNode* pStart, const SwNode* pEnd,
+        SwSelBoxes& rBoxes, const SearchType eSearchType, bool bProtect ) const;
+    void ExpandSelection( SwSelBoxes& rBoxes ) const;
+
+
+// The following functions are "pseudo-virtual", i.e. they are different for old and new table model
+// It's not allowed to change the table model after the first call of one of these functions.
+
+    BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes, const SwSelBoxes& rMerged,
+                SwTableBox* pMergeBox, SwUndoTblMerge* pUndo = 0 )
+    {
+#ifndef PRODUCT
+        bDontChangeModel = true;
+#endif
+        return bNewModel ? NewMerge( pDoc, rBoxes, rMerged, pMergeBox, pUndo ) :
+                           OldMerge( pDoc, rBoxes, pMergeBox, pUndo );
+    }
+    BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
+                   BOOL bSameHeight = FALSE )
+    {
+#ifndef PRODUCT
+        bDontChangeModel = true;
+#endif
+        return bNewModel ? NewSplitRow( pDoc, rBoxes, nCnt, bSameHeight ) :
+                           OldSplitRow( pDoc, rBoxes, nCnt, bSameHeight );
+    }
+    bool PrepareMerge( const SwPaM& rPam, SwSelBoxes& rBoxes,
+        SwSelBoxes& rMerged, SwTableBox** ppMergeBox, SwUndoTblMerge* pUndo );
+    void ExpandColumnSelection( SwSelBoxes& rBoxes, long &rMin, long &rMax ) const;
+    void PrepareDeleteCol( long nMin, long nMax );
+    bool IsSelectionRectangular( const SwSelBoxes& rBoxes ) const;
+
     BOOL InsertCol( SwDoc*, const SwSelBoxes& rBoxes,
                     USHORT nCnt = 1, BOOL bBehind = TRUE );
     BOOL InsertRow( SwDoc*, const SwSelBoxes& rBoxes,
                     USHORT nCnt = 1, BOOL bBehind = TRUE );
     BOOL AppendRow( SwDoc* pDoc, USHORT nCnt = 1 );
-    BOOL DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, SwUndo* pUndo = 0,
-                            const BOOL bDelMakeFrms = TRUE,
-                            const BOOL bCorrBorder = TRUE );
-    BOOL SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1,
-                   BOOL bSameHeight = FALSE );
+    void PrepareDelBoxes( const SwSelBoxes& rBoxes );
+    BOOL DeleteSel( SwDoc*, const SwSelBoxes& rBoxes, const SwSelBoxes* pMerged,
+        SwUndo* pUndo, const BOOL bDelMakeFrms, const BOOL bCorrBorder );
     BOOL SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt=1 );
-    BOOL Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
-                SwTableBox* pMergeBox, SwUndoTblMerge* = 0 );
+
+    void FindSuperfluousRows( SwSelBoxes& rBoxes )
+        { _FindSuperfluousRows( rBoxes, 0, 0 ); }
+    void CheckRowSpan( SwTableLinePtr &rpLine, bool bUp ) const;
 
           SwTableSortBoxes& GetTabSortBoxes()       { return aSortCntBoxes; }
     const SwTableSortBoxes& GetTabSortBoxes() const { return aSortCntBoxes; }
@@ -200,6 +268,8 @@ public:
                     SwUndoTblCpyTbl* pUndo = 0 );
     BOOL InsTable( const SwTable& rCpyTbl, const SwSelBoxes&,
                     SwUndoTblCpyTbl* pUndo = 0 );
+    BOOL InsNewTable( const SwTable& rCpyTbl, const SwSelBoxes&,
+                      SwUndoTblCpyTbl* pUndo );
         // kopiere die Headline (mit Inhalt!) der Tabelle in eine andere
     BOOL CopyHeadlineIntoTable( SwTableNode& rTblNd );
 
@@ -252,6 +322,9 @@ public:
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
     BOOL SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         SwTwips nAbsDiff, SwTwips nRelDiff, SwUndo** ppUndo );
+#ifndef PRODUCT
+    void CheckConsistency() const;
+#endif
 };
 
 class SwTableLine: public SwClient      // Client vom FrmFmt
@@ -379,6 +452,21 @@ public:
     inline const Color* GetSaveNumFmtColor() const;
     inline void SetSaveUserColor(const Color* p );
     inline void SetSaveNumFmtColor( const Color* p );
+
+    long getRowSpan() const;
+    void setRowSpan( long nNewRowSpan );
+    bool getDummyFlag() const;
+    void setDummyFlag( bool bDummy );
+
+    SwTableBox& FindStartOfRowSpan( const SwTable&, USHORT nMaxStep = USHRT_MAX );
+    const SwTableBox& FindStartOfRowSpan( const SwTable& rTable,
+        USHORT nMaxStep = USHRT_MAX ) const
+        { return const_cast<SwTableBox*>(this)->FindStartOfRowSpan( rTable, nMaxStep ); }
+
+    SwTableBox& FindEndOfRowSpan( const SwTable&, USHORT nMaxStep = USHRT_MAX );
+    const SwTableBox& FindEndOfRowSpan( const SwTable& rTable,
+        USHORT nMaxStep = USHRT_MAX ) const
+        { return const_cast<SwTableBox*>(this)->FindEndOfRowSpan( rTable, nMaxStep ); }
 };
 
 #endif  //_SWTABLE_HXX
