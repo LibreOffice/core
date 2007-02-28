@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accfrmobj.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:35:34 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,19 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
+#ifndef _CELLFRM_HXX
+#include <cellfrm.hxx>
+#endif
+
+sal_Bool SwFrmOrObj::IsAccessible( sal_Bool bPagePreview ) const
+{
+    return ( pFrm && pFrm->IsAccessibleFrm() &&
+             ( !pFrm->IsCellFrm() ||
+               static_cast<const SwCellFrm *>( pFrm )->GetTabBox()->GetSttNd() != 0 ) &&
+             !pFrm->IsInCoveredCell() &&
+             ( bPagePreview || !pFrm->IsPageFrm() ) ) ||
+           pObj;
+}
 
 sal_Bool SwFrmOrObj::IsBoundAsChar() const
 {
@@ -66,3 +79,4 @@ sal_Bool SwFrmOrObj::IsBoundAsChar() const
                        : sal_False;
     }
 }
+
