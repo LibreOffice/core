@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 15:40:30 $
+#   last change: $Author: vg $ $Date: 2007-02-28 15:40:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,8 @@ SLOFILES =	\
         $(SLO)$/poolfmt.obj \
         $(SLO)$/sortopt.obj \
         $(SLO)$/swserv.obj \
-        $(SLO)$/swstylemanager.obj \
-        $(SLO)$/swtable.obj \
-        $(SLO)$/tblafmt.obj \
+                $(SLO)$/swstylemanager.obj \
+                $(SLO)$/tblafmt.obj \
         $(SLO)$/tblcpy.obj \
         $(SLO)$/tblrwcl.obj \
         $(SLO)$/visiturl.obj \
