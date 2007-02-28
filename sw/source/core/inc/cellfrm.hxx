@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:43:10 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ class SwBorderAttrs;
 
 class SwCellFrm: public SwLayoutFrm
 {
-    const SwTableBox *pTabBox;
+    const SwTableBox* pTabBox;
 
 protected:
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
@@ -56,9 +56,10 @@ public:
     SwCellFrm( const SwTableBox &, bool bInsertContent = true );
     ~SwCellFrm();
 
-    virtual BOOL   GetCrsrOfst( SwPosition *, Point&,
-                                SwCrsrMoveState* = 0 ) const;
-    virtual void   Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual BOOL GetCrsrOfst( SwPosition *, Point&, SwCrsrMoveState* = 0 ) const;
+    virtual void Modify( SfxPoolItem*, SfxPoolItem* );
+    virtual void Paint( const SwRect& ) const;
+    virtual void CheckDirection( BOOL bVert );
 
     const SwTableBox *GetTabBox() const { return pTabBox; }
 
@@ -66,7 +67,9 @@ public:
     SwCellFrm* GetFollowCell() const;
     SwCellFrm* GetPreviousCell() const;
 
-    virtual void  CheckDirection( BOOL bVert );
+    // used for rowspan stuff:
+    const SwCellFrm& FindStartEndOfRowSpanCell( bool bStart, bool bCurrentTab ) const;
+    long GetLayoutRowSpan() const;
 
     DECL_FIXEDMEMPOOL_NEWDEL(SwCellFrm)
 };
