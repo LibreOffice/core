@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:49:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -634,6 +634,7 @@ BOOL SwLayAction::RemoveEmptyBrowserPages()
 void SwLayAction::Action()
 {
     bActionInProgress = TRUE;
+
     //TurboMode? Disqualifiziert fuer Idle-Format.
     if ( IsPaint() && !IsIdle() && TurboAction() )
     {
@@ -674,6 +675,7 @@ void SwLayAction::Action()
     if ( IsInput() )
         pImp->GetShell()->SetNoNextScroll();
     SetCheckPages( TRUE );
+
     bActionInProgress = FALSE;
 }
 
@@ -1785,7 +1787,7 @@ BOOL MA_FASTCALL lcl_AreLowersScrollable( const SwLayoutFrm *pLay )
     const SwFrm *pLow = pLay->Lower();
     while ( pLow )
     {
-        if ( pLow->IsCompletePaint() || !pLow->IsValid() )
+        if ( pLow->IsCompletePaint() || !pLow->IsValid() || pLow->IsCoveredCell() )
             return FALSE;
         if ( pLow->IsLayoutFrm() && !::lcl_AreLowersScrollable( (SwLayoutFrm*)pLow ))
             return FALSE;
@@ -1804,10 +1806,16 @@ SwLayoutFrm * MA_FASTCALL lcl_IsTabScrollable( SwTabFrm *pTab )
         SwLayoutFrm *pRow = (SwLayoutFrm*)pTab->Lower();
         while ( pRow )
         {
-            if ( !::lcl_AreLowersScrollable( pRow ) )
+            if ( ::lcl_AreLowersScrollable( pRow ) )
+            {
+                if ( !pUnchgdRow )
+                    pUnchgdRow = pRow;
+            }
+            else
+            {
                 pUnchgdRow = 0;
-            else if ( !pUnchgdRow )
-                pUnchgdRow = pRow;
+            }
+
             pRow = (SwLayoutFrm*)pRow->GetNext();
         }
         return pUnchgdRow;
@@ -1824,8 +1832,8 @@ void lcl_ValidateLowerObjs( SwFrm* pFrm,
 // OD 2004-05-11 #i28701# - correction: floating screen objects, which are
 // anchored at-fly, have also been to be considered.
 void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
-                        SwLayoutFrm *pRow, SwPageFrm *pPage,
-                        BOOL bResetOnly )
+                                     SwLayoutFrm *pRow, SwPageFrm *pPage,
+                                     BOOL bResetOnly )
 {
     pLay->ResetCompletePaint();
 
@@ -1836,11 +1844,7 @@ void MA_FASTCALL lcl_ValidateLowers( SwLayoutFrm *pLay, const SwTwips nOfst,
         ::lcl_ValidateLowerObjs( pLay, nOfst, pPage, bResetOnly );
     }
 
-    SwFrm *pLow = pLay->Lower();
-    if ( pRow )
-        while ( pLow != pRow )
-            pLow = pLow->GetNext();
-
+    SwFrm *pLow = pRow ? pRow : pLay->Lower();
     SwRootFrm *pRootFrm = 0;
 
     while ( pLow )
