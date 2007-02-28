@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:53:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -751,7 +751,7 @@ void SwRTFParser::ReadTable( int nToken )
             const SwTable *pTable =
                 pDoc->InsertTable(
                     SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 0 ),
-                    *pPam->GetPoint(), 1, 1, eAdjust );
+                    *pPam->GetPoint(), 1, 1, eAdjust, 0, 0, FALSE, FALSE );
             bContainsTablePara=true; //#117881#
             pTableNode = pTable ? pTable->GetTableNode() : 0;
 
