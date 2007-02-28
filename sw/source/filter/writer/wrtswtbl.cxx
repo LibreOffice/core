@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtswtbl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:18:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -705,6 +705,14 @@ void SwWriteTable::FillTableRowsCols( long nStartRPos, USHORT nStartRow,
             if( !ShouldExpandSub( pBox, bSubExpanded, nDepth ) )
             {
                 USHORT nRowSpan = nRow - nOldRow + 1;
+
+                // The new table model may have true row span attributes
+                const long nAttrRowSpan = pBox->getRowSpan();
+                if ( 1 < nAttrRowSpan )
+                    nRowSpan = (USHORT)nAttrRowSpan;
+                else if ( nAttrRowSpan < 1 )
+                    nRowSpan = 0;
+
                 USHORT nColSpan = nCol - nOldCol + 1;
                 pRow->AddCell( pBox, nOldRow, nOldCol,
                                nRowSpan, nColSpan, nHeight,
