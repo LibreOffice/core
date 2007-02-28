@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:59:12 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,9 +123,20 @@
 #ifndef _TBLRWCL_HXX
 #include <tblrwcl.hxx>
 #endif
+#include <boost/shared_ptr.hpp>
 
 #define COLFUZZY 20
 #define ROWFUZZY 10
+
+#ifdef PRODUCT
+#define CHECK_TABLE(t)
+#else
+#ifdef DEBUG
+#define CHECK_TABLE(t) (t).CheckConsistency();
+#else
+#define CHECK_TABLE(t)
+#endif
+#endif
 
 typedef SwTableLine* SwTableLinePtr;
 SV_DECL_PTRARR_SORT( SwSortTableLines, SwTableLinePtr, 16, 16 );
@@ -340,33 +351,41 @@ void lcl_DelCpyTabFrmFmts( _CpyTabFrm& rArr );
 
 struct _CpyPara
 {
+    boost::shared_ptr< std::vector< std::vector< ULONG > > > pWidths;
     SwDoc* pDoc;
     SwTableNode* pTblNd;
     _CpyTabFrms& rTabFrmArr;
     SwTableLine* pInsLine;
     SwTableBox* pInsBox;
     ULONG nOldSize, nNewSize;           // zum Korrigieren der Size-Attribute
+    ULONG nMinLeft, nMaxRight;
     USHORT nCpyCnt, nInsPos;
+    USHORT nLnIdx, nBoxIdx;
     BYTE nDelBorderFlag;
     BOOL bCpyCntnt;
 
     _CpyPara( SwTableNode* pNd, USHORT nCopies, _CpyTabFrms& rFrmArr,
-                BOOL bCopyContent = TRUE )
-        : pDoc( pNd->GetDoc() ), pTblNd( pNd ), nCpyCnt(nCopies), rTabFrmArr(rFrmArr),
-        pInsLine(0), pInsBox(0), nInsPos(0), nNewSize(0), nOldSize(0),
-        bCpyCntnt( bCopyContent ), nDelBorderFlag( 0 )
+              BOOL bCopyContent = TRUE )
+        : pDoc( pNd->GetDoc() ), pTblNd( pNd ), rTabFrmArr(rFrmArr),
+        pInsLine(0), pInsBox(0), nOldSize(0), nNewSize(0),
+        nMinLeft(ULONG_MAX), nMaxRight(0), nCpyCnt(nCopies), nInsPos(0),
+        nLnIdx(0), nBoxIdx(0), nDelBorderFlag(0), bCpyCntnt( bCopyContent )
         {}
     _CpyPara( const _CpyPara& rPara, SwTableLine* pLine )
-        : pDoc(rPara.pDoc), pTblNd(rPara.pTblNd), nCpyCnt(rPara.nCpyCnt),
+        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTblNd(rPara.pTblNd),
         rTabFrmArr(rPara.rTabFrmArr), pInsLine(pLine), pInsBox(rPara.pInsBox),
-        nInsPos(0), nNewSize(rPara.nNewSize), nOldSize(0),
-        bCpyCntnt( rPara.bCpyCntnt ), nDelBorderFlag( rPara.nDelBorderFlag )
+        nOldSize(0), nNewSize(rPara.nNewSize), nMinLeft( rPara.nMinLeft ),
+        nMaxRight( rPara.nMaxRight ), nCpyCnt(rPara.nCpyCnt), nInsPos(0),
+        nLnIdx( rPara.nLnIdx), nBoxIdx( rPara.nBoxIdx ),
+        nDelBorderFlag( rPara.nDelBorderFlag ), bCpyCntnt( rPara.bCpyCntnt )
         {}
     _CpyPara( const _CpyPara& rPara, SwTableBox* pBox )
-        : pDoc(rPara.pDoc), pTblNd(rPara.pTblNd), nCpyCnt(rPara.nCpyCnt),
+        : pWidths( rPara.pWidths ), pDoc(rPara.pDoc), pTblNd(rPara.pTblNd),
         rTabFrmArr(rPara.rTabFrmArr), pInsLine(rPara.pInsLine), pInsBox(pBox),
-        nInsPos(0), nNewSize(rPara.nNewSize),nOldSize(rPara.nOldSize),
-        bCpyCntnt( rPara.bCpyCntnt ), nDelBorderFlag( rPara.nDelBorderFlag )
+        nOldSize(rPara.nOldSize), nNewSize(rPara.nNewSize),
+        nMinLeft( rPara.nMinLeft ), nMaxRight( rPara.nMaxRight ),
+        nCpyCnt(rPara.nCpyCnt), nInsPos(0), nLnIdx(rPara.nLnIdx), nBoxIdx(rPara.nBoxIdx),
+        nDelBorderFlag( rPara.nDelBorderFlag ), bCpyCntnt( rPara.bCpyCntnt )
         {}
     void SetBoxWidth( SwTableBox* pBox );
 };
@@ -572,6 +591,9 @@ BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     if( !pTblNd )
         return FALSE;
 
+    if( IsNewModel() )
+        return NewInsertCol( pDoc, rBoxes, nCnt, bBehind );
+
     // suche alle Boxen / Lines
     _FndBox aFndBox( 0, 0 );
     {
@@ -605,8 +627,7 @@ BOOL SwTable::InsertCol( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     return TRUE;
 }
 
-
-BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+BOOL SwTable::_InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                         USHORT nCnt, BOOL bBehind )
 {
     ASSERT( pDoc && rBoxes.Count() && nCnt, "keine gueltige Box-Liste" );
@@ -641,7 +662,8 @@ BOOL SwTable::InsertRow( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     }
 
     //Lines fuer das Layout-Update herausuchen.
-    const FASTBOOL bLayout = 0 != SwClientIter( *GetFrmFmt() ).First( TYPE(SwTabFrm) );
+    const FASTBOOL bLayout = !IsNewModel() &&
+        0 != SwClientIter( *GetFrmFmt() ).First( TYPE(SwTabFrm) );
     if ( bLayout )
     {
         aFndBox.SetTableLines( *this );
@@ -976,6 +998,7 @@ SwTableBox* lcl_FndNxtPrvDelBox( const SwTableLines& rTblLns,
         SwTwips nFndBoxWidth, nFndWidth = nBoxStt + nBoxWidth;
         USHORT nBoxCnt = pLine->GetTabBoxes().Count();
 
+        pFndBox = pLine->GetTabBoxes()[ 0 ];
         for( USHORT n = 0; 0 < nFndWidth && n < nBoxCnt; ++n )
         {
             pFndBox = pLine->GetTabBoxes()[ n ];
@@ -1089,19 +1112,17 @@ void lcl_SaveUpperLowerBorder( SwTable& rTbl, const SwTableBox& rBox,
 }
 
 
-BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
-                         const BOOL bDelMakeFrms, const BOOL bCorrBorder )
+BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+    const SwSelBoxes* pMerged, SwUndo* pUndo,
+    const BOOL bDelMakeFrms, const BOOL bCorrBorder )
 {
-    ASSERT( pDoc && rBoxes.Count(), "keine gueltigen Werte" );
-    SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
-    if( !pTblNd )
-        return FALSE;
-
-    // es darf nie die gesamte Tabelle geloescht werden
-    if( rBoxes[0]->GetSttIdx()-1 == pTblNd->GetIndex() &&
-        rBoxes[rBoxes.Count()-1]->GetSttNd()->EndOfSectionIndex()+1
-        == pTblNd->EndOfSectionIndex() )
-        return FALSE;
+    ASSERT( pDoc, "No doc?" );
+    if( rBoxes.Count() )
+    {
+        SwTableNode* pTblNd = (SwTableNode*)rBoxes[0]->GetSttNd()->FindTableNode();
+        if( !pTblNd )
+            return FALSE;
+    }
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
 
@@ -1109,7 +1130,10 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
     _FndBox aFndBox( 0, 0 );
     if ( bDelMakeFrms )
     {
-        aFndBox.SetTableLines( rBoxes, *this );
+        if( pMerged && pMerged->Count() )
+            aFndBox.SetTableLines( *pMerged, *this );
+        else if( rBoxes.Count() )
+            aFndBox.SetTableLines( rBoxes, *this );
         aFndBox.DelFrms( *this );
     }
     aFndBox.SaveChartData( *this );
@@ -1126,6 +1150,8 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
                                         &aBoxes, &n );
     }
 
+    PrepareDelBoxes( rBoxes );
+
     for( USHORT n = 0; n < rBoxes.Count(); ++n )
         _DeleteBox( *this, rBoxes[n], pUndo, TRUE, bCorrBorder, &aShareFmts );
 
@@ -1137,6 +1163,7 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
     aFndBox.RestoreChartData( *this );
 
     CHECKTABLELAYOUT
+    CHECK_TABLE( *this )
 
     return TRUE;
 }
@@ -1144,7 +1171,7 @@ BOOL SwTable::DeleteSel( SwDoc* pDoc, const SwSelBoxes& rBoxes, SwUndo* pUndo,
 
 // ---------------------------------------------------------------
 
-BOOL SwTable::SplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
+BOOL SwTable::OldSplitRow( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt,
                         BOOL bSameHeight )
 {
     ASSERT( pDoc && rBoxes.Count() && nCnt, "keine gueltigen Werte" );
@@ -1292,20 +1319,27 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
         return FALSE;
 
     SetHTMLTableLayout( 0 );    // MIB 9.7.97: HTML-Layout loeschen
+    SwSelBoxes aSelBoxes;
+    aSelBoxes.Insert(rBoxes.GetData(), rBoxes.Count());
+    ExpandSelection( aSelBoxes );
 
     //Lines fuer das Layout-Update herausuchen.
     _FndBox aFndBox( 0, 0 );
-    aFndBox.SetTableLines( rBoxes, *this );
+    aFndBox.SetTableLines( aSelBoxes, *this );
     aFndBox.DelFrms( *this );
     aFndBox.SaveChartData( *this );
 
     _CpyTabFrms aFrmArr;
     SvPtrarr aLastBoxArr;
     USHORT nFndPos;
-    for( USHORT n = 0; n < rBoxes.Count(); ++n )
+    for( USHORT n = 0; n < aSelBoxes.Count(); ++n )
     {
-        SwTableBox* pSelBox = *( rBoxes.GetData() + n );
+        SwTableBox* pSelBox = *( aSelBoxes.GetData() + n );
         ASSERT( pSelBox, "Box steht nicht in der Tabelle" );
+
+        // We don't want to split small table cells into very very small cells
+        if( pSelBox->GetFrmFmt()->GetFrmSize().GetWidth()/( nCnt + 1 ) < 10 )
+            continue;
 
         // dann teile die Box nCnt in nCnt Boxen
         SwTableLine* pInsLine = pSelBox->GetUpper();
@@ -1352,12 +1386,12 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
                     pSelBox, nBoxPos + nCnt );  // dahinter einfuegen
 
         // Sonderbehandlung fuer die Umrandung:
-        const SvxBoxItem& rBoxItem = aFindFrm.pNewFrmFmt->GetBox();
-        if( rBoxItem.GetRight() )
+        const SvxBoxItem& aSelBoxItem = aFindFrm.pNewFrmFmt->GetBox();
+        if( aSelBoxItem.GetRight() )
         {
             pInsLine->GetTabBoxes()[ nBoxPos + nCnt ]->ClaimFrmFmt();
 
-            SvxBoxItem aTmp( rBoxItem );
+            SvxBoxItem aTmp( aSelBoxItem );
             aTmp.SetLine( 0, BOX_LINE_RIGHT );
             aFindFrm.pNewFrmFmt->SetAttr( aTmp );
 
@@ -1387,7 +1421,7 @@ BOOL SwTable::SplitCol( SwDoc* pDoc, const SwSelBoxes& rBoxes, USHORT nCnt )
 
 /*
     ----------------------- >> MERGE << ------------------------
-     Algorythmus:
+     Algorithmus:
         ist in der _FndBox nur eine Line angegeben, nehme die Line
         und teste die Anzahl der Boxen
         - ist mehr als 1 Box angegeben, so wird auf Boxenebene zusammen-
@@ -1719,7 +1753,7 @@ BOOL lcl_Merge_MoveLine( const _FndLine*& rpFndLine, void* pPara )
 }
 
 
-BOOL SwTable::Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
+BOOL SwTable::OldMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
                     SwTableBox* pMergeBox, SwUndoTblMerge* pUndo )
 {
     ASSERT( pDoc && rBoxes.Count() && pMergeBox, "keine gueltigen Werte" );
@@ -1809,7 +1843,7 @@ BOOL SwTable::Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
             pUndo->AddNewBox( pRight->GetSttIdx() );
     }
 
-    DeleteSel( pDoc, rBoxes, 0, FALSE, FALSE );
+    DeleteSel( pDoc, rBoxes, 0, 0, FALSE, FALSE );
 
     // dann raeume die Struktur dieser Line noch mal auf:
     // generell alle Aufraeumen
@@ -1826,6 +1860,28 @@ BOOL SwTable::Merge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
 }
 
 // ---------------------------------------------------------------
+
+void lcl_CheckRowSpan( SwTable &rTbl )
+{
+    USHORT nLineCount = rTbl.GetTabLines().Count();
+    USHORT nMaxSpan = nLineCount;
+    long nMinSpan = 1;
+    while( nMaxSpan )
+    {
+        SwTableLine* pLine = rTbl.GetTabLines()[ nLineCount - nMaxSpan ];
+        for( USHORT nBox = 0; nBox < pLine->GetTabBoxes().Count(); ++nBox )
+        {
+            SwTableBox* pBox = pLine->GetTabBoxes()[nBox];
+            long nRowSpan = pBox->getRowSpan();
+            if( nRowSpan > nMaxSpan )
+                pBox->setRowSpan( nMaxSpan );
+            else if( nRowSpan < nMinSpan )
+                pBox->setRowSpan( nMinSpan > 0 ? nMaxSpan : nMinSpan );
+        }
+        --nMaxSpan;
+        nMinSpan = -nMaxSpan;
+    }
+}
 
 USHORT lcl_GetBoxOffset( const _FndBox& rBox )
 {
@@ -1856,89 +1912,212 @@ USHORT lcl_GetLineWidth( const _FndLine& rLine )
     return nRet;
 }
 
+void lcl_CalcNewWidths( const _FndLines& rFndLines, _CpyPara& rPara )
+{
+    rPara.pWidths.reset();
+    USHORT nLineCount = rFndLines.Count();
+    if( nLineCount )
+    {
+        rPara.pWidths = boost::shared_ptr< std::vector< std::vector< ULONG > > >
+                        ( new std::vector< std::vector< ULONG > >( nLineCount ));
+        // First we collect information about the left/right borders of all
+        // selected cells
+        for( USHORT nLine = 0; nLine < nLineCount; ++nLine )
+        {
+            std::vector< ULONG > &rWidth = (*rPara.pWidths.get())[ nLine ];
+            const _FndLine *pFndLine = rFndLines[ nLine ];
+            if( pFndLine && pFndLine->GetBoxes().Count() )
+            {
+                const SwTableLine *pLine = pFndLine->GetLine();
+                if( pLine && pLine->GetTabBoxes().Count() )
+                {
+                    USHORT nBoxCount = pLine->GetTabBoxes().Count();
+                    ULONG nPos = 0;
+                    // The first selected box...
+                    const SwTableBox *pSel = pFndLine->GetBoxes()[0]->GetBox();
+                    USHORT nBox = 0;
+                    // Sum up the width of all boxes before the first selected box
+                    while( nBox < nBoxCount )
+                    {
+                        SwTableBox* pBox = pLine->GetTabBoxes()[nBox++];
+                        if( pBox != pSel )
+                            nPos += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
+                        else
+                            break;
+                    }
+                    // nPos is now the left border of the first selceted box
+                    if( rPara.nMinLeft > nPos )
+                        rPara.nMinLeft = nPos;
+                    nBoxCount = pFndLine->GetBoxes().Count();
+                    rWidth = std::vector< ULONG >( nBoxCount+2 );
+                    rWidth[ 0 ] = nPos;
+                    // Add now the widths of all selected boxes and store
+                    // the positions in the vector
+                    for( nBox = 0; nBox < nBoxCount; )
+                    {
+                        nPos += pFndLine->GetBoxes()[nBox]
+                            ->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
+                        rWidth[ ++nBox ] = nPos;
+                    }
+                    // nPos: The right border of the last selected box
+                    if( rPara.nMaxRight < nPos )
+                        rPara.nMaxRight = nPos;
+                    if( nPos <= rWidth[ 0 ] )
+                        rWidth.clear();
+                }
+            }
+        }
+    }
+    // Second step: calculate the new widths for the copied cells
+    ULONG nSelSize = rPara.nMaxRight - rPara.nMinLeft;
+    if( nSelSize )
+    {
+        for( USHORT nLine = 0; nLine < nLineCount; ++nLine )
+        {
+            std::vector< ULONG > &rWidth = (*rPara.pWidths.get())[ nLine ];
+            USHORT nCount = (USHORT)rWidth.size();
+            if( nCount > 2 )
+            {
+                rWidth[ nCount - 1 ] = rPara.nMaxRight;
+                ULONG nLastPos = 0;
+                for( USHORT nBox = 0; nBox < nCount; ++nBox )
+                {
+                    sal_uInt64 nNextPos = rWidth[ nBox ];
+                    nNextPos -= rPara.nMinLeft;
+                    nNextPos *= rPara.nNewSize;
+                    nNextPos /= nSelSize;
+                    rWidth[ nBox ] = (ULONG)(nNextPos - nLastPos);
+                    nLastPos = (ULONG)nNextPos;
+                }
+            }
+        }
+    }
+}
+
 BOOL lcl_CopyBoxToDoc( const _FndBox*& rpFndBox, void* pPara )
 {
     _CpyPara* pCpyPara = (_CpyPara*)pPara;
 
-    // Berechne die neue Size
-    ULONG nSize = pCpyPara->nNewSize;
-    nSize *= rpFndBox->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
-    nSize /= pCpyPara->nOldSize;
-
-    // suche das Frame-Format in der Liste aller Frame-Formate
-    _CpyTabFrm aFindFrm( (SwTableBoxFmt*)rpFndBox->GetBox()->GetFrmFmt() );
-
-    SwFmtFrmSize aFrmSz;
-    USHORT nFndPos;
-    if( !pCpyPara->rTabFrmArr.Seek_Entry( aFindFrm, &nFndPos ) ||
-        ( aFrmSz = ( aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ]).pNewFrmFmt->
-            GetFrmSize()).GetWidth() != (SwTwips)nSize )
+    // Calculation of new size
+    ULONG nRealSize;
+    ULONG nDummy1 = 0;
+    ULONG nDummy2 = 0;
+    if( pCpyPara->pTblNd->GetTable().IsNewModel() )
     {
-        // es ist noch nicht vorhanden, also kopiere es
-        aFindFrm.pNewFrmFmt = pCpyPara->pDoc->MakeTableBoxFmt();
-        aFindFrm.pNewFrmFmt->CopyAttrs( *rpFndBox->GetBox()->GetFrmFmt() );
-        if( !pCpyPara->bCpyCntnt )
-            aFindFrm.pNewFrmFmt->ResetAttr(  RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
-        aFrmSz.SetWidth( nSize );
-        aFindFrm.pNewFrmFmt->SetAttr( aFrmSz );
-        pCpyPara->rTabFrmArr.Insert( aFindFrm );
-    }
-
-    SwTableBox* pBox;
-    if( rpFndBox->GetLines().Count() )
-    {
-        pBox = new SwTableBox( aFindFrm.pNewFrmFmt,
-                    rpFndBox->GetLines().Count(), pCpyPara->pInsLine );
-        pCpyPara->pInsLine->GetTabBoxes().C40_INSERT( SwTableBox, pBox, pCpyPara->nInsPos++ );
-        _CpyPara aPara( *pCpyPara, pBox );
-        aPara.nNewSize = nSize;     // hole die Groesse
-        ((_FndBox*)rpFndBox)->GetLines().ForEach( &lcl_CopyLineToDoc, &aPara );
+        if( pCpyPara->nBoxIdx == 1 )
+            nDummy1 = (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx][0];
+        nRealSize = (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx][pCpyPara->nBoxIdx++];
+        if( pCpyPara->nBoxIdx == (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx].size()-1 )
+            nDummy2 = (*pCpyPara->pWidths.get())[pCpyPara->nLnIdx][pCpyPara->nBoxIdx];
     }
     else
     {
-        // erzeuge eine leere Box
-        pCpyPara->pDoc->GetNodes().InsBoxen( pCpyPara->pTblNd, pCpyPara->pInsLine,
-                        aFindFrm.pNewFrmFmt,
-                        (SwTxtFmtColl*)pCpyPara->pDoc->GetDfltTxtFmtColl(),
-                        0, pCpyPara->nInsPos );
-
-        if( pCpyPara->bCpyCntnt )
-        {
-            // dann kopiere mal den Inhalt in diese leere Box
-            pBox = pCpyPara->pInsLine->GetTabBoxes()[ pCpyPara->nInsPos ];
-
-            // der Inhalt kopiert wird, dann koennen auch Formeln&Values
-            // kopiert werden.
-            {
-                SfxItemSet aBoxAttrSet( pCpyPara->pDoc->GetAttrPool(),
-                                        RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
-                aBoxAttrSet.Put( rpFndBox->GetBox()->GetFrmFmt()->GetAttrSet() );
-                if( aBoxAttrSet.Count() )
-                {
-                    const SfxPoolItem* pItem;
-                    SvNumberFormatter* pN = pCpyPara->pDoc->GetNumberFormatter( FALSE );
-                    if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == aBoxAttrSet.
-                        GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem ) )
-                    {
-                        ULONG nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
-                        ULONG nNewIdx = pN->GetMergeFmtIndex( nOldIdx );
-                        if( nNewIdx != nOldIdx )
-                            aBoxAttrSet.Put( SwTblBoxNumFormat( nNewIdx ));
-                    }
-                    pBox->ClaimFrmFmt()->SetAttr( aBoxAttrSet );
-                }
-            }
-            SwDoc* pFromDoc = rpFndBox->GetBox()->GetFrmFmt()->GetDoc();
-            SwNodeRange aCpyRg( *rpFndBox->GetBox()->GetSttNd(), 1,
-                        *rpFndBox->GetBox()->GetSttNd()->EndOfSectionNode() );
-            SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
-
-            pFromDoc->CopyWithFlyInFly( aCpyRg, aInsIdx, FALSE );
-            // den initialen TextNode loeschen
-            pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
-        }
-        ++pCpyPara->nInsPos;
+        nRealSize = pCpyPara->nNewSize;
+        nRealSize *= rpFndBox->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
+        nRealSize /= pCpyPara->nOldSize;
     }
+
+    ULONG nSize;
+    bool bDummy = nDummy1 > 0;
+    if( bDummy )
+        nSize = nDummy1;
+    else
+    {
+        nSize = nRealSize;
+        nRealSize = 0;
+    }
+    do
+    {
+        // suche das Frame-Format in der Liste aller Frame-Formate
+        _CpyTabFrm aFindFrm( (SwTableBoxFmt*)rpFndBox->GetBox()->GetFrmFmt() );
+
+        SwFmtFrmSize aFrmSz;
+        USHORT nFndPos;
+        if( !pCpyPara->rTabFrmArr.Seek_Entry( aFindFrm, &nFndPos ) ||
+            ( aFrmSz = ( aFindFrm = pCpyPara->rTabFrmArr[ nFndPos ]).pNewFrmFmt->
+                GetFrmSize()).GetWidth() != (SwTwips)nSize )
+        {
+            // es ist noch nicht vorhanden, also kopiere es
+            aFindFrm.pNewFrmFmt = pCpyPara->pDoc->MakeTableBoxFmt();
+            aFindFrm.pNewFrmFmt->CopyAttrs( *rpFndBox->GetBox()->GetFrmFmt() );
+            if( !pCpyPara->bCpyCntnt )
+                aFindFrm.pNewFrmFmt->ResetAttr(  RES_BOXATR_FORMULA, RES_BOXATR_VALUE );
+            aFrmSz.SetWidth( nSize );
+            aFindFrm.pNewFrmFmt->SetAttr( aFrmSz );
+            pCpyPara->rTabFrmArr.Insert( aFindFrm );
+        }
+
+        SwTableBox* pBox;
+        if( rpFndBox->GetLines().Count() )
+        {
+            pBox = new SwTableBox( aFindFrm.pNewFrmFmt,
+                        rpFndBox->GetLines().Count(), pCpyPara->pInsLine );
+            pCpyPara->pInsLine->GetTabBoxes().C40_INSERT( SwTableBox, pBox, pCpyPara->nInsPos++ );
+            _CpyPara aPara( *pCpyPara, pBox );
+            aPara.nNewSize = nSize;     // hole die Groesse
+            ((_FndBox*)rpFndBox)->GetLines().ForEach( &lcl_CopyLineToDoc, &aPara );
+        }
+        else
+        {
+            // erzeuge eine leere Box
+            pCpyPara->pDoc->GetNodes().InsBoxen( pCpyPara->pTblNd, pCpyPara->pInsLine,
+                            aFindFrm.pNewFrmFmt,
+                            (SwTxtFmtColl*)pCpyPara->pDoc->GetDfltTxtFmtColl(),
+                            0, pCpyPara->nInsPos );
+            pBox = pCpyPara->pInsLine->GetTabBoxes()[ pCpyPara->nInsPos ];
+            if( bDummy )
+                pBox->setDummyFlag( true );
+            else if( pCpyPara->bCpyCntnt )
+            {
+                // dann kopiere mal den Inhalt in diese leere Box
+                pBox->setRowSpan( rpFndBox->GetBox()->getRowSpan() );
+
+                // der Inhalt kopiert wird, dann koennen auch Formeln&Values
+                // kopiert werden.
+                {
+                    SfxItemSet aBoxAttrSet( pCpyPara->pDoc->GetAttrPool(),
+                                            RES_BOXATR_FORMAT, RES_BOXATR_VALUE );
+                    aBoxAttrSet.Put( rpFndBox->GetBox()->GetFrmFmt()->GetAttrSet() );
+                    if( aBoxAttrSet.Count() )
+                    {
+                        const SfxPoolItem* pItem;
+                        SvNumberFormatter* pN = pCpyPara->pDoc->GetNumberFormatter( FALSE );
+                        if( pN && pN->HasMergeFmtTbl() && SFX_ITEM_SET == aBoxAttrSet.
+                            GetItemState( RES_BOXATR_FORMAT, FALSE, &pItem ) )
+                        {
+                            ULONG nOldIdx = ((SwTblBoxNumFormat*)pItem)->GetValue();
+                            ULONG nNewIdx = pN->GetMergeFmtIndex( nOldIdx );
+                            if( nNewIdx != nOldIdx )
+                                aBoxAttrSet.Put( SwTblBoxNumFormat( nNewIdx ));
+                        }
+                        pBox->ClaimFrmFmt()->SetAttr( aBoxAttrSet );
+                    }
+                }
+                SwDoc* pFromDoc = rpFndBox->GetBox()->GetFrmFmt()->GetDoc();
+                SwNodeRange aCpyRg( *rpFndBox->GetBox()->GetSttNd(), 1,
+                            *rpFndBox->GetBox()->GetSttNd()->EndOfSectionNode() );
+                SwNodeIndex aInsIdx( *pBox->GetSttNd(), 1 );
+
+                pFromDoc->CopyWithFlyInFly( aCpyRg, aInsIdx, FALSE );
+                // den initialen TextNode loeschen
+                pCpyPara->pDoc->GetNodes().Delete( aInsIdx, 1 );
+            }
+            ++pCpyPara->nInsPos;
+        }
+        if( nRealSize )
+        {
+            bDummy = false;
+            nSize = nRealSize;
+            nRealSize = 0;
+        }
+        else
+        {
+            bDummy = true;
+            nSize = nDummy2;
+            nDummy2 = 0;
+        }
+    }
+    while( nSize );
     return TRUE;
 }
 
@@ -1973,8 +2152,12 @@ BOOL lcl_CopyLineToDoc( const _FndLine*& rpFndLine, void* pPara )
 
     _CpyPara aPara( *pCpyPara, pNewLine );
 
-    // berechne die neue Size der Boxen einer Line
-    if( rpFndLine->GetBoxes().Count() ==
+    if( pCpyPara->pTblNd->GetTable().IsNewModel() )
+    {
+        aPara.nOldSize = 0; // will not be used
+        aPara.nBoxIdx = 1;
+    }
+    else if( rpFndLine->GetBoxes().Count() ==
                     rpFndLine->GetLine()->GetTabBoxes().Count() )
     {
         // hole die Size vom Parent
@@ -1993,6 +2176,8 @@ BOOL lcl_CopyLineToDoc( const _FndLine*& rpFndLine, void* pPara )
                         ->GetBox()->GetFrmFmt()->GetFrmSize().GetWidth();
 
     ((_FndLine*)rpFndLine)->GetBoxes().ForEach( &lcl_CopyBoxToDoc, &aPara );
+    if( pCpyPara->pTblNd->GetTable().IsNewModel() )
+        ++pCpyPara->nLnIdx;
     return TRUE;
 }
 
@@ -2023,6 +2208,8 @@ BOOL SwTable::CopyHeadlineIntoTable( SwTableNode& rTblNd )
     _CpyPara aPara( &rTblNd, 1, aCpyFmt, TRUE );
     aPara.nNewSize = aPara.nOldSize = rTblNd.GetTable().GetFrmFmt()->GetFrmSize().GetWidth();
     // dann kopiere mal
+    if( IsNewModel() )
+        lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
     aFndBox.GetLines().ForEach( &lcl_CopyLineToDoc, &aPara );
 
     return TRUE;
@@ -2052,7 +2239,8 @@ BOOL SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
 
     SwTable* pNewTbl = (SwTable*)pInsDoc->InsertTable(
             SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
-            rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient() );
+            rPos, 1, 1, GetFrmFmt()->GetHoriOrient().GetHoriOrient(),
+            0, 0, FALSE, IsNewModel() );
     if( !pNewTbl )
         return FALSE;
 
@@ -2099,6 +2287,9 @@ BOOL SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
     _CpyTabFrms aCpyFmt;
     _CpyPara aPara( pTblNd, 1, aCpyFmt, bCpyNds );
     aPara.nNewSize = aPara.nOldSize = GetFrmFmt()->GetFrmSize().GetWidth();
+
+    if( IsNewModel() )
+        lcl_CalcNewWidths( aFndBox.GetLines(), aPara );
     // dann kopiere mal
     aFndBox.GetLines().ForEach( &lcl_CopyLineToDoc, &aPara );
 
@@ -2152,6 +2343,8 @@ BOOL SwTable::MakeCopy( SwDoc* pInsDoc, const SwPosition& rPos,
                 pNewTbl->GetTabLines().Count() - 1 ]->GetTabBoxes()[0],
                 0, FALSE, FALSE );
 
+    if( pNewTbl->IsNewModel() )
+        lcl_CheckRowSpan( *pNewTbl );
     // Mal kurz aufraeumen:
     pNewTbl->GCLines();
 
