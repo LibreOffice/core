@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:49:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:47:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2888,7 +2888,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling, bool bGro
     }
 
     if ( bGrow )
-        pParent->Grow( nGrowVal PHEIGHT );
+        pParent->Grow( nGrowVal );
 }
 
 /*************************************************************************
