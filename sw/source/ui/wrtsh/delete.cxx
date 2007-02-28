@@ -4,9 +4,9 @@
  *
  *  $RCSfile: delete.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:39:07 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,8 +208,16 @@ long SwWrtShell::DelLeft()
     // JP 29.06.95: nie eine davor stehende Tabelle loeschen.
     BOOL bSwap = FALSE;
     const SwTableNode * pWasInTblNd = SwCrsrShell::IsCrsrInTbl();
+
     if( SwCrsrShell::IsSttPara())
     {
+        // --> FME 2007-02-15 #i4032# Don't actually call a 'delete' if we
+        // changed the table cell, compare DelRight().
+        const SwStartNode * pSNdOld = pWasInTblNd ?
+                                      GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
+                                      0;
+        // <--
+
         /* If the cursor is at the beginning of a paragraph, try to step
            backwards. On failure we are done. */
         if( !SwCrsrShell::Left(1,CRSR_SKIP_CHARS) )
@@ -217,8 +225,19 @@ long SwWrtShell::DelLeft()
 
         /* If the cursor entered or left a table (or both) we are done. No step
            back. */
-        if( SwCrsrShell::IsCrsrInTbl() != pWasInTblNd )
+        const SwTableNode* pIsInTblNd = SwCrsrShell::IsCrsrInTbl();
+        if( pIsInTblNd != pWasInTblNd )
             return 0;
+
+        const SwStartNode* pSNdNew = pIsInTblNd ?
+                                     GetSwCrsr()->GetNode()->FindTableBoxStartNode() :
+                                     0;
+
+        // --> FME 2007-02-15 #i4032# Don't actually call a 'delete' if we
+        // changed the table cell, compare DelRight().
+        if ( pSNdOld != pSNdNew )
+            return 0;
+        // <--
 
         OpenMark();
         SwCrsrShell::Right(1,CRSR_SKIP_CHARS);
@@ -306,7 +325,7 @@ long SwWrtShell::DelRight(BOOL bDelFrm)
             if ( SwCrsrShell::IsEndPara() )
             {
                 // --> FME 2005-01-28 #i41424# Introduced a couple of
-                // Push()-Pop() pairs here. The reason for this is thet a
+                // Push()-Pop() pairs here. The reason for this is that a
                 // Right()-Left() combination does not make sure, that
                 // the cursor will be in its initial state, because there
                 // may be a numbering in front of the next paragraph.
