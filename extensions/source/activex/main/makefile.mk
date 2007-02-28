@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:13:59 $
+#   last change: $Author: vg $ $Date: 2007-02-28 16:27:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@ TARGET=so_activex
 use_shl_versions=
 
 # --- Settings ----------------------------------
+.IF "$(GUI)" == "WNT" && "$(DISABLE_ACTIVEX)"==""
+PROF_EDITION=TRUE
+.ENDIF
 
 .INCLUDE : settings.mk
 
@@ -117,4 +120,3 @@ $(MISC)$/envsettings.h : makefile.mk
 .ELSE			# "$(USE_SHELL)"!="4nt"
     echo #define MISC .\..\$(INPATH)\misc > $@
 .ENDIF			# "$(USE_SHELL)"!="4nt"
-
