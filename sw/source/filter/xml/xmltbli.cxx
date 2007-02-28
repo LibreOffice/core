@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:54:28 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,6 +258,7 @@ class SwXMLTableCell_Impl
 
     sal_Bool bProtected : 1;
     sal_Bool bHasValue; // determines whether dValue attribute is valid
+    sal_Bool mbCovered;
 
 public:
 
@@ -265,7 +266,8 @@ public:
         nRowSpan( nRSpan ),
         nColSpan( nCSpan ),
         pStartNode( 0 ),
-        bProtected( sal_False )
+        bProtected( sal_False ),
+        mbCovered( sal_False )
         {}
 
     inline void Set( const OUString& rStyleName,
@@ -274,6 +276,7 @@ public:
                      sal_Bool bProtect = sal_False,
                      const OUString* pFormula = NULL,
                      sal_Bool bHasValue = sal_False,
+                     sal_Bool mbCovered = sal_False,
                      double dVal = 0.0 );
 
     sal_Bool IsUsed() const { return pStartNode!=0 ||
@@ -287,6 +290,7 @@ public:
     double GetValue() const { return dValue; }
     sal_Bool HasValue() const { return bHasValue; }
     sal_Bool IsProtected() const { return bProtected; }
+    sal_Bool IsCovered() const { return mbCovered; }
 
     const SwStartNode *GetStartNode() const { return pStartNode; }
     inline void SetStartNode( const SwStartNode *pSttNd );
@@ -303,6 +307,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
                                       sal_Bool bProtect,
                                       const OUString* pFormula,
                                       sal_Bool bHasVal,
+                                      sal_Bool bCov,
                                       double dVal)
 {
     aStyleName = rStyleName;
@@ -312,6 +317,7 @@ inline void SwXMLTableCell_Impl::Set( const OUString& rStyleName,
     xSubTable = pTable;
     dValue = dVal;
     bHasValue = bHasVal;
+    mbCovered = bCov;
     bProtected = bProtect;
 
     // set formula, if valid
@@ -657,6 +663,8 @@ SvXMLImportContext *SwXMLTableCellContext_Impl::CreateChildContext(
             pContext = pTblContext;
             if( GetTable()->IsValid() )
                 InsertContent( pTblContext );
+
+            GetTable()->SetHasSubTables( sal_True );
         }
     }
     else
@@ -678,7 +686,6 @@ void SwXMLTableCellContext_Impl::EndElement()
 {
     if( GetTable()->IsValid() )
     {
-        sal_Bool bEmpty = sal_False;
         if( bHasTextContent )
         {
             GetImport().GetTextImport()->DeleteParagraph();
@@ -846,7 +853,7 @@ public:
 
 SwXMLTableColsContext_Impl::SwXMLTableColsContext_Impl(
         SwXMLImport& rImport, sal_uInt16 nPrfx, const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable, sal_Bool bHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     xMyTable( pTable ),
@@ -1023,7 +1030,7 @@ public:
 SwXMLTableRowsContext_Impl::SwXMLTableRowsContext_Impl( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable,
         sal_Bool bHead ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
@@ -1310,6 +1317,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
     nWidth( 0UL ),
     bFirstSection( sal_True ),
     bRelWidth( sal_True ),
+    bHasSubTables( sal_False ),
     nHeaderRows( 0 ),
     pDDESource(NULL),
     pSharedBoxFormats(NULL)
@@ -1434,7 +1442,7 @@ SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
 SwXMLTableContext::SwXMLTableContext( SwXMLImport& rImport,
         sal_uInt16 nPrfx,
         const OUString& rLName,
-        const Reference< xml::sax::XAttributeList > & xAttrList,
+        const Reference< xml::sax::XAttributeList > &,
         SwXMLTableContext *pTable ) :
     XMLTextTableContext( rImport, nPrfx, rLName ),
     xParentTable( pTable ),
@@ -1676,10 +1684,15 @@ void SwXMLTableContext::InsertCell( const OUString& rStyleName,
 
     // Fill the cells
     for( i=nColSpan; i>0UL; i-- )
+    {
         for( j=nRowSpan; j>0UL; j-- )
+        {
+            const bool bCovered = i != nColSpan || j != nRowSpan;
             GetCell( nRowsReq-j, nColsReq-i )
-                ->Set( sStyleName, j, i, pStartNode, pTable, bProtect,
-                       pFormula, bHasValue, fValue);
+                ->Set( sStyleName, j, i, pStartNode,
+                       pTable, bProtect, pFormula, bHasValue, bCovered, fValue);
+        }
+    }
 
     // Set current col to the next (free) column
     nCurCol = nColsReq;
@@ -1798,7 +1811,7 @@ const SwStartNode *SwXMLTableContext::GetPrevStartNode( sal_uInt32 nRow,
             pPrevCell = pPrevRow->GetCell( GetColumnCount()-1UL );
     }
 
-    const SwStartNode *pSttNd;
+    const SwStartNode *pSttNd = 0;
     if( pPrevCell )
     {
         if( pPrevCell->GetStartNode() )
@@ -1827,13 +1840,13 @@ void SwXMLTableContext::FixRowSpan( sal_uInt32 nRow, sal_uInt32 nCol,
     }
 }
 
-void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol )
+void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol, bool bRows )
 {
     const SwStartNode *pPrevSttNd = GetPrevStartNode( nRow, nCol );
     const SwStartNode *pSttNd = InsertTableSection( pPrevSttNd );
 
     const SwXMLTableCell_Impl *pCell = GetCell( nRow, nCol );
-    sal_uInt32 nLastRow = nRow + pCell->GetRowSpan();
+    sal_uInt32 nLastRow = bRows ? nRow + pCell->GetRowSpan() : nRow + 1;
     sal_uInt32 nLastCol = nCol + pCell->GetColSpan();
 
     for( sal_uInt32 i=nRow; i<nLastRow; i++ )
@@ -1842,6 +1855,7 @@ void SwXMLTableContext::ReplaceWithEmptyCell( sal_uInt32 nRow, sal_uInt32 nCol )
         for( sal_uInt32 j=nCol; j<nLastCol; j++ )
             pRow->GetCell( j )->SetStartNode( pSttNd );
     }
+
 }
 
 SwTableBox *SwXMLTableContext::NewTableBox( const SwStartNode *pStNd,
@@ -1927,9 +1941,9 @@ SwTableBoxFmt* SwXMLTableContext::GetSharedBoxFormat(
 }
 
 SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
-                                              sal_uInt32 nTopRow,
+                                             sal_uInt32 nTopRow,
                                              sal_uInt32 nLeftCol,
-                                              sal_uInt32 nBottomRow,
+                                             sal_uInt32 nBottomRow,
                                              sal_uInt32 nRightCol )
 {
     SwTableBox *pBox = new SwTableBox( pBoxFmt, 0, pUpper );
@@ -2008,7 +2022,7 @@ SwTableBox *SwXMLTableContext::MakeTableBox( SwTableLine *pUpper,
                                 GetCell( nStartRow, i );
                             sal_uInt32 nColSpan = pCell->GetColSpan();
                             FixRowSpan( nStartRow-1UL, i, nColSpan );
-                            ReplaceWithEmptyCell( nStartRow, i );
+                            ReplaceWithEmptyCell( nStartRow, i, true );
                             i += nColSpan;
                         }
                         else
@@ -2168,9 +2182,9 @@ SwTableBox *SwXMLTableContext::MakeTableBox(
 }
 
 SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
-                                                  sal_uInt32 nTopRow,
+                                               sal_uInt32 nTopRow,
                                                sal_uInt32 nLeftCol,
-                                                  sal_uInt32 nBottomRow,
+                                               sal_uInt32 nBottomRow,
                                                sal_uInt32 nRightCol )
 {
     SwTableLine *pLine;
@@ -2224,52 +2238,82 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
             sal_Bool bSplit = sal_True;
             sal_Bool bHoriSplitMayContinue = sal_False;
             sal_Bool bHoriSplitPossible = sal_False;
-            for( sal_uInt32 nRow=nTopRow; nRow<nBottomRow; nRow++ )
+
+            if ( bHasSubTables )
             {
-                SwXMLTableCell_Impl *pCell = GetCell(nRow,nCol);
-                // Could the table fragment be splitted horizontally behind
-                // the current line?
-                sal_Bool bHoriSplit = (*pRows)[(sal_uInt16)nRow]->IsSplitable() &&
-                                  nRow+1UL < nBottomRow &&
-                                  1UL == pCell->GetRowSpan();
-                (*pRows)[(sal_uInt16)nRow]->SetSplitable( bHoriSplit );
+                // Convert row spans if the table has subtables:
+                for( sal_uInt32 nRow=nTopRow; nRow<nBottomRow; nRow++ )
+                {
+                    SwXMLTableCell_Impl *pCell = GetCell(nRow,nCol);
+                    // Could the table fragment be splitted horizontally behind
+                    // the current line?
+                    sal_Bool bHoriSplit = (*pRows)[(sal_uInt16)nRow]->IsSplitable() &&
+                                      nRow+1UL < nBottomRow &&
+                                      1UL == pCell->GetRowSpan();
+                    (*pRows)[(sal_uInt16)nRow]->SetSplitable( bHoriSplit );
+
+                    // Could the table fragment be splitted vertically behind the
+                    // current column (uptp the current line?
+                    bSplit &= ( 1UL == pCell->GetColSpan() );
+                    if( bSplit )
+                    {
+                        bHoriSplitPossible |= bHoriSplit;
+
+                        // Could the current table fragment be splitted
+                        // horizontally behind the next collumn, too?
+                        bHoriSplit &= (nCol+1UL < nRightCol &&
+                                       1UL == GetCell(nRow,nCol+1UL)->GetRowSpan());
+                        bHoriSplitMayContinue |= bHoriSplit;
+                    }
+                }
+            }
+            else
+            {
+                // No subtabels: We use the new table model.
+                SwXMLTableCell_Impl *pCell = GetCell(nTopRow,nCol);
 
                 // Could the table fragment be splitted vertically behind the
                 // current column (uptp the current line?
-                bSplit &= ( 1UL == pCell->GetColSpan() );
-                if( bSplit )
-                {
-                    bHoriSplitPossible |= bHoriSplit;
-
-                    // Could the current table fragment be splitted
-                    // horizontally behind the next collumn, too?
-                    bHoriSplit &= (nCol+1UL < nRightCol &&
-                                   1UL == GetCell(nRow,nCol+1UL)->GetRowSpan());
-                    bHoriSplitMayContinue |= bHoriSplit;
-                }
+                bSplit = 1UL == pCell->GetColSpan();
             }
 
 #ifndef PRODUCT
             if( nCol == nRightCol-1UL )
             {
                 ASSERT( bSplit, "Split-Flag falsch" );
-                ASSERT( !bHoriSplitMayContinue,
-                        "HoriSplitMayContinue-Flag falsch" );
-                SwXMLTableCell_Impl *pCell = GetCell( nTopRow, nStartCol );
-                ASSERT( pCell->GetRowSpan() != (nBottomRow-nTopRow) ||
-                        !bHoriSplitPossible, "HoriSplitPossible-Flag falsch" );
+                if ( bHasSubTables )
+                {
+                    ASSERT( !bHoriSplitMayContinue,
+                            "HoriSplitMayContinue-Flag falsch" );
+                    SwXMLTableCell_Impl *pTmpCell = GetCell( nTopRow, nStartCol );
+                    ASSERT( pTmpCell->GetRowSpan() != (nBottomRow-nTopRow) ||
+                            !bHoriSplitPossible, "HoriSplitPossible-Flag falsch" );
+                }
             }
 #endif
-            ASSERT( !bHoriSplitMayContinue || bHoriSplitPossible,
+
+            ASSERT( !bHasSubTables || !bHoriSplitMayContinue || bHoriSplitPossible,
                     "bHoriSplitMayContinue, aber nicht bHoriSplitPossible" );
 
             if( bSplit )
             {
                 SwTableBox* pBox = 0;
                 SwXMLTableCell_Impl *pCell = GetCell( nTopRow, nStartCol );
-                if( pCell->GetRowSpan() == (nBottomRow-nTopRow) &&
+                if( ( !bHasSubTables || ( pCell->GetRowSpan() == (nBottomRow-nTopRow) ) ) &&
                     pCell->GetColSpan() == (nCol+1UL-nStartCol) )
                 {
+                    // insert new empty cell for covered cells:
+                    long nBoxRowSpan = 1;
+                    if ( !bHasSubTables )
+                    {
+                        nBoxRowSpan = pCell->GetRowSpan();
+                        if ( pCell->IsCovered() )
+                        {
+                            nBoxRowSpan = -1 * nBoxRowSpan;
+                            ReplaceWithEmptyCell( nTopRow, nStartCol, false );
+                        }
+                    }
+
                     // The remaining box neither contains lines nor rows (i.e.
                     // is a content box
                     nSplitCol = nCol + 1UL;
@@ -2277,9 +2321,13 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     pBox = MakeTableBox( pLine, pCell,
                                          nTopRow, nStartCol,
                                          nBottomRow, nSplitCol );
+
+                    if ( 1 != nBoxRowSpan )
+                        pBox->setRowSpan( nBoxRowSpan );
+
                     bSplitted = sal_True;
                 }
-                else if( bHoriSplitPossible && bHoriSplitMayContinue )
+                else if( bHasSubTables && bHoriSplitPossible && bHoriSplitMayContinue )
                 {
                     // The table fragment could be splitted behind the current
                     // column, and the remaining fragment could be divided
@@ -2289,7 +2337,7 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                     // split.
                     nSplitCol = nCol + 1UL;
                 }
-                else
+                else if ( bHasSubTables )
                 {
                     // If the table resulting table fragment could be divided
                     // into lines if spllitting behind the current column, but
@@ -2312,6 +2360,9 @@ SwTableLine *SwXMLTableContext::MakeTableLine( SwTableBox *pUpper,
                                          nBottomRow, nSplitCol );
                     bSplitted = sal_True;
                 }
+
+                ASSERT( bHasSubTables || pBox, "Colspan trouble" )
+
                 if( pBox )
                     rBoxes.C40_INSERT( SwTableBox, pBox, rBoxes.Count() );
             }
@@ -2560,12 +2611,15 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
     {
         // Could we split the table behind the current line?
         sal_Bool bSplit = sal_True;
-        SwXMLTableRow_Impl *pRow = (*pRows)[(sal_uInt16)i];
-        for( sal_uInt32 j=0UL; j<nCols; j++ )
+        if ( bHasSubTables )
         {
-            bSplit = ( 1UL == pRow->GetCell(j)->GetRowSpan() );
-            if( !bSplit )
-                break;
+            SwXMLTableRow_Impl *pRow = (*pRows)[(sal_uInt16)i];
+            for( sal_uInt32 j=0UL; j<nCols; j++ )
+            {
+                bSplit = ( 1UL == pRow->GetCell(j)->GetRowSpan() );
+                if( !bSplit )
+                    break;
+            }
         }
 
         if( bSplit )
@@ -2594,10 +2648,9 @@ void SwXMLTableContext::MakeTable()
     sal_Bool bSetHoriOrient = sal_False;
 
     sal_uInt16 nPrcWidth = 0U;
-    sal_Bool bCalcWidth = sal_False;
-    sal_Bool bSetWidth = sal_False;
 
     pTableNode->GetTable().SetRowsToRepeat( nHeaderRows );
+    pTableNode->GetTable().SetTableModel( !bHasSubTables );
 
     const SfxItemSet *pAutoItemSet = 0;
     if( aStyleName.getLength() &&
@@ -2705,7 +2758,7 @@ void SwXMLTableContext::MakeTable()
     pLineFmt = (SwTableLineFmt*)pLine1->GetFrmFmt();
     pBoxFmt = (SwTableBoxFmt*)pBox1->GetFrmFmt();
 
-    _MakeTable();
+    _MakeTable( 0 );
 
     if( bSetHoriOrient )
         pFrmFmt->SetAttr( SwFmtHoriOrient( 0, eHoriOrient ) );
