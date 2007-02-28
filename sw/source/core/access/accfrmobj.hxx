@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accfrmobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:43:49 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:38:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,10 +36,6 @@
 #define _ACCFRMOBJ_HXX
 #ifndef _FLYFRM_HXX
 #include <flyfrm.hxx>
-#endif
-
-#ifndef _CELLFRM_HXX
-#include <cellfrm.hxx>
 #endif
 
 #ifndef _PAGEFRM_HXX
@@ -82,7 +78,7 @@ public:
     inline const SdrObject *GetSdrObject() const;
     inline const SwFrm *GetSwFrm() const;
 
-    inline sal_Bool IsAccessible( sal_Bool bPagePreview ) const;
+    sal_Bool IsAccessible( sal_Bool bPagePreview ) const;
     sal_Bool IsBoundAsChar() const;
     inline sal_Bool IsVisibleChildrenOnly() const;
     inline SwRect GetBox() const;
@@ -183,17 +179,6 @@ inline const SwFrm *SwFrmOrObj::GetSwFrm() const
 {
     return pFrm;
 }
-
-inline sal_Bool SwFrmOrObj::IsAccessible( sal_Bool bPagePreview ) const
-{
-    return ( pFrm && pFrm->IsAccessibleFrm() &&
-             ( !pFrm->IsCellFrm() ||
-              static_cast<const SwCellFrm *>( pFrm )->GetTabBox()
-                                                     ->GetSttNd() != 0 ) &&
-             ( bPagePreview || !pFrm->IsPageFrm() ) ) ||
-           pObj;
-}
-
 
 inline sal_Bool SwFrmOrObj::IsVisibleChildrenOnly() const
 {
