@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:11:38 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:49:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,10 +589,10 @@ FASTBOOL lcl_IsInRepeatedHeadline( const SwFrm *pFrm,
 //MA 26. Jan. 98: Chg auch andere Geschuetzte Bereiche ueberspringen.
 // FME: Skip follow flow cells
 const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
-                                                       GetNxtPrvCnt fnNxtPrv,
-                                                       FASTBOOL bMissHeadline,
-                                                       FASTBOOL bInReadOnly,
-                                                       FASTBOOL bMissFollowFlowLine )
+                                                        GetNxtPrvCnt fnNxtPrv,
+                                                        FASTBOOL bMissHeadline,
+                                                        FASTBOOL bInReadOnly,
+                                                        FASTBOOL bMissFollowFlowLine )
 {
     if ( pCnt && pCnt->IsInTab() )
     {
@@ -605,7 +605,8 @@ const SwCntntFrm * MA_FASTCALL lcl_MissProtectedFrames( const SwCntntFrm *pCnt,
             if ( !pCell ||
                     ( ( bInReadOnly || !pCell->GetFmt()->GetProtect().IsCntntProtected() ) &&
                       ( !bMissHeadline || !lcl_IsInRepeatedHeadline( pCell ) ) &&
-                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) ) )
+                      ( !bMissFollowFlowLine || !pCell->IsInFollowFlowRow() ) ) &&
+                        !pCell->IsCoveredCell() )
                 bProtect = FALSE;
             else
                 pCnt = (*fnNxtPrv)( pCnt );
@@ -1804,7 +1805,9 @@ BOOL SwFrm::IsProtected() const
             if ( ((SwLayoutFrm*)pFrm)->GetFmt() &&
                  ((SwLayoutFrm*)pFrm)->GetFmt()->
                  GetProtect().IsCntntProtected() )
-            return TRUE;
+                return TRUE;
+            if ( pFrm->IsCoveredCell() )
+                return TRUE;
         }
         if ( pFrm->IsFlyFrm() )
         {
@@ -1990,6 +1993,10 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
 
     bool bRet = false;
 
+    // For new table models there's no need to ask the layout..
+    if( rTblCrsr.NewTableSelection() )
+        return true;
+
     Point aPtPt, aMkPt;
     {
         SwShellCrsr* pShCrsr =  rTblCrsr.operator SwShellCrsr*();
@@ -2075,34 +2082,7 @@ bool SwRootFrm::MakeTblCrsrs( SwTableCursor& rTblCrsr )
             }
         }
 
-        SwSelBoxes& rOld = (SwSelBoxes&)rTblCrsr.GetBoxes();
-        USHORT nOld = 0, nNew = 0;
-        while ( nOld < rOld.Count() && nNew < aNew.Count() )
-        {
-            const SwTableBox* pPOld = *( rOld.GetData() + nOld );
-            const SwTableBox* pPNew = *( aNew.GetData() + nNew );
-            if( pPOld == pPNew )
-            {
-                // diese Box bleibt erhalten
-                ++nOld;
-                aNew.Remove( nNew );
-            }
-            else if( pPOld->GetSttIdx() < pPNew->GetSttIdx() )
-                rTblCrsr.DeleteBox( nOld );
-            else
-            {
-                rTblCrsr.InsertBox( *pPNew );
-                ++nOld;
-                ++nNew;
-            }
-        }
-
-        while( nOld < rOld.Count() )
-            rTblCrsr.DeleteBox( nOld );
-
-        for( ; nNew < aNew.Count(); ++nNew )
-            rTblCrsr.InsertBox( **( aNew.GetData() + nNew ) );
-
+        rTblCrsr.ActualizeSelection( aNew );
         bRet = true;
     }
 
