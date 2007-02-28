@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:11:48 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,8 +179,8 @@ public:
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 
-    SwTwips _Shrink( SwTwips, SZPTR BOOL bTst );
-    SwTwips _Grow  ( SwTwips, SZPTR BOOL bTst );
+    SwTwips _Shrink( SwTwips, BOOL bTst );
+    SwTwips _Grow  ( SwTwips, BOOL bTst );
     void    _Invalidate( SwPageFrm *pPage = 0 );
 
     BOOL FrmSizeChg( const SwFmtFrmSize & );
