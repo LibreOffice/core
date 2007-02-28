@@ -4,9 +4,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:44:09 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ bool SwLayoutFrm::IsBefore( const SwLayoutFrm* _pCheckRefLayFrm ) const
 // Local helper functions for GetNextLayoutLeaf
 //
 
-const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext, bool bFollowCell )
+const SwFrm* lcl_FindLayoutFrame( const SwFrm* pFrm, bool bNext )
 {
     const SwFrm* pRet = 0;
     if ( pFrm->IsFlyFrm() )
@@ -385,7 +385,7 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
              // I cannot go down, because either I'm currently going up or
              // because the is no lower.
              // I'll try to go forward:
-             bGoingFwdOrBwd = (0 != (p = lcl_FindLayoutFrame( pFrm, bFwd, true ) ) );
+             bGoingFwdOrBwd = (0 != (p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
              if ( !bGoingFwdOrBwd )
              {
                  // I cannot go forward, because there is no next frame.
@@ -449,7 +449,7 @@ const SwCntntFrm* SwCntntFrm::ImplGetNextCntntFrm( bool bFwd ) const
         bGoingDown = ( !bGoingUp && ( 0 != ( p = lcl_GetLower( pFrm, true ) ) ) );
         if ( !bGoingDown )
         {
-            bGoingFwdOrBwd = ( 0 != ( p = lcl_FindLayoutFrame( pFrm, bFwd, false ) ) );
+            bGoingFwdOrBwd = ( 0 != ( p = lcl_FindLayoutFrame( pFrm, bFwd ) ) );
             if ( !bGoingFwdOrBwd )
             {
                 bGoingUp = ( 0 != ( p = pFrm->GetUpper() ) );
@@ -697,7 +697,7 @@ SwFrm* lcl_NextFrm( SwFrm* pFrm )
     SwFrm *pRet = 0;
     FASTBOOL bGoingUp = FALSE;
     do {
-        SwFrm *p;
+        SwFrm *p = 0;
         FASTBOOL bGoingFwd = FALSE, bGoingDown = FALSE;
         if( !(bGoingDown = (!bGoingUp && ( 0 != (p = pFrm->IsLayoutFrm() ? ((SwLayoutFrm*)pFrm)->Lower() : 0)))) &&
             !(bGoingFwd = (0 != (p = ( pFrm->IsFlyFrm() ? ((SwFlyFrm*)pFrm)->GetNextLink() : pFrm->GetNext())))) &&
@@ -1309,6 +1309,7 @@ BOOL lcl_IsInColSct( const SwFrm *pUp )
 
     @author OD
 */
+
 bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 {
     bool bRetVal = false;
@@ -1329,11 +1330,7 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
                   _pLayoutFrm->IsInFtn() )
         {
             if ( _pLayoutFrm->IsInTab() && !IsTabFrm() &&
-                 ( !IsCntntFrm() || !IsInSplitTableRow() ||
-                   // --> FME 2004-12-08 #i36991# Consider content in rows in
-                   // cells in split table rows
-                   !const_cast<SwFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) ) )
-                   // <--
+                 ( !IsCntntFrm() || !const_cast<SwFrm*>(this)->GetNextCellLeaf( MAKEPAGE_NONE ) ) )
             {
                 bRetVal = false;
             }
@@ -1374,7 +1371,6 @@ bool SwFrm::IsMoveable( const SwLayoutFrm* _pLayoutFrm ) const
 
     return bRetVal;
 }
-
 
 /*************************************************************************
 |*
@@ -1467,7 +1463,7 @@ void SwFrm::SetDirFlags( BOOL bVert )
     }
 }
 
-SwLayoutFrm* SwFrm::GetNextCellLeaf( MakePageType eMakePage )
+SwLayoutFrm* SwFrm::GetNextCellLeaf( MakePageType )
 {
     SwFrm* pTmpFrm = this;
     while ( !pTmpFrm->IsCellFrm() )
@@ -1477,7 +1473,7 @@ SwLayoutFrm* SwFrm::GetNextCellLeaf( MakePageType eMakePage )
     return ((SwCellFrm*)pTmpFrm)->GetFollowCell();
 }
 
-SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType eMakePage )
+SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType )
 {
     SwFrm* pTmpFrm = this;
     while ( !pTmpFrm->IsCellFrm() )
@@ -1486,7 +1482,6 @@ SwLayoutFrm* SwFrm::GetPrevCellLeaf( MakePageType eMakePage )
     ASSERT( pTmpFrm, "SwFrm::GetNextPreviousLeaf() without cell" )
     return ((SwCellFrm*)pTmpFrm)->GetPreviousCell();
 }
-
 
 SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
                                          const SwCellFrm& rOrigCell,
@@ -1535,28 +1530,64 @@ SwCellFrm* lcl_FindCorrespondingCellFrm( const SwRowFrm& rOrigRow,
     return pRet;
 }
 
-
+// VERSION OF GetFollowCell() that assumes that we always have a follow flow line:
 SwCellFrm* SwCellFrm::GetFollowCell() const
 {
     SwCellFrm* pRet = NULL;
+
+    // NEW TABLES
+    // Covered cells do not have follow cells!
+    const long nRowSpan = GetLayoutRowSpan();
+    if ( nRowSpan < 1 )
+        return NULL;
 
     // find most upper row frame
     const SwFrm* pRow = GetUpper();
     while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
         pRow = pRow->GetUpper();
 
+    if ( !pRow )
+        return NULL;
+
+    const SwTabFrm* pTabFrm = static_cast<const SwTabFrm*>( pRow->GetUpper() );
+    if ( !pRow || !pTabFrm->GetFollow() || !pTabFrm->HasFollowFlowLine() )
+        return NULL;
+
+    const SwCellFrm* pThisCell = this;
+
+    // Get last cell of the current table frame that belongs to the rowspan:
+    if ( nRowSpan > 1 )
+    {
+        // optimization: Will end of row span be in last row or exceed row?
+        long nMax = 0;
+        while ( pRow->GetNext() && ++nMax < nRowSpan )
+            pRow = pRow->GetNext();
+
+        if ( !pRow->GetNext() )
+        {
+            pThisCell = &pThisCell->FindStartEndOfRowSpanCell( false, true );
+            pRow = pThisCell->GetUpper();
+        }
+    }
+
     const SwRowFrm* pFollowRow = NULL;
     if ( !pRow->GetNext() &&
-         NULL != ( pFollowRow = pRow->IsInSplitTableRow() ) )
-        pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pFollowRow, true );
+         NULL != ( pFollowRow = pRow->IsInSplitTableRow() ) &&
+         ( !pFollowRow->IsRowSpanLine() || nRowSpan > 1 ) )
+         pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *pThisCell, *pFollowRow, true );
 
     return pRet;
 }
 
-
+// VERSION OF GetPreviousCell() THAT ASSUMES THAT WE ALWAYS HAVE A FFL
 SwCellFrm* SwCellFrm::GetPreviousCell() const
 {
     SwCellFrm* pRet = NULL;
+
+    // NEW TABLES
+    // Covered cells do not have previous cells!
+    if ( GetLayoutRowSpan() < 1 )
+        return NULL;
 
     // find most upper row frame
     const SwFrm* pRow = GetUpper();
@@ -1579,6 +1610,8 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
             {
                 SwRowFrm* pMasterRow = static_cast<SwRowFrm*>(pMaster->GetLastLower());
                 pRet = lcl_FindCorrespondingCellFrm( *((SwRowFrm*)pRow), *this, *pMasterRow, false );
+                if ( pRet && pRet->GetTabBox()->getRowSpan() < 1 )
+                    pRet = &const_cast<SwCellFrm&>(pRet->FindStartEndOfRowSpanCell( true, true ));
             }
         }
     }
@@ -1586,13 +1619,90 @@ SwCellFrm* SwCellFrm::GetPreviousCell() const
     return pRet;
 }
 
+// --> NEW TABLES
+const SwCellFrm& SwCellFrm::FindStartEndOfRowSpanCell( bool bStart, bool bCurrentTableOnly ) const
+{
+    const SwCellFrm* pRet = 0;
+
+    const SwTabFrm* pTableFrm = dynamic_cast<const SwTabFrm*>(GetUpper()->GetUpper());
+
+    if ( !bStart && pTableFrm->IsFollow() && pTableFrm->IsInHeadline( *this ) )
+        return *this;
+
+    ASSERT( pTableFrm &&
+            (  bStart && GetTabBox()->getRowSpan() < 1 ||
+              !bStart && GetLayoutRowSpan() > 1 ),
+            "SwCellFrm::FindStartRowSpanCell: No rowspan, no table, no cookies" )
+
+    if ( pTableFrm )
+    {
+        const SwTable* pTable = pTableFrm->GetTable();
+
+        USHORT nMax = USHRT_MAX;
+        if ( bCurrentTableOnly )
+        {
+            const SwFrm* pCurrentRow = GetUpper();
+            nMax = 0;
+            while ( bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext() )
+            {
+                pCurrentRow = bStart ? pCurrentRow->GetPrev() : pCurrentRow->GetNext();
+                ++nMax;
+            }
+        }
+
+        // By passing the nMax value for Find*OfRowSpan (in case of bCurrentTableOnly
+        // is set) we assure that we find a rMasterBox that has a SwCellFrm in
+        // the current table frame:
+        const SwTableBox& rMasterBox = bStart ?
+                                       GetTabBox()->FindStartOfRowSpan( *pTable, nMax ) :
+                                       GetTabBox()->FindEndOfRowSpan( *pTable, nMax );
+
+        SwClientIter aIter( const_cast<SwFrmFmt&>( *rMasterBox.GetFrmFmt()) );
+
+        for ( SwClient* pLast = aIter.First( TYPE( SwFrm ) ); pLast; pLast = aIter.Next() )
+        {
+            ASSERT( ((SwFrm*)pLast)->IsCellFrm(), "Non-row frame registered in table line" )
+            const SwCellFrm* pMasterCell = static_cast<const SwCellFrm*>(pLast);
+
+            if ( pMasterCell->GetTabBox() == &rMasterBox )
+            {
+                const SwTabFrm* pMasterTable = static_cast<const SwTabFrm*>(pMasterCell->GetUpper()->GetUpper());
+
+                if ( bCurrentTableOnly )
+                {
+                    if ( pMasterTable == pTableFrm )
+                    {
+                        pRet = pMasterCell;
+                        break;
+                    }
+                }
+                else
+                {
+                    if ( pMasterTable == pTableFrm ||
+                         (  bStart && pMasterTable->IsAnFollow( pTableFrm ) ||
+                           !bStart && pTableFrm->IsAnFollow( pMasterTable ) ) )
+                    {
+                        pRet = pMasterCell;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    ASSERT( pRet, "SwCellFrm::FindStartRowSpanCell: No result" )
+
+    return *pRet;
+}
+// <-- NEW TABLES
 
 const SwRowFrm* SwFrm::IsInSplitTableRow() const
 {
     ASSERT( IsInTab(), "IsInSplitTableRow should only be called for frames in tables" )
 
-    // find most upper row frame
     const SwFrm* pRow = this;
+
+    // find most upper row frame
     while( pRow && ( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() ) )
         pRow = pRow->GetUpper();
 
