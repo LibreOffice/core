@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:14:53 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:43:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,7 @@ BOOL SwFEShell::DeleteCol()
 
         // dann loesche doch die Spalten
         StartUndo(UNDO_COL_DELETE);
-        bRet = GetDoc()->DeleteRowCol( aBoxes );
+        bRet = GetDoc()->DeleteRowCol( aBoxes, true );
         EndUndo(UNDO_COL_DELETE);
 
     }
