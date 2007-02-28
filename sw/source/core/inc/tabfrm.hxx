@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabfrm.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:06:11 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,8 +120,7 @@ protected:
     virtual void MakeAll();
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
         //Aendert nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 public:
     SwTabFrm( SwTable & );  //Immer nach dem erzeugen _und_ pasten das
                             //Regist Flys rufen!
