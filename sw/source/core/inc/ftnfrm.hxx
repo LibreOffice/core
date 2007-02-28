@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ftnfrm.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 14:23:07 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:45:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,10 +55,8 @@ public:
 
     const SwFtnFrm* FindFootNote() const;
 
-    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm( SwTwips, SZPTR
-                             BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual void    Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
                                  const SwBorderAttrs & ) const;
@@ -83,10 +81,8 @@ class SwFtnFrm: public SwLayoutFrm
     // <--
 #ifndef PRODUCT
 protected:
-    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 #endif
 
 
