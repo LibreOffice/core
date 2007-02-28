@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-03-09 14:05:42 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:45:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,10 +68,8 @@ protected:
 
     SwFrm           *pLower;
 
-    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
-                               BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips ShrinkFrm( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
+    virtual SwTwips GrowFrm  ( SwTwips, BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     long CalcRel( const SwFmtFrmSize &rSz, BOOL bWidth ) const;
 
