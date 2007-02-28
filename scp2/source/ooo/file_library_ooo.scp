@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.222 $
+ *  $Revision: 1.223 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:55:30 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 16:26:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1941,7 +1941,11 @@ SPECIAL_UNO_LIB_FILE_PATCH(gid_File_Lib_Srtrs1,srtrs1)
 #ifndef USE_SYSTEM_STL
 File gid_File_Lib_Stlport
     TXT_FILE_BODY;
+  #ifdef M1400
+    Styles = (PACKED,PATCH);
+  #else
     Styles = (PACKED);
+  #endif
     Dir = gid_Dir_Program;
   #ifdef _STLP_DEBUG
   #ifdef UNX
