@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:46:07 $
+#   last change: $Author: vg $ $Date: 2007-02-28 15:38:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -79,7 +79,8 @@ SUBLIBS2= \
                 $(SLB)$/unocore.lib \
                 $(SLB)$/objectpositioning.lib \
                 $(SLB)$/smarttags.lib \
-                $(SLB)$/SwNumberTree.lib
+                $(SLB)$/SwNumberTree.lib \
+                $(SLB)$/tablecore.lib
 
 .IF "$(PRODUCT)" == ""
 SUBLIBS2+= \
