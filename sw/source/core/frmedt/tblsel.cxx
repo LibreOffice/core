@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:43:22 $
+ *  last change: $Author: vg $ $Date: 2007-02-28 15:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,10 +295,22 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
     // teste ob Tabelle komplex ist. Wenn ja, dann immer uebers Layout
     // die selektierten Boxen zusammen suchen. Andernfalls ueber die
     // Tabellen-Struktur (fuer Makros !!)
-    const SwTableNode* pTblNd;
+    const SwTableNode* pTblNd = rCrsr.GetNode()->FindTableNode();
+    if( pTblNd && pTblNd->GetTable().IsNewModel() )
+    {
+        SwTable::SearchType eSearch;
+        switch( TBLSEARCH_COL & eSearchType )
+        {
+            case TBLSEARCH_ROW: eSearch = SwTable::SEARCH_ROW; break;
+            case TBLSEARCH_COL: eSearch = SwTable::SEARCH_COL; break;
+            default: eSearch = SwTable::SEARCH_NONE; break;
+        }
+        bool bChkP = 0 != ( TBLSEARCH_PROTECT & eSearchType );
+        pTblNd->GetTable().CreateSelection( rCrsr, rBoxes, eSearch, bChkP );
+        return;
+    }
     if( TBLSEARCH_ROW == ((~TBLSEARCH_PROTECT ) & eSearchType ) &&
-        0 != ( pTblNd = rCrsr.GetNode()->FindTableNode() ) &&
-        !pTblNd->GetTable().IsTblComplex() )
+        pTblNd && !pTblNd->GetTable().IsTblComplex() )
     {
         const SwTable& rTbl = pTblNd->GetTable();
         const SwTableLines& rLines = rTbl.GetTabLines();
@@ -1022,8 +1034,9 @@ BOOL IsEmptyBox( const SwTableBox& rBox, SwPaM& rPam )
     rPam.SetMark();
     rPam.GetPoint()->nNode = *rBox.GetSttNd();
     rPam.Move( fnMoveForward, fnGoCntnt );
+    BOOL bRet = *rPam.GetMark() == *rPam.GetPoint()
+        && ( rBox.GetSttNd()->GetIndex() + 1 == rPam.GetPoint()->nNode.GetIndex() );
 
-    BOOL bRet = *rPam.GetMark() == *rPam.GetPoint();
     if( bRet )
     {
         // dann teste mal auf absatzgebundenen Flys
@@ -1806,6 +1819,7 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     sal_Bool bRTL = pTab->IsRightToLeft();
     const long nTmpWish = pOrg->GetFmt()->GetFrmSize().GetWidth();
     const long nWish = ( nTmpWish > 0 ) ? nTmpWish : 1;
+
     while ( pTab->IsFollow() )
     {
         const SwFrm *pTmp = pTab->FindPrev();
@@ -1813,11 +1827,20 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
         pTab = (const SwTabFrm*)pTmp;
     }
 
-    SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
-    const SwTwips nSX = ::lcl_CalcWish( rpStart, nWish, nPrtWidth ) +
-                        (pTab->*fnRect->fnGetPrtLeft)();
+    SwTwips nSX  = 0;
+    SwTwips nSX2 = 0;
 
-    const SwTwips nSX2= nSX + (rpStart->GetFmt()->GetFrmSize().GetWidth() * nPrtWidth / nWish);
+    if ( pTab->GetTable()->IsNewModel() )
+    {
+        nSX  = (rpStart->Frm().*fnRect->fnGetLeft )();
+        nSX2 = (rpStart->Frm().*fnRect->fnGetRight)();
+    }
+    else
+    {
+        const SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+        nSX = ::lcl_CalcWish( rpStart, nWish, nPrtWidth ) + (pTab->*fnRect->fnGetPrtLeft)();
+        nSX2 = nSX + (rpStart->GetFmt()->GetFrmSize().GetWidth() * nPrtWidth / nWish);
+    }
 
     const SwLayoutFrm *pTmp = pTab->FirstCell();
 
@@ -1854,9 +1877,17 @@ void lcl_FindStartEndCol( const SwLayoutFrm *&rpStart,
     }
     pTab = pLastValidTab;
 
-    nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
-    const SwTwips nEX = ::lcl_CalcWish( rpEnd, nWish, nPrtWidth ) +
-                          (pTab->*fnRect->fnGetPrtLeft)();
+    SwTwips nEX = 0;
+
+    if ( pTab->GetTable()->IsNewModel() )
+    {
+        nEX = (rpEnd->Frm().*fnRect->fnGetLeft )();
+    }
+    else
+    {
+        const SwTwips nPrtWidth = (pTab->Prt().*fnRect->fnGetWidth)();
+        nEX = ::lcl_CalcWish( rpEnd, nWish, nPrtWidth ) + (pTab->*fnRect->fnGetPrtLeft)();
+    }
 
     const SwCntntFrm* pLastCntnt = pTab->FindLastCntnt();
     rpEnd = pLastCntnt ? pLastCntnt->GetUpper() : 0;
@@ -2353,6 +2384,8 @@ void _FndBox::DelFrms( SwTable &rTable )
 
     USHORT nStPos = 0;
     USHORT nEndPos= rTable.GetTabLines().Count() - 1;
+    if( rTable.IsNewModel() && pLineBefore )
+        rTable.CheckRowSpan( pLineBefore, true );
     if ( pLineBefore )
     {
         nStPos = rTable.GetTabLines().GetPos(
@@ -2360,6 +2393,8 @@ void _FndBox::DelFrms( SwTable &rTable )
         ASSERT( nStPos != USHRT_MAX, "Fuchs Du hast die Line gestohlen!" );
         ++nStPos;
     }
+    if( rTable.IsNewModel() && pLineBehind )
+        rTable.CheckRowSpan( pLineBehind, false );
     if ( pLineBehind )
     {
         nEndPos = rTable.GetTabLines().GetPos(
