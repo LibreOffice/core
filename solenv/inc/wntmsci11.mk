@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-04 16:27:35 $
+#   last change: $Author: vg $ $Date: 2007-02-28 16:25:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -248,12 +248,14 @@ MODULES_WITH_WARNINGS := \
     sch \
     scripting \
     sd \
+    setupso_native \
     sfx2 \
     sj2 \
     slideshow \
     smoketest_native \
     smoketestoo_native \
     so3 \
+    soldep \
     starmath \
     svtools \
     svx \
@@ -292,7 +294,7 @@ _VC_MANIFEST_INC=0
 .IF "$(PRODUCT)"!="full"
 LINKFLAGS+= /NODEFAULTLIB /DEBUGTYPE:cv /DEBUG
 .ELSE # "$(PRODUCT)"!="full"
-LINKFLAGS+= /NODEFAULTLIB /RELEASE
+LINKFLAGS+= /NODEFAULTLIB /RELEASE /DEBUG /INCREMENTAL:NO
 .ENDIF # "$(PRODUCT)"!="full"
 MAPFILE=-out:$$@
 .ENDIF # "$(linkinc)" != ""
@@ -357,10 +359,17 @@ LIBSTLPORT=stlport_vc8.lib
 LIBSTLPORTST=stlport_vc8_static.lib
 .ENDIF
 
+.IF "$(PROF_EDITION)" == ""
 ATL_INCLUDE*=$(COMPATH)$/PlatformSDK$/include$/atl
 ATL_LIB*=$(COMPATH)$/atlmfc$/lib
 MFC_INCLUDE*=$(COMPATH)$/PlatformSDK$/include$/mfc
 MFC_LIB*=$(COMPATH)$/atlmfc$/lib
+.ELSE
+ATL_INCLUDE*=$(COMPATH)$/atlmfc$/include
+ATL_LIB*=$(COMPATH)$/atlmfc$/lib
+MFC_INCLUDE*=$(COMPATH)$/atlmfc$/include
+MFC_LIB*=$(COMPATH)$/atlmfc$/lib
+.ENDIF
 
 LIBMGR=$(WRAPCMD) lib $(NOLOGO)
 IMPLIB=$(WRAPCMD) lib
@@ -382,4 +391,3 @@ DLLPOSTFIX=mi
 
 CSC*=$(WRAPCMD) csc
 VBC*=$(WRAPCMD) vbc
-
