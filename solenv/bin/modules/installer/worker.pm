@@ -4,9 +4,9 @@
 #
 #   $RCSfile: worker.pm,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:49:31 $
+#   last change: $Author: vg $ $Date: 2007-03-01 15:16:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 package installer::worker;
 
+use Cwd;
 use installer::control;
 use installer::converter;
 use installer::existence;
@@ -2492,7 +2493,11 @@ sub set_pkginfo_line
 
 sub fix_solaris_x86_patch
 {
-    my ($packagename) = @_;
+    my ($packagename, $subdir) = @_;
+
+    # changing into directory of packages, important for soft linking
+    my $startdir = cwd();
+    chdir($subdir);
 
     # $packagename is: "SUNWstaroffice-core01"
     # $installer::globals::subdir is "packages"
@@ -2500,11 +2505,11 @@ sub fix_solaris_x86_patch
 
     # create new folder in "packages": $packagename . ".i"
     my $newpackagename = $packagename . "\.i";
-    my $newdir = $installer::globals::subdir . $installer::globals::separator . $newpackagename;
+    my $newdir = $newpackagename;
     installer::systemactions::create_directory($newdir);
 
     # collecting all directories in the package
-    my $olddir = $installer::globals::subdir . $installer::globals::separator . $packagename;
+    my $olddir = $packagename;
     my $allsubdirs = installer::systemactions::get_all_directories_without_path($olddir);
 
     # link all directories from $packagename to $packagename . ".i"
@@ -2512,7 +2517,8 @@ sub fix_solaris_x86_patch
     {
         my $sourcedir = $olddir . $installer::globals::separator . ${$allsubdirs}[$i];
         my $destdir = $newdir . $installer::globals::separator . ${$allsubdirs}[$i];
-        installer::systemactions::hardlink_complete_directory($sourcedir, $destdir);
+        my $directory_depth = 2; # important for soft links, two directories already exist
+        installer::systemactions::softlink_complete_directory($sourcedir, $destdir, $directory_depth);
     }
 
     # copy "pkginfo" and "pkgmap" from $packagename to $packagename . ".i"
@@ -2540,6 +2546,8 @@ sub fix_solaris_x86_patch
     set_pkginfo_line($pkgmapfile, $pkginfofilename);
     installer::files::save_file($pkgmapfilename, $pkgmapfile);
 
+    # changing back to startdir
+    chdir($startdir);
 }
 
 1;
