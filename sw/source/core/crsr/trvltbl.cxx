@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:39:44 $
+ *  last change: $Author: vg $ $Date: 2007-03-01 15:40:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -744,9 +744,10 @@ String SwCrsrShell::GetBoxNms() const
 
     pFrm = pPos->nNode.GetNode().GetCntntNode()->GetFrm();
 
-    do {
+    while( pFrm && !pFrm->IsCellFrm() )
+    {
         pFrm = pFrm->GetUpper();
-    } while ( pFrm && !pFrm->IsCellFrm() );
+    }
 
     if( pFrm )
         sNm += ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
