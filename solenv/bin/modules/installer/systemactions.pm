@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 16:23:36 $
+#   last change: $Author: vg $ $Date: 2007-03-01 15:15:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -268,9 +268,9 @@ sub copy_one_file
     return $returnvalue;
 }
 
-########################
-# Copying one file
-########################
+##########################
+# Hard linking one file
+##########################
 
 sub hardlink_one_file
 {
@@ -288,6 +288,34 @@ sub hardlink_one_file
     else
     {
         $infoline = "ERROR: Could not link $source to $dest\n";
+        $returnvalue = 0;
+    }
+
+    push(@installer::globals::logfileinfo, $infoline);
+
+    return $returnvalue;
+}
+
+##########################
+# Soft linking one file
+##########################
+
+sub softlink_one_file
+{
+    my ($source, $dest) = @_;
+
+    my ($returnvalue, $infoline);
+
+    my $linkreturn = symlink($source, $dest);
+
+    if ($linkreturn)
+    {
+        $infoline = "Symlink: $source to $dest\n";
+        $returnvalue = 1;
+    }
+    else
+    {
+        $infoline = "ERROR: Could not symlink $source to $dest\n";
         $returnvalue = 0;
     }
 
@@ -434,6 +462,53 @@ sub hardlink_complete_directory
             if ( -d $source )   # recursive
             {
                 hardlink_complete_directory($source, $dest);
+            }
+        }
+    }
+}
+
+#####################################################################
+# Creating hard links to a complete directory with sub directories.
+#####################################################################
+
+sub softlink_complete_directory
+{
+    my ($sourcedir, $destdir, $depth) = @_;
+
+    my @sourcefiles = ();
+
+    $sourcedir =~ s/\Q$installer::globals::separator\E\s*$//;
+    $destdir =~ s/\Q$installer::globals::separator\E\s*$//;
+
+    if ( ! -d $destdir ) { create_directory($destdir); }
+
+    my $infoline = "\n";
+    push(@installer::globals::logfileinfo, $infoline);
+    $infoline = "Creating soft links for all files from directory $sourcedir to directory $destdir\n";
+    push(@installer::globals::logfileinfo, $infoline);
+
+    opendir(DIR, $sourcedir);
+    @sourcefiles = readdir(DIR);
+    closedir(DIR);
+
+    my $onefile;
+
+    foreach $onefile (@sourcefiles)
+    {
+        if ((!($onefile eq ".")) && (!($onefile eq "..")))
+        {
+            my $source = $sourcedir . $installer::globals::separator . $onefile;
+            my $dest = $destdir . $installer::globals::separator . $onefile;
+            if ( -f $source )   # only files, no directories
+            {
+                my $localsource = $source;
+                if ( $depth > 0 ) { for ( my $i = 1; $i <= $depth; $i++ ) { $localsource = "../" . $localsource; } }
+                softlink_one_file($localsource, $dest);
+            }
+            if ( -d $source )   # recursive
+            {
+                my $newdepth = $depth + 1;
+                softlink_complete_directory($source, $dest, $newdepth);
             }
         }
     }
