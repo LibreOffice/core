@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:03:17 $
+#   last change: $Author: vg $ $Date: 2007-03-01 16:00:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@ USE_LDUMP2=TRUE
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=cont_pch
 PROJECTPCHSOURCE=cont_pch
+
+TARGETTYPE=CUI
 
 # --- Settings -----------------------------------------------------
 
@@ -120,6 +122,10 @@ OBJFILES=   \
             $(OBJ)$/logfile.obj     \
             $(OBJ)$/tres.obj        \
             $(OBJ)$/math.obj
+            
+APP1TARGET=gen_makefile
+APP1OBJS=$(SLO)$/gen_makefile.obj
+APP1LIBSALCPPRT=
 
 # --- Extra objs ----------------------------------------------------
 
@@ -141,6 +147,11 @@ SYSALLOCCDEFS+=-DFORCE_SYSALLOC
 #.ENDIF
 
 .ENDIF
+
+# --- Makefile snippet  --------------------------------------------
+
+# used by e.g. update info file
+BOOTSTRAPMK = $(OUT)$/inc$/rtlbootstrap.mk
 
 # --- Targets ------------------------------------------------------
 
@@ -167,4 +178,8 @@ $(ALWAYSDBGFILES):
 .ENDIF
 .ENDIF
 
+ALLTAR : $(BOOTSTRAPMK)
+
+$(BOOTSTRAPMK) : $(APP1TARGETN)
+    $< > $@
 
