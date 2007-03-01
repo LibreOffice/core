@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:48:07 $
+#   last change: $Author: vg $ $Date: 2007-03-01 15:15:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1450,7 +1450,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
                         $installer::globals::subdir = installer::epmfile::create_new_directory_structure($newepmdir);
                         $installer::globals::postprocess_specialepm = 1;
 
-                        if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix_solaris_x86_patch($packagename); }
+                        if (( $installer::globals::patch ) && ( $installer::globals::issolarisx86build )) { installer::worker::fix_solaris_x86_patch($packagename, $installer::globals::subdir); }
                     }
                 }
                 else    # this is the standard epm (not relocatable) or ( nonlinux and nonsolaris )
