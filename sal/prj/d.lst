@@ -6,6 +6,7 @@ mkdir: %_DEST%\inc%_EXT%\systools\win32
 mkdir: %_DEST%\inc%_EXT%\systools\unx
 
 ..\inc\udkversion.mk %_DEST%\inc%_EXT%\udkversion.mk
+..\%__SRC%\inc\rtlbootstrap.mk %_DEST%\inc%_EXT%\rtlbootstrap.mk
 ..\inc\sal\*.h %_DEST%\inc%_EXT%\sal\*.h
 ..\%__SRC%\inc\sal\typesizes.h %_DEST%\inc%_EXT%\sal\typesizes.h
 ..\inc\osl\*.h %_DEST%\inc%_EXT%\osl\*.h
