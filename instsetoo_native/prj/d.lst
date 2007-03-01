@@ -1,0 +1,2 @@
+mkdir: %COMMON_DEST%\pus%_EXT%
+..\%__SRC%\misc\*.update.xml %COMMON_DEST%\pus%_EXT%\*.update.xml
