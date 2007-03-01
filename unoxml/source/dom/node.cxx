@@ -4,9 +4,9 @@
  *
  *  $RCSfile: node.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:07:29 $
+ *  last change: $Author: vg $ $Date: 2007-03-01 15:39:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,6 +203,29 @@ namespace DOM
             CNode::remove(m_aNodePtr);
     }
 
+    static void _nsexchange(const xmlNodePtr aNode, xmlNsPtr oldNs, xmlNsPtr newNs)
+    {
+        // recursively exchange any references to oldNs with references to newNs
+        xmlNodePtr cur = aNode;
+        while (cur != 0)
+        {
+            if (cur->ns == oldNs)
+                cur->ns = newNs;
+            if (cur->type == XML_ELEMENT_NODE)
+            {
+                xmlAttrPtr curAttr = cur->properties;
+                while(curAttr != 0)
+                {
+                    if (curAttr->ns == oldNs)
+                        curAttr->ns = newNs;
+                    curAttr = curAttr->next;
+                }
+                _nsexchange(cur->children, oldNs, newNs);
+            }
+            cur = cur->next;
+        }
+    }
+
     static void _nscleanup(const xmlNodePtr aNode, const xmlNodePtr aParent)
     {
         xmlNodePtr cur = aNode;
@@ -231,7 +254,6 @@ namespace DOM
                 xmlNsPtr ns = xmlSearchNs(cur->doc, aParent, cur->ns->prefix);
                 if (ns != NULL && ns != cur->ns && strcmp((char*)ns->href, (char*)cur->ns->href)==0)
                 {
-                    cur->ns = ns;
                     xmlNsPtr curDef = cur->nsDef;
                     xmlNsPtr *refp = &(cur->nsDef); // insert point
                     while (curDef != NULL)
@@ -239,6 +261,9 @@ namespace DOM
                         ns = xmlSearchNs(cur->doc, aParent, curDef->prefix);
                         if (ns != NULL && ns != curDef && strcmp((char*)ns->href, (char*)curDef->href)==0)
                         {
+                            // reconnect ns pointers in sub-tree to newly found ns before
+                            // removing redundant nsdecl to prevent dangling pointers.
+                            _nsexchange(cur, curDef, ns);
                             *refp = curDef->next;
                             xmlFreeNs(curDef);
                             curDef = *refp;
@@ -330,7 +355,10 @@ namespace DOM
             if (cur != res)
                 CNode::remove(cur);
 
-            _nscleanup(res, m_aNodePtr);
+        // use custom ns cleanup instaead of
+            // xmlReconciliateNs(m_aNodePtr->doc, m_aNodePtr);
+        // because that will not remove unneeded ns decls
+        _nscleanup(res, m_aNodePtr);
 
             aNode = Reference< XNode>(CNode::get(res));
         }
