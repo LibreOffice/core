@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:50:39 $
+ *  last change: $Author: vg $ $Date: 2007-03-02 11:48:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1363,7 +1363,7 @@ void SwTable::NewSetTabCols( Parm &rParm, const SwTabCols &rNew,
     const SwTabCols &rOld, const SwTableBox *pStart, BOOL bCurRowOnly )
 {
 #ifndef PRODUCT
-    static nCallCount = 0;
+    static int nCallCount = 0;
     ++nCallCount;
 #endif
     // First step: evaluate which lines have been moved/which widths changed
