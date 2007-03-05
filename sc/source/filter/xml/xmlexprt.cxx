@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.202 $
+ *  $Revision: 1.203 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:50:50 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:43:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -517,7 +517,7 @@ void ScXMLShapeExport::onExport( const uno::Reference < drawing::XShape >& xShap
     uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
     if( xShapeProp.is() )
     {
-        sal_Int16 nLayerID;
+        sal_Int16 nLayerID = 0;
         if( (xShapeProp->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( SC_LAYERID ))) >>= nLayerID) && (nLayerID == SC_LAYER_BACK) )
             GetExport().AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_BACKGROUND, XML_TRUE);
     }
@@ -533,7 +533,7 @@ sal_Int16 ScXMLExport::GetFieldUnit()
                 com::sun::star::uno::UNO_QUERY);
     if (xProperties.is())
     {
-        sal_Int16 nFieldUnit;
+        sal_Int16 nFieldUnit = 0;
         if (xProperties->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Metric"))) >>= nFieldUnit)
             return nFieldUnit;
     }
@@ -702,7 +702,7 @@ void ScXMLExport::CollectSharedData(sal_Int32& nTableCount, sal_Int32& nShapesCo
                                         uno::Reference< beans::XPropertySet > xShapeProp( xShape, uno::UNO_QUERY );
                                         if( xShapeProp.is() )
                                         {
-                                            sal_Int16 nLayerID;
+                                            sal_Int16 nLayerID = 0;
                                             if( xShapeProp->getPropertyValue(sLayerID) >>= nLayerID )
                                             {
                                                 if( nLayerID == SC_LAYER_INTERN )
@@ -1759,7 +1759,7 @@ void ScXMLExport::_ExportStyles( sal_Bool bUsed )
                         uno::Reference <beans::XPropertySet> xCellProperties(xCellStyles->getByIndex(i), uno::UNO_QUERY);
                         if (xCellProperties.is())
                         {
-                            sal_Int32 nNumberFormat;
+                            sal_Int32 nNumberFormat = 0;
                             if (xCellProperties->getPropertyValue(sNumberFormat) >>= nNumberFormat)
                                 addDataStyle(nNumberFormat);
                         }
@@ -2533,7 +2533,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
     rtl::OUString sPersistName (RTL_CONSTASCII_USTRINGPARAM("PersistName"));
     if (xShapeProps.is())
     {
-        sal_Int32 nZOrder;
+        sal_Int32 nZOrder = 0;
         if (xShapeProps->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ZOrder"))) >>= nZOrder)
         {
             rtl::OUStringBuffer sBuffer;
@@ -3079,7 +3079,7 @@ void ScXMLExport::WriteCalculationSettings(const uno::Reference <sheet::XSpreads
         sal_uInt16 nYear2000 (pDoc ? pDoc->GetDocOptions().GetYear2000() : 0);
         sal_Int32 nIterationCount(100);
         xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITERCOUNT))) >>= nIterationCount;
-        double fIterationEpsilon;
+        double fIterationEpsilon = 0;
         xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_ITEREPSILON))) >>= fIterationEpsilon;
         util::Date aNullDate;
         xPropertySet->getPropertyValue( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_NULLDATE))) >>= aNullDate;
