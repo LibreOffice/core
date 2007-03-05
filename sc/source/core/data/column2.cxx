@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:00:26 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:40:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -320,7 +320,7 @@ void ScColumn::SaveData( SvStream& rStream ) const
 #endif
 
     ScAttrIterator aIter( pAttrArray, 0, MAXROW );
-    SCROW nStt, nEnd;
+    SCROW nStt = 0, nEnd = 0;
     const ScPatternAttr* pAttr;
     do
     {
@@ -611,7 +611,7 @@ BOOL ScColumn::Load( SvStream& rStream, ScMultipleReadHeader& rHdr )
         ScFontToSubsFontConverter_AutoPtr xFontConverter;
         const ULONG nFontConverterFlags = FONTTOSUBSFONT_IMPORT | FONTTOSUBSFONT_ONLYOLDSOSYMBOLFONTS;
         ScSymbolStringCellEntry* pE;
-        SCROW nStt, nEnd;
+        SCROW nStt, nEnd = 0;
 
         ScAttrIterator aIter( pAttrArray, 0, MAXROW );
         const ScPatternAttr* pAttr = aIter.Next( nStt, nEnd );
