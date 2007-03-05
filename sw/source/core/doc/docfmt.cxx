@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:38:18 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:57:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -272,6 +272,14 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         USHORT __READONLY_DATA aSavIds[ 3 ] = { RES_PAGEDESC, RES_BREAK,
                                                 RES_PARATR_NUMRULE };
 
+        // --> OD 2007-03-02 #i75027#
+        // numbering attributes has to be restored, if numbering rule is restored.
+        bool bRestoreNumAttrs( false );
+        int nToBeRestoredNumLevel( -1 );
+        bool bToBeRestoredIsRestart( false );
+        SwNodeNum::tSwNumTreeNumber nToBeRestoredRestartVal( 0 );
+        // <--
+
         const SfxPoolItem* pItem;
         std::vector<USHORT> aClearWhichIds;
         for( USHORT n = 0; n < 3; ++n )
@@ -281,14 +289,26 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
                 BOOL bSave = FALSE;
                 switch( aSavIds[ n ] )
                 {
-                case RES_PAGEDESC:
-                    bSave = 0 != ((SwFmtPageDesc*)pItem)->GetPageDesc();
+                    case RES_PAGEDESC:
+                        bSave = 0 != ((SwFmtPageDesc*)pItem)->GetPageDesc();
                     break;
-                case RES_BREAK:
-                    bSave = SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak();
+                    case RES_BREAK:
+                        bSave = SVX_BREAK_NONE != ((SvxFmtBreakItem*)pItem)->GetBreak();
                     break;
-                case RES_PARATR_NUMRULE:
-                    bSave = 0 != ((SwNumRuleItem*)pItem)->GetValue().Len();
+                    case RES_PARATR_NUMRULE:
+                    {
+                        bSave = 0 != ((SwNumRuleItem*)pItem)->GetValue().Len();
+                        // --> OD 2007-03-02 #i75027#
+                        SwTxtNode* pTxtNode( dynamic_cast<SwTxtNode*>(pNode) );
+                        if ( pTxtNode )
+                        {
+                            bRestoreNumAttrs = true;
+                            nToBeRestoredNumLevel = pTxtNode->GetLevel();
+                            bToBeRestoredIsRestart = pTxtNode->IsRestart();
+                            nToBeRestoredRestartVal = pTxtNode->GetStart();
+                        }
+                        // <--
+                    }
                     break;
                 }
                 if( bSave )
@@ -331,6 +351,15 @@ BOOL lcl_RstAttr( const SwNodePtr& rpNd, void* pArgs )
         {
             pNode->LockModify();
             pNode->SetAttr( aSet );
+            // --> OD 2007-03-02 #i75027#
+            if ( bRestoreNumAttrs && dynamic_cast<SwTxtNode*>(pNode) )
+            {
+                SwTxtNode* pTxtNode( dynamic_cast<SwTxtNode*>(pNode) );
+                pTxtNode->SetLevel( nToBeRestoredNumLevel );
+                pTxtNode->SetRestart( bToBeRestoredIsRestart );
+                pTxtNode->SetStart( nToBeRestoredRestartVal );
+            }
+            // <--
 
             if( !bLocked )
                 pNode->UnlockModify();
