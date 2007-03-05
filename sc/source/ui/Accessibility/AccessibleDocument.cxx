@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:55:09 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:44:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ struct ScShapeDataLess
         if (xProps.is())
         {
             uno::Any aPropAny = xProps->getPropertyValue(msLayerId);
-            sal_Int16 nLayerID;
+            sal_Int16 nLayerID = 0;
             if( (aPropAny >>= nLayerID) )
             {
                 if (nLayerID == SC_LAYER_BACK)
@@ -235,9 +235,9 @@ struct ScShapeDataLess
                     if (nLayerID1 == nLayerID2)
                     {
                         uno::Any aAny1 = xProps1->getPropertyValue(msZOrder);
-                        sal_Int32 nZOrder1;
+                        sal_Int32 nZOrder1 = 0;
                         uno::Any aAny2 = xProps2->getPropertyValue(msZOrder);
-                        sal_Int32 nZOrder2;
+                        sal_Int32 nZOrder2 = 0;
                         if ( (aAny1 >>= nZOrder1) && (aAny2 >>= nZOrder2) )
                             bResult = (nZOrder1 < nZOrder2);
                     }
@@ -1179,7 +1179,7 @@ void ScChildrenShapes::AddShape(const uno::Reference<drawing::XShape>& xShape, s
         if (xShapeProp.is())
         {
             uno::Any aPropAny = xShapeProp->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(  "LayerID" )));
-            sal_Int16 nLayerID;
+            sal_Int16 nLayerID = 0;
             if( aPropAny >>= nLayerID )
             {
                 if( nLayerID == SC_LAYER_INTERN )
