@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:03:14 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1294,7 +1294,11 @@ bool PDFWriterImpl::PDFPage::appendLineInfo( const LineInfo& rInfo, OStringBuffe
         rBuffer.append( " w\n" );
     }
     else if( rInfo.GetWidth() == 0 )
-        rBuffer.append( "0 w\n" );
+    {
+        // "pixel" line
+        appendDouble( 72.0/double(m_pWriter->getReferenceDevice()->ImplGetDPIX()), rBuffer );
+        rBuffer.append( " w\n" );
+    }
     return bRet;
 }
 
@@ -1984,8 +1988,11 @@ sal_Int32 PDFWriterImpl::newPage( sal_Int32 nPageWidth, sal_Int32 nPageHeight, P
     m_aPages.back().beginStream();
 
     // setup global graphics state
-    // linewidth is 0 (as thin as possible) by default
-    writeBuffer( "0 w\n", 4 );
+    // linewidth is "1 pixel" by default
+    OStringBuffer aBuf( 16 );
+    appendDouble( 72.0/double(getReferenceDevice()->ImplGetDPIX()), aBuf );
+    aBuf.append( " w\n" );
+    writeBuffer( aBuf.getStr(), aBuf.getLength() );
 
     return m_nCurrentPage;
 }
