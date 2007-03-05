@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrib.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:59:35 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -304,7 +304,7 @@ BOOL ScProtectionAttr::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 BOOL ScProtectionAttr::PutValue( const uno::Any& rVal, BYTE nMemberId )
 {
     BOOL bRet = FALSE;
-    sal_Bool bVal;
+    sal_Bool bVal = sal_Bool();
     nMemberId &= ~CONVERT_TWIPS;
     switch ( nMemberId )
     {
