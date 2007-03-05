@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:41:21 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:45:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2090,7 +2090,7 @@ void lcl_SetCellProperty( const SfxItemPropertyMap& rMap, const uno::Any& rValue
                 LanguageType eOldLang = ((const SvxLanguageItem&)rSet.Get( ATTR_LANGUAGE_FORMAT )).GetLanguage();
                 nOldFormat = pFormatter->GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
-                sal_Int32 nIntVal;
+                sal_Int32 nIntVal = 0;
                 if ( rValue >>= nIntVal )
                 {
                     ULONG nNewFormat = (ULONG)nIntVal;
@@ -2121,7 +2121,7 @@ void lcl_SetCellProperty( const SfxItemPropertyMap& rMap, const uno::Any& rValue
             break;
         case ATTR_INDENT:
             {
-                sal_Int16 nIntVal;
+                sal_Int16 nIntVal = 0;
                 if ( rValue >>= nIntVal )
                     rSet.Put( SfxUInt16Item( rMap.nWID, (USHORT)HMMToTwips(nIntVal) ) );
                 else
@@ -2130,7 +2130,7 @@ void lcl_SetCellProperty( const SfxItemPropertyMap& rMap, const uno::Any& rValue
             break;
         case ATTR_ROTATE_VALUE:
             {
-                sal_Int32 nRotVal;
+                sal_Int32 nRotVal = 0;
                 if ( rValue >>= nRotVal )
                 {
                     //  stored value is always between 0 and 360 deg.
@@ -8061,7 +8061,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const
         {
             if (pDoc->IsScenario(nTab))
             {
-                sal_Int32 nNewColor;
+                sal_Int32 nNewColor = 0;
                 if (aValue >>= nNewColor)
                 {
                     String aName;
@@ -8277,7 +8277,7 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const
         }
         else if ( pMap->nWID == SC_WID_UNO_TABLAYOUT )
         {
-            sal_Int16 nValue;
+            sal_Int16 nValue = 0;
             if (aValue >>= nValue)
             {
                 if (nValue == com::sun::star::text::WritingMode2::RL_TB)
@@ -8640,7 +8640,7 @@ void ScTableColumnObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, cons
 
         if ( pMap->nWID == SC_WID_UNO_CELLWID )
         {
-            sal_Int32 nNewWidth;
+            sal_Int32 nNewWidth = 0;
             if ( aValue >>= nNewWidth )
             {
                 //  property is 1/100mm, column width is twips
@@ -8784,7 +8784,7 @@ void ScTableRowObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const u
 
         if ( pMap->nWID == SC_WID_UNO_CELLHGT )
         {
-            sal_Int32 nNewHeight;
+            sal_Int32 nNewHeight = 0;
             if ( aValue >>= nNewHeight )
             {
                 //  property is 1/100mm, row height is twips
