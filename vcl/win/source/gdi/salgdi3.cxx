@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:26:50 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -898,7 +898,7 @@ void ImplWinFontData::ReadOs2Table( HDC hDC )
 #endif
 
         // Check for CJK capabilities of the current font
-        mbHasCJKSupport = (ulUnicodeRange2 & 0x2FF00000);
+        mbHasCJKSupport = (ulUnicodeRange2 & 0x2DF00000);
         mbHasKoreanRange= (ulUnicodeRange1 & 0x10000000)
                         | (ulUnicodeRange2 & 0x01100000);
     }
