@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:04:26 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:25:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1746,6 +1746,9 @@ void GtkSalFrame::SetPointer( PointerStyle ePointerStyle )
         GdkCursor *pCursor = getDisplay()->getCursor( ePointerStyle );
         gdk_window_set_cursor( GTK_WIDGET(m_pWindow)->window, pCursor );
         m_pCurrentCursor = pCursor;
+
+        if( getDisplay()->MouseCaptured( this ) || m_nFloats > 0 )
+            grabPointer( TRUE, TRUE );
     }
 }
 
