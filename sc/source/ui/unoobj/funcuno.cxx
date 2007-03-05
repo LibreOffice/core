@@ -4,9 +4,9 @@
  *
  *  $RCSfile: funcuno.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:45:44 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -575,7 +575,7 @@ uno::Any SAL_CALL ScFunctionAccess::callFunction( const rtl::OUString& aName,
         {
             //  #87871# accept integer types because Basic passes a floating point
             //  variable as byte, short or long if it's an integer number.
-            double fVal;
+            double fVal = 0;
             rArg >>= fVal;
             aTokenArr.AddDouble( fVal );
         }
