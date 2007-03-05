@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeuno.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:47:02 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:47:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -483,7 +483,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_HORIPOS ) )
     {
-        sal_Int32 nPos;
+        sal_Int32 nPos = 0;
         if (aValue >>= nPos)
         {
             SdrObject *pObj = GetSdrObject();
@@ -579,7 +579,7 @@ void SAL_CALL ScShapeObj::setPropertyValue(
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_VERTPOS ) )
     {
-        sal_Int32 nPos;
+        sal_Int32 nPos = 0;
         if (aValue >>= nPos)
         {
             SdrObject *pObj = GetSdrObject();
