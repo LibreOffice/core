@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <model>
 <namespace name="a" url="http://schemas.openxmlformats.org/drawingml/2006/main">
+<start name="blip"/>
 <grammar xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" ns="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <include href="dml-baseTypes.rng"/>
@@ -2677,7 +2678,9 @@
       </element>
     </optional>
   </define>
-</grammar></namespace><namespace name="a"><grammar xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+</grammar></namespace><namespace name="a">
+<start name="graphic"/>
+<grammar xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <!-- start = graphic -->
   <define name="CT_GraphicalObjectData">
@@ -3570,7 +3573,10 @@
       </element>
     </choice>
   </define>
-</grammar></namespace><namespace name="wp"><grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+</grammar></namespace><namespace name="wp">
+<start name="inline"/>
+<start name="anchor"/>
+<grammar xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <include href="dml-graphicalObject.rng"/>
   <include href="dml-documentProperties.rng"/>
@@ -4022,7 +4028,9 @@
       <ref name="CT_Anchor"/>
     </element>
   </define>
-</grammar></namespace><namespace name="s"><grammar xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/schemaLibrary/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+</grammar></namespace><namespace name="s">
+<start name="schemaLibrary"/>
+<grammar xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/schemaLibrary/2006/main" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <!-- start = schemaLibrary -->
   <define name="CT_Schema">
@@ -4057,7 +4065,11 @@
       <ref name="CT_SchemaLibrary"/>
     </element>
   </define>
-</grammar></namespace><namespace name="w"><grammar xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+</grammar></namespace><namespace name="w">
+<start name="mathPar"/>
+<start name="oMathPara"/>
+<start name="oMath"/>
+<grammar xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" ns="http://schemas.openxmlformats.org/officeDocument/2006/math" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <include href="wml.rng"/>
   <!-- start = mathPr | oMathPara | oMath -->
@@ -5310,7 +5322,9 @@
       <ref name="CT_OMath"/>
     </element>
   </define>
-</grammar></namespace><namespace name="w"><grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
+</grammar>
+<resource name="CT_OnOff" resource="BooleanValue"/>
+</namespace><namespace name="w"><grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <define name="ST_RelationshipId">
     <data type="string">
@@ -5358,6 +5372,7 @@
   </define>
 </grammar></namespace>
 <namespace name="pic">
+<start name="pic"/>
 <grammar ns="http://schemas.openxmlformats.org/drawingml/2006/picture" xmlns="http://relaxng.org/ns/structure/1.0">
   <!-- ISO RELAX NG Schema -->
   <include href="dml-shapeProperties.rng"/>
@@ -5390,6 +5405,20 @@
 </grammar>
 </namespace>
 <namespace name="w">
+<start name="recipients"/>
+<start name="txbxContent"/>
+<start name="comments"/>
+<start name="footnotes"/>
+<start name="endnotes"/>
+<start name="hdr"/>
+<start name="ftr"/>
+<start name="settings"/>
+<start name="webSettings"/>
+<start name="fonts"/>
+<start name="numbering"/>
+<start name="styles"/>
+<start name="document"/>
+<start name="glossaryDocument"/>
 <grammar xmlns:sl="http://schemas.openxmlformats.org/schemaLibrary/2006/main" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:rel="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:xs="http://www.w3.org/2001/XMLSchema" ns="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <include href="shared-customXmlSchemaProperties.rng"/>
@@ -13978,24 +14007,12 @@
     </zeroOrMore>
   </define>
 </grammar>
-</namespace>
-  <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
-<start name="recipients"/>
-<start name="txbxContent"/>
-<start name="comments"/>
-<start name="footnotes"/>
-<start name="endnotes"/>
-<start name="hdr"/>
-<start name="ftr"/>
-<start name="settings"/>
-<start name="webSettings"/>
-<start name="fonts"/>
-<start name="numbering"/>
-<start name="styles"/>
-<start name="document"/>
-<start name="glossaryDocument"/>
-<start name="graphic"/>
-<start name="pic"/>
+<resource name="CT_Color" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Color_val"/>
+  <attribute name="themeColor" tokenid="ooxml:CT_Color_themeColor"/>
+  <attribute name="themeTint" tokenid="ooxml:CT_Color_themeTint"/>
+  <attribute name="themeShade" tokenid="ooxml:CT_Color_themeShade"/>
+</resource>
 <resource name="document" resource="Stream"/>
 <resource name="CT_Document" resource="Stream"/>
 <resource name="CT_Text" resource="Stream"/>
@@ -14007,46 +14024,49 @@
   <action name="start" action="startCharacterGroup"/>
   <action name="end" action="endCharacterGroup"/>
 </resource>
-<resource name="EG_RPrBase" resource="Properties">
-  <attribute name="rStyle" tokenid="rtf:unused"/>
-  <attribute name="rFonts" tokenid="rtf:unused"/>
-  <attribute name="b" tokenid="rtf:unused"/>
-  <attribute name="bCs" tokenid="rtf:unused"/>
-  <attribute name="i" tokenid="rtf:unused"/>
-  <attribute name="iCs" tokenid="rtf:unused"/>
-  <attribute name="caps" tokenid="rtf:unused"/>
-  <attribute name="smallCaps" tokenid="rtf:unused"/>
-  <attribute name="strike" tokenid="rtf:unused"/>
-  <attribute name="dstrike" tokenid="rtf:unused"/>
-  <attribute name="outline" tokenid="rtf:unused"/>
-  <attribute name="shadow" tokenid="rtf:unused"/>
-  <attribute name="emboss" tokenid="rtf:unused"/>
-  <attribute name="imprint" tokenid="rtf:unused"/>
-  <attribute name="noProof" tokenid="rtf:unused"/>
-  <attribute name="snapToGrid" tokenid="rtf:unused"/>
-  <attribute name="vanish" tokenid="rtf:unused"/>
-  <attribute name="webHidden" tokenid="rtf:unused"/>
-  <attribute name="color" tokenid="rtf:unused"/>
-  <attribute name="spacing" tokenid="rtf:unused"/>
-  <attribute name="w" tokenid="rtf:unused"/>
-  <attribute name="kern" tokenid="rtf:unused"/>
-  <attribute name="position" tokenid="rtf:unused"/>
-  <attribute name="sz" tokenid="rtf:unused"/>
-  <attribute name="szCs" tokenid="rtf:unused"/>
-  <attribute name="highlight" tokenid="rtf:unused"/>
-  <attribute name="u" tokenid="rtf:unused"/>
-  <attribute name="effect" tokenid="rtf:unused"/>
-  <attribute name="bdr" tokenid="rtf:unused"/>
-  <attribute name="shd" tokenid="rtf:unused"/>
-  <attribute name="fitText" tokenid="rtf:unused"/>
-  <attribute name="vertAlign" tokenid="rtf:unused"/>
-  <attribute name="rtl" tokenid="rtf:unused"/>
-  <attribute name="cs" tokenid="rtf:unused"/>
-  <attribute name="em" tokenid="rtf:unused"/>
-  <attribute name="lang" tokenid="rtf:unused"/>
-  <attribute name="eastAsianLayout" tokenid="rtf:unused"/>
-  <attribute name="specVanish" tokenid="rtf:unused"/>
-  <attribute name="oMath" tokenid="rtf:unused"/>
+<resource name="EG_RPrBase" resource="Property">
+  <sprm name="rStyle" tokenid="0x0"/>
+  <sprm name="rFonts" tokenid="0x0"/>
+  <sprm name="b" tokenid="0x835"/>
+  <sprm name="bCs" tokenid="0x85c"/>
+  <sprm name="i" tokenid="0x836"/>
+  <sprm name="iCs" tokenid="0x85d"/>
+  <sprm name="caps" tokenid="0x83b"/>
+  <sprm name="smallCaps" tokenid="0x83a"/>
+  <sprm name="strike" tokenid="0x837"/>
+  <sprm name="dstrike" tokenid="0x2a53"/>
+  <sprm name="outline" tokenid="0x838"/>
+  <sprm name="shadow" tokenid="0x839"/>
+  <sprm name="emboss" tokenid="0x858"/>
+  <sprm name="imprint" tokenid="0x854"/>
+  <sprm name="noProof" tokenid="0x875"/>
+  <sprm name="snapToGrid" tokenid="0x0"/>
+  <sprm name="vanish" tokenid="0x83c"/>
+  <sprm name="webHidden" tokenid="0x0"/>
+  <sprm name="color" tokenid="0x2a42"/>
+  <sprm name="spacing" tokenid="0x8840"/>
+  <sprm name="w" tokenid="0x4852"/>
+  <sprm name="kern" tokenid="0x484b"/>
+  <sprm name="position" tokenid="0x4845"/>
+  <sprm name="sz" tokenid="0x0"/>
+  <sprm name="szCs" tokenid="0x0"/>
+  <sprm name="highlight" tokenid="0x2a0c"/>
+  <sprm name="u" tokenid="0x2a3e"/>
+  <sprm name="effect" tokenid="0x6816"/>
+  <sprm name="bdr" tokenid="0xca72"/>
+  <sprm name="shd" tokenid="0x4866"/>
+  <sprm name="fitText" tokenid="0xca76"/>
+  <sprm name="vertAlign" tokenid="0x0"/>
+  <sprm name="rtl" tokenid="0x0"/>
+  <sprm name="cs" tokenid="0x882"/>
+  <sprm name="em" tokenid="0x2a34"/>
+  <sprm name="lang" tokenid="0x0"/>
+  <sprm name="eastAsianLayout" tokenid="0x0"/>
+  <sprm name="specVanish" tokenid="0x818"/>
+  <sprm name="oMath" tokenid="0x0"/>
 </resource>
-
+<resource name="CT_RPr" resource="Properties"/>
+<resource name="CT_OnOff" resource="BooleanValue"/>
+</namespace>
+  <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>
