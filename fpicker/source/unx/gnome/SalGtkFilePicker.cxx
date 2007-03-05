@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SalGtkFilePicker.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:40:48 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,6 +221,15 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
 
     m_pVBox = gtk_vbox_new( FALSE, 0 );
 
+    // We don't want clickable items to have a huge hit-area
+    GtkWidget *pHBox = gtk_hbox_new( FALSE, 0 );
+    GtkWidget *pThinVBox = gtk_vbox_new( FALSE, 0 );
+
+    gtk_box_pack_end (GTK_BOX( m_pVBox ), pHBox, FALSE, FALSE, 0);
+    gtk_box_pack_start (GTK_BOX( pHBox ), pThinVBox, FALSE, FALSE, 0);
+    gtk_widget_show( pHBox );
+    gtk_widget_show( pThinVBox );
+
     OUString aLabel;
 
     for( i = 0; i < TOGGLE_LAST; i++ )
@@ -247,8 +256,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
                 break;
         }
 
-
-        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pToggles[i], FALSE, TRUE, 0 );
+        gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pToggles[i], FALSE, FALSE, 0 );
     }
 
     for( i = 0; i < BUTTON_LAST; i++ )
@@ -269,7 +277,7 @@ SalGtkFilePicker::SalGtkFilePicker( const uno::Reference<lang::XMultiServiceFact
                 break;
         }
 
-        gtk_box_pack_end( GTK_BOX( m_pVBox ), m_pButtons[i], FALSE, TRUE, 0 );
+        gtk_box_pack_end( GTK_BOX( pThinVBox ), m_pButtons[i], FALSE, TRUE, 0 );
     }
 
     for( i = 0; i < LIST_LAST; i++ )
