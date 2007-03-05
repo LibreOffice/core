@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:33:49 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:26:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,6 +242,16 @@ void X11SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 BOOL X11SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( bExternPixmap_ )
+        return FALSE;
+
+    // #144688#
+    // the X protocol request CreatePixmap puts an upper bound
+    // of 16 bit to the size. Beyond that there may be implementation
+    // limits of the Xserver; which we should catch by a failed XCreatePixmap
+    // call. However extra large values should be caught here since we'd run into
+    // 16 bit truncation here without noticing.
+    if( nDX < 0 || nDX > 65535 ||
+        nDY < 0 || nDY > 65535 )
         return FALSE;
 
     if( !nDX ) nDX = 1;
