@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.252 $
+ *  $Revision: 1.253 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:04:40 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:25:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4745,6 +4745,8 @@ Window::~Window()
 // -----------------------------------------------------------------------
 void Window::doLazyDelete()
 {
+    if( dynamic_cast<SystemWindow*>(this) )
+        SetParent( ImplGetDefaultWindow() );
     vcl::LazyDeletor<Window>::Delete( this );
 }
 
@@ -6160,7 +6162,7 @@ void Window::SetParent( Window* pNewParent )
     ImplSetFrameParent( pNewParent );
 
     if ( mpWindowImpl->mbFrame )
-        return;
+        mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
 
     if ( mpWindowImpl->mpBorderWindow )
     {
