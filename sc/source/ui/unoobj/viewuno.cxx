@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewuno.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:48:11 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1717,25 +1717,25 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             aNewOpt.SetOption( VOPT_VSCROLL, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNO_SHOWOBJ ) )
         {
-            sal_Int16 nIntVal;
+            sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 aNewOpt.SetObjMode( VOBJ_TYPE_OLE, (ScVObjMode) nIntVal );
         }
         else if ( aString.EqualsAscii( SC_UNO_SHOWCHARTS ) )
         {
-            sal_Int16 nIntVal;
+            sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 aNewOpt.SetObjMode( VOBJ_TYPE_CHART, (ScVObjMode) nIntVal );
         }
         else if ( aString.EqualsAscii( SC_UNO_SHOWDRAW ) )
         {
-            sal_Int16 nIntVal;
+            sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 aNewOpt.SetObjMode( VOBJ_TYPE_DRAW, (ScVObjMode) nIntVal );
         }
         else if ( aString.EqualsAscii( SC_UNO_GRIDCOLOR ) )
         {
-            sal_Int32 nIntVal;
+            sal_Int32 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 aNewOpt.SetGridColor( nIntVal, String() );
         }
@@ -1743,13 +1743,13 @@ void SAL_CALL ScTabViewObj::setPropertyValue(
             aNewOpt.SetHideAutoSpell( ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aString.EqualsAscii( SC_UNO_ZOOMTYPE ) )
         {
-            sal_Int16 nIntVal;
+            sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 SetZoomType(nIntVal);
         }
         else if ( aString.EqualsAscii( SC_UNO_ZOOMVALUE ) )
         {
-            sal_Int16 nIntVal;
+            sal_Int16 nIntVal = 0;
             if ( aValue >>= nIntVal )
                 SetZoom(nIntVal);
         }
