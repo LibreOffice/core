@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:37:59 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,6 +539,13 @@ I18NStatus& I18NStatus::get()
 
 // --------------------------------------------------------------------------
 
+bool I18NStatus::exists()
+{
+    return pInstance != NULL;
+}
+
+// --------------------------------------------------------------------------
+
 void I18NStatus::free()
 {
     if( pInstance )
@@ -715,6 +722,7 @@ bool I18NStatus::getStatusWindowMode()
  */
 X11ImeStatus::~X11ImeStatus()
 {
+    vcl::I18NStatus::free();
 }
 
 bool X11ImeStatus::canToggle()
