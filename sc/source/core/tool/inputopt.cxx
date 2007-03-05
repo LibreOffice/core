@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inputopt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:15:54 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:41:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,7 +213,7 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 ScInputCfg::ScInputCfg() :
     ConfigItem( OUString::createFromAscii( CFGPATH_INPUT ) )
 {
-    sal_Int32 nIntVal;
+    sal_Int32 nIntVal = 0;
 
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
