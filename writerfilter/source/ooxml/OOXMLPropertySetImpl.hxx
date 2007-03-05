@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:26:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,17 +42,36 @@ namespace ooxml
 {
 using namespace ::std;
 using namespace doctok;
-class OOXMLPropertySprm : public OOXMLProperty
+
+class OOXMLValue : public Value
+{
+public:
+    typedef auto_ptr<OOXMLValue> Pointer_t;
+    OOXMLValue();
+    virtual ~OOXMLValue();
+
+    virtual int getInt() const;
+    virtual ::rtl::OUString getString() const;
+    virtual uno::Any getAny() const;
+    virtual doctok::Reference<Properties>::Pointer_t getProperties();
+    virtual doctok::Reference<Stream>::Pointer_t getStream();
+    virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
+};
+
+class OOXMLPropertyImpl : public OOXMLProperty
 {
     Id mId;
-    mutable Value::Pointer_t mpValue;
+    mutable OOXMLValue::Pointer_t mpValue;
 
 public:
+    enum Type_t { SPRM, ATTRIBUTE } meType;
     typedef boost::shared_ptr<OOXMLProperty> Pointer_t;
 
-    OOXMLPropertySprm(Id id, Value::Pointer_t pValue);
-    OOXMLPropertySprm(const OOXMLPropertySprm & rSprm);
-    virtual ~OOXMLPropertySprm();
+    OOXMLPropertyImpl(Id id, Value::Pointer_t pValue, Type_t eType);
+    OOXMLPropertyImpl(const OOXMLPropertyImpl & rSprm);
+    virtual ~OOXMLPropertyImpl();
 
     virtual sal_uInt32 getId() const;
     virtual Value::Pointer_t getValue();
@@ -62,6 +81,35 @@ public:
     virtual string getName() const;
     virtual string toString() const;
     virtual Sprm * clone();
+    virtual void resolve(doctok::Properties & rProperties);
+};
+
+class OOXMLBooleanValue : public OOXMLValue
+{
+protected:
+    bool mbValue;
+public:
+    OOXMLBooleanValue(bool bValue);
+    virtual ~OOXMLBooleanValue();
+
+    virtual int getInt() const;
+    virtual uno::Any getAny() const;
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
+};
+
+class OOXMLStringValue : public OOXMLValue
+{
+protected:
+    rtl::OUString mStr;
+public:
+    OOXMLStringValue(const rtl::OUString & rStr);
+    virtual ~OOXMLStringValue();
+
+    virtual uno::Any getAny() const;
+    virtual rtl::OUString getString() const;
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
 };
 
 class OOXMLPropertySetImpl : public OOXMLPropertySet
@@ -71,9 +119,23 @@ class OOXMLPropertySetImpl : public OOXMLPropertySet
 public:
     OOXMLPropertySetImpl();
     virtual ~OOXMLPropertySetImpl();
+
     virtual void resolve(Properties & rHandler);
     virtual string getType() const;
     virtual void add(OOXMLProperty::Pointer_t pProperty);
+    virtual OOXMLPropertySet * clone() const;
+};
+
+class OOXMLPropertySetValue : public OOXMLValue
+{
+    OOXMLPropertySet::Pointer_t mpPropertySet;
+public:
+    OOXMLPropertySetValue(OOXMLPropertySet::Pointer_t pPropertySet);
+    virtual ~OOXMLPropertySetValue();
+
+    virtual doctok::Reference<Properties>::Pointer_t getProperties();
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
 };
 
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:26:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,65 +33,234 @@
  *
  ************************************************************************/
 
- #include "OOXMLPropertySetImpl.hxx"
+#include "OOXMLPropertySetImpl.hxx"
+#include <stdio.h>
 
 namespace ooxml
 {
 
 using namespace doctok;
 
-OOXMLPropertySprm::OOXMLPropertySprm(Id id, Value::Pointer_t pValue)
-: mId(id), mpValue(pValue)
+OOXMLPropertyImpl::OOXMLPropertyImpl(Id id, Value::Pointer_t pValue,
+                                     OOXMLPropertyImpl::Type_t eType)
+: mId(id), mpValue(pValue), meType(eType)
 {
 }
 
-OOXMLPropertySprm::OOXMLPropertySprm(const OOXMLPropertySprm & rSprm)
-: OOXMLProperty(), mId(rSprm.mId), mpValue(rSprm.mpValue)
+OOXMLPropertyImpl::OOXMLPropertyImpl(const OOXMLPropertyImpl & rSprm)
+: OOXMLProperty(), mId(rSprm.mId), mpValue(rSprm.mpValue), meType(rSprm.meType)
 {
 }
 
-OOXMLPropertySprm::~OOXMLPropertySprm()
+OOXMLPropertyImpl::~OOXMLPropertyImpl()
 {
 }
 
-sal_uInt32 OOXMLPropertySprm::getId() const
+sal_uInt32 OOXMLPropertyImpl::getId() const
 {
     return mId;
 }
 
-Value::Pointer_t OOXMLPropertySprm::getValue()
+Value::Pointer_t OOXMLPropertyImpl::getValue()
 {
-    return mpValue;
+    Value::Pointer_t pResult;
+
+    if (mpValue.get() != NULL)
+        pResult = Value::Pointer_t(mpValue->clone());
+
+    return pResult;
 }
 
-doctok::Reference<BinaryObj>::Pointer_t OOXMLPropertySprm::getBinary()
+doctok::Reference<BinaryObj>::Pointer_t OOXMLPropertyImpl::getBinary()
 {
-    return doctok::Reference<BinaryObj>::Pointer_t();
+    doctok::Reference<BinaryObj>::Pointer_t pResult;
+
+    if (mpValue.get() != NULL)
+        pResult = mpValue->getBinary();
+
+    return pResult;
 }
 
-doctok::Reference<Stream>::Pointer_t OOXMLPropertySprm::getStream()
+doctok::Reference<Stream>::Pointer_t OOXMLPropertyImpl::getStream()
 {
-    return doctok::Reference<Stream>::Pointer_t();
+    doctok::Reference<Stream>::Pointer_t pResult;
+
+    if (mpValue.get() != NULL)
+        pResult = mpValue->getStream();
+
+    return pResult;
 }
 
-doctok::Reference<Properties>::Pointer_t OOXMLPropertySprm::getProps()
+doctok::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
 {
-    return doctok::Reference<Properties>::Pointer_t();
+    doctok::Reference<Properties>::Pointer_t pResult;
+
+    if (mpValue.get() != NULL)
+        pResult = mpValue->getProperties();
+
+    return pResult;
 }
 
-string OOXMLPropertySprm::getName() const
+string OOXMLPropertyImpl::getName() const
 {
     return "??";
 }
 
-string OOXMLPropertySprm::toString() const
+string OOXMLPropertyImpl::toString() const
 {
-    return "OOXMLPropertySprm";
+    string sResult = "(";
+    static char buffer[256];
+
+    snprintf(buffer, sizeof(buffer), "0x%x", mId);
+    sResult += buffer;
+    sResult += ", ";
+    if (mpValue.get() != NULL)
+        sResult += mpValue->toString();
+    else
+        sResult +="(null)";
+    sResult +=")";
+
+    return sResult;
 }
 
-Sprm * OOXMLPropertySprm::clone()
+Sprm * OOXMLPropertyImpl::clone()
 {
-    return new OOXMLPropertySprm(*this);
+    return new OOXMLPropertyImpl(*this);
+}
+
+void OOXMLPropertyImpl::resolve(doctok::Properties & rProperties)
+{
+    switch (meType)
+    {
+    case SPRM:
+        rProperties.sprm(*this);
+        break;
+    case ATTRIBUTE:
+        rProperties.attribute(mId, *getValue());
+        break;
+    }
+}
+
+/*
+   class OOXMLValue
+*/
+
+OOXMLValue::OOXMLValue()
+{
+}
+
+OOXMLValue::~OOXMLValue()
+{
+}
+
+int OOXMLValue::getInt() const
+{
+    return 0;
+}
+
+::rtl::OUString OOXMLValue::getString() const
+{
+    return ::rtl::OUString();
+}
+
+uno::Any OOXMLValue::getAny() const
+{
+    return uno::Any();
+}
+
+doctok::Reference<Properties>::Pointer_t OOXMLValue::getProperties()
+{
+    return doctok::Reference<Properties>::Pointer_t();
+}
+
+doctok::Reference<Stream>::Pointer_t OOXMLValue::getStream()
+{
+    return doctok::Reference<Stream>::Pointer_t();
+}
+
+doctok::Reference<BinaryObj>::Pointer_t OOXMLValue::getBinary()
+{
+    return doctok::Reference<BinaryObj>::Pointer_t();
+}
+
+string OOXMLValue::toString() const
+{
+    return "OOXMLValue";
+}
+
+OOXMLValue * OOXMLValue::clone() const
+{
+    return new OOXMLValue(*this);
+}
+
+/*
+  class OOXMLBooleanValue
+*/
+
+OOXMLBooleanValue::OOXMLBooleanValue(bool bValue)
+: mbValue(bValue)
+{
+}
+
+OOXMLBooleanValue::~OOXMLBooleanValue()
+{
+}
+
+int OOXMLBooleanValue::getInt() const
+{
+    return mbValue ? 1 : 0;
+}
+
+uno::Any OOXMLBooleanValue::getAny() const
+{
+    uno::Any aResult(mbValue);
+
+    return aResult;
+}
+
+string OOXMLBooleanValue::toString() const
+{
+    return mbValue ? "true" : "false";
+}
+
+OOXMLValue * OOXMLBooleanValue::clone() const
+{
+    return new OOXMLBooleanValue(*this);
+}
+
+/*
+  class OOXMLStringValue
+*/
+
+OOXMLStringValue::OOXMLStringValue(const rtl::OUString & rStr)
+: mStr(rStr)
+{
+}
+
+OOXMLStringValue::~OOXMLStringValue()
+{
+}
+
+uno::Any OOXMLStringValue::getAny() const
+{
+    uno::Any aAny(mStr);
+
+    return aAny;
+}
+
+rtl::OUString OOXMLStringValue::getString() const
+{
+    return mStr;
+}
+
+string OOXMLStringValue::toString() const
+{
+    return OUStringToOString(mStr, RTL_TEXTENCODING_ASCII_US).getStr();
+}
+
+OOXMLValue * OOXMLStringValue::clone() const
+{
+    return new OOXMLStringValue(*this);
 }
 
 /**
@@ -113,7 +282,7 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
     {
         OOXMLProperty::Pointer_t pProp = *aIt;
 
-        rHandler.sprm(*pProp);
+        pProp->resolve(rHandler);
 
         aIt++;
     }
@@ -128,6 +297,41 @@ void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
     mProperties.push_back(pProperty);
 
+}
+
+OOXMLPropertySet * OOXMLPropertySetImpl::clone() const
+{
+    return new OOXMLPropertySetImpl(*this);
+}
+
+/*
+  class OOXMLPropertySetValue
+*/
+
+OOXMLPropertySetValue::OOXMLPropertySetValue
+(OOXMLPropertySet::Pointer_t pPropertySet)
+: mpPropertySet(pPropertySet)
+{
+}
+
+OOXMLPropertySetValue::~OOXMLPropertySetValue()
+{
+}
+
+doctok::Reference<Properties>::Pointer_t OOXMLPropertySetValue::getProperties()
+{
+    return doctok::Reference<Properties>::Pointer_t
+        (mpPropertySet->clone());
+}
+
+string OOXMLPropertySetValue::toString() const
+{
+    return "OOXMLPropertySetValue";
+}
+
+OOXMLValue * OOXMLPropertySetValue::clone() const
+{
+    return new OOXMLPropertySetValue(*this);
 }
 
 }
