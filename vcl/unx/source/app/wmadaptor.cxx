@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:39:01 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:26:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1934,7 +1934,7 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
             Atom nType, *pStates;
             int nFormat;
             unsigned long nItems, nBytesLeft;
-            unsigned char* pData;
+            unsigned char* pData = NULL;
             long nOffset = 0;
             do
             {
@@ -1964,7 +1964,11 @@ int NetWMAdaptor::handlePropertyNotify( X11SalFrame* pFrame, XPropertyEvent* pEv
                         }
                     }
                     XFree( pData );
+                    pData = NULL;
+                    nOffset += nItems * nFormat / 32;
                 }
+                else
+                    break;
             } while( nBytesLeft > 0 );
         }
 
