@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellvaluebinding.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:41:32 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:45:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -393,7 +393,7 @@ namespace calc
             {
                 DBG_ASSERT( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
 
-                double nValue;
+                double nValue = 0;
                 aValue >>= nValue;
                 if ( m_xCell.is() )
                     m_xCell->setValue( nValue );
@@ -404,7 +404,7 @@ namespace calc
             {
                 DBG_ASSERT( m_xCell.is(), "OCellValueBinding::setValue: don't have a double value supplier!" );
 
-                sal_Int32 nValue;
+                sal_Int32 nValue = 0;
                 aValue >>= nValue;      // list index from control layer (0-based)
                 ++nValue;               // the list position value in the cell is 1-based
                 if ( m_xCell.is() )
