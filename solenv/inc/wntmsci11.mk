@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci11.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-28 16:25:27 $
+#   last change: $Author: obo $ $Date: 2007-03-05 13:50:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ _VC_MANIFEST_INC=0
 .IF "$(PRODUCT)"!="full"
 LINKFLAGS+= /NODEFAULTLIB /DEBUGTYPE:cv /DEBUG
 .ELSE # "$(PRODUCT)"!="full"
-LINKFLAGS+= /NODEFAULTLIB /RELEASE /DEBUG /INCREMENTAL:NO
+LINKFLAGS+= -NODEFAULTLIB -RELEASE -DEBUG -INCREMENTAL:NO
 .ENDIF # "$(PRODUCT)"!="full"
 MAPFILE=-out:$$@
 .ENDIF # "$(linkinc)" != ""
