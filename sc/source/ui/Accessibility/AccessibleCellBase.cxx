@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:54:23 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:44:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ sal_Bool SAL_CALL
 {
      ScUnoGuard aGuard;
     IsObjectValid();
-    double fValue;
+    double fValue = 0;
     sal_Bool bResult(sal_False);
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
     {
