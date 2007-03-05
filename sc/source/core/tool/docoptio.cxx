@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docoptio.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:15:20 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:41:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,8 +342,8 @@ ScDocCfg::ScDocCfg() :
     aCalcItem( OUString::createFromAscii( CFGPATH_CALC ) ),
     aLayoutItem( OUString::createFromAscii( CFGPATH_DOCLAYOUT ) )
 {
-    sal_Int32 nIntVal;
-    double fDoubleVal;
+    sal_Int32 nIntVal = 0;
+    double fDoubleVal = 0;
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
