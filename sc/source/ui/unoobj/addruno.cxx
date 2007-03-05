@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addruno.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:40:21 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:44:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const rtl::OUString& aPr
     else if ( aNameStr.EqualsAscii( SC_UNONAME_REFSHEET ) )
     {
         //  set the reference sheet
-        sal_Int32 nIntVal;
+        sal_Int32 nIntVal = 0;
         if ( aValue >>= nIntVal )
         {
             nRefSheet = nIntVal;
