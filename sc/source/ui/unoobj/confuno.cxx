@@ -4,9 +4,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:42:19 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,7 +179,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 aViewOpt.SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
             else if ( aPropertyName.compareToAscii( SC_UNO_GRIDCOLOR ) == 0 )
             {
-                sal_Int64 nColor;
+                sal_Int64 nColor = 0;
                 if (aValue >>= nColor)
                 {
                     String aColorName;
