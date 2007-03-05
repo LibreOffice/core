@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-26 15:37:20 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,10 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"  
     xmlns:rng="http://relaxng.org/ns/structure/1.0"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" 
-    xmlns:UML = 'org.omg.xmi.namespace.UML' xml:space="default">
+    xmlns:xalan="http://xml.apache.org/xalan"
+    xmlns:UML = 'org.omg.xmi.namespace.UML' 
+    exclude-result-prefixes = "xalan"
+    xml:space="default">
   <xsl:output method="text" />
 
   <xsl:key name="same-attribute"
@@ -86,6 +89,48 @@
   <xsl:key name="context-resource"
            match="resource" use="@name"/>
 
+  <xsl:key name="defines-with-application"
+           match="rng:define" use="ancestor::rng:grammar/@application"/>
+
+  <xsl:template name="namespace">
+    <xsl:value-of select="ancestor::rng:grammar/@ns"/>
+  </xsl:template>
+
+  <xsl:template name="defineforref">
+    <xsl:variable name="mygrammarid" select="generate-id(ancestor::rng:grammar)"/>
+    <xsl:value-of select="key('defines-with-name', @name)[generate-id(ancestor::rng:grammar) = $mygrammarid]"/>
+  </xsl:template>
+
+  <xsl:template name="contextnameforname">
+    <xsl:variable name="application" select="ancestor::rng:grammar/@application"/>
+    <xsl:variable name="name" select="@name"/>
+    /* <xsl:value-of select="$application"/>:<xsl:value-of select="$name"/>
+    (<xsl:for-each select="key('defines-with-name', $name)">
+      <xsl:value-of select="ancestor::rng:grammar/@application"/>,
+    </xsl:for-each>)*/
+    <xsl:choose>
+      <xsl:when test="count(key('defines-with-name', @name)) = 1">
+        <xsl:for-each select="key('defines-with-name', @name)">
+          <xsl:call-template name="contextnamefordefine"/>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:for-each select="key('defines-with-application', $application)[@name=$name]">
+          <xsl:call-template name="contextnamefordefine"/>
+        </xsl:for-each>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="contextnew">
+    <xsl:text> new </xsl:text>
+    <xsl:call-template name="contextnameforname"/>
+    <xsl:text>(*this)</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="defineforname">
+    <xsl:value-of select="key('defines-with-name', @name)"/>
+  </xsl:template>
   <!-- 
        Create name with prefix.
 
@@ -249,33 +294,18 @@
   </xsl:template>
 
   <xsl:template name="contextnamefordefine">
-    <xsl:param name="name"/>
-    <xsl:choose>
-      <xsl:when test="$name">
-        <xsl:variable name="mydefine" select="key('defines-with-name', $name)"/>
-        <xsl:variable name="myprefix">
-          <xsl:apply-templates select="$mydefine" mode="grammar-prefix"/>
-        </xsl:variable>
-        <xsl:call-template name="contextname">
-          <xsl:with-param name="prefix" select="$myprefix"/>
-          <xsl:with-param name="name" select="$mydefine/@name"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:variable name="mydefine" select="key('defines-with-name', @name)"/>
-        <xsl:variable name="myprefix">
-          <xsl:apply-templates select="$mydefine" mode="grammar-prefix"/>
-        </xsl:variable>
-        <xsl:call-template name="contextname">
-          <xsl:with-param name="prefix" select="$myprefix"/>
-          <xsl:with-param name="name" select="$mydefine/@name"/>
-        </xsl:call-template>
-      </xsl:otherwise>
-    </xsl:choose>
+    <xsl:variable name="myprefix">
+      <xsl:apply-templates select="." mode="grammar-prefix"/>
+    </xsl:variable>
+    <xsl:call-template name="contextname">
+      <xsl:with-param name="prefix" select="$myprefix"/>
+      <xsl:with-param name="name" select="@name"/>
+    </xsl:call-template>
   </xsl:template>
 
   <xsl:template name="contextresource">
-    <xsl:value-of select="key('context-resource', @name)/@resource"/>
+    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+    <xsl:value-of select="key('context-resource', @name)[generate-id(ancestor::namespace)=$mynsid]/@resource"/>
   </xsl:template>
 
   <xsl:template name="contextmembers">
@@ -340,6 +370,9 @@ throw (xml::sax::SAXException,uno::RuntimeException)
     <xsl:variable name="classname">
       <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
     <xsl:text>
 class </xsl:text>
     <xsl:value-of select="$classname"/>
@@ -361,9 +394,11 @@ public:
     <xsl:text>
     virtual OOXMLContext::Pointer_t element(TokenEnum_t nToken);
     virtual OOXMLContext::Pointer_t elementFromRefs(TokenEnum_t nToken);
-    //virtual bool attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue); 
+    virtual bool attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue);    virtual doctok::Id getId(TokenEnum_t nToken);
+    virtual doctok::Id getIdFromRefs(TokenEnum_t nToken);
+
     virtual string getType() { return "</xsl:text>
-    <xsl:value-of select="@name"/>
+    <xsl:value-of select="$classname"/>
     <xsl:text>"; }</xsl:text>
     <xsl:text>
 };
@@ -372,17 +407,9 @@ public:
   
   <xsl:template name="classfordefine">
     <xsl:choose>
-      <xsl:when test="(.//rng:ref or .//rng:element or .//rng:attribute) and (generate-id(.) = generate-id(key('defines-with-name', @name)[1]))">1</xsl:when>
+      <xsl:when test="(.//rng:ref or .//rng:element or .//rng:attribute)">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="referreddefine">
-    <xsl:param name="name"/>
-    <xsl:variable name="prefix" select="key('defines-with-name', @name)[1]/ancestor::namespace/@name"/>
-    <xsl:value-of select="$prefix"/>
-    <xsl:text>:</xsl:text>
-    <xsl:value-of select="$name"/>
   </xsl:template>
 
   <xsl:template name="contextdecls">
@@ -412,9 +439,7 @@ public:
     {       
         OOXMLContext::Pointer_t pSubContext = OOXMLContext::Pointer_t
             (</xsl:text>
-      <xsl:call-template name="contextnew">
-        <xsl:with-param name="define" select="@name"/>
-      </xsl:call-template>
+      <xsl:call-template name="contextnew"/>
       <xsl:text>);</xsl:text>
         OOXMLContext::Pointer_t pContext(pSubContext->element(nToken));
 
@@ -422,6 +447,35 @@ public:
             return pContext;
      }
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="contextrefsidimpl">
+    <xsl:param name="prefix"/>
+    <xsl:variable name="classname">
+      <xsl:call-template name="contextnamefordefine"/>
+    </xsl:variable>
+    <xsl:text>
+doctok::Id </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::getIdFromRefs(TokenEnum_t nToken)
+{
+    TokenEnum_t tmpToken;
+    tmpToken = nToken; // prevent warning
+
+    </xsl:text>
+   <xsl:variable name="myid" select="generate-id(.)"/>
+    <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute) and @name]">
+      <xsl:if test="generate-id(.) != $myid">
+        <xsl:variable name="mydefine" select="key('defines-with-name', @name)"/>
+        <xsl:for-each select="$mydefine">
+          <xsl:call-template name="refsidimplondefine"/>
+        </xsl:for-each>
+      </xsl:if>
+    </xsl:for-each>    
+    <xsl:text>
+    return 0x0;
+}
+    </xsl:text>
   </xsl:template>
 
   <xsl:template name="contextrefsimpl">
@@ -452,15 +506,42 @@ OOXMLContext::Pointer_t </xsl:text>
     </xsl:text>
   </xsl:template>
 
-  <xsl:template name="contextnew">
-    <xsl:param name="define"/>
-    <xsl:for-each select="key('defines-with-name', $define)[1]">
-      <xsl:text> new </xsl:text>
-      <xsl:call-template name="contextnamefordefine">
-        <xsl:with-param name="name" select="$define"/>
+  <xsl:template name="refsidimplondefine">
+    <xsl:variable name="do">
+      <xsl:call-template name="classfordefine">
       </xsl:call-template>
-      <xsl:text>(*this)</xsl:text>
-    </xsl:for-each>
+    </xsl:variable>
+    <xsl:if test="$do = '1'">
+      <xsl:text>
+    {       
+        OOXMLContext::Pointer_t pSubContext = OOXMLContext::Pointer_t
+            (</xsl:text>
+      <xsl:call-template name="contextnew"/>
+      <xsl:text>);</xsl:text>
+        doctok::Id nId = pSubContext->getId(nToken);
+
+        if (nId != 0x0)
+            return nId;
+     }
+    </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="caselabelelement">
+          <xsl:text>
+     case </xsl:text>
+           <xsl:call-template name="elementname">
+             <xsl:with-param name="name" select="@enumname"/>
+           </xsl:call-template>
+           <xsl:text>:</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="caselabelattribute">
+          <xsl:text>
+     case </xsl:text>
+           <xsl:call-template name="attrname">
+             <xsl:with-param name="name" select="@enumname"/>
+           </xsl:call-template>
+           <xsl:text>:</xsl:text>
   </xsl:template>
 
   <xsl:template name="contextelementimpl">
@@ -468,6 +549,10 @@ OOXMLContext::Pointer_t </xsl:text>
     <xsl:variable name="classname">
       <xsl:call-template name="contextnamefordefine"/>
     </xsl:variable>
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+    <xsl:variable name="mydefine" select="@name"/>
     <xsl:text>
 OOXMLContext::Pointer_t
 </xsl:text>
@@ -492,15 +577,11 @@ OOXMLContext::Pointer_t
           </xsl:for-each>
         </xsl:variable>
         <xsl:if test="$do = '1'">
-          <xsl:text>
-     case </xsl:text>
-           <xsl:call-template name="elementname">
-             <xsl:with-param name="name" select="@enumname"/>
-           </xsl:call-template>
-           <xsl:text>:</xsl:text>
-             <xsl:choose>
-               <xsl:when test="./rng:ref/@name='BUILT_IN_ANY_TYPE'">
-                 <xsl:text>
+          <xsl:variable name="myelement" select="@name"/>
+          <xsl:call-template name="caselabelelement"/>
+          <xsl:choose>
+            <xsl:when test="./rng:ref/@name='BUILT_IN_ANY_TYPE'">
+              <xsl:text>
         {
             OOXMLContext aContext(*this);
             pResult = aContext.element(nToken);
@@ -509,12 +590,18 @@ OOXMLContext::Pointer_t
                </xsl:when>
                <xsl:otherwise>
            <xsl:text>
-         pResult = OOXMLContext::Pointer_t
+        {
+            pResult = OOXMLContext::Pointer_t
                (</xsl:text>
-           <xsl:call-template name="contextnew">
-             <xsl:with-param name="define" select="./rng:ref/@name"/>
-           </xsl:call-template>
-         <xsl:text>);
+               <xsl:for-each select="./rng:ref">
+                 <xsl:text>/*</xsl:text>
+                 <xsl:value-of select="@name"/>
+                 <xsl:text>*/</xsl:text>
+                 <xsl:call-template name="contextnew"/>
+               </xsl:for-each>
+           <xsl:text>);</xsl:text>
+         <xsl:text>
+         }
              break;</xsl:text>
                </xsl:otherwise>
              </xsl:choose>
@@ -540,6 +627,224 @@ OOXMLContext::Pointer_t
     return pResult;
 }
      </xsl:text>
+  </xsl:template>
+
+  <xsl:template name="processtokenid">
+    <xsl:choose>
+      <xsl:when test="contains(@tokenid, ':')">
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="@tokenid"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="@tokenid"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="contextendelementimpl">
+    <xsl:param name="prefix"/>
+    <xsl:variable name="classname">
+      <xsl:call-template name="contextnamefordefine"/>
+    </xsl:variable>
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+    <xsl:variable name="mydefine" select="@name"/>
+    <xsl:text>
+void 
+</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::endElement(TokenEnum_t nToken, OOXMLContext::Pointer_t pContext)
+{</xsl:text>
+    TokenEnum_t nTmpToken;
+    nTmpToken = nToken;
+    OOXMLContext::Pointer_t pTmpContext;
+    pTmpContext = pContext;
+    <xsl:if test="$resource = 'Property'">
+      <xsl:text>
+    switch (nToken)
+    {</xsl:text>
+    <xsl:for-each select="//resource[@name=$mydefine]/sprm">
+      <xsl:variable name="sprmname" select="@name"/>
+      // <xsl:value-of select="$mydefine"/> : <xsl:value-of select="$sprmname"/>
+      <xsl:for-each select="key('defines-with-name', $mydefine)//rng:element[@name=$sprmname]">
+        <xsl:call-template name="caselabelelement"/>
+      </xsl:for-each>
+      <xsl:text>
+        {
+            clog &lt;&lt; "</xsl:text>
+            <xsl:value-of select="$classname"/>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="$sprmname"/>
+            <xsl:text>" &lt;&lt; endl;
+
+            OOXMLPropertyImpl::Pointer_t pProperty
+                (new OOXMLPropertyImpl(</xsl:text>
+                <xsl:call-template name="processtokenid"/>
+        <xsl:text>, pContext->getValue(), OOXMLPropertyImpl::SPRM));
+            static_cast &lt; OOXMLPropertySet * &gt; (mpPropertySet.get())->add(pProperty);</xsl:text>
+        }
+        break;
+    </xsl:for-each>
+    <xsl:text>
+    case OOXML_TOKENS_END: // prevent warning
+        break;
+    default:
+        break;
+    }</xsl:text>
+    </xsl:if>
+    <xsl:text>
+}
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template name="contextgetid">
+    <xsl:param name="prefix"/>
+    <xsl:variable name="classname">
+      <xsl:call-template name="contextnamefordefine"/>
+    </xsl:variable>
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+    <xsl:variable name="mydefine" select="@name"/>
+    <xsl:text>
+doctok::Id
+</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::getId(TokenEnum_t nToken)
+{
+    doctok::Id nResult = 0x0;
+
+#ifdef DEBUG_GETID
+    clog &lt;&lt; "-->getId::</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>" &lt;&lt; endl;
+#endif
+
+    TokenEnum_t nTmpToken;
+    nTmpToken = nToken;
+
+    switch (nToken)
+    {</xsl:text>
+    <xsl:if test="$resource = 'Property' or $resource = 'PropertySetValue'">
+    <xsl:for-each select="//resource[@name=$mydefine]">
+      <xsl:for-each select="attribute|sprm">
+      <xsl:variable name="sprmname" select="@name"/>
+      // <xsl:value-of select="$mydefine"/> : <xsl:value-of select="$sprmname"/>
+      <xsl:for-each select="key('defines-with-name', $mydefine)//rng:element[@name=$sprmname]">
+        <xsl:call-template name="caselabelelement"/>
+      </xsl:for-each>
+      <xsl:for-each select="key('defines-with-name', $mydefine)//rng:attribute[@name=$sprmname]">
+        <xsl:call-template name="caselabelattribute"/>
+      </xsl:for-each>
+      <xsl:text>
+        {
+            clog &lt;&lt; "</xsl:text>
+            <xsl:value-of select="$classname"/>
+            <xsl:text>: </xsl:text>
+            <xsl:value-of select="$sprmname"/>
+            <xsl:text>" &lt;&lt; endl;
+            
+            nResult = </xsl:text>
+            <xsl:call-template name="processtokenid"/>
+        <xsl:text>;
+        }
+        break;</xsl:text>
+    </xsl:for-each>
+    </xsl:for-each>
+    </xsl:if>
+    <xsl:text>
+    case OOXML_TOKENS_END: // prevent warning
+        break;
+    default:
+        nResult = getIdFromRefs(nToken);
+        break;
+    }</xsl:text>
+    <xsl:text>
+
+#ifdef DEBUG_GETID
+    clog &lt;&lt; "&gt;--getId::</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>" &lt;&lt; endl;
+#endif
+
+    return nResult;  
+}
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template name="contextattributeimplbool">
+        if (strue.compareTo(rValue) == 0
+            || sTrue.compareTo(rValue) == 0
+            || s1.compareTo(rValue) == 0)
+            mbValue = true;
+        else
+            mbValue = false;
+
+        bResult = true;
+  </xsl:template>
+
+  <xsl:template name="contextattributeimplprops">
+    <xsl:choose>
+      <xsl:when test=".//rng:text">
+        {
+            doctok::Id nId = this->getId(nToken);
+    
+            doctok::Value::Pointer_t pVal(new OOXMLStringValue(rValue));
+            OOXMLPropertyImpl::Pointer_t pProperty
+                (new OOXMLPropertyImpl(nId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
+
+            mpPropertySet->add(pProperty);
+        }
+      </xsl:when>
+    </xsl:choose>
+  </xsl:template>
+
+  <xsl:template name="contextattributeimpl">
+    <xsl:param name="prefix"/>
+    <xsl:variable name="classname">
+      <xsl:call-template name="contextnamefordefine"/>
+    </xsl:variable>
+    <xsl:variable name="resource">
+      <xsl:call-template name="contextresource"/>
+    </xsl:variable>
+    <xsl:text>
+bool </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue)
+{
+    bool bResult = false;
+    rtl::OUString sTmp;
+    sTmp = rValue;
+
+    switch (nToken)
+    {</xsl:text>
+    <xsl:for-each select=".//rng:attribute[@name]">
+      <xsl:variable name="mydefine" select="key('defines-with-name', .//rng:ref/@name)"/>
+      <xsl:call-template name="caselabelattribute"/>
+      <xsl:choose>
+        <xsl:when test="$resource = 'BooleanValue'">
+          <xsl:call-template name="contextattributeimplbool"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'PropertySetValue'">
+          <xsl:call-template name="contextattributeimplprops"/>
+        </xsl:when>
+        <xsl:otherwise/>
+      </xsl:choose>
+      <xsl:text>
+        break;</xsl:text>
+    </xsl:for-each>
+    <xsl:text>
+    case OOXML_TOKENS_END: // prevent warning
+      break;
+    default:
+      break;
+    }
+    
+    return bResult;
+}
+    </xsl:text>
   </xsl:template>
 
   <xsl:template name="contextconstructorimpl">
@@ -607,9 +912,8 @@ OOXMLContext::Pointer_t
   </xsl:template>
 
   <xsl:template name="contextimpls">
-    <xsl:call-template name="maincontextrefs">
-      <xsl:with-param name="prefix" select="$prefix"/>
-    </xsl:call-template>
+    <xsl:call-template name="maincontextrefs"/>
+    <xsl:call-template name="mainidrefs"/>
     <xsl:for-each select=".//rng:define">
       <xsl:variable name="do">
         <xsl:call-template name="classfordefine"/>
@@ -631,6 +935,9 @@ OOXMLContext::Pointer_t
         <xsl:call-template name="contextdestructorimpl"/>
         <xsl:call-template name="contextrefsimpl"/>
         <xsl:call-template name="contextelementimpl"/>
+        <xsl:call-template name="contextattributeimpl"/>
+        <xsl:call-template name="contextgetid"/>
+        <xsl:call-template name="contextrefsidimpl"/>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
@@ -641,25 +948,54 @@ OOXMLContext::Pointer_t
 OOXMLContext::Pointer_t OOXMLContext::elementFromRefs(TokenEnum_t nToken)
 {</xsl:text>
     <xsl:for-each select=".//start">
-      <xsl:variable name="mydefine" select="key('defines-with-name', @name)"/>
-      <xsl:text>
+      <xsl:variable name="name" select="@name"/>
+      <xsl:for-each select="ancestor::namespace//rng:define[@name=$name]">
+        <xsl:text>
     {
         OOXMLContext::Pointer_t pTopContext
             (</xsl:text>
-    <xsl:call-template name="contextnew">
-      <xsl:with-param name="define" select="@name"/>
-    </xsl:call-template>
-    <xsl:text>);
+        <xsl:call-template name="contextnew"/>
+      <xsl:text>);
         OOXMLContext::Pointer_t pContext(pTopContext->element(nToken));
 
         if (pContext.get() != NULL)
             return pContext;
     }
-    </xsl:text>
+        </xsl:text>
+      </xsl:for-each>
     </xsl:for-each>
     <xsl:text>
 
     return OOXMLContext::Pointer_t();
+}
+    </xsl:text>  
+  </xsl:template>
+
+  <xsl:template name="mainidrefs">
+    <xsl:param name="prefix"/>
+    <xsl:text>
+doctok::Id OOXMLContext::getIdFromRefs(TokenEnum_t nToken)
+{</xsl:text>
+    <xsl:for-each select=".//start">
+      <xsl:variable name="name" select="@name"/>
+      <xsl:for-each select="ancestor::namespace//rng:define[@name=$name]">
+        <xsl:text>
+    {
+        OOXMLContext::Pointer_t pTopContext
+            ( </xsl:text>
+        <xsl:call-template name="contextnew"/>
+        <xsl:text>);
+        doctok::Id nId = pTopContext->getId(nToken);
+
+        if (nId != 0x0)
+            return nId;
+    }
+        </xsl:text>
+      </xsl:for-each>
+    </xsl:for-each>
+    <xsl:text>
+
+    return 0x0;
 }
     </xsl:text>  
   </xsl:template>
@@ -685,15 +1021,14 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
       <xsl:text>:
         pResult = OOXMLContext::Pointer_t
             (new </xsl:text>
-      <xsl:variable name="referred">
-        <xsl:call-template name="referreddefine">
-          <xsl:with-param name="name" select="./rng:ref/@name"/>
-        </xsl:call-template>
+      <xsl:variable name="referreddefine">
+        <xsl:for-each select="./rng:ref">
+          <xsl:call-template name="defineforref"/>
+        </xsl:for-each>
       </xsl:variable>
-      <xsl:call-template name="contextname">
-        <xsl:with-param name="prefix" select="$nsname"/>
-        <xsl:with-param name="name" select="$referred"/>
-      </xsl:call-template>
+      <xsl:for-each select="$referreddefine">        
+        <xsl:call-template name="contextnamefordefine"/>
+      </xsl:for-each>
       <xsl:text>());
         break;</xsl:text>
       </xsl:if>
@@ -706,6 +1041,31 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
     
     return pResult;
 }&#xa;</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="defineooxmlids">
+    <xsl:text>
+namespace writerfilter {
+namespace NS_ooxml
+{</xsl:text>
+    <xsl:for-each select="//resource">
+      <xsl:variable name="name" select="@name"/>
+      <xsl:for-each select="attribute|element">
+        <xsl:if test="contains(@tokenid, 'ooxml:')">
+          <xsl:text>
+          const QName_t LN_</xsl:text>
+          <xsl:value-of select="substring-after(@tokenid, 'ooxml:')"/>
+          <xsl:text> = </xsl:text>
+          <xsl:value-of select="90000 + position()"/>
+          <xsl:text>;</xsl:text>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:for-each>
+}}
+  </xsl:template>
+
+  <xsl:template name='idtoqname'>
+    <xsl:param name='id'/>NS_<xsl:value-of select='substring-before($id, ":")'/>::LN_<xsl:value-of select='substring-after($id, ":")'/>
   </xsl:template>
 
 </xsl:stylesheet>
