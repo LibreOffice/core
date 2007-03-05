@@ -4,9 +4,9 @@
  *
  *  $RCSfile: afmtuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:40:32 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:45:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -696,7 +696,7 @@ void SAL_CALL ScAutoFormatObj::setPropertyValue(
         DBG_ASSERT(pData,"AutoFormat Daten nicht da");
 
         String aPropString(aPropertyName);
-        sal_Bool bBool;
+        sal_Bool bBool = sal_Bool();
         if (aPropString.EqualsAscii( SC_UNONAME_INCBACK ) && (aValue >>= bBool))
             pData->SetIncludeBackground( bBool );
         else if (aPropString.EqualsAscii( SC_UNONAME_INCBORD ) && (aValue >>= bBool))
