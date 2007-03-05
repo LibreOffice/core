@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySet.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:26:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@ public:
     virtual doctok::Reference<Properties>::Pointer_t getProps() = 0;
     virtual string getName() const = 0;
     virtual string toString() const = 0;
+    virtual void resolve(doctok::Properties & rProperties) = 0;
 
     virtual Sprm * clone() = 0;
 };
@@ -59,10 +60,13 @@ public:
 class OOXMLPropertySet : public doctok::Reference<Properties>
 {
 public:
+    typedef boost::shared_ptr<OOXMLPropertySet> Pointer_t;
+
     virtual ~OOXMLPropertySet() {}
     virtual void resolve(Properties & rHandler) = 0;
     virtual string getType() const = 0;
     virtual void add(OOXMLProperty::Pointer_t pProperty) = 0;
+    virtual OOXMLPropertySet * clone() const = 0;
 };
 
 }
