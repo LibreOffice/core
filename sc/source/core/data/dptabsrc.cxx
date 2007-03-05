@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dptabsrc.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:05:43 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:40:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1421,13 +1421,13 @@ void SAL_CALL ScDPDimension::setPropertyValue( const rtl::OUString& aPropertyNam
     String aNameStr = aPropertyName;
     if ( aNameStr.EqualsAscii( SC_UNO_POSITION ) )
     {
-        INT32 nInt;
+        INT32 nInt = 0;
         if (aValue >>= nInt)
             setPosition( nInt );
     }
     else if ( aNameStr.EqualsAscii( SC_UNO_USEDHIER ) )
     {
-        INT32 nInt;
+        INT32 nInt = 0;
         if (aValue >>= nInt)
             setUsedHierarchy( nInt );
     }
