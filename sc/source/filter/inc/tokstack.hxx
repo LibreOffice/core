@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tokstack.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:36:15 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:43:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ struct TokenId
 {
         UINT16          nId;
 
-                        TokenId() {}
+                        TokenId() : nId( 0 ) {}
                         TokenId( UINT16 n ) : nId( n ) {}
                         TokenId( const TokenId& r ) : nId( r.nId ) {}
     inline  TokenId&    operator =( const TokenId& r ) { nId = r.nId; return *this; }
