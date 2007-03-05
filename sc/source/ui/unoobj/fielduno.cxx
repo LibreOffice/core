@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fielduno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:44:56 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1412,7 +1412,7 @@ void SAL_CALL ScHeaderFieldObj::setPropertyValue(
     String aNameString(aPropertyName);
     if ( nType == SC_SERVICE_FILEFIELD && aNameString.EqualsAscii( SC_UNONAME_FILEFORM ) )
     {
-        sal_Int16 nIntVal;
+        sal_Int16 nIntVal = 0;
         if ( aValue >>= nIntVal )
         {
             SvxFileFormat eFormat = lcl_UnoToSvxFileFormat( nIntVal );
