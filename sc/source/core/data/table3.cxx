@@ -4,9 +4,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:09:41 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:40:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1785,7 +1785,7 @@ void ScTable::UpdateSelectionFunction( ScFunctionData& rData,
 
 void ScTable::FindConditionalFormat( ULONG nKey, ScRangeList& rList )
 {
-    SCROW nStartRow, nEndRow;
+    SCROW nStartRow = 0, nEndRow = 0;
     for (SCCOL nCol=0; nCol<=MAXCOL; nCol++)
     {
         ScAttrIterator* pIter = aCol[nCol].CreateAttrIterator( 0, MAXROW );
