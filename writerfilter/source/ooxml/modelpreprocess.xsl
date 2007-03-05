@@ -5,9 +5,9 @@
  *
  *  $RCSfile: modelpreprocess.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-26 15:34:50 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,16 @@
       </xsl:attribute>
       <xsl:apply-templates/>      
     </xsl:copy>    
+  </xsl:template>
+
+  <xsl:template match="rng:grammar">
+   <xsl:copy>
+     <xsl:apply-templates select="@*"/>
+     <xsl:attribute name="application">
+       <xsl:value-of select="substring-before(substring-after(@ns, 'http://schemas.openxmlformats.org/'), '/')"/>
+     </xsl:attribute>
+     <xsl:apply-templates/>
+   </xsl:copy>
   </xsl:template>
 
   <xsl:template match="node()|@*">
