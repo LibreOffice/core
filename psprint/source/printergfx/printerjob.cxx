@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 11:56:32 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -388,6 +388,16 @@ getLocalTime(sal_Char* pBuffer)
 
 }
 
+static bool isAscii( const rtl::OUString& rStr )
+{
+    const sal_Unicode* pStr = rStr;
+    sal_Int32 nLen = rStr.getLength();
+    for( sal_Int32 i = 0; i < nLen; i++ )
+        if( pStr[i] > 127 )
+            return false;
+    return true;
+}
+
 sal_Bool
 PrinterJob::StartJob (
                       const rtl::OUString& rFileName,
@@ -423,30 +433,62 @@ PrinterJob::StartJob (
 
     // Creator (this application)
     aFilterWS = WhitespaceToSpace( rAppName, FALSE );
-    WritePS (mpJobHeader, "%%Creator: ");
+    WritePS (mpJobHeader, "%%Creator: (");
     WritePS (mpJobHeader, aFilterWS);
-    WritePS (mpJobHeader, "\n");
+    WritePS (mpJobHeader, ")\n");
 
     // For (user name)
     sal_Char pUserName[64];
     if (getUserName(pUserName, sizeof(pUserName)))
     {
-        WritePS (mpJobHeader, "%%For: ");
+        WritePS (mpJobHeader, "%%For: (");
         WritePS (mpJobHeader, pUserName);
-        WritePS (mpJobHeader, "\n");
+        WritePS (mpJobHeader, ")\n");
     }
 
     // Creation Date (locale independent local time)
     sal_Char pCreationDate [256];
-    WritePS (mpJobHeader, "%%CreationDate: ");
-    WritePS (mpJobHeader, getLocalTime(pCreationDate));
+    WritePS (mpJobHeader, "%%CreationDate: (");
+    getLocalTime(pCreationDate);
+    for( unsigned int i = 0; i < sizeof(pCreationDate)/sizeof(pCreationDate[0]); i++ )
+    {
+        if( pCreationDate[i] == '\n' )
+        {
+            pCreationDate[i] = 0;
+            break;
+        }
+    }
+    WritePS (mpJobHeader, pCreationDate );
+    WritePS (mpJobHeader, ")\n");
 
     // Document Title
+    /* #i74335#
+    * The title should be clean ascii; rJobName however may
+    * contain any Unicode character. So implement the following
+    * algorithm:
+    * use rJobName, if it contains only ascii
+    * use the filename, if it contains only ascii
+    * else omit %%Title
+    */
     aFilterWS = WhitespaceToSpace( rJobName, FALSE );
+    rtl::OUString aTitle( aFilterWS );
+    if( ! isAscii( aTitle ) )
+    {
+        sal_Int32 nIndex = 0;
+        while( nIndex != -1 )
+            aTitle = rFileName.getToken( 0, '/', nIndex );
+        aTitle = WhitespaceToSpace( aTitle, FALSE );
+        if( ! isAscii( aTitle ) )
+            aTitle = rtl::OUString();
+    }
+
     maJobTitle = aFilterWS;
-    WritePS (mpJobHeader, "%%Title: ");
-    WritePS (mpJobHeader, aFilterWS);
-    WritePS (mpJobHeader, "\n");
+    if( aTitle.getLength() )
+    {
+        WritePS (mpJobHeader, "%%Title: (");
+        WritePS (mpJobHeader, aTitle);
+        WritePS (mpJobHeader, ")\n");
+    }
 
     // Language Level
     sal_Char pLevel[16];
