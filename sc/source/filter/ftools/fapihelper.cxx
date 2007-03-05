@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fapihelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-21 12:24:19 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:43:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,7 +242,7 @@ bool ScfPropertySet::GetStringProperty( String& rValue, const OUString& rPropNam
 
 bool ScfPropertySet::GetColorProperty( Color& rColor, const ::rtl::OUString& rPropName ) const
 {
-    sal_Int32 nApiColor;
+    sal_Int32 nApiColor = 0;
     bool bRet = GetProperty( nApiColor, rPropName );
     if( bRet )
         rColor = ScfApiHelper::ConvertFromApiColor( nApiColor );
