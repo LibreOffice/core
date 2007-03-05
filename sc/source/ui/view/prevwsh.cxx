@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prevwsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:55:05 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:48:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -830,7 +830,7 @@ void __EXPORT ScPreviewShell::ReadUserDataSequence(const uno::Sequence < beans::
     sal_Int32 nCount(rSeq.getLength());
     if (nCount)
     {
-        sal_Int32 nTemp;
+        sal_Int32 nTemp = 0;
         const beans::PropertyValue* pSeq = rSeq.getConstArray();
         if(pSeq)
         {
