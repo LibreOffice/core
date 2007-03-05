@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:47:25 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:47:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1664,7 +1664,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                 nOldFormat = pFormatter->
                                         GetFormatForLanguageIfBuiltIn( nOldFormat, eOldLang );
 
-                                UINT32 nNewFormat;
+                                UINT32 nNewFormat = 0;
                                 *pValue >>= nNewFormat;
                                 rSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, nNewFormat ) );
 
@@ -1679,14 +1679,14 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                             break;
                         case ATTR_INDENT:
                             {
-                                sal_Int16 nVal;
+                                sal_Int16 nVal = 0;
                                 *pValue >>= nVal;
                                 rSet.Put( SfxUInt16Item( pOwnMap->nWID, (USHORT)HMMToTwips(nVal) ) );
                             }
                             break;
                         case ATTR_ROTATE_VALUE:
                             {
-                                sal_Int32 nRotVal;
+                                sal_Int32 nRotVal = 0;
                                 if ( *pValue >>= nRotVal )
                                 {
                                     //  stored value is always between 0 and 360 deg.
@@ -1733,7 +1733,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                                 rSet.ClearItem(ATTR_PAGE_SCALETOPAGES);
                                 rSet.ClearItem(ATTR_PAGE_SCALE);
                                 rSet.ClearItem(ATTR_PAGE_SCALETO);
-                                sal_Int16 nVal;
+                                sal_Int16 nVal = 0;
                                 *pValue >>= nVal;
                                 rSet.Put( SfxUInt16Item( pOwnMap->nWID, nVal ) );
                             }
@@ -1742,7 +1742,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                         case ATTR_PAGE_OBJECTS:
                         case ATTR_PAGE_DRAWINGS:
                             {
-                                sal_Bool bBool;
+                                sal_Bool bBool = sal_Bool();
                                 *pValue >>= bBool;
                                 //! sal_Bool-MID fuer ScViewObjectModeItem definieren?
                                 rSet.Put( ScViewObjectModeItem( pOwnMap->nWID,
@@ -1784,7 +1784,7 @@ void ScStyleObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const uno:
                             break;
                         case ATTR_PAGE_SCALETO:
                             {
-                                sal_Int16 nPages;
+                                sal_Int16 nPages = 0;
                                 if (*pValue >>= nPages)
                                 {
                                     ScPageScaleToItem aItem = ((const ScPageScaleToItem&)rSet.Get(ATTR_PAGE_SCALETO));
