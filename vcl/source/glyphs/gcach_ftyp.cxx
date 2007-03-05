@@ -399,6 +399,8 @@ int FtFontInfo::GetExtraGlyphKernValue( int nLeftGlyph, int nRightGlyph ) const
 {
     if( !mpExtraKernInfo )
         return 0;
+    if( !mpGlyph2Char )
+        return 0;
     sal_Unicode cLeftChar   = (*mpGlyph2Char)[ nLeftGlyph ];
     sal_Unicode cRightChar  = (*mpGlyph2Char)[ nRightGlyph ];
     return mpExtraKernInfo->GetUnscaledKernValue( cLeftChar, cRightChar );
@@ -982,7 +984,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         // Check for CJK capabilities of the current font
         // #107888# workaround for Asian...
         // TODO: remove when ExtLeading fully implemented
-        BOOL bCJKCapable = ((pOS2->ulUnicodeRange2 & 0x2FF00000) != 0);
+        BOOL bCJKCapable = ((pOS2->ulUnicodeRange2 & 0x2DF00000) != 0);
 
         if ( bCJKCapable )
         {
