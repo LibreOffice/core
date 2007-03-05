@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unitconv.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:19:51 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ ScUnitConverter::ScUnitConverter( USHORT nInit, USHORT nDeltaP ) :
 
             OUString sFromUnit;
             OUString sToUnit;
-            double fFactor;
+            double fFactor = 0;
 
             nIndex = 0;
             for (long i=0; i<nNodeCount; i++)
