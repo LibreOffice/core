@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chgtrack.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:53:33 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:39:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,7 @@ public:
                                         if ( !ppPrev )
                                         {
                                             ppPrev = ppPrevP;
-                                            if ( pNext = *ppPrevP )
+                                            if ( (pNext = *ppPrevP) )
                                                 pNext->ppPrev = &pNext;
                                             *ppPrevP = this;
                                         }
