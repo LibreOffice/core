@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validat.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:10:47 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:40:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ BOOL ScValidationData::DoScript( const ScAddress& rPos, const String& rInput,
 
     // Check the return value from the script
     // The contents of the cell get reset if the script returns false
-    BOOL bTmp;
+    BOOL bTmp = FALSE;
     if ( eRet == ERRCODE_NONE &&
              aRet.getValueType() == getCppuBooleanType() &&
              sal_True == ( aRet >>= bTmp ) &&
