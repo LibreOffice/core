@@ -4,9 +4,9 @@
  *
  *  $RCSfile: linkuno.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:45:55 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:46:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,13 +246,13 @@ void SAL_CALL ScSheetLinkObj::setPropertyValue(
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
     {
-        sal_Int32 nRefresh;
+        sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
     {
-        sal_Int32 nRefresh;
+        sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
@@ -790,13 +790,13 @@ void SAL_CALL ScAreaLinkObj::setPropertyValue(
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFPERIOD ) )
     {
-        sal_Int32 nRefresh;
+        sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
     else if ( aNameString.EqualsAscii( SC_UNONAME_REFDELAY ) )
     {
-        sal_Int32 nRefresh;
+        sal_Int32 nRefresh = 0;
         if ( aValue >>= nRefresh )
             setRefreshDelay( nRefresh );
     }
