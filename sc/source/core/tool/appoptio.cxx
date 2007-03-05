@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appoptio.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:12:03 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:41:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -505,7 +505,7 @@ ScAppCfg::ScAppCfg() :
     aSortListItem( OUString::createFromAscii( CFGPATH_SORTLIST ) ),
     aMiscItem( OUString::createFromAscii( CFGPATH_MISC ) )
 {
-    sal_Int32 nIntVal;
+    sal_Int32 nIntVal = 0;
 
     Sequence<OUString> aNames;
     Sequence<Any> aValues;
