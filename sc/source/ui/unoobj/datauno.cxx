@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datauno.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:42:55 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -508,7 +508,7 @@ void ScSortDescriptor::FillSortParam( ScSortParam& rParam, const uno::Sequence<b
             rParam.bUserDef = ScUnoHelpFunctions::GetBoolFromAny( rProp.Value );
         else if (aPropName.EqualsAscii( SC_UNONAME_UINDEX ))
         {
-            sal_Int32 nVal;
+            sal_Int32 nVal = 0;
             if ( rProp.Value >>= nVal )
                 rParam.nUserIndex = (USHORT)nVal;
         }
@@ -803,13 +803,13 @@ void SAL_CALL ScSubTotalDescriptorBase::setPropertyValue(
         aParam.bUserDef = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_UINDEX ) || aString.EqualsAscii( SC_UNONAME_USINDEX ))
     {
-        sal_Int32 nVal;
+        sal_Int32 nVal = 0;
         if ( aValue >>= nVal )
             aParam.nUserIndex = (USHORT)nVal;
     }
     else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
     {
-        sal_Int32 nVal;
+        sal_Int32 nVal = 0;
         if ( (aValue >>= nVal) && nVal > sal::static_int_cast<sal_Int32>(MAXSUBTOTAL) )
         {
             throw lang::IllegalArgumentException();
@@ -1295,7 +1295,7 @@ void SAL_CALL ScFilterDescriptorBase::setPropertyValue(
         aParam.bCaseSens = ScUnoHelpFunctions::GetBoolFromAny( aValue );
     else if (aString.EqualsAscii( SC_UNONAME_MAXFLD ))
     {
-        sal_Int32 nVal;
+        sal_Int32 nVal = 0;
         if ( (aValue >>= nVal) && nVal > sal::static_int_cast<sal_Int32>(MAXQUERY) )
         {
             throw lang::IllegalArgumentException();
@@ -1965,7 +1965,7 @@ void SAL_CALL ScDatabaseRangeObj::setPropertyValue(
         }
         else if (aString.EqualsAscii( SC_UNONAME_REFPERIOD ))
         {
-            sal_Int32 nRefresh;
+            sal_Int32 nRefresh = 0;
             if (aValue >>= nRefresh)
             {
                 ScDocument* pDoc = pDocShell->GetDocument();
