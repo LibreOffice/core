@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewopti.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:20:15 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:42:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,7 +553,7 @@ ScViewCfg::ScViewCfg() :
     aDisplayItem( OUString::createFromAscii( CFGPATH_DISPLAY ) ),
     aGridItem( OUString::createFromAscii( CFGPATH_GRID ) )
 {
-    sal_Int32 nIntVal;
+    sal_Int32 nIntVal = 0;
 
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues = aLayoutItem.GetProperties(aNames);
