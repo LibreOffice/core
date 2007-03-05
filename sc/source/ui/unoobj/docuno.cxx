@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:44:04 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2307,7 +2307,7 @@ void SAL_CALL ScTableColumnsObj::setPropertyValue(
 
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLWID ) )
     {
-        sal_Int32 nNewWidth;
+        sal_Int32 nNewWidth = 0;
         if ( aValue >>= nNewWidth )
             aFunc.SetWidthOrHeight( TRUE, 1, nColArr, nTab, SC_SIZE_ORIGINAL,
                                     (USHORT)HMMToTwips(nNewWidth), TRUE, TRUE );
@@ -2534,7 +2534,7 @@ void SAL_CALL ScTableRowsObj::setPropertyValue(
 
     if ( aNameString.EqualsAscii( SC_UNONAME_CELLHGT ) )
     {
-        sal_Int32 nNewHeight;
+        sal_Int32 nNewHeight = 0;
         if ( aValue >>= nNewHeight )
             aFunc.SetWidthOrHeight( FALSE, 1, nRowArr, nTab, SC_SIZE_ORIGINAL,
                                     (USHORT)HMMToTwips(nNewHeight), TRUE, TRUE );
