@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:16:06 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:41:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3296,7 +3296,7 @@ void ScInterpreter::ScColumn()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
-        double nVal;
+        double nVal = 0;
         if (nParamCount == 0)
         {
             nVal = aPos.Col() + 1;
@@ -3371,7 +3371,7 @@ void ScInterpreter::ScRow()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
-        double nVal;
+        double nVal = 0;
         if (nParamCount == 0)
         {
             nVal = aPos.Row() + 1;
