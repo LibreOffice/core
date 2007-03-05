@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocimp.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:06:33 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -158,7 +158,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
         }
         else if ( aPropName.EqualsAscii( SC_DBPROP_COMMANDTYPE ))
         {
-            sal_Int32 nType;
+            sal_Int32 nType = 0;
             if ( rProp.Value >>= nType )
             {
                 aImParam.bSql = ( nType == sdb::CommandType::COMMAND );
@@ -180,7 +180,7 @@ BOOL ScDBDocFunc::DoImportUno( const ScAddress& rPos,
     long nSelLen = aSelection.getLength();
     for (i = 0; i < nSelLen; i++)
     {
-        sal_Int32 nEntry;
+        sal_Int32 nEntry = 0;
         if ( aSelection[i] >>= nEntry )
             aList.Insert( (void*)nEntry, LIST_APPEND );
     }
