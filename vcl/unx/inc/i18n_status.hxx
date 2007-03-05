@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i18n_status.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-01 10:36:22 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:25:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@ private:
 
 public:
     static I18NStatus& get();
+    static bool exists();
     static void free();
 
     void setParent( SalFrame* pParent );
