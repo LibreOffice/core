@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thread.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:34:15 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:27:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,8 @@ public:
 
     virtual  ~Thread()
     {
-        osl_destroyThread( m_hThread);
+        if( m_hThread )
+            osl_destroyThread( m_hThread);
     }
 
     sal_Bool SAL_CALL create()
@@ -109,22 +110,26 @@ public:
 
     virtual void SAL_CALL suspend()
     {
-        osl_suspendThread(m_hThread);
+        if( m_hThread )
+            osl_suspendThread(m_hThread);
     }
 
     virtual void SAL_CALL resume()
     {
-        osl_resumeThread(m_hThread);
+        if( m_hThread )
+            osl_resumeThread(m_hThread);
     }
 
     virtual void SAL_CALL terminate()
     {
-        osl_terminateThread(m_hThread);
+        if( m_hThread )
+            osl_terminateThread(m_hThread);
     }
 
     virtual void SAL_CALL join()
     {
-        osl_joinWithThread(m_hThread);
+        if( m_hThread )
+            osl_joinWithThread(m_hThread);
     }
 
     sal_Bool SAL_CALL isRunning()
@@ -134,12 +139,13 @@ public:
 
     void SAL_CALL setPriority( oslThreadPriority Priority)
     {
-        osl_setThreadPriority(m_hThread, Priority);
+        if( m_hThread )
+            osl_setThreadPriority(m_hThread, Priority);
     }
 
     oslThreadPriority SAL_CALL getPriority()
     {
-        return osl_getThreadPriority(m_hThread);
+        return m_hThread ? osl_getThreadPriority(m_hThread) : osl_Thread_PriorityUnknown;
     }
 
     oslThreadIdentifier SAL_CALL getIdentifier() const
@@ -165,7 +171,7 @@ public:
 
     virtual sal_Bool SAL_CALL schedule()
     {
-        return osl_scheduleThread(m_hThread);
+        return m_hThread ? osl_scheduleThread(m_hThread) : sal_False;
     }
 
     SAL_CALL operator oslThread() const
