@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:52:35 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,7 +331,7 @@ void ScXMLCellExportPropertyMapper::ContextFilter(
 
     if (pPadding && pPadding_Bottom && pPadding_Left && pPadding_Right && pPadding_Top)
     {
-        sal_Int32 nBottom, nTop, nLeft, nRight;
+        sal_Int32 nBottom = 0, nTop = 0, nLeft = 0, nRight = 0;
         if ((pPadding_Bottom->maValue >>= nBottom) &&
             (pPadding_Left->maValue >>= nLeft) &&
             (pPadding_Right->maValue >>= nRight) &&
@@ -658,7 +658,7 @@ void ScXMLAutoStylePoolP::exportStyleAttributes(
             {
                 case CTF_SC_NUMBERFORMAT :
                 {
-                    sal_Int32 nNumberFormat;
+                    sal_Int32 nNumberFormat = 0;
                     if (i->maValue >>= nNumberFormat)
                     {
                         rtl::OUString sAttrValue(rScXMLExport.getDataStyleName(nNumberFormat));
@@ -850,7 +850,7 @@ void ScXMLStyleExport::exportStyleAttributes(
             if( xPropState.is() && (beans::PropertyState_DIRECT_VALUE ==
                     xPropState->getPropertyState( sNumberFormat )) )
             {
-                sal_Int32 nNumberFormat;
+                sal_Int32 nNumberFormat = 0;
                 if (xPropSet->getPropertyValue( sNumberFormat ) >>= nNumberFormat)
                     GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DATA_STYLE_NAME,
                                                         GetExport().getDataStyleName(nNumberFormat) );
@@ -1481,7 +1481,7 @@ bool XmlScPropHdl_RotateAngle::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Int32 aAngle1, aAngle2;
+    sal_Int32 aAngle1 = 0, aAngle2 = 0;
 
     if((r1 >>= aAngle1) && (r2 >>= aAngle2))
         return (aAngle1 == aAngle2);
@@ -1511,7 +1511,7 @@ sal_Bool XmlScPropHdl_RotateAngle::exportXML(
     const ::com::sun::star::uno::Any& rValue,
     const SvXMLUnitConverter& /* rUnitConverter */ ) const
 {
-    sal_Int32 nVal;
+    sal_Int32 nVal = 0;
     sal_Bool bRetval(sal_False);
 
     if(rValue >>= nVal)
@@ -1727,7 +1727,7 @@ bool XmlScPropHdl_BreakBefore::equals(
     const ::com::sun::star::uno::Any& r1,
     const ::com::sun::star::uno::Any& r2 ) const
 {
-    sal_Bool aBreak1, aBreak2;
+    sal_Bool aBreak1 = 0, aBreak2 = 0;
 
     if((r1 >>= aBreak1) && (r2 >>= aBreak2))
         return (aBreak1 == aBreak2);
