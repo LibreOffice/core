@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:24:19 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:43:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
         return;
 
     // control type
-    sal_Int16 nClassId;
+    sal_Int16 nClassId = 0;
     if( aCtrlProp.GetProperty( nClassId, CREATE_OUSTRING( "ClassId" ) ) )
     {
         switch( nClassId )
@@ -403,8 +403,8 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
         {
             XclExpFontData aFontData;
             OUString aFontName;
-            float fFloatVal;
-            sal_Int16 nShortVal;
+            float fFloatVal = 0;
+            sal_Int16 nShortVal = 0;
 
             if( aCtrlProp.GetProperty( aFontName, CREATE_OUSTRING( "FontName" ) ) )
                 aFontData.maName = XclTools::GetXclFontName( aFontName );
@@ -541,7 +541,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
 
         case FormCompType::SCROLLBAR:
         {
-            sal_Int32 nApiValue;
+            sal_Int32 nApiValue = 0;
             if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValueMin" ) ) )
                 mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
             if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "ScrollValueMax" ) ) )
@@ -559,7 +559,7 @@ XclExpTbxControlObj::XclExpTbxControlObj( const XclExpRoot& rRoot, Reference< XS
 
         case FormCompType::SPINBUTTON:
         {
-            sal_Int32 nApiValue;
+            sal_Int32 nApiValue = 0;
             if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValueMin" ) ) )
                 mnScrollMin = limit_cast< sal_Int16 >( nApiValue, EXC_OBJ_SBS_MINSCROLL, EXC_OBJ_SBS_MAXSCROLL );
             if( aCtrlProp.GetProperty( nApiValue, CREATE_OUSTRING( "SpinValueMax" ) ) )
