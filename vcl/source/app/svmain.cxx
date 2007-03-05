@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:23:06 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 15:24:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,11 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
 #include <rtl/logfile.hxx>
+
+#if OSL_DEBUG_LEVEL > 0
+#include <typeinfo>
+#include <rtl/strbuf.hxx>
+#endif
 
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
@@ -412,10 +417,36 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
 
 void DeInitVCL()
 {
-    DBG_ASSERT( Application::GetTopWindowCount()==0, "DeInitVCL: some windows are still alive!" );
-
     ImplSVData* pSVData = ImplGetSVData();
     pSVData->mbDeInit = TRUE;
+
+    // give ime status a chance to destroy its own windows
+    delete pSVData->mpImeStatus;
+    pSVData->mpImeStatus = NULL;
+
+    #if OSL_DEBUG_LEVEL > 0
+    rtl::OStringBuffer aBuf( 256 );
+    aBuf.append( "DeInitVCL: some top Windows are still alive\n" );
+    long nTopWindowCount = Application::GetTopWindowCount();
+    long nBadTopWindows = nTopWindowCount;
+    for( long i = 0; i < nTopWindowCount; i++ )
+    {
+        Window* pWin = Application::GetTopWindow( i );
+        // default window will be destroyed further down
+        // but may still be useful during deinit up to that point
+        if( pWin == pSVData->mpDefaultWin )
+            nBadTopWindows--;
+        else
+        {
+            aBuf.append( "text = \"" );
+            aBuf.append( rtl::OUStringToOString( pWin->GetText(), osl_getThreadTextEncoding() ) );
+            aBuf.append( "\" type = \"" );
+            aBuf.append( typeid(*pWin).name() );
+            aBuf.append( "\"\n" );
+        }
+    }
+    DBG_ASSERT( nBadTopWindows==0, aBuf.getStr() );
+    #endif
 
     ImplImageTree::cleanup();
 
@@ -563,8 +594,6 @@ void DeInitVCL()
 
     // destroy all Sal interfaces before destorying the instance
     // and thereby unloading the plugin
-    delete pSVData->mpImeStatus;
-    pSVData->mpImeStatus = NULL;
     delete pSVData->mpSalSystem;
     pSVData->mpSalSystem = NULL;
     delete pSVData->mpSalTimer;
