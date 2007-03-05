@@ -4,9 +4,9 @@
  *
  *  $RCSfile: miscuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:46:06 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ sal_Bool ScUnoHelpFunctions::GetBoolFromAny( const uno::Any& aAny )
 //  static
 sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
 {
-    sal_Int16 nRet;
+    sal_Int16 nRet = 0;
     if ( aAny >>= nRet )
         return nRet;
     return 0;
@@ -162,7 +162,7 @@ sal_Int16 ScUnoHelpFunctions::GetInt16FromAny( const uno::Any& aAny )
 //  static
 sal_Int32 ScUnoHelpFunctions::GetInt32FromAny( const uno::Any& aAny )
 {
-    sal_Int32 nRet;
+    sal_Int32 nRet = 0;
     if ( aAny >>= nRet )
         return nRet;
     return 0;
