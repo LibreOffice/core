@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewdata.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 14:00:27 $
+ *  last change: $Author: obo $ $Date: 2007-03-05 14:48:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2714,7 +2714,7 @@ void ScViewData::ReadUserDataSequence(const uno::Sequence <beans::PropertyValue>
             pOptions->SetOption(VOPT_GRID, ScUnoHelpFunctions::GetBoolFromAny( rSettings[i].Value ) );
         else if ( sName.compareToAscii( SC_UNO_GRIDCOLOR ) == 0 )
         {
-            sal_Int64 nColor;
+            sal_Int64 nColor = 0;
             if (rSettings[i].Value >>= nColor)
             {
                 String aColorName;
