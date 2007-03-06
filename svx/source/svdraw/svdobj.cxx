@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:07:25 $
+ *  last change: $Author: obo $ $Date: 2007-03-06 14:41:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3422,6 +3422,15 @@ void SdrObject::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const ba
     basegfx::B2DTuple aTranslate;
     double fRotate, fShearX;
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
+    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
+    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    {
+        aScale.setX(fabs(aScale.getX()));
+        aScale.setY(fabs(aScale.getY()));
+        fRotate = fmod(fRotate + F_PI, F_2PI);
+    }
 
     // force metric to pool metric
     SfxMapUnit eMapUnit = pModel->GetItemPool().GetMetric(0);
