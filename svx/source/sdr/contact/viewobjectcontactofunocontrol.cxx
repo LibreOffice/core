@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewobjectcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 15:58:44 $
+ *  last change: $Author: obo $ $Date: 2007-03-06 14:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -520,13 +520,12 @@ namespace sdr { namespace contact {
 
             @param _rDisplayInfo
                 display info as passed to the paint-related method
-            @param _out_rpObject
-                out-parameter taking our SdrUnoObj upon successfull return
         */
-        bool initPaint( const DisplayInfo& _rDisplayInfo, SdrUnoObj*& _out_rpObject )
+        bool initPaint( const DisplayInfo& _rDisplayInfo )
         {
             Reference< XView > xUnused;
-            return initPaint( _rDisplayInfo, _out_rpObject, xUnused );
+            SdrUnoObj* pUnused( NULL );
+            return initPaint( _rDisplayInfo, pUnused, xUnused );
         }
 
         /** ensures that we have an XControl which can be painted onto the given display
@@ -982,9 +981,6 @@ namespace sdr { namespace contact {
 
         SdrPageView* pPageView = pPageViewContact ? &pPageViewContact->GetPageWindow().GetPageView() : _rDisplayInfo.GetPageView();
 
-        OSL_TRACE( "control for: %p\n", pDeviceForControl );
-        OSL_TRACE( "  page view: %s\n", pPageViewContact ? "yes" : "no" );
-
         ::std::auto_ptr< IPageViewAccess > pPVAccess;
         pPVAccess.reset( pPageView ? (IPageViewAccess*)new SdrPageViewAccess( *pPageView ) : (IPageViewAccess*)new DummyPageViewAccess() );
         return impl_ensureControl_nothrow( *pPVAccess, *pDeviceForControl );
@@ -1050,8 +1046,6 @@ namespace sdr { namespace contact {
 
         // listen for changes in the control container
 
-        OSL_TRACE( "control for: %p\n", &_rDevice );
-        OSL_TRACE( "       type: %i\n", _rDevice.GetOutDevType() );
         m_pOutputDeviceForWindow = &_rDevice;
         m_xControl = xControl;
         m_xContainer = m_xContainer.query( _rPageView.getControlContainer( _rDevice ) );
@@ -1666,9 +1660,16 @@ namespace sdr { namespace contact {
     }
 
     //--------------------------------------------------------------------
-    void ViewObjectContactOfUnoControl::positionControl( DisplayInfo& _rDisplayInfo ) const
+    void ViewObjectContactOfUnoControl::positionControlForPaint( DisplayInfo& _rDisplayInfo ) const
     {
         VOCGuard aGuard( *m_pImpl );
+
+        // ensure we have a control. If we don't, then the Drawing Layer might be tempted to
+        // never draw the complete form layer.
+        // #i75095# / 2007-03-05 / frank.schoenheit@sun.com
+        m_pImpl->ensureControl( _rDisplayInfo );
+
+        // position the control
         m_pImpl->positionControlForPaint( _rDisplayInfo );
     }
 
