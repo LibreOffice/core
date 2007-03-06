@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-06 09:51:37 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-06 13:42:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,7 +133,8 @@ void OOXMLPropertyImpl::resolve(doctok::Properties & rProperties)
     switch (meType)
     {
     case SPRM:
-        rProperties.sprm(*this);
+        if (mId != 0x0)
+            rProperties.sprm(*this);
         break;
     case ATTRIBUTE:
         rProperties.attribute(mId, *getValue());
