@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:16:45 $
+ *  last change: $Author: obo $ $Date: 2007-03-06 14:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3133,6 +3133,15 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     basegfx::B2DTuple aTranslate;
     double fRotate, fShearX;
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
+    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
+    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    {
+        aScale.setX(fabs(aScale.getX()));
+        aScale.setY(fabs(aScale.getY()));
+        fRotate = fmod(fRotate + F_PI, F_2PI);
+    }
 
     // copy poly
     basegfx::B2DPolyPolygon aNewPolyPolygon(rPolyPolygon);
