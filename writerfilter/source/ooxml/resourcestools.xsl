@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-06 09:51:38 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-06 13:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -892,16 +892,18 @@ bool </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>()
 {</xsl:text>
-    <xsl:choose>
-      <xsl:when test="$resource/action[@name='end' and @action='endParagraphGroup']">
+    <xsl:if test="$resource/action[@name='end' and @action='endOfParagraph']">
+      <xsl:text>
+    mrStream.utext(reinterpret_cast&lt;const sal_uInt8 *&gt;(sLF.getStr()), sLF.getLength());</xsl:text>
+    </xsl:if>
+    <xsl:if test="$resource/action[@name='end' and @action='endParagraphGroup']">
         <xsl:text>
     mrStream.endParagraphGroup();</xsl:text>
-      </xsl:when>
-      <xsl:when test="$resource/action[@name='end' and @action='endCharacterGroup']">
+    </xsl:if>
+    <xsl:if test="$resource/action[@name='end' and @action='endCharacterGroup']">
         <xsl:text>
     mrStream.endCharacterGroup();</xsl:text>
-      </xsl:when>
-    </xsl:choose>
+    </xsl:if>
     <xsl:text>
 #ifdef DEBUG_OOXML_MEMORY
    clog &lt;&lt; "&lt;--</xsl:text>
@@ -1045,15 +1047,14 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
 
   <xsl:template name="defineooxmlids">
     <xsl:text>
-namespace writerfilter {
-namespace NS_ooxml
+namespace writerfilter { namespace NS_ooxml
 {</xsl:text>
     <xsl:for-each select="//resource">
       <xsl:variable name="name" select="@name"/>
-      <xsl:for-each select="attribute|element">
+      <xsl:for-each select="attribute|element|sprm">
         <xsl:if test="contains(@tokenid, 'ooxml:')">
           <xsl:text>
-          const QName_t LN_</xsl:text>
+    const QName_t LN_</xsl:text>
           <xsl:value-of select="substring-after(@tokenid, 'ooxml:')"/>
           <xsl:text> = </xsl:text>
           <xsl:value-of select="90000 + position()"/>
