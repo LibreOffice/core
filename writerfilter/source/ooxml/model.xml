@@ -14018,6 +14018,7 @@
 <resource name="CT_Text" resource="Stream"/>
 <resource name="CT_P" resource="Stream">
   <action name="start" action="startParagraphGroup"/>
+  <action name="end" action="endOfParagraph"/>
   <action name="end" action="endParagraphGroup"/>
 </resource>
 <resource name="CT_R" resource="Stream">
@@ -14069,39 +14070,40 @@
 <resource name="CT_OnOff" resource="BooleanValue"/>
 <resource name="CT_PPrBase" resource="Property">
   <sprm name="pStyle" tokenid="0x0"/>
-  <sprm name="keepNext" tokenid="0x0"/>
-  <sprm name="keepLines" tokenid="0x0"/>
-  <sprm name="pageBreakBefore" tokenid="0x0"/>
+  <sprm name="keepNext" tokenid="0x2406"/>
+  <sprm name="keepLines" tokenid="0x2405"/>
+  <sprm name="pageBreakBefore" tokenid="0x2407"/>
   <sprm name="framePr" tokenid="0x0"/>
-  <sprm name="widowControl" tokenid="0x0"/>
+  <sprm name="widowControl" tokenid="ooxml:windowControl"/>
   <sprm name="numPr" tokenid="0x0"/>
-  <sprm name="suppressLineNumbers" tokenid="0x0"/>
+  <sprm name="suppressLineNumbers" tokenid="0x240c"/>
   <sprm name="pBdr" tokenid="0x0"/>
-  <sprm name="shd" tokenid="0x0"/>
-  <sprm name="tabs" tokenid="0x0"/>
-  <sprm name="suppressAutoHyphens" tokenid="0x0"/>
-  <sprm name="kinsoku" tokenid="0x0"/>
-  <sprm name="wordWrap" tokenid="0x0"/>
-  <sprm name="overflowPunct" tokenid="0x0"/>
-  <sprm name="topLinePunct" tokenid="0x0"/>
-  <sprm name="autoSpaceDE" tokenid="0x0"/>
-  <sprm name="autoSpaceDN" tokenid="0x0"/>
-  <sprm name="bidi" tokenid="0x0"/>
-  <sprm name="adjustRightInd" tokenid="0x0"/>
-  <sprm name="snapToGrid" tokenid="0x0"/>
-  <sprm name="spacing" tokenid="0x0"/>
+  <sprm name="shd" tokenid="0x442d"/>
+  <sprm name="tabs" tokenid="0xc60d"/>
+  <sprm name="suppressAutoHyphens" tokenid="0x242a"/>
+  <sprm name="kinsoku" tokenid="ooxml:kinsoku"/>
+  <sprm name="wordWrap" tokenid="ooxml:wordWrap"/>
+  <sprm name="overflowPunct" tokenid="0x2435"/>
+  <sprm name="topLinePunct" tokenid="0x2436"/>
+  <sprm name="autoSpaceDE" tokenid="0x2437"/>
+  <sprm name="autoSpaceDN" tokenid="0x2438"/>
+  <sprm name="bidi" tokenid="0x2441"/>
+  <sprm name="adjustRightInd" tokenid="ooxml:adjustRightInd"/>
+  <sprm name="snapToGrid" tokenid="ooxml:snapToGrid"/>
+  <sprm name="spacing" tokenid="ooxml:spacing"/>
   <sprm name="ind" tokenid="0x0"/>
-  <sprm name="contextualSpacing" tokenid="0x0"/>
-  <sprm name="mirrorIndents" tokenid="0x0"/>
-  <sprm name="suppressOverlap" tokenid="0x0"/>
+  <sprm name="contextualSpacing" tokenid="0x246d"/>
+  <sprm name="mirrorIndents" tokenid="0x2470"/>
+  <sprm name="suppressOverlap" tokenid="0x2462"/>
   <sprm name="jc" tokenid="0x0"/>
-  <sprm name="textDirection" tokenid="0x0"/>
-  <sprm name="textAlignment" tokenid="0x0"/>
-  <sprm name="textboxTightWrap" tokenid="0x0"/>
-  <sprm name="outlineLvl" tokenid="0x0"/>
-  <sprm name="divId" tokenid="0x0"/>
-  <sprm name="cnfStyle" tokenid="0x0"/>
+  <sprm name="textDirection" tokenid="0x443a"/>
+  <sprm name="textAlignment" tokenid="0x4439"/>
+  <sprm name="textboxTightWrap" tokenid="0x2471"/>
+  <sprm name="outlineLvl" tokenid="0x2640"/>
+  <sprm name="divId" tokenid="ooxml:divId"/>
+  <sprm name="cnfStyle" tokenid="ooxml:cnfStyle"/>
 </resource>
+<resource name="CT_PPr" resource="Properties"/>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>
