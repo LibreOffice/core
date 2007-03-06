@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofunocontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:14:50 $
+ *  last change: $Author: obo $ $Date: 2007-03-06 14:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,7 +208,7 @@ namespace sdr { namespace contact {
         // since the VCL window is not moved to the proper position.
         // #i72694# / 2006-12-18 / frank.schoenheit@sun.com
         const ViewObjectContactOfUnoControl& rVOC( dynamic_cast< const ViewObjectContactOfUnoControl& >( _rAssociatedVOC ) );
-        rVOC.positionControl( _rDisplayInfo );
+        rVOC.positionControlForPaint( _rDisplayInfo );
 
         return ViewContactOfSdrObj::ShouldPaintObject( _rDisplayInfo, _rAssociatedVOC );
     }
