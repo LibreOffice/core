@@ -14067,6 +14067,41 @@
 </resource>
 <resource name="CT_RPr" resource="Properties"/>
 <resource name="CT_OnOff" resource="BooleanValue"/>
+<resource name="CT_PPrBase" resource="Property">
+  <sprm name="pStyle" tokenid="0x0"/>
+  <sprm name="keepNext" tokenid="0x0"/>
+  <sprm name="keepLines" tokenid="0x0"/>
+  <sprm name="pageBreakBefore" tokenid="0x0"/>
+  <sprm name="framePr" tokenid="0x0"/>
+  <sprm name="widowControl" tokenid="0x0"/>
+  <sprm name="numPr" tokenid="0x0"/>
+  <sprm name="suppressLineNumbers" tokenid="0x0"/>
+  <sprm name="pBdr" tokenid="0x0"/>
+  <sprm name="shd" tokenid="0x0"/>
+  <sprm name="tabs" tokenid="0x0"/>
+  <sprm name="suppressAutoHyphens" tokenid="0x0"/>
+  <sprm name="kinsoku" tokenid="0x0"/>
+  <sprm name="wordWrap" tokenid="0x0"/>
+  <sprm name="overflowPunct" tokenid="0x0"/>
+  <sprm name="topLinePunct" tokenid="0x0"/>
+  <sprm name="autoSpaceDE" tokenid="0x0"/>
+  <sprm name="autoSpaceDN" tokenid="0x0"/>
+  <sprm name="bidi" tokenid="0x0"/>
+  <sprm name="adjustRightInd" tokenid="0x0"/>
+  <sprm name="snapToGrid" tokenid="0x0"/>
+  <sprm name="spacing" tokenid="0x0"/>
+  <sprm name="ind" tokenid="0x0"/>
+  <sprm name="contextualSpacing" tokenid="0x0"/>
+  <sprm name="mirrorIndents" tokenid="0x0"/>
+  <sprm name="suppressOverlap" tokenid="0x0"/>
+  <sprm name="jc" tokenid="0x0"/>
+  <sprm name="textDirection" tokenid="0x0"/>
+  <sprm name="textAlignment" tokenid="0x0"/>
+  <sprm name="textboxTightWrap" tokenid="0x0"/>
+  <sprm name="outlineLvl" tokenid="0x0"/>
+  <sprm name="divId" tokenid="0x0"/>
+  <sprm name="cnfStyle" tokenid="0x0"/>
+</resource>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>
