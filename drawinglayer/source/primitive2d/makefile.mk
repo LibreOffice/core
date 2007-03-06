@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: aw $ $Date: 2007-01-25 18:20:23 $
+#   last change: $Author: aw $ $Date: 2007-03-06 12:34:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,17 +50,21 @@ SLOFILES= \
         $(SLO)$/baseprimitive2d.obj				\
         $(SLO)$/backgroundcolorprimitive2d.obj	\
         $(SLO)$/bitmapprimitive2d.obj			\
+        $(SLO)$/controlprimitive2d.obj			\
         $(SLO)$/embedded3dprimitive2d.obj		\
         $(SLO)$/fillbitmapprimitive2d.obj		\
         $(SLO)$/fillgradientprimitive2d.obj		\
         $(SLO)$/fillhatchprimitive2d.obj		\
+        $(SLO)$/graphicprimitive2d.obj			\
         $(SLO)$/gridprimitive2d.obj				\
         $(SLO)$/groupprimitive2d.obj			\
         $(SLO)$/helplineprimitive2d.obj			\
         $(SLO)$/markerarrayprimitive2d.obj		\
         $(SLO)$/maskprimitive2d.obj				\
+        $(SLO)$/mediaprimitive2d.obj			\
         $(SLO)$/metafileprimitive2d.obj			\
         $(SLO)$/modifiedcolorprimitive2d.obj	\
+        $(SLO)$/oleprimitive2d.obj				\
         $(SLO)$/polypolygonprimitive2d.obj		\
         $(SLO)$/polygonprimitive2d.obj			\
         $(SLO)$/sceneprimitive2d.obj			\

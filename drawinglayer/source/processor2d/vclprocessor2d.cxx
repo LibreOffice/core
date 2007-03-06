@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-21 09:00:34 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,48 +37,12 @@
 #include <drawinglayer/processor2d/vclprocessor2d.hxx>
 #endif
 
-#ifndef _SV_OUTDEV_HXX
-#include <vcl/outdev.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
-#include <basegfx/polygon/b2dpolygon.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
-#include <drawinglayer/attribute/fillattribute.hxx>
-#endif
-
-#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
-#include <basegfx/polygon/b2dpolypolygontools.hxx>
-#endif
-
-#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
-#include <basegfx/polygon/b2dpolygontools.hxx>
-#endif
-
-#ifndef INCLUDED_DRAWINGLAYER_TEXTURE_TEXTURE_HXX
-#include <drawinglayer/texture/texture.hxx>
-#endif
-
-#ifndef _SV_BMPACC_HXX
-#include <vcl/bmpacc.hxx>
-#endif
-
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
-#endif
-
-#ifndef _SV_VIRDEV_HXX
-#include <vcl/virdev.hxx>
-#endif
-
-#ifndef _GRFMGR_HXX
-#include <goodies/grfmgr.hxx>
-#endif
-
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE_TEXTPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
+#endif
+
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
@@ -89,6 +53,18 @@
 #include <drawinglayer/primitive2d/bitmapprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBITMAPTRANSFORM_HXX
+#include <vclhelperbitmaptransform.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolygontools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBITMAPRENDER_HXX
+#include <vclhelperbitmaprender.hxx>
+#endif
+
 #ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_SDRFILLBITMAPATTRIBUTE_HXX
 #include <drawinglayer/attribute/sdrfillbitmapattribute.hxx>
 #endif
@@ -97,20 +73,36 @@
 #include <drawinglayer/primitive2d/fillbitmapprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_ATTRIBUTE_FILLATTRIBUTE_HXX
+#include <drawinglayer/attribute/fillattribute.hxx>
+#endif
+
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYPOLYGONPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERGRADIENT_HXX
+#include <vclhelpergradient.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_METAFILEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/metafileprimitive2d.hxx>
 #endif
 
-#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
-#include <basegfx/tools/canvastools.hxx>
-#endif
-
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MASKPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
+#include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBUFFERDEVICE_HXX
+#include <vclhelperbufferdevice.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
+#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
 #endif
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ALPHAPRIMITIVE2D_HXX
@@ -125,891 +117,21 @@
 #include <drawinglayer/primitive2d/markerarrayprimitive2d.hxx>
 #endif
 
+#ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
+#include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef _BGFX_POLYPOLYGON_B2DPOLYGONCLIPPER_HXX
+#include <basegfx/polygon/b2dpolygonclipper.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
-
-//////////////////////////////////////////////////////////////////////////////
-// support methods for vcl direct gradeint renderering
-
-namespace drawinglayer
-{
-    namespace
-    {
-        sal_uInt32 impCalcGradientSteps(OutputDevice& rOutDev, sal_uInt32 nSteps, const basegfx::B2DRange& rRange, sal_uInt32 nMaxDist)
-        {
-            if(nSteps == 0L)
-            {
-                const Size aSize(rOutDev.LogicToPixel(Size(basegfx::fround(rRange.getWidth()), basegfx::fround(rRange.getHeight()))));
-                nSteps = (aSize.getWidth() + aSize.getHeight()) >> 3L;
-            }
-
-            if(nSteps < 2L)
-            {
-                nSteps = 2L;
-            }
-
-            if(nSteps > nMaxDist)
-            {
-                nSteps = nMaxDist;
-            }
-
-            return nSteps;
-        }
-
-        void impDrawGradientToOutDevSimple(
-            OutputDevice& rOutDev,
-            const basegfx::B2DPolyPolygon& rTargetForm,
-            const ::std::vector< basegfx::B2DHomMatrix >& rMatrices,
-            const ::std::vector< basegfx::BColor >& rColors,
-            const basegfx::B2DPolygon& rUnitPolygon)
-        {
-            rOutDev.SetLineColor();
-
-            for(sal_uInt32 a(0L); a < rColors.size(); a++)
-            {
-                // set correct color
-                const basegfx::BColor aFillColor(rColors[a]);
-                rOutDev.SetFillColor(Color(aFillColor));
-
-                if(a)
-                {
-                    if(a - 1L < rMatrices.size())
-                    {
-                        basegfx::B2DPolygon aNewPoly(rUnitPolygon);
-                        aNewPoly.transform(rMatrices[a - 1L]);
-                        rOutDev.DrawPolygon(Polygon(aNewPoly));
-                    }
-                }
-                else
-                {
-                    rOutDev.DrawPolyPolygon(PolyPolygon(rTargetForm));
-                }
-            }
-        }
-
-        void impDrawGradientToOutDevComplex(
-            OutputDevice& rOutDev,
-            const basegfx::B2DPolyPolygon& rTargetForm,
-            const ::std::vector< basegfx::B2DHomMatrix >& rMatrices,
-            const ::std::vector< basegfx::BColor >& rColors,
-            const basegfx::B2DPolygon& rUnitPolygon)
-        {
-            PolyPolygon aVclTargetForm(rTargetForm);
-            ::std::vector< Polygon > aVclPolygons;
-            sal_uInt32 a;
-
-            // remember and set to XOR
-            rOutDev.SetLineColor();
-            rOutDev.Push(PUSH_RASTEROP);
-            rOutDev.SetRasterOp(ROP_XOR);
-
-            // draw gradient PolyPolygons
-            for(a = 0L; a < rMatrices.size(); a++)
-            {
-                // create polygon and remember
-                basegfx::B2DPolygon aNewPoly(rUnitPolygon);
-                aNewPoly.transform(rMatrices[a]);
-                aVclPolygons.push_back(Polygon(aNewPoly));
-
-                // set correct color
-                if(rColors.size() > a)
-                {
-                    const basegfx::BColor aFillColor(rColors[a]);
-                    rOutDev.SetFillColor(Color(aFillColor));
-                }
-
-                // create vcl PolyPolygon and draw it
-                if(a)
-                {
-                    PolyPolygon aVclPolyPoly(aVclPolygons[a - 1L]);
-                    aVclPolyPoly.Insert(aVclPolygons[a]);
-                    rOutDev.DrawPolyPolygon(aVclPolyPoly);
-                }
-                else
-                {
-                    PolyPolygon aVclPolyPoly(aVclTargetForm);
-                    aVclPolyPoly.Insert(aVclPolygons[0L]);
-                    rOutDev.DrawPolyPolygon(aVclPolyPoly);
-                }
-            }
-
-            // draw last poly in last color
-            if(rColors.size())
-            {
-                const basegfx::BColor aFillColor(rColors[rColors.size() - 1L]);
-                rOutDev.SetFillColor(Color(aFillColor));
-                rOutDev.DrawPolygon(aVclPolygons[aVclPolygons.size() - 1L]);
-            }
-
-            // draw object form in black and go back to XOR
-            rOutDev.SetFillColor(COL_BLACK);
-            rOutDev.SetRasterOp(ROP_0);
-            rOutDev.DrawPolyPolygon(aVclTargetForm);
-            rOutDev.SetRasterOp(ROP_XOR);
-
-            // draw gradient PolyPolygons again
-            for(a = 0L; a < rMatrices.size(); a++)
-            {
-                // set correct color
-                if(rColors.size() > a)
-                {
-                    const basegfx::BColor aFillColor(rColors[a]);
-                    rOutDev.SetFillColor(Color(aFillColor));
-                }
-
-                // create vcl PolyPolygon and draw it
-                if(a)
-                {
-                    PolyPolygon aVclPolyPoly(aVclPolygons[a - 1L]);
-                    aVclPolyPoly.Insert(aVclPolygons[a]);
-                    rOutDev.DrawPolyPolygon(aVclPolyPoly);
-                }
-                else
-                {
-                    PolyPolygon aVclPolyPoly(aVclTargetForm);
-                    aVclPolyPoly.Insert(aVclPolygons[0L]);
-                    rOutDev.DrawPolyPolygon(aVclPolyPoly);
-                }
-            }
-
-            // draw last poly in last color
-            if(rColors.size())
-            {
-                const basegfx::BColor aFillColor(rColors[rColors.size() - 1L]);
-                rOutDev.SetFillColor(Color(aFillColor));
-                rOutDev.DrawPolygon(aVclPolygons[aVclPolygons.size() - 1L]);
-            }
-
-            // reset drawmode
-            rOutDev.Pop();
-        }
-
-        void impDrawGradientToOutDev(
-            OutputDevice& rOutDev,
-            const basegfx::B2DPolyPolygon& rTargetForm,
-            attribute::GradientStyle eGradientStyle,
-            sal_uInt32 nSteps,
-            const basegfx::BColor& rStart,
-            const basegfx::BColor& rEnd,
-            double fBorder, double fAngle, double fOffsetX, double fOffsetY, bool bSimple)
-        {
-            const basegfx::B2DRange aOutlineRange(basegfx::tools::getRange(rTargetForm));
-            ::std::vector< basegfx::B2DHomMatrix > aMatrices;
-            ::std::vector< basegfx::BColor > aColors;
-            basegfx::B2DPolygon aUnitPolygon;
-
-            if(attribute::GRADIENTSTYLE_RADIAL == eGradientStyle || attribute::GRADIENTSTYLE_ELLIPTICAL == eGradientStyle)
-            {
-                const basegfx::B2DPoint aCircleCenter(0.5, 0.5);
-                aUnitPolygon = basegfx::tools::createPolygonFromEllipse(aCircleCenter, 0.5, 0.5);
-                // aUnitPolygon = basegfx::tools::adaptiveSubdivideByAngle(aUnitPolygon);
-            }
-            else
-            {
-                aUnitPolygon = basegfx::tools::createPolygonFromRect(basegfx::B2DRange(0.0, 0.0, 1.0, 1.0));
-            }
-
-            // make sure steps is not too high/low
-            nSteps = impCalcGradientSteps(rOutDev, nSteps, aOutlineRange, sal_uInt32((rStart.getMaximumDistance(rEnd) * 127.5) + 0.5));
-
-            // create geometries
-            switch(eGradientStyle)
-            {
-                case attribute::GRADIENTSTYLE_LINEAR:
-                {
-                    texture::GeoTexSvxGradientLinear aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
-                    aGradient.appendTransformations(aMatrices);
-                    aGradient.appendColors(aColors);
-                    break;
-                }
-                case attribute::GRADIENTSTYLE_AXIAL:
-                {
-                    texture::GeoTexSvxGradientAxial aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fAngle);
-                    aGradient.appendTransformations(aMatrices);
-                    aGradient.appendColors(aColors);
-                    break;
-                }
-                case attribute::GRADIENTSTYLE_RADIAL:
-                {
-                    texture::GeoTexSvxGradientRadial aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetY);
-                    aGradient.appendTransformations(aMatrices);
-                    aGradient.appendColors(aColors);
-                    break;
-                }
-                case attribute::GRADIENTSTYLE_ELLIPTICAL:
-                {
-                    texture::GeoTexSvxGradientElliptical aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
-                    aGradient.appendTransformations(aMatrices);
-                    aGradient.appendColors(aColors);
-                    break;
-                }
-                case attribute::GRADIENTSTYLE_SQUARE:
-                {
-                    texture::GeoTexSvxGradientSquare aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
-                    aGradient.appendTransformations(aMatrices);
-                    aGradient.appendColors(aColors);
-                    break;
-                }
-                case attribute::GRADIENTSTYLE_RECT:
-                {
-                    texture::GeoTexSvxGradientRect aGradient(aOutlineRange, rStart, rEnd, nSteps, fBorder, fOffsetX, fOffsetX, fAngle);
-                    aGradient.appendTransformations(aMatrices);
-                    aGradient.appendColors(aColors);
-                    break;
-                }
-            }
-
-            // paint them with mask using the XOR method
-            if(aMatrices.size())
-            {
-                if(bSimple)
-                {
-                    impDrawGradientToOutDevSimple(rOutDev, rTargetForm, aMatrices, aColors, aUnitPolygon);
-                }
-                else
-                {
-                    impDrawGradientToOutDevComplex(rOutDev, rTargetForm, aMatrices, aColors, aUnitPolygon);
-                }
-            }
-        }
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-// support for rendering Bitmap and BitmapEx contents
-
-namespace drawinglayer
-{
-    namespace
-    {
-        void impSmoothPoint(BitmapColor& rValue, const basegfx::B2DPoint& rSource, sal_Int32 nIntX, sal_Int32 nIntY, BitmapReadAccess& rRead)
-        {
-            double fDeltaX(rSource.getX() - nIntX);
-            double fDeltaY(rSource.getY() - nIntY);
-            sal_Int32 nIndX(0L);
-            sal_Int32 nIndY(0L);
-
-            if(fDeltaX > 0.0 && nIntX + 1L < rRead.Width())
-            {
-                nIndX++;
-            }
-            else if(fDeltaX < 0.0 && nIntX >= 1L)
-            {
-                fDeltaX = -fDeltaX;
-                nIndX--;
-            }
-
-            if(fDeltaY > 0.0 && nIntY + 1L < rRead.Height())
-            {
-                nIndY++;
-            }
-            else if(fDeltaY < 0.0 && nIntY >= 1L)
-            {
-                fDeltaY = -fDeltaY;
-                nIndY--;
-            }
-
-            if(nIndX || nIndY)
-            {
-                const double fColorToReal(1.0 / 255.0);
-                double fR(rValue.GetRed() * fColorToReal);
-                double fG(rValue.GetGreen() * fColorToReal);
-                double fB(rValue.GetBlue() * fColorToReal);
-                double fRBottom(0.0), fGBottom(0.0), fBBottom(0.0);
-
-                if(nIndX)
-                {
-                    const double fMulA(fDeltaX * fColorToReal);
-                    double fMulB(1.0 - fDeltaX);
-                    const BitmapColor aTopPartner(rRead.GetColor(nIntY, nIntX + nIndX));
-
-                    fR = (fR * fMulB) + (aTopPartner.GetRed() * fMulA);
-                    fG = (fG * fMulB) + (aTopPartner.GetGreen() * fMulA);
-                    fB = (fB * fMulB) + (aTopPartner.GetBlue() * fMulA);
-
-                    if(nIndY)
-                    {
-                        fMulB *= fColorToReal;
-                        const BitmapColor aBottom(rRead.GetColor(nIntY + nIndY, nIntX));
-                        const BitmapColor aBottomPartner(rRead.GetColor(nIntY + nIndY, nIntX + nIndX));
-
-                        fRBottom = (aBottom.GetRed() * fMulB) + (aBottomPartner.GetRed() * fMulA);
-                        fGBottom = (aBottom.GetGreen() * fMulB) + (aBottomPartner.GetGreen() * fMulA);
-                        fBBottom = (aBottom.GetBlue() * fMulB) + (aBottomPartner.GetBlue() * fMulA);
-                    }
-                }
-
-                if(nIndY)
-                {
-                    if(!nIndX)
-                    {
-                        const BitmapColor aBottom(rRead.GetColor(nIntY + nIndY, nIntX));
-
-                        fRBottom = aBottom.GetRed() * fColorToReal;
-                        fGBottom = aBottom.GetGreen() * fColorToReal;
-                        fBBottom = aBottom.GetBlue() * fColorToReal;
-                    }
-
-                    const double fMulB(1.0 - fDeltaY);
-
-                    fR = (fR * fMulB) + (fRBottom * fDeltaY);
-                    fG = (fG * fMulB) + (fGBottom * fDeltaY);
-                    fB = (fB * fMulB) + (fBBottom * fDeltaY);
-                }
-
-                rValue.SetRed((sal_uInt8)(fR * 255.0));
-                rValue.SetGreen((sal_uInt8)(fG * 255.0));
-                rValue.SetBlue((sal_uInt8)(fB * 255.0));
-            }
-        }
-
-        void impSmoothIndex(BitmapColor& rValue, const basegfx::B2DPoint& rSource, sal_Int32 nIntX, sal_Int32 nIntY, BitmapReadAccess& rRead)
-        {
-            double fDeltaX(rSource.getX() - nIntX);
-            double fDeltaY(rSource.getY() - nIntY);
-            sal_Int32 nIndX(0L);
-            sal_Int32 nIndY(0L);
-
-            if(fDeltaX > 0.0 && nIntX + 1L < rRead.Width())
-            {
-                nIndX++;
-            }
-            else if(fDeltaX < 0.0 && nIntX >= 1L)
-            {
-                fDeltaX = -fDeltaX;
-                nIndX--;
-            }
-
-            if(fDeltaY > 0.0 && nIntY + 1L < rRead.Height())
-            {
-                nIndY++;
-            }
-            else if(fDeltaY < 0.0 && nIntY >= 1L)
-            {
-                fDeltaY = -fDeltaY;
-                nIndY--;
-            }
-
-            if(nIndX || nIndY)
-            {
-                const double fColorToReal(1.0 / 255.0);
-                double fVal(rValue.GetIndex() * fColorToReal);
-                double fValBottom(0.0);
-
-                if(nIndX)
-                {
-                    const double fMulA(fDeltaX * fColorToReal);
-                    double fMulB(1.0 - fDeltaX);
-                    const BitmapColor aTopPartner(rRead.GetPixel(nIntY, nIntX + nIndX));
-
-                    fVal = (fVal * fMulB) + (aTopPartner.GetIndex() * fMulA);
-
-                    if(nIndY)
-                    {
-                        fMulB *= fColorToReal;
-                        const BitmapColor aBottom(rRead.GetPixel(nIntY + nIndY, nIntX));
-                        const BitmapColor aBottomPartner(rRead.GetPixel(nIntY + nIndY, nIntX + nIndX));
-
-                        fValBottom = (aBottom.GetIndex() * fMulB) + (aBottomPartner.GetIndex() * fMulA);
-                    }
-                }
-
-                if(nIndY)
-                {
-                    if(!nIndX)
-                    {
-                        const BitmapColor aBottom(rRead.GetPixel(nIntY + nIndY, nIntX));
-
-                        fValBottom = aBottom.GetIndex() * fColorToReal;
-                    }
-
-                    const double fMulB(1.0 - fDeltaY);
-
-                    fVal = (fVal * fMulB) + (fValBottom * fDeltaY);
-                }
-
-                rValue.SetIndex((sal_uInt8)(fVal * 255.0));
-            }
-        }
-
-        void impTransformBitmap(const Bitmap& rSource, Bitmap& rDestination, const basegfx::B2DHomMatrix& rTransform, bool bSmooth)
-        {
-            BitmapWriteAccess* pWrite = rDestination.AcquireWriteAccess();
-
-            if(pWrite)
-            {
-                const Size aContentSizePixel(rSource.GetSizePixel());
-                BitmapReadAccess* pRead = (const_cast< Bitmap& >(rSource)).AcquireReadAccess();
-
-                if(pRead)
-                {
-                    const Size aDestinationSizePixel(rDestination.GetSizePixel());
-                    bool bWorkWithIndex(rDestination.GetBitCount() <= 8);
-                    BitmapColor aOutside(pRead->GetBestMatchingColor(BitmapColor(0xff, 0xff, 0xff)));
-
-                    for(sal_Int32 y(0L); y < aDestinationSizePixel.getHeight(); y++)
-                    {
-                        for(sal_Int32 x(0L); x < aDestinationSizePixel.getWidth(); x++)
-                        {
-                            const basegfx::B2DPoint aSourceCoor(rTransform * basegfx::B2DPoint(x, y));
-                            const sal_Int32 nIntX(basegfx::fround(aSourceCoor.getX()));
-
-                            if(nIntX >= 0L && nIntX < aContentSizePixel.getWidth())
-                            {
-                                const sal_Int32 nIntY(basegfx::fround(aSourceCoor.getY()));
-
-                                if(nIntY >= 0L && nIntY < aContentSizePixel.getHeight())
-                                {
-                                    if(bWorkWithIndex)
-                                    {
-                                        BitmapColor aValue(pRead->GetPixel(nIntY, nIntX));
-
-                                        if(bSmooth)
-                                        {
-                                            impSmoothIndex(aValue, aSourceCoor, nIntX, nIntY, *pRead);
-                                        }
-
-                                        pWrite->SetPixel(y, x, aValue);
-                                    }
-                                    else
-                                    {
-                                        BitmapColor aValue(pRead->GetColor(nIntY, nIntX));
-
-                                        if(bSmooth)
-                                        {
-                                            impSmoothPoint(aValue, aSourceCoor, nIntX, nIntY, *pRead);
-                                        }
-
-                                        pWrite->SetPixel(y, x, aValue.IsIndex() ? aValue : pWrite->GetBestMatchingColor(aValue));
-                                    }
-
-                                    continue;
-                                }
-                            }
-
-                            // here are outside pixels. Complete mask
-                            if(bWorkWithIndex)
-                            {
-                                pWrite->SetPixel(y, x, aOutside);
-                            }
-                        }
-                    }
-
-                    delete pRead;
-                }
-
-                delete pWrite;
-            }
-        }
-
-        Bitmap impCreateEmptyBitmapWithPattern(const Bitmap& rSource, const Size& aTargetSizePixel)
-        {
-            Bitmap aRetval;
-            BitmapReadAccess* pReadAccess = (const_cast< Bitmap& >(rSource)).AcquireReadAccess();
-
-            if(pReadAccess)
-            {
-                if(rSource.GetBitCount() <= 8)
-                {
-                    BitmapPalette aPalette(pReadAccess->GetPalette());
-                    aRetval = Bitmap(aTargetSizePixel, rSource.GetBitCount(), &aPalette);
-                }
-                else
-                {
-                    aRetval = Bitmap(aTargetSizePixel, rSource.GetBitCount());
-                }
-
-                delete pReadAccess;
-            }
-
-            return aRetval;
-        }
-
-        BitmapEx impTransformBitmapEx(const BitmapEx& rSource, const Rectangle &rCroppedRectPixel, const basegfx::B2DHomMatrix& rTransform)
-        {
-            // force destination to 24 bit, we want to smooth output
-            const Size aDestinationSize(rCroppedRectPixel.GetSize());
-            Bitmap aDestination(impCreateEmptyBitmapWithPattern(rSource.GetBitmap(), aDestinationSize));
-            static bool bDoSmoothAtAll(true);
-            impTransformBitmap(rSource.GetBitmap(), aDestination, rTransform, bDoSmoothAtAll);
-
-            // create mask
-            if(rSource.IsTransparent())
-            {
-                if(rSource.IsAlpha())
-                {
-                    Bitmap aAlpha(impCreateEmptyBitmapWithPattern(rSource.GetAlpha().GetBitmap(), aDestinationSize));
-                    impTransformBitmap(rSource.GetAlpha().GetBitmap(), aAlpha, rTransform, bDoSmoothAtAll);
-                    return BitmapEx(aDestination, AlphaMask(aAlpha));
-                }
-                else
-                {
-                    Bitmap aMask(impCreateEmptyBitmapWithPattern(rSource.GetMask(), aDestinationSize));
-                    impTransformBitmap(rSource.GetMask(), aMask, rTransform, false);
-                    return BitmapEx(aDestination, aMask);
-                }
-            }
-
-            return BitmapEx(aDestination);
-        }
-
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-// support class for OutputDevice output with mask
-
-namespace drawinglayer
-{
-    namespace
-    {
-        class impBufferDevice
-        {
-            OutputDevice&                       mrOutDev;
-            VirtualDevice                       maContent;
-            VirtualDevice*                      mpMask;
-            VirtualDevice*                      mpAlpha;
-            Rectangle                           maDestPixel;
-
-        public:
-            impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange);
-            ~impBufferDevice();
-
-            void paint(double fTrans = 0.0);
-            bool isVisible() const { return !maDestPixel.IsEmpty(); }
-            VirtualDevice& getContent() { return maContent; }
-            VirtualDevice& getMask();
-            VirtualDevice& getAlpha();
-        };
-
-        impBufferDevice::impBufferDevice(OutputDevice& rOutDev, const basegfx::B2DRange& rRange)
-        :   mrOutDev(rOutDev),
-            maContent(rOutDev),
-            mpMask(0L),
-            mpAlpha(0L)
-        {
-            const Rectangle aRectLogic(
-                (sal_Int32)floor(rRange.getMinX()), (sal_Int32)floor(rRange.getMinY()),
-                (sal_Int32)floor(rRange.getMaxX()) + 1L, (sal_Int32)floor(rRange.getMaxY()) + 1L);
-            const Rectangle aRectPixel(rOutDev.LogicToPixel(aRectLogic));
-            const Point aEmptyPoint;
-            maDestPixel = Rectangle(aEmptyPoint, rOutDev.GetOutputSizePixel());
-            maDestPixel.Intersection(aRectPixel);
-
-            if(isVisible())
-            {
-                maContent.SetOutputSizePixel(maDestPixel.GetSize(), false);
-
-                const bool bWasEnabledSrc(rOutDev.IsMapModeEnabled());
-                rOutDev.EnableMapMode(false);
-                maContent.DrawOutDev(aEmptyPoint, maDestPixel.GetSize(), maDestPixel.TopLeft(), maDestPixel.GetSize(), rOutDev);
-                rOutDev.EnableMapMode(bWasEnabledSrc);
-
-                MapMode aNewMapMode(rOutDev.GetMapMode());
-                const Point aLogicTopLeft(rOutDev.PixelToLogic(maDestPixel.TopLeft()));
-                aNewMapMode.SetOrigin(Point(-aLogicTopLeft.X(), -aLogicTopLeft.Y()));
-
-                maContent.SetMapMode(aNewMapMode);
-            }
-        }
-
-        impBufferDevice::~impBufferDevice()
-        {
-            delete mpMask;
-            delete mpAlpha;
-        }
-
-        void impBufferDevice::paint(double fTrans)
-        {
-            const Point aEmptyPoint;
-            const Size aSizePixel(maContent.GetOutputSizePixel());
-            const bool bWasEnabledDst(mrOutDev.IsMapModeEnabled());
-
-            mrOutDev.EnableMapMode(false);
-            maContent.EnableMapMode(false);
-            Bitmap aContent(maContent.GetBitmap(aEmptyPoint, aSizePixel));
-
-            if(mpAlpha)
-            {
-                mpAlpha->EnableMapMode(false);
-                AlphaMask aAlphaMask(mpAlpha->GetBitmap(aEmptyPoint, aSizePixel));
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
-            }
-            else if(mpMask)
-            {
-                mpMask->EnableMapMode(false);
-                Bitmap aMask(mpMask->GetBitmap(aEmptyPoint, aSizePixel));
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aMask));
-            }
-            else if(0.0 != fTrans)
-            {
-                sal_uInt8 nMaskValue((sal_uInt8)basegfx::fround(fTrans * 255.0));
-                AlphaMask aAlphaMask(aSizePixel, &nMaskValue);
-                mrOutDev.DrawBitmapEx(maDestPixel.TopLeft(), BitmapEx(aContent, aAlphaMask));
-            }
-            else
-            {
-                mrOutDev.DrawBitmap(maDestPixel.TopLeft(), aContent);
-            }
-
-            mrOutDev.EnableMapMode(bWasEnabledDst);
-        }
-
-        VirtualDevice& impBufferDevice::getMask()
-        {
-            if(!mpMask)
-            {
-                mpMask = new VirtualDevice(mrOutDev, 1);
-                mpMask->SetOutputSizePixel(maDestPixel.GetSize(), true);
-                mpMask->SetMapMode(maContent.GetMapMode());
-            }
-
-            return *mpMask;
-        }
-
-        VirtualDevice& impBufferDevice::getAlpha()
-        {
-            if(!mpAlpha)
-            {
-                mpAlpha = new VirtualDevice();
-                mpAlpha->SetOutputSizePixel(maDestPixel.GetSize(), true);
-                mpAlpha->SetMapMode(maContent.GetMapMode());
-            }
-
-            return *mpAlpha;
-        }
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-// support for different kinds of bitmap rendering using vcl
-
-namespace drawinglayer
-{
-    namespace
-    {
-        void RenderBitmapPrimitive2D_GraphicManager(OutputDevice& rOutDev, const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform)
-        {
-            // prepare attributes
-            GraphicAttr aAttributes;
-
-            // decompose matrix to check for shear, rotate and mirroring
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            // mirror flags
-            aAttributes.SetMirrorFlags(
-                (basegfx::fTools::less(aScale.getX(), 0.0) ? BMP_MIRROR_HORZ : 0)|
-                (basegfx::fTools::less(aScale.getY(), 0.0) ? BMP_MIRROR_VERT : 0));
-
-            // rotation
-            if(!basegfx::fTools::equalZero(fRotate))
-            {
-                double fRotation(fmod(3600.0 - (fRotate * (10.0 / F_PI180)), 3600.0));
-                aAttributes.SetRotation((sal_uInt16)(fRotation));
-            }
-
-            // prepare Bitmap
-            basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
-
-            if(basegfx::fTools::equalZero(fRotate))
-            {
-                aOutlineRange.transform(rTransform);
-            }
-            else
-            {
-                // if rotated, create the unrotated output rectangle for the GraphicManager paint
-                basegfx::B2DHomMatrix aSimpleObjectMatrix;
-
-                aSimpleObjectMatrix.scale(fabs(aScale.getX()), fabs(aScale.getY()));
-                aSimpleObjectMatrix.translate(aTranslate.getX(), aTranslate.getY());
-
-                aOutlineRange.transform(aSimpleObjectMatrix);
-            }
-
-            // prepare dest coor
-            const Rectangle aDestRectPixel(
-                basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
-                basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
-
-            // paint it using GraphicManager
-            Graphic aGraphic(rBitmapEx);
-            GraphicObject aGraphicObject(aGraphic);
-            aGraphicObject.Draw(&rOutDev, aDestRectPixel.TopLeft(), aDestRectPixel.GetSize(), &aAttributes);
-        }
-
-        void RenderBitmapPrimitive2D_BitmapEx(OutputDevice& rOutDev, const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform)
-        {
-            // only translate and scale, use vcl's DrawBitmapEx().
-            BitmapEx aContent(rBitmapEx);
-
-            // prepare dest coor. Necessary to expand since vcl's DrawBitmapEx draws one pix less
-            basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
-            aOutlineRange.transform(rTransform);
-            const Rectangle aDestRectPixel(
-                basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
-                basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
-
-            // decompose matrix to check for shear, rotate and mirroring
-            basegfx::B2DVector aScale, aTranslate;
-            double fRotate, fShearX;
-            rTransform.decompose(aScale, aTranslate, fRotate, fShearX);
-
-            // Check mirroring.
-            sal_uInt32 nMirrorFlags(BMP_MIRROR_NONE);
-
-            if(basegfx::fTools::less(aScale.getX(), 0.0))
-            {
-                nMirrorFlags |= BMP_MIRROR_HORZ;
-            }
-
-            if(basegfx::fTools::less(aScale.getY(), 0.0))
-            {
-                nMirrorFlags |= BMP_MIRROR_VERT;
-            }
-
-            if(BMP_MIRROR_NONE != nMirrorFlags)
-            {
-                aContent.Mirror(nMirrorFlags);
-            }
-
-            // draw bitmap
-            rOutDev.DrawBitmapEx(aDestRectPixel.TopLeft(), aDestRectPixel.GetSize(), aContent);
-        }
-
-        void RenderBitmapPrimitive2D_self(OutputDevice& rOutDev, const BitmapEx& rBitmapEx, const basegfx::B2DHomMatrix& rTransform)
-        {
-            // process self with free transformation (containing shear and rotate). Get dest rect in pixels.
-            basegfx::B2DRange aOutlineRange(0.0, 0.0, 1.0, 1.0);
-            aOutlineRange.transform(rTransform);
-            const Rectangle aDestRectLogic(
-                basegfx::fround(aOutlineRange.getMinX()), basegfx::fround(aOutlineRange.getMinY()),
-                basegfx::fround(aOutlineRange.getMaxX()), basegfx::fround(aOutlineRange.getMaxY()));
-            const Rectangle aDestRectPixel(rOutDev.LogicToPixel(aDestRectLogic));
-
-            // intersect with output pixel size
-            const Rectangle aOutputRectPixel(Point(), rOutDev.GetOutputSizePixel());
-            const Rectangle aCroppedRectPixel(aDestRectPixel.GetIntersection(aOutputRectPixel));
-
-            if(!aCroppedRectPixel.IsEmpty())
-            {
-                // build transform from pixel in aDestination to pixel in rBitmapEx
-                basegfx::B2DHomMatrix aTransform;
-
-                // from relative in aCroppedRectPixel to relative in aDestRectPixel
-                aTransform.translate(aCroppedRectPixel.Left() - aDestRectPixel.Left(), aCroppedRectPixel.Top() - aDestRectPixel.Top());
-
-                // from relative in aDestRectPixel to absolute Logic
-                aTransform.scale((double)aDestRectLogic.getWidth() / (double)aDestRectPixel.getWidth(), (double)aDestRectLogic.getHeight() / (double)aDestRectPixel.getHeight());
-                aTransform.translate(aDestRectLogic.Left(), aDestRectLogic.Top());
-
-                // from absolute in Logic to unified object coordinates (0.0 .. 1.0 in x and y)
-                basegfx::B2DHomMatrix aInvBitmapTransform(rTransform);
-                aInvBitmapTransform.invert();
-                aTransform = aInvBitmapTransform * aTransform;
-
-                // from unit object coordinates to rBitmapEx pixel coordintes
-                const Size aSourceSizePixel(rBitmapEx.GetSizePixel());
-                aTransform.scale(aSourceSizePixel.getWidth() - 1L, aSourceSizePixel.getHeight() - 1L);
-
-                // create bitmap using source, destination and linear back-transformation
-                BitmapEx aDestination = impTransformBitmapEx(rBitmapEx, aCroppedRectPixel, aTransform);
-
-                // paint
-                const bool bWasEnabled(rOutDev.IsMapModeEnabled());
-                rOutDev.EnableMapMode(false);
-                rOutDev.DrawBitmapEx(aCroppedRectPixel.TopLeft(), aDestination);
-                rOutDev.EnableMapMode(bWasEnabled);
-            }
-        }
-
-        BitmapEx impModifyBitmapEx(const basegfx::BColorModifierStack& rBColorModifierStack, const BitmapEx& rSource)
-        {
-            Bitmap aChangedBitmap(rSource.GetBitmap());
-            bool bDone(false);
-
-            for(sal_uInt32 a(rBColorModifierStack.count()); a && !bDone; )
-            {
-                const basegfx::BColorModifier& rModifier = rBColorModifierStack.getBColorModifier(--a);
-
-                switch(rModifier.getMode())
-                {
-                    case basegfx::BCOLORMODIFYMODE_REPLACE :
-                    {
-                        // complete replace
-                        if(rSource.IsTransparent())
-                        {
-                            // clear bitmap with dest color
-                            aChangedBitmap.Erase(Color(rModifier.getBColor()));
-                        }
-                        else
-                        {
-                            // erase bitmap, caller will know to paint direct
-                            aChangedBitmap.SetEmpty();
-                        }
-
-                        bDone = true;
-                        break;
-                    }
-
-                    default : // BCOLORMODIFYMODE_INTERPOLATE, BCOLORMODIFYMODE_GRAY, BCOLORMODIFYMODE_BLACKANDWHITE
-                    {
-                        BitmapWriteAccess* pContent = aChangedBitmap.AcquireWriteAccess();
-
-                        if(pContent)
-                        {
-                            const double fConvertColor(1.0 / 255.0);
-
-                            for(sal_uInt32 y(0L); y < (sal_uInt32)pContent->Height(); y++)
-                            {
-                                for(sal_uInt32 x(0L); x < (sal_uInt32)pContent->Width(); x++)
-                                {
-                                    const BitmapColor aBMCol(pContent->GetColor(y, x));
-                                    const basegfx::BColor aBSource(
-                                        (double)aBMCol.GetRed() * fConvertColor,
-                                        (double)aBMCol.GetGreen() * fConvertColor,
-                                        (double)aBMCol.GetBlue() * fConvertColor);
-                                    const basegfx::BColor aBDest(rModifier.getModifiedColor(aBSource));
-
-                                    pContent->SetPixel(y, x, BitmapColor(Color(aBDest)));
-                                }
-                            }
-
-                            delete pContent;
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            if(aChangedBitmap.IsEmpty())
-            {
-                return BitmapEx();
-            }
-            else
-            {
-                if(rSource.IsTransparent())
-                {
-                    if(rSource.IsAlpha())
-                    {
-                        return BitmapEx(aChangedBitmap, rSource.GetAlpha());
-                    }
-                    else
-                    {
-                        return BitmapEx(aChangedBitmap, rSource.GetMask());
-                    }
-                }
-                else
-                {
-                    return BitmapEx(aChangedBitmap);
-                }
-            }
-        }
-    } // end of anonymous namespace
-} // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1147,10 +269,6 @@ namespace drawinglayer
                         // set Shadow attribute
                         if( pTCPP->getShadow() )
                             aFont.SetShadow( true );
-
-                        // set Outline attribute
-                        if( pTCPP->getOutline() )
-                            aFont.SetOutline( true );
                     }
 
                     mpOutputDevice->SetFont(aFont);
@@ -1197,7 +315,20 @@ namespace drawinglayer
             basegfx::B2DPolygon aLocalPolygon(rPolygonCandidate.getB2DPolygon());
             aLocalPolygon.transform(maCurrentTransformation);
 
-            mpOutputDevice->DrawPolyLine(Polygon(aLocalPolygon));
+            if(maCurrentClipPolyPolygon.count())
+            {
+                const basegfx::B2DPolyPolygon aClippedPolyPolygon(basegfx::tools::clipPolygonOnPolyPolygon(aLocalPolygon, maCurrentClipPolyPolygon, true, false));
+
+                for(sal_uInt32 a(0L); a < aClippedPolyPolygon.count(); a++)
+                {
+                    const basegfx::B2DPolygon aClippedPolygon(aClippedPolyPolygon.getB2DPolygon(a));
+                    mpOutputDevice->DrawPolyLine(Polygon(aClippedPolygon));
+                }
+            }
+            else
+            {
+                mpOutputDevice->DrawPolyLine(Polygon(aLocalPolygon));
+            }
         }
 
         // direct draw of transformed BitmapEx primitive
@@ -1438,6 +569,11 @@ namespace drawinglayer
             basegfx::B2DPolyPolygon aLocalPolyPolygon(rPolygonCandidate.getB2DPolyPolygon());
             aLocalPolyPolygon.transform(maCurrentTransformation);
 
+            if(maCurrentClipPolyPolygon.count())
+            {
+                aLocalPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aLocalPolyPolygon, maCurrentClipPolyPolygon, false, false);
+            }
+
             mpOutputDevice->DrawPolyPolygon(PolyPolygon(aLocalPolyPolygon));
         }
 
@@ -1489,30 +625,67 @@ namespace drawinglayer
             if(rMaskCandidate.getChildren().hasElements())
             {
                 basegfx::B2DPolyPolygon aMask(rMaskCandidate.getMask());
-                aMask.transform(maCurrentTransformation);
-                const basegfx::B2DRange aRange(basegfx::tools::getRange(aMask));
-                impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
 
-                if(aBufferDevice.isVisible())
+                if(aMask.count())
                 {
-                    // remember last OutDev and set to content
-                    OutputDevice* pLastOutputDevice = mpOutputDevice;
-                    mpOutputDevice = &aBufferDevice.getContent();
+                    aMask.transform(maCurrentTransformation);
 
-                    // paint to it
-                    process(rMaskCandidate.getChildren());
+                    if(isOutputToRecordingMetaFile() || isOutputToPrinter())
+                    {
+                        // vector output; use ClipPolyPolygon
+                        if(maCurrentClipPolyPolygon.count())
+                        {
+                            // rescue current
+                            const basegfx::B2DPolyPolygon aOldClipPolyPolygon(maCurrentClipPolyPolygon);
 
-                    // back to old OutDev
-                    mpOutputDevice = pLastOutputDevice;
+                            // create and set new
+                            maCurrentClipPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aMask, maCurrentClipPolyPolygon, false, false);
 
-                    // draw mask
-                    VirtualDevice& rMask = aBufferDevice.getMask();
-                    rMask.SetLineColor();
-                    rMask.SetFillColor(COL_BLACK);
-                    rMask.DrawPolyPolygon(PolyPolygon(aMask));
+                            // process with new ClipPolyPoygon
+                            process(rMaskCandidate.getChildren());
 
-                    // dump buffer to outdev
-                    aBufferDevice.paint();
+                            // restore old
+                            maCurrentClipPolyPolygon = aOldClipPolyPolygon;
+                        }
+                        else
+                        {
+                            // set new
+                            maCurrentClipPolyPolygon = aMask;
+
+                            // process with new ClipPolyPoygon
+                            process(rMaskCandidate.getChildren());
+
+                            // restore old
+                            maCurrentClipPolyPolygon.clear();
+                        }
+                    }
+                    else
+                    {
+                        const basegfx::B2DRange aRange(basegfx::tools::getRange(aMask));
+                        impBufferDevice aBufferDevice(*mpOutputDevice, aRange);
+
+                        if(aBufferDevice.isVisible())
+                        {
+                            // remember last OutDev and set to content
+                            OutputDevice* pLastOutputDevice = mpOutputDevice;
+                            mpOutputDevice = &aBufferDevice.getContent();
+
+                            // paint to it
+                            process(rMaskCandidate.getChildren());
+
+                            // back to old OutDev
+                            mpOutputDevice = pLastOutputDevice;
+
+                            // draw mask
+                            VirtualDevice& rMask = aBufferDevice.getMask();
+                            rMask.SetLineColor();
+                            rMask.SetFillColor(COL_BLACK);
+                            rMask.DrawPolyPolygon(PolyPolygon(aMask));
+
+                            // dump buffer to outdev
+                            aBufferDevice.paint();
+                        }
+                    }
                 }
             }
         }
@@ -1589,7 +762,7 @@ namespace drawinglayer
         {
             const std::vector< basegfx::B2DPoint >& rPositions = rMarkArrayCandidate.getPositions();
             const basegfx::BColor aRGBColor(maBColorModifierStack.getModifiedColor(rMarkArrayCandidate.getRGBColor()));
-            const Color aColor(aRGBColor);
+            const Color aVCLColor(aRGBColor);
 
             if(primitive2d::MARKERSTYLE2D_POINT == rMarkArrayCandidate.getStyle())
             {
@@ -1598,7 +771,7 @@ namespace drawinglayer
                     const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
                     const Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
 
-                    mpOutputDevice->DrawPixel(aPos, aColor);
+                    mpOutputDevice->DrawPixel(aPos, aVCLColor);
                 }
             }
             else
@@ -1609,44 +782,41 @@ namespace drawinglayer
                 {
                     const basegfx::B2DPoint aViewPosition(maCurrentTransformation * (*aIter));
                     Point aPos(basegfx::fround(aViewPosition.getX()), basegfx::fround(aViewPosition.getY()));
-                    aPos = mpOutputDevice->LogicToPixel(aPos);
 
+                    aPos = mpOutputDevice->LogicToPixel(aPos);
                     mpOutputDevice->EnableMapMode(false);
 
                     switch(rMarkArrayCandidate.getStyle())
                     {
+                        default : // not implemented types; MARKERSTYLE2D_POINT is already handled above
+                        {
+                            break;
+                        }
                         case primitive2d::MARKERSTYLE2D_CROSS :
                         {
-                            mpOutputDevice->DrawPixel(aPos, aColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aColor);
-                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aColor);
+                            mpOutputDevice->DrawPixel(aPos, aVCLColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X() - 1L, aPos.Y()), aVCLColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X() + 1L, aPos.Y()), aVCLColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() - 1L), aVCLColor);
+                            mpOutputDevice->DrawPixel(Point(aPos.X(), aPos.Y() + 1L), aVCLColor);
 
                             break;
                         }
                         case primitive2d::MARKERSTYLE2D_GLUEPOINT :
                         {
                             // backpen
-                            mpOutputDevice->SetLineColor(aColor);
+                            mpOutputDevice->SetLineColor(aVCLColor);
                             mpOutputDevice->DrawLine(aPos + Point(-2, -3), aPos + Point(+3, +2));
                             mpOutputDevice->DrawLine(aPos + Point(-3, -2), aPos + Point(+2, +3));
                             mpOutputDevice->DrawLine(aPos + Point(-3, +2), aPos + Point(+2, -3));
                             mpOutputDevice->DrawLine(aPos + Point(-2, +3), aPos + Point(+3, -2));
 
                             // frontpen (hard coded)
-                            Color aFrontColor(COL_LIGHTBLUE);
-                            const basegfx::BColor aRGBFrontColor(maBColorModifierStack.getModifiedColor(aFrontColor.getBColor()));
-                            aFrontColor = Color(aRGBFrontColor);
-
-                            mpOutputDevice->SetLineColor(aFrontColor);
+                            const basegfx::BColor aRGBFrontColor(maBColorModifierStack.getModifiedColor(Color(COL_LIGHTBLUE).getBColor()));
+                            mpOutputDevice->SetLineColor(Color(aRGBFrontColor));
                             mpOutputDevice->DrawLine(aPos + Point(-2, -2), aPos + Point(+2, +2));
                             mpOutputDevice->DrawLine(aPos + Point(-2, +2), aPos + Point(+2, -2));
 
-                            break;
-                        }
-                        default : // primitive2d::MARKERSTYLE2D_POINT
-                        {
                             break;
                         }
                     }
@@ -1680,74 +850,99 @@ namespace drawinglayer
                             // it is a BasePrimitive2D implementation, use getPrimitiveID() call for switch
                             switch(pBasePrimitive->getPrimitiveID())
                             {
-                                case Create2DPrimitiveID('2','T','S','i') :
-                                case Create2DPrimitiveID('2','T','D','o') :
+                                case PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D :
+                                case PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D :
                                 {
                                     // directdraw of text simple portion
                                     RenderTextSimplePortionPrimitive2D(static_cast< const primitive2d::TextSimplePortionPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','P','H','a') :
+                                case PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D :
                                 {
                                     // direct draw of hairline
                                     RenderPolygonHairlinePrimitive2D(static_cast< const primitive2d::PolygonHairlinePrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','B','i','t') :
+                                case PRIMITIVE2D_ID_BITMAPPRIMITIVE2D :
                                 {
                                     // direct draw of transformed BitmapEx primitive
                                     RenderBitmapPrimitive2D(static_cast< const primitive2d::BitmapPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','F','B','i') :
+                                case PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D :
                                 {
-                                    // direct draw of fillBitmapPrimitive
-                                    RenderFillBitmapPrimitive2D(static_cast< const primitive2d::FillBitmapPrimitive2D& >(*pBasePrimitive));
+                                    const primitive2d::FillBitmapPrimitive2D& rFillBitmapCandidate(static_cast< const primitive2d::FillBitmapPrimitive2D& >(*pBasePrimitive));
+
+                                    if(isOutputToRecordingMetaFile() || isOutputToPrinter())
+                                    {
+                                        // vector device or printer
+                                        // do not use VDev but use decompose which creates BitmapPrimitive2D's
+                                        process(pBasePrimitive->get2DDecomposition(getViewInformation2D()));
+                                    }
+                                    else
+                                    {
+                                        // pixel device
+                                        // direct draw of fillBitmapPrimitive
+                                        RenderFillBitmapPrimitive2D(rFillBitmapCandidate);
+                                    }
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','P','P','G') :
+                                case PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D :
                                 {
-                                    // direct draw of gradient
-                                    RenderPolyPolygonGradientPrimitive2D(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(*pBasePrimitive));
+                                    const primitive2d::PolyPolygonGradientPrimitive2D& rPolygonCandidate(static_cast< const primitive2d::PolyPolygonGradientPrimitive2D& >(*pBasePrimitive));
+
+                                    if(isOutputToRecordingMetaFile() || isOutputToPrinter())
+                                    {
+                                        // vector device or printer
+                                        // do not use VDev but use decompose which creates a mask primitive which then
+                                        // is used for clipping
+                                        process(pBasePrimitive->get2DDecomposition(getViewInformation2D()));
+                                    }
+                                    else
+                                    {
+                                        // pixel device
+                                        // direct draw of gradient
+                                        RenderPolyPolygonGradientPrimitive2D(rPolygonCandidate);
+                                    }
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','P','P','C') :
+                                case PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D :
                                 {
                                     // direct draw of PolyPolygon with color
                                     RenderPolyPolygonColorPrimitive2D(static_cast< const primitive2d::PolyPolygonColorPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','M','e','t') :
+                                case PRIMITIVE2D_ID_METAFILEPRIMITIVE2D :
                                 {
                                     // direct draw of MetaFile
                                     RenderMetafilePrimitive2D(static_cast< const primitive2d::MetafilePrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','M','a','s') :
+                                case PRIMITIVE2D_ID_MASKPRIMITIVE2D :
                                 {
-                                    // mask group. Force output to VDev and create mask from given mask
+                                    // mask group.
                                     RenderMaskPrimitive2D(static_cast< const primitive2d::MaskPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','M','C','o') :
+                                case PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D :
                                 {
                                     // modified color group. Force output to unified color.
                                     RenderModifiedColorPrimitive2D(static_cast< const primitive2d::ModifiedColorPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','A','l','p') :
+                                case PRIMITIVE2D_ID_ALPHAPRIMITIVE2D :
                                 {
                                     // sub-transparence group. Draw to VDev first.
                                     RenderAlphaPrimitive2D(static_cast< const primitive2d::AlphaPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','T','r','a') :
+                                case PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D :
                                 {
                                     // transform group.
                                     RenderTransformPrimitive2D(static_cast< const primitive2d::TransformPrimitive2D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create2DPrimitiveID('2','M','a','r') :
+                                case PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D :
                                 {
                                     // marker array
                                     RenderMarkerArrayPrimitive2D(static_cast< const primitive2d::MarkerArrayPrimitive2D& >(*pBasePrimitive));
@@ -1781,19 +976,24 @@ namespace drawinglayer
             const geometry::ViewInformation2D& rViewInformation,
             OutputDevice& rOutDev)
         :   BaseProcessor2D(rViewInformation),
-            mbOutputToRecordingMetaFile(false)
+            mpOutputDevice(&rOutDev),
+            maBColorModifierStack(),
+            maCurrentTransformation(),
+            maCurrentClipPolyPolygon(),
+            mbOutputToRecordingMetaFile(false),
+            mbOutputToPrinter(false)
         {
-            // initialize destination OutDev
-            mpOutputDevice = &rOutDev;
-
             // check if output is recorded to metafile
             const GDIMetaFile* pMetaFile = mpOutputDevice->GetConnectMetaFile();
             mbOutputToRecordingMetaFile = (pMetaFile && pMetaFile->IsRecord() && !pMetaFile->IsPause());
 
-            if(mbOutputToRecordingMetaFile)
+            if(isOutputToRecordingMetaFile())
             {
                 // draw to logic coordinates, do not initialize maCurrentTransformation to viewTransformation,
                 // do not change MapMode of destination
+
+                // look for printer output, too
+                mbOutputToPrinter = (OUTDEV_PRINTER == mpOutputDevice->GetOutDevType());
             }
             else
             {
@@ -1808,8 +1008,9 @@ namespace drawinglayer
 
         VclProcessor2D::~VclProcessor2D()
         {
-            if(mbOutputToRecordingMetaFile)
+            if(isOutputToRecordingMetaFile())
             {
+                // MapMode was not changed, no restore necessary
             }
             else
             {

@@ -1,0 +1,92 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: drawinglayer_primitivetypes2d.hxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:30:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+
+//////////////////////////////////////////////////////////////////////////////
+// define ranges for other libraries
+
+#define PRIMITIVE2D_ID_RANGE_DRAWINGLAYER           (0 << 16)
+#define PRIMITIVE2D_ID_RANGE_SVX                    (1 << 16)
+#define PRIMITIVE2D_ID_RANGE_SD                     (2 << 16)
+
+//////////////////////////////////////////////////////////////////////////////
+// local primitives
+
+#define PRIMITIVE2D_ID_ALPHAPRIMITIVE2D                     (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 0)
+#define PRIMITIVE2D_ID_ANIMATEDSWITCHPRIMITIVE2D            (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 1)
+#define PRIMITIVE2D_ID_ANIMATEDBLINKPRIMITIVE2D             (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 2)
+#define PRIMITIVE2D_ID_ANIMATEDINTERPOLATEPRIMITIVE2D       (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 3)
+#define PRIMITIVE2D_ID_BACKGROUNDCOLORPRIMITIVE2D           (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 4)
+#define PRIMITIVE2D_ID_BITMAPPRIMITIVE2D                    (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 5)
+#define PRIMITIVE2D_ID_CONTROLPRIMITIVE2D                   (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 6)
+#define PRIMITIVE2D_ID_EMBEDDED3DPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 7)
+#define PRIMITIVE2D_ID_FILLBITMAPPRIMITIVE2D                (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 8)
+#define PRIMITIVE2D_ID_FILLGRADIENTPRIMITIVE2D              (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 9)
+#define PRIMITIVE2D_ID_FILLHATCHPRIMITIVE2D                 (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 10)
+#define PRIMITIVE2D_ID_GRAPHICPRIMITIVE2D                   (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 11)
+#define PRIMITIVE2D_ID_GRIDPRIMITIVE2D                      (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 12)
+#define PRIMITIVE2D_ID_GROUPPRIMITIVE2D                     (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 13)
+#define PRIMITIVE2D_ID_HELPLINEPRIMITIVE2D                  (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 14)
+#define PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D               (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 15)
+#define PRIMITIVE2D_ID_MASKPRIMITIVE2D                      (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 16)
+#define PRIMITIVE2D_ID_MEDIAPRIMITIVE2D                     (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 17)
+#define PRIMITIVE2D_ID_METAFILEPRIMITIVE2D                  (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 18)
+#define PRIMITIVE2D_ID_MODIFIEDCOLORPRIMITIVE2D             (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 19)
+#define PRIMITIVE2D_ID_OLEPRIMITIVE2D                       (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 20)
+#define PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D           (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 21)
+#define PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D             (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 22)
+#define PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D             (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 23)
+#define PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D        (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 24)
+#define PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 25)
+#define PRIMITIVE2D_ID_POLYPOLYGONSTROKEARROWPRIMITIVE2D    (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 26)
+#define PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D          (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 27)
+#define PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D       (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 28)
+#define PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D          (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 29)
+#define PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 30)
+#define PRIMITIVE2D_ID_SCENEPRIMITIVE2D                     (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 31)
+#define PRIMITIVE2D_ID_SHADOWPRIMITIVE2D                    (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 32)
+#define PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D         (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 33)
+#define PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D      (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 34)
+#define PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D                 (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 35)
+#define PRIMITIVE2D_ID_UNIFIEDALPHAPRIMITIVE2D              (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 36)
+
+//////////////////////////////////////////////////////////////////////////////
+
+#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+
+//////////////////////////////////////////////////////////////////////////////
+// eof

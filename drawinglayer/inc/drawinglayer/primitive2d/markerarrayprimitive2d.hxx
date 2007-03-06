@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markerarrayprimitive2d.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 18:19:00 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:30:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,14 @@ namespace drawinglayer
     {
         enum MarkerStyle2D
         {
+            /// Point: Uses RGBColor, 1x1 pixel
             MARKERSTYLE2D_POINT,
+
+            /// Cross: Uses RGBColor, 3x3 pixel, centered, form of a plus sign
             MARKERSTYLE2D_CROSS,
+
+            /// Gluepoint: Uses RGBColor as outline and hardcoded COL_LIGHTBLUE as inner
+            /// line pen, 7x7 pixel, centered, looks like a x with thee pixel lines
             MARKERSTYLE2D_GLUEPOINT
         };
 
@@ -70,9 +76,6 @@ namespace drawinglayer
                 const std::vector< basegfx::B2DPoint >& rPositions,
                 MarkerStyle2D eStyle,
                 const basegfx::BColor& rRGBColor);
-
-            // helpers
-            basegfx::B2DVector getDiscreteSize() const;
 
             // get data
             const std::vector< basegfx::B2DPoint >& getPositions() const { return maPositions; }

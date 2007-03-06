@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrlatheprimitive3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:11 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,6 +55,10 @@
 
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -342,7 +346,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(SdrLathePrimitive3D, '3','L','a','t')
+        ImplPrimitrive3DIDBlock(SdrLathePrimitive3D, PRIMITIVE3D_ID_SDRLATHEPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

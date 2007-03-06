@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 18:21:13 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,12 +40,16 @@
 #include <drawinglayer/processor2d/baseprocessor2d.hxx>
 #endif
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MODIFIEDCOLORPRIMITIVE2D_HXX
-#include <drawinglayer/primitive2d/modifiedcolorprimitive2d.hxx>
-#endif
-
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#endif
+
+#ifndef _BGFX_COLOR_BCOLORMODIFIER_HXX
+#include <basegfx/color/bcolormodifier.hxx>
+#endif
+
+#ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -68,6 +72,7 @@ namespace drawinglayer { namespace primitive2d {
     class AlphaPrimitive2D;
     class TransformPrimitive2D;
     class MarkerArrayPrimitive2D;
+    class ModifiedColorPrimitive2D;
 }}
 
 //////////////////////////////////////////////////////////////////////////////
@@ -88,9 +93,15 @@ namespace drawinglayer
             // the current transformation
             basegfx::B2DHomMatrix                                   maCurrentTransformation;
 
+            // the current clip polyPolygon (for print and metafile)
+            basegfx::B2DPolyPolygon                                 maCurrentClipPolyPolygon;
+
             // bitfield
-            // flag to hold info if output of given OutDev goes to metafile
+            // flag to hold info if output of initial OutDev goes to metafile
             unsigned                                                mbOutputToRecordingMetaFile : 1;
+
+            // flag to hold info if output of initial OutDev goes to printer
+            unsigned                                                mbOutputToPrinter : 1;
 
             //////////////////////////////////////////////////////////////////////////////
             // rendering support
@@ -116,6 +127,10 @@ namespace drawinglayer
 
             // the central processing method
             virtual void process(const primitive2d::Primitive2DSequence& rSource);
+
+            // data access
+            bool isOutputToRecordingMetaFile() const { return mbOutputToRecordingMetaFile; }
+            bool isOutputToPrinter() const { return mbOutputToPrinter; }
         };
     } // end of namespace processor2d
 } // end of namespace drawinglayer

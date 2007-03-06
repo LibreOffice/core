@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sceneprimitive2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,6 +81,10 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -139,11 +143,12 @@ namespace drawinglayer
                 const double fViewSizeX(fLogicSizeX * (rViewInformation.getViewTransformation() * basegfx::B2DVector(aUnitVisiblePart.getWidth(), 0.0)).getLength());
                 const double fViewSizeY(fLogicSizeY * (rViewInformation.getViewTransformation() * basegfx::B2DVector(0.0, aUnitVisiblePart.getHeight())).getLength());
                 const double fViewVisibleArea(fViewSizeX * fViewSizeY);
+                const double fMaximumVisibleArea(1000000.0);
                 double fReduceFactor(1.0);
 
-                if(fViewVisibleArea > 1000000.0)
+                if(fViewVisibleArea > fMaximumVisibleArea)
                 {
-                    fReduceFactor = sqrt(1000000.0 / fViewVisibleArea);
+                    fReduceFactor = sqrt(fMaximumVisibleArea / fViewVisibleArea);
                     fLogicSizeX *= fReduceFactor;
                     fLogicSizeY *= fReduceFactor;
                 }
@@ -426,7 +431,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(ScenePrimitive2D, '2','S','c','e')
+        ImplPrimitrive2DIDBlock(ScenePrimitive2D, PRIMITIVE2D_ID_SCENEPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

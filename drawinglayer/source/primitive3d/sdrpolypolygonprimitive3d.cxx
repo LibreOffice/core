@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrpolypolygonprimitive3d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:11 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRDECOMPOSITIONTOOLS3D_HXX
 #include <drawinglayer/primitive3d/sdrdecompositiontools3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -115,7 +119,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(SdrPolyPolygonPrimitive3D, '3','P','P','o')
+        ImplPrimitrive3DIDBlock(SdrPolyPolygonPrimitive3D, PRIMITIVE3D_ID_SDRPOLYPOLYGONPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

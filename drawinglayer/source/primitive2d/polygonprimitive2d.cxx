@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,10 @@
 #include <drawinglayer/primitive2d/polypolygonprimitive2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -92,7 +96,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolygonHairlinePrimitive2D, '2','P','H','a')
+        ImplPrimitrive2DIDBlock(PolygonHairlinePrimitive2D, PRIMITIVE2D_ID_POLYGONHAIRLINEPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -181,7 +185,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolygonMarkerPrimitive2D, '2','P','M','a')
+        ImplPrimitrive2DIDBlock(PolygonMarkerPrimitive2D, PRIMITIVE2D_ID_POLYGONMARKERPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -304,7 +308,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolygonStrokePrimitive2D, '2','P','S','t')
+        ImplPrimitrive2DIDBlock(PolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -421,7 +425,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolygonStrokeArrowPrimitive2D, '2','P','S','A')
+        ImplPrimitrive2DIDBlock(PolygonStrokeArrowPrimitive2D, PRIMITIVE2D_ID_POLYGONSTROKEARROWPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

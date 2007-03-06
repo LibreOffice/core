@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: bitmapprimitive2d.hxx,v $
+ *  $RCSfile: mediaprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:30:46 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:30:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,42 +33,51 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MEDIAPRIMITIVE2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MEDIAPRIMITIVE2D_HXX
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
+#ifndef _BGFX_COLOR_BCOLOR_HXX
+#include <basegfx/color/bcolor.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
-// BitmapPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BitmapPrimitive2D : public BasePrimitive2D
+        class MediaPrimitive2D : public BasePrimitive2D
         {
         private:
-            BitmapEx                                    maBitmapEx;
             basegfx::B2DHomMatrix                       maTransform;
+            rtl::OUString                               maURL;
+            basegfx::BColor                             maBackgroundColor;
+            sal_uInt32                                  mnDiscreteBorder;
+
+        protected:
+            // local decomposition
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            BitmapPrimitive2D(
-                const BitmapEx& rBitmapEx,
-                const basegfx::B2DHomMatrix& rTransform);
+            MediaPrimitive2D(
+                const basegfx::B2DHomMatrix& rTransform,
+                const rtl::OUString& rURL,
+                const basegfx::BColor& rBackgroundColor,
+                sal_uInt32 nDiscreteBorder);
 
             // get data
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+            const rtl::OUString& getURL() const { return maURL; }
+            const basegfx::BColor& getBackgroundColor() const { return maBackgroundColor; }
+            sal_uInt32 getDiscreteBorder() const { return mnDiscreteBorder; }
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -84,7 +93,7 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
+#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_MEDIAPRIMITIVE2D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

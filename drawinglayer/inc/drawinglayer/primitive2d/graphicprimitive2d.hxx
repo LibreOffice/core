@@ -2,9 +2,9 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: bitmapprimitive2d.hxx,v $
+ *  $RCSfile: graphicprimitive2d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: aw $ $Date: 2007-03-06 12:30:46 $
  *
@@ -33,42 +33,52 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
-#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVE2D_HXX
+#define INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVE2D_HXX
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BASEPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
-#endif
-
-#ifndef _SV_BITMAPEX_HXX
-#include <vcl/bitmapex.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
+#ifndef _GRFMGR_HXX
+#include <goodies/grfmgr.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
-// BitmapPrimitive2D class
 
 namespace drawinglayer
 {
     namespace primitive2d
     {
-        class BitmapPrimitive2D : public BasePrimitive2D
+        class GraphicPrimitive2D : public BasePrimitive2D
         {
         private:
-            BitmapEx                                    maBitmapEx;
             basegfx::B2DHomMatrix                       maTransform;
+            GraphicObject                               maGraphicObject;
+            GraphicAttr                                 maGraphicAttr;
+
+        protected:
+            // local decomposition
+            virtual Primitive2DSequence createLocalDecomposition(const geometry::ViewInformation2D& rViewInformation) const;
 
         public:
-            BitmapPrimitive2D(
-                const BitmapEx& rBitmapEx,
-                const basegfx::B2DHomMatrix& rTransform);
+            GraphicPrimitive2D(
+                const basegfx::B2DHomMatrix& rTransform,
+                const GraphicObject& rGraphicObject,
+                const GraphicAttr& rGraphicAttr);
+            GraphicPrimitive2D(
+                const basegfx::B2DHomMatrix& rTransform,
+                const GraphicObject& rGraphicObject);
 
             // get data
-            const BitmapEx& getBitmapEx() const { return maBitmapEx; }
             const basegfx::B2DHomMatrix& getTransform() const { return maTransform; }
+            const GraphicObject& getGraphicObject() const { return maGraphicObject; }
+            const GraphicAttr& getGraphicAttr() const { return maGraphicAttr; }
+            bool isTransparent() const;
 
             // compare operator
             virtual bool operator==(const BasePrimitive2D& rPrimitive) const;
@@ -84,7 +94,7 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_BITMAPPRIMITIVE2D_HXX
+#endif // INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GRAPHICPRIMITIVE2D_HXX
 
 //////////////////////////////////////////////////////////////////////////////
 // eof

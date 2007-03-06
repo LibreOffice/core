@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadowprimitive3d.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:11 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SHADOWPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/shadowprimitive3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -77,7 +81,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(ShadowPrimitive3D, '3','S','h','a')
+        ImplPrimitrive3DIDBlock(ShadowPrimitive3D, PRIMITIVE3D_ID_SHADOWPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer

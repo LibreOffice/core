@@ -7,22 +7,27 @@
 mkdir: %_DEST%\inc%_EXT%\drawinglayer
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
+..\inc\drawinglayer\primitive2d\drawinglayer_primitivetypes2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\drawinglayer_primitivetypes2d.hxx
 ..\inc\drawinglayer\primitive2d\alphaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\alphaprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\animatedprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\animatedprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\backgroundcolorprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\backgroundcolorprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\baseprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\baseprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\bitmapprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\bitmapprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\controlprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\controlprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\embedded3dprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\embedded3dprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\fillbitmapprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\fillbitmapprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\fillgradientprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\fillgradientprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\fillhatchprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\fillhatchprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\graphicprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\graphicprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\gridprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\gridprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\groupprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\groupprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\helplineprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\helplineprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\markerarrayprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\markerarrayprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\maskprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\maskprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\mediaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\mediaprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\metafileprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\metafileprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\modifiedcolorprimitive2d.hxx
+..\inc\drawinglayer\primitive2d\oleprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\oleprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\polypolygonprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\polypolygonprimitive2d.hxx
 ..\inc\drawinglayer\primitive2d\sceneprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\sceneprimitive2d.hxx
@@ -33,6 +38,7 @@ mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive2d
 ..\inc\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive2d\unifiedalphaprimitive2d.hxx
 
 mkdir: %_DEST%\inc%_EXT%\drawinglayer\primitive3d
+..\inc\drawinglayer\primitive3d\drawinglayer_primitivetypes3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\drawinglayer_primitivetypes3d.hxx
 ..\inc\drawinglayer\primitive3d\baseprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\baseprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\groupprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\groupprimitive3d.hxx
 ..\inc\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx %_DEST%\inc%_EXT%\drawinglayer\primitive3d\hatchtextureprimitive3d.hxx

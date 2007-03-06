@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive3d.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-12-13 16:57:07 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:31:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,6 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// defines for Create3DPrimitiveID
-
-#define Create3DPrimitiveID(a, b, c, d) ((((((a << 8L)|b)<<8L)|c)<<8L)|d)
-
-//////////////////////////////////////////////////////////////////////////////
 // defines for DeclPrimitrive3DIDBlock and ImplPrimitrive3DIDBlock
 // Added to be able to simply change identification stuff later, e.g. add
 // a identification string and/or ID to the interface and to the implementation
@@ -68,8 +63,8 @@
 #define DeclPrimitrive3DIDBlock() \
     virtual sal_uInt32 getPrimitiveID() const;
 
-#define ImplPrimitrive3DIDBlock(TheClass, a, b, c, d) \
-    sal_uInt32 TheClass::getPrimitiveID() const { return Create3DPrimitiveID(a, b, c, d); }
+#define ImplPrimitrive3DIDBlock(TheClass, TheID) \
+    sal_uInt32 TheClass::getPrimitiveID() const { return TheID; }
 
 //////////////////////////////////////////////////////////////////////////////
 // basePrimitive3D class
@@ -122,8 +117,7 @@ namespace drawinglayer
             virtual basegfx::B3DRange getB3DRange(double fTime) const;
 
             // provide unique ID for fast identifying of known primitive implementations in renderers. These use
-            // the Create3DPrimitiveID macro to define unique IDs. The same macro is used from the renderers
-            // in their typical switch/case loop
+            // the the defines from primitivetypes3d.hxx to define unique IDs.
             virtual sal_uInt32 getPrimitiveID() const = 0;
 
             // The getDecomposition default implementation will on demand use createLocalDecomposition() if maLocalDecomposition is empty.

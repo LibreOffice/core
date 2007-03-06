@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: aw $ $Date: 2006-10-19 10:26:01 $
+#   last change: $Author: aw $ $Date: 2007-03-06 12:36:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,12 @@ SHL1STDLIBS=\
         $(VCLLIB)			\
         $(BASEGFXLIB)		\
         $(TOOLSLIB)			\
+        $(SVTOOLLIB)		\
         $(SALLIB)			\
         $(CPPUHELPERLIB)	\
-        $(CPPULIB)
+        $(CPPULIB)			\
+        $(AVMEDIALIB)		\
+        $(COMPHELPERLIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=	$(SLB)$/drawinglayer.lib

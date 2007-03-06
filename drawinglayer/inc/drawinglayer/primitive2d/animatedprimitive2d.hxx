@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animatedprimitive2d.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:03 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,42 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
+// helper class for AnimatedInterpolatePrimitive2D
+
+namespace drawinglayer
+{
+    namespace
+    {
+        class BufferedMatrixDecompose
+        {
+        private:
+            // the matrix itself
+            basegfx::B2DHomMatrix                       maB2DHomMatrix;
+
+            // the decomposition
+            basegfx::B2DVector                          maScale;
+            basegfx::B2DVector                          maTranslate;
+            double                                      mfRotate;
+            double                                      mfShearX;
+
+            // flag if already decomposed, used by ensureDecompose()
+            bool                                        mbDecomposed;
+
+        public:
+            BufferedMatrixDecompose(const basegfx::B2DHomMatrix& rMatrix);
+            void ensureDecompose() const;
+
+            // data access
+            const basegfx::B2DHomMatrix& getB2DHomMatrix() const { return maB2DHomMatrix; }
+            const basegfx::B2DVector& getScale() const { return maScale; }
+            const basegfx::B2DVector& getTranslate() const { return maTranslate; }
+            double getRotate() const { return mfRotate; }
+            double getShearX() const { return mfShearX; }
+        };
+    } // end of anonymous namespace
+} // end of namespace drawinglayer
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace drawinglayer
 {
@@ -138,26 +174,8 @@ namespace drawinglayer
         class AnimatedInterpolatePrimitive2D : public AnimatedSwitchPrimitive2D
         {
         private:
-            // the start and stop transformations
-            basegfx::B2DHomMatrix                       maStart;
-            basegfx::B2DHomMatrix                       maStop;
-
-            // locally buffered decompose of the matrices
-            basegfx::B2DVector                          maScaleA;
-            basegfx::B2DVector                          maTranslateA;
-            basegfx::B2DVector                          maScaleB;
-            basegfx::B2DVector                          maTranslateB;
-            double                                      mfRotateA;
-            double                                      mfShearXA;
-            double                                      mfRotateB;
-            double                                      mfShearXB;
-
-            // bitfield
-            // flag to track if the matrices decomposition was already done
-            unsigned                                    mbDecomposed : 1;
-
-            // helpers
-            void implDecompose();
+            // the transformations
+            std::vector< BufferedMatrixDecompose >      maMatrixStack;
 
         protected:
             // create local decomposition
@@ -165,10 +183,9 @@ namespace drawinglayer
 
         public:
             AnimatedInterpolatePrimitive2D(
+                const std::vector< basegfx::B2DHomMatrix >& rmMatrixStack,
                 const animation::AnimationEntry& rAnimationEntry,
                 const Primitive2DSequence& rChildren,
-                const basegfx::B2DHomMatrix& rStart,
-                const basegfx::B2DHomMatrix& rStop,
                 bool bIsTextAnimation);
 
             // provide unique ID

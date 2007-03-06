@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-22 15:11:38 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,10 @@
 
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
 #include <numeric>
@@ -306,7 +310,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(TextSimplePortionPrimitive2D, '2','T','S','i')
+        ImplPrimitrive2DIDBlock(TextSimplePortionPrimitive2D, PRIMITIVE2D_ID_TEXTSIMPLEPORTIONPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -642,7 +646,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(TextDecoratedPortionPrimitive2D, '2','T','D','o')
+        ImplPrimitrive2DIDBlock(TextDecoratedPortionPrimitive2D, PRIMITIVE2D_ID_TEXTDECORATEDPORTIONPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

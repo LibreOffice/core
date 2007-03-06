@@ -4,9 +4,9 @@
  *
  *  $RCSfile: polypolygonprimitive2d.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2007-02-22 12:11:10 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_POLYGONPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/polygonprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -138,7 +142,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolyPolygonStrokePrimitive2D, '2','P','P','s')
+        ImplPrimitrive2DIDBlock(PolyPolygonStrokePrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONSTROKEPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -222,7 +226,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolyPolygonStrokeArrowPrimitive2D, '2','P','P','A')
+        ImplPrimitrive2DIDBlock(PolyPolygonStrokeArrowPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONSTROKEARROWPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -262,7 +266,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolyPolygonColorPrimitive2D, '2','P','P','C')
+        ImplPrimitrive2DIDBlock(PolyPolygonColorPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONCOLORPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -308,7 +312,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolyPolygonGradientPrimitive2D, '2','P','P','G')
+        ImplPrimitrive2DIDBlock(PolyPolygonGradientPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONGRADIENTPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -354,7 +358,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolyPolygonHatchPrimitive2D, '2','P','P','H')
+        ImplPrimitrive2DIDBlock(PolyPolygonHatchPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONHATCHPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer
@@ -406,7 +410,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(PolyPolygonBitmapPrimitive2D, '2','P','P','B')
+        ImplPrimitrive2DIDBlock(PolyPolygonBitmapPrimitive2D, PRIMITIVE2D_ID_POLYPOLYGONBITMAPPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

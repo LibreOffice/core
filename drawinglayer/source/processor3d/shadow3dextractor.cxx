@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shadow3dextractor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-28 11:03:58 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_SDRLABELPRIMITIVE3D_HXX
 #include <drawinglayer/primitive3d/sdrlabelprimitive3d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -169,7 +173,7 @@ namespace drawinglayer
                             // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
                             switch(pBasePrimitive->getPrimitiveID())
                             {
-                                case Create3DPrimitiveID('3','S','h','a') :
+                                case PRIMITIVE3D_ID_SHADOWPRIMITIVE3D :
                                 {
                                     // shadow3d object. Call recursive with content and start conversion
                                     const primitive3d::ShadowPrimitive3D& rPrimitive = static_cast< const primitive3d::ShadowPrimitive3D& >(*pBasePrimitive);
@@ -212,7 +216,7 @@ namespace drawinglayer
                                     }
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','T','r','a') :
+                                case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
                                 {
                                     // transform group. Remember current transformations
                                     const primitive3d::TransformPrimitive3D& rPrimitive = static_cast< const primitive3d::TransformPrimitive3D& >(*pBasePrimitive);
@@ -231,7 +235,7 @@ namespace drawinglayer
                                     maWorldToEye = aLastWorldToEye;
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','P','H','a') :
+                                case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
                                 {
                                     // PolygonHairlinePrimitive3D
                                     if(mbConvert)
@@ -260,7 +264,7 @@ namespace drawinglayer
                                     }
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','P','P','M') :
+                                case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
                                 {
                                     // PolyPolygonMaterialPrimitive3D
                                     if(mbConvert)
@@ -289,7 +293,7 @@ namespace drawinglayer
                                     }
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','L','a','b') :
+                                case PRIMITIVE3D_ID_SDRLABELPRIMITIVE3D :
                                 {
                                     // SdrLabelPrimitive3D
                                     // has no 3d shadow, accept and ignore

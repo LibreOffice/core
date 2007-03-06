@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baseprimitive2d.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 12:56:40 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:30:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,11 +55,6 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// defines for Create2DPrimitiveID
-
-#define Create2DPrimitiveID(a, b, c, d) ((((((a << 8L)|b)<<8L)|c)<<8L)|d)
-
-//////////////////////////////////////////////////////////////////////////////
 // defines for DeclPrimitrive2DIDBlock and ImplPrimitrive2DIDBlock
 // Added to be able to simply change identification stuff later, e.g. add
 // a identification string and/or ID to the interface and to the implementation
@@ -68,8 +63,8 @@
 #define DeclPrimitrive2DIDBlock() \
     virtual sal_uInt32 getPrimitiveID() const;
 
-#define ImplPrimitrive2DIDBlock(TheClass, a, b, c, d) \
-    sal_uInt32 TheClass::getPrimitiveID() const { return Create2DPrimitiveID(a, b, c, d); }
+#define ImplPrimitrive2DIDBlock(TheClass, TheID) \
+    sal_uInt32 TheClass::getPrimitiveID() const { return TheID; }
 
 //////////////////////////////////////////////////////////////////////////////
 // predefines
@@ -130,8 +125,7 @@ namespace drawinglayer
             virtual basegfx::B2DRange getB2DRange(const geometry::ViewInformation2D& rViewInformation) const;
 
             // provide unique ID for fast identifying of known primitive implementations in renderers. These use
-            // the Create2DPrimitiveID macro to define unique IDs. The same macro is used from the renderers
-            // in their typical switch/case loop
+            // the the defines from primitivetypes2d.hxx to define unique IDs.
             // This method is normally defined using DeclPrimitrive2DIDBlock()
             virtual sal_uInt32 getPrimitiveID() const = 0;
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: defaultprocessor3d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2006-12-13 16:57:09 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:35:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,6 +109,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_GEOMETRY_VIEWINFORMATION2D_HXX
 #include <drawinglayer/geometry/viewinformation2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1716,14 +1720,14 @@ namespace drawinglayer
                             // it is a BasePrimitive3D implementation, use getPrimitiveID() call for switch
                             switch(pBasePrimitive->getPrimitiveID())
                             {
-                                case Create3DPrimitiveID('3','G','T','e') :
+                                case PRIMITIVE3D_ID_GRADIENTTEXTUREPRIMITIVE3D :
                                 {
                                     // GradientTexturePrimitive3D
                                     const primitive3d::GradientTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::GradientTexturePrimitive3D& >(*pBasePrimitive);
                                     impRender_GRX3(rPrimitive, false);
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','H','T','e') :
+                                case PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D :
                                 {
                                     // HatchTexturePrimitive3D
                                     static bool bDoHatchDecomposition(true);
@@ -1741,14 +1745,14 @@ namespace drawinglayer
                                     }
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','B','T','e') :
+                                case PRIMITIVE3D_ID_BITMAPTEXTUREPRIMITIVE3D :
                                 {
                                     // BitmapTexturePrimitive3D
                                     const primitive3d::BitmapTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::BitmapTexturePrimitive3D& >(*pBasePrimitive);
                                     impRender_BMX3(rPrimitive);
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','A','T','e') :
+                                case PRIMITIVE3D_ID_ALPHATEXTUREPRIMITIVE3D :
                                 {
                                     // AlphaTexturePrimitive3D
                                     const primitive3d::AlphaTexturePrimitive3D& rPrimitive = static_cast< const primitive3d::AlphaTexturePrimitive3D& >(*pBasePrimitive);
@@ -1763,7 +1767,7 @@ namespace drawinglayer
                                     }
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','M','C','o') :
+                                case PRIMITIVE3D_ID_MODIFIEDCOLORPRIMITIVE3D :
                                 {
                                     // ModifiedColorPrimitive3D
                                     // Force output to unified color.
@@ -1771,7 +1775,7 @@ namespace drawinglayer
                                     impRender_MCOL(rPrimitive);
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','P','H','a') :
+                                case PRIMITIVE3D_ID_POLYGONHAIRLINEPRIMITIVE3D :
                                 {
                                     // directdraw of PolygonHairlinePrimitive3D
                                     const primitive3d::PolygonHairlinePrimitive3D& rPrimitive = static_cast< const primitive3d::PolygonHairlinePrimitive3D& >(*pBasePrimitive);
@@ -1782,7 +1786,7 @@ namespace drawinglayer
                                     }
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','P','P','M') :
+                                case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
                                 {
                                     // directdraw of PolyPolygonMaterialPrimitive3D
                                     const primitive3d::PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const primitive3d::PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
@@ -1793,13 +1797,13 @@ namespace drawinglayer
                                     }
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','T','r','a') :
+                                case PRIMITIVE3D_ID_TRANSFORMPRIMITIVE3D :
                                 {
                                     // transform group (TransformPrimitive3D)
                                     impRender_TRN3(static_cast< const primitive3d::TransformPrimitive3D& >(*pBasePrimitive));
                                     break;
                                 }
-                                case Create3DPrimitiveID('3','L','a','b') :
+                                case PRIMITIVE3D_ID_SDRLABELPRIMITIVE3D :
                                 {
                                     // SdrLabelPrimitive3D. Accept, but ignore. Is handled by the scenePrimitive decompose
                                     // method which creates 2d text objects at the 3d-projection-dependent positions.

@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: alphaprimitive2d.cxx,v $
+ *  $RCSfile: vclhelperbitmaprender.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:28 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,48 +33,44 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ALPHAPRIMITIVE2D_HXX
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
-#endif
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBITMAPRENDER_HXX
+#define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBITMAPRENDER_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// predefines
 
-using namespace com::sun::star;
+class OutputDevice;
+class BitmapEx;
+namespace basegfx { class B2DHomMatrix; }
 
 //////////////////////////////////////////////////////////////////////////////
+// support methods for vcl direct gradient renderering
 
 namespace drawinglayer
 {
-    namespace primitive2d
-    {
-        AlphaPrimitive2D::AlphaPrimitive2D(
-            const Primitive2DSequence& rChildren,
-            const Primitive2DSequence& rAlpha)
-        :   GroupPrimitive2D(rChildren),
-            maAlpha(rAlpha)
-        {
-        }
+    void RenderBitmapPrimitive2D_GraphicManager(
+        OutputDevice& rOutDev,
+        const BitmapEx& rBitmapEx,
+        const basegfx::B2DHomMatrix& rTransform);
 
-        bool AlphaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const AlphaPrimitive2D& rCompare = (AlphaPrimitive2D&)rPrimitive;
+    void RenderBitmapPrimitive2D_BitmapEx(
+        OutputDevice& rOutDev,
+        const BitmapEx& rBitmapEx,
+        const basegfx::B2DHomMatrix& rTransform);
 
-                return (getAlpha() == rCompare.getAlpha());
-            }
+    void RenderBitmapPrimitive2D_self(
+        OutputDevice& rOutDev,
+        const BitmapEx& rBitmapEx,
+        const basegfx::B2DHomMatrix& rTransform);
 
-            return false;
-        }
-
-        // provide unique ID
-        ImplPrimitrive2DIDBlock(AlphaPrimitive2D, PRIMITIVE2D_ID_ALPHAPRIMITIVE2D)
-    } // end of namespace primitive2d
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
+
+#endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBITMAPRENDER_HXX
+
 // eof

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: markerarrayprimitive2d.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 18:20:23 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,10 @@
 #include <drawinglayer/geometry/viewinformation2d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -59,27 +63,6 @@ namespace drawinglayer
 {
     namespace primitive2d
     {
-        basegfx::B2DVector MarkerArrayPrimitive2D::getDiscreteSize() const
-        {
-            switch(getStyle())
-            {
-                case MARKERSTYLE2D_CROSS :
-                {
-                    return basegfx::B2DVector(3.0, 3.0);
-                    break;
-                }
-                case MARKERSTYLE2D_GLUEPOINT :
-                {
-                    return basegfx::B2DVector(7.0, 7.0);
-                    break;
-                }
-                default : // MARKERSTYLE2D_POINT
-                {
-                    return basegfx::B2DVector(1.0, 1.0);
-                }
-            }
-        }
-
         MarkerArrayPrimitive2D::MarkerArrayPrimitive2D(
             const std::vector< basegfx::B2DPoint >& rPositions,
             MarkerStyle2D eStyle,
@@ -109,26 +92,34 @@ namespace drawinglayer
         {
             basegfx::B2DRange aRetval;
 
-            if(MARKERSTYLE2D_POINT == getStyle())
+            // get the basic range from the position vector
+            for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
             {
-                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
-                {
-                    aRetval.expand(*aIter);
-                }
+                aRetval.expand(*aIter);
             }
-            else
+
+            switch(getStyle())
             {
-                const basegfx::B2DVector fHalfDiscreteSize(getDiscreteSize() / 2.0);
-                basegfx::B2DRange aRealtiveLogicRange(-fHalfDiscreteSize.getX(), -fHalfDiscreteSize.getY(), fHalfDiscreteSize.getX(), fHalfDiscreteSize.getY());
-                aRealtiveLogicRange.transform(rViewInformation.getInverseViewTransformation());
-
-                const basegfx::B2DPoint aLogicRelativeTopLeft(aRealtiveLogicRange.getMinimum());
-                const basegfx::B2DPoint aLogicRelativeBottomRight(aRealtiveLogicRange.getMaximum());
-
-                for(std::vector< basegfx::B2DPoint >::const_iterator aIter(getPositions().begin()); aIter != getPositions().end(); aIter++)
+                default : // MARKERSTYLE2D_POINT
                 {
-                    aRetval.expand(aLogicRelativeTopLeft + *aIter);
-                    aRetval.expand(aLogicRelativeBottomRight + *aIter);
+                    // nothing to do; aRetval is already valid
+                    break;
+                }
+                case MARKERSTYLE2D_CROSS :
+                {
+                    // size is 3x3 centered, expand
+                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector(1.5, 1.5));
+                    aRetval.expand(aRetval.getMinimum() - aDiscreteVector);
+                    aRetval.expand(aRetval.getMinimum() + aDiscreteVector);
+                    break;
+                }
+                case MARKERSTYLE2D_GLUEPOINT :
+                {
+                    // size is 7x7 centered, expand
+                    const basegfx::B2DVector aDiscreteVector(rViewInformation.getInverseViewTransformation() * basegfx::B2DVector(3.5, 3.5));
+                    aRetval.expand(aRetval.getMinimum() - aDiscreteVector);
+                    aRetval.expand(aRetval.getMinimum() + aDiscreteVector);
+                    break;
                 }
             }
 
@@ -136,7 +127,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(MarkerArrayPrimitive2D, '2','M','a','r')
+        ImplPrimitrive2DIDBlock(MarkerArrayPrimitive2D, PRIMITIVE2D_ID_MARKERARRAYPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

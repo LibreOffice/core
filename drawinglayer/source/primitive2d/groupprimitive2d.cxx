@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupprimitive2d.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2007-01-25 12:57:55 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,10 @@
 
 #ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_GROUPPRIMITIVE2D_HXX
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -76,7 +80,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(GroupPrimitive2D, '2','G','r','o')
+        ImplPrimitrive2DIDBlock(GroupPrimitive2D, PRIMITIVE2D_ID_GROUPPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

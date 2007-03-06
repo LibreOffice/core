@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: aw $ $Date: 2007-01-25 12:57:14 $
+#   last change: $Author: aw $ $Date: 2007-03-06 12:34:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,11 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files -------------------------------------
 
 SLOFILES= \
-        $(SLO)$/baseprocessor2d.obj			\
+        $(SLO)$/baseprocessor2d.obj				\
+        $(SLO)$/vclhelpergradient.obj			\
+        $(SLO)$/vclhelperbitmaptransform.obj	\
+        $(SLO)$/vclhelperbitmaprender.obj		\
+        $(SLO)$/vclhelperbufferdevice.obj		\
         $(SLO)$/vclprocessor2d.obj
 
 # --- Targets ----------------------------------

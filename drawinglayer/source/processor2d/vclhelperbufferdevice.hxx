@@ -2,11 +2,11 @@
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
- *  $RCSfile: alphaprimitive2d.cxx,v $
+ *  $RCSfile: vclhelperbufferdevice.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:28 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,48 +33,47 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_ALPHAPRIMITIVE2D_HXX
-#include <drawinglayer/primitive2d/alphaprimitive2d.hxx>
-#endif
+#ifndef INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBUFFERDEVICE_HXX
+#define INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBUFFERDEVICE_HXX
 
-#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
-#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
+#ifndef _SV_VIRDEV_HXX
+#include <vcl/virdev.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
+// predefines
 
-using namespace com::sun::star;
+namespace basegfx { class B2DRange; }
 
 //////////////////////////////////////////////////////////////////////////////
+// support methods for vcl direct gradient renderering
 
 namespace drawinglayer
 {
-    namespace primitive2d
+    class impBufferDevice
     {
-        AlphaPrimitive2D::AlphaPrimitive2D(
-            const Primitive2DSequence& rChildren,
-            const Primitive2DSequence& rAlpha)
-        :   GroupPrimitive2D(rChildren),
-            maAlpha(rAlpha)
-        {
-        }
+        OutputDevice&                       mrOutDev;
+        VirtualDevice                       maContent;
+        VirtualDevice*                      mpMask;
+        VirtualDevice*                      mpAlpha;
+        Rectangle                           maDestPixel;
 
-        bool AlphaPrimitive2D::operator==(const BasePrimitive2D& rPrimitive) const
-        {
-            if(GroupPrimitive2D::operator==(rPrimitive))
-            {
-                const AlphaPrimitive2D& rCompare = (AlphaPrimitive2D&)rPrimitive;
+    public:
+        impBufferDevice(
+            OutputDevice& rOutDev,
+            const basegfx::B2DRange& rRange);
+        ~impBufferDevice();
 
-                return (getAlpha() == rCompare.getAlpha());
-            }
-
-            return false;
-        }
-
-        // provide unique ID
-        ImplPrimitrive2DIDBlock(AlphaPrimitive2D, PRIMITIVE2D_ID_ALPHAPRIMITIVE2D)
-    } // end of namespace primitive2d
+        void paint(double fTrans = 0.0);
+        bool isVisible() const { return !maDestPixel.IsEmpty(); }
+        VirtualDevice& getContent() { return maContent; }
+        VirtualDevice& getMask();
+        VirtualDevice& getAlpha();
+    };
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
+
+#endif // INCLUDED_DRAWINGLAYER_PROCESSOR2D_VCLHELPERBUFFERDEVICE_HXX
+
 // eof

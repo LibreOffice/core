@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transformprimitive2d.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2006-11-07 15:49:09 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 
 #ifndef _BGFX_TOOLS_CANVASTOOLS_HXX
 #include <basegfx/tools/canvastools.hxx>
+#endif
+
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE2D_PRIMITIVETYPES2D_HXX
+#include <drawinglayer/primitive2d/drawinglayer_primitivetypes2d.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
@@ -79,7 +83,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive2DIDBlock(TransformPrimitive2D, '2','T','r','a')
+        ImplPrimitrive2DIDBlock(TransformPrimitive2D, PRIMITIVE2D_ID_TRANSFORMPRIMITIVE2D)
 
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

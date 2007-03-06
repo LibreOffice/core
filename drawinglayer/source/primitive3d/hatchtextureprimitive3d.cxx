@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hatchtextureprimitive3d.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2006-12-13 16:57:08 $
+ *  last change: $Author: aw $ $Date: 2007-03-06 12:34:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,10 @@
 #include <drawinglayer/primitive3d/polygonprimitive3d.hxx>
 #endif
 
+#ifndef INCLUDED_DRAWINGLAYER_PRIMITIVE3D_PRIMITIVETYPES3D_HXX
+#include <drawinglayer/primitive3d/drawinglayer_primitivetypes3d.hxx>
+#endif
+
 //////////////////////////////////////////////////////////////////////////////
 
 using namespace com::sun::star;
@@ -114,7 +118,7 @@ namespace drawinglayer
                             // not all content is needed, remove transparencies and ModifiedColorPrimitives
                             switch(pBasePrimitive->getPrimitiveID())
                             {
-                                case Create3DPrimitiveID('3','P','P','M') :
+                                case PRIMITIVE3D_ID_POLYPOLYGONMATERIALPRIMITIVE3D :
                                 {
                                     // polyPolygonMaterialPrimitive3D, check texturing and hatching
                                     const PolyPolygonMaterialPrimitive3D& rPrimitive = static_cast< const PolyPolygonMaterialPrimitive3D& >(*pBasePrimitive);
@@ -333,7 +337,7 @@ namespace drawinglayer
         }
 
         // provide unique ID
-        ImplPrimitrive3DIDBlock(HatchTexturePrimitive3D, '3','H','T','e')
+        ImplPrimitrive3DIDBlock(HatchTexturePrimitive3D, PRIMITIVE3D_ID_HATCHTEXTUREPRIMITIVE3D)
 
     } // end of namespace primitive3d
 } // end of namespace drawinglayer
