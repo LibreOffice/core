@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:30:24 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-06 09:51:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -791,7 +791,7 @@ doctok::Id
         {
             doctok::Id nId = this->getId(nToken);
     
-            doctok::Value::Pointer_t pVal(new OOXMLStringValue(rValue));
+            OOXMLValue::Pointer_t pVal(new OOXMLStringValue(rValue));
             OOXMLPropertyImpl::Pointer_t pProperty
                 (new OOXMLPropertyImpl(nId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
 
