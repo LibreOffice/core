@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdotext.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 16:56:42 $
+ *  last change: $Author: obo $ $Date: 2007-03-06 14:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2210,6 +2210,15 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     basegfx::B2DTuple aTranslate;
     double fRotate, fShearX;
     rMatrix.decompose(aScale, aTranslate, fRotate, fShearX);
+
+    // #i75086# Old DrawingLayer (GeoStat and geometry) does not support holding negative scalings
+    // in X and Y which equal a 180 degree rotation. Recognize it and react accordingly
+    if(basegfx::fTools::less(aScale.getX(), 0.0) && basegfx::fTools::less(aScale.getY(), 0.0))
+    {
+        aScale.setX(fabs(aScale.getX()));
+        aScale.setY(fabs(aScale.getY()));
+        fRotate = fmod(fRotate + F_PI, F_2PI);
+    }
 
     // reset object shear and rotations
     aGeo.nDrehWink = 0;
