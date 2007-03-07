@@ -5,9 +5,9 @@
 #
 #   $RCSfile: soffice.sh,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:33:58 $
+#   last change: $Author: obo $ $Date: 2007-03-07 13:14:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -43,9 +43,9 @@
 SAL_ENABLE_FILE_LOCKING=1
 export SAL_ENABLE_FILE_LOCKING
 
-# Uncomment the below line if you suspect that OpenGL is not
+# Uncomment the line below if you suspect that OpenGL is not
 # working on your system.
-# export SAL_NOOPENGL=true;
+# SAL_NOOPENGL=true; export SAL_NOOPENGL
 
 sd_platform=`uname -s`
 
@@ -105,7 +105,7 @@ case $sd_platform in
 
   Darwin)
     # this is a temporary hack until we can live with the default search paths
-    if [ $DYLD_LIBRARY_PATH ]; then
+    if [ "$DYLD_LIBRARY_PATH" ]; then
       SYSTEM_DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
       export SYSTEM_DYLD_LIBRARY_PATH
       DYLD_LIBRARY_PATH="$sd_prog$add_moz_lib":$DYLD_LIBRARY_PATH
