@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdem.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:32:56 $
+ *  last change: $Author: obo $ $Date: 2007-03-07 13:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -487,7 +487,7 @@ IMPL_LINK( MyFontDialog, SelectFont, ComboBox*, EMPTYARG )
 {
     aStyleBox.Fill( aFontBox.GetText(), pList );
     FontInfo aInfo = pList->Get( aFontBox.GetText(), aStyleBox.GetText() );
-    aSizeBox.Fill( aInfo, pList );
+    aSizeBox.Fill( &aInfo, pList );
     SetAttr();
     return 0;
 }
@@ -497,7 +497,7 @@ IMPL_LINK( MyFontDialog, SelectFont, ComboBox*, EMPTYARG )
 IMPL_LINK( MyFontDialog, SelectStyle, ComboBox*, EMPTYARG )
 {
     FontInfo aInfo = pList->Get( aFontBox.GetText(), aStyleBox.GetText() );
-    aSizeBox.Fill( aInfo, pList );
+    aSizeBox.Fill( &aInfo, pList );
     SetAttr();
     return 0;
 }
