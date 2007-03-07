@@ -422,8 +422,39 @@
   }
   
   // ----------------------------------------------------------------------
+*** misc/STLport-4.5/stlport/stl/_list.h	Wed May 30 05:45:41 2001
+--- misc/build/STLport-4.5/stlport/stl/_list.h	Sun Mar  4 16:42:45 2007
+***************
+*** 87,93 ****
+    _List_node_base* _M_node;
+  
+    _List_iterator_base(_List_node_base* __x) : _M_node(__x) {}
+!   _List_iterator_base() {}
+  
+    void _M_incr() { _M_node = _M_node->_M_next; }
+    void _M_decr() { _M_node = _M_node->_M_prev; }
+--- 87,93 ----
+    _List_node_base* _M_node;
+  
+    _List_iterator_base(_List_node_base* __x) : _M_node(__x) {}
+!   _List_iterator_base() : _M_node(NULL) {}
+  
+    void _M_incr() { _M_node = _M_node->_M_next; }
+    void _M_decr() { _M_node = _M_node->_M_prev; }
+*** misc/STLport-4.5/stlport/stl/_tempbuf.h	Wed May 30 05:45:42 2001
+--- misc/build/STLport-4.5/stlport/stl/_tempbuf.h	Sun Mar  4 16:41:59 2007
+***************
+*** 113,118 ****
+--- 113,119 ----
+  #   else
+       typedef typename __type_traits<_Tp>::has_trivial_default_constructor  _Trivial;
+  #   endif
++     _M_buffer = 0;
+      _STLP_TRY {
+        _M_len = distance(__first, __last);
+        _M_allocate_buffer();
 *** misc/STLport-4.5/stlport/stl/_threads.h	Tue Sep  4 19:10:20 2001
---- misc/build/STLport-4.5/stlport/stl/_threads.h	Sun Sep 17 09:25:58 2006
+--- misc/build/STLport-4.5/stlport/stl/_threads.h	Mon Feb 26 12:15:24 2007
 ***************
 *** 42,49 ****
   #  include <cstdlib>
