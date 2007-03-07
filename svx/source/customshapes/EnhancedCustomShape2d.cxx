@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShape2d.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:06:52 $
+ *  last change: $Author: obo $ $Date: 2007-03-07 13:12:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1296,7 +1296,7 @@ sal_Int32 EnhancedCustomShape2d::GetAdjustValueAsInteger( const sal_Int32 nIndex
     {
         if ( seqAdjustmentValues[ nIndex ].Value.getValueTypeClass() == TypeClass_DOUBLE )
         {
-            double fNumber;
+            double fNumber = 0;
             seqAdjustmentValues[ nIndex ].Value >>= fNumber;
             nNumber = (sal_Int32)fNumber;
         }
