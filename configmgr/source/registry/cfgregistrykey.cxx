@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgregistrykey.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:23:57 $
+ *  last change: $Author: obo $ $Date: 2007-03-07 13:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -934,7 +934,7 @@ sal_Int32 SAL_CALL OConfigurationRegistryKey::getLongValue(  ) throw(InvalidRegi
         OSL_ENSURE(false, "Unexpected type FLOAT in configuration node");
         {
             // treat as double
-            float fNativeValue;
+            float fNativeValue = 0;
             if (aValue >>= fNativeValue)
                 aValue <<= double(fNativeValue);
         }
