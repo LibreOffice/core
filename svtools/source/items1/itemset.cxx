@@ -4,9 +4,9 @@
  *
  *  $RCSfile: itemset.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:22:09 $
+ *  last change: $Author: obo $ $Date: 2007-03-07 13:07:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,10 +185,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool, USHORT nWhich1, USHORT nWhich2 ):
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
-#ifndef PRODUCT
-    if( nWhich1 > nWhich2 )                         // falls der Bereich
-        nWhich1 ^= nWhich2 ^= nWhich1 ^= nWhich2;   // ungueltig ist swappen
-#endif
     InitRanges_Impl(nWhich1, nWhich2);
 }
 
@@ -231,10 +227,6 @@ SfxItemSet::SfxItemSet( SfxItemPool& rPool,
     DBG_ASSERTWARNING( _pPool == _pPool->GetMasterPool(), "kein Master-Pool" );
     DBG( _pChildCountCtor; *_pChildCount(this) = 0 );
 
-#ifndef PRODUCT
-    if( nWh1 > nWh2 )                   // falls der Bereich ungueltig ist
-        nWh1 ^= nWh2 ^= nWh1 ^= nWh2;   // swappen
-#endif
     if(!nNull)
         InitRanges_Impl(
             sal::static_int_cast< USHORT >(nWh1),
