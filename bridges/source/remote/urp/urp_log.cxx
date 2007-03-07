@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_log.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 16:01:29 $
+ *  last change: $Author: obo $ $Date: 2007-03-07 13:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,11 @@ namespace bridges_urp
 
             FileAccess access( pBridgeImpl );
             fprintf( access.getFile() ,
-                     "%06d: calling [size=%d(usedata=%d)] [synchron=%d] [name=%s]\n" ,
-                     osl_getGlobalTimer(),
-                     nSize, nUseData, bSynchron, sOperation.pData->buffer );
+                     "%06u: calling [size=%d(usedata=%d)] [synchron=%d] [name=%s]\n" ,
+                     static_cast< unsigned int > (osl_getGlobalTimer()),
+                     static_cast< int > (nSize),
+                     static_cast< int > (nUseData),
+                     bSynchron, sOperation.pData->buffer );
         }
     }
 
@@ -105,10 +107,10 @@ namespace bridges_urp
             FileAccess access( pBridgeImpl );
             fprintf(
                 access.getFile(),
-                "%06d: serving request [size=%d(usedata=%d)] [synchron=%d] [name=%s]\n",
-                osl_getGlobalTimer(),
-                nSize,
-                nUseData,
+                "%06u: serving request [size=%d(usedata=%d)] [synchron=%d] [name=%s]\n",
+                static_cast< unsigned int > (osl_getGlobalTimer()),
+                static_cast< int > (nSize),
+                static_cast< int > (nUseData),
                 bSynchron,
                 sOperation.pData->buffer
                 );
@@ -124,9 +126,10 @@ namespace bridges_urp
             OString sOperation = OUStringToOString( sMethodName,RTL_TEXTENCODING_ASCII_US );
             FileAccess access( pBridgeImpl );
             fprintf( access.getFile(),
-                     "%06d: getting reply [size=%d(usedata=%d)][name=%s]\n" ,
-                     osl_getGlobalTimer(),
-                     nSize, nUseData,
+                     "%06u: getting reply [size=%d(usedata=%d)][name=%s]\n" ,
+                     static_cast< unsigned int > (osl_getGlobalTimer()),
+                     static_cast< int > (nSize),
+                     static_cast< int > (nUseData),
                      sOperation.pData->buffer);
         }
     }
@@ -141,9 +144,10 @@ namespace bridges_urp
 
             FileAccess access( pBridgeImpl );
             fprintf( access.getFile(),
-                     "%06d: replying [size=%d(usedata=%d)] [name=%s]\n",
-                     osl_getGlobalTimer(),
-                     nSize, nUseData,
+                     "%06u: replying [size=%d(usedata=%d)] [name=%s]\n",
+                     static_cast< unsigned int > (osl_getGlobalTimer()),
+                     static_cast< int > (nSize),
+                     static_cast< int > (nUseData),
                      sOperation.pData->buffer);
         }
     }
