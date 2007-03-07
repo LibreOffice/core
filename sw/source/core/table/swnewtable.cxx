@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:50:29 $
+ *  last change: $Author: obo $ $Date: 2007-03-07 13:23:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ class SwBoxSelection
 public:
     std::vector<const SwSelBoxes*> aBoxes;
     long mnMergeWidth;
-    SwBoxSelection::SwBoxSelection() : mnMergeWidth(0) {}
+    SwBoxSelection() : mnMergeWidth(0) {}
     bool isEmpty() const { return aBoxes.size() == 0; }
     void insertBoxes( const SwSelBoxes* pNew ){ aBoxes.insert( aBoxes.end(), pNew ); }
 };
