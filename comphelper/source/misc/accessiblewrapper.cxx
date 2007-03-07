@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessiblewrapper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:09:16 $
+ *  last change: $Author: obo $ $Date: 2007-03-07 13:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -490,7 +490,7 @@ namespace comphelper
         if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
         {
             sal_Bool bChildTransienceChanged = sal_False;
-            sal_Int16 nChangeState;
+            sal_Int16 nChangeState = 0;
             if ( _rEvent.OldValue >>= nChangeState )
                 bChildTransienceChanged = bChildTransienceChanged || AccessibleStateType::MANAGES_DESCENDANTS == nChangeState;
             if ( _rEvent.NewValue >>= nChangeState )
