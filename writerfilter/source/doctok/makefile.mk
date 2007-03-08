@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:30:29 $
+#  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:16:41 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION #-DDEBUG_DOCTOK_DUMP
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
+    $(SLO)$/qnametostr.obj \
     $(SLO)$/WW8Annotation.obj \
     $(SLO)$/WW8OutputWithDepth.obj \
     $(SLO)$/WW8Text.obj \
