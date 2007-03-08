@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:35:17 $
+ *  last change: $Author: os $ $Date: 2007-03-08 09:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -222,7 +222,7 @@ SectionPropertyMap::SectionPropertyMap(bool bIsFirstSection) :
     {
         PropertyNameSupplier& rPropNameSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
         m_sFirstPageStyleName = rPropNameSupplier.GetName( PROP_FIRST_PAGE );
-        m_sFollowPageStyleName = rPropNameSupplier.GetName( PROP_DEFAULT );
+        m_sFollowPageStyleName = rPropNameSupplier.GetName( PROP_STANDARD );
     }
 }
 /*-- 24.07.2006 08:29:02---------------------------------------------------
@@ -799,9 +799,10 @@ void SectionPropertyMap::_ApplyProperties( uno::Reference< beans::XPropertySet >
     PropertyMap::iterator aMapIter = begin();
     try
     {
-        for( ; aMapIter != end(); ++aMapIter )
+        while( aMapIter != end())
         {
-                xStyle->setPropertyValue( aMapIter->first, aMapIter->second );
+            xStyle->setPropertyValue( aMapIter->first, aMapIter->second );
+            ++aMapIter;
         }
     }
     catch( const uno::Exception& )

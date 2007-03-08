@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
+ *  last change: $Author: os $ $Date: 2007-03-08 09:19:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,7 +278,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_TEXT                   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text")); break;
             case PROP_CREATE_FROM_OUTLINE    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline")); break;
             case PROP_CREATE_FROM_MARKS      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_STANDARD               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

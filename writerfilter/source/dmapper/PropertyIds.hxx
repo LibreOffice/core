@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
+ *  last change: $Author: os $ $Date: 2007-03-08 09:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ enum PropertyIds
 /*178*/ ,PROP_TEXT
 /*179*/ ,PROP_CREATE_FROM_OUTLINE
 /*180*/ ,PROP_CREATE_FROM_MARKS
-///*181*/ ,PROP_
+/*181*/ ,PROP_STANDARD
 ///*182*/ ,PROP_
 ///*183*/ ,PROP_
 ///*184*/ ,PROP_
