@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:09:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,8 @@
   xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:UML = 'org.omg.xmi.namespace.UML' xml:space="default">
 <xsl:output method="text" />
 
+  <xsl:include href="resourcetools.xsl"/>
+
 <xsl:template match="/">
 <xsl:text>
 /*************************************************************************
@@ -47,9 +49,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:09:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +95,6 @@ extern WW8OutputWithDepth output;
 using namespace ::std;
 </xsl:text>
 <xsl:apply-templates select='.//UML:Class' mode='class'/>
-<xsl:apply-templates select='//UML:Model' mode='qnametostr'/>
 <xsl:apply-templates select='//UML:Model' mode='sprmcodetostr'/>
 <xsl:apply-templates select='//UML:Model' mode='createsprmprops'/>
 <xsl:apply-templates select='//UML:Model' mode='createsprmbinary'/>
@@ -489,58 +490,6 @@ using namespace ::std;
     </xsl:text>
   </xsl:template>
 
-<xsl:template match='UML:Model' mode='qnametostr'>
-QNameToString::QNameToString()
-{
-<xsl:variable name='tmp'>map &lt; sal_uInt32, string &gt; </xsl:variable>
-        /* Attributes */
-<xsl:for-each select='.//UML:Attribute[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="attrid"]'>
-<xsl:choose>
-<xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
-</xsl:when>
-<xsl:otherwise>
-<xsl:text>    mMap[</xsl:text>
-<xsl:call-template name='idtoqname'>
-<xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text>]= "</xsl:text>
-<xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-<xsl:text>";
-</xsl:text>
-</xsl:otherwise>
-</xsl:choose>
-</xsl:for-each>
-        /* Operations */
-<xsl:for-each select='.//UML:Operation[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="opid"]'>
-<xsl:choose>
-<xsl:when test='.//UML:Stereotype[@xmi.idref="noresolve"]'>
-</xsl:when>
-<xsl:otherwise>
-<xsl:text>    mMap[</xsl:text>
-<xsl:call-template name='idtoqname'>
-<xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text>] = "</xsl:text>
-<xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-<xsl:text>";
-</xsl:text>
-</xsl:otherwise>
-</xsl:choose>
-</xsl:for-each>
-        /* Classes */
-<xsl:for-each select='.//UML:Class[@name!="reserved"]//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="classid"]'>
-<xsl:text>    mMap[</xsl:text>
-<xsl:call-template name='idtoqname'>
-<xsl:with-param name='id'><xsl:value-of select='.//UML:TaggedValue.dataValue'/></xsl:with-param>
-</xsl:call-template>
-<xsl:text>] = "</xsl:text>
-<xsl:value-of select='.//UML:TaggedValue.dataValue'/>
-<xsl:text>";
-</xsl:text>
-</xsl:for-each>
-}
-</xsl:template>
-
 <xsl:template match='UML:Model' mode='sprmcodetostr'>
 SprmIdToString::SprmIdToString()
 {
@@ -882,65 +831,5 @@ bool isBooleanDffOpt(sal_uInt32 nId)
 </xsl:text>
 </xsl:template>
 
-<xsl:template name='idtoqname'>
-<xsl:param name='id'/>NS_<xsl:value-of select='substring-before($id, ":")'/>::LN_<xsl:value-of select='substring-after($id, ":")'/>
-</xsl:template>
-
-<xsl:template name="parenttype">
-  <xsl:param name='type'/>
-  <xsl:value-of select='//UML:Generalization[UML:Generalization.child/UML:Class/@xmi.idref=$type]/UML:Generalization.parent/UML:Class/@xmi.idref'/>
-</xsl:template>
-
-<xsl:template name='saltype'>
-  <xsl:param name='type'/>
-  <xsl:param name='parenttype'/>
-  <xsl:choose>
-    <xsl:when test="$type='U8'">sal_uInt8</xsl:when>
-    <xsl:when test="$type='S8'">sal_Int8</xsl:when>
-    <xsl:when test="$type='U16'">sal_uInt16</xsl:when>
-    <xsl:when test="$type='S16'">sal_Int16</xsl:when>
-    <xsl:when test="$type='U32'">sal_uInt32</xsl:when>
-    <xsl:when test="$type='S32'">sal_Int32</xsl:when>
-    <xsl:when test="$type='String'">rtl::OUString</xsl:when>
-    <xsl:otherwise>
-      <xsl:text>doctok::Reference &lt; </xsl:text>
-      <xsl:value-of select='$parenttype'/>
-      <xsl:text> &gt;::Pointer_t</xsl:text>
-    </xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template name='typetype'>
-  <xsl:param name='type'/><xsl:choose>
-  <xsl:when test="$type='U8'">simple</xsl:when>
-  <xsl:when test="$type='S8'">simple</xsl:when>
-  <xsl:when test="$type='U16'">simple</xsl:when>
-  <xsl:when test="$type='S16'">simple</xsl:when>
-  <xsl:when test="$type='U32'">simple</xsl:when>
-  <xsl:when test="$type='S32'">simple</xsl:when>
-  <xsl:when test="$type='String'">string</xsl:when>
-  <xsl:when test="$type='Binary'">binary</xsl:when>
-  <xsl:otherwise>complex</xsl:otherwise>
-</xsl:choose>
-</xsl:template>
-
-<xsl:template name="valuetype">
-  <xsl:param name="type"/>
-  <xsl:choose>
-    <xsl:when test='$type="U8"'>WW8IntValue</xsl:when>
-    <xsl:when test='$type="S8"'>WW8IntValue</xsl:when>
-    <xsl:when test='$type="U16"'>WW8IntValue</xsl:when>
-    <xsl:when test='$type="S16"'>WW8IntValue</xsl:when>
-    <xsl:when test='$type="U32"'>WW8IntValue</xsl:when>
-    <xsl:when test='$type="S32"'>WW8IntValue</xsl:when>
-    <xsl:otherwise>WW8PropertiesValue</xsl:otherwise>
-  </xsl:choose>
-</xsl:template>
-
-<xsl:template match="UML:Attribute" mode="valuetype">
-  <xsl:call-template name="valuetype">
-    <xsl:with-param name="type" select='.//UML:DataType/@xmi.idref'/>
-  </xsl:call-template>
-</xsl:template>
 </xsl:stylesheet>
 
