@@ -5324,6 +5324,7 @@
   </define>
 </grammar>
 <resource name="CT_OnOff" resource="BooleanValue"/>
+<resource name="CT_DecimalNumber" resource="IntegerValue"/>
 </namespace><namespace name="w"><grammar xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:rng="http://relaxng.org/ns/structure/1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fn="http://www.w3.org/2006/xpath-functions" xmlns="http://relaxng.org/ns/structure/1.0" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes">
   <!-- ISO RELAX NG Schema -->
   <define name="ST_RelationshipId">
@@ -14013,9 +14014,56 @@
   <attribute name="themeTint" tokenid="ooxml:CT_Color_themeTint"/>
   <attribute name="themeShade" tokenid="ooxml:CT_Color_themeShade"/>
 </resource>
+<resource name="CT_Underline" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Underline_val"/>
+  <attribute name="color" tokenid="ooxml:CT_Underline_color"/>
+  <attribute name="themeColor" tokenid="ooxml:CT_Underline_themeColor"/>
+  <attribute name="themeTint" tokenid="ooxml:CT_Underline_themeTint"/>
+  <attribute name="themeShade" tokenid="ooxml:CT_Underline_themeShade"/>
+</resource>
+<resource name="CT_Language" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Language_val"/>
+  <attribute name="eastAsia" tokenid="ooxml:CT_Language_eastAsia"/>
+  <attribute name="bidi" tokenid="ooxml:CT_Language_bidi"/>
+</resource>
+<resource name="CT_Em" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Em_val"/>
+</resource>
+<resource name="CT_Shd" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Shd_val"/>
+  <attribute name="color" tokenid="ooxml:CT_Shd_color"/>
+  <attribute name="themeColor" tokenid="ooxml:CT_Shd_themeColor"/>
+  <attribute name="themeTint" tokenid="ooxml:CT_Shd_themeTint"/>
+  <attribute name="themeShade" tokenid="ooxml:CT_Shd_themeShade"/>
+  <attribute name="fill" tokenid="ooxml:CT_Shd_fill"/>
+  <attribute name="themeFill" tokenid="ooxml:CT_Shd_themeFill"/>
+  <attribute name="themeFillTint" tokenid="ooxml:CT_Shd_themeFillTint"/>
+  <attribute name="themeFillShade" tokenid="ooxml:CT_Shd_themeFillShade"/>
+</resource>
+<resource name="CT_Border" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Border_val"/>
+  <attribute name="color" tokenid="ooxml:CT_Border_color"/>
+  <attribute name="themeColor" tokenid="ooxml:CT_Border_themeColor"/>
+  <attribute name="themeTint" tokenid="ooxml:CT_Border_themeTint"/>
+  <attribute name="themeShade" tokenid="ooxml:CT_Border_themeShade"/>
+  <attribute name="sz" tokenid="ooxml:CT_Border_sz"/>
+  <attribute name="space" tokenid="ooxml:CT_Border_space"/>
+  <attribute name="shadow" tokenid="ooxml:CT_Border_shadow"/>
+  <attribute name="frame" tokenid="ooxml:CT_Border_frame"/>
+</resource>
+<resource name="CT_PBdr" resource="PropertySetValue">
+  <attribute name="top" tokenid="ooxml:CT_PBdr_top"/>
+  <attribute name="left" tokenid="ooxml:CT_PBdr_left"/>
+  <attribute name="bottom" tokenid="ooxml:CT_PBdr_bottom"/>
+  <attribute name="right" tokenid="ooxml:CT_PBdr_right"/>
+  <attribute name="between" tokenid="ooxml:CT_PBdr_between"/>
+  <attribute name="bar" tokenid="ooxml:CT_PBdr_bar"/>
+</resource>
 <resource name="document" resource="Stream"/>
 <resource name="CT_Document" resource="Stream"/>
-<resource name="CT_Text" resource="Stream"/>
+<resource name="CT_Text" resource="Stream">
+  <action name="characters" action="text"/>
+</resource>
 <resource name="CT_P" resource="Stream">
   <action name="start" action="startParagraphGroup"/>
   <action name="end" action="endOfParagraph"/>
@@ -14068,40 +14116,75 @@
 </resource>
 <resource name="CT_RPr" resource="Properties"/>
 <resource name="CT_OnOff" resource="BooleanValue"/>
+<resource name="CT_FramePr" resource="PropertySetValue">
+  <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
+  <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
+  <sprm name="w" tokenid="0x841a"/>
+  <sprm name="h" tokenid="0x442b"/>
+  <sprm name="vSpace" tokenid="0x842e"/>
+  <sprm name="hSpace" tokenid="0x842f"/>
+  <sprm name="wrap" tokenid="0x2423"/>
+  <attribute name="hAnchor" tokenid="ooxml:CT_FramePr_hAnchor"/>
+  <attribute name="vAnchor" tokenid="ooxml:CT_FramePr_vAnchor"/>
+  <attribute name="x" tokenid="ooxml:CT_FramePr_x"/>
+  <attribute name="xAlign" tokenid="ooxml:CT_FramePr_xAlign"/>
+  <attribute name="y" tokenid="ooxml:CT_FramePr_y"/>
+  <attribute name="yAlign" tokenid="ooxml:CT_FramePr_yAlign"/>
+  <attribute name="hRule" tokenid="ooxml:CT_FramePr_hRule"/>
+  <sprm name="anchorLock" tokenid="0x2430"/>
+</resource>
+<resource name="CT_NumPr" resource="PropertySetValue">
+  <sprm name="ilvl" tokenid="0x260a"/>
+  <sprm name="numId" tokenid="0x460b"/>
+  <attribute name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
+  <attribute name="ins" tokenid="ooxml:CT_NumPr_ins"/>
+</resource>
+<resource name="ST_DecimalNumber" resource="IntegerValue"/>
+<resource name="ST_SignedTwipsMeasure" resource="IntegerValue"/>
+<resource name="CT_Ind" resource="PropertySetValue">
+  <sprm name="left" tokenid="0x840f"/>
+  <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
+  <sprm name="right" tokenid="0x840e"/>
+  <attribute name="rightChars" tokenid="ooxml:CT_Ind_rightChars"/>
+  <sprm name="hanging" tokenid="0x8411"/>
+  <attribute name="hangingChars" tokenid="ooxml:CT_Ind_hangingChars"/>
+  <sprm name="firstLine" tokenid="0x8411"/>
+  <attribute name="firstLineChars" tokenid="ooxml:CT_Ind_firstLineChars"/>
+</resource>
 <resource name="CT_PPrBase" resource="Property">
   <sprm name="pStyle" tokenid="0x0"/>
   <sprm name="keepNext" tokenid="0x2406"/>
   <sprm name="keepLines" tokenid="0x2405"/>
   <sprm name="pageBreakBefore" tokenid="0x2407"/>
-  <sprm name="framePr" tokenid="0x0"/>
-  <sprm name="widowControl" tokenid="ooxml:windowControl"/>
-  <sprm name="numPr" tokenid="0x0"/>
+  <sprm name="framePr" tokenid="ooxml:CT_PPrBase_framePr"/>
+  <sprm name="widowControl" tokenid="ooxml:CT_PPrBase_windowControl"/>
+  <sprm name="numPr" tokenid="ooxml:CT_PPrBase_numPr"/>
   <sprm name="suppressLineNumbers" tokenid="0x240c"/>
   <sprm name="pBdr" tokenid="0x0"/>
   <sprm name="shd" tokenid="0x442d"/>
   <sprm name="tabs" tokenid="0xc60d"/>
   <sprm name="suppressAutoHyphens" tokenid="0x242a"/>
-  <sprm name="kinsoku" tokenid="ooxml:kinsoku"/>
-  <sprm name="wordWrap" tokenid="ooxml:wordWrap"/>
+  <sprm name="kinsoku" tokenid="ooxml:CT_PPrBase_kinsoku"/>
+  <sprm name="wordWrap" tokenid="ooxml:CT_PPrBase_wordWrap"/>
   <sprm name="overflowPunct" tokenid="0x2435"/>
   <sprm name="topLinePunct" tokenid="0x2436"/>
   <sprm name="autoSpaceDE" tokenid="0x2437"/>
   <sprm name="autoSpaceDN" tokenid="0x2438"/>
   <sprm name="bidi" tokenid="0x2441"/>
-  <sprm name="adjustRightInd" tokenid="ooxml:adjustRightInd"/>
-  <sprm name="snapToGrid" tokenid="ooxml:snapToGrid"/>
-  <sprm name="spacing" tokenid="ooxml:spacing"/>
-  <sprm name="ind" tokenid="0x0"/>
+  <sprm name="adjustRightInd" tokenid="ooxml:CT_PPrBase_adjustRightInd"/>
+  <sprm name="snapToGrid" tokenid="ooxml:CT_PPrBase_snapToGrid"/>
+  <sprm name="spacing" tokenid="ooxml:CT_PPrBase_spacing"/>
+  <sprm name="ind" tokenid="ooxml:CT_PPrBase_ind"/>
   <sprm name="contextualSpacing" tokenid="0x246d"/>
   <sprm name="mirrorIndents" tokenid="0x2470"/>
   <sprm name="suppressOverlap" tokenid="0x2462"/>
-  <sprm name="jc" tokenid="0x0"/>
+  <sprm name="jc" tokenid="ooxml:CT_PPrBase_jc"/>
   <sprm name="textDirection" tokenid="0x443a"/>
   <sprm name="textAlignment" tokenid="0x4439"/>
   <sprm name="textboxTightWrap" tokenid="0x2471"/>
   <sprm name="outlineLvl" tokenid="0x2640"/>
-  <sprm name="divId" tokenid="ooxml:divId"/>
-  <sprm name="cnfStyle" tokenid="ooxml:cnfStyle"/>
+  <sprm name="divId" tokenid="ooxml:CT_PPrBase_divId"/>
+  <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
 </resource>
 <resource name="CT_PPr" resource="Properties"/>
 </namespace>
