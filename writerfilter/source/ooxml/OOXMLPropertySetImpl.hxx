@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-06 09:51:37 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,6 +134,18 @@ public:
     virtual ~OOXMLPropertySetValue();
 
     virtual doctok::Reference<Properties>::Pointer_t getProperties();
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
+};
+
+class OOXMLIntegerValue : public OOXMLValue
+{
+    sal_Int32 mnValue;
+public:
+    OOXMLIntegerValue(sal_Int32 nValue);
+    virtual ~OOXMLIntegerValue();
+
+    virtual int getInt() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
 };

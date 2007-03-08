@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-06 13:42:54 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:34:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@ Value::Pointer_t OOXMLPropertyImpl::getValue()
 
     if (mpValue.get() != NULL)
         pResult = Value::Pointer_t(mpValue->clone());
+    else
+        pResult = Value::Pointer_t(new OOXMLValue());
 
     return pResult;
 }
@@ -333,6 +335,37 @@ string OOXMLPropertySetValue::toString() const
 OOXMLValue * OOXMLPropertySetValue::clone() const
 {
     return new OOXMLPropertySetValue(*this);
+}
+
+/*
+  class OOXMLIntegerValue
+*/
+
+OOXMLIntegerValue::OOXMLIntegerValue(sal_Int32 nValue)
+: mnValue(nValue)
+{
+}
+
+OOXMLIntegerValue::~OOXMLIntegerValue()
+{
+}
+
+int OOXMLIntegerValue::getInt() const
+{
+    return mnValue;
+}
+
+OOXMLValue * OOXMLIntegerValue::clone() const
+{
+    return new OOXMLIntegerValue(*this);
+}
+
+string OOXMLIntegerValue::toString() const
+{
+    char buffer[256];
+    snprintf(buffer, sizeof(buffer), "%ld", mnValue);
+
+    return buffer;
 }
 
 }
