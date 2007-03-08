@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RTFScanner.lex,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:37 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-08 16:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,8 +115,8 @@ void yyFlexLexer::split_ctrl(char *yytext, char* token, char *value)
      eventHandler.dest(token, value);
    }
  
- #define _num_of_destctrls 137
-char _destctrls[_num_of_destctrls][20] = {
+#define _num_of_destctrls (sizeof(_destctrls)/sizeof(_destctrls[0]))
+static const char* _destctrls[] = {
 "aftncn",
 "aftnsep",
 "aftnsepc",
@@ -255,7 +255,6 @@ char _destctrls[_num_of_destctrls][20] = {
 "userprops",
 "xe"
 };
-
 
  void yyFlexLexer::raise_destOrCtrl(char* yytext)
    {
