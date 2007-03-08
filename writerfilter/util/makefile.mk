@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:39:01 $
+#  last change: $Author: fridrich_strba $ $Date: 2007-03-08 12:20:22 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,6 +72,7 @@ LIB2TARGET=$(SLB)$/$(TARGET2).lib
 LIB2FILES=  \
     $(SLB)$/ooxml.lib \
     $(SLB)$/doctok.lib \
+    $(SLB)$/rtftok.lib \
     $(SLB)$/dmapper.lib \
     $(SLB)$/filter.lib
 
@@ -81,6 +82,10 @@ SHL2LIBS=$(SLB)$/$(TARGET2).lib
 SHL2TARGET=$(TARGET2)$(UPD)$(DLLPOSTFIX)
 SHL2STDLIBS=\
     $(I18NISOLANGLIB) \
+    $(SOTLIB) \
+    $(TOOLSLIB) \
+    $(UCBHELPERLIB) \
+    $(UNOTOOLSLIB) \
     $(CPPUHELPERLIB)    \
     $(COMPHELPERLIB)    \
     $(CPPULIB)          \

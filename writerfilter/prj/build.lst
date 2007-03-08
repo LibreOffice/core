@@ -15,6 +15,6 @@ wf  writerfilter\source\odiapi\qname    nmake   -   all wf_qname NULL
 wf	writerfilter\source\odiapi\props	nmake	- all	wf_odiapiprops wf_qname NULL
 wf	writerfilter\source\odiapi\xxml	nmake	- all	wf_odiapixxml wf_odiapiprops wf_qname NULL
 wf	writerfilter\source\odiapi\sl	nmake	- all	wf_odiapisl wf_odiapixxml wf_odiapiprops wf_qname NULL
-wf  writerfilter\source\filter      nmake   - all   wf_filter wf_doctok wf_ooxml NULL
-wf  writerfilter\source\dmapper      nmake   - all   wf_dmapper wf_doctok wf_ooxml NULL
+wf  writerfilter\source\filter      nmake   - all   wf_filter wf_doctok wf_ooxml wf_rtftok NULL
+wf  writerfilter\source\dmapper      nmake   - all   wf_dmapper wf_doctok wf_ooxml wf_rtftok NULL
 wf  writerfilter\util   nmake   - all   wf_odiapi wf_odiapisl wf_odiapixxml wf_odiapiprops wf_qname wf_odiapicore wf_filter wf_dmapper NULL
