@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-06 13:44:38 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,10 +104,6 @@
   <xsl:template name="contextnameforname">
     <xsl:variable name="application" select="ancestor::rng:grammar/@application"/>
     <xsl:variable name="name" select="@name"/>
-    /* <xsl:value-of select="$application"/>:<xsl:value-of select="$name"/>
-    (<xsl:for-each select="key('defines-with-name', $name)">
-      <xsl:value-of select="ancestor::rng:grammar/@application"/>,
-    </xsl:for-each>)*/
     <xsl:choose>
       <xsl:when test="count(key('defines-with-name', @name)) = 1">
         <xsl:for-each select="key('defines-with-name', @name)">
@@ -319,45 +315,6 @@
     <xsl:text>(const OOXMLContext &amp; rContext);&#xa;</xsl:text>
   </xsl:template>
 
-  <xsl:template name="contextcharactersdecl">
-    <xsl:variable name="resource">
-      <xsl:call-template name="contextresource"/>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$resource = 'Stream'">
-        <xsl:text>
-    virtual void  characters(const rtl::OUString&amp; /*str*/) 
-        throw (xml::sax::SAXException,uno::RuntimeException);
-        </xsl:text>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:template>
-
-  <xsl:template name="contextcharactersimpl">
-    <xsl:param name="prefix"/>
-    <xsl:variable name="resource">
-      <xsl:call-template name="contextresource"/>
-    </xsl:variable>
-    <xsl:variable name="classname">
-      <xsl:call-template name="contextnamefordefine"/>
-    </xsl:variable>
-    <xsl:choose>
-      <xsl:when test="$resource = 'Stream'">
-        <xsl:text>
-void </xsl:text>
-        <xsl:value-of select="$classname"/>
-        <xsl:text>::characters(const rtl::OUString&amp; str) 
-throw (xml::sax::SAXException,uno::RuntimeException)
-{
-    mrStream.utext(reinterpret_cast &lt; const sal_uInt8 * &gt; (sText.getStr()), sText.getLength());
-}
-        </xsl:text>
-      </xsl:when>
-      <xsl:otherwise/>
-    </xsl:choose>
-  </xsl:template>
-
   <xsl:template name="contextparent">
     <xsl:variable name="resource">
       <xsl:call-template name="contextresource"/>
@@ -396,6 +353,8 @@ public:
     virtual OOXMLContext::Pointer_t elementFromRefs(TokenEnum_t nToken);
     virtual bool attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue);    virtual doctok::Id getId(TokenEnum_t nToken);
     virtual doctok::Id getIdFromRefs(TokenEnum_t nToken);
+    virtual void  characters(const rtl::OUString &amp; str) 
+        throw (xml::sax::SAXException,uno::RuntimeException);
 
     virtual string getType() { return "</xsl:text>
     <xsl:value-of select="$classname"/>
@@ -419,10 +378,7 @@ public:
         <xsl:call-template name="classfordefine"/>
       </xsl:variable>
       <xsl:text>
-/* </xsl:text>
-      <xsl:value-of select="@name"/>
-      <xsl:value-of select="$do"/>
-      <xsl:text>*/ </xsl:text>
+      </xsl:text>
       <xsl:if test="$do = '1'">
         <xsl:call-template name="contextdecl"/>
       </xsl:if>
@@ -524,6 +480,38 @@ OOXMLContext::Pointer_t </xsl:text>
             return nId;
      }
     </xsl:if>
+  </xsl:template>
+
+  <xsl:template name="contextcharactersimpl">
+    <xsl:variable name="classname">
+      <xsl:call-template name="contextnamefordefine"/>
+    </xsl:variable>
+    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+    <xsl:variable name="resource" select="key('context-resource', @name)[generate-id(ancestor::namespace) = $mynsid]"/>
+    /*<xsl:value-of select="$resource/action/@name"/>*/
+    <xsl:text>
+void </xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>::characters(const rtl::OUString &amp; sText) 
+        throw (xml::sax::SAXException,uno::RuntimeException)
+{
+</xsl:text>
+    <xsl:choose>
+      <xsl:when test="$resource/action[@name='characters' and @action='text']">
+        <xsl:text>
+    mrStream.utext(reinterpret_cast &lt; const sal_uInt8 * &gt; 
+                   (sText.getStr()), 
+                   sText.getLength());</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>
+    </xsl:text>
+        <xsl:call-template name="contextparent"/>
+        <xsl:text>::characters(sText);</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>
+}</xsl:text>
   </xsl:template>
 
   <xsl:template name="caselabelelement">
@@ -642,63 +630,6 @@ OOXMLContext::Pointer_t
     </xsl:choose>
   </xsl:template>
 
-  <xsl:template name="contextendelementimpl">
-    <xsl:param name="prefix"/>
-    <xsl:variable name="classname">
-      <xsl:call-template name="contextnamefordefine"/>
-    </xsl:variable>
-    <xsl:variable name="resource">
-      <xsl:call-template name="contextresource"/>
-    </xsl:variable>
-    <xsl:variable name="mydefine" select="@name"/>
-    <xsl:text>
-void 
-</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>::endElement(TokenEnum_t nToken, OOXMLContext::Pointer_t pContext)
-{</xsl:text>
-    TokenEnum_t nTmpToken;
-    nTmpToken = nToken;
-    OOXMLContext::Pointer_t pTmpContext;
-    pTmpContext = pContext;
-    <xsl:if test="$resource = 'Property'">
-      <xsl:text>
-    switch (nToken)
-    {</xsl:text>
-    <xsl:for-each select="//resource[@name=$mydefine]/sprm">
-      <xsl:variable name="sprmname" select="@name"/>
-      // <xsl:value-of select="$mydefine"/> : <xsl:value-of select="$sprmname"/>
-      <xsl:for-each select="key('defines-with-name', $mydefine)//rng:element[@name=$sprmname]">
-        <xsl:call-template name="caselabelelement"/>
-      </xsl:for-each>
-      <xsl:text>
-        {
-            clog &lt;&lt; "</xsl:text>
-            <xsl:value-of select="$classname"/>
-            <xsl:text>: </xsl:text>
-            <xsl:value-of select="$sprmname"/>
-            <xsl:text>" &lt;&lt; endl;
-
-            OOXMLPropertyImpl::Pointer_t pProperty
-                (new OOXMLPropertyImpl(</xsl:text>
-                <xsl:call-template name="processtokenid"/>
-        <xsl:text>, pContext->getValue(), OOXMLPropertyImpl::SPRM));
-            static_cast &lt; OOXMLPropertySet * &gt; (mpPropertySet.get())->add(pProperty);</xsl:text>
-        }
-        break;
-    </xsl:for-each>
-    <xsl:text>
-    case OOXML_TOKENS_END: // prevent warning
-        break;
-    default:
-        break;
-    }</xsl:text>
-    </xsl:if>
-    <xsl:text>
-}
-    </xsl:text>
-  </xsl:template>
-
   <xsl:template name="contextgetid">
     <xsl:param name="prefix"/>
     <xsl:variable name="classname">
@@ -785,18 +716,38 @@ doctok::Id
         bResult = true;
   </xsl:template>
 
+  <xsl:template name="contextattributeimplint">
+        mnValue = rValue.toInt32();
+  </xsl:template>
+
   <xsl:template name="contextattributeimplprops">
+    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
+    <xsl:variable name="name" select="@name"/>
+    <xsl:variable name="definename" select="ancestor::rng:define/@name"/>
+    <xsl:variable name="resource" select="key('context-resource', $definename)[generate-id(ancestor::namespace)=$mynsid]"/>
+    <xsl:variable name="proptype">
+      <xsl:choose>
+        <xsl:when test="$resource/sprm[@name=$name]">
+          <xsl:text>OOXMLPropertyImpl::SPRM</xsl:text>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:text>OOXMLPropertyImpl::ATTRIBUTE</xsl:text>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:variable>
     <xsl:choose>
       <xsl:when test=".//rng:text">
+        <xsl:text>
         {
             doctok::Id nId = this->getId(nToken);
     
             OOXMLValue::Pointer_t pVal(new OOXMLStringValue(rValue));
             OOXMLPropertyImpl::Pointer_t pProperty
-                (new OOXMLPropertyImpl(nId, pVal, OOXMLPropertyImpl::ATTRIBUTE));
-
+                (new OOXMLPropertyImpl(nId, pVal, </xsl:text>
+                <xsl:value-of select="$proptype"/>
+                <xsl:text>));
             mpPropertySet->add(pProperty);
-        }
+        }</xsl:text>
       </xsl:when>
     </xsl:choose>
   </xsl:template>
@@ -826,6 +777,9 @@ bool </xsl:text>
       <xsl:choose>
         <xsl:when test="$resource = 'BooleanValue'">
           <xsl:call-template name="contextattributeimplbool"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'IntegerValue'">
+          <xsl:call-template name="contextattributeimplint"/>
         </xsl:when>
         <xsl:when test="$resource = 'PropertySetValue'">
           <xsl:call-template name="contextattributeimplprops"/>
@@ -940,6 +894,7 @@ bool </xsl:text>
         <xsl:call-template name="contextattributeimpl"/>
         <xsl:call-template name="contextgetid"/>
         <xsl:call-template name="contextrefsidimpl"/>
+        <xsl:call-template name="contextcharactersimpl"/>
       </xsl:if>
     </xsl:for-each>
   </xsl:template>
@@ -1049,20 +1004,38 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
     <xsl:text>
 namespace writerfilter { namespace NS_ooxml
 {</xsl:text>
+    <xsl:for-each select="//resource//attribute|//resource//element|//resource//sprm">
+      <xsl:if test="contains(@tokenid, 'ooxml:')">
+        <xsl:text>
+    const QName_t LN_</xsl:text>
+    <xsl:value-of select="substring-after(@tokenid, 'ooxml:')"/>
+    <xsl:text> = </xsl:text>
+    <xsl:value-of select="90000 + position()"/>
+    <xsl:text>;</xsl:text>
+      </xsl:if>
+    </xsl:for-each>
+}}
+  </xsl:template>
+
+  <xsl:template name="qnametostr">
+    <xsl:text>
+    /* ooxml */
+    </xsl:text>
     <xsl:for-each select="//resource">
       <xsl:variable name="name" select="@name"/>
       <xsl:for-each select="attribute|element|sprm">
         <xsl:if test="contains(@tokenid, 'ooxml:')">
           <xsl:text>
-    const QName_t LN_</xsl:text>
-          <xsl:value-of select="substring-after(@tokenid, 'ooxml:')"/>
-          <xsl:text> = </xsl:text>
-          <xsl:value-of select="90000 + position()"/>
-          <xsl:text>;</xsl:text>
+    mMap[</xsl:text>
+          <xsl:call-template name="idtoqname">
+            <xsl:with-param name="id" select="@tokenid"/>
+          </xsl:call-template>
+          <xsl:text>] = "</xsl:text>
+          <xsl:value-of select="@tokenid"/>
+          <xsl:text>";</xsl:text>
         </xsl:if>
       </xsl:for-each>
     </xsl:for-each>
-}}
   </xsl:template>
 
   <xsl:template name='idtoqname'>
