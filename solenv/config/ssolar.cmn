@@ -94,6 +94,7 @@ common
 		JDK_PATH
         L10N-framework
         L10N_framework
+        LFS_CFLAFS
 		LOCALINI
 		MK_UNROLL
 		MKDIR
