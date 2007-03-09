@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DocumentHelper.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:27:53 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,16 +68,28 @@ public class DocumentHelper
     }
 
     /* ------------------------------------------------------------------ */
-    protected static XComponent implCreateBlankDocument( XMultiServiceFactory orb, String factoryURL ) throws com.sun.star.uno.Exception
+    private static DocumentHelper implLoadDocument( XMultiServiceFactory orb, String documentOrFactoryURL ) throws com.sun.star.uno.Exception
     {
         XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
             XComponentLoader.class,
             orb.createInstance( "com.sun.star.frame.Desktop" )
         );
 
-        return dbfTools.queryComponent(
-            aLoader.loadComponentFromURL( factoryURL, "_blank", 0, new PropertyValue[ 0 ] )
+        XComponent document = dbfTools.queryComponent(
+            aLoader.loadComponentFromURL( documentOrFactoryURL, "_blank", 0, new PropertyValue[ 0 ] )
         );
+
+        XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface( XServiceInfo.class,
+            document );
+        if ( xSI.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+            return new SpreadsheetDocument( orb, document );
+        return new DocumentHelper( orb, document );
+    }
+
+    /* ------------------------------------------------------------------ */
+    public static DocumentHelper loadDocument( XMultiServiceFactory orb, String documentURL ) throws com.sun.star.uno.Exception
+    {
+        return implLoadDocument( orb, documentURL );
     }
 
     /* ------------------------------------------------------------------ */
@@ -89,10 +101,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     public static DocumentHelper blankDocument( XMultiServiceFactory orb, DocumentType eType ) throws com.sun.star.uno.Exception
     {
-        XComponent document = implCreateBlankDocument( orb, getDocumentFactoryURL( eType ) );
-        if ( eType == DocumentType.CALC )
-            return new SpreadsheetDocument( orb, document );
-        return new DocumentHelper( orb, document );
+        return implLoadDocument( orb, getDocumentFactoryURL( eType ) );
     }
 
     /* ================================================================== */
