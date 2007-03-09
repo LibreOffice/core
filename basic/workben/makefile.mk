@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:01:46 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:18:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ APP1STDLIBS= \
             $(UNOTOOLSLIB) \
             $(SVTOOLLIB) \
             $(SVLLIB) \
-            $(SVLIB) \
+            $(VCLLIB) \
             $(COMPHELPERLIB) \
             $(UCBHELPERLIB) \
             $(CPPUHELPERLIB) \
@@ -61,14 +61,14 @@ APP1STDLIBS= \
             $(SOTLIB) \
             $(VOSLIB)
 
-.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
-APP1STDLIBS+=$(CPPULIB)
-.ENDIF
-.IF "$(GUI)"=="UNX"
-APP1STDLIBS+= \
-            $(VOSLIB) \
-            $(SALLIB)
-.ENDIF
+#.IF "$(GUI)"=="WNT" || "$(COM)"=="GCC"
+#APP1STDLIBS+=$(CPPULIB)
+#.ENDIF
+#.IF "$(GUI)"=="UNX"
+#APP1STDLIBS+= \
+#			$(VOSLIB) \
+#			$(SALLIB)
+#.ENDIF
 
 APP1LIBS= \
             $(LB)$/basic.lib \
