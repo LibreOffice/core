@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:25:24 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:45:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,10 +52,6 @@ USE_DEFFILE=TRUE
     @echo "No mozilla -> no nss -> no libxmlsec -> no xmlsecurity..."
 .ENDIF
 
-# --- Allgemein ----------------------------------------------------
-NO_BSYMBOLIC=TRUE
-ENABLE_EXCEPTIONS=TRUE
-
 # --- Files --------------------------------------------------------
 
 BMP_IN=$(PRJ)$/res
@@ -99,7 +95,6 @@ SHL2STDLIBS +=			\
     $(SALLIB)			\
     $(CPPULIB)			\
     $(CPPUHELPERLIB)	\
-    $(OSLLIB)	\
     $(SALLIB)	\
     $(UNOTOOLSLIB)	    \
     $(SVLLIB)			\
