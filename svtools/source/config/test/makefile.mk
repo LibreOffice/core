@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:25:28 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:25:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,10 @@ TARGET=				test_configitems
 LIBTARGET=			NO
 ENABLE_EXCEPTIONS=	TRUE
 USE_DEFFILE=		TRUE
-NO_BSYMBOLIC=		TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
-.ENDIF
 
 # --- application: "test" --------------------------------------------------
 
@@ -56,22 +51,20 @@ APP1TARGET= 	test
 APP1OBJS=		$(SLO)$/test.obj					\
                 $(SLO)$/dynamicmenuoptions.obj
 
+DEPOBJFILES=$(APP1OBJS)
+
 APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
                 $(COMPHELPERLIB)					\
                 $(UNOTOOLSLIB) 						\
-                $(OSLLIB)							\
                 $(SALLIB)							\
                 $(VOSLIB)							\
                 $(TOOLSLIB) 						\
-                $(SVLIB)
+                $(VCLLIB)
 
 APP1DEPN=		$(SLO)$/dynamicmenuoptions.obj
-
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP1DEF=		$(MISC)$/$(APP1TARGET).def
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
