@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-21 12:22:33 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:34:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,21 +67,19 @@ SHL1DEPN	=$(SHL1LIBS)
 SHL1STDLIBS     = $(SVTOOLLIB)		\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
-                $(SVLIB)			\
+                $(VCLLIB)			\
                 $(SOTLIB)			\
                 $(BTSTRPLIB)		\
                 $(TOOLSLIB) 		\
                 $(VOSLIB)			\
-                $(UNOLIB)			\
-                $(OSLLIB)			\
                 $(SALLIB)           \
                 $(CPPULIB)  \
                    $(PERL_LIB)
 
-.IF "$(GUI)" == "UNX"
-SHL1STDLIBS+=\
-        $(SALLIB)
-.ENDIF
+#.IF "$(GUI)" == "UNX"
+#SHL1STDLIBS+=\
+#		$(SALLIB)
+#.ENDIF
 
 
 DEF1NAME    =$(SHL1TARGET)
@@ -109,13 +107,11 @@ APP1STDLIBS= \
             $(SVTOOLLIB)		\
             $(CPPUHELPERLIB)	\
             $(COMPHELPERLIB)	\
-            $(SVLIB)			\
+            $(VCLLIB)			\
             $(SOTLIB)			\
             $(BTSTRPLIB)		\
             $(TOOLSLIB) 		\
             $(VOSLIB)			\
-            $(UNOLIB)			\
-            $(OSLLIB)			\
             $(SALLIB)           \
                $(CPPULIB)  \
                $(PERL_LIB)
@@ -136,8 +132,8 @@ ALLTAR : $(BIN)$/applicat.rdb
 $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
     rm -f $@
     $(GNUCOPY) $(UNOUCRRDB) $@
-     +cd $(BIN) && \
-    regcomp -register -r applicat.rdb \
+     cd $(BIN) && \
+    $(REGCOMP) -register -r applicat.rdb \
              -c i18nsearch.uno$(DLLPOST) \
              -c i18npool.uno$(DLLPOST)
 
