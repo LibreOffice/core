@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:29:19 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:31:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
 SHL1TARGET=     eme$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     eos2met
-SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
+SHL1STDLIBS=    $(TOOLSLIB) $(VCLLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
 
 SHL1LIBS=       $(SLB)$/eos2met.lib
 .IF "$(GUI)" != "UNX"
