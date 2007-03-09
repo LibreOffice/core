@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:35:17 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:34:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,6 @@ APP1NOSAL=TRUE
 APP1TARGET=	$(TARGET)
 APP1OBJS=$(OBJFILES)
 
-LIBCIMT=msvcrtd.lib
-
-
 APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
@@ -85,13 +82,6 @@ APP1LIBS=	\
             $(SLB)$/dtutils.lib
 
 #			$(SOLARLIBDIR)$/imtaolecb.lib\
-
-
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS += $(LIBCIMT)
-APP2STDLIBS += $(LIBCIMT)
-.ENDIF
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
