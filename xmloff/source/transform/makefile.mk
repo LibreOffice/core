@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:03:27 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:19:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,7 @@
 PRJ := ..$/..
 PRJNAME := xmloff
 TARGET := xof
-
-AUTOSEG := true
+LIBTARGET=NO
 ENABLE_EXCEPTIONS := TRUE
 
 .INCLUDE: settings.mk
@@ -83,12 +82,11 @@ SHL1OBJS = \
     $(SLO)$/TransformerContext.obj \
     $(SLO)$/TransformerTokenMap.obj \
     $(SLO)$/XMLFilterRegistration.obj
+
 SHL1STDLIBS = \
     $(COMPHELPERLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(ONELIB) \
-    $(RTLLIB) \
     $(SALHELPERLIB) \
     $(SALLIB) \
     $(TOOLSLIB)
