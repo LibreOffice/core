@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:24:52 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:25:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ SRS1FILES=$(SRS)$/bmp.srs
 APP1TARGET= $(TARGET)
 
 APP1STDLIBS =		\
-    $(SVLIB)		\
+    $(VCLLIB)		\
     $(TOOLSLIB)		\
     $(VOSLIB) 		\
     $(SALLIB)
@@ -78,7 +78,7 @@ APP2TARGET	=	bmpsum
 APP2BASE	=	0x10000000
 APP2OBJS	=   $(OBJ)$/bmpsum.obj
 
-APP2STDLIBS	=	$(SVLIB)		\
+APP2STDLIBS	=	$(VCLLIB)		\
                 $(TOOLSLIB)		\
                 $(VOSLIB) 		\
                 $(SALLIB)
