@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:37:49 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:00:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,21 +66,11 @@ APP1STDLIBS = $(APPSTDLIBS)
 
 
     
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+=$(LIBCIMT)
-.ENDIF
-
 APP2TARGET = mozThread
 APP2OBJS   = $(OBJ)$/initUNO.obj	\
      $(OBJ)$/mozthread.obj
                  
 APP2STDLIBS = $(APPSTDLIBS)
-
-
-    
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+=$(LIBCIMT)
-.ENDIF
 
 # --- Targets ------------------------------------------------------
     
