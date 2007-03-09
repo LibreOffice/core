@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:52:26 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -765,7 +765,9 @@ const SwPropNameTab aPropNameTab = {
 /* 0707 UNO_CHAR_AUTO_STYLE_NAME */     {MAP_CHAR_LEN("CharAutoStyleName")},
 /* 0708 UNO_PARA_AUTO_STYLE_NAME */     {MAP_CHAR_LEN("ParaAutoStyleName")},
 /* 0709 UNO_NAME_APPLY_WORKAROUND_FOR_B6375613*/ {MAP_CHAR_LEN("ApplyWorkaroundForB6375613")},
-/* 0710 UNO_NAME_LAYOUT_SIZE*/ {MAP_CHAR_LEN("LayoutSize")}
+/* 0710 UNO_NAME_LAYOUT_SIZE*/ {MAP_CHAR_LEN("LayoutSize")},
+/* 0711 UNO_NAME_HELP */ {MAP_CHAR_LEN("Help")},
+/* 0712 UNO_NAME_TOOLTIP */ {MAP_CHAR_LEN("Tooltip")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
