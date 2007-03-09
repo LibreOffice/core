@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:23:15 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:23:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files ---
 
-.IF "$(depend)" != ""
-
 OBJFILES=\
     $(OBJ)$/srcharg.obj \
     $(OBJ)$/ucbdemo.obj
-
-.ENDIF # depend
 
 #SRSFILES= $(SRS)$/ucbdemo.srs
 
@@ -87,10 +83,8 @@ APP1STDLIBS=\
     $(COMPHELPERLIB) \
     $(TOOLSLIB) \
     $(SVTOOLLIB) \
-    $(SVLIB) \
+    $(VCLLIB) \
     $(UCBHELPERLIB)
-
-APP1DEF=	$(MISC)\$(APP1TARGET).def
 
 # --- Targets ---
 
