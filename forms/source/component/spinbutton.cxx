@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinbutton.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:55:52 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:34:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,19 +122,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    Reference< XPropertySetInfo > SAL_CALL OSpinButtonModel::getPropertySetInfo() throw(RuntimeException)
-    {
-        return Reference< XPropertySetInfo >( createPropertySetInfo( getInfoHelper() ) );
-    }
-
-    //--------------------------------------------------------------------
-    cppu::IPropertyArrayHelper& OSpinButtonModel::getInfoHelper()
-    {
-        return *const_cast< OSpinButtonModel* >( this )->getArrayHelper();
-    }
-
-    //--------------------------------------------------------------------
-    void OSpinButtonModel::fillProperties( Sequence< Property >& _rProps, Sequence< Property >& _rAggregateProps ) const
+    void OSpinButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 3, OControlModel )
             DECL_PROP1( DEFAULT_SPIN_VALUE,   sal_Int32,       BOUND );
