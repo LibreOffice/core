@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:47:14 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,6 @@ class OListBoxModel :public OBoundControlModel
                     ,public OListBoxModel_BASE
                     ,public OEntryListHelper
                     ,public OErrorBroadcaster
-                    ,public ::comphelper::OAggregationArrayUsageHelper< OListBoxModel >
 {
     ::com::sun::star::uno::Any                  m_aSaveValue;
 
@@ -159,10 +158,6 @@ public:
                 throw (::com::sun::star::lang::IllegalArgumentException);
 
 protected:
-    // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
     // XMultiPropertySet
     virtual void SAL_CALL   setPropertyValues(const ::com::sun::star::uno::Sequence< ::rtl::OUString >& PropertyNames, const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& Values) throw(::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
@@ -178,12 +173,13 @@ protected:
     virtual void SAL_CALL addRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL removeRefreshListener(const ::com::sun::star::uno::Reference< ::com::sun::star::util::XRefreshListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+    // OControlModel's property handling
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
+    virtual void describeAggregateProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    ) const;
 
     // XEventListener
     virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& Source) throw (::com::sun::star::uno::RuntimeException);
