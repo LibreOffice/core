@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:05:18 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:46:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,6 @@ APP1STDLIBS = $(APPSTDLIBS)
 
 APP1STDLIBS+=$(STDLIBCPP)
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+=$(LIBCIMT)
-.ENDIF
-
 APP1TARGET= $(TARGET)
 APP1OBJS=	\
     $(SLO)$/cfgapi.obj	\
@@ -82,10 +78,6 @@ APP1OBJS=	\
 APP6STDLIBS = $(APPSTDLIBS)
 
 APP6STDLIBS+=$(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP6STDLIBS+=$(LIBCIMT)
-.ENDIF
 
 APP6TARGET= $(TARGET6)
 APP6OBJS=	\
@@ -99,10 +91,6 @@ APP2STDLIBS = $(APPSTDLIBS)
 
 APP2STDLIBS+=$(STDLIBCPP)
 
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+=$(LIBCIMT)
-.ENDIF
-
 APP2TARGET= $(TARGET2)
 APP2OBJS=	\
     $(SLO)$/cfgregistry.obj	\
@@ -112,10 +100,6 @@ APP3STDLIBS = $(APPSTDLIBS)
 
 APP3STDLIBS+=$(STDLIBCPP)
 
-.IF "$(GUI)"=="WNT"
-APP3STDLIBS+=$(LIBCIMT)
-.ENDIF
-
 APP3TARGET= $(TARGET3)
 APP3OBJS=	\
     $(SLO)$/cfgadduser.obj	\
@@ -124,10 +108,6 @@ APP3OBJS=	\
 APP4STDLIBS = $(APPSTDLIBS)
 
 APP4STDLIBS+=$(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP4STDLIBS+=$(LIBCIMT)
-.ENDIF
 
 APP4TARGET= $(TARGET4)
 APP4OBJS=	\
@@ -140,10 +120,6 @@ APP4OBJS=	\
 APP5STDLIBS = $(APPSTDLIBS)
 
 APP5STDLIBS+=$(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP5STDLIBS+=$(LIBCIMT)
-.ENDIF
 
 APP5TARGET= $(TARGET5)
 APP5OBJS=	\
