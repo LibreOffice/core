@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlnxi.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 17:16:23 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:10:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,6 @@ CFLAGSCC=-pipe -fguiding-decls $(ARCH_FLAGS)
 CFLAGSCXX=-pipe -fguiding-decls $(ARCH_FLAGS)
 PICSWITCH:=-fpic
 #STDOBJVCL=$(L)$/salmain.o
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=$(PICSWITCH)
@@ -94,11 +92,7 @@ LINK=ld
 .IF "$(GLIBC)"=="2"
 LINKFLAGS=-melf_i386 -z nodefs -dynamic-linker /lib/ld-linux.so.2 /usr/lib/crti.o /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtbegin.o
 .ELSE
-.IF "$(TARGETTHREAD)"=="MT"
 LINKFLAGS=-melf_i386 -z nodefs -dynamic-linker /lib/ld-linux.so.1 /usr/lib/crti.o /usr/lib/crtbegin.o -lpthread_init
-.ELSE
-LINKFLAGS=-melf_i386 -z nodefs -dynamic-linker /lib/ld-linux.so.1 /usr/lib/crti.o /usr/lib/crtbegin.o
-.ENDIF
 .ENDIF
 LINKFLAGSAPPGUI=/usr/lib/crt1.o 
 LINKFLAGSSHLGUI=-noinhibit-exec -warn-once -Bsymbolic -G
@@ -135,15 +129,11 @@ STDSLOCUI=
 
 .IF "$(WORK_STAMP)=="MIX364"
 .IF "$(GLIBC)"=="2"
-STDLIBGUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
-STDLIBCUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDLIBGUIMT=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDLIBCUIMT=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDSHLGUIMT=-Bdynamic -lX11 -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDSHLCUIMT=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 .ELSE
-STDLIBGUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
-STDLIBCUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
 STDLIBGUIMT=-Bdynamic -lpthread -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
 STDLIBCUIMT=-Bdynamic -lpthread -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
 STDSHLGUIMT=-Bdynamic -lX11 -lpthread -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
@@ -151,15 +141,11 @@ STDSHLCUIMT=-Bdynamic -lpthread -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/cr
 .ENDIF
 .ELSE
 .IF "$(GLIBC)"=="2"
-STDLIBGUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
-STDLIBCUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDLIBGUIMT=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDLIBCUIMT=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDSHLGUIMT=-Bdynamic -lX11 -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 STDSHLCUIMT=-Bdynamic -lm -lc -ldl /usr/lib/gcc-lib/i586-pc-linux-gnu/2.8.1/crtend.o /usr/lib/crtn.o 
 .ELSE
-STDLIBGUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
-STDLIBCUIST=-Bdynamic -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
 STDLIBGUIMT=-Bdynamic -lpthread -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
 STDLIBCUIMT=-Bdynamic -lpthread -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
 STDSHLGUIMT=-Bdynamic -lX11 -lpthread -lgcc -lm -lc -ldl /usr/lib/crtend.o /usr/lib/crtn.o 
