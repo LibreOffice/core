@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 13:34:29 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:54:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,6 @@ PRJ=..$/..
 PRJNAME=tools
 TARGET=addexes2
 TARGETTYPE=CUI
-TARGETTHREAD=MT
-#NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
 
