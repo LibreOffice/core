@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxhpxr.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:01:30 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:08:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,8 +61,6 @@ CC=cc
 CFLAGS= -c
 CFLAGSCC= -Aa +e +Z $(ARCH_FLAGS)
 CFLAGSCXX=$(DISWARN) +Z $(ARCH_FLAGS)
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=
@@ -94,8 +92,6 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST= -lX11 -lXext -lsec -lcxx -ldld -lm
-STDLIBCUIST= -lsec -lcxx -ldld -lm
 #STDLIBGUIMT= -lX11 -lXext -lcma -lsec -lcxx -ldld -lc_r -lm
 STDLIBGUIMT= -lX11 -lXext -lpthread
 STDLIBCUIMT= -lcma
