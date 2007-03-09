@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngs3904.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:03:52 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:10:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,6 @@ CFLAGSCXX= -fsigned-char -pipe -fno-rtti $(ARCH_FLAGS)
 #CFLAGSCXX= -fsigned-char -pipe
 PICSWITCH:=-fPIC
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=$(PICSWITCH)
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -163,10 +159,8 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBCUIST=-ldl -lm
 STDLIBGUIMT=-lX11 -ldl -lpthread -lm
 STDLIBCUIMT=-ldl -lpthread -lm
-STDLIBGUIST=-lX11 -ldl -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
