@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_dep.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:59:12 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:05:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,10 @@ ALLDEP .PHONY:
 .IF "$(DEPFILES)" != ""
 #to keep win9x happy
 .IF "$(GROUPSHELL:b:l)"=="4dos"
-    @@-echo $(foreach,i,$(DEPFILES) $(shell $(4nt_force_shell)-del $i >& $(NULLDEV)))
+    @@-echo $(foreach,i,$(DEPFILES) $(shell @@$(4nt_force_shell)-del $i))
 .ELSE			# "$(GROUPSHELL:b)"=="4dos"
 .IF "$(USE_SHELL)"=="4nt"
-    @@-echo $(foreach,i,$(DEPFILES) $(shell $(shell $(4nt_force_shell)-del $i >& $(NULLDEV)))
+    @@-echo $(foreach,i,$(DEPFILES) $(shell @@$(4nt_force_shell)-del $i ))
 .ELSE			# "$(USE_SHELL)"=="4nt"
     @@-$(RM) $(DEPFILES)
 .ENDIF			# "$(USE_SHELL)"=="4nt"
