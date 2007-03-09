@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:02:07 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:06:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ $(ZIP$(TNR)DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP$(TNR)TARGETN) : delzip
+$(ZIP$(TNR)TARGETN) : delzip $(ZIP$(TNR)DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
