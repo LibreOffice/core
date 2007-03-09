@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedText.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:40:04 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:25:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,9 @@ namespace frm
 //==================================================================
 class OFixedTextModel
         :public OControlModel
-        ,public ::comphelper::OAggregationArrayUsageHelper< OFixedTextModel >
 {
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OFixedTextModel );
-
-// XPropertySetRef
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL   getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
 
 // XServiceInfo
     IMPLEMENTATION_NAME(OFixedTextModel);
@@ -69,12 +64,10 @@ public:
     virtual void SAL_CALL
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    // OControlModel's property handling
+    virtual void describeAggregateProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
 
 protected:
     DECLARE_XCLONEABLE();
