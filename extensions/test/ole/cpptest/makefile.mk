@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 12:46:40 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:41:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,6 @@ INCPRE+=-I$(ATL_INCLUDE)
 
 APP1TARGET=	$(TARGET)
 APP1OBJS=	$(OBJ)$/cppTest.obj
-LIBCMT=msvcrt.lib
-
 
 APP1STDLIBS= \
     $(SALLIB) \
@@ -67,10 +65,6 @@ APP1STDLIBS= \
     uuid.lib		\
     comdlg32.lib	\
     comsupp.lib
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS += $(LIBCIMT)
-.ENDIF
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
