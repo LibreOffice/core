@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:18:55 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:44:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,21 +38,20 @@
 #ifndef __com_sun_star_form_XFormComponent_idl__
 #include <com/sun/star/form/XFormComponent.idl>
 #endif
-
 #ifndef __com_sun_star_lang_XComponent_idl__
 #include <com/sun/star/lang/XComponent.idl>
 #endif
-
 #ifndef __com_sun_star_container_XNamed_idl__
 #include <com/sun/star/container/XNamed.idl>
 #endif
-
 #ifndef __com_sun_star_beans_XPropertySet_idl__
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
-
 #ifndef __com_sun_star_io_XPersistObject_idl__
 #include <com/sun/star/io/XPersistObject.idl>
+#endif
+#ifndef __com_sun_star_beans_PropertyBag_idl__
+#include <com/sun/star/beans/PropertyBag.idl>
 #endif
 
 
@@ -92,6 +91,28 @@ published service FormComponent
     /** Each FormComponent must be able to be stored into and read from a stream.
      */
     interface com::sun::star::io::XPersistObject;
+
+    /** allows to associate arbitrary properties with the form component
+
+        <p>Every concrete form component - i.e. every service which includes
+        the <code>FormComponent</code> service - has a set of properties which
+        are available as long as the component lives - the so-called <em>static
+        properties</em>.</p>
+
+        <p>Additionally, you can add more properties to the component as needed,
+        using the <type scope="com::sun::star::beans">XPropertyContainer</type> interface.
+        Those properties are called <em>dynamic properties</em>.</p>
+
+        <p>Dynamic properties are not evaluated by the component itself,
+        nor by the form's runtime environment. They're only remembered and available for
+        use by other instances.</p>
+
+        <p>Note that dynamic properties added to a form component are, by definition,
+        removeable. That is, the <member scope="com::sun::star::beans">PropertyAttribute::REMOVEABLE</member>
+        will always be set, even if you do not specify it in the
+        <member scope="com::sun::star::beans">XPropertyContainer::addProperty</member> call.</p>
+    */
+    [optional] service com::sun::star::beans::PropertyBag;
 
     //-------------------------------------------------------------------------
 
