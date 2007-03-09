@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:04:50 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:45:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..
 
-PRJNAME=SV
+PRJNAME=xmlsecurity
 TARGET=signaturetest
 LIBTARGET=NO
 TARGETTYPE=GUI
@@ -66,7 +66,7 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(SALLIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
-                $(SVLIB)			\
+                $(VCLLIB)			\
                 $(SFXLIB)			\
                 $(XMLOFFLIB)		\
                 $(SVXLIB)
@@ -75,8 +75,5 @@ APP1STDLIBS=	$(CPPULIB)			\
 
 # --- Targets ------------------------------------------------------
 
-ALL :   ALLTAR 
-
 .INCLUDE :	target.mk
 
- 
