@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-27 11:48:58 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:13:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -128,21 +128,15 @@ CFLAGSCC=$(ARCH_FLAGS)
 CDEFSSLOMT+=-DWIN32 -D_MT -D_DLL
 CDEFSSLOMT+=-DWIN32 -D_MT -D_DLL
 .IF "$(NO_DYNAMIC_OBJ)"==""
-CDEFSOBJST+=-DWIN32 -D_DLL
-CDEFSOBJST+=-DWIN32 -D_DLL
 CDEFSOBJMT+=-DWIN32 -D_MT -D_DLL
 CDEFSOBJMT+=-DWIN32 -D_MT -D_DLL
 .ELSE
-CDEFSOBJST+=-DWIN32
-CDEFSOBJST+=-DWIN32
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
 .ELSE
 CDEFSSLOMT+=-DWIN32 -D_MT
 CDEFSSLOMT+=-DWIN32 -D_MT
-CDEFSOBJST+=-DWIN32
-CDEFSOBJST+=-DWIN32
 CDEFSOBJMT+=-DWIN32 -D_MT
 CDEFSOBJMT+=-DWIN32 -D_MT
 .ENDIF
@@ -273,23 +267,18 @@ LINKFLAGSOPT=
 
 UWINAPILIB*=uwinapi.lib
 .IF "$(DYNAMIC_CRT)"!=""
-LIBCST=msvcrt.lib
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrtd.lib
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=msvcrt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
-# See iz57443 for details about LIBCIMT
-#LIBCIMT=
-.ELSE
-LIBCST=libc.lib
+.ELSE			# "$(DYNAMIC_CRT)"!=""
 .IF "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmtd.lib
 .ELSE  # "$(USE_STLP_DEBUG)" != ""
 LIBCMT=libcmt.lib
 .ENDIF # "$(USE_STLP_DEBUG)" != ""
-LIBCIMT=libcimt.lib
-.ENDIF
+.ENDIF			# "$(DYNAMIC_CRT)"!=""
 
 STDOBJVCL=$(L)$/salmain.obj
 STDOBJGUI=
@@ -297,12 +286,8 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=$(LIBCST) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
-STDLIBCUIST=$(LIBCST) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDLIBGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDLIBCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
-STDSHLGUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
-STDSHLCUIST=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLGUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 STDSHLCUIMT=$(LIBCMT) $(UWINAPILIB) kernel32.lib user32.lib oldnames.lib
 
