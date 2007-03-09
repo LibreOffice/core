@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EditBase.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:10:36 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:24:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,59 +362,6 @@ void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const 
 }
 
 //XPropertyState
-//------------------------------------------------------------------------------
-PropertyState OEditBaseModel::getPropertyStateByHandle(sal_Int32 nHandle)
-{
-    PropertyState eState;
-    switch (nHandle)
-    {
-        case PROPERTY_ID_DEFAULT_TEXT:
-            if (!m_aDefaultText.getLength())
-                eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
-            break;
-        case PROPERTY_ID_FILTERPROPOSAL:
-            if (!m_bFilterProposal)
-                eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
-            break;
-        case PROPERTY_ID_DEFAULT_VALUE:
-        case PROPERTY_ID_DEFAULT_DATE:
-        case PROPERTY_ID_DEFAULT_TIME:
-            if (!m_aDefault.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            else
-                eState = PropertyState_DIRECT_VALUE;
-            break;
-        default:
-            eState = OBoundControlModel::getPropertyStateByHandle(nHandle);
-    }
-    return eState;
-}
-
-//------------------------------------------------------------------------------
-void OEditBaseModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_DEFAULT_TEXT:
-            setFastPropertyValue(nHandle, makeAny(::rtl::OUString()));
-            break;
-        case PROPERTY_ID_FILTERPROPOSAL:
-            setFastPropertyValue(nHandle, makeAny((sal_Bool)sal_False));
-            break;
-        case PROPERTY_ID_DEFAULT_VALUE:
-        case PROPERTY_ID_DEFAULT_DATE:
-        case PROPERTY_ID_DEFAULT_TIME:
-            setFastPropertyValue(nHandle, Any());
-            break;
-        default:
-            OBoundControlModel::setPropertyToDefaultByHandle(nHandle);
-    }
-}
-
 //------------------------------------------------------------------------------
 Any OEditBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
