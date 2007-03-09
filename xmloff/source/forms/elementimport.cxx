@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:42:45 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:05:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,12 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
 #include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 /** === end UNO includes === **/
 #ifndef _URLOBJ_HXX
@@ -362,6 +368,7 @@ namespace xmloff
             return;
 
         Reference< XPropertySetInfo > xPropSetInfo = m_xElement->getPropertySetInfo();
+        Reference< XPropertyContainer > xDynamicProperties( m_xElement, UNO_QUERY );
 
         for (   PropertyValueArray::iterator aPropValues =
                 m_aGenericValues.begin();
@@ -373,6 +380,26 @@ namespace xmloff
             // the property
             try
             {
+                // if such a property does not yet exist at the element, create it if necessary
+                bool bExistentProperty = xPropSetInfo->hasPropertyByName( aPropValues->Name );
+                if ( !bExistentProperty )
+                {
+                    if ( !xDynamicProperties.is() )
+                    {
+                        OSL_ENSURE( false, "OElementImport::implImportGenericProperties: encountered an unknown property, but component is no PropertyBag!" );
+                        continue;
+                    }
+
+                    xDynamicProperties->addProperty(
+                        aPropValues->Name,
+                        PropertyAttribute::BOUND | PropertyAttribute::REMOVEABLE,
+                        aPropValues->Value
+                    );
+
+                    // re-fetch the PropertySetInfo
+                    xPropSetInfo = m_xElement->getPropertySetInfo();
+                }
+
                 // determine the type of the value (source forthe following conversion)
                 TypeClass eValueTypeClass = aPropValues->Value.getValueTypeClass();
                 sal_Bool bValueIsSequence = TypeClass_SEQUENCE == eValueTypeClass;
@@ -458,8 +485,8 @@ namespace xmloff
                         break;
                     }
                 }
-                m_xElement->setPropertyValue(aPropValues->Name,
-                                                 aPropValues->Value);
+
+                m_xElement->setPropertyValue( aPropValues->Name, aPropValues->Value );
             }
             catch(Exception&)
             {
