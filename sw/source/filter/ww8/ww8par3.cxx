@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:54:26 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:17:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,12 @@
 #endif
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 #ifndef __SGI_STL_ALGORITHM
@@ -251,12 +257,17 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
     aFormula.sDefault = GetFieldResult(pF);
 
     //substituting Unicode spacing 0x2002 with double space for layout
+#if 0
     aFormula.sDefault.SearchAndReplaceAll(
         String(static_cast< sal_Unicode >(0x2002)),
         CREATE_CONST_ASC("  "));
+#endif
 
     SwInputField aFld((SwInputFieldType*)rDoc.GetSysFldType( RES_INPUTFLD ),
         aFormula.sDefault , aFormula.sTitle , INP_TXT, 0 );
+    aFld.SetHelp(aFormula.sHelp);
+    aFld.SetToolTip(aFormula.sToolTip);
+
     rDoc.Insert(*pPaM, SwFmtFld(aFld), 0);
 
     return FLD_OK;
@@ -287,6 +298,8 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
         (SwDropDownFieldType*)rDoc.GetSysFldType(RES_DROPDOWN));
 
     aFld.SetName(aFormula.sTitle);
+    aFld.SetHelp(aFormula.sHelp);
+    aFld.SetToolTip(aFormula.sToolTip);
 
     if (!aFormula.maListEntries.empty())
     {
@@ -2069,6 +2082,8 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     UINT8 nField;
     UINT8 nHeaderByte;
 
+    sal_Size nOffset = pDataStream->Tell();
+
     int nType=0;
     *pDataStream >> nHeaderByte;
     if (nHeaderByte == 0xFF) //Guesswork time, difference between 97 and 95 ?
@@ -2122,8 +2137,10 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
     else if (nWhich == WW8_CT_DROPDOWN)
         *pDataStream >> nChecked;
     else
+    {
         sDefault = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
                           : WW8Read_xstz(*pDataStream, 0, true);
+    }
 
     sFormatting = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
                          : WW8Read_xstz(*pDataStream, 0, true);
@@ -2135,8 +2152,10 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         fToolTip = true;
 
     if( fToolTip )
+    {
         sToolTip = !nType ? WW8ReadPString(*pDataStream, eEnc, true)
                           : WW8Read_xstz(*pDataStream, 0, true);
+    }
 
     if (nWhich == WW8_CT_DROPDOWN)
     {
@@ -2392,6 +2411,29 @@ WW8FormulaCheckBox::WW8FormulaCheckBox(SwWW8ImplReader &rR)
 {
 }
 
+static void lcl_AddToPropertyContainer
+(uno::Reference<beans::XPropertySet> xPropSet,
+ const rtl::OUString & rPropertyName, const rtl::OUString & rValue)
+{
+    uno::Reference<beans::XPropertySetInfo> xPropSetInfo =
+        xPropSet->getPropertySetInfo();
+    if (xPropSetInfo.is() &&
+        ! xPropSetInfo->hasPropertyByName(rPropertyName))
+    {
+        uno::Reference<beans::XPropertyContainer>
+            xPropContainer(xPropSet, uno::UNO_QUERY);
+        uno::Any aAny(C2U(""));
+        xPropContainer->addProperty
+            (rPropertyName,
+             static_cast<sal_Int16>(beans::PropertyAttribute::BOUND ||
+                                    beans::PropertyAttribute::REMOVABLE),
+             aAny);
+    }
+
+    uno::Any aAnyValue(rValue);
+    xPropSet->setPropertyValue(rPropertyName, aAnyValue );
+}
+
 sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
     lang::XMultiServiceFactory> &rServiceFactory,
     uno::Reference <form::XFormComponent> &rFComp,awt::Size &rSz )
@@ -2421,10 +2463,10 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
     xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
 
     if( sToolTip.Len() )
-    {
-        aTmp <<= rtl::OUString(sToolTip);
-        xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
-    }
+        lcl_AddToPropertyContainer(xPropSet, C2U("HelpText"), sToolTip);
+
+    if( sHelp.Len() )
+        lcl_AddToPropertyContainer(xPropSet, C2U("HelpF1Text"), sHelp);
 
     return sal_True;
 
