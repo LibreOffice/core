@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:09:36 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:29:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,7 @@ $(BIN)$/addin.zip : \
     $(TYPE) $< | zip -@ -u -j $(BIN)$/addin.zip $(CHECKZIPRESULT)
 .ENDIF
 
-ALL: \
-    $(BIN)$/addin.zip \
-    ALLTAR
-
 .INCLUDE: target.mk
+
+ALLTAR:	$(BIN)$/addin.zip 
 
