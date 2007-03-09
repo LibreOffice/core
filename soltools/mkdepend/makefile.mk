@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-22 08:57:22 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:21:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@ PRJNAME=soltools
 TARGET=make_makedepend
 PRJ=..
 TARGETTYPE=CUI
-TARGETTHREAD=ST
 LIBTARGET=NO
-NO_DEFAULT_STL=TRUE
 nodep=true
 
 # "mkdepend" is written in K&R style C. Modern compilers will generate
@@ -68,7 +66,6 @@ OBJFILES=  \
 
 APP1TARGET=makedepend
 APP1OBJS=$(OBJFILES)
-APP1STDLIBS=$(LIBSTLPORT)
 
 .INCLUDE : target.mk
 
