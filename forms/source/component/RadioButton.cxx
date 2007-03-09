@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RadioButton.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:52:47 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:31:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -298,22 +298,7 @@ void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL ORadioButtonModel::getPropertySetInfo() throw(RuntimeException)
-{
-    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-cppu::IPropertyArrayHelper& ORadioButtonModel::getInfoHelper()
-{
-    return *const_cast<ORadioButtonModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void ORadioButtonModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
