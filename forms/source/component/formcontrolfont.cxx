@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formcontrolfont.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:54:18 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,10 @@ namespace frm
             || ( _nPropertyHandle == PROPERTY_ID_FONT_SLANT )
             || ( _nPropertyHandle == PROPERTY_ID_FONT_UNDERLINE )
             || ( _nPropertyHandle == PROPERTY_ID_FONT_STRIKEOUT )
-            || ( _nPropertyHandle == PROPERTY_ID_FONT_WORDLINEMODE );
+            || ( _nPropertyHandle == PROPERTY_ID_FONT_WORDLINEMODE )
+            || ( _nPropertyHandle == PROPERTY_ID_FONT_PITCH )
+            || ( _nPropertyHandle == PROPERTY_ID_FONT_KERNING )
+            || ( _nPropertyHandle == PROPERTY_ID_FONT_TYPE );
     }
 
     //---------------------------------------------------------------------
