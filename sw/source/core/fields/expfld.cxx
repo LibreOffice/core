@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:11:24 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:14:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1075,6 +1075,7 @@ SwFieldType* SwInputFieldType::Copy() const
     Beschreibung: Eingabefeld
  --------------------------------------------------------------------*/
 
+
 SwInputField::SwInputField(SwInputFieldType* pType, const String& rContent,
                            const String& rPrompt, USHORT nSub, ULONG nFmt) :
     SwField(pType, nFmt), nSubType(nSub), aContent(rContent), aPText(rPrompt)
@@ -1101,6 +1102,10 @@ SwField* SwInputField::Copy() const
 {
     SwInputField* pFld = new SwInputField((SwInputFieldType*)GetTyp(), aContent,
                                           aPText, GetSubType(), GetFormat());
+
+    pFld->SetHelp(aHelp);
+    pFld->SetToolTip(aToolTip);
+
     pFld->SetAutomaticLanguage(IsAutomaticLanguage());
     return pFld;
 }
@@ -1136,6 +1141,12 @@ BOOL SwInputField::QueryValue( uno::Any& rAny, BYTE nMId ) const
     case FIELD_PROP_PAR2:
         rAny <<= OUString( aPText );
         break;
+    case FIELD_PROP_PAR3:
+        rAny <<= OUString( aHelp );
+        break;
+    case FIELD_PROP_PAR4:
+        rAny <<= OUString( aToolTip );
+        break;
     default:
         DBG_ERROR("illegal property");
     }
@@ -1154,6 +1165,12 @@ BOOL SwInputField::PutValue( const uno::Any& rAny, BYTE nMId )
         break;
     case FIELD_PROP_PAR2:
         ::GetString( rAny, aPText );
+        break;
+    case FIELD_PROP_PAR3:
+        ::GetString( rAny, aHelp );
+        break;
+    case FIELD_PROP_PAR4:
+        ::GetString( rAny, aToolTip );
         break;
     default:
         DBG_ERROR("illegal property");
@@ -1186,6 +1203,31 @@ void SwInputField::SetPar2(const String& rStr)
 String SwInputField::GetPar2() const
 {
     return aPText;
+}
+
+void SwInputField::SetHelp(const String & rStr)
+{
+    aHelp = rStr;
+}
+
+String SwInputField::GetHelp() const
+{
+    return aHelp;
+}
+
+void SwInputField::SetToolTip(const String & rStr)
+{
+    aToolTip = rStr;
+}
+
+String SwInputField::GetToolTip() const
+{
+    return aToolTip;
+}
+
+BOOL SwInputField::isFormField() const
+{
+    return aHelp.Len() > 0 || aToolTip.Len() > 0;
 }
 
 USHORT SwInputField::GetSubType() const
