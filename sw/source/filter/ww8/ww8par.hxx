@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:54:12 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -463,7 +463,6 @@ public:
     }
     UINT8 fUnknown:2;
     UINT8 fDropdownIndex:6;
-    UINT8 nDefaultChecked;
     UINT8 fToolTip:1;
     UINT8 fNoMark:1;
     UINT8 fUseSize:1;
@@ -474,6 +473,7 @@ public:
 
     UINT16 hpsCheckBox;
     UINT16 nChecked;
+    UINT16 nDefaultChecked;
 
     String sTitle;
     String sDefault;
