@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.68 $
+#   $Revision: 1.69 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-28 16:28:51 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:17:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -96,17 +96,17 @@ LIB1FILES += $(OBJ)$/copyright_ascii_sun.obj
 LINKFLAGSAPPGUI!:=	$(LINKFLAGSAPPGUI:s/-bind_at_load//)
 .ENDIF # MACOSX
 
-.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "NETBSD"
-# #74158# linux needs sal/vos/tools at end of link list, solaris needs it first,
-# winXX is handled like solaris for now
-APP1_STDPRE=
-APP1_STDPOST=$(CPPULIB) $(CPPUHELPERLIB) $(UNOLIB) $(TOOLSLIB) \
-    $(VOSLIB) $(SALLIB)
-.ELSE
-APP1_STDPRE=$(SALLIB) $(VOSLIB) $(TOOLSLIB) $(UNOLIB) $(CPPULIB) \
-    $(CPPUHELPERLIB)
-APP1_STDPOST=
-.ENDIF
+#.IF "$(OS)" == "LINUX" || "$(OS)" == "FREEBSD" || "$(OS)" == "NETBSD"
+## #74158# linux needs sal/vos/tools at end of link list, solaris needs it first,
+## winXX is handled like solaris for now
+#APP1_STDPRE=
+#APP1_STDPOST=$(CPPULIB) $(CPPUHELPERLIB) $(UNOLIB) $(TOOLSLIB) \
+#	$(VOSLIB) $(SALLIB)
+#.ELSE
+#APP1_STDPRE=$(SALLIB) $(VOSLIB) $(TOOLSLIB) $(UNOLIB) $(CPPULIB) \
+#	$(CPPUHELPERLIB)
+#APP1_STDPOST=
+#.ENDIF
 
 RESLIB1NAME=		dkt
 RESLIB1IMAGES=		$(PRJ)$/res
@@ -133,7 +133,6 @@ APP1STDLIBS=			\
 
 #	$(APP1_STDPRE)		\
 #	$(SVLLIB)			\
-#	$(SVMEMLIB)			\
 #	$(VCLLIB)			\
 #   $(APP1_STDPOST)		\
 #	$(UNOTOOLSLIB)		\
@@ -151,7 +150,6 @@ APP1STDLIBS+= -lXext -lSM -lICE
 .ENDIF
 
 APP1DEPN= $(APP1RES) verinfo.rc
-APP1DEF=    $(MISCX)$/$(TARGET).def
 
 .IF "$(GUI)" == "WNT"
 APP1RES=    $(RES)$/desktop.res
@@ -226,14 +224,6 @@ APP7OBJS = \
 STDLIB7=advapi32.lib
 .ENDIF # WNT
 
-all: $(BIN)$/so ALLTAR
-
-.IF "$(GUI)" == "WNT"
-
-ALLTAR: $(MISC)$/$(TARGET).exe.manifest
-
-.ENDIF # WNT
-
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -291,11 +281,6 @@ $(BIN)$/$(TARGET).bin: $(BIN)$/$(TARGET)$(EXECPOST)
 
 $(BIN)$/so$/$(TARGET).bin: $(BIN)$/so$/$(TARGET)$(EXECPOST)
    $(COPY) $< $@
-
-$(MISCX)$/$(APP1TARGET).def : makefile.mk
-    echo  NAME			soffice								>$@
-    echo  DESCRIPTION   'StarDesktop Version 5'           >>$@
-    echo  DATA			READ WRITE NONSHARED		   >>$@
 
 .ENDIF # WNT
 
