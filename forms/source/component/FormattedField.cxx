@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:11:25 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:25:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,43 +542,34 @@ Sequence< Type > OFormattedModel::_getTypes()
 
 // XPropertySet
 //------------------------------------------------------------------------------
-Reference<com::sun::star::beans::XPropertySetInfo> SAL_CALL OFormattedModel::getPropertySetInfo() throw(RuntimeException)
-{
-    Reference<com::sun::star::beans::XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OFormattedModel::getInfoHelper()
-{
-    return *const_cast<OFormattedModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void OFormattedModel::fillProperties(
-                Sequence< com::sun::star::beans::Property >& _rProps,
-                Sequence< com::sun::star::beans::Property >& _rAggregateProps ) const
+void OFormattedModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 3, OEditBaseModel )
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,              BOUND);
         DECL_BOOL_PROP2(FILTERPROPOSAL,                         BOUND, MAYBEDEFAULT);
-
-        // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
-        // - der kann Text oder Zahl sein - einen Sinn zu geben)
-        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, PropertyAttribute::TRANSIENT);
-        // same for FormatKey
-        // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
-        // But we have for the format key ...)
-        // 25.06.2001 - 87862 - frank.schoenheit@sun.com
-        ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, PropertyAttribute::TRANSIENT);
-
-        RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
-            // no strict format property for formatted fields: it does not make sense, 'cause
-            // there is no general way to decide which characters/sub strings are allowed during the input of an
-            // arbitraryly formatted control
-            // 81441 - 12/07/00 - FS
     END_DESCRIBE_PROPERTIES();
+}
+
+//------------------------------------------------------------------------------
+void OFormattedModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
+{
+    OEditBaseModel::describeAggregateProperties( _rAggregateProps );
+
+    // TreatAsNumeric nicht transient : wir wollen es an der UI anbinden (ist noetig, um dem EffectiveDefault
+    // - der kann Text oder Zahl sein - einen Sinn zu geben)
+    ModifyPropertyAttributes(_rAggregateProps, PROPERTY_TREATASNUMERIC, 0, PropertyAttribute::TRANSIENT);
+    // same for FormatKey
+    // (though the paragraph above for the TreatAsNumeric does not hold anymore - we do not have an UI for this.
+    // But we have for the format key ...)
+    // 25.06.2001 - 87862 - frank.schoenheit@sun.com
+    ModifyPropertyAttributes(_rAggregateProps, PROPERTY_FORMATKEY, 0, PropertyAttribute::TRANSIENT);
+
+    RemoveProperty(_rAggregateProps, PROPERTY_STRICTFORMAT);
+        // no strict format property for formatted fields: it does not make sense, 'cause
+        // there is no general way to decide which characters/sub strings are allowed during the input of an
+        // arbitraryly formatted control
+        // 81441 - 12/07/00 - FS
 }
 
 //------------------------------------------------------------------------------
@@ -617,7 +608,7 @@ void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
 //------------------------------------------------------------------------------
 void OFormattedModel::setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
-    OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
+    OPropertyArrayAggregationHelper& rPH = impl_ts_getArrayHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
@@ -641,7 +632,7 @@ Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 //------------------------------------------------------------------------------
 Any SAL_CALL OFormattedModel::getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw( com::sun::star::beans::UnknownPropertyException, RuntimeException )
 {
-    OPropertyArrayAggregationHelper& rPH = (OPropertyArrayAggregationHelper&)getInfoHelper();
+    OPropertyArrayAggregationHelper& rPH = impl_ts_getArrayHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
 
     if (nHandle == PROPERTY_ID_FORMATSSUPPLIER)
