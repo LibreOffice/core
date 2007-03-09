@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsdi2.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:00:41 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:07:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,10 +85,6 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX= -pipe -frtti $(ARCH_FLAGS)
 PICSWITCH:=-fpic
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -161,15 +157,11 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBCUIST=-lm
 STDLIBGUIMT=-lX11 -lpthread -lm
 STDLIBCUIMT=-lpthread -lm
-STDLIBGUIST=-lX11 -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -lpthread -lm
 STDSHLCUIMT=-lpthread -lm
-STDSHLGUIST=-lX11 -lXext -lm
-STDSHLCUIST=-lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
