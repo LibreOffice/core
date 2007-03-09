@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormLayer.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:29:13 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:19:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,6 +34,9 @@
  ************************************************************************/
 package integration.forms;
 
+import com.sun.star.container.NoSuchElementException;
+import com.sun.star.container.XNameAccess;
+import com.sun.star.lang.WrappedTargetException;
 import com.sun.star.uno.UnoRuntime;
 
 import com.sun.star.beans.XPropertySet;
@@ -275,5 +278,24 @@ import integration.forms.DocumentHelper;
                     return control;
         }
         return null;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** retrieves a control model with a given access path
+     */
+    public XPropertySet getControlModel( String[] _accessPath ) throws com.sun.star.uno.Exception
+    {
+        XNameAccess nameAcc = m_document.getFormComponentTreeRoot();
+        XPropertySet controlModel = null;
+        int i=0;
+        while ( ( nameAcc != null ) && ( i < _accessPath.length ) )
+        {
+            controlModel = (XPropertySet)UnoRuntime.queryInterface( XPropertySet.class,
+                nameAcc.getByName( _accessPath[i] ) );
+            nameAcc = (XNameAccess)UnoRuntime.queryInterface( XNameAccess.class,
+                controlModel );
+            ++i;
+        }
+        return controlModel;
     }
 }
