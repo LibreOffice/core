@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-05 14:38:25 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:11:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,8 +110,6 @@ CFLAGSCXX=-pipe -malign-natural -fsigned-char -Wno-long-double $(ARCH_FLAGS)
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
 PICSWITCH:=-fPIC
 # Other flags
-CFLAGSOBJGUIST=$(PICSWITCH) -fno-common
-CFLAGSOBJCUIST=$(PICSWITCH) -fno-common
 CFLAGSOBJGUIMT=$(PICSWITCH) -fno-common
 CFLAGSOBJCUIMT=$(PICSWITCH) -fno-common
 CFLAGSSLOGUIMT=$(PICSWITCH) -fno-common
@@ -225,8 +223,6 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=-lm
-STDLIBCUIST=-lX11 -lpthread CPPRUNTIME -lm
 STDLIBGUIMT=-lpthread CPPRUNTIME -lm
 STDLIBCUIMT=-lX11 CPPRUNTIME -lm
 STDSHLGUIMT=-lX11 -lXext -lpthread CPPRUNTIME -lm -framework CoreFoundation
