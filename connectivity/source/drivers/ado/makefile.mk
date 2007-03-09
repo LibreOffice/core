@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:53:35 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:57:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,6 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(OSLLIB)					\
     $(SALLIB)					\
     ole32.lib					\
     oleaut32.lib				\
@@ -106,7 +105,7 @@ SHL1STDLIBS=\
 SHL1STDLIBS+= icomphelp2.lib
 .ENDIF
 
-SHL1DEPN=
+#SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
