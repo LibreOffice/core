@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Grid.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:11:56 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:26:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,24 +438,9 @@ void OGridControlModel::_reset()
 
 // XPropertySet
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OGridControlModel::getPropertySetInfo() throw(RuntimeException)
+void OGridControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OGridControlModel::getInfoHelper()
-{
-    return *const_cast<OGridControlModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void OGridControlModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
-{
-    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(34, m_xAggregateSet)
+    BEGIN_DESCRIBE_BASE_PROPERTIES( 34 )
         DECL_PROP1(NAME,                ::rtl::OUString,    BOUND);
         DECL_PROP2(CLASSID,             sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(TAG,                 ::rtl::OUString,    BOUND);
