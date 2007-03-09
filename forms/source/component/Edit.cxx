@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:46:42 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,13 +432,6 @@ StringSequence SAL_CALL OEditModel::getSupportedServiceNames() throw()
 }
 
 // XPropertySet
-//------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OEditModel::getPropertySetInfo() throw(RuntimeException)
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-// -----------------------------------------------------------------------------
 void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     if ( PROPERTY_ID_PERSISTENCE_MAXTEXTLENGTH == nHandle )
@@ -455,19 +448,9 @@ void SAL_CALL OEditModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) 
 }
 
 //------------------------------------------------------------------------------
-void OEditModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OEditModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OEditBaseModel )
-        // our aggregate is a rich text model, which also derives from OControlModel, as
-        // do we, so we need to remove some duplicate properties
-        RemoveProperty( _rAggregateProps, PROPERTY_TABINDEX );
-        RemoveProperty( _rAggregateProps, PROPERTY_CLASSID );
-        RemoveProperty( _rAggregateProps, PROPERTY_NAME );
-        RemoveProperty( _rAggregateProps, PROPERTY_TAG );
-        RemoveProperty( _rAggregateProps, PROPERTY_NATIVE_LOOK );
-
         DECL_PROP2(PERSISTENCE_MAXTEXTLENGTH,sal_Int16,         READONLY, TRANSIENT);
         DECL_PROP2(DEFAULT_TEXT,        ::rtl::OUString,        BOUND, MAYBEDEFAULT);
         DECL_BOOL_PROP1(EMPTY_IS_NULL,                          BOUND);
@@ -477,9 +460,18 @@ void OEditModel::fillProperties(
 }
 
 //------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OEditModel::getInfoHelper()
+void OEditModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
-    return *const_cast<OEditModel*>(this)->getArrayHelper();
+    OEditBaseModel::describeAggregateProperties( _rAggregateProps );
+
+    // our aggregate is a rich text model, which also derives from OControlModel, as
+    // do we, so we need to remove some duplicate properties
+    RemoveProperty( _rAggregateProps, PROPERTY_TABINDEX );
+    RemoveProperty( _rAggregateProps, PROPERTY_CLASSID );
+    RemoveProperty( _rAggregateProps, PROPERTY_NAME );
+    RemoveProperty( _rAggregateProps, PROPERTY_TAG );
+    RemoveProperty( _rAggregateProps, PROPERTY_NATIVE_LOOK );
+
 }
 
 //------------------------------------------------------------------------------
