@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:11:10 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:32:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,19 +80,18 @@ APP1OBJS= $(OBJFILES)
 APP1STDLIBS=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(COMPHELPERLIB)	\
-                $(VCLLIB)			\
                 $(TOOLSLIB) 		\
                 $(SALLIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
-                $(SVLIB)
+                $(VCLLIB)
 
 .ELSE
 
 SHL1TARGET= tfu$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= itfu
 SHL1STDLIBS=\
-            $(SVLIB)     \
+            $(VCLLIB)     \
             $(TOOLSLIB)  \
             $(SALLIB)
 
