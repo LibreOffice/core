@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:41:34 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:33:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,14 +55,9 @@ SHL1IMPLIB= $(TARGET)
 SHL1USE_EXPORTS=ordinal
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 
-SHL1STDLIBS=$(TOOLSLIB) $(RTLLIB) $(SALLIB) $(UNOTOOLSLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(UCBHELPERLIB) $(UNOLIB) $(CPPULIB)
+SHL1STDLIBS=$(TOOLSLIB) $(SALLIB) $(UNOTOOLSLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(UCBHELPERLIB) $(CPPULIB)
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-.IF "$(linkinc)" != ""
-SHL11FILE=	$(MISC)$/base.slo
-SHL12FILE=	$(MISC)$/sdstor.slo
-.ENDIF
 
 DEF1NAME	=$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
