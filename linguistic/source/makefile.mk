@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 11:10:59 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:00:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,26 +46,9 @@ EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 
 # --- Files --------------------------------------------------------
 
-EXCEPTIONSFILES= \
-        $(SLO)$/convdic.obj\
-        $(SLO)$/convdiclist.obj\
-        $(SLO)$/convdicxml.obj\
-        $(SLO)$/dicimp.obj\
-        $(SLO)$/dlistimp.obj\
-        $(SLO)$/hhconvdic.obj\
-        $(SLO)$/hyphdsp.obj\
-        $(SLO)$/lngopt.obj\
-        $(SLO)$/lngreg.obj\
-        $(SLO)$/lngsvcmgr.obj\
-        $(SLO)$/misc.obj\
-        $(SLO)$/prophelp.obj\
-        $(SLO)$/spelldsp.obj\
-        $(SLO)$/thesdta.obj\
-        $(SLO)$/thesdsp.obj
-
 SLOFILES = \
-        $(SLO)$/convdic.obj\
         $(SLO)$/convdiclist.obj\
+        $(SLO)$/convdic.obj\
         $(SLO)$/convdicxml.obj\
         $(SLO)$/dicimp.obj\
         $(SLO)$/dlistimp.obj\
@@ -74,15 +57,15 @@ SLOFILES = \
         $(SLO)$/hyphdta.obj\
         $(SLO)$/iprcache.obj\
         $(SLO)$/lngopt.obj\
+        $(SLO)$/lngreg.obj\
         $(SLO)$/lngsvcmgr.obj\
         $(SLO)$/misc.obj\
         $(SLO)$/prophelp.obj\
         $(SLO)$/spelldsp.obj\
         $(SLO)$/spelldta.obj\
         $(SLO)$/supplang.obj\
-        $(SLO)$/thesdta.obj\
         $(SLO)$/thesdsp.obj\
-        $(SLO)$/lngreg.obj
+        $(SLO)$/thesdta.obj
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 
@@ -90,7 +73,6 @@ SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
         $(I18NUTILLIB)  \
-        $(UNOLIB)		\
         $(VOSLIB)		\
         $(TOOLSLIB)		\
         $(I18NISOLANGLIB) \
@@ -135,6 +117,6 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
     @echo Making: $@
     @echo lcl > $@
-    @echo component > $@
-    @echo __CT > $@
+    @echo component >> $@
+    @echo __CT >> $@
 
