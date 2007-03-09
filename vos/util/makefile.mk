@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:57:59 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:14:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,16 +37,9 @@ RTLLIB=irtl.lib
 
 PRJ=..
 
-PRJPCH=
-
 PRJNAME=vos
 TARGET=vos
-USE_LDUMP2=TRUE
-#USE_DEFFILE=TRUE
-
-.IF "$(GUI)"=="UNX"
 TARGETTYPE=CUI
-.ENDIF
 
 # --- Settings -----------------------------------------------------
 
@@ -54,12 +47,6 @@ TARGETTYPE=CUI
 .INCLUDE :  ..$/version.mk
 
 # --- Files --------------------------------------------------------
-
-#.IF "$(UPDATER)"=="YES"
-#LIB1TARGET=$(LB)$/a$(TARGET).lib
-#LIB1ARCHIV=$(LB)$/lib$(TARGET)$(VOS_MAJOR)$(DLLPOSTFIX).a
-#LIB1FILES=$(LB)$/cpp$(TARGET).lib
-#.ENDIF
 
 SHL1TARGET=$(VOS_TARGET)$(VOS_MAJOR)$(COMID)
 SHL1IMPLIB=i$(TARGET)
@@ -70,18 +57,10 @@ SHL1STDLIBS=wsock32.lib $(SALLIB)
 SHL1STDLIBS=$(SALLIB)
 .ENDIF
 
-.IF "$(GUI)"=="WIN"
-SHL1STDLIBS+=	\
-                winsock.lib
-.ENDIF
-
-
 SHL1LIBS=    $(SLB)$/cpp$(TARGET).lib
 .IF "$(GUI)" != "UNX"
-.IF "$(GUI)" != "MAC"
 SHL1OBJS=    \
     $(SLO)$/object.obj
-.ENDIF
 .ENDIF
 
 SHL1DEPN=
