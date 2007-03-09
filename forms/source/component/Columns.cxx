@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Columns.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:47:20 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:21:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
 #endif
 #ifndef _COMPHELPER_SEQUENCE_HXX_
 #include <comphelper/sequence.hxx>
@@ -168,12 +171,6 @@ sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName)
 /*************************************************************************/
 
 //------------------------------------------------------------------
-InterfaceRef SAL_CALL OGridColumn_CreateInstance(const Reference<XMultiServiceFactory>& _rxFactory)
-{
-    return *(new OGridColumn(_rxFactory));
-}
-
-//------------------------------------------------------------------
 const Sequence<sal_Int8>& OGridColumn::getUnoTunnelImplementationId()
 {
     static Sequence< sal_Int8 > * pSeq = 0;
@@ -230,10 +227,11 @@ Sequence<Type> SAL_CALL OGridColumn::getTypes() throw(RuntimeException)
 Any SAL_CALL OGridColumn::queryAggregation( const Type& _rType ) throw (RuntimeException)
 {
     Any aReturn;
-    // though our aggregate may be an XFormComponent or an XServiceInfo, we aren't anymore
+    // some functionality at our aggregate cannot be reasonably fullfilled here.
     if  (   _rType.equals(::getCppuType(static_cast< Reference< XFormComponent >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XServiceInfo >* >(NULL)))
         ||  _rType.equals(::getCppuType(static_cast< Reference< XBindableValue >* >(NULL)))
+        ||  _rType.equals(::getCppuType(static_cast< Reference< XPropertyContainer >* >(NULL)))
         )
         return aReturn;
 
@@ -439,23 +437,6 @@ void OGridColumn::setOwnProperties(Sequence<Property>& aDescriptor)
 
 // Reference<XPropertySet>
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OGridColumn::getPropertySetInfo() throw(RuntimeException)
-{
-    DBG_ERROR("OGridColumn::getPropertySetInfo() : Dummy Called");
-    return Reference<XPropertySetInfo> ();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OGridColumn::getInfoHelper()
-{
-    DBG_ERROR("OGridColumn::getInfoHelper() : Dummy Called");
-
-    Sequence<Property> aDescriptor, aAggProperties;
-    static OPropertyArrayAggregationHelper aDescAry(aDescriptor, aAggProperties);
-    return aDescAry;
-}
-
-//------------------------------------------------------------------------------
 void OGridColumn::getFastPropertyValue(Any& rValue, sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -535,54 +516,6 @@ void OGridColumn::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any
 
 // XPropertyState
 //------------------------------------------------------------------------------
-PropertyState OGridColumn::getPropertyStateByHandle(sal_Int32 nHandle)
-{
-    PropertyState eState = PropertyState_DIRECT_VALUE;
-
-    switch (nHandle)
-    {
-        case PROPERTY_ID_WIDTH:
-            if (!m_aWidth.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-
-        case PROPERTY_ID_ALIGN:
-            if (!m_aAlign.hasValue())
-                eState = PropertyState_DEFAULT_VALUE;
-            break;
-
-        case PROPERTY_ID_HIDDEN:
-        {
-            sal_Bool bHidden = sal_True;
-            if ( ( m_aHidden >>= bHidden ) && !bHidden )
-                eState = PropertyState_DEFAULT_VALUE;
-        }
-        break;
-
-        default:
-            eState = OPropertySetAggregationHelper::getPropertyStateByHandle(nHandle);
-    }
-    return eState;
-}
-
-//------------------------------------------------------------------------------
-void OGridColumn::setPropertyToDefaultByHandle(sal_Int32 nHandle)
-{
-    switch (nHandle)
-    {
-        case PROPERTY_ID_WIDTH:
-        case PROPERTY_ID_ALIGN:
-            setFastPropertyValue(nHandle, Any());
-            break;
-        case PROPERTY_ID_HIDDEN:
-            setFastPropertyValue( nHandle, makeAny( (sal_Bool)sal_False ) );
-            break;
-        default:
-            OPropertySetAggregationHelper::setPropertyToDefaultByHandle(nHandle);
-    }
-}
-
-//------------------------------------------------------------------------------
 Any OGridColumn::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
 {
     switch (nHandle)
@@ -603,12 +536,6 @@ Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeExce
 {
     OGridColumn* pNewColumn = createCloneColumn();
     return pNewColumn;
-}
-
-//------------------------------------------------------------------------------
-OGridColumn* OGridColumn::createCloneColumn() const
-{
-    return new OGridColumn( this );
 }
 
 //XPersistObject
