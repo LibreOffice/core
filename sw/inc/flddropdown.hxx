@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddropdown.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:45:59 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,6 +97,16 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
       the name of the field
     */
     String aName;
+
+    /**
+       help text
+     */
+    String aHelp;
+
+    /**
+       tool tip string
+     */
+    String aToolTip;
 
 public:
     /**
@@ -207,6 +217,20 @@ public:
     const String & GetName() const;
 
     /**
+       Returns the help text of the field.
+
+       @return the help text of the field
+    */
+    const String & GetHelp() const;
+
+    /**
+       Returns the tool tip of the field.
+
+       @return the tool tip of the field
+     */
+    const String & GetToolTip() const;
+
+    /**
        Sets the selected item.
 
        If rItem is found in this dropdown field it is selected. If
@@ -227,12 +251,28 @@ public:
     void SetName(const String & rName);
 
     /**
+       Sets the help text of the field.
+
+       @param rHelp    the help text
+    */
+    void SetHelp(const String & rHelp);
+
+    /**
+       Sets the tool tip of the field.
+
+       @param rToolTip  the tool tip
+    */
+    void SetToolTip(const String & rToolTip);
+
+    /**
        API: Gets a property value from the dropdown field.
 
        @param rVal return value
        @param nMId
           - FIELD_PROP_PAR1 Get selected item (String)
           - FIELD_PROP_STRINGS Get all items (Sequence)
+          - FIELD_PROP_PAR3 Get the help text of the field.
+          - FIELD_PROP_PAR4 Get the tool tip of the field.
     */
     virtual BOOL QueryValue(com::sun::star::uno::Any &rVal, BYTE nMId) const;
 
@@ -243,6 +283,8 @@ public:
        @param nMId
           - FIELD_PROP_PAR1 Set selected item (String)
           - FIELD_PROP_STRINGS Set all items (Sequence)
+          - FIELD_PROP_PAR3  Set the help text of the field.
+          - FIELD_PROP_PAR4  Set the tool tip of the field.
     */
         virtual BOOL PutValue(const com::sun::star::uno::Any &rVal, BYTE nMId);
 };
