@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:41:02 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:31:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,16 +194,7 @@ IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 
 // XPropertySet
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OTimeModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void OTimeModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OTimeModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
         DECL_PROP3(DEFAULT_TIME,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
@@ -211,12 +202,6 @@ void OTimeModel::fillProperties(
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
         DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OTimeModel::getInfoHelper()
-{
-    return *const_cast<OTimeModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
