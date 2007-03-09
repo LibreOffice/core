@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.194 $
+ *  $Revision: 1.195 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:33:16 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2019,6 +2019,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     {SW_PROP_NMID(UNO_NAME_CONTENT),    FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_HINT),       FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_HELP),       FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_TOOLTIP),        FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING),   PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0}
                 };
@@ -2056,6 +2058,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     {SW_PROP_NMID(UNO_NAME_ITEMS), FIELD_PROP_STRINGS, CPPU_E2T(CPPUTYPE_OUSTRINGS), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_SELITEM), FIELD_PROP_PAR1, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     {SW_PROP_NMID(UNO_NAME_NAME), FIELD_PROP_PAR2, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_HELP), FIELD_PROP_PAR3, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
+                    {SW_PROP_NMID(UNO_NAME_TOOLTIP), FIELD_PROP_PAR4, CPPU_E2T(CPPUTYPE_OUSTRING), PROPERTY_NONE, 0},
                     COMMON_FLDTYP_PROPERTIES
                     {0,0,0,0}
                 };
