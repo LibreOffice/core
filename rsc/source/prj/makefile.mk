@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:31:59 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:32:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,35 +46,19 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------------
 
-.IF "$(GUI)"!="WIN"
-CXXFILES=   gui.cxx                 \
-            start.cxx
-
 OBJFILES=   $(OBJ)$/gui.obj          \
             $(OBJ)$/start.obj
 
-.IF "$(GUI)$(COM)$(COMEX)" != "DOSSTCX"
 APP1TARGET= rsc
 APP1STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB) $(VOSLIB) $(SALLIB) # $(RTLLIB)
 APP1LIBS=   $(LB)$/rsctoo.lib
 APP1OBJS=   $(OBJ)$/start.obj
-APP1STACK=64000
-.IF "$(GUI)" != "OS2"
-APP1STACK=32768
-.ENDIF
-.ENDIF
 
-.IF "$(GUI)$(COM)$(COMEX)" != "DOSSTC"
+# why not this way?
+APP1STACK=64000
+#APP1STACK=32768
+
 APP2TARGET= rsc2
-.IF "$(GUI)" == "MAC"
-APP2STDLIBS=$(PRJ)$/..$/TOOLS$/$(INPATH)$/SLB$/tools.lib \
-            $(PRJ)$/..$/SAL$/$(INPATH)$/SLB$/cpposl.lib \
-            $(PRJ)$/..$/VOS$/$(INPATH)$/SLB$/cppvos.lib \
-            $(PRJ)$/..$/RTL$/$(INPATH)$/SLB$/cpprtl.lib \
-            $(MWPPCLibraries)PPCToolLibs.o  \
-            $(STDSLOGUI)
-MACRES= $(SV_RES)MPWToolCfrg.r -d SVTOOLNAME="¶"SV TOOL¶""
-.ELSE
 .IF "$(OS)"=="SCO"
 # SCO hat Probleme mit fork/exec und einigen shared libraries. 
 # rsc2 muss daher statisch gelinkt werden
@@ -82,51 +66,18 @@ APP2STDLIBS=$(STATIC) -latools $(BPICONVLIB) $(VOSLIB) $(OSLLIB) $(RTLLIB) $(DYN
 .ELSE
 APP2STDLIBS=$(TOOLSLIB) $(I18NISOLANGLIB) $(VOSLIB) $(SALLIB) #RTLLIB)
 .ENDIF
-.ENDIF
 APP2LIBS=   $(LB)$/rsctoo.lib \
             $(LB)$/rscres.lib \
             $(LB)$/rscpar.lib \
             $(LB)$/rscrsc.lib \
             $(LB)$/rscmis.lib
 APP2OBJS=   $(OBJ)$/gui.obj
+
+# why not this way?
 APP2STACK=64000
-.IF "$(GUI)" != "OS2"
-APP2STACK=32768
-.ENDIF
-.ENDIF
-.ENDIF
+#APP2STACK=32768
 
 # --- Targets ------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-# -------------------------------------------------------------------
-# PM2
-# -------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(APP1TARGET).def : makefile
-    echo  NAME          RSC WINDOWCOMPAT                    >$@
-    echo  DESCRIPTION   'RSC-Compiler'                     >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB          'os2STUB.EXE'                      >>$@
-.ENDIF
-    echo  DATA          MULTIPLE                           >>$@
-    echo  EXETYPE       OS2                                >>$@
-    echo  PROTMODE                                         >>$@
-    echo  HEAPSIZE      16000                              >>$@
-    echo  STACKSIZE     48000                              >>$@
-
-$(MISC)$/$(APP2TARGET).def : makefile
-    echo  NAME          RSC2 WINDOWCOMPAT                   >$@
-    echo  DESCRIPTION   'RSC2-Compiler'                    >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB          'os2STUB.EXE'                      >>$@
-.ENDIF
-    echo  DATA          MULTIPLE                           >>$@
-    echo  EXETYPE       OS2                                >>$@
-    echo  PROTMODE                                         >>$@
-    echo  HEAPSIZE      16000                              >>$@
-    echo  STACKSIZE     48000                              >>$@
-.ENDIF
