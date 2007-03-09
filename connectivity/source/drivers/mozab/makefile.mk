@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:47:08 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:59:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ all:
 #mozilla specific stuff.
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
-#.ENDIF
 
 .IF "$(OS)"=="WNT" 
 .IF "$(USE_SHELL)"=="4nt"
@@ -107,7 +106,6 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(OSLLIB)					\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
@@ -171,7 +169,6 @@ SHL2STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(OSLLIB)					\
     $(SALLIB)					\
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)			\
@@ -195,13 +192,11 @@ DEF2NAME=	$(SHL2TARGET)
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
-    @echo CLEAR_THE_FILE	> $@
-    @echo _TI				>>$@
+    @echo _TI				>$@
     @echo _real				>>$@
 
 $(MISC)$/$(SHL2TARGET).flt: makefile.mk
     @echo ------------------------------
-    @echo CLEAR_THE_FILE	> $@
-    @echo _TI				>>$@
+    @echo _TI				>$@
     @echo _real				>>$@
 
