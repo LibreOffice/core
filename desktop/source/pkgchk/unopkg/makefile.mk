@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:08:28 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:16:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -113,5 +113,5 @@ CFLAGS += -Ob0
 $(APP1TARGETN) : $(PRJ)$/$(BIN)$/so
 
 $(PRJ)$/$(BIN)$/so:
-    @@+-$(MKDIRHIER) $(BIN)$/so
+    @@-$(MKDIRHIER) $(BIN)$/so
 
