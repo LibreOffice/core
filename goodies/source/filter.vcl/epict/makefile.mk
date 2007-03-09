@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:29:56 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:31:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
 SHL1TARGET=     ept$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB=     epict
-SHL1STDLIBS=    $(TOOLSLIB) $(SVLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
+SHL1STDLIBS=    $(TOOLSLIB) $(VCLLIB) $(SVTOOLLIB) $(CPPULIB) $(SALLIB)
 
 SHL1LIBS=       $(SLB)$/epict.lib
 

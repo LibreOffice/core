@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:30:17 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:31:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ RESLIB1SRSFILES=$(SRS)$/$(TARGET).srs
 
 SHL1TARGET= 	epp$(UPD)$(DLLPOSTFIX)
 SHL1IMPLIB= 	eppm
-SHL1STDLIBS=	$(TOOLSLIB) $(SVLIB) $(CPPULIB) $(SVTOOLLIB) $(SALLIB)
+SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(CPPULIB) $(SVTOOLLIB) $(SALLIB)
 
 SHL1LIBS=		$(SLB)$/eppm.lib
 
