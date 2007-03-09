@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:22:46 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:15:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,6 +781,7 @@ void SwXFieldMaster::setPropertyValue( const OUString& rPropertyName,
                     throw IllegalArgumentException();
                 bParam1 = *(sal_Bool*)rValue.getValue();
             }
+
             break;
         case RES_DBFLD:
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)))
@@ -1769,8 +1770,14 @@ void SwXTextField::attachToRange(
                 if(!pFldType)
                     throw uno::RuntimeException();
                 USHORT nInpSubType = SW_SERVICE_FIELDTYPE_INPUT_USER == m_nServiceId ? INP_USR : INP_TXT;
-                pFld = new SwInputField((SwInputFieldType*)pFldType,
-                        m_pProps->sPar1, m_pProps->sPar2, nInpSubType);
+                SwInputField * pTxtField =
+                    new SwInputField((SwInputFieldType*)pFldType,
+                                     m_pProps->sPar1, m_pProps->sPar2,
+                                     nInpSubType);
+                pTxtField->SetHelp(m_pProps->sPar3);
+                pTxtField->SetToolTip(m_pProps->sPar4);
+
+                pFld = pTxtField;
             }
             break;
             case SW_SERVICE_FIELDTYPE_MACRO:
@@ -1839,6 +1846,8 @@ void SwXTextField::attachToRange(
                 ((SwDropDownField *) pFld)->SetItems(m_pProps->aStrings);
                 ((SwDropDownField *) pFld)->SetSelectedItem(m_pProps->sPar1);
                 ((SwDropDownField *) pFld)->SetName(m_pProps->sPar2);
+                ((SwDropDownField *) pFld)->SetHelp(m_pProps->sPar3);
+                ((SwDropDownField *) pFld)->SetToolTip(m_pProps->sPar4);
                 break;
 
             case SW_SERVICE_FIELDTYPE_TABLE_FORMULA :
