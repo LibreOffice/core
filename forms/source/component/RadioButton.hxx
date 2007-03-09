@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RadioButton.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:46:48 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:31:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ namespace frm
 // ORadioButtonModel
 //==================================================================
 class ORadioButtonModel     :public OReferenceValueComponent
-                            ,public ::comphelper::OAggregationArrayUsageHelper< ORadioButtonModel >
 {
 public:
     DECLARE_DEFAULT_LEAF_XTOR( ORadioButtonModel );
@@ -61,10 +60,6 @@ public:
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
                 throw (::com::sun::star::uno::Exception);
 
-    // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
     // XPersistObject
     virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
@@ -75,12 +70,10 @@ public:
     // OPropertyChangeListener
     virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
 
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    // OControlModel's property handling
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
 
 protected:
     // OBoundControlModel overridables
