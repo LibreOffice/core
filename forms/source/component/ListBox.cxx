@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListBox.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:47:04 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:29:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -468,27 +468,9 @@ namespace frm
     }
 
     //------------------------------------------------------------------------------
-    Reference<XPropertySetInfo> SAL_CALL OListBoxModel::getPropertySetInfo() throw(RuntimeException)
-    {
-        Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
-        return xInfo;
-    }
-
-    //------------------------------------------------------------------------------
-    cppu::IPropertyArrayHelper& OListBoxModel::getInfoHelper()
-    {
-        return *const_cast<OListBoxModel*>(this)->getArrayHelper();
-    }
-
-    //------------------------------------------------------------------------------
-    void OListBoxModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+    void OListBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 7, OBoundControlModel )
-            RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
-                // we want to "override" this property
-
             DECL_PROP1(TABINDEX,            sal_Int16,                      BOUND);
             DECL_PROP2(BOUNDCOLUMN,         sal_Int16,                      BOUND, MAYBEVOID);
             DECL_PROP1(LISTSOURCETYPE,      ListSourceType,                 BOUND);
@@ -497,6 +479,15 @@ namespace frm
             DECL_PROP1(DEFAULT_SELECT_SEQ,  Sequence<sal_Int16>,            BOUND);
             DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,    BOUND);
         END_DESCRIBE_PROPERTIES();
+    }
+
+    //------------------------------------------------------------------------------
+    void OListBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
+    {
+        OBoundControlModel::describeAggregateProperties( _rAggregateProps );
+
+        // superseded properties:
+        RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
     }
 
     //------------------------------------------------------------------------------
