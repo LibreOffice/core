@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:25:31 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:54:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -132,36 +132,30 @@ UNOTYPES= \
 
 # --- Targets ------------------------------------------------------
 
-.IF "$(depend)" == ""
-ALL : 	$(RDB)	\
-        $(GENJAVAFILES) \
-        ALLTAR
-.ELSE
-ALL: 		ALLDEP
-.ENDIF
-
 .INCLUDE :	target.mk
+
+ALLTAR : $(GENJAVAFILES)
 
 ALLIDLFILES= \
         mozillatesttoolserver.idl \
         xmozillatesttoolserver.idl
 
 $(RDB): $(ALLIDLFILES)
-    touch $@
-    rm $@
-    +unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
-    +regmerge $@ /UCR $(BIN)$/{$(ALLIDLFILES:f:s/.idl/.urd/)}
-    +regmerge $@ / $(SOLARBINDIR)$/applicat.rdb
-    +regcomp -register -r $@ -c $(DLLPRE)connectr$(DLLPOST)
-    +regcomp -register -r $@ -c $(DLLPRE)acceptor$(DLLPOST)
-    +regcomp -register -r $@ -c $(DLLPRE)brdgfctr$(DLLPOST)
-    +regcomp -register -r $@ -c $(DLLPRE)remotebridge$(DLLPOST)
-    touch $@
+    $(TOUCH) $@
+    $(RM) $@
+    unoidl -I$(PRJ) -I$(SOLARIDLDIR) -Burd -OH$(BIN) $?
+    $(REGMERGE) $@ /UCR $(BIN)$/{$(ALLIDLFILES:f:s/.idl/.urd/)}
+    $(REGMERGE) $@ / $(SOLARBINDIR)$/applicat.rdb
+    $(REGCOMP) -register -r $@ -c $(DLLPRE)connectr$(DLLPOST)
+    $(REGCOMP) -register -r $@ -c $(DLLPRE)acceptor$(DLLPOST)
+    $(REGCOMP) -register -r $@ -c $(DLLPRE)brdgfctr$(DLLPOST)
+    $(REGCOMP) -register -r $@ -c $(DLLPRE)remotebridge$(DLLPOST)
+    $(TOUCH) $@
 
 
 $(GENJAVAFILES): $(RDB)
     @echo Types: $(TYPES)
     @echo Javafiles: $(GENJAVAFILES)
-     javamaker -BUCR -O$(OUT) $(TYPES) $(RDB)
+     $(JAVAMAKER) -BUCR -O$(OUT) $(TYPES) $(RDB)
 
 
