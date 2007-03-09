@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:16:28 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,6 +89,9 @@
 #include "../inc/msfilter.hxx"
 #endif
 
+#ifndef _EXPFLD_HXX
+#include <expfld.hxx>
+#endif
 
 // einige Forward Deklarationen
 class BitmapPalette;
@@ -696,8 +699,13 @@ public:
     SwPaM* GetEndPaM()              { return pOrigPam; }
     void SetEndPaM( SwPaM* pPam )   { pOrigPam = pPam; }
 
-    void DoComboBox(const rtl::OUString &rName, const rtl::OUString &rSelected,
-            com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
+    void DoComboBox(const rtl::OUString &rName,
+                    const rtl::OUString &rHelp,
+                    const rtl::OUString &ToolTip,
+                    const rtl::OUString &rSelected,
+                    com::sun::star::uno::Sequence<rtl::OUString> &rListItems);
+
+    void DoFormText(const SwInputField * pFld);
 
     static bool NoPageBreakSection(const SfxItemSet *pSet);
     void push_charpropstart(xub_StrLen nPos);
