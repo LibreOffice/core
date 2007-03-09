@@ -4,9 +4,9 @@
  *
  *  $RCSfile: File.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:49:08 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,18 @@ void OFileControlModel::disposing()
 }
 
 //------------------------------------------------------------------------------
+Any OFileControlModel::getPropertyDefaultByHandle( sal_Int32 _nHandle ) const
+{
+    Any aReturn;
+    switch ( _nHandle )
+    {
+        case PROPERTY_ID_DEFAULT_TEXT:
+            return makeAny( ::rtl::OUString() );
+    }
+    return OControlModel::getPropertyDefaultByHandle( _nHandle );
+}
+
+//------------------------------------------------------------------------------
 void OFileControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const
 {
     switch (nHandle)
@@ -212,27 +224,12 @@ sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& 
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OFileControlModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void OFileControlModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OControlModel )
         DECL_PROP1(DEFAULT_TEXT,    ::rtl::OUString,    BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OFileControlModel::getInfoHelper()
-{
-    return *const_cast<OFileControlModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
