@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupBox.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:42:42 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:27:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ namespace frm
 //==================================================================
 class OGroupBoxModel
         :public OControlModel
-        ,public ::comphelper::OAggregationArrayUsageHelper< OGroupBoxModel >
 {
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OGroupBoxModel );
@@ -58,10 +57,6 @@ public:
     IMPLEMENTATION_NAME(OGroupBoxModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException);
 
-    // XPropertySetRef
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
     // XPersistObject
     virtual ::rtl::OUString SAL_CALL    getServiceName() throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL
@@ -69,12 +64,10 @@ public:
     virtual void SAL_CALL
         read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+    // OControlModel's property handling
+    virtual void describeAggregateProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    ) const;
 
 protected:
     DECLARE_XCLONEABLE();
