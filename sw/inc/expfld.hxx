@@ -4,9 +4,9 @@
  *
  *  $RCSfile: expfld.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:21:38 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,6 +329,8 @@ class SwInputField : public SwField
 {
     String  aContent;
     String  aPText;
+    String  aHelp;
+    String  aToolTip;
     USHORT  nSubType;
 public:
     // Direkte Eingabe ueber Dialog alten Wert loeschen
@@ -347,6 +349,14 @@ public:
     // aPromptText
     virtual String          GetPar2() const;
     virtual void            SetPar2(const String& rStr);
+
+    virtual String          GetHelp() const;
+    virtual void            SetHelp(const String & rStr);
+
+    virtual String          GetToolTip() const;
+    virtual void            SetToolTip(const String & rStr);
+
+    virtual BOOL            isFormField() const;
 
     virtual USHORT          GetSubType() const;
     virtual void            SetSubType(USHORT nSub);
