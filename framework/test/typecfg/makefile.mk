@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:02:09 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:44:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,16 +38,10 @@ PRJNAME=			framework
 TARGET=             typecfg
 LIBTARGET=			NO
 ENABLE_EXCEPTIONS=	TRUE
-USE_DEFFILE=		TRUE
-NO_BSYMBOLIC=		TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
-.ENDIF
 
 # --- applikation: "xml2xcd" --------------------------------------------------
 
@@ -62,9 +56,10 @@ APP2OBJS=		$(SLO)$/cfgview.obj					\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/lockhelper.obj
 
+DEPOBJFILES=$(APP2OBJS)
+
 APP2STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
                 $(SALLIB)							\
                 $(VOSLIB)							\
                 $(TOOLSLIB) 						\
@@ -72,7 +67,7 @@ APP2STDLIBS=	$(CPPULIB)							\
                 $(TKLIB)							\
                 $(COMPHELPERLIB)					\
                 $(UNOTOOLSLIB)						\
-                $(SVLIB)
+                $(VCLLIB)
 
 APP2DEPN=		$(SLO)$/servicemanager.obj			\
                 $(SLO)$/filtercachedata.obj			\
@@ -80,10 +75,7 @@ APP2DEPN=		$(SLO)$/servicemanager.obj			\
                 $(SLO)$/wildcard.obj				\
                 $(SLO)$/lockhelper.obj
 
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP2DEF=        $(MISC)$/cfgview.def
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
