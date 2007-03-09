@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:34:28 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-09 11:23:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,12 +569,12 @@ void DomainMapper_Impl::ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue)
         case NS_rtf::LN_TLC: //tab leading characters - for decimal tabs
             // 0 - no leader, 1- dotted, 2 - hyphenated, 3 - single line, 4 - heavy line, 5 - middle dot
             if( nValue >= 0 &&  nValue < sal::static_int_cast<sal_Int32>(sizeof(aTabFillCharWord) / sizeof (sal_Unicode)))
-                (m_aCurrentTabStops.begin() + m_nCurrentTabStopIndex)->FillChar = aTabFillCharWord[nValue];
+                m_aCurrentTabStops[m_nCurrentTabStopIndex].FillChar = aTabFillCharWord[nValue];
         break;
         case NS_rtf::LN_JC: //tab justification
             //0 - left, 1 - centered, 2 - right, 3 - decimal 4 - bar
             if( nValue >= 0 && nValue < sal::static_int_cast<sal_Int32>(sizeof(aTabAlignFromWord) / sizeof (style::TabAlign)))
-                (m_aCurrentTabStops.begin() + m_nCurrentTabStopIndex)->Alignment = aTabAlignFromWord[nValue];
+                m_aCurrentTabStops[m_nCurrentTabStopIndex].Alignment = aTabAlignFromWord[nValue];
         break;
     }
 }
