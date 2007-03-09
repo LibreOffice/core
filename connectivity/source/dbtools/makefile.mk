@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 16:14:53 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:56:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,9 +65,7 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(OSLLIB)					\
     $(SALLIB)					\
-    $(UNOTOOLSLIB)				\
     $(JVMACCESSLIB)				\
     $(UNOTOOLSLIB)	\
     $(COMPHELPERLIB)
@@ -79,18 +77,15 @@ SHL1STDLIBS=\
 SHL1STDLIBS+=$(UCBHELPERLIB)
 .ENDIF
 
-SHL1DEPN=
+#SHL1DEPN=
 SHL1IMPLIB=	idbtools
 
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
-# SHL1VERSIONMAP=$(TARGET).map
 DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
             $(LIB1TARGET)
             
-# DEF1EXPORTFILE=	exports.dxp			
-
 DEFLIB1NAME=$(TARGET)
 
 
@@ -100,12 +95,8 @@ DEFLIB1NAME=$(TARGET)
 
 # --- filter file ------------------------------
 
-.IF "$(depend)"==""
-
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
-    @echo CLEAR_THE_FILE	> $@
-    @echo _TI				>>$@
+    @echo _TI				>$@
     @echo _real				>>$@
-.ENDIF
 
