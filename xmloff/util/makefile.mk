@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 14:16:56 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:19:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ USE_DEFFILE=TRUE
 .INCLUDE: $(PRJ)$/util$/makefile.pmk
 
 # --- Allgemein ----------------------------------------------------
-ENABLE_EXCEPTIONS=TRUE
 
 LIB1TARGET= $(SLB)$/xo.lib
 LIB1FILES=	\
@@ -80,13 +79,11 @@ SHL1STDLIBS= \
         $(CPPULIB)		\
         $(CPPUHELPERLIB)\
         $(COMPHELPERLIB)\
-        $(RTLLIB)		\
-        $(SVLIB)		\
+        $(VCLLIB)		\
         $(TKLIB)		\
         $(SVLLIB)		\
         $(SALLIB)		\
         $(UNOTOOLSLIB)	\
-        $(ONELIB)		\
         $(BASEGFXLIB)	\
         $(SALHELPERLIB)
 
@@ -101,12 +98,10 @@ SHL1LIBS=   $(LIB1TARGET)
 
 SHL5STDLIBS= \
         $(TOOLSLIB)         \
-        $(RTLLIB)           \
         $(SALLIB)           \
         $(SALHELPERLIB)     \
         $(CPPULIB)          \
         $(CPPUHELPERLIB)    \
-        $(ONELIB)           \
         $(COMPHELPERLIB)
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
