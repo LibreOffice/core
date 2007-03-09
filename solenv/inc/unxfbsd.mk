@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxfbsd.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: maho $ $Date: 2006-07-08 03:16:07 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:07:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,10 +108,6 @@ PICSWITCH:=-fpic
 CFLAGSCXX += -fvisibility-inlines-hidden
 .ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -194,15 +190,11 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBCUIST=-lm
 STDLIBGUIMT=-lX11 $(PTHREAD_LIBS) -lm
 STDLIBCUIMT=$(PTHREAD_LIBS) -lm
-STDLIBGUIST=-lX11 -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext $(PTHREAD_LIBS) -lm
 STDSHLCUIMT=$(PTHREAD_LIBS) -lm
-STDSHLGUIST=-lX11 -lXext -lm
-STDSHLCUIST=-lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
