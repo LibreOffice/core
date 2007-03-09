@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-20 01:27:40 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:58:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@ PRJINC=..$/..
 PRJNAME=connectivity
 TARGET=file
 
-USE_LDUMP2=TRUE
 USE_DEFFILE=TRUE
-LDUMP=ldump2.exe
 
 # --- Settings ----------------------------------
 .IF "$(DBGUTIL_OJ)"!=""
@@ -83,7 +81,6 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(OSLLIB)					\
     $(SVLLIB)					\
     $(TOOLSLIB)					\
     $(SVTOOLLIB)				\
@@ -110,12 +107,8 @@ DEFLIB1NAME=$(TARGET)
 
 # --- filter file ------------------------------
 
-.IF "$(depend)"==""
-
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
-    @echo CLEAR_THE_FILE	> $@
-    @echo _TI				>>$@
+    @echo _TI				>$@
     @echo _real				>>$@
-.ENDIF
 
