@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:27:32 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:30:00 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,6 @@ UNOTYPES=\
 PACKAGE=stardiv$/starcalc$/test
 IDLFILES= testadd.idl
 
-CXXFILES=	\
-        addin.cxx \
-        result.cxx
-
 SLOFILES=	\
         $(SLO)$/addin.obj \
         $(SLO)$/result.obj
@@ -78,27 +74,13 @@ EXCEPTIONSFILES= \
         $(SLO)$/addin.obj \
         $(SLO)$/result.obj
 
-
-#SRC1FILES=
-#SRS1NAME=
-#SRSFILES=      $(SRS)$/
-#SRC2FILES=
-#SRS2NAME=
-
-#RESLIB1NAME=tst
-#RESLIB1SRSFILES=\
-#                $(SRS)$/
-#                $(SOLARRESDIR)$/
-
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
-#SHL1LIBS=$(SLB)$/$(TARGET).lib
 
-SHL1STDLIBS=$(USRLIB) $(SVLIB) $(TOOLSLIB) $(ONELIB) $(SVLLIB) $(TKLIB) $(SALLIB) $(VOSLIB) $(CPPULIB) $(CPPUHELPERLIB)
+SHL1STDLIBS=$(VCLLIB) $(TOOLSLIB) $(SVLLIB) $(TKLIB) $(SALLIB) $(VOSLIB) $(CPPULIB) $(CPPUHELPERLIB)
 
 SHL1DEPN=   $(L)$/itools.lib $(SVLIBDEPEND)
 SHL1DEF=    $(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=$(TARGET)
-#SHL1RES=    $(RES)$/$(TARGET).res
 SHL1OBJS=	$(SLO)$/addin.obj $(SLO)$/result.obj $(SLO)$/workben$/testadd.obj
 
 # --- Targets ------------------------------------------------------
@@ -118,46 +100,3 @@ $(MISC)$/$(SHL1TARGET).def:  makefile.mk
     @echo   component_getFactory @26                                >>$@
 .ENDIF
 
-.IF "$(GUI)" == "WIN"
-
-$(MISC)$/$(SHL1TARGET).def:  makefile
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo DESCRIPTION 'StarOne Test-DLL'                                 >>$@
-    @echo EXETYPE     WINDOWS                                       >>$@
-    @echo PROTMODE                                                  >>$@
-    @echo CODE        LOADONCALL MOVEABLE DISCARDABLE               >>$@
-    @echo DATA        PRELOAD MOVEABLE SINGLE                       >>$@
-    @echo HEAPSIZE    0                                             >>$@
-    @echo EXPORTS                                                   >>$@
-    @echo _CreateWindow @2 								>>$@
-.ENDIF
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(SHL1TARGET).def:  makefile
-    @echo ================================================================
-    @echo building $@
-    @echo ----------------------------------------------------------------
-.IF "$(COM)"!="WTC"
-    echo  LIBRARY		INITINSTANCE TERMINSTANCE			>$@
-    echo  DESCRIPTION	'StarOne Test-DLL'           					>>$@
-    echo  PROTMODE										   >>$@
-        @echo CODE        LOADONCALL 			              >>$@
-    @echo DATA		  PRELOAD MULTIPLE NONSHARED					  >>$@
-        @echo EXPORTS                                                   >>$@
-.IF "$(COM)"!="ICC"
-    @echo _CreateWindow @2 								>>$@
-.ELSE
-    @echo CreateWindow @2 								>>$@
-.ENDIF
-
-.ELSE
-        @echo option DESCRIPTION 'StarOne Test-DLL'		                    >$@
-        @echo name $(BIN)$/$(SHL1TARGET).dll                         >>$@
-    @echo CreateWindow_ @2 								>>$@
-    @gawk -f s:\util\exp.awk temp.def				>>$@
-    del temp.def
-.ENDIF
-.ENDIF
