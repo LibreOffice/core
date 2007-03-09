@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageButton.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:51:40 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:27:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,13 +113,6 @@ OImageButtonModel::~OImageButtonModel()
     DBG_DTOR(OImageButtonModel, NULL);
 }
 
-//------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OImageButtonModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
 // XServiceInfo
 //------------------------------------------------------------------------------
 StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
@@ -133,9 +126,7 @@ StringSequence  OImageButtonModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-void OImageButtonModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OImageButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
         DECL_PROP1(BUTTONTYPE,          FormButtonType,     BOUND);
@@ -144,12 +135,6 @@ void OImageButtonModel::fillProperties(
         DECL_PROP1(TARGET_FRAME,        ::rtl::OUString,    BOUND);
         DECL_PROP1(TABINDEX,            sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OImageButtonModel::getInfoHelper()
-{
-    return *const_cast<OImageButtonModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
