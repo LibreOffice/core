@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refvaluecomponent.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:13:41 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:33:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ namespace frm
     }
 
     //--------------------------------------------------------------------
-    void OReferenceValueComponent::fillProperties( Sequence< Property >& /* [out] */ _rProps, Sequence< Property >& /* [out] */ _rAggregateProps ) const
+    void OReferenceValueComponent::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( m_bSupportSecondRefValue ? 3 : 2, OBoundControlModel )
             DECL_PROP1( REFVALUE,       ::rtl::OUString,    BOUND );
