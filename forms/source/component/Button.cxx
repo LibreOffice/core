@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Button.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:46:53 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:19:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,16 +114,7 @@ OButtonModel::~OButtonModel()
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OButtonModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void OButtonModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OButtonModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 5, OClickableImageBaseModel )
         DECL_PROP1(BUTTONTYPE,      FormButtonType,             BOUND);
@@ -132,12 +123,6 @@ void OButtonModel::fillProperties(
         DECL_PROP1(TARGET_FRAME,    ::rtl::OUString,            BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,                  BOUND);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OButtonModel::getInfoHelper()
-{
-    return *const_cast<OButtonModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
