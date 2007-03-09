@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 15:30:23 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:22:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,7 +88,7 @@ SHL1STDLIBS=	$(CHARTTOOLS)		\
                 $(BASEGFXLIB)		\
                 $(GOODIESLIB)		\
                 $(SALLIB)			\
-                $(SVLIB)			\
+                $(VCLLIB)			\
                 $(SVLLIB)			\
                 $(SVTOOLLIB)		\
                 $(SVXLIB)			\
