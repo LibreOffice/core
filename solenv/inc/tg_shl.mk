@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.106 $
+#   $Revision: 1.107 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:01:28 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:06:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -187,8 +187,8 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -203,20 +203,20 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL$(TNR)OBJS)"!=""
-    +-echo $(foreach,i,$(SHL$(TNR)OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL$(TNR)OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL$(TNR)LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL$(TNR)LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
@@ -447,14 +447,6 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
