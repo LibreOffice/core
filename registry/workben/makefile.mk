@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:36:30 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:56:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,42 +64,17 @@ APP1STDLIBS=\
             $(SALLIB)	\
             $(REGLIB)
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
-
-
 APP2TARGET= test
 APP2OBJS=   $(OBJ)$/test.obj
 
 APP2STDLIBS=\
             $(RGTLIB)
 
-
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
-
-    
 APP3TARGET= regspeed
 APP3OBJS=   $(OBJ)$/regspeed.obj
 
 APP3STDLIBS=\
             $(SALLIB)	\
             $(REGLIB) 	 
-
-.IF "$(GUI)"=="WNT"
-APP3STDLIBS+= \
-            $(LIBCIMT) $(LIBCMT)
-.ENDIF
-
-
-
-#.IF "$(COM)"=="ICC"
-#ENVCFLAGS=$(ENVCFLAGS) -D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
-#.ENDIF
-
 
 .INCLUDE :  target.mk
