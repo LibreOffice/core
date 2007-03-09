@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Pattern.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:52:34 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:30:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,16 +152,7 @@ StringSequence SAL_CALL OPatternModel::getSupportedServiceNames() throw()
 
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OPatternModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void OPatternModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OPatternModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
         DECL_PROP2(DEFAULT_TEXT,    ::rtl::OUString,    BOUND, MAYBEDEFAULT);
@@ -169,12 +160,6 @@ void OPatternModel::fillProperties(
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP2(FILTERPROPOSAL,  sal_Bool,           BOUND, MAYBEDEFAULT);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OPatternModel::getInfoHelper()
-{
-    return *const_cast<OPatternModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
