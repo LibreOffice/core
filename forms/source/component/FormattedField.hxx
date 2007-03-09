@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormattedField.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:11:41 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:26:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,6 @@ namespace frm
     class OFormattedModel
                     :public OEditBaseModel
                     ,public OErrorBroadcaster
-                    ,public ::comphelper::OAggregationArrayUsageHelper< OFormattedModel >
     {
         // das Original, falls ich die Format-Properties meines aggregierten Models gefaket, d.h. von dem Feld, an das
         // ich gebunden bin, weitergereicht habe (nur gueltig wenn loaded)
@@ -108,9 +107,6 @@ namespace frm
         virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                               sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
@@ -127,12 +123,13 @@ namespace frm
         void SAL_CALL setPropertyToDefault(const ::rtl::OUString& aPropertyName) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
         ::com::sun::star::uno::Any SAL_CALL getPropertyDefault( const ::rtl::OUString& aPropertyName ) throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::uno::RuntimeException);
 
-        // OAggregationArrayUsageHelper
-        virtual void fillProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        // OControlModel's property handling
+        virtual void describeFixedProperties(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        ) const;
+        virtual void describeAggregateProperties(
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-            ) const;
-        IMPLEMENT_INFO_SERVICE()
+        ) const;
 
     // XPropertyChangeListener
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent& evt) throw(::com::sun::star::uno::RuntimeException);
