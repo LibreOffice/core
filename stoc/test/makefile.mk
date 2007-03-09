@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:08:38 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:51:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,11 +82,6 @@ APP1STDLIBS= \
         $(SALHELPERLIB) 	\
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+= 
-#		$(LIBCIMT) $(LIBCMT)
-.ENDIF
-
 # --- Application 2 ------------------------------------------------
 APP2TARGET= $(TARGET2)
 APP2OBJS=   $(OBJ)$/testregistry.obj $(OBJ)$/mergekeys_.obj
@@ -96,12 +91,6 @@ APP2STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(SALHELPERLIB) 	\
         $(SALLIB)
-
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+= 
-#		$(LIBCIMT) $(LIBCMT)
-.ENDIF
-
 
 # --- Application 3 - testsmgr main ------------------------------------
 APP3TARGET=	$(TARGET3)
@@ -116,8 +105,7 @@ APP3STDLIBS= \
 APP3STDLIBS+= -l$(SHL1TARGET)
 .ENDIF
 .IF "$(GUI)"=="WNT"
-APP3STDLIBS+=	$(LIBCIMT) \
-        i$(SHL1TARGET).lib
+APP3STDLIBS+= i$(SHL1TARGET).lib
 .ENDIF
 
 # --- Application 4 - testcorefl main ------------------------------------
@@ -128,10 +116,6 @@ APP4STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT"
-APP4STDLIBS+=	$(LIBCIMT)
-.ENDIF
-
 # --- Application 5 - testinvocation main ------------------------------------
 APP5TARGET= 	$(TARGET5)
 APP5OBJS  = 	$(OBJ)$/testiadapter.obj 
@@ -139,10 +123,6 @@ APP5STDLIBS= \
         $(CPPULIB) 		\
         $(CPPUHELPERLIB) 	\
         $(SALLIB)
-
-.IF "$(GUI)"=="WNT"
-APP5STDLIBS+=	$(LIBCIMT)
-.ENDIF
 
 # --- Application 6 - testitrosp main ------------------------------------
 APP6TARGET= 	$(TARGET6)
@@ -153,10 +133,6 @@ APP6STDLIBS= \
         $(SALHELPERLIB) 	\
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT"
-APP6STDLIBS+=	$(LIBCIMT)
-.ENDIF
-
 # --- Application 7 - testconv main ------------------------------------
 APP7TARGET= 	$(TARGET7)
 APP7OBJS  = 	$(OBJ)$/testconv.obj 
@@ -165,10 +141,6 @@ APP7STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(SALLIB)
 
-.IF "$(GUI)"=="WNT"
-APP7STDLIBS+=	$(LIBCIMT)
-.ENDIF
-
 # --- Application 8 - testproxyfac main ------------------------------------
 APP8TARGET= 	$(TARGET8)
 APP8OBJS  = 	$(OBJ)$/testproxyfac.obj 
@@ -176,10 +148,6 @@ APP8STDLIBS= \
         $(CPPULIB) 		\
         $(CPPUHELPERLIB) 	\
         $(SALLIB)
-
-.IF "$(GUI)"=="WNT"
-APP8STDLIBS+=	$(LIBCIMT)
-.ENDIF
 
 # --- Application 9 - testproxyfac main ------------------------------------
 APP9TARGET= 	$(TARGET9)
