@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:32:53 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:36:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,6 @@ namespace frm
             ,public FontControlModel
             ,public IEngineTextChangeListener
             ,public ::comphelper::OPropertyContainerHelper
-            ,public OAggregationArrayUsageHelper< ORichTextModel >
             ,public ORichTextModel_BASE
     {
     private:
@@ -162,8 +161,6 @@ namespace frm
         virtual void SAL_CALL removeModifyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::util::XModifyListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
 
         // XPropertySet and friends
-        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-        virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
         virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                             sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
@@ -171,12 +168,13 @@ namespace frm
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue) throw ( ::com::sun::star::uno::Exception);
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
-        // OAggregationArrayUsageHelper
-        virtual void fillProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+        // OControlModel's property handling
+        virtual void describeFixedProperties(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+        ) const;
+        virtual void describeAggregateProperties(
             ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-            ) const;
-        IMPLEMENT_INFO_SERVICE()
+        ) const;
 
         // prevent method hiding
         using OControlModel::disposing;
