@@ -4,9 +4,9 @@
 #
 #   $RCSfile: sc.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:57:03 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:05:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -33,32 +33,4 @@
 #
 #*************************************************************************
 
-# MakeDepn nicht das segdefs.hxx und die PCHs auswerten lassen
-# PCHs werden nur in den ..._1st Verzeichnissen aufgenommen
-EXCDEPN=segdefs.hxx
-EXCDEPNPCH=core_pch.hxx;filt_pch.hxx;ui_pch.hxx
-# done by protecting define now
-.IF "$(GUI)" != "MAC"
-#MKDEPFLAGS+=-E:$(EXCDEPN);$(EXCDEPNPCH)
-.ELSE
-#MKDEPFLAGS+=-E:"$(EXCDEPN);$(EXCDEPNPCH)"
-.ENDIF
-
-.IF "$(GUI)" == "WIN"
-LINKFLAGSAPPGUI=/A:128
-LIBFLAGS=$(LIBFLAGS) /PAGE:128
-.ENDIF
-
-
-.IF "$(GUI)$(COM)" == "WINMSC"
-.IF "$(optimize)" != ""
-CFLAGS=$(CFLAGS) -OV9
-.ENDIF
-
-# kein -GEfs wegen dann fehlender inlinings
-CFLAGSOBJGUIST=-Alfd -GA -GEd
-
-# Wer hatte dieses denn aus welchem Grunde eingebaut ????
-#CFLAGSOBJGUIST=-Alfd -GA
-# !ENDIF
-.ENDIF
+# TODO: remove usage and file...
