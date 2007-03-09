@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:05:30 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:47:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,6 @@ APP1STDLIBS = $(APPSTDLIBS) \
 
 APP1STDLIBS+=$(STDLIBCPP)
 
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS+=$(LIBCIMT)
-.ENDIF
-
-
 APP1TARGET= $(TARGET)
 
 APP1OBJS=	\
@@ -97,10 +92,6 @@ APP1OBJS=	\
 # APP2STDLIBS = $(APPSTDLIBS)
 # 
 # APP2STDLIBS+=$(STDLIBCPP)
-# 
-# .IF "$(GUI)"=="WNT"
-# APP2STDLIBS+=$(LIBCIMT)
-# .ENDIF
 # 
 # APP2TARGET= cfglocal
 # APP2OBJS=	\
