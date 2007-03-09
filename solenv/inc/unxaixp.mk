@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxaixp.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:00:09 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:06:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,6 @@ CDEFS+=			-D_PTHREADS
 CDEFS+=			-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSCXX=$(ARCH_FLAGS)
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=
@@ -87,8 +85,6 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=
-STDLIBCUIST=
 # application
 STDLIBGUIMT=	# -lX11 -ldl
 STDLIBCUIMT=	# -lX11 -ldl

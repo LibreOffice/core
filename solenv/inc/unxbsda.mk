@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsda.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:00:19 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:06:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,8 +48,6 @@ CDEFS+= 		-DNO_AUDIO -DPRINTER_DUMMY
 CFLAGSCC=		-fsigned-char $(ARCH_FLAGS)
 CFLAGSCXX=		-fsigned-char $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=$(PICSWITCH)
@@ -80,8 +78,6 @@ STDOBJGUI=		/usr/lib/crt0.o
 STDSLOGUI=		/usr/lib/crt0.o
 STDOBJCUI=		/usr/lib/crt0.o
 STDSLOCUI=		/usr/lib/crt0.o
-STDLIBGUIST=	-Bdynamic -lc -Bstatic -lg++ -lstdc++ -Bdynamic -lm -lgcc -lc -lgcc
-STDLIBCUIST=	-Bdynamic -lc -Bstatic -lg++ -lstdc++ -Bdynamic -lm -lgcc -lc -lgcc
 STDLIBGUIMT=	-Bdynamic -lc -Bstatic -lg++ -lstdc++ -Bdynamic -lm -lgcc -lc -lgcc
 STDLIBCUIMT=	-Bdynamic -lc -Bstatic -lg++ -lstdc++ -Bdynamic -lm -lgcc -lc -lgcc
 STDSHLGUIMT=	-Bdynamic -lc -Bstatic -lg++ -lstdc++ -Bdynamic -lm -lgcc -lc -lgcc
