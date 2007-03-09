@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:22:27 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:23:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,10 +50,9 @@ TARGET2=s$(UCP_NAME)
 
 ENABLE_EXCEPTIONS=TRUE
 USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
 
 TARGET2TYPE=CUI
-LIB2TARGET=NO
+LIBTARGET=NO
 
 # --- Settings ---------------------------------------------------------
 
@@ -102,20 +101,14 @@ DEF1EXPORTFILE=exports.dxp
 DEF1DES=UCB ODMA Content Provider
 
 # --- SODMA executable -------------------------------------------------
-OBJ2FILES= $(OBJ)$/odma_main.obj 
+OBJFILES= $(OBJ)$/odma_main.obj 
 
 APP2TARGET= $(TARGET2)
-APP2OBJS=   $(OBJ2FILES)
+APP2OBJS=   $(OBJFILES)
 APP2STDLIBS=$(SALLIB)			\
             $(VOSLIB)			\
             $(CPPULIB)			\
             $(CPPUHELPERLIB)
-
-APP2STDLIBS+=$(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+=$(LIBCIMT)
-.ENDIF
 
 # @@@ A description string for you UCP.
 DEF2DES=UCB ODMA URL converter
