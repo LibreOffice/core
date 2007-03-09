@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 16:46:44 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:50:36 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ=..$/..
 
-PRJNAME=UCBEXPLORER
+PRJNAME=ucbhelper
 TARGET=ucbexplorer
 TARGETTYPE=GUI
 LIBTARGET=NO
@@ -47,11 +47,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files ---
 
-.IF "$(depend)" != ""
-
 OBJFILES=$(OBJ)$/$(TARGET).obj
-
-.ENDIF # depend
 
 SRS1NAME=$(TARGET)
 SRC1FILES=$(TARGET).src
@@ -76,7 +72,7 @@ APP1STDLIBS=$(SALLIB) 	 \
         $(SVTOOLLIB)	 \
         $(COMPHELPERLIB) \
         $(UCBHELPERLIB)  \
-        $(SVLIB)
+        $(VCLLIB)
 
 # --- Targets ---
 
