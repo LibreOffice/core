@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsoli4.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-27 11:48:35 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:12:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,6 @@ CFLAGSENABLESYMBOLS_CC_ONLY=-g -xs # was temporarily commented out, reenabled be
 CFLAGSEXCEPTIONS=
 CFLAGS_NO_EXCEPTIONS=-noex
 
-CFLAGSOBJGUIST=-KPIC
-CFLAGSOBJCUIST=-KPIC
 CFLAGSOBJGUIMT=-KPIC
 CFLAGSOBJCUIMT=-KPIC
 CFLAGSSLOGUIMT=-KPIC
@@ -190,19 +188,13 @@ STDOBJCUI=
 STDSLOCUI=
 
 # CPPRUNTIME - define where to place C++ runtime if required
-STDLIBGUIST=$(DYNAMIC) -lm
-STDLIBCUIST=$(DYNAMIC) -lm
 STDLIBGUIMT=$(DYNAMIC) -lpthread -lm
 STDLIBCUIMT=$(DYNAMIC) -lpthread -lm
-STDSHLGUIST=$(DYNAMIC) CPPRUNTIME -lm -lc
-STDSHLCUIST=$(DYNAMIC) CPPRUNTIME -lm -lc
 STDSHLGUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 STDSHLCUIMT=$(DYNAMIC) -lpthread CPPRUNTIME -lm -lc
 
 # libdl.so - no really an GUI library but required in this context
-STDLIBGUIST+=-lX11 -ldl
 STDLIBGUIMT+=-lX11 -ldl
-STDSHLGUIST+=-lX11 -ldl
 STDSHLGUIMT+=-lX11 -ldl
 
 # @@@ interposer needed for -Bdirect @@@
