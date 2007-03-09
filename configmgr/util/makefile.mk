@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:43:09 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:45:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,13 +55,8 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(OSLLIB)					\
     $(SALHELPERLIB)				\
-    $(SALLIB)					\
-    $(CPPRTLLIB)
-
-#	$(UNOTOOLSLIB)				\
-#	$(ZLIB3RDLIB) \
+    $(SALLIB)
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(SHL1TARGET)
