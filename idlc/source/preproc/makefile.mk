@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 18:15:31 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:14:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJ=..$/..
 PRJNAME=idlc
 TARGET=idlcpp
 TARGETTYPE=CUI
-TARGETTHREAD=ST
 
 # --- Settings -----------------------------------------------------
 
@@ -48,17 +47,6 @@ LIBSALCPPRT=$(0)
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-CXXFILES=   \
-            cpp.c	\
-            eval.c	\
-            getopt.c	\
-            include.c	\
-            lex.c	\
-            macro.c	\
-            nlist.c	\
-            tokens.c	\
-            unix.c
 
 OBJFILES=   \
             $(OBJ)$/cpp.obj	\
@@ -79,22 +67,8 @@ APP1OBJS=$(OBJ)$/cpp.obj
 .ENDIF
 
 APP1LIBS= $(LB)$/idlcpp.lib
-APP1DEPN=  
-
-.IF "$(GUI)" == "MAC"
-APP1STDLIBS=$(MWPPCLibraries)PPCToolLibs.o  \
-            $(STDSLOGUI)
-MACRES= $(SV_RES)MPWToolCfrg.r -d SVTOOLNAME="¶"SV TOOL¶""
-.ENDIF
 
 # --- Targets ------------------------------------------------------
-.IF "$(depend)" == ""
-
-all: \
-    ALLTAR
-
-.ENDIF
-
 
 .INCLUDE :  target.mk
 
