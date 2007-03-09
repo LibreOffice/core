@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Date.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:47:34 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:23:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ namespace frm
 class ODateModel
                 :public OEditBaseModel
                 ,public OLimitedFormats
-                ,public ::comphelper::OAggregationArrayUsageHelper< ODateModel >
 {
     ::com::sun::star::uno::Any      m_aSaveValue;
     sal_Bool                        m_bDateTimeField;
@@ -80,16 +79,12 @@ public:
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     using OEditBaseModel::getFastPropertyValue;
 
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    // OControlModel's property handling
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
 
 protected:
     // OBoundControlModel overridables
