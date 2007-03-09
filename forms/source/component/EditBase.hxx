@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EditBase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:10:52 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,8 +121,6 @@ public:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
     // XPropertyState
-    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
 protected:
