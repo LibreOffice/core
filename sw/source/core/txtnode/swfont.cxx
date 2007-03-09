@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:47:04 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:15:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
