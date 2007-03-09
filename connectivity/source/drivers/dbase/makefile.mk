@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:34:42 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:57:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,15 @@ EXCEPTIONSFILES=\
     $(SLO)$/Dservices.obj			\
     $(SLO)$/DDriver.obj
 
+# [kh] ppc linux gcc compiler problem
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
+EXCEPTIONSNOOPTFILES= \
+    $(SLO)$/DTable.obj
+.ELSE
+EXCEPTIONSFILES +=\
+            $(SLO)$/DTable.obj
+.ENDIF
+
 
 SHL1VERSIONMAP=$(TARGET).map
 
@@ -96,7 +105,6 @@ SHL1STDLIBS=\
     $(CPPULIB)					\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
-    $(OSLLIB)					\
     $(SVLLIB)					\
     $(TOOLSLIB)					\
     $(SVTOOLLIB)				\
@@ -120,15 +128,6 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
-
-# [kh] ppc linux gcc compiler problem
-.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCPOWERPC"
-EXCEPTIONSNOOPTFILES= \
-    $(SLO)$/DTable.obj
-.ELSE
-EXCEPTIONSFILES +=\
-            $(SLO)$/DTable.obj
-.ENDIF
 
 # --- Targets ----------------------------------
 
