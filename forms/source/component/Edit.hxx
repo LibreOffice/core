@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Edit.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:10:18 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:23:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ namespace frm
 //==================================================================
 class OEditModel
                 :public OEditBaseModel
-                ,public ::comphelper::OAggregationArrayUsageHelper< OEditModel >
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter>         m_xFormatter;
     ::rtl::OUString                 m_aSaveValue;
@@ -92,8 +91,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun::star::uno::RuntimeException);
 
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
     using OBoundControlModel::getFastPropertyValue;
 
     // XReset
@@ -103,12 +100,13 @@ public:
     IMPLEMENTATION_NAME(OEditModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
+    // OControlModel's property handling
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
+    virtual void describeAggregateProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    ) const;
 
     // XEventListener
     using OBoundControlModel::disposing;
