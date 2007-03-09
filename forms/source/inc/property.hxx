@@ -4,9 +4,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:59:16 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,10 +148,15 @@ public:
 
 //------------------------------------------------------------------------------
 #define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
-    baseclass::fillProperties( _rProps, _rAggregateProps ); \
+    baseclass::describeFixedProperties( _rProps ); \
     sal_Int32 nOldCount = _rProps.getLength(); \
     _rProps.realloc( nOldCount + ( count ) );   \
     ::com::sun::star::beans::Property* pProperties = _rProps.getArray() + nOldCount;       \
+
+//------------------------------------------------------------------------------
+#define BEGIN_DESCRIBE_BASE_PROPERTIES( count ) \
+    _rProps.realloc( count );   \
+    ::com::sun::star::beans::Property* pProperties = _rProps.getArray();       \
 
 //------------------------------------------------------------------------------
 #define BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( count, aggregate )   \
@@ -224,7 +229,7 @@ public:
 // ===
 //------------------------------------------------------------------------------
 #define END_DESCRIBE_PROPERTIES()   \
-    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::fillProperties/getInfoHelper: forgot to adjust the count ?");  \
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::describeFixedProperties/getInfoHelper: forgot to adjust the count ?"); \
 
 //==============================================================================
 //------------------------------------------------------------------------------
