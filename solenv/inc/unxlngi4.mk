@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.42 $
+#   $Revision: 1.43 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-08 11:38:27 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:09:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,10 +94,6 @@ CFLAGSCXX+=-include preinclude.h
 .ENDIF
 PICSWITCH:=-fpic
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -175,26 +171,18 @@ STDOBJCUI=
 STDSLOCUI=
 
 .IF "$(ALLOC)" == "TCMALLOC"
-STDLIBCUIST+=-ltcmalloc
 STDLIBGUIMT+=-ltcmalloc
 STDLIBCUIMT+=-ltcmalloc
-STDLIBGUIST+=-ltcmalloc
 STDSHLGUIMT+=-ltcmalloc
 STDSHLCUIMT+=-ltcmalloc
-STDSHLGUIST+=-ltcmalloc
-STDSHLCUIST+=-ltcmalloc
 .ENDIF
 
 # libraries for linking applications
-STDLIBCUIST+=-ldl -lm
 STDLIBGUIMT+=-lX11 -ldl -lpthread -lm
 STDLIBCUIMT+=-ldl -lpthread -lm
-STDLIBGUIST+=-lX11 -ldl -lm
 # libraries for linking shared libraries
 STDSHLGUIMT+=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT+=-ldl -lpthread -lm
-STDSHLGUIST+=-lX11 -lXext -ldl -lm
-STDSHLCUIST+=-ldl -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
