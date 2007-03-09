@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:43:39 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:49:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,6 @@ SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
-        $(UNOLIB)		\
         $(VOSLIB)		\
         $(TOOLSLIB)		\
         $(SVTOOLLIB)	\
@@ -115,9 +114,6 @@ SHL1VERSIONMAP= $(TARGET).map
 
 # build DEF file
 DEF1NAME	 =$(SHL1TARGET)
-#DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME =$(TARGET)
-#DEF1DES     =Linguistic2 main DLL
 DEF1EXPORTFILE=	exports.dxp
 
 .ENDIF
