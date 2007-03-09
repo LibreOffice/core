@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ImageControl.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:46:54 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:28:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -342,27 +342,12 @@ sal_Bool OImageControlModel::convertFastPropertyValue(Any& rConvertedValue, Any&
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OImageControlModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo(createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void OImageControlModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OImageControlModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OBoundControlModel )
         DECL_BOOL_PROP1 ( READONLY,             BOUND );
         DECL_PROP1      ( TABINDEX, sal_Int16,  BOUND );
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OImageControlModel::getInfoHelper()
-{
-    return *const_cast<OImageControlModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
