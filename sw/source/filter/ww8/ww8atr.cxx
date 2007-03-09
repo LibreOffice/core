@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:56:16 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:17:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1810,9 +1810,23 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
         }
         // --> OD 2005-06-08 #i43956# - write hyperlink character including
         // attributes and corresponding binary data for certain reference fields.
-        if ( pFld && pFld->GetTyp()->Which() == RES_GETREFFLD &&
-             ( eFldType == ww::ePAGEREF || eFldType == ww::eREF ||
-               eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ) )
+        bool bHandleBookmark = false;
+
+        if (pFld)
+        {
+            if (pFld->GetTyp()->Which() == RES_GETREFFLD &&
+                ( eFldType == ww::ePAGEREF || eFldType == ww::eREF ||
+                  eFldType == ww::eNOTEREF || eFldType == ww::eFOOTREF ))
+                bHandleBookmark = true;
+
+#if 0
+            if (pFld->GetTyp()->Which() == RES_INPUTFLD &&
+                eFldType == ww::eFORMTEXT)
+                bHandleBookmark = true;
+#endif
+        }
+
+        if ( bHandleBookmark )
         {
             // retrieve reference destionation - the name of the bookmark
             String aLinkStr;
@@ -1827,6 +1841,10 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
                       nSubType == REF_ENDNOTE )
             {
                 aLinkStr = GetBookmarkName( nSubType, 0, rRFld.GetSeqNo() );
+            }
+            else if ( nSubType == REF_SEQUENCEFLD )
+            {
+                aLinkStr = pFld->GetPar2();
             }
             // insert hyperlink character including attributes and data.
             InsertSpecialChar( *this, 0x01, &aLinkStr );
@@ -1855,11 +1873,47 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
                 SwWW8Writer::WriteString8(Strm(), sOut, false,
                     RTL_TEXTENCODING_MS_1252);
             }
+
+            if (pFld)
+            {
+                if (pFld->GetTyp()->Which() == RES_INPUTFLD &&
+                    eFldType == ww::eFORMTEXT)
+                {
+                    BYTE aArr[12];
+                    BYTE *pArr = aArr;
+
+                    Set_UInt16(pArr, 0x6a03);
+                    Set_UInt32(pArr, 0x0);
+
+                    if( bWrtWW8 )
+                        Set_UInt16( pArr, 0x855 );
+                    else
+                        Set_UInt8( pArr, 117 );
+                    Set_UInt8( pArr, 1 );
+                    Set_UInt16( pArr, 0x875 );
+                    Set_UInt8(pArr, 1);
+
+                    pChpPlc->AppendFkpEntry( pStrm->Tell(), pArr - aArr, aArr );
+                }
+            }
         }
     }
     if (WRITEFIELD_CLOSE & nMode)
     {
-        static const BYTE aFld15[2] = { 0x15, 0x80 };
+        BYTE aFld15[2] = { 0x15, 0x80 };
+
+        if (pFld)
+        {
+            if (pFld->GetTyp()->Which() == RES_INPUTFLD &&
+                eFldType == ww::eFORMTEXT)
+            {
+                USHORT nSubType = pFld->GetSubType();
+
+                if (nSubType == REF_SEQUENCEFLD)
+                    aFld15[0] |= (0x4 << 5);
+            }
+        }
+
         pFldP->Append( Fc2Cp( Strm().Tell() ), aFld15 );
         InsertSpecialChar( *this, 0x15 );
     }
@@ -2612,11 +2666,23 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
         }
         break;
     case RES_INPUTFLD:
-        sStr = FieldString(ww::eFILLIN);
-        sStr.ASSIGN_CONST_ASC("\"");
-        sStr += pFld->GetPar2();
-        sStr += '\"';
-        rWW8Wrt.OutField(pFld, ww::eFILLIN, sStr);
+        {
+            const SwInputField * pInputField =
+                dynamic_cast<const SwInputField *>(pFld);
+
+            if (pInputField->isFormField())
+                rWW8Wrt.DoFormText(pInputField);
+            else
+            {
+                sStr = FieldString(ww::eFILLIN);
+
+                sStr.ASSIGN_CONST_ASC("\"");
+                sStr += pFld->GetPar2();
+                sStr += '\"';
+
+                rWW8Wrt.OutField(pFld, ww::eFILLIN, sStr);
+            }
+        }
         break;
     case RES_GETREFFLD:
         {
@@ -2735,7 +2801,10 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
             const SwDropDownField& rFld = *(SwDropDownField*)pFld;
             com::sun::star::uno::Sequence<rtl::OUString> aItems =
                 rFld.GetItemSequence();
-            rWW8Wrt.DoComboBox(rFld.GetName(), rFld.GetSelectedItem(), aItems);
+            rWW8Wrt.DoComboBox(rFld.GetName(),
+                               rFld.GetHelp(),
+                               rFld.GetToolTip(),
+                               rFld.GetSelectedItem(), aItems);
         }
         else
             bWriteExpand = true;
