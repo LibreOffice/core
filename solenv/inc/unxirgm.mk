@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirgm.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:01:41 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:08:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,6 @@ CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSCXX=$(ARCH_FLAGS)
 PICSWITCH:=-fpic
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -106,12 +102,11 @@ LINK= g++
 LINKFLAGS=	-L/usr/lib32 -Wl,-no_unresolved
 LINKVERSIONMAPFLAG= -Wl,-exports_file
 
-.IF "$(TARGETTHREAD)"=="MT"
 LINKFLAGSAPPGUI= $(THREADLIB)
 LINKFLAGSAPPCUI= $(THREADLIB)
 LINKFLAGSSHLGUI= $(THREADLIB)
 LINKFLAGSSHLCUI= $(THREADLIB)
-.ENDIF
+
 LINKFLAGSAPPGUI+= -Wl,-multigot
 LINKFLAGSAPPCUI+= -Wl,-multigot
 LINKFLAGSSHLGUI+= -shared 
@@ -135,8 +130,6 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIST=	$(DYNAMIC) -lc -lm
 STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
 STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lgcc -lc -lm
 STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
