@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Time.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:53:25 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ namespace frm
 class OTimeModel
                 :public OEditBaseModel
                 ,public OLimitedFormats
-                ,public ::comphelper::OAggregationArrayUsageHelper< OTimeModel >
 {
 private:
     ::com::sun::star::uno::Any      m_aSaveValue;
@@ -80,16 +79,10 @@ public:
     IMPLEMENTATION_NAME(OTimeModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // ::com::sun::star::beans::XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    // OControlModel's property handling
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
 
     // prevent method hiding
     using OBoundControlModel::getFastPropertyValue;
