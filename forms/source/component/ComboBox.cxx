@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ComboBox.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:46:07 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:21:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,27 +359,9 @@ sal_Bool OComboBoxModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OComboBoxModel::getPropertySetInfo() throw(RuntimeException)
-{
-        Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-cppu::IPropertyArrayHelper& OComboBoxModel::getInfoHelper()
-{
-    return *const_cast<OComboBoxModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void OComboBoxModel::fillProperties(
-                Sequence< Property >& _rProps,
-                Sequence< Property >& _rAggregateProps ) const
+void OComboBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 6, OBoundControlModel )
-        RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
-            // we want to "override" this property
-
         DECL_PROP1(TABINDEX,            sal_Int16,                  BOUND);
         DECL_PROP1(LISTSOURCETYPE,      ListSourceType, BOUND);
         DECL_PROP1(LISTSOURCE,          ::rtl::OUString,            BOUND);
@@ -387,6 +369,15 @@ void OComboBoxModel::fillProperties(
         DECL_PROP1(DEFAULT_TEXT,        ::rtl::OUString,            BOUND);
         DECL_PROP1(STRINGITEMLIST,      Sequence< ::rtl::OUString >,BOUND);
     END_DESCRIBE_PROPERTIES();
+}
+
+//------------------------------------------------------------------------------
+void OComboBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
+{
+    OBoundControlModel::describeAggregateProperties( _rAggregateProps );
+
+    // superseded properties:
+    RemoveProperty( _rAggregateProps, PROPERTY_STRINGITEMLIST );
 }
 
 //------------------------------------------------------------------------------
