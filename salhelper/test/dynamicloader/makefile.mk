@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:02:30 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:15:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,9 +97,6 @@ APP1TARGET=	$(TARGET)
 
 APP1OBJS=	$(OBJ)$/loader.obj
 
-#LIBCIMT=msvcrtd.lib
-            
-
 APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
@@ -111,12 +108,6 @@ APP1STDLIBS= \
 APP1STDLIBS+=   $(LB)$/isalhelper.lib
 .ELSE
 APP1STDLIBS+=   -lsalhelper$(UDK_MAJOR)$(COM)
-.ENDIF
-
-
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS += $(LIBCIMT)
 .ENDIF
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
