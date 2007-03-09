@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 12:46:12 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:41:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,10 +67,6 @@ APP1STDLIBS= \
     comdlg32.lib	\
     $(COMPATH)$/atlmfc$/lib$/atls.lib \
     advapi32.lib
-
-.IF "$(GUI)"=="WNT"
-APP1STDLIBS += $(LIBCIMT)
-.ENDIF
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
