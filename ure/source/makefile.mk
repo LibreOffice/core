@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:52:20 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:14:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ $(BIN)$/ure$/README: README
 
 $(BIN)$/ure$/THIRDPARTYLICENSEREADME.html: THIRDPARTYLICENSEREADME.html
     - $(MKDIR) $(@:d)
-    + $(COPY) $< $@
+    $(COPY) $< $@
 
 $(BIN)$/ure$/jvmfwk3$(MY_RC): jvmfwk3$(MY_RC)
     -$(MKDIR) $(@:d)
