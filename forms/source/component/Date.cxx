@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Date.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:40:26 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,16 +197,7 @@ StringSequence SAL_CALL ODateModel::getSupportedServiceNames() throw()
 
 // XPropertySet
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL ODateModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void ODateModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void ODateModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 4, OEditBaseModel )
         DECL_PROP3(DEFAULT_DATE,            sal_Int32,              BOUND, MAYBEDEFAULT, MAYBEVOID);
@@ -214,12 +205,6 @@ void ODateModel::fillProperties(
         DECL_PROP1(FORMATKEY,               sal_Int32,              TRANSIENT);
         DECL_IFACE_PROP2(FORMATSSUPPLIER,   XNumberFormatsSupplier, READONLY, TRANSIENT);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& ODateModel::getInfoHelper()
-{
-    return *const_cast<ODateModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
