@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.107 $
+#   $Revision: 1.108 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-03 11:32:39 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:05:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.107 $$"
+LIBSMKREV!:="$$Revision: 1.108 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
@@ -57,15 +57,8 @@ COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
 CONNECTIVITYLIB=-lconnectivity
 LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
-DVOSUTILLIBST=-ldvosutil
-DUNOUTILLIBST=-ldunoutil
-DVCLUTILLIBST=-ldvclutil
 BPICONVLIB=-lbpiconv
 TOOLSLIB=-ltl$(OFFICEUPD)$(DLLPOSTFIX)
-# make sure some ancient libs are empty
-OSLLIB=
-RTLLIB=
-TECLIB=
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
 .INCLUDE .IGNORE : ucbhelper$/version.mk
@@ -86,16 +79,10 @@ BTSTRPLIB=-lbtstrp
 BTSTRPDTLIB=-lbootstrpdt$(OFFICEUPD)$(DLLPOSTFIX)
 SOLDEPLIB=-lsoldep$(OFFICEUPD)$(DLLPOSTFIX)
 TRANSEXLIB=-ltransex
-IOTXLIB=
 OTXLIB=-lotx_ind
 OSXLIB=-losx
-UNOLIB=-luno$(OFFICEUPD)$(DLLPOSTFIX)
 UNOTOOLSLIB=-lutl$(OFFICEUPD)$(DLLPOSTFIX)
-UCRLIB=-lucr$(OFFICEUPD)$(DLLPOSTFIX)
-UASLIB=-luas$(OFFICEUPD)$(DLLPOSTFIX)
-USRLIB=-lusr$(OFFICEUPD)$(DLLPOSTFIX)
 SOTLIB=-lsot$(OFFICEUPD)$(DLLPOSTFIX)
-ONELIB=-lone$(OFFICEUPD)$(DLLPOSTFIX)
 MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
 MOZBASELIB=-lnspr4 -lxpcom
 .IF "$(WITH_OPENLDAP)" == "YES"
@@ -103,12 +90,8 @@ LDAPSDKLIB=-lldap
 .ELSE
 LDAPSDKLIB=-lldap50
 .ENDIF
-ONELIB=
-UNOLIB=
-SVLIB=-lvcl$(OFFICEUPD)$(DLLPOSTFIX)
 ICOLIB=-lico$(OFFICEUPD)$(DLLPOSTFIX)
-VCLLIBST=-lvcl
-VCLLIB=$(SVLIB)
+VCLLIB=-lvcl$(OFFICEUPD)$(DLLPOSTFIX)
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
 BASEBMPLIB=-lbasebmp$(OFFICEUPD)$(DLLPOSTFIX)
 CANVASTOOLSLIB=-lcanvastools$(OFFICEUPD)$(DLLPOSTFIX)
@@ -125,7 +108,6 @@ FREETYPELIBST=$(FREETYPE_LIBS)
 FREETYPELIB=-lfreetype
 FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
 .ENDIF
-XPLIB=-l_xp
 TKLIB=-ltk$(OFFICEUPD)$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(OFFICEUPD)$(DLLPOSTFIX)
 XMLSECLIB=-lxmlsec1
@@ -141,11 +123,6 @@ COMMUNILIB=-lcommuni$(OFFICEUPD)$(DLLPOSTFIX)
 BTCOMMUNILIB=-lbtcommuni$(OFFICEUPD)$(DLLPOSTFIX)
 AUTOMATIONLIB=-lsts$(OFFICEUPD)$(DLLPOSTFIX)
 SVLLIB=-lsvl$(OFFICEUPD)$(DLLPOSTFIX)
-SVMEMLIB=
-SVUNZIPLIB=-lsvunzip
-SVUNZIPDLL=-lzip$(OFFICEUPD)$(DLLPOSTFIX)
-PLUGCTORLIB=-lplugctor
-# PLUGCTORLIB=
 SO2LIB=-lso$(OFFICEUPD)$(DLLPOSTFIX)
 TKTLIB=-ltkt$(OFFICEUPD)$(DLLPOSTFIX)
 SJLIB=-lj$(OFFICEUPD)$(DLLPOSTFIX)_g
@@ -153,8 +130,6 @@ GOODIESLIB=-lgo$(OFFICEUPD)$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(OFFICEUPD)$(DLLPOSTFIX)
 BASICLIB=-lsb$(OFFICEUPD)$(DLLPOSTFIX)
-BASICLIGHTLIB=-lsbl$(OFFICEUPD)$(DLLPOSTFIX)
-SDBLIB=-lsdb$(OFFICEUPD)$(DLLPOSTFIX)
 DBTOOLSLIB=-ldbtools$(OFFICEUPD)$(DLLPOSTFIX)
 HM2LIBSH=-lhmwrpdll
 HM2LIBST=-lhmwrap
@@ -210,21 +185,11 @@ SVXLLIB=-lsvxl
 CHAOSLIB=-lcnt$(OFFICEUPD)$(DLLPOSTFIX)
 UUILIB=-luui$(OFFICEUPD)$(DLLPOSTFIX)
 DGLIB=
-SIMLIB=-lysim
 SCHLIB=-lysch
 SMLIB=-lysm
-SBALIB=-lsbawrap
-#SBALIB=-lsba$(OFFICEUPD)$(DLLPOSTFIX)
 OFALIB=-lofa$(OFFICEUPD)$(DLLPOSTFIX)
-SETUPLIB=-lset$(OFFICEUPD)$(DLLPOSTFIX)
-SCHEDLIB=-lss$(OFFICEUPD)$(DLLPOSTFIX)
-SSLLIB=-lssl$(OFFICEUPD)$(DLLPOSTFIX)
-SSCLIB=-lssc$(OFFICEUPD)$(DLLPOSTFIX)
-SSWLIB=-lssw$(OFFICEUPD)$(DLLPOSTFIX)
 PRXLIB=-llprx2$(OFFICEUPD)$(DLLPOSTFIX)
-TRACERLIB=-ltrc$(OFFICEUPD)$(DLLPOSTFIX)
 PAPILIB=-lpap$(OFFICEUPD)$(DLLPOSTFIX)
-TRCLIB=$(TRACERLIB)
 SCLIB=-lsclib
 SDLIB=-lsdlib
 SDLLIB=-lsdl
@@ -234,7 +199,6 @@ ISCLIB=-lsc$(OFFICEUPD)$(DLLPOSTFIX)
 ISDLIB=-lsd$(OFFICEUPD)$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
-SSOOPTLIB=-lssoopt$(OFFICEUPD)$(DLLPOSTFIX)
 JVMACCESSLIB = -ljvmaccess$(COMID)
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
 .IF "$(SYSTEM_LIBXML)"=="YES"
@@ -277,7 +241,7 @@ USED_VCL_LIBS =		$(SOTLIB) $(TOOLSLIB) $(USED_UNO_LIBS)
 
 # Applikationen
 USED_BOOTSTRP_LIBS= $(TOOLSLIB)
-USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) $(UNOLIB) \
+USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) \
                     $(USED_UNO_LIBS)
 
 .ELSE				# "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
@@ -304,45 +268,23 @@ ODBCBASELIB=iodbcbase.lib
 DBFILELIB=ifile$(OFFICEUPD).lib
 TOOLSLIB=itools.lib
 TOOLSLIBST=atools.lib
-DVOSUTILLIBST=dvosutil.lib
-DUNOUTILLIBST=dunoutil.lib
-DVCLUTILLIBST=dvclutil.lib
 BPICONVLIB=bpiconv.lib
 SALLIB=isal.lib
-# make sure some ancient libs are empty
-OSLLIB=
-RTLLIB=
-TECLIB=
 VOSLIB=ivos.lib
-UNOLIB=iuno.lib
 UNOTOOLSLIB=iutl.lib
 RMCXTLIB=irmcxt.lib
 XMLOFFLIB=ixo.lib
 XMLOFFLLIB=xol.lib
 STORELIB=istore.lib
-IOTXLIB=iotx.lib
 OTXLIB=otx_ind.lib
 OSXLIB=osx.lib
 REGLIB=ireg.lib
-UCRLIB=ucr.lib
-UASLIB=uas.lib
 EXTLIB=iext.lib
-USRLIB=usr.lib
 SOTLIB=sot.lib
-ONELIB=one.lib
 MOZBASELIBST=nspr4_s.lib xpcombase_s.lib
 MOZBASELIB=nspr4.lib xpcom.lib
 LDAPSDKLIB=nsldap32v50.lib
-ONELIB=
-UNOLIB=
 PAPILIB=ipap.lib
-TRACERLIB=itrc.lib
-TRCLIB=$(TRACERLIB)
-SETUPLIB=iset.lib
-SCHEDLIB=ss.lib
-SSCLIB=ssc.lib
-SSLLIB=ssl.lib
-SSWLIB=ssw.lib
 SFX2LIB=sfx.lib
 SFXLIB=$(SFX2LIB)
 FWELIB=ifwe.lib
@@ -368,16 +310,11 @@ COMMUNILIB=icommuni.lib
 BTCOMMUNILIB=ibtcommuni.lib
 AUTOMATIONLIB=ists.lib
 SVLLIB=isvl.lib
-PLUGCTORLIB=plugctor.lib
 PLUGAPPLIB=plugapp.lib
-SVMEMLIB=svmem.lib
-SVUNZIPLIB=svunzip.lib
-SVUNZIPDLL=unzipdll.lib
 GOODIESLIB=igo.lib
 MAILLIB=mail.lib
 DOCMGRLIB=docmgr.lib
 BASICLIB=basic.lib
-BASICLIGHTLIB=basicl.lib
 SO2LIB=so2.lib
 TKTLIB=tkt.lib
 SJLIB=sj.lib
@@ -385,7 +322,6 @@ SVXLIB=isvx.lib
 BASCTLLIB=basctl.lib
 BASICIDELIB=ybctl.lib
 SVXLLIB=svxl.lib
-SDBLIB=sdb.lib
 DBTOOLSLIB=idbtools.lib
 HM2LIBSH=hmwrpdll.lib
 HM2LIBST=hmwrap.lib
@@ -402,10 +338,8 @@ CURLLIB=libcurl.lib
 CHAOSLIB=ichaos.lib
 UUILIB=iuui.lib
 DGLIB=
-SIMLIB=ysim.lib
 SCHLIB=ysch.lib
 SMLIB=ysm.lib
-SBALIB=sbawrap.lib
 OFALIB=aofa.lib
 SCLIB=sclib.lib
 SDLIB=sdlib.lib
@@ -415,8 +349,7 @@ PRXLIB=ilprx2.lib
 ISWLIB=_sw.lib
 ISCLIB=sci.lib
 ISDLIB=sdi.lib
-SVLIB=ivcl.lib
-VCLLIB=$(SVLIB)
+VCLLIB=ivcl.lib
 BASEGFXLIB=ibasegfx.lib
 BASEBMPLIB=ibasebmp.lib
 CANVASTOOLSLIB=icanvastools.lib
@@ -428,7 +361,6 @@ FREETYPELIB=freetype.lib
 FREETYPELIBST=freetype.lib
 PKGCHKLIB=ipkgchk.lib
 SYSSHELLLIB=sysshell.lib
-SSOOPTLIB=issoopt$(OFFICEUPD)$(DLLPOSTFIX).lib
 JVMACCESSLIB = ijvmaccess.lib
 CPPUNITLIB = cppunit.lib
 XML2LIB = libxml2.lib
