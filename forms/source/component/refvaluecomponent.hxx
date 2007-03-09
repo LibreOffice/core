@@ -4,9 +4,9 @@
  *
  *  $RCSfile: refvaluecomponent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:56:13 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:34:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,9 +102,8 @@ namespace frm
         virtual sal_Bool SAL_CALL convertFastPropertyValue(
                     ::com::sun::star::uno::Any& _rConvertedValue, ::com::sun::star::uno::Any& _rOldValue, sal_Int32 _nHandle, const ::com::sun::star::uno::Any& _rValue )
                     throw (::com::sun::star::lang::IllegalArgumentException);
-        virtual void fillProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+        virtual void describeFixedProperties(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
         ) const;
         using ::cppu::OPropertySetHelper::getFastPropertyValue;
 

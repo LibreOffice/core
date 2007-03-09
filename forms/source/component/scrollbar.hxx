@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrollbar.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:56:36 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:34:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ namespace frm
     //= OScrollBarModel
     //====================================================================
     class OScrollBarModel   :public OBoundControlModel
-                            ,public ::comphelper::OAggregationArrayUsageHelper< OScrollBarModel >
     {
     private:
         // <properties>
@@ -74,12 +73,9 @@ namespace frm
         // XPropertyState
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const;
 
-        // XPropertySet and related helpers
-        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-        ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-        virtual void fillProperties(
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+        // OControlModel's property handling
+        virtual void describeFixedProperties(
+            ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
         ) const;
 
         // OPropertySetHelper
@@ -109,7 +105,6 @@ namespace frm
         using OBoundControlModel::disposing;
         using OBoundControlModel::getFastPropertyValue;
 
-        IMPLEMENT_INFO_SERVICE()
     };
 //........................................................................
 } // namespacefrm
