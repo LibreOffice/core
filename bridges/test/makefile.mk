@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:30:54 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:49:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,8 +111,7 @@ APP2STDLIBS+= -lstdc++
 APP2STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
-            $(SALLIB)	\
-            $(LIBCIMT) 
+            $(SALLIB)
 
 APP3TARGET=	testclient
 APP3OBJS=	$(OBJ)$/testclient.obj \
@@ -125,8 +124,7 @@ APP3STDLIBS+= -lstdc++
 APP3STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
-            $(SALLIB)	\
-            $(LIBCIMT) 
+            $(SALLIB)
 
 #----------------------------------
 
@@ -141,8 +139,7 @@ APP4STDLIBS+= -lstdc++
 APP4STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
-            $(SALLIB)	\
-            $(LIBCIMT) 
+            $(SALLIB)
 
 APP4DEF=	$(MISC)$/$(APP4TARGET).def
 
@@ -159,8 +156,7 @@ APP4DEF=	$(MISC)$/$(APP4TARGET).def
 # APP5STDLIBS+=	\
 # 			$(CPPULIB)	\
 # 			$(CPPUHELPERLIB)\
-# 			$(SALLIB)	\
-# 			$(LIBCIMT) 
+# 			$(SALLIB)
 
 # APP5DEF=	$(MISC)$/$(APP5TARGET).def
 
