@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.191 $
+#   $Revision: 1.192 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:58:16 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:05:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,38 +82,6 @@ SUBDIRSDEPS=$(RC_SUBDIRSDEPS)
 .ENDIF			# "$(YACCTARGET)"!=""
 
 .IF "$(nodep)"==""
-.IF "$(TESTOBJECTS)"!=""
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB1OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB2OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB3OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB4OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB5OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB6OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB7OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB8OBJFILES:s/.obj/.dpcc/)))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(LIB9OBJFILES:s/.obj/.dpcc/)))
-
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL1OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL2OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL3OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL4OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL5OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL6OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL7OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL8OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(SLO)$/,$(MISC)$/s_ $(SHL9OBJS:s/.obj/.dpcc/))
-
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP1OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP2OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP3OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP4OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP5OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP6OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP7OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP8OBJS:s/.obj/.dpcc/))
-DEPFILES_TEST+=$(subst,$(OBJ)$/,$(MISC)$/o_ $(APP9OBJS:s/.obj/.dpcc/))
-DEPFILESx+=$(uniq $(DEPFILES_TEST))
-.ENDIF			# "$(TESTOBJECTS)"!=""
 
 .IF "$(L10N_framework)"==""
 DEPFILESx+:=$(subst,$(SLO)$/,$(MISC)$/s_ $(subst,$(OBJ)$/,$(MISC)$/o_ $(DEPOBJFILES:s/.obj/.dpcc/)))
@@ -142,24 +110,6 @@ DEPCOLLECT_OBJ!:=$(uniq $(DEPCOLLECT_OBJ))
 DEPFILE_OBJ+:=$(MISC)$/all_$(TARGET).dpobj
 .ENDIF			# "$(DEPCOLLECT_OBJ)"!=""
 .ENDIF			# "$(nodep)"==""
-
-.IF "$(TESTOBJECTS)"!=""
-.IF "$(strip $(DEPFILES_TEST))"!=""
-.IF "$(DEPFILES)"=="$(strip $(DEPFILESx))"
-something_wrong_with_objects :
-    @echo --------------------------------------------------
-    @echo make sure that every object appears in either	
-    @echo     OBJFILES,
-    @echo     SLOFILES
-    @echo  or DEPOBJFILES
-    @echo --------------------------------------------------
-#	@echo ooo$(strip $(DEPFILES_TEST))ooo
-#	@echo $(DEPFILES)
-#	@echo $(DEPFILESx)
-    force_dmake_to_error
-.ENDIF			# "$(DEPFILES)"!="$(strip $(DEPFILESX))"
-.ENDIF			# "$(DEPFILES_TEST)"!=""
-.ENDIF			# "$(TESTOBJECTS)"!=""
 
 .IF "$(depend)" == ""
 
