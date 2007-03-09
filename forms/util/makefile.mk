@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:21:11 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:53:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@ USE_DEFFILE=TRUE
 
 .INCLUDE :	settings.mk
 
-LDUMP=ldump2.exe
-
 # --- Library -----------------------------------
 # --- frm ---------------------------------------
 LIB1TARGET=$(SLB)$/forms.lib
@@ -64,8 +62,6 @@ SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
 SHL1STDLIBS= \
         $(SALLIB) \
-        $(OSLLIB) \
-        $(ONELIB) \
         $(CPPULIB) \
         $(CPPUHELPERLIB) \
         $(TOOLSLIB) \
@@ -125,16 +121,12 @@ SHL1STDLIBS +=\
 
 # --- Filter-Datei ---
 
-.IF "$(depend)"==""
-
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo ------------------------------
-    @echo CLEAR_THE_FILE			> $@
-    @echo __CT				    >>$@
+    @echo __CT				    >$@
     @echo createRegistryInfo    >>$@
     @echo queryInterface        >>$@
     @echo queryAggregation      >>$@
     @echo NavigationToolBar     >>$@
     @echo ONavigationBar        >>$@
-.ENDIF
 
