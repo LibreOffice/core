@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxbsds.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:00:58 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:07:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,10 +78,6 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=$(PICSWITCH)
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -150,10 +146,8 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBCUIST=-lm
 STDLIBGUIMT=-lX11 -lpthread -lm
 STDLIBCUIMT=-lpthread -lm
-STDLIBGUIST=-lX11 -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -lpthread -lm
 STDSHLCUIMT=-lpthread -lm
