@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtflde.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2007-02-01 09:16:25 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:03:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,6 +539,8 @@ private:
     const ::rtl::OUString sPropertyValue;
     const ::rtl::OUString sPropertyVariableName;
     const ::rtl::OUString sPropertyVariableSubType;
+    const ::rtl::OUString sPropertyHelp;
+    const ::rtl::OUString sPropertyTooltip;
 
     const ::rtl::OUString sEmpty;
 
