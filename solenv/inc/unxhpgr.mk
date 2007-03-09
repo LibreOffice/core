@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxhpgr.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:01:20 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:08:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,8 +64,6 @@ CFLAGS=-nostdinc -c
 CFLAGSCC=-pipe -fguiding-decls $(ARCH_FLAGS)
 CFLAGSCXX=-pipe -fguiding-decls $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=$(PICSWITCH)
@@ -102,8 +100,6 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST= -lX11 -lXext -lsec -lcxx -ldld -lm
-STDLIBCUIST= -lsec -lcxx -ldld -lm
 #STDLIBGUIMT= -lX11 -lXext -lcma -lsec -lcxx -ldld -lc_r -lm
 STDLIBGUIMT= -lX11 -lXext -ldce
 STDLIBCUIMT= -lc_r -lgcc -ldce

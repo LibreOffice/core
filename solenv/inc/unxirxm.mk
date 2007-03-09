@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirxm.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:01:52 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:08:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,6 @@ CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
 # 1682    ...is only partially overridden in class...
 CFLAGSCC=	-Xcpluscomm -woff 1009,1021,1107,1110,1155,1171,1183,1185,1188,1233,1234,1257,1440,1516,1681,1682 $(ARCH_FLAGS)
 CFLAGSCXX=	-woff 1009,1021,1107,1110,1155,1171,1183,1185,1188,1233,1234,1257,1440,1516,1681,1682 $(ARCH_FLAGS)
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=
@@ -113,9 +111,6 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-# STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
-STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIST=	$(DYNAMIC) -lc -lm
 # STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
 STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
 STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lc -lm
