@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-03 17:33:57 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:59:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@ SLOFILES= \
     $(SLO)$/KDriver.obj     \
     $(SLO)$/KServices.obj
 
+DEPOBJFILES= \
+    $(SLO2FILES)
+
 # --- Library -----------------------------------
 
 SHL1VERSIONMAP=$(TARGET).map
@@ -68,7 +71,6 @@ SHL1OBJS=$(SLOFILES)
 SHL1STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
-    $(OSLLIB)                   \
     $(SALLIB)
 
 SHL1DEPN=
@@ -110,7 +112,6 @@ SHL2STDLIBS=\
     $(CPPULIB)                  \
     $(CPPUHELPERLIB)            \
     $(VOSLIB)                   \
-    $(OSLLIB)                   \
     $(SALLIB)                   \
     $(DBTOOLSLIB)               \
     $(COMPHELPERLIB)            \
