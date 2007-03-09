@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:53:12 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:32:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -958,42 +958,16 @@ namespace frm
         ::osl::MutexGuard aGuard(m_aMutex);
         SetURL( getString(rEvt.NewValue) );
     }
-    // -----------------------------------------------------------------------------
-    PropertyState OClickableImageBaseModel::getPropertyStateByHandle(sal_Int32 nHandle)
-    {
-        PropertyState eState;
-        switch (nHandle)
-        {
-            case PROPERTY_ID_DISPATCHURLINTERNAL:
-                if ( m_bDispatchUrlInternal )
-                    eState = PropertyState_DIRECT_VALUE;
-                else
-                    eState = PropertyState_DEFAULT_VALUE;
-                break;
-            default:
-                eState = OControlModel::getPropertyStateByHandle(nHandle);
-        }
-        return eState;
-    }
-    // -----------------------------------------------------------------------------
-    void OClickableImageBaseModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
-    {
-        switch (nHandle)
-        {
-            case PROPERTY_ID_DISPATCHURLINTERNAL:
-                setFastPropertyValue(nHandle, makeAny(sal_False));
-                break;
-            default:
-                OControlModel::setPropertyToDefaultByHandle(nHandle);
-        }
-    }
+
     // -----------------------------------------------------------------------------
     Any OClickableImageBaseModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
     {
         switch (nHandle)
         {
-            case PROPERTY_ID_DISPATCHURLINTERNAL:
-                return makeAny(sal_False);
+            case PROPERTY_ID_BUTTONTYPE             : return makeAny( FormButtonType_PUSH );
+            case PROPERTY_ID_TARGET_URL             :
+            case PROPERTY_ID_TARGET_FRAME           : return makeAny( ::rtl::OUString() );
+            case PROPERTY_ID_DISPATCHURLINTERNAL    : return makeAny( sal_False );
             default:
                 return OControlModel::getPropertyDefaultByHandle(nHandle);
         }
