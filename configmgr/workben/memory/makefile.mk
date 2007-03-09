@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:05:43 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:48:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,10 +64,6 @@ APPSTDLIBS=\
 # 
 # APP1STDLIBS+=$(STDLIBCPP)
 # 
-# .IF "$(GUI)"=="WNT"
-# APP1STDLIBS+=$(LIBCIMT)
-# .ENDIF
-# 
 # APP1TARGET= $(TARGET)
 # APP1OBJS=	\
 # 	  $(SLO)$/cfgapi2.obj	\
@@ -80,10 +76,6 @@ APPSTDLIBS=\
 APP2STDLIBS = $(APPSTDLIBS)
 
 APP2STDLIBS+= $(STDLIBCPP)
-
-.IF "$(GUI)"=="WNT"
-APP2STDLIBS+= $(LIBCIMT)
-.ENDIF
 
 # CFLAGS+=-DWITHOUTAPI
 
