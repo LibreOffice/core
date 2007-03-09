@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GroupBox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:50:56 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:26:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,24 +116,9 @@ OGroupBoxModel::~OGroupBoxModel()
 IMPLEMENT_DEFAULT_CLONING( OGroupBoxModel )
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OGroupBoxModel::getPropertySetInfo() throw(RuntimeException)
+void OGroupBoxModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
-    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-cppu::IPropertyArrayHelper& OGroupBoxModel::getInfoHelper()
-{
-    return *const_cast<OGroupBoxModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void OGroupBoxModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
-{
-    OControlModel::fillProperties( _rProps, _rAggregateProps );
+    OControlModel::describeAggregateProperties( _rAggregateProps );
     // don't want to have the TabStop property
     RemoveProperty(_rAggregateProps, PROPERTY_TABSTOP);
 }

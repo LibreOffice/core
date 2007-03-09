@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Hidden.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:51:26 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:27:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,24 +147,9 @@ sal_Bool OHiddenModel::convertFastPropertyValue(
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OHiddenModel::getPropertySetInfo() throw(RuntimeException)
+void OHiddenModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
-    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-cppu::IPropertyArrayHelper& OHiddenModel::getInfoHelper()
-{
-    return *const_cast<OHiddenModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void OHiddenModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
-{
-    BEGIN_DESCRIBE_AGGREGATION_PROPERTIES(4, m_xAggregateSet)
+    BEGIN_DESCRIBE_BASE_PROPERTIES(4)
         DECL_PROP2(CLASSID,         sal_Int16,          READONLY, TRANSIENT);
         DECL_PROP1(HIDDEN_VALUE,    ::rtl::OUString,    BOUND);
         DECL_PROP1(NAME,            ::rtl::OUString,    BOUND);
