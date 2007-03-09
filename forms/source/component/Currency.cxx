@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:47:46 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:22:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -213,16 +213,7 @@ StringSequence SAL_CALL OCurrencyModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OCurrencyModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void OCurrencyModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
         // Value auf transient setzen
@@ -231,12 +222,6 @@ void OCurrencyModel::fillProperties(
         DECL_PROP3(DEFAULT_VALUE,       double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& OCurrencyModel::getInfoHelper()
-{
-    return *const_cast<OCurrencyModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
