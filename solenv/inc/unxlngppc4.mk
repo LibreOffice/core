@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngppc4.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: ihi $ $Date: 2006-08-22 13:18:37 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:10:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,11 +84,6 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX= -fsigned-char -pipe -frtti $(ARCH_FLAGS)
 
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-PICSWITCH:=-fPIC
-CFLAGSOBJGUIST=$(PICSWITCH)
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=$(PICSWITCH)
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -177,10 +172,8 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBCUIST=-ldl -lm
 STDLIBGUIMT=-lX11 -ldl -lpthread -lm
 STDLIBCUIMT=-ldl -lpthread -lm
-STDLIBGUIST=-lX11 -ldl -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm
 STDSHLCUIMT=-ldl -lpthread -lm
