@@ -4,9 +4,9 @@
  *
  *  $RCSfile: richtextmodel.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:11:29 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,18 +285,6 @@ namespace frm
         OControlModel::disposing();
     }
 
-    //--------------------------------------------------------------------
-    Reference< XPropertySetInfo > SAL_CALL ORichTextModel::getPropertySetInfo() throw ( RuntimeException )
-    {
-        return createPropertySetInfo( getInfoHelper() );
-    }
-
-    //--------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper& SAL_CALL ORichTextModel::getInfoHelper()
-    {
-        return *const_cast< ORichTextModel* >( this )->getArrayHelper();
-    }
-
     //------------------------------------------------------------------------------
     namespace
     {
@@ -317,9 +305,7 @@ namespace frm
         }
     }
     //------------------------------------------------------------------------------
-    void ORichTextModel::fillProperties(
-            Sequence< Property >& _rProps,
-            Sequence< Property >& _rAggregateProps ) const
+    void ORichTextModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )
             DECL_PROP2( TABINDEX,       sal_Int16,  BOUND,    MAYBEDEFAULT );
@@ -333,16 +319,18 @@ namespace frm
         Sequence< Property > aFontProperties;
         describeFontRelatedProperties( aFontProperties );
 
+        _rProps = concatSequences( aContainedProperties, aFontProperties, _rProps );
+    }
+
+    //------------------------------------------------------------------------------
+    void ORichTextModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
+    {
+        OControlModel::describeAggregateProperties( _rAggregateProps );
+
         // our aggregate (the SvxUnoText) declares a FontDescriptor property, as does
         // our FormControlFont base class. We remove it from the base class' sequence
         // here, and later on care for both instances being in sync
         lcl_removeProperty( _rAggregateProps, PROPERTY_FONT );
-
-        _rProps = concatSequences(
-            aContainedProperties,
-            aFontProperties,
-            _rProps
-        );
     }
 
     //--------------------------------------------------------------------
