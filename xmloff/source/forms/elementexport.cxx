@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementexport.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:33:50 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:05:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1159,7 +1159,7 @@ namespace xmloff
 
                 exportedProperty( PROPERTY_REPEAT_DELAY );
 
-            #ifdef DBG_UTIL
+            #if OSL_DEBUG_LEVEL > 0
                 //  reset the bit for later checking
                 m_nIncludeSpecial = m_nIncludeSpecial & ~SCA_REPEAT_DELAY;
             #endif
