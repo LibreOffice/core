@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigationbar.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:55:11 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:33:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,18 +372,6 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    Reference< XPropertySetInfo > SAL_CALL ONavigationBarModel::getPropertySetInfo() throw( RuntimeException )
-    {
-        return createPropertySetInfo( getInfoHelper() );
-    }
-
-    //------------------------------------------------------------------
-    ::cppu::IPropertyArrayHelper& SAL_CALL ONavigationBarModel::getInfoHelper()
-    {
-        return *getArrayHelper();
-    }
-
-    //------------------------------------------------------------------
     void SAL_CALL ONavigationBarModel::getFastPropertyValue( Any& _rValue, sal_Int32 _nHandle ) const
     {
         if ( isRegisteredProperty( _nHandle ) )
@@ -495,8 +483,7 @@ namespace frm
     }
 
     //------------------------------------------------------------------
-    void ONavigationBarModel::fillProperties( Sequence< Property >& /* [out] */ _rProps,
-        Sequence< Property >& /* [out] */ _rAggregateProps ) const
+    void ONavigationBarModel::describeFixedProperties( Sequence< Property >& _rProps ) const
     {
         BEGIN_DESCRIBE_PROPERTIES( 1, OControlModel )
             DECL_PROP2( TABINDEX,           sal_Int16,          BOUND, MAYBEDEFAULT );
