@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:43:31 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:03:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,8 +49,6 @@ ENABLE_EXCEPTIONS=TRUE
 
 SCRIPTFILES =	$(BIN)$/gengal
 
-CXXFILES=	gengal.cxx
-
 OBJFILES=	$(OBJ)$/gengal.obj
 
 .IF "$(GUI)"=="WNT"
@@ -62,8 +60,6 @@ APP1TARGET= $(TARGET).bin
 APP1OBJS=   $(OBJFILES)
 
 APP1STDLIBS=$(TOOLSLIB) 		\
-            $(OSLLIB)			\
-            $(ONELIB)			\
             $(VOSLIB)			\
             $(SO2LIB)			\
             $(SVTOOLLIB)		\
@@ -75,19 +71,14 @@ APP1STDLIBS=$(TOOLSLIB) 		\
             $(GOODIESLIB)		\
             $(SFXLIB)			\
             $(SOTLIB)			\
-            $(DLLIB)			\
-            $(SVLIB)			\
+            $(VCLLIB)			\
             $(UCBHELPERLIB)		\
             $(SVXLIB)
 
-.IF "$(GUI)"!="UNX"
-APP1DEF=	$(MISC)$/$(TARGET).def
-.ENDIF
-
-.IF "$(COM)"=="GCC"
-ADDOPTFILES=$(OBJ)$/gengal.obj
-add_cflagscxx="-frtti -fexceptions"
-.ENDIF
+#.IF "$(COM)"=="GCC"
+#ADDOPTFILES=$(OBJ)$/gengal.obj
+#add_cflagscxx="-frtti -fexceptions"
+#.ENDIF
 
 # --- Targets ------------------------------------------------------
 
