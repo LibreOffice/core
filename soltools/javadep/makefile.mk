@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 07:27:39 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:20:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ PRJ=..
 PRJNAME=soltools
 TARGET=javadep
 TARGETTYPE=CUI
-TARGETTHREAD=MT
 NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
