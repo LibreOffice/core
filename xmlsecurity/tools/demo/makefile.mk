@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2006-04-07 11:58:09 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:44:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ APP5OBJS= $(OBJ)$/util.obj	$(OBJ)$/performance.obj
 #
 PACKAGE=	    com$/sun$/star$/xml$/security$/eval
 JARFILES=       sandbox.jar ridl.jar jurt.jar unoil.jar juh.jar
-JAVAFILES:=     $(shell +ls *.java)
+JAVAFILES:=     $(shell ls *.java)
 JAVACLASSFILES= $(CLASSDIR)$/$(PACKAGE)$/JavaFlatFilter.class
 JARCLASSDIRS=   $(PACKAGE)
 JARTARGET=      jflatfilter.jar
