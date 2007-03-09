@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Columns.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:45:58 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:21:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,8 +144,7 @@ public:
     virtual void SAL_CALL read(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream);
 
     // XPropertySet
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() = 0;
     virtual void SAL_CALL getFastPropertyValue(::com::sun::star::uno::Any& rValue, sal_Int32 nHandle ) const;
     virtual sal_Bool SAL_CALL convertFastPropertyValue(::com::sun::star::uno::Any& rConvertedValue, ::com::sun::star::uno::Any& rOldValue,
                                           sal_Int32 nHandle, const ::com::sun::star::uno::Any& rValue )
@@ -155,8 +154,6 @@ public:
     using OPropertySetAggregationHelper::getFastPropertyValue;
 
     // ::com::sun::star::beans::XPropertyState
-    virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
-    virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
     virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
     // XCloneable
@@ -168,7 +165,7 @@ protected:
     static void clearAggregateProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps, sal_Bool bAllowDropDown);
     static void setOwnProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property>& seqProps);
 
-    virtual OGridColumn* createCloneColumn() const;
+    virtual OGridColumn* createCloneColumn() const = 0;
 };
 
 #define DECL_COLUMN(ClassName)                                      \
