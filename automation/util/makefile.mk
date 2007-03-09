@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:38:02 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:54:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ SHL1STDLIBS= \
             $(UNOTOOLSLIB) \
             $(SVTOOLLIB) \
             $(SVLLIB)       \
-            $(SVLIB) \
+            $(VCLLIB) \
             $(BASICLIB) \
             $(VOSLIB) \
             $(SALLIB) \
@@ -117,7 +117,7 @@ SHL3STDLIBS= \
             $(TOOLSLIB) \
             $(SVTOOLLIB) \
             $(SVLLIB)       \
-            $(SVLIB) \
+            $(VCLLIB) \
             $(BASICLIB) \
             $(VOSLIB) \
             $(SALLIB) \
@@ -166,7 +166,7 @@ APP1STDLIBS+= \
             $(UNOTOOLSLIB) \
             $(SVTOOLLIB) \
             $(SVLLIB) \
-            $(SVLIB) \
+            $(VCLLIB) \
             $(SALLIB) \
             $(SJLIB) \
             $(VOSLIB) \
@@ -233,7 +233,7 @@ APP3STDLIBS= \
             $(SALLIB) \
             $(TOOLSLIB) \
             $(SVTOOLLIB) \
-            $(SVLIB) \
+            $(VCLLIB) \
             $(SJLIB)
 
 .IF "$(GUI)"=="UNX"
