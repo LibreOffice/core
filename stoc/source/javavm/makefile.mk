@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:48:32 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:50:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,6 @@ SHL1VERSIONMAP = jen.map
 SHL1STDLIBS= \
         $(CPPUHELPERLIB) 	\
         $(CPPULIB)	    	\
-        $(UNOLIB)	    	\
         $(SALLIB) \
         $(JVMACCESSLIB) \
         $(SALHELPERLIB) \
