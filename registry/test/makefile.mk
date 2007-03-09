@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:36:06 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:55:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,13 +67,6 @@ SHL1STDLIBS=	\
                 $(SALLIB) \
                 $(SALHELPERLIB)	\
                 $(STDLIBCPP)
-
-.IF "$(GUI)" == "WNT"
-SHL1STDLIBS +=	\
-                $(LIBCMT) \
-                $(LIBCIMT)
-.ENDIF
-
 
 SHL1LIBS=	$(LIB1TARGET)
 SHL1DEPN=	$(LIB1TARGET)
