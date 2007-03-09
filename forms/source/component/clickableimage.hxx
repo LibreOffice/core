@@ -4,9 +4,9 @@
  *
  *  $RCSfile: clickableimage.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 12:53:56 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:32:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,8 +164,6 @@ namespace frm
         virtual void _propertyChanged(const ::com::sun::star::beans::PropertyChangeEvent&) throw(::com::sun::star::uno::RuntimeException);
 
         // XPropertyState
-        virtual ::com::sun::star::beans::PropertyState getPropertyStateByHandle(sal_Int32 nHandle);
-        virtual void setPropertyToDefaultByHandle(sal_Int32 nHandle);
         virtual ::com::sun::star::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const;
 
         // XImageProducer
