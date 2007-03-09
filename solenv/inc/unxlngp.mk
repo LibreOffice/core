@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngp.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:02:48 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:09:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,8 +69,6 @@ CFLAGSCXX += -fexceptions
 .ENDIF
 PICSWITCH:=-fPIC
 #STDOBJVCL=$(L)$/salmain.o
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=$(PICSWITCH)
@@ -130,8 +128,6 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=-Bdynamic -lcrypt -ldl -lm -lgcc -lc /nw386/dev/s/solenv/unxlngp/lib/gcc-lib/i586-pc-linux-gnu/egcs-2.90.29/crtend.o /nw386/dev/s/solenv/unxlngp/usr/lib/crtn.o 
-STDLIBCUIST=-Bdynamic -lcrypt -ldl -lm -lgcc -lc /nw386/dev/s/solenv/unxlngp/lib/gcc-lib/i586-pc-linux-gnu/egcs-2.90.29/crtend.o /nw386/dev/s/solenv/unxlngp/usr/lib/crtn.o
 STDLIBGUIMT=-Bdynamic -lcrypt -ldl -lpthread -lm -lgcc -lc /nw386/dev/s/solenv/unxlngp/lib/gcc-lib/i586-pc-linux-gnu/egcs-2.90.29/crtend.o /nw386/dev/s/solenv/unxlngp/usr/lib/crtn.o
 STDLIBCUIMT=-Bdynamic -lcrypt -ldl -lpthread -lm -lgcc -lc /nw386/dev/s/solenv/unxlngp/lib/gcc-lib/i586-pc-linux-gnu/egcs-2.90.29/crtend.o /nw386/dev/s/solenv/unxlngp/usr/lib/crtn.o
 STDSHLGUIMT=-Bdynamic -lX11 -lXext -lcrypt -ldl -lpthread -lm -lgcc -lc /nw386/dev/s/solenv/unxlngp/lib/gcc-lib/i586-pc-linux-gnu/egcs-2.90.29/crtend.o /nw386/dev/s/solenv/unxlngp/usr/lib/crtn.o
