@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:35:01 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:05:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,8 @@ namespace xmloff
 
         try
         {
-            Reference< XPropertyState > xPropertyState(m_xProps, UNO_QUERY);
+            Reference< XPropertyState > xPropertyState( m_xProps, UNO_QUERY );
+            Reference< XPropertySetInfo > xPSI( m_xProps->getPropertySetInfo() );
 
             Any aValue;
             ::rtl::OUString sValue;
@@ -163,8 +164,13 @@ namespace xmloff
     #if OSL_DEBUG_LEVEL > 0
                 const ::rtl::OUString sPropertyName = *aProperty; (void)sPropertyName;
     #endif
-                // if the property state is DEFAULT, it does not need to be written
-                if (xPropertyState.is() && (PropertyState_DEFAULT_VALUE == xPropertyState->getPropertyState(*aProperty)))
+                // if the property state is DEFAULT, it does not need to be written - at least
+                // if it's a built-in property, and not a dynamically-added one.
+                bool bIsDefaultValue =    xPropertyState.is()
+                                    &&  ( PropertyState_DEFAULT_VALUE == xPropertyState->getPropertyState( *aProperty ) );
+                bool bIsDynamicProperty =  xPSI.is()
+                                        && ( ( xPSI->getPropertyByName( *aProperty ).Attributes & PropertyAttribute::REMOVEABLE ) != 0 );
+                if ( bIsDefaultValue && !bIsDynamicProperty )
                     continue;
 
                 // now that we have the first sub-tag we need the form:properties element
@@ -176,13 +182,6 @@ namespace xmloff
 
                 // get the value
                 aValue = m_xProps->getPropertyValue(*aProperty);
-
-                if (sal_False)
-                {
-                    ::rtl::OUString sTemp;
-                    aValue >>= sTemp;
-                    aValue <<= makeAny(Sequence< ::rtl::OUString >(&sTemp, 1));
-                }
 
                 // the type to export
                 Type aExportType;
