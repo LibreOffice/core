@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxirxm3.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:02:02 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:08:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,10 +59,6 @@ CDEFS+= -DSTLPORT_VERSION=0x450 -D_USE_NAMESPACE=1 -DNEW_SOLAR
 CFLAGSCC=$(ARCH_FLAGS)
 CFLAGSCXX=      -LANG:ansi-for-init-scope=OFF -LANG:std=ON -LANG:libc_in_namespace_std=ON $(ARCH_FLAGS)
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -106,12 +102,11 @@ LINK= CC
 LINKFLAGS=      -L/usr/lib32 -Wl,-no_unresolved
 LINKVERSIONMAPFLAG= -Wl,-exports_file
 
-.IF "$(TARGETTHREAD)"=="MT"
 LINKFLAGSAPPGUI= $(THREADLIB)
 LINKFLAGSAPPCUI= $(THREADLIB)
 LINKFLAGSSHLGUI= $(THREADLIB)
 LINKFLAGSSHLCUI= $(THREADLIB)
-.ENDIF
+
 LINKFLAGSAPPGUI+= -Wl,-multigot
 LINKFLAGSAPPCUI+= -Wl,-multigot
 LINKFLAGSSHLGUI+= -shared
@@ -135,8 +130,6 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=    $(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIST=    $(DYNAMIC) -lc -lm
 STDLIBGUIMT=    $(THREADLIB) $(DYNAMIC) -lX11 -lm -lc
 STDLIBCUIMT=    $(THREADLIB) $(DYNAMIC) -lc -lm
 STDSHLGUIMT=    -L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lm -lc
