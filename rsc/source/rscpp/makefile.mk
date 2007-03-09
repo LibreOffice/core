@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2006-02-28 16:17:13 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:32:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,6 @@
 PRJ=..$/..
 
 TARGETTYPE=CUI
-TARGETTHREAD=ST
 NO_DEFAULT_STL=TRUE
 
 PRJNAME=rsc
