@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:57:00 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:00:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,12 +74,6 @@ UNOTYPES=\
     com.sun.star.linguistic2.XThesaurus
 
 
-.IF "$(header)" == ""
-
-EXCEPTIONSFILES=	\
-        $(SLO)$/sprophelp.obj\
-        $(SLO)$/sspellimp.obj
-
 SLOFILES=	\
         $(SLO)$/sprophelp.obj\
         $(SLO)$/sreg.obj\
@@ -91,7 +85,6 @@ SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
 SHL1STDLIBS= \
         $(CPPULIB) 	 \
         $(CPPUHELPERLIB) 	 \
-        $(UNOLIB)		\
         $(VOSLIB)		\
         $(TOOLSLIB)		\
         $(SVTOOLLIB)	\
@@ -114,12 +107,7 @@ SHL1VERSIONMAP= $(TARGET).map
 
 # build DEF file
 DEF1NAME	 =$(SHL1TARGET)
-#DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME =$(TARGET)
-#DEF1DES     =Linguistic2 main DLL
 DEF1EXPORTFILE=	exports.dxp
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
