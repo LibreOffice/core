@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:47:07 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:20:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,22 +163,7 @@ StringSequence SAL_CALL OCheckBoxModel::getSupportedServiceNames() throw(::com::
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL OCheckBoxModel::getPropertySetInfo() throw(RuntimeException)
-{
-    Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-cppu::IPropertyArrayHelper& OCheckBoxModel::getInfoHelper()
-{
-    return *const_cast<OCheckBoxModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void OCheckBoxModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void OCheckBoxModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 1, OReferenceValueComponent )
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
