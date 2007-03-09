@@ -82,7 +82,7 @@ $(ZIP1DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP1TARGETN) : delzip
+$(ZIP1TARGETN) : delzip $(ZIP1DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -199,7 +199,7 @@ $(ZIP2DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP2TARGETN) : delzip
+$(ZIP2TARGETN) : delzip $(ZIP2DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -316,7 +316,7 @@ $(ZIP3DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP3TARGETN) : delzip
+$(ZIP3TARGETN) : delzip $(ZIP3DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -433,7 +433,7 @@ $(ZIP4DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP4TARGETN) : delzip
+$(ZIP4TARGETN) : delzip $(ZIP4DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -550,7 +550,7 @@ $(ZIP5DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP5TARGETN) : delzip
+$(ZIP5TARGETN) : delzip $(ZIP5DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -667,7 +667,7 @@ $(ZIP6DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP6TARGETN) : delzip
+$(ZIP6TARGETN) : delzip $(ZIP6DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -784,7 +784,7 @@ $(ZIP7DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP7TARGETN) : delzip
+$(ZIP7TARGETN) : delzip $(ZIP7DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -901,7 +901,7 @@ $(ZIP8DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP8TARGETN) : delzip
+$(ZIP8TARGETN) : delzip $(ZIP8DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -1018,7 +1018,7 @@ $(ZIP9DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP9TARGETN) : delzip
+$(ZIP9TARGETN) : delzip $(ZIP9DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
@@ -1135,7 +1135,7 @@ $(ZIP10DEPFILE) :
     @echo $@ : makefile.mk >> $(MISC)$/$(@:f)
 
 
-$(ZIP10TARGETN) : delzip
+$(ZIP10TARGETN) : delzip $(ZIP10DEPS)
     @echo ------------------------------
     @echo Making: $@
     @@$(!eq,$?,$(?:s/delzip/zzz/) -$(RM) echo) $(uniq $@ $(subst,$(COMMON_OUTDIR),$(OUTPATH) $@))
