@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsogi.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:04:36 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:11:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,6 @@ CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX= -pipe $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
 
-CFLAGSOBJGUIST=
-CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
 CFLAGSOBJCUIMT=
 CFLAGSSLOGUIMT=$(PICSWITCH)
@@ -114,17 +112,12 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=$(DYNAMIC) -lm
-STDLIBCUIST=$(DYNAMIC) -lm
 STDLIBGUIMT=$(DYNAMIC) -lpthread -lthread -lm
 STDLIBCUIMT=$(DYNAMIC) -lpthread -lthread -lm
 # libraries for linking shared libraries
-STDSHLGUIST=$(DYNAMIC) -lm
-STDSHLCUIST=$(DYNAMIC) -lm
 STDSHLGUIMT=$(DYNAMIC) -lpthread -lthread -lm
 STDSHLCUIMT=$(DYNAMIC) -lpthread -lthread -lm
 
-STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
 
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
