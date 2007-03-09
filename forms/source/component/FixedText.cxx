@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FixedText.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:49:35 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:25:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,24 +114,9 @@ StringSequence SAL_CALL OFixedTextModel::getSupportedServiceNames() throw(::com:
 }
 
 //------------------------------------------------------------------------------
-Reference<starbeans::XPropertySetInfo> SAL_CALL OFixedTextModel::getPropertySetInfo() throw(RuntimeException)
+void OFixedTextModel::describeAggregateProperties( Sequence< Property >& _rAggregateProps ) const
 {
-    Reference<starbeans::XPropertySetInfo> xInfo(createPropertySetInfo(getInfoHelper()));
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-cppu::IPropertyArrayHelper& OFixedTextModel::getInfoHelper()
-{
-    return *const_cast<OFixedTextModel*>(this)->getArrayHelper();
-}
-
-//------------------------------------------------------------------------------
-void OFixedTextModel::fillProperties(
-        Sequence< starbeans::Property >& _rProps,
-        Sequence< starbeans::Property >& _rAggregateProps ) const
-{
-    OControlModel::fillProperties( _rProps, _rAggregateProps );
+    OControlModel::describeAggregateProperties( _rAggregateProps );
     RemoveProperty( _rAggregateProps, PROPERTY_TABSTOP );
 }
 
