@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 08:27:40 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:51:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,21 +75,7 @@ APP6STDLIBS= \
         $(SALLIB)	
 #		$(UNOLIB)
 
-.IF "$(GUI)"=="WNT"
-APP6STDLIBS+=	$(LIBCIMT)
-.ENDIF
-
-#ALLIDLFILES:=
-
 # --- Target ------------------------------------------------
-
-.IF "$(depend)" == ""
-#ALL : 		unoheader	\
-#		ALLTAR
-ALL : 		ALLTAR
-.ELSE
-ALL: 		ALLDEP
-.ENDIF
 
 .INCLUDE :	target.mk
 
