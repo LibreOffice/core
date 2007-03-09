@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngr.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:03:30 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:10:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,10 +83,6 @@ CFLAGSCXX=$(ARCH_FLAGS)
 
 PICSWITCH:=-fpic
 
-# Compiler flags for compiling static object in single threaded environment with graphical user interface
-CFLAGSOBJGUIST=
-# Compiler flags for compiling static object in single threaded environment with character user interface
-CFLAGSOBJCUIST=
 # Compiler flags for compiling static object in multi threaded environment with graphical user interface
 CFLAGSOBJGUIMT=
 # Compiler flags for compiling static object in multi threaded environment with character user interface
@@ -150,10 +146,8 @@ STDOBJCUI=
 STDSLOCUI=
 
 # libraries for linking applications
-STDLIBCUIST=-ldl -lm -lstlport_gcc
 STDLIBGUIMT=-ldl -lpthread -lm -lstlport_gcc
 STDLIBCUIMT=-ldl -lpthread -lm -lstlport_gcc
-STDLIBGUIST=-lX11 -ldl -lm
 # libraries for linking shared libraries
 STDSHLGUIMT=-lX11 -lXext -ldl -lpthread -lm -lstlport_gcc
 STDSHLCUIMT=-ldl -lpthread -lm -lstlport_gcc
