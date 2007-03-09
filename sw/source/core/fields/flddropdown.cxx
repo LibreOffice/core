@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddropdown.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:12:06 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:15:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,7 +83,7 @@ SwDropDownField::SwDropDownField(SwFieldType * pTyp)
 SwDropDownField::SwDropDownField(const SwDropDownField & rSrc)
     : SwField(rSrc.GetTyp(), rSrc.GetFormat(), rSrc.GetLanguage()),
       aValues(rSrc.aValues), aSelectedItem(rSrc.aSelectedItem),
-      aName(rSrc.aName)
+      aName(rSrc.aName), aHelp(rSrc.aHelp), aToolTip(rSrc.aToolTip)
 {
 }
 
@@ -175,6 +175,16 @@ const String & SwDropDownField::GetName() const
     return aName;
 }
 
+const String & SwDropDownField::GetHelp() const
+{
+    return aHelp;
+}
+
+const String & SwDropDownField::GetToolTip() const
+{
+    return aToolTip;
+}
+
 BOOL SwDropDownField::SetSelectedItem(const String & rItem)
 {
     vector<String>::const_iterator aIt =
@@ -193,6 +203,16 @@ void SwDropDownField::SetName(const String & rName)
     aName = rName;
 }
 
+void SwDropDownField::SetHelp(const String & rHelp)
+{
+    aHelp = rHelp;
+}
+
+void SwDropDownField::SetToolTip(const String & rToolTip)
+{
+    aToolTip = rToolTip;
+}
+
 BOOL SwDropDownField::QueryValue(css::uno::Any &rVal, BYTE nMId)
     const
 {
@@ -204,6 +224,12 @@ BOOL SwDropDownField::QueryValue(css::uno::Any &rVal, BYTE nMId)
         break;
     case FIELD_PROP_PAR2:
         rVal <<= rtl::OUString(GetName());
+        break;
+    case FIELD_PROP_PAR3:
+        rVal <<= rtl::OUString(GetHelp());
+        break;
+    case FIELD_PROP_PAR4:
+        rVal <<= rtl::OUString(GetToolTip());
         break;
     case FIELD_PROP_STRINGS:
         rVal <<= GetItemSequence();
@@ -237,6 +263,24 @@ BOOL SwDropDownField::PutValue(const css::uno::Any &rVal,
             ::GetString( rVal, aTmpStr );
 
             SetName(aTmpStr);
+        }
+        break;
+
+    case FIELD_PROP_PAR3:
+        {
+            String aTmpStr;
+            ::GetString( rVal, aTmpStr );
+
+            SetHelp(aTmpStr);
+        }
+        break;
+
+    case FIELD_PROP_PAR4:
+        {
+            String aTmpStr;
+            ::GetString( rVal, aTmpStr );
+
+            SetToolTip(aTmpStr);
         }
         break;
 
