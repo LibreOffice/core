@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Currency.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:36:05 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:22:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ namespace frm
 //==================================================================
 class OCurrencyModel
                 :public OEditBaseModel
-                ,public ::comphelper::OAggregationArrayUsageHelper< OCurrencyModel >
 {
     ::com::sun::star::uno::Any          m_aSaveValue;
 
@@ -64,19 +63,13 @@ public:
     IMPLEMENTATION_NAME(OCurrencyModel);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(::com::sun::star::uno::RuntimeException);
-    virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
-
     // ::com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException);
 
-    // OAggregationArrayUsageHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-    IMPLEMENT_INFO_SERVICE()
+    // OControlModel's property handling
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
 
 protected:
     // OBoundControlModel overridables
