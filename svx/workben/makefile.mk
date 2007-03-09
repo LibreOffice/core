@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:44:00 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:03:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,16 +49,12 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	edittest.cxx
-
 OBJFILES=	$(OBJ)$/edittest.obj
 
 APP1TARGET= $(TARGET)
 APP1OBJS=	$(OBJFILES)
-APP1LIBS=	$(LB)/svx.lib $(LB)/dl.lib
+APP1LIBS=	$(LB)$/svx.lib
 APP1STDLIBS=$(TOOLSLIB) 		\
-            $(OSLLIB)			\
-            $(ONELIB)			\
             $(VOSLIB)			\
             $(SO2LIB)			\
             $(SVTOOLLIB)		\
@@ -70,74 +66,16 @@ APP1STDLIBS=$(TOOLSLIB) 		\
             $(GOODIESLIB)		\
             $(SFXLIB)			\
             $(SOTLIB)			\
-            $(DLLIB)			\
-            $(SVLIB)
-
-.IF "$(GUI)"!="UNX"
-APP1DEF=	$(MISC)$/$(TARGET).def
-.ENDIF
+            $(VCLLIB)
 
 
-.IF "$(COM)"=="GCC"
-ADDOPTFILES=$(OBJ)$/edittest.obj
-add_cflagscxx="-frtti -fexceptions"
-.ENDIF
+#.IF "$(COM)"=="GCC"
+#ADDOPTFILES=$(OBJ)$/edittest.obj
+#add_cflagscxx="-frtti -fexceptions"
+#.ENDIF
 
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-
-# ------------------------------------------------------------------
-# MAC
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISC)$/$(TARGET).def: makefile
-    echo Kein Def-File fuer Applikationen auf Mac
-.ENDIF
-
-
-# ------------------------------------------------------------------
-# Windows
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "WIN"
-
-$(MISC)$/$(TARGET).def: makefile
-    echo  NAME			$(TARGET)							>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-    echo  EXETYPE		WINDOWS 						   >>$@
-    echo  STUB			'winSTUB.EXE'                      >>$@
-    echo  PROTMODE										   >>$@
-    echo  CODE			PRELOAD MOVEABLE DISCARDABLE	   >>$@
-    echo  DATA			PRELOAD MOVEABLE MULTIPLE		   >>$@
-    echo  HEAPSIZE		8192							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-.ENDIF
-
-# ------------------------------------------------------------------
-# OS2
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-$(MISC)$/$(TARGET).def: makefile
-    echo  NAME			$(TARGET) WINDOWAPI 				>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-.IF "$(COM)" != "BLC"
-    echo  STUB			'os2STUB.EXE'                      >>$@
-.ENDIF
-.IF "$(COM)"!="MTW"
-    echo  EXETYPE		OS2 							   >>$@
-.ENDIF
-    echo  PROTMODE										   >>$@
-    echo  CODE			LOADONCALL						   >>$@
-    echo  DATA			PRELOAD MULTIPLE				   >>$@
-    echo  HEAPSIZE		16384							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-.ENDIF
