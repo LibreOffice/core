@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:42:19 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:44:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,16 +55,17 @@ APP1OBJS=		$(SLO)$/login.obj					\
                 $(SLO)$/lockhelper.obj				\
                 $(SLO)$/transactionmanager.obj
 
+DEPOBJFILES=$(APP1OBJS)
+
 APP1STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
                 $(SALLIB)							\
                 $(VOSLIB)							\
                 $(TOOLSLIB) 						\
                 $(SVTOOLLIB)						\
                 $(TKLIB)							\
                 $(COMPHELPERLIB)					\
-                $(SVLIB)
+                $(VCLLIB)
 
 APP1DEPN=		$(SLO)$/servicemanager.obj
 
