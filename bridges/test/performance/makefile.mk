@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:32:07 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:49:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,8 +62,7 @@ APP1STDLIBS+=	\
             $(CPPULIB)	\
             $(CPPUHELPERLIB)	\
             $(VOSLIB)	\
-            $(SALLIB)	\
-            $(LIBCIMT) 
+            $(SALLIB)
 
 APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
