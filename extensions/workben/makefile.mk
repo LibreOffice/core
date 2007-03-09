@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 21:02:03 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:42:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -88,14 +88,11 @@ OBJFILES=	$(OBJ)$/testpgp.obj
 
 APP1TARGET=	testpgp
 APP1OBJS=	$(OBJFILES)
-APP1STDLIBS=$(USRLIB)		\
+APP1STDLIBS= \
             $(CPPUHELPERLIB)\
             $(CPPULIB)		\
             $(VOSLIB)		\
             $(SALLIB)
-
-APP1DEPN=	$(L)$/usr.lib
-APP1DEF=	$(MISC)$/$(APP1TARGET).def
 
 .ENDIF # testpgp
 
@@ -108,13 +105,10 @@ OBJFILES=	$(OBJ)$/testcomponent.obj
 
 APP2TARGET = testcomponent
 APP2OBJS   = $(OBJ)$/testcomponent.obj
-APP2STDLIBS = $(UNOLIB) \
+APP2STDLIBS = \
               $(VOSLIB) \
-              $(USRLIB) \
               $(TOOLSLIB)	\
-              $(SALLIB) \
-              $(RTLLIB) \
-              $(ONELIB)
+              $(SALLIB)
 
 .ENDIF # testcomponent
 
@@ -128,13 +122,7 @@ OBJFILES=	$(OBJ)$/pythontest.obj
 #APP4TARGET=	pythontest
 #APP4OBJS=	$(OBJ)$/pythontest.obj 
 #APP4STDLIBS=$(TOOLSLIB)		\
-#			$(USRLIB)		\
-#			$(UNOLIB)		\
-#			$(VOSLIB)		\
-#			$(RTLLIB)
-
-#APP1DEPN=	$(LB)$/one.lib
-#APP4DEF=	$(MISC)$/$(APP4TARGET).def
+#			$(VOSLIB)
 
 .ENDIF # phytontest
 
@@ -148,11 +136,7 @@ OBJFILES=	$(OBJ)$/pythonautotest.obj
 #APP5TARGET= pythonautotest
 #APP5OBJS = $(OBJ)$/pythonautotest.obj
 #APP5STDLIBS=$(TOOLSLIB)		\
-#			$(USRLIB)		\
-#			$(UNOLIB)		\
-#			$(VOSLIB)		\
-#			$(RTLLIB)
-#APP5DEF=	$(MISC)$/$(APP5TARGET).def
+#			$(VOSLIB)
 
 .ENDIF # phytonautotest
 
@@ -172,13 +156,7 @@ APP2TARGET=	testresource
 APP2OBJS=	$(OBJ)$/testresource.obj
 APP2STDLIBS=$(TOOLSLIB)		\
             $(VCLLIB)		\
-            $(ONELIB)		\
-            $(USRLIB)		\
-            $(UNOLIB)		\
-            $(SALLIB) \
-            $(RTLLIB)
-
-APP2DEF=	$(MISC)$/$(APP3TARGET).def
+            $(SALLIB)
 
 .ENDIF # testresource
 
@@ -192,19 +170,13 @@ OBJFILES=	$(OBJ)$/testframecontrol.obj
 APP3TARGET=	testframecontrol
 APP3OBJS=	$(OBJ)$/testframecontrol.obj
 APP3STDLIBS=$(TOOLSLIB)		\
-            $(ONELIB)		\
-            $(USRLIB)		\
-            $(UNOLIB)		\
             $(VOSLIB)		\
-            $(OSLLIB)		\
-            $(RTLLIB)		\
             $(SVTOOLLIB)	\
             $(VCLLIB)
-
-APP3DEF=	$(MISC)$/$(APP3TARGET).def
 
 .ENDIF # testframecontrol
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
