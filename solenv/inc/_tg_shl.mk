@@ -150,8 +150,8 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -166,20 +166,20 @@ $(USE_SHL1VERSIONMAP): $(SHL1VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL1OBJS)"!=""
-    +-echo $(foreach,i,$(SHL1OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL1OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL1LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL1LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
@@ -410,14 +410,6 @@ $(SHL1TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -582,8 +574,8 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -598,20 +590,20 @@ $(USE_SHL2VERSIONMAP): $(SHL2VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL2OBJS)"!=""
-    +-echo $(foreach,i,$(SHL2OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL2OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL2LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL2LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
@@ -842,14 +834,6 @@ $(SHL2TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -1014,8 +998,8 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -1030,20 +1014,20 @@ $(USE_SHL3VERSIONMAP): $(SHL3VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL3OBJS)"!=""
-    +-echo $(foreach,i,$(SHL3OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL3OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL3LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL3LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
@@ -1274,14 +1258,6 @@ $(SHL3TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -1446,8 +1422,8 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -1462,20 +1438,20 @@ $(USE_SHL4VERSIONMAP): $(SHL4VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL4OBJS)"!=""
-    +-echo $(foreach,i,$(SHL4OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL4OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL4LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL4LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
@@ -1706,14 +1682,6 @@ $(SHL4TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -1878,8 +1846,8 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -1894,20 +1862,20 @@ $(USE_SHL5VERSIONMAP): $(SHL5VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL5OBJS)"!=""
-    +-echo $(foreach,i,$(SHL5OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL5OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL5LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL5LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
@@ -2138,14 +2106,6 @@ $(SHL5TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -2310,8 +2270,8 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -2326,20 +2286,20 @@ $(USE_SHL6VERSIONMAP): $(SHL6VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL6OBJS)"!=""
-    +-echo $(foreach,i,$(SHL6OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL6OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL6LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL6LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
@@ -2570,14 +2530,6 @@ $(SHL6TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -2742,8 +2694,8 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -2758,20 +2710,20 @@ $(USE_SHL7VERSIONMAP): $(SHL7VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL7OBJS)"!=""
-    +-echo $(foreach,i,$(SHL7OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL7OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL7LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL7LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
@@ -3002,14 +2954,6 @@ $(SHL7TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -3174,8 +3118,8 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -3190,20 +3134,20 @@ $(USE_SHL8VERSIONMAP): $(SHL8VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL8OBJS)"!=""
-    +-echo $(foreach,i,$(SHL8OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL8OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL8LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL8LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
@@ -3434,14 +3378,6 @@ $(SHL8TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -3606,8 +3542,8 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -3622,20 +3558,20 @@ $(USE_SHL9VERSIONMAP): $(SHL9VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL9OBJS)"!=""
-    +-echo $(foreach,i,$(SHL9OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL9OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL9LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL9LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
@@ -3866,14 +3802,6 @@ $(SHL9TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
@@ -4038,8 +3966,8 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
-    @+-$(RM) -f $@.symregexp >& $(NULLDEV)
-    @+-$(RM) -f $@.expsymlist >& $(NULLDEV)
+    @-$(RM) -f $@.symregexp >& $(NULLDEV)
+    @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
 
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
@@ -4054,20 +3982,20 @@ $(USE_SHL10VERSIONMAP): $(SHL10VERSIONMAP)
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
-    +-cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
+    -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
 
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL10OBJS)"!=""
-    +-echo $(foreach,i,$(SHL10OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -echo $(foreach,i,$(SHL10OBJS:s/.obj/.o/) $i) | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 .IF "$(SHL10LIBS)"!=""	
-    +-$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
+    -$(TYPE) $(foreach,j,$(SHL10LIBS) $j) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g | xargs -n1 nm -gx | $(SOLARENV)$/bin$/addsym-macosx.sh $@.symbols-regexp $(MISC)$/symbols-regexp.tmp >> $@.exported-symbols
 .ENDIF
 # overwrite the map file generate into the local output tree with the generated 
 # exported symbols list
-    +cp $@.exported-symbols $@ 
+    cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
 
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
@@ -4298,14 +4226,6 @@ $(SHL10TARGETN) : \
 .ENDIF			# "$(UNIXVERSIONNAMES)"!=""
     @ls -l $@
 .ENDIF			# "$(GUI)" == "UNX"
-.IF "$(TARGETTHREAD)"!="MT"
-    @echo ----------------------------------------------------------
-    @echo -
-    @echo - THREAD WARNING! - this library was linked single threaded 
-    @echo - and must not be used in any office installation!
-    @echo -
-    @echo ----------------------------------------------------------
-.ENDIF			# "$(TARGETTHREAD)"!="MT"
 
 .IF "$(TESTDIR)"!=""
 .IF "$(NO_TESTS)"==""
