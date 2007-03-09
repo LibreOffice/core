@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormComponent.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:47:35 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,8 @@
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE5_HXX_
-#include <cppuhelper/implbase5.hxx>
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XCONTROL_HPP_
 #include <com/sun/star/awt/XControl.hpp>
@@ -135,12 +135,18 @@
 #ifndef _COM_SUN_STAR_FORM_VALIDATION_XVALIDATABLEFORMCOMPONENT_HPP_
 #include <com/sun/star/form/validation/XValidatableFormComponent.hpp>
 #endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCONTAINER_HPP_
+#include <com/sun/star/beans/XPropertyContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
+#include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
 #include <comphelper/propagg.hxx>
 #endif
-#ifndef _COMPHELPER_PROPERTY_ARRAY_HELPER_HXX_
-#include <comphelper/proparrhlp.hxx>
+#ifndef COMPHELPER_PROPERTYBAG_HXX
+#include <comphelper/propertybag.hxx>
 #endif
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
@@ -192,10 +198,6 @@ namespace frm
     #define IMPLEMENTATION_NAME(ImplName)                                       \
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException) \
         { return ::rtl::OUString::createFromAscii("com.sun.star.comp.forms.") + ::rtl::OUString::createFromAscii(#ImplName); }
-
-    // macro for overriding the getInfoServive method of OAggregationArrayUsageHelper
-    #define IMPLEMENT_INFO_SERVICE()    \
-    virtual IPropertyInfoService* getInfoService() const { return &s_aPropInfos; }
 
 //=========================================================================
 //= OControl
@@ -369,11 +371,13 @@ protected:
 //= OControlModel
 //= model of a form layer control
 //==================================================================
-typedef ::cppu::ImplHelper5 <   ::com::sun::star::form::XFormComponent
+typedef ::cppu::ImplHelper7 <   ::com::sun::star::form::XFormComponent
                             ,   ::com::sun::star::io::XPersistObject
                             ,   ::com::sun::star::container::XNamed
                             ,   ::com::sun::star::lang::XServiceInfo
                             ,   ::com::sun::star::util::XCloneable
+                            ,   ::com::sun::star::beans::XPropertyContainer
+                            ,   ::com::sun::star::beans::XPropertyAccess
                             >   OControlModel_BASE;
 
 
@@ -390,6 +394,10 @@ protected:
 
     InterfaceRef                    m_xParent;                  // ParentComponent
     OImplementationIdsRef           m_aHoldIdHelper;
+    ::comphelper::OPropertyArrayAggregationHelper*
+                                    m_pPropertyArrayHelper;
+    ::comphelper::PropertyBag
+                                    m_aDynamicProperties;
 
     static ConcretInfoService s_aPropInfos;
 
@@ -447,12 +455,6 @@ protected:
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > getAggregateServiceNames();
 
-    // OPropertySetAggregationHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
-
 public:
     DECLARE_UNO3_AGG_DEFAULTS(OControl, OComponentHelper);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
@@ -507,9 +509,58 @@ public:
 // XCloneable
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::util::XCloneable > SAL_CALL createClone(  ) throw (::com::sun::star::uno::RuntimeException) = 0;
 
+// XPropertyContainer
+    virtual void SAL_CALL addProperty( const ::rtl::OUString& Name, ::sal_Int16 Attributes, const ::com::sun::star::uno::Any& DefaultValue ) throw (::com::sun::star::beans::PropertyExistException, ::com::sun::star::beans::IllegalTypeException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeProperty( const ::rtl::OUString& Name ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::NotRemoveableException, ::com::sun::star::uno::RuntimeException);
+
+// XPropertyAccess
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL getPropertyValues(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setPropertyValues( const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aProps ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    using OPropertySetAggregationHelper::setPropertyValues;
+
 protected:
     virtual void writeAggregate( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& _rxOutStream ) const;
     virtual void readAggregate( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& _rxInStream );
+
+protected:
+    // XPropertySet
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw( ::com::sun::star::uno::RuntimeException);
+    // OPropertySetHelper
+    virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper();
+
+    /** returns the IPropertyArrayHelper instance used by |this|
+    */
+    ::comphelper::OPropertyArrayAggregationHelper& impl_ts_getArrayHelper() const;
+
+    /** finds a free property handle
+        @param _rPropertyName
+            the name of the property to find a handle for. If possible, the handle as determined by
+            our ConcretInfoService instance will be used
+    */
+    sal_Int32   impl_findFreeHandle( const ::rtl::OUString& _rPropertyName );
+
+    /** describes the properties provided by this class, or its respective
+        derived class
+
+        Derived classes usually call the base class first, and then append own properties.
+    */
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
+
+    /** describes the properties of our aggregate
+
+        The default implementation simply asks m_xAggregateSet for its properties.
+
+        You usually only need to overload this method if you want to filter the aggregate
+        properties.
+    */
+    virtual void describeAggregateProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
+    ) const;
+
+private:
+    void    impl_invalidatePropertySetInfo();
 };
 
 //==================================================================
@@ -717,14 +768,14 @@ protected:
             the name of the value property
         @param _nValuePropertyExternalHandle
             the handle of the property, as exposed to external components.<br/>
-            Normally, this information can be obtained dynamically (e.g. from fillProperties),
+            Normally, this information can be obtained dynamically (e.g. from describeFixedProperties),
             but since this method is to be called from within the constructor of derived classes,
             we prefer to be on the *really* safe side here ....
 
         @see setControlValue
         @see suspendValueListening
         @see resumeValueListening
-        @see fillProperties
+        @see describeFixedProperties
     */
     void                    initValueProperty(
                                 const ::rtl::OUString& _rValuePropertyName,
@@ -963,11 +1014,10 @@ protected:
         return m_xField.is();
     }
 
-    // OPropertySetAggregationHelper
-    virtual void fillProperties(
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
-        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
-        ) const;
+    // OControlModel's property handling
+    virtual void describeFixedProperties(
+        ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps
+    ) const;
 
 public:
     // UNO Anbindung
