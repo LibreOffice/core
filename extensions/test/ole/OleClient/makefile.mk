@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 12:45:58 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:40:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    $(LIBCIMT) 	\
     user32.lib	\
     $(COMPATH)$/atlmfc$/lib$/atls.lib \
     kernel32.lib \
