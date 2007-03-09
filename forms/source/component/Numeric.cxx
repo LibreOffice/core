@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Numeric.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:52:20 $
+ *  last change: $Author: obo $ $Date: 2007-03-09 13:29:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,27 +165,12 @@ StringSequence ONumericModel::getSupportedServiceNames() throw()
 }
 
 //------------------------------------------------------------------------------
-Reference<XPropertySetInfo> SAL_CALL ONumericModel::getPropertySetInfo() throw( RuntimeException )
-{
-    Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
-    return xInfo;
-}
-
-//------------------------------------------------------------------------------
-void ONumericModel::fillProperties(
-        Sequence< Property >& _rProps,
-        Sequence< Property >& _rAggregateProps ) const
+void ONumericModel::describeFixedProperties( Sequence< Property >& _rProps ) const
 {
     BEGIN_DESCRIBE_PROPERTIES( 2, OEditBaseModel )
         DECL_PROP3(DEFAULT_VALUE,   double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
     END_DESCRIBE_PROPERTIES();
-}
-
-//------------------------------------------------------------------------------
-::cppu::IPropertyArrayHelper& ONumericModel::getInfoHelper()
-{
-    return *const_cast<ONumericModel*>(this)->getArrayHelper();
 }
 
 //------------------------------------------------------------------------------
