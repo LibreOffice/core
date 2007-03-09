@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-10-19 11:49:34 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:03:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ APP1STDLIBS=	$(CPPULIB)			\
                 $(SALLIB)			\
                 $(VOSLIB)			\
                 $(SOTLIB)			\
-                $(SVLIB)			\
+                $(VCLLIB)			\
                 $(SVXLIB)			\
                 $(SFXLIB)
 
@@ -76,6 +76,5 @@ APP1STDLIBS=	$(CPPULIB)			\
 
 # --- Targets ------------------------------------------------------
 
-ALL :   ALLTAR 
-
 .INCLUDE :	target.mk
+
