@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:01:43 $
+#   last change: $Author: obo $ $Date: 2007-03-09 08:43:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,42 +39,33 @@ TARGET=				test
 LIBTARGET=			NO
 ENABLE_EXCEPTIONS=	TRUE
 USE_DEFFILE=		TRUE
-NO_BSYMBOLIC=		TRUE
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
-
-.IF "$(COM)"=="ICC"
-LINKFLAGS+=/SEGMENTS:1024 /PACKD:32768
-.ENDIF
 
 # --- applikation: "test" --------------------------------------------------
 
 #APP1TARGET= 	test
 
 #APP1OBJS=		$(SLO)$/test.obj
+#DEPOBJFILES+= $(APP1OBJS)
 
 #APP1LIBS=		$(SLB)$/fwk_classes.lib				\
 #				$(SLB)$/fwk_helper.lib
 
 #APP1STDLIBS=	$(CPPULIB)							\
 #				$(CPPUHELPERLIB)					\
-#				$(OSLLIB)							\
 #				$(SALLIB)							\
 #				$(VOSLIB)							\
 #				$(TOOLSLIB) 						\
 #				$(SVTOOLLIB)						\
 #				$(TKLIB)							\
 #				$(COMPHELPERLIB)					\
-#				$(SVLIB)
+#				$(VCLLIB)
 
 #APP1DEPN=		$(SLB)$/fwk_helper.lib				\
 #				$(SLB)$/fwk_classes.lib
-
-#.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-#APP1DEF=		$(MISC)$/test.def
-#.ENDIF
 
 # --- application: "threadtest" --------------------------------------------------
 
@@ -89,12 +80,13 @@ APP2OBJS=		$(SLO)$/threadtest.obj				\
                 $(SLO)$/readguard.obj				\
                 $(SLO)$/writeguard.obj
 
+DEPOBJFILES+= $(APP2OBJS)
+
 APP2STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
-                $(OSLLIB)							\
                 $(SALLIB)							\
                 $(VOSLIB)							\
-                $(SVLIB)
+                $(VCLLIB)
 
 APP2DEPN=		$(SLO)$/fairrwlock.obj				\
                 $(SLO)$/transactionmanager.obj		\
@@ -104,10 +96,7 @@ APP2DEPN=		$(SLO)$/fairrwlock.obj				\
                 $(SLO)$/readguard.obj				\
                 $(SLO)$/writeguard.obj
 
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS2"
-APP2DEF=		$(MISC)$/threadtest.def
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
+
