@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxscoi.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2006-07-05 22:04:24 $
+#   last change: $Author: obo $ $Date: 2007-03-09 09:11:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,6 @@ CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX=-fguiding-decls -frtti $(ARCH_FLAGS)
 PICSWITCH:=-fPIC
-CFLAGSOBJGUIST=$(PICSWITCH)
-CFLAGSOBJCUIST=$(PICSWITCH)
 CFLAGSOBJGUIMT=$(PICSWITCH)
 CFLAGSOBJCUIMT=$(PICSWITCH)
 CFLAGSSLOGUIMT=$(PICSWITCH)
@@ -108,8 +106,6 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-STDLIBGUIST=-lXext -lX11 -ldl -lsocket -lm
-STDLIBCUIST=-ldl -lsocket -lm
 .IF "$(PRJNAME)"=="rsc"
 STDLIBGUIMT=-lXext -lX11 $(STATIC) -lpthread $(DYNAMIC) -ldl -lsocket -lm
 STDLIBCUIMT=$(STATIC) -lpthread $(DYNAMIC) -ldl -lsocket -lm 
