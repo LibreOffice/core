@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2006-11-24 16:20:34 $
+#   last change: $Author: obo $ $Date: 2007-03-12 15:50:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -81,7 +81,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.28 $ ';
+my $id_str = ' $Revision: 1.29 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1011,7 +1011,8 @@ sub relink_cws_action
         }
         # copy all wanted output trees
         $sync_dir::do_keepzip = 1;
-        sync_dir::set_excludelist( \@added_modules );
+        sync_dir::set_excludelist( \@added_modules ); # omit added modules
+        sync_dir::addto_excludelist(["instset_native", "instsetoo_native"]); # omit instset* modules
         my $btarget = "finalize";
         foreach my $platform ( @found_platforms )
         {
