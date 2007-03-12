@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:52:39 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 15:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -853,9 +853,15 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
 
     // create source Picture
     int nDepth = m_pVDev ? m_pVDev->GetDepth() : rSalVis.GetDepth();
-    const X11SalBitmap& rSrcX11Bmp = reinterpret_cast<const X11SalBitmap&>( rSrcBitmap );
+    const X11SalBitmap& rSrcX11Bmp = static_cast<const X11SalBitmap&>( rSrcBitmap );
     ImplSalDDB* pSrcDDB = rSrcX11Bmp.ImplGetDDB( hDrawable_, m_nScreen, nDepth, rTR );
     if( !pSrcDDB )
+        return false;
+
+    //#i75249# workaround for ImplGetDDB() giving us back a different depth than
+    // we requested. E.g. mask pixmaps are always compatible with the drawable
+    // TODO: find an appropriate picture format for these cases
+    if( nDepth != pSrcDDB->ImplGetDepth() )
         return false;
 
     Pixmap aSrcPM = pSrcDDB->ImplGetPixmap();
