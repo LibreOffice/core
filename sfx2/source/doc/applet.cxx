@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applet.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:38:16 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 11:00:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #include "sfxdlg.hxx"
 #include "sfxsids.hrc"
 
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "cppuhelper/factory.hxx"
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <sj2/sjapplet.hxx>
@@ -97,11 +99,73 @@ SfxItemPropertyMap aAppletPropertyMap_Impl[] =
     {0,0,0,0,0,0}
 };
 
-SFX_IMPL_XSERVICEINFO( AppletObject, "com.sun.star.embed.SpecialEmbeddedObject", "com.sun.star.comp.sfx2.AppletObject" )
-SFX_IMPL_SINGLEFACTORY( AppletObject );
+::rtl::OUString AppletObject::getImplementationName()
+    throw( ::com::sun::star::uno::RuntimeException )
+{
+    return impl_getStaticImplementationName();
+}
 
-AppletObject::AppletObject( const uno::Reference < lang::XMultiServiceFactory >& rFact )
-    : mxFact( rFact )
+::sal_Bool AppletObject::supportsService( const ::rtl::OUString& sServiceName )
+    throw( ::com::sun::star::uno::RuntimeException )
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > seqServiceNames =
+          getSupportedServiceNames();
+    const ::rtl::OUString* pArray = seqServiceNames.getConstArray();
+    for ( ::sal_Int32 nCounter=0; nCounter<seqServiceNames.getLength();
+          nCounter++ )
+    {
+        if ( pArray[nCounter] == sServiceName )
+        {
+            return sal_True ;
+        }
+    }
+    return sal_False ;
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString >
+AppletObject::getSupportedServiceNames()
+    throw( ::com::sun::star::uno::RuntimeException )
+{
+    return impl_getStaticSupportedServiceNames();
+}
+
+::com::sun::star::uno::Sequence< ::rtl::OUString >
+AppletObject::impl_getStaticSupportedServiceNames()
+{
+    ::com::sun::star::uno::Sequence< ::rtl::OUString > seqServiceNames( 1 );
+    seqServiceNames.getArray() [0] = ::rtl::OUString::createFromAscii(
+        "com.sun.star.embed.SpecialEmbeddedObject" );
+    return seqServiceNames ;
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+AppletObject::impl_createInstance(
+    const ::com::sun::star::uno::Reference<
+    ::com::sun::star::uno::XComponentContext >& xContext )
+    throw( ::com::sun::star::uno::Exception )
+{
+    return static_cast< ::cppu::OWeakObject * >( new AppletObject( xContext ) );
+}
+
+::rtl::OUString AppletObject::impl_getStaticImplementationName()
+{
+    return ::rtl::OUString::createFromAscii(
+        "com.sun.star.comp.sfx2.AppletObject" );
+}
+
+::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+AppletObject::impl_createFactory()
+{
+    return uno::Reference< uno::XInterface >(
+        cppu::createSingleComponentFactory(
+            impl_createInstance, impl_getStaticImplementationName(),
+            impl_getStaticSupportedServiceNames() ),
+        uno::UNO_QUERY_THROW );
+}
+
+AppletObject::AppletObject(
+    const uno::Reference < uno::XComponentContext >& rContext )
+    : mxContext( rContext )
     , maPropSet( aAppletPropertyMap_Impl )
     , mpApplet( NULL )
     , mbMayScript( FALSE )
@@ -159,7 +223,7 @@ throw( uno::RuntimeException )
             maCmdList.Append( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "mayscript" ) ), String() );
 
         INetURLObject aDocBase( maDocBase );
-        mpApplet->Init( pWin, aDocBase, maCmdList );
+        mpApplet->Init( mxContext, pWin, aDocBase, maCmdList );
         uno::Reference < awt::XWindow > xWindow( pWin->GetComponentInterface(), uno::UNO_QUERY );
 
         // we must destroy the applet before the parent is destroyed
