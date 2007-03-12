@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-15 13:31:41 $
+#   last change: $Author: obo $ $Date: 2007-03-12 10:40:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@ SECONDARY_PACKAGE = org$/hsqldb$/lib
 # --- Files --------------------------------------------------------  
 
 
-JARFILES = ridl.jar unoil.jar jurt.jar juh.jar
+JARFILES = jurt.jar unoil.jar
 .IF "$(SYSTEM_HSQLDB)" == "YES"
 XCLASSPATH!:=$(XCLASSPATH)$(PATH_SEPERATOR)$(HSQLDB_JAR)
 .ELSE
@@ -67,6 +67,7 @@ JAVACLASSFILES  = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class
 JARCOMPRESS	= TRUE
 JARCLASSDIRS = $(PACKAGE) $(SECONDARY_PACKAGE)
 JARTARGET	= $(TARGET).jar
+JARCLASSPATH = $(JARFILES)
 
 # --- Targets ------------------------------------------------------  
 .INCLUDE :  target.mk 
