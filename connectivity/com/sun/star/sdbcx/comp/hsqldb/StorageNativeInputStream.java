@@ -16,14 +16,14 @@ public class StorageNativeInputStream {
     // preload shared libraries whichs import lips are linked to hsqldb
     if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
     {
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr71");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "uwinapi");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "sal3");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "dbtools680mi");
+            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "msvcr71");
+            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "uwinapi");
+            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "sal3");
+            NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "dbtools680mi");
     }
 
     // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "hsqldb2");
+        NativeLibraryLoader.loadLibrary(StorageNativeInputStream.class.getClassLoader(), "hsqldb2");
     }
     /** Creates a new instance of StorageNativeInputStream */
     public StorageNativeInputStream(String key,String _file) {
