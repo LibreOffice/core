@@ -28,3 +28,10 @@ UDK_3.3 {
         ?getVirtualMachine@UnoVirtualMachine@jvmaccess@@QBE?AV?$Reference@VVirtualMachine@jvmaccess@@@rtl@@XZ; # jvmaccess::UnoVirtualMachine::getVirtualMachine() const
         ?getClassLoader@UnoVirtualMachine@jvmaccess@@QBEPAXXZ; # jvmaccess::UnoVirtualMachine::getClassLoader() const
 } UDK_3.2;
+
+UDK_3.4 {
+    global:
+        # jvmaccess/classpath.hxx:
+        ?doLoadClass@ClassPath@jvmaccess@@CAPAXABV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@PAUJNIEnv_@@ABVOUString@rtl@@2@Z; # jvmaccess::ClassPath::doLoadClass(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, JNIEnv *, rtl::OUString const &, rtl::OUString const &)
+        ?doTranslateToUrls@ClassPath@jvmaccess@@CAPAXABV?$Reference@VXComponentContext@uno@star@sun@com@@@uno@star@sun@com@@PAUJNIEnv_@@ABVOUString@rtl@@@Z; # jvmaccess::ClassPath::doTranslateToUrls(com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext > const &, JNIEnv *, rtl::OUString const &)
+} UDK_3.3;
