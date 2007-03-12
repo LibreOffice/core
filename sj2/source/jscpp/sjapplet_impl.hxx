@@ -3,14 +3,12 @@
 #ifdef SOLAR_JAVA
 #include <jni.h>
 #endif // SOLAR_JAVA
-#include <unotools/processfactory.hxx>
 
 #ifdef SOLAR_JAVA
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #endif // SOLAR_JAVA
 
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include "rtl/ref.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 
@@ -18,6 +16,9 @@ class Window;
 class INetURLObject;
 class SvCommandList;
 class Size;
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 #ifdef SOLAR_JAVA
 struct EmbeddedWindow;
@@ -38,7 +39,8 @@ struct SjApplet2_Impl {
     ~SjApplet2_Impl() throw();
 
     void init(Window * pParentWin,
-              const com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> & smgr,
+              com::sun::star::uno::Reference<
+                  com::sun::star::uno::XComponentContext > const & context,
               const INetURLObject & rDocBase,
               const SvCommandList & rCmdList) throw(com::sun::star::uno::RuntimeException);
 
