@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageFileAccess.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:50:19 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:40:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 import org.hsqldb.lib.FileAccess;
-import com.sun.star.embed.XStorage;
 import com.sun.star.lib.util.NativeLibraryLoader;
 import org.hsqldb.lib.FileSystemRuntimeException;
 
@@ -52,13 +51,13 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
     static {
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
         {
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr71");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "uwinapi");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "sal3");
-        //  NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "dbtools680mi");
+            NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "msvcr71");
+            NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "uwinapi");
+            NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "sal3");
+        //  NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "dbtools680mi");
         }
     // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "hsqldb2");
+        NativeLibraryLoader.loadLibrary(StorageFileAccess.class.getClassLoader(), "hsqldb2");
     }
     String ds_name;
     String key;
