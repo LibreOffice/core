@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoLoader.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:10:39 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:48:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,8 @@ public final class UnoLoader {
         throws IOException, ClassNotFoundException, NoSuchMethodException,
         InvocationTargetException
     {
-        new UnoClassLoader(base, UnoLoader.class.getClassLoader()).execute(
-            jar, arguments);
+        new UnoClassLoader(base, null, UnoLoader.class.getClassLoader()).
+            execute(jar, arguments);
     }
 
     private UnoLoader() {}
