@@ -6,7 +6,6 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 
-import com.sun.star.embed.XStorage;
 /**
  *
  * @author  oj93728
