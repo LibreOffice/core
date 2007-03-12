@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JConnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:35:13 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:41:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,12 @@
 #include "connectivity/dbexception.hxx"
 #endif
 #include "java/util/Property.hxx"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "jvmaccess/classpath.hxx"
+
+#include <jni.h>
+
+#include <list>
 #include <memory>
 
 using namespace connectivity;
@@ -79,6 +85,109 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
+
+namespace {
+
+struct JObject {
+    JObject(JNIEnv * environment): object(NULL), m_environment(environment) {}
+    ~JObject() { if (object != NULL) m_environment->DeleteLocalRef(object); }
+
+    jobject release() {
+        jobject t = object;
+        object = NULL;
+        return t;
+    }
+
+    jobject object;
+
+private:
+    JNIEnv *& m_environment;
+};
+
+struct ClassMapEntry {
+    ClassMapEntry(
+        rtl::OUString const & theClassPath, rtl::OUString const & theClassName):
+        classPath(theClassPath), className(theClassName), classObject(NULL) {}
+
+    rtl::OUString classPath;
+    rtl::OUString className;
+    jweak classObject;
+};
+
+typedef std::list< ClassMapEntry > ClassMap;
+
+struct ClassMapData {
+    osl::Mutex mutex;
+
+    ClassMap map;
+};
+
+struct ClassMapDataInit {
+    ClassMapData * operator()() {
+        static ClassMapData instance;
+        return &instance;
+    }
+};
+
+// Load a class (see jvmaccess::ClassPath::loadClass in jvmaccess/classpath.hxx
+// for details).  A map from (classPath, name) pairs to weak Java class
+// references is maintained, so that a class is only loaded once.  If null is
+// returned, a (still pending) JNI exception occurred.
+jclass loadClass(
+    Reference< XComponentContext > const & context, JNIEnv * environment,
+    rtl::OUString const & classPath, rtl::OUString const & name)
+{
+    // For any jweak entries still present in the map upon destruction,
+    // DeleteWeakGlobalRef is not called (which is a leak):
+    ClassMapData * d =
+        rtl_Instance< ClassMapData, ClassMapDataInit, osl::MutexGuard,
+        osl::GetGlobalMutex >::create(
+            ClassMapDataInit(), osl::GetGlobalMutex());
+    osl::MutexGuard g(d->mutex);
+    JObject cl(environment);
+    // Prune dangling weak references from the list while searching for a match,
+    // so that the list cannot grow unbounded:
+    for (ClassMap::iterator i(d->map.begin()); i != d->map.end();) {
+        JObject o(environment);
+        o.object = environment->NewLocalRef(i->classObject);
+        if (o.object == NULL) {
+            if (environment->ExceptionCheck()) {
+                return NULL;
+            }
+            if (i->classObject != NULL) {
+                environment->DeleteWeakGlobalRef(i->classObject);
+            }
+            i = d->map.erase(i);
+        } else {
+            if (i->classPath == classPath && i->className == name) {
+                cl.object = o.release();
+            }
+            ++i;
+        }
+    }
+    if (cl.object == NULL) {
+        // Push a new ClassMapEntry (which can potentially fail) before loading
+        // the class, so that it never happens that a class is loaded but not
+        // added to the map (which could have effects on the JVM that are not
+        // easily undone).  If the pushed ClassMapEntry is not used after all
+        // (jvmaccess::ClassPath::loadClass throws, return NULL, etc.) it will
+        // be pruned on next call because its classObject is null:
+        d->map.push_front(ClassMapEntry(classPath, name));
+        cl.object = jvmaccess::ClassPath::loadClass(
+            context, environment, classPath, name);
+        if (cl.object == NULL) {
+            return NULL;
+        }
+        jweak w = environment->NewWeakGlobalRef(cl.object);
+        if (w == NULL) {
+            return NULL;
+        }
+        d->map.front().classObject = w;
+    }
+    return static_cast< jclass >(cl.release());
+}
+
+}
 
 //------------------------------------------------------------------------------
 IMPLEMENT_SERVICE_INFO(java_sql_Connection,"com.sun.star.sdbcx.JConnection","com.sun.star.sdbc.Connection");
@@ -690,40 +799,19 @@ void java_sql_Connection::loadDriverFromProperties(const Sequence< PropertyValue
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     try
     {
+        const PropertyValue* pJavaDriverClass = 0;
+        const PropertyValue* pJavaDriverClassPath = 0;
         const PropertyValue* pBegin = info.getConstArray();
         const PropertyValue* pEnd   = pBegin + info.getLength();
         for(;pBegin != pEnd;++pBegin)
         {
-            if ( !object && !pBegin->Name.compareToAscii("JavaDriverClass") )
+            if (!pBegin->Name.compareToAscii("JavaDriverClass"))
             {
-                // here I try to find the class for jdbc driver
-                java_sql_SQLException_BASE::getMyClass();
-                java_lang_Throwable::getMyClass();
-
-                ::rtl::OUString aStr;
-                OSL_VERIFY( pBegin->Value >>= aStr );
-                OSL_ASSERT( aStr.getLength());
-                if ( aStr.getLength() )
-                {
-                    // the driver manager holds the class of the driver for later use
-                    // if forName didn't find the class it will throw an exception
-                    ::std::auto_ptr< java_lang_Class > pDrvClass = ::std::auto_ptr< java_lang_Class >(java_lang_Class::forName(aStr));
-                    if ( pDrvClass.get() )
-                    {
-                        m_pDriverobject = pDrvClass->newInstanceObject();
-                        if( t.pEnv && m_pDriverobject )
-                            m_pDriverobject = t.pEnv->NewGlobalRef( m_pDriverobject );
-                        if( t.pEnv )
-                        {
-                            jclass tempClass = t.pEnv->GetObjectClass(m_pDriverobject);
-                            if ( m_pDriverobject )
-                            {
-                                m_Driver_theClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
-                                t.pEnv->DeleteLocalRef( tempClass );
-                            }
-                        }
-                    }
-                }
+                pJavaDriverClass = pBegin;
+            }
+            else if (!pBegin->Name.compareToAscii("JavaDriverClassPath"))
+            {
+                pJavaDriverClassPath = pBegin;
             }
             else if(!pBegin->Name.compareToAscii("IsAutoRetrievingEnabled"))
             {
@@ -740,6 +828,60 @@ void java_sql_Connection::loadDriverFromProperties(const Sequence< PropertyValue
             else if(!pBegin->Name.compareToAscii("IgnoreDriverPrivileges"))
             {
                 OSL_VERIFY( pBegin->Value >>= _bIgnoreDriverPrivileges );
+            }
+        }
+        if ( !object && pJavaDriverClass != 0 )
+        {
+            // here I try to find the class for jdbc driver
+            java_sql_SQLException_BASE::getMyClass();
+            java_lang_Throwable::getMyClass();
+
+            ::rtl::OUString aStr;
+            OSL_VERIFY( pJavaDriverClass->Value >>= aStr );
+            OSL_ASSERT( aStr.getLength());
+            if ( aStr.getLength() )
+            {
+                // the driver manager holds the class of the driver for later use
+                ::std::auto_ptr< java_lang_Class > pDrvClass;
+                if ( pJavaDriverClassPath == 0 )
+                {
+                    // if forName didn't find the class it will throw an exception
+                    pDrvClass = ::std::auto_ptr< java_lang_Class >(java_lang_Class::forName(aStr));
+                }
+                else
+                {
+                    ::rtl::OUString classpath;
+                    OSL_VERIFY( pJavaDriverClassPath->Value >>= classpath );
+                    pDrvClass.reset(
+                        new java_lang_Class(
+                            t.pEnv,
+                            loadClass(
+                                Reference< XComponentContext >(
+                                    Reference< XPropertySet >(
+                                        m_pDriver->getORB(),
+                                        UNO_QUERY_THROW)->getPropertyValue(
+                                            ::rtl::OUString(
+                                                RTL_CONSTASCII_USTRINGPARAM(
+                                                    "DefaultContext"))),
+                                    UNO_QUERY_THROW),
+                                t.pEnv, classpath, aStr)));
+                    ThrowSQLException(t.pEnv, *this);
+                }
+                if ( pDrvClass.get() )
+                {
+                    m_pDriverobject = pDrvClass->newInstanceObject();
+                    if( t.pEnv && m_pDriverobject )
+                        m_pDriverobject = t.pEnv->NewGlobalRef( m_pDriverobject );
+                    if( t.pEnv )
+                    {
+                        jclass tempClass = t.pEnv->GetObjectClass(m_pDriverobject);
+                        if ( m_pDriverobject )
+                        {
+                            m_Driver_theClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
+                            t.pEnv->DeleteLocalRef( tempClass );
+                        }
+                    }
+                }
             }
         }
     }
