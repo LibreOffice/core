@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.183 $
+ *  $Revision: 1.184 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 12:30:11 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 11:01:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -694,7 +694,7 @@ STD_JAR_FILE( gid_File_Jar_Bsh, bsh )
 
 #ifdef SOLAR_JAVA
 
-STD_JAR_FILE( gid_File_Jar_Classes, classes )
+STD_JAR_FILE_PATCH( gid_File_Jar_Classes, classes )
 
 #endif
 
@@ -778,7 +778,7 @@ UNO_JAR_FILE_PATCH( gid_File_Jar_Juh, juh )
 #ifndef SYSTEM_HSQLDB
 STD_JAR_FILE_PATCH( gid_File_Jar_Hsqldb, hsqldb )
 #endif
-STD_JAR_FILE( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
+STD_JAR_FILE_PATCH( gid_File_Jar_Hsqldb_Sdbc, sdbc_hsqldb )
 #endif
 
 #ifdef SOLAR_JAVA
@@ -813,10 +813,10 @@ End
 #endif
 
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_Scriptframework, ScriptFramework )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
-UNO_JAR_FILE( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptframework, ScriptFramework )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptproviderforbeanshell, ScriptProviderForBeanShell )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptproviderforjava, ScriptProviderForJava )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Scriptproviderforjavascript, ScriptProviderForJavaScript )
 #endif
 
 #ifdef SOLAR_JAVA
