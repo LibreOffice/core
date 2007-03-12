@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test_uriproc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:44:21 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:56:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,10 @@
 #include "com/sun/star/uri/XExternalUriReferenceTranslator.hpp"
 #include "com/sun/star/uri/XUriReference.hpp"
 #include "com/sun/star/uri/XUriReferenceFactory.hpp"
+#include "com/sun/star/uri/XVndSunStarExpandUrlReference.hpp"
 #include "com/sun/star/uri/XVndSunStarPkgUrlReferenceFactory.hpp"
 #include "com/sun/star/uri/XVndSunStarScriptUrlReference.hpp"
+#include "com/sun/star/util/XMacroExpander.hpp"
 #include "cppuhelper/servicefactory.hxx"
 #include "cppunit/simpleheader.hxx"
 #include "osl/diagnose.h"
@@ -130,6 +132,8 @@ public:
 
     void testMakeRelative();
 
+    void testVndSunStarExpand();
+
     void testVndSunStarScript();
 
     void testTranslator();
@@ -140,6 +144,7 @@ public:
     CPPUNIT_TEST(testParse);
     CPPUNIT_TEST(testMakeAbsolute);
     CPPUNIT_TEST(testMakeRelative);
+    CPPUNIT_TEST(testVndSunStarExpand);
     CPPUNIT_TEST(testVndSunStarScript);
     CPPUNIT_TEST(testTranslator);
     CPPUNIT_TEST(testPkgUrlFactory);
@@ -742,6 +747,40 @@ void Test::testMakeRelative() {
                     data[i].absolute == 0
                     ? data[i].uriReference : data[i].absolute),
                 absolute->getUriReference());
+        }
+    }
+}
+
+void Test::testVndSunStarExpand() {
+    struct Data {
+        char const * uriReference;
+        char const * expanded;
+    };
+    Data data[] = {
+        { "vnd.sun.star.expand:", "" }, // liberally accepted
+        { "vnd.sun.star.expand:/", "/" }, // liberally accepted
+        { "vnd.sun.star.expand:%80", 0 },
+        { "vnd.sun.star.expand:%5C$%5C%24%5C%5C", "$$\\" } };
+    css::uno::Reference< css::util::XMacroExpander > expander(
+        m_context->getValueByName(
+              rtl::OUString(
+                  RTL_CONSTASCII_USTRINGPARAM(
+                      "/singletons/com.sun.star.util.theMacroExpander"))),
+        css::uno::UNO_QUERY_THROW);
+    for (std::size_t i = 0; i < sizeof data / sizeof data[0]; ++i) {
+        css::uno::Reference< css::uri::XUriReference > uriRef(
+            m_uriFactory->parse(
+                rtl::OUString::createFromAscii(data[i].uriReference)));
+        TEST_ASSERT_EQUAL(
+            "testVndSunStarExpand", i, data[i].uriReference,
+            data[i].expanded != 0, uriRef.is());
+        if (uriRef.is()) {
+            css::uno::Reference< css::uri::XVndSunStarExpandUrlReference >
+                expandUrl(uriRef, css::uno::UNO_QUERY_THROW);
+            TEST_ASSERT_EQUAL(
+                "testVndSunStarExpand", i, data[i].uriReference,
+                rtl::OUString::createFromAscii(data[i].expanded),
+                expandUrl->expand(expander));
         }
     }
 }
