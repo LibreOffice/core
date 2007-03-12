@@ -5,9 +5,9 @@
  *
  *  $RCSfile: dummyannotate.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 09:05:28 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-12 16:10:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,8 +149,53 @@
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
-  
+
+  <xsl:template match="rng:define" mode="dummydocvalues">
+    <w:body>
+    <xsl:for-each select=".//rng:value">
+      <w:p>
+        <w:pPr>
+          <w:pBdr>
+            <w:top>
+              <xsl:attribute name="w:val"><xsl:value-of select="."/></xsl:attribute>
+              <xsl:attribute name="w:sz">4</xsl:attribute>
+              <xsl:attribute name="w:space">1</xsl:attribute>
+              <xsl:attribute name="w:color">auto</xsl:attribute>
+            </w:top>
+            <w:left>
+              <xsl:attribute name="w:val"><xsl:value-of select="."/></xsl:attribute>
+              <xsl:attribute name="w:sz">4</xsl:attribute>
+              <xsl:attribute name="w:space">4</xsl:attribute>
+              <xsl:attribute name="w:color">auto</xsl:attribute>
+            </w:left>
+            <w:bottom>
+              <xsl:attribute name="w:val"><xsl:value-of select="."/></xsl:attribute>
+              <xsl:attribute name="w:sz">4</xsl:attribute>
+              <xsl:attribute name="w:space">1</xsl:attribute>
+              <xsl:attribute name="w:color">auto</xsl:attribute>
+            </w:bottom>
+            <w:between>
+              <xsl:attribute name="w:val"><xsl:value-of select="."/></xsl:attribute>
+              <xsl:attribute name="w:sz">4</xsl:attribute>
+              <xsl:attribute name="w:space">1</xsl:attribute>
+              <xsl:attribute name="w:color">auto</xsl:attribute>
+            </w:between>
+            <w:bar>
+              <xsl:attribute name="w:val"><xsl:value-of select="."/></xsl:attribute>
+              <xsl:attribute name="w:sz">4</xsl:attribute>
+              <xsl:attribute name="w:color">auto</xsl:attribute>
+            </w:bar>
+          </w:pBdr>
+        </w:pPr>
+        <w:r>
+          <w:t><xsl:value-of select="."/></w:t>
+        </w:r>
+      </w:p>
+    </xsl:for-each>
+    </w:body>
+  </xsl:template>
+
   <xsl:template match="/">
-    <xsl:apply-templates select="//rng:define[@name='ST_Underline']" mode="attrvalue"/>
+    <xsl:apply-templates select="//rng:define[@name='ST_Border']" mode="dummydocvalues"/>
   </xsl:template>
 </xsl:stylesheet>
