@@ -1,2 +1,3 @@
 RegistrationClassName: XSLTransformer
 Class-Path: xalan.jar xercesImpl.jar serializer.jar xml-apis.jar
+UNO-Type-Path: 
