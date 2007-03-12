@@ -1,1 +1,2 @@
 RegistrationClassName: com.sun.star.wizards.form.CallFormWizard
+UNO-Type-Path: 
