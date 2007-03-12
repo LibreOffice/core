@@ -5781,7 +5781,7 @@
   <define name="CT_Underline">
     <optional>
       <attribute name="val">
-        <text/>
+        <ref name="ST_Underline"/>
         <xs:documentation>Underline Style</xs:documentation>
       </attribute>
     </optional>
@@ -14015,7 +14015,7 @@
   <attribute name="themeShade" tokenid="ooxml:CT_Color_themeShade"/>
 </resource>
 <resource name="CT_Underline" resource="PropertySetValue">
-  <attribute name="val" tokenid="ooxml:CT_Underline_val"/>
+  <attribute name="val" tokenid="ooxml:CT_Underline_val" default="single"/>
   <attribute name="color" tokenid="ooxml:CT_Underline_color"/>
   <attribute name="themeColor" tokenid="ooxml:CT_Underline_themeColor"/>
   <attribute name="themeTint" tokenid="ooxml:CT_Underline_themeTint"/>
@@ -14187,6 +14187,26 @@
   <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
 </resource>
 <resource name="CT_PPr" resource="Properties"/>
+<resource name="ST_Underline" resource="List">
+  <value tokenid="1">single</value>
+  <value tokenid="2">words</value>
+  <value tokenid="3">double</value>
+  <value tokenid="6">thick</value>
+  <value tokenid="4">dotted</value>
+  <value tokenid="20">dottedHeavy</value>
+  <value tokenid="7">dash</value>
+  <value tokenid="23">dashedHeavy</value>
+  <value tokenid="39">dashLong</value>
+  <value tokenid="55">dashLongHeavy</value>
+  <value tokenid="9">dotDash</value>
+  <value tokenid="25">dashDotHeavy</value>
+  <value tokenid="10">dotDotDash</value>
+  <value tokenid="26">dashDotDotHeavy</value>
+  <value tokenid="11">wave</value>
+  <value tokenid="27">wavyHeavy</value>
+  <value tokenid="43">wavyDouble</value>
+  <value tokenid="0">none</value>
+</resource>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>
