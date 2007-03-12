@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:33:25 $
+#   last change: $Author: obo $ $Date: 2007-03-12 10:56:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,8 @@ UNOTYPES = \
     com.sun.star.uri.XUriReference \
     com.sun.star.uri.XUriReferenceFactory \
     com.sun.star.uri.XVndSunStarPkgUrlReferenceFactory \
-    com.sun.star.uri.XVndSunStarScriptUrlReference
+    com.sun.star.uri.XVndSunStarScriptUrlReference \
+    com.sun.star.util.XMacroExpander
 
 SHL1TARGET = $(TARGET)
 SHL1OBJS = $(SLO)$/test_uriproc.obj
