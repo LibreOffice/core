@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:53:26 $
+#   last change: $Author: obo $ $Date: 2007-03-12 10:56:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,7 @@ SHL1OBJS = \
     $(SLO)$/ExternalUriReferenceTranslator.obj \
     $(SLO)$/UriReference.obj \
     $(SLO)$/UriReferenceFactory.obj \
+    $(SLO)$/UriSchemeParser_vndDOTsunDOTstarDOTexpand.obj \
     $(SLO)$/UriSchemeParser_vndDOTsunDOTstarDOTscript.obj \
     $(SLO)$/VndSunStarPkgUrlReferenceFactory.obj \
     $(SLO)$/component.obj \
