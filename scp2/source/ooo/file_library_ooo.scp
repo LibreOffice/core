@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.224 $
+ *  $Revision: 1.225 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 09:16:16 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 11:01:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2351,7 +2351,7 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Xmlfd, xmlfd )
 
 #ifdef SOLAR_JAVA
 UNO_JAR_FILE_PATCH( gid_File_Jar_Xsltfilter, XSLTFilter )
-UNO_JAR_FILE( gid_File_Jar_Xsltvalidate, XSLTValidate )
+UNO_JAR_FILE_PATCH( gid_File_Jar_Xsltvalidate, XSLTValidate )
 #endif
 
 #ifndef SYSTEM_LIBXML
@@ -2402,7 +2402,7 @@ STD_LIB_FILE_PATCH( gid_File_Lib_AVMedia, avmedia )
 
 #if defined UNX
 #ifdef SOLAR_JAVA
-UNO_JAR_FILE( gid_File_Jar_AVmedia, avmedia )
+UNO_JAR_FILE_PATCH( gid_File_Jar_AVmedia, avmedia )
 #endif
 #elif defined WNT
 #ifdef ENABLE_DIRECTX
