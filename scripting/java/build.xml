@@ -4,9 +4,9 @@
 
     $RCSfile: build.xml,v $
 
-    $Revision: 1.34 $
+    $Revision: 1.35 $
 
-    last change: $Author: hr $ $Date: 2006-04-19 15:06:54 $
+    last change: $Author: obo $ $Date: 2007-03-12 10:42:05 $
 
     The Contents of this file are made available subject to
     the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,8 @@
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
                        value="com.sun.star.script.framework.provider.java.ScriptProviderForJava"/>
+            <attribute name="Class-Path" value="ScriptFramework.jar"/>
+            <attribute name="UNO-Type-Path" value=""/>
         </manifest>
         <include name="**/provider/java/*.class"/>
     </jar>
@@ -161,6 +163,8 @@
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
                        value="com.sun.star.script.framework.provider.beanshell.ScriptProviderForBeanShell"/>
+            <attribute name="Class-Path" value="ScriptFramework.jar bsh.jar"/>
+            <attribute name="UNO-Type-Path" value=""/>
         </manifest>
         <include name="**/provider/beanshell/*.class"/>
         <fileset dir=".">
@@ -174,6 +178,8 @@
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
                        value="com.sun.star.script.framework.provider.javascript.ScriptProviderForJavaScript"/>
+            <attribute name="Class-Path" value="ScriptFramework.jar js.jar"/>
+            <attribute name="UNO-Type-Path" value=""/>
         </manifest>
         <include name="**/provider/javascript/*.class"/>
         <fileset dir=".">
@@ -187,6 +193,7 @@
             <attribute name="Built-By" value="Sun Microsystems"/>
             <attribute name="RegistrationClassName"
                        value="com.sun.star.script.framework.security.SecurityDialog"/>
+            <attribute name="UNO-Type-Path" value=""/>
         </manifest>
         <include name="**/security/*"/>
         <include name="**/log/*.class"/>
