@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HDriver.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 13:34:10 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:40:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,7 +228,7 @@ namespace connectivity
 
                 bool bIsNewDatabase = !xStorage->hasElements();
 
-                Sequence< PropertyValue > aConvertedProperties(8);
+                Sequence< PropertyValue > aConvertedProperties(9);
                 sal_Int32 nPos = 0;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("storage_key"));
                 ::rtl::OUString sConnPartURL = sSystemPath.copy(0,::std::max<sal_Int32>(nIndex,sSystemPath.getLength()));
@@ -240,6 +240,8 @@ namespace connectivity
                 aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdbcx.comp.hsqldb.StorageFileAccess"));
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClass"));
                 aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("org.hsqldb.jdbcDriver"));
+                aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("JavaDriverClassPath"));
+                aConvertedProperties[nPos++].Value <<= ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.expand:$ORIGIN/classes/hsqldb.jar vnd.sun.star.expand:$ORIGIN/classes/sdbc_hsqldb.jar"));
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsAutoRetrievingEnabled"));
                 aConvertedProperties[nPos++].Value <<= sal_True;
                 aConvertedProperties[nPos].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AutoRetrievingStatement"));
