@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:38:27 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:46:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #ifndef _SJ_SJAPPLET_HXX
 #define _SJ_SJAPPLET_HXX
 
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
+#include "com/sun/star/uno/Reference.hxx"
+#endif
 #include <tools/string.hxx>
 
 class INetURLObject;
@@ -43,6 +46,9 @@ class Size;
 class SjJScriptAppletObject;
 class SvCommandList;
 class Window;
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+} } } }
 
 struct SjApplet2_Impl;
 
@@ -60,7 +66,11 @@ public:
 
     SjApplet2();
     virtual ~SjApplet2();
-    void Init(Window * pParentWin, const INetURLObject & rDocBase, const SvCommandList & rCmdList);
+    void Init(
+        com::sun::star::uno::Reference<
+            com::sun::star::uno::XComponentContext > const & context,
+        Window * pParentWin, const INetURLObject & rDocBase,
+        const SvCommandList & rCmdList);
     void setSizePixel( const Size & );
     void appletRestart();
     void appletReload();
