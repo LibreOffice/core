@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-12 14:36:08 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-12 16:13:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1098,7 +1098,9 @@ rtl::OUString </xsl:text>
     </xsl:call-template>
     <xsl:text>) == 0)
         mnValue = </xsl:text>
-        <xsl:value-of select="@tokenid"/>
+        <xsl:call-template name="idtoqname">
+          <xsl:with-param name="id" select="@tokenid"/>
+        </xsl:call-template>
         <xsl:text>;</xsl:text>
   </xsl:for-each>
   <xsl:text>
@@ -1248,7 +1250,7 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
     <xsl:text>
 namespace writerfilter { namespace NS_ooxml
 {</xsl:text>
-    <xsl:for-each select="//resource//attribute|//resource//element|//resource//sprm">
+    <xsl:for-each select="//resource//attribute|//resource//element|//resource//sprm|//resource//value">
       <xsl:if test="contains(@tokenid, 'ooxml:')">
         <xsl:text>
     const QName_t LN_</xsl:text>
@@ -1283,7 +1285,18 @@ namespace writerfilter { namespace NS_ooxml
   </xsl:template>
 
   <xsl:template name='idtoqname'>
-    <xsl:param name='id'/>NS_<xsl:value-of select='substring-before($id, ":")'/>::LN_<xsl:value-of select='substring-after($id, ":")'/>
+    <xsl:param name='id'/>
+    <xsl:choose>
+      <xsl:when test="contains($id, ':')">
+        <xsl:text>NS_</xsl:text>
+        <xsl:value-of select='substring-before($id, ":")'/>
+        <xsl:text>::LN_</xsl:text>
+        <xsl:value-of select='substring-after($id, ":")'/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$id"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
 </xsl:stylesheet>

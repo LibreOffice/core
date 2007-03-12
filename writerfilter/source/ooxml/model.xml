@@ -6228,7 +6228,7 @@
   </define>
   <define name="CT_Border">
     <attribute name="val">
-      <text/>
+      <ref name="ST_Border"/>
       <xs:documentation>Border Style</xs:documentation>
     </attribute>
     <optional>
@@ -6937,7 +6937,7 @@
   </define>
   <define name="CT_Jc">
     <attribute name="val">
-      <text/>
+      <ref name="ST_Jc"/>
       <xs:documentation>Alignment Type</xs:documentation>
     </attribute>
   </define>
@@ -14040,25 +14040,6 @@
   <attribute name="themeFillTint" tokenid="ooxml:CT_Shd_themeFillTint"/>
   <attribute name="themeFillShade" tokenid="ooxml:CT_Shd_themeFillShade"/>
 </resource>
-<resource name="CT_Border" resource="PropertySetValue">
-  <attribute name="val" tokenid="ooxml:CT_Border_val"/>
-  <attribute name="color" tokenid="ooxml:CT_Border_color"/>
-  <attribute name="themeColor" tokenid="ooxml:CT_Border_themeColor"/>
-  <attribute name="themeTint" tokenid="ooxml:CT_Border_themeTint"/>
-  <attribute name="themeShade" tokenid="ooxml:CT_Border_themeShade"/>
-  <attribute name="sz" tokenid="ooxml:CT_Border_sz"/>
-  <attribute name="space" tokenid="ooxml:CT_Border_space"/>
-  <attribute name="shadow" tokenid="ooxml:CT_Border_shadow"/>
-  <attribute name="frame" tokenid="ooxml:CT_Border_frame"/>
-</resource>
-<resource name="CT_PBdr" resource="PropertySetValue">
-  <attribute name="top" tokenid="ooxml:CT_PBdr_top"/>
-  <attribute name="left" tokenid="ooxml:CT_PBdr_left"/>
-  <attribute name="bottom" tokenid="ooxml:CT_PBdr_bottom"/>
-  <attribute name="right" tokenid="ooxml:CT_PBdr_right"/>
-  <attribute name="between" tokenid="ooxml:CT_PBdr_between"/>
-  <attribute name="bar" tokenid="ooxml:CT_PBdr_bar"/>
-</resource>
 <resource name="document" resource="Stream"/>
 <resource name="CT_Document" resource="Stream"/>
 <resource name="CT_Text" resource="Stream">
@@ -14160,7 +14141,7 @@
   <sprm name="widowControl" tokenid="ooxml:CT_PPrBase_windowControl"/>
   <sprm name="numPr" tokenid="ooxml:CT_PPrBase_numPr"/>
   <sprm name="suppressLineNumbers" tokenid="0x240c"/>
-  <sprm name="pBdr" tokenid="0x0"/>
+  <sprm name="pBdr" tokenid="ooxml:CT_PrBase_pBdr"/>
   <sprm name="shd" tokenid="0x442d"/>
   <sprm name="tabs" tokenid="0xc60d"/>
   <sprm name="suppressAutoHyphens" tokenid="0x242a"/>
@@ -14214,6 +14195,231 @@
   <value tokenid="27">wavyHeavy</value>
   <value tokenid="43">wavyDouble</value>
   <value tokenid="0">none</value>
+</resource>
+<resource name="CT_Jc" resource="PropertySetValue"/>
+<resource name="ST_Jc" resource="List">
+  <value tokenid="0">left</value>
+  <value tokenid="1">center</value>
+  <value tokenid="2">right</value>
+  <value tokenid="3">both</value>
+  <value tokenid="ooxml:Value_ST_Jc_mediumKashida">mediumKashida</value>
+  <value tokenid="ooxml:Value_ST_Jc_distribute">distribute</value>
+  <value tokenid="ooxml:Value_ST_Jc_numTab">numTab</value>
+  <value tokenid="ooxml:Value_ST_Jc_highKashida">highKashida</value>
+  <value tokenid="ooxml:Value_ST_Jc_lowKashida">lowKashida</value>
+  <value tokenid="ooxml:Value_ST_Jc_thaiDistribute">thaiDistribute</value>
+</resource>
+<resource name="CT_PBdr" resource="PropertySetValue">
+  <sprm name="top" tokenid="0x6424"/>
+  <sprm name="left" tokenid="0x6425"/>
+  <sprm name="bottom" tokenid="0x6426"/>
+  <sprm name="right" tokenid="0x6427"/>
+  <sprm name="between" tokenid="0x6428"/>
+  <sprm name="bar" tokenid="0x6429"/>
+</resource>
+<resource name="CT_Border" resource="PropertySetValue">
+  <attribute name="val" tokenid="rtf:BRCTYPE"/>
+  <attribute name="color" tokenid="ooxml:CT_Border_color"/>
+  <attribute name="themeColor" tokenid="ooxml:CT_Border_themeColor"/>
+  <attribute name="themeTint" tokenid="ooxml:CT_Border_themeTint"/>
+  <attribute name="themeShade" tokenid="ooxml:CT_Border_themeShade"/>
+  <attribute name="sz" tokenid="rtf:DPTLINEWIDTH"/>
+  <attribute name="space" tokenid="rtf:DPTSPACE"/>
+  <attribute name="shadow" tokenid="rtf:FSHADOW"/>
+  <attribute name="frame" tokenid="rtf:FFRAME"/>
+</resource>
+<resource name="ST_Border" resource="List">
+  <value tokenid="255">nil</value>
+  <value tokenid="0">none</value>
+  <value tokenid="1">single</value>
+  <value tokenid="2">thick</value>
+  <value tokenid="3">double</value>
+  <value tokenid="6">dotted</value>
+  <value tokenid="7">dashed</value>
+  <value tokenid="8">dotDash</value>
+  <value tokenid="9">dotDotDash</value>
+  <value tokenid="10">triple</value>
+  <value tokenid="11">thinThickSmallGap</value>
+  <value tokenid="12">thickThinSmallGap</value>
+  <value tokenid="13">thinThickThinSmallGap</value>
+  <value tokenid="14">thinThickMediumGap</value>
+  <value tokenid="15">thickThinMediumGap</value>
+  <value tokenid="16">thinThickThinMediumGap</value>
+  <value tokenid="17">thinThickLargeGap</value>
+  <value tokenid="18">thickThinLargeGap</value>
+  <value tokenid="19">thinThickThinLargeGap</value>
+  <value tokenid="20">wave</value>
+  <value tokenid="21">doubleWave</value>
+  <value tokenid="22">dashSmallGap</value>
+  <value tokenid="23">dashDotStroked</value>
+  <value tokenid="24">threeDEmboss</value>
+  <value tokenid="25">threeDEngrave</value>
+  <value tokenid="18">outset</value>
+  <value tokenid="17">inset</value>
+  <value tokenid="64">apples</value>
+  <value tokenid="65">archedScallops</value>
+  <value tokenid="66">babyPacifier</value>
+  <value tokenid="67">babyRattle</value>
+  <value tokenid="68">balloons3Colors</value>
+  <value tokenid="69">balloonsHotAir</value>
+  <value tokenid="70">basicBlackDashes</value>
+  <value tokenid="71">basicBlackDots</value>
+  <value tokenid="72">basicBlackSquares</value>
+  <value tokenid="73">basicThinLines</value>
+  <value tokenid="74">basicWhiteDashes</value>
+  <value tokenid="75">basicWhiteDots</value>
+  <value tokenid="76">basicWhiteSquares</value>
+  <value tokenid="77">basicWideInline</value>
+  <value tokenid="78">basicWideMidline</value>
+  <value tokenid="79">basicWideOutline</value>
+  <value tokenid="80">bats</value>
+  <value tokenid="81">birds</value>
+  <value tokenid="82">birdsFlight</value>
+  <value tokenid="83">cabins</value>
+  <value tokenid="84">cakeSlice</value>
+  <value tokenid="85">candyCorn</value>
+  <value tokenid="86">celticKnotwork</value>
+  <value tokenid="87">certificateBanner</value>
+  <value tokenid="88">chainLink</value>
+  <value tokenid="89">champagneBottle</value>
+  <value tokenid="90">checkedBarBlack</value>
+  <value tokenid="91">checkedBarColor</value>
+  <value tokenid="92">checkered</value>
+  <value tokenid="93">christmasTree</value>
+  <value tokenid="94">circlesLines</value>
+  <value tokenid="95">circlesRectangles</value>
+  <value tokenid="96">classicalWave</value>
+  <value tokenid="97">clocks</value>
+  <value tokenid="98">compass</value>
+  <value tokenid="99">confetti</value>
+  <value tokenid="100">confettiGrays</value>
+  <value tokenid="101">confettiOutline</value>
+  <value tokenid="102">confettiStreamers</value>
+  <value tokenid="103">confettiWhite</value>
+  <value tokenid="104">cornerTriangles</value>
+  <value tokenid="105">couponCutoutDashes</value>
+  <value tokenid="106">couponCutoutDots</value>
+  <value tokenid="107">crazyMaze</value>
+  <value tokenid="108">creaturesButterfly</value>
+  <value tokenid="109">creaturesFish</value>
+  <value tokenid="110">creaturesInsects</value>
+  <value tokenid="111">creaturesLadyBug</value>
+  <value tokenid="112">crossStitch</value>
+  <value tokenid="113">cup</value>
+  <value tokenid="114">decoArch</value>
+  <value tokenid="115">decoArchColor</value>
+  <value tokenid="116">decoBlocks</value>
+  <value tokenid="117">diamondsGray</value>
+  <value tokenid="118">doubleD</value>
+  <value tokenid="119">doubleDiamonds</value>
+  <value tokenid="120">earth1</value>
+  <value tokenid="121">earth2</value>
+  <value tokenid="122">eclipsingSquares1</value>
+  <value tokenid="123">eclipsingSquares2</value>
+  <value tokenid="124">eggsBlack</value>
+  <value tokenid="125">fans</value>
+  <value tokenid="126">film</value>
+  <value tokenid="127">firecrackers</value>
+  <value tokenid="128">flowersBlockPrint</value>
+  <value tokenid="129">flowersDaisies</value>
+  <value tokenid="130">flowersModern1</value>
+  <value tokenid="131">flowersModern2</value>
+  <value tokenid="132">flowersPansy</value>
+  <value tokenid="133">flowersRedRose</value>
+  <value tokenid="134">flowersRoses</value>
+  <value tokenid="135">flowersTeacup</value>
+  <value tokenid="136">flowersTiny</value>
+  <value tokenid="137">gems</value>
+  <value tokenid="138">gingerbreadMan</value>
+  <value tokenid="139">gradient</value>
+  <value tokenid="140">handmade1</value>
+  <value tokenid="141">handmade2</value>
+  <value tokenid="142">heartBalloon</value>
+  <value tokenid="143">heartGray</value>
+  <value tokenid="144">hearts</value>
+  <value tokenid="145">heebieJeebies</value>
+  <value tokenid="146">holly</value>
+  <value tokenid="147">houseFunky</value>
+  <value tokenid="148">hypnotic</value>
+  <value tokenid="149">iceCreamCones</value>
+  <value tokenid="150">lightBulb</value>
+  <value tokenid="151">lightning1</value>
+  <value tokenid="152">lightning2</value>
+  <value tokenid="153">mapPins</value>
+  <value tokenid="154">mapleLeaf</value>
+  <value tokenid="155">mapleMuffins</value>
+  <value tokenid="156">marquee</value>
+  <value tokenid="157">marqueeToothed</value>
+  <value tokenid="158">moons</value>
+  <value tokenid="159">mosaic</value>
+  <value tokenid="160">musicNotes</value>
+  <value tokenid="161">northwest</value>
+  <value tokenid="162">ovals</value>
+  <value tokenid="163">packages</value>
+  <value tokenid="164">palmsBlack</value>
+  <value tokenid="165">palmsColor</value>
+  <value tokenid="166">paperClips</value>
+  <value tokenid="167">papyrus</value>
+  <value tokenid="168">partyFavor</value>
+  <value tokenid="169">partyGlass</value>
+  <value tokenid="170">pencils</value>
+  <value tokenid="171">people</value>
+  <value tokenid="172">peopleWaving</value>
+  <value tokenid="173">peopleHats</value>
+  <value tokenid="174">poinsettias</value>
+  <value tokenid="175">postageStamp</value>
+  <value tokenid="176">pumpkin1</value>
+  <value tokenid="177">pushPinNote2</value>
+  <value tokenid="178">pushPinNote1</value>
+  <value tokenid="179">pyramids</value>
+  <value tokenid="180">pyramidsAbove</value>
+  <value tokenid="181">quadrants</value>
+  <value tokenid="182">rings</value>
+  <value tokenid="183">safari</value>
+  <value tokenid="184">sawtooth</value>
+  <value tokenid="185">sawtoothGray</value>
+  <value tokenid="186">scaredCat</value>
+  <value tokenid="187">seattle</value>
+  <value tokenid="188">shadowedSquares</value>
+  <value tokenid="189">sharksTeeth</value>
+  <value tokenid="190">shorebirdTracks</value>
+  <value tokenid="191">skyrocket</value>
+  <value tokenid="192">snowflakeFancy</value>
+  <value tokenid="193">snowflakes</value>
+  <value tokenid="194">sombrero</value>
+  <value tokenid="195">southwest</value>
+  <value tokenid="196">stars</value>
+  <value tokenid="197">starsTop</value>
+  <value tokenid="198">stars3d</value>
+  <value tokenid="199">starsBlack</value>
+  <value tokenid="200">starsShadowed</value>
+  <value tokenid="201">sun</value>
+  <value tokenid="202">swirligig</value>
+  <value tokenid="203">tornPaper</value>
+  <value tokenid="204">tornPaperBlack</value>
+  <value tokenid="205">trees</value>
+  <value tokenid="206">triangleParty</value>
+  <value tokenid="207">triangles</value>
+  <value tokenid="208">tribal1</value>
+  <value tokenid="209">tribal2</value>
+  <value tokenid="210">tribal3</value>
+  <value tokenid="211">tribal4</value>
+  <value tokenid="212">tribal5</value>
+  <value tokenid="213">tribal6</value>
+  <value tokenid="214">twistedLines1</value>
+  <value tokenid="215">twistedLines2</value>
+  <value tokenid="216">vine</value>
+  <value tokenid="217">waveline</value>
+  <value tokenid="218">weavingAngles</value>
+  <value tokenid="219">weavingBraid</value>
+  <value tokenid="220">weavingRibbon</value>
+  <value tokenid="221">weavingStrips</value>
+  <value tokenid="222">whiteFlowers</value>
+  <value tokenid="223">woodwork</value>
+  <value tokenid="224">xIllusions</value>
+  <value tokenid="225">zanyTriangles</value>
+  <value tokenid="226">zigZag</value>
+  <value tokenid="227">zigZagStitch</value>
 </resource>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
