@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 10:47:05 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-12 14:36:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -812,8 +812,9 @@ doctok::Id
   </xsl:template>
 
   <xsl:template name="attributeproptype">
-    <xsl:variable name="resource" select="key('context-resource', @name)[generate-id(ancestor::namespace)=$mynsid]"/>
+    <xsl:variable name="mynsid" select="generate-id(ancestor::namespace)"/>
     <xsl:variable name="name" select="@name"/>
+    <xsl:variable name="resource" select="key('context-resource', @name)[generate-id(ancestor::namespace)=$mynsid]"/>
     <xsl:choose>
       <xsl:when test="$resource/sprm[@name=$name]">
         <xsl:text>OOXMLPropertyImpl::SPRM</xsl:text>

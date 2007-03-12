@@ -14187,6 +14187,14 @@
   <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
 </resource>
 <resource name="CT_PPr" resource="Properties"/>
+<resource name="CT_Tabs" resource="Property">
+  <sprm name="tab" tokenid="0xC60D"/>
+</resource>
+<resource name="CT_TabStop" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_TabStop_val"/>
+  <attribute name="leader" tokenid="ooxml:CT_TabStop_leader"/>
+  <attribute name="pos" tokenid="ooxml:CT_TabStop_pos"/>
+</resource>
 <resource name="ST_Underline" resource="List">
   <value tokenid="1">single</value>
   <value tokenid="2">words</value>
