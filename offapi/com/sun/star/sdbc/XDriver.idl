@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XDriver.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:07:54 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:45:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,10 @@ published interface XDriver: com::sun::star::uno::XInterface
         The info argument can be used to pass arbitrary
         string tag/value pairs as connection arguments.
         Normally at least "user" and "password" properties should be
-        included in the Properties. For a JDBC driver also the java class must be supplied. The property is named JavaDriverClass.
+        included in the Properties. For a JDBC driver also the Java class must
+        be supplied in the property named JavaDriverClass, and a class path (a
+        space-separated list of URLs) needed to locate that class can optionally
+        be supplied in a property named JavaDriverClassPath.
         Possible property value names are when supported by the driver:
         @see com::sun::star::sdbc::ConnectionProperties
         </p>
