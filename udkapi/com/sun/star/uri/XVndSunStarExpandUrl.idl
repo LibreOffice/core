@@ -1,0 +1,85 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XVndSunStarExpandUrl.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:57:36 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_uri_XVndSunStarExpandUrl_idl__
+#define __com_sun_star_uri_XVndSunStarExpandUrl_idl__
+
+#include "com/sun/star/lang/IllegalArgumentException.idl"
+#include "com/sun/star/uno/XInterface.idl"
+
+module com { module sun { module star { module util {
+    published interface XMacroExpander;
+}; }; }; };
+
+module com { module sun { module star { module uri {
+
+/**
+   represents absolute &ldquo;vnd.sun.star.expand&rdquo; URLs.
+
+   <p>These URLs are of the form<br/>
+   &emsp;<var>vnd-sun-star-expand-url</var> =
+   <code>"VND.SUN.STAR.EXPAND:"</code> <var>opaque_part</var><br/>
+   where the <var>opaque_part</var> is an UTF-8 string as described in
+   <a href="http://udk.openoffice.org/common/man/concept/micro_deployment.html">
+   <cite>Bootstrap Arguments and Micro Deployment</cite></a>.  See
+   <a href="http://www.ietf.org/rfc/rfc2396.txt">RFC&nbsp;2396</a>,
+   <a href="http://www.ietf.org/rfc/rfc2732.txt">RFC&nbsp;2732</a>, and
+   <a href="http://www.ietf.org/rfc/rfc2234.txt">RFC&nbsp;2234</a> for
+   details.</p>
+
+   @since OOo 2.3
+ */
+interface XVndSunStarExpandUrl {
+    /**
+       returns the expanded content of this URL.
+
+       @param expander
+       a macro expander; must not be <NULL/>.
+
+       @returns
+       the expanded content of this URL.
+
+       @throws com::sun::star::lang::IllegalArgumentException
+       if calling <member
+       scope="com::sun::star::util">XMacroExpander::expandMacros</member> on
+       <code>expander</code> raises any such exception.
+     */
+    string expand([in] com::sun::star::util::XMacroExpander expander)
+        raises (com::sun::star::lang::IllegalArgumentException);
+};
+
+}; }; }; };
+
+#endif
