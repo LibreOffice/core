@@ -4,9 +4,9 @@
  *
  *  $RCSfile: NativeStorageAccess.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:55:13 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:39:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,16 +44,7 @@ package com.sun.star.sdbcx.comp.hsqldb;
  *
  * @author  oj93728
  */
-import com.sun.star.document.XDocumentSubStorageSupplier;
 import com.sun.star.embed.ElementModes;
-import com.sun.star.embed.XStorage;
-import com.sun.star.io.XStream;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XSeekable;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.NamedValue;
 import com.sun.star.lib.util.NativeLibraryLoader;
 
 public class NativeStorageAccess {
@@ -61,12 +52,12 @@ public class NativeStorageAccess {
     {
         if ( System.getProperty( "os.name" ).startsWith( "Windows" ) )
         {
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "msvcr71");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "uwinapi");
-            NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "sal3");
+            NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "msvcr71");
+            NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "uwinapi");
+            NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "sal3");
         }
         // load shared library for JNI code
-        NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "hsqldb2");
+        NativeLibraryLoader.loadLibrary(NativeStorageAccess.class.getClassLoader(), "hsqldb2");
     }
     /** Creates a new instance of StorageAccess */
     public NativeStorageAccess(String name,String _mode,Object key) throws java.io.IOException{
