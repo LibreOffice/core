@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:25:23 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:55:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ int main( int argc, char * argv[])
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implbase1.hxx"
 #include "cppuhelper/implementationentry.hxx"
+#include "jvmaccess/classpath.hxx"
 #include "jvmaccess/unovirtualmachine.hxx"
 #include "jvmaccess/virtualmachine.hxx"
 #include "osl/file.hxx"
@@ -138,6 +139,7 @@ int main( int argc, char * argv[])
 #include <string.h>
 #include <time.h>
 #include <memory>
+#include <vector>
 #include "boost/scoped_array.hpp"
 #define OUSTR(x) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( x ))
 
@@ -161,12 +163,20 @@ int main( int argc, char * argv[])
 
 /* Within this implementation of the com.sun.star.java.JavaVirtualMachine
  * service and com.sun.star.java.theJavaVirtualMachine singleton, the method
- * com.sun.star.java.XJavaVM.getJavaVM relies on the string
- * "$URE_INTERNAL_JAVA_DIR/" being expanded via the
+ * com.sun.star.java.XJavaVM.getJavaVM relies on the following:
+ * 1  The string "$URE_INTERNAL_JAVA_DIR/" is expanded via the
  * com.sun.star.util.theMacroExpander singleton into an internal (see the
  * com.sun.star.uri.ExternalUriReferenceTranslator service), hierarchical URI
- * reference relative to which the URE JAR files can be addressed.  If this is
- * not the case, getJavaVM raises a com.sun.star.uno.RuntimeException.
+ * reference relative to which the URE JAR files can be addressed.
+ * 2  The string "$URE_INTERNAL_JAVA_CLASSPATH" is either not expandable via the
+ * com.sun.star.util.theMacroExpander singleton
+ * (com.sun.star.lang.IllegalArgumentException), or is expanded via the
+ * com.sun.star.util.theMacroExpander singleton into a list of zero or more
+ * internal (see the com.sun.star.uri.ExternalUriReferenceTranslator service)
+ * URIs, where any space characters (U+0020) are ignored (and, in particular,
+ * separate adjacent URIs).
+ * If either of these requirements is not met, getJavaVM raises a
+ * com.sun.star.uno.RuntimeException.
  */
 
 namespace css = com::sun::star;
@@ -1686,6 +1696,12 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
                 static_cast< cppu::OWeakObject * >(this));
         }
     }
+    rtl::OUString classPath;
+    try {
+        classPath = exp->expandMacros(
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM("$URE_INTERNAL_JAVA_CLASSPATH")));
+    } catch (css::lang::IllegalArgumentException &) {}
     jclass class_URLClassLoader = environment->FindClass(
         "java/net/URLClassLoader");
     if (class_URLClassLoader == 0) {
@@ -1705,7 +1721,7 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     if (ctor_URL_1 == 0) {
         handleJniException(environment);
     }
-    jvalue args[2];
+    jvalue args[3];
     args[0].l = environment->NewString(
         static_cast< jchar const * >(baseUrl.getStr()),
         static_cast< jsize >(baseUrl.getLength()));
@@ -1719,6 +1735,11 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     jmethodID ctor_URL_2 = environment->GetMethodID(
         class_URL, "<init>", "(Ljava/net/URL;Ljava/lang/String;)V");
     if (ctor_URL_2 == 0) {
+        handleJniException(environment);
+    }
+    jobjectArray classpath = jvmaccess::ClassPath::translateToUrls(
+        m_xContext, environment, classPath);
+    if (classpath == 0) {
         handleJniException(environment);
     }
     args[0].l = base;
@@ -1757,12 +1778,13 @@ void JavaVirtualMachine::setUpUnoVirtualMachine(JNIEnv * environment) {
     }
     jmethodID ctor_UnoClassLoader = environment->GetMethodID(
         class_UnoClassLoader, "<init>",
-        "(Ljava/net/URL;Ljava/lang/ClassLoader;)V");
+        "(Ljava/net/URL;[Ljava/net/URL;Ljava/lang/ClassLoader;)V");
     if (ctor_UnoClassLoader == 0) {
         handleJniException(environment);
     }
     args[0].l = base;
-    args[1].l = cl1;
+    args[1].l = classpath;
+    args[2].l = cl1;
     jobject cl2 = environment->NewObjectA(
         class_UnoClassLoader, ctor_UnoClassLoader, args);
     if (cl2 == 0) {
