@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-19 15:12:47 $
+#   last change: $Author: obo $ $Date: 2007-03-12 10:54:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,8 @@ CUSTOMMANIFESTFILE= MANIFEST.MF
 
 JARCLASSDIRS	= com$/sun$/star$/wizards$/web
 JARTARGET		= web.jar
+JARCLASSPATH = \
+    commonwizards.jar serializer.jar xalan.jar xercesImpl.jar xml-apis.jar
 
 # --- Files --------------------------------------------------------
 
