@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:38:55 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,9 @@
 #include <vcl/syschild.hxx>
 #include <vcl/sysdata.hxx>
 #include <com/sun/star/java/XJavaVM.hpp>
+#include "com/sun/star/lang/XMultiComponentFactory.hpp"
+#include "com/sun/star/uno/XComponentContext.hpp"
+#include "jvmaccess/classpath.hxx"
 
 #ifdef UNX
 #define Time xlib_time
@@ -72,7 +75,6 @@
 
 using namespace ::rtl;
 using namespace ::osl;
-using namespace ::utl;
 #ifdef SOLAR_JAVA
 using namespace ::com::sun::star::java;
 #endif // SOLAR_JAVA
@@ -275,10 +277,10 @@ SjApplet2_Impl::~SjApplet2_Impl() throw()
 #endif
 }
 
-void SjApplet2_Impl::init(Window * pParentWin,
-                          const css::uno::Reference<XMultiServiceFactory> & smgr,
-                          const INetURLObject & rDocBase,
-                          const SvCommandList & rCmdList)
+void SjApplet2_Impl::init(
+    Window * pParentWin,
+    css::uno::Reference< css::uno::XComponentContext > const & context,
+    const INetURLObject & rDocBase, const SvCommandList & rCmdList)
     throw(com::sun::star::uno::RuntimeException)
 {
 #ifdef SOLAR_JAVA
@@ -308,9 +310,15 @@ void SjApplet2_Impl::init(Window * pParentWin,
     OSL_TRACE("SjApplet2_Impl::init - mainUrl: %s\n", tmp.getStr());
 #endif
 
-    css::uno::Reference<XJavaVM>_xJavaVM =
-        css::uno::Reference<XJavaVM>(smgr->createInstance(
-           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
+    css::uno::Reference<XJavaVM> _xJavaVM = css::uno::Reference<XJavaVM>(
+        (css::uno::Reference< css::lang::XMultiComponentFactory >(
+            context->getServiceManager(), css::uno::UNO_QUERY_THROW)->
+         createInstanceWithContext(
+             rtl::OUString(
+                 RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.java.JavaVirtualMachine")),
+             context)),
+        UNO_QUERY);
     Sequence<sal_Int8> processID(17);
     rtl_getGlobalProcessId((sal_uInt8 *)processID.getArray());
     processID[16] = 0;
@@ -331,7 +339,15 @@ void SjApplet2_Impl::init(Window * pParentWin,
 
         JNIEnv * pEnv = vmAttachGuard.getEnvironment();
 
-        _jcAppletExecutionContext = pEnv->FindClass("stardiv/applet/AppletExecutionContext");                             testJavaException(pEnv);
+        _jcAppletExecutionContext = jvmaccess::ClassPath::loadClass(
+            context, pEnv,
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "vnd.sun.star.expand:$ORIGIN/classes/classes.jar")),
+            rtl::OUString(
+                RTL_CONSTASCII_USTRINGPARAM(
+                    "stardiv.applet.AppletExecutionContext")));
+        testJavaException(pEnv);
         _jcAppletExecutionContext = (jclass) pEnv->NewGlobalRef(_jcAppletExecutionContext );                               testJavaException(pEnv);
 
         jclass jcURL = pEnv->FindClass("java/net/URL");                                                                   testJavaException(pEnv);
