@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_component.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:10:14 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 11:02:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,26 @@ namespace {
 
 typedef ::std::list<OUString> t_stringlist;
 typedef ::std::vector< ::std::pair<OUString, OUString> > t_stringpairvec;
+
+bool jarManifestHeaderPresent(
+    OUString const & url, OUString const & name,
+    Reference<XCommandEnvironment> const & xCmdEnv )
+{
+    ::rtl::OUStringBuffer buf;
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
+    buf.append(
+        ::rtl::Uri::encode(
+            url, rtl_UriCharClassRegName, rtl_UriEncodeIgnoreEscapes,
+            RTL_TEXTENCODING_UTF8 ) );
+    buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("/META-INF/MANIFEST.MF") );
+    ::ucb::Content manifestContent;
+    OUString line;
+    return
+        create_ucb_content(
+            &manifestContent, buf.makeStringAndClear(), xCmdEnv,
+            false /* no throw */ )
+        && readLine( &line, name, manifestContent, RTL_TEXTENCODING_ASCII_US );
+}
 
 //==============================================================================
 class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
@@ -459,27 +479,10 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             else if (title.endsWithIgnoreAsciiCaseAsciiL(
                          RTL_CONSTASCII_STRINGPARAM(".jar") ))
             {
-                // read .jar manifest file:
-                ::rtl::OUStringBuffer buf;
-                buf.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.zip://") );
-                buf.append( ::rtl::Uri::encode( url,
-                                                rtl_UriCharClassRegName,
-                                                rtl_UriEncodeIgnoreEscapes,
-                                                RTL_TEXTENCODING_UTF8 ) );
-                buf.appendAscii(
-                    RTL_CONSTASCII_STRINGPARAM("/META-INF/MANIFEST.MF") );
-                ::ucb::Content manifestContent;
-                if (create_ucb_content( &manifestContent,
-                                        buf.makeStringAndClear(),
-                                        xCmdEnv, false /* no throw */ ))
-                {
-                    OUString line;
-                    if (readLine( &line, OUSTR("RegistrationClassName"),
-                                  manifestContent, RTL_TEXTENCODING_ASCII_US ))
-                        mediaType = OUSTR(
-                            "application/vnd.sun.star.uno-component;type=Java");
-                }
+                if (jarManifestHeaderPresent(
+                        url, OUSTR("RegistrationClassName"), xCmdEnv ))
+                    mediaType = OUSTR(
+                        "application/vnd.sun.star.uno-component;type=Java");
                 if (mediaType.getLength() == 0)
                     mediaType = OUSTR(
                         "application/vnd.sun.star.uno-typelibrary;type=Java");
@@ -1016,15 +1019,12 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
     const bool java = m_loader.equalsAsciiL(
         RTL_CONSTASCII_STRINGPARAM("com.sun.star.loader.Java2") );
     const OUString url( getURL() );
+    bool isJavaTypelib = java &&
+        !jarManifestHeaderPresent( url, OUSTR("UNO-Type-Path"), xCmdEnv );
 
     if (doRegisterPackage)
     {
-        if (java) // xxx todo: add to CLASSPATH until we have an
-                  // own extendable classloader, the sandbox
-                  // classloader is insufficient, because the bridge
-                  // and class com.sun.star.uno.Type load classes
-                  // using a different classloader, so add first before
-                  // raising the uno process
+        if (isJavaTypelib)
             that->addToUnoRc( java, url, xCmdEnv );
 
         if (! m_xRemoteContext.is()) {
@@ -1189,11 +1189,7 @@ void BackendImpl::ComponentPackageImpl::processPackage_(
                 xContext ), UNO_QUERY_THROW );
         xImplReg->revokeImplementation( url, xServicesRDB );
 
-        if (java) // xxx todo: add to CLASSPATH until we have an
-                  // own extendable classloader, the sandbox
-                  // classloader is insufficient, because the bridge
-                  // and class com.sun.star.uno.Type load classes
-                  // using a different classloader
+        if (isJavaTypelib)
             that->removeFromUnoRc( java, url, xCmdEnv );
 
         if (m_xRemoteContext.is()) {
@@ -1238,6 +1234,12 @@ void BackendImpl::TypelibraryPackageImpl::processPackage_(
         // live insertion:
         if (m_jarFile) {
             // xxx todo add to classpath at runtime: ???
+            //SB: It is probably not worth it to add the live inserted type
+            // library JAR to the UnoClassLoader in the soffice process.  Any
+            // live inserted component JAR that might reference this type
+            // library JAR runs in its own uno process, so there is probably no
+            // Java code in the soffice process that would see any UNO types
+            // introduced by this type library JAR.
         }
         else // RDB:
         {
