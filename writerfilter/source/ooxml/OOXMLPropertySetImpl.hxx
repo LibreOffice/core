@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:34:13 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-12 10:43:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef INCLUDED_OOXML_PROPERTY_SET_IMPL_HXX
 #define INCLUDED_OOXML_PROPERTY_SET_IMPL_HXX
 
-#include <vector>
+#include <set>
 #include "OOXMLPropertySet.hxx"
 
 namespace ooxml
@@ -112,9 +112,15 @@ public:
     virtual OOXMLValue * clone() const;
 };
 
+struct OOXMLPropertySetImplCompare
+{
+    bool operator()(const OOXMLProperty::Pointer_t x,
+                    const OOXMLProperty::Pointer_t y) const;
+};
+
 class OOXMLPropertySetImpl : public OOXMLPropertySet
 {
-    typedef vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
+    typedef set<OOXMLProperty::Pointer_t, OOXMLPropertySetImplCompare> OOXMLProperties_t;
     OOXMLProperties_t mProperties;
 public:
     OOXMLPropertySetImpl();
@@ -140,6 +146,7 @@ public:
 
 class OOXMLIntegerValue : public OOXMLValue
 {
+protected:
     sal_Int32 mnValue;
 public:
     OOXMLIntegerValue(sal_Int32 nValue);
@@ -148,6 +155,13 @@ public:
     virtual int getInt() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
+};
+
+class OOXMLListValue : public OOXMLIntegerValue
+{
+public:
+    OOXMLListValue();
+    virtual ~OOXMLListValue();
 };
 
 }

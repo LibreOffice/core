@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:34:13 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-12 10:43:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -266,6 +266,23 @@ OOXMLValue * OOXMLStringValue::clone() const
     return new OOXMLStringValue(*this);
 }
 
+/*
+  struct OOXMLPropertySetImplCompare
+ */
+
+bool OOXMLPropertySetImplCompare::operator()(const OOXMLProperty::Pointer_t x,
+                                             const OOXMLProperty::Pointer_t y) const
+{
+    bool bResult = false;
+
+    if (x.get() == NULL && y.get() != NULL)
+        bResult = true;
+    else if (x.get() != NULL && y.get() != NULL)
+        bResult = x->getId() < y->getId();
+
+    return bResult;
+}
+
 /**
    class OOXMLPropertySetImpl
 */
@@ -298,8 +315,12 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
-    mProperties.push_back(pProperty);
+    OOXMLProperties_t::iterator aIt = mProperties.find(pProperty);
 
+    if (aIt != mProperties.end())
+        mProperties.erase(aIt);
+
+    mProperties.insert(pProperty);
 }
 
 OOXMLPropertySet * OOXMLPropertySetImpl::clone() const
@@ -366,6 +387,18 @@ string OOXMLIntegerValue::toString() const
     snprintf(buffer, sizeof(buffer), "%ld", mnValue);
 
     return buffer;
+}
+
+/*
+  class OOXMLListValue
+*/
+OOXMLListValue::OOXMLListValue()
+: OOXMLIntegerValue(0)
+{
+}
+
+OOXMLListValue::~OOXMLListValue()
+{
 }
 
 }
