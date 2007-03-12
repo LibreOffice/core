@@ -4,9 +4,9 @@
  *
  *  $RCSfile: JDBCConnectionProperties.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 03:44:16 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:45:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,8 +60,27 @@ service JDBCConnectionProperties
     service com::sun::star::sdbc::ConnectionProperties;
 
     /** which jdbc driver class should be loaded to create the connection.
+
+        @see com::sun::star::sdbc::JDBCConnectionProperties::JavaDriverClassPath
     */
     [optional, property] string JavaDriverClass;
+
+    /** an optional class path to locate the <member
+        scope="com::sun::star::sdbc">JDBCConnectionProperties::JavaDriverClass
+        </member>.
+
+        <p>The class path is a list of zero or more internal (see the
+        <type scope="com::sun::star::uri">ExternalUriReferenceTranslator</type>
+        service) URI references, where any space characters
+        (<code>U+0020</code>) are ignored (and, in particular, separate adjacent
+        URI references).  Any &ldquo;vnd.sun.star.expand&rdquo; URL references
+        in the list are expanded using the
+        <type scope="com::sun::star::util">theMacroExpander</type>
+        singleton.</p>
+
+        @since OOo 2.3
+    */
+    [optional, property] string JavaDriverClassPath;
 
     /** specifies if retrieving of auto generated values should be enabled or not.
         If <TRUE/> than the statement will support the XGeneratedResultSet (future concept) interface, otherwise not.
