@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StorageAccess.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 04:55:34 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:39:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,17 +44,6 @@ package com.sun.star.sdbcx.comp.hsqldb;
  *
  * @author  oj93728
  */
-import com.sun.star.document.XDocumentSubStorageSupplier;
-import com.sun.star.embed.ElementModes;
-import com.sun.star.embed.XStorage;
-import com.sun.star.io.XStream;
-import com.sun.star.io.XInputStream;
-import com.sun.star.io.XOutputStream;
-import com.sun.star.io.XSeekable;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.beans.NamedValue;
-// import org.hsqldb.lib.SimpleLog;
 
 public class StorageAccess implements org.hsqldb.lib.Storage {
     String key;
