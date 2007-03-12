@@ -6,7 +6,6 @@
 
 package com.sun.star.sdbcx.comp.hsqldb;
 import com.sun.star.lib.util.NativeLibraryLoader;
-import com.sun.star.embed.XStorage;
 import com.sun.star.embed.ElementModes;
 /**
  *
