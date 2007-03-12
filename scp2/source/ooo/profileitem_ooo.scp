@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 14:57:51 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 11:01:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,7 +727,7 @@ ProfileItem gid_Profileitem_Uno_Uno_Java_Component_Path
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 7;
+    Order = 9;
     Key = "UNO_JAVA_COMPONENT_PATH";
     Value = "$ORIGIN/classes";
 End
@@ -736,9 +736,18 @@ ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Dir
     ProfileID = gid_Profile_Uno_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
-    Order = 7;
+    Order = 10;
     Key = "URE_INTERNAL_JAVA_DIR";
     Value = "$ORIGIN/classes";
+End
+
+ProfileItem gid_Profileitem_Uno_Ure_Internal_Java_Classpath
+    ProfileID = gid_Profile_Uno_Ini;
+    ModuleID = gid_Module_Root;
+    Section = "Bootstrap";
+    Order = 11;
+    Key = "URE_INTERNAL_JAVA_CLASSPATH";
+    Value = "$ORIGIN/classes/unoil.jar ${PKG_UserUnoFile:UNO_JAVA_CLASSPATH} ${PKG_SharedUnoFile:UNO_JAVA_CLASSPATH}";
 End
 
 
@@ -808,59 +817,32 @@ ProfileItem gid_Profileitem_Jvmfwk_UnoSettings
   #endif
 End
 
+#if defined SYSTEM_BSH || defined SYSTEM_HSQLDB || defined SYSTEM_XML_APIS || \
+    defined SYSTEM_XERCES || defined SYSTEM_XALAN || defined SYSTEM_SERIALIZER
 ProfileItem gid_Profileitem_Jvmfwk_Uno_Java_Jfw_Classpath_Urls
     ProfileID = gid_Profile_Jvmfwk_Ini;
     ModuleID = gid_Module_Root;
     Section = "Bootstrap";
     Order = 7;
     Key = "UNO_JAVA_JFW_CLASSPATH_URLS";
-    Value = "${${$ORIGIN/$UNO_SETTINGS:PKG_UserUnoFile}:UNO_JAVA_CLASSPATH}";
-    ValueList1  = "${${$ORIGIN/$UNO_SETTINGS:PKG_SharedUnoFile}:UNO_JAVA_CLASSPATH}";
-    ValueList2  = "$ORIGIN/classes/jurt.jar $ORIGIN/classes/ridl.jar";
-    ValueList3  = "$ORIGIN/classes/java_uno.jar";
-#ifndef GCJ
-    ValueList4  = "$ORIGIN/classes/sandbox.jar";
-#endif
+    Value = "";
 #ifdef SYSTEM_BSH
-    ValueList5  = BSH_JAR;
-#else
-    ValueList5  = "$ORIGIN/classes/bsh.jar";
+    ValueList1 = BSH_JAR;
 #endif
-    ValueList6  = "$ORIGIN/classes/classes.jar $ORIGIN/classes/commonwizards.jar";
-    ValueList7  = "$ORIGIN/classes/htmlsoff.jar";
-    ValueList8  = "$ORIGIN/classes/java_uno_accessbridge.jar $ORIGIN/classes/js.jar";
-    ValueList9  = "$ORIGIN/classes/juh.jar $ORIGIN/classes/jut.jar";
-    ValueList10 = "$ORIGIN/classes/letter.jar $ORIGIN/classes/officebean.jar";
-    ValueList11 = "$ORIGIN/classes/query.jar $ORIGIN/classes/report.jar";
-    ValueList12 = "$ORIGIN/classes/ScriptFramework.jar";
-    ValueList13 = "$ORIGIN/classes/ScriptProviderForBeanShell.jar";
-    ValueList14 = "$ORIGIN/classes/ScriptProviderForJava.jar";
-    ValueList15 = "$ORIGIN/classes/ScriptProviderForJavaScript.jar";
-    ValueList16 = "$ORIGIN/classes/tutorial.jar $ORIGIN/classes/unoil.jar";
-    ValueList17 = "$ORIGIN/classes/web.jar $ORIGIN/classes/xmerge.jar";
-    ValueList18 = "$ORIGIN/classes/XMergeBridge.jar $ORIGIN/classes/XSLTFilter.jar";
-    ValueList19 = "$ORIGIN/classes/XSLTValidate.jar";
-    ValueList20 = "$ORIGIN/classes/activation.jar $ORIGIN/classes/agenda.jar";
-    ValueList21 = "$ORIGIN/classes/aportisdoc.jar $ORIGIN/classes/avmedia.jar";
-    ValueList22 = "$ORIGIN/classes/email.jar $ORIGIN/classes/fax.jar";
-    ValueList23 = "$ORIGIN/classes/pexcel.jar $ORIGIN/classes/pocketword.jar";
-    ValueList24 = "$ORIGIN/classes/mail.jar";
 #ifdef SYSTEM_HSQLDB
-    ValueList25 = HSQLDB_JAR;
-#else
-    ValueList25 = "$ORIGIN/classes/hsqldb.jar";
+    ValueList2 = HSQLDB_JAR;
 #endif
-    ValueList26 = "$ORIGIN/classes/sdbc_hsqldb.jar";
 #ifdef SYSTEM_XML_APIS
-    ValueList27 = XML_APIS_JAR;
+    ValueList3 = XML_APIS_JAR;
 #endif
 #ifdef SYSTEM_XERCES
-    ValueList28 = XERCES_JAR;
+    ValueList4 = XERCES_JAR;
 #endif
 #ifdef SYSTEM_XALAN
-    ValueList29 = XALAN_JAR;
-#ifdef SYSTEM_SERIALIZER
-    ValueList30 = SERIALIZER_JAR;
+    ValueList5 = XALAN_JAR;
 #endif
+#ifdef SYSTEM_SERIALIZER
+    ValueList6 = SERIALIZER_JAR;
 #endif
 End
+#endif
