@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MacroExpander.idl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 16:40:49 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,22 +64,6 @@ published service MacroExpander
 {
     interface XMacroExpander;
     [optional] interface com::sun::star::lang::XComponent;
-};
-
-/** A service that has to deal with macrofied strings will preprocess those
-    strings using the macro expander singleton.
-    The macro expander singleton is deployed with the application.
-
-    This feature is currently used macrofying loader urls with macros defined
-    in uno.ini/unorc bootstrap files.  The component loader uses the macro
-    expander singleton to expand those macros.  This is a flexible way
-    preprocessing loader urls.
-
-    @see MacroExpander
-*/
-published singleton theMacroExpander
-{
-    service MacroExpander;
 };
 
 }; }; }; };
