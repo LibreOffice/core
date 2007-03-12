@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:57:37 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2283,7 +2283,8 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
         )
     {
         // Define variables which are used in following macros.
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleServiceFactory >   xFactory                                                                                                ;
+        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+              xFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    xServiceManager( reinterpret_cast< ::com::sun::star::lang::XMultiServiceFactory* >( pServiceManager ) ) ;
 
         //=============================================================================
@@ -2306,7 +2307,11 @@ SFX2_DLLPUBLIC void* SAL_CALL component_getFactory(
         IF_NAME_CREATECOMPONENTFACTORY( TestMouseClickHandler )
 #endif
         IF_NAME_CREATECOMPONENTFACTORY( OPackageStructureCreator )
-        IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::AppletObject )
+        if ( ::sfx2::AppletObject::impl_getStaticImplementationName().equals(
+                 ::rtl::OUString::createFromAscii( pImplementationName ) ) )
+        {
+            xFactory = ::sfx2::AppletObject::impl_createFactory();
+        }
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::PluginObject )
         IF_NAME_CREATECOMPONENTFACTORY( ::sfx2::IFrameObject )
 
