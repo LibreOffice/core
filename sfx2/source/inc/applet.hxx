@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applet.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:32:18 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 11:00:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,6 @@
 #ifndef  _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef  _COM_SUN_STAR_UI_DIALOGS_XEXECUTABLEDIALOG_HPP_
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #endif
@@ -75,7 +72,10 @@
 #include <svtools/ownlist.hxx>
 #include <svtools/itemprop.hxx>
 
-#include "sfxuno.hxx"
+namespace com { namespace sun { namespace star { namespace uno {
+    class XComponentContext;
+    class XInterface;
+} } } }
 
 class SjApplet2;
 namespace sfx2
@@ -89,7 +89,8 @@ class AppletObject : public ::cppu::WeakImplHelper6 <
         com::sun::star::lang::XInitialization,
         com::sun::star::beans::XPropertySet >
 {
-    com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory > mxFact;
+    com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >
+        mxContext;
     com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject > mxObj;
     SfxItemPropertySet  maPropSet;
     SvCommandList       maCmdList;
@@ -100,7 +101,10 @@ class AppletObject : public ::cppu::WeakImplHelper6 <
     SjApplet2*          mpApplet;
     sal_Bool            mbMayScript;
 
-                        AppletObject( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rFact );
+    AppletObject( AppletObject & ); // not defined
+    void operator =( AppletObject & ); // not defined
+
+                        AppletObject( const com::sun::star::uno::Reference < com::sun::star::uno::XComponentContext >& rContext );
                         ~AppletObject();
 
     virtual sal_Bool SAL_CALL load( const com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue >& lDescriptor,
@@ -120,8 +124,27 @@ class AppletObject : public ::cppu::WeakImplHelper6 <
     virtual void SAL_CALL setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::beans::PropertyVetoException, ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getPropertyValue( const ::rtl::OUString& PropertyName ) throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+
+    virtual ::rtl::OUString SAL_CALL getImplementationName()
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::sal_Bool SAL_CALL supportsService(
+        const ::rtl::OUString& sServiceName )
+        throw( ::com::sun::star::uno::RuntimeException );
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
+    getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
+
+    static ::com::sun::star::uno::Sequence< ::rtl::OUString >
+    impl_getStaticSupportedServiceNames();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    SAL_CALL impl_createInstance(
+        const ::com::sun::star::uno::Reference<
+        ::com::sun::star::uno::XComponentContext >& xContext )
+        throw( ::com::sun::star::uno::Exception );
+
 public:
-    SFX_DECL_XSERVICEINFO
+    static ::rtl::OUString impl_getStaticImplementationName();
+    static ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
+    impl_createFactory();
 };
 
 }
