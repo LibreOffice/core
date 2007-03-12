@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoClassLoader.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-20 10:10:25 $
+ *  last change: $Author: obo $ $Date: 2007-03-12 10:48:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,8 @@ import java.util.jar.JarInputStream;
  * types, and any additional UNO types introduced by components; for the latter,
  * {@link #addURL} may be necessary).</p>
  *
- * <p><em>This class is not yet stable.</em></p>
+ * <p><em>This is an internal, unstable class of the Uno Runtime Environment; it
+ * should not be used by client code.</em></p>
  *
  * @since UDK 3.2.0
  */
@@ -68,48 +69,20 @@ public final class UnoClassLoader extends URLClassLoader {
      * (<code>java_uno.jar</code>, <code>juh.jar</code>, <code>jurt.jar</code>,
      * <code>ridl.jar</code>) can be found; must not be <code>null</code>.
      *
+     * @param classPath an array of URLs that form the class path of this class
+     * loader; may be <code>null</code>, which is the same as an empty array.
+     * The URLs are interpreted in the same way as the arguments of a {@link
+     * URLClassLoader}.
+     *
      * @param parent the parent class loader for delegation.
      *
      * @throws MalformedURLException if the given <code>base</code> URL is
      * malformed.
      */
-    public UnoClassLoader(URL base, ClassLoader parent)
+    public UnoClassLoader(URL base, URL[] classPath, ClassLoader parent)
         throws MalformedURLException
     {
-        //TODO  Get rid of java_uno.jar here:
-        super(
-            new URL[] {
-                new URL(base, "java_uno.jar"), new URL(base, "juh.jar"),
-                new URL(base, "jurt.jar"), new URL(base, "ridl.jar") },
-            parent);
-    }
-
-    /**
-     * Instantiates the root UNO class loader, passing it locations of
-     * additional UNO types.
-     *
-     * @param base a base URL relative to which the URE JARs
-     * (<code>java_uno.jar</code>, <code>juh.jar</code>, <code>jurt.jar</code>,
-     * <code>ridl.jar</code>) can be found; must not be <code>null</code>.
-     *
-     * @param parent the parent class loader for delegation.
-     *
-     * @param extraTypes a (possibly empty) array of URLs through which Java
-     * classes representing additional UNO types can be found; must not be
-     * <code>null</code>.
-     *
-     * @throws MalformedURLException if the given <code>base</code> URL is
-     * malformed.
-     *
-     * @since UDK 3.2.2
-     */
-    public UnoClassLoader(URL base, ClassLoader parent, URL[] extraTypes)
-        throws MalformedURLException
-    {
-        this(base, parent);
-        for (int i = 0; i < extraTypes.length; ++i) {
-            addURL(extraTypes[i]);
-        }
+        super(createUrls(base, classPath), parent);
     }
 
     /**
@@ -230,5 +203,20 @@ public final class UnoClassLoader extends URLClassLoader {
             s.close();
         }
         return mf == null ? null : mf.getMainAttributes();
+    }
+
+    private static URL[] createUrls(URL base, URL[] classPath)
+        throws MalformedURLException
+    {
+        final int JARS = 4;
+        URL[] urls = new URL[JARS + (classPath == null ? 0 : classPath.length)];
+        urls[0] = new URL(base, "java_uno.jar"); //TODO get rid of it here
+        urls[1] = new URL(base, "juh.jar");
+        urls[2] = new URL(base, "jurt.jar");
+        urls[3] = new URL(base, "ridl.jar");
+        if (classPath != null) {
+            System.arraycopy(classPath, 0, urls, JARS, classPath.length);
+        }
+        return urls;
     }
 }
