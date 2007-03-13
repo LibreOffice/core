@@ -14093,7 +14093,7 @@
   <sprm name="lang" tokenid="0x0"/>
   <sprm name="eastAsianLayout" tokenid="0x0"/>
   <sprm name="specVanish" tokenid="0x818"/>
-  <sprm name="oMath" tokenid="0x0"/>
+  <sprm name="oMath" tokenid="0x0"/>rtf:sprmPChgTabsPapx
 </resource>
 <resource name="CT_RPr" resource="Properties"/>
 <resource name="CT_OnOff" resource="BooleanValue"/>
@@ -14143,7 +14143,7 @@
   <sprm name="suppressLineNumbers" tokenid="0x240c"/>
   <sprm name="pBdr" tokenid="ooxml:CT_PrBase_pBdr"/>
   <sprm name="shd" tokenid="0x442d"/>
-  <sprm name="tabs" tokenid="0xc60d"/>
+  <attribute name="tabs" tokenid="ooxml:CT_PPrBase_tabs"/>
   <sprm name="suppressAutoHyphens" tokenid="0x242a"/>
   <sprm name="kinsoku" tokenid="ooxml:CT_PPrBase_kinsoku"/>
   <sprm name="wordWrap" tokenid="ooxml:CT_PPrBase_wordWrap"/>
@@ -14168,9 +14168,7 @@
   <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
 </resource>
 <resource name="CT_PPr" resource="Properties"/>
-<resource name="CT_Tabs" resource="Property">
-  <sprm name="tab" tokenid="0xC60D"/>
-</resource>
+<resource name="CT_Tabs" resource="Property" />
 <resource name="CT_TabStop" resource="PropertySetValue">
   <attribute name="val" tokenid="ooxml:CT_TabStop_val"/>
   <attribute name="leader" tokenid="ooxml:CT_TabStop_leader"/>
