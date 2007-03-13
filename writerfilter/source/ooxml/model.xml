@@ -14176,6 +14176,23 @@
   <attribute name="leader" tokenid="ooxml:CT_TabStop_leader"/>
   <attribute name="pos" tokenid="ooxml:CT_TabStop_pos"/>
 </resource>
+<resource name="ST_TabJc" resource="List">
+  <value tokenid="ooxml:Value_ST_TabJc_clear">clear</value>
+  <value tokenid="0">left</value>
+  <value tokenid="1">center</value>
+  <value tokenid="2">right</value>
+  <value tokenid="3">decimal</value>
+  <value tokenid="4">bar</value>
+  <value tokenid="ooxml:Value_ST_TabJc_num">num</value>
+</resource>
+<resource name="ST_TabTlc" resource="List">
+  <value tokenid="0">none</value>
+  <value tokenid="1">dot</value>
+  <value tokenid="2">hyphen</value>
+  <value tokenid="3">underscore</value>
+  <value tokenid="4">heavy</value>
+  <value tokenid="ooxml:Value_ST_TabTlc_middleDot">middleDot</value>
+</resource>
 <resource name="ST_Underline" resource="List">
   <value tokenid="1">single</value>
   <value tokenid="2">words</value>
