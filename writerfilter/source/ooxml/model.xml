@@ -6781,12 +6781,12 @@
   </define>
   <define name="CT_TabStop">
     <attribute name="val">
-      <text/>
+      <ref name="ST_TabJc"/>
       <xs:documentation>Tab Stop Type</xs:documentation>
     </attribute>
     <optional>
       <attribute name="leader">
-        <text/>
+        <ref name="ST_TabTlc"/>
         <xs:documentation>Tab Leader Character</xs:documentation>
       </attribute>
     </optional>
