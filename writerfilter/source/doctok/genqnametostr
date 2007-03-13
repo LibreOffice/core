@@ -5,9 +5,9 @@
 #
 #  $RCSfile: genqnametostr,v $
 #
-#  $Revision: 1.1 $
+#  $Revision: 1.2 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-03-12 10:06:49 $
+#  last change: $Author: hbrinkm $ $Date: 2007-03-13 10:09:13 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
 #
 # ***********************************************************************/
 
-xalan -xsl qnametostr.xsl -in resources.xmi > qnametostr.tmp &
+xalan -xsl qnametostr.xsl -in resources.xmi > qnametostr.tmp 
 cat qnametostrheader > qnametostr.cxx
 cat qnametostr.tmp >> qnametostr.cxx
 cat ../ooxml/qnametostr.tmp >> qnametostr.cxx
