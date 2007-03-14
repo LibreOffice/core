@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustrbuf.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:44:49 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,11 +247,15 @@ public:
     void setLength(sal_Int32 newLength)
     {
         OSL_ASSERT(newLength >= 0);
-        if( newLength > nCapacity )
-            rtl_uStringbuffer_ensureCapacity(&pData, &nCapacity, newLength);
-        else
-            pData->buffer[newLength] = 0;
-        pData->length = newLength;
+        // Avoid modifications if pData points to const empty string:
+        if( newLength != pData->length )
+        {
+            if( newLength > nCapacity )
+                rtl_uStringbuffer_ensureCapacity(&pData, &nCapacity, newLength);
+            else
+                pData->buffer[newLength] = 0;
+            pData->length = newLength;
+        }
     }
 
     /**
