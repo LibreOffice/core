@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urp_propertyobject.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:48:51 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -728,8 +728,14 @@ void SAL_CALL PropertyObject::localCommitChange( const ::rtl::OUString &sProps ,
                    &pArg1,
                    &pException );
     job.setBridgePropertyCall();
-    job.pack();
-    job.wait();
+    if( job.pack() )
+    {
+        job.wait();
+    }
+    else
+    {
+        OSL_ASSERT( pException != NULL );
+    }
 
     ::uno_type_destructData(
         &pSeq, getCppuType( (Sequence< ProtocolProperty > *)0).getTypeLibType(), 0 );
