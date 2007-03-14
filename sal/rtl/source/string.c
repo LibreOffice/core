@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:14:24 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,8 +68,7 @@
 /* static data to be referenced by all empty strings
  * the refCount is predefined to 1 and must never become 0 !
  */
-// MT: Should be const, but doesn't work because of #i64835#
-static rtl_String aImplEmpty_rtl_String =
+static rtl_String const aImplEmpty_rtl_String =
 {
     1,      /* sal_Int32    refCount;   */
     0,      /* sal_Int32    length;     */
