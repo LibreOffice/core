@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoLoader.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 10:48:53 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:35:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,7 +37,11 @@ package com.sun.star.lib.unoloader;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.AccessController;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 
 /**
  * A helper class for executing UNO JARs.
@@ -75,12 +79,23 @@ public final class UnoLoader {
      * the <code>main</code> method of the specified Main-Class of the given JAR
      * <code>jar</code>.
      */
-    public static void execute(URL base, URL jar, String[] arguments)
+    public static void execute(final URL base, URL jar, String[] arguments)
         throws IOException, ClassNotFoundException, NoSuchMethodException,
         InvocationTargetException
     {
-        new UnoClassLoader(base, null, UnoLoader.class.getClassLoader()).
-            execute(jar, arguments);
+        UnoClassLoader cl;
+        try {
+            cl = (UnoClassLoader) AccessController.doPrivileged(
+                new PrivilegedExceptionAction() {
+                    public Object run() throws MalformedURLException {
+                        return new UnoClassLoader(
+                            base, UnoLoader.class.getClassLoader());
+                    }
+                });
+        } catch (PrivilegedActionException e) {
+            throw (MalformedURLException) e.getException();
+        }
+        cl.execute(jar, arguments);
     }
 
     private UnoLoader() {}
