@@ -4,9 +4,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 12:20:39 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:27:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,8 @@
 #include <com/sun/star/reflection/XServiceTypeDescription.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include "com/sun/star/uno/RuntimeException.hpp"
+
+#include "mergekeys.hxx"
 
 #if defined(SAL_W32) || defined(SAL_OS2)
 #include <io.h>
@@ -159,11 +161,6 @@ const StringPool &spool()
     return *pPool;
 }
 
-void SAL_CALL mergeKeys(
-    Reference< registry::XRegistryKey > const & xDest,
-    Reference< registry::XRegistryKey > const & xSource )
-    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
-
 static Sequence< OUString > impreg_getSupportedServiceNames()
 {
     static Sequence < OUString > *pNames = 0;
@@ -190,7 +187,8 @@ static OUString impreg_getImplementationName()
 //  static deleteAllLinkReferences()
 //
 static void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
-                                    const Reference < XRegistryKey >& xSource) throw ( InvalidRegistryException )
+                                    const Reference < XRegistryKey >& xSource)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     Reference < XRegistryKey > xKey = xSource->openKey(
         spool().slash_UNO_slash_REGISTRY_LINKS );
@@ -273,7 +271,8 @@ static void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
 //
 static void prepareLink( const Reference < XSimpleRegistry > & xDest,
                          const Reference < XRegistryKey > & xSource,
-                         const OUString& link) throw ( InvalidRegistryException )
+                         const OUString& link)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     OUString linkRefName = xSource->getKeyName();
     OUString linkName(link);
@@ -318,7 +317,7 @@ static OUString searchImplForLink(
     const Reference < XRegistryKey > & xRootKey,
     const OUString& linkName,
     const OUString& implName )
-    throw ( InvalidRegistryException )
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     const StringPool & pool = spool();
     Reference < XRegistryKey > xKey = xRootKey->openKey( pool.slash_IMPLEMENTATIONS );
@@ -356,7 +355,8 @@ static OUString searchImplForLink(
 //
 static OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootKey,
                                         const OUString& linkName,
-                                        const OUString& implName) throw ( InvalidRegistryException )
+                                        const OUString& implName)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     OUString ret;
 
@@ -398,7 +398,8 @@ static OUString searchLinkTargetForImpl(const Reference < XRegistryKey >& xRootK
 //  static createUniqueSubEntry
 //
 static void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
-                                 const OUString& value) throw ( InvalidRegistryException )
+                                 const OUString& value)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     if (xSuperKey.is())
     {
@@ -458,7 +459,7 @@ static void createUniqueSubEntry(const Reference < XRegistryKey > & xSuperKey,
 //  static deleteSubEntry
 //
 static sal_Bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, const OUString& value)
-    throw ( InvalidRegistryException )
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     if (xSuperKey->getValueType() == RegistryValueType_ASCIILIST)
     {
@@ -505,7 +506,8 @@ static sal_Bool deleteSubEntry(const Reference < XRegistryKey >& xSuperKey, cons
 static void prepareUserLink(const Reference < XSimpleRegistry >& xDest,
                                 const OUString& linkName,
                                 const OUString& linkTarget,
-                                const OUString& implName) throw ( InvalidRegistryException  )
+                                const OUString& implName)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     sal_Bool ret = sal_False;
 
@@ -578,7 +580,8 @@ static void deletePathIfPossible(const Reference < XRegistryKey >& xRootKey,
 static void deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                                const OUString& linkName,
                                const OUString& linkTarget,
-                               const OUString& implName) throw ( InvalidRegistryException )
+                               const OUString& implName)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     sal_Bool bClean = sal_False;
 
@@ -682,7 +685,8 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
                                 const Reference < XRegistryKey >& xUnoKey,
                                 const Reference < XRegistryKey >& xKey,
                                 const OUString& implName,
-                                sal_Bool bRegister) throw ( InvalidRegistryException )
+                                sal_Bool bRegister)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     sal_Bool hasSubKeys = sal_False;
 
@@ -759,7 +763,8 @@ static void prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
 static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xReg,
                                         const Reference < XRegistryKey >& xSource,
                                         const OUString& locationUrl,
-                                        std::list<OUString> & implNames) throw (InvalidRegistryException)
+                                        std::list<OUString> & implNames)
+    // throw (InvalidRegistryException, RuntimeException)
 {
     Sequence < Reference < XRegistryKey > > subKeys = xSource->openKeys();
 
@@ -842,7 +847,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
 static void delete_all_singleton_entries(
     Reference < registry::XRegistryKey > const & xSingletons_section,
     ::std::list< OUString > const & impl_names )
-    throw (InvalidRegistryException)
+    // throw (InvalidRegistryException, RuntimeException)
 {
     Sequence< Reference< registry::XRegistryKey > > singletons( xSingletons_section->openKeys() );
     Reference< registry::XRegistryKey > const * subkeys = singletons.getConstArray();
@@ -906,7 +911,8 @@ static void delete_all_singleton_entries(
 //
 static void deleteAllServiceEntries(    const Reference < XSimpleRegistry >& xReg,
                                         const Reference < XRegistryKey >& xSource,
-                                        const OUString& implName) throw ( InvalidRegistryException )
+                                        const OUString& implName)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
 
@@ -999,8 +1005,7 @@ static void insert_singletons(
     Reference< registry::XSimpleRegistry > const & xDest,
     Reference< registry::XRegistryKey > const & xImplKey,
     Reference< XComponentContext > const & xContext )
-    SAL_THROW( (registry::InvalidRegistryException,
-                registry::CannotRegisterImplementationException) )
+    // throw( registry::InvalidRegistryException, registry::CannotRegisterImplementationException, RuntimeException )
 {
     // singletons
     Reference< registry::XRegistryKey > xKey( xImplKey->openKey( OUSTR("UNO/SINGLETONS") ) );
@@ -1131,7 +1136,7 @@ static void prepareRegistry(
     const OUString& implementationLoaderUrl,
     const OUString& locationUrl,
     Reference< XComponentContext > const & xContext )
-    throw ( InvalidRegistryException, CannotRegisterImplementationException )
+    // throw ( InvalidRegistryException, CannotRegisterImplementationException, RuntimeException )
 {
     Sequence< Reference < XRegistryKey > > subKeys = xSource->openKeys();
 
@@ -1309,9 +1314,9 @@ public:
     ~ImplementationRegistration();
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw();
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw();
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw();
+    OUString                        SAL_CALL getImplementationName() throw(RuntimeException);
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException);
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames(void) throw(RuntimeException);
 
     // XImplementationRegistration
     virtual void SAL_CALL registerImplementation(
@@ -1350,8 +1355,8 @@ private: // helper methods
         const OUString& implementationLoader,
         const OUString& location,
         bool stripPath,
-        const Reference < XSimpleRegistry > & xReg)
-        throw(  CannotRegisterImplementationException, RuntimeException );
+        const Reference < XSimpleRegistry > & xReg);
+    // throw( CannotRegisterImplementationException, RuntimeException )
 
     static void doRegister( const Reference < XMultiComponentFactory >& xSMgr,
                             const Reference < XComponentContext > &xCtx,
@@ -1359,14 +1364,14 @@ private: // helper methods
                             const Reference < XSimpleRegistry >& xDest,
                             const OUString& implementationLoaderUrl,
                             const OUString& locationUrl,
-                            bool stripPath)
-        throw ( InvalidRegistryException,
-                MergeConflictException,
-                CannotRegisterImplementationException );
+                            bool stripPath);
+        /* throw ( InvalidRegistryException,
+                   MergeConflictException,
+                   CannotRegisterImplementationException, RuntimeException ) */
 
     static void doRevoke( const Reference < XSimpleRegistry >& xDest,
-                          const OUString& locationUrl )
-        throw( InvalidRegistryException );
+                          const OUString& locationUrl );
+        // throw( InvalidRegistryException, RuntimeException )
     Reference< XSimpleRegistry > getRegistryFromServiceManager();
 
     static Reference< XSimpleRegistry > createTemporarySimpleRegistry(
@@ -1398,13 +1403,13 @@ ImplementationRegistration::~ImplementationRegistration()
 
 
 // XServiceInfo
-OUString ImplementationRegistration::getImplementationName() throw()
+OUString ImplementationRegistration::getImplementationName() throw(RuntimeException)
 {
     return impreg_getImplementationName();
 }
 
 // XServiceInfo
-sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName) throw()
+sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName) throw(RuntimeException)
 {
     Sequence< OUString > aSNL = getSupportedServiceNames();
     const OUString * pArray = aSNL.getConstArray();
@@ -1415,7 +1420,7 @@ sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName
 }
 
 // XServiceInfo
-Sequence< OUString > ImplementationRegistration::getSupportedServiceNames(void) throw()
+Sequence< OUString > ImplementationRegistration::getSupportedServiceNames(void) throw(RuntimeException)
 {
     return impreg_getSupportedServiceNames();
 }
@@ -1558,7 +1563,7 @@ void ImplementationRegistration::prepareRegister(
     const OUString& locationUrl,
     bool stripPath,
     const Reference < XSimpleRegistry > & xReg)
-    throw( CannotRegisterImplementationException, RuntimeException )
+    // throw( CannotRegisterImplementationException, RuntimeException )
 {
     OUString implLoaderUrl(implementationLoaderUrl);
     OUString activatorName;
@@ -1807,7 +1812,8 @@ Sequence< OUString > ImplementationRegistration::checkInstantiation(const OUStri
 
 void ImplementationRegistration::doRevoke(
     const Reference < XSimpleRegistry >& xDest,
-    const OUString& locationUrl) throw ( InvalidRegistryException )
+    const OUString& locationUrl)
+    // throw ( InvalidRegistryException, RuntimeException )
 {
     if( xDest.is() )
     {
@@ -1856,9 +1862,9 @@ void ImplementationRegistration::doRegister(
     const OUString& implementationLoaderUrl,
     const OUString& locationUrl,
     bool stripPath)
-    throw ( InvalidRegistryException,
-            MergeConflictException,
-            CannotRegisterImplementationException )
+    /* throw ( InvalidRegistryException,
+               MergeConflictException,
+               CannotRegisterImplementationException, RuntimeException ) */
 {
     Reference < XSimpleRegistry >   xReg =
         createTemporarySimpleRegistry( xSMgr, xCtx );
@@ -1939,7 +1945,7 @@ Reference< XSimpleRegistry > ImplementationRegistration::createTemporarySimpleRe
 
 //*************************************************************************
 static Reference<XInterface> SAL_CALL ImplementationRegistration_CreateInstance(
-    const Reference<XComponentContext> & xCtx ) throw(Exception)
+    const Reference<XComponentContext> & xCtx ) // throw(Exception)
 {
     return (XImplementationRegistration *)new ImplementationRegistration(xCtx);
 }
