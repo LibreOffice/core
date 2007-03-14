@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tenchelp.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:45:42 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:30:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,6 +130,9 @@ typedef struct
 {
     sal_uInt16                      mnUniChar;
     sal_uChar                       mnChar;
+    sal_uChar                       mnChar2;
+        // to cater for mappings like MS1258 with 1--2 bytes per Unicode char,
+        // 0 if unused
 } ImplUniCharTabData;
 
 typedef struct
