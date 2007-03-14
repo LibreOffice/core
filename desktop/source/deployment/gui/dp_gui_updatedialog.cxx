@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:24:20 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:32:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -495,7 +495,7 @@ void UpdateDialog::Thread::handle(
         package->getUpdateInformationURLs());
     if (urls.getLength() == 0) {
         map->insert(
-            std::pair< Map::key_type const, Map::data_type >(
+            Map::value_type(
                 id, Entry(package, packageManager, package->getVersion())));
     } else {
         css::uno::Sequence< css::uno::Reference< css::xml::dom::XElement > >
