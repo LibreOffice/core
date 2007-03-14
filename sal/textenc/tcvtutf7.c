@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtutf7.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:38:15 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:30:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -503,7 +503,7 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
             {
                 if ( pDestBuf >= pEndDestBuf )
                 {
-                    *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+                    *pInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }
                 *pDestBuf = IMPL_SHIFT_IN_CHAR;
@@ -513,7 +513,7 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
                 {
                     if ( pDestBuf >= pEndDestBuf )
                     {
-                        *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+                        *pInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                         break;
                     }
                     *pDestBuf = IMPL_SHIFT_OUT_CHAR;
@@ -553,7 +553,7 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
 
             if ( nBufferBits >= 6 )
             {
-                *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+                *pInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                 break;
             }
 
@@ -562,7 +562,7 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
             {
                 if ( pDestBuf >= pEndDestBuf )
                 {
-                    *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+                    *pInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }
                 *pDestBuf = IMPL_SHIFT_OUT_CHAR;
@@ -578,7 +578,7 @@ sal_Size ImplUnicodeToUTF7( const ImplTextConverterData* pData, void* pContext,
             {
                 if ( pDestBuf >= pEndDestBuf )
                 {
-                    *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+                    *pInfo |= RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
                     break;
                 }
                 *pDestBuf = (sal_Char)(sal_uChar)c;
