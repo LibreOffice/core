@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:15:24 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -885,7 +885,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     if( STRING_LEN == rInf.GetLen() )
         rInf.SetLen( nLn );
 
-    FontUnderline nOldUnder;
+    FontUnderline nOldUnder( UNDERLINE_NONE );
     SwUnderlineFont* pUnderFnt = 0;
 
     if( rInf.GetUnderFnt() )
