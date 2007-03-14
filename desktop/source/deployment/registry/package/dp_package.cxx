@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:55:59 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 13:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -660,9 +660,9 @@ bool BackendImpl::PackageImpl::checkDependencies(
     try
     {
         css::uno::Reference<css::xml::dom::XNode> xRoot = desc.getRootElement();
-        css::uno::Reference<css::xml::xpath::XXPathAPI> xPath(
+        css::uno::Reference<css::xml::xpath::XXPathAPI> xPath =
             DescriptionInfoset(getMyBackend()->getComponentContext(), xRoot).
-            getXpath());
+            getXpath();
 
         css::uno::Reference<css::xml::dom::XNode> nodeSimpleLic =
             xPath->selectSingleNode(xRoot,
@@ -688,7 +688,8 @@ bool BackendImpl::PackageImpl::checkDependencies(
         OSL_ASSERT(aContextName.getLength());
         if (sAccept.equals(OUSTR("user")) && aContextName.equals(OUSTR("shared")))
         {
-            css::deployment::LicenseIndividualAgreementException exc(OUString(), 0, m_name);
+        css::deployment::LicenseIndividualAgreementException exc =
+            css::deployment::LicenseIndividualAgreementException(OUString(), 0, m_name);
 
             bool approve = false;
             bool abort = false;
@@ -722,7 +723,8 @@ bool BackendImpl::PackageImpl::checkDependencies(
 
         if ( !(bInstalled && bSuppress))
         {
-            css::deployment::LicenseException licExc(OUString(), 0, m_name, sLicense);
+            css::deployment::LicenseException licExc =
+                css::deployment::LicenseException(OUString(), 0, m_name, sLicense);
             bool approve = false;
             bool abort = false;
             if (! interactContinuation(
