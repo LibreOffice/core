@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tcvtbyte.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:37:51 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:29:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -653,63 +653,71 @@ sal_Size ImplCharToUnicode( const ImplTextConverterData* pData,
 
 /* ----------------------------------------------------------------------- */
 
-static sal_Char ImplConvertUnicodeCharToChar( const ImplByteConvertData* pConvertData,
-                                              sal_Unicode c )
+// Writes 0--2 characters to dest:
+static int ImplConvertUnicodeCharToChar(
+    const ImplByteConvertData* pConvertData, sal_Unicode c, sal_Char * dest )
 {
-    sal_Char                    cConv;
     const ImplUniCharTabData*   pToCharExTab;
 
     if ( c < 0x80 )
-        cConv = (sal_Char)c;
-    else
     {
-        if ( (c >= pConvertData->mnToCharStart1) && (c <= pConvertData->mnToCharEnd1) )
-            cConv = (sal_Char)pConvertData->mpToCharTab1[c-pConvertData->mnToCharStart1];
-        else if ( (c >= pConvertData->mnToCharStart2) && (c <= pConvertData->mnToCharEnd2) )
-            cConv = (sal_Char)pConvertData->mpToCharTab2[c-pConvertData->mnToCharStart2];
-        else
+        dest[0] = (sal_Char)c;
+        return 1;
+    }
+    if ( (c >= pConvertData->mnToCharStart1) && (c <= pConvertData->mnToCharEnd1) )
+    {
+        dest[0] = (sal_Char)pConvertData->mpToCharTab1[c-pConvertData->mnToCharStart1];
+        if ( dest[0] != 0 )
+            return 1;
+    }
+    else if ( (c >= pConvertData->mnToCharStart2) && (c <= pConvertData->mnToCharEnd2) )
+    {
+        dest[0] = (sal_Char)pConvertData->mpToCharTab2[c-pConvertData->mnToCharStart2];
+        if ( dest[0] != 0 )
+            return 1;
+    }
+    pToCharExTab = pConvertData->mpToCharExTab;
+    if ( pToCharExTab )
+    {
+        sal_uInt16                  nLow;
+        sal_uInt16                  nHigh;
+        sal_uInt16                  nMid;
+        sal_uInt16                  nCompareChar;
+        const ImplUniCharTabData*   pCharExData;
+
+        nLow = 0;
+        nHigh = pConvertData->mnToCharExCount-1;
+        do
         {
-            cConv = 0x00;
-
-            pToCharExTab = pConvertData->mpToCharExTab;
-            if ( pToCharExTab )
+            nMid = (nLow+nHigh)/2;
+            pCharExData = pToCharExTab+nMid;
+            nCompareChar = pCharExData->mnUniChar;
+            if ( c < nCompareChar )
             {
-                sal_uInt16                  nLow;
-                sal_uInt16                  nHigh;
-                sal_uInt16                  nMid;
-                sal_uInt16                  nCompareChar;
-                const ImplUniCharTabData*   pCharExData;
-
-                nLow = 0;
-                nHigh = pConvertData->mnToCharExCount-1;
-                do
+                if ( !nMid )
+                    break;
+                nHigh = nMid-1;
+            }
+            else
+            {
+                if ( c > nCompareChar )
+                    nLow = nMid+1;
+                else
                 {
-                    nMid = (nLow+nHigh)/2;
-                    pCharExData = pToCharExTab+nMid;
-                    nCompareChar = pCharExData->mnUniChar;
-                    if ( c < nCompareChar )
-                    {
-                        if ( !nMid )
-                            break;
-                        nHigh = nMid-1;
-                    }
+                    dest[0] = (sal_Char)pCharExData->mnChar;
+                    if ( pCharExData->mnChar2 == 0 )
+                        return 1;
                     else
                     {
-                        if ( c > nCompareChar )
-                            nLow = nMid+1;
-                        else
-                        {
-                            cConv = (sal_Char)pCharExData->mnChar;
-                            break;
-                        }
+                        dest[1] = (sal_Char)pCharExData->mnChar2;
+                        return 2;
                     }
                 }
-                while ( nLow <= nHigh );
             }
         }
+        while ( nLow <= nHigh );
     }
-
-    return cConv;
+    return 0;
 }
 
 /* ----------------------------------------------------------------------- */
@@ -722,14 +730,13 @@ sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData,
                             sal_Size* pSrcCvtChars )
 {
     sal_Unicode                 c;
-    sal_Char                    cConv;
     const ImplByteConvertData*  pConvertData = (const ImplByteConvertData*)pData;
     sal_Char*                   pEndDestBuf;
     const sal_Unicode*          pEndSrcBuf;
     int                         i;
     int                         n;
     sal_uInt16                  cTemp;
-    sal_Char                    aTempBuf[IMPL_MAX_REPLACECHAR+1];
+    sal_Char                    aTempBuf[IMPL_MAX_REPLACECHAR+2];
     const sal_uInt16*           pReplace;
 
     (void) pContext; /* unused */
@@ -741,83 +748,73 @@ sal_Size ImplUnicodeToChar( const ImplTextConverterData* pData,
     {
         c = *pSrcBuf;
         if ( c < 0x80 )
-            cConv = (sal_Char)c;
+        {
+            aTempBuf[0] = (sal_Char)c;
+            n = 1;
+        }
         else
         {
-            cConv = ImplConvertUnicodeCharToChar( pConvertData, c );
+            n = ImplConvertUnicodeCharToChar( pConvertData, c, aTempBuf );
 
-            if ( !cConv )
+            if ( n == 0 )
             {
                 if ( nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE )
                 {
                     cTemp = ImplGetReplaceChar( c );
                     if ( cTemp )
-                        cConv = ImplConvertUnicodeCharToChar( pConvertData, cTemp );
+                        n = ImplConvertUnicodeCharToChar(
+                            pConvertData, cTemp, aTempBuf );
                 }
 
-                if ( !cConv )
+                if ( n == 0 )
                 {
                     if ( nFlags & RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR )
                     {
                         pReplace = ImplGetReplaceString( c );
                         if ( pReplace )
                         {
-                            i = 0;
-                            while ( *pReplace && (i < IMPL_MAX_REPLACECHAR) )
+                            while ( *pReplace && (n < IMPL_MAX_REPLACECHAR) )
                             {
-                                cConv = ImplConvertUnicodeCharToChar( pConvertData, *pReplace );
-                                if ( !cConv )
+                                i = ImplConvertUnicodeCharToChar(
+                                    pConvertData, *pReplace, aTempBuf + n );
+                                if ( i == 0 )
+                                {
+                                    n = 0;
                                     break;
-                                aTempBuf[i] = cConv;
+                                }
                                 pReplace++;
-                                i++;
-                            }
-
-                            if ( cConv )
-                            {
-                                if ( pDestBuf+i >= pEndDestBuf )
-                                {
-                                    *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
-                                    break;
-                                }
-
-                                n = 0;
-                                while ( n < i )
-                                {
-                                    *pDestBuf = aTempBuf[n];
-                                    pDestBuf++;
-                                    n++;
-                                }
-                                pSrcBuf++;
-                                continue;
+                                n += i;
                             }
                         }
                     }
 
                     /* Handle undefined and surrogates characters */
                     /* (all surrogates characters are undefined) */
-                    if (ImplHandleUndefinedUnicodeToTextChar(pData,
-                                                             &pSrcBuf,
-                                                             pEndSrcBuf,
-                                                             &pDestBuf,
-                                                             pEndDestBuf,
-                                                             nFlags,
-                                                             pInfo))
-                        continue;
-                    else
-                        break;
+                    if ( n == 0 )
+                    {
+                        if (ImplHandleUndefinedUnicodeToTextChar(pData,
+                                                                 &pSrcBuf,
+                                                                 pEndSrcBuf,
+                                                                 &pDestBuf,
+                                                                 pEndDestBuf,
+                                                                 nFlags,
+                                                                 pInfo))
+                            continue;
+                        else
+                            break;
+                    }
                 }
             }
         }
 
-        if ( pDestBuf == pEndDestBuf )
+        if ( pEndDestBuf - pDestBuf < n )
         {
             *pInfo |= RTL_UNICODETOTEXT_INFO_ERROR | RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
             break;
         }
 
-        *pDestBuf = cConv;
-        pDestBuf++;
+        for ( i = 0; i < n; ++i )
+            *pDestBuf++ = aTempBuf[i];
         pSrcBuf++;
     }
 
