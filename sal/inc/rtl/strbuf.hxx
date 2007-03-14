@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strbuf.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:14:15 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:27:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,11 +246,15 @@ public:
     void setLength(sal_Int32 newLength)
     {
         OSL_ASSERT(newLength >= 0);
-        if( newLength > nCapacity )
-            rtl_stringbuffer_ensureCapacity(&pData, &nCapacity, newLength);
-        else
-            pData->buffer[newLength] = '\0';
-        pData->length = newLength;
+        // Avoid modifications if pData points to const empty string:
+        if( newLength != pData->length )
+        {
+            if( newLength > nCapacity )
+                rtl_stringbuffer_ensureCapacity(&pData, &nCapacity, newLength);
+            else
+                pData->buffer[newLength] = '\0';
+            pData->length = newLength;
+        }
     }
 
     /**
