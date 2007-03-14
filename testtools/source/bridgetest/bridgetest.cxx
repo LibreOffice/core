@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bridgetest.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:44:40 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:24:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1214,8 +1214,6 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
         fprintf( stderr, "exception occured: %s\n", cstr.getStr() );
         throw;
     }
-
-    bRet = MyClass::checkObjectCount() && bRet;
 
     if( bRet )
     {
