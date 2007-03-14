@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:44:22 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:25:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,7 +421,7 @@ namespace {
 
 extern "C" void privateSnippetExecutor();
 
-int const codeSnippetSize = 32;
+int const codeSnippetSize = 7 * 4;
 
 unsigned char * codeSnippet(
     unsigned char * code, sal_Int32 functionIndex, sal_Int32 vtableOffset,
@@ -438,17 +438,15 @@ unsigned char * codeSnippet(
     // sethi %hi(privateSnippetExecutor), %l0:
     *p++ = 0x21000000
         | (reinterpret_cast< unsigned int >(privateSnippetExecutor) >> 10);
-    // or %l0, %lo(privateSnippetExecutor), %l0:
-    *p++ = 0xA0142000
-        | (reinterpret_cast< unsigned int >(privateSnippetExecutor) & 0x3FF);
     // sethi %hi(index), %o0:
     *p++ = 0x11000000 | (index >> 10);
     // or %o0, %lo(index), %o0:
     *p++ = 0x90122000 | (index & 0x3FF);
     // sethi %hi(vtableOffset), %o1:
     *p++ = 0x13000000 | (vtableOffset >> 10);
-    // jmpl %l0, %g0:
-    *p++ = 0x81C40000;
+    // jmpl %l0, %lo(privateSnippetExecutor), %g0:
+    *p++ = 0x81C42000
+        | (reinterpret_cast< unsigned int >(privateSnippetExecutor) & 0x3FF);
     // or %o1, %lo(vtableOffset), %o1:
     *p++ = 0x92126000 | (vtableOffset & 0x3FF);
     OSL_ASSERT(
