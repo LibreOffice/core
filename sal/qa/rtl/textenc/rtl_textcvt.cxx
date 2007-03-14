@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_textcvt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:53:17 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:28:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2443,6 +2443,29 @@ void Test::testComplex() {
               6,
               true,
               true,
+              true,
+              false,
+              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+
+            // Bug #i73103#:
+            { RTL_TEXTENCODING_MS_1258,
+              RTL_CONSTASCII_STRINGPARAM(
+                  "\xC0\x41\xDE\xE3\xD2\xD4\xEC\xFD\xF2"),
+              { 0x00C0, 0x0041, 0x0303, 0x0103, 0x0309, 0x00D4, 0x0301, 0x01B0,
+                0x0323 },
+              9,
+              true,
+              true,
+              true,
+              false,
+              RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR },
+            { RTL_TEXTENCODING_MS_1258,
+              RTL_CONSTASCII_STRINGPARAM(
+                  "\xC0\x41\xDE\xE3\xD2\xD4\xEC\xFD\xF2"),
+              { 0x00C0, 0x00C3, 0x1EB3, 0x1ED0, 0x1EF1 },
+              5,
+              false,
+              false,
               true,
               false,
               RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR }
