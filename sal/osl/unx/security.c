@@ -4,9 +4,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 09:55:41 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:28:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,12 +76,25 @@ static sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszD
 static sal_Bool SAL_CALL osl_psz_getConfigDir(oslSecurity Security, sal_Char* pszDirectory, sal_uInt32 nMax);
 
 static oslSecurityImpl * newSecurityImpl(size_t * bufSize) {
-#if defined (MACOSX) || defined (FREEBSD)
-    /* #i64906#: sysconf(_SC_GETPW_R_SIZE_MAX) returns -1 on Mac OS X and FreeBSD */
-    size_t n = 1024;
-#else
-    size_t n = (size_t) sysconf(_SC_GETPW_R_SIZE_MAX);
-#endif
+    long m;
+    size_t n;
+    errno = 0;
+    m = sysconf(_SC_GETPW_R_SIZE_MAX);
+    if (m == -1) {
+        if (errno == 0) {
+            /* _SC_GETPW_R_SIZE_MAX has no limit, choose something sensible (the
+               callers of newSecurityImpl should detect it if the allocated
+               buffer is too small, so this could lead to an error upstream, but
+               not a crash): */
+            n = 1024;
+        } else {
+            /* sysconf failed: */
+            return NULL;
+        }
+    } else {
+        OSL_ASSERT(m >= 0 && (unsigned long) m < SIZE_MAX);
+        n = (size_t) m;
+    }
     if (n <= SIZE_MAX - offsetof(oslSecurityImpl, m_buffer)) {
         *bufSize = n;
         n += offsetof(oslSecurityImpl, m_buffer);
