@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:11:00 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 13:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,7 +394,7 @@ void SwViewImp::MakeDrawView()
             if(pWindow)
             {
                 // #i72754# use correct region calculation now
-                const Rectangle aRectPixel(Point(), pWindow->GetOutputSizePixel());
+                const Rectangle aRectPixel = Rectangle(Point(), pWindow->GetOutputSizePixel());
                 const Rectangle aRectLogic(pWindow->PixelToLogic(aRectPixel));
                 const Region aRegionLogic(aRectLogic);
                 ViewShell &rSh = *GetShell();
