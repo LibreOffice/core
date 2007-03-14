@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uuid.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 16:32:30 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:29:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,11 +117,15 @@ extern "C" void SAL_CALL rtl_createUuid( sal_uInt8 *pTargetUUID ,
         if (pool == NULL) {
             pool = rtl_random_createPool();
             if (pool == NULL) {
-                abort(); //TODO
+                abort();
+                    // only possible way to signal failure here (rtl_createUuid
+                    // being part of a fixed C API)
             }
         }
         if (rtl_random_getBytes(pool, pTargetUUID, 16) != rtl_Random_E_None) {
-            abort(); //TODO
+            abort();
+                // only possible way to signal failure here (rtl_createUuid
+                // being part of a fixed C API)
         }
     }
     // See ITU-T Recommendation X.667:
