@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:04:46 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 13:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -336,7 +336,7 @@ void SdDocPreviewWin::updateViewSettings()
 
         // Use new StandardCheckVisisbilityRedirector
         StandardCheckVisisbilityRedirector aRedirector;
-        const Rectangle aRedrawRectangle( Point(), aNewSize );
+        const Rectangle aRedrawRectangle = Rectangle( Point(), aNewSize );
         Region aRedrawRegion(aRedrawRectangle);
         pView->SdrPaintView::CompleteRedraw(&aVDev,aRedrawRegion,0,&aRedirector);
 
