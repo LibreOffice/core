@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_misc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:58:02 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include "osl/file.h"
 #include "osl/thread.hxx"
 #include "cppuhelper/servicefactory.hxx"
-#include "cppuhelper/component_context.hxx"
 #include "ucbhelper/contentbroker.hxx"
 #include "ucbhelper/configurationkeys.hxx"
 #include "unotools/processfactory.hxx"
@@ -364,28 +363,6 @@ Reference<XComponentContext> bootstrapStandAlone(
     // assure disposing of local component context:
     disposeGuard.reset(
         Reference<lang::XComponent>( xContext, UNO_QUERY ) );
-
-    // wrap component context to work on local configuration data only
-    const ::cppu::ContextEntry_Init contextEntries [] = {
-#define CFG_PREFIX "/modules/com.sun.star.configuration/bootstrap/"
-        ::cppu::ContextEntry_Init(
-            OUSTR(CFG_PREFIX "BackendService"),
-            Any( OUSTR("com.sun.star.configuration.backend."
-                       "LocalSingleBackend") ) ),
-        ::cppu::ContextEntry_Init(
-            OUSTR(CFG_PREFIX "BackendWrapper"),
-            Any( OUSTR("com.sun.star.configuration.backend."
-                       "OnlineBackend") ) ),
-        ::cppu::ContextEntry_Init(
-            OUSTR(CFG_PREFIX "CacheUrl"), Any( OUString() ) ),
-        ::cppu::ContextEntry_Init( OUSTR(CFG_PREFIX "Offline"), Any() ),
-        ::cppu::ContextEntry_Init(
-            OUSTR("/implementations/com.sun.star.com.configuration."
-                  "bootstrap.ComponentContext/isPassthrough"),
-            Any(true) )
-    };
-    xContext = ::cppu::createComponentContext(
-        contextEntries, ARLEN(contextEntries), xContext );
 
     Reference<lang::XMultiServiceFactory> xServiceManager(
         xContext->getServiceManager(), UNO_QUERY_THROW );
