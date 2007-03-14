@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:30:39 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:29:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1062,7 +1062,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new )( IMPL_RTL_STRINGDATA** ppThis )
     if ( *ppThis)
         IMPL_RTL_STRINGNAME( release )( *ppThis );
 
-    *ppThis = &IMPL_RTL_EMPTYSTRING;
+    *ppThis = (IMPL_RTL_STRINGDATA*) (&IMPL_RTL_EMPTYSTRING);
     IMPL_RTL_AQUIRE( *ppThis );
 }
 
