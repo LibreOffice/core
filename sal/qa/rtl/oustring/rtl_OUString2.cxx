@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:58:11 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:28:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1004,12 +1004,35 @@ public:
     CPPUNIT_TEST_SUITE_END();
 }; // class getToken
 
+class convertToString: public CppUnit::TestFixture {
+public:
+    void test();
+
+    CPPUNIT_TEST_SUITE(convertToString);
+    CPPUNIT_TEST(test);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+void convertToString::test() {
+    static sal_Unicode const utf16[] = { 0x0041, 0x00E4, 0x0061 };
+    rtl::OString s;
+    CPPUNIT_ASSERT(
+        rtl::OUString(utf16, sizeof utf16 / sizeof utf16[0]).convertToString(
+            &s, RTL_TEXTENCODING_UTF7,
+            (RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR |
+             RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR)));
+    CPPUNIT_ASSERT_EQUAL(
+        rtl::OString(RTL_CONSTASCII_STRINGPARAM("A+AOQ-a")), s);
+}
+
 // -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toFloat, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::lastIndexOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::getToken, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
+    rtl_OUString::convertToString, "rtl_OUString");
 
 } // namespace rtl_OUString
 
