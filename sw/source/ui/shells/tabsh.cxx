@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:16:39 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:05:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1063,10 +1063,42 @@ void SwTableShell::Execute(SfxRequest &rReq)
 
             if( nCount )
             {
+                // i74180: Table border patch submitted by chensuchun:
+                // -->get the SvxBoxInfoItem of the table before insert
+                SfxItemSet aCoreSet( GetPool(), aUITableAttrRange);
+                ::lcl_TableParamToItemSet( aCoreSet, rSh );
+                bool bSetInnerBorders = false;
+                sal_uInt16 nUndoId = 0;
+                // <--End
+
                 if( bColumn )
+                {
+                    rSh.StartUndo( UNDO_TABLE_INSCOL );
                     rSh.InsertCol( nCount, bAfter );
+                    bSetInnerBorders = true;
+                    nUndoId = UNDO_TABLE_INSCOL;
+                }
                 else if ( !rSh.IsInRepeatedHeadline() )
+                {
+                    rSh.StartUndo( UNDO_TABLE_INSROW );
                     rSh.InsertRow( nCount, bAfter );
+                    bSetInnerBorders = true;
+                    nUndoId = UNDO_TABLE_INSROW;
+                }
+
+                // -->after inserting,reset the inner table borders
+                if ( bSetInnerBorders )
+                {
+                    const SvxBoxInfoItem aBoxInfo((const SvxBoxInfoItem&)
+                        aCoreSet.Get(SID_ATTR_BORDER_INNER));
+                    SfxItemSet aSet( GetPool(), SID_ATTR_BORDER_INNER,
+                                                SID_ATTR_BORDER_INNER, 0);
+                    aSet.Put( aBoxInfo );
+                    ItemSetToTableParam( aSet, rSh );
+                    rSh.EndUndo( nUndoId );
+                }
+                // <--
+
                 bCallDone = TRUE;
                 break;
             }
