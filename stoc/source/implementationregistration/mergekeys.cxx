@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mergekeys.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:29:28 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 08:27:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 #include <com/sun/star/registry/XRegistryKey.hpp>
 #include <com/sun/star/registry/MergeConflictException.hpp>
 
+#include "mergekeys.hxx"
+
 #define OUSTR(x) ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(x) )
 
 using namespace ::rtl;
@@ -56,7 +58,7 @@ struct Link
     OUString m_name;
     OUString m_target;
 
-    inline Link( OUString const & name, OUString const & target ) SAL_THROW( () )
+    inline Link( OUString const & name, OUString const & target )
         : m_name( name )
         , m_target( target )
         {}
@@ -68,7 +70,7 @@ static void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource,
     t_links & links )
-    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
+    // throw( registry::InvalidRegistryException, registry::MergeConflictException, RuntimeException )
 {
     if (!xSource.is() || !xSource->isValid()) {
         throw registry::InvalidRegistryException(
@@ -160,10 +162,10 @@ static void mergeKeys(
 }
 
 //==================================================================================================
-void SAL_CALL mergeKeys(
+void mergeKeys(
     Reference< registry::XRegistryKey > const & xDest,
     Reference< registry::XRegistryKey > const & xSource )
-    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) )
+    // throw( registry::InvalidRegistryException, registry::MergeConflictException, RuntimeException )
 {
     if (!xDest.is() || !xDest->isValid()) {
         throw registry::InvalidRegistryException(
