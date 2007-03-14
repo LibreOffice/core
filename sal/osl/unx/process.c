@@ -4,9 +4,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 15:55:13 $
+ *  last change: $Author: obo $ $Date: 2007-03-14 13:17:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,10 +48,6 @@
 # endif
 #endif
 
-
-#ifdef LINUX
-#include <asm/param.h>
-#endif
 
 #ifdef FREEBSD
 #include <machine/param.h>
@@ -1472,13 +1468,24 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
              *   to work in 2.0.36)
              */
 
-            unsigned long userseconds=(procstat.utime/HZ);
-            unsigned long systemseconds=(procstat.stime/HZ);
+            long clktck;
+            unsigned long hz;
+            unsigned long userseconds;
+            unsigned long systemseconds;
+
+            clktck = sysconf(_SC_CLK_TCK);
+            if (clktck < 0) {
+                return osl_Process_E_Unknown;
+            }
+            hz = (unsigned long) clktck;
+
+            userseconds = procstat.utime/hz;
+            systemseconds = procstat.stime/hz;
 
             pInfo->UserTime.Seconds   = userseconds;
-            pInfo->UserTime.Nanosec   = procstat.utime - (userseconds * HZ);
+            pInfo->UserTime.Nanosec   = procstat.utime - (userseconds * hz);
             pInfo->SystemTime.Seconds = systemseconds;
-            pInfo->SystemTime.Nanosec = procstat.stime - (systemseconds * HZ);
+            pInfo->SystemTime.Nanosec = procstat.stime - (systemseconds * hz);
 
             pInfo->Fields |= osl_Process_CPUTIMES;
         }
