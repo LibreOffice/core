@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlged.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-02-01 12:52:53 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:00:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::io;
-using namespace ::rtl;
+using ::rtl::OUString;
 
 static ::rtl::OUString aResourceResolverPropName =
     ::rtl::OUString::createFromAscii( "ResourceResolver" );
