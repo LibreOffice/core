@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:28:41 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:52:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,7 +392,7 @@ protected:
 public:
                     TYPEINFO();
 
-                    ModulWindow( ModulWindowLayout* pParent, SfxObjectShell* pShell, String aLibName,
+                    ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName,
                         String aName, ::rtl::OUString& aModule );
 
                     ~ModulWindow();
