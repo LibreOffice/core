@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-02-01 08:25:03 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:02:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,8 +43,9 @@
 #include <com/sun/star/container/XNameContainer.hpp>
 #endif
 
+#include "scriptdocument.hxx"
+
 class BasicIDEShell;
-class SfxObjectShell;
 class DlgEditor;
 
 class LocalizationMgr
@@ -54,7 +55,7 @@ class LocalizationMgr
 
     BasicIDEShell*                                              m_pIDEShell;
 
-    SfxObjectShell*                                             m_pShell;
+    ScriptDocument                                              m_aDocument;
     String                                                      m_aLibName;
 
     ::com::sun::star::lang::Locale                              m_aLocaleBeforeBasicStart;
@@ -85,7 +86,7 @@ class LocalizationMgr
     void implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode );
 
 public:
-    LocalizationMgr( BasicIDEShell* pIDEShell, SfxObjectShell* pShell, String aLibName,
+    LocalizationMgr( BasicIDEShell* pIDEShell, const ScriptDocument& rDocument, String aLibName,
         const ::com::sun::star::uno::Reference
             < ::com::sun::star::resource::XStringResourceManager >& xStringResourceManager );
     ::com::sun::star::uno::Reference
@@ -121,13 +122,13 @@ public:
     static void deleteControlResourceIDsForDeletedEditorObject( DlgEditor* pEditor,
         ::com::sun::star::uno::Any aControlAny, const ::rtl::OUString& aCtrlName );
 
-    static void setStringResourceAtDialog( SfxObjectShell* pShell, const String& aLibName, const String& aDlgName,
+    static void setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName, const String& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
-    static void renameStringResourceIDs( SfxObjectShell* pShell, const String& aLibName, const String& aDlgName,
+    static void renameStringResourceIDs( const ScriptDocument& rDocument, const String& aLibName, const String& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
-    static void removeResourceForDialog( SfxObjectShell* pShell, const String& aLibName, const String& aDlgName,
+    static void removeResourceForDialog( const ScriptDocument& rDocument, const String& aLibName, const String& aDlgName,
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > xDialogModel );
 
     static ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceManager >
