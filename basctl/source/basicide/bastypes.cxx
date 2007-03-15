@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastypes.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-19 08:43:06 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:55:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,9 +81,9 @@ const char* pRegName = "BasicIDETabBar";
 TYPEINIT0( IDEBaseWindow )
 TYPEINIT1( SbxItem, SfxPoolItem );
 
-IDEBaseWindow::IDEBaseWindow( Window* pParent, SfxObjectShell* pShell, String aLibName, String aName )
+IDEBaseWindow::IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName )
     :Window( pParent, WinBits( WB_3DLOOK ) )
-    ,m_pShell( pShell )
+    ,m_aDocument( rDocument )
     ,m_aLibName( aLibName )
     ,m_aName( aName )
 {
@@ -235,8 +235,8 @@ String IDEBaseWindow::CreateQualifiedName()
     String aName;
     if ( m_aLibName.Len() )
     {
-        LibraryLocation eLocation = BasicIDE::GetLibraryLocation( m_pShell, m_aLibName );
-        aName = BasicIDE::GetTitle( m_pShell, eLocation, SFX_TITLE_CAPTION );
+        LibraryLocation eLocation = m_aDocument.getLibraryLocation( m_aLibName );
+        aName = m_aDocument.getTitle( eLocation );
         aName += '.';
         aName += m_aLibName;
         aName += '.';
@@ -637,10 +637,10 @@ void __EXPORT BasicIDETabBar::Command( const CommandEvent& rCEvt )
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
         if ( pIDEShell )
         {
-            SfxObjectShell* pShell = pIDEShell->GetCurShell();
+            ScriptDocument aDocument( pIDEShell->GetCurDocument() );
             ::rtl::OUString aOULibName( pIDEShell->GetCurLibName() );
-            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+            Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                  ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
             {
@@ -813,12 +813,12 @@ ULONG CalcLineCount( SvStream& rStream )
 }
 
 LibInfoKey::LibInfoKey()
-    :m_pShell( 0 )
+    :m_aDocument( ScriptDocument::getApplicationScriptDocument() )
 {
 }
 
-LibInfoKey::LibInfoKey( SfxObjectShell* pShell, const String& rLibName )
-    :m_pShell( pShell )
+LibInfoKey::LibInfoKey( const ScriptDocument& rDocument, const String& rLibName )
+    :m_aDocument( rDocument )
     ,m_aLibName( rLibName )
 {
 }
@@ -828,14 +828,14 @@ LibInfoKey::~LibInfoKey()
 }
 
 LibInfoKey::LibInfoKey( const LibInfoKey& rKey )
-    :m_pShell( rKey.m_pShell )
+    :m_aDocument( rKey.m_aDocument )
     ,m_aLibName( rKey.m_aLibName )
 {
 }
 
 LibInfoKey& LibInfoKey::operator=( const LibInfoKey& rKey )
 {
-    m_pShell = rKey.m_pShell;
+    m_aDocument = rKey.m_aDocument;
     m_aLibName = rKey.m_aLibName;
     return *this;
 }
@@ -843,19 +843,19 @@ LibInfoKey& LibInfoKey::operator=( const LibInfoKey& rKey )
 bool LibInfoKey::operator==( const LibInfoKey& rKey ) const
 {
     bool bRet = false;
-    if ( m_pShell == rKey.m_pShell && m_aLibName == rKey.m_aLibName )
+    if ( m_aDocument == rKey.m_aDocument && m_aLibName == rKey.m_aLibName )
         bRet = true;
     return bRet;
 }
 
 LibInfoItem::LibInfoItem()
-    :m_pShell( 0 )
+    :m_aDocument( ScriptDocument::getApplicationScriptDocument() )
     ,m_nCurrentType( 0 )
 {
 }
 
-LibInfoItem::LibInfoItem( SfxObjectShell* pShell, const String& rLibName, const String& rCurrentName, USHORT nCurrentType )
-    :m_pShell( pShell )
+LibInfoItem::LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, USHORT nCurrentType )
+    :m_aDocument( rDocument )
     ,m_aLibName( rLibName )
     ,m_aCurrentName( rCurrentName )
     ,m_nCurrentType( nCurrentType )
@@ -867,7 +867,7 @@ LibInfoItem::~LibInfoItem()
 }
 
 LibInfoItem::LibInfoItem( const LibInfoItem& rItem )
-    :m_pShell( rItem.m_pShell )
+    :m_aDocument( rItem.m_aDocument )
     ,m_aLibName( rItem.m_aLibName )
     ,m_aCurrentName( rItem.m_aCurrentName )
     ,m_nCurrentType( rItem.m_nCurrentType )
@@ -876,7 +876,7 @@ LibInfoItem::LibInfoItem( const LibInfoItem& rItem )
 
 LibInfoItem& LibInfoItem::operator=( const LibInfoItem& rItem )
 {
-    m_pShell = rItem.m_pShell;
+    m_aDocument = rItem.m_aDocument;
     m_aLibName = rItem.m_aLibName;
     m_aCurrentName = rItem.m_aCurrentName;
     m_nCurrentType = rItem.m_nCurrentType;
@@ -898,7 +898,7 @@ LibInfos::~LibInfos()
 
 void LibInfos::InsertInfo( LibInfoItem* pItem )
 {
-    LibInfoKey aKey( pItem->GetShell(), pItem->GetLibName() );
+    LibInfoKey aKey( pItem->GetDocument(), pItem->GetLibName() );
     LibInfoMap::iterator it = m_aLibInfoMap.find( aKey );
     if ( it != m_aLibInfoMap.end() )
     {
@@ -929,18 +929,18 @@ LibInfoItem* LibInfos::GetInfo( const LibInfoKey& rKey )
     return pItem;
 }
 
-SbxItem::SbxItem(USHORT nWhich_, SfxObjectShell* pShell, const String& aLibName, const String& aName, USHORT nType )
+SbxItem::SbxItem(USHORT nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, USHORT nType )
     :SfxPoolItem( nWhich_ )
-    ,m_pShell(pShell)
+    ,m_aDocument(rDocument)
     ,m_aLibName(aLibName)
     ,m_aName(aName)
     ,m_nType(nType)
 {
 }
 
-SbxItem::SbxItem(USHORT nWhich_, SfxObjectShell* pShell, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType )
+SbxItem::SbxItem(USHORT nWhich_, const ScriptDocument& rDocument, const String& aLibName, const String& aName, const String& aMethodName, USHORT nType )
     :SfxPoolItem( nWhich_ )
-    ,m_pShell(pShell)
+    ,m_aDocument(rDocument)
     ,m_aLibName(aLibName)
     ,m_aName(aName)
     ,m_aMethodName(aMethodName)
@@ -948,9 +948,10 @@ SbxItem::SbxItem(USHORT nWhich_, SfxObjectShell* pShell, const String& aLibName,
 {
 }
 
-SbxItem::SbxItem(const SbxItem& rCopy) : SfxPoolItem( rCopy )
+SbxItem::SbxItem(const SbxItem& rCopy)
+    :SfxPoolItem( rCopy )
+    ,m_aDocument( rCopy.m_aDocument )
 {
-    m_pShell = rCopy.m_pShell;
     m_aLibName = rCopy.m_aLibName;
     m_aName = rCopy.m_aName;
     m_aMethodName = rCopy.m_aMethodName;
@@ -960,7 +961,7 @@ SbxItem::SbxItem(const SbxItem& rCopy) : SfxPoolItem( rCopy )
 int SbxItem::operator==( const SfxPoolItem& rCmp) const
 {
     DBG_ASSERT( rCmp.ISA( SbxItem ), "==: Kein SbxItem!" );
-    return ( SfxPoolItem::operator==( rCmp ) && ( m_pShell == ((const SbxItem&)rCmp).m_pShell )
+    return ( SfxPoolItem::operator==( rCmp ) && ( m_aDocument == ((const SbxItem&)rCmp).m_aDocument )
                                              && ( m_aLibName == ((const SbxItem&)rCmp).m_aLibName )
                                              && ( m_aName == ((const SbxItem&)rCmp).m_aName )
                                              && ( m_aMethodName == ((const SbxItem&)rCmp).m_aMethodName )
