@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:30:02 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:54:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #include <basidesh.hrc>
 #include <baside2.hxx>
 #include <basicmod.hxx>
-
+#include <basdoc.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -69,10 +69,11 @@ using namespace ::com::sun::star::container;
 //----------------------------------------------------------------------------
 
 extern "C" {
-    rtl_uString* basicide_choose_macro( BOOL bExecute, BOOL bChooseOnly, rtl_uString* pMacroDesc )
+    rtl_uString* basicide_choose_macro( void* pOnlyInDocument_AsXModel, BOOL bChooseOnly, rtl_uString* pMacroDesc )
     {
         ::rtl::OUString aMacroDesc( pMacroDesc );
-        ::rtl::OUString aScriptURL = BasicIDE::ChooseMacro( bExecute, bChooseOnly, aMacroDesc );
+        Reference< frame::XModel > aDocument( static_cast< frame::XModel* >( pOnlyInDocument_AsXModel ) );
+        ::rtl::OUString aScriptURL = BasicIDE::ChooseMacro( aDocument, bChooseOnly, aMacroDesc );
         rtl_uString* pScriptURL = aScriptURL.pData;
         rtl_uString_acquire( pScriptURL );
 
@@ -178,16 +179,6 @@ void BasicIDE::DecBasicDialogCount()
 
 //----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > BasicIDE::GetLibraryNames( SfxObjectShell* pShell )
-{
-    Reference< script::XLibraryContainer > xModLibContainer( GetModuleLibraryContainer( pShell ), UNO_QUERY );
-    Reference< script::XLibraryContainer > xDlgLibContainer( GetDialogLibraryContainer( pShell ), UNO_QUERY );
-
-    return GetMergedLibraryNames( xModLibContainer, xDlgLibContainer );
-}
-
-//----------------------------------------------------------------------------
-
 Sequence< ::rtl::OUString > BasicIDE::GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
 {
     // create a sorted list of module library names
@@ -231,307 +222,28 @@ Sequence< ::rtl::OUString > BasicIDE::GetMergedLibraryNames( const Reference< sc
 
 //----------------------------------------------------------------------------
 
-BOOL BasicIDE::HasShell( SfxObjectShell* pShell )
+bool BasicIDE::RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const String& rLibName, const String& rOldName, const String& rNewName )
 {
-    BOOL bHasShell = FALSE;
-
-    if ( pShell )
+    if ( !rDocument.hasModule( rLibName, rOldName ) )
     {
-        SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
-        while ( pDocShell )
-        {
-            if ( pDocShell == pShell )
-            {
-                bHasShell = TRUE;
-                break;
-            }
-            pDocShell = SfxObjectShell::GetNext( *pDocShell );
-        }
+        OSL_ENSURE( false, "BasicIDE::RenameModule: old module name is invalid!" );
+        return false;
     }
 
-    return bHasShell;
-}
-
-//----------------------------------------------------------------------------
-
-Reference< script::XLibraryContainer > BasicIDE::GetModuleLibraryContainer( SfxObjectShell* pShell )
-{
-    // get library container
-    Reference< script::XLibraryContainer > xLibContainer;
-    if( pShell )
+    if ( rDocument.hasModule( rLibName, rNewName ) )
     {
-        // document
-        xLibContainer = Reference< script::XLibraryContainer >( pShell->GetBasicContainer(), UNO_QUERY );
-    }
-    else
-    {
-        // application
-        xLibContainer = Reference< script::XLibraryContainer >( SFX_APP()->GetBasicContainer(), UNO_QUERY );
+        ErrorBox aError( pErrorParent, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) );
+        aError.Execute();
+        return false;
     }
 
-    return xLibContainer;
-}
-
-//----------------------------------------------------------------------------
-
-BOOL BasicIDE::HasModuleLibrary( SfxObjectShell* pShell, const String& rLibName )
-{
-    BOOL bHasModuleLibrary = FALSE;
-
-    // get library container
-    Reference< script::XLibraryContainer > xLibContainer = GetModuleLibraryContainer( pShell );
-
-    // check if library container has module library
-    ::rtl::OUString aOULibName( rLibName );
-    if( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
-    {
-        bHasModuleLibrary = TRUE;
-    }
-
-    return bHasModuleLibrary;
-}
-
-//----------------------------------------------------------------------------
-
-Reference< container::XNameContainer > BasicIDE::GetModuleLibrary( SfxObjectShell* pShell, const String& rLibName, BOOL bLoadLibrary )
-    throw(NoSuchElementException)
-{
-    // get library container
-    Reference< script::XLibraryContainer > xLibContainer = GetModuleLibraryContainer( pShell );
-
-    // get library
-    Reference< container::XNameContainer > xLib;
-    ::rtl::OUString aOULibName( rLibName );
-    if( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
-    {
-        Any aElement = xLibContainer->getByName( aOULibName );
-        aElement >>= xLib;
-    }
-    else
-    {
-        throw NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetModuleLibrary: NoSuchElementException!") ),
-            Reference<XInterface>() );
-    }
-
-    // load library
-    if( bLoadLibrary && !xLibContainer->isLibraryLoaded( aOULibName ) )
-        xLibContainer->loadLibrary( aOULibName );
-
-    return xLib;
-}
-
-//----------------------------------------------------------------------------
-
-Reference< ::com::sun::star::container::XNameContainer > BasicIDE::CreateModuleLibrary( SfxObjectShell* pShell, const String& rLibName )
-    throw(ElementExistException)
-{
-    // get library container
-    Reference< script::XLibraryContainer > xLibContainer = GetModuleLibraryContainer( pShell );
-
-    // create module library
-    Reference< container::XNameContainer > xLib;
-    ::rtl::OUString aOULibName( rLibName );
-    if( xLibContainer.is() && !xLibContainer->hasByName( aOULibName ) )
-    {
-        xLib = xLibContainer->createLibrary( aOULibName );
-    }
-    else
-    {
-        throw ElementExistException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::CreateModuleLibrary: ElementExistException!") ),
-            Reference<XInterface>() );
-    }
-
-    return xLib;
-}
-
-//----------------------------------------------------------------------------
-
-Sequence< ::rtl::OUString > BasicIDE::GetModuleNames( SfxObjectShell* pShell, const String& rLibName )
-    throw(NoSuchElementException)
-{
-    Sequence< ::rtl::OUString > aSeqModNames;
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName );
-    if( xLib.is() )
-    {
-        Sequence< ::rtl::OUString > aModNames = xLib->getElementNames();
-        sal_Int32 nModCount = aModNames.getLength();
-        const ::rtl::OUString* pModNames = aModNames.getConstArray();
-
-        // sort module names
-        ::std::vector<String> aModList( nModCount );
-        sal_Int32 i;
-
-        for ( i = 0 ; i < nModCount ; i++ )
-            aModList[ i ] = pModNames[ i ];
-        ::std::sort( aModList.begin() , aModList.end() , StringCompareLessThan );
-
-        // copy to sequence
-        aSeqModNames.realloc( nModCount );
-        for ( i = 0 ; i < nModCount ; i++ )
-            aSeqModNames.getArray()[ i ] = aModList[ i ];
-    }
-
-    return aSeqModNames;
-}
-
-//----------------------------------------------------------------------------
-
-BOOL BasicIDE::HasModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
-{
-    BOOL bHasModule = FALSE;
-
-    // get library container
-    Reference< script::XLibraryContainer > xLibContainer = GetModuleLibraryContainer( pShell );
-
-    // check if library container has module library
-    ::rtl::OUString aOULibName( rLibName );
-    if ( xLibContainer.is() && xLibContainer->hasByName( aOULibName ) )
-    {
-        // load library
-        if ( !xLibContainer->isLibraryLoaded( aOULibName ) )
-            xLibContainer->loadLibrary( aOULibName );
-
-        // get library
-        Reference< container::XNameContainer > xLib;
-        Any aElement = xLibContainer->getByName( aOULibName );
-        aElement >>= xLib;
-
-        // check if library has module
-        ::rtl::OUString aOUModName( rModName );
-        if ( xLib.is() && xLib->hasByName( aOUModName ) )
-            bHasModule = TRUE;
-    }
-
-    return bHasModule;
-}
-
-//----------------------------------------------------------------------------
-
-::rtl::OUString BasicIDE::GetModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
-    throw(NoSuchElementException)
-{
-    // get library
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
-
-    // get module
-    ::rtl::OUString aOUSource;
-    ::rtl::OUString aOUModName( rModName );
-    if( xLib.is() && xLib->hasByName( aOUModName ) )
-    {
-        Any aElement = xLib->getByName( aOUModName );
-        aElement >>= aOUSource;
-    }
-    else
-    {
-        throw NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::GetModule: NoSuchElementException!") ),
-            Reference<XInterface>() );
-    }
-
-    return aOUSource;
-}
-
-//----------------------------------------------------------------------------
-
-String BasicIDE::CreateModuleName( SfxObjectShell* pShell, const String& rLibName )
-{
-    String aModName;
-    String aModStdName( RTL_CONSTASCII_USTRINGPARAM( "Module" ) );
-    //String aModStdName( IDEResId( RID_STR_STDMODULENAME ) );
-    BOOL bValid = FALSE;
-    USHORT i = 1;
-    while ( !bValid )
-    {
-        aModName = aModStdName;
-        aModName += String::CreateFromInt32( i );
-        if ( !BasicIDE::HasModule( pShell, rLibName, aModName ) )
-            bValid = TRUE;
-
-        i++;
-    }
-
-    return aModName;
-}
-
-//----------------------------------------------------------------------------
-
-::rtl::OUString BasicIDE::CreateModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName, BOOL bCreateMain )
-    throw(ElementExistException, NoSuchElementException)
-{
-    // get library
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
-
-    // create module
-    ::rtl::OUString aOUSource;
-    ::rtl::OUString aOUModName( rModName );
-    if( xLib.is() && !xLib->hasByName( aOUModName ) )
-    {
-        // create new module
-        aOUSource = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "REM  *****  BASIC  *****\n\n" ) );
-        if ( bCreateMain )
-            aOUSource += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Sub Main\n\nEnd Sub" ) );
-
-        // insert module into library
-        Any aElement;
-        aElement <<= aOUSource;
-        xLib->insertByName( aOUModName, aElement );
-
-        // doc shell modified
-        BasicIDE::MarkDocShellModified( pShell );   // here?
-    }
-    else
-    {
-        throw ElementExistException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::CreateModule: ElementExistException!") ),
-            Reference<XInterface>() );
-    }
-
-    return aOUSource;
-}
-
-//----------------------------------------------------------------------------
-
-void BasicIDE::RenameModule( SfxObjectShell* pShell, const String& rLibName, const String& rOldName, const String& rNewName )
-    throw(ElementExistException, NoSuchElementException)
-{
-    ::rtl::OUString aOUOldName( rOldName );
-    ::rtl::OUString aOUNewName( rNewName );
-
-    // get library
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
-
-    // rename module
-    if( xLib.is() && xLib->hasByName( aOUOldName ) )
-    {
-        if ( xLib->hasByName( aOUNewName ) )
-        {
-            throw ElementExistException(
-                ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameModule: ElementExistException!") ),
-                Reference<XInterface>() );
-        }
-
-        // get module
-        Any aElement = xLib->getByName( aOUOldName );
-
-        // remove module from module container
-        xLib->removeByName( aOUOldName );
-
-        // insert module by new name in module container
-        xLib->insertByName( aOUNewName, aElement );
-    }
-    else
-    {
-        throw NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RenameModule: NoSuchElementException!") ),
-            Reference<XInterface>() );
-    }
+    if ( !rDocument.renameModule( rLibName, rOldName, rNewName ) )
+        return false;
 
     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
     if ( pIDEShell )
     {
-        IDEBaseWindow* pWin = pIDEShell->FindWindow( pShell, rLibName, rOldName, BASICIDE_TYPE_MODULE, FALSE );
+        IDEBaseWindow* pWin = pIDEShell->FindWindow( rDocument, rLibName, rOldName, BASICIDE_TYPE_MODULE, FALSE );
         if ( pWin )
         {
             // set new name in window
@@ -553,85 +265,12 @@ void BasicIDE::RenameModule( SfxObjectShell* pShell, const String& rLibName, con
             }
         }
     }
+    return true;
 }
 
 //----------------------------------------------------------------------------
 
-void BasicIDE::RemoveModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
-    throw(NoSuchElementException)
-{
-    // get library
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
-
-    // remove module
-    ::rtl::OUString aOUModName( rModName );
-    if( xLib.is() && xLib->hasByName( aOUModName ) )
-    {
-        xLib->removeByName( aOUModName );
-    }
-    else
-    {
-        throw NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::RemoveModule: NoSuchElementException!") ),
-            Reference<XInterface>() );
-    }
-}
-
-//----------------------------------------------------------------------------
-
-void BasicIDE::InsertModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName, ::rtl::OUString& aModule )
-    throw(ElementExistException, NoSuchElementException)
-{
-    // get library
-    Reference< container::XNameContainer > xLib;
-    if ( BasicIDE::HasModuleLibrary( pShell, rLibName ) )
-        xLib = GetModuleLibrary( pShell, rLibName, TRUE );
-    else
-        xLib = BasicIDE::CreateModuleLibrary( pShell, rLibName );
-
-    // insert module into library
-    ::rtl::OUString aOUModName( rModName );
-    if( xLib.is() && !xLib->hasByName( aOUModName ) )
-    {
-        Any aElement;
-        aElement <<= aModule;
-        xLib->insertByName( aOUModName, aElement );
-    }
-    else
-    {
-        throw ElementExistException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::InsertModule: ElementExistException!") ),
-            Reference<XInterface>() );
-    }
-}
-
-//----------------------------------------------------------------------------
-
-void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, const String& rModName, ::rtl::OUString& aModule )
-    throw(NoSuchElementException)
-{
-    // get library
-    Reference< container::XNameContainer > xLib = GetModuleLibrary( pShell, rLibName, TRUE );
-
-    // update module in library
-    ::rtl::OUString aOUModName( rModName );
-    if ( xLib.is() && xLib->hasByName( aOUModName ) )
-    {
-        Any aElement;
-        aElement <<= aModule;
-        xLib->replaceByName( aOUModName, aElement );
-    }
-    else
-    {
-        throw NoSuchElementException(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BasicIDE::UpdateModule: NoSuchElementException!") ),
-            Reference<XInterface>() );
-    }
-}
-
-//----------------------------------------------------------------------------
-
-::rtl::OUString BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
+::rtl::OUString BasicIDE::ChooseMacro( const uno::Reference< frame::XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
 {
     (void)rMacroDesc;
 
@@ -648,7 +287,7 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
     if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
-    if ( !bChooseOnly && !bExecute )
+    if ( !bChooseOnly && rxLimitToDocument.is() )
         // Hack!
         pChooser->SetMode( MACROCHOOSER_RECORDING );
 
@@ -691,14 +330,13 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
 
                             // location
                             String aLocation;
-                            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-                            if ( pShell )
+                            ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+                            if ( aDocument.isDocument() )
                             {
                                 // document basic
                                 aLocation = String::CreateFromAscii("document");
 
-                                SfxObjectShell* pCurrShell = SfxObjectShell::Current();
-                                if ( !bExecute && pShell != pCurrShell )
+                                if ( rxLimitToDocument.is() && ( rxLimitToDocument != aDocument.getDocument() ) )
                                 {
                                     // error
                                     bError = TRUE;
@@ -726,7 +364,7 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
                 }
             }
 
-            if ( pMethod && bExecute )
+            if ( pMethod && !rxLimitToDocument.is() )
             {
                 pMethod->AddRef();  // festhalten, bis Event abgearbeitet.
                 Application::PostUserEvent( LINK( IDE_DLL()->GetExtraData(), BasicIDEData, ExecuteMacroEvent ), pMethod );
@@ -744,22 +382,26 @@ void BasicIDE::UpdateModule( SfxObjectShell* pShell, const String& rLibName, con
 
 //----------------------------------------------------------------------------
 
-Sequence< ::rtl::OUString > BasicIDE::GetMethodNames( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
+Sequence< ::rtl::OUString > BasicIDE::GetMethodNames( const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
     throw(NoSuchElementException )
 {
+    Sequence< ::rtl::OUString > aSeqMethods;
+
     // get module
-    ::rtl::OUString aOUSource = GetModule( pShell, rLibName, rModName );
-
-    SbModuleRef xModule = new SbModule( rModName );
-    xModule->SetSource32( aOUSource );
-    USHORT nCount = xModule->GetMethods()->Count();
-    Sequence< ::rtl::OUString > aSeqMethods( nCount );
-
-    for ( USHORT i = 0; i < nCount; i++ )
+    ::rtl::OUString aOUSource;
+    if ( rDocument.getModule( rLibName, rModName, aOUSource ) )
     {
-        SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
-        DBG_ASSERT( pMethod, "Method not found! (NULL)" );
-        aSeqMethods.getArray()[ i ] = pMethod->GetName();
+        SbModuleRef xModule = new SbModule( rModName );
+        xModule->SetSource32( aOUSource );
+        USHORT nCount = xModule->GetMethods()->Count();
+        aSeqMethods.realloc( nCount );
+
+        for ( USHORT i = 0; i < nCount; i++ )
+        {
+            SbMethod* pMethod = (SbMethod*)xModule->GetMethods()->Get( i );
+            DBG_ASSERT( pMethod, "Method not found! (NULL)" );
+            aSeqMethods.getArray()[ i ] = pMethod->GetName();
+        }
     }
 
     return aSeqMethods;
@@ -767,13 +409,13 @@ Sequence< ::rtl::OUString > BasicIDE::GetMethodNames( SfxObjectShell* pShell, co
 
 //----------------------------------------------------------------------------
 
-BOOL BasicIDE::HasMethod( SfxObjectShell* pShell, const String& rLibName, const String& rModName, const String& rMethName )
+BOOL BasicIDE::HasMethod( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, const String& rMethName )
 {
     BOOL bHasMethod = FALSE;
 
-    if ( HasModule( pShell, rLibName, rModName ) )
+    ::rtl::OUString aOUSource;
+    if ( rDocument.hasModule( rLibName, rModName ) && rDocument.getModule( rLibName, rModName, aOUSource ) )
     {
-        ::rtl::OUString aOUSource = GetModule( pShell, rLibName, rModName );
         SbModuleRef xModule = new SbModule( rModName );
         xModule->SetSource32( aOUSource );
         SbxArray* pMethods = xModule->GetMethods();
