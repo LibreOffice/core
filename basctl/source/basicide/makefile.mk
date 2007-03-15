@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:34:25 $
+#   last change: $Author: obo $ $Date: 2007-03-15 15:57:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,36 +54,8 @@ CDEFS+=-DBASICDEBUG
 
 # --- Allgemein ----------------------------------------------------------
 
-SLOFILES =  \
-            $(SLO)$/basdoc.obj	\
-            $(SLO)$/basicbox.obj	\
-            $(SLO)$/basidesh.obj	\
-            $(SLO)$/basides1.obj	\
-            $(SLO)$/basides2.obj	\
-            $(SLO)$/basides3.obj	\
-            $(SLO)$/baside2.obj	\
-            $(SLO)$/baside2b.obj	\
-            $(SLO)$/baside3.obj	\
-            $(SLO)$/basobj.obj	\
-            $(SLO)$/basobj2.obj	\
-            $(SLO)$/basobj3.obj	\
-            $(SLO)$/bastypes.obj	\
-            $(SLO)$/bastype2.obj	\
-            $(SLO)$/bastype3.obj	\
-            $(SLO)$/brkdlg.obj	\
-            $(SLO)$/iderdll.obj	\
-            $(SLO)$/macrodlg.obj	\
-            $(SLO)$/moptions.obj	\
-            $(SLO)$/moduldlg.obj	\
-            $(SLO)$/moduldl2.obj	\
-            $(SLO)$/objdlg.obj	\
-            $(SLO)$/unomodel.obj	\
-            $(SLO)$/register.obj	\
-            $(SLO)$/tbxctl.obj	\
-            $(SLO)$/basidectrlr.obj	\
-            $(SLO)$/localizationmgr.obj
-
-EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
+EXCEPTIONSFILES=$(SLO)$/scriptdocument.obj  \
+                $(SLO)$/basidesh.obj	\
                 $(SLO)$/basides1.obj	\
                 $(SLO)$/basides2.obj	\
                 $(SLO)$/basides3.obj	\
@@ -103,6 +75,15 @@ EXCEPTIONSFILES=$(SLO)$/basidesh.obj	\
                 $(SLO)$/tbxctl.obj		\
                 $(SLO)$/basidectrlr.obj	\
                 $(SLO)$/localizationmgr.obj
+
+SLOFILES =  $(EXCEPTIONSFILES) \
+            $(SLO)$/basdoc.obj	\
+            $(SLO)$/basicbox.obj	\
+            $(SLO)$/baside2b.obj	\
+            $(SLO)$/basobj.obj	\
+            $(SLO)$/brkdlg.obj	\
+            $(SLO)$/moptions.obj	\
+            $(SLO)$/objdlg.obj	\
 
 SRS1NAME=$(TARGET)
 SRC1FILES=	basidesh.src macrodlg.src moptions.src moduldlg.src objdlg.src brkdlg.src tbxctl.src
