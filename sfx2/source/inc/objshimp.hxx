@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 12:00:29 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,13 +62,6 @@ struct MarkData_Impl
     SfxViewFrame* pFrame;
 };
 
-namespace basic
-{
-    class SfxDialogLibraryContainer;
-    class SfxScriptLibraryContainer;
-    class SfxLibraryContainer;
-}
-
 class SfxFrame;
 class SfxToolBoxConfig;
 class SfxAcceleratorManager;
@@ -81,6 +74,10 @@ struct SfxObjectShell_Impl
     SfxConfigManager*   pCfgMgr;
     SfxBasicManagerHolder*
                         pBasicManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
+                        xBasicLibraries;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XLibraryContainer >
+                        xDialogLibraries;
     SfxProgress*        pProgress;
     String              aTitle;
     String              aTempName;
@@ -118,7 +115,8 @@ struct SfxObjectShell_Impl
                         bSignatureErrorIsShown:1,
                         bModelInitialized:1, // whether the related model is initialized
                         bPreserveVersions:1,
-                        m_bMacroSignBroken:1; // whether the macro signature was explicitly broken
+                        m_bMacroSignBroken:1, // whether the macro signature was explicitly broken
+                        m_bNoBasicCapabilities:1;
 
     String              aNewName;  // Der Name, unter dem das Doc gespeichert
                                    // werden soll
