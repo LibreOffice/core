@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:28:15 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:51:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ private:
     com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 
     void            ReleaseFocus();
-    void            InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocation );
+    void            InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation );
 
     void            FillBox( BOOL bSelect = TRUE );
     void            ClearBox();
