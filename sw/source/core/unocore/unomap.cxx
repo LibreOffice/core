@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.195 $
+ *  $Revision: 1.196 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:15:54 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:45:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1686,6 +1686,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_FONT_PITCH_COMPLEX), RES_CHRATR_CTL_FONT,  CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_FONT_PITCH   },
                     { SW_PROP_NMID(UNO_NAME_CHAR_LOCALE), RES_CHRATR_LANGUAGE ,   CPPU_E2T(CPPUTYPE_LOCALE), PropertyAttribute::MAYBEVOID,  MID_LANG_LOCALE },
                     { SW_PROP_NMID(UNO_NAME_CHARACTER_COUNT), WID_DOC_CHAR_COUNT,           CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY,   0},
+                    { SW_PROP_NMID(UNO_NAME_DIALOG_LIBRARIES), WID_DOC_DIALOG_LIBRARIES,  CPPU_E2T(CPPUTYPE_REFLIBCONTAINER), PropertyAttribute::READONLY, 0},
                     { SW_PROP_NMID(UNO_NAME_INDEX_AUTO_MARK_FILE_U_R_L), WID_DOC_AUTO_MARK_URL, CPPU_E2T(CPPUTYPE_OUSTRING),    PROPERTY_NONE,   0},
                     { SW_PROP_NMID(UNO_NAME_PARAGRAPH_COUNT), WID_DOC_PARA_COUNT,           CPPU_E2T(CPPUTYPE_INT32),   PropertyAttribute::READONLY,   0},
                     { SW_PROP_NMID(UNO_NAME_RECORD_CHANGES), WID_DOC_CHANGES_RECORD,        CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE,   0},
