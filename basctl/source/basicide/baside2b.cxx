@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:28:54 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:52:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,11 +443,11 @@ void __EXPORT EditorWindow::KeyInput( const KeyEvent& rKEvt )
         return;
 
 #if OSL_DEBUG_LEVEL > 1
-    Range aRange = pModulWindow->GetHScrollBar()->GetRange();
-    long nVisSz = pModulWindow->GetHScrollBar()->GetVisibleSize();
-    long nPapSz = pModulWindow->GetHScrollBar()->GetPageSize();
-    long nLinSz = pModulWindow->GetHScrollBar()->GetLineSize();
-    long nThumb = pModulWindow->GetHScrollBar()->GetThumbPos();
+    Range aRange = pModulWindow->GetHScrollBar()->GetRange(); (void)aRange;
+    long nVisSz = pModulWindow->GetHScrollBar()->GetVisibleSize(); (void)nVisSz;
+    long nPapSz = pModulWindow->GetHScrollBar()->GetPageSize(); (void)nPapSz;
+    long nLinSz = pModulWindow->GetHScrollBar()->GetLineSize(); (void)nLinSz;
+    long nThumb = pModulWindow->GetHScrollBar()->GetThumbPos(); (void)nThumb;
 #endif
     BOOL bDone = FALSE;
     BOOL bWasModified = pEditEngine->IsModified();
@@ -539,13 +539,13 @@ BOOL EditorWindow::SetSourceInBasic( BOOL bQuiet )
             pModulWindow->SetModule( aModule );
 
             // update module in library
-            SfxObjectShell* pShell = pModulWindow->GetShell();
+            ScriptDocument aDocument( pModulWindow->GetDocument() );
             String aLibName = pModulWindow->GetLibName();
             String aName = pModulWindow->GetName();
-            BasicIDE::UpdateModule( pShell, aLibName, aName, aModule );
+            OSL_VERIFY( aDocument.updateModule( aLibName, aName, aModule ) );
 
             pEditEngine->SetModified( FALSE );
-            BasicIDE::MarkDocShellModified( pShell );
+            BasicIDE::MarkDocumentModified( aDocument );
             bChanged = TRUE;
         }
     }
@@ -647,15 +647,15 @@ void EditorWindow::CreateEditEngine()
     DBG_ASSERT( pModulWindow->GetBreakPointWindow().GetCurYOffset() == 0, "CreateEditEngine: Brechpunkte verschoben?" );
 
     // set readonly mode for readonly libraries
-    SfxObjectShell* pShell = pModulWindow->GetShell();
+    ScriptDocument aDocument( pModulWindow->GetDocument() );
     ::rtl::OUString aOULibName( pModulWindow->GetLibName() );
-    Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) )
     {
         pModulWindow->SetReadOnly( TRUE );
     }
 
-    if ( pShell && pShell->IsReadOnly() )
+    if ( aDocument.isDocument() && aDocument.isReadOnly() )
         pModulWindow->SetReadOnly( TRUE );
 }
 
