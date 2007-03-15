@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:33:35 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 
 #include "unomodel.hxx"
 
-using namespace ::rtl;
+using ::rtl::OUString;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
