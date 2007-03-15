@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicmanagerrepository.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:05:01 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:37:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ namespace basic
     using ::com::sun::star::uno::XInterface;
     using ::com::sun::star::uno::UNO_QUERY;
     using ::com::sun::star::embed::XStorage;
-    using ::com::sun::star::script::XLibraryContainer;
+    using ::com::sun::star::script::XPersistentLibraryContainer;
     using ::com::sun::star::uno::Any;
     using ::com::sun::star::lang::XMultiServiceFactory;
     using ::com::sun::star::uno::UNO_QUERY_THROW;
@@ -227,6 +227,33 @@ namespace basic
                 In the latter case, processing this document should stop.
         */
         bool    impl_getDocumentStorage_nothrow( const Reference< XModel >& _rxDocument, Reference< XStorage >& _out_rStorage );
+
+        /** retrieves the containers for Basic and Dialog libraries for a given document
+
+            @param  _rxDocument
+                the document whose containers are to be retrieved.
+
+            @param _out_rxBasicLibraries
+                takes the basic library container upon successful return
+
+            @param _out_rxDialogLibraries
+                takes the dialog library container upon successful return
+
+            @return
+                <TRUE/> if and only if both containers exist, and could successfully be retrieved
+        */
+        bool    impl_getDocumentLibraryContainers_nothrow(
+                    const Reference< XModel >& _rxDocument,
+                    Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries,
+                    Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries
+                );
+
+        /** initializes the given library containers, which belong to a document
+        */
+        void    impl_initDocLibraryContainers_nothrow(
+                    Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries,
+                    Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries
+                );
 
         // OEventListenerAdapter overridables
         virtual void _disposing( const ::com::sun::star::lang::EventObject& _rSource );
@@ -336,18 +363,16 @@ namespace basic
         pBasicManager->SetStorageName( aAppBasic.PathToFileName() );
 
         // Basic container
-        SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ), pBasicManager );
-        Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
+        SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer( Reference< XStorage >() );
+        Reference< XPersistentLibraryContainer > xBasicCont( pBasicCont );
         pBasicCont->setBasicManager( pBasicManager );
 
         // Dialog container
         SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( Reference< XStorage >() );
-        Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
+        Reference< XPersistentLibraryContainer > xDialogCont( pDialogCont );
 
-        LibraryContainerInfo* pInfo = new LibraryContainerInfo
-            ( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
-        pBasicManager->SetLibraryContainerInfo( pInfo );
+        LibraryContainerInfo aInfo( xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
+        pBasicManager->SetLibraryContainerInfo( aInfo );
 
         // global constants
 
@@ -418,6 +443,28 @@ namespace basic
     }
 
     //--------------------------------------------------------------------
+    void ImplRepository::impl_initDocLibraryContainers_nothrow( Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries, Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries )
+    {
+        OSL_PRECOND( _out_rxBasicLibraries.is() && _out_rxDialogLibraries.is(),
+            "ImplRepository::impl_initDocLibraryContainers_nothrow: illegal library containers, this will crash!" );
+
+        try
+        {
+            // ensure there's a standard library in the basic container
+            ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
+            if ( !_out_rxBasicLibraries->hasByName( aStdLibName ) )
+                _out_rxBasicLibraries->createLibrary( aStdLibName );
+            // as well as in the dialog container
+            if ( !_out_rxDialogLibraries->hasByName( aStdLibName ) )
+                _out_rxDialogLibraries->createLibrary( aStdLibName );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+    }
+
+    //--------------------------------------------------------------------
     BasicManagerPointer ImplRepository::impl_createManagerForModel( const Reference< XModel >& _rxDocumentModel )
     {
         StarBASIC* pAppBasic = impl_getDefaultAppBasicLibrary();
@@ -426,6 +473,12 @@ namespace basic
         Reference< XStorage > xStorage;
         if ( !impl_getDocumentStorage_nothrow( _rxDocumentModel, xStorage ) )
             // the document is not able to provide the storage it is based on.
+            return pBasicManager;
+
+        Reference< XPersistentLibraryContainer > xBasicLibs;
+        Reference< XPersistentLibraryContainer > xDialogLibs;
+        if ( !impl_getDocumentLibraryContainers_nothrow( _rxDocumentModel, xBasicLibs, xDialogLibs ) )
+            // the document does not have BasicLibraries and DialogLibraries
             return pBasicManager;
 
         if ( xStorage.is() )
@@ -467,45 +520,22 @@ namespace basic
             pBasicManager = new BasicManager( pBasic );
         }
 
-        // Basic container
-        SfxScriptLibraryContainer* pBasicCont = new SfxScriptLibraryContainer(
-            ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StarBasic" ) ),
-            pBasicManager, xStorage );
-        Reference< XLibraryContainer > xBasicCont = static_cast< XLibraryContainer* >( pBasicCont );
-        sal_Bool bBasicModified = pBasicCont->isContainerModified();
+        // knit the containers with the BasicManager
+        LibraryContainerInfo aInfo( xBasicLibs, xDialogLibs, dynamic_cast< OldBasicPassword* >( xBasicLibs.get() ) );
+        OSL_ENSURE( aInfo.mpOldBasicPassword, "ImplRepository::impl_createManagerForModel: wrong BasicLibraries implementation!" );
+        pBasicManager->SetLibraryContainerInfo( aInfo );
+        //pBasicCont->setBasicManager( pBasicManager );
+            // that's not needed anymore today. The containers will retrieve their associated
+            // BasicManager from the BasicManagerRepository, when needed.
 
-        // Dialog container
-        SfxDialogLibraryContainer* pDialogCont = new SfxDialogLibraryContainer( xStorage );
-        Reference< XLibraryContainer > xDialogCont = static_cast< XLibraryContainer* >( pDialogCont );
-        sal_Bool bDialogModified = pDialogCont->isContainerModified();
-
-        LibraryContainerInfo* pInfo = new LibraryContainerInfo(
-            xBasicCont, xDialogCont, static_cast< OldBasicPassword* >( pBasicCont ) );
-        pBasicManager->SetLibraryContainerInfo( pInfo );
-        pBasicCont->setBasicManager( pBasicManager );
-
-        // ensure there's a standard library in the basic container
-        ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
-        if ( xBasicCont.is() && !xBasicCont->hasByName( aStdLibName ) )
-            xBasicCont->createLibrary( aStdLibName );
-        // as well as in the dialog container
-        if ( xDialogCont.is() && !xDialogCont->hasByName( aStdLibName ) )
-            xDialogCont->createLibrary( aStdLibName );  // create Standard library
+        // initialize the containers
+        impl_initDocLibraryContainers_nothrow( xBasicLibs, xDialogLibs );
 
         // damit auch Dialoge etc. 'qualifiziert' angesprochen werden k"onnen
-        StarBASIC* pDefaultBasicLib = pBasicManager->GetLib(0);
-        sal_Bool bWasModified = pDefaultBasicLib->IsModified();
-        pDefaultBasicLib->SetParent( pAppBasic );
+        pBasicManager->GetLib(0)->SetParent( pAppBasic );
 
-        // Properties im Doc-BASIC
-        // ThisComponent
+        // global properties in the document's Basic
         pBasicManager->InsertGlobalUNOConstant( "ThisComponent", makeAny( _rxDocumentModel ) );
-        // (BasicLibraries and DialogLibraries have automatically been added in SetLibraryContainerInfo)
-
-        // reset the modify flags (have been set in MakeVariable)
-        pDefaultBasicLib->SetModified( bWasModified );
-        pBasicCont->setContainerModified( bBasicModified );
-        pDialogCont->setContainerModified( bDialogModified );
 
         // notify
         impl_notifyCreationListeners( _rxDocumentModel, *pBasicManager );
@@ -536,6 +566,31 @@ namespace basic
             return false;
         }
         return true;
+    }
+
+    //--------------------------------------------------------------------
+    bool ImplRepository::impl_getDocumentLibraryContainers_nothrow( const Reference< XModel >& _rxDocument,
+        Reference< XPersistentLibraryContainer >& _out_rxBasicLibraries, Reference< XPersistentLibraryContainer >& _out_rxDialogLibraries )
+    {
+        _out_rxBasicLibraries.clear();
+        _out_rxDialogLibraries.clear();
+        try
+        {
+            Reference< XPropertySet > xDocumentProperties( _rxDocument, UNO_QUERY_THROW );
+            _out_rxBasicLibraries.set(
+                xDocumentProperties->getPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ),
+                    UNO_QUERY_THROW );
+            _out_rxDialogLibraries.set(
+                xDocumentProperties->getPropertyValue(
+                    ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DialogLibraries" ) ) ),
+                    UNO_QUERY_THROW );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
+        return _out_rxBasicLibraries.is() && _out_rxDialogLibraries.is();
     }
 
     //--------------------------------------------------------------------
