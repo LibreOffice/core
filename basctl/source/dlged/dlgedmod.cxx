@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedmod.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-19 08:37:32 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:00:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,34 +56,8 @@ TYPEINIT1(DlgEdModel,SdrModel);
 
 //----------------------------------------------------------------------------
 
-DlgEdModel::DlgEdModel(SfxItemPool* pPool,SfxObjectShell* pPers) :
-    SdrModel(pPool,pPers), pObjectShell(0)
-{
-    DBG_CTOR(DlgEdModel,0);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdModel::DlgEdModel(const String& rPath, SfxItemPool* pPool,
-    SfxObjectShell* pPers) : SdrModel(rPath,pPool,pPers), pObjectShell(0)
-{
-    DBG_CTOR(DlgEdModel,0);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdModel::DlgEdModel(SfxItemPool* pPool, SfxObjectShell* pPers,
-    FASTBOOL bUseExtColorTable ) :
-    SdrModel(pPool,pPers,bUseExtColorTable, LOADREFCOUNTS),pObjectShell(0)
-{
-    DBG_CTOR(DlgEdModel,0);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdModel::DlgEdModel(const String& rPath, SfxItemPool* pPool,
-    SfxObjectShell* pPers, FASTBOOL bUseExtColorTable ) :
-    SdrModel(rPath, pPool, pPers, bUseExtColorTable, LOADREFCOUNTS), pObjectShell(0)
+DlgEdModel::DlgEdModel()
+    :SdrModel(NULL, NULL)
 {
     DBG_CTOR(DlgEdModel,0);
 }
@@ -93,21 +67,6 @@ DlgEdModel::DlgEdModel(const String& rPath, SfxItemPool* pPool,
 DlgEdModel::~DlgEdModel()
 {
     DBG_DTOR(DlgEdModel,0);
-}
-
-//----------------------------------------------------------------------------
-
-DlgEdModel::DlgEdModel( const DlgEdModel& )
-    : SdrModel()
-{
-    DBG_ERROR("DlgEdModel: CopyCtor not implemented");
-}
-
-//----------------------------------------------------------------------------
-
-void DlgEdModel::operator=(const DlgEdModel& )
-{
-    DBG_ERROR("DlgEdModel: operator= not implemented");
 }
 
 //----------------------------------------------------------------------------
