@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 15:33:32 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:21:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1322,6 +1322,15 @@ void lcl_MergeAttr_ExpandChrFmt( SfxItemSet& rSet, const SfxPoolItem& rAttr )
     rSet.Put( rAttr );
 }
 
+struct SwPoolItemEndPair
+{
+public:
+    const SfxPoolItem* mpItem;
+    xub_StrLen mnEndPos;
+
+    SwPoolItemEndPair() : mpItem( 0 ), mnEndPos( 0 ) {};
+};
+
 // erfrage die Attribute vom TextNode ueber den Bereich
 BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStart, xub_StrLen nEnd,
                             BOOL bOnlyTxtAttr, BOOL bGetFromChrFmt ) const
@@ -1376,7 +1385,10 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStart, xub_StrLen nEnd,
         }
         else                            // es ist ein Bereich definiert
         {
-            SwTxtAttr** aAttrArr = 0;
+            // --> FME 2007-03-13 #i75299#
+            std::vector< SwPoolItemEndPair >* pAttrArr = 0;
+            // <--
+
             const USHORT coArrSz = RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN +
                                     ( RES_UNKNOWNATR_END -
                                                     RES_UNKNOWNATR_BEGIN );
@@ -1411,75 +1423,108 @@ BOOL SwTxtNode::GetAttr( SfxItemSet& rSet, xub_StrLen nStart, xub_StrLen nEnd,
                 if( bChkInvalid )
                 {
                     // uneindeutig ?
-                    if( !aAttrArr )
-                    {
-                        aAttrArr = new SwTxtAttr* [ coArrSz ];
-                        memset( aAttrArr, 0, sizeof( SwTxtAttr* ) * coArrSz );
-                    }
+                    SfxItemIter* pItemIter = 0;
+                    const SfxPoolItem* pItem = 0;
 
-                    const SwTxtAttr** ppPrev;
-                    if( RES_CHRATR_BEGIN <= pHt->Which() &&
-                        pHt->Which() < RES_TXTATR_WITHEND_END )
-                         ppPrev = (const SwTxtAttr**)&aAttrArr[
-                                        pHt->Which() - RES_CHRATR_BEGIN ];
-                    else if( RES_UNKNOWNATR_BEGIN <= pHt->Which() &&
-                        pHt->Which() < RES_UNKNOWNATR_END )
-                         ppPrev = (const SwTxtAttr**)&aAttrArr[
-                                        pHt->Which() - RES_UNKNOWNATR_BEGIN
-                                        + ( RES_TXTATR_WITHEND_END -
-                                            RES_CHRATR_BEGIN ) ];
+                    if ( RES_TXTATR_AUTOFMT == pHt->Which() )
+                    {
+                        const SfxItemSet* pAutoSet = CharFmt::GetItemSet( pHt->GetAttr() );
+                        if ( pAutoSet )
+                        {
+                            pItemIter = new SfxItemIter( *pAutoSet );
+                            pItem = pItemIter->GetCurItem();
+                        }
+                    }
                     else
-                        ppPrev = 0;
+                        pItem = &pHt->GetAttr();
 
-                    if( !*ppPrev )
+                    const USHORT nHintEnd = *pAttrEnd;
+
+                    while ( pItem )
                     {
-                        if( nAttrStart > nStart )
-                        {
-                            rSet.InvalidateItem( pHt->Which() );
-                            *ppPrev = (SwTxtAttr*)-1;
-                        }
+                        const USHORT nHintWhich = pItem->Which();
+
+                        if( !pAttrArr )
+                            pAttrArr = new std::vector< SwPoolItemEndPair >( coArrSz );
+
+                        std::vector< SwPoolItemEndPair >::iterator pPrev = pAttrArr->begin();
+                        if( RES_CHRATR_BEGIN <= nHintWhich && nHintWhich < RES_TXTATR_WITHEND_END )
+                            pPrev += nHintWhich - RES_CHRATR_BEGIN;
+                        else if( RES_UNKNOWNATR_BEGIN <= nHintWhich && nHintWhich < RES_UNKNOWNATR_END )
+                            pPrev += nHintWhich - RES_UNKNOWNATR_BEGIN + ( RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN );
                         else
-                            *ppPrev = pHt;
-                    }
-                    else if( (SwTxtAttr*)-1 != *ppPrev )
-                    {
-                        if( *(*ppPrev)->GetEnd() == nAttrStart &&
-                            (*ppPrev)->GetAttr() == pHt->GetAttr() )
-                            *ppPrev = pHt;
-                        else
+                            pPrev = pAttrArr->end();
+
+#if OSL_DEBUG_LEVEL > 1
+                        SwPoolItemEndPair aTmp = *pPrev;
+#endif
+
+                        if( pPrev != pAttrArr->end() )
                         {
-                            rSet.InvalidateItem( pHt->Which() );
-                            *ppPrev = (SwTxtAttr*)-1;
+                            if( !pPrev->mpItem )
+                            {
+                                if ( bOnlyTxtAttr || *pItem != aFmtSet.Get( nHintWhich ) )
+                                {
+                                    if( nAttrStart > nStart )
+                                    {
+                                        rSet.InvalidateItem( nHintWhich );
+                                        pPrev->mpItem = (SfxPoolItem*)-1;
+                                    }
+                                    else
+                                    {
+                                        pPrev->mpItem = pItem;
+                                        pPrev->mnEndPos = nHintEnd;
+                                    }
+                                }
+                            }
+                            else if( (SfxPoolItem*)-1 != pPrev->mpItem )
+                            {
+                                if( pPrev->mnEndPos == nAttrStart &&
+                                    *pPrev->mpItem == *pItem )
+                                {
+                                    pPrev->mpItem = pItem;
+                                    pPrev->mnEndPos = nHintEnd;
+                                }
+                                else
+                                {
+                                    rSet.InvalidateItem( nHintWhich );
+                                    pPrev->mpItem = (SfxPoolItem*)-1;
+                                }
+                            }
                         }
-                    }
+
+                        pItem = ( pItemIter && !pItemIter->IsAtEnd() ) ? pItemIter->NextItem() : 0;
+                    } // end while
+
+                    delete pItemIter;
                 }
             }
-            if( aAttrArr )
+
+            if( pAttrArr )
             {
-                const SwTxtAttr* pAttr;
                 for( n = 0; n < coArrSz; ++n )
-                    if( 0 != ( pAttr = aAttrArr[ n ] ) &&
-                        (SwTxtAttr*)-1 != pAttr )
+                {
+                    const SwPoolItemEndPair& rItemPair = (*pAttrArr)[ n ];
+                    if( (0 != rItemPair.mpItem) && ((SfxPoolItem*)-1 != rItemPair.mpItem) )
                     {
                         USHORT nWh;
-                        if( n < (RES_TXTATR_WITHEND_END -
-                                            RES_CHRATR_BEGIN ))
+                        if( n < (RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN ))
                             nWh = n + RES_CHRATR_BEGIN;
                         else
-                            nWh = n - ( RES_TXTATR_WITHEND_END -
-                                                  RES_CHRATR_BEGIN ) +
-                                                RES_UNKNOWNATR_BEGIN;
+                            nWh = n - ( RES_TXTATR_WITHEND_END - RES_CHRATR_BEGIN ) + RES_UNKNOWNATR_BEGIN;
 
-                        if( nEnd <= *pAttr->GetEnd() )  // hinter oder genau Ende
+                        if( nEnd <= rItemPair.mnEndPos ) // hinter oder genau Ende
                         {
-                            if( pAttr->GetAttr() != aFmtSet.Get( nWh ) )
-                                (*fnMergeAttr)( rSet, pAttr->GetAttr() );
+                            if( *rItemPair.mpItem != aFmtSet.Get( nWh ) )
+                                (*fnMergeAttr)( rSet, *rItemPair.mpItem );
                         }
                         else
                             // uneindeutig
                             rSet.InvalidateItem( nWh );
                     }
-                delete[] aAttrArr;
+                }
+
+                delete pAttrArr;
             }
         }
         if( aFmtSet.Count() )
