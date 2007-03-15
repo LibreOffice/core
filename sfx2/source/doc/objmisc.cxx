@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:01 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:03:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2203,7 +2203,7 @@ void SfxObjectShell::InPlaceActivate( BOOL )
 
 BOOL SfxObjectShell::HasMacrosLib_Impl() const
 {
-    Reference< XLibraryContainer > xContainer( pImp->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS ) );
+    Reference< XLibraryContainer > xContainer( const_cast< SfxObjectShell* >( this )->GetBasicContainer() );
     BOOL bHasMacros = xContainer.is();
     try
     {
@@ -2213,7 +2213,9 @@ BOOL SfxObjectShell::HasMacrosLib_Impl() const
 
             // if there are libraries except "Standard" library
             // we assume that they are not empty (because they have been created by the user)
-            if ( xContainer->hasElements() )
+            if ( !xContainer->hasElements() )
+                bHasMacros = sal_False;
+            else
             {
                 ::rtl::OUString aStdLibName( RTL_CONSTASCII_USTRINGPARAM( "Standard" ) );
                 uno::Sequence< ::rtl::OUString > aElements = xContainer->getElementNames();
@@ -2225,6 +2227,12 @@ BOOL SfxObjectShell::HasMacrosLib_Impl() const
                     {
                         // usually a "Standard" library is always present (design)
                         // for this reason we must check if it's empty
+                        //
+                        // Note: Since #i73229#, this is not true anymore. There's no default
+                        // "Standard" lib anymore. Wouldn't it be time to get completely
+                        // rid of the "Standard" thingie - this shouldn't be necessary
+                        // anymore, should it?
+                        // 2007-01-25 / frank.schoenheit@sun.com
                         uno::Reference < container::XNameAccess > xLib;
                         uno::Any aAny = xContainer->getByName( aStdLibName );
                         aAny >>= xLib;
