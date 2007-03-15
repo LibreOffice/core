@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:49:59 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:53:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@
 #include <svtools/texteng.hxx>
 #include <svtools/textview.hxx>
 #include <svtools/xtextedt.hxx>
+#include <tools/diagnose_ex.h>
 #include <sfx2/sfxdefs.hxx>
 
 using namespace ::com::sun::star;
@@ -165,8 +166,8 @@ void BasicIDEShell::SetMDITitle()
 
     if ( m_aCurLibName.Len() )
     {
-        LibraryLocation eLocation = BasicIDE::GetLibraryLocation( m_pCurShell, m_aCurLibName );
-        aTitle = BasicIDE::GetTitle( m_pCurShell, eLocation, SFX_TITLE_CAPTION );
+        LibraryLocation eLocation = m_aCurDocument.getLibraryLocation( m_aCurLibName );
+        aTitle = m_aCurDocument.getTitle( eLocation );
         aTitle += '.';
         aTitle += m_aCurLibName;
     }
@@ -175,8 +176,8 @@ void BasicIDEShell::SetMDITitle()
         aTitle = String( IDEResId( RID_STR_ALL ) );
     }
 
-    if ( m_pCurShell &&
-         m_pCurShell->GetScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+    if ( m_aCurDocument.isDocument() &&
+         m_aCurDocument.getScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
     {
         aTitle += String::CreateFromAscii( " " );
         aTitle += String( IDEResId( RID_STR_SIGNED ) );
@@ -216,7 +217,7 @@ void BasicIDEShell::CreateModulWindowLayout()
     pModulLayout = new ModulWindowLayout( &GetViewFrame()->GetWindow() );
 }
 
-ModulWindow* BasicIDEShell::CreateBasWin( SfxObjectShell* pShell, const String& rLibName, const String& rModName )
+ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName )
 {
     bCreatingWindow = TRUE;
 
@@ -229,44 +230,28 @@ ModulWindow* BasicIDEShell::CreateBasWin( SfxObjectShell* pShell, const String& 
     if ( !aLibName.Len() )
         aLibName = String::CreateFromAscii( "Standard" );
 
-    if ( !BasicIDE::HasModuleLibrary( pShell, aLibName ) )
-        BasicIDE::CreateModuleLibrary( pShell, aLibName );
+    rDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
     if ( !aModName.Len() )
-        aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+        aModName = rDocument.createObjectName( E_SCRIPTS, aLibName );
 
     // Vielleicht gibt es ein suspendiertes?
-    pWin = FindBasWin( pShell, aLibName, aModName, FALSE, TRUE );
+    pWin = FindBasWin( rDocument, aLibName, aModName, FALSE, TRUE );
 
     if ( !pWin )
     {
-        try
-        {
-            ::rtl::OUString aModule;
-            if ( BasicIDE::HasModule( pShell, aLibName, aModName ) )
-            {
-                // get module
-                aModule = BasicIDE::GetModule( pShell, aLibName, aModName );
-            }
-            else
-            {
-                // create module
-                aModule = BasicIDE::CreateModule( pShell, aLibName, aModName, TRUE );
-            }
+        ::rtl::OUString aModule;
+        bool bSuccess = false;
+        if ( rDocument.hasModule( aLibName, aModName ) )
+            bSuccess = rDocument.getModule( aLibName, aModName, aModule );
+        else
+            bSuccess = rDocument.createModule( aLibName, aModName, TRUE, aModule );
 
+        if ( bSuccess )
+        {
             // new module window
-            pWin = new ModulWindow( pModulLayout, pShell, aLibName, aModName, aModule );
+            pWin = new ModulWindow( pModulLayout, rDocument, aLibName, aModName, aModule );
             nKey = InsertWindowInTable( pWin );
-        }
-        catch ( container::ElementExistException& e )
-        {
-            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aBStr.GetBuffer() );
-        }
-        catch ( container::NoSuchElementException& e )
-        {
-            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aBStr.GetBuffer() );
         }
     }
     else
@@ -291,7 +276,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( SfxObjectShell* pShell, const String& 
     return pWin;
 }
 
-ModulWindow* BasicIDEShell::FindBasWin( SfxObjectShell* pShell, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
+ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const String& rLibName, const String& rModName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
 {
     ModulWindow* pModWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -301,13 +286,13 @@ ModulWindow* BasicIDEShell::FindBasWin( SfxObjectShell* pShell, const String& rL
         {
             if ( !rLibName.Len() )  // nur irgendeins finden...
                 pModWin = (ModulWindow*)pWin;
-            else if ( pWin->GetShell() == pShell && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
+            else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
                 pModWin = (ModulWindow*)pWin;
         }
         pWin = aIDEWindowTable.Next();
     }
     if ( !pModWin && bCreateIfNotExist )
-        pModWin = CreateBasWin( pShell, rLibName, rModName );
+        pModWin = CreateBasWin( rDocument, rLibName, rModName );
 
     return pModWin;
 }
