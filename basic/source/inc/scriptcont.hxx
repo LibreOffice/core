@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scriptcont.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:05:30 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:38:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,6 @@ namespace basic
 class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPassword
 {
     ::rtl::OUString maScriptLanguage;
-    BasicManager* mpBasMgr;
 
     // Methods to distinguish between deffirent library types
     virtual SfxLibrary* SAL_CALL implCreateLibrary( const ::rtl::OUString& aName );
@@ -105,32 +104,15 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
     virtual void clearLibraryPassword( const String& rLibraryName );
     virtual sal_Bool hasLibraryPassword( const String& rLibraryName );
 
-    sal_Bool init( const ::rtl::OUString& aInitialisationParam,
-                   const ::rtl::OUString& aScriptLanguage,
-                   BasicManager* pBasMgr=NULL,
-                   const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage =
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >() );
-    protected:
-        using SfxLibraryContainer::init;
+    virtual const sal_Char* SAL_CALL    getInfoFileName() const;
+    virtual const sal_Char* SAL_CALL    getOldInfoFileName() const;
+    virtual const sal_Char* SAL_CALL    getLibElementFileExtension() const;
+    virtual const sal_Char* SAL_CALL    getLibrariesDir() const;
 
 public:
     SfxScriptLibraryContainer( void );
-    SfxScriptLibraryContainer( const ::rtl::OUString& aScriptLanguage,
-        BasicManager* pBasMgr,
-        const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage =
-                                        ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >() );
+    SfxScriptLibraryContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
 
-
-    // TODO: Methods of new XLibraryStorage interface?
-    virtual void SAL_CALL storeLibraries( sal_Bool bComplete );
-    virtual void SAL_CALL storeLibrariesToStorage(
-                const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage );
-
-    // Methods XInitialization
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence<
-        ::com::sun::star::uno::Any >& aArguments )
-            throw (::com::sun::star::uno::Exception,
-                   ::com::sun::star::uno::RuntimeException);
 
     // Methods XLibraryContainerPassword
     virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const ::rtl::OUString& Name )
@@ -149,6 +131,12 @@ public:
         throw (::com::sun::star::lang::IllegalArgumentException,
                ::com::sun::star::container::NoSuchElementException,
                ::com::sun::star::uno::RuntimeException);
+
+    // Methods XServiceInfo
+    virtual ::rtl::OUString SAL_CALL getImplementationName( )
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames( )
+        throw (::com::sun::star::uno::RuntimeException);
 
     // Service
     static ::com::sun::star::uno::Sequence< ::rtl::OUString > getSupportedServiceNames_static();
@@ -180,14 +168,16 @@ class SfxScriptLibrary : public SfxLibrary
 public:
     SfxScriptLibrary
     (
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF,
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSFI
+        ModifiableHelper& _rModifiable,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xSFI
     );
 
     SfxScriptLibrary
     (
-        ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMSF,
-        ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSFI,
+        ModifiableHelper& _rModifiable,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xMSF,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XSimpleFileAccess >& xSFI,
         const ::rtl::OUString& aLibInfoFileURL, const ::rtl::OUString& aStorageURL, sal_Bool ReadOnly
     );
 };
