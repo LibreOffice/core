@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:59:05 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:46:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2308,6 +2308,9 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         break;
         case WID_DOC_BASIC_LIBRARIES:
             aAny <<= pDocShell->GetBasicContainer();
+        break;
+        case WID_DOC_DIALOG_LIBRARIES:
+            aAny <<= pDocShell->GetDialogContainer();
         break;
         case WID_DOC_RUNTIME_UID:
             aAny <<= getRuntimeUID();
