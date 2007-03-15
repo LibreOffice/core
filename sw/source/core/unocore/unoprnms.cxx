@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoprnms.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:16:10 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -768,6 +768,7 @@ const SwPropNameTab aPropNameTab = {
 /* 0710 UNO_NAME_LAYOUT_SIZE*/ {MAP_CHAR_LEN("LayoutSize")},
 /* 0711 UNO_NAME_HELP */ {MAP_CHAR_LEN("Help")},
 /* 0712 UNO_NAME_TOOLTIP */ {MAP_CHAR_LEN("Tooltip")}
+/* 0713 UNO_NAME_DIALOG_LIBRARIES*/     {MAP_CHAR_LEN("DialogLibraries")}
 };
 
 const SwPropNameLen& SwGetPropName( USHORT nId )
