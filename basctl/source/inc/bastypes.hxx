@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastypes.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:18:21 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,8 @@
 #endif
 
 #include <iderid.hxx>
+
+#include "scriptdocument.hxx"
 
 class ModulWindow;
 class SfxRequest;
@@ -195,7 +197,6 @@ public:
 
 class Printer;
 class SfxUndoManager;
-class SfxObjectShell;
 class BasicEntryDescriptor;
 
 class IDEBaseWindow : public Window
@@ -207,16 +208,16 @@ private:
     DECL_LINK( ScrollHdl, ScrollBar * );
     BYTE            nStatus;
 
-    SfxObjectShell* m_pShell;
-    String          m_aLibName;
-    String          m_aName;
+    ScriptDocument      m_aDocument;
+    String              m_aLibName;
+    String              m_aName;
 
 protected:
     virtual void    DoScroll( ScrollBar* pCurScrollBar );
 
 public:
                     TYPEINFO();
-                    IDEBaseWindow( Window* pParent, SfxObjectShell* pShell, String aLibName, String aName );
+                    IDEBaseWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName );
     virtual         ~IDEBaseWindow();
 
     void            Init();
@@ -265,8 +266,10 @@ public:
     BOOL            IsSuspended() const
                         { return ( nStatus & BASWIN_SUSPENDED ) ? TRUE : FALSE; }
 
-    SfxObjectShell* GetShell() const { return m_pShell; }
-    void            SetShell( SfxObjectShell* pShell ) { m_pShell = pShell; }
+    const ScriptDocument&
+                    GetDocument() const { return m_aDocument; }
+    void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
+    bool            IsDocument( const ScriptDocument& rDocument ) const { return rDocument == m_aDocument; }
     const String&   GetLibName() const { return m_aLibName; }
     void            SetLibName( const String& aLibName ) { m_aLibName = aLibName; }
     const String&   GetName() const { return m_aName; }
@@ -276,12 +279,12 @@ public:
 class LibInfoKey
 {
 private:
-    SfxObjectShell* m_pShell;
-    String          m_aLibName;
+    ScriptDocument      m_aDocument;
+    String              m_aLibName;
 
 public:
     LibInfoKey();
-    LibInfoKey( SfxObjectShell* pShell, const String& rLibName );
+    LibInfoKey( const ScriptDocument& rDocument, const String& rLibName );
     ~LibInfoKey();
 
     LibInfoKey( const LibInfoKey& rKey );
@@ -289,27 +292,29 @@ public:
 
     bool operator==( const LibInfoKey& rKey ) const;
 
-    SfxObjectShell* GetShell() const { return m_pShell; }
+    const ScriptDocument&
+                    GetDocument() const { return m_aDocument; }
     const String&   GetLibName() const { return m_aLibName; }
 };
 
 class LibInfoItem
 {
 private:
-    SfxObjectShell* m_pShell;
-    String          m_aLibName;
-    String          m_aCurrentName;
-    USHORT          m_nCurrentType;
+    ScriptDocument      m_aDocument;
+    String              m_aLibName;
+    String              m_aCurrentName;
+    USHORT              m_nCurrentType;
 
 public:
     LibInfoItem();
-    LibInfoItem( SfxObjectShell* pShell, const String& rLibName, const String& rCurrentName, USHORT nCurrentType );
+    LibInfoItem( const ScriptDocument& rDocument, const String& rLibName, const String& rCurrentName, USHORT nCurrentType );
     ~LibInfoItem();
 
     LibInfoItem( const LibInfoItem& rItem );
     LibInfoItem& operator=( const LibInfoItem& rItem );
 
-    SfxObjectShell* GetShell() const { return m_pShell; }
+    const ScriptDocument&
+                    GetDocument() const { return m_aDocument; }
     const String&   GetLibName() const { return m_aLibName; }
     const String&   GetCurrentName() const { return m_aCurrentName; }
     USHORT          GetCurrentType() const { return m_nCurrentType; }
@@ -323,7 +328,7 @@ private:
     {
         size_t operator()( const LibInfoKey& rKey ) const
         {
-            size_t nHash = (size_t) rKey.GetShell();
+            size_t nHash = (size_t) rKey.GetDocument().hashCode();
             nHash += (size_t) ::rtl::OUString( rKey.GetLibName() ).hashCode();
             return nHash;
         }
