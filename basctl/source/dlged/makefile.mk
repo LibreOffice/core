@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-14 09:29:28 $
+#   last change: $Author: obo $ $Date: 2007-03-15 16:00:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,25 +46,19 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-SLOFILES=	$(SLO)$/dlged.obj		\
-            $(SLO)$/dlgedfunc.obj	\
-            $(SLO)$/dlgedfac.obj	\
-            $(SLO)$/dlgedmod.obj	\
-            $(SLO)$/dlgedpage.obj	\
-            $(SLO)$/dlgedview.obj	\
-            $(SLO)$/dlgedobj.obj	\
-            $(SLO)$/dlgedlist.obj	\
-            $(SLO)$/dlgedclip.obj	\
-            $(SLO)$/propbrw.obj \
-            $(SLO)$/managelang.obj
-
 EXCEPTIONSFILES=$(SLO)$/dlged.obj	\
                 $(SLO)$/dlgedobj.obj \
                 $(SLO)$/dlgedfac.obj	\
-                $(SLO)$/dlgedobj.obj	\
                 $(SLO)$/dlgedlist.obj	\
                 $(SLO)$/dlgedclip.obj	\
                 $(SLO)$/propbrw.obj
+
+SLOFILES=   $(EXCEPTIONSFILES)      \
+            $(SLO)$/dlgedfunc.obj	\
+            $(SLO)$/dlgedmod.obj	\
+            $(SLO)$/dlgedpage.obj	\
+            $(SLO)$/dlgedview.obj	\
+            $(SLO)$/managelang.obj
 
 SRS1NAME=$(TARGET)
 SRC1FILES=	dlgresid.src \
