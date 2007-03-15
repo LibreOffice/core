@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 11:56:37 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:01:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -509,18 +509,10 @@ sal_uInt16 SfxApplication::SaveBasicManager() const
 }
 
 //--------------------------------------------------------------------
-sal_uInt16 SfxApplication::SaveDialogContainer() const
+sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
 {
-    // Save Dialog Container
-    pAppData_Impl->pBasicManager->storeLibraries( SfxBasicManagerHolder::DIALOGS, false );
-    return 0;
-}
-
-//--------------------------------------------------------------------
-sal_uInt16 SfxApplication::SaveBasicContainer() const
-{
-    // Save Dialog Container
-    pAppData_Impl->pBasicManager->storeLibraries( SfxBasicManagerHolder::SCRIPTS, false );
+    if ( pAppData_Impl->pBasicManager->isValid() )
+        pAppData_Impl->pBasicManager->storeAllLibraries();
     return 0;
 }
 
