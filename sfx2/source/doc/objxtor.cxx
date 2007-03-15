@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:12 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:03:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,11 +106,16 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/script/DocumentDialogLibraryContainer.hpp>
+#include <com/sun/star/script/DocumentScriptLibraryContainer.hpp>
+
 #include <svtools/urihelper.hxx>
 #include <svtools/pathoptions.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbhelper.hxx>
 #include <svtools/asynclink.hxx>
+#include <tools/diagnose_ex.h>
 #include <sot/clsids.hxx>
 
 #include "app.hxx"
@@ -139,15 +144,15 @@
 #include "msg.hxx"
 #include "appbaslib.hxx"
 
-#include <basic/namecont.hxx>
 #include <basic/basicmanagerrepository.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::script;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::document;
 
 using ::basic::BasicManagerRepository;
-using ::basic::SfxLibraryContainer;
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
@@ -210,6 +215,7 @@ SfxObjectShell_Impl::SfxObjectShell_Impl()
     ,bModelInitialized( sal_False )
     ,bPreserveVersions( sal_True )
     ,m_bMacroSignBroken( sal_False )
+    ,m_bNoBasicCapabilities( sal_False )
     ,lErr(ERRCODE_NONE)
     ,nEventId ( 0)
     ,bDoNotTouchDocInfo( sal_False )
@@ -672,32 +678,64 @@ BasicManager* SfxObjectShell::GetBasicManager() const
     return HasBasic() ? pImp->pBasicManager->get() : SFX_APP()->GetBasicManager();
 }
 
+//--------------------------------------------------------------------
+
+void SfxObjectShell::SetHasNoBasic()
+{
+    pImp->m_bNoBasicCapabilities = sal_True;
+}
+
+//--------------------------------------------------------------------
+
 sal_Bool SfxObjectShell::HasBasic() const
 {
+    if ( pImp->m_bNoBasicCapabilities )
+        return sal_False;
+
     if ( !pImp->bBasicInitialized )
-    {
-        String aName( GetMedium()->GetName() );
         const_cast< SfxObjectShell* >( this )->InitBasicManager_Impl();
-    }
+
     return pImp->pBasicManager->isValid();
+}
+
+//--------------------------------------------------------------------
+namespace
+{
+    const Reference< XLibraryContainer >&
+    lcl_getOrCreateLibraryContainer( bool _bScript, Reference< XLibraryContainer >& _rxContainer,
+        const Reference< XModel >& _rxDocument )
+    {
+        if ( !_rxContainer.is() )
+        {
+            try
+            {
+                Reference< XStorageBasedDocument > xStorageDoc( _rxDocument, UNO_QUERY );
+                _rxContainer.set (   _bScript
+                                ?   DocumentScriptLibraryContainer::create( comphelper_getProcessComponentContext(), xStorageDoc )
+                                :   DocumentDialogLibraryContainer::create( comphelper_getProcessComponentContext(), xStorageDoc )
+                                ,   UNO_QUERY_THROW );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION();
+            }
+        }
+        return _rxContainer;
+    }
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
-    if( !pImp->pBasicManager->isValid() )
-        GetBasicManager();
-    return pImp->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::DIALOGS );
+    return lcl_getOrCreateLibraryContainer( false, pImp->xDialogLibraries, GetModel() );
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
-    if( !pImp->pBasicManager->isValid() )
-        GetBasicManager();
-    return pImp->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS );
+    return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
 }
 
 //--------------------------------------------------------------------
