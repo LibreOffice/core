@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:12:19 $
+#   last change: $Author: obo $ $Date: 2007-03-15 15:49:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,14 @@ PACKAGE=com$/sun$/star$/script
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    DocumentDialogLibraryContainer.idl\
+    DocumentScriptLibraryContainer.idl\
     XLibraryContainer.idl\
     XLibraryContainer2.idl\
     XLibraryContainerPassword.idl\
     XLibraryContainerExport.idl\
+    XPersistentLibraryContainer.idl\
+    XStorageBasedLibraryContainer.idl\
     ModuleSizeExceededRequest.idl\
 
 # ------------------------------------------------------------------
