@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:13:23 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -778,7 +778,7 @@ void SfxApplication::Invalidate( USHORT nId )
 #define STRING( x )                         DOSTRING( x )
 
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, BOOL, rtl_uString*);
 typedef void* (SAL_CALL *basicide_macro_organizer)(INT16);
 IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 {
@@ -863,28 +863,6 @@ SfxApplication::ChooseScript()
 
           delete pDlg;
     }
-    return aScriptURL;
-}
-
-::rtl::OUString SfxApplication::ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc )
-{
-    // get basctl dllname
-    String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
-    sLibName.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "sfx" ) ), String( RTL_CONSTASCII_USTRINGPARAM( "basctl" ) ) );
-    ::rtl::OUString aLibName( sLibName );
-
-    // load module
-    oslModule handleMod = osl_loadModule( aLibName.pData, 0 );
-
-    // get symbol
-    ::rtl::OUString aSymbol( RTL_CONSTASCII_USTRINGPARAM( "basicide_choose_macro" ) );
-    basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
-
-    // call basicide_choose_macro in basctl
-    rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
-
-    ::rtl::OUString aScriptURL( pScriptURL );
-    rtl_uString_release( pScriptURL );
     return aScriptURL;
 }
 
