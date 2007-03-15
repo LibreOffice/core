@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:48:33 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:36:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #endif
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
+#endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
 #endif
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
@@ -618,18 +621,16 @@ void UnoControlDialogModel::removeByName( const ::rtl::OUString& aName ) throw(N
     maContainerListeners.elementRemoved( aEvent );
 
     stopControlListening( aElementPos->first );
+    Reference< XPropertySet > xPS( aElementPos->first, UNO_QUERY );
     maModels.erase( aElementPos );
     mbGroupsUpToDate = sal_False;
 
-    Reference< XPropertySet > xPS( aElementPos->first, UNO_QUERY );
     if ( xPS.is() )
-    {
-        // Remove dialog resource resolver from control
-        Reference< resource::XStringResourceResolver > xResourceResolver;
-        Any a;
-        a <<= xResourceResolver;
-        xPS->setPropertyValue( PROPERTY_RESOURCERESOLVER, a );
-    }
+        try
+        {
+            xPS->setPropertyValue( PROPERTY_RESOURCERESOLVER, makeAny( Reference< resource::XStringResourceResolver >() ) );
+        }
+        catch( const Exception& ) { DBG_UNHANDLED_EXCEPTION(); }
 
     // our "tab controller model" has potentially changed -> notify this
     implNotifyTabModelChange( aName );
