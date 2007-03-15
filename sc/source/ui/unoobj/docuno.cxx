@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:46:17 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:58:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ const SfxItemPropertyMap* lcl_GetDocOptPropertyMap()
         {MAP_CHAR_LEN(SC_UNO_AREALINKS),         0, &getCppuType((uno::Reference<sheet::XAreaLinks>*)0),      0, 0},
         {MAP_CHAR_LEN(SC_UNO_AUTOCONTFOC),       0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNO_BASICLIBRARIES),    0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
+        {MAP_CHAR_LEN(SC_UNO_DIALOGLIBRARIES),   0, &getCppuType((uno::Reference< script::XLibraryContainer >*)0), beans::PropertyAttribute::READONLY, 0},
         {MAP_CHAR_LEN(SC_UNO_CALCASSHOWN),       0, &getBooleanCppuType(),                                    0, 0},
         {MAP_CHAR_LEN(SC_UNONAME_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
         {MAP_CHAR_LEN(SC_UNO_CJK_CLOCAL),        0, &getCppuType((lang::Locale*)0),                           0, 0},
@@ -1458,6 +1459,10 @@ uno::Any SAL_CALL ScModelObj::getPropertyValue( const rtl::OUString& aPropertyNa
         else if ( aString.EqualsAscii( SC_UNO_BASICLIBRARIES ) )
         {
             aRet <<= pDocShell->GetBasicContainer();
+        }
+        else if ( aString.EqualsAscii( SC_UNO_DIALOGLIBRARIES ) )
+        {
+            aRet <<= pDocShell->GetDialogContainer();
         }
         else if ( aString.EqualsAscii( SC_UNO_RUNTIMEUID ) )
         {
