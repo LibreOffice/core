@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unonames.hxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-05 09:33:22 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:58:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,6 +466,7 @@
 #define SC_UNO_STANDARDDEC          "StandardDecimals"
 #define SC_UNO_REGEXENABLED         "RegularExpressions"
 #define SC_UNO_BASICLIBRARIES       "BasicLibraries"
+#define SC_UNO_DIALOGLIBRARIES      "DialogLibraries"
 #define SC_UNO_RUNTIMEUID           "RuntimeUID"
 #define SC_UNO_HASVALIDSIGNATURES   "HasValidSignatures"
 
