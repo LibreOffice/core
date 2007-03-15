@@ -14438,7 +14438,6 @@
   <value tokenid="226">zigZag</value>
   <value tokenid="227">zigZagStitch</value>
 </resource>
-<resource name="CT_Empty" resource="SingleElement"/>
 <resource name="EG_RunInnerContent" resource="Property">
   <attribute name="br" tokenid="ooxml:EG_RunInnerContent_br"/>
   <attribute name="t" tokenid="ooxml:EG_RunInnerContent_t"/>

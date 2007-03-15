@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 15:34:44 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 17:22:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,7 @@ public:
     <xsl:variable name="name" select="@name"/>
     <xsl:choose>
       <xsl:when test="ancestor::namespace//start[@name=$name]">1</xsl:when>
-      <xsl:when test="(starts-with(@name, 'CT_') or starts-with(@name, 'EG_')) and (.//rng:ref or .//rng:element or .//rng:attribute)">1</xsl:when>
+      <xsl:when test="(starts-with(@name, 'CT_') or starts-with(@name, 'EG_'))">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
