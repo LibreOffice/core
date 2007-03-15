@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbaslib.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:08:22 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:03:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,24 +45,25 @@
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SCRIPT_XLIBRARYCONTAINER_HPP_
-#include <com/sun/star/script/XLibraryContainer.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_XSTORAGEBASEDLIBRARYCONTAINER_HPP_
+#include <com/sun/star/script/XStorageBasedLibraryContainer.hpp>
 #endif
 #ifndef _COM_SUN_STAR_EMBED_XSTORAGE_HPP_
 #include <com/sun/star/embed/XStorage.hpp>
 #endif
 
 class BasicManager;
-namespace basic { class SfxLibraryContainer; }
 
 /** helper class which holds and manipulates a BasicManager
 */
 class SfxBasicManagerHolder
 {
 private:
-    BasicManager*                   mpBasicManager;
-    ::basic::SfxLibraryContainer*   mpBasicLibContainer;
-    ::basic::SfxLibraryContainer*   mpDialogLibContainer;
+    BasicManager*   mpBasicManager;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >
+                    mxBasicContainer;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >
+                    mxDialogContainer;
 
 public:
     SfxBasicManagerHolder();
@@ -77,15 +78,12 @@ public:
     */
     bool    isValid() const { return mpBasicManager != NULL; }
 
-    /** returns the BasicManager to which this instance is currently bound to
+    /** returns the BasicManager which this instance is currently bound to
     */
     BasicManager*
             get() const { return mpBasicManager; }
 
     /** binds the instance to the given BasicManager
-
-        The instance takes ownership of the given BasicManager, that is, it will be deleted
-        when the instance is destroyed, or bound to another BasicManager later.
     */
     void    reset( BasicManager* _pBasicManager );
 
@@ -97,19 +95,17 @@ public:
     */
     bool    isAnyContainerModified() const;
 
-    /** calls the storeLibraries at the SfxLibraryContainer denoted by ContainerType.
-
-        If this container is <NULL/> currently, nothing happens.
+    /** calls the storeLibraries at both our script and basic library container
     */
-    void    storeLibraries( ContainerType _eType, bool _bComplete );
+    void    storeAllLibraries();
 
-    /** calls the setStorage at all our SfxLibraryContainer.
+    /** calls the setStorage at all our XStorageBasedLibraryContainer.
     */
     void    setStorage(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
             );
 
-    /** calls the storeLibrariesToStorage at all our SfxLibraryContainer.
+    /** calls the storeLibrariesToStorage at all our XStorageBasedLibraryContainer.
     */
     void    storeLibrariesToStorage(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& _rxStorage
@@ -125,8 +121,9 @@ public:
 private:
     void    impl_releaseContainers();
 
-    ::basic::SfxLibraryContainer*
-            impl_getContainer( ContainerType _eType );
+    bool    impl_getContainer(
+                ContainerType _eType,
+                ::com::sun::star::uno::Reference< ::com::sun::star::script::XStorageBasedLibraryContainer >& _out_rxContainer );
 };
 
 class SfxApplicationScriptLibraryContainer
