@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.189 $
+ *  $Revision: 1.190 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:08:11 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,8 +245,6 @@ using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::document;
 using namespace ::rtl;
 using namespace ::cppu;
-
-using ::basic::SfxLibraryContainer;
 
 namespace css = ::com::sun::star;
 
