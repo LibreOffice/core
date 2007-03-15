@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:32:57 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ class BasicCheckBox : public SvTabListBox
 private:
     USHORT              nMode;
     SvLBoxButtonData*   pCheckButton;
-    SfxObjectShell*     m_pShell;
+    ScriptDocument      m_aDocument;
     void                Init();
 
 public:
@@ -170,7 +170,7 @@ public:
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
     virtual BOOL    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
 
-    void            SetShell( SfxObjectShell* pShell ) { m_pShell = pShell; }
+    void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
     void            SetMode( USHORT n );
     USHORT          GetMode() const         { return nMode; }
@@ -231,7 +231,7 @@ protected:
     DECL_LINK( BasicBoxHighlightHdl, BasicTreeListBox * );
     DECL_LINK( ButtonHdl, Button * );
     void                CheckButtons();
-    bool                GetSelection( SfxObjectShell*& rpShell, String& rLibName );
+    bool                GetSelection( ScriptDocument& rDocument, String& rLibName );
     void                DeleteCurrent();
     void                NewModule();
     void                NewDialog();
@@ -267,7 +267,7 @@ protected:
     PushButton          aInsertLibButton;
     PushButton          aDelButton;
 
-    SfxObjectShell*     m_pCurShell;
+    ScriptDocument      m_aCurDocument;
     LibraryLocation     m_eCurLocation;
 
     DECL_LINK( TreeListHighlightHdl, SvTreeListBox * );
@@ -285,7 +285,7 @@ protected:
     void                ExportAsBasic( const String& aLibName );
     void                EndTabDialog( USHORT nRet );
     void                FillListBox();
-    void                InsertListBoxEntry( SfxObjectShell* pShell, LibraryLocation eLocation );
+    void                InsertListBoxEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void                SetCurLib();
     SvLBoxEntry*        ImpInsertLibEntry( const String& rLibName, ULONG nPos );
     virtual void        ActivatePage();
@@ -301,9 +301,9 @@ public:
 };
 
 // Helper functions
-SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell,
+SbModule* createModImpl( Window* pWin, const ScriptDocument& rDocument,
     BasicTreeListBox& rBasicBox, const String& rLibName, String aModName, bool bMain = false );
-void createLibImpl( Window* pWin, SfxObjectShell* pShell,
+void createLibImpl( Window* pWin, const ScriptDocument& rDocument,
                     BasicCheckBox* pLibBox, BasicTreeListBox* pBasicBox );
 
 #endif // _MODULDLG_HXX
