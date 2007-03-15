@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgedmod.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:36:45 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:02:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,26 +55,16 @@ class DlgEdModel : public SdrModel
     friend class DlgEdPage;
 
 private:
-    SfxObjectShell* pObjectShell;
-
-    DlgEdModel( const DlgEdModel& );
-    void operator=(const DlgEdModel& rSrcModel);
+    DlgEdModel( const DlgEdModel& );                // not implemented
+    void operator=(const DlgEdModel& rSrcModel);    // not implemented
 
 public:
     TYPEINFO();
 
-    DlgEdModel(SfxItemPool* pPool=NULL, SfxObjectShell* pPers=NULL );
-    DlgEdModel(const String& rPath, SfxItemPool* pPool=NULL,
-                SfxObjectShell* pPers=NULL );
-    DlgEdModel(SfxItemPool* pPool, SfxObjectShell* pPers, FASTBOOL bUseExtColorTable );
-    DlgEdModel(const String& rPath, SfxItemPool* pPool, SfxObjectShell* pPers,
-                FASTBOOL bUseExtColorTable );
+    DlgEdModel();
     virtual ~DlgEdModel();
 
     virtual void DlgEdModelChanged( FASTBOOL bChanged = TRUE );
-
-    SfxObjectShell* GetObjectShell() const { return pObjectShell; }
-    void SetObjectShell( SfxObjectShell* pShell ) { pObjectShell = pShell; }
 
     virtual SdrPage*  AllocPage(FASTBOOL bMasterPage);
 
