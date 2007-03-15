@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:47:58 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 15:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@
 
 #ifndef INCLUDED_RESOURCESIDS
 #include <doctok/resourceids.hxx>
+#include <ooxml/resourceids.hxx>
 #endif
 #ifndef INCLUDED_TABLE_MANAGER_HXX
 #include <doctok/TableManager.hxx>

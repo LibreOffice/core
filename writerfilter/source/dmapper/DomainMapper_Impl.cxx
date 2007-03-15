@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-09 11:23:26 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 15:34:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -488,7 +488,7 @@ void    DomainMapper_Impl::PopProperties(ContextType eId)
             m_pTopContext = m_aPropertyStacks[m_aContextStack.top()].top();
     else
     {
-        OSL_ENSURE(eId == CONTEXT_SECTION, "this should happen at a section context end");
+        // OSL_ENSURE(eId == CONTEXT_SECTION, "this should happen at a section context end");
         m_pTopContext.reset();
     }
 }

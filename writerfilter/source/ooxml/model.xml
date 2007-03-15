@@ -86,7 +86,7 @@
     </optional>
   </define>
   <define name="CT_ColorReplaceEffect">
-    <ref name="EG_ColorChoice"/>
+    <ref nameOOXMLContext_schemas_openxmlformats_org_wordprocessingml_2006_main_CT_Tabs="EG_ColorChoice"/>
   </define>
   <define name="CT_DuotoneEffect">
     <oneOrMore>
@@ -14093,7 +14093,7 @@
   <sprm name="lang" tokenid="0x0"/>
   <sprm name="eastAsianLayout" tokenid="0x0"/>
   <sprm name="specVanish" tokenid="0x818"/>
-  <sprm name="oMath" tokenid="0x0"/>rtf:sprmPChgTabsPapx
+  <sprm name="oMath" tokenid="0x0"/>
 </resource>
 <resource name="CT_RPr" resource="Properties"/>
 <resource name="CT_OnOff" resource="BooleanValue"/>
@@ -14168,7 +14168,9 @@
   <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
 </resource>
 <resource name="CT_PPr" resource="Properties"/>
-<resource name="CT_Tabs" resource="Property" />
+<resource name="CT_Tabs" resource="Property">
+  <attribute name="tab" tokenid="ooxml:CT_Tabs_tab"/>
+</resource>
 <resource name="CT_TabStop" resource="PropertySetValue">
   <attribute name="val" tokenid="ooxml:CT_TabStop_val"/>
   <attribute name="leader" tokenid="ooxml:CT_TabStop_leader"/>
@@ -14436,6 +14438,42 @@
   <value tokenid="226">zigZag</value>
   <value tokenid="227">zigZagStitch</value>
 </resource>
+<resource name="CT_Empty" resource="SingleElement"/>
+<resource name="EG_RunInnerContent" resource="Property">
+  <attribute name="br" tokenid="ooxml:EG_RunInnerContent_br"/>
+  <attribute name="t" tokenid="ooxml:EG_RunInnerContent_t"/>
+  <attribute name="delText" tokenid="ooxml:EG_RunInnerContent_delText"/>
+  <attribute name="instrText" tokenid="ooxml:EG_RunInnerContent_instrText"/>
+  <attribute name="delInstrText" tokenid="ooxml:EG_RunInnerContent_delInstrText"/>
+  <attribute name="noBreakHyphen" tokenid="ooxml:EG_RunInnerContent_noBreakHyphen"/>
+  <attribute name="softHyphen" tokenid="ooxml:EG_RunInnerContent_softHyphen"/>
+  <attribute name="dayShort" tokenid="ooxml:EG_RunInnerContent_dayShort"/>
+  <attribute name="monthShort" tokenid="ooxml:EG_RunInnerContent_monthShort"/>
+  <attribute name="yearShort" tokenid="ooxml:EG_RunInnerContent_yearShort"/>
+  <attribute name="dayLong" tokenid="ooxml:EG_RunInnerContent_dayLong"/>
+  <attribute name="monthLong" tokenid="ooxml:EG_RunInnerContent_monthLong"/>
+  <attribute name="yearLong" tokenid="ooxml:EG_RunInnerContent_yearLong"/>
+  <attribute name="annotationRef" tokenid="ooxml:EG_RunInnerContent_annotationRef"/>
+  <attribute name="footnoteRef" tokenid="ooxml:EG_RunInnerContent_footnoteRef"/>
+  <attribute name="endnoteRef" tokenid="ooxml:EG_RunInnerContent_endnoteRef"/>
+  <attribute name="separator" tokenid="ooxml:EG_RunInnerContent_separator"/>
+  <attribute name="continuationSeparator" tokenid="ooxml:EG_RunInnerContent_continuationSeparator"/>
+  <attribute name="sym" tokenid="ooxml:EG_RunInnerContent_sym"/>
+  <attribute name="pgNum" tokenid="ooxml:EG_RunInnerContent_pgNum"/>
+  <attribute name="cr" tokenid="ooxml:EG_RunInnerContent_cr"/>
+  <attribute name="tab" tokenid="ooxml:EG_RunInnerContent_tab"/>
+  <attribute name="object" tokenid="ooxml:EG_RunInnerContent_object"/>
+  <attribute name="pict" tokenid="ooxml:EG_RunInnerContent_pict"/>
+  <attribute name="fldChar" tokenid="ooxml:EG_RunInnerContent_fldChar"/>
+  <attribute name="ruby" tokenid="ooxml:EG_RunInnerContent_ruby"/>
+  <attribute name="footnoteReference" tokenid="ooxml:EG_RunInnerContent_footnoteReference"/>
+  <attribute name="endnoteReference" tokenid="ooxml:EG_RunInnerContent_endnoteReference"/>
+  <attribute name="commentReference" tokenid="ooxml:EG_RunInnerContent_commentReference"/>
+  <attribute name="drawing" tokenid="ooxml:EG_RunInnerContent_drawing"/>
+  <attribute name="ptab" tokenid="ooxml:EG_RunInnerContent_ptab"/>
+  <attribute name="lastRenderedPageBreak" tokenid="ooxml:EG_RunInnerContent_lastRenderedPageBreak"/>
+</resource>
+<resource name="CT_Empty" resource="SingleElement"/>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>

@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 16:13:31 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 15:34:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -734,7 +734,7 @@ doctok::Id
 
     switch (nToken)
     {</xsl:text>
-    <xsl:if test="$resource = 'Property' or $resource = 'PropertySetValue'">
+    <xsl:if test="$resource = 'Property' or $resource = 'PropertySetValue' or $resource = 'SingleElement'">
     <xsl:for-each select="//resource[@name=$mydefine]">
       <xsl:for-each select="attribute|sprm">
       <xsl:variable name="sprmname" select="@name"/>
