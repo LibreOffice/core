@@ -4,9 +4,9 @@
  *
  *  $RCSfile: localizationmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-02-01 11:45:39 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,11 @@ static ::rtl::OUString aSemi = ::rtl::OUString::createFromAscii( ";" );
 
 
 LocalizationMgr::LocalizationMgr( BasicIDEShell* pIDEShell,
-    SfxObjectShell* pShell, String aLibName,
+    const ScriptDocument& rDocument, String aLibName,
     const Reference< XStringResourceManager >& xStringResourceManager )
         : m_xStringResourceManager( xStringResourceManager )
         , m_pIDEShell( pIDEShell )
-        , m_pShell( pShell )
+        , m_aDocument( rDocument )
         , m_aLibName( aLibName )
 {
 }
@@ -152,7 +152,7 @@ bool isLanguageDependentProperty( ::rtl::OUString aName )
 
 void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResourceMode eMode )
 {
-    Sequence< ::rtl::OUString > aDlgNames = BasicIDE::GetDialogNames( m_pShell, m_aLibName );
+    Sequence< ::rtl::OUString > aDlgNames = m_aDocument.getObjectNames( E_DIALOGS, m_aLibName );
     sal_Int32 nDlgCount = aDlgNames.getLength();
     const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
 
@@ -160,7 +160,7 @@ void LocalizationMgr::implEnableDisableResourceForAllLibraryDialogs( HandleResou
     for( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
     {
         String aDlgName = pDlgNames[ i ];
-        DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_pShell, m_aLibName, aDlgName, FALSE );
+        DialogWindow* pWin = m_pIDEShell->FindDlgWin( m_aDocument, m_aLibName, aDlgName, FALSE );
         if( pWin && pWin->IsA( TYPE( DialogWindow ) ) )
         {
             DialogWindow* pDialogWin = static_cast< DialogWindow* >( pWin );
@@ -676,7 +676,7 @@ void LocalizationMgr::handleAddLocales( Sequence< Locale > aLocaleSeq )
         enableResourceForAllLibraryDialogs();
     }
 
-    BasicIDE::MarkDocShellModified( m_pShell );
+    BasicIDE::MarkDocumentModified( m_aDocument );
 
     // update locale toolbar
     SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
@@ -732,7 +732,7 @@ void LocalizationMgr::handleRemoveLocales( Sequence< Locale > aLocaleSeq )
     }
     if( bModified )
     {
-        BasicIDE::MarkDocShellModified( m_pShell );
+        BasicIDE::MarkDocumentModified( m_aDocument );
 
         // update slots
         SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
@@ -848,9 +848,12 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
     if( !pDlgWin )
         return;
-    SfxObjectShell* pShell = pDlgWin->GetShell();
+    ScriptDocument aDocument( pDlgWin->GetDocument() );
+    DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::setControlResourceIDsForNewEditorObject: invalid document!" );
+    if ( !aDocument.isValid() )
+        return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib = BasicIDE::GetDialogLibrary( pShell, rLibName, TRUE );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -865,7 +868,7 @@ void LocalizationMgr::setControlResourceIDsForNewEditorObject( DlgEditor* pEdito
           xDummyStringResolver, SET_IDS );
 
     if( nChangedCount )
-        BasicIDE::MarkDocShellModified( pShell );
+        BasicIDE::MarkDocumentModified( aDocument );
 }
 
 void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEditor,
@@ -875,9 +878,12 @@ void LocalizationMgr::renameControlResourceIDsForEditorObject( DlgEditor* pEdito
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
     if( !pDlgWin )
         return;
-    SfxObjectShell* pShell = pDlgWin->GetShell();
+    ScriptDocument aDocument( pDlgWin->GetDocument() );
+    DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::renameControlResourceIDsForEditorObject: invalid document!" );
+    if ( !aDocument.isValid() )
+        return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib = BasicIDE::GetDialogLibrary( pShell, rLibName, TRUE );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -905,9 +911,12 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
     if( !pDlgWin )
         return;
-    SfxObjectShell* pShell = pDlgWin->GetShell();
+    ScriptDocument aDocument( pDlgWin->GetDocument() );
+    DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject: invalid document!" );
+    if ( !aDocument.isValid() )
+        return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib = BasicIDE::GetDialogLibrary( pShell, rLibName, TRUE );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -918,16 +927,16 @@ void LocalizationMgr::deleteControlResourceIDsForDeletedEditorObject( DlgEditor*
           xDummyStringResolver, REMOVE_IDS_FROM_RESOURCE );
 
     if( nChangedCount )
-        BasicIDE::MarkDocShellModified( pShell );
+        BasicIDE::MarkDocumentModified( aDocument );
 }
 
-void LocalizationMgr::setStringResourceAtDialog( SfxObjectShell* pShell, const String& aLibName,
+void LocalizationMgr::setStringResourceAtDialog( const ScriptDocument& rDocument, const String& aLibName,
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     static ::rtl::OUString aResourceResolverPropName = ::rtl::OUString::createFromAscii( "ResourceResolver" );
 
     // Get library
-    Reference< container::XNameContainer > xDialogLib = BasicIDE::GetDialogLibrary( pShell, aLibName, TRUE );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
@@ -953,11 +962,11 @@ void LocalizationMgr::setStringResourceAtDialog( SfxObjectShell* pShell, const S
     }
 }
 
-void LocalizationMgr::renameStringResourceIDs( SfxObjectShell* pShell, const String& aLibName,
+void LocalizationMgr::renameStringResourceIDs( const ScriptDocument& rDocument, const String& aLibName,
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
-    Reference< container::XNameContainer > xDialogLib = BasicIDE::GetDialogLibrary( pShell, aLibName, TRUE );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
     if( !xStringResourceManager.is() )
@@ -984,11 +993,11 @@ void LocalizationMgr::renameStringResourceIDs( SfxObjectShell* pShell, const Str
     }
 }
 
-void LocalizationMgr::removeResourceForDialog( SfxObjectShell* pShell, const String& aLibName,
+void LocalizationMgr::removeResourceForDialog( const ScriptDocument& rDocument, const String& aLibName,
     const String& aDlgName, Reference< container::XNameContainer > xDialogModel )
 {
     // Get library
-    Reference< container::XNameContainer > xDialogLib = BasicIDE::GetDialogLibrary( pShell, aLibName, TRUE );
+    Reference< container::XNameContainer > xDialogLib( rDocument.getLibrary( E_DIALOGS, aLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
     if( !xStringResourceManager.is() )
@@ -1050,9 +1059,12 @@ void LocalizationMgr::moveResourcesForPastedEditorObject( DlgEditor* pEditor,
     DialogWindow* pDlgWin = FindDialogWindowForEditor( pEditor );
     if( !pDlgWin )
         return;
-    SfxObjectShell* pShell = pDlgWin->GetShell();
+    ScriptDocument aDocument( pDlgWin->GetDocument() );
+    DBG_ASSERT( aDocument.isValid(), "LocalizationMgr::moveResourcesForPastedEditorObject: invalid document!" );
+    if ( !aDocument.isValid() )
+        return;
     const String& rLibName = pDlgWin->GetLibName();
-    Reference< container::XNameContainer > xDialogLib = BasicIDE::GetDialogLibrary( pShell, rLibName, TRUE );
+    Reference< container::XNameContainer > xDialogLib( aDocument.getLibrary( E_DIALOGS, rLibName, TRUE ) );
     Reference< XStringResourceManager > xStringResourceManager =
         LocalizationMgr::getStringResourceFromDialogLibrary( xDialogLib );
 
