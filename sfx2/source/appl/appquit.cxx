@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appquit.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-26 09:04:58 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:02:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,8 +177,7 @@ void SfxApplication::Deinitialize()
     if ( pBasMgr && pBasMgr->IsModified() )
         SaveBasicManager();
 
-    SaveBasicContainer();
-    SaveDialogContainer();
+    SaveBasicAndDialogContainer();
 
     pAppData_Impl->bDowning = TRUE; // wegen Timer aus DecAliveCount und QueryExit
 
