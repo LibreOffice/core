@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basdoc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:27:22 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:51:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ BasicDocShell::BasicDocShell( SfxObjectCreateMode eMode ) : SfxObjectShell( eMod
     pPrinter = 0;
     SetPool( &SFX_APP()->GetPool() );
     SetModel( new SIDEModel(this) );
+    SetHasNoBasic();
 }
 
 __EXPORT BasicDocShell::~BasicDocShell()
