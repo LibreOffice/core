@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:33:22 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
             SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
             if( pDispatcher )
             {
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetShell(), aDesc.GetLibName(), aDesc.GetName(),
+                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
                                   aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
                 pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                         SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
@@ -218,7 +218,7 @@ IMPL_LINK( ObjectCatalog, ToolBoxHdl, ToolBox*, pToolBox )
             {
                 if( pDispatcher )
                 {
-                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetShell(), aDesc.GetLibName(), aDesc.GetName(),
+                    SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
                                       aDesc.GetMethodName(), aMacroTreeList.ConvertType( aDesc.GetType() ) );
                     pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
                                           SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
