@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 14:01:21 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,6 +380,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                         bRet = TRUE;
                         // Yes, no failure, don't raise a "couldn't paste"
                         // dialog if user cancelled.
+                    delete pDlg;
                 }
                 else
                     bRet = aObj.ImportString( aStr, nFormatId );
