@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-02-21 08:17:40 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,9 +112,9 @@ using namespace ::com::sun::star::io;
 
 TYPEINIT1( DialogWindow, IDEBaseWindow );
 
-DialogWindow::DialogWindow( Window* pParent, SfxObjectShell* pShell, String aLibName, String aName,
+DialogWindow::DialogWindow( Window* pParent, const ScriptDocument& rDocument, String aLibName, String aName,
     const com::sun::star::uno::Reference< com::sun::star::container::XNameContainer >& xDialogModel )
-        :IDEBaseWindow( pParent, pShell, aLibName, aName )
+        :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,pUndoMgr(NULL)
 {
     InitSettings( TRUE, TRUE, TRUE );
@@ -135,23 +135,13 @@ DialogWindow::DialogWindow( Window* pParent, SfxObjectShell* pShell, String aLib
 
     // set readonly mode for readonly libraries
     ::rtl::OUString aOULibName( aLibName );
-    Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+    Reference< script::XLibraryContainer2 > xDlgLibContainer( GetDocument().getLibraryContainer( E_DIALOGS ), UNO_QUERY );
     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) )
-    {
         SetReadOnly( TRUE );
-    }
 
-    if ( pShell && pShell->IsReadOnly() )
+    if ( rDocument.isDocument() && rDocument.isReadOnly() )
         SetReadOnly( TRUE );
 }
-
-DialogWindow::DialogWindow( DialogWindow* pOrgWin ) :
-        IDEBaseWindow( pOrgWin->GetParent(), pOrgWin->GetShell(), pOrgWin->GetLibName(), pOrgWin->GetName() )
-{
-    DBG_ERROR( "Dieser CTOR ist nicht erlaubt!" );
-}
-
-
 
 DialogWindow::~DialogWindow()
 {
@@ -655,28 +645,14 @@ Reference< container::XNameContainer > DialogWindow::GetDialog() const
 
 BOOL DialogWindow::RenameDialog( const String& rNewName )
 {
-    BOOL bDone = TRUE;
+    if ( !BasicIDE::RenameDialog( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
+        return FALSE;
 
-    try
-    {
-        BasicIDE::RenameDialog( GetShell(), GetLibName(), GetName(), rNewName );
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
-            pBindings->Invalidate( SID_DOC_MODIFIED );
-    }
-    catch ( container::ElementExistException& )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
-        bDone = FALSE;
-    }
-    catch ( container::NoSuchElementException& e )
-    {
-        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aBStr.GetBuffer() );
-        bDone = FALSE;
-    }
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+        pBindings->Invalidate( SID_DOC_MODIFIED );
 
-    return bDone;
+    return TRUE;
 }
 
 void DialogWindow::DisableBrowser()
@@ -729,10 +705,10 @@ String DialogWindow::GetTitle()
 
 BasicEntryDescriptor DialogWindow::CreateEntryDescriptor()
 {
-    SfxObjectShell* pShell( GetShell() );
+    ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
-    LibraryLocation eLocation = BasicIDE::GetLibraryLocation( pShell, aLibName );
-    return BasicEntryDescriptor( pShell, eLocation, aLibName, GetName(), OBJ_TYPE_DIALOG );
+    LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, GetName(), OBJ_TYPE_DIALOG );
 }
 
 void DialogWindow::SetReadOnly( BOOL b )
@@ -767,7 +743,7 @@ void DialogWindow::StoreData()
     {
         try
         {
-            Reference< container::XNameContainer > xLib = BasicIDE::GetDialogLibrary( GetShell(), GetLibName(), TRUE );
+            Reference< container::XNameContainer > xLib = GetDocument().getLibrary( E_DIALOGS, GetLibName(), true );
 
             if( xLib.is() )
             {
@@ -780,9 +756,7 @@ void DialogWindow::StoreData()
                     OSL_ASSERT( xProps.is() );
                     OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
                     Reference< XInputStreamProvider > xISP = ::xmlscript::exportDialogModel( xDialogModel, xContext );
-                    Any aAny;
-                    aAny <<= xISP;
-                    xLib->replaceByName( ::rtl::OUString( GetName() ), aAny );
+                    xLib->replaceByName( ::rtl::OUString( GetName() ), makeAny( xISP ) );
                 }
             }
         }
@@ -790,7 +764,7 @@ void DialogWindow::StoreData()
         {
             DBG_UNHANDLED_EXCEPTION();
         }
-        BasicIDE::MarkDocShellModified( GetShell() );
+        BasicIDE::MarkDocumentModified( GetDocument() );
         pEditor->ClearModifyFlag();
     }
 }
@@ -798,7 +772,7 @@ void DialogWindow::StoreData()
 void DialogWindow::Deactivating()
 {
     if ( IsModified() )
-        BasicIDE::MarkDocShellModified( GetShell() );
+        BasicIDE::MarkDocumentModified( GetDocument() );
 }
 
 void DialogWindow::PrintData( Printer* pPrinter )
