@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype2.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:30:57 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:55:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include "basobj.hxx"
 #endif
 
-enum BasicEntryType { OBJ_TYPE_UNKNOWN, OBJ_TYPE_SHELL, OBJ_TYPE_LIBRARY, OBJ_TYPE_MODULE, OBJ_TYPE_DIALOG, OBJ_TYPE_METHOD };
+enum BasicEntryType { OBJ_TYPE_UNKNOWN, OBJ_TYPE_DOCUMENT, OBJ_TYPE_LIBRARY, OBJ_TYPE_MODULE, OBJ_TYPE_DIALOG, OBJ_TYPE_METHOD };
 
 #define BROWSEMODE_MODULES      0x01
 #define BROWSEMODE_SUBS         0x02
@@ -85,27 +85,28 @@ public:
     BasicEntryType  GetType() const                     { return m_eType; }
 };
 
-class BasicShellEntry : public BasicEntry
+class BasicDocumentEntry : public BasicEntry
 {
 private:
-    SfxObjectShell* m_pShell;
-    LibraryLocation m_eLocation;
+    ScriptDocument      m_aDocument;
+    LibraryLocation     m_eLocation;
 
 public:
-                    BasicShellEntry( SfxObjectShell* pShell, LibraryLocation eLocation, BasicEntryType eType = OBJ_TYPE_SHELL );
-    virtual         ~BasicShellEntry();
+                    BasicDocumentEntry( const ScriptDocument& rDocument, LibraryLocation eLocation, BasicEntryType eType = OBJ_TYPE_DOCUMENT );
+    virtual         ~BasicDocumentEntry();
 
-    SfxObjectShell* GetShell() const { return m_pShell; }
+    const ScriptDocument&
+                    GetDocument() const { return m_aDocument; }
     LibraryLocation GetLocation() const { return m_eLocation; }
 };
 
-class BasicLibEntry : public BasicShellEntry
+class BasicLibEntry : public BasicDocumentEntry
 {
 private:
     String          m_aLibName;
 
 public:
-                    BasicLibEntry( SfxObjectShell* pShell, LibraryLocation eLocation, const String& rLibName, BasicEntryType eType = OBJ_TYPE_LIBRARY );
+                    BasicLibEntry( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, BasicEntryType eType = OBJ_TYPE_LIBRARY );
     virtual         ~BasicLibEntry();
 
     const String&   GetLibName() const { return m_aLibName; }
@@ -113,7 +114,7 @@ public:
 
 class BasicEntryDescriptor
 {
-    SfxObjectShell*         m_pShell;
+    ScriptDocument          m_aDocument;
     LibraryLocation         m_eLocation;
     String                  m_aLibName;
     String                  m_aName;
@@ -122,16 +123,17 @@ class BasicEntryDescriptor
 
 public:
                             BasicEntryDescriptor();
-                            BasicEntryDescriptor( SfxObjectShell* pShell, LibraryLocation eLocation, const String& rLibName, const String& rName, BasicEntryType eType );
-                            BasicEntryDescriptor( SfxObjectShell* pShell, LibraryLocation eLocation, const String& rLibName, const String& rName, const String& rMethodName, BasicEntryType eType );
+                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rName, BasicEntryType eType );
+                            BasicEntryDescriptor( const ScriptDocument& rDocument, LibraryLocation eLocation, const String& rLibName, const String& rName, const String& rMethodName, BasicEntryType eType );
     virtual                 ~BasicEntryDescriptor();
 
                             BasicEntryDescriptor( const BasicEntryDescriptor& rDesc );
     BasicEntryDescriptor&   operator=( const BasicEntryDescriptor& rDesc );
     bool                    operator==( const BasicEntryDescriptor& rDesc ) const;
 
-    SfxObjectShell*         GetShell() const { return m_pShell; }
-    void                    SetShell( SfxObjectShell* pShell ) { m_pShell = pShell; }
+    const ScriptDocument&
+                            GetDocument() const { return m_aDocument; }
+    void                    SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 
     LibraryLocation         GetLocation() const { return m_eLocation; }
     void                    SetLocation( LibraryLocation eLocation ) { m_eLocation = eLocation; }
@@ -153,7 +155,7 @@ public:
 /****************************************
     Zuordnung von Typen und Pointern in BasicEntrys:
 
-    OBJ_TYPE_SHELL           BasicShellEntry
+    OBJ_TYPE_DOCUMENT        BasicDocumentEntry
     OBJ_TYPE_LIBRARY         BasicEntry
     OBJ_TYPE_MODULE          BasicEntry
     OBJ_TYPE_DIALOG          BasicEntry
@@ -175,8 +177,8 @@ protected:
     virtual SvLBoxEntry*    CloneEntry( SvLBoxEntry* pSource );
     virtual long            ExpandingHdl();
 
-    void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, SfxObjectShell* pShell, LibraryLocation eLocation );
-    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, SfxObjectShell* pShell, const String& rLibName );
+    void                    ImpCreateLibEntries( SvLBoxEntry* pShellRootEntry, const ScriptDocument& rDocument, LibraryLocation eLocation );
+    void                    ImpCreateLibSubEntries( SvLBoxEntry* pLibRootEntry, const ScriptDocument& rDocument, const String& rLibName );
 
     using                   Control::Notify;
     virtual void            SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType );
@@ -185,7 +187,7 @@ public:
                     BasicTreeListBox( Window* pParent, const ResId& rRes );
                     ~BasicTreeListBox();
 
-    void            ScanEntry( SfxObjectShell* pShell, LibraryLocation eLocation );
+    void            ScanEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     void            ScanAllEntries();
     void            UpdateEntries();
 
@@ -198,7 +200,7 @@ public:
 
     SbModule*       FindModule( SvLBoxEntry* pEntry );
     SbxVariable*    FindVariable( SvLBoxEntry* pEntry );
-    SvLBoxEntry*    FindRootEntry( SfxObjectShell* pShell, LibraryLocation eLocation );
+    SvLBoxEntry*    FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation );
     SvLBoxEntry*    FindEntry( SvLBoxEntry* pParent, const String& rText, BasicEntryType eType );
 
     BasicEntryDescriptor    GetEntryDescriptor( SvLBoxEntry* pEntry );
@@ -210,8 +212,8 @@ public:
                               SvLBoxEntry* pParent, bool bChildrenOnDemand,
                               std::auto_ptr< BasicEntry > aUserData );
 
-    String          GetRootEntryName( SfxObjectShell* pShell, LibraryLocation eLocation );
-    void            GetRootEntryBitmaps( SfxObjectShell* pShell, Image& rImage, Image& rImageHC );
+    String          GetRootEntryName( const ScriptDocument& rDocument, LibraryLocation eLocation );
+    void            GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& rImage, Image& rImageHC );
 
     void            SetCurrentEntry( BasicEntryDescriptor& rDesc );
 };
