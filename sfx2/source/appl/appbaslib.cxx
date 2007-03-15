@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbaslib.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:07:20 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:02:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,8 @@
 #include "app.hxx"
 
 #include <basic/basmgr.hxx>
-#include <basic/namecont.hxx>
+#include <tools/diagnose_ex.h>
+#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -52,13 +53,9 @@ using ::rtl::OUString;
 using ::osl::MutexGuard;
 using ::osl::Mutex;
 
-using ::basic::SfxLibraryContainer;
-
 //============================================================================
 SfxBasicManagerHolder::SfxBasicManagerHolder()
     :mpBasicManager( NULL )
-    ,mpBasicLibContainer( NULL )
-    ,mpDialogLibContainer( NULL )
 {
 }
 
@@ -75,91 +72,102 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 
     if ( mpBasicManager )
     {
-        const LibraryContainerInfo& rContainerInfo( mpBasicManager->GetLibraryContainerInfo() );
-        mpBasicLibContainer = dynamic_cast< SfxLibraryContainer* >( rContainerInfo.mxScriptCont.get() );
-        mpDialogLibContainer = dynamic_cast< SfxLibraryContainer* >( rContainerInfo.mxDialogCont.get() );
-        DBG_ASSERT( mpBasicLibContainer && mpDialogLibContainer,
-            "SfxBasicManagerHolder::reset: invalid library container implementations!" );
-
-        if ( mpBasicLibContainer )
-            mpBasicLibContainer->acquire();
-        if ( mpDialogLibContainer )
-            mpDialogLibContainer->acquire();
+        try
+        {
+            mxBasicContainer.set( mpBasicManager->GetScriptLibraryContainer(), UNO_QUERY_THROW );
+            mxDialogContainer.set( mpBasicManager->GetDialogLibraryContainer(), UNO_QUERY_THROW  );
+        }
+        catch( const Exception& )
+        {
+            DBG_UNHANDLED_EXCEPTION();
+        }
     }
 }
 
 bool SfxBasicManagerHolder::isAnyContainerModified() const
 {
-    if ( mpBasicLibContainer && mpBasicLibContainer->isContainerModified() )
+    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::isAnyContainerModified: not initialized!" );
+
+    if ( mxBasicContainer.is() && mxBasicContainer->isModified() )
         return true;
-    if ( mpDialogLibContainer && mpDialogLibContainer->isContainerModified() )
+    if ( mxDialogContainer.is() && mxDialogContainer->isModified() )
         return true;
+
     return false;
 }
 
-void SfxBasicManagerHolder::storeLibraries( ContainerType _eType, bool _bComplete )
+void SfxBasicManagerHolder::storeAllLibraries()
 {
-    SfxLibraryContainer* pContainer = impl_getContainer( _eType );
-    if ( pContainer )
-        pContainer->storeLibraries( _bComplete );
+    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeAllLibraries: not initialized!" );
+    try
+    {
+        if ( mxBasicContainer.is() )
+            mxBasicContainer->storeLibraries();
+        if ( mxDialogContainer.is() )
+            mxDialogContainer->storeLibraries();
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void SfxBasicManagerHolder::setStorage( const Reference< XStorage >& _rxStorage )
 {
-    SfxLibraryContainer* pContainer = impl_getContainer( SCRIPTS );
-    if ( pContainer )
-        pContainer->setStorage( _rxStorage );
-
-    pContainer = impl_getContainer( DIALOGS );
-    if ( pContainer )
-        pContainer->setStorage( _rxStorage );
+    try
+    {
+        if ( mxBasicContainer.is() )
+            mxBasicContainer->setRootStorage( _rxStorage );
+        if ( mxDialogContainer.is() )
+            mxDialogContainer->setRootStorage( _rxStorage );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >& _rxStorage )
 {
-    SfxLibraryContainer* pContainer = impl_getContainer( SCRIPTS );
-    if ( pContainer )
-        pContainer->storeLibrariesToStorage( _rxStorage );
+    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeLibrariesToStorage: not initialized!" );
 
-    pContainer = impl_getContainer( DIALOGS );
-    if ( pContainer )
-        pContainer->storeLibrariesToStorage( _rxStorage );
+    try
+    {
+        if ( mxBasicContainer.is() )
+            mxBasicContainer->storeLibrariesToStorage( _rxStorage );
+        if ( mxDialogContainer.is() )
+            mxDialogContainer->storeLibrariesToStorage( _rxStorage );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
 
 Reference< XLibraryContainer > SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
 {
-    return impl_getContainer( _eType );
+    OSL_PRECOND( isValid(), "SfxBasicManagerHolder::getLibraryContainer: not initialized!" );
+
+    switch ( _eType )
+    {
+    case SCRIPTS:   return mxBasicContainer.get();
+    case DIALOGS:   return mxDialogContainer.get();
+    }
+    DBG_ERROR( "SfxBasicManagerHolder::getLibraryContainer: illegal container type!" );
+    return NULL;
 }
 
 void SfxBasicManagerHolder::impl_releaseContainers()
 {
-    if ( mpBasicLibContainer )
-        mpBasicLibContainer->release();
-    mpBasicLibContainer = NULL;
-    if ( mpDialogLibContainer )
-        mpDialogLibContainer->release();
-    mpDialogLibContainer = NULL;
+    mxBasicContainer.clear();
+    mxDialogContainer.clear();
 }
 
-SfxLibraryContainer* SfxBasicManagerHolder::impl_getContainer( ContainerType _eType )
-{
-    switch ( _eType )
-    {
-    case SCRIPTS:   return mpBasicLibContainer;
-    case DIALOGS:   return mpDialogLibContainer;
-    }
-    DBG_ERROR( "SfxBasicManagerHolder::impl_getContainer: illegal container type!" );
-    return NULL;
-}
-
-// could have moved this to basic/BasicManager class, however probably best
-// to keep the nasty use of the uno implementation SfxLibraryContainer class in
-// one place
 sal_Bool
 SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< rtl::OUString >& sModules )
 {
-    if ( mpBasicLibContainer )
-        return mpBasicLibContainer->LegacyPsswdBinaryLimitExceeded( sModules );
+    if ( mpBasicManager )
+        return mpBasicManager->LegacyPsswdBinaryLimitExceeded( sModules );
     return sal_True;
 }
 
