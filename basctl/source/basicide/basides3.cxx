@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:49:27 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:53:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,9 @@
 #ifndef _XMLSCRIPT_XMLDLG_IMEXP_HXX_
 #include <xmlscript/xmldlg_imexp.hxx>
 #endif
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
 
 using namespace comphelper;
 using namespace ::com::sun::star;
@@ -73,7 +76,7 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 
 
-DialogWindow* BasicIDEShell::CreateDlgWin( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName )
+DialogWindow* BasicIDEShell::CreateDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName )
 {
     bCreatingWindow = TRUE;
 
@@ -85,30 +88,23 @@ DialogWindow* BasicIDEShell::CreateDlgWin( SfxObjectShell* pShell, const String&
     if ( !aLibName.Len() )
         aLibName = String::CreateFromAscii( "Standard" );
 
-    if ( !BasicIDE::HasDialogLibrary( pShell, aLibName ) )
-        BasicIDE::CreateDialogLibrary( pShell, aLibName );
+    rDocument.getOrCreateLibrary( E_DIALOGS, aLibName );
 
     if ( !aDlgName.Len() )
-        aDlgName = BasicIDE::CreateDialogName( pShell, aLibName );
+        aDlgName = rDocument.createObjectName( E_DIALOGS, aLibName );
 
     // Vielleicht gibt es ein suspendiertes?
-    pWin = FindDlgWin( pShell, aLibName, aDlgName, FALSE, TRUE );
+    pWin = FindDlgWin( rDocument, aLibName, aDlgName, FALSE, TRUE );
 
     if ( !pWin )
     {
         try
         {
             Reference< io::XInputStreamProvider > xISP;
-            if ( BasicIDE::HasDialog( pShell, aLibName, aDlgName ) )
-            {
-                // get dialog
-                xISP = BasicIDE::GetDialog( pShell, aLibName, aDlgName );
-            }
+            if ( rDocument.hasDialog( aLibName, aDlgName ) )
+                rDocument.getDialog( aLibName, aDlgName, xISP );
             else
-            {
-                // create dialog
-                xISP = BasicIDE::CreateDialog( pShell, aLibName, aDlgName );
-            }
+                rDocument.createDialog( aLibName, aDlgName, xISP );
 
             if ( xISP.is() )
             {
@@ -122,22 +118,16 @@ DialogWindow* BasicIDEShell::CreateDlgWin( SfxObjectShell* pShell, const String&
                 OSL_ASSERT( xProps.is() );
                 OSL_VERIFY( xProps->getPropertyValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultContext")) ) >>= xContext );
                 ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
-                LocalizationMgr::setStringResourceAtDialog( pShell, rLibName, aDlgName, xDialogModel );
+                LocalizationMgr::setStringResourceAtDialog( rDocument, rLibName, aDlgName, xDialogModel );
 
                 // new dialog window
-                pWin = new DialogWindow( &GetViewFrame()->GetWindow(), pShell, aLibName, aDlgName, xDialogModel );
+                pWin = new DialogWindow( &GetViewFrame()->GetWindow(), rDocument, aLibName, aDlgName, xDialogModel );
                 nKey = InsertWindowInTable( pWin );
             }
         }
-        catch ( container::ElementExistException& e )
+        catch ( uno::Exception& )
         {
-            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aBStr.GetBuffer() );
-        }
-        catch ( container::NoSuchElementException& e )
-        {
-            ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-            DBG_ERROR( aBStr.GetBuffer() );
+            DBG_UNHANDLED_EXCEPTION();
         }
     }
     else
@@ -166,7 +156,7 @@ DialogWindow* BasicIDEShell::CreateDlgWin( SfxObjectShell* pShell, const String&
     return pWin;
 }
 
-DialogWindow* BasicIDEShell::FindDlgWin( SfxObjectShell* pShell, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
+DialogWindow* BasicIDEShell::FindDlgWin( const ScriptDocument& rDocument, const String& rLibName, const String& rDlgName, BOOL bCreateIfNotExist, BOOL bFindSuspended )
 {
     DialogWindow* pDlgWin = 0;
     IDEBaseWindow* pWin = aIDEWindowTable.First();
@@ -176,13 +166,13 @@ DialogWindow* BasicIDEShell::FindDlgWin( SfxObjectShell* pShell, const String& r
         {
             if ( !rLibName.Len() )  // nur irgendeins finden...
                 pDlgWin = (DialogWindow*)pWin;
-            else if ( pWin->GetShell() == pShell && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
+            else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rDlgName )
                 pDlgWin = (DialogWindow*)pWin;
         }
         pWin = aIDEWindowTable.Next();
     }
     if ( !pDlgWin && bCreateIfNotExist )
-        pDlgWin = CreateDlgWin( pShell, rLibName, rDlgName );
+        pDlgWin = CreateDlgWin( rDocument, rLibName, rDlgName );
 
     return pDlgWin;
 }
