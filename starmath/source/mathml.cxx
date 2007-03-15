@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mathml.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:53:32 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:04:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3575,10 +3575,12 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
 
             const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
             const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
+            const OUString sDialogLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "DialogLibraries" ) );
             while( nCount-- )
             {
                 if (pValues->Name != sFormula &&
-                    pValues->Name != sBasicLibraries)
+                    pValues->Name != sBasicLibraries &&
+                    pValues->Name != sDialogLibraries)
                 {
                     try
                     {
@@ -3697,12 +3699,14 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                 {
                     const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
                     const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
+                    const OUString sDialogLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "DialogLibraries" ) );
                     const OUString sRuntimeUID ( RTL_CONSTASCII_USTRINGPARAM ( "RuntimeUID" ) );
                     for (sal_Int32 i = 0; i < nCount; i++, pProps++)
                     {
                         const OUString &rPropName = aProps[i].Name;
                         if (rPropName != sFormula &&
                             rPropName != sBasicLibraries &&
+                            rPropName != sDialogLibraries &&
                             rPropName != sRuntimeUID)
                         {
                             pProps->Name = rPropName;
