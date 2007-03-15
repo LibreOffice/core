@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:21:30 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 16:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,8 +206,9 @@ enum SmModelPropertyHandles
     HANDLE_BASIC_LIBRARIES,     /* #93295# */
     HANDLE_RUNTIME_UID,
     // --> PB 2004-08-25 #i33095# Security Options
-    HANDLE_LOAD_READONLY
+    HANDLE_LOAD_READONLY,
     // <--
+    HANDLE_DIALOG_LIBRARIES     // #i73329#
 };
 
 PropertySetInfo * lcl_createModelPropertyInfo ()
@@ -221,6 +222,7 @@ PropertySetInfo * lcl_createModelPropertyInfo ()
         { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameFixed"            ), HANDLE_CUSTOM_FONT_NAME_FIXED             ,       &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_FIXED          },
         { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSans"              ), HANDLE_CUSTOM_FONT_NAME_SANS              ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SANS        },
         { RTL_CONSTASCII_STRINGPARAM( "CustomFontNameSerif"             ), HANDLE_CUSTOM_FONT_NAME_SERIF             ,      &::getCppuType((const OUString*)0),     PROPERTY_NONE, FNT_SERIF          },
+        { RTL_CONSTASCII_STRINGPARAM( "DialogLibraries"                 ), HANDLE_DIALOG_LIBRARIES                   ,      &::getCppuType((const uno::Reference< script::XLibraryContainer > *)0),    PropertyAttribute::READONLY, 0},
         { RTL_CONSTASCII_STRINGPARAM( "FontFixedIsBold"),     HANDLE_CUSTOM_FONT_FIXED_WEIGHT    ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
         { RTL_CONSTASCII_STRINGPARAM( "FontFixedIsItalic"), HANDLE_CUSTOM_FONT_FIXED_POSTURE   ,  &::getBooleanCppuType(),  PROPERTY_NONE, FNT_FIXED},
         { RTL_CONSTASCII_STRINGPARAM( "FontFunctionsIsBold"),    HANDLE_FONT_FUNCTIONS_WEIGHT    ,  &::getBooleanCppuType(),            PROPERTY_NONE, FNT_FUNCTION},
@@ -882,6 +884,9 @@ void SmModel::_getPropertyValues( const PropertyMapEntry **ppEntries, Any *pValu
             break;
             case HANDLE_BASIC_LIBRARIES:
                 *pValue <<= pDocSh->GetBasicContainer();
+            break;
+            case HANDLE_DIALOG_LIBRARIES:
+                *pValue <<= pDocSh->GetDialogContainer();
             break;
             case HANDLE_RUNTIME_UID:
                 *pValue <<= getRuntimeUID();
