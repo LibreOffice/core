@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:25:32 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 17:02:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -774,13 +774,13 @@ static const ::rtl::OUString& getProductRegistrationServiceName( )
     return s_sServiceName;
 }
 
-typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(BOOL, BOOL, rtl_uString*);
+typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(XModel*, BOOL, rtl_uString*);
 typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
 
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
-::rtl::OUString ChooseMacro( BOOL bExecute, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
+::rtl::OUString ChooseMacro( const Reference< XModel >& rxLimitToDocument, BOOL bChooseOnly, const ::rtl::OUString& rMacroDesc = ::rtl::OUString() )
 {
     // get basctl dllname
     String sLibName = String::CreateFromAscii( STRING( DLL_NAME ) );
@@ -795,7 +795,7 @@ typedef void (SAL_CALL *basicide_macro_organizer)( INT16 );
     basicide_choose_macro pSymbol = (basicide_choose_macro) osl_getFunctionSymbol( handleMod, aSymbol.pData );
 
     // call basicide_choose_macro in basctl
-    rtl_uString* pScriptURL = pSymbol( bExecute, bChooseOnly, rMacroDesc.pData );
+    rtl_uString* pScriptURL = pSymbol( rxLimitToDocument.get(), bChooseOnly, rMacroDesc.pData );
     ::rtl::OUString aScriptURL( pScriptURL );
     rtl_uString_release( pScriptURL );
     return aScriptURL;
@@ -925,7 +925,8 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
         {
             const SfxItemSet* pArgs = rReq.GetArgs();
             const SfxPoolItem* pItem;
-            BOOL bChooseOnly = FALSE, bExecute = TRUE;
+            BOOL bChooseOnly = FALSE;
+            Reference< XModel > xLimitToModel;
             if(pArgs && SFX_ITEM_SET == pArgs->GetItemState(SID_RECORDMACRO, sal_False, &pItem) )
             {
                 BOOL bRecord = ((SfxBoolItem*)pItem)->GetValue();
@@ -933,11 +934,14 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 {
                     // !Hack
                     bChooseOnly = FALSE;
-                    bExecute = FALSE;
+                    SfxObjectShell* pCurrentShell = SfxObjectShell::Current();
+                    OSL_ENSURE( pCurrentShell, "macro recording outside an SFX document?" );
+                    if ( pCurrentShell )
+                        xLimitToModel = pCurrentShell->GetModel();
                 }
             }
 
-            rReq.SetReturnValue( SfxStringItem( rReq.GetSlot(), ChooseMacro( bExecute, bChooseOnly ) ) );
+            rReq.SetReturnValue( SfxStringItem( rReq.GetSlot(), ChooseMacro( xLimitToModel, bChooseOnly ) ) );
             rReq.Done();
         }
         break;
