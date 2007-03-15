@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.108 $
+#   $Revision: 1.109 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:05:04 $
+#   last change: $Author: obo $ $Date: 2007-03-15 16:56:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,7 +32,7 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.108 $$"
+LIBSMKREV!:="$$Revision: 1.109 $$"
 
 .IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
@@ -223,6 +223,7 @@ BFOFALIB=-lbf_ofa$(OFFICEUPD)$(DLLPOSTFIX)
 LEGACYSMGRLIB=-llegacy_binfilters$(OFFICEUPD)$(DLLPOSTFIX)
 BFXMLOFFLIB=-lbf_xo$(OFFICEUPD)$(DLLPOSTFIX)
 BFGOODIESLIB=-lbf_go$(OFFICEUPD)$(DLLPOSTFIX)
+BFBASICLIB=-lbf_sb$(OFFICEUPD)$(DLLPOSTFIX)
 
 
 #
@@ -380,6 +381,7 @@ BFSWLIB=bf_swlib.lib
 BFOFALIB=bf_ofa.lib
 BFXMLOFFLIB=ibf_xo.lib
 BFGOODIESLIB=bf_go.lib
+BFBASICLIB=bf_sb.lib
 LEGACYSMGRLIB=ilegacy_binfilters.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
