@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basicbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:27:48 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -208,17 +208,17 @@ void BasicLibBox::FillBox( BOOL bSelect )
 
     // create list box entries
     USHORT nPos = InsertEntry( String( IDEResId( RID_STR_ALL ) ), LISTBOX_APPEND );
-    SetEntryData( nPos, new BasicLibEntry( 0, LIBRARY_LOCATION_UNKNOWN, String() ) );
-    InsertEntries( 0, LIBRARY_LOCATION_USER );
-    InsertEntries( 0, LIBRARY_LOCATION_SHARE );
-    SfxObjectShell* pShell = SfxObjectShell::GetFirst();
-    while ( pShell )
-    {
-        // only if there's a corresponding window (not for remote documents)
-        if ( SfxViewFrame::GetFirst( pShell ) && !pShell->ISA( BasicDocShell ) )
-            InsertEntries( pShell, LIBRARY_LOCATION_DOCUMENT );
+    SetEntryData( nPos, new BasicLibEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_UNKNOWN, String() ) );
+    InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
+    InsertEntries( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
-        pShell = SfxObjectShell::GetNext( *pShell );
+    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( false ) );
+    for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
+            doc != aDocuments.end();
+            ++doc
+        )
+    {
+        InsertEntries( *doc, LIBRARY_LOCATION_DOCUMENT );
     }
 
     SetUpdateMode( TRUE );
@@ -235,22 +235,22 @@ void BasicLibBox::FillBox( BOOL bSelect )
     bIgnoreSelect = FALSE;
 }
 
-void BasicLibBox::InsertEntries( SfxObjectShell* pShell, LibraryLocation eLocation )
+void BasicLibBox::InsertEntries( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
     // get a sorted list of library names
-    Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetLibraryNames( pShell );
+    Sequence< ::rtl::OUString > aLibNames = rDocument.getLibraryNames();
     sal_Int32 nLibCount = aLibNames.getLength();
     const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
 
     for ( sal_Int32 i = 0 ; i < nLibCount ; ++i )
     {
         String aLibName = pLibNames[ i ];
-        if ( eLocation == BasicIDE::GetLibraryLocation( pShell, aLibName ) )
+        if ( eLocation == rDocument.getLibraryLocation( aLibName ) )
         {
-            String aName( BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_CAPTION ) );
+            String aName( rDocument.getTitle( eLocation ) );
             String aEntryText( CreateMgrAndLibStr( aName, aLibName ) );
             USHORT nPos = InsertEntry( aEntryText, LISTBOX_APPEND );
-            SetEntryData( nPos, new BasicLibEntry( pShell, eLocation, aLibName ) );
+            SetEntryData( nPos, new BasicLibEntry( rDocument, eLocation, aLibName ) );
         }
     }
 }
@@ -317,8 +317,8 @@ void BasicLibBox::NotifyIDE()
     BasicLibEntry* pEntry = (BasicLibEntry*)GetEntryData( nSelPos );
     if ( pEntry )
     {
-        SfxObjectShell* pShell = pEntry->GetShell();
-        SfxObjectShellItem aShellItem( SID_BASICIDE_ARG_SHELL, pShell );
+        ScriptDocument aDocument( pEntry->GetDocument() );
+        SfxUsrAnyItem aDocumentItem( SID_BASICIDE_ARG_DOCUMENT_MODEL, uno::makeAny( aDocument.getDocumentOrNull() ) );
         String aLibName = pEntry->GetLibName();
         SfxStringItem aLibNameItem( SID_BASICIDE_ARG_LIBNAME, aLibName );
         BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -327,7 +327,7 @@ void BasicLibBox::NotifyIDE()
         if ( pDispatcher )
         {
             pDispatcher->Execute( SID_BASICIDE_LIBSELECTED,
-                                  SFX_CALLMODE_SYNCHRON, &aShellItem, &aLibNameItem, 0L );
+                                  SFX_CALLMODE_SYNCHRON, &aDocumentItem, &aLibNameItem, 0L );
         }
     }
     ReleaseFocus();
