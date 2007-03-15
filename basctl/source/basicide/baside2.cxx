@@ -4,9 +4,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-19 08:37:14 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:52:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,6 +100,7 @@
 //#endif
 
 #include <unotools/textsearch.hxx>
+#include <tools/diagnose_ex.h>
 
 //#ifdef OS2
 //#define INCL_DOSPROCESS
@@ -224,9 +225,9 @@ void lcl_ConvertTabsToSpaces( String& rLine )
 }
 
 
-ModulWindow::ModulWindow( ModulWindowLayout* pParent, SfxObjectShell* pShell, String aLibName,
+ModulWindow::ModulWindow( ModulWindowLayout* pParent, const ScriptDocument& rDocument, String aLibName,
                           String aName, ::rtl::OUString& aModule )
-        :IDEBaseWindow( pParent, pShell, aLibName, aName )
+        :IDEBaseWindow( pParent, rDocument, aLibName, aName )
         ,aXEditorWindow( this )
         ,m_aModule( aModule )
 {
@@ -235,7 +236,7 @@ ModulWindow::ModulWindow( ModulWindowLayout* pParent, SfxObjectShell* pShell, St
     pLayout = pParent;
     aXEditorWindow.Show();
 
-    BasicManager* pBasMgr = pShell ? pShell->GetBasicManager() : SFX_APP()->GetBasicManager();
+    BasicManager* pBasMgr = rDocument.getBasicManager();
     if ( pBasMgr )
     {
         StarBASIC* pBasic = pBasMgr->GetLib( aLibName );
@@ -343,11 +344,11 @@ BOOL ModulWindow::BasicExecute()
     DBG_CHKTHIS( ModulWindow, 0 );
 
     // #116444# check security settings before macro execution
-    SfxObjectShell* pShell = GetShell();
-    if ( pShell )
+    ScriptDocument aDocument( GetDocument() );
+    if ( aDocument.isDocument() )
     {
-        pShell->AdjustMacroMode( String() );
-        if ( pShell->GetMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+        aDocument.adjustMacroMode( ::rtl::OUString() );
+        if ( aDocument.getMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
         {
             WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
             return FALSE;
@@ -947,7 +948,7 @@ void __EXPORT ModulWindow::UpdateData()
             setTextEngineText( GetEditEngine(), xModule->GetSource32() );
             GetEditView()->SetSelection( aSel );
             GetEditEngine()->SetModified( FALSE );
-            BasicIDE::MarkDocShellModified( GetShell() );
+            BasicIDE::MarkDocumentModified( GetDocument() );
         }
     }
 }
@@ -1215,28 +1216,14 @@ void __EXPORT ModulWindow::DoScroll( ScrollBar* pCurScrollBar )
 
 BOOL ModulWindow::RenameModule( const String& rNewName )
 {
-    BOOL bDone = TRUE;
+    if ( !BasicIDE::RenameModule( this, GetDocument(), GetLibName(), GetName(), rNewName ) )
+        return FALSE;
 
-    try
-    {
-        BasicIDE::RenameModule( GetShell(), GetLibName(), GetName(), rNewName );
-        SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
-        if ( pBindings )
-            pBindings->Invalidate( SID_DOC_MODIFIED );
-    }
-    catch ( container::ElementExistException& )
-    {
-        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_SBXNAMEALLREADYUSED2 ) ) ).Execute();
-        bDone = FALSE;
-    }
-    catch ( container::NoSuchElementException& e )
-    {
-        ByteString aBStr( String(e.Message), RTL_TEXTENCODING_ASCII_US );
-        DBG_ERROR( aBStr.GetBuffer() );
-        bDone = FALSE;
-    }
+    SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+    if ( pBindings )
+        pBindings->Invalidate( SID_DOC_MODIFIED );
 
-    return bDone;
+    return TRUE;
 }
 
 
@@ -1403,10 +1390,10 @@ void __EXPORT ModulWindow::BasicStopped()
 
 BasicEntryDescriptor ModulWindow::CreateEntryDescriptor()
 {
-    SfxObjectShell* pShell( GetShell() );
+    ScriptDocument aDocument( GetDocument() );
     String aLibName( GetLibName() );
-    LibraryLocation eLocation = BasicIDE::GetLibraryLocation( pShell, aLibName );
-    return BasicEntryDescriptor( pShell, eLocation, aLibName, GetName(), OBJ_TYPE_MODULE );
+    LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, GetName(), OBJ_TYPE_MODULE );
 }
 
 void ModulWindow::SetReadOnly( BOOL b )
