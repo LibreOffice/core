@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:32:12 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:56:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,11 +86,11 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
         SfxModalDialog(     pParnt, IDEResId( RID_MACROCHOOSER ) ),
         aMacroNameTxt(      this,   IDEResId( RID_TXT_MACRONAME ) ),
         aMacroNameEdit(     this,   IDEResId( RID_ED_MACRONAME ) ),
-        aMacrosInTxt(       this,   IDEResId( RID_TXT_MACROSIN ) ),
-        aMacroBox(          this,   IDEResId( RID_CTRL_MACRO ) ),
         aMacroFromTxT(      this,   IDEResId( RID_TXT_MACROFROM ) ),
         aMacrosSaveInTxt(   this,   IDEResId( RID_TXT_SAVEMACRO ) ),
         aBasicBox(          this,   IDEResId( RID_CTRL_LIB ) ),
+        aMacrosInTxt(       this,   IDEResId( RID_TXT_MACROSIN ) ),
+        aMacroBox(          this,   IDEResId( RID_CTRL_MACRO ) ),
         aRunButton(         this,   IDEResId( RID_PB_RUN ) ),
         aCloseButton(       this,   IDEResId( RID_PB_CLOSE ) ),
         aAssignButton(      this,   IDEResId( RID_PB_ASSIGN ) ),
@@ -98,8 +98,8 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
         aNewDelButton(      this,   IDEResId( RID_PB_DEL ) ),
         aOrganizeButton(    this,   IDEResId( RID_PB_ORG ) ),
         aHelpButton(        this,   IDEResId( RID_PB_HELP ) ),
-        aNewLibButton(  this,   IDEResId( RID_PB_NEWLIB ) ),
-        aNewModButton(  this,   IDEResId( RID_PB_NEWMOD ) )
+        aNewLibButton(      this,   IDEResId( RID_PB_NEWLIB ) ),
+        aNewModButton(      this,   IDEResId( RID_PB_NEWMOD ) )
 {
     FreeResource();
 
@@ -159,10 +159,7 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bCreateEntries ) :
 MacroChooser::~MacroChooser()
 {
     if ( bForceStoreBasic )
-    {
-        SFX_APP()->SaveBasicContainer();
-        SFX_APP()->SaveDialogContainer();
-    }
+        SFX_APP()->SaveBasicAndDialogContainer();
 }
 
 void MacroChooser::StoreMacroDescription()
@@ -239,13 +236,12 @@ short __EXPORT MacroChooser::Execute()
     // #104198 Check if "wrong" document is active
     SvLBoxEntry* pSelectedEntry = aBasicBox.GetCurEntry();
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pSelectedEntry ) );
-    SfxObjectShell* pSelectedShell = aDesc.GetShell();
+    const ScriptDocument& rSelectedDoc( aDesc.GetDocument() );
 
     // App Basic is always ok, so only check if shell was found
-    if( pSelectedShell )
+    if( rSelectedDoc.isDocument() )
     {
-        SfxObjectShell* pCurShell = SfxObjectShell::Current();
-        if( pCurShell != pSelectedShell )
+        if ( !rSelectedDoc.isActive() )
         {
             // Search for the right entry
             ULONG nRootPos = 0;
@@ -253,8 +249,8 @@ short __EXPORT MacroChooser::Execute()
             while( pRootEntry )
             {
                 BasicEntryDescriptor aCmpDesc( aBasicBox.GetEntryDescriptor( pRootEntry ) );
-                SfxObjectShell* pCmpShell = aCmpDesc.GetShell();
-                if( pCmpShell == pCurShell )
+                const ScriptDocument rCmpDoc( aCmpDesc.GetDocument() );
+                if ( rCmpDoc.isDocument() && rCmpDoc.isActive() )
                 {
                     SvLBoxEntry* pEntry = pRootEntry;
                     SvLBoxEntry* pLastValid = pEntry;
@@ -346,10 +342,10 @@ void MacroChooser::DeleteMacro()
         DBG_ASSERT( pBasic, "Basic?!" );
         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
         DBG_ASSERT( pBasMgr, "BasMgr?" );
-        SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-        if ( pShell )   // Muss ja nicht aus einem Document kommen...
+        ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+        if ( aDocument.isDocument() )    // Muss ja nicht aus einem Document kommen...
         {
-            pShell->SetModified();
+            aDocument.setDocumentModified();
             SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
             if ( pBindings )
                 pBindings->Invalidate( SID_SAVEDOC );
@@ -367,7 +363,7 @@ void MacroChooser::DeleteMacro()
         // update module in library
         String aLibName = pBasic->GetName();
         String aModName = pModule->GetName();
-        BasicIDE::UpdateModule( pShell, aLibName, aModName, aSource );
+        OSL_VERIFY( aDocument.updateModule( aLibName, aModName, aSource ) );
 
         SvLBoxEntry* pEntry = aMacroBox.FirstSelected();
         DBG_ASSERT( pEntry, "DeleteMacro: Entry ?!" );
@@ -381,24 +377,27 @@ SbMethod* MacroChooser::CreateMacro()
     SbMethod* pMethod = 0;
     SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
     BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
-    SfxObjectShell* pShell( aDesc.GetShell() );
+    ScriptDocument aDocument( aDesc.GetDocument() );
+    OSL_ENSURE( aDocument.isValid(), "MacroChooser::CreateMacro: no document!" );
+    if ( !aDocument.isValid() )
+        return NULL;
+
     String aLibName( aDesc.GetLibName() );
 
     if ( !aLibName.Len() )
         aLibName = String::CreateFromAscii( "Standard" );
 
-    if ( !BasicIDE::HasModuleLibrary( pShell, aLibName ) )
-        BasicIDE::CreateModuleLibrary( pShell, aLibName );
+    aDocument.getOrCreateLibrary( E_SCRIPTS, aLibName );
 
     ::rtl::OUString aOULibName( aLibName );
-    Reference< script::XLibraryContainer > xModLibContainer = BasicIDE::GetModuleLibraryContainer( pShell );
+    Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
     if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && !xModLibContainer->isLibraryLoaded( aOULibName ) )
         xModLibContainer->loadLibrary( aOULibName );
-    Reference< script::XLibraryContainer > xDlgLibContainer = BasicIDE::GetDialogLibraryContainer( pShell );
+    Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ) );
     if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
         xDlgLibContainer->loadLibrary( aOULibName );
 
-    BasicManager* pBasMgr = pShell ? pShell->GetBasicManager() : SFX_APP()->GetBasicManager();
+    BasicManager* pBasMgr = aDocument.getBasicManager();
     StarBASIC* pBasic = pBasMgr ? pBasMgr->GetLib( aLibName ) : 0;
     if ( pBasic )
     {
@@ -412,7 +411,7 @@ SbMethod* MacroChooser::CreateMacro()
         if ( !pModule )
         {
             pModule = createModImpl( static_cast<Window*>( this ),
-                pShell, aBasicBox, aLibName, aModName );
+                aDocument, aBasicBox, aLibName, aModName );
         }
 
         String aSubName = aMacroNameEdit.GetText();
@@ -447,10 +446,10 @@ void MacroChooser::CheckButtons()
     USHORT nDepth = pCurEntry ? aBasicBox.GetModel()->GetDepth( pCurEntry ) : 0;
     if ( nDepth == 1 || nDepth == 2 )
     {
-        SfxObjectShell* pShell( aDesc.GetShell() );
+        ScriptDocument aDocument( aDesc.GetDocument() );
         ::rtl::OUString aOULibName( aDesc.GetLibName() );
-        Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-        Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+        Reference< script::XLibraryContainer2 > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
+        Reference< script::XLibraryContainer2 > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
         if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
         {
@@ -470,8 +469,7 @@ void MacroChooser::CheckButtons()
     // Organisieren immer moeglich ?
 
     // Assign...
-    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    EnableButton( aAssignButton, pMethod && pViewFrame ? TRUE : FALSE );
+    EnableButton( aAssignButton, pMethod ? TRUE : FALSE );
 
     // Edit...
     EnableButton( aEditButton, pMacroEntry ? TRUE : FALSE );
@@ -700,11 +698,11 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                         BasicManager* pBasMgr = BasicIDE::FindBasicManager( pBasic );
                         if ( pBasMgr )
                         {
-                            SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
-                            if ( pShell )
+                            ScriptDocument aDocument( ScriptDocument::getDocumentForBasicManager( pBasMgr ) );
+                            if ( aDocument.isDocument() )
                             {
-                                pShell->AdjustMacroMode( String() );
-                                if ( pShell->GetMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
+                                aDocument.adjustMacroMode( String() );
+                                if ( aDocument.getMacroMode() == ::com::sun::star::document::MacroExecMode::NEVER_EXECUTE )
                                 {
                                     WarningBox( this, WB_OK, String( IDEResId( RID_STR_CANNOTRUNMACRO ) ) ).Execute();
                                     return 0;
@@ -742,8 +740,11 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     {
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
-        SfxObjectShell* pShell( aDesc.GetShell() );
-        BasicManager* pBasMgr = pShell ? pShell->GetBasicManager() : SFX_APP()->GetBasicManager();
+        ScriptDocument aDocument( aDesc.GetDocument() );
+        DBG_ASSERT( aDocument.isValid(), "MacroChooser::ButtonHdl: no document!" );
+        if ( !aDocument.isValid() )
+            return 0;
+        BasicManager* pBasMgr = aDocument.getBasicManager();
         String aLib( aDesc.GetLibName() );
         String aMod( aDesc.GetName() );
         String aSub( aDesc.GetMethodName() );
@@ -819,8 +820,11 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
     {
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
-        SfxObjectShell* pShell( aDesc.GetShell() );
-        BasicManager* pBasMgr = pShell ? pShell->GetBasicManager() : SFX_APP()->GetBasicManager();
+        ScriptDocument aDocument( aDesc.GetDocument() );
+        DBG_ASSERT( aDocument.isValid(), "MacroChooser::ButtonHdl: no document!" );
+        if ( !aDocument.isValid() )
+            return 0;
+        BasicManager* pBasMgr = aDocument.getBasicManager();
         String aLib( aDesc.GetLibName() );
         String aMod( aDesc.GetName() );
         String aSub( aMacroNameEdit.GetText() );
@@ -833,30 +837,22 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
         SfxRequest aRequest( SID_CONFIG, SFX_CALLMODE_SYNCHRON, Args );
         aRequest.AppendItem( aItem );
         SFX_APP()->ExecuteSlot( aRequest );
-
-        // Wenn jetzt ein FloatingWindow vom Config-Dlg hochgezogen wurde,
-        // muss dieser modale Dlg verschwinden:
-        SfxViewFrame* pCurFrame = SfxViewFrame::Current();
-        DBG_ASSERT( pCurFrame != NULL, "No current view frame!" );
-        SfxChildWindow* pChildWin = pCurFrame ? pCurFrame->GetChildWindow(SID_CUSTOMIZETOOLBOX) : NULL;
-        if ( pChildWin )
-            EndDialog( MACRO_CLOSE );
     }
     else if ( pButton == &aNewLibButton )
     {
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
-        SfxObjectShell* pShell( aDesc.GetShell() );
-        createLibImpl( static_cast<Window*>( this ), pShell, NULL, &aBasicBox );
+        ScriptDocument aDocument( aDesc.GetDocument() );
+        createLibImpl( static_cast<Window*>( this ), aDocument, NULL, &aBasicBox );
     }
     else if ( pButton == &aNewModButton )
     {
         SvLBoxEntry* pCurEntry = aBasicBox.GetCurEntry();
         BasicEntryDescriptor aDesc( aBasicBox.GetEntryDescriptor( pCurEntry ) );
-        SfxObjectShell* pShell( aDesc.GetShell() );
+        ScriptDocument aDocument( aDesc.GetDocument() );
         String aLibName( aDesc.GetLibName() );
         String aModName;
-        createModImpl( static_cast<Window*>( this ), pShell,
+        createModImpl( static_cast<Window*>( this ), aDocument,
             aBasicBox, aLibName, aModName, true );
     }
     else if ( pButton == &aOrganizeButton )
