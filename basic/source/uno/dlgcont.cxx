@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:27:31 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:39:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,6 +103,7 @@
 namespace basic
 {
 
+using namespace com::sun::star::document;
 using namespace com::sun::star::container;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -119,17 +120,10 @@ using namespace osl;
 //============================================================================
 // Implementation class SfxDialogLibraryContainer
 
-sal_Bool SfxDialogLibraryContainer::init( const OUString& aInitialisationParam,
-    const uno::Reference< embed::XStorage >& xStorage )
-{
-    return SfxLibraryContainer::init(
-          aInitialisationParam,
-          OUString ( RTL_CONSTASCII_USTRINGPARAM("dialog") ),
-          OUString ( RTL_CONSTASCII_USTRINGPARAM("dialogs") ),
-          OUString ( RTL_CONSTASCII_USTRINGPARAM("xdl") ),
-          OUString ( RTL_CONSTASCII_USTRINGPARAM("Dialogs") ),
-          xStorage );
-}
+const sal_Char* SAL_CALL SfxDialogLibraryContainer::getInfoFileName() const { return "dialog"; }
+const sal_Char* SAL_CALL SfxDialogLibraryContainer::getOldInfoFileName() const { return "dialogs"; }
+const sal_Char* SAL_CALL SfxDialogLibraryContainer::getLibElementFileExtension() const { return "xdl"; }
+const sal_Char* SAL_CALL SfxDialogLibraryContainer::getLibrariesDir() const { return "Dialogs"; }
 
 // Ctor for service
 SfxDialogLibraryContainer::SfxDialogLibraryContainer( void )
@@ -140,14 +134,13 @@ SfxDialogLibraryContainer::SfxDialogLibraryContainer( void )
 
 SfxDialogLibraryContainer::SfxDialogLibraryContainer( const uno::Reference< embed::XStorage >& xStorage )
 {
-    OUString aInitialisationParam;
-    init( aInitialisationParam, xStorage );
+    init( OUString(), xStorage );
 }
 
 // Methods to get library instances of the correct type
 SfxLibrary* SfxDialogLibraryContainer::implCreateLibrary( const ::rtl::OUString& aName )
 {
-    SfxLibrary* pRet = (SfxLibrary*) new SfxDialogLibrary( aName, mxMSF, mxSFI, this );
+    SfxLibrary* pRet = new SfxDialogLibrary( maModifiable, aName, mxMSF, mxSFI, this );
     return pRet;
 }
 
@@ -155,9 +148,8 @@ SfxLibrary* SfxDialogLibraryContainer::implCreateLibraryLink
     ( const ::rtl::OUString& aName, const OUString& aLibInfoFileURL,
       const OUString& StorageURL, sal_Bool ReadOnly )
 {
-    SfxLibrary* pRet =
-        (SfxLibrary*) new SfxDialogLibrary
-            ( aName, mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
+    SfxLibrary* pRet = new SfxDialogLibrary
+            ( maModifiable, aName, mxMSF, mxSFI, aLibInfoFileURL, StorageURL, ReadOnly, this );
     return pRet;
 }
 
@@ -278,8 +270,9 @@ void SAL_CALL SfxDialogLibraryContainer::writeLibraryElement
     xInput->closeInput();
 }
 
-void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage )
+void SfxDialogLibraryContainer::storeLibrariesToStorage( const uno::Reference< embed::XStorage >& xStorage ) throw ( RuntimeException )
 {
+    LibraryContainerMethodGuard aGuard( *this );
     mbOasis2OOoFormat = sal_False;
 
     if ( mxStorage.is() && xStorage.is() )
@@ -392,27 +385,6 @@ SfxLibraryContainer* SfxDialogLibraryContainer::createInstanceImpl( void )
     return new SfxDialogLibraryContainer();
 }
 
-
-//============================================================================
-// Methods XInitialization
-void SAL_CALL SfxDialogLibraryContainer::initialize( const Sequence< Any >& aArguments )
-    throw (::com::sun::star::uno::Exception,
-           ::com::sun::star::uno::RuntimeException)
-{
-    sal_Int32 nArgCount = aArguments.getLength();
-    OSL_ENSURE( nArgCount, "SfxDialogLibraryContainer::initialize() called with no arguments\n" );
-
-    OUString aInitialisationParam;
-    if( nArgCount )
-    {
-        const Any* pArgs = aArguments.getConstArray();
-        pArgs[0] >>= aInitialisationParam;
-        OSL_ENSURE( aInitialisationParam.getLength(),
-            "SfxDialogLibraryContainer::initialize() called with empty url\n" );
-    }
-
-    init( aInitialisationParam );
-}
 
 static OUString aResourceFileNameBase = OUString::createFromAscii( "DialogStrings" );
 static OUString aResourceFileCommentBase = OUString::createFromAscii( "# Strings for Dialog Library " );
@@ -557,19 +529,23 @@ void createRegistryInfo_SfxDialogLibraryContainer()
     static OAutoRegistration< SfxDialogLibraryContainer > aAutoRegistration;
 }
 
+::rtl::OUString SAL_CALL SfxDialogLibraryContainer::getImplementationName( ) throw (RuntimeException)
+{
+    return getImplementationName_static();
+}
+
+Sequence< ::rtl::OUString > SAL_CALL SfxDialogLibraryContainer::getSupportedServiceNames( ) throw (RuntimeException)
+{
+    return getSupportedServiceNames_static();
+}
+
 Sequence< OUString > SfxDialogLibraryContainer::getSupportedServiceNames_static()
 {
-    static Sequence< OUString > seqServiceNames( 1 );
-    static sal_Bool bNeedsInit = sal_True;
-
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
-    if( bNeedsInit )
-    {
-        OUString* pSeq = seqServiceNames.getArray();
-        pSeq[0] = OUString::createFromAscii( "com.sun.star.script.DialogLibraryContainer" );
-        bNeedsInit = sal_False;
-    }
-    return seqServiceNames;
+    Sequence< OUString > aServiceNames( 2 );
+    aServiceNames[0] = OUString::createFromAscii( "com.sun.star.script.DocumentDialogLibraryContainer" );
+    // plus, for compatibility:
+    aServiceNames[1] = OUString::createFromAscii( "com.sun.star.script.DialogLibraryContainer" );
+    return aServiceNames;
 }
 
 OUString SfxDialogLibraryContainer::getImplementationName_static()
@@ -598,29 +574,34 @@ Reference< XInterface > SAL_CALL SfxDialogLibraryContainer::Create( const Refere
 // Implementation class SfxDialogLibrary
 
 // Ctor
-SfxDialogLibrary::SfxDialogLibrary( const ::rtl::OUString& aName,
-                                    Reference< XMultiServiceFactory > xMSF,
-                                    Reference< XSimpleFileAccess > xSFI,
+SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
+                                    const ::rtl::OUString& aName,
+                                    const Reference< XMultiServiceFactory >& xMSF,
+                                    const Reference< XSimpleFileAccess >& xSFI,
                                     SfxDialogLibraryContainer* pParent )
-    : SfxDialogLibrary_BASE( getCppuType( (const Reference< XInputStreamProvider > *)0 ), xMSF, xSFI )
+    : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ), xMSF, xSFI )
     , m_pParent( pParent )
     , m_aName( aName )
 {
 }
 
-SfxDialogLibrary::SfxDialogLibrary( const ::rtl::OUString& aName,
-                                    Reference< XMultiServiceFactory > xMSF,
-                                    Reference< XSimpleFileAccess > xSFI,
+SfxDialogLibrary::SfxDialogLibrary( ModifiableHelper& _rModifiable,
+                                    const ::rtl::OUString& aName,
+                                    const Reference< XMultiServiceFactory >& xMSF,
+                                    const Reference< XSimpleFileAccess >& xSFI,
                                     const OUString& aLibInfoFileURL,
                                     const OUString& aStorageURL,
                                     sal_Bool ReadOnly,
                                     SfxDialogLibraryContainer* pParent )
-    : SfxDialogLibrary_BASE( getCppuType( (const Reference< XInputStreamProvider > *)0 ),
+    : SfxLibrary( _rModifiable, getCppuType( (const Reference< XInputStreamProvider > *)0 ),
                        xMSF, xSFI, aLibInfoFileURL, aStorageURL, ReadOnly)
     , m_pParent( pParent )
     , m_aName( aName )
 {
 }
+
+IMPLEMENT_FORWARD_XINTERFACE2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BASE );
+IMPLEMENT_FORWARD_XTYPEPROVIDER2( SfxDialogLibrary, SfxLibrary, SfxDialogLibrary_BASE );
 
 // Provide modify state including resources
 sal_Bool SfxDialogLibrary::isModified( void )
