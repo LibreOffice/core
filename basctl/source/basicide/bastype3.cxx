@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bastype3.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-16 16:31:10 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:55:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,13 +68,17 @@ SV_IMPL_VARARR( EntryArray, SvLBoxEntry*);
 void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 {
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
-    SfxObjectShell* pShell( aDesc.GetShell() );
+    ScriptDocument aDocument( aDesc.GetDocument() );
+    OSL_ENSURE( aDocument.isValid(), "BasicTreeListBox::RequestingChilds: invalid document!" );
+    if ( !aDocument.isValid() )
+        return;
+
     LibraryLocation eLocation( aDesc.GetLocation() );
     BasicEntryType eType( aDesc.GetType() );
 
-    if ( eType == OBJ_TYPE_SHELL )
+    if ( eType == OBJ_TYPE_DOCUMENT )
     {
-        ImpCreateLibEntries( pEntry, pShell, eLocation );
+        ImpCreateLibEntries( pEntry, aDocument, eLocation );
     }
     else if ( eType == OBJ_TYPE_LIBRARY )
     {
@@ -83,7 +87,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
         // check password
         BOOL bOK = TRUE;
-        Reference< script::XLibraryContainer > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+        Reference< script::XLibraryContainer > xModLibContainer( aDocument.getLibraryContainer( E_SCRIPTS ) );
         if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
         {
             Reference< script::XLibraryContainerPassword > xPasswd( xModLibContainer, UNO_QUERY );
@@ -111,7 +115,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
 
             // load dialog library
             BOOL bDlgLibLoaded = FALSE;
-            Reference< script::XLibraryContainer > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+            Reference< script::XLibraryContainer > xDlgLibContainer( aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
             {
                 if ( !xDlgLibContainer->isLibraryLoaded( aOULibName ) )
@@ -126,7 +130,7 @@ void __EXPORT BasicTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
             if ( bModLibLoaded || bDlgLibLoaded )
             {
                 // create the sub entries
-                ImpCreateLibSubEntries( pEntry, pShell, aLibName );
+                ImpCreateLibSubEntries( pEntry, aDocument, aLibName );
 
                 // exchange image
                 bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
@@ -163,16 +167,17 @@ void __EXPORT BasicTreeListBox::ExpandedHdl()
 
 void BasicTreeListBox::ScanAllEntries()
 {
-    ScanEntry( 0, LIBRARY_LOCATION_USER );
-    ScanEntry( 0, LIBRARY_LOCATION_SHARE );
-    SfxObjectShell* pDocShell = SfxObjectShell::GetFirst();
-    while ( pDocShell )
-    {
-        // only if there's a corresponding window (not for remote documents)
-        if ( SfxViewFrame::GetFirst( pDocShell ) && !pDocShell->ISA( BasicDocShell ) && !pDocShell->IsInPrepareClose() )
-            ScanEntry( pDocShell, LIBRARY_LOCATION_DOCUMENT );
+    ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_USER );
+    ScanEntry( ScriptDocument::getApplicationScriptDocument(), LIBRARY_LOCATION_SHARE );
 
-        pDocShell = SfxObjectShell::GetNext( *pDocShell );
+    ScriptDocuments aDocuments( ScriptDocument::getAllScriptDocuments( false ) );
+    for (   ScriptDocuments::const_iterator doc = aDocuments.begin();
+            doc != aDocuments.end();
+            ++doc
+        )
+    {
+        if ( !doc->isClosing() )
+            ScanEntry( *doc, LIBRARY_LOCATION_DOCUMENT );
     }
 }
 
@@ -210,7 +215,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
         return 0;
 
     String aLib, aModOrObj, aSubOrPropOrSObj, aPropOrSubInSObj;
-    SfxObjectShell* pShell = 0;
+    ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     EntryArray aEntries;
 
     while ( pEntry )
@@ -228,7 +233,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             break;
             case 0:
             {
-                pShell = ((BasicShellEntry*)pEntry->GetUserData())->GetShell();
+                aDocument = ((BasicDocumentEntry*)pEntry->GetUserData())->GetDocument();
             }
             break;
         }
@@ -250,7 +255,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
             {
                 case OBJ_TYPE_LIBRARY:
                 {
-                    BasicManager* pBasMgr = pShell ? pShell->GetBasicManager() : SFX_APP()->GetBasicManager();
+                    BasicManager* pBasMgr = aDocument.getBasicManager();
                     if ( pBasMgr )
                         pVar = pBasMgr->GetLib( aName );
                 }
@@ -289,7 +294,7 @@ SbxVariable* BasicTreeListBox::FindVariable( SvLBoxEntry* pEntry )
 
 BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
 {
-    SfxObjectShell* pShell = 0;
+    ScriptDocument aDocument( ScriptDocument::getApplicationScriptDocument() );
     LibraryLocation eLocation = LIBRARY_LOCATION_UNKNOWN;
     String aLibName;
     String aName;
@@ -297,7 +302,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
     BasicEntryType eType = OBJ_TYPE_UNKNOWN;
 
     if ( !pEntry )
-        return BasicEntryDescriptor( pShell, eLocation, aLibName, aName, aMethodName, eType );
+        return BasicEntryDescriptor( aDocument, eLocation, aLibName, aName, aMethodName, eType );
 
     EntryArray aEntries;
 
@@ -316,12 +321,12 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
             break;
             case 0:
             {
-                BasicShellEntry* pBasicShellEntry = (BasicShellEntry*)pEntry->GetUserData();
-                if ( pBasicShellEntry )
+                BasicDocumentEntry* pBasicDocumentEntry = (BasicDocumentEntry*)pEntry->GetUserData();
+                if ( pBasicDocumentEntry )
                 {
-                    pShell = pBasicShellEntry->GetShell();
-                    eLocation = pBasicShellEntry->GetLocation();
-                    eType = OBJ_TYPE_SHELL;
+                    aDocument = pBasicDocumentEntry->GetDocument();
+                    eLocation = pBasicDocumentEntry->GetLocation();
+                    eType = OBJ_TYPE_DOCUMENT;
                 }
             }
             break;
@@ -377,7 +382,7 @@ BasicEntryDescriptor BasicTreeListBox::GetEntryDescriptor( SvLBoxEntry* pEntry )
         }
     }
 
-    return BasicEntryDescriptor( pShell, eLocation, aLibName, aName, aMethodName, eType );
+    return BasicEntryDescriptor( aDocument, eLocation, aLibName, aName, aMethodName, eType );
 }
 
 USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
@@ -386,7 +391,7 @@ USHORT BasicTreeListBox::ConvertType( BasicEntryType eType )
 
     switch ( eType )
     {
-        case OBJ_TYPE_SHELL:
+        case OBJ_TYPE_DOCUMENT:
         {
             nType = BASICIDE_TYPE_SHELL;
         }
@@ -422,7 +427,7 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
     bool bIsValid = false;
 
     BasicEntryDescriptor aDesc( GetEntryDescriptor( pEntry ) );
-    SfxObjectShell* pShell( aDesc.GetShell() );
+    ScriptDocument aDocument( aDesc.GetDocument() );
     LibraryLocation eLocation( aDesc.GetLocation() );
     String aLibName( aDesc.GetLibName() );
     String aName( aDesc.GetName() );
@@ -431,31 +436,33 @@ bool BasicTreeListBox::IsValidEntry( SvLBoxEntry* pEntry )
 
     switch ( eType )
     {
-        case OBJ_TYPE_SHELL:
+        case OBJ_TYPE_DOCUMENT:
         {
-            bIsValid = ( !pShell || ( BasicIDE::HasShell( pShell ) &&
-                                      GetRootEntryName( pShell, eLocation ) == GetEntryText( pEntry ) &&
-                                      !pShell->IsInPrepareClose() ) );
+            bIsValid =  (   aDocument.isApplication()
+                        ||  (   GetRootEntryName( aDocument, eLocation ) == GetEntryText( pEntry )
+                            &&  !aDocument.isClosing()
+                            )
+                        );
         }
         break;
         case OBJ_TYPE_LIBRARY:
         {
-            bIsValid = BasicIDE::HasModuleLibrary( pShell, aLibName ) || BasicIDE::HasDialogLibrary( pShell, aLibName );
+            bIsValid = aDocument.hasLibrary( E_SCRIPTS, aLibName ) || aDocument.hasLibrary( E_DIALOGS, aLibName );
         }
         break;
         case OBJ_TYPE_MODULE:
         {
-            bIsValid = BasicIDE::HasModule( pShell, aLibName, aName );
+            bIsValid = aDocument.hasModule( aLibName, aName );
         }
         break;
         case OBJ_TYPE_DIALOG:
         {
-            bIsValid = BasicIDE::HasDialog( pShell, aLibName, aName );
+            bIsValid = aDocument.hasDialog( aLibName, aName );
         }
         break;
         case OBJ_TYPE_METHOD:
         {
-            bIsValid = BasicIDE::HasMethod( pShell, aLibName, aName, aMethodName );
+            bIsValid = BasicIDE::HasMethod( aDocument, aLibName, aName, aMethodName );
         }
         break;
         default: ;
@@ -472,15 +479,16 @@ SbModule* BasicTreeListBox::FindModule( SvLBoxEntry* pEntry )
     return 0;
 }
 
-SvLBoxEntry* BasicTreeListBox::FindRootEntry( SfxObjectShell* pShell, LibraryLocation eLocation )
+SvLBoxEntry* BasicTreeListBox::FindRootEntry( const ScriptDocument& rDocument, LibraryLocation eLocation )
 {
+    OSL_ENSURE( rDocument.isValid(), "BasicTreeListBox::FindRootEntry: invalid document!" );
     ULONG nRootPos = 0;
     SvLBoxEntry* pRootEntry = GetEntry( nRootPos );
     while ( pRootEntry )
     {
-        DBG_ASSERT( (((BasicEntry*)pRootEntry->GetUserData())->GetType() == OBJ_TYPE_SHELL ), "Kein Shelleintrag?" );
-        BasicShellEntry* pBasicShellEntry = (BasicShellEntry*)pRootEntry->GetUserData();
-        if ( pBasicShellEntry && pBasicShellEntry->GetShell() == pShell && pBasicShellEntry->GetLocation() == eLocation )
+        DBG_ASSERT( (((BasicEntry*)pRootEntry->GetUserData())->GetType() == OBJ_TYPE_DOCUMENT ), "Kein Shelleintrag?" );
+        BasicDocumentEntry* pBasicDocumentEntry = (BasicDocumentEntry*)pRootEntry->GetUserData();
+        if ( pBasicDocumentEntry && ( pBasicDocumentEntry->GetDocument() == rDocument ) && pBasicDocumentEntry->GetLocation() == eLocation )
             return pRootEntry;
         pRootEntry = GetEntry( ++nRootPos );
     }
