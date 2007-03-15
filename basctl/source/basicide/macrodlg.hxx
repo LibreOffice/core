@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrodlg.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:06:02 $
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:57:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,12 @@ class MacroChooser : public SfxModalDialog
 private:
     FixedText               aMacroNameTxt;
     Edit                    aMacroNameEdit;
-    FixedText               aMacrosInTxt;
-    String                  aMacrosInTxtBaseStr;
-    SvTreeListBox           aMacroBox;
     FixedText               aMacroFromTxT;
     FixedText               aMacrosSaveInTxt;
     BasicTreeListBox        aBasicBox;
+    FixedText               aMacrosInTxt;
+    String                  aMacrosInTxtBaseStr;
+    SvTreeListBox           aMacroBox;
 
     PushButton              aRunButton;
     CancelButton            aCloseButton;
