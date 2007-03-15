@@ -1,0 +1,112 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XPersistentLibraryContainer.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: obo $ $Date: 2007-03-15 15:48:57 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_script_XPersistentLibraryContainer_idl__
+#define __com_sun_star_script_XPersistentLibraryContainer_idl__
+
+#ifndef __com_sun_star_util_XModifiable_idl__
+#include <com/sun/star/util/XModifiable.idl>
+#endif
+#ifndef __com_sun_star_script_XLibraryContainer2_idl__
+#include <com/sun/star/script/XLibraryContainer2.idl>
+#endif
+#ifndef __com_sun_star_lang_WrappedTargetException_idl__
+#include <com/sun/star/lang/WrappedTargetException.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module script {
+
+//=============================================================================
+
+/** describes a container of script libraries which is persistent.
+
+    <p>The type of persistence of the container elements is not defined here,
+    but in derived interfaces or services using
+    <code>XPersistentLibraryContainer</code>.</p>
+
+    <p>The actual libraries are stored in some object - a sub folder, or a sub storage,
+    for example - below the root location.</p>
+
+    @since OOo 2.3
+ */
+interface XPersistentLibraryContainer
+{
+    interface ::com::sun::star::util::XModifiable;
+    interface XLibraryContainer2;
+
+    /** denotes the root location associated with the container.
+
+        <p>The type of this location - it might be a folder in a file system,
+        a storage, or anything else - is not specified here, but in derived interfaces
+        or services implementing <code>XPersistentLibraryContainer</code>.</p>
+
+        <p>All operations of the library container take place in a location below
+        the root location, the so-called container location, whose
+        name is exposed as <member>ContainerStorageName</member>.</p>
+
+        @see ContainerLocationName
+    */
+    [attribute, readonly] any   RootLocation;
+
+    /** denotes the name of the sub location where the container elements are
+        actually stored.
+
+        @see RootLocation
+    */
+    [attribute, readonly] string ContainerLocationName;
+
+    /** stores the libraries to the current location.
+
+        @raises ::com::sun::star::lang::WrappedTargetException
+            if an error occurs during storing.
+
+        @see RootLocation
+        @see ContainerLocationName
+    */
+    void    storeLibraries()
+        raises ( ::com::sun::star::lang::WrappedTargetException );
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+//=============================================================================
+
+#endif
+
