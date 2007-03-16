@@ -9047,15 +9047,15 @@
   </define>
   <define name="CT_PTab">
     <attribute name="alignment">
-      <text/>
+      <ref name="ST_PTabAlignment"/>
       <xs:documentation>Positional Tab Stop Alignment</xs:documentation>
     </attribute>
     <attribute name="relativeTo">
-      <text/>
+      <ref name="ST_PTabRelativeTo"/>
       <xs:documentation>Positional Tab Base</xs:documentation>
     </attribute>
     <attribute name="leader">
-      <text/>
+      <ref name="ST_PTabLeader"/>
       <xs:documentation>Tab Leader Character</xs:documentation>
     </attribute>
   </define>
@@ -14495,6 +14495,27 @@
   <value tokenid="ooxml:Value_ST_BrClear_left">left</value>
   <value tokenid="ooxml:Value_ST_BrClear_right">right</value>
   <value tokenid="ooxml:Value_ST_BrClear_all">all</value>
+</resource>
+<resource name="CT_PTab" resource="PropertySetValue">
+  <attribute name="alignment" tokenid="ooxml:CT_PTab_alignment"/>
+  <attribute name="relativeTo" tokenid="ooxml:CT_PTab_relativeTo"/>
+  <attribute name="leader" tokenid="ooxml:CT_PTab_leader"/>
+</resource>
+<resource name="ST_PTabAlignment" resource="List">
+  <value tokenid="ooxml:Value_ST_PTabAlignment_left">left</value>
+  <value tokenid="ooxml:Value_ST_PTabAlignment_center">center</value>
+  <value tokenid="ooxml:Value_ST_PTabAlignment_right">right</value>
+</resource>
+<resource name="ST_PTabRelativeTo" resource="List">
+  <value tokenid="ooxml:Value_ST_PTabRelativeTo_margin">margin</value>
+  <value tokenid="ooxml:Value_ST_PTabRelativeTo_indent">indent</value>
+</resource>
+<resource name="ST_PTabLeader" resource="List">
+  <value tokenid="ooxml:Value_ST_PTabLeader_none">none</value>
+  <value tokenid="ooxml:Value_ST_PTabLeader_dot">dot</value>
+  <value tokenid="ooxml:Value_ST_PTabLeader_hyphen">hyphen</value>
+  <value tokenid="ooxml:Value_ST_PTabLeader_underscore">underscore</value>
+  <value tokenid="ooxml:Value_ST_PTabLeader_middleDot">middleDot</value>
 </resource>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
