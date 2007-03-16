@@ -5547,7 +5547,7 @@
   </define>
   <define name="CT_HpsMeasure">
     <attribute name="val">
-      <text/>
+      <ref name="ST_HpsMeasure"/>
       <xs:documentation>Half Point Measurement</xs:documentation>
     </attribute>
   </define>
@@ -14120,8 +14120,9 @@
   <attribute name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
   <attribute name="ins" tokenid="ooxml:CT_NumPr_ins"/>
 </resource>
-<resource name="ST_DecimalNumber" resource="IntegerValue"/>
-<resource name="ST_SignedTwipsMeasure" resource="IntegerValue"/>
+<resource name="ST_DecimalNumber" resource="Integer"/>
+<resource name="ST_SignedTwipsMeasure" resource="Integer"/>
+<resource name="ST_HpsMeasure" resource="Integer"/>
 <resource name="CT_Ind" resource="PropertySetValue">
   <sprm name="left" tokenid="0x840f"/>
   <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
@@ -14471,6 +14472,10 @@
   <attribute name="drawing" tokenid="ooxml:EG_RunInnerContent_drawing"/>
   <attribute name="ptab" tokenid="ooxml:EG_RunInnerContent_ptab"/>
   <attribute name="lastRenderedPageBreak" tokenid="ooxml:EG_RunInnerContent_lastRenderedPageBreak"/>
+</resource>
+<resource name="CT_Sym" resource="PropertySetValue">
+  <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
+  <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
 </resource>
 <resource name="CT_Empty" resource="SingleElement"/>
 </namespace>
