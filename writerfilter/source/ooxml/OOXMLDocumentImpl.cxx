@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:48:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,8 +40,12 @@
 #include "OOXMLDocumentImpl.hxx"
 #include "OOXMLSaxHandler.hxx"
 
+#include <iostream>
+
 namespace ooxml
 {
+
+using namespace ::std;
 
 OOXMLDocumentImpl::OOXMLDocumentImpl
 (OOXMLStream::Pointer_t pStream)
@@ -55,27 +59,60 @@ OOXMLDocumentImpl::~OOXMLDocumentImpl()
 
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
-    uno::Reference < xml::sax::XParser > oSaxParser = mpStream->getParser();
-
-    if (oSaxParser.is())
     {
-        uno::Reference<xml::sax::XDocumentHandler>
-            xDocumentHandler
-            (static_cast<cppu::OWeakObject *>
-             (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
-        oSaxParser->setDocumentHandler( xDocumentHandler );
+        uno::Reference < xml::sax::XParser > oSaxParser = mpStream->getParser();
 
-        uno::Reference<io::XInputStream> xInputStream =
-            mpStream->getInputStream();
+        if (oSaxParser.is())
+        {
+            uno::Reference<xml::sax::XDocumentHandler>
+                xDocumentHandler
+                (static_cast<cppu::OWeakObject *>
+                 (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
+            oSaxParser->setDocumentHandler( xDocumentHandler );
 
-        struct xml::sax::InputSource oInputSource;
-        oInputSource.aInputStream = xInputStream;
-        oSaxParser->parseStream(oInputSource);
+            OOXMLStream::Pointer_t pStylesStream
+                (OOXMLDocumentFactory::createStream(mpStream,
+                                                    OOXMLStream::TYPES));
 
-        xInputStream->closeInput();
+            uno::Reference < xml::sax::XParser > oStylesSaxParser =
+                pStylesStream->getParser();
+
+            if (oStylesSaxParser.is())
+            {
+                uno::Reference<xml::sax::XDocumentHandler>
+                    xStylesDocumentHandler
+                    (static_cast<cppu::OWeakObject *>
+                     (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
+                oStylesSaxParser->setDocumentHandler( xStylesDocumentHandler );
+
+                uno::Reference<io::XInputStream> xStylesInputStream =
+                    pStylesStream->getInputStream();
+
+//                 uno::Sequence<sal_Int8> aSeq(1024);
+//                 while (xStylesInputStream->readBytes(aSeq, 1024) > 0)
+//                 {
+//                     string tmpStr(reinterpret_cast<char *>(&aSeq[0]));
+
+//                     clog << tmpStr;
+//                 }
+                struct xml::sax::InputSource oStylesInputSource;
+                oStylesInputSource.aInputStream = xStylesInputStream;
+                oStylesSaxParser->parseStream(oStylesInputSource);
+
+                xStylesInputStream->closeInput();
+
+            }
+
+            uno::Reference<io::XInputStream> xInputStream =
+                mpStream->getInputStream();
+
+            struct xml::sax::InputSource oInputSource;
+            oInputSource.aInputStream = xInputStream;
+            oSaxParser->parseStream(oInputSource);
+
+            xInputStream->closeInput();
+        }
     }
-
-    rStream.info("Test");
 }
 
 string OOXMLDocumentImpl::getType() const
