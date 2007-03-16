@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocument.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 15:06:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,12 +64,14 @@ using namespace com::sun::star;
 class WRITERFILTER_DLLPUBLIC OOXMLStream
 {
 public:
+    enum StreamType_t { DOCUMENT, TYPES };
     typedef boost::shared_ptr<OOXMLStream> Pointer_t;
 
     virtual ~OOXMLStream() {}
 
     virtual uno::Reference<xml::sax::XParser> getParser() = 0;
     virtual uno::Reference<io::XInputStream> getInputStream() = 0;
+    virtual uno::Reference<uno::XComponentContext> getContext() = 0;
 };
 
 class WRITERFILTER_DLLPUBLIC OOXMLDocument : public doctok::Reference<Stream>
@@ -93,7 +95,12 @@ class WRITERFILTER_DLLPUBLIC OOXMLDocumentFactory
 public:
     static OOXMLStream::Pointer_t
     createStream(uno::Reference<uno::XComponentContext> rContext,
-                 uno::Reference<io::XInputStream> rStream);
+                 uno::Reference<io::XInputStream> rStream,
+                 OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
+
+    static OOXMLStream::Pointer_t
+    createStream(OOXMLStream::Pointer_t pStream,
+                 OOXMLStream::StreamType_t nStreamType = OOXMLStream::DOCUMENT);
 
     static OOXMLDocument *
     createDocument(OOXMLStream::Pointer_t pStream);
