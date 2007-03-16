@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UnoLoader.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:35:06 $
+ *  last change: $Author: obo $ $Date: 2007-03-16 08:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,7 +89,7 @@ public final class UnoLoader {
                 new PrivilegedExceptionAction() {
                     public Object run() throws MalformedURLException {
                         return new UnoClassLoader(
-                            base, UnoLoader.class.getClassLoader());
+                            base, null, UnoLoader.class.getClassLoader());
                     }
                 });
         } catch (PrivilegedActionException e) {
