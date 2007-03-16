@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:24:52 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:26:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -524,6 +524,7 @@ WW8Value::Pointer_t createValue(doctok::Reference<BinaryObj>::Pointer_t rRef)
 
 WW8StreamHandler::WW8StreamHandler()
 {
+    output.closeGroup();
     output.addItem("<stream>");
     gTableManager.startLevel();
 }
@@ -532,8 +533,8 @@ WW8StreamHandler::~WW8StreamHandler()
 {
     gTableManager.endLevel();
 
-    output.addItem("</stream>");
     output.closeGroup();
+    output.addItem("</stream>");
 }
 
 void WW8StreamHandler::startSectionGroup()
