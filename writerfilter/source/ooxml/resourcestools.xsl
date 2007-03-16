@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 17:22:07 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,7 +376,9 @@ public:
        </xsl:when>
        <xsl:otherwise>
          <xsl:value-of select="$classname"/>
-         <xsl:text>() {}</xsl:text>
+         <xsl:text>(const rtl::OUString &amp; rValue) : </xsl:text>
+         <xsl:call-template name="valueparent"/>
+         <xsl:text>(rValue) {}</xsl:text>
        </xsl:otherwise>
      </xsl:choose>
      <xsl:text>
@@ -439,7 +441,7 @@ public:
 
   <xsl:template name="valuefordefine">
     <xsl:choose>
-      <xsl:when test="starts-with(@name, 'ST_') and .//rng:value">1</xsl:when>
+      <xsl:when test="starts-with(@name, 'ST_')">1</xsl:when>
       <xsl:otherwise>0</xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -782,6 +784,8 @@ doctok::Id
   </xsl:template>
 
   <xsl:template name="contextattributeimplbool">
+    <xsl:call-template name="caselabelattribute"/>
+    <xsl:text>
         if (strue.compareTo(rValue) == 0
             || sTrue.compareTo(rValue) == 0
             || s1.compareTo(rValue) == 0)
@@ -790,13 +794,19 @@ doctok::Id
             mbValue = false;
 
         bResult = true;
+        
+        break;</xsl:text>
   </xsl:template>
 
   <xsl:template name="contextattributeimplint">
+    <xsl:call-template name="caselabelattribute"/>
+    <xsl:text>
         mnValue = rValue.toInt32();
+        break;</xsl:text>
   </xsl:template>
 
   <xsl:template name="contextattributeimpllist">
+    <xsl:call-template name="caselabelattribute"/>
     <xsl:for-each select=".//rng:ref">
       <xsl:text>
       {</xsl:text>
@@ -809,6 +819,8 @@ doctok::Id
       }</xsl:text>
       </xsl:for-each>
     </xsl:for-each>
+    <xsl:text>
+      break;</xsl:text>
   </xsl:template>
 
   <xsl:template name="attributeproptype">
@@ -833,17 +845,12 @@ doctok::Id
     <xsl:variable name="proptype">
       <xsl:call-template name="attributeproptype"/>
     </xsl:variable>
+    <xsl:call-template name="caselabelattribute"/>
     <xsl:if test=".//rng:text">
       <xsl:text>
         {
-            doctok::Id nId = this->getId(nToken);
-    
             OOXMLValue::Pointer_t pVal(new OOXMLStringValue(rValue));
-            OOXMLPropertyImpl::Pointer_t pProperty
-                (new OOXMLPropertyImpl(nId, pVal, </xsl:text>
-                <xsl:value-of select="$proptype"/>
-                <xsl:text>));
-            mpPropertySet->add(pProperty);
+            newProperty(nToken, pVal);
         }</xsl:text>
     </xsl:if>
     <xsl:for-each select=".//rng:ref">
@@ -854,18 +861,14 @@ doctok::Id
       </xsl:variable>
       <xsl:text>
         {
-          doctok::Id nId = this->getId(nToken);
-
           OOXMLValue::Pointer_t pVal(new </xsl:text>
           <xsl:value-of select="$refclassname"/>
           <xsl:text>(rValue));
-          OOXMLPropertyImpl::Pointer_t pProperty
-              (new OOXMLPropertyImpl(nId, pVal, </xsl:text>
-                <xsl:value-of select="$proptype"/>
-                <xsl:text>));
-            mpPropertySet->add(pProperty);
+          newProperty(nToken, pVal);
         }</xsl:text>
     </xsl:for-each>
+    <xsl:text>
+      break;</xsl:text>
   </xsl:template>
 
   <xsl:template name="contextattributeimpl">
@@ -888,7 +891,6 @@ bool </xsl:text>
     switch (nToken)
     {</xsl:text>
     <xsl:for-each select=".//rng:attribute[@name]">
-      <xsl:call-template name="caselabelattribute"/>
       <xsl:choose>
         <xsl:when test="$resource = 'BooleanValue'">
           <xsl:call-template name="contextattributeimplbool"/>
@@ -904,8 +906,6 @@ bool </xsl:text>
         </xsl:when>
         <xsl:otherwise/>
       </xsl:choose>
-      <xsl:text>
-        break;</xsl:text>
     </xsl:for-each>
     <xsl:text>
     case OOXML_TOKENS_END: // prevent warning
@@ -1091,8 +1091,12 @@ rtl::OUString </xsl:text>
       <xsl:value-of select="."/>
     </xsl:for-each>
     <xsl:for-each select="ancestor::namespace//resource[@name=$name]/value">
-    <xsl:text>
-    if (rValue.compareTo(</xsl:text>
+      <xsl:text>
+  </xsl:text>
+      <xsl:if test="position() > 1">
+        <xsl:text>else </xsl:text>
+      </xsl:if>
+    <xsl:text>if (rValue.compareTo(</xsl:text>
     <xsl:call-template name="valuestringname">
       <xsl:with-param name="string" select="text()"/>
     </xsl:call-template>
