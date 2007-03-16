@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 10:43:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:49:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ class OOXMLValue : public Value
 {
 public:
     typedef auto_ptr<OOXMLValue> Pointer_t;
+    OOXMLValue(const rtl::OUString & rValue);
     OOXMLValue();
     virtual ~OOXMLValue();
 
@@ -150,6 +151,7 @@ protected:
     sal_Int32 mnValue;
 public:
     OOXMLIntegerValue(sal_Int32 nValue);
+    OOXMLIntegerValue(const rtl::OUString & rValue);
     virtual ~OOXMLIntegerValue();
 
     virtual int getInt() const;

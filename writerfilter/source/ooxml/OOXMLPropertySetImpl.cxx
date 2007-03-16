@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 10:43:33 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:50:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,6 +149,10 @@ void OOXMLPropertyImpl::resolve(doctok::Properties & rProperties)
 */
 
 OOXMLValue::OOXMLValue()
+{
+}
+
+OOXMLValue::OOXMLValue(const rtl::OUString & /*rValue*/)
 {
 }
 
@@ -365,6 +369,11 @@ OOXMLValue * OOXMLPropertySetValue::clone() const
 OOXMLIntegerValue::OOXMLIntegerValue(sal_Int32 nValue)
 : mnValue(nValue)
 {
+}
+
+OOXMLIntegerValue::OOXMLIntegerValue(const rtl::OUString & rValue)
+{
+    mnValue = rValue.toInt32();
 }
 
 OOXMLIntegerValue::~OOXMLIntegerValue()
