@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:30:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,23 +58,35 @@ using namespace com::sun::star;
 
 class OOXMLStreamImpl : public OOXMLStream
 {
-    uno::Reference<embed::XStorage> mxStorage;
-    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
+protected:
     uno::Reference<uno::XComponentContext> mxContext;
+    uno::Reference<embed::XStorage> mxStorage;
     uno::Reference<io::XInputStream> mxInputStream;
+    uno::Reference<embed::XRelationshipAccess> mxRelationshipAccess;
     uno::Reference<io::XStream> mxDocumentStream;
+
+    rtl::OUString msPath;
+
+    StreamType_t mnStreamType;
 public:
     typedef boost::shared_ptr<OOXMLStreamImpl> Pointer_t;
 
     OOXMLStreamImpl
+    (OOXMLStreamImpl & rStream, StreamType_t nType);
+    OOXMLStreamImpl
     (uno::Reference<uno::XComponentContext> xContext,
-     uno::Reference<io::XInputStream> xStream);
+     uno::Reference<embed::XStorage> xStorage,
+     StreamType_t nType);
+
     virtual ~OOXMLStreamImpl();
 
     void init();
 
-    uno::Reference<xml::sax::XParser> getParser();
-    uno::Reference<io::XInputStream> getInputStream();
+    OOXMLStream::Pointer_t getSubStream(StreamType_t nStreamType);
+
+    virtual uno::Reference<xml::sax::XParser> getParser();
+    virtual uno::Reference<io::XInputStream> getInputStream();
+    virtual uno::Reference<uno::XComponentContext> getContext();
 };
 }
 #endif // INCLUDED_OOXML_STREAM_IMPL_HXX

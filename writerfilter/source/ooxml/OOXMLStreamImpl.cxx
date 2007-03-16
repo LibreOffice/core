@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:30:10 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:51:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,11 +46,24 @@ namespace ooxml
 using namespace ::std;
 
 OOXMLStreamImpl::OOXMLStreamImpl
-(
- uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<io::XInputStream> xStream)
-: mxContext(xContext), mxInputStream(xStream)
+(uno::Reference<uno::XComponentContext> xContext,
+ uno::Reference<embed::XStorage> xStorage, StreamType_t nType)
+: mxContext(xContext),  mxStorage(xStorage), mnStreamType(nType)
 {
+    mxRelationshipAccess = uno::Reference<embed::XRelationshipAccess>
+        (mxStorage, uno::UNO_QUERY);
+
+    init();
+}
+
+OOXMLStreamImpl::OOXMLStreamImpl
+(OOXMLStreamImpl & rOOXMLStream, StreamType_t nStreamType)
+: mxContext(rOOXMLStream.mxContext), mxStorage(rOOXMLStream.mxStorage),
+  msPath(rOOXMLStream.msPath), mnStreamType(nStreamType)
+{
+    mxRelationshipAccess = uno::Reference<embed::XRelationshipAccess>
+        (rOOXMLStream.mxDocumentStream, uno::UNO_QUERY);
+
     init();
 }
 
@@ -62,17 +75,19 @@ void OOXMLStreamImpl::init()
 {
     static rtl::OUString sType(RTL_CONSTASCII_USTRINGPARAM("Type"));
     static rtl::OUString sDocumentType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"));
+    static rtl::OUString sStylesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"));
     static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
 
-    uno::Reference<lang::XMultiComponentFactory> xFactory =
-        uno::Reference<lang::XMultiComponentFactory>
-        (mxContext->getServiceManager());
+    rtl::OUString sStreamType(sDocumentType);
 
-    mxStorage = comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
-        (OFOPXML_STORAGE_FORMAT_STRING, mxInputStream);
-
-    mxRelationshipAccess = uno::Reference<embed::XRelationshipAccess>
-        (mxStorage, uno::UNO_QUERY);
+    switch (mnStreamType)
+    {
+    case TYPES:
+        sStreamType = sStylesType;
+        break;
+    default:
+        break;
+    }
 
     if (mxRelationshipAccess.is())
     {
@@ -92,10 +107,13 @@ void OOXMLStreamImpl::init()
                 beans::StringPair aPair = aSeq[i];
 
                 if (aPair.First.compareTo(sType) == 0 &&
-                    aPair.Second.compareTo(sDocumentType) == 0)
+                    aPair.Second.compareTo(sStreamType) == 0)
                     bFound = true;
                 else if (aPair.First.compareTo(sTarget) == 0)
-                    sDocumentTarget = aPair.Second;
+                {
+                    sDocumentTarget = msPath;
+                    sDocumentTarget += aPair.Second;
+                }
 
                 clog << "\""
                      << OUStringToOString(aPair.First,
@@ -115,6 +133,10 @@ void OOXMLStreamImpl::init()
 
         if (bFound)
         {
+            sal_Int32 nLastIndex = sDocumentTarget.lastIndexOf('/');
+            if (nLastIndex >= 0)
+                msPath = sDocumentTarget.copy(0, nLastIndex + 1);
+
             uno::Reference<embed::XHierarchicalStorageAccess>
                 xHierarchicalStorageAccess(mxStorage, uno::UNO_QUERY);
 
@@ -154,12 +176,32 @@ uno::Reference<xml::sax::XParser> OOXMLStreamImpl::getParser()
     return xParser;
 }
 
+uno::Reference<uno::XComponentContext> OOXMLStreamImpl::getContext()
+{
+    return mxContext;
+}
+
 OOXMLStream::Pointer_t
 OOXMLDocumentFactory::createStream
 (uno::Reference<uno::XComponentContext> xContext,
- uno::Reference<io::XInputStream> rStream)
+ uno::Reference<io::XInputStream> rStream,
+ OOXMLStream::StreamType_t nStreamType)
 {
-    return OOXMLStream::Pointer_t(new OOXMLStreamImpl(xContext, rStream));
+    uno::Reference<embed::XStorage> xStorage =
+        comphelper::OStorageHelper::GetStorageOfFormatFromInputStream
+        (OFOPXML_STORAGE_FORMAT_STRING, rStream);
+
+    return OOXMLStream::Pointer_t(new OOXMLStreamImpl(xContext, xStorage,
+                                                      nStreamType));
+}
+
+OOXMLStream::Pointer_t
+OOXMLDocumentFactory::createStream
+(OOXMLStream::Pointer_t pStream,  OOXMLStream::StreamType_t nStreamType)
+{
+    return OOXMLStream::Pointer_t
+        (new OOXMLStreamImpl(*dynamic_cast<OOXMLStreamImpl *>(pStream.get()),
+                             nStreamType));
 }
 
 }
