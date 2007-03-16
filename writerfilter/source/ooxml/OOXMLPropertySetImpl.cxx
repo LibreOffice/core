@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:50:09 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-16 16:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,6 +394,42 @@ string OOXMLIntegerValue::toString() const
 {
     char buffer[256];
     snprintf(buffer, sizeof(buffer), "%ld", mnValue);
+
+    return buffer;
+}
+
+/*
+  class OOXMLHexValue
+*/
+
+OOXMLHexValue::OOXMLHexValue(sal_uInt32 nValue)
+: mnValue(nValue)
+{
+}
+
+OOXMLHexValue::OOXMLHexValue(const rtl::OUString & rValue)
+{
+    mnValue = static_cast<sal_uInt32>(rValue.toInt32(16));
+}
+
+OOXMLHexValue::~OOXMLHexValue()
+{
+}
+
+int OOXMLHexValue::getInt() const
+{
+    return mnValue;
+}
+
+OOXMLValue * OOXMLHexValue::clone() const
+{
+    return new OOXMLHexValue(*this);
+}
+
+string OOXMLHexValue::toString() const
+{
+    char buffer[256];
+    snprintf(buffer, sizeof(buffer), "0x%lx", mnValue);
 
     return buffer;
 }

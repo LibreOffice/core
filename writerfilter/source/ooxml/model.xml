@@ -5463,7 +5463,7 @@
   </define>
   <define name="CT_LongHexNumber">
     <attribute name="val">
-      <text/>
+      <ref name="ST_LongHexNumber"/>
       <xs:documentation>Long Hexadecimal Number Value</xs:documentation>
     </attribute>
   </define>
@@ -5475,7 +5475,7 @@
   </define>
   <define name="CT_ShortHexNumber">
     <attribute name="val">
-      <text/>
+      <ref name="ST_ShortHexNumber"/>
       <xs:documentation>Two Digit Hexadecimal Value</xs:documentation>
     </attribute>
   </define>
@@ -5487,7 +5487,7 @@
   </define>
   <define name="CT_UcharHexNumber">
     <attribute name="val">
-      <text/>
+      <ref name="ST_UcharHexNumber"/>
       <xs:documentation>Value</xs:documentation>
     </attribute>
   </define>
@@ -5498,7 +5498,7 @@
   </define>
   <define name="CT_DecimalNumber">
     <attribute name="val">
-      <text/>
+      <ref name="ST_DecimalNumber"/>
       <xs:documentation>Decimal Number Value</xs:documentation>
     </attribute>
   </define>
@@ -5514,7 +5514,7 @@
   </define>
   <define name="CT_TwipsMeasure">
     <attribute name="val">
-      <text/>
+      <ref name="ST_TwipsMeasure"/>
       <xs:documentation>Measurement in Twentieths of a Point</xs:documentation>
     </attribute>
   </define>
@@ -5525,7 +5525,7 @@
   </define>
   <define name="CT_SignedTwipsMeasure">
     <attribute name="val">
-      <text/>
+      <ref name="ST_SignedTwipsMeasure"/>
       <xs:documentation>Positive or Negative Value in Twentieths of a Point</xs:documentation>
     </attribute>
   </define>
@@ -5536,7 +5536,7 @@
   </define>
   <define name="CT_PixelsMeasure">
     <attribute name="val">
-      <text/>
+      <ref name="ST_PixelsMeasure"/>
       <xs:documentation>Measurement in Pixels</xs:documentation>
     </attribute>
   </define>
@@ -5558,7 +5558,7 @@
   </define>
   <define name="CT_SignedHpsMeasure">
     <attribute name="val">
-      <text/>
+      <ref name="ST_SignedHpsMeasure"/>
       <xs:documentation>Signed Half-Point Measurement</xs:documentation>
     </attribute>
   </define>
@@ -5783,7 +5783,7 @@
       <attribute name="val">
         <ref name="ST_Underline"/>
         <xs:documentation>Underline Style</xs:documentation>
-      </attribute>
+      </attribute>ST_String
     </optional>
     <optional>
       <attribute name="color">
@@ -8993,13 +8993,13 @@
   <define name="CT_Br">
     <optional>
       <attribute name="type">
-        <text/>
+        <ref name="ST_BrType"/>
         <xs:documentation>Break Type</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="clear">
-        <text/>
+        <ref name="ST_BrClear"/>
         <xs:documentation>Restart Location For Text Wrapping Break</xs:documentation>
       </attribute>
     </optional>
@@ -9065,7 +9065,7 @@
       <xs:documentation>Symbol Character Font</xs:documentation>
     </attribute>
     <attribute name="char">
-      <text/>
+      <ref name="ST_ShortHexNumber"/>
       <xs:documentation>Symbol Character Code</xs:documentation>
     </attribute>
   </define>
@@ -14477,7 +14477,25 @@
   <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
   <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
 </resource>
+<resource name="ST_ShortHexNumber" resource="Hex"/>
+<resource name="ST_LongHexNumber" resource="Hex"/>
+<resource name="ST_UcharHexNumber" resource="Hex"/>
 <resource name="CT_Empty" resource="SingleElement"/>
+<resource name="CT_Br" resource="PropertySetValue">
+  <attribute name="type" tokenid="ooxml:CT_Br_type"/>
+  <attribute name="clear" tokenid="ooxml:CT_Br_clear"/>
+</resource>
+<resource name="ST_BrType" resource="List">
+  <value tokenid="ooxml:Value_ST_BrType_column">column</value>
+  <value tokenid="ooxml:Value_ST_BrType_page">page</value>
+  <value tokenid="ooxml:Value_ST_BrType_textWrapping">textWrapping</value>
+</resource>
+<resource name="ST_BrClear" resource="List">
+  <value tokenid="ooxml:Value_ST_BrClear_none">none</value>
+  <value tokenid="ooxml:Value_ST_BrClear_left">left</value>
+  <value tokenid="ooxml:Value_ST_BrClear_right">right</value>
+  <value tokenid="ooxml:Value_ST_BrClear_all">all</value>
+</resource>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>

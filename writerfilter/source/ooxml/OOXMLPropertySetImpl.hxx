@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:49:54 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-16 16:04:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,20 @@ public:
     virtual OOXMLValue * clone() const;
 };
 
+class OOXMLHexValue : public OOXMLValue
+{
+protected:
+    sal_uInt32 mnValue;
+public:
+    OOXMLHexValue(sal_uInt32 nValue);
+    OOXMLHexValue(const rtl::OUString & rValue);
+    virtual ~OOXMLHexValue();
+
+    virtual int getInt() const;
+    virtual string toString() const;
+    virtual OOXMLValue * clone() const;
+};
+
 class OOXMLListValue : public OOXMLIntegerValue
 {
 public:
@@ -166,6 +180,6 @@ public:
     virtual ~OOXMLListValue();
 };
 
-}
+}  // namespace ooxml
 
 #endif // INCLUDED_OOXML_PROPERTY_SET_IMPL_HXX
