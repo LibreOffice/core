@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgcont.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:38:19 $
+ *  last change: $Author: obo $ $Date: 2007-03-19 10:48:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,8 +157,8 @@ public:
         SfxDialogLibraryContainer* pParent
     );
 
-    DECLARE_XINTERFACE();
-    DECLARE_XTYPEPROVIDER();
+    DECLARE_XINTERFACE()
+    DECLARE_XTYPEPROVIDER()
 
     // XStringResourceSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::resource::XStringResourceResolver >
