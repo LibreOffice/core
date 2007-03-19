@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:16:26 $
+ *  last change: $Author: obo $ $Date: 2007-03-19 13:21:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -622,29 +622,29 @@ void SwWW8Writer::DoFormText(const SwInputField * pFld)
 
     pDataStrm->Write( aComboData2, sizeof(aComboData2) );
 
-    String aStr = pFld->GetPar2();
-    sal_uInt16 nLen = msword_cast<sal_uInt16>(aStr.Len());
+    rtl::OUString aStr = pFld->GetPar2();
+    sal_uInt16 nLen = msword_cast<sal_uInt16>(aStr.getLength());
     *pDataStrm << nLen;
     WriteString16(*pDataStrm, aStr, true);
 
-    aStr = aEmptyStr; //pFld->GetPar1();
-    nLen = msword_cast<sal_uInt16>(aStr.Len());
+    aStr = rtl::OUString();//aEmptyStr; //pFld->GetPar1();
+    nLen = msword_cast<sal_uInt16>(aStr.getLength());
     *pDataStrm << nLen;
     WriteString16(*pDataStrm, aStr, true);
 
     aStr = pFld->GetHelp();
-    nLen = msword_cast<sal_uInt16>(aStr.Len());
+    nLen = msword_cast<sal_uInt16>(aStr.getLength());
     *pDataStrm << nLen;
     WriteString16(*pDataStrm, aStr, true);
 
-    nLen = msword_cast<sal_uInt16>(aEmptyStr.Len());
+    nLen = 0;
     *pDataStrm << nLen;
     WriteString16(*pDataStrm, aEmptyStr, true);
 
     aStr = pFld->GetToolTip();
-    if (aStr.Len() > 0)
+    if (aStr.getLength() > 0)
     {
-        nLen = msword_cast<sal_uInt16>(aStr.Len());
+        nLen = msword_cast<sal_uInt16>(aStr.getLength());
         *pDataStrm << nLen;
         WriteString16(*pDataStrm, aStr, true);
     }
