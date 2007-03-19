@@ -86,7 +86,7 @@
     </optional>
   </define>
   <define name="CT_ColorReplaceEffect">
-    <ref nameOOXMLContext_schemas_openxmlformats_org_wordprocessingml_2006_main_CT_Tabs="EG_ColorChoice"/>
+    <ref name="EG_ColorChoice"/>
   </define>
   <define name="CT_DuotoneEffect">
     <oneOrMore>
@@ -14054,7 +14054,7 @@
   <action name="start" action="startCharacterGroup"/>
   <action name="end" action="endCharacterGroup"/>
 </resource>
-<resource name="EG_RPrBase" resource="Property">
+<resource name="EG_RPrBase" resource="Properties">
   <sprm name="rStyle" tokenid="0x0"/>
   <sprm name="rFonts" tokenid="0x0"/>
   <sprm name="b" tokenid="0x835"/>
@@ -14169,7 +14169,7 @@
   <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
 </resource>
 <resource name="CT_PPr" resource="Properties"/>
-<resource name="CT_Tabs" resource="Property">
+<resource name="CT_Tabs" resource="PropertySetValue">
   <attribute name="tab" tokenid="ooxml:CT_Tabs_tab"/>
 </resource>
 <resource name="CT_TabStop" resource="PropertySetValue">
@@ -14439,7 +14439,7 @@
   <value tokenid="226">zigZag</value>
   <value tokenid="227">zigZagStitch</value>
 </resource>
-<resource name="EG_RunInnerContent" resource="Property">
+<resource name="EG_RunInnerContent" resource="Properties">
   <attribute name="br" tokenid="ooxml:EG_RunInnerContent_br"/>
   <attribute name="t" tokenid="ooxml:EG_RunInnerContent_t"/>
   <attribute name="delText" tokenid="ooxml:EG_RunInnerContent_delText"/>
