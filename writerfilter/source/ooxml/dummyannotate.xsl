@@ -5,9 +5,9 @@
  *
  *  $RCSfile: dummyannotate.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 16:10:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-21 09:24:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,6 +196,6 @@
   </xsl:template>
 
   <xsl:template match="/">
-    <xsl:apply-templates select="//rng:define[@name='ST_Border']" mode="dummydocvalues"/>
+    <xsl:apply-templates select="//rng:define[@name='CT_Sym']" mode="propertiesattr"/>
   </xsl:template>
 </xsl:stylesheet>
