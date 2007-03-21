@@ -4148,7 +4148,7 @@
   </define>
   <define name="CT_OnOff">
     <attribute name="val">
-      <text/>
+      <ref name="ST_OnOff"/>
       <xs:documentation>value</xs:documentation>
     </attribute>
   </define>
@@ -5451,7 +5451,7 @@
   </define>
   <define name="CT_OnOff">
     <attribute name="val">
-      <text/>
+      <ref name="ST_OnOff"/>
       <xs:documentation>On/Off Value</xs:documentation>
     </attribute>
   </define>
