@@ -195,6 +195,7 @@ common
 		use_cygcp
 		use_shl_versions
         VCL
+        WITH_LDAP
 		WST
 		XCLASSPATH
         ZIPDEP
