@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:53:29 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-21 11:34:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,8 +419,7 @@ public:
     virtual OOXMLContext::Pointer_t elementFromRefs(TokenEnum_t nToken);
     virtual bool attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue);    virtual doctok::Id getId(TokenEnum_t nToken);
     virtual doctok::Id getIdFromRefs(TokenEnum_t nToken);
-    virtual void  characters(const rtl::OUString &amp; str) 
-        throw (xml::sax::SAXException,uno::RuntimeException);
+    virtual void  characters(const rtl::OUString &amp; str); 
 
     virtual string getType() { return "</xsl:text>
     <xsl:value-of select="$classname"/>
@@ -571,7 +570,6 @@ OOXMLContext::Pointer_t </xsl:text>
 void </xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>::characters(const rtl::OUString &amp; sText) 
-        throw (xml::sax::SAXException,uno::RuntimeException)
 {
 </xsl:text>
     <xsl:choose>
