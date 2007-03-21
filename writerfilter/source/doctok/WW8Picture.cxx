@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8Picture.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:23:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-21 11:37:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,9 @@ sal_uInt32 WW8FFDATA::get_FLT()
     if (pDocument != NULL)
     {
         WW8FLD::Pointer_t pFLD = pDocument->getCurrentFLD();
-        nResult = pFLD->get_flt();
+
+        if (pFLD.get() != NULL)
+            nResult = pFLD->get_flt();
     }
 
     return nResult;
