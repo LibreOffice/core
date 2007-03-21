@@ -14517,58 +14517,6 @@
   <value tokenid="ooxml:Value_ST_PTabLeader_underscore">underscore</value>
   <value tokenid="ooxml:Value_ST_PTabLeader_middleDot">middleDot</value>
 </resource>
-<resource name="EG_RPrBase" resource="Properties">
-  <attribute name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
-  <attribute name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
-  <attribute name="b" tokenid="ooxml:EG_RPrBase_b"/>
-  <attribute name="bCs" tokenid="ooxml:EG_RPrBase_bCs"/>
-  <attribute name="i" tokenid="ooxml:EG_RPrBase_i"/>
-  <attribute name="iCs" tokenid="ooxml:EG_RPrBase_iCs"/>
-  <attribute name="caps" tokenid="ooxml:EG_RPrBase_caps"/>
-  <attribute name="smallCaps" tokenid="ooxml:EG_RPrBase_smallCaps"/>
-  <attribute name="strike" tokenid="ooxml:EG_RPrBase_strike"/>
-  <attribute name="dstrike" tokenid="ooxml:EG_RPrBase_dstrike"/>
-  <attribute name="outline" tokenid="ooxml:EG_RPrBase_outline"/>
-  <attribute name="shadow" tokenid="ooxml:EG_RPrBase_shadow"/>
-  <attribute name="emboss" tokenid="ooxml:EG_RPrBase_emboss"/>
-  <attribute name="imprint" tokenid="ooxml:EG_RPrBase_imprint"/>
-  <attribute name="noProof" tokenid="ooxml:EG_RPrBase_noProof"/>
-  <attribute name="snapToGrid" tokenid="ooxml:EG_RPrBase_snapToGrid"/>
-  <attribute name="vanish" tokenid="ooxml:EG_RPrBase_vanish"/>
-  <attribute name="webHidden" tokenid="ooxml:EG_RPrBase_webHidden"/>
-  <attribute name="color" tokenid="ooxml:EG_RPrBase_color"/>
-  <attribute name="spacing" tokenid="ooxml:EG_RPrBase_spacing"/>
-  <attribute name="w" tokenid="ooxml:EG_RPrBase_w"/>
-  <attribute name="kern" tokenid="ooxml:EG_RPrBase_kern"/>
-  <attribute name="position" tokenid="ooxml:EG_RPrBase_position"/>
-  <attribute name="sz" tokenid="ooxml:EG_RPrBase_sz"/>
-  <attribute name="szCs" tokenid="ooxml:EG_RPrBase_szCs"/>
-  <attribute name="highlight" tokenid="ooxml:EG_RPrBase_highlight"/>
-  <attribute name="u" tokenid="ooxml:EG_RPrBase_u"/>
-  <attribute name="effect" tokenid="ooxml:EG_RPrBase_effect"/>
-  <attribute name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
-  <attribute name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
-  <attribute name="fitText" tokenid="ooxml:EG_RPrBase_fitText"/>
-  <attribute name="vertAlign" tokenid="ooxml:EG_RPrBase_vertAlign"/>
-  <attribute name="rtl" tokenid="ooxml:EG_RPrBase_rtl"/>
-  <attribute name="cs" tokenid="ooxml:EG_RPrBase_cs"/>
-  <attribute name="em" tokenid="ooxml:EG_RPrBase_em"/>
-  <attribute name="lang" tokenid="ooxml:EG_RPrBase_lang"/>
-  <attribute name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
-  <attribute name="specVanish" tokenid="ooxml:EG_RPrBase_specVanish"/>
-  <attribute name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
-</resource>
-<resource name="CT_OnOff" resource="PropertySetValue">
-  <attribute name="val" tokenid="ooxml:CT_OnOff_val"/>
-</resource>
-<resource name="ST_OnOff" resource="List">
-  <value tokenid="ooxml:Value_ST_OnOff_on">on</value>
-  <value tokenid="ooxml:Value_ST_OnOff_true">true</value>
-  <value tokenid="ooxml:Value_ST_OnOff_1">1</value>
-  <value tokenid="ooxml:Value_ST_OnOff_off">off</value>
-  <value tokenid="ooxml:Value_ST_OnOff_false">false</value>
-  <value tokenid="ooxml:Value_ST_OnOff_0">0</value>
-</resource>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>
