@@ -5,9 +5,9 @@
  *
  *  $RCSfile: dummyannotate.xsl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-21 09:24:23 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-21 09:50:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,20 +111,19 @@
   </xsl:template>
   
   <xsl:template match="rng:define" mode="dummydoc">
-    <xsl:element name="w:document">
-      <xsl:for-each select=".//rng:attribute">
-        <xsl:element name="w:p">
-          <xsl:element name="w:pPr">
-            <xsl:element name="w:numPr">
-              <xsl:attribute name="w:{@name}"/>
-            </xsl:element>
-          </xsl:element>
-          <xsl:element name="w:r">
+    <xsl:element name="w:body">
+      <xsl:for-each select=".//rng:element">
+        <w:p>
+          <w:pPr/>
+          <w:r>
+            <w:rPr>
+              <xsl:element name="w:{@name}"/>
+            </w:rPr>
             <xsl:element name="w:t">
               <xsl:value-of select="@name"/>
             </xsl:element>
-          </xsl:element>
-        </xsl:element>
+          </w:r>
+        </w:p>
       </xsl:for-each>
     </xsl:element>
   </xsl:template>
@@ -196,6 +195,8 @@
   </xsl:template>
 
   <xsl:template match="/">
-    <xsl:apply-templates select="//rng:define[@name='CT_Sym']" mode="propertiesattr"/>
+    <out>
+      <xsl:apply-templates select="//rng:define[@name='CT_NumPr']" mode="dummydoc"/>
+    </out>
   </xsl:template>
 </xsl:stylesheet>
