@@ -14054,7 +14054,7 @@
   <action name="start" action="startCharacterGroup"/>
   <action name="end" action="endCharacterGroup"/>
 </resource>
-<resource name="EG_RPrBase" resource="Properties">
+<resource name="EG_RPrBase" resource="Property">
   <sprm name="rStyle" tokenid="0x0"/>
   <sprm name="rFonts" tokenid="0x0"/>
   <sprm name="b" tokenid="0x835"/>

@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-21 11:34:00 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-22 15:43:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -786,7 +786,9 @@ doctok::Id
     <xsl:text>
         if (strue.compareTo(rValue) == 0
             || sTrue.compareTo(rValue) == 0
-            || s1.compareTo(rValue) == 0)
+            || s1.compareTo(rValue) == 0
+            || son.compareTo(rValue) == 0
+            || sOn.compareTo(rValue) == 0)
             mbValue = true;
         else
             mbValue = false;

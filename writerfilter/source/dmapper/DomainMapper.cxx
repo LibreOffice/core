@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 15:34:40 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-22 15:43:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1432,6 +1432,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_STYLESHEET:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
+#if 0
         case NS_ooxml::LN_CT_PPrBase_tabs:
             std::cerr << "Fridrich Strba -- balise -- ooxml:CT_PPrBase_tabs" << std::endl;
             break;
@@ -1444,6 +1445,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_ooxml::LN_CT_TabStop_pos:
             std::cerr << "Fridrich Strba -- balise -- ooxml:CT_TabStop_pos" << std::endl;
             break;
+#endif
         default:
             {
                 //int nVal = val.getInt();
