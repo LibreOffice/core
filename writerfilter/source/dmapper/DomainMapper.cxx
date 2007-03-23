@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-22 15:43:29 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-23 14:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ DomainMapper::~DomainMapper()
 -----------------------------------------------------------------------*/
 void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
 {
+
     sal_Int32 nIntValue = val.getInt();
     if( Name >= NS_rtf::LN_WIDENT && Name <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( Name, nIntValue );
@@ -1432,18 +1433,45 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_STYLESHEET:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
+
+        case NS_ooxml::LN_CT_Underline_val:
+            {
+                printf("NS_ooxml::LN_CT_Underline_val\n");
+                sal_Int16 eUnderline = awt::FontUnderline::NONE;
+
+                switch(nIntValue)
+                {
+                case 0: eUnderline = awt::FontUnderline::NONE; break;
+                case 2: m_pImpl->GetTopContext()->Insert(PROP_CHAR_WORD_MODE, uno::makeAny( true ) ); // TODO: how to get rid of it?
+                case 1: eUnderline = awt::FontUnderline::SINGLE;       break;
+                case 3: eUnderline = awt::FontUnderline::DOUBLE;       break;
+                case 4: eUnderline = awt::FontUnderline::DOTTED;       break;
+                case 7: eUnderline = awt::FontUnderline::DASH;         break;
+                case 9: eUnderline = awt::FontUnderline::DASHDOT;      break;
+                case 10:eUnderline = awt::FontUnderline::DASHDOTDOT;   break;
+                case 6: eUnderline = awt::FontUnderline::BOLD;         break;
+                case 11:eUnderline = awt::FontUnderline::WAVE;         break;
+                case 20:eUnderline = awt::FontUnderline::BOLDDOTTED;   break;
+                case 23:eUnderline = awt::FontUnderline::BOLDDASH;     break;
+                case 39:eUnderline = awt::FontUnderline::LONGDASH;     break;
+                case 55:eUnderline = awt::FontUnderline::BOLDLONGDASH; break;
+                case 25:eUnderline = awt::FontUnderline::BOLDDASHDOT;  break;
+                case 26:eUnderline = awt::FontUnderline::BOLDDASHDOTDOT;break;
+                case 27:eUnderline = awt::FontUnderline::BOLDWAVE;     break;
+                case 43:eUnderline = awt::FontUnderline::DOUBLEWAVE;   break;
+                default: ;
+                }
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_UNDERLINE, uno::makeAny( eUnderline ) );
+            }
+            break;
 #if 0
         case NS_ooxml::LN_CT_PPrBase_tabs:
-            std::cerr << "Fridrich Strba -- balise -- ooxml:CT_PPrBase_tabs" << std::endl;
             break;
         case NS_ooxml::LN_CT_TabStop_val:
-            std::cerr << "Fridrich Strba -- balise -- ooxml:CT_TabStop_val" << std::endl;
             break;
         case NS_ooxml::LN_CT_TabStop_leader:
-            std::cerr << "Fridrich Strba -- balise -- ooxml:CT_TabStop_leader" << std::endl;
             break;
         case NS_ooxml::LN_CT_TabStop_pos:
-            std::cerr << "Fridrich Strba -- balise -- ooxml:CT_TabStop_pos" << std::endl;
             break;
 #endif
         default:
@@ -1481,6 +1509,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     //      bExchangeLeftRight = true;
     doctok::Value::Pointer_t pValue = sprm_.getValue();
     sal_Int32 nIntValue = pValue->getInt();
+
     /* WRITERFILTERSTATUS: table: sprmdata */
     switch(nId)
     {
@@ -2083,30 +2112,39 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             // 3 = double,  4 = dotted,  5 = hidden
             // 6 = thick,   7 = dash,    8 = dot(not used)
             // 9 = dotdash 10 = dotdotdash 11 = wave
-            sal_Int16 eUnderline = awt::FontUnderline::NONE;
-            switch(nIntValue)
+
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+
+            if (!pProperties.get())
             {
-            case 0: eUnderline = awt::FontUnderline::NONE; break;
-            case 2: rContext->Insert(PROP_CHAR_WORD_MODE, uno::makeAny( true ) ); // TODO: how to get rid of it?
-            case 1: eUnderline = awt::FontUnderline::SINGLE;       break;
-            case 3: eUnderline = awt::FontUnderline::DOUBLE;       break;
-            case 4: eUnderline = awt::FontUnderline::DOTTED;       break;
-            case 7: eUnderline = awt::FontUnderline::DASH;         break;
-            case 9: eUnderline = awt::FontUnderline::DASHDOT;      break;
-            case 10:eUnderline = awt::FontUnderline::DASHDOTDOT;   break;
-            case 6: eUnderline = awt::FontUnderline::BOLD;         break;
-            case 11:eUnderline = awt::FontUnderline::WAVE;         break;
-            case 20:eUnderline = awt::FontUnderline::BOLDDOTTED;   break;
-            case 23:eUnderline = awt::FontUnderline::BOLDDASH;     break;
-            case 39:eUnderline = awt::FontUnderline::LONGDASH;     break;
-            case 55:eUnderline = awt::FontUnderline::BOLDLONGDASH; break;
-            case 25:eUnderline = awt::FontUnderline::BOLDDASHDOT;  break;
-            case 26:eUnderline = awt::FontUnderline::BOLDDASHDOTDOT;break;
-            case 27:eUnderline = awt::FontUnderline::BOLDWAVE;     break;
-            case 43:eUnderline = awt::FontUnderline::DOUBLEWAVE;   break;
-            default: ;
+                sal_Int16 eUnderline = awt::FontUnderline::NONE;
+
+                switch(nIntValue)
+                {
+                case 0: eUnderline = awt::FontUnderline::NONE; break;
+                case 2: rContext->Insert(PROP_CHAR_WORD_MODE, uno::makeAny( true ) ); // TODO: how to get rid of it?
+                case 1: eUnderline = awt::FontUnderline::SINGLE;       break;
+                case 3: eUnderline = awt::FontUnderline::DOUBLE;       break;
+                case 4: eUnderline = awt::FontUnderline::DOTTED;       break;
+                case 7: eUnderline = awt::FontUnderline::DASH;         break;
+                case 9: eUnderline = awt::FontUnderline::DASHDOT;      break;
+                case 10:eUnderline = awt::FontUnderline::DASHDOTDOT;   break;
+                case 6: eUnderline = awt::FontUnderline::BOLD;         break;
+                case 11:eUnderline = awt::FontUnderline::WAVE;         break;
+                case 20:eUnderline = awt::FontUnderline::BOLDDOTTED;   break;
+                case 23:eUnderline = awt::FontUnderline::BOLDDASH;     break;
+                case 39:eUnderline = awt::FontUnderline::LONGDASH;     break;
+                case 55:eUnderline = awt::FontUnderline::BOLDLONGDASH; break;
+                case 25:eUnderline = awt::FontUnderline::BOLDDASHDOT;  break;
+                case 26:eUnderline = awt::FontUnderline::BOLDDASHDOTDOT;break;
+                case 27:eUnderline = awt::FontUnderline::BOLDWAVE;     break;
+                case 43:eUnderline = awt::FontUnderline::DOUBLEWAVE;   break;
+                default: ;
+                }
+                rContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny( eUnderline ) );
             }
-            rContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny( eUnderline ) );
+            else
+                pProperties->resolve(*this);
         }
         break;
     case 0xEA3F:

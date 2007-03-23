@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-16 16:04:45 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-23 14:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,6 +155,7 @@ public:
     virtual ~OOXMLIntegerValue();
 
     virtual int getInt() const;
+    virtual uno::Any getAny() const;
     virtual string toString() const;
     virtual OOXMLValue * clone() const;
 };

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-16 16:04:45 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-23 14:16:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -372,6 +372,7 @@ OOXMLIntegerValue::OOXMLIntegerValue(sal_Int32 nValue)
 }
 
 OOXMLIntegerValue::OOXMLIntegerValue(const rtl::OUString & rValue)
+: mnValue(0)
 {
     mnValue = rValue.toInt32();
 }
@@ -383,6 +384,13 @@ OOXMLIntegerValue::~OOXMLIntegerValue()
 int OOXMLIntegerValue::getInt() const
 {
     return mnValue;
+}
+
+uno::Any OOXMLIntegerValue::getAny() const
+{
+    uno::Any aResult(mnValue);
+
+    return aResult;
 }
 
 OOXMLValue * OOXMLIntegerValue::clone() const

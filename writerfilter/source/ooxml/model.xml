@@ -9352,39 +9352,39 @@
   </define>
   <define name="CT_Fonts">
     <attribute name="hint">
-      <text/>
+      <ref name="ST_Hint"/>
       <xs:documentation>Font Content Type</xs:documentation>
     </attribute>
     <attribute name="ascii">
-      <text/>
+      <ref name="ST_String"/>
       <xs:documentation>ASCII Font</xs:documentation>
     </attribute>
     <attribute name="hAnsi">
-      <text/>
+      <ref name="ST_String"/>
       <xs:documentation>High ANSI Font</xs:documentation>
     </attribute>
     <attribute name="eastAsia">
-      <text/>
+      <ref name="ST_String"/>
       <xs:documentation>East Asian Font</xs:documentation>
     </attribute>
     <attribute name="cs">
-      <text/>
+      <ref name="ST_String"/>
       <xs:documentation>Complex Script Font</xs:documentation>
     </attribute>
     <attribute name="asciiTheme">
-      <text/>
+      <ref name="ST_Theme"/>
       <xs:documentation>ASCII Theme Font</xs:documentation>
     </attribute>
     <attribute name="hAnsiTheme">
-      <text/>
+      <ref name="ST_Theme"/>
       <xs:documentation>High ANSI Theme Font</xs:documentation>
     </attribute>
     <attribute name="eastAsiaTheme">
-      <text/>
+      <ref name="ST_Theme"/>
       <xs:documentation>East Asian Theme Font</xs:documentation>
     </attribute>
     <attribute name="cstheme">
-      <text/>
+      <ref name="ST_Theme"/>
       <xs:documentation>Complex Script Theme Font</xs:documentation>
     </attribute>
   </define>
@@ -14039,6 +14039,51 @@
   <attribute name="themeFill" tokenid="ooxml:CT_Shd_themeFill"/>
   <attribute name="themeFillTint" tokenid="ooxml:CT_Shd_themeFillTint"/>
   <attribute name="themeFillShade" tokenid="ooxml:CT_Shd_themeFillShade"/>
+</resource>
+<resource name="CT_Fonts" resource="PropertySetValue">
+  <attribute name="hint" tokenid="ooxml:CT_Fonts_hint"/>
+  <attribute name="ascii" tokenid="ooxml:CT_Fonts_ascii"/>
+  <attribute name="hAnsi" tokenid="ooxml:CT_Fonts_hAnsi"/>
+  <attribute name="eastAsia" tokenid="ooxml:CT_Fonts_eastAsia"/>
+  <attribute name="cs" tokenid="ooxml:CT_Fonts_cs"/>
+  <attribute name="asciiTheme" tokenid="ooxml:CT_Fonts_asciiTheme"/>
+  <attribute name="hAnsiTheme" tokenid="ooxml:CT_Fonts_hAnsiTheme"/>
+  <attribute name="eastAsiaTheme" tokenid="ooxml:CT_Fonts_eastAsiaTheme"/>
+  <attribute name="cstheme" tokenid="ooxml:CT_Fonts_cstheme"/>
+</resource>
+<resource name="ST_Hint" resource="List">
+  <value tokenid="ooxml:Value_ST_Hint_default">default</value>
+  <value tokenid="ooxml:Value_ST_Hint_eastAsia">eastAsia</value>
+  <value tokenid="ooxml:Value_ST_Hint_cs">cs</value>
+</resource>
+<resource name="ST_Theme" resource="List">
+  <value tokenid="ooxml:Value_ST_Theme_majorEastAsia">majorEastAsia</value>
+  <value tokenid="ooxml:Value_ST_Theme_majorBidi">majorBidi</value>
+  <value tokenid="ooxml:Value_ST_Theme_majorAscii">majorAscii</value>
+  <value tokenid="ooxml:Value_ST_Theme_majorHAnsi">majorHAnsi</value>
+  <value tokenid="ooxml:Value_ST_Theme_minorEastAsia">minorEastAsia</value>
+  <value tokenid="ooxml:Value_ST_Theme_minorBidi">minorBidi</value>
+  <value tokenid="ooxml:Value_ST_Theme_minorAscii">minorAscii</value>
+  <value tokenid="ooxml:Value_ST_Theme_minorHAnsi">minorHAnsi</value>
+</resource>
+<resource name="ST_ThemeColor" resource="List">
+  <value tokenid="ooxml:Value_St_ThemeColor_dark1">dark1</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_light1">light1</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_dark2">dark2</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_light2">light2</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_accent1">accent1</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_accent2">accent2</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_accent3">accent3</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_accent4">accent4</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_accent5">accent5</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_accent6">accent6</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_hyperlink">hyperlink</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_followedHyperlink">followedHyperlink</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_none">none</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_background1">background1</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_text1">text1</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_background2">background2</value>
+  <value tokenid="ooxml:Value_St_ThemeColor_text2">text2</value>
 </resource>
 <resource name="document" resource="Stream"/>
 <resource name="CT_Document" resource="Stream"/>
