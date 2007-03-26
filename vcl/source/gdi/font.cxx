@@ -4,9 +4,9 @@
  *
  *  $RCSfile: font.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:59:55 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:20:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@
 #ifndef _DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#include <psprint/sft.h>
+
 #ifndef _SV_FONT_HXX
 #include <font.hxx>
 #endif
@@ -57,6 +59,8 @@
 #ifndef _VCL_OUTDEV_H
 #include <outdev.h> // just for ImplGetEnglishSearchFontName! TODO: move it
 #endif
+
+#include <algorithm>
 
 // =======================================================================
 
@@ -857,6 +861,213 @@ SvStream& operator<<( SvStream& rOStm, const Font& rFont )
 }
 
 // -----------------------------------------------------------------------
+namespace
+{
+    bool identifyTrueTypeFont( const void* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
+    {
+        bool bResult = false;
+        TrueTypeFont* pTTF = NULL;
+        if( OpenTTFontBuffer( const_cast<void*>(i_pBuffer), i_nSize, 0, &pTTF ) == SF_OK )
+        {
+            TTGlobalFontInfo aInfo;
+            GetTTGlobalFontInfo( pTTF, &aInfo );
+            // most important: the family name
+            if( aInfo.ufamily )
+                o_rResult.SetName( aInfo.ufamily );
+            else if( aInfo.family )
+                o_rResult.SetName( rtl::OStringToOUString( aInfo.family, RTL_TEXTENCODING_ASCII_US ) );
+            // set weight
+            if( aInfo.weight )
+            {
+                if( aInfo.weight < FW_EXTRALIGHT )
+                    o_rResult.SetWeight( WEIGHT_THIN );
+                else if( aInfo.weight < FW_LIGHT )
+                    o_rResult.SetWeight( WEIGHT_ULTRALIGHT );
+                else if( aInfo.weight < FW_NORMAL )
+                    o_rResult.SetWeight( WEIGHT_LIGHT );
+                else if( aInfo.weight < FW_MEDIUM )
+                    o_rResult.SetWeight( WEIGHT_NORMAL );
+                else if( aInfo.weight < FW_SEMIBOLD )
+                    o_rResult.SetWeight( WEIGHT_MEDIUM );
+                else if( aInfo.weight < FW_BOLD )
+                    o_rResult.SetWeight( WEIGHT_SEMIBOLD );
+                else if( aInfo.weight < FW_EXTRABOLD )
+                    o_rResult.SetWeight( WEIGHT_BOLD );
+                else if( aInfo.weight < FW_BLACK )
+                    o_rResult.SetWeight( WEIGHT_ULTRABOLD );
+                else
+                    o_rResult.SetWeight( WEIGHT_BLACK );
+            }
+            else
+                o_rResult.SetWeight( (aInfo.macStyle & 1) ? WEIGHT_BOLD : WEIGHT_NORMAL );
+            // set width
+            if( aInfo.width )
+            {
+                if( aInfo.width == FWIDTH_ULTRA_CONDENSED )
+                    o_rResult.SetWidth( WIDTH_ULTRA_CONDENSED );
+                else if( aInfo.width == FWIDTH_EXTRA_CONDENSED )
+                    o_rResult.SetWidth( WIDTH_EXTRA_CONDENSED );
+                else if( aInfo.width == FWIDTH_CONDENSED )
+                    o_rResult.SetWidth( WIDTH_CONDENSED );
+                else if( aInfo.width == FWIDTH_SEMI_CONDENSED )
+                    o_rResult.SetWidth( WIDTH_SEMI_CONDENSED );
+                else if( aInfo.width == FWIDTH_NORMAL )
+                    o_rResult.SetWidth( WIDTH_NORMAL );
+                else if( aInfo.width == FWIDTH_SEMI_EXPANDED )
+                    o_rResult.SetWidth( WIDTH_SEMI_EXPANDED );
+                else if( aInfo.width == FWIDTH_EXPANDED )
+                    o_rResult.SetWidth( WIDTH_EXPANDED );
+                else if( aInfo.width == FWIDTH_EXTRA_EXPANDED )
+                    o_rResult.SetWidth( WIDTH_EXTRA_EXPANDED );
+                else if( aInfo.width >= FWIDTH_ULTRA_EXPANDED )
+                    o_rResult.SetWidth( WIDTH_ULTRA_EXPANDED );
+            }
+            // set italic
+            o_rResult.SetItalic( (aInfo.italicAngle != 0) ? ITALIC_NORMAL : ITALIC_NONE );
+
+            // set pitch
+            o_rResult.SetPitch( (aInfo.pitch == 0) ? PITCH_VARIABLE : PITCH_FIXED );
+
+            // set style name
+            if( aInfo.usubfamily )
+                o_rResult.SetStyleName( rtl::OUString( aInfo.usubfamily ) );
+            else if( aInfo.subfamily )
+                o_rResult.SetStyleName( rtl::OUString::createFromAscii( aInfo.subfamily ) );
+
+            // cleanup
+            CloseTTFont( pTTF );
+            // success
+            bResult = true;
+        }
+        return bResult;
+    }
+
+    struct WeightSearchEntry
+    {
+        const char* string;
+        int         string_len;
+        FontWeight  weight;
+
+        bool operator<( const WeightSearchEntry& rRight ) const
+        {
+            return rtl_str_compareIgnoreAsciiCase_WithLength( string, string_len, rRight.string, rRight.string_len ) < 0;
+        }
+    }
+    weight_table[] =
+    {
+        { "black", 5, WEIGHT_BLACK },
+        { "bold", 4, WEIGHT_BOLD },
+        { "book", 4, WEIGHT_LIGHT },
+        { "demi", 4, WEIGHT_SEMIBOLD },
+        { "heavy", 5, WEIGHT_BLACK },
+        { "light", 5, WEIGHT_LIGHT },
+        { "medium", 6, WEIGHT_MEDIUM },
+        { "regular", 7, WEIGHT_NORMAL },
+        { "super", 5, WEIGHT_ULTRABOLD },
+        { "thin", 4, WEIGHT_THIN }
+    };
+
+    bool identifyType1Font( const char* i_pBuffer, sal_uInt32 i_nSize, Font& o_rResult )
+    {
+        bool bResult = false;
+        // might be a type1, find eexec
+        const char* pStream = i_pBuffer;
+        const char* pExec = "eexec";
+        const char* pExecPos = std::search( pStream, pStream+i_nSize, pExec, pExec+5 );
+        if( pExecPos != pStream+i_nSize)
+        {
+            // find /FamilyName entry
+            static const char* pFam = "/FamilyName";
+            const char* pFamPos = std::search( pStream, pExecPos, pFam, pFam+11 );
+            if( pFamPos != pExecPos )
+            {
+                // extract the string value behind /FamilyName
+                const char* pOpen = pFamPos+11;
+                while( pOpen < pExecPos && *pOpen != '(' )
+                    pOpen++;
+                const char* pClose = pOpen;
+                while( pClose < pExecPos && *pClose != ')' )
+                    pClose++;
+                if( pClose - pOpen > 1 )
+                {
+                    o_rResult.SetName( rtl::OStringToOUString( rtl::OString( pOpen+1, pClose-pOpen-1 ), RTL_TEXTENCODING_ASCII_US ) );
+                }
+            }
+
+            // parse /ItalicAngle
+            static const char* pItalic = "/ItalicAngle";
+            const char* pItalicPos = std::search( pStream, pExecPos, pItalic, pItalic+12 );
+            if( pItalicPos != pExecPos )
+            {
+                sal_Int32 nItalic = rtl_str_toInt32( pItalicPos+12, 10 );
+                o_rResult.SetItalic( (nItalic != 0) ? ITALIC_NORMAL : ITALIC_NONE );
+            }
+
+            // parse /Weight
+            static const char* pWeight = "/Weight";
+            const char* pWeightPos = std::search( pStream, pExecPos, pWeight, pWeight+7 );
+            if( pWeightPos != pExecPos )
+            {
+                // extract the string value behind /Weight
+                const char* pOpen = pWeightPos+7;
+                while( pOpen < pExecPos && *pOpen != '(' )
+                    pOpen++;
+                const char* pClose = pOpen;
+                while( pClose < pExecPos && *pClose != ')' )
+                    pClose++;
+                if( pClose - pOpen > 1 )
+                {
+                    WeightSearchEntry aEnt;
+                    aEnt.string = pOpen+1;
+                    aEnt.string_len = (pClose-pOpen)-1;
+                    aEnt.weight = WEIGHT_NORMAL;
+                    const int nEnt = sizeof( weight_table ) / sizeof( weight_table[0] );
+                    WeightSearchEntry* pFound = std::lower_bound( weight_table, weight_table+nEnt, aEnt );
+                    if( pFound != (weight_table+nEnt) )
+                        o_rResult.SetWeight( pFound->weight );
+                }
+            }
+
+            // parse isFixedPitch
+            static const char* pFixed = "/isFixedPitch";
+            const char* pFixedPos = std::search( pStream, pExecPos, pFixed, pFixed+13 );
+            if( pFixedPos != pExecPos )
+            {
+                // skip whitespace
+                while( pFixedPos < pExecPos-4 &&
+                       ( *pFixedPos == ' '  ||
+                         *pFixedPos == '\t' ||
+                         *pFixedPos == '\r' ||
+                         *pFixedPos == '\n' ) )
+                {
+                    pFixedPos++;
+                }
+                // find "true" value
+                if( rtl_str_compareIgnoreAsciiCase_WithLength( pFixedPos, 4, "true", 4 ) == 0 )
+                    o_rResult.SetPitch( PITCH_FIXED );
+                else
+                    o_rResult.SetPitch( PITCH_VARIABLE );
+            }
+        }
+        return bResult;
+    }
+}
+
+Font Font::identifyFont( const void* i_pBuffer, sal_uInt32 i_nSize )
+{
+    Font aResult;
+    if( ! identifyTrueTypeFont( i_pBuffer, i_nSize, aResult ) )
+    {
+        const char* pStream = reinterpret_cast<const char*>(i_pBuffer);
+        if( pStream && i_nSize > 100 &&
+             *pStream == '%' && pStream[1] == '!' )
+        {
+            identifyType1Font( pStream, i_nSize, aResult );
+        }
+    }
+
+    return aResult;
+}
 
 // the inlines from the font.hxx header are now instantiated for pImpl-ification
 // TODO: reformat
