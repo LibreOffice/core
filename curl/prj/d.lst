@@ -7,7 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\external\curl
 ..\%__SRC%\inc\stdcheaders.h %_DEST%\inc%_EXT%\external\curl\stdcheaders.h
 ..\%__SRC%\inc\types.h %_DEST%\inc%_EXT%\external\curl\types.h
 
-..\%__SRC%\bin\libcurl.dll %_DEST%\bin%_EXT%\libcurl.dll
+..\%__SRC%\bin\libcurl*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\libcurl.* %_DEST%\lib%_EXT%\libcurl.*
 
 linklib: libcurl.*.*
