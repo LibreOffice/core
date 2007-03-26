@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:52:51 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:07:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -152,9 +152,9 @@ RES2FILELIST=\
 
 .IF "$(GUI)"=="WNT"
 #needed by 		$(SLO)$/adodatalinks.obj
-SHL2STDLIBS+=		ole32.lib \
-                    oleaut32.lib \
-                    uuid.lib
+SHL2STDLIBS+=		$(OLE32LIB) \
+                    $(OLEAUT32LIB) \
+                    $(UUIDLIB)
 .ENDIF
 
 RESLIB2NAME=$(TARGET2)
