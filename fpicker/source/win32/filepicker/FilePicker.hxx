@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilePicker.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:48:35 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,7 @@ public:
         throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL setDefaultName( const ::rtl::OUString& aName )
-        throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
+        throw( ::com::sun::star::uno::RuntimeException );
 
     virtual void SAL_CALL setDisplayDirectory( const ::rtl::OUString& aDirectory )
         throw( ::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException );
@@ -236,7 +236,8 @@ public:
     // XCancellable
     //------------------------------------------------
 
-    virtual void SAL_CALL cancel( );
+    virtual void SAL_CALL cancel( )
+        throw(::com::sun::star::uno::RuntimeException);
 
     //------------------------------------------------
     // XEventListener
