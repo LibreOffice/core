@@ -15,6 +15,7 @@ mkdir: %_DEST%\inc%_EXT%\berkeleydb
 
 ..\%__SRC%\bin\libdb42.dll %_DEST%\bin%_EXT%\libdb42.dll
 ..\%__SRC%\bin\libdb_java42.dll %_DEST%\bin%_EXT%\libdb_java42.dll
+..\%__SRC%\bin\libdb_cxx42.dll %_DEST%\bin%_EXT%\libdb_cxx42.dll
 
 ..\%__SRC%\bin\db.jar %_DEST%\bin%_EXT%\db.jar
 ..\%__SRC%\class\db.jar %_DEST%\bin%_EXT%\db.jar
