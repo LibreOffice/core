@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:34:25 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:07:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,9 @@ LIBTARGET=NO
 # ------------------------------------------------------------------
 
 #-DUNICODE -D_UNICODE
+.IF "$(COM)"!="GCC"
 CFLAGS+=-GR -Ob0
+.ENDIF
 
 SLOFILES=$(SLO)$/DtObjFactory.obj\
          $(SLO)$/APNDataObject.obj\
@@ -62,7 +64,20 @@ SLOFILES=$(SLO)$/DtObjFactory.obj\
          $(SLO)$/XNotifyingDataObject.obj
 
 LIB1TARGET=$(SLB)$/$(TARGET).lib
+.IF "$(COM)"!="GCC"
 LIB1OBJFILES=$(SLOFILES)
+.ELSE
+LIB1OBJFILES=$(SLO)$/DtObjFactory.obj\
+         $(SLO)$/APNDataObject.obj\
+         $(SLO)$/DOTransferable.obj\
+         $(SLO)$/DTransHelper.obj\
+         $(SLO)$/XTDataObject.obj\
+         $(SLO)$/TxtCnvtHlp.obj\
+         $(SLO)$/DataFmtTransl.obj\
+         $(SLO)$/FmtFilter.obj\
+         $(SLO)$/FetcList.obj\
+         $(SLO)$/Fetc.obj
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
