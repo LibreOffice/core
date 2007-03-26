@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_app.mk,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:58:46 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:17:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,13 @@ APP$(TNR)STACKN=
 .IF "$(APP$(TNR)NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP$(TNR)OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP$(TNR)RESO=
+.IF "$(APP$(TNR)LINKRES)" != "" || "$(APP$(TNR)RES)" != ""
+APP$(TNR)RESO=$(MISC)$/$(APP$(TNR)TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -148,6 +155,21 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
 .ENDIF		# "$(APP$(TNR)VERINFO)" != ""
     $(RC) -DWIN32 $(APP$(TNR)PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP$(TNR)LINKRES:b).rc
 .ENDIF			# "$(APP$(TNR)LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP$(TNR)LINKRES)" != "" || "$(APP$(TNR)RES)" != ""
+    @cat $(APP$(TNR)LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP$(TNR)RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP$(TNR)RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP$(TNR)BASEX) $(APP$(TNR)STACKN) -o $@ $(APP$(TNR)OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP$(TNR)RESO) \
+        `$(TYPE) /dev/null $(APP$(TNR)LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP$(TNR)LIBSALCPPRT) $(APP$(TNR)STDLIBS) $(APP$(TNR)STDLIB) $(STDLIB$(TNR)) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP$(TNR)LINKER) @$(mktmp \
         $(APP$(TNR)LINKFLAGS) \
@@ -187,6 +209,7 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
         $(IFEXIST) $(MISC)$/$(APP$(TNR)TARGET).lst $(THEN) type $(MISC)$/$(APP$(TNR)TARGET).lst  >> $(MISC)$/$(APP$(TNR)TARGET).lnk $(FI)
         $(APP$(TNR)LINKER) @$(MISC)\$(APP$(TNR)TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP$(TNR)TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
