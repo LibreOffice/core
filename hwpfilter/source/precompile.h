@@ -4,9 +4,9 @@
  *
  *  $RCSfile: precompile.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 00:56:22 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:53:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
  ************************************************************************/
 
 /*
-  $Id: precompile.h,v 1.3 2006-06-20 00:56:22 hr Exp $
+  $Id: precompile.h,v 1.4 2007-03-26 13:53:01 vg Exp $
 */
 
 #ifdef _WIN32
@@ -42,9 +42,11 @@
         #pragma warning(push, 1)
     #endif
 #include "windows.h"
+#ifndef __MINGW32__
 //#include "stdafx.h"
 #include "crtdbg.h"
     #if defined _MSC_VER
         #pragma warning(pop)
     #endif
+#endif
 #endif
