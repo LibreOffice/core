@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-06 14:43:22 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:36:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3198,6 +3198,16 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
     // create transformation for polygon, set values at aGeo direct
     basegfx::B2DHomMatrix aTransform;
+
+    // #i75086#
+    // Given polygon is already scaled (for historical reasons), but not mirrored yet.
+    // Thus, when scale is negative in X or Y, apply the needed mirroring accordingly.
+    if(basegfx::fTools::less(aScale.getX(), 0.0) || basegfx::fTools::less(aScale.getY(), 0.0))
+    {
+        aTransform.scale(
+            basegfx::fTools::less(aScale.getX(), 0.0) ? -1.0 : 1.0,
+            basegfx::fTools::less(aScale.getY(), 0.0) ? -1.0 : 1.0);
+    }
 
     if(!basegfx::fTools::equalZero(fShearX))
     {
