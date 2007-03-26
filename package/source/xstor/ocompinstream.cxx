@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ocompinstream.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:48:46 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:13:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,13 +269,19 @@ void OInputCompStream::InternalDispose()
     if ( m_bDisposed )
         throw lang::DisposedException();
 
-    if ( m_pInterfaceContainer )
-    {
-        lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
-        m_pInterfaceContainer->disposeAndClear( aSource );
-    }
+    // the source object is also a kind of locker for the current object
+    // since the listeners could dispose the object while being notified
+    lang::EventObject aSource( static_cast< ::cppu::OWeakObject*>( this ) );
 
-    m_xStream->closeInput();
+    if ( m_pInterfaceContainer )
+        m_pInterfaceContainer->disposeAndClear( aSource );
+
+    try
+    {
+        m_xStream->closeInput();
+    }
+    catch( uno::Exception& )
+    {}
 
     m_pImpl = NULL;
     m_bDisposed = sal_True;
