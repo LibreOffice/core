@@ -1,5 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\psprint
 
+..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%
 ..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\slb\apsp.lib %_DEST%\lib%_EXT%\apsp.lib
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
