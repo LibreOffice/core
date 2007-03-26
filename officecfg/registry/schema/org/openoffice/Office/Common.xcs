@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:31:49 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:15:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4971,13 +4971,20 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 						</constraints>
 						<value>0</value>
 					</prop>
-                                        <prop oor:name="IsSkipEmptyPages" oor:type="xs:boolean">
-                                                <info>
-                                                        <author>FME</author>
-                                                        <desc>Specifies that automatically inserted empty pages are suppressed. This option is active only if storing Writer documents.</desc>
-                                                </info>
-                                                <value>false</value>
-                                        </prop>
+                    <prop oor:name="IsSkipEmptyPages" oor:type="xs:boolean">
+                            <info>
+                                    <author>FME</author>
+                                    <desc>Specifies that automatically inserted empty pages are suppressed. This option is active only if storing Writer documents.</desc>
+                            </info>
+                            <value>false</value>
+                    </prop>
+                    <prop oor:name="IsAddStream" oor:type="xs:boolean">
+                            <info>
+                                    <author>PL</author>
+                                    <desc>Specifies that a stream is inserted to the PDF file which contains the original document for archiving purposes.</desc>
+                            </info>
+                            <value>false</value>
+                    </prop>
 					<prop oor:name="HideViewerMenubar" oor:type="xs:boolean">
 						<info>
 							<author>beppec56</author>
