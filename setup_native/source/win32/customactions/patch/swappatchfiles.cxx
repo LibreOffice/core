@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swappatchfiles.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 13:51:38 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:08:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 #include <queue>
 #include <stdio.h>
 
-#ifdef _WIN32_WINNT
+#if defined(_WIN32_WINNT) && !defined(__MINGW32__)
 #error YES
 #endif
 
