@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:12:27 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:50:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,20 +61,26 @@ SLOFILES=$(SLO)$/classfactory.obj\
 
 SHL1TARGET=$(TARGET)
 
-SHL1STDLIBS=uwinapi.lib\
-    oleaut32.lib\
-    advapi32.lib\
-    ole32.lib\
-    uuid.lib\
-    shell32.lib\
-    kernel32.lib\
-    gdi32.lib\
-    gdiplus.lib
-
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS=$(ZLIB3RDLIB) $(EXPAT3RDLIB)
+SHL1LIBS=
+.ELSE
+SHL1STDLIBS=
 SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
-    $(SOLARLIBDIR)$/expat_xmltok.lib\
-    $(SLB)$/util.lib\
+    $(SOLARLIBDIR)$/expat_xmltok.lib
+.ENDIF
+SHL1STDLIBS+=$(UWINAPILIB)\
+    $(OLEAUT32LIB)\
+    $(ADVAPI32LIB)\
+    $(OLE32LIB)\
+    $(UUIDLIB)\
+    $(SHELL32LIB)\
+    $(KERNEL32LIB)\
+    $(GDI32LIB)\
+    $(GDIPLUSLIB)
+
+SHL1LIBS+=$(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
 
 SHL1DEPN=
