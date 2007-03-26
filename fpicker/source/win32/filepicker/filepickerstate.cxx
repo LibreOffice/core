@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filepickerstate.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:52:54 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:19:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -289,7 +289,7 @@ Sequence< OUString > SAL_CALL CNonExecuteFilePickerState::getFiles( CFileOpenDia
         while (pTemp < pStrEnd)
         {
             // detect the length of the next sub string
-            lSubStr = wcslen(pTemp);
+            lSubStr = rtl_ustr_getLength(pTemp);
 
             aFilePathList.realloc(aFilePathList.getLength() + 1);
 
@@ -518,7 +518,7 @@ void SAL_CALL CExecuteFilePickerState::setLabel( sal_Int16 aControlId, const OUS
 
     // somewhat risky because we don't know if OUString
     // has a terminating '\0'
-    SetWindowText( hwndCtrl, aWinLabel.getStr( ) );
+    SetWindowText( hwndCtrl, reinterpret_cast<LPCTSTR>(aWinLabel.getStr( )) );
 }
 
 //---------------------------------------------
@@ -535,12 +535,12 @@ OUString SAL_CALL CExecuteFilePickerState::getLabel( sal_Int16 aControlId )
         hwndCtrl = GetListboxLabelItem( aControlId );
 
     sal_Unicode aLabel[MAX_LABEL];
-    int nRet = GetWindowText( hwndCtrl, aLabel, MAX_LABEL );
+    int nRet = GetWindowText( hwndCtrl, reinterpret_cast<LPTSTR>(aLabel), MAX_LABEL );
 
     OUString ctrlLabel;
     if ( nRet )
     {
-        ctrlLabel = OUString( aLabel, wcslen( aLabel ) );
+        ctrlLabel = OUString( aLabel, rtl_ustr_getLength( aLabel ) );
         ctrlLabel = WindowsToSOfficeLabel( aLabel );
     }
 
