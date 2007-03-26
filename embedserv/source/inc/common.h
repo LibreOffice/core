@@ -4,9 +4,9 @@
  *
  *  $RCSfile: common.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:55:19 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:49:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,25 @@ const sal_Int32 nConstBufferSize = 32000;
 
 #define SUPPORTED_FACTORIES_NUM 10
 
+#ifdef __MINGW32__
+#define DECLSPEC_SELECTANY
+#endif
+#if defined(__MINGW32__) && !defined(INITGUID)
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_WriterTextServer;
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_WriterOASISTextServer;
+
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_CalcServer;
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_CalcOASISServer;
+
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_DrawingServer;
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_DrawingOASISServer;
+
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_PresentationServer;
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_PresentationOASISServer;
+
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_MathServer;
+EXTERN_C const GUID DECLSPEC_SELECTANY OID_MathOASISServer;
+#else
 EXTERN_C const GUID DECLSPEC_SELECTANY OID_WriterTextServer = { SO3_SW_OLE_EMBED_CLASSID_60 };
 EXTERN_C const GUID DECLSPEC_SELECTANY OID_WriterOASISTextServer = { SO3_SW_OLE_EMBED_CLASSID_8 };
 
@@ -85,6 +104,6 @@ EXTERN_C const GUID DECLSPEC_SELECTANY OID_PresentationOASISServer = { SO3_SIMPR
 
 EXTERN_C const GUID DECLSPEC_SELECTANY OID_MathServer = { SO3_SM_OLE_EMBED_CLASSID_60 };
 EXTERN_C const GUID DECLSPEC_SELECTANY OID_MathOASISServer = { SO3_SM_OLE_EMBED_CLASSID_8 };
-
 #endif
 
+#endif
