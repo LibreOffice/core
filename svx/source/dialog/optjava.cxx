@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:36:01 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -978,6 +978,7 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
     m_aAddArchiveBtn.SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddArchiveHdl_Impl ) );
     m_aAddPathBtn.SetClickHdl( LINK( this, SvxJavaClassPathDlg, AddPathHdl_Impl ) );
     m_aRemoveBtn.SetClickHdl( LINK( this, SvxJavaClassPathDlg, RemoveHdl_Impl ) );
+    m_aPathList.SetSelectHdl( LINK( this, SvxJavaClassPathDlg, SelectHdl_Impl ) );
 
     // check if the buttons text are not too wide otherwise we have to stretch the buttons
     // and shrink the listbox
@@ -1002,8 +1003,6 @@ SvxJavaClassPathDlg::SvxJavaClassPathDlg( Window* pParent ) :
         aBoxSz.Width() -= nDelta;
         m_aPathList.SetSizePixel( aBoxSz );
     }
-
-    EnableRemoveButton();
 
     // set initial focus to path list
     m_aPathList.GrabFocus();
@@ -1116,6 +1115,14 @@ IMPL_LINK( SvxJavaClassPathDlg, RemoveHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SvxJavaClassPathDlg, SelectHdl_Impl, ListBox *, EMPTYARG )
+{
+    EnableRemoveButton();
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 bool SvxJavaClassPathDlg::IsPathDuplicate( const String& _rPath )
 {
     bool bRet = false;
@@ -1171,5 +1178,6 @@ void SvxJavaClassPathDlg::SetClassPath( const String& _rPath )
     }
     // select first entry
     m_aPathList.SelectEntryPos(0);
+    SelectHdl_Impl( NULL );
 }
 
