@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:32:37 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:21:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,10 +106,12 @@ namespace vcl
 {
 
 class PDFSalLayout;
+class PDFStreamIf;
 
 class PDFWriterImpl
 {
     friend class PDFSalLayout;
+    friend class PDFStreamIf;
 public:
     // definition of structs
     struct BuiltinFont
@@ -513,6 +515,16 @@ public:
 
     };
 
+    struct PDFAddStream
+    {
+        rtl::OUString           m_aMimeType;
+        PDFOutputStream*        m_pStream;
+        sal_Int32               m_nStreamObject;
+        bool                    m_bCompress;
+
+        PDFAddStream() : m_pStream( NULL ), m_nStreamObject( 0 ), m_bCompress( true ) {}
+    };
+
     static const sal_Char* getStructureTag( PDFWriter::StructElement );
     static const sal_Char* getAttributeTag( PDFWriter::StructAttribute eAtr );
     static const sal_Char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
@@ -691,6 +703,10 @@ private:
 
     ZCodec*                                 m_pCodec;
     SvMemoryStream*                         m_pMemStream;
+
+    std::vector< PDFAddStream >             m_aAdditionalStreams;
+
+    rtlDigest                               m_aDocDigest;
 
 /*
 variables for PDF security
@@ -931,6 +947,8 @@ i12626
     bool emitCatalog();
     // writes xref and trailer
     bool emitTrailer();
+    // emit additional streams collected; also create there object numbers
+    bool emitAdditionalStreams();
     // emits info dict (if applicable)
     sal_Int32 emitInfoDict( );
 
@@ -1202,6 +1220,9 @@ public:
     sal_Int32 createControl( const PDFWriter::AnyWidget& rControl, sal_Int32 nPageNr = -1 );
     void beginControlAppearance( sal_Int32 nControl );
     bool endControlAppearance( PDFWriter::WidgetState eState );
+
+    // additional streams
+    void addStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress );
 
     // helper: eventually begin marked content sequence and
     // emit a comment in debug case
