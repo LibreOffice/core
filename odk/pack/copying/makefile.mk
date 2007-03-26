@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:29:05 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:27:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,9 +94,14 @@ EXELIST = \
     $(DESTDIRBIN)$/uno-skeletonmaker$(EXEPOSTFIX)
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+EXELIST += \
+    $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX)
+.ELSE
 EXELIST += \
     $(DESTDIRBIN)$/regcomp$(EXEPOSTFIX) \
     $(DESTDIRBIN)$/climaker$(EXEPOSTFIX)
+.ENDIF
 .ELSE
 EXELIST += \
     $(DESTDIRBIN)$/regcomp.bin 	\
