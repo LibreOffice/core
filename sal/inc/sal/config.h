@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.h,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:11:40 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:21:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,12 +78,16 @@ extern "C" {
 #endif
 #endif /* defined _MSC_VER < 1300 */
 
+#endif /* defined _MSC_VER */
+
 /* Provide ISO C99 compatible versions of snprint and vsnprintf */
+#ifdef __MINGW32__
+#define _SNPRINTF_DLLIMPORT
+#endif
 #ifndef _SNPRINTF_H
 #include <systools/win32/snprintf.h>
 #endif
 
-#endif /* defined _MSC_VER */
 #endif /* defined WIN32 */
 
 /* BR: 16bit fuer Borland-Compiler */
