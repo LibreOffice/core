@@ -15,8 +15,11 @@
 /*  The non-debug versions of _vscprintf/_scprintf are just calls
     to _vsprintf/_sprintf with string buffer pointer set to NULL,
     requires MSVCRT version 7.0 */
-
+#ifdef __MINGW32__
+static int __cdecl _vsctprintf( const TCHAR *format, va_list ap )
+#else
 static int __cdecl _vsctprintf( const _TXCHAR *format, va_list ap )
+#endif
 {
     FILE    *fp = _tfopen( _T("NUL"), _T("wb") );
 
