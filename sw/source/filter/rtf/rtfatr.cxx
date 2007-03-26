@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:53:17 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,7 +339,7 @@
  * diese Section und die dazugeherigen Tabellen muessen in folgenden Files
  * gepflegt werden: rtf\rtfatr.cxx, sw6\sw6atr.cxx, w4w\w4watr.cxx
  */
-#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC)
+#if !defined(UNX) && !defined(MSC) && !defined(PPC) && !defined(CSET) && !defined(__MWERKS__) && !defined(WTC) && !defined(__MINGW32__)
 
 #define ATTRFNTAB_SIZE 130
 #if ATTRFNTAB_SIZE != POOLATTR_END - POOLATTR_BEGIN
@@ -3859,7 +3859,11 @@ static Writer& OutRTF_SwFmtBox( Writer& rWrt, const SfxPoolItem& rHt )
 
     static USHORT __READONLY_DATA aBorders[] = {
             BOX_LINE_TOP, BOX_LINE_LEFT, BOX_LINE_BOTTOM, BOX_LINE_RIGHT };
+#ifdef __MINGW32__ // for runtime pseudo reloc
+    static const sal_Char* aBorderNames[] = {
+#else
     static const sal_Char* __READONLY_DATA aBorderNames[] = {
+#endif
             sRTF_BRDRT, sRTF_BRDRL, sRTF_BRDRB, sRTF_BRDRR };
 
     USHORT nDist = rBox.GetDistance();
