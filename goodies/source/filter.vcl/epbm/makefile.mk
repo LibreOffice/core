@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:31:15 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:55:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,9 @@ SHL1STDLIBS=	$(TOOLSLIB) $(VCLLIB) $(CPPULIB)	$(SVTOOLLIB) $(SALLIB)
 SHL1LIBS=		$(SLB)$/epbm.lib
 
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 SHL1OBJS=		$(SLO)$/epbm.obj
+.ENDIF
 .ENDIF
 
 SHL1VERSIONMAP=exports.map
