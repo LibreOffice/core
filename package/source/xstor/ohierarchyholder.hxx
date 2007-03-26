@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ohierarchyholder.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:49:25 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,6 +74,8 @@ typedef ::std::hash_map< ::rtl::OUString,
                          eqFunc > OHierarchyElementList_Impl;
 
 typedef ::std::vector< ::rtl::OUString > OStringList_Impl;
+typedef ::std::list< ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XExtendedStorageStream > >
+                        OWeakStorRefList_Impl;
 
 struct OHierarchyElement_Impl : public cppu::WeakImplHelper1< ::com::sun::star::embed::XTransactionListener >
 {
@@ -85,7 +87,7 @@ struct OHierarchyElement_Impl : public cppu::WeakImplHelper1< ::com::sun::star::
 
     OHierarchyElementList_Impl m_aChildren;
 
-    ::std::list< ::com::sun::star::uno::Reference< ::com::sun::star::embed::XExtendedStorageStream > > m_aOpenStreams;
+    OWeakStorRefList_Impl m_aOpenStreams;
 
 public:
     OHierarchyElement_Impl( OHierarchyElement_Impl* pParent, const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xStorage )
@@ -134,11 +136,11 @@ public:
 class OHierarchyHolder_Impl : public ::cppu::OWeakObject
 {
     ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage > m_xWeakOwnStorage;
-    OHierarchyElement_Impl m_aChild;
+    ::rtl::Reference< OHierarchyElement_Impl > m_xChild;
 public:
     OHierarchyHolder_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage >& xOwnStorage )
     : m_xWeakOwnStorage( xOwnStorage )
-    , m_aChild( ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >( xOwnStorage ) )
+    , m_xChild( new OHierarchyElement_Impl( ::com::sun::star::uno::WeakReference< ::com::sun::star::embed::XStorage >( xOwnStorage ) ) )
     {}
 
     static OStringList_Impl GetListPathFromString( const ::rtl::OUString& aPath );
