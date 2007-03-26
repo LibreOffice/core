@@ -5,9 +5,9 @@
  *
  *  $RCSfile: DrawWindowState.xcu,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 10:22:22 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:55:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -382,7 +382,7 @@
             <node oor:name="private:resource/toolbar/formdesign" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Design</value>
-                    <value xml:lang="de">Formular Entwurf</value>
+                    <value xml:lang="de">Formular-Entwurf</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -502,7 +502,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Text Formatting</value>
-                    <value xml:lang="de">Text Format</value>
+                    <value xml:lang="de">Textformat</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
@@ -715,7 +715,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Master View</value>
-                    <value xml:lang="de">Master Ansicht</value>
+                    <value xml:lang="de">Master-Ansicht</value>
                 </prop>
                 <prop oor:name="NoClose" oor:type="xs:boolean">
                     <value>true</value>
