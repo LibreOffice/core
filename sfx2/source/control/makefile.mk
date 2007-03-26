@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2006-05-02 16:28:08 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:04:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,9 @@ ENABLE_EXCEPTIONS=TRUE
 
 # w.g. compilerbugs
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 CFLAGS+=-Od
+.ENDIF
 .ENDIF
 
 # --- Files --------------------------------------------------------
