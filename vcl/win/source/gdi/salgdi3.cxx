@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:27:04 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -934,7 +934,7 @@ void ImplWinFontData::ReadGsubTable( HDC hDC ) const
         nFaceNum = ~0U;  // indicate "TTC font extracts only"
 
     TrueTypeFont* pTTFont = NULL;
-    ::OpenTTFont( &aRawFont[0], nFontSize, nFaceNum, &pTTFont );
+    ::OpenTTFontBuffer( &aRawFont[0], nFontSize, nFaceNum, &pTTFont );
     if( !pTTFont )
         return;
 
@@ -2491,7 +2491,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
                              sal_uInt32 nFaceNum)
 {
     OSL_ENSURE(m_pFont == 0, "already open");
-    return OpenTTFont(pBuffer, nLen, nFaceNum, &m_pFont);
+    return OpenTTFontBuffer(pBuffer, nLen, nFaceNum, &m_pFont);
 }
 
 BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
