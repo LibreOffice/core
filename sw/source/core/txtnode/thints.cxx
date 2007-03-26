@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:21:11 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:32:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1095,6 +1095,15 @@ void SwTxtNode::Delete( USHORT nTxtWhich, xub_StrLen nStart, xub_StrLen nEnd )
                 if ( SFX_ITEM_SET == pFmt->GetItemState( RES_CHRATR_HIDDEN, TRUE, &pItem ) )
                     SetCalcHiddenCharFlags();
             }
+            // --> FME 2007-03-16 #i75430# Recalc hidden flags if necessary
+            else if ( nWhich == RES_TXTATR_AUTOFMT )
+            {
+                // Check if auto style contains hidden attribute:
+                const SfxPoolItem* pHiddenItem = CharFmt::GetItem( *pTxtHt, RES_CHRATR_HIDDEN );
+                if ( pHiddenItem )
+                    SetCalcHiddenCharFlags();
+            }
+            // <--
 
             pEndIdx = pTxtHt->GetEnd();
 
@@ -1910,6 +1919,16 @@ void SwpHints::Insert( SwTxtAttr* pHint, SwTxtNode &rNode, USHORT nMode )
         ((SwTxtCharFmt*)pHint)->ChgTxtNode( &rNode );
         break;
     }
+    // --> FME 2007-03-16 #i75430# Recalc hidden flags if necessary
+    case RES_TXTATR_AUTOFMT:
+    {
+        // Check if auto style contains hidden attribute:
+        const SfxPoolItem* pHiddenItem = CharFmt::GetItem( *pHint, RES_CHRATR_HIDDEN );
+        if ( pHiddenItem )
+            rNode.SetCalcHiddenCharFlags();
+        break;
+    }
+    // <--
     case RES_TXTATR_INETFMT:
         {
             ((SwTxtINetFmt*)pHint)->ChgTxtNode( &rNode );
