@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 12:45:30 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:48:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@ PRJ=..$/..
 
 PRJNAME=extensions
 TARGET=oleautobridge.uno
+TARGET2=oleautobridge2.uno
 
 ENABLE_EXCEPTIONS=TRUE
 
@@ -66,7 +67,11 @@ SLOFILES= \
         $(SLO)$/windata.obj		\
         $(SLO)$/unotypewrapper.obj
 
+SECOND_BUILD=OWNGUID
+OWNGUID_SLOFILES=$(SLOFILES)
+OWNGUIDCDEFS+= -DOWNGUID
 
+# the original library
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=\
         $(SALLIB) 	\
@@ -91,6 +96,32 @@ SHL1OBJS=$(SLOFILES)
 
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=$(SHL1TARGET).dxp
+
+# the second library
+SHL2TARGET=$(TARGET2)
+SHL2STDLIBS=\
+        $(SALLIB) 	\
+    $(VOSLIB)	\
+    $(CPPULIB)	\
+    $(CPPUHELPERLIB)	\
+    ole32.lib 	\
+    uuid.lib 	\
+    advapi32.lib	\
+    oleaut32.lib
+
+.IF "$(COMEX)"=="8" || "$(COMEX)"=="10"
+.IF "$(USE_STLP_DEBUG)" != ""
+    SHL2STDLIBS+= $(ATL_LIB)$/atlsd.lib
+.ELSE
+    SHL2STDLIBS+= $(ATL_LIB)$/atls.lib
+.ENDIF
+.ENDIF
+
+SHL2LIBS=
+SHL2OBJS=$(REAL_OWNGUID_SLOFILES)
+
+DEF2NAME=$(SHL2TARGET)
+DEF2EXPORTFILE=$(TARGET).dxp
 
 .ENDIF
 
