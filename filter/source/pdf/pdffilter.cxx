@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdffilter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:19:51 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,7 @@ sal_Bool PDFFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
     }
     if( mxSrcDoc.is() && xOStm.is() )
     {
-        PDFExport       aExport( mxSrcDoc, xStatusIndicator );
+        PDFExport       aExport( mxSrcDoc, xStatusIndicator, mxMSF );
         ::utl::TempFile aTempFile;
 
         aTempFile.EnableKillingFile();
