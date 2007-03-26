@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:50:58 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:17:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,7 @@ SHL1STDLIBS= \
     $(JVMFWKLIB)
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS += advapi32.lib
+SHL1STDLIBS += $(ADVAPI32LIB)
 .ENDIF
 
 SHL1DEPN=		
