@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 12:29:51 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:00:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ APP1OBJS=$(OBJFILES1)
 APP1STDLIBS+=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(SALLIB) 	 		\
-                user32.lib
+                $(USER32LIB)
 
 APP1DEF=		$(MISC)$/$(APP1TARGET).def
 
@@ -78,7 +78,7 @@ APP2OBJS=$(OBJFILES2)
 APP2STDLIBS+=	$(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(SALLIB) 	 		\
-                user32.lib
+                $(USER32LIB)
 
 APP2DEF=		$(MISC)$/$(APP2TARGET).def
 
