@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddewrap.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:27:41 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,11 @@
 
 //------------------------------------------------------------------------
 
+#ifdef __MINGW32__
+HSZ WINAPI DdeCreateStringHandleW_9x( DWORD idInst, LPWSTR pszString, int )
+#else
 HSZ WINAPI DdeCreateStringHandleW_9x( DWORD idInst, LPCWSTR pszString, int )
+#endif
 {
     HSZ     hszResult;
     LPSTR   pszANSIString;
