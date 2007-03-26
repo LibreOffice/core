@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:07:31 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
         xFactory->createInstance( UNISTRING( "com.sun.star.setup.UpdateCheckConfig" ) ),
         uno::UNO_QUERY_THROW );
 
-    sal_Bool bDownloadSupported = sal_Bool();
+    sal_Bool bDownloadSupported = sal_False;
     m_xUpdateAccess->getByName( UNISTRING( "DownloadSupported") ) >>= bDownloadSupported;
 
     WinBits nStyle = m_aDestPath.GetStyle();
@@ -141,6 +141,9 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
     m_aDestPathLabel.Show(bDownloadSupported);
     m_aDestPath.Show(bDownloadSupported);
     m_aChangePathButton.Show(bDownloadSupported);
+
+    // dynamical length of the PushButtons
+    CalcButtonWidth();
 }
 
 // -----------------------------------------------------------------------
@@ -374,5 +377,23 @@ IMPL_LINK( SvxOnlineUpdateTabPage, CheckNowHdl_Impl, PushButton *, EMPTYARG )
     }
 
     return 0;
+}
+
+void SvxOnlineUpdateTabPage::CalcButtonWidth()
+{
+    // detect the longest button text
+    long nTxtWidth = ::std::max( m_aCheckNowButton.GetCtrlTextWidth( m_aCheckNowButton.GetText() ),
+                                 m_aCheckNowButton.GetCtrlTextWidth( m_aChangePathButton.GetText() ) );
+    // add a little offset
+    nTxtWidth = nTxtWidth + 12;
+    // compare with the button width
+    Size aSize = m_aCheckNowButton.GetSizePixel();
+    // and change it if it's necessary
+    if ( nTxtWidth > aSize.Width() )
+    {
+        aSize.Width() = nTxtWidth;
+        m_aCheckNowButton.SetSizePixel( aSize );
+        m_aChangePathButton.SetSizePixel( aSize );
+    }
 }
 
