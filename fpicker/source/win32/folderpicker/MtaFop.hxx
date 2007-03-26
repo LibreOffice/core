@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaFop.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:55:30 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:20:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,9 @@
 #endif
 
 #include <utility>
+#ifdef __MINGW32__
+#include <windows.h>
+#endif
 #if defined _MSC_VER
 #pragma warning(push, 1)
 #pragma warning(disable: 4917)
