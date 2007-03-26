@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclxwindows.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:02:58 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:35:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2125,7 +2125,9 @@ sal_Int16 VCLXDialog::execute() throw(::com::sun::star::uno::RuntimeException)
         if ( pParent && !pParent->IsReallyVisible() )
         {
             pOldParent = pDlg->GetParent();
-            pDlg->SetParent( pDlg->GetWindow( WINDOW_FRAME ) );
+            Window* pFrame = pDlg->GetWindow( WINDOW_FRAME );
+            if( pFrame != pDlg )
+                pDlg->SetParent( pFrame );
         }
         nRet = pDlg->Execute();
         if ( pOldParent )
