@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:24:19 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:21:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@
 
 #include "implncvt.hxx"
 
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
 
 using namespace vcl;
 using namespace rtl;
@@ -74,6 +77,25 @@ using namespace rtl;
 #endif
 
 #ifdef DO_TEST_PDF
+class PDFTestOutputStream : public PDFOutputStream
+{
+    public:
+    virtual ~PDFTestOutputStream();
+    virtual void write( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xStream );
+};
+
+PDFTestOutputStream::~PDFTestOutputStream()
+{
+}
+
+void PDFTestOutputStream::write( const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xStream )
+{
+    OString aStr( "lalala\ntest\ntest\ntest" );
+    com::sun::star::uno::Sequence< sal_Int8 > aData( aStr.getLength() );
+    rtl_copyMemory( aData.getArray(), aStr.getStr(), aStr.getLength() );
+    xStream->writeBytes( aData );
+}
+
 void doTestCode()
 {
     static const char* pHome = getenv( "HOME"  );
@@ -143,6 +165,8 @@ void doTestCode()
                       );
 
     aWriter.NewPage();
+    // test AddStream interface
+    aWriter.AddStream( String( RTL_CONSTASCII_USTRINGPARAM( "text/plain" ) ), new PDFTestOutputStream(), true );
     // set transitional mode
     aWriter.SetPageTransition( PDFWriter::WipeRightToLeft, 1500 );
     aWriter.SetMapMode( MapMode( MAP_100TH_MM ) );
@@ -1362,8 +1386,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_nFontDictObject( -1 ),
         m_nZaDbObject( -1 ),
         m_nHelvRegObject( -1 ),
-
         m_pCodec( NULL ),
+        m_aDocDigest( rtl_digest_createMD5() ),
         m_aCipher( (rtlCipher)NULL ),
         m_aDigest( NULL ),
         m_bEncryptThisStream( false ),
@@ -1371,7 +1395,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_aCreationDateString( 64 ),
         m_pEncryptionBuffer( NULL ),
         m_nEncryptionBufferSize( 0 )
-
 {
 #ifdef DO_TEST_PDF
     static bool bOnce = true;
@@ -1444,6 +1467,8 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
 
 PDFWriterImpl::~PDFWriterImpl()
 {
+    if( m_aDocDigest )
+        rtl_digest_destroyMD5( m_aDocDigest );
     delete static_cast<VirtualDevice*>(m_pReferenceDevice);
 
     if( m_aCipher )
@@ -1709,8 +1734,12 @@ bool PDFWriterImpl::writeBuffer( const void* pBuffer, sal_uInt64 nBytes )
                                           m_pEncryptionBuffer, static_cast<sal_Size>(nBytes) );
         }
 
+        const void* pWriteBuffer = ( m_bEncryptThisStream && buffOK ) ? m_pEncryptionBuffer  : pBuffer;
+        if( m_aDocDigest )
+            rtl_digest_updateMD5( m_aDocDigest, pWriteBuffer, static_cast<sal_uInt32>(nBytes) );
+
         if( osl_writeFile( m_aFile,
-                           ( m_bEncryptThisStream && buffOK ) ? m_pEncryptionBuffer  : pBuffer,
+                           pWriteBuffer,
                            nBytes, &nWritten ) != osl_File_E_None )
             nWritten = 0;
 
@@ -5011,6 +5040,15 @@ bool PDFWriterImpl::emitTrailer()
         CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
     }
 
+    // prepare document checksum
+    OStringBuffer aDocChecksum( 2*RTL_DIGEST_LENGTH_MD5+1 );
+    if( m_aDocDigest )
+    {
+        sal_uInt8 nMD5Sum[ RTL_DIGEST_LENGTH_MD5 ];
+        rtl_digest_getMD5( m_aDocDigest, nMD5Sum, sizeof(nMD5Sum) );
+        for( unsigned int i = 0; i < RTL_DIGEST_LENGTH_MD5; i++ )
+            appendHex( nMD5Sum[i], aDocChecksum );
+    }
     // document id set in setDocInfo method
     // emit trailer
     aLine.setLength( 0 );
@@ -5040,6 +5078,25 @@ bool PDFWriterImpl::emitTrailer()
                       "<" );
         aLine.append( m_aDocID.getStr(), m_aDocID.getLength() );
         aLine.append( "> ]\n" );
+    }
+    if( aDocChecksum.getLength() )
+    {
+        aLine.append( "/DocChecksum /" );
+        aLine.append( aDocChecksum );
+        aLine.append( "\n" );
+    }
+    if( m_aAdditionalStreams.size() > 0 )
+    {
+        aLine.append( "/AdditionalStreams [" );
+        for( unsigned int i = 0; i < m_aAdditionalStreams.size(); i++ )
+        {
+            aLine.append( "/" );
+            appendName( m_aAdditionalStreams[i].m_aMimeType, aLine );
+            aLine.append( " " );
+            aLine.append( m_aAdditionalStreams[i].m_nStreamObject );
+            aLine.append( " 0 R\n" );
+        }
+        aLine.append( "]\n" );
     }
     aLine.append( ">>\n"
                   "startxref\n" );
@@ -5153,6 +5210,109 @@ void PDFWriterImpl::sortWidgets()
     // FIXME: implement tab order in structure tree for PDF 1.5
 }
 
+namespace vcl {
+class PDFStreamIf :
+        public cppu::WeakImplHelper1< com::sun::star::io::XOutputStream >
+{
+    PDFWriterImpl*  m_pWriter;
+    bool            m_bWrite;
+    public:
+    PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
+    virtual ~PDFStreamIf();
+
+    virtual void SAL_CALL writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw();
+    virtual void SAL_CALL flush() throw();
+    virtual void SAL_CALL closeOutput() throw();
+};
+}
+
+PDFStreamIf::~PDFStreamIf()
+{
+}
+
+void SAL_CALL  PDFStreamIf::writeBytes( const com::sun::star::uno::Sequence< sal_Int8 >& aData ) throw()
+{
+    if( m_bWrite )
+    {
+        sal_Int32 nBytes = aData.getLength();
+        if( nBytes > 0 )
+            m_pWriter->writeBuffer( aData.getConstArray(), nBytes );
+    }
+}
+
+void SAL_CALL PDFStreamIf::flush() throw()
+{
+}
+
+void SAL_CALL PDFStreamIf::closeOutput() throw()
+{
+    m_bWrite = false;
+}
+
+bool PDFWriterImpl::emitAdditionalStreams()
+{
+    unsigned int nStreams = m_aAdditionalStreams.size();
+    for( unsigned int i = 0; i < nStreams; i++ )
+    {
+        PDFAddStream& rStream = m_aAdditionalStreams[i];
+        rStream.m_nStreamObject = createObject();
+        sal_Int32 nSizeObject = createObject();
+
+        if( ! updateObject( rStream.m_nStreamObject ) )
+            return false;
+
+        OStringBuffer aLine;
+        aLine.append( rStream.m_nStreamObject );
+        aLine.append( " 0 obj\n<</Length " );
+        aLine.append( nSizeObject );
+        aLine.append( " 0 R" );
+        if( rStream.m_bCompress )
+            aLine.append( "/Filter/FlateDecode" );
+        aLine.append( ">>\nstream\n" );
+        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            return false;
+        sal_uInt64 nBeginStreamPos = 0, nEndStreamPos = 0;
+        if( osl_File_E_None != osl_getFilePos( m_aFile, &nBeginStreamPos ) )
+        {
+            osl_closeFile( m_aFile );
+            m_bOpen = false;
+        }
+        if( rStream.m_bCompress )
+            beginCompression();
+
+        checkAndEnableStreamEncryption( rStream.m_nStreamObject );
+        com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xStream( new PDFStreamIf( this ) );
+        rStream.m_pStream->write( xStream );
+        xStream.clear();
+        delete rStream.m_pStream;
+        rStream.m_pStream = NULL;
+        disableStreamEncryption();
+
+        if( rStream.m_bCompress )
+            endCompression();
+
+        if( osl_File_E_None != osl_getFilePos( m_aFile, &nEndStreamPos ) )
+        {
+            osl_closeFile( m_aFile );
+            m_bOpen = false;
+            return false;
+        }
+        if( ! writeBuffer( "\nendstream\nendobj\n\n", 19 ) )
+            return false ;
+        // emit stream length object
+        if( ! updateObject( nSizeObject ) )
+            return false;
+        aLine.setLength( 0 );
+        aLine.append( nSizeObject );
+        aLine.append( " 0 obj\n" );
+        aLine.append( (sal_Int64)(nEndStreamPos-nBeginStreamPos) );
+        aLine.append( "\nendobj\n\n" );
+        if( ! writeBuffer( aLine.getStr(), aLine.getLength() ) )
+            return false;
+    }
+    return true;
+}
+
 bool PDFWriterImpl::emit()
 {
     endPage();
@@ -5160,6 +5320,9 @@ bool PDFWriterImpl::emit()
     // resort structure tree and annotations if necessary
     // needed for widget tab order
     sortWidgets();
+
+    // emit additional streams
+    CHECK_RETURN( emitAdditionalStreams() );
 
     // emit catalog
     CHECK_RETURN( emitCatalog() );
@@ -10020,6 +10183,20 @@ bool PDFWriterImpl::endControlAppearance( PDFWriter::WidgetState eState )
     return bRet;
 }
 
+void PDFWriterImpl::addStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress )
+{
+    if( pStream )
+    {
+        m_aAdditionalStreams.push_back( PDFAddStream() );
+        PDFAddStream& rStream = m_aAdditionalStreams.back();
+        rStream.m_aMimeType = rMimeType.Len()
+                              ? OUString( rMimeType )
+                              : OUString( RTL_CONSTASCII_USTRINGPARAM( "application/octet-stream" ) );
+        rStream.m_pStream = pStream;
+        rStream.m_bCompress = bCompress;
+    }
+}
+
 /*************************************************************
 begin i12626 methods
 
@@ -10284,3 +10461,4 @@ according to the table 3.15, pdf v 1.4 */
         m_aContext.Encrypt = false; //then turn the encryption off
 }
 /* end i12626 methods */
+
