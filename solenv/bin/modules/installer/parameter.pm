@@ -4,9 +4,9 @@
 #
 #   $RCSfile: parameter.pm,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:48:55 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:15:05 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -291,7 +291,7 @@ sub setglobalvariables
     # makefile calling the perl program.
     $installer::globals::installertypedir = $installer::globals::packageformat;
 
-    if ( $installer::globals::compiler =~ /wntmsci/ )
+    if ( $installer::globals::compiler =~ /wnt(msc|gcc)i/ )
     {
         $installer::globals::iswindowsbuild = 1;
         if ( $installer::globals::installertypedir eq "" ) { $installer::globals::installertypedir = "msi"; }
