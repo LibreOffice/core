@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:24:02 $
+#   last change: $Author: vg $ $Date: 2007-03-26 16:02:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,9 @@ ADDITIONAL_FILES= \
     src$/nss$/keytrans.c \
     src$/nss$/keywrapers.c \
     src$/nss$/tokens.c \
+    xmlsec-mscrypto.pc.in \
+    include$/xmlsec$/mscrypto$/Makefile.in \
+    src$/mscrypto$/Makefile.in \
     libxml2-config
 
 .IF "$(GUI)"=="WNT"
@@ -77,11 +80,22 @@ CRYPTOLIB=nss
 .ENDIF
 
 .IF "$(OS)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_DIR=
+CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no --with-mozilla_ver=1.7.5 --with-mscrypto --build=i586-pc-mingw32 --host=i586-pc-mingw32 CFLAGS="-D_MT" LDFLAGS="-no-undefined -L$(ILIB:s/;/ -L/)" LIBS="-lmingwthrd" LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB) OBJDUMP="$(WRAPCMD) objdump"
+.IF "$(SYSTEM_MOZILLA)" != "YES"
+CONFIGURE_FLAGS+=--enable-pkgconfig=no
+.ENDIF
+BUILD_ACTION=$(GNUMAKE)
+BUILD_DIR=$(CONFIGURE_DIR)
+.ELSE
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
 CONFIGURE_FLAGS=crypto=$(CRYPTOLIB) xslt=no iconv=no static=no include=$(BASEINC) lib=$(BASELIB)
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
+.ENDIF
 .ELSE
 .IF "$(GUI)"=="UNX"
 
@@ -99,11 +113,6 @@ xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN'
 .IF "$(OS)$(COM)"=="SOLARISC52"
 xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN'
 .ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
-
-.IF "$(OS)$(COM)"=="LINUXGCC"
-xmlsec_LDFLAGS+=-Wl,-z,noexecstack
-.ENDIF
-
 LDFLAGS:=$(xmlsec_LDFLAGS)
 .EXPORT: LDFLAGS
 
@@ -117,8 +126,8 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 .ENDIF
 CONFIGURE_DIR=
 #CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)" LDFLAGS="$(xmlsec_LDFLAGS)"
-CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
-CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no
+CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no LIBXML2LIB=$(LIBXML2LIB) ZLIB3RDLIB=$(ZLIB3RDLIB)
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
 # that the internal headers still are used when they are there but....
@@ -141,8 +150,12 @@ OUTDIR2INC=include$/xmlsec
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=src$/.libs$/libxmlsec1.*dylib src$/nss$/.libs$/libxmlsec1-nss.*dylib 
 .ELIF "$(OS)"=="WNT"
+.IF "$(COM)"=="GCC"
+OUT2BIN+=src$/.libs$/libxmlsec1-1.dll src$/nss$/.libs$/libxmlsec1-nss-1.dll src$/mscrypto$/.libs$/libxmlsec1-mscrypto-1.dll
+.ELSE
 OUT2LIB+=win32$/binaries$/*.lib
 OUT2BIN+=win32$/binaries$/*.dll
+.ENDIF
 .ELSE
 OUT2LIB+=src$/.libs$/libxmlsec1.so* src$/nss$/.libs$/libxmlsec1-nss.so*
 .ENDIF
