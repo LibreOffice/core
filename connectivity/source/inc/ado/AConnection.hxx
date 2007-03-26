@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:00:01 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:01:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-            virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+            virtual void SAL_CALL release() throw();
 
             // XConnection
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XStatement > SAL_CALL createStatement(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
