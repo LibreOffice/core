@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:21:41 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,11 +74,20 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XSTORABLE_HPP_
+#include <com/sun/star/frame/XStorable.hpp>
+#endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFO_HPP_
 #include <com/sun/star/document/XDocumentInfo.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTINFOSUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentInfoSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
 #endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
@@ -127,8 +136,9 @@ OUString GetProperty( const Reference< XPropertySet > & rXPropSet, const sal_Cha
 // - PDFExport -
 // -------------
 
-PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& rxStatusIndicator ) :
+PDFExport::PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& rxStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFactory ) :
     mxSrcDoc                ( rxSrcDoc ),
+    mxMSF                   ( xFactory ),
     mxStatusIndicator       ( rxStatusIndicator ),
     mbUseTaggedPDF          ( sal_False ),
     mbExportNotes           ( sal_True ),
@@ -272,6 +282,123 @@ sal_Bool PDFExport::ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com:
     return bRet;
 }
 
+class PDFExportStreamDoc : public vcl::PDFOutputStream
+{
+    Reference< XComponent > m_xSrcDoc;
+    rtl::OUString           m_aPassWd;
+    public:
+    PDFExportStreamDoc( const Reference< XComponent >& xDoc, const rtl::OUString& rPwd )
+    : m_xSrcDoc( xDoc ),
+      m_aPassWd( rPwd )
+    {}
+    virtual ~PDFExportStreamDoc();
+
+    virtual void write( const Reference< XOutputStream >& xStream );
+};
+
+PDFExportStreamDoc::~PDFExportStreamDoc()
+{
+}
+
+void PDFExportStreamDoc::write( const Reference< XOutputStream >& xStream )
+{
+    Reference< com::sun::star::frame::XStorable > xStore( m_xSrcDoc, UNO_QUERY );
+    if( xStore.is() )
+    {
+        Sequence< beans::PropertyValue > aArgs( m_aPassWd.getLength() ? 3 : 2 );
+        aArgs.getArray()[0].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterName" ) );
+        aArgs.getArray()[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "OutputStream" ) );
+        aArgs.getArray()[1].Value <<= xStream;
+        if( m_aPassWd.getLength() )
+        {
+            aArgs.getArray()[2].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Password" ) );
+            aArgs.getArray()[2].Value <<= m_aPassWd;
+        }
+        try
+        {
+            xStore->storeToURL( OUString( RTL_CONSTASCII_USTRINGPARAM( "private:stream" ) ),
+                                aArgs );
+        }
+        catch( IOException& )
+        {
+        }
+    }
+}
+
+static OUString getMimetypeForDocument( const Reference< XMultiServiceFactory >& xFactory,
+                                        const Reference< XComponent >& xDoc ) throw()
+{
+    OUString aDocMimetype;
+        // get document service name
+    Reference< com::sun::star::frame::XStorable > xStore( xDoc, UNO_QUERY );
+    Reference< frame::XModuleManager > xModuleManager(
+        xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ModuleManager" ) ) ),
+                               uno::UNO_QUERY );
+    if( xModuleManager.is() && xStore.is() )
+    {
+        OUString aDocServiceName = xModuleManager->identify( Reference< XInterface >( xStore, uno::UNO_QUERY ) );
+        if ( aDocServiceName.getLength() )
+        {
+            // get the actual filter name
+            OUString aFilterName;
+            Reference< lang::XMultiServiceFactory > xConfigProvider(
+                xFactory->createInstance(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationProvider" ) ) ),
+                        uno::UNO_QUERY );
+            if( xConfigProvider.is() )
+            {
+                uno::Sequence< uno::Any > aArgs( 1 );
+                beans::PropertyValue aPathProp;
+                aPathProp.Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) );
+                aPathProp.Value <<= OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Setup/Office/Factories/" ) );
+                aArgs[0] <<= aPathProp;
+
+                Reference< container::XNameAccess > xSOFConfig(
+                    xConfigProvider->createInstanceWithArguments(
+                        OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationAccess" ) ),
+                        aArgs ),
+                        uno::UNO_QUERY );
+
+                Reference< container::XNameAccess > xApplConfig;
+                xSOFConfig->getByName( aDocServiceName ) >>= xApplConfig;
+                if ( xApplConfig.is() )
+                {
+                    xApplConfig->getByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "ooSetupFactoryActualFilter" ) ) ) >>= aFilterName;
+                    if( aFilterName.getLength() )
+                    {
+                        // find the related type name
+                        OUString aTypeName;
+                        Reference< container::XNameAccess > xFilterFactory(
+                            xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.FilterFactory" ) ),
+                            uno::UNO_QUERY );
+
+                        Sequence< beans::PropertyValue > aFilterData;
+                        xFilterFactory->getByName( aFilterName ) >>= aFilterData;
+                        for ( sal_Int32 nInd = 0; nInd < aFilterData.getLength(); nInd++ )
+                            if ( aFilterData[nInd].Name.equalsAscii( "Type" ) )
+                                aFilterData[nInd].Value >>= aTypeName;
+
+                        if ( aTypeName.getLength() )
+                        {
+                            // find the mediatype
+                            Reference< container::XNameAccess > xTypeDetection(
+                                xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.document.TypeDetection" ) ),
+                                UNO_QUERY );
+
+                            Sequence< beans::PropertyValue > aTypeData;
+                            xTypeDetection->getByName( aTypeName ) >>= aTypeData;
+                            for ( sal_Int32 nInd = 0; nInd < aTypeData.getLength(); nInd++ )
+                                if ( aTypeData[nInd].Name.equalsAscii( "MediaType" ) )
+                                    aTypeData[nInd].Value >>= aDocMimetype;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return aDocMimetype;
+}
+
 sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue >& rFilterData )
 {
     INetURLObject   aURL( rFile );
@@ -370,6 +497,8 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                     rFilterData[ nData ].Value >>= mnPDFPageLayout;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPageOnLeft" ) ) )
                     rFilterData[ nData ].Value >>= aContext.FirstPageLeft;
+                else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ) )
+                    rFilterData[ nData ].Value >>= mbAddStream;
                 else if ( rFilterData[ nData ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "Watermark" ) ) )
                 {
                     maWatermark = rFilterData[ nData ].Value;
@@ -563,6 +692,16 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
             pXDevice->SetOutputDevice( pOut );
 
+            if( mbAddStream )
+            {
+                // export stream
+                // get mimetype
+                OUString aSrcMimetype = getMimetypeForDocument( mxMSF, mxSrcDoc );
+                pPDFWriter->AddStream( aSrcMimetype,
+                                       new PDFExportStreamDoc( mxSrcDoc, msPermissionPassword ),
+                                       false
+                                       );
+            }
             PDFDocInfo aDocInfo;
             Reference< document::XDocumentInfoSupplier > xDocumentInfoSupplier( mxSrcDoc, UNO_QUERY );
             if ( xDocumentInfoSupplier.is() )
