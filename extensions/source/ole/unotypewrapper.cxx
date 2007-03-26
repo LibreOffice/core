@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotypewrapper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:05:31 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,17 @@ bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
     {
         pObj->AddRef();
         pVar->vt= VT_DISPATCH;
+#ifdef __MINGW32__
+        pVar->pdispVal= CComQIPtr<IDispatch, &__uuidof(IDispatch)>(pObj->GetUnknown());
+#else
         pVar->pdispVal= CComQIPtr<IDispatch>(pObj->GetUnknown());
+#endif
         //now set the value, e.i. the name of the type
+#ifdef __MINGW32__
+        CComQIPtr<IUnoTypeWrapper, &__uuidof(IUnoTypeWrapper)> spType(pVar->pdispVal);
+#else
         CComQIPtr<IUnoTypeWrapper> spType(pVar->pdispVal);
+#endif
         OSL_ASSERT(spType);
         if (SUCCEEDED(spType->put_Name(sTypeName)))
         {
@@ -64,7 +72,7 @@ bool createUnoTypeWrapper(BSTR sTypeName, VARIANT * pVar)
 
 bool createUnoTypeWrapper(const rtl::OUString& sTypeName, VARIANT * pVar)
 {
-    CComBSTR bstr(sTypeName.getStr());
+    CComBSTR bstr(reinterpret_cast<LPCOLESTR>(sTypeName.getStr()));
     return createUnoTypeWrapper(bstr, pVar);
 }
 
