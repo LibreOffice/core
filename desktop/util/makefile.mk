@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.69 $
+#   $Revision: 1.70 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:17:08 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:31:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -210,7 +210,7 @@ APP6LINKRES=$(MISC)$/soffice6.res
 APP6ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP6OBJS = \
         $(OBJ)$/officeloader.obj
-STDLIB6=advapi32.lib
+STDLIB6=$(ADVAPI32LIB)
 
 APP7TARGET=officeloader
 APP7RES=$(RES)$/ooloader.res
@@ -221,7 +221,7 @@ APP7LINKRES=$(MISC)$/ooffice7.res
 APP7ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP7OBJS = \
         $(OBJ)$/officeloader.obj
-STDLIB7=advapi32.lib
+STDLIB7=$(ADVAPI32LIB)
 .ENDIF # WNT
 
 # --- Targets -------------------------------------------------------------
