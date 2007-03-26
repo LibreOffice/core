@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:04:34 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:26:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,7 @@ SLOFILES=\
         $(SLO)$/DllGetVersion.obj\
         $(SLO)$/DllMain.obj\
         $(SLO)$/ResolveThunk.obj\
+        $(SLO)$/ResolveUnicows.obj\
         $(SLO)$/snprintf.obj\
         $(SLO)$/snwprintf.obj\
         $(SLO)$/FindFirstVolumeA.obj\
@@ -118,9 +119,15 @@ SHL1TARGET=$(TARGET)
 SHL1IMPLIB=$(SHL1TARGET)
 SHL1DEF=$(MISC)/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
+.IF "$(COM)"=="GCC"
+DEF1EXPORTFILE=\
+    $(SHL1TARGET)_mingw.dxp\
+    unicows_mingw.dxp
+.ELSE
 DEF1EXPORTFILE=\
     $(SHL1TARGET).dxp\
     unicows.dxp
+.ENDIF
 DEF1DEPN=\
         $(DEF1EXPORTFILE)\
         makefile.mk
@@ -131,16 +138,31 @@ SHL1OBJS=$(SLOFILES)
 #No default libraries
 STDSHL=
 
+.IF "$(COM)"=="GCC"
 SHL1STDLIBS=\
-        unicows.lib\
-        kernel32.lib\
-        user32.lib\
-        advapi32.lib\
-        version.lib\
-        msvcrt.lib\
-        shlwapi.lib
+        -lmingw32 \
+        -lgcc
+.ELSE
+SHL1STDLIBS=\
+        unicows.lib
+.ENDIF
+
+SHL1STDLIBS+=\
+        $(KERNEL32LIB)\
+        $(USER32LIB)\
+        $(ADVAPI32LIB)\
+        $(VERSIONLIB)\
+        $(MSVCRTLIB)\
+        $(SHLWAPILIB)
 
         
+.ENDIF
+
+.IF "$(COM)"=="GCC"
+ALL: ALLTAR $(LB)$/libuwinapi.a
+
+$(LB)$/libuwinapi.a: $(MISC)$/uwinapi.def
+    dlltool --dllname uwinapi.dll --input-def=$(MISC)$/uwinapi.def --kill-at --output-lib=$(LB)$/libuwinapi.a
 .ENDIF
 
 .INCLUDE : target.mk
