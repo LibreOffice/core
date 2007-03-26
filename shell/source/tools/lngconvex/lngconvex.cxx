@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lngconvex.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:41:28 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:49:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,7 +516,7 @@ void inflate_rc_template_to_file(
 
         for ( /**/ ;rct_iter != rct_iter_end; ++rct_iter)
         {
-            std::istringstream iss = *rct_iter;
+            std::istringstream iss(*rct_iter);
             std::string line;
 
             while (iss)
