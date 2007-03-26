@@ -4,9 +4,9 @@
  *
  *  $RCSfile: propspec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:44:46 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:50:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,8 @@ inline void * operator new( size_t /*size*/, void * p )
 CFullPropSpec & CFullPropSpec::operator=( CFullPropSpec const & Property )
 {
     // Clean up.
-    CFullPropSpec::~CFullPropSpec();
+    this->CFullPropSpec::~CFullPropSpec();
+
 #pragma warning( disable : 4291 )           // unmatched operator new
     new (this) CFullPropSpec( Property );
 #pragma warning( default : 4291 )
