@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:33:01 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:58:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,9 @@ SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=       $(SLB)$/ipcx.lib
 
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 SHL1OBJS=       $(SLO)$/ipcx.obj
+.ENDIF
 .ENDIF
 
 SHL1VERSIONMAP=exports.map
