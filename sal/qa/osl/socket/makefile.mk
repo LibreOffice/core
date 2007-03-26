@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 15:58:03 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:25:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ SHL1STDLIBS=\
 
 .IF "$(GUI)" == "WNT"
 #SHL1STDLIBS+=	$(SOLARLIBDIR)$/cppunit.lib
-SHL1STDLIBS+= ws2_32.lib
+SHL1STDLIBS+= $(WS2_32LIB)
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -101,7 +101,7 @@ SHL3STDLIBS=\
     $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
-SHL3STDLIBS += ws2_32.lib
+SHL3STDLIBS += $(WS2_32LIB)
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -126,7 +126,7 @@ SHL4STDLIBS=\
     $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
-SHL4STDLIBS += ws2_32.lib
+SHL4STDLIBS += $(WS2_32LIB)
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -151,7 +151,7 @@ SHL5STDLIBS=\
     $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
-SHL5STDLIBS += ws2_32.lib
+SHL5STDLIBS += $(WS2_32LIB)
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -176,7 +176,7 @@ SHL6STDLIBS=\
     $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
-SHL6STDLIBS += ws2_32.lib
+SHL6STDLIBS += $(WS2_32LIB)
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -201,7 +201,7 @@ SHL7STDLIBS=\
     $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
-SHL7STDLIBS += ws2_32.lib
+SHL7STDLIBS += $(WS2_32LIB)
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
@@ -226,7 +226,7 @@ SHL8STDLIBS=\
     $(CPPUNITLIB)
 
 .IF "$(GUI)" == "WNT"
-SHL8STDLIBS += ws2_32.lib
+SHL8STDLIBS += $(WS2_32LIB)
 .ENDIF
 
 .IF "$(GUI)" == "UNX"
