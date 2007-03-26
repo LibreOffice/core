@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaOleClipb.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:03:07 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:08:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #include <process.h>
 
 #include <systools/win32/comtools.hxx>
+#ifdef __MINGW32__
+#define __uuidof(I) IID_##I
+#endif
 
 //----------------------------------------------------------------
 //  namespace directives
