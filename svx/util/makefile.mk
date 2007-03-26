@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: ihi $ $Date: 2006-11-14 13:58:58 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:06:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -172,8 +172,8 @@ SHL2STDLIBS= \
 
 .IF "$(GUI)"=="WNT"	
 SHL2STDLIBS+= \
-             Shlwapi.lib \
-             Advapi32.lib     
+             $(SHLWAPILIB) \
+             $(ADVAPI32LIB)
 .ENDIF # WNT
 
 # Resource files
