@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AStatement.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:15:32 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,7 @@ void OStatement_Base::disposing()
     OStatement_BASE::disposing();
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::release() throw(RuntimeException)
+void SAL_CALL OStatement_Base::release() throw()
 {
     relase_ChildImpl();
 }
@@ -853,17 +853,17 @@ OStatement::~OStatement()
 }
 IMPLEMENT_SERVICE_INFO(OStatement,"com.sun.star.sdbcx.AStatement","com.sun.star.sdbc.Statement");
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement_Base::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OStatement_Base::acquire() throw()
 {
     OStatement_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OStatement::acquire() throw()
 {
     OStatement_Base::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OStatement::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OStatement::release() throw()
 {
     OStatement_Base::release();
 }
