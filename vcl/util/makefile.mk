@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-23 06:36:24 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 11:21:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -154,6 +154,8 @@ LIB1FILES=  $(SLB)$/app.lib     \
 
 .IF "$(GUI)" == "UNX"
 LIB1FILES+=$(SLB)$/salplug.lib
+SHL1STDLIBS+=\
+            -lpsp$(VERSION)$(DLLPOSTFIX)
 .ELSE
 LIB1FILES+= \
             $(SLB)$/salwin.lib  \
