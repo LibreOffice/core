@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.45 $
+#   $Revision: 1.46 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-07 15:32:15 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:04:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -102,12 +102,12 @@ SHL1STDLIBS+=\
 .IF "$(GUI)"=="WNT"
 
 SHL1STDLIBS+=\
-        uwinapi.lib \
-        advapi32.lib \
-        shell32.lib \
-        gdi32.lib \
-        ole32.lib \
-        uuid.lib
+        $(UWINAPILIB) \
+        $(ADVAPI32LIB) \
+        $(SHELL32LIB) \
+        $(GDI32LIB) \
+        $(OLE32LIB) \
+        $(UUIDLIB)
 
 .ENDIF # WNT
 
