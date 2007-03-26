@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_java2uno.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:58:17 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:15:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,11 @@
 #include <rtl/ustrbuf.hxx>
 
 #include <algorithm>
+
+
+#ifdef __MINGW32__
+#define BROKEN_ALLOCA
+#endif
 
 using namespace ::rtl;
 
@@ -206,7 +211,11 @@ jobject Bridge::call_uno(
         break;
     }
 
+#ifdef BROKEN_ALLOCA
+    char * mem = (char *) malloc(
+#else
     char * mem = (char *) alloca(
+#endif
         (nParams * sizeof (void *)) +
         return_size + (nParams * sizeof (largest)) );
     void ** uno_args = (void **) mem;
@@ -227,7 +236,11 @@ jobject Bridge::call_uno(
             TypeDescr td( type );
             if (sal::static_int_cast< sal_uInt32 >(td.get()->nSize)
                 > sizeof (largest))
+#ifdef BROKEN_ALLOCA
+                uno_args[ nPos ] = malloc( td.get()->nSize );
+#else
                 uno_args[ nPos ] = alloca( td.get()->nSize );
+#endif
         }
 
         if (param.bIn)
@@ -255,7 +268,14 @@ jobject Bridge::call_uno(
                         uno_type_destructData(
                             uno_args[ n ], p.pTypeRef, 0 );
                     }
+#ifdef BROKEN_ALLOCA
+            if (uno_args[ nPos ] && uno_args[ nPos ] != &uno_args_mem[ nPos ])
+            free( uno_args[ nPos ] );
+#endif
                 }
+#ifdef BROKEN_ALLOCA
+        free( mem );
+#endif
                 throw;
             }
         }
@@ -294,9 +314,16 @@ jobject Bridge::call_uno(
                     {
                         uno_type_destructData(
                             uno_args[ n ], pParams[ n ].pTypeRef, 0 );
+#ifdef BROKEN_ALLOCA
+            if (uno_args[ nPos ] && uno_args[ nPos ] != &uno_args_mem[ nPos ])
+                free( uno_args[ nPos ] );
+#endif
                     }
                     // cleanup uno return value
                     uno_type_destructData( uno_ret, return_type, 0 );
+#ifdef BROKEN_ALLOCA
+            free( mem );
+#endif
                     throw;
                 }
             }
@@ -304,6 +331,10 @@ jobject Bridge::call_uno(
                 typelib_TypeClass_ENUM != type->eTypeClass) // opt
             {
                 uno_type_destructData( uno_args[ nPos ], type, 0 );
+#ifdef BROKEN_ALLOCA
+        if (uno_args[ nPos ] && uno_args[ nPos ] != &uno_args_mem[ nPos ])
+            free( uno_args[ nPos ] );
+#endif
             }
         }
 
@@ -321,6 +352,9 @@ jobject Bridge::call_uno(
             catch (...)
             {
                 uno_type_destructData( uno_ret, return_type, 0 );
+#ifdef BROKEN_ALLOCA
+        free( mem );
+#endif
                 throw;
             }
             if (typelib_TypeClass_DOUBLE < return_type->eTypeClass &&
@@ -328,8 +362,14 @@ jobject Bridge::call_uno(
             {
                 uno_type_destructData( uno_ret, return_type, 0 );
             }
+#ifdef BROKEN_ALLOCA
+        free( mem );
+#endif
             return java_ret.l;
         }
+#ifdef BROKEN_ALLOCA
+    free( mem );
+#endif
         return 0; // void return
     }
     else // exception occured
@@ -340,9 +380,16 @@ jobject Bridge::call_uno(
             typelib_MethodParameter const & param = pParams[ nPos ];
             if (param.bIn)
                 uno_type_destructData( uno_args[ nPos ], param.pTypeRef, 0 );
+#ifdef BROKEN_ALLOCA
+        if (uno_args[ nPos ] && uno_args[ nPos ] != &uno_args_mem[ nPos ])
+            free( uno_args[ nPos ] );
+#endif
         }
 
         handle_uno_exc( jni, uno_exc );
+#ifdef BROKEN_ALLOCA
+    free( mem );
+#endif
         return 0;
     }
 }
