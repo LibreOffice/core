@@ -4,9 +4,9 @@
  *
  *  $RCSfile: framegrabber.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:26:32 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:46:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ IMediaDet* FrameGrabber::implCreateMediaDet( const ::rtl::OUString& rURL ) const
 
         if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( rURL, aLocalStr ) && aLocalStr.Len() )
         {
-            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( aLocalStr.GetBuffer() ) ) ) )
+            if( !SUCCEEDED( pDet->put_Filename( ::SysAllocString( reinterpret_cast<LPCOLESTR>(aLocalStr.GetBuffer()) ) ) ) )
             {
                 pDet->Release();
                 pDet = NULL;
