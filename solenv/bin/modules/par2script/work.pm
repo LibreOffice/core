@@ -4,9 +4,9 @@
 #
 #   $RCSfile: work.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:28:53 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:46:22 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -721,6 +721,144 @@ sub add_array_into_array
     for ( my $i = 0; $i <= $#{$newarray}; $i++ )
     {
         push(@{$basearray}, ${$newarray}[$i]);
+    }
+}
+
+##########################################################
+# Collecting all subdirectories of a specified directory
+##########################################################
+
+sub collect_subdirectories
+{
+    my ($parfile, $directorygid, $collector) = @_;
+
+    my $isdirectory = 0;
+    my $currentgid = "";
+
+    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
+    {
+        my $oneline = ${$parfile}[$i];
+
+        if ( $oneline =~ /^\s*Directory\s+(\w+)\s*$/ )
+        {
+            $currentgid = $1;
+            $isdirectory = 1;
+        }
+
+        if (( $isdirectory ) && ( $oneline =~ /^\s*End\s*$/ )) { $isdirectory = 0; }
+
+        if ( $isdirectory )
+        {
+            if ( $oneline =~ /^\s*ParentID\s*=\s*(\w+)\s*\;\s*$/ )
+            {
+                my $parentgid = $1;
+
+                if ( $parentgid eq $directorygid )
+                {
+                    # Found a child of the directory, that shall be removed
+
+                    my %removeitem = ();
+                    my $item = "Directory";
+                    $removeitem{'gid'} = $currentgid;
+                    $removeitem{'item'} = $item;
+
+                    push(@{$collector}, \%removeitem);
+
+                    # recursively checking additional children
+                    collect_subdirectories($parfile, $currentgid, $collector);
+                }
+            }
+        }
+    }
+}
+
+##########################################################
+# Collecting all items (Files and Shortcuts), that
+# are located in the list of directories.
+##########################################################
+
+sub get_all_items_in_directories
+{
+    my ($parfile, $directorygid, $item, $collector) = @_;
+
+    my $isitem = 0;
+    my $currentgid = "";
+
+    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
+    {
+        my $oneline = ${$parfile}[$i];
+
+        if ( $oneline =~ /^\s*\Q$item\E\s+(\w+)\s*$/ )
+        {
+            $currentgid = $1;
+            $isitem = 1;
+        }
+
+        if (( $isitem ) && ( $oneline =~ /^\s*End\s*$/ )) { $isitem = 0; }
+
+        if ( $isitem )
+        {
+            if ( $oneline =~ /^\s*Dir\s*=\s*(\w+)\s*\;\s*$/ )
+            {
+                my $installdir = $1;
+
+                if ( $installdir eq $directorygid )
+                {
+                    # Found an item, that shall be installed in the specific directory
+
+                    my %removeitem = ();
+                    $removeitem{'gid'} = $currentgid;
+                    $removeitem{'item'} = $item;
+
+                    push(@{$collector}, \%removeitem);
+                }
+            }
+        }
+    }
+}
+
+##########################################################
+# Collecting all items (ProfileItems), that
+# are located in the list of Profiles.
+##########################################################
+
+sub get_all_items_in_profile
+{
+    my ($parfile, $profilegid, $item, $collector) = @_;
+
+    my $isitem = 0;
+    my $currentgid = "";
+
+    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
+    {
+        my $oneline = ${$parfile}[$i];
+
+        if ( $oneline =~ /^\s*\Q$item\E\s+(\w+)\s*$/ )
+        {
+            $currentgid = $1;
+            $isitem = 1;
+        }
+
+        if (( $isitem ) && ( $oneline =~ /^\s*End\s*$/ )) { $isitem = 0; }
+
+        if ( $isitem )
+        {
+            if ( $oneline =~ /^\s*ProfileID\s*=\s*(\w+)\s*\;\s*$/ )
+            {
+                my $profilename = $1;
+
+                if ( $profilename eq $profilegid )
+                {
+                    # Found an item, that shall be installed in the specific directory
+
+                    my %removeitem = ();
+                    $removeitem{'gid'} = $currentgid;
+                    $removeitem{'item'} = $item;
+
+                    push(@{$collector}, \%removeitem);
+                }
+            }
+        }
     }
 }
 
