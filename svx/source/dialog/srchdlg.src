@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-10 08:56:43 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:08:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -212,7 +212,7 @@ ModelessDialog RID_SVXDLG_SEARCH
         Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "E~xakte Suche" ;
+        Text [ de ] = "Gro~ß-/Kleinschreibung" ;
         Text [ en-US ] = "Ma~tch case";
     };
     CheckBox CB_WHOLE_WORDS
