@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.114 $
+#   $Revision: 1.115 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:05:56 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:22:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.114 $ ';
+$id_str = ' $Revision: 1.115 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -141,15 +141,9 @@ parse_options();
 
 if ( ! $opt_delete ) {
     if ( $ENV{GUI} eq 'WNT' ) {
-        if ($ENV{COM} eq 'GCC') {
-            warn("Warning: do we need stripping for windows gcc? Nothing defined yet.");
-        }
+        initialize_strip() if ($ENV{COM} eq 'GCC');
     } else {
-        if ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq "")) {
-            $strip = 'strip';
-            $strip .= " -x" if ($ENV{OS} eq 'MACOSX');
-            $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
-        }
+        initialize_strip();
     }
 }
 
@@ -267,7 +261,6 @@ sub do_linklib
 
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
-        next if ( $lib =~ /^lib.*\.\d+\.jnilib$/ );
         if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/
              || $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/ )
         {
@@ -738,11 +731,22 @@ sub is_unstripped {
             return '1' if ($file_name =~ /\.bin$/o);
             return '1' if ($file_name =~ /\.so\.*/o);
             return '1' if ($file_name =~ /\.dylib\.*/o);
+            return '1' if ($file_name =~ /\.com\.*/o);
+            return '1' if ($file_name =~ /\.dll\.*/o);
+            return '1' if ($file_name =~ /\.exe\.*/o);
             return '1' if (basename($file_name) !~ /\./o);
         }
     };
     return '';
 }
+
+sub initialize_strip {
+    if ((!defined $ENV{DISABLE_STRIP}) || ($ENV{DISABLE_STRIP} eq "")) {
+        $strip = 'strip';
+        $strip .= " -x" if ($ENV{OS} eq 'MACOSX');
+        $strip .= " -R '.comment' -s" if ($ENV{OS} eq 'LINUX');
+    };
+};
 
 sub is_jar {
     my $file_name = shift;
@@ -935,25 +939,12 @@ sub get_latest_patchlevel
     # comparison function for sorting
         my (@field_a, @field_b, $i);
 
-        if ( $a !~ /^(lib[\w-]+(\.so|\.dylib))(\.(\d+))+$/ ||
-             $b !~ /^(lib[\w-]+(\.so|\.dylib))(\.(\d+))+$/ ) {
-            # cannot happen: unexpected library name allthough checked earlier
-            print_warning("internal error");
-            return 0;
-        }
-        @field_a = split /\./, $a;
-        @field_b = split /\./, $b;
-        if ( $#field_a != $#field_b ) {
-            # should not happen
-            print_warning("get_latest_patchlevel: cannot compare '$a' to '$b'");
-            return 0;
-        }
-        shift @field_a; # library name
-        shift @field_b; # library name
-        shift @field_a; # extension
-        shift @field_b; # extension
+        $a =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)\.(\d+)$/;
+        @field_a = ($3, $4, $5);
+        $b =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)\.(\d+)$/;
+        @field_b = ($3, $4, $5);
 
-        for ($i = 0; $i <= $#field_a; $i++)
+        for ($i = 0; $i < 3; $i++)
           {
               if ( ($field_a[$i] < $field_b[$i]) ) {
                   return -1;
