@@ -4,9 +4,9 @@
 #
 #   $RCSfile: extractfiles.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:35:30 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:53:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ BIN_RUNTIMELIST+=	\
     msgbsutl	\
     nsldap32v50		\
     nsldappr32v50
-
 .ELSE	#"$(GUI)"=="WNT"
 BIN_RUNTIMELIST+=	\
     mozjs	\
@@ -125,6 +124,17 @@ DEFAULTS_RUNTIMELIST=	\
     greprefs$/security-prefs.js
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+LIBLIST=	\
+    libembed_base_s.a	\
+    libmozreg_s.a	\
+    libnslber32v50.a	\
+    libnsldap32v50.a	\
+    libnspr4.a 	\
+    libxpcom.dll.a	\
+    libnss3.a	\
+    libsmime3.a
+.ELSE
 LIBLIST=	\
     embed_base_s.lib	\
     mozreg_s.lib	\
@@ -137,6 +147,7 @@ LIBLIST=	\
     nss3.lib	\
     ssl3.lib	\
     smime3.lib
+.ENDIF
 .ELSE	#"$(GUI)"=="WNT"
 LIBLIST=	\
     libembed_base_s.a	\
