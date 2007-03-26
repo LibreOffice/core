@@ -1,7 +1,6 @@
 {
     local:
         AddTable;
-        CloseTTFont;
         cmapAdd;
         CountTTCFonts;
         CreateT3FromTTGlyphs;
@@ -9,7 +8,6 @@
         CreateTTFromTTGlyphs;
         DisposeNameRecords;
         GetRawData;
-        GetTTGlobalFontInfo;
         GetTTGlyphComponents;
         GetTTGlyphPoints;
         GetTTNameRecords;
@@ -52,7 +50,7 @@
         modname;
         modver;
         nameAdd;
-        OpenTTFont;
+        OpenTTFontFile;
         ReadGSUB;
         RemoveTable;
         StreamToFile;
