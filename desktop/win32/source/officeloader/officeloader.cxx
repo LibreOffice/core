@@ -4,9 +4,9 @@
  *
  *  $RCSfile: officeloader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:19:47 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,11 @@ static LPTSTR   *GetCommandArgs( int *pArgc )
 
 //---------------------------------------------------------------------------
 
+#ifdef __MINGW32__
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR, int )
+#else
 int WINAPI _tWinMain( HINSTANCE, HINSTANCE, LPTSTR, int )
+#endif
 {
     TCHAR               szTargetFileName[MAX_PATH] = TEXT("");
     TCHAR               szPerfTuneIniFile[MAX_PATH] = TEXT("");
