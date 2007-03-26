@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:03:54 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:46:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@ TARGETTYPE=CUI
 
 .INCLUDE :  settings.mk
 
+.IF "$(COM)"=="GCC"
+CDEFS=-D_WIN32_WINNT=0x0501
+.ENDIF
+
 CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
@@ -60,7 +64,7 @@ APP1NOSAL=TRUE
 APP1OBJS=$(OBJFILES)
 APP1TARGET=$(TARGET)
 
-STDLIB1=\
+STDLIB1=
 
 
 # --- Targets ------------------------------------------------------
