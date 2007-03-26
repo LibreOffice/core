@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gui.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:00:35 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:01:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ static RscCompiler * pRscCompiler = NULL;
 /*                                                              */
 /*  Description :   Gibt die Temporaeren Dateien frei.          */
 /****************************************************************/
-#if defined( UNX ) || ( defined( PM2 ) && ( defined( TCPP ) || defined ( GCC )) ) || defined( MAC ) || defined (WTC) || defined (MTW)
+#if defined( UNX ) || ( defined( PM2 ) && ( defined( TCPP ) || defined ( GCC )) ) || defined( MAC ) || defined (WTC) || defined (MTW) || defined(__MINGW32__)
         void ExitProgram( void ){
 #else
 #if defined( CSET )
@@ -70,7 +70,7 @@ static RscCompiler * pRscCompiler = NULL;
         delete pRscCompiler;
 }
 
-#if defined( UNX ) || defined( MAC ) || ( defined( PM2 ) && ( defined( CSET ) || defined ( GCC ))) || defined (WTC) || defined(ICC)
+#if defined( UNX ) || defined( MAC ) || ( defined( PM2 ) && ( defined( CSET ) || defined ( GCC ))) || defined (WTC) || defined(ICC) || defined(__MINGW32__)
 int main ( int argc, char ** argv) {
 #else
 #if defined( MTW )
