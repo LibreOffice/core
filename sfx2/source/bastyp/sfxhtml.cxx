@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:25:00 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:03:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,11 @@ sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
 #define HTML_META_CONTENT_TYPE  12
 
 // <INPUT TYPE=xxx>
+#ifdef __MINGW32__ // for runtime pseudo reloc
+static HTMLOptionEnum aAreaShapeOptEnums[] =
+#else
 static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
+#endif
 {
     { sHTML_SH_rect,        IMAP_OBJ_RECTANGLE  },
     { sHTML_SH_rectangle,   IMAP_OBJ_RECTANGLE  },
@@ -117,7 +121,11 @@ static HTMLOptionEnum __READONLY_DATA aAreaShapeOptEnums[] =
 };
 
 // <META NAME=xxx>
+#ifdef __MINGW32__ // for runtime pseudo reloc
+static HTMLOptionEnum aHTMLMetaNameTable[] =
+#else
 static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
+#endif
 {
     { sHTML_META_author,        HTML_META_AUTHOR        },
     { sHTML_META_changed,       HTML_META_CHANGED       },
