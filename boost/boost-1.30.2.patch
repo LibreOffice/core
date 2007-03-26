@@ -1,5 +1,5 @@
 *** misc/boost-1.30.2/boost/bind.hpp	Tue Oct 15 12:51:34 2002
---- misc/build/boost-1.30.2/boost/bind.hpp	Thu Jan 26 17:10:47 2006
+--- misc/build/boost-1.30.2/boost/bind.hpp	Tue Jul 25 14:47:06 2006
 ***************
 *** 5,10 ****
 --- 5,17 ----
@@ -186,7 +186,7 @@
         function_base::functor = detail::function::make_any_pointer(this);
       }
 *** misc/boost-1.30.2/boost/function.hpp	Fri Feb 14 16:34:39 2003
---- misc/build/boost-1.30.2/boost/function.hpp	Thu Jan 26 17:10:47 2006
+--- misc/build/boost-1.30.2/boost/function.hpp	Tue Jul 25 14:47:06 2006
 ***************
 *** 16,21 ****
 --- 16,26 ----
@@ -202,17 +202,18 @@
   #include <boost/detail/workaround.hpp>
   
 ***************
-*** 68,70 ****
---- 73,79 ----
+*** 67,70 ****
+--- 72,79 ----
+  #  define BOOST_PP_ITERATION_PARAMS_1 (3,(0,BOOST_FUNCTION_MAX_ARGS,<boost/function/detail/function_iterate.hpp>))
   #  include BOOST_PP_ITERATE()
   #  undef BOOST_PP_ITERATION_PARAMS_1
-  #endif
++ #endif
 + 
 + #if defined _MSC_VER
 + #pragma warning(pop)
-+ #endif
+  #endif
 *** misc/boost-1.30.2/boost/mem_fn.hpp	Fri Dec 20 19:14:59 2002
---- misc/build/boost-1.30.2/boost/mem_fn.hpp	Thu Jan 26 17:10:47 2006
+--- misc/build/boost-1.30.2/boost/mem_fn.hpp	Tue Jul 25 14:47:06 2006
 ***************
 *** 5,10 ****
 --- 5,17 ----
@@ -666,3 +667,4 @@
 + #endif
 + 
   #endif // BOOST_MPL_SEQUENCE_TAG_HPP_INCLUDED
+
