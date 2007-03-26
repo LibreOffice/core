@@ -19,6 +19,7 @@ mkdir: %_DEST%\inc%_EXT%\bridges\remote
 ..\%__SRC%\bin\msci_uno.* %_DEST%\bin%_EXT%\msci_uno.*
 ..\%__SRC%\lib\libgcc2_uno.* %_DEST%\lib%_EXT%\libgcc2_uno.*
 ..\%__SRC%\lib\libgcc3_uno.* %_DEST%\lib%_EXT%\libgcc3_uno.*
+..\%__SRC%\bin\gcc3_uno.* %_DEST%\bin%_EXT%\gcc3_uno.*
 ..\%__SRC%\lib\libsunpro5_uno.* %_DEST%\lib%_EXT%\libsunpro5_uno.*
 
 
