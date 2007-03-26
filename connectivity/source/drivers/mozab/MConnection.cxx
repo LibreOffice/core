@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:19:44 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:59:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,9 @@ struct ConnectionImplData
 };
 
 // -----------------------------------------------------------------------------
+#ifdef __MINGW32__
+extern "C"
+#endif
 const sal_Char* getSdbcScheme( SdbcScheme _eScheme )
 {
     switch ( _eScheme )
