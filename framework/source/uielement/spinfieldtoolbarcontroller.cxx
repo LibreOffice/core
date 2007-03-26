@@ -4,9 +4,9 @@
  *
  *  $RCSfile: spinfieldtoolbarcontroller.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:23:59 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:12:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@
 #endif
 #include <tools/urlobj.hxx>
 #ifdef WINNT
-#include <sal/systools/win32/snprintf.h>
+#include <systools/win32/snprintf.h>
 #endif
 
 using namespace ::rtl;
@@ -622,11 +622,11 @@ rtl::OUString SpinfieldToolbarController::impl_formatOutputString( double fValue
 
         aBuffer[0] = 0;
         if ( m_bFloat )
-            swprintf( aBuffer, 128, (const wchar_t *)m_aOutFormat.getStr(), fValue );
+            snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), fValue );
         else
-            swprintf( aBuffer, 128, (const wchar_t *)m_aOutFormat.getStr(), sal_Int32( fValue ));
+            snwprintf( reinterpret_cast<wchar_t *>(aBuffer), 128, reinterpret_cast<const wchar_t *>(m_aOutFormat.getStr()), sal_Int32( fValue ));
 
-        sal_Int32 nSize = wcslen( aBuffer );
+        sal_Int32 nSize = rtl_ustr_getLength( aBuffer );
         return rtl::OUString( aBuffer, nSize );
 #else
         // Currently we have no support for a format string using sal_Unicode. wchar_t
