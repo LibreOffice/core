@@ -4,9 +4,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:15:25 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:57:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -532,12 +532,12 @@ Sequence< sal_Int32 > SAL_CALL OPreparedStatement::executeBatch(  ) throw(SQLExc
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPreparedStatement::acquire() throw()
 {
     OStatement_Base::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OPreparedStatement::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OPreparedStatement::release() throw()
 {
     OStatement_Base::release();
 }
