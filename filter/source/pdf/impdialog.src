@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:18:20 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 #include "impdialog.hrc"
 
-#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 218 )
+#define TAB_PDF_SIZE Size = MAP_APPFONT ( 176, 225 )
 //string for TabDialog standard buttons
 String STR_PDF_EXPORT
 {
@@ -251,6 +251,14 @@ TabPage  RID_PDF_TAB_GENER
         TabStop = TRUE ;
         Text[ de ] = "Automatisch eingefügte ~Leerseiten exportieren" ;
         Text[ en-US ] = "Export automatically inserted ~blank pages";
+    };
+    CheckBox CB_ADDSTREAM
+    {
+        Pos = MAP_APPFONT ( 12 , 213 ) ;
+        Size = MAP_APPFONT ( 153 , 10 ) ;
+        TabStop = TRUE ;
+        Text[ de ] = "~Hybridformat erzeugen" ;
+        Text[ en-US ] = "Create ~hybrid file";
     };
 };
 
