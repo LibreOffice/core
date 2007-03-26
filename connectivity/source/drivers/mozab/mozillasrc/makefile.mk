@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-21 17:00:54 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:00:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,21 @@ MOZINC = . -I.. -I..$/bootstrap -I$(MOZ_INC)  -I$(MOZ_INC)$/nspr -I$(MOZ_INC)$/x
         -I$(MOZ_INC)$/xpcom_obsolete -I$(MOZ_INC)$/content
         
 .IF "$(GUI)" == "WNT"
+.IF "$(COM)"=="GCC"
+INCPOST += $(MOZINC)
+CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
+        -DNS_NET_FILE -DCookieManagement -DSingleSignon -DClientWallet \
+            -DTRACING -DXP_PC -DXP_WIN -DXP_WIN32 -DHW_THREADS \
+            -DNS_MT_SUPPORTED -DNETLIB_THREAD \
+            -DOJI -DWIN32 -D_X86_ -D_WINDOWS \
+        -DMOZ_XUL -DMOZ_REFLOW_PERF -DMOZ_REFLOW_PERF_DSP \
+        -DNSPR20 -DOS_HAS_DLL -DNO_JNI_STUBS \
+        -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL
+CFLAGSCXX += \
+            -fno-rtti -Wall -Wconversion -Wpointer-arith \
+            -Wcast-align -Woverloaded-virtual -Wsynth \
+            -Wno-long-long
+.ELSE
 .IF "$(DBG_LEVEL)" == "0"
 INCPRE += $(MOZINC)
 CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
@@ -118,6 +133,7 @@ CDEFS +=    -DWINVER=0x400 -DMOZILLA_CLIENT \
         -DNETSCAPE -DMOZILLA_CLIENT -DJS_THREADSAFE -DNECKO -DINCLUDE_XUL	\
         -UDEBUG
 CFLAGS +=   -Zi -GR- -W3 -Gy -MDd -UDEBUG
+.ENDIF
 .ENDIF
 .ENDIF
 .IF "$(GUI)" == "UNX"
