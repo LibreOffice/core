@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FolderPicker.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:57:57 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -219,6 +219,7 @@ Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
 // -------------------------------------------------
 
 void SAL_CALL CFolderPicker::cancel( )
+    throw(RuntimeException)
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
