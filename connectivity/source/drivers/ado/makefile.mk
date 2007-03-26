@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:57:19 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:59:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
         
 EXCEPTIONSFILES= \
+        $(SLO)$/ADatabaseMetaDataImpl.obj				\
+        $(SLO)$/Aolevariant.obj							\
         $(SLO)$/ADatabaseMetaData.obj					\
         $(SLO)$/AColumn.obj								\
         $(SLO)$/AColumns.obj							\
@@ -95,9 +97,9 @@ SHL1STDLIBS=\
     $(CPPUHELPERLIB)			\
     $(VOSLIB)					\
     $(SALLIB)					\
-    ole32.lib					\
-    oleaut32.lib				\
-    uuid.lib					\
+    $(OLE32LIB)					\
+    $(OLEAUT32LIB)				\
+    $(UUIDLIB)					\
     $(DBTOOLSLIB)				\
     $(COMPHELPERLIB)
 
