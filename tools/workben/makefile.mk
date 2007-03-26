@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 13:56:45 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:45:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,7 @@ APP2OBJS = $(OBJ)$/urltest.obj
 .IF "$(GUI)" == "UNX"
 APP2STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ELSE
-APP2STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib icppu.lib icppuhelper.lib
+APP2STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB) $(CPPULIB) $(CPPUHELPERLIB)
 .ENDIF
 
 APP3TARGET = inetmimetest
@@ -83,7 +83,7 @@ APP3STDLIBS = $(SALLIB) $(TOOLSLIB)
 # .IF "$(GUI)" == "UNX"
 # APP4STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
 # .ELSE
-# APP4STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib
+# APP4STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB)
 # .ENDIF
 
 # APP5TARGET = fstest
@@ -91,7 +91,7 @@ APP3STDLIBS = $(SALLIB) $(TOOLSLIB)
 # .IF "$(GUI)" == "UNX"
 # APP5STDLIBS = $(TOOLSLIB) $(VOSLIB) $(SALLIB)
 # .ELSE
-# APP5STDLIBS = $(LB)$/itools.lib ivos.lib isal.lib
+# APP5STDLIBS = $(LB)$/itools.lib $(VOSLIB) $(SALLIB)
 # .ENDIF
 
 .INCLUDE: target.mk
