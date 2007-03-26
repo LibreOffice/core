@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-03-15 09:15:30 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:03:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,9 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 CFLAGSNOOPT+=-Ob0
+.ENDIF
 .ENDIF
 
 OBJFILES=   $(OBJ)$/cppumaker.obj	\
