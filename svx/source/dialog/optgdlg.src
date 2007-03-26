@@ -1,12 +1,12 @@
-/*************************************************************************
+﻿/*************************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-28 10:44:17 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:06:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,9 +287,9 @@ TabPage OFA_TP_VIEW
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT( 12, ROW_CB_SYSTEM_FONT );
-        Size = MAP_APPFONT( 110, 16 );
+        Size = MAP_APPFONT( 114, 16 );
         WordBreak = TRUE;
-        Text[ de ] = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
+        Text[ de ] = "Syst~emschriftart für die Benutzeroberfläche verwenden" ;
         Text[ en-US ] = "Use system ~font for user interface";
     };
 
@@ -297,7 +297,7 @@ TabPage OFA_TP_VIEW
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , ROW_CB_FONTANTIALIASING ) ;
-        Size = MAP_APPFONT ( 110 , 8 ) ;
+        Size = MAP_APPFONT ( 110 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Bildschirmschriften glätten" ;
         Text [ en-US ] = "Screen font antialiasing" ;
     };
@@ -338,8 +338,8 @@ TabPage OFA_TP_VIEW
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , ROW_CB_MENU_ICONS ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Icons in Menüs ~anzeigen" ;
+        Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
+        Text [ de ] = "Icons in ~Menüs anzeigen" ;
         Text [ en-US ] = "Show icons in menus";
     };
     FixedLine FL_FONTLISTS
@@ -352,18 +352,17 @@ TabPage OFA_TP_VIEW
     CheckBox CB_FONT_SHOW
     {
         Pos = MAP_APPFONT ( 12, ROW_CB_FONT_SHOW ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Schriftartenvorschau anzeigen" ;
         Text [ en-US ] = "Show p~review of fonts" ;
     };
     CheckBox CB_FONT_HISTORY
     {
         Pos = MAP_APPFONT ( 12, ROW_CB_FONT_HISTORY ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Benutzte S~chriftarten anzeigen" ;
         Text [ en-US ] = "Show font h~istory" ;
     };
-
     FixedLine FL_3D
     {
         Pos = MAP_APPFONT (  133, ROW_FL_3D ) ;
@@ -374,14 +373,14 @@ TabPage OFA_TP_VIEW
     CheckBox CB_3D_OPENGL
     {
         Pos = MAP_APPFONT ( 139, ROW_CB_3D_OPENGL ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "~OpenGL benutzen" ;
         Text [ en-US ] = "Use ~OpenGL" ;
     };
     CheckBox CB_3D_OPENGL_FASTER
     {
         Pos = MAP_APPFONT ( 148 , ROW_CB_3D_OPENGL_FASTER ) ;
-        Size = MAP_APPFONT ( 104 , 10 ) ;
+        Size = MAP_APPFONT ( 104 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ x-comment ] = "; pb: verbesserte Bildschirmausgabe";
         Text [ de ] = "Op~timierte Ausgabe" ;
         Text [ en-US ] = "O~ptimized output";
@@ -389,14 +388,14 @@ TabPage OFA_TP_VIEW
     CheckBox CB_3D_DITHERING
     {
         Pos = MAP_APPFONT ( 139 , ROW_CB_3D_DITHERING ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "~Dithering benutzen" ;
         Text [ en-US ] = "Use ~dithering" ;
     };
     CheckBox CB_3D_SHOWFULL
     {
         Pos = MAP_APPFONT ( 139 , ROW_CB_3D_SHOWFULL ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "~Volldarstellung bei Interaktion" ;
         Text [ en-US ] = "Ob~ject refresh during interaction" ;
     };
@@ -412,7 +411,7 @@ TabPage OFA_TP_VIEW
     CheckBox CB_USE_HARDACCELL
     {
         Pos = MAP_APPFONT ( 139, ROW_CB_USE_HARDACCELL ) ;
-        Size = MAP_APPFONT ( 118 , 8 ) ;
+        Size = MAP_APPFONT ( 118 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Hardwarebeschleunigung verwenden" ;
         Text [ en-US ] = "Use hardware acceleration" ;
     };
@@ -549,7 +548,7 @@ TabPage OFA_TP_LANGUAGES
     CheckBox CB_DECIMALSEPARATOR
     {
         Pos = MAP_APPFONT ( 135 , 46) ;
-        Size = MAP_APPFONT ( 119 , 10 ) ;
+        Size = MAP_APPFONT ( 119 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "~Dem Gebietsschema entsprechend ( %1 )" ;
         Text [ en-US ] = "~Same as locale setting ( %1 )";
     };
@@ -652,7 +651,7 @@ TabPage OFA_TP_LANGUAGES
     CheckBox CB_CURRENT_DOC
     {
         Pos = MAP_APPFONT ( 135 , 135 ) ;
-        Size = MAP_APPFONT ( 113 , 10 ) ;
+        Size = MAP_APPFONT ( 113 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "~Nur für das aktuelle Dokument" ;
         Text [ en-US ] = "For the current document only";
     };
@@ -672,7 +671,7 @@ TabPage OFA_TP_LANGUAGES
     CheckBox CB_ASIANSUPPORT
     {
         Pos = MAP_APPFONT ( 12 , 158 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Size = MAP_APPFONT ( 236 ,RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Unterstützung von asiatischen Sprachen aktiviert" ;
         Text [ en-US ] = "E~nabled for Asian languages";
     };
@@ -685,7 +684,7 @@ TabPage OFA_TP_LANGUAGES
     CheckBox CB_CTLSUPPORT
     {
         Pos = MAP_APPFONT ( 12 , 173 ) ;
-        Size = MAP_APPFONT ( 236 , 10 ) ;
+        Size = MAP_APPFONT ( 236 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Text [ de ] = "Unterstützung von 'Complex Text Layout' (CTL) aktiviert" ;
         Text [ en-US ] = "Ena~bled for complex text layout (CTL)";
     };
