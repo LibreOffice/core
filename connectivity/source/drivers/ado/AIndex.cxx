@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AIndex.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:13:31 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -168,12 +168,12 @@ void SAL_CALL OAdoIndex::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,cons
     OIndex_ADO::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoIndex::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoIndex::acquire() throw()
 {
     OIndex_ADO::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoIndex::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoIndex::release() throw()
 {
     OIndex_ADO::release();
 }
