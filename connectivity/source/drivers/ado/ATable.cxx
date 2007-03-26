@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:15:45 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,7 +206,7 @@ sal_Int64 OAdoTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Run
 void SAL_CALL OAdoTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(rBHelper.bDisposed);
+    checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
 
     m_aTable.put_Name(newName);
     ADOS::ThrowException(*(m_pCatalog->getConnection()->getConnection()),*this);
@@ -223,7 +223,7 @@ Reference< XDatabaseMetaData> OAdoTable::getMetaData() const
 void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(rBHelper.bDisposed);
+    checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
 
     sal_Bool bError = sal_True;
     OAdoColumn* pColumn = NULL;
@@ -243,7 +243,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, cons
 void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(rBHelper.bDisposed);
+    checkDisposed(OTableDescriptor_BASE_TYPEDEF::rBHelper.bDisposed);
 
     Reference< XPropertySet > xOld;
     m_pColumns->getByIndex(index) >>= xOld;
@@ -283,14 +283,18 @@ void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rV
     OTable_TYPEDEF::setFastPropertyValue_NoBroadcast(nHandle,rValue);
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OAdoTable::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoTable::acquire() throw()
 {
     OTable_TYPEDEF::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoTable::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoTable::release() throw()
 {
     OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OAdoTable::getName() throw(::com::sun::star::uno::RuntimeException)
+{
+      return m_aTable.get_Name();
+}
 
