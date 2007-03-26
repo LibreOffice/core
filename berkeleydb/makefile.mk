@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:24:50 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:04:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,11 @@ ADDITIONAL_FILES=    \
 
 
 # not needed for win32. comment out when causing problems...
+.IF "$(GUI)$(COM)"=="WNTGCC"
+PATCH_FILE_NAME=db-4.2.52-mingw.patch
+.ELSE
 PATCH_FILE_NAME=db-4.2.52.patch
+.ENDIF
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
@@ -116,6 +120,35 @@ OUT2INC= \
 .ENDIF			# "$(GUI)"=="UNX"
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_DIR=out
+#relative to CONFIGURE_DIR
+CONFIGURE_ACTION=..$/dist$/configure
+CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="-nostdinc -D_MT" CPPFLAGS="$(INCLUDE)" LIBS="-lmingwthrd" LIBSO_LIBS="-lmingwthrd" LIBJSO_LIBS="-lmingwthrd" LIBXSO_LIBS="-lmingwthrd $(LIBSTLPORT)"
+.IF "$(USE_MINGW)"=="cygwin"
+CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(UPD)/$(INPATH)/lib -L$(SOLARVER)/$(UPD)/$(INPATH)/bin -L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)/lib"
+.ELSE
+CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(UPD)/$(INPATH)/lib -L$(SOLARVER)/$(UPD)/$(INPATH)/bin -L$(COMPATH)/lib"
+.ENDIF
+.IF "$(SOLAR_JAVA)"!=""
+CONFIGURE_FLAGS+=--enable-java
+.ENDIF
+
+BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_DIR_OUT=$(CONFIGURE_DIR)
+BUILD_ACTION=make
+
+OUT2LIB=$(BUILD_DIR)$/.libs$/libdb*42.a
+OUT2BIN=$(BUILD_DIR)$/.libs$/libdb*42.dll
+.IF "$(SOLAR_JAVA)"!=""
+OUT2BIN+=$(BUILD_DIR)$/db.jar
+OUT2CLASS=$(BUILD_DIR)$/db.jar
+.ENDIF
+
+OUT2INC= \
+    $(BUILD_DIR)$/db.h
+
+.ELSE
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
@@ -137,6 +170,7 @@ BUILD_DIR_OUT=build_win32
 #OUT2CLASS=$(BUILD_DIR_OUT)$/Release$/db.jar
 OUT2INC= \
     $(BUILD_DIR_OUT)$/db.h
+.ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 
 # --- Targets ------------------------------------------------------
