@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sendreportw32.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:26:33 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,7 +144,7 @@ namespace svx{
 
         bool ErrorRepSendDialog::SaveParams()
         {
-            const _TCHAR    *lpHTTPProxyServer = maParams.maHTTPProxyServer.GetBuffer();
+            const _TCHAR    *lpHTTPProxyServer = reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyServer.GetBuffer());
             RegWriteValue(
                 HKEY_CURRENT_USER,
                 TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
@@ -153,7 +153,7 @@ namespace svx{
                 sizeof(TCHAR) * (_tcslen(lpHTTPProxyServer) + 1) );
 
             _TCHAR* endptr = NULL;
-            DWORD dwProxyPort = _tcstoul( maParams.maHTTPProxyPort.GetBuffer(), &endptr, 10 );
+            DWORD dwProxyPort = _tcstoul( reinterpret_cast<LPCTSTR>(maParams.maHTTPProxyPort.GetBuffer()), &endptr, 10 );
 
             RegWriteValue(
                 HKEY_CURRENT_USER,
@@ -180,7 +180,7 @@ namespace svx{
                 &uInternetConnection,
                 sizeof(DWORD) );
 
-            const _TCHAR    *lpEmail = GetEMailAddress().GetBuffer();
+            const _TCHAR    *lpEmail = reinterpret_cast<LPCTSTR>(GetEMailAddress().GetBuffer());
             RegWriteValue(
                 HKEY_CURRENT_USER,
                 TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
@@ -209,7 +209,7 @@ namespace svx{
                 fclose( fp );
             }
 
-            SetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), GetDocType().GetBuffer() );
+            SetEnvironmentVariable( TEXT("ERRORREPORT_SUBJECT"), reinterpret_cast<LPCTSTR>(GetDocType().GetBuffer()) );
             SetEnvironmentVariable( TEXT("ERRORREPORT_BODYFILE"), szFileName );
 
             _TCHAR  szBuffer[1024];
