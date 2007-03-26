@@ -4,9 +4,9 @@
 #
 #   $RCSfile: registry.pm,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:50:47 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:45:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -120,9 +120,11 @@ sub get_registry_root
 
     if ( $registry->{'ParentID'} ) { $scproot = $registry->{'ParentID'}; }
 
+    if ( $scproot eq "PREDEFINED_HKEY_LOCAL_MACHINE" ) { $rootvalue = -1; }
+
     if ( $scproot eq "PREDEFINED_HKEY_CLASSES_ROOT" ) { $rootvalue = 0; }
 
-    if ( $scproot eq "PREDEFINED_HKEY_LOCAL_MACHINE" ) { $rootvalue = -1; }
+    if ( $scproot eq "PREDEFINED_HKEY_CURRENT_USER_ONLY" ) { $rootvalue = 1; }
 
     if ( $scproot eq "PREDEFINED_HKEY_LOCAL_MACHINE_ONLY" ) { $rootvalue = 2; }
 
