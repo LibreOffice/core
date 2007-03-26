@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:31:00 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,11 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
+#ifdef __MINGW32__
+#include <windows.h>
+#else
 #include "stdafx.h"
+#endif
 #include "servprov.hxx"
 #include "embeddoc.hxx"
 
