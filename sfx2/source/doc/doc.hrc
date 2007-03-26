@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hrc,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:16:55 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:10:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,9 +211,10 @@
 #define STR_NEW_FILENAME_SAVE               (RID_SFX_DOC_START+121)
 #define STR_MACROS_DISABLED                 (RID_SFX_DOC_START+122)
 #define STR_ERROR_DELETE_TEMPLATE_DIR       (RID_SFX_DOC_START+123)
+#define STR_DOCINFO_INFOFIELD               (RID_SFX_DOC_START+124)
 
 // please update to the last id
-#define ACT_SFX_DOC_END STR_ERROR_DELETE_TEMPLATE_DIR
+#define ACT_SFX_DOC_END STR_DOCINFO_INFOFIELD
 #if ACT_SFX_DOC_END > RID_SFX_DOC_END
 #error resource overflow in #line, #file
 #endif
