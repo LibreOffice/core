@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 11:03:34 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:18:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -324,3 +324,34 @@ DLLPOSTFIX=mi
 
 CSC*=$(WRAPCMD) csc
 VBC*=$(WRAPCMD) vbc
+
+ADVAPI32LIB=advapi32.lib
+SHELL32LIB=shell32.lib
+GDI32LIB=gdi32.lib
+OLE32LIB=ole32.lib
+OLEAUT32LIB=oleaut32.lib
+UUIDLIB=uuid.lib
+WINSPOOLLIB=winspool.lib
+IMM32LIB=imm32.lib
+PSPLIB=apsp.lib
+VERSIONLIB=version.lib
+WINMMLIB=winmm.lib
+WSOCK32LIB=wsock32.lib
+MPRLIB=mpr.lib
+WS2_32LIB=ws2_32.lib
+KERNEL32LIB=kernel32.lib
+USER32LIB=user32.lib
+MSVCRTLIB=msvcrt.lib
+COMDLG32LIB=comdlg32.lib
+COMCTL32LIB=comctl32.lib
+CRYPT32LIB=crypt32.lib
+GDIPLUSLIB=gdiplus.lib
+DBGHELPLIB=dbghelp.lib
+MSILIB=msi.lib
+DDRAWLIB=ddraw.lib
+SHLWAPILIB=shlwapi.lib
+URLMONLIB=urlmon.lib
+UNICOWSLIB=unicows.lib
+WININETLIB=wininet.lib
+OLDNAMESLIB=oldnames.lib
+
