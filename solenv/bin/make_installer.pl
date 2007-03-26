@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.82 $
+#   $Revision: 1.83 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-01 15:15:37 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:43:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,7 @@ use installer::setupscript;
 use installer::simplepackage;
 use installer::sorter;
 use installer::strip;
+use installer::upx;
 use installer::systemactions;
 use installer::windows::assembly;
 use installer::windows::binary;
@@ -1047,6 +1048,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         installer::logger::print_message( "... creating inf files ...\n" );
         installer::worker::create_inf_file($filesinproductlanguageresolvedarrayref, $registryitemsinproductlanguageresolvedarrayref, $folderinproductlanguageresolvedarrayref, $folderitemsinproductlanguageresolvedarrayref, $modulesinproductlanguageresolvedarrayref, $languagesarrayref, $languagestringref, $allvariableshashref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16c.log", $filesinproductlanguageresolvedarrayref); }
+    }
+
+    ###########################################
+    # Using upx, to decrease file size
+    # Currently only for Windows.
+    ###########################################
+
+    if ( $allvariableshashref->{'UPXPRODUCT'} )
+    {
+        installer::upx::upx_on_libraries($filesinproductlanguageresolvedarrayref, $languagestringref);
+        if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles16d.log", $filesinproductlanguageresolvedarrayref); }
     }
 
     ###########################################################
