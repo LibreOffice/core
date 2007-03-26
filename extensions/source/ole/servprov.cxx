@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:48:41 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,13 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_extensions.hxx"
 
+#ifdef __MINGW32__
+#define INITGUID
+#include <initguid.h>
+#else
 #include "ole2uno.hxx"
 #include "unoconversionutilities.hxx"
+#endif
 #include "servprov.hxx"
 #include "unoobjw.hxx"
 #include "oleobjw.hxx"
@@ -99,7 +104,7 @@ ProviderOleWrapper_Impl::ProviderOleWrapper_Impl(const Reference<XMultiServiceFa
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = smgr->createInstance(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
+    Reference<XInterface> xInt = smgr->createInstance(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
 
     if (xInt.is())
     {
@@ -234,7 +239,7 @@ OneInstanceOleWrapper_Impl::OneInstanceOleWrapper_Impl(  const Reference<XMultiS
 {
     m_guid = *pGuid;
 
-    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
+    Reference<XInterface> xInt = m_smgr->createInstance(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
 
     if (xInt.is())
     {
@@ -544,7 +549,7 @@ Sequence< OUString >    SAL_CALL OleClient_Impl::getAvailableServiceNames() thro
 
 OUString OleClient_Impl::getImplementationName()
 {
-    return OUString(L"com.sun.star.comp.ole.OleClient");
+    return OUString(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleClient"));
 }
 
 Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& ServiceSpecifier) throw (Exception, RuntimeException )
@@ -557,7 +562,7 @@ Reference<XInterface> SAL_CALL OleClient_Impl::createInstance(const OUString& Se
     o2u_attachCurrentThread();
 
     result = CLSIDFromProgID(
-                  ServiceSpecifier.getStr(),    //Pointer to the ProgID
+                  reinterpret_cast<LPCWSTR>(ServiceSpecifier.getStr()),     //Pointer to the ProgID
                   &classId);                        //Pointer to the CLSID
 
 
@@ -638,7 +643,7 @@ OleServer_Impl::OleServer_Impl( const Reference<XMultiServiceFactory>& smgr):
 {
     //library unloading support
     globalModuleCount.modCnt.acquire( &globalModuleCount.modCnt);
-    Reference<XInterface> xInt = m_smgr->createInstance(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
+    Reference<XInterface> xInt = m_smgr->createInstance(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
 
     if (xInt.is())
     {
@@ -670,11 +675,11 @@ Any SAL_CALL OleServer_Impl::queryInterface( const Type& aType ) throw(RuntimeEx
     else
         return a;
 }
-void SAL_CALL OleServer_Impl::acquire(  ) throw(RuntimeException)
+void SAL_CALL OleServer_Impl::acquire(  ) throw()
 {
     OWeakObject::acquire();
 }
-void SAL_CALL OleServer_Impl::release(  ) throw (RuntimeException)
+void SAL_CALL OleServer_Impl::release(  ) throw ()
 {
     OWeakObject::release();
 }
