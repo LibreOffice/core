@@ -22,7 +22,7 @@ RegistryException::RegistryException(long ErrorCode) :
 
 /**
 */
-RegistryException::~RegistryException()
+RegistryException::~RegistryException() throw()
 {
     if (m_ErrorMsg)
         LocalFree(m_ErrorMsg);
@@ -30,7 +30,7 @@ RegistryException::~RegistryException()
 
 /**
 */
-const char* RegistryException::what() const
+const char* RegistryException::what() const throw()
 {
     FormatMessage(
         FORMAT_MESSAGE_ALLOCATE_BUFFER |
