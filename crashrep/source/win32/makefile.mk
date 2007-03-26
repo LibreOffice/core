@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:39:39 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:03:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,13 +72,13 @@ APP1TARGET=$(TARGET)
 
 STDLIB1=\
     $(SALLIB)\
-    gdi32.lib\
-    comctl32.lib\
-    comdlg32.lib\
-    advapi32.lib\
-    wsock32.lib\
-    shell32.lib\
-    dbghelp.lib
+    $(GDI32LIB)\
+    $(COMCTL32LIB)\
+    $(COMDLG32LIB)\
+    $(ADVAPI32LIB)\
+    $(WSOCK32LIB)\
+    $(SHELL32LIB)\
+    $(DBGHELPLIB)
 
 APP1NOSVRES=$(RES)$/$(TARGET).res
 
