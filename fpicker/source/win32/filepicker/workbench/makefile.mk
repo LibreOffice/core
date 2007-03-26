@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:48:27 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:19:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,8 +58,8 @@ APP1STDLIBS+=\
             $(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
-            user32.lib\
-            ole32.lib
+            $(USER32LIB)\
+            $(OLE32LIB)
 
 APP1DEF=$(MISC)$/$(APP1TARGET).def
 
