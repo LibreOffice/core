@@ -4,9 +4,9 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-09 11:19:12 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:45:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -438,6 +438,9 @@ sub get_msidatabasename
     $databasename =~ s/\.//g;
     $databasename =~ s/\-//g;
     $databasename =~ s/\s//g;
+
+    # possibility to overwrite the name with variable DATABASENAME
+    if ( $allvariableshashref->{'DATABASENAME'} ) { $databasename = $allvariableshashref->{'DATABASENAME'}; }
 
     if ( $language )
     {
