@@ -4,9 +4,9 @@
  *
  *  $RCSfile: respintest.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:36:29 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:08:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
 #include <string>
 #include <systools/win32/uwinapi.h>
 
-#ifdef _WIN32_WINNT
+#if defined(_WIN32_WINNT) && !defined(__MINGW32__)
 #error YES
 #endif
 
