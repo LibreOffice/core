@@ -4,9 +4,9 @@
  *
  *  $RCSfile: i_xml_parser_event_handler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:36:49 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,10 @@
 
 #if defined(XML_UNICODE) || defined(XML_UNICODE_WCHAR_T)
     typedef std::wstring string_t;
+    typedef wchar_t char_t;
 #else
     typedef std::string string_t;
+    typedef char char_t;
 #endif
 
 // name-value container
