@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-01 09:59:38 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:45:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,9 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL$(TNR)TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -119,6 +121,13 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL$(TNR)TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB$(TNR)NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL$(TNR)TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT$(TNR)_PROTECT) $(RM) $(MISC)$/$(SHL$(TNR)TARGET).exp
+.ELSE
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
     @-$(EXPORT$(TNR)_PROTECT) $(RMHACK$(TNR)) $(MISC)$/$(SHL$(TNR)TARGET).exp
     @$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
@@ -136,6 +145,7 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF$(TNR)FILTER) $(MISC)$/$(SHL$(TNR)TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL$(TNR)USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -210,7 +220,11 @@ $(DEF$(TNR)TARGETN) .PHONY :
     @echo $(DEF$(TNR)EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF$(TNR)EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF$(TNR)EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF$(TNR)EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
