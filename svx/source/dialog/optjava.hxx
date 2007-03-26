@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjava.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:36:13 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,6 +217,7 @@ private:
     DECL_LINK(              AddArchiveHdl_Impl, PushButton * );
     DECL_LINK(              AddPathHdl_Impl, PushButton * );
     DECL_LINK(              RemoveHdl_Impl, PushButton * );
+    DECL_LINK(              SelectHdl_Impl, ListBox * );
 
     bool                    IsPathDuplicate( const String& _rPath );
     inline void             EnableRemoveButton()
