@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.48 $
+#   $Revision: 1.49 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-29 15:07:31 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:03:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,10 @@ LIBTARGET=NO
 
 # w.g. compilerbugs
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 CFLAGS+=-Od
 CFLAGS+=-DENABLE_QUICKSTART_APPLET
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)"=="UNX"
