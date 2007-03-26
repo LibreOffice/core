@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unitools.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:02:20 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:18:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -133,6 +133,11 @@ PERL*:=perl
 RENAME*=mv
 TOUCH*=touch
 TYPE*=cat
+TRANSEX*=transex3
+ULFEX*=ulfex
+XMLEX*=xmlex
+XRMEX*=xrmex
+CFGEX*=cfgex
 .ELSE			# "$(USE_SHELL)"!="4nt"
 CDD=+cdd
 COPY*=+copy
