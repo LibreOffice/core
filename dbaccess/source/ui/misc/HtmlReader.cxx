@@ -4,9 +4,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 13:31:57 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:07:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,7 +175,11 @@ using namespace ::com::sun::star::awt;
 
 const HTMLOptionEnum* getOptions()
 {
+#ifdef __MINGW32__ // for runtime pseudo reloc
+    static HTMLOptionEnum aHTMLMetaNameTable[] =
+#else
     static HTMLOptionEnum __READONLY_DATA aHTMLMetaNameTable[] =
+#endif
     {
         { sHTML_META_author,        HTML_META_AUTHOR        },
         { sHTML_META_changed,       HTML_META_CHANGED       },
