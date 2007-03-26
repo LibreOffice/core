@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:16:37 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:07:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@ UWINAPILIB=
 SLOFILES =	$(SLO)$/jfregca.obj
 
 STDSHL += \
-    advapi32.lib\
-    msi.lib
+    $(ADVAPI32LIB)\
+    $(MSILIB)
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
