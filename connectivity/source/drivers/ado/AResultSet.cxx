@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AResultSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:15:05 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1010,6 +1010,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
 }
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getResultSetConcurrency() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nValue=0;
     LockTypeEnum eRet;
@@ -1029,6 +1030,7 @@ sal_Int32 OResultSet::getResultSetConcurrency() const
 }
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getResultSetType() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nValue=0;
     CursorTypeEnum eRet;
@@ -1053,11 +1055,13 @@ sal_Int32 OResultSet::getResultSetType() const
 }
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getFetchDirection() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
 //------------------------------------------------------------------------------
 sal_Int32 OResultSet::getFetchSize() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nValue=-1;
     m_pRecordSet->get_CacheSize(&nValue);
@@ -1065,17 +1069,20 @@ sal_Int32 OResultSet::getFetchSize() const
 }
 //------------------------------------------------------------------------------
 ::rtl::OUString OResultSet::getCursorName() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------------
 void OResultSet::setFetchDirection(sal_Int32 /*_par0*/)
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
 }
 //------------------------------------------------------------------------------
 void OResultSet::setFetchSize(sal_Int32 _par0)
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     m_pRecordSet->put_CacheSize(_par0);
 }
@@ -1177,12 +1184,12 @@ void OResultSet::getFastPropertyValue(Any& rValue,sal_Int32 nHandle) const
     }
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OResultSet::acquire() throw()
 {
     OResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OResultSet::release() throw()
 {
     OResultSet_BASE::release();
 }
