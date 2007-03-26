@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 12:25:39 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,9 @@
 #include <osl/diagnose.h>
 #include <osl/mutex.h>
 #include <osl/signal.h>
+#ifndef __MINGW32__
 #include <DbgHelp.h>
+#endif
 #include <ErrorRep.h>
 #include <systools/win32/uwinapi.h>
 
@@ -69,6 +71,9 @@ static sal_Bool InitSignal(void)
     hFaultRep = LoadLibrary( "faultrep.dll" );
     if ( hFaultRep )
     {
+#ifdef __MINGW32__
+typedef BOOL (WINAPI *pfn_ADDEREXCLUDEDAPPLICATIONW)(LPCWSTR);
+#endif
         pfn_ADDEREXCLUDEDAPPLICATIONW       pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
         if ( pfn )
             pfn( L"SOFFICE.EXE" );
