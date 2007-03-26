@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AKey.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:13:58 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:57:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,12 +176,12 @@ void OAdoKey::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rVal
 }
 // -------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoKey::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoKey::acquire() throw()
 {
     OKey_ADO::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoKey::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoKey::release() throw()
 {
     OKey_ADO::release();
 }
