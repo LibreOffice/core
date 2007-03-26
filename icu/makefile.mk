@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.33 $
+#   $Revision: 1.34 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:37:16 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:25:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,6 +71,11 @@ icu_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 icu_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
+
+# Disable executable stack
+.IF "$(OS)$(COM)"=="LINUXGCC"
+icu_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
 
 icu_CFLAGS+=-O $(ARCH_FLAGS)
 icu_CXXFLAGS+=-O $(ARCH_FLAGS)
