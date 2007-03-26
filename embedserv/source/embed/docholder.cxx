@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:40:04 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:47:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1521,6 +1521,7 @@ void SAL_CALL
 DocumentHolder::disposing(
     const com::sun::star::lang::EventObject& aSource
 )
+        throw( uno::RuntimeException )
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
     {
@@ -1551,6 +1552,7 @@ DocumentHolder::queryClosing(
 void SAL_CALL
 DocumentHolder::notifyClosing(
     const lang::EventObject& aSource )
+        throw( uno::RuntimeException )
 {
     try
     {
@@ -1592,6 +1594,7 @@ void SAL_CALL
 DocumentHolder::notifyTermination(
     const lang::EventObject& aSource
 )
+        throw( uno::RuntimeException )
 {
     OSL_ENSURE( !m_xDocument.is(), "Just a disaster..." );
     uno::Reference< frame::XDesktop > xDesktop(
