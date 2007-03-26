@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.30 $
+#   $Revision: 1.31 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:23:31 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:36:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,8 @@ ADDITIONAL_FILES=$(foreach,i,$(ADDITIONAL_FILES_TMP) PCbuild/$(i).mak PCbuild/$(
 
 CONFIGURE_DIR=
 
+ADDITIONAL_FILES+=Lib/plat-cygwin Python/fileblocks.c
+
 .IF "$(GUI)"=="UNX"
 BUILD_DIR=
 MYCWD=$(shell pwd)/$(INPATH)/misc/build
@@ -122,6 +124,16 @@ BUILD_ACTION=$(ENV_BUILD) $(GNUMAKE) -j$(EXTMAXPROCESS) ; $(GNUMAKE) install ; c
 # ----------------------------------
 # WINDOWS
 # ----------------------------------
+.IF "$(COM)"=="GCC"
+BUILD_DIR=
+MYCWD=$(shell pwd)/$(INPATH)/misc/build
+CC:=$(CC:s/guw.pl //)
+CXX:=$(CXX:s/guw.pl //)
+LDFLAGS:=-mno-cygwin
+.EXPORT : LDFLAGS
+CONFIGURE_ACTION= ./configure --prefix=$(MYCWD)/python-inst --enable-shared LN="cp -p"
+BUILD_ACTION=$(ENV_BUILD) make ; make install
+.ELSE
 PYTHONPATH:=..$/Lib
 .EXPORT : PYTHONPATH
 
@@ -140,6 +152,7 @@ BUILD_ACTION= \
     python.exe -c "import os" && \
     echo build done
 .ENDIF
+.ENDIF
 
 PYVERSIONFILE=$(MISC)$/pyversion.mk
 
@@ -152,6 +165,7 @@ PYVERSIONFILE=$(MISC)$/pyversion.mk
 
 .IF "$(L10N_framework)"==""
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)"!="GCC"
 PYCONFIG:=$(MISC)$/build$/pyconfig.h
 $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h : $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE)
 
@@ -160,6 +174,7 @@ $(PACKAGE_DIR)$/$(BUILD_FLAG_FILE) : $(PYCONFIG)
 $(PYCONFIG) : $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h
     -rm -f $@
     cat $(MISC)$/build$/$(TARFILE_NAME)$/PC$/pyconfig.h > $@
+.ENDIF
 .ENDIF
 
 ALLTAR : $(PYVERSIONFILE)
