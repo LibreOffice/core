@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSet.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:12:24 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:56:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -695,21 +695,25 @@ Any SAL_CALL ODatabaseMetaDataResultSet::getWarnings(  ) throw(SQLException, Run
 }
 //------------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetConcurrency() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ResultSetConcurrency::READ_ONLY;
 }
 //------------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaDataResultSet::getResultSetType() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ResultSetType::FORWARD_ONLY;
 }
 //------------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaDataResultSet::getFetchDirection() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return FetchDirection::FORWARD;
 }
 //------------------------------------------------------------------------------
 sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     sal_Int32 nValue=-1;
     if(m_pRecordSet)
@@ -718,17 +722,20 @@ sal_Int32 ODatabaseMetaDataResultSet::getFetchSize() const
 }
 //------------------------------------------------------------------------------
 ::rtl::OUString ODatabaseMetaDataResultSet::getCursorName() const
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString();
 }
 
 //------------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::setFetchDirection(sal_Int32 /*_par0*/)
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     ::dbtools::throwFeatureNotImplementedException( "ResultSet::FetchDirection", *this );
 }
 //------------------------------------------------------------------------------
 void ODatabaseMetaDataResultSet::setFetchSize(sal_Int32 _par0)
+    throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException)
 {
     if(m_pRecordSet)
         m_pRecordSet->put_CacheSize(_par0);
@@ -1219,12 +1226,12 @@ void ODatabaseMetaDataResultSet::setTypeInfoMap(sal_Bool _bJetEngine)
     m_xMetaData = pMetaData;
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::acquire() throw()
 {
     ODatabaseMetaDataResultSet_BASE::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL ODatabaseMetaDataResultSet::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL ODatabaseMetaDataResultSet::release() throw()
 {
     ODatabaseMetaDataResultSet_BASE::release();
 }
