@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:28:52 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:08:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,7 @@ PRJNAME=dtrans
 TARGET=dtutils
 LIBTARGET=NO
 USE_BOUNDCHK=
+ENABLE_EXCEPTIONS=YES
 
 .IF "$(USE_BOUNDCHK)"=="TR"
 bndchk=tr
