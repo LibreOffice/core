@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:53:59 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,8 @@
 #include "sfxsids.hrc"
 #include "dispatch.hxx"
 #include "request.hxx"
+
+#include <sfxuno.hxx>
 
 using namespace com::sun::star;
 
@@ -333,8 +335,19 @@ void SfxVersionDialog::Open_Impl()
     SfxStringItem aTarget( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") );
     SfxStringItem aReferer( SID_REFERER, DEFINE_CONST_UNICODE("private:user") );
     SfxStringItem aFile( SID_FILE_NAME, pObjShell->GetMedium()->GetName() );
-    pViewFrame->GetDispatcher()->Execute(
-        SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, 0L );
+
+    ::rtl::OUString aPassString;
+    if ( GetPasswd_Impl( pObjShell->GetMedium()->GetItemSet(), aPassString ) )
+    {
+        // there is a password, it should be used during the opening
+        SfxStringItem aPassItem( SID_PASSWORD, aPassString );
+        pViewFrame->GetDispatcher()->Execute(
+            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, &aPassItem, 0L );
+    }
+    else
+        pViewFrame->GetDispatcher()->Execute(
+            SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, &aFile, &aItem, &aTarget, &aReferer, 0L );
+
     Close();
 }
 
