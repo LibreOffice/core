@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:30:43 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:45:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,7 +108,7 @@ LIB1FILES+=  $(SLB)$/dll.lib
 LIB1FILES+= $(SOLARLIBDIR)\xosl.lib \
             $(SOLARLIBDIR)\xrtl.lib \
             $(SOLARLIBDIR)\xvos.lib
-SHL1STDLIBS+=   wsock32.lib
+SHL1STDLIBS+=   $(WSOCK32LIB)
 .ENDIF
 .ENDIF          # "$(BIG_TOOLS)"!=""
 
@@ -129,11 +129,11 @@ SHL1STDLIBS+=   $(GPC3RDLIB)
 
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+=   shell32.lib     \
-                mpr.lib         \
-                ole32.lib       \
-                uuid.lib        \
-                advapi32.lib
+SHL1STDLIBS+=   $(SHELL32LIB)     \
+                $(MPRLIB)         \
+                $(OLE32LIB)       \
+                $(UUIDLIB)        \
+                $(ADVAPI32LIB)
 .ENDIF
 
 DEF1NAME        =$(SHL1TARGET)
