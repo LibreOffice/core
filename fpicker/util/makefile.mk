@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:53:34 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:21:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,15 +57,15 @@ COMMON_LIBS=$(CPPULIB)\
 
 SHL1TARGET=$(TARGET1)
 SHL1STDLIBS=		$(COMMON_LIBS) \
-            uwinapi.lib \
-            advapi32.lib \
-            shell32.lib\
-            ole32.lib\
-            gdi32.lib\
-            oleaut32.lib\
-            comdlg32.lib\
-            kernel32.lib\
-            oleaut32.lib
+            $(UWINAPILIB) \
+            $(ADVAPI32LIB) \
+            $(SHELL32LIB)\
+            $(OLE32LIB)\
+            $(GDI32LIB)\
+            $(OLEAUT32LIB)\
+            $(COMDLG32LIB)\
+            $(KERNEL32LIB)\
+            $(OLEAUT32LIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
@@ -86,12 +86,12 @@ SHL2NOCHECK=TRUE
 SHL2TARGET=$(TARGET2)
 
 SHL2STDLIBS=		$(COMMON_LIBS) \
-            uwinapi.lib \
-            advapi32.lib \
-            ole32.lib\
-            gdi32.lib\
-            shell32.lib\
-            oleaut32.lib
+            $(UWINAPILIB) \
+            $(ADVAPI32LIB) \
+            $(OLE32LIB)\
+            $(GDI32LIB)\
+            $(SHELL32LIB)\
+            $(OLEAUT32LIB)
 
 SHL2DEPN=
 SHL2IMPLIB=i$(SHL2TARGET)
