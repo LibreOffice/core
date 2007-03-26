@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:45:02 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:44:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2194,7 +2194,7 @@ DirEntry DirEntry::TempName( DirEntryKind eKind ) const
              * Welcome to the 21st century, we can have longer filenames now ;)
              * New format: pfx + "5 char milli/micro second res" + "current pid" + ".tmp"
              */
-#if defined MSC && defined WNT
+#if (defined MSC || defined __MINGW32__) && defined WNT
             /* Milliseconds !! */
             static unsigned long u = GetTickCount();
             unsigned long mypid = static_cast<unsigned long>(_getpid());
