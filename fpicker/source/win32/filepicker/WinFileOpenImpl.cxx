@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WinFileOpenImpl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:49:17 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:19:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1055,7 +1055,7 @@ void SAL_CALL CWinFileOpenImpl::InitialSetDefaultName()
             edt1Id = cmb13;
 
         HWND hwndEdt1 = GetDlgItem(m_hwndFileOpenDlg, edt1Id);
-        SetWindowText(hwndEdt1, m_defaultName.getStr());
+        SetWindowText(hwndEdt1, reinterpret_cast<LPCTSTR>(m_defaultName.getStr()));
     }
 
     m_bInitialSelChanged = sal_False;
