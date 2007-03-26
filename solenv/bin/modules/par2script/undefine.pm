@@ -4,9 +4,9 @@
 #
 #   $RCSfile: undefine.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:28:35 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:46:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -102,5 +102,145 @@ sub undefine_gids
     }
 }
 
+##########################################################
+# Collecting all RemoveDirectories, that are listed
+# in the par files
+##########################################################
+
+sub get_list_of_removeitems
+{
+    my ($removeitem, $parfile) = @_;
+
+    my @collector  =();
+
+    for ( my $i = 0; $i <= $#{$parfile}; $i++ )
+    {
+        if ( ${$parfile}[$i] =~ /^\s*\Q$removeitem\E\s+(\w+)\s*$/ )
+        {
+            my $gid = $1;
+            my $item = $removeitem;
+            $item =~ s/Remove//;
+
+            my %removeitem = ();
+            $removeitem{'gid'} = $gid;
+            $removeitem{'item'} = $oneitem;
+
+            push(@collector, \%removeitem);
+        }
+    }
+
+    return \@collector;
+}
+
+##########################################################
+# Removing in the script complete directories.
+# This includes subdirectories, files and shortcuts.
+##########################################################
+
+sub remove_complete_dirs
+{
+    my ($script, $parfile) = @_;
+
+    my $removeitem = "RemoveDirectory";
+    my @allundefines = ();
+    my @alldirs = ();
+    my @removeitems = ("File", "Shortcut");
+
+    # Collecting all definitions of "RemoveDirectory"
+    my $oneremoveitem = "RemoveDirectory";
+    my $directremovedirs = get_list_of_removeitems($oneremoveitem, $parfile);
+
+    if ($#{$directremovedirs} > -1 )
+    {
+        par2script::work::add_array_into_array(\@allundefines, $directremovedirs);
+        par2script::work::add_array_into_array(\@alldirs, $directremovedirs);
+
+        # Collecting all subdirectories
+        for ( my $i = 0; $i <= $#{$directremovedirs}; $i++ )
+        {
+            my @collector = ();
+            my $dir = ${$directremovedirs}[$i];
+            my $directorygid = $dir->{'gid'};
+            par2script::work::collect_subdirectories($parfile, $directorygid, \@collector);
+            par2script::work::add_array_into_array(\@allundefines, \@collector);
+            par2script::work::add_array_into_array(\@alldirs, \@collector);
+        }
+
+        # Collecting Files and ShortCuts, that are installed in the collected directories
+        for ( my $i = 0; $i <= $#removeitems; $i++ )
+        {
+            for ( my $j = 0; $j <= $#alldirs; $j++ )
+            {
+                my @collector = ();
+                my $item = $removeitems[$i];
+                my $dir = $alldirs[$j];
+                my $directorygid = $dir->{'gid'};
+                par2script::work::get_all_items_in_directories($parfile, $directorygid, $item, \@collector);
+                par2script::work::add_array_into_array(\@allundefines, \@collector);
+            }
+        }
+    }
+
+    if ($#allundefines > -1 )
+    {
+        for ( my $i = 0; $i <= $#allundefines; $i++ )
+        {
+            my $gid = $allundefines[$i]->{'gid'};
+            print "Removing gid from script: $gid \n";
+            par2script::remover::remove_leading_and_ending_whitespaces(\$gid);
+            par2script::work::remove_definitionblock_from_script($script, $gid);
+        }
+    }
+}
+
+##########################################################
+# Removing in the script complete profiles.
+# This includes the Profile and its ProfileItems.
+##########################################################
+
+sub remove_complete_profile
+{
+    my ($script, $parfile) = @_;
+
+    my $removeitem = "RemoveProfile";
+    my @allundefines = ();
+    my @alldirs = ();
+    my @removeitems = ("ProfileItem");
+
+    # Collecting all definitions of "RemoveProfile"
+    my $oneremoveitem = "RemoveProfile";
+    my $directremoveprofiles = get_list_of_removeitems($oneremoveitem, $parfile);
+
+    if ($#{$directremoveprofiles} > -1 )
+    {
+        par2script::work::add_array_into_array(\@allundefines, $directremoveprofiles);
+        par2script::work::add_array_into_array(\@allprofiles, $directremoveprofiles);
+
+        # Collecting ProfileItems, that are written in the collected Profiles
+        for ( my $i = 0; $i <= $#removeitems; $i++ )
+        {
+            for ( my $j = 0; $j <= $#allprofiles; $j++ )
+            {
+                my @collector = ();
+                my $item = $removeitems[$i];
+                my $profile = $allprofiles[$j];
+                my $profilegid = $profile->{'gid'};
+                par2script::work::get_all_items_in_profile($parfile, $profilegid, $item, \@collector);
+                par2script::work::add_array_into_array(\@allundefines, \@collector);
+            }
+        }
+    }
+
+    if ($#allundefines > -1 )
+    {
+        for ( my $i = 0; $i <= $#allundefines; $i++ )
+        {
+            my $gid = $allundefines[$i]->{'gid'};
+            print "Removing gid from script: $gid \n";
+            par2script::remover::remove_leading_and_ending_whitespaces(\$gid);
+            par2script::work::remove_definitionblock_from_script($script, $gid);
+        }
+    }
+}
 
 1;
