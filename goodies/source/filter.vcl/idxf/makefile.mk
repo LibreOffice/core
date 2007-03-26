@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:31:42 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:57:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,9 @@ SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=       $(SLB)$/idxf.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 SHL1OBJS=       $(SLO)$/idxf.obj
+.ENDIF
 .ENDIF
 
 SHL1VERSIONMAP=exports.map
