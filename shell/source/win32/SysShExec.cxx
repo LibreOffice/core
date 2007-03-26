@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SysShExec.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:43:09 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:49:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,8 +329,8 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
     ZeroMemory(&sei, sizeof( sei));
 
     sei.cbSize       = sizeof(sei);
-    sei.lpFile       = preprocessed_command.getStr();
-    sei.lpParameters = aParameter.getStr();
+    sei.lpFile       = reinterpret_cast<LPCWSTR>(preprocessed_command.getStr());
+    sei.lpParameters = reinterpret_cast<LPCWSTR>(aParameter.getStr());
     sei.nShow        = SW_SHOWNORMAL;
 
     if (NO_SYSTEM_ERROR_MESSAGE & nFlags)
