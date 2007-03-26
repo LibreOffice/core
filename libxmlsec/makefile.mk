@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 18:58:55 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:24:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,11 @@ xmlsec_LDFLAGS+=-Wl,-rpath,'$$$$ORIGIN'
 .IF "$(OS)$(COM)"=="SOLARISC52"
 xmlsec_LDFLAGS+=-Wl,-R'$$$$ORIGIN'
 .ENDIF			# "$(OS)$(COM)"=="SOLARISC52"
+
+.IF "$(OS)$(COM)"=="LINUXGCC"
+xmlsec_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
+
 LDFLAGS:=$(xmlsec_LDFLAGS)
 .EXPORT: LDFLAGS
 
@@ -112,7 +117,7 @@ LDFLAGS:=$(xmlsec_LDFLAGS)
 .ENDIF
 CONFIGURE_DIR=
 #CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)" LDFLAGS="$(xmlsec_LDFLAGS)"
-CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure CFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
+CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure ADDCFLAGS="$(xmlsec_CFLAGS)" CPPFLAGS="$(xmlsec_CPPFLAGS)"
 CONFIGURE_FLAGS=--with-libxslt=no --with-openssl=no --with-gnutls=no
 # system-mozilla needs pkgconfig to get the information about nss
 # FIXME: This also will enable pkg-config usage for libxml2. It *seems*
