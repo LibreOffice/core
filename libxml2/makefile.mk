@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2005-12-28 16:59:16 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:25:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,14 @@ xml2_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 xml2_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
+
+.IF "$(OS)$(COM)"=="LINUXGCC"
+xml2_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes CFLAGS="$(xml2_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS)"
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --with-sax1=yes ADDCFLAGS="$(xml2_CFLAGS)" LDFLAGS="$(xml2_LDFLAGS)"
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
