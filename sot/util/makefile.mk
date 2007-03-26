@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:33:51 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:01:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,11 @@ TARGET=sot
 # --- Files --------------------------------------------------------
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
+.IF "$(GUI)$(COM)"=="WNTGCC"
+LIB1ARCHIV= $(LB)$/lib$(TARGET)$(UPD)$(DLLPOSTFIX)_static.a
+.ELSE
 LIB1ARCHIV= $(LB)$/lib$(TARGET)$(UPD)$(DLLPOSTFIX).a
+.ENDIF
 LIB1FILES=	$(SLB)$/base.lib \
             $(SLB)$/sdstor.lib \
             $(SLB)$/unoolestorage.lib
