@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.107 $
+#   $Revision: 1.108 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:06:22 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:27:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -105,14 +105,14 @@ $(MISC)$/$(SHL$(TNR)VERSIONOBJ:b).c : $(SOLARENV)$/src$/version.c $(INCCOM)$/$(S
 
 .IF "$(GUI)" != "UNX"
 .IF "$(GUI)" == "WNT"
-.IF "$(COM)" == "MSC"
 .IF "$(SHL$(TNR)IMPLIB)" == ""
 SHL$(TNR)IMPLIB=i$(TARGET)_t$(TNR)
 .ENDIF			# "$(SHL$(TNR)IMPLIB)" == ""
+.IF "$(COM)" != "GCC"
 USE_$(TNR)IMPLIB=-implib:$(LB)$/$(SHL$(TNR)IMPLIB).lib
+.ENDIF			# "$(COM)" != "GCC"
 SHL$(TNR)IMPLIBN=$(LB)$/$(SHL$(TNR)IMPLIB).lib
 ALLTAR : $(SHL$(TNR)IMPLIBN)
-.ENDIF			# "$(COM)" == "MSC"
 
 .IF "$(USE_DEFFILE)"==""
 USE_$(TNR)IMPLIB_DEPS=$(LB)$/$(SHL$(TNR)IMPLIB).lib
@@ -238,12 +238,14 @@ SHL$(TNR)SONAME=\"$(SONAME_SWITCH)$(SHL$(TNR)TARGETN:f)\"
 .IF "$(SHL$(TNR)RES)"!=""
 SHL$(TNR)ALLRES+=$(SHL$(TNR)RES)
 SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
+SHL$(TNR)LINKRESO*=$(MISC)$/$(SHL$(TNR)TARGET)_res.o
 .ENDIF			# "$(SHL$(TNR)RES)"!=""
 
 .IF "$(SHL$(TNR)DEFAULTRES)$(use_shl_versions)"!=""
 SHL$(TNR)DEFAULTRES*=$(MISC)$/$(SHL$(TNR)TARGET)_def.res
 SHL$(TNR)ALLRES+=$(SHL$(TNR)DEFAULTRES)
 SHL$(TNR)LINKRES*=$(MISC)$/$(SHL$(TNR)TARGET).res
+SHL$(TNR)LINKRESO*=$(MISC)$/$(SHL$(TNR)TARGET)_res.o
 .ENDIF			# "$(SHL$(TNR)DEFAULTRES)$(use_shl_versions)"!=""
 
 .IF "$(NO_SHL$(TNR)DESCRIPTION)"==""
@@ -315,18 +317,34 @@ $(SHL$(TNR)TARGETN) : \
     $(COPY) /b $(SHL$(TNR)ALLRES:s/res /res+/) $(SHL$(TNR)LINKRES)
 .ELSE			# "$(USE_SHELL)"=="4nt"
     $(TYPE) $(SHL$(TNR)ALLRES) > $(SHL$(TNR)LINKRES)
+.IF "$(COM)"=="GCC"
+    windres $(SHL$(TNR)LINKRES) $(SHL$(TNR)LINKRESO)
+.ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF			# "$(SHL$(TNR)ALLRES)"!=""
+.IF "$(COM)"=="GCC"
+.IF "$(USE_DEFFILE)"!=""
+    dlltool --input-def $(SHL$(TNR)DEF) --dllname $(SHL$(TNR)TARGET)$(DLLPOST) --kill-at --output-exp $(MISC)$/$(@:b).exp
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
+        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        -Wl,$(MISC)$/$(@:b).exp,--exclude-libs,ALL $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
+        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.ELSE			# "$(USE_DEFFILE)"!=""
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
+        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) $(SHL$(TNR)OBJS) $(SHL$(TNR)LINKRESO) \
+        `$(TYPE) /dev/null $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$(ROUT)\#g` \
+        -Wl,--export-all-symbols,--exclude-libs,ALL $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) \
+        -Wl,-Map,$(MISC)$/$(@:b).map > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+.ENDIF			# "$(USE_DEFFILE)"!=""
+.ELSE
 .IF "$(linkinc)"==""
 .IF "$(SHL$(TNR)USE_EXPORTS)"!="name"
 .IF "$(USE_DEFFILE)"!=""
-.IF "$(COM)"=="GCC"
-    @echo $(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS) $(LINKFLAGSSHL) -o$@ \
-        $(STDOBJ) $(SHL$(TNR)VERSIONOBJ) $(SHL$(TNR)DESCRIPTIONOBJ) | tr -d "\r\n" > $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-    @$(TYPE) $(SHL$(TNR)LIBS) | $(SED) s\#$(ROUT)\#$(PRJ)$/$/$(ROUT)\#g | tr -d "\r\n" >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-    @echo  $(SHL$(TNR)STDLIBS) $(SHL$(TNR)STDSHL) $(STDSHL$(TNR)) $(SHL$(TNR)RES) >> $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-    $(MISC)$/$(TARGET).$(@:b)_$(TNR).cmd
-.ELSE
     $(SHL$(TNR)LINKER) @$(mktmp \
         $(SHL$(TNR)LINKFLAGS) \
         $(LINKFLAGSSHL) \
@@ -347,7 +365,6 @@ $(SHL$(TNR)TARGETN) : \
     @echo linking $@.manifest ...
     $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
     $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
-.ENDIF			# "$(COM)"=="GCC"
 .ELSE			# "$(USE_DEFFILE)"!=""
     $(SHL$(TNR)LINKER) @$(mktmp	$(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
@@ -405,6 +422,7 @@ $(SHL$(TNR)TARGETN) : \
         $(IFEXIST) $@.manifest $(THEN) mt.exe -manifest $@.manifest -outputresource:$@$(EMQ);2 $(FI)
         $(IFEXIST) $@.manifest $(THEN) $(RM:s/+//) $@.manifest $(FI)
 .ENDIF			# "$(linkinc)"==""
+.ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)" == "WNT"
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)"=="MACOSX"
@@ -492,13 +510,19 @@ $(SHL$(TNR)IMPLIBN):	\
     @echo ------------------------------
     @echo Making: $(SHL$(TNR)IMPLIBN)
 .IF "$(GUI)" == "WNT"
+.IF "$(COM)"=="GCC"
+    @echo no ImportLibs on mingw
+    @+-$(RM) $@
+    @$(TOUCH) $@
+.ELSE			# "$(COM)=="GCC"
 # bei use_deffile implib von linker erstellt
 .IF "$(USE_DEFFILE)"==""
     $(IMPLIB) $(IMPLIBFLAGS) @$(mktmp -out:$(SHL$(TNR)IMPLIBN) \
     -def:$(SHL$(TNR)DEF) )
-.ELSE			# "$(GUI)" == "WNT"
+.ELSE			# "$(USE_DEFFILE)==""
     @echo build of $(SHL$(TNR)TARGETN) creates $@
-.ENDIF			# "$(GUI)" == "WNT"
+.ENDIF			# "$(USE_DEFFILE)==""
+.ENDIF			# "$(COM)"=="GCC"
 .ELSE
     @echo no ImportLibs on Mac and *ix
     @-$(RM) $@
