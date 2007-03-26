@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.191 $
+ *  $Revision: 1.192 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:18:29 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:12:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -287,7 +287,7 @@ sal_Bool SfxObjectShell::SaveAs( SfxMedium& rMedium )
 
 //-------------------------------------------------------------------------
 
-sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd )
+sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, ::rtl::OUString& rPasswd )
 {
     const SfxPoolItem* pItem = NULL;
     if ( pSet && SFX_ITEM_SET == pSet->GetItemState( SID_PASSWORD, sal_True, &pItem ) )
@@ -1179,7 +1179,7 @@ sal_Bool SfxObjectShell::DoSave()
 
         pImp->bIsSaving = sal_True;
 
-        String aPasswd;
+        ::rtl::OUString aPasswd;
         if ( IsPackageStorageFormat_Impl( *GetMedium() ) )
         {
             if ( GetPasswd_Impl( GetMedium()->GetItemSet(), aPasswd ) )
@@ -1484,7 +1484,7 @@ sal_Bool SfxObjectShell::SaveTo_Impl
         }
 
         // transfer password from the parameters to the storage
-        String aPasswd;
+        ::rtl::OUString aPasswd;
         sal_Bool bPasswdProvided = sal_False;
         if ( GetPasswd_Impl( rMedium.GetItemSet(), aPasswd ) )
         {
@@ -3055,7 +3055,7 @@ sal_Bool SfxObjectShell::LoadOwnFormat( SfxMedium& rMedium )
         SFX_ITEMSET_ARG( rMedium.GetItemSet(), pPasswdItem, SfxStringItem, SID_PASSWORD, sal_False );
         if ( pPasswdItem || ERRCODE_IO_ABORT != CheckPasswd_Impl( this, SFX_APP()->GetPool(), pMedium ) )
         {
-            String aPasswd;
+            ::rtl::OUString aPasswd;
             if ( GetPasswd_Impl(pMedium->GetItemSet(), aPasswd) )
             {
                 try
