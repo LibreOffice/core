@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:44:29 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:53:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1162,11 +1162,11 @@ void FontSizeBox::ImplInit()
 
 void FontSizeBox::Reformat()
 {
-    if ( !bRelativeMode )
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
+    if ( !bRelativeMode || !aFontSizeNames.IsEmpty() )
     {
-        FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
         long nNewValue = aFontSizeNames.Name2Size( GetText() );
-            if ( nNewValue)
+        if ( nNewValue)
         {
             mnLastValue = nNewValue;
             return;
@@ -1256,24 +1256,24 @@ void FontSizeBox::Fill( const FontInfo* pInfo, const FontList* pList )
         pAry = pList->GetStdSizeAry();
     }
 
+    // first insert font size names (for simplified/traditional chinese)
+    FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
     if ( pAry == pList->GetStdSizeAry() )
     {
         // for standard sizes we don't need to bother
-        if ( bStdSize && GetEntryCount() )
+        if ( bStdSize && GetEntryCount() && aFontSizeNames.IsEmpty() )
             return;
         bStdSize = TRUE;
     }
     else
         bStdSize = FALSE;
 
-    Selection   aSelection = GetSelection();
-    XubString   aStr = GetText();
+    Selection aSelection = GetSelection();
+    XubString aStr = GetText();
 
     Clear();
     USHORT nPos = 0;
 
-    // first insert font size names (for simplified/traditional chinese)
-    FontSizeNames aFontSizeNames( GetSettings().GetUILanguage() );
     if ( !aFontSizeNames.IsEmpty() )
     {
         if ( pAry == pList->GetStdSizeAry() )
@@ -1435,6 +1435,7 @@ void FontSizeBox::SetValue( sal_Int64 nNewValue, FieldUnit eInUnit )
             SetText( aName );
             mnFieldValue = mnLastValue;
             SetEmptyFieldValueData( FALSE );
+            return;
         }
     }
 
