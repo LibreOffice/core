@@ -17,7 +17,7 @@ public:
 
     RegistryException(long ErrorCode);
 
-    virtual ~RegistryException();
+    virtual ~RegistryException() throw();
 
     /**
         @descr  Returns a string that describes the error if
@@ -25,7 +25,7 @@ public:
                 returned string is only temporary so the caller
                 has to copy it if he needs the string further.
     */
-    virtual const char* what() const;
+    virtual const char* what() const throw();
 
     /**
         @descr  Returns the error code.
