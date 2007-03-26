@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OSubComponent.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:37:56 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,13 +83,14 @@ namespace connectivity
     protected:
         void dispose_ChildImpl()
         {
-            ::osl::MutexGuard aGuard( m_pDerivedImplementation->rBHelper.rMutex );
+            // avoid ambiguity
+            ::osl::MutexGuard aGuard( m_pDerivedImplementation->WEAK::rBHelper.rMutex );
             m_xParent = NULL;
         }
         void relase_ChildImpl()
         {
             ::connectivity::release(m_pDerivedImplementation->m_refCount,
-                                    m_pDerivedImplementation->rBHelper,
+                                    m_pDerivedImplementation->WEAK::rBHelper,
                                     m_xParent,
                                     m_pDerivedImplementation);
 
