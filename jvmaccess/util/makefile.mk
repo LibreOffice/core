@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:38:28 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:55:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ SHL1IMPLIB = i$(TARGET)
 SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1STDLIBS = $(CPPULIB) $(SALLIB) $(SALHELPERLIB)
 .IF "$(OS)" == "WNT"
-SHL1STDLIBS += advapi32.lib
+SHL1STDLIBS += $(ADVAPI32LIB)
 .ENDIF # WNT
 
 .IF "$(COMNAME)" == "msci"
@@ -70,6 +70,8 @@ SHL1VERSIONMAP = gcc3_linux_intel.map
 SHL1VERSIONMAP = gcc3_linux_intel.map
 .ELIF "$(OS)$(CPU)$(COMNAME)"=="MACOSXIgcc3"
 SHL1VERSIONMAP = gcc3_linux_intel.map
+.ELIF "$(GUI)$(COM)" == "WNTGCC"
+SHL1VERSIONMAP = mingw.map
 .ENDIF
 
 DEF1NAME = $(SHL1TARGET)
