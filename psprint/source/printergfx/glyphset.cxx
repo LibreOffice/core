@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glyphset.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:36:46 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:16:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -818,7 +818,7 @@ GlyphSet::PSUploadFont (osl::File& rOutFile, PrinterGfx &rGfx, bool bAsType42, s
     TrueTypeFont *pTTFont;
     OString aTTFileName (rGfx.GetFontMgr().getFontFileSysPath(mnFontID));
     int nFace = rGfx.GetFontMgr().getFontFaceNumber(mnFontID);
-    sal_Int32 nSuccess = OpenTTFont(aTTFileName.getStr(), nFace < 0 ? 0 : nFace, &pTTFont);
+    sal_Int32 nSuccess = OpenTTFontFile(aTTFileName.getStr(), nFace < 0 ? 0 : nFace, &pTTFont);
     if (nSuccess != SF_OK)
         return sal_False;
     FILE* pTmpFile = tmpfile();
