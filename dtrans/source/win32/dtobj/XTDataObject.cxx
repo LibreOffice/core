@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:37:29 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:07:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,10 @@
 #pragma warning(pop)
 #endif
 
+#ifdef __MINGW32__
+#define __uuidof(I) IID_##I
+#endif
+
 //------------------------------------------------------------------------
 // namespace directives
 //------------------------------------------------------------------------
@@ -91,7 +95,6 @@ using namespace com::sun::star::datatransfer::clipboard;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::lang;
 using namespace rtl;
-//2005 using CStgTransferHelper::CStgTransferException;
 
 //------------------------------------------------------------------------
 // a helper class that will be thrown by the function validateFormatEtc
@@ -463,7 +466,7 @@ void SAL_CALL CXTDataObject::renderSynthesizedTextAndSetupStgMedium( FORMATETC& 
 
     WideCharToMultiByteEx(
         GetACP( ),
-        static_cast< const sal_Unicode* >( aUnicodeText.getStr( ) ),
+        reinterpret_cast<LPCWSTR>( aUnicodeText.getStr( ) ),
         aUnicodeText.getLength( ),
         stgTransfHelper );
 
