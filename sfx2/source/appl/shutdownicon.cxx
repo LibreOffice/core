@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 12:15:30 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:10:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,6 +258,7 @@ void ShutdownIcon::deInitSystray()
 ShutdownIcon::ShutdownIcon( Reference< XMultiServiceFactory > aSMgr ) :
     ShutdownIconServiceBase( m_aMutex ),
     m_bVeto ( false ),
+    m_bListenForTermination ( false ),
     m_pResMgr( NULL ),
     m_pFileDlg( NULL ),
     m_xServiceManager( aSMgr ),
@@ -540,35 +541,51 @@ IMPL_STATIC_LINK( ShutdownIcon, DialogClosedHdl_Impl, FileDialogHelper*, EMPTYAR
 
 void ShutdownIcon::addTerminateListener()
 {
-    if ( getInstance() && getInstance()->m_xDesktop.is() )
-        getInstance()->m_xDesktop->addTerminateListener( getInstance() );
+    ShutdownIcon* pInst = getInstance();
+    if ( ! pInst)
+        return;
+
+    if (pInst->m_bListenForTermination)
+        return;
+
+    Reference< XDesktop > xDesktop = pInst->m_xDesktop;
+    if ( ! xDesktop.is())
+        return;
+
+    xDesktop->addTerminateListener( pInst );
+    pInst->m_bListenForTermination = true;
 }
 
 // ---------------------------------------------------------------------------
 
 void ShutdownIcon::terminateDesktop()
 {
-    if ( getInstance() && getInstance()->m_xDesktop.is() )
+    ShutdownIcon* pInst = getInstance();
+    if ( ! pInst)
+        return;
+
+    Reference< XDesktop > xDesktop = pInst->m_xDesktop;
+    if ( ! xDesktop.is())
+        return;
+
+    // always remove ourselves as listener
+    xDesktop->removeTerminateListener( pInst );
+    pInst->m_bListenForTermination = true;
+
+    // terminate desktop only if no tasks exist
+    Reference< XFramesSupplier > xSupplier( xDesktop, UNO_QUERY );
+    if ( xSupplier.is() )
     {
-        // always remove ourselves as listener
-        getInstance()->m_xDesktop->removeTerminateListener( getInstance() );
-
-
-        // terminate desktop only if no tasks exist
-        Reference < XFramesSupplier > xSupplier( getInstance()->m_xDesktop, UNO_QUERY );
-        if( xSupplier.is() )
+        Reference< XIndexAccess > xTasks ( xSupplier->getFrames(), UNO_QUERY );
+        if( xTasks.is() )
         {
-            Reference < XIndexAccess > xTasks ( xSupplier->getFrames(), UNO_QUERY );
-            if( xTasks.is() )
-            {
-                if( xTasks->getCount()<1 )
-                    getInstance()->m_xDesktop->terminate();
-            }
+            if( xTasks->getCount() < 1 )
+                xDesktop->terminate();
         }
-
-        // remove the instance pointer
-        ShutdownIcon::pShutdownIcon = 0;
     }
+
+    // remove the instance pointer
+    ShutdownIcon::pShutdownIcon = 0;
 }
 
 // ---------------------------------------------------------------------------
@@ -848,4 +865,58 @@ void ShutdownIcon::SetAutostart( bool bActivate )
 #else
     (void)bActivate; // unused variable
 #endif // ENABLE_QUICKSTART_APPLET
+}
+
+static const ::sal_Int32 PROPHANDLE_TERMINATEVETOSTATE = 0;
+
+// XFastPropertySet
+void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32                  nHandle,
+                                                  const ::com::sun::star::uno::Any& aValue )
+    throw (::com::sun::star::beans::UnknownPropertyException,
+            ::com::sun::star::beans::PropertyVetoException,
+            ::com::sun::star::lang::IllegalArgumentException,
+            ::com::sun::star::lang::WrappedTargetException,
+            ::com::sun::star::uno::RuntimeException)
+{
+    switch(nHandle)
+    {
+        case PROPHANDLE_TERMINATEVETOSTATE :
+             {
+                // use new value in case it's a valid information only
+                ::sal_Bool bState;
+                if (! (aValue >>= bState))
+                    return;
+
+                m_bVeto = bState;
+                if (m_bVeto && ! m_bListenForTermination)
+                    addTerminateListener();
+             }
+             break;
+
+        default :
+            throw ::com::sun::star::beans::UnknownPropertyException();
+    }
+}
+
+// XFastPropertySet
+::com::sun::star::uno::Any SAL_CALL ShutdownIcon::getFastPropertyValue( ::sal_Int32 nHandle )
+    throw (::com::sun::star::beans::UnknownPropertyException,
+            ::com::sun::star::lang::WrappedTargetException,
+            ::com::sun::star::uno::RuntimeException)
+{
+    ::com::sun::star::uno::Any aValue;
+    switch(nHandle)
+    {
+        case PROPHANDLE_TERMINATEVETOSTATE :
+             {
+                bool bState   = (m_bListenForTermination && m_bVeto);
+                     aValue <<= bState;
+             }
+             break;
+
+        default :
+            throw ::com::sun::star::beans::UnknownPropertyException();
+    }
+
+    return aValue;
 }
