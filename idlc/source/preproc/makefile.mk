@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:14:27 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:19:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,9 @@ OBJFILES=   \
 
 APP1TARGET= $(TARGET)
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 APP1OBJS=$(OBJ)$/cpp.obj
+.ENDIF
 .ENDIF
 
 APP1LIBS= $(LB)$/idlcpp.lib
