@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoobjw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:05:18 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ static void writeExcepinfo(EXCEPINFO * pInfo, const OUString& message)
     {
         pInfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
         pInfo->bstrSource = SysAllocString(L"[automation bridge] ");
-        pInfo->bstrDescription = SysAllocString(message.getStr());
+        pInfo->bstrDescription = SysAllocString(reinterpret_cast<LPCOLESTR>(message.getStr()));
     }
 }
 
@@ -283,7 +283,7 @@ STDMETHODIMP InterfaceOleWrapper_Impl::GetIDsOfNames(REFIID riid,
         // ----------------------------------------
         if (m_xInvocation.is() && (cNames > 0))
         {
-            OUString name(rgszNames[0]);
+            OUString name(reinterpret_cast<const sal_Unicode*>(rgszNames[0]));
             NameToIdMap::iterator iter = m_nameToDispIdMap.find(name);
 
             if (iter == m_nameToDispIdMap.end())
@@ -607,7 +607,7 @@ bool getType( const BSTR name, Type & type)
     Type retType;
     bool ret = false;
     typelib_TypeDescription * pDesc= NULL;
-    OUString str( name);
+    OUString str( reinterpret_cast<const sal_Unicode*>(name));
     typelib_typedescription_getByName( &pDesc, str.pData );
     if( pDesc)
     {
@@ -631,7 +631,11 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
         CComPtr<IDispatch> spDispDest(varDest.pdispVal);
 
         // special Handling for a JScriptValue object
+#ifdef __MINGW32__
+        CComQIPtr<IJScriptValueObject, &__uuidof(IJScriptValueObject)> spValueDest(spDispDest);
+#else
         CComQIPtr<IJScriptValueObject> spValueDest(spDispDest);
+#endif
         if (spValueDest)
         {
             VARIANT_BOOL varBool= VARIANT_FALSE;
@@ -650,7 +654,11 @@ static sal_Bool writeBackOutParameter2( VARIANTARG* pDest, VARIANT* pSource)
             // of a property if it does not exist already. This is convenient for
             // out parameters in JScript. Then the user must not specify propery "0"
             // explicitly
+#ifdef __MINGW32__
+            CComQIPtr<IDispatchEx, &__uuidof(IDispatchEx)> spDispEx( spDispDest);
+#else
             CComQIPtr<IDispatchEx> spDispEx( spDispDest);
+#endif
             if( spDispEx)
             {
                 CComBSTR nullProp(L"0");
@@ -1091,7 +1099,7 @@ HRESULT InterfaceOleWrapper_Impl::doSetProperty( DISPPARAMS * pdispparams, VARIA
             pexcepinfo->wCode = UNO_2_OLE_EXCEPTIONCODE;
             pexcepinfo->bstrSource = SysAllocString(L"any ONE component");
             pexcepinfo->bstrDescription = SysAllocString(
-                org.getValueType().getTypeName());
+                reinterpret_cast<LPCOLESTR>(org.getValueType().getTypeName().getStr()));
         }
         ret = DISP_E_EXCEPTION;
     }
@@ -1136,7 +1144,11 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             {
                 pValue->AddRef();
                 pvarResult->vt= VT_DISPATCH;
+#ifdef __MINGW32__
+                pvarResult->pdispVal= CComQIPtr<IDispatch, &__uuidof(IDispatch)>(pValue->GetUnknown());
+#else
                 pvarResult->pdispVal= CComQIPtr<IDispatch>(pValue->GetUnknown());
+#endif
                 ret= S_OK;
             }
             else
@@ -1156,7 +1168,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
                 CComVariant arg;
                 if( pdispparams->cArgs == 1 && SUCCEEDED( arg.ChangeType( VT_BSTR, &pdispparams->rgvarg[0])) )
                 {
-                    Reference<XIdlClass> classStruct= xRefl->forName( arg.bstrVal);
+                    Reference<XIdlClass> classStruct= xRefl->forName( reinterpret_cast<const sal_Unicode*>(arg.bstrVal));
                     if( classStruct.is())
                     {
                         Any anyStruct;
@@ -1192,7 +1204,7 @@ HRESULT InterfaceOleWrapper_Impl::InvokeGeneral( DISPID dispidMember, unsigned s
             {
                 writeExcepinfo(pexcepinfo,OUString(
                                    OUSTR("[automation bridge] A UNO type with the name ") +
-                                   OUString(arg.bstrVal) + OUSTR(" does not exist!")));
+                                   OUString(reinterpret_cast<const sal_Unicode*>(arg.bstrVal)) + OUSTR(" does not exist!")));
                 return DISP_E_EXCEPTION;
             }
 
@@ -1353,7 +1365,7 @@ STDMETHODIMP  UnoObjectWrapperRemoteOpt::GetIDsOfNames ( REFIID riid, OLECHAR **
     // ----------------------------------------
     if (m_xInvocation.is() && (cNames > 0))
     {
-        OUString name(rgszNames[0]);
+        OUString name(reinterpret_cast<const sal_Unicode*>(rgszNames[0]));
         // has this name been determined as "bad"
         BadNameMap::iterator badIter= m_badNameMap.find( name);
         if( badIter == m_badNameMap.end() )
