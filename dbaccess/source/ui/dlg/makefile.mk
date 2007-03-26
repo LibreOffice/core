@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: hjs $ $Date: 2006-10-09 12:15:45 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:06:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@ TARGET=uidlg
 
 .IF "$(SYSTEM_ODBC_HEADERS)" == "YES"
 CFLAGS+=-DSYSTEM_ODBC_HEADERS
+.ENDIF
+
+.IF "$(GUI)$(COM)"=="WNTGCC" # for adoint.h
+CFLAGS+=-fpermissive
 .ENDIF
 
 # --- Files -------------------------------------
