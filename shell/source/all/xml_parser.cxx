@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xml_parser.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:34:34 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:48:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,12 +134,12 @@ static void xml_start_element_handler(void* UserData, const XML_Char* name, cons
 
         while(atts[i])
         {
-            attributes[get_local_name(atts[i])] = atts[i+1];
+            attributes[reinterpret_cast<const char_t*>(get_local_name(atts[i]))] = reinterpret_cast<const char_t*>(atts[i+1]);
             i += 2; // skip to next pair
         }
 
         pDocHdl->start_element(
-            name, get_local_name(name), attributes);
+            reinterpret_cast<const char_t*>(name), reinterpret_cast<const char_t*>(get_local_name(name)), attributes);
     }
 }
 
@@ -151,7 +151,7 @@ static void xml_end_element_handler(void* UserData, const XML_Char* name)
     xml_parser* pImpl  = get_parser_instance(UserData);
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
-        pDocHdl->end_element(name, get_local_name(name));
+        pDocHdl->end_element(reinterpret_cast<const char_t*>(name), reinterpret_cast<const char_t*>(get_local_name(name)));
 }
 
 //###################################################
@@ -164,9 +164,9 @@ static void xml_character_data_handler(void* UserData, const XML_Char* s, int le
     if (pDocHdl)
     {
         if (has_only_whitespaces(s,len))
-            pDocHdl->ignore_whitespace(string_t(s, len));
+            pDocHdl->ignore_whitespace(string_t(reinterpret_cast<const char_t*>(s), len));
         else
-            pDocHdl->characters(string_t(s, len));
+            pDocHdl->characters(string_t(reinterpret_cast<const char_t*>(s), len));
     }
 }
 
@@ -178,7 +178,7 @@ static void xml_comment_handler(void* UserData, const XML_Char* Data)
     xml_parser* pImpl  = get_parser_instance(UserData);
     i_xml_parser_event_handler* pDocHdl = pImpl->get_document_handler();
     if (pDocHdl)
-        pDocHdl->comment(Data);
+        pDocHdl->comment(reinterpret_cast<const char_t*>(Data));
 }
 
 } // extern "C"
