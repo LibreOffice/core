@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:53:11 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:10:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,13 +58,20 @@ INCPRE+=.\Include
 
 SLOFILES =	$(SLO)$/regpatchactivex.obj
 
-SHL1STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib\
-                libcmt.lib
-# msvcrt.lib
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS=	-lmingw32 -lstdc++ -lgcc -lmingwthrd -lmsvcrt
+.ELSE
+SHL1STDLIBS=
+.ENDIF
+
+SHL1STDLIBS+=	$(KERNEL32LIB)\
+                $(USER32LIB)\
+                $(ADVAPI32LIB)\
+                $(SHELL32LIB)\
+                $(MSILIB)
+.IF "$(COM)"!="GCC"
+SHL1STDLIBS+=	libcmt.lib
+.ENDIF
 
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
