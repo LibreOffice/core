@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servreg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:05:04 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:08:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,28 +92,28 @@ extern "C" void * SAL_CALL component_getFactory(
     OUString aImplName( OUString::createFromAscii( pImplName ) );
     Reference< XSingleServiceFactory > xFactory;
     Sequence<OUString> seqServiceNames;
-    if (pServiceManager && aImplName.equals(  L"com.sun.star.comp.ole.OleConverter2"  ))
+    if (pServiceManager && aImplName.equals(  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleConverter2")  ))
     {
         xFactory=  createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
                                          OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverter2")),
                                          ConverterProvider_CreateInstance2, seqServiceNames,
                                          &globalModuleCount.modCnt );
     }
-    else if (pServiceManager && aImplName.equals(  L"com.sun.star.comp.ole.OleConverterVar1"  ))
+    else if (pServiceManager && aImplName.equals(  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleConverterVar1")  ))
     {
         xFactory= createSingleFactory( reinterpret_cast<XMultiServiceFactory*>(pServiceManager),
                                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleConverterVar1")),
                                        ConverterProvider_CreateInstanceVar1, seqServiceNames,
                                        &globalModuleCount.modCnt );
     }
-    else if(pServiceManager && aImplName.equals(L"com.sun.star.comp.ole.OleClient"))
+    else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleClient")))
     {
         xFactory= createSingleFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
                                        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleClient")),
                                        OleClient_CreateInstance, seqServiceNames,
                                        &globalModuleCount.modCnt);
     }
-    else if(pServiceManager && aImplName.equals(L"com.sun.star.comp.ole.OleServer"))
+    else if(pServiceManager && aImplName.equals(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.comp.ole.OleServer")))
     {
         xFactory= createOneInstanceFactory( reinterpret_cast< XMultiServiceFactory*>(pServiceManager),
                                             OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.ole.OleServer")),
@@ -139,28 +139,28 @@ extern "C" sal_Bool SAL_CALL component_writeInfo(   void * pServiceManager, void
         {
             //deprecated
             Reference<XRegistryKey> xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleConverter2/UNO/SERVICES");
-            xNewKey->createKey(L"com.sun.star.bridge.OleBridgeSupplier2");
+                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleConverter2/UNO/SERVICES"));
+            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleBridgeSupplier2"));
 
-            xNewKey->createKey(L"com.sun.star.bridge.oleautomation.BridgeSupplier");
-
-            //deprecated
-            xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleConverterVar1/UNO/SERVICES");
-            xNewKey->createKey(L"com.sun.star.bridge.OleBridgeSupplierVar1");
+            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.BridgeSupplier"));
 
             //deprecated
             xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleClient/UNO/SERVICES");
-            xNewKey->createKey(L"com.sun.star.bridge.OleObjectFactory");
+                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleConverterVar1/UNO/SERVICES"));
+            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleBridgeSupplierVar1"));
 
-            xNewKey->createKey(L"com.sun.star.bridge.oleautomation.Factory");
             //deprecated
             xNewKey =
-                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(L"/com.sun.star.comp.ole.OleServer/UNO/SERVICES");
-            xNewKey->createKey(L"com.sun.star.bridge.OleApplicationRegistration");
+                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleClient/UNO/SERVICES"));
+            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleObjectFactory"));
 
-            xNewKey->createKey(L"com.sun.star.bridge.oleautomation.ApplicationRegistration");
+            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.Factory"));
+            //deprecated
+            xNewKey =
+                reinterpret_cast<XRegistryKey*>( pRegistryKey)->createKey(reinterpret_cast<const sal_Unicode*>(L"/com.sun.star.comp.ole.OleServer/UNO/SERVICES"));
+            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.OleApplicationRegistration"));
+
+            xNewKey->createKey(reinterpret_cast<const sal_Unicode*>(L"com.sun.star.bridge.oleautomation.ApplicationRegistration"));
 
             return sal_True;
         }
