@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.142 $
+ *  $Revision: 1.143 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:27:17 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:42:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 
 #ifndef _SVWIN_HXX
 #include <tools/svwin.h>
+#endif
+#ifdef __MINGW32__
+#include <excpt.h>
 #endif
 
 #ifndef _RTL_STRING_H_
@@ -1214,7 +1217,7 @@ void WinSalFrame::SetTitle( const XubString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "WinSalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
-    if ( !SetWindowTextW( mhWnd, rTitle.GetBuffer() ) )
+    if ( !SetWindowTextW( mhWnd, reinterpret_cast<LPCWSTR>(rTitle.GetBuffer()) ) )
     {
         ByteString aAnsiTitle = ImplSalGetWinAnsiString( rTitle );
         SetWindowTextA( mhWnd, aAnsiTitle.GetBuffer() );
@@ -2794,7 +2797,7 @@ static void ImplSalUpdateStyleFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rF
     // 6 Point is the smallest one
     if ( rFont.GetHeight() < 8 )
     {
-        if ( rtl_ustr_compareIgnoreAsciiCase( rLogFont.lfFaceName, L"MS Sans Serif" ) == 0 )
+        if ( rtl_ustr_compareIgnoreAsciiCase( reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName), reinterpret_cast<const sal_Unicode*>(L"MS Sans Serif") ) == 0 )
             rFont.SetHeight( 8 );
         else if ( rFont.GetHeight() < 6 )
             rFont.SetHeight( 6 );
@@ -5403,7 +5406,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_RESULTSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = XubString( pTextBuf, (xub_StrLen)nTextLen );
+            aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
             delete pTextBuf;
         }
 
@@ -5429,7 +5432,7 @@ static BOOL ImplHandleIMECompositionInput( WinSalFrame* pFrame,
         {
             WCHAR* pTextBuf = new WCHAR[nTextLen];
             ImmGetCompositionStringW( hIMC, GCS_COMPSTR, pTextBuf, nTextLen*sizeof( WCHAR ) );
-            aEvt.maText = XubString( pTextBuf, (xub_StrLen)nTextLen );
+            aEvt.maText = XubString( reinterpret_cast<const xub_Unicode*>(pTextBuf), (xub_StrLen)nTextLen );
             delete pTextBuf;
 
             WIN_BYTE*   pAttrBuf = NULL;
@@ -6107,13 +6110,25 @@ LRESULT CALLBACK SalFrameWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
+#ifdef __MINGW32__
+    jmp_buf jmpbuf;
+    __SEHandler han;
+    if (__builtin_setjmp(jmpbuf) == 0)
+    {
+        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
+#else
     __try
     {
+#endif
         nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
+#ifdef __MINGW32__
+    han.Reset();
+#else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
+#endif
     if ( bDef )
         nRet = DefWindowProcA( hWnd, nMsg, wParam, lParam );
     return nRet;
@@ -6123,13 +6138,25 @@ LRESULT CALLBACK SalFrameWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM l
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
+#ifdef __MINGW32__
+    jmp_buf jmpbuf;
+    __SEHandler han;
+    if (__builtin_setjmp(jmpbuf) == 0)
+    {
+        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
+#else
     __try
     {
+#endif
         nRet = SalFrameWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
+#ifdef __MINGW32__
+    han.Reset();
+#else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
+#endif
 
     if ( bDef )
         nRet = DefWindowProcW( hWnd, nMsg, wParam, lParam );
