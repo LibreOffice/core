@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:33:58 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:59:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,9 @@ SHL1STDLIBS=	$(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=		$(SLB)$/itga.lib
 
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 SHL1OBJS=		$(SLO)$/itga.obj
+.ENDIF
 .ENDIF
 
 SHL1VERSIONMAP=exports.map
