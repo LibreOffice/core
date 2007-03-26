@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olecomponent.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:33:17 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:43:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ HRESULT OpenIStorageFromURL_Impl( const ::rtl::OUString& aURL, IStorage** ppISto
     if ( !ppIStorage || ::osl::FileBase::getSystemPathFromFileURL( aURL, aFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happend
 
-    return StgOpenStorage( aFilePath,
+    return StgOpenStorage( reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
                              NULL,
                              STGM_READWRITE | STGM_TRANSACTED, // | STGM_DELETEONRELEASE,
                              NULL,
@@ -498,7 +498,7 @@ void OleComponent::CreateNewIStorage_Impl()
     if ( ::osl::FileBase::getSystemPathFromFileURL( aTempURL, aTempFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happend
 
-    HRESULT hr = StgCreateDocfile( aTempFilePath, STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &m_pNativeImpl->m_pIStorage );
+    HRESULT hr = StgCreateDocfile( reinterpret_cast<LPCWSTR>(aTempFilePath.getStr()), STGM_CREATE | STGM_READWRITE | STGM_TRANSACTED | STGM_DELETEONRELEASE, 0, &m_pNativeImpl->m_pIStorage );
     if ( FAILED( hr ) || !m_pNativeImpl->m_pIStorage )
         throw io::IOException(); // TODO: transport error code?
 }
@@ -771,7 +771,7 @@ void OleComponent::CreateObjectFromFile( const ::rtl::OUString& aFileURL )
         throw uno::RuntimeException(); // TODO: something dangerous happend
 
     HRESULT hr = OleCreateFromFile( CLSID_NULL,
-                                    aFilePath.getStr(),
+                                    reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
                                     IID_IUnknown,
                                     OLERENDER_DRAW, // OLERENDER_FORMAT
                                     NULL,
@@ -800,7 +800,7 @@ void OleComponent::CreateLinkFromFile( const ::rtl::OUString& aFileURL )
     if ( ::osl::FileBase::getSystemPathFromFileURL( aFileURL, aFilePath ) != ::osl::FileBase::E_None )
         throw uno::RuntimeException(); // TODO: something dangerous happend
 
-    HRESULT hr = OleCreateLinkToFile( aFilePath.getStr(),
+    HRESULT hr = OleCreateLinkToFile( reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
                                         IID_IUnknown,
                                         OLERENDER_DRAW, // OLERENDER_FORMAT
                                         NULL,
@@ -872,7 +872,7 @@ void OleComponent::InitEmbeddedCopyOfLink( OleComponent* pOleLinkComponent )
                     pMalloc->Free( ( void* )pOleStr );
 
                 hr = OleCreateFromFile( CLSID_NULL,
-                                        aFilePath.getStr(),
+                                        reinterpret_cast<LPCWSTR>(aFilePath.getStr()),
                                         IID_IUnknown,
                                         OLERENDER_DRAW, // OLERENDER_FORMAT
                                         NULL,
@@ -989,7 +989,7 @@ uno::Sequence< embed::VerbDescriptor > OleComponent::GetVerbList()
                     for( sal_uInt32 nInd = 0; nInd < nNum; nInd++ )
                     {
                         m_aVerbList[nSeqSize-nNum+nInd].VerbID = szEle[ nInd ].lVerb;
-                        m_aVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl_Impl( szEle[ nInd ].lpszVerbName );
+                        m_aVerbList[nSeqSize-nNum+nInd].VerbName = WinAccToVcl_Impl( reinterpret_cast<const sal_Unicode*>(szEle[ nInd ].lpszVerbName) );
                         m_aVerbList[nSeqSize-nNum+nInd].VerbFlags = szEle[ nInd ].fuFlags;
                         m_aVerbList[nSeqSize-nNum+nInd].VerbAttributes = szEle[ nInd ].grfAttribs;
                     }
