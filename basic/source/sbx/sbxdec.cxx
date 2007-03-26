@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxdec.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:09:42 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,7 @@ bool SbxDecimal::getString( String& rString )
                     i++;
                 }
             }
-            rString = aBStr;
+            rString = reinterpret_cast<const sal_Unicode*>(aBStr);
         }
 
         SysFreeString( aBStr );
