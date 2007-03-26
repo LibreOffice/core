@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Aolevariant.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:17:08 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:59:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ OLEString::OLEString(const BSTR& _sBStr)
 }
 OLEString::OLEString(const ::rtl::OUString& _sBStr)
 {
-    m_sStr = ::SysAllocString(_sBStr);
+    m_sStr = ::SysAllocString(reinterpret_cast<LPCOLESTR>(_sBStr.getStr()));
 }
 OLEString::~OLEString()
 {
@@ -80,7 +80,7 @@ OLEString& OLEString::operator=(const ::rtl::OUString& _rSrc)
 {
     if(m_sStr)
         ::SysFreeString(m_sStr);
-    m_sStr = ::SysAllocString(_rSrc);
+    m_sStr = ::SysAllocString(reinterpret_cast<LPCOLESTR>(_rSrc.getStr()));
     return *this;
 }
 OLEString& OLEString::operator=(const OLEString& _rSrc)
@@ -102,7 +102,7 @@ OLEString& OLEString::operator=(const BSTR& _rSrc)
 }
 OLEString::operator ::rtl::OUString() const
 {
-    return (m_sStr != NULL) ? ::rtl::OUString(m_sStr,::SysStringLen(m_sStr)) : ::rtl::OUString();
+    return (m_sStr != NULL) ? ::rtl::OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(m_sStr)),::SysStringLen(m_sStr)) : ::rtl::OUString();
 }
 OLEString::operator BSTR() const
 {
@@ -146,7 +146,7 @@ OLEVariant::OLEVariant(const rtl::OUString& us)
 {
     ::VariantInit(this);
     vt      = VT_BSTR;
-    bstrVal = SysAllocString(us);
+    bstrVal = SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
 }
 OLEVariant::~OLEVariant()
 {
@@ -321,7 +321,7 @@ void OLEVariant::setString(const rtl::OUString& us)
     OSL_ENSURE(eRet == S_OK,"Error while clearing an ado variant!");
     OSL_UNUSED(eRet);
     vt = VT_BSTR;
-    bstrVal     = ::SysAllocString(us);
+    bstrVal     = ::SysAllocString(reinterpret_cast<LPCOLESTR>(us.getStr()));
 }
 void OLEVariant::setNoArg()
 {
@@ -427,7 +427,7 @@ void OLEVariant::set(double n)
 OLEVariant::operator rtl::OUString() const
 {
     if (V_VT(this) == VT_BSTR)
-        return V_BSTR(this);
+        return reinterpret_cast<const sal_Unicode*>(LPCOLESTR(V_BSTR(this)));
 
     if(isNull())
         return ::rtl::OUString();
@@ -436,7 +436,7 @@ OLEVariant::operator rtl::OUString() const
 
     varDest.ChangeType(VT_BSTR, this);
 
-    return V_BSTR(&varDest);
+    return reinterpret_cast<const sal_Unicode*>(LPCOLESTR(V_BSTR(&varDest)));
 }
 
 // -----------------------------------------------------------------------------
@@ -512,7 +512,10 @@ OLEVariant::operator ::com::sun::star::uno::Sequence< sal_Int8 >() const
 // -----------------------------------------------------------------------------
 ::rtl::OUString OLEVariant::getString() const
 {
-    return isNull() ? ::rtl::OUString() : (rtl::OUString)*this;
+    if(isNull())
+        return ::rtl::OUString();
+    else
+        return *this;
 }
 // -----------------------------------------------------------------------------
 sal_Bool OLEVariant::getBool() const
