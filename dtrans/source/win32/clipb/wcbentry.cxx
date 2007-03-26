@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wcbentry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:57:42 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:05:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,7 +96,7 @@ namespace
 
     Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& rServiceManager )
     {
-        return Reference< XInterface >( static_cast< XClipboard* >( new CWinClipboard( rServiceManager, L"" ) ) );
+        return Reference< XInterface >( static_cast< XClipboard* >( new CWinClipboard( rServiceManager, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" ) ) ) ) );
     }
 }
 
