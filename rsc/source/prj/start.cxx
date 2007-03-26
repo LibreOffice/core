@@ -4,9 +4,9 @@
  *
  *  $RCSfile: start.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-27 09:52:13 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:01:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,7 +288,7 @@ static BOOL CallRsc2( ByteString aRsc2Name,
 |*    Letzte Aenderung  MM 05.09.91
 |*
 *************************************************************************/
-#if defined UNX || (defined PM2 && (defined CSET || defined GCC )) || defined WTC || defined MTW || defined ICC
+#if defined UNX || (defined PM2 && (defined CSET || defined GCC )) || defined WTC || defined MTW || defined ICC || defined(__MINGW32__)
 int main ( int argc, char ** argv)
 {
 #else
