@@ -80,7 +80,7 @@ extern "C" {
 #  endif
 #elif defined(XP_PC) || defined(_WINDOWS) || defined(WIN32) || defined(_WIN32)
 #   include <windows.h>
-#   if defined(_MSC_VER)
+#   if defined(_MSC_VER) || defined(__MINGW32__)
 #       if defined(WIN32) || defined(_WIN32)
 #           define JRI_PUBLIC_API(ResultType)   _declspec(dllexport) ResultType
 #           define JRI_PUBLIC_VAR(VarType)      VarType
