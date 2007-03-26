@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:33:44 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:09:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ SHL1STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        uwinapi.lib
+        $(UWINAPILIB)
 .ENDIF
 
 
@@ -88,10 +88,10 @@ SHL2STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)\
-        uwinapi.lib\
-        advapi32.lib\
-        ole32.lib\
-        gdi32.lib
+        $(UWINAPILIB)\
+        $(ADVAPI32LIB)\
+        $(OLE32LIB)\
+        $(GDI32LIB)
 
 SHL2IMPLIB=i$(SHL2TARGET) 
 
@@ -109,17 +109,21 @@ SHL3LIBS=$(SLB)$/sysdtrans.lib\
          $(SLB)$/dtobjfact.lib\
          $(SLB)$/mtaolecb.lib
 
+.IF "$(COM)" == "GCC"
+SHL3OBJS=$(SLO)$/XNotifyingDataObject.obj
+.ENDIF
+
 SHL3STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)\
-        uwinapi.lib\
-        advapi32.lib\
-        ole32.lib\
-        oleaut32.lib\
-        gdi32.lib\
-        shell32.lib\
-        uuid.lib
+        $(UWINAPILIB)\
+        $(ADVAPI32LIB)\
+        $(OLE32LIB)\
+        $(OLEAUT32LIB)\
+        $(GDI32LIB)\
+        $(SHELL32LIB)\
+        $(UUIDLIB)
         
 SHL3IMPLIB=i$(SHL3TARGET) 
 
@@ -141,13 +145,13 @@ SHL4STDLIBS= \
         $(SALLIB)	\
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
-        uwinapi.lib\
-        advapi32.lib\
-        ole32.lib\
-        oleaut32.lib\
-        gdi32.lib\
-        shell32.lib\
-        uuid.lib
+        $(UWINAPILIB)\
+        $(ADVAPI32LIB)\
+        $(OLE32LIB)\
+        $(OLEAUT32LIB)\
+        $(GDI32LIB)\
+        $(SHELL32LIB)\
+        $(UUIDLIB)
 
 SHL4DEPN=
 SHL4IMPLIB=i$(SHL4TARGET) 
