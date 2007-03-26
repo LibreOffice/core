@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.253 $
+ *  $Revision: 1.254 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:25:22 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -6144,6 +6144,10 @@ void Window::SetParent( Window* pNewParent )
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
     DBG_ASSERT( pNewParent, "Window::SetParent(): pParent == NULL" );
+    DBG_ASSERT( pNewParent != this, "someone tried to reparent a window to itself" );
+
+    if( pNewParent == this )
+        return;
 
     // check if the taskpanelist would change and move the window pointer accordingly
     SystemWindow *pSysWin = ImplGetLastSystemWindow(this);
@@ -6161,9 +6165,6 @@ void Window::SetParent( Window* pNewParent )
 
     ImplSetFrameParent( pNewParent );
 
-    if ( mpWindowImpl->mbFrame )
-        mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
-
     if ( mpWindowImpl->mpBorderWindow )
     {
         mpWindowImpl->mpRealParent = pNewParent;
@@ -6173,6 +6174,9 @@ void Window::SetParent( Window* pNewParent )
 
     if ( mpWindowImpl->mpParent == pNewParent )
         return;
+
+    if ( mpWindowImpl->mbFrame )
+        mpWindowImpl->mpFrame->SetParent( pNewParent->mpWindowImpl->mpFrame );
 
     BOOL bVisible = IsVisible();
     Show( FALSE, SHOW_NOFOCUSCHANGE );
