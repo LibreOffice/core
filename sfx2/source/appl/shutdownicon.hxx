@@ -26,6 +26,12 @@
 #ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
 #include <com/sun/star/lang/XInitialization.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
+#include <com/sun/star/beans/XFastPropertySet.hpp>
+#endif
 #ifndef _RTL_STRING_HXX
 #include <rtl/string.hxx>
 #endif
@@ -41,8 +47,8 @@
 #ifndef _SFX_SFXUNO_HXX
 #include <sfxuno.hxx>
 #endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 #ifndef INCLUDED_SFX2_DLLAPI_H
 #include "dllapi.h"
@@ -54,10 +60,11 @@ namespace sfx2
     class FileDialogHelper;
 }
 
-typedef ::cppu::WeakComponentImplHelper3<
+typedef ::cppu::WeakComponentImplHelper4<
     ::com::sun::star::lang::XInitialization,
     ::com::sun::star::frame::XTerminateListener,
-    ::com::sun::star::lang::XServiceInfo > ShutdownIconServiceBase;
+    ::com::sun::star::lang::XServiceInfo,
+    ::com::sun::star::beans::XFastPropertySet > ShutdownIconServiceBase;
 
 #if defined(USE_APP_SHORTCUTS)
 #define WRITER_URL      "private:factory/swriter"
@@ -73,6 +80,7 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
 {
         ::osl::Mutex            m_aMutex;
         bool                    m_bVeto;
+        bool                    m_bListenForTermination;
         ResMgr*                 m_pResMgr;
         sfx2::FileDialogHelper* m_pFileDlg;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > m_xServiceManager;
@@ -152,6 +160,19 @@ class SFX2_DLLPUBLIC ShutdownIcon : public ShutdownIconServiceBase
         // XInitialization
         virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments )
             throw( ::com::sun::star::uno::Exception );
+
+        // XFastPropertySet
+        virtual void SAL_CALL setFastPropertyValue(       ::sal_Int32                  nHandle,
+                                                    const ::com::sun::star::uno::Any& aValue )
+            throw (::com::sun::star::beans::UnknownPropertyException,
+                    ::com::sun::star::beans::PropertyVetoException,
+                    ::com::sun::star::lang::IllegalArgumentException,
+                    ::com::sun::star::lang::WrappedTargetException,
+                    ::com::sun::star::uno::RuntimeException);
+        virtual ::com::sun::star::uno::Any SAL_CALL getFastPropertyValue( ::sal_Int32 nHandle )
+            throw (::com::sun::star::beans::UnknownPropertyException,
+                    ::com::sun::star::lang::WrappedTargetException,
+                    ::com::sun::star::uno::RuntimeException);
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDesktop > m_xDesktop;
 
