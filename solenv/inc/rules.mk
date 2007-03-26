@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:56:51 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:43:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,11 @@ $(SLO)$/%.obj : %.cxx
     @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(ACT_PCH_SWITCHES) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx ) $(CAPTURE_OUTPUT)
     @$(ECHONL)
+.IF "$(COM)"=="GCC"
+    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(ACT_PCH_SWITCHES) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx
+.ELSE
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(ACT_PCH_SWITCHES) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cxx )
+.ENDIF		    # "$(COM)"=="GCC"	
 .ENDIF			# "$(GUI)"=="UNX"
 
 $(SLO)$/%.obj : %.cpp
@@ -151,7 +155,11 @@ $(SLO)$/%.obj : %.cpp
     @@-$(RM) $@
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
     @$(ECHONL)
+.IF "$(COM)"=="GCC"
+    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp
+.ELSE
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(PWD)$/$*.cpp )
+.ENDIF
 .ENDIF
 
 $(SLO)$/%.obj : $(MISC)$/%.cxx
@@ -171,7 +179,11 @@ $(SLO)$/%.obj : $(MISC)$/%.cxx
 .ELSE
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
     @$(ECHONL)
+.IF "$(COM)"=="GCC"
+    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx
+.ELSE
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
+.ENDIF
 .ENDIF
 
 $(OBJ)$/%.obj : $(MISC)$/%.cxx
@@ -191,7 +203,11 @@ $(OBJ)$/%.obj : $(MISC)$/%.cxx
 .ELSE
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
     @$(ECHONL)
+.IF "$(COM)"=="GCC"
+    $(CXX) $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx
+.ELSE
     $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE) $(CFLAGSCXX) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(!eq,$(EXCEPTIONSFILES),$(subst,$@, $(EXCEPTIONSFILES)) $(LOCAL_EXCEPTIONS_FLAGS) $(GLOBAL_EXCEPTIONS_FLAGS)) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(CFLAGSINCXX)$(MISC)$/$*.cxx )
+.ENDIF
 .ENDIF
 
 $(OBJ)$/%.obj : %.c
@@ -212,7 +228,7 @@ $(OBJ)$/%.obj : %.c
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $*.c )
     @$(ECHONL)
 .IF "$(COM)"=="GCC"
-    $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $*.c
+    $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $*.c
 .ELSE
     -@echo Cflags: $(CFLAGS) $(INCLUDE)
     $(CC) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $*.c )
@@ -231,9 +247,13 @@ $(OBJ)$/%.obj : $(MISC)$/%.c
      $(IFEXIST) $(@:s/.obj/.o/) $(THEN) $(TOUCH) $@ $(FI)
 .ELSE
     @@-$(RM) $@
-    @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(MISC)$/$*.c )
+    @$(TYPE) $(mktmp $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(MISC)$/$*.c )
     @$(ECHONL)
-    $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(MISC)$/$*.c )
+.IF "$(COM)"=="GCC"
+    $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(MISC)$/$*.c
+.ELSE
+    $(CC) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSOBJ) $(CDEFS) $(CDEFSOBJ) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(OBJ)$/$*.obj $(MISC)$/$*.c )
+.ENDIF
 .ENDIF
 
 $(SLO)$/%.obj : $(MISC)$/%.c
@@ -251,9 +271,9 @@ $(SLO)$/%.obj : $(MISC)$/%.c
     @$(TYPE) $(mktmp $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c )
     @$(ECHONL)
 .IF "$(COM)"=="GCC"
-    $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c 
+    $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c 
 .ELSE
-    $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c )
+    $(CC) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $(MISC)$/$*.c )
 .ENDIF
 .ENDIF
 
@@ -270,9 +290,9 @@ $(SLO)$/%.obj : %.c
 .ELSE
     @@-$(RM) $@
 .IF "$(COM)"=="GCC"
-       $(CXX) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
+       $(CC) $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c 
 .ELSE
-       $(CXX) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c )
+       $(CC) @$(mktmp $(CFLAGS) $(INCLUDE_C) $(CFLAGSCC) $(CFLAGSSLO) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(CFLAGSAPPEND) $(CFLAGSOUTOBJ)$(SLO)$/$*.obj $*.c )
 .ENDIF
 .ENDIF
 
@@ -493,6 +513,15 @@ $(MISC)$/%.dpj :
 $(SLO)$/%.obj : %.asm
        @echo ------------------------------
        @echo Making: $@
+.IF "$(COM)"=="GCC"
+.IF "$(ASM)"=="ml"
+       $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)$/$*.obj $*.asm
+       @+-$(RM) $*.err >& $(NULLDEV)
+.ELSE			# "$(ASM)"=="ml"
+        @+-$(RM) $@ >&  $(NULLDEV)
+        $(ASM) $(AFLAGS) $*.asm,$(SLO)$/$*.obj;
+.ENDIF			# "$(ASM)"=="ml"
+.ELSE
 .IF "$(COM)"=="WTC"
         $(ASM) $(AFLAGS) -D$(COM) $*.asm -fo=$(SLO)$/$*.obj
         -$(IFEXIST) $*.err $(THEN) $(RM:s/+//) $*.err $(FI)
@@ -507,10 +536,20 @@ $(SLO)$/%.obj : %.asm
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
 .ENDIF
+.ENDIF
 
 $(OBJ)$/%.obj : %.asm
        @echo ------------------------------
        @echo Making: $@
+.IF "$(COM)"=="GCC"
+.IF "$(ASM)"=="ml"
+       $(ASM) $(AFLAGS) -D$(COM) /Fo$(OBJ)$/$*.obj $*.asm
+       @+-$(RM) $*.err >& $(NULLDEV)
+.ELSE			# "$(ASM)"=="ml"
+        @+-$(RM) $@ >&  $(NULLDEV)
+        $(ASM) $(AFLAGS) $*.asm,$(OBJ)$/$*.obj;
+.ENDIF			# "$(ASM)"=="ml"
+.ELSE
 .IF "$(COM)"=="MSC"
 .IF "$(ASM)"=="ml"
     $(ASM) $(AFLAGS) -D$(COM) /Fo$(SLO)$/$*.obj $*.asm
@@ -520,6 +559,7 @@ $(OBJ)$/%.obj : %.asm
     $(ASM) $(AFLAGS) $*.asm,$(OBJ)$/$*.obj;
 .ENDIF			# "$(ASM)"=="ml"
 .ENDIF			 "$(COM)"=="MSC"
+.ENDIF
 
 $(OUT)$/ucr$/$(IDLPACKAGE)$/%.urd : %.idl
         @noop $(assign all_outdated_idl+:=$<)
