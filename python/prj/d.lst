@@ -65,6 +65,11 @@ symlink: %_DEST%\lib%_EXT%\libpython2.3.so.1.0 %_DEST%\lib%_EXT%\libpython2.3.so
 # MacOS X
 ..\%__SRC%\misc\build\python-inst\lib\libpython2.3.dylib %_DEST%\lib%_EXT%\libpython2.3.dylib
 
+#MingW ONLY !
+..\%__SRC%\misc\build\python-inst\include\python22\pyconfig.h %_DEST%\inc%_EXT%\python\pyconfig.h
+..\%__SRC%\misc\build\python-inst\bin\python.exe %_DEST%\bin%_EXT%\python.exe
+..\%__SRC%\misc\build\Python-2.3.4\libpython2.3.dll %_DEST%\bin%_EXT%\libpython2.3.dll
+
 # WINDOWS ONLY !
 ..\%__SRC%\misc\build\pyconfig.h %_DEST%\inc%_EXT%\python\pyconfig.h
 ..\%__SRC%\misc\build\Python-2.3.4\PCBuild\python.exe %_DEST%\bin%_EXT%\python.exe
