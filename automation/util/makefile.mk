@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:54:24 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:42:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,8 +73,8 @@ SHL1STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        advapi32.lib	\
-        gdi32.lib
+        $(ADVAPI32LIB)	\
+        $(GDI32LIB)
 .ENDIF
 
 SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
@@ -131,8 +131,8 @@ SHL3STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL3STDLIBS+= \
-        advapi32.lib	\
-        gdi32.lib
+        $(ADVAPI32LIB)	\
+        $(GDI32LIB)
 .ENDIF
 
 SHL3DEF=        $(MISC)$/$(SHL3TARGET).def
@@ -151,14 +151,13 @@ DEF3DES         =Communication
 APP1TARGET=testtool
 
 .IF "$(GUI)" == "UNX"
-APP1STDLIBS= -lapp -lsample
 APP1DEPN+=$(SHL2TARGETN) $(SHL3TARGETN)
 .ELSE
-APP1STDLIBS= \
-        app.lib \
-        sample.lib
 APP1DEPN+=$(SHL2IMPLIBN) $(SHL3IMPLIBN)
 .ENDIF
+APP1STDLIBS= \
+        $(APP3RDLIB) \
+        $(SAMPLE3RDLIB)
 
 APP1STDLIBS+= \
             $(CPPUHELPERLIB) \
@@ -188,8 +187,8 @@ APP1STDLIBS+=$(CPPULIB)
 
 .IF "$(GUI)"=="WNT"
 APP1STDLIBS += \
-        shell32.lib \
-        advapi32.lib
+        $(SHELL32LIB) \
+        $(ADVAPI32LIB)
 .ENDIF # "$(GUI)"=="WNT"
 
 
@@ -256,8 +255,10 @@ APP3LIBS= \
         $(LB)$/miniapp.lib
 
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 #		win16 braucht ein appobj
 APP3OBJS=		$(OBJ)$/testapp.obj
+.ENDIF
 .ENDIF
 
 # --- Targets -----------------------------------------------------------
