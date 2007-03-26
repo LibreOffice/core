@@ -2,9 +2,9 @@
 #
 #   $RCSfile: check.pl,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: ihi $ $Date: 2006-12-20 12:26:55 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:28:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,14 +63,14 @@ if (-d "$StartDir") {
         }
     }
 
-    if ($OperatingSystem eq "windows") {
+    if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
         if (! -e "$StartDir/$OperatingSystem/bin/regcomp.exe") {
         $return++;
         print "\nERROR: \"$StartDir/$OperatingSystem/bin/regcomp.exe\" is missing\n";
         } else {
         print "+";
         }
-        if (! -e "$StartDir/$OperatingSystem/bin/climaker.exe") {
+        if ($OperatingSystem eq "windows" && ! -e "$StartDir/$OperatingSystem/bin/climaker.exe") {
         $return++;
         print "\nERROR: \"$StartDir/$OperatingSystem/bin/climaker.exe\" is missing\n";
         } else {
@@ -118,7 +118,7 @@ if (-d "$StartDir") {
 
     #check configure files
     print "check config files: ";
-    if ($OperatingSystem eq "windows") {
+    if ($OperatingSystem eq "windows" || $OperatingSystem eq "mingw") {
     if (! -e "$StartDir/setsdkenv_windows.bat") {
         print "\nERROR: \"$StartDir/setsdkenv_windows.bat\" is missing\n";
         $return++;
