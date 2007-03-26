@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scanwin.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:28:16 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -932,7 +932,7 @@ void ScannerManager::DestroyData()
 
 // -----------------------------------------------------------------------------
 
-AWT::Size ScannerManager::getSize()
+AWT::Size ScannerManager::getSize() throw()
 {
     AWT::Size   aRet;
     HGLOBAL     hDIB = (HGLOBAL)(long) mpData;
@@ -959,7 +959,7 @@ AWT::Size ScannerManager::getSize()
 
 // -----------------------------------------------------------------------------
 
-SEQ( sal_Int8 ) ScannerManager::getDIB()
+SEQ( sal_Int8 ) ScannerManager::getDIB() throw()
 {
     SEQ( sal_Int8 ) aRet;
 
@@ -1022,7 +1022,7 @@ SEQ( sal_Int8 ) ScannerManager::getDIB()
 
 // -----------------------------------------------------------------------------
 
-SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners()
+SEQ( ScannerContext ) SAL_CALL ScannerManager::getAvailableScanners() throw()
 {
     vos::OGuard             aGuard( maProtector );
     SEQ( ScannerContext )   aRet( 1 );
