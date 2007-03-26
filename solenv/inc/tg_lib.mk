@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_lib.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:00:38 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:47:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,15 @@ $(LIB$(TNR)ARCHIV) :	$(LIB$(TNR)TARGET)
     @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
     @+source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
 .ELSE			# "$(GUI)"=="UNX"
+.IF "$(GUI)$(COM)"=="WNTGCC"
+    @+-$(RM) $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @+echo $(LIBMGR) $(LIB$(TNR)FLAGS) $(LIBFLAGS) $(LIB$(TNR)ARCHIV) `cat $(LIB$(TNR)TARGET) | sed s#'^'$(ROUT)#$(PRJ)$/$(ROUT)#g` > $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @+echo  ranlib $(LIB$(TNR)ARCHIV) >> $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @cat $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+    @+source $(MISC)$/$(LIB$(TNR)ARCHIV:b).cmd
+.ELSE
     @echo just a dummy > $@
+.ENDIF			# "$(GUI)$(COM)"=="WNTGCC"
 .ENDIF			# "$(GUI)"=="UNX"
 
 .ENDIF			# "$(LIB$(TNR)ARCHIV)" != ""
@@ -85,6 +93,10 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
 .ENDIF
 .ELSE			# "$(GUI)"=="UNX"
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+    +$(ECHONL) $(LIB$(TNR)OBJFILES) | sed "s#$(PRJ:s/././)$/$(ROUT)#$(ROUT)#g" | xargs -n1 > $@
+    @+cat /dev/null $(LIB$(TNR)FILES) | xargs -n1 >> $@
+.ELSE
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(LIB$(TNR)FILES) $(LIB$(TNR)OBJFILES))
     @-$(RM) $(@:s/.lib/.lin/)
 .IF "$(LIB$(TNR)OBJFILES)"!=""    
@@ -94,6 +106,7 @@ $(LIB$(TNR)TARGET) :	$(LIB$(TNR)FILES) \
     @-$(TYPE) $(foreach,i,$(LIB$(TNR)FILES) $(i:s/.lib/.lin/)) >> $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIB$(TNR)FILES)"!=""    
     @$(ECHONL)
+.ENDIF          # "$(LIB$(TNR)FILES)"!=""    
 .ELSE			# "$(GUI)"=="WNT"
     @-$(RM) $@
     echo $(LIBMGR) r $@ $(LIB$(TNR)OBJFILES)
