@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_slo.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:57:12 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:17:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,14 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
     @echo Making: $@
 #	@$(RM) $@
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+    +$(ECHONL) $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i)) | xargs -n1 > $@
+.ELSE
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
+.ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
     echo $(foreach,i,$(SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
@@ -61,7 +65,6 @@ $(SLOTARGET): $(SLOFILES) $(IDLSLOFILES)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(SLOTARGET)"!=""
 
-
 .IF "$(SECOND_BUILD)"!=""
 .IF "$($(SECOND_BUILD)SLOTARGET)"!=""
 $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
@@ -72,10 +75,14 @@ $($(SECOND_BUILD)SLOTARGET): $(REAL_$(SECOND_BUILD)_SLOFILES)
     @echo ------------------------------
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+    +$(ECHONL) $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i)) | xargs -n1 > $@
+.ELSE
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
 .ENDIF          # "$(LIBTARGET)"!="NO"
     $(LIBMGR) $(LIBFLAGS) /OUT:$@ @$(mktmp $(&:+"\n"))
+.ENDIF			# "$(COM)"=="GCC"
 .ENDIF			# "$(GUI)"=="WNT"
 .IF "$(GUI)"=="UNX"
     echo $(foreach,i,$(REAL_$(SECOND_BUILD)_SLOFILES:f) $(RSLO)$/$(i:s/.obj/.o/)) | xargs -n1 > $@
