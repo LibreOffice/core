@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:17:43 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:10:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,7 @@ UWINAPILIB=
 SLOFILES =	$(SLO)$/regactivex.obj
 
 STDSHL += \
-    msi.lib
+    $(MSILIB)
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
