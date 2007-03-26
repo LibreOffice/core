@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:34:52 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:17:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ SHL1LIBS = $(SLB)$/$(TARGET).lib
 SHL1STDLIBS = $(CPPULIB) $(CPPUHELPERLIB) $(SALLIB) $(SALHELPERLIB) $(XML2LIB)
 
 .IF "$(OS)" == "WNT"
-SHL1STDLIBS += advapi32.lib
+SHL1STDLIBS += $(ADVAPI32LIB)
 .ENDIF # WNT
 
 SHL1VERSIONMAP = framework.map
