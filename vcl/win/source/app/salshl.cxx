@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salshl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:43:49 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:40:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@ SalShlData aSalShlData;
 extern "C"
 {
 
+#ifdef __MINGW32__
+BOOL WINAPI DllMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
+#else
 #ifdef ICC
 int _CRT_init(void);
 #else
@@ -66,17 +69,20 @@ WIN_BOOL WINAPI _CRT_INIT( HINSTANCE hInst, DWORD nReason, LPVOID pReserved );
 #endif
 
 WIN_BOOL WINAPI LibMain( HINSTANCE hInst, DWORD nReason, LPVOID pReserved )
+#endif
 {
     // Unsere DLL-Initialisierung
     if ( nReason == DLL_PROCESS_ATTACH )
         aSalShlData.mhInst = hInst;
 
+#ifndef __MINGW32__
 #ifdef ICC
     if ( _CRT_init() == -1 )
 #else
     if ( !_CRT_INIT( hInst, nReason, pReserved ) )
 #endif
         return 0;
+#endif
 
     return 1;
 }
