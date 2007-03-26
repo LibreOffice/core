@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kz $ $Date: 2006-11-08 12:06:30 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:31:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -75,7 +75,10 @@ LIBSALCPPRT=	$(0)
 APP1NOSAL=		TRUE
 APP1TARGET=		loader2
 
-APP1STDLIBS=	gdi32.lib advapi32.lib libcmt.lib shell32.lib
+APP1STDLIBS=	$(GDI32LIB) $(ADVAPI32LIB) $(SHELL32LIB)
+.IF "$(COM)"!="GCC"
+APP1STDLIBS+=	libcmt.lib
+.ENDIF
 APP1OBJS=		$(OBJFILES)
 
 APP1DEF=		$(MISC)$/$(TARGET).def
