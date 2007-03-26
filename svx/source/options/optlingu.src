@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:00:08 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:08:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
 
 ModalDialog RID_SVXDLG_EDIT_MODULES
 {
-    HelpID = HID_LNGDLG_NUM_PREBREAK ;
+//? HelpID = HID_LNGDLG_NUM_PREBREAK ; pb: why two helpids???
     HelpID = HID_EDIT_MODULES ;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -118,7 +118,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text [ en-US ] = "~Back";
     };
 
-    Bitmap BMP_CHKBUT_UNCHECKED
+        Bitmap BMP_CHKBUT_UNCHECKED
     {
         File = "chkun.bmp" ;
     };
@@ -154,7 +154,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     Size = MAP_APPFONT ( 155 , 43 ) ;
     Text [ de ] = "Silbentrennung" ;
     Text [ en-US ] = "Hyphenation";
-    FixedLine FL_NUMVAL_PREBREAK
+        FixedLine FL_NUMVAL_PREBREAK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 87 , 8 ) ;
@@ -210,7 +210,7 @@ TabPage RID_SFXPAGE_LINGU
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    FixedLine FL_LINGUISTIC
+        FixedLine FL_LINGUISTIC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
@@ -269,7 +269,7 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ de ] = "B~earbeiten..." ;
-        Text [ en-US ] = "~Edit...";
+        Text [ en-US ] = "Ed~it...";
     };
     PushButton PB_LINGU_DICS_DEL_DIC
     {
@@ -277,7 +277,7 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ de ] = "~LÃ¶schen" ;
-        Text [ en-US ] = "Dele~te";
+        Text [ en-US ] = "~Delete";
     };
     FixedText FT_LINGU_OPTIONS
     {
@@ -300,7 +300,7 @@ TabPage RID_SFXPAGE_LINGU
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text [ de ] = "Be~arbeiten..." ;
-        Text [ en-US ] = "E~dit...";
+        Text [ en-US ] = "Edi~t...";
     };
 
     String STR_CAPITAL_WORDS
@@ -385,9 +385,6 @@ QueryBox RID_SFXQB_DELDICT
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-     // ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Wörterbuch löschen? : Wollen sie das Wörterbuch löschen?
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Wörterbuch löschen? : M÷chten Sie das W÷rterbuch l÷schen? */
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie das Wörterbuch löschen? : M÷chten Sie das W÷rterbuch l÷schen? */
     Message [ de ] = "MÃ¶chten Sie das WÃ¶rterbuch lÃ¶schen?" ;
     Message [ en-US ] = "Do you want to delete the dictionary?" ;
 };
@@ -396,9 +393,6 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-     // ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Ignorieren-Liste löschen? : Wollen sie die Ignorieren-Liste löschen?
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Ignorieren-Liste löschen? : M÷chten Sie die Ignorieren-Liste l÷schen? */
-    /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Ignorieren-Liste löschen? : M÷chten Sie die Ignorieren-Liste l÷schen? */
     Message [ de ] = "MÃ¶chten Sie die Ignorieren-Liste lÃ¶schen?" ;
     Message [ en-US ] = "Do you want to delete the ignore list?" ;
 };
