@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-28 16:25:50 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:50:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,14 +70,14 @@ SHL1STDLIBS=\
         $(SALLIB)			\
         $(CPPULIB)			\
         $(CPPUHELPERLIB)	\
-        ole32.lib			\
-        gdi32.lib			\
-        uuid.lib				\
-        oleaut32.lib
+        $(OLE32LIB)			\
+        $(GDI32LIB)			\
+        $(UUIDLIB)				\
+        $(OLEAUT32LIB)
 
 .IF "$(CCNUMVER)" >= "001300000000" && "$(CCNUMVER)" <= "001399999999"
 SHL1STDLIBS+=\
-        advapi32.lib	\
+        $(ADVAPI32LIB)	\
         $(ATL_LIB)$/atls.lib
 .ENDIF
 
