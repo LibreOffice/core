@@ -1,0 +1,97 @@
+;*************************************************************************
+;
+;   OpenOffice.org - a multi-platform office productivity suite
+;
+;   $RCSfile: uwinapi_mingw.dxp,v $
+;
+;   $Revision: 1.2 $
+;
+;   last change: $Author: vg $ $Date: 2007-03-26 14:27:22 $
+;
+;   The Contents of this file are made available subject to
+;   the terms of GNU Lesser General Public License Version 2.1.
+;
+;
+;     GNU Lesser General Public License Version 2.1
+;     =============================================
+;     Copyright 2005 by Sun Microsystems, Inc.
+;     901 San Antonio Road, Palo Alto, CA 94303, USA
+;
+;     This library is free software; you can redistribute it and/or
+;     modify it under the terms of the GNU Lesser General Public
+;     License version 2.1, as published by the Free Software Foundation.
+;
+;     This library is distributed in the hope that it will be useful,
+;     but WITHOUT ANY WARRANTY; without even the implied warranty of
+;     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+;     Lesser General Public License for more details.
+;
+;     You should have received a copy of the GNU Lesser General Public
+;     License along with this library; if not, write to the Free Software
+;     Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+;     MA  02111-1307  USA
+;
+;*************************************************************************
+
+DllGetVersion@4
+CommandLineToArgvW@8
+CopyFileExA@24
+CopyFileExW@24
+CreateToolhelp32Snapshot@8
+DrawStateW@40
+EnumProcesses@12
+GetDiskFreeSpaceExA@16
+GetDiskFreeSpaceExW@16
+GetLogicalDriveStringsW@8
+GetLongPathNameA@12
+GetLongPathNameW@12
+GetModuleFileNameExA@16
+GetModuleFileNameExW@16
+GetProcessId@4
+GetUserDefaultUILanguage@0
+GetUserDomainA@8
+GetUserDomainW@8
+Module32First@8
+Module32FirstW@8
+Module32Next@8
+Module32NextW@8
+MoveFileExA@12
+MoveFileExW@12
+Process32First@8
+Process32FirstW@8
+Process32Next@8
+Process32NextW@8
+FindFirstVolumeA@8
+FindFirstVolumeW@8
+FindNextVolumeA@12
+FindNextVolumeW@12
+FindVolumeClose@4
+FindFirstVolumeMountPointA@12
+FindFirstVolumeMountPointW@12
+FindNextVolumeMountPointA@12
+FindNextVolumeMountPointW@12
+FindVolumeMountPointClose@4
+GetVolumeNameForVolumeMountPointA@12
+GetVolumeNameForVolumeMountPointW@12
+DeleteVolumeMountPointA@4
+DeleteVolumeMountPointW@4
+GetVolumePathNameA@12
+GetVolumePathNameW@12
+SetVolumeMountPointA@8
+SetVolumeMountPointW@8
+PathAddBackslashW@4
+PathCompactPathExW@16
+PathFileExistsW@4
+PathFindExtensionW@4
+PathFindFileNameW@4
+PathIsFileSpecW@4
+PathIsUNCW@4
+PathRemoveExtensionW@4
+PathRemoveFileSpecW@4
+PathSetDlgItemPathW@12
+PathStripToRootW@4
+snprintf
+snwprintf
+vsnprintf
+vsnwprintf
+
