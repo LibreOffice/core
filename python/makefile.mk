@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:15:01 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:23:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,6 +98,10 @@ python_LDFLAGS+=-L$(SYSBASE)/usr/lib
 python_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
 .ENDIF			# "$(SYSBASE)"!=""
+
+.IF "$(OS)$(COM)"=="LINUXGCC"
+python_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
 
 CONFIGURE_ACTION=./configure --prefix=$(MYCWD)/python-inst --enable-shared CFLAGS="$(python_CFLAGS)" LDFLAGS="$(python_LDFLAGS)"
 .IF "$(OS)$(CPU)" == "SOLARISI"
