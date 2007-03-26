@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_obj.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:56:07 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:51:15 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,7 @@ $(OBJTARGET): $(OBJFILES) $(IDLOBJFILES)
     @echo Making: $@
 .IF "$(GUI)"=="WNT"
 .IF "$(COM)"=="GCC"
-    $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) >> $@
-    @$(TYPE) $@ | tr -d ï\n\rï > $@
-    @$(ECHONL) >> $@
+    $(ECHONL) $(foreach,i,$(OBJFILES:f) $(ROBJ)$/$(i)) > $@
 .ELSE			# "$(COM)"=="GCC"
 .IF "$(LIBTARGET)"!="NO"
     @-$(TYPE) $(mktmp $(&:+"\n")) > $(@:s/.lib/.lin/)
