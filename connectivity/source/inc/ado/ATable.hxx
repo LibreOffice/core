@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ATable.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:54:00 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ namespace connectivity
     namespace ado
     {
         typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
+        typedef connectivity::sdbcx::OTableDescriptor_BASE OTableDescriptor_BASE_TYPEDEF;
 
         class OAdoTable :   public OTable_TYPEDEF
         {
@@ -74,7 +75,7 @@ namespace connectivity
             OAdoTable(sdbcx::OCollection* _pTables,sal_Bool _bCase,OCatalog* _pCatalog);
 
 
-            ::rtl::OUString SAL_CALL getName() { return m_Name; }
+            virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
             ::rtl::OUString getSchema() const { return m_SchemaName; }
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const;
             // com::sun::star::lang::XUnoTunnel

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:55:54 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:02:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -157,6 +157,7 @@ namespace connectivity
         template<class Ts, class T, class WrapT> class WpOLECollection : public WpOLEBase<Ts>
         {
         public:
+            using WpOLEBase<Ts>::pInterface;
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
             WpOLECollection(Ts* pInt=NULL):WpOLEBase<Ts>(pInt){}
@@ -211,7 +212,7 @@ namespace connectivity
             }
             inline void fillElementNames(TStringVector& _rVector)
             {
-                if(IsValid())
+                if(WpOLEBase<Ts>::IsValid())
                 {
                     Refresh();
                     sal_Int32 nCount = GetItemCount();
@@ -233,6 +234,7 @@ namespace connectivity
         public:
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
+            using WpOLEBase<Ts>::pInterface;
             WpOLEAppendCollection(Ts* pInt=NULL):WpOLECollection<Ts,T,WrapT>(pInt){}
             WpOLEAppendCollection(const WpOLEAppendCollection& rhs){ operator=(rhs); }
             inline WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
