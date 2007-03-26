@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ohierarchyholder.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:52:59 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:13:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyHolder_Impl::GetStream
         throw io::IOException();
 
     uno::Reference< embed::XExtendedStorageStream > xResult =
-        m_aChild.GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aPass );
+        m_xChild->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aPass );
     if ( !xResult.is() )
         throw uno::RuntimeException();
 
@@ -81,7 +81,7 @@ void OHierarchyHolder_Impl::RemoveStreamHierarchically( OStringList_Impl& aListP
 {
     uno::Reference< embed::XStorage > xOwnStor( m_xWeakOwnStorage.get(), uno::UNO_QUERY_THROW );
 
-    m_aChild.RemoveStreamHierarchically( aListPath );
+    m_xChild->RemoveStreamHierarchically( aListPath );
 }
 
 //-----------------------------------------------
@@ -131,7 +131,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
     if ( !aListPath.size() )
     {
         uno::Reference< embed::XHierarchicalStorageAccess > xHStorage( xOwnStor, uno::UNO_QUERY_THROW );
-        if ( aListPath.size() )
+        if ( !aPass.getLength() )
             xResult = xHStorage->openStreamElementByHierarchicalName( aNextName, nStreamMode );
         else
             xResult = xHStorage->openEncryptedStreamElementByHierarchicalName( aNextName, nStreamMode, aPass );
@@ -150,7 +150,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
             xStreamComp->addEventListener( static_cast< lang::XEventListener* >( this ) );
         }
 
-        m_aOpenStreams.push_back( xResult );
+        m_aOpenStreams.push_back( uno::WeakReference< embed::XExtendedStorageStream >( xResult ) );
     }
     else
     {
@@ -170,7 +170,7 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
             aElement = new OHierarchyElement_Impl( NULL, xChildStorage );
         }
 
-        xResult = aElement->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode );
+        xResult = aElement->GetStreamHierarchically( nStorageMode, aListPath, nStreamMode, aPass );
         if ( !xResult.is() )
             throw uno::RuntimeException();
 
@@ -180,6 +180,9 @@ uno::Reference< embed::XExtendedStorageStream > OHierarchyElement_Impl::GetStrea
             aElement->SetParent( this );
         }
     }
+
+    // the subelement was opened successfuly, remember the storage to let it be locked
+    m_xOwnStorage = xOwnStor;
 
     return xResult;
 }
@@ -267,7 +270,22 @@ void OHierarchyElement_Impl::TestForClosing()
         if ( !m_aOpenStreams.size() && !m_aChildren.size() )
         {
             if ( m_rParent.is() )
+            {
+                // only the root storage should not be disposed, other storages can be disposed
+                if ( m_xOwnStorage.is() )
+                {
+                    try
+                    {
+                        m_xOwnStorage->dispose();
+                    }
+                    catch( uno::Exception& )
+                    {}
+                }
+
                 m_rParent->RemoveElement( this );
+            }
+
+            m_xOwnStorage = uno::Reference< embed::XStorage >();
         }
     }
 }
@@ -282,7 +300,15 @@ void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
         uno::Reference< embed::XExtendedStorageStream > xStream( Source.Source, uno::UNO_QUERY );
-        m_aOpenStreams.remove( xStream );
+
+        for ( OWeakStorRefList_Impl::iterator pStorageIter = m_aOpenStreams.begin();
+              pStorageIter != m_aOpenStreams.end(); )
+        {
+            OWeakStorRefList_Impl::iterator pTmp = pStorageIter++;
+            if ( !pTmp->get().is() || pTmp->get() == xStream )
+                m_aOpenStreams.erase( pTmp );
+        }
+
         aGuard.clear();
 
         TestForClosing();
