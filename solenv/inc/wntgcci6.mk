@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntgcci6.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2005-11-07 12:43:53 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:18:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,146 @@
 
 # mk file for wntgcci6
 
-# This is a dummy file that has to be populated for an OOo MinGW port.
-.ERROR : ; @echo Forced error: MinGW compiler currently not supported!
-Compiler_not_supported
+SOLAR_JAVA*=TRUE
+FULL_DESK=TRUE
+JAVAFLAGSDEBUG=-g
+
+# SOLAR JAva Unterstuetzung nur fuer wntmsci
+
+ASM=ml
+AFLAGS=/c /Cp /coff
+
+# architecture dependent flags for the C and C++ compiler that can be changed by
+# exporting the variable ARCH_FLAGS="..." in the shell, which is used to start build
+ARCH_FLAGS*=-march=pentium
+
+CXX*=$(WRAPCMD) gcc
+### Der gcc vertraegt kein Semikolon im Include-Pfad         RT
+# old:
+#CFLAGS=-c -Wall -I$(INCLUDE) $(OLE2DEF)
+# new:
+#CYGINC=$(INCLUDE:s/-I /-I/:+"  ":s/;/ -I/:s/-I  //:s/   / /)
+CFLAGS=-c -Wall -nostdinc $(OLE2DEF)
+###
+PICSWITCH:=
+CFLAGS+=-fpcc-struct-return $(PICSWITCH)
+CFLAGSCC=-pipe $(ARCH_FLAGS)
+CFLAGSCXX=-pipe $(ARCH_FLAGS)
+CFLAGSEXCEPTIONS=-fexceptions
+CFLAGS_NO_EXCEPTIONS=-fno-exceptions
+
+CFLAGSOBJGUIST=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL
+CFLAGSOBJCUIST=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL
+CFLAGSOBJGUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT
+CFLAGSOBJCUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT
+CFLAGSSLOGUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT $(PICSWITCH)
+CFLAGSSLOCUIMT=-DWIN32 -DWINVER=0x500 -D_WIN32_IE=0x400 -D_DLL -D_MT $(PICSWITCH)
+CFLAGSPROF=
+CFLAGSDEBUG=-g
+CFLAGSDBGUTIL=
+CFLAGSOPT=-O3
+CFLAGSNOOPT=-O
+CFLAGSOUTOBJ=-o
+#plattform hart setzen
+CDEFS+=-D_M_IX86
+CDEFS+=-DSTLPORT_VERSION=450
+CDEFS+=-D_NATIVE_WCHAR_T_DEFINED
+
+STATIC= -static
+DYNAMIC= -dynamic
+
+LINK*=$(CC)
+CYGLIB=$(LIB:s/;/ -L/)
+LINKFLAGS=-nostdlib -Wl,--enable-stdcall-fixup,--enable-runtime-pseudo-reloc -L$(CYGLIB)
+.IF "$(USE_MINGW)"=="cygwin"
+MINGWLIBDIR=$(COMPATH)$/lib$/mingw
+.ELSE
+MINGWLIBDIR=$(COMPATH)$/lib
+.ENDIF
+LINKFLAGSAPPGUI=-mwindows $(MINGWLIBDIR)$/crt2.o
+LINKFLAGSSHLGUI=--warn-once -mwindows -shared $(MINGWLIBDIR)$/dllcrt2.o
+LINKFLAGSAPPCUI=-mconsole $(MINGWLIBDIR)$/crt2.o
+LINKFLAGSSHLCUI=--warn-once -mconsole -shared $(MINGWLIBDIR)$/dllcrt2.o
+LINKFLAGSTACK=
+LINKFLAGSPROF=
+LINKFLAGSDEBUG=-g
+LINKFLAGSOPT=
+
+STDLIBCPP=-lstdc++
+UWINAPILIB*=$(DYNAMIC) -luwinapi
+
+STDOBJVCL=$(L)$/salmain.obj
+STDOBJGUI=
+STDSLOGUI=
+STDOBJCUI=
+STDSLOCUI=
+STDLIBGUIST=-Wl,--start-group CPPRUNTIME -lgcc
+STDLIBCUIST=-Wl,--start-group CPPRUNTIME -lgcc
+STDLIBGUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+STDLIBCUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+STDSHLGUIST=-Wl,--start-group CPPRUNTIME -lgcc
+STDSHLCUIST=-Wl,--start-group CPPRUNTIME -lgcc
+STDSHLGUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+STDSHLCUIMT=-Wl,--start-group CPPRUNTIME -lgcc
+STDLIBGUIMT+=-lmingwthrd
+STDLIBCUIMT+=-lmingwthrd
+STDSHLGUIMT+=-lmingwthrd
+STDSHLCUIMT+=-lmingwthrd
+STDLIBGUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDLIBCUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDLIBGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDLIBCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDSHLGUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDSHLCUIST+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDSHLGUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+STDSHLCUIMT+=-lmingw32 -lmoldname -lmingwex -Wl,--end-group $(UWINAPILIB) -lm -lkernel32 -luser32 -lmsvcrt
+
+LIBSTLPORT=-lstlport_gcc
+LIBSTLPORTST=-lstlport_gcc_static
+
+LIBMGR=$(WRAPCMD) ar
+LIBFLAGS=-rsu
+
+IMPLIB=$(WRAPCMD) ld
+IMPLIBFLAGS=
+
+MAPSYM=tmapsym
+MAPSYMFLAGS=
+
+RC=$(WRAPCMD) rc
+RCFLAGS=-D__MINGW32__ -DWIN32 -D_WIN32_IE=0x400 -fo$@ $(RCFILES)
+RCLINK=
+RCLINKFLAGS=
+RCSETVERSION=
+
+DLLPOSTFIX=gi
+
+ADVAPI32LIB=-ladvapi32
+SHELL32LIB=-lshell32
+GDI32LIB=-lgdi32
+OLE32LIB=-lole32
+OLEAUT32LIB=-loleaut32
+UUIDLIB=$(PSDK_HOME)$/lib$/uuid.lib
+WINSPOOLLIB=-lwinspool
+IMM32LIB=-limm32
+PSPLIB=-lpsp$(VERSION)$(DLLPOSTFIX)
+VERSIONLIB=-lversion
+WINMMLIB=-lwinmm
+WSOCK32LIB=-lwsock32
+MPRLIB=-lmpr
+WS2_32LIB=-lws2_32
+KERNEL32LIB=-lkernel32
+USER32LIB=-luser32
+MSVCRTLIB=-lmsvcrt
+COMDLG32LIB=-lcomdlg32
+COMCTL32LIB=-lcomctl32
+CRYPT32LIB=$(PSDK_HOME)$/lib$/crypt32.lib
+GDIPLUSLIB=$(PSDK_HOME)$/lib$/gdiplus.lib
+DBGHELPLIB=$(PSDK_HOME)$/lib$/dbghelp.lib
+MSILIB=$(PSDK_HOME)$/lib$/msi.lib
+DDRAWLIB=$(DIRECTXSDK_LIB)/ddraw.lib
+SHLWAPILIB=$(PSDK_HOME)$/lib$/shlwapi.lib
+URLMONLIB=$(PSDK_HOME)$/lib$/urlmon.lib
+UNICOWSLIB=$(PSDK_HOME)$/lib$/unicows.lib
+WININETLIB=-lwininet
+OLDNAMESLIB=-lmoldname
