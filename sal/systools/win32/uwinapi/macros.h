@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macros.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:17:12 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:26:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,6 +113,31 @@ EXTERN_C void WINAPI ResolveThunk_ALLWAYS( FARPROC *lppfn, LPCSTR lpLibFileName,
 
 
 
+#ifdef __MINGW32__
+#define IMPLEMENT_THUNK( module, resolve, rettype, calltype, func, params ) \
+static void func##_Thunk(); \
+EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
+EXTERN_C rettype calltype func params \
+{ \
+    asm("   popl    %ebp"); \
+    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+} \
+EXTERN_C rettype calltype func##_##resolve params; \
+static rettype calltype func##_##Failure params; \
+static void func##_Thunk() \
+{ \
+    ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, (FARPROC)func##_##resolve, (FARPROC)func##_##Failure ); \
+    asm("   movl    %ebp, %esp"); \
+    asm("   popl    %ebp"); \
+    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+} \
+static rettype calltype func##_##Failure params \
+{ \
+    SetLastError( ERROR_CALL_NOT_IMPLEMENTED ); \
+    return (rettype)0; \
+} \
+EXTERN_C rettype calltype func##_##resolve params
+#else
 #define IMPLEMENT_THUNK( module, resolve, rettype, calltype, func, params ) \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
 EXTERN_C rettype calltype func##_##resolve params; \
@@ -133,9 +158,27 @@ static rettype calltype func##_##Failure params \
     return (rettype)0; \
 } \
 EXTERN_C rettype calltype func##_##resolve params
+#endif
 
 
 
+#ifdef __MINGW32__
+#define DEFINE_CUSTOM_THUNK( module, resolve, rettype, calltype, func, params ) \
+static void func##_Thunk(); \
+EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
+static void func##_Thunk() \
+{ \
+    ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func ); \
+    asm("   movl    %ebp, %esp"); \
+    asm("   popl    %ebp"); \
+    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+} \
+EXTERN_C rettype calltype func params \
+{ \
+    asm("   popl    %ebp"); \
+    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+}
+#else
 #define DEFINE_CUSTOM_THUNK( module, resolve, rettype, calltype, func, params ) \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
 static _declspec ( naked ) void func##_Thunk() \
@@ -148,9 +191,32 @@ EXTERN_C _declspec( naked ) rettype calltype func params \
     _asm    jmp [module##_##func##_Ptr] \
 } \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk;
+#endif
 
 
-
+#ifdef __MINGW32__
+#define DEFINE_DEFAULT_THUNK( module, resolve, rettype, calltype, func, params ) \
+static void func##_Thunk(); \
+EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr = (FARPROC)func##_Thunk; \
+static rettype calltype func##_##Failure params; \
+static _declspec ( naked ) void func##_Thunk() \
+{ \
+    ResolveThunk_##resolve( &module##_##func##_Ptr, #module ".dll", #func, NULL, (FARPROC)func##_##Failure ); \
+    asm("   movl    %ebp, %esp"); \
+    asm("   popl    %ebp"); \
+    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+} \
+EXTERN_C _declspec( naked ) rettype calltype func params \
+{ \
+    asm("   popl    %ebp"); \
+    asm("   jmp *(%0)"::"m"(module##_##func##_Ptr)); \
+} \
+static rettype calltype func##_##Failure params \
+{ \
+    SetLastError( ERROR_CALL_NOT_IMPLEMENTED ); \
+    return (rettype)0; \
+}
+#else
 #define DEFINE_DEFAULT_THUNK( module, resolve, rettype, calltype, func, params ) \
 EXTERN_C _declspec( dllexport ) FARPROC module##_##func##_Ptr; \
 static rettype calltype func##_##Failure params; \
@@ -169,3 +235,5 @@ static rettype calltype func##_##Failure params \
     SetLastError( ERROR_CALL_NOT_IMPLEMENTED ); \
     return (rettype)0; \
 }
+#endif
+
