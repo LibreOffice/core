@@ -1,219 +1,138 @@
-*** misc/Python-2.3.4/configure	2004-05-07 21:13:40.000000000 +0200
---- misc/build/Python-2.3.4/configure	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/Include/osdefs.h	Tue Feb 26 12:20:01 2002
+--- misc/build/Python-2.3.4/Include/osdefs.h	Tue Mar 20 17:26:51 2007
 ***************
-*** 1479,1490 ****
---- 1479,1503 ----
-    # several APIs are not declared. Since this is also needed in some
-    # cases for HP-UX, we define it globally.
+*** 16,22 ****
   
-+ define_xopen_source_extended=no
-+ case $ac_sys_system/$ac_sys_release in
-+ 	SunOS/5.1*)
-+ 		;;
-+ 	*)
-+ 		define_xopen_source_extended=yes
-+ 		;;
-+ esac
-+ 
-+ if test $define_xopen_source_extended = yes
-+ then
+  /* Mod by chrish: QNX has WATCOM, but isn't DOS */
+  #if !defined(__QNX__)
+! #if defined(MS_WINDOWS) || defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__DJGPP__) || defined(PYOS_OS2)
+  #if defined(PYOS_OS2) && defined(PYCC_GCC)
+  #define MAXPATHLEN 260
+  #define SEP '/'
+--- 16,22 ----
   
-  cat >>confdefs.h <<\_ACEOF
-  #define _XOPEN_SOURCE_EXTENDED 1
-  _ACEOF
+  /* Mod by chrish: QNX has WATCOM, but isn't DOS */
+  #if !defined(__QNX__)
+! #if defined(MS_WINDOWS) || defined(__BORLANDC__) || defined(__WATCOMC__) || defined(__DJGPP__) || defined(PYOS_OS2) || defined(__MINGW32__)
+  #if defined(PYOS_OS2) && defined(PYCC_GCC)
+  #define MAXPATHLEN 260
+  #define SEP '/'
+*** misc/Python-2.3.4/Include/pyport.h	Tue Sep 30 16:56:50 2003
+--- misc/build/Python-2.3.4/Include/pyport.h	Tue Mar 20 17:26:51 2007
+***************
+*** 2,7 ****
+--- 2,11 ----
+  #define Py_PYPORT_H
   
+  #include "pyconfig.h" /* include for defines */
++ #if defined(__MINGW32__)
++ #undef HAVE_FORKPTY
++ #undef HAVE_OPENPTY
++ #endif
   
-+ fi
-+ 
-  cat >>confdefs.h <<\_ACEOF
-  #define _POSIX_C_SOURCE 200112L
-  _ACEOF
+  /**************************************************************************
+  Symbols and macros to supply platform-independent interfaces to basic
 ***************
-*** 3590,3595 ****
---- 3603,3611 ----
-  _ACEOF
-  
-    case $ac_sys_system in
-+     Darwin*)
-+          LDLIBRARY='libpython$(VERSION).dylib'
-+          ;;
-      BeOS*)
-            LDLIBRARY='libpython$(VERSION).so'
-            ;;
-***************
-*** 3603,3609 ****
-  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
-  	  INSTSONAME="$LDLIBRARY".$SOVERSION
-            ;;
-!     Linux*|GNU*|NetBSD*)
-  	  LDLIBRARY='libpython$(VERSION).so'
-  	  BLDLIBRARY='-L. -lpython$(VERSION)'
-  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
---- 3619,3625 ----
-  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
-  	  INSTSONAME="$LDLIBRARY".$SOVERSION
-            ;;
-!     Linux*|GNU*|NetBSD*|FreeBSD*)
-  	  LDLIBRARY='libpython$(VERSION).so'
-  	  BLDLIBRARY='-L. -lpython$(VERSION)'
-  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
-***************
-*** 4021,4027 ****
-  	    ;;
-  	# is there any other compiler on Darwin besides gcc?
-  	Darwin*)
-! 	    BASECFLAGS="$BASECFLAGS -Wno-long-double -no-cpp-precomp -mno-fused-madd"
-  	    ;;
-      esac
-      ;;
---- 4037,4043 ----
-  	    ;;
-  	# is there any other compiler on Darwin besides gcc?
-  	Darwin*)
-! 	    BASECFLAGS="$BASECFLAGS -fno-common -Wno-long-double -no-cpp-precomp -mno-fused-madd"
-  	    ;;
-      esac
-      ;;
-***************
-*** 10069,10076 ****
-  	SunOS/4*) LDSHARED="ld";;
-  	SunOS/5*)
-  		if test "$GCC" = "yes"
-! 		then LDSHARED='$(CC) -shared'
-! 		else LDSHARED='$(CC) -G';
-  		fi ;;
-  	hp*|HP*) LDSHARED="ld -b";;
-  	OSF*) LDSHARED="ld -shared -expect_unresolved \"*\"";;
---- 10085,10092 ----
-  	SunOS/4*) LDSHARED="ld";;
-  	SunOS/5*)
-  		if test "$GCC" = "yes"
-! 		then LDSHARED='$(CC) $(LDFLAGS) -shared'
-! 		else LDSHARED='$(CC) $(LDFLAGS) -G';
-  		fi ;;
-  	hp*|HP*) LDSHARED="ld -b";;
-  	OSF*) LDSHARED="ld -shared -expect_unresolved \"*\"";;
-***************
-*** 10082,10088 ****
-  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
-  		else
-  			# No framework. Ignore undefined symbols, assuming they come from Python
-! 			LDSHARED="$LDSHARED -undefined suppress"
-  		fi ;;
-  	Darwin/*)
-  		LDSHARED='$(CC) $(LDFLAGS) -bundle'
---- 10098,10104 ----
-  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
-  		else
-  			# No framework. Ignore undefined symbols, assuming they come from Python
-! 			LDSHARED="$LDSHARED -flat_namespace -undefined suppress"
-  		fi ;;
-  	Darwin/*)
-  		LDSHARED='$(CC) $(LDFLAGS) -bundle'
-***************
-*** 10091,10100 ****
-  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
-  		else
-  			# No framework, use the Python app as bundle-loader
-! 			BLDSHARED="$LDSHARED "'-bundle_loader $(BUILDPYTHON)'
-! 			LDSHARED="$LDSHARED "'-bundle_loader $(BINDIR)/python$(VERSION)$(EXE)'
-  		fi ;;
-! 	Linux*|GNU*) LDSHARED='$(CC) -shared';;
-  	dgux*) LDSHARED="ld -G";;
-  	BSD/OS*/4*) LDSHARED="gcc -shared";;
-  	OpenBSD*|FreeBSD*)
---- 10107,10116 ----
-  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
-  		else
-  			# No framework, use the Python app as bundle-loader
-! 			BLDSHARED="$LDSHARED -flat_namespace -undefined suppress"
-! 			LDSHARED="$LDSHARED -flat_namespace -undefined suppress"
-  		fi ;;
-! 	Linux*|GNU*) LDSHARED='$(CC) $(LDFLAGS) -shared';;
-  	dgux*) LDSHARED="ld -G";;
-  	BSD/OS*/4*) LDSHARED="gcc -shared";;
-  	OpenBSD*|FreeBSD*)
-***************
-*** 10129,10134 ****
---- 10145,10151 ----
-  	case $ac_sys_system/$ac_sys_release in
-  	SunOS*) if test "$GCC" = yes;
-  	        then CCSHARED="-fPIC";
-+ 	        else CCSHARED="-KPIC";  # for sun's cc
-  	        fi;;
-  	hp*|HP*) if test "$GCC" = yes;
-  		 then CCSHARED="-fPIC";
-***************
-*** 12986,12992 ****
-  	;;
-  	BeOS*) DYNLOADFILE="dynload_beos.o";;
-  	hp*|HP*) DYNLOADFILE="dynload_hpux.o";;
-! 	Darwin/*) DYNLOADFILE="dynload_next.o";;
-  	atheos*) DYNLOADFILE="dynload_atheos.o";;
-  	*)
-  	# use dynload_shlib.c and dlopen() if we have it; otherwise stub
---- 13003,13009 ----
-  	;;
-  	BeOS*) DYNLOADFILE="dynload_beos.o";;
-  	hp*|HP*) DYNLOADFILE="dynload_hpux.o";;
-! 	Darwin/*) DYNLOADFILE="dynload_shlib.o";;
-  	atheos*) DYNLOADFILE="dynload_atheos.o";;
-  	*)
-  	# use dynload_shlib.c and dlopen() if we have it; otherwise stub
-*** misc/Python-2.3.4/configure.in	2004-05-07 21:13:47.000000000 +0200
---- misc/build/Python-2.3.4/configure.in	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 174,182 ****
-    # several APIs are not declared. Since this is also needed in some
-    # cases for HP-UX, we define it globally.
-    
-!   AC_DEFINE(_XOPEN_SOURCE_EXTENDED, 1, Define to activate Unix95-and-earlier features)
-!   AC_DEFINE(_POSIX_C_SOURCE, 200112L, Define to activate features from IEEE Stds 1003.1-2001)
-  
-  fi
-  
-  #
---- 174,195 ----
-    # several APIs are not declared. Since this is also needed in some
-    # cases for HP-UX, we define it globally.
-    
-! define_xopen_source_extended = no
-! case $ac_sys_system/$ac_sys_release in
-! 	SunOS/5.1*)
-! 		# don't define _XOPEN_SOURCE_EXTENDED as forces _XOPEN_SOURCE to be
-! 		# assumed as "4"
-! 		;;
-! 	*)
-! 		$define_xopen_source_extended = yes
-! 		;;
-! esac
-  
-+ 	if test $define_xopen_source_extended = yes
-+ 	then
-+ 	  AC_DEFINE(_XOPEN_SOURCE_EXTENDED, 1, Define to activate Unix95-and-earlier features)
-+ 	fi
-+ 	  AC_DEFINE(_POSIX_C_SOURCE, 200112L, Define to activate features from IEEE Stds 1003.1-2001)
-  fi
-  
-  #
-*** misc/Python-2.3.4/Include/pyport.h	2003-09-30 16:56:50.000000000 +0200
---- misc/build/Python-2.3.4/Include/pyport.h	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 346,356 ****
+*** 345,355 ****
+  Please be conservative with adding new ones, document them and enclose them
   in platform-specific #ifdefs.
   **************************************************************************/
-  
+- 
 - #ifdef SOLARIS
 - /* Unchecked */
 - extern int gethostname(char *, int);
 - #endif
-- 
+  
   #ifdef __BEOS__
   /* Unchecked */
-  /* It's in the libs, but not the headers... - [cjh] */
---- 346,351 ----
-*** misc/Python-2.3.4/Mac/OSX/Makefile	2003-11-04 23:45:16.000000000 +0100
---- misc/build/Python-2.3.4/Mac/OSX/Makefile	2007-02-19 16:22:48.000000000 +0100
+--- 349,354 ----
+*** misc/Python-2.3.4/Lib/distutils/command/build_ext.py	Tue Nov 19 14:12:28 2002
+--- misc/build/Python-2.3.4/Lib/distutils/command/build_ext.py	Tue Mar 20 17:26:51 2007
+***************
+*** 181,187 ****
+          # for extensions under Cygwin and AtheOS Python's library directory must be
+          # appended to library_dirs
+          if sys.platform[:6] == 'cygwin' or sys.platform[:6] == 'atheos':
+!             if string.find(sys.executable, sys.exec_prefix) != -1:
+                  # building third party extensions
+                  self.library_dirs.append(os.path.join(sys.prefix, "lib",
+                                                        "python" + get_python_version(),
+--- 181,187 ----
+          # for extensions under Cygwin and AtheOS Python's library directory must be
+          # appended to library_dirs
+          if sys.platform[:6] == 'cygwin' or sys.platform[:6] == 'atheos':
+!             if string.find(sys.exec_prefix, sys.executable) != -1:
+                  # building third party extensions
+                  self.library_dirs.append(os.path.join(sys.prefix, "lib",
+                                                        "python" + get_python_version(),
+*** misc/Python-2.3.4/Lib/distutils/spawn.py	Thu Nov 21 21:41:07 2002
+--- misc/build/Python-2.3.4/Lib/distutils/spawn.py	Tue Mar 20 17:26:51 2007
+***************
+*** 179,185 ****
+          path = os.environ['PATH']
+      paths = string.split(path, os.pathsep)
+      (base, ext) = os.path.splitext(executable)
+!     if (sys.platform == 'win32' or os.name == 'os2') and (ext != '.exe'):
+          executable = executable + '.exe'
+      if not os.path.isfile(executable):
+          for p in paths:
+--- 179,185 ----
+          path = os.environ['PATH']
+      paths = string.split(path, os.pathsep)
+      (base, ext) = os.path.splitext(executable)
+!     if (sys.platform == 'win32' or sys.platform == 'cygwin' or os.name == 'os2') and (ext != '.exe'):
+          executable = executable + '.exe'
+      if not os.path.isfile(executable):
+          for p in paths:
+*** misc/Python-2.3.4/Lib/distutils/sysconfig.py	Mon Feb 10 15:02:33 2003
+--- misc/build/Python-2.3.4/Lib/distutils/sysconfig.py	Tue Mar 20 17:26:51 2007
+***************
+*** 468,473 ****
+--- 468,476 ----
+      global _config_vars
+      if _config_vars is None:
+          func = globals().get("_init_" + os.name)
++         if sys.platform == "cygwin":
++             func = globals().get("_init_posix")
++ 
+          if func:
+              func()
+          else:
+*** misc/Python-2.3.4/Lib/os.py	Sun Apr  4 09:17:05 2004
+--- misc/build/Python-2.3.4/Lib/os.py	Tue Mar 20 17:26:51 2007
+***************
+*** 36,42 ****
+      except AttributeError:
+          return [n for n in dir(module) if n[0] != '_']
+  
+! if 'posix' in _names:
+      name = 'posix'
+      linesep = '\n'
+      from posix import *
+--- 36,56 ----
+      except AttributeError:
+          return [n for n in dir(module) if n[0] != '_']
+  
+! if 'mingw32' in _names:
+!     name = 'nt'
+!     linesep = '\r\n'
+!     from posix import *
+!     try:
+!         from posix import _exit
+!     except ImportError:
+!         pass
+!     import ntpath as path
+! 
+!     import posix
+!     __all__.extend(_get_exports_list(posix))
+!     del posix
+! 
+! elif 'posix' in _names:
+      name = 'posix'
+      linesep = '\n'
+      from posix import *
+*** misc/Python-2.3.4/Mac/OSX/Makefile	Tue Nov  4 23:45:16 2003
+--- misc/build/Python-2.3.4/Mac/OSX/Makefile	Tue Mar 20 17:26:51 2007
 ***************
 *** 26,33 ****
   INSTALLED_PYTHONW=$(APPINSTALLDIR)/Contents/MacOS/Python
@@ -233,8 +152,8 @@
   INSTALL=/usr/bin/install -c
   INSTALL_SYMLINK=ln -fsn
   INSTALL_PROGRAM=${INSTALL}
-*** misc/Python-2.3.4/Makefile.pre.in	2003-11-18 20:54:00.000000000 +0100
---- misc/build/Python-2.3.4/Makefile.pre.in	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/Makefile.pre.in	Tue Nov 18 20:54:00 2003
+--- misc/build/Python-2.3.4/Makefile.pre.in	Tue Mar 20 17:26:51 2007
 ***************
 *** 114,123 ****
   RUNSHARED=       @RUNSHARED@
@@ -258,6 +177,54 @@
   
   # configure script arguments
   CONFIG_ARGS=	@CONFIG_ARGS@
+***************
+*** 167,173 ****
+  # Modules
+  MODULE_OBJS=	\
+  		Modules/config.o \
+! 		Modules/getpath.o \
+  		Modules/main.o \
+  		Modules/gcmodule.o
+  
+--- 167,173 ----
+  # Modules
+  MODULE_OBJS=	\
+  		Modules/config.o \
+! 		@GETPATH_OBJS@ \
+  		Modules/main.o \
+  		Modules/gcmodule.o
+  
+***************
+*** 308,321 ****
+  			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
+  
+  platform: $(BUILDPYTHON)
+! 	$(RUNSHARED) ./$(BUILDPYTHON) -E -c 'import sys ; from distutils.util import get_platform ; print get_platform()+"-"+sys.version[0:3]' >platform
+  
+  
+  # Build the shared modules
+  sharedmods: $(BUILDPYTHON)
+  	case $$MAKEFLAGS in \
+! 	*-s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py -q build;; \
+! 	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' ./$(BUILDPYTHON) -E $(srcdir)/setup.py build;; \
+  	esac
+  
+  # buildno should really depend on something like LIBRARY_SRC
+--- 308,321 ----
+  			$(BLDLIBRARY) $(LIBS) $(MODLIBS) $(SYSLIBS) $(LDLAST)
+  
+  platform: $(BUILDPYTHON)
+! 	$(RUNSHARED) $(WRAPCMD) ./$(BUILDPYTHON) -E -c 'import sys ; from distutils.util import get_platform ; print get_platform()+"-"+sys.version[0:3]' >platform
+  
+  
+  # Build the shared modules
+  sharedmods: $(BUILDPYTHON)
+  	case $$MAKEFLAGS in \
+! 	*-s*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' $(WRAPCMD) ./$(BUILDPYTHON) -E $(srcdir)/setup.py -q build;; \
+! 	*) $(RUNSHARED) CC='$(CC)' LDSHARED='$(BLDSHARED)' OPT='$(OPT)' $(WRAPCMD) ./$(BUILDPYTHON) -E $(srcdir)/setup.py build;; \
+  	esac
+  
+  # buildno should really depend on something like LIBRARY_SRC
 ***************
 *** 345,356 ****
   
@@ -289,8 +256,37 @@
   	$(LDSHARED) -o $@ $(LIBRARY_OBJS) $(LIBC) $(LIBM)
   
 ***************
+*** 456,461 ****
+--- 459,467 ----
+  Objects/unicodectype.o:	$(srcdir)/Objects/unicodectype.c \
+  				$(srcdir)/Objects/unicodetype_db.h
+  
++ PC/import_nt.o: $(srcdir)/PC/import_nt.c
++ 		$(CC) -c $(PY_CFLAGS) -I$(srcdir)/Python -o $@ $(srcdir)/PC/import_nt.c
++ 
+  ############################################################################
+  # Header files
+  
+***************
+*** 523,529 ****
+  
+  TESTOPTS=	-l
+  TESTPROG=	$(srcdir)/Lib/test/regrtest.py
+! TESTPYTHON=	$(RUNSHARED) ./$(BUILDPYTHON) -E -tt
+  test:		all platform
+  		-find $(srcdir)/Lib -name '*.py[co]' -print | xargs rm -f
+  		-$(TESTPYTHON) $(TESTPROG) $(TESTOPTS)
+--- 529,535 ----
+  
+  TESTOPTS=	-l
+  TESTPROG=	$(srcdir)/Lib/test/regrtest.py
+! TESTPYTHON=	$(RUNSHARED) $(WRAPCMD) ./$(BUILDPYTHON) -E -tt
+  test:		all platform
+  		-find $(srcdir)/Lib -name '*.py[co]' -print | xargs rm -f
+  		-$(TESTPYTHON) $(TESTPROG) $(TESTOPTS)
+***************
 *** 615,620 ****
---- 618,626 ----
+--- 621,629 ----
   		fi; \
   	else	true; \
   	fi
@@ -300,8 +296,66 @@
   
   # Install the manual page
   maninstall:
-*** misc/Python-2.3.4/Misc/setuid-prog.c	1998-09-10 22:18:09.000000000 +0200
---- misc/build/Python-2.3.4/Misc/setuid-prog.c	2007-02-19 16:22:48.000000000 +0100
+***************
+*** 705,723 ****
+  	done
+  	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(LIBDEST)/LICENSE.txt
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
+! 		./$(BUILDPYTHON) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST) -f \
+  		-x 'badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
+! 		./$(BUILDPYTHON) -Wi -tt -O $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST) -f \
+  		-x 'badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
+! 		./$(BUILDPYTHON) -Wi -t $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST)/site-packages -f \
+  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
+! 		./$(BUILDPYTHON) -Wi -t -O $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST)/site-packages -f \
+  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
+  
+--- 714,732 ----
+  	done
+  	$(INSTALL_DATA) $(srcdir)/LICENSE $(DESTDIR)$(LIBDEST)/LICENSE.txt
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
+! 		$(WRAPCMD) ./$(BUILDPYTHON) -Wi -tt $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST) -f \
+  		-x 'badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
+! 		$(WRAPCMD) ./$(BUILDPYTHON) -Wi -tt -O $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST) -f \
+  		-x 'badsyntax|site-packages' $(DESTDIR)$(LIBDEST)
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST)  $(RUNSHARED) \
+! 		$(WRAPCMD) ./$(BUILDPYTHON) -Wi -t $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST)/site-packages -f \
+  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
+  	PYTHONPATH=$(DESTDIR)$(LIBDEST) $(RUNSHARED) \
+! 		$(WRAPCMD) ./$(BUILDPYTHON) -Wi -t -O $(DESTDIR)$(LIBDEST)/compileall.py \
+  		-d $(LIBDEST)/site-packages -f \
+  		-x badsyntax $(DESTDIR)$(LIBDEST)/site-packages
+  
+***************
+*** 812,818 ****
+  # Install the dynamically loadable modules
+  # This goes into $(exec_prefix)
+  sharedinstall:
+! 	$(RUNSHARED) ./$(BUILDPYTHON) -E $(srcdir)/setup.py install \
+  	   	--prefix=$(prefix) \
+  		--install-scripts=$(BINDIR) \
+  		--install-platlib=$(DESTSHARED) \
+--- 821,827 ----
+  # Install the dynamically loadable modules
+  # This goes into $(exec_prefix)
+  sharedinstall:
+! 	$(RUNSHARED) $(WRAPCMD) ./$(BUILDPYTHON) -E $(srcdir)/setup.py install \
+  	   	--prefix=$(prefix) \
+  		--install-scripts=$(BINDIR) \
+  		--install-platlib=$(DESTSHARED) \
+*** misc/Python-2.3.4/Misc/setuid-prog.c	Thu Sep 10 22:18:09 1998
+--- misc/build/Python-2.3.4/Misc/setuid-prog.c	Tue Mar 20 17:26:51 2007
 ***************
 *** 70,75 ****
 --- 70,81 ----
@@ -317,8 +371,402 @@
   /* don't change def_IFS */
   char def_IFS[] = "IFS= \t\n";
   /* you may want to change def_PATH, but you should really change it in */
-*** misc/Python-2.3.4/Modules/posixmodule.c	2004-05-04 10:07:49.000000000 +0200
---- misc/build/Python-2.3.4/Modules/posixmodule.c	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/Modules/_hotshot.c	Mon Mar 17 20:46:07 2003
+--- misc/build/Python-2.3.4/Modules/_hotshot.c	Tue Mar 20 17:26:51 2007
+***************
+*** 12,18 ****
+   * Which timer to use should be made more configurable, but that should not
+   * be difficult.  This will do for now.
+   */
+! #ifdef MS_WINDOWS
+  #include <windows.h>
+  #include <direct.h>    /* for getcwd() */
+  typedef __int64 hs_time;
+--- 12,18 ----
+   * Which timer to use should be made more configurable, but that should not
+   * be difficult.  This will do for now.
+   */
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  #include <windows.h>
+  #include <direct.h>    /* for getcwd() */
+  typedef __int64 hs_time;
+***************
+*** 98,104 ****
+  static PyObject * ProfilerError = NULL;
+  
+  
+! #ifndef MS_WINDOWS
+  #ifdef GETTIMEOFDAY_NO_TZ
+  #define GETTIMEOFDAY(ptv) gettimeofday((ptv))
+  #else
+--- 98,104 ----
+  static PyObject * ProfilerError = NULL;
+  
+  
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  #ifdef GETTIMEOFDAY_NO_TZ
+  #define GETTIMEOFDAY(ptv) gettimeofday((ptv))
+  #else
+***************
+*** 812,818 ****
+  get_tdelta(ProfilerObject *self)
+  {
+      int tdelta;
+! #ifdef MS_WINDOWS
+      hs_time tv;
+      hs_time diff;
+  
+--- 812,818 ----
+  get_tdelta(ProfilerObject *self)
+  {
+      int tdelta;
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+      hs_time tv;
+      hs_time diff;
+  
+***************
+*** 904,910 ****
+  
+  /* A couple of useful helper functions. */
+  
+! #ifdef MS_WINDOWS
+  static LARGE_INTEGER frequency = {0, 0};
+  #endif
+  
+--- 904,910 ----
+  
+  /* A couple of useful helper functions. */
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  static LARGE_INTEGER frequency = {0, 0};
+  #endif
+  
+***************
+*** 916,922 ****
+  {
+      hs_time tv1, tv2;
+  
+! #ifdef MS_WINDOWS
+      hs_time diff;
+      QueryPerformanceFrequency(&frequency);
+  #endif
+--- 916,922 ----
+  {
+      hs_time tv1, tv2;
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+      hs_time diff;
+      QueryPerformanceFrequency(&frequency);
+  #endif
+***************
+*** 924,930 ****
+      GETTIMEOFDAY(&tv1);
+      while (1) {
+          GETTIMEOFDAY(&tv2);
+! #ifdef MS_WINDOWS
+          diff = tv2 - tv1;
+          if (diff != 0) {
+              timeofday_diff = (unsigned long)diff;
+--- 924,930 ----
+      GETTIMEOFDAY(&tv1);
+      while (1) {
+          GETTIMEOFDAY(&tv2);
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+          diff = tv2 - tv1;
+          if (diff != 0) {
+              timeofday_diff = (unsigned long)diff;
+***************
+*** 940,946 ****
+          }
+  #endif
+      }
+! #if defined(MS_WINDOWS) || defined(macintosh) || defined(PYOS_OS2) || \
+      defined(__VMS)
+      rusage_diff = -1;
+  #else
+--- 940,946 ----
+          }
+  #endif
+      }
+! #if defined(MS_WINDOWS) || defined(__MINGW32__) || defined(macintosh) || defined(PYOS_OS2) || \
+      defined(__VMS)
+      rusage_diff = -1;
+  #else
+***************
+*** 1466,1472 ****
+      else
+          pack_add_info(self, "executable-version", buffer);
+  
+! #ifdef MS_WINDOWS
+      PyOS_snprintf(cwdbuffer, sizeof(cwdbuffer), "%I64d", frequency.QuadPart);
+      pack_add_info(self, "reported-performance-frequency", cwdbuffer);
+  #else
+--- 1466,1472 ----
+      else
+          pack_add_info(self, "executable-version", buffer);
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+      PyOS_snprintf(cwdbuffer, sizeof(cwdbuffer), "%I64d", frequency.QuadPart);
+      pack_add_info(self, "reported-performance-frequency", cwdbuffer);
+  #else
+***************
+*** 1575,1581 ****
+  }
+  
+  PyDoc_VAR(resolution__doc__) = 
+! #ifdef MS_WINDOWS
+  PyDoc_STR(
+  "resolution() -> (performance-counter-ticks, update-frequency)\n"
+  "Return the resolution of the timer provided by the QueryPerformanceCounter()\n"
+--- 1575,1581 ----
+  }
+  
+  PyDoc_VAR(resolution__doc__) = 
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  PyDoc_STR(
+  "resolution() -> (performance-counter-ticks, update-frequency)\n"
+  "Return the resolution of the timer provided by the QueryPerformanceCounter()\n"
+***************
+*** 1602,1608 ****
+              calibrate();
+              calibrate();
+          }
+! #ifdef MS_WINDOWS
+          result = Py_BuildValue("ii", timeofday_diff, frequency.LowPart);
+  #else
+          result = Py_BuildValue("ii", timeofday_diff, rusage_diff);
+--- 1602,1608 ----
+              calibrate();
+              calibrate();
+          }
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+          result = Py_BuildValue("ii", timeofday_diff, frequency.LowPart);
+  #else
+          result = Py_BuildValue("ii", timeofday_diff, rusage_diff);
+*** misc/Python-2.3.4/Modules/config.c.in	Sun Jul  7 05:59:34 2002
+--- misc/build/Python-2.3.4/Modules/config.c.in	Tue Mar 20 17:26:51 2007
+***************
+*** 39,44 ****
+--- 39,47 ----
+  	{"__builtin__", NULL},
+  	{"sys", NULL},
+  	{"exceptions", NULL},
++ #ifdef __MINGW32__
++ 	{"mingw32", NULL},
++ #endif
+  
+  	/* This lives in gcmodule.c */
+  	{"gc", initgc},
+*** misc/Python-2.3.4/Modules/mmapmodule.c	Tue Jul 15 14:37:46 2003
+--- misc/build/Python-2.3.4/Modules/mmapmodule.c	Tue Mar 20 17:26:52 2007
+***************
+*** 20,30 ****
+  
+  #include <Python.h>
+  
+! #ifndef MS_WINDOWS
+  #define UNIX
+  #endif
+  
+! #ifdef MS_WINDOWS
+  #include <windows.h>
+  static int
+  my_getpagesize(void)
+--- 20,30 ----
+  
+  #include <Python.h>
+  
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  #define UNIX
+  #endif
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  #include <windows.h>
+  static int
+  my_getpagesize(void)
+***************
+*** 75,81 ****
+  	size_t	size;
+  	size_t	pos;
+  
+! #ifdef MS_WINDOWS
+  	HANDLE	map_handle;
+  	HANDLE	file_handle;
+  	char *	tagname;
+--- 75,81 ----
+  	size_t	size;
+  	size_t	pos;
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	HANDLE	map_handle;
+  	HANDLE	file_handle;
+  	char *	tagname;
+***************
+*** 92,98 ****
+  static void
+  mmap_object_dealloc(mmap_object *m_obj)
+  {
+! #ifdef MS_WINDOWS
+  	if (m_obj->data != NULL)
+  		UnmapViewOfFile (m_obj->data);
+  	if (m_obj->map_handle != INVALID_HANDLE_VALUE)
+--- 92,98 ----
+  static void
+  mmap_object_dealloc(mmap_object *m_obj)
+  {
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	if (m_obj->data != NULL)
+  		UnmapViewOfFile (m_obj->data);
+  	if (m_obj->map_handle != INVALID_HANDLE_VALUE)
+***************
+*** 118,124 ****
+  {
+          if (!PyArg_ParseTuple(args, ":close"))
+  		return NULL;
+! #ifdef MS_WINDOWS
+  	/* For each resource we maintain, we need to check
+  	   the value is valid, and if so, free the resource 
+  	   and set the member value to an invalid value so
+--- 118,124 ----
+  {
+          if (!PyArg_ParseTuple(args, ":close"))
+  		return NULL;
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	/* For each resource we maintain, we need to check
+  	   the value is valid, and if so, free the resource 
+  	   and set the member value to an invalid value so
+***************
+*** 151,157 ****
+  	return (Py_None);
+  }
+  
+! #ifdef MS_WINDOWS
+  #define CHECK_VALID(err)						\
+  do {									\
+      if (self->map_handle == INVALID_HANDLE_VALUE) {						\
+--- 151,157 ----
+  	return (Py_None);
+  }
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  #define CHECK_VALID(err)						\
+  do {									\
+      if (self->map_handle == INVALID_HANDLE_VALUE) {						\
+***************
+*** 338,344 ****
+          if (!PyArg_ParseTuple(args, ":size"))
+  		return NULL;
+  
+! #ifdef MS_WINDOWS
+  	if (self->file_handle != INVALID_HANDLE_VALUE) {
+  		return (Py_BuildValue (
+  			"l", (long)
+--- 338,344 ----
+          if (!PyArg_ParseTuple(args, ":size"))
+  		return NULL;
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	if (self->file_handle != INVALID_HANDLE_VALUE) {
+  		return (Py_BuildValue (
+  			"l", (long)
+***************
+*** 378,384 ****
+  	if (!PyArg_ParseTuple (args, "l:resize", &new_size) || 
+  	    !is_resizeable(self)) {
+  		return NULL;
+! #ifdef MS_WINDOWS
+  	} else { 
+  		DWORD dwErrCode = 0;
+  		/* First, unmap the file view */
+--- 378,384 ----
+  	if (!PyArg_ParseTuple (args, "l:resize", &new_size) || 
+  	    !is_resizeable(self)) {
+  		return NULL;
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	} else { 
+  		DWORD dwErrCode = 0;
+  		/* First, unmap the file view */
+***************
+*** 469,475 ****
+  				 "flush values out of range");
+  		return NULL;
+  	} else {
+! #ifdef MS_WINDOWS
+  		return (Py_BuildValue("l", (long)
+                                        FlushViewOfFile(self->data+offset, size)));
+  #endif /* MS_WINDOWS */
+--- 469,475 ----
+  				 "flush values out of range");
+  		return NULL;
+  	} else {
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  		return (Py_BuildValue("l", (long)
+                                        FlushViewOfFile(self->data+offset, size)));
+  #endif /* MS_WINDOWS */
+***************
+*** 926,932 ****
+  }
+  #endif /* UNIX */
+  
+! #ifdef MS_WINDOWS
+  static PyObject *
+  new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
+  {
+--- 926,932 ----
+  }
+  #endif /* UNIX */
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  static PyObject *
+  new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
+  {
+*** misc/Python-2.3.4/Modules/posixmodule.c	Tue May  4 10:07:49 2004
+--- misc/build/Python-2.3.4/Modules/posixmodule.c	Tue Mar 20 17:26:52 2007
+***************
+*** 104,109 ****
+--- 104,118 ----
+  #define HAVE_FSYNC	1
+  #define fsync _commit
+  #else
++ #ifdef __MINGW32__
++ #define HAVE_SPAWNV	1
++ #define HAVE_EXECV      1
++ #define HAVE_GETCWD     1
++ #define HAVE_OPENDIR    1
++ #define HAVE_PIPE       1
++ #define HAVE_POPEN      1
++ #define HAVE_SYSTEM	1
++ #else
+  #if defined(PYOS_OS2) && defined(PYCC_GCC) || defined(__VMS)
+  /* Everything needed is defined in PC/os2emx/pyconfig.h or vms/pyconfig.h */
+  #else			/* all other compilers */
+***************
+*** 127,132 ****
+--- 136,142 ----
+  #define HAVE_WAIT       1
+  #define HAVE_TTYNAME	1
+  #endif  /* PYOS_OS2 && PYCC_GCC && __VMS */
++ #endif  /* __MINGW32__ */
+  #endif  /* _MSC_VER */
+  #endif  /* __BORLANDC__ */
+  #endif  /* ! __WATCOMC__ || __QNX__ */
+***************
+*** 154,160 ****
+  #if defined(PYCC_VACPP)
+  extern int mkdir(char *);
+  #else
+! #if ( defined(__WATCOMC__) || defined(_MSC_VER) ) && !defined(__QNX__)
+  extern int mkdir(const char *);
+  #else
+  extern int mkdir(const char *, mode_t);
+--- 164,170 ----
+  #if defined(PYCC_VACPP)
+  extern int mkdir(char *);
+  #else
+! #if ( defined(__WATCOMC__) || defined(_MSC_VER) || defined(__MINGW32__) ) && !defined(__QNX__)
+  extern int mkdir(const char *);
+  #else
+  extern int mkdir(const char *, mode_t);
 ***************
 *** 304,310 ****
   #endif
@@ -328,7 +776,7 @@
   /* On Darwin/MacOSX a shared library or framework has no access to
   ** environ directly, we must obtain it with _NSGetEnviron().
   */
---- 304,310 ----
+--- 314,320 ----
   #endif
   
   /* Return a dictionary corresponding to the POSIX environment table */
@@ -345,7 +793,7 @@
   	if (environ == NULL)
   		environ = *_NSGetEnviron();
   #endif
---- 322,328 ----
+--- 332,338 ----
   	d = PyDict_New();
   	if (d == NULL)
   		return NULL;
@@ -353,8 +801,73 @@
   	if (environ == NULL)
   		environ = *_NSGetEnviron();
   #endif
-*** misc/Python-2.3.4/Modules/readline.c	2003-11-13 08:42:13.000000000 +0100
---- misc/build/Python-2.3.4/Modules/readline.c	2007-02-19 16:22:48.000000000 +0100
+***************
+*** 918,924 ****
+  	char *pathfree = NULL;  /* this memory must be free'd */
+  	int res;
+  
+! #ifdef MS_WINDOWS
+  	int pathlen;
+  	char pathcopy[MAX_PATH];
+  #endif /* MS_WINDOWS */
+--- 928,934 ----
+  	char *pathfree = NULL;  /* this memory must be free'd */
+  	int res;
+  
+! #ifdef MS_WINDOWS || defined (__MINGW32__)
+  	int pathlen;
+  	char pathcopy[MAX_PATH];
+  #endif /* MS_WINDOWS */
+***************
+*** 972,978 ****
+  		return NULL;
+  	pathfree = path;
+  
+! #ifdef MS_WINDOWS
+  	pathlen = strlen(path);
+  	/* the library call can blow up if the file name is too long! */
+  	if (pathlen > MAX_PATH) {
+--- 982,988 ----
+  		return NULL;
+  	pathfree = path;
+  
+! #ifdef MS_WINDOWS || defined (__MINGW32__)
+  	pathlen = strlen(path);
+  	/* the library call can blow up if the file name is too long! */
+  	if (pathlen > MAX_PATH) {
+***************
+*** 1693,1699 ****
+  	                      Py_FileSystemDefaultEncoding, &path, &mode))
+  		return NULL;
+  	Py_BEGIN_ALLOW_THREADS
+! #if ( defined(__WATCOMC__) || defined(_MSC_VER) || defined(PYCC_VACPP) ) && !defined(__QNX__)
+  	res = mkdir(path);
+  #else
+  	res = mkdir(path, mode);
+--- 1703,1709 ----
+  	                      Py_FileSystemDefaultEncoding, &path, &mode))
+  		return NULL;
+  	Py_BEGIN_ALLOW_THREADS
+! #if ( defined(__WATCOMC__) || defined(_MSC_VER) || defined(__MINGW32__) || defined(PYCC_VACPP) ) && !defined(__QNX__)
+  	res = mkdir(path);
+  #else
+  	res = mkdir(path, mode);
+***************
+*** 5387,5393 ****
+--- 5397,5407 ----
+  	int fds[2];
+  	int res;
+  	Py_BEGIN_ALLOW_THREADS
++ #ifdef __MINGW32__
++ 	res = _pipe(fds, 1024, O_BINARY);
++ #else
+  	res = pipe(fds);
++ #endif
+  	Py_END_ALLOW_THREADS
+  	if (res != 0)
+  		return posix_error();
+*** misc/Python-2.3.4/Modules/readline.c	Thu Nov 13 08:42:13 2003
+--- misc/build/Python-2.3.4/Modules/readline.c	Tue Mar 20 17:26:52 2007
 ***************
 *** 93,99 ****
   	return Py_None;
@@ -431,8 +944,584 @@
   }
   
   PyDoc_STRVAR(get_history_length_doc,
-*** misc/Python-2.3.4/PCbuild/_bsddb.dep	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/Modules/selectmodule.c	Mon Mar 22 21:20:33 2004
+--- misc/build/Python-2.3.4/Modules/selectmodule.c	Tue Mar 20 17:26:52 2007
+***************
+*** 14,20 ****
+     Users who want even more than the boosted limit should #define
+     FD_SETSIZE higher before this; e.g., via compiler /D switch.
+  */
+! #if defined(MS_WINDOWS) && !defined(FD_SETSIZE)
+  #define FD_SETSIZE 512
+  #endif 
+  
+--- 14,20 ----
+     Users who want even more than the boosted limit should #define
+     FD_SETSIZE higher before this; e.g., via compiler /D switch.
+  */
+! #if (defined(MS_WINDOWS) || defined(__MINGW32__)) && !defined(FD_SETSIZE)
+  #define FD_SETSIZE 512
+  #endif 
+  
+***************
+*** 38,44 ****
+  #include <utils.h>
+  #endif
+  
+! #ifdef MS_WINDOWS
+  #include <winsock.h>
+  #else
+  #ifdef __BEOS__
+--- 38,44 ----
+  #include <utils.h>
+  #endif
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  #include <winsock.h>
+  #else
+  #ifdef __BEOS__
+***************
+*** 271,277 ****
+  	n = select(max, &ifdset, &ofdset, &efdset, tvp);
+  	Py_END_ALLOW_THREADS
+  
+! #ifdef MS_WINDOWS
+  	if (n == SOCKET_ERROR) {
+  		PyErr_SetExcFromWindowsErr(SelectError, WSAGetLastError());
+  	}
+--- 271,277 ----
+  	n = select(max, &ifdset, &ofdset, &efdset, tvp);
+  	Py_END_ALLOW_THREADS
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	if (n == SOCKET_ERROR) {
+  		PyErr_SetExcFromWindowsErr(SelectError, WSAGetLastError());
+  	}
+*** misc/Python-2.3.4/Modules/socketmodule.c	Sun Apr 11 14:10:03 2004
+--- misc/build/Python-2.3.4/Modules/socketmodule.c	Tue Mar 20 17:26:52 2007
+***************
+*** 136,142 ****
+  #endif
+  
+  #if !defined(HAVE_GETHOSTBYNAME_R) && defined(WITH_THREAD) && \
+!     !defined(MS_WINDOWS)
+  # define USE_GETHOSTBYNAME_LOCK
+  #endif
+  
+--- 136,142 ----
+  #endif
+  
+  #if !defined(HAVE_GETHOSTBYNAME_R) && defined(WITH_THREAD) && \
+!     !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  # define USE_GETHOSTBYNAME_LOCK
+  #endif
+  
+***************
+*** 215,221 ****
+  
+  /* Addressing includes */
+  
+! #ifndef MS_WINDOWS
+  
+  /* Non-MS WINDOWS includes */
+  # include <netdb.h>
+--- 215,221 ----
+  
+  /* Addressing includes */
+  
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  
+  /* Non-MS WINDOWS includes */
+  # include <netdb.h>
+***************
+*** 296,309 ****
+  #include "getnameinfo.c"
+  #endif
+  
+! #if defined(MS_WINDOWS) || defined(__BEOS__)
+  /* BeOS suffers from the same socket dichotomy as Win32... - [cjh] */
+  /* seem to be a few differences in the API */
+  #define SOCKETCLOSE closesocket
+  #define NO_DUP /* Actually it exists on NT 3.5, but what the heck... */
+  #endif
+  
+! #ifdef MS_WIN32
+  #define EAFNOSUPPORT WSAEAFNOSUPPORT
+  #define snprintf _snprintf
+  #endif
+--- 296,309 ----
+  #include "getnameinfo.c"
+  #endif
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__) || defined(__BEOS__)
+  /* BeOS suffers from the same socket dichotomy as Win32... - [cjh] */
+  /* seem to be a few differences in the API */
+  #define SOCKETCLOSE closesocket
+  #define NO_DUP /* Actually it exists on NT 3.5, but what the heck... */
+  #endif
+  
+! #if defined(MS_WIN32) || defined(__MINGW32__)
+  #define EAFNOSUPPORT WSAEAFNOSUPPORT
+  #define snprintf _snprintf
+  #endif
+***************
+*** 359,365 ****
+  static PyObject *
+  set_error(void)
+  {
+! #ifdef MS_WINDOWS
+  	int err_no = WSAGetLastError();
+  	static struct {
+  		int no;
+--- 359,365 ----
+  static PyObject *
+  set_error(void)
+  {
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	int err_no = WSAGetLastError();
+  	static struct {
+  		int no;
+***************
+*** 544,550 ****
+  internal_setblocking(PySocketSockObject *s, int block)
+  {
+  #ifndef RISCOS
+! #ifndef MS_WINDOWS
+  	int delay_flag;
+  #endif
+  #endif
+--- 544,550 ----
+  internal_setblocking(PySocketSockObject *s, int block)
+  {
+  #ifndef RISCOS
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  	int delay_flag;
+  #endif
+  #endif
+***************
+*** 556,562 ****
+  		   (void *)(&block), sizeof(int));
+  #else
+  #ifndef RISCOS
+! #ifndef MS_WINDOWS
+  #if defined(PYOS_OS2) && !defined(PYCC_GCC)
+  	block = !block;
+  	ioctl(s->sock_fd, FIONBIO, (caddr_t)&block, sizeof(block));
+--- 556,562 ----
+  		   (void *)(&block), sizeof(int));
+  #else
+  #ifndef RISCOS
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  #if defined(PYOS_OS2) && !defined(PYCC_GCC)
+  	block = !block;
+  	ioctl(s->sock_fd, FIONBIO, (caddr_t)&block, sizeof(block));
+***************
+*** 1124,1130 ****
+  		return NULL;
+  	memset(addrbuf, 0, addrlen);
+  
+! #ifdef MS_WINDOWS
+  	newfd = INVALID_SOCKET;
+  #else
+  	newfd = -1;
+--- 1124,1130 ----
+  		return NULL;
+  	memset(addrbuf, 0, addrlen);
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	newfd = INVALID_SOCKET;
+  #else
+  	newfd = -1;
+***************
+*** 1142,1148 ****
+  		return NULL;
+  	}
+  
+! #ifdef MS_WINDOWS
+  	if (newfd == INVALID_SOCKET)
+  #else
+  	if (newfd < 0)
+--- 1142,1148 ----
+  		return NULL;
+  	}
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	if (newfd == INVALID_SOCKET)
+  #else
+  	if (newfd < 0)
+***************
+*** 1455,1461 ****
+  	timeout = 0;
+  	res = connect(s->sock_fd, addr, addrlen);
+  
+! #ifdef MS_WINDOWS
+  
+  	if (s->sock_timeout > 0.0) {
+  		if (res < 0 && WSAGetLastError() == WSAEWOULDBLOCK) {
+--- 1455,1461 ----
+  	timeout = 0;
+  	res = connect(s->sock_fd, addr, addrlen);
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  
+  	if (s->sock_timeout > 0.0) {
+  		if (res < 0 && WSAGetLastError() == WSAEWOULDBLOCK) {
+***************
+*** 1886,1892 ****
+  	timeout = internal_select(s, 0);
+  	if (!timeout)
+  		n = recvfrom(s->sock_fd, PyString_AS_STRING(buf), len, flags,
+! #ifndef MS_WINDOWS
+  #if defined(PYOS_OS2) && !defined(PYCC_GCC)
+  			     (struct sockaddr *)addrbuf, &addrlen
+  #else
+--- 1886,1892 ----
+  	timeout = internal_select(s, 0);
+  	if (!timeout)
+  		n = recvfrom(s->sock_fd, PyString_AS_STRING(buf), len, flags,
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  #if defined(PYOS_OS2) && !defined(PYCC_GCC)
+  			     (struct sockaddr *)addrbuf, &addrlen
+  #else
+***************
+*** 2245,2251 ****
+  	fd = socket(family, type, proto);
+  	Py_END_ALLOW_THREADS
+  
+! #ifdef MS_WINDOWS
+  	if (fd == INVALID_SOCKET)
+  #else
+  	if (fd < 0)
+--- 2245,2251 ----
+  	fd = socket(family, type, proto);
+  	Py_END_ALLOW_THREADS
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	if (fd == INVALID_SOCKET)
+  #else
+  	if (fd < 0)
+***************
+*** 3368,3374 ****
+  #endif /* RISCOS */
+  
+  
+! #ifdef MS_WINDOWS
+  #define OS_INIT_DEFINED
+  
+  /* Additional initialization and cleanup for Windows */
+--- 3368,3374 ----
+  #endif /* RISCOS */
+  
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  #define OS_INIT_DEFINED
+  
+  /* Additional initialization and cleanup for Windows */
+*** misc/Python-2.3.4/Modules/socketmodule.h	Sat May  3 11:14:53 2003
+--- misc/build/Python-2.3.4/Modules/socketmodule.h	Tue Mar 20 17:26:52 2007
+***************
+*** 1,7 ****
+  /* Socket module header file */
+  
+  /* Includes needed for the sockaddr_* symbols below */
+! #ifndef MS_WINDOWS
+  #ifdef __VMS
+  #   include <socket.h>
+  # else
+--- 1,7 ----
+  /* Socket module header file */
+  
+  /* Includes needed for the sockaddr_* symbols below */
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__)
+  #ifdef __VMS
+  #   include <socket.h>
+  # else
+***************
+*** 49,55 ****
+  #define PySocket_CAPI_NAME	"CAPI"
+  
+  /* Abstract the socket file descriptor type */
+! #ifdef MS_WINDOWS
+  typedef SOCKET SOCKET_T;
+  #	ifdef MS_WIN64
+  #		define SIZEOF_SOCKET_T 8
+--- 49,55 ----
+  #define PySocket_CAPI_NAME	"CAPI"
+  
+  /* Abstract the socket file descriptor type */
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  typedef SOCKET SOCKET_T;
+  #	ifdef MS_WIN64
+  #		define SIZEOF_SOCKET_T 8
+*** misc/Python-2.3.4/Modules/timemodule.c	Tue Jul  1 07:16:08 2003
+--- misc/build/Python-2.3.4/Modules/timemodule.c	Tue Mar 20 17:26:52 2007
+***************
+*** 19,25 ****
+  
+  #ifdef HAVE_FTIME
+  #include <sys/timeb.h>
+! #if !defined(MS_WINDOWS) && !defined(PYOS_OS2)
+  extern int ftime(struct timeb *);
+  #endif /* MS_WINDOWS */
+  #endif /* HAVE_FTIME */
+--- 19,25 ----
+  
+  #ifdef HAVE_FTIME
+  #include <sys/timeb.h>
+! #if !defined(MS_WINDOWS) && !defined(__MINGW32__) && !defined(PYOS_OS2)
+  extern int ftime(struct timeb *);
+  #endif /* MS_WINDOWS */
+  #endif /* HAVE_FTIME */
+***************
+*** 27,33 ****
+  #if defined(__WATCOMC__) && !defined(__QNX__)
+  #include <i86.h>
+  #else
+! #ifdef MS_WINDOWS
+  #define WIN32_LEAN_AND_MEAN
+  #include <windows.h>
+  #include "pythread.h"
+--- 27,33 ----
+  #if defined(__WATCOMC__) && !defined(__QNX__)
+  #include <i86.h>
+  #else
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  #define WIN32_LEAN_AND_MEAN
+  #include <windows.h>
+  #include "pythread.h"
+***************
+*** 55,61 ****
+  #endif /* MS_WINDOWS */
+  #endif /* !__WATCOMC__ || __QNX__ */
+  
+! #if defined(MS_WINDOWS) && !defined(MS_WIN64) && !defined(__BORLANDC__)
+  /* Win32 has better clock replacement
+     XXX Win64 does not yet, but might when the platform matures. */
+  #undef HAVE_CLOCK /* We have our own version down below */
+--- 55,61 ----
+  #endif /* MS_WINDOWS */
+  #endif /* !__WATCOMC__ || __QNX__ */
+  
+! #if ( defined(MS_WINDOWS) && !defined(MS_WIN64) && !defined(__BORLANDC__) ) || defined(__MINGW32__)
+  /* Win32 has better clock replacement
+     XXX Win64 does not yet, but might when the platform matures. */
+  #undef HAVE_CLOCK /* We have our own version down below */
+***************
+*** 159,165 ****
+  }
+  #endif /* HAVE_CLOCK */
+  
+! #if defined(MS_WINDOWS) && !defined(MS_WIN64) && !defined(__BORLANDC__)
+  /* Due to Mark Hammond and Tim Peters */
+  static PyObject *
+  time_clock(PyObject *self, PyObject *args)
+--- 159,165 ----
+  }
+  #endif /* HAVE_CLOCK */
+  
+! #if ( defined(MS_WINDOWS) && !defined(MS_WIN64) && !defined(__BORLANDC__) ) || defined(__MINGW32__)
+  /* Due to Mark Hammond and Tim Peters */
+  static PyObject *
+  time_clock(PyObject *self, PyObject *args)
+***************
+*** 747,753 ****
+  	/* Set, or reset, module variables like time.timezone */
+  	inittimezone(m);
+  
+! #ifdef MS_WINDOWS
+  	/* Helper to allow interrupts for Windows.
+  	   If Ctrl+C event delivered while not sleeping
+  	   it will be ignored.
+--- 747,753 ----
+  	/* Set, or reset, module variables like time.timezone */
+  	inittimezone(m);
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	/* Helper to allow interrupts for Windows.
+  	   If Ctrl+C event delivered while not sleeping
+  	   it will be ignored.
+***************
+*** 843,849 ****
+  	Py_BEGIN_ALLOW_THREADS
+  	delay((int)(secs * 1000 + 0.5));  /* delay() uses milliseconds */
+  	Py_END_ALLOW_THREADS
+! #elif defined(MS_WINDOWS)
+  	{
+  		double millisecs = secs * 1000.0;
+  		unsigned long ul_millis;
+--- 843,849 ----
+  	Py_BEGIN_ALLOW_THREADS
+  	delay((int)(secs * 1000 + 0.5));  /* delay() uses milliseconds */
+  	Py_END_ALLOW_THREADS
+! #elif defined(MS_WINDOWS) || defined(__MINGW32__)
+  	{
+  		double millisecs = secs * 1000.0;
+  		unsigned long ul_millis;
+*** misc/Python-2.3.4/PC/dl_nt.c	Thu Jul 26 15:41:05 2001
+--- misc/build/Python-2.3.4/PC/dl_nt.c	Tue Mar 20 17:26:52 2007
+***************
+*** 7,16 ****
+  forgotten) from the programmer.
+  
+  */
+! #include "windows.h"
+  
+  /* NT and Python share these */
+! #include "pyconfig.h"
+  #include "Python.h"
+  
+  char dllVersionBuffer[16] = ""; // a private buffer
+--- 7,16 ----
+  forgotten) from the programmer.
+  
+  */
+! #include <windows.h>
+  
+  /* NT and Python share these */
+! #include <pyconfig.h>
+  #include "Python.h"
+  
+  char dllVersionBuffer[16] = ""; // a private buffer
+*** misc/Python-2.3.4/PC/getpathp.c	Mon Aug 18 19:54:10 2003
+--- misc/build/Python-2.3.4/PC/getpathp.c	Tue Mar 20 17:26:52 2007
+***************
+*** 57,63 ****
+  #include "Python.h"
+  #include "osdefs.h"
+  
+! #ifdef MS_WINDOWS
+  #include <windows.h>
+  #include <tchar.h>
+  #endif
+--- 57,63 ----
+  #include "Python.h"
+  #include "osdefs.h"
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  #include <windows.h>
+  #include <tchar.h>
+  #endif
+***************
+*** 183,189 ****
+  	return 0;
+  }
+  
+! #ifdef MS_WINDOWS
+  
+  /* a string loaded from the DLL at startup.*/
+  extern const char *PyWin_DLLVersionString;
+--- 183,189 ----
+  	return 0;
+  }
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  
+  /* a string loaded from the DLL at startup.*/
+  extern const char *PyWin_DLLVersionString;
+***************
+*** 350,356 ****
+  	char *path = getenv("PATH");
+  	char *prog = Py_GetProgramName();
+  
+! #ifdef MS_WINDOWS
+  	extern HANDLE PyWin_DLLhModule;
+  #ifdef UNICODE
+  	WCHAR wprogpath[MAXPATHLEN+1];
+--- 350,356 ----
+  	char *path = getenv("PATH");
+  	char *prog = Py_GetProgramName();
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	extern HANDLE PyWin_DLLhModule;
+  #ifdef UNICODE
+  	WCHAR wprogpath[MAXPATHLEN+1];
+***************
+*** 436,442 ****
+  	char *pythonhome = Py_GetPythonHome();
+  	char *envpath = Py_GETENV("PYTHONPATH");
+  
+! #ifdef MS_WINDOWS
+  	int skiphome, skipdefault;
+  	char *machinepath = NULL;
+  	char *userpath = NULL;
+--- 436,442 ----
+  	char *pythonhome = Py_GetPythonHome();
+  	char *envpath = Py_GETENV("PYTHONPATH");
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	int skiphome, skipdefault;
+  	char *machinepath = NULL;
+  	char *userpath = NULL;
+***************
+*** 461,467 ****
+  		envpath = NULL;
+  
+  
+! #ifdef MS_WINDOWS
+  	/* Calculate zip archive path */
+  	if (dllpath[0])		/* use name of python DLL */
+  		strncpy(zip_path, dllpath, MAXPATHLEN);
+--- 461,467 ----
+  		envpath = NULL;
+  
+  
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	/* Calculate zip archive path */
+  	if (dllpath[0])		/* use name of python DLL */
+  		strncpy(zip_path, dllpath, MAXPATHLEN);
+***************
+*** 514,520 ****
+  		bufsz = 0;
+  	bufsz += strlen(PYTHONPATH) + 1;
+  	bufsz += strlen(argv0_path) + 1;
+! #ifdef MS_WINDOWS
+  	if (userpath)
+  		bufsz += strlen(userpath) + 1;
+  	if (machinepath)
+--- 514,520 ----
+  		bufsz = 0;
+  	bufsz += strlen(PYTHONPATH) + 1;
+  	bufsz += strlen(argv0_path) + 1;
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	if (userpath)
+  		bufsz += strlen(userpath) + 1;
+  	if (machinepath)
+***************
+*** 536,542 ****
+  			fprintf(stderr, "Using default static path.\n");
+  			module_search_path = PYTHONPATH;
+  		}
+! #ifdef MS_WINDOWS
+  		if (machinepath)
+  			free(machinepath);
+  		if (userpath)
+--- 536,542 ----
+  			fprintf(stderr, "Using default static path.\n");
+  			module_search_path = PYTHONPATH;
+  		}
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  		if (machinepath)
+  			free(machinepath);
+  		if (userpath)
+***************
+*** 550,556 ****
+  		buf = strchr(buf, '\0');
+  		*buf++ = DELIM;
+  	}
+! #ifdef MS_WINDOWS
+  	if (zip_path[0]) {
+  		strcpy(buf, zip_path);
+  		buf = strchr(buf, '\0');
+--- 550,556 ----
+  		buf = strchr(buf, '\0');
+  		*buf++ = DELIM;
+  	}
+! #if defined(MS_WINDOWS) || defined(__MINGW32__)
+  	if (zip_path[0]) {
+  		strcpy(buf, zip_path);
+  		buf = strchr(buf, '\0');
+*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -485,8 +1574,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_bsddb.mak	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/_bsddb.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -729,257 +1818,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/bz2.dep	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/bz2.dep	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,50 ----
-! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von bz2.mak
-! 
-! ..\Modules\bz2module.c : \
-! 	"..\Include\abstract.h"\
-! 	"..\Include\boolobject.h"\
-! 	"..\Include\bufferobject.h"\
-! 	"..\Include\cellobject.h"\
-! 	"..\Include\ceval.h"\
-! 	"..\Include\classobject.h"\
-! 	"..\Include\cobject.h"\
-! 	"..\Include\complexobject.h"\
-! 	"..\Include\descrobject.h"\
-! 	"..\Include\dictobject.h"\
-! 	"..\Include\enumobject.h"\
-! 	"..\Include\fileobject.h"\
-! 	"..\Include\floatobject.h"\
-! 	"..\Include\funcobject.h"\
-! 	"..\Include\import.h"\
-! 	"..\Include\intobject.h"\
-! 	"..\Include\intrcheck.h"\
-! 	"..\Include\iterobject.h"\
-! 	"..\Include\listobject.h"\
-! 	"..\Include\longobject.h"\
-! 	"..\Include\methodobject.h"\
-! 	"..\Include\modsupport.h"\
-! 	"..\Include\moduleobject.h"\
-! 	"..\Include\object.h"\
-! 	"..\Include\objimpl.h"\
-! 	"..\Include\patchlevel.h"\
-! 	"..\Include\pydebug.h"\
-! 	"..\Include\pyerrors.h"\
-! 	"..\Include\pyfpe.h"\
-! 	"..\Include\pymem.h"\
-! 	"..\Include\pyport.h"\
-! 	"..\Include\pystate.h"\
-! 	"..\Include\Python.h"\
-! 	"..\Include\pythonrun.h"\
-! 	"..\Include\pythread.h"\
-! 	"..\Include\rangeobject.h"\
-! 	"..\Include\sliceobject.h"\
-! 	"..\Include\stringobject.h"\
-! 	"..\Include\structmember.h"\
-! 	"..\Include\sysmodule.h"\
-! 	"..\Include\traceback.h"\
-! 	"..\Include\tupleobject.h"\
-! 	"..\Include\unicodeobject.h"\
-! 	"..\Include\weakrefobject.h"\
-! 	"..\PC\pyconfig.h"\
-! 	{$(INCLUDE)}"basetsd.h"\
-! 	
-*** misc/Python-2.3.4/PCbuild/bz2.mak	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/bz2.mak	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,187 ----
-! !IF "$(CFG)" == ""
-! CFG=bz2 - Win32 Release
-! !ENDIF
-! 
-! NULL=
-! 
-! !IF  "$(CFG)" == "bz2 - Win32 Release"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-release\bz2
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! ALL : "$(OUTDIR)\bz2.pyd"
-! 
-! 
-! CLEAN :
-! 	-@erase "$(INTDIR)\bz2module.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\bz2.exp"
-! 	-@erase "$(OUTDIR)\bz2.lib"
-! 	-@erase "$(OUTDIR)\bz2.pdb"
-! 	-@erase "$(OUTDIR)\bz2.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /I "..\..\bzip2-1.0.2" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\bz2.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\bz2.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=..\..\bzip2-1.0.2\libbz2.lib /nologo /base:"0x1D170000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\bz2.pdb" /debug /machine:I386 /nodefaultlib:"libc" /out:"$(OUTDIR)\bz2.pyd" /implib:"$(OUTDIR)\bz2.lib"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\bz2module.obj"
-! 
-! "$(OUTDIR)\bz2.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ELSEIF  "$(CFG)" == "bz2 - Win32 Debug"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-debug\bz2
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! ALL : "$(OUTDIR)\bz2_d.pyd"
-! 
-! 
-! CLEAN :
-! 	-@erase "$(INTDIR)\bz2module.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\bz2_d.exp"
-! 	-@erase "$(OUTDIR)\bz2_d.ilk"
-! 	-@erase "$(OUTDIR)\bz2_d.lib"
-! 	-@erase "$(OUTDIR)\bz2_d.pdb"
-! 	-@erase "$(OUTDIR)\bz2_d.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /I "..\..\bzip2-1.0.2" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\bz2.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\bz2.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=..\..\bzip2-1.0.2\libbz2.lib /nologo /base:"0x1D170000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\bz2_d.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"libc" /out:"$(OUTDIR)\bz2_d.pyd" /implib:"$(OUTDIR)\bz2_d.lib" /pdbtype:sept
-! LINK32_OBJS= \
-! 	"$(INTDIR)\bz2module.obj"
-! 
-! "$(OUTDIR)\bz2_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ENDIF
-! 
-! 
-! !IF "$(NO_EXTERNAL_DEPS)" != "1"
-! !IF EXISTS("bz2.dep")
-! !INCLUDE "bz2.dep"
-! !ELSE
-! !MESSAGE Warning: cannot find "bz2.dep"
-! !ENDIF
-! !ENDIF
-! 
-! 
-! !IF "$(CFG)" == "bz2 - Win32 Release" || "$(CFG)" == "bz2 - Win32 Debug"
-! SOURCE=..\Modules\bz2module.c
-! 
-! "$(INTDIR)\bz2module.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! 
-! !ENDIF
-! 
-*** misc/Python-2.3.4/PCbuild/_csv.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_csv.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/_csv.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/_csv.dep	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1033,8 +1873,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_csv.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_csv.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/_csv.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/_csv.mak	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1276,8 +2116,1762 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/datetime.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/datetime.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/_socket.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/_socket.dep	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,53 ----
+! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _socket.mak
+! 
+! ..\Modules\socketmodule.c : \
+! 	"..\Include\abstract.h"\
+! 	"..\Include\boolobject.h"\
+! 	"..\Include\bufferobject.h"\
+! 	"..\Include\cellobject.h"\
+! 	"..\Include\ceval.h"\
+! 	"..\Include\classobject.h"\
+! 	"..\Include\cobject.h"\
+! 	"..\Include\complexobject.h"\
+! 	"..\Include\descrobject.h"\
+! 	"..\Include\dictobject.h"\
+! 	"..\Include\enumobject.h"\
+! 	"..\Include\fileobject.h"\
+! 	"..\Include\floatobject.h"\
+! 	"..\Include\funcobject.h"\
+! 	"..\Include\import.h"\
+! 	"..\Include\intobject.h"\
+! 	"..\Include\intrcheck.h"\
+! 	"..\Include\iterobject.h"\
+! 	"..\Include\listobject.h"\
+! 	"..\Include\longobject.h"\
+! 	"..\Include\methodobject.h"\
+! 	"..\Include\modsupport.h"\
+! 	"..\Include\moduleobject.h"\
+! 	"..\Include\object.h"\
+! 	"..\Include\objimpl.h"\
+! 	"..\Include\patchlevel.h"\
+! 	"..\Include\pydebug.h"\
+! 	"..\Include\pyerrors.h"\
+! 	"..\Include\pyfpe.h"\
+! 	"..\Include\pymem.h"\
+! 	"..\Include\pyport.h"\
+! 	"..\Include\pystate.h"\
+! 	"..\Include\Python.h"\
+! 	"..\Include\pythonrun.h"\
+! 	"..\Include\pythread.h"\
+! 	"..\Include\rangeobject.h"\
+! 	"..\Include\sliceobject.h"\
+! 	"..\Include\stringobject.h"\
+! 	"..\Include\sysmodule.h"\
+! 	"..\Include\traceback.h"\
+! 	"..\Include\tupleobject.h"\
+! 	"..\Include\unicodeobject.h"\
+! 	"..\Include\weakrefobject.h"\
+! 	"..\Modules\addrinfo.h"\
+! 	"..\Modules\getaddrinfo.c"\
+! 	"..\Modules\getnameinfo.c"\
+! 	"..\Modules\socketmodule.h"\
+! 	"..\PC\pyconfig.h"\
+! 	{$(INCLUDE)}"basetsd.h"\
+! 	
+*** misc/Python-2.3.4/PCbuild/_socket.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/_socket.mak	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,237 ----
+! !IF "$(CFG)" == ""
+! CFG=_socket - Win32 Release
+! !ENDIF
+! 
+! NULL=
+! 
+! !IF  "$(CFG)" == "_socket - Win32 Release"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-release\_socket
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_socket.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_socket.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\socketmodule.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_socket.exp"
+! 	-@erase "$(OUTDIR)\_socket.lib"
+! 	-@erase "$(OUTDIR)\_socket.pdb"
+! 	-@erase "$(OUTDIR)\_socket.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\_socket.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_socket.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /base:"0x1e1D0000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\_socket.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_socket.pyd" /implib:"$(OUTDIR)\_socket.lib"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\socketmodule.obj" \
+! 	"$(OUTDIR)\python23.lib"
+! 
+! "$(OUTDIR)\_socket.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ELSEIF  "$(CFG)" == "_socket - Win32 Debug"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-debug\_socket
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_socket_d.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_socket_d.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 DebugCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\socketmodule.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_socket_d.exp"
+! 	-@erase "$(OUTDIR)\_socket_d.ilk"
+! 	-@erase "$(OUTDIR)\_socket_d.lib"
+! 	-@erase "$(OUTDIR)\_socket_d.pdb"
+! 	-@erase "$(OUTDIR)\_socket_d.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\_socket.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_socket.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /base:"0x1e1D0000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\_socket_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_socket_d.pyd" /implib:"$(OUTDIR)\_socket_d.lib" /pdbtype:sept
+! LINK32_OBJS= \
+! 	"$(INTDIR)\socketmodule.obj" \
+! 	"$(OUTDIR)\python23_d.lib"
+! 
+! "$(OUTDIR)\_socket_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ENDIF
+! 
+! 
+! !IF "$(NO_EXTERNAL_DEPS)" != "1"
+! !IF EXISTS("_socket.dep")
+! !INCLUDE "_socket.dep"
+! !ELSE
+! !MESSAGE Warning: cannot find "_socket.dep"
+! !ENDIF
+! !ENDIF
+! 
+! 
+! !IF "$(CFG)" == "_socket - Win32 Release" || "$(CFG)" == "_socket - Win32 Debug"
+! 
+! !IF  "$(CFG)" == "_socket - Win32 Release"
+! 
+! "pythoncore - Win32 Release" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
+!    cd "."
+! 
+! "pythoncore - Win32 ReleaseCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ELSEIF  "$(CFG)" == "_socket - Win32 Debug"
+! 
+! "pythoncore - Win32 Debug" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
+!    cd "."
+! 
+! "pythoncore - Win32 DebugCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ENDIF
+! 
+! SOURCE=..\Modules\socketmodule.c
+! 
+! "$(INTDIR)\socketmodule.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! 
+! !ENDIF
+*** misc/Python-2.3.4/PCbuild/_sre.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_sre.dep	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,51 ----
+! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _sre.mak
+! 
+! ..\Modules\_sre.c : \
+! 	"..\Include\abstract.h"\
+! 	"..\Include\boolobject.h"\
+! 	"..\Include\bufferobject.h"\
+! 	"..\Include\cellobject.h"\
+! 	"..\Include\ceval.h"\
+! 	"..\Include\classobject.h"\
+! 	"..\Include\cobject.h"\
+! 	"..\Include\complexobject.h"\
+! 	"..\Include\descrobject.h"\
+! 	"..\Include\dictobject.h"\
+! 	"..\Include\enumobject.h"\
+! 	"..\Include\fileobject.h"\
+! 	"..\Include\floatobject.h"\
+! 	"..\Include\funcobject.h"\
+! 	"..\Include\import.h"\
+! 	"..\Include\intobject.h"\
+! 	"..\Include\intrcheck.h"\
+! 	"..\Include\iterobject.h"\
+! 	"..\Include\listobject.h"\
+! 	"..\Include\longobject.h"\
+! 	"..\Include\methodobject.h"\
+! 	"..\Include\modsupport.h"\
+! 	"..\Include\moduleobject.h"\
+! 	"..\Include\object.h"\
+! 	"..\Include\objimpl.h"\
+! 	"..\Include\patchlevel.h"\
+! 	"..\Include\pydebug.h"\
+! 	"..\Include\pyerrors.h"\
+! 	"..\Include\pyfpe.h"\
+! 	"..\Include\pymem.h"\
+! 	"..\Include\pyport.h"\
+! 	"..\Include\pystate.h"\
+! 	"..\Include\Python.h"\
+! 	"..\Include\pythonrun.h"\
+! 	"..\Include\rangeobject.h"\
+! 	"..\Include\sliceobject.h"\
+! 	"..\Include\stringobject.h"\
+! 	"..\Include\structmember.h"\
+! 	"..\Include\sysmodule.h"\
+! 	"..\Include\traceback.h"\
+! 	"..\Include\tupleobject.h"\
+! 	"..\Include\unicodeobject.h"\
+! 	"..\Include\weakrefobject.h"\
+! 	"..\Modules\sre.h"\
+! 	"..\Modules\sre_constants.h"\
+! 	"..\PC\pyconfig.h"\
+! 	{$(INCLUDE)}"basetsd.h"\
+! 	
+*** misc/Python-2.3.4/PCbuild/_sre.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/_sre.mak	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,237 ----
+! !IF "$(CFG)" == ""
+! CFG=_sre - Win32 Release
+! !ENDIF
+! 
+! NULL=
+! 
+! !IF  "$(CFG)" == "_sre - Win32 Release"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-release\_sre
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_sre.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_sre.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\_sre.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_sre.exp"
+! 	-@erase "$(OUTDIR)\_sre.lib"
+! 	-@erase "$(OUTDIR)\_sre.pdb"
+! 	-@erase "$(OUTDIR)\_sre.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /I "C:\Program Files\Tcl\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"$(INTDIR)\_sre.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_sre.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1e0000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\_sre.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_sre.pyd" /implib:"$(OUTDIR)\_sre.lib"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\_sre.obj" \
+! 	"$(OUTDIR)\python23.lib"
+! 
+! "$(OUTDIR)\_sre.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ELSEIF  "$(CFG)" == "_sre - Win32 Debug"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-debug\_sre
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_sre_d.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_sre_d.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 DebugCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\_sre.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_sre_d.exp"
+! 	-@erase "$(OUTDIR)\_sre_d.ilk"
+! 	-@erase "$(OUTDIR)\_sre_d.lib"
+! 	-@erase "$(OUTDIR)\_sre_d.pdb"
+! 	-@erase "$(OUTDIR)\_sre_d.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /I "C:\Program Files\Tcl\include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"$(INTDIR)\_sre.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_sre.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1e0000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\_sre_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_sre_d.pyd" /implib:"$(OUTDIR)\_sre_d.lib" /pdbtype:sept
+! LINK32_OBJS= \
+! 	"$(INTDIR)\_sre.obj" \
+! 	"$(OUTDIR)\python23_d.lib"
+! 
+! "$(OUTDIR)\_sre_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ENDIF
+! 
+! 
+! !IF "$(NO_EXTERNAL_DEPS)" != "1"
+! !IF EXISTS("_sre.dep")
+! !INCLUDE "_sre.dep"
+! !ELSE
+! !MESSAGE Warning: cannot find "_sre.dep"
+! !ENDIF
+! !ENDIF
+! 
+! 
+! !IF "$(CFG)" == "_sre - Win32 Release" || "$(CFG)" == "_sre - Win32 Debug"
+! 
+! !IF  "$(CFG)" == "_sre - Win32 Release"
+! 
+! "pythoncore - Win32 Release" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
+!    cd "."
+! 
+! "pythoncore - Win32 ReleaseCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ELSEIF  "$(CFG)" == "_sre - Win32 Debug"
+! 
+! "pythoncore - Win32 Debug" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
+!    cd "."
+! 
+! "pythoncore - Win32 DebugCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ENDIF
+! 
+! SOURCE=..\Modules\_sre.c
+! 
+! "$(INTDIR)\_sre.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! 
+! !ENDIF
+*** misc/Python-2.3.4/PCbuild/_symtable.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_symtable.dep	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,50 ----
+! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _symtable.mak
+! 
+! ..\Modules\symtablemodule.c : \
+! 	"..\Include\abstract.h"\
+! 	"..\Include\boolobject.h"\
+! 	"..\Include\bufferobject.h"\
+! 	"..\Include\cellobject.h"\
+! 	"..\Include\ceval.h"\
+! 	"..\Include\classobject.h"\
+! 	"..\Include\cobject.h"\
+! 	"..\Include\compile.h"\
+! 	"..\Include\complexobject.h"\
+! 	"..\Include\descrobject.h"\
+! 	"..\Include\dictobject.h"\
+! 	"..\Include\enumobject.h"\
+! 	"..\Include\fileobject.h"\
+! 	"..\Include\floatobject.h"\
+! 	"..\Include\funcobject.h"\
+! 	"..\Include\import.h"\
+! 	"..\Include\intobject.h"\
+! 	"..\Include\intrcheck.h"\
+! 	"..\Include\iterobject.h"\
+! 	"..\Include\listobject.h"\
+! 	"..\Include\longobject.h"\
+! 	"..\Include\methodobject.h"\
+! 	"..\Include\modsupport.h"\
+! 	"..\Include\moduleobject.h"\
+! 	"..\Include\object.h"\
+! 	"..\Include\objimpl.h"\
+! 	"..\Include\patchlevel.h"\
+! 	"..\Include\pydebug.h"\
+! 	"..\Include\pyerrors.h"\
+! 	"..\Include\pyfpe.h"\
+! 	"..\Include\pymem.h"\
+! 	"..\Include\pyport.h"\
+! 	"..\Include\pystate.h"\
+! 	"..\Include\Python.h"\
+! 	"..\Include\pythonrun.h"\
+! 	"..\Include\rangeobject.h"\
+! 	"..\Include\sliceobject.h"\
+! 	"..\Include\stringobject.h"\
+! 	"..\Include\symtable.h"\
+! 	"..\Include\sysmodule.h"\
+! 	"..\Include\traceback.h"\
+! 	"..\Include\tupleobject.h"\
+! 	"..\Include\unicodeobject.h"\
+! 	"..\Include\weakrefobject.h"\
+! 	"..\PC\pyconfig.h"\
+! 	{$(INCLUDE)}"basetsd.h"\
+! 	
+*** misc/Python-2.3.4/PCbuild/_symtable.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_symtable.mak	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,236 ----
+! !IF "$(CFG)" == ""
+! CFG=_symtable - Win32 Release
+! !ENDIF
+! 
+! NULL=
+! 
+! !IF  "$(CFG)" == "_symtable - Win32 Release"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-release\_symtable
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_symtable.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_symtable.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\symtablemodule.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(OUTDIR)\_symtable.exp"
+! 	-@erase "$(OUTDIR)\_symtable.lib"
+! 	-@erase "$(OUTDIR)\_symtable.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /O2 /I "..\Include" /I "..\PC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_symtable.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_symtable.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e100000" /dll /incremental:no /pdb:"$(OUTDIR)\_symtable.pdb" /machine:I386 /out:"$(OUTDIR)\_symtable.pyd" /implib:"$(OUTDIR)\_symtable.lib"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\symtablemodule.obj" \
+! 	"$(OUTDIR)\python23.lib"
+! 
+! "$(OUTDIR)\_symtable.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ELSEIF  "$(CFG)" == "_symtable - Win32 Debug"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-debug\_symtable
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_symtable_d.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_symtable_d.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 DebugCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\symtablemodule.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_symtable_d.exp"
+! 	-@erase "$(OUTDIR)\_symtable_d.ilk"
+! 	-@erase "$(OUTDIR)\_symtable_d.lib"
+! 	-@erase "$(OUTDIR)\_symtable_d.pdb"
+! 	-@erase "$(OUTDIR)\_symtable_d.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_symtable.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_symtable.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e100000" /dll /incremental:yes /pdb:"$(OUTDIR)\_symtable_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_symtable_d.pyd" /implib:"$(OUTDIR)\_symtable_d.lib" /pdbtype:sept
+! LINK32_OBJS= \
+! 	"$(INTDIR)\symtablemodule.obj" \
+! 	"$(OUTDIR)\python23_d.lib"
+! 
+! "$(OUTDIR)\_symtable_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ENDIF
+! 
+! 
+! !IF "$(NO_EXTERNAL_DEPS)" != "1"
+! !IF EXISTS("_symtable.dep")
+! !INCLUDE "_symtable.dep"
+! !ELSE
+! !MESSAGE Warning: cannot find "_symtable.dep"
+! !ENDIF
+! !ENDIF
+! 
+! 
+! !IF "$(CFG)" == "_symtable - Win32 Release" || "$(CFG)" == "_symtable - Win32 Debug"
+! 
+! !IF  "$(CFG)" == "_symtable - Win32 Release"
+! 
+! "pythoncore - Win32 Release" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" 
+!    cd "."
+! 
+! "pythoncore - Win32 ReleaseCLEAN" : 
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN 
+!    cd "."
+! 
+! !ELSEIF  "$(CFG)" == "_symtable - Win32 Debug"
+! 
+! "pythoncore - Win32 Debug" : 
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" 
+!    cd "."
+! 
+! "pythoncore - Win32 DebugCLEAN" : 
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN 
+!    cd "."
+! 
+! !ENDIF 
+! 
+! SOURCE=..\Modules\symtablemodule.c
+! 
+! "$(INTDIR)\symtablemodule.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! 
+! !ENDIF 
+! 
+*** misc/Python-2.3.4/PCbuild/_testcapi.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,50 ----
+! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _testcapi.mak
+! 
+! ..\Modules\_testcapimodule.c : \
+! 	"..\Include\abstract.h"\
+! 	"..\Include\boolobject.h"\
+! 	"..\Include\bufferobject.h"\
+! 	"..\Include\cellobject.h"\
+! 	"..\Include\ceval.h"\
+! 	"..\Include\classobject.h"\
+! 	"..\Include\cobject.h"\
+! 	"..\Include\complexobject.h"\
+! 	"..\Include\descrobject.h"\
+! 	"..\Include\dictobject.h"\
+! 	"..\Include\enumobject.h"\
+! 	"..\Include\fileobject.h"\
+! 	"..\Include\floatobject.h"\
+! 	"..\Include\funcobject.h"\
+! 	"..\Include\import.h"\
+! 	"..\Include\intobject.h"\
+! 	"..\Include\intrcheck.h"\
+! 	"..\Include\iterobject.h"\
+! 	"..\Include\listobject.h"\
+! 	"..\Include\longobject.h"\
+! 	"..\Include\methodobject.h"\
+! 	"..\Include\modsupport.h"\
+! 	"..\Include\moduleobject.h"\
+! 	"..\Include\object.h"\
+! 	"..\Include\objimpl.h"\
+! 	"..\Include\patchlevel.h"\
+! 	"..\Include\pydebug.h"\
+! 	"..\Include\pyerrors.h"\
+! 	"..\Include\pyfpe.h"\
+! 	"..\Include\pymem.h"\
+! 	"..\Include\pyport.h"\
+! 	"..\Include\pystate.h"\
+! 	"..\Include\Python.h"\
+! 	"..\Include\pythonrun.h"\
+! 	"..\Include\pythread.h"\
+! 	"..\Include\rangeobject.h"\
+! 	"..\Include\sliceobject.h"\
+! 	"..\Include\stringobject.h"\
+! 	"..\Include\sysmodule.h"\
+! 	"..\Include\traceback.h"\
+! 	"..\Include\tupleobject.h"\
+! 	"..\Include\unicodeobject.h"\
+! 	"..\Include\weakrefobject.h"\
+! 	"..\Modules\testcapi_long.h"\
+! 	"..\PC\pyconfig.h"\
+! 	{$(INCLUDE)}"basetsd.h"\
+! 	
+*** misc/Python-2.3.4/PCbuild/_testcapi.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,235 ----
+! !IF "$(CFG)" == ""
+! CFG=_testcapi - Win32 Debug
+! !ENDIF
+! 
+! NULL=
+! 
+! !IF  "$(CFG)" == "_testcapi - Win32 Release"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-release\_testcapi
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_testcapi.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_testcapi.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\_testcapimodule.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(OUTDIR)\_testcapi.exp"
+! 	-@erase "$(OUTDIR)\_testcapi.lib"
+! 	-@erase "$(OUTDIR)\_testcapi.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /O2 /I "..\Include" /I "..\PC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_testcapi.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_testcapi.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1F0000" /dll /incremental:no /pdb:"$(OUTDIR)\_testcapi.pdb" /machine:I386 /out:"$(OUTDIR)\_testcapi.pyd" /implib:"$(OUTDIR)\_testcapi.lib"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\_testcapimodule.obj" \
+! 	"$(OUTDIR)\python23.lib"
+! 
+! "$(OUTDIR)\_testcapi.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ELSEIF  "$(CFG)" == "_testcapi - Win32 Debug"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-debug\_testcapi
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_testcapi_d.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_testcapi_d.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 DebugCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\_testcapimodule.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_testcapi_d.exp"
+! 	-@erase "$(OUTDIR)\_testcapi_d.ilk"
+! 	-@erase "$(OUTDIR)\_testcapi_d.lib"
+! 	-@erase "$(OUTDIR)\_testcapi_d.pdb"
+! 	-@erase "$(OUTDIR)\_testcapi_d.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_testcapi.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_testcapi.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1F0000" /dll /incremental:yes /pdb:"$(OUTDIR)\_testcapi_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_testcapi_d.pyd" /implib:"$(OUTDIR)\_testcapi_d.lib" /pdbtype:sept
+! LINK32_OBJS= \
+! 	"$(INTDIR)\_testcapimodule.obj" \
+! 	"$(OUTDIR)\python23_d.lib"
+! 
+! "$(OUTDIR)\_testcapi_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ENDIF
+! 
+! 
+! !IF "$(NO_EXTERNAL_DEPS)" != "1"
+! !IF EXISTS("_testcapi.dep")
+! !INCLUDE "_testcapi.dep"
+! !ELSE
+! !MESSAGE Warning: cannot find "_testcapi.dep"
+! !ENDIF
+! !ENDIF
+! 
+! 
+! !IF "$(CFG)" == "_testcapi - Win32 Release" || "$(CFG)" == "_testcapi - Win32 Debug"
+! 
+! !IF  "$(CFG)" == "_testcapi - Win32 Release"
+! 
+! "pythoncore - Win32 Release" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
+!    cd "."
+! 
+! "pythoncore - Win32 ReleaseCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ELSEIF  "$(CFG)" == "_testcapi - Win32 Debug"
+! 
+! "pythoncore - Win32 Debug" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
+!    cd "."
+! 
+! "pythoncore - Win32 DebugCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ENDIF
+! 
+! SOURCE=..\Modules\_testcapimodule.c
+! 
+! "$(INTDIR)\_testcapimodule.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! 
+! !ENDIF
+*** misc/Python-2.3.4/PCbuild/_tkinter.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,49 ----
+! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _tkinter.mak
+! 
+! ..\Modules\_tkinter.c : \
+! 	"..\Include\abstract.h"\
+! 	"..\Include\boolobject.h"\
+! 	"..\Include\bufferobject.h"\
+! 	"..\Include\cellobject.h"\
+! 	"..\Include\ceval.h"\
+! 	"..\Include\classobject.h"\
+! 	"..\Include\cobject.h"\
+! 	"..\Include\complexobject.h"\
+! 	"..\Include\descrobject.h"\
+! 	"..\Include\dictobject.h"\
+! 	"..\Include\enumobject.h"\
+! 	"..\Include\fileobject.h"\
+! 	"..\Include\floatobject.h"\
+! 	"..\Include\funcobject.h"\
+! 	"..\Include\import.h"\
+! 	"..\Include\intobject.h"\
+! 	"..\Include\intrcheck.h"\
+! 	"..\Include\iterobject.h"\
+! 	"..\Include\listobject.h"\
+! 	"..\Include\longobject.h"\
+! 	"..\Include\methodobject.h"\
+! 	"..\Include\modsupport.h"\
+! 	"..\Include\moduleobject.h"\
+! 	"..\Include\object.h"\
+! 	"..\Include\objimpl.h"\
+! 	"..\Include\patchlevel.h"\
+! 	"..\Include\pydebug.h"\
+! 	"..\Include\pyerrors.h"\
+! 	"..\Include\pyfpe.h"\
+! 	"..\Include\pymem.h"\
+! 	"..\Include\pyport.h"\
+! 	"..\Include\pystate.h"\
+! 	"..\Include\Python.h"\
+! 	"..\Include\pythonrun.h"\
+! 	"..\Include\pythread.h"\
+! 	"..\Include\rangeobject.h"\
+! 	"..\Include\sliceobject.h"\
+! 	"..\Include\stringobject.h"\
+! 	"..\Include\sysmodule.h"\
+! 	"..\Include\traceback.h"\
+! 	"..\Include\tupleobject.h"\
+! 	"..\Include\unicodeobject.h"\
+! 	"..\Include\weakrefobject.h"\
+! 	"..\PC\pyconfig.h"\
+! 	{$(INCLUDE)}"basetsd.h"\
+! 	
+*** misc/Python-2.3.4/PCbuild/_tkinter.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,247 ----
+! !IF "$(CFG)" == ""
+! CFG=_tkinter - Win32 Release
+! !ENDIF
+! 
+! NULL=
+! 
+! !IF  "$(CFG)" == "_tkinter - Win32 Debug"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-debug\_tkinter
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_tkinter_d.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_tkinter_d.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 DebugCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\_tkinter.obj"
+! 	-@erase "$(INTDIR)\tkappinit.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_tkinter_d.exp"
+! 	-@erase "$(OUTDIR)\_tkinter_d.ilk"
+! 	-@erase "$(OUTDIR)\_tkinter_d.lib"
+! 	-@erase "$(OUTDIR)\_tkinter_d.pdb"
+! 	-@erase "$(OUTDIR)\_tkinter_d.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\..\tcl84\include" /I "..\Include" /I "..\PC" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WITH_APPINIT" /Fp"$(INTDIR)\_tkinter.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_tkinter.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=..\..\tcl84\lib\tk84.lib ..\..\tcl84\lib\tcl84.lib odbc32.lib odbccp32.lib user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1e190000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\_tkinter_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_tkinter_d.pyd" /implib:"$(OUTDIR)\_tkinter_d.lib" /pdbtype:sept /libpath:"C:\Program Files\Tcl\lib"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\_tkinter.obj" \
+! 	"$(INTDIR)\tkappinit.obj" \
+! 	"$(OUTDIR)\python23_d.lib"
+! 
+! "$(OUTDIR)\_tkinter_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ELSEIF  "$(CFG)" == "_tkinter - Win32 Release"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-release\_tkinter
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\_tkinter.pyd"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_tkinter.pyd"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\_tkinter.obj"
+! 	-@erase "$(INTDIR)\tkappinit.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\_tkinter.exp"
+! 	-@erase "$(OUTDIR)\_tkinter.lib"
+! 	-@erase "$(OUTDIR)\_tkinter.pdb"
+! 	-@erase "$(OUTDIR)\_tkinter.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\..\tcl84\include" /I "..\Include" /I "..\PC" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WITH_APPINIT" /Fp"$(INTDIR)\_tkinter.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_tkinter.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=..\..\tcl84\lib\tk84.lib ..\..\tcl84\lib\tcl84.lib odbc32.lib odbccp32.lib user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1e190000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\_tkinter.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_tkinter.pyd" /implib:"$(OUTDIR)\_tkinter.lib" /libpath:"C:\Program Files\Tcl\lib"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\_tkinter.obj" \
+! 	"$(INTDIR)\tkappinit.obj" \
+! 	"$(OUTDIR)\python23.lib"
+! 
+! "$(OUTDIR)\_tkinter.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ENDIF
+! 
+! 
+! !IF "$(NO_EXTERNAL_DEPS)" != "1"
+! !IF EXISTS("_tkinter.dep")
+! !INCLUDE "_tkinter.dep"
+! !ELSE
+! !MESSAGE Warning: cannot find "_tkinter.dep"
+! !ENDIF
+! !ENDIF
+! 
+! 
+! !IF "$(CFG)" == "_tkinter - Win32 Debug" || "$(CFG)" == "_tkinter - Win32 Release"
+! 
+! !IF  "$(CFG)" == "_tkinter - Win32 Debug"
+! 
+! "pythoncore - Win32 Debug" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
+!    cd "."
+! 
+! "pythoncore - Win32 DebugCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ELSEIF  "$(CFG)" == "_tkinter - Win32 Release"
+! 
+! "pythoncore - Win32 Release" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
+!    cd "."
+! 
+! "pythoncore - Win32 ReleaseCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ENDIF
+! 
+! SOURCE=..\Modules\_tkinter.c
+! 
+! "$(INTDIR)\_tkinter.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! SOURCE=..\Modules\tkappinit.c
+! 
+! "$(INTDIR)\tkappinit.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! 
+! !ENDIF
+*** misc/Python-2.3.4/PCbuild/bz2.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/bz2.dep	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,50 ----
+! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von bz2.mak
+! 
+! ..\Modules\bz2module.c : \
+! 	"..\Include\abstract.h"\
+! 	"..\Include\boolobject.h"\
+! 	"..\Include\bufferobject.h"\
+! 	"..\Include\cellobject.h"\
+! 	"..\Include\ceval.h"\
+! 	"..\Include\classobject.h"\
+! 	"..\Include\cobject.h"\
+! 	"..\Include\complexobject.h"\
+! 	"..\Include\descrobject.h"\
+! 	"..\Include\dictobject.h"\
+! 	"..\Include\enumobject.h"\
+! 	"..\Include\fileobject.h"\
+! 	"..\Include\floatobject.h"\
+! 	"..\Include\funcobject.h"\
+! 	"..\Include\import.h"\
+! 	"..\Include\intobject.h"\
+! 	"..\Include\intrcheck.h"\
+! 	"..\Include\iterobject.h"\
+! 	"..\Include\listobject.h"\
+! 	"..\Include\longobject.h"\
+! 	"..\Include\methodobject.h"\
+! 	"..\Include\modsupport.h"\
+! 	"..\Include\moduleobject.h"\
+! 	"..\Include\object.h"\
+! 	"..\Include\objimpl.h"\
+! 	"..\Include\patchlevel.h"\
+! 	"..\Include\pydebug.h"\
+! 	"..\Include\pyerrors.h"\
+! 	"..\Include\pyfpe.h"\
+! 	"..\Include\pymem.h"\
+! 	"..\Include\pyport.h"\
+! 	"..\Include\pystate.h"\
+! 	"..\Include\Python.h"\
+! 	"..\Include\pythonrun.h"\
+! 	"..\Include\pythread.h"\
+! 	"..\Include\rangeobject.h"\
+! 	"..\Include\sliceobject.h"\
+! 	"..\Include\stringobject.h"\
+! 	"..\Include\structmember.h"\
+! 	"..\Include\sysmodule.h"\
+! 	"..\Include\traceback.h"\
+! 	"..\Include\tupleobject.h"\
+! 	"..\Include\unicodeobject.h"\
+! 	"..\Include\weakrefobject.h"\
+! 	"..\PC\pyconfig.h"\
+! 	{$(INCLUDE)}"basetsd.h"\
+! 	
+*** misc/Python-2.3.4/PCbuild/bz2.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/bz2.mak	Tue Mar 20 17:26:52 2007
+***************
+*** 1 ****
+! dummy
+--- 1,187 ----
+! !IF "$(CFG)" == ""
+! CFG=bz2 - Win32 Release
+! !ENDIF
+! 
+! NULL=
+! 
+! !IF  "$(CFG)" == "bz2 - Win32 Release"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-release\bz2
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! ALL : "$(OUTDIR)\bz2.pyd"
+! 
+! 
+! CLEAN :
+! 	-@erase "$(INTDIR)\bz2module.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\bz2.exp"
+! 	-@erase "$(OUTDIR)\bz2.lib"
+! 	-@erase "$(OUTDIR)\bz2.pdb"
+! 	-@erase "$(OUTDIR)\bz2.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /I "..\..\bzip2-1.0.2" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\bz2.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\bz2.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=..\..\bzip2-1.0.2\libbz2.lib /nologo /base:"0x1D170000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\bz2.pdb" /debug /machine:I386 /nodefaultlib:"libc" /out:"$(OUTDIR)\bz2.pyd" /implib:"$(OUTDIR)\bz2.lib"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\bz2module.obj"
+! 
+! "$(OUTDIR)\bz2.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ELSEIF  "$(CFG)" == "bz2 - Win32 Debug"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-debug\bz2
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! ALL : "$(OUTDIR)\bz2_d.pyd"
+! 
+! 
+! CLEAN :
+! 	-@erase "$(INTDIR)\bz2module.obj"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\bz2_d.exp"
+! 	-@erase "$(OUTDIR)\bz2_d.ilk"
+! 	-@erase "$(OUTDIR)\bz2_d.lib"
+! 	-@erase "$(OUTDIR)\bz2_d.pdb"
+! 	-@erase "$(OUTDIR)\bz2_d.pyd"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! F90=df.exe
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /I "..\..\bzip2-1.0.2" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\bz2.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! MTL=midl.exe
+! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+! RSC=rc.exe
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\bz2.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=..\..\bzip2-1.0.2\libbz2.lib /nologo /base:"0x1D170000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\bz2_d.pdb" /debug /machine:I386 /nodefaultlib:"msvcrt" /nodefaultlib:"libc" /out:"$(OUTDIR)\bz2_d.pyd" /implib:"$(OUTDIR)\bz2_d.lib" /pdbtype:sept
+! LINK32_OBJS= \
+! 	"$(INTDIR)\bz2module.obj"
+! 
+! "$(OUTDIR)\bz2_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
+! 	echo $(CPP_PROJ)
+! 
+! !ENDIF
+! 
+! 
+! !IF "$(NO_EXTERNAL_DEPS)" != "1"
+! !IF EXISTS("bz2.dep")
+! !INCLUDE "bz2.dep"
+! !ELSE
+! !MESSAGE Warning: cannot find "bz2.dep"
+! !ENDIF
+! !ENDIF
+! 
+! 
+! !IF "$(CFG)" == "bz2 - Win32 Release" || "$(CFG)" == "bz2 - Win32 Debug"
+! SOURCE=..\Modules\bz2module.c
+! 
+! "$(INTDIR)\bz2module.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! 
+! !ENDIF
+! 
+*** misc/Python-2.3.4/PCbuild/datetime.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/datetime.dep	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1332,8 +3926,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/datetime.mak	2007-02-19 16:22:55.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/datetime.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/datetime.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/datetime.mak	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1577,8 +4171,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1588,8 +4182,8 @@
 ! ..\PC\make_versioninfo.c : \
 ! 	"..\Include\patchlevel.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1814,8 +4408,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/mmap.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/mmap.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/mmap.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/mmap.dep	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1868,8 +4462,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/mmap.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/mmap.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/mmap.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/mmap.mak	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2109,8 +4703,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/parser.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/parser.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/parser.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/parser.dep	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2168,8 +4762,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/parser.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/parser.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/parser.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/parser.mak	Tue Mar 20 17:26:52 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2411,8 +5005,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pyexpat.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/pyexpat.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2502,8 +5096,8 @@
 ! 	"..\Modules\expat\xmltok_impl.h"\
 ! 	"..\Modules\expat\xmltok_ns.c"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pyexpat.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/pyexpat.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2776,8 +5370,343 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/pythoncore.dep	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/python.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/python.dep	Tue Mar 20 17:26:53 2007
+***************
+*** 1 ****
+! dummy
+--- 1,52 ----
+! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von python.mak
+! 
+! ..\Modules\python.c : \
+! 	"..\Include\abstract.h"\
+! 	"..\Include\boolobject.h"\
+! 	"..\Include\bufferobject.h"\
+! 	"..\Include\cellobject.h"\
+! 	"..\Include\ceval.h"\
+! 	"..\Include\classobject.h"\
+! 	"..\Include\cobject.h"\
+! 	"..\Include\complexobject.h"\
+! 	"..\Include\descrobject.h"\
+! 	"..\Include\dictobject.h"\
+! 	"..\Include\enumobject.h"\
+! 	"..\Include\fileobject.h"\
+! 	"..\Include\floatobject.h"\
+! 	"..\Include\funcobject.h"\
+! 	"..\Include\import.h"\
+! 	"..\Include\intobject.h"\
+! 	"..\Include\intrcheck.h"\
+! 	"..\Include\iterobject.h"\
+! 	"..\Include\listobject.h"\
+! 	"..\Include\longobject.h"\
+! 	"..\Include\methodobject.h"\
+! 	"..\Include\modsupport.h"\
+! 	"..\Include\moduleobject.h"\
+! 	"..\Include\object.h"\
+! 	"..\Include\objimpl.h"\
+! 	"..\Include\patchlevel.h"\
+! 	"..\Include\pydebug.h"\
+! 	"..\Include\pyerrors.h"\
+! 	"..\Include\pyfpe.h"\
+! 	"..\Include\pymem.h"\
+! 	"..\Include\pyport.h"\
+! 	"..\Include\pystate.h"\
+! 	"..\Include\Python.h"\
+! 	"..\Include\pythonrun.h"\
+! 	"..\Include\rangeobject.h"\
+! 	"..\Include\sliceobject.h"\
+! 	"..\Include\stringobject.h"\
+! 	"..\Include\sysmodule.h"\
+! 	"..\Include\traceback.h"\
+! 	"..\Include\tupleobject.h"\
+! 	"..\Include\unicodeobject.h"\
+! 	"..\Include\weakrefobject.h"\
+! 	"..\PC\pyconfig.h"\
+! 	{$(INCLUDE)}"basetsd.h"\
+! 	
+! 
+! ..\PC\python_exe.rc : \
+! 	"..\PC\pycon.ico"\
+! 	
+*** misc/Python-2.3.4/PCbuild/python.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/python.mak	Tue Mar 20 17:26:53 2007
+***************
+*** 1 ****
+! dummy
+--- 1,271 ----
+! !IF "$(CFG)" == ""
+! CFG=python - Win32 Release
+! !ENDIF
+! 
+! NULL=
+! 
+! !IF  "$(CFG)" == "python - Win32 Release"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-release\python
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\python.exe"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\python.exe"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\python.obj"
+! 	-@erase "$(INTDIR)\python_exe.res"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\python.exe"
+! 	-@erase "$(OUTDIR)\python.pdb"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"$(INTDIR)\python.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! RSC=rc.exe
+! RSC_PROJ=/l 0x409 /fo"$(INTDIR)\python_exe.res" /d "NDEBUG"
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\python.bsc"
+! BSC32_SBRS= \
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1d000000" /subsystem:console /incremental:no /pdb:"$(OUTDIR)\python.pdb" /debug /machine:I386 /out:"$(OUTDIR)\python.exe"
+! LINK32_OBJS= \
+! 	"$(INTDIR)\python.obj" \
+! 	"$(INTDIR)\python_exe.res" \
+! 	"$(OUTDIR)\python23.lib"
+! 
+! "$(OUTDIR)\python.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;1
+! 	echo $(CPP_PROJ)
+! 
+! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
+! 
+! OUTDIR=.\.
+! INTDIR=.\x86-temp-debug\python
+! # Begin Custom Macros
+! OutDir=.\.
+! # End Custom Macros
+! 
+! !IF "$(RECURSE)" == "0"
+! 
+! ALL : "$(OUTDIR)\python_d.exe" "$(OUTDIR)\python.bsc"
+! 
+! !ELSE
+! 
+! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\python_d.exe" "$(OUTDIR)\python.bsc"
+! 
+! !ENDIF
+! 
+! !IF "$(RECURSE)" == "1"
+! CLEAN :"pythoncore - Win32 DebugCLEAN"
+! !ELSE
+! CLEAN :
+! !ENDIF
+! 	-@erase "$(INTDIR)\python.obj"
+! 	-@erase "$(INTDIR)\python.sbr"
+! 	-@erase "$(INTDIR)\python_exe.res"
+! 	-@erase "$(INTDIR)\vc60.idb"
+! 	-@erase "$(INTDIR)\vc60.pdb"
+! 	-@erase "$(OUTDIR)\python.bsc"
+! 	-@erase "$(OUTDIR)\python_d.exe"
+! 	-@erase "$(OUTDIR)\python_d.ilk"
+! 	-@erase "$(OUTDIR)\python_d.pdb"
+! 
+! "$(OUTDIR)" :
+!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
+! 
+! "$(INTDIR)" :
+!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
+! 
+! CPP=cl.exe
+! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\python.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
+! 
+! .c{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.obj::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .c{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cpp{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! .cxx{$(INTDIR)}.sbr::
+!    $(CPP) @<<
+!    $(CPP_PROJ) $<
+! <<
+! 
+! RSC=rc.exe
+! RSC_PROJ=/l 0x409 /fo"$(INTDIR)\python_exe.res" /i "..\Include" /d "_DEBUG"
+! BSC32=bscmake.exe
+! BSC32_FLAGS=/nologo /o"$(OUTDIR)\python.bsc"
+! BSC32_SBRS= \
+! 	"$(INTDIR)\python.sbr"
+! 
+! "$(OUTDIR)\python.bsc" : "$(OUTDIR)" $(BSC32_SBRS)
+!     $(BSC32) @<<
+!   $(BSC32_FLAGS) $(BSC32_SBRS)
+! <<
+! 
+! LINK32=link.exe
+! LINK32_FLAGS=odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1d000000" /subsystem:console /incremental:yes /pdb:"$(OUTDIR)\python_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\python_d.exe" /pdbtype:sept
+! LINK32_OBJS= \
+! 	"$(INTDIR)\python.obj" \
+! 	"$(INTDIR)\python_exe.res" \
+! 	"$(OUTDIR)\python23_d.lib"
+! 
+! "$(OUTDIR)\python_d.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
+!     $(LINK32) @<<
+!   $(LINK32_FLAGS) $(LINK32_OBJS)
+! <<
+! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;1
+! 	echo $(CPP_PROJ)
+! 
+! !ENDIF
+! 
+! 
+! !IF "$(NO_EXTERNAL_DEPS)" != "1"
+! !IF EXISTS("python.dep")
+! !INCLUDE "python.dep"
+! !ELSE
+! !MESSAGE Warning: cannot find "python.dep"
+! !ENDIF
+! !ENDIF
+! 
+! 
+! !IF "$(CFG)" == "python - Win32 Release" || "$(CFG)" == "python - Win32 Debug"
+! 
+! !IF  "$(CFG)" == "python - Win32 Release"
+! 
+! "pythoncore - Win32 Release" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
+!    cd "."
+! 
+! "pythoncore - Win32 ReleaseCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
+! 
+! "pythoncore - Win32 Debug" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
+!    cd "."
+! 
+! "pythoncore - Win32 DebugCLEAN" :
+!    cd "."
+!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
+!    cd "."
+! 
+! !ENDIF
+! 
+! SOURCE=..\Modules\python.c
+! 
+! !IF  "$(CFG)" == "python - Win32 Release"
+! 
+! 
+! "$(INTDIR)\python.obj" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
+! 
+! 
+! "$(INTDIR)\python.obj"	"$(INTDIR)\python.sbr" : $(SOURCE) "$(INTDIR)"
+! 	$(CPP) $(CPP_PROJ) $(SOURCE)
+! 
+! 
+! !ENDIF
+! 
+! SOURCE=..\PC\python_exe.rc
+! 
+! !IF  "$(CFG)" == "python - Win32 Release"
+! 
+! 
+! "$(INTDIR)\python_exe.res" : $(SOURCE) "$(INTDIR)"
+! 	$(RSC) /l 0x409 /fo"$(INTDIR)\python_exe.res" /i "\tmp\Python-2.3.4\PC" /d "NDEBUG" $(SOURCE)
+! 
+! 
+! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
+! 
+! 
+! "$(INTDIR)\python_exe.res" : $(SOURCE) "$(INTDIR)"
+! 	$(RSC) /l 0x409 /fo"$(INTDIR)\python_exe.res" /i "..\Include" /i "\tmp\Python-2.3.4\PC" /d "_DEBUG" $(SOURCE)
+! 
+! 
+! !ENDIF
+! 
+! 
+! !ENDIF
+*** misc/Python-2.3.4/PCbuild/pythoncore.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -8234,8 +11163,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythoncore.mak	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/pythoncore.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -9673,343 +12602,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/python.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/python.dep	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,52 ----
-! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von python.mak
-! 
-! ..\Modules\python.c : \
-! 	"..\Include\abstract.h"\
-! 	"..\Include\boolobject.h"\
-! 	"..\Include\bufferobject.h"\
-! 	"..\Include\cellobject.h"\
-! 	"..\Include\ceval.h"\
-! 	"..\Include\classobject.h"\
-! 	"..\Include\cobject.h"\
-! 	"..\Include\complexobject.h"\
-! 	"..\Include\descrobject.h"\
-! 	"..\Include\dictobject.h"\
-! 	"..\Include\enumobject.h"\
-! 	"..\Include\fileobject.h"\
-! 	"..\Include\floatobject.h"\
-! 	"..\Include\funcobject.h"\
-! 	"..\Include\import.h"\
-! 	"..\Include\intobject.h"\
-! 	"..\Include\intrcheck.h"\
-! 	"..\Include\iterobject.h"\
-! 	"..\Include\listobject.h"\
-! 	"..\Include\longobject.h"\
-! 	"..\Include\methodobject.h"\
-! 	"..\Include\modsupport.h"\
-! 	"..\Include\moduleobject.h"\
-! 	"..\Include\object.h"\
-! 	"..\Include\objimpl.h"\
-! 	"..\Include\patchlevel.h"\
-! 	"..\Include\pydebug.h"\
-! 	"..\Include\pyerrors.h"\
-! 	"..\Include\pyfpe.h"\
-! 	"..\Include\pymem.h"\
-! 	"..\Include\pyport.h"\
-! 	"..\Include\pystate.h"\
-! 	"..\Include\Python.h"\
-! 	"..\Include\pythonrun.h"\
-! 	"..\Include\rangeobject.h"\
-! 	"..\Include\sliceobject.h"\
-! 	"..\Include\stringobject.h"\
-! 	"..\Include\sysmodule.h"\
-! 	"..\Include\traceback.h"\
-! 	"..\Include\tupleobject.h"\
-! 	"..\Include\unicodeobject.h"\
-! 	"..\Include\weakrefobject.h"\
-! 	"..\PC\pyconfig.h"\
-! 	{$(INCLUDE)}"basetsd.h"\
-! 	
-! 
-! ..\PC\python_exe.rc : \
-! 	"..\PC\pycon.ico"\
-! 	
-*** misc/Python-2.3.4/PCbuild/python.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/python.mak	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,271 ----
-! !IF "$(CFG)" == ""
-! CFG=python - Win32 Release
-! !ENDIF
-! 
-! NULL=
-! 
-! !IF  "$(CFG)" == "python - Win32 Release"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-release\python
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\python.exe"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\python.exe"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\python.obj"
-! 	-@erase "$(INTDIR)\python_exe.res"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\python.exe"
-! 	-@erase "$(OUTDIR)\python.pdb"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /Fp"$(INTDIR)\python.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! RSC=rc.exe
-! RSC_PROJ=/l 0x409 /fo"$(INTDIR)\python_exe.res" /d "NDEBUG"
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\python.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1d000000" /subsystem:console /incremental:no /pdb:"$(OUTDIR)\python.pdb" /debug /machine:I386 /out:"$(OUTDIR)\python.exe"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\python.obj" \
-! 	"$(INTDIR)\python_exe.res" \
-! 	"$(OUTDIR)\python23.lib"
-! 
-! "$(OUTDIR)\python.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;1
-! 	echo $(CPP_PROJ)
-! 
-! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-debug\python
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\python_d.exe" "$(OUTDIR)\python.bsc"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\python_d.exe" "$(OUTDIR)\python.bsc"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 DebugCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\python.obj"
-! 	-@erase "$(INTDIR)\python.sbr"
-! 	-@erase "$(INTDIR)\python_exe.res"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\python.bsc"
-! 	-@erase "$(OUTDIR)\python_d.exe"
-! 	-@erase "$(OUTDIR)\python_d.ilk"
-! 	-@erase "$(OUTDIR)\python_d.pdb"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FR"$(INTDIR)\\" /Fp"$(INTDIR)\python.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! RSC=rc.exe
-! RSC_PROJ=/l 0x409 /fo"$(INTDIR)\python_exe.res" /i "..\Include" /d "_DEBUG"
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\python.bsc"
-! BSC32_SBRS= \
-! 	"$(INTDIR)\python.sbr"
-! 
-! "$(OUTDIR)\python.bsc" : "$(OUTDIR)" $(BSC32_SBRS)
-!     $(BSC32) @<<
-!   $(BSC32_FLAGS) $(BSC32_SBRS)
-! <<
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=odbc32.lib odbccp32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1d000000" /subsystem:console /incremental:yes /pdb:"$(OUTDIR)\python_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\python_d.exe" /pdbtype:sept
-! LINK32_OBJS= \
-! 	"$(INTDIR)\python.obj" \
-! 	"$(INTDIR)\python_exe.res" \
-! 	"$(OUTDIR)\python23_d.lib"
-! 
-! "$(OUTDIR)\python_d.exe" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;1
-! 	echo $(CPP_PROJ)
-! 
-! !ENDIF
-! 
-! 
-! !IF "$(NO_EXTERNAL_DEPS)" != "1"
-! !IF EXISTS("python.dep")
-! !INCLUDE "python.dep"
-! !ELSE
-! !MESSAGE Warning: cannot find "python.dep"
-! !ENDIF
-! !ENDIF
-! 
-! 
-! !IF "$(CFG)" == "python - Win32 Release" || "$(CFG)" == "python - Win32 Debug"
-! 
-! !IF  "$(CFG)" == "python - Win32 Release"
-! 
-! "pythoncore - Win32 Release" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
-!    cd "."
-! 
-! "pythoncore - Win32 ReleaseCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
-! 
-! "pythoncore - Win32 Debug" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
-!    cd "."
-! 
-! "pythoncore - Win32 DebugCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ENDIF
-! 
-! SOURCE=..\Modules\python.c
-! 
-! !IF  "$(CFG)" == "python - Win32 Release"
-! 
-! 
-! "$(INTDIR)\python.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
-! 
-! 
-! "$(INTDIR)\python.obj"	"$(INTDIR)\python.sbr" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! !ENDIF
-! 
-! SOURCE=..\PC\python_exe.rc
-! 
-! !IF  "$(CFG)" == "python - Win32 Release"
-! 
-! 
-! "$(INTDIR)\python_exe.res" : $(SOURCE) "$(INTDIR)"
-! 	$(RSC) /l 0x409 /fo"$(INTDIR)\python_exe.res" /i "\tmp\Python-2.3.4\PC" /d "NDEBUG" $(SOURCE)
-! 
-! 
-! !ELSEIF  "$(CFG)" == "python - Win32 Debug"
-! 
-! 
-! "$(INTDIR)\python_exe.res" : $(SOURCE) "$(INTDIR)"
-! 	$(RSC) /l 0x409 /fo"$(INTDIR)\python_exe.res" /i "..\Include" /i "\tmp\Python-2.3.4\PC" /d "_DEBUG" $(SOURCE)
-! 
-! 
-! !ENDIF
-! 
-! 
-! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pythonw.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/pythonw.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/pythonw.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/pythonw.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -10066,8 +12660,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythonw.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/pythonw.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/pythonw.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/pythonw.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -10327,8 +12921,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/select.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/select.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/select.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/select.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -10381,8 +12975,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/select.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/select.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/select.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/select.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -10625,1513 +13219,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/_socket.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_socket.dep	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,53 ----
-! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _socket.mak
-! 
-! ..\Modules\socketmodule.c : \
-! 	"..\Include\abstract.h"\
-! 	"..\Include\boolobject.h"\
-! 	"..\Include\bufferobject.h"\
-! 	"..\Include\cellobject.h"\
-! 	"..\Include\ceval.h"\
-! 	"..\Include\classobject.h"\
-! 	"..\Include\cobject.h"\
-! 	"..\Include\complexobject.h"\
-! 	"..\Include\descrobject.h"\
-! 	"..\Include\dictobject.h"\
-! 	"..\Include\enumobject.h"\
-! 	"..\Include\fileobject.h"\
-! 	"..\Include\floatobject.h"\
-! 	"..\Include\funcobject.h"\
-! 	"..\Include\import.h"\
-! 	"..\Include\intobject.h"\
-! 	"..\Include\intrcheck.h"\
-! 	"..\Include\iterobject.h"\
-! 	"..\Include\listobject.h"\
-! 	"..\Include\longobject.h"\
-! 	"..\Include\methodobject.h"\
-! 	"..\Include\modsupport.h"\
-! 	"..\Include\moduleobject.h"\
-! 	"..\Include\object.h"\
-! 	"..\Include\objimpl.h"\
-! 	"..\Include\patchlevel.h"\
-! 	"..\Include\pydebug.h"\
-! 	"..\Include\pyerrors.h"\
-! 	"..\Include\pyfpe.h"\
-! 	"..\Include\pymem.h"\
-! 	"..\Include\pyport.h"\
-! 	"..\Include\pystate.h"\
-! 	"..\Include\Python.h"\
-! 	"..\Include\pythonrun.h"\
-! 	"..\Include\pythread.h"\
-! 	"..\Include\rangeobject.h"\
-! 	"..\Include\sliceobject.h"\
-! 	"..\Include\stringobject.h"\
-! 	"..\Include\sysmodule.h"\
-! 	"..\Include\traceback.h"\
-! 	"..\Include\tupleobject.h"\
-! 	"..\Include\unicodeobject.h"\
-! 	"..\Include\weakrefobject.h"\
-! 	"..\Modules\addrinfo.h"\
-! 	"..\Modules\getaddrinfo.c"\
-! 	"..\Modules\getnameinfo.c"\
-! 	"..\Modules\socketmodule.h"\
-! 	"..\PC\pyconfig.h"\
-! 	{$(INCLUDE)}"basetsd.h"\
-! 	
-*** misc/Python-2.3.4/PCbuild/_socket.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_socket.mak	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,237 ----
-! !IF "$(CFG)" == ""
-! CFG=_socket - Win32 Release
-! !ENDIF
-! 
-! NULL=
-! 
-! !IF  "$(CFG)" == "_socket - Win32 Release"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-release\_socket
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_socket.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_socket.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\socketmodule.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_socket.exp"
-! 	-@erase "$(OUTDIR)\_socket.lib"
-! 	-@erase "$(OUTDIR)\_socket.pdb"
-! 	-@erase "$(OUTDIR)\_socket.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\_socket.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_socket.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /base:"0x1e1D0000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\_socket.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_socket.pyd" /implib:"$(OUTDIR)\_socket.lib"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\socketmodule.obj" \
-! 	"$(OUTDIR)\python23.lib"
-! 
-! "$(OUTDIR)\_socket.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ELSEIF  "$(CFG)" == "_socket - Win32 Debug"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-debug\_socket
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_socket_d.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_socket_d.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 DebugCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\socketmodule.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_socket_d.exp"
-! 	-@erase "$(OUTDIR)\_socket_d.ilk"
-! 	-@erase "$(OUTDIR)\_socket_d.lib"
-! 	-@erase "$(OUTDIR)\_socket_d.pdb"
-! 	-@erase "$(OUTDIR)\_socket_d.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /Fp"$(INTDIR)\_socket.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_socket.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib wsock32.lib /nologo /base:"0x1e1D0000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\_socket_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_socket_d.pyd" /implib:"$(OUTDIR)\_socket_d.lib" /pdbtype:sept
-! LINK32_OBJS= \
-! 	"$(INTDIR)\socketmodule.obj" \
-! 	"$(OUTDIR)\python23_d.lib"
-! 
-! "$(OUTDIR)\_socket_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ENDIF
-! 
-! 
-! !IF "$(NO_EXTERNAL_DEPS)" != "1"
-! !IF EXISTS("_socket.dep")
-! !INCLUDE "_socket.dep"
-! !ELSE
-! !MESSAGE Warning: cannot find "_socket.dep"
-! !ENDIF
-! !ENDIF
-! 
-! 
-! !IF "$(CFG)" == "_socket - Win32 Release" || "$(CFG)" == "_socket - Win32 Debug"
-! 
-! !IF  "$(CFG)" == "_socket - Win32 Release"
-! 
-! "pythoncore - Win32 Release" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
-!    cd "."
-! 
-! "pythoncore - Win32 ReleaseCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ELSEIF  "$(CFG)" == "_socket - Win32 Debug"
-! 
-! "pythoncore - Win32 Debug" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
-!    cd "."
-! 
-! "pythoncore - Win32 DebugCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ENDIF
-! 
-! SOURCE=..\Modules\socketmodule.c
-! 
-! "$(INTDIR)\socketmodule.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! 
-! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_sre.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_sre.dep	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,51 ----
-! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _sre.mak
-! 
-! ..\Modules\_sre.c : \
-! 	"..\Include\abstract.h"\
-! 	"..\Include\boolobject.h"\
-! 	"..\Include\bufferobject.h"\
-! 	"..\Include\cellobject.h"\
-! 	"..\Include\ceval.h"\
-! 	"..\Include\classobject.h"\
-! 	"..\Include\cobject.h"\
-! 	"..\Include\complexobject.h"\
-! 	"..\Include\descrobject.h"\
-! 	"..\Include\dictobject.h"\
-! 	"..\Include\enumobject.h"\
-! 	"..\Include\fileobject.h"\
-! 	"..\Include\floatobject.h"\
-! 	"..\Include\funcobject.h"\
-! 	"..\Include\import.h"\
-! 	"..\Include\intobject.h"\
-! 	"..\Include\intrcheck.h"\
-! 	"..\Include\iterobject.h"\
-! 	"..\Include\listobject.h"\
-! 	"..\Include\longobject.h"\
-! 	"..\Include\methodobject.h"\
-! 	"..\Include\modsupport.h"\
-! 	"..\Include\moduleobject.h"\
-! 	"..\Include\object.h"\
-! 	"..\Include\objimpl.h"\
-! 	"..\Include\patchlevel.h"\
-! 	"..\Include\pydebug.h"\
-! 	"..\Include\pyerrors.h"\
-! 	"..\Include\pyfpe.h"\
-! 	"..\Include\pymem.h"\
-! 	"..\Include\pyport.h"\
-! 	"..\Include\pystate.h"\
-! 	"..\Include\Python.h"\
-! 	"..\Include\pythonrun.h"\
-! 	"..\Include\rangeobject.h"\
-! 	"..\Include\sliceobject.h"\
-! 	"..\Include\stringobject.h"\
-! 	"..\Include\structmember.h"\
-! 	"..\Include\sysmodule.h"\
-! 	"..\Include\traceback.h"\
-! 	"..\Include\tupleobject.h"\
-! 	"..\Include\unicodeobject.h"\
-! 	"..\Include\weakrefobject.h"\
-! 	"..\Modules\sre.h"\
-! 	"..\Modules\sre_constants.h"\
-! 	"..\PC\pyconfig.h"\
-! 	{$(INCLUDE)}"basetsd.h"\
-! 	
-*** misc/Python-2.3.4/PCbuild/_sre.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_sre.mak	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,237 ----
-! !IF "$(CFG)" == ""
-! CFG=_sre - Win32 Release
-! !ENDIF
-! 
-! NULL=
-! 
-! !IF  "$(CFG)" == "_sre - Win32 Release"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-release\_sre
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_sre.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_sre.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\_sre.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_sre.exp"
-! 	-@erase "$(OUTDIR)\_sre.lib"
-! 	-@erase "$(OUTDIR)\_sre.pdb"
-! 	-@erase "$(OUTDIR)\_sre.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\Include" /I "..\PC" /I "C:\Program Files\Tcl\include" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /Fp"$(INTDIR)\_sre.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_sre.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1e0000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\_sre.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_sre.pyd" /implib:"$(OUTDIR)\_sre.lib"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\_sre.obj" \
-! 	"$(OUTDIR)\python23.lib"
-! 
-! "$(OUTDIR)\_sre.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ELSEIF  "$(CFG)" == "_sre - Win32 Debug"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-debug\_sre
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_sre_d.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_sre_d.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 DebugCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\_sre.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_sre_d.exp"
-! 	-@erase "$(OUTDIR)\_sre_d.ilk"
-! 	-@erase "$(OUTDIR)\_sre_d.lib"
-! 	-@erase "$(OUTDIR)\_sre_d.pdb"
-! 	-@erase "$(OUTDIR)\_sre_d.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /I "C:\Program Files\Tcl\include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /Fp"$(INTDIR)\_sre.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_sre.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1e0000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\_sre_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_sre_d.pyd" /implib:"$(OUTDIR)\_sre_d.lib" /pdbtype:sept
-! LINK32_OBJS= \
-! 	"$(INTDIR)\_sre.obj" \
-! 	"$(OUTDIR)\python23_d.lib"
-! 
-! "$(OUTDIR)\_sre_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ENDIF
-! 
-! 
-! !IF "$(NO_EXTERNAL_DEPS)" != "1"
-! !IF EXISTS("_sre.dep")
-! !INCLUDE "_sre.dep"
-! !ELSE
-! !MESSAGE Warning: cannot find "_sre.dep"
-! !ENDIF
-! !ENDIF
-! 
-! 
-! !IF "$(CFG)" == "_sre - Win32 Release" || "$(CFG)" == "_sre - Win32 Debug"
-! 
-! !IF  "$(CFG)" == "_sre - Win32 Release"
-! 
-! "pythoncore - Win32 Release" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
-!    cd "."
-! 
-! "pythoncore - Win32 ReleaseCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ELSEIF  "$(CFG)" == "_sre - Win32 Debug"
-! 
-! "pythoncore - Win32 Debug" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
-!    cd "."
-! 
-! "pythoncore - Win32 DebugCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ENDIF
-! 
-! SOURCE=..\Modules\_sre.c
-! 
-! "$(INTDIR)\_sre.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! 
-! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_symtable.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_symtable.dep	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,50 ----
-! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _symtable.mak
-! 
-! ..\Modules\symtablemodule.c : \
-! 	"..\Include\abstract.h"\
-! 	"..\Include\boolobject.h"\
-! 	"..\Include\bufferobject.h"\
-! 	"..\Include\cellobject.h"\
-! 	"..\Include\ceval.h"\
-! 	"..\Include\classobject.h"\
-! 	"..\Include\cobject.h"\
-! 	"..\Include\compile.h"\
-! 	"..\Include\complexobject.h"\
-! 	"..\Include\descrobject.h"\
-! 	"..\Include\dictobject.h"\
-! 	"..\Include\enumobject.h"\
-! 	"..\Include\fileobject.h"\
-! 	"..\Include\floatobject.h"\
-! 	"..\Include\funcobject.h"\
-! 	"..\Include\import.h"\
-! 	"..\Include\intobject.h"\
-! 	"..\Include\intrcheck.h"\
-! 	"..\Include\iterobject.h"\
-! 	"..\Include\listobject.h"\
-! 	"..\Include\longobject.h"\
-! 	"..\Include\methodobject.h"\
-! 	"..\Include\modsupport.h"\
-! 	"..\Include\moduleobject.h"\
-! 	"..\Include\object.h"\
-! 	"..\Include\objimpl.h"\
-! 	"..\Include\patchlevel.h"\
-! 	"..\Include\pydebug.h"\
-! 	"..\Include\pyerrors.h"\
-! 	"..\Include\pyfpe.h"\
-! 	"..\Include\pymem.h"\
-! 	"..\Include\pyport.h"\
-! 	"..\Include\pystate.h"\
-! 	"..\Include\Python.h"\
-! 	"..\Include\pythonrun.h"\
-! 	"..\Include\rangeobject.h"\
-! 	"..\Include\sliceobject.h"\
-! 	"..\Include\stringobject.h"\
-! 	"..\Include\symtable.h"\
-! 	"..\Include\sysmodule.h"\
-! 	"..\Include\traceback.h"\
-! 	"..\Include\tupleobject.h"\
-! 	"..\Include\unicodeobject.h"\
-! 	"..\Include\weakrefobject.h"\
-! 	"..\PC\pyconfig.h"\
-! 	{$(INCLUDE)}"basetsd.h"\
-! 	
-*** misc/Python-2.3.4/PCbuild/_symtable.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_symtable.mak	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,236 ----
-! !IF "$(CFG)" == ""
-! CFG=_symtable - Win32 Release
-! !ENDIF
-! 
-! NULL=
-! 
-! !IF  "$(CFG)" == "_symtable - Win32 Release"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-release\_symtable
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_symtable.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_symtable.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\symtablemodule.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(OUTDIR)\_symtable.exp"
-! 	-@erase "$(OUTDIR)\_symtable.lib"
-! 	-@erase "$(OUTDIR)\_symtable.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /O2 /I "..\Include" /I "..\PC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_symtable.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_symtable.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e100000" /dll /incremental:no /pdb:"$(OUTDIR)\_symtable.pdb" /machine:I386 /out:"$(OUTDIR)\_symtable.pyd" /implib:"$(OUTDIR)\_symtable.lib"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\symtablemodule.obj" \
-! 	"$(OUTDIR)\python23.lib"
-! 
-! "$(OUTDIR)\_symtable.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ELSEIF  "$(CFG)" == "_symtable - Win32 Debug"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-debug\_symtable
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_symtable_d.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_symtable_d.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 DebugCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\symtablemodule.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_symtable_d.exp"
-! 	-@erase "$(OUTDIR)\_symtable_d.ilk"
-! 	-@erase "$(OUTDIR)\_symtable_d.lib"
-! 	-@erase "$(OUTDIR)\_symtable_d.pdb"
-! 	-@erase "$(OUTDIR)\_symtable_d.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_symtable.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_symtable.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e100000" /dll /incremental:yes /pdb:"$(OUTDIR)\_symtable_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_symtable_d.pyd" /implib:"$(OUTDIR)\_symtable_d.lib" /pdbtype:sept
-! LINK32_OBJS= \
-! 	"$(INTDIR)\symtablemodule.obj" \
-! 	"$(OUTDIR)\python23_d.lib"
-! 
-! "$(OUTDIR)\_symtable_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ENDIF
-! 
-! 
-! !IF "$(NO_EXTERNAL_DEPS)" != "1"
-! !IF EXISTS("_symtable.dep")
-! !INCLUDE "_symtable.dep"
-! !ELSE
-! !MESSAGE Warning: cannot find "_symtable.dep"
-! !ENDIF
-! !ENDIF
-! 
-! 
-! !IF "$(CFG)" == "_symtable - Win32 Release" || "$(CFG)" == "_symtable - Win32 Debug"
-! 
-! !IF  "$(CFG)" == "_symtable - Win32 Release"
-! 
-! "pythoncore - Win32 Release" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" 
-!    cd "."
-! 
-! "pythoncore - Win32 ReleaseCLEAN" : 
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN 
-!    cd "."
-! 
-! !ELSEIF  "$(CFG)" == "_symtable - Win32 Debug"
-! 
-! "pythoncore - Win32 Debug" : 
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" 
-!    cd "."
-! 
-! "pythoncore - Win32 DebugCLEAN" : 
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN 
-!    cd "."
-! 
-! !ENDIF 
-! 
-! SOURCE=..\Modules\symtablemodule.c
-! 
-! "$(INTDIR)\symtablemodule.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! 
-! !ENDIF 
-! 
-*** misc/Python-2.3.4/PCbuild/_testcapi.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,50 ----
-! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _testcapi.mak
-! 
-! ..\Modules\_testcapimodule.c : \
-! 	"..\Include\abstract.h"\
-! 	"..\Include\boolobject.h"\
-! 	"..\Include\bufferobject.h"\
-! 	"..\Include\cellobject.h"\
-! 	"..\Include\ceval.h"\
-! 	"..\Include\classobject.h"\
-! 	"..\Include\cobject.h"\
-! 	"..\Include\complexobject.h"\
-! 	"..\Include\descrobject.h"\
-! 	"..\Include\dictobject.h"\
-! 	"..\Include\enumobject.h"\
-! 	"..\Include\fileobject.h"\
-! 	"..\Include\floatobject.h"\
-! 	"..\Include\funcobject.h"\
-! 	"..\Include\import.h"\
-! 	"..\Include\intobject.h"\
-! 	"..\Include\intrcheck.h"\
-! 	"..\Include\iterobject.h"\
-! 	"..\Include\listobject.h"\
-! 	"..\Include\longobject.h"\
-! 	"..\Include\methodobject.h"\
-! 	"..\Include\modsupport.h"\
-! 	"..\Include\moduleobject.h"\
-! 	"..\Include\object.h"\
-! 	"..\Include\objimpl.h"\
-! 	"..\Include\patchlevel.h"\
-! 	"..\Include\pydebug.h"\
-! 	"..\Include\pyerrors.h"\
-! 	"..\Include\pyfpe.h"\
-! 	"..\Include\pymem.h"\
-! 	"..\Include\pyport.h"\
-! 	"..\Include\pystate.h"\
-! 	"..\Include\Python.h"\
-! 	"..\Include\pythonrun.h"\
-! 	"..\Include\pythread.h"\
-! 	"..\Include\rangeobject.h"\
-! 	"..\Include\sliceobject.h"\
-! 	"..\Include\stringobject.h"\
-! 	"..\Include\sysmodule.h"\
-! 	"..\Include\traceback.h"\
-! 	"..\Include\tupleobject.h"\
-! 	"..\Include\unicodeobject.h"\
-! 	"..\Include\weakrefobject.h"\
-! 	"..\Modules\testcapi_long.h"\
-! 	"..\PC\pyconfig.h"\
-! 	{$(INCLUDE)}"basetsd.h"\
-! 	
-*** misc/Python-2.3.4/PCbuild/_testcapi.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,235 ----
-! !IF "$(CFG)" == ""
-! CFG=_testcapi - Win32 Debug
-! !ENDIF
-! 
-! NULL=
-! 
-! !IF  "$(CFG)" == "_testcapi - Win32 Release"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-release\_testcapi
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_testcapi.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_testcapi.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\_testcapimodule.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(OUTDIR)\_testcapi.exp"
-! 	-@erase "$(OUTDIR)\_testcapi.lib"
-! 	-@erase "$(OUTDIR)\_testcapi.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /O2 /I "..\Include" /I "..\PC" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_testcapi.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_testcapi.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1F0000" /dll /incremental:no /pdb:"$(OUTDIR)\_testcapi.pdb" /machine:I386 /out:"$(OUTDIR)\_testcapi.pyd" /implib:"$(OUTDIR)\_testcapi.lib"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\_testcapimodule.obj" \
-! 	"$(OUTDIR)\python23.lib"
-! 
-! "$(OUTDIR)\_testcapi.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ELSEIF  "$(CFG)" == "_testcapi - Win32 Debug"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-debug\_testcapi
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_testcapi_d.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_testcapi_d.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 DebugCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\_testcapimodule.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_testcapi_d.exp"
-! 	-@erase "$(OUTDIR)\_testcapi_d.ilk"
-! 	-@erase "$(OUTDIR)\_testcapi_d.lib"
-! 	-@erase "$(OUTDIR)\_testcapi_d.pdb"
-! 	-@erase "$(OUTDIR)\_testcapi_d.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\Include" /I "..\PC" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_USRDLL" /D "MMAP_EXPORTS" /Fp"$(INTDIR)\_testcapi.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /GZ /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_testcapi.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /base:"0x1e1F0000" /dll /incremental:yes /pdb:"$(OUTDIR)\_testcapi_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_testcapi_d.pyd" /implib:"$(OUTDIR)\_testcapi_d.lib" /pdbtype:sept
-! LINK32_OBJS= \
-! 	"$(INTDIR)\_testcapimodule.obj" \
-! 	"$(OUTDIR)\python23_d.lib"
-! 
-! "$(OUTDIR)\_testcapi_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ENDIF
-! 
-! 
-! !IF "$(NO_EXTERNAL_DEPS)" != "1"
-! !IF EXISTS("_testcapi.dep")
-! !INCLUDE "_testcapi.dep"
-! !ELSE
-! !MESSAGE Warning: cannot find "_testcapi.dep"
-! !ENDIF
-! !ENDIF
-! 
-! 
-! !IF "$(CFG)" == "_testcapi - Win32 Release" || "$(CFG)" == "_testcapi - Win32 Debug"
-! 
-! !IF  "$(CFG)" == "_testcapi - Win32 Release"
-! 
-! "pythoncore - Win32 Release" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
-!    cd "."
-! 
-! "pythoncore - Win32 ReleaseCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ELSEIF  "$(CFG)" == "_testcapi - Win32 Debug"
-! 
-! "pythoncore - Win32 Debug" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
-!    cd "."
-! 
-! "pythoncore - Win32 DebugCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ENDIF
-! 
-! SOURCE=..\Modules\_testcapimodule.c
-! 
-! "$(INTDIR)\_testcapimodule.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! 
-! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_tkinter.dep	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,49 ----
-! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von _tkinter.mak
-! 
-! ..\Modules\_tkinter.c : \
-! 	"..\Include\abstract.h"\
-! 	"..\Include\boolobject.h"\
-! 	"..\Include\bufferobject.h"\
-! 	"..\Include\cellobject.h"\
-! 	"..\Include\ceval.h"\
-! 	"..\Include\classobject.h"\
-! 	"..\Include\cobject.h"\
-! 	"..\Include\complexobject.h"\
-! 	"..\Include\descrobject.h"\
-! 	"..\Include\dictobject.h"\
-! 	"..\Include\enumobject.h"\
-! 	"..\Include\fileobject.h"\
-! 	"..\Include\floatobject.h"\
-! 	"..\Include\funcobject.h"\
-! 	"..\Include\import.h"\
-! 	"..\Include\intobject.h"\
-! 	"..\Include\intrcheck.h"\
-! 	"..\Include\iterobject.h"\
-! 	"..\Include\listobject.h"\
-! 	"..\Include\longobject.h"\
-! 	"..\Include\methodobject.h"\
-! 	"..\Include\modsupport.h"\
-! 	"..\Include\moduleobject.h"\
-! 	"..\Include\object.h"\
-! 	"..\Include\objimpl.h"\
-! 	"..\Include\patchlevel.h"\
-! 	"..\Include\pydebug.h"\
-! 	"..\Include\pyerrors.h"\
-! 	"..\Include\pyfpe.h"\
-! 	"..\Include\pymem.h"\
-! 	"..\Include\pyport.h"\
-! 	"..\Include\pystate.h"\
-! 	"..\Include\Python.h"\
-! 	"..\Include\pythonrun.h"\
-! 	"..\Include\pythread.h"\
-! 	"..\Include\rangeobject.h"\
-! 	"..\Include\sliceobject.h"\
-! 	"..\Include\stringobject.h"\
-! 	"..\Include\sysmodule.h"\
-! 	"..\Include\traceback.h"\
-! 	"..\Include\tupleobject.h"\
-! 	"..\Include\unicodeobject.h"\
-! 	"..\Include\weakrefobject.h"\
-! 	"..\PC\pyconfig.h"\
-! 	{$(INCLUDE)}"basetsd.h"\
-! 	
-*** misc/Python-2.3.4/PCbuild/_tkinter.mak	2007-02-19 16:22:58.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	2007-02-19 16:22:48.000000000 +0100
-***************
-*** 1 ****
-! dummy
---- 1,247 ----
-! !IF "$(CFG)" == ""
-! CFG=_tkinter - Win32 Release
-! !ENDIF
-! 
-! NULL=
-! 
-! !IF  "$(CFG)" == "_tkinter - Win32 Debug"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-debug\_tkinter
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_tkinter_d.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Debug" "$(OUTDIR)\_tkinter_d.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 DebugCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\_tkinter.obj"
-! 	-@erase "$(INTDIR)\tkappinit.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_tkinter_d.exp"
-! 	-@erase "$(OUTDIR)\_tkinter_d.ilk"
-! 	-@erase "$(OUTDIR)\_tkinter_d.lib"
-! 	-@erase "$(OUTDIR)\_tkinter_d.pdb"
-! 	-@erase "$(OUTDIR)\_tkinter_d.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MDd /W3 /Gm $(EXFLAGS) /Zi /Od /I "..\..\tcl84\include" /I "..\Include" /I "..\PC" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WITH_APPINIT" /Fp"$(INTDIR)\_tkinter.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_tkinter.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=..\..\tcl84\lib\tk84.lib ..\..\tcl84\lib\tcl84.lib odbc32.lib odbccp32.lib user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1e190000" /subsystem:windows /dll /incremental:yes /pdb:"$(OUTDIR)\_tkinter_d.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_tkinter_d.pyd" /implib:"$(OUTDIR)\_tkinter_d.lib" /pdbtype:sept /libpath:"C:\Program Files\Tcl\lib"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\_tkinter.obj" \
-! 	"$(INTDIR)\tkappinit.obj" \
-! 	"$(OUTDIR)\python23_d.lib"
-! 
-! "$(OUTDIR)\_tkinter_d.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ELSEIF  "$(CFG)" == "_tkinter - Win32 Release"
-! 
-! OUTDIR=.\.
-! INTDIR=.\x86-temp-release\_tkinter
-! # Begin Custom Macros
-! OutDir=.\.
-! # End Custom Macros
-! 
-! !IF "$(RECURSE)" == "0"
-! 
-! ALL : "$(OUTDIR)\_tkinter.pyd"
-! 
-! !ELSE
-! 
-! ALL : "pythoncore - Win32 Release" "$(OUTDIR)\_tkinter.pyd"
-! 
-! !ENDIF
-! 
-! !IF "$(RECURSE)" == "1"
-! CLEAN :"pythoncore - Win32 ReleaseCLEAN"
-! !ELSE
-! CLEAN :
-! !ENDIF
-! 	-@erase "$(INTDIR)\_tkinter.obj"
-! 	-@erase "$(INTDIR)\tkappinit.obj"
-! 	-@erase "$(INTDIR)\vc60.idb"
-! 	-@erase "$(INTDIR)\vc60.pdb"
-! 	-@erase "$(OUTDIR)\_tkinter.exp"
-! 	-@erase "$(OUTDIR)\_tkinter.lib"
-! 	-@erase "$(OUTDIR)\_tkinter.pdb"
-! 	-@erase "$(OUTDIR)\_tkinter.pyd"
-! 
-! "$(OUTDIR)" :
-!     if not exist "$(OUTDIR)/$(NULL)" mkdir "$(OUTDIR)"
-! 
-! "$(INTDIR)" :
-!     if not exist "$(INTDIR)/$(NULL)" mkdir "$(INTDIR)"
-! 
-! F90=df.exe
-! CPP=cl.exe
-! CPP_PROJ=/nologo /MD /W3 $(EXFLAGS) /Zi /O2 /I "..\..\tcl84\include" /I "..\Include" /I "..\PC" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "WITH_APPINIT" /Fp"$(INTDIR)\_tkinter.pch" /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\" /FD /c
-! 
-! .c{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.obj::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .c{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cpp{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! .cxx{$(INTDIR)}.sbr::
-!    $(CPP) @<<
-!    $(CPP_PROJ) $<
-! <<
-! 
-! MTL=midl.exe
-! MTL_PROJ=/nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
-! RSC=rc.exe
-! BSC32=bscmake.exe
-! BSC32_FLAGS=/nologo /o"$(OUTDIR)\_tkinter.bsc"
-! BSC32_SBRS= \
-! 
-! LINK32=link.exe
-! LINK32_FLAGS=..\..\tcl84\lib\tk84.lib ..\..\tcl84\lib\tcl84.lib odbc32.lib odbccp32.lib user32.lib kernel32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /base:"0x1e190000" /subsystem:windows /dll /incremental:no /pdb:"$(OUTDIR)\_tkinter.pdb" /debug /machine:I386 /out:"$(OUTDIR)\_tkinter.pyd" /implib:"$(OUTDIR)\_tkinter.lib" /libpath:"C:\Program Files\Tcl\lib"
-! LINK32_OBJS= \
-! 	"$(INTDIR)\_tkinter.obj" \
-! 	"$(INTDIR)\tkappinit.obj" \
-! 	"$(OUTDIR)\python23.lib"
-! 
-! "$(OUTDIR)\_tkinter.pyd" : "$(OUTDIR)" $(DEF_FILE) $(LINK32_OBJS)
-!     $(LINK32) @<<
-!   $(LINK32_FLAGS) $(LINK32_OBJS)
-! <<
-! 	if exist $@.manifest mt.exe -manifest $@.manifest -outputresource:$@;2
-! 	echo $(CPP_PROJ)
-! 
-! !ENDIF
-! 
-! 
-! !IF "$(NO_EXTERNAL_DEPS)" != "1"
-! !IF EXISTS("_tkinter.dep")
-! !INCLUDE "_tkinter.dep"
-! !ELSE
-! !MESSAGE Warning: cannot find "_tkinter.dep"
-! !ENDIF
-! !ENDIF
-! 
-! 
-! !IF "$(CFG)" == "_tkinter - Win32 Debug" || "$(CFG)" == "_tkinter - Win32 Release"
-! 
-! !IF  "$(CFG)" == "_tkinter - Win32 Debug"
-! 
-! "pythoncore - Win32 Debug" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug"
-!    cd "."
-! 
-! "pythoncore - Win32 DebugCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Debug" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ELSEIF  "$(CFG)" == "_tkinter - Win32 Release"
-! 
-! "pythoncore - Win32 Release" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release"
-!    cd "."
-! 
-! "pythoncore - Win32 ReleaseCLEAN" :
-!    cd "."
-!    $(MAKE) /$(MAKEFLAGS) /F ".\pythoncore.mak" CFG="pythoncore - Win32 Release" RECURSE=1 CLEAN
-!    cd "."
-! 
-! !ENDIF
-! 
-! SOURCE=..\Modules\_tkinter.c
-! 
-! "$(INTDIR)\_tkinter.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! SOURCE=..\Modules\tkappinit.c
-! 
-! "$(INTDIR)\tkappinit.obj" : $(SOURCE) "$(INTDIR)"
-! 	$(CPP) $(CPP_PROJ) $(SOURCE)
-! 
-! 
-! 
-! !ENDIF
-*** misc/Python-2.3.4/PCbuild/unicodedata.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/unicodedata.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12187,8 +13276,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/unicodedata.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/unicodedata.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12428,16 +13517,16 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
 --- 1,2 ----
 ! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von w9xpopen.mak
 ! 
-*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	2007-02-19 16:22:56.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12620,8 +13709,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/winreg.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/winreg.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/winreg.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/winreg.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12675,8 +13764,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winreg.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/winreg.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/winreg.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/winreg.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12934,8 +14023,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/winsound.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/winsound.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/winsound.dep	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/winsound.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12988,8 +14077,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winsound.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/winsound.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/winsound.mak	Tue Mar 20 17:29:22 2007
+--- misc/build/Python-2.3.4/PCbuild/winsound.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13229,8 +14318,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/zlib.dep	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/zlib.dep	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/zlib.dep	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/zlib.dep	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13284,8 +14373,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/zlib.mak	2007-02-19 16:22:57.000000000 +0100
---- misc/build/Python-2.3.4/PCbuild/zlib.mak	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/PCbuild/zlib.mak	Tue Mar 20 17:29:23 2007
+--- misc/build/Python-2.3.4/PCbuild/zlib.mak	Tue Mar 20 17:26:53 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13535,8 +14624,27 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/Python/pythonrun.c	2004-03-22 21:41:47.000000000 +0100
---- misc/build/Python-2.3.4/Python/pythonrun.c	2007-02-19 16:22:48.000000000 +0100
+*** misc/Python-2.3.4/Python/dynload_win.c	Mon Aug 26 23:20:30 2002
+--- misc/build/Python-2.3.4/Python/dynload_win.c	Tue Mar 20 17:26:53 2007
+***************
+*** 23,29 ****
+  /* Case insensitive string compare, to avoid any dependencies on particular
+     C RTL implementations */
+  
+! static int strcasecmp (char *string1, char *string2)
+  { 
+  	int first, second;
+  
+--- 23,29 ----
+  /* Case insensitive string compare, to avoid any dependencies on particular
+     C RTL implementations */
+  
+! static int strcasecmp (const char *string1, const char *string2)
+  { 
+  	int first, second;
+  
+*** misc/Python-2.3.4/Python/pythonrun.c	Mon Mar 22 21:41:47 2004
+--- misc/build/Python-2.3.4/Python/pythonrun.c	Tue Mar 20 17:26:53 2007
 ***************
 *** 1674,1679 ****
 --- 1674,1697 ----
@@ -13564,8 +14672,523 @@
   	handler = signal(sig, SIG_IGN);
   	signal(sig, handler);
   	return handler;
+*** misc/Python-2.3.4/configure	Fri May  7 21:13:40 2004
+--- misc/build/Python-2.3.4/configure	Tue Mar 20 17:26:53 2007
+***************
+*** 309,315 ****
+  # include <unistd.h>
+  #endif"
+  
+! ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS VERSION SOVERSION CONFIG_ARGS PYTHONFRAMEWORK PYTHONFRAMEWORKDIR PYTHONFRAMEWORKPREFIX PYTHONFRAMEWORKINSTALLDIR MACHDEP SGI_ABI EXTRAPLATDIR EXTRAMACHDEPPATH CXX MAINOBJ EXEEXT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC OBJEXT CPP EGREP BUILDEXEEXT LIBRARY LDLIBRARY DLLLIBRARY BLDLIBRARY LDLIBRARYDIR INSTSONAME RUNSHARED LINKCC RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN OPT BASECFLAGS LIBTOOL_CRUFT SO LDSHARED BLDSHARED CCSHARED LINKFORSHARED CFLAGSFORSHARED SHLIBS USE_SIGNAL_MODULE SIGNAL_OBJS USE_THREAD_MODULE LDLAST THREADOBJ DLINCLDIR DYNLOADFILE MACHDEP_OBJS TRUE LIBOBJS HAVE_GETHOSTBYNAME_R_6_ARG HAVE_GETHOSTBYNAME_R_5_ARG HAVE_GETHOSTBYNAME_R_3_ARG HAVE_GETHOSTBYNAME_R HAVE_GETHOSTBYNAME LIBM LIBC UNICODE_OBJS THREADHEADERS SRCDIRS LTLIBOBJS'
+  ac_subst_files=''
+  
+  # Initialize some variables set by options.
+--- 309,315 ----
+  # include <unistd.h>
+  #endif"
+  
+! ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS VERSION SOVERSION CONFIG_ARGS PYTHONFRAMEWORK PYTHONFRAMEWORKDIR PYTHONFRAMEWORKPREFIX PYTHONFRAMEWORKINSTALLDIR MACHDEP SGI_ABI EXTRAPLATDIR EXTRAMACHDEPPATH CXX MAINOBJ EXEEXT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC OBJEXT CPP EGREP BUILDEXEEXT LIBRARY LDLIBRARY DLLLIBRARY BLDLIBRARY LDLIBRARYDIR INSTSONAME RUNSHARED LINKCC RANLIB ac_ct_RANLIB AR INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA LN OPT BASECFLAGS LIBTOOL_CRUFT SO LDSHARED BLDSHARED CCSHARED LINKFORSHARED CFLAGSFORSHARED SHLIBS USE_SIGNAL_MODULE SIGNAL_OBJS USE_THREAD_MODULE LDLAST THREADOBJ DLINCLDIR DYNLOADFILE GETPATH_OBJS MACHDEP_OBJS TRUE LIBOBJS HAVE_GETHOSTBYNAME_R_6_ARG HAVE_GETHOSTBYNAME_R_5_ARG HAVE_GETHOSTBYNAME_R_3_ARG HAVE_GETHOSTBYNAME_R HAVE_GETHOSTBYNAME LIBM LIBC UNICODE_OBJS THREADHEADERS SRCDIRS LTLIBOBJS'
+  ac_subst_files=''
+  
+  # Initialize some variables set by options.
+***************
+*** 1479,1490 ****
+--- 1479,1503 ----
+    # several APIs are not declared. Since this is also needed in some
+    # cases for HP-UX, we define it globally.
+  
++ define_xopen_source_extended=no
++ case $ac_sys_system/$ac_sys_release in
++ 	SunOS/5.1*)
++ 		;;
++ 	*)
++ 		define_xopen_source_extended=yes
++ 		;;
++ esac
++ 
++ if test $define_xopen_source_extended = yes
++ then
+  
+  cat >>confdefs.h <<\_ACEOF
+  #define _XOPEN_SOURCE_EXTENDED 1
+  _ACEOF
+  
+  
++ fi
++ 
+  cat >>confdefs.h <<\_ACEOF
+  #define _POSIX_C_SOURCE 200112L
+  _ACEOF
+***************
+*** 3590,3595 ****
+--- 3603,3611 ----
+  _ACEOF
+  
+    case $ac_sys_system in
++     Darwin*)
++          LDLIBRARY='libpython$(VERSION).dylib'
++          ;;
+      BeOS*)
+            LDLIBRARY='libpython$(VERSION).so'
+            ;;
+***************
+*** 3603,3609 ****
+  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+  	  INSTSONAME="$LDLIBRARY".$SOVERSION
+            ;;
+!     Linux*|GNU*|NetBSD*)
+  	  LDLIBRARY='libpython$(VERSION).so'
+  	  BLDLIBRARY='-L. -lpython$(VERSION)'
+  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+--- 3619,3625 ----
+  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+  	  INSTSONAME="$LDLIBRARY".$SOVERSION
+            ;;
+!     Linux*|GNU*|NetBSD*|FreeBSD*)
+  	  LDLIBRARY='libpython$(VERSION).so'
+  	  BLDLIBRARY='-L. -lpython$(VERSION)'
+  	  RUNSHARED=LD_LIBRARY_PATH=`pwd`:${LD_LIBRARY_PATH}
+***************
+*** 4021,4027 ****
+  	    ;;
+  	# is there any other compiler on Darwin besides gcc?
+  	Darwin*)
+! 	    BASECFLAGS="$BASECFLAGS -Wno-long-double -no-cpp-precomp -mno-fused-madd"
+  	    ;;
+      esac
+      ;;
+--- 4037,4043 ----
+  	    ;;
+  	# is there any other compiler on Darwin besides gcc?
+  	Darwin*)
+! 	    BASECFLAGS="$BASECFLAGS -fno-common -Wno-long-double -no-cpp-precomp -mno-fused-madd"
+  	    ;;
+      esac
+      ;;
+***************
+*** 10082,10088 ****
+  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
+  		else
+  			# No framework. Ignore undefined symbols, assuming they come from Python
+! 			LDSHARED="$LDSHARED -undefined suppress"
+  		fi ;;
+  	Darwin/*)
+  		LDSHARED='$(CC) $(LDFLAGS) -bundle'
+--- 10098,10104 ----
+  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
+  		else
+  			# No framework. Ignore undefined symbols, assuming they come from Python
+! 			LDSHARED="$LDSHARED -flat_namespace -undefined suppress"
+  		fi ;;
+  	Darwin/*)
+  		LDSHARED='$(CC) $(LDFLAGS) -bundle'
+***************
+*** 10091,10098 ****
+  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
+  		else
+  			# No framework, use the Python app as bundle-loader
+! 			BLDSHARED="$LDSHARED "'-bundle_loader $(BUILDPYTHON)'
+! 			LDSHARED="$LDSHARED "'-bundle_loader $(BINDIR)/python$(VERSION)$(EXE)'
+  		fi ;;
+  	Linux*|GNU*) LDSHARED='$(CC) -shared';;
+  	dgux*) LDSHARED="ld -G";;
+--- 10107,10114 ----
+  			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
+  		else
+  			# No framework, use the Python app as bundle-loader
+! 			BLDSHARED="$LDSHARED -flat_namespace -undefined suppress"
+! 			LDSHARED="$LDSHARED -flat_namespace -undefined suppress"
+  		fi ;;
+  	Linux*|GNU*) LDSHARED='$(CC) -shared';;
+  	dgux*) LDSHARED="ld -G";;
+***************
+*** 10112,10118 ****
+  		fi;;
+  	SCO_SV*) LDSHARED='$(CC) -Wl,-G,-Bexport';;
+  	Monterey*) LDSHARED="cc -G -dy -Bdynamic -Bexport -L/usr/lib/ia64l64";;
+! 	CYGWIN*) LDSHARED="gcc -shared -Wl,--enable-auto-image-base";;
+  	atheos*) LDSHARED="gcc -shared";;
+  	*)	LDSHARED="ld";;
+  	esac
+--- 10128,10134 ----
+  		fi;;
+  	SCO_SV*) LDSHARED='$(CC) -Wl,-G,-Bexport';;
+  	Monterey*) LDSHARED="cc -G -dy -Bdynamic -Bexport -L/usr/lib/ia64l64";;
+! 	CYGWIN*) LDSHARED="gcc -shared -Wl,--enable-auto-image-base -Wl,--enable-runtime-pseudo-reloc ${LDFLAGS}";;
+  	atheos*) LDSHARED="gcc -shared";;
+  	*)	LDSHARED="ld";;
+  	esac
+***************
+*** 10129,10134 ****
+--- 10145,10151 ----
+  	case $ac_sys_system/$ac_sys_release in
+  	SunOS*) if test "$GCC" = yes;
+  	        then CCSHARED="-fPIC";
++ 	        else CCSHARED="-KPIC";  # for sun's cc
+  	        fi;;
+  	hp*|HP*) if test "$GCC" = yes;
+  		 then CCSHARED="-fPIC";
+***************
+*** 10222,10227 ****
+--- 10239,10248 ----
+  		CFLAGSFORSHARED='$(CCSHARED)'
+  	esac
+  fi
++ case $ac_sys_system in
++ CYGWIN*)
++ 		CFLAGSFORSHARED="$CFLAGSFORSHARED -DMS_COREDLL";;
++ esac
+  echo "$as_me:$LINENO: result: $CFLAGSFORSHARED" >&5
+  echo "${ECHO_T}$CFLAGSFORSHARED" >&6
+  
+***************
+*** 11572,11577 ****
+--- 11593,11740 ----
+      THREADOBJ="Python/thread.o"
+  else
+  
++     if test "${ac_cv_header_windows_h+set}" = set; then
++   echo "$as_me:$LINENO: checking for windows.h" >&5
++ echo $ECHO_N "checking for windows.h... $ECHO_C" >&6
++ if test "${ac_cv_header_windows_h+set}" = set; then
++   echo $ECHO_N "(cached) $ECHO_C" >&6
++ fi
++ echo "$as_me:$LINENO: result: $ac_cv_header_windows_h" >&5
++ echo "${ECHO_T}$ac_cv_header_windows_h" >&6
++ else
++   # Is the header compilable?
++ echo "$as_me:$LINENO: checking windows.h usability" >&5
++ echo $ECHO_N "checking windows.h usability... $ECHO_C" >&6
++ cat >conftest.$ac_ext <<_ACEOF
++ #line $LINENO "configure"
++ /* confdefs.h.  */
++ _ACEOF
++ cat confdefs.h >>conftest.$ac_ext
++ cat >>conftest.$ac_ext <<_ACEOF
++ /* end confdefs.h.  */
++ $ac_includes_default
++ #include <windows.h>
++ _ACEOF
++ rm -f conftest.$ac_objext
++ if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
++   (eval $ac_compile) 2>&5
++   ac_status=$?
++   echo "$as_me:$LINENO: \$? = $ac_status" >&5
++   (exit $ac_status); } &&
++          { ac_try='test -s conftest.$ac_objext'
++   { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
++   (eval $ac_try) 2>&5
++   ac_status=$?
++   echo "$as_me:$LINENO: \$? = $ac_status" >&5
++   (exit $ac_status); }; }; then
++   ac_header_compiler=yes
++ else
++   echo "$as_me: failed program was:" >&5
++ sed 's/^/| /' conftest.$ac_ext >&5
++ 
++ ac_header_compiler=no
++ fi
++ rm -f conftest.$ac_objext conftest.$ac_ext
++ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
++ echo "${ECHO_T}$ac_header_compiler" >&6
++ 
++ # Is the header present?
++ echo "$as_me:$LINENO: checking windows.h presence" >&5
++ echo $ECHO_N "checking windows.h presence... $ECHO_C" >&6
++ cat >conftest.$ac_ext <<_ACEOF
++ #line $LINENO "configure"
++ /* confdefs.h.  */
++ _ACEOF
++ cat confdefs.h >>conftest.$ac_ext
++ cat >>conftest.$ac_ext <<_ACEOF
++ /* end confdefs.h.  */
++ #include <windows.h>
++ _ACEOF
++ if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
++   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
++   ac_status=$?
++   grep -v '^ *+' conftest.er1 >conftest.err
++   rm -f conftest.er1
++   cat conftest.err >&5
++   echo "$as_me:$LINENO: \$? = $ac_status" >&5
++   (exit $ac_status); } >/dev/null; then
++   if test -s conftest.err; then
++     ac_cpp_err=$ac_c_preproc_warn_flag
++   else
++     ac_cpp_err=
++   fi
++ else
++   ac_cpp_err=yes
++ fi
++ if test -z "$ac_cpp_err"; then
++   ac_header_preproc=yes
++ else
++   echo "$as_me: failed program was:" >&5
++ sed 's/^/| /' conftest.$ac_ext >&5
++ 
++   ac_header_preproc=no
++ fi
++ rm -f conftest.err conftest.$ac_ext
++ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
++ echo "${ECHO_T}$ac_header_preproc" >&6
++ 
++ # So?  What about this header?
++ case $ac_header_compiler:$ac_header_preproc in
++   yes:no )
++     { echo "$as_me:$LINENO: WARNING: windows.h: accepted by the compiler, rejected by the preprocessor!" >&5
++ echo "$as_me: WARNING: windows.h: accepted by the compiler, rejected by the preprocessor!" >&2;}
++     { echo "$as_me:$LINENO: WARNING: windows.h: proceeding with the preprocessor's result" >&5
++ echo "$as_me: WARNING: windows.h: proceeding with the preprocessor's result" >&2;}
++     (
++       cat <<\_ASBOX
++ ## ------------------------------------ ##
++ ## Report this to bug-autoconf@gnu.org. ##
++ ## ------------------------------------ ##
++ _ASBOX
++     ) |
++       sed "s/^/$as_me: WARNING:     /" >&2
++     ;;
++   no:yes )
++     { echo "$as_me:$LINENO: WARNING: windows.h: present but cannot be compiled" >&5
++ echo "$as_me: WARNING: windows.h: present but cannot be compiled" >&2;}
++     { echo "$as_me:$LINENO: WARNING: windows.h: check for missing prerequisite headers?" >&5
++ echo "$as_me: WARNING: windows.h: check for missing prerequisite headers?" >&2;}
++     { echo "$as_me:$LINENO: WARNING: windows.h: proceeding with the preprocessor's result" >&5
++ echo "$as_me: WARNING: windows.h: proceeding with the preprocessor's result" >&2;}
++     (
++       cat <<\_ASBOX
++ ## ------------------------------------ ##
++ ## Report this to bug-autoconf@gnu.org. ##
++ ## ------------------------------------ ##
++ _ASBOX
++     ) |
++       sed "s/^/$as_me: WARNING:     /" >&2
++     ;;
++ esac
++ echo "$as_me:$LINENO: checking for windows.h" >&5
++ echo $ECHO_N "checking for windows.h... $ECHO_C" >&6
++ if test "${ac_cv_header_windows_h+set}" = set; then
++   echo $ECHO_N "(cached) $ECHO_C" >&6
++ else
++   ac_cv_header_windows_h=$ac_header_preproc
++ fi
++ echo "$as_me:$LINENO: result: $ac_cv_header_windows_h" >&5
++ echo "${ECHO_T}$ac_cv_header_windows_h" >&6
++ 
++ fi
++ if test $ac_cv_header_windows_h = yes; then
++   cat >>confdefs.h <<\_ACEOF
++ #define WITH_THREAD 1
++ _ACEOF
++ 
++ 
++ cat >>confdefs.h <<\_ACEOF
++ #define NT_THREADS 1
++ _ACEOF
++ 
++     THREADOBJ="Python/thread.o"
++ else
++ 
+      if test "${ac_cv_header_kernel_OS_h+set}" = set; then
+    echo "$as_me:$LINENO: checking for kernel/OS.h" >&5
+  echo $ECHO_N "checking for kernel/OS.h... $ECHO_C" >&6
+***************
+*** 12051,12056 ****
+--- 12214,12221 ----
+  
+  fi
+  
++ fi
++ 
+  
+  fi
+  
+***************
+*** 12986,12993 ****
+  	;;
+  	BeOS*) DYNLOADFILE="dynload_beos.o";;
+  	hp*|HP*) DYNLOADFILE="dynload_hpux.o";;
+! 	Darwin/*) DYNLOADFILE="dynload_next.o";;
+  	atheos*) DYNLOADFILE="dynload_atheos.o";;
+  	*)
+  	# use dynload_shlib.c and dlopen() if we have it; otherwise stub
+  	# out any dynamic loading
+--- 13151,13159 ----
+  	;;
+  	BeOS*) DYNLOADFILE="dynload_beos.o";;
+  	hp*|HP*) DYNLOADFILE="dynload_hpux.o";;
+! 	Darwin/*) DYNLOADFILE="dynload_shlib.o";;
+  	atheos*) DYNLOADFILE="dynload_atheos.o";;
++ 	CYGWIN*) DYNLOADFILE="dynload_win.o PC/import_nt.o PC/dl_nt.o";;
+  	*)
+  	# use dynload_shlib.c and dlopen() if we have it; otherwise stub
+  	# out any dynamic loading
+***************
+*** 13009,13014 ****
+--- 13175,13198 ----
+  
+  fi
+  
++ 
++ echo "$as_me:$LINENO: checking GETPATH_OBJS" >&5
++ echo $ECHO_N "checking GETPATH_OBJS... $ECHO_C" >&6
++ if test -z "$GETPATH_OBJS"
++ then
++ 	case $ac_sys_system in
++ 	CYGWIN*)
++ 		# Cygwin needs CCSHARED when building extension DLLs
++ 		# but not when building the interpreter DLL.
++ 		GETPATH_OBJS='PC/getpathp.o';;
++ 	*)
++ 		GETPATH_OBJS='Modules/getpath.o'
++ 	esac
++ fi
++ echo "$as_me:$LINENO: result: $GETPATH_OBJS" >&5
++ echo "${ECHO_T}$GETPATH_OBJS" >&6
++ 
++ 
+  # MACHDEP_OBJS can be set to platform-specific object files needed by Python
+  
+  
+***************
+*** 13114,13119 ****
+--- 13298,13308 ----
+  if eval "test \"\${$as_ac_var+set}\" = set"; then
+    echo $ECHO_N "(cached) $ECHO_C" >&6
+  else
++ case "$ac_func$ac_sys_system" in
++ getpeernameCYGWIN*)
++ eval "$as_ac_var=yes"
++ ;;
++ *)
+    cat >conftest.$ac_ext <<_ACEOF
+  #line $LINENO "configure"
+  /* confdefs.h.  */
+***************
+*** 13180,13185 ****
+--- 13369,13376 ----
+  eval "$as_ac_var=no"
+  fi
+  rm -f conftest.$ac_objext conftest$ac_exeext conftest.$ac_ext
++ ;;
++ esac
+  fi
+  echo "$as_me:$LINENO: result: `eval echo '${'$as_ac_var'}'`" >&5
+  echo "${ECHO_T}`eval echo '${'$as_ac_var'}'`" >&6
+***************
+*** 17812,17818 ****
+  #define Py_USING_UNICODE 1
+  _ACEOF
+  
+!   if test "$unicode_size" = "$ac_cv_sizeof_wchar_t"
+    then
+      PY_UNICODE_TYPE="wchar_t"
+  
+--- 18003,18015 ----
+  #define Py_USING_UNICODE 1
+  _ACEOF
+  
+!   case $ac_sys_system in
+!   CYGWIN*)
+!   	ac_cv_use_wchar_t=0;;
+!   *)
+!   	ac_cv_use_wchar_t=1;;
+!   esac
+!   if test "$unicode_size" = "$ac_cv_sizeof_wchar_t" -a $ac_cv_use_wchar_t -gt 0
+    then
+      PY_UNICODE_TYPE="wchar_t"
+  
+***************
+*** 18760,18765 ****
+--- 18957,18964 ----
+  
+  fi
+  
++ if test "$MACHDEP" != "cygwin"
++ then
+  echo "$as_me:$LINENO: checking for /dev/ptmx" >&5
+  echo $ECHO_N "checking for /dev/ptmx... $ECHO_C" >&6
+  
+***************
+*** 18793,18798 ****
+--- 18992,18998 ----
+    echo "$as_me:$LINENO: result: no" >&5
+  echo "${ECHO_T}no" >&6
+  fi
++ fi
+  
+  echo "$as_me:$LINENO: checking for socklen_t" >&5
+  echo $ECHO_N "checking for socklen_t... $ECHO_C" >&6
+***************
+*** 19548,19553 ****
+--- 19748,19754 ----
+  s,@THREADOBJ@,$THREADOBJ,;t t
+  s,@DLINCLDIR@,$DLINCLDIR,;t t
+  s,@DYNLOADFILE@,$DYNLOADFILE,;t t
++ s,@GETPATH_OBJS@,$GETPATH_OBJS,;t t
+  s,@MACHDEP_OBJS@,$MACHDEP_OBJS,;t t
+  s,@TRUE@,$TRUE,;t t
+  s,@LIBOBJS@,$LIBOBJS,;t t
+***************
+*** 20024,20029 ****
+--- 20225,20243 ----
+  if test ! -f Modules/Setup
+  then
+  	cp $srcdir/Modules/Setup.dist Modules/Setup
++         case $ac_sys_system in
++         CYGWIN*)
++ 		cat >>Modules/Setup <<_ACEOF
++ _hotshot _hotshot.c
++ _weakref _weakref.c
++ _random _randommodule.c
++ _testcapi _testcapimodule.c
++ _locale _localemodule.c
++ _csv _csv.c
++ _socket socketmodule.c -lwsock32
++ _ACEOF
++ 	;;
++ 	esac
+  fi
+  
+  echo "creating Setup.local"
+*** misc/Python-2.3.4/configure.in	Fri May  7 21:13:47 2004
+--- misc/build/Python-2.3.4/configure.in	Tue Mar 20 17:26:54 2007
+***************
+*** 174,182 ****
+    # several APIs are not declared. Since this is also needed in some
+    # cases for HP-UX, we define it globally.
+    
+!   AC_DEFINE(_XOPEN_SOURCE_EXTENDED, 1, Define to activate Unix95-and-earlier features)
+!   AC_DEFINE(_POSIX_C_SOURCE, 200112L, Define to activate features from IEEE Stds 1003.1-2001)
+  
+  fi
+  
+  #
+--- 174,195 ----
+    # several APIs are not declared. Since this is also needed in some
+    # cases for HP-UX, we define it globally.
+    
+! define_xopen_source_extended = no
+! case $ac_sys_system/$ac_sys_release in
+! 	SunOS/5.1*)
+! 		# don't define _XOPEN_SOURCE_EXTENDED as forces _XOPEN_SOURCE to be
+! 		# assumed as "4"
+! 		;;
+! 	*)
+! 		$define_xopen_source_extended = yes
+! 		;;
+! esac
+  
++ 	if test $define_xopen_source_extended = yes
++ 	then
++ 	  AC_DEFINE(_XOPEN_SOURCE_EXTENDED, 1, Define to activate Unix95-and-earlier features)
++ 	fi
++ 	  AC_DEFINE(_POSIX_C_SOURCE, 200112L, Define to activate features from IEEE Stds 1003.1-2001)
+  fi
+  
+  #
 *** misc/Python-2.3.4/pyconfig.h.in	Mon Mar 22 21:20:32 2004
---- misc/build/Python-2.3.4/pyconfig.h.in	Mon Feb 19 15:55:26 2007
+--- misc/build/Python-2.3.4/pyconfig.h.in	Tue Mar 20 17:27:26 2007
 ***************
 *** 841,846 ****
 --- 841,849 ----
@@ -13603,3 +15226,19 @@
   /* Define on FreeBSD to activate all library features */
   #undef __BSD_VISIBLE
   
+***************
+*** 907,912 ****
+--- 917,929 ----
+  /* Define to empty if the keyword does not work. */
+  #undef volatile
+  
++ #ifdef __MINGW32__
++ /* Define this if you have Windows NT threads */
++ #undef NT_THREADS
++ #ifndef PYTHONPATH
++ #	define PYTHONPATH ".\\DLLs;.\\lib;.\\lib\\plat-win;.\\lib\\lib-tk"
++ #endif
++ #endif
+  
+  /* Define the macros needed if on a UnixWare 7.x system. */
+  #if defined(__USLC__) && defined(__SCO_VERSION__)
