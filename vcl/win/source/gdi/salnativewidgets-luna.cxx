@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salnativewidgets-luna.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:45:33 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:41:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -344,7 +344,7 @@ BOOL ImplDrawTheme( HTHEME hTheme, HDC hDC, int iPart, int iState, RECT rc, cons
         RECT rcContent;
         hr = vsAPI.GetThemeBackgroundContentRect( hTheme, hDC, iPart, iState, &rc, &rcContent);
         hr = vsAPI.DrawThemeText( hTheme, hDC, iPart, iState,
-            aStr.getStr(), -1,
+            reinterpret_cast<LPCWSTR>(aStr.getStr()), -1,
             DT_CENTER | DT_VCENTER | DT_SINGLELINE,
             0, &rcContent);
     }
