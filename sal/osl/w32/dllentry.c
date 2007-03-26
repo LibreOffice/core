@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dllentry.c,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:00:10 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,17 @@ extern void rtl_memory_fini (void);
 extern void rtl_cache_fini (void);
 extern void rtl_arena_fini (void);
 
+#ifdef __MINGW32__
+
+typedef void (*func_ptr) (void);
+extern func_ptr __CTOR_LIST__[];
+extern func_ptr __DTOR_LIST__[];
+
+static void do_startup(void);
+static void do_cleanup(void);
+
+#else
+
 /*
 This is needed because DllMain is called after static constructors. A DLL's
 startup and shutdown sequence looks like this:
@@ -77,9 +88,10 @@ _pRawDllMain()
 
 */
 
-
 static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved );
 extern BOOL (WINAPI *_pRawDllMain)(HANDLE, DWORD, LPVOID) = _RawDllMain;
+
+#endif
 
 //------------------------------------------------------------------------------
 // defines
@@ -160,6 +172,71 @@ static void InitDCOM(void)
 int osl_isSingleCPU = 0;
 #endif
 
+#ifdef __MINGW32__
+
+void
+__do_global_dtors (void)
+{
+  static func_ptr *p = __DTOR_LIST__ + 1;
+
+  /*
+   * Call each destructor in the destructor list until a null pointer
+   * is encountered.
+   */
+  while (*p)
+    {
+      (*(p)) ();
+      p++;
+    }
+}
+
+void
+__do_global_ctors (void)
+{
+  unsigned long nptrs = (unsigned long) __CTOR_LIST__[0];
+  unsigned i;
+
+  /*
+   * If the first entry in the constructor list is -1 then the list
+   * is terminated with a null entry. Otherwise the first entry was
+   * the number of pointers in the list.
+   */
+  if (nptrs == -1)
+    {
+      for (nptrs = 0; __CTOR_LIST__[nptrs + 1] != 0; nptrs++)
+    ;
+    }
+
+  /*
+   * Go through the list backwards calling constructors.
+   */
+  for (i = nptrs; i >= 1; i--)
+    {
+      __CTOR_LIST__[i] ();
+    }
+
+  /*
+   * Register the destructors for processing on exit.
+   */
+  atexit (__do_global_dtors);
+}
+
+static int initialized = 0;
+
+void
+__main (void)
+{
+  if (!initialized)
+    {
+      initialized = 1;
+      do_startup();
+      __do_global_ctors ();
+    }
+}
+
+static void do_startup( void )
+{
+#else
 static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved )
 {
     /* avoid warnings */
@@ -170,6 +247,7 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
     {
         case DLL_PROCESS_ATTACH:
             {
+#endif
                 OSVERSIONINFO aInfo;
                 WSADATA wsaData;
                 int     error;
@@ -244,11 +322,18 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
                 //We disable floating point exceptions. This is the usual state at program startup
                 //but on Windows 98 and ME this is not always the case.
                 _control87(_MCW_EM, _MCW_EM);
+#ifdef __MINGW32__
+        atexit(do_cleanup);
+}
 
+void do_cleanup( void )
+{
+#else
                 break;
             }
 
         case DLL_PROCESS_DETACH:
+#endif
 
             WSACleanup( );
 
@@ -259,6 +344,7 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
 
             osl_destroyMutex( g_CurrentDirectoryMutex );
 
+#ifndef __MINGW32__
             /* finalize memory management */
             rtl_memory_fini();
             rtl_cache_fini();
@@ -267,6 +353,7 @@ static BOOL WINAPI _RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvR
     }
 
     return TRUE;
+#endif
 }
 
 static DWORD GetParentProcessId()
