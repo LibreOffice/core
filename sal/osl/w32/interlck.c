@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-27 12:00:24 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,16 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
 #ifdef _M_IX86
 #pragma warning(disable: 4035)
 {
+#ifdef __MINGW32__
+    asm
+    (
+     "  movl        %0, %%ecx\n"
+     "      movl        $1, %%eax\n"
+     "      lock xadd   %%eax, (%%ecx)\n"
+     "      incl        %%eax\n"
+     ::"m"(pCount)
+    );
+#else
     __asm
     {
         mov         ecx, pCount
@@ -70,6 +80,7 @@ oslInterlockedCount SAL_CALL osl_incrementInterlockedCount(oslInterlockedCount* 
     cont:
         inc         eax
     }
+#endif
 }
 #pragma warning(default: 4035)
 #else
@@ -86,6 +97,16 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
 #ifdef _M_IX86
 #pragma warning(disable: 4035)
 {
+#ifdef __MINGW32__
+    asm
+    (
+     "  movl        %0, %%ecx\n"
+     "      movl        $-1, %%eax\n"
+     "      lock xadd   %%eax, (%%ecx)\n"
+     "      decl        %%eax\n"
+     ::"m"(pCount)
+    );
+#else
     __asm
     {
         mov         ecx, pCount
@@ -100,6 +121,7 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     cont:
         dec         eax
     }
+#endif
 }
 #pragma warning(default: 4035)
 #else
