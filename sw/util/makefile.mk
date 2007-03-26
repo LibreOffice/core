@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.58 $
+#   $Revision: 1.59 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:25:56 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:26:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ SHL1STDLIBS+= $(SCHLIB)
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+= advapi32.lib
+SHL1STDLIBS+= $(ADVAPI32LIB)
 .ENDIF # WNT
 
 
