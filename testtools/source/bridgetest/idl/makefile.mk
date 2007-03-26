@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:23:55 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:11:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,7 @@ $(BIN)$/bridgetest.rdb: bridgetest.idl
     $(REGMERGE) $@ /UCR $(MISC)$/$(TARGET)$/bridgetest.urd
 
 .IF "$(GUI)" == "WNT"
+.IF "$(COM)" != "GCC"
 
 CLIMAKERFLAGS =
 .IF "$(debug)" != ""
@@ -71,4 +72,5 @@ $(BIN)$/cli_types_bridgetest.dll: $(BIN)$/bridgetest.rdb
         -X $(SOLARBINDIR)$/types.rdb $< 
     $(TOUCH) $@
 
+.ENDIF
 .ENDIF # GUI, WNT
