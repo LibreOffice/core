@@ -74,7 +74,9 @@ $(DEF1TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL1TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -82,6 +84,13 @@ $(DEF1TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL1TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB1NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL1TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT1_PROTECT) $(RM) $(MISC)$/$(SHL1TARGET).exp
+.ELSE
 .IF "$(SHL1USE_EXPORTS)"!="ordinal"
     @-$(EXPORT1_PROTECT) $(RMHACK1) $(MISC)$/$(SHL1TARGET).exp
     @$(EXPORT1_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
@@ -99,6 +108,7 @@ $(DEF1TARGETN) .PHONY :
     @$(EXPORT1_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF1FILTER) $(MISC)$/$(SHL1TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL1USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -173,7 +183,11 @@ $(DEF1TARGETN) .PHONY :
     @echo $(DEF1EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF1EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF1EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF1EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -268,7 +282,9 @@ $(DEF2TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL2TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -276,6 +292,13 @@ $(DEF2TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL2TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB2NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL2TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT2_PROTECT) $(RM) $(MISC)$/$(SHL2TARGET).exp
+.ELSE
 .IF "$(SHL2USE_EXPORTS)"!="ordinal"
     @-$(EXPORT2_PROTECT) $(RMHACK2) $(MISC)$/$(SHL2TARGET).exp
     @$(EXPORT2_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
@@ -293,6 +316,7 @@ $(DEF2TARGETN) .PHONY :
     @$(EXPORT2_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF2FILTER) $(MISC)$/$(SHL2TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL2USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -367,7 +391,11 @@ $(DEF2TARGETN) .PHONY :
     @echo $(DEF2EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF2EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF2EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF2EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -462,7 +490,9 @@ $(DEF3TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL3TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -470,6 +500,13 @@ $(DEF3TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL3TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB3NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL3TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT3_PROTECT) $(RM) $(MISC)$/$(SHL3TARGET).exp
+.ELSE
 .IF "$(SHL3USE_EXPORTS)"!="ordinal"
     @-$(EXPORT3_PROTECT) $(RMHACK3) $(MISC)$/$(SHL3TARGET).exp
     @$(EXPORT3_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
@@ -487,6 +524,7 @@ $(DEF3TARGETN) .PHONY :
     @$(EXPORT3_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF3FILTER) $(MISC)$/$(SHL3TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL3USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -561,7 +599,11 @@ $(DEF3TARGETN) .PHONY :
     @echo $(DEF3EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF3EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF3EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF3EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -656,7 +698,9 @@ $(DEF4TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL4TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -664,6 +708,13 @@ $(DEF4TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL4TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB4NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL4TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT4_PROTECT) $(RM) $(MISC)$/$(SHL4TARGET).exp
+.ELSE
 .IF "$(SHL4USE_EXPORTS)"!="ordinal"
     @-$(EXPORT4_PROTECT) $(RMHACK4) $(MISC)$/$(SHL4TARGET).exp
     @$(EXPORT4_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
@@ -681,6 +732,7 @@ $(DEF4TARGETN) .PHONY :
     @$(EXPORT4_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF4FILTER) $(MISC)$/$(SHL4TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL4USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -755,7 +807,11 @@ $(DEF4TARGETN) .PHONY :
     @echo $(DEF4EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF4EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF4EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF4EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -850,7 +906,9 @@ $(DEF5TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL5TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -858,6 +916,13 @@ $(DEF5TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL5TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB5NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL5TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT5_PROTECT) $(RM) $(MISC)$/$(SHL5TARGET).exp
+.ELSE
 .IF "$(SHL5USE_EXPORTS)"!="ordinal"
     @-$(EXPORT5_PROTECT) $(RMHACK5) $(MISC)$/$(SHL5TARGET).exp
     @$(EXPORT5_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
@@ -875,6 +940,7 @@ $(DEF5TARGETN) .PHONY :
     @$(EXPORT5_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF5FILTER) $(MISC)$/$(SHL5TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL5USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -949,7 +1015,11 @@ $(DEF5TARGETN) .PHONY :
     @echo $(DEF5EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF5EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF5EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF5EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -1044,7 +1114,9 @@ $(DEF6TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL6TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -1052,6 +1124,13 @@ $(DEF6TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL6TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB6NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL6TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT6_PROTECT) $(RM) $(MISC)$/$(SHL6TARGET).exp
+.ELSE
 .IF "$(SHL6USE_EXPORTS)"!="ordinal"
     @-$(EXPORT6_PROTECT) $(RMHACK6) $(MISC)$/$(SHL6TARGET).exp
     @$(EXPORT6_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
@@ -1069,6 +1148,7 @@ $(DEF6TARGETN) .PHONY :
     @$(EXPORT6_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF6FILTER) $(MISC)$/$(SHL6TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL6USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -1143,7 +1223,11 @@ $(DEF6TARGETN) .PHONY :
     @echo $(DEF6EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF6EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF6EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF6EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -1238,7 +1322,9 @@ $(DEF7TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL7TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -1246,6 +1332,13 @@ $(DEF7TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL7TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB7NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL7TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT7_PROTECT) $(RM) $(MISC)$/$(SHL7TARGET).exp
+.ELSE
 .IF "$(SHL7USE_EXPORTS)"!="ordinal"
     @-$(EXPORT7_PROTECT) $(RMHACK7) $(MISC)$/$(SHL7TARGET).exp
     @$(EXPORT7_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
@@ -1263,6 +1356,7 @@ $(DEF7TARGETN) .PHONY :
     @$(EXPORT7_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF7FILTER) $(MISC)$/$(SHL7TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL7USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -1337,7 +1431,11 @@ $(DEF7TARGETN) .PHONY :
     @echo $(DEF7EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF7EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF7EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF7EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -1432,7 +1530,9 @@ $(DEF8TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL8TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -1440,6 +1540,13 @@ $(DEF8TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL8TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB8NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL8TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT8_PROTECT) $(RM) $(MISC)$/$(SHL8TARGET).exp
+.ELSE
 .IF "$(SHL8USE_EXPORTS)"!="ordinal"
     @-$(EXPORT8_PROTECT) $(RMHACK8) $(MISC)$/$(SHL8TARGET).exp
     @$(EXPORT8_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
@@ -1457,6 +1564,7 @@ $(DEF8TARGETN) .PHONY :
     @$(EXPORT8_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF8FILTER) $(MISC)$/$(SHL8TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL8USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -1531,7 +1639,11 @@ $(DEF8TARGETN) .PHONY :
     @echo $(DEF8EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF8EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF8EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF8EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -1626,7 +1738,9 @@ $(DEF9TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL9TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -1634,6 +1748,13 @@ $(DEF9TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL9TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB9NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL9TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT9_PROTECT) $(RM) $(MISC)$/$(SHL9TARGET).exp
+.ELSE
 .IF "$(SHL9USE_EXPORTS)"!="ordinal"
     @-$(EXPORT9_PROTECT) $(RMHACK9) $(MISC)$/$(SHL9TARGET).exp
     @$(EXPORT9_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
@@ -1651,6 +1772,7 @@ $(DEF9TARGETN) .PHONY :
     @$(EXPORT9_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF9FILTER) $(MISC)$/$(SHL9TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL9USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -1725,7 +1847,11 @@ $(DEF9TARGETN) .PHONY :
     @echo $(DEF9EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF9EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF9EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF9EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
@@ -1820,7 +1946,9 @@ $(DEF10TARGETN) .PHONY :
     @echo ------------------------------
     @echo Making Module-Definitionfile : $@
     @echo LIBRARY	  $(SHL10TARGETN:f) 								 >$@.tmpfile
+.IF "$(COM)"!="GCC"
     @echo HEAPSIZE	  0 											>>$@.tmpfile
+.ENDIF
     @echo EXPORTS													>>$@.tmpfile
 #	getversioninfo fuer alle!!
     @echo GetVersionInfo		>>$@.tmpfile
@@ -1828,6 +1956,13 @@ $(DEF10TARGETN) .PHONY :
     @echo component_getDescriptionFunc	>>$@.tmpfile
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
+.IF "$(COM)"=="GCC"
+    @-+$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
+    dlltool --output-def $(MISC)$/$(SHL10TARGET).exp --export-all-symbols \
+        `$(TYPE) $(SLB)$/$(DEFLIB10NAME).lib | sed s#$(ROUT)#$(PRJ)$/$(ROUT)#g`
+    tail --lines +3 $(MISC)$/$(SHL10TARGET).exp | sed '/^;/d' >>$@.tmpfile
+    @-+$(EXPORT10_PROTECT) $(RM) $(MISC)$/$(SHL10TARGET).exp
+.ELSE
 .IF "$(SHL10USE_EXPORTS)"!="ordinal"
     @-$(EXPORT10_PROTECT) $(RMHACK10) $(MISC)$/$(SHL10TARGET).exp
     @$(EXPORT10_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(MISC)$/$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
@@ -1845,6 +1980,7 @@ $(DEF10TARGETN) .PHONY :
     @$(EXPORT10_PROTECT) $(LDUMP2) -D -E 20 -F $(DEF10FILTER) $(MISC)$/$(SHL10TARGET).direct >>$@.tmpfile
 .ENDIF
 .ENDIF			# "$(SHL10USE_EXPORTS)"!="ordinal"
+.ENDIF
 # now *\defs\$(OUTPATH)	exists, commit it
 .IF "$(MWS_BUILD)"!=""
 .IF "$(UPDATER)"!=""
@@ -1919,7 +2055,11 @@ $(DEF10TARGETN) .PHONY :
     @echo $(DEF10EXPORT20)										>>$@.tmpfile
 .ENDIF
 .IF "$(DEF10EXPORTFILE)"!=""
+.IF "$(COM)"=="GCC"
+    $(TYPE) $(DEF10EXPORTFILE) | sed -e s:PRIVATE:: >> $@.tmpfile
+.ELSE
     $(TYPE) $(DEF10EXPORTFILE) >> $@.tmpfile
+.ENDIF
 .ENDIF
     @-$(RM) $@
     @$(RENAME) $@.tmpfile $@
