@@ -4,9 +4,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:20:16 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:40:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,11 @@ TARGET=salgdi
 
 # --- #105371#
 CFLAGS += -DWINVER=0x0400
+
+.IF "$(COM)"=="GCC"
+CFLAGS += -D_WIN32_WINNT=0x0501
+.ENDIF
+
 # --- Files --------------------------------------------------------
 
 SLOFILES=   $(SLO)$/salgdi.obj   \
