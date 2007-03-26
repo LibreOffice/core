@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:19:04 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:04:40 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,10 @@ APP1STDLIBS=	\
 
 APP1LIBS= $(LB)$/$(TARGET).lib
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)"!="GCC"
 APP1OBJS=	$(OBJ)$/svidl.obj	\
             $(OBJ)$/command.obj
+.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="FREEBSD"
