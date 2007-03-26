@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:13:24 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 11:03:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -209,12 +209,13 @@ CFLAGSWERRCC=-WX
 # settings.mk):
 MODULES_WITH_WARNINGS := \
     b_server \
+    basctl \
     chart2 \
-    devtools \
     extensions \
     lingu \
     lingucomponent \
     r_tools \
+    sc \
     soldep \
     starmath \
     sw \
