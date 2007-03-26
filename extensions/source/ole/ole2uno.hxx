@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ole2uno.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:36:20 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@
 
 #include <tools/prewin.h>
 #include <tchar.h>
-#if _MSC_VER >= 1200
+#if (_MSC_VER >= 1200) || defined(__MINGW32__)
 #include <dispex.h>
 #endif
 #include <tools/postwin.h>
