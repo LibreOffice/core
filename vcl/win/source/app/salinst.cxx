@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:33:04 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:39:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include <tools/svwin.h>
 #ifdef WNT
 #include <process.h>
+#endif
+#ifdef __MINGW32__
+#include <excpt.h>
 #endif
 
 #ifndef _VOS_MUTEX_HXX
@@ -898,13 +901,25 @@ LRESULT CALLBACK SalComWndProcA( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
+#ifdef __MINGW32__
+    jmp_buf jmpbuf;
+    __SEHandler han;
+    if (__builtin_setjmp(jmpbuf) == 0)
+    {
+        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
+#else
     __try
     {
+#endif
         nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
+#ifdef __MINGW32__
+    han.Reset();
+#else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
+#endif
     if ( bDef )
     {
         if ( !ImplHandleGlobalMsg( hWnd, nMsg, wParam, lParam, nRet ) )
@@ -917,13 +932,25 @@ LRESULT CALLBACK SalComWndProcW( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lPa
 {
     int bDef = TRUE;
     LRESULT nRet = 0;
+#ifdef __MINGW32__
+    jmp_buf jmpbuf;
+    __SEHandler han;
+    if (__builtin_setjmp(jmpbuf) == 0)
+    {
+        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
+#else
     __try
     {
+#endif
         nRet = SalComWndProc( hWnd, nMsg, wParam, lParam, bDef );
     }
+#ifdef __MINGW32__
+    han.Reset();
+#else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
+#endif
     if ( bDef )
     {
         if ( !ImplHandleGlobalMsg( hWnd, nMsg, wParam, lParam, nRet ) )
@@ -1065,7 +1092,7 @@ void* WinSalInstance::GetConnectionIdentifier( ConnectionIdentifierType& rReturn
 {
     rReturnedBytes  = 1;
     rReturnedType   = AsciiCString;
-    return "";
+    return const_cast<char *>("");
 }
 
 // -----------------------------------------------------------------------
@@ -1126,6 +1153,7 @@ SalSession* WinSalInstance::CreateSalSession()
     return NULL;
 }
 
+#ifndef __MINGW32__
 // -----------------------------------------------------------------------
 int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POINTERS pExceptionInfo)
 {
@@ -1142,4 +1170,4 @@ int WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(int, LPEXCEPTION_POIN
 
     return UnhandledExceptionFilter( pExceptionInfo );
 }
-
+#endif
