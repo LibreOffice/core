@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:33:57 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:04:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,10 @@ stoponerror=tr
 
 # ------------------------------------------------------------------
 
-CFLAGS+=-GR -DUNICODE -D_UNICODE
+.IF "$(COM)" != "GCC"
+CFLAGS+=-GR
+.ENDIF
+CFLAGS+=-DUNICODE -D_UNICODE
 
 SLOFILES=$(SLO)$/WinClipboard.obj \
          $(SLO)$/WinClipbImpl.obj \
