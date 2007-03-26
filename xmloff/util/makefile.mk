@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:19:35 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:35:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ SHL5STDLIBS= \
         $(CPPUHELPERLIB)    \
         $(COMPHELPERLIB)
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(COM)"=="GCC"
     SHL5STDLIBS += -lxo$(OFFICEUPD)$(DLLPOSTFIX)
 .ELSE
     SHL5STDLIBS += ixo.lib
