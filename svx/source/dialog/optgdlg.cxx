@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:35:43 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:05:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -738,13 +738,13 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     aFontListsFL        ( this, ResId( FL_FONTLISTS) ),
     aFontShowCB         ( this, ResId( CB_FONT_SHOW ) ),
     aFontHistoryCB      ( this, ResId( CB_FONT_HISTORY ) ),
-    aRenderingFL        ( this, ResId( FL_RENDERING ) ),
-    aUseHardwareAccell  ( this, ResId( CB_USE_HARDACCELL ) ),
     a3DGB               ( this, ResId( FL_3D ) ),
     a3DOpenGLCB         ( this, ResId( CB_3D_OPENGL ) ),
     a3DOpenGLFasterCB   ( this, ResId( CB_3D_OPENGL_FASTER ) ),
     a3DDitheringCB      ( this, ResId( CB_3D_DITHERING ) ),
     a3DShowFullCB       ( this, ResId( CB_3D_SHOWFULL ) ),
+    aRenderingFL        ( this, ResId( FL_RENDERING ) ),
+    aUseHardwareAccell  ( this, ResId( CB_USE_HARDACCELL ) ),
     aMouseFL            ( this, ResId( FL_MOUSE ) ),
     aMousePosFT         ( this, ResId( FT_MOUSEPOS ) ),
     aMousePosLB         ( this, ResId( LB_MOUSEPOS ) ),
