@@ -4,9 +4,9 @@
  *
  *  $RCSfile: simplemapi.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 14:24:23 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,9 @@
 #endif
 #include <windows.h>
 #include <mapi.h>
+#ifndef __MINGW32__
 #include <mapix.h>
+#endif
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
