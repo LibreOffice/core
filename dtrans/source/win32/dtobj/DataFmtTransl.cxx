@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DataFmtTransl.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:00:27 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:07:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 #pragma warning(disable:4917)
 #endif
 #include <windows.h>
-#if (_MSC_VER < 1300)
+#if (_MSC_VER < 1300) && !defined(__MINGW32__)
 #include <olestd.h>
 #endif
 #include <shlobj.h>
@@ -158,7 +158,7 @@ CFormatEtc CDataFormatTranslator::getFormatEtcFromDataFlavor( const DataFlavor& 
                     aFormat >>= aClipFmtName;
 
                     OSL_ASSERT( aClipFmtName.getLength( ) );
-                    cf = RegisterClipboardFormatW( aClipFmtName.getStr( ) );
+                    cf = RegisterClipboardFormatW( reinterpret_cast<LPCWSTR>(aClipFmtName.getStr( )) );
 
                     OSL_ENSURE( CF_INVALID != cf, "RegisterClipboardFormat failed" );
                 }
@@ -242,7 +242,7 @@ CFormatEtc SAL_CALL CDataFormatTranslator::getFormatEtcForClipformatName( const 
     if ( !aClipFmtName.getLength( ) )
         return CFormatEtc( CF_INVALID );
 
-    CLIPFORMAT cf = sal::static_int_cast<CLIPFORMAT>(RegisterClipboardFormatW( aClipFmtName.getStr( ) ));
+    CLIPFORMAT cf = sal::static_int_cast<CLIPFORMAT>(RegisterClipboardFormatW( reinterpret_cast<LPCWSTR>(aClipFmtName.getStr( )) ));
     return getFormatEtcForClipformat( cf );
 }
 
@@ -255,7 +255,7 @@ OUString CDataFormatTranslator::getClipboardFormatName( CLIPFORMAT aClipformat )
     OSL_PRECOND( CF_INVALID != aClipformat, "Invalid clipboard format" );
 
     sal_Unicode wBuff[ MAX_CLIPFORMAT_NAME ];
-    sal_Int32   nLen = GetClipboardFormatNameW( aClipformat, wBuff, MAX_CLIPFORMAT_NAME );
+    sal_Int32   nLen = GetClipboardFormatNameW( aClipformat, reinterpret_cast<LPWSTR>(wBuff), MAX_CLIPFORMAT_NAME );
 
     return OUString( wBuff, nLen );
 }
