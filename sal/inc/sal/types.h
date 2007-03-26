@@ -4,9 +4,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:15:50 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:21:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ typedef char                     sal_Char;
 typedef signed char              sal_sChar;
 typedef unsigned char            sal_uChar;
 
-#if defined(SAL_W32)
+#if defined(SAL_W32) && !defined(__MINGW32__)
     typedef wchar_t             sal_Unicode;
 #else
     #define SAL_UNICODE_NOTEQUAL_WCHAR_T
@@ -200,12 +200,21 @@ typedef void *                   sal_Handle;
 #   define SAL_MAX_ENUM 0x7fff
 #endif
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) || defined(__MINGW32__)
 #   define SAL_DLLPUBLIC_EXPORT    __declspec(dllexport)
+#if defined(_MSC_VER)
 #   define SAL_DLLPUBLIC_IMPORT    __declspec(dllimport)
+#else
+#   define SAL_DLLPUBLIC_IMPORT
+#endif // defined(_MSC_VER)
 #   define SAL_DLLPRIVATE
+#if defined(_MSC_VER)
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
+#else
+#   define SAL_CALL
+#   define SAL_CALL_ELLIPSE
+#endif
 #elif defined SAL_OS2
 #   define SAL_DLLPUBLIC_EXPORT
 #   define SAL_DLLPUBLIC_IMPORT
