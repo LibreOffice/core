@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appdef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:33:16 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 10:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -165,8 +165,6 @@ const char* GetEnv( const char *pVar );
 const char* GetEnv( const char *pVar, const char *pDefault );
 
 #define CONVERT_R_TO_HOSTFSYS( sPath )  { sPath.ToLowerAscii().SearchAndReplace( "r:", GetEnv("ISERVERBASE", DEFAULT_INI_ROOT ) ); sPath.SearchAndReplaceAll( "\\", S_PATH_SEPARATOR ); }
-
-#define ISERVER "iserver.germany.sun.com"
 
 // Only for usage inside IServer!
 #define ISERVER_DEF_STAND_LIST  "r:\\b_server\\config\\stand.lst"
