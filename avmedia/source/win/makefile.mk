@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2006-06-19 13:59:23 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:46:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -72,12 +72,17 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 DEF1EXPORTFILE=exports.dxp
 
+SHL1STDLIBS += $(OLE32LIB)
+SHL1STDLIBS += $(OLEAUT32LIB)
+SHL1STDLIBS += $(GDI32LIB)
+SHL1STDLIBS += $(DDRAWLIB)
+
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS += $(PSDK_HOME)$/lib$/strmiids.lib
+.ELSE
 SHL1STDLIBS += strmiids.lib
-SHL1STDLIBS += ole32.lib
-SHL1STDLIBS += oleaut32.lib
-SHL1STDLIBS += gdi32.lib
-SHL1STDLIBS += ddraw.lib
 SHL1STDLIBS += dxguid.lib
+.ENDIF
 
 .ENDIF
 .ENDIF
