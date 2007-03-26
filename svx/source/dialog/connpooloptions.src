@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:46:19 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:05:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,21 +60,21 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     CheckBox CB_POOL_CONNS
     {
         Pos = MAP_APPFONT( 7, 15 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - 14, 8 );
+        Size = MAP_APPFONT( PAGE_SIZE_X - 14, 10 );
         Text [ de ] = "Verbindungen aufbewahren";
         Text [ en-US ] = "Connection pooling enabled";
         Text [ x-comment ] = "; jc 01.08.01: der Eintrag befindet sich in Extras/Optionen/Datenquellen/Verbindungen";
     };
     FixedText FT_DRIVERS
     {
-        Pos = MAP_APPFONT( 17, 27 );
+        Pos = MAP_APPFONT( 17, 28 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 14 - 8, 8 );
         Text [ de ] = "In %PRODUCTNAME bekannte Treiber";
         Text [ en-US ] = "Drivers known in %PRODUCTNAME";
     };
     Control CTRL_DRIVER_LIST
     {
-        Pos = MAP_APPFONT( 17, 38 );
+        Pos = MAP_APPFONT( 17, 39 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 14 - 8, LIST_SIZE_Y );
         TabStop = TRUE;
         Border = TRUE;
@@ -82,33 +82,33 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     };
     FixedText FT_DRIVERLABEL
     {
-        Pos = MAP_APPFONT( 17, 38 + LIST_SIZE_Y + 4 );
+        Pos = MAP_APPFONT( 17, 39 + LIST_SIZE_Y + 4 );
         Size = MAP_APPFONT( 70, 8 );
         Text [ de ] = "aktueller Treiber:";
         Text [ en-US ] = "Current driver:";
     };
     FixedText FT_DRIVER
     {
-        Pos = MAP_APPFONT( 17 + 70 + 3, 38 + LIST_SIZE_Y + 4 );
+        Pos = MAP_APPFONT( 17 + 70 + 3, 39 + LIST_SIZE_Y + 4 );
         Size = MAP_APPFONT( PAGE_SIZE_X - ( 15 + 70 + 3 ) - 7, 8 );
     };
     CheckBox CB_DRIVERPOOLING
     {
-        Pos = MAP_APPFONT( 17, 38 + LIST_SIZE_Y + 4 + 8 + 3 );
-        Size = MAP_APPFONT( PAGE_SIZE_X - 23, 8 );
+        Pos = MAP_APPFONT( 17, 39 + LIST_SIZE_Y + 4 + 8 + 3 );
+        Size = MAP_APPFONT( PAGE_SIZE_X - 23, 10 );
         Text [ de ] = "Verbindungen dieses Treibers aufbewahren";
         Text [ en-US ] = "Enable pooling for this driver";
     };
     FixedText FT_TIMEOUT
     {
-        Pos = MAP_APPFONT( 27, 38 + LIST_SIZE_Y + 4 + 8 + 3 + 8 + 3 + 2 );
+        Pos = MAP_APPFONT( 27, 39 + LIST_SIZE_Y + 4 + 8 + 3 + 10 + 3 + 2 );
         Size = MAP_APPFONT( 100, 8 );
         Text [ de ] = "Verfallszeit (Sekunden)";
         Text [ en-US ] = "Timeout (seconds)";
     };
     NumericField NF_TIMEOUT
     {
-        Pos = MAP_APPFONT( 27 + 100 + 3, 38 + LIST_SIZE_Y + 4 + 8 + 3 + 8 + 3 );
+        Pos = MAP_APPFONT( 27 + 100 + 3, 39 + LIST_SIZE_Y + 4 + 8 + 3 + 10 + 3 );
         Size = MAP_APPFONT( 40, 12 );
         SvLook = TRUE;
         Border = TRUE;
