@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 11:28:13 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:11:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -682,6 +682,13 @@ String STR_ERROR_DELETE_TEMPLATE_DIR
     Text [ de ] = "Einige Templates sind geschützt und konnten daher nicht gelöscht werden.";
     Text [ en-US ] = "Some template files are protected and can not be deleted.";
     Text [ x-comment ] = " ";
+};
+
+String STR_DOCINFO_INFOFIELD
+{
+    Text [ de ] = "Info %1";
+    Text [ en-US ] = "Info %1";
+    Text [ x-comment ] = "pb: %1 == a number [1-4]";
 };
 
 // ******************************************************************* EOF
