@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DOTransferable.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:37:14 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:06:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,7 @@
 #endif
 
 
-#if(_MSC_VER < 1300)
+#if(_MSC_VER < 1300) && !defined(__MINGW32__)
 #include <olestd.h>
 #endif
 
@@ -106,7 +106,6 @@ using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::io;
 using namespace com::sun::star::lang;
 using namespace com::sun::star::container;
-//2005 using CStgTransferHelper::CStgTransferException;
 
 //------------------------------------------------------------------------
 //
