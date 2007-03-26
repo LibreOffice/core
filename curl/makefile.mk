@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:26:56 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:00:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,16 @@ OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)*
 
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_DIR=.$/
+#relative to CONFIGURE_DIR
+CONFIGURE_ACTION=.$/configure
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --build=i586-pc-mingw32 --host=i586-pc-mingw32 OBJDUMP="$(WRAPCMD) objdump" CFLAGS=-D_MT LDFLAGS="-L$(ILIB:s/;/ -L/)" LIBS="-lws2_32 -lwinmm -lmingwthrd"
+BUILD_DIR=$(CONFIGURE_DIR)$/lib
+BUILD_ACTION=make
+OUT2BIN=$(BUILD_DIR)$/.libs$/libcurl*.dll
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*.a
+.ELSE
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
@@ -102,6 +112,7 @@ BUILD_ACTION=nmake -f Makefile.vc6 cfg=debug-dll EXCFLAGS=$(EXCFLAGS)
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
 OUT2LIB=$(BUILD_DIR)$/libcurl.lib
 
+.ENDIF
 .ENDIF			# "$(GUI)"=="WNT"
 
 
