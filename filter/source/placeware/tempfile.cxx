@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tempfile.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:29:10 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ oslFileError SAL_CALL my_getTempDirURL( rtl_uString** pustrTempDir )
         if ( '\\' == lpBuffer[nLength-1] )
             lpBuffer[nLength-1] = 0;
 
-        rtl_uString_newFromStr( &ustrTempPath, lpBuffer );
+        rtl_uString_newFromStr( &ustrTempPath, reinterpret_cast<const sal_Unicode*>(lpBuffer) );
 
         error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
 
