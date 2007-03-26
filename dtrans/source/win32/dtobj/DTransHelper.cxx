@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTransHelper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:00:13 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:06:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,10 @@
 //------------------------------------------------------------------------
 // includes
 //------------------------------------------------------------------------
+
+#ifndef _RTL_USTRING_H_
+#include <rtl/ustring.h>
+#endif
 
 #ifndef _OSL_DIAGNOSE_H_
 #include <osl/diagnose.h>
@@ -239,7 +243,7 @@ sal_uInt32 SAL_CALL CStgTransferHelper::memSize( CLIPFORMAT cf ) const
             sal_Unicode* pText = static_cast< sal_Unicode* >( GlobalLock( hGlob ) );
             if ( pText )
             {
-                dwSize = wcslen( pText ) * sizeof( sal_Unicode );
+                dwSize = rtl_ustr_getLength( pText ) * sizeof( sal_Unicode );
                 GlobalUnlock( hGlob );
             }
         }
