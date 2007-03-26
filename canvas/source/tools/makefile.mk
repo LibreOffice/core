@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:48:04 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:02:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ DEF1DES		=Canvastools
 DEFLIB1NAME	=$(TARGET)
 
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS += winmm.lib kernel32.lib
+SHL1STDLIBS += $(WINMMLIB) $(KERNEL32LIB)
 .ENDIF
 
 
