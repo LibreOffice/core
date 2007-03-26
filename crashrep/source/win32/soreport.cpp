@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soreport.cpp,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:15:06 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,11 @@
 #define MAX_TEXT_BUFFER (32*1024-1)
 #define MAX_HOSTNAME    (1024)
 
+#ifdef __MINGW32__
+#include <imagehlp.h>
+#else
 #include <dbghelp.h>
+#endif
 
 #ifdef _UNICODE
 #define tstring wstring
@@ -203,7 +207,7 @@ static BOOL GetCrashDataPath( LPTSTR szBuffer )
             result = ::osl::FileBase::getSystemPathFromFileURL( ustrValue, ustrPath );
             if (  ::osl::FileBase::E_None == result  )
             {
-                _tcsncpy( szBuffer, ustrPath.getStr(), MAX_PATH );
+                _tcsncpy( szBuffer, reinterpret_cast<LPCWSTR>(ustrPath.getStr()), MAX_PATH );
                 return TRUE;
             }
         }
@@ -1983,7 +1987,41 @@ static DWORD FindProcessForImage( LPCTSTR lpImagePath )
 static bool ParseCommandArgs( LPDWORD pdwProcessId, PEXCEPTION_POINTERS* ppException, LPDWORD pdwThreadId )
 {
     int     argc = __argc;
+#ifdef __MINGW32__
+#ifdef _UNICODE
+    TCHAR   **argv = reinterpret_cast<TCHAR **>(alloca((argc+1)*sizeof(WCHAR*)));
+    int *sizes = reinterpret_cast<int *>(alloca(argc*sizeof(int)));
+    int argsize=0;
+    char **ptr;
+    int i;
+    ptr=__argv;
+    for (i = 0; i < argc; ++i)
+    {
+        sizes[i]=MultiByteToWideChar(CP_ACP, 0, *ptr, -1, NULL, 0);
+        argsize+=sizes[i]+1;
+        ++ptr;
+    }
+    ++argsize;
+    TCHAR   *args = reinterpret_cast<TCHAR *>(alloca(argsize*sizeof(WCHAR)));
+    ptr=__argv;
+    TCHAR *cptr=args;
+    for (i = 0; i < argc; ++i)
+    {
+        argv[i]=cptr;
+        MultiByteToWideChar( CP_ACP, 0, *ptr, -1, cptr, sizes[i] );
+        ++ptr;
+        cptr+=sizes[i];
+        *cptr=0;
+        ++cptr;
+    }
+    argv[i]=cptr;
+    *cptr=0;
+#else
+    TCHAR   **argv = __argv;
+#endif
+#else
     TCHAR   **argv = __targv;
+#endif
     bool    bSuccess = true;
 
     for ( int argn = 1; bSuccess && argn < argc; argn++ )
@@ -2742,11 +2780,18 @@ bool SendCrashReport( HWND hwndParent, const CrashReportParams &rParams )
 
 //***************************************************************************
 
+#ifdef __MINGW32__
+int WINAPI WinMain( HINSTANCE hInstance, HINSTANCE, LPSTR /*lpCmdLine*/, int )
+#else
 int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR /*lpCmdLine*/, int )
+#endif
 {
     int exitcode = -1;
     int argc = __argc;
 
+#ifdef __MINGW32__
+    char **argv = __argv;
+#else
 #ifdef _UNICODE
     char **argv = new char *[argc + 1];
 
@@ -2759,6 +2804,7 @@ int WINAPI _tWinMain( HINSTANCE hInstance, HINSTANCE, LPTSTR /*lpCmdLine*/, int 
     argv[argc] = NULL;
 #else
     char **argv = __targv;
+#endif
 #endif
 
     osl_setCommandArgs( argc, argv );
