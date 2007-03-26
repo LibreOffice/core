@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:04:50 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:48:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,9 +74,15 @@ namespace ole_adapter
 // {3ECF78F0-B149-11D2-8EBE-00105AD848AF}
 //DEFINE_GUID(OID_ServiceManager, 0x3ECF78F0, 0xB149, 0x11d2, 0x8E, 0xBE, 0x00, 0x10, 0x5A, 0xD8, 0x48, 0xAF);
 
+#ifndef OWNGUID
 // GUID used since 5.2 ( src569 m)
 // {82154420-0FBF-11d4-8313-005004526AB4}
 DEFINE_GUID(OID_ServiceManager, 0x82154420, 0xfbf, 0x11d4, 0x83, 0x13, 0x0, 0x50, 0x4, 0x52, 0x6a, 0xb4);
+#else
+// Alternative GUID
+// {D9BB9D1D-BFA9-4357-9F11-9A2E9061F06E}
+DEFINE_GUID(OID_ServiceManager, 0xd9bb9d1d, 0xbfa9, 0x4357, 0x9f, 0x11, 0x9a, 0x2e, 0x90, 0x61, 0xf0, 0x6e);
+#endif
 
 extern  rtl_StandardModuleCount globalModuleCount;
 
