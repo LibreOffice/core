@@ -1,5 +1,5 @@
-*** misc/libmspack/mspack/makefile.mk	2004-04-15 09:16:23.000000000 -0400
---- misc/build/libmspack/mspack/makefile.mk	2004-04-15 09:16:10.000000000 -0400
+*** misc/libmspack/mspack/makefile.mk	Wed Nov  8 15:41:39 2006
+--- misc/build/libmspack/mspack/makefile.mk	Wed Nov  8 15:41:26 2006
 ***************
 *** 1 ****
 ! dummy
@@ -10,9 +10,9 @@
 ! #
 ! #   $RCSfile: msfontextract.patch,v $
 ! #
-! #   $Revision: 1.7 $
+! #   $Revision: 1.8 $
 ! #
-! #   last change: $Author: ihi $ $Date: 2006-08-24 10:41:13 $
+! #   last change: $Author: vg $ $Date: 2007-03-26 13:43:01 $
 ! #
 ! #   The Contents of this file are made available subject to
 ! #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,8 +90,8 @@
 ! # --- Targets ------------------------------------------------------
 ! 
 ! .INCLUDE :  target.mk
-*** misc/libmspack/mspack/ministub.c	2004-04-15 09:16:23.000000000 -0400
---- misc/build/libmspack/mspack/ministub.c	2004-04-15 09:15:24.000000000 -0400
+*** misc/libmspack/mspack/ministub.c	Wed Nov  8 15:41:39 2006
+--- misc/build/libmspack/mspack/ministub.c	Wed Nov  8 15:41:26 2006
 ***************
 *** 1 ****
 ! dummy
@@ -107,8 +107,8 @@
 ! int qtmd_decompress() {return MSPACK_ERR_DECRUNCH;}
 ! void qtmd_free() {}
 ! 
-*** misc/libmspack/mspack/msfontextract.c	2004-04-15 09:16:23.000000000 -0400
---- misc/build/libmspack/mspack/msfontextract.c	2004-04-15 09:15:24.000000000 -0400
+*** misc/libmspack/mspack/msfontextract.c	Wed Nov  8 15:41:39 2006
+--- misc/build/libmspack/mspack/msfontextract.c	Wed Nov  8 15:41:26 2006
 ***************
 *** 1 ****
 ! dummy
@@ -220,8 +220,8 @@
 !    return 0;
 ! }
 ! 
-*** misc/libmspack/mspack/mspack.h	2003-12-12 12:06:15.000000000 -0500
---- misc/build/libmspack/mspack/mspack.h	2004-04-15 09:15:24.000000000 -0400
+*** misc/libmspack/mspack/mspack.h	Fri Dec 12 18:06:15 2003
+--- misc/build/libmspack/mspack/mspack.h	Wed Nov  8 15:41:26 2006
 ***************
 *** 120,125 ****
 --- 120,130 ----
@@ -229,15 +229,15 @@
   #include <unistd.h>
   
 + /* MS Compiler defines size_t in stddef.h */
-+ #if defined(_MSC_VER)
++ #if defined(_MSC_VER) || defined(__MINGW32__)
 + #include <stddef.h>
 + #endif
 + 
   /**
    * System self-test function, to ensure both library and calling program
    * can use one another.
-*** misc/libmspack/mspack/system.h	2003-09-11 10:06:52.000000000 -0400
---- misc/build/libmspack/mspack/system.h	2004-04-15 09:15:24.000000000 -0400
+*** misc/libmspack/mspack/system.h	Thu Sep 11 16:06:52 2003
+--- misc/build/libmspack/mspack/system.h	Wed Nov  8 15:41:26 2006
 ***************
 *** 12,23 ****
   
