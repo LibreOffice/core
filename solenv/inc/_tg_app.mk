@@ -30,6 +30,13 @@ APP1OBJS+= $(STDOBJVCL)
 .ENDIF
 .ENDIF
 
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP1RESO=
+.IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
+APP1RESO=$(MISC)$/$(APP1TARGET:b)_res.o
+.ENDIF
+.ENDIF
+
 .IF "$(GUI)" == "UNX"
 APP1DEPN+:=$(APP1DEPNU)
 USE_APP1DEF=
@@ -111,6 +118,21 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
 .ENDIF		# "$(APP1VERINFO)" != ""
     $(RC) -DWIN32 $(APP1PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP1LINKRES:b).rc
 .ENDIF			# "$(APP1LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP1LINKRES)" != "" || "$(APP1RES)" != ""
+    @cat $(APP1LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP1RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP1RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP1BASEX) $(APP1STACKN) -o $@ $(APP1OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP1RESO) \
+        `$(TYPE) /dev/null $(APP1LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP1LIBSALCPPRT) $(APP1STDLIBS) $(APP1STDLIB) $(STDLIB1) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP1LINKER) @$(mktmp \
         $(APP1LINKFLAGS) \
@@ -150,6 +172,7 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
         $(IFEXIST) $(MISC)$/$(APP1TARGET).lst $(THEN) type $(MISC)$/$(APP1TARGET).lst  >> $(MISC)$/$(APP1TARGET).lnk $(FI)
         $(APP1LINKER) @$(MISC)\$(APP1TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP1TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -196,6 +219,13 @@ APP2STACKN=
 .IF "$(APP2NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP2OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP2RESO=
+.IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
+APP2RESO=$(MISC)$/$(APP2TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -280,6 +310,21 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
 .ENDIF		# "$(APP2VERINFO)" != ""
     $(RC) -DWIN32 $(APP2PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP2LINKRES:b).rc
 .ENDIF			# "$(APP2LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP2LINKRES)" != "" || "$(APP2RES)" != ""
+    @cat $(APP2LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP2RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP2RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP2BASEX) $(APP2STACKN) -o $@ $(APP2OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP2RESO) \
+        `$(TYPE) /dev/null $(APP2LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP2LIBSALCPPRT) $(APP2STDLIBS) $(APP2STDLIB) $(STDLIB2) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP2LINKER) @$(mktmp \
         $(APP2LINKFLAGS) \
@@ -319,6 +364,7 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
         $(IFEXIST) $(MISC)$/$(APP2TARGET).lst $(THEN) type $(MISC)$/$(APP2TARGET).lst  >> $(MISC)$/$(APP2TARGET).lnk $(FI)
         $(APP2LINKER) @$(MISC)\$(APP2TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP2TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -365,6 +411,13 @@ APP3STACKN=
 .IF "$(APP3NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP3OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP3RESO=
+.IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
+APP3RESO=$(MISC)$/$(APP3TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -449,6 +502,21 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
 .ENDIF		# "$(APP3VERINFO)" != ""
     $(RC) -DWIN32 $(APP3PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP3LINKRES:b).rc
 .ENDIF			# "$(APP3LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP3LINKRES)" != "" || "$(APP3RES)" != ""
+    @cat $(APP3LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP3RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP3RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP3BASEX) $(APP3STACKN) -o $@ $(APP3OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP3RESO) \
+        `$(TYPE) /dev/null $(APP3LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP3LIBSALCPPRT) $(APP3STDLIBS) $(APP3STDLIB) $(STDLIB3) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP3LINKER) @$(mktmp \
         $(APP3LINKFLAGS) \
@@ -488,6 +556,7 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
         $(IFEXIST) $(MISC)$/$(APP3TARGET).lst $(THEN) type $(MISC)$/$(APP3TARGET).lst  >> $(MISC)$/$(APP3TARGET).lnk $(FI)
         $(APP3LINKER) @$(MISC)\$(APP3TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP3TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -534,6 +603,13 @@ APP4STACKN=
 .IF "$(APP4NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP4OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP4RESO=
+.IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
+APP4RESO=$(MISC)$/$(APP4TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -618,6 +694,21 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
 .ENDIF		# "$(APP4VERINFO)" != ""
     $(RC) -DWIN32 $(APP4PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP4LINKRES:b).rc
 .ENDIF			# "$(APP4LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP4LINKRES)" != "" || "$(APP4RES)" != ""
+    @cat $(APP4LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP4RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP4RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP4BASEX) $(APP4STACKN) -o $@ $(APP4OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP4RESO) \
+        `$(TYPE) /dev/null $(APP4LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP4LIBSALCPPRT) $(APP4STDLIBS) $(APP4STDLIB) $(STDLIB4) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP4LINKER) @$(mktmp \
         $(APP4LINKFLAGS) \
@@ -657,6 +748,7 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
         $(IFEXIST) $(MISC)$/$(APP4TARGET).lst $(THEN) type $(MISC)$/$(APP4TARGET).lst  >> $(MISC)$/$(APP4TARGET).lnk $(FI)
         $(APP4LINKER) @$(MISC)\$(APP4TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP4TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -703,6 +795,13 @@ APP5STACKN=
 .IF "$(APP5NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP5OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP5RESO=
+.IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
+APP5RESO=$(MISC)$/$(APP5TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -787,6 +886,21 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
 .ENDIF		# "$(APP5VERINFO)" != ""
     $(RC) -DWIN32 $(APP5PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP5LINKRES:b).rc
 .ENDIF			# "$(APP5LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP5LINKRES)" != "" || "$(APP5RES)" != ""
+    @cat $(APP5LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP5RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP5RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP5BASEX) $(APP5STACKN) -o $@ $(APP5OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP5RESO) \
+        `$(TYPE) /dev/null $(APP5LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP5LIBSALCPPRT) $(APP5STDLIBS) $(APP5STDLIB) $(STDLIB5) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP5LINKER) @$(mktmp \
         $(APP5LINKFLAGS) \
@@ -826,6 +940,7 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
         $(IFEXIST) $(MISC)$/$(APP5TARGET).lst $(THEN) type $(MISC)$/$(APP5TARGET).lst  >> $(MISC)$/$(APP5TARGET).lnk $(FI)
         $(APP5LINKER) @$(MISC)\$(APP5TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP5TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -872,6 +987,13 @@ APP6STACKN=
 .IF "$(APP6NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP6OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP6RESO=
+.IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
+APP6RESO=$(MISC)$/$(APP6TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -956,6 +1078,21 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
 .ENDIF		# "$(APP6VERINFO)" != ""
     $(RC) -DWIN32 $(APP6PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP6LINKRES:b).rc
 .ENDIF			# "$(APP6LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP6LINKRES)" != "" || "$(APP6RES)" != ""
+    @cat $(APP6LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP6RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP6RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP6BASEX) $(APP6STACKN) -o $@ $(APP6OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP6RESO) \
+        `$(TYPE) /dev/null $(APP6LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP6LIBSALCPPRT) $(APP6STDLIBS) $(APP6STDLIB) $(STDLIB6) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP6LINKER) @$(mktmp \
         $(APP6LINKFLAGS) \
@@ -995,6 +1132,7 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
         $(IFEXIST) $(MISC)$/$(APP6TARGET).lst $(THEN) type $(MISC)$/$(APP6TARGET).lst  >> $(MISC)$/$(APP6TARGET).lnk $(FI)
         $(APP6LINKER) @$(MISC)\$(APP6TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP6TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -1041,6 +1179,13 @@ APP7STACKN=
 .IF "$(APP7NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP7OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP7RESO=
+.IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
+APP7RESO=$(MISC)$/$(APP7TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -1125,6 +1270,21 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
 .ENDIF		# "$(APP7VERINFO)" != ""
     $(RC) -DWIN32 $(APP7PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP7LINKRES:b).rc
 .ENDIF			# "$(APP7LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP7LINKRES)" != "" || "$(APP7RES)" != ""
+    @cat $(APP7LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP7RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP7RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP7BASEX) $(APP7STACKN) -o $@ $(APP7OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP7RESO) \
+        `$(TYPE) /dev/null $(APP7LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP7LIBSALCPPRT) $(APP7STDLIBS) $(APP7STDLIB) $(STDLIB7) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP7LINKER) @$(mktmp \
         $(APP7LINKFLAGS) \
@@ -1164,6 +1324,7 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
         $(IFEXIST) $(MISC)$/$(APP7TARGET).lst $(THEN) type $(MISC)$/$(APP7TARGET).lst  >> $(MISC)$/$(APP7TARGET).lnk $(FI)
         $(APP7LINKER) @$(MISC)\$(APP7TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP7TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -1210,6 +1371,13 @@ APP8STACKN=
 .IF "$(APP8NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP8OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP8RESO=
+.IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
+APP8RESO=$(MISC)$/$(APP8TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -1294,6 +1462,21 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
 .ENDIF		# "$(APP8VERINFO)" != ""
     $(RC) -DWIN32 $(APP8PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP8LINKRES:b).rc
 .ENDIF			# "$(APP8LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP8LINKRES)" != "" || "$(APP8RES)" != ""
+    @cat $(APP8LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP8RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP8RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP8BASEX) $(APP8STACKN) -o $@ $(APP8OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP8RESO) \
+        `$(TYPE) /dev/null $(APP8LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP8LIBSALCPPRT) $(APP8STDLIBS) $(APP8STDLIB) $(STDLIB8) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP8LINKER) @$(mktmp \
         $(APP8LINKFLAGS) \
@@ -1333,6 +1516,7 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
         $(IFEXIST) $(MISC)$/$(APP8TARGET).lst $(THEN) type $(MISC)$/$(APP8TARGET).lst  >> $(MISC)$/$(APP8TARGET).lnk $(FI)
         $(APP8LINKER) @$(MISC)\$(APP8TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP8TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -1379,6 +1563,13 @@ APP9STACKN=
 .IF "$(APP9NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP9OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP9RESO=
+.IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
+APP9RESO=$(MISC)$/$(APP9TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -1463,6 +1654,21 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
 .ENDIF		# "$(APP9VERINFO)" != ""
     $(RC) -DWIN32 $(APP9PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP9LINKRES:b).rc
 .ENDIF			# "$(APP9LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP9LINKRES)" != "" || "$(APP9RES)" != ""
+    @cat $(APP9LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP9RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP9RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP9BASEX) $(APP9STACKN) -o $@ $(APP9OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP9RESO) \
+        `$(TYPE) /dev/null $(APP9LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP9LIBSALCPPRT) $(APP9STDLIBS) $(APP9STDLIB) $(STDLIB9) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP9LINKER) @$(mktmp \
         $(APP9LINKFLAGS) \
@@ -1502,6 +1708,7 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
         $(IFEXIST) $(MISC)$/$(APP9TARGET).lst $(THEN) type $(MISC)$/$(APP9TARGET).lst  >> $(MISC)$/$(APP9TARGET).lnk $(FI)
         $(APP9LINKER) @$(MISC)\$(APP9TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP9TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
@@ -1548,6 +1755,13 @@ APP10STACKN=
 .IF "$(APP10NOSAL)"==""
 .IF "$(TARGETTYPE)" == "GUI"
 APP10OBJS+= $(STDOBJVCL)
+.ENDIF
+.ENDIF
+
+.IF "$(GUI)$(COM)" == "WNTGCC"
+APP10RESO=
+.IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
+APP10RESO=$(MISC)$/$(APP10TARGET:b)_res.o
 .ENDIF
 .ENDIF
 
@@ -1632,6 +1846,21 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
 .ENDIF		# "$(APP10VERINFO)" != ""
     $(RC) -DWIN32 $(APP10PRODUCTDEF) -I$(SOLARRESDIR) $(INCLUDE) $(RCLINKFLAGS) $(MISC)$/$(APP10LINKRES:b).rc
 .ENDIF			# "$(APP10LINKRES)" != ""
+.IF "$(COM)" == "GCC"
+    @+echo mingw
+.IF "$(APP10LINKRES)" != "" || "$(APP10RES)" != ""
+    @cat $(APP10LINKRES) $(subst,$/res$/,$/res{$(subst,$(BIN), $(@:d))} $(APP10RES)) >  $(MISC)$/$(@:b)_all.RES
+    windres $(MISC)$/$(@:b)_all.RES $(APP10RESO)
+.ENDIF
+    @+echo $(LINK) $(LINKFLAGS) $(LINKFLAGSAPP) -L$(PRJ)$/$(INPATH)$/lib $(SOLARLIB) $(STDSLO) \
+        $(APP10BASEX) $(APP10STACKN) -o $@ $(APP10OBJS) \
+        -Wl,-Map,$(MISC)$/$(@:b).map $(STDOBJ) $(APP10RESO) \
+        `$(TYPE) /dev/null $(APP10LIBS) | sed s#$(ROUT)#$(OUT)#g` \
+        $(APP_LINKTYPE) $(APP10LIBSALCPPRT) $(APP10STDLIBS) $(APP10STDLIB) $(STDLIB10) > $(MISC)$/$(@:b).cmd
+    @+$(TYPE)  $(MISC)$/$(@:b).cmd
+    @+source $(MISC)$/$(@:b).cmd
+    @ls -l $@
+.ELSE	# "$(COM)" == "GCC"
 .IF "$(linkinc)" == ""
     $(APP10LINKER) @$(mktmp \
         $(APP10LINKFLAGS) \
@@ -1671,6 +1900,7 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
         $(IFEXIST) $(MISC)$/$(APP10TARGET).lst $(THEN) type $(MISC)$/$(APP10TARGET).lst  >> $(MISC)$/$(APP10TARGET).lnk $(FI)
         $(APP10LINKER) @$(MISC)\$(APP10TARGET).lnk
 .ENDIF		# "$(linkinc)" == ""
+.ENDIF		# "$(COM)" == "GCC"
 .IF "$(APP10TARGET)" == "loader"
     $(PERL) loader.pl $@
 .IF "$(USE_SHELL)"=="4nt"
