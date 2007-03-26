@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:21:52 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:40:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -589,7 +589,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
     aDFA.mbSymbolFlag   = (rLogFont.lfCharSet == SYMBOL_CHARSET);
 
     // get the font face name
-    aDFA.maName = rLogFont.lfFaceName;
+    aDFA.maName = reinterpret_cast<const sal_Unicode*>(rLogFont.lfFaceName);
 
     // use the face's style name only if it looks reasonable
     const wchar_t* pStyleName = rEnumFont.elfStyle;
@@ -599,7 +599,7 @@ static ImplDevFontAttributes WinFont2DevFontAttributes( const ENUMLOGFONTEXW& rE
         if( *p < 0x0020 )
             break;
     if( p < pEnd )
-        aDFA.maStyleName = pStyleName;
+        aDFA.maStyleName = reinterpret_cast<const sal_Unicode*>(pStyleName);
 
     // get device specific font attributes
     aDFA.mbOrientation  = (nFontType & RASTER_FONTTYPE) == 0;
@@ -733,7 +733,7 @@ void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont )
 
 void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont )
 {
-    XubString aFontName( rLogFont.lfFaceName );
+    XubString aFontName( reinterpret_cast<const xub_Unicode*>(rLogFont.lfFaceName) );
     if ( aFontName.Len() )
     {
         rFont.SetName( aFontName );
@@ -1418,7 +1418,7 @@ void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     {
         wchar_t aFaceName[LF_FACESIZE+60];
         if( ::GetTextFaceW( mhDC, sizeof(aFaceName)/sizeof(wchar_t), aFaceName ) )
-            pMetric->maName = aFaceName;
+            pMetric->maName = reinterpret_cast<const sal_Unicode*>(aFaceName);
     }
     else
     {
@@ -1783,7 +1783,7 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
                 pInfo->mbCourier = ImplSalWICompareAscii( pLogFont->elfLogFont.lfFaceName, "Courier" ) == 0;
             else
                 pInfo->mbCourier = FALSE;
-            String aName( pLogFont->elfLogFont.lfFaceName );
+            String aName( reinterpret_cast<const sal_Unicode*>(pLogFont->elfLogFont.lfFaceName) );
             pInfo->mpName = &aName;
             memcpy( pInfo->mpLogFontW->lfFaceName, pLogFont->elfLogFont.lfFaceName, (aName.Len()+1)*sizeof( wchar_t ) );
             pInfo->mpLogFontW->lfCharSet = pLogFont->elfLogFont.lfCharSet;
@@ -1832,7 +1832,7 @@ bool ImplAddTempFont( SalData& rSalData, const String& rFontFileURL )
 #ifdef FR_PRIVATE   // wingdi.h, but only if _WIN32_WINNT >= 0x0500, which is currently not true.
     if( aSalShlData.maVersionInfo.dwMajorVersion >= 5 )
     {
-        nRet = AddFontResourceExW( aUSytemPath.getStr(), FR_PRIVATE, NULL );
+        nRet = AddFontResourceExW( reinterpret_cast<LPCWSTR>(aUSytemPath.getStr()), FR_PRIVATE, NULL );
     }
     else
 #endif
@@ -1887,7 +1887,7 @@ void ImplReleaseTempFonts( SalData& rSalData )
         else
         {
             if( aSalShlData.mbWNT )
-                ::RemoveFontResourceW( p->maFontFilePath.getStr() );
+                ::RemoveFontResourceW( reinterpret_cast<LPCWSTR>(p->maFontFilePath.getStr()) );
             else
             {
                 // poor man's string conversion because converter is gone
@@ -2648,7 +2648,7 @@ const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont,
         nFNLen--;
     if( nFNLen == 0 )
         *pDataLen = 0;
-    rInfo.m_aPSName     = String( aFaceName, sal::static_int_cast<USHORT>(nFNLen) );
+    rInfo.m_aPSName     = String( reinterpret_cast<const sal_Unicode*>(aFaceName), sal::static_int_cast<USHORT>(nFNLen) );
     rInfo.m_nAscent     = +aTm.tmAscent;
     rInfo.m_nDescent    = -aTm.tmDescent;
     rInfo.m_aFontBBox   = Rectangle( Point( -aTm.tmOverhang, -aTm.tmDescent ),
