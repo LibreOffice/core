@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uwinapi.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:16:20 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,13 @@
 #   pragma warning(push,1) /* disable warnings within system headers */
 #   include <windows.h>
 #   pragma warning(pop)
+#endif
+
+#ifdef __MINGW32__
+#include <basetyps.h>
+#ifdef _UWINAPI_
+#define WINBASEAPI
+#endif
 #endif
 
 /** GetUserDomain
