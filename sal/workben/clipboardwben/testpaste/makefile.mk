@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:04:09 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:28:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,7 +61,7 @@ CXXFLAGS+= $(LFS_CFLAGS)
     APP1NOSAL=  TRUE
     APP1NOSVRES= $(RES)$/$(TARGET).res
 
-    APP1STDLIBS+=ole32.lib user32.lib kernel32.lib
+    APP1STDLIBS+=$(OLE32LIB) $(USER32LIB) $(KERNEL32LIB)
     
     APP1LIBS=$(LB)$/ole9x.lib \
              $(LB)$/tools32.lib 
