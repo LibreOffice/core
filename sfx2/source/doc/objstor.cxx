@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.190 $
+ *  $Revision: 1.191 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:03:20 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:18:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -707,6 +707,65 @@ sal_Bool SfxObjectShell::DoInitNew( SfxMedium* pMed )
 //REMOVE        }
 //REMOVE        return sal_False;
 //REMOVE    }
+
+//-------------------------------------------------------------------------
+
+sal_Bool SfxObjectShell::ImportFromGeneratedStream_Impl(
+                    const uno::Reference< io::XStream >& xStream,
+                    const uno::Sequence< beans::PropertyValue >& aMediaDescr )
+{
+    if ( !xStream.is() )
+        return sal_False;
+
+    if ( pMedium && pMedium->HasStorage_Impl() )
+        pMedium->CloseStorage();
+
+    sal_Bool bResult = sal_False;
+
+    try
+    {
+        uno::Reference< embed::XStorage > xStorage =
+            ::comphelper::OStorageHelper::GetStorageFromStream( xStream, embed::ElementModes::READWRITE );
+
+        if ( !xStorage.is() )
+            throw uno::RuntimeException();
+
+        if ( !pMedium )
+            pMedium = new SfxMedium( xStorage, String() );
+        else
+            pMedium->SetStorage_Impl( xStorage );
+
+        SfxAllItemSet aSet( SFX_APP()->GetPool() );
+        TransformParameters( SID_OPENDOC, aMediaDescr, aSet );
+        pMedium->GetItemSet()->Put( aSet );
+        pMedium->CanDisposeStorage_Impl( sal_False );
+
+        // allow the subfilter to reinit the model
+        if ( pImp->m_bIsInit )
+            pImp->m_bIsInit = sal_False;
+
+        if ( LoadOwnFormat( *pMedium ) )
+        {
+            SfxDocumentInfo& rDocInfo = GetDocInfo();
+            bHasName = sal_True;
+
+            if ( !IsReadOnly() && rDocInfo.IsLoadReadonly() )
+                SetReadOnlyUI();
+
+            bResult = sal_True;
+            OSL_ENSURE( pImp->m_xDocStorage == xStorage, "Wrong storage is used!\n" );
+        }
+
+        // now the medium can be disconnected from the storage
+        // the medium is not allowed to dispose the storage so CloseStorage() can be used
+        pMedium->CloseStorage();
+    }
+    catch( uno::Exception& )
+    {
+    }
+
+    return bResult;
+}
 
 //-------------------------------------------------------------------------
 
