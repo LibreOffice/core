@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 15:57:12 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:24:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ APP3OBJS=$(OBJ3FILES)
 # APP3STDLIBS=$(LB)$/libsal.so
 # .ENDIF
 # .IF "$(GUI)" == "WNT"
-# APP3STDLIBS=kernel32.lib $(LB)$/isal.lib
+# APP3STDLIBS=$(KERNEL32LIB) $(LB)$/isal.lib
 # .ENDIF
 APP3STDLIBS=$(SALLIB)
 
