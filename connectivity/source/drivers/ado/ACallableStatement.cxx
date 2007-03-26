@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ACallableStatement.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:10:46 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,12 +235,12 @@ Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 /*columnIndex*/
 }
 // -------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OCallableStatement::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OCallableStatement::acquire() throw()
 {
     OPreparedStatement::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OCallableStatement::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OCallableStatement::release() throw()
 {
     OPreparedStatement::release();
 }
