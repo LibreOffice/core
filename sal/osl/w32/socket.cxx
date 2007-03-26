@@ -4,9 +4,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:47:57 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -948,9 +948,9 @@ void SAL_CALL osl_destroyHostAddr(oslHostAddr pAddr)
 /*****************************************************************************/
 oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
 {
-    static sal_Unicode LocalHostname[256] = L"";
+    static sal_Unicode LocalHostname[256] = {0};
 
-    if (wcslen(LocalHostname) == 0)
+    if (rtl_ustr_getLength(LocalHostname) == 0)
     {
         sal_Char Host[256]= "";
         if (gethostname(Host, sizeof(Host)) == 0)
@@ -971,7 +971,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
                 rtl_uString_release (hostName);
 
                 if (pAddr && pAddr->pHostName)
-                    wcscpy(LocalHostname, pAddr->pHostName->buffer);
+                    memcpy(LocalHostname, pAddr->pHostName->buffer, sizeof(sal_Unicode)*(rtl_ustr_getLength(pAddr->pHostName->buffer)+1));
                 else
                     memset(LocalHostname, 0, sizeof(LocalHostname));
 
@@ -980,7 +980,7 @@ oslSocketResult SAL_CALL osl_getLocalHostname (rtl_uString **strLocalHostname)
         }
     }
 
-    if (wcslen(LocalHostname) > 0)
+    if (rtl_ustr_getLength(LocalHostname) > 0)
     {
         rtl_uString_newFromStr (strLocalHostname, LocalHostname);
         return osl_Socket_Ok;
@@ -1840,210 +1840,210 @@ void SAL_CALL osl_getLastSocketErrorDescription (
     switch(error = WSAGetLastError())
     {
         case WSAENOTSOCK:
-            rtl_uString_newFromStr (strError, L"WSAENOTSOCK, Socket operation on non-socket. A socket created in one process is used by another process.");
+            rtl_uString_newFromAscii (strError, "WSAENOTSOCK, Socket operation on non-socket. A socket created in one process is used by another process.");
             break;
 
         case WSAEDESTADDRREQ:
-            rtl_uString_newFromStr (strError, L"WSAEDESTADDRREQ, Destination Addr required");
+            rtl_uString_newFromAscii (strError, "WSAEDESTADDRREQ, Destination Addr required");
             break;
 
         case WSAEMSGSIZE:
-            rtl_uString_newFromStr (strError, L"WSAEMSGSIZE, Message too long");
+            rtl_uString_newFromAscii (strError, "WSAEMSGSIZE, Message too long");
             break;
 
         case WSAEPROTOTYPE:
-            rtl_uString_newFromStr (strError, L"WSAEPROTOTYPE, Protocol wrong type for socket");
+            rtl_uString_newFromAscii (strError, "WSAEPROTOTYPE, Protocol wrong type for socket");
             break;
 
         case WSAENOPROTOOPT:
-            rtl_uString_newFromStr (strError, L"WSAENOPROTOOPT, Protocol not available");
+            rtl_uString_newFromAscii (strError, "WSAENOPROTOOPT, Protocol not available");
             break;
 
         case WSAEPROTONOSUPPORT:
-            rtl_uString_newFromStr (strError, L"WSAEPROTONOSUPPORT, Protocol not supported");
+            rtl_uString_newFromAscii (strError, "WSAEPROTONOSUPPORT, Protocol not supported");
             break;
 
         case WSAESOCKTNOSUPPORT:
-            rtl_uString_newFromStr (strError, L"WSAESOCKTNOSUPPORT, Socket type not supported");
+            rtl_uString_newFromAscii (strError, "WSAESOCKTNOSUPPORT, Socket type not supported");
             break;
 
         case WSAEOPNOTSUPP:
-            rtl_uString_newFromStr (strError, L"WSAEOPNOTSUPP, Operation not supported on socket");
+            rtl_uString_newFromAscii (strError, "WSAEOPNOTSUPP, Operation not supported on socket");
             break;
 
         case WSAEPFNOSUPPORT:
-            rtl_uString_newFromStr (strError, L"WSAEPFNOSUPPORT, Protocol family not supported");
+            rtl_uString_newFromAscii (strError, "WSAEPFNOSUPPORT, Protocol family not supported");
             break;
 
         case WSAEAFNOSUPPORT:
-            rtl_uString_newFromStr (strError, L"WSEAFNOSUPPORT, Addr family not supported by protocol family");
+            rtl_uString_newFromAscii (strError, "WSEAFNOSUPPORT, Addr family not supported by protocol family");
             break;
 
         case WSAEADDRINUSE:
-            rtl_uString_newFromStr (strError, L"WSAEADDRINUSE, Triggered by bind() because a process went down without closing a socket.");
+            rtl_uString_newFromAscii (strError, "WSAEADDRINUSE, Triggered by bind() because a process went down without closing a socket.");
             break;
 
         case WSAEADDRNOTAVAIL:
-            rtl_uString_newFromStr (strError, L"WSAEADDRNOTAVAIL, Can't assign requested Addr");
+            rtl_uString_newFromAscii (strError, "WSAEADDRNOTAVAIL, Can't assign requested Addr");
             break;
 
         case WSAENETDOWN:
-            rtl_uString_newFromStr (strError, L"WSAENETDOWN, Network is down");
+            rtl_uString_newFromAscii (strError, "WSAENETDOWN, Network is down");
             break;
 
         case WSAENETUNREACH:
-            rtl_uString_newFromStr (strError, L"WSAENETUNREACH, Network is unreachable");
+            rtl_uString_newFromAscii (strError, "WSAENETUNREACH, Network is unreachable");
             break;
 
         case WSAENETRESET:
-            rtl_uString_newFromStr (strError, L"WSAENETRESET, Network dropped connection or reset");
+            rtl_uString_newFromAscii (strError, "WSAENETRESET, Network dropped connection or reset");
             break;
 
         case WSAECONNABORTED:
-            rtl_uString_newFromStr (strError, L"WSAECONNABORTED, Software caused connection abort");
+            rtl_uString_newFromAscii (strError, "WSAECONNABORTED, Software caused connection abort");
             break;
 
         case WSAECONNRESET:
-            rtl_uString_newFromStr (strError, L"WSAECONNRESET, Connection reset by peer");
+            rtl_uString_newFromAscii (strError, "WSAECONNRESET, Connection reset by peer");
             break;
 
         case WSAENOBUFS:
-            rtl_uString_newFromStr (strError, L"WSAENOBUFS, No buffer space available.");
+            rtl_uString_newFromAscii (strError, "WSAENOBUFS, No buffer space available.");
             break;
 
         case WSAEISCONN:
-            rtl_uString_newFromStr (strError, L"WSAEISCONN, Socket is already connected");
+            rtl_uString_newFromAscii (strError, "WSAEISCONN, Socket is already connected");
             break;
 
         case WSAENOTCONN:
-            rtl_uString_newFromStr (strError, L"WSAENOTCONN, Socket is not connected");
+            rtl_uString_newFromAscii (strError, "WSAENOTCONN, Socket is not connected");
             break;
 
         case WSAESHUTDOWN:
-            rtl_uString_newFromStr (strError, L"WSAESHUTDOWN, Can't send after socket shutdown");
+            rtl_uString_newFromAscii (strError, "WSAESHUTDOWN, Can't send after socket shutdown");
             break;
 
         case WSAETIMEDOUT:
-            rtl_uString_newFromStr (strError, L"WSAETIMEDOUT, Connection timed out");
+            rtl_uString_newFromAscii (strError, "WSAETIMEDOUT, Connection timed out");
             break;
 
         case WSAECONNREFUSED:
-            rtl_uString_newFromStr (strError, L"WSAECONNREFUSED, Connection refused");
+            rtl_uString_newFromAscii (strError, "WSAECONNREFUSED, Connection refused");
             break;
 
         case WSAEHOSTDOWN:
-            rtl_uString_newFromStr (strError, L"WSAEHOSTDOWN, Networking subsystem not started");
+            rtl_uString_newFromAscii (strError, "WSAEHOSTDOWN, Networking subsystem not started");
             break;
 
         case WSAEHOSTUNREACH:
-            rtl_uString_newFromStr (strError, L"WSAEHOSTUNREACH, No route to host");
+            rtl_uString_newFromAscii (strError, "WSAEHOSTUNREACH, No route to host");
             break;
 
         case WSAEWOULDBLOCK:
-            rtl_uString_newFromStr (strError, L"WSAEWOULDBLOCK, Operation would block");
+            rtl_uString_newFromAscii (strError, "WSAEWOULDBLOCK, Operation would block");
             break;
 
         case WSAEINPROGRESS:
-            rtl_uString_newFromStr (strError, L"WSAEINPROGRESS, Operation now in progress");
+            rtl_uString_newFromAscii (strError, "WSAEINPROGRESS, Operation now in progress");
             break;
 
         case WSAEALREADY:
-            rtl_uString_newFromStr (strError, L"WSAEALREADY, Operation already in progress");
+            rtl_uString_newFromAscii (strError, "WSAEALREADY, Operation already in progress");
             break;
 
         case WSAEINTR:
-            rtl_uString_newFromStr (strError, L"WSAEALREADY, Operation was interrupted");
+            rtl_uString_newFromAscii (strError, "WSAEALREADY, Operation was interrupted");
             break;
 
         case WSAEBADF:
-            rtl_uString_newFromStr (strError, L"WSAEBADF, Bad file number");
+            rtl_uString_newFromAscii (strError, "WSAEBADF, Bad file number");
             break;
 
         case WSAEACCES:
-            rtl_uString_newFromStr (strError, L"WSAEACCES, Access is denied");
+            rtl_uString_newFromAscii (strError, "WSAEACCES, Access is denied");
             break;
 
         case WSAEFAULT:
-            rtl_uString_newFromStr (strError, L"WSAEFAULT, Bad memory Addr");
+            rtl_uString_newFromAscii (strError, "WSAEFAULT, Bad memory Addr");
             break;
 
         case WSAEINVAL:
-            rtl_uString_newFromStr (strError, L"WSAEINVAL, The socket has not been bound with bind() or is already connected");
+            rtl_uString_newFromAscii (strError, "WSAEINVAL, The socket has not been bound with bind() or is already connected");
             break;
 
         case WSAEMFILE:
-            rtl_uString_newFromStr (strError, L"WSAEMFILE, No more file descriptors are available");
+            rtl_uString_newFromAscii (strError, "WSAEMFILE, No more file descriptors are available");
             break;
 
         case WSAETOOMANYREFS:
-            rtl_uString_newFromStr (strError, L"WSAETOOMANYREFS, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAETOOMANYREFS, Undocumented WinSock error");
             break;
 
         case WSAENAMETOOLONG:
-            rtl_uString_newFromStr (strError, L"WSAENAMETOOLONG, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAENAMETOOLONG, Undocumented WinSock error");
             break;
 
         case WSAENOTEMPTY:
-            rtl_uString_newFromStr (strError, L"WSAENOTEMPTY, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAENOTEMPTY, Undocumented WinSock error");
             break;
 
         case WSAEPROCLIM:
-            rtl_uString_newFromStr (strError, L"WSAEPROCLIM, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAEPROCLIM, Undocumented WinSock error");
             break;
 
         case WSAEUSERS:
-            rtl_uString_newFromStr (strError, L"WSAEUSERS, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAEUSERS, Undocumented WinSock error");
             break;
 
         case WSAEDQUOT:
-            rtl_uString_newFromStr (strError, L"WSAEDQUOT, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAEDQUOT, Undocumented WinSock error");
             break;
 
         case WSAESTALE:
-            rtl_uString_newFromStr (strError, L"WSAESTALE, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAESTALE, Undocumented WinSock error");
             break;
 
         case WSAEREMOTE:
-            rtl_uString_newFromStr (strError, L"WSAEREMOTE, Undocumented WinSock error");
+            rtl_uString_newFromAscii (strError, "WSAEREMOTE, Undocumented WinSock error");
             break;
 
         case WSAEDISCON:
-            rtl_uString_newFromStr (strError, L"WSAEDISCON, Circuit was gracefully terminated");
+            rtl_uString_newFromAscii (strError, "WSAEDISCON, Circuit was gracefully terminated");
             break;
 
         case WSASYSNOTREADY:
-            rtl_uString_newFromStr (strError, L"WSASYSNOTREADY, The underlying network subsystem is not ready for network communication");
+            rtl_uString_newFromAscii (strError, "WSASYSNOTREADY, The underlying network subsystem is not ready for network communication");
             break;
 
         case WSAVERNOTSUPPORTED:
-            rtl_uString_newFromStr (strError, L"WSAVERNOTSUPPORTED, The version of Windows Sockets API support requested is not provided by this particular Windows Sockets implementation");
+            rtl_uString_newFromAscii (strError, "WSAVERNOTSUPPORTED, The version of Windows Sockets API support requested is not provided by this particular Windows Sockets implementation");
             break;
 
         case WSANOTINITIALISED:
-            rtl_uString_newFromStr (strError, L"WSANOTINITIALISED, WSAStartup() has not been called");
+            rtl_uString_newFromAscii (strError, "WSANOTINITIALISED, WSAStartup() has not been called");
             break;
 
         case WSAHOST_NOT_FOUND:
-            rtl_uString_newFromStr (strError, L"WSAHOST_NOT_FOUND, Authoritative answer host not found");
+            rtl_uString_newFromAscii (strError, "WSAHOST_NOT_FOUND, Authoritative answer host not found");
             break;
 
         case WSATRY_AGAIN:
-            rtl_uString_newFromStr (strError, L"WSATRY_AGAIN, Non-authoritative answer host not found or SERVERFAIL");
+            rtl_uString_newFromAscii (strError, "WSATRY_AGAIN, Non-authoritative answer host not found or SERVERFAIL");
             break;
 
         case WSANO_RECOVERY:
-            rtl_uString_newFromStr (strError, L"WSANO_RECOVERY, Non recoverable errors, FORMERR, REFUSED, NOTIMP");
+            rtl_uString_newFromAscii (strError, "WSANO_RECOVERY, Non recoverable errors, FORMERR, REFUSED, NOTIMP");
             break;
 
         case WSANO_DATA:
-            rtl_uString_newFromStr (strError, L"WSANO_DATA or WSANO_ADDRESS, Valid name, no data record of requested type");
+            rtl_uString_newFromAscii (strError, "WSANO_DATA or WSANO_ADDRESS, Valid name, no data record of requested type");
             break;
 
         default:
         {
             sal_Unicode message[128];
 
-            wsprintfW((sal_Unicode *)message, (sal_Unicode *)L"Unknown WinSock Error Number %d", error);
+            wsprintfW(reinterpret_cast<LPWSTR>(message), L"Unknown WinSock Error Number %d", error);
             rtl_uString_newFromStr (strError, message);
         }
 
