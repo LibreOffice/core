@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:34:13 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:09:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,13 +69,13 @@ APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB)		\
-    uwinapi.lib \
-    user32.lib		\
-    ole32.lib		\
+    $(UWINAPILIB) \
+    $(USER32LIB)		\
+    $(OLE32LIB)		\
     comsupp.lib		\
-    oleaut32.lib	\
-    gdi32.lib		\
-    uuid.lib
+    $(OLEAUT32LIB)	\
+    $(GDI32LIB)		\
+    $(UUIDLIB)
 
 APP1LIBS=	\
             $(SLB)$/dtobjfact.lib	\
