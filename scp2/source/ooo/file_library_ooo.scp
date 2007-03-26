@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.226 $
+ *  $Revision: 1.227 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:04:53 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -507,7 +507,11 @@ File gid_File_Lib_Curl
        Name = STRING(CONCAT8(libcurl,UNXSUFFIX,.,CURL_MAJOR,.,CURL_MINOR,.,CURL_MICRO));
     #endif
   #else
+   #ifdef _gcc3
+    Name = "libcurl-3.dll";
+   #else
     Name = "libcurl.dll";
+   #endif
   #endif
 End
 
@@ -904,7 +908,7 @@ STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Fwl , fwl)
 
 STD_UNO_LIB_FILE_PATCH( gid_File_Lib_Fwm , fwm)
 
-#if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) || defined(SYSTEM_STDLIBS))
+#if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) || defined(SYSTEM_STDLIBS) || defined(WNT))
 #if defined( _gcc3 )
 
 File gid_File_Lib_Gcc
@@ -918,7 +922,7 @@ End
 
 #endif
 
-#if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) || defined(SYSTEM_STDLIBS))
+#if ! (defined (FREEBSD) || defined (NETBSD) || defined(MACOSX) || defined(SYSTEM_STDLIBS) || defined(WNT))
 #if defined( _gcc3 )
 
 File gid_File_Lib_Stdc
@@ -1024,7 +1028,11 @@ File gid_File_Lib_Icudata
   #ifdef UNX
     Name = STRING(CONCAT7(libicudata,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
+   #ifdef _gcc3
+    Name = STRING(CONCAT6(libicudata,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
+   #else
     Name = STRING(CONCAT5(icudt,ICU_MAJOR,ICU_MINOR,l,.dll));
+   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1035,7 +1043,11 @@ File gid_File_Lib_Icui18n
   #ifdef UNX
     Name = STRING(CONCAT7(libicui18n,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
+   #ifdef _gcc3
+    Name = STRING(CONCAT6(libicui18n,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
+   #else
     Name = STRING(CONCAT4(icuin,ICU_MAJOR,ICU_MINOR,.dll));
+   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1046,7 +1058,11 @@ File gid_File_Lib_Icule
   #ifdef UNX
     Name = STRING(CONCAT7(libicule,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
+   #ifdef _gcc3
+    Name = STRING(CONCAT6(libicule,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
+   #else
     Name = STRING(CONCAT4(icule,ICU_MAJOR,ICU_MINOR,.dll));
+   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1057,7 +1073,11 @@ File gid_File_Lib_Icuuc
   #ifdef UNX
     Name = STRING(CONCAT7(libicuuc,UNXSUFFIX,.,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO));
   #else
+   #ifdef _gcc3
+    Name = STRING(CONCAT6(libicuuc,ICU_MAJOR,ICU_MINOR,.,ICU_MICRO,.dll));
+   #else
     Name = STRING(CONCAT4(icuuc,ICU_MAJOR,ICU_MINOR,.dll));
+   #endif
   #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
@@ -1397,6 +1417,17 @@ End
 
 #ifdef WNT
 
+#if defined(_gcc3)
+
+File GID_FILE_LIB_MINGWM10
+    BIN_FILE_BODY;
+    Styles = (PACKED, SETUPZIP);
+    Dir = gid_Dir_Program;
+    Name = "mingwm10.dll";
+End
+
+#endif
+
 #if defined(M1300)
 
 File gid_File_Lib_Msvcp70
@@ -1520,7 +1551,7 @@ End
 #endif
 #endif
 
-#ifdef WNT
+#if defined(WNT) && !defined(_gcc3)
 
 File gid_File_Lib_Ole
     TXT_FILE_BODY;
@@ -1587,6 +1618,12 @@ File gid_File_Lib_Psp
     Styles = (PACKED,PATCH);
     Dir = gid_Dir_Program;
 End
+#endif
+
+#if defined(WNT) && defined(_gcc3)
+
+STD_SETUPZIP_LIB_FILE( GID_FILE_LIB_PSP, psp )
+
 #endif
 
 #ifdef UNX
@@ -1991,7 +2028,11 @@ File gid_File_Lib_Stlport
   #elif defined(M1400)
     Name = STRING(CONCAT3(stlport_,vc845,.dll));
   #else
+   #if defined(_gcc3)
+    Name = STRING(CONCAT3(libstlport_,gcc,.dll));
+   #else
     Name = STRING(CONCAT3(stlport_,vc745,.dll));
+   #endif
   #endif
   #endif
   #endif
@@ -2367,7 +2408,11 @@ File gid_File_Lib_Xml2
        Name = STRING(CONCAT3(libxml2,UNXSUFFIX,.2.6.17));
     #endif
   #else
+   #ifdef _gcc3
+    Name = "libxml2-2.dll";
+   #else
     Name = "libxml2.dll";
+   #endif
   #endif
 End
 #endif
@@ -2457,7 +2502,11 @@ File gid_File_Lib_LibXMLSec_xmlseccore
             Name = STRING(CONCAT3(libxmlsec1,UNXSUFFIX,.1.2.6));
         #endif
     #else
+      #ifdef _gcc3
+        Name = "libxmlsec1-1.dll";
+      #else
         Name = "libxmlsec.dll";
+      #endif
     #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED);
@@ -2466,7 +2515,11 @@ End
 #ifdef WNT
 File gid_File_Lib_LibXMLSec_xmlsecmscrypto
     TXT_FILE_BODY;
+  #ifdef _gcc3
+    Name = "libxmlsec1-mscrypto-1.dll";
+  #else
     Name = "libxmlsec-mscrypto.dll";
+  #endif
     Dir = gid_Dir_Program;
     Styles = (PACKED,PATCH);
 End
