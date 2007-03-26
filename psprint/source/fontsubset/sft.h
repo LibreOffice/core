@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 10:25:17 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:16:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.15 2006-06-19 10:25:17 hr Exp $ */
+/* $Id: sft.h,v 1.16 2007-03-26 11:16:26 ihi Exp $ */
 
 /**
 
@@ -297,6 +297,16 @@ extern "C" {
 
 /**
  * TrueTypeFont constructor.
+ * The font file has to be provided as a memory buffer and length
+ * @param  facenum - logical font number within a TTC file. This value is ignored
+ *                   for TrueType fonts
+ * @return value of SFErrCodes enum
+ * @ingroup sft
+ */
+    int OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
+#if ! defined WIN32
+/**
+ * TrueTypeFont constructor.
  * Reads the font file and allocates the memory for the structure.
  * on WIN32 the font has to be provided as a memory buffer and length
  * @param  facenum - logical font number within a TTC file. This value is ignored
@@ -304,10 +314,7 @@ extern "C" {
  * @return value of SFErrCodes enum
  * @ingroup sft
  */
-#if defined WIN32
-    int OpenTTFont(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf); /*FOLD01*/
-#else
-    int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
+    int OpenTTFontFile(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf);
 #endif
 
 /**
