@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 23:52:50 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:21:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@ PRJ=..$/..$/..
 PRJNAME=fpicker
 TARGET=utils
 LIBTARGET=NO
+ENABLE_EXCEPTIONS=YES
 
 # --- Settings ----------------------------------
 
