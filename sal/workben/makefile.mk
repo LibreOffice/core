@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:06:04 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:27:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,7 +78,7 @@ SHL1OBJS=$(SLO)$/t_osl_getVolInfo.obj
 SHL1TARGET=togvi
 
 .IF "$(GUI)" == "WNT"
-APP1STDLIBS=kernel32.lib
+APP1STDLIBS=$(KERNEL32LIB)
 SHL1STDLIBS=$(LB)$/isal.lib
 SHL1STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
@@ -107,7 +107,7 @@ SHL1OBJS=$(SLO)$/t_osl_joinProcess.obj
 SHL1TARGET=tojp
 
 .IF "$(GUI)" == "WNT"
-APP1STDLIBS=kernel32.lib
+APP1STDLIBS=$(KERNEL32LIB)
 SHL1STDLIBS=$(LB)$/isal.lib
 SHL1STDLIBS+=$(SOLARLIBDIR)$/cppunit.lib
 .ENDIF
@@ -131,7 +131,7 @@ DEF1EXPORTFILE=export.exp
     APP1OBJS=$(OBJFILES)
 
     APP1STDLIBS=\
-                kernel32.lib
+                $(KERNEL32LIB)
 
     APP1LIBS=\
             $(LB)$/kernel9x.lib\
@@ -151,10 +151,10 @@ DEF1EXPORTFILE=export.exp
     APP1OBJS=	$(OBJFILES)
     APP1STDLIBS=\
                 $(LB)$/asal.lib\
-                shell32.lib\
-                user32.lib\
-                comdlg32.lib\
-                advapi32.lib
+                $(SHELL32LIB)\
+                $(USER32LIB)\
+                $(COMDLG32LIB)\
+                $(ADVAPI32LIB)
 
     APP1DEPN=	$(LB)$/asal.lib	
 
@@ -168,10 +168,10 @@ DEF1EXPORTFILE=export.exp
     APP1OBJS=	$(OBJFILES)
     APP1STDLIBS=\
                 $(LB)$/isal.lib\
-                shell32.lib\
-                user32.lib\
-                comdlg32.lib\
-                advapi32.lib
+                $(SHELL32LIB)\
+                $(USER32LIB)\
+                $(COMDLG32LIB)\
+                $(ADVAPI32LIB)
 
     APP1DEPN=	$(LB)$/isal.lib
 
@@ -252,7 +252,7 @@ SALTLSLIB=		-lsaltls2
 .ENDIF # unx
 
 .IF "$(GUI)" == "WNT"
-SALTLSLIB=		isaltls.lib
+SALTLSLIB=		$(SALTLSLIB)
 .ENDIF # wnt
 
 .ENDIF # saltlslib
@@ -279,7 +279,7 @@ SALZIPLIB=	-lsalzip2
 .ENDIF # unx
 
 .IF "$(GUI)" == "WNT"
-SALZIPLIB=	isalzip.lib
+SALZIPLIB=	$(SALZIPLIB)
 .ENDIF # wnt
 
 .ENDIF # salziplib
