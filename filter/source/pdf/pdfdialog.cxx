@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:42:16 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 
     if( mpResMgr && mxSrcDoc.is() )
     {
-        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc );
+        ImpPDFTabDialog* pDlg = new ImpPDFTabDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc, m_xORB );
         pRet = pDlg;
     }
 
