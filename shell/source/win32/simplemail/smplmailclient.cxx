@@ -4,9 +4,9 @@
  *
  *  $RCSfile: smplmailclient.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:47:59 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,7 +118,7 @@ namespace /* private */
             lret = RegQueryValueW(hkey, NULL, buff, &sz);
             if (lret == ERROR_SUCCESS)
             {
-                osl::FileBase::getFileURLFromSystemPath(buff, altSenddocUrl);
+                osl::FileBase::getFileURLFromSystemPath(reinterpret_cast<const sal_Unicode*>(buff), altSenddocUrl);
             }
             RegCloseKey(hkey);
         }
@@ -139,7 +139,7 @@ namespace /* private */
         if (senddocUrl.getLength() == 0)
         {
             rtl::OUString baseUrl;
-            if (!osl::Module::getUrlFromAddress(getSenddocUrl, baseUrl))
+            if (!osl::Module::getUrlFromAddress(reinterpret_cast<oslGenericFunction>(getSenddocUrl), baseUrl))
                 return rtl::OUString();
 
             senddocUrl = baseUrl.copy(0, baseUrl.lastIndexOf('/') + 1);
