@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scpaction_ooo.scp,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:31:40 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,13 @@ ScpAction scp_Copy_Readme_Txt
     Styles = (SCPZIP_REPLACE);
     Subdir = "readmes";
 End
+
+#if defined(WNT) && defined(_gcc3)
+ScpAction SCP_COPY_MINGWM10
+    Copy = "mingwm10.dll";
+    Name = "mingwm10.dll";
+End
+#endif
 
 ScpAction scp_Copy_Xpd_Javaloader
   	Copy = "javaloader.sh";
