@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-23 12:39:31 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:08:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,13 @@ typedef unsigned char   BYTE;
 #define INTERFACE_OLE_WRAPPER_IMPL      1
 #define UNO_OBJECT_WRAPPER_REMOTE_OPT   2
 
-#define INVOCATION_SERVICE L"com.sun.star.script.Invocation"
+#define INVOCATION_SERVICE reinterpret_cast<const sal_Unicode*>(L"com.sun.star.script.Invocation")
 
 
 // classes for wrapping ole objects
 #define IUNKNOWN_WRAPPER_IMPL           1
 
-#define INTERFACE_ADAPTER_FACTORY  L"com.sun.star.script.InvocationAdapterFactory"
+#define INTERFACE_ADAPTER_FACTORY  reinterpret_cast<const sal_Unicode*>(L"com.sun.star.script.InvocationAdapterFactory")
 // COM or JScript objects implementing UNO interfaces have to implement this property
 #define SUPPORTED_INTERFACES_PROP L"_implementedInterfaces"
 // Second property without leading underscore for use in VB
@@ -71,6 +71,10 @@ typedef unsigned char   BYTE;
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::uno;
+#ifdef __MINGW32__
+using namespace com::sun::star::bridge;
+using namespace com::sun::star::bridge::ModelDependent;
+#endif
 using namespace com::sun::star::bridge::oleautomation;
 using namespace boost;
 namespace ole_adapter
@@ -96,6 +100,9 @@ typedef hash_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Com
 extern hash_map<sal_uInt32, WeakReference<XInterface> > UnoObjToWrapperMap;
 typedef hash_map<sal_uInt32, WeakReference<XInterface> >::iterator IT_Uno;
 typedef hash_map<sal_uInt32, WeakReference<XInterface> >::const_iterator CIT_Uno;
+#ifdef __MINGW32__
+inline void reduceRange( Any& any);
+#endif
 
 
 
@@ -504,7 +511,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
             case TypeClass_HYPER:
                 if(SUCCEEDED(hr = VariantChangeType(& var, &var, 0, VT_DECIMAL)))
                 {
-                    if (var.decVal.Lo64 > 0x8000000000000000
+                    if (var.decVal.Lo64 > SAL_CONST_UINT64(0x8000000000000000)
                         || var.decVal.Hi32 > 0
                         || var.decVal.scale > 0)
                     {
@@ -513,7 +520,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANTARG* pArg, Any& rAny,
                     }
                     sal_Int64 value = var.decVal.Lo64;
                     if (var.decVal.sign == DECIMAL_NEG)
-                        value |=  0x8000000000000000;
+                        value |=  SAL_CONST_UINT64(0x8000000000000000);
                     rAny <<= value;
                 }
                 else if (hr == DISP_E_TYPEMISMATCH)
@@ -836,7 +843,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             if (rAny >>= value)
             {
                 pVariant->vt = VT_BSTR;
-                pVariant->bstrVal = SysAllocString(value);
+                pVariant->bstrVal = SysAllocString(reinterpret_cast<LPCOLESTR>(value.getStr()));
             }
             else
             {
@@ -935,7 +942,7 @@ void UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
             sal_Int64 value;
             rAny >>= value;
 
-            if (value & 0x8000000000000000)
+            if (value & SAL_CONST_UINT64(0x8000000000000000))
                 pVariant->decVal.sign = DECIMAL_NEG;
 
             pVariant->decVal.Lo64 = value;
@@ -1538,7 +1545,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 }
                 case VT_BSTR:
                 {
-                    OUString b(var.bstrVal);
+                    OUString b(reinterpret_cast<const sal_Unicode*>(var.bstrVal));
                     rAny.setValue( &b, getCppuType( &b));
                     break;
                 }
@@ -1546,7 +1553,11 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                 case VT_DISPATCH:
                 {
                     //check if it is a UNO type
+#ifdef __MINGW32__
+                    CComQIPtr<IUnoTypeWrapper, &__uuidof(IUnoTypeWrapper)> spType((IUnknown*) var.byref);
+#else
                     CComQIPtr<IUnoTypeWrapper> spType((IUnknown*) var.byref);
+#endif
                     if (spType)
                     {
                         CComBSTR sName;
@@ -1559,7 +1570,7 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
                         {
                             throw CannotConvertException(
                                 OUSTR("[automation bridge]UnoConversionUtilities<T>::variantToAny \n"
-                                      "A UNO type with the name: ") + OUString(sName) +
+                                      "A UNO type with the name: ") + OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(sName))) +
                                 OUSTR("does not exist!"),
                                 0, TypeClass_UNKNOWN, FailReason::TYPE_NOT_SUPPORTED,0);
                         }
@@ -1672,7 +1683,11 @@ void UnoConversionUtilities<T>::variantToAny( const VARIANT* pVariant, Any& rAny
 // UNO wrapper than the original UNO object is being extracted, queried for "aType" (if
 // it is no struct) and returned.
 template<class T>
+#ifdef __MINGW32__
+Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type& aType)
+#else
 Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type& aType= Type())
+#endif
 {
     if (pVar->vt != VT_UNKNOWN && pVar->vt != VT_DISPATCH)
         throw IllegalArgumentException(
@@ -1688,13 +1703,21 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     {
         spUnknown = pVar->punkVal;
         if (spUnknown)
+#ifdef __MINGW32__
+            spUnknown->QueryInterface( IID_IDispatch, reinterpret_cast<LPVOID*>( & spDispatch.p));
+#else
             spUnknown.QueryInterface( & spDispatch.p);
+#endif
     }
     else if (pVar->vt == VT_DISPATCH && pVar->pdispVal != NULL)
     {
         CComPtr<IDispatch> spDispatch(pVar->pdispVal);
         if (spDispatch)
+#ifdef __MINGW32__
+            spDispatch->QueryInterface( IID_IUnknown, reinterpret_cast<LPVOID*>( & spUnknown.p));
+#else
             spDispatch.QueryInterface( & spUnknown.p);
+#endif
     }
 
     static Type VOID_TYPE= Type();
@@ -1726,7 +1749,11 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     // Check if "spUnknown" is a UNO wrapper, that is an UNO object that has been
     // passed to COM. Then it supports IUnoObjectWrapper
     // and we extract the original UNO object.
+#ifdef __MINGW32__
+    CComQIPtr<IUnoObjectWrapper, &__uuidof(IUnoObjectWrapper)> spUno( spUnknown);
+#else
     CComQIPtr<IUnoObjectWrapper> spUno( spUnknown);
+#endif
     if( spUno)
     {   // it is a wrapper
          Reference<XInterface> xInt;
@@ -1819,13 +1846,21 @@ Any UnoConversionUtilities<T>::createOleObjectWrapper(VARIANT* pVar, const Type&
     OSL_ASSERT( xInit.is());
 
     Any  params[3];
+#ifdef __MINGW32__
+    params[0] <<= reinterpret_cast<sal_uInt32>( spUnknown.p );
+#else
     params[0] <<= (sal_uInt32) spUnknown.p;
+#endif
     sal_Bool bDisp = pVar->vt == VT_DISPATCH ? sal_True : sal_False;
     params[1].setValue( & bDisp, getBooleanCppuType());
     params[2] <<= seqTypes;
 
     xInit->initialize( Sequence<Any>( params, 3));
+#ifdef __MINGW32__
+    ComPtrToWrapperMap[reinterpret_cast<sal_uInt32>( spUnknown.p )]= xIntNewProxy;
+#else
     ComPtrToWrapperMap[reinterpret_cast<sal_uInt32>(spUnknown.p)]= xIntNewProxy;
+#endif
 
     // we have a wrapper object
     //The wrapper implements already XInvocation and XInterface. If
