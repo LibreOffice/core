@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:32:18 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:00:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,8 +97,8 @@ SHL1STDLIBS=\
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
-            comdlg32.lib \
-            advapi32.lib
+            $(COMDLG32LIB) \
+            $(ADVAPI32LIB)
 .ENDIF
 
 SHL1OBJS=$(SLOFILES)
