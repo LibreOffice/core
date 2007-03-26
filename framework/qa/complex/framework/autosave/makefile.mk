@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:17:01 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:19:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #*************************************************************************
 PRJ = ..$/..$/..$/..
 TARGET  = AutoSave
-PRJNAME = $(TARGET)
+PRJNAME = framework
 PACKAGE = complex$/framework$/autosave
 
 # --- Settings -----------------------------------------------------
