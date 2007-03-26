@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:35:29 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:59:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,11 @@ $(DLLDEST)$/pyuno_services.rdb : makefile.mk $(DLLDEST)$/$(DLLPRE)$(TARGET)$(DLL
 .IF "$(OS)"=="MACOSX"
     cd $(DLLDEST) && sh -c "DYLD_LIBRARY_PATH=$(DYLD_LIBRARY_PATH):$(OUT)$/lib;export DYLD_LIBRARY_PATH;regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))"
 .ELSE
+.IF "$(GUI)$(COM)"=="WNTGCC"
+    cd $(DLLDEST) && sh -c "export PATH='$(PATH):$(OUT)$/bin'; regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))"
+.ELSE
     cd $(DLLDEST) && regcomp -register -r pyuno_services.tmp $(foreach,i,$(COMPONENTS) -c $(i))
+.ENDIF   "$(GUI)$(COM)"=="WNTGCC" 
 .ENDIF    # $(OS)=="MACOSX"
     cd $(DLLDEST) && mv pyuno_services.tmp pyuno_services.rdb
 
