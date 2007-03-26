@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:25:32 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:29:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,22 @@ all:
 LIBXML2VERSION=2.6.17
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
+.IF "$(OS)$(COM)"=="WNTGCC"
+PATCH_FILE_NAME=$(TARFILE_NAME)-mingw.patch
+.ELSE
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
+.ENDIF
 
 # This is only for UNX environment now
 
 .IF "$(OS)"=="WNT"
+.IF "$(COM)"=="GCC"
+CONFIGURE_DIR=
+CONFIGURE_ACTION=.$/configure
+CONFIGURE_FLAGS=--enable-ipv6=no --without-python --enable-static=no --without-debug --build=i586-pc-mingw32 --host=i586-pc-mingw32 lt_cv_cc_dll_switch="-shared" CFLAGS=-D_MT LDFLAGS="-no-undefined -Wl,--enable-runtime-pseudo-reloc -L$(ILIB:s/;/ -L/)" LIBS="-lws2_32 -lmingwthrd" OBJDUMP="$(WRAPCMD) objdump"
+BUILD_ACTION=$(GNUMAKE)
+BUILD_DIR=$(CONFIGURE_DIR)
+.ELSE
 CONFIGURE_DIR=win32
 CONFIGURE_ACTION=cscript configure.js
 CONFIGURE_FLAGS=iconv=no sax1=yes
@@ -66,6 +77,7 @@ CONFIGURE_FLAGS+=debug=yes
 .ENDIF
 BUILD_ACTION=nmake
 BUILD_DIR=$(CONFIGURE_DIR)
+.ENDIF
 .ELSE
 .IF "$(SYSBASE)"!=""
 xml2_CFLAGS+=-I$(SYSBASE)$/usr$/include
@@ -93,8 +105,13 @@ OUTDIR2INC=include$/libxml
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=.libs$/libxml2.*.dylib
 .ELIF "$(OS)"=="WNT"
+.IF "$(COM)"=="GCC"
+OUT2LIB+=.libs$/libxml2*.a
+OUT2BIN+=.libs$/libxml2*.dll
+.ELSE
 OUT2LIB+=win32$/bin.msvc$/*.lib
 OUT2BIN+=win32$/bin.msvc$/*.dll
+.ENDIF
 .ELSE
 OUT2LIB+=.libs$/libxml2.so*
 .ENDIF
