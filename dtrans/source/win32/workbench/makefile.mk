@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:35:02 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:09:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,9 +68,9 @@ APP1STDLIBS=	$(SALLIB) \
                 $(CPPULIB)			\
                 $(CPPUHELPERLIB)	\
                 $(SOLARLIBDIR)$/uwinapi.lib\
-                user32.lib \
-                ole32.lib\
-                comdlg32.lib
+                $(USER32LIB) \
+                $(OLE32LIB)\
+                $(COMDLG32LIB)
 
 APP1LIBS= $(SLB)$/dtutils.lib
           
@@ -88,10 +88,10 @@ APP1TARGET=		$(TARGET1)
 APP1OBJS=		$(OBJ)$/testmarshal.obj
                 
 APP1STDLIBS=	$(SALLIB)\
-                user32.lib\
-                ole32.lib\
+                $(USER32LIB)\
+                $(OLE32LIB)\
                 comsupp.lib\
-                oleaut32.lib
+                $(OLEAUT32LIB)
 
 APP1LIBS= 
 
