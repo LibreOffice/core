@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AConnection.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:15:09 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:56:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -196,7 +196,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
     osl_decrementInterlockedCount( &m_refCount );
 }
 //-----------------------------------------------------------------------------
-void SAL_CALL OConnection::release() throw(RuntimeException)
+void SAL_CALL OConnection::release() throw()
 {
     relase_ChildImpl();
 }
