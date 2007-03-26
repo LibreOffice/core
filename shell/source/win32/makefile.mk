@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:05:07 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:50:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,9 +54,9 @@ SHL1TARGET=$(TARGET).uno
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
-            uwinapi.lib \
-            advapi32.lib \
-            shell32.lib
+            $(UWINAPILIB) \
+            $(ADVAPI32LIB) \
+            $(SHELL32LIB)
 
 SHL1DEPN=
 SHL1IMPLIB=i$(SHL1TARGET)
