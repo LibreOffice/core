@@ -4,7 +4,11 @@
 #define DECLARE_WAPI_FUNC(func) \
     extern func##_PROC lpfn##func;
 
+#ifdef __MINGW32__
+typedef HSZ (WINAPI *DdeCreateStringHandleW_PROC)( DWORD idInst, LPWSTR pszString, int iCodePage );
+#else
 typedef HSZ (WINAPI *DdeCreateStringHandleW_PROC)( DWORD idInst, LPCWSTR pszString, int iCodePage );
+#endif
 typedef DWORD (WINAPI *DdeQueryStringW_PROC)( DWORD idInst, HSZ hsz, LPWSTR pszString, DWORD cchMax, int iCodePage );
 typedef UINT (WINAPI *DdeInitializeW_PROC)( LPDWORD pidInst, PFNCALLBACK pfnCallback, DWORD afCmd, DWORD ulRes );
 
