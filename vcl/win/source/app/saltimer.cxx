@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:44:24 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:40:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef _SVWIN_H
 #include <tools/svwin.h>
+#endif
+#ifdef __MINGW32__
+#include <excpt.h>
 #endif
 
 #ifndef _SV_SALDATA_HXX
@@ -117,8 +120,16 @@ void WinSalTimer::Stop()
 
 void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
 {
+#ifdef __MINGW32__
+    jmp_buf jmpbuf;
+    __SEHandler han;
+    if (__builtin_setjmp(jmpbuf) == 0)
+    {
+        han.Set(jmpbuf, NULL, (__SEHandler::PF)EXCEPTION_EXECUTE_HANDLER);
+#else
     __try
     {
+#endif
         SalData* pSalData = GetSalData();
         ImplSVData* pSVData = ImplGetSVData();
 
@@ -151,7 +162,11 @@ void CALLBACK SalTimerProc( HWND, UINT, UINT_PTR nId, DWORD )
                 ImplSalStartTimer( 10, TRUE );
         }
     }
+#ifdef __MINGW32__
+    han.Reset();
+#else
     __except(WinSalInstance::WorkaroundExceptionHandlingInUSER32Lib(GetExceptionCode(), GetExceptionInformation()))
     {
     }
+#endif
 }
