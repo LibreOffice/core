@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WindowsAccessBridgeAdapter.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:03:27 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:47:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,8 +96,10 @@
 
 #include <osl/diagnose.h>
 
-using namespace ::rtl;
-using namespace ::com::sun::star::uno;
+using ::rtl::OUString;
+using ::com::sun::star::uno::Mapping;
+using ::com::sun::star::uno::Reference;
+using ::com::sun::star::uno::RuntimeException;
 using namespace ::com::sun::star::accessibility;
 
 long VCLEventListenerLinkFunc(void * pInst, void * pData);
