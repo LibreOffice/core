@@ -4,9 +4,9 @@
  *
  *  $RCSfile: migrateinstallpath.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 03:41:40 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:11:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <tchar.h>
 #include <string>
 
-#ifdef _WIN32_WINNT
+#if defined(_WIN32_WINNT) && !defined(__MINGW32__)
 #error YES
 #endif
 
