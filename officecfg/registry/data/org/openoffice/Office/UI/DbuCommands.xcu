@@ -536,7 +536,7 @@
             </node>
             <node oor:name=".uno:DBSendReportToWriter" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Bericht an Text Dokument...</value>
+                    <value xml:lang="de">Bericht an Textdokument...</value>
                     <value xml:lang="en-US">Report to Text Document...</value>
                 </prop>
             </node>
