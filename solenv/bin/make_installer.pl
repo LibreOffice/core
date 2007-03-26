@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.83 $
+#   $Revision: 1.84 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:43:58 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:14:54 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -92,6 +92,7 @@ use installer::windows::removefile;
 use installer::windows::registry;
 use installer::windows::selfreg;
 use installer::windows::shortcut;
+use installer::windows::strip;
 use installer::windows::upgrade;
 use installer::worker;
 use installer::xpdinstaller;
@@ -1642,6 +1643,20 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     if ( $installer::globals::iswindowsbuild )
     {
+        ###########################################
+        # Stripping libraries
+        ###########################################
+
+        # Building for gcc build in cws requires, that all files are stripped before packaging:
+        # 1. copy all files that need to be stripped locally
+        # 2. strip all these files
+
+        if ( $installer::globals::compiler =~ /wntgcci/ )
+        {
+            installer::windows::strip::strip_binaries($filesinproductlanguageresolvedarrayref, $languagestringref);
+            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . $packagename ."_files.log", $filesinproductlanguageresolvedarrayref); }
+        }
+
         $installdir = installer::worker::create_installation_directory($shipinstalldir, $languagestringref, \$current_install_number);
 
          my $idtdirbase = installer::systemactions::create_directories("idt_files", $languagestringref);
