@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.40 $
+#   $Revision: 1.41 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-16 16:05:51 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:27:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,19 +103,15 @@ SHL1IMPLIB= i$(TARGET)
 SHL1VERSIONMAP=	$(TARGET).map
 
 .IF "$(GUI)"=="WNT"
-.IF "$(COM)"!="GCC"
 SHL1STDLIBS=	\
-                uwinapi.lib\
-                advapi32.lib\
-                wsock32.lib\
-                mpr.lib\
-                shell32.lib\
-                comdlg32.lib\
-                user32.lib\
-                ole32.lib
-.ELSE
-SHL1STDLIBS= -luwinapi.lib -ladvapi32 -lwsock32 -lmpr -lole32
-.ENDIF # GCC
+                $(UWINAPILIB)\
+                $(ADVAPI32LIB)\
+                $(WSOCK32LIB)\
+                $(MPRLIB)\
+                $(SHELL32LIB)\
+                $(COMDLG32LIB)\
+                $(USER32LIB)\
+                $(OLE32LIB)
 .ENDIF # WNT
 
 .IF "$(GUI)"=="MAC"
@@ -181,8 +177,10 @@ SHL1OBJS=
 SHL1OBJS= \
     $(OBJ)$/dllentry.obj
 .ELSE
+.IF "$(GUI)$(COM)"!="WNTGCC"
 SHL1OBJS= \
     $(SLO)$/dllentry.obj
+.ENDIF # WNTGCC
 .ENDIF # MAC
 .ENDIF # UNX
 .ENDIF # lincinc
