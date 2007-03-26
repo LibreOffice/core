@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oledll.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:04:07 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:07:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1300) && !defined(_STLP_DEBUG)
 #undef _DEBUG
+#endif
+#ifdef __MINGW32__
+#define _INIT_ATL_COMMON_VARS
 #endif
 #include <atlbase.h>
 CComModule _Module;
