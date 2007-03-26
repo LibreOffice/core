@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:34:04 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:15:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -438,7 +438,7 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
     TrueTypeFont* pTTFont = NULL;
 
-    if( OpenTTFont( aFile.GetBuffer(), m_nCollectionEntry < 0 ? 0 : m_nCollectionEntry, &pTTFont ) == SF_OK )
+    if( OpenTTFontFile( aFile.GetBuffer(), m_nCollectionEntry < 0 ? 0 : m_nCollectionEntry, &pTTFont ) == SF_OK )
     {
         if( ! m_pMetrics )
         {
@@ -1845,7 +1845,7 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
     TrueTypeFont* pTTFont = NULL;
 
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-    if( OpenTTFont( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+    if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
     {
         TTGlobalFontInfo aInfo;
         GetTTGlobalFontInfo( pTTFont, & aInfo );
@@ -3050,7 +3050,7 @@ bool PrintFontManager::isFontDownloadingAllowed( fontID nFont ) const
             {
                 TrueTypeFont* pTTFont = NULL;
                 ByteString aFile = getFontFile( pFont );
-                if( OpenTTFont( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+                if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
                 {
                     // get type flags
                     TTGlobalFontInfo aInfo;
@@ -3571,7 +3571,7 @@ bool PrintFontManager::getAlternativeFamilyNames( fontID nFont, ::std::list< OUS
         TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
         ByteString aFile( getFontFile( pFont ) );
         TrueTypeFont* pTTFont;
-        if( OpenTTFont( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
+        if( OpenTTFontFile( aFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) == SF_OK )
         {
             NameRecord* pNameRecords = NULL;
             int nNameRecords = GetTTNameRecords( pTTFont, &pNameRecords );
@@ -3655,7 +3655,7 @@ bool PrintFontManager::createFontSubset(
 
     TrueTypeFont* pTTFont = NULL;
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
-    if( OpenTTFont( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+    if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
 
     TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
