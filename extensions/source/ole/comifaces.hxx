@@ -4,9 +4,9 @@
  *
  *  $RCSfile: comifaces.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:42:33 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:06:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,11 @@
 
 using namespace com::sun::star::uno;
 
+#ifdef __MINGW32__
+DEFINE_GUID(IID_IJScriptValueObject, 0xe40a2331, 0x3bc1, 0x11d4, 0x83, 0x21, 0x00, 0x50, 0x04, 0x52, 0x6a, 0xb4);
+DEFINE_GUID(IID_IUnoObjectWrapper, 0x7B5C3410, 0x66FA, 0x11d4, 0x83, 0x2A, 0x00, 0x50, 0x04, 0x52, 0x6A, 0xB4);
+DEFINE_GUID(IID_IUnoTypeWrapper, 0x8BB66591, 0xA544, 0x4de9, 0x82, 0x2C, 0x57, 0xAB, 0x57, 0xBC, 0xED, 0x1C);
+#endif
 MIDL_INTERFACE("e40a2331-3bc1-11d4-8321-005004526ab4")
 IJScriptValueObject: public IUnknown
 {
