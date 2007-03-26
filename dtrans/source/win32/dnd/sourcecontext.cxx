@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sourcecontext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:58:49 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,12 +88,12 @@ sal_Int32 SAL_CALL SourceContext::getCurrentCursor(  )
 }
 
 void SAL_CALL SourceContext::setCursor( sal_Int32 /*cursorId*/ )
-    throw( IllegalArgumentException, RuntimeException)
+    throw( RuntimeException)
 {
 }
 
 void SAL_CALL SourceContext::setImage( sal_Int32 /*imageId*/ )
-    throw( IllegalArgumentException, RuntimeException)
+    throw( RuntimeException)
 {
 }
 
