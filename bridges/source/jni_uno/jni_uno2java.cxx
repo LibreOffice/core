@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jni_uno2java.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:58:29 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:16:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 
 #include "jni_bridge.h"
 
+
+#ifdef __MINGW32__
+#define BROKEN_ALLOCA
+#endif
 
 using namespace ::std;
 using namespace ::rtl;
@@ -180,7 +184,11 @@ void Bridge::call_java(
     }
 
     // prepare java args, save param td
+#ifdef BROKEN_ALLOCA
+    jvalue * java_args = (jvalue *) malloc( sizeof (jvalue) * nParams );
+#else
     jvalue * java_args = (jvalue *) alloca( sizeof (jvalue) * nParams );
+#endif
 
     sal_Int32 nPos;
     for ( nPos = 0; nPos < nParams; ++nPos )
@@ -208,6 +216,9 @@ void Bridge::call_java(
                     jni->DeleteLocalRef( java_args[ n ].l );
                 }
             }
+#ifdef BROKEN_ALLOCA
+        free( java_args );
+#endif
             throw;
         }
     }
@@ -369,6 +380,9 @@ void Bridge::call_java(
                             jni->DeleteLocalRef( java_args[ nPos ].l );
                         }
                     }
+#ifdef BROKEN_ALLOCA
+            free( java_args );
+#endif
                     throw;
                 }
                 jni->DeleteLocalRef( java_args[ nPos ].l );
@@ -403,6 +417,9 @@ void Bridge::call_java(
                             uno_args[ i ], param.pTypeRef, 0 );
                     }
                 }
+#ifdef BROKEN_ALLOCA
+        free( java_args );
+#endif
                 throw;
             }
         } // else: already set integral uno return value
@@ -410,6 +427,9 @@ void Bridge::call_java(
         // no exception occured
         *uno_exc = 0;
     }
+#ifdef BROKEN_ALLOCA
+    free( java_args );
+#endif
 }
 
 //==== a uno proxy wrapping a java interface ===================================
