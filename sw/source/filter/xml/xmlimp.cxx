@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:20:39 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:03:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1131,7 +1131,7 @@ void SwXMLImport::SetViewSettings(const Sequence < PropertyValue > & aViewProps)
     sal_Int32 nCount = aViewProps.getLength();
     const PropertyValue *pValue = aViewProps.getConstArray();
 
-    long nTmp;
+    sal_Int64 nTmp = 0;
     sal_Bool bShowRedlineChanges = sal_False, bBrowseMode = sal_False;
     sal_Bool bChangeShowRedline = sal_False, bChangeBrowseMode = sal_False;
 
