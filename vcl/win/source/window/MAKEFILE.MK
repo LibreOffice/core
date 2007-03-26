@@ -4,9 +4,9 @@
 #
 #   $RCSfile: MAKEFILE.MK,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:20:40 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:41:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,10 @@ SLOFILES=   \
             $(SLO)$/salframe.obj   \
             $(SLO)$/salmenu.obj    \
             $(SLO)$/salobj.obj
+
+.IF "$(COM)"=="GCC"
+EXCEPTIONSFILES=   $(SLO)$/salframe.obj
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
