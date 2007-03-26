@@ -219,7 +219,7 @@
             </node>
             <node oor:name=".uno:UpdateAll" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Alles Aktualisieren</value>
+                    <value xml:lang="de">~Alles aktualisieren</value>
                     <value xml:lang="en-US">~Update All</value>
                 </prop>
             </node>
