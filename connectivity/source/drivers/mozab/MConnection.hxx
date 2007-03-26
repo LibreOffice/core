@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MConnection.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 01:42:01 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:59:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,6 +119,9 @@ namespace connectivity
             SDBC_OUTLOOK_MAPI,
             SDBC_OUTLOOK_EXPRESS
         };
+#ifdef __MINGW32__
+    extern "C"
+#endif
         const sal_Char* getSdbcScheme( SdbcScheme _eScheme );
 
         typedef connectivity::OMetaConnection               OConnection_BASE; // implements basics and text encoding
