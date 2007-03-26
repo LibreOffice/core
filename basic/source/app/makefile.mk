@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2006-10-12 14:22:37 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:34:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,6 +66,11 @@ OBJFILES = \
 EXCEPTIONSFILES = \
     $(OBJ)$/app.obj \
     $(OBJ)$/process.obj
+
+.IF "$(GUI)" == "WNT"
+EXCEPTIONSFILES += \
+    $(OBJ)$/process.obj
+.ENDIF
 
 SRS1NAME=$(TARGET)
 SRC1FILES = \
