@@ -1434,7 +1434,7 @@
                     <value xml:lang="en-US">~Move/Copy Sheet...</value>
                 </prop>
                 <prop oor:name="ContextLabel" oor:type="xs:string">
-                    <value xml:lang="de">~Verschieben/Kopieren...</value>
+                    <value xml:lang="de">~Verschieben/kopieren...</value>
                     <value xml:lang="en-US">~Move/Copy...</value>
                 </prop>
             </node>
