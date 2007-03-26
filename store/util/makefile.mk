@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:42:48 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:45:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,9 @@ SHL1STDLIBS+=$(LIBSTLPORT)
 
 # On gcc3 __Unwind_SetIP is not in supc++ but in libgcc_s.so
 .IF "$(COMID)"=="gcc3"
+.IF "$(GUI)"=="WNT"
+SHL1STDLIBS+= 	-lsupc++
+.ELSE
 .IF "$(OS)"=="FREEBSD" || "$(OS)"=="NETBSD"
 SHL1STDLIBS+= 	-lsupc++
 .ELIF "$(OS)"=="MACOSX"
@@ -84,6 +87,7 @@ SHL1STDLIBS+=	-lsupc++
 .ENDIF # CCNUMVER
 .ELIF "$(CCNUMVER)"<="000400000999"
 SHL1STDLIBS+= 	-lsupc++ -lgcc_s
+.ENDIF
 .ENDIF
 .ENDIF
 
