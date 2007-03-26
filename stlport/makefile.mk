@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 14:01:07 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:38:49 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,16 @@ $(INCCOM)$/stlport$/hash_map : systemstl/hash_map
         TARFILE_NAME=STLport-4.0
         PATCH_FILE_NAME=STLport-4.0.macosx.patch
     .ELSE
-        TARFILE_NAME=STLport-4.0
+        .IF "$(GUI)"=="WNT"
+            .IF "$(CCNUMVER)"<="001300000000"
+                TARFILE_NAME=STLport-4.0
+                PATCH_FILE_NAME=STLport-4.0.patch
+            .ELSE			# "$(CCNUMVER)"<="001300000000"
+                TARFILE_NAME=STLport-4.5-0119
+                PATCH_FILE_NAME=STLport-4.5-0119.patch
+            .ENDIF			# "$(CCNUMVER)"<="001300000000"
+        .ELSE
+                TARFILE_NAME=STLport-4.0
         # To disable warnings from within STLport headers on unxsoli4 and
         # unxsols4, STLport-4.0.patch had to be extended mechanically by
         #
@@ -93,25 +102,16 @@ $(INCCOM)$/stlport$/hash_map : systemstl/hash_map
         # STLport headers are read in by the compiler only at the end of a
         # compilation unit, outside the scope of stl/_prolog.h and
         # stl/_epilog.h.)
-        PATCH_FILE_NAME=STLport-4.0.patch
+                PATCH_FILE_NAME=STLport-4.0.patch
+        .ENDIF
     .ENDIF			# "$(OS)"=="MACOSX"
 .ENDIF			# "$(COMID)"=="gcc3"
-
-.IF "$(GUI)"=="WNT"
-.IF "$(CCNUMVER)"<="001300000000"
-TARFILE_NAME=STLport-4.0
-PATCH_FILE_NAME=STLport-4.0.patch
-.ELSE			# "$(CCNUMVER)"<="001300000000"
-TARFILE_NAME=STLport-4.5-0119
-PATCH_FILE_NAME=STLport-4.5-0119.patch
-.ENDIF			# "$(CCNUMVER)"<="001300000000"
-.ENDIF
 
 .IF "$(USE_SHELL)"=="4nt"
 TAR_EXCLUDES=*/SC5/*
 .ENDIF          # "$(USE_SHELL)"=="4nt"
 
-ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak
+ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-macosx.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak
 
 
 CONFIGURE_ACTION=none
@@ -135,6 +135,8 @@ BUILD_FLAGS=-f vc7.mak EXFLAGS="/EHa /Zc:wchar_t-" CCNUMVER=$(CCNUMVER)
             BUILD_FLAGS=-f gcc-3.0-freebsd.mak
         .ELIF "$(OS)"=="MACOSX"
             BUILD_FLAGS=-f gcc-3.0-macosx.mak
+        .ELIF "$(GUI)"=="WNT"
+            BUILD_FLAGS=-f gcc-3.0-mingw.mak
         .ELSE
             BUILD_FLAGS=-f gcc-3.0.mak
         .ENDIF
@@ -179,6 +181,15 @@ OUTDIR2INC= \
     stlport
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+
+OUT2LIB= \
+    lib$/lib*_static.a
+
+OUT2BIN= \
+    lib$/*.dll
+
+.ELSE
 
 OUT2LIB= \
     lib$/*.lib
@@ -186,6 +197,8 @@ OUT2LIB= \
 OUT2BIN= \
     lib$/*.dll \
     lib$/*.pdb
+
+.ENDIF # "$(COM)"=="GCC"
 
 .ELSE          # "$(GUI)"=="WNT"
 
@@ -207,6 +220,7 @@ all :
 .INCLUDE :	tg_ext.mk
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"!="GCC"
 .IF "$(CCNUMVER)"<="001300000000"
 
 $(MISC)$/$(TARFILE_ROOTDIR) : avoid_win32_patches
@@ -237,4 +251,5 @@ $(PACKAGE_DIR)$/win32_sdk_patch :  $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
 $(PACKAGE_DIR)$/$(CONFIGURE_FLAG_FILE) : $(PACKAGE_DIR)$/win32_sdk_patch
 .ENDIF			# "$(USE_NEW_SDK)"!=""
 .ENDIF			# COMVER<=001300000000
+.ENDIF "$(COM)"=="GCC"
 .ENDIF          # "$(GUI)"=="WNT"
