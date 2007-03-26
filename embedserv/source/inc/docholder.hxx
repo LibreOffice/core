@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 12:53:16 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:49:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,8 @@ public:
 
     // XEventListener
     virtual void SAL_CALL
-    disposing( const com::sun::star::lang::EventObject& aSource );
+    disposing( const com::sun::star::lang::EventObject& aSource )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     // XCloseListener
     virtual void SAL_CALL
@@ -249,7 +250,8 @@ public:
     virtual void SAL_CALL
     notifyClosing(
         const com::sun::star::lang::EventObject& aSource
-    );
+    )
+        throw( ::com::sun::star::uno::RuntimeException );
 
     // XTerminateListener
     virtual void SAL_CALL
@@ -263,7 +265,8 @@ public:
     virtual void SAL_CALL
     notifyTermination(
         const com::sun::star::lang::EventObject& aSource
-    );
+    )
+        throw( ::com::sun::star::uno::RuntimeException );
 
 
     // XModifyListener
