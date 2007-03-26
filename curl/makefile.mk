@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2006-09-25 13:34:04 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:26:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,10 +61,14 @@ curl_CFLAGS+=-I$(SYSBASE)$/usr$/include
 curl_LDFLAGS+=-L$(SYSBASE)$/usr$/lib
 .ENDIF			# "$(SYSBASE)"!=""
 
+.IF "$(OS)$(COM)$(CPU)"=="LINUXGCCI"
+curl_LDFLAGS+=-Wl,-z,noexecstack
+.ENDIF
+
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static CFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
+CONFIGURE_FLAGS= --without-ssl --without-libidn --enable-ftp --enable-ipv6 --enable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict --disable-static ADDCFLAGS="$(curl_CFLAGS)"  LDFLAGS="$(curl_LDFLAGS)"
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 .IF "$(OS)"=="IRIX"
