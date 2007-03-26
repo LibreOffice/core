@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-01-30 08:25:14 $
+dnl * Date: $Date: 2007-03-26 14:51:20 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.197 $ )
+AC_REVISION( $Revision: 1.198 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -1106,14 +1106,14 @@ link, and copy the program to the name of the link.])
    dnl CC and CXX but the configure checks here assume that guw.exe
    dnl (if needed at all) is not yet present.
    dnl ===================================================================
-   CC=`echo $CC | $SED -n "s/^guw.exe //p"`
-   CXX=`echo $CXX | $SED -n "s/^guw.exe //p"`
+   CC=`echo $CC | $SED "s/^guw.exe //"`
+   CXX=`echo $CXX | $SED "s/^guw.exe //"`
    dnl ===================================================================
    dnl If $CC is set to a MinGW compiler, e.g. "gcc -mno-cygwin" enable
    dnl $WITH_MINGWIN
    dnl ===================================================================
       if test -n "$CC";then
-         if test "`$CC -dumpmachine 2>/dev/null | $AWK -F- '{ print $3 }'`" = "mingw32"; then
+         if test "`$CC -dumpmachine 2>/dev/null | $SED -e 's/^.*-//'`" = "mingw32"; then
             WITH_MINGWIN="yes"
          fi
       fi
@@ -1488,8 +1488,13 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
 		fi
 	else
 		AC_MSG_CHECKING([the Mingwin32 C++ Compiler])
-		if test `$CC -dumpmachine | $AWK -F- '{ print $3 }'` = "mingw32"; then
+		if test `$CC -dumpmachine | $SED -e 's/^.*-//'` = "mingw32"; then
 			AC_MSG_RESULT([found.])
+			if $CC -dumpspecs | grep -q "mno-cygwin"; then
+				USE_MINGW="cygwin"
+			else
+				USE_MINGW="pure-mingw"
+			fi
 		else
 			AC_MSG_ERROR([Mingwin32 C++ Compiler not found.])
 		fi
@@ -1497,6 +1502,7 @@ dnl      The following find microsoft, matches nn.nn.nnnn then pulls numbers out
 fi
 AC_SUBST(COMEX)
 AC_SUBST(MSPDB_PATH)
+AC_SUBST(USE_MINGW)
 
 dnl ===================================================================
 dnl  .NET needs special treatment
@@ -1705,6 +1711,10 @@ if test "$GXX" = "yes"; then
       if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
           with_gxx_include_path="/usr/include"
       fi
+      if test "$WITH_MINGWIN" = "yes"; then
+         with_gxx_include_path=`cygpath -d "$with_gxx_include_path"`
+         with_gxx_include_path=`cygpath -u "$with_gxx_include_path"`
+      fi
    fi
 fi
 dnl This is the original code...
@@ -1717,6 +1727,36 @@ else
 fi
 GXX_INCLUDE_PATH="$with_gxx_include_path"
 AC_SUBST(GXX_INCLUDE_PATH)
+
+dnl ===================================================================
+dnl Set the mingw runtime library include directories
+dnl ===================================================================
+if test "$WITH_MINGWIN" = "yes"; then
+   AC_MSG_CHECKING([for mingwin runtime include path])
+   cat >conftest.$ac_ext <<_ACEOF
+#include <stddef.h>
+#include <bits/c++config.h>
+_ACEOF
+   _lib_include_path=`$CXX -E -xc++ conftest.$ac_ext | $SED -n -e '/.*1*"\(.*\)\/stddef.h".*/s//\1/p' -e '/.*1*"\(.*\)\/bits\/c++config.h".*/s//\1/p' | sort -u | xargs echo`
+   rm conftest.$ac_ext
+   if test -n "$_lib_include_path"; then
+      _temp=""
+      for a in $_lib_include_path
+         do
+            a=`cygpath -d "$a"`
+            _temp="$_temp "`cygpath -u "$a"`
+         done
+      _lib_include_path=$_temp
+   fi
+fi
+if test -z "$_lib_include_path"; then
+   _lib_include_path="NO_LIB_INCLUDE"
+   AC_MSG_RESULT([no mingwin runtime includes])
+else
+   AC_MSG_RESULT([$_lib_include_path])
+fi
+LIB_INCLUDE_PATH="$_lib_include_path"
+AC_SUBST(LIB_INCLUDE_PATH)
 
 dnl ===================================================================
 dnl Extra checking for the SUN OS compiler
@@ -4296,7 +4336,7 @@ AC_SUBST(CYGWIN_PATH)
 dnl ***************************************
 dnl testing ml.exe assembler path
 dnl ***************************************
-if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then
+if test "$_os" = "WINNT"; then
   AC_MSG_CHECKING([ml.exe assembler path])
   if test ! -x "$with_asm_home/ml.exe"; then
     AC_PATH_PROG(ML_EXE, ml.exe)
@@ -4315,7 +4355,7 @@ else
 	with_asm_home="NO_ASM_HOME"
 fi
 ASM_HOME="$with_asm_home"
-if test -z "$ASM_HOME"; then
+if test -n "$ASM_HOME"; then
   AC_MSG_RESULT([$ASM_HOME])
 fi
 AC_SUBST(ASM_HOME)
