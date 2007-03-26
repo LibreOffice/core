@@ -1,13 +1,13 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:33:35 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:55:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -4720,7 +4720,7 @@
             </node>
             <node oor:name=".uno:SearchDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Suchen &amp; Ersetzen...</value>
+                    <value xml:lang="de">~Suchen &amp; ersetzen...</value>
                     <value xml:lang="en-US">~Find &amp; Replace...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -4765,7 +4765,7 @@
             </node>
             <node oor:name=".uno:FormDesignTools" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Formular Entwurf</value>
+                    <value xml:lang="de">Formular-Entwurf</value>
                     <value xml:lang="en-US">Form Design</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
