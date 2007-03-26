@@ -279,7 +279,7 @@ void Registrar::RegisterAsHtmlEditorForInternetExplorer() const
     RegistryValue RegVal(
         new RegistryValueImpl(
             DEFAULT_VALUE_NAME,
-            m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::Open)));
+            m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open)));
 
     RegKey->SetValue(RegVal);
 
@@ -293,7 +293,7 @@ void Registrar::RegisterAsHtmlEditorForInternetExplorer() const
     RegKey = RegKey->CreateSubKey(SHELL_EDIT_COMMAND);
     RegVal->SetName(DEFAULT_VALUE_NAME);
     RegVal->SetValue(
-        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::Open));
+        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
     RegKey->SetValue(RegVal);
 
     SaveRegisteredFor(HTML_EDITOR);
@@ -352,7 +352,7 @@ void Registrar::RegisterAsDefaultHtmlEditorForInternetExplorer() const
     }
 
     RegVal->SetValue(
-        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::Open));
+        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
     RegKey = RegistrationRootKey->OpenSubKey(MS_IE_DEF_HTML_EDITOR_SHL_EDIT_CMD);
     RegKey->SetValue(RegVal);
 
@@ -443,7 +443,7 @@ void Registrar::RegisterAsDefaultShellHtmlEditor() const
     }
 
     RegVal->SetValue(
-        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::Open));
+        m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
 
     RegKey->SetValue(RegVal);
 
@@ -632,19 +632,19 @@ void Registrar::RegisterForMsOfficeApplication(
     RegKey->SetValue(RegVal);
 
     RegKey = RegKey->CreateSubKey(L"command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::New));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::New));
     RegKey->SetValue(RegVal);
 
     RegKey = RegKeyShell->CreateSubKey(L"open\\command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::Open));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Open));
     RegKey->SetValue(RegVal);
 
     RegKey = RegKeyShell->CreateSubKey(L"print\\command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::Print));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Print));
     RegKey->SetValue(RegVal);
 
     RegKey = RegKeyShell->CreateSubKey(L"printto\\command");
-    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::SHELL_COMMAND::Printto));
+    RegVal->SetValue(m_ContextInformation.GetOpenOfficeCommandline(RegistrationContextInformation::Printto));
     RegKey->SetValue(RegVal);
 
     // set the new forward key under the appropriate extension
