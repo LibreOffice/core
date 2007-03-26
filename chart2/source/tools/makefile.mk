@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 15:38:45 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:43:55 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -132,7 +132,9 @@ SHL1STDLIBS=    \
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 #Specifies the library name to parse for symbols. For Win32 only.
-#DEFLIB1NAME=	_$(TARGET)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+DEFLIB1NAME=	$(TARGET)
+.ENDIF
 
 #A file of symbols to export.
 #DEF1EXPORTFILE=	$(PRJ)$/source$/inc$/exports.dxp
