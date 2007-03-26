@@ -4,9 +4,9 @@
  *
  *  $RCSfile: checksingleton.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:54:43 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:54:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -419,7 +419,7 @@ static sal_Bool checkSingletons(RegistryKey& singletonKey, RegistryKey& typeKey)
     return bRet;
 }
 
-#if (defined UNX) || (defined OS2)
+#if (defined UNX) || (defined OS2) || (defined __MINGW32__)
 int main( int argc, char * argv[] )
 #else
 int _cdecl main( int argc, char * argv[] )
