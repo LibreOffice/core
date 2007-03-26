@@ -4,9 +4,9 @@
 #
 #   $RCSfile: media.pm,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2006-04-20 13:57:20 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:45:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -148,6 +148,9 @@ sub generate_cab_filename_for_some_cabs
     $name =~ s/\.//g;
     $name =~ s/\s//g;
 
+    # possibility to overwrite the name with variable CABFILENAME
+    if ( $allvariables->{'CABFILENAME'} ) { $name = $allvariables->{'CABFILENAME'}; }
+
     $name = $name . $id . ".cab";
 
     if ( $installer::globals::include_cab_in_msi ) { $name = "\#" . $name; }
@@ -168,6 +171,9 @@ sub generate_cab_filename
     $name = lc($name);
     $name =~ s/\.//g;
     $name =~ s/\s//g;
+
+    # possibility to overwrite the name with variable CABFILENAME
+    if ( $allvariables->{'CABFILENAME'} ) { $name = $allvariables->{'CABFILENAME'}; }
 
     $name = $name . ".cab";
 
@@ -212,6 +218,7 @@ sub create_media_table
     installer::windows::idtglobal::write_idt_header(\@mediatable, "media");
 
     if ( $installer::globals::product =~ /ada/i ) { $installer::globals::include_cab_in_msi = 1; }
+    if ( $installer::globals::product =~ /4ms/i ) { $installer::globals::include_cab_in_msi = 1; }
 
     if ( $installer::globals::cab_file_per_component )
     {
