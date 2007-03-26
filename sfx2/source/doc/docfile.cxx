@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.187 $
+ *  $Revision: 1.188 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:39:25 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:11:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1051,13 +1051,12 @@ uno::Reference < embed::XStorage > SfxMedium::GetOutputStorage()
 }
 
 //------------------------------------------------------------------
-sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd );
 void SfxMedium::SetPasswordToStorage_Impl()
 {
     // in case media-descriptor contains password it should be used on opening
     if ( pImp->xStorage.is() && pSet )
     {
-        String aPasswd;
+        ::rtl::OUString aPasswd;
         if ( GetPasswd_Impl( pSet, aPasswd ) )
         {
             try
@@ -1284,7 +1283,7 @@ uno::Reference < embed::XStorage > SfxMedium::GetStorage()
     //if ( aStorage->GetError() == SVSTREAM_OK )
     if ( pImp->xStorage.is() )
     {
-        // SetPasswordToStorage_Impl();
+        SetPasswordToStorage_Impl();
         GetVersionList();
     }
 
