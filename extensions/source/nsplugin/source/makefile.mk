@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hr $ $Date: 2006-02-17 16:03:55 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:05:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ SHL1STDLIBS+=$(SOLARLIBDIR)$/npunix.o
 .ENDIF #UNX
 .IF "$(GUI)"=="WNT"
 STDLIBS+=$(SOLARLIBDIR)$/npwin.obj
-SHL1STDLIBS+= shell32.lib $(SOLARLIBDIR)$/npwin.obj
+SHL1STDLIBS+= $(SHELL32LIB) $(SOLARLIBDIR)$/npwin.obj
 
 .ENDIF
 
@@ -124,14 +124,14 @@ APP1STDLIBS+= -ldl -lnsl -lnls -lsocket
 .IF "$(GUI)"=="WNT"
 DEPOBJFILES=$(OBJ)$/nsp_windows.obj
 APP1OBJS+=$(OBJ)$/nsp_windows.obj
-APP1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib oleaut32.lib uuid.lib
+APP1STDLIBS+= $(WS2_32LIB) $(SHELL32LIB) $(OLE32LIB) $(KERNEL32LIB) $(USER32LIB) $(GDI32LIB) $(WINSPOOLLIB) $(COMDLG32LIB) $(ADVAPI32LIB) $(OLEAAUT32LIB) $(UUIDLIB)
 .ENDIF
 
 # --- Library -----------------------------------
 
 SHL1TARGET=$(TARGET)_so
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
+SHL1STDLIBS+= $(WS2_32LIB) $(SHELL32LIB) $(OLE32LIB) $(KERNEL32LIB) $(USER32LIB) $(GDI32LIB) $(WINSPOOLLIB) $(COMDLG32LIB) $(ADVAPI32LIB) $(OLE32LIB) $(OLEAAUT32LIB) $(UUIDLIB) $(KERNEL32LIB) $(USER32LIB) $(GDI32LIB) $(WINSPOOLLIB) $(COMDLG32LIB) $(ADVAPI32LIB)
 .ENDIF
 
 SHL1DEPN=
@@ -154,7 +154,7 @@ SHL2OBJS=$(SHL1OBJS)
 SHL2STDLIBS=$(SHL1STDLIBS)
 SHL2TARGET=$(TARGET)
 .IF "$(GUI)"=="WNT"
-SHL2STDLIBS+= ws2_32.lib shell32.lib ole32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib ole32.lib oleaut32.lib uuid.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib
+SHL2STDLIBS+= $(WS2_32LIB) $(SHELL32LIB) $(OLE32LIB) $(KERNEL32LIB) $(USER32LIB) $(GDI32LIB) $(WINSPOOLLIB) $(COMDLG32LIB) $(ADVAPI32LIB) $(OLE32LIB) $(OLEAAUT32LIB) $(UUIDLIB) $(KERNEL32LIB) $(USER32LIB) $(GDI32LIB) $(WINSPOOLLIB) $(COMDLG32LIB) $(ADVAPI32LIB)
 .ENDIF
 
 SHL2DEPN=
