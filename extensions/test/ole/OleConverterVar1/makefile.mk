@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:41:10 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:11:08 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,14 @@ APP1STDLIBS= \
     $(SALLIB) \
     $(CPPUHELPERLIB) \
     $(CPPULIB) \
-    user32.lib	\
-    kernel32.lib \
-    ole32.lib	\
-    oleaut32.lib	\
-    uuid.lib	\
-    comdlg32.lib	\
+    $(USER32LIB)	\
+    $(KERNEL32LIB) \
+    $(OLE32LIB)	\
+    $(OLEAUT32LIB)	\
+    $(UUIDLIB)	\
+    $(COMDLG32LIB)	\
     $(COMPATH)$/atlmfc$/lib$/atls.lib \
-    advapi32.lib
+    $(ADVAPI32LIB)    
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
