@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddesvr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:27:18 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:46:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                             while( STRING_NOTFOUND != n )
                             {
                                 String s( sTopics.GetToken( 0, '\t', n ));
-                                if( s == chTopicBuf )
+                                if( s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
                                     ++nTopics;
                             }
                         }
@@ -178,7 +178,7 @@ HDDEDATA CALLBACK _export DdeInternal::SvrCallback(
                     {
                         String s( sTopics.GetToken( 0, '\t', n ));
                         s.EraseAllChars( '\n' ).EraseAllChars( '\r' );
-                        if( !hText1 || s == chTopicBuf )
+                        if( !hText1 || s == reinterpret_cast<const sal_Unicode*>(chTopicBuf) )
                         {
                             DdeString aDStr( pInst->hDdeInstSvr, s );
                             pTopic = FindTopic( *pService, (HSZ)aDStr );
@@ -280,15 +280,15 @@ found:
             String aRes;          // darf erst am Ende freigegeben werden!!
             if ( pTopic->IsSystemTopic() )
             {
-                if ( pTopic->aItem == SZDDESYS_ITEM_TOPICS )
+                if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) )
                     aRes = pService->Topics();
-                else if ( pTopic->aItem == SZDDESYS_ITEM_SYSITEMS )
+                else if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_SYSITEMS) )
                     aRes = pService->SysItems();
-                else if ( pTopic->aItem == SZDDESYS_ITEM_STATUS )
+                else if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_STATUS) )
                     aRes = pService->Status();
-                else if ( pTopic->aItem == SZDDESYS_ITEM_FORMATS )
+                else if ( pTopic->aItem == reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_FORMATS) )
                     aRes = pService->Formats();
-                else if ( pTopic->aItem ==  SZDDESYS_ITEM_HELP )
+                else if ( pTopic->aItem ==  reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_HELP) )
                     aRes = pService->GetHelp();
                 else
                     aRes = pService->SysTopicGet( pTopic->aItem );
@@ -432,7 +432,7 @@ DdeTopic* DdeInternal::FindTopic( DdeService& rService, HSZ hTopic )
         // dann befragen wir doch mal unsere Ableitung:
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hTopic,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
-        bWeiter = rService.MakeTopic( chBuf );
+        bWeiter = rService.MakeTopic( reinterpret_cast<const sal_Unicode*>(chBuf) );
         // dann muessen wir noch mal suchen
     } while( bWeiter );
 
@@ -462,7 +462,7 @@ DdeItem* DdeInternal::FindItem( DdeTopic& rTopic, HSZ hItem )
         // dann befragen wir doch mal unsere Ableitung:
         TCHAR chBuf[250];
         DdeQueryString(pInst->hDdeInstSvr,hItem,chBuf,sizeof(chBuf)/sizeof(TCHAR),CP_WINUNICODE );
-        bWeiter = rTopic.MakeItem( chBuf );
+        bWeiter = rTopic.MakeItem( reinterpret_cast<const sal_Unicode*>(chBuf) );
         // dann muessen wir noch mal suchen
     } while( bWeiter );
 
@@ -504,12 +504,12 @@ DdeService::DdeService( const String& rService )
             nStatus = DMLERR_SYS_ERROR;
 
     AddFormat( FORMAT_STRING );
-    pSysTopic = new DdeTopic( SZDDESYS_TOPIC );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_TOPICS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_SYSITEMS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_STATUS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_FORMATS ) );
-    pSysTopic->AddItem( DdeItem( SZDDESYS_ITEM_HELP ) );
+    pSysTopic = new DdeTopic( reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) );
+    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) ) );
+    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_SYSITEMS) ) );
+    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_STATUS) ) );
+    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_FORMATS) ) );
+    pSysTopic->AddItem( DdeItem( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_HELP) ) );
     AddTopic( *pSysTopic );
 }
 
@@ -661,7 +661,7 @@ const String& DdeTopic::GetName() const
 
 BOOL DdeTopic::IsSystemTopic()
 {
-    return BOOL (GetName() == SZDDESYS_TOPIC);
+    return BOOL (GetName() == reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC));
 }
 
 // --- DdeTopic::AddItem() -----------------------------------------
@@ -1040,10 +1040,10 @@ String DdeService::Formats()
         switch( (USHORT)f )
         {
             case CF_TEXT:
-                p = String::CreateFromAscii("TEXT").GetBuffer();
+                p = reinterpret_cast<LPCTSTR>(String::CreateFromAscii("TEXT").GetBuffer());
                 break;
             case CF_BITMAP:
-                p = String::CreateFromAscii("BITMAP").GetBuffer();
+                p = reinterpret_cast<LPCTSTR>(String::CreateFromAscii("BITMAP").GetBuffer());
                 break;
 #ifdef OS2
             case CF_DSPTEXT:
@@ -1068,7 +1068,7 @@ String DdeService::Formats()
                 GetClipboardFormatName( (UINT)f, buf, sizeof(buf) / sizeof(TCHAR) );
 #endif
         }
-        s += String( p );
+        s += String( reinterpret_cast<const sal_Unicode*>(p) );
     }
     s += String::CreateFromAscii("\r\n");
 
