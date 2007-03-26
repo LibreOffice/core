@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contwnd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:15:05 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,11 @@
 
 #ifndef _BGFX_POLYPOLYGON_B2DPOLYGONTOOLS_HXX
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
+#endif
+
+// #i75482#
+#ifndef _SDRPAINTWINDOW_HXX
+#include "sdrpaintwindow.hxx"
 #endif
 
 #ifdef MAC
@@ -335,21 +340,26 @@ void ContourWindow::MouseButtonUp(const MouseEvent& rMEvt)
 
 void ContourWindow::Paint( const Rectangle& rRect )
 {
-    const Graphic& rGraphic = GetGraphic();
+    // #i75482#
+    // encapsulate the redraw using Begin/End and use the returned
+    // data to get the target output device (e.g. when pre-rendering)
+    SdrPaintWindow* pPaintWindow = pView->BeginCompleteRedraw(this);
+    OutputDevice& rTarget = pPaintWindow->GetTargetOutputDevice();
 
+    const Graphic& rGraphic = GetGraphic();
     const Color& rOldLineColor = GetLineColor();
     const Color& rOldFillColor = GetFillColor();
 
-    SetLineColor( Color( COL_BLACK ) );
-    SetFillColor( Color( COL_WHITE ) );
+    rTarget.SetLineColor( Color( COL_BLACK ) );
+    rTarget.SetFillColor( Color( COL_WHITE ) );
 
-    DrawRect( Rectangle( Point(), GetGraphicSize() ) );
+    rTarget.DrawRect( Rectangle( Point(), GetGraphicSize() ) );
 
-    SetLineColor( rOldLineColor );
-    SetFillColor( rOldFillColor );
+    rTarget.SetLineColor( rOldLineColor );
+    rTarget.SetFillColor( rOldFillColor );
 
     if ( rGraphic.GetType() != GRAPHIC_NONE )
-        rGraphic.Draw( this, Point(), GetGraphicSize() );
+        rGraphic.Draw( &rTarget, Point(), GetGraphicSize() );
 
     if ( aWorkRect.Left() != aWorkRect.Right() && aWorkRect.Top() != aWorkRect.Bottom() )
     {
@@ -359,12 +369,15 @@ void ContourWindow::Paint( const Rectangle& rRect )
         _aPolyPoly.Insert( Rectangle( Point(), GetGraphicSize() ) );
         _aPolyPoly.Insert( aWorkRect );
 
-        SetFillColor( COL_LIGHTRED );
-        DrawTransparent( _aPolyPoly, 50 );
-        SetFillColor( aOldFillColor );
+        rTarget.SetFillColor( COL_LIGHTRED );
+        rTarget.DrawTransparent( _aPolyPoly, 50 );
+        rTarget.SetFillColor( aOldFillColor );
     }
 
-    pView->CompleteRedraw( this , rRect );
+    // #i75482#
+    const Region aRepaintRegion(rRect);
+    pView->DoCompleteRedraw(*pPaintWindow, aRepaintRegion);
+    pView->EndCompleteRedraw(*pPaintWindow, aRepaintRegion);
 }
 
-
+// eof
