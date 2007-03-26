@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:29:04 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:54:02 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,10 @@ SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
 
 .IF "$(GUI)" == "WNT"
-SHL1STDLIBS=     gdi32.lib advapi32.lib comdlg32.lib \
-                 uuid.lib ole32.lib shell32.lib winspool.lib
+SHL1STDLIBS=     $(GDI32LIB) $(ADVAPI32LIB) $(COMDLG32LIB) \
+                 $(UUIDLIB) $(OLE32LIB) $(SHELL32LIB) $(WINSPOOLLIB)
 .IF "$(GVER)" == "W40"
-SHL1STDLIBS=    $(SHL1STDLIBS) comctl32.lib
+SHL1STDLIBS=    $(SHL1STDLIBS) $(COMCTL32LIB)
 .ENDIF # W40
 .ENDIF # WNT
 
