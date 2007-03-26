@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XNotifyingDataObject.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:01:50 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,6 +56,9 @@
 #include "..\..\inc\DtObjFactory.hxx"
 #endif
 
+#ifdef __MINGW32__
+#define __uuidof(I) IID_##I
+#endif
 
 using namespace com::sun::star::datatransfer;
 using namespace com::sun::star::datatransfer::clipboard;
