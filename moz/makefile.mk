@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:45:27 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:53:44 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -164,15 +164,28 @@ SYSTEM_JPEG:=
 
 # For W32-tcsh CC and CXX must not contain the wrapper, and W32-4nt ( in
 # some cases ) doesn't work with DOS path notation when building mozilla.
+.IF "$(COM)"=="GCC"
+CC:=$(CC:s/guw.pl //:s/ -mno-cygwin//)
+CXX:=$(CXX:s/guw.pl //:s/ -mno-cygwin//)
+CPP:=$(CC) -E
+LD:=ld
+LIBS:=-lsupc++
+.EXPORT : CPP LIBS
+.ELSE
 CC:=cl.exe
 CXX:=cl.exe
+.ENDIF
 
 # Variables to install/use our own wintools
 MOZTOOLSUNPACK:=$(MISC)$/build$/moztoolsunpack
 MOZTOOLSINST:=$(MISC)$/build$/moztoolsinst
 .IF "$(USE_SHELL)"!="4nt"
 MOZ_TOOLS_DOS:=$(shell cygpath -ad "$(MISC)")\build\moztoolsinst
+.IF "$(COM)"=="GCC"
+PATH!:=$(PATH):$(shell cygpath $(MOZ_TOOLS_DOS))/bin:$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin
+.ELSE
 PATH!:=$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
+.ENDIF
 SET_MOZ_TOOLS_INSTALL_BAT:=setenv MOZ_TOOLS "$(MOZ_TOOLS_DOS)"
 .ELSE # "$(USE_SHELL)"!="4nt"
 # MOZ_TOOLS must contain an absolute path
