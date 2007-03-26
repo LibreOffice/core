@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MtaFop.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:01:17 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:20:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -421,10 +421,10 @@ sal_Bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
     // pre SHBrowseFroFolder
 
     m_bi.pidlRoot       = 0;
-    m_bi.pszDisplayName = m_pathBuff;
+    m_bi.pszDisplayName = reinterpret_cast<LPWSTR>(m_pathBuff.get());
 
     if ( m_Description.getLength( ) )
-        m_bi.lpszTitle = m_Description.getStr( );
+        m_bi.lpszTitle = reinterpret_cast<LPCWSTR>(m_Description.getStr( ));
 
     lpiid = SHBrowseForFolderW( &m_bi );
     bRet = ( NULL != lpiid );
@@ -478,7 +478,7 @@ LPITEMIDLIST SAL_CALL CMtaFolderPicker::getItemIdListFromPath( const rtl::OUStri
             pIShellFolder->ParseDisplayName(
                 NULL,
                 NULL,
-                const_cast< sal_Unicode* >( aDirectory.getStr( ) ),
+                reinterpret_cast<LPOLESTR>(const_cast< sal_Unicode* >( aDirectory.getStr( ) )),
                 NULL,
                 &lpItemIdList,
                 NULL );
@@ -503,7 +503,7 @@ OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemI
 
     if ( lpItemIdList )
     {
-        bool bRet = SHGetPathFromIDListW( lpItemIdList, m_pathBuff );
+        bool bRet = SHGetPathFromIDListW( lpItemIdList, reinterpret_cast<LPWSTR>(m_pathBuff.get()) );
         if ( bRet )
             path = m_pathBuff.get( );
     }
@@ -606,7 +606,7 @@ int CALLBACK CMtaFolderPicker::FolderPickerCallback( HWND hwnd, UINT uMsg, LPARA
         case BFFM_INITIALIZED:
             pImpl->m_hwnd = hwnd;
             pImpl->onInitialized( );
-            SetWindowTextW( hwnd, pImpl->m_dialogTitle );
+            SetWindowTextW( hwnd, reinterpret_cast<LPCWSTR>(pImpl->m_dialogTitle.getStr()) );
         break;
 
         case BFFM_SELCHANGED:
