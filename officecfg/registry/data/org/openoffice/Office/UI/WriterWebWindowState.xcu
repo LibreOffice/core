@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WriterWebWindowState.xcu,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:21:58 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">OLE-Object</value>
-                    <value xml:lang="de">OLE Objekt</value>
+                    <value xml:lang="de">OLE-Objekt</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
@@ -361,7 +361,7 @@
             <node oor:name="private:resource/toolbar/formdesign" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Design</value>
-                    <value xml:lang="de">Formular Entwurf</value>
+                    <value xml:lang="de">Formular-Entwurf</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
