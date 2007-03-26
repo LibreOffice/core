@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:14:45 $
+#   last change: $Author: vg $ $Date: 2007-03-26 15:34:24 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -52,15 +52,17 @@ SHL1TARGET=$(VOS_TARGET)$(VOS_MAJOR)$(COMID)
 SHL1IMPLIB=i$(TARGET)
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS=wsock32.lib $(SALLIB)
+SHL1STDLIBS=$(WSOCK32LIB) $(SALLIB)
 .ELSE
 SHL1STDLIBS=$(SALLIB)
 .ENDIF
 
 SHL1LIBS=    $(SLB)$/cpp$(TARGET).lib
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 SHL1OBJS=    \
     $(SLO)$/object.obj
+.ENDIF
 .ENDIF
 
 SHL1DEPN=
