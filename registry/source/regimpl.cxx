@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regimpl.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:53:32 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:54:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,9 @@
 #define strdup(str) strcpy((sal_Char*)malloc(strlen(str)+1),str) /* #100211# - checked */
 #endif
 #ifdef UNX
+#include    <unistd.h>
+#endif
+#ifdef __MINGW32__
 #include    <unistd.h>
 #endif
 
