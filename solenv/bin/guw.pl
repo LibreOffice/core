@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: guw.pl,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2005-10-13 16:48:17 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:14:42 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,50 +116,75 @@ sub WinFormat {
   $variable =~ s/(\$\w+)/$1/eeg ; # expand the variables twice!
 
   # Include paths or parameters with filenames
-  if ( $variable =~ /\A(-?\w[\w\.]*=)[\'\"]?((?:\/?[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+  if ( $variable =~ /\A(-D[\w\.]*=)[\'\"]?((?:\/?[\w\.\-\+ ~]+)+\/?)[\'\"]?\Z/ ) {
+      # This regex evaluates -D<something>=<path>, sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (-D<something>=<path>) path:\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
+      if ( $d2 ne "" ) {
+             $d2 =~ s/\\/\\\\/g ;
+      }
+  } elsif ( $variable =~ /\A(-?\w[\w\.]*=)[\'\"]?((?:\/?[\w\.\-\+ ~]+)+\/?)[\'\"]?\Z/ ) {
       # This regex evaluates [-]X<something>=<path>, sometimes with quotes or "/" at the end
       # option -> $1, filename without quotes -> $2
       if ( defined $debug ) { print(STDERR "WinFormat:\ninclude ([-]<something>=<path>) path:\n$variable\n"); }
       $d1_prefix = $1;
-      $d1 = myCygpath($2,1);
-  } elsif ( $variable =~ /\A(-\w[\w\.]*:)[\'\"]?((?:\/?[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(--\w[\w\.\-]*=)[\'\"]?((?:\/?[\w\.\-\+ ~]+)+\/?)[\'\"]?\Z/ ) {
+      # This regex evaluates --<something>=<path>, sometimes with quotes or "/" at the end
+      # option -> $1, filename without quotes -> $2
+      if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (--<something>=<path>) path:\n$variable\n"); }
+      $d1_prefix = $1;
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(-\w[\w\.]*:)[\'\"]?((?:\/?[\w\.\-\+ ~]+)+\/?)[\'\"]?\Z/ ) {
       # This regex evaluates -X<something>:<path>, sometimes with quotes or "/" at the end
       # option -> $1, filename without quotes -> $2
       if ( defined $debug ) { print(STDERR "WinFormat:\nFound (-<something>:<path>):\n$variable\n"); }
       $d1_prefix = $1;
-      $d1 = myCygpath($2,1);
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
   } elsif ( $variable =~ /\A(-\w+:)(.*)\Z/ ) {
       # This regex evaluates -X<something>:<NO-path>, and prevents translating of these.
       # option -> $1, rest -> $2
       if ( defined $debug ) { print(STDERR "WinFormat:\nFound (-<something>:<no-path>):\n$variable\n"); }
       $d1_prefix = $1;
-      $d1 = myCygpath($2,1);
-  } elsif ( $variable =~ /\A(\w+:)[\'\"]?\/\/\/((?:\/?[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(\w+:)[\'\"]?\/\/\/((?:\/?[\w\.\-\+ ~]+)+\/?)[\'\"]?\Z/ ) {
       # See iz35982 for the reason for the special treatment of this switch.
       # This regex evaluates <something>:///<path>, sometimes with quotes or "/" at the end
       # option -> $1, filename without quotes -> $2
       if ( defined $debug ) { print(STDERR "WinFormat:\nFound (<something>:///<path>):\n$variable\n"); }
       $d1_prefix = $1."///";
-      $d1 = myCygpath($2,1);
-      $d1 =~ s/\\/\//g ;
-  } elsif ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
+      $d2 =~ s/\\/\//g ;
+  } elsif ( $variable =~ /\A(-\w)[\'\"]?((?:\/[\w\.\-\+ ~]+)+\/?)[\'\"]?\Z/ ) {
       # This regex evaluates -X<path>, sometimes with quotes or "/" at the end
       # option -> $1, filename without quotes -> $2
       if ( defined $debug ) { print(STDERR "WinFormat:\ninclude (-X<absolute path>) path:\n$variable\n"); }
       $d1_prefix = $1;
-      $d1 = myCygpath($2,1);
-  } elsif ( $variable =~ /\A(-F[ARdemopr])[\'\"]?((?:\/[\w\.\- ~]+)+\/?)[\'\"]?\Z/ ) {
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
+  } elsif ( $variable =~ /\A(-F[ARdemopr])[\'\"]?((?:\/[\w\.\-\+ ~]+)+\/?)[\'\"]?\Z/ ) {
       # This regex evaluates -FX<path> (MSVC switches for output naming), sometimes with quotes or "/" at the end
       # option -> $1, filename without quotes -> $2
       if ( defined $debug ) { print(STDERR "WinFormat:\ncompiler naming (-FX<absolute path>) path:\n$variable\n"); }
       $d1_prefix = $1;
-      $d1 = myCygpath($2,1);
+      $d1 = $2;
+      $d2 = myCygpath($2,1);
   } else {
-      $d1 = "";
+      $d2 = "";
   }
-  if ( $d1 ne "" ) {
+  if ( $d2 ne "" ) {
       # Found a parameter
-      $variable = $d1_prefix.$d1;
+      $d1 =~ s/\+/\\\+/ ;
+      $d1 =~ s/\./\\\./ ;
+      $variable =~ s/$d1/$d2/ ;
   } else {
     # Found no parameter, assume a path
     $variable =~ s/:/;/g;
@@ -168,24 +193,25 @@ sub WinFormat {
     # Search for posix path ;entry; (The regex accepts valid paths with at least one /)
     # and replace with DOS path, accept quotes.
     # iz28717 Accept ',' as path seperator.
-    while ( $variable =~ /(?:[;,]|\A)[\'\"]?([\w\.\- ~]*(?:\/[\w\.\- ~]+)+\/?)[\'\"]?(?:[;,]|\Z)/ ) {
+    while ( $variable =~ /(?:[;,]|\A)[\'\"]?([\w\.\-\+ ~]*(?:\/[\w\.\-\+ ~]+)+\/?)[\'\"]?(?:[;,]|\Z)/ ) {
         # Normal paths
         $d1 = $1;
         $d2 = myCygpath($d1);
         if ( defined $debug ) {
             print(STDERR "WinFormat:\nFull path:\n$variable\nTranslated part:$d2\n");
         }
+    $d1 =~ s/\+/\\\+/ ;
         $variable =~ s/$d1/$d2/ ;
     }
   }
 
   # Sanity check for -X<path>
-  if ( $variable =~ /-\w[\'\"]?(?:(?:\/[\w\.\- ~]+)+)/ ) {
+  if ( $variable =~ /-\w[\'\"]?(?:(?:\/[\w\.\-\+ ~]+)+)/ ) {
       print(STDERR "Error: guw.pl: WinFormat: Not converted -X/... type switch in :$variable:.\n");
       if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed -X/...\n"; }
   }
   # Sanity check for [-]X<something>(:|=)<path> case
-  if ( $variable =~ /\A-?\w[\w\.]*[=:][\'\"]?(?:\/[\w\.\- ~]+)+/ ) {
+  if ( $variable =~ /\A-?\w[\w\.]*[=:][\'\"]?(?:\/[\w\.\-\+ ~]+)+/ ) {
       print(STDERR "Error: guw.pl: WinFormat: Not converted [-]X<something>(=|:)/<path> type switch in :$variable:.\n");
       if ( (defined $debug_light) or (defined $debug) ) { die "\nNot processed [-]X<something>(=|:)/...\n"; }
   }
@@ -253,7 +279,7 @@ sub replace_cyg {
           # remove .exe and convert to lower case
           $shortcommand = lc $command ;
           $shortcommand =~ s/\.exe$//;
-          $shortcommand =~ /(\w+$)/;
+          $shortcommand =~ /([^\/]+$)/;
           $shortcommand = $1;
           foreach $i (@{$knownpara{$shortcommand}}) {
             if( $para =~ /$i/ ) {
