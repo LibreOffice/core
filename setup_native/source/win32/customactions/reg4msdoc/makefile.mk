@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:17:31 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:09:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,12 +68,12 @@ SLOFILES =	$(SLO)$/msihelper.obj\
             $(SLO)$/register.obj\
             $(SLO)$/reg4msdocmsi.obj            
 
-SHL1STDLIBS=	kernel32.lib\
-                user32.lib\
-                advapi32.lib\
-                shell32.lib\
-                msi.lib\
-                shlwapi.lib\
+SHL1STDLIBS=	$(KERNEL32LIB)\
+                $(USER32LIB)\
+                $(ADVAPI32LIB)\
+                $(SHELL32LIB)\
+                $(MSILIB)\
+                $(SHLWAPILIB)\
                 $(LIBSTLPORTST)								
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
