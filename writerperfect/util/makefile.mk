@@ -12,7 +12,11 @@ LIBWPD=$(LIBWPD_LIBS)
 LIBWPD=-lwpdlib
 .ENDIF
 .ELSE
-LIBWPD=$(LIBPRE) wpdlib.lib
+.IF "$(GUI)$(COM)"=="WNTGCC"
+LIBWPD=-lwpdlib
+.ELSE
+ LIBWPD=$(LIBPRE) wpdlib.lib
+.ENDIF
 .ENDIF
 
 LIB1TARGET= $(SLB)$/wpft.lib
