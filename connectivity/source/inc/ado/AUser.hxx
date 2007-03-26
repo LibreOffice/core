@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AUser.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 06:54:35 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:01:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,7 @@ namespace connectivity
     {
         class OCatalog;
         typedef connectivity::sdbcx::OUser OUser_TYPEDEF;
+        typedef connectivity::sdbcx::OUser_BASE OUser_BASE_TYPEDEF;
 
         class OAdoUser : public OUser_TYPEDEF
         {
