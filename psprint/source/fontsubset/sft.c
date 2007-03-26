@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:28:20 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1631,45 +1631,41 @@ int CountTTCFonts(const char* fname)
     return nFonts;
 }
 
-#if defined WIN32
-int OpenTTFont(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD01*/
-#else
-int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD01*/
-#endif
+static void allocTrueTypeFont( TrueTypeFont** ttf )
 {
-    TrueTypeFont *t;
-    int i;
-    #ifndef WIN32
+    *ttf = calloc(1,sizeof(TrueTypeFont));
+    if( *ttf != NULL )
+    {
+        (*ttf)->tag = 0;
+        (*ttf)->fname = 0;
+        (*ttf)->fsize = -1;
+        (*ttf)->ptr = 0;
+        (*ttf)->nglyphs = 0xFFFFFFFF;
+        (*ttf)->pGSubstitution = 0;
+    }
+}
+
+/* forward declariotn for the two entry points to use*/
+static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t );
+
+#if ! defined WIN32
+int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
+{
     int ret, fd = -1;
-    #endif
-    sal_uInt32 version;
-    sal_uInt8 *table, *offset;
-    sal_uInt32 length, tag;
-    sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
-#ifndef WIN32
     struct stat st;
-#endif
 
-    int indexfmt, k;
-
-    *ttf = 0;
-
-#ifndef WIN32
     if (!fname || !*fname) return SF_BADFILE;
-#endif
 
-    t = calloc(1,sizeof(TrueTypeFont));
-    assert(t != 0);
-    t->tag = 0;
-    t->fname = 0;
-    t->fsize = -1;
-    t->ptr = 0;
-    t->nglyphs = 0xFFFFFFFF;
-    t->pGSubstitution = 0;
+    allocTrueTypeFont( ttf );
+    if( ! *ttf )
+        return SF_MEMORY;
 
-#ifndef WIN32
-    t->fname = strdup(fname);
-    assert(t->fname != 0);
+    (*ttf)->fname = strdup(fname);
+    if( ! (*ttf)->fname )
+    {
+        ret = SF_MEMORY;
+        goto cleanup;
+    }
 
     fd = open(fname, O_RDONLY);
 
@@ -1683,13 +1679,13 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
         goto cleanup;
     }
 
-    t->fsize = st.st_size;
+    (*ttf)->fsize = st.st_size;
 
     /* On Mac OS, most likely will happen if a Mac user renames a font file
      * to be .ttf when its really a Mac resource-based font.
      * Size will be 0, but fonts smaller than 4 bytes would be broken anyway.
      */
-    if (t->fsize == 0) {
+    if ((*ttf)->fsize == 0) {
 #ifdef MACOSX
         fprintf( stderr, "WARNING: Font file %s\nhad a data-fork size of 0, it is either:\n", t->fname );
         fprintf( stderr, "   1) A Resource-Based font that has a .ttf at the end of its name\n" );
@@ -1701,16 +1697,45 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     }
 
 
-    if ((t->ptr = (sal_uInt8 *) mmap(0, t->fsize, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
+    if (((*ttf)->ptr = (sal_uInt8 *) mmap(0, (*ttf)->fsize, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
         ret = SF_MEMORY;
         goto cleanup;
     }
     close(fd);
-#else
-    t->fname = NULL;
-    t->fsize = nLen;
-    t->ptr   = pBuffer;
+
+    return doOpenTTFont( facenum, *ttf );
+
+cleanup:
+    if (fd != -1) close(fd);
+    /*- t and t->fname have been allocated! */
+    free((*ttf)->fname);
+    free(*ttf);
+    *ttf = NULL;
+    return ret;
+}
 #endif
+
+int OpenTTFontBuffer(void* pBuffer, sal_uInt32 nLen, sal_uInt32 facenum, TrueTypeFont** ttf)
+{
+    allocTrueTypeFont( ttf );
+    if( *ttf == NULL )
+        return SF_MEMORY;
+
+    (*ttf)->fname = NULL;
+    (*ttf)->fsize = nLen;
+    (*ttf)->ptr   = pBuffer;
+
+    return doOpenTTFont( facenum, *ttf );
+}
+
+static int doOpenTTFont( sal_uInt32 facenum, TrueTypeFont* t )
+{
+    int i;
+    sal_uInt32 version;
+    sal_uInt8 *table, *offset;
+    sal_uInt32 length, tag;
+    sal_uInt32 tdoffset = 0;        /* offset to TableDirectory in a TTC file. For TTF files is 0 */
+    int indexfmt, k;
 
     version = GetInt32(t->ptr, 0, 1);
 
@@ -1880,17 +1905,7 @@ int OpenTTFont(const char *fname, sal_uInt32 facenum, TrueTypeFont** ttf) /*FOLD
     GetKern(t);
     ReadGSUB( t, 0, 0 );
 
-    *ttf = t;
     return SF_OK;
-
-#ifndef WIN32
-  cleanup:
-    if (fd != -1) close(fd);
-    /*- t and t->fname have been allocated! */
-    free(t->fname);
-    free(t);
-    return ret;
-#endif
 }
 
 void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
@@ -1898,7 +1913,8 @@ void CloseTTFont(TrueTypeFont *ttf) /*FOLD01*/
     if (ttf->tag != TTFontClassTag) return;
 
 #ifndef WIN32
-    munmap((char *) ttf->ptr, ttf->fsize);
+    if( ttf->fname )
+        munmap((char *) ttf->ptr, ttf->fsize);
 #endif
     free(ttf->fname);
     free(ttf->goffsets);
