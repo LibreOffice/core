@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-09 11:52:05 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:33:23 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -56,14 +56,19 @@ OBJFILES=$(OBJ)$/QuickStart.obj
 APP1OBJS=$(OBJFILES)
 APP1NOSAL=TRUE
 APP1TARGET=$(TARGET)
-APP1STDLIBS=shell32.lib\
-            ole32.lib\
-            gdi32.lib\
-            oleaut32.lib\
-            comdlg32.lib\
-            kernel32.lib\
-            comsupp.lib\
-            oleaut32.lib
+.IF "$(COM)"=="GCC"
+APP1STDLIBS=-luuid
+.ELSE
+APP1STDLIBS=comsupp.lib
+.ENDIF
+
+APP1STDLIBS+=$(SHELL32LIB)\
+            $(OLE32LIB)\
+            $(GDI32LIB)\
+            $(OLEAUT32LIB)\
+            $(COMDLG32LIB)\
+            $(KERNEL32LIB)\
+            $(OLEAUT32LIB)
 
 APP1NOSVRES=$(RES)$/$(TARGET).res
 
