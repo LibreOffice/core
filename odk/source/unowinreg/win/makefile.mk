@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:23:00 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:28:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -98,11 +98,15 @@ SHL1TARGET=$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 #No default libraries
+.IF "$(COM)"=="GCC"
+STDSHL=-lmingw32 -lmsvcrt
+.ELSE
 STDSHL=
+.ENDIF
 
 SHL1STDLIBS +=\
-        kernel32.lib\
-        advapi32.lib
+        $(KERNEL32LIB)\
+        $(ADVAPI32LIB)
         
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
