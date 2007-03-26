@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 20:02:01 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:51:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,12 +53,12 @@ CDEFS+=-D_WIN32_IE=0x501
 
 SLOFILES=$(SLO)$/ooofiltproxy.obj
 SHL1TARGET=$(TARGET)
-SHL1STDLIBS=ole32.lib\
-     advapi32.lib\
-     comctl32.lib\
-     uuid.lib\
-     shell32.lib\
-     kernel32.lib
+SHL1STDLIBS=$(OLE32LIB)\
+     $(ADVAPO32LIB)\
+     $(COMCTL32LIB)\
+     $(UUIDLIB)\
+     $(SHELL32LIB)\
+     $(KERNEL32LIB)
      
 SHL1DEPN=        
 SHL1OBJS=$(SLOFILES)
