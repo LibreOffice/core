@@ -4,9 +4,9 @@
  *
  *  $RCSfile: setup_main.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:55:10 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,14 @@ public:
                     SetupApp();
     virtual        ~SetupApp();
 
-    virtual boolean Initialize( HINSTANCE hInst ) = NULL;
-    virtual boolean AlreadyRunning() const = NULL;
-    virtual boolean ReadProfile() = NULL;
-    virtual boolean ChooseLanguage( long& rLanguage ) = NULL;
-    virtual boolean CheckVersion() = NULL;
-    virtual boolean Install( long nLanguage ) = NULL;
+    virtual boolean Initialize( HINSTANCE hInst ) = 0;
+    virtual boolean AlreadyRunning() const = 0;
+    virtual boolean ReadProfile() = 0;
+    virtual boolean ChooseLanguage( long& rLanguage ) = 0;
+    virtual boolean CheckVersion() = 0;
+    virtual boolean Install( long nLanguage ) = 0;
 
-    virtual void    DisplayError( UINT nErr ) const = NULL;
+    virtual void    DisplayError( UINT nErr ) const = 0;
 
     UINT            GetError() const { return m_uiRet; }
     void            SetError( UINT nErr ) { m_uiRet = nErr; }
