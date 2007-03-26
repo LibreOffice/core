@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctemplates.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:54:38 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:12:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2083,11 +2083,23 @@ sal_Bool SfxDocTplService_Impl::addTemplate( const OUString& rGroupName,
                                                 aNewTemplateTargetName,
                                                 NameClash::OVERWRITE ) )
             return sal_False;
+
+        // allow to edit the added template
+        Content aResultContent;
+        if ( Content::create( aNewTemplateTargetURL, xEnv, aResultContent ) )
+        {
+            ::rtl::OUString aPropertyName( RTL_CONSTASCII_USTRINGPARAM( "IsReadonly" ) );
+            uno::Any aProperty;
+            sal_Bool bReadOnly = sal_False;
+            if ( getProperty( aResultContent, aPropertyName, aProperty ) && ( aProperty >>= bReadOnly ) && bReadOnly )
+                setProperty( aResultContent, aPropertyName, uno::makeAny( (sal_Bool)sal_False ) );
+        }
     }
     catch ( ContentCreationException& )
     { return sal_False; }
     catch ( Exception& )
     { return sal_False; }
+
 
     // either the document has title and it is the same as requested, or we have to set it
     sal_Bool bCorrectTitle = ( bDocHasTitle && aTitle.equals( rTemplateName ) );
