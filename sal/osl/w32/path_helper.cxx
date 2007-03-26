@@ -4,9 +4,9 @@
  *
  *  $RCSfile: path_helper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:47:18 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:23:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,24 +109,24 @@ void SAL_CALL osl_systemPathRemoveSeparator(/*inout*/ rtl_uString** ppustrPath)
  ******************************************************************/
 
 // is [A-Za-z]:[/|\]\0
-const sal_Unicode* LDP                    = L":";
-const sal_Unicode* LDP_WITH_BACKSLASH     = L":\\";
-const sal_Unicode* LDP_WITH_SLASH         = L":/";
+const sal_Char* LDP                    = ":";
+const sal_Char* LDP_WITH_BACKSLASH     = ":\\";
+const sal_Char* LDP_WITH_SLASH         = ":/";
 
 // degenerated case returned by the Windows FileOpen dialog
 // when someone enters for instance "x:filename", the Win32
 // API accepts this case
-const sal_Unicode* LDP_WITH_DOT_BACKSLASH = L":.\\";
+const sal_Char* LDP_WITH_DOT_BACKSLASH = ":.\\";
 
 sal_Int32 osl_systemPathIsLogicalDrivePattern(/*in*/ const rtl_uString* pustrPath)
 {
     const sal_Unicode* p = rtl_uString_getStr(const_cast<rtl_uString*>(pustrPath));
     if (iswalpha(*p++))
     {
-        return ((0 == wcscmp(p, LDP)) ||
-                (0 == wcscmp(p, LDP_WITH_BACKSLASH)) ||
-                (0 == wcscmp(p, LDP_WITH_SLASH)) ||
-                (0 == wcscmp(p, LDP_WITH_DOT_BACKSLASH)));
+        return ((0 == rtl_ustr_ascii_compare(p, LDP)) ||
+                (0 == rtl_ustr_ascii_compare(p, LDP_WITH_BACKSLASH)) ||
+                (0 == rtl_ustr_ascii_compare(p, LDP_WITH_SLASH)) ||
+                (0 == rtl_ustr_ascii_compare(p, LDP_WITH_DOT_BACKSLASH)));
     }
     return 0;
 }
