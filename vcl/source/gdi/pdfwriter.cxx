@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:32:05 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:20:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,6 +525,15 @@ sal_Int32 PDFWriter::CreateControl( const PDFWriter::AnyWidget& rControl, sal_In
     return ((PDFWriterImpl*)pImplementation)->createControl( rControl, nPageNr );
 }
 
+PDFOutputStream::~PDFOutputStream()
+{
+}
+
+void PDFWriter::AddStream( const String& rMimeType, PDFOutputStream* pStream, bool bCompress )
+{
+    ((PDFWriterImpl*)pImplementation)->addStream( rMimeType, pStream, bCompress );
+}
+
 void PDFWriter::BeginPattern()
 {
     ((PDFWriterImpl*)pImplementation)->beginPattern();
@@ -539,3 +548,4 @@ void PDFWriter::DrawPolyPolygon( const PolyPolygon& rPolyPoly, sal_Int32 nPatter
 {
     ((PDFWriterImpl*)pImplementation)->drawPolyPolygon( rPolyPoly, nPattern, bEOFill );
 }
+
