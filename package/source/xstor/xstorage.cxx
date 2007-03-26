@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:54 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1995,6 +1995,8 @@ void SAL_CALL OStorage::InternalDispose( sal_Bool bNotifyImpl )
     if ( !m_pImpl )
         throw lang::DisposedException();
 
+    // the source object is also a kind of locker for the current object
+    // since the listeners could dispose the object while being notified
        lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
     m_pData->m_aListenersContainer.disposeAndClear( aSource );
 
