@@ -14,7 +14,7 @@ class RuntimeException : public std::exception
 {
 public:
     RuntimeException(int Error);
-    virtual ~RuntimeException();
+    virtual ~RuntimeException() throw();
 
     int GetErrorCode() const;
 
@@ -40,7 +40,7 @@ class Win32Exception : public RuntimeException
 {
 public:
     Win32Exception(int Error);
-    virtual ~Win32Exception();
+    virtual ~Win32Exception() throw();
 
     virtual const char* what() const throw();
 
