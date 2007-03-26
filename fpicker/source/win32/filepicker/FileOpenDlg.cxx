@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FileOpenDlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:10:57 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,10 +145,10 @@ CFileOpenDialog::CFileOpenDialog(
     // we get a parent window (using a vcl window?)
     m_ofn.hwndOwner = choose_parent_window();
 
-    m_ofn.lpstrFile = const_cast<sal_Unicode*>(m_fileNameBuffer.getStr());
+    m_ofn.lpstrFile = reinterpret_cast<LPTSTR>(const_cast<sal_Unicode*>(m_fileNameBuffer.getStr()));
     m_ofn.nMaxFile  = m_fileNameBuffer.getCapacity();
 
-    m_ofn.lpstrFileTitle = const_cast<sal_Unicode*>(m_fileTitleBuffer.getStr());
+    m_ofn.lpstrFileTitle = reinterpret_cast<LPTSTR>(const_cast<sal_Unicode*>(m_fileTitleBuffer.getStr()));
     m_ofn.nMaxFileTitle  = m_fileTitleBuffer.getCapacity();
 
     m_ofn.lpfnHook = CFileOpenDialog::ofnHookProc;
@@ -183,7 +183,7 @@ CFileOpenDialog::~CFileOpenDialog()
 void SAL_CALL CFileOpenDialog::setTitle(const rtl::OUString& aTitle)
 {
     m_dialogTitle = aTitle;
-    m_ofn.lpstrTitle = m_dialogTitle.getStr();
+    m_ofn.lpstrTitle = reinterpret_cast<LPCTSTR>(m_dialogTitle.getStr());
 }
 
 //------------------------------------------------------------------------
@@ -198,7 +198,7 @@ void CFileOpenDialog::setFilter(const rtl::OUString& aFilter)
     m_filterBuffer.ensureCapacity(aFilter.getLength());
     m_filterBuffer.setLength(0);
     m_filterBuffer.append(aFilter);
-    m_ofn.lpstrFilter = m_filterBuffer.getStr();
+    m_ofn.lpstrFilter = reinterpret_cast<LPCTSTR>(m_filterBuffer.getStr());
 }
 
 //------------------------------------------------------------------------
@@ -229,7 +229,7 @@ void SAL_CALL CFileOpenDialog::setDefaultName(const rtl::OUString& aName)
 {
     m_fileNameBuffer.setLength(0);
     m_fileNameBuffer.append(aName);
-    m_ofn.lpstrFile = const_cast<sal_Unicode*>(m_fileNameBuffer.getStr());
+    m_ofn.lpstrFile = reinterpret_cast<LPTSTR>(const_cast<sal_Unicode*>(m_fileNameBuffer.getStr()));
 }
 
 //------------------------------------------------------------------------
@@ -239,7 +239,7 @@ void SAL_CALL CFileOpenDialog::setDefaultName(const rtl::OUString& aName)
 void SAL_CALL CFileOpenDialog::setDisplayDirectory(const rtl::OUString& aDirectory)
 {
     m_displayDirectory = aDirectory;
-    m_ofn.lpstrInitialDir = m_displayDirectory;
+    m_ofn.lpstrInitialDir = reinterpret_cast<LPCTSTR>(m_displayDirectory.getStr());
 }
 
 //------------------------------------------------------------------------
@@ -278,7 +278,7 @@ rtl::OUString CFileOpenDialog::getFileExtension()
 {
     if (m_ofn.nFileExtension)
         return rtl::OUString(m_fileNameBuffer.getStr() + m_ofn.nFileExtension,
-            wcslen(m_fileNameBuffer.getStr() + m_ofn.nFileExtension));
+            rtl_ustr_getLength(m_fileNameBuffer.getStr() + m_ofn.nFileExtension));
 
     return rtl::OUString();
 }
@@ -290,7 +290,7 @@ rtl::OUString CFileOpenDialog::getFileExtension()
 void CFileOpenDialog::setDefaultFileExtension(const rtl::OUString& aExtension)
 {
     m_defaultExtension = aExtension;
-    m_ofn.lpstrDefExt  = m_defaultExtension.getStr();
+    m_ofn.lpstrDefExt  = reinterpret_cast<LPCTSTR>(m_defaultExtension.getStr());
 }
 
 //------------------------------------------------------------------------
@@ -377,7 +377,7 @@ void SAL_CALL CFileOpenDialog::postModal(sal_Int16 nDialogResult)
         // Attention: assuming that nFileOffset is always greater 0 because under
         // Windows there is always a drive letter or a server in a complete path
         // the OPENFILENAME docu never says that nFileOffset can be 0
-        m_displayDirectory = rtl::OUString(m_ofn.lpstrFile,m_ofn.nFileOffset);
+        m_displayDirectory = rtl::OUString(reinterpret_cast<const sal_Unicode*>(m_ofn.lpstrFile),m_ofn.nFileOffset);
     }
 }
 
@@ -524,7 +524,7 @@ sal_uInt32 SAL_CALL CFileOpenDialog::onWMNotify( HWND, LPOFNOTIFY lpOfNotify )
     switch(lpOfNotify->hdr.code)
     {
     case CDN_SHAREVIOLATION:
-        return onShareViolation(lpOfNotify->pszFile);
+        return onShareViolation(reinterpret_cast<const sal_Unicode*>(lpOfNotify->pszFile));
 
     case CDN_FILEOK:
         return onFileOk();
