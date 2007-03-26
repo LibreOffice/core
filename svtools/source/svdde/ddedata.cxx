@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddedata.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:23:57 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:46:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -178,7 +178,7 @@ ULONG DdeData::GetExternalFormat( ULONG nFmt )
 #if defined(WNT) || defined(WIN)
 
             if( aName.Len() )
-                nFmt = RegisterClipboardFormat( aName.GetBuffer() );
+                nFmt = RegisterClipboardFormat( reinterpret_cast<LPCWSTR>(aName.GetBuffer()) );
 #endif
 #if defined( PM2 )
 
@@ -217,7 +217,7 @@ ULONG DdeData::GetInternalFormat( ULONG nFmt )
             TCHAR szName[ 256 ];
 
             if( GetClipboardFormatName( nFmt, szName, sizeof(szName) ) )
-                nFmt = SotExchange::RegisterFormatName( String(szName) );
+                nFmt = SotExchange::RegisterFormatName( String(reinterpret_cast<const sal_Unicode*>(szName)) );
         }
 #endif
 #if defined(PM2)
