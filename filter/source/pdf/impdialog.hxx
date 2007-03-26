@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:21:19 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,7 +68,7 @@ class ImpPDFTabOpnFtrPage;
 class ImpPDFTabDialog : public SfxTabDialog
 {
 private:
-
+    com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > mxMSF;
     FilterConfigItem            maConfigItem;
     FilterConfigItem            maConfigI18N;
 
@@ -90,6 +90,7 @@ protected:
     sal_Bool                    mbExportNotesBoth;
     sal_Bool                    mbUseTransitionEffects;
     sal_Bool                    mbIsSkipEmptyPages;
+    sal_Bool                    mbAddStream;
     sal_Int32                   mnFormsType;
     sal_Bool                    mbExportFormFields;
     sal_Bool                    mbExportBookmarks;
@@ -133,10 +134,13 @@ public:
 
     ImpPDFTabDialog( Window* pParent, ResMgr& rResMgr,
                      Sequence< PropertyValue >& rFilterData,
-                     const Reference< XComponent >& rDoc );
+                     const Reference< XComponent >& rDoc,
+                     const Reference< lang::XMultiServiceFactory >& xFact
+                     );
     ~ImpPDFTabDialog();
 
     Sequence< PropertyValue >   GetFilterData();
+    const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& getServiceFactory() const { return mxMSF; }
 
 protected:
     virtual void                PageCreated( USHORT _nId,
@@ -170,6 +174,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     FixedText                   maFtFormsFormat;
     ListBox                     maLbFormsFormat;
     CheckBox                    maCbExportEmptyPages;
+    CheckBox                    maCbAddStream;
 
     sal_Bool                    mbIsPresentation;
     sal_Bool                    mbIsWriter;
@@ -179,6 +184,7 @@ class ImpPDFTabGeneralPage : public SfxTabPage
     DECL_LINK( TogglePagesHdl, void* );
     DECL_LINK( ToggleCompressionHdl, void* );
     DECL_LINK( ToggleReduceImageResolutionHdl, void* );
+    DECL_LINK( ToggleAddStreamHdl, void* );
     DECL_LINK( ToggleExportFormFieldsHdl, void* );
 
 public:
