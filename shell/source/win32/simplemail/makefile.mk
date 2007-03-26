@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 14:05:21 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:51:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,7 @@ SHL1TARGET=$(TARGET).uno
 SHL1STDLIBS=$(CPPULIB)\
             $(CPPUHELPERLIB)\
             $(SALLIB)\
-            advapi32.lib
+            $(ADVAPI32LIB)
 
 SHL1IMPLIB=i$(SHL1TARGET)
 
@@ -76,7 +76,7 @@ OBJFILES=   $(OBJ)$/senddoc.obj\
 
 APP1TARGET=senddoc
 APP1OBJS=$(OBJFILES)
-APP1STDLIBS=kernel32.lib\
+APP1STDLIBS=$(KERNEL32LIB)\
             $(SALLIB)
             
 APP1DEF=$(MISC)$/$(APP1TARGET).def
