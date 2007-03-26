@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:11:56 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:24:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ PATCH_FILE_NAME=db-4.2.52.patch
 
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
-LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN'
+LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="LINUXGCC"
 .IF "$(OS)$(COM)"=="SOLARISC52"
