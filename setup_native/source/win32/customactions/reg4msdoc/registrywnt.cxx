@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrywnt.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:06:53 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:10:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,7 +188,7 @@ StringListPtr RegistryKeyImplWinNT::GetSubKeyNames() const
     else if (ERROR_NO_MORE_ITEMS != rc && ERROR_SUCCESS != rc)
         throw RegistryException(rc);
 
-#if (_MSC_VER < 1300)
+#if (_MSC_VER < 1300) && !defined(__MINGW32__)
     return key_names;
 #else
     return (StringListPtr) key_names;
@@ -229,7 +229,7 @@ StringListPtr RegistryKeyImplWinNT::GetSubValueNames() const
     else if (ERROR_NO_MORE_ITEMS != rc && ERROR_SUCCESS != rc)
         throw RegistryException(rc);
 
-#if (_MSC_VER < 1300)
+#if (_MSC_VER < 1300) && !defined(__MINGW32__)
     return value_names;
 #else
     return (StringListPtr) value_names;
@@ -309,7 +309,7 @@ RegistryValue RegistryKeyImplWinNT::GetValue(const std::wstring& Name, const Reg
 
     if (ERROR_FILE_NOT_FOUND == rc)
     {
-        #if (_MSC_VER < 1300)
+        #if (_MSC_VER < 1300) && !defined(__MINGW32__)
         return Default;
         #else
         RegistryValue regval_ptr;
