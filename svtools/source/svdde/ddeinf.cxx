@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddeinf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:27:05 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,8 +79,12 @@ DdeServiceList::DdeServiceList( const String* pTopic )
     {
         if ( pTopic )
         {
-            LPCTSTR p = pTopic->GetBuffer();
+            LPCTSTR p = reinterpret_cast<LPCTSTR>(pTopic->GetBuffer());
+#ifdef __MINGW32__
+            hTopic = DdeCreateStringHandle( hDdeInst, const_cast<LPTSTR>(p), CP_WINUNICODE );
+#else
             hTopic = DdeCreateStringHandle( hDdeInst, p, CP_WINUNICODE );
+#endif
         }
 
         hConvList = DdeConnectList( hDdeInst, NULL, hTopic, NULL, NULL );
@@ -113,7 +117,7 @@ DdeServiceList::DdeServiceList( const String* pTopic )
                 *p++ = '|'; *p = 0;
                 DdeQueryString( hDdeInst, aInf.hszTopic, p, sizeof(buf)/sizeof(TCHAR)-lstrlen( buf ),
                                 CP_WINUNICODE );
-                aServices.Insert( new String( buf ) );
+                aServices.Insert( new String( reinterpret_cast<const sal_Unicode*>(buf) ) );
             }
         }
         DdeDisconnectList( hConvList );
@@ -141,11 +145,11 @@ DdeServiceList::~DdeServiceList()
 
 DdeTopicList::DdeTopicList( const String& rService )
 {
-    DdeConnection aSys( rService, String( SZDDESYS_TOPIC ) );
+    DdeConnection aSys( rService, String( reinterpret_cast<const sal_Unicode*>(SZDDESYS_TOPIC) ) );
 
     if ( !aSys.GetError() )
     {
-        DdeRequest aReq( aSys, String( SZDDESYS_ITEM_TOPICS ), 500 );
+        DdeRequest aReq( aSys, String( reinterpret_cast<const sal_Unicode*>(SZDDESYS_ITEM_TOPICS) ), 500 );
         aReq.SetDataHdl( LINK( this, DdeTopicList, Data ) );
         aReq.Execute();
     }
