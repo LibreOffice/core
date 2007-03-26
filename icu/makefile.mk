@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:25:49 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:41:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,49 @@ OUT2BIN= \
 
 .IF "$(GUI)"=="WNT"
 CONFIGURE_DIR=source
+.IF "$(COM)"=="GCC"
+CONFIGURE_ACTION=sh -c 'CFLAGS="-O -D_MT" CXXFLAGS="-O -D_MT" LDFLAGS="$(SOLARLIB) -L$(COMPATH)$/lib" LIBS="-lmingwthrd" ./configure --enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no'
+
+#CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
+CONFIGURE_FLAGS=
+
+# Use of
+# CONFIGURE_ACTION=sh -c 'CFLAGS=-O CXXFLAGS=-O ./configure'
+# CONFIGURE_FLAGS=--enable-layout --enable-static --enable-shared=yes --enable-64bit-libs=no
+# doesn't work as it would result in
+# sh -c 'CFLAGS=-O CXXFLAGS=-O ./configure' --enable-layout ...
+# note the position of the single quotes.
+
+BUILD_DIR=$(CONFIGURE_DIR)
+BUILD_ACTION=$(GNUMAKE)
+OUT2LIB= \
+    $(BUILD_DIR)$/data$/out$/libicudata_static.a \
+    $(BUILD_DIR)$/common$/libicuuc_static.a \
+    $(BUILD_DIR)$/i18n$/libicui18n_static.a \
+    $(BUILD_DIR)$/layout$/libicule_static.a \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil_static.a
+
+OUT2BIN= \
+    $(BUILD_DIR)$/data$/out$/libicudata26.0$(DLLPOST) \
+    $(BUILD_DIR)$/data$/out$/libicudata26$(DLLPOST) \
+    $(BUILD_DIR)$/data$/out$/libicudata$(DLLPOST) \
+    $(BUILD_DIR)$/common$/libicuuc26.0$(DLLPOST) \
+    $(BUILD_DIR)$/common$/libicuuc26$(DLLPOST) \
+    $(BUILD_DIR)$/common$/libicuuc$(DLLPOST) \
+    $(BUILD_DIR)$/i18n$/libicui18n26.0$(DLLPOST) \
+    $(BUILD_DIR)$/i18n$/libicui18n26$(DLLPOST) \
+    $(BUILD_DIR)$/i18n$/libicui18n$(DLLPOST) \
+    $(BUILD_DIR)$/layout$/libicule26.0$(DLLPOST) \
+    $(BUILD_DIR)$/layout$/libicule26$(DLLPOST) \
+    $(BUILD_DIR)$/layout$/libicule$(DLLPOST) \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil26.0$(DLLPOST) \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil26$(DLLPOST) \
+    $(BUILD_DIR)$/tools$/toolutil$/libicutoolutil$(DLLPOST) \
+    $(BUILD_DIR)$/tools$/genccode$/genccode.exe \
+    $(BUILD_DIR)$/tools$/genbrk$/genbrk.exe \
+    $(BUILD_DIR)$/tools$/gencmn$/gencmn.exe
+
+.ELSE
 .IF "$(USE_SHELL)"=="4nt"
 BUILD_ACTION_SEP=^
 .ELSE			# "$(USE_SHELL)"=="4nt"
@@ -184,6 +227,7 @@ OUT2BIN= \
     $(BUILD_DIR)$/..$/bin$/genbrk.exe \
     $(BUILD_DIR)$/..$/bin$/gencmn.exe
 
+.ENDIF
 .ENDIF		# "$(GUI)"=="WNT"
 
 # --- Targets ------------------------------------------------------
