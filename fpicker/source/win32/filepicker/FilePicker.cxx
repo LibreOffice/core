@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FilePicker.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:53:35 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:18:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,7 +380,7 @@ void SAL_CALL CFilePicker::appendFilterGroup(const rtl::OUString& sGroupTitle, c
 //-----------------------------------------------------------------------------------------
 
 void SAL_CALL CFilePicker::setDefaultName(const rtl::OUString& aName)
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
+    throw(uno::RuntimeException)
 {
     OSL_ASSERT(0 != m_pImpl.get());
     osl::MutexGuard aGuard(m_aMutex);
@@ -737,6 +737,7 @@ void SAL_CALL CFilePicker::initialize(const uno::Sequence<uno::Any>& aArguments)
 //------------------------------------------------------------------------------------
 
 void SAL_CALL CFilePicker::cancel()
+    throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_pImpl.get());
 
