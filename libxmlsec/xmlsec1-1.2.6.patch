@@ -1,5 +1,5 @@
-*** misc/xmlsec1-1.2.6/apps/Makefile.in	2004-08-26 08:00:30.000000000 +0200
---- misc/build/xmlsec1-1.2.6/apps/Makefile.in	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/apps/Makefile.in	Thu Aug 26 08:00:30 2004
+--- misc/build/xmlsec1-1.2.6/apps/Makefile.in	Wed Nov 15 12:23:26 2006
 ***************
 *** 370,376 ****
   	$(CRYPTO_DEPS) \
@@ -17,60 +17,94 @@
   
   .SUFFIXES:
   .SUFFIXES: .c .lo .o .obj
-*** misc/xmlsec1-1.2.6/configure	2004-08-26 08:00:34.000000000 +0200
---- misc/build/xmlsec1-1.2.6/configure	2006-11-28 14:20:31.000000000 +0100
+*** misc/xmlsec1-1.2.6/configure	Thu Aug 26 08:00:34 2004
+--- misc/build/xmlsec1-1.2.6/configure	Wed Nov 15 12:23:27 2006
 ***************
-*** 2045,2052 ****
+*** 463,469 ****
+  # include <unistd.h>
+  #endif"
   
-  ac_ext=c
-  ac_cpp='$CPP $CPPFLAGS'
-! ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-! ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-  ac_compiler_gnu=$ac_cv_c_compiler_gnu
-  if test -n "$ac_tool_prefix"; then
-    # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
---- 2045,2052 ----
+! ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os XMLSEC_VERSION XMLSEC_PACKAGE XMLSEC_VERSION_SAFE XMLSEC_VERSION_MAJOR XMLSEC_VERSION_MINOR XMLSEC_VERSION_SUBMINOR XMLSEC_VERSION_INFO INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL RM CP MV TAR HELP2MAN MAN2HTML U ANSI2KNR INSTALL_LTDL_TRUE INSTALL_LTDL_FALSE CONVENIENCE_LTDL_TRUE CONVENIENCE_LTDL_FALSE LIBADD_DL PKG_CONFIG_ENABLED PKG_CONFIG LIBXML_CFLAGS LIBXML_LIBS LIBXML262_CFLAGS LIBXML262_LIBS LIBXML_CONFIG LIBXML_MIN_VERSION LIBXSLT_CFLAGS LIBXSLT_LIBS XMLSEC_NO_LIBXSLT LIBXSLT_CONFIG LIBXSLT_MIN_VERSION OPENSSL_CFLAGS OPENSSL_LIBS OPENSSL097_CFLAGS OPENSSL097_LIBS XMLSEC_NO_OPENSSL_TRUE XMLSEC_NO_OPENSSL_FALSE XMLSEC_NO_OPENSSL OPENSSL_CRYPTO_LIB OPENSSL_MIN_VERSION GNUTLS_CFLAGS GNUTLS_LIBS XMLSEC_NO_GNUTLS_TRUE XMLSEC_NO_GNUTLS_FALSE XMLSEC_NO_GNUTLS GNUTLS_CRYPTO_LIB GNUTLS_MIN_VERSION NSS_CFLAGS NSS_LIBS XMLSEC_NO_NSS_TRUE XMLSEC_NO_NSS_FALSE XMLSEC_NO_NSS NSS_CRYPTO_LIB NSS_MIN_VERSION NSPR_MIN_VERSION MOZILLA_MIN_VERSION XMLSEC_NO_SHA1_TRUE XMLSEC_NO_SHA1_FALSE XMLSEC_NO_SHA1 XMLSEC_NO_RIPEMD160_TRUE XMLSEC_NO_RIPEMD160_FALSE XMLSEC_NO_RIPEMD160 XMLSEC_NO_HMAC_TRUE XMLSEC_NO_HMAC_FALSE XMLSEC_NO_HMAC XMLSEC_NO_DSA_TRUE XMLSEC_NO_DSA_FALSE XMLSEC_NO_DSA XMLSEC_NO_RSA_TRUE XMLSEC_NO_RSA_FALSE XMLSEC_NO_RSA XMLSEC_NO_X509_TRUE XMLSEC_NO_X509_FALSE XMLSEC_NO_X509 XMLSEC_NO_DES_TRUE XMLSEC_NO_DES_FALSE XMLSEC_NO_DES XMLSEC_NO_AES_TRUE XMLSEC_NO_AES_FALSE XMLSEC_NO_AES XMLSEC_NO_XMLDSIG_TRUE XMLSEC_NO_XMLDSIG_FALSE XMLSEC_NO_XMLDSIG XMLSEC_NO_XMLENC_TRUE XMLSEC_NO_XMLENC_FALSE XMLSEC_NO_XMLENC XMLSEC_NO_XKMS_TRUE XMLSEC_NO_XKMS_FALSE XMLSEC_NO_XKMS XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_TRUE XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_FALSE XMLSEC_NO_CRYPTO_DYNAMIC_LOADING XMLSEC_DL_INCLUDES XMLSEC_DL_LIBS XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_TRUE XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_FALSE XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING XMLSEC_DOCDIR XMLSEC_STATIC_BINARIES XMLSEC_CORE_CFLAGS XMLSEC_CORE_LIBS XMLSEC_LIBDIR XMLSEC_OPENSSL_CFLAGS XMLSEC_OPENSSL_LIBS XMLSEC_GNUTLS_CFLAGS XMLSEC_GNUTLS_LIBS XMLSEC_NSS_CFLAGS XMLSEC_NSS_LIBS XMLSEC_CFLAGS XMLSEC_LIBS XMLSEC_DEFINES XMLSEC_APP_DEFINES XMLSEC_CRYPTO XMLSEC_CRYPTO_LIST XMLSEC_CRYPTO_DISABLED_LIST XMLSEC_CRYPTO_LIB XMLSEC_CRYPTO_CFLAGS XMLSEC_CRYPTO_LIBS XMLSEC_CRYPTO_PC_FILES_LIST LIBOBJS LTLIBOBJS'
+  ac_subst_files=''
   
-  ac_ext=c
-  ac_cpp='$CPP $CPPFLAGS'
-! ac_compile='$CC -c $ADDCFLAGS $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-! ac_link='$CC -o conftest$ac_exeext $ADDCFLAGS $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-  ac_compiler_gnu=$ac_cv_c_compiler_gnu
-  if test -n "$ac_tool_prefix"; then
-    # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
+  # Initialize some variables set by options.
+--- 463,469 ----
+  # include <unistd.h>
+  #endif"
+  
+! ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS build build_cpu build_vendor build_os host host_cpu host_vendor host_os XMLSEC_VERSION XMLSEC_PACKAGE XMLSEC_VERSION_SAFE XMLSEC_VERSION_MAJOR XMLSEC_VERSION_MINOR XMLSEC_VERSION_SUBMINOR XMLSEC_VERSION_INFO INSTALL_PROGRAM INSTALL_SCRIPT INSTALL_DATA CYGPATH_W PACKAGE VERSION ACLOCAL AUTOCONF AUTOMAKE AUTOHEADER MAKEINFO AMTAR install_sh STRIP ac_ct_STRIP INSTALL_STRIP_PROGRAM mkdir_p AWK SET_MAKE am__leading_dot MAINTAINER_MODE_TRUE MAINTAINER_MODE_FALSE MAINT CC CFLAGS LDFLAGS CPPFLAGS ac_ct_CC EXEEXT OBJEXT DEPDIR am__include am__quote AMDEP_TRUE AMDEP_FALSE AMDEPBACKSLASH CCDEPMODE am__fastdepCC_TRUE am__fastdepCC_FALSE EGREP LN_S ECHO AR ac_ct_AR RANLIB ac_ct_RANLIB CPP CXX CXXFLAGS ac_ct_CXX CXXDEPMODE am__fastdepCXX_TRUE am__fastdepCXX_FALSE CXXCPP F77 FFLAGS ac_ct_F77 LIBTOOL RM CP MV TAR HELP2MAN MAN2HTML U ANSI2KNR INSTALL_LTDL_TRUE INSTALL_LTDL_FALSE CONVENIENCE_LTDL_TRUE CONVENIENCE_LTDL_FALSE LIBADD_DL PKG_CONFIG_ENABLED PKG_CONFIG LIBXML_CFLAGS LIBXML_LIBS LIBXML262_CFLAGS LIBXML262_LIBS LIBXML_CONFIG LIBXML_MIN_VERSION LIBXSLT_CFLAGS LIBXSLT_LIBS XMLSEC_NO_LIBXSLT LIBXSLT_CONFIG LIBXSLT_MIN_VERSION OPENSSL_CFLAGS OPENSSL_LIBS OPENSSL097_CFLAGS OPENSSL097_LIBS XMLSEC_NO_OPENSSL_TRUE XMLSEC_NO_OPENSSL_FALSE XMLSEC_NO_OPENSSL OPENSSL_CRYPTO_LIB OPENSSL_MIN_VERSION GNUTLS_CFLAGS GNUTLS_LIBS XMLSEC_NO_GNUTLS_TRUE XMLSEC_NO_GNUTLS_FALSE XMLSEC_NO_GNUTLS GNUTLS_CRYPTO_LIB GNUTLS_MIN_VERSION NSS_CFLAGS NSS_LIBS XMLSEC_NO_NSS_TRUE XMLSEC_NO_NSS_FALSE XMLSEC_NO_NSS NSS_CRYPTO_LIB NSS_MIN_VERSION NSPR_MIN_VERSION MOZILLA_MIN_VERSION MSCRYPTO_CFLAGS MSCRYPTO_LIBS XMLSEC_NO_SHA1_TRUE XMLSEC_NO_SHA1_FALSE XMLSEC_NO_SHA1 XMLSEC_NO_RIPEMD160_TRUE XMLSEC_NO_RIPEMD160_FALSE XMLSEC_NO_RIPEMD160 XMLSEC_NO_HMAC_TRUE XMLSEC_NO_HMAC_FALSE XMLSEC_NO_HMAC XMLSEC_NO_DSA_TRUE XMLSEC_NO_DSA_FALSE XMLSEC_NO_DSA XMLSEC_NO_RSA_TRUE XMLSEC_NO_RSA_FALSE XMLSEC_NO_RSA XMLSEC_NO_X509_TRUE XMLSEC_NO_X509_FALSE XMLSEC_NO_X509 XMLSEC_NO_DES_TRUE XMLSEC_NO_DES_FALSE XMLSEC_NO_DES XMLSEC_NO_AES_TRUE XMLSEC_NO_AES_FALSE XMLSEC_NO_AES XMLSEC_NO_XMLDSIG_TRUE XMLSEC_NO_XMLDSIG_FALSE XMLSEC_NO_XMLDSIG XMLSEC_NO_XMLENC_TRUE XMLSEC_NO_XMLENC_FALSE XMLSEC_NO_XMLENC XMLSEC_NO_XKMS_TRUE XMLSEC_NO_XKMS_FALSE XMLSEC_NO_XKMS XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_TRUE XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_FALSE XMLSEC_NO_CRYPTO_DYNAMIC_LOADING XMLSEC_DL_INCLUDES XMLSEC_DL_LIBS XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_TRUE XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_FALSE XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING XMLSEC_DOCDIR XMLSEC_STATIC_BINARIES XMLSEC_CORE_CFLAGS XMLSEC_CORE_LIBS XMLSEC_LIBDIR XMLSEC_OPENSSL_CFLAGS XMLSEC_OPENSSL_LIBS XMLSEC_GNUTLS_CFLAGS XMLSEC_GNUTLS_LIBS XMLSEC_NSS_CFLAGS XMLSEC_NSS_LIBS XMLSEC_CFLAGS XMLSEC_LIBS XMLSEC_DEFINES XMLSEC_APP_DEFINES XMLSEC_CRYPTO XMLSEC_CRYPTO_LIST XMLSEC_CRYPTO_DISABLED_LIST XMLSEC_CRYPTO_LIB XMLSEC_CRYPTO_CFLAGS XMLSEC_CRYPTO_LIBS XMLSEC_CRYPTO_PC_FILES_LIST LIBOBJS LTLIBOBJS'
+  ac_subst_files=''
+  
+  # Initialize some variables set by options.
 ***************
-*** 2698,2712 ****
-    CFLAGS=$ac_save_CFLAGS
-  elif test $ac_cv_prog_cc_g = yes; then
-    if test "$GCC" = yes; then
-!     CFLAGS="-g -O2"
-    else
-!     CFLAGS="-g"
-    fi
-  else
-    if test "$GCC" = yes; then
-!     CFLAGS="-O2"
-    else
-!     CFLAGS=
-    fi
-  fi
-  echo "$as_me:$LINENO: checking for $CC option to accept ANSI C" >&5
---- 2698,2712 ----
-    CFLAGS=$ac_save_CFLAGS
-  elif test $ac_cv_prog_cc_g = yes; then
-    if test "$GCC" = yes; then
-!     CFLAGS="$ADDCFLAGS -g -O2"
-    else
-!     CFLAGS="$ADDCFLAGS -g"
-    fi
-  else
-    if test "$GCC" = yes; then
-!     CFLAGS="$ADDCFLAGS -O2"
-    else
-!     CFLAGS="$ADDCFLAGS"
-    fi
-  fi
-  echo "$as_me:$LINENO: checking for $CC option to accept ANSI C" >&5
+*** 1072,1077 ****
+--- 1072,1078 ----
+    --with-nss=PFX          nss location
+    --with-nspr=PFX         nspr location (needed for NSS)
+    --with-mozilla-ver=VER  mozilla version (alt to --with-nss, --with-nspr)
++   --with-mscrypto         try to use mscrypto
+    --with-html-dir=PATH    path to installed docs
+  
+  Some influential environment variables:
+***************
+*** 6350,6360 ****
+        lt_prog_compiler_pic='-m68020 -resident32 -malways-restore-a4'
+        ;;
+  
+!     beos* | cygwin* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+  
+!     mingw* | pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic='-DDLL_EXPORT'
+--- 6351,6361 ----
+        lt_prog_compiler_pic='-m68020 -resident32 -malways-restore-a4'
+        ;;
+  
+!     beos* | cygwin* | mingw* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+  
+!     pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic='-DDLL_EXPORT'
+***************
+*** 6409,6415 ****
+        fi
+        ;;
+  
+!     mingw* | pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic='-DDLL_EXPORT'
+--- 6410,6416 ----
+        fi
+        ;;
+  
+!     pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic='-DDLL_EXPORT'
+***************
+*** 6752,6758 ****
+        export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--out-implib,$lib'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+--- 6753,6759 ----
+        export_symbols_cmds='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--exclude-libs,ALL ${wl}--out-implib,$lib'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
 ***************
 *** 9046,9052 ****
         ;;
@@ -80,7 +114,7 @@
       module_cmds='$CC $allow_undefined_flag -o $lib -bundle $libobjs $deplibs$compiler_flags'
       # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
       archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
---- 9046,9052 ----
+--- 9047,9053 ----
         ;;
       esac
       output_verbose_link_cmd='echo'
@@ -88,6 +122,147 @@
       module_cmds='$CC $allow_undefined_flag -o $lib -bundle $libobjs $deplibs$compiler_flags'
       # Don't fix this by using the ld -exported_symbols_list flag, it doesn't exist in older darwin ld's
       archive_expsym_cmds='sed -e "s,#.*,," -e "s,^[    ]*,," -e "s,^\(..*\),_&," < $export_symbols > $output_objdir/${libname}-symbols.expsym~$CC -dynamiclib $allow_undefined_flag  -o $lib $libobjs $deplibs$compiler_flags -install_name $rpath/$soname $verstring~nmedit -s $output_objdir/${libname}-symbols.expsym ${lib}'
+***************
+*** 10088,10094 ****
+      enable_shared_with_static_runtimes_CXX=yes
+  
+      if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!       archive_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--out-implib,$lib'
+        # If the export-symbols file already is a .def file (1st line
+        # is EXPORTS), use it as is; otherwise, prepend...
+        archive_expsym_cmds_CXX='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+--- 10089,10095 ----
+      enable_shared_with_static_runtimes_CXX=yes
+  
+      if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!       archive_cmds_CXX='$CC -shared -nostdlib $predep_objects $libobjs $deplibs $postdep_objects $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--exclude-libs,ALL ${wl}--out-implib,$lib'
+        # If the export-symbols file already is a .def file (1st line
+        # is EXPORTS), use it as is; otherwise, prepend...
+        archive_expsym_cmds_CXX='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+***************
+*** 10816,10825 ****
+        # like `-m68040'.
+        lt_prog_compiler_pic_CXX='-m68020 -resident32 -malways-restore-a4'
+        ;;
+!     beos* | cygwin* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+!     mingw* | os2* | pw32*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_CXX='-DDLL_EXPORT'
+--- 10817,10826 ----
+        # like `-m68040'.
+        lt_prog_compiler_pic_CXX='-m68020 -resident32 -malways-restore-a4'
+        ;;
+!     beos* | cygwin* | mingw* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+!     os2* | pw32*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_CXX='-DDLL_EXPORT'
+***************
+*** 13259,13269 ****
+        lt_prog_compiler_pic_F77='-m68020 -resident32 -malways-restore-a4'
+        ;;
+  
+!     beos* | cygwin* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+  
+!     mingw* | pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_F77='-DDLL_EXPORT'
+--- 13260,13270 ----
+        lt_prog_compiler_pic_F77='-m68020 -resident32 -malways-restore-a4'
+        ;;
+  
+!     beos* | cygwin* | mingw* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+  
+!     pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_F77='-DDLL_EXPORT'
+***************
+*** 13661,13667 ****
+        export_symbols_cmds_F77='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds_F77='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--out-implib,$lib'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds_F77='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+--- 13662,13668 ----
+        export_symbols_cmds_F77='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds_F77='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--exclude-libs,ALL ${wl}--out-implib,$lib'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds_F77='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+***************
+*** 15607,15617 ****
+        lt_prog_compiler_pic_GCJ='-m68020 -resident32 -malways-restore-a4'
+        ;;
+  
+!     beos* | cygwin* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+  
+!     mingw* | pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_GCJ='-DDLL_EXPORT'
+--- 15608,15618 ----
+        lt_prog_compiler_pic_GCJ='-m68020 -resident32 -malways-restore-a4'
+        ;;
+  
+!     beos* | cygwin* | mingw* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
+        # PIC is the default for these OSes.
+        ;;
+  
+!     pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_GCJ='-DDLL_EXPORT'
+***************
+*** 15666,15672 ****
+        fi
+        ;;
+  
+!     mingw* | pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_GCJ='-DDLL_EXPORT'
+--- 15667,15673 ----
+        fi
+        ;;
+  
+!     pw32* | os2*)
+        # This hack is so that the source file can tell whether it is being
+        # built for inclusion in a dll (and should export symbols for example).
+        lt_prog_compiler_pic_GCJ='-DDLL_EXPORT'
+***************
+*** 16009,16015 ****
+        export_symbols_cmds_GCJ='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds_GCJ='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--out-implib,$lib'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds_GCJ='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
+--- 16010,16016 ----
+        export_symbols_cmds_GCJ='$NM $libobjs $convenience | $global_symbol_pipe | $SED -e '\''/^[BCDGS] /s/.* \([^ ]*\)/\1 DATA/'\'' | $SED -e '\''/^[AITW] /s/.* //'\'' | sort | uniq > $export_symbols'
+  
+        if $LD --help 2>&1 | grep 'auto-import' > /dev/null; then
+!         archive_cmds_GCJ='$CC -shared $libobjs $deplibs $compiler_flags -o $output_objdir/$soname ${wl}--image-base=0x10000000 ${wl}--exclude-libs,ALL ${wl}--out-implib,$lib'
+  	# If the export-symbols file already is a .def file (1st line
+  	# is EXPORTS), use it as is; otherwise, prepend...
+  	archive_expsym_cmds_GCJ='if test "x`$SED 1q $export_symbols`" = xEXPORTS; then
 ***************
 *** 24598,24604 ****
   fi
@@ -97,7 +272,7 @@
   LIBXML_CFLAGS=""
   LIBXML_LIBS=""
   LIBXML_FOUND="no"
---- 24598,24604 ----
+--- 24599,24605 ----
   fi
   
   LIBXML_MIN_VERSION="2.4.2"
@@ -118,7 +293,7 @@
   NSPR_LIBS_LIST="-lnspr4 -lplds4 -lplc4"
   NSS_CRYPTO_LIB="$PACKAGE-nss"
   NSS_FOUND="no"
---- 25678,25691 ----
+--- 25679,25692 ----
   
   XMLSEC_NO_NSS="1"
   MOZILLA_MIN_VERSION="1.4"
@@ -158,7 +333,7 @@
               echo "$as_me:$LINENO: result: $NSS_LIBS" >&5
   echo "${ECHO_T}$NSS_LIBS" >&6
           else
---- 25769,25791 ----
+--- 25770,25792 ----
     else
        PKG_CONFIG_MIN_VERSION=0.9.0
        if $PKG_CONFIG --atleast-pkgconfig-version $PKG_CONFIG_MIN_VERSION; then
@@ -191,7 +366,7 @@
   
           fi
   
---- 25793,25799 ----
+--- 25794,25800 ----
               NSS_LIBS=""
               ## If we have a custom action on failure, don't print errors, but
               ## do set a variable so people can do so.
@@ -209,7 +384,7 @@
   
       echo "$as_me:$LINENO: checking for nspr libraries >= $NSPR_MIN_VERSION" >&5
   echo $ECHO_N "checking for nspr libraries >= $NSPR_MIN_VERSION... $ECHO_C" >&6
---- 25820,25827 ----
+--- 25821,25828 ----
           ac_mozilla_name=mozilla-$MOZILLA_MIN_VERSION
       fi
   
@@ -227,7 +402,7 @@
   		        	if test "z$dir" = "z/usr/lib" ; then
               	    NSPR_LIBS="$NSPR_LIBS_LIST"
       		else
---- 25856,25862 ----
+--- 25857,25863 ----
   	done
   
   	for dir in $ac_nss_lib_dir ; do
@@ -244,7 +419,7 @@
           	    		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
                   else
---- 25942,25948 ----
+--- 25943,25949 ----
           done
   
           for dir in $ac_nss_lib_dir ; do
@@ -252,8 +427,1908 @@
           	    		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
                   else
-*** misc/xmlsec1-1.2.6/configure.in	2004-08-26 04:49:24.000000000 +0200
---- misc/build/xmlsec1-1.2.6/configure.in	2006-11-28 14:17:22.000000000 +0100
+***************
+*** 26037,26042 ****
+--- 26041,26149 ----
+  
+  
+  
++ MSCRYPTO_CFLAGS=""
++ MSCRYPTO_LIBS=""
++ MSCRYPTO_FOUND="no"
++ 
++ 
++ # Check whether --with-mscrypto or --without-mscrypto was given.
++ if test "${with_mscrypto+set}" = set; then
++   withval="$with_mscrypto"
++ 
++ fi;
++ if test "z$with_mscrypto" = "zno" ; then
++     echo "$as_me:$LINENO: checking for MSCRYPTO libraries" >&5
++ echo $ECHO_N "checking for MSCRYPTO libraries... $ECHO_C" >&6
++     echo "$as_me:$LINENO: result: no" >&5
++ echo "${ECHO_T}no" >&6
++     MSCRYPTO_FOUND="without"
++ else
++     ac_mscrypto_lib_dir="${PSDK_HOME}/lib"
++     ac_mscrypto_inc_dir="${SOLARVERSION}/${INPATH}/inc${UPDMINOREXT}/external/mingw/include ${COMPATH}/include ${COMPATH}/include/w32api"
++         echo "$as_me:$LINENO: checking for mscrypto libraries" >&5
++ echo $ECHO_N "checking for mscrypto libraries... $ECHO_C" >&6
++     MSCRYPTO_INCLUDES_FOUND="no"
++     MSCRYPTO_LIBS_FOUND="no"
++     WINCRYPT_H=""
++ 
++ 	for dir in $ac_mscrypto_inc_dir ; do
++ 	    if test -f $dir/wincrypt.h ; then
++             	    MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -I$dir"
++     		MSCRYPTO_INCLUDES_FOUND="yes"
++     		WINCRYPT_H="$dir/wincrypt.h"
++     		break
++     	    fi
++         done
++ 
++         for dir in $ac_mscrypto_lib_dir ; do
++     	    if test -f $dir/crypt32.lib ; then
++             	    if test "z$with_gnu_ld" = "zyes" ; then
++     			MSCRYPTO_LIBS="-Wl,-rpath-link -Wl,$dir -L$dir $dir/crypt32.lib"
++             	    else
++         		MSCRYPTO_LIBS="-L$dir $dir/crypt32.lib"
++ 		    fi
++     		MSCRYPTO_LIBS_FOUND="yes"
++     		break
++ 	    fi
++ 	done
++ 
++     if test "z$MSCRYPTO_INCLUDES_FOUND" = "zyes" -a "z$MSCRYPTO_LIBS_FOUND" = "zyes" ; then
++        OLD_CPPFLAGS=$CPPFLAGS
++        CPPFLAGS="$MSCRYPTO_CFLAGS"
++        cat >conftest.$ac_ext <<_ACEOF
++ /* confdefs.h.  */
++ _ACEOF
++ cat confdefs.h >>conftest.$ac_ext
++ cat >>conftest.$ac_ext <<_ACEOF
++ /* end confdefs.h.  */
++ 
++           #include <wincrypt.h>
++           #if defined(_WINCRYPT_H) || defined(__WINCRYPT_H__)
++              yes
++           #endif
++ 
++ _ACEOF
++ if (eval "$ac_cpp conftest.$ac_ext") 2>&5 |
++   $EGREP "yes" >/dev/null 2>&1; then
++ 
++ 	    MSCRYPTO_FOUND=yes
++ 
++ else
++ 
++ 	    MSCRYPTO_FOUND=no
++ 
++ fi
++ rm -f conftest*
++ 
++ 	CPPFLAGS="$OLD_CPPFLAGS"
++     fi
++ 
++     if test "z$MSCRYPTO_FOUND" = "zyes" ; then
++ 	echo "$as_me:$LINENO: result: yes" >&5
++ echo "${ECHO_T}yes" >&6
++     else
++ 	echo "$as_me:$LINENO: result: no" >&5
++ echo "${ECHO_T}no" >&6
++     fi
++ 
++ fi
++ 
++ if test "z$MSCRYPTO_FOUND" = "zyes" ; then
++     MSCRYPTO_CFLAGS="$MSCRYPTO_CFLAGS -DXMLSEC_CRYPTO_MSCRYPTO=1"
++ 
++         if test "z$XMLSEC_CRYPTO" = "z" ;  then
++ 	XMLSEC_CRYPTO="mscrypto"
++ 	XMLSEC_CRYPTO_LIB="$PACKAGE-mscrypto"
++ 	XMLSEC_CRYPTO_CFLAGS="$MSCRYPTO_CFLAGS"
++ 	XMLSEC_CRYPTO_LIBS="$MSCRYPTO_LIBS"
++     fi
++     XMLSEC_CRYPTO_LIST="$XMLSEC_CRYPTO_LIST mscrypto"
++ else
++     XMLSEC_CRYPTO_DISABLED_LIST="$XMLSEC_CRYPTO_DISABLED_LIST mscrypto"
++ fi
++ 
++ 
++ 
+  echo "$as_me:$LINENO: checking for crypto library" >&5
+  echo $ECHO_N "checking for crypto library... $ECHO_C" >&6
+  if test "z$XMLSEC_CRYPTO" = "z" ;  then
+***************
+*** 26604,26610 ****
+  done
+  
+  
+!                                                                                                                                                                 ac_config_files="$ac_config_files include/xmlsec/version.h Makefile include/Makefile include/xmlsec/Makefile include/xmlsec/private/Makefile src/Makefile apps/Makefile docs/Makefile docs/api/Makefile man/Makefile xmlsec1Conf.sh:xmlsecConf.sh.in xmlsec1-config:xmlsec-config.in xmlsec1-openssl.pc:xmlsec-openssl.pc.in xmlsec1-gnutls.pc:xmlsec-gnutls.pc.in xmlsec1-nss.pc:xmlsec-nss.pc.in xmlsec1.spec:xmlsec.spec.in"
+  cat >confcache <<\_ACEOF
+  # This file is a shell script that caches the results of configure
+  # tests run on this system so they can be shared between configure
+--- 26711,26717 ----
+  done
+  
+  
+!                                                                                                                                                                 ac_config_files="$ac_config_files include/xmlsec/version.h Makefile include/Makefile include/xmlsec/Makefile include/xmlsec/private/Makefile src/Makefile apps/Makefile docs/Makefile docs/api/Makefile man/Makefile xmlsec1Conf.sh:xmlsecConf.sh.in xmlsec1-config:xmlsec-config.in xmlsec1-openssl.pc:xmlsec-openssl.pc.in xmlsec1-gnutls.pc:xmlsec-gnutls.pc.in xmlsec1-nss.pc:xmlsec-nss.pc.in xmlsec1-mscrypto.pc:xmlsec-mscrypto.pc.in xmlsec1.spec:xmlsec.spec.in"
+  cat >confcache <<\_ACEOF
+  # This file is a shell script that caches the results of configure
+  # tests run on this system so they can be shared between configure
+***************
+*** 27521,27526 ****
+--- 27628,27635 ----
+  s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
+  s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
+  s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
++ s,@MSCRYPTO_CFLAGS@,$MSCRYPTO_CFLAGS,;t t
++ s,@MSCRYPTO_LIBS@,$MSCRYPTO_LIBS,;t t
+  s,@XMLSEC_NO_SHA1_TRUE@,$XMLSEC_NO_SHA1_TRUE,;t t
+  s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
+  s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
+***************
+*** 29231,29236 ****
+--- 29340,29347 ----
+  s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
+  s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
+  s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
++ s,@MSCRYPTO_CFLAGS@,$MSCRYPTO_CFLAGS,;t t
++ s,@MSCRYPTO_LIBS@,$MSCRYPTO_LIBS,;t t
+  s,@XMLSEC_NO_SHA1_TRUE@,$XMLSEC_NO_SHA1_TRUE,;t t
+  s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
+  s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
+***************
+*** 30941,30946 ****
+--- 31052,31059 ----
+  s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
+  s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
+  s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
++ s,@MSCRYPTO_CFLAGS@,$MSCRYPTO_CFLAGS,;t t
++ s,@MSCRYPTO_LIBS@,$MSCRYPTO_LIBS,;t t
+  s,@XMLSEC_NO_SHA1_TRUE@,$XMLSEC_NO_SHA1_TRUE,;t t
+  s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
+  s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
+***************
+*** 32653,32658 ****
+--- 32766,34489 ----
+  s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
+  s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
+  s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
++ s,@MSCRYPTO_CFLAGS@,$MSCRYPTO_CFLAGS,;t t
++ s,@MSCRYPTO_LIBS@,$MSCRYPTO_LIBS,;t t
++ s,@XMLSEC_NO_SHA1_TRUE@,$XMLSEC_NO_SHA1_TRUE,;t t
++ s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
++ s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
++ s,@XMLSEC_NO_RIPEMD160_TRUE@,$XMLSEC_NO_RIPEMD160_TRUE,;t t
++ s,@XMLSEC_NO_RIPEMD160_FALSE@,$XMLSEC_NO_RIPEMD160_FALSE,;t t
++ s,@XMLSEC_NO_RIPEMD160@,$XMLSEC_NO_RIPEMD160,;t t
++ s,@XMLSEC_NO_HMAC_TRUE@,$XMLSEC_NO_HMAC_TRUE,;t t
++ s,@XMLSEC_NO_HMAC_FALSE@,$XMLSEC_NO_HMAC_FALSE,;t t
++ s,@XMLSEC_NO_HMAC@,$XMLSEC_NO_HMAC,;t t
++ s,@XMLSEC_NO_DSA_TRUE@,$XMLSEC_NO_DSA_TRUE,;t t
++ s,@XMLSEC_NO_DSA_FALSE@,$XMLSEC_NO_DSA_FALSE,;t t
++ s,@XMLSEC_NO_DSA@,$XMLSEC_NO_DSA,;t t
++ s,@XMLSEC_NO_RSA_TRUE@,$XMLSEC_NO_RSA_TRUE,;t t
++ s,@XMLSEC_NO_RSA_FALSE@,$XMLSEC_NO_RSA_FALSE,;t t
++ s,@XMLSEC_NO_RSA@,$XMLSEC_NO_RSA,;t t
++ s,@XMLSEC_NO_X509_TRUE@,$XMLSEC_NO_X509_TRUE,;t t
++ s,@XMLSEC_NO_X509_FALSE@,$XMLSEC_NO_X509_FALSE,;t t
++ s,@XMLSEC_NO_X509@,$XMLSEC_NO_X509,;t t
++ s,@XMLSEC_NO_DES_TRUE@,$XMLSEC_NO_DES_TRUE,;t t
++ s,@XMLSEC_NO_DES_FALSE@,$XMLSEC_NO_DES_FALSE,;t t
++ s,@XMLSEC_NO_DES@,$XMLSEC_NO_DES,;t t
++ s,@XMLSEC_NO_AES_TRUE@,$XMLSEC_NO_AES_TRUE,;t t
++ s,@XMLSEC_NO_AES_FALSE@,$XMLSEC_NO_AES_FALSE,;t t
++ s,@XMLSEC_NO_AES@,$XMLSEC_NO_AES,;t t
++ s,@XMLSEC_NO_XMLDSIG_TRUE@,$XMLSEC_NO_XMLDSIG_TRUE,;t t
++ s,@XMLSEC_NO_XMLDSIG_FALSE@,$XMLSEC_NO_XMLDSIG_FALSE,;t t
++ s,@XMLSEC_NO_XMLDSIG@,$XMLSEC_NO_XMLDSIG,;t t
++ s,@XMLSEC_NO_XMLENC_TRUE@,$XMLSEC_NO_XMLENC_TRUE,;t t
++ s,@XMLSEC_NO_XMLENC_FALSE@,$XMLSEC_NO_XMLENC_FALSE,;t t
++ s,@XMLSEC_NO_XMLENC@,$XMLSEC_NO_XMLENC,;t t
++ s,@XMLSEC_NO_XKMS_TRUE@,$XMLSEC_NO_XKMS_TRUE,;t t
++ s,@XMLSEC_NO_XKMS_FALSE@,$XMLSEC_NO_XKMS_FALSE,;t t
++ s,@XMLSEC_NO_XKMS@,$XMLSEC_NO_XKMS,;t t
++ s,@XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_TRUE@,$XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_TRUE,;t t
++ s,@XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_FALSE@,$XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_FALSE,;t t
++ s,@XMLSEC_NO_CRYPTO_DYNAMIC_LOADING@,$XMLSEC_NO_CRYPTO_DYNAMIC_LOADING,;t t
++ s,@XMLSEC_DL_INCLUDES@,$XMLSEC_DL_INCLUDES,;t t
++ s,@XMLSEC_DL_LIBS@,$XMLSEC_DL_LIBS,;t t
++ s,@XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_TRUE@,$XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_TRUE,;t t
++ s,@XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_FALSE@,$XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_FALSE,;t t
++ s,@XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING@,$XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING,;t t
++ s,@XMLSEC_DOCDIR@,$XMLSEC_DOCDIR,;t t
++ s,@XMLSEC_STATIC_BINARIES@,$XMLSEC_STATIC_BINARIES,;t t
++ s,@XMLSEC_CORE_CFLAGS@,$XMLSEC_CORE_CFLAGS,;t t
++ s,@XMLSEC_CORE_LIBS@,$XMLSEC_CORE_LIBS,;t t
++ s,@XMLSEC_LIBDIR@,$XMLSEC_LIBDIR,;t t
++ s,@XMLSEC_OPENSSL_CFLAGS@,$XMLSEC_OPENSSL_CFLAGS,;t t
++ s,@XMLSEC_OPENSSL_LIBS@,$XMLSEC_OPENSSL_LIBS,;t t
++ s,@XMLSEC_GNUTLS_CFLAGS@,$XMLSEC_GNUTLS_CFLAGS,;t t
++ s,@XMLSEC_GNUTLS_LIBS@,$XMLSEC_GNUTLS_LIBS,;t t
++ s,@XMLSEC_NSS_CFLAGS@,$XMLSEC_NSS_CFLAGS,;t t
++ s,@XMLSEC_NSS_LIBS@,$XMLSEC_NSS_LIBS,;t t
++ s,@XMLSEC_CFLAGS@,$XMLSEC_CFLAGS,;t t
++ s,@XMLSEC_LIBS@,$XMLSEC_LIBS,;t t
++ s,@XMLSEC_DEFINES@,$XMLSEC_DEFINES,;t t
++ s,@XMLSEC_APP_DEFINES@,$XMLSEC_APP_DEFINES,;t t
++ s,@XMLSEC_CRYPTO@,$XMLSEC_CRYPTO,;t t
++ s,@XMLSEC_CRYPTO_LIST@,$XMLSEC_CRYPTO_LIST,;t t
++ s,@XMLSEC_CRYPTO_DISABLED_LIST@,$XMLSEC_CRYPTO_DISABLED_LIST,;t t
++ s,@XMLSEC_CRYPTO_LIB@,$XMLSEC_CRYPTO_LIB,;t t
++ s,@XMLSEC_CRYPTO_CFLAGS@,$XMLSEC_CRYPTO_CFLAGS,;t t
++ s,@XMLSEC_CRYPTO_LIBS@,$XMLSEC_CRYPTO_LIBS,;t t
++ s,@XMLSEC_CRYPTO_PC_FILES_LIST@,$XMLSEC_CRYPTO_PC_FILES_LIST,;t t
++ s,@LIBOBJS@,$LIBOBJS,;t t
++ s,@LTLIBOBJS@,$LTLIBOBJS,;t t
++ CEOF
++ 
++ _ACEOF
++ 
++   cat >>$CONFIG_STATUS <<\_ACEOF
++   # Split the substitutions into bite-sized pieces for seds with
++   # small command number limits, like on Digital OSF/1 and HP-UX.
++   ac_max_sed_lines=48
++   ac_sed_frag=1 # Number of current file.
++   ac_beg=1 # First line for current file.
++   ac_end=$ac_max_sed_lines # Line after last line for current file.
++   ac_more_lines=:
++   ac_sed_cmds=
++   while $ac_more_lines; do
++     if test $ac_beg -gt 1; then
++       sed "1,${ac_beg}d; ${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
++     else
++       sed "${ac_end}q" $tmp/subs.sed >$tmp/subs.frag
++     fi
++     if test ! -s $tmp/subs.frag; then
++       ac_more_lines=false
++     else
++       # The purpose of the label and of the branching condition is to
++       # speed up the sed processing (if there are no `@' at all, there
++       # is no need to browse any of the substitutions).
++       # These are the two extra sed commands mentioned above.
++       (echo ':t
++   /@[a-zA-Z_][a-zA-Z_0-9]*@/!b' && cat $tmp/subs.frag) >$tmp/subs-$ac_sed_frag.sed
++       if test -z "$ac_sed_cmds"; then
++ 	ac_sed_cmds="sed -f $tmp/subs-$ac_sed_frag.sed"
++       else
++ 	ac_sed_cmds="$ac_sed_cmds | sed -f $tmp/subs-$ac_sed_frag.sed"
++       fi
++       ac_sed_frag=`expr $ac_sed_frag + 1`
++       ac_beg=$ac_end
++       ac_end=`expr $ac_end + $ac_max_sed_lines`
++     fi
++   done
++   if test -z "$ac_sed_cmds"; then
++     ac_sed_cmds=cat
++   fi
++ fi # test -n "$CONFIG_FILES"
++ 
++ _ACEOF
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ for ac_file in : $CONFIG_FILES; do test "x$ac_file" = x: && continue
++   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
++   case $ac_file in
++   - | *:- | *:-:* ) # input from stdin
++ 	cat >$tmp/stdin
++ 	ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
++ 	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
++   *:* ) ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
++ 	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
++   * )   ac_file_in=$ac_file.in ;;
++   esac
++ 
++   # Compute @srcdir@, @top_srcdir@, and @INSTALL@ for subdirectories.
++   ac_dir=`(dirname "$ac_file") 2>/dev/null ||
++ $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$ac_file" : 'X\(//\)[^/]' \| \
++ 	 X"$ac_file" : 'X\(//\)$' \| \
++ 	 X"$ac_file" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$ac_file" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++   { if $as_mkdir_p; then
++     mkdir -p "$ac_dir"
++   else
++     as_dir="$ac_dir"
++     as_dirs=
++     while test ! -d "$as_dir"; do
++       as_dirs="$as_dir $as_dirs"
++       as_dir=`(dirname "$as_dir") 2>/dev/null ||
++ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
++ 	 X"$as_dir" : 'X\(//\)$' \| \
++ 	 X"$as_dir" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$as_dir" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++     done
++     test ! -n "$as_dirs" || mkdir $as_dirs
++   fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dir\"" >&5
++ echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
++    { (exit 1); exit 1; }; }; }
++ 
++   ac_builddir=.
++ 
++ if test "$ac_dir" != .; then
++   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
++   # A "../" for each directory in $ac_dir_suffix.
++   ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
++ else
++   ac_dir_suffix= ac_top_builddir=
++ fi
++ 
++ case $srcdir in
++   .)  # No --srcdir option.  We are building in place.
++     ac_srcdir=.
++     if test -z "$ac_top_builddir"; then
++        ac_top_srcdir=.
++     else
++        ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
++     fi ;;
++   [\\/]* | ?:[\\/]* )  # Absolute path.
++     ac_srcdir=$srcdir$ac_dir_suffix;
++     ac_top_srcdir=$srcdir ;;
++   *) # Relative path.
++     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
++     ac_top_srcdir=$ac_top_builddir$srcdir ;;
++ esac
++ 
++ # Do not use `cd foo && pwd` to compute absolute paths, because
++ # the directories may not exist.
++ case `pwd` in
++ .) ac_abs_builddir="$ac_dir";;
++ *)
++   case "$ac_dir" in
++   .) ac_abs_builddir=`pwd`;;
++   [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dir";;
++   *) ac_abs_builddir=`pwd`/"$ac_dir";;
++   esac;;
++ esac
++ case $ac_abs_builddir in
++ .) ac_abs_top_builddir=${ac_top_builddir}.;;
++ *)
++   case ${ac_top_builddir}. in
++   .) ac_abs_top_builddir=$ac_abs_builddir;;
++   [\\/]* | ?:[\\/]* ) ac_abs_top_builddir=${ac_top_builddir}.;;
++   *) ac_abs_top_builddir=$ac_abs_builddir/${ac_top_builddir}.;;
++   esac;;
++ esac
++ case $ac_abs_builddir in
++ .) ac_abs_srcdir=$ac_srcdir;;
++ *)
++   case $ac_srcdir in
++   .) ac_abs_srcdir=$ac_abs_builddir;;
++   [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
++   *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
++   esac;;
++ esac
++ case $ac_abs_builddir in
++ .) ac_abs_top_srcdir=$ac_top_srcdir;;
++ *)
++   case $ac_top_srcdir in
++   .) ac_abs_top_srcdir=$ac_abs_builddir;;
++   [\\/]* | ?:[\\/]* ) ac_abs_top_srcdir=$ac_top_srcdir;;
++   *) ac_abs_top_srcdir=$ac_abs_builddir/$ac_top_srcdir;;
++   esac;;
++ esac
++ 
++ 
++   case $INSTALL in
++   [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
++   *) ac_INSTALL=$ac_top_builddir$INSTALL ;;
++   esac
++ 
++   if test x"$ac_file" != x-; then
++     { echo "$as_me:$LINENO: creating $ac_file" >&5
++ echo "$as_me: creating $ac_file" >&6;}
++     rm -f "$ac_file"
++   fi
++   # Let's still pretend it is `configure' which instantiates (i.e., don't
++   # use $as_me), people would be surprised to read:
++   #    /* config.h.  Generated by config.status.  */
++   if test x"$ac_file" = x-; then
++     configure_input=
++   else
++     configure_input="$ac_file.  "
++   fi
++   configure_input=$configure_input"Generated from `echo $ac_file_in |
++ 				     sed 's,.*/,,'` by configure."
++ 
++   # First look for the input files in the build tree, otherwise in the
++   # src tree.
++   ac_file_inputs=`IFS=:
++     for f in $ac_file_in; do
++       case $f in
++       -) echo $tmp/stdin ;;
++       [\\/$]*)
++ 	 # Absolute (can't be DOS-style, as IFS=:)
++ 	 test -f "$f" || { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
++ echo "$as_me: error: cannot find input file: $f" >&2;}
++    { (exit 1); exit 1; }; }
++ 	 echo "$f";;
++       *) # Relative
++ 	 if test -f "$f"; then
++ 	   # Build tree
++ 	   echo "$f"
++ 	 elif test -f "$srcdir/$f"; then
++ 	   # Source tree
++ 	   echo "$srcdir/$f"
++ 	 else
++ 	   # /dev/null tree
++ 	   { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
++ echo "$as_me: error: cannot find input file: $f" >&2;}
++    { (exit 1); exit 1; }; }
++ 	 fi;;
++       esac
++     done` || { (exit 1); exit 1; }
++ _ACEOF
++ cat >>$CONFIG_STATUS <<_ACEOF
++   sed "$ac_vpsub
++ $extrasub
++ _ACEOF
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ :t
++ /@[a-zA-Z_][a-zA-Z_0-9]*@/!b
++ s,@configure_input@,$configure_input,;t t
++ s,@srcdir@,$ac_srcdir,;t t
++ s,@abs_srcdir@,$ac_abs_srcdir,;t t
++ s,@top_srcdir@,$ac_top_srcdir,;t t
++ s,@abs_top_srcdir@,$ac_abs_top_srcdir,;t t
++ s,@builddir@,$ac_builddir,;t t
++ s,@abs_builddir@,$ac_abs_builddir,;t t
++ s,@top_builddir@,$ac_top_builddir,;t t
++ s,@abs_top_builddir@,$ac_abs_top_builddir,;t t
++ s,@INSTALL@,$ac_INSTALL,;t t
++ " $ac_file_inputs | (eval "$ac_sed_cmds") >$tmp/out
++   rm -f $tmp/stdin
++   if test x"$ac_file" != x-; then
++     mv $tmp/out $ac_file
++   else
++     cat $tmp/out
++     rm -f $tmp/out
++   fi
++ 
++ done
++ _ACEOF
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ 
++ #
++ # CONFIG_HEADER section.
++ #
++ 
++ # These sed commands are passed to sed as "A NAME B NAME C VALUE D", where
++ # NAME is the cpp macro being defined and VALUE is the value it is being given.
++ #
++ # ac_d sets the value in "#define NAME VALUE" lines.
++ ac_dA='s,^\([	 ]*\)#\([	 ]*define[	 ][	 ]*\)'
++ ac_dB='[	 ].*$,\1#\2'
++ ac_dC=' '
++ ac_dD=',;t'
++ # ac_u turns "#undef NAME" without trailing blanks into "#define NAME VALUE".
++ ac_uA='s,^\([	 ]*\)#\([	 ]*\)undef\([	 ][	 ]*\)'
++ ac_uB='$,\1#\2define\3'
++ ac_uC=' '
++ ac_uD=',;t'
++ 
++ for ac_file in : $CONFIG_HEADERS; do test "x$ac_file" = x: && continue
++   # Support "outfile[:infile[:infile...]]", defaulting infile="outfile.in".
++   case $ac_file in
++   - | *:- | *:-:* ) # input from stdin
++ 	cat >$tmp/stdin
++ 	ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
++ 	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
++   *:* ) ac_file_in=`echo "$ac_file" | sed 's,[^:]*:,,'`
++ 	ac_file=`echo "$ac_file" | sed 's,:.*,,'` ;;
++   * )   ac_file_in=$ac_file.in ;;
++   esac
++ 
++   test x"$ac_file" != x- && { echo "$as_me:$LINENO: creating $ac_file" >&5
++ echo "$as_me: creating $ac_file" >&6;}
++ 
++   # First look for the input files in the build tree, otherwise in the
++   # src tree.
++   ac_file_inputs=`IFS=:
++     for f in $ac_file_in; do
++       case $f in
++       -) echo $tmp/stdin ;;
++       [\\/$]*)
++ 	 # Absolute (can't be DOS-style, as IFS=:)
++ 	 test -f "$f" || { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
++ echo "$as_me: error: cannot find input file: $f" >&2;}
++    { (exit 1); exit 1; }; }
++ 	 # Do quote $f, to prevent DOS paths from being IFS'd.
++ 	 echo "$f";;
++       *) # Relative
++ 	 if test -f "$f"; then
++ 	   # Build tree
++ 	   echo "$f"
++ 	 elif test -f "$srcdir/$f"; then
++ 	   # Source tree
++ 	   echo "$srcdir/$f"
++ 	 else
++ 	   # /dev/null tree
++ 	   { { echo "$as_me:$LINENO: error: cannot find input file: $f" >&5
++ echo "$as_me: error: cannot find input file: $f" >&2;}
++    { (exit 1); exit 1; }; }
++ 	 fi;;
++       esac
++     done` || { (exit 1); exit 1; }
++   # Remove the trailing spaces.
++   sed 's/[	 ]*$//' $ac_file_inputs >$tmp/in
++ 
++ _ACEOF
++ 
++ # Transform confdefs.h into two sed scripts, `conftest.defines' and
++ # `conftest.undefs', that substitutes the proper values into
++ # config.h.in to produce config.h.  The first handles `#define'
++ # templates, and the second `#undef' templates.
++ # And first: Protect against being on the right side of a sed subst in
++ # config.status.  Protect against being in an unquoted here document
++ # in config.status.
++ rm -f conftest.defines conftest.undefs
++ # Using a here document instead of a string reduces the quoting nightmare.
++ # Putting comments in sed scripts is not portable.
++ #
++ # `end' is used to avoid that the second main sed command (meant for
++ # 0-ary CPP macros) applies to n-ary macro definitions.
++ # See the Autoconf documentation for `clear'.
++ cat >confdef2sed.sed <<\_ACEOF
++ s/[\\&,]/\\&/g
++ s,[\\$`],\\&,g
++ t clear
++ : clear
++ s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 (][^	 (]*\)\(([^)]*)\)[	 ]*\(.*\)$,${ac_dA}\1${ac_dB}\1\2${ac_dC}\3${ac_dD},gp
++ t end
++ s,^[	 ]*#[	 ]*define[	 ][	 ]*\([^	 ][^	 ]*\)[	 ]*\(.*\)$,${ac_dA}\1${ac_dB}\1${ac_dC}\2${ac_dD},gp
++ : end
++ _ACEOF
++ # If some macros were called several times there might be several times
++ # the same #defines, which is useless.  Nevertheless, we may not want to
++ # sort them, since we want the *last* AC-DEFINE to be honored.
++ uniq confdefs.h | sed -n -f confdef2sed.sed >conftest.defines
++ sed 's/ac_d/ac_u/g' conftest.defines >conftest.undefs
++ rm -f confdef2sed.sed
++ 
++ # This sed command replaces #undef with comments.  This is necessary, for
++ # example, in the case of _POSIX_SOURCE, which is predefined and required
++ # on some systems where configure will not decide to define it.
++ cat >>conftest.undefs <<\_ACEOF
++ s,^[	 ]*#[	 ]*undef[	 ][	 ]*[a-zA-Z_][a-zA-Z_0-9]*,/* & */,
++ _ACEOF
++ 
++ # Break up conftest.defines because some shells have a limit on the size
++ # of here documents, and old seds have small limits too (100 cmds).
++ echo '  # Handle all the #define templates only if necessary.' >>$CONFIG_STATUS
++ echo '  if grep "^[	 ]*#[	 ]*define" $tmp/in >/dev/null; then' >>$CONFIG_STATUS
++ echo '  # If there are no defines, we may have an empty if/fi' >>$CONFIG_STATUS
++ echo '  :' >>$CONFIG_STATUS
++ rm -f conftest.tail
++ while grep . conftest.defines >/dev/null
++ do
++   # Write a limited-size here document to $tmp/defines.sed.
++   echo '  cat >$tmp/defines.sed <<CEOF' >>$CONFIG_STATUS
++   # Speed up: don't consider the non `#define' lines.
++   echo '/^[	 ]*#[	 ]*define/!b' >>$CONFIG_STATUS
++   # Work around the forget-to-reset-the-flag bug.
++   echo 't clr' >>$CONFIG_STATUS
++   echo ': clr' >>$CONFIG_STATUS
++   sed ${ac_max_here_lines}q conftest.defines >>$CONFIG_STATUS
++   echo 'CEOF
++   sed -f $tmp/defines.sed $tmp/in >$tmp/out
++   rm -f $tmp/in
++   mv $tmp/out $tmp/in
++ ' >>$CONFIG_STATUS
++   sed 1,${ac_max_here_lines}d conftest.defines >conftest.tail
++   rm -f conftest.defines
++   mv conftest.tail conftest.defines
++ done
++ rm -f conftest.defines
++ echo '  fi # grep' >>$CONFIG_STATUS
++ echo >>$CONFIG_STATUS
++ 
++ # Break up conftest.undefs because some shells have a limit on the size
++ # of here documents, and old seds have small limits too (100 cmds).
++ echo '  # Handle all the #undef templates' >>$CONFIG_STATUS
++ rm -f conftest.tail
++ while grep . conftest.undefs >/dev/null
++ do
++   # Write a limited-size here document to $tmp/undefs.sed.
++   echo '  cat >$tmp/undefs.sed <<CEOF' >>$CONFIG_STATUS
++   # Speed up: don't consider the non `#undef'
++   echo '/^[	 ]*#[	 ]*undef/!b' >>$CONFIG_STATUS
++   # Work around the forget-to-reset-the-flag bug.
++   echo 't clr' >>$CONFIG_STATUS
++   echo ': clr' >>$CONFIG_STATUS
++   sed ${ac_max_here_lines}q conftest.undefs >>$CONFIG_STATUS
++   echo 'CEOF
++   sed -f $tmp/undefs.sed $tmp/in >$tmp/out
++   rm -f $tmp/in
++   mv $tmp/out $tmp/in
++ ' >>$CONFIG_STATUS
++   sed 1,${ac_max_here_lines}d conftest.undefs >conftest.tail
++   rm -f conftest.undefs
++   mv conftest.tail conftest.undefs
++ done
++ rm -f conftest.undefs
++ 
++ cat >>$CONFIG_STATUS <<\_ACEOF
++   # Let's still pretend it is `configure' which instantiates (i.e., don't
++   # use $as_me), people would be surprised to read:
++   #    /* config.h.  Generated by config.status.  */
++   if test x"$ac_file" = x-; then
++     echo "/* Generated by configure.  */" >$tmp/config.h
++   else
++     echo "/* $ac_file.  Generated by configure.  */" >$tmp/config.h
++   fi
++   cat $tmp/in >>$tmp/config.h
++   rm -f $tmp/in
++   if test x"$ac_file" != x-; then
++     if diff $ac_file $tmp/config.h >/dev/null 2>&1; then
++       { echo "$as_me:$LINENO: $ac_file is unchanged" >&5
++ echo "$as_me: $ac_file is unchanged" >&6;}
++     else
++       ac_dir=`(dirname "$ac_file") 2>/dev/null ||
++ $as_expr X"$ac_file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$ac_file" : 'X\(//\)[^/]' \| \
++ 	 X"$ac_file" : 'X\(//\)$' \| \
++ 	 X"$ac_file" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$ac_file" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++       { if $as_mkdir_p; then
++     mkdir -p "$ac_dir"
++   else
++     as_dir="$ac_dir"
++     as_dirs=
++     while test ! -d "$as_dir"; do
++       as_dirs="$as_dir $as_dirs"
++       as_dir=`(dirname "$as_dir") 2>/dev/null ||
++ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
++ 	 X"$as_dir" : 'X\(//\)$' \| \
++ 	 X"$as_dir" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$as_dir" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++     done
++     test ! -n "$as_dirs" || mkdir $as_dirs
++   fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dir\"" >&5
++ echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
++    { (exit 1); exit 1; }; }; }
++ 
++       rm -f $ac_file
++       mv $tmp/config.h $ac_file
++     fi
++   else
++     cat $tmp/config.h
++     rm -f $tmp/config.h
++   fi
++ # Compute $ac_file's index in $config_headers.
++ _am_stamp_count=1
++ for _am_header in $config_headers :; do
++   case $_am_header in
++     $ac_file | $ac_file:* )
++       break ;;
++     * )
++       _am_stamp_count=`expr $_am_stamp_count + 1` ;;
++   esac
++ done
++ echo "timestamp for $ac_file" >`(dirname $ac_file) 2>/dev/null ||
++ $as_expr X$ac_file : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X$ac_file : 'X\(//\)[^/]' \| \
++ 	 X$ac_file : 'X\(//\)$' \| \
++ 	 X$ac_file : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X$ac_file |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`/stamp-h$_am_stamp_count
++ done
++ _ACEOF
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ 
++ #
++ # CONFIG_COMMANDS section.
++ #
++ for ac_file in : $CONFIG_COMMANDS; do test "x$ac_file" = x: && continue
++   ac_dest=`echo "$ac_file" | sed 's,:.*,,'`
++   ac_source=`echo "$ac_file" | sed 's,[^:]*:,,'`
++   ac_dir=`(dirname "$ac_dest") 2>/dev/null ||
++ $as_expr X"$ac_dest" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$ac_dest" : 'X\(//\)[^/]' \| \
++ 	 X"$ac_dest" : 'X\(//\)$' \| \
++ 	 X"$ac_dest" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$ac_dest" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++   { if $as_mkdir_p; then
++     mkdir -p "$ac_dir"
++   else
++     as_dir="$ac_dir"
++     as_dirs=
++     while test ! -d "$as_dir"; do
++       as_dirs="$as_dir $as_dirs"
++       as_dir=`(dirname "$as_dir") 2>/dev/null ||
++ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
++ 	 X"$as_dir" : 'X\(//\)$' \| \
++ 	 X"$as_dir" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$as_dir" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++     done
++     test ! -n "$as_dirs" || mkdir $as_dirs
++   fi || { { echo "$as_me:$LINENO: error: cannot create directory \"$ac_dir\"" >&5
++ echo "$as_me: error: cannot create directory \"$ac_dir\"" >&2;}
++    { (exit 1); exit 1; }; }; }
++ 
++   ac_builddir=.
++ 
++ if test "$ac_dir" != .; then
++   ac_dir_suffix=/`echo "$ac_dir" | sed 's,^\.[\\/],,'`
++   # A "../" for each directory in $ac_dir_suffix.
++   ac_top_builddir=`echo "$ac_dir_suffix" | sed 's,/[^\\/]*,../,g'`
++ else
++   ac_dir_suffix= ac_top_builddir=
++ fi
++ 
++ case $srcdir in
++   .)  # No --srcdir option.  We are building in place.
++     ac_srcdir=.
++     if test -z "$ac_top_builddir"; then
++        ac_top_srcdir=.
++     else
++        ac_top_srcdir=`echo $ac_top_builddir | sed 's,/$,,'`
++     fi ;;
++   [\\/]* | ?:[\\/]* )  # Absolute path.
++     ac_srcdir=$srcdir$ac_dir_suffix;
++     ac_top_srcdir=$srcdir ;;
++   *) # Relative path.
++     ac_srcdir=$ac_top_builddir$srcdir$ac_dir_suffix
++     ac_top_srcdir=$ac_top_builddir$srcdir ;;
++ esac
++ 
++ # Do not use `cd foo && pwd` to compute absolute paths, because
++ # the directories may not exist.
++ case `pwd` in
++ .) ac_abs_builddir="$ac_dir";;
++ *)
++   case "$ac_dir" in
++   .) ac_abs_builddir=`pwd`;;
++   [\\/]* | ?:[\\/]* ) ac_abs_builddir="$ac_dir";;
++   *) ac_abs_builddir=`pwd`/"$ac_dir";;
++   esac;;
++ esac
++ case $ac_abs_builddir in
++ .) ac_abs_top_builddir=${ac_top_builddir}.;;
++ *)
++   case ${ac_top_builddir}. in
++   .) ac_abs_top_builddir=$ac_abs_builddir;;
++   [\\/]* | ?:[\\/]* ) ac_abs_top_builddir=${ac_top_builddir}.;;
++   *) ac_abs_top_builddir=$ac_abs_builddir/${ac_top_builddir}.;;
++   esac;;
++ esac
++ case $ac_abs_builddir in
++ .) ac_abs_srcdir=$ac_srcdir;;
++ *)
++   case $ac_srcdir in
++   .) ac_abs_srcdir=$ac_abs_builddir;;
++   [\\/]* | ?:[\\/]* ) ac_abs_srcdir=$ac_srcdir;;
++   *) ac_abs_srcdir=$ac_abs_builddir/$ac_srcdir;;
++   esac;;
++ esac
++ case $ac_abs_builddir in
++ .) ac_abs_top_srcdir=$ac_top_srcdir;;
++ *)
++   case $ac_top_srcdir in
++   .) ac_abs_top_srcdir=$ac_abs_builddir;;
++   [\\/]* | ?:[\\/]* ) ac_abs_top_srcdir=$ac_top_srcdir;;
++   *) ac_abs_top_srcdir=$ac_abs_builddir/$ac_top_srcdir;;
++   esac;;
++ esac
++ 
++ 
++   { echo "$as_me:$LINENO: executing $ac_dest commands" >&5
++ echo "$as_me: executing $ac_dest commands" >&6;}
++   case $ac_dest in
++     depfiles ) test x"$AMDEP_TRUE" != x"" || for mf in $CONFIG_FILES; do
++   # Strip MF so we end up with the name of the file.
++   mf=`echo "$mf" | sed -e 's/:.*$//'`
++   # Check whether this is an Automake generated Makefile or not.
++   # We used to match only the files named `Makefile.in', but
++   # some people rename them; so instead we look at the file content.
++   # Grep'ing the first line is not enough: some people post-process
++   # each Makefile.in and add a new line on top of each file to say so.
++   # So let's grep whole file.
++   if grep '^#.*generated by automake' $mf > /dev/null 2>&1; then
++     dirpart=`(dirname "$mf") 2>/dev/null ||
++ $as_expr X"$mf" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$mf" : 'X\(//\)[^/]' \| \
++ 	 X"$mf" : 'X\(//\)$' \| \
++ 	 X"$mf" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$mf" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++   else
++     continue
++   fi
++   grep '^DEP_FILES *= *[^ #]' < "$mf" > /dev/null || continue
++   # Extract the definition of DEP_FILES from the Makefile without
++   # running `make'.
++   DEPDIR=`sed -n 's/^DEPDIR = //p' < "$mf"`
++   test -z "$DEPDIR" && continue
++   # When using ansi2knr, U may be empty or an underscore; expand it
++   U=`sed -n 's/^U = //p' < "$mf"`
++   test -d "$dirpart/$DEPDIR" || mkdir "$dirpart/$DEPDIR"
++   # We invoke sed twice because it is the simplest approach to
++   # changing $(DEPDIR) to its actual value in the expansion.
++   for file in `sed -n '
++     /^DEP_FILES = .*\\\\$/ {
++       s/^DEP_FILES = //
++       :loop
++ 	s/\\\\$//
++ 	p
++ 	n
++ 	/\\\\$/ b loop
++       p
++     }
++     /^DEP_FILES = / s/^DEP_FILES = //p' < "$mf" | \
++        sed -e 's/\$(DEPDIR)/'"$DEPDIR"'/g' -e 's/\$U/'"$U"'/g'`; do
++     # Make sure the directory exists.
++     test -f "$dirpart/$file" && continue
++     fdir=`(dirname "$file") 2>/dev/null ||
++ $as_expr X"$file" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$file" : 'X\(//\)[^/]' \| \
++ 	 X"$file" : 'X\(//\)$' \| \
++ 	 X"$file" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$file" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++     { if $as_mkdir_p; then
++     mkdir -p $dirpart/$fdir
++   else
++     as_dir=$dirpart/$fdir
++     as_dirs=
++     while test ! -d "$as_dir"; do
++       as_dirs="$as_dir $as_dirs"
++       as_dir=`(dirname "$as_dir") 2>/dev/null ||
++ $as_expr X"$as_dir" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
++ 	 X"$as_dir" : 'X\(//\)[^/]' \| \
++ 	 X"$as_dir" : 'X\(//\)$' \| \
++ 	 X"$as_dir" : 'X\(/\)' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X"$as_dir" |
++     sed '/^X\(.*[^/]\)\/\/*[^/][^/]*\/*$/{ s//\1/; q; }
++   	  /^X\(\/\/\)[^/].*/{ s//\1/; q; }
++   	  /^X\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++     done
++     test ! -n "$as_dirs" || mkdir $as_dirs
++   fi || { { echo "$as_me:$LINENO: error: cannot create directory $dirpart/$fdir" >&5
++ echo "$as_me: error: cannot create directory $dirpart/$fdir" >&2;}
++    { (exit 1); exit 1; }; }; }
++ 
++     # echo "creating $dirpart/$file"
++     echo '# dummy' > "$dirpart/$file"
++   done
++ done
++  ;;
++   esac
++ done
++ _ACEOF
++ 
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ 
++ { (exit 0); exit 0; }
++ _ACEOF
++ chmod +x $CONFIG_STATUS
++ ac_clean_files=$ac_clean_files_save
++ 
++ 
++ # configure is writing to config.log, and then calls config.status.
++ # config.status does its own redirection, appending to config.log.
++ # Unfortunately, on DOS this fails, as config.log is still kept open
++ # by configure, so config.status won't be able to write to it; its
++ # output is simply discarded.  So we exec the FD to /dev/null,
++ # effectively closing config.log, so it can be properly (re)opened and
++ # appended to by config.status.  When coming back to configure, we
++ # need to make the FD available again.
++ if test "$no_create" != yes; then
++   ac_cs_success=:
++   ac_config_status_args=
++   test "$silent" = yes &&
++     ac_config_status_args="$ac_config_status_args --quiet"
++   exec 5>/dev/null
++   $SHELL $CONFIG_STATUS $ac_config_status_args || ac_cs_success=false
++   exec 5>>config.log
++   # Use ||, not &&, to avoid exiting from the if with $? = 1, which
++   # would make configure fail if this is the last instruction.
++   $ac_cs_success || { (exit 1); exit 1; }
++ fi
++ 
++ fi
++ 
++ if test "z$MSCRYPTO_FOUND" = "zyes" ; then
++                     ac_config_files="$ac_config_files include/xmlsec/mscrypto/Makefile src/mscrypto/Makefile"
++ cat >confcache <<\_ACEOF
++ # This file is a shell script that caches the results of configure
++ # tests run on this system so they can be shared between configure
++ # scripts and configure runs, see configure's option --config-cache.
++ # It is not useful on other systems.  If it contains results you don't
++ # want to keep, you may remove or edit it.
++ #
++ # config.status only pays attention to the cache file if you give it
++ # the --recheck option to rerun configure.
++ #
++ # `ac_cv_env_foo' variables (set or unset) will be overridden when
++ # loading this file, other *unset* `ac_cv_foo' will be assigned the
++ # following values.
++ 
++ _ACEOF
++ 
++ # The following way of writing the cache mishandles newlines in values,
++ # but we know of no workaround that is simple, portable, and efficient.
++ # So, don't put newlines in cache variables' values.
++ # Ultrix sh set writes to stderr and can't be redirected directly,
++ # and sets the high bit in the cache file unless we assign to the vars.
++ {
++   (set) 2>&1 |
++     case `(ac_space=' '; set | grep ac_space) 2>&1` in
++     *ac_space=\ *)
++       # `set' does not quote correctly, so add quotes (double-quote
++       # substitution turns \\\\ into \\, and sed turns \\ into \).
++       sed -n \
++ 	"s/'/'\\\\''/g;
++ 	  s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1='\\2'/p"
++       ;;
++     *)
++       # `set' quotes correctly as required by POSIX, so do not add quotes.
++       sed -n \
++ 	"s/^\\([_$as_cr_alnum]*_cv_[_$as_cr_alnum]*\\)=\\(.*\\)/\\1=\\2/p"
++       ;;
++     esac;
++ } |
++   sed '
++      t clear
++      : clear
++      s/^\([^=]*\)=\(.*[{}].*\)$/test "${\1+set}" = set || &/
++      t end
++      /^ac_cv_env/!s/^\([^=]*\)=\(.*\)$/\1=${\1=\2}/
++      : end' >>confcache
++ if diff $cache_file confcache >/dev/null 2>&1; then :; else
++   if test -w $cache_file; then
++     test "x$cache_file" != "x/dev/null" && echo "updating cache $cache_file"
++     cat confcache >$cache_file
++   else
++     echo "not updating unwritable cache $cache_file"
++   fi
++ fi
++ rm -f confcache
++ 
++ test "x$prefix" = xNONE && prefix=$ac_default_prefix
++ # Let make expand exec_prefix.
++ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
++ 
++ # VPATH may cause trouble with some makes, so we remove $(srcdir),
++ # ${srcdir} and @srcdir@ from VPATH if srcdir is ".", strip leading and
++ # trailing colons and then remove the whole line if VPATH becomes empty
++ # (actually we leave an empty line to preserve line numbers).
++ if test "x$srcdir" = x.; then
++   ac_vpsub='/^[	 ]*VPATH[	 ]*=/{
++ s/:*\$(srcdir):*/:/;
++ s/:*\${srcdir}:*/:/;
++ s/:*@srcdir@:*/:/;
++ s/^\([^=]*=[	 ]*\):*/\1/;
++ s/:*$//;
++ s/^[^=]*=[	 ]*$//;
++ }'
++ fi
++ 
++ DEFS=-DHAVE_CONFIG_H
++ 
++ ac_libobjs=
++ ac_ltlibobjs=
++ for ac_i in : $LIBOBJS; do test "x$ac_i" = x: && continue
++   # 1. Remove the extension, and $U if already installed.
++   ac_i=`echo "$ac_i" |
++ 	 sed 's/\$U\././;s/\.o$//;s/\.obj$//'`
++   # 2. Add them.
++   ac_libobjs="$ac_libobjs $ac_i\$U.$ac_objext"
++   ac_ltlibobjs="$ac_ltlibobjs $ac_i"'$U.lo'
++ done
++ LIBOBJS=$ac_libobjs
++ 
++ LTLIBOBJS=$ac_ltlibobjs
++ 
++ 
++ if test -z "${MAINTAINER_MODE_TRUE}" && test -z "${MAINTAINER_MODE_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"MAINTAINER_MODE\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"MAINTAINER_MODE\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${AMDEP_TRUE}" && test -z "${AMDEP_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"AMDEP\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"AMDEP\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${am__fastdepCC_TRUE}" && test -z "${am__fastdepCC_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"am__fastdepCC\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"am__fastdepCC\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${am__fastdepCXX_TRUE}" && test -z "${am__fastdepCXX_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"am__fastdepCXX\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"am__fastdepCXX\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${INSTALL_LTDL_TRUE}" && test -z "${INSTALL_LTDL_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"INSTALL_LTDL\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"INSTALL_LTDL\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${CONVENIENCE_LTDL_TRUE}" && test -z "${CONVENIENCE_LTDL_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"CONVENIENCE_LTDL\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"CONVENIENCE_LTDL\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_OPENSSL_TRUE}" && test -z "${XMLSEC_NO_OPENSSL_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_OPENSSL\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_OPENSSL\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_GNUTLS_TRUE}" && test -z "${XMLSEC_NO_GNUTLS_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_GNUTLS\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_GNUTLS\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_NSS_TRUE}" && test -z "${XMLSEC_NO_NSS_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_NSS\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_NSS\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_SHA1_TRUE}" && test -z "${XMLSEC_NO_SHA1_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_SHA1\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_SHA1\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_RIPEMD160_TRUE}" && test -z "${XMLSEC_NO_RIPEMD160_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_RIPEMD160\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_RIPEMD160\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_HMAC_TRUE}" && test -z "${XMLSEC_NO_HMAC_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_HMAC\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_HMAC\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_DSA_TRUE}" && test -z "${XMLSEC_NO_DSA_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_DSA\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_DSA\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_RSA_TRUE}" && test -z "${XMLSEC_NO_RSA_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_RSA\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_RSA\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_X509_TRUE}" && test -z "${XMLSEC_NO_X509_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_X509\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_X509\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_DES_TRUE}" && test -z "${XMLSEC_NO_DES_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_DES\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_DES\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_AES_TRUE}" && test -z "${XMLSEC_NO_AES_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_AES\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_AES\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_XMLDSIG_TRUE}" && test -z "${XMLSEC_NO_XMLDSIG_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_XMLDSIG\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_XMLDSIG\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_XMLENC_TRUE}" && test -z "${XMLSEC_NO_XMLENC_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_XMLENC\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_XMLENC\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_XKMS_TRUE}" && test -z "${XMLSEC_NO_XKMS_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_XKMS\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_XKMS\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_TRUE}" && test -z "${XMLSEC_NO_CRYPTO_DYNAMIC_LOADING_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_CRYPTO_DYNAMIC_LOADING\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_CRYPTO_DYNAMIC_LOADING\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ if test -z "${XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_TRUE}" && test -z "${XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING_FALSE}"; then
++   { { echo "$as_me:$LINENO: error: conditional \"XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&5
++ echo "$as_me: error: conditional \"XMLSEC_NO_APPS_CRYPTO_DYNAMIC_LOADING\" was never defined.
++ Usually this means the macro was only invoked conditionally." >&2;}
++    { (exit 1); exit 1; }; }
++ fi
++ 
++ : ${CONFIG_STATUS=./config.status}
++ ac_clean_files_save=$ac_clean_files
++ ac_clean_files="$ac_clean_files $CONFIG_STATUS"
++ { echo "$as_me:$LINENO: creating $CONFIG_STATUS" >&5
++ echo "$as_me: creating $CONFIG_STATUS" >&6;}
++ cat >$CONFIG_STATUS <<_ACEOF
++ #! $SHELL
++ # Generated by $as_me.
++ # Run this file to recreate the current configuration.
++ # Compiler output produced by configure, useful for debugging
++ # configure, is in config.log if it exists.
++ 
++ debug=false
++ ac_cs_recheck=false
++ ac_cs_silent=false
++ SHELL=\${CONFIG_SHELL-$SHELL}
++ _ACEOF
++ 
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ ## --------------------- ##
++ ## M4sh Initialization.  ##
++ ## --------------------- ##
++ 
++ # Be Bourne compatible
++ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
++   emulate sh
++   NULLCMD=:
++   # Zsh 3.x and 4.x performs word splitting on ${1+"$@"}, which
++   # is contrary to our usage.  Disable this feature.
++   alias -g '${1+"$@"}'='"$@"'
++ elif test -n "${BASH_VERSION+set}" && (set -o posix) >/dev/null 2>&1; then
++   set -o posix
++ fi
++ DUALCASE=1; export DUALCASE # for MKS sh
++ 
++ # Support unset when possible.
++ if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
++   as_unset=unset
++ else
++   as_unset=false
++ fi
++ 
++ 
++ # Work around bugs in pre-3.0 UWIN ksh.
++ $as_unset ENV MAIL MAILPATH
++ PS1='$ '
++ PS2='> '
++ PS4='+ '
++ 
++ # NLS nuisances.
++ for as_var in \
++   LANG LANGUAGE LC_ADDRESS LC_ALL LC_COLLATE LC_CTYPE LC_IDENTIFICATION \
++   LC_MEASUREMENT LC_MESSAGES LC_MONETARY LC_NAME LC_NUMERIC LC_PAPER \
++   LC_TELEPHONE LC_TIME
++ do
++   if (set +x; test -z "`(eval $as_var=C; export $as_var) 2>&1`"); then
++     eval $as_var=C; export $as_var
++   else
++     $as_unset $as_var
++   fi
++ done
++ 
++ # Required to use basename.
++ if expr a : '\(a\)' >/dev/null 2>&1; then
++   as_expr=expr
++ else
++   as_expr=false
++ fi
++ 
++ if (basename /) >/dev/null 2>&1 && test "X`basename / 2>&1`" = "X/"; then
++   as_basename=basename
++ else
++   as_basename=false
++ fi
++ 
++ 
++ # Name of the executable.
++ as_me=`$as_basename "$0" ||
++ $as_expr X/"$0" : '.*/\([^/][^/]*\)/*$' \| \
++ 	 X"$0" : 'X\(//\)$' \| \
++ 	 X"$0" : 'X\(/\)$' \| \
++ 	 .     : '\(.\)' 2>/dev/null ||
++ echo X/"$0" |
++     sed '/^.*\/\([^/][^/]*\)\/*$/{ s//\1/; q; }
++   	  /^X\/\(\/\/\)$/{ s//\1/; q; }
++   	  /^X\/\(\/\).*/{ s//\1/; q; }
++   	  s/.*/./; q'`
++ 
++ 
++ # PATH needs CR, and LINENO needs CR and PATH.
++ # Avoid depending upon Character Ranges.
++ as_cr_letters='abcdefghijklmnopqrstuvwxyz'
++ as_cr_LETTERS='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
++ as_cr_Letters=$as_cr_letters$as_cr_LETTERS
++ as_cr_digits='0123456789'
++ as_cr_alnum=$as_cr_Letters$as_cr_digits
++ 
++ # The user is always right.
++ if test "${PATH_SEPARATOR+set}" != set; then
++   echo "#! /bin/sh" >conf$$.sh
++   echo  "exit 0"   >>conf$$.sh
++   chmod +x conf$$.sh
++   if (PATH="/nonexistent;."; conf$$.sh) >/dev/null 2>&1; then
++     PATH_SEPARATOR=';'
++   else
++     PATH_SEPARATOR=:
++   fi
++   rm -f conf$$.sh
++ fi
++ 
++ 
++   as_lineno_1=$LINENO
++   as_lineno_2=$LINENO
++   as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
++   test "x$as_lineno_1" != "x$as_lineno_2" &&
++   test "x$as_lineno_3"  = "x$as_lineno_2"  || {
++   # Find who we are.  Look in the path if we contain no path at all
++   # relative or not.
++   case $0 in
++     *[\\/]* ) as_myself=$0 ;;
++     *) as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++ for as_dir in $PATH
++ do
++   IFS=$as_save_IFS
++   test -z "$as_dir" && as_dir=.
++   test -r "$as_dir/$0" && as_myself=$as_dir/$0 && break
++ done
++ 
++        ;;
++   esac
++   # We did not find ourselves, most probably we were run as `sh COMMAND'
++   # in which case we are not to be found in the path.
++   if test "x$as_myself" = x; then
++     as_myself=$0
++   fi
++   if test ! -f "$as_myself"; then
++     { { echo "$as_me:$LINENO: error: cannot find myself; rerun with an absolute path" >&5
++ echo "$as_me: error: cannot find myself; rerun with an absolute path" >&2;}
++    { (exit 1); exit 1; }; }
++   fi
++   case $CONFIG_SHELL in
++   '')
++     as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
++ for as_dir in /bin$PATH_SEPARATOR/usr/bin$PATH_SEPARATOR$PATH
++ do
++   IFS=$as_save_IFS
++   test -z "$as_dir" && as_dir=.
++   for as_base in sh bash ksh sh5; do
++ 	 case $as_dir in
++ 	 /*)
++ 	   if ("$as_dir/$as_base" -c '
++   as_lineno_1=$LINENO
++   as_lineno_2=$LINENO
++   as_lineno_3=`(expr $as_lineno_1 + 1) 2>/dev/null`
++   test "x$as_lineno_1" != "x$as_lineno_2" &&
++   test "x$as_lineno_3"  = "x$as_lineno_2" ') 2>/dev/null; then
++ 	     $as_unset BASH_ENV || test "${BASH_ENV+set}" != set || { BASH_ENV=; export BASH_ENV; }
++ 	     $as_unset ENV || test "${ENV+set}" != set || { ENV=; export ENV; }
++ 	     CONFIG_SHELL=$as_dir/$as_base
++ 	     export CONFIG_SHELL
++ 	     exec "$CONFIG_SHELL" "$0" ${1+"$@"}
++ 	   fi;;
++ 	 esac
++        done
++ done
++ ;;
++   esac
++ 
++   # Create $as_me.lineno as a copy of $as_myself, but with $LINENO
++   # uniformly replaced by the line number.  The first 'sed' inserts a
++   # line-number line before each line; the second 'sed' does the real
++   # work.  The second script uses 'N' to pair each line-number line
++   # with the numbered line, and appends trailing '-' during
++   # substitution so that $LINENO is not a special case at line end.
++   # (Raja R Harinath suggested sed '=', and Paul Eggert wrote the
++   # second 'sed' script.  Blame Lee E. McMahon for sed's syntax.  :-)
++   sed '=' <$as_myself |
++     sed '
++       N
++       s,$,-,
++       : loop
++       s,^\(['$as_cr_digits']*\)\(.*\)[$]LINENO\([^'$as_cr_alnum'_]\),\1\2\1\3,
++       t loop
++       s,-$,,
++       s,^['$as_cr_digits']*\n,,
++     ' >$as_me.lineno &&
++   chmod +x $as_me.lineno ||
++     { { echo "$as_me:$LINENO: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&5
++ echo "$as_me: error: cannot create $as_me.lineno; rerun with a POSIX shell" >&2;}
++    { (exit 1); exit 1; }; }
++ 
++   # Don't try to exec as it changes $[0], causing all sort of problems
++   # (the dirname of $[0] is not the place where we might find the
++   # original and so on.  Autoconf is especially sensible to this).
++   . ./$as_me.lineno
++   # Exit status is that of the last command.
++   exit
++ }
++ 
++ 
++ case `echo "testing\c"; echo 1,2,3`,`echo -n testing; echo 1,2,3` in
++   *c*,-n*) ECHO_N= ECHO_C='
++ ' ECHO_T='	' ;;
++   *c*,*  ) ECHO_N=-n ECHO_C= ECHO_T= ;;
++   *)       ECHO_N= ECHO_C='\c' ECHO_T= ;;
++ esac
++ 
++ if expr a : '\(a\)' >/dev/null 2>&1; then
++   as_expr=expr
++ else
++   as_expr=false
++ fi
++ 
++ rm -f conf$$ conf$$.exe conf$$.file
++ echo >conf$$.file
++ if ln -s conf$$.file conf$$ 2>/dev/null; then
++   # We could just check for DJGPP; but this test a) works b) is more generic
++   # and c) will remain valid once DJGPP supports symlinks (DJGPP 2.04).
++   if test -f conf$$.exe; then
++     # Don't use ln at all; we don't have any links
++     as_ln_s='cp -p'
++   else
++     as_ln_s='ln -s'
++   fi
++ elif ln conf$$.file conf$$ 2>/dev/null; then
++   as_ln_s=ln
++ else
++   as_ln_s='cp -p'
++ fi
++ rm -f conf$$ conf$$.exe conf$$.file
++ 
++ if mkdir -p . 2>/dev/null; then
++   as_mkdir_p=:
++ else
++   test -d ./-p && rmdir ./-p
++   as_mkdir_p=false
++ fi
++ 
++ as_executable_p="test -f"
++ 
++ # Sed expression to map a string onto a valid CPP name.
++ as_tr_cpp="eval sed 'y%*$as_cr_letters%P$as_cr_LETTERS%;s%[^_$as_cr_alnum]%_%g'"
++ 
++ # Sed expression to map a string onto a valid variable name.
++ as_tr_sh="eval sed 'y%*+%pp%;s%[^_$as_cr_alnum]%_%g'"
++ 
++ 
++ # IFS
++ # We need space, tab and new line, in precisely that order.
++ as_nl='
++ '
++ IFS=" 	$as_nl"
++ 
++ # CDPATH.
++ $as_unset CDPATH
++ 
++ exec 6>&1
++ 
++ # Open the log real soon, to keep \$[0] and so on meaningful, and to
++ # report actual input values of CONFIG_FILES etc. instead of their
++ # values after options handling.  Logging --version etc. is OK.
++ exec 5>>config.log
++ {
++   echo
++   sed 'h;s/./-/g;s/^.../## /;s/...$/ ##/;p;x;p;x' <<_ASBOX
++ ## Running $as_me. ##
++ _ASBOX
++ } >&5
++ cat >&5 <<_CSEOF
++ 
++ This file was extended by $as_me, which was
++ generated by GNU Autoconf 2.59.  Invocation command line was
++ 
++   CONFIG_FILES    = $CONFIG_FILES
++   CONFIG_HEADERS  = $CONFIG_HEADERS
++   CONFIG_LINKS    = $CONFIG_LINKS
++   CONFIG_COMMANDS = $CONFIG_COMMANDS
++   $ $0 $@
++ 
++ _CSEOF
++ echo "on `(hostname || uname -n) 2>/dev/null | sed 1q`" >&5
++ echo >&5
++ _ACEOF
++ 
++ # Files that config.status was made for.
++ if test -n "$ac_config_files"; then
++   echo "config_files=\"$ac_config_files\"" >>$CONFIG_STATUS
++ fi
++ 
++ if test -n "$ac_config_headers"; then
++   echo "config_headers=\"$ac_config_headers\"" >>$CONFIG_STATUS
++ fi
++ 
++ if test -n "$ac_config_links"; then
++   echo "config_links=\"$ac_config_links\"" >>$CONFIG_STATUS
++ fi
++ 
++ if test -n "$ac_config_commands"; then
++   echo "config_commands=\"$ac_config_commands\"" >>$CONFIG_STATUS
++ fi
++ 
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ 
++ ac_cs_usage="\
++ \`$as_me' instantiates files from templates according to the
++ current configuration.
++ 
++ Usage: $0 [OPTIONS] [FILE]...
++ 
++   -h, --help       print this help, then exit
++   -V, --version    print version number, then exit
++   -q, --quiet      do not print progress messages
++   -d, --debug      don't remove temporary files
++       --recheck    update $as_me by reconfiguring in the same conditions
++   --file=FILE[:TEMPLATE]
++ 		   instantiate the configuration file FILE
++   --header=FILE[:TEMPLATE]
++ 		   instantiate the configuration header FILE
++ 
++ Configuration files:
++ $config_files
++ 
++ Configuration headers:
++ $config_headers
++ 
++ Configuration commands:
++ $config_commands
++ 
++ Report bugs to <bug-autoconf@gnu.org>."
++ _ACEOF
++ 
++ cat >>$CONFIG_STATUS <<_ACEOF
++ ac_cs_version="\\
++ config.status
++ configured by $0, generated by GNU Autoconf 2.59,
++   with options \\"`echo "$ac_configure_args" | sed 's/[\\""\`\$]/\\\\&/g'`\\"
++ 
++ Copyright (C) 2003 Free Software Foundation, Inc.
++ This config.status script is free software; the Free Software Foundation
++ gives unlimited permission to copy, distribute and modify it."
++ srcdir=$srcdir
++ INSTALL="$INSTALL"
++ _ACEOF
++ 
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ # If no file are specified by the user, then we need to provide default
++ # value.  By we need to know if files were specified by the user.
++ ac_need_defaults=:
++ while test $# != 0
++ do
++   case $1 in
++   --*=*)
++     ac_option=`expr "x$1" : 'x\([^=]*\)='`
++     ac_optarg=`expr "x$1" : 'x[^=]*=\(.*\)'`
++     ac_shift=:
++     ;;
++   -*)
++     ac_option=$1
++     ac_optarg=$2
++     ac_shift=shift
++     ;;
++   *) # This is not an option, so the user has probably given explicit
++      # arguments.
++      ac_option=$1
++      ac_need_defaults=false;;
++   esac
++ 
++   case $ac_option in
++   # Handling of the options.
++ _ACEOF
++ cat >>$CONFIG_STATUS <<\_ACEOF
++   -recheck | --recheck | --rechec | --reche | --rech | --rec | --re | --r)
++     ac_cs_recheck=: ;;
++   --version | --vers* | -V )
++     echo "$ac_cs_version"; exit 0 ;;
++   --he | --h)
++     # Conflict between --help and --header
++     { { echo "$as_me:$LINENO: error: ambiguous option: $1
++ Try \`$0 --help' for more information." >&5
++ echo "$as_me: error: ambiguous option: $1
++ Try \`$0 --help' for more information." >&2;}
++    { (exit 1); exit 1; }; };;
++   --help | --hel | -h )
++     echo "$ac_cs_usage"; exit 0 ;;
++   --debug | --d* | -d )
++     debug=: ;;
++   --file | --fil | --fi | --f )
++     $ac_shift
++     CONFIG_FILES="$CONFIG_FILES $ac_optarg"
++     ac_need_defaults=false;;
++   --header | --heade | --head | --hea )
++     $ac_shift
++     CONFIG_HEADERS="$CONFIG_HEADERS $ac_optarg"
++     ac_need_defaults=false;;
++   -q | -quiet | --quiet | --quie | --qui | --qu | --q \
++   | -silent | --silent | --silen | --sile | --sil | --si | --s)
++     ac_cs_silent=: ;;
++ 
++   # This is an error.
++   -*) { { echo "$as_me:$LINENO: error: unrecognized option: $1
++ Try \`$0 --help' for more information." >&5
++ echo "$as_me: error: unrecognized option: $1
++ Try \`$0 --help' for more information." >&2;}
++    { (exit 1); exit 1; }; } ;;
++ 
++   *) ac_config_targets="$ac_config_targets $1" ;;
++ 
++   esac
++   shift
++ done
++ 
++ ac_configure_extra_args=
++ 
++ if $ac_cs_silent; then
++   exec 6>/dev/null
++   ac_configure_extra_args="$ac_configure_extra_args --silent"
++ fi
++ 
++ _ACEOF
++ cat >>$CONFIG_STATUS <<_ACEOF
++ if \$ac_cs_recheck; then
++   echo "running $SHELL $0 " $ac_configure_args \$ac_configure_extra_args " --no-create --no-recursion" >&6
++   exec $SHELL $0 $ac_configure_args \$ac_configure_extra_args --no-create --no-recursion
++ fi
++ 
++ _ACEOF
++ 
++ cat >>$CONFIG_STATUS <<_ACEOF
++ #
++ # INIT-COMMANDS section.
++ #
++ 
++ AMDEP_TRUE="$AMDEP_TRUE" ac_aux_dir="$ac_aux_dir"
++ 
++ _ACEOF
++ 
++ 
++ 
++ cat >>$CONFIG_STATUS <<\_ACEOF
++ for ac_config_target in $ac_config_targets
++ do
++   case "$ac_config_target" in
++   # Handling of arguments.
++   "include/xmlsec/version.h" ) CONFIG_FILES="$CONFIG_FILES include/xmlsec/version.h" ;;
++   "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
++   "include/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
++   "include/xmlsec/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/xmlsec/Makefile" ;;
++   "include/xmlsec/private/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/xmlsec/private/Makefile" ;;
++   "src/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
++   "apps/Makefile" ) CONFIG_FILES="$CONFIG_FILES apps/Makefile" ;;
++   "docs/Makefile" ) CONFIG_FILES="$CONFIG_FILES docs/Makefile" ;;
++   "docs/api/Makefile" ) CONFIG_FILES="$CONFIG_FILES docs/api/Makefile" ;;
++   "man/Makefile" ) CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
++   "xmlsec1Conf.sh" ) CONFIG_FILES="$CONFIG_FILES xmlsec1Conf.sh:xmlsecConf.sh.in" ;;
++   "xmlsec1-config" ) CONFIG_FILES="$CONFIG_FILES xmlsec1-config:xmlsec-config.in" ;;
++   "xmlsec1-openssl.pc" ) CONFIG_FILES="$CONFIG_FILES xmlsec1-openssl.pc:xmlsec-openssl.pc.in" ;;
++   "xmlsec1-gnutls.pc" ) CONFIG_FILES="$CONFIG_FILES xmlsec1-gnutls.pc:xmlsec-gnutls.pc.in" ;;
++   "xmlsec1-nss.pc" ) CONFIG_FILES="$CONFIG_FILES xmlsec1-nss.pc:xmlsec-nss.pc.in" ;;
++   "xmlsec1.spec" ) CONFIG_FILES="$CONFIG_FILES xmlsec1.spec:xmlsec.spec.in" ;;
++   "include/xmlsec/openssl/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/xmlsec/openssl/Makefile" ;;
++   "src/openssl/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/openssl/Makefile" ;;
++   "include/xmlsec/gnutls/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/xmlsec/gnutls/Makefile" ;;
++   "src/gnutls/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/gnutls/Makefile" ;;
++   "include/xmlsec/nss/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/xmlsec/nss/Makefile" ;;
++   "src/nss/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/nss/Makefile" ;;
++   "include/xmlsec/mscrypto/Makefile" ) CONFIG_FILES="$CONFIG_FILES include/xmlsec/mscrypto/Makefile" ;;
++   "src/mscrypto/Makefile" ) CONFIG_FILES="$CONFIG_FILES src/mscrypto/Makefile" ;;
++   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
++   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h" ;;
++   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
++ echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
++    { (exit 1); exit 1; }; };;
++   esac
++ done
++ 
++ # If the user did not use the arguments to specify the items to instantiate,
++ # then the envvar interface is used.  Set only those that are not.
++ # We use the long form for the default assignment because of an extremely
++ # bizarre bug on SunOS 4.1.3.
++ if $ac_need_defaults; then
++   test "${CONFIG_FILES+set}" = set || CONFIG_FILES=$config_files
++   test "${CONFIG_HEADERS+set}" = set || CONFIG_HEADERS=$config_headers
++   test "${CONFIG_COMMANDS+set}" = set || CONFIG_COMMANDS=$config_commands
++ fi
++ 
++ # Have a temporary directory for convenience.  Make it in the build tree
++ # simply because there is no reason to put it here, and in addition,
++ # creating and moving files from /tmp can sometimes cause problems.
++ # Create a temporary directory, and hook for its removal unless debugging.
++ $debug ||
++ {
++   trap 'exit_status=$?; rm -rf $tmp && exit $exit_status' 0
++   trap '{ (exit 1); exit 1; }' 1 2 13 15
++ }
++ 
++ # Create a (secure) tmp directory for tmp files.
++ 
++ {
++   tmp=`(umask 077 && mktemp -d -q "./confstatXXXXXX") 2>/dev/null` &&
++   test -n "$tmp" && test -d "$tmp"
++ }  ||
++ {
++   tmp=./confstat$$-$RANDOM
++   (umask 077 && mkdir $tmp)
++ } ||
++ {
++    echo "$me: cannot create a temporary directory in ." >&2
++    { (exit 1); exit 1; }
++ }
++ 
++ _ACEOF
++ 
++ cat >>$CONFIG_STATUS <<_ACEOF
++ 
++ #
++ # CONFIG_FILES section.
++ #
++ 
++ # No need to generate the scripts if there are no CONFIG_FILES.
++ # This happens for instance when ./config.status config.h
++ if test -n "\$CONFIG_FILES"; then
++   # Protect against being on the right side of a sed subst in config.status.
++   sed 's/,@/@@/; s/@,/@@/; s/,;t t\$/@;t t/; /@;t t\$/s/[\\\\&,]/\\\\&/g;
++    s/@@/,@/; s/@@/@,/; s/@;t t\$/,;t t/' >\$tmp/subs.sed <<\\CEOF
++ s,@SHELL@,$SHELL,;t t
++ s,@PATH_SEPARATOR@,$PATH_SEPARATOR,;t t
++ s,@PACKAGE_NAME@,$PACKAGE_NAME,;t t
++ s,@PACKAGE_TARNAME@,$PACKAGE_TARNAME,;t t
++ s,@PACKAGE_VERSION@,$PACKAGE_VERSION,;t t
++ s,@PACKAGE_STRING@,$PACKAGE_STRING,;t t
++ s,@PACKAGE_BUGREPORT@,$PACKAGE_BUGREPORT,;t t
++ s,@exec_prefix@,$exec_prefix,;t t
++ s,@prefix@,$prefix,;t t
++ s,@program_transform_name@,$program_transform_name,;t t
++ s,@bindir@,$bindir,;t t
++ s,@sbindir@,$sbindir,;t t
++ s,@libexecdir@,$libexecdir,;t t
++ s,@datadir@,$datadir,;t t
++ s,@sysconfdir@,$sysconfdir,;t t
++ s,@sharedstatedir@,$sharedstatedir,;t t
++ s,@localstatedir@,$localstatedir,;t t
++ s,@libdir@,$libdir,;t t
++ s,@includedir@,$includedir,;t t
++ s,@oldincludedir@,$oldincludedir,;t t
++ s,@infodir@,$infodir,;t t
++ s,@mandir@,$mandir,;t t
++ s,@build_alias@,$build_alias,;t t
++ s,@host_alias@,$host_alias,;t t
++ s,@target_alias@,$target_alias,;t t
++ s,@DEFS@,$DEFS,;t t
++ s,@ECHO_C@,$ECHO_C,;t t
++ s,@ECHO_N@,$ECHO_N,;t t
++ s,@ECHO_T@,$ECHO_T,;t t
++ s,@LIBS@,$LIBS,;t t
++ s,@build@,$build,;t t
++ s,@build_cpu@,$build_cpu,;t t
++ s,@build_vendor@,$build_vendor,;t t
++ s,@build_os@,$build_os,;t t
++ s,@host@,$host,;t t
++ s,@host_cpu@,$host_cpu,;t t
++ s,@host_vendor@,$host_vendor,;t t
++ s,@host_os@,$host_os,;t t
++ s,@XMLSEC_VERSION@,$XMLSEC_VERSION,;t t
++ s,@XMLSEC_PACKAGE@,$XMLSEC_PACKAGE,;t t
++ s,@XMLSEC_VERSION_SAFE@,$XMLSEC_VERSION_SAFE,;t t
++ s,@XMLSEC_VERSION_MAJOR@,$XMLSEC_VERSION_MAJOR,;t t
++ s,@XMLSEC_VERSION_MINOR@,$XMLSEC_VERSION_MINOR,;t t
++ s,@XMLSEC_VERSION_SUBMINOR@,$XMLSEC_VERSION_SUBMINOR,;t t
++ s,@XMLSEC_VERSION_INFO@,$XMLSEC_VERSION_INFO,;t t
++ s,@INSTALL_PROGRAM@,$INSTALL_PROGRAM,;t t
++ s,@INSTALL_SCRIPT@,$INSTALL_SCRIPT,;t t
++ s,@INSTALL_DATA@,$INSTALL_DATA,;t t
++ s,@CYGPATH_W@,$CYGPATH_W,;t t
++ s,@PACKAGE@,$PACKAGE,;t t
++ s,@VERSION@,$VERSION,;t t
++ s,@ACLOCAL@,$ACLOCAL,;t t
++ s,@AUTOCONF@,$AUTOCONF,;t t
++ s,@AUTOMAKE@,$AUTOMAKE,;t t
++ s,@AUTOHEADER@,$AUTOHEADER,;t t
++ s,@MAKEINFO@,$MAKEINFO,;t t
++ s,@AMTAR@,$AMTAR,;t t
++ s,@install_sh@,$install_sh,;t t
++ s,@STRIP@,$STRIP,;t t
++ s,@ac_ct_STRIP@,$ac_ct_STRIP,;t t
++ s,@INSTALL_STRIP_PROGRAM@,$INSTALL_STRIP_PROGRAM,;t t
++ s,@mkdir_p@,$mkdir_p,;t t
++ s,@AWK@,$AWK,;t t
++ s,@SET_MAKE@,$SET_MAKE,;t t
++ s,@am__leading_dot@,$am__leading_dot,;t t
++ s,@MAINTAINER_MODE_TRUE@,$MAINTAINER_MODE_TRUE,;t t
++ s,@MAINTAINER_MODE_FALSE@,$MAINTAINER_MODE_FALSE,;t t
++ s,@MAINT@,$MAINT,;t t
++ s,@CC@,$CC,;t t
++ s,@CFLAGS@,$CFLAGS,;t t
++ s,@LDFLAGS@,$LDFLAGS,;t t
++ s,@CPPFLAGS@,$CPPFLAGS,;t t
++ s,@ac_ct_CC@,$ac_ct_CC,;t t
++ s,@EXEEXT@,$EXEEXT,;t t
++ s,@OBJEXT@,$OBJEXT,;t t
++ s,@DEPDIR@,$DEPDIR,;t t
++ s,@am__include@,$am__include,;t t
++ s,@am__quote@,$am__quote,;t t
++ s,@AMDEP_TRUE@,$AMDEP_TRUE,;t t
++ s,@AMDEP_FALSE@,$AMDEP_FALSE,;t t
++ s,@AMDEPBACKSLASH@,$AMDEPBACKSLASH,;t t
++ s,@CCDEPMODE@,$CCDEPMODE,;t t
++ s,@am__fastdepCC_TRUE@,$am__fastdepCC_TRUE,;t t
++ s,@am__fastdepCC_FALSE@,$am__fastdepCC_FALSE,;t t
++ s,@EGREP@,$EGREP,;t t
++ s,@LN_S@,$LN_S,;t t
++ s,@ECHO@,$ECHO,;t t
++ s,@AR@,$AR,;t t
++ s,@ac_ct_AR@,$ac_ct_AR,;t t
++ s,@RANLIB@,$RANLIB,;t t
++ s,@ac_ct_RANLIB@,$ac_ct_RANLIB,;t t
++ s,@CPP@,$CPP,;t t
++ s,@CXX@,$CXX,;t t
++ s,@CXXFLAGS@,$CXXFLAGS,;t t
++ s,@ac_ct_CXX@,$ac_ct_CXX,;t t
++ s,@CXXDEPMODE@,$CXXDEPMODE,;t t
++ s,@am__fastdepCXX_TRUE@,$am__fastdepCXX_TRUE,;t t
++ s,@am__fastdepCXX_FALSE@,$am__fastdepCXX_FALSE,;t t
++ s,@CXXCPP@,$CXXCPP,;t t
++ s,@F77@,$F77,;t t
++ s,@FFLAGS@,$FFLAGS,;t t
++ s,@ac_ct_F77@,$ac_ct_F77,;t t
++ s,@LIBTOOL@,$LIBTOOL,;t t
++ s,@RM@,$RM,;t t
++ s,@CP@,$CP,;t t
++ s,@MV@,$MV,;t t
++ s,@TAR@,$TAR,;t t
++ s,@HELP2MAN@,$HELP2MAN,;t t
++ s,@MAN2HTML@,$MAN2HTML,;t t
++ s,@U@,$U,;t t
++ s,@ANSI2KNR@,$ANSI2KNR,;t t
++ s,@INSTALL_LTDL_TRUE@,$INSTALL_LTDL_TRUE,;t t
++ s,@INSTALL_LTDL_FALSE@,$INSTALL_LTDL_FALSE,;t t
++ s,@CONVENIENCE_LTDL_TRUE@,$CONVENIENCE_LTDL_TRUE,;t t
++ s,@CONVENIENCE_LTDL_FALSE@,$CONVENIENCE_LTDL_FALSE,;t t
++ s,@LIBADD_DL@,$LIBADD_DL,;t t
++ s,@PKG_CONFIG_ENABLED@,$PKG_CONFIG_ENABLED,;t t
++ s,@PKG_CONFIG@,$PKG_CONFIG,;t t
++ s,@LIBXML_CFLAGS@,$LIBXML_CFLAGS,;t t
++ s,@LIBXML_LIBS@,$LIBXML_LIBS,;t t
++ s,@LIBXML262_CFLAGS@,$LIBXML262_CFLAGS,;t t
++ s,@LIBXML262_LIBS@,$LIBXML262_LIBS,;t t
++ s,@LIBXML_CONFIG@,$LIBXML_CONFIG,;t t
++ s,@LIBXML_MIN_VERSION@,$LIBXML_MIN_VERSION,;t t
++ s,@LIBXSLT_CFLAGS@,$LIBXSLT_CFLAGS,;t t
++ s,@LIBXSLT_LIBS@,$LIBXSLT_LIBS,;t t
++ s,@XMLSEC_NO_LIBXSLT@,$XMLSEC_NO_LIBXSLT,;t t
++ s,@LIBXSLT_CONFIG@,$LIBXSLT_CONFIG,;t t
++ s,@LIBXSLT_MIN_VERSION@,$LIBXSLT_MIN_VERSION,;t t
++ s,@OPENSSL_CFLAGS@,$OPENSSL_CFLAGS,;t t
++ s,@OPENSSL_LIBS@,$OPENSSL_LIBS,;t t
++ s,@OPENSSL097_CFLAGS@,$OPENSSL097_CFLAGS,;t t
++ s,@OPENSSL097_LIBS@,$OPENSSL097_LIBS,;t t
++ s,@XMLSEC_NO_OPENSSL_TRUE@,$XMLSEC_NO_OPENSSL_TRUE,;t t
++ s,@XMLSEC_NO_OPENSSL_FALSE@,$XMLSEC_NO_OPENSSL_FALSE,;t t
++ s,@XMLSEC_NO_OPENSSL@,$XMLSEC_NO_OPENSSL,;t t
++ s,@OPENSSL_CRYPTO_LIB@,$OPENSSL_CRYPTO_LIB,;t t
++ s,@OPENSSL_MIN_VERSION@,$OPENSSL_MIN_VERSION,;t t
++ s,@GNUTLS_CFLAGS@,$GNUTLS_CFLAGS,;t t
++ s,@GNUTLS_LIBS@,$GNUTLS_LIBS,;t t
++ s,@XMLSEC_NO_GNUTLS_TRUE@,$XMLSEC_NO_GNUTLS_TRUE,;t t
++ s,@XMLSEC_NO_GNUTLS_FALSE@,$XMLSEC_NO_GNUTLS_FALSE,;t t
++ s,@XMLSEC_NO_GNUTLS@,$XMLSEC_NO_GNUTLS,;t t
++ s,@GNUTLS_CRYPTO_LIB@,$GNUTLS_CRYPTO_LIB,;t t
++ s,@GNUTLS_MIN_VERSION@,$GNUTLS_MIN_VERSION,;t t
++ s,@NSS_CFLAGS@,$NSS_CFLAGS,;t t
++ s,@NSS_LIBS@,$NSS_LIBS,;t t
++ s,@XMLSEC_NO_NSS_TRUE@,$XMLSEC_NO_NSS_TRUE,;t t
++ s,@XMLSEC_NO_NSS_FALSE@,$XMLSEC_NO_NSS_FALSE,;t t
++ s,@XMLSEC_NO_NSS@,$XMLSEC_NO_NSS,;t t
++ s,@NSS_CRYPTO_LIB@,$NSS_CRYPTO_LIB,;t t
++ s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
++ s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
++ s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
++ s,@MSCRYPTO_CFLAGS@,$MSCRYPTO_CFLAGS,;t t
++ s,@MSCRYPTO_LIBS@,$MSCRYPTO_LIBS,;t t
+  s,@XMLSEC_NO_SHA1_TRUE@,$XMLSEC_NO_SHA1_TRUE,;t t
+  s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
+  s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
+***************
+*** 34368,34373 ****
+--- 36199,36206 ----
+  s,@NSS_MIN_VERSION@,$NSS_MIN_VERSION,;t t
+  s,@NSPR_MIN_VERSION@,$NSPR_MIN_VERSION,;t t
+  s,@MOZILLA_MIN_VERSION@,$MOZILLA_MIN_VERSION,;t t
++ s,@MSCRYPTO_CFLAGS@,$MSCRYPTO_CFLAGS,;t t
++ s,@MSCRYPTO_LIBS@,$MSCRYPTO_LIBS,;t t
+  s,@XMLSEC_NO_SHA1_TRUE@,$XMLSEC_NO_SHA1_TRUE,;t t
+  s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
+  s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
+*** misc/xmlsec1-1.2.6/configure.in	Thu Aug 26 04:49:24 2004
+--- misc/build/xmlsec1-1.2.6/configure.in	Wed Nov 15 12:23:27 2006
 ***************
 *** 143,149 ****
   dnl find libxml
@@ -369,8 +2444,72 @@
           	dnl do not add -L/usr/lib because compiler does it anyway
       		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Wed Nov 15 12:23:27 2006
+***************
+*** 1 ****
+! dummy
+--- 1,58 ----
+! # Makefile.in generated by automake 1.8.3 from Makefile.am.
+! # @configure_input@
+! 
+! # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+! # 2003, 2004  Free Software Foundation, Inc.
+! # This Makefile.in is free software; the Free Software Foundation
+! # gives unlimited permission to copy and/or distribute it,
+! # with or without modifications, as long as this notice is preserved.
+! 
+! # This program is distributed in the hope that it will be useful,
+! # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+! # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+! # PARTICULAR PURPOSE.
+! 
+! @SET_MAKE@
+! 
+! HEADERS = $(xmlsecmscryptoinc_HEADERS)
+! NULL = 
+! xmlsecmscryptoinc_HEADERS = \
+! akmngr.h \
+! app.h \
+! crypto.h \
+! symbols.h \
+! certkeys.h \
+! keysstore.h \
+! x509.h \
+! $(NULL)
+! 
+! all: all-am
+! 
+! mostlyclean-libtool:
+! 	-rm -f *.lo
+! 
+! clean-libtool:
+! 	-rm -rf .libs _libs
+! 
+! all-am: Makefile $(HEADERS)
+! 
+! mostlyclean-generic:
+! 
+! clean-generic:
+! 
+! clean: clean-am
+! 
+! clean-am: clean-generic clean-libtool mostlyclean-am
+! 
+! mostlyclean: mostlyclean-am
+! 
+! mostlyclean-am: mostlyclean-generic mostlyclean-libtool
+! 
+! .PHONY: all all-am clean clean-generic \
+! 	clean-libtool \
+! 	mostlyclean mostlyclean-generic mostlyclean-libtool
+! 
+! 
+! # Tell versions [3.59,3.63) of GNU make to not export all variables.
+! # Otherwise a system limit (for SysV at least) may be exceeded.
+! .NOEXPORT:
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 1 ****
 ! dummy
@@ -446,8 +2585,8 @@
 ! #endif /* __XMLSEC_MSCRYPTO_AKMNGR_H__ */
 ! 
 ! 
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	2003-09-26 08:12:46.000000000 +0200
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Fri Sep 26 08:12:46 2003
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 77,82 ****
 --- 77,97 ----
@@ -472,8 +2611,54 @@
   
   #endif /* XMLSEC_NO_X509 */
   
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Wed Jul 30 04:46:35 2003
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Wed Nov 15 12:23:27 2006
+***************
+*** 3,8 ****
+--- 3,9 ----
+  xmlsecnssincdir = $(includedir)/xmlsec1/xmlsec/nss
+  
+  xmlsecnssinc_HEADERS = \
++ akmngr.h \
+  app.h \
+  crypto.h \
+  symbols.h \
+***************
+*** 10,15 ****
+--- 11,18 ----
+  keysstore.h \
+  pkikeys.h \
+  x509.h \
++ tokens.h \
++ ciphers.h \
+  $(NULL)
+  
+  install-exec-hook:
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Thu Aug 26 08:00:31 2004
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Wed Nov 15 12:23:27 2006
+***************
+*** 273,278 ****
+--- 273,279 ----
+  NULL = 
+  xmlsecnssincdir = $(includedir)/xmlsec1/xmlsec/nss
+  xmlsecnssinc_HEADERS = \
++ akmngr.h \
+  app.h \
+  crypto.h \
+  symbols.h \
+***************
+*** 280,285 ****
+--- 281,288 ----
+  keysstore.h \
+  pkikeys.h \
+  x509.h \
++ tokens.h \
++ ciphers.h \
+  $(NULL)
+  
+  all: all-am
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 1 ****
 ! dummy
@@ -534,8 +2719,8 @@
 ! #endif /* __XMLSEC_NSS_AKMNGR_H__ */
 ! 
 ! 
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/app.h	2004-01-12 22:06:14.000000000 +0100
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Mon Jan 12 22:06:14 2004
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 22,27 ****
 --- 22,30 ----
@@ -559,8 +2744,8 @@
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrLoad	(xmlSecKeysMngrPtr mngr,
   									 const char* uri);
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrSave	(xmlSecKeysMngrPtr mngr,
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 1 ****
 ! dummy
@@ -600,8 +2785,8 @@
 ! #endif /* __XMLSEC_NSS_CIPHERS_H__ */
 ! 
 ! 
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	2004-01-12 22:06:14.000000000 +0100
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Mon Jan 12 22:06:14 2004
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 264,269 ****
 --- 264,278 ----
@@ -620,8 +2805,8 @@
   #endif /* XMLSEC_NO_RSA */
   
   
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	2003-07-30 04:46:35.000000000 +0200
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Wed Jul 30 04:46:35 2003
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 16,21 ****
 --- 16,23 ----
@@ -644,54 +2829,8 @@
   XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreLoad 	(xmlSecKeyStorePtr store,
   								 const char *uri,
   								 xmlSecKeysMngrPtr keysMngr);
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	2003-07-30 04:46:35.000000000 +0200
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	2006-11-28 14:17:22.000000000 +0100
-***************
-*** 3,8 ****
---- 3,9 ----
-  xmlsecnssincdir = $(includedir)/xmlsec1/xmlsec/nss
-  
-  xmlsecnssinc_HEADERS = \
-+ akmngr.h \
-  app.h \
-  crypto.h \
-  symbols.h \
-***************
-*** 10,15 ****
---- 11,18 ----
-  keysstore.h \
-  pkikeys.h \
-  x509.h \
-+ tokens.h \
-+ ciphers.h \
-  $(NULL)
-  
-  install-exec-hook:
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	2004-08-26 08:00:31.000000000 +0200
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	2006-11-28 14:17:22.000000000 +0100
-***************
-*** 273,278 ****
---- 273,279 ----
-  NULL = 
-  xmlsecnssincdir = $(includedir)/xmlsec1/xmlsec/nss
-  xmlsecnssinc_HEADERS = \
-+ akmngr.h \
-  app.h \
-  crypto.h \
-  symbols.h \
-***************
-*** 280,285 ****
---- 281,288 ----
-  keysstore.h \
-  pkikeys.h \
-  x509.h \
-+ tokens.h \
-+ ciphers.h \
-  $(NULL)
-  
-  all: all-am
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Wed Nov 15 12:23:27 2006
 ***************
 *** 1 ****
 ! dummy
@@ -878,8 +3017,8 @@
 ! 
 ! #endif	/* __XMLSEC_NSS_TOKENS_H__ */
 ! 
-*** misc/xmlsec1-1.2.6/libxml2-config	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/libxml2-config	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/libxml2-config	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/libxml2-config	Wed Nov 15 12:23:27 2006
 ***************
 *** 1 ****
 ! dummy
@@ -932,8 +3071,35 @@
 ! done
 ! 
 ! exit 0
-*** misc/xmlsec1-1.2.6/ltmain.sh	2004-08-26 08:00:15.000000000 +0200
---- misc/build/xmlsec1-1.2.6/ltmain.sh	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/ltmain.sh	Thu Aug 26 08:00:15 2004
+--- misc/build/xmlsec1-1.2.6/ltmain.sh	Wed Nov 15 12:23:27 2006
+***************
+*** 1661,1666 ****
+--- 1661,1671 ----
+  	fi
+  	;;
+  
++       *.lib)
++ 	deplibs="$deplibs $arg"
++ 	continue
++ 	;;
++ 
+        *.$libext)
+  	# An archive.
+  	deplibs="$deplibs $arg"
+***************
+*** 1974,1979 ****
+--- 1979,1988 ----
+  	  continue
+  	  ;;
+  	*.la) lib="$deplib" ;;
++ 	*.lib)
++ 	  deplibs="$deplib $deplibs"
++ 	  continue
++ 	  ;;
+  	*.$libext)
+  	  if test "$pass" = conv; then
+  	    deplibs="$deplib $deplibs"
 ***************
 *** 2994,3006 ****
   	  ;;
@@ -949,7 +3115,7 @@
   	  ;;
   
   	irix | nonstopux)
---- 2994,3006 ----
+--- 3003,3015 ----
   	  ;;
   
   	freebsd-aout)
@@ -972,7 +3138,7 @@
   	      fi
   	    elif test -n "$runpath_var"; then
   	      case "$perm_rpath " in
---- 3564,3571 ----
+--- 3573,3580 ----
   		fi
   	      else
   		eval flag=\"$hardcode_libdir_flag_spec\"
@@ -981,8 +3147,8 @@
   	      fi
   	    elif test -n "$runpath_var"; then
   	      case "$perm_rpath " in
-*** misc/xmlsec1-1.2.6/src/bn.c	2004-06-21 20:33:27.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/bn.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/bn.c	Mon Jun 21 20:33:27 2004
+--- misc/build/xmlsec1-1.2.6/src/bn.c	Wed Nov 15 12:23:27 2006
 ***************
 *** 170,177 ****
    */
@@ -1548,8 +3714,8 @@
       }
   
       return(0);
-*** misc/xmlsec1-1.2.6/src/dl.c	2003-10-29 16:57:20.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/dl.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/dl.c	Wed Oct 29 16:57:20 2003
+--- misc/build/xmlsec1-1.2.6/src/dl.c	Wed Nov 15 12:23:27 2006
 ***************
 *** 329,334 ****
 --- 329,338 ----
@@ -1575,8 +3741,192 @@
   }
   
 --- 354,359 ----
-*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Wed Nov 15 12:23:27 2006
+***************
+*** 1 ****
+! dummy
+--- 1,178 ----
+! # Makefile.in generated by automake 1.8.3 from Makefile.am.
+! # @configure_input@
+! 
+! # Copyright (C) 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
+! # 2003, 2004  Free Software Foundation, Inc.
+! # This Makefile.in is free software; the Free Software Foundation
+! # gives unlimited permission to copy and/or distribute it,
+! # with or without modifications, as long as this notice is preserved.
+! 
+! # This program is distributed in the hope that it will be useful,
+! # but WITHOUT ANY WARRANTY, to the extent permitted by law; without
+! # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+! # PARTICULAR PURPOSE.
+! 
+! @SET_MAKE@
+! 
+! srcdir = @srcdir@
+! top_srcdir = @top_srcdir@
+! top_builddir = ../..
+! LTLIBRARIES = $(lib_LTLIBRARIES)
+! am__DEPENDENCIES_1 =
+! libxmlsec1_mscrypto_la_DEPENDENCIES = ../libxmlsec1.la \
+! 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+! 	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+! am__objects_1 =
+! am_libxmlsec1_mscrypto_la_OBJECTS = akmngr.lo app.lo certkeys.lo ciphers.lo crypto.lo \
+! 	digests.lo keysstore.lo kt_rsa.lo signatures.lo symkeys.lo \
+! 	x509.lo x509vfy.lo $(am__objects_1)
+! libxmlsec1_mscrypto_la_OBJECTS = $(am_libxmlsec1_mscrypto_la_OBJECTS)
+! DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+! depcomp = $(SHELL) $(top_srcdir)/depcomp
+! @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/app.Plo ./$(DEPDIR)/certkeys.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/ciphers.Plo ./$(DEPDIR)/crypto.Plo \
+! @AMDEP_TRUE@    ./$(DEPDIR)/digests.Plo ./$(DEPDIR)/keysstore.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/kt_rsa.Plo ./$(DEPDIR)/signatures.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/symkeys.Plo ./$(DEPDIR)/x509.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/x509vfy.Plo ./$(DEPDIR)/akmngr.Plo
+! COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+! 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+! LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
+! 	$(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+! 	$(AM_CFLAGS) $(CFLAGS)
+! CCLD = $(CC)
+! LINK = $(LIBTOOL) --mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) \
+! 	$(AM_LDFLAGS) $(LDFLAGS) -o $@
+! CC = @CC@
+! CCDEPMODE = @CCDEPMODE@
+! CFLAGS = @CFLAGS@
+! CPPFLAGS = @CPPFLAGS@
+! CYGPATH_W = @CYGPATH_W@
+! DEFS = @DEFS@
+! DEPDIR = @DEPDIR@
+! LDFLAGS = @LDFLAGS@
+! LIBS = @LIBS@
+! LIBTOOL = @LIBTOOL@
+! LIBXML_CFLAGS = @LIBXML_CFLAGS@
+! LIBXML_LIBS = @LIBXML_LIBS@
+! MSCRYPTO_CFLAGS = @MSCRYPTO_CFLAGS@
+! MSCRYPTO_LIBS = @MSCRYPTO_LIBS@
+! OBJEXT = @OBJEXT@
+! SHELL = @SHELL@
+! XMLSEC_DEFINES = @XMLSEC_DEFINES@
+! exec_prefix = @exec_prefix@
+! libdir = @libdir@
+! prefix = @prefix@
+! NULL = 
+! 
+! INCLUDES = \
+! 	-DPACKAGE=\"@PACKAGE@\" \
+! 	-I$(top_srcdir) \
+! 	-I$(top_srcdir)/include \
+! 	$(XMLSEC_DEFINES) \
+! 	$(MSCRYPTO_CFLAGS) \
+! 	$(LIBXSLT_CFLAGS) \
+! 	$(LIBXML_CFLAGS) \
+! 	$(NULL)
+! 
+! lib_LTLIBRARIES = \
+! 	libxmlsec1-mscrypto.la \
+! 	$(NULL)
+! 
+! libxmlsec1_mscrypto_la_LIBADD = \
+! 	../libxmlsec1.la \
+! 	$(MSCRYPTO_LIBS) \
+! 	$(LIBXSLT_LIBS) \
+! 	$(LIBXML_LIBS) \
+! 	$(NULL)
+! 
+! libxmlsec1_mscrypto_la_LDFLAGS = \
+! 	-version-info @XMLSEC_VERSION_INFO@ \
+! 	$(NULL)
+! 
+! all: all-am
+! 
+! .SUFFIXES:
+! .SUFFIXES: .c .lo .o .obj
+! 
+! clean-libLTLIBRARIES:
+! 	-test -z "$(lib_LTLIBRARIES)" || rm -f $(lib_LTLIBRARIES)
+! 	@list='$(lib_LTLIBRARIES)'; for p in $$list; do \
+! 	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+! 	  test "$$dir" = "$$p" && dir=.; \
+! 	  echo "rm -f \"$${dir}/so_locations\""; \
+! 	  rm -f "$${dir}/so_locations"; \
+! 	done
+! libxmlsec1-mscrypto.la: $(libxmlsec1_mscrypto_la_OBJECTS) $(libxmlsec1_mscrypto_la_DEPENDENCIES) 
+! 	$(LINK) -rpath $(libdir) $(libxmlsec1_mscrypto_la_LDFLAGS) $(libxmlsec1_mscrypto_la_OBJECTS) $(libxmlsec1_mscrypto_la_LIBADD) $(LIBS)
+! 
+! mostlyclean-compile:
+! 	-rm -f *.$(OBJEXT)
+! 
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/akmngr.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/app.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/certkeys.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ciphers.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crypto.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digests.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keysstore.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kt_rsa.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/x509.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/x509vfy.Plo@am__quote@
+! 
+! .c.o:
+! @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+! @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+! @am__fastdepCC_FALSE@	$(COMPILE) -c $<
+! 
+! .c.obj:
+! @am__fastdepCC_TRUE@	if $(COMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ `$(CYGPATH_W) '$<'`; \
+! @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Po"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Po' tmpdepfile='$(DEPDIR)/$*.TPo' @AMDEPBACKSLASH@
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+! @am__fastdepCC_FALSE@	$(COMPILE) -c `$(CYGPATH_W) '$<'`
+! 
+! .c.lo:
+! @am__fastdepCC_TRUE@	if $(LTCOMPILE) -MT $@ -MD -MP -MF "$(DEPDIR)/$*.Tpo" -c -o $@ $<; \
+! @am__fastdepCC_TRUE@	then mv -f "$(DEPDIR)/$*.Tpo" "$(DEPDIR)/$*.Plo"; else rm -f "$(DEPDIR)/$*.Tpo"; exit 1; fi
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	depfile='$(DEPDIR)/$*.Plo' tmpdepfile='$(DEPDIR)/$*.TPlo' @AMDEPBACKSLASH@
+! @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+! @am__fastdepCC_FALSE@	$(LTCOMPILE) -c -o $@ $<
+! 
+! mostlyclean-libtool:
+! 	-rm -f *.lo
+! 
+! clean-libtool:
+! 	-rm -rf .libs _libs
+! 
+! all-am: Makefile $(LTLIBRARIES)
+! 
+! mostlyclean-generic:
+! 
+! clean-generic:
+! 
+! clean: clean-am
+! 
+! clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
+! 	mostlyclean-am
+! 
+! mostlyclean: mostlyclean-am
+! 
+! mostlyclean-am: mostlyclean-compile mostlyclean-generic \
+! 	mostlyclean-libtool
+! 
+! .PHONY: all all-am clean clean-generic \
+! 	clean-libLTLIBRARIES clean-libtool \
+! 	maintainer-clean-generic mostlyclean mostlyclean-compile \
+! 	mostlyclean-generic mostlyclean-libtool
+! 
+! # Tell versions [3.59,3.63) of GNU make to not export all variables.
+! # Otherwise a system limit (for SysV at least) may be exceeded.
+! .NOEXPORT:
+*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Wed Nov 15 12:23:27 2006
 ***************
 *** 1 ****
 ! dummy
@@ -1816,8 +4166,8 @@
 ! 	return( 0 ) ;
 ! }
 ! 
-*** misc/xmlsec1-1.2.6/src/mscrypto/certkeys.c	2004-03-17 06:06:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Wed Mar 17 06:06:43 2004
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Wed Nov 15 12:23:27 2006
 ***************
 *** 41,46 ****
 --- 41,47 ----
@@ -2494,8 +4844,78 @@
   }
   
   static xmlSecKeyDataType
-*** misc/xmlsec1-1.2.6/src/mscrypto/crypto.c	2003-11-12 03:38:51.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Fri Sep 26 08:12:51 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Wed Nov 15 12:23:27 2006
+***************
+*** 785,791 ****
+   * AES CBC cipher transforms
+   *
+   ********************************************************************/
+! static xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+--- 785,791 ----
+   * AES CBC cipher transforms
+   *
+   ********************************************************************/
+! static struct _xmlSecTransformKlass xmlSecMSCryptoAes128CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+***************
+*** 824,830 ****
+      return(&xmlSecMSCryptoAes128CbcKlass);
+  }
+  
+! static xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+--- 824,830 ----
+      return(&xmlSecMSCryptoAes128CbcKlass);
+  }
+  
+! static struct _xmlSecTransformKlass xmlSecMSCryptoAes192CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+***************
+*** 863,869 ****
+      return(&xmlSecMSCryptoAes192CbcKlass);
+  }
+  
+! static xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+--- 863,869 ----
+      return(&xmlSecMSCryptoAes192CbcKlass);
+  }
+  
+! static struct _xmlSecTransformKlass xmlSecMSCryptoAes256CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoBlockCipherSize,		/* xmlSecSize objSize */
+***************
+*** 906,912 ****
+  
+  
+  #ifndef XMLSEC_NO_DES
+! static xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),	/* size_t klassSize */
+      xmlSecMSCryptoBlockCipherSize,	/* size_t objSize */
+--- 906,912 ----
+  
+  
+  #ifndef XMLSEC_NO_DES
+! static struct _xmlSecTransformKlass xmlSecMSCryptoDes3CbcKlass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),	/* size_t klassSize */
+      xmlSecMSCryptoBlockCipherSize,	/* size_t objSize */
+*** misc/xmlsec1-1.2.6/src/mscrypto/crypto.c	Wed Nov 12 03:38:51 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	Wed Nov 15 12:23:27 2006
 ***************
 *** 330,342 ****
   BYTE* 
@@ -2527,8 +4947,8 @@
   	return(NULL);
       }
   	
-*** misc/xmlsec1-1.2.6/src/mscrypto/digests.c	2003-09-30 04:09:51.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/mscrypto/digests.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/mscrypto/digests.c	Tue Sep 30 04:09:51 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/digests.c	Wed Nov 15 12:23:27 2006
 ***************
 *** 96,107 ****
   
@@ -2559,8 +4979,116 @@
       }
   
       return(0);
-*** misc/xmlsec1-1.2.6/src/mscrypto/x509.c	2003-09-26 02:58:13.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Fri Sep 26 22:29:25 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Wed Nov 15 12:23:27 2006
+***************
+*** 66,72 ****
+  static int  	xmlSecMSCryptoRsaPkcs1Process			(xmlSecTransformPtr transform, 
+  								 xmlSecTransformCtxPtr transformCtx);
+  
+! static xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoRsaPkcs1Size,			/* xmlSecSize objSize */
+--- 66,72 ----
+  static int  	xmlSecMSCryptoRsaPkcs1Process			(xmlSecTransformPtr transform, 
+  								 xmlSecTransformCtxPtr transformCtx);
+  
+! static struct _xmlSecTransformKlass xmlSecMSCryptoRsaPkcs1Klass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoRsaPkcs1Size,			/* xmlSecSize objSize */
+*** misc/xmlsec1-1.2.6/src/mscrypto/signatures.c	Fri Sep 26 22:29:25 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/signatures.c	Wed Nov 15 12:23:27 2006
+***************
+*** 483,489 ****
+   * RSA-SHA1 signature transform
+   *
+   ***************************************************************************/
+! static xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoSignatureSize,		/* xmlSecSize objSize */
+--- 483,489 ----
+   * RSA-SHA1 signature transform
+   *
+   ***************************************************************************/
+! static struct _xmlSecTransformKlass xmlSecMSCryptoRsaSha1Klass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoSignatureSize,		/* xmlSecSize objSize */
+***************
+*** 531,537 ****
+   *
+   ***************************************************************************/
+  
+! static xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoSignatureSize,	        /* xmlSecSize objSize */
+--- 531,537 ----
+   *
+   ***************************************************************************/
+  
+! static struct _xmlSecTransformKlass xmlSecMSCryptoDsaSha1Klass = {
+      /* klass/object sizes */
+      sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
+      xmlSecMSCryptoSignatureSize,	        /* xmlSecSize objSize */
+*** misc/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Fri Sep 26 02:58:13 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Wed Nov 15 12:23:28 2006
+***************
+*** 72,78 ****
+   * <xmlsec:AESKeyValue> processing
+   *
+   *************************************************************************/
+! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecKeyDataBinarySize,
+  
+--- 72,78 ----
+   * <xmlsec:AESKeyValue> processing
+   *
+   *************************************************************************/
+! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataAesKlass = {
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecKeyDataBinarySize,
+  
+***************
+*** 153,159 ****
+   * <xmlsec:DESKeyValue> processing
+   *
+   *************************************************************************/
+! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecKeyDataBinarySize,
+  
+--- 153,159 ----
+   * <xmlsec:DESKeyValue> processing
+   *
+   *************************************************************************/
+! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataDesKlass = {
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecKeyDataBinarySize,
+  
+*** misc/xmlsec1-1.2.6/src/mscrypto/x509.c	Fri Sep 26 02:58:13 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	Wed Nov 15 12:26:17 2006
+***************
+*** 240,246 ****
+  
+  
+  
+! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecMSCryptoX509DataSize,
+  
+--- 240,246 ----
+  
+  
+  
+! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataX509Klass = {
+      sizeof(xmlSecKeyDataKlass),
+      xmlSecMSCryptoX509DataSize,
+  
 ***************
 *** 1572,1577 ****
 --- 1572,1578 ----
@@ -2573,10 +5101,54 @@
       xmlSecAssert2(xmlSecKeyDataCheckId(data, xmlSecMSCryptoKeyDataX509Id), -1);
 ***************
 *** 1610,1615 ****
---- 1611,1619 ----
+--- 1611,1663 ----
   		return(-1);
   	    }
   
++ 		/*
++ 		 * I'll search key according to KeyReq.
++ 		 */
++ 		pCert = CertDuplicateCertificateContext( ctx->keyCert ) ;
++ 		if( pCert == NULL ) {
++ 			xmlSecError( XMLSEC_ERRORS_HERE,
++ 		    	xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
++ 				"CertDuplicateCertificateContext",
++ 				XMLSEC_ERRORS_R_CRYPTO_FAILED,
++ 				XMLSEC_ERRORS_NO_MESSAGE);
++ 
++ 			return(-1);
++ 		}
++ 
++ 		if( ( keyInfoCtx->keyReq.keyType & xmlSecKeyDataTypePrivate ) == xmlSecKeyDataTypePrivate ) {
++ 			keyValue = xmlSecMSCryptoCertAdopt( pCert, xmlSecKeyDataTypePrivate ) ;
++ 			if(keyValue == NULL) {
++ 				xmlSecError(XMLSEC_ERRORS_HERE,
++ 						xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
++ 						"xmlSecMSCryptoCertAdopt",
++ 						XMLSEC_ERRORS_R_XMLSEC_FAILED,
++ 						XMLSEC_ERRORS_NO_MESSAGE);
++ 
++ 				CertFreeCertificateContext( pCert ) ;
++ 				return(-1);
++ 			}
++ 			pCert = NULL ;
++ 		} else if( ( keyInfoCtx->keyReq.keyType & xmlSecKeyDataTypePublic ) == xmlSecKeyDataTypePublic ) {
++ 			keyValue = xmlSecMSCryptoCertAdopt( pCert, xmlSecKeyDataTypePublic ) ;
++ 			if(keyValue == NULL) {
++ 				xmlSecError(XMLSEC_ERRORS_HERE,
++ 						xmlSecErrorsSafeString(xmlSecKeyDataGetName(data)),
++ 						"xmlSecMSCryptoCertAdopt",
++ 						XMLSEC_ERRORS_R_XMLSEC_FAILED,
++ 						XMLSEC_ERRORS_NO_MESSAGE);
++ 
++ 				CertFreeCertificateContext( pCert ) ;
++ 				return(-1);
++ 			}
++ 			pCert = NULL ;
++ 		}
++ 
++ 
++ 
 + 		/*-
 + 		 * Get Public key from cert, which does not always work for sign action.
 +          *
@@ -2585,7 +5157,7 @@
   		xmlSecError(XMLSEC_ERRORS_HERE,
 ***************
 *** 1619,1624 ****
---- 1623,1673 ----
+--- 1667,1717 ----
   			    XMLSEC_ERRORS_NO_MESSAGE);
   		return(-1);
   	    }
@@ -2646,7 +5218,7 @@
       str = (char *)xmlMalloc(csz);
       if (NULL == str) {
   	xmlSecError(XMLSEC_ERRORS_HERE,
---- 1931,1937 ----
+--- 1975,1981 ----
       xmlSecAssert2(nm->pbData != NULL, NULL);
       xmlSecAssert2(nm->cbData > 0, NULL);
   
@@ -2663,7 +5235,7 @@
       if (csz < 1) {
   	xmlSecError(XMLSEC_ERRORS_HERE,
   		    NULL,
---- 1942,1948 ----
+--- 1986,1992 ----
   	return (NULL);
       }
   
@@ -2690,7 +5262,7 @@
       xmlFree(str);
       return(res);
   }
---- 1953,1989 ----
+--- 1997,2033 ----
   	return(NULL);
       }
   
@@ -2728,8 +5300,42 @@
       xmlFree(str);
       return(res);
   }
-*** misc/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	2003-09-27 05:12:22.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	2006-11-28 14:17:22.000000000 +0100
+***************
+*** 2153,2159 ****
+  								 xmlSecSize bufSize,
+  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
+  
+! static xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
+      sizeof(xmlSecKeyDataKlass),
+      sizeof(xmlSecKeyData),
+  
+--- 2266,2272 ----
+  								 xmlSecSize bufSize,
+  								 xmlSecKeyInfoCtxPtr keyInfoCtx);
+  
+! static struct _xmlSecKeyDataKlass xmlSecMSCryptoKeyDataRawX509CertKlass = {
+      sizeof(xmlSecKeyDataKlass),
+      sizeof(xmlSecKeyData),
+  
+*** misc/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Sat Sep 27 05:12:22 2003
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Wed Nov 15 12:23:28 2006
+***************
+*** 70,76 ****
+  static xmlSecByte * 	xmlSecMSCryptoX509NameRead	(xmlSecByte *str, 
+  							 int len);
+  
+! static xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
+      sizeof(xmlSecKeyDataStoreKlass),
+      xmlSecMSCryptoX509StoreSize,
+  
+--- 70,76 ----
+  static xmlSecByte * 	xmlSecMSCryptoX509NameRead	(xmlSecByte *str, 
+  							 int len);
+  
+! static struct _xmlSecKeyDataStoreKlass xmlSecMSCryptoX509StoreKlass = {
+      sizeof(xmlSecKeyDataStoreKlass),
+      xmlSecMSCryptoX509StoreSize,
+  
 ***************
 *** 125,130 ****
 --- 125,131 ----
@@ -3344,7 +5950,7 @@
 +         memcpy(p, "       Email=", 13);
 +     }
 + 
-+ 
+  
 + 
 +     /* get issuer name */
 + 	cName = xmlSecMSCryptoCertStrToName(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING,
@@ -3361,7 +5967,7 @@
 + 	}
 + 	cnb.pbData = cName;
 + 	cnb.cbData = cNameLen;
-  
++ 
 +     /* get serial number */
   	ret = xmlSecBnInitialize(&issuerSerialBn, 0);
   	if(ret < 0) {
@@ -3457,8 +6063,181 @@
   	    }
   	}
   	xmlFree(cName);
-*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/Makefile.am	Tue Sep 16 11:43:03 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	Wed Nov 15 12:23:28 2006
+***************
+*** 20,40 ****
+  	$(NULL)
+  
+  libxmlsec1_nss_la_SOURCES =\
+  	app.c \
+  	bignum.c \
+  	ciphers.c \
+  	crypto.c \
+  	digests.c \
+  	hmac.c \
+  	pkikeys.c \
+  	signatures.c \
+  	symkeys.c \
+  	x509.c \
+  	x509vfy.c \
+- 	keysstore.c \
+- 	kt_rsa.c \
+- 	kw_des.c \
+- 	kw_aes.c \
+  	$(NULL)
+  
+  libxmlsec1_nss_la_LIBADD = \
+--- 20,41 ----
+  	$(NULL)
+  
+  libxmlsec1_nss_la_SOURCES =\
++ 	akmngr.c \
+  	app.c \
+  	bignum.c \
+  	ciphers.c \
+  	crypto.c \
+  	digests.c \
+  	hmac.c \
++ 	keysstore.c \
++ 	keytrans.c \
++ 	keywrapers.c \
+  	pkikeys.c \
+  	signatures.c \
+  	symkeys.c \
++ 	tokens.c \
+  	x509.c \
+  	x509vfy.c \
+  	$(NULL)
+  
+  libxmlsec1_nss_la_LIBADD = \
+*** misc/xmlsec1-1.2.6/src/nss/Makefile.in	Thu Aug 26 08:00:32 2004
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	Wed Nov 15 12:23:28 2006
+***************
+*** 54,62 ****
+  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+  am__objects_1 =
+! am_libxmlsec1_nss_la_OBJECTS = app.lo bignum.lo ciphers.lo crypto.lo \
+  	digests.lo hmac.lo pkikeys.lo signatures.lo symkeys.lo x509.lo \
+! 	x509vfy.lo keysstore.lo kt_rsa.lo kw_des.lo kw_aes.lo \
+  	$(am__objects_1)
+  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
+  DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+--- 54,62 ----
+  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
+  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
+  am__objects_1 =
+! am_libxmlsec1_nss_la_OBJECTS = akmngr.lo app.lo bignum.lo ciphers.lo crypto.lo \
+  	digests.lo hmac.lo pkikeys.lo signatures.lo symkeys.lo x509.lo \
+! 	x509vfy.lo keysstore.lo tokens.lo keytrans.lo keywrapers.lo \
+  	$(am__objects_1)
+  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
+  DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
+***************
+*** 65,75 ****
+  @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/app.Plo ./$(DEPDIR)/bignum.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/ciphers.Plo ./$(DEPDIR)/crypto.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/digests.Plo ./$(DEPDIR)/hmac.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/keysstore.Plo ./$(DEPDIR)/kt_rsa.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/kw_aes.Plo ./$(DEPDIR)/kw_des.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/pkikeys.Plo ./$(DEPDIR)/signatures.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/symkeys.Plo ./$(DEPDIR)/x509.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/x509vfy.Plo
+  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+  LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
+--- 65,75 ----
+  @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/app.Plo ./$(DEPDIR)/bignum.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/ciphers.Plo ./$(DEPDIR)/crypto.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/digests.Plo ./$(DEPDIR)/hmac.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/keysstore.Plo ./$(DEPDIR)/tokens.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/keywrapers.Plo ./$(DEPDIR)/keytrans.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/pkikeys.Plo ./$(DEPDIR)/signatures.Plo \
+  @AMDEP_TRUE@	./$(DEPDIR)/symkeys.Plo ./$(DEPDIR)/x509.Plo \
+! @AMDEP_TRUE@	./$(DEPDIR)/x509vfy.Plo ./$(DEPDIR)/akmngr.Plo
+  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
+  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
+  LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
+***************
+*** 321,341 ****
+  	$(NULL)
+  
+  libxmlsec1_nss_la_SOURCES = \
+  	app.c \
+  	bignum.c \
+  	ciphers.c \
+  	crypto.c \
+  	digests.c \
+  	hmac.c \
+  	pkikeys.c \
+  	signatures.c \
+  	symkeys.c \
+  	x509.c \
+  	x509vfy.c \
+- 	keysstore.c \
+- 	kt_rsa.c \
+- 	kw_des.c \
+- 	kw_aes.c \
+  	$(NULL)
+  
+  libxmlsec1_nss_la_LIBADD = \
+--- 321,342 ----
+  	$(NULL)
+  
+  libxmlsec1_nss_la_SOURCES = \
++ 	akmngr.c \
+  	app.c \
+  	bignum.c \
+  	ciphers.c \
+  	crypto.c \
+  	digests.c \
+  	hmac.c \
++ 	keysstore.c \
++ 	keytrans.c \
++ 	keywrappers.c \
+  	pkikeys.c \
+  	signatures.c \
+  	symkeys.c \
++ 	tokens.c \
+  	x509.c \
+  	x509vfy.c \
+  	$(NULL)
+  
+  libxmlsec1_nss_la_LIBADD = \
+***************
+*** 418,423 ****
+--- 419,425 ----
+  distclean-compile:
+  	-rm -f *.tab.c
+  
++ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/akmngr.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/app.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bignum.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ciphers.Plo@am__quote@
+***************
+*** 425,433 ****
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digests.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hmac.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keysstore.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kt_rsa.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kw_aes.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kw_des.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkikeys.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
+--- 427,435 ----
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digests.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hmac.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keysstore.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tokens.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keywrapers.Plo@am__quote@
+! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keytrans.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkikeys.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
+  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
+*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 1 ****
 ! dummy
@@ -3847,8 +6626,8 @@
 ! 	return(0) ;
 ! }
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/ciphers.c	2003-09-26 02:58:15.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/ciphers.c	Fri Sep 26 02:58:15 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 1,838 ****
 ! /** 
@@ -5641,8 +8420,8 @@
   }
 ! 
   
-*** misc/xmlsec1-1.2.6/src/nss/crypto.c	2003-10-29 16:57:25.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/crypto.c	Wed Oct 29 16:57:25 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 130,135 ****
 --- 130,136 ----
@@ -5695,8 +8474,8 @@
   
       return(gXmlSecNssFunctions);
   }
-*** misc/xmlsec1-1.2.6/src/nss/digests.c	2003-09-26 02:58:15.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/digests.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/digests.c	Fri Sep 26 02:58:15 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/digests.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 21,27 ****
   #include <xmlsec/transforms.h>
@@ -5792,8 +8571,8 @@
   		return(-1);
   	    }
   	    xmlSecAssert2(ctx->dgstSize > 0, -1);
-*** misc/xmlsec1-1.2.6/src/nss/hmac.c	2003-09-26 02:58:15.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/hmac.c	Fri Sep 26 02:58:15 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 23,30 ****
   #include <xmlsec/transforms.h>
@@ -5927,8 +8706,8 @@
   		return(-1);
   	    }
   	    xmlSecAssert2(dgstSize > 0, -1);
-*** misc/xmlsec1-1.2.6/src/nss/keysstore.c	2003-09-26 02:58:15.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/keysstore.c	Fri Sep 26 02:58:15 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 1,119 ****
   /** 
@@ -6995,8 +9774,8 @@
 !     return(0);
   }
 + 
-*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 1 ****
 ! dummy
@@ -7745,8 +10524,8 @@
 ! 
 ! #endif /* XMLSEC_NO_RSA */
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 1 ****
 ! dummy
@@ -8948,181 +11727,8 @@
 ! 
 ! #endif /* XMLSEC_NO_DES */
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/Makefile.am	2003-09-16 11:43:03.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	2006-11-28 14:17:22.000000000 +0100
-***************
-*** 20,40 ****
-  	$(NULL)
-  
-  libxmlsec1_nss_la_SOURCES =\
-  	app.c \
-  	bignum.c \
-  	ciphers.c \
-  	crypto.c \
-  	digests.c \
-  	hmac.c \
-  	pkikeys.c \
-  	signatures.c \
-  	symkeys.c \
-  	x509.c \
-  	x509vfy.c \
-- 	keysstore.c \
-- 	kt_rsa.c \
-- 	kw_des.c \
-- 	kw_aes.c \
-  	$(NULL)
-  
-  libxmlsec1_nss_la_LIBADD = \
---- 20,41 ----
-  	$(NULL)
-  
-  libxmlsec1_nss_la_SOURCES =\
-+ 	akmngr.c \
-  	app.c \
-  	bignum.c \
-  	ciphers.c \
-  	crypto.c \
-  	digests.c \
-  	hmac.c \
-+ 	keysstore.c \
-+ 	keytrans.c \
-+ 	keywrapers.c \
-  	pkikeys.c \
-  	signatures.c \
-  	symkeys.c \
-+ 	tokens.c \
-  	x509.c \
-  	x509vfy.c \
-  	$(NULL)
-  
-  libxmlsec1_nss_la_LIBADD = \
-*** misc/xmlsec1-1.2.6/src/nss/Makefile.in	2004-08-26 08:00:32.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	2006-11-28 14:17:22.000000000 +0100
-***************
-*** 54,62 ****
-  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-  am__objects_1 =
-! am_libxmlsec1_nss_la_OBJECTS = app.lo bignum.lo ciphers.lo crypto.lo \
-  	digests.lo hmac.lo pkikeys.lo signatures.lo symkeys.lo x509.lo \
-! 	x509vfy.lo keysstore.lo kt_rsa.lo kw_des.lo kw_aes.lo \
-  	$(am__objects_1)
-  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
-  DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
---- 54,62 ----
-  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
-  	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
-  am__objects_1 =
-! am_libxmlsec1_nss_la_OBJECTS = akmngr.lo app.lo bignum.lo ciphers.lo crypto.lo \
-  	digests.lo hmac.lo pkikeys.lo signatures.lo symkeys.lo x509.lo \
-! 	x509vfy.lo keysstore.lo tokens.lo keytrans.lo keywrapers.lo \
-  	$(am__objects_1)
-  libxmlsec1_nss_la_OBJECTS = $(am_libxmlsec1_nss_la_OBJECTS)
-  DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)
-***************
-*** 65,75 ****
-  @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/app.Plo ./$(DEPDIR)/bignum.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/ciphers.Plo ./$(DEPDIR)/crypto.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/digests.Plo ./$(DEPDIR)/hmac.Plo \
-! @AMDEP_TRUE@	./$(DEPDIR)/keysstore.Plo ./$(DEPDIR)/kt_rsa.Plo \
-! @AMDEP_TRUE@	./$(DEPDIR)/kw_aes.Plo ./$(DEPDIR)/kw_des.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/pkikeys.Plo ./$(DEPDIR)/signatures.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/symkeys.Plo ./$(DEPDIR)/x509.Plo \
-! @AMDEP_TRUE@	./$(DEPDIR)/x509vfy.Plo
-  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-  LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
---- 65,75 ----
-  @AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/app.Plo ./$(DEPDIR)/bignum.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/ciphers.Plo ./$(DEPDIR)/crypto.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/digests.Plo ./$(DEPDIR)/hmac.Plo \
-! @AMDEP_TRUE@	./$(DEPDIR)/keysstore.Plo ./$(DEPDIR)/tokens.Plo \
-! @AMDEP_TRUE@	./$(DEPDIR)/keywrapers.Plo ./$(DEPDIR)/keytrans.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/pkikeys.Plo ./$(DEPDIR)/signatures.Plo \
-  @AMDEP_TRUE@	./$(DEPDIR)/symkeys.Plo ./$(DEPDIR)/x509.Plo \
-! @AMDEP_TRUE@	./$(DEPDIR)/x509vfy.Plo ./$(DEPDIR)/akmngr.Plo
-  COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-  	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-  LTCOMPILE = $(LIBTOOL) --mode=compile $(CC) $(DEFS) \
-***************
-*** 321,341 ****
-  	$(NULL)
-  
-  libxmlsec1_nss_la_SOURCES = \
-  	app.c \
-  	bignum.c \
-  	ciphers.c \
-  	crypto.c \
-  	digests.c \
-  	hmac.c \
-  	pkikeys.c \
-  	signatures.c \
-  	symkeys.c \
-  	x509.c \
-  	x509vfy.c \
-- 	keysstore.c \
-- 	kt_rsa.c \
-- 	kw_des.c \
-- 	kw_aes.c \
-  	$(NULL)
-  
-  libxmlsec1_nss_la_LIBADD = \
---- 321,342 ----
-  	$(NULL)
-  
-  libxmlsec1_nss_la_SOURCES = \
-+ 	akmngr.c \
-  	app.c \
-  	bignum.c \
-  	ciphers.c \
-  	crypto.c \
-  	digests.c \
-  	hmac.c \
-+ 	keysstore.c \
-+ 	keytrans.c \
-+ 	keywrappers.c \
-  	pkikeys.c \
-  	signatures.c \
-  	symkeys.c \
-+ 	tokens.c \
-  	x509.c \
-  	x509vfy.c \
-  	$(NULL)
-  
-  libxmlsec1_nss_la_LIBADD = \
-***************
-*** 418,423 ****
---- 419,425 ----
-  distclean-compile:
-  	-rm -f *.tab.c
-  
-+ @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/akmngr.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/app.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/bignum.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/ciphers.Plo@am__quote@
-***************
-*** 425,433 ****
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digests.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hmac.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keysstore.Plo@am__quote@
-! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kt_rsa.Plo@am__quote@
-! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kw_aes.Plo@am__quote@
-! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/kw_des.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkikeys.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
---- 427,435 ----
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/digests.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hmac.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keysstore.Plo@am__quote@
-! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/tokens.Plo@am__quote@
-! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keywrapers.Plo@am__quote@
-! @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keytrans.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkikeys.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
-  @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
-*** misc/xmlsec1-1.2.6/src/nss/pkikeys.c	2004-03-17 06:06:45.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/pkikeys.c	Wed Mar 17 06:06:45 2004
+--- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 5,10 ****
 --- 5,11 ----
@@ -9921,8 +12527,8 @@
   
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
-*** misc/xmlsec1-1.2.6/src/nss/signatures.c	2003-09-26 02:58:15.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/signatures.c	Fri Sep 26 02:58:15 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 199,205 ****
   			xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
@@ -10059,8 +12665,8 @@
   		return(-1);
   	    }
   
-*** misc/xmlsec1-1.2.6/src/nss/symkeys.c	2003-07-21 05:12:52.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/symkeys.c	Mon Jul 21 05:12:52 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 15,192 ****
   #include <stdio.h>
@@ -11391,8 +13997,8 @@
    *
    * Sets the value of HMAC key data.
    *
-*** misc/xmlsec1-1.2.6/src/nss/tokens.c	2006-11-28 14:20:43.000000000 +0100
---- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/tokens.c	Wed Nov 15 12:26:58 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 1 ****
 ! dummy
@@ -11941,8 +14547,8 @@
 ! 	return(0);
 ! }
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/x509.c	2003-09-26 05:53:09.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/x509.c	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/src/nss/x509.c	Fri Sep 26 05:53:09 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/x509.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 34,40 ****
   #include <xmlsec/keys.h>
@@ -12962,10 +15568,11 @@
       }
   
 ***************
-*** 1946,2031 ****
+*** 1945,2030 ****
+  
       return(res);
   }
-  
+- 
 - static xmlChar*
 - xmlSecNssX509NameWrite(CERTName* nm) {
 -     xmlChar *res = NULL;
@@ -13045,13 +15652,12 @@
 -     return(res);
 - }
 - 
-- 
+  
   static void 
   xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
-      SECItem *sn;
---- 1701,1706 ----
-*** misc/xmlsec1-1.2.6/src/nss/x509vfy.c	2003-09-26 02:58:15.000000000 +0200
---- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	2006-11-28 14:17:22.000000000 +0100
+--- 1700,1705 ----
+*** misc/xmlsec1-1.2.6/src/nss/x509vfy.c	Fri Sep 26 02:58:15 2003
+--- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	Wed Nov 15 12:23:28 2006
 ***************
 *** 30,35 ****
 --- 30,36 ----
@@ -14193,8 +16799,8 @@
   
 + #endif /* XMLSEC_NO_X509 */
   
-*** misc/xmlsec1-1.2.6/win32/Makefile.msvc	2004-06-09 16:35:12.000000000 +0200
---- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	2006-11-28 14:17:22.000000000 +0100
+*** misc/xmlsec1-1.2.6/win32/Makefile.msvc	Wed Jun  9 16:35:12 2004
+--- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	Wed Nov 15 12:23:28 2006
 ***************
 *** 223,228 ****
 --- 223,232 ----
