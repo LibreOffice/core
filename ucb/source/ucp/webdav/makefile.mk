@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:23:03 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:44:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ SHL1STDLIBS=\
         $(XML2LIB)
 
 .IF "$(GUI)"=="WNT"
-SHL1STDLIBS+= wsock32.lib
+SHL1STDLIBS+= $(WSOCK32LIB)
 .ENDIF # WNT
 .IF "$(OS)"=="SOLARIS"
 SHL1STDLIBS+= -lnsl -lsocket
