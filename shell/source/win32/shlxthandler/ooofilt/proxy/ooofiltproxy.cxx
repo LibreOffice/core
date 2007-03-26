@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ooofiltproxy.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:12:50 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:51:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 #pragma warning(pop)
 #endif
 #include <tchar.h>
+#ifdef __MINGW32__
+#include <basetyps.h>
+#endif
+
 
 /*
     The indexing filter library ooofilt.dll is linked against a couple
