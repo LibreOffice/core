@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:21:58 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,7 @@ class PDFExport
 private:
 
     Reference< XComponent > mxSrcDoc;
+    Reference< lang::XMultiServiceFactory > mxMSF;
     Reference< task::XStatusIndicator > mxStatusIndicator;
 
     sal_Bool                mbUseTaggedPDF;
@@ -76,6 +77,7 @@ private:
     sal_Bool                mbUseLosslessCompression;
     sal_Bool                mbReduceImageResolution;
     sal_Bool                mbSkipEmptyPages;
+    sal_Bool                mbAddStream;
     sal_Int32               mnMaxImageResolution;
     sal_Int32               mnQuality;
     sal_Int32               mnFormsFormat;
@@ -125,7 +127,7 @@ private:
     void                    ImplWriteWatermark( ::vcl::PDFWriter& rWriter, const Size& rPageSize );
 public:
 
-                            PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& xStatusIndicator );
+                            PDFExport( const Reference< XComponent >& rxSrcDoc, Reference< task::XStatusIndicator >& xStatusIndicator, const Reference< lang::XMultiServiceFactory >& xFact );
                             ~PDFExport();
 
     sal_Bool                ExportSelection( vcl::PDFWriter& rPDFWriter, Reference< com::sun::star::view::XRenderable >& rRenderable, Any& rSelection,
