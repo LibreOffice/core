@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 18:47:02 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 11:58:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 PRJ = ..$/..
 TARGET  = EmbedContFrame
-PRJNAME = $(TARGET)
+PRJNAME = embeddedobj
 PACKAGE = embeddedobj$/test
 
 # --- Settings -----------------------------------------------------
