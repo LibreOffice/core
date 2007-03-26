@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:06:31 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:09:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,11 @@ void RegistryKeyImpl::Close()
 void RegistryKeyImpl::CopyValue(const RegistryKey& RegistryKey, const std::wstring& Name)
 {
     assert(RegistryKey->HasValue(Name));
+#ifdef __MINGW32__
+    SetValue((const RegistryValue&)(RegistryKey->GetValue(Name)));
+#else
     SetValue(RegistryKey->GetValue(Name));
+#endif
     assert(HasValue(Name));
 }
 
