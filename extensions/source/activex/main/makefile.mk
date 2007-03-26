@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-28 16:27:24 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:05:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -76,13 +76,13 @@ SLOFILES=\
 
 SHL1TARGET=$(TARGET)
 SHL1STDLIBS=\
-    uuid.lib \
-    advapi32.lib \
-    ole32.lib \
-    oleaut32.lib \
-    gdi32.lib \
-    urlmon.lib \
-    Shlwapi.lib
+    $(UUIDLIB) \
+    $(ADVAPI32LIB) \
+    $(OLE32LIB) \
+    $(OLEAUT32LIB) \
+    $(GDI32LIB) \
+    $(URLMONLIB) \
+    $(SHLWAPILIB)
 
 .IF "$(COMEX)"=="11" || "$(COMEX)"=="10"
 .IF "$(USE_STLP_DEBUG)" != ""
@@ -93,12 +93,12 @@ SHL1STDLIBS=\
 .ENDIF
 
 
-#    kernel32.lib \
+#    $(KERNEL32LIB) \
 #    rpcndr.lib \
 #    rpcns4.lib \
 #    rpcrt4.lib
 
-#kernel32.lib rpcndr.lib rpcns4.lib rpcrt4.lib
+#$(KERNEL32LIB) rpcndr.lib rpcns4.lib rpcrt4.lib
 
 SHL1OBJS=$(SLOFILES)
 
