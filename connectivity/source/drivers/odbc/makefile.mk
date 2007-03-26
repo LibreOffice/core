@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 06:36:23 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:00:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ SHL2STDLIBS=\
     $(SALLIB)
 
 .IF "$(ODBCBASELIB)" == ""
-SHL2STDLIBS+= iodbcbase.lib
+SHL2STDLIBS+= $(ODBCBASELIB)
 .ENDIF
 
 SHL2DEPN=$(SHL1TARGETN)
