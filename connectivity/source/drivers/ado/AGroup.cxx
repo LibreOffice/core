@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AGroup.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:13:05 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:56:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -199,12 +199,12 @@ void SAL_CALL OAdoGroup::revokePrivileges( const ::rtl::OUString& objName, sal_I
 }
 
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoGroup::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoGroup::acquire() throw()
 {
     OGroup_ADO::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoGroup::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoGroup::release() throw()
 {
     OGroup_ADO::release();
 }
