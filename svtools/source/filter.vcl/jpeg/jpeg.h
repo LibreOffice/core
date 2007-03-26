@@ -4,9 +4,9 @@
  *
  *  $RCSfile: jpeg.h,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:25:07 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:46:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include <stdio.h>
 #endif
 
-#if defined (UNX)
+#if defined (UNX) || defined(__MINGW32__)
 #include <sys/types.h>
 #endif
 
