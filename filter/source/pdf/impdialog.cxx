@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:43:26 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:13:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,8 +84,11 @@ using namespace ::com::sun::star;
 ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                                   ResMgr& rResMgr,
                                   Sequence< PropertyValue >& rFilterData,
-                                  const Reference< XComponent >& rxDoc ) :
+                                  const Reference< XComponent >& rxDoc,
+                                  const Reference< lang::XMultiServiceFactory >& xFact
+                                  ) :
     SfxTabDialog( pParent, ResId( RID_PDF_EXPORT_DLG, &rResMgr ), 0, FALSE, 0 ),
+    mxMSF( xFact ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
     maConfigI18N( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/I18N/CTL/" ) ) ),
     mbIsPresentation( sal_False ),
@@ -205,6 +208,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
     mnOpenBookmarkLevels = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "OpenBookmarkLevels" ) ), -1 );
     mbUseTransitionEffects = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects"  ) ), sal_True );
     mbIsSkipEmptyPages = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages"  ) ), sal_False );
+    mbAddStream = maConfigItem.ReadBool( String( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), sal_False );
 
     mnFormsType = maConfigItem.ReadInt32( OUString( RTL_CONSTASCII_USTRINGPARAM( "FormsType" ) ), 0 );
     mbExportFormFields = maConfigItem.ReadBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportFormFields" ) ), sal_True );
@@ -311,6 +315,7 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "ExportBookmarks" ) ), mbExportBookmarks );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "UseTransitionEffects" ) ), mbUseTransitionEffects );
     maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsSkipEmptyPages" ) ), mbIsSkipEmptyPages );
+    maConfigItem.WriteBool( OUString( RTL_CONSTASCII_USTRINGPARAM( "IsAddStream" ) ), mbAddStream );
 
     /*
     * FIXME: the entries are only implicitly defined by the resource file. Should there
@@ -418,6 +423,7 @@ ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
     maFtFormsFormat( this, ResId( FT_FORMSFORMAT, paResMgr ) ),
     maLbFormsFormat( this, ResId( LB_FORMSFORMAT, paResMgr ) ),
     maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES, paResMgr ) ),
+    maCbAddStream( this, ResId( CB_ADDSTREAM, paResMgr ) ),
     mbIsPresentation( sal_False ),
     mbIsWriter( sal_False)
 {
@@ -481,6 +487,26 @@ void ImpPDFTabGeneralPage::SetFilterConfigItem( const ImpPDFTabDialog* paParent 
 
     maCbExportEmptyPages.Check( !paParent->mbIsSkipEmptyPages );
 
+    Reference< XMultiServiceFactory > xFactory = paParent->getServiceFactory();
+    Reference< XInterface > xIfc;
+    if( xFactory.is() )
+    {
+        xIfc = xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.documents.PDFImport" ) ) );
+    }
+    if( xIfc.is() )
+    {
+        maCbAddStream.Show( TRUE );
+        maCbAddStream.Check( paParent->mbAddStream );
+    }
+    else
+    {
+        maCbAddStream.Show( FALSE );
+        maCbAddStream.Check( FALSE );
+    }
+    maCbAddStream.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleAddStreamHdl ) );
+    // init addstream dependencies
+    ToggleAddStreamHdl( NULL );
+
     maCbExportFormFields.SetToggleHdl( LINK( this, ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl ) );
     maCbExportFormFields.Check( paParent->mbExportFormFields );
     maLbFormsFormat.SelectEntryPos( (sal_uInt16)paParent->mnFormsType );
@@ -500,6 +526,7 @@ void ImpPDFTabGeneralPage::GetFilterConfigItem( ImpPDFTabDialog* paParent )
     paParent->mbExportBookmarks = maCbExportBookmarks.IsChecked();
 
     paParent->mbIsSkipEmptyPages =  !maCbExportEmptyPages.IsChecked();
+    paParent->mbAddStream = maCbAddStream.IsVisible() && maCbAddStream.IsChecked();
 
     paParent->mbIsRangeChecked = sal_False;
     if( maRbRange.IsChecked() )
@@ -530,35 +557,55 @@ SfxTabPage*  ImpPDFTabGeneralPage::Create( Window* pParent,
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, p )
+IMPL_LINK( ImpPDFTabGeneralPage, TogglePagesHdl, void*, EMPTYARG )
 {
-    p = p; //for compiler warning
     maEdPages.Enable( maRbRange.IsChecked() );
     maEdPages.SetReadOnly( !maRbRange.IsChecked() );
     return 0;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, void*, p )
+IMPL_LINK( ImpPDFTabGeneralPage, ToggleExportFormFieldsHdl, void*, EMPTYARG )
 {
-    p = p; //for compiler warning
     maLbFormsFormat.Enable( maCbExportFormFields.IsChecked() );
     return 0;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleCompressionHdl, void*, p )
+IMPL_LINK( ImpPDFTabGeneralPage, ToggleCompressionHdl, void*, EMPTYARG )
 {
-    p = p; //for compiler warning
     maNfQuality.Enable( maRbJPEGCompression.IsChecked() );
     return 0;
 }
 
 // -----------------------------------------------------------------------------
-IMPL_LINK( ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, void*, p )
+IMPL_LINK( ImpPDFTabGeneralPage, ToggleReduceImageResolutionHdl, void*, EMPTYARG )
 {
-    p = p; //for compiler warning
     maCoReduceImageResolution.Enable( maCbReduceImageResolution.IsChecked() );
+    return 0;
+}
+
+// -----------------------------------------------------------------------------
+IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
+{
+    if( maCbAddStream.IsVisible() )
+    {
+        if( maCbAddStream.IsChecked() )
+        {
+            maRbAll.Check();
+            maRbRange.Enable( FALSE );
+            maRbSelection.Enable( FALSE );
+            maEdPages.Enable( FALSE );
+            maEdPages.SetReadOnly( TRUE );
+            maRbAll.Enable( FALSE );
+        }
+        else
+        {
+            maRbAll.Enable( TRUE );
+            maRbRange.Enable( TRUE );
+            maRbSelection.Enable( TRUE );
+        }
+    }
     return 0;
 }
 
