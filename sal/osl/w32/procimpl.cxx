@@ -4,9 +4,9 @@
  *
  *  $RCSfile: procimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:47:44 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:23:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ namespace /* private */
 
         while (size_t l = _tcslen(p))
         {
-            environment->push_back(p);
+            environment->push_back(reinterpret_cast<const sal_Unicode*>(p));
             p += l + 1;
         }
         FreeEnvironmentStrings(env);
@@ -489,7 +489,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     if (ustrDirectory && ustrDirectory->length && (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
            return osl_Process_E_InvalidError;
 
-    LPCWSTR p_cwd = (cwd.getLength()) ? cwd.getStr() : NULL;
+    LPCWSTR p_cwd = (cwd.getLength()) ? reinterpret_cast<LPCWSTR>(cwd.getStr()) : NULL;
 
     if ((Options & osl_Process_DETACHED) && !(flags & CREATE_NEW_CONSOLE))
         flags |= DETACHED_PROCESS;
@@ -551,14 +551,14 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     {
         bRet = CreateProcessAsUser(
             ((oslSecurityImpl*)Security)->m_hToken,
-            NULL, const_cast<sal_Unicode*>(cmdline.getStr()), NULL,  NULL,
+            NULL, const_cast<LPTSTR>(reinterpret_cast<LPCTSTR>(cmdline.getStr())), NULL,  NULL,
             b_inherit_handles, flags, p_environment, p_cwd,
             &startup_info, &process_info);
     }
     else
     {
         bRet = CreateProcess(
-            NULL, const_cast<sal_Unicode*>(cmdline.getStr()), NULL,  NULL,
+            NULL, const_cast<LPTSTR>(reinterpret_cast<LPCTSTR>(cmdline.getStr())), NULL,  NULL,
             b_inherit_handles, flags, p_environment, p_cwd,
             &startup_info, &process_info);
     }
