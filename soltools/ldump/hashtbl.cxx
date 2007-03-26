@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hashtbl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:34:24 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:38:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,7 +365,11 @@ void HashTable::SmartGrow()
     unsigned long     lOldSize = m_lSize;              // alte Daten sichern
     HashItem* pOldData = m_pData;
 
+#ifdef __MINGW32__
+    m_lSize = (unsigned long) (m_dGrowFactor * m_lSize); // neue Größe
+#else
     m_lSize = unsigned long (m_dGrowFactor * m_lSize); // neue Größe
+#endif
     m_pData = new HashItem[m_lSize];           // neue Daten holen
 
     // kein Speicher:
