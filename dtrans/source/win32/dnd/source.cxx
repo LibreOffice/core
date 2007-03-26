@@ -4,9 +4,9 @@
  *
  *  $RCSfile: source.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:58:35 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:05:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,10 @@
 #include <process.h>
 #include <winuser.h>
 #include <stdio.h>
+
+#ifdef __MINGW32__
+#define __uuidof(I) IID_##I
+#endif
 
 using namespace rtl;
 using namespace cppu;
