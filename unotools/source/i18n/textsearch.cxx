@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsearch.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:26:10 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:46:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ TextSearch::TextSearch( const SearchOptions& rPara )
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xTextSearch = Reference< XTextSearch > ( xMSF->createInstance(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY );
+                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
         xTextSearch->setOptions( rPara );
     }
     catch ( Exception& )
@@ -196,7 +196,7 @@ void TextSearch::Init( const SearchParam & rParam,
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xTextSearch = Reference< XTextSearch > ( xMSF->createInstance(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY );
+                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
         xTextSearch->setOptions( aSOpt );
     }
     catch ( Exception& )
@@ -217,7 +217,7 @@ void TextSearch::SetLocale( const ::com::sun::star::util::SearchOptions& rOption
         Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
         xTextSearch = Reference< XTextSearch > ( xMSF->createInstance(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY );
+                        "com.sun.star.util.TextSearch" ) ) ), UNO_QUERY_THROW );
         xTextSearch->setOptions( aSOpt );
     }
     catch ( Exception& )
