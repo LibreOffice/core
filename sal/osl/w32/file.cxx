@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:53:01 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:22:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,6 +60,9 @@
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <tchar.h>
+#ifdef __MINGW32__
+#include <wchar.h>
+#endif
 #include <malloc.h>
 #include <algorithm>
 
@@ -153,8 +156,12 @@ using namespace osl;
 #define ELEMENTS_OF_ARRAY(arr) (sizeof(arr)/(sizeof((arr)[0])))
 
 // Allocate n number of t's on the stack return a pointer to it in p
+#ifdef __MINGW32__
+#define STACK_ALLOC(p, t, n) (p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));
+#else
 #define STACK_ALLOC(p, t, n) __try {(p) = reinterpret_cast<t*>(_alloca((n)*sizeof(t)));} \
                              __except(EXCEPTION_EXECUTE_HANDLER) {(p) = NULL;}
+#endif
 
 #if OSL_DEBUG_LEVEL > 0
 #define OSL_ENSURE_FILE( cond, msg, file ) ( (cond) ?  (void)0 : _osl_warnFile( msg, file ) )
@@ -340,7 +347,7 @@ namespace /* private */
             Directory_Impl  *pDirImpl;
 
             pDirImpl = reinterpret_cast<Directory_Impl*>(rtl_allocateMemory( sizeof(Directory_Impl)));
-            _tcscpy( pDirImpl->szDirectoryPath, rtl_uString_getStr(strSysPath) );
+            _tcscpy( pDirImpl->szDirectoryPath, reinterpret_cast<LPCTSTR>(rtl_uString_getStr(strSysPath)) );
 
             /* Append backslash if neccessary */
 
@@ -395,7 +402,7 @@ namespace /* private */
             Directory_Impl  *pDirImpl;
 
             pDirImpl = reinterpret_cast<Directory_Impl*>(rtl_allocateMemory(sizeof(Directory_Impl)));
-            _tcscpy( pDirImpl->szDirectoryPath, rtl_uString_getStr(strDirectoryPath) );
+            _tcscpy( pDirImpl->szDirectoryPath, reinterpret_cast<LPCTSTR>(rtl_uString_getStr(strDirectoryPath)) );
 
             /* Append backslash if neccessary */
 
@@ -522,7 +529,7 @@ namespace /* private */
 
         ZeroMemory( &aNetResource, sizeof(aNetResource) );
 
-        aNetResource.lpRemoteName = strSysDirPath->buffer;
+        aNetResource.lpRemoteName = reinterpret_cast<LPWSTR>(strSysDirPath->buffer);
 
         dwError = WNetOpenEnumW(
             RESOURCE_GLOBALNET,
@@ -704,9 +711,9 @@ namespace /* private */
                     LPCWSTR lpLastBkSlash = wcschr( &lpFirstBkSlash[1], '\\' );
 
                     if ( lpLastBkSlash )
-                        rtl_uString_newFromStr_WithLength( &pStatus->ustrFileName, &lpFirstBkSlash[1], lpLastBkSlash - lpFirstBkSlash - 1 );
+                        rtl_uString_newFromStr_WithLength( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(&lpFirstBkSlash[1]), lpLastBkSlash - lpFirstBkSlash - 1 );
                     else
-                        rtl_uString_newFromStr( &pStatus->ustrFileName, &lpFirstBkSlash[1] );
+                        rtl_uString_newFromStr( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(&lpFirstBkSlash[1]) );
                     pStatus->uValidFields |= osl_FileStatus_Mask_FileName;
                 }
             }
@@ -723,10 +730,10 @@ namespace /* private */
                         TCHAR   szFileName[ELEMENTS_OF_ARRAY(szBuffer) + 16];
 
                         swprintf( szFileName, L"%s [%s]", cDrive, szBuffer );
-                        rtl_uString_newFromStr( &pStatus->ustrFileName, szFileName );
+                        rtl_uString_newFromStr( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(szFileName) );
                     }
                     else
-                        rtl_uString_newFromStr( &pStatus->ustrFileName, cDrive );
+                        rtl_uString_newFromStr( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(cDrive) );
                 }
                 pStatus->uValidFields |= osl_FileStatus_Mask_FileName;
                 break;
@@ -739,17 +746,17 @@ namespace /* private */
                         TCHAR   szFileName[ELEMENTS_OF_ARRAY(szVolumeNameBuffer) + 16];
 
                         swprintf( szFileName, L"%s [%s]", cDrive, szVolumeNameBuffer );
-                        rtl_uString_newFromStr( &pStatus->ustrFileName, szFileName );
+                        rtl_uString_newFromStr( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(szFileName) );
                     }
                     else
-                        rtl_uString_newFromStr( &pStatus->ustrFileName, cDrive );
+                        rtl_uString_newFromStr( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(cDrive) );
                 }
                 pStatus->uValidFields |= osl_FileStatus_Mask_FileName;
                 break;
             case DRIVE_CDROM:
             case DRIVE_REMOVABLE:
                 pStatus->uValidFields |= osl_FileStatus_Mask_FileName;
-                rtl_uString_newFromStr( &pStatus->ustrFileName, cRoot );
+                rtl_uString_newFromStr( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(cRoot) );
                 break;
             case DRIVE_UNKNOWN:
             default:
@@ -764,7 +771,7 @@ namespace /* private */
         {
             rtl_uString *ustrSystemPath = NULL;
 
-            rtl_uString_newFromStr( &ustrSystemPath, pItemImpl->cDriveString );
+            rtl_uString_newFromStr( &ustrSystemPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->cDriveString) );
             osl_getFileURLFromSystemPath( ustrSystemPath, &pStatus->ustrFileURL );
             rtl_uString_release( ustrSystemPath );
             pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
@@ -797,7 +804,7 @@ namespace /* private */
         {
             rtl_uString *ustrSystemPath = NULL;
 
-            rtl_uString_newFromStr( &ustrSystemPath, pItemImpl->szFullPath );
+            rtl_uString_newFromStr( &ustrSystemPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->szFullPath) );
             osl_getFileURLFromSystemPath( ustrSystemPath, &pStatus->ustrFileURL );
             rtl_uString_release( ustrSystemPath );
             pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
@@ -1421,7 +1428,7 @@ namespace /* private */
     const wchar_t SLASH = '/';
 
     bool is_UNC_path(const sal_Unicode* path)
-    { return (0 == wcsncmp(UNC_PREFIX, path, ELEMENTS_OF_ARRAY(UNC_PREFIX) - 1)); }
+    { return (0 == wcsncmp(UNC_PREFIX, reinterpret_cast<LPCWSTR>(path), ELEMENTS_OF_ARRAY(UNC_PREFIX) - 1)); }
 
     //#####################################################
     bool is_UNC_path(const rtl::OUString& path)
@@ -1433,7 +1440,7 @@ namespace /* private */
         OSL_PRECOND(is_UNC_path(path), "Precondition violated: No UNC path");
         OSL_PRECOND(!wcschr(path, SLASH), "Path must not contain slashes");
 
-        const sal_Unicode* pend = path + wcslen(path);
+        const sal_Unicode* pend = path + rtl_ustr_getLength(path);
         const sal_Unicode* ppos = path + 2;
 
         puncc->server_.begin_ = ppos;
@@ -1478,13 +1485,13 @@ namespace /* private */
 
         if (!is_floppy_drive(p))
         {
-            DWORD fattr = GetFileAttributes(p.getStr());
+            DWORD fattr = GetFileAttributes(reinterpret_cast<LPCTSTR>(p.getStr()));
 
             if ((INVALID_FILE_ATTRIBUTES != fattr) &&
                 (FILE_ATTRIBUTE_REPARSE_POINT & fattr))
             {
                 WIN32_FIND_DATA find_data;
-                HANDLE h_find = FindFirstFile(p.getStr(), &find_data);
+                HANDLE h_find = FindFirstFile(reinterpret_cast<LPCTSTR>(p.getStr()), &find_data);
 
                 if (IsValidHandle(h_find) &&
                     (FILE_ATTRIBUTE_REPARSE_POINT & find_data.dwFileAttributes) &&
@@ -1554,7 +1561,7 @@ namespace /* private */
         OSL_PRECOND(!wcschr(path, SLASH), "Path must not contain slashes");
         OSL_PRECOND(has_path_parent(path), "Path must have a parent");
 
-        sal_Unicode* pos_last_backslash = wcsrchr(path, BACKSLASH);
+        sal_Unicode* pos_last_backslash = path + rtl_ustr_lastIndexOfChar(path, BACKSLASH);
         *pos_last_backslash = 0;
         return (pos_last_backslash - path);
     }
@@ -1591,7 +1598,7 @@ namespace /* private */
         osl_systemPathEnsureSeparator(&p.pData);
 
         TCHAR vn[51];
-        if (GetVolumeNameForVolumeMountPoint(p.getStr(), vn, ELEMENTS_OF_ARRAY(vn)))
+        if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, ELEMENTS_OF_ARRAY(vn)))
         {
             TCHAR vnfloppy[51];
             if (is_floppy_A_present() &&
@@ -1613,7 +1620,7 @@ namespace /* private */
     // for the drive letter alone is not sufficient
     // we must compare the unique volume name with
     // that of the available floppy disks
-    const sal_Unicode* FLOPPY_DRV_LETTERS = TEXT("AaBb");
+    LPCWSTR FLOPPY_DRV_LETTERS = TEXT("AaBb");
 
     bool is_floppy_drive(const rtl::OUString& path)
     {
@@ -1633,7 +1640,7 @@ namespace /* private */
         osl_systemPathEnsureSeparator(&p.pData);
 
         TCHAR vn[51];
-        if (GetVolumeNameForVolumeMountPoint(p.getStr(), vn, ELEMENTS_OF_ARRAY(vn)))
+        if (GetVolumeNameForVolumeMountPoint(reinterpret_cast<LPCTSTR>(p.getStr()), vn, ELEMENTS_OF_ARRAY(vn)))
             return GetDriveType(vn);
 
         return DRIVE_NO_ROOT_DIR;
@@ -1648,7 +1655,7 @@ namespace /* private */
         if (is_volume_mount_point(path))
             drive_type = get_volume_mount_point_drive_type(path);
         else
-            drive_type = GetDriveType(path.getStr());
+            drive_type = GetDriveType(reinterpret_cast<LPCTSTR>(path.getStr()));
 
         if (DRIVE_NO_ROOT_DIR == drive_type)
             return MapError(ERROR_INVALID_DRIVE);
@@ -1698,7 +1705,7 @@ namespace /* private */
     void get_volume_space_information(const rtl::OUString& path, oslVolumeInfo *pInfo)
     {
         BOOL ret = GetDiskFreeSpaceEx(
-            path.getStr(),
+            reinterpret_cast<LPCTSTR>(path.getStr()),
             (PULARGE_INTEGER)&pInfo->uFreeSpace,
             (PULARGE_INTEGER)&pInfo->uTotalSpace,
             NULL);
@@ -1749,7 +1756,7 @@ namespace /* private */
             DWORD mcl;
             DWORD flags;
 
-            if (GetVolumeInformation(path.getStr(), vn, MAX_PATH, &serial, &mcl, &flags, fsn, MAX_PATH))
+            if (GetVolumeInformation(reinterpret_cast<LPCTSTR>(path.getStr()), vn, MAX_PATH, &serial, &mcl, &flags, fsn, MAX_PATH))
             {
                 pInfo->uValidFields   |= osl_VolumeInfo_Mask_MaxNameLength;
                 pInfo->uMaxNameLength  = mcl;
@@ -1758,7 +1765,7 @@ namespace /* private */
                 pInfo->uMaxPathLength  = MAX_PATH;
 
                 pInfo->uValidFields   |= osl_VolumeInfo_Mask_FileSystemName;
-                rtl_uString_newFromStr(&pInfo->ustrFileSystemName, fsn);
+                rtl_uString_newFromStr(&pInfo->ustrFileSystemName, reinterpret_cast<const sal_Unicode*>(fsn));
 
                 // volumes (even NTFS) will always be considered case
                 // insensitive because the Win32 API is not able to
@@ -1785,7 +1792,7 @@ namespace /* private */
         oslDirectoryCreationCallbackFunc aDirectoryCreationCallbackFunc,
         void* pData)
     {
-        if (CreateDirectory(dir_path, NULL))
+        if (CreateDirectory(reinterpret_cast<LPCTSTR>(dir_path), NULL))
         {
             if (aDirectoryCreationCallbackFunc)
             {
@@ -1898,7 +1905,7 @@ namespace /* private */
         oslFileError osl_error = osl_File_E_None;
 
         if (0 == GetTempFileNameW(
-                rtl_uString_getStr(base_directory),
+                reinterpret_cast<LPCWSTR>(rtl_uString_getStr(base_directory)),
                 L"",
                 0,
                 temp_file_name))
@@ -1961,7 +1968,7 @@ namespace /* private */
         if ((osl_File_E_None == osl_error) && !b_delete_on_close)
         {
             rtl_uString* pustr = 0;
-            rtl_uString_newFromStr(&pustr, tmp_name);
+            rtl_uString_newFromStr(&pustr, reinterpret_cast<const sal_Unicode*>(tmp_name));
             osl_getFileURLFromSystemPath(pustr, ppustrTempFileURL);
             rtl_uString_release(pustr);
         }
@@ -2165,18 +2172,18 @@ namespace /* private */
 
                 /* Indicates local root */
                 if ( nDecodedLen == nSkip )
-                    rtl_uString_newFromStr_WithLength( &strTempPath, WSTR_SYSTEM_ROOT_PATH, ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 );
+                    rtl_uString_newFromStr_WithLength( &strTempPath, reinterpret_cast<const sal_Unicode*>(WSTR_SYSTEM_ROOT_PATH), ELEMENTS_OF_ARRAY(WSTR_SYSTEM_ROOT_PATH) - 1 );
                 else
                     rtl_uString_newFromStr_WithLength( &strTempPath, pDecodedURL + nSkip, nDecodedLen - nSkip );
 
-                if ( IsValidFilePath( strTempPath->buffer, NULL, VALIDATEPATH_ALLOW_ELLIPSE ) )
+                if ( IsValidFilePath( reinterpret_cast<LPCTSTR>(strTempPath->buffer), NULL, VALIDATEPATH_ALLOW_ELLIPSE ) )
                     nError = osl_File_E_None;
             }
             else if ( bAllowRelative )  /* This maybe a relative file URL */
             {
                 rtl_uString_assign( &strTempPath, strDecodedURL );
 
-                if ( IsValidFilePath( strTempPath->buffer, NULL, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE ) )
+                if ( IsValidFilePath( reinterpret_cast<LPCTSTR>(strTempPath->buffer), NULL, VALIDATEPATH_ALLOW_RELATIVE | VALIDATEPATH_ALLOW_ELLIPSE ) )
                     nError = osl_File_E_None;
             }
         /*
@@ -2210,7 +2217,7 @@ namespace /* private */
         DWORD dwPathType = PATHTYPE_ERROR;
 
         if (strPath)
-            dwPathType = IsValidFilePath(strPath->buffer, NULL, VALIDATEPATH_ALLOW_RELATIVE);
+            dwPathType = IsValidFilePath(reinterpret_cast<LPCTSTR>(strPath->buffer), NULL, VALIDATEPATH_ALLOW_RELATIVE);
 
         if (dwPathType)
         {
@@ -2433,7 +2440,7 @@ oslFileError SAL_CALL osl_getTempDirURL(rtl_uString** pustrTempDir)
         if ( '\\' == lpBuffer[nLength-1] )
             lpBuffer[nLength-1] = 0;
 
-        rtl_uString_newFromStr( &ustrTempPath, lpBuffer );
+        rtl_uString_newFromStr( &ustrTempPath, reinterpret_cast<const sal_Unicode*>(lpBuffer) );
 
         error = osl_getFileURLFromSystemPath( ustrTempPath, pustrTempDir );
 
@@ -2475,7 +2482,7 @@ oslFileError SAL_CALL osl_openFile(
         else
             dwCreation |= OPEN_EXISTING;
 
-        hFile = CreateFileW( rtl_uString_getStr( strSysPath ), dwAccess, dwShare, NULL, dwCreation, dwAttributes, NULL );
+        hFile = CreateFileW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), dwAccess, dwShare, NULL, dwCreation, dwAttributes, NULL );
 
         *pHandle = osl_createFileHandleFromOSHandle( hFile );
 
@@ -2726,7 +2733,7 @@ oslFileError SAL_CALL osl_removeFile( rtl_uString* strPath )
 
     if ( osl_File_E_None == error )
     {
-        if ( DeleteFile( rtl_uString_getStr( strSysPath ) ) )
+        if ( DeleteFile( reinterpret_cast<LPCTSTR>(rtl_uString_getStr( strSysPath )) ) )
             error = osl_File_E_None;
         else
             error = MapError( GetLastError() );
@@ -2750,7 +2757,7 @@ oslFileError SAL_CALL osl_copyFile( rtl_uString* strPath, rtl_uString *strDestPa
 
     if ( osl_File_E_None == error )
     {
-        if ( CopyFile( rtl_uString_getStr( strSysPath ), rtl_uString_getStr( strSysDestPath ), FALSE ) )
+        if ( CopyFile( reinterpret_cast<LPCTSTR>(rtl_uString_getStr( strSysPath )), reinterpret_cast<LPCTSTR>(rtl_uString_getStr( strSysDestPath )), FALSE ) )
             error = osl_File_E_None;
         else
             error = MapError( GetLastError() );
@@ -2775,7 +2782,7 @@ oslFileError SAL_CALL osl_moveFile( rtl_uString* strPath, rtl_uString *strDestPa
 
     if ( osl_File_E_None == error )
     {
-        if ( MoveFileEx( rtl_uString_getStr( strSysPath ), rtl_uString_getStr( strSysDestPath ), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING ) )
+        if ( MoveFileEx( reinterpret_cast<LPCTSTR>(rtl_uString_getStr( strSysPath )), reinterpret_cast<LPCTSTR>(rtl_uString_getStr( strSysDestPath )), MOVEFILE_COPY_ALLOWED | MOVEFILE_WRITE_THROUGH | MOVEFILE_REPLACE_EXISTING ) )
             error = osl_File_E_None;
         else
             error = MapError( GetLastError() );
@@ -2805,7 +2812,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
     if ( osl_File_E_None != error )
         return error;
 
-    dwFileAttributes = GetFileAttributes( rtl_uString_getStr(ustrSysPath) );
+    dwFileAttributes = GetFileAttributes( reinterpret_cast<LPCTSTR>(rtl_uString_getStr(ustrSysPath)) );
 
     if ( (DWORD)-1 != dwFileAttributes )
     {
@@ -2817,7 +2824,7 @@ oslFileError SAL_CALL osl_setFileAttributes(
         if ( uAttributes & osl_File_Attribute_Hidden )
             dwFileAttributes |= FILE_ATTRIBUTE_HIDDEN;
 
-        fSuccess = SetFileAttributes( rtl_uString_getStr(ustrSysPath), dwFileAttributes );
+        fSuccess = SetFileAttributes( reinterpret_cast<LPCTSTR>(rtl_uString_getStr(ustrSysPath)), dwFileAttributes );
     }
     else
         fSuccess = FALSE;
@@ -2854,7 +2861,7 @@ oslFileError SAL_CALL osl_setFileTime(
     if (error==osl_File_E_INVAL)
         return error;
 
-    hFile=CreateFileW(rtl_uString_getStr(sysPath), GENERIC_WRITE, 0, NULL , OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
+    hFile=CreateFileW(reinterpret_cast<LPCWSTR>(rtl_uString_getStr(sysPath)), GENERIC_WRITE, 0, NULL , OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     rtl_uString_release(sysPath);
 
     if (hFile==INVALID_HANDLE_VALUE)
@@ -2941,7 +2948,7 @@ oslFileError SAL_CALL osl_getFileStatus(
 
     /* Most of the fields are already set, regardless of requiered fields */
 
-    rtl_uString_newFromStr( &pStatus->ustrFileName, pItemImpl->FindData.cFileName );
+    rtl_uString_newFromStr( &pStatus->ustrFileName, reinterpret_cast<const sal_Unicode*>(pItemImpl->FindData.cFileName) );
     pStatus->uValidFields |= osl_FileStatus_Mask_FileName;
 
     if ((FILE_ATTRIBUTE_REPARSE_POINT & pItemImpl->FindData.dwFileAttributes) &&
@@ -2964,7 +2971,7 @@ oslFileError SAL_CALL osl_getFileStatus(
     {
         rtl_uString *ustrFullPath = NULL;
 
-        rtl_uString_newFromStr( &ustrFullPath, pItemImpl->szFullPath );
+        rtl_uString_newFromStr( &ustrFullPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->szFullPath) );
         osl_getFileURLFromSystemPath( ustrFullPath, &pStatus->ustrLinkTargetURL );
         rtl_uString_release( ustrFullPath );
 
@@ -2981,7 +2988,7 @@ oslFileError SAL_CALL osl_getFileStatus(
             GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
             pItemImpl->bFullPathNormalized = TRUE;
         }
-        rtl_uString_newFromStr( &ustrFullPath, pItemImpl->szFullPath );
+        rtl_uString_newFromStr( &ustrFullPath, reinterpret_cast<const sal_Unicode*>(pItemImpl->szFullPath) );
         osl_getFileURLFromSystemPath( ustrFullPath, &pStatus->ustrFileURL );
         rtl_uString_release( ustrFullPath );
         pStatus->uValidFields |= osl_FileStatus_Mask_FileURL;
@@ -3003,7 +3010,7 @@ oslFileError SAL_CALL osl_createDirectory(rtl_uString* strPath)
 
     if ( osl_File_E_None == error )
     {
-        if ( CreateDirectoryW( rtl_uString_getStr( strSysPath ), NULL ) )
+        if ( CreateDirectoryW( reinterpret_cast<LPCWSTR>(rtl_uString_getStr( strSysPath )), NULL ) )
             error = osl_File_E_None;
 /*@@@ToDo
   The else case is a hack because the ucb or the webtop had some
@@ -3038,7 +3045,7 @@ oslFileError SAL_CALL osl_removeDirectory(rtl_uString* strPath)
 
     if ( osl_File_E_None == error )
     {
-        if ( RemoveDirectory( rtl_uString_getStr( strSysPath ) ) )
+        if ( RemoveDirectory( reinterpret_cast<LPCTSTR>(rtl_uString_getStr( strSysPath )) ) )
             error = osl_File_E_None;
         else
             error = MapError( GetLastError() );
@@ -3053,7 +3060,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
 {
     oslFileError    error;
 
-    if ( 0 == rtl_ustr_compareIgnoreAsciiCase( strDirectoryPath->buffer, L"file:///" ) )
+    if ( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase( strDirectoryPath->buffer, "file:///" ) )
         error = osl_openLocalRoot( strDirectoryPath, pDirectory );
     else
     {
@@ -3074,7 +3081,7 @@ oslFileError SAL_CALL osl_openDirectory(rtl_uString *strDirectoryPath, oslDirect
         }
         */
 
-        dwPathType = IsValidFilePath( strSysDirectoryPath->buffer, NULL, VALIDATEPATH_NORMAL );
+        dwPathType = IsValidFilePath( reinterpret_cast<LPCTSTR>(strSysDirectoryPath->buffer), NULL, VALIDATEPATH_NORMAL );
 
         if ( dwPathType & PATHTYPE_IS_SERVER )
         {
@@ -3178,7 +3185,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
     }
     */
 
-    dwPathType = IsValidFilePath( strSysFilePath->buffer, NULL, VALIDATEPATH_NORMAL );
+    dwPathType = IsValidFilePath( reinterpret_cast<LPCTSTR>(strSysFilePath->buffer), NULL, VALIDATEPATH_NORMAL );
 
     if ( dwPathType & PATHTYPE_IS_VOLUME )
         type = PATHTYPE_VOLUME;
@@ -3204,7 +3211,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
 
-                _tcscpy( pItemImpl->szFullPath, strSysFilePath->buffer );
+                _tcscpy( pItemImpl->szFullPath, reinterpret_cast<LPCTSTR>(strSysFilePath->buffer) );
 
                 // Assign a title anyway
                 {
@@ -3236,7 +3243,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
 
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
 
-                _tcscpy( pItemImpl->cDriveString, strSysFilePath->buffer );
+                _tcscpy( pItemImpl->cDriveString, reinterpret_cast<LPCTSTR>(strSysFilePath->buffer) );
                 pItemImpl->cDriveString[0] = _toupper( pItemImpl->cDriveString[0] );
 
                 if ( pItemImpl->cDriveString[_tcslen(pItemImpl->cDriveString) - 1] != '\\' )
@@ -3256,7 +3263,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
             if ( strSysFilePath->length > 0 && strSysFilePath->buffer[strSysFilePath->length - 1] == '\\' )
                 rtl_uString_newFromStr_WithLength( &strSysFilePath, strSysFilePath->buffer, strSysFilePath->length - 1 );
 
-            hFind = FindFirstFile( rtl_uString_getStr(strSysFilePath), &aFindData );
+            hFind = FindFirstFile( reinterpret_cast<LPCTSTR>(rtl_uString_getStr(strSysFilePath)), &aFindData );
 
             if ( hFind != INVALID_HANDLE_VALUE )
             {
@@ -3267,7 +3274,7 @@ oslFileError SAL_CALL osl_getDirectoryItem(rtl_uString *strFilePath, oslDirector
                 osl_acquireDirectoryItem( (oslDirectoryItem)pItemImpl );
 
                 CopyMemory( &pItemImpl->FindData, &aFindData, sizeof(WIN32_FIND_DATA) );
-                _tcscpy( pItemImpl->szFullPath, rtl_uString_getStr(strSysFilePath) );
+                _tcscpy( pItemImpl->szFullPath, reinterpret_cast<LPCTSTR>(rtl_uString_getStr(strSysFilePath)) );
 
                 // MT: This costs 600ms startup time on fast v60x!
                 // GetCaseCorrectPathName( pItemImpl->szFullPath, pItemImpl->szFullPath, sizeof(pItemImpl->szFullPath) );
@@ -3420,8 +3427,8 @@ oslFileError SAL_CALL osl_searchFileURL(
         do
         {
             /* If search path is empty use a NULL pointer instead according to MSDN documentation of SearchPath */
-            LPCTSTR lpszSearchPath = ustrSystemSearchPath && ustrSystemSearchPath->length ? ustrSystemSearchPath->buffer : NULL;
-            LPCTSTR lpszSearchFile = ustrSysPath->buffer;
+            LPCTSTR lpszSearchPath = ustrSystemSearchPath && ustrSystemSearchPath->length ? reinterpret_cast<LPCTSTR>(ustrSystemSearchPath->buffer) : NULL;
+            LPCTSTR lpszSearchFile = reinterpret_cast<LPCTSTR>(ustrSysPath->buffer);
 
             /* Allocate space for buffer according to previous returned count of required chars */
             /* +1 is not neccessary if we follow MSDN documentation but for robustness we do so */
@@ -3438,7 +3445,7 @@ oslFileError SAL_CALL osl_searchFileURL(
 
         if ( dwResult )
         {
-            rtl_uString_newFromStr( &ustrSysPath, lpBuffer );
+            rtl_uString_newFromStr( &ustrSysPath, reinterpret_cast<const sal_Unicode*>(lpBuffer) );
             error = osl_getFileURLFromSystemPath( ustrSysPath, pustrPath );
         }
         else
@@ -3449,7 +3456,7 @@ oslFileError SAL_CALL osl_searchFileURL(
             /* Somthing went wrong, perhaps the path was absolute */
             error = MapError( GetLastError() );
 
-            hFind = FindFirstFile( ustrSysPath->buffer, &aFindFileData );
+            hFind = FindFirstFile( reinterpret_cast<LPCTSTR>(ustrSysPath->buffer), &aFindFileData );
 
             if ( IsValidHandle(hFind) )
             {
@@ -3510,10 +3517,10 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
             osl_acquireMutex( g_CurrentDirectoryMutex );
 
             GetCurrentDirectory( MAX_PATH, szCurrentDir );
-            SetCurrentDirectory( ustrBaseSysPath->buffer );
+            SetCurrentDirectory( reinterpret_cast<LPCTSTR>(ustrBaseSysPath->buffer) );
         }
 
-        dwResult = GetFullPathName( ustrRelSysPath->buffer, MAX_PATH, szBuffer, &lpFilePart );
+        dwResult = GetFullPathName( reinterpret_cast<LPCTSTR>(ustrRelSysPath->buffer), MAX_PATH, szBuffer, &lpFilePart );
 
         if ( ustrBaseSysPath )
         {
@@ -3530,7 +3537,7 @@ oslFileError SAL_CALL osl_getAbsoluteFileURL( rtl_uString* ustrBaseURL, rtl_uStr
             {
                 rtl_uString *ustrAbsSysPath = NULL;
 
-                rtl_uString_newFromStr( &ustrAbsSysPath, szBuffer );
+                rtl_uString_newFromStr( &ustrAbsSysPath, reinterpret_cast<const sal_Unicode*>(szBuffer) );
 
                 eError = osl_getFileURLFromSystemPath( ustrAbsSysPath, pustrAbsoluteURL );
 
