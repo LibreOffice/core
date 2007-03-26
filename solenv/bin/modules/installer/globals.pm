@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.66 $
+#   $Revision: 1.67 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:48:33 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:44:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,6 +121,8 @@ BEGIN
     $epm_in_path = 0;
     $epm_path = "";
     $epmoutpath = "";
+    $upx_in_path = 0;
+    $upxfile = "";
     $simple = 0;
     $simpledefaultuserdir = "\$ORIGIN/..";
     $call_epm = 1;
