@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgdlg.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:21:37 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:06:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,14 +129,15 @@ private:
     FixedLine       aFontListsFL;
     CheckBox        aFontShowCB;
     CheckBox        aFontHistoryCB;
-    FixedLine       aRenderingFL;
-    CheckBox        aUseHardwareAccell;
 
     FixedLine       a3DGB;
     CheckBox        a3DOpenGLCB;
     CheckBox        a3DOpenGLFasterCB;
     CheckBox        a3DDitheringCB;
     CheckBox        a3DShowFullCB;
+
+    FixedLine       aRenderingFL;
+    CheckBox        aUseHardwareAccell;
 
     FixedLine       aMouseFL;
     FixedText       aMousePosFT;
