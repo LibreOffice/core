@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.113 $
+#   $Revision: 1.114 $
 #
-#   last change: $Author: rt $ $Date: 2007-01-31 08:41:55 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:05:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.113 $ ';
+$id_str = ' $Revision: 1.114 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -267,6 +267,7 @@ sub do_linklib
 
     foreach $lib (@globbed_files) {
         $lib = basename($lib);
+        next if ( $lib =~ /^lib.*\.\d+\.jnilib$/ );
         if ( $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)(\.(\d+))?$/
              || $lib =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)$/ )
         {
@@ -934,12 +935,25 @@ sub get_latest_patchlevel
     # comparison function for sorting
         my (@field_a, @field_b, $i);
 
-        $a =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)\.(\d+)$/;
-        @field_a = ($3, $4, $5);
-        $b =~ /^(lib[\w-]+(\.so|\.dylib))\.(\d+)\.(\d+)\.(\d+)$/;
-        @field_b = ($3, $4, $5);
+        if ( $a !~ /^(lib[\w-]+(\.so|\.dylib))(\.(\d+))+$/ ||
+             $b !~ /^(lib[\w-]+(\.so|\.dylib))(\.(\d+))+$/ ) {
+            # cannot happen: unexpected library name allthough checked earlier
+            print_warning("internal error");
+            return 0;
+        }
+        @field_a = split /\./, $a;
+        @field_b = split /\./, $b;
+        if ( $#field_a != $#field_b ) {
+            # should not happen
+            print_warning("get_latest_patchlevel: cannot compare '$a' to '$b'");
+            return 0;
+        }
+        shift @field_a; # library name
+        shift @field_b; # library name
+        shift @field_a; # extension
+        shift @field_b; # extension
 
-        for ($i = 0; $i < 3; $i++)
+        for ($i = 0; $i <= $#field_a; $i++)
           {
               if ( ($field_a[$i] < $field_b[$i]) ) {
                   return -1;
