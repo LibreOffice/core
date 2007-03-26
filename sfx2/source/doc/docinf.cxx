@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:28:57 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,9 @@
 #include "sfxtypes.hxx"
 #include "appdata.hxx"
 #include "doctempl.hxx"
+#include "sfxresid.hxx"
+
+#include "doc.hrc"
 
 // ============================================================================
 
@@ -2442,10 +2445,13 @@ SfxDocumentInfo::SfxDocumentInfo() :
     bSaveGraphicsCompressed = aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsCompressed;
     bSaveOriginalGraphics = aSaveOptions.GetSaveGraphicsMode() == SvtSaveOptions::SaveGraphicsOriginal;
 
-    const String aInf( DEFINE_CONST_UNICODE( "Info " ) );
-    for( USHORT i = 0; i < MAXDOCUSERKEYS; ++i )    {
-        aUserKeys[i].aTitle = aInf;
-        aUserKeys[i].aTitle += String::CreateFromInt32(i+1);
+    const String sInfo( SfxResId( STR_DOCINFO_INFOFIELD ) );
+    const String sVar( RTL_CONSTASCII_USTRINGPARAM( "%1" ) );
+    for( USHORT i = 0; i < MAXDOCUSERKEYS; ++i )
+    {
+        String sTitle( sInfo );
+        sTitle.SearchAndReplace( sVar, String::CreateFromInt32(i+1) );
+        aUserKeys[i].aTitle = sTitle;
     }
 }
 
