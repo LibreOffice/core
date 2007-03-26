@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oleobjw.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:04:22 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,15 +394,15 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             throw RuntimeException();
             break;
         case DISP_E_OVERFLOW:
-            throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
+            throw CannotConvertException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")), static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;
         case DISP_E_PARAMNOTFOUND:
-            throw IllegalArgumentException(L"call to OLE object failed", static_cast<XInterface*>(
+            throw IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")), static_cast<XInterface*>(
                                                static_cast<XWeak*>(this)), uArgErr) ;
             break;
         case DISP_E_TYPEMISMATCH:
-            throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
+            throw CannotConvertException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")), static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
             break;
         case DISP_E_UNKNOWNINTERFACE:
@@ -412,7 +412,7 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
             throw RuntimeException();
             break;
         case DISP_E_PARAMNOTOPTIONAL:
-            throw CannotConvertException(L"call to OLE object failed",static_cast<XInterface*>(
+            throw CannotConvertException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")),static_cast<XInterface*>(
                                              static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
             break;
         default:
@@ -517,51 +517,51 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
         case S_OK:
             break;
         case DISP_E_BADPARAMCOUNT:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_BADVARTYPE:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_EXCEPTION:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_MEMBERNOTFOUND:
-            throw UnknownPropertyException(OUString(excepinfo.bstrDescription),
+            throw UnknownPropertyException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_NONAMEDARGS:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_OVERFLOW:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_PARAMNOTFOUND:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_TYPEMISMATCH:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_UNKNOWNINTERFACE:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_UNKNOWNLCID:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         case DISP_E_PARAMNOTOPTIONAL:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         default:
-            throw RuntimeException(OUString(excepinfo.bstrDescription),
+            throw RuntimeException(OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription)),
                                    Reference<XInterface>());
             break;
         }
@@ -956,7 +956,11 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
                         if( SUCCEEDED( CComObject<JScriptOutParam>::CreateInstance( &pParamObject)))
                         {
                             CComPtr<IUnknown> pUnk(pParamObject->GetUnknown());
+#ifdef __MINGW32__
+                            CComQIPtr<IDispatch, &__uuidof(IDispatch)> pDisp( pUnk);
+#else
                             CComQIPtr<IDispatch> pDisp( pUnk);
+#endif
 
                             pVarParams[ parameterCount - i -1].vt= VT_DISPATCH;
                             pVarParams[ parameterCount - i -1].pdispVal= pDisp;
@@ -1116,7 +1120,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
     }
 
     if( !bConvRet) // conversion of return or out parameter failed
-        throw CannotConvertException( L"Call to COM object failed. Conversion of return or out value failed",
+        throw CannotConvertException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Call to COM object failed. Conversion of return or out value failed")),
                                       Reference<XInterface>( static_cast<XWeak*>(this), UNO_QUERY   ), TypeClass_UNKNOWN,
                                       FailReason::UNKNOWN, 0);// lookup error code
     // conversion of return or out parameter failed
@@ -1140,15 +1144,15 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         throw IllegalArgumentException();
         break;
     case DISP_E_OVERFLOW:
-        throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
+        throw CannotConvertException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")), static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
         break;
     case DISP_E_PARAMNOTFOUND:
-        throw IllegalArgumentException(L"call to OLE object failed", static_cast<XInterface*>(
+        throw IllegalArgumentException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")), static_cast<XInterface*>(
                                            static_cast<XWeak*>(this)), uArgErr);
         break;
     case DISP_E_TYPEMISMATCH:
-        throw CannotConvertException(L"call to OLE object failed",static_cast<XInterface*>(
+        throw CannotConvertException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")),static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)) , TypeClass_UNKNOWN, FailReason::UNKNOWN, uArgErr);
         break;
     case DISP_E_UNKNOWNINTERFACE:
@@ -1158,7 +1162,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
         throw RuntimeException() ;
         break;
     case DISP_E_PARAMNOTOPTIONAL:
-        throw CannotConvertException(L"call to OLE object failed", static_cast<XInterface*>(
+        throw CannotConvertException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("call to OLE object failed")), static_cast<XInterface*>(
                                          static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::NO_DEFAULT_AVAILABLE, uArgErr);
                 break;
     default:
@@ -1183,7 +1187,11 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
     OSL_ASSERT(aArguments.getLength() == 3);
 
     m_spUnknown= *(IUnknown**) aArguments[0].getValue();
+#ifdef __MINGW32__
+    m_spUnknown->QueryInterface(IID_IDispatch, reinterpret_cast<LPVOID*>( & m_spDispatch.p));
+#else
     m_spUnknown.QueryInterface( & m_spDispatch.p);
+#endif
 
     aArguments[1] >>= m_bOriginalDispatch;
     aArguments[2] >>= m_seqTypes;
@@ -1294,7 +1302,7 @@ sal_Bool IUnknownWrapper_Impl::isJScriptObject()
                 {
                     CComBSTR name( result.bstrVal);
                     name.ToLower();
-                    if( name == JSCRIPT_ID)
+                    if( name == CComBSTR(JSCRIPT_ID))
                         m_eJScript= IsJScript;
                 }
             }
@@ -1417,7 +1425,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
 
         scoped_array<OLECHAR*> saNames(new OLECHAR*[nSizeAr]);
         OLECHAR ** arNames = saNames.get();
-        arNames[0] = const_cast<OLECHAR*>(sFuncName.getStr());
+        arNames[0] = const_cast<OLECHAR*>(reinterpret_cast<LPCOLESTR>(sFuncName.getStr()));
 
         int cNamedArg = 0;
         for (int iParams = 0; iParams < dispparams.cArgs; iParams ++)
@@ -1429,7 +1437,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                 //We put the parameter names in reverse order into the array,
                 //so we can use the DISPID array for DISPPARAMS::rgdispidNamedArgs
                 //The first name in the array is the method name
-                arNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(arg.Name.getStr());
+                arNames[nSizeAr - 1 - cNamedArg++] = const_cast<OLECHAR*>(reinterpret_cast<LPCOLESTR>(arg.Name.getStr()));
             }
         }
 
@@ -1762,7 +1770,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
             break;
         case DISP_E_EXCEPTION:
                 message = OUSTR("[automation bridge]: ");
-                message += OUString(excepinfo.bstrDescription,
+                message += OUString(reinterpret_cast<const sal_Unicode*>(excepinfo.bstrDescription),
                     ::SysStringLen(excepinfo.bstrDescription));
                 throw InvocationTargetException(message, Reference<XInterface>(), Any());
                 break;
@@ -1777,7 +1785,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdComTlb(const OUString& sFuncName,
                   "returned DISP_E_NONAMEDARGS"),0, uArgErr);
             break;
         case DISP_E_OVERFLOW:
-            throw CannotConvertException(L"[automation bridge] Call failed.",
+            throw CannotConvertException(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("[automation bridge] Call failed.")),
                                          static_cast<XInterface*>(
                 static_cast<XWeak*>(this)), TypeClass_UNKNOWN, FailReason::OUT_OF_RANGE, uArgErr);
             break;
@@ -1870,7 +1878,7 @@ void IUnknownWrapper_Impl::getFuncDescForInvoke(const OUString & sFuncName,
 bool IUnknownWrapper_Impl::getDispid(const OUString& sFuncName, DISPID * id)
 {
     OSL_ASSERT(m_spDispatch);
-    LPOLESTR lpsz = const_cast<LPOLESTR> (sFuncName.getStr());
+    LPOLESTR lpsz = const_cast<LPOLESTR> (reinterpret_cast<LPCOLESTR>(sFuncName.getStr()));
     HRESULT hr = m_spDispatch->GetIDsOfNames(IID_NULL, &lpsz, 1, LOCALE_USER_DEFAULT, id);
     return hr == S_OK ? true : false;
 }
@@ -1898,7 +1906,7 @@ void IUnknownWrapper_Impl::getFuncDesc(const OUString & sFuncName, FUNCDESC ** p
                 //get the associated index and add an entry to the map
                 //with the name sFuncName which differs in the casing of the letters to
                 //the actual name as obtained from ITypeInfo
-                cit itOrg  = m_mapComFunc.find(OUString(memberName));
+                cit itOrg  = m_mapComFunc.find(OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName))));
                 OSL_ASSERT(itOrg != m_mapComFunc.end());
                 itIndex =
                     m_mapComFunc.insert( TLBFuncIndexMap::value_type
@@ -1960,7 +1968,7 @@ void IUnknownWrapper_Impl::getPropDesc(const OUString & sFuncName, FUNCDESC ** p
                 //As opposed to getFuncDesc, we do not add the value because we would
                 // need to find the get and set description for the property. This would
                 //mean to iterate over all FUNCDESCs again.
-                p = m_mapComFunc.equal_range(OUString(memberName));
+                p = m_mapComFunc.equal_range(OUString(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName))));
             }
         }
     }
@@ -2088,7 +2096,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             unsigned int pcNames=0;
                             if( SUCCEEDED(pType->GetNames( funcDesc->memid, & memberName, 1, &pcNames)))
                             {
-                                OUString usName(memberName);
+                                OUString usName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName)));
                                 m_mapComFunc.insert( TLBFuncIndexMap::value_type( usName, i));
                             }
                             else
@@ -2115,7 +2123,7 @@ void IUnknownWrapper_Impl::buildComTlbIndex()
                             {
                                 if (varDesc->varkind == VAR_DISPATCH)
                                 {
-                                    OUString usName(memberName);
+                                    OUString usName(reinterpret_cast<const sal_Unicode*>(LPCOLESTR(memberName)));
                                     m_mapComFunc.insert(TLBFuncIndexMap::value_type(
                                                         usName, i));
                                 }
