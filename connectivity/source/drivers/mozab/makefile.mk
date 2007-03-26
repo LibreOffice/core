@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 08:59:26 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:00:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,10 +66,14 @@ MOZ_REG_LIB := $(MOZ_LIB)$/mozreg.lib
 .ENDIF
 .ENDIF
 
-.IF "$(COM)"=="MSC" 
+.IF "$(OS)"=="WNT" 
+.IF "$(COM)"=="GCC"
+MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
+.ELSE
 LIB += $(MOZ_LIB)
 MOZ_LIB_XPCOM= $(MOZ_EMBED_LIB) $(MOZ_LIB)$/nspr4.lib $(MOZ_REG_LIB) $(MOZ_LIB)$/xpcom.lib
-.ELSE "$(COM)"=="MSC" 
+.ENDIF
+.ELSE "$(OS)"=="WNT" 
 MOZ_LIB_XPCOM= -L$(MOZ_LIB) -lembed_base_s -lnspr4 -lmozreg_s -lxpcom
 .ENDIF
 #End of mozilla specific stuff.
@@ -176,7 +180,7 @@ SHL2STDLIBS=\
 
 .IF "$(GUI)"=="WNT"
     SHL2STDLIBS += \
-                 shell32.lib
+                 $(SHELL32LIB)
 .ENDIF # "$(GUI)"=="WNT"
 
 SHL2DEPN=
