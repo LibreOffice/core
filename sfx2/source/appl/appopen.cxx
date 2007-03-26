@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:54:44 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:09:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -397,6 +397,9 @@ ULONG CheckPasswd_Impl
                                     ::comphelper::OStorageHelper::SetCommonStoragePassword(
                                                                     xStorage,
                                                                     pPasswordRequest->getPassword() );
+
+                                    // update the version list of the medium using the new password
+                                    pFile->GetVersionList();
                                 }
                                 catch( uno::Exception& )
                                 {
