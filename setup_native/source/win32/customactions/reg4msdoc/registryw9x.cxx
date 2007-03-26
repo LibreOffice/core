@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryw9x.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:06:41 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:10:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,7 +302,7 @@ RegistryValue RegistryKeyImplWin9x::GetValue(const std::wstring& Name, const Reg
 
     if (ERROR_FILE_NOT_FOUND == rc)
     {
-        #if (_MSC_VER < 1300)
+        #if !defined(__MINGW32__) && (_MSC_VER < 1300)
         return Default;
         #else
         RegistryValue regval_ptr;
