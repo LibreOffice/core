@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:16:15 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:58:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,12 +189,12 @@ cppu::IPropertyArrayHelper & OUserExtend::getInfoHelper()
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoUser::acquire() throw(RuntimeException)
+void SAL_CALL OAdoUser::acquire() throw()
 {
     OUser_TYPEDEF::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoUser::release() throw(RuntimeException)
+void SAL_CALL OAdoUser::release() throw()
 {
     OUser_TYPEDEF::release();
 }
@@ -202,7 +202,7 @@ void SAL_CALL OAdoUser::release() throw(RuntimeException)
 sal_Int32 SAL_CALL OAdoUser::getPrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
 
     return ADOS::mapAdoRights2Sdbc(m_aUser.GetPermissions(objName, ADOS::mapObjectType2Ado(objType)));
 }
@@ -210,7 +210,7 @@ sal_Int32 SAL_CALL OAdoUser::getPrivileges( const ::rtl::OUString& objName, sal_
 sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const ::rtl::OUString& objName, sal_Int32 objType ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
 
     sal_Int32 nRights = 0;
     RightsEnum eRights = m_aUser.GetPermissions(objName, ADOS::mapObjectType2Ado(objType));
@@ -223,7 +223,7 @@ sal_Int32 SAL_CALL OAdoUser::getGrantablePrivileges( const ::rtl::OUString& objN
 void SAL_CALL OAdoUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
     m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessGrant,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
@@ -231,7 +231,7 @@ void SAL_CALL OAdoUser::grantPrivileges( const ::rtl::OUString& objName, sal_Int
 void SAL_CALL OAdoUser::revokePrivileges( const ::rtl::OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
     m_aUser.SetPermissions(objName,ADOS::mapObjectType2Ado(objType),adAccessRevoke,RightsEnum(ADOS::mapRights2Ado(objPrivileges)));
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
@@ -240,7 +240,7 @@ void SAL_CALL OAdoUser::revokePrivileges( const ::rtl::OUString& objName, sal_In
 void SAL_CALL OAdoUser::changePassword( const ::rtl::OUString& objPassword, const ::rtl::OUString& newPassword ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_TYPEDEF::rBHelper.bDisposed);
+    checkDisposed(OUser_BASE_TYPEDEF::rBHelper.bDisposed);
     m_aUser.ChangePassword(objPassword,newPassword);
     ADOS::ThrowException(*m_pCatalog->getConnection()->getConnection(),*this);
 }
