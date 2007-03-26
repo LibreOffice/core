@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2006-05-08 14:43:23 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:19:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -34,7 +34,7 @@
 #*************************************************************************
 PRJ = ..$/..$/..$/..
 TARGET  = checkdispatchapi
-PRJNAME = $(TARGET)
+PRJNAME = framework
 PACKAGE = complex$/dispatches$/helper
 
 # --- Settings -----------------------------------------------------
