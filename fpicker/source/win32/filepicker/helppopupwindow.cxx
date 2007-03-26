@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helppopupwindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:53:48 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:19:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,7 +224,7 @@ void SAL_CALL CHelpPopupWindow::calcWindowRect( LPRECT lprect )
 
     DrawText(
       hdc,
-      m_HelpText.getStr( ),
+      reinterpret_cast<LPCTSTR>(m_HelpText.getStr( )),
       m_HelpText.getLength( ),
       lprect,
       nFormat );
