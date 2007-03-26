@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: vg $ $Date: 2006-11-22 10:57:59 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 11:18:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@ SLOFILES =	\
         $(SLO)$/objcont.obj \
         $(SLO)$/objserv.obj \
         $(SLO)$/objitem.obj \
+        $(SLO)$/ownsubfilterservice.obj \
         $(SLO)$/docfac.obj \
         $(SLO)$/docfilt.obj \
         $(SLO)$/doctempl.obj \
