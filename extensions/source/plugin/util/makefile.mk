@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:16:55 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:10:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -61,9 +61,9 @@ SHL1OWNLIBS = -lsocket
 .IF "$(GUI)" == "WNT"
 SHL1LINKLIB = $(SLB)$/plwin.lib
 SHL1OWNLIBS = \
-    version.lib	\
-    ole32.lib	\
-    advapi32.lib
+    $(VERSIONLIB)	\
+    $(OLE32LIB)	\
+    $(ADVAPI32LIB)
 .ENDIF # WNT
 
 SHL1TARGET= $(TARGET)$(UPD)$(DLLPOSTFIX)
