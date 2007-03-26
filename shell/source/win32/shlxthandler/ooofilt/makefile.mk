@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: hr $ $Date: 2007-01-02 16:12:39 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:55:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,18 +59,24 @@ SLOFILES=$(SLO)$/ooofilt.obj\
 #        $(SLO)$/dbgmacros.obj
 
 SHL1TARGET=$(TARGET)
-SHL1STDLIBS=ole32.lib\
-     advapi32.lib\
-     comctl32.lib\
-     uuid.lib\
-     shell32.lib\
-     kernel32.lib\
-     OldNames.Lib
-
+.IF "$(COM)"=="GCC"
+SHL1STDLIBS=$(ZLIB3RDLIB) $(EXPAT3RDLIB)
+SHL1LIBS=
+.ELSE
+SHL1STDLIBS=
 SHL1LIBS=$(SOLARLIBDIR)$/zlib.lib\
     $(SOLARLIBDIR)$/expat_xmlparse.lib\
-    $(SOLARLIBDIR)$/expat_xmltok.lib\
-    $(SLB)$/util.lib\
+    $(SOLARLIBDIR)$/expat_xmltok.lib
+.ENDIF
+SHL1STDLIBS+=$(OLE32LIB)\
+     $(ADVAPI32LIB)\
+     $(COMCTL32LIB)\
+     $(UUIDLIB)\
+     $(SHELL32LIB)\
+     $(KERNEL32LIB)\
+     $(OLDNAMESLIB)
+     
+SHL1LIBS+=$(SLB)$/util.lib\
     $(SLB)$/ooofilereader.lib
 
 SHL1DEPN=
