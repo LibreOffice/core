@@ -4,9 +4,9 @@
 #
 #   $RCSfile: control.pm,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-22 14:46:45 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:44:38 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,6 +137,21 @@ sub check_system_path
 
             $installer::globals::epm_path = $$fileref;
         }
+    }
+
+    # checking, if upx can be found in path
+
+    if ( $installer::globals::iswindowsbuild ) { $installer::globals::upxfile = "upx.exe"; }
+    else { $installer::globals::upxfile = "upx"; }
+
+    my $upxfilename = $installer::globals::upxfile;
+    my $upxfileref = installer::scriptitems::get_sourcepath_from_filename_and_includepath_classic(\$upxfilename, $patharrayref , 0);
+
+    if (!( $$upxfileref eq "" ))
+    {
+        $installer::globals::upx_in_path = 1;
+        $installer::globals::upxfile = $$upxfileref;
+        installer::logger::print_message( "\tFound: $$upxfileref\n" );
     }
 
 }
