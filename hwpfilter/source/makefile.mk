@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 16:43:22 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:52:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -90,7 +90,7 @@ SHL1STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        ole32.lib uuid.lib
+        $(OLE32LIB) $(UUIDLIB)
 .ENDIF			# "$(GUI)"=="WNT"		
 
 
