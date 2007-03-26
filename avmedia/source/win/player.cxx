@@ -4,9 +4,9 @@
  *
  *  $RCSfile: player.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:26:44 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:46:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,7 +138,7 @@ bool Player::create( const ::rtl::OUString& rURL )
                 mpEV = NULL;
         }
 
-        if( SUCCEEDED( hR = mpGB->RenderFile( rURL, NULL ) ) &&
+        if( SUCCEEDED( hR = mpGB->RenderFile( reinterpret_cast<LPCWSTR>(rURL.getStr()), NULL ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaControl, (void**) &mpMC ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaEventEx, (void**) &mpME ) ) &&
             SUCCEEDED( hR = mpGB->QueryInterface( IID_IMediaSeeking, (void**) &mpMS ) ) &&
