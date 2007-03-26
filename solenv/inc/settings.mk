@@ -4,9 +4,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.210 $
+#   $Revision: 1.211 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:05:27 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:16:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -708,7 +708,11 @@ WINVERSIONNAMES=$(UNIXVERSIONNAMES)
 .ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(GUI)"=="WNT"
+.IF "$(COM)"=="GCC"
+SHELLLIB=-lgdi32 -lshell32 -ladvapi32 -lcomdlg32
+.ELSE
 SHELLLIB=gdi32.lib shell32.lib advapi32.lib comdlg32.lib
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)" != "MAC"
@@ -838,6 +842,11 @@ ILIB!:=$(SOLARROOT)$/udk$/$(UDKVERSION)$/$(OUTPATH)$/lib;$(ILIB)
 # extend library path for MS Compiler
 .IF "$(COM)"=="MSC"
 LIB:=$(LB);$(SLB);$(ILIB)
+.ENDIF
+
+# extend library path for MinGW Compiler
+.IF "$(GUI)$(COM)"=="WNTGCC"
+LIB:=$(LB);$(BIN);$(ILIB)
 .ENDIF
 
 # --- Environment-Allgemein ----------------------------------------
