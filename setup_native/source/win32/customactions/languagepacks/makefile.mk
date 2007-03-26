@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:16:51 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:07:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,9 +59,15 @@ SLOFILES =	$(SLO)$/lngpckinsthelper.obj \
             $(SLO)$/respintest.obj
 
 STDSHL+=	\
-    advapi32.lib\
-    msi.lib\
+    $(ADVAPI32LIB)\
+    $(MSILIB)\
     $(LIBSTLPORTST)								
+
+.IF "$(COM)"=="GCC"
+STDSHL+=	\
+    $(KERNEL32LIB)\
+    -lmsvcrt
+.ENDIF
 
 SHL1LIBS = $(SLB)$/$(TARGET).lib 
 
