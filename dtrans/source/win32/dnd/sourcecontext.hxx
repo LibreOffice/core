@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sourcecontext.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 18:18:59 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:06:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,9 +84,9 @@ public:
     virtual sal_Int32 SAL_CALL getCurrentCursor(  )
         throw( RuntimeException);
     virtual void SAL_CALL setCursor( sal_Int32 cursorId )
-        throw( IllegalArgumentException, RuntimeException);
+        throw( RuntimeException);
     virtual void SAL_CALL setImage( sal_Int32 imageId )
-        throw( IllegalArgumentException, RuntimeException);
+        throw( RuntimeException);
     virtual void SAL_CALL transferablesFlavorsChanged(  )
         throw( RuntimeException);
 
