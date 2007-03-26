@@ -5,9 +5,9 @@
  *
  *  $RCSfile: CalcWindowState.xcu,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:20:53 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 11:54:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,7 @@
             <node oor:name="private:resource/toolbar/formsobjectbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Object</value>
-                    <value xml:lang="de">Form Objekt</value>
+                    <value xml:lang="de">Form-Objekt</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -250,7 +250,7 @@
             <node oor:name="private:resource/toolbar/formdesign" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Design</value>
-                    <value xml:lang="de">Formular Entwurf</value>
+                    <value xml:lang="de">Formular-Entwurf</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -301,7 +301,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Cell</value>
-                    <value xml:lang="de">Zelle Einfügen</value>
+                    <value xml:lang="de">Zelle einfügen</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/insertobjectbar" oor:op="replace">
@@ -313,7 +313,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Insert Object</value>
-                    <value xml:lang="de">Objekt Einfügen</value>
+                    <value xml:lang="de">Objekt einfügen</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/standardbar" oor:op="replace">
@@ -352,7 +352,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Text Formatting</value>
-                    <value xml:lang="de">Text Format</value>
+                    <value xml:lang="de">Textformat</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
