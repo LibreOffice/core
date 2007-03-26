@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servprov.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:45:05 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:08:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,8 +263,8 @@ public:
 
     // XInterface
     virtual Any SAL_CALL queryInterface( const Type& aType ) throw(RuntimeException);
-    virtual void SAL_CALL acquire(  ) throw (RuntimeException);
-    virtual void SAL_CALL release(  ) throw (RuntimeException);
+    virtual void SAL_CALL acquire(  ) throw ();
+    virtual void SAL_CALL release(  ) throw ();
 
     // XTypeProvider
     virtual Sequence< Type > SAL_CALL getTypes( ) throw(RuntimeException);
