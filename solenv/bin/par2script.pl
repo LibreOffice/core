@@ -4,9 +4,9 @@
 #
 #   $RCSfile: par2script.pl,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 22:13:02 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:44:11 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,9 @@ my $parfilecontent = par2script::work::read_all_parfiles($parfiles);
 my $setupscript = par2script::work::collect_all_items($parfilecontent);
 
 par2script::undefine::undefine_gids($setupscript, $parfilecontent);
+
+par2script::undefine::remove_complete_dirs($setupscript, $parfilecontent);
+par2script::undefine::remove_complete_profile($setupscript, $parfilecontent);
 
 par2script::shortcut::shift_shortcut_positions($setupscript);
 par2script::module::remove_from_modules($setupscript);
