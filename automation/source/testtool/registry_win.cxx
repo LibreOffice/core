@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registry_win.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:39:11 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:42:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ String ReadRegistry( String aKey, String aValueName )
     HKEY hRegKey;
 
     if ( RegOpenKeyW( hBaseKey,
-                aKey.GetBuffer(),
+                reinterpret_cast<LPCWSTR>(aKey.GetBuffer()),
                 &hRegKey ) == ERROR_SUCCESS )
     {
         LONG lRet;
@@ -82,7 +82,7 @@ String ReadRegistry( String aKey, String aValueName )
         DWORD lSize = sizeof(PathW) / sizeof( sal_Unicode );
         DWORD Type = REG_SZ;
 
-        lRet = RegQueryValueExW(hRegKey, aValueName.GetBuffer(), NULL, &Type, (LPBYTE)PathW, &lSize);
+        lRet = RegQueryValueExW(hRegKey, reinterpret_cast<LPCWSTR>(aValueName.GetBuffer()), NULL, &Type, (LPBYTE)PathW, &lSize);
 
         if ((lRet == ERROR_SUCCESS) && (Type == REG_SZ))
         {
