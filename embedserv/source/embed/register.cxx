@@ -4,9 +4,9 @@
  *
  *  $RCSfile: register.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:30:46 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:48:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,9 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
+#ifdef __MINGW32__
+#define INITGUID
+#endif
 #include "servprov.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
