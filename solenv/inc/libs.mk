@@ -4,9 +4,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.109 $
+#   $Revision: 1.110 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-15 16:56:51 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:31:37 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -32,14 +32,18 @@
 #     MA  02111-1307  USA
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.109 $$"
+LIBSMKREV!:="$$Revision: 1.110 $$"
 
-.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC" || "$(COM)"=="GCC"
 
 #
 #externe libs in plattform.mk
 #
+.IF "$(GUI)$(COM)"=="WNTGCC"
+AWTLIB*=$(JAVA_HOME)$/lib$/jawt.lib
+.ELSE
 AWTLIB*=-ljawt
+.ENDIF
 AVMEDIALIB=-lavmedia$(OFFICEUPD)$(DLLPOSTFIX)
 ICUINLIB=-licui18n
 ICULELIB=-licule
@@ -50,7 +54,11 @@ I18NISOLANGLIB=-li18nisolang$(ISOLANG_MAJOR)$(COMID)
 .IF "$(WITH_GPC)"!="NO"
 GPC3RDLIB=-lgpc
 .ENDIF
+.IF "$(GUI)$(COM)"=="WNTGCC"
+SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COMID)
+.ELSE
 SALHELPERLIB=-luno_salhelper$(COMID)
+.ENDIF
 XMLSCRIPTLIB =-lxcr$(OFFICEUPD)$(DLLPOSTFIX)
 .INCLUDE .IGNORE : comphelper$/version.mk
 COMPHELPERLIB=-lcomphelp$(COMPHLP_MAJOR)$(COMID)
@@ -59,22 +67,40 @@ LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
 BPICONVLIB=-lbpiconv
 TOOLSLIB=-ltl$(OFFICEUPD)$(DLLPOSTFIX)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+CPPULIB=-lcppu$(UDK_MAJOR)
+CPPUHELPERLIB=-lcppuhelper$(UDK_MAJOR)$(COMID)
+.ELSE
 CPPULIB=-luno_cppu
 CPPUHELPERLIB=-luno_cppuhelper$(COMID)
+.ENDIF
 .INCLUDE .IGNORE : ucbhelper$/version.mk
 UCBHELPERLIB=-lucbhelper$(UCBHELPER_MAJOR)$(COMID)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+REGLIB=-lreg$(UDK_MAJOR)
+.ELSE
 REGLIB=-lreg
+.ENDIF
 .INCLUDE .IGNORE : vos$/version.mk
 VOSLIB=-lvos$(VOS_MAJOR)$(COMID)
 XMLOFFLIB=-lxo$(OFFICEUPD)$(DLLPOSTFIX)
 XMLOFFLLIB=-lxol
+.IF "$(GUI)$(COM)"=="WNTGCC"
+STORELIB=-lstore$(UDK_MAJOR)
+SALLIB=-lsal$(UDK_MAJOR)
+.ELSE
 STORELIB=-lstore
 SALLIB=-luno_sal
+.ENDIF
 .INCLUDE .IGNORE : connectivity$/version.mk
 ODBCLIB=-lodbc$(ODBC_MAJOR)
 ODBCBASELIB=-lodbcbase$(ODBC_MAJOR)
 DBFILELIB=-lfile$(OFFICEUPD)$(DLLPOSTFIX)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+RMCXTLIB=-lrmcxt$(UDK_MAJOR)
+.ELSE
 RMCXTLIB=-lrmcxt
+.ENDIF
 BTSTRPLIB=-lbtstrp
 BTSTRPDTLIB=-lbootstrpdt$(OFFICEUPD)$(DLLPOSTFIX)
 SOLDEPLIB=-lsoldep$(OFFICEUPD)$(DLLPOSTFIX)
@@ -85,10 +111,14 @@ UNOTOOLSLIB=-lutl$(OFFICEUPD)$(DLLPOSTFIX)
 SOTLIB=-lsot$(OFFICEUPD)$(DLLPOSTFIX)
 MOZBASELIBST=$(STATIC) -lnspr4 -lxpcombase_s $(DYNAMIC)
 MOZBASELIB=-lnspr4 -lxpcom
+.IF "$(GUI)$(COM)"=="WNTGCC"
+LDAPSDKLIB=-lnsldap32v50
+.ELSE
 .IF "$(WITH_OPENLDAP)" == "YES"
 LDAPSDKLIB=-lldap
 .ELSE
 LDAPSDKLIB=-lldap50
+.ENDIF
 .ENDIF
 ICOLIB=-lico$(OFFICEUPD)$(DLLPOSTFIX)
 VCLLIB=-lvcl$(OFFICEUPD)$(DLLPOSTFIX)
@@ -110,13 +140,26 @@ FREETYPELIBST=$(STATIC) -lfreetype $(DYNAMIC)
 .ENDIF
 TKLIB=-ltk$(OFFICEUPD)$(DLLPOSTFIX)
 SVTOOLLIB=-lsvt$(OFFICEUPD)$(DLLPOSTFIX)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+XMLSECLIB=-lxmlsec1-1
+XMLSECLIB-NSS=-lxmlsec1-nss-1
+.ELSE
 XMLSECLIB=-lxmlsec1
 XMLSECLIB-NSS=-lxmlsec1-nss
+.ENDIF
+.IF "$(GUI)$(COM)"=="WNTGCC"
+LIBXML2LIB=-lxml2-2
+.ELSE
 LIBXML2LIB=-lxml2
+.ENDIF
 NSS3LIB=-lnss3
 NSPR4LIB=-lnspr4
 PLC4LIB=-lplc4
 NSSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-NSS) $(NSS3LIB) $(NSPR4LIB) $(PLC4LIB)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+XMLSECLIB-MS=-lxmlsec1-mscrypto-1
+MSCRYPTOLIBS=$(LIBXML2LIB) $(XMLSECLIB) $(XMLSECLIB-MS) $(CRYPT32LIB) $(ADVAPI32LIB)
+.ENDIF
 BROOKERLIB=-lbrooker$(OFFICEUPD)$(DLLPOSTFIX)
 SIMPLECMLIB=-lsimplecm$(OFFICEUPD)$(DLLPOSTFIX)
 COMMUNILIB=-lcommuni$(OFFICEUPD)$(DLLPOSTFIX)
@@ -164,6 +207,11 @@ JPEG3RDLIB=-ljpeg
 JPEG3RDLIB=-ljpeglib
 .ENDIF
 NEON3RDLIB=-lneon
+.IF "$(GUI)$(COM)"=="WNTGCC"
+BERKELEYLIB=-ldb42
+BERKELEYCPPLIB=-ldb_cxx42
+CURLLIB=-lcurl-3
+.ELSE
 .IF "$(SYSTEM_DB)" == "YES"
 BERKELEYLIB=-ldb
 BERKELEYCPPLIB=-ldb_cxx
@@ -172,6 +220,7 @@ BERKELEYLIB=-ldb-4.2
 BERKELEYCPPLIB=-ldb_cxx-4.2
 .ENDIF
 CURLLIB=-lcurl
+.ENDIF
 SFX2LIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(OFFICEUPD)$(DLLPOSTFIX)
 EGGTRAYLIB=-leggtray$(OFFICEUPD)$(DLLPOSTFIX)
@@ -199,14 +248,26 @@ ISCLIB=-lsc$(OFFICEUPD)$(DLLPOSTFIX)
 ISDLIB=-lsd$(OFFICEUPD)$(DLLPOSTFIX)
 PKGCHKLIB=-lpkgchk$(OFFICEUPD)$(DLLPOSTFIX)
 SYSSHELLLIB=-lsysshell
+.IF "$(GUI)$(COM)"=="WNTGCC"
+JVMACCESSLIB = -ljvmaccess$(UDK_MAJOR)$(COMID)
+.ELSE
 JVMACCESSLIB = -ljvmaccess$(COMID)
+.ENDIF
 CPPUNITLIB = -lcppunit$(DLLPOSTFIX)
+.IF "$(GUI)$(COM)"=="WNTGCC"
+XML2LIB=-lxml2-2
+.ELSE
 .IF "$(SYSTEM_LIBXML)"=="YES"
 XML2LIB=$(LIBXML_LIBS)
 .ELSE
 XML2LIB=-lxml2
 .ENDIF
+.ENDIF
+.IF "$(GUI)$(COM)"=="WNTGCC"
+JVMFWKLIB = -ljvmfwk$(UDK_MAJOR)
+.ELSE
 JVMFWKLIB = -ljvmfwk
+.ENDIF
 
 # #110743#
 # For BinFilters, some libs were added.
@@ -244,6 +305,18 @@ USED_VCL_LIBS =		$(SOTLIB) $(TOOLSLIB) $(USED_UNO_LIBS)
 USED_BOOTSTRP_LIBS= $(TOOLSLIB)
 USED_RCLIENT_LIBS =	$(VCLLIB) $(SOTLIB) $(TOOLSLIB) \
                     $(USED_UNO_LIBS)
+
+SABLOT3RDLIB=-lsablot
+APP3RDLIB=-lapp
+SAMPLE3RDLIB=-lsample
+HNJLIB=-lhnj
+MYSPELLLIB=-lmyspell
+COSVLIB=-lcosv
+UDMLIB=-ludm
+HUNSPELLLIB=-lhunspell
+ULINGULIB=-lulingu
+MYTHESLIB=-lmythes
+PYUNOLIB=-lpyuno
 
 .ELSE				# "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 AWTLIB*=jawt.lib
@@ -383,6 +456,18 @@ BFXMLOFFLIB=ibf_xo.lib
 BFGOODIESLIB=bf_go.lib
 BFBASICLIB=bf_sb.lib
 LEGACYSMGRLIB=ilegacy_binfilters.lib
+
+SABLOT3RDLIB= $(LIBPRE) sablot.lib
+APP3RDLIB= $(LIBPRE) app.lib
+SAMPLE3RDLIB= $(LIBPRE) sample.lib
+HNJLIB= libhnj.lib
+MYSPELLLIB= $(LIBPRE) myspell.lib
+COSVLIB= $(LIBPRE) cosv.lib
+UDMLIB= $(LIBPRE) udm.lib
+HUNSPELLLIB=hunspell.lib
+ULINGULIB=$(LIBPRE) libulingu.lib
+MYTHESLIB=libmythes.lib
+PYUNOLIB=ipyuno.lib
 
 .ENDIF              # "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
 
