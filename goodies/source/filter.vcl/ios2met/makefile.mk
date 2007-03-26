@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: ihi $ $Date: 2006-06-29 11:32:16 $
+#   last change: $Author: vg $ $Date: 2007-03-26 14:57:56 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,9 @@ SHL1STDLIBS=    $(VCLLIB) $(TOOLSLIB) $(SALLIB)
 SHL1LIBS=       $(SLB)$/ios2met.lib # $(LB)$/rtftoken.lib
 
 .IF "$(GUI)" != "UNX"
+.IF "$(COM)" != "GCC"
 SHL1OBJS=       $(SLO)$/ios2met.obj
+.ENDIF
 .ENDIF
 
 SHL1VERSIONMAP=exports.map
