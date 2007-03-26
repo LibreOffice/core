@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:48:40 $
+ *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,8 @@ private:
     DECL_LINK(  CheckNowHdl_Impl, PushButton* ) ;
     DECL_LINK(  AutoCheckHdl_Impl, CheckBox* ) ;
     DECL_LINK(  AutoDownloadHdl_Impl, CheckBox* ) ;
+
+    void        CalcButtonWidth();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xUpdateAccess;
 
