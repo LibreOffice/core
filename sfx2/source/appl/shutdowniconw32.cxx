@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdowniconw32.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-19 08:05:15 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 15:03:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -182,7 +182,7 @@ static bool isNT()
 
 // -------------------------------
 
-static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, OUString& text, int& pos, int bOwnerdraw )
+static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text, int& pos, int bOwnerdraw )
 {
     MENUITEMINFOW mi;
     memset( &mi, 0, sizeof( MENUITEMINFOW ) );
@@ -711,7 +711,7 @@ void OnMeasureItem(HWND hwnd, LPMEASUREITEMSTRUCT lpmis)
 
     HFONT hfntOld = (HFONT) SelectObject(hdc, (HFONT) CreateFontIndirect( &ncm.lfMenuFont ));
 
-    GetTextExtentPoint32W(hdc, pMyItem->text.getStr(),
+    GetTextExtentPoint32W(hdc, reinterpret_cast<LPCWSTR>(pMyItem->text.getStr()),
             pMyItem->text.getLength(), &size);
 
     lpmis->itemWidth = size.cx + 4 + GetSystemMetrics( SM_CXSMICON );
@@ -789,7 +789,7 @@ void OnDrawItem(HWND hwnd, LPDRAWITEMSTRUCT lpdis)
 
 
     SIZE    size;
-    GetTextExtentPointW( lpdis->hDC, pMyItem->text.getStr(), pMyItem->text.getLength(), &size );
+    GetTextExtentPointW( lpdis->hDC, reinterpret_cast<LPCWSTR>(pMyItem->text.getStr()), pMyItem->text.getLength(), &size );
 
     DrawStateW( lpdis->hDC, (HBRUSH)NULL, (DRAWSTATEPROC)NULL, (LPARAM)pMyItem->text.getStr(), (WPARAM)0, aRect.left, aRect.top + (height - size.cy)/2, 0, 0, DST_TEXT | (fDisabled && !fSelected ? DSS_DISABLED : DSS_NORMAL) );
 
@@ -830,7 +830,7 @@ static OUString _SHGetSpecialFolder( int nFolderID )
         lpFolderA = ALLOC( WCHAR, 16000 );
 
         SHGetPathFromIDListW( pidl, lpFolderA );
-        aFolder = OUString( lpFolderA );
+        aFolder = OUString( reinterpret_cast<const sal_Unicode*>(lpFolderA) );
 
         FREE( lpFolderA );
         _SHFree( pidl );
@@ -887,7 +887,7 @@ BOOL CreateShortcut( const OUString& rAbsObject, const OUString& rAbsObjectPath,
 
         if( SUCCEEDED(hres) )
         {
-            hres = ppf->Save( rAbsShortcut.getStr(), TRUE );
+            hres = ppf->Save( reinterpret_cast<LPCOLESTR>(rAbsShortcut.getStr()), TRUE );
             ppf->Release();
         } else return FALSE;
         psl->Release();
@@ -934,7 +934,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
             MultiByteToWideChar( CP_ACP, 0, szPathA, -1, aPath, nNeededWStrBuffSize );
     }
 
-    OUString aOfficepath( aPath );
+    OUString aOfficepath( reinterpret_cast<const sal_Unicode*>(aPath) );
     int i = aOfficepath.lastIndexOf((sal_Char) '\\');
     if( i != -1 )
         aOfficepath = aOfficepath.copy(0, i);
@@ -942,7 +942,7 @@ bool ShutdownIcon::IsQuickstarterInstalled()
     OUString quickstartExe(aOfficepath);
     quickstartExe += OUString( RTL_CONSTASCII_USTRINGPARAM( "\\quickstart.exe" ) );
 
-    return FileExistsW( quickstartExe.getStr() );
+    return FileExistsW( reinterpret_cast<LPCWSTR>(quickstartExe.getStr()) );
 }
 
 void ShutdownIcon::EnableAutostartW32( const rtl::OUString &aShortcut )
