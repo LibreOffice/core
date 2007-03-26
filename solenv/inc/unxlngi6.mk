@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxlngi6.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:09:26 $
+#   last change: $Author: ihi $ $Date: 2007-03-26 12:26:28 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -157,7 +157,8 @@ LINKC*=$(CC)
 # default linker flags
 LINKFLAGSDEFS*=-Wl,-z,defs
 LINKFLAGSRUNPATH*=-Wl,-rpath,\''$$ORIGIN'\'
-LINKFLAGS=-Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
+# flag -Wl,-z,noexecstack sets the NX bit on the stack 
+LINKFLAGS=-Wl,-z,noexecstack -Wl,-z,combreloc $(LINKFLAGSDEFS) $(LINKFLAGSRUNPATH)
 
 # linker flags for linking applications
 LINKFLAGSAPPGUI= -Wl,-export-dynamic -Wl,--noinhibit-exec
