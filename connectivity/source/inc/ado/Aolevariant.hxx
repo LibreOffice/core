@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Aolevariant.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:00:12 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,9 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifdef __MINGW32__
+#include <windows.h>
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
