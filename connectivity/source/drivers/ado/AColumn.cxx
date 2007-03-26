@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AColumn.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 02:11:15 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 13:56:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,12 +311,12 @@ WpADOColumn OAdoColumn::getColumnImpl() const
 }
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoColumn::acquire() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoColumn::acquire() throw()
 {
     OColumn_ADO::acquire();
 }
 // -----------------------------------------------------------------------------
-void SAL_CALL OAdoColumn::release() throw(::com::sun::star::uno::RuntimeException)
+void SAL_CALL OAdoColumn::release() throw()
 {
     OColumn_ADO::release();
 }
