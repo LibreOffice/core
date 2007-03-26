@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:45:53 $
+ *  last change: $Author: vg $ $Date: 2007-03-26 14:41:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ typedef void    ( __OPENGL_CALL *OGLFncMakeCurrent )( HDC hDC, HGLRC hContext  )
 #define INIT_OGLFNC_WGL( FncName ) static OGLFnc##FncName pImplOpenWGLFnc##FncName = NULL;
 #define GET_OGLFNC_WGL( FncName )                                                                 \
 OUString queryFuncName##FncName( RTL_CONSTASCII_USTRINGPARAM( "wgl" #FncName ) );                 \
-pImplOpenWGLFnc##FncName = (OGLFnc##FncName##) osl_getSymbol( hImplOGLLib, queryFuncName##FncName.pData ); \
+pImplOpenWGLFnc##FncName = (OGLFnc##FncName) osl_getSymbol( hImplOGLLib, queryFuncName##FncName.pData ); \
 if( !pImplOpenWGLFnc##FncName ) bRet = FALSE;
 
 // -----------------
