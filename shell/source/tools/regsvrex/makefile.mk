@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-07 19:53:15 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:49:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@ TARGETTYPE=CUI
 OBJFILES=$(OBJ)$/regsvrex.obj
 APP1TARGET=$(TARGET)
 APP1OBJS=$(OBJFILES)
-APP1STDLIBS=kernel32.lib
+APP1STDLIBS=$(KERNEL32LIB)
 APP1DEF=$(MISC)$/$(APP1TARGET).def
 
 # --- Targets ------------------------------------------------------
