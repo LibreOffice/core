@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:19:17 $
+#   last change: $Author: vg $ $Date: 2007-03-26 13:26:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,23 +65,23 @@ APP1TARGET=$(PRJNAME)
 APP1LIBS=$(LIB1TARGET)
 
 .IF "$(GUI)" == "WNT"
-APP1STDLIBS= $(SVTOOLLIB) $(SVLLIB) $(TOOLSLIB) $(SVLIB) svmem.lib so2.lib
+APP1STDLIBS= $(SVTOOLLIB) $(SVLLIB) $(TOOLSLIB) $(SVLIB) $(SVMEMLIB) $(SO2LIB)
 # irtl.lib
 .IF "$(SO3)" == ""
 APP1STDLIBS+= sdstor.lib
 .ELSE
-APP1STDLIBS+= sot.lib
+APP1STDLIBS+= $(SOTLIB)
 .ENDIF
 .IF "$(COMEX)"=="10"
-APP1STDLIBS+= ole32.lib oleaut32.lib uuid.lib shell32.lib advapi32.lib libci.lib
+APP1STDLIBS+= $(OLE32LIB) $(OLEAUT32LIB) $(UUIDLIB) $(SHELL32LIB) $(ADVAPI32LIB) libci.lib
 .ELSE
-APP1STDLIBS+= ole32.lib oleaut32.lib uuid.lib shell32.lib advapi32.lib libci.lib msvcirt.lib
+APP1STDLIBS+= $(OLE32LIB) $(OLEAUT32LIB) $(UUIDLIB) $(SHELL32LIB) $(ADVAPI32LIB) libci.lib msvcirt.lib
 .ENDIF
 .ELSE
 .IF "$(GUI)" == "OS2"
-APP1STDLIBS=sdstor.lib so2.lib svtool.lib $(SVLIB) tools.lib svmem.lib svx.lib
+APP1STDLIBS=sdstor.lib $(SO2LIB) $(SVTOOLLIB) $(SVLIB) tools.lib $(SVMEMLIB) $(SVXLIB)
 .ELSE
-APP1STDLIBS=svtool.lib tools.lib $(SVLIB) svmem.lib sdstor.lib so2.lib svx.lib
+APP1STDLIBS=$(SVTOOLLIB) tools.lib $(SVLIB) $(SVMEMLIB) sdstor.lib $(SO2LIB) $(SVXLIB)
 APP1STDLIBS+= ole2 compobj storage shell
 .ENDIF
 .ENDIF
