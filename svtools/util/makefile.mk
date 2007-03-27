@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.60 $
+#   $Revision: 1.61 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:07:11 $
+#   last change: $Author: vg $ $Date: 2007-03-27 09:58:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -165,13 +165,13 @@ SHL1STDLIBS+= $(JPEG3RDLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        uwinapi.lib \
-        advapi32.lib	\
-        gdi32.lib \
-        ole32.lib 	\
-        uuid.lib 	\
-        advapi32.lib	\
-        oleaut32.lib
+        $(UWINAPILIB) \
+        $(ADVAPI32LIB)	\
+        $(GDI32LIB) \
+        $(OLE32LIB) 	\
+        $(UUIDLIB) 	\
+        $(ADVAPI32LIB)	\
+        $(OLEAUT32LIB)
 .ENDIF # WNT
 
 SHL1OBJS= \
@@ -209,9 +209,9 @@ SHL2STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL2STDLIBS+= \
-        uwinapi.lib \
-        advapi32.lib	\
-        gdi32.lib
+        $(UWINAPILIB) \
+        $(ADVAPI32LIB)	\
+        $(GDI32LIB)
 .ENDIF # WNT
 
 SHL2LIBS=	$(SLB)$/svl.lib
@@ -232,7 +232,7 @@ APP1OBJS	=   $(OBJ)$/bmpgui.obj	\
                 $(OBJ)$/bmpcore.obj
 
 .IF "$(GUI)"!="UNX"
-APP1STDLIBS+= svtool.lib
+APP1STDLIBS+= $(SVTOOLLIB)
 .ELSE
 APP1STDLIBS+= -lsvt$(UPD)$(DLLPOSTFIX)
 APP1STDLIBS+= -lsvl$(UPD)$(DLLPOSTFIX)
@@ -253,7 +253,7 @@ APP2DEPN	=   $(SHL1TARGETN) $(SHL2TARGETN)
 APP2OBJS	=   $(OBJ)$/g2g.obj
 
 .IF "$(GUI)"!="UNX"
-APP2STDLIBS+= svtool.lib
+APP2STDLIBS+= $(SVTOOLLIB)
 .ELSE
 APP2STDLIBS+= -lsvt$(UPD)$(DLLPOSTFIX)
 APP2STDLIBS+= -lsvl$(UPD)$(DLLPOSTFIX)
