@@ -4,9 +4,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:05:56 $
+ *  last change: $Author: vg $ $Date: 2007-03-27 09:53:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,9 @@
 
 #include <cstdio>
 #include <malloc.h>
+#ifndef __MINGW32__
 #define alloca _alloca
+#endif
 
 #ifdef GCP_KERN_HACK
     #include <algorithm>
@@ -414,7 +416,7 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
     for( i = 0; i < mnGlyphCount; ++i )
     {
         // get the current UCS-4 code point, check for surrogate pairs
-        const WCHAR* pCodes = &pBidiStr[i];
+        const WCHAR* pCodes = reinterpret_cast<LPCWSTR>(&pBidiStr[i]);
         unsigned nCharCode = pCodes[0];
         bool bSurrogate = ((nCharCode >= 0xD800) && (nCharCode <= 0xDFFF));
         if( bSurrogate )
@@ -1318,7 +1320,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
     {
         mpScriptItems = new SCRIPT_ITEM[ nItemCapacity ];
         HRESULT nRC = (*pScriptItemize)(
-            rArgs.mpStr + mnSubStringMin, nSubStringEnd - mnSubStringMin,
+            reinterpret_cast<LPCWSTR>(rArgs.mpStr + mnSubStringMin), nSubStringEnd - mnSubStringMin,
             nItemCapacity - 1, &aScriptControl, &aScriptState,
             mpScriptItems, &mnItemCount );
         if( !nRC )  // break loop when everything is correctly itemized
@@ -1455,7 +1457,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         int nGlyphCount = 0;
         int nCharCount = rVisualItem.mnEndCharPos - rVisualItem.mnMinCharPos;
         HRESULT nRC = (*pScriptShape)( mhDC, &rScriptCache,
-            rArgs.mpStr + rVisualItem.mnMinCharPos,
+            reinterpret_cast<LPCWSTR>(rArgs.mpStr + rVisualItem.mnMinCharPos),
             nCharCount,
             mnGlyphCapacity - rVisualItem.mnMinGlyphPos, // problem when >0xFFFF
             &rVisualItem.mpScriptItem->a,
@@ -1480,7 +1482,7 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
             // the primitive layout engine is good enough for the default layout
             rVisualItem.mpScriptItem->a.eScript = SCRIPT_UNDEFINED;
             nRC = (*pScriptShape)( mhDC, &rScriptCache,
-                rArgs.mpStr + rVisualItem.mnMinCharPos,
+                reinterpret_cast<LPCWSTR>(rArgs.mpStr + rVisualItem.mnMinCharPos),
                 nCharCount,
                 mnGlyphCapacity - rVisualItem.mnMinGlyphPos,
                 &rVisualItem.mpScriptItem->a,
