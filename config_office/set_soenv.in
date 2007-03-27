@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.137 $
-# Date:        $Date: 2007-03-09 09:26:07 $
+# Version:     $Revision: 1.138 $
+# Date:        $Date: 2007-03-27 10:20:09 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -39,9 +39,9 @@ use File::Basename;
 #--------------------------------------------------------
 #
 my ( $outfile, $outfile_sh, $outfile_bat, $outfile_jam, $bootfile, $newline, $comment, $comment4nt, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
-     $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW, $platform,
+     $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $MINGW, $USE_MINGW, $platform,
      $cygwinver, $empty, $no_ant, $no_stl, $no_gcc_include, 
-     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $unsetvarsjam, $exportvars, $win_format_var, $perl_os);
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $unsetvarssh, $unsetvarsbat, $unsetvarsjam, $exportvars, $win_format_var, $perl_os, @lib_include_paths, $lib_include_path);
 #
 #-------------------------------------------------
 # IIb. Declaring environment values (constants).
@@ -82,7 +82,7 @@ my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $JDK, $SHELL,
      $MSPDB_PATH, $MIDL_PATH, $CSC_PATH,
      $LD_LIBRARY_PATH, $PATH, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARLIB, 
      $SOLARINC, $LOCALINI, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $PERL, 
-     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $USE_NEW_SDK, $FRAME_HOME, 
+     $COMP_ENV, $ILIB, $JAVAHOME, $PSDK_HOME, $DIRECTXSDK_LIB, $USE_NEW_SDK, $FRAME_HOME, 
      $ATL_LIB, $ATL_INCLUDE, $MFC_LIB, $MFC_INCLUDE, $NO_HIDS, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
      $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $MOZILLA_VERSION, $MOZILLA_TOOLKIT, $PREBUILD_MOZAB,
 	 $PROEXT,
@@ -121,6 +121,7 @@ $SYSTEM_PYTHON	= '@SYSTEM_PYTHON@';
 $SYSTEM_MOZILLA = '@SYSTEM_MOZILLA@';
 $JDK 		= '@JDK@';
 $MINGW          = '@WITH_MINGWIN@'; # use MinGW for Windows build
+$USE_MINGW      = '@USE_MINGW@';     # use MinGW in cygwin or pure-mingw
 $CC             = '@CC@';           # C compiler
 $CXX            = '@CXX@';          # C++ compiler
 $EXCEPTIONS     = '@EXCEPTIONS@';   # Exception handling type
@@ -552,6 +553,7 @@ elsif ( $platform =~ m/cygwin/ )
       $MIDL_PATH      = PosixFormat('@MIDL_PATH@');
       $CSC_PATH       = PosixFormat('@CSC_PATH@');
       $PSDK_HOME      = PosixFormat('@PSDK_HOME@');
+      $DIRECTXSDK_LIB = PosixFormat('@DIRECTXSDK_LIB@');
       $FRAME_HOME     = PosixFormat('@FRAME_HOME@');
       $USE_NEW_SDK    = "TRUE";
       $CPUNAME        = "INTEL";
@@ -570,11 +572,17 @@ elsif ( $platform =~ m/cygwin/ )
 	  $WRAPCMD        = "guw.exe";
       $outfile        = "winmingw.set"; 
       $COM            = "GCC";
-      $CVER           = "C300";
+      $COMPATH        =~ s/\/bin$//i;
+      if ( $USE_MINGW ne "cygwin" )
+      { $CC             = $WRAPCMD." ".$CC;
+        $CXX            = $WRAPCMD." ".$CXX;
+      }
+      $CVER           = "C341";
       $OUTPATH        = "wntgcci";
       $INPATH         = $OUTPATH.$PROEXT;
       $GVERDIR        = $INPATH;
       $PATH_SEPERATOR = ':';
+      $ATL_INCLUDE = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$ds."inc".$ds."external".$ds."mingw".$ds."include".$ds."atl". " ".'$PSDK_HOME'.$ds."include".$ds."atl";
   }
   else # The MSVC section starts here
   {   $outfile        = "winenv.set";
@@ -1027,16 +1035,32 @@ if ($platform =~ m/cygwin/)
 
    $JAVAHOME          = '$JAVA_HOME';
 
-   $ILIB             = $cur_dir.$ps_STLPORT_LIB.
-                        $ps.$SOLARVER.$ds.$INPATH.$LIB.
-                        $ps.$JAVA_HOME.$LIB.
-                        $ps.'$PSDK_HOME'.$LIB.
-                        $ps.'$FRAME_HOME'.$LIB;
+   $ILIB             = $cur_dir.$ps_STLPORT_LIB;
    # Mingw is different
    if ( $COM eq "MSC" )
-   {  $ILIB       .= $ps.'$COMPATH'.$LIB;
+   {  $ILIB       .=   $ps.$SOLARVER.$ds.$INPATH.$LIB. 
+                        $ps.$JAVA_HOME.$LIB.
+                        $ps.'$PSDK_HOME'.$LIB.
+                        $ps.'$FRAME_HOME'.$LIB.
+                        $ps.'$COMPATH'.$LIB;
       if ( '@ENABLE_DIRECTX@' ne "" ) {
-          $ILIB   .= $ps.PosixFormat('@DIRECTXSDK_LIB@');
+          $ILIB   .= $ps.$DIRECTXSDK_LIB;
+      }
+   }
+   elsif ( $COM eq "GCC" )
+   {  $ILIB       .=    $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
+                        $ps.$SOLARVER.$ds.$INPATH.$LIB.
+                        $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$BIN.
+                        $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
+                        $ps.$JAVA_HOME.$LIB;
+      if ( $USE_MINGW eq "cygwin" )
+      {  $ILIB    .= $ps.'$COMPATH'.$LIB.$ds."mingw".
+                     $ps.'$COMPATH'.$LIB.$ds."w32api";
+      }
+      $ILIB       .= $ps.'$COMPATH'.$LIB.
+                     $ps.'$PSDK_HOME'.$LIB;
+      if ( '@ENABLE_DIRETX@' )
+      {   $ILIB   .= $ps.'@DIRECTXSDK_LIB@';
       }
    }
 
@@ -1104,7 +1128,7 @@ elsif ($platform =~ m/cygwin/)
    if ( $COM eq "MSC" ) {
       $PATH .= $ps.'$COMPATH'.$BIN;
    } else { # Mingw is different
-      $PATH .= $ps.'$COMPATH';
+      $PATH .= $ps.$COMPATH.$BIN;
    }
    if ( $COM eq "MSC" ) {
 	   # for .NET to find mspdb71.dll (needed by CL.EXE C/C++ Compiler)
@@ -1125,9 +1149,14 @@ elsif ($platform =~ m/cygwin/)
 			   $PATH .= $ps.$PSDK_HOME.$BIN;
 		   }
 	   }
+   } else { # Mingw is different
+	   # Native installer needs some files if the Windows Installer SDK
+	   if ( $PATH !~ /(?:[:]|\A)(?:$PSDK_HOME\/bin)(?:[:]|\Z)/i ) {
+		   $PATH .= $ps.$PSDK_HOME.$BIN;
+	   }
    }
 
-   if ( ($COM eq "MSC") && ($ASM_PATH ne "ASM_IN_PATH") )
+   if ( $ASM_PATH ne "ASM_IN_PATH" )
    {   $PATH          .= $ps.$ASM_PATH;
    } 
    # zip.exe / unzip.exe path for Windows users.
@@ -1152,6 +1181,12 @@ elsif ($platform =~ m/cygwin/)
       $PATH           .= $ps.$CYGWIN_PATH;
    }
    $PATH              .= $ps_STLPORT_LIB;
+   # zip.exe / unzip.exe path for Windows users.
+   my $nsis_path = PosixFormat('@NSIS_PATH@');
+   if ( ! $PATH =~ /(?:[:]|\A)(?:$nsis_path)(?:[:]|\Z)/ ) {
+       $PATH          .= $ps.$nsis_path;
+   }
+
 
    # Add the rest of the original path if it is still missing.
    if ($^O eq "cygwin") { # Not for ActiveState perl
@@ -1318,14 +1353,34 @@ if ($platform =~ m/linux-gnu/)
 elsif ($platform =~ m/cygwin/)
 {  $SOLARINC         .= $STLPORT_stlport.
                         $I.'$JAVA_HOME'.$ds."include".$ds."win32".
-                        $I.'$JAVA_HOME'.$ds."include".
-                        $I.'$PSDK_HOME'.$INCLUDE;
+                        $I.'$JAVA_HOME'.$ds."include";
    # Mingw is different
    if ( $COM eq "MSC" )
-   {  $SOLARINC       .= $I.'$COMPATH'.$ds."include";
+   {  $SOLARINC       .= $I.'$PSDK_HOME'.$INCLUDE.
+                         $I.'$COMPATH'.$ds."include";
       if ( '@ENABLE_DIRECTX@' ne "" ) {
           $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
       }
+   }
+   elsif ( $COM eq "GCC" )
+   {  $SOLARINC       .= $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.$ds."external".$ds."mingw".$ds."include";
+     if ( $USE_MINGW eq "cygwin" )
+     {  $SOLARINC    .= $I.'$COMPATH'.$ds."include".$ds."mingw".$ds."include".
+                        $I.'$COMPATH'.$ds."include".$ds."w32api"; }
+        $SOLARINC    .= $I.'$COMPATH'.$ds."include";
+     @lib_include_paths = split( / /, "@LIB_INCLUDE_PATH@" );
+     foreach $lib_include_path (@lib_include_paths)
+       {   chomp $lib_include_path;
+           if ( $lib_include_path ne $COMPATH.$ds."include" && $lib_include_path ne "" )
+           {
+              $SOLARINC   .= $I.$lib_include_path;
+           }
+       }
+     $SOLARINC .= $I."@GXX_INCLUDE_PATH@".$I."@GXX_INCLUDE_PATH@".$ds."mingw32".
+                  $I.'$PSDK_HOME'.$INCLUDE;
+   }
+   if ( '@ENABLE_DIRECTX@' ne "" ) {
+       $SOLARINC   .= $I.PosixFormat('@DIRECTXSDK_HOME@').$INCLUDE;
    }
 }
 elsif ($platform =~ m/darwin/)
@@ -1606,8 +1661,11 @@ ToFile( "Variable values.",  $empty,             "c" );
 if ( $platform =~ m/cygwin/ )
 {  ToFile( "CYGWIN_PATH",       $CYGWIN_PATH,       "e" );
    ToFile( "PSDK_HOME",         $PSDK_HOME,         "e" );
+   ToFile( "DIRECTXSDK_LIB",    $DIRECTXSDK_LIB,    "e" );
    ToFile( "ATL_LIB",           $ATL_LIB,         "e" );
-   ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+   if ( $MINGW ne "yes" )
+   {  ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+   }
    ToFile( "MFC_LIB",           $MFC_LIB,         "e" );
    ToFile( "MFC_INCLUDE",       $MFC_INCLUDE,       "e" );
    ToFile( "NSIS_PATH",         "@NSIS_PATH@",      "e" );
@@ -1822,7 +1880,15 @@ ToFile( "SOLARSRC",           $SOLARSRC,           "e" );
 if ( $platform =~ m/cygwin/ )
 {
    # these variables marked with "j" are used with cygwin only
-   ToFile( "ILIB",              $ILIB,              "j" );
+   if ( $MINGW eq "yes" )
+   {  my ($tempstring);
+      $tempstring = $ILIB;
+      $tempstring =~ s/:/;/g;
+      ToFile( "ILIB",              $tempstring,              "e" );
+      ToFile( "ATL_INCLUDE",       $ATL_INCLUDE,       "e" );
+      ToFile( "USE_MINGW",         $USE_MINGW,              "e" ); }
+   else
+   {  ToFile( "ILIB",              $ILIB,              "j" ); }
 
    ToFile( "GREP",              $WIN_GREP,          "e" );
    ToFile( "FIND",              $WIN_FIND,          "e" );
@@ -2015,6 +2081,8 @@ die "Cannot open $bootfile: $!\n";
 print OUT "#!/bin/sh\n";
 print OUT "_ISBOOTSTRAP_=TRUE ; export _ISBOOTSTRAP_ ; . $SRC_ROOT/$outfile.sh\n"; 
 print OUT "unset _ISBOOTSTRAP_; export _ISBOOTSTRAP_\n"; 
+if ( $MINGW eq "yes" )
+{  print OUT 'PATH="/usr/bin:$PATH" : export PATH'."\n"; }
 close( OUT ) || print "Can't close $bootfile: $!";
 system(`cat bootstrap.1 >> bootstrap`);
 system(`chmod +x bootstrap`);
