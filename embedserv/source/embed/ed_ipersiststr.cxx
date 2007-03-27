@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ed_ipersiststr.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:59:14 $
+ *  last change: $Author: vg $ $Date: 2007-03-27 10:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,22 +239,23 @@ EmbedDocument_Impl::~EmbedDocument_Impl()
 
 uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Impl( uno::Reference< io::XInputStream > xStream, DWORD /*nStreamMode*/, LPCOLESTR pFilePath )
 {
-    uno::Sequence< beans::PropertyValue > aArgs( 3 );
+    uno::Sequence< beans::PropertyValue > aArgs( 4 );
 
-    sal_Int32 nInd = 0; // must not be bigger than the preset size
-    aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
-    aArgs[nInd++].Value <<= getFilterNameFromGUID_Impl( &m_guid );
+    aArgs[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "FilterName" ) );
+    aArgs[0].Value <<= getFilterNameFromGUID_Impl( &m_guid );
+    aArgs[1].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
+    aArgs[1].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
     if ( xStream.is() )
     {
-        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
-        aArgs[nInd++].Value <<= xStream;
-        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
-        aArgs[nInd++].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
+        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "InputStream" ) );
+        aArgs[2].Value <<= xStream;
+        aArgs[3].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+        aArgs[3].Value <<= ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "private:stream" ) );
     }
     else
     {
-        aArgs[nInd].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
+        aArgs[2].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "URL" ) );
 
         rtl::OUString sDocUrl;
         if ( pFilePath )
@@ -266,21 +267,16 @@ uno::Sequence< beans::PropertyValue > EmbedDocument_Impl::fillArgsForLoading_Imp
             {
                 util::URL aURL;
 
-                USES_CONVERSION;
-                aURL.Complete = ::rtl::OUString( OLE2CW( pFilePath ) );
+                aURL.Complete = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pFilePath) );
 
                 if ( aTransformer->parseSmart( aURL, ::rtl::OUString() ) )
                     sDocUrl = aURL.Complete;
             }
         }
 
-        aArgs[nInd++].Value <<= sDocUrl;
+        aArgs[2].Value <<= sDocUrl;
+        aArgs.realloc( 3 );
     }
-
-    aArgs.realloc( nInd );
-
-    // aArgs[].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "ReadOnly" ) );
-    // aArgs[].Value <<= sal_False; //( ( nStreamMode & ( STGM_READWRITE | STGM_WRITE ) ) ? sal_True : sal_False );
 
     return aArgs;
 }
@@ -466,11 +462,11 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
                     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
                     hr = WriteFmtUserTypeStg( pStg,
                                             cf,                         // ???
-                                            ( sal_Unicode* )aCurType.getStr() );
+                                            reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
 
                     if ( hr == S_OK )
                     {
-                        hr = pStg->CreateStream( aOfficeEmbedStreamName,
+                        hr = pStg->CreateStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()),
                                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                                  0,
                                                  0,
@@ -478,7 +474,7 @@ STDMETHODIMP EmbedDocument_Impl::InitNew( IStorage *pStg )
 
                         if ( hr == S_OK && m_pOwnStream )
                         {
-                            hr = pStg->CreateStream( aExtentStreamName,
+                            hr = pStg->CreateStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()),
                                                      STGM_CREATE | ( nStreamMode & 0x73 ),
                                                      0,
                                                      0,
@@ -524,7 +520,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     if ( FAILED( hr ) ) return E_FAIL;
 
     DWORD nStreamMode = aStat.grfMode;
-    hr = pStg->OpenStream( aOfficeEmbedStreamName,
+    hr = pStg->OpenStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()),
                             0,
                             nStreamMode & 0x73,
                             0,
@@ -533,7 +529,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
 
     if ( SUCCEEDED( hr ) )
     {
-        hr = pStg->OpenStream( aExtentStreamName,
+        hr = pStg->OpenStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()),
                                 0,
                                 nStreamMode & 0x73,
                                 0,
@@ -606,8 +602,8 @@ STDMETHODIMP EmbedDocument_Impl::Load( IStorage *pStg )
     {
         m_pOwnStream = CComPtr< IStream >();
         m_pExtStream = CComPtr< IStream >();
-        hr = pStg->DestroyElement( aOfficeEmbedStreamName );
-        hr = pStg->DestroyElement( aExtentStreamName );
+        hr = pStg->DestroyElement( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()) );
+        hr = pStg->DestroyElement( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()) );
 
         OSL_ENSURE( SUCCEEDED( hr ), "Can not destroy created stream!\n" );
         if ( FAILED( hr ) )
@@ -636,14 +632,14 @@ STDMETHODIMP EmbedDocument_Impl::Save( IStorage *pStgSave, BOOL fSameAsLoad )
         if ( FAILED( hr ) ) return E_FAIL;
 
         DWORD nStreamMode = aStat.grfMode;
-        hr = pStgSave->CreateStream( aOfficeEmbedStreamName,
+        hr = pStgSave->CreateStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()),
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
                                  &pTargetStream );
         if ( FAILED( hr ) || !pTargetStream ) return E_FAIL;
 
-        hr = pStgSave->CreateStream( aExtentStreamName,
+        hr = pStgSave->CreateStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()),
                                  STGM_CREATE | ( nStreamMode & 0x73 ),
                                 0,
                                  0,
@@ -740,14 +736,14 @@ STDMETHODIMP EmbedDocument_Impl::SaveCompleted( IStorage *pStgNew )
     if ( FAILED( hr ) ) return E_OUTOFMEMORY;
 
     DWORD nStreamMode = aStat.grfMode;
-    hr = m_pMasterStorage->OpenStream( aOfficeEmbedStreamName,
+    hr = m_pMasterStorage->OpenStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()),
                                         0,
                                         nStreamMode & 0x73,
                                         0,
                                         &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_OUTOFMEMORY;
 
-    hr = m_pMasterStorage->OpenStream( aExtentStreamName,
+    hr = m_pMasterStorage->OpenStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()),
                                         0,
                                         nStreamMode & 0x73,
                                         0,
@@ -796,20 +792,20 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
     CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
     hr = WriteFmtUserTypeStg( m_pMasterStorage,
                             cf,                         // ???
-                            ( sal_Unicode* )aCurType.getStr() );
+                            reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
     if ( FAILED( hr ) ) return E_FAIL;
 
     hr = m_pMasterStorage->SetClass( m_guid );
     if ( FAILED( hr ) ) return E_FAIL;
 
-    hr = m_pMasterStorage->CreateStream( aOfficeEmbedStreamName,
+    hr = m_pMasterStorage->CreateStream( reinterpret_cast<LPCWSTR>(aOfficeEmbedStreamName.getStr()),
                             STGM_CREATE | ( nStreamMode & 0x73 ),
                             0,
                             0,
                             &m_pOwnStream );
     if ( FAILED( hr ) || !m_pOwnStream ) return E_FAIL;
 
-    hr = m_pMasterStorage->CreateStream( aExtentStreamName,
+    hr = m_pMasterStorage->CreateStream( reinterpret_cast<LPCWSTR>(aExtentStreamName.getStr()),
                             STGM_CREATE | ( nStreamMode & 0x73 ),
                             0,
                             0,
@@ -834,8 +830,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
                                                             pszFileName ) );
                 hr = S_OK;
 
-                USES_CONVERSION;
-                m_aFileName = ::rtl::OUString( OLE2CW( pszFileName ) );
+                m_aFileName = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
             }
             catch( uno::Exception& )
             {
@@ -848,7 +843,7 @@ STDMETHODIMP EmbedDocument_Impl::Load( LPCOLESTR pszFileName, DWORD /*dwMode*/ )
             CLIPFORMAT cf = (CLIPFORMAT)RegisterClipboardFormatA( "Embedded Object" );
             hr = WriteFmtUserTypeStg( m_pMasterStorage,
                                     cf,                         // ???
-                                    ( sal_Unicode* )aCurType.getStr() );
+                                    reinterpret_cast<LPWSTR>(( sal_Unicode* )aCurType.getStr()) );
 
             if ( SUCCEEDED( hr ) )
             {
@@ -942,7 +937,7 @@ STDMETHODIMP EmbedDocument_Impl::Save( LPCOLESTR pszFileName, BOOL fRemember )
 STDMETHODIMP EmbedDocument_Impl::SaveCompleted( LPCOLESTR pszFileName )
 {
     // the different file name would mean error here
-    m_aFileName = ::rtl::OUString( OLE2CW( pszFileName ) );
+    m_aFileName = ::rtl::OUString( reinterpret_cast<const sal_Unicode*>(pszFileName) );
     return S_OK;
 }
 
@@ -954,7 +949,7 @@ STDMETHODIMP EmbedDocument_Impl::GetCurFile( LPOLESTR *ppszFileName )
     if ( FAILED( hr ) || !pMalloc ) return E_FAIL;
 
     *ppszFileName = (LPOLESTR)( pMalloc->Alloc( sizeof( sal_Unicode ) * ( m_aFileName.getLength() + 1 ) ) );
-    wcsncpy( *ppszFileName, m_aFileName.getStr(), m_aFileName.getLength() + 1 );
+    wcsncpy( *ppszFileName, reinterpret_cast<LPCWSTR>(m_aFileName.getStr()), m_aFileName.getLength() + 1 );
 
     return m_aFileName.getLength() ? S_OK : S_FALSE;
 }
