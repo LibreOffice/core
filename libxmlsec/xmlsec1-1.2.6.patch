@@ -1,5 +1,5 @@
 *** misc/xmlsec1-1.2.6/apps/Makefile.in	Thu Aug 26 08:00:30 2004
---- misc/build/xmlsec1-1.2.6/apps/Makefile.in	Wed Nov 15 12:23:26 2006
+--- misc/build/xmlsec1-1.2.6/apps/Makefile.in	Tue Mar 27 11:21:29 2007
 ***************
 *** 370,376 ****
   	$(CRYPTO_DEPS) \
@@ -18,7 +18,7 @@
   .SUFFIXES:
   .SUFFIXES: .c .lo .o .obj
 *** misc/xmlsec1-1.2.6/configure	Thu Aug 26 08:00:34 2004
---- misc/build/xmlsec1-1.2.6/configure	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/configure	Tue Mar 27 11:26:19 2007
 ***************
 *** 463,469 ****
   # include <unistd.h>
@@ -46,6 +46,58 @@
     --with-html-dir=PATH    path to installed docs
   
   Some influential environment variables:
+***************
+*** 2045,2052 ****
+  
+  ac_ext=c
+  ac_cpp='$CPP $CPPFLAGS'
+! ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+! ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+  ac_compiler_gnu=$ac_cv_c_compiler_gnu
+  if test -n "$ac_tool_prefix"; then
+    # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
+--- 2046,2053 ----
+  
+  ac_ext=c
+  ac_cpp='$CPP $CPPFLAGS'
+! ac_compile='$CC -c $ADDCFLAGS $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+! ac_link='$CC -o conftest$ac_exeext $ADDCFLAGS $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+  ac_compiler_gnu=$ac_cv_c_compiler_gnu
+  if test -n "$ac_tool_prefix"; then
+    # Extract the first word of "${ac_tool_prefix}gcc", so it can be a program name with args.
+***************
+*** 2698,2712 ****
+    CFLAGS=$ac_save_CFLAGS
+  elif test $ac_cv_prog_cc_g = yes; then
+    if test "$GCC" = yes; then
+!     CFLAGS="-g -O2"
+    else
+!     CFLAGS="-g"
+    fi
+  else
+    if test "$GCC" = yes; then
+!     CFLAGS="-O2"
+    else
+!     CFLAGS=
+    fi
+  fi
+  echo "$as_me:$LINENO: checking for $CC option to accept ANSI C" >&5
+--- 2699,2713 ----
+    CFLAGS=$ac_save_CFLAGS
+  elif test $ac_cv_prog_cc_g = yes; then
+    if test "$GCC" = yes; then
+!     CFLAGS="$ADDCFLAGS -g -O2"
+    else
+!     CFLAGS="$ADDCFLAGS -g"
+    fi
+  else
+    if test "$GCC" = yes; then
+!     CFLAGS="$ADDCFLAGS -O2"
+    else
+!     CFLAGS="$ADDCFLAGS"
+    fi
+  fi
+  echo "$as_me:$LINENO: checking for $CC option to accept ANSI C" >&5
 ***************
 *** 6350,6360 ****
         lt_prog_compiler_pic='-m68020 -resident32 -malways-restore-a4'
@@ -2328,7 +2380,7 @@
   s,@XMLSEC_NO_SHA1_FALSE@,$XMLSEC_NO_SHA1_FALSE,;t t
   s,@XMLSEC_NO_SHA1@,$XMLSEC_NO_SHA1,;t t
 *** misc/xmlsec1-1.2.6/configure.in	Thu Aug 26 04:49:24 2004
---- misc/build/xmlsec1-1.2.6/configure.in	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/configure.in	Tue Mar 27 11:21:29 2007
 ***************
 *** 143,149 ****
   dnl find libxml
@@ -2444,8 +2496,8 @@
           	dnl do not add -L/usr/lib because compiler does it anyway
       		if test "z$dir" = "z/usr/lib" ; then
           	    NSS_LIBS="$NSS_LIBS_LIST"
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/Makefile.in	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2508,8 +2560,8 @@
 ! # Tell versions [3.59,3.63) of GNU make to not export all variables.
 ! # Otherwise a system limit (for SysV at least) may be exceeded.
 ! .NOEXPORT:
-*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/akmngr.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2586,7 +2638,7 @@
 ! 
 ! 
 *** misc/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Fri Sep 26 08:12:46 2003
---- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/mscrypto/x509.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 77,82 ****
 --- 77,97 ----
@@ -2612,7 +2664,7 @@
   #endif /* XMLSEC_NO_X509 */
   
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Wed Jul 30 04:46:35 2003
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.am	Tue Mar 27 11:21:29 2007
 ***************
 *** 3,8 ****
 --- 3,9 ----
@@ -2635,7 +2687,7 @@
   
   install-exec-hook:
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Thu Aug 26 08:00:31 2004
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/Makefile.in	Tue Mar 27 11:21:29 2007
 ***************
 *** 273,278 ****
 --- 273,279 ----
@@ -2657,8 +2709,8 @@
   $(NULL)
   
   all: all-am
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/akmngr.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2720,7 +2772,7 @@
 ! 
 ! 
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Mon Jan 12 22:06:14 2004
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/app.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 22,27 ****
 --- 22,30 ----
@@ -2744,8 +2796,8 @@
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrLoad	(xmlSecKeysMngrPtr mngr,
   									 const char* uri);
   XMLSEC_CRYPTO_EXPORT int 		xmlSecNssAppDefaultKeysMngrSave	(xmlSecKeysMngrPtr mngr,
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/ciphers.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2786,7 +2838,7 @@
 ! 
 ! 
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Mon Jan 12 22:06:14 2004
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/crypto.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 264,269 ****
 --- 264,278 ----
@@ -2806,7 +2858,7 @@
   
   
 *** misc/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Wed Jul 30 04:46:35 2003
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/keysstore.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 16,21 ****
 --- 16,23 ----
@@ -2829,8 +2881,8 @@
   XMLSEC_CRYPTO_EXPORT int		xmlSecNssKeysStoreLoad 	(xmlSecKeyStorePtr store,
   								 const char *uri,
   								 xmlSecKeysMngrPtr keysMngr);
-*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/include/xmlsec/nss/tokens.h	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3017,8 +3069,8 @@
 ! 
 ! #endif	/* __XMLSEC_NSS_TOKENS_H__ */
 ! 
-*** misc/xmlsec1-1.2.6/libxml2-config	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/libxml2-config	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/libxml2-config	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/libxml2-config	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3072,7 +3124,7 @@
 ! 
 ! exit 0
 *** misc/xmlsec1-1.2.6/ltmain.sh	Thu Aug 26 08:00:15 2004
---- misc/build/xmlsec1-1.2.6/ltmain.sh	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/ltmain.sh	Tue Mar 27 11:21:29 2007
 ***************
 *** 1661,1666 ****
 --- 1661,1671 ----
@@ -3148,7 +3200,7 @@
   	    elif test -n "$runpath_var"; then
   	      case "$perm_rpath " in
 *** misc/xmlsec1-1.2.6/src/bn.c	Mon Jun 21 20:33:27 2004
---- misc/build/xmlsec1-1.2.6/src/bn.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/bn.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 170,177 ****
    */
@@ -3715,7 +3767,7 @@
   
       return(0);
 *** misc/xmlsec1-1.2.6/src/dl.c	Wed Oct 29 16:57:20 2003
---- misc/build/xmlsec1-1.2.6/src/dl.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/dl.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 329,334 ****
 --- 329,338 ----
@@ -3741,8 +3793,8 @@
   }
   
 --- 354,359 ----
-*** misc/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/Makefile.in	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3925,8 +3977,8 @@
 ! # Tell versions [3.59,3.63) of GNU make to not export all variables.
 ! # Otherwise a system limit (for SysV at least) may be exceeded.
 ! .NOEXPORT:
-*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Wed Nov 15 12:23:27 2006
+*** misc/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/akmngr.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4167,7 +4219,7 @@
 ! }
 ! 
 *** misc/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Wed Mar 17 06:06:43 2004
---- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/certkeys.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 41,46 ****
 --- 41,47 ----
@@ -4845,7 +4897,7 @@
   
   static xmlSecKeyDataType
 *** misc/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Fri Sep 26 08:12:51 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/ciphers.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 785,791 ****
    * AES CBC cipher transforms
@@ -4915,7 +4967,7 @@
       sizeof(xmlSecTransformKlass),	/* size_t klassSize */
       xmlSecMSCryptoBlockCipherSize,	/* size_t objSize */
 *** misc/xmlsec1-1.2.6/src/mscrypto/crypto.c	Wed Nov 12 03:38:51 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/crypto.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 330,342 ****
   BYTE* 
@@ -4948,7 +5000,7 @@
       }
   	
 *** misc/xmlsec1-1.2.6/src/mscrypto/digests.c	Tue Sep 30 04:09:51 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/digests.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/digests.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 96,107 ****
   
@@ -4980,7 +5032,7 @@
   
       return(0);
 *** misc/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Fri Sep 26 22:29:25 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/kt_rsa.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 66,72 ****
   static int  	xmlSecMSCryptoRsaPkcs1Process			(xmlSecTransformPtr transform, 
@@ -4999,7 +5051,7 @@
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoRsaPkcs1Size,			/* xmlSecSize objSize */
 *** misc/xmlsec1-1.2.6/src/mscrypto/signatures.c	Fri Sep 26 22:29:25 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/signatures.c	Wed Nov 15 12:23:27 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/signatures.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 483,489 ****
    * RSA-SHA1 signature transform
@@ -5035,7 +5087,7 @@
       sizeof(xmlSecTransformKlass),		/* xmlSecSize klassSize */
       xmlSecMSCryptoSignatureSize,	        /* xmlSecSize objSize */
 *** misc/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Fri Sep 26 02:58:13 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/symkeys.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 72,78 ****
    * <xmlsec:AESKeyValue> processing
@@ -5071,7 +5123,7 @@
       xmlSecKeyDataBinarySize,
   
 *** misc/xmlsec1-1.2.6/src/mscrypto/x509.c	Fri Sep 26 02:58:13 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	Wed Nov 15 12:26:17 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 240,246 ****
   
@@ -5318,7 +5370,7 @@
       sizeof(xmlSecKeyData),
   
 *** misc/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Sat Sep 27 05:12:22 2003
---- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/mscrypto/x509vfy.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 70,76 ****
   static xmlSecByte * 	xmlSecMSCryptoX509NameRead	(xmlSecByte *str, 
@@ -6064,7 +6116,7 @@
   	}
   	xmlFree(cName);
 *** misc/xmlsec1-1.2.6/src/nss/Makefile.am	Tue Sep 16 11:43:03 2003
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.am	Tue Mar 27 11:21:29 2007
 ***************
 *** 20,40 ****
   	$(NULL)
@@ -6112,7 +6164,7 @@
   
   libxmlsec1_nss_la_LIBADD = \
 *** misc/xmlsec1-1.2.6/src/nss/Makefile.in	Thu Aug 26 08:00:32 2004
---- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/Makefile.in	Tue Mar 27 11:21:29 2007
 ***************
 *** 54,62 ****
   	$(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -6236,8 +6288,8 @@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/pkikeys.Plo@am__quote@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/signatures.Plo@am__quote@
   @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/symkeys.Plo@am__quote@
-*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	Wed Nov 15 12:23:28 2006
+*** misc/xmlsec1-1.2.6/src/nss/akmngr.c	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/akmngr.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -6627,7 +6679,7 @@
 ! }
 ! 
 *** misc/xmlsec1-1.2.6/src/nss/ciphers.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/ciphers.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 1,838 ****
 ! /** 
@@ -8421,7 +8473,7 @@
 ! 
   
 *** misc/xmlsec1-1.2.6/src/nss/crypto.c	Wed Oct 29 16:57:25 2003
---- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/crypto.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 130,135 ****
 --- 130,136 ----
@@ -8475,7 +8527,7 @@
       return(gXmlSecNssFunctions);
   }
 *** misc/xmlsec1-1.2.6/src/nss/digests.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/digests.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/digests.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 21,27 ****
   #include <xmlsec/transforms.h>
@@ -8572,7 +8624,7 @@
   	    }
   	    xmlSecAssert2(ctx->dgstSize > 0, -1);
 *** misc/xmlsec1-1.2.6/src/nss/hmac.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/hmac.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 23,30 ****
   #include <xmlsec/transforms.h>
@@ -8707,7 +8759,7 @@
   	    }
   	    xmlSecAssert2(dgstSize > 0, -1);
 *** misc/xmlsec1-1.2.6/src/nss/keysstore.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/keysstore.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 1,119 ****
   /** 
@@ -9774,8 +9826,8 @@
 !     return(0);
   }
 + 
-*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	Wed Nov 15 12:23:28 2006
+*** misc/xmlsec1-1.2.6/src/nss/keytrans.c	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/keytrans.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -10524,8 +10576,8 @@
 ! 
 ! #endif /* XMLSEC_NO_RSA */
 ! 
-*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	Wed Nov 15 12:23:28 2006
+*** misc/xmlsec1-1.2.6/src/nss/keywrapers.c	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/keywrapers.c	Tue Mar 27 11:21:29 2007
 ***************
 *** 1 ****
 ! dummy
@@ -11728,7 +11780,7 @@
 ! #endif /* XMLSEC_NO_DES */
 ! 
 *** misc/xmlsec1-1.2.6/src/nss/pkikeys.c	Wed Mar 17 06:06:45 2004
---- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/pkikeys.c	Tue Mar 27 11:21:30 2007
 ***************
 *** 5,10 ****
 --- 5,11 ----
@@ -12528,7 +12580,7 @@
       return(8 * SECKEY_PublicKeyStrength(ctx->pubkey));
   }
 *** misc/xmlsec1-1.2.6/src/nss/signatures.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/signatures.c	Tue Mar 27 11:21:30 2007
 ***************
 *** 199,205 ****
   			xmlSecErrorsSafeString(xmlSecTransformGetName(transform)),
@@ -12666,7 +12718,7 @@
   	    }
   
 *** misc/xmlsec1-1.2.6/src/nss/symkeys.c	Mon Jul 21 05:12:52 2003
---- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/symkeys.c	Tue Mar 27 11:21:30 2007
 ***************
 *** 15,192 ****
   #include <stdio.h>
@@ -13997,8 +14049,8 @@
    *
    * Sets the value of HMAC key data.
    *
-*** misc/xmlsec1-1.2.6/src/nss/tokens.c	Wed Nov 15 12:26:58 2006
---- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	Wed Nov 15 12:23:28 2006
+*** misc/xmlsec1-1.2.6/src/nss/tokens.c	Tue Mar 27 11:34:32 2007
+--- misc/build/xmlsec1-1.2.6/src/nss/tokens.c	Tue Mar 27 11:21:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -14548,7 +14600,7 @@
 ! }
 ! 
 *** misc/xmlsec1-1.2.6/src/nss/x509.c	Fri Sep 26 05:53:09 2003
---- misc/build/xmlsec1-1.2.6/src/nss/x509.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/x509.c	Tue Mar 27 11:21:30 2007
 ***************
 *** 34,40 ****
   #include <xmlsec/keys.h>
@@ -15657,7 +15709,7 @@
   xmlSecNssX509CertDebugDump(CERTCertificate* cert, FILE* output) {
 --- 1700,1705 ----
 *** misc/xmlsec1-1.2.6/src/nss/x509vfy.c	Fri Sep 26 02:58:15 2003
---- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/src/nss/x509vfy.c	Tue Mar 27 11:21:30 2007
 ***************
 *** 30,35 ****
 --- 30,36 ----
@@ -16800,7 +16852,7 @@
 + #endif /* XMLSEC_NO_X509 */
   
 *** misc/xmlsec1-1.2.6/win32/Makefile.msvc	Wed Jun  9 16:35:12 2004
---- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	Wed Nov 15 12:23:28 2006
+--- misc/build/xmlsec1-1.2.6/win32/Makefile.msvc	Tue Mar 27 11:21:30 2007
 ***************
 *** 223,228 ****
 --- 223,232 ----
