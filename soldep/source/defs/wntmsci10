@@ -463,3 +463,7 @@ _real@41f0000000000000
 ?DbgIsErrorOut@@YAKXZ
 ?GetVersionMajor@SolSelectVersionDlg@@QAE?AVByteString@@XZ
 ?GetVersionMinor@SolSelectVersionDlg@@QAE?AVByteString@@XZ
+??1SolIdMapper2@@UAE@XZ
+??1SolIdMapper@@UAE@XZ
+??_GSolIdMapper2@@UAEPAXI@Z
+??_GSolIdMapper@@UAEPAXI@Z
