@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2007-03-08 09:19:17 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-27 17:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -221,11 +221,11 @@ enum PropertyIds
 /*179*/ ,PROP_CREATE_FROM_OUTLINE
 /*180*/ ,PROP_CREATE_FROM_MARKS
 /*181*/ ,PROP_STANDARD
-///*182*/ ,PROP_
-///*183*/ ,PROP_
-///*184*/ ,PROP_
-///*185*/ ,PROP_
-///*186*/ ,PROP_
+/*182*/ ,PROP_CHAR_FONT_NAME_HANSI
+/*183*/ ,PROP_CHAR_FONT_STYLE_HANSI
+/*184*/ ,PROP_CHAR_FONT_FAMILY_HANSI
+/*185*/ ,PROP_CHAR_FONT_CHAR_SET_HANSI
+/*186*/ ,PROP_CHAR_FONT_PITCH_HANSI
 ///*187*/ ,PROP_
 ///*188*/ ,PROP_
 ///*189*/ ,PROP_

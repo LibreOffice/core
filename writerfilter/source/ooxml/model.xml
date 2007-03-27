@@ -5682,24 +5682,24 @@
   <!-- Union -->
   <define name="CT_Color">
     <attribute name="val">
-      <text/>
+      <ref name="ST_HexColor"/>
       <xs:documentation>Run Content Color</xs:documentation>
     </attribute>
     <optional>
       <attribute name="themeColor">
-        <text/>
+        <ref name="ST_ThemeColor"/>
         <xs:documentation>Run Content Theme Color</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeTint">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Run Content Theme Color Tint</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeShade">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Run Content Theme Color Shade</xs:documentation>
       </attribute>
     </optional>
@@ -8466,54 +8466,54 @@
   <define name="CT_PageSz">
     <optional>
       <attribute name="w">
-        <text/>
+        <ref name="ST_TwipsMeasure"/>
         <xs:documentation>Page Width</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="h">
-        <text/>
+        <ref name="ST_TwipsMeasure"/>
         <xs:documentation>Page Height</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="orient">
-        <text/>
+        <ref name="ST_PageOrientation"/>
         <xs:documentation>Page Orientation</xs:documentation>
       </attribute>
     </optional>
     <attribute name="code">
-      <text/>
+      <ref name="ST_DecimalNumber"/>
       <xs:documentation>Printer Paper Code</xs:documentation>
     </attribute>
   </define>
   <define name="CT_PageMar">
     <attribute name="top">
-      <text/>
+      <ref name="ST_SignedTwipsMeasure"/>
       <xs:documentation>Top Margin Spacing</xs:documentation>
     </attribute>
     <attribute name="right">
-      <text/>
+      <ref name="ST_TwipsMeasure"/>
       <xs:documentation>Right Margin Spacing</xs:documentation>
     </attribute>
     <attribute name="bottom">
-      <text/>
+      <ref name="ST_SignedTwipsMeasure"/>
       <xs:documentation>Page Bottom Spacing</xs:documentation>
     </attribute>
     <attribute name="left">
-      <text/>
+      <ref name="ST_TwipsMeasure"/>
       <xs:documentation>Left Margin Spacing</xs:documentation>
     </attribute>
     <attribute name="header">
-      <text/>
+      <ref name="ST_TwipsMeasure"/>
       <xs:documentation>Spacing to Top of Header</xs:documentation>
     </attribute>
     <attribute name="footer">
-      <text/>
+      <ref name="ST_TwipsMeasure"/>
       <xs:documentation>Spacing to Bottom of Footer</xs:documentation>
     </attribute>
     <attribute name="gutter">
-      <text/>
+      <ref name="ST_TwipsMeasure"/>
       <xs:documentation>Page Gutter Spacing</xs:documentation>
     </attribute>
   </define>
@@ -14014,6 +14014,11 @@
   <attribute name="themeTint" tokenid="ooxml:CT_Color_themeTint"/>
   <attribute name="themeShade" tokenid="ooxml:CT_Color_themeShade"/>
 </resource>
+<resource name="ST_HexColorRGB" resource="Hex"/>
+<resource name="ST_HexColorAuto" resource="List">
+  <value tokenid="ooxml:Value_ST_HexColorAuto_auto">auto</value>
+</resource>
+<resource name="ST_HexColor" resource="Hex"/>
 <resource name="CT_Underline" resource="PropertySetValue">
   <attribute name="val" tokenid="ooxml:CT_Underline_val" default="single"/>
   <attribute name="color" tokenid="ooxml:CT_Underline_color"/>
@@ -14101,7 +14106,7 @@
 </resource>
 <resource name="EG_RPrBase" resource="Property">
   <sprm name="rStyle" tokenid="0x0"/>
-  <sprm name="rFonts" tokenid="0x0"/>
+  <sprm name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
   <sprm name="b" tokenid="0x835"/>
   <sprm name="bCs" tokenid="0x85c"/>
   <sprm name="i" tokenid="0x836"/>
@@ -14118,7 +14123,7 @@
   <sprm name="snapToGrid" tokenid="0x0"/>
   <sprm name="vanish" tokenid="0x83c"/>
   <sprm name="webHidden" tokenid="0x0"/>
-  <sprm name="color" tokenid="0x2a42"/>
+  <sprm name="color" tokenid="ooxml:EG_RPrBase_color"/>
   <sprm name="spacing" tokenid="0x8840"/>
   <sprm name="w" tokenid="0x4852"/>
   <sprm name="kern" tokenid="0x484b"/>
@@ -14259,7 +14264,9 @@
   <value tokenid="43">wavyDouble</value>
   <value tokenid="0">none</value>
 </resource>
-<resource name="CT_Jc" resource="PropertySetValue"/>
+<resource name="CT_Jc" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Jc_val"/>
+</resource>
 <resource name="ST_Jc" resource="List">
   <value tokenid="0">left</value>
   <value tokenid="1">center</value>
@@ -14522,6 +14529,7 @@
   <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
   <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
 </resource>
+<resource name="ST_String" resource="String"/>
 <resource name="ST_ShortHexNumber" resource="Hex"/>
 <resource name="ST_LongHexNumber" resource="Hex"/>
 <resource name="ST_UcharHexNumber" resource="Hex"/>

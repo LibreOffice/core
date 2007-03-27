@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-23 15:14:02 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-27 17:31:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,9 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
 {
 
     sal_Int32 nIntValue = val.getInt();
+    rtl::OUString sStringValue = val.getString();
+    bool bExchangeLeftRight = false;
+
     if( Name >= NS_rtf::LN_WIDENT && Name <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( Name, nIntValue );
     else
@@ -1433,20 +1436,54 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_STYLESHEET:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
-
         case NS_ooxml::LN_CT_Underline_val:
             handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
             break;
-#if 0
-        case NS_ooxml::LN_CT_PPrBase_tabs:
+        case NS_ooxml::LN_CT_Color_val:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_COLOR, uno::makeAny( nIntValue ) );
             break;
+        case NS_ooxml::LN_CT_Underline_color:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_UNDERLINE_HAS_COLOR, uno::makeAny( true ) );
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_UNDERLINE_COLOR, uno::makeAny( nIntValue ) );
+            break;
+        case NS_ooxml::LN_CT_PPrBase_tabs:
+            {
+                doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+                if( pProperties.get())
+                    pProperties->resolve(*this);
+            }
+            break;
+        case NS_ooxml::LN_CT_Tabs_tab:
+            {
+                doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+                if( pProperties.get())
+                    pProperties->resolve(*this);
+            }
+            break;
+
         case NS_ooxml::LN_CT_TabStop_val:
             break;
         case NS_ooxml::LN_CT_TabStop_leader:
             break;
         case NS_ooxml::LN_CT_TabStop_pos:
             break;
-#endif
+
+        case NS_ooxml::LN_CT_Fonts_ascii:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( val.getString() ));
+            break;
+        case NS_ooxml::LN_CT_Fonts_hAnsi:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_HANSI, uno::makeAny( val.getString() ));
+            break;
+        case NS_ooxml::LN_CT_Fonts_eastAsia:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( val.getString() ));
+            break;
+        case NS_ooxml::LN_CT_Fonts_cs:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( val.getString() ));
+            break;
+        case NS_ooxml::LN_CT_Jc_val:
+            handleParaJustification(nIntValue, m_pImpl->GetTopContext(), bExchangeLeftRight);
+            break;
+
         default:
             {
                 //int nVal = val.getInt();
@@ -1482,8 +1519,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     //      bExchangeLeftRight = true;
     doctok::Value::Pointer_t pValue = sprm_.getValue();
     sal_Int32 nIntValue = pValue->getInt();
+    rtl::OUString sStringValue = pValue->getString();
 
     /* WRITERFILTERSTATUS: table: sprmdata */
+
     switch(nId)
     {
     case 2:  // sprmPIstd
@@ -1501,26 +1540,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x2461: // sprmPJc Asian (undocumented)
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
     case 0x2403: // sprmPJc
-        {
-            sal_Int16 nAdjust = 0;
-            sal_Int16 nLastLineAdjust = 0;
-            switch(nIntValue)
-            {
-            case 0: nAdjust = static_cast< sal_Int16 > (
-                                                        bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT);
-                break;
-            case 1: nAdjust = style::ParagraphAdjust_CENTER;   break;
-            case 2: nAdjust = static_cast< sal_Int16 > (
-                                                        bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT);
-                break;
-            case 4:
-                nLastLineAdjust = style::ParagraphAdjust_BLOCK;
-                //no break;
-            case 3: nAdjust = style::ParagraphAdjust_BLOCK;    break;
-            }
-            rContext->Insert( PROP_PARA_ADJUST, uno::makeAny( nAdjust ) );
-            rContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::makeAny( nLastLineAdjust ) );
-        }
+        handleParaJustification(nIntValue, rContext, bExchangeLeftRight);
         break;
     case 0x2404:
         /* WRITERFILTERSTATUS: done: 0, planned: 3, spent: 0 */
@@ -2102,6 +2122,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmCLid
     case 0x2A42:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        {
+            sal_Int32 nColor = 0;
+            if (getColorFromIndex(nIntValue, nColor))
+                rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
+        }
         break;  // sprmCIco
     case 0x4A61:    // sprmCHpsBi
     case 0x4A43:    // sprmCHps
@@ -2828,6 +2853,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             //contains a color as 0xTTRRGGBB while SO uses 0xTTRRGGBB
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+
             sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);
             rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
         }
@@ -2876,6 +2903,52 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xd237:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         break;//undocumented section properties
+    // TEMPORARY SOLUTION: have to find how to make this attribute instead of sprm
+    case NS_ooxml::LN_EG_RPrBase_color:
+        {
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+            if (pProperties.get())
+                pProperties->resolve(*this);
+        }
+        break;
+
+    case NS_ooxml::LN_CT_PPrBase_tabs:
+        {
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+            if( pProperties.get())
+                pProperties->resolve(*this);
+        }
+        break;
+    case NS_ooxml::LN_CT_Tabs_tab:
+        {
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+            if( pProperties.get())
+                pProperties->resolve(*this);
+        }
+        break;
+
+    case NS_ooxml::LN_CT_TabStop_val:
+        break;
+    case NS_ooxml::LN_CT_TabStop_leader:
+        break;
+    case NS_ooxml::LN_CT_TabStop_pos:
+        break;
+
+    case NS_ooxml::LN_EG_RPrBase_rFonts:
+        {
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+            if( pProperties.get())
+                pProperties->resolve(*this);
+        }
+        break;
+    case NS_ooxml::LN_CT_PPrBase_jc:
+        {
+            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+            if( pProperties.get())
+                pProperties->resolve(*this);
+        }
+        break;
+
     default:
         {
             OSL_ASSERT("DomainMapper::sprm()"); //
@@ -3189,5 +3262,63 @@ void DomainMapper::handleUnderlineType(const sal_Int32 nIntValue, const ::boost:
     }
     pContext->Insert(PROP_CHAR_UNDERLINE, uno::makeAny( eUnderline ) );
 }
+
+void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight)
+{
+    sal_Int16 nAdjust = 0;
+    sal_Int16 nLastLineAdjust = 0;
+    switch(nIntValue)
+    {
+    case 1:
+        nAdjust = style::ParagraphAdjust_CENTER;
+        break;
+    case 2:
+        nAdjust = static_cast< sal_Int16 > (bExchangeLeftRight ? style::ParagraphAdjust_LEFT : style::ParagraphAdjust_RIGHT);
+        break;
+    case 4:
+        nLastLineAdjust = style::ParagraphAdjust_BLOCK;
+        //no break;
+    case 3:
+        nAdjust = style::ParagraphAdjust_BLOCK;
+        break;
+    case 0:
+    default:
+        nAdjust = static_cast< sal_Int16 > (bExchangeLeftRight ? style::ParagraphAdjust_RIGHT : style::ParagraphAdjust_LEFT);
+        break;
+    }
+    pContext->Insert( PROP_PARA_ADJUST, uno::makeAny( nAdjust ) );
+    pContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::makeAny( nLastLineAdjust ) );
+}
+
+bool DomainMapper::getColorFromIndex(const sal_Int32 nIndex, sal_Int32 nColor)
+{
+    nColor = 0;
+    if ((nIndex < 1) || (nIndex > 16))
+        return false;
+
+    switch (nIndex)
+    {
+    case 1: nColor=0x000000; break; //black
+    case 2: nColor=0x0000ff; break; //blue
+    case 3: nColor=0x00ffff; break; //cyan
+    case 4: nColor=0x00ff00; break; //green
+    case 5: nColor=0xff00ff; break; //magenta
+    case 6: nColor=0xff0000; break; //red
+    case 7: nColor=0xffff00; break; //yellow
+    case 8: nColor=0xffffff; break; //white
+    case 9: nColor=0x000080;  break;//dark blue
+    case 10: nColor=0x008080; break; //dark cyan
+    case 11: nColor=0x008000; break; //dark green
+    case 12: nColor=0x800080; break; //dark magenta
+    case 13: nColor=0x800000; break; //dark red
+    case 14: nColor=0x808000; break; //dark yellow
+    case 15: nColor=0x808080; break; //dark gray
+    case 16: nColor=0xC0C0C0; break; //light gray
+    default:
+        return false;
+    }
+    return true;
+}
+
 
 } //namespace dmapper
