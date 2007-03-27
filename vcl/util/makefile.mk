@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 11:21:40 $
+#   last change: $Author: vg $ $Date: 2007-03-27 09:41:26 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -189,7 +189,9 @@ SHL1USE_EXPORTS=ordinal
 
 SHL1LIBS=   $(LIB1TARGET)
 .IF "$(GUI)"!="UNX"
+.IF "$(COM)"!="GCC"
 SHL1OBJS=   $(SLO)$/salshl.obj
+.ENDIF
 .ENDIF
 
 .IF "$(GUI)" != "MAC"
@@ -209,15 +211,15 @@ DEFLIB1NAME =vcl
 
 .IF "$(GUI)" == "WNT"
 
-SHL1STDLIBS += uwinapi.lib      \
-               gdi32.lib        \
-               msimg32.lib     \
-               winspool.lib     \
-               ole32.lib        \
-               shell32.lib      \
-               advapi32.lib     \
-               apsp.lib         \
-               imm32.lib
+SHL1STDLIBS += $(UWINAPILIB)      \
+               $(GDI32LIB)        \
+               msimg32.lib        \
+               $(WINSPOOLLIB)     \
+               $(OLE32LIB)        \
+               $(SHELL32LIB)      \
+               $(ADVAPI32LIB)     \
+               $(PSPLIB)         \
+               $(IMM32LIB)
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 LINKFLAGSSHL += /ENTRY:LibMain@12
