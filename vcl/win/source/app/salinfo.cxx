@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salinfo.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:26:22 $
+ *  last change: $Author: vg $ $Date: 2007-03-27 09:50:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,6 +52,7 @@
 #if defined _MSC_VER
 #pragma warning(pop)
 #endif
+#include <multimon.h>
 #include <tools/postsys.h>
 
 #include <tools/string.hxx>
@@ -275,7 +276,7 @@ int WinSalSystem::ShowNativeMessageBox(const String& rTitle, const String& rMess
 
     return MessageBoxW(
         0,
-        rMessage.GetBuffer(),
-        rTitle.GetBuffer(),
+        reinterpret_cast<LPCWSTR>(rMessage.GetBuffer()),
+        reinterpret_cast<LPCWSTR>(rTitle.GetBuffer()),
         nFlags);
 }
