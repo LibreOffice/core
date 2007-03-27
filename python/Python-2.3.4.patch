@@ -1,5 +1,5 @@
 *** misc/Python-2.3.4/Include/osdefs.h	Tue Feb 26 12:20:01 2002
---- misc/build/Python-2.3.4/Include/osdefs.h	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Include/osdefs.h	Wed Mar 21 16:02:29 2007
 ***************
 *** 16,22 ****
   
@@ -18,7 +18,7 @@
   #define MAXPATHLEN 260
   #define SEP '/'
 *** misc/Python-2.3.4/Include/pyport.h	Tue Sep 30 16:56:50 2003
---- misc/build/Python-2.3.4/Include/pyport.h	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Include/pyport.h	Wed Mar 21 16:02:29 2007
 ***************
 *** 2,7 ****
 --- 2,11 ----
@@ -47,7 +47,7 @@
   /* Unchecked */
 --- 349,354 ----
 *** misc/Python-2.3.4/Lib/distutils/command/build_ext.py	Tue Nov 19 14:12:28 2002
---- misc/build/Python-2.3.4/Lib/distutils/command/build_ext.py	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Lib/distutils/command/build_ext.py	Wed Mar 21 16:02:29 2007
 ***************
 *** 181,187 ****
           # for extensions under Cygwin and AtheOS Python's library directory must be
@@ -66,7 +66,7 @@
                   self.library_dirs.append(os.path.join(sys.prefix, "lib",
                                                         "python" + get_python_version(),
 *** misc/Python-2.3.4/Lib/distutils/spawn.py	Thu Nov 21 21:41:07 2002
---- misc/build/Python-2.3.4/Lib/distutils/spawn.py	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Lib/distutils/spawn.py	Wed Mar 21 16:02:29 2007
 ***************
 *** 179,185 ****
           path = os.environ['PATH']
@@ -85,7 +85,7 @@
       if not os.path.isfile(executable):
           for p in paths:
 *** misc/Python-2.3.4/Lib/distutils/sysconfig.py	Mon Feb 10 15:02:33 2003
---- misc/build/Python-2.3.4/Lib/distutils/sysconfig.py	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Lib/distutils/sysconfig.py	Wed Mar 21 16:02:29 2007
 ***************
 *** 468,473 ****
 --- 468,476 ----
@@ -99,7 +99,7 @@
               func()
           else:
 *** misc/Python-2.3.4/Lib/os.py	Sun Apr  4 09:17:05 2004
---- misc/build/Python-2.3.4/Lib/os.py	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Lib/os.py	Wed Mar 21 16:02:30 2007
 ***************
 *** 36,42 ****
       except AttributeError:
@@ -132,7 +132,7 @@
       linesep = '\n'
       from posix import *
 *** misc/Python-2.3.4/Mac/OSX/Makefile	Tue Nov  4 23:45:16 2003
---- misc/build/Python-2.3.4/Mac/OSX/Makefile	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Mac/OSX/Makefile	Wed Mar 21 16:02:30 2007
 ***************
 *** 26,33 ****
   INSTALLED_PYTHONW=$(APPINSTALLDIR)/Contents/MacOS/Python
@@ -153,7 +153,7 @@
   INSTALL_SYMLINK=ln -fsn
   INSTALL_PROGRAM=${INSTALL}
 *** misc/Python-2.3.4/Makefile.pre.in	Tue Nov 18 20:54:00 2003
---- misc/build/Python-2.3.4/Makefile.pre.in	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Makefile.pre.in	Wed Mar 21 16:02:30 2007
 ***************
 *** 114,123 ****
   RUNSHARED=       @RUNSHARED@
@@ -355,7 +355,7 @@
   		--install-scripts=$(BINDIR) \
   		--install-platlib=$(DESTSHARED) \
 *** misc/Python-2.3.4/Misc/setuid-prog.c	Thu Sep 10 22:18:09 1998
---- misc/build/Python-2.3.4/Misc/setuid-prog.c	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Misc/setuid-prog.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 70,75 ****
 --- 70,81 ----
@@ -372,7 +372,7 @@
   char def_IFS[] = "IFS= \t\n";
   /* you may want to change def_PATH, but you should really change it in */
 *** misc/Python-2.3.4/Modules/_hotshot.c	Mon Mar 17 20:46:07 2003
---- misc/build/Python-2.3.4/Modules/_hotshot.c	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Modules/_hotshot.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 12,18 ****
    * Which timer to use should be made more configurable, but that should not
@@ -544,7 +544,7 @@
   #else
           result = Py_BuildValue("ii", timeofday_diff, rusage_diff);
 *** misc/Python-2.3.4/Modules/config.c.in	Sun Jul  7 05:59:34 2002
---- misc/build/Python-2.3.4/Modules/config.c.in	Tue Mar 20 17:26:51 2007
+--- misc/build/Python-2.3.4/Modules/config.c.in	Wed Mar 21 16:02:30 2007
 ***************
 *** 39,44 ****
 --- 39,47 ----
@@ -558,7 +558,7 @@
   	/* This lives in gcmodule.c */
   	{"gc", initgc},
 *** misc/Python-2.3.4/Modules/mmapmodule.c	Tue Jul 15 14:37:46 2003
---- misc/build/Python-2.3.4/Modules/mmapmodule.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/Modules/mmapmodule.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 20,30 ****
   
@@ -721,7 +721,7 @@
   new_mmap_object(PyObject *self, PyObject *args, PyObject *kwdict)
   {
 *** misc/Python-2.3.4/Modules/posixmodule.c	Tue May  4 10:07:49 2004
---- misc/build/Python-2.3.4/Modules/posixmodule.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/Modules/posixmodule.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 104,109 ****
 --- 104,118 ----
@@ -867,7 +867,7 @@
   	if (res != 0)
   		return posix_error();
 *** misc/Python-2.3.4/Modules/readline.c	Thu Nov 13 08:42:13 2003
---- misc/build/Python-2.3.4/Modules/readline.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/Modules/readline.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 93,99 ****
   	return Py_None;
@@ -945,7 +945,7 @@
   
   PyDoc_STRVAR(get_history_length_doc,
 *** misc/Python-2.3.4/Modules/selectmodule.c	Mon Mar 22 21:20:33 2004
---- misc/build/Python-2.3.4/Modules/selectmodule.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/Modules/selectmodule.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 14,20 ****
      Users who want even more than the boosted limit should #define
@@ -998,7 +998,7 @@
   		PyErr_SetExcFromWindowsErr(SelectError, WSAGetLastError());
   	}
 *** misc/Python-2.3.4/Modules/socketmodule.c	Sun Apr 11 14:10:03 2004
---- misc/build/Python-2.3.4/Modules/socketmodule.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/Modules/socketmodule.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 136,142 ****
   #endif
@@ -1218,7 +1218,7 @@
   
   /* Additional initialization and cleanup for Windows */
 *** misc/Python-2.3.4/Modules/socketmodule.h	Sat May  3 11:14:53 2003
---- misc/build/Python-2.3.4/Modules/socketmodule.h	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/Modules/socketmodule.h	Wed Mar 21 16:02:30 2007
 ***************
 *** 1,7 ****
   /* Socket module header file */
@@ -1254,7 +1254,7 @@
   #	ifdef MS_WIN64
   #		define SIZEOF_SOCKET_T 8
 *** misc/Python-2.3.4/Modules/timemodule.c	Tue Jul  1 07:16:08 2003
---- misc/build/Python-2.3.4/Modules/timemodule.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/Modules/timemodule.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 19,25 ****
   
@@ -1358,7 +1358,7 @@
   		double millisecs = secs * 1000.0;
   		unsigned long ul_millis;
 *** misc/Python-2.3.4/PC/dl_nt.c	Thu Jul 26 15:41:05 2001
---- misc/build/Python-2.3.4/PC/dl_nt.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/PC/dl_nt.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 7,16 ****
   forgotten) from the programmer.
@@ -1383,7 +1383,7 @@
   
   char dllVersionBuffer[16] = ""; // a private buffer
 *** misc/Python-2.3.4/PC/getpathp.c	Mon Aug 18 19:54:10 2003
---- misc/build/Python-2.3.4/PC/getpathp.c	Tue Mar 20 17:26:52 2007
+--- misc/build/Python-2.3.4/PC/getpathp.c	Wed Mar 21 16:02:30 2007
 ***************
 *** 57,63 ****
   #include "Python.h"
@@ -1520,8 +1520,8 @@
   	if (zip_path[0]) {
   		strcpy(buf, zip_path);
   		buf = strchr(buf, '\0');
-*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_bsddb.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.dep	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1574,8 +1574,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_bsddb.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_bsddb.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_bsddb.mak	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1818,8 +1818,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_csv.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/_csv.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_csv.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_csv.dep	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -1873,8 +1873,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_csv.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/_csv.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_csv.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_csv.mak	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2116,8 +2116,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_socket.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/_socket.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_socket.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_socket.dep	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2175,8 +2175,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_socket.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/_socket.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_socket.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_socket.mak	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2418,8 +2418,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_sre.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_sre.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_sre.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_sre.dep	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2475,8 +2475,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_sre.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/_sre.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_sre.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_sre.mak	Wed Mar 21 16:02:30 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2718,8 +2718,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_symtable.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_symtable.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_symtable.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_symtable.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -2774,8 +2774,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_symtable.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_symtable.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_symtable.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_symtable.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3016,8 +3016,8 @@
 ! 
 ! !ENDIF 
 ! 
-*** misc/Python-2.3.4/PCbuild/_testcapi.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_testcapi.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3072,8 +3072,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_testcapi.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_testcapi.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_testcapi.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3313,8 +3313,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/_tkinter.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_tkinter.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3368,8 +3368,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/_tkinter.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/_tkinter.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/_tkinter.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3621,8 +3621,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/bz2.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/bz2.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/bz2.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/bz2.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3677,8 +3677,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/bz2.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/bz2.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/bz2.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/bz2.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3870,8 +3870,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/datetime.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/datetime.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/datetime.dep	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/datetime.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -3926,8 +3926,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/datetime.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/datetime.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/datetime.mak	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/datetime.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4171,8 +4171,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4182,8 +4182,8 @@
 ! ..\PC\make_versioninfo.c : \
 ! 	"..\Include\patchlevel.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/make_versioninfo.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/make_versioninfo.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4408,8 +4408,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/mmap.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/mmap.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/mmap.dep	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/mmap.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4462,8 +4462,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/mmap.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/mmap.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/mmap.mak	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/mmap.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4703,8 +4703,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/parser.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/parser.dep	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/parser.dep	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/parser.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -4762,8 +4762,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/parser.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/parser.mak	Tue Mar 20 17:26:52 2007
+*** misc/Python-2.3.4/PCbuild/parser.mak	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/parser.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -5005,8 +5005,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pyexpat.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/pyexpat.dep	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -5096,8 +5096,8 @@
 ! 	"..\Modules\expat\xmltok_impl.h"\
 ! 	"..\Modules\expat\xmltok_ns.c"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pyexpat.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/pyexpat.mak	Tue Mar 27 12:51:06 2007
+--- misc/build/Python-2.3.4/PCbuild/pyexpat.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -5370,8 +5370,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/python.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/python.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/python.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/python.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -5428,8 +5428,8 @@
 ! ..\PC\python_exe.rc : \
 ! 	"..\PC\pycon.ico"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/python.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/python.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/python.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/python.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -5705,8 +5705,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pythoncore.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/pythoncore.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -11163,8 +11163,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythoncore.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/pythoncore.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/pythoncore.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12602,8 +12602,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/pythonw.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/pythonw.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/pythonw.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/pythonw.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12660,8 +12660,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/pythonw.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/pythonw.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/pythonw.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/pythonw.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12921,8 +12921,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/select.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/select.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/select.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/select.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -12975,8 +12975,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/select.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/select.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/select.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/select.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13219,8 +13219,8 @@
 ! 
 ! !ENDIF
 ! 
-*** misc/Python-2.3.4/PCbuild/unicodedata.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/unicodedata.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13276,8 +13276,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/unicodedata.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/unicodedata.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/unicodedata.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13517,16 +13517,16 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/w9xpopen.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
 --- 1,2 ----
 ! # Microsoft Developer Studio erstellte Abhängigkeitsdatei, einbezogen von w9xpopen.mak
 ! 
-*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/w9xpopen.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/w9xpopen.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13709,8 +13709,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/winreg.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/winreg.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/winreg.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/winreg.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -13764,8 +13764,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winreg.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/winreg.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/winreg.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/winreg.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -14023,8 +14023,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/winsound.dep	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/winsound.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/winsound.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/winsound.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -14077,8 +14077,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/winsound.mak	Tue Mar 20 17:29:22 2007
---- misc/build/Python-2.3.4/PCbuild/winsound.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/winsound.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/winsound.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -14318,8 +14318,8 @@
 ! 
 ! 
 ! !ENDIF
-*** misc/Python-2.3.4/PCbuild/zlib.dep	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/zlib.dep	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/zlib.dep	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/zlib.dep	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -14373,8 +14373,8 @@
 ! 	"..\PC\pyconfig.h"\
 ! 	{$(INCLUDE)}"basetsd.h"\
 ! 	
-*** misc/Python-2.3.4/PCbuild/zlib.mak	Tue Mar 20 17:29:23 2007
---- misc/build/Python-2.3.4/PCbuild/zlib.mak	Tue Mar 20 17:26:53 2007
+*** misc/Python-2.3.4/PCbuild/zlib.mak	Tue Mar 27 12:51:07 2007
+--- misc/build/Python-2.3.4/PCbuild/zlib.mak	Wed Mar 21 16:02:31 2007
 ***************
 *** 1 ****
 ! dummy
@@ -14625,7 +14625,7 @@
 ! 
 ! !ENDIF
 *** misc/Python-2.3.4/Python/dynload_win.c	Mon Aug 26 23:20:30 2002
---- misc/build/Python-2.3.4/Python/dynload_win.c	Tue Mar 20 17:26:53 2007
+--- misc/build/Python-2.3.4/Python/dynload_win.c	Wed Mar 21 16:02:31 2007
 ***************
 *** 23,29 ****
   /* Case insensitive string compare, to avoid any dependencies on particular
@@ -14644,7 +14644,7 @@
   	int first, second;
   
 *** misc/Python-2.3.4/Python/pythonrun.c	Mon Mar 22 21:41:47 2004
---- misc/build/Python-2.3.4/Python/pythonrun.c	Tue Mar 20 17:26:53 2007
+--- misc/build/Python-2.3.4/Python/pythonrun.c	Wed Mar 21 16:02:31 2007
 ***************
 *** 1674,1679 ****
 --- 1674,1697 ----
@@ -14673,7 +14673,7 @@
   	signal(sig, handler);
   	return handler;
 *** misc/Python-2.3.4/configure	Fri May  7 21:13:40 2004
---- misc/build/Python-2.3.4/configure	Tue Mar 20 17:26:53 2007
+--- misc/build/Python-2.3.4/configure	Tue Mar 27 12:49:41 2007
 ***************
 *** 309,315 ****
   # include <unistd.h>
@@ -14766,6 +14766,25 @@
       esac
       ;;
 ***************
+*** 10069,10076 ****
+  	SunOS/4*) LDSHARED="ld";;
+  	SunOS/5*)
+  		if test "$GCC" = "yes"
+! 		then LDSHARED='$(CC) -shared'
+! 		else LDSHARED='$(CC) -G';
+  		fi ;;
+  	hp*|HP*) LDSHARED="ld -b";;
+  	OSF*) LDSHARED="ld -shared -expect_unresolved \"*\"";;
+--- 10085,10092 ----
+  	SunOS/4*) LDSHARED="ld";;
+  	SunOS/5*)
+  		if test "$GCC" = "yes"
+! 		then LDSHARED='$(CC) $(LDFLAGS) -shared'
+! 		else LDSHARED='$(CC) $(LDFLAGS) -G';
+  		fi ;;
+  	hp*|HP*) LDSHARED="ld -b";;
+  	OSF*) LDSHARED="ld -shared -expect_unresolved \"*\"";;
+***************
 *** 10082,10088 ****
   			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
   		else
@@ -14783,24 +14802,28 @@
   	Darwin/*)
   		LDSHARED='$(CC) $(LDFLAGS) -bundle'
 ***************
-*** 10091,10098 ****
+*** 10091,10100 ****
   			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
   		else
   			# No framework, use the Python app as bundle-loader
 ! 			BLDSHARED="$LDSHARED "'-bundle_loader $(BUILDPYTHON)'
 ! 			LDSHARED="$LDSHARED "'-bundle_loader $(BINDIR)/python$(VERSION)$(EXE)'
   		fi ;;
-  	Linux*|GNU*) LDSHARED='$(CC) -shared';;
+! 	Linux*|GNU*) LDSHARED='$(CC) -shared';;
   	dgux*) LDSHARED="ld -G";;
---- 10107,10114 ----
+  	BSD/OS*/4*) LDSHARED="gcc -shared";;
+  	OpenBSD*|FreeBSD*)
+--- 10107,10116 ----
   			LDSHARED="$LDSHARED "'-framework $(PYTHONFRAMEWORK)'
   		else
   			# No framework, use the Python app as bundle-loader
 ! 			BLDSHARED="$LDSHARED -flat_namespace -undefined suppress"
 ! 			LDSHARED="$LDSHARED -flat_namespace -undefined suppress"
   		fi ;;
-  	Linux*|GNU*) LDSHARED='$(CC) -shared';;
+! 	Linux*|GNU*) LDSHARED='$(CC) $(LDFLAGS) -shared';;
   	dgux*) LDSHARED="ld -G";;
+  	BSD/OS*/4*) LDSHARED="gcc -shared";;
+  	OpenBSD*|FreeBSD*)
 ***************
 *** 10112,10118 ****
   		fi;;
@@ -15152,7 +15175,7 @@
   
   echo "creating Setup.local"
 *** misc/Python-2.3.4/configure.in	Fri May  7 21:13:47 2004
---- misc/build/Python-2.3.4/configure.in	Tue Mar 20 17:26:54 2007
+--- misc/build/Python-2.3.4/configure.in	Wed Mar 21 16:02:32 2007
 ***************
 *** 174,182 ****
     # several APIs are not declared. Since this is also needed in some
@@ -15188,7 +15211,7 @@
   
   #
 *** misc/Python-2.3.4/pyconfig.h.in	Mon Mar 22 21:20:32 2004
---- misc/build/Python-2.3.4/pyconfig.h.in	Tue Mar 20 17:27:26 2007
+--- misc/build/Python-2.3.4/pyconfig.h.in	Wed Mar 21 16:02:32 2007
 ***************
 *** 841,846 ****
 --- 841,849 ----
