@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:42:32 $
+#   last change: $Author: obo $ $Date: 2007-03-28 11:39:29 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -65,11 +65,6 @@ LIBSALCPPRT=$(0)
 
 .IF "$(GUI)"=="WNT"
 UWINAPILIB=$(0)
-.IF "$(COM)"=="MSC"
-.IF "$(COMEX)"!="10"
-APP1STDLIBS= MSVCIRT.LIB
-.ENDIF
-.ENDIF
 .ENDIF
 
 
