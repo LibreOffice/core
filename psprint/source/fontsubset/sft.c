@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:16:04 $
+ *  last change: $Author: rt $ $Date: 2007-03-28 07:17:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1687,7 +1687,7 @@ int OpenTTFontFile( const char* fname, sal_uInt32 facenum, TrueTypeFont** ttf )
      */
     if ((*ttf)->fsize == 0) {
 #ifdef MACOSX
-        fprintf( stderr, "WARNING: Font file %s\nhad a data-fork size of 0, it is either:\n", t->fname );
+        fprintf( stderr, "WARNING: Font file %s\nhad a data-fork size of 0, it is either:\n", (*ttf)->fname );
         fprintf( stderr, "   1) A Resource-Based font that has a .ttf at the end of its name\n" );
         fprintf( stderr, "       (in which case '/usr/local/bin/fondu <font-file-name>' should be run to convert it instead)\n" );
         fprintf( stderr, "   2) A bad font\n\n" );
