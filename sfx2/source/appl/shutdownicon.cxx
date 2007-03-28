@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:10:05 $
+ *  last change: $Author: rt $ $Date: 2007-03-28 08:31:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -883,7 +883,7 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
         case PROPHANDLE_TERMINATEVETOSTATE :
              {
                 // use new value in case it's a valid information only
-                ::sal_Bool bState;
+                ::sal_Bool bState( sal_False );
                 if (! (aValue >>= bState))
                     return;
 
