@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-23 14:16:44 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-28 09:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 #ifndef INCLUDED_OOXML_PROPERTY_SET_IMPL_HXX
 #define INCLUDED_OOXML_PROPERTY_SET_IMPL_HXX
 
-#include <set>
+#include <vector>
 #include "OOXMLPropertySet.hxx"
 
 namespace ooxml
@@ -121,7 +121,7 @@ struct OOXMLPropertySetImplCompare
 
 class OOXMLPropertySetImpl : public OOXMLPropertySet
 {
-    typedef set<OOXMLProperty::Pointer_t, OOXMLPropertySetImplCompare> OOXMLProperties_t;
+    typedef vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
     OOXMLProperties_t mProperties;
 public:
     OOXMLPropertySetImpl();

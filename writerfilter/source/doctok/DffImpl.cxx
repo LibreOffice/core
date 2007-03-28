@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DffImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-14 15:31:03 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-28 09:17:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -506,6 +506,7 @@ void DffUDefProp::resolveNoAuto(Properties & rHandler)
         case 0x391: nAttrid = NS_rtf::LN_YAlign; break;
         case 0x392: nAttrid = NS_rtf::LN_YRelTo; break;
         case 0x3bf: nAttrid = NS_rtf::LN_LayoutInTableCell; break;
+        case 0x53f: nAttrid = NS_rtf::LN_Inline; break;
         default:
             break;
         }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-23 14:16:44 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-03-28 09:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -319,12 +319,7 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
-    OOXMLProperties_t::iterator aIt = mProperties.find(pProperty);
-
-    if (aIt != mProperties.end())
-        mProperties.erase(aIt);
-
-    mProperties.insert(pProperty);
+    mProperties.push_back(pProperty);
 }
 
 OOXMLPropertySet * OOXMLPropertySetImpl::clone() const

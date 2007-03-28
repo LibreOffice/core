@@ -456,6 +456,21 @@
             </UML:Attribute>
           </UML:Classifier.feature>
           <UML:Classifier.feature>
+            <UML:Attribute name="Inline">
+              <UML:ModelElement.taggedValue>
+                <UML:TaggedValue>
+                  <UML:TaggedValue.dataValue>rtf:Inline</UML:TaggedValue.dataValue>
+                  <UML:TaggedValue.type>
+                    <UML:TagDefinition xmi.idref="attrid"/>
+                  </UML:TaggedValue.type>
+                </UML:TaggedValue>
+              </UML:ModelElement.taggedValue>
+              <UML:ModelElement.stereotype>
+                <UML:Stereotype xmi.idref="attribute"/>
+              </UML:ModelElement.stereotype>
+            </UML:Attribute>
+          </UML:Classifier.feature>
+          <UML:Classifier.feature>
             <UML:Attribute name="dffrecord">
               <UML:ModelElement.taggedValue>
                 <UML:TaggedValue>
