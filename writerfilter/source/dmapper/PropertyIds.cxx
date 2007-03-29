@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-27 17:31:59 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 17:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,8 +146,8 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_STYLE_NAME:      sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")); break;
             case PROP_PARA_ADJUST:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaAdjust")); break;
             case PROP_PARA_LAST_LINE_ADJUST:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLastLineAdjust")); break;
-            case PROP_PARA_RIGHT_MARGIN     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLeftMargin")); break;
-            case PROP_PARA_LEFT_MARGIN      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaRightMargin")); break;
+            case PROP_PARA_RIGHT_MARGIN     :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaRightMargin")); break;
+            case PROP_PARA_LEFT_MARGIN      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLeftMargin")); break;
             case PROP_PARA_FIRST_LINE_INDENT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaFirstLineIndent")); break;
             case PROP_PARA_KEEP_TOGETHER:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaKeepTogether")); break;
             case PROP_PARA_TOP_MARGIN:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaTopMargin")); break;
