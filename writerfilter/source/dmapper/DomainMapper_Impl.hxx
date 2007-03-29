@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 15:34:41 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -302,6 +302,7 @@ public:
 
     void    InitTabStopFromStyle( const ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >& rInitTabStops );
     void    ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue);
+    void    IncorporateTabStop (DeletableTabStop &aTabStop);
     ::com::sun::star::uno::Sequence< ::com::sun::star::style::TabStop >     GetCurrentTabStopAndClear();
     void                                NextTabStop() {++m_nCurrentTabStopIndex;}
 
@@ -344,6 +345,7 @@ public:
 
     void SetLineNumbering( sal_Int32 nLnnMod, sal_Int32 nLnc, sal_Int32 ndxaLnn );
     bool IsLineNumberingSet() const {return m_bLineNumberingSet;}
+    DeletableTabStop                m_aCurrentTabStop;
 
 };
 } //namespace dmapper

@@ -6791,7 +6791,7 @@
       </attribute>
     </optional>
     <attribute name="pos">
-      <text/>
+      <ref name="ST_SignedTwipsMeasure"/>
       <xs:documentation>Tab Stop Position</xs:documentation>
     </attribute>
   </define>
@@ -6811,49 +6811,49 @@
   <define name="CT_Spacing">
     <optional>
       <attribute name="before">
-        <text/>
+        <ref name="ST_TwipsMeasure"/>
         <xs:documentation>Spacing Above Paragraph</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="beforeLines">
-        <text/>
+        <ref name="ST_DecimalNumber"/>
         <xs:documentation>Spacing Above Paragraph IN Line Units</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="beforeAutospacing">
-        <text/>
+        <ref name="ST_OnOff"/>
         <xs:documentation>Automatically Determine Spacing Above Paragraph</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="after">
-        <text/>
+        <ref name="ST_TwipsMeasure"/>
         <xs:documentation>Spacing Below Paragraph</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="afterLines">
-        <text/>
+        <ref name="ST_DecimalNumber"/>
         <xs:documentation>Spacing Below Paragraph in Line Units</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="afterAutospacing">
-        <text/>
+        <ref name="ST_OnOff"/>
         <xs:documentation>Automatically Determine Spacing Below Paragraph</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="line">
-        <text/>
+        <ref name="ST_SignedTwipsMeasure"/>
         <xs:documentation>Spacing Between Lines in Paragraph</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="lineRule">
-        <text/>
+        <ref name="ST_LineSpacingRule"/>
         <xs:documentation>Type of Spacing Between Lines</xs:documentation>
       </attribute>
     </optional>
@@ -6861,49 +6861,49 @@
   <define name="CT_Ind">
     <optional>
       <attribute name="left">
-        <text/>
+        <ref name="ST_SignedTwipsMeasure"/>
         <xs:documentation>Left Indentation</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="leftChars">
-        <text/>
+        <ref name="ST_DecimalNumber"/>
         <xs:documentation>Left Indentation in Character Units</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="right">
-        <text/>
+        <ref name="ST_SignedTwipsMeasure"/>
         <xs:documentation>Right Indentation</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="rightChars">
-        <text/>
+        <ref name="ST_DecimalNumber"/>
         <xs:documentation>Right Indentation in Character Units</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="hanging">
-        <text/>
+        <ref name="ST_TwipsMeasure"/>
         <xs:documentation>Indentation Removed from First Line</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="hangingChars">
-        <text/>
+        <ref name="ST_DecimalNumber"/>
         <xs:documentation>Indentation Removed From First Line in Character Units</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="firstLine">
-        <text/>
+        <ref name="ST_TwipsMeasure"/>
         <xs:documentation>Additional First Line Indentation</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="firstLineChars">
-        <text/>
+        <ref name="ST_DecimalNumber"/>
         <xs:documentation>Additional First Line Indentation in Character Units</xs:documentation>
       </attribute>
     </optional>
@@ -14128,8 +14128,8 @@
   <sprm name="w" tokenid="0x4852"/>
   <sprm name="kern" tokenid="0x484b"/>
   <sprm name="position" tokenid="0x4845"/>
-  <sprm name="sz" tokenid="0x0"/>
-  <sprm name="szCs" tokenid="0x0"/>
+  <sprm name="sz" tokenid="ooxml:EG_RPrBase_sz"/>
+  <sprm name="szCs" tokenid="ooxml:EG_RPrBase_szCs"/>
   <sprm name="highlight" tokenid="0x2a0c"/>
   <sprm name="u" tokenid="0x2a3e"/>
   <sprm name="effect" tokenid="0x6816"/>
@@ -14172,15 +14172,19 @@
 </resource>
 <resource name="ST_DecimalNumber" resource="Integer"/>
 <resource name="ST_SignedTwipsMeasure" resource="Integer"/>
+<resource name="ST_TwipsMeasure" resource="Integer"/>
+<resource name="CT_HpsMeasure" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_HpsMeasure_val"/>
+</resource>
 <resource name="ST_HpsMeasure" resource="Integer"/>
 <resource name="CT_Ind" resource="PropertySetValue">
-  <sprm name="left" tokenid="0x840f"/>
+  <attribute name="left" tokenid="ooxml:CT_Ind_left"/>
   <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
-  <sprm name="right" tokenid="0x840e"/>
+  <attribute name="right" tokenid="ooxml:CT_Ind_right"/>
   <attribute name="rightChars" tokenid="ooxml:CT_Ind_rightChars"/>
-  <sprm name="hanging" tokenid="0x8411"/>
+  <attribute name="hanging" tokenid="ooxml:CT_Ind_hanging"/>
   <attribute name="hangingChars" tokenid="ooxml:CT_Ind_hangingChars"/>
-  <sprm name="firstLine" tokenid="0x8411"/>
+  <attribute name="firstLine" tokenid="ooxml:CT_Ind_firstLine"/>
   <attribute name="firstLineChars" tokenid="ooxml:CT_Ind_firstLineChars"/>
 </resource>
 <resource name="CT_PPrBase" resource="Property">
@@ -14534,7 +14538,7 @@
 <resource name="ST_LongHexNumber" resource="Hex"/>
 <resource name="ST_UcharHexNumber" resource="Hex"/>
 <resource name="CT_Empty" resource="SingleElement"/>
-<resource name="CT_Br" resource="PropertySetValue">
+<resource name="CT_Br" resource="SingleElement">
   <attribute name="type" tokenid="ooxml:CT_Br_type"/>
   <attribute name="clear" tokenid="ooxml:CT_Br_clear"/>
 </resource>
@@ -14569,6 +14573,16 @@
   <value tokenid="ooxml:Value_ST_PTabLeader_hyphen">hyphen</value>
   <value tokenid="ooxml:Value_ST_PTabLeader_underscore">underscore</value>
   <value tokenid="ooxml:Value_ST_PTabLeader_middleDot">middleDot</value>
+</resource>
+<resource name="CT_Spacing" resource="PropertySetValue">
+  <attribute name="before" tokenid="ooxml:CT_Spacing_before"/>
+  <attribute name="beforeLines" tokenid="ooxml:CT_Spacing_beforeLines"/>
+  <attribute name="beforeAutospacing" tokenid="ooxml:CT_Spacing_beforeAutospacing"/>
+  <attribute name="after" tokenid="ooxml:CT_Spacing_after"/>
+  <attribute name="afterLines" tokenid="ooxml:CT_Spacing_afterLines"/>
+  <attribute name="afterAutospacing" tokenid="ooxml:CT_Spacing_afterAutospacing"/>
+  <attribute name="line" tokenid="ooxml:CT_Spacing_line"/>
+  <attribute name="lineRule" tokenid="ooxml:CT_Spacing_lineRule"/>
 </resource>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->

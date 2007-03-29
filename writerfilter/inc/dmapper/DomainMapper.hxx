@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-27 17:31:58 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,6 +105,8 @@ private:
     void handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight);
     bool getColorFromIndex(const sal_Int32 nIndex, sal_Int32 nColor);
+    void resolveSprmProps(doctok::Sprm & sprm_);
+    sal_Int32 mnHpsMeasure;
 };
 
 } // namespace dmapper

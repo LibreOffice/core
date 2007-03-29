@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-27 17:31:59 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -111,7 +111,8 @@ namespace dmapper{
   -----------------------------------------------------------------------*/
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< lang::XComponent > xModel) :
-    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel ))
+    m_pImpl( new DomainMapper_Impl( *this, xContext, xModel )),
+    mnHpsMeasure(0)
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -129,7 +130,6 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
     bool bExchangeLeftRight = false;
-
     if( Name >= NS_rtf::LN_WIDENT && Name <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( Name, nIntValue );
     else
@@ -1446,26 +1446,23 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_UNDERLINE_HAS_COLOR, uno::makeAny( true ) );
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_UNDERLINE_COLOR, uno::makeAny( nIntValue ) );
             break;
-        case NS_ooxml::LN_CT_PPrBase_tabs:
-            {
-                doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
-                if( pProperties.get())
-                    pProperties->resolve(*this);
-            }
-            break;
-        case NS_ooxml::LN_CT_Tabs_tab:
-            {
-                doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
-                if( pProperties.get())
-                    pProperties->resolve(*this);
-            }
-            break;
 
         case NS_ooxml::LN_CT_TabStop_val:
+            if (nIntValue == NS_ooxml::LN_Value_ST_TabJc_clear)
+                m_pImpl->m_aCurrentTabStop.bDeleted = true;
+            else
+            {
+                m_pImpl->m_aCurrentTabStop.bDeleted = false;
+                // TODO handle the alignment
+                // m_pImpl->m_aCurrentTabStop.Alignment = ???
+            }
             break;
         case NS_ooxml::LN_CT_TabStop_leader:
+            // TODO handle the leader character
+            // m_pImpl->m_aCurrentTabStop.FillChar = ???
             break;
         case NS_ooxml::LN_CT_TabStop_pos:
+            m_pImpl->m_aCurrentTabStop.Position = ConversionHelper::convertToMM100(nIntValue);
             break;
 
         case NS_ooxml::LN_CT_Fonts_ascii:
@@ -1484,6 +1481,44 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             handleParaJustification(nIntValue, m_pImpl->GetTopContext(), bExchangeLeftRight);
             break;
 
+        case NS_ooxml::LN_CT_Spacing_before:
+            m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ));
+            break;
+        case NS_ooxml::LN_CT_Spacing_beforeLines:
+            break;
+        case NS_ooxml::LN_CT_Spacing_after:
+            m_pImpl->GetTopContext()->Insert(PROP_PARA_BOTTOM_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ));
+            break;
+        case NS_ooxml::LN_CT_Spacing_afterLines:
+            break;
+        case NS_ooxml::LN_CT_Spacing_line:
+            {
+                style::LineSpacing aSpacing;
+                aSpacing.Mode = style::LineSpacingMode::PROP;
+                aSpacing.Height = sal_Int16(sal_Int32(nIntValue) * 100 /240);
+                m_pImpl->GetTopContext()->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ));
+            }
+            break;
+        case NS_ooxml::LN_CT_HpsMeasure_val:
+            mnHpsMeasure = nIntValue;
+            break;
+
+        case NS_ooxml::LN_CT_Ind_left:
+            m_pImpl->GetTopContext()->Insert(
+                PROP_PARA_LEFT_MARGIN, uno::makeAny( ConversionHelper::convertToMM100(nIntValue ) ));
+            break;
+        case NS_ooxml::LN_CT_Ind_right:
+            m_pImpl->GetTopContext()->Insert(
+                PROP_PARA_RIGHT_MARGIN, uno::makeAny( ConversionHelper::convertToMM100(nIntValue ) ));
+            break;
+        case NS_ooxml::LN_CT_Ind_hanging:
+            m_pImpl->GetTopContext()->Insert(
+                PROP_PARA_FIRST_LINE_INDENT, uno::makeAny( - ConversionHelper::convertToMM100(nIntValue ) ));
+            break;
+        case NS_ooxml::LN_CT_Ind_firstLine:
+            m_pImpl->GetTopContext()->Insert(
+                PROP_PARA_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertToMM100(nIntValue ) ));
+            break;
         default:
             {
                 //int nVal = val.getInt();
@@ -2903,50 +2938,30 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xd237:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         break;//undocumented section properties
+    case NS_ooxml::LN_CT_Tabs_tab:
+        resolveSprmProps(sprm_);
+        m_pImpl->IncorporateTabStop(m_pImpl->m_aCurrentTabStop);
+        break;
+
     // TEMPORARY SOLUTION: have to find how to make this attribute instead of sprm
     case NS_ooxml::LN_EG_RPrBase_color:
-        {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-            if (pProperties.get())
-                pProperties->resolve(*this);
-        }
-        break;
-
     case NS_ooxml::LN_CT_PPrBase_tabs:
-        {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-            if( pProperties.get())
-                pProperties->resolve(*this);
-        }
-        break;
-    case NS_ooxml::LN_CT_Tabs_tab:
-        {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-            if( pProperties.get())
-                pProperties->resolve(*this);
-        }
-        break;
-
-    case NS_ooxml::LN_CT_TabStop_val:
-        break;
-    case NS_ooxml::LN_CT_TabStop_leader:
-        break;
-    case NS_ooxml::LN_CT_TabStop_pos:
-        break;
-
     case NS_ooxml::LN_EG_RPrBase_rFonts:
-        {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-            if( pProperties.get())
-                pProperties->resolve(*this);
-        }
-        break;
     case NS_ooxml::LN_CT_PPrBase_jc:
-        {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-            if( pProperties.get())
-                pProperties->resolve(*this);
-        }
+    case NS_ooxml::LN_CT_PPrBase_spacing:
+    case NS_ooxml::LN_CT_PPrBase_ind:
+        resolveSprmProps(sprm_);
+        break;
+
+    case NS_ooxml::LN_EG_RPrBase_szCs:
+        resolveSprmProps(sprm_);
+        rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
+        break;
+
+    case NS_ooxml::LN_EG_RPrBase_sz:
+        resolveSprmProps(sprm_);
+        rContext->Insert( PROP_CHAR_HEIGHT, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
+        rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
         break;
 
     default:
@@ -3318,6 +3333,14 @@ bool DomainMapper::getColorFromIndex(const sal_Int32 nIndex, sal_Int32 nColor)
         return false;
     }
     return true;
+}
+
+void DomainMapper::resolveSprmProps(doctok::Sprm & sprm_)
+{
+    doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
+    if( pProperties.get())
+        pProperties->resolve(*this);
+
 }
 
 

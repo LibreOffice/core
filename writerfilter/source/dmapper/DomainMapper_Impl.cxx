@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-15 15:34:41 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,6 +516,7 @@ void DomainMapper_Impl::InitTabStopFromStyle( const uno::Sequence< style::TabSto
         m_aCurrentTabStops.push_back( DeletableTabStop(rInitTabStops[nTab]) );
     }
 }
+
 /*-- 29.06.2006 13:35:33---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -577,6 +578,11 @@ void DomainMapper_Impl::ModifyCurrentTabStop( doctok::Id nId, sal_Int32 nValue)
                 m_aCurrentTabStops[m_nCurrentTabStopIndex].Alignment = aTabAlignFromWord[nValue];
         break;
     }
+}
+
+void DomainMapper_Impl::IncorporateTabStop (DeletableTabStop & /* aTabStop */)
+{
+    // PLEASE, implement me !!!!!
 }
 /*-- 29.06.2006 13:35:33---------------------------------------------------
 

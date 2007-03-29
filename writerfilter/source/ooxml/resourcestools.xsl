@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-22 15:43:31 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -902,6 +902,9 @@ bool </xsl:text>
           <xsl:call-template name="contextattributeimpllist"/>
         </xsl:when>
         <xsl:when test="$resource = 'PropertySetValue'">
+          <xsl:call-template name="contextattributeimplprops"/>
+        </xsl:when>
+        <xsl:when test="$resource = 'SingleElement'">
           <xsl:call-template name="contextattributeimplprops"/>
         </xsl:when>
         <xsl:otherwise/>
