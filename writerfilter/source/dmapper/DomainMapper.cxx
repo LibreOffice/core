@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:43 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-03-30 15:35:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ namespace dmapper{
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< lang::XComponent > xModel) :
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel )),
-    mnHpsMeasure(0)
+    mnHpsMeasure(0), mnTwipsMeasure(0)
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -130,6 +130,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
     bool bExchangeLeftRight = false;
+    printf("*** attribute *** 0x%.8x *** 0x%.8x *** %s *** attribute ***\n", (unsigned int)Name, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
     if( Name >= NS_rtf::LN_WIDENT && Name <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( Name, nIntValue );
     else
@@ -1500,7 +1501,13 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             }
             break;
         case NS_ooxml::LN_CT_HpsMeasure_val:
+        case NS_ooxml::LN_CT_SignedHpsMeasure_val:
             mnHpsMeasure = nIntValue;
+            break;
+
+        case NS_ooxml::LN_CT_SignedTwipsMeasure_val:
+        case NS_ooxml::LN_CT_TwipsMeasure_val:
+            mnTwipsMeasure = nIntValue;
             break;
 
         case NS_ooxml::LN_CT_Ind_left:
@@ -1558,6 +1565,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     /* WRITERFILTERSTATUS: table: sprmdata */
 
+    printf("*** sprm *** 0x%.8x *** sprm *** 0x%.8x *** %s *** sprm ***\n", (unsigned int)nId, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
     switch(nId)
     {
     case 2:  // sprmPIstd
@@ -2963,6 +2971,29 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         rContext->Insert( PROP_CHAR_HEIGHT, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
         rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
         break;
+
+    case NS_ooxml::LN_EG_RPrBase_spacing:
+        mnTwipsMeasure = 0;
+        resolveSprmProps(sprm_);
+        rContext->Insert(PROP_CHAR_CHAR_KERNING, uno::makeAny( sal_Int16(ConversionHelper::convertToMM100(sal_Int16(mnTwipsMeasure))) ) );
+        break;
+    case NS_ooxml::LN_EG_RPrBase_position:
+        mnHpsMeasure = 0;
+        resolveSprmProps(sprm_);
+        {
+            sal_Int16 nEscapement = 0;
+            sal_Int8 nProp  = 100;
+            if (mnHpsMeasure < 0)
+                nEscapement = -58;
+            else if (mnHpsMeasure > 0)
+                nEscapement = 58;
+            else /* (mnHpsMeasure == 0) */
+                nProp = 0;
+            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
+            rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
+        }
+        break;
+
 
     default:
         {

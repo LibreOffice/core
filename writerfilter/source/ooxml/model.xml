@@ -14124,10 +14124,10 @@
   <sprm name="vanish" tokenid="0x83c"/>
   <sprm name="webHidden" tokenid="0x0"/>
   <sprm name="color" tokenid="ooxml:EG_RPrBase_color"/>
-  <sprm name="spacing" tokenid="0x8840"/>
+  <sprm name="spacing" tokenid="ooxml:EG_RPrBase_spacing"/>
   <sprm name="w" tokenid="0x4852"/>
   <sprm name="kern" tokenid="0x484b"/>
-  <sprm name="position" tokenid="0x4845"/>
+  <sprm name="position" tokenid="ooxml:EG_RPrBase_position"/>
   <sprm name="sz" tokenid="ooxml:EG_RPrBase_sz"/>
   <sprm name="szCs" tokenid="ooxml:EG_RPrBase_szCs"/>
   <sprm name="highlight" tokenid="0x2a0c"/>
@@ -14170,9 +14170,22 @@
   <attribute name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
   <attribute name="ins" tokenid="ooxml:CT_NumPr_ins"/>
 </resource>
+<resource name="CT_DecimalNumber" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_DecimalNumber_val"/>
+</resource>
 <resource name="ST_DecimalNumber" resource="Integer"/>
+<resource name="CT_SignedTwipsMeasure" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val"/>
+</resource>
 <resource name="ST_SignedTwipsMeasure" resource="Integer"/>
+<resource name="CT_TwipsMeasure" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val"/>
+</resource>
 <resource name="ST_TwipsMeasure" resource="Integer"/>
+<resource name="CT_SignedHpsMeasure" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_SignedHpsMeasure_val"/>
+</resource>
+<resource name="ST_SignedHpsMeasure" resource="Integer"/>
 <resource name="CT_HpsMeasure" resource="PropertySetValue">
   <attribute name="val" tokenid="ooxml:CT_HpsMeasure_val"/>
 </resource>
