@@ -147,24 +147,30 @@ public class SetupFrame extends WindowAdapter {
         }
     }
 
+    public void setButtonSelected(int button) {
+        switch (button) {
+            case BUTTON_NEXT:       mNextButton.grabFocus();     break;
+            case BUTTON_PREVIOUS:   mPreviousButton.grabFocus(); break;
+            case BUTTON_CANCEL:     mCancelButton.grabFocus();   break;
+            case BUTTON_HELP:       mHelpButton.grabFocus();     break;
+        }
+    }
+
     public void setButtonEnabled(boolean enabled, int button) {
         switch (button) {
-            case BUTTON_NEXT:       mNextButton.setEnabled(enabled);        break;
-            case BUTTON_PREVIOUS:   mPreviousButton.setEnabled(enabled);    break;
-            case BUTTON_CANCEL:     mCancelButton.setEnabled(enabled);      break;
-            case BUTTON_HELP:       mHelpButton.setEnabled(enabled);        break;
+            case BUTTON_NEXT:       mNextButton.setEnabled(enabled);     break;
+            case BUTTON_PREVIOUS:   mPreviousButton.setEnabled(enabled); break;
+            case BUTTON_CANCEL:     mCancelButton.setEnabled(enabled);   break;
+            case BUTTON_HELP:       mHelpButton.setEnabled(enabled);     break;
         }
     }
 
     public void removeButtonIcon(int button) {
-
-        // mPreviousButton.setIcon(ResourceManager.getIcon("Icon_Previous"));
-        // mNextButton.setIcon(ResourceManager.getIcon("Icon_Next"));
         switch (button) {
-            case BUTTON_NEXT:       mNextButton.setIcon(null);        break;
-            case BUTTON_PREVIOUS:   mPreviousButton.setIcon(null);    break;
-            case BUTTON_CANCEL:     mCancelButton.setIcon(null);      break;
-            case BUTTON_HELP:       mHelpButton.setIcon(null);        break;
+            case BUTTON_NEXT:       mNextButton.setIcon(null);           break;
+            case BUTTON_PREVIOUS:   mPreviousButton.setIcon(null);       break;
+            case BUTTON_CANCEL:     mCancelButton.setIcon(null);         break;
+            case BUTTON_HELP:       mHelpButton.setIcon(null);           break;
         }
     }
 
