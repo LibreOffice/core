@@ -4,9 +4,9 @@
 #
 #   $RCSfile: make_installer.pl,v $
 #
-#   $Revision: 1.84 $
+#   $Revision: 1.85 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:14:54 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:21:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -576,6 +576,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     }
 
     my $logminor = "";
+    my $avoidlanginlog = 0;
     if ( $installer::globals::updatepack ) { $logminor = $installer::globals::lastminor; }
     else { $logminor = $installer::globals::minor; }
 
@@ -583,13 +584,17 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     if ( $installer::globals::is_unix_multi ) { $loglanguagestring = $installer::globals::unixmultipath_orig; }
 
     my $loglanguagestring_orig = $loglanguagestring;
-    if (length($loglanguagestring) > 120)
+    if (length($loglanguagestring) > $installer::globals::max_lang_length)
     {
         chomp(my $shorter = `echo $loglanguagestring | md5sum | sed -e "s/ .*//g"`);
         $loglanguagestring = $shorter;
+        $avoidlanginlog = 1;
     }
 
-    $installer::globals::logfilename = "log_" . $installer::globals::build . "_" . $logminor . "_" . $loglanguagestring . ".log";
+    $installer::globals::logfilename = "log_" . $installer::globals::build;
+    if ( $logminor ne "" ) { $installer::globals::logfilename .= "_" . $logminor; }
+    if ( ! $avoidlanginlog ) { $installer::globals::logfilename .= "_" . $loglanguagestring; }
+    $installer::globals::logfilename .= ".log";
 
     if ( $isfirstrun ) { $loggingdir = $loggingdir . $loglanguagestring . $installer::globals::separator; }
 
@@ -1710,7 +1715,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "registryitems5.log", $registryitemsinproductlanguageresolvedarrayref); }
 
         # Advising language specific files and component to the corresponding feature for multilingual installation sets
-        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack )) { installer::windows::feature::change_modules_in_filescollector($filesinproductlanguageresolvedarrayref); }
+        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSELANGUAGEPACKFEATURE'} )) { installer::windows::feature::change_modules_in_filescollector($filesinproductlanguageresolvedarrayref); }
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles19b.log", $filesinproductlanguageresolvedarrayref); }
 
         # Attention: The table "Feature.idt" contains language specific strings -> parameter: $languagesarrayref !
