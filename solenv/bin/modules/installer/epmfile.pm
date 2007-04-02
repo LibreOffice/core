@@ -4,9 +4,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.62 $
+#   $Revision: 1.63 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:48:21 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:21:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1872,6 +1872,28 @@ sub create_packages_without_epm
                 $systemcall = "cd $destinationdir; cp -p -R $packagename $installer::globals::saved_packages_path;";
                  make_systemcall($systemcall);
                 installer::logger::print_message( "... $systemcall ...\n" );
+
+                # Setting unix rights to "775" for all created directories inside the package,
+                # that is saved in temp directory
+
+                $systemcall = "cd $packagestempdir; find $packagename -type d -exec chmod 775 \{\} \\\;";
+                installer::logger::print_message( "... $systemcall ...\n" );
+
+                $returnvalue = system($systemcall);
+
+                $infoline = "Systemcall: $systemcall\n";
+                push( @installer::globals::logfileinfo, $infoline);
+
+                if ($returnvalue)
+                {
+                    $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
+                else
+                {
+                    $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                    push( @installer::globals::logfileinfo, $infoline);
+                }
             }
         }
 
