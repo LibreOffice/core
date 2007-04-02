@@ -31,13 +31,16 @@ public class LinuxInstaller extends Installer {
 
     public void postInstall(PackageDescription packageData) {
         InstallData data = InstallData.getInstance();
-        data.setStillRunning(true);
-        // Collecting information about installed packages
-        // Creating a list containing pairs of package names and rpm file names
-        // that has to be used during uninstallation.
-        helper.createPackageNameFileAtPostinstall(data, packageData);
-        helper.saveModulesLogFile(data);
-        data.setStillRunning(false);
+
+        if ( ! data.isAbortedInstallation() ) {
+            data.setStillRunning(true);
+            // Collecting information about installed packages
+            // Creating a list containing pairs of package names and rpm file names
+            // that has to be used during uninstallation.
+            helper.createPackageNameFileAtPostinstall(data, packageData);
+            helper.saveModulesLogFile(data);
+            data.setStillRunning(false);
+        }
     }
 
     public void preUninstall(PackageDescription packageData) {
