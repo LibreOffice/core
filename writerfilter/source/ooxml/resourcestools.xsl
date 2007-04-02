@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-02 14:34:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1096,19 +1096,19 @@ rtl::OUString </xsl:text>
     <xsl:for-each select="ancestor::namespace//resource[@name=$name]/value">
       <xsl:text>
   </xsl:text>
-      <xsl:if test="position() > 1">
-        <xsl:text>else </xsl:text>
-      </xsl:if>
     <xsl:text>if (rValue.compareTo(</xsl:text>
     <xsl:call-template name="valuestringname">
       <xsl:with-param name="string" select="text()"/>
     </xsl:call-template>
     <xsl:text>) == 0)
+    {
         mnValue = </xsl:text>
         <xsl:call-template name="idtoqname">
           <xsl:with-param name="id" select="@tokenid"/>
         </xsl:call-template>
-        <xsl:text>;</xsl:text>
+        <xsl:text>; 
+        return; 
+    }</xsl:text>
   </xsl:for-each>
   <xsl:text>
 }
