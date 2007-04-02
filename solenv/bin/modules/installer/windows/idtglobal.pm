@@ -4,9 +4,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:50:33 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:23:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -137,10 +137,8 @@ sub get_next_free_number_with_hash
     }
     until (!($alreadyexists));
 
-    if (( $counter > 9 ) && ( length($name) > 6 ))
-    {
-        $dontsave = 1;
-    }
+    if (( $counter > 9 ) && ( length($name) > 6 )) { $dontsave = 1; }
+    if (( $counter > 99 ) && ( length($name) > 5 )) { $dontsave = 1; }
 
     if (!($dontsave))
     {
@@ -275,6 +273,7 @@ sub make_eight_three_conform_with_hash
         {
             # simply taking the first three letters
             $extension = substr($extension, 0, 3);  # name, offset, length
+            $changed = 1;
         }
 
         # Attention: readme.html -> README~1.HTM
@@ -285,25 +284,35 @@ sub make_eight_three_conform_with_hash
             if ( $namelength > 6 )
             {
                 $name = substr($name, 0, 6);    # name, offset, length
-            }
-
-            $name = $name . "\~";
-
-            ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref);
-
-            # if $number>9 the new name would be "abcdef~10.xyz", which is 9+3, and therefore not allowed
-
-            if ( ! $saved )
-            {
-                $name = substr($name, 0, 5);    # name, offset, length
                 $name = $name . "\~";
                 ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref);
-                if ( ! $saved ) { installer::exiter::exit_program("ERROR: Could not set 8+3 conform name for $inputstring !", "make_eight_three_conform_with_hash"); }
+
+                # if $number>9 the new name would be "abcdef~10.xyz", which is 9+3, and therefore not allowed
+
+                if ( ! $saved )
+                {
+                    $name = substr($name, 0, 5);    # name, offset, length
+                    $name = $name . "\~";
+                    ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref);
+
+                    # if $number>99 the new name would be "abcde~100.xyz", which is 9+3, and therefore not allowed
+
+                    if ( ! $saved )
+                    {
+                        $name = substr($name, 0, 4);    # name, offset, length
+                        $name = $name . "\~";
+                        ($number, $saved) = get_next_free_number_with_hash($name, $shortnamesref);
+
+                        if ( ! $saved )
+                        {
+                            installer::exiter::exit_program("ERROR: Could not set 8+3 conform name for $inputstring !", "make_eight_three_conform_with_hash");
+                        }
+                    }
+                }
+
+                $name = $name . "$number";
+                $changed = 1;
             }
-
-            $name = $name . "$number";
-
-            $changed = 1;
         }
 
         $conformstring = $name . "\." . $extension;
