@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.227 $
+ *  $Revision: 1.228 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 14:30:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-02 12:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,6 +202,9 @@ File gid_File_Lib_Cli_Cppuhelper_Assembly
     Version = "${CLI_CPPUHELPER_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "x86";
+#endif
 End
 
 #endif
@@ -217,6 +220,9 @@ File gid_File_Lib_Policy_Cli_Cppuhelper_Assembly
     Version = "${CLI_CPPUHELPER_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
 End
 
 #endif
@@ -258,6 +264,9 @@ File gid_File_Lib_Cli_Types_Assembly
     Version = "${CLI_TYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
 End
 
 #endif
@@ -274,6 +283,9 @@ File gid_File_Lib_Policy_Cli_Types_Assembly
     Version = "${CLI_TYPES_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
 End
 
 #endif
@@ -313,6 +325,9 @@ File gid_File_Lib_Cli_Basetypes_Assembly
     Version = "${CLI_BASETYPES_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
 End
 
 #endif
@@ -329,6 +344,9 @@ File gid_File_Lib_Policy_Cli_Basetypes_Assembly
     Version = "${CLI_BASETYPES_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
 End
 
 #endif
@@ -379,6 +397,9 @@ File gid_File_Lib_Cli_Ure_Assembly
     Version = "${CLI_URE_NEW_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
 End
 
 #endif
@@ -394,6 +415,9 @@ File gid_File_Lib_Policy_Cli_Ure_Assembly
     Version = "${CLI_URE_POLICY_VERSION}";
     Culture = "neutral";
     Attributes = "0";
+#ifndef M1310
+    ProcessorArchitecture = "MSIL";
+#endif
 End
 
 #endif
