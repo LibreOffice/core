@@ -4,9 +4,9 @@
 #
 #   $RCSfile: assembly.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:13:54 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:22:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -296,6 +296,12 @@ sub create_msiassemblyname_table
         if ( $onefile->{'Culture'} )
         {
             $oneline = $component . "\t" . "culture" . "\t" . $onefile->{'Culture'} . "\n";
+            push(@msiassemblynametable, $oneline);
+        }
+
+        if ( $onefile->{'ProcessorArchitecture'} )
+        {
+            $oneline = $component . "\t" . "processorArchitecture" . "\t" . $onefile->{'ProcessorArchitecture'} . "\n";
             push(@msiassemblynametable, $oneline);
         }
     }
