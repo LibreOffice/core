@@ -6,9 +6,9 @@ import org.openoffice.setup.ResourceManager;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Insets;
-import java.io.File;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
@@ -16,6 +16,7 @@ public class UninstallationImminent extends JPanel {
 
     private String infoText;
     private JEditorPane ProductInformation;
+    private JScrollPane ProductPane;
 
     public UninstallationImminent() {
         setLayout(new java.awt.BorderLayout());
@@ -34,7 +35,7 @@ public class UninstallationImminent extends JPanel {
         ProductInformation = new JEditorPane("text/html", getInfoText());
         ProductInformation.setEditable(false);
 
-        JScrollPane ProductPane = new JScrollPane(ProductInformation);
+        ProductPane = new JScrollPane(ProductInformation);
         ProductPane.setPreferredSize(new Dimension(250, 145));
         ProductPane.setBorder(new EmptyBorder(10, 0, 10, 0));
 
@@ -55,6 +56,19 @@ public class UninstallationImminent extends JPanel {
 
     public void updateInfoText() {
         ProductInformation.setText(infoText);
+    }
+
+    public void setTabOrder() {
+        JScrollBar ScrollBar = ProductPane.getVerticalScrollBar();
+        if ( ScrollBar.isShowing() ) {
+            ProductInformation.setFocusable(true);
+        } else {
+            ProductInformation.setFocusable(false);
+        }
+    }
+
+    public void setCaretPosition() {
+        ProductInformation.setCaretPosition(0);
     }
 
 }

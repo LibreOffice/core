@@ -19,7 +19,6 @@ public class UninstallationPrologue extends JPanel {
         PanelTitle titleBox = new PanelTitle(titleText);
         add(titleBox, BorderLayout.NORTH);
 
-
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new java.awt.BorderLayout());
 
