@@ -163,6 +163,7 @@ URE
             DOWNLOADBANNER urebanner.bmp
             DOWNLOADBITMAP urebitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
         }
         active 1
         compression 5
@@ -192,6 +193,7 @@ OpenOffice_SDK
             DOWNLOADBANNER ooobanner.bmp
             DOWNLOADBITMAP ooobitmap.bmp
             DOWNLOADSETUPICO ooosetup.ico
+            DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
         }
         active 1
