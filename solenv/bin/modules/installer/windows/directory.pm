@@ -4,9 +4,9 @@
 #
 #   $RCSfile: directory.pm,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:49:54 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:22:59 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -221,8 +221,11 @@ sub add_root_directories
         $oneline = "$installer::globals::programmenufolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
 
-        $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$productkey\n";
-        push(@{$directorytableref}, $oneline);
+        if (( ! $installer::globals::patch ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSESTARTMENUFOLDER'} ))
+        {
+            $oneline = "$installer::globals::officemenufolder\t$installer::globals::programmenufolder\t$shortproductkey|$productkey\n";
+            push(@{$directorytableref}, $oneline);
+        }
 
         $oneline = "$installer::globals::startupfolder\tTARGETDIR\t.\n";
         push(@{$directorytableref}, $oneline);
