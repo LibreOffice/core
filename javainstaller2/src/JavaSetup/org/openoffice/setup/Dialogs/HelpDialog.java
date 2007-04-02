@@ -1,15 +1,16 @@
 package org.openoffice.setup.Dialogs;
 
 import org.openoffice.setup.InstallData;
-import org.openoffice.setup.PanelHelper.PanelLabel;
 import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupFrame;
+import org.openoffice.setup.Util.DialogFocusTraversalPolicy;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.io.File;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
@@ -20,6 +21,8 @@ import javax.swing.border.EmptyBorder;
 public class HelpDialog extends JDialog implements ActionListener {
 
     private JButton okButton;
+    private JEditorPane editorPane;
+    private JScrollPane editorScrollPane;
     private String helpFileName;
     private String helpFileString;
 
@@ -45,8 +48,8 @@ public class HelpDialog extends JDialog implements ActionListener {
         buttonpanel.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
         //Create an editor pane.
-        JEditorPane editorPane = createEditorPane();
-        JScrollPane editorScrollPane = new JScrollPane(editorPane);
+        editorPane = createEditorPane();
+        editorScrollPane = new JScrollPane(editorPane);
         editorScrollPane.setPreferredSize(new Dimension(250, 145));
         editorScrollPane.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
 
@@ -77,6 +80,10 @@ public class HelpDialog extends JDialog implements ActionListener {
         this.getContentPane().add(editorScrollPane, BorderLayout.CENTER);
         this.getContentPane().add(buttonpanel, BorderLayout.SOUTH);
 
+        // Setting tab-order and focus on okButton
+        DialogFocusTraversalPolicy policy = new DialogFocusTraversalPolicy(new JComponent[] {okButton, editorScrollPane});
+        this.setFocusTraversalPolicy(policy);  // set policy
+        this.setFocusCycleRoot(true); // enable policy
     }
 
      private JEditorPane createEditorPane() {
@@ -107,6 +114,15 @@ public class HelpDialog extends JDialog implements ActionListener {
 
         return editorPane;
     }
+
+//    public void setTabForScrollPane() {
+//        JScrollBar ScrollBar = editorScrollPane.getVerticalScrollBar();
+//        editorPane.setFocusable(true);
+//        if ( ScrollBar.isShowing() ) {
+//        } else {
+//            editorPane.setFocusable(false);
+//        }
+//    }
 
     public void actionPerformed (java.awt.event.ActionEvent evt) {
         setVisible(false);

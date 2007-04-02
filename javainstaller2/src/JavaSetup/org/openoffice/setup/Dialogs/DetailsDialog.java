@@ -1,18 +1,20 @@
 package org.openoffice.setup.Dialogs;
 
-import org.openoffice.setup.PanelHelper.PanelLabel;
 import org.openoffice.setup.ResourceManager;
 import org.openoffice.setup.SetupFrame;
+import org.openoffice.setup.Util.DialogFocusTraversalPolicy;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Insets;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JViewport;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
@@ -42,11 +44,16 @@ public class DetailsDialog extends JDialog implements ActionListener {
 
         //Create an editor pane.
         JEditorPane editorPane = createEditorPane(dialogText);
+        editorPane.setCaretPosition(0);
         JScrollPane editorScrollPane = new JScrollPane(editorPane,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         editorScrollPane.setPreferredSize(new Dimension(250, 145));
         editorScrollPane.setBorder(new EmptyBorder(new Insets(5, 10, 5, 10)));
+
+        JViewport port = editorScrollPane.getViewport();
+        port.getVisibleRect().setLocation(0,0);
+        editorScrollPane.setViewport(port);
 
         // String helpTitle1 = ResourceManager.getString("String_Details_Title_1");
         // PanelLabel label1 = new PanelLabel(helpTitle1, true);
@@ -67,6 +74,18 @@ public class DetailsDialog extends JDialog implements ActionListener {
         this.getContentPane().add(toppanel, BorderLayout.NORTH);
         this.getContentPane().add(editorScrollPane, BorderLayout.CENTER);
         this.getContentPane().add(buttonpanel, BorderLayout.SOUTH);
+
+        // JScrollBar ScrollBar = editorScrollPane.getVerticalScrollBar();
+        // if ( ScrollBar.isShowing() ) {
+        //     editorPane.setFocusable(false);
+        // } else {
+        //     editorPane.setFocusable(true);
+        // }
+
+        // Setting tab-order and focus on okButton
+        DialogFocusTraversalPolicy policy = new DialogFocusTraversalPolicy(new JComponent[] {okButton, editorScrollPane});
+        this.setFocusTraversalPolicy(policy);  // set policy
+        this.setFocusCycleRoot(true); // enable policy
     }
 
      private JEditorPane createEditorPane(String dialogText) {
@@ -74,7 +93,6 @@ public class DetailsDialog extends JDialog implements ActionListener {
         editorPane.setEditable(false);
         editorPane.setContentType("text/html");
         editorPane.setText(dialogText);
-
         return editorPane;
     }
 
