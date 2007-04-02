@@ -111,6 +111,7 @@ public class UninstallationPrologueCtrl extends PanelController {
         // System.err.println("\nUninstallation module state dump 1:");
         // PackageDescription packageData = SetupDataProvider.getPackageDescription();
         // ModuleCtrl.dumpModuleStates(packageData);
+        getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_NEXT);
     }
 
     public void duringShow() {
@@ -139,6 +140,7 @@ public class UninstallationPrologueCtrl extends PanelController {
                     ModuleCtrl.setDontUninstallFlags(packageData);
                     ModuleCtrl.setParentDefaultModuleSettings(packageData);
                     getSetupFrame().setButtonEnabled(true, getSetupFrame().BUTTON_NEXT);
+                    getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_NEXT);
                 }
             }
         };
