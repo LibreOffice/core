@@ -84,5 +84,4 @@ public class InstallationOngoing extends JPanel {
         mStopButton.setEnabled(enabled);
     }
 
-
 }

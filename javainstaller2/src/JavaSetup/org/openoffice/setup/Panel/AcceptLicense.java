@@ -29,6 +29,7 @@ public class AcceptLicense extends JPanel {
 
         String text1 = ResourceManager.getString("String_AcceptLicense2");
         PanelLabel label1 = new PanelLabel(text1);
+
         String text2 = ResourceManager.getString("String_AcceptLicense3");
         PanelLabel label2 = new PanelLabel(text2, true);
 

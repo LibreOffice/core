@@ -19,14 +19,13 @@ public class Prologue extends JPanel {
         PanelTitle titleBox = new PanelTitle(titleText);
         add(titleBox, BorderLayout.NORTH);
 
-
         JPanel contentPanel = new JPanel();
         contentPanel.setLayout(new java.awt.BorderLayout());
 
-            String text1 = ResourceManager.getString("String_Prologue2");
-            PanelLabel label1 = new PanelLabel(text1, true);
-            String text2 = ResourceManager.getString("String_Prologue3");
-            PanelLabel label2 = new PanelLabel(text2);
+        String text1 = ResourceManager.getString("String_Prologue2");
+        PanelLabel label1 = new PanelLabel(text1, true);
+        String text2 = ResourceManager.getString("String_Prologue3");
+        PanelLabel label2 = new PanelLabel(text2);
 
         contentPanel.add(label1, BorderLayout.NORTH);
         contentPanel.add(label2, BorderLayout.CENTER);
