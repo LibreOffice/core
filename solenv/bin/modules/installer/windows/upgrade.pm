@@ -4,9 +4,9 @@
 #
 #   $RCSfile: upgrade.pm,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:50:59 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:23:52 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,7 +54,7 @@ sub create_upgrade_table
     # fix for problematic OOo 1.9 versions
     my $include_ooo_fix = 0;
     my $ooomaxnew = "";
-    if ($installer::globals::product =~ /OpenOffice/i )
+    if (($installer::globals::product =~ /OpenOffice/i ) && ( ! ( $installer::globals::product =~ /SDK/i )))
     {
         $include_ooo_fix = 1;
         $ooomaxnew = "34.0.0";
@@ -76,7 +76,7 @@ sub create_upgrade_table
 
         if ( $include_ooo_fix )
         {
-            $newline = $installer::globals::upgradecode . "\t" . "35.0.0" . "\t" . "36.0.0" . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTS" . "\n";
+            $newline = $installer::globals::upgradecode . "\t" . "35.0.0" . "\t" . "36.0.0" . "\t" . "\t" . "1" . "\t" . "\t" . "OLDPRODUCTS2" . "\n";
             push(@upgradetable, $newline);
         }
 
