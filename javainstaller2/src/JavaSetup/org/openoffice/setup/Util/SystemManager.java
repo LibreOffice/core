@@ -1,6 +1,5 @@
 package org.openoffice.setup.Util;
 
-import org.openoffice.setup.InstallData;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
