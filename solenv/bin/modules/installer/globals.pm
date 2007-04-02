@@ -4,9 +4,9 @@
 #
 #   $RCSfile: globals.pm,v $
 #
-#   $Revision: 1.67 $
+#   $Revision: 1.68 $
 #
-#   last change: $Author: ihi $ $Date: 2007-03-26 12:44:51 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:22:01 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -116,6 +116,7 @@ BEGIN
     $installertypedir = "";
     $controlledmakecabversion = "5";
     $saved_packages_path = "";
+    $max_lang_length = 50;
 
     $is_special_epm = 0;
     $epm_in_path = 0;
