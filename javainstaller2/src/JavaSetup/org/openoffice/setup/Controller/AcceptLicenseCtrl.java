@@ -30,6 +30,8 @@ public class AcceptLicenseCtrl extends PanelController {
         getSetupFrame().setButtonText(StringInstall, getSetupFrame().BUTTON_NEXT);
         String StringDecline = ResourceManager.getString("String_Decline");
         getSetupFrame().setButtonText(StringDecline, getSetupFrame().BUTTON_CANCEL);
+
+        getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_CANCEL);
     }
 
 }
