@@ -4,9 +4,9 @@
 #
 #   $RCSfile: systemactions.pm,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-01 15:15:50 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:22:14 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -204,6 +204,13 @@ sub create_directories
         if (!($locallanguagesref eq "" ))   # this will be a path like "01_49", for Profiles and ConfigurationFiles, idt-Files
         {
             my $languagestring = $$languagesref;
+
+            if (length($languagestring) > $installer::globals::max_lang_length )
+            {
+                chomp(my $shorter = `echo $languagestring | md5sum | sed -e "s/ .*//g"`);
+                $languagestring = $shorter;
+            }
+
             if ($installer::globals::is_unix_multi) { $languagestring = $installer::globals::unixmultipath; }
             $path = $path . $languagestring  . $installer::globals::separator;
             create_directory($path);
