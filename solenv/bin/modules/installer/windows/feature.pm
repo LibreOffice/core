@@ -4,9 +4,9 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: rt $ $Date: 2007-02-19 13:50:08 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:23:12 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -259,7 +259,7 @@ sub add_language_pack_feature
         # $languagemodules contains all modules with flag LANGUAGEMODULE
         # Now it is time to find the correct feature using the gid.
         my $onefeature = installer::worker::find_item_by_gid($languagemodules, $gid);
-        if ( $onefeature eq "" ) { installer::exiter::exit_program("ERROR: Language feature not found: $gid !", "add_multilingual_features"); }
+        if ( $onefeature eq "" ) { installer::exiter::exit_program("ERROR: Language feature not found: $gid !", "add_language_pack_feature"); }
 
         my %feature = ();
 
@@ -444,7 +444,7 @@ sub create_feature_table
 
         if ( $installer::globals::languagepack ) { add_language_pack_feature(\@featuretable, \@languagefeatures, $onelanguage); }
 
-        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack )) { add_multilingual_features(\@featuretable, \@languagefeatures, $onelanguage); }
+        if (( $installer::globals::ismultilingual ) && ( ! $installer::globals::languagepack ) && ( ! $allvariableshashref->{'DONTUSELANGUAGEPACKFEATURE'} )) { add_multilingual_features(\@featuretable, \@languagefeatures, $onelanguage); }
 
         # Saving the file
 
