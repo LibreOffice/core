@@ -307,14 +307,13 @@ void Registrar::UnregisterAsHtmlEditorForInternetExplorer() const
     {
         std::wstring OOFriendlyAppName = m_ContextInformation.GetOpenOfficeFriendlyAppName();
 
-        std::wstring RegKeyName = APPLICATIONS + std::wstring(L"\\") + OOFriendlyAppName;
-        if (m_RootKey->HasSubKey(RegKeyName))
-            m_RootKey->DeleteSubKeyTree(RegKeyName);
+        RegistryKey aRegKey = m_RootKey->OpenSubKey( APPLICATIONS );
+        if ( aRegKey->HasSubKey( OOFriendlyAppName ) )
+            aRegKey->DeleteSubKeyTree( OOFriendlyAppName );
 
-        RegKeyName = HTM_OPENWITHLIST + std::wstring(L"\\") + OOFriendlyAppName;
-
-        if (m_RootKey->HasSubKey(RegKeyName))
-            m_RootKey->DeleteSubKeyTree(RegKeyName);
+        aRegKey = m_RootKey->OpenSubKey( HTM_OPENWITHLIST );
+        if ( aRegKey->HasSubKey( OOFriendlyAppName ) )
+            aRegKey->DeleteSubKeyTree( OOFriendlyAppName );
     }
     catch(RegistryKeyNotFoundException&)
     {}
