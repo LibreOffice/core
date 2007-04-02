@@ -34,6 +34,7 @@ public class PanelLabel extends JTextArea {
         setBackground(BackgroundColor);
         setForeground(TextColor);
         setFont(TextFont);
+        setFocusable(false);
 
         if (multiline) {
             setLineWrap(true);

@@ -45,6 +45,7 @@ public class PanelTitle extends Box {
     private void init(String title, String subtitle, int rows, int columns) {
 
         TitleLabel = new JLabel(title);
+        TitleLabel.setFocusable(false);
         JPanel TitlePanel = new JPanel();
         TitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
         TitlePanel.add(TitleLabel);
@@ -62,8 +63,9 @@ public class PanelTitle extends Box {
             } else {
                 SubtitleLabel = new PanelLabel(subtitle);
             }
+            SubtitleLabel.setFocusable(false);
             // PanelLabel SubtitleLabel = new PanelLabel(subtitle, true);
-            JPanel    SubtitlePanel = new JPanel();
+            JPanel SubtitlePanel = new JPanel();
             SubtitlePanel.setLayout(new FlowLayout(FlowLayout.LEFT, 0, 0));
             SubtitlePanel.add(SubtitleLabel);
 
