@@ -4,9 +4,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 09:01:42 $
+#   last change: $Author: rt $ $Date: 2007-04-02 12:21:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,8 @@ sub set_global_environment_variables
     if ( $ENV{'JREPATH'} ) { $installer::globals::jrepath = $ENV{'JREPATH'}; }
 
     if ( $ENV{'BSCLIENT'} && ( (lc $ENV{'BSCLIENT'}) eq "true" ) ) { $installer::globals::quiet = 1; }
+
+    if ( $ENV{'MAX_LANG_LENGTH'} ) { $installer::globals::max_lang_length = $ENV{'MAX_LANG_LENGTH'}; }
 }
 
 1;
