@@ -12,6 +12,7 @@ import org.openoffice.setup.Util.InfoDir;
 import org.openoffice.setup.Util.SystemManager;
 import java.io.File;
 import java.util.Vector;
+
 public class InstallationOngoingCtrl extends PanelController {
 
     private String helpFile;
@@ -39,6 +40,7 @@ public class InstallationOngoingCtrl extends PanelController {
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_PREVIOUS);
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_NEXT);
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_CANCEL);
+        getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_HELP);
 
         InstallationOngoing panel = (InstallationOngoing)getPanel();
         panel.setStopButtonActionCommand(getSetupFrame().ACTION_STOP);

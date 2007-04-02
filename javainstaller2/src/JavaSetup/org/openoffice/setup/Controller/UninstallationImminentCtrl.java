@@ -56,10 +56,16 @@ public class UninstallationImminentCtrl extends PanelController {
 
         UninstallationImminent panel = (UninstallationImminent)getPanel();
         panel.setInfoText(htmlInfoText);
+        panel.setCaretPosition();
 
         // System.err.println("\nUninstallation module state dump 3:");
         // Dumper.dumpModuleStates(packageData);
-}
+    }
+
+    public void duringShow() {
+        UninstallationImminent panel = (UninstallationImminent)getPanel();
+        panel.setTabOrder();
+    }
 
     public boolean afterShow(boolean nextButtonPressed) {
         boolean repeatDialog = false;

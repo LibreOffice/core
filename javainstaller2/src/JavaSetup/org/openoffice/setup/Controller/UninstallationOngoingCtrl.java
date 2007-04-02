@@ -36,6 +36,7 @@ public class UninstallationOngoingCtrl extends PanelController {
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_PREVIOUS);
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_NEXT);
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_CANCEL);
+        getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_HELP);
 
         UninstallationOngoing panel = (UninstallationOngoing)getPanel();
         panel.setStopButtonActionCommand(getSetupFrame().ACTION_STOP);

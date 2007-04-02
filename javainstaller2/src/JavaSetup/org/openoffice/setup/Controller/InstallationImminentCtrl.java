@@ -53,7 +53,6 @@ public class InstallationImminentCtrl extends PanelController {
     }
 
     public void beforeShow() {
-
         String StringInstall = ResourceManager.getString("String_Install");
         getSetupFrame().setButtonText(StringInstall, getSetupFrame().BUTTON_NEXT);
 
@@ -67,6 +66,7 @@ public class InstallationImminentCtrl extends PanelController {
 
         InstallationImminent panel = (InstallationImminent)getPanel();
         panel.setInfoText(htmlInfoText);
+        panel.setCaretPosition();
 
         // Update mode
         InstallData data = InstallData.getInstance();
@@ -74,7 +74,11 @@ public class InstallationImminentCtrl extends PanelController {
             String dialogTitle = ResourceManager.getString("String_InstallationImminent1_Update");
             panel.setTitleText(dialogTitle);
         }
+    }
 
+    public void duringShow() {
+        InstallationImminent panel = (InstallationImminent)getPanel();
+        panel.setTabOrder();
     }
 
     public boolean afterShow(boolean nextButtonPressed) {

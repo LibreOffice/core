@@ -29,6 +29,7 @@ public class UninstallationCompletedCtrl extends PanelController {
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_CANCEL);
         getSetupFrame().setButtonEnabled(false, getSetupFrame().BUTTON_HELP);
         getSetupFrame().removeButtonIcon(getSetupFrame().BUTTON_NEXT);
+        getSetupFrame().setButtonSelected(getSetupFrame().BUTTON_NEXT);
 
         UninstallationCompleted panel = (UninstallationCompleted)getPanel();
         panel.setDetailsButtonActionCommand(getSetupFrame().ACTION_DETAILS);
