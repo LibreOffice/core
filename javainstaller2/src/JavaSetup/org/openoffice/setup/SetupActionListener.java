@@ -33,6 +33,7 @@ public class SetupActionListener implements ActionListener {
             if ( n == 0 ) {
                 setupFrame.close(SetupFrame.CODE_CANCEL);
             }
+            setupFrame.setButtonSelected(setupFrame.BUTTON_CANCEL);
         } else if (evt.getActionCommand().equals(SetupFrame.ACTION_STOP)) {
             String StringStopDialog;
             String StringStopDialogTitle;
@@ -50,6 +51,10 @@ public class SetupActionListener implements ActionListener {
             if ( n == 0 ) {
                 AbortInstaller.abortInstallProcess();
             }
+            // setting focus on help button, if not aborted
+            setupFrame.setButtonSelected(setupFrame.BUTTON_HELP);
+            // PanelController panel = setupFrame.getCurrentPanel();
+            // panel.setStopButtonSelected();
         } else if (evt.getActionCommand().equals(SetupFrame.ACTION_PREVIOUS)) {
             PanelController panel = setupFrame.getCurrentPanel();
             String previous = panel.getPrevious();
@@ -69,6 +74,8 @@ public class SetupActionListener implements ActionListener {
             detailsdialog.setSize(new Dimension(600, 300));
             detailsdialog.setLocationRelativeTo(dialog);
             detailsdialog.setVisible(true);
+            // setting focus on next button, if details dialog is closed
+            setupFrame.setButtonSelected(setupFrame.BUTTON_NEXT);
         } else if (evt.getActionCommand().equals(SetupFrame.ACTION_HELP)) {
             JDialog dialog = setupFrame.getDialog();
             HelpDialog helpdialog = new HelpDialog(setupFrame);
@@ -76,6 +83,7 @@ public class SetupActionListener implements ActionListener {
             helpdialog.setSize(new Dimension(400, 300));
             helpdialog.setLocationRelativeTo(dialog);
             helpdialog.setVisible(true);
+            setupFrame.setButtonSelected(setupFrame.BUTTON_HELP);
         }
     }
 }
