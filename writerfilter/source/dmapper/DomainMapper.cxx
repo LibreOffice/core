@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-30 15:35:35 $
+ *  last change: $Author: os $ $Date: 2007-04-02 11:53:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1529,6 +1529,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         default:
             {
                 //int nVal = val.getInt();
+                OSL_ASSERT("unknown attribute");
             }
         }
     }
@@ -1659,7 +1660,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 17:
     case 0x840F:   // sprmPDxaLeft
         /* WRITERFILTERSTATUS: done: 50, planned: 5, spent: 1 */
-        if( 0x840e == nId || 0x17 == nId|| (bExchangeLeftRight && nId == 0x845d) || ( !bExchangeLeftRight && nId == 0x845e))
+        if( 0x840F == nId || 0x17 == nId|| (bExchangeLeftRight && nId == 0x845d) || ( !bExchangeLeftRight && nId == 0x845e))
             rContext->Insert(
                              eSprmType == SPRM_DEFAULT ? PROP_PARA_LEFT_MARGIN : PROP_LEFT_MARGIN,
 
