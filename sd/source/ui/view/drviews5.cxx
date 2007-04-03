@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:36:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,11 +160,14 @@ void DrawViewShell::ModelHasChanged()
     }
 }
 
-void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
+
+
+
+void DrawViewShell::Resize (void)
 {
     if (!mpSlideShow || !mpSlideShow->isFullScreen())
     {
-        ViewShell::Resize(rPos, rSize);
+        ViewShell::Resize();
 
         if ( GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
         {
@@ -173,8 +176,11 @@ void DrawViewShell::Resize (const Point &rPos, const Size &rSize)
     }
 
     if(mpSlideShow != NULL)
-        mpSlideShow->resize( rSize );
+        mpSlideShow->resize(maViewSize);
 }
+
+
+
 
 void DrawViewShell::ArrangeGUIElements (void)
 {
