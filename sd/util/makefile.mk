@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.47 $
+#   $Revision: 1.48 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:22:26 $
+#   last change: $Author: rt $ $Date: 2007-04-03 16:33:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -126,34 +126,41 @@ LIB2OBJFILES=   \
             $(SLO)$/sdmod.obj
 
 LIB3TARGET=$(SLB)$/sdraw3.lib
-LIB3FILES=      \
-            $(SLB)$/view.lib        \
-            $(SLB)$/app.lib			\
-            $(SLB)$/func.lib        \
-            $(SLB)$/docshell.lib    \
-            $(SLB)$/dlg.lib			\
-            $(SLB)$/core.lib		\
-            $(SLB)$/undo.lib		\
-            $(SLB)$/helper.lib		\
-            $(SLB)$/xml.lib			\
-            $(SLB)$/cgm.lib			\
-            $(SLB)$/grf.lib			\
-            $(SLB)$/html.lib		\
-            $(SLB)$/filter.lib		\
-            $(SLB)$/unoidl.lib		\
-            $(SLB)$/ppt.lib 		\
-            $(SLB)$/animui.lib		\
-            $(SLB)$/accessibility.lib	\
-            $(SLB)$/toolpanel.lib		\
-            $(SLB)$/uitools.lib			\
-            $(SLB)$/tpcontrols.lib		\
-            $(SLB)$/slsshell.lib		\
-            $(SLB)$/slsmodel.lib		\
-            $(SLB)$/slsview.lib			\
-            $(SLB)$/slscontroller.lib	\
-            $(SLB)$/slscache.lib		\
-            $(SLB)$/notes.lib			\
-            $(SLB)$/slideshow.lib
+LIB3FILES=      								\
+            $(SLB)$/view.lib        			\
+            $(SLB)$/app.lib						\
+            $(SLB)$/func.lib        			\
+            $(SLB)$/docshell.lib    			\
+            $(SLB)$/dlg.lib						\
+            $(SLB)$/core.lib					\
+            $(SLB)$/undo.lib					\
+            $(SLB)$/helper.lib					\
+            $(SLB)$/xml.lib						\
+            $(SLB)$/cgm.lib						\
+            $(SLB)$/grf.lib						\
+            $(SLB)$/html.lib					\
+            $(SLB)$/filter.lib					\
+            $(SLB)$/unoidl.lib					\
+            $(SLB)$/ppt.lib 					\
+            $(SLB)$/animui.lib					\
+            $(SLB)$/accessibility.lib			\
+            $(SLB)$/toolpanel.lib				\
+            $(SLB)$/uitools.lib					\
+            $(SLB)$/tpcontrols.lib				\
+            $(SLB)$/slsshell.lib				\
+            $(SLB)$/slsmodel.lib				\
+            $(SLB)$/slsview.lib					\
+            $(SLB)$/slscontroller.lib			\
+            $(SLB)$/slscache.lib				\
+            $(SLB)$/notes.lib					\
+            $(SLB)$/slideshow.lib				\
+            $(SLB)$/framework_pane.lib			\
+            $(SLB)$/framework_view.lib			\
+            $(SLB)$/framework_configuration.lib	\
+            $(SLB)$/framework_module.lib		\
+            $(SLB)$/framework_toolbar.lib		\
+            $(SLB)$/framework_tools.lib			\
+            $(SLB)$/framework_command.lib
 
 
 # sdd
