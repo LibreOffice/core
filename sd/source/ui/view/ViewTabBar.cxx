@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewTabBar.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:09:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,41 +35,71 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include "ViewTabBar.hxx"
 
 #define USE_TAB_CONTROL
 
 #include "ViewShell.hxx"
-#include "PaneManager.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
 #include "FrameView.hxx"
+#include "EventMultiplexer.hxx"
+#include "framework/FrameworkHelper.hxx"
+#include "framework/Pane.hxx"
+#include "DrawController.hxx"
+
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "helpids.h"
 #ifndef SD_CLIENT_HXX
 #include "Client.hxx"
 #endif
+#include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
+#include <vos/mutex.hxx>
+#include <sfx2/viewfrm.hxx>
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEID_HPP_
+#include <com/sun/star/drawing/framework/ResourceId.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XViewController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+#include <comphelper/processfactory.hxx>
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
+using ::sd::framework::FrameworkHelper;
+using ::sd::tools::EventMultiplexerEvent;
+using ::rtl::OUString;
+
+namespace sd {
 
 namespace {
-
-enum ViewTabBarEntry {
-    VTBE_FIRST = 1,
-    VTBE_EDIT_VIEW = VTBE_FIRST,
-    VTBE_OUTLINE_VIEW,
-    VTBE_NOTES_VIEW,
-    VTBE_HANDOUT_VIEW,
-    VTBE_SLIDE_VIEW,
-    VTBE_LAST = VTBE_SLIDE_VIEW
-};
+bool IsEqual (const TabBarButton& rButton1, const TabBarButton& rButton2)
+{
+    return (
+        (rButton1.ResourceId.is()
+            && rButton2.ResourceId.is()
+            && rButton1.ResourceId->compareTo(rButton2.ResourceId)==0)
+        || rButton1.ButtonLabel == rButton2.ButtonLabel);
+}
 
 } // end of anonymous namespace
 
 
 
 
-namespace sd {
 
 class ViewTabPage : public TabPage
 {
@@ -79,44 +109,64 @@ public:
     { SetPosSizePixel(Point(0,0),GetParent()->GetOutputSizePixel()); }
 };
 
-ViewTabBar::ViewTabBar (ViewShellBase& rViewShellBase, Window* pParent)
-    : TabControl (pParent),
-      mrViewShellBase (rViewShellBase)
-{
-    // Add tabs for the views that can be displayed in the center pane.
-    InsertPage (VTBE_EDIT_VIEW,
-        String (SdResId (STR_DRAW_MODE)));
-    InsertPage (VTBE_OUTLINE_VIEW,
-        String (SdResId (STR_OUTLINE_MODE)));
-    InsertPage (VTBE_NOTES_VIEW,
-        String (SdResId (STR_NOTES_MODE)));
-    InsertPage (VTBE_HANDOUT_VIEW,
-        String (SdResId (STR_HANDOUT_MODE)));
-    InsertPage (VTBE_SLIDE_VIEW,
-        String (SdResId (STR_SLIDE_MODE)));
 
+
+
+//===== ViewTabBar ============================================================
+
+ViewTabBar::ViewTabBar (
+    const Reference<XResourceId>& rxViewTabBarId,
+    const Reference<frame::XController>& rxController)
+    : ViewTabBarInterfaceBase(maMutex),
+      ::TabControl(GetAnchorWindow(rxViewTabBarId,rxController)),
+      mxController(rxController),
+      maTabBarButtons(),
+      mpTabPage(NULL),
+      mxViewTabBarId(rxViewTabBarId),
+      mpViewShellBase(NULL)
+{
     // Set one new tab page for all tab entries.  We need it only to
     // determine the height of the tab bar.
-    TabPage* pTabPage = new TabPage (this);
-    for (USHORT nIndex=VTBE_FIRST; nIndex<=VTBE_LAST; nIndex++)
-    {
-        SetTabPage (nIndex, pTabPage);
-        pTabPage->Hide();
-    }
+    mpTabPage.reset(new TabPage (this));
+    mpTabPage->Hide();
 
     // add some space before the tabitems
     SetItemsOffset( Point( 5, 3) );
 
-    // Set help texts.
-    SetHelpId (VTBE_EDIT_VIEW, HID_SD_BTN_DRAW);
-    SetHelpId (VTBE_SLIDE_VIEW, HID_SD_BTN_SLIDE);
-    SetHelpId (VTBE_OUTLINE_VIEW, HID_SD_BTN_OUTLINE);
-    SetHelpId (VTBE_NOTES_VIEW, HID_SD_BTN_NOTES);
-    SetHelpId (VTBE_HANDOUT_VIEW, HID_SD_BTN_HANDOUT);
+    // Tunnel through the controller and use the ViewShellBase to obtain the
+    // view frame.
+    try
+    {
+        Reference<lang::XUnoTunnel> xTunnel (mxController, UNO_QUERY_THROW);
+        DrawController* pController = reinterpret_cast<DrawController*>(
+            xTunnel->getSomething(DrawController::getUnoTunnelId()));
+        mpViewShellBase = pController->GetViewShellBase();
+    }
+    catch(RuntimeException&)
+    {}
 
-    // Register as listener at the view shell base.
-    mrViewShellBase.GetPaneManager().AddEventListener (
-        LINK(this, ViewTabBar, ViewShellBaseEventHandler));
+    // Register as listener at XConfigurationController.
+    Reference<XControllerManager> xControllerManager (mxController, UNO_QUERY);
+    if (xControllerManager.is())
+    {
+        mxConfigurationController = xControllerManager->getConfigurationController();
+        if (mxConfigurationController.is())
+        {
+            mxConfigurationController->addConfigurationChangeListener(
+                this,
+                    FrameworkHelper::msResourceActivationEvent,
+                Any());
+        }
+    }
+
+    Show();
+
+    if (mpViewShellBase != NULL
+        && rxViewTabBarId->isBoundToURL(
+            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+    {
+        mpViewShellBase->SetViewTabBar(this);
+    }
 }
 
 
@@ -124,115 +174,483 @@ ViewTabBar::ViewTabBar (ViewShellBase& rViewShellBase, Window* pParent)
 
 ViewTabBar::~ViewTabBar (void)
 {
-    // Set all references to the one tab page to NULL and delete the page.
-    TabPage* pTabPage = GetTabPage (VTBE_FIRST);
-    for (USHORT nIndex=VTBE_FIRST; nIndex<=VTBE_LAST; nIndex++)
-    {
-        SetTabPage (nIndex, NULL);
-    }
-    delete pTabPage;
-
-    // Tell the view shell base that we are not able to listen anymore.
-    mrViewShellBase.GetPaneManager().RemoveEventListener (
-        LINK(this, ViewTabBar, ViewShellBaseEventHandler));
 }
 
 
 
 
+::Window* ViewTabBar::GetAnchorWindow(
+    const Reference<XResourceId>& rxViewTabBarId,
+    const Reference<frame::XController>& rxController)
+{
+    ::Window* pWindow = NULL;
+    ViewShellBase* pBase = NULL;
+
+    // Tunnel through the controller and use the ViewShellBase to obtain the
+    // view frame.
+    try
+    {
+        Reference<lang::XUnoTunnel> xTunnel (rxController, UNO_QUERY_THROW);
+        DrawController* pController = reinterpret_cast<DrawController*>(
+            xTunnel->getSomething(DrawController::getUnoTunnelId()));
+        pBase = pController->GetViewShellBase();
+    }
+    catch(RuntimeException&)
+    {}
+
+    // The ViewTabBar supports at the moment only the center pane.
+    if (rxViewTabBarId.is()
+        && rxViewTabBarId->isBoundToURL(
+            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+    {
+        if (pBase != NULL && pBase->GetViewFrame() != NULL)
+            pWindow = &pBase->GetViewFrame()->GetWindow();
+    }
+
+    // The rest is (at the moment) just for the emergency case.
+    if (pWindow == NULL)
+    {
+        Reference<XPane> xPane;
+        try
+        {
+            Reference<XControllerManager> xControllerManager (rxController, UNO_QUERY_THROW);
+            Reference<XPaneController> xPaneController (xControllerManager->getPaneController());
+            if (xPaneController.is())
+                xPane = xPaneController->getPane(rxViewTabBarId->getAnchor());
+        }
+        catch (RuntimeException&)
+        {}
+
+        // Tunnel through the XWindow to the VCL side.
+        try
+        {
+            Reference<lang::XUnoTunnel> xTunnel (xPane, UNO_QUERY_THROW);
+            framework::Pane* pPane = reinterpret_cast<framework::Pane*>(
+                xTunnel->getSomething(framework::Pane::getUnoTunnelId()));
+            if (pPane != NULL)
+                pWindow = pPane->GetWindow()->GetParent();
+        }
+        catch (RuntimeException&)
+        {}
+    }
+
+    return pWindow;
+}
+
+
+
+
+void ViewTabBar::disposing (void)
+{
+    if (mpViewShellBase != NULL
+        && mxViewTabBarId->isBoundToURL(
+            FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+    {
+        mpViewShellBase->SetViewTabBar(NULL);
+    }
+
+    if (mxConfigurationController.is())
+    {
+        // Unregister listener from XConfigurationController.
+        try
+        {
+            mxConfigurationController->removeConfigurationChangeListener(this);
+        }
+        catch (lang::DisposedException e)
+        {
+            // Receiving a disposed exception is the normal case.  Is there
+            // a way to avoid it?
+        }
+        mxConfigurationController = NULL;
+    }
+
+    // Set all references to the one tab page to NULL and delete the page.
+    for (USHORT nIndex=0; nIndex<GetPageCount(); ++nIndex)
+        SetTabPage(nIndex, NULL);
+    mpTabPage.reset();
+
+    mxController = NULL;
+}
+
+
+
+
+//----- XConfigurationChangeListener ------------------------------------------
+
+void SAL_CALL  ViewTabBar::notifyConfigurationChange (
+    const ConfigurationChangeEvent& rEvent)
+    throw (RuntimeException)
+{
+    if (rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent)
+        && rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix)
+        && rEvent.ResourceId->isBoundTo(mxViewTabBarId->getAnchor(), AnchorBindingMode_DIRECT))
+    {
+        UpdateActiveButton();
+    }
+}
+
+
+
+
+//----- XEventListener --------------------------------------------------------
+
+void SAL_CALL ViewTabBar::disposing(
+    const lang::EventObject& rEvent)
+    throw (RuntimeException)
+{
+    if (rEvent.Source == mxConfigurationController)
+    {
+        mxConfigurationController = NULL;
+        mxController = NULL;
+    }
+}
+
+
+
+
+//----- XTabBar ---------------------------------------------------------------
+
+void SAL_CALL ViewTabBar::addTabBarButtonAfter (
+    const TabBarButton& rButton,
+    const TabBarButton& rAnchor)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    AddTabBarButton(rButton, rAnchor);
+}
+
+
+
+
+void SAL_CALL ViewTabBar::appendTabBarButton (const TabBarButton& rButton)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    AddTabBarButton(rButton);
+}
+
+
+
+void SAL_CALL ViewTabBar::removeTabBarButton (const TabBarButton& rButton)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    RemoveTabBarButton(rButton);
+}
+
+
+
+
+sal_Bool SAL_CALL ViewTabBar::hasTabBarButton (const TabBarButton& rButton)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    return HasTabBarButton(rButton);
+}
+
+
+
+
+Sequence<TabBarButton> SAL_CALL ViewTabBar::getTabBarButtons (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+    return GetTabBarButtons();
+}
+
+
+
+
+//----- XResource -------------------------------------------------------------
+
+Reference<XResourceId> SAL_CALL ViewTabBar::getResourceId (void)
+    throw (RuntimeException)
+{
+    return mxViewTabBarId;
+}
+
+
+
+
+//----- XUnoTunnel ------------------------------------------------------------
+
+const Sequence<sal_Int8>& ViewTabBar::getUnoTunnelId (void)
+{
+    static Sequence<sal_Int8>* pSequence = NULL;
+    if (pSequence == NULL)
+    {
+        const ::vos::OGuard aSolarGuard (Application::GetSolarMutex());
+        if (pSequence == NULL)
+        {
+            static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
+            rtl_createUuid((sal_uInt8*)aSequence.getArray(), 0, sal_True);
+            pSequence = &aSequence;
+        }
+    }
+    return *pSequence;
+}
+
+
+
+
+sal_Int64 SAL_CALL ViewTabBar::getSomething (const Sequence<sal_Int8>& rId)
+    throw (RuntimeException)
+{
+    sal_Int64 nResult = 0;
+
+    if (rId.getLength() == 16
+        && rtl_compareMemory(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0)
+    {
+        nResult = reinterpret_cast<sal_Int64>(this);
+    }
+
+    return nResult;
+}
+
+
+
+
+//-----------------------------------------------------------------------------
+
 void ViewTabBar::ActivatePage (void)
 {
-    Client* pIPClient = dynamic_cast<Client*>(mrViewShellBase.GetIPClient());
-    if (pIPClient==NULL || ! pIPClient->IsObjectInPlaceActive())
+    try
     {
-        // Call the parent so that the correct tab is highlighted.
-        TabControl::ActivatePage ();
-        ViewShell::ShellType eType (
-            mrViewShellBase.GetPaneManager().GetViewShellType(
-                PaneManager::PT_CENTER));
-        PageKind ePageKind (PK_STANDARD);
-        switch (GetCurPageId())
+        Reference<XControllerManager> xControllerManager (mxController,UNO_QUERY_THROW);
+        Reference<XViewController> xViewController (
+            xControllerManager->getViewController());
+        Reference<XConfigurationController> xConfigurationController (
+            xControllerManager->getConfigurationController());
+        if ( ! xViewController.is() || ! xConfigurationController.is())
+            throw RuntimeException();
+        Reference<XView> xView;
+        try
         {
-            case VTBE_EDIT_VIEW:
-                eType = ViewShell::ST_IMPRESS;
-                ePageKind = PK_STANDARD;
-                break;
-
-            case VTBE_OUTLINE_VIEW:
-                eType = ViewShell::ST_OUTLINE;
-                break;
-
-            case VTBE_NOTES_VIEW:
-                eType = ViewShell::ST_NOTES;
-                ePageKind = PK_NOTES;
-                break;
-
-            case VTBE_HANDOUT_VIEW:
-                eType = ViewShell::ST_HANDOUT;
-                ePageKind = PK_HANDOUT;
-                break;
-
-            case VTBE_SLIDE_VIEW:
-                eType = ViewShell::ST_SLIDE_SORTER;
-                break;
-
-            default:
-                eType = ViewShell::ST_NONE;
-                break;
+            xView = (xViewController->getView(
+            ResourceId::create(
+                comphelper_getProcessComponentContext(),
+                FrameworkHelper::msCenterPaneURL)));
+        }
+        catch (DeploymentException)
+        {
         }
 
-        ViewShell* pViewShell = mrViewShellBase.GetMainViewShell();
-        if (pViewShell != NULL)
+        Client* pIPClient = NULL;
+        if (mpViewShellBase != NULL)
+            pIPClient = dynamic_cast<Client*>(mpViewShellBase->GetIPClient());
+        if (pIPClient==NULL || ! pIPClient->IsObjectInPlaceActive())
         {
-            FrameView* pFrameView = pViewShell->GetFrameView();
-            if (pFrameView != NULL)
+
+            // Call the parent so that the correct tab is highlighted.
+            ::TabControl::ActivatePage ();
+
+            USHORT nIndex (GetCurPageId() - 1);
+            if (nIndex < maTabBarButtons.size())
             {
-                pFrameView->SetViewShEditMode (EM_PAGE, pFrameView->GetPageKind());
-                DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pViewShell);
-                if (pDrawViewShell != NULL)
-                {
-                    pFrameView->SetLayerMode (pDrawViewShell->IsLayerModeActive());
-                    pFrameView->SetViewShEditMode(EM_PAGE, ePageKind);
-                }
+                xConfigurationController->requestResourceActivation(
+                    maTabBarButtons[nIndex].ResourceId,
+                    ResourceActivationMode_REPLACE);
             }
         }
-        mrViewShellBase.GetPaneManager().RequestMainViewShellChange (eType);
+        else
+        {
+            // When we run into this else branch then we have an active OLE
+            // object.  We ignore the request to switch views.  Additionally
+            // we put the active tab back to the one for the current view.
+            UpdateActiveButton();
+        }
+    }
+    catch (RuntimeException&)
+    {
+        DBG_ASSERT(false,"ViewTabBar::ActivatePage(): caught exception");
+    }
+}
+
+
+
+
+int ViewTabBar::GetHeight (void)
+{
+    int nHeight (0);
+
+    if (maTabBarButtons.size() > 0)
+    {
+        TabPage* pActivePage (GetTabPage(GetCurPageId()));
+        if (pActivePage!=NULL && IsReallyVisible())
+            nHeight = pActivePage->GetPosPixel().Y();
+
+        if (nHeight <= 0)
+            // Using a default when the real height can not be determined.
+            // To get correct height this method should be called when the
+            // control is visible.
+            nHeight = 21;
+    }
+
+    return nHeight;
+}
+
+
+
+
+void ViewTabBar::AddTabBarButton (
+    const ::com::sun::star::drawing::framework::TabBarButton& rButton,
+    const ::com::sun::star::drawing::framework::TabBarButton& rAnchor)
+{
+    sal_uInt32 nIndex;
+
+    if ( ! rAnchor.ResourceId.is()
+        || (rAnchor.ResourceId->getResourceURL().getLength() == 0
+            && rAnchor.ButtonLabel.getLength() == 0))
+    {
+        nIndex = 0;
     }
     else
     {
-        // When we run into this else branch then we have an active OLE
-        // object.  We ignore the request to switch views.  Additionally we
-        // put the active tab back to the one for the current view.
-        ViewTabBarEntry eActiveView = VTBE_EDIT_VIEW;
-        switch (mrViewShellBase.GetPaneManager().GetViewShellType (
-            PaneManager::PT_CENTER))
+        for (nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
         {
-            case ViewShell::ST_DRAW:
-            case ViewShell::ST_IMPRESS:
-                eActiveView = VTBE_EDIT_VIEW;
+            if (IsEqual(maTabBarButtons[nIndex], rAnchor))
+            {
+                ++nIndex;
                 break;
-
-            case ViewShell::ST_OUTLINE:
-                eActiveView = VTBE_OUTLINE_VIEW;
-                break;
-
-            case ViewShell::ST_SLIDE_SORTER:
-                eActiveView = VTBE_SLIDE_VIEW;
-                break;
-
-            case ViewShell::ST_NOTES:
-                eActiveView = VTBE_NOTES_VIEW;
-                break;
-
-            case ViewShell::ST_HANDOUT:
-                eActiveView = VTBE_HANDOUT_VIEW;
-                break;
-            default:
-                break;
+            }
         }
-        SetCurPageId ((USHORT)eActiveView);
-        TabControl::ActivatePage ();
     }
+
+    AddTabBarButton(rButton,nIndex);
+}
+
+
+
+
+void ViewTabBar::AddTabBarButton (
+    const ::com::sun::star::drawing::framework::TabBarButton& rButton)
+{
+    AddTabBarButton(rButton, maTabBarButtons.size());
+}
+
+
+
+
+void ViewTabBar::AddTabBarButton (
+    const ::com::sun::star::drawing::framework::TabBarButton& rButton,
+    sal_Int32 nPosition)
+{
+    if (nPosition>=0
+        && nPosition<=GetPageCount())
+    {
+        USHORT nIndex ((USHORT)nPosition);
+
+        // Insert the button into our local array.
+        maTabBarButtons.insert(maTabBarButtons.begin()+nIndex, rButton);
+        UpdateTabBarButtons();
+        UpdateActiveButton();
+    }
+}
+
+
+
+
+void ViewTabBar::RemoveTabBarButton (
+    const ::com::sun::star::drawing::framework::TabBarButton& rButton)
+{
+    USHORT nIndex;
+    for (nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+    {
+        if (IsEqual(maTabBarButtons[nIndex], rButton))
+        {
+            maTabBarButtons.erase(maTabBarButtons.begin()+nIndex);
+            UpdateTabBarButtons();
+            UpdateActiveButton();
+            break;
+        }
+    }
+}
+
+
+
+
+bool ViewTabBar::HasTabBarButton (
+    const ::com::sun::star::drawing::framework::TabBarButton& rButton)
+{
+    bool bResult (false);
+
+    for (sal_uInt32 nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+    {
+        if (IsEqual(maTabBarButtons[nIndex], rButton))
+        {
+            bResult = true;
+            break;
+        }
+    }
+
+    return bResult;
+}
+
+
+
+
+::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
+    ViewTabBar::GetTabBarButtons (void)
+{
+    sal_uInt32 nCount (maTabBarButtons.size());
+    ::com::sun::star::uno::Sequence<com::sun::star::drawing::framework::TabBarButton>
+          aList (nCount);
+
+    for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
+        aList[nIndex] = maTabBarButtons[nIndex];
+
+    return aList;
+}
+
+
+
+
+void ViewTabBar::UpdateActiveButton (void)
+{
+    Reference<XView> xView;
+    if (mpViewShellBase != NULL)
+        xView = FrameworkHelper::Instance(*mpViewShellBase)->GetView(
+            mxViewTabBarId->getAnchor());
+    if (xView.is())
+    {
+        Reference<XResourceId> xViewId (xView->getResourceId());
+        for (USHORT nIndex=0; nIndex<maTabBarButtons.size(); ++nIndex)
+        {
+            if (maTabBarButtons[nIndex].ResourceId->compareTo(xViewId) == 0)
+            {
+                SetCurPageId(nIndex+1);
+                ::TabControl::ActivatePage();
+                break;
+            }
+        }
+    }
+}
+
+
+
+
+void ViewTabBar::UpdateTabBarButtons (void)
+{
+    TabBarButtonList::const_iterator iTab;
+    USHORT nPageCount (GetPageCount());
+    USHORT nIndex;
+    for (iTab=maTabBarButtons.begin(),nIndex=1; iTab!=maTabBarButtons.end(); ++iTab,++nIndex)
+    {
+        // Create a new tab when there are not enough.
+        if (nPageCount < nIndex)
+            InsertPage(nIndex, iTab->ButtonLabel);
+
+        // Update the tab.
+        SetPageText(nIndex, iTab->ButtonLabel);
+        SetHelpText(nIndex, iTab->HelpText);
+        SetTabPage(nIndex, mpTabPage.get());
+    }
+
+    // Delete tabs that are no longer used.
+    for (; nIndex<=nPageCount; ++nIndex)
+        RemovePage(nIndex);
+
+    mpTabPage->Hide();
 }
 
 
@@ -245,79 +663,18 @@ void ViewTabBar::Paint (const Rectangle& rRect)
 
     // Because the actual window background is transparent--to avoid
     // flickering due to multiple background paintings by this and by child
-    // windows--we have to paint the background for this control
-    // explicitly: the actual control is not painted over its whole bounding
-    // box.
+    // windows--we have to paint the background for this control explicitly:
+    // the actual control is not painted over its whole bounding box.
     SetFillColor (GetSettings().GetStyleSettings().GetDialogColor());
     SetLineColor ();
     DrawRect (rRect);
-    TabControl::Paint (rRect);
+    ::TabControl::Paint (rRect);
 
     SetFillColor (aOriginalFillColor);
     SetLineColor (aOriginalLineColor);
 }
 
 
-
-
-int ViewTabBar::GetHeight (void)
-{
-    int nHeight (0);
-
-    TabPage* pActivePage (GetTabPage(GetCurPageId()));
-    if (pActivePage!=NULL && IsReallyVisible())
-        nHeight = pActivePage->GetPosPixel().Y();
-
-    if (nHeight <= 0)
-        // Using a default when the real height can not be determined.  To
-        // get correct height this method should be called when the control
-        // is visible.
-        nHeight = 21;
-
-    return nHeight;
-}
-
-
-
-
-IMPL_LINK(ViewTabBar, ViewShellBaseEventHandler, PaneManagerEvent*, pEvent)
-{
-    if (pEvent->meEventId == PaneManagerEvent::EID_VIEW_SHELL_ADDED
-        && pEvent->mePane == PaneManager::PT_CENTER)
-    {
-        // Select the tab of the currently active view.
-        ViewTabBarEntry eActiveView = VTBE_EDIT_VIEW;
-        switch (mrViewShellBase.GetPaneManager().GetViewShellType (
-            PaneManager::PT_CENTER))
-        {
-            case ViewShell::ST_DRAW:
-            case ViewShell::ST_IMPRESS:
-                eActiveView = VTBE_EDIT_VIEW;
-                break;
-
-            case ViewShell::ST_OUTLINE:
-                eActiveView = VTBE_OUTLINE_VIEW;
-                break;
-
-            case ViewShell::ST_SLIDE_SORTER:
-                eActiveView = VTBE_SLIDE_VIEW;
-                break;
-
-            case ViewShell::ST_NOTES:
-                eActiveView = VTBE_NOTES_VIEW;
-                break;
-
-            case ViewShell::ST_HANDOUT:
-                eActiveView = VTBE_HANDOUT_VIEW;
-                break;
-            default:
-                break;
-        }
-        SetCurPageId ((USHORT)eActiveView);
-    }
-
-    return 0;
-}
 
 
 } // end of namespace sd
