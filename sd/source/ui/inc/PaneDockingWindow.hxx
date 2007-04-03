@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneDockingWindow.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 16:17:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,8 @@
 #include <sfx2/dockwin.hxx>
 #endif
 #include <sfx2/viewfrm.hxx>
-#include "PaneManager.hxx"
+
+#include <boost/scoped_ptr.hpp>
 
 class ToolBox;
 
@@ -73,8 +74,8 @@ public:
         SfxChildWindow *pChildWindow,
         ::Window* pParent,
         const ResId& rResId,
-        PaneManager::PaneType ePane,
-        const String& rsTitle);
+        const ::rtl::OUString& rsPaneURL,
+        const ::rtl::OUString& rsTitle);
 
     virtual ~PaneDockingWindow (void);
 
@@ -107,19 +108,21 @@ public:
     */
     void SetTitle (const String& rsTitle);
 
+    ::Window* GetContentWindow (void);
+
 private:
     /** The pane which is represented by the docking window.
     */
-    PaneManager::PaneType mePane;
+    ::rtl::OUString msPaneURL;
 
     /** Title that is shown at the top of the docking window.
     */
-    String msTitle;
+    ::rtl::OUString msTitle;
 
     /** The tool box that is displayed in the window title area contains
         menus and the closer button.
     */
-    ::std::auto_ptr<ToolBox> mpTitleToolBox;
+    ::boost::scoped_ptr<ToolBox> mpTitleToolBox;
 
     /** The border that is painted arround the inner window.  The bevel
         shadow lines are part of the border, so where the border is 0 no
@@ -129,8 +132,21 @@ private:
 
     sal_uInt16 mnChildWindowId;
 
+    ::boost::scoped_ptr< ::Window> mpContentWindow;
+
+    /** Remember that a layout is pending, i.e. Resize() has been called
+        since the last Paint().
+    */
+    bool mbIsLayoutPending;
+
     DECL_LINK(ToolboxSelectHandler, ToolBox*);
-    DECL_LINK(WindowEventListener, VclSimpleEvent*);
+
+    /** This does the actual placing and sizing of the title bar and the
+        content window after the size of the docking window has changed.
+        This method is called from withing the Paint() method when since its
+        last invocation the size of the docking window has changed.
+    */
+    void Layout (void);
 };
 
 } // end of namespace ::sd
