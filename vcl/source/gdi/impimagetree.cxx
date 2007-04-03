@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impimagetree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:03:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -594,7 +594,7 @@ bool ImplImageTree::loadImage( const ::rtl::OUString& rName,
     }
 
     if( !rReturn.IsEmpty() )
-        aBmpExHashMap[ rName ] = rReturn;
+        aBmpExHashMap[ rName.intern() ] = rReturn;
 
     return( !rReturn.IsEmpty() );
 }
