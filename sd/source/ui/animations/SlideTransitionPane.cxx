@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideTransitionPane.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:13:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
 #include "ViewShellBase.hxx"
 #include "DrawDocShell.hxx"
 #include "SlideSorterViewShell.hxx"
-#include "PaneManager.hxx"
 #include "drawdoc.hxx"
 #include "filedlg.hxx"
 #include "strings.hrc"
@@ -95,6 +94,9 @@
 #ifndef _SDDLL_HXX
 #include "sddll.hxx"
 #endif
+#ifndef SD_FRAMEWORK_FRAMEWORK_HELPER_HXX
+#include "framework/FrameworkHelper.hxx"
+#endif
 
 #include "DialogListBox.hxx"
 
@@ -108,6 +110,8 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::Sequence;
 using ::rtl::OUString;
 using ::com::sun::star::uno::RuntimeException;
+
+using ::sd::framework::FrameworkHelper;
 
 // ____________________________
 //
@@ -258,31 +262,6 @@ struct TransitionEffect
 
 namespace
 {
-
-::sd::slidesorter::SlideSorterViewShell * lcl_getSlideSorterViewShell( ::sd::ViewShellBase& rBase )
-{
-    // Find a slide sorter to get the selection from.  When one is
-    // displayed in the center pane use that.  Otherwise use the one in
-    // the left pane.
-    ::sd::ViewShell * pSlideSorter =
-        rBase.GetPaneManager().GetViewShell( ::sd::PaneManager::PT_CENTER );
-
-    if( pSlideSorter &&
-        pSlideSorter->GetShellType() != ::sd::ViewShell::ST_SLIDE_SORTER )
-    {
-        pSlideSorter =
-            rBase.GetPaneManager().GetViewShell( ::sd::PaneManager::PT_LEFT );
-    }
-
-    if( pSlideSorter &&
-        pSlideSorter->GetShellType() != ::sd::ViewShell::ST_SLIDE_SORTER )
-        pSlideSorter = 0;
-
-    ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell =
-          dynamic_cast< ::sd::slidesorter::SlideSorterViewShell * >( pSlideSorter );
-
-    return pSlideSorterViewShell;
-}
 
 void lcl_ApplyToPages( ::std::vector< SdPage * > aPages, const ::sd::impl::TransitionEffect & rEffect )
 {
@@ -575,7 +554,7 @@ void SlideTransitionPane::onChangeCurrentPage()
 ::std::vector< SdPage * > SlideTransitionPane::getSelectedPages()
 {
     ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell =
-          lcl_getSlideSorterViewShell( mrBase );
+        ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(mrBase);
 //    DBG_ASSERT( pSlideSorterViewShell, "No Slide-Sorter available" );
     ::std::vector< SdPage * > aSelectedPages;
 
@@ -1112,7 +1091,8 @@ void SlideTransitionPane::playCurrentEffect()
 {
     if( mxView.is() )
     {
-        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >( mrBase.GetPaneManager().GetViewShell() );
+        DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
+            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
         if( pViewShell == 0 )
             return;
 
@@ -1120,7 +1100,7 @@ void SlideTransitionPane::playCurrentEffect()
 
         pViewShell->SetSlideShow( 0 );
         std::auto_ptr<Slideshow> pSlideshow(
-            new Slideshow( pViewShell, pView, pViewShell->GetDoc() ) );
+            new Slideshow( pViewShell, pView, pViewShell->GetDoc(), mrBase.GetViewWindow() ) );
         Reference< ::com::sun::star::animations::XAnimationNode > xNode;
         if (pSlideshow->startPreview( mxView->getCurrentPage(), xNode ))
             pViewShell->SetSlideShow( pSlideshow.release() );
@@ -1133,6 +1113,7 @@ void SlideTransitionPane::addListener()
     mrBase.GetEventMultiplexer().AddEventListener (
         aLink,
         tools::EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION
+        | tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION
         | tools::EventMultiplexerEvent::EID_CURRENT_PAGE
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED
         | tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
@@ -1154,6 +1135,7 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
             break;
 
         case tools::EventMultiplexerEvent::EID_CURRENT_PAGE:
+        case tools::EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION:
             onChangeCurrentPage();
             break;
 
