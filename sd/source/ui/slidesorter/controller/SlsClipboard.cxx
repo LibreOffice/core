@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsClipboard.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:23:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -720,7 +720,7 @@ sal_Int8 Clipboard::ExecuteOrAcceptShapeDrop (
     // is implemented in the ViewShell class and uses the page view of the
     // main edit view.  This is not possible without a DrawViewShell.
     DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(
-        mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
+        mrController.GetViewShell().GetViewShellBase().GetMainViewShell().get());
     if (pDrawViewShell != NULL
         && (pDrawViewShell->GetShellType() == ViewShell::ST_IMPRESS
             || pDrawViewShell->GetShellType() == ViewShell::ST_DRAW))
