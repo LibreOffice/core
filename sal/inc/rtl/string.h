@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:14:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:03:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _OSL_INTERLOCK_H_
+#include <osl/interlck.h>
 #endif
 #ifndef _RTL_TEXTCVT_H
 #include <rtl/textcvt.h>
@@ -762,9 +765,9 @@ double SAL_CALL rtl_str_toDouble( const sal_Char * str ) SAL_THROW_EXTERN_C();
  */
 typedef struct _rtl_String
 {
-    sal_Int32       refCount;
-    sal_Int32       length;
-    sal_Char        buffer[1];
+    oslInterlockedCount refCount; /* opaque */
+    sal_Int32           length;
+    sal_Char            buffer[1];
 } rtl_String;
 
 #ifdef SAL_W32
