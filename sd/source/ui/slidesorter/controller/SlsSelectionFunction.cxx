@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSelectionFunction.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:52:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:17:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,11 +53,9 @@
 #include "view/SlsViewOverlay.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsPageObjectViewObjectContact.hxx"
+#include "framework/FrameworkHelper.hxx"
 #ifndef SD_SHOW_VIEW_HXX
 #include "showview.hxx"
-#endif
-#ifndef SD_PANE_MANAGER_HXX
-#include "PaneManager.hxx"
 #endif
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
@@ -1133,8 +1131,10 @@ void SelectionFunction::SwitchView (const model::SharedPageDescriptor& rpDescrip
             mpViewShell->GetFrameView()->SetSelectedPage(
                 (rpDescriptor->GetPage()->GetPageNum()-1)/2);
         }
-        mrController.GetViewShell().GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
-            ViewShell::ST_IMPRESS);
+        framework::FrameworkHelper::Instance(
+            mrController.GetViewShell().GetViewShellBase())->RequestView(
+                framework::FrameworkHelper::msImpressViewURL,
+                framework::FrameworkHelper::msCenterPaneURL);
     }
 }
 
