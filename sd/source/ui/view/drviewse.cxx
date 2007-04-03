@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewse.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:15:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:30:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,9 @@
 #include "DrawViewShell.hxx"
 #include "slideshow.hxx"
 
+#include "ViewShellImplementation.hxx"
 #include "ViewShellHint.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 #ifndef _COM_SUN_STAR_FORM_FORMBUTTONTYPE_HPP_
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -193,7 +195,6 @@
 #endif
 #include "DrawDocShell.hxx"
 #include "sdattr.hxx"
-#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -812,7 +813,8 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
                     if (mpFrameView->GetPreviousViewShellType() == ViewShell::ST_NONE)
                         mpFrameView->SetPreviousViewShellType(GetShellType());
 
-                    mpSlideShow = new Slideshow( this, mpDrawView, GetDoc() );
+                    mpSlideShow = new Slideshow( this, mpDrawView, GetDoc(),
+                        GetViewShellBase().GetViewWindow() );
                     mpSlideShow->setRehearseTimings(
                         nSId == SID_REHEARSE_TIMINGS );
                     if (!mpSlideShow->startShow())
@@ -1014,7 +1016,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
             // Let the sub-shell manager handle the slot handling.
-            GetViewShellBase().GetPaneManager().HandleModeChangeSlot (
+            framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSId,
                 rReq);
             rReq.Ignore ();
@@ -1084,32 +1086,33 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             else
             {
                 // Switch to requested ViewShell.
-                ViewShell::ShellType eShellType;
+                ::rtl::OUString sRequestedView;
                 PageKind ePageKind;
                 switch (nSId)
                 {
                     case SID_SLIDE_MASTERPAGE:
                     case SID_TITLE_MASTERPAGE:
                     default:
-                        eShellType = ViewShell::ST_IMPRESS;
+                        sRequestedView = framework::FrameworkHelper::msImpressViewURL;
                         ePageKind = PK_STANDARD;
                         break;
 
                     case SID_NOTES_MASTERPAGE:
-                        eShellType = ViewShell::ST_NOTES;
+                        sRequestedView = framework::FrameworkHelper::msNotesViewURL;
                         ePageKind = PK_NOTES;
                         break;
 
                     case SID_HANDOUT_MASTERPAGE:
-                        eShellType = ViewShell::ST_HANDOUT;
+                        sRequestedView = framework::FrameworkHelper::msHandoutViewURL;
                         ePageKind = PK_HANDOUT;
                         break;
                 }
 
                 mpFrameView->SetViewShEditMode(EM_MASTERPAGE, ePageKind);
                 mpFrameView->SetLayerMode(mbIsLayerModeActive);
-                GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
-                    eShellType);
+                framework::FrameworkHelper::Instance(GetViewShellBase())->RequestView(
+                    sRequestedView,
+                    framework::FrameworkHelper::msCenterPaneURL);
             }
             Broadcast (
                 ViewShellHint(ViewShellHint::HINT_CHANGE_EDIT_MODE_END));
@@ -1176,6 +1179,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             }
 
             Invalidate (SID_RULER);
+            Resize();
             rReq.Done ();
         }
         break;
@@ -1802,7 +1806,9 @@ void DrawViewShell::StopSlideShow (bool bCloseFrame)
             mpFrameView->SetSlotId(SID_OBJECT_SELECT);
             mpFrameView->SetPreviousViewShellType(GetShellType());
 
-            GetViewShellBase().GetPaneManager().RequestMainViewShellChange(ePreviousType);
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestView(
+                framework::FrameworkHelper::GetViewURL(ePreviousType),
+                framework::FrameworkHelper::msCenterPaneURL);
 
             GetViewFrame()->GetBindings().InvalidateAll( TRUE );
         }
