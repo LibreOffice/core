@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesSelector.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:49:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:22:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include "MasterPagesSelector.hxx"
 
 #include "MasterPageContainer.hxx"
@@ -53,7 +54,6 @@
 #include "SlideSorterViewShell.hxx"
 #include "PreviewValueSet.hxx"
 #include "ViewShellBase.hxx"
-#include "PaneManager.hxx"
 #include "../TaskPaneShellManager.hxx"
 #include "taskpane/TitledControl.hxx"
 #include "taskpane/ControlContainer.hxx"
