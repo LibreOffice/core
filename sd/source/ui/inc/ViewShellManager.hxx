@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellManager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:29:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:08:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,19 +59,19 @@ class ViewShellBase;
     (the underlying ViewShellBase, the only true SfxViewShell descendant,
     forms a third level.)  On the first level there are the view shells
     (what formely was called view shell, anyway; nowadays they are derived
-    from SfxShell.)  On the second level there are sub shells (also derived
-    from SfxShell) that usually are tool bars.
+    from SfxShell.) and shells for panes. On the second level there are sub
+    shells (also derived from SfxShell) that usually are tool bars.
 
     <p>On the SFX shell stack the regular sub shells are placed above their
     view shells.  The FormShell is a special case.  With the SetFormShell()
     method it can be placed directly above or below one of the view
     shells.</p>
 
-    <p>Shells managed by this class are created by factories.  On factory
-    for the view shells.  For the sub shells there is one factory for every
-    view shell.  Factories are set via the Set(View,Sub)ShellFactory()
-    methods.  The FormShell is managed with the factory of its view
-    shell.</p>
+    <p>Shells managed by this class are created by factories or are given
+    directly to Activate... methods.  For the sub shells there is one
+    factory for every view shell.  Factories are added or removed via the
+    (Add|Remove)SubShellFactory() methods.  The FormShell is managed with the
+    factory of its view shell.</p>
 */
 class ViewShellManager
 {
@@ -91,14 +91,6 @@ public:
         destroyed but the view shell manager itself can not yet be deleted.
     */
     void Shutdown (void);
-
-    /** Register the default factory that is called to create a new instance
-        of a shell for a given id when there is no factory that has been
-        registered specially for that id.
-        @param pFactory
-            The factory object that is called to create a new shell instance.
-    */
-    void SetViewShellFactory (const SharedShellFactory& rpFactory);
 
     /** Set the factory for sub shells of the specified view shell.
     */
@@ -126,12 +118,25 @@ public:
         ::Window* pParentWindow,
         FrameView* pFrameView);
 
+    /** Activate the given view shell.
+    */
+    void ActivateViewShell (ViewShell* pViewShell);
+
+    /** Activate the given shell which is not a view shell.  For view shells
+        use the ActivateViewShell() method.
+    */
+    void ActivateShell (SfxShell* pShell);
+
     /** Deactivate the specified shell, i.e. take it and all of its
         object bars from the shell stack.
         @param pShell
             The shell to deactivate.
     */
     void DeactivateViewShell (const ViewShell* pShell);
+
+    /** Deactivate the specified shell.  The shell is not destroyed.
+    */
+    void DeactivateShell (const SfxShell* pShell);
 
     /** Associate the form shell with a view shell and their relative
         position.  This method does not change the shell stack, it just
