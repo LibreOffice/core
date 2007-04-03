@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:49:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:31:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 	</info>
 	<import oor:component="org.openoffice.Office.Common"/>
 	<templates>
-		<group oor:name="MasterPageDescriptor">
+        <group oor:name="MasterPageDescriptor">
             <info>
 				<desc>Describes master pages that belong to the list of recently used master pages.</desc>
             </info>
@@ -54,6 +54,33 @@
 	    			<desc>The internal name of the master page.</desc>
                 </info>
             </prop>
+		</group>
+        <group oor:name="Resource">
+            <info>
+				<desc>A factory that can create one more resources for the multi pane framework.</desc>
+            </info>
+			<prop oor:name="URL" oor:type="xs:string">
+                <info>
+	    			<desc>URL of a multi pane framework resource.</desc>
+                </info>
+            </prop>
+		</group>
+        <group oor:name="ResourceFactory">
+            <info>
+				<desc>A factory that can create one more resources for the multi pane framework.</desc>
+            </info>
+			<prop oor:name="ServiceName" oor:type="xs:string">
+                <info>
+	    			<desc>The service name of the factory.  This service is not the factory itself.
+                      It is expected to create and register a set of factories when an instance of
+                      the service is created.</desc>
+                </info>
+            </prop>
+            <set oor:name="ResourceList" oor:node-type="Resource">
+                <info>
+                    <desc>List of URLs of the resources that are created by the factory.</desc>
+                </info>
+			</set>
 		</group>
 	</templates>
 	<component>
@@ -1244,6 +1271,18 @@
                     </info>
                 </set>
 			</group>
+			<group oor:name="Framework">
+                <info>
+                    <desc>Options that control the multi pane framework.</desc>
+    	    		<label>Multi Pane Framework Options</label>
+                </info>
+				<set oor:name="ResourceFactories" oor:node-type="ResourceFactory">
+                    <info>
+                        <desc>Set of factories and the resources created by them.</desc>
+    	        		<label>Multi Pane Framework Resource Factories</label>
+                    </info>
+                </set>
+            </group>
 			<group oor:name="SlideSorter">
                 <info>
 		    		<desc>Values related to the slide sorter.</desc>
