@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:32:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,12 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANECONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XPaneController.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
@@ -62,24 +68,27 @@
 #ifndef _COMPHELPER_UNO3_HXX_
 #include <comphelper/uno3.hxx>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE4_HXX_
-#include <cppuhelper/implbase4.hxx>
+#ifndef _CPPUHELPER_IMPLBASE6_HXX_
+#include <cppuhelper/implbase6.hxx>
 #endif
 #include <tools/weakbase.hxx>
 #include <memory>
 #include <vector>
+#include <boost/scoped_ptr.hpp>
 
 class SfxViewShell;
 class SdXImpressDocument;
 
 namespace {
 
-typedef ::cppu::ImplInheritanceHelper4 <
+typedef ::cppu::ImplInheritanceHelper6 <
     SfxBaseController,
     ::com::sun::star::view::XSelectionSupplier,
     ::com::sun::star::lang::XServiceInfo,
     ::com::sun::star::drawing::XDrawView,
-    ::com::sun::star::view::XSelectionChangeListener
+    ::com::sun::star::view::XSelectionChangeListener,
+    ::com::sun::star::drawing::framework::XControllerManager,
+    ::com::sun::star::lang::XUnoTunnel
     > DrawControllerInterfaceBase;
 
 class BroadcastHelperOwner
@@ -104,7 +113,11 @@ class View;
 /** The DrawController is the UNO controller for Impress and Draw.  It
     relies objects that implement the DrawSubController interface for view
     specific behaviour.  The life time of the DrawController is roughly that
-    of ViewShellBase.
+    of ViewShellBase but note that the DrawController can (in the case of a
+    reload) outlive the ViewShellBase.
+
+    The implementation of the XControllerManager interface is not yet in its
+    final form.
 */
 class DrawController
     : public DrawControllerInterfaceBase,
@@ -123,6 +136,11 @@ public:
         PROPERTY_ZOOMTYPE,
         PROPERTY_ZOOMVALUE,
         PROPERTY_VIEWOFFSET,
+        PROPERTY_CONFIGURATION_CONTROLLER,
+        PROPERTY_PANE_CONTROLLER,
+        PROPERTY_VIEW_CONTROLLER,
+        PROPERTY_TOOL_BAR_CONTROLLER,
+        PROPERTY_DISPATCH_CONTROLLER,
         PROPERTY__END
     };
 
@@ -165,6 +183,23 @@ public:
     /** Call this method when there is a new current page.
     */
     void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
+
+    /** Return a pointer to the ViewShellBase object that the DrawController
+        is connected to.
+        @return
+            The returned pointer is <NULL/> after a call to
+            ReleaseViewShellBase().
+    */
+    ViewShellBase* GetViewShellBase (void);
+
+    /** This method is typically called from the destructor of ViewShellBase
+        to tell the DrawController that it and its members must not access
+        the ViewShellBase anymore.
+        After this call the DrawController is semi-disposed.
+    */
+    void ReleaseViewShellBase (void);
+
+    static const ::com::sun::star::uno::Sequence<sal_Int8>& getUnoTunnelId (void);
 
     DECLARE_XINTERFACE()
     DECLARE_XTYPEPROVIDER()
@@ -213,6 +248,63 @@ public:
     virtual void  SAL_CALL
         selectionChanged (const ::com::sun::star::lang::EventObject& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
+
+
+    // XControllerManager
+
+    virtual void SAL_CALL registerResourceController (
+        const ::rtl::OUString& sServiceName,
+        const com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::framework::XResourceController>& rxController)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL removeResourceController (
+        const com::sun::star::uno::Reference<
+            ::com::sun::star::drawing::framework::XResourceController>& rxController)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence<com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XResourceController> > SAL_CALL
+        getResourceControllers (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface> SAL_CALL
+        getController (const ::rtl::OUString& sServiceName)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XConfigurationController> SAL_CALL
+            getConfigurationController (void)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XModuleController> SAL_CALL
+            getModuleController (void)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XPaneController> SAL_CALL
+            getPaneController (void)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XViewController> SAL_CALL
+            getViewController (void)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XToolBarController> SAL_CALL
+            getToolBarController (void)
+        throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XCommandController> SAL_CALL
+            getCommandController (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL releaseController (
+        const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xController)
+        throw (::com::sun::star::uno::RuntimeException);
+
+
+    // XUnoTunnel
+
+    virtual sal_Int64 SAL_CALL getSomething (const com::sun::star::uno::Sequence<sal_Int8>& rId)
+        throw (com::sun::star::uno::RuntimeException);
 
 protected:
     /** This method must return the name to index table. This table
@@ -270,7 +362,10 @@ protected:
     using cppu::OPropertySetHelper::getFastPropertyValue;
 
 private:
-    ViewShellBase& mrBase;
+    /** This pointer to the ViewShellBase can be NULL (after a call to
+        ReleaseViewShellBase()).
+    */
+    ViewShellBase* mpBase;
 
     Rectangle maLastVisArea;
     ::tools::WeakReference<SdrPage> mpCurrentPage;
@@ -288,6 +383,24 @@ private:
     */
     ::std::auto_ptr<DrawSubController> mpSubController;
 
+    class ControllerContainer;
+    ::boost::scoped_ptr<ControllerContainer> mpControllerContainer;
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
+        mxConfigurationController;
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XModuleController>
+        mxModuleController;
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XPaneController>
+        mxPaneController;
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XViewController>
+        mxViewController;
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XToolBarController>
+        mxToolBarController;
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XCommandController>
+        mxCommandController;
+    ::com::sun::star::uno::Sequence<com::sun::star::uno::Reference<
+        ::com::sun::star::drawing::framework::XResourceController> > maResourceControllerList;
+
+
     /** Send an event to all relevant property listeners that a
         property has changed its value.  The fire() method of the
         OPropertySetHelper is wrapped by this method to handle
@@ -297,6 +410,13 @@ private:
         sal_Int32 nHandle,
         const ::com::sun::star::uno::Any& rNewValue,
         const ::com::sun::star::uno::Any& rOldValue);
+
+    void ProvideSubControllers (void);
+    void DisposeSubControllers (void);
+    void DisposeSubController (
+        const ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxSubController);
+    void RemoveSubController (
+        const ::com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& rxSubController);
 };
 
 } // end of namespace sd
