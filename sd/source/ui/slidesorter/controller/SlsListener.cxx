@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsListener.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:29:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:17:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ Listener::Listener (SlideSorterController& rController)
 
     // Listen for hints of the MainViewShell as well.  If that is not yet
     // present then the EventMultiplexer will tell us when it is available.
-    ViewShell* pMainViewShell = rBase.GetMainViewShell();
+    ViewShell* pMainViewShell = rBase.GetMainViewShell().get();
     if (pMainViewShell != NULL
         && pMainViewShell!=static_cast<ViewShell*>(&mrController.GetViewShell()))
     {
@@ -357,7 +357,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED:
         {
             ViewShell* pMainViewShell
-                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell();
+                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell().get();
             if (pMainViewShell != NULL)
                 EndListening(*pMainViewShell);
         }
@@ -367,7 +367,7 @@ IMPL_LINK(Listener, EventMultiplexerCallback, ::sd::tools::EventMultiplexerEvent
         case tools::EventMultiplexerEvent::EID_MAIN_VIEW_ADDED:
         {
             ViewShell* pMainViewShell
-                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell();
+                = mrController.GetViewShell().GetViewShellBase().GetMainViewShell().get();
             if (pMainViewShell != NULL
                 && pMainViewShell!=static_cast<ViewShell*>(&mrController.GetViewShell()))
             {
