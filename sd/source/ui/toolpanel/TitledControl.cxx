@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitledControl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:44:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:21:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,7 @@ TitledControl::TitledControl (
     TreeNode* pParent,
     ::std::auto_ptr<TreeNode> pControl,
     const String& rTitle,
+    const ClickHandler& rClickHandler,
     TitleBar::TitleBarType eType)
     : ::Window (pParent->GetWindow(), WB_TABSTOP),
       TreeNode(pParent),
@@ -65,6 +66,7 @@ TitledControl::TitledControl (
       mbVisible(true),
       mpUserData(NULL),
       mpControlFactory(NULL),
+      mpClickHandler(new ClickHandler(rClickHandler)),
       mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
 {
     if (pControl.get() != NULL)
@@ -94,6 +96,7 @@ TitledControl::TitledControl (
     TreeNode* pParent,
     ::std::auto_ptr<ControlFactory> pControlFactory,
     const String& rTitle,
+    const ClickHandler& rClickHandler,
     TitleBar::TitleBarType eType)
     : ::Window (pParent->GetWindow(), WB_TABSTOP),
       TreeNode(pParent),
@@ -101,6 +104,7 @@ TitledControl::TitledControl (
       mbVisible (true),
       mpUserData (NULL),
       mpControlFactory(pControlFactory),
+      mpClickHandler(new ClickHandler(rClickHandler)),
       mbExpansionModeIsToggle(eType!=TitleBar::TBT_CONTROL_TITLE)
 {
     mpControlContainer->AddControl (::std::auto_ptr<TreeNode> (
@@ -410,11 +414,7 @@ IMPL_LINK(TitledControl, WindowEventListener,
         switch (pWindowEvent->GetId())
         {
             case VCLEVENT_WINDOW_MOUSEBUTTONUP:
-                // Toggle expansion.
-                GetParentNode()->GetControlContainer().SetExpansionState (
-                    this,
-                    mbExpansionModeIsToggle ? ControlContainer::ES_TOGGLE
-                                            : ControlContainer::ES_EXPAND);
+                (*mpClickHandler)(*this);
                 break;
         }
     }
@@ -477,5 +477,25 @@ TitleBar* TitledControl::GetTitleBar (void)
 }
 
 
+
+
+//===== TitledControlStandardClickHandler =====================================
+
+TitledControlStandardClickHandler::TitledControlStandardClickHandler (
+    ControlContainer& rControlContainer,
+    ControlContainer::ExpansionState eExpansionState)
+    : mrControlContainer(rControlContainer),
+      meExpansionState(eExpansionState)
+{
+}
+
+
+
+
+void TitledControlStandardClickHandler::operator () (TitledControl& rTitledControl)
+{
+    // Toggle expansion.
+    mrControlContainer.SetExpansionState (&rTitledControl, meExpansionState);
+}
 
 } } // end of namespace ::sd::toolpanel
