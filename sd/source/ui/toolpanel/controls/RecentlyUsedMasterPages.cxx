@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:51:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:22:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
 #include "MasterPageObserver.hxx"
 #include "MasterPagesSelector.hxx"
 #include "MasterPageDescriptor.hxx"
-
+#include "tools/ConfigurationAccess.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 
@@ -90,13 +90,6 @@ using namespace ::com::sun::star::uno;
 
 namespace {
 
-static const OUString& GetConfigurationProviderServiceName (void)
-{
-    static const OUString sConfigurationProviderServiceName (
-        RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.configuration.ConfigurationProvider"));
-    return sConfigurationProviderServiceName;
-}
 static const OUString& GetPathToImpressConfigurationRoot (void)
 {
     static const OUString sPathToImpressConfigurationRoot (
@@ -217,103 +210,17 @@ void RecentlyUsedMasterPages::LateInit (void)
 
 
 
-Reference<XInterface> RecentlyUsedMasterPages::OpenConfiguration (
-    const OUString& rsRootName,
-    bool bReadOnly)
-{
-    Reference<XInterface> xRoot;
-    try
-    {
-        Reference<lang::XMultiServiceFactory> xProvider (
-            ::comphelper::getProcessServiceFactory()->createInstance(
-                rsRootName),
-            UNO_QUERY);
-        if (xProvider.is())
-        {
-            Sequence<Any> aCreationArguments(3);
-            aCreationArguments[0] = makeAny(beans::PropertyValue(
-                OUString(
-                    RTL_CONSTASCII_USTRINGPARAM("nodepath")),
-                0,
-                makeAny(GetPathToImpressConfigurationRoot()),
-                beans::PropertyState_DIRECT_VALUE));
-            aCreationArguments[1] = makeAny(beans::PropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("depth")),
-                0,
-                makeAny((sal_Int32)-1),
-                beans::PropertyState_DIRECT_VALUE));
-            aCreationArguments[2] = makeAny(beans::PropertyValue(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("lazywrite")),
-                0,
-                makeAny(true),
-                beans::PropertyState_DIRECT_VALUE));
-            OUString sAccessService;
-            if (bReadOnly)
-                sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationAccess"));
-            else
-                sAccessService = OUString(RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationUpdateAccess"));
-
-            xRoot = xProvider->createInstanceWithArguments(
-                sAccessService, aCreationArguments);
-        }
-    }
-    catch (Exception& rException)
-    {
-        OSL_TRACE ("caught exception while opening configuration: %s",
-            ::rtl::OUStringToOString(rException.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
-    }
-
-    return xRoot;
-}
-
-
-
-
-Reference<XInterface> RecentlyUsedMasterPages::GetConfigurationNode (
-    const Reference<XInterface>& xRoot,
-    const OUString& sPathToNode)
-{
-    Reference<XInterface> xNode;
-
-    try
-    {
-        Reference<container::XHierarchicalNameAccess> xHierarchy (
-            xRoot, UNO_QUERY);
-        if (xHierarchy.is())
-        {
-            xHierarchy->getByHierarchicalName(sPathToNode) >>= xNode;
-        }
-    }
-    catch (Exception& rException)
-    {
-        OSL_TRACE ("caught exception while getting configuration node %s: %s",
-            ::rtl::OUStringToOString(sPathToNode,
-                RTL_TEXTENCODING_UTF8).getStr(),
-            ::rtl::OUStringToOString(rException.Message,
-                RTL_TEXTENCODING_UTF8).getStr());
-    }
-
-    return xNode;
-}
-
-
-
-
 void RecentlyUsedMasterPages::LoadPersistentValues (void)
 {
     try
     {
         do
         {
-            Reference<XInterface> xRoot (
-                OpenConfiguration(GetConfigurationProviderServiceName(),true));
-            if ( ! xRoot.is())
-                break;
+            tools::ConfigurationAccess aConfiguration (
+                GetPathToImpressConfigurationRoot(),
+                tools::ConfigurationAccess::READ_ONLY);
             Reference<container::XNameAccess> xSet (
-                GetConfigurationNode(xRoot, GetPathToSetNode()),
+                aConfiguration.GetConfigurationNode(GetPathToSetNode()),
                 UNO_QUERY);
             if ( ! xSet.is())
                 break;
@@ -360,9 +267,6 @@ void RecentlyUsedMasterPages::LoadPersistentValues (void)
                     mpMasterPages->push_back(Descriptor(aToken,sURL,sName));
                 }
             }
-            // Release references to the configuration.
-            xSet = NULL;
-            xRoot = NULL;
 
             ResolveList();
         }
@@ -383,13 +287,11 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
     {
         do
         {
-            Reference<util::XChangesBatch> xRoot (
-                OpenConfiguration(GetConfigurationProviderServiceName(),false),
-                UNO_QUERY);
-            if ( ! xRoot.is())
-                break;
+            tools::ConfigurationAccess aConfiguration (
+                GetPathToImpressConfigurationRoot(),
+                tools::ConfigurationAccess::READ_WRITE);
             Reference<container::XNameContainer> xSet (
-                GetConfigurationNode(xRoot, GetPathToSetNode()),
+                aConfiguration.GetConfigurationNode(GetPathToSetNode()),
                 UNO_QUERY);
             if ( ! xSet.is())
                 break;
@@ -432,7 +334,7 @@ void RecentlyUsedMasterPages::SavePersistentValues (void)
             }
 
             // Write the data back to disk.
-            xRoot->commitChanges();
+            aConfiguration.CommitChanges();
         }
         while (false);
     }
