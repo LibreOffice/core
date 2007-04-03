@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:37:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:06:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -226,6 +226,11 @@ public:
     virtual ::com::sun::star::uno::Reference<
         ::com::sun::star::accessibility::XAccessible>
         CreateAccessibleDocumentView (::sd::Window* pWindow);
+
+    /** Try to relocate all toplevel window elements to the given parent
+        window.
+    */
+    virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
 protected:
     ::std::auto_ptr<controller::SlideSorterController> mpSlideSorterController;
