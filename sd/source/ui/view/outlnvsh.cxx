@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:18:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:31:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "OutlineViewShell.hxx"
 
+#include "ViewShellImplementation.hxx"
 #include <memory>
 
 #include "app.hrc"
@@ -185,12 +186,12 @@
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_OUTLINE_VIEW_HXX
 #include "AccessibleOutlineView.hxx"
 #endif
-#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
 #include "ViewShellManager.hxx"
 #include "DrawController.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -384,6 +385,19 @@ OutlineViewShell::~OutlineViewShell()
         pClipEvtLstnr->release();
     }
 }
+
+
+
+
+void OutlineViewShell::Shutdown (void)
+{
+    ViewShell::Shutdown();
+
+    PrepareClose();
+}
+
+
+
 
 /*************************************************************************
 |*
@@ -708,7 +722,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
-            GetViewShellBase().GetPaneManager().HandleModeChangeSlot (
+            framework::FrameworkHelper::Instance(GetViewShellBase())->HandleModeChangeSlot(
                 nSlot,
                 rReq);
             rReq.Done();
