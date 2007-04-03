@@ -1,0 +1,76 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XModuleController.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:45:20 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XModuleController_idl__
+#define __com_sun_star_drawing_framework_XModuleController_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_IDL_
+#include <com/sun/star/frame/XController.idl>
+#endif
+#ifndef __com_sun_star_drawing_framework_ResourceId_idl__
+#include <com/sun/star/drawing/framework/ResourceId.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+interface XView;
+
+/** The module controller is responsible for loading a module (addon,
+    plugin, whatever the name) when it is first used.
+    <p>For this there is a
+    list in the office configuration which associates resource URLs with
+    service names which in turn are associated with modules (or dlls).  The
+    path to the office configuration list is
+    <const>MultiPaneGUI/Framework/ResourceFactories</const> in the
+    Impress.xcu file.</p>
+*/
+interface XModuleController
+    : ::com::sun::star::uno::XInterface
+{
+    /** When the specified resource is requested for the first time then
+        create a new instance of the associated factory service.
+    */
+    void requestResource ([in] string sResourceTypeURL);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
