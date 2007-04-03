@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellImplementation.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:09:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:28:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include "ViewShellImplementation.hxx"
 
 #include "sdpage.hxx"
@@ -56,6 +57,10 @@
 #include "slideshow.hxx"
 #include "TaskPaneViewShell.hxx"
 #include "ViewShellBase.hxx"
+#include "FrameView.hxx"
+#include "DrawViewShell.hxx"
+#include "ViewShellHint.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
@@ -65,6 +70,16 @@
 #include <basic/sbstar.hxx>
 #include "undo/undoobjects.hxx"
 
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XViewController.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
+using ::sd::framework::FrameworkHelper;
 
 namespace {
 
