@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawController.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:54:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,9 +39,6 @@
 #include "DrawController.hxx"
 
 #include "DrawSubController.hxx"
-#ifndef SD_PANE_MANAGER_HXX
-#include "PaneManager.hxx"
-#endif
 #include "sdpage.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
@@ -49,12 +46,22 @@
 #ifndef SD_VIEW_SHELL_MANAGER_HXX
 #include "ViewShellManager.hxx"
 #endif
+#include "framework/PaneController.hxx"
 
 #include <comphelper/anytostring.hxx>
+#include <comphelper/processfactory.hxx>
+#include <comphelper/stl_types.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <cppuhelper/bootstrap.hxx>
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_PANECONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/PaneController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
 #endif
 
 #ifndef _VOS_MUTEX_HXX_
@@ -71,6 +78,7 @@ using namespace ::cppu;
 using namespace ::vos;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
 
 namespace {
 static const ::com::sun::star::uno::Type saComponentTypeIdentifier (
@@ -82,6 +90,18 @@ static const ::com::sun::star::uno::Type saSelectionTypeIdentifier (
 
 namespace sd {
 
+class DrawController::ControllerContainer
+    : public ::std::hash_map<
+          rtl::OUString,
+          Reference<XInterface>,
+          ::comphelper::UStringHash,
+          ::comphelper::UStringEqual>
+{
+public:
+    ControllerContainer (void) {};
+};
+
+
 
 DrawController::DrawController (ViewShellBase& rBase) throw()
     : DrawControllerInterfaceBase(&rBase),
@@ -90,15 +110,21 @@ DrawController::DrawController (ViewShellBase& rBase) throw()
           OMultiTypeInterfaceContainerHelper,
           OMultiTypeInterfaceContainerHelper::keyType>& >(
               BroadcastHelperOwner::maBroadcastHelper)),
-      mrBase(rBase),
+      mpBase(&rBase),
       maLastVisArea(),
       mpCurrentPage(NULL),
       mbMasterPageMode(false),
       mbLayerMode(false),
       mbDisposing(false),
       mpPropertyArrayHelper(NULL),
-      mpSubController()
+      mpSubController(),
+      mpControllerContainer(new ControllerContainer()),
+      mxConfigurationController(),
+      mxPaneController(),
+      mxViewController(),
+      maResourceControllerList()
 {
+    ProvideSubControllers();
 }
 
 
@@ -172,14 +198,15 @@ void SAL_CALL DrawController::dispose()
             // When the controller has not been detached from its view
             // shell, i.e. mpViewShell is not NULL, then tell PaneManager
             // and ViewShellManager to clear the shell stack.
-            if (mpSubController.get() != NULL)
+            if (mpSubController.get()!=NULL && mpBase!=NULL)
             {
-                mrBase.DisconnectAllClients();
-                mrBase.GetPaneManager().Shutdown(true);
-                mrBase.GetViewShellManager().Shutdown();
+                mpBase->DisconnectAllClients();
+                mpBase->GetViewShellManager().Shutdown();
             }
 
             OPropertySetHelper::disposing();
+
+            DisposeSubControllers();
 
             SfxBaseController::dispose();
         }
@@ -215,7 +242,9 @@ void SAL_CALL DrawController::removeEventListener (
 
 OUString SAL_CALL DrawController::getImplementationName(  ) throw(RuntimeException)
 {
-    ThrowIfDisposed();
+    // Do not throw an excepetion at the moment.  This leads to a crash
+    // under Solaris on relead.  See issue i70929 for details.
+    //    ThrowIfDisposed();
     return OUString( RTL_CONSTASCII_USTRINGPARAM( "DrawController" ) );
 }
 
@@ -228,7 +257,9 @@ sal_Bool SAL_CALL DrawController::supportsService (
     const OUString& rsServiceName)
     throw(RuntimeException)
 {
-    ThrowIfDisposed();
+    // Do not throw an excepetion at the moment.  This leads to a crash
+    // under Solaris on relead.  See issue i70929 for details.
+    //    ThrowIfDisposed();
     return rsServiceName.equals(ssServiceName);
 }
 
@@ -543,6 +574,389 @@ void DrawController::FirePropertyChange (
 
 
 
+ViewShellBase* DrawController::GetViewShellBase (void)
+{
+    return mpBase;
+}
+
+
+
+
+void DrawController::ReleaseViewShellBase (void)
+{
+    DisposeSubControllers();
+    mpBase = NULL;
+}
+
+
+
+
+//===== XControllerManager ==============================================================
+
+void SAL_CALL DrawController::registerResourceController (
+    const ::rtl::OUString& sServiceName,
+    const Reference<XResourceController>& rxResourceController)
+    throw (RuntimeException)
+{
+    (void)sServiceName;
+
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+
+    sal_uInt32 nResourceControllerCount (maResourceControllerList.getLength());
+    maResourceControllerList.realloc(nResourceControllerCount+1);
+    maResourceControllerList[nResourceControllerCount] = rxResourceController;
+}
+
+
+
+
+void SAL_CALL DrawController::removeResourceController (
+    const Reference<XResourceController>& rxResourceController)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+
+    sal_uInt32 nResourceControllerCount (maResourceControllerList.getLength());
+    for (sal_uInt32 nIndex=0; nIndex<nResourceControllerCount; ++nIndex)
+    {
+        if (maResourceControllerList[nIndex] == rxResourceController)
+        {
+            nResourceControllerCount -= 1;
+            for ( ; nIndex<nResourceControllerCount; ++nIndex)
+                maResourceControllerList[nIndex] = maResourceControllerList[nIndex+1];
+            maResourceControllerList.realloc(nResourceControllerCount);
+            break;
+        }
+    }
+}
+
+
+
+
+Sequence<Reference<XResourceController> > SAL_CALL
+    DrawController::getResourceControllers (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return maResourceControllerList;
+}
+
+
+
+
+Reference<XInterface> SAL_CALL DrawController::getController (const ::rtl::OUString& sServiceName)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+
+    Reference<XInterface> xController;
+    ControllerContainer::const_iterator iController (mpControllerContainer->find(sServiceName));
+    if (iController != mpControllerContainer->end())
+        xController = iController->second;
+
+    if ( ! xController.is())
+    {
+        try
+        {
+            // We do the creation and initialization manually so that we can
+            // store the newly created instance before it is initialized.
+            // This prevents a second creation when during the
+            // initialization the service is requested a second time.
+            Reference<lang::XMultiServiceFactory> xFactory (
+                ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW);
+            xController = xFactory->createInstance(sServiceName);
+            (*mpControllerContainer)[sServiceName] = xController;
+            Reference<lang::XInitialization> xInit (xController, UNO_QUERY_THROW);
+            Sequence<Any> aArguments(1);
+            aArguments[0] = makeAny(Reference<XController>(this));
+            xInit->initialize(aArguments);
+        }
+        catch (RuntimeException&)
+        {
+        }
+    }
+    return xController;
+}
+
+
+
+
+void DrawController::ProvideSubControllers (void)
+{
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    try
+    {
+        Reference<lang::XMultiServiceFactory> xFactory (
+            ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW);
+
+        Sequence<Any> aInitializationArguments(1);
+        aInitializationArguments[0] = makeAny(Reference<XController>(this));
+        OUString sServiceName;
+        Reference<XInterface> xController;
+
+        // First, create the module controller whose services may be used by
+        // the resource controllers to find the right resource factories.
+        if ( ! mxModuleController.is())
+        {
+            sServiceName = ::rtl::OUString::createFromAscii(
+                "com.sun.star.drawing.framework.ModuleController");
+            xController = xFactory->createInstance(sServiceName);
+            (*mpControllerContainer)[sServiceName] = xController;
+            mxModuleController = Reference<XModuleController>(xController, UNO_QUERY);
+            Reference<lang::XInitialization> xInit (xController, UNO_QUERY_THROW);
+            xInit->initialize(aInitializationArguments);
+        }
+
+        // Create the configuration controller that synchronizes the
+        // resource controllers.
+        if ( ! mxConfigurationController.is())
+        {
+            sServiceName = ::rtl::OUString::createFromAscii(
+                "com.sun.star.drawing.framework.ConfigurationController");
+            xController = xFactory->createInstance(sServiceName);
+            (*mpControllerContainer)[sServiceName] = xController;
+            mxConfigurationController
+                = Reference<XConfigurationController>(xController, UNO_QUERY);
+            Reference<lang::XInitialization> xInit (xController, UNO_QUERY_THROW);
+            xInit->initialize(aInitializationArguments);
+        }
+
+        // Create the resource controllers.
+        if ( ! mxPaneController.is())
+        {
+            sServiceName = ::rtl::OUString::createFromAscii(
+                "com.sun.star.drawing.framework.PaneController");
+            xController = xFactory->createInstance(sServiceName);
+            (*mpControllerContainer)[sServiceName] = xController;
+            mxPaneController = Reference<XPaneController>(xController, UNO_QUERY);
+            Reference<lang::XInitialization> xInit (xController, UNO_QUERY_THROW);
+            xInit->initialize(aInitializationArguments);
+        }
+        if ( ! mxViewController.is())
+        {
+            sServiceName = ::rtl::OUString::createFromAscii(
+                "com.sun.star.drawing.framework.ViewController");
+            xController = xFactory->createInstance(sServiceName);
+            (*mpControllerContainer)[sServiceName] = xController;
+            mxViewController = Reference<XViewController>(xController, UNO_QUERY);
+            Reference<lang::XInitialization> xInit (xController, UNO_QUERY_THROW);
+            xInit->initialize(aInitializationArguments);
+        }
+        if ( ! mxToolBarController.is())
+        {
+            sServiceName = ::rtl::OUString::createFromAscii(
+                "com.sun.star.drawing.framework.ToolbarController");
+            xController = xFactory->createInstance(sServiceName);
+            (*mpControllerContainer)[sServiceName] = xController;
+            mxToolBarController = Reference<XToolBarController>(xController, UNO_QUERY);
+            Reference<lang::XInitialization> xInit (xController, UNO_QUERY_THROW);
+            xInit->initialize(aInitializationArguments);
+        }
+        if ( ! mxCommandController.is())
+        {
+            sServiceName = ::rtl::OUString::createFromAscii(
+                "com.sun.star.drawing.framework.CommandController");
+            xController = xFactory->createInstance(sServiceName);
+            (*mpControllerContainer)[sServiceName] = xController;
+            mxCommandController = Reference<XCommandController>(xController, UNO_QUERY);
+            Reference<lang::XInitialization> xInit (xController, UNO_QUERY_THROW);
+            xInit->initialize(aInitializationArguments);
+        }
+
+        // Put the controllers into the resource controller list.
+        maResourceControllerList.realloc(4);
+        maResourceControllerList[0]
+            = Reference<XResourceController>(mxToolBarController, UNO_QUERY_THROW);
+        maResourceControllerList[1]
+            = Reference<XResourceController>(mxViewController, UNO_QUERY_THROW);
+        maResourceControllerList[2]
+            = Reference<XResourceController>(mxPaneController, UNO_QUERY_THROW);
+        maResourceControllerList[3]
+            = Reference<XResourceController>(mxCommandController, UNO_QUERY_THROW);
+    }
+    catch (RuntimeException&)
+    {
+        mxModuleController = NULL;
+        mxPaneController = NULL;
+        mxViewController = NULL;
+        mxToolBarController = NULL;
+        mxCommandController = NULL;
+        mxConfigurationController = NULL;
+        mpControllerContainer->clear();
+        maResourceControllerList.realloc(0);
+    }
+}
+
+
+
+
+Reference<XConfigurationController> SAL_CALL DrawController::getConfigurationController (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    if ( ! mxConfigurationController.is())
+    {
+        mxConfigurationController = Reference<XConfigurationController>(
+            getController(
+                ::rtl::OUString::createFromAscii(
+                    "com.sun.star.drawing.framework.ConfigurationController")),
+            UNO_QUERY);
+    }
+    return mxConfigurationController;
+}
+
+
+
+
+Reference<XModuleController> SAL_CALL DrawController::getModuleController (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+
+    if ( ! mxModuleController.is())
+    {
+        mxModuleController = Reference<XModuleController>(
+            getController(
+                ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.ModuleController")),
+            UNO_QUERY);
+    }
+
+    return mxModuleController;
+}
+
+
+
+
+Reference<XPaneController> SAL_CALL DrawController::getPaneController (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    if ( ! mxPaneController.is())
+    {
+        mxPaneController = Reference<XPaneController>(
+            getController(
+                ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.PaneController")),
+            UNO_QUERY);
+    }
+    return mxPaneController;
+}
+
+
+
+
+Reference<XViewController> SAL_CALL DrawController::getViewController (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    if ( ! mxViewController.is())
+    {
+        mxViewController = Reference<XViewController>(
+            getController(
+                ::rtl::OUString::createFromAscii("com.sun.star.drawing.framework.ViewController")),
+            UNO_QUERY);
+    }
+    return mxViewController;
+}
+
+
+
+
+Reference<XToolBarController> SAL_CALL DrawController::getToolBarController (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    if ( ! mxToolBarController.is())
+    {
+        mxToolBarController = Reference<XToolBarController>(
+            getController(
+                ::rtl::OUString::createFromAscii(
+                    "com.sun.star.drawing.framework.ToolbarController")),
+            UNO_QUERY);
+    }
+    return mxToolBarController;
+}
+
+
+
+
+Reference<XCommandController> SAL_CALL DrawController::getCommandController (void)
+    throw (RuntimeException)
+{
+    ThrowIfDisposed();
+    ::vos::OGuard aGuard (Application::GetSolarMutex());
+    if ( ! mxCommandController.is())
+    {
+        mxCommandController = Reference<XCommandController>(
+            getController(
+                ::rtl::OUString::createFromAscii(
+                    "com.sun.star.drawing.framework.CommandController")),
+            UNO_QUERY);
+    }
+    return mxCommandController;
+}
+
+
+
+
+void SAL_CALL DrawController::releaseController (
+    const Reference<XInterface>& xController)
+    throw (RuntimeException)
+{
+    (void)xController;
+    throw RuntimeException(
+        OUString(RTL_CONSTASCII_USTRINGPARAM(
+            "DrawController::releaseController is not yet implemented")),
+        const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
+}
+
+
+
+
+//===== XUnoTunnel ============================================================
+
+const Sequence<sal_Int8>& DrawController::getUnoTunnelId (void)
+{
+    static ::com::sun::star::uno::Sequence<sal_Int8>* pSequence = NULL;
+    if (pSequence == NULL)
+    {
+        ::osl::Guard< ::osl::Mutex > aGuard (::osl::Mutex::getGlobalMutex());
+        if (pSequence == NULL)
+        {
+            static ::com::sun::star::uno::Sequence<sal_Int8> aSequence (16);
+            rtl_createUuid((sal_uInt8*)aSequence.getArray(), 0, sal_True);
+            pSequence = &aSequence;
+        }
+    }
+    return *pSequence;
+}
+
+
+
+
+sal_Int64 SAL_CALL DrawController::getSomething (const Sequence<sal_Int8>& rId)
+    throw (RuntimeException)
+{
+    sal_Int64 nResult = 0;
+
+    if (rId.getLength() == 16
+        && rtl_compareMemory(getUnoTunnelId().getConstArray(), rId.getConstArray(), 16) == 0)
+    {
+        nResult = sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_IntPtr>(this));
+    }
+
+    return nResult;
+}
+
+
+
+
 //===== Properties ============================================================
 
 void DrawController::FillPropertyTable (
@@ -590,6 +1004,12 @@ void DrawController::FillPropertyTable (
             PROPERTY_VIEWOFFSET,
             ::getCppuType((const ::com::sun::star::awt::Point*)0),
             beans::PropertyAttribute::BOUND ));
+
+    rProperties.push_back(
+        beans::Property( OUString( RTL_CONSTASCII_USTRINGPARAM("PaneController") ),
+            PROPERTY_PANE_CONTROLLER,
+            ::getCppuType((const Reference<XInterface>*)0),
+            beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY));
 }
 
 
@@ -677,10 +1097,83 @@ void DrawController::getFastPropertyValue (
                 maLastVisArea.GetHeight());
             break;
 
+        case PROPERTY_PANE_CONTROLLER:
+            //            rRet <<= mxPaneController;
+            break;
+
         default:
             if (mpSubController.get() != NULL)
                 mpSubController->getFastPropertyValue(rRet,nHandle);
             break;
+    }
+}
+
+
+
+void DrawController::DisposeSubControllers (void)
+{
+    // Dispose the named sub controllers in a defined order.
+    DisposeSubController(mxConfigurationController);
+    mxConfigurationController = NULL;
+
+    DisposeSubController(mxViewController);
+    mxViewController = NULL;
+
+    DisposeSubController(mxPaneController);
+    mxPaneController = NULL;
+
+    DisposeSubController(mxToolBarController);
+    mxToolBarController = NULL;
+
+    DisposeSubController(mxCommandController);
+    mxCommandController = NULL;
+
+    // Dispose the other sub controllers.
+    ControllerContainer::iterator iController;
+    for (iController=mpControllerContainer->begin();
+         iController!=mpControllerContainer->end();
+         ++iController)
+    {
+        DisposeSubController(iController->second);
+    }
+}
+
+
+
+
+void DrawController::DisposeSubController (const Reference<XInterface>& rxController)
+{
+    if (rxController.is())
+    {
+        try
+        {
+            Reference<XComponent> xComponent (rxController, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->dispose();
+            RemoveSubController(mxViewController);
+        }
+        catch (RuntimeException&)
+        {
+            DBG_ASSERT(false, "caught exception while disposing sub controller");
+        }
+    }
+}
+
+
+
+
+void DrawController::RemoveSubController (const Reference<XInterface>& rxController)
+{
+    ControllerContainer::iterator iController;
+    for (iController=mpControllerContainer->begin();
+         iController!=mpControllerContainer->end();
+         ++iController)
+    {
+        if (iController->second == rxController)
+        {
+            mpControllerContainer->erase(iController);
+            break;
+        }
     }
 }
 
