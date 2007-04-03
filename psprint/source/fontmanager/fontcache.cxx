@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontcache.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:33:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:55:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -464,7 +464,9 @@ void FontCache::read()
                     default: break;
                 }
                 if( nTokens > nStyleTokenNr )
-                    pFont->m_aStyleName = OUString( pLine + nTokenPos[nStyleTokenNr], nLen - nTokenPos[nStyleTokenNr], RTL_TEXTENCODING_UTF8 );
+                    pFont->m_aStyleName = OUString::intern( pLine + nTokenPos[nStyleTokenNr],
+                                                            nLen - nTokenPos[nStyleTokenNr],
+                                                            RTL_TEXTENCODING_UTF8 );
 
                 bool bObsolete = false;
                 if( bKeepOnlyUserOverridden )
