@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:55:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:39:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,7 +324,7 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             {
                 ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, SfxViewShell::Current());
                 if(pBase)
-                    pViewSh = pBase->GetMainViewShell();
+                    pViewSh = pBase->GetMainViewShell().get();
             }
             if( !pDoc && pViewSh )
                 pDoc = pViewSh->GetDoc();
