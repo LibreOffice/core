@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outlnvs2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:18:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:31:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,7 +137,6 @@
 #endif
 #include "drawdoc.hxx"
 #include "sdattr.hxx"
-#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -145,6 +144,7 @@
 #include "PresentationViewShell.hxx"
 #endif
 #include "sdabstdlg.hxx"
+#include "framework/FrameworkHelper.hxx"
 namespace sd {
 
 
@@ -319,10 +319,12 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
                 // presentation in a window.  Switching to a presentation
                 // view shell is an error here, because this would not
                 // return to us (re-create us).
-                GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
-                    ViewShell::ST_IMPRESS);
-                GetViewFrame()->GetDispatcher()->Execute(nSId,
-                    SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+                framework::FrameworkHelper::Instance(GetViewShellBase())->RequestView(
+                    framework::FrameworkHelper::msImpressViewURL,
+                    framework::FrameworkHelper::msCenterPaneURL);
+                framework::FrameworkHelper::Instance(GetViewShellBase())->RunOnConfigurationEvent(
+                    framework::FrameworkHelper::msConfigurationUpdateEndEvent,
+                    framework::DispatchCaller(*GetViewFrame()->GetDispatcher(), nSId));
             }
 
             rReq.Done();
