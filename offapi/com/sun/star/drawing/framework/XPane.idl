@@ -1,0 +1,89 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XPane.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:45:30 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XPane_idl__
+#define __com_sun_star_drawing_framework_XPane_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+#ifndef __com_sun_star_rendering_XCcanvas_idl__
+#include <com/sun/star/rendering/XCanvas.idl>
+#endif
+#ifndef __com_sun_star_drawing_framework_XResource_idl__
+#include <com/sun/star/drawing/framework/XResource.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+/** A pane is an abstraction of a window and is one of the resources managed
+    by the drawing framework.
+    <p>Apart from the area that displays the view a pane usually contains other
+    parts like title, menu, closer button.</p>
+    <p>The URL prefix of panes is <code>private:resource/floater</code></p>
+    <p>Implementations of <type>XPane</type> may implement
+    <type>XTabBar</type> as well.</p>
+    @see XPaneController
+    @see XPaneFactory
+    @see XTabBar
+*/
+interface XPane
+    : ::com::sun::star::drawing::framework::XResource
+{
+    /** Return the <type scope="com::sun::star::awt">XWindow</type> of the
+        pane that is used to display a view.
+        <p>This window usually is part of a small hierarchy of windows
+        rooted in the outer window of the pane.</p>
+    */
+    ::com::sun::star::awt::XWindow getWindow ();
+
+    /** Return the <type scope="com::sun::star::awt">XCanvas</type> of the pane.  The
+        <type scope="com::sun::star::rendering">XCanvas</type> object is expected to
+        be associated with the <type
+        scope="com::sun::star::awt">XWindow</type> object returned by
+        <member>getWindow()</member>.
+        @return
+            When the <type scope="com::sun::star::rendering">XCanvas</type>
+            interface is not supported then an empty reference is returned.
+    */
+    ::com::sun::star::rendering::XCanvas getCanvas ();
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
