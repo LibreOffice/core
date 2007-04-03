@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:12:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:30:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,6 +150,7 @@
 #ifndef SD_TOOLPANEL_TASK_PANE_VIEW_SHELL_HXX
 #include "TaskPaneViewShell.hxx"
 #endif
+#include "framework/FrameworkHelper.hxx"
 
 namespace sd {
 
@@ -715,15 +716,8 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
-            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                toolpanel::TaskPaneViewShell::PID_CUSTOM_ANIMATION);
-            GetViewFrame()->GetDispatcher()->Execute(
-                SID_TASK_PANE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                &aMakeToolPaneVisible,
-                &aPanelId,
-                NULL);
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+                framework::FrameworkHelper::msCustomAnimationTaskPanelURL);
 
             Cancel();
             rReq.Done ();
@@ -734,15 +728,9 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
-            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                toolpanel::TaskPaneViewShell::PID_SLIDE_TRANSITION);
-            GetViewFrame()->GetDispatcher()->Execute(
-                SID_TASK_PANE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                &aMakeToolPaneVisible,
-                &aPanelId,
-                NULL);
+            framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+                framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
+
             Cancel();
             rReq.Done ();
         }
