@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:05:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:26:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,12 +151,12 @@
 #ifndef SD_DRAW_VIEW_HXX
 #include "drawview.hxx"
 #endif
-#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
 #include "SpellDialogChildWindow.hxx"
 #include "ToolBarManager.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 using ::rtl::OUString;
 using namespace ::com::sun::star;
@@ -371,7 +371,7 @@ void Outliner::PrepareSpelling (void)
 
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
-            SetViewShell (pBase->GetMainViewShell());
+            SetViewShell (pBase->GetMainViewShell().get());
         SetRefDevice( SD_MOD()->GetRefDevice( *mpDrawDocument->GetDocSh() ) );
 
         if (mpViewShell != NULL)
@@ -422,7 +422,7 @@ void Outliner::EndSpelling (void)
     {
         ViewShellBase* pBase = PTR_CAST(ViewShellBase,SfxViewShell::Current());
         if (pBase != NULL)
-            mpViewShell = pBase->GetMainViewShell();
+            mpViewShell = pBase->GetMainViewShell().get();
         else
             mpViewShell = NULL;
 
@@ -595,7 +595,7 @@ bool Outliner::StartSearchAndReplace (const SvxSearchItem* pSearchItem)
         bool bAbort = false;
         if (pBase != NULL)
         {
-            ViewShell* pShell = pBase->GetMainViewShell();
+            ViewShell* pShell = pBase->GetMainViewShell().get();
             SetViewShell (pShell);
             if (pShell == NULL)
                 bAbort = true;
@@ -1355,23 +1355,22 @@ void Outliner::SetViewMode (PageKind ePageKind)
     if (ePageKind != static_cast<DrawViewShell*>(mpViewShell)->GetPageKind())
     {
         // Restore old edit mode.
-        DrawViewShell* pDrawViewShell =
-            static_cast<DrawViewShell*>(mpViewShell);
+        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
         pDrawViewShell->ChangeEditMode(mpImpl->meOriginalEditMode, FALSE);
 
         SetStatusEventHdl(Link());
-        ViewShell::ShellType eType;
+        ::rtl::OUString sViewURL;
         switch (ePageKind)
         {
             case PK_STANDARD:
             default:
-                eType = ViewShell::ST_IMPRESS;
+                sViewURL = framework::FrameworkHelper::msImpressViewURL;
                 break;
             case PK_NOTES:
-                eType = ViewShell::ST_NOTES;
+                sViewURL = framework::FrameworkHelper::msNotesViewURL;
                 break;
             case PK_HANDOUT:
-                eType = ViewShell::ST_HANDOUT;
+                sViewURL = framework::FrameworkHelper::msHandoutViewURL;
                 break;
         }
         // The text object iterator is destroyed when the shells are
@@ -1381,9 +1380,13 @@ void Outliner::SetViewMode (PageKind ePageKind)
 
         ViewShellBase& rBase = mpViewShell->GetViewShellBase();
         SetViewShell (NULL);
-        rBase.GetPaneManager().RequestMainViewShellChange (
-            eType,
-            PaneManager::CM_SYNCHRONOUS);
+        framework::FrameworkHelper::Instance(rBase)->RequestView(
+            sViewURL,
+            framework::FrameworkHelper::msCenterPaneURL);
+
+        framework::FrameworkHelper::Instance(rBase)->WaitForEvent(
+            framework::FrameworkHelper::msConfigurationUpdateEndEvent);
+
         // Switching to another view shell has intermediatly called
         // EndSpelling().  A PrepareSpelling() is pending, so call that now.
         PrepareSpelling();
@@ -1392,6 +1395,7 @@ void Outliner::SetViewMode (PageKind ePageKind)
         // <member>DetectChange()</member> has the correct value to compare
         // to.
         mnPageCount = mpDrawDocument->GetSdPageCount(ePageKind);
+
         maObjectIterator = aIterator;
         mbMatchMayExist = bMatchMayExist;
 
@@ -1706,7 +1710,7 @@ void Outliner::BeginConversion (void)
 
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     if (pBase != NULL)
-        SetViewShell (pBase->GetMainViewShell());
+        SetViewShell (pBase->GetMainViewShell().get());
 
     if (mpViewShell != NULL)
     {
@@ -1941,8 +1945,5 @@ void Outliner::Implementation::ReleaseOutlinerView (void)
         mpOutlineView = NULL;
     }
 }
-
-
-
 
 } // end of namespace sd
