@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:37:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:18:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include "SlideSorterViewShell.hxx"
 
 #include "model/SlideSorterModel.hxx"
@@ -47,7 +48,7 @@
 #include "controller/SlsScrollBarManager.hxx"
 #include "controller/SlsClipboard.hxx"
 #include "controller/SlsFocusManager.hxx"
-
+#include "framework/FrameworkHelper.hxx"
 #include "AccessibleSlideSorterView.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellImplementation.hxx"
@@ -60,7 +61,6 @@
 #include "FrameView.hxx"
 #include "sdpage.hxx"
 #include "SdUnoSlideView.hxx"
-#include "PaneManager.hxx"
 #include "DrawDocShell.hxx"
 #include "ViewShellManager.hxx"
 
@@ -76,11 +76,27 @@
 #include <svtools/tabbar.hxx>
 #include <vcl/scrbar.hxx>
 
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_PANECONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/PaneController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEID_HPP_
+#include <com/sun/star/drawing/framework/ResourceId.hpp>
+#endif
+#include <cppuhelper/bootstrap.hxx>
+#include <comphelper/processfactory.hxx>
+
 using namespace ::sd::slidesorter;
 #define SlideSorterViewShell
 #include "sdslots.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
+
+using ::sd::framework::FrameworkHelper;
 
 namespace sd { namespace slidesorter {
 
@@ -198,25 +214,40 @@ void SlideSorterViewShell::Init (bool bIsMainViewShell)
 
 SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase)
 {
+    SlideSorterViewShell* pViewShell = NULL;
+
     // Test the center, left, and then the right pane for showing a slide sorter.
-    PaneManager::PaneType aPanes[] = {
-        PaneManager::PT_CENTER, PaneManager::PT_LEFT, PaneManager::PT_RIGHT, PaneManager::PT_NONE };
-    ViewShell* pShell = NULL;
-    for (int i=0; pShell==NULL && aPanes[i]!=PaneManager::PT_NONE; i++)
+    ::rtl::OUString aPaneURLs[] = {
+        FrameworkHelper::msCenterPaneURL,
+        FrameworkHelper::msLeftImpressPaneURL,
+        FrameworkHelper::msRightPaneURL,
+        ::rtl::OUString()};
+
+    try
     {
-        pShell = rBase.GetPaneManager().GetViewShell(aPanes[i]);
-        if (pShell!=NULL && pShell->GetShellType()!=ViewShell::ST_SLIDE_SORTER)
-            // A shell but not the right one.
-            pShell = NULL;
-
-        ::Window* pWindow = rBase.GetPaneManager().GetWindow(aPanes[i]);
-        if (pWindow==NULL || ! pWindow->IsReallyVisible())
-            // The pane is not visible.
-            pShell = NULL;
-
+        Reference<XControllerManager> xControllerManager (rBase.GetController(), UNO_QUERY_THROW);
+        Reference<XViewController> xViewController (xControllerManager->getViewController());
+        if (xViewController.is())
+            for (int i=0; pViewShell==NULL && aPaneURLs[i].getLength()>0; ++i)
+            {
+                Reference<XResourceId> xPaneId(
+                    ResourceId::create(
+                        comphelper_getProcessComponentContext(),
+                        aPaneURLs[i]));
+                Reference<XView> xView (xViewController->getView(xPaneId));
+                if (xView.is()
+                    && xView->getResourceId()->getResourceURL().equals(
+                        FrameworkHelper::msSlideSorterURL))
+                {
+                    pViewShell = dynamic_cast<SlideSorterViewShell*>(
+                        FrameworkHelper::Instance(rBase)->GetViewShell(aPaneURLs[i]).get());
+                }
+            }
     }
+    catch (RuntimeException&)
+    {}
 
-    return static_cast<SlideSorterViewShell*>(pShell);
+    return pViewShell;
 }
 
 
@@ -254,6 +285,34 @@ SlideSorterViewShell* SlideSorterViewShell::GetSlideSorter (ViewShellBase& rBase
         *mpSlideSorterController.get(),
         pWindow->GetAccessibleParentWindow()->GetAccessible(),
         pWindow);
+}
+
+
+
+
+bool SlideSorterViewShell::RelocateToParentWindow (::Window* pParentWindow)
+{
+    ReleaseListeners();
+
+    ViewShell::RelocateToParentWindow(pParentWindow);
+
+    SetupControls(GetParentWindow());
+    SetupListeners();
+
+    // For accessibility we have to shortly hide the content window.  This
+    // triggers the construction of a new accessibility object for the new
+    // view shell.  (One is created earlier while the construtor of the base
+    // class is executed.  At that time the correct accessibility object can
+    // not be constructed.)
+    if (mpContentWindow.get() !=NULL)
+    {
+        mpContentWindow->Hide();
+        mpContentWindow->Show();
+    }
+
+    Resize();
+
+    return true;
 }
 
 
@@ -705,16 +764,16 @@ void SlideSorterViewShell::WriteFrameViewData()
             mpFrameView->SetDrawMode( GetActiveWindow()->GetDrawMode() );
 
         SdPage* pActualPage = GetActualPage();
-
         if (pActualPage != NULL)
         {
-            mpFrameView->SetSelectedPage (
-                ( pActualPage->GetPageNum() - 1 ) / 2 );
+            // The slide sorter is not expected to switch the current page
+            // other then by double clicks.  That is handled seperatly.
+            //            mpFrameView->SetSelectedPage((pActualPage->GetPageNum()- 1) / 2);
         }
         else
         {
             // We have no current page to set but at least we can make sure
-            // tht the index of the frame view has a legal value.
+            // that the index of the frame view has a legal value.
             if (mpFrameView->GetSelectedPage() >= mpSlideSorterModel->GetPageCount())
                 mpFrameView->SetSelectedPage((USHORT)mpSlideSorterModel->GetPageCount()-1);
         }
