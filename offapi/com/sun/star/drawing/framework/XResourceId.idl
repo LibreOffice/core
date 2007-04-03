@@ -1,0 +1,151 @@
+
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XResourceId.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:46:33 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XResourceId_idl__
+#define __com_sun_star_drawing_framework_XResourceId_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_drawing_framework_AnchorBindingMode_idl__
+#include <com/sun/star/drawing/framework/AnchorBindingMode.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+/** A resource id uses a set of URLs to unambiguously specify a resource of
+    the drawing framework.
+    <p>Resources of the drawing framework are panes, views, tool bars, and
+    command groups.  One URL describes the type of the actual resource.  A
+    sequence of URLs (typically one, sometimes two) specifies its anchor,
+    the resource it is bound to.  The anchor typically is a pane (for
+    views), or it is empty (for panes).</p>
+    <p>The resource URL may be empty.  In this case the anchor is empty,
+    too.  Such an empty resource id does not describe a resource but rather
+    the absence of one.  Instead of an empty <type>XResourceId</type> object
+    an empty reference can be used in many places.</p>
+*/
+interface XResourceId
+    : ::com::sun::star::uno::XInterface
+{
+    /** Return the URL of the resource.
+    */
+    string getResourceURL ();
+
+    /** Return whether there is a non-empty anchor URL.  When this method
+        returns <FALSE/> then getAnchorURLs() will return an empty list.
+    */
+    boolean hasAnchor ();
+
+    /** Return a new XResourceId that represents the anchor resource.
+    */
+    XResourceId getAnchor ();
+
+    /** Return the, possibly empty, list of anchor URLs.
+    */
+    sequence<string> getAnchorURLs ();
+
+    /** Return the type prefix of the resource URL.  This includes all up to
+        and including the second slash.
+    */
+    string getResourceTypePrefix ();
+
+    /** Compare the called <type>XResourceId</type> object with the given
+        one.
+        <p>The two resource ids are compared first by the number of their
+        resource URLs and anchor URLs. When these numbers are the same then
+        the URLs are compared like normal strings beginning with the
+        resource URL.</p>
+        @param xId
+            The resource id to which the called resource id is compared.
+        @return
+            Returns <const>0</const> when the called object has the same
+            number of URLs as the given object and all URLs of the called
+            object are equal to their counterparts of the given
+            object. Returns <code>-1</code> when the called object has a
+            smaller number of URLs and <code>+1</code> when it has a larger
+            number of URLs as the given object. When the number of URLs is
+            the same then the result of comparing the first differing URL is
+            returned.
+    */
+    short compareTo (
+        [in] XResourceId xId);
+
+    /** Return whether the anchor of the called resource id object
+        represents the same resource as the given object.
+        <p>Note that not only the anchor of the given object is taken into
+        account. The whole object, including the resource URL, is
+        interpreted as anchor resource.</p>
+        @param xAnchor
+            The resource id of the anchor.
+        @param eMode
+            This mode specifies how the called resource has to be bound to
+            the given anchor in order to have this function return <TRUE/>.
+            <p>If eMode is <const>DIRECT</const> then the anchor of the called resource id
+            has to be identical to the given anchor. If eMode is
+            <const>INDIRECT</const> then the given anchor has to be a part
+            of the anchor of the called resource.
+    */
+    boolean isBoundTo (
+        [in] XResourceId xId,
+        [in] AnchorBindingMode eMode);
+
+    /** Return whether the anchor of the called resource id object
+        represents the same resource as the given anchor URL. This is a
+        convenience variant of the <member>isBoundTo()</member> function
+        that can also be seen as an optimization for the case that the
+        anchor consists of exactly one URL.
+        @param xAnchor
+            The resource URL of the anchor.
+        @param eMode
+            This mode specifies how the called resource has to be bound to
+            the given anchor in order to have this function return. See the
+            description of <member>isBoundTo()</member> for more
+            information.
+    */
+    boolean isBoundToURL (
+        [in] string sAnchorURL,
+        [in] AnchorBindingMode eMode);
+
+    /** Return a copy of the called resource id.  The caller becomes the
+        owner of the new object.
+    */
+    XResourceId clone ();
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
