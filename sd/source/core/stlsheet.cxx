@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlsheet.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:34:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:37:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -371,8 +371,8 @@ SdStyleSheet* SdStyleSheet::GetRealStyleSheet() const
         ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase(
             pViewShellBase->GetViewFrame());
         DBG_ASSERT(pBase!=NULL, "ViewShellBase not valid");
-        ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
-        ::sd::DrawViewShell* pDrawViewShell = dynamic_cast< ::sd::DrawViewShell*>(pViewShell);
+        ::sd::DrawViewShell* pDrawViewShell = dynamic_cast< ::sd::DrawViewShell*>(
+            pBase->GetMainViewShell().get());
         if (pDrawViewShell != NULL && pDrawViewShell->GetDoc() == pDoc)
         {
             SdPage* pPage = pDrawViewShell->GetActualPage();
