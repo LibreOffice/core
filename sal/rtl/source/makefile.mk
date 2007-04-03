@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-01 16:00:07 $
+#   last change: $Author: rt $ $Date: 2007-04-03 14:05:25 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,7 @@ SLOFILES=   \
             $(SLO)$/random.obj      \
             $(SLO)$/locale.obj      \
             $(SLO)$/strimp.obj      \
+            $(SLO)$/hash.obj        \
             $(SLO)$/string.obj      \
             $(SLO)$/ustring.obj     \
             $(SLO)$/strbuf.obj      \
@@ -107,6 +108,7 @@ OBJFILES=   \
             $(OBJ)$/random.obj      \
             $(OBJ)$/locale.obj      \
             $(OBJ)$/strimp.obj      \
+            $(OBJ)$/hash.obj        \
             $(OBJ)$/string.obj      \
             $(OBJ)$/ustring.obj     \
             $(OBJ)$/strbuf.obj      \
