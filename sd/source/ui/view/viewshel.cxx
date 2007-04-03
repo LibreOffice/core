@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:24:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:33:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,6 @@
 #include "ViewShellManager.hxx"
 #include "FormShellManager.hxx"
 #include <svx/fmshell.hxx>
-#include "ViewTabBar.hxx"
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>
@@ -218,25 +217,9 @@ ViewShell::ViewShell( SfxViewFrame*, ::Window* pParentWindow, const ViewShell& r
 
 ViewShell::~ViewShell()
 {
-    SfxViewShell* pViewShell = GetViewShell();
-    OSL_ASSERT (pViewShell!=NULL);
-
-    // Call SfxViewShell::SetWindow() directly instead of the local
-    // SetActiveWindow() because the later one accesses the view that
-    // usually has been destroyed already in a derived destructor.
-    if (IsMainViewShell())
-        pViewShell->SetWindow (NULL);
-
     // Keep the content window from accessing in its destructor the
     // WindowUpdater.
     mpContentWindow->SetViewShell(NULL);
-
-    // Stop listening for window events.
-    // GetParentWindow()->RemoveEventListener (
-    //    LINK(this,ViewShell,FrameWindowEventListener));
-
-    if (IsMainViewShell())
-        GetDocSh()->Disconnect(this);
 
     delete mpZoomList;
 
@@ -282,7 +265,13 @@ void ViewShell::construct(void)
     mpContentWindow->SetBackground (Wallpaper());
     mpContentWindow->SetCenterAllowed(mbCenterAllowed);
     mpContentWindow->SetViewShell(this);
+    mpContentWindow->SetPosSizePixel(
+        GetParentWindow()->GetPosPixel(),GetParentWindow()->GetSizePixel());
     mpContentWindow->Show();
+    static_cast< ::Window*>(mpContentWindow.get())->Resize();
+    OSL_TRACE("content window has size %d %d",
+        mpContentWindow->GetSizePixel().Width(),
+        mpContentWindow->GetSizePixel().Height());
 
     if ( ! GetDocSh()->IsPreview())
     {
@@ -324,6 +313,8 @@ void ViewShell::construct(void)
     // Register the sub shell factory.
     mpImpl->mpSubShellFactory.reset(new ViewShellObjectBarFactory(*this));
     GetViewShellBase().GetViewShellManager().AddSubShellFactory(this,mpImpl->mpSubShellFactory);
+
+    GetParentWindow()->Show();
 }
 
 
@@ -333,6 +324,8 @@ void ViewShell::Init (bool bIsMainViewShell)
 {
     mpImpl->mbIsInitialized = true;
     SetIsMainViewShell(bIsMainViewShell);
+    if (bIsMainViewShell)
+        SetActiveWindow (mpContentWindow.get());
 }
 
 
@@ -349,11 +342,10 @@ void ViewShell::Exit (void)
 
     Deactivate (TRUE);
 
-    // Call the SetWindow(NULL) method while we can still detect wether we
-    // are the main view shell.
-    SfxViewShell* pViewShell = GetViewShell();
-    if (pViewShell!=NULL && mpImpl->mbIsMainViewShell)
-        pViewShell->SetWindow(NULL);
+    if (IsMainViewShell())
+    {
+        GetDocSh()->Disconnect(this);
+    }
 
     SetIsMainViewShell(false);
 }
@@ -819,18 +811,21 @@ BOOL ViewShell::HasRuler (void)
 
 
 
-void ViewShell::Resize (const Point& rPos, const Size& rSize)
+void ViewShell::Resize (void)
 {
     SetupRulers ();
 
-    //  AdjustPosSizePixel(rPos, rSize);
+    if (mpParentWindow == NULL)
+        return;
+
     // Make sure that the new size is not degenerate.
-    if ( !rSize.Width() || !rSize.Height() )
+    const Size aSize (mpParentWindow->GetSizePixel());
+    if (aSize.Width()==0 || aSize.Height()==0)
         return;
 
     // Remember the new position and size.
-    maViewPos  = rPos;
-    maViewSize = rSize;
+    maViewPos = Point(0,0); //mpParentWindow->GetPosPixel();
+    maViewSize = aSize;
 
     // Rearrange the UI elements to take care of the new position and size.
     ArrangeGUIElements ();
@@ -1050,7 +1045,7 @@ void ViewShell::UpdatePreview (SdPage*, BOOL )
 
 SfxUndoManager* ViewShell::ImpGetUndoManager (void) const
 {
-    const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell();
+    const ViewShell* pMainViewShell = GetViewShellBase().GetMainViewShell().get();
 
     if( pMainViewShell == 0 )
         pMainViewShell = this;
@@ -1429,7 +1424,8 @@ void ViewShell::SetSlideShow(sd::Slideshow* pSlideShow)
 
 bool ViewShell::IsMainViewShell (void) const
 {
-    return GetViewShellBase().GetMainViewShell() == this;
+    return mpImpl->mbIsMainViewShell;
+    //    return GetViewShellBase().GetMainViewShell() == this;
 }
 
 
@@ -1510,6 +1506,28 @@ void ViewShell::ShowUIControls (bool bVisible)
         mpContentWindow->Show( bVisible );
 }
 
+
+
+
+
+bool ViewShell::RelocateToParentWindow (::Window* pParentWindow)
+{
+    mpParentWindow = pParentWindow;
+
+    mpParentWindow->SetBackground (Wallpaper());
+
+    if (mpContentWindow.get() != NULL)
+        mpContentWindow->SetParent(pParentWindow);
+
+    if (mpHorizontalScrollBar.get() != NULL)
+        mpHorizontalScrollBar->SetParent(mpParentWindow);
+    if (mpVerticalScrollBar.get() != NULL)
+        mpVerticalScrollBar->SetParent(mpParentWindow);
+    if (mpScrollBarBox.get() != NULL)
+        mpScrollBarBox->SetParent(mpParentWindow);
+
+    return true;
+}
 
 
 
