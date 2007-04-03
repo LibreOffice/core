@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolboxdocumenthandler.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:43:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:51:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,10 @@ static void ExtractToolbarParameters( const Sequence< PropertyValue > rProp,
     for ( sal_Int32 i = 0; i < rProp.getLength(); i++ )
     {
         if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
+        {
             rProp[i].Value >>= rCommandURL;
+            rCommandURL = rCommandURL.intern();
+        }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
             rProp[i].Value >>= rHelpURL;
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_LABEL ))
@@ -362,7 +365,7 @@ throw(  SAXException, RuntimeException )
                             case TB_ATTRIBUTE_URL:
                             {
                                 bAttributeURL   = sal_True;
-                                aCommandURL     = xAttribs->getValueByIndex( n );
+                                aCommandURL     = xAttribs->getValueByIndex( n ).intern();
                             }
                             break;
 
