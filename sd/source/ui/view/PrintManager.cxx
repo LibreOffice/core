@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:38:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:27:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -205,7 +205,7 @@ USHORT PrintManager::SetPrinterOptDlg (
             bScaleAll = (aWarnBox.Execute() == RET_YES);
         }
 
-        ViewShell* pShell = mrBase.GetMainViewShell();
+        ViewShell* pShell = mrBase.GetMainViewShell().get();
         if (pShell != NULL && pShell->ISA(DrawViewShell))
         {
             SdPage* pPage = mrBase.GetDocument()->GetSdPage(
@@ -235,7 +235,7 @@ PrintDialog* PrintManager::CreatePrintDialog (::Window *pParent)
 
     pDlg = new PrintDialog(pParent );
 
-    ViewShell* pShell = mrBase.GetMainViewShell();
+    ViewShell* pShell = mrBase.GetMainViewShell().get();
     if (pShell!=NULL && ! pShell->ISA(OutlineViewShell))
     {
 
@@ -306,7 +306,7 @@ SfxTabPage*  PrintManager::CreatePrintOptionsPage( ::Window *pParent, const SfxI
 USHORT  PrintManager::Print (SfxProgress& rProgress, BOOL bIsAPI, PrintDialog* pDlg)
 {
     SfxPrinter* pPrinter = mrBase.GetPrinter(TRUE);
-    ViewShell* pShell = mrBase.GetMainViewShell();
+    ViewShell* pShell = mrBase.GetMainViewShell().get();
 
     if (pPrinter!=NULL && pShell!=NULL)
     {
@@ -592,7 +592,7 @@ ErrCode PrintManager::DoPrint (
 
     do
     {
-        ViewShell* pShell = mrBase.GetMainViewShell();
+        ViewShell* pShell = mrBase.GetMainViewShell().get();
         if (pShell == NULL)
             break;
 
