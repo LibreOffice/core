@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:38:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:07:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include "ViewShell.hxx"
 #include "glob.hxx"
+#include "framework/FrameworkHelper.hxx"
 #include <vcl/button.hxx>
 #ifndef _SFX_SHELL_HXX
 #include <sfx2/shell.hxx>
@@ -140,14 +141,15 @@ public:
 
     virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
 
+    /** Relocate all toplevel controls to the given parent window.
+    */
+    virtual bool RelocateToParentWindow (::Window* pParentWindow);
+
 private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
 
     ::std::auto_ptr<ToolPanel> mpTaskPane;
-
-    // Control that displays the closer symbol in the title bar.
-    ::std::auto_ptr<TitleToolBox> mpTitleToolBox;
 
     bool mbIsInitialized;
 
@@ -184,6 +186,33 @@ private:
             shown in the center pane, then <NULL?> is returned.
     */
     DockingWindow* GetDockingWindow (void);
+
+    /** Initialize the task pane view shell if that has not yet been done
+        before.  If mbIsInitialized is already set to <TRUE/> then this
+        method returns immediately.
+    */
+    void Initialize (void);
+};
+
+
+
+
+/** This functor makes visible a panel in the task pane.  It can be used
+    with the FrameworkHelper to make a panel visible after an asynchonous
+    update of the configuration, e.g. after switching to another view.
+*/
+class PanelActivation
+{
+public:
+    /** Create a new object that, when its operator() method is called, will
+        make the specified panel visible in the task pane that belongs to
+        the application window specified by the given ViewShellBase.
+    */
+    PanelActivation (ViewShellBase& rBase, TaskPaneViewShell::PanelId nPanelId);
+    void operator() (bool);
+private:
+    ViewShellBase& mrBase;
+    TaskPaneViewShell::PanelId mnPanelId;
 };
 
 
