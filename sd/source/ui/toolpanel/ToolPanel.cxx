@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:45:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:21:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,14 @@ ToolPanel::~ToolPanel (void)
 sal_uInt32 ToolPanel::AddControl (
     ::std::auto_ptr<ControlFactory> pControlFactory,
     const String& rTitle,
-    ULONG nHelpId)
+    ULONG nHelpId,
+    const TitledControl::ClickHandler& rClickHandler)
 {
     TitledControl* pTitledControl = new TitledControl (
         this,
         pControlFactory,
         rTitle,
+        rClickHandler,
         TitleBar::TBT_CONTROL_TITLE);
     ::std::auto_ptr<TreeNode> pChild (pTitledControl);
 
