@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:46:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
         if( nMergeType == DBMGR_MERGE_MAILMERGE ||
                 DBMGR_MERGE_DOCUMENTS == nMergeType )
         {
-            SwView::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(),
+            SwView::MakeOptions( pDlg, aOpts, 0, 0, bWeb, GetPrinter(),
                             pSh->getIDocumentDeviceAccess()->getPrintData() );
             if(DBMGR_MERGE_DOCUMENTS == nMergeType)
                 bStartJob = pMgr->MergePrintDocuments( *this, aOpts, *pProgress, bIsAPI );
@@ -355,7 +355,8 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
                 pSh->ResetModified();
 
             BOOL bPrtPros;
-            SwView::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter(),
+            BOOL bPrtPros_RTL;
+            SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, bWeb, GetPrinter(),
                             pSh->getIDocumentDeviceAccess()->getPrintData() );
             if( -1 != bPrintSelection )
                 aOpts.bPrintSelection = 0 != bPrintSelection;
@@ -403,7 +404,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg, BOOL bSilent, 
                 {
                     bStartJob = pPrinter->StartJob( aOpts.GetJobName() );
                     if( bStartJob )
-                        pSh->PrintProspect( aOpts, *pProgress );
+                        pSh->PrintProspect( aOpts, *pProgress, bPrtPros_RTL );
                 }
                 else
                     bStartJob = pSh->Prt( aOpts, pProgress );
