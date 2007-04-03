@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:53:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,8 @@ enum AnimationMode
 class Slideshow
 {
 public:
-    Slideshow( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc );
+    Slideshow( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc,
+        ::Window* pParentWindow );
     ~Slideshow();
 
     // actions
