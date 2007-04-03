@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationViewShellBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:24:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:06:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,11 +58,7 @@ public:
     virtual ~PresentationViewShellBase (void);
 
 protected:
-
-    /** The ViewTabBar is not supported so this factory method always
-        returns <NULL/>.
-    */
-    virtual ViewTabBar* CreateViewTabBar (void);
+    virtual void InitializeFramework (void);
 };
 
 } // end of namespace sd
