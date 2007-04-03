@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ZipFile.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:28:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:08:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -798,9 +798,9 @@ sal_Int32 ZipFile::readCEN()
             if ( aEntry.nExtraLen > ZIP_MAXEXTRA )
                 throw ZipException( OUString( RTL_CONSTASCII_USTRINGPARAM ( "extra header info exceeds ZIP_MAXEXTRA bytes") ), Reference < XInterface > () );
 
-            aEntry.sName = OUString ( (sal_Char *) aMemGrabber.getCurrentPos(),
-                                      aEntry.nNameLen,
-                                      RTL_TEXTENCODING_ASCII_US);
+            aEntry.sName = rtl::OUString::intern ( (sal_Char *) aMemGrabber.getCurrentPos(),
+                                                   aEntry.nNameLen,
+                                                   RTL_TEXTENCODING_ASCII_US);
 
             aMemGrabber.skipBytes( aEntry.nNameLen + aEntry.nExtraLen + nCommentLen );
             aEntries[aEntry.sName] = aEntry;
