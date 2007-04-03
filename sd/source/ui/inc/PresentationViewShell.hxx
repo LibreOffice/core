@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationViewShell.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:36:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:06:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,22 @@ public:
         ViewShellBase& rViewShellBase,
         ::Window* pParentWindow,
         FrameView* pFrameView = NULL);
-    static void     CreateFullScreenShow(ViewShell* pOriginShell, SfxRequest& rReq );
+    virtual ~PresentationViewShell (void);
+
+    /** Create a new full screen show and take document, current page, and
+        frame view from the given view shell.
+    */
+    static void CreateFullScreenShow(
+        ViewShell* pOriginShell,
+        SfxRequest& rRequest);
+
+    /** Create a new full screen show and take the document from the given
+        ViewShellBase.  The show is started with the first page of the
+        document.
+    */
+    static void CreateFullScreenShow(
+        ViewShellBase& pViewShellBase,
+        SfxRequest& rRequest);
 
     /** This method is used by a simple class that passes some
         arguments from the creator of the new view shell to the new view
@@ -91,10 +106,28 @@ private:
         SfxViewFrame* pFrame,
         ::Window* pParentWindow,
         const DrawViewShell& rShell);
-    virtual ~PresentationViewShell (void);
 
     virtual void Activate (BOOL bIsMDIActivate);
     virtual void Paint (const Rectangle& rRect, ::sd::Window* pWin);
+
+    /** Create a full screen show for the given arguments.  This method is
+        typically called by one of its public cousins.
+        @param pDocument
+            The document that provides the pages.
+        @param pCurrentPage
+            The page with which to start the show.
+        @param pFrameView
+            The new PresentationViewShell will use a copy of this frame
+            view.
+        @param rRequest
+            Some flags are extracted from the request if possible.  This is
+            whether to be always on top and whether to rehearse timings.
+    */
+    static void CreateFullScreenShow(
+        SdDrawDocument* pDocument,
+        SdPage* pCurrentPage,
+        FrameView* pFrameView,
+        SfxRequest& rRequest);
 };
 
 } // end of namespace sd
