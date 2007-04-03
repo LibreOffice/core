@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayerDialogContent.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:33:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:39:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,10 +70,9 @@
 #include "View.hxx"
 #endif
 #include "drawdoc.hxx"
-#include "PaneManager.hxx"
 #include "ViewShellBase.hxx"
 #include "DrawViewShell.hxx"
-
+#include "framework/FrameworkHelper.hxx"
 
 using namespace ::com::sun::star;
 
@@ -88,9 +87,10 @@ LayerDialogContent::LayerDialogContent (
     const SdResId& rSdResId,
     ViewShellBase& rBase)
     : SfxDockingWindow (pInBindings, pCW, pParent, rSdResId),
-      maLayerTabBar (
-          static_cast<DrawViewShell*>(
-              rBase.GetPaneManager().GetViewShell(PaneManager::PT_CENTER)),
+      maLayerTabBar(
+          dynamic_cast<DrawViewShell*>(
+              framework::FrameworkHelper::Instance(rBase)->GetViewShell(
+                  framework::FrameworkHelper::msCenterPaneURL).get()),
           this,
           SdResId(TB_LAYERS))
 {
