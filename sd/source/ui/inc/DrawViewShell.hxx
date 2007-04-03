@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DrawViewShell.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:33:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:02:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,7 +128,9 @@ public:
 
     virtual void Init (bool bIsMainViewShell);
 
-    virtual void    Paint(const Rectangle& rRect, ::sd::Window* pWin);
+    virtual void Shutdown (void);
+
+    virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin);
 
     /** Set the position and size of the area which contains the GUI
         elements like rulers, sliders, and buttons as well as the document
@@ -165,9 +167,7 @@ public:
     virtual void    MouseButtonDown(const MouseEvent& rMEvt, ::sd::Window* pWin);
     virtual void    Command(const CommandEvent& rCEvt, ::sd::Window* pWin);
 
-    virtual void Resize (const Point& rPos, const Size& rSize);
-    //  virtual void    OuterResizePixel(const Point& rPos, const Size& rSize);
-    //  virtual void    InnerResizePixel(const Point& rPos, const Size& rSize);
+    virtual void Resize (void);
 
     void            ShowMousePosInfo(const Rectangle& rRect, ::sd::Window* pWin);
 
@@ -388,6 +388,11 @@ public:
     virtual ::std::auto_ptr<DrawSubController> CreateSubController (void);
 
     DrawView*   GetDrawView() const { return mpDrawView; }
+
+    /** Relocation to a new parent window is not supported for DrawViewShell
+        objects so this method always returns <FALSE/>.
+    */
+    virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
 protected:
     DrawView*       mpDrawView;
