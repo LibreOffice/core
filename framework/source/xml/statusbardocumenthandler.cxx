@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusbardocumenthandler.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:44:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:51:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,6 +151,7 @@ static void ExtractStatusbarItemParameters(
         if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
         {
             rProp[i].Value >>= rCommandURL;
+            rCommandURL = rCommandURL.intern();
         }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
         {
