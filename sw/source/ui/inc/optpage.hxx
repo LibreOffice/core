@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:13:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:48:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,6 +147,7 @@ class SwAddPrinterTabPage : public SfxTabPage
     CheckBox        aRightPageCB;
     CheckBox        aReverseCB;
     CheckBox        aProspectCB;
+    CheckBox        aProspectCB_RTL;
 
     FixedLine       aSeparatorRFL;
 
@@ -173,7 +174,6 @@ class SwAddPrinterTabPage : public SfxTabPage
 
                 SwAddPrinterTabPage( Window* pParent,
                                            const SfxItemSet& rSet );
-
 public:
 
     static SfxTabPage*  Create( Window* pParent,
