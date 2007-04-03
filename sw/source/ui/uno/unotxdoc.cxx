@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:46:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2813,7 +2813,7 @@ void SAL_CALL SwXTextDocument::render(
 
         const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
         BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
-        SwView::MakeOptions( NULL, aOptions, NULL, bWeb, NULL, NULL );
+        SwView::MakeOptions( NULL, aOptions, NULL, NULL, bWeb, NULL, NULL );
 
         Range aPageRange( nRenderer+1, nRenderer+1 );
         MultiSelection aPage( aPageRange );
