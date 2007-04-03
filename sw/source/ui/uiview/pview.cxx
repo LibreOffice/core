@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:45:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1854,7 +1854,7 @@ void SwPagePreView::Init(const SwViewOption * pPrefs)
 
     // OD 09.01.2003 #i6467# - adjust view shell option to the same as for print
     SwPrtOptions aPrintOptions( GetViewFrame()->GetObjectShell()->GetTitle(0) );
-    SwView::MakeOptions( 0, aPrintOptions, 0, false, 0, 0 );
+    SwView::MakeOptions( 0, aPrintOptions, 0, 0, false, 0, 0 );
     GetViewShell()->AdjustOptionsForPagePreview( aPrintOptions );
 
     IDocumentSettingAccess* pIDSA = pESh->getIDocumentSettingAccess();
@@ -2520,12 +2520,13 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, BOOL bIsAPI, PrintDialog *
     SwPrtOptions aOpts( pObjShell->GetTitle(0) );
 
     BOOL bPrtPros;
-    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, FALSE, GetPrinter(), GetDocShell()->GetDoc()->getPrintData() );
+    BOOL bPrtPros_RTL;
+    SwView::MakeOptions( pDlg, aOpts, &bPrtPros, &bPrtPros_RTL, FALSE, GetPrinter(), GetDocShell()->GetDoc()->getPrintData() );
 
     if( bNormalPrint )
     {
         if( bPrtPros )
-            pSh->PrintProspect( aOpts, rProgress );
+            pSh->PrintProspect( aOpts, rProgress, bPrtPros_RTL );
         else
             pSh->Prt( aOpts, &rProgress );
     }
