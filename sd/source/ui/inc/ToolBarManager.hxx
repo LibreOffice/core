@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:04:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ class EventMultiplexer;
 
 namespace sd {
 
-class PaneManager;
 class ViewShellBase;
 class ViewShellManager;
 
@@ -90,7 +89,6 @@ public:
     static ::std::auto_ptr<ToolBarManager> Create (
         ViewShellBase& rBase,
         tools::EventMultiplexer& rMultiplexer,
-        PaneManager& rPaneManager,
         ViewShellManager& rViewShellManager);
 
     ~ToolBarManager (void);
@@ -258,9 +256,11 @@ public:
         ShellId nToolBarId);
 
     void PreUpdate (void);
-    //    void PostUpdate (void);
 
-    void Update (void);
+    /** Request an update of the active tool bars.  The update is made
+        asynchronously.
+    */
+    void RequestUpdate (void);
 
     /** This is a hint for the ToolBarManager to improve the performance
         when it updates its tool bars when its own lock is released.  Taking
