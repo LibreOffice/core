@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:11:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:29:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,7 +159,6 @@
 #include "Ruler.hxx"
 #include "DrawDocShell.hxx"
 #include "sdabstdlg.hxx"
-#include "PaneManager.hxx"
 #include <sfx2/ipclient.hxx>
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
@@ -170,6 +169,19 @@
 #include "LayerTabBar.hxx"
 #include "sdabstdlg.hxx"
 #include "sdpage.hxx"
+
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
 
 namespace sd {
 
@@ -441,25 +453,50 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             // #83951#
             USHORT nId = Svx3DChildWindow::GetChildWindowId();
             SfxViewFrame* pFrame = GetViewFrame();
-            ::std::auto_ptr<PaneManagerState> pPaneManagerState (
-                GetViewShellBase().GetPaneManager().GetState());
 
-            SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
-            if(pWindow)
+            try
             {
-                Svx3DWin* p3DWin = (Svx3DWin*)(pWindow->GetWindow());
-                if(p3DWin)
-                    p3DWin->DocumentReload();
+                // Save the current configuration of panes and views.
+                Reference<XControllerManager> xControllerManager (
+                    GetViewShellBase().GetController(), UNO_QUERY_THROW);
+                Reference<XConfigurationController> xConfigurationController (
+                    xControllerManager->getConfigurationController());
+                if ( ! xConfigurationController.is())
+                    throw RuntimeException();
+                Reference<XConfiguration> xConfiguration (
+                    xConfigurationController->getConfiguration());
+                if ( ! xConfiguration.is())
+                    throw RuntimeException();
+
+                SfxChildWindow* pWindow = pFrame->GetChildWindow(nId);
+                if(pWindow)
+                {
+                    Svx3DWin* p3DWin = (Svx3DWin*)(pWindow->GetWindow());
+                    if(p3DWin)
+                        p3DWin->DocumentReload();
+                }
+
+                // Normale Weiterleitung an ViewFrame zur Ausfuehrung
+                GetViewFrame()->ExecuteSlot(rReq);
+
+                // From here on we must cope with this object already being
+                // deleted.  Do not call any methods or use data members.
+                ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pFrame);
+                OSL_ASSERT(pBase!=NULL);
+
+                // Restore the configuration.
+                xControllerManager = Reference<XControllerManager>(
+                    pBase->GetController(), UNO_QUERY_THROW);
+                xConfigurationController = Reference<XConfigurationController>(
+                    xControllerManager->getConfigurationController());
+                if ( ! xConfigurationController.is())
+                    throw RuntimeException();
+                xConfigurationController->restoreConfiguration(xConfiguration);
             }
-
-            // Normale Weiterleitung an ViewFrame zur Ausfuehrung
-            GetViewFrame()->ExecuteSlot(rReq);
-
-            // From here on we must copy with this object already being
-            // deleted.  Do not call any methods or use data members.
-            ViewShellBase* pBase = ViewShellBase::GetViewShellBase(pFrame);
-            OSL_ASSERT(pBase!=NULL);
-            pBase->GetPaneManager().SetState(*pPaneManagerState);
+            catch (RuntimeException&)
+            {
+                DBG_ASSERT(false, "caught exception while handline SID_RELOAD");
+            }
 
             // We have to return immediately to avoid accessing this object.
             return;
