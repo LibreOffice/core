@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:10:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:46:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -466,7 +466,7 @@ public:
                            const SwPagePreViewPrtData* = 0 );
 
     // Prospekt-Format drucken
-    void PrintProspect( SwPrtOptions&, SfxProgress& );
+    void PrintProspect( SwPrtOptions&, SfxProgress& , BOOL bRTL);
 
     sal_Bool IsViewLocked() const { return bViewLocked; }
     void LockView( sal_Bool b )   { bViewLocked = b;    }
