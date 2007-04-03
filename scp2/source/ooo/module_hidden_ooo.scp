@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 14:49:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:59:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -689,6 +689,7 @@ Module gid_Module_Root_Files_6
 	gid_File_Oo_Office_Ui_Genericcommands_Xcu,
 	gid_File_Oo_Office_Ui_GlobalSettings_Xcs,
 	gid_File_Oo_Office_Impress_Xcs,
+	gid_File_Oo_Office_Impress_Xcu,
 	gid_File_Oo_Office_Java_Xcs,
 	gid_File_Oo_Office_Jobs_Xcs,
 	gid_File_Oo_Office_Jobs_Xcu,
