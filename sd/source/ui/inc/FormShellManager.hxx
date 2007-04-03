@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormShellManager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-21 17:21:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 
 class VclWindowEvent;
 class FmFormShell;
+
+namespace sd { namespace tools { class EventMultiplexerEvent; } }
 
 namespace sd {
 
@@ -121,11 +123,11 @@ private:
     */
     DECL_LINK(WindowEventHandler, VclWindowEvent*);
 
-    /** This call back is called when the PaneManager switches shells in a
-        pane.  When this happens in the center pane we unregister at the
-        window of the old and register at the window of the new shell.
+    /** This call back is called when view in the center pane is replaced.
+        When this happens then we unregister at the window of the old and
+        register at the window of the new shell.
     */
-    DECL_LINK(PaneManagerEventHandler, PaneManagerEvent*);
+    DECL_LINK(ConfigurationUpdateHandler, ::sd::tools::EventMultiplexerEvent*);
 
     /** This call back is called by the form shell when it gets the focus.
         In this case the form shell is moved to the top of the shell stack.
