@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:46:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:49:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1935,7 +1935,7 @@ void SwView::NotifyDBChanged()
  --------------------------------------------------------------------*/
 
 void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
-        BOOL* pPrtProspect, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
+         BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
 {
     SwAddPrinterItem* pAddPrinterAttr;
     if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
@@ -1950,6 +1950,8 @@ void SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
     rOpts = *pData;
     if( pPrtProspect )
         *pPrtProspect = pData->bPrintProspect;
+    if( pPrtProspect_RTL )
+        *pPrtProspect_RTL = pData->bPrintProspect_RTL;
     rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
     rOpts.aMulti.SelectAll( FALSE );
     rOpts.nCopyCount = 1;
