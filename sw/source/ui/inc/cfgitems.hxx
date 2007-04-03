@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:38:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:48:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,9 @@ public:
 
 
     BOOL   IsPrintProspect() const      { return bPrintProspect; }
+    BOOL   IsPrintProspect_RTL() const      { return bPrintProspect_RTL; }
     void   SetPrintProspect(BOOL bFlag ){ bPrintProspect = bFlag; }
+    void   SetPrintProspect_RTL(BOOL bFlag ){ bPrintProspect_RTL = bFlag; }
     BOOL IsPrintGraphic () const { return bPrintGraphic; }
     BOOL IsPrintTable () const { return bPrintTable; }
     BOOL IsPrintDraw () const { return bPrintDraw; }
