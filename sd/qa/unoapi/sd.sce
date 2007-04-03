@@ -1,8 +1,5 @@
-###i46734###-o sd.SdUnoSlideView
 -o sd.SdXImpressDocument
 -o sd.SdXCustomPresentationAccess
--o sd.SdUnoOutlineView
--o sd.SdUnoPresView
 ###i35935### -o sd.AccessibleDrawDocumentView
 -o sd.AccessibleOutlineView
 ###i35935### -o sd.AccessibleSlideView
@@ -17,5 +14,9 @@
 -o sd.SdXCustomPresentation
 -o sd.SdXPresentation
 -o sd.SdXShape
--o sd.SdUnoDrawView
 -o sd.SdDrawPagesAccess
+-o sd.DrawController_DrawView
+-o sd.DrawController_HandoutView
+-o sd.DrawController_NotesView
+-o sd.DrawController_OutlineView
+-o sd.DrawController_PresentationView
