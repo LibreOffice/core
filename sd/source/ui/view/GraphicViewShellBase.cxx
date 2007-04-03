@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicViewShellBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:04:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:26:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,23 +38,20 @@
 
 #include "GraphicViewShellBase.hxx"
 
-#include "ViewTabBar.hxx"
+#include "GraphicDocShell.hxx"
 #ifndef SD_RESID_HXX
 #include "sdresid.hxx"
 #endif
-#ifndef SD_GRAPHIC_DOC_SHELL_HXX
-#include "GraphicDocShell.hxx"
-#endif
 #include "strings.hrc"
 #include "app.hrc"
+#include "framework/DrawModule.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 #ifndef _SFXREQUEST_HXX
 #include <sfx2/request.hxx>
 #endif
 
 namespace sd {
-
-class DrawDocShell;
 
 TYPEINIT1(GraphicViewShellBase, ViewShellBase);
 
@@ -72,7 +69,7 @@ SfxViewShell* __EXPORT GraphicViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     GraphicViewShellBase* pBase = new GraphicViewShellBase(pFrame, pOldView);
-    pBase->LateInit();
+    pBase->LateInit(framework::FrameworkHelper::msDrawViewURL);
     return pBase;
 }
 void GraphicViewShellBase::RegisterFactory( USHORT nPrio )
@@ -96,17 +93,8 @@ void GraphicViewShellBase::InitFactory()
 GraphicViewShellBase::GraphicViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (_pFrame, pOldShell, ViewShell::ST_DRAW)
+    : ViewShellBase (_pFrame, pOldShell)
 {
-}
-
-
-
-
-ViewTabBar* GraphicViewShellBase::CreateViewTabBar (void)
-{
-    // The ViewTabBar is not supported.
-    return NULL;
 }
 
 
@@ -141,11 +129,21 @@ void GraphicViewShellBase::Execute (SfxRequest& rRequest)
         case SID_LEFT_PANE_DRAW:
         case SID_LEFT_PANE_IMPRESS:
         default:
-            // The remaining requests are forwarded to out base class.
+            // The remaining requests are forwarded to our base class.
             ViewShellBase::Execute (rRequest);
             break;
     }
 
+}
+
+
+
+
+void GraphicViewShellBase::InitializeFramework (void)
+{
+    com::sun::star::uno::Reference<com::sun::star::frame::XController>
+        xController (GetController());
+    sd::framework::DrawModule::Initialize(xController);
 }
 
 
