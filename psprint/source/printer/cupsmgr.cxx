@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 11:55:18 $
+ *  last change: $Author: vg $ $Date: 2007-04-03 15:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,6 +359,7 @@ OString CUPSWrapper::cupsGetPPD( const char* pPrinter )
     return aResult;
 }
 
+#ifdef ENABLE_CUPS
 static const char* setPasswordCallback( const char* pIn )
 {
     const char* pRet = NULL;
@@ -368,6 +369,7 @@ static const char* setPasswordCallback( const char* pIn )
         pRet = static_cast<CUPSManager&>(rMgr).authenticateUser( pIn );
     return pRet;
 }
+#endif
 
 /*
  *  CUPSManager class
