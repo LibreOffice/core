@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageObjectViewContact.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:36:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:19:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,14 @@ void PageObjectViewContact::CalcPaintRectangle (void)
 Rectangle PageObjectViewContact::GetPageRectangle (void)
 {
     return GetPageObj().GetCurrentBoundRect();
+}
+
+
+
+
+void PageObjectViewContact::ActionChanged (void)
+{
+    ViewContactOfPageObj::ActionChanged();
 }
 
 
