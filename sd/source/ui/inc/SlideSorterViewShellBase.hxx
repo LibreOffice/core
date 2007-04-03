@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShellBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:15:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:07:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef SD_SLIDE_SORTER_VIEW_SHELL_BASE_HXX
 #define SD_SLIDE_SORTER_VIEW_SHELL_BASE_HXX
 
-#include "ViewShellBase.hxx"
+#include "ImpressViewShellBase.hxx"
 
 
 namespace sd {
@@ -45,11 +45,12 @@ namespace sd {
     slide sorter view shell as default.
 */
 class SlideSorterViewShellBase
-    : public ViewShellBase
+    : public ImpressViewShellBase
 {
 public:
     TYPEINFO();
     SFX_DECL_VIEWFACTORY(SlideSorterViewShellBase);
+
     /** This constructor is used by the view factory of the SFX
         macros.
     */
