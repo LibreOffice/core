@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SubToolPanel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:42:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:20:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,6 +120,7 @@ void SubToolPanel::AddControl (
         this,
         pControl,
         rTitle,
+        TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     pTitledControl->GetWindow()->SetParent(this);
     pTitledControl->GetWindow()->SetHelpId(nHelpId);
