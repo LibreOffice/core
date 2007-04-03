@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneHider.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:02:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:15:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,29 @@
 #include "ViewShell.hxx"
 #include "ViewShellBase.hxx"
 #include "slideshow.hxx"
-#include "PaneManager.hxx"
+#include "framework/FrameworkHelper.hxx"
+#include "framework/ConfigurationController.hxx"
+
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANECONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XPaneController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
+using ::sd::framework::FrameworkHelper;
+using ::com::sun::star::lang::DisposedException;
 
 namespace sd {
 
@@ -56,17 +78,39 @@ PaneHider::PaneHider (const ViewShell& rViewShell)
     Slideshow* pSlideShow = mrViewShell.GetSlideShow();
     if (pSlideShow!=NULL && !pSlideShow->isFullScreen())
     {
-        PaneManager& rPaneManager (mrViewShell.GetViewShellBase().GetPaneManager());
-        mbOriginalLeftPaneWindowVisibility = rPaneManager.RequestWindowVisibilityChange(
-            PaneManager::PT_LEFT,
-            false,
-            PaneManager::CM_SYNCHRONOUS);
-        mbOriginalRightPaneWindowVisibility = rPaneManager.RequestWindowVisibilityChange(
-            PaneManager::PT_RIGHT,
-            false,
-            PaneManager::CM_SYNCHRONOUS);
-
-        mbWindowVisibilitySaved = true;
+        try
+        {
+            Reference<XControllerManager> xControllerManager (
+                mrViewShell.GetViewShellBase().GetController(), UNO_QUERY_THROW);
+            mxConfigurationController = xControllerManager->getConfigurationController();
+            if (mxConfigurationController.is())
+            {
+                // Get and save the current configuration.
+                mxConfiguration = mxConfigurationController->getConfiguration();
+                if (mxConfiguration.is())
+                {
+                    // Iterate over the resources and deactivate the panes.
+                    Sequence<Reference<XResourceId> > aResources (
+                        mxConfiguration->getResources(
+                            NULL,
+                            framework::FrameworkHelper::msPaneURLPrefix,
+                            AnchorBindingMode_DIRECT));
+                    for (sal_Int32 nIndex=0; nIndex<aResources.getLength(); ++nIndex)
+                    {
+                        Reference<XResourceId> xPaneId (aResources[nIndex]);
+                        if ( ! xPaneId->getResourceURL().equals(FrameworkHelper::msCenterPaneURL))
+                        {
+                            mxConfigurationController->requestResourceDeactivation(xPaneId);
+                        }
+                    }
+                }
+            }
+            FrameworkHelper::Instance(mrViewShell.GetViewShellBase())->WaitForUpdate();
+        }
+        catch (RuntimeException&)
+        {
+            DBG_ASSERT(false, "caught exception in PaneHider constructor");
+        }
     }
 }
 
@@ -75,18 +119,19 @@ PaneHider::PaneHider (const ViewShell& rViewShell)
 
 PaneHider::~PaneHider (void)
 {
-    if (mbWindowVisibilitySaved)
+    if (mxConfiguration.is() && mxConfigurationController.is())
     {
-        PaneManager& rPaneManager (mrViewShell.GetViewShellBase().GetPaneManager());
-        rPaneManager.RequestWindowVisibilityChange(
-            PaneManager::PT_LEFT,
-            mbOriginalLeftPaneWindowVisibility,
-            PaneManager::CM_ASYNCHRONOUS);
-        rPaneManager.RequestWindowVisibilityChange(
-            PaneManager::PT_RIGHT,
-            mbOriginalRightPaneWindowVisibility,
-            PaneManager::CM_ASYNCHRONOUS);
+        try
+        {
+            mxConfigurationController->restoreConfiguration(mxConfiguration);
+        }
+        catch (DisposedException&)
+        {
+            // When the configuration controller is already disposed then
+            // there is no point in restoring the configuration.
+        }
     }
 }
+
 
 } // end of namespace sd
