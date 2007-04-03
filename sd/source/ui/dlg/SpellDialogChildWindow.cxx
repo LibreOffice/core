@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:57:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:41:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ void SpellDialogChildWindow::ProvideOutliner (void)
 
     if (pViewShellBase != NULL)
     {
-        ViewShell* pViewShell = pViewShellBase->GetMainViewShell();
+        ViewShell* pViewShell = pViewShellBase->GetMainViewShell().get();
         // If there already exists an outliner that has been created
         // for another view shell then destroy it first.
         if (mpSdOutliner != NULL)
