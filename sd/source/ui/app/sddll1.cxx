@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:30:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:38:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@
 #ifndef SD_MEDIA_OBJECT_BAR_HXX
 #include "MediaObjectBar.hxx"
 #endif
-#ifndef SD_VIEW_SHELL_BASE_HXX
-#include "ViewShellBase.hxx"
+#ifndef SD_IMPRESS_VIEW_SHELL_BASE_HXX
+#include "ImpressViewShellBase.hxx"
 #endif
 #ifndef SD_PRESENTATION_VIEW_SHELL_BASE_HXX
 #include "PresentationViewShellBase.hxx"
@@ -114,7 +114,7 @@ void SdDLL::RegisterFactorys()
 {
     if (SvtModuleOptions().IsImpress())
     {
-        ::sd::ViewShellBase::RegisterFactory (
+        ::sd::ImpressViewShellBase::RegisterFactory (
             ::sd::IMPRESS_FACTORY_ID);
         ::sd::SlideSorterViewShellBase::RegisterFactory (
             ::sd::SLIDE_SORTER_FACTORY_ID);
