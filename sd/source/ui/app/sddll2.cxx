@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:54:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:38:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -232,7 +232,8 @@ void SdDLL::RegisterControllers()
     SvxHlinkDlgWrapper::RegisterChildWindow(0, pMod);
     ::sd::SpellDialogChildWindow::RegisterChildWindow(0, pMod);
     ::avmedia::MediaPlayer::RegisterChildWindow(0, pMod);
-    ::sd::LeftPaneChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::LeftPaneImpressChildWindow::RegisterChildWindow(0, pMod);
+    ::sd::LeftPaneDrawChildWindow::RegisterChildWindow(0, pMod);
     ::sd::RightPaneChildWindow::RegisterChildWindow(0, pMod);
     ::sd::notes::NotesChildWindow::RegisterChildWindow(0, pMod);
 
