@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmview.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:36:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:30:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
 #include <com/sun/star/awt/Rectangle.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEID_HPP_
+#include <com/sun/star/drawing/framework/ResourceId.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -65,7 +68,6 @@
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
 #include "optsitem.hxx"
-#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -83,11 +85,14 @@
 #include "pres.hxx"
 #include "glob.hrc"
 #include "sdiocmpt.hxx"
+#include "framework/FrameworkHelper.hxx"
+#include <comphelper/processfactory.hxx>
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
-using namespace ::rtl;
 using namespace ::std;
+using ::rtl::OUString;
 
 namespace sd {
 
@@ -132,7 +137,8 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
 
             while (pSfxViewFrame)
             {
-                // Count the FrameViews and remember the ty
+                // Count the FrameViews and remember the type of the main
+                // view shell.
                 pSfxViewSh = pSfxViewFrame->GetViewShell();
                 pBase = PTR_CAST(ViewShellBase, pSfxViewSh );
 
@@ -140,9 +146,16 @@ FrameView::FrameView(SdDrawDocument* pDrawDoc, FrameView* pFrameView /* = NULK *
                 {
                     nSdViewShellCount++;
 
-                    //AF
-                    switch (pBase->GetPaneManager().GetViewShellType(
-                        PaneManager::PT_CENTER))
+                    ::rtl::OUString sViewURL;
+                    Reference<drawing::framework::XView> xView (
+                        framework::FrameworkHelper::Instance(*pBase)->GetView(
+                            drawing::framework::ResourceId::create(
+                                comphelper_getProcessComponentContext(),
+                                framework::FrameworkHelper::msCenterPaneURL)));
+                    if (xView.is())
+                        sViewURL = xView->getResourceId()->getResourceURL();
+
+                    switch (framework::FrameworkHelper::GetViewId(sViewURL))
                     {
                         default:
 //                        case ViewShell::ST_IMPRESS:
@@ -473,7 +486,7 @@ EditMode FrameView::GetViewShEditModeOnLoad (void) const
 
 static OUString createHelpLinesString( const SdrHelpLineList& rHelpLines )
 {
-    OUStringBuffer aLines;
+    ::rtl::OUStringBuffer aLines;
 
     const USHORT nCount = rHelpLines.GetCount();
     for( USHORT nHlpLine = 0; nHlpLine < nCount; nHlpLine++ )
