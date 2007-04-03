@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshow.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:06:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:15:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,9 @@
 using namespace ::sd;
 using namespace ::rtl;
 
-Slideshow::Slideshow( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc )
-: mpImpl( new SlideshowImpl(pViewSh, pView, pDoc ) )
+Slideshow::Slideshow( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc,
+    ::Window* pParentWindow )
+    : mpImpl( new SlideshowImpl(pViewSh, pView, pDoc, pParentWindow ) )
 {
     mpImpl->acquire();
 }
