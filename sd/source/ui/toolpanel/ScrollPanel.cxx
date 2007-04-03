@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScrollPanel.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:40:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,6 +138,7 @@ TitledControl* ScrollPanel::AddControl (
         this,
         pControl,
         rTitle,
+        TitledControlStandardClickHandler(GetControlContainer(), ControlContainer::ES_TOGGLE),
         TitleBar::TBT_SUB_CONTROL_HEADLINE);
     pTitledControl->GetTitleBar()->SetHelpId(nHelpId);
 
@@ -796,7 +797,7 @@ IMPL_LINK(ScrollPanel,WindowEventListener,VclSimpleEvent*,pEvent)
                 // focus (::Window wise their enclosing TitledControl gets
                 // the focus.)
                 TitledControl* pTitledControl = dynamic_cast<TitledControl*>(pWindowEvent->GetWindow());
-                if (pTitledControl != NULL)
+                if (pTitledControl!=NULL && pTitledControl->GetTitleBar()!=NULL)
                 {
                     ::Window* pTitleBarWindow = pTitledControl->GetTitleBar()->GetWindow();
                     Rectangle aBox(pTitleBarWindow->GetPosPixel(),pTitleBarWindow->GetSizePixel());
