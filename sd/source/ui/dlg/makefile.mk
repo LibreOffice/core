@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 17:06:07 $
+#   last change: $Author: rt $ $Date: 2007-04-03 15:42:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -124,11 +124,12 @@ SLOFILES =  \
         $(SLO)$/LayerTabBar.obj				\
         $(SLO)$/NavigatorChildWindow.obj	\
         $(SLO)$/TemplateScanner.obj \
-                $(SLO)$/sduiexp.obj \
+        $(SLO)$/sduiexp.obj \
         $(SLO)$/sddlgfact.obj \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj			\
-        $(SLO)$/PaneDockingWindow.obj
+        $(SLO)$/PaneDockingWindow.obj			\
+        $(SLO)$/PaneShells.obj
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 
@@ -153,7 +154,8 @@ LIB1OBJFILES= \
         $(SLO)$/TemplateScanner.obj \
         $(SLO)$/sdabstdlg.obj \
         $(SLO)$/PaneChildWindows.obj		\
-        $(SLO)$/PaneDockingWindow.obj
+        $(SLO)$/PaneDockingWindow.obj		\
+        $(SLO)$/PaneShells.obj
 
 
 LIB2TARGET= $(SLB)$/sdui.lib
