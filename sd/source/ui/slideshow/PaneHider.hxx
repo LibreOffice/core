@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneHider.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:06:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:15:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,14 @@
 
 #ifndef SD_PANE_HIDE_HXX
 #define SD_PANE_HIDE_HXX
+
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATION_HPP_
+#include <com/sun/star/drawing/framework/XConfiguration.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XConfigurationController.hpp>
+#endif
+
 
 namespace sd {
 
@@ -66,6 +74,11 @@ private:
     bool mbWindowVisibilitySaved;
     bool mbOriginalLeftPaneWindowVisibility;
     bool mbOriginalRightPaneWindowVisibility;
+
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfigurationController>
+        mxConfigurationController;
+    ::com::sun::star::uno::Reference<com::sun::star::drawing::framework::XConfiguration>
+        mxConfiguration;
 };
 
 } // end of namespace sd
