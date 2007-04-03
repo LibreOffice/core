@@ -1,0 +1,111 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XControllerManager.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:44:53 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XControllerManager_idl__
+#define __com_sun_star_drawing_framework_XControllerManager_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+interface XCommandController;
+interface XConfigurationController;
+interface XModuleController;
+interface XPaneController;
+interface XResourceController;
+interface XToolBarController;
+interface XViewController;
+
+/** The XControllerManager gives access to the sub controllers that provide
+    the different aspects of the drawing framework.
+    <p><strong>This interface is not yet in its final form and will probably change
+    considerably.</strong></p>
+    <p>The <type>XControllerManager</type> interface is typically
+    implemented by the same object that implements <type
+    scope="com::sun::star::frame">XController</type>.</p>
+    <p>The sub controllers that this interface gives access to come from
+    different sources:
+    <ul><li>The core sub controllers are created by instantiating a service
+    from a predefined set of services.  These are <type>CommandController</type>,
+    <type>ConfigurationController</type>, <type>ModuleController</type>,
+    <type>PaneController</type>, <type>ToolbarController</type>, and
+    <type>ViewController</type>.  There explicit access methods for all of
+    these services.</li>
+    <li>Optional sub controllers that are created by instantiating
+    services can be added and removed with the
+    <member>registerController()</member> and
+    <member>removeController()</member> methods.</li>
+    <li>Optional sub controllers who are added as living objects.  There are
+    not methods for this yet.</li>
+    </ul>
+    One motivation for optional sub controllers that can be added at runtime
+    is to allow the slide sorter register a sub controller that exports its
+    (multi) selection.  This selection is used for example by controls in
+    the task pane.  A sub controller is one way of providing a central
+    access point to the selection of the slide sorter which may be shown
+    either in the center pane or the left pane or not at all.</p>
+*/
+interface XControllerManager :
+    ::com::sun::star::uno::XInterface
+{
+    void registerResourceController (
+        [in] string sServiceName,
+        [in] XResourceController xController);
+
+    void removeResourceController (
+        [in] XResourceController xController);
+
+    sequence<XResourceController> getResourceControllers ();
+
+    /** Return an instance of a sub controller that implements the specified
+        service.
+    */
+    ::com::sun::star::uno::XInterface getController ( [in] string sServiceName);
+
+    XCommandController getCommandController ();
+    XConfigurationController getConfigurationController ();
+    XModuleController getModuleController ();
+    XPaneController getPaneController ();
+    XToolBarController getToolBarController ();
+    XViewController getViewController ();
+
+    void releaseController ( [in] ::com::sun::star::uno::XInterface xController);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
