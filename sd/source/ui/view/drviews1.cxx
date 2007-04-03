@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 17:57:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:29:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -948,7 +948,7 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
     if (GetActiveWindow()->IsInPaint())
     {
         // Switching the current page while a Paint is being executed is
-        // dangerous.  So, post it for alter execution and return.
+        // dangerous.  So, post it for later execution and return.
         maAsynchronousSwitchPageCall.Post(::boost::bind(
             ::std::mem_fun(&DrawViewShell::SwitchPage),
             this,
@@ -963,9 +963,9 @@ BOOL DrawViewShell::SwitchPage(USHORT nSelectedPage)
     // returns at one point in time SDRPAGE_NOTFOUND as current page index.
     // Because FuSlideShow is currently being rewritten this bug is fixed
     // here.
-    // This is not as bad a hack as it may lock since making SwitchPage()
-    // more robust with respect to invalid page numbers this if statement is
-    // a good thing anyway.
+    // This is not as bad a hack as it may look because making SwitchPage()
+    // more robust with respect to invalid page numbers is a good thing
+    // anyway.
     if (nSelectedPage == SDRPAGE_NOTFOUND)
     {
         nSelectedPage = 0;
