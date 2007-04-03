@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docshel4.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 12:57:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:42:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,7 @@
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
 #endif
-
+#include <comphelper/processfactory.hxx>
 
 #include "app.hrc"
 #include "glob.hrc"
@@ -149,9 +149,6 @@
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
-#ifndef SD_PANE_MANAGER_HXX
-#include "PaneManager.hxx"
-#endif
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
 #endif
@@ -164,8 +161,12 @@
 #include "sdcgmfilter.hxx"
 #include "sdgrffilter.hxx"
 #include "sdhtmlfilter.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::sd::framework::FrameworkHelper;
+
 
 namespace sd {
 
@@ -811,42 +812,41 @@ SfxStyleSheetBasePool* DrawDocShell::GetStyleSheetPool()
 
 BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
 {
-    OSL_TRACE("GotoBookmark %s",
-        ::rtl::OUStringToOString(rBookmark, RTL_TEXTENCODING_UTF8).getStr());
     BOOL bFound = FALSE;
 
     if (mpViewShell && mpViewShell->ISA(DrawViewShell))
     {
-        DrawViewShell* pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
+        DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(mpViewShell);
+        ViewShellBase& rBase (mpViewShell->GetViewShellBase());
 
         String aBookmark( rBookmark );
 
         // Ist das Bookmark eine Seite?
-        BOOL        bIsMasterPage;
-        USHORT      nPgNum = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
-        SdrObject*  pObj = NULL;
+        BOOL bIsMasterPage;
+        USHORT nPageNumber = mpDoc->GetPageByName( aBookmark, bIsMasterPage );
+        SdrObject* pObj = NULL;
 
-        if (nPgNum == SDRPAGE_NOTFOUND)
+        if (nPageNumber == SDRPAGE_NOTFOUND)
         {
             // Ist das Bookmark ein Objekt?
             pObj = mpDoc->GetObj(aBookmark);
 
             if (pObj)
             {
-                nPgNum = pObj->GetPage()->GetPageNum();
+                nPageNumber = pObj->GetPage()->GetPageNum();
             }
         }
 
-        if (nPgNum != SDRPAGE_NOTFOUND)
+        if (nPageNumber != SDRPAGE_NOTFOUND)
         {
             // Jump to the bookmarked page.  This is done in three steps.
 
             bFound = TRUE;
             SdPage* pPage;
             if (bIsMasterPage)
-                pPage = (SdPage*) mpDoc->GetMasterPage(nPgNum);
+                pPage = (SdPage*) mpDoc->GetMasterPage(nPageNumber);
             else
-                pPage = (SdPage*) mpDoc->GetPage(nPgNum);
+                pPage = (SdPage*) mpDoc->GetPage(nPageNumber);
 
             // 1.) Change the view shell to the edit view, the notes view,
             // or the handout view.
@@ -855,86 +855,95 @@ BOOL DrawDocShell::GotoBookmark(const String& rBookmark)
             if( (eNewPageKind != PK_STANDARD) && (mpDoc->GetDocumentType() == DOCUMENT_TYPE_DRAW) )
                 return FALSE;
 
-            if (eNewPageKind != pDrViewSh->GetPageKind())
+            if (eNewPageKind != pDrawViewShell->GetPageKind())
             {
                 // Arbeitsbereich wechseln
                 GetFrameView()->SetPageKind(eNewPageKind);
-                if (mpViewShell != NULL)
+                ::rtl::OUString sViewURL;
+                switch (eNewPageKind)
                 {
-                    ViewShell::ShellType eShellType(
-                        mpViewShell->GetShellType());
-                    switch (eNewPageKind)
-                    {
-                        case PK_STANDARD:
-                            eShellType = ViewShell::ST_IMPRESS;
-                            break;
-                        case PK_NOTES:
-                            eShellType = ViewShell::ST_NOTES;
-                            break;
-                        case PK_HANDOUT:
-                            eShellType = ViewShell::ST_HANDOUT;
-                            break;
-                        default:
-                            break;
-                    }
-                    mpViewShell->GetViewShellBase().GetPaneManager()
-                        .RequestMainViewShellChange(
-                            eShellType,
-                            PaneManager::CM_SYNCHRONOUS);
+                    case PK_STANDARD:
+                        sViewURL = FrameworkHelper::msImpressViewURL;
+                        break;
+                    case PK_NOTES:
+                        sViewURL = FrameworkHelper::msNotesViewURL;
+                        break;
+                    case PK_HANDOUT:
+                        sViewURL = FrameworkHelper::msHandoutViewURL;
+                        break;
+                    default:
+                        break;
                 }
-                // Die aktuelle ViewShell hat sich geaendert!
-                pDrViewSh = static_cast<DrawViewShell*>(mpViewShell);
+                if (sViewURL.getLength() > 0)
+                {
+                    ::boost::shared_ptr<FrameworkHelper> pHelper (
+                        FrameworkHelper::Instance(rBase));
+                    pHelper->RequestView(
+                        sViewURL,
+                        FrameworkHelper::msCenterPaneURL);
+                    pHelper->WaitForUpdate();
+
+                    // Get the new DrawViewShell.
+                    mpViewShell = pHelper->GetViewShell(FrameworkHelper::msCenterPaneURL).get();
+                    pDrawViewShell = dynamic_cast<sd::DrawViewShell*>(mpViewShell);
+                }
+                else
+                {
+                    pDrawViewShell = NULL;
+                }
             }
 
-            // 2.) Set the edit mode to either the normal edit mode or the
-            // master page mode.
-            EditMode eNewEditMode = EM_PAGE;
-            if( bIsMasterPage )
+            if (pDrawViewShell != NULL)
             {
-                eNewEditMode = EM_MASTERPAGE;
-            }
+                // Set the edit mode to either the normal edit mode or the
+                // master page mode.
+                EditMode eNewEditMode = EM_PAGE;
+                if (bIsMasterPage)
+                {
+                    eNewEditMode = EM_MASTERPAGE;
+                }
 
-            if (eNewEditMode != pDrViewSh->GetEditMode())
-            {
-                // EditMode setzen
-                pDrViewSh->ChangeEditMode(eNewEditMode, FALSE);
-            }
+                if (eNewEditMode != pDrawViewShell->GetEditMode())
+                {
+                    // EditMode setzen
+                    pDrawViewShell->ChangeEditMode(eNewEditMode, FALSE);
+                }
 
-            // 3.) Make the bookmarked page the current page.  This is done
-            // by using the API because this takes care of all the little
-            // things to be done.  Especially writing the view data to the
-            // frame view (see bug #107803#).
-            USHORT nSdPgNum = (nPgNum - 1) / 2;
-            uno::Reference<drawing::XDrawView> xController (
-                pDrViewSh->GetViewShellBase().GetController(), uno::UNO_QUERY);
-            if (xController.is())
-            {
-                ::com::sun::star::uno::Reference<
-                      ::com::sun::star::drawing::XDrawPage> xDrawPage (
-                          pPage->getUnoPage(), ::com::sun::star::uno::UNO_QUERY);
-                xController->setCurrentPage (xDrawPage);
-            }
-            else
-            {
-                // As a fall back switch to the page via the core.
-                DBG_ASSERT (xController.is(),
-                    "DrawDocShell::GotoBookmark: can't switch page via API");
-                pDrViewSh->SwitchPage(nSdPgNum);
-            }
+                // Make the bookmarked page the current page.  This is done
+                // by using the API because this takes care of all the
+                // little things to be done.  Especially writing the view
+                // data to the frame view (see bug #107803#).
+                USHORT nSdPgNum = (nPageNumber - 1) / 2;
+                Reference<drawing::XDrawView> xController (rBase.GetController(), UNO_QUERY);
+                if (xController.is())
+                {
+                    Reference<drawing::XDrawPage> xDrawPage (pPage->getUnoPage(), UNO_QUERY);
+                    xController->setCurrentPage (xDrawPage);
+                }
+                else
+                {
+                    // As a fall back switch to the page via the core.
+                    DBG_ASSERT (xController.is(),
+                        "DrawDocShell::GotoBookmark: can't switch page via API");
+                    pDrawViewShell->SwitchPage(nSdPgNum);
+                }
 
-
-            if (pObj)
-            {
-                // Objekt einblenden und selektieren
-                pDrViewSh->MakeVisible(pObj->GetLogicRect(),
-                                       *pDrViewSh->GetActiveWindow());
-                pDrViewSh->GetView()->UnmarkAll();
-                pDrViewSh->GetView()->MarkObj(pObj, pDrViewSh->GetView()->GetSdrPageView(), FALSE);
+                if (pObj != NULL)
+                {
+                    // Objekt einblenden und selektieren
+                    pDrawViewShell->MakeVisible(pObj->GetLogicRect(),
+                        *pDrawViewShell->GetActiveWindow());
+                    pDrawViewShell->GetView()->UnmarkAll();
+                    pDrawViewShell->GetView()->MarkObj(
+                        pObj,
+                        pDrawViewShell->GetView()->GetSdrPageView(), FALSE);
+                }
             }
         }
 
-        SfxBindings& rBindings = ( ( mpViewShell && mpViewShell->GetViewFrame() ) ?
-                                 mpViewShell->GetViewFrame() : SfxViewFrame::Current() )->GetBindings();
+        SfxBindings& rBindings = (pDrawViewShell->GetViewFrame()!=NULL
+            ? pDrawViewShell->GetViewFrame()
+            : SfxViewFrame::Current() )->GetBindings();
 
         rBindings.Invalidate(SID_NAVIGATOR_STATE, TRUE, FALSE);
         rBindings.Invalidate(SID_NAVIGATOR_PAGENAME);
