@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:11:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:47:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -350,6 +350,14 @@ TabPage TP_OPTPRINT_PAGE
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Text [ de ] = "Pr~ospekt" ;
         Text [ en-US ] = "Broch~ure" ;
+        Text [ x-comment ] = " ";
+    };
+    CheckBox CB_PROSPECT_RTL
+    {
+        Pos = MAP_APPFONT ( 103 , 66 ) ;
+        Size = MAP_APPFONT ( 70 , 10 ) ;
+        Text [ de ] = "Rechts nach Links" ;
+        Text [ en-US ] = "Right to Left" ;
         Text [ x-comment ] = " ";
     };
     RadioButton RB_NO
