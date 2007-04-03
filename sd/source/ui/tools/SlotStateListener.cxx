@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlotStateListener.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:53:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:24:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ namespace sd { namespace tools {
 SlotStateListener::SlotStateListener (void)
     : SlotStateListenerInterfaceBase(maMutex),
       maCallback(),
-      mxFrameWeak(NULL)
+      mxDispatchProviderWeak(NULL)
 {
 }
 
@@ -75,14 +75,14 @@ SlotStateListener::SlotStateListener (void)
 
 SlotStateListener::SlotStateListener (
     Link& rCallback,
-    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame> xFrame,
+    const Reference<frame::XDispatchProvider>& rxDispatchProvider,
     const ::rtl::OUString& rSlotName)
     : SlotStateListenerInterfaceBase(maMutex),
       maCallback(),
-      mxFrameWeak(NULL)
+      mxDispatchProviderWeak(NULL)
 {
     SetCallback(rCallback);
-    ConnectToFrame(xFrame);
+    ConnectToDispatchProvider(rxDispatchProvider);
     ObserveSlot(rSlotName);
 }
 
@@ -107,7 +107,8 @@ void SlotStateListener::SetCallback (const Link& rCallback)
 
 
 
-void SlotStateListener::ConnectToFrame (Reference<frame::XFrame> xFrame)
+void SlotStateListener::ConnectToDispatchProvider (
+    const Reference<frame::XDispatchProvider>& rxDispatchProvider)
 {
     ThrowIfDisposed();
 
@@ -116,7 +117,7 @@ void SlotStateListener::ConnectToFrame (Reference<frame::XFrame> xFrame)
     if ( ! maRegisteredURLList.empty())
         ReleaseListeners();
 
-    mxFrameWeak = xFrame;
+    mxDispatchProviderWeak = rxDispatchProvider;
 }
 
 
@@ -142,10 +143,18 @@ void SlotStateListener::ObserveSlot (const ::rtl::OUString& rSlotName)
 
 
 
+bool SlotStateListener::IsValid (void) const
+{
+    return maRegisteredURLList.size() > 0;
+}
+
+
+
+
 void SlotStateListener::disposing (void)
 {
     ReleaseListeners();
-    mxFrameWeak = WeakReference<frame::XFrame>(NULL);
+    mxDispatchProviderWeak = WeakReference<frame::XDispatchProvider>(NULL);
     maCallback = Link();
 }
 
@@ -180,8 +189,7 @@ Reference<frame::XDispatch>
 {
     Reference<frame::XDispatch> xDispatch;
 
-    Reference<frame::XFrame> xFrame (mxFrameWeak);
-    Reference<frame::XDispatchProvider> xDispatchProvider (xFrame, UNO_QUERY);
+    Reference<frame::XDispatchProvider> xDispatchProvider (mxDispatchProviderWeak);
     if (xDispatchProvider.is())
         xDispatch = xDispatchProvider->queryDispatch(rURL, OUString(), 0);
 
