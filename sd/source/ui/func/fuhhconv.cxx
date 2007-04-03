@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuhhconv.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:18:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,7 +161,7 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
 
     ViewShellBase* pBase = PTR_CAST(ViewShellBase, SfxViewShell::Current());
     if (pBase != NULL)
-        mpViewShell = pBase->GetMainViewShell();
+        mpViewShell = pBase->GetMainViewShell().get();
 
     if( mpViewShell )
     {
@@ -189,7 +189,7 @@ void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTar
 
     // Due to changing between edit mode, notes mode, and handout mode the
     // view has most likely changed.  Get the new one.
-    mpViewShell = pBase->GetMainViewShell();
+    mpViewShell = pBase->GetMainViewShell().get();
     if (mpViewShell != NULL)
     {
         mpView = mpViewShell->GetView();
