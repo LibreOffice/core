@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:06:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:42:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -772,7 +772,7 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
             ::sd::ViewShellBase* pBase =
                 ::sd::ViewShellBase::GetViewShellBase(
                     mpBindings->GetDispatcher()->GetFrame());
-            ::sd::ViewShell* pViewShell = pBase->GetMainViewShell();
+            ::sd::ViewShell* pViewShell = pBase->GetMainViewShell().get();
             if (pViewShell != NULL)
             {
                 ::sd::Slideshow* pSlideShow = pViewShell->GetSlideShow();
