@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineViewShellBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:05:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:26:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "DrawDocShell.hxx"
 #endif
 #include "strings.hrc"
+#include "framework/FrameworkHelper.hxx"
 
 namespace sd {
 
@@ -66,7 +67,7 @@ SfxViewShell* __EXPORT OutlineViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     OutlineViewShellBase* pBase = new OutlineViewShellBase(pFrame, pOldView);
-    pBase->LateInit();
+    pBase->LateInit(framework::FrameworkHelper::msOutlineViewURL);
     return pBase;
 }
 void OutlineViewShellBase::RegisterFactory( USHORT nPrio )
@@ -86,7 +87,7 @@ void OutlineViewShellBase::InitFactory()
 OutlineViewShellBase::OutlineViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (_pFrame, pOldShell, ViewShell::ST_OUTLINE)
+    : ImpressViewShellBase (_pFrame, pOldShell)
 {
 }
 
@@ -96,6 +97,9 @@ OutlineViewShellBase::OutlineViewShellBase (
 OutlineViewShellBase::~OutlineViewShellBase (void)
 {
 }
+
+
+
 
 } // end of namespace sd
 
