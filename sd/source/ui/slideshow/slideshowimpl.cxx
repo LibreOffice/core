@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:51:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:16:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -531,15 +531,16 @@ void AnimationSlideController::displayCurrentSlide( const Reference< XSlideShow 
 SlideshowImpl::SlideshowImpl(
     ViewShell* pViewSh,
     ::sd::View* pView,
-    SdDrawDocument* pDoc )
+    SdDrawDocument* pDoc,
+    ::Window* pParentWindow )
 :   SlideshowImpl_base( m_aMutex ),
     mxModel(pDoc->getUnoModel(),UNO_QUERY_THROW),
     mpView(pView),
     mpViewShell(pViewSh),
     mpDocSh(pDoc->GetDocSh()),
     mpDoc(pDoc),
-
     mpNewAttr(0),
+    mpParentWindow(pParentWindow),
     mpShowWindow(0),
     mpTimeButton(0),
     mnRestoreSlide(0),
@@ -648,7 +649,7 @@ bool SlideshowImpl::startPreview(
         mpSlideController->insertSlideNumber( nSlideNumber-1 );
         mpSlideController->setPreviewNode( xAnimationNode );
 
-        mpShowWindow = new ShowWindow( ((pParent == 0) && mpViewShell) ?  mpViewShell->GetParentWindow() : pParent );
+        mpShowWindow = new ShowWindow( ((pParent == 0) && mpViewShell) ?  mpParentWindow : pParent );
         if( mpViewShell )
         {
             mpViewShell->SetActiveWindow( mpShowWindow );
@@ -721,6 +722,9 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
     DBG_ASSERT( !mxShow.is(), "sd::SlideshowImpl::startShow(), called twice!" );
     if( mxShow.is() )
         return true;
+    DBG_ASSERT( mpParentWindow!=NULL, "sd::SlideshowImpl::startShow() called without parent window" );
+    if (mpParentWindow == NULL)
+        return false;
 
     bool bRet = false;
 
@@ -816,10 +820,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         // hide child windows
         hideChildWindows();
 
-        ::Window* pParent;
-        pParent = getViewFrame() ? &getViewFrame()->GetWindow() : 0;
-
-        mpShowWindow = new ShowWindow( pParent );
+        mpShowWindow = new ShowWindow( mpParentWindow );
         mpShowWindow->SetMouseAutoHide( !maPresSettings.mbMouseVisible );
         if( mpViewShell )
         {
@@ -854,7 +855,7 @@ bool SlideshowImpl::startShow( PresentationSettings* pPresSettings )
         }
 
         // call resize handler
-        maPresSize = pParent->GetSizePixel();
+        maPresSize = mpParentWindow->GetSizePixel();
         if( !maPresSettings.mbFullScreen && mpViewShell )
         {
             const Rectangle& aClientRect = mpViewShell->GetViewShellBase().getClientRectangle();
