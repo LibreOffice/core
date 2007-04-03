@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 15:11:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,6 +194,7 @@
 #define FT_UNKNOWN                  137
 #define LB_UNKNOWN                  138
 #define FL_TABLE_SEPARATOR          139
+#define CB_PROSPECT_RTL        140
 
 #define FL_SHDWCRSFLAG                             1
 #define CB_SHDWCRSONOFF                2
