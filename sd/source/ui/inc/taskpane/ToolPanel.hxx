@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolPanel.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:58:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #define SD_TOOL_PANEL_HXX
 
 #include "taskpane/TaskPaneTreeNode.hxx"
+#include "taskpane/TitledControl.hxx"
 #ifndef _SV_CTRL_HXX
 #include <vcl/ctrl.hxx>
 #endif
@@ -74,13 +75,22 @@ public:
 
     /** Append the given control to the end of the list of controls that are
         managed by the tool panel.
+        @param pControlFactory
+            Factory that provides the control on demand, typically when it
+            is expanded the first time.
+        @param rTitle
+            The string that is displayed in the title bar above the control.
         @param nHelpId
             The help id is set at the title bar not the actual control.
+        @param rClickHandler
+            The click handler typically expands a control when the user has
+            clicked on its title.
     */
     sal_uInt32 AddControl (
         ::std::auto_ptr<ControlFactory> pControlFactory,
         const String& rTitle,
-        ULONG nHelpId);
+        ULONG nHelpId,
+        const TitledControl::ClickHandler& rClickHandler);
 
     virtual void Resize (void);
 
