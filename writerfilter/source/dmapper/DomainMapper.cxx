@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2007-04-02 11:53:21 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-03 15:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,7 +112,7 @@ namespace dmapper{
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< lang::XComponent > xModel) :
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel )),
-    mnHpsMeasure(0), mnTwipsMeasure(0)
+    mnHpsMeasure(0), mnTwipsMeasure(0), mnBackgroundColor(0), mbIsHighlightSet(false)
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -130,7 +130,6 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
     bool bExchangeLeftRight = false;
-    printf("*** attribute *** 0x%.8x *** 0x%.8x *** %s *** attribute ***\n", (unsigned int)Name, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
     if( Name >= NS_rtf::LN_WIDENT && Name <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( Name, nIntValue );
     else
@@ -1526,6 +1525,21 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             m_pImpl->GetTopContext()->Insert(
                 PROP_PARA_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertToMM100(nIntValue ) ));
             break;
+
+        case NS_ooxml::LN_CT_Highlight_val:
+            {
+                sal_Int32 nColor = 0;
+                if (mbIsHighlightSet = getColorFromIndex(nIntValue, nColor))
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
+                else if (mnBackgroundColor)
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
+            }
+            break;
+
+        case NS_ooxml::LN_CT_TextScale_val:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_SCALE_WIDTH, uno::makeAny( sal_Int16(nIntValue) ));
+            break;
+
         default:
             {
                 //int nVal = val.getInt();
@@ -1566,7 +1580,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     /* WRITERFILTERSTATUS: table: sprmdata */
 
-    printf("*** sprm *** 0x%.8x *** sprm *** 0x%.8x *** %s *** sprm ***\n", (unsigned int)nId, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
     switch(nId)
     {
     case 2:  // sprmPIstd
@@ -1970,6 +1983,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmCIdCharType
     case 0x2A0C:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        {
+            sal_Int32 nColor;
+            if (getColorFromIndex(nIntValue, nColor))
+                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny ( nColor ));
+        }
         break;  // sprmCHighlight
     case 0x680E:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -2117,6 +2135,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                                          uno::makeAny( awt::FontStrikeout::DOUBLE ) );
                     break;
                     case 0x838: /*sprmCFOutline*/
+                    case 0x839: /*sprmCFShadow*/
+                    case 0x83c: /*sprmCFVanish*/
                         nPropertyNameId = static_cast<sal_uInt16>( ePropertyId );
                     break;
                     case 0x83a: /*sprmCFSmallCaps*/
@@ -2127,7 +2147,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? style::CaseMap::UPPERCASE : style::CaseMap::NONE));
                     break;
-                    case 0x83c: /*sprmCFVanish*/ break;
                     case 0x0858: /*sprmCFEmboss*/
                         rContext->Insert(ePropertyId,
                                          uno::makeAny( nIntValue ? awt::FontRelief::EMBOSSED : awt::FontRelief::NONE ));
@@ -2300,7 +2319,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
         rContext->Insert(PROP_CHAR_SCALE_WIDTH,
                          uno::makeAny( sal_Int16(nIntValue) ));
-
         break;
     case 0x0854: // sprmCFImprint   1 or 0
         /* WRITERFILTERSTATUS: done: 100, planned: 2, spent: 0 */
@@ -2994,7 +3012,13 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
         break;
+    case NS_ooxml::LN_EG_RPrBase_highlight:
+        resolveSprmProps(sprm_);
+        break;
 
+    case NS_ooxml::LN_EG_RPrBase_w:
+        resolveSprmProps(sprm_);
+        break;
 
     default:
         {
@@ -3337,7 +3361,7 @@ void DomainMapper::handleParaJustification(const sal_Int32 nIntValue, const ::bo
     pContext->Insert( PROP_PARA_LAST_LINE_ADJUST, uno::makeAny( nLastLineAdjust ) );
 }
 
-bool DomainMapper::getColorFromIndex(const sal_Int32 nIndex, sal_Int32 nColor)
+bool DomainMapper::getColorFromIndex(const sal_Int32 nIndex, sal_Int32 &nColor)
 {
     nColor = 0;
     if ((nIndex < 1) || (nIndex > 16))

@@ -5609,7 +5609,7 @@
   </define>
   <define name="CT_TextScale">
     <attribute name="val">
-      <text/>
+      <ref name="ST_TextScale"/>
       <xs:documentation>Text Expansion/Compression Value</xs:documentation>
     </attribute>
   </define>
@@ -5656,7 +5656,7 @@
   </define>
   <define name="CT_Highlight">
     <attribute name="val">
-      <text/>
+      <ref name="ST_HighlightColor"/>
       <xs:documentation>Highlighting Color</xs:documentation>
     </attribute>
   </define>
@@ -6365,54 +6365,54 @@
   </define>
   <define name="CT_Shd">
     <attribute name="val">
-      <text/>
+      <ref name="ST_Shd"/>
       <xs:documentation>Shading Pattern</xs:documentation>
     </attribute>
     <optional>
       <attribute name="color">
-        <text/>
+        <ref name="ST_HexColor"/>
         <xs:documentation>Shading Pattern Color</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeColor">
-        <text/>
+        <ref name="ST_ThemeColor"/>
         <xs:documentation>Shading Pattern Theme Color</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeTint">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Shading Pattern Theme Color Tint</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeShade">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Shading Pattern Theme Color Shade</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="fill">
-        <text/>
+        <ref name="ST_HexColor"/>
         <xs:documentation>Shading Background Color</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeFill">
-        <text/>
+        <ref name="ST_ThemeColor"/>
         <xs:documentation>Shading Background Theme Color</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeFillTint">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Shading Background Theme Color Tint</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeFillShade">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Shading Background Theme Color Shade</xs:documentation>
       </attribute>
     </optional>
@@ -14122,19 +14122,19 @@
   <sprm name="noProof" tokenid="0x875"/>
   <sprm name="snapToGrid" tokenid="0x0"/>
   <sprm name="vanish" tokenid="0x83c"/>
-  <sprm name="webHidden" tokenid="0x0"/>
+  <sprm name="webHidden" tokenid="0x83c"/>
   <sprm name="color" tokenid="ooxml:EG_RPrBase_color"/>
   <sprm name="spacing" tokenid="ooxml:EG_RPrBase_spacing"/>
-  <sprm name="w" tokenid="0x4852"/>
+  <sprm name="w" tokenid="ooxml:EG_RPrBase_w"/>
   <sprm name="kern" tokenid="0x484b"/>
   <sprm name="position" tokenid="ooxml:EG_RPrBase_position"/>
   <sprm name="sz" tokenid="ooxml:EG_RPrBase_sz"/>
   <sprm name="szCs" tokenid="ooxml:EG_RPrBase_szCs"/>
-  <sprm name="highlight" tokenid="0x2a0c"/>
+  <sprm name="highlight" tokenid="ooxml:EG_RPrBase_highlight"/>
   <sprm name="u" tokenid="0x2a3e"/>
   <sprm name="effect" tokenid="0x6816"/>
   <sprm name="bdr" tokenid="0xca72"/>
-  <sprm name="shd" tokenid="0x4866"/>
+  <sprm name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
   <sprm name="fitText" tokenid="0xca76"/>
   <sprm name="vertAlign" tokenid="0x0"/>
   <sprm name="rtl" tokenid="0x0"/>
@@ -14597,6 +14597,72 @@
   <attribute name="line" tokenid="ooxml:CT_Spacing_line"/>
   <attribute name="lineRule" tokenid="ooxml:CT_Spacing_lineRule"/>
 </resource>
+<resource name="CT_Highlight" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_Highlight_val"/>
+</resource>
+<resource name="ST_HighlightColor" resource="List">
+  <value tokenid="1">black</value>
+  <value tokenid="2">blue</value>
+  <value tokenid="3">cyan</value>
+  <value tokenid="4">green</value>
+  <value tokenid="5">magenta</value>
+  <value tokenid="6">red</value>
+  <value tokenid="7">yellow</value>
+  <value tokenid="8">white</value>
+  <value tokenid="9">darkBlue</value>
+  <value tokenid="10">darkCyan</value>
+  <value tokenid="11">darkGreen</value>
+  <value tokenid="12">darkMagenta</value>
+  <value tokenid="13">darkRed</value>
+  <value tokenid="14">darkYellow</value>
+  <value tokenid="15">darkGray</value>
+  <value tokenid="16">lightGray</value>
+  <value tokenid="0">none</value>
+</resource>
+<resource name="ST_Shd" resource="List">
+  <value tokenid="ooxml:Value_ST_Shd_nil">nil</value>
+  <value tokenid="ooxml:Value_ST_Shd_clear">clear</value>
+  <value tokenid="ooxml:Value_ST_Shd_solid">solid</value>
+  <value tokenid="ooxml:Value_ST_Shd_horzStripe">horzStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_vertStripe">vertStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_reverseDiagStripe">reverseDiagStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_diagStripe">diagStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_horzCross">horzCross</value>
+  <value tokenid="ooxml:Value_ST_Shd_diagCross">diagCross</value>
+  <value tokenid="ooxml:Value_ST_Shd_thinHorzStripe">thinHorzStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_thinVertStripe">thinVertStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_thinReverseDiagStripe">thinReverseDiagStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_thinDiagStripe">thinDiagStripe</value>
+  <value tokenid="ooxml:Value_ST_Shd_thinHorzCross">thinHorzCross</value>
+  <value tokenid="ooxml:Value_ST_Shd_thinDiagCross">thinDiagCross</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct5">pct5</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct10">pct10</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct12">pct12</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct15">pct15</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct20">pct20</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct25">pct25</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct30">pct30</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct35">pct35</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct37">pct37</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct40">pct40</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct45">pct45</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct50">pct50</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct55">pct55</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct60">pct60</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct62">pct62</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct65">pct65</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct70">pct70</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct75">pct75</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct80">pct80</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct85">pct85</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct87">pct87</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct90">pct90</value>
+  <value tokenid="ooxml:Value_ST_Shd_pct95">pct95</value>
+</resource>
+<resource name="CT_TextScale" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_TextScale_val"/>
+</resource>
+<resource name="ST_TextScale" resource="Integer"/>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>
