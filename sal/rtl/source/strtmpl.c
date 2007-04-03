@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strtmpl.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:29:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1025,7 +1025,7 @@ static IMPL_RTL_STRCODE* IMPL_RTL_STRINGNAME( ImplNewCopy )( IMPL_RTL_STRINGDATA
 
 #define IMPL_RTL_AQUIRE( pThis )                                \
 {                                                               \
-    if (pThis != &IMPL_RTL_EMPTYSTRING)                         \
+    if (!SAL_STRING_IS_STATIC (pThis))                          \
         osl_incrementInterlockedCount( &((pThis)->refCount) );  \
 }
 
@@ -1040,17 +1040,21 @@ void SAL_CALL IMPL_RTL_STRINGNAME( acquire )( IMPL_RTL_STRINGDATA* pThis )
 
 void SAL_CALL IMPL_RTL_STRINGNAME( release )( IMPL_RTL_STRINGDATA* pThis )
 {
-    if (pThis == &IMPL_RTL_EMPTYSTRING)
+    if (SAL_STRING_IS_STATIC (pThis))
         return;
 
-    if ( pThis->refCount == 1 )
+/* OString doesn't have an 'intern' */
+#ifdef IMPL_RTL_INTERN
+    if (SAL_STRING_IS_INTERN (pThis))
     {
-        OSL_ENSURE( pThis != &IMPL_RTL_EMPTYSTRING, "static empty string: refCount < 1" );
-        rtl_freeMemory( pThis );
+        internRelease (pThis);
+        return;
     }
-    else if ( !osl_decrementInterlockedCount( &(pThis->refCount) ) )
+#endif
+
+    if ( pThis->refCount == 1 ||
+         !osl_decrementInterlockedCount( &(pThis->refCount) ) )
     {
-        OSL_ENSURE( IMPL_RTL_EMPTYSTRING.refCount >= 1, "static empty string: refCount < 1" );
         rtl_freeMemory( pThis );
     }
 }
