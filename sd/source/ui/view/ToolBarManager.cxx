@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ToolBarManager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:07:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 
 #include "DrawViewShell.hxx"
 #include "EventMultiplexer.hxx"
-#include "PaneManager.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"
 
@@ -93,9 +92,8 @@ class ToolBarRules;
 class LayouterLock
 {
 public:
-    LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
-        : mxLayouter(rxLayouter) { if (mxLayouter.is()) { mxLayouter->lock(); } }
-    ~LayouterLock (void) { if (mxLayouter.is()) { mxLayouter->unlock(); } }
+    LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter);
+    ~LayouterLock (void);
 private:
     Reference<frame::XLayoutManager> mxLayouter;
 };
@@ -141,7 +139,7 @@ private:
     requested shells that are not active and deactivates the active shells
     that are not requested.
 
-    This is done by maintainging two lists.  Oone (the current list)
+    This is done by maintaining two lists.  One (the current list)
     reflects the current state.  The other (the requested list) contains the
     currently requested shells.  UpdateShells() makes the requested
     list the current list and clears the current list.
@@ -291,16 +289,15 @@ namespace sd {
 class ToolBarManager::Implementation
 {
 public:
-    /** This constructor takes three arguments even though the PaneManager
-        and the ToolBarManager could be taken from the ViewShellBase.  This
-        is so to state explicitly which information has to be present when
-        this constructor is called.  The ViewShellBase may not have been
-        fully initialized at this point and must not be asked for this values.
+    /** This constructor takes three arguments even though the
+        ToolBarManager could be taken from the ViewShellBase.  This is so to
+        state explicitly which information has to be present when this
+        constructor is called.  The ViewShellBase may not have been fully
+        initialized at this point and must not be asked for this values.
     */
     Implementation (
         ViewShellBase& rBase,
         sd::tools::EventMultiplexer& rMultiplexer,
-        PaneManager& rPaneManager,
         ViewShellManager& rViewShellManager,
         ToolBarManager& rToolBarManager);
     ~Implementation (void);
@@ -324,9 +321,18 @@ public:
 
     void ToolBarsDestroyed(void);
 
+    void RequestUpdate (void);
+
     void PreUpdate (void);
     void PostUpdate (void);
-    void Update (void);
+    /** Tell the XLayoutManager about the tool bars that we would like to be
+        shown.
+        @param rpLayouterLock
+            This typically is the mpSynchronousLayouterLock that is used in
+            this method and that is either released at its end or assigned
+            to mpAsynchronousLock in order to be unlocked later.
+    */
+    void Update (::std::auto_ptr<LayouterLock> pLayouterLock);
 
     class UpdateLock
     {
@@ -358,7 +364,13 @@ private:
     sal_Int32 mnLockCount;
     bool mbPreUpdatePending;
     bool mbPostUpdatePending;
-    ::std::auto_ptr<LayouterLock> mpLayouterLock;
+    /** The layouter locks manage the locking of the XLayoutManager.  The
+        lock() and unlock() functions are not called directly because the
+        (final) unlocking  is usually done asynchronously *after* the
+        list of requested toolbars is updated.
+    */
+    ::std::auto_ptr<LayouterLock> mpSynchronousLayouterLock;
+    ::std::auto_ptr<LayouterLock> mpAsynchronousLayouterLock;
     ::std::auto_ptr<ViewShellManager::UpdateLock> mpViewShellManagerLock;
     ULONG mnPendingUpdateCall;
     ULONG mnPendingSetValidCall;
@@ -395,12 +407,11 @@ const ::rtl::OUString ToolBarManager::msMediaObjectBar(OUSTRING("mediaobjectbar"
 ::std::auto_ptr<ToolBarManager> ToolBarManager::Create (
     ViewShellBase& rBase,
     sd::tools::EventMultiplexer& rMultiplexer,
-    PaneManager& rPaneManager,
     ViewShellManager& rViewShellManager)
 {
     ::std::auto_ptr<ToolBarManager> pManager (new ToolBarManager());
     pManager->mpImpl.reset(
-        new Implementation(rBase,rMultiplexer,rPaneManager,rViewShellManager,*pManager));
+        new Implementation(rBase,rMultiplexer,rViewShellManager,*pManager));
     return pManager;
 }
 
@@ -559,10 +570,10 @@ void ToolBarManager::PreUpdate (void)
 
 
 
-void ToolBarManager::Update (void)
+void ToolBarManager::RequestUpdate (void)
 {
     if (mpImpl.get()!=NULL)
-        mpImpl->Update();
+        mpImpl->RequestUpdate();
 }
 
 
@@ -654,7 +665,6 @@ const ::rtl::OUString ToolBarManager::Implementation::msToolBarResourcePrefix(
 ToolBarManager::Implementation::Implementation (
     ViewShellBase& rBase,
     sd::tools::EventMultiplexer& rMultiplexer,
-    PaneManager&,
     ViewShellManager& rViewShellManager,
     ToolBarManager& rToolBarManager)
     : maMutex(),
@@ -667,7 +677,8 @@ ToolBarManager::Implementation::Implementation (
       mnLockCount(0),
       mbPreUpdatePending(false),
       mbPostUpdatePending(false),
-      mpLayouterLock(),
+      mpSynchronousLayouterLock(),
+      mpAsynchronousLayouterLock(),
       mpViewShellManagerLock(),
       mnPendingUpdateCall(0),
       mnPendingSetValidCall(0),
@@ -811,7 +822,7 @@ void ToolBarManager::Implementation::AddToolBarShell (
     ToolBarGroup eGroup,
     ShellId nToolBarId)
 {
-    ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
     if (pMainViewShell != NULL)
     {
         maToolBarShellList.AddShellId(eGroup,nToolBarId);
@@ -826,7 +837,7 @@ void ToolBarManager::Implementation::RemoveToolBarShell (
     ToolBarGroup eGroup,
     ShellId nToolBarId)
 {
-    ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+    ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
     if (pMainViewShell != NULL)
     {
         GetToolBarRules().SubShellRemoved(eGroup, nToolBarId);
@@ -840,7 +851,19 @@ void ToolBarManager::Implementation::RemoveToolBarShell (
 void ToolBarManager::Implementation::ReleaseAllToolBarShells (void)
 {
     maToolBarShellList.ReleaseAllShells(GetToolBarRules());
-    maToolBarShellList.UpdateShells(mrBase.GetMainViewShell(), mrBase.GetViewShellManager());
+    maToolBarShellList.UpdateShells(mrBase.GetMainViewShell().get(), mrBase.GetViewShellManager());
+}
+
+
+
+
+void ToolBarManager::Implementation::RequestUpdate (void)
+{
+    if (mnPendingUpdateCall == 0)
+    {
+        mnPendingUpdateCall = Application::PostUserEvent(
+            LINK(this,ToolBarManager::Implementation,UpdateCallback));
+    }
 }
 
 
@@ -955,8 +978,9 @@ void ToolBarManager::Implementation::LockUpdate (void)
     DBG_ASSERT(mnLockCount<100, "ToolBarManager lock count unusually high");
     if (mnLockCount == 0)
     {
-        OSL_ASSERT(mpViewShellManagerLock.get()==NULL);
-        mpLayouterLock.reset(new LayouterLock(mxLayouter));
+        OSL_ASSERT(mpSynchronousLayouterLock.get()==NULL);
+
+        mpSynchronousLayouterLock.reset(new LayouterLock(mxLayouter));
     }
     ++mnLockCount;
 }
@@ -975,14 +999,15 @@ void ToolBarManager::Implementation::UnlockUpdate (void)
     --mnLockCount;
     if (mnLockCount == 0)
     {
-        Update();
+        Update(mpSynchronousLayouterLock);
     }
 }
 
 
 
 
-void ToolBarManager::Implementation::Update (void)
+void ToolBarManager::Implementation::Update (
+    ::std::auto_ptr<LayouterLock> pLocalLayouterLock)
 {
     // When the lock is released and there are pending changes to the set of
     // tool bars then update this set now.
@@ -1017,7 +1042,7 @@ void ToolBarManager::Implementation::Update (void)
                 mpViewShellManagerLock.reset(
                     new ViewShellManager::UpdateLock(mrBase.GetViewShellManager()));
             maToolBarShellList.UpdateShells(
-                mrBase.GetMainViewShell(),
+                mrBase.GetMainViewShell().get(),
                 mrBase.GetViewShellManager());
 
             // 3) Unlock the ViewShellManager::UpdateLock.  This updates the
@@ -1033,12 +1058,14 @@ void ToolBarManager::Implementation::Update (void)
             // guaranteed to be executed when the SFX shell stack has been
             // updated (under the assumption that our lock to the
             // ViewShellManager was the only one open.  If that is not the
-            // case then all should still be well but not as fast.)  Note
-            // that the lock count may have been increased since entering
-            // this method.  In that case one of the next UnlockUpdate()
-            // calls will post the UpdateCallback.
+            // case then all should still be well but not as fast.)
+            //
+            // Note that the lock count may have been increased since
+            // entering this method.  In that case one of the next
+            // UnlockUpdate() calls will post the UpdateCallback.
             if (mnPendingUpdateCall==0 && mnLockCount==0)
             {
+                mpAsynchronousLayouterLock = pLocalLayouterLock;
                 mnPendingUpdateCall = Application::PostUserEvent(
                     LINK(this,ToolBarManager::Implementation,UpdateCallback));
             }
@@ -1046,7 +1073,7 @@ void ToolBarManager::Implementation::Update (void)
         else
         {
             mpViewShellManagerLock.reset();
-            mpLayouterLock.reset();
+            pLocalLayouterLock.reset();
         }
     }
 }
@@ -1071,8 +1098,8 @@ IMPL_LINK(ToolBarManager::Implementation,UpdateCallback,bool*,EMPTYARG)
             PreUpdate();
         if (mbPostUpdatePending)
             PostUpdate();
-        if (mbIsValid && mnLockCount==0 && mxLayouter.is())
-            mpLayouterLock.reset();
+        if (mbIsValid && mxLayouter.is())
+            mpAsynchronousLayouterLock.reset();
     }
     return 0;
 }
@@ -1174,6 +1201,29 @@ namespace {
 
 using namespace ::sd;
 
+//===== LayouterLock ==========================================================
+
+LayouterLock::LayouterLock (const Reference<frame::XLayoutManager>& rxLayouter)
+    : mxLayouter(rxLayouter)
+{
+    OSL_TRACE("LayouterLock %d", mxLayouter.is() ? 1 :0);
+    if (mxLayouter.is())
+        mxLayouter->lock();
+}
+
+
+
+
+LayouterLock::~LayouterLock (void)
+{
+    OSL_TRACE("~LayouterLock %d", mxLayouter.is() ? 1 :0);
+    if (mxLayouter.is())
+        mxLayouter->unlock();
+}
+
+
+
+
 //===== ToolBarRules ==========================================================
 
 ToolBarRules::ToolBarRules (
@@ -1189,7 +1239,7 @@ ToolBarRules::ToolBarRules (
 
 void ToolBarRules::Update (ViewShellBase& rBase)
 {
-    ViewShell* pMainViewShell = rBase.GetMainViewShell();
+    ViewShell* pMainViewShell = rBase.GetMainViewShell().get();
     if (pMainViewShell != NULL)
     {
         MainViewShellChanged(pMainViewShell->GetShellType());
@@ -1296,6 +1346,7 @@ void ToolBarRules::MainViewShellChanged (const ViewShell& rMainViewShell)
                         ToolBarManager::msMasterViewToolBar);
             break;
         }
+
         default:
             break;
     }
@@ -1666,11 +1717,15 @@ bool ToolBarShellList::RemoveShellId (sd::ToolBarManager::ToolBarGroup eGroup, s
 
 void ToolBarShellList::ReleaseAllShells (ToolBarRules& rRules)
 {
+    // Release the currently active tool bars.
+    GroupedShellList aList (maCurrentList);
     GroupedShellList::iterator iDescriptor;
-    for (iDescriptor=maCurrentList.begin(); iDescriptor!=maCurrentList.end(); ++iDescriptor)
+    for (iDescriptor=aList.begin(); iDescriptor!=aList.end(); ++iDescriptor)
     {
         rRules.SubShellRemoved(iDescriptor->meGroup, iDescriptor->mnId);
     }
+
+    // Clear the list of requested tool bars.
     maNewList.clear();
 }
 
@@ -1714,8 +1769,7 @@ void ToolBarShellList::UpdateShells (
 
         // The maNewList now refelects the current state and thus is made
         // maCurrentList.
-        maNewList.swap(maCurrentList);
-        maNewList.clear();
+        maCurrentList = maNewList;
     }
 }
 
