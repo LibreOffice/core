@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:26:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:58:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1011,6 +1011,8 @@ int SfxDispatcher::GetShellAndSlot_Impl
         *ppSlot = aSvr.GetSlot();
         if ( 0 == (*ppSlot)->GetExecFnc() && bRealSlot )
             *ppSlot = (*ppShell)->GetInterface()->GetRealSlot(*ppSlot);
+        if ( (0 == *ppSlot) || (0 == (*ppSlot)->GetExecFnc()) )
+            return sal_False;
 
 #ifdef DBG_UTILx
         ByteString aMsg( nSlot );
