@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlideSorterViewShellBase.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:07:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:27:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "DrawDocShell.hxx"
 #endif
 #include "strings.hrc"
+#include "framework/FrameworkHelper.hxx"
 
 namespace sd {
 
@@ -66,15 +67,23 @@ SfxViewShell* __EXPORT SlideSorterViewShellBase::CreateInstance (
     SfxViewFrame *pFrame, SfxViewShell *pOldView)
 {
     SlideSorterViewShellBase* pBase = new SlideSorterViewShellBase(pFrame, pOldView);
-    pBase->LateInit();
+    pBase->LateInit(framework::FrameworkHelper::msSlideSorterURL);
     return pBase;
 }
+
+
+
+
 void SlideSorterViewShellBase::RegisterFactory( USHORT nPrio )
 {
     pFactory = new SfxViewFactory(
         &CreateInstance,&InitFactory,nPrio,SdResId(STR_DEFAULTVIEW));
     InitFactory();
 }
+
+
+
+
 void SlideSorterViewShellBase::InitFactory()
 {
     SFX_VIEW_REGISTRATION(DrawDocShell);
@@ -89,7 +98,7 @@ void SlideSorterViewShellBase::InitFactory()
 SlideSorterViewShellBase::SlideSorterViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (_pFrame, pOldShell, ViewShell::ST_SLIDE_SORTER)
+    : ImpressViewShellBase (_pFrame, pOldShell)
 {
 }
 
@@ -99,6 +108,9 @@ SlideSorterViewShellBase::SlideSorterViewShellBase (
 SlideSorterViewShellBase::~SlideSorterViewShellBase (void)
 {
 }
+
+
+
 
 } // end of namespace sd
 
