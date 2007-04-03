@@ -4,9 +4,9 @@
  *
  *  $RCSfile: binaryreadhandler.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:46:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:57:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,17 +96,6 @@ namespace configmgr
             ComponentDataFactory m_aNodeFactory;
             rtl::OUString        m_aComponentName;
 
-            // pool recent strings for re-use
-            enum NamePool {
-                    GroupName,
-                    SetName,
-                    InstanceName,
-                    InstanceModule,
-                    ValueName,
-                    LastEntry
-            };
-            int           m_nInsert[LastEntry];
-            rtl::OUString m_aPreviousName[LastEntry][8];
         public:
             BinaryReadHandler(rtl::OUString const & _aFileURL, rtl::OUString const & _aComponentName, MultiServiceFactory const & _aFactory);
             ~BinaryReadHandler();
@@ -167,7 +156,7 @@ namespace configmgr
                                               uno::Any& _aValue, uno::Any& _aDefaultValue,uno::Type& _aType)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
 
-            void readName(rtl::OUString &_aString, NamePool ePool)
+            void readName(rtl::OUString &_aString)
                 SAL_THROW( (io::IOException, uno::RuntimeException) );
         };
     // ---------------------------------------------------------------------------
