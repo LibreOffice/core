@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AnimationSchemesPane.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:50:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:37:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 #include "ViewShellBase.hxx"
 #include "DrawDocShell.hxx"
 #include "SlideSorterViewShell.hxx"
-#include "PaneManager.hxx"
 #include "drawdoc.hxx"
 #include "filedlg.hxx"
 #include "strings.hrc"
@@ -88,35 +87,11 @@ using ::com::sun::star::uno::RuntimeException;
 namespace
 {
 
-::sd::slidesorter::SlideSorterViewShell * lcl_getSlideSorterViewShell( ::sd::ViewShellBase& rBase )
-{
-    // Find a slide sorter to get the selection from.  When one is
-    // displayed in the center pane use that.  Otherwise use the one in
-    // the left pane.
-    ::sd::ViewShell * pSlideSorter =
-        rBase.GetPaneManager().GetViewShell( ::sd::PaneManager::PT_CENTER );
-
-    if( pSlideSorter &&
-        pSlideSorter->GetShellType() != ::sd::ViewShell::ST_SLIDE_SORTER )
-    {
-        pSlideSorter =
-            rBase.GetPaneManager().GetViewShell( ::sd::PaneManager::PT_LEFT );
-    }
-
-    if( pSlideSorter &&
-        pSlideSorter->GetShellType() != ::sd::ViewShell::ST_SLIDE_SORTER )
-        pSlideSorter = 0;
-
-    ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell =
-          dynamic_cast< ::sd::slidesorter::SlideSorterViewShell * >( pSlideSorter );
-
-    return pSlideSorterViewShell;
-}
 
 ::std::vector< SdPage * > lcl_getSelectedPages( ::sd::ViewShellBase& rBase )
 {
     ::sd::slidesorter::SlideSorterViewShell * pSlideSorterViewShell =
-          lcl_getSlideSorterViewShell( rBase );
+        ::sd::slidesorter::SlideSorterViewShell::GetSlideSorter(rBase);
     DBG_ASSERT( pSlideSorterViewShell, "No Slide-Sorter available" );
     ::std::vector< SdPage * > aSelectedPages;
 
