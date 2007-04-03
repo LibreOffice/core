@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlotStateListener.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:04:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,8 +47,8 @@
 #ifndef _COM_SUN_STAR_FRAME_FEATURESTATEEVENT_HPP_
 #include <com/sun/star/frame/FeatureStateEvent.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHP_HPP_
-#include <com/sun/star/frame/XDispatch.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTIOIN_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
@@ -92,7 +92,8 @@ public:
     */
     SlotStateListener (
         Link& rCallback,
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame> xFrame,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XDispatchProvider>& rxDispatchProvider,
         const ::rtl::OUString& rSlotName);
 
     /** The constructor de-registers all remaining listeners.  Usually a prior
@@ -112,7 +113,9 @@ public:
         listeners are released first.
         @throws DisposedException
     */
-    void ConnectToFrame (::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame> xFrame);
+    void ConnectToDispatchProvider (
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::frame::XDispatchProvider>& rxDispatchProvider);
 
     /** Observe the slot specified by the given name.  Note that
         ConnectToFrame() has to have been called earlier.
@@ -122,6 +125,13 @@ public:
         @throws DisposedException
     */
     void ObserveSlot (const ::rtl::OUString& rSlotName);
+
+    /** Return whether the called SlotStateListener is connected to a slot.
+        One reason for returning <FALSE/> is that the SlotStateListener has
+        been created before the controller and frame have been properly
+        initialized.
+    */
+    bool IsValid (void) const;
 
 
     //=====  frame::XStatusListener  ==========================================
@@ -158,7 +168,7 @@ private:
     RegisteredURLList maRegisteredURLList;
 
     ::com::sun::star::uno::WeakReference<
-        ::com::sun::star::frame::XFrame> mxFrameWeak;
+        ::com::sun::star::frame::XDispatchProvider> mxDispatchProviderWeak;
 
     /** Deregister all currently active state change listeners.
     */
