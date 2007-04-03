@@ -1,0 +1,90 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XConfigurationControllerRequestQueue.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:44:43 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
+#define __com_sun_star_drawing_framework_XConfigurationControllerRequestQueue_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+interface XConfigurationChangeRequest;
+
+/** The request queue of the configuration controller handles requests for
+    changes to the current configuration.
+
+    <p>This interface allows callers to add requests to the back of the
+    queue and to determine wheter the queue is empty.</p>
+
+    <p>This interface is typically called only by (resource) controllers of
+    the drawing framework.  Other code should call the
+    <member>XConfigurationController::requestResourceActivation()</member> and
+    <member>XConfigurationController::requestResourceDeactivation()</member>
+    functions instead.</p>
+*/
+interface XConfigurationControllerRequestQueue
+
+{
+    /** Return whether there are pending requests for configuration changes.
+        @return
+            Returns <TRUE/> when there is at least one request object in the
+            queue that has not yet been processed.  It returns <FALSE/> when
+            the queue is empty.
+    */
+    boolean hasPendingRequests ();
+
+    /** Add a request for a configuration change to the request queue.
+        <p>This method should not be called from outside the drawing
+        famework.  Other sub conrollers of the drawing framework are typical
+        callers.  They can add change requests that can not be made with the
+        <member>requestResourceActivation()</member> and
+        <member>requestResourceDeactivation()</member> methods.</p>
+        @param xRequest
+            The configuration change represented by this request object must only
+            be commited to the configuration when the
+            <member
+            scope="com::sun::star::drawing::framework::XConfigurationChangeRequest"
+            >execute()</member>
+            method of the xRequest object is called.
+    */
+    void postChangeRequest (
+        [in] XConfigurationChangeRequest xRequest);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
