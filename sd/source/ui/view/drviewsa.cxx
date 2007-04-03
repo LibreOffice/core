@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drviewsa.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:14:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:30:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,6 +254,7 @@ DrawViewShell::~DrawViewShell()
             p3DWin->DocumentReload();
     }
 
+    EndListening (*GetDoc());
     EndListening (*GetDocSh());
 
     if (mpSlideShow != NULL)
@@ -493,6 +494,20 @@ void DrawViewShell::Init (bool bIsMainViewShell)
 
 
 
+void DrawViewShell::Shutdown (void)
+{
+    ViewShell::Shutdown();
+
+    if (GetSlideShow() != NULL)
+    {
+        // Turn off effects.
+        GetDrawView()->SetAnimationMode(SDR_ANIMATION_DISABLE);
+    }
+}
+
+
+
+
 ::std::auto_ptr<DrawSubController> DrawViewShell::CreateSubController (void)
 {
     ::std::auto_ptr<DrawSubController> pResult;
@@ -510,6 +525,17 @@ void DrawViewShell::Init (bool bIsMainViewShell)
     }
 
     return pResult;
+}
+
+
+
+
+bool DrawViewShell::RelocateToParentWindow (::Window* pParentWindow)
+{
+    // DrawViewShells can not be relocated to a new parent window at the
+    // moment, so return <FALSE/> except when the given parent window is the
+    // parent window that is already in use.
+    return pParentWindow==GetParentWindow();
 }
 
 
