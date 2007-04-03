@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneDockingWindow.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:57:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:40:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,17 @@
 #ifndef _SV_TASKPANELIST_HXX
 #include <vcl/taskpanelist.hxx>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XPANECONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XPaneController.hpp>
+#endif
+#include "framework/FrameworkHelper.hxx"
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
 
 namespace sd {
 
@@ -56,19 +67,21 @@ PaneDockingWindow::PaneDockingWindow (
     SfxChildWindow *pChildWindow,
     ::Window* pParent,
     const ResId& rResId,
-    PaneManager::PaneType ePane,
-    const String& rsTitle)
+    const ::rtl::OUString& rsPaneURL,
+    const ::rtl::OUString& rsTitle)
     : SfxDockingWindow (
         _pBindings,
         pChildWindow,
         pParent,
         rResId
         ),
-      mePane(ePane),
+      msPaneURL(rsPaneURL),
       msTitle(rsTitle),
       mpTitleToolBox(NULL),
       maBorder (3,1,3,3),
-      mnChildWindowId(pChildWindow->GetType())
+      mnChildWindowId(pChildWindow->GetType()),
+      mpContentWindow(new ::Window(this)),
+      mbIsLayoutPending(false)
 {
     SetBackground (Wallpaper());
 
@@ -80,7 +93,7 @@ PaneDockingWindow::PaneDockingWindow (
     if (pSystemWindow != NULL)
         pSystemWindow->GetTaskPaneList()->AddWindow(this);
 
-    AddEventListener(LINK(this,PaneDockingWindow,WindowEventListener));
+    mpContentWindow->Show();
 }
 
 
@@ -88,13 +101,12 @@ PaneDockingWindow::PaneDockingWindow (
 
 PaneDockingWindow::~PaneDockingWindow (void)
 {
-    RemoveEventListener(LINK(this,PaneDockingWindow,WindowEventListener));
-
     // Tell the next system window that the docking window is no longer
     // available.
     SystemWindow* pSystemWindow = GetSystemWindow();
     if (pSystemWindow != NULL)
         pSystemWindow->GetTaskPaneList()->RemoveWindow(this);
+    mpTitleToolBox.reset();
 }
 
 
@@ -112,6 +124,16 @@ void PaneDockingWindow::SetTitle (const String& rsTitle)
 void PaneDockingWindow::Resize (void)
 {
     SfxDockingWindow::Resize();
+    mbIsLayoutPending = true;
+}
+
+
+
+
+void PaneDockingWindow::Layout (void)
+{
+    mbIsLayoutPending = false;
+
     Size aWindowSize (GetOutputSizePixel());
     Size aToolBoxSize (0,0);
     int nTitleBarHeight (GetSettings().GetStyleSettings().GetTitleHeight());
@@ -133,23 +155,14 @@ void PaneDockingWindow::Resize (void)
             aToolBoxSize);
     }
 
-    // Place the view shell.
-    ViewShellBase* pBase (ViewShellBase::GetViewShellBase(
-        GetBindings().GetDispatcher()->GetFrame()));
-    if (pBase != NULL)
-    {
-        ViewShell* pViewShell = pBase->GetPaneManager().GetViewShell (mePane);
-        if (pViewShell != NULL)
-        {
-            if (nTitleBarHeight < aToolBoxSize.Height())
-                nTitleBarHeight = aToolBoxSize.Height();
-            aWindowSize.Height() -= nTitleBarHeight;
-            pViewShell->Resize(
-                Point(maBorder.Left(),nTitleBarHeight+maBorder.Top()),
-                Size (aWindowSize.Width()-maBorder.Left()-maBorder.Right(),
-                    aWindowSize.Height()-maBorder.Top()-maBorder.Bottom()));
-        }
-    }
+    // Place the content window.
+    if (nTitleBarHeight < aToolBoxSize.Height())
+        nTitleBarHeight = aToolBoxSize.Height();
+    aWindowSize.Height() -= nTitleBarHeight;
+    mpContentWindow->SetPosSizePixel(
+        Point(maBorder.Left(),nTitleBarHeight+maBorder.Top()),
+        Size (aWindowSize.Width()-maBorder.Left()-maBorder.Right(),
+            aWindowSize.Height()-maBorder.Top()-maBorder.Bottom()));
 }
 
 
@@ -157,6 +170,9 @@ void PaneDockingWindow::Resize (void)
 
 void PaneDockingWindow::Paint (const Rectangle& rRectangle)
 {
+    if (mbIsLayoutPending)
+        Layout();
+
     SfxDockingWindow::Paint (rRectangle);
     int nTitleBarHeight (GetSettings().GetStyleSettings().GetTitleHeight());
     Size aToolBoxSize = mpTitleToolBox->CalcWindowSizePixel();
@@ -278,15 +294,20 @@ USHORT PaneDockingWindow::AddMenu (
 {
     // Add the menu before the closer button.
     USHORT nItemCount (mpTitleToolBox->GetItemCount());
-    USHORT nItemId = (nItemCount+1);
+    USHORT nItemId (nItemCount+1);
     mpTitleToolBox->InsertItem (
         nItemId,
         rsMenuName,
         TIB_DROPDOWNONLY,
-        nItemCount-1);
+        nItemCount>0 ? nItemCount-1 : (USHORT)-1);
     mpTitleToolBox->SetHelpId( nItemId, nHelpId );
     mpTitleToolBox->SetClickHdl (rCallback);
     mpTitleToolBox->SetDropdownClickHdl (rCallback);
+
+    // The tool box has likely changed its size. The title bar has to be
+    // resized.
+    Resize();
+    Invalidate();
 
     return nItemCount+1;
 }
@@ -329,6 +350,20 @@ void PaneDockingWindow::StateChanged( StateChangedType nType )
     {
         case STATE_CHANGE_INITSHOW:
             Resize();
+            break;
+
+        case STATE_CHANGE_VISIBLE:
+            // The visibility of the docking window has changed.  Tell the
+            // ConfigurationController so that it can activate or deactivate
+            // a/the view for the pane.
+            // Without this the side panes remain empty after closing an
+            // in-place slide show.
+            ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
+                GetBindings().GetDispatcher()->GetFrame());
+            if (pBase != NULL)
+            {
+                framework::FrameworkHelper::Instance(*pBase)->UpdateConfiguration();
+            }
             break;
     }
     SfxDockingWindow::StateChanged (nType);
@@ -377,34 +412,9 @@ void PaneDockingWindow::DataChanged (const DataChangedEvent& rEvent)
 
 
 
-IMPL_LINK(PaneDockingWindow, WindowEventListener, VclSimpleEvent*, pEvent)
+::Window* PaneDockingWindow::GetContentWindow (void)
 {
-    if (pEvent!=NULL && pEvent->ISA(VclWindowEvent))
-    {
-        ViewShellBase* pBase = ViewShellBase::GetViewShellBase(
-            GetBindings().GetDispatcher()->GetFrame());
-
-        VclWindowEvent* pWindowEvent = static_cast<VclWindowEvent*>(pEvent);
-        switch (pWindowEvent->GetId())
-        {
-            case VCLEVENT_WINDOW_SHOW:
-                if (pBase != NULL)
-                    pBase->GetPaneManager().RequestWindowVisibilityChange(
-                        mePane,
-                        true,
-                        PaneManager::CM_ASYNCHRONOUS);
-                break;
-
-            case VCLEVENT_WINDOW_HIDE:
-                if (pBase != NULL)
-                    pBase->GetPaneManager().RequestWindowVisibilityChange(
-                        mePane,
-                        false,
-                        PaneManager::CM_ASYNCHRONOUS);
-                break;
-        }
-    }
-    return 1;
+    return mpContentWindow.get();
 }
 
 } // end of namespace ::sd
