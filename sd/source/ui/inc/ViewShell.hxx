@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShell.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:39:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -374,15 +374,11 @@ public:
     */
     SvBorder GetBorder (bool bOuterResize);
 
-    /** Place all UI elements that are controlled by the view shell inside
-        the specified rectangle.  This includes the border elements like
-        rulers and scroll bars as well as the document view.  It is the
-        responsibility of the caller to give an appropriate rectangle for an
-        Inner- or OuterResizePixel().
-        The rectangle is given in pixel coordinates relative to the parent
-        window.
+    /** Notify the view shell that its parent window has been resized.
+        The ViewShell places and resizes its UI elements accordingly.
+        The new size can be obtained from the parent window.
     */
-    virtual void Resize (const Point &rPos, const Size &rSize);
+    virtual void Resize (void);
 
     /** Set the position and size of the area which contains the GUI
         elements like rulers, sliders, and buttons as well as the document
@@ -463,6 +459,12 @@ public:
     */
     virtual void ShowUIControls (bool bVisible = true);
     BOOL IsPageFlipMode(void) const;
+
+    /** Set the given window as new parent window.  This is not possible for
+        all views, so the return value tells the caller if the relocation
+        was successfull.
+    */
+    virtual bool RelocateToParentWindow (::Window* pParentWindow);
 
     class Implementation;
 
