@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:36:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:03:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,8 @@ public:
         const OutlineViewShell& rShell);
 
     virtual ~OutlineViewShell (void);
+
+    virtual void Shutdown (void);
 
     virtual void Paint(const Rectangle& rRect, ::sd::Window* pWin);
 
