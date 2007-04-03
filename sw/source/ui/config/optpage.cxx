@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:56:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:47:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,6 +166,10 @@
 #include <sfx2/request.hxx>
 #endif
 #include <swwrtshitem.hxx> //CHINA001
+#ifndef _SVTOOLS_CTLOPTIONS_HXX
+#include <svtools/ctloptions.hxx>
+#endif
+
 #define C2S(cChar) String::CreateFromAscii(cChar)
 /*******************************************************
  ******************************************************/
@@ -417,6 +421,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aRightPageCB     (this, SW_RES(CB_RIGHTP)),
     aReverseCB       (this, SW_RES(CB_REVERSE)),
     aProspectCB      (this, SW_RES(CB_PROSPECT)),
+    aProspectCB_RTL      (this, SW_RES(CB_PROSPECT_RTL)),
     aFL2          (this, SW_RES(FL_2)),
     aNoRB            (this, SW_RES(RB_NO)),
     aOnlyRB          (this, SW_RES(RB_ONLY)),
@@ -445,6 +450,7 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
     aBlackFontCB.SetClickHdl( aLk );
     aReverseCB.SetClickHdl( aLk );
     aProspectCB.SetClickHdl( aLk );
+    aProspectCB_RTL.SetClickHdl( aLk );
     aPaperFromSetupCB.SetClickHdl( aLk );
     aPrintEmptyPagesCB.SetClickHdl( aLk );
     aEndPageRB.SetClickHdl( aLk );
@@ -461,13 +467,18 @@ SwAddPrinterTabPage::SwAddPrinterTabPage( Window* pParent,
         aDrawCB      .Hide();
         aLeftPageCB  .Hide();
         aRightPageCB .Hide();
+        Point rPt(aReverseCB .GetPosPixel());
+        rPt.setX(rPt.getX() + 15); // indent
+        aProspectCB_RTL.SetPosPixel(rPt);
         aReverseCB.SetPosPixel(aLeftPageCB  .GetPosPixel());
         aProspectCB.SetPosPixel(aRightPageCB .GetPosPixel());
         aBlackFontCB.SetPosPixel(aBackgroundCB.GetPosPixel());
         aBackgroundCB.SetPosPixel(aCtrlFldCB.GetPosPixel());
         aCtrlFldCB.SetPosPixel(aDrawCB.GetPosPixel());
     }
-
+    aProspectCB_RTL.Disable();
+    SvtCTLOptions aCTLOptions;
+    aProspectCB_RTL.Show(aCTLOptions.IsCTLFontEnabled());
 }
 
 //------------------------------------------------------------------------
@@ -481,6 +492,7 @@ void SwAddPrinterTabPage::SetPreview(BOOL bPrev)
         aLeftPageCB.Disable();
         aRightPageCB.Disable();
         aProspectCB.Disable();
+        aProspectCB_RTL.Disable();
         aFL3.Disable();
         aNoRB.Disable();
         aOnlyRB.Disable();
@@ -515,6 +527,7 @@ BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         aAddPrinterAttr.bPrintRightPage = aRightPageCB.IsChecked();
         aAddPrinterAttr.bPrintReverse   = aReverseCB.IsChecked();
         aAddPrinterAttr.bPrintProspect  = aProspectCB.IsChecked();
+        aAddPrinterAttr.bPrintProspect_RTL  = aProspectCB_RTL.IsChecked();
         aAddPrinterAttr.bPaperFromSetup = aPaperFromSetupCB.IsChecked();
         aAddPrinterAttr.bPrintEmptyPages = aPrintEmptyPagesCB.IsChecked();
         aAddPrinterAttr.bPrintSingleJobs = aSingleJobsCB.IsChecked();
@@ -557,6 +570,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         aPaperFromSetupCB.Check(pAddPrinterAttr->bPaperFromSetup);
         aPrintEmptyPagesCB.Check(pAddPrinterAttr->bPrintEmptyPages);
         aProspectCB.Check(      pAddPrinterAttr->bPrintProspect);
+        aProspectCB_RTL.Check(      pAddPrinterAttr->bPrintProspect_RTL);
         aSingleJobsCB.Check(    pAddPrinterAttr->bPrintSingleJobs);
 
         aNoRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_NONE ) ;
@@ -565,9 +579,12 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
         aEndPageRB.Check (pAddPrinterAttr->nPrintPostIts== POSTITS_ENDPAGE ) ;
         aFaxLB.SelectEntry( pAddPrinterAttr->sFaxName );
     }
-}
-//-----------------------------------------------------------------------
+    if (aProspectCB.IsChecked())
+        aProspectCB_RTL.Enable(TRUE);
+    else
+        aProspectCB_RTL.Disable();
 
+}
 //-----------------------------------------------------------------------
 
 
@@ -581,6 +598,13 @@ void    SwAddPrinterTabPage::Init()
 IMPL_LINK_INLINE_START( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
 {
     bAttrModified = TRUE;
+    if (aProspectCB.IsChecked())
+        aProspectCB_RTL.Enable(TRUE);
+    else
+    {
+        aProspectCB_RTL.Check( FALSE );
+        aProspectCB_RTL.Disable();
+    }
     return 0;
 }
 IMPL_LINK_INLINE_END( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
