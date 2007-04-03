@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:23:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:32:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -807,11 +807,6 @@ void ViewShell::SetActiveWindow (::sd::Window* pWin)
         {
             pWin->EnableChildTransparentMode();
         }
-
-        // The ViewShellBase is informed only about the center window.  The
-        // windows of the other panes are not its business.
-        if (IsMainViewShell())
-            pViewShell->SetWindow (pWin);
     }
 
     if (mpActiveWindow != pWin)
