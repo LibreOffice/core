@@ -1,0 +1,96 @@
+
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ConfigurationChangeEvent.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:41:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
+#define __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
+
+#ifndef __com_sun_star_lang_EventObject_idl__
+#include <com/sun/star/lang/EventObject.idl>
+#endif
+
+module com { module sun { module star { module uno { interface XInterface; }; }; }; };
+
+module com { module sun { module star { module drawing { module framework {
+
+interface XConfiguration;
+interface XConfigurationController;
+interface XResourceId;
+
+/** Objects of this class are used for notifying changes of the
+    configuration.
+
+    <p>They are broadcasted by the configuration controller
+    which maintains the configuration.  The set of types of configuration
+    changes is not fixed and is not maintained or documented in one
+    place.</p>
+
+    <p>The set of used members and the exact meaning of their values is not the
+    same for all types.  Therefore, the descriptions of the members are just
+    general guidelines.   See <type>XConfigurationController</type> for a
+    list of event types used by the basic drawing framework.</p>
+*/
+struct ConfigurationChangeEvent
+     : ::com::sun::star::lang::EventObject
+{
+    /** The type of configuration change is a free-form string.  This is the
+        only member that is always set.  The values of the other members
+        depend on the configuration change type and may or may not be set.
+    */
+    string Type;
+
+    /** The current configuration, depending on the event type, either
+        before or after the change.  May be an empty reference.
+    */
+    XConfiguration Configuration;
+
+    /** The resource id that is part of the configuration change.
+    */
+    XResourceId ResourceId;
+
+    /** The resource object that corresponds to the ResourceId.  May
+        be an empty reference.
+    */
+    com::sun::star::uno::XInterface ResourceObject;
+
+    /** Each listener is called with exactly the <member>UserData</member>
+        that was given when the listener was registered.
+    */
+    any UserData;
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
