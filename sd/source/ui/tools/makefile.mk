@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:15:27 $
+#   last change: $Author: rt $ $Date: 2007-04-03 16:25:03 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@ AUTOSEG=true
 
 SLOFILES =      							\
     $(SLO)$/AsynchronousCall.obj			\
+    $(SLO)$/ConfigurationAccess.obj			\
     $(SLO)$/IconCache.obj					\
     $(SLO)$/IdleDetection.obj				\
     $(SLO)$/EventMultiplexer.obj			\
