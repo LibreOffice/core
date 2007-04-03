@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:23:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -329,18 +329,8 @@ SdPage* ViewShell::CreateOrDuplicatePage (
     if (! pArgs)
     {
         // Make the layout menu visible in the tool pane.
-        SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
-        SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-            toolpanel::TaskPaneViewShell::PID_LAYOUT);
-        DBG_ASSERT(GetViewFrame()!=NULL && GetViewFrame()->GetDispatcher()!=NULL,
-            "ViewShell::CreateOrDuplicatePage(): can not get valid dispatcher");
-        if (GetViewFrame()!=NULL && GetViewFrame()->GetDispatcher()!=NULL)
-            GetViewFrame()->GetDispatcher()->Execute (
-                SID_TASK_PANE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                &aMakeToolPaneVisible,
-                &aPanelId,
-                NULL);
+        framework::FrameworkHelper::Instance(GetViewShellBase())->RequestTaskPanel(
+            framework::FrameworkHelper::msLayoutTaskPanelURL);
 
         // AutoLayouts muessen fertig sein
         pDocument->StopWorkStartupDelay();
