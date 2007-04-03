@@ -4,9 +4,9 @@
  *
  *  $RCSfile: MasterPagesPanel.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:19:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,8 +67,7 @@ MasterPagesPanel::MasterPagesPanel (TreeNode* pParent, ViewShellBase& rBase)
 
     // Create a panel with the master pages that are in use by the currently
     // edited document.
-    DrawViewShell* pDrawViewShell = static_cast<DrawViewShell*>(
-        rBase.GetMainViewShell());
+    DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(rBase.GetMainViewShell().get());
     pSelector.reset(new controls::CurrentMasterPagesSelector (
         this,
         *pDocument,
