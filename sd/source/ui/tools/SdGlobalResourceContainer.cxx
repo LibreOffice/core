@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SdGlobalResourceContainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:22:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:24:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -189,8 +189,13 @@ SdGlobalResourceContainer::~SdGlobalResourceContainer (void)
          iSharedResource != mpImpl->maSharedResources.rend();
          ++iSharedResource)
     {
-        DBG_ASSERT((*iSharedResource).unique(),
-            "SdGlobalResource still held in ~SdGlobalResourceContainer");
+        if ( ! iSharedResource->unique())
+        {
+            SdGlobalResource* pResource = iSharedResource->get();
+            OSL_TRACE(" %p %d", pResource, iSharedResource->use_count());
+            DBG_ASSERT(iSharedResource->unique(),
+                "SdGlobalResource still held in ~SdGlobalResourceContainer");
+        }
     }
 
     DBG_ASSERT(Implementation::mpInstance == this,
