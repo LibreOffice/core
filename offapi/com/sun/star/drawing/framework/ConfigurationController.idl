@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ConfigurationController.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:41:56 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_ConfigurationController_idl__
+#define __com_sun_star_drawing_framework_ConfigurationController_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_drawing_framework_XConfigurationController_idl__
+#include <com/sun/star/drawing/framework/XConfigurationController.idl>
+#endif
+#ifndef __com_sun_star_frame_XController_idl__
+#include <com/sun/star/frame/XController.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+/** See <type>XConfigurationController</type> for a description of the
+    configuration controller.
+
+    <p>This service is used at the moment by the
+    <type>XControllerManager</type> to create a configuration controller.
+    This allows developers to replace the default implementation of the
+    configuration controller with their own.  This may not be a usefull
+    feature.  Furthermore the sub controllers may need a tighter coupling
+    than the interfaces allow.  These are reasons for removing this service
+    in the future and let the controller manager create the sub controllers
+    directly.</p>
+*/
+service ConfigurationController
+    : XConfigurationController
+{
+    create ([in] ::com::sun::star::frame::XController xController);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
