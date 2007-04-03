@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string.c,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:28:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:05:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,8 @@
  */
 static rtl_String const aImplEmpty_rtl_String =
 {
-    1,      /* sal_Int32    refCount;   */
+    SAL_STRING_STATIC_FLAG|1,
+            /* sal_Int32    refCount;   */
     0,      /* sal_Int32    length;     */
     { 0 }   /* sal_Char     buffer[1];  */
 };
