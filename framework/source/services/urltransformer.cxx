@@ -4,9 +4,9 @@
  *
  *  $RCSfile: urltransformer.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:12:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:50:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -229,6 +229,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( URL& aURL ) throw( RuntimeExcepti
                 // INetURLObject supports only an intelligent method of parsing URL's. So write
                 // back Complete to have a valid encoded URL in all cases!
                 aURL.Complete   = aParser.GetMainURL( INetURLObject::NO_DECODE           );
+                aURL.Complete   = aURL.Complete.intern();
 
                 aParser.SetMark ( OUString() );
                 aParser.SetParam( OUString() );
