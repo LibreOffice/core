@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AsynchronousCall.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2006-01-19 12:51:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:14:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,11 +45,11 @@ namespace sd { namespace tools {
 
 /** Store a function object and execute it asynchronous.
 
-    This features of this class are:
+    The features of this class are:
     a) It provides a wrapper around a VCL Timer so that generic function
     objects can be used.
     b) When more than one function objects are posted to be executed later
-    then the pending ones are erased and only the last will actually be
+    then the pending ones are erased and only the last one will actually be
     executed.
 
     Use this class like this:
@@ -69,7 +69,7 @@ public:
 
     ~AsynchronousCall (void);
 
-    /** Post a function object that is to executed asynchronously.  When
+    /** Post a function object that is to be executed asynchronously.  When
         this method is called while the current function object has not bee
         executed then the later is destroyed and only the given function
         object will be executed.
