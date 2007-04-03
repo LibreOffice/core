@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RecentlyUsedMasterPages.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-26 20:53:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,16 +128,6 @@ private:
         it presistent.
     */
     void SavePersistentValues (void);
-
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-        OpenConfiguration (
-            const ::rtl::OUString& rsRootName,
-            bool bReadOnly);
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>
-        GetConfigurationNode (
-            const ::com::sun::star::uno::Reference<
-            ::com::sun::star::uno::XInterface>& xRoot,
-          const ::rtl::OUString& sPathToNode);
 
     void ResolveList (void);
 };
