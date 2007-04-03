@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:44:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:48:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1126,7 +1126,7 @@ BOOL SwNewDBMgr::MergePrint( SwView& rView,
             {
                 if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
                 {
-                    pSh->PrintProspect( rOpt, rProgress );
+                    pSh->PrintProspect( rOpt, rProgress, rOpt.IsPrintProspect_RTL() );
                     bRet = TRUE;
                 }
             }
@@ -1283,7 +1283,7 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
         {
             if( pPrt->IsJobActive() || pPrt->StartJob( rOpt.GetJobName() ))
             {
-                pSh->PrintProspect( rOpt, rProgress );
+                pSh->PrintProspect( rOpt, rProgress,  rOpt.IsPrintProspect_RTL() );
                 bRet = TRUE;
             }
         }
