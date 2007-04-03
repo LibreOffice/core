@@ -1,0 +1,71 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: modules.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:40:35 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_modules_framework_idl__
+#define __com_sun_star_modules_framework_idl__
+
+module com { module sun { module star { module drawing {
+
+/** The drawing framework is responsible for managing the resources used by
+    the UI of the drawing applications.
+    <p>The framework is implemented by a set of sub controllers that are
+    responsible for its different resources: <type
+    scope="com::sun::star::drawing::framework">XModuleController</type>,
+    <type scope="com::sun::star::drawing::framework">XPaneController</type>,
+    <type scope="com::sun::star::drawing::framework">XViewController</type>,
+    <type scope="com::sun::star::drawing::framework">XToolbarController</type>,
+    <type scope="com::sun::star::drawing::framework">XCommandController</type>.
+    The set of active resources is represented by the <type
+    scope="com::sun::star::drawing::framework">XConfiguration</type>.</p>
+    <p>The <type
+    scope="com::sun::star::drawing::framework">XControllerManager</type>
+    interface provides access to the sub controllers.  It typically is
+    implemented by the same class that implements the <type
+    scope=:com::sun::star::frame">XController</type> interface.</p>
+    <p>The
+    configuration is managed by the <type
+    scope="com::sun::star::drawing::framework">XConfigurationController</type>.
+    It coordinates changes to the configuration made by the other sub
+    controllers so that
+    <ul><li>unnecessary ui updates (flickering) is avoided and</li>
+    <li>and the configuration is always in a valid and meaningfull
+    state.</li></ul>
+*/
+module framework {};
+
+}; }; }; };
+
+#endif
+
