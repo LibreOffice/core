@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PaneChildWindows.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:11:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:04:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#ifndef SD_PANE_CHILD_WINDOW_HXX
-#define SD_PANE_CHILD_WINDOW_HXX
+#ifndef SD_PANE_CHILD_WINDOWS_HXX
+#define SD_PANE_CHILD_WINDOWS_HXX
 
 #ifndef _SFX_CHILDWIN_HXX
 #include <sfx2/childwin.hxx>
@@ -42,26 +42,58 @@
 
 namespace sd {
 
-class RightPaneChildWindow
+class PaneChildWindow
     : public SfxChildWindow
+{
+public:
+    PaneChildWindow (
+        ::Window* pParentWindow,
+        USHORT nId,
+        SfxBindings* pBindings,
+        SfxChildWinInfo* pInfo,
+        const ResId& rResId,
+        const ::rtl::OUString& rsTitle,
+        SfxChildAlignment eAlignment);
+    virtual ~PaneChildWindow (void);
+};
+
+
+
+
+class LeftPaneImpressChildWindow
+    : public PaneChildWindow
+{
+public:
+    LeftPaneImpressChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
+
+    SFX_DECL_CHILDWINDOW(LeftPaneImpressChildWindow);
+};
+
+
+
+
+class LeftPaneDrawChildWindow
+    : public PaneChildWindow
+{
+public:
+    LeftPaneDrawChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
+
+    SFX_DECL_CHILDWINDOW(LeftPaneDrawChildWindow);
+};
+
+
+
+
+class RightPaneChildWindow
+    : public PaneChildWindow
 {
 public:
     RightPaneChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
-    virtual ~RightPaneChildWindow (void);
 
-    SFX_DECL_CHILDWINDOW (RightPaneChildWindow);
+    SFX_DECL_CHILDWINDOW(RightPaneChildWindow);
 };
 
 
-class LeftPaneChildWindow
-    : public SfxChildWindow
-{
-public:
-    LeftPaneChildWindow (::Window*, USHORT, SfxBindings*, SfxChildWinInfo*);
-    virtual ~LeftPaneChildWindow (void);
-
-    SFX_DECL_CHILDWINDOW (LeftPaneChildWindow);
-};
 
 
 } // end of namespace ::sd
