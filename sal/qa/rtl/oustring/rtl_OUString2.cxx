@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtl_OUString2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:28:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:18:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,15 +116,6 @@ class valueOf : public CppUnit::TestFixture
         }
 
 public:
-    // initialise your test code values here.
-    void setUp()
-    {
-    }
-
-    void tearDown()
-    {
-    }
-
     // insert your test code here.
     void valueOf_float_test_001()
     {
@@ -364,15 +355,6 @@ sal_Int16 SAL_CALL checkPrecisionSize()
     class toDouble : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp()
-            {
-            }
-
-        void tearDown()
-            {
-            }
-
         void toDouble_test_impl(rtl::OString const& _sValue)
             {
                 //t_print("the original str is %s\n", _sValue.getStr());
@@ -510,15 +492,6 @@ sal_Int16 SAL_CALL checkPrecisionSize()
     class toFloat : public CppUnit::TestFixture
     {
     public:
-        // initialise your test code values here.
-        void setUp()
-            {
-            }
-
-        void tearDown()
-            {
-            }
-
         void toFloat_test_impl(rtl::OString const& _sValue)
             {
                 //t_print("the original str is %s\n", _sValue.getStr());
@@ -662,18 +635,6 @@ class lastIndexOf : public CppUnit::TestFixture
 {
 
 public:
-
-    // initialise your test code values here.
-    void setUp()
-        {
-        }
-
-    void tearDown()
-        {
-        }
-
-    // -----------------------------------------------------------------------------
-
     void lastIndexOf_oustring(rtl::OUString const& _suStr, rtl::OUString const& _suSearchStr, sal_Int32 _nExpectedResultPos)
         {
             // Algorithm
@@ -889,18 +850,6 @@ class getToken : public CppUnit::TestFixture
 {
 
 public:
-
-    // initialise your test code values here.
-    void setUp()
-        {
-        }
-
-    void tearDown()
-        {
-        }
-
-    // -----------------------------------------------------------------------------
-
     void getToken_000()
         {
             rtl::OUString suTokenStr;
@@ -1026,6 +975,86 @@ void convertToString::test() {
 }
 
 // -----------------------------------------------------------------------------
+// - string construction & interning (tests)
+// -----------------------------------------------------------------------------
+class construction : public CppUnit::TestFixture
+{
+public:
+    void construct()
+    {
+#ifdef RTL_INLINE_STRINGS
+        ::rtl::OUString aFoo( RTL_CONSTASCII_USTRINGPARAM("foo") );
+        CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[0] == 'f');
+        CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[1] == 'o');
+        CPPUNIT_ASSERT_MESSAGE("string contents", aFoo[2] == 'o');
+        CPPUNIT_ASSERT_MESSAGE("string length", aFoo.getLength() == 3);
+
+        ::rtl::OUString aBaa( RTL_CONSTASCII_USTRINGPARAM("this is a very long string with a lot of long things inside it and it goes on and on and on forever etc.") );
+        CPPUNIT_ASSERT_MESSAGE("string length", aBaa.getLength() == 104);
+        // Dig at the internals ... FIXME: should we have the bit-flag defines public ?
+        CPPUNIT_ASSERT_MESSAGE("string static flags", (aBaa.pData->refCount & 1<<30) != 0);
+#endif
+    }
+
+    void intern()
+    {
+        ::rtl::OUString aFoo( RTL_CONSTASCII_USTRINGPARAM("foo") );
+        ::rtl::OUString aFooIntern = aFoo.intern();
+        CPPUNIT_ASSERT_MESSAGE("string contents", aFooIntern.equalsAscii("foo"));
+        CPPUNIT_ASSERT_MESSAGE("string length", aFooIntern.getLength() == 3);
+        // We have to dup due to no atomic 'intern' bit-set operation
+        CPPUNIT_ASSERT_MESSAGE("intern dups", aFoo.pData != aFooIntern.pData);
+
+        // Test interning lots of things
+        int i;
+        static const int nSequence = 4096;
+        rtl::OUString *pStrs;
+        sal_uIntPtr   *pValues;
+
+        pStrs = new rtl::OUString[nSequence];
+        pValues = new sal_uIntPtr[nSequence];
+        for (i = 0; i < nSequence; i++)
+        {
+            pStrs[i] = rtl::OUString::valueOf( sqrt( i ) ).intern();
+            pValues[i] = reinterpret_cast<sal_uIntPtr>( pStrs[i].pData );
+        }
+        for (i = 0; i < nSequence; i++)
+        {
+            rtl::OUString aNew = rtl::OUString::valueOf( sqrt( i ) ).intern();
+            CPPUNIT_ASSERT_MESSAGE("double intern failed",
+                                   aNew.pData == pStrs[i].pData);
+        }
+
+        // Free strings to check for leaks
+        for (i = 0; i < nSequence; i++)
+        {
+            // Overwrite - hopefully this re-uses the memory
+            pStrs[i] = rtl::OUString();
+            pStrs[i] = rtl::OUString::valueOf( sqrt( i ) );
+        }
+
+        for (i = 0; i < nSequence; i++)
+        {
+            rtl::OUString aIntern;
+            sal_uIntPtr nValue;
+            aIntern = rtl::OUString::valueOf( sqrt( i ) ).intern();
+
+            nValue = reinterpret_cast<sal_uIntPtr>( aIntern.pData );
+            // This may not be 100% reliable: memory may
+            // have been re-used, but it's worth checking.
+            CPPUNIT_ASSERT_MESSAGE("intern leaking", nValue != pValues[i]);
+        }
+        delete [] pValues;
+        delete [] pStrs;
+    }
+
+    CPPUNIT_TEST_SUITE(construction);
+    CPPUNIT_TEST(construct);
+    CPPUNIT_TEST(intern);
+    CPPUNIT_TEST_SUITE_END();
+};
+
+// -----------------------------------------------------------------------------
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::valueOf, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toDouble, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::toFloat, "rtl_OUString");
@@ -1033,6 +1062,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::lastIndexOf, "rtl_OUString")
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::getToken, "rtl_OUString");
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(
     rtl_OUString::convertToString, "rtl_OUString");
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(rtl_OUString::construction, "rtl_OUString");
 
 } // namespace rtl_OUString
 
