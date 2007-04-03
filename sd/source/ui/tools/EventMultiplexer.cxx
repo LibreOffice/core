@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:52:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:23:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,10 @@
 
 #include "MutexOwner.hxx"
 #include "ViewShellBase.hxx"
-#include "PaneManager.hxx"
 #include "drawdoc.hxx"
 #include "DrawController.hxx"
 #include "SlideSorterViewShell.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 #ifndef _COM_SUN_STAR_DOCUMENT_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -54,24 +54,37 @@
 #ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTIOIN_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONFIGURATIONCHANGELISTENER_HPP_
+#include <com/sun/star/drawing/framework/XConfigurationChangeListener.hpp>
+#endif
 #include <cppuhelper/weak.hxx>
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
 #endif
 #include <sfx2/viewfrm.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::drawing::framework;
+
+using ::rtl::OUString;
+using ::sd::framework::FrameworkHelper;
 
 class SdDrawDocument;
 
+namespace {
+static const sal_Int32 ResourceActivationEvent = 0;
+static const sal_Int32 ResourceDeactivationEvent = 1;
+}
+
 namespace sd { namespace tools {
 
-typedef cppu::WeakComponentImplHelper3<
-    ::com::sun::star::beans::XPropertyChangeListener,
-    ::com::sun::star::frame::XFrameActionListener,
-    ::com::sun::star::view::XSelectionChangeListener
+typedef cppu::WeakComponentImplHelper4<
+      ::com::sun::star::beans::XPropertyChangeListener,
+      ::com::sun::star::frame::XFrameActionListener,
+      ::com::sun::star::view::XSelectionChangeListener,
+      ::com::sun::star::drawing::framework::XConfigurationChangeListener
     > EventMultiplexerImplementationInterfaceBase;
 
 class EventMultiplexer::Implementation
@@ -122,6 +135,13 @@ public:
         frameAction (const ::com::sun::star::frame::FrameActionEvent& rEvent)
         throw (::com::sun::star::uno::RuntimeException);
 
+    //===== drawing::framework::XConfigurationChangeListener ==================
+    virtual void SAL_CALL
+        notifyConfigurationChange (
+            const ::com::sun::star::drawing::framework::ConfigurationChangeEvent& rEvent)
+        throw (::com::sun::star::uno::RuntimeException);
+
+
     virtual void SAL_CALL disposing (void);
 
 protected:
@@ -139,8 +159,6 @@ private:
     bool mbListeningToController;
     /// Remember whether we are listening to the frame.
     bool mbListeningToFrame;
-    /// Remember when the pane manger becomes unavailable.
-    bool mbPaneManagerAvailable;
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::frame::XController> mxControllerWeak;
@@ -149,6 +167,9 @@ private:
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::view::XSelectionSupplier> mxSlideSorterSelectionWeak;
     SdDrawDocument* mpDocument;
+    ::com::sun::star::uno::WeakReference<
+        ::com::sun::star::drawing::framework::XConfigurationController>
+        mxConfigurationControllerWeak;
 
     static const ::rtl::OUString msCurrentPagePropertyName;
     static const ::rtl::OUString msEditModePropertyName;
@@ -168,7 +189,6 @@ private:
     void ThrowIfDisposed (void)
         throw (::com::sun::star::lang::DisposedException);
 
-    DECL_LINK(PaneManagerEventListener, PaneManagerEvent*);
     DECL_LINK(SlideSorterSelectionChangeListener, void*);
 };
 
@@ -253,11 +273,11 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
       mrBase (rBase),
       mbListeningToController (false),
       mbListeningToFrame (false),
-      mbPaneManagerAvailable(true),
       mxControllerWeak(NULL),
       mxFrameWeak(NULL),
       mxSlideSorterSelectionWeak(NULL),
-      mpDocument(NULL)
+      mpDocument(NULL),
+      mxConfigurationControllerWeak()
 {
     // Connect to the frame to listen for controllers being exchanged.
     // Listen to changes of certain properties.
@@ -281,10 +301,30 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     if (mpDocument != NULL)
         StartListening (*mpDocument);
 
-    // Listen for view switches.
-    if (mbPaneManagerAvailable)
-        mrBase.GetPaneManager().AddEventListener (
-            LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
+    // Listen for configuration changes.
+    Reference<XControllerManager> xControllerManager (
+        Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY);
+    if (xControllerManager.is())
+    {
+        Reference<XConfigurationController> xConfigurationController (
+            xControllerManager->getConfigurationController());
+        mxConfigurationControllerWeak = xConfigurationController;
+        if (xConfigurationController.is())
+        {
+            Reference<XComponent> xComponent (xConfigurationController, UNO_QUERY);
+            if (xComponent.is())
+                xComponent->addEventListener(static_cast<beans::XPropertyChangeListener*>(this));
+
+            xConfigurationController->addConfigurationChangeListener(
+                this,
+                FrameworkHelper::msResourceActivationEvent,
+                makeAny(ResourceActivationEvent));
+            xConfigurationController->addConfigurationChangeListener(
+                this,
+                FrameworkHelper::msResourceDeactivationEvent,
+                makeAny(ResourceDeactivationEvent));
+        }
+    }
 }
 
 
@@ -292,8 +332,12 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
 
 EventMultiplexer::Implementation::~Implementation (void)
 {
-    DBG_ASSERT( !mbListeningToFrame, "sd::EventMultiplexer::Implementation::~Implementation(), disposing was not called!" );
+    DBG_ASSERT( !mbListeningToFrame,
+        "sd::EventMultiplexer::Implementation::~Implementation(), disposing was not called!" );
 }
+
+
+
 
 void EventMultiplexer::Implementation::ReleaseListeners (void)
 {
@@ -319,10 +363,16 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
         mpDocument = NULL;
     }
 
-    // Stop listening for view switches.
-    if (mbPaneManagerAvailable)
-        mrBase.GetPaneManager().RemoveEventListener (
-            LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
+    // Stop listening for configuration changes.
+    Reference<XConfigurationController> xConfigurationController (mxConfigurationControllerWeak);
+    if (xConfigurationController.is())
+    {
+        Reference<XComponent> xComponent (xConfigurationController, UNO_QUERY);
+        if (xComponent.is())
+            xComponent->removeEventListener(static_cast<beans::XPropertyChangeListener*>(this));
+
+        xConfigurationController->removeConfigurationChangeListener(this);
+    }
 }
 
 
@@ -503,6 +553,14 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
             mbListeningToController = false;
         }
     }
+
+    Reference<XConfigurationController> xConfigurationController (
+        mxConfigurationControllerWeak);
+    if (xConfigurationController.is()
+        && rEventObject.Source == xConfigurationController)
+    {
+        mxConfigurationControllerWeak = Reference<XConfigurationController>();
+    }
 }
 
 
@@ -571,6 +629,77 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
     throw (::com::sun::star::uno::RuntimeException)
 {
     CallListeners (EventMultiplexerEvent::EID_EDIT_VIEW_SELECTION);
+}
+
+
+
+
+//===== drawing::framework::XConfigurationChangeListener ==================
+
+void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
+    const ConfigurationChangeEvent& rEvent)
+    throw (RuntimeException)
+{
+    sal_Int32 nEventType;
+    rEvent.UserData >>= nEventType;
+    switch (nEventType)
+    {
+        case ResourceActivationEvent:
+            if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
+            {
+                CallListeners (EventMultiplexerEvent::EID_VIEW_ADDED);
+
+                if (rEvent.ResourceId->isBoundToURL(
+                    FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+                {
+                    CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_ADDED);
+                }
+
+                // Add selection change listener at slide sorter.
+                if (rEvent.ResourceId->getResourceURL().equals(FrameworkHelper::msSlideSorterURL))
+                {
+                    slidesorter::SlideSorterViewShell* pViewShell
+                        = dynamic_cast<slidesorter::SlideSorterViewShell*>(
+                            FrameworkHelper::GetViewShell(
+                                Reference<XView>(rEvent.ResourceObject,UNO_QUERY)).get());
+                    if (pViewShell != NULL)
+                        pViewShell->AddSelectionChangeListener (
+                            LINK(this,
+                                EventMultiplexer::Implementation,
+                                SlideSorterSelectionChangeListener));
+                }
+            }
+            break;
+
+        case ResourceDeactivationEvent:
+            if (rEvent.ResourceId->getResourceURL().match(FrameworkHelper::msViewURLPrefix))
+            {
+                CallListeners (EventMultiplexerEvent::EID_VIEW_REMOVED);
+
+                if (rEvent.ResourceId->isBoundToURL(
+                    FrameworkHelper::msCenterPaneURL, AnchorBindingMode_DIRECT))
+                {
+                    CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
+                }
+
+                // Remove selection change listener from slide sorter.  Add
+                // selection change listener at slide sorter.
+                if (rEvent.ResourceId->getResourceURL().equals(FrameworkHelper::msSlideSorterURL))
+                {
+                    slidesorter::SlideSorterViewShell* pViewShell
+                        = dynamic_cast<slidesorter::SlideSorterViewShell*>(
+                            FrameworkHelper::GetViewShell(
+                                Reference<XView>(rEvent.ResourceObject, UNO_QUERY)).get());
+                    if (pViewShell != NULL)
+                        pViewShell->RemoveSelectionChangeListener (
+                            LINK(this,
+                                EventMultiplexer::Implementation,
+                                SlideSorterSelectionChangeListener));
+                }
+            }
+            break;
+    }
+
 }
 
 
@@ -667,68 +796,6 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
         if ((iListener->second && rEvent.meEventId) != 0)
             iListener->first.Call(&rEvent);
     }
-}
-
-
-
-
-IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
-    PaneManagerEvent*, pEvent)
-{
-    OSL_ASSERT(pEvent!=NULL);
-
-    switch (pEvent->meEventId)
-    {
-        case PaneManagerEvent::EID_VIEW_SHELL_ADDED:
-            CallListeners (EventMultiplexerEvent::EID_VIEW_ADDED);
-
-            if (pEvent->mePane == PaneManager::PT_CENTER)
-                CallListeners (
-                    EventMultiplexerEvent::EID_MAIN_VIEW_ADDED,
-                    pEvent->mpShell);
-
-            // Add selection change listener at slide sorter.
-            if (pEvent->mpShell != NULL
-                && pEvent->mpShell->GetShellType()
-                    == ViewShell::ST_SLIDE_SORTER)
-            {
-                static_cast<slidesorter::SlideSorterViewShell*>(
-                    pEvent->mpShell)->AddSelectionChangeListener (
-                        LINK(this,
-                            EventMultiplexer::Implementation,
-                            SlideSorterSelectionChangeListener));
-            }
-            break;
-
-        case PaneManagerEvent::EID_VIEW_SHELL_REMOVED:
-            if (pEvent->mePane == PaneManager::PT_CENTER)
-                CallListeners (EventMultiplexerEvent::EID_MAIN_VIEW_REMOVED);
-            CallListeners (EventMultiplexerEvent::EID_VIEW_REMOVED);
-
-            // Remove selection change listener from slide sorter.
-            if (pEvent->mpShell != NULL
-                && pEvent->mpShell->GetShellType()
-                    == ViewShell::ST_SLIDE_SORTER)
-            {
-                static_cast<slidesorter::SlideSorterViewShell*>(
-                    pEvent->mpShell)->RemoveSelectionChangeListener (
-                        LINK(this,
-                            EventMultiplexer::Implementation,
-                            SlideSorterSelectionChangeListener));
-            }
-            break;
-
-        case PaneManagerEvent::EID_PANE_MANAGER_DYING:
-            CallListeners (EventMultiplexerEvent::EID_PANE_MANAGER_DYING);
-
-            // Stop listening for view switches.
-            mrBase.GetPaneManager().RemoveEventListener (
-                LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
-            mbPaneManagerAvailable = false;
-            break;
-    }
-
-    return 0;
 }
 
 
