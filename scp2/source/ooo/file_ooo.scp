@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.184 $
+ *  $Revision: 1.185 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 11:01:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:59:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1390,6 +1390,13 @@ File gid_File_Oo_Office_Impress_Xcs
     Styles = (PACKED, PATCH);
     Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office;
     Name = "/registry/schema/org/openoffice/Office/Impress.xcs";
+End
+
+File gid_File_Oo_Office_Impress_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED, PATCH);
+    Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
+    Name = "/registry/data/org/openoffice/Office/Impress.xcu";
 End
 
 File gid_File_Oo_Office_Java_Xcs
