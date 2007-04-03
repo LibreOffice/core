@@ -4,9 +4,9 @@
  *
  *  $RCSfile: LayoutMenu.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:40:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:19:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@
 #include "ViewShellBase.hxx"
 #endif
 #include "DrawViewShell.hxx"
-#include "PaneManager.hxx"
 #include "SlideSorterViewShell.hxx"
 #include "controller/SlideSorterController.hxx"
 #include "controller/SlsPageSelector.hxx"
@@ -63,6 +62,8 @@
 #include "taskpane/ScrollPanel.hxx"
 #include "tools/SlotStateListener.hxx"
 #include "EventMultiplexer.hxx"
+#include "DrawController.hxx"
+#include "framework/FrameworkHelper.hxx"
 
 #include <vector>
 #include <memory>
@@ -84,18 +85,32 @@
 #endif
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
+#include <comphelper/processfactory.hxx>
 
 #ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
 #include <com/sun/star/frame/XController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XCONTROLLERMANAGER_HPP_
+#include <com/sun/star/drawing/framework/XControllerManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEWCONTROLLER_HPP_
+#include <com/sun/star/drawing/framework/XViewController.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XVIEW_HPP_
+#include <com/sun/star/drawing/framework/XView.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEID_HPP_
+#include <com/sun/star/drawing/framework/ResourceId.hpp>
 #endif
 
 using namespace ::sd::toolpanel;
 #define LayoutMenu
 #include "sdslots.hxx"
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star;
+using namespace ::com::sun::star::drawing::framework;
 using namespace ::sd::slidesorter;
 
 namespace sd { namespace toolpanel {
@@ -273,7 +288,7 @@ LayoutMenu::LayoutMenu (
     Link aStateChangeLink (LINK(this,LayoutMenu,StateChangeHandler));
     mxListener = new ::sd::tools::SlotStateListener(
         aStateChangeLink,
-        mrBase.GetController()->getFrame(),
+        Reference<frame::XDispatchProvider>(mrBase.GetController()->getFrame(), UNO_QUERY),
         ::rtl::OUString::createFromAscii(".uno:VerticalTextState"));
 
     // Add this new object as shell to the shell factory.
@@ -533,7 +548,7 @@ void LayoutMenu::GetState (SfxItemSet& rItemSet)
 
 void LayoutMenu::InsertPageWithLayout (AutoLayout aLayout)
 {
-    ViewShell* pViewShell = mrBase.GetMainViewShell();
+    ViewShell* pViewShell = mrBase.GetMainViewShell().get();
     if (pViewShell != NULL)
     {
         // Because we process the SID_INSERTPAGE slot ourselves we have to
@@ -600,7 +615,7 @@ void LayoutMenu::AssignLayoutToSelectedSlides (AutoLayout aLayout)
     do
     {
         // The view shell in the center pane has to be present.
-        ViewShell* pMainViewShell = mrBase.GetMainViewShell();
+        ViewShell* pMainViewShell = mrBase.GetMainViewShell().get();
         if (pMainViewShell == NULL)
             break;
 
@@ -700,7 +715,7 @@ SfxRequest LayoutMenu::CreateRequest (
             String(SdResId(STR_LAYER_BCKGRND)), FALSE));
         BYTE aBackgroundObject (rLayerAdmin.GetLayerID(
             String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE));
-        ViewShell* pViewShell = mrBase.GetMainViewShell();
+        ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
         SdPage* pPage = pViewShell->GetActualPage();
@@ -736,25 +751,43 @@ void LayoutMenu::Fill (void)
     sal_Bool bRightToLeft = (pDocument!=NULL
         && pDocument->GetDefaultWritingMode() == WritingMode_RL_TB);
 
-    snewfoil_value_info* pInfo;
-    switch (mrBase.GetPaneManager().GetViewShellType(
-        PaneManager::PT_CENTER))
+    // Get URL of the view in the cente pane.
+    ::rtl::OUString sCenterPaneViewName;
+    try
     {
-        case ViewShell::ST_NOTES:
-            pInfo = notes;
-            break;
+        Reference<XControllerManager> xControllerManager (
+            Reference<XWeak>(&mrBase.GetDrawController()), UNO_QUERY_THROW);
+        Reference<XViewController> xViewController (xControllerManager->getViewController());
+        if (xViewController.is())
+        {
+            Reference<XResourceId> xPaneId (ResourceId::create(
+                comphelper_getProcessComponentContext(),
+                framework::FrameworkHelper::msCenterPaneURL));
+            Reference<XView> xView (xViewController->getFirstViewForAnchor(xPaneId));
+            if (xView.is())
+                sCenterPaneViewName = xView->getResourceId()->getResourceURL();
+        }
+    }
+    catch (RuntimeException&)
+    {}
 
-        case ViewShell::ST_HANDOUT:
-            pInfo = handout;
-            break;
-
-        case ViewShell::ST_IMPRESS:
-        case ViewShell::ST_SLIDE_SORTER:
-            pInfo = standard;
-            break;
-
-        default:
-            pInfo = NULL;
+    snewfoil_value_info* pInfo = NULL;
+    if (sCenterPaneViewName.equals(framework::FrameworkHelper::msNotesViewURL))
+    {
+        pInfo = notes;
+    }
+    else if (sCenterPaneViewName.equals(framework::FrameworkHelper::msHandoutViewURL))
+    {
+        pInfo = handout;
+    }
+    else if (sCenterPaneViewName.equals(framework::FrameworkHelper::msImpressViewURL)
+        || sCenterPaneViewName.equals(framework::FrameworkHelper::msSlideSorterURL))
+    {
+        pInfo = standard;
+    }
+    else
+    {
+        pInfo = NULL;
     }
 
     Clear();
@@ -869,7 +902,7 @@ void LayoutMenu::UpdateSelection (void)
     do
     {
         // Get current page of main view.
-        ViewShell* pViewShell = mrBase.GetMainViewShell();
+        ViewShell* pViewShell = mrBase.GetMainViewShell().get();
         if (pViewShell == NULL)
             break;
 
