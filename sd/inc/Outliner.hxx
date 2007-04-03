@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:21:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:34:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -566,7 +566,6 @@ private:
         search dialog, if visible, is locked, too.
     */
     USHORT ShowModalMessageBox (Dialog& rMessageBox);
-
 };
 
 } // end of namespace sd
