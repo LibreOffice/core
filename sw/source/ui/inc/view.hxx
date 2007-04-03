@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:45:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -649,7 +649,7 @@ public:
 
     // get print options (SwPrtOptions)
     static void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts,
-            BOOL* pPrtProspect, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
+            BOOL* pPrtProspect, BOOL* pPrtProspect_RTL, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
 
     SwView(SfxViewFrame* pFrame, SfxViewShell*);
     ~SwView();
