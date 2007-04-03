@@ -1,0 +1,62 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ResourceActivationMode.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:42:45 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_ResourceActivationMode_idl__
+#define __com_sun_star_drawing_framework_ResourceActivationMode_idl__
+
+module com { module sun { module star { module drawing { module framework {
+
+/** The ResourceActivationMode specifies, for example for the <member
+    scope="com::sun::star::drawing::framework"
+    >XConfigurationController::requestResourceActivation()</member>,
+    whether a requested resource is to replace an existing resource of the
+    same class or is to be activated additionally.
+*/
+enum ResourceActivationMode
+{
+    /** A resource is requested in addition to already existing ones.  This
+        is used for example for panes.
+    */
+    ADD,
+
+    /** A resource is requested to replace an already existing one of the
+        same class.  This is used for example for views.
+    */
+    REPLACE
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
