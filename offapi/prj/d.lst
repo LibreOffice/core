@@ -31,6 +31,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\datatransfer\clipboard
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\document
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\geometry
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing
+mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing\framework
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\embed
 mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\form
@@ -135,6 +136,7 @@ mkdir: %COMMON_DEST%\idl%_EXT%\com\sun\star\xml\wrapper
 ..\com\sun\star\document\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\document
 ..\com\sun\star\geometry\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\geometry
 ..\com\sun\star\drawing\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing
+..\com\sun\star\drawing\framework\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\drawing\framework
 ..\com\sun\star\rendering\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\rendering
 ..\com\sun\star\embed\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\embed
 ..\com\sun\star\form\*.idl %COMMON_DEST%\idl%_EXT%\com\sun\star\form
