@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsPageSelector.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 19:06:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:17:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,7 @@ void PageSelector::SetCurrentPage (const SharedPageDescriptor& rpDescriptor)
     {
         // First the traditional way.
         DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(
-            mrController.GetViewShell().GetViewShellBase().GetMainViewShell());
+            mrController.GetViewShell().GetViewShellBase().GetMainViewShell().get());
         if (pDrawViewShell != NULL)
         {
             USHORT nPageNumber = (rpDescriptor->GetPage()->GetPageNum()-1)/2;
