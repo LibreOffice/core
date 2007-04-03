@@ -24,6 +24,7 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\datatransfer\dnd
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\daemons
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\document
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\drawing
+mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\drawing\framework
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\geometry
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\rendering
 mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\embed
@@ -164,6 +165,8 @@ mkdir: %_DEST%\inc%_EXT%\offuh\com\sun\star\xml\wrapper
 ..\%__SRC%\inc\offuh\com\sun\star\document\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\document\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\drawing\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\drawing\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\drawing\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\drawing\*.hpp
+..\%__SRC%\inc\offuh\com\sun\star\drawing\framework\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\drawing\framework\*.hdl
+..\%__SRC%\inc\offuh\com\sun\star\drawing\framework\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\drawing\framework\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\geometry\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\geometry\*.hdl
 ..\%__SRC%\inc\offuh\com\sun\star\geometry\*.hpp %_DEST%\inc%_EXT%\offuh\com\sun\star\geometry\*.hpp
 ..\%__SRC%\inc\offuh\com\sun\star\rendering\*.hdl %_DEST%\inc%_EXT%\offuh\com\sun\star\rendering\*.hdl
