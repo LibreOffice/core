@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:51:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:16:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -235,7 +235,8 @@ class SlideshowImpl : public ::comphelper::OBaseMutex, public SlideshowImpl_base
 {
     friend class Slideshow;
 public:
-    SlideshowImpl( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc );
+    SlideshowImpl( ViewShell* pViewSh, ::sd::View* pView, SdDrawDocument* pDoc,
+        ::Window* pParentWindow );
     ~SlideshowImpl();
 
     bool startShow( PresentationSettings* pPresSettings );
@@ -351,6 +352,7 @@ private:
     SdDrawDocument* mpDoc;
 
     SfxItemSet*     mpNewAttr;
+    ::Window*       mpParentWindow;
     ShowWindow*     mpShowWindow;
     PushButton*     mpTimeButton;
 
