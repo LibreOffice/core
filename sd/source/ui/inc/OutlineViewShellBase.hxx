@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OutlineViewShellBase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 05:10:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:04:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_BASE_HXX
 #define SD_OUTLINE_VIEW_SHELL_BASE_HXX
 
-#include "ViewShellBase.hxx"
+#include "ImpressViewShellBase.hxx"
 
 
 namespace sd {
@@ -45,11 +45,12 @@ namespace sd {
     creates an outline view shell as default.
 */
 class OutlineViewShellBase
-    : public ViewShellBase
+    : public ImpressViewShellBase
 {
 public:
     TYPEINFO();
     SFX_DECL_VIEWFACTORY(OutlineViewShellBase);
+
     /** This constructor is used by the view factory of the SFX
         macros.
     */
