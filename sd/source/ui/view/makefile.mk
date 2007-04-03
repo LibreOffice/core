@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-12 19:18:18 $
+#   last change: $Author: rt $ $Date: 2007-04-03 16:31:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,11 @@ SLOFILES =	\
         $(SLO)$/FormShellManager.obj			\
         $(SLO)$/GraphicObjectBar.obj			\
         $(SLO)$/GraphicViewShellBase.obj		\
+        $(SLO)$/ImpressViewShellBase.obj		\
         $(SLO)$/MediaObjectBar.obj				\
         $(SLO)$/Outliner.obj					\
         $(SLO)$/OutlinerIterator.obj			\
         $(SLO)$/OutlineViewShellBase.obj		\
-        $(SLO)$/PaneManager.obj					\
         $(SLO)$/SlideSorterViewShellBase.obj	\
         $(SLO)$/PresentationViewShellBase.obj	\
         $(SLO)$/PrintManager.obj				\
