@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdata.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:29:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:46:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@ struct SwPrintData
 {
     sal_Bool bPrintGraphic, bPrintTable, bPrintDraw, bPrintControl, bPrintPageBackground,
              bPrintBlackFont, bPrintLeftPage, bPrintRightPage, bPrintReverse, bPrintProspect,
+             bPrintProspect_RTL,
              bPrintSingleJobs, bPaperFromSetup,
              // --> FME 2005-12-13 #b6354161# Print empty pages
              bPrintEmptyPages,
@@ -73,6 +74,7 @@ struct SwPrintData
         bPaperFromSetup         =
         bPrintReverse           =
         bPrintProspect          =
+        bPrintProspect_RTL      =
         bPrintSingleJobs        =
         bModified               =
         bPrintBlackFont         = sal_False;
@@ -93,6 +95,7 @@ struct SwPrintData
         bPrintRightPage     ==   rData.bPrintRightPage     &&
         bPrintReverse       ==   rData.bPrintReverse       &&
         bPrintProspect      ==   rData.bPrintProspect      &&
+        bPrintProspect_RTL  ==   rData.bPrintProspect_RTL  &&
         bPrintSingleJobs    ==   rData.bPrintSingleJobs    &&
         bPaperFromSetup     ==   rData.bPaperFromSetup     &&
         bPrintEmptyPages    ==   rData.bPrintEmptyPages   &&
@@ -110,6 +113,7 @@ struct SwPrintData
     sal_Bool IsPaperFromSetup() const { return bPaperFromSetup; }
     sal_Bool IsPrintEmptyPages() const{ return bPrintEmptyPages; }
     sal_Bool IsPrintProspect()  const { return bPrintProspect; }
+    sal_Bool IsPrintProspect_RTL()  const { return bPrintProspect_RTL; }
     sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
     sal_Bool IsPrintBlackFont() const { return bPrintBlackFont;}
     sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs;}
