@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuspell.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:24:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:01:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,7 +154,7 @@ void FuSpell::StartSpelling()
     ViewShellBase* pBase (ViewShellBase::GetViewShellBase (
         mpDocSh->GetViewShell()->GetViewFrame()));
     if (pBase != NULL)
-        mpViewShell = pBase->GetMainViewShell ();
+        mpViewShell = pBase->GetMainViewShell().get();
     else
         mpViewShell = NULL;
     if (mpViewShell != NULL)
