@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:29:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:06:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,11 +49,17 @@
 #ifndef _RTL_ALLOC_H_
 #include <rtl/alloc.h>
 #endif
+#include <osl/mutex.h>
+#include <osl/doublecheckedlocking.h>
 
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
 
+#include <string.h>
+#include <sal/alloca.h>
+
+#include "hash.h"
 #include "strimp.h"
 
 #ifndef _RTL_USTRING_H_
@@ -70,9 +76,9 @@
  */
 static rtl_uString const aImplEmpty_rtl_uString =
 {
-    1,      /* sal_Int32    refCount;   */
-    0,      /* sal_Int32    length;     */
-    { 0 }   /* sal_Unicode  buffer[1];  */
+    SAL_STRING_STATIC_FLAG|1, /* sal_Int32    refCount;   */
+    0,                        /* sal_Int32    length;     */
+    { 0 }                     /* sal_Unicode  buffer[1];  */
 };
 
 /* ======================================================================= */
@@ -84,6 +90,8 @@ static rtl_uString const aImplEmpty_rtl_uString =
 #define IMPL_RTL_STRINGNAME( n )    rtl_uString_ ## n
 #define IMPL_RTL_STRINGDATA         rtl_uString
 #define IMPL_RTL_EMPTYSTRING        aImplEmpty_rtl_uString
+#define IMPL_RTL_INTERN
+static void internRelease (rtl_uString *pThis);
 
 /* ======================================================================= */
 
@@ -474,14 +482,15 @@ static int rtl_ImplGetFastUTF8UnicodeLen( const sal_Char* pStr, sal_Int32 nLen )
 
 /* ----------------------------------------------------------------------- */
 
-void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
-                                  const sal_Char* pStr,
-                                  sal_Int32 nLen,
-                                  rtl_TextEncoding eTextEncoding,
-                                  sal_uInt32 nCvtFlags )
+static void rtl_string2UString_status( rtl_uString** ppThis,
+                                       const sal_Char* pStr,
+                                       sal_Int32 nLen,
+                                       rtl_TextEncoding eTextEncoding,
+                                       sal_uInt32 nCvtFlags,
+                                       sal_uInt32 *pInfo )
 {
     OSL_ENSURE(rtl_isOctetTextEncoding(eTextEncoding),
-               "rtl_string2UString() - Wrong TextEncoding" );
+               "rtl_string2UString_status() - Wrong TextEncoding" );
 
     if ( !nLen )
         rtl_uString_new( ppThis );
@@ -503,7 +512,7 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
             {
                 /* Check ASCII range */
                 OSL_ENSURE( ((unsigned char)*pStr) <= 127,
-                            "rtl_string2UString() - Found char > 127 and RTL_TEXTENCODING_ASCII_US is specified" );
+                            "rtl_string2UString_status() - Found char > 127 and RTL_TEXTENCODING_ASCII_US is specified" );
 
                 *pBuffer = *pStr;
                 pBuffer++;
@@ -533,7 +542,8 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
                 {
                     IMPL_RTL_STRCODE* pBuffer;
                     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
-                    if (*ppThis == NULL) {
+                    if (*ppThis == NULL)
+                    {
                         return;
                     }
                     pBuffer = (*ppThis)->buffer;
@@ -541,7 +551,7 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
                     {
                         /* Check ASCII range */
                         OSL_ENSURE( ((unsigned char)*pStr) <= 127,
-                                    "rtl_string2UString() - UTF8 test encoding is wrong" );
+                                    "rtl_string2UString_status() - UTF8 test encoding is wrong" );
 
                         *pBuffer = *pStr;
                         pBuffer++;
@@ -587,15 +597,24 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
                                                        &nInfo, &nSrcBytes );
             }
 
-            /* Set the buffer to the correct size or is there to
+            if (pInfo)
+                *pInfo = nInfo;
+
+            /* Set the buffer to the correct size or if there is too
                much overhead, reallocate to the correct size */
             if ( nNewLen > nDestChars+8 )
             {
                 rtl_uString* pTemp2 = IMPL_RTL_STRINGNAME( ImplAlloc )( nDestChars );
-                if (pTemp2 != NULL) {
+                if (pTemp2 != NULL)
+                {
                     rtl_str_ImplCopy(pTemp2->buffer, pTemp->buffer, nDestChars);
                     rtl_freeMemory(pTemp);
                     pTemp = pTemp2;
+                }
+                else
+                {
+                    rtl_freeMemory(pTemp);
+                    return;
                 }
             }
             else
@@ -613,4 +632,170 @@ void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
                 rtl_uString_new( ppThis );
         }
     }
+}
+
+void SAL_CALL rtl_string2UString( rtl_uString** ppThis,
+                                  const sal_Char* pStr,
+                                  sal_Int32 nLen,
+                                  rtl_TextEncoding eTextEncoding,
+                                  sal_uInt32 nCvtFlags )
+{
+    rtl_string2UString_status( ppThis, pStr, nLen, eTextEncoding,
+                               nCvtFlags, NULL );
+}
+
+/* ----------------------------------------------------------------------- */
+
+typedef enum {
+    CANNOT_RETURN,
+    CAN_RETURN = 1
+} StrLifecycle;
+
+static oslMutex
+getInternMutex()
+{
+    static oslMutex pPoolGuard = NULL;
+    if( !pPoolGuard )
+    {
+        oslMutex pGlobalGuard;
+        pGlobalGuard = *osl_getGlobalMutex();
+        osl_acquireMutex( pGlobalGuard );
+        if( !pPoolGuard )
+        {
+            oslMutex p = osl_createMutex();
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            pPoolGuard = p;
+        }
+        osl_releaseMutex( pGlobalGuard );
+    }
+    else
+    {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+    }
+
+    return pPoolGuard;
+}
+
+static StringHashTable *pInternPool = NULL;
+
+/* returns true if we found a dup in the pool */
+static void rtl_ustring_intern_internal( rtl_uString ** newStr,
+                                         rtl_uString  * str,
+                                         StrLifecycle   can_return )
+{
+    oslMutex pPoolMutex;
+
+    pPoolMutex = getInternMutex();
+
+    osl_acquireMutex( pPoolMutex );
+
+    if (!pInternPool)
+        pInternPool = rtl_str_hash_new (1024);
+    *newStr = rtl_str_hash_intern (pInternPool, str, can_return);
+
+    osl_releaseMutex( pPoolMutex );
+
+    if( can_return && *newStr != str )
+    { /* we dupped, then found a match */
+        rtl_freeMemory( str );
+    }
+}
+
+void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
+                                  rtl_uString  * str)
+{
+    if (SAL_STRING_IS_INTERN(str))
+    {
+        IMPL_RTL_AQUIRE( str );
+        *newStr = str;
+    }
+    else
+    {
+        if (*newStr)
+        {
+            rtl_uString_release (*newStr);
+            *newStr = NULL;
+        }
+        rtl_ustring_intern_internal( newStr, str, CANNOT_RETURN );
+    }
+}
+
+void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
+                                         const sal_Char * str,
+                                         sal_Int32        len,
+                                         rtl_TextEncoding eTextEncoding,
+                                         sal_uInt32       convertFlags,
+                                         sal_uInt32     * pInfo )
+{
+    rtl_uString *scratch;
+
+    if (*newStr)
+    {
+        rtl_uString_release (*newStr);
+        *newStr = NULL;
+    }
+
+    if ( len < 256 )
+    { // try various optimisations
+        if ( len < 0 )
+            len = strlen( str );
+        if ( eTextEncoding == RTL_TEXTENCODING_ASCII_US )
+        {
+            int i;
+            rtl_uString *pScratch;
+            pScratch = alloca( sizeof( rtl_uString )
+                               + len * sizeof (IMPL_RTL_STRCODE ) );
+            for (i = 0; i < len; i++)
+            {
+                /* Check ASCII range */
+                OSL_ENSURE( ((unsigned char)str[i]) <= 127,
+                            "rtl_ustring_internConvert() - Found char > 127 and RTL_TEXTENCODING_ASCII_US is specified" );
+                pScratch->buffer[i] = str[i];
+            }
+            pScratch->length = len;
+            rtl_ustring_intern_internal( newStr, pScratch, CANNOT_RETURN );
+            return;
+        }
+        /* FIXME: we want a nice UTF-8 / alloca shortcut here */
+    }
+
+    scratch = NULL;
+    rtl_string2UString_status( &scratch, str, len, eTextEncoding, convertFlags,
+                               pInfo );
+    if (!scratch) {
+        return;
+    }
+    rtl_ustring_intern_internal( newStr, scratch, CAN_RETURN );
+}
+
+static void
+internRelease (rtl_uString *pThis)
+{
+    oslMutex pPoolMutex;
+
+    rtl_uString *pFree = NULL;
+    if ( SAL_STRING_REFCOUNT(
+             osl_decrementInterlockedCount( &(pThis->refCount) ) ) == 0)
+    {
+        pPoolMutex = getInternMutex();
+        osl_acquireMutex( pPoolMutex );
+
+        rtl_str_hash_remove (pInternPool, pThis);
+
+        /* May have been separately acquired */
+        if ( SAL_STRING_REFCOUNT(
+                 osl_incrementInterlockedCount( &(pThis->refCount) ) ) == 1 )
+        {
+            /* we got the last ref */
+            pFree = pThis;
+        }
+        else /* very unusual */
+        {
+            internRelease (pThis);
+        }
+
+        osl_releaseMutex( pPoolMutex );
+    }
+    if (pFree)
+        rtl_freeMemory (pFree);
 }
