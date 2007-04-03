@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menudocumenthandler.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:43:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:50:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -163,6 +163,7 @@ static void ExtractMenuParameters( const Sequence< PropertyValue > rProp,
         if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_COMMANDURL ))
         {
             rProp[i].Value >>= rCommandURL;
+            rCommandURL = rCommandURL.intern();
         }
         else if ( rProp[i].Name.equalsAscii( ITEM_DESCRIPTOR_HELPURL ))
         {
@@ -258,7 +259,7 @@ void ReadMenuDocumentHandlerBase::initPropertyCommon(
     rProps[4].Name = m_aType;
 
     // Common values
-    rProps[0].Value <<= rCommandURL;
+    rProps[0].Value <<= rCommandURL.intern();
     rProps[1].Value <<= rHelpId;
     rProps[2].Value <<= Reference< XIndexContainer >();
     rProps[3].Value <<= rLabel;
