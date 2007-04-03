@@ -551,6 +551,12 @@ UDK_3.5 {
         rtl_cache_free;
 } UDK_3.4;
 
+UDK_3.6 {
+    global:
+        rtl_uString_intern;
+        rtl_uString_internConvert;
+} UDK_3.5;
+
 PRIVATE_1.0 {
     global:
         osl_detail_ObjectRegistry_storeAddresses;
