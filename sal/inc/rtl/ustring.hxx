@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 13:13:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:04:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1080,6 +1080,79 @@ public:
     double toDouble() const SAL_THROW(())
     {
         return rtl_ustr_toDouble( pData->buffer );
+    }
+
+
+    /**
+       Return a canonical representation for a string.
+
+       A pool of strings, initially empty is maintained privately
+       by the string class. On invocation, if present in the pool
+       the original string will be returned. Otherwise this string,
+       or a copy thereof will be added to the pool and returned.
+
+       @return
+       a version of the string from the pool.
+
+       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+
+       @since UDK 3.2.7
+    */
+    OUString intern() const
+    {
+        rtl_uString * pNew = 0;
+        rtl_uString_intern( &pNew, pData );
+#if defined EXCEPTIONS_OFF
+        OSL_ASSERT(pNew != NULL);
+#else
+        if (pNew == 0) {
+            throw std::bad_alloc();
+        }
+#endif
+        return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
+    }
+
+    /**
+       Return a canonical representation for a converted string.
+
+       A pool of strings, initially empty is maintained privately
+       by the string class. On invocation, if present in the pool
+       the original string will be returned. Otherwise this string,
+       or a copy thereof will be added to the pool and returned.
+
+       @param    value           a 8-Bit character array.
+       @param    length          the number of character which should be converted.
+                                 The 8-Bit character array length must be
+                                 greater or equal than this value.
+       @param    encoding        the text encoding from which the 8-Bit character
+                                 sequence should be converted.
+       @param    convertFlags    flags which controls the conversion.
+                                 see RTL_TEXTTOUNICODE_FLAGS_...
+       @param    pInfo           pointer to return conversion status or NULL.
+
+       @return
+       a version of the converted string from the pool.
+
+       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
+
+       @since UDK 3.2.7
+    */
+    static OUString intern( const sal_Char * value, sal_Int32 length,
+                            rtl_TextEncoding encoding,
+                            sal_uInt32 convertFlags = OSTRING_TO_OUSTRING_CVTFLAGS,
+                            sal_uInt32 *pInfo = NULL )
+    {
+        rtl_uString * pNew = 0;
+        rtl_uString_internConvert( &pNew, value, length, encoding,
+                                   convertFlags, pInfo );
+#if defined EXCEPTIONS_OFF
+        OSL_ASSERT(pNew != NULL);
+#else
+        if (pNew == 0) {
+            throw std::bad_alloc();
+        }
+#endif
+        return OUString( pNew, (DO_NOT_ACQUIRE *)0 );
     }
 
     /**
