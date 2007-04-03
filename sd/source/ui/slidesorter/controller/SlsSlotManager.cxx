@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsSlotManager.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:33:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:18:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
+
 #include "SlsSlotManager.hxx"
 
 #include "SlideSorterViewShell.hxx"
@@ -51,7 +52,7 @@
 #include "view/SlideSorterView.hxx"
 #include "view/SlsLayouter.hxx"
 #include "view/SlsViewOverlay.hxx"
-
+#include "framework/FrameworkHelper.hxx"
 #include "Window.hxx"
 #include "fupoor.hxx"
 #include "fuzoom.hxx"
@@ -66,7 +67,6 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include "DrawDocShell.hxx"
-#include "PaneManager.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellImplementation.hxx"
 #include "sdattr.hxx"
@@ -112,11 +112,30 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+
+
 namespace sd { namespace slidesorter { namespace controller {
+
+/** Callback for the asynchronous start of a slide show.
+*/
+class SlideShowCallback
+{
+public:
+    SlideShowCallback (ViewShellBase& rBase, const SfxRequest& rRequest);
+    ~SlideShowCallback (void);
+    DECL_LINK(Callback, void*);
+
+private:
+    ViewShellBase& mrBase;
+    SfxRequest maRequest;
+    sal_uInt32 mnCallbackId;
+};
+
 
 
 SlotManager::SlotManager (SlideSorterController& rController)
-    : mrController (rController)
+    : mrController(rController),
+      maCommandQueue()
 {
 }
 
@@ -146,7 +165,7 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
     {
         case SID_PRESENTATION:
         case SID_REHEARSE_TIMINGS:
-            ShowSlideShow (rRequest);
+            ShowSlideShow(rRequest);
             rShell.Cancel();
             break;
 
@@ -190,16 +209,8 @@ void SlotManager::FuTemporary (SfxRequest& rRequest)
         {
             // Make the slide transition panel visible (expand it) in the
             // tool pane.
-            SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
-            SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX,
-                toolpanel::TaskPaneViewShell::PID_SLIDE_TRANSITION);
-            rShell.GetViewFrame()->GetDispatcher()->Execute(
-                SID_TASK_PANE,
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD,
-                &aMakeToolPaneVisible,
-                &aPanelId,
-                NULL);
-
+            framework::FrameworkHelper::Instance(mrController.GetViewShell().GetViewShellBase())
+                ->RequestTaskPanel(sd::framework::FrameworkHelper::msSlideTransitionTaskPanelURL);
             rShell.Cancel();
             rRequest.Ignore ();
             break;
@@ -375,9 +386,10 @@ void SlotManager::FuSupport (SfxRequest& rRequest)
         case SID_HANDOUTMODE:
         case SID_DIAMODE:
         case SID_OUTLINEMODE:
-            rShell.GetViewShellBase().GetPaneManager().HandleModeChangeSlot (
-                rRequest.GetSlot(),
-                rRequest);
+            framework::FrameworkHelper::Instance(mrController.GetViewShell().GetViewShellBase())
+                ->HandleModeChangeSlot(
+                    rRequest.GetSlot(),
+                    rRequest);
             rRequest.Done();
             break;
 
@@ -827,16 +839,8 @@ void SlotManager::ShowSlideShow( SfxRequest& rRequest)
 
     if ( ! rShell.IsMainViewShell())
     {
-        // We are not the main sub shell, so delegate this call to the main
-        // sub shell.  Because there is no SFX functionality to forward a
-        // slot call further down the stack we have to do that here
-        // manually.
-        ViewShell* pMainViewShell
-            = rShell.GetViewShellBase().GetPaneManager().GetViewShell(
-                PaneManager::PT_CENTER);
-        if (pMainViewShell->ISA(DrawViewShell))
-            PTR_CAST(DrawViewShell, pMainViewShell)->FuSupport (
-                rRequest);
+        // The new object will delete itself later.
+        new SlideShowCallback(rShell.GetViewShellBase(), rRequest);
     }
     else
     {
@@ -866,11 +870,15 @@ void SlotManager::ShowSlideShow( SfxRequest& rRequest)
             pFrameView->SetPreviousViewShellType (rShell.GetShellType());
             pFrameView->SetSlotId (rRequest.GetSlot());
             pFrameView->SetPageKind (PK_STANDARD);
-            rShell.GetViewShellBase().GetPaneManager().RequestMainViewShellChange(
-                ViewShell::ST_IMPRESS,
-                PaneManager::CM_ASYNCHRONOUS);
-            rShell.GetViewFrame()->GetDispatcher()->Execute(rRequest.GetSlot(),
-                SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD);
+            ::boost::shared_ptr<framework::FrameworkHelper> pHelper (
+                framework::FrameworkHelper::Instance(rShell.GetViewShellBase()));
+            pHelper->RequestView(
+                framework::FrameworkHelper::msImpressViewURL,
+                framework::FrameworkHelper::msCenterPaneURL);
+            pHelper->RunOnConfigurationEvent(
+                framework::FrameworkHelper::msConfigurationUpdateEndEvent,
+                framework::DispatchCaller(
+                    *rShell.GetViewFrame()->GetDispatcher(), rRequest.GetSlot()));
             rRequest.Done();
         }
     }
@@ -1199,4 +1207,57 @@ IMPL_LINK(SlotManager, UserEventCallback, void*, EMPTYARG)
 }
 
 
+
+
+//===== SlotManager::SlideShowCallbackData ====================================
+
+SlideShowCallback::SlideShowCallback (
+    ViewShellBase& rBase,
+    const SfxRequest& rRequest)
+    : mrBase(rBase),
+      maRequest(rRequest),
+      mnCallbackId(0)
+{
+    mnCallbackId = Application::PostUserEvent(
+        LINK(this,SlideShowCallback,Callback));
+}
+
+
+
+
+SlideShowCallback::~SlideShowCallback (void)
+{
+    if (mnCallbackId != 0)
+        Application::RemoveUserEvent(mnCallbackId);
+}
+
+
+
+
+IMPL_LINK(SlideShowCallback, Callback, void*, pUnused)
+{
+    (void)pUnused;
+    mnCallbackId = 0;
+
+    // We are not the main sub shell, so delegate this call to the main
+    // sub shell.  Because there is no SFX functionality to forward a
+    // slot call further down the stack we have to do that here
+    // manually.
+    ::boost::shared_ptr<ViewShell> pMainViewShell (
+        framework::FrameworkHelper::Instance(mrBase)
+            ->GetViewShell(framework::FrameworkHelper::msCenterPaneURL));
+    DrawViewShell* pDrawViewShell = dynamic_cast<DrawViewShell*>(pMainViewShell.get());
+    if (pDrawViewShell != NULL)
+        pDrawViewShell->FuSupport(maRequest);
+    else
+    {
+        PresentationViewShell::CreateFullScreenShow(mrBase, maRequest);
+    }
+
+    delete this;
+
+    return 0;
+}
+
 } } } // end of namespace ::sd::slidesorter::controller
+
