@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TitledControl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:57:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,12 @@
 #define SD_TASKPANE_TITLED_CONTROL_HXX
 
 #include "taskpane/TaskPaneTreeNode.hxx"
+#include "taskpane/ControlContainer.hxx"
 #include "TitleBar.hxx"
 
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#endif
 #ifndef _STRING_HXX
 #include <tools/string.hxx>
 #endif
@@ -49,6 +53,7 @@
 #include <vcl/window.hxx>
 #endif
 #include <memory>
+#include <boost/function.hpp>
 
 class Window;
 
@@ -65,6 +70,8 @@ class TitledControl
       public TreeNode
 {
 public:
+    typedef ::boost::function1<void, TitledControl&> ClickHandler;
+
     /** Create a new descriptor for the given control.
         @param pParent
             The parent window of the new descriptor.
@@ -74,6 +81,8 @@ public:
         @param rTitle
             String that is shown as title in the title area above the
             control.
+        @param rClickHandler
+            The typical action of the click handler is to expand the control.
         @param eType
             Type of the title bar.  This specifies how the title bar
             will be formated.  For more information see TitleBar.
@@ -83,12 +92,14 @@ public:
         TreeNode* pParent,
         ::std::auto_ptr<TreeNode> pControl,
         const String& rTitle,
+        const ClickHandler& rClickHandler,
         TitleBar::TitleBarType eType);
 
     TitledControl (
         TreeNode* pParent,
         ::std::auto_ptr<ControlFactory> pControlFactory,
         const String& rTitle,
+        const ClickHandler& rClickHandler,
         TitleBar::TitleBarType eType);
 
     virtual ~TitledControl (void);
@@ -159,6 +170,7 @@ private:
     bool mbVisible;
     void* mpUserData;
     ::std::auto_ptr<ControlFactory> mpControlFactory;
+    ::std::auto_ptr<ClickHandler> mpClickHandler;
 
     /** Remember whether to toggle (true) the expansion state when the title
         bar is clicked on.  When set to false then the control is always
@@ -173,6 +185,31 @@ private:
     void UpdateStates (void);
 
     DECL_LINK(WindowEventListener, VclSimpleEvent*);
+};
+
+
+
+
+/** This standard implementation of the ClickHandler expands, or toggles the
+    expansion state, of the control, whose title was clicked.
+*/
+class TitledControlStandardClickHandler
+{
+public:
+    /** Create a new instance of this class.
+        @param rControlContainer
+            The container of which the TitledControl is part of.
+        @param eExpansionState
+            This specifies whether to always expand the titled control or to
+            toggle its expansion state.
+    */
+    TitledControlStandardClickHandler (
+        ControlContainer& rControlContainer,
+        ControlContainer::ExpansionState eExpansionState);
+    void operator () (TitledControl& rTitledControl);
+private:
+    ControlContainer& mrControlContainer;
+    ControlContainer::ExpansionState meExpansionState;
 };
 
 } } // end of namespace ::sd::toolpanel
