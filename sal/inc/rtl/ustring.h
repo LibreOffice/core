@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.h,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 04:14:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 14:04:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,9 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+#ifndef _OSL_INTERLOCK_H_
+#include <osl/interlck.h>
 #endif
 #ifndef _RTL_STRING_H_
 #include <rtl/string.h>
@@ -1030,9 +1033,9 @@ double SAL_CALL rtl_ustr_toDouble( const sal_Unicode * str ) SAL_THROW_EXTERN_C(
 */
 typedef struct _rtl_uString
 {
-    sal_Int32       refCount;
-    sal_Int32       length;
-    sal_Unicode     buffer[1];
+    oslInterlockedCount refCount; /* opaque */
+    sal_Int32           length;
+    sal_Unicode         buffer[1];
 } rtl_uString;
 
 #ifdef SAL_W32
@@ -1430,6 +1433,73 @@ sal_Int32 SAL_CALL rtl_uString_getToken( rtl_uString ** newStr , rtl_uString * s
     details.
  */
 void SAL_CALL rtl_string2UString( rtl_uString ** newStr, const sal_Char * str, sal_Int32 len, rtl_TextEncoding encoding, sal_uInt32 convertFlags ) SAL_THROW_EXTERN_C();
+
+/* ======================================================================= */
+/* Interning methods */
+
+/** Return a canonical representation for a string.
+
+    A pool of strings, initially empty is maintained privately
+    by the string class. On invocation, if present in the pool
+    the original string will be returned. Otherwise this string,
+    or a copy thereof will be added to the pool and returned.
+
+    @param newStr
+    pointer to the new string.  The pointed-to data must be null or a valid
+    string.
+
+    If an out-of-memory condition occurs, newStr will point to a null pointer
+    upon return.
+
+    @param str
+    pointer to the string to be interned.
+
+    @since UDK 3.2.7
+ */
+void SAL_CALL rtl_uString_intern( rtl_uString ** newStr,
+                                  rtl_uString  * str) SAL_THROW_EXTERN_C();
+
+/** Return a canonical representation for a string.
+
+    A pool of strings, initially empty is maintained privately
+    by the string class. On invocation, if present in the pool
+    the original string will be returned. Otherwise this string,
+    or a copy thereof will be added to the pool and returned.
+
+    @param newStr
+    pointer to the new string.  The pointed-to data must be null or a valid
+    string.
+
+    If an out-of-memory condition occurs, newStr will point to a null pointer
+    upon return.
+
+    @param str
+    a byte character array.  Need not be null-terminated, but must be at
+    least as long as the specified len.
+
+    @param len
+    the length of the byte character array.
+
+    @param encoding
+    the text encoding to use for conversion.
+
+    @param convertFlags
+    flags which control the conversion.  Either use
+    OSTRING_TO_OUSTRING_CVTFLAGS, or see
+    <http://udk.openoffice.org/cpp/man/spec/textconversion.html> for more
+    details.
+
+    @param pInfo
+    pointer to return conversion status in, or NULL.
+
+    @since UDK 3.2.7
+ */
+void SAL_CALL rtl_uString_internConvert( rtl_uString   ** newStr,
+                                         const sal_Char * str,
+                                         sal_Int32        len,
+                                         rtl_TextEncoding encoding,
+                                         sal_uInt32       convertFlags,
+                                         sal_uInt32      *pInfo) SAL_THROW_EXTERN_C();
 
 #ifdef __cplusplus
 }
