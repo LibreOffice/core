@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtopt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:41:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,15 +79,16 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
         "Content/Note",                 //  5
         "Page/Reversed",                //  6
         "Page/Brochure",                //  7
-        "Output/SinglePrintJob",        //  8
-        "Output/Fax",                   //  9
-        "Papertray/FromPrinterSetup",   // 10
-        "Content/Drawing",              // 11 not in SW/Web
-        "Page/LeftPage",                // 12 not in SW/Web
-        "Page/RightPage",               // 13 not in SW/Web
-        "EmptyPages"                    // 14 not in SW/Web
+        "Page/BrochureRightToLeft",     //  8
+        "Output/SinglePrintJob",        //  9
+        "Output/Fax",                   // 10
+        "Papertray/FromPrinterSetup",   // 11
+        "Content/Drawing",              // 12 not in SW/Web
+        "Page/LeftPage",                // 13 not in SW/Web
+        "Page/RightPage",               // 14 not in SW/Web
+        "EmptyPages"                   // 15 not in SW/Web
     };
-    const int nCount = bIsWeb ? 11 : 15;
+    const int nCount = bIsWeb ? 12 : 16;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -132,13 +133,14 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
                     break;
                     case  6: bPrintReverse      = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  7: bPrintProspect      = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  8: bPrintSingleJobs   = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case  9: pValues[nProp] >>= sFaxName;  break;
-                    case 10: bPaperFromSetup    = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 11: bPrintDraw         = *(sal_Bool*)pValues[nProp].getValue() ;  break;
-                    case 12: bPrintLeftPage     = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 13: bPrintRightPage        = *(sal_Bool*)pValues[nProp].getValue();  break;
-                    case 14: bPrintEmptyPages       = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  8: bPrintProspect_RTL  = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  9: bPrintSingleJobs   = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 10: pValues[nProp] >>= sFaxName;  break;
+                    case 11: bPaperFromSetup    = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 12: bPrintDraw         = *(sal_Bool*)pValues[nProp].getValue() ;  break;
+                    case 13: bPrintLeftPage     = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 14: bPrintRightPage        = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case 15: bPrintEmptyPages       = *(sal_Bool*)pValues[nProp].getValue();  break;
                 }
             }
         }
@@ -175,13 +177,14 @@ void    SwPrintOptions::Commit()
             case  5: pValues[nProp] <<=  (sal_Int32)nPrintPostIts       ; break;
             case  6: bVal = bPrintReverse       ; pValues[nProp].setValue(&bVal, rType);  break;
             case  7: bVal = bPrintProspect      ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  8: bVal = bPrintSingleJobs     ; pValues[nProp].setValue(&bVal, rType);  break;
-            case  9: pValues[nProp] <<= sFaxName;  break;
-            case 10: bVal = bPaperFromSetup     ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 11: bVal = bPrintDraw           ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 12: bVal = bPrintLeftPage       ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 13: bVal = bPrintRightPage     ; pValues[nProp].setValue(&bVal, rType);  break;
-            case 14: bVal = bPrintEmptyPages    ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  8: bVal = bPrintProspect_RTL      ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  9: bVal = bPrintSingleJobs     ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 10: pValues[nProp] <<= sFaxName;  break;
+            case 11: bVal = bPaperFromSetup     ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 12: bVal = bPrintDraw           ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 13: bVal = bPrintLeftPage       ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 14: bVal = bPrintRightPage     ; pValues[nProp].setValue(&bVal, rType);  break;
+            case 15: bVal = bPrintEmptyPages    ; pValues[nProp].setValue(&bVal, rType);  break;
         }
     }
     PutProperties(aNames, aValues);
