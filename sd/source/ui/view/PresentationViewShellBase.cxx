@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PresentationViewShellBase.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:06:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,8 +45,9 @@
 #include "DrawDocShell.hxx"
 #endif
 #include "strings.hrc"
-#include "ViewTabBar.hxx"
 #include "UpdateLockManager.hxx"
+#include "framework/FrameworkHelper.hxx"
+#include "framework/PresentationModule.hxx"
 
 #include <sfx2/viewfrm.hxx>
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
@@ -80,7 +81,7 @@ SfxViewShell* __EXPORT PresentationViewShellBase::CreateInstance (
 {
     PresentationViewShellBase* pBase =
         new PresentationViewShellBase(_pFrame, pOldView);
-    pBase->LateInit();
+    pBase->LateInit(framework::FrameworkHelper::msPresentationViewURL);
     return pBase;
 }
 void PresentationViewShellBase::RegisterFactory( USHORT nPrio )
@@ -100,9 +101,9 @@ void PresentationViewShellBase::InitFactory()
 PresentationViewShellBase::PresentationViewShellBase (
     SfxViewFrame* _pFrame,
     SfxViewShell* pOldShell)
-    : ViewShellBase (_pFrame, pOldShell, ViewShell::ST_PRESENTATION)
+    : ViewShellBase (_pFrame, pOldShell)
 {
-    GetUpdateLockManager().Disable();
+    GetUpdateLockManager()->Disable();
 
     // Hide the automatic (non-context sensitive) tool bars.
     if (_pFrame!=NULL && _pFrame->GetFrame()!=NULL)
@@ -128,20 +129,19 @@ PresentationViewShellBase::PresentationViewShellBase (
 
 
 
-ViewTabBar* PresentationViewShellBase::CreateViewTabBar (void)
-{
-    // The ViewTabBar is not supported.
-    return NULL;
-}
-
-
-
-
 PresentationViewShellBase::~PresentationViewShellBase (void)
 {
 }
 
 
+
+
+void PresentationViewShellBase::InitializeFramework (void)
+{
+    com::sun::star::uno::Reference<com::sun::star::frame::XController>
+        xController (GetController());
+    sd::framework::PresentationModule::Initialize(xController);
+}
 
 } // end of namespace sd
 
