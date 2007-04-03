@@ -1,0 +1,80 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XConfigurationChangeRequest.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:44:12 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef __com_sun_star_drawing_framework_XConfigurationChangeRequest_idl__
+#define __com_sun_star_drawing_framework_XConfigurationChangeRequest_idl__
+
+#ifndef __com_sun_star_uno_XInterface_idl__
+#include <com/sun/star/uno/XInterface.idl>
+#endif
+#ifndef __com_sun_star_drawing_framework_ConfigurationChangeEvent_idl__
+#include <com/sun/star/drawing/framework/ConfigurationChangeEvent.idl>
+#endif
+
+module com { module sun { module star { module drawing { module framework {
+
+interface XConfiguration;
+
+/** A single explicit request for a configuration change.
+
+    <p>The one explicitly represented change request may lead to other,
+    implicit, configuration changes when executed.  For example, when the
+    deactivation of a pane is requested, then the view displayed in it has
+    also to be deactivated.</p>
+    <p>The requested change is committed to a configuration only when the
+    <member>execute()</member> method is called.  Configuration change
+    requests are executed asynchronously.  This is done to avoid reentrance
+    problems with objects that are registered as
+    <type>XConfigurationChangeListener</type> and at the same time make
+    configuration change requests.  When the requests were executed
+    synchronously then they would be notified of the changes while their
+    request call has not yet returned.</p>
+    @see XConfiguration
+    @see XConfigurationController
+*/
+interface XConfigurationChangeRequest
+    : ::com::sun::star::uno::XInterface
+{
+    /** Commit the configuration change request represented by the called
+        object to the given configuration.
+        @param xConfiguration
+            This is the configuration to commit the requested change to.
+    */
+    void execute ([in] XConfiguration xConfiguration);
+};
+
+}; }; }; }; }; // ::com::sun::star::drawing::framework
+
+#endif
