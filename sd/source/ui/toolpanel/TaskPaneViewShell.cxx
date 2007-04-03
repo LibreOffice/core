@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TaskPaneViewShell.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:43:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:21:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,15 @@
 #include "helpids.h"
 #include "strings.hrc"
 #include "sdresid.hxx"
+#include "framework/FrameworkHelper.hxx"
+
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_XRESOURCEID_HPP_
+#include <com/sun/star/drawing/framework/XResourceId.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_FRAMEWORK_RESOURCEACTIVATIONMODE_HPP_
+#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
+#endif
+
 #ifndef _SVX_DLG_CTRL_HXX
 #include <svx/dlgctrl.hxx>
 #endif
@@ -106,12 +115,6 @@
 #include <vcl/svapp.hxx>
 #endif
 
-using namespace ::sd::toolpanel;
-#define TaskPaneViewShell
-#include "sdslots.hxx"
-
-
-
 //#define SHOW_TEST_PANEL
 #ifdef SHOW_TEST_PANEL
 #include "TestPanel.hxx"
@@ -122,6 +125,17 @@ using namespace ::sd::toolpanel;
 #endif
 
 #include <vector>
+#include <boost/shared_ptr.hpp>
+
+using namespace ::sd::toolpanel;
+
+#define TaskPaneViewShell
+#include "sdslots.hxx"
+
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using ::sd::framework::FrameworkHelper;
 
 
 namespace sd { namespace toolpanel {
@@ -178,6 +192,9 @@ private:
     InternalIdToPanelIdMap maIndexMap;
 };
 
+
+
+
 namespace {
 
 enum MenuId {
@@ -202,6 +219,21 @@ public:
     }
 };
 
+class ResourceActivationClickHandler
+{
+public:
+    ResourceActivationClickHandler (
+        const ::boost::shared_ptr<FrameworkHelper>& rpFrameworkHelper,
+        const Reference<drawing::framework::XResourceId>& rxResourceId,
+        ControlContainer& rControlContainer);
+    void operator () (TitledControl& rTitledControl);
+
+private:
+    ::boost::shared_ptr<FrameworkHelper> mpFrameworkHelper;
+    Reference<drawing::framework::XResourceId> mxResourceId;
+    ControlContainer& mrControlContainer;
+};
+
 } // end of anonymouse namespace
 
 
@@ -216,18 +248,32 @@ void TaskPaneViewShell::Implementation::Setup (
     sal_uInt32 nId;
     sal_uInt32 nIdOfControlToExpand;
 
+    ::boost::shared_ptr<FrameworkHelper> pFrameworkHelper (FrameworkHelper::Instance(rBase));
+    Reference<drawing::framework::XResourceId> xTaskPaneId (pFrameworkHelper->CreateResourceId(
+        FrameworkHelper::msTaskPaneURL, FrameworkHelper::msRightPaneURL));
+
     // The master page controls.
     nId = pToolPanel->AddControl (
         controls::MasterPagesPanel::CreateControlFactory(rBase),
         SdResId(STR_TASKPANEL_MASTER_PAGE_TITLE),
-        HID_SD_SLIDE_DESIGNS);
+        HID_SD_SLIDE_DESIGNS,
+        ResourceActivationClickHandler(
+            pFrameworkHelper,
+            pFrameworkHelper->CreateResourceId(
+                FrameworkHelper::msMasterPagesTaskPanelURL, xTaskPaneId),
+            pToolPanel->GetControlContainer()));
     AddPanel (nId, PID_MASTER_PAGES);
 
     // Layout Menu.
     nId = pToolPanel->AddControl (
         LayoutMenu::CreateControlFactory(rBase, *pDocument->GetDocSh()),
         SdResId(STR_TASKPANEL_LAYOUT_MENU_TITLE),
-        HID_SD_SLIDE_LAYOUTS);
+        HID_SD_SLIDE_LAYOUTS,
+        ResourceActivationClickHandler(
+            pFrameworkHelper,
+            pFrameworkHelper->CreateResourceId(
+                FrameworkHelper::msLayoutTaskPanelURL, xTaskPaneId),
+            pToolPanel->GetControlContainer()));
     AddPanel (nId, PID_LAYOUT);
     nIdOfControlToExpand = nId;
 
@@ -238,7 +284,12 @@ void TaskPaneViewShell::Implementation::Setup (
         nId = pToolPanel->AddControl (
             controls::CustomAnimationPanel::CreateControlFactory(rBase),
             aControl.GetText(),
-            HID_SD_CUSTOM_ANIMATIONS);
+            HID_SD_CUSTOM_ANIMATIONS,
+            ResourceActivationClickHandler(
+                pFrameworkHelper,
+                    pFrameworkHelper->CreateResourceId(
+                        FrameworkHelper::msCustomAnimationTaskPanelURL, xTaskPaneId),
+                pToolPanel->GetControlContainer()));
         AddPanel (nId, PID_CUSTOM_ANIMATION);
     }
 
@@ -249,7 +300,12 @@ void TaskPaneViewShell::Implementation::Setup (
         nId = pToolPanel->AddControl (
             controls::SlideTransitionPanel::CreateControlFactory(rBase),
             aControl.GetText(),
-            HID_SD_SLIDE_TRANSITIONS);
+            HID_SD_SLIDE_TRANSITIONS,
+            ResourceActivationClickHandler(
+                pFrameworkHelper,
+                    pFrameworkHelper->CreateResourceId(
+                        FrameworkHelper::msSlideTransitionTaskPanelURL, xTaskPaneId),
+                pToolPanel->GetControlContainer()));
         AddPanel (nId, PID_SLIDE_TRANSITION);
     }
 
@@ -287,6 +343,18 @@ void TaskPaneViewShell::Implementation::Setup (
 
 
 
+void TaskPaneViewShell::Initialize (void)
+{
+    if ( ! mbIsInitialized)
+    {
+        mbIsInitialized = true;
+        mpImpl->Setup (mpTaskPane.get(), GetViewShellBase());
+    }
+}
+
+
+
+
 TaskPaneViewShell::TaskPaneViewShell (
     SfxViewFrame* pFrame,
     ViewShellBase& rViewShellBase,
@@ -295,7 +363,6 @@ TaskPaneViewShell::TaskPaneViewShell (
     : ViewShell (pFrame, pParentWindow, rViewShellBase),
       mpImpl(NULL),
       mpTaskPane(NULL),
-      mpTitleToolBox(NULL),
       mbIsInitialized(false),
       mpSubShellManager(),
       mnMenuId(0)
@@ -314,8 +381,7 @@ TaskPaneViewShell::TaskPaneViewShell (
 
     GetParentWindow()->SetHelpId(HID_SD_TASK_PANE);
 
-    PaneDockingWindow* pDockingWindow = static_cast<PaneDockingWindow*>(
-        pParentWindow);
+    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(GetDockingWindow());
     if (pDockingWindow != NULL)
     {
         pDockingWindow->InitializeTitleToolBox();
@@ -393,11 +459,7 @@ void TaskPaneViewShell::ArrangeGUIElements (void)
     Point aOrigin (maViewPos);
     Size aSize (maViewSize);
 
-    if ( ! mbIsInitialized)
-    {
-        mbIsInitialized = true;
-        mpImpl->Setup (mpTaskPane.get(), GetViewShellBase());
-    }
+    Initialize();
 
     // Place the task pane.
     if (mpTaskPane.get() != NULL)
@@ -606,7 +668,7 @@ DockingWindow* TaskPaneViewShell::GetDockingWindow (void)
     DockingWindow* pDockingWindow = NULL;
     while (pParentWindow!=NULL && pDockingWindow==NULL)
     {
-        pDockingWindow = static_cast<DockingWindow*>(pParentWindow);
+        pDockingWindow = dynamic_cast<DockingWindow*>(pParentWindow);
         pParentWindow = pParentWindow->GetParent();
     }
     return pDockingWindow;
@@ -617,6 +679,7 @@ DockingWindow* TaskPaneViewShell::GetDockingWindow (void)
 
 void TaskPaneViewShell::ShowPanel (PanelId nPublicId)
 {
+    Initialize();
     sal_uInt32 nId (mpImpl->GetInternalId (nPublicId));
     if (nId != Implementation::mnInvalidId)
     {
@@ -664,6 +727,33 @@ void TaskPaneViewShell::ShowPanel (PanelId nPublicId)
     // This view shell is not designed to be the main view shell and thus
     // does not support a UNO controller.
     return ::std::auto_ptr<DrawSubController>();
+}
+
+
+
+
+bool TaskPaneViewShell::RelocateToParentWindow (::Window* pParentWindow)
+{
+    ::Window* pOldParentWindow = GetParentWindow();
+    FocusManager::Instance().RemoveLinks(pOldParentWindow, mpTaskPane.get());
+    FocusManager::Instance().RemoveLinks(mpTaskPane.get(), pOldParentWindow);
+
+    ViewShell::RelocateToParentWindow(pParentWindow);
+
+    PaneDockingWindow* pDockingWindow = dynamic_cast<PaneDockingWindow*>(GetDockingWindow());
+    if (pDockingWindow != NULL)
+    {
+        pDockingWindow->InitializeTitleToolBox();
+        mnMenuId = pDockingWindow->AddMenu (
+            String(SdResId(STR_TASKPANEL_MASTER_PAGE_MENU_TITLE)),
+            HID_SD_TASK_PANE_VIEW_MENU,
+            LINK(this, TaskPaneViewShell, ToolboxClickHandler));
+    }
+    FocusManager::Instance().RegisterDownLink(pParentWindow, mpTaskPane.get());
+
+    Resize();
+
+    return true;
 }
 
 
@@ -727,6 +817,52 @@ sal_uInt32
 }
 
 
+
+
+//===== PanelActivation =======================================================
+
+PanelActivation::PanelActivation (ViewShellBase& rBase, TaskPaneViewShell::PanelId nPanelId)
+    : mrBase(rBase),
+      mnPanelId(nPanelId)
+{
+}
+
+void PanelActivation::operator() (bool)
+{
+    toolpanel::TaskPaneViewShell* pTaskPane
+        = dynamic_cast<toolpanel::TaskPaneViewShell*>(
+            framework::FrameworkHelper::Instance(mrBase)
+            ->GetViewShell(framework::FrameworkHelper::msRightPaneURL).get());
+    if (pTaskPane != NULL)
+        pTaskPane->ShowPanel(mnPanelId);
+}
+
+
+
+
+//===== ResourceActivationClickHandler ========================================
+
+ResourceActivationClickHandler::ResourceActivationClickHandler (
+    const ::boost::shared_ptr<FrameworkHelper>& rpFrameworkHelper,
+    const Reference<drawing::framework::XResourceId>& rxResourceId,
+    ControlContainer& rControlContainer)
+    : mpFrameworkHelper(rpFrameworkHelper),
+      mxResourceId(rxResourceId),
+      mrControlContainer(rControlContainer)
+{
+}
+
+
+
+
+void ResourceActivationClickHandler::operator () (TitledControl& rTitledControl)
+{
+    mrControlContainer.SetExpansionState (
+        &rTitledControl,
+        ControlContainer::ES_EXPAND);
+    mpFrameworkHelper->GetConfigurationController()->requestResourceActivation(
+        mxResourceId, drawing::framework::ResourceActivationMode_REPLACE);
+}
 
 
 } } // end of namespace ::sd::toolpanel
