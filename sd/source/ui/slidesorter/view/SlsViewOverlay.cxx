@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:39:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -615,7 +615,7 @@ void MouseOverIndicatorOverlay::SetSlideUnderMouse (
     const model::SharedPageDescriptor& rpDescriptor)
 {
     SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
-    if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager().IsLocked())
+    if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager()->IsLocked())
     {
         model::SharedPageDescriptor pDescriptor;
         if ( ! mpPageUnderMouse.expired())
@@ -657,7 +657,7 @@ void MouseOverIndicatorOverlay::Paint (void)
         if (pDescriptor.get() != NULL)
         {
             SlideSorterViewShell& rViewShell (mrViewOverlay.GetViewShell());
-            if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager().IsLocked())
+            if ( ! rViewShell.GetViewShellBase().GetUpdateLockManager()->IsLocked())
             {
                 SlideSorterView& rView (rViewShell.GetSlideSorterController().GetView());
                 OutputDevice* pDevice = rView.GetWindow();
