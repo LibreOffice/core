@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:22:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:37:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,9 +159,6 @@
 #include "slideshow.hxx"
 #endif
 
-#ifndef SD_PANE_MANAGER_HXX
-#include "PaneManager.hxx"
-#endif
 #ifndef _SD_UNDO_ANIM_HXX
 #include "undoanim.hxx"
 #endif
@@ -171,6 +168,9 @@
 #endif
 #ifndef _SDDLL_HXX
 #include "sddll.hxx"
+#endif
+#ifndef SD_FRAMEWORK_FRAMEWORK_HELPER_HXX
+#include "framework/FrameworkHelper.hxx"
 #endif
 
 #include "EventMultiplexer.hxx"
@@ -210,6 +210,7 @@ using ::com::sun::star::container::XIndexAccess;
 using ::com::sun::star::container::XEnumerationAccess;
 using ::com::sun::star::container::XEnumeration;
 using ::com::sun::star::text::XText;
+using ::sd::framework::FrameworkHelper;
 
 namespace sd {
 
@@ -1907,7 +1908,8 @@ void CustomAnimationPane::onChange( bool bCreate )
     updateControls();
 
     // stop running preview from dialog
-    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >( mrBase.GetPaneManager().GetViewShell() );
+    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
+        FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
     if( pViewShell )
         pViewShell->SetSlideShow( 0 );
 }
@@ -2229,7 +2231,8 @@ void CustomAnimationPane::onPreview( bool bForcePreview )
 
 void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimationNode )
 {
-    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >( mrBase.GetPaneManager().GetViewShell() );
+    DrawViewShell* pViewShell = dynamic_cast< DrawViewShell* >(
+        FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
     if( pViewShell == 0 )
         return;
 
@@ -2247,7 +2250,7 @@ void CustomAnimationPane::preview( const Reference< XAnimationNode >& xAnimation
 
         pViewShell->SetSlideShow( 0 );
         std::auto_ptr<Slideshow> pSlideshow(
-            new Slideshow( pViewShell, pView, pViewShell->GetDoc() ) );
+            new Slideshow( pViewShell, pView, pViewShell->GetDoc(), mrBase.GetViewWindow() ) );
         Reference< XAnimationNode > xNode( xRoot, UNO_QUERY );
         if (pSlideshow->startPreview( mxCurrentPage, xNode ))
             pViewShell->SetSlideShow( pSlideshow.release() );
