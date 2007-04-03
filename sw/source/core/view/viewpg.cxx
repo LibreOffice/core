@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:03:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -484,7 +484,7 @@ void ViewShell::PrintPreViewPage( SwPrtOptions& rOptions,
 // OD 05.05.2003 #i14016# - consider empty pages on calculation of the scaling
 // for a page to be printed.
 void ViewShell::PrintProspect( SwPrtOptions& rOptions,
-                               SfxProgress& rProgress )
+                               SfxProgress& rProgress , BOOL bRTL)
 {
     if( !rOptions.aMulti.GetSelectCount() )
         return;
@@ -714,7 +714,8 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
                                  aSttPageSize.Height() );
             }
 
-            if( 0 == ( nSPg & 1 ) )     // diese muss gespiegel werden
+            short nRtlOfs = bRTL ? 1 : 0;
+            if( 0 == (( nSPg + nRtlOfs) & 1 ) )     // switch for odd number in LTR, even number in RTL
             {
                 const SwPageFrm* pTmp = pStPage;
                 pStPage = pNxtPage;
