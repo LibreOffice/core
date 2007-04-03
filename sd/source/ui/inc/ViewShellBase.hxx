@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ViewShellBase.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:38:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:08:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -32,6 +32,7 @@
  *    MA  02111-1307  USA
  *
  ************************************************************************/
+
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #define SD_VIEW_SHELL_BASE_HXX
 
@@ -49,6 +50,7 @@
 #include <sfx2/viewfac.hxx>
 #endif
 #include <memory>
+#include <boost/shared_ptr.hpp>
 
 class SdDrawDocument;
 class SfxRequest;
@@ -62,7 +64,6 @@ namespace sd {
 class DrawController;
 class DrawDocShell;
 class FormShellManager;
-class PaneManager;
 class PrintManager;
 class ToolBarManager;
 class UpdateLockManager;
@@ -94,15 +95,14 @@ public:
     */
     ViewShellBase (
         SfxViewFrame *pFrame,
-        SfxViewShell* pOldShell,
-        ViewShell::ShellType eDefaultSubShell = ViewShell::ST_NONE);
+        SfxViewShell* pOldShell);
 
     virtual ~ViewShellBase (void);
 
     /** This method is part of the object construction.  It HAS to be called
         after the constructor has created a new object.
     */
-    virtual void LateInit (void);
+    virtual void LateInit (const ::rtl::OUString& rsDefaultView);
 
     ViewShellManager& GetViewShellManager (void) const;
 
@@ -110,9 +110,7 @@ public:
         object.  This is usually the view shell displayed in the center
         pane.
     */
-    ViewShell* GetMainViewShell (void) const;
-
-    PaneManager& GetPaneManager (void);
+    ::boost::shared_ptr<ViewShell> GetMainViewShell (void) const;
 
     /** When given a view frame this static method returns the
         corresponding sd::ViewShellBase object.
@@ -257,7 +255,7 @@ public:
     */
     const Rectangle& getClientRectangle() const;
 
-    UpdateLockManager& GetUpdateLockManager (void) const;
+    ::boost::shared_ptr<UpdateLockManager> GetUpdateLockManager (void) const;
 
     ToolBarManager& GetToolBarManager (void) const;
 
@@ -265,27 +263,28 @@ public:
 
     DrawController& GetDrawController (void) const;
 
+    void SetViewTabBar (const ::rtl::Reference<ViewTabBar>& rViewTabBar);
+
+    /** Return the window that is used by the main view shell to display its
+        view and other UI elements, like scroll bars and rulers.  Ownership
+        of that window remains with the called ViewShellBase object.
+    */
+    ::Window* GetViewWindow (void);
+
 protected:
     osl::Mutex maMutex;
-
-    /** Factory method for creating the ViewTabBar member that allows
-        derived classes to have no ViewTabBar.
-        @return
-            When the ViewTabBar is supported then a new instance of that
-            class is returned.  Otherwise it returns <NULL/>.
-    */
-    virtual ViewTabBar* CreateViewTabBar (void);
 
     virtual void SFX_NOTIFY(SfxBroadcaster& rBC,
         const TypeId& rBCType,
         const SfxHint& rHint,
         const TypeId& rHintType);
 
+    virtual void InitializeFramework (void);
+
 private:
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
     ::std::auto_ptr<ViewShellManager> mpViewShellManager;
-    ::std::auto_ptr<PaneManager> mpPaneManager;
     DrawDocShell* mpDocShell;
     SdDrawDocument* mpDocument;
 
@@ -296,7 +295,7 @@ private:
 
     ::std::auto_ptr<tools::EventMultiplexer> mpEventMultiplexer;
 
-    ::std::auto_ptr<UpdateLockManager> mpUpdateLockManager;
+    ::boost::shared_ptr<UpdateLockManager> mpUpdateLockManager;
 
     /** Determine from the properties of the document shell the initial type
         of the view shell in the center pane.  We use this method to avoid
@@ -304,12 +303,7 @@ private:
         we check that the right type is active and change again if that is
         not the case because something went wrong.
     */
-    ViewShell::ShellType GetInitialViewShellType (void);
-
-    /** Wait for the ViewTabBar to become visible so that its correct height
-        can calculated and the border can be updated.
-    */
-    DECL_LINK(WindowEventHandler,VclWindowEvent*);
+    ::rtl::OUString GetInitialViewShellType (void);
 };
 
 } // end of namespace sd
