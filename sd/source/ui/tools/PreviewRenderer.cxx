@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PreviewRenderer.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:53:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -479,7 +479,8 @@ Image PreviewRenderer::ScaleBitmap (
 
 
 
-void PreviewRenderer::SFX_NOTIFY(SfxBroadcaster&,
+void PreviewRenderer::SFX_NOTIFY(
+    SfxBroadcaster&,
     const TypeId& rBCType,
     const SfxHint& rHint,
     const TypeId& rHintType)
