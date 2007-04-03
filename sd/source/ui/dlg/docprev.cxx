@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docprev.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 13:11:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:41:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #ifndef SD_VIEW_SHELL_HXX
 #include "ViewShell.hxx"
 #endif
+#ifndef SD_VIEW_SHELL_BASE_HXX
+#include "ViewShellBase.hxx"
+#endif
 #ifndef SD_SHOW_VIEW_HXX
 #include "showview.hxx"
 #endif
@@ -94,6 +97,7 @@
 #include "drawview.hxx"
 #endif
 #include "sdpage.hxx"
+#include "sfx2/viewfrm.hxx"
 
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
@@ -240,14 +244,18 @@ void SdDocPreviewWin::startPreview()
 
             if( pPage && (pPage->getTransitionType() != 0) )
             {
-                std::auto_ptr<sd::Slideshow> pSlideShow(
-                    new sd::Slideshow( 0, 0, pDoc ) );
+                SfxViewFrame* pFrame = SfxViewFrame::Current();
+                if (pFrame != NULL)
+                {
+                    std::auto_ptr<sd::Slideshow> pSlideShow(
+                        new sd::Slideshow( 0, 0, pDoc, &pFrame->GetWindow() ) );
 
-                Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
-                Reference< XAnimationNode > xAnimationNode;
+                    Reference< XDrawPage > xDrawPage( pPage->getUnoPage(), UNO_QUERY );
+                    Reference< XAnimationNode > xAnimationNode;
 
-                if (pSlideShow->startPreview( xDrawPage, xAnimationNode, this ))
-                    mpSlideShow = pSlideShow.release();
+                    if (pSlideShow->startPreview( xDrawPage, xAnimationNode, this ))
+                        mpSlideShow = pSlideShow.release();
+                }
             }
         }
     }
