@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:54:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 15:39:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,9 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
 #include <svtools/moduleoptions.hxx>
+#endif
+#ifndef SD_FRAMEWORK_FRAMEWORK_HELPER_HXX
+#include "framework/FrameworkHelper.hxx"
 #endif
 
 #include <svx/dialogs.hrc>
@@ -108,7 +111,6 @@
 #ifndef SD_OUTLINE_VIEW_SHELL_HXX
 #include "OutlineViewShell.hxx"
 #endif
-#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -121,6 +123,28 @@
 #endif
 #include "sdabstdlg.hxx"
 #include <memory>
+
+using ::sd::framework::FrameworkHelper;
+
+namespace {
+
+class OutlineToImpressFinalizer
+{
+public:
+    OutlineToImpressFinalizer (
+        ::sd::ViewShellBase& rBase,
+        SdDrawDocument& rDocument,
+        SvLockBytes& rBytes);
+    void operator() (bool bEventSeen);
+private:
+    ::sd::ViewShellBase& mrBase;
+    SdDrawDocument& mrDocument;
+    SvLockBytes& mrBytes;
+};
+
+
+} //end of anonymous namespace
+
 
 /*************************************************************************
 |*
@@ -347,61 +371,23 @@ void SdModule::OutlineToImpress (SfxRequest& rRequest)
 
                     SfxViewFrame* pViewFrame = pViewSh->GetViewFrame();
 
-                    // When the view frame has not been just created
-                    // we have to switch synchronously to the outline
-                    // view.  (Otherwise the request will be ignored
-                    // anyway.)
-                    ::sd::ViewShellBase* pBase =
-                          static_cast< ::sd::ViewShellBase*>(
-                              pViewFrame->GetViewShell());
-                    pBase->GetPaneManager().RequestMainViewShellChange (
-                        ::sd::ViewShell::ST_OUTLINE,
-                        ::sd::PaneManager::CM_SYNCHRONOUS);
-
-                    // Fetch the new outline view shell.
-                    ::sd::OutlineViewShell* pOutlineShell =
-                          PTR_CAST(::sd::OutlineViewShell, pBase->GetMainViewShell());
-
-                    if (pOutlineShell != NULL)
+                    // When the view frame has not been just created we have
+                    // to switch synchronously to the outline view.
+                    // (Otherwise the request will be ignored anyway.)
+                    ::sd::ViewShellBase* pBase
+                        = dynamic_cast< ::sd::ViewShellBase*>(pViewFrame->GetViewShell());
+                    if (pBase != NULL)
                     {
-                        sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
-                        SvStream* pStream = (SvStream*) pBytes->GetStream();
-                        // mba: the stream can't contain any relative URLs, because we don't have any information about a BaseURL!
-                        if ( pOutlineShell->Read(*pStream, String(), EE_FORMAT_RTF) == 0 )
-                        {
-                            sd::OutlineViewPageChangesGuard aGuard( pView );
-
-                            // Remove the first empty pages
-                            USHORT nPageCount = pDoc->GetPageCount();
-                            pDoc->RemovePage( --nPageCount );  // notes page
-                            pDoc->RemovePage( --nPageCount );  // standard page
-                        }
-
-                        // Call UpdatePreview once for every slide to resync the
-                        // document with the outliner of the OutlineViewShell.
-                        USHORT nPageCount (pDoc->GetSdPageCount(PK_STANDARD));
-                        for (USHORT nIndex=0; nIndex<nPageCount; nIndex++)
-                        {
-                            SdPage* pPage = pDoc->GetSdPage(nIndex, PK_STANDARD);
-                            // Make the page the actual page so that the
-                            // following UpdatePreview() call accesses the
-                            // correct paragraphs.
-                            pView->SetActualPage(pPage);
-                            pOutlineShell->UpdatePreview(pPage, true);
-                        }
-                        // Select the first slide.
-                        SdPage* pPage = pDoc->GetSdPage(0, PK_STANDARD);
-                        pView->SetActualPage(pPage);
-                        pOutlineShell->UpdatePreview(pPage, true);
+                        ::boost::shared_ptr<FrameworkHelper> pHelper (
+                            FrameworkHelper::Instance(*pBase));
+                        pHelper->RequestView(
+                            FrameworkHelper::msOutlineViewURL,
+                            FrameworkHelper::msCenterPaneURL);
+                        pHelper->RunOnConfigurationEvent(
+                            ::rtl::OUString::createFromAscii("ConfigurationUpdateEnd"),
+                                OutlineToImpressFinalizer(*pBase, *pDoc, *pBytes));
                     }
                 }
-
-                // #97231# Undo-Stack needs to be cleared, else the user may remove the
-                // only drawpage and this is a state we cannot handle ATM.
-                SfxUndoManager* pUndoManager = pDocSh->GetUndoManager();
-                DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
-                if(pUndoManager->GetUndoActionCount())
-                    pUndoManager->Clear();
             }
         }
     }
@@ -732,10 +718,10 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
                                   ::sd::ViewShellBase::GetViewShellBase (
                                       pViewFrame);
                             OSL_ASSERT (pBase!=NULL);
-                            ::sd::ViewShell* pViewSh = pBase->GetMainViewShell ();
+                            ::boost::shared_ptr<sd::ViewShell> pViewSh = pBase->GetMainViewShell();
                             SdOptions* pOptions = GetSdOptions(pDoc->GetDocumentType());
 
-                            if (pOptions && pViewSh)
+                            if (pOptions && pViewSh.get())
                             {
                                 // The AutoPilot-document shall be open without its own options
                                 ::sd::FrameView* pFrameView = pViewSh->GetFrameView();
@@ -788,21 +774,14 @@ SfxFrame* SdModule::ExecuteNewDocument( SfxRequest& rReq )
             }
         }
 
-        if( bMakeLayoutVisible )
+        if (bMakeLayoutVisible && pViewFrame!=NULL)
         {
-            SfxDispatcher* pDispatcher = 0;
-
-            if( !pViewFrame && pFrame )
-                pViewFrame = pFrame->GetCurrentViewFrame();
-            if( pViewFrame )
-                pDispatcher = pViewFrame->GetDispatcher();
-
-            if( pDispatcher )
+            // Make the layout menu visible in the tool pane.
+            ::sd::ViewShellBase* pBase = ::sd::ViewShellBase::GetViewShellBase(pViewFrame);
+            if (pBase != NULL)
             {
-                // Make the layout menu visible in the tool pane.
-                SfxBoolItem aMakeToolPaneVisible (ID_VAL_ISVISIBLE, TRUE);
-                SfxUInt32Item aPanelId (ID_VAL_PANEL_INDEX, ::sd::toolpanel::TaskPaneViewShell::PID_LAYOUT);
-                pDispatcher->Execute( SID_TASK_PANE, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aMakeToolPaneVisible, &aPanelId, NULL);
+                FrameworkHelper::Instance(*pBase)->RequestTaskPanel(
+                    FrameworkHelper::msLayoutTaskPanelURL);
             }
         }
     }
@@ -989,3 +968,77 @@ void SdModule::ChangeMedium( ::sd::DrawDocShell* pDocShell, SfxViewFrame* pViewF
         pViewFrame->GetDispatcher()->Execute(SID_SIZE_PAGE, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
     }
 }
+
+
+
+
+//===== OutlineToImpressFinalize ==============================================
+
+namespace {
+
+OutlineToImpressFinalizer::OutlineToImpressFinalizer (
+    ::sd::ViewShellBase& rBase,
+    SdDrawDocument& rDocument,
+    SvLockBytes& rBytes)
+    : mrBase(rBase),
+      mrDocument(rDocument),
+      mrBytes(rBytes)
+{
+}
+
+
+
+
+void OutlineToImpressFinalizer::operator() (bool)
+{
+    // Fetch the new outline view shell.
+    ::sd::OutlineViewShell* pOutlineShell
+        = dynamic_cast<sd::OutlineViewShell*>(
+            FrameworkHelper::Instance(mrBase)->GetViewShell(FrameworkHelper::msCenterPaneURL).get());
+
+    if (pOutlineShell != NULL)
+    {
+        sd::OutlineView* pView = static_cast<sd::OutlineView*>(pOutlineShell->GetView());
+        SvStream* pStream = const_cast<SvStream*>(mrBytes.GetStream());
+        // mba: the stream can't contain any relative URLs, because we don't
+        // have any information about a BaseURL!
+        if ( pOutlineShell->Read(*pStream, String(), EE_FORMAT_RTF) == 0 )
+        {
+            sd::OutlineViewPageChangesGuard aGuard( pView );
+
+            // Remove the first empty pages
+            USHORT nPageCount = mrDocument.GetPageCount();
+            mrDocument.RemovePage( --nPageCount );  // notes page
+            mrDocument.RemovePage( --nPageCount );  // standard page
+        }
+
+        // Call UpdatePreview once for every slide to resync the
+        // document with the outliner of the OutlineViewShell.
+        USHORT nPageCount (mrDocument.GetSdPageCount(PK_STANDARD));
+        for (USHORT nIndex=0; nIndex<nPageCount; nIndex++)
+        {
+            SdPage* pPage = mrDocument.GetSdPage(nIndex, PK_STANDARD);
+            // Make the page the actual page so that the
+            // following UpdatePreview() call accesses the
+            // correct paragraphs.
+            pView->SetActualPage(pPage);
+            pOutlineShell->UpdatePreview(pPage, true);
+        }
+        // Select the first slide.
+        SdPage* pPage = mrDocument.GetSdPage(0, PK_STANDARD);
+        pView->SetActualPage(pPage);
+        pOutlineShell->UpdatePreview(pPage, true);
+    }
+
+
+    // #97231# Undo-Stack needs to be cleared, else the user may remove the
+    // only drawpage and this is a state we cannot handle ATM.
+    ::sd::DrawDocShell* pDocShell = mrDocument.GetDocSh();
+    SfxUndoManager* pUndoManager = pDocShell->GetUndoManager();
+    DBG_ASSERT(pUndoManager, "No UNDO MANAGER ?!?");
+    if(pUndoManager->GetUndoActionCount())
+        pUndoManager->Clear();
+}
+
+
+} // end of anonymous namespace
