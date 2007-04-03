@@ -1,12 +1,12 @@
 /*************************************************************************
-*
+ *
  *  OpenOffice.org - a multi-platform office productivity suite
  *
  *  $RCSfile: binaryreader.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 15:02:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 13:57:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -542,8 +542,8 @@ namespace configmgr
 
                 rtl_TextEncoding const enc = bIsAscii ? RTL_TEXTENCODING_ASCII_US : RTL_TEXTENCODING_UTF8;
 
-                rtl_string2UString( &result.pData, pUTF, nStrLength,
-                                    enc, OSTRING_TO_OUSTRING_CVTFLAGS);
+                rtl_uString_internConvert(&result.pData, pUTF, nStrLength, enc,
+                                          OSTRING_TO_OUSTRING_CVTFLAGS, NULL);
             }
 
             return result;
