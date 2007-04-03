@@ -4,9 +4,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 17:48:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-03 16:32:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,7 +85,6 @@
 #include "app.hrc"
 #include "strings.hrc"
 #include "glob.hrc"
-#include "PaneManager.hxx"
 #ifndef SD_VIEW_SHELL_BASE_HXX
 #include "ViewShellBase.hxx"
 #endif
@@ -218,7 +217,8 @@ void PresentationViewShell::FinishInitialization (
     SwitchPage (nPageNumber);
     WriteFrameViewData();
 
-    mpSlideShow = new sd::Slideshow( this, GetView(), GetDoc() );
+    mpSlideShow = new sd::Slideshow( this, GetView(), GetDoc(),
+        GetViewShellBase().GetViewWindow() );
     mpSlideShow->setRehearseTimings(
         rRequest.GetSlot() == SID_REHEARSE_TIMINGS );
     GetActiveWindow()->GrabFocus();
@@ -232,6 +232,7 @@ void PresentationViewShell::FinishInitialization (
         mpSlideShow = 0;
     }
 
+    Resize();
     GetViewFrame()->Show();
 
     Activate(TRUE);
@@ -299,18 +300,45 @@ void PresentationViewShell::Paint( const Rectangle& rRect, ::sd::Window* )
 
 
 void PresentationViewShell::CreateFullScreenShow (
+    ViewShellBase& rViewShellBase,
+    SfxRequest& rRequest)
+{
+    CreateFullScreenShow(
+        rViewShellBase.GetDocument(),
+        rViewShellBase.GetDocument()->GetSdPage(0, PK_STANDARD),
+        NULL,
+        rRequest);
+}
+
+
+
+
+void PresentationViewShell::CreateFullScreenShow (
     ViewShell* pOriginShell,
     SfxRequest& rRequest)
 {
-    SdDrawDocument* pDoc = pOriginShell->GetDoc();
-    SdPage* pCurrentPage = pOriginShell->GetActualPage();
+    CreateFullScreenShow(
+        pOriginShell->GetDoc(),
+        pOriginShell->GetActualPage(),
+        pOriginShell->GetFrameView(),
+        rRequest);
+}
 
+
+
+
+void PresentationViewShell::CreateFullScreenShow (
+    SdDrawDocument* pDocument,
+    SdPage* pCurrentPage,
+    FrameView* pFrameView,
+    SfxRequest& rRequest)
+{
     SFX_REQUEST_ARG (rRequest, pAlwaysOnTop, SfxBoolItem,
         ATTR_PRESENT_ALWAYS_ON_TOP, FALSE);
     bool bAlwaysOnTop =
         ((rRequest.GetSlot() !=  SID_REHEARSE_TIMINGS) && pAlwaysOnTop )
         ? pAlwaysOnTop->GetValue()
-        : pDoc->getPresentationSettings().mbAlwaysOnTop;
+        : pDocument->getPresentationSettings().mbAlwaysOnTop;
 
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
 
@@ -349,7 +377,7 @@ void PresentationViewShell::CreateFullScreenShow (
         // the new view shell--a prerequisite to process slot calls and
         // initialize its panes--a GrabFocus() has to be called later on.
         SfxTopFrame* pNewFrame = SfxTopFrame::Create (
-            pDoc->GetDocSh(),
+            pDocument->GetDocSh(),
             pWorkWindow,
             PRESENTATION_FACTORY_ID,
             TRUE);
@@ -367,18 +395,25 @@ void PresentationViewShell::CreateFullScreenShow (
             if (pCurrentPage != NULL)
                 nStartPage = (pCurrentPage->GetPageNum() - 1) / 2;
 
-//            pBase->GetViewFrame()->Show();
             // The following GrabFocus() is responsible for activating the
             // new view shell.  Without it the screen remains blank (under
             // Windows and some Linux variants.)
             pBase->GetWindow()->GrabFocus();
 
-            PresentationViewShell* pShell = PTR_CAST(PresentationViewShell, pBase->GetMainViewShell());
+            PresentationViewShell* pShell = dynamic_cast<PresentationViewShell*>(
+                pBase->GetMainViewShell().get());
             if (pShell != NULL)
+            {
+                // Initialize the new presentation view shell with a copy of
+                // the frame view of the current view shell.  This avoids
+                // that changes made by the presentation have an effect on
+                // the other view shells.
+                FrameView* pFrameViewCopy = new FrameView(pDocument, pFrameView);
                 pShell->FinishInitialization (
-                    pOriginShell->GetFrameView(),
+                    pFrameViewCopy,
                     rRequest,
                     nStartPage);
+            }
         }
     }
 }
