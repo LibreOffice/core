@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingDialogProvider.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:12:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -48,12 +48,16 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.ButtonGroup;
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JDialog;
+import javax.swing.JEditorPane;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
@@ -67,10 +71,11 @@ public class SwingDialogProvider implements XDialogProvider{
     private JDialog m_jInspectorDialog = new JDialog();
     private JTabbedPane m_jTabbedPane1 = new JTabbedPane();
     private Container cp;
-    private static String SINVOKE = "Invoke";
 
-
-
+    private JMenu jMnuOptions = new JMenu("Options");
+    private JRadioButtonMenuItem jJavaMenuItem = null;
+    private JRadioButtonMenuItem jCPlusPlusMenuItem = null;
+    private JRadioButtonMenuItem jBasicMenuItem = null;
 
     /** Creates a new instance of SwingPopupMentuProvider */
     public SwingDialogProvider(Inspector._Inspector _oInspector, String _sTitle) {
@@ -85,7 +90,7 @@ public class SwingDialogProvider implements XDialogProvider{
         m_jInspectorDialog.addWindowListener(new InspectorWindowAdapter());
         m_jInspectorDialog.addComponentListener(new InspectorComponentAdapter());
         m_jInspectorDialog.setTitle(_sTitle);
-        m_jInspectorDialog.setLocation(300, 300);
+        m_jInspectorDialog.setLocation(100, 50);
         m_jInspectorDialog.getContentPane().add(m_jTabbedPane1);
     }
 
@@ -126,11 +131,16 @@ public class SwingDialogProvider implements XDialogProvider{
 
 
         public InspectorPane getSelectedInspectorPage(){
-            InspectorPane oInspectorPane = null;
             int nIndex = m_jTabbedPane1.getSelectedIndex();
-            if (nIndex > -1){
-                JPanel jPnlContainerInspectorPanel = (JPanel) m_jTabbedPane1.getComponentAt(nIndex);
-                String sInspectorPanelTitle = m_jTabbedPane1.getTitleAt(nIndex);
+            return getInspectorPage(nIndex);
+        }
+
+
+        public InspectorPane getInspectorPage(int _nIndex){
+            InspectorPane oInspectorPane = null;
+            if (_nIndex > -1){
+                JPanel jPnlContainerInspectorPanel = (JPanel) m_jTabbedPane1.getComponentAt(_nIndex);
+                String sInspectorPanelTitle = m_jTabbedPane1.getTitleAt(_nIndex);
                 oInspectorPane = (InspectorPane) m_oInspector.getInspectorPages().get(sInspectorPanelTitle);
             }
             return oInspectorPane;
@@ -181,7 +191,7 @@ public class SwingDialogProvider implements XDialogProvider{
 
         private void initializePopupMenu(){
             m_jPopupMenu.add(getInspectMenuItem("Inspect"));
-            m_jPopupMenu.add(getSourceCodeMenuItem("Add to Sourcecode"));
+            m_jPopupMenu.add(getSourceCodeMenuItem(SADDTOSOURCECODE));
             m_jPopupMenu.add(getInvokeMenuItem(SINVOKE));
             m_jPopupMenu.addSeparator();
             m_jPopupMenu.add(getHelpMenuItem("Help"));
@@ -227,7 +237,7 @@ public class SwingDialogProvider implements XDialogProvider{
 
         private void addHelpMenu(JMenuBar _jInspectMenuBar){
             JMenu jMnuHelp = new JMenu("Help");
-            jMnuHelp.add(getHelpMenuItem("Object Inspector Help"));
+            jMnuHelp.add(getHelpMenuItem("Idl-Help"));
             _jInspectMenuBar.add(jMnuHelp);
         }
 
@@ -235,6 +245,7 @@ public class SwingDialogProvider implements XDialogProvider{
         private JMenuItem getHelpMenuItem(String _sMenuTitle){
             JMenuItem jMnuHelpItem = new JMenuItem(_sMenuTitle);
             jMnuHelpItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
+            jMnuHelpItem.setMnemonic('H');
             jMnuHelpItem.addActionListener(new ActionListener(){
                 public void actionPerformed(java.awt.event.ActionEvent evt) {
                     m_oInspector.openIdlFileforSelectedNode();
@@ -306,11 +317,62 @@ public class SwingDialogProvider implements XDialogProvider{
             _jInspectMenuBar.add(jMnuInspect);
         }
 
+        public int getLanguage(){
+            return XLanguageSourceCodeGenerator.nJAVA;
+        }
+
+
+        public void selectSourceCodeLanguage(int _nLanguage){
+            switch (_nLanguage){
+                case XLanguageSourceCodeGenerator.nJAVA:
+                    jJavaMenuItem.setSelected(true);
+                    break;
+                case XLanguageSourceCodeGenerator.nCPLUSPLUS:
+                    jCPlusPlusMenuItem.setSelected(true);
+                    break;
+                case XLanguageSourceCodeGenerator.nBASIC:
+                    jBasicMenuItem.setSelected(true);
+                    break;
+                default:
+                    System.out.println("Warning: Sourcecode language is not defined!");
+            }
+        }
+
+        private JRadioButtonMenuItem addLanguageMenuItem(ButtonGroup _group, String _sLanguageTitle, boolean _bSelect, char _sMnemonic, final int _nLanguage){
+            JRadioButtonMenuItem jMenuItem = new JRadioButtonMenuItem(_sLanguageTitle, _bSelect);
+            jMenuItem.setMnemonic(_sMnemonic);
+            _group.add(jMenuItem);
+            jMenuItem.addActionListener(new ActionListener(){
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    m_oInspector.setSourceCodeLanguage(_nLanguage);
+                }
+            });
+            return jMenuItem;
+        }
+
+
+        public String getIDLPath(){
+            return this.m_oInspector.getIDLPath();
+        }
+
         private void addOptionsMenu(JMenuBar _jInspectMenuBar){
-            JMenu jMnuOptions = new JMenu("Options");
-            JMenuItem jMnuItemJava = new JMenuItem("Create Java Sourcecode");
-            jMnuItemJava.setSelected(true);
-            jMnuOptions.add(jMnuItemJava);
+            ButtonGroup oButtonGroup = new ButtonGroup();
+            jJavaMenuItem = addLanguageMenuItem(oButtonGroup, "Generate Java Sourcecode", true, 'J', XLanguageSourceCodeGenerator.nJAVA);
+            jMnuOptions.add(jJavaMenuItem);
+            jCPlusPlusMenuItem = addLanguageMenuItem(oButtonGroup, "Generate C++ Sourcecode", false, 'C', XLanguageSourceCodeGenerator.nCPLUSPLUS);
+            jMnuOptions.add(jCPlusPlusMenuItem);
+            jBasicMenuItem = addLanguageMenuItem(oButtonGroup, "Generate OpenOffice.org Basic Sourcecode", false, 'B', XLanguageSourceCodeGenerator.nBASIC);
+            jMnuOptions.add(jBasicMenuItem);
+            jMnuOptions.addSeparator();
+            JMenuItem jMenuItem = new JMenuItem("Path to SDK-Installation");
+            jMenuItem.setMnemonic('I');
+            jMenuItem.addActionListener(new ActionListener(){
+                public void actionPerformed(java.awt.event.ActionEvent evt) {
+                    m_oInspector.assignSDKPath();
+                }
+            });
+
+            jMnuOptions.add(jMenuItem);
             _jInspectMenuBar.add(jMnuOptions);
         }
 
@@ -319,12 +381,12 @@ public class SwingDialogProvider implements XDialogProvider{
             JMenuBar jMenuBar1 = new javax.swing.JMenuBar();
             addFileMenu(jMenuBar1);
             addInspectMenu(jMenuBar1);
-//            JMenu jMnuEdit = new JMenu("Edit");
-//            JMenu jMnuView = new JMenu("View");
-//            addOptionsMenu(jMenuBar1);
+            JMenu jMnuEdit = new JMenu("Edit");
+            JMenu jMnuView = new JMenu("View");
+            addOptionsMenu(jMenuBar1);
             jMenuBar1.setFont(new java.awt.Font("Dialog", 0, 12));
-//            jMenuBar1.add(jMnuEdit);
-//            jMenuBar1.add(jMnuView);
+            jMenuBar1.add(jMnuEdit);
+            jMenuBar1.add(jMnuView);
             addHelpMenu(jMenuBar1);
             addMenuBar(jMenuBar1);
         }
@@ -341,12 +403,12 @@ public class SwingDialogProvider implements XDialogProvider{
 
 
 
-        public void enableInvokeMenuItem(boolean _bdoEnable){
+        public void enablePopupMenuItem(String _sMenuTitle, boolean _bdoEnable){
             Component[] oComponents = m_jPopupMenu.getComponents();
             for (int i = 0; i < oComponents.length; i++){
                 if (oComponents[i] instanceof JMenuItem){
                     JMenuItem jMenuItem = (JMenuItem) oComponents[i];
-                    if (jMenuItem.getText().equals(SINVOKE)){
+                    if (jMenuItem.getText().equals(_sMenuTitle)){
                         jMenuItem.setEnabled(_bdoEnable);
                     }
                 }
@@ -384,5 +446,4 @@ public class SwingDialogProvider implements XDialogProvider{
                 m_jTabbedPane1.addTab(_sTitle, (Component) _oContainer);
             }
         }
-
 }
