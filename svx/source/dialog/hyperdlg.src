@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:40:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -934,7 +934,7 @@ String RID_SVXSTR_HYPERDLG_HLDOCTP
 String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
 {
     Text [ de ] = "Erstellen Sie einen Hyperlink zu einem bestehenden Dokument oder ein Ziel innerhalb eines Dokumentes." ;
-    Text [ en-US ] = "This is where you create a hyperlink to an exisitng document or a target within a document." ;
+    Text [ en-US ] = "This is where you create a hyperlink to an existing document or a target within a document." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCNTP
