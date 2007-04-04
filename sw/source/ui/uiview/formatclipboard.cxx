@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatclipboard.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:22:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:18:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,6 +115,7 @@
 #ifndef _SWUNDO_HXX
 #include <swundo.hxx>           // fuer die UndoIds
 #endif
+#include <boost/shared_ptr.hpp>
 
 //#define FORMAT_PAINTBRUSH_ALSO_COPY_NUMBERFORMAT_FOR_TABLES 1
 
@@ -151,7 +152,7 @@ FN_NUMBER_NEWSTART, FN_NUMBER_NEWSTART, \
 FN_NUMBER_NEWSTART_AT, FN_NUMBER_NEWSTART_AT,
 
 SfxItemSet* lcl_CreateEmptyItemSet( int nSelectionType, SfxItemPool& rPool
-            , bool bNoCharacterFormats=false, bool bNoParagraphFormats=false )
+            , bool bNoCharacterFormats = false, bool bNoParagraphFormats = false )
 {
     SfxItemSet* pItemSet = 0;
     if( nSelectionType & (SwWrtShell::SEL_FRM | SwWrtShell::SEL_OLE | SwWrtShell::SEL_GRF) )
@@ -500,6 +501,41 @@ void SwFormatClipboard::Copy( SwWrtShell& rWrtShell, SfxItemPool& rPool, bool bP
     rWrtShell.Pop(FALSE);
     rWrtShell.EndAction();
 }
+typedef boost::shared_ptr< SfxPoolItem > SfxPoolItemPtr;
+typedef std::vector< SfxPoolItemPtr > ItemVector;
+// #144857# collect all PoolItems from the applied styles
+void lcl_AppendSetItems( ItemVector& rItemVector, const SfxItemSet& rStyleAttrSet )
+{
+    const USHORT*  pRanges = rStyleAttrSet.GetRanges();
+    while( *pRanges )
+    {
+        for ( USHORT nWhich = *pRanges; nWhich <= *(pRanges+1); ++nWhich )
+        {
+            const SfxPoolItem* pItem;
+            if( SFX_ITEM_SET == rStyleAttrSet.GetItemState( nWhich, sal_False, &pItem ) )
+            {
+                rItemVector.push_back( SfxPoolItemPtr( pItem->Clone() ) );
+            }
+        }
+        pRanges += 2;
+    }
+}
+// #144857# remove all items that are inherited from the styles
+void lcl_RemoveEqualItems( SfxItemSet& rTemplateItemSet, ItemVector& rItemVector )
+{
+    ItemVector::iterator aEnd = rItemVector.end();
+    ItemVector::iterator aIter = rItemVector.begin();
+    while( aIter != aEnd )
+    {
+        const SfxPoolItem* pItem;
+        if( SFX_ITEM_SET == rTemplateItemSet.GetItemState( (*aIter)->Which(), sal_True, &pItem ) &&
+            *pItem == *(*aIter) )
+        {
+            rTemplateItemSet.ClearItem( (*aIter)->Which() );
+        }
+        ++aIter;
+    }
+}
 
 void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPool
                               , bool bNoCharacterFormats, bool bNoParagraphFormats )
@@ -515,6 +551,7 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
     rWrtShell.StartAction();
     rWrtShell.StartUndo(UNDO_INSATTR);
 
+    ItemVector aItemVector;
     if(pPool) //to find the styles we need the pool
     {
         if( nSelectionType & SwWrtShell::SEL_TXT )
@@ -525,6 +562,8 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
                 if( pStyle )
                 {
                     SwFmtCharFmt aFmt(pStyle->GetCharFmt());
+                    // #144857# collect items from character style
+                    lcl_AppendSetItems( aItemVector, aFmt.GetCharFmt()->GetAttrSet());
                     USHORT nFlags=0; //(nMode & KEY_SHIFT) ? SETATTR_DONTREPLACE : SETATTR_DEFAULT;
                     rWrtShell.SetAttr( aFmt, nFlags );
                 }
@@ -533,7 +572,11 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
             {
                 SwDocStyleSheet* pStyle = (SwDocStyleSheet*)pPool->Find(m_aParaStyle, SFX_STYLE_FAMILY_PARA);
                 if( pStyle )
+                {
+                    // #144857# collect items from paragraph style
+                    lcl_AppendSetItems( aItemVector, pStyle->GetCollection()->GetAttrSet());
                     rWrtShell.SetTxtFmtColl( pStyle->GetCollection() );
+                }
             }
         }
     }
@@ -552,10 +595,12 @@ void SwFormatClipboard::Paste( SwWrtShell& rWrtShell, SfxStyleSheetBasePool* pPo
         {
             SfxItemSet* pTemplateItemSet = lcl_CreateEmptyItemSet(
                               nSelectionType, *m_pItemSet->GetPool()
-                            , bNoCharacterFormats, bNoParagraphFormats  );
+                              , bNoCharacterFormats, bNoParagraphFormats );
             if(pTemplateItemSet)
             {
                 pTemplateItemSet->Put( *m_pItemSet );
+                // #144857# only _set_ attributes that differ from style attributes should be applied - the style is applied anyway
+                lcl_RemoveEqualItems( *pTemplateItemSet, aItemVector );
 
                 if( nSelectionType & (SwWrtShell::SEL_FRM | SwWrtShell::SEL_OLE | SwWrtShell::SEL_GRF) )
                     rWrtShell.SetFlyFrmAttr(*pTemplateItemSet);
