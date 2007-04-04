@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconflayer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:22:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,6 +153,26 @@ uno::Any translateToOOo( const ConfigurationValue aValue, GConfValue *aGconfValu
                 return uno::makeAny( (sal_Int32) 1 );
             else if( aProxyMode.equals( rtl::OUString::createFromAscii( "none" ) ) )
                 return uno::makeAny( (sal_Int32) 0 );
+        }
+            break;
+
+        case SETTING_NO_PROXY_FOR:
+        {
+            rtl::OStringBuffer aBuffer;
+            if( (GCONF_VALUE_LIST == aGconfValue->type) && (GCONF_VALUE_STRING == gconf_value_get_list_type(aGconfValue)) )
+            {
+                GSList * list = gconf_value_get_list(aGconfValue);
+                for(; list; list = g_slist_next(list))
+                {
+                    aBuffer.append(gconf_value_get_string((GConfValue *) list->data));
+                    aBuffer.append(";");
+                }
+                // Remove trailing ";"
+                aBuffer.setLength(aBuffer.getLength()-1);
+                return uno::makeAny(rtl::OStringToOUString(aBuffer.makeStringAndClear(), RTL_TEXTENCODING_UTF8));
+            }
+            else
+                g_warning( "unexpected type for ignore_hosts" );
         }
             break;
 
@@ -420,6 +440,15 @@ rtl::OUString SAL_CALL GconfLayer::getTimestamp( void )
                 case GCONF_VALUE_STRING:
                     nHashCode ^= (sal_Int32) g_str_hash( gconf_value_get_string( aGconfValue ) );
                     break;
+
+                case GCONF_VALUE_LIST:
+                    if( GCONF_VALUE_STRING == gconf_value_get_list_type( aGconfValue ) )
+                    {
+                        GSList *list = gconf_value_get_list( aGconfValue );
+                        for(; list; list = g_slist_next(list))
+                            nHashCode ^= (sal_Int32) g_str_hash( gconf_value_get_string((GConfValue *) list->data) );
+                        break;
+                    }
 
                 default:
                     fprintf( stderr, "getTimestamp: Type not handled.\n" );
