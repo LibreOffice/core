@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:21:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:24:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,9 @@
 #include <rtl/digest.h>
 #endif
 
+#include "pdffontcache.hxx"
+
+
 #include <vector>
 #include <map>
 #include <hash_map>
@@ -107,6 +110,7 @@ namespace vcl
 
 class PDFSalLayout;
 class PDFStreamIf;
+class Matrix3;
 
 class PDFWriterImpl
 {
@@ -525,6 +529,27 @@ public:
         PDFAddStream() : m_pStream( NULL ), m_nStreamObject( 0 ), m_bCompress( true ) {}
     };
 
+
+    // helper structure for drawLayout and friends
+    struct PDFGlyph
+    {
+        Point       m_aPos;
+        sal_Int32   m_nNativeWidth;
+        sal_Int32   m_nGlyphId;
+        sal_Int32   m_nMappedFontId;
+        sal_uInt8   m_nMappedGlyphId;
+
+        PDFGlyph( const Point& rPos,
+                  sal_Int32 nNativeWidth,
+                  sal_Int32 nGlyphId,
+                  sal_Int32 nFontId,
+                  sal_uInt8 nMappedGlyphId )
+        : m_aPos( rPos ), m_nNativeWidth( nNativeWidth ), m_nGlyphId( nGlyphId ),
+          m_nMappedFontId( nFontId ), m_nMappedGlyphId( nMappedGlyphId )
+        {}
+    };
+
+
     static const sal_Char* getStructureTag( PDFWriter::StructElement );
     static const sal_Char* getAttributeTag( PDFWriter::StructAttribute eAtr );
     static const sal_Char* getAttributeValueTag( PDFWriter::StructAttributeValue eVal );
@@ -601,6 +626,7 @@ private:
     FontSubsetData                      m_aSubsets;
     FontEmbedData                       m_aEmbeddedFonts;
     sal_Int32                           m_nNextFID;
+    PDFFontCache                        m_aFontCache;
 
     sal_Int32                           m_nInheritedPageWidth;  // in inch/72
     sal_Int32                           m_nInheritedPageHeight; // in inch/72
@@ -832,10 +858,12 @@ i12626
     void appendLiteralStringEncrypt( rtl::OStringBuffer& rInString, const sal_Int32 nInObjectNumber, rtl::OStringBuffer& rOutBuffer );
 
     /* creates fonts and subsets that will be emitted later */
-    void registerGlyphs( int nGlyphs, sal_Int32* pGlyphs, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, ImplFontData* pFallbackFonts[] );
+    void registerGlyphs( int nGlyphs, sal_Int32* pGlyphs, sal_Int32* pGlpyhWidths, sal_Unicode* pUnicodes, sal_uInt8* pMappedGlyphs, sal_Int32* pMappedFontObjects, ImplFontData* pFallbackFonts[] );
 
     /*  emits a text object according to the passed layout */
     /* TODO: remove rText as soon as SalLayout will change so that rText is not necessary anymore */
+    void drawVerticalGlyphs( const std::vector<PDFGlyph>& rGlyphs, rtl::OStringBuffer& rLine, const Point& rAlignOffset, const Matrix3& rRotScale, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight );
+    void drawHorizontalGlyphs( const std::vector<PDFGlyph>& rGlyphs, rtl::OStringBuffer& rLine, const Point& rAlignOffset, double fAngle, double fXScale, double fSkew, sal_Int32 nFontHeight, sal_Int32 nPixelFontHeight );
     void drawLayout( SalLayout& rLayout, const String& rText, bool bTextLines );
     void drawRelief( SalLayout& rLayout, const String& rText, bool bTextLines );
     void drawShadow( SalLayout& rLayout, const String& rText, bool bTextLines );
