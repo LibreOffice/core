@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_extd.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:40:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:07:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,11 @@ ImplFontEntry* ImplX11FontData::CreateFontInstance( ImplFontSelectData& rFSD ) c
 {
     ImplFontEntry* pEntry = new ImplFontEntry( rFSD );
     return pEntry;
+}
+
+sal_IntPtr ImplX11FontData::GetFontId() const
+{
+    return reinterpret_cast<sal_IntPtr>(&mrXlfd);
 }
 
 // --------------------------------------------------------------------------
