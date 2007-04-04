@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingUnoMethodNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:13:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -48,14 +48,20 @@ import java.util.Vector;
 public class SwingUnoMethodNode extends SwingUnoNode implements ActionListener, XUnoMethodNode{
 
     private UnoMethodNode m_oUnoMethodNode;
+    private XDialogProvider m_xDialogProvider = null;
 
-    public SwingUnoMethodNode(XIdlMethod _xIdlMethod, Object _oUnoObject) {
+    public SwingUnoMethodNode(XIdlMethod _xIdlMethod, Object _oUnoObject, XDialogProvider _xDialogProvider) {
         super(_oUnoObject);
         m_oUnoMethodNode = new UnoMethodNode(_xIdlMethod, _oUnoObject, this);
+        m_xDialogProvider = _xDialogProvider;
         setUserObject(m_oUnoMethodNode.getNodeDescription());
         if (m_oUnoMethodNode.isFoldable()){
             setFoldable(true);
         }
+    }
+
+    public boolean isFoldable(){
+        return m_oUnoMethodNode.isFoldable();
     }
 
     public String getName(){
@@ -71,6 +77,9 @@ public class SwingUnoMethodNode extends SwingUnoNode implements ActionListener, 
         return sClassName;
     }
 
+    public String getAnchor(){
+        return m_oUnoMethodNode.getAnchor();
+    }
 
     public Object invoke(Object _oUnoObject, Object[] _oParameters) throws com.sun.star.uno.Exception{
         return m_oUnoMethodNode.invoke(_oUnoObject, _oParameters);
@@ -105,18 +114,27 @@ public class SwingUnoMethodNode extends SwingUnoNode implements ActionListener, 
         return m_oUnoMethodNode.isInvoked();
     }
 
+    public boolean isInvokable(){
+        return m_oUnoMethodNode.isInvokable();
+    }
+
     public boolean isPrimitive() {
         return m_oUnoMethodNode.isPrimitive();
     }
 
     public void actionPerformed(ActionEvent e){
-        openIdlDescription();
+        openIdlDescription(m_xDialogProvider.getIDLPath());
     }
 
     public Vector getMethodObjects(){
         MethodParametersDialog oMethodParametersDialog = new MethodParametersDialog(this);
         oMethodParametersDialog.addActionListener(this);
         return oMethodParametersDialog.getMethodObjects();
+    }
+
+
+    public String getParameterDescription(){
+        return m_oUnoMethodNode.getParameterDescription();
     }
 
 
