@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:29:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:49:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -717,7 +717,7 @@ OUString FirstStartWizard::getLicensePath()
     OString aMgrName = OString("dkt") + OString::valueOf((sal_Int32)SUPD, 10);
     AllSettings aSettings(Application::GetSettings());
     aLocale = aSettings.GetUILocale();
-    ResMgr::SearchCreateResMgr(aMgrName, aLocale);
+    ResMgr* pLocalResMgr = ResMgr::SearchCreateResMgr(aMgrName, aLocale);
 
     aLangString = aLocale.Language;
     if ( aLocale.Country.getLength() != 0 )
@@ -745,6 +745,7 @@ OUString FirstStartWizard::getLicensePath()
         + aLangString
         + OUString::createFromAscii(szUNXLicenseExt);
 #endif
+    delete pLocalResMgr;
     return aLicensePath;
 }
 }
