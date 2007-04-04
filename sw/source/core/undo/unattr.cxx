@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unattr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:48:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -963,7 +963,7 @@ SwUndoDefaultAttr::SwUndoDefaultAttr( const SfxItemSet& rSet )
     : SwUndo( UNDO_SETDEFTATTR ), pOldSet( 0 ), pTabStop( 0 )
 {
     const SfxPoolItem* pItem;
-    if( rSet.GetItemState( RES_PARATR_TABSTOP, FALSE, &pItem ) )
+    if( SFX_ITEM_SET == rSet.GetItemState( RES_PARATR_TABSTOP, FALSE, &pItem ) )
     {
         pTabStop = (SvxTabStopItem*)pItem->Clone();     // gesondert merken, aendert sich !!!
         if( 1 != rSet.Count() )         // gibts noch mehr Attribute ?
