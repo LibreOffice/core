@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.c,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-03-28 07:17:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2568,6 +2568,11 @@ int DoesVerticalSubstitution( TrueTypeFont *ttf, int bvertical)
 }
 
 #endif
+
+int GetTTGlyphCount( TrueTypeFont* ttf )
+{
+    return ttf->nglyphs;
+}
 
 TTSimpleGlyphMetrics *GetTTSimpleGlyphMetrics(TrueTypeFont *ttf, sal_uInt16 *glyphArray, int nGlyphs, int mode)
 {
