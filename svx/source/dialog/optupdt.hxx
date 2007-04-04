@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:46:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,6 +64,9 @@ private:
     FixedText           m_aDestPathLabel;
     FixedText           m_aDestPath;
     PushButton          m_aChangePathButton;
+    FixedText           m_aLastChecked;
+    rtl::OUString       m_aNeverChecked;
+    rtl::OUString       m_aLastCheckedTemplate;
 
     DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
     DECL_LINK(  CheckNowHdl_Impl, PushButton* ) ;
@@ -73,6 +76,8 @@ private:
     void        CalcButtonWidth();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameReplace > m_xUpdateAccess;
+
+    void                    UpdateLastCheckedText();
 
 public:
     SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSet& rSet );

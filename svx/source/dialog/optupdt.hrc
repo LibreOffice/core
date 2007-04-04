@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:48:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:45:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,8 @@
 #define FT_DESTPATHLABEL 17
 #define FT_DESTPATH      18
 #define PB_CHANGEPATH    19
+#define FT_LASTCHECKED   20
+#define STR_NEVERCHECKED 21
 
 
 #endif // #ifndef _SVX_OPTUPDT_HRC
