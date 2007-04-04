@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLanguageSourceCodeGenerator.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:15:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:24:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -42,17 +42,31 @@ import java.util.Vector;
 
 public interface XLanguageSourceCodeGenerator {
 
+    public static final int nJAVA = 0;
+    public static final int nCPLUSPLUS = 1;
+    public static final int nBASIC = 2;
+
     public String getHeaderSourceCode(Object _oUnoObject, String _sClassName, TypeClass _aTypeClass);
+
+    public String getFinalHeaderStatements();
+
+    public void assignqueryInterfaceHeaderSourceCode();
 
     public String getMainMethodSignatureSourceCode(XUnoNode _oUnoNode, String _soReturnObjectDescription);
 
     public String getMethodTerminationSourceCode();
 
-    public String getqueryInterfaceSourceCode(String _sReturnValueDescription, String _sShortClassName, String _sObjectDescription);
+    public String getStatementTerminationCharacter();
 
-    public String getPropertyValueGetterSourceCode(String _sPropertyName, String _sReturnVariableName, String _sIncomingObjectName);
+    public boolean needsqueryInterface();
 
-    public String getObjectTypeDescription(String sShortClassName);
+    public String getqueryInterfaceSourceCode(String _sReturnValueDescription, String _sClassName, String _sObjectDescription);
+
+    public String getPropertyValueGetterSourceCode(String _sPropertyName, String _sReturnVariableName, String _sIncomingObjectName, TypeClass _aTypeClass, String _sTypeName);
+
+    public String getStructSourceCode(String _sReturnVariableDescription, String _sObjectDescription, String _sMember);
+
+    public String getObjectTypeDescription(String _sClassName, boolean _bAsHeader);
 
     public String getbooleanTypeDescription();
 
@@ -78,12 +92,21 @@ public interface XLanguageSourceCodeGenerator {
 
     public String getstringTypeDescription(boolean _bAsHeaderSourceCode);
 
-    public String gettypeTypeDescription();
+    public String gettypeTypeDescription(boolean _bAsHeaderSourceCode);
 
     public String getanyTypeDescription(boolean _bAsHeaderSourceCode);
 
     public String getArrayDeclaration(String sVariableDeclaration);
 
-    public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean _bIsArray);
+    public String getVariableDeclaration(String _sTypeString, String _sVariableName, boolean _bIsArray, TypeClass aTypeClass, boolean _bInitialize);
 
+    public String getMethodSeparator();
+
+    public String getStringValue(String _sValue);
+
+    public String getConvertedSourceCodeValueOfObject(String _sReturnVariableName, String _sObjectDescription, TypeClass _aTypeClass, String _sTypeName);
+
+    public String castLiteral(String _sExpression, TypeClass _aTypeClass);
+
+    public String getCommentSign();
 }
