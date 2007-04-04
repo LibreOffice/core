@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoMethodNode.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:14:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -67,6 +67,17 @@ public class UnoMethodNode extends UnoNode{
         return ((!this.isPrimitive()) &&  (getTypeClass().getValue() != TypeClass.VOID_value));
     }
 
+    protected boolean isInvokable(){
+        boolean bisFoldable = true;
+        XIdlClass[] xIdlClasses = m_xIdlMethod.getParameterTypes();
+        for (int i = 0; i < xIdlClasses.length; i++){
+            bisFoldable = Introspector.isPrimitive(xIdlClasses[i].getTypeClass());
+            if (!bisFoldable){
+                return false;
+            }
+        }
+        return bisFoldable;
+    }
 
     public XIdlMethod getXIdlMethod(){
         return m_xIdlMethod;
@@ -154,7 +165,7 @@ public class UnoMethodNode extends UnoNode{
     }
 
 
-    private String getParameterDescription(){
+    public String getParameterDescription(){
         ParamInfo[] paramInfo = m_xIdlMethod.getParameterInfos();
         String sParameters = "";
         String sStandardMethodDisplayText = m_xIdlMethod.getReturnType().getName() + " " + m_xIdlMethod.getName() + " (" + sParameters + " )";
