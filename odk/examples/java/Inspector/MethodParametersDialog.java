@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodParametersDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:11:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -240,7 +240,7 @@ public class MethodParametersDialog extends JDialog{
                     m_jComponent = jTextField;
                     break;
                 default:
-                    System.out.println("Cannot evaluate Parameter of type" + m_aTypeClass.getValue());
+                    System.out.println("Type " + m_aTypeClass.getValue() + " not yet defined in 'ParameterPanel()'");
             }
             add(jPnlCenter1, java.awt.BorderLayout.CENTER);
             JPanel jPnlEast = new JPanel();
