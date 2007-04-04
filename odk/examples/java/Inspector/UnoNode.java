@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoNode.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:14:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:23:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -139,28 +139,34 @@ public class UnoNode{
         sLabel = _sLabel;
     }
 
-    public void openIdlDescription(String _sClassName){
+    public void openIdlDescription(String _sIDLUrl, String _sClassName, String _sAnchor){
     try{
-        String sAnchor = getAnchor();
-        String sFallbackUrl = "http://api.openoffice.org/docs/common/ref/com/sun/star/module-ix";
-        String sIdlUrl = "http://api.openoffice.org/docs/common/ref/";
+        String sIDLUrl = _sIDLUrl;
+        String sAnchor = ""; // TODO find out how the Anchor may be set at the html file;  //_sAnchor;
+        boolean bExists = Introspector.getIntrospector().getXSimpleFileAccess().exists(sIDLUrl);
+        if (sIDLUrl.equals("") || (!bExists)){
+            sIDLUrl = "http://api.openoffice.org/" + Inspector.sIDLDOCUMENTSUBFOLDER;
+        }
+        if (!sIDLUrl.endsWith("/")){
+            sIDLUrl += "/";
+        }
         if (_sClassName.equals("")){
-            sIdlUrl = sFallbackUrl;
+            sIDLUrl += "com/sun/star/module-ix";
             sAnchor = "";
         }
         else{
-            sIdlUrl += _sClassName.replace('.', '/');
+            sIDLUrl += _sClassName.replace('.', '/');
         }
-        sIdlUrl += ".html";
         if (sAnchor != null){
             if (!sAnchor.equals("")){
-                sIdlUrl += "#" + sAnchor;
+                sIDLUrl += "#" + sAnchor;
             }
         }
+        sIDLUrl += ".html";
         URL openHyperlink = getDispatchURL(".uno:OpenHyperlink");
         PropertyValue pv = new PropertyValue();
         pv.Name = "URL";
-        pv.Value = sIdlUrl;
+        pv.Value = sIDLUrl;
         getXDispatcher(openHyperlink).dispatch(openHyperlink, new PropertyValue[] {pv});
     } catch(Exception exception) {
         exception.printStackTrace(System.out);
