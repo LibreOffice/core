@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-03 14:05:25 $
+#   last change: $Author: rt $ $Date: 2007-04-04 07:59:31 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -58,6 +58,10 @@ CFLAGS+= $(LFS_CFLAGS)
 CXXFLAGS+= $(LFS_CFLAGS)
 
 # --- Files --------------------------------------------------------
+
+# safe that way: gen_makefile doesn't want it,
+# no other link target here
+UWINAPILIB:=
 
 .IF "$(header)" == ""
 
