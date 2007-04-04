@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Introspector.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:10:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:19:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,6 +40,7 @@
 
 import com.sun.star.beans.IllegalTypeException;
 import com.sun.star.beans.MethodConcept;
+import com.sun.star.beans.NamedValue;
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XIntrospection;
 import com.sun.star.beans.XIntrospectionAccess;
@@ -51,7 +52,9 @@ import com.sun.star.container.XEnumeration;
 import com.sun.star.container.XEnumerationAccess;
 import com.sun.star.container.XHierarchicalNameAccess;
 import com.sun.star.container.XIndexAccess;
+import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.lang.XServiceInfo;
 import com.sun.star.lang.XTypeProvider;
 import com.sun.star.lib.uno.helper.WeakBase;
@@ -71,6 +74,8 @@ import com.sun.star.reflection.XServiceTypeDescription;
 import com.sun.star.reflection.XTypeDescription;
 import com.sun.star.reflection.XTypeDescriptionEnumeration;
 import com.sun.star.reflection.XTypeDescriptionEnumerationAccess;
+import com.sun.star.ucb.CommandAbortedException;
+import com.sun.star.ucb.XSimpleFileAccess;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
@@ -91,6 +96,8 @@ public class Introspector extends WeakBase{
     private XIdlReflection mxIdlReflection;
     private URL openHyperlink;
     private static Introspector m_oIntrospector = null;
+    private XSimpleFileAccess xSimpleFileAccess = null;
+
 
 
     public static Introspector getIntrospector(){
@@ -445,8 +452,12 @@ public class Introspector extends WeakBase{
     try{
         XHierarchicalNameAccess xHierarchicalNameAccess = (XHierarchicalNameAccess) UnoRuntime.queryInterface(XHierarchicalNameAccess.class, m_xTDEnumerationAccess);
         if (xHierarchicalNameAccess != null){
-            XIndirectTypeDescription xIndirectTypeDescription = (XIndirectTypeDescription) UnoRuntime.queryInterface(XIndirectTypeDescription.class, xHierarchicalNameAccess.getByHierarchicalName(_sTypeName));
-            xTypeDescription = xIndirectTypeDescription.getReferencedType();
+            if (xHierarchicalNameAccess.hasByHierarchicalName(_sTypeName)){
+                XIndirectTypeDescription xIndirectTypeDescription = (XIndirectTypeDescription) UnoRuntime.queryInterface(XIndirectTypeDescription.class, xHierarchicalNameAccess.getByHierarchicalName(_sTypeName));
+                if (xIndirectTypeDescription != null){
+                    xTypeDescription = xIndirectTypeDescription.getReferencedType();
+                }
+            }
         }
     } catch (Exception ex) {
         ex.printStackTrace(System.out);
@@ -487,6 +498,16 @@ public class Introspector extends WeakBase{
         else{
             return "";
         }
+    }
+
+
+    public static String getShortClassName(String _sClassName){
+        String sShortClassName = _sClassName;
+        int nindex = _sClassName.lastIndexOf(".");
+        if ((nindex < _sClassName.length()) && nindex > -1){
+            sShortClassName = _sClassName.substring(nindex + 1);
+        }
+        return sShortClassName;
     }
 
 
@@ -612,4 +633,41 @@ public class Introspector extends WeakBase{
         }
         return oReturn;
     }
+
+
+    public XSimpleFileAccess getXSimpleFileAccess(){
+    try {
+        if (xSimpleFileAccess == null){
+            Object oSimpleFileAccess = m_xComponentContext.getServiceManager().createInstanceWithContext("com.sun.star.ucb.SimpleFileAccess", m_xComponentContext);
+            xSimpleFileAccess = (XSimpleFileAccess) com.sun.star.uno.UnoRuntime.queryInterface(XSimpleFileAccess.class, oSimpleFileAccess);
+        }
+        return xSimpleFileAccess;
+    } catch (com.sun.star.uno.Exception ex) {
+        ex.printStackTrace(System.out);
+        return null;
+    }}
+
+
+    public boolean isValidSDKInstallationPath(String _sSDKInstallationPath){
+    boolean bIsValid = false;
+    try {
+        String sIDLFolder = Introspector.addToPath(_sSDKInstallationPath, Inspector.sIDLDOCUMENTSUBFOLDER);
+        String sIndexFile = Introspector.addToPath(_sSDKInstallationPath, "index.html");
+        if (getXSimpleFileAccess() != null){
+            bIsValid = (getXSimpleFileAccess().exists(sIDLFolder) && getXSimpleFileAccess().exists(sIndexFile));
+        }
+    } catch (com.sun.star.uno.Exception ex) {
+        ex.printStackTrace(System.out);
+    }
+        return bIsValid;
+    }
+
+
+    public static String addToPath(String _sPath, String _sSubPath){
+        if (!_sPath.endsWith("/")){
+            _sPath += "/";
+        }
+        return _sPath + _sSubPath;
+    }
+
 }
