@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InspectorPane.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:10:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:18:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -72,12 +72,12 @@ import javax.swing.event.TreeWillExpandListener;
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
          * @param xMultiServiceFactory XMultiServiceFactory
          */
-        public InspectorPane(XComponentContext _xComponentContext, XDialogProvider _xDialogProvider, XTreeControlProvider _xTreeControlProvider) {
+        public InspectorPane(XComponentContext _xComponentContext, XDialogProvider _xDialogProvider, XTreeControlProvider _xTreeControlProvider, int _nLanguage) {
             m_xComponentContext = _xComponentContext;
             m_xTreeControlProvider = _xTreeControlProvider;
             m_xDialogProvider = _xDialogProvider;
             m_oIntrospector = Introspector.getIntrospector(m_xComponentContext);
-            m_oSourceCodeGenerator = new SourceCodeGenerator();
+            m_oSourceCodeGenerator = new SourceCodeGenerator(_nLanguage);
             _xTreeControlProvider.addInspectorPane(this);
         }
 
@@ -137,10 +137,10 @@ import javax.swing.event.TreeWillExpandListener;
             Object oUnoReturnObject = _oUnoMethodNode.invoke();
             boolean bHasParameters = _oUnoMethodNode.hasParameters();
             boolean bIsPrimitive = _oUnoMethodNode.isPrimitive();
-            if (oUnoReturnObject != null ){
                 if (bHasParameters){
                     sParamValueDescription = " (" + m_oSourceCodeGenerator.getMethodParameterValueDescription(_oUnoMethodNode, _oUnoMethodNode.getLastParameterObjects(), true) + ")";
                 }
+            if (oUnoReturnObject != null ){
                 String sNodeDescription = "";
                 XUnoNode oUnoNode = null;
                 if (_oUnoMethodNode.getXIdlMethod().getReturnType().getTypeClass().getValue() == TypeClass.VOID_value){
@@ -154,7 +154,7 @@ import javax.swing.event.TreeWillExpandListener;
                     }
                     else{
                         Any aReturnObject = Any.complete(oUnoReturnObject);
-                        String sShortClassName = m_oSourceCodeGenerator.getShortClassName(aReturnObject.getType().getTypeName());
+                        String sShortClassName = m_oIntrospector.getShortClassName(aReturnObject.getType().getTypeName());
                         sNodeDescription += m_oSourceCodeGenerator.getVariableNameforUnoObject(sShortClassName);
                     }
                     if (m_oIntrospector.isArray(oUnoReturnObject)){
@@ -196,8 +196,11 @@ import javax.swing.event.TreeWillExpandListener;
             else{
                 if (!bHasParameters){
                     _oUnoMethodNode.setLabel(_oUnoMethodNode.getLabel() + " = null");
-                    m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
                 }
+                else{
+                    _oUnoMethodNode.setLabel(_oUnoMethodNode.getXIdlMethod().getName() + sParamValueDescription + " = null");
+                }
+                m_xTreeControlProvider.nodeChanged(_oUnoMethodNode);
             }
             return oUnoReturnObject;
         }catch(Exception exception ) {
@@ -220,14 +223,19 @@ import javax.swing.event.TreeWillExpandListener;
             XUnoNode oUnoNode = oTreePathProvider.getLastPathComponent();
             if (oUnoNode instanceof XUnoMethodNode){
                 XUnoMethodNode oUnoMethodNode = (XUnoMethodNode) oUnoNode;
-                if (!oUnoMethodNode.isInvoked()){
+                if (!oUnoMethodNode.isInvoked() && oUnoMethodNode.isInvokable()){
                     invoke(oUnoMethodNode);
                 }
             }
-            String sSourceCode = m_oSourceCodeGenerator.addSourceCodeOfUnoObject(oTreePathProvider);
+            String sSourceCode = m_oSourceCodeGenerator.addSourceCodeOfUnoObject(oTreePathProvider, true, true, true);
             m_xTreeControlProvider.setSourceCode(sSourceCode);
         }
 
+
+        public void convertCompleteSourceCode(int _nLanguage){
+            String sSourceCode = m_oSourceCodeGenerator.convertAllUnoObjects(_nLanguage);
+            m_xTreeControlProvider.setSourceCode(sSourceCode);
+        }
 
         protected XUnoNode getSelectedNode(){
             return m_xTreeControlProvider.getSelectedNode();
@@ -612,8 +620,15 @@ import javax.swing.event.TreeWillExpandListener;
 
         public void showPopUpMenu(Object _invoker, int x, int y) throws ClassCastException{
             XUnoNode oUnoNode = getSelectedNode();
-            boolean bdoEnable = oUnoNode instanceof XUnoMethodNode;
-            m_xDialogProvider.enableInvokeMenuItem(bdoEnable);
+            boolean bdoEnableInvoke = oUnoNode instanceof XUnoMethodNode;
+//            boolean bdoEnableSourceCodeGeneration = true;
+            if (bdoEnableInvoke){
+                XUnoMethodNode oUnoMethodNode = (XUnoMethodNode) oUnoNode;
+                bdoEnableInvoke = oUnoMethodNode.isInvokable();
+//                bdoEnableSourceCodeGeneration = bdoEnableInvoke;
+            }
+            m_xDialogProvider.enablePopupMenuItem(XDialogProvider.SINVOKE, bdoEnableInvoke);
+//            m_xDialogProvider.enablePopupMenuItem(XDialogProvider.SADDTOSOURCECODE, bdoEnableSourceCodeGeneration);
             m_xDialogProvider.showPopUpMenu(_invoker, x, y);
         }
 }
