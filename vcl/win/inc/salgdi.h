@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:40:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:08:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,6 +82,8 @@ public:
 
     virtual ImplFontData*   Clone() const;
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual sal_IntPtr      GetFontId() const;
+    void                    SetFontId( sal_IntPtr nId ) { mnId = nId; }
     void                    UpdateFromHDC( HDC );
 
     bool                    HasChar( sal_uInt32 cChar ) const;
@@ -95,8 +97,15 @@ public:
     bool                    AliasSymbolsLow() const     { return mbAliasSymbolsLow; }
 
     ImplFontCharMap*        GetImplFontCharMap();
-
+    std::map< sal_Unicode,sal_Int32>* GetEncodingVector() const { return mpEncodingVector; }
+    void SetEncodingVector( std::map< sal_Unicode,sal_Int32>* pNewVec )
+    {
+        if( mpEncodingVector )
+            delete mpEncodingVector;
+        mpEncodingVector = pNewVec;
+    }
 private:
+    sal_IntPtr              mnId;
     bool                    mbDisableGlyphApi;
     bool                    mbHasKoreanRange;
     bool                    mbHasCJKSupport;
@@ -110,7 +119,7 @@ private:
     WIN_BYTE                mnPitchAndFamily;
     bool                    mbAliasSymbolsHigh;
     bool                    mbAliasSymbolsLow;
-
+    std::map< sal_Unicode,sal_Int32>* mpEncodingVector;
 private:
     void                    ReadCmapTable( HDC );
     void                    ReadOs2Table( HDC );
@@ -171,6 +180,8 @@ public:
     BOOL                    mbWindow;           // is Window
     BOOL                    mbScreen;           // is Screen compatible
     BOOL                    mbXORMode;          // _every_ output with RasterOp XOR
+
+    HFONT                   ImplDoSetFont( ImplFontSelectData* i_pFont, float& o_rFontScale, HFONT& o_rOldFont );
 
 public:
     WinSalGraphics();
@@ -332,6 +343,10 @@ public:
                                           long* pDataLen );
     // frees the font data again
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
+    virtual void            GetGlyphWidths( ImplFontData* pFont,
+                                            bool bVertical,
+                                            std::vector< sal_Int32 >& rWidths,
+                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
 
     virtual BOOL                    GetGlyphBoundRect( long nIndex, Rectangle& );
     virtual BOOL                    GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
