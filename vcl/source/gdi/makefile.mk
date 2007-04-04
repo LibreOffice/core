@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 14:18:36 $
+#   last change: $Author: rt $ $Date: 2007-04-04 08:05:04 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -108,6 +108,7 @@ SLOFILES=	$(SLO)$/salmisc.obj 	\
             $(SLO)$/base14.obj		\
             $(SLO)$/pdfwriter.obj	\
             $(SLO)$/pdfwriter_impl.obj	\
+            $(SLO)$/pdffontcache.obj\
             $(SLO)$/sallayout.obj		\
             $(SLO)$/salgdilayout.obj	\
             $(SLO)$/extoutdevdata.obj	\
@@ -128,6 +129,7 @@ EXCEPTIONSFILES=	$(SLO)$/outdev.obj		\
                     $(SLO)$/impgraph.obj	\
                     $(SLO)$/metric.obj		\
                     $(SLO)$/pdfwriter_impl.obj	\
+                    $(SLO)$/pdffontcache.obj\
                     $(SLO)$/fontcfg.obj		\
                     $(SLO)$/bmpconv.obj		\
                     $(SLO)$/pdfextoutdevdata.obj	\
