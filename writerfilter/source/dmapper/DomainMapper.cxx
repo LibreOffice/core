@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-03 15:57:00 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 10:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,6 +48,9 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextPortionAppend.hpp>
 #include <com/sun/star/text/XParagraphAppend.hpp>
+#ifndef _COM_SUN_STAR_TEXT_FONTEMPHASIS_HPP_
+#include <com/sun/star/text/FontEmphasis.hpp>
+#endif
 #ifndef _COM_SUN_STAR_AWT_FONTRELIEF_HPP_
 #include <com/sun/star/awt/FontRelief.hpp>
 #endif
@@ -2009,6 +2012,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmCPlain
     case 0x2A34:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        rContext->Insert(PROP_CHAR_EMPHASIS, (uno::makeAny ( getEmphasisValue (nIntValue))));
         break;  // sprmCKcd
     case 0x0858:// sprmCFEmboss
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
@@ -2977,6 +2981,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_CT_PPrBase_jc:
     case NS_ooxml::LN_CT_PPrBase_spacing:
     case NS_ooxml::LN_CT_PPrBase_ind:
+    case NS_ooxml::LN_EG_RPrBase_bdr:
+    case NS_ooxml::LN_EG_RPrBase_em:
         resolveSprmProps(sprm_);
         break;
 
@@ -3390,6 +3396,24 @@ bool DomainMapper::getColorFromIndex(const sal_Int32 nIndex, sal_Int32 &nColor)
     }
     return true;
 }
+
+sal_Int16 DomainMapper::getEmphasisValue(const sal_Int32 nIntValue)
+{
+    switch (nIntValue)
+    {
+    case 1:
+        return com::sun::star::text::FontEmphasis::DOT_ABOVE;
+    case 2:
+        return com::sun::star::text::FontEmphasis::ACCENT_ABOVE;
+    case 3:
+        return com::sun::star::text::FontEmphasis::CIRCLE_ABOVE;
+    case 4:
+        return com::sun::star::text::FontEmphasis::DOT_BELOW;
+    default:
+        return com::sun::star::text::FontEmphasis::NONE;
+    }
+}
+
 
 void DomainMapper::resolveSprmProps(doctok::Sprm & sprm_)
 {

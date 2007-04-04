@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-03 15:56:59 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 10:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #endif
 #include <doctok/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/text/FontEmphasis.hpp>
 
 namespace com{ namespace sun {namespace star{
     namespace uno{
@@ -105,6 +106,7 @@ private:
     void handleUnderlineType(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext);
     void handleParaJustification(const sal_Int32 nIntValue, const ::boost::shared_ptr<PropertyMap> pContext, const bool bExchangeLeftRight);
     bool getColorFromIndex(const sal_Int32 nIndex, sal_Int32 &nColor);
+    sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
     void resolveSprmProps(doctok::Sprm & sprm_);
     sal_Int32 mnHpsMeasure, mnTwipsMeasure, mnBackgroundColor;
     bool mbIsHighlightSet;

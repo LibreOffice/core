@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-03 15:57:00 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 10:57:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -140,7 +140,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_WEIGHT_ASIAN     :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharWeightAsian")); break;
             case PROP_CHAR_POSTURE_ASIAN    :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPostureAsian")); break;
             case PROP_CHAR_BACK_COLOR:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharBackColor")); break;
-//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
+            case PROP_CHAR_EMPHASIS:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharEmphasis")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 
             case PROP_PARA_STYLE_NAME:      sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")); break;

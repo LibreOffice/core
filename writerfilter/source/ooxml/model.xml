@@ -5833,7 +5833,7 @@
   </define>
   <define name="CT_TextEffect">
     <attribute name="val">
-      <text/>
+      <ref name="ST_TextEffect"/>
       <xs:documentation>Animated Text Effect Type</xs:documentation>
     </attribute>
   </define>
@@ -6233,49 +6233,49 @@
     </attribute>
     <optional>
       <attribute name="color">
-        <text/>
+        <ref name="ST_HexColor"/>
         <xs:documentation>Border Color</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeColor">
-        <text/>
+        <ref name="ST_ThemeColor"/>
         <xs:documentation>Border Theme Color</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeTint">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Border Theme Color Tint</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="themeShade">
-        <text/>
+        <ref name="ST_UcharHexNumber"/>
         <xs:documentation>Border Theme Color Shade</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="sz">
-        <text/>
+        <ref name="ST_EighthPointMeasure"/>
         <xs:documentation>Border Width</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="space">
-        <text/>
+        <ref name="ST_PointMeasure"/>
         <xs:documentation>Border Spacing Measurement</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="shadow">
-        <text/>
+        <ref name="ST_OnOff"/>
         <xs:documentation>Border Shadow</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="frame">
-        <text/>
+        <ref name="ST_OnOff"/>
         <xs:documentation>Create Frame Effect</xs:documentation>
       </attribute>
     </optional>
@@ -6467,7 +6467,7 @@
   </define>
   <define name="CT_Em">
     <attribute name="val">
-      <text/>
+      <ref name="ST_Em"/>
       <xs:documentation>Emphasis Mark Type</xs:documentation>
     </attribute>
   </define>
@@ -14034,6 +14034,13 @@
 <resource name="CT_Em" resource="PropertySetValue">
   <attribute name="val" tokenid="ooxml:CT_Em_val"/>
 </resource>
+<resource name="ST_Em" resource="List">
+  <value tokenid="0">none</value>
+  <value tokenid="1">dot</value>
+  <value tokenid="2">comma</value>
+  <value tokenid="3">circle</value>
+  <value tokenid="4">underDot</value>
+</resource>
 <resource name="CT_Shd" resource="PropertySetValue">
   <attribute name="val" tokenid="ooxml:CT_Shd_val"/>
   <attribute name="color" tokenid="ooxml:CT_Shd_color"/>
@@ -14133,13 +14140,14 @@
   <sprm name="highlight" tokenid="ooxml:EG_RPrBase_highlight"/>
   <sprm name="u" tokenid="0x2a3e"/>
   <sprm name="effect" tokenid="0x6816"/>
-  <sprm name="bdr" tokenid="0xca72"/>
+  <sprm name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
   <sprm name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
   <sprm name="fitText" tokenid="0xca76"/>
   <sprm name="vertAlign" tokenid="0x0"/>
   <sprm name="rtl" tokenid="0x0"/>
   <sprm name="cs" tokenid="0x882"/>
-  <sprm name="em" tokenid="0x2a34"/>
+<!--  <sprm name="em" tokenid="0x2a34"/> -->
+  <sprm name="em" tokenid="ooxml:EG_RPrBase_em"/>
   <sprm name="lang" tokenid="0x0"/>
   <sprm name="eastAsianLayout" tokenid="0x0"/>
   <sprm name="specVanish" tokenid="0x818"/>
@@ -14663,6 +14671,20 @@
   <attribute name="val" tokenid="ooxml:CT_TextScale_val"/>
 </resource>
 <resource name="ST_TextScale" resource="Integer"/>
+<resource name="CT_TextEffect" resource="PropertySetValue">
+  <attribute name="val" tokenid="ooxml:CT_TextEffect_val"/>
+</resource>
+<resource name="ST_TextEffect" resource="List">
+  <value tokenid="ooxml:Value_ST_TextEffect_blinkBackground">blinkBackground</value>
+  <value tokenid="ooxml:Value_ST_TextEffect_lights">lights</value>
+  <value tokenid="ooxml:Value_ST_TextEffect_antsBlack">antsBlack</value>
+  <value tokenid="ooxml:Value_ST_TextEffect_antsRed">antsRed</value>
+  <value tokenid="ooxml:Value_ST_TextEffect_shimmer">shimmer</value>
+  <value tokenid="ooxml:Value_ST_TextEffect_sparkle">sparkle</value>
+  <value tokenid="ooxml:Value_ST_TextEffect_none">none</value>
+</resource>
+<resource name="ST_PointMeasure" resource="Integer"/>
+<resource name="ST_EighthPointMeasure" resource="Integer"/>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>
