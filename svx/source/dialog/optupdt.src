@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:51:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,27 +66,34 @@ TabPage RID_SVXPAGE_ONLINEUPDATE
     RadioButton RB_EVERYDAY
     {
         Pos = MAP_APPFONT ( 18, 27 ) ;
-        Size = MAP_APPFONT ( 90, 10 ) ;
+        Size = MAP_APPFONT ( 160, 10 ) ;
         Text [ de ] = "Jeden ~Tag" ;
         Text [ en-US ] = "Every Da~y" ;
     };
     RadioButton RB_EVERYWEEK
     {
         Pos = MAP_APPFONT ( 18, 40 ) ;
-        Size = MAP_APPFONT ( 90, 10 ) ;
+        Size = MAP_APPFONT ( 160, 10 ) ;
         Text [ de ] = "Jede ~Woche" ;
         Text [ en-US ] = "Every ~Week" ;
     };
     RadioButton RB_EVERYMONTH
     {
         Pos = MAP_APPFONT ( 18, 53 ) ;
-        Size = MAP_APPFONT ( 90, 10 ) ;
+        Size = MAP_APPFONT ( 160, 10 ) ;
         Text [ de ] = "Jeden ~Monat" ;
         Text [ en-US ] = "Every ~Month" ;
     };
-    PushButton PB_CHECKNOW
+    FixedText FT_LASTCHECKED
     {
         Pos = MAP_APPFONT ( 12, 69 ) ;
+        Size = MAP_APPFONT ( 160, 10 ) ;
+        Text [ de ] = "Zuletzt gesucht: %DATE%, %TIME%" ;
+        Text [ en-US ] = "Last checked: %DATE%, %TIME%" ;
+    };
+    PushButton PB_CHECKNOW
+    {
+        Pos = MAP_APPFONT ( 12, 82 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ de ] = "Jetzt ~suchen" ;
         Text [ en-US ] = "Check ~now" ;
@@ -116,5 +123,10 @@ TabPage RID_SVXPAGE_ONLINEUPDATE
         Size = MAP_APPFONT ( 50, 14 ) ;
         Text [ de ] = "Ä~ndern..." ;
         Text [ en-US ] = "Ch~ange..." ;
+    };
+    String STR_NEVERCHECKED
+    {
+        Text [ de ] = "Zuletzt gesucht: Bisher noch nicht" ;
+        Text [ en-US ] = "Last checked: Not yet" ;
     };
 };
