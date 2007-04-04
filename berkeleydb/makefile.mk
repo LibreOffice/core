@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.36 $
+#   $Revision: 1.37 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:04:01 $
+#   last change: $Author: rt $ $Date: 2007-04-04 07:58:48 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -69,6 +69,13 @@ PATCH_FILE_NAME=db-4.2.52-mingw.patch
 PATCH_FILE_NAME=db-4.2.52.patch
 .ENDIF
 
+# disable aliasing for all GCC platforms, at least GCC 4.x needs it if
+# optimization level >= 2
+.IF "$(COM)"=="GCC"
+CFLAGS:=-fno-strict-aliasing
+CXXFLAGS:=-fno-strict-aliasing
+.ENDIF
+
 .IF "$(GUI)"=="UNX"
 .IF "$(OS)$(COM)"=="LINUXGCC"
 LDFLAGS:=-Wl,-rpath,'$$$$ORIGIN' -Wl,-z,noexecstack
@@ -83,8 +90,8 @@ LDFLAGS:=-R\''$$$$ORIGIN'\'
 .EXPORT: LDFLAGS
 .ENDIF                  # "$(OS)$(COM)"=="SOLARISC52"
 # just pass ARCH_FLAGS to native build
-CFLAGS:=$(ARCH_FLAGS)
-CXXFLAGS:=$(ARCH_FLAGS)
+CFLAGS+:=$(ARCH_FLAGS)
+CXXFLAGS+:=$(ARCH_FLAGS)
 .EXPORT : CFLAGS CXXFLAGS
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
@@ -123,8 +130,10 @@ OUT2INC= \
 .IF "$(COM)"=="GCC"
 CONFIGURE_DIR=out
 #relative to CONFIGURE_DIR
+# TODO needs clean up
+CFLAGS+=-nostdinc -D_MT
 CONFIGURE_ACTION=..$/dist$/configure
-CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="-nostdinc -D_MT" CPPFLAGS="$(INCLUDE)" LIBS="-lmingwthrd" LIBSO_LIBS="-lmingwthrd" LIBJSO_LIBS="-lmingwthrd" LIBXSO_LIBS="-lmingwthrd $(LIBSTLPORT)"
+CONFIGURE_FLAGS=--enable-cxx --enable-dynamic --enable-shared --build=i586-pc-mingw32 --host=i586-pc-mingw32 --enable-mingw LN_S=ln NM="$(WRAPCMD) nm" OBJDUMP="$(WRAPCMD) objdump" JAVA="$(WRAPCMD) -env java" JAVAC="$(WRAPCMD) -env javac" CFLAGS="$(CFLAGS)" CPPFLAGS="$(INCLUDE)" LIBS="-lmingwthrd" LIBSO_LIBS="-lmingwthrd" LIBJSO_LIBS="-lmingwthrd" LIBXSO_LIBS="-lmingwthrd $(LIBSTLPORT)"
 .IF "$(USE_MINGW)"=="cygwin"
 CONFIGURE_FLAGS+=LDFLAGS="-no-undefined -L$(SOLARVER)/$(UPD)/$(INPATH)/lib -L$(SOLARVER)/$(UPD)/$(INPATH)/bin -L$(COMPATH)/lib/mingw -L$(COMPATH)/lib/w32api -L$(COMPATH)/lib"
 .ELSE
