@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InspectorAddon.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 14:58:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -40,6 +40,7 @@
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.FrameSearchFlag;
+import com.sun.star.frame.XController;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
@@ -60,11 +61,11 @@ public class InspectorAddon {
     /** This class implements the component. At least the interfaces XServiceInfo,
      * XTypeProvider, and XInitialization should be provided by the service.
      */
-    public static class InspectorAddonImpl extends WeakBase implements XDispatchProvider, XDispatch, XInitialization, XServiceInfo {
+    public static class InspectorAddonImpl extends WeakBase implements XDispatchProvider, XInitialization, XServiceInfo {
     private static XModel xModel = null;
-    private XFrame xFrame = null;
     org.openoffice.XInstanceInspector xInstInspector = null;
-
+//    Dispatcher oDispatcher = null;
+    XFrame m_xFrame = null;
 
     private static final String[] m_serviceNames = {
         "org.openoffice.InstanceInspectorAddon",
@@ -81,7 +82,8 @@ public class InspectorAddon {
             XDispatch xRet = null;
             if ( aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ) {
                 if ( aURL.Path.compareTo( "inspect" ) == 0 ){
-                    xRet = this;
+                    // Todo: Check if the frame is already administered (use hashtable)
+                    xRet = new Dispatcher(m_xFrame);
                 }
             }
             return xRet;
@@ -97,51 +99,65 @@ public class InspectorAddon {
         }
 
 
-        // XDispatch
-        public void dispatch( /*IN*/com.sun.star.util.URL _aURL, /*IN*/com.sun.star.beans.PropertyValue[] aArguments ) {
-        try{
-            if ( _aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ){
-                if ( _aURL.Path.equals("inspect")){
-                    Object oUnoInspectObject = xModel;
-                    com.sun.star.lang.XMultiComponentFactory xMCF = m_xContext.getServiceManager();
-                    if (xInstInspector == null){
-                        Object obj= xMCF.createInstanceWithContext("org.openoffice.InstanceInspector", m_xContext);
-                        xInstInspector = (org.openoffice.XInstanceInspector)UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);
-                    }
-                    if ((xFrame == null) || (xModel == null)){
-                        Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
-                        xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, oDesktop);
-                        oUnoInspectObject = xFrame;
-                    }
-                    XPropertySet xFramePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xFrame);
-                    String sTitle = (String) xFramePropertySet.getPropertyValue("Title");
-                    String[] sTitleList = sTitle.split(" - ");
-                    if (sTitleList.length > 0){
-                        sTitle = sTitleList[0];
-                    }
-                    xInstInspector.inspect(oUnoInspectObject, sTitle);
-                }
-            }
-        } catch( Exception e ) {
-            System.err.println( e + e.getMessage());
-            e.printStackTrace(System.out);
-        }}
-
-
-
         public void initialize( Object[] object ) throws com.sun.star.uno.Exception {
             if ( object.length > 0 ){
-                xFrame = ( XFrame ) UnoRuntime.queryInterface(XFrame.class, object[ 0 ] );
-                xModel = xFrame.getController().getModel();
+                m_xFrame = ( XFrame ) UnoRuntime.queryInterface(XFrame.class, object[ 0 ] );
             }
         }
 
+        public class Dispatcher implements XDispatch{
+            private XFrame m_xFrame = null;
+            private XModel xModel = null;
 
-        public void addStatusListener( /*IN*/XStatusListener xControl, /*IN*/com.sun.star.util.URL aURL ) {
+            public Dispatcher(XFrame _xFrame){
+                m_xFrame = _xFrame;
+                if (m_xFrame != null){
+                    XController xController = m_xFrame.getController();
+                    if (xController != null){
+                        xModel = xController.getModel();
+                    }
+                }
+            }
+
+            // XDispatch
+            public void dispatch( /*IN*/com.sun.star.util.URL _aURL, /*IN*/com.sun.star.beans.PropertyValue[] aArguments ) {
+            try{
+                if ( _aURL.Protocol.compareTo("org.openoffice.Office.addon.Inspector:") == 0 ){
+                    if ( _aURL.Path.equals("inspect")){
+                        Object oUnoInspectObject = xModel;
+                        com.sun.star.lang.XMultiComponentFactory xMCF = m_xContext.getServiceManager();
+                        if (xInstInspector == null){
+                            Object obj= xMCF.createInstanceWithContext("org.openoffice.InstanceInspector", m_xContext);
+                            xInstInspector = (org.openoffice.XInstanceInspector)UnoRuntime.queryInterface(org.openoffice.XInstanceInspector.class, obj);
+                        }
+                        if ((m_xFrame == null) || (xModel == null)){
+                            Object oDesktop = xMCF.createInstanceWithContext("com.sun.star.frame.Desktop", m_xContext);
+                            m_xFrame = (XFrame) UnoRuntime.queryInterface(XFrame.class, oDesktop);
+                            oUnoInspectObject = m_xFrame;
+                        }
+                        XPropertySet xFramePropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, m_xFrame);
+                        String sTitle = (String) xFramePropertySet.getPropertyValue("Title");
+                        String[] sTitleList = sTitle.split(" - ");
+                        if (sTitleList.length > 0){
+                            sTitle = sTitleList[0];
+                        }
+                        xInstInspector.inspect(oUnoInspectObject, sTitle);
+                    }
+                }
+            } catch( Exception e ) {
+                System.err.println( e + e.getMessage());
+                e.printStackTrace(System.out);
+            }}
+
+            public void addStatusListener( /*IN*/XStatusListener xControl, /*IN*/com.sun.star.util.URL aURL ) {
+            }
+
+            public void removeStatusListener( /*IN*/XStatusListener xControl, /*IN*/com.sun.star.util.URL aURL ) {
+            }
+
+
         }
 
-        public void removeStatusListener( /*IN*/XStatusListener xControl, /*IN*/com.sun.star.util.URL aURL ) {
-        }
 
         public static String[] getServiceNames() {
             return m_serviceNames;
