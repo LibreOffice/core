@@ -4,9 +4,9 @@
  *
  *  $RCSfile: apphdl.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 15:57:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:16:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -530,7 +530,7 @@ void SwMailMergeWizardExecutor::ExecuteMailMergeWizard( const SfxItemSet * pArgs
                     SwDBData aDBData;
                     aDBData.sDataSource = sDBName.GetToken(0, DB_DELIM);
                     aDBData.sCommand = sDBName.GetToken(1, DB_DELIM);
-                    aDBData.nCommandType = sDBName.GetToken(2).ToInt32();
+                    aDBData.nCommandType = sDBName.GetToken(2, DB_DELIM ).ToInt32();
                     //set the currently used database for the wizard
                     m_pMMConfig->SetCurrentDBData( aDBData );
                 }
