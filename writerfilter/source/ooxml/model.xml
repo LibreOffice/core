@@ -6511,31 +6511,31 @@
   <define name="CT_EastAsianLayout">
     <optional>
       <attribute name="id">
-        <text/>
+        <ref name="ST_DecimalNumber"/>
         <xs:documentation>East Asian Typography Run ID</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="combine">
-        <text/>
+        <ref name="ST_OnOff"/>
         <xs:documentation>Two Lines in One</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="combineBrackets">
-        <text/>
+        <ref name="ST_CombineBrackets"/>
         <xs:documentation>Display Brackets Around Two Lines in One</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="vert">
-        <text/>
+        <ref name="ST_OnOff"/>
         <xs:documentation>Horizontal in Vertical (Rotate Text)</xs:documentation>
       </attribute>
     </optional>
     <optional>
       <attribute name="vertCompress">
-        <text/>
+        <ref name="ST_OnOff"/>
         <xs:documentation>Compress Rotated Text to Line Height</xs:documentation>
       </attribute>
     </optional>
@@ -14146,10 +14146,9 @@
   <sprm name="vertAlign" tokenid="0x0"/>
   <sprm name="rtl" tokenid="0x0"/>
   <sprm name="cs" tokenid="0x882"/>
-<!--  <sprm name="em" tokenid="0x2a34"/> -->
   <sprm name="em" tokenid="ooxml:EG_RPrBase_em"/>
   <sprm name="lang" tokenid="0x0"/>
-  <sprm name="eastAsianLayout" tokenid="0x0"/>
+  <sprm name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
   <sprm name="specVanish" tokenid="0x818"/>
   <sprm name="oMath" tokenid="0x0"/>
 </resource>
@@ -14685,6 +14684,21 @@
 </resource>
 <resource name="ST_PointMeasure" resource="Integer"/>
 <resource name="ST_EighthPointMeasure" resource="Integer"/>
+<resource name="CT_EastAsianLayout" resource="PropertySetValue">
+  <attribute name="id" tokenid="ooxml:CT_EastAsianLayout_id"/>
+  <attribute name="combine" tokenid="ooxml:CT_EastAsianLayout_combine"/>
+  <attribute name="combineBrackets" tokenid="ooxml:CT_EastAsianLayout_combineBrackets"/>
+  <attribute name="vert" tokenid="ooxml:CT_EastAsianLayout_vert"/>
+  <attribute name="vertCompress" tokenid="ooxml:CT_EastAsianLayout_vertCompress"/>
+</resource>
+<resource name="ST_CombineBrackets" resource="List">
+  <value tokenid="ooxml:Value_ST_CombineBrackets_none">none</value>
+  <value tokenid="ooxml:Value_ST_CombineBrackets_round">round</value>
+  <value tokenid="ooxml:Value_ST_CombineBrackets_square">square</value>
+  <value tokenid="ooxml:Value_ST_CombineBrackets_angle">angle</value>
+  <value tokenid="ooxml:Value_ST_CombineBrackets_curly">curly</value>
+</resource>
+<resource name="ST_OnOff" resource="Boolean"/>
 </namespace>
   <!-- start = recipients | txbxContent | comments | footnotes | endnotes | hdr | ftr | settings | webSettings | fonts | numbering | styles | document | glossaryDocument -->
 </model>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 10:57:38 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 15:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1543,6 +1543,33 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_SCALE_WIDTH, uno::makeAny( sal_Int16(nIntValue) ));
             break;
 
+        case NS_ooxml::LN_CT_Em_val:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
+            break;
+
+        case NS_ooxml::LN_CT_EastAsianLayout_id:
+            break;
+        case NS_ooxml::LN_CT_EastAsianLayout_combine:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_IS_ON, uno::makeAny ( nIntValue ? true : false ));
+            break;
+        case NS_ooxml::LN_CT_EastAsianLayout_combineBrackets:
+            {
+                rtl::OUString sCombinePrefix = getBracketStringFromEnum(nIntValue);
+                rtl::OUString sCombineSuffix = getBracketStringFromEnum(nIntValue, false);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_PREFIX, uno::makeAny ( sCombinePrefix ));
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_SUFFIX, uno::makeAny ( sCombineSuffix ));
+            }
+            break;
+        case NS_ooxml::LN_CT_EastAsianLayout_vert:
+            {
+                sal_Int16 nRotationAngle = (nIntValue ? 900 : 0);
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION, uno::makeAny ( nRotationAngle ));
+            }
+            break;
+        case NS_ooxml::LN_CT_EastAsianLayout_vertCompress:
+            m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny ( nIntValue ? true : false));
+            break;
+
         default:
             {
                 //int nVal = val.getInt();
@@ -2012,7 +2039,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmCPlain
     case 0x2A34:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        rContext->Insert(PROP_CHAR_EMPHASIS, (uno::makeAny ( getEmphasisValue (nIntValue))));
+        rContext->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
         break;  // sprmCKcd
     case 0x0858:// sprmCFEmboss
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
@@ -2983,6 +3010,9 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_CT_PPrBase_ind:
     case NS_ooxml::LN_EG_RPrBase_bdr:
     case NS_ooxml::LN_EG_RPrBase_em:
+    case NS_ooxml::LN_EG_RPrBase_highlight:
+    case NS_ooxml::LN_EG_RPrBase_w:
+    case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
         resolveSprmProps(sprm_);
         break;
 
@@ -3017,13 +3047,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
             rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
         }
-        break;
-    case NS_ooxml::LN_EG_RPrBase_highlight:
-        resolveSprmProps(sprm_);
-        break;
-
-    case NS_ooxml::LN_EG_RPrBase_w:
-        resolveSprmProps(sprm_);
         break;
 
     default:
@@ -3414,13 +3437,41 @@ sal_Int16 DomainMapper::getEmphasisValue(const sal_Int32 nIntValue)
     }
 }
 
+rtl::OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix)
+{
+    switch(nIntValue)
+    {
+    case NS_ooxml::LN_Value_ST_CombineBrackets_round:
+        if (bIsPrefix)
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "(" ));
+        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ));
+
+    case NS_ooxml::LN_Value_ST_CombineBrackets_square:
+        if (bIsPrefix)
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "[" ));
+        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "]" ));
+
+    case NS_ooxml::LN_Value_ST_CombineBrackets_angle:
+        if (bIsPrefix)
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "<" ));
+        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ">" ));
+
+    case NS_ooxml::LN_Value_ST_CombineBrackets_curly:
+        if (bIsPrefix)
+            return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "{" ));
+        return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "}" ));
+
+    case NS_ooxml::LN_Value_ST_CombineBrackets_none:
+    default:
+        return rtl::OUString();
+    }
+}
 
 void DomainMapper::resolveSprmProps(doctok::Sprm & sprm_)
 {
     doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
     if( pProperties.get())
         pProperties->resolve(*this);
-
 }
 
 

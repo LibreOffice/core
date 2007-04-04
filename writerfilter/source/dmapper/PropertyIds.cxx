@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 10:57:38 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 15:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,14 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_POSTURE_ASIAN    :     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharPostureAsian")); break;
             case PROP_CHAR_BACK_COLOR:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharBackColor")); break;
             case PROP_CHAR_EMPHASIS:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharEmphasis")); break;
+            case PROP_CHAR_COMBINE_IS_ON:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCombineIsOn")); break;
+            case PROP_CHAR_COMBINE_PREFIX:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCombinePrefix")); break;
+            case PROP_CHAR_COMBINE_SUFFIX:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCombineSuffix")); break;
+            case PROP_CHAR_ROTATION:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRotation")); break;
+            case PROP_CHAR_ROTATION_IS_FIT_TO_LINE:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRotationIsFitToLine")); break;
+//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
+//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
+//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 
             case PROP_PARA_STYLE_NAME:      sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaStyleName")); break;

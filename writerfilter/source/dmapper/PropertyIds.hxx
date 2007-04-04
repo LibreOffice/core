@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 10:57:38 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 15:44:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -228,11 +228,11 @@ enum PropertyIds
 /*186*/ ,PROP_CHAR_FONT_PITCH_HANSI
 /*187*/ ,PROP_CHAR_BACK_COLOR
 /*188*/ ,PROP_CHAR_EMPHASIS
-///*189*/ ,PROP_
-///*190*/ ,PROP_
-///*191*/ ,PROP_
-///*192*/ ,PROP_
-///*193*/ ,PROP_
+/*189*/ ,PROP_CHAR_COMBINE_IS_ON
+/*190*/ ,PROP_CHAR_COMBINE_PREFIX
+/*191*/ ,PROP_CHAR_COMBINE_SUFFIX
+/*192*/ ,PROP_CHAR_ROTATION
+/*193*/ ,PROP_CHAR_ROTATION_IS_FIT_TO_LINE
 ///*194*/ ,PROP_
 ///*195*/ ,PROP_
 ///*196*/ ,PROP_
