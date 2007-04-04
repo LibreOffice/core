@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gconfbackend.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 14:22:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:46:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,6 +239,16 @@ static const ConfigurationValue InetConfigurationValuesList[] =
         "int",
         sal_False,
         sal_False,
+        SETTING_PROXY_MODE
+    },
+
+    {
+        SETTING_NO_PROXY_FOR,
+        "/system/http_proxy/ignore_hosts",
+        "org.openoffice.Inet/Settings/ooInetNoProxy",
+        "string",
+        sal_False,
+        sal_True,
         SETTING_PROXY_MODE
     },
 };
