@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoTreeRenderer.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:15:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:23:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -84,28 +84,28 @@ public class UnoTreeRenderer extends DefaultTreeCellRenderer{
         String  sLabelText = (String)node.getUserObject();
         if (sLabelText != null){
             if (sLabelText.equals(XUnoFacetteNode.SCONTAINERDESCRIPTION)){
-                setIcon(m_oContainerIcon);
+//                setIcon(m_oContainerIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SCONTENTDESCRIPTION)){
-                setIcon(m_oContentIcon);
+//                setIcon(m_oContentIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SINTERFACEDESCRIPTION)){
-                setIcon(m_oInterfaceIcon);
+//                setIcon(m_oInterfaceIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SMETHODDESCRIPTION)){
-                setIcon(m_oMethodIcon);
+//                setIcon(m_oMethodIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYDESCRIPTION)){
-                setIcon(m_oPropertyIcon);
+//                setIcon(m_oPropertyIcon);
             }
             else if (sLabelText.startsWith(XUnoFacetteNode.SPROPERTYINFODESCRIPTION)){
-                setIcon(m_oPropertyIcon);
+//                setIcon(m_oPropertyIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SPROPERTYVALUEDESCRIPTION)){
-                setIcon(m_oPropertyValueIcon);
+//                setIcon(m_oPropertyValueIcon);
             }
             else if (sLabelText.equals(XUnoFacetteNode.SSERVICEDESCRIPTION)){
-                setIcon(m_oServiceIcon);
+//                setIcon(m_oServiceIcon);
             }
             else{
                 setText(sLabelText);
