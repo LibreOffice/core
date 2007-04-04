@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheck.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:00:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:48:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -193,7 +193,7 @@ class UpdateCheckJob : public ::cppu::WeakImplHelper3< task::XJob, lang::XServic
 
 
 
-    uno::Reference<uno::XInterface> getUIService(sal_Bool bShowBubble) const;
+    void getUIService( sal_Bool bShowBubble );
     uno::Reference<task::XInteractionHandler> getInteractionHandler() const;
     uno::Reference<c3s::XSystemShellExecute> getShellExecuter() const;
 
@@ -416,35 +416,37 @@ UpdateCheckJob::getUpdateAccess(
 
 //------------------------------------------------------------------------------
 
-uno::Reference< uno::XInterface >
-UpdateCheckJob::getUIService(sal_Bool bShowBubble) const
+void UpdateCheckJob::getUIService( sal_Bool bShowBubble )
 {
-    uno::Reference< uno::XComponentContext > xContext(m_xContext);
-    uno::Reference< uno::XInterface > xUpdateCheckUI;
+    if ( ! m_xUIService.is() )
+    {
+        uno::Reference< uno::XComponentContext > xContext(m_xContext);
+        if( !xContext.is() )
+            throw uno::RuntimeException( UNISTRING( "UpdateCheckJob: empty component context" ), *this );
 
-    if( !xContext.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: empty component context" ), *this );
+        uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
 
-    uno::Reference< lang::XMultiComponentFactory > xServiceManager(xContext->getServiceManager());
+        if( !xServiceManager.is() )
+            throw uno::RuntimeException(
+                UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
 
-    if( !xServiceManager.is() )
-        throw uno::RuntimeException(
-            UNISTRING( "UpdateCheckJob: unable to obtain service manager from component context" ), *this );
+        m_xUIService = xServiceManager->createInstanceWithContext(
+            UNISTRING( "com.sun.star.setup.UpdateCheckUI" ), xContext );
 
-    xUpdateCheckUI = xServiceManager->createInstanceWithContext(
-        UNISTRING( "com.sun.star.setup.UpdateCheckUI" ), xContext );
-
-    uno::Reference< beans::XPropertySet > xSetProperties(xUpdateCheckUI, uno::UNO_QUERY_THROW);
-    xSetProperties->setPropertyValue( PROPERTY_TITLE,
-                                      xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TITLE ) );
-    xSetProperties->setPropertyValue( PROPERTY_TEXT,
-                                      xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TEXT ) );
-    xSetProperties->setPropertyValue( PROPERTY_CLICK_HDL,
-                                      uno::makeAny( uno::Reference< task::XJob >(const_cast <UpdateCheckJob *> (this) ) ) );
-    xSetProperties->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( bShowBubble ) );
-
-    return xUpdateCheckUI;
+        uno::Reference< beans::XPropertySet > xSetProperties( m_xUIService, uno::UNO_QUERY_THROW );
+        xSetProperties->setPropertyValue( PROPERTY_TITLE,
+                                          xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TITLE ) );
+        xSetProperties->setPropertyValue( PROPERTY_TEXT,
+                                          xSetProperties->getPropertyValue( PROPERTY_DEFAULT_TEXT ) );
+        xSetProperties->setPropertyValue( PROPERTY_CLICK_HDL,
+                                          uno::makeAny( uno::Reference< task::XJob >(const_cast <UpdateCheckJob *> (this) ) ) );
+        xSetProperties->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( bShowBubble ) );
+    }
+    else
+    {
+        uno::Reference< beans::XPropertySet > xSetProperties( m_xUIService, uno::UNO_QUERY_THROW );
+        xSetProperties->setPropertyValue( PROPERTY_SHOW_BUBBLE, uno::makeAny( bShowBubble ) );
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -614,7 +616,7 @@ UpdateCheckJob::runAsThread()
                     xCFGUpdate->getByName( UNISTRING("UpdateVersionFound") ) >>= aPreviousVersionFound;
 
                     if( ! aPreviousVersionFound.equals(aVersionFound) )
-                        m_xUIService = getUIService(sal_True);
+                        getUIService( sal_True );
 
                     xCFGUpdate->replaceByName(UNISTRING("UpdateVersionFound"), uno::makeAny(aVersionFound));
                     xCFGUpdate->replaceByName(UNISTRING("DownloadURL"), uno::makeAny(aDownloadURL));
@@ -698,7 +700,7 @@ UpdateCheckJob::createAndStartThread( rtl::OUString &rBuildId )
     // If we found an update earlier, turn on menu bar icon
     if( ( rBuildId.getLength() > 0 ) && ! m_xUIService.is() )
     {
-        m_xUIService = getUIService(sal_False);
+        getUIService( sal_False );
         OSL_TRACE( "UI Service initialization %s\n", m_xUIService.is() ? "succeeded" : "failed" );
     }
 
