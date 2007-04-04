@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wininetlayer.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:40:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:47:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,8 @@
 #endif
 
 #include <malloc.h>
+
+#include <rtl/ustrbuf.hxx>
 
 #define EQUAL_SIGN '='
 #define COLON      ':'
@@ -181,6 +183,26 @@ void SAL_CALL WinInetLayer::readData(
         // fill proxy bypass list
         if( aProxyBypassList.getLength() > 0 )
         {
+            rtl::OUStringBuffer aReverseList;
+            sal_Int32 nIndex = 0;
+            do
+            {
+                rtl::OUString aToken = aProxyBypassList.getToken( 0, SPACE, nIndex );
+                if ( aProxyList.indexOf( aToken ) == -1 )
+                {
+                    if ( aReverseList.getLength() )
+                    {
+                        aReverseList.insert( 0, sal_Unicode( SEMI_COLON ) );
+                        aReverseList.insert( 0, aToken );
+                    }
+                    else
+                        aReverseList = aToken;
+                }
+            }
+            while ( nIndex >= 0 );
+
+            aProxyBypassList = aReverseList.makeStringAndClear();
+
             aPropInfoList[nProperties].Name = rtl::OUString(
                 RTL_CONSTASCII_USTRINGPARAM( "org.openoffice.Inet/Settings/ooInetNoProxy") );
             aPropInfoList[nProperties].Type = rtl::OUString(
