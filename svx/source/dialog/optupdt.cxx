@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:07:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,16 @@
 #endif
 
 // include ---------------------------------------------------------------
+#ifndef   _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 #ifndef _FILEDLGHELPER_HXX
 #include <sfx2/filedlghelper.hxx>
+#endif
+
+#ifndef _ZFORLIST_HXX
+#include <svtools/zforlist.hxx>
 #endif
 
 #include "optupdt.hxx"
@@ -96,7 +103,6 @@ namespace lang = ::com::sun::star::lang;
 namespace uno = ::com::sun::star::uno;
 namespace util = ::com::sun::star::util;
 
-
 // define ----------------------------------------------------------------
 
 #define UNISTRING(s) rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(s))
@@ -115,8 +121,10 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
         m_aAutoDownloadCheckBox( this, ResId( CB_AUTODOWNLOAD ) ),
         m_aDestPathLabel( this, ResId( FT_DESTPATHLABEL ) ),
         m_aDestPath( this, ResId( FT_DESTPATH ) ),
-        m_aChangePathButton( this, ResId( PB_CHANGEPATH ) )
+        m_aChangePathButton( this, ResId( PB_CHANGEPATH ) ),
+        m_aLastChecked( this, ResId( FT_LASTCHECKED ) )
 {
+    m_aNeverChecked = String( ResId( STR_NEVERCHECKED ) );
     FreeResource();
 
     m_aAutoCheckCheckBox.SetClickHdl( LINK( this, SvxOnlineUpdateTabPage, AutoCheckHdl_Impl ) );
@@ -144,12 +152,77 @@ SvxOnlineUpdateTabPage::SvxOnlineUpdateTabPage( Window* pParent, const SfxItemSe
 
     // dynamical length of the PushButtons
     CalcButtonWidth();
+
+    m_aLastCheckedTemplate = m_aLastChecked.GetText();
+
+    UpdateLastCheckedText();
 }
 
 // -----------------------------------------------------------------------
 
 SvxOnlineUpdateTabPage::~SvxOnlineUpdateTabPage()
 {
+}
+
+// -----------------------------------------------------------------------
+void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
+{
+    rtl::OUString aDateStr;
+    rtl::OUString aTimeStr;
+    rtl::OUString aText;
+    sal_Int64 lastChecked;
+
+    m_xUpdateAccess->getByName( UNISTRING( "LastCheck") ) >>= lastChecked;
+
+    if( lastChecked == 0 ) // never checked
+    {
+        aText = m_aNeverChecked;
+    }
+    else
+    {
+        TimeValue   lastCheckedTV;
+        oslDateTime lastCheckedDT;
+
+        Date  aDate;
+        Time  aTime;
+
+        lastCheckedTV.Seconds = (sal_uInt32) lastChecked;
+        osl_getLocalTimeFromSystemTime( &lastCheckedTV, &lastCheckedTV );
+
+        if ( osl_getDateTimeFromTimeValue(  &lastCheckedTV, &lastCheckedDT ) )
+        {
+            aDate = Date( lastCheckedDT.Day, lastCheckedDT.Month, lastCheckedDT.Year );
+            aTime = Time( lastCheckedDT.Hours, lastCheckedDT.Minutes );
+        }
+
+        LanguageType eUILang = Application::GetSettings().GetUILanguage();
+        SvNumberFormatter *pNumberFormatter = new SvNumberFormatter( ::comphelper::getProcessServiceFactory(), eUILang );
+        String      aTmpStr;
+        Color*      pColor = NULL;
+        Date*       pNullDate = pNumberFormatter->GetNullDate();
+        sal_uInt32  nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_DATE, eUILang );
+
+        pNumberFormatter->GetOutputString( aDate - *pNullDate, nFormat, aTmpStr, &pColor );
+        aDateStr = aTmpStr;
+
+        nFormat = pNumberFormatter->GetStandardFormat( NUMBERFORMAT_TIME, eUILang );
+        pNumberFormatter->GetOutputString( aTime.GetTimeInDays(), nFormat, aTmpStr, &pColor );
+        aTimeStr = aTmpStr;
+
+        delete pColor;
+        delete pNumberFormatter;
+
+        aText = m_aLastCheckedTemplate;
+        sal_Int32 nIndex = aText.indexOf( UNISTRING( "%DATE%" ) );
+        if ( nIndex != -1 )
+            aText = aText.replaceAt( nIndex, 6, aDateStr );
+
+        nIndex = aText.indexOf( UNISTRING( "%TIME%" ) );
+        if ( nIndex != -1 )
+            aText = aText.replaceAt( nIndex, 6, aTimeStr );
+    }
+
+    m_aLastChecked.SetText( aText );
 }
 
 // -----------------------------------------------------------------------
@@ -367,8 +440,10 @@ IMPL_LINK( SvxOnlineUpdateTabPage, CheckNowHdl_Impl, PushButton *, EMPTYARG )
         uno::Reference< frame::XDispatch > xDispatch = xDispatchProvider->queryDispatch(aURL, rtl::OUString(), 0);
 
         if( xDispatch.is() )
+        {
             xDispatch->dispatch(aURL, uno::Sequence< beans::PropertyValue > ());
-
+            UpdateLastCheckedText();
+        }
     }
     catch( const uno::Exception& e )
     {
