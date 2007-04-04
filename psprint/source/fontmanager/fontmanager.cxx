@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:15:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:02:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3146,11 +3146,11 @@ bool PrintFontManager::getMetrics( fontID nFontID, sal_Unicode minCharacter, sal
             effectiveCode |= bVertical ? 1 << 16 : 0;
             ::std::hash_map< int, CharacterMetric >::const_iterator it =
                   pFont->m_pMetrics->m_aMetrics.find( effectiveCode );
-        // if no vertical metrics are available assume rotated horizontal metrics
-        if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
-                  it = pFont->m_pMetrics->m_aMetrics.find( code );
-        // the character metrics are in it->second
-        if( it != pFont->m_pMetrics->m_aMetrics.end() )
+            // if no vertical metrics are available assume rotated horizontal metrics
+            if( bVertical && (it == pFont->m_pMetrics->m_aMetrics.end()) )
+                it = pFont->m_pMetrics->m_aMetrics.find( code );
+            // the character metrics are in it->second
+            if( it != pFont->m_pMetrics->m_aMetrics.end() )
                 pArray[ code - minCharacter ] = it->second;
         }
     }
@@ -3639,7 +3639,7 @@ bool PrintFontManager::createFontSubset(
         }
         else
         {
-            DBG_ASSERT( !(pGlyphIDs[i] & 0xffff0000), "overlong glyph id" );
+            DBG_ASSERT( !(pGlyphIDs[i] & 0x007f0000), "overlong glyph id" );
             DBG_ASSERT( (int)pNewEncoding[i] < nGlyphs, "encoding wrong" );
             DBG_ASSERT( pEnc[pNewEncoding[i]] == 0 && pGID[pNewEncoding[i]] == 0, "duplicate encoded glyph" );
             pEnc[ pNewEncoding[i] ] = pNewEncoding[i];
@@ -3685,6 +3685,66 @@ bool PrintFontManager::createFontSubset(
     CloseTTFont( pTTFont );
 
     return bSuccess;
+}
+
+void PrintFontManager::getGlyphWidths( fontID nFont,
+                                       bool bVertical,
+                                       std::vector< sal_Int32 >& rWidths,
+                                       std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
+{
+    PrintFont* pFont = getFont( nFont );
+    if( !pFont ||
+        (pFont->m_eType != fonttype::TrueType && pFont->m_eType != fonttype::Type1) )
+        return;
+    if( pFont->m_eType == fonttype::TrueType )
+    {
+        TrueTypeFont* pTTFont = NULL;
+        TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
+        ByteString aFromFile = getFontFile( pFont );
+        if( OpenTTFont( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+            return;
+        int nGlyphs = GetTTGlyphCount( pTTFont );
+        if( nGlyphs > 0 )
+        {
+            rWidths.resize(nGlyphs);
+            std::vector<sal_uInt16> aGlyphIds(nGlyphs);
+            for( int i = 0; i < nGlyphs; i++ )
+                aGlyphIds[i] = sal_uInt16(i);
+            TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
+                                                                      &aGlyphIds[0],
+                                                                      nGlyphs,
+                                                                      bVertical ? 1 : 0 );
+            if( pMetrics )
+            {
+                for( int i = 0; i< nGlyphs; i++ )
+                    rWidths[i] = pMetrics[i].adv;
+                free( pMetrics );
+                rUnicodeEnc.clear();
+            }
+        }
+        CloseTTFont( pTTFont );
+    }
+    else if( pFont->m_eType == fonttype::Type1 )
+    {
+        if( ! pFont->m_aEncodingVector.size() )
+            pFont->readAfmMetrics( getAfmFile( pFont ), m_pAtoms, true, true );
+        if( pFont->m_pMetrics )
+        {
+            rUnicodeEnc.clear();
+            rWidths.clear();
+            rWidths.reserve( pFont->m_pMetrics->m_aMetrics.size() );
+            for( std::hash_map< int, CharacterMetric >::const_iterator it =
+                 pFont->m_pMetrics->m_aMetrics.begin();
+                 it != pFont->m_pMetrics->m_aMetrics.end(); ++it )
+            {
+                if( (it->first & 0x00010000) == 0 || bVertical )
+                {
+                    rUnicodeEnc[ sal_Unicode(it->first & 0x0000ffff) ] = sal_uInt32(rWidths.size());
+                    rWidths.push_back( it->second.width );
+                }
+            }
+        }
+    }
 }
 
 // -------------------------------------------------------------------------
