@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinsdlg.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:43:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:17:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1524,8 +1524,8 @@ void SwInsertDBColAutoPilot::DataToDoc( const Sequence<Any>& rSelection,
                                     if(aStandard != aCompare)
                                         nValue += (aStandard - aCompare);
                                 }
+                                pFld->ChgValue( nValue, TRUE );
                             }
-                            pFld->ChgValue( nValue, TRUE );
                             pFld->SetInitialized();
 
                             rSh.Insert( *pFld );
