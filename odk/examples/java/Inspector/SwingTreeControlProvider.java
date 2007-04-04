@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingTreeControlProvider.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:13:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:21:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -43,6 +43,7 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.NullPointerException;
 import com.sun.star.reflection.XConstantTypeDescription;
 import com.sun.star.reflection.XIdlMethod;
+import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -55,6 +56,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
@@ -68,7 +70,6 @@ import javax.swing.tree.TreeSelectionModel;
 
 
 
-
 public class SwingTreeControlProvider implements XTreeControlProvider{
     private JTextArea jtxtGeneratedSourceCode = new JTextArea();
     private JTextField jtxtFilter = new JTextField();
@@ -78,7 +79,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     private JPanel jPnlPath = new JPanel(new BorderLayout());
     private JLabel jLblPath = new JLabel("Generated source code");
     private JProgressBar jProgressBar1 = new JProgressBar();
-    private JTree jTree = null;
+    private JTree jTree = new javax.swing.JTree();
     private XDialogProvider m_xDialogProvider;
     private HideableTreeModel treeModel;
     private UnoTreeRenderer oUnoTreeRenderer;
@@ -92,16 +93,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
 
 
     public SwingTreeControlProvider(XDialogProvider _xDialogProvider){
-    try{
         m_xDialogProvider = _xDialogProvider;
-        jTree = new javax.swing.JTree();
-    }catch( java.lang.RuntimeException exception ) {
-        exception.printStackTrace(System.out);
-    }
-    catch (Throwable t) {
-        t.printStackTrace();
-    }
-
     }
 
 
@@ -146,17 +138,12 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
     }
 
 
-    private void insertBottomPanel(JPanel _jPnlCenter){
-        jPnlPath.setPreferredSize(new Dimension(nDIALOGWIDTH,220));
-        jPnlPath.add(jLblPath, java.awt.BorderLayout.NORTH);
+    private void insertBottomPanel(JSplitPane _jSplitPane){ //JPanel _jPnlCenter){
         jtxtGeneratedSourceCode.setTabSize(4);
         JScrollPane jScrollPane = new JScrollPane(jtxtGeneratedSourceCode);
-        jScrollPane.setPreferredSize(new Dimension(nDIALOGWIDTH, 205));
+        jScrollPane.setPreferredSize(new Dimension(nDIALOGWIDTH,205));
         jtxtGeneratedSourceCode.setEditable(false);
-        jPnlPath.add(jScrollPane, java.awt.BorderLayout.SOUTH);
-        jPnlBottom.add(jPnlPath, java.awt.BorderLayout.SOUTH);
-//        initializeProgressPanel();
-        _jPnlCenter.add(jPnlBottom, java.awt.BorderLayout.SOUTH);
+        _jSplitPane.setBottomComponent(jScrollPane);
     }
 
         private void insertBorderPanes(Container _cp){
@@ -221,8 +208,11 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
             insertTopPanel(jPnlCenter);
             jScrollPane1.setViewportView(jTree);
             jScrollPane1.setPreferredSize(new java.awt.Dimension(600, 600));
-            jPnlCenter.add(jScrollPane1, java.awt.BorderLayout.CENTER);
-            insertBottomPanel(jPnlCenter);
+            JSplitPane jSplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+            jSplitPane.setTopComponent(jScrollPane1);
+            jPnlCenter.add(jSplitPane, java.awt.BorderLayout.CENTER);
+            jSplitPane.setDividerLocation(500);
+            insertBottomPanel(jSplitPane);
             UnoTreeRenderer oUnoTreeRenderer = new UnoTreeRenderer();
             jTree.setCellRenderer(oUnoTreeRenderer);
             jTree.addTreeSelectionListener(
@@ -243,15 +233,18 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
                         //  function key F1 pressed
                         TreePath aTreePath = jTree.getSelectionPath();
                         SwingUnoNode oUnoNode = (SwingUnoNode) aTreePath.getLastPathComponent();
-                        oUnoNode.openIdlDescription();
+                        oUnoNode.openIdlDescription(m_xDialogProvider.getIDLPath());
                     }
                 }
             });
             jTree.addMouseListener(new MouseAdapter() {
                 public void mousePressed (MouseEvent e) {
-                    if (e.isPopupTrigger()) {
+                    if (e.isPopupTrigger()){
                         m_oInspectorPane.showPopUpMenu(e.getComponent(), e.getX(), e.getY());
-
+                    }
+                    //unfortunately under Windows the method "isPopupTrigger" always returns false
+                    else if ((e.getModifiersEx() & MouseEvent.BUTTON3_DOWN_MASK) == MouseEvent.BUTTON3_DOWN_MASK){
+                        m_oInspectorPane.showPopUpMenu(e.getComponent(), e.getX(), e.getY());
                     }
                 }
             });
@@ -369,7 +362,7 @@ public class SwingTreeControlProvider implements XTreeControlProvider{
 
 
     public XUnoMethodNode addMethodNode(Object _objectElement, XIdlMethod _xIdlMethod){
-        SwingUnoMethodNode oSwingUnoMethodNode = new SwingUnoMethodNode(_xIdlMethod, _objectElement);
+        SwingUnoMethodNode oSwingUnoMethodNode = new SwingUnoMethodNode(_xIdlMethod, _objectElement, m_xDialogProvider);
         return oSwingUnoMethodNode;
     }
 
