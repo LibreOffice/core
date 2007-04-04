@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingUnoNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:13:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:21:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -77,8 +77,8 @@ public class SwingUnoNode extends HideableMutableTreeNode implements XUnoNode{
         m_oUnoNode.setParameterObjects(_oParamObjects);
     }
 
-    public void openIdlDescription() {
-        m_oUnoNode.openIdlDescription(getClassName());
+    public void openIdlDescription(String _SDKPath) {
+        m_oUnoNode.openIdlDescription(_SDKPath, getClassName(), getAnchor());
     }
 
     public Object[] getParameterObjects() {

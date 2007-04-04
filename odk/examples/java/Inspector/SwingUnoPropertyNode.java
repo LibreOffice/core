@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwingUnoPropertyNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:13:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -82,6 +82,9 @@ public class SwingUnoPropertyNode extends SwingUnoNode implements XUnoPropertyNo
         return sClassName;
     }
 
+    public String getAnchor(){
+        return m_oUnoPropertyNode.getAnchor();
+    }
 
     public int getPropertyNodeType(){
         return m_oUnoPropertyNode.getPropertyNodeType();
