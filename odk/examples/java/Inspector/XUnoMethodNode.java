@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnoMethodNode.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:16:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 09:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -53,6 +53,8 @@ public interface XUnoMethodNode extends XUnoNode {
 
     public Object invoke(Object _oUnoObject, Object[] _oParameters) throws com.sun.star.uno.Exception;
 
+    public boolean isInvokable();
+
     public boolean hasParameters();
 
     public Object[] getLastParameterObjects();
@@ -64,6 +66,8 @@ public interface XUnoMethodNode extends XUnoNode {
     public boolean isPrimitive();
 
     public Vector getMethodObjects();
+
+    public boolean isFoldable();
 
     public String getStandardMethodDescription();
 
