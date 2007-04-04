@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:50:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,7 @@
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
 #endif
+#include <svtools/apearcfg.hxx>
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
@@ -688,33 +689,37 @@ void IconChoiceDialog::SetPosSizeCtrls ( BOOL bInit )
     ////////////////////////////////////////
     // IconChoiceCtrl resizen & positionieren
     //
-    Size aNewIconCtrlSize  ( ICONCTRL_WIDTH_PIXEL,
+    SvtTabAppearanceCfg aCfg;
+    const long nDefaultWidth = (aCfg.GetScaleFactor() * ICONCTRL_WIDTH_PIXEL) / 100;
+    const long nDefaultHeight = (aCfg.GetScaleFactor() * ICONCTRL_HEIGHT_PIXEL) / 100;
+
+    Size aNewIconCtrlSize  ( nDefaultWidth,
                              aOutSize.Height()-(2*aCtrlOffset.X()) );
     Point aIconCtrlPos;
     switch ( meChoicePos )
     {
         case PosLeft :
             aIconCtrlPos = aCtrlOffset;
-            aNewIconCtrlSize = Size ( ICONCTRL_WIDTH_PIXEL,
+            aNewIconCtrlSize = Size ( nDefaultWidth,
                                       aOutSize.Height()-(2*aCtrlOffset.X()) );
             break;
         case PosRight :
-            aIconCtrlPos = Point ( aOutSize.Width() - ICONCTRL_WIDTH_PIXEL -
+            aIconCtrlPos = Point ( aOutSize.Width() - nDefaultWidth -
                                    aCtrlOffset.X(), aCtrlOffset.X() );
-            aNewIconCtrlSize = Size ( ICONCTRL_WIDTH_PIXEL,
+            aNewIconCtrlSize = Size ( nDefaultWidth,
                                       aOutSize.Height()-(2*aCtrlOffset.X()) );
             break;
         case PosTop :
             aIconCtrlPos = aCtrlOffset;
             aNewIconCtrlSize = Size ( aOutSize.Width()-(2*aCtrlOffset.X()),
-                                      ICONCTRL_HEIGHT_PIXEL );
+                                      nDefaultHeight );
             break;
         case PosBottom :
             aIconCtrlPos = Point ( aCtrlOffset.X(), aOutSize.Height() -
                                    aResetButtonSize.Height() - (2*aCtrlOffset.X()) -
-                                   ICONCTRL_HEIGHT_PIXEL );
+                                   nDefaultHeight );
             aNewIconCtrlSize = Size ( aOutSize.Width()-(2*aCtrlOffset.X()),
-                                      ICONCTRL_HEIGHT_PIXEL );
+                                      nDefaultHeight );
             break;
     };
     maIconCtrl.SetPosSizePixel ( aIconCtrlPos, aNewIconCtrlSize );
