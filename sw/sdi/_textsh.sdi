@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _textsh.sdi,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:15:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:14:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1232,7 +1232,31 @@ interface BaseText
         StateMethod = GetTxtFontCtrlState ;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_ATTR_CHAR_CJK_FONT // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl ;
+        StateMethod = GetTxtFontCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CTL_FONT // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl ;
+        StateMethod = GetTxtFontCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     SID_ATTR_CHAR_FONTHEIGHT // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl ;
+        StateMethod = GetTxtFontCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CJK_FONTHEIGHT // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl ;
+        StateMethod = GetTxtFontCtrlState ;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CTL_FONTHEIGHT // status(final|play)
     [
         ExecMethod = ExecTxtCtrl ;
         StateMethod = GetTxtFontCtrlState ;
@@ -1274,7 +1298,31 @@ interface BaseText
         StateMethod = GetTxtFontCtrlState;
         DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
     ]
+    SID_ATTR_CHAR_CJK_WEIGHT // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl;
+        StateMethod = GetTxtFontCtrlState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CTL_WEIGHT // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl;
+        StateMethod = GetTxtFontCtrlState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
     SID_ATTR_CHAR_POSTURE // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl;
+        StateMethod = GetTxtFontCtrlState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CJK_POSTURE // status(final|play)
+    [
+        ExecMethod = ExecTxtCtrl;
+        StateMethod = GetTxtFontCtrlState;
+        DisableFlags="SW_DISABLE_ON_PROTECTED_CURSOR";
+    ]
+    SID_ATTR_CHAR_CTL_POSTURE // status(final|play)
     [
         ExecMethod = ExecTxtCtrl;
         StateMethod = GetTxtFontCtrlState;
