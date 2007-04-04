@@ -4,9 +4,9 @@
  *
  *  $RCSfile: updatecheckui.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:10:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 07:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -422,17 +422,17 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin )
         mpIconMBar = pActiveMBar;
         mpIconSysWin = pSysWin;
         mpIconSysWin->AddEventListener( maWindowEventHdl );
+    }
 
-        if ( mbShowBubble && pActiveMBar )
+    if ( mbShowBubble && pActiveMBar )
+    {
+        mpBubbleWin = GetBubbleWindow();
+        if ( mpBubbleWin )
         {
-            mpBubbleWin = GetBubbleWindow();
-            if ( mpBubbleWin )
-            {
-                mpBubbleWin->Show( TRUE );
-                maTimeoutTimer.Start();
-            }
-            mbShowBubble = FALSE;
+            mpBubbleWin->Show( TRUE );
+            maTimeoutTimer.Start();
         }
+        mbShowBubble = FALSE;
     }
 }
 
