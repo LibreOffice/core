@@ -12,5 +12,7 @@
     </info>
     <component>
         <prop oor:name="Language" oor:type="xs:string"/>
+        <prop oor:name="SDKPath" oor:type="xs:string"/>
     </component>        
+
 </oor:component-schema>

@@ -10,5 +10,9 @@
         <prop oor:name="Language" oor:type="xs:string">
             <value>Java</value>
         </prop>
+        <prop oor:name="SDKPath" oor:type="xs:string">
+            <value></value>
+        </prop>
+
 </oor:component-data>
 
