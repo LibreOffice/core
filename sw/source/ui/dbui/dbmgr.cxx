@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:48:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:17:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1336,6 +1336,67 @@ BOOL SwNewDBMgr::MergePrintDocuments( SwView& rView,
 /*--------------------------------------------------------------------
     Beschreibung:   Serienbriefe als einzelne Dokumente speichern
  --------------------------------------------------------------------*/
+String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, ULONG nDocNo )
+{
+    do
+    {
+        String sTest = rStartingPageDesc;
+        sTest += String::CreateFromInt32( nDocNo );
+        if( !pTargetShell->FindPageDescByName( sTest ) )
+            return sTest;
+        ++nDocNo;
+    }while(true);
+}
+void lcl_CopyDynamicDefaults( const SwDoc& rSource, SwDoc& rTarget )
+{
+    USHORT __FAR_DATA aRangeOfDefaults[] = {
+        RES_FRMATR_BEGIN, RES_FRMATR_END-1,
+        RES_CHRATR_BEGIN, RES_CHRATR_END-1,
+        RES_PARATR_BEGIN, RES_PARATR_END-1,
+        RES_UNKNOWNATR_BEGIN, RES_UNKNOWNATR_END-1,
+        0
+    };
+
+    SfxItemSet aNewDefaults( rTarget.GetAttrPool(), aRangeOfDefaults );
+
+    USHORT nWhich;
+    USHORT nRange = 0;
+    while( aRangeOfDefaults[nRange] != 0)
+    {
+        for( nWhich = aRangeOfDefaults[nRange]; nWhich < aRangeOfDefaults[nRange + 1]; ++nWhich )
+        {
+            const SfxPoolItem& rSourceAttr = rSource.GetDefault( nWhich );
+            if( rSourceAttr != rTarget.GetDefault( nWhich ) )
+                aNewDefaults.Put( rSourceAttr );
+        }
+        nRange += 2;
+    }
+    if( aNewDefaults.Count() )
+        rTarget.SetDefault( aNewDefaults );
+}
+void lcl_CopyFollowPageDesc(
+                            SwWrtShell& rWorkShell,
+                            SwWrtShell& rTargetShell,
+                            const SwPageDesc& rSourcePageDesc,
+                            const SwPageDesc& rTargetPageDesc,
+                            const ULONG nDocNo )
+{
+    //now copy the follow page desc, too
+    const SwPageDesc* pFollowPageDesc = rSourcePageDesc.GetFollow();
+    String sFollowPageDesc = pFollowPageDesc->GetName();
+    if( sFollowPageDesc != rSourcePageDesc.GetName() )
+    {
+        SwDoc* pTargetDoc = rTargetShell.GetDoc();
+        String sNewFollowPageDesc = lcl_FindUniqueName(&rTargetShell, sFollowPageDesc, nDocNo );
+        sal_uInt16 nNewDesc = pTargetDoc->MakePageDesc( sNewFollowPageDesc );
+        SwPageDesc& rTargetFollowPageDesc = pTargetDoc->_GetPageDesc( nNewDesc );
+
+        pTargetDoc->CopyPageDesc( *pFollowPageDesc, rTargetFollowPageDesc, sal_False );
+        SwPageDesc aDesc( rTargetPageDesc );
+        aDesc.SetFollow( &rTargetFollowPageDesc );
+        pTargetDoc->ChgPageDesc( rTargetPageDesc.GetName(), aDesc );
+    }
+}
 
 BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
         const SwMergeDescriptor& rMergeDescriptor)
@@ -1418,8 +1479,10 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
             SwWrtShell* pTargetShell = 0;
             SfxObjectShellRef xTargetDocShell;
             std::auto_ptr< utl::TempFile > aTempFile;
+            String sModifiedStartingPageDesc;
             String sStartingPageDesc;
             USHORT nStartingPageNo = 0;
+            bool bPageStylesWithHeaderFooter = false;
             if(rMergeDescriptor.bCreateSingleFile)
             {
                 // create a target docshell to put the merged document into
@@ -1444,10 +1507,18 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                 //determine the page style and number used at the start of the source document
                 pSourceShell->SwCrsrShell::SttDoc();
                 nStartingPageNo = pSourceShell->GetVirtPageNum();
-                sStartingPageDesc = pSourceShell->GetPageDesc(
+                sStartingPageDesc = sModifiedStartingPageDesc = pSourceShell->GetPageDesc(
                                             pSourceShell->GetCurPageDesc()).GetName();
                 // #122799# copy compatibility options
                 lcl_CopyCompatibilityOptions( *pSourceShell, *pTargetShell);
+                // #72821# copy dynamic defaults
+                lcl_CopyDynamicDefaults( *pSourceShell->GetDoc(), *pTargetShell->GetDoc() );
+                // #i72517#
+                const SwPageDesc* pSourcePageDesc = pSourceShell->FindPageDescByName( sStartingPageDesc );
+                const SwFrmFmt& rMaster = pSourcePageDesc->GetMaster();
+                bPageStylesWithHeaderFooter = rMaster.GetHeader().IsActive()  ||
+                                                rMaster.GetFooter().IsActive();
+
             }
 
             PrintMonitor aPrtMonDlg(&pSourceShell->GetView().GetEditWin());
@@ -1568,16 +1639,39 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                 rWorkShell.SwCrsrShell::SttDoc();
                                 rWorkShell.SelAll();
                                 pTargetShell->SwCrsrShell::EndDoc();
+                                //#i72517# the headers and footers are still those from the source - update in case of fields inside header/footer
+                                if( !nDocNo && bPageStylesWithHeaderFooter )
+                                    pTargetShell->GetView().GetDocShell()->_LoadStyles( *rWorkShell.GetView().GetDocShell(), sal_True );
+                                //#i72517# put the styles to the target document
+                                //if the source uses headers or footers each new copy need to copy a new page styles
+                                if(bPageStylesWithHeaderFooter)
+                                {
+                                    //create a new pagestyle
+                                    //copy the pagedesc from the current document to the new document and change the name of the to-be-applied style
+
+                                    SwDoc* pTargetDoc = pTargetShell->GetDoc();
+                                    SwPageDesc* pSourcePageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
+                                    String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
+                                    pTargetDoc->MakePageDesc( sNewPageDescName );
+                                    SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
+                                    if(pSourcePageDesc && pTargetPageDesc)
+                                    {
+                                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
+                                        sModifiedStartingPageDesc = sNewPageDescName;
+                                        lcl_CopyFollowPageDesc( rWorkShell, *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
+                                    }
+                                }
+
                                 if(nDocNo > 1)
-                                    pTargetShell->InsertPageBreak( &sStartingPageDesc, nStartingPageNo );
+                                    pTargetShell->InsertPageBreak( &sModifiedStartingPageDesc, nStartingPageNo );
                                 else
-                                    pTargetShell->SetPageStyle(sStartingPageDesc);
+                                    pTargetShell->SetPageStyle(sModifiedStartingPageDesc);
                                 DBG_ASSERT(!pTargetShell->GetTableFmt(),"target document ends with a table - paragraph should be appended")
                                 //#i51359# add a second paragraph in case there's only one
                                 {
                                     SwNodeIndex aIdx( pWorkDoc->GetNodes().GetEndOfExtras(), 2 );
-                  SwPosition aTestPos( aIdx );
-                  SwCursor aTestCrsr(aTestPos);
+                                    SwPosition aTestPos( aIdx );
+                                    SwCursor aTestCrsr(aTestPos);
                                     if(!aTestCrsr.MovePara(fnParaNext, fnParaStart))
                                     {
                                         //append a paragraph
@@ -1585,6 +1679,7 @@ BOOL SwNewDBMgr::MergeMailFiles(SwWrtShell* pSourceShell,
                                     }
                                 }
                                 pTargetShell->Paste( rWorkShell.GetDoc(), sal_True );
+
                                 //convert fields in page styles (header/footer - has to be done after the first document has been pasted
                                 if(1 == nDocNo)
                                 {
@@ -3095,17 +3190,6 @@ uno::Reference<XResultSet> SwNewDBMgr::createCursor(const ::rtl::OUString& _sDat
     merge all data into one resulting document and return the number of
     merged documents
   -----------------------------------------------------------------------*/
-String lcl_FindUniqueName(SwWrtShell* pTargetShell, const String& rStartingPageDesc, ULONG nDocNo )
-{
-    do
-    {
-        String sTest = rStartingPageDesc;
-        sTest += String::CreateFromInt32( nDocNo );
-        if( !pTargetShell->FindPageDescByName( sTest ) )
-            return sTest;
-        ++nDocNo;
-    }while(true);
-}
 
 sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                             SwView& rSourceView )
@@ -3211,6 +3295,8 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
 
         // #122799# copy compatibility options
         lcl_CopyCompatibilityOptions( rSourceShell, *pTargetShell);
+        // #72821# copy dynamic defaults
+        lcl_CopyDynamicDefaults( *rSourceShell.GetDoc(), *pTargetShell->GetDoc() );
 
 
         long nStartRow, nEndRow;
@@ -3283,11 +3369,12 @@ sal_Int32 SwNewDBMgr::MergeDocuments( SwMailMergeConfigItem& rMMConfig,
                     SwPageDesc* pSourcePageDesc = rWorkShell.FindPageDescByName( sStartingPageDesc );
                     String sNewPageDescName = lcl_FindUniqueName(pTargetShell, sStartingPageDesc, nDocNo );
                     pTargetShell->GetDoc()->MakePageDesc( sNewPageDescName );
-                    SwPageDesc* pDestPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
-                    if(pSourcePageDesc && pDestPageDesc)
+                    SwPageDesc* pTargetPageDesc = pTargetShell->FindPageDescByName( sNewPageDescName );
+                    if(pSourcePageDesc && pTargetPageDesc)
                     {
-                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pDestPageDesc, sal_False );
+                        pTargetDoc->CopyPageDesc( *pSourcePageDesc, *pTargetPageDesc, sal_False );
                         sModifiedStartingPageDesc = sNewPageDescName;
+                        lcl_CopyFollowPageDesc( rWorkShell, *pTargetShell, *pSourcePageDesc, *pTargetPageDesc, nDocNo );
                     }
                 }
                 if(nDocNo == 1 || bPageStylesWithHeaderFooter)
