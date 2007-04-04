@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sft.h,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:16:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-/* $Id: sft.h,v 1.16 2007-03-26 11:16:26 ihi Exp $ */
+/* $Id: sft.h,v 1.17 2007-04-04 08:03:04 rt Exp $ */
 
 /**
 
@@ -577,6 +577,11 @@ extern "C" {
  * Returns nonzero if font is a symbol encoded font
  */
     int CheckSymbolEncoding(TrueTypeFont* ttf);
+
+/**
+ * returns the number of glyphs in a font
+ */
+ int GetTTGlyphCount( TrueTypeFont* ttf );
 
 /*- private definitions */ /*FOLD00*/
 
