@@ -146,7 +146,7 @@
             </node>
             <node oor:name=".uno:ZoomIn" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Ver~größern</value>
+                    <value xml:lang="de">~Vergrößern</value>
                     <value xml:lang="en-US">Z~oom In</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
