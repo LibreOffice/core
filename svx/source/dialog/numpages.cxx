@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:35:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:23:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1960,6 +1960,9 @@ void SvxNumOptionsTabPage::InitControls()
     }
     else
         aCharFmtLB.SetNoSelection();
+
+    pPreviewWIN->SetLevel(nActNumLvl);
+    pPreviewWIN->Invalidate();
 }
 
 /*-----------------02.12.97 14:01-------------------
@@ -2872,6 +2875,16 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
         }
         else
         {
+            //#i5153# painting gray or black rectangles as 'normal' numbering text
+            String sMsg( RTL_CONSTASCII_USTRINGPARAM( "Preview") );
+            long nWidth = pVDev->GetTextWidth(sMsg);
+            long nTextHeight = pVDev->GetTextHeight();
+            long nRectHeight = nTextHeight * 2 / 3;
+            long nTopOffset = nTextHeight - nRectHeight;
+            Color aBlackColor(COL_BLACK);
+            if(aBlackColor == aBackColor)
+                aBlackColor.Invert();
+
             for( BYTE nLevel = 0; nLevel < pActNum->GetLevelCount();
                             ++nLevel, nYStart = nYStart + nYStep )
             {
@@ -2916,11 +2929,30 @@ void    SvxNumberingPreview::Paint( const Rectangle& /*rRect*/ )
                     nTextOffset = nTextOffset + nXStep;
                     nPreNum++;
                 }
-                pVDev->SetFont(aStdFont);
-                String sMsg( RTL_CONSTASCII_USTRINGPARAM( "Preview") );
                 if(pOutlineNames)
+                {
+                    //#i5153# outline numberings still use the style names as text
+                    pVDev->SetFont(aStdFont);
                     sMsg = pOutlineNames[nLevel];
-                pVDev->DrawText( Point(nXStart + nTextOffset, nYStart), sMsg );
+                    pVDev->DrawText( Point(nXStart + nTextOffset, nYStart), sMsg );
+                }
+                else
+                {
+                    //#i5153# the selected rectangle(s) should be black
+                    if( 0 != (nActLevel & (1<<nLevel)))
+                    {
+                        pVDev->SetFillColor( aBlackColor );
+                        pVDev->SetLineColor( aBlackColor );
+                    }
+                    else
+                    {
+                        //#i5153# unselected levels are gray
+                        pVDev->SetFillColor( aLineColor );
+                        pVDev->SetLineColor( aLineColor );
+                    }
+                    Rectangle aRect1(Point(nXStart + nTextOffset, nYStart + nTopOffset), Size(nWidth, nRectHeight));
+                    pVDev->DrawRect(aRect1);
+                }
             }
         }
     }
