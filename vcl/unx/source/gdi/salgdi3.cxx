@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-21 12:05:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1466,6 +1466,22 @@ const std::map< sal_Unicode, sal_Int32 >* X11SalGraphics::GetFontEncodingVector(
 #else
     return NULL;
 #endif
+}
+
+//--------------------------------------------------------------------------
+
+void X11SalGraphics::GetGlyphWidths( ImplFontData* pFont,
+                                   bool bVertical,
+                                   std::vector< sal_Int32 >& rWidths,
+                                   std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc )
+{
+    // in this context the pFont->GetFontId() is a valid PSP
+    // font since they are the only ones left after the PDF
+    // export has filtered its list of subsettable fonts (for
+    // which this method was created). The correct way would
+    // be to have the GlyphCache search for the ImplFontData pFont
+    psp::fontID aFont = pFont->GetFontId();
+    PspGraphics::DoGetGlyphWidths( aFont, bVertical, rWidths, rUnicodeEnc );
 }
 
 // ===========================================================================
