@@ -562,7 +562,7 @@
             </node>
             <node oor:name=".uno:InsertPageCountField" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Seitenan~zahl</value>
+                    <value xml:lang="de">~Gesamtzahl der Seiten</value>
                     <value xml:lang="en-US">Page ~Count</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -1383,7 +1383,7 @@
             </node>
             <node oor:name=".uno:InsertFormula" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Formel</value>
+                    <value xml:lang="de">Fo~rmel</value>
                     <value xml:lang="en-US">Fo~rmula</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
