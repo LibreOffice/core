@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:24:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:06:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -268,6 +268,10 @@ public:
                                           FontSubsetInfo& rInfo,
                                           long* pDataLen );
     virtual void            FreeEmbedFontData( const void* pData, long nDataLen );
+    virtual void            GetGlyphWidths( ImplFontData* pFont,
+                                            bool bVertical,
+                                            std::vector< sal_Int32 >& rWidths,
+                                            std::map< sal_Unicode, sal_uInt32 >& rUnicodeEnc );
     virtual BOOL            GetGlyphBoundRect( long nIndex, Rectangle& );
     virtual BOOL            GetGlyphOutline( long nIndex, ::basegfx::B2DPolyPolygon& );
     virtual SalLayout*      GetTextLayout( ImplLayoutArgs&, int nFallbackLevel );
