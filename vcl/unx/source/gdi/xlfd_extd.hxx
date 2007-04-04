@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xlfd_extd.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 13:09:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 08:07:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,6 +274,7 @@ public:
     const ExtendedXlfd&     GetExtendedXlfd() const { return mrXlfd; }
     virtual ImplFontData*   Clone() const           { return new ImplX11FontData( *this ); }
     virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const;
+    virtual sal_IntPtr      GetFontId() const;
 
     static bool             CheckFontData( const ImplFontData& r ) { return r.CheckMagic( X11IFD_MAGIC ); }
 };
