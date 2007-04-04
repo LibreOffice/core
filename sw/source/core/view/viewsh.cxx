@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:11:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-04 15:15:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1143,10 +1143,6 @@ void ViewShell::VisPortChgd( const SwRect &rRect)
         ASSERT( !this, "Scroll waehrend einer EndAction." );
     }
 #endif
-
-    ASSERT( rRect.Top() >= 0 && rRect.Left() >= 0 &&
-            rRect.Bottom() >= 0 && rRect.Right() >= 0,
-            "VisArea in die Wiese?" );
 
     //Ersteinmal die alte sichtbare Seite holen, dann braucht nacher nicht
     //lange gesucht werden.
