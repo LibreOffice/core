@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:02:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-05 13:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3701,7 +3701,7 @@ void PrintFontManager::getGlyphWidths( fontID nFont,
         TrueTypeFont* pTTFont = NULL;
         TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
         ByteString aFromFile = getFontFile( pFont );
-        if( OpenTTFont( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
+        if( OpenTTFontFile( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
             return;
         int nGlyphs = GetTTGlyphCount( pTTFont );
         if( nGlyphs > 0 )
