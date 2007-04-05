@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 15:44:18 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-05 19:56:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1364,15 +1364,8 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             break;
         case NS_rtf::LN_sed:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
-
-            {
-                //section properties
-                doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
-                if( pProperties.get())
-                {
-                    pProperties->resolve(*this);
-                }
-            }
+            //section properties
+            resolveAttributeProperties(val);
             break;
         case NS_rtf::LN_tbdAdd:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
@@ -1439,6 +1432,46 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_STYLESHEET:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
+
+        case NS_rtf::LN_fcEastAsianLayout:
+        /*  it seems that the value is following:
+                ???? XX YYYY ZZ
+            where
+                XX seems to be the run id
+                ZZ is the length of the function that is normally 6
+                Lower byte of YYYY determines whether it is
+                    vertical text flow (0x01), or
+                    two lines in one layout (0x02).
+                For 0x01, if the higher byte of YYYY is zero, the text is not scaled to fit the line height,
+                    in oposite case, it is to be scaled.
+                For 0x02, the higher byte of YYYY is determinig the prefix and suffix of the run:
+                    no brackets (0x00) ,
+                    () round brackets (0x01),
+                    [] square backets (0x02),
+                    <> angle brackets (0x03) and
+                    {} curly brackets (0x04).
+                ???? is different and we do not know its signification
+          */
+
+            if ((nIntValue & 0x000000FF) == 6)
+            {
+                switch ((nIntValue & 0x0000FF00) >> 8)
+                {
+                case 1: // vertical text
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION, uno::makeAny ( sal_Int16(900) ));
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny (((nIntValue & 0x00FF0000) >> 16) != 0));
+                    break;
+                case 2: // two lines in one
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_IS_ON, uno::makeAny ( true ));
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_PREFIX, uno::makeAny ( getBracketStringFromEnum((nIntValue & 0x00FF0000) >> 16)));
+                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_COMBINE_SUFFIX, uno::makeAny ( getBracketStringFromEnum((nIntValue & 0x00FF0000) >> 16, false)));
+                    break;
+                default:
+                    break;
+                }
+            }
+            break;
+
         case NS_ooxml::LN_CT_Underline_val:
             handleUnderlineType(nIntValue, m_pImpl->GetTopContext());
             break;
@@ -1456,13 +1489,11 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             else
             {
                 m_pImpl->m_aCurrentTabStop.bDeleted = false;
-                // TODO handle the alignment
-                // m_pImpl->m_aCurrentTabStop.Alignment = ???
+                m_pImpl->m_aCurrentTabStop.Alignment = getTabAlignFromValue(nIntValue);
             }
             break;
         case NS_ooxml::LN_CT_TabStop_leader:
-            // TODO handle the leader character
-            // m_pImpl->m_aCurrentTabStop.FillChar = ???
+            m_pImpl->m_aCurrentTabStop.FillChar = getFillCharFromValue(nIntValue);
             break;
         case NS_ooxml::LN_CT_TabStop_pos:
             m_pImpl->m_aCurrentTabStop.Position = ConversionHelper::convertToMM100(nIntValue);
@@ -1680,7 +1711,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 90, planned: 8, spent: 8 */
         /* WRITERFILTERSTATUS: comment: bar tab stops a unavailable */
         {
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
             // Initialize tab stop vector from style sheet
             uno::Any aValue = m_pImpl->GetPropertyFromStyleSheet(PROP_PARA_TAB_STOPS);
             uno::Sequence< style::TabStop > aStyleTabStops;
@@ -1690,8 +1720,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             }
 
             //create a new tab stop property - this is done with the contained properties
-            if( pProperties.get())
-                pProperties->resolve(*this);
+            resolveSprmProps(sprm_);
             //add this property
             rContext->Insert(PROP_PARA_TAB_STOPS, uno::makeAny( m_pImpl->GetCurrentTabStopAndClear()));
         }
@@ -2199,13 +2228,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
             // 3 = double,  4 = dotted,  5 = hidden
             // 6 = thick,   7 = dash,    8 = dot(not used)
             // 9 = dotdash 10 = dotdotdash 11 = wave
-
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-
-            if (!pProperties.get())
-                handleUnderlineType(nIntValue, rContext);
-            else
-                pProperties->resolve(*this);
+            handleUnderlineType(nIntValue, rContext);
         }
         break;
     case 0xEA3F:
@@ -2996,6 +3019,9 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xd237:
         /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
         break;//undocumented section properties
+    case 0xca78:
+        resolveSprmProps(sprm_);
+        break;
     case NS_ooxml::LN_CT_Tabs_tab:
         resolveSprmProps(sprm_);
         m_pImpl->IncorporateTabStop(m_pImpl->m_aCurrentTabStop);
@@ -3003,7 +3029,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
 
     // TEMPORARY SOLUTION: have to find how to make this attribute instead of sprm
     case NS_ooxml::LN_EG_RPrBase_color:
-    case NS_ooxml::LN_CT_PPrBase_tabs:
     case NS_ooxml::LN_EG_RPrBase_rFonts:
     case NS_ooxml::LN_CT_PPrBase_jc:
     case NS_ooxml::LN_CT_PPrBase_spacing:
@@ -3013,6 +3038,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_EG_RPrBase_highlight:
     case NS_ooxml::LN_EG_RPrBase_w:
     case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
+    case NS_ooxml::LN_EG_RPrBase_u:
+        resolveSprmProps(sprm_);
+        break;
+
+    case NS_ooxml::LN_CT_PPrBase_tabs:
         resolveSprmProps(sprm_);
         break;
 
@@ -3441,27 +3471,27 @@ rtl::OUString DomainMapper::getBracketStringFromEnum(const sal_Int32 nIntValue, 
 {
     switch(nIntValue)
     {
-    case NS_ooxml::LN_Value_ST_CombineBrackets_round:
+    case 1:
         if (bIsPrefix)
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "(" ));
         return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ")" ));
 
-    case NS_ooxml::LN_Value_ST_CombineBrackets_square:
+    case 2:
         if (bIsPrefix)
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "[" ));
         return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "]" ));
 
-    case NS_ooxml::LN_Value_ST_CombineBrackets_angle:
+    case 3:
         if (bIsPrefix)
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "<" ));
         return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( ">" ));
 
-    case NS_ooxml::LN_Value_ST_CombineBrackets_curly:
+    case 4:
         if (bIsPrefix)
             return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "{" ));
         return rtl::OUString( RTL_CONSTASCII_USTRINGPARAM ( "}" ));
 
-    case NS_ooxml::LN_Value_ST_CombineBrackets_none:
+    case 0:
     default:
         return rtl::OUString();
     }
@@ -3474,5 +3504,50 @@ void DomainMapper::resolveSprmProps(doctok::Sprm & sprm_)
         pProperties->resolve(*this);
 }
 
+void DomainMapper::resolveAttributeProperties(doctok::Value & val)
+{
+    doctok::Reference<Properties>::Pointer_t pProperties = val.getProperties();
+    if( pProperties.get())
+        pProperties->resolve(*this);
+}
+
+
+com::sun::star::style::TabAlign DomainMapper::getTabAlignFromValue(const sal_Int32 nIntValue)
+{
+    switch (nIntValue)
+    {
+    case 0:
+    case 4: // bar not supported
+        return com::sun::star::style::TabAlign_LEFT;
+    case 1:
+        return com::sun::star::style::TabAlign_CENTER;
+    case 2:
+        return com::sun::star::style::TabAlign_RIGHT;
+    case 3:
+        return com::sun::star::style::TabAlign_DECIMAL;
+    default:
+        return com::sun::star::style::TabAlign_DEFAULT;
+    }
+    return com::sun::star::style::TabAlign_LEFT;
+}
+
+sal_Unicode DomainMapper::getFillCharFromValue(const sal_Int32 nIntValue)
+{
+    switch (nIntValue)
+    {
+    case 1: // dot
+        return sal_Unicode(0x002e);
+    case 2: // hyphen
+        return sal_Unicode(0x002d);
+    case 3: // underscore
+    case 4: // heavy FIXME ???
+        return sal_Unicode(0x005f);
+    case NS_ooxml::LN_Value_ST_TabTlc_middleDot: // middleDot
+        return sal_Unicode(0x00b7);
+    case 0: // none
+    default:
+        return sal_Unicode(0x0020); // blank space
+    }
+}
 
 } //namespace dmapper

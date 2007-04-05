@@ -14138,7 +14138,7 @@
   <sprm name="sz" tokenid="ooxml:EG_RPrBase_sz"/>
   <sprm name="szCs" tokenid="ooxml:EG_RPrBase_szCs"/>
   <sprm name="highlight" tokenid="ooxml:EG_RPrBase_highlight"/>
-  <sprm name="u" tokenid="0x2a3e"/>
+  <sprm name="u" tokenid="ooxml:EG_RPrBase_u"/>
   <sprm name="effect" tokenid="0x6816"/>
   <sprm name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
   <sprm name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
@@ -14692,11 +14692,11 @@
   <attribute name="vertCompress" tokenid="ooxml:CT_EastAsianLayout_vertCompress"/>
 </resource>
 <resource name="ST_CombineBrackets" resource="List">
-  <value tokenid="ooxml:Value_ST_CombineBrackets_none">none</value>
-  <value tokenid="ooxml:Value_ST_CombineBrackets_round">round</value>
-  <value tokenid="ooxml:Value_ST_CombineBrackets_square">square</value>
-  <value tokenid="ooxml:Value_ST_CombineBrackets_angle">angle</value>
-  <value tokenid="ooxml:Value_ST_CombineBrackets_curly">curly</value>
+  <value tokenid="0">none</value>
+  <value tokenid="1">round</value>
+  <value tokenid="2">square</value>
+  <value tokenid="3">angle</value>
+  <value tokenid="4">curly</value>
 </resource>
 <resource name="ST_OnOff" resource="Boolean"/>
 </namespace>

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 15:44:17 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-05 19:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,6 +41,7 @@
 #include <doctok/WW8ResourceModel.hxx>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>
+#include <com/sun/star/style/TabAlign.hpp>
 
 namespace com{ namespace sun {namespace star{
     namespace uno{
@@ -108,6 +109,9 @@ private:
     bool getColorFromIndex(const sal_Int32 nIndex, sal_Int32 &nColor);
     sal_Int16 getEmphasisValue(const sal_Int32 nIntValue);
     rtl::OUString getBracketStringFromEnum(const sal_Int32 nIntValue, const bool bIsPrefix = true);
+    com::sun::star::style::TabAlign getTabAlignFromValue(const sal_Int32 nIntValue);
+    sal_Unicode getFillCharFromValue(const sal_Int32 nIntValue);
+    void resolveAttributeProperties(doctok::Value & val);
     void resolveSprmProps(doctok::Sprm & sprm_);
     sal_Int32 mnHpsMeasure, mnTwipsMeasure, mnBackgroundColor;
     bool mbIsHighlightSet;
