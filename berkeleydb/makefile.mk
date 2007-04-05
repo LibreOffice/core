@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.37 $
+#   $Revision: 1.38 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-04 07:58:48 $
+#   last change: $Author: rt $ $Date: 2007-04-05 13:16:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,10 @@ PATCH_FILE_NAME=db-4.2.52-mingw.patch
 .ELSE
 PATCH_FILE_NAME=db-4.2.52.patch
 .ENDIF
+
+# clean compiler flags
+CFLAGS:=
+CXXFLAGS:=
 
 # disable aliasing for all GCC platforms, at least GCC 4.x needs it if
 # optimization level >= 2
