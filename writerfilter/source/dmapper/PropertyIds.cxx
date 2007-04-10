@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 15:44:18 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-10 09:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,7 +146,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CHAR_COMBINE_SUFFIX:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCombineSuffix")); break;
             case PROP_CHAR_ROTATION:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRotation")); break;
             case PROP_CHAR_ROTATION_IS_FIT_TO_LINE:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharRotationIsFitToLine")); break;
-//            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
+            case PROP_CHAR_FLASH:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharFlash")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;
 //            case PROP_CHAR_:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Char")); break;

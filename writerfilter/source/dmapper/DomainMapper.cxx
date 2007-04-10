@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-05 19:56:40 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-10 09:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1601,6 +1601,13 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny ( nIntValue ? true : false));
             break;
 
+        case NS_ooxml::LN_CT_TextEffect_val:
+            if (nIntValue)
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_FLASH, uno::makeAny ( true ));
+            else
+                m_pImpl->GetTopContext()->Insert(PROP_CHAR_FLASH, uno::makeAny ( false ));
+            break;
+
         default:
             {
                 //int nVal = val.getInt();
@@ -2387,6 +2394,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCPropRMark
     case 0x2859:
+        if (nIntValue)
+            rContext->Insert(PROP_CHAR_FLASH, uno::makeAny( true ));
+        else
+            rContext->Insert(PROP_CHAR_FLASH, uno::makeAny( false ));
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCSfxText
     case 0x085A:
@@ -3039,6 +3050,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_EG_RPrBase_w:
     case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
     case NS_ooxml::LN_EG_RPrBase_u:
+    case NS_ooxml::LN_EG_RPrBase_effect:
         resolveSprmProps(sprm_);
         break;
 

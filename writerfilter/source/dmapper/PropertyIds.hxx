@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-04 15:44:18 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-10 09:31:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -233,7 +233,7 @@ enum PropertyIds
 /*191*/ ,PROP_CHAR_COMBINE_SUFFIX
 /*192*/ ,PROP_CHAR_ROTATION
 /*193*/ ,PROP_CHAR_ROTATION_IS_FIT_TO_LINE
-///*194*/ ,PROP_
+/*194*/ ,PROP_CHAR_FLASH
 ///*195*/ ,PROP_
 ///*196*/ ,PROP_
 ///*197*/ ,PROP_
