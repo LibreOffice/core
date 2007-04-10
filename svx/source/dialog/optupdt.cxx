@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:51:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-10 06:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,7 +170,7 @@ void SvxOnlineUpdateTabPage::UpdateLastCheckedText()
     rtl::OUString aDateStr;
     rtl::OUString aTimeStr;
     rtl::OUString aText;
-    sal_Int64 lastChecked;
+    sal_Int64 lastChecked = 0;
 
     m_xUpdateAccess->getByName( UNISTRING( "LastCheck") ) >>= lastChecked;
 
