@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.5 $
+#  $Revision: 1.6 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:37:01 $
+#  last change: $Author: os $ $Date: 2007-04-10 14:21:31 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,7 @@ OOXMLLIB=-looxml
 .ELIF "$(GUI)"=="WNT"
 ODIAPILIB=$(LB)$/iodiapi.lib
 RTFTOKLIB=$(LB)$/irtftok.lib
+DOCTOKLIB=$(LB)$/idoctok.lib
 OOXMLLIB=$(LB)$/iooxml.lib
 .ENDIF
 
