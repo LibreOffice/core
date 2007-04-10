@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ResourceManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 15:54:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-10 07:01:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,7 +160,7 @@ void SAL_CALL ResourceManager::notifyConfigurationChange (
 {
     OSL_ASSERT(rEvent.ResourceId.is());
 
-    sal_Int32 nEventType;
+    sal_Int32 nEventType = 0;
     rEvent.UserData >>= nEventType;
     switch (nEventType)
     {
