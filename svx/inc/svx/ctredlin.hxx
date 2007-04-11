@@ -1,0 +1,469 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: ctredlin.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 15:43:00 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SVX_CTREDLIN_HXX
+#define _SVX_CTREDLIN_HXX
+
+#ifndef _MOREBTN_HXX //autogen
+#include <vcl/morebtn.hxx>
+#endif
+#ifndef _COMBOBOX_HXX //autogen
+#include <vcl/combobox.hxx>
+#endif
+
+#ifndef _HEADBAR_HXX //autogen
+#include <svtools/headbar.hxx>
+#endif
+
+#ifndef _SVTABBX_HXX //autogen
+#include <svtools/svtabbx.hxx>
+#endif
+
+#ifndef _SV_LSTBOX_HXX //autogen
+#include <vcl/lstbox.hxx>
+#endif
+
+#ifndef _SV_TABPAGE_HXX //autogen
+#include <vcl/tabpage.hxx>
+#endif
+
+#ifndef _SV_FIELD_HXX //autogen
+#include <vcl/field.hxx>
+#endif
+
+#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
+#endif
+
+#ifndef _SVX_SIMPTABL
+#include <svx/simptabl.hxx>
+#endif
+
+#ifndef _SV_TABCTRL_HXX //autogen
+#include <vcl/tabctrl.hxx>
+#endif
+
+#ifndef _DATETIME_HXX //autogen
+#include <tools/datetime.hxx>
+#endif
+
+#ifndef _TXTCMP_HXX //autogen
+#include <svtools/txtcmp.hxx>
+#endif
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
+#define FLT_DATE_BEFORE     0
+#define FLT_DATE_SINCE      1
+#define FLT_DATE_EQUAL      2
+#define FLT_DATE_NOTEQUAL   3
+#define FLT_DATE_BETWEEN    4
+#define FLT_DATE_SAVE       5
+
+
+//  Struct fuer Datums-Sortierung
+
+class SVX_DLLPUBLIC RedlinData
+{
+public:
+                    RedlinData();
+    virtual         ~RedlinData();
+    BOOL            bDisabled;
+    DateTime        aDateTime;
+    void*           pData;
+};
+
+class SvxRedlinEntry : public SvLBoxEntry
+{
+public:
+                    SvxRedlinEntry();
+        virtual     ~SvxRedlinEntry();
+};
+
+// Klasse fuer die Darstellung von schriftabhaengigen Strings
+class SvLBoxColorString : public SvLBoxString
+{
+private:
+
+    Color           aPrivColor;
+
+public:
+                    SvLBoxColorString( SvLBoxEntry*,USHORT nFlags,const XubString& rStr,
+                                    const Color& rCol);
+                    SvLBoxColorString();
+                    ~SvLBoxColorString();
+
+    void            Paint( const Point&, SvLBox& rDev, USHORT nFlags,SvLBoxEntry* );
+    SvLBoxItem*     Create() const;
+};
+
+class SVX_DLLPUBLIC SvxRedlinTable : public SvxSimpleTable
+{
+    using SvTabListBox::InsertEntry;
+
+private:
+
+    BOOL            bIsCalc;
+    USHORT          nDatePos;
+    BOOL            bAuthor;
+    BOOL            bDate;
+    BOOL            bComment;
+    USHORT          nDaTiMode;
+    DateTime        aDaTiFirst;
+    DateTime        aDaTiLast;
+    DateTime        aDaTiFilterFirst;
+    DateTime        aDaTiFilterLast;
+    String          aAuthor;
+    Color           aEntryColor;
+    String          aCurEntry;
+    utl::TextSearch* pCommentSearcher;
+    Link            aColCompareLink;
+
+protected:
+
+    virtual StringCompare   ColCompare(SvLBoxEntry*,SvLBoxEntry*);
+    virtual void            InitEntry(SvLBoxEntry*,const XubString&,const Image&,const Image&,SvLBoxButtonKind);
+
+
+
+public:
+
+                    SvxRedlinTable( Window* pParent,WinBits nBits );
+                    SvxRedlinTable( Window* pParent,const ResId& rResId);
+                    ~SvxRedlinTable();
+
+    // For FilterPage only {
+    void            SetFilterDate(BOOL bFlag=TRUE);
+    void            SetDateTimeMode(USHORT nMode);
+    void            SetFirstDate(const Date&);
+    void            SetLastDate(const Date&);
+    void            SetFirstTime(const Time&);
+    void            SetLastTime(const Time&);
+    void            SetFilterAuthor(BOOL bFlag=TRUE);
+    void            SetAuthor(const String &);
+    void            SetFilterComment(BOOL bFlag=TRUE);
+    void            SetCommentParams( const utl::SearchParam* pSearchPara );
+
+    void            UpdateFilterTest();
+    // } For FilterPage only
+
+    void            SetCalcView(BOOL bFlag=TRUE);
+    BOOL            IsValidCalcEntry(const String& ,RedlinData *pUserData);
+    BOOL            IsValidWriterEntry(const String& ,RedlinData *pUserData);
+
+    // keine NULL-Ptr. ueberpruefung {
+    BOOL            IsValidEntry(const String* pAuthor,const DateTime *pDateTime,const String* pComment);
+    BOOL            IsValidEntry(const String* pAuthor,const DateTime *pDateTime);
+    BOOL            IsValidComment(const String* pComment);
+    // }
+
+    SvLBoxEntry*    InsertEntry(const String& ,RedlinData *pUserData,
+                                SvLBoxEntry* pParent=NULL,ULONG nPos=LIST_APPEND);
+
+    SvLBoxEntry*    InsertEntry(const String& ,RedlinData *pUserData,const Color&,
+                                SvLBoxEntry* pParent=NULL,ULONG nPos=LIST_APPEND);
+
+
+    virtual SvLBoxEntry* CreateEntry() const;
+
+    void            SetColCompareHdl(const Link& rLink ) { aColCompareLink = rLink; }
+    const Link&     GetColCompareHdl() const { return aColCompareLink; }
+
+
+};
+
+//==================================================================
+//  Filter- Tabpage
+//==================================================================
+class SVX_DLLPUBLIC SvxTPFilter: public TabPage
+{
+private:
+
+    Link            aReadyLink;
+    Link            aModifyLink;
+    Link            aModifyDateLink;
+    Link            aModifyAuthorLink;
+    Link            aModifyRefLink;
+    Link            aRefLink;
+    Link            aModifyComLink;
+
+    SvxRedlinTable* pRedlinTable;
+    CheckBox        aCbDate;
+    ListBox         aLbDate;
+    DateField       aDfDate;
+    TimeField       aTfDate;
+    ImageButton     aIbClock;
+    FixedText       aFtDate2;
+    DateField       aDfDate2;
+    TimeField       aTfDate2;
+    ImageButton     aIbClock2;
+    CheckBox        aCbAuthor;
+    ListBox         aLbAuthor;
+    CheckBox        aCbRange;
+    Edit            aEdRange;
+    PushButton      aBtnRange;
+    ListBox         aLbAction;
+    CheckBox        aCbComment;
+    Edit            aEdComment;
+    String          aActionStr;
+    String          aRangeStr;
+    String          aStrMyName;
+    BOOL            bModified;
+
+    DECL_LINK( SelDateHdl, ListBox* );
+    DECL_LINK( RowEnableHdl, CheckBox* );
+    DECL_LINK( TimeHdl, ImageButton* );
+    DECL_LINK( ModifyHdl, void* );
+    DECL_LINK( ModifyDate, void* );
+    DECL_LINK( RefHandle, PushButton* );
+
+
+protected:
+
+    void            ShowDateFields(USHORT nKind);
+    void            EnableDateLine1(BOOL bFlag);
+    void            EnableDateLine2(BOOL bFlag);
+
+public:
+                    SvxTPFilter( Window * pParent);
+
+    virtual void    DeactivatePage();
+    void            SetRedlinTable(SvxRedlinTable*);
+
+    String          GetMyName() const;
+    Date            GetFirstDate() const;
+    void            SetFirstDate(const Date &aDate);
+    Time            GetFirstTime() const;
+    void            SetFirstTime(const Time &aTime);
+
+    Date            GetLastDate() const;
+    void            SetLastDate(const Date &aDate);
+    Time            GetLastTime() const;
+    void            SetLastTime(const Time &aTime);
+
+    void            SetDateMode(USHORT nMode);
+    USHORT          GetDateMode();
+
+    void            ClearAuthors();
+    void            InsertAuthor( const String& rString, USHORT nPos = LISTBOX_APPEND );
+    USHORT          GetSelectedAuthorPos();
+    String          GetSelectedAuthor()const;
+    void            SelectedAuthorPos(USHORT nPos);
+    USHORT          SelectAuthor(const String& aString);
+    void            SetComment(const String &rComment);
+    String          GetComment()const;
+
+
+    // Methoden fuer Calc {
+    void            SetRange(const String& rString);
+    String          GetRange() const;
+    void            HideRange(BOOL bHide=TRUE);
+    void            DisableRange(BOOL bFlag=TRUE);
+    void            SetFocusToRange();
+    // } Methoden fuer Calc
+
+    void            HideClocks(BOOL bHide=TRUE);
+    void            DisableRef(BOOL bFlag);
+
+    BOOL            IsDate();
+    BOOL            IsAuthor();
+    BOOL            IsRange();
+    BOOL            IsAction();
+    BOOL            IsComment();
+
+    void            ShowAction(BOOL bShow=TRUE);
+
+    void            CheckDate(BOOL bFlag=TRUE);
+    void            CheckAuthor(BOOL bFlag=TRUE);
+    void            CheckRange(BOOL bFlag=TRUE);
+    void            CheckAction(BOOL bFlag=TRUE);
+    void            CheckComment(BOOL bFlag=TRUE);
+
+    ListBox*        GetLbAction();
+
+    void            SetReadyHdl( const Link& rLink ) { aReadyLink= rLink; }
+    const Link&     GetReadyHdl() const { return aReadyLink; }
+
+    void            SetModifyHdl( const Link& rLink ) { aModifyLink = rLink; }
+    const Link&     GetModifyHdl() const { return aModifyLink; }
+
+    void            SetModifyDateHdl( const Link& rLink ) { aModifyDateLink = rLink; }
+    const Link&     GetModifyDateHdl() const { return aModifyDateLink; }
+
+    void            SetModifyAuthorHdl( const Link& rLink ) { aModifyAuthorLink = rLink; }
+    const Link&     GetModifyAuthorHdl() const { return aModifyAuthorLink; }
+
+    void            SetModifyCommentHdl(const Link& rLink ) { aModifyComLink = rLink; }
+    const Link&     GetModifyCommentHdl() const { return aModifyComLink; }
+
+
+    // Methoden fuer Calc {
+    void            SetModifyRangeHdl( const Link& rLink ) { aModifyRefLink = rLink; }
+    const Link&     GetModifyRangeHdl() const { return aModifyRefLink; }
+
+    void            SetRefHdl( const Link& rLink ) { aRefLink = rLink; }
+    const Link&     GetRefHdl() const { return aRefLink; }
+
+    void            Enable( bool bEnable = true, bool bChild = true );
+    void            Disable( bool bChild = true );
+
+    // } Methoden fuer Calc
+};
+
+
+//==================================================================
+//  View- Tabpage
+//==================================================================
+
+class SVX_DLLPUBLIC SvxTPView: public TabPage
+{
+private:
+
+    Link            AcceptClickLk;
+    Link            AcceptAllClickLk;
+    Link            RejectClickLk;
+    Link            RejectAllClickLk;
+    Link            UndoClickLk;
+
+    SvxRedlinTable  aViewData;
+    PushButton      PbAccept;
+    PushButton      PbReject;
+    PushButton      PbAcceptAll;
+    PushButton      PbRejectAll;
+    PushButton      PbUndo;
+    String          aTitle1;
+    String          aTitle2;
+    String          aTitle3;
+    String          aTitle4;
+    String          aTitle5;
+    String          aStrMyName;
+    long            nDistance;
+    Size            aMinSize;
+
+    DECL_LINK( PbClickHdl, PushButton* );
+
+
+protected:
+
+    void            Resize();
+
+public:
+                    SvxTPView( Window * pParent);
+
+    String          GetMyName() const;
+
+    void            InsertWriterHeader();
+    void            InsertCalcHeader();
+    SvxRedlinTable* GetTableControl();
+
+    void            EnableAccept(BOOL nFlag=TRUE);
+    void            EnableAcceptAll(BOOL nFlag=TRUE);
+    void            EnableReject(BOOL nFlag=TRUE);
+    void            EnableRejectAll(BOOL nFlag=TRUE);
+    void            EnableUndo(BOOL nFlag=TRUE);
+
+    void            DisableAccept()     {EnableAccept(FALSE);}
+    void            DisableAcceptAll()  {EnableAcceptAll(FALSE);}
+    void            DisableReject()     {EnableReject(FALSE);}
+    void            DisableRejectAll()  {EnableRejectAll(FALSE);}
+    void            DisableUndo()       {EnableUndo(FALSE);}
+
+    void            ShowUndo(BOOL nFlag=TRUE);
+    void            HideUndo()          {ShowUndo(FALSE);}
+    BOOL            IsUndoVisible();
+
+    Size            GetMinSizePixel();
+
+    void            SetAcceptClickHdl( const Link& rLink ) { AcceptClickLk = rLink; }
+    const Link&     GetAcceptClickHdl() const { return AcceptClickLk; }
+
+    void            SetAcceptAllClickHdl( const Link& rLink ) { AcceptAllClickLk = rLink; }
+    const Link&     GetAcceptAllClickHdl() const { return AcceptAllClickLk; }
+
+    void            SetRejectClickHdl( const Link& rLink ) { RejectClickLk = rLink; }
+    const Link&     GetRejectClickHdl() const { return RejectClickLk; }
+
+    void            SetRejectAllClickHdl( const Link& rLink ) { RejectAllClickLk = rLink; }
+    const Link&     GetRejectAllClickHdl() const { return RejectAllClickLk; }
+
+    void            SetUndoClickHdl( const Link& rLink ) { UndoClickLk = rLink; }
+    const Link&     GetUndoAllClickHdl() const { return UndoClickLk; }
+};
+
+//==================================================================
+//  Redlining - Control (Accept- Changes)
+//==================================================================
+
+class SVX_DLLPUBLIC SvxAcceptChgCtr : public Control
+{
+private:
+
+    Link            aMinSizeLink;
+    TabControl      aTCAccept;
+    SvxTPFilter*    pTPFilter;
+    SvxTPView*      pTPView;
+    Size            aMinSize;
+
+protected:
+
+    virtual void    Resize();
+
+public:
+                    SvxAcceptChgCtr( Window* pParent, WinBits nWinStyle = 0 );
+                    SvxAcceptChgCtr( Window* pParent, const ResId& rResId );
+
+                    ~SvxAcceptChgCtr();
+
+    Size            GetMinSizePixel() const;
+
+    void            ShowFilterPage();
+    void            ShowViewPage();
+
+    BOOL            IsFilterPageVisible();
+    BOOL            IsViewPageVisible();
+
+    SvxTPFilter*    GetFilterPage();
+    SvxTPView*      GetViewPage();
+    SvxRedlinTable* GetViewTable();
+
+    void            SetMinSizeHdl( const Link& rLink ) { aMinSizeLink= rLink; }
+    const Link&     GetMinSizeHdl() const { return aMinSizeLink; }
+};
+
+
+#endif // _SVX_CTREDLIN_HXX
+
