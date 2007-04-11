@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdobj1.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:06:23 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 12:57:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@
 #endif
 #include <svtools/transfer.hxx>
 #include "runtime.hxx"
-#include "stdobj1.hxx"
+#include "sbstdobj.hxx"
 
 #define ATTR_IMP_TYPE           1
 #define ATTR_IMP_WIDTH          2
