@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brwbox1.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:05:58 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 19:45:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,9 +130,9 @@ namespace
 
 //===================================================================
 
-void BrowseBox::Construct( BrowserMode nMode )
+void BrowseBox::ConstructImpl( BrowserMode nMode )
 {
-    DBG_TRACE1( "BrowseBox: %p->Construct", this );
+    DBG_TRACE1( "BrowseBox: %p->ConstructImpl", this );
     bMultiSelection = FALSE;
     pColSel = 0;
     pDataWin = 0;
@@ -180,7 +180,7 @@ void BrowseBox::Construct( BrowserMode nMode )
     bHasFocus = HasChildPathFocus();
     getDataWindow()->nCursorHidden =
                 ( bHasFocus ? 0 : 1 ) + ( GetUpdateMode() ? 0 : 1 );
-    LOG( this, "Construct", "*" );
+    LOG( this, "ConstructImpl", "*" );
 }
 
 //-------------------------------------------------------------------
@@ -192,7 +192,7 @@ BrowseBox::BrowseBox( Window* pParent, WinBits nBits, BrowserMode nMode )
     ,aHScroll( this, WinBits( WB_HSCROLL ) )
 {
     DBG_CTOR( BrowseBox, NULL );
-    Construct( nMode );
+    ConstructImpl( nMode );
 }
 
 //-------------------------------------------------------------------
@@ -204,7 +204,7 @@ BrowseBox::BrowseBox( Window* pParent, const ResId& rId, BrowserMode nMode )
     ,aHScroll( this, WinBits(WB_HSCROLL) )
 {
     DBG_CTOR( BrowseBox, NULL );
-    Construct(nMode);
+    ConstructImpl(nMode);
 }
 //-------------------------------------------------------------------
 
