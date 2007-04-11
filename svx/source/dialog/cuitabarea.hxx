@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitabarea.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:10:16 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 17:03:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ private:
 protected:
     virtual short       Ok();
 #ifdef _SVX_TABAREA_CXX
-    DECL_LINK( CancelHdl, void * );
+    DECL_LINK( CancelHdlImpl, void * );
     void                SavePalettes();
 #endif
 
