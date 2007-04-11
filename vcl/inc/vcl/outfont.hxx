@@ -1,0 +1,409 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: outfont.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 18:02:27 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SV_OUTFONT_HXX
+#define _SV_OUTFONT_HXX
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+#ifndef _LIST_HXX
+#include <tools/list.hxx>
+#endif
+#ifndef INCLUDED_I18NPOOL_LANG_H
+#include <i18npool/lang.h>
+#endif
+#ifndef _GEN_HXX
+#include <tools/gen.hxx>
+#endif
+
+#ifndef _SV_SV_H
+#include <vcl/sv.h>
+#endif
+
+#ifndef _VCL_DLLAPI_H
+#include <vcl/dllapi.h>
+#endif
+
+#include <vcl/vclenum.hxx>
+
+#include <hash_map>
+
+class ImplDevFontListData;
+class ImplGetDevFontList;
+class ImplGetDevSizeList;
+class ImplFontEntry;
+struct ImplFontSubstEntry;
+class ImplFontSelectData;
+class Font;
+class ImplCvtChar;
+struct FontMatchStatus;
+class OutputDevice;
+
+namespace vcl {
+  struct FontNameAttr;
+}
+
+// ----------------------
+// - ImplFontAttributes -
+// ----------------------
+// device independent font properties
+
+class ImplFontAttributes
+{
+public: // TODO: create matching interface class
+    const String&   GetFamilyName() const   { return maName; }
+    const String&   GetStyleName() const    { return maStyleName; }
+    FontWeight      GetWeight() const       { return meWeight; }
+    FontItalic      GetSlant() const        { return meItalic; }
+    FontFamily      GetFamilyType() const   { return meFamily; }
+    FontPitch       GetPitch() const        { return mePitch; }
+    FontWidth       GetWidthType() const    { return meWidthType; }
+    bool            IsSymbolFont() const    { return mbSymbolFlag; }
+
+public: // TODO: hide members behind accessor methods
+    String          maName;         // Font Family Name
+    String          maStyleName;    // Font Style Name
+    FontWeight      meWeight;       // Weight Type
+    FontItalic      meItalic;       // Slant Type
+    FontFamily      meFamily;       // Family Type
+    FontPitch       mePitch;        // Pitch Type
+    FontWidth       meWidthType;    // Width Type
+    bool            mbSymbolFlag;
+};
+
+// -------------------------
+// - ImplDevFontAttributes -
+// -------------------------
+// device dependent font properties
+
+class ImplDevFontAttributes : public ImplFontAttributes
+{
+public: // TODO: create matching interface class
+    const String&      GetAliasNames() const     { return maMapNames; }
+    int                GetQuality() const        { return mnQuality; }
+    bool               IsRotatable() const       { return mbOrientation; }
+    bool               IsDeviceFont() const      { return mbDevice; }
+    bool               IsEmbeddable() const      { return mbEmbeddable; }
+    bool               IsSubsettable() const     { return mbSubsettable; }
+    FontEmbeddedBitmap UseEmbeddedBitmap() const { return meEmbeddedBitmap; }
+    FontAntiAlias      UseAntiAlias() const      { return meAntiAlias; }
+
+public: // TODO: hide members behind accessor methods
+    String             maMapNames;       // List of family name aliass separated with ';'
+    int                mnQuality;        // Quality (used when similar fonts compete)
+    bool               mbOrientation;    // true: physical font can be rotated
+    bool               mbDevice;         // true: built in font
+    bool               mbSubsettable;    // true: a subset of the font can be created
+    bool               mbEmbeddable;     // true: the font can be embedded
+    FontEmbeddedBitmap meEmbeddedBitmap; // whether the embedded bitmaps should be used
+    FontAntiAlias      meAntiAlias;      // whether the font should be antialiased
+};
+
+// ----------------
+// - ImplFontData -
+// ----------------
+// TODO: rename ImplFontData to PhysicalFontFace
+// TODO: no more direct access to members
+// TODO: add reference counting
+// TODO: get rid of height/width for scalable fonts
+// TODO: make cloning cheaper
+
+// abstract base class for physical font faces
+class VCL_DLLPUBLIC ImplFontData : public ImplDevFontAttributes
+{
+public:
+    // by using an ImplFontData object as a factory for its corresponding
+    // ImplFontEntry an ImplFontEntry can be extended to cache device and
+    // font instance specific data
+    virtual ImplFontEntry*  CreateFontInstance( ImplFontSelectData& ) const = 0;
+
+    virtual int             GetHeight() const           { return mnHeight; }
+    virtual int             GetWidth() const            { return mnWidth; }
+    virtual sal_IntPtr      GetFontId() const = 0;
+    int                     GetFontMagic() const        { return mnMagic; }
+    bool                    IsScalable() const          { return (mnHeight == 0); }
+    bool                    CheckMagic( int n ) const   { return (n == mnMagic); }
+    ImplFontData*           GetNextFace() const         { return mpNext; }
+    ImplFontData*           CreateAlias() const         { return Clone(); }
+
+    bool                    IsBetterMatch( const ImplFontSelectData&, FontMatchStatus& ) const;
+    StringCompare           CompareWithSize( const ImplFontData& ) const;
+    StringCompare           CompareIgnoreSize( const ImplFontData& ) const;
+    virtual                 ~ImplFontData() {}
+    virtual ImplFontData*   Clone() const = 0;
+
+protected:
+                            ImplFontData( const ImplDevFontAttributes&, int nMagic );
+    void                    SetBitmapSize( int nW, int nH ) { mnWidth=nW; mnHeight=nH; }
+
+    long                    mnWidth;    // Width (in pixels)
+    long                    mnHeight;   // Height (in pixels)
+
+private:
+friend class ImplDevFontListData;
+    const int               mnMagic;    // poor man's RTTI
+    ImplFontData*           mpNext;
+};
+
+// ----------------------
+// - ImplFontSelectData -
+// ----------------------
+
+class ImplFontSelectData : public ImplFontAttributes
+{
+public:
+                        ImplFontSelectData( const Font&, const String& rSearchName, const Size& );
+                        ImplFontSelectData( ImplFontData&, const Size&,
+                            int nOrientation, bool bVertical );
+
+public: // TODO: change to private
+    String              maTargetName;       // name of the font name token that is chosen
+    String              maSearchName;       // name of the font that matches best
+    int                 mnWidth;            // width of font in pixel units
+    int                 mnHeight;           // height of font in pixel units
+    int                 mnOrientation;      // text orientation in 3600 system
+    LanguageType        meLanguage;         // text language
+    bool                mbVertical;         // vertical mode of requested font
+    bool                mbNonAntialiased;   // true if antialiasing is disabled
+
+    ImplFontData*       mpFontData;         // a matching ImplFontData object
+    ImplFontEntry*      mpFontEntry;        // pointer to the resulting FontCache entry
+};
+
+struct FontNameHash { int operator()(const String&) const; };
+
+// -------------------
+// - ImplDevFontList -
+// -------------------
+// TODO: merge with ImplFontCache
+// TODO: rename to LogicalFontManager
+
+class VCL_DLLPUBLIC ImplDevFontList
+{
+private:
+    mutable bool            mbMatchData;    // true if matching attributes are initialized
+    bool                    mbMapNames;     // true if MapNames are available
+
+    typedef std::hash_map<const String, ImplDevFontListData*,FontNameHash> DevFontList;
+    DevFontList             maDevFontList;
+
+public:
+                            ImplDevFontList();
+                            ~ImplDevFontList();
+
+    void                    Add( ImplFontData* );
+    void                    Clear();
+    int                     Count() const { return maDevFontList.size(); }
+
+    ImplDevFontListData*    FindFontFamily( const String& rFontName ) const;
+    ImplDevFontListData*    ImplFindByFont( ImplFontSelectData&, bool bPrinter, ImplFontSubstEntry* pDevSpecificSubst ) const;
+    ImplDevFontListData*    ImplFindBySearchName( const String& ) const;
+
+    bool                    HasFallbacks() const;
+    void                    SetFallbacks( ImplDevFontListData**, int nCount );
+    ImplDevFontListData*    GetFallback( int nIndex ) const;
+
+    ImplDevFontList*        Clone( bool bScalable, bool bEmbeddable ) const;
+    ImplGetDevFontList*     GetDevFontList() const;
+    ImplGetDevSizeList*     GetDevSizeList( const String& rFontName ) const;
+
+protected:
+    void                    InitMatchData() const;
+    bool                    AreMapNamesAvailable() const { return mbMapNames; }
+
+    ImplDevFontListData*    ImplFindByTokenNames( const String& ) const;
+    ImplDevFontListData*    ImplFindByAliasName( const String& rSearchName, const String& rShortName ) const;
+    ImplDevFontListData*    ImplFindBySubstFontAttr( const vcl::FontNameAttr& ) const;
+    ImplDevFontListData*    ImplFindByAttributes( ULONG nSearchType, FontWeight, FontWidth,
+                                FontFamily, FontItalic, const String& rSearchFamily ) const;
+    ImplDevFontListData*    FindDefaultFont() const;
+
+private:
+    ImplDevFontListData**   mpFallbackList;
+    int                     mnFallbackCount;
+};
+
+
+// --------------------
+// - ImplKernPairData -
+// --------------------
+// TODO: get rid of ImplKernPairData and use outdev.hxx's KerningPair struct
+// the problem is that outdev.hxx is too high level for the device layers
+// and outdev.hxx's customers depend on KerningPair being defined there
+
+struct ImplKernPairData
+{
+    USHORT              mnChar1;
+    USHORT              mnChar2;
+    long                mnKern;
+};
+
+
+// -----------------------
+// - ImplFontMetricData -
+// -----------------------
+
+class ImplFontMetricData : public ImplFontAttributes
+{
+public:
+            ImplFontMetricData( const ImplFontSelectData& );
+    void    ImplInitTextLineSize( const OutputDevice* pDev );
+    void    ImplInitAboveTextLineSize();
+
+public: // TODO: hide members behind accessor methods
+    long                mnWidth;                    // Reference Width
+    long                mnAscent;                   // Ascent
+    long                mnDescent;                  // Descent
+    long                mnIntLeading;               // Internal Leading
+    long                mnExtLeading;               // External Leading
+    int                 mnSlant;                    // Slant (Italic/Oblique)
+    int                 meFamilyType;               // Font Family Type
+    short               mnOrientation;              // Rotation in 1/10 degrees
+    bool                mbDevice;                   // Flag for Device Fonts
+    bool                mbScalableFont;
+    bool                mbKernableFont;
+    long                mnUnderlineSize;            // Lineheight of Underline
+    long                mnUnderlineOffset;          // Offset from Underline to Baseline
+    long                mnBUnderlineSize;           // Hoehe von fetter Unterstreichung
+    long                mnBUnderlineOffset;         // Offset von fetter Unterstreichung zur Baseline
+    long                mnDUnderlineSize;           // Hoehe von doppelter Unterstreichung
+    long                mnDUnderlineOffset1;        // Offset von doppelter Unterstreichung zur Baseline
+    long                mnDUnderlineOffset2;        // Offset von doppelter Unterstreichung zur Baseline
+    long                mnWUnderlineSize;           // Hoehe von WaveLine-Unterstreichung
+    long                mnWUnderlineOffset;         // Offset von WaveLine-Unterstreichung zur Baseline, jedoch zentriert zur WaveLine
+    long                mnAboveUnderlineSize;       // Hoehe von einfacher Unterstreichung (for Vertical Right)
+    long                mnAboveUnderlineOffset;     // Offset von einfacher Unterstreichung zur Baseline (for Vertical Right)
+    long                mnAboveBUnderlineSize;      // Hoehe von fetter Unterstreichung (for Vertical Right)
+    long                mnAboveBUnderlineOffset;    // Offset von fetter Unterstreichung zur Baseline (for Vertical Right)
+    long                mnAboveDUnderlineSize;      // Hoehe von doppelter Unterstreichung (for Vertical Right)
+    long                mnAboveDUnderlineOffset1;   // Offset von doppelter Unterstreichung zur Baseline (for Vertical Right)
+    long                mnAboveDUnderlineOffset2;   // Offset von doppelter Unterstreichung zur Baseline (for Vertical Right)
+    long                mnAboveWUnderlineSize;      // Hoehe von WaveLine-Unterstreichung (for Vertical Right)
+    long                mnAboveWUnderlineOffset;    // Offset von WaveLine-Unterstreichung zur Baseline, jedoch zentriert zur WaveLine (for Vertical Right)
+    long                mnStrikeoutSize;            // Hoehe von einfacher Durchstreichung
+    long                mnStrikeoutOffset;          // Offset von einfacher Durchstreichung zur Baseline
+    long                mnBStrikeoutSize;           // Hoehe von fetter Durchstreichung
+    long                mnBStrikeoutOffset;         // Offset von fetter Durchstreichung zur Baseline
+    long                mnDStrikeoutSize;           // Hoehe von doppelter Durchstreichung
+    long                mnDStrikeoutOffset1;        // Offset von doppelter Durchstreichung zur Baseline
+    long                mnDStrikeoutOffset2;        // Offset von doppelter Durchstreichung zur Baseline
+};
+
+// -----------------
+// - ImplFontEntry -
+// ------------------
+// TODO: rename ImplFontEntry to LogicalFontInstance
+// TODO: allow sharing of metrics for related fonts
+
+class VCL_DLLPUBLIC ImplFontEntry
+{
+public:
+                        ImplFontEntry( const ImplFontSelectData& );
+    virtual             ~ImplFontEntry() {}
+
+public: // TODO: make data members private
+    ImplFontSelectData  maFontSelData;      // FontSelectionData
+    ImplFontMetricData  maMetric;           // Font Metric
+    const ImplCvtChar*  mpConversion;       // used e.g. for StarBats->StarSymbol
+    long                mnLineHeight;
+    ULONG               mnRefCount;
+    USHORT              mnSetFontFlags;     // Flags returned by SalGraphics::SetFont()
+    short               mnOwnOrientation;   // text angle if lower layers don't rotate text themselves
+    short               mnOrientation;      // text angle in 3600 system
+    bool                mbInit;             // true if maMetric member is valid
+};
+
+
+class ImplTextLineInfo
+{
+private:
+    long        mnWidth;
+    xub_StrLen  mnIndex;
+    xub_StrLen  mnLen;
+
+public:
+                ImplTextLineInfo( long nWidth, xub_StrLen nIndex, xub_StrLen nLen )
+                {
+                    mnWidth = nWidth;
+                    mnIndex = nIndex;
+                    mnLen   = nLen;
+                }
+
+    long        GetWidth() const { return mnWidth; }
+    xub_StrLen  GetIndex() const { return mnIndex; }
+    xub_StrLen  GetLen() const { return mnLen; }
+};
+
+#define MULTITEXTLINEINFO_RESIZE    16
+typedef ImplTextLineInfo* PImplTextLineInfo;
+
+class ImplMultiTextLineInfo
+{
+private:
+    PImplTextLineInfo*  mpLines;
+    xub_StrLen          mnLines;
+    xub_StrLen          mnSize;
+
+public:
+                        ImplMultiTextLineInfo();
+                        ~ImplMultiTextLineInfo();
+
+    void                AddLine( ImplTextLineInfo* pLine );
+    void                Clear();
+
+    ImplTextLineInfo*   GetLine( USHORT nLine ) const
+                            { return mpLines[nLine]; }
+    xub_StrLen          Count() const { return mnLines; }
+
+private:
+                            ImplMultiTextLineInfo( const ImplMultiTextLineInfo& );
+    ImplMultiTextLineInfo&  operator=( const ImplMultiTextLineInfo& );
+};
+
+#define SAL_FONTSUBSETINFO_TYPE_TRUETYPE 0
+#define SAL_FONTSUBSETINFO_TYPE_TYPE1    1
+
+struct FontSubsetInfo
+{
+    String      m_aPSName;
+    int         m_nFontType;
+    int         m_nAscent; // all lengths in PS font units
+    int         m_nDescent;
+    int         m_nCapHeight;
+    Rectangle   m_aFontBBox;
+};
+
+#endif // _SV_OUTFONT_HXX
