@@ -1,0 +1,447 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: svdoedge.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 16:23:44 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SVDOEDGE_HXX
+#define _SVDOEDGE_HXX
+
+#ifndef _SVDOTEXT_HXX
+#include <svx/svdotext.hxx>
+#endif
+
+#ifndef _SVDGLUE_HXX
+#include <svx/svdglue.hxx>
+#endif
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
+//************************************************************
+//   Vorausdeklarationen
+//************************************************************
+
+class SdrDragMethod;
+class SdrPageView;
+
+namespace sdr
+{
+    namespace properties
+    {
+        class ConnectorProperties;
+    } // end of namespace properties
+} // end of namespace sdr
+
+//************************************************************
+//   Hilfsklasse SdrObjConnection
+//************************************************************
+
+class SdrObjConnection
+{
+    friend class                SdrEdgeObj;
+    friend class                ImpEdgeHdl;
+    friend class                SdrCreateView;
+
+protected:
+    Point                       aObjOfs;       // Wird beim Draggen eines Knotens gesetzt
+    SdrObject*                  pObj;          // Referenziertes Objekt
+    long                        nXDist;        // Hor. Objektabstand wenn bXDistOvr=TRUE
+    long                        nYDist;        // Vert. Objektabstand wenn bYDistOvr=TRUE
+    USHORT                      nConId;        // Konnektornummer
+
+    // bitfield
+    unsigned                    bBestConn : 1;   // TRUE= es wird der guenstigste Konnektor gesucht
+    unsigned                    bBestVertex : 1; // TRUE= es wird der guenstigste Scheitelpunkt zum konnekten gesucht
+    unsigned                    bXDistOvr : 1;   // TRUE= Hor. Objektabstand wurde gedragt (Overwrite)
+    unsigned                    bYDistOvr : 1;   // TRUE= Vert. Objektabstand wurde gedragt (Overwrite)
+    unsigned                    bAutoVertex : 1; // AutoConnector am Scheitelpunkt nCon
+    unsigned                    bAutoCorner : 1; // AutoConnector am Eckpunkt nCon
+
+public:
+    SdrObjConnection() { ResetVars(); }
+    ~SdrObjConnection();
+
+    void ResetVars();
+    FASTBOOL TakeGluePoint(SdrGluePoint& rGP, FASTBOOL bSetAbsolutePos) const;
+
+    inline void SetBestConnection( BOOL rB ) { bBestConn = rB; };
+    inline void SetBestVertex( BOOL rB ) { bBestVertex = rB; };
+    inline void SetAutoVertex( BOOL rB ) { bAutoVertex = rB; };
+    inline void SetConnectorId( USHORT nId ) { nConId = nId; };
+
+    inline BOOL IsBestConnection() const { return bBestConn; };
+    inline BOOL IsBestVertex() const { return bBestVertex; };
+    inline BOOL IsAutoVertex() const { return bAutoVertex; };
+    inline sal_uInt16 GetConnectorId() const { return nConId; };
+    inline SdrObject* GetObject() const { return pObj; }
+};
+
+//************************************************************
+//   Hilfsklasse SdrEdgeInfoRec
+//************************************************************
+
+enum SdrEdgeLineCode {OBJ1LINE2,OBJ1LINE3,OBJ2LINE2,OBJ2LINE3,MIDDLELINE};
+
+class SdrEdgeInfoRec
+{
+public:
+    // Die 5 Distanzen werden beim draggen bzw. per SetAttr gesetzt und von
+    // ImpCalcEdgeTrack ausgewertet. Per Get/SetAttr/Get/SetStyleSh werden
+    // jedoch nur 0-3 longs transportiert.
+    Point                       aObj1Line2;
+    Point                       aObj1Line3;
+    Point                       aObj2Line2;
+    Point                       aObj2Line3;
+    Point                       aMiddleLine;
+
+    // Nachfolgende Werte werden von ImpCalcEdgeTrack gesetzt
+    long                        nAngle1;           // Austrittswinkel am Obj1
+    long                        nAngle2;           // Austrittswinkel am Obj2
+    USHORT                      nObj1Lines;        // 1..3
+    USHORT                      nObj2Lines;        // 1..3
+    USHORT                      nMiddleLine;       // 0xFFFF=keine, sonst Punktnummer des Linienbeginns
+    char                        cOrthoForm;        // Form des Ortho-Verbindes, z.B. 'Z','U',I','L','S',...
+
+public:
+    SdrEdgeInfoRec()
+    :   nAngle1(0),
+        nAngle2(0),
+        nObj1Lines(0),
+        nObj2Lines(0),
+        nMiddleLine(0xFFFF),
+        cOrthoForm(0)
+    {}
+
+    Point& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode);
+    const Point& ImpGetLineVersatzPoint(SdrEdgeLineCode eLineCode) const { return ((SdrEdgeInfoRec*)this)->ImpGetLineVersatzPoint(eLineCode); }
+    USHORT ImpGetPolyIdx(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
+    FASTBOOL ImpIsHorzLine(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
+    void ImpSetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP, long nVal);
+    long ImpGetLineVersatz(SdrEdgeLineCode eLineCode, const XPolygon& rXP) const;
+};
+
+//************************************************************
+//   Hilfsklasse SdrEdgeObjGeoData
+//************************************************************
+
+class SdrEdgeObjGeoData : public SdrTextObjGeoData
+{
+public:
+    SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
+    SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
+    XPolygon*                   pEdgeTrack;
+    FASTBOOL                    bEdgeTrackDirty;// TRUE=Verbindungsverlauf muss neu berechnet werden.
+    SdrEdgeInfoRec              aEdgeInfo;
+
+public:
+    SdrEdgeObjGeoData();
+    virtual ~SdrEdgeObjGeoData();
+};
+
+//************************************************************
+//   Hilfsklasse SdrEdgeObj
+//************************************************************
+
+class SVX_DLLPUBLIC SdrEdgeObj : public SdrTextObj
+{
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
+    // to allow sdr::properties::ConnectorProperties access to ImpSetAttrToEdgeInfo()
+    friend class sdr::properties::ConnectorProperties;
+
+    friend class                SdrCreateView;
+    friend class                ImpEdgeHdl;
+
+protected:
+    SdrObjConnection            aCon1;  // Verbindungszustand des Linienanfangs
+    SdrObjConnection            aCon2;  // Verbindungszustand des Linienendes
+
+    XPolygon*                   pEdgeTrack;
+    sal_uInt16                  nNotifyingCount; // Verrieglung
+    SdrEdgeInfoRec              aEdgeInfo;
+
+    // bitfield
+    unsigned                    bEdgeTrackDirty : 1; // TRUE=Verbindungsverlauf muss neu berechnet werden.
+
+    // #109007#
+    // Bool to allow supporession of default connects at object
+    // inside test (HitTest) and object center test (see ImpFindConnector())
+    unsigned                    mbSuppressDefaultConnect : 1;
+
+    // #110649#
+    // Flag value for avoiding death loops when calculating BoundRects
+    // from circularly connected connectors. A coloring algorythm is used
+    // here. When the GetCurrentBoundRect() calculation of a SdrEdgeObj
+    // is running, the flag is set, else it is always sal_False.
+    unsigned                    mbBoundRectCalculationRunning : 1;
+
+public:
+    // #109007#
+    // Interface to default connect suppression
+    void SetSuppressDefaultConnect(sal_Bool bNew) { mbSuppressDefaultConnect = bNew; }
+    sal_Bool GetSuppressDefaultConnect() const { return mbSuppressDefaultConnect; }
+
+    // #110649#
+    sal_Bool IsBoundRectCalculationRunning() const { return mbBoundRectCalculationRunning; }
+
+protected:
+    virtual void SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType);
+
+    XPolygon ImpCalcObjToCenter(const Point& rStPt, long nEscAngle, const Rectangle& rRect, const Point& rCenter) const;
+    void ImpRecalcEdgeTrack();  // Neuberechnung des Verbindungsverlaufs
+    XPolygon ImpCalcEdgeTrack(const XPolygon& rTrack0, SdrObjConnection& rCon1, SdrObjConnection& rCon2, SdrEdgeInfoRec* pInfo) const;
+    XPolygon ImpCalcEdgeTrack(const Point& rPt1, long nAngle1, const Rectangle& rBoundRect1, const Rectangle& rBewareRect1,
+        const Point& rPt2, long nAngle2, const Rectangle& rBoundRect2, const Rectangle& rBewareRect2,
+        ULONG* pnQuality, SdrEdgeInfoRec* pInfo) const;
+    static FASTBOOL ImpFindConnector(const Point& rPt, const SdrPageView& rPV, SdrObjConnection& rCon, const SdrEdgeObj* pThis, OutputDevice* pOut=NULL);
+    USHORT ImpCalcEscAngle(SdrObject* pObj, const Point& aPt2) const;
+    FASTBOOL ImpStripPolyPoints(XPolygon& rXP) const; // entfernen ueberfluessiger Punkte
+    void ImpSetTailPoint(FASTBOOL bTail1, const Point& rPt);
+    void ImpUndirtyEdgeTrack();  // eventuelle Neuberechnung des Verbindungsverlaufs
+    void ImpSetAttrToEdgeInfo(); // Werte vom Pool nach aEdgeInfo kopieren
+    void ImpSetEdgeInfoToAttr(); // Werte vom aEdgeInfo in den Pool kopieren
+
+public:
+    TYPEINFO();
+
+    SdrEdgeObj();
+    virtual ~SdrEdgeObj();
+
+    SdrObjConnection& GetConnection(FASTBOOL bTail1) { return *(bTail1 ? &aCon1 : &aCon2); }
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+    virtual UINT16 GetObjIdentifier() const;
+    virtual const Rectangle& GetCurrentBoundRect() const;
+    virtual const Rectangle& GetSnapRect() const;
+    virtual FASTBOOL IsNode() const;
+    virtual SdrGluePoint GetVertexGluePoint(USHORT nNum) const;
+    virtual SdrGluePoint GetCornerGluePoint(USHORT nNum) const;
+    virtual const SdrGluePointList* GetGluePointList() const;
+    virtual SdrGluePointList* ForceGluePointList();
+    virtual FASTBOOL IsEdge() const;
+
+    // bTail1=TRUE: Linienanfang, sonst LinienEnde
+    // pObj=NULL: Disconnect
+    void SetEdgeTrackDirty() { bEdgeTrackDirty=TRUE; }
+    void ConnectToNode(FASTBOOL bTail1, SdrObject* pObj);
+    void DisconnectFromNode(FASTBOOL bTail1);
+    SdrObject* GetConnectedNode(FASTBOOL bTail1) const;
+    const SdrObjConnection& GetConnection(FASTBOOL bTail1) const { return *(bTail1 ? &aCon1 : &aCon2); }
+    FASTBOOL CheckNodeConnection(FASTBOOL bTail1) const;
+
+    virtual void RecalcBoundRect();
+    virtual void RecalcSnapRect();
+    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
+    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
+    virtual void operator=(const SdrObject& rObj);
+    virtual void TakeObjNameSingul(String& rName) const;
+    virtual void TakeObjNamePlural(String& rName) const;
+
+    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual sal_uInt32 GetHdlCount() const;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+
+    virtual FASTBOOL HasSpecialDrag() const;
+    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
+    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
+    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
+    virtual void BrkDrag(SdrDragStat& rDrag) const;
+    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
+
+    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+    virtual void NbcSetSnapRect(const Rectangle& rRect);
+    virtual void NbcMove(const Size& aSize);
+    virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact);
+
+    // #102344# Added missing implementation
+    virtual void NbcSetAnchorPos(const Point& rPnt);
+
+    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual void BrkCreate(SdrDragStat& rStat);
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+    virtual Pointer GetCreatePointer() const;
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+
+    virtual sal_uInt32 GetSnapPointCount() const;
+    virtual Point GetSnapPoint(sal_uInt32 i) const;
+    virtual sal_Bool IsPolyObj() const;
+    virtual sal_uInt32 GetPointCount() const;
+    virtual Point GetPoint(sal_uInt32 i) const;
+    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
+
+    virtual SdrObjGeoData* NewGeoData() const;
+    virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
+    virtual void RestGeoData(const SdrObjGeoData& rGeo);
+
+    /** updates edges that are connected to the edges of this object
+        as if the connected objects send a repaint broadcast
+        #103122#
+    */
+    void Reformat();
+
+    // helper methods for the StarOffice api
+    Point GetTailPoint( BOOL bTail ) const;
+    void SetTailPoint( BOOL bTail, const Point& rPt );
+    void setGluePointIndex( sal_Bool bTail, sal_Int32 nId = -1 );
+    sal_Int32 getGluePointIndex( sal_Bool bTail );
+
+    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
+
+    // helper method for SdrDragMethod::AddConnectorOverlays. Adds a overlay polygon for
+    // this connector to rResult.
+    void ImplAddConnectorOverlay(basegfx::B2DPolyPolygon& rResult, SdrDragMethod& rDragMethod, sal_Bool bTail1, sal_Bool bTail2, sal_Bool bDetail) const;
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Zur Bestimmung der Verlaufslinie werden folgende Item-Parameter des SdrItemPool verwendet:
+//
+//  USHORT EdgeFlowAngle       Default 9000 (=90.00 Deg), min 0, max 9000
+//      Verlauffreiheitswinkel.
+//      Der Winkel, in dem die Verbindungslinie verlaufen darf.
+//
+//  USHORT EdgeEscAngle        Default 9000 (=90.00 Deg), min 0, max 9000
+//      Objektaustrittswinkel.
+//      Der Winkel, in dem die Verbindungslinie aus dem Objekt austreten darf.
+//
+//  BOOL   EdgeEscAsRay        Default FALSE
+//      TRUE= die Verbindungslinie tritt aus dem Obj Strahlenfoermig aus.
+//      Also Winkelvorgabe durch die Strecke ObjMitte/Konnektor.
+//
+//  BOOL   EdgeEscUseObjAngle  Default FALSE
+//      Objektdrehwinkelberuecksichtigung.
+//      TRUE= Bei der Bestimmung des Objektaustrittswinkels wird der
+//      Drehwinkel des Objekts als Offset beruecksichtigt.
+//
+//  ULONG  EdgeFlowDefDist     Default 0, min 0, max ?
+//      Das ist der Default-Mindestabstand der bei der Berechnung der
+//      Verbindungslinie zu den angedockten Objekten in logischen Einheiten.
+//      Dieser Abstand wird innerhalb des Objektes "ueberschrieben", sobald
+//      der User an den Linien draggd. Beim Andocken an ein neues Objekt wird
+//      dann jedoch wieder dieser Default verwendet.
+//
+//
+// Allgemeines zu Konnektoren:
+//
+// Es gibt Knoten und Kantenobjekte. Zwei Knoten koennen durch eine Kante
+// miteinander verbunden werden. Ist eine Kante nur an einem Ende an einen
+// Knoten geklebt, ist das andere Ende auf einer absoluten Position im Doc
+// fixiert. Ebenso ist es natuerlich auch moeglich, dass eine Kante an beiden
+// Enden "frei", also nicht mit einem Knotenobjekt verbunden ist.
+//
+// Ein Kantenobjekt kann theoretisch auch gleichzeitig Knotenobjekt sein. In
+// der ersten Version wird das jedoch noch nicht realisiert werden.
+//
+// Eine Verbindung zwischen Knoten und Kante kann hergestellt werden durch:
+// - Interaktives erzeugen eines neuen Kantenobjekts an der SdrView wobei
+//   Anfangs- bzw. Endpunkt der Kante auf ein Konnektor (Klebestelle) eines
+//   bereits vorhandenen Knotenobjekts gelegt wird.
+// - Interaktives draggen des Anfangs- bzw. Endpunkts eines bestehenden
+//   Kantenobjekts an der SdrView auf ein Konnektor (Klebestelle) eines
+//   bereits vorhandenen Knotenobjekts.
+// - Undo/Redo
+// Verschieben von Knotenobjekten stellt keine Verbindungen her. Ebenso auch
+// nicht das direkte Verschieben von Kantenendpunkten am SdrModel...
+// Verbindungen koennen auch hergestellt werden, wenn die Konnektoren an der
+// View nicht sichtbar geschaltet sind.
+//
+// Eine vorhandene Verbindung zwischen Knoten und Kante bleibt erhalten bei:
+// - Draggen (Move/Resize/Rotate/...) des Knotenobjekts
+// - Verschieben einer Konnektorposition im Knotemobjekt
+// - gleichzeitiges Draggen (Move/Resize/Rotate/...) von Knoten und Kante
+//
+// Eine Verbindung zwischen Knoten und Kante kann geloesst werden durch:
+// - Loeschen eines der Objekte
+// - Draggen des Kantenobjekts ohne gleichzeitiges Draggen des Knotens
+// - Loeschen des Konnektors am Knotenobjekt
+// - Undo/Redo/Repeat
+// Beim Draggen muss die Aufforderung zum loesen der Verbindung von ausserhalb
+// des Models befohlen werden (z.B. von der SdrView). SdrEdgeObj::Move() loesst
+// die Verbindung nicht selbsttaetig.
+//
+// Jedes Knotenobjekt kann Konnektoren, sog. Klebestellen besitzen. Das sind die
+// geometrischen Punkte, an denen das verbindende Kantenobjekt bei hergestellter
+// Verbindung endet. Defaultmaessig hat jedes Objekt keine Konnektoren. Trotzdem
+// kann man bei bestimmten View-Einstellungen eine Kante andocken, da dann z.B.
+// an den 4 Scheitelpunkten des Knotenobjekts bei Bedarf automatisch Konnektoren
+// generiert werden. Jedes Objekt liefert dafuer 2x4 sog. Default-Konnektorposi-
+// tionen, 4 an den Scheitelpunkten und 4 an den Eckpositionen. Im Normalfall
+// liegen diese an den 8 Handlepositionen; Ausnahmen bilden hier Ellipsen,
+// Parallelogramme, ... . Darueberhinaus koennen auch an jedem Knotenobjekt
+// anwenderspeziefische Konnektoren gesetzt werden.
+//
+// Dann gibt es noch die Moeglichkeit, ein Kante an einem Objekt mit dem
+// Attribut "bUseBestConnector" anzudocken. Es wird dann aus dem Angebot der
+// Konnektoren des Objekts oder/und der Scheitelpunkte, jeweils die fuer den
+// Verlauf der Verbindungslinie guenstigste Konnektorposition verwendet. Der
+// Anwender vergibt dieses Attribut, indem er den Knoten in seiner Mitte
+// andockt (siehe z.B. Visio).
+// 09-06-1996: bUseBestConnector verwendet nur Scheitelpunktklebepunkte.
+//
+// Und hier noch etwas Begriffsdefinition:
+//   Verbinder : Eben das Verbinderobjekt (Kantenobjekt)
+//   Knoten    : Ein beliebiges Objekt, an dem ein Verbinder drangeklebt
+//               werden kann, z.B. ein Rechteck, ...
+//   Klebepunkt: Der Punkt, an dem der Verbinder an das Knotenobjekt
+//               geklebt wird. Hierbei gibt es:
+//                 Scheitelpunktklebepunkte: Jedes Knotenobjekt hat diese
+//                     Klebepunkte von Natur aus. Moeglicherweise gibt es
+//                     im Draw bereits die Option "Automatisch ankleben an
+//                     Objektscheitelpunkte" (default an)
+//                 Eckpunktklebepunkte: Auch diese Klebepunkte sind den
+//                     Objekten von mir bereits mitgegeben. Wie die oben
+//                     erwaehnten gibt es fuer diese moeglicherweise
+//                     bereits auch eine Option im Draw. (default aus)
+//                 Scheitelpunktklebepunkte und Eckpunktklebepunkte sind
+//                     im Gegensatz zu Visio nicht optisch sichtbar; sie
+//                     sind eben einfach da (wenn Option eingeschaltet).
+//                 Benutzerdefinierte Klebepunkte: Gibt es an jedem
+//                     Knotenobjekt beliebig viele. Per Option koennen sie
+//                     sichtbar geschaltet werden (beim editieren immer
+//                     sichtbar). Zur Zeit sind die jedoch noch nicht ganz
+//                     fertigimplementiert.
+//                 Automatische Klebepunktwahl: Wird der Verbinder so an
+//                     das Knotenobjekt gedockt, dass der schwarke Rahmen
+//                     das gesamte Objekt umfasst, so versucht der
+//                     Verbinder von den 4 Scheitelpunktklebepunkten (und
+//                     zwar nur von denen) den guenstigsten herauszufinden.
+//
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+#endif //_SVDOEDGE_HXX
+
