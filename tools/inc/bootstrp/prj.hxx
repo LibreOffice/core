@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:32:23 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:07:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _PRJ_HXX
 #define _PRJ_HXX
 
-#include "fsys.hxx"
-#include "stream.hxx"
+#include <tools/fsys.hxx>
+#include <tools/stream.hxx>
 #ifndef _LISTMACR_HXX
 #include "bootstrp/listmacr.hxx"
 #endif
@@ -182,7 +182,6 @@ public:
 #define ENV_DEVROOT 0x00100000
 #define ENV_EMERG   0x00200000
 #define ENV_STAND   0x00400000
-
 
 /*********************************************************************
 *

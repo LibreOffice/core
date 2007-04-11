@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkcreate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:32:14 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:07:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,13 +36,13 @@
 #ifndef _MK_CREATE_HXX
 #define _MK_CREATE_HXX
 
-#include "string.hxx"
+#include <tools/string.hxx>
 
 #ifndef _SSTRING_HXX
 #include "bootstrp/sstring.hxx"
 #endif
 
-#include "list.hxx"
+#include <tools/list.hxx>
 
 #ifndef _PRJ_HXX
 #include "bootstrp/prj.hxx"
@@ -128,7 +128,6 @@ public:
         return nOSType;
     }
 };
-
 
 //
 // class SourceDirectory
