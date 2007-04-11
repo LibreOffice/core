@@ -10,7 +10,7 @@ mkdir: %COMMON_DEST%\res%_EXT%
 
 mkdir: %_DEST%\inc%_EXT%\avmedia
 
-hedabu: ..\inc\mediawindow.hxx %_DEST%\inc%_EXT%\avmedia\mediawindow.hxx
-hedabu: ..\inc\mediaitem.hxx %_DEST%\inc%_EXT%\avmedia\mediaitem.hxx
-hedabu: ..\inc\mediaplayer.hxx %_DEST%\inc%_EXT%\avmedia\mediaplayer.hxx
-hedabu: ..\inc\mediatoolbox.hxx %_DEST%\inc%_EXT%\avmedia\mediatoolbox.hxx
+..\inc\avmedia\mediawindow.hxx %_DEST%\inc%_EXT%\avmedia\mediawindow.hxx
+..\inc\avmedia\mediaitem.hxx %_DEST%\inc%_EXT%\avmedia\mediaitem.hxx
+..\inc\avmedia\mediaplayer.hxx %_DEST%\inc%_EXT%\avmedia\mediaplayer.hxx
+..\inc\avmedia\mediatoolbox.hxx %_DEST%\inc%_EXT%\avmedia\mediatoolbox.hxx
