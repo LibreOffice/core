@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-05 11:19:26 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 18:24:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@
 #include <tools/config.hxx>
 #endif
 
-#include "solar.hrc"
+#include "svtools/solar.hrc"
 #include "filedlg.hxx"
 #include "bmpcore.hxx"
 #include "bmp.hrc"
