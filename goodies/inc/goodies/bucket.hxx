@@ -1,0 +1,204 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: bucket.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:32:58 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _B3D_BUCKET_HXX
+#define _B3D_BUCKET_HXX
+
+#ifndef _SVARRAY_HXX
+#include <svtools/svarray.hxx>
+#endif
+
+/*************************************************************************
+|*
+|* Bucket deklarator
+|*
+\************************************************************************/
+
+#define BASE3D_DECL_BUCKET(TheClassName,TheExtension) \
+    SV_DECL_VARARR(TheClassName##TheExtension##MemArr, char*, 32, 32) \
+    class TheClassName##TheExtension { \
+    private: \
+    TheClassName##TheExtension##MemArr  aMemArray; \
+        UINT32          nMask; \
+        UINT32          nCount; \
+        INT16           nFreeMemArray; \
+        INT16           nActMemArray; \
+        UINT16          nFreeEntry; \
+        UINT16          nShift; \
+        UINT16          nBlockShift; \
+        UINT16          nEntriesPerArray; \
+        UINT16          nSlotSize; \
+        UINT16          nNext; \
+        UINT16          nMemArray; \
+    public: \
+        TheClassName##TheExtension(UINT16 TheSize); \
+        /* Notwendiger Leer-Konstruktor, benutzt default-Groesse 8 */ \
+        TheClassName##TheExtension(); \
+        /* Zu verwendende Groesse der Speicherarrays setzen */ \
+        /* Bitte NUR verwenden, falls sich der Leerkonstruktor */ \
+        /* nicht vermeiden laesst! Nicht nachtraeglich anwenden!  */ \
+        void InitializeSize(UINT16 TheSize); \
+        /* Destruktor */ \
+        ~TheClassName##TheExtension(); \
+        /* Anhaengen und kopieren */ \
+        BOOL Append(TheClassName& rVec) \
+            { if(CareForSpace()) return ImplAppend(rVec); return FALSE; } \
+        /* nur neuen Eintrag anhaengen, ohne ausfuellen */ \
+        BOOL Append() \
+            { if(CareForSpace()) return ImplAppend(); return FALSE; } \
+        /* Letzten Eintrag entfernen */ \
+        BOOL Remove() { if(nCount) return ImplRemove(); return FALSE; } \
+        /* leeren und Speicher freigeben */ \
+        void Empty(); \
+        /* leeren aber Speicher behalten */ \
+        void Erase(); \
+        TheClassName& operator[] (UINT32 nPos); \
+        const TheClassName& operator[] (UINT32 nPos) const; \
+        UINT32 Count() const { return nCount; } \
+        UINT32 GetNumAllocated() const { return aMemArray.Count() * nEntriesPerArray; } \
+        void operator=(const TheClassName##TheExtension&); \
+        UINT16 GetBlockShift() const { return nBlockShift; } \
+        UINT16 GetSlotSize() const { return nSlotSize; } \
+    private: \
+        BOOL CareForSpace() \
+            { if(nFreeEntry == nEntriesPerArray) \
+            return ImplCareForSpace(); return TRUE; } \
+        BOOL ImplCareForSpace(); \
+        /* Anhaengen und kopieren */ \
+        BOOL ImplAppend(TheClassName& rVec); \
+        /* nur neuen Eintrag anhaengen, ohne ausfuellen */ \
+        BOOL ImplAppend(); \
+        BOOL ImplRemove(); \
+    };
+
+/*************************************************************************
+|*
+|* Bucket implementor
+|*
+\************************************************************************/
+
+#define BASE3D_IMPL_BUCKET(TheClassName,TheExtension) \
+    SV_IMPL_VARARR(TheClassName##TheExtension##MemArr, char*) \
+    TheClassName##TheExtension::TheClassName##TheExtension(UINT16 TheSize) { \
+        InitializeSize(TheSize); \
+    } \
+    TheClassName##TheExtension::TheClassName##TheExtension() { \
+        InitializeSize(8); \
+    } \
+    void TheClassName##TheExtension::InitializeSize(UINT16 TheSize) { \
+        UINT16 nSiz; \
+        for(nShift=0,nSiz=1;nSiz<sizeof(TheClassName);nSiz<<=1,nShift++); \
+        nBlockShift = TheSize - nShift; \
+        nMask = (1L << nBlockShift)-1L; \
+        nSlotSize = 1<<nShift; \
+        nEntriesPerArray = (UINT16)((1L << TheSize) >> nShift); \
+        Empty(); \
+    } \
+    void TheClassName##TheExtension::operator=(const TheClassName##TheExtension& rObj) { \
+        Erase(); \
+        TheClassName##TheExtension& rSrc = (TheClassName##TheExtension&)rObj; \
+        for(UINT32 a=0;a<rSrc.Count();a++) \
+            Append(rSrc[a]); \
+    } \
+    void TheClassName##TheExtension::Empty() { \
+        for(UINT16 i=0;i<aMemArray.Count();i++) \
+            /*#90353#*/ delete [] aMemArray[i]; \
+        if(aMemArray.Count()) \
+            aMemArray.Remove(0, aMemArray.Count()); \
+        nFreeMemArray = 0; \
+        nActMemArray = -1; \
+        Erase(); \
+    } \
+    void TheClassName##TheExtension::Erase() { \
+        nFreeEntry = nEntriesPerArray; \
+        nCount = 0; \
+        nActMemArray = -1; \
+    } \
+    TheClassName##TheExtension::~TheClassName##TheExtension() { \
+        Empty(); \
+    } \
+    BOOL TheClassName##TheExtension::ImplAppend(TheClassName& rVec) { \
+        *((TheClassName*)(aMemArray[nActMemArray] + (nFreeEntry++ << nShift))) = rVec; \
+        nCount++; \
+        return TRUE; \
+    } \
+    BOOL TheClassName##TheExtension::ImplAppend() { \
+        nFreeEntry++; \
+        nCount++; \
+        return TRUE; \
+    } \
+    BOOL TheClassName##TheExtension::ImplRemove() { \
+        if(nFreeEntry == 1) { \
+            nFreeEntry = nEntriesPerArray + 1; \
+            if(nActMemArray == -1) \
+                return FALSE; \
+            nActMemArray--; \
+        } \
+        nFreeEntry--; \
+        nCount--; \
+        return TRUE; \
+    } \
+    BOOL TheClassName##TheExtension::ImplCareForSpace() { \
+        /* neues array bestimmem */ \
+        if(nActMemArray + 1 < nFreeMemArray) { \
+            /* ist scon allokiert, gehe auf naechstes */ \
+            nActMemArray++; \
+        } else { \
+            /* neues muss allokiert werden */ \
+            char* pNew = new char[nEntriesPerArray << nShift]; \
+            if(!pNew) \
+                return FALSE; \
+            aMemArray.Insert((const char*&) pNew, aMemArray.Count()); \
+            nActMemArray = nFreeMemArray++; \
+        } \
+        nFreeEntry = 0; \
+        return TRUE; \
+    } \
+    TheClassName& TheClassName##TheExtension::operator[] (UINT32 nPos) { \
+        if(nPos >= nCount) { \
+            DBG_ERROR("Access to Bucket out of range!"); \
+            return *((TheClassName*)aMemArray[0]); \
+        } \
+        return *((TheClassName*)(aMemArray[(UINT16)(nPos >> nBlockShift)] + ((nPos & nMask) << nShift))); \
+    } \
+    const TheClassName& TheClassName##TheExtension::operator[] (UINT32 nPos) const { \
+        if(nPos >= nCount) { \
+            DBG_ERROR("Access to Bucket out of range!"); \
+            return *((TheClassName*)aMemArray[0]); \
+        } \
+        return *((TheClassName*)(aMemArray[(UINT16)(nPos >> nBlockShift)] + ((nPos & nMask) << nShift))); \
+    }
+
+#endif          // _B3D_BUCKET_HXX
