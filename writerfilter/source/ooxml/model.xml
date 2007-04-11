@@ -12805,7 +12805,7 @@
   </define>
   <define name="CT_MultiLevelType">
     <attribute name="val">
-      <text/>
+      <ref name="ST_MultiLevelType"/>
       <xs:documentation>Abstract Numbering Definition Type</xs:documentation>
     </attribute>
   </define>
@@ -14008,6 +14008,53 @@
     </zeroOrMore>
   </define>
 </grammar>
+<resource name="CT_Numbering" resource="Properties"/>
+<resource name="CT_AbstractNum" resource="PropertySetValue">
+  <element name="nsid" tokenid="ooxml:CT_AbstractNum_nsid"/>
+  <element name="multiLevelType" tokenid="ooxml:CT_AbstractNum_multiLevelType"/>
+  <element name="tmpl" tokenid="ooxml:CT_AbstractNum_tmpl"/>
+  <element name="name" tokenid="ooxml:CT_AbstractNum_name"/>
+  <element name="styleLink" tokenid="ooxml:CT_AbstractNum_styleLink"/>
+  <element name="numStyleLink" tokenid="ooxml:CT_AbstractNum_numStyleLink"/>
+  <element name="lvl" tokenid="ooxml:CT_AbstractNum_lvl"/>
+  <attribute name="abstractNumId" tokenid="ooxml:CT_AbstractNum_abstractNumId"/>
+</resource>
+<resource name="ST_MultiLevelType" resource="List">
+  <value tokenid="ooxml:Value_ST_MultiLevelType_singleLevel">singleLevel</value>
+  <value tokenid="ooxml:Value_ST_MultiLevelType_multilevel">multilevel</value>    <value tokenid="ooxml:Value_ST_MultiLevelType_hybridMultilevel">hybridMultilevel</value>
+</resource>
+<resource name="CT_Lvl" resource="PropertySetValue">
+  <element name="start" tokenid="ooxml:CT_Lvl_start"/>
+  <element name="numFmt" tokenid="ooxml:CT_Lvl_numFmt"/>
+  <element name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
+  <element name="pStyle" tokenid="ooxml:CT_Lvl_pStyle"/>
+  <element name="isLgl" tokenid="ooxml:CT_Lvl_isLgl"/>
+  <element name="suff" tokenid="ooxml:CT_Lvl_suff"/>
+  <element name="lvlText" tokenid="ooxml:CT_Lvl_lvlText"/>
+  <element name="lvlPicBulletId" tokenid="ooxml:CT_Lvl_lvlPicBulletId"/>
+  <element name="legacy" tokenid="ooxml:CT_Lvl_legacy"/>
+  <element name="lvlJc" tokenid="ooxml:CT_Lvl_lvlJc"/>
+  <element name="pPr" tokenid="ooxml:CT_Lvl_pPr"/>
+  <element name="rPr" tokenid="ooxml:CT_Lvl_rPr"/>
+  <attribute name="ilvl" tokenid="ooxml:CT_Lvl_ilvl"/>
+  <attribute name="tplc" tokenid="ooxml:CT_Lvl_tplc"/>
+  <attribute name="tentative" tokenid="ooxml:CT_Lvl_tentative"/>
+</resource>
+<resource name="CT_LvlLegacy" resource="PropertySetValue">
+  <attribute name="legacy" tokenid="ooxml:CT_LvlLegacy_legacy"/>
+  <attribute name="legacySpace" tokenid="ooxml:CT_LvlLegacy_legacySpace"/>
+  <attribute name="legacyIndent" tokenid="ooxml:CT_LvlLegacy_legacyIndent"/>
+</resource>
+<resource name="CT_Num" resource="PropertySetValue">
+  <element name="abstractNumId" tokenid="ooxml:CT_Num_abstractNumId"/>
+  <element name="lvlOverride" tokenid="ooxml:CT_Num_lvlOverride"/>
+  <attribute name="numId" tokenid="ooxml:CT_Num_numId"/>
+</resource>
+<resource name="CT_NumLvl" resource="PropertySetValue">
+  <element name="startOverride" tokenid="ooxml:CT_NumLvl_startOverride"/>
+  <element name="lvl" tokenid="ooxml:CT_NumLvl_lvl"/>
+  <attribute name="ilvl" tokenid="ooxml:CT_NumLvl_ilvl"/>
+</resource>
 <resource name="CT_Color" resource="PropertySetValue">
   <attribute name="val" tokenid="ooxml:CT_Color_val"/>
   <attribute name="themeColor" tokenid="ooxml:CT_Color_themeColor"/>
@@ -14558,6 +14605,7 @@
 <resource name="ST_LongHexNumber" resource="Hex"/>
 <resource name="ST_UcharHexNumber" resource="Hex"/>
 <resource name="CT_Empty" resource="SingleElement"/>
+<resource name="CT_LongHexNumber" resource="HexValue"/>
 <resource name="CT_Br" resource="SingleElement">
   <attribute name="type" tokenid="ooxml:CT_Br_type"/>
   <attribute name="clear" tokenid="ooxml:CT_Br_clear"/>
