@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofmasterpagedescriptor.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:35:21 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 17:02:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _SDR_MASTERPAGEDESCRIPTOR_HXX
-#include <sdrmasterpagedescriptor.hxx>
+#include <svx/sdrmasterpagedescriptor.hxx>
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
