@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 15:07:33 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 19:45:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -443,7 +443,7 @@ void FormattedField::SetValidateText(const XubString& rText, const String* pErro
         SetText(rText);
     else
         if (pErrorText)
-            ImplSetText(*pErrorText, NULL);
+            ImplSetTextImpl(*pErrorText, NULL);
         else
             ImplSetValue(m_dDefaultValue, TRUE);
 }
@@ -573,14 +573,14 @@ void FormattedField::Modify()
     }
     else
     {
-        ImplSetText(m_sLastValidText, &m_aLastSelection);
+        ImplSetTextImpl(m_sLastValidText, &m_aLastSelection);
     }
 
     SpinField::Modify();
 }
 
 //------------------------------------------------------------------------------
-void FormattedField::ImplSetText(const XubString& rNew, Selection* pNewSel)
+void FormattedField::ImplSetTextImpl(const XubString& rNew, Selection* pNewSel)
 {
     DBG_CHKTHIS(FormattedField, NULL);
 
@@ -1027,7 +1027,7 @@ void FormattedField::ImplSetValue(double dVal, BOOL bForce)
         ImplGetFormatter()->GetOutputString(dVal, m_nFormatKey, sNewText, &m_pLastOutputColor);
     }
 
-    ImplSetText(sNewText, NULL);
+    ImplSetTextImpl(sNewText, NULL);
     m_bValueDirty = FALSE;
     DBG_ASSERT(CheckText(sNewText), "FormattedField::ImplSetValue : formatted string doesn't match the criteria !");
 }
