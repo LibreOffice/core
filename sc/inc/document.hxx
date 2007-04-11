@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:03:02 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:27:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -170,14 +170,15 @@ namespace com { namespace sun { namespace star {
     }
 } } }
 
-
+#include <svtools/zforlist.hxx>
+/*
 #ifdef _ZFORLIST_DECLARE_TABLE
 class SvNumberFormatterIndexTable;
 #else
 class Table;
 typedef Table SvNumberFormatterIndexTable;
 #endif
-
+*/
 
 #define SC_DOC_NEW          0xFFFF
 
