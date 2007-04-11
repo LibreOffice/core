@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.46 $
+#   $Revision: 1.47 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:04:27 $
+#   last change: $Author: vg $ $Date: 2007-04-11 21:32:57 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ LIB1FILES=  $(SLB)$/appl.lib		\
             $(SLB)$/config.lib
 
 HELPIDFILES=\
-            ..\inc\sfxsids.hrc	\
+            ..\inc\sfx2\sfxsids.hrc	\
             ..\source\inc\helpid.hrc
 
 .IF "$(GUI)"!="UNX"
