@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stg.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 05:52:05 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:51:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,13 +401,13 @@ public:
     // should be removed before release
     UNOStorageHolderList* GetUNOStorageHolderList();
 
-#if _SOLAR__PRIVATE
+//#if _SOLAR__PRIVATE
     UCBStorageElement_Impl*     FindElement_Impl( const String& rName ) const;
     BOOL                        CopyStorageElement_Impl( UCBStorageElement_Impl& rElement,
                                     BaseStorage* pDest, const String& rNew ) const;
     BaseStorage*                OpenStorage_Impl( const String & rEleName,
                                        StreamMode, BOOL bDirect, BOOL bForceUCBStorage );
-#endif
+//#endif
 
 };
 
