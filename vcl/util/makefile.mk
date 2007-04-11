@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-27 09:41:26 $
+#   last change: $Author: vg $ $Date: 2007-04-11 18:18:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -54,83 +54,83 @@ LINKFLAGSRUNPATH=-R/usr/sfw/lib -R\''$$ORIGIN'\'
 
 # --- Allgemein ----------------------------------------------------------
 
-HXXDEPNLST= $(INC)$/accel.hxx       \
-            $(INC)$/animate.hxx     \
-            $(INC)$/apptypes.hxx    \
-            $(INC)$/bitmap.hxx      \
-            $(INC)$/bitmapex.hxx    \
-            $(INC)$/bmpacc.hxx      \
-            $(INC)$/btndlg.hxx      \
-            $(INC)$/button.hxx      \
-            $(INC)$/ctrl.hxx        \
-            $(INC)$/cursor.hxx      \
-            $(INC)$/cmdevt.hxx      \
-            $(INC)$/decoview.hxx    \
-            $(INC)$/dialog.hxx      \
-            $(INC)$/dllapi.h        \
-            $(INC)$/dockwin.hxx     \
-            $(INC)$/edit.hxx        \
-            $(INC)$/event.hxx       \
-            $(INC)$/field.hxx       \
-            $(INC)$/fixed.hxx       \
-            $(INC)$/floatwin.hxx    \
-            $(INC)$/font.hxx        \
-            $(INC)$/fontcvt.hxx     \
-            $(INC)$/floatwin.hxx    \
-            $(INC)$/graph.hxx       \
-            $(INC)$/group.hxx       \
-            $(INC)$/help.hxx        \
-            $(INC)$/jobset.hxx      \
-            $(INC)$/keycodes.hxx    \
-            $(INC)$/keycod.hxx      \
-            $(INC)$/image.hxx       \
-            $(INC)$/lstbox.h        \
-            $(INC)$/lstbox.hxx      \
-            $(INC)$/mapmod.hxx      \
-            $(INC)$/metaact.hxx     \
-            $(INC)$/menu.hxx        \
-            $(INC)$/menubtn.hxx     \
-            $(INC)$/metric.hxx      \
-            $(INC)$/morebtn.hxx     \
-            $(INC)$/msgbox.hxx      \
-            $(INC)$/octree.hxx      \
-            $(INC)$/outdev.hxx      \
-            $(INC)$/outdev3d.hxx    \
-            $(INC)$/pointr.hxx      \
-            $(INC)$/ptrstyle.hxx    \
-            $(INC)$/prntypes.hxx    \
-            $(INC)$/print.hxx       \
-            $(INC)$/prndlg.hxx      \
-            $(INC)$/region.hxx      \
-            $(INC)$/salbtype.hxx    \
-            $(INC)$/scrbar.hxx      \
-            $(INC)$/slider.hxx      \
-            $(INC)$/seleng.hxx      \
-            $(INC)$/settings.hxx    \
-            $(INC)$/sound.hxx       \
-            $(INC)$/sndstyle.hxx    \
-            $(INC)$/split.hxx       \
-            $(INC)$/splitwin.hxx    \
-            $(INC)$/spin.hxx        \
-            $(INC)$/spinfld.hxx     \
-            $(INC)$/status.hxx      \
-            $(INC)$/stdtext.hxx     \
-            $(INC)$/sv.h            \
-            $(INC)$/svapp.hxx       \
-            $(INC)$/syschild.hxx    \
+HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
+            $(INC)$/vcl$/animate.hxx     \
+            $(INC)$/vcl$/apptypes.hxx    \
+            $(INC)$/vcl$/bitmap.hxx      \
+            $(INC)$/vcl$/bitmapex.hxx    \
+            $(INC)$/vcl$/bmpacc.hxx      \
+            $(INC)$/vcl$/btndlg.hxx      \
+            $(INC)$/vcl$/button.hxx      \
+            $(INC)$/vcl$/ctrl.hxx        \
+            $(INC)$/vcl$/cursor.hxx      \
+            $(INC)$/vcl$/cmdevt.hxx      \
+            $(INC)$/vcl$/decoview.hxx    \
+            $(INC)$/vcl$/dialog.hxx      \
+            $(INC)$/vcl$/dllapi.h        \
+            $(INC)$/vcl$/dockwin.hxx     \
+            $(INC)$/vcl$/edit.hxx        \
+            $(INC)$/vcl$/event.hxx       \
+            $(INC)$/vcl$/field.hxx       \
+            $(INC)$/vcl$/fixed.hxx       \
+            $(INC)$/vcl$/floatwin.hxx    \
+            $(INC)$/vcl$/font.hxx        \
+            $(INC)$/vcl$/fontcvt.hxx     \
+            $(INC)$/vcl$/floatwin.hxx    \
+            $(INC)$/vcl$/graph.hxx       \
+            $(INC)$/vcl$/group.hxx       \
+            $(INC)$/vcl$/help.hxx        \
+            $(INC)$/vcl$/jobset.hxx      \
+            $(INC)$/vcl$/keycodes.hxx    \
+            $(INC)$/vcl$/keycod.hxx      \
+            $(INC)$/vcl$/image.hxx       \
+            $(INC)$/lstbox.h             \
+            $(INC)$/vcl$/lstbox.hxx      \
+            $(INC)$/vcl$/mapmod.hxx      \
+            $(INC)$/vcl$/metaact.hxx     \
+            $(INC)$/vcl$/menu.hxx        \
+            $(INC)$/vcl$/menubtn.hxx     \
+            $(INC)$/vcl$/metric.hxx      \
+            $(INC)$/vcl$/morebtn.hxx     \
+            $(INC)$/vcl$/msgbox.hxx      \
+            $(INC)$/vcl$/octree.hxx      \
+            $(INC)$/vcl$/outdev.hxx      \
+            $(INC)$/vcl$/outdev3d.hxx    \
+            $(INC)$/vcl$/pointr.hxx      \
+            $(INC)$/vcl$/ptrstyle.hxx    \
+            $(INC)$/vcl$/prntypes.hxx    \
+            $(INC)$/vcl$/print.hxx       \
+            $(INC)$/vcl$/prndlg.hxx      \
+            $(INC)$/vcl$/region.hxx      \
+            $(INC)$/vcl$/salbtype.hxx    \
+            $(INC)$/vcl$/scrbar.hxx      \
+            $(INC)$/vcl$/slider.hxx      \
+            $(INC)$/vcl$/seleng.hxx      \
+            $(INC)$/vcl$/settings.hxx    \
+            $(INC)$/vcl$/sound.hxx       \
+            $(INC)$/vcl$/sndstyle.hxx    \
+            $(INC)$/vcl$/split.hxx       \
+            $(INC)$/vcl$/splitwin.hxx    \
+            $(INC)$/vcl$/spin.hxx        \
+            $(INC)$/vcl$/spinfld.hxx     \
+            $(INC)$/vcl$/status.hxx      \
+            $(INC)$/vcl$/stdtext.hxx     \
+            $(INC)$/vcl$/sv.h            \
+            $(INC)$/vcl$/svapp.hxx       \
+            $(INC)$/vcl$/syschild.hxx    \
             $(INC)$/sysdata.hxx     \
-            $(INC)$/syswin.hxx      \
-            $(INC)$/tabctrl.hxx     \
-            $(INC)$/tabdlg.hxx      \
-            $(INC)$/tabpage.hxx     \
-            $(INC)$/toolbox.hxx     \
-            $(INC)$/timer.hxx       \
-            $(INC)$/virdev.hxx      \
-            $(INC)$/wall.hxx        \
-            $(INC)$/waitobj.hxx     \
-            $(INC)$/wintypes.hxx    \
-            $(INC)$/window.hxx      \
-            $(INC)$/wrkwin.hxx
+            $(INC)$/vcl$/syswin.hxx      \
+            $(INC)$/vcl$/tabctrl.hxx     \
+            $(INC)$/vcl$/tabdlg.hxx      \
+            $(INC)$/vcl$/tabpage.hxx     \
+            $(INC)$/vcl$/toolbox.hxx     \
+            $(INC)$/vcl$/timer.hxx       \
+            $(INC)$/vcl$/virdev.hxx      \
+            $(INC)$/vcl$/wall.hxx        \
+            $(INC)$/vcl$/waitobj.hxx     \
+            $(INC)$/vcl$/wintypes.hxx    \
+            $(INC)$/vcl$/window.hxx      \
+            $(INC)$/vcl$/wrkwin.hxx
 
 .IF "$(linkinc)" != ""
 SHL11FILE=  $(MISC)$/app.slo
