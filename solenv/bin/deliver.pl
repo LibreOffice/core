@@ -7,9 +7,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.115 $
+#   $Revision: 1.116 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:22:04 $
+#   last change: $Author: vg $ $Date: 2007-04-11 19:47:27 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.115 $ ';
+$id_str = ' $Revision: 1.116 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -65,7 +65,7 @@ print "$script_name -- version: $script_rev\n";
 @action_list        =   (           # valid actions
                         'copy',
                         'dos',
-                        'hedabu',
+                        'hedabu_obsolete',
                         'linklib',
                         'mkdir',
                         'symlink',
@@ -91,7 +91,7 @@ $common_dest        = 0;            # common tree on solver
 
 @action_data        = ();           # LoL with all action data
 @macros             = ();           # d.lst macros
-@hedabu_list        = ();           # files which have to be filtered through hedabu
+@hedabu_obsolete_list        = ();           # files which have to be filtered through hedabu_obsolete
 @dirlist            = ();           # List of 'mkdir' targets
 @zip_list           = ();           # files which have to be zipped
 @common_zip_list    = ();           # common files which have to be zipped
@@ -151,7 +151,7 @@ init_globals();
 push_default_actions();
 parse_dlst();
 walk_action_data();
-walk_hedabu_list();
+walk_hedabu_obsolete_list();
 write_log() if $opt_log;
 zip_files() if $opt_zip;
 cleanup() if $opt_delete;
@@ -224,9 +224,9 @@ sub do_dos
     }
 }
 
-sub do_hedabu
+sub do_hedabu_obsolete
 {
-    # just collect all hedabu files, actual filtering is done later
+    # just collect all hedabu_obsolete files, actual filtering is done later
     my $line = shift;
     my ($from, $to);
     my @globbed_files = ();
@@ -234,7 +234,7 @@ sub do_hedabu
     $line = expand_macros($line);
     ($from, $to) = split(' ', $line);
 
-    push( @hedabu_list, @{glob_line($from, $to)});
+    push( @hedabu_obsolete_list, @{glob_line($from, $to)});
 }
 
 sub do_linklib
@@ -1024,33 +1024,33 @@ sub push_default_actions
     }
 }
 
-sub walk_hedabu_list
+sub walk_hedabu_obsolete_list
 {
-    my (@hedabu_headers);
-    return if $#hedabu_list == -1;
+    my (@hedabu_obsolete_headers);
+    return if $#hedabu_obsolete_list == -1;
 
-    # create hash with all hedabu header names
-    for (my $i = 0; $i <= $#hedabu_list; $i++) {
-        my @field = split('/', $hedabu_list[$i][0]);
-        push (@hedabu_headers, $field[-1]);
+    # create hash with all hedabu_obsolete header names
+    for (my $i = 0; $i <= $#hedabu_obsolete_list; $i++) {
+        my @field = split('/', $hedabu_obsolete_list[$i][0]);
+        push (@hedabu_obsolete_headers, $field[-1]);
     }
 
-    # now stream all hedabu headers through hedabu filter
-    for (my $i = 0; $i <= $#hedabu_list; $i++) {
-        hedabu_if_newer($hedabu_list[$i][0], $hedabu_list[$i][1], \@hedabu_headers)
+    # now stream all hedabu_obsolete headers through hedabu_obsolete filter
+    for (my $i = 0; $i <= $#hedabu_obsolete_list; $i++) {
+        hedabu_obsolete_if_newer($hedabu_obsolete_list[$i][0], $hedabu_obsolete_list[$i][1], \@hedabu_obsolete_headers)
                 ? $files_copied++ : $files_unchanged++;
     }
 }
 
-sub hedabu_if_newer
+sub hedabu_obsolete_if_newer
 {
     my $from = shift;
     my $to = shift;
-    my $hedabu_headers_ref = shift;
+    my $hedabu_obsolete_headers_ref = shift;
     my ($from_stat_ref, $header);
 
     push_on_ziplist($to) if $opt_zip;
-    push_on_loglist("HEDABU", "$from", "$to") if $opt_log;
+    push_on_loglist("HEDABU_OBSOLETE", "$from", "$to") if $opt_log;
 
     if ( $opt_delete ) {
         print "REMOVE: $to\n";
@@ -1060,7 +1060,7 @@ sub hedabu_if_newer
     }
 
     if ( $from_stat_ref = is_newer($from, $to) ) {
-        print "HEDABU: $from -> $to\n";
+        print "HEDABU_OBSOLETE: $from -> $to\n";
 
         return 1 if $opt_check;
 
@@ -1079,7 +1079,7 @@ sub hedabu_if_newer
         # squeeze multiple blank lines
         $content =~ s/\n{3,}/\n\n/sg;
 
-        foreach $header (@$hedabu_headers_ref) {
+        foreach $header (@$hedabu_obsolete_headers_ref) {
             $content =~ s/#include [<"]$header[>"]/#include <$module\/$header>/g;
         }
 
@@ -1126,7 +1126,7 @@ sub push_on_loglist
     my @entry = @_;
     return 0 if ( $opt_check );
     return -1 if ( $#entry != 2 );
-    if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "HEDABU" )) {
+    if (( $entry[0] eq "COPY" ) || ( $entry[0] eq "HEDABU_OBSOLETE" )) {
         return 0 if ( ! -e $entry[1].$maybedot );
         # make 'from' relative to source root
         $entry[1] = $module . "/prj/" . $entry[1];
