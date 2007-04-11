@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:01:37 $
+#   last change: $Author: vg $ $Date: 2007-04-11 20:53:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -67,13 +67,13 @@ DEF1NAME	=$(SHL1TARGET)
 DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
          $(PRJ)$/inc$/absdev.hxx	\
          $(PRJ)$/inc$/agg.hxx       \
-         $(PRJ)$/inc$/exchange.hxx  \
-         $(PRJ)$/inc$/factory.hxx   \
-         $(PRJ)$/inc$/object.hxx    \
-         $(PRJ)$/inc$/sotdata.hxx   \
-         $(PRJ)$/inc$/sotref.hxx    \
+         $(PRJ)$/inc$/sot$/exchange.hxx  \
+         $(PRJ)$/inc$/sot$/factory.hxx   \
+         $(PRJ)$/inc$/sot$/object.hxx    \
+         $(PRJ)$/inc$/sot$/sotdata.hxx   \
+         $(PRJ)$/inc$/sot$/sotref.hxx    \
          $(PRJ)$/inc$/stg.hxx       \
-         $(PRJ)$/inc$/storage.hxx   \
+         $(PRJ)$/inc$/sot$/storage.hxx   \
          $(PRJ)$/inc$/storinfo.hxx
 DEFLIB1NAME =$(TARGET)
 DEF1DES 	=StarObjectsTools
