@@ -1,0 +1,224 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: textdata.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 19:39:38 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _TEXTDATA_HXX
+#define _TEXTDATA_HXX
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
+#ifndef _SFXBRDCST_HXX
+#include <svtools/brdcst.hxx>
+#endif
+
+#ifndef _SFXSMPLHINT_HXX
+#include <svtools/smplhint.hxx>
+#endif
+
+#ifndef _STRING_HXX
+#include <tools/string.hxx>
+#endif
+
+#define TEXTUNDO_START              100
+#define TEXTUNDO_REMOVECHARS        100
+#define TEXTUNDO_CONNECTPARAS       101
+#define TEXTUNDO_SPLITPARA          102
+#define TEXTUNDO_INSERTCHARS        103
+#define TEXTUNDO_DELCONTENT         104
+#define TEXTUNDO_DELETE             105
+#define TEXTUNDO_CUT                106
+#define TEXTUNDO_PASTE              107
+#define TEXTUNDO_INSERT             108
+#define TEXTUNDO_ATTRIBS            109
+#define TEXTUNDO_DRAGANDDROP        110
+#define TEXTUNDO_READ               111
+#define TEXTUNDO_END                149
+
+#define XTEXTUNDO_START             150
+#define XTEXTUNDO_END               199
+
+#define TEXTUNDO_USER               200
+
+// Fuer Notify, wenn alle Absaetze geloescht wurden...
+#define TEXT_PARA_ALL               0xFFFFFFFF
+
+class TextPaM
+{
+private:
+    ULONG           mnPara;
+    USHORT          mnIndex;
+
+public:
+                    TextPaM()                               { mnPara = 0, mnIndex = 0; }
+                    TextPaM( ULONG nPara, USHORT nIndex )   { mnPara = nPara, mnIndex = nIndex; }
+
+    ULONG           GetPara() const     { return mnPara; }
+    ULONG&          GetPara()           { return mnPara; }
+
+    USHORT          GetIndex() const    { return mnIndex; }
+    USHORT&         GetIndex()          { return mnIndex; }
+
+    inline BOOL     operator == ( const TextPaM& rPaM ) const;
+    inline BOOL     operator != ( const TextPaM& rPaM ) const;
+    inline BOOL     operator < ( const TextPaM& rPaM ) const;
+    inline BOOL     operator > ( const TextPaM& rPaM ) const;
+};
+
+inline BOOL TextPaM::operator == ( const TextPaM& rPaM ) const
+{
+    return ( ( mnPara == rPaM.mnPara ) && ( mnIndex == rPaM.mnIndex ) ) ? TRUE : FALSE;
+}
+
+inline BOOL TextPaM::operator != ( const TextPaM& rPaM ) const
+{
+    return !( *this == rPaM );
+}
+
+inline BOOL TextPaM::operator < ( const TextPaM& rPaM ) const
+{
+    return ( ( mnPara < rPaM.mnPara ) ||
+             ( ( mnPara == rPaM.mnPara ) && mnIndex < rPaM.mnIndex ) ) ? TRUE : FALSE;
+}
+
+inline BOOL TextPaM::operator > ( const TextPaM& rPaM ) const
+{
+    return ( ( mnPara > rPaM.mnPara ) ||
+             ( ( mnPara == rPaM.mnPara ) && mnIndex > rPaM.mnIndex ) ) ? TRUE : FALSE;
+}
+
+class SVT_DLLPUBLIC TextSelection
+{
+private:
+    TextPaM         maStartPaM;
+    TextPaM         maEndPaM;
+
+public:
+                    TextSelection();
+                    TextSelection( const TextPaM& rPaM );
+                    TextSelection( const TextPaM& rStart, const TextPaM& rEnd );
+
+    const TextPaM&  GetStart() const    { return maStartPaM; }
+    TextPaM&        GetStart()          { return maStartPaM; }
+
+    const TextPaM&  GetEnd() const      { return maEndPaM; }
+    TextPaM&        GetEnd()            { return maEndPaM; }
+
+    void            Justify();
+
+    BOOL            HasRange() const    { return maStartPaM != maEndPaM; }
+
+    inline BOOL     operator == ( const TextSelection& rSel ) const;
+    inline BOOL     operator != ( const TextSelection& rSel ) const;
+};
+
+inline BOOL TextSelection::operator == ( const TextSelection& rSel ) const
+{
+    return ( ( maStartPaM == rSel.maStartPaM ) && ( maEndPaM == rSel.maEndPaM ) );
+}
+
+inline BOOL TextSelection::operator != ( const TextSelection& rSel ) const
+{
+    return !( *this == rSel );
+}
+
+#define TEXT_HINT_PARAINSERTED              1
+#define TEXT_HINT_PARAREMOVED               2
+#define TEXT_HINT_PARACONTENTCHANGED        3
+#define TEXT_HINT_TEXTHEIGHTCHANGED         4
+#define TEXT_HINT_FORMATPARA                5
+#define TEXT_HINT_TEXTFORMATTED             6
+#define TEXT_HINT_MODIFIED                  7
+#define TEXT_HINT_BLOCKNOTIFICATION_START   8
+#define TEXT_HINT_BLOCKNOTIFICATION_END     9
+#define TEXT_HINT_INPUT_START               10
+#define TEXT_HINT_INPUT_END                 11
+
+#define TEXT_HINT_VIEWSCROLLED          100
+#define TEXT_HINT_VIEWSELECTIONCHANGED  101
+
+class SVT_DLLPUBLIC TextHint : public SfxSimpleHint
+{
+private:
+    ULONG   mnValue;
+
+public:
+            TYPEINFO();
+            TextHint( ULONG nId );
+            TextHint( ULONG nId, ULONG nValue );
+
+    ULONG   GetValue() const        { return mnValue; }
+    void    SetValue( ULONG n )     { mnValue = n; }
+};
+
+struct TEIMEInfos
+{
+    String  aOldTextAfterStartPos;
+    USHORT* pAttribs;
+    TextPaM aPos;
+    USHORT  nLen;
+    BOOL    bCursor;
+    BOOL    bWasCursorOverwrite;
+
+            TEIMEInfos( const TextPaM& rPos, const String& rOldTextAfterStartPos );
+            ~TEIMEInfos();
+
+    void    CopyAttribs( const USHORT* pA, USHORT nL );
+    void    DestroyAttribs();
+};
+
+// -----------------  Wrapper for old Tools List -------------------
+
+#ifndef INCLUDED_VECTOR
+#include <vector>
+#define INCLUDED_VECTOR
+#endif
+
+#ifndef INCLUDED_ALGORITHM
+#include <algorithm>
+#define INCLUDED_ALGORITHM
+#endif
+
+template <class T> class ToolsList : public ::std::vector< T >
+{
+public:
+    ULONG           Count() const { return static_cast<ULONG>(::std::vector< T >::size()); }
+    ULONG           GetPos( T pObject ) const { return ( ::std::find( this->begin(), this->end(), pObject ) ) - this->begin(); }
+    T               GetObject( ULONG nIndex ) const { return (*this)[nIndex]; }
+    void            Insert( T pObject, ULONG nPos ) { ::std::vector< T >::insert( this->begin()+nPos, pObject ); }
+    void            Remove( ULONG nPos ) { ::std::vector< T >::erase( this->begin()+nPos ); }
+};
+
+#endif // _TEXTDATA_HXX
