@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mkfilt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:50:30 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 19:48:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,8 +38,8 @@
 
 #include <stdio.h>
 
-#include <../../inc/string.hxx>
-#include <../../inc/list.hxx>
+#include <../../inc/tools/string.hxx>
+#include <../../inc/tools/list.hxx>
 
 class TextFilter
 {
