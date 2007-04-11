@@ -4,9 +4,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:33:00 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 12:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ using namespace com::sun::star::io;
 //#define _ENABLE_CUR_DIR
 
 #include "stdobj.hxx"
-#include "stdobj1.hxx"
+#include "sbstdobj.hxx"
 #include "rtlproto.hxx"
 #include "basrid.hxx"
 #include "image.hxx"
