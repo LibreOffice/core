@@ -1,0 +1,215 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: svdopath.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 16:25:15 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SVDOPATH_HXX
+#define _SVDOPATH_HXX
+
+#ifndef _SVDOTEXT_HXX
+#include <svx/svdotext.hxx>
+#endif
+
+#ifndef _XPOLY_HXX
+#include <svx/xpoly.hxx>
+#endif
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
+#ifndef _BGFX_VECTOR_B2ENUMS_HXX
+#include <basegfx/vector/b2enums.hxx>
+#endif
+
+//************************************************************
+//   Vorausdeklarationen
+//************************************************************
+
+class ImpPathForDragAndCreate;
+
+//************************************************************
+//   Hilfsklasse SdrPathObjGeoData
+//
+// fuer Undo/Redo
+//
+//************************************************************
+
+class SdrPathObjGeoData : public SdrTextObjGeoData
+{
+public:
+    basegfx::B2DPolyPolygon maPathPolygon;
+    SdrObjKind                  meKind;
+
+    SdrPathObjGeoData();
+    virtual ~SdrPathObjGeoData();
+};
+
+//************************************************************
+//   SdrPathObj
+//************************************************************
+
+class SVX_DLLPUBLIC SdrPathObj : public SdrTextObj
+{
+    friend class ImpPathForDragAndCreate;
+
+protected:
+    basegfx::B2DPolyPolygon maPathPolygon;
+    SdrObjKind                  meKind;
+
+    // for isolation of old Drag/Create code
+    ImpPathForDragAndCreate*    mpDAC;
+
+protected:
+    // Hilfsfunktion fuer GET/SET/INS/etc. PNT
+    void ImpSetClosed(sal_Bool bClose);
+    void ImpForceKind();
+    void ImpForceLineWink();
+    ImpPathForDragAndCreate& impGetDAC() const;
+    void impDeleteDAC() const;
+
+public:
+    static sal_Bool ImpFindPolyPnt(const basegfx::B2DPolyPolygon& rPoly, sal_uInt32 nAbsPnt, sal_uInt32& rPolyNum, sal_uInt32& rPointNum);
+    virtual void SetRectsDirty(sal_Bool bNotMyself = sal_False);
+
+public:
+    TYPEINFO();
+    SdrPathObj(SdrObjKind eNewKind);
+    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly);
+    virtual ~SdrPathObj();
+
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+    virtual UINT16 GetObjIdentifier() const;
+    virtual void RecalcBoundRect();
+    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
+    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
+    virtual void operator=(const SdrObject& rObj);
+
+    virtual void TakeObjNameSingul(String& rName) const;
+    virtual void TakeObjNamePlural(String& rName) const;
+    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual void RecalcSnapRect();
+    virtual void NbcSetSnapRect(const Rectangle& rRect);
+    virtual sal_uInt32 GetHdlCount() const;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+    virtual sal_uInt32 GetPlusHdlCount(const SdrHdl& rHdl) const;
+    virtual SdrHdl* GetPlusHdl(const SdrHdl& rHdl, sal_uInt32 nPlNum) const;
+    virtual void AddToHdlList(SdrHdlList& rHdlList) const;
+
+    virtual FASTBOOL HasSpecialDrag() const;
+    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
+    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
+    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
+    virtual void BrkDrag(SdrDragStat& rDrag) const;
+    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
+    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+
+    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual void BrkCreate(SdrDragStat& rStat);
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+    Pointer GetCreatePointer() const;
+
+    // during drag or create, allow accessing the so-far created/modified polyPolygon
+    basegfx::B2DPolyPolygon getObjectPolyPolygon(const SdrDragStat& rDrag) const;
+    basegfx::B2DPolyPolygon getDragPolyPolygon(const SdrDragStat& rDrag) const;
+
+    virtual void NbcMove(const Size& aSize);
+    virtual void NbcResize(const Point& rRefPnt, const Fraction& aXFact, const Fraction& aYFact);
+    virtual void NbcRotate(const Point& rRefPnt, long nAngle, double fSin, double fCos);
+    virtual void NbcMirror(const Point& rRefPnt1, const Point& rRefPnt2);
+    virtual void NbcShear(const Point& rRefPnt, long nAngle, double fTan, FASTBOOL bVShear);
+
+    virtual sal_uInt32 GetSnapPointCount() const;
+    virtual Point GetSnapPoint(sal_uInt32 i) const;
+
+    virtual sal_Bool IsPolyObj() const;
+    virtual sal_uInt32 GetPointCount() const;
+    virtual Point GetPoint(sal_uInt32 nHdlNum) const;
+    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 nHdlNum);
+
+    // Punkt einfuegen
+    sal_uInt32 NbcInsPointOld(const Point& rPos, sal_Bool bNewObj, sal_Bool bHideHim);
+    sal_uInt32 NbcInsPoint(sal_uInt32 i, const Point& rPos, sal_Bool bNewObj, sal_Bool bHideHim);
+
+    // An diesem Punkt auftrennen
+    SdrObject* RipPoint(sal_uInt32 nHdlNum, sal_uInt32& rNewPt0Index);
+
+protected:
+    virtual SdrObjGeoData* NewGeoData() const;
+    virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
+    virtual void RestGeoData(const SdrObjGeoData& rGeo);
+
+public:
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+
+    // Bezierpolygon holen/setzen
+    const basegfx::B2DPolyPolygon& GetPathPoly() const { return maPathPolygon; }
+    void SetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
+    void NbcSetPathPoly(const basegfx::B2DPolyPolygon& rPathPoly);
+
+    // Spezialfunktionen fuer Bezierpolygon-Bearbeitung
+    sal_Bool IsClosed() const { return meKind==OBJ_POLY || meKind==OBJ_PATHPOLY || meKind==OBJ_PATHFILL || meKind==OBJ_FREEFILL || meKind==OBJ_SPLNFILL; }
+    sal_Bool IsLine() const { return meKind==OBJ_PLIN || meKind==OBJ_PATHPLIN || meKind==OBJ_PATHLINE || meKind==OBJ_FREELINE || meKind==OBJ_SPLNLINE || meKind==OBJ_LINE; }
+    sal_Bool IsFreeHand() const { return meKind==OBJ_FREELINE || meKind==OBJ_FREEFILL; }
+    sal_Bool IsBezier() const { return meKind==OBJ_PATHLINE || meKind==OBJ_PATHFILL; }
+    sal_Bool IsSpline() const { return meKind==OBJ_SPLNLINE || meKind==OBJ_SPLNFILL; }
+
+    // Pfad schliessen bzw. oeffnen; im letzteren Fall den Endpunkt um
+    // "nOpenDistance" verschieben
+    void ToggleClosed(); // long nOpenDistance);
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    // transformation interface for StarOfficeAPI. This implements support for
+    // homogen 3x3 matrices containing the transformation of the SdrObject. At the
+    // moment it contains a shearX, rotation and translation, but for setting all linear
+    // transforms like Scale, ShearX, ShearY, Rotate and Translate are supported.
+    //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // gets base transformation and rectangle of object. If it's an SdrPathObj it fills the PolyPolygon
+    // with the base geometry and returns TRUE. Otherwise it returns FALSE.
+    virtual sal_Bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const;
+    // sets the base geometry of the object using infos contained in the homogen 3x3 matrix.
+    // If it's an SdrPathObj it will use the provided geometry information. The Polygon has
+    // to use (0,0) as upper left and will be scaled to the given size in the matrix.
+    virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon);
+};
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#endif //_SVDOPATH_HXX
+
