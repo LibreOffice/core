@@ -1,6 +1,6 @@
 mkdir: %_DEST%\inc%_EXT%\soldep
 mkdir: %_DEST%\inc%_EXT%\bootstrp2
-hedabu: ..\inc\sdtresid.hxx %_DEST%\inc%_EXT%\soldep\sdtresid.hxx
+..\inc\soldep\sdtresid.hxx %_DEST%\inc%_EXT%\soldep\sdtresid.hxx
 ..\%__SRC%\bin\soldepl.exe %_DEST%\bin%_EXT%\soldepl.exe
 ..\%__SRC%\bin\bootstrpdt?????.dll %_DEST%\bin%_EXT%\bootstrpdt?????.dll
 ..\%__SRC%\bin\soldep?????.dll %_DEST%\bin%_EXT%\soldep?????.dll
@@ -10,23 +10,23 @@ hedabu: ..\inc\sdtresid.hxx %_DEST%\inc%_EXT%\soldep\sdtresid.hxx
 
 ..\util\perl.mk  %_DEST%\inc%_EXT%\soldep\perl.mk
 
-hedabu: ..\inc\soldep.hxx %_DEST%\inc%_EXT%\soldep\soldep.hxx
-hedabu: ..\inc\soldlg.hxx %_DEST%\inc%_EXT%\soldep\soldlg.hxx
-hedabu: ..\inc\hashtbl.hxx %_DEST%\inc%_EXT%\soldep\hashtbl.hxx
-hedabu: ..\inc\depper.hxx %_DEST%\inc%_EXT%\soldep\depper.hxx
-hedabu: ..\inc\objwin.hxx %_DEST%\inc%_EXT%\soldep\objwin.hxx
-hedabu: ..\inc\connctr.hxx %_DEST%\inc%_EXT%\soldep\connctr.hxx
-hedabu: ..\inc\depwin.hxx %_DEST%\inc%_EXT%\soldep\depwin.hxx
-hedabu: ..\inc\graphwin.hxx %_DEST%\inc%_EXT%\soldep\graphwin.hxx
-hedabu: ..\inc\tbox.hxx %_DEST%\inc%_EXT%\soldep\tbox.hxx
-hedabu: ..\inc\hashobj.hxx %_DEST%\inc%_EXT%\soldep\hashobj.hxx
-hedabu: ..\inc\minormk.hxx %_DEST%\inc%_EXT%\soldep\minormk.hxx
-hedabu: ..\inc\prj.hxx %_DEST%\inc%_EXT%\soldep\prj.hxx
-hedabu: ..\inc\dep.hxx %_DEST%\inc%_EXT%\soldep\dep.hxx
-hedabu: ..\inc\prodmap.hxx %_DEST%\inc%_EXT%\soldep\prodmap.hxx
-hedabu: ..\inc\XmlBuildList.hxx %_DEST%\inc%_EXT%\soldep\XmlBuildList.hxx
-hedabu: ..\inc\appdef.hxx %_DEST%\inc%_EXT%\soldep\appdef.hxx
-hedabu: ..\inc\soldlg.hrc %_DEST%\inc%_EXT%\soldep\soldlg.hrc
+..\inc\soldep\soldep.hxx %_DEST%\inc%_EXT%\soldep\soldep.hxx
+..\inc\soldep\soldlg.hxx %_DEST%\inc%_EXT%\soldep\soldlg.hxx
+..\inc\soldep\hashtbl.hxx %_DEST%\inc%_EXT%\soldep\hashtbl.hxx
+..\inc\soldep\depper.hxx %_DEST%\inc%_EXT%\soldep\depper.hxx
+..\inc\soldep\objwin.hxx %_DEST%\inc%_EXT%\soldep\objwin.hxx
+..\inc\soldep\connctr.hxx %_DEST%\inc%_EXT%\soldep\connctr.hxx
+..\inc\soldep\depwin.hxx %_DEST%\inc%_EXT%\soldep\depwin.hxx
+..\inc\soldep\graphwin.hxx %_DEST%\inc%_EXT%\soldep\graphwin.hxx
+..\inc\soldep\tbox.hxx %_DEST%\inc%_EXT%\soldep\tbox.hxx
+..\inc\soldep\hashobj.hxx %_DEST%\inc%_EXT%\soldep\hashobj.hxx
+..\inc\minormk.hxx %_DEST%\inc%_EXT%\soldep\minormk.hxx
+..\inc\soldep\prj.hxx %_DEST%\inc%_EXT%\soldep\prj.hxx
+..\inc\dep.hxx %_DEST%\inc%_EXT%\soldep\dep.hxx
+..\inc\prodmap.hxx %_DEST%\inc%_EXT%\soldep\prodmap.hxx
+..\inc\soldep\XmlBuildList.hxx %_DEST%\inc%_EXT%\soldep\XmlBuildList.hxx
+..\inc\appdef.hxx %_DEST%\inc%_EXT%\soldep\appdef.hxx
+..\inc\soldep\soldlg.hrc %_DEST%\inc%_EXT%\soldep\soldlg.hrc
 
 ..\%__SRC%\lib\soldep.lib %_DEST%\lib%_EXT%\soldep.lib
 ..\%__SRC%\lib\bootstrpdt.lib %_DEST%\lib%_EXT%\bootstrpdt.lib
