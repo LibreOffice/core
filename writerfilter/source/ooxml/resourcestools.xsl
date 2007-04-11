@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-02 14:34:35 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:48:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,6 +85,9 @@
 
   <xsl:key name="same-attribute-enum"
            match="rng:attribute" use="@enumname"/>
+
+  <xsl:key name="same-element-or-attribute-enum"
+           match="rng:attribute|rng:element" use="@enumname"/>
 
   <xsl:key name="context-resource"
            match="resource" use="@name"/>
@@ -231,10 +234,14 @@
     {
         rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
         <xsl:value-of select="@qname"/>
-          <xsl:text>"));
+          <xsl:text>"));</xsl:text>
+<!--
+          <xsl:text>
         mElementMap[aStr] = </xsl:text>
         <xsl:value-of select="$element"/>
-          <xsl:text>;
+          <xsl:text>;</xsl:text>
+-->
+          <xsl:text>
         mElementReverseMap[</xsl:text>
         <xsl:value-of select="$element"/>
         <xsl:text>] = aStr;
@@ -258,10 +265,14 @@
     {
         rtl::OUString aStr(RTL_CONSTASCII_USTRINGPARAM("</xsl:text>
           <xsl:value-of select="@qname"/>
-          <xsl:text>"));
+          <xsl:text>"));</xsl:text>
+<!--
+          <xsl:text>
         mAttributeMap[aStr] = </xsl:text>
           <xsl:value-of select="$attribute"/>
-          <xsl:text>;
+          <xsl:text>;</xsl:text>
+-->
+          <xsl:text>
         mAttributeReverseMap[</xsl:text>
           <xsl:value-of select="$attribute"/>
           <xsl:text>] = aStr;        
@@ -494,9 +505,7 @@ doctok::Id </xsl:text>
     <xsl:text>::getIdFromRefs(TokenEnum_t nToken)
 {
     TokenEnum_t tmpToken;
-    tmpToken = nToken; // prevent warning
-
-    </xsl:text>
+    tmpToken = nToken; // prevent warning</xsl:text>
    <xsl:variable name="myid" select="generate-id(.)"/>
     <xsl:for-each select=".//rng:ref[not(ancestor::rng:element or ancestor::rng:attribute) and @name]">
       <xsl:if test="generate-id(.) != $myid">
@@ -580,8 +589,6 @@ void </xsl:text>
                    sText.getLength());</xsl:text>
       </xsl:when>
       <xsl:otherwise>
-        <xsl:text>
-    </xsl:text>
         <xsl:call-template name="contextparent"/>
         <xsl:text>::characters(sText);</xsl:text>
       </xsl:otherwise>
@@ -617,23 +624,7 @@ void </xsl:text>
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
     <xsl:variable name="mydefine" select="@name"/>
-    <xsl:text>
-OOXMLContext::Pointer_t
-</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>::element(TokenEnum_t nToken)
-{
-#ifdef DEBUG_OOXML_ELEMENT
-    clog &lt;&lt; "-->" &lt;&lt; "</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text> "&lt;&lt; nToken &lt;&lt; endl;
-#endif
-
-    OOXMLContext::Pointer_t pResult;
-    </xsl:text>
-      <xsl:text>
-    switch (nToken)
-    {</xsl:text>
+    <xsl:variable name="switchbody">
       <xsl:for-each select=".//rng:element[@enumname and rng:ref]">
         <xsl:variable name="do">
           <xsl:for-each select="key('defines-with-name', ./rng:ref/@name)[1]">
@@ -671,6 +662,34 @@ OOXMLContext::Pointer_t
              </xsl:choose>
          </xsl:if>
        </xsl:for-each>       
+    </xsl:variable>
+    <xsl:text>
+OOXMLContext::Pointer_t
+</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:choose>
+      <xsl:when test="string-length($switchbody) > 0">
+        <xsl:text>::element(TokenEnum_t nToken)</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>::element(TokenEnum_t /*nToken*/)</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>
+{
+#ifdef DEBUG_OOXML_ELEMENT
+    clog &lt;&lt; "-->" &lt;&lt; "</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text> "&lt;&lt; nToken &lt;&lt; endl;
+#endif
+
+    OOXMLContext::Pointer_t pResult;
+    </xsl:text>
+    <xsl:if test="string-length($switchbody) > 0">
+      <xsl:text>
+    switch (nToken)
+    {</xsl:text>
+    <xsl:value-of select="$switchbody"/>
        <xsl:text>
      case OOXML_TOKENS_END:
         // prevent warning
@@ -680,6 +699,7 @@ OOXMLContext::Pointer_t
               break;
      }
        </xsl:text>
+    </xsl:if>
      <xsl:text>
 
 #ifdef DEBUG_OOXML_ELEMENT
@@ -715,25 +735,7 @@ OOXMLContext::Pointer_t
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
     <xsl:variable name="mydefine" select="@name"/>
-    <xsl:text>
-doctok::Id
-</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>::getId(TokenEnum_t nToken)
-{
-    doctok::Id nResult = 0x0;
-
-#ifdef DEBUG_GETID
-    clog &lt;&lt; "-->getId::</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>" &lt;&lt; endl;
-#endif
-
-    TokenEnum_t nTmpToken;
-    nTmpToken = nToken;
-
-    switch (nToken)
-    {</xsl:text>
+    <xsl:variable name="switchbody">
     <xsl:if test="$resource = 'Property' or $resource = 'PropertySetValue' or $resource = 'SingleElement'">
     <xsl:for-each select="//resource[@name=$mydefine]">
       <xsl:for-each select="attribute|sprm">
@@ -761,6 +763,35 @@ doctok::Id
     </xsl:for-each>
     </xsl:for-each>
     </xsl:if>
+    </xsl:variable>
+    <xsl:text>
+doctok::Id
+</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:choose>
+      <xsl:when test="string-length($switchbody) > 0">
+        <xsl:text>::getId(TokenEnum_t nToken)</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>::getId(TokenEnum_t /*nToken*/)</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>
+{
+    doctok::Id nResult = 0x0;
+
+#ifdef DEBUG_GETID
+    clog &lt;&lt; "-->getId::</xsl:text>
+    <xsl:value-of select="$classname"/>
+    <xsl:text>" &lt;&lt; endl;
+#endif
+
+    </xsl:text>
+    <xsl:if test="string-length($switchbody) > 0">
+    <xsl:text>
+    switch (nToken)
+    {</xsl:text>
+    <xsl:value-of select="$switchbody"/>
     <xsl:text>
     case OOXML_TOKENS_END: // prevent warning
         break;
@@ -768,6 +799,7 @@ doctok::Id
         nResult = getIdFromRefs(nToken);
         break;
     }</xsl:text>
+    </xsl:if>
     <xsl:text>
 
 #ifdef DEBUG_GETID
@@ -802,6 +834,13 @@ doctok::Id
     <xsl:call-template name="caselabelattribute"/>
     <xsl:text>
         mnValue = rValue.toInt32();
+        break;</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="contextattributeimplhex">
+    <xsl:call-template name="caselabelattribute"/>
+    <xsl:text>
+        mnValue = rValue.toInt32(16);
         break;</xsl:text>
   </xsl:template>
 
@@ -879,47 +918,61 @@ doctok::Id
     <xsl:variable name="resource">
       <xsl:call-template name="contextresource"/>
     </xsl:variable>
+    <xsl:variable name="switchbody">
+      <xsl:for-each select=".//rng:attribute[@name]">
+        <xsl:choose>
+          <xsl:when test="$resource = 'BooleanValue'">
+            <xsl:call-template name="contextattributeimplbool"/>
+          </xsl:when>
+          <xsl:when test="$resource = 'IntegerValue'">
+            <xsl:call-template name="contextattributeimplint"/>
+          </xsl:when>
+          <xsl:when test="$resource = 'HexValue'">
+            <xsl:call-template name="contextattributeimplhex"/>
+          </xsl:when>
+          <xsl:when test="$resource = 'ListValue'">
+            <xsl:call-template name="contextattributeimpllist"/>
+          </xsl:when>
+          <xsl:when test="$resource = 'PropertySetValue'">
+            <xsl:call-template name="contextattributeimplprops"/>
+          </xsl:when>
+          <xsl:when test="$resource = 'SingleElement'">
+            <xsl:call-template name="contextattributeimplprops"/>
+          </xsl:when>
+          <xsl:otherwise/>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:variable>
     <xsl:text>
 bool </xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:text>::attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue)
+    <xsl:choose>
+      <xsl:when test="string-length($switchbody) > 0">
+    <xsl:text>::attribute(TokenEnum_t nToken, const rtl::OUString &amp; rValue)</xsl:text>
+    </xsl:when>
+    <xsl:otherwise>
+    <xsl:text>::attribute(TokenEnum_t /*nToken*/, const rtl::OUString &amp; /*rValue*/)</xsl:text>
+    </xsl:otherwise>
+    </xsl:choose>
+    <xsl:text>
 {
-    bool bResult = false;
-    rtl::OUString sTmp;
-    sTmp = rValue;
-
+    bool bResult = false;</xsl:text>
+    <xsl:if test="string-length($switchbody) > 0">
+      <xsl:text>
     switch (nToken)
     {</xsl:text>
-    <xsl:for-each select=".//rng:attribute[@name]">
-      <xsl:choose>
-        <xsl:when test="$resource = 'BooleanValue'">
-          <xsl:call-template name="contextattributeimplbool"/>
-        </xsl:when>
-        <xsl:when test="$resource = 'IntegerValue'">
-          <xsl:call-template name="contextattributeimplint"/>
-        </xsl:when>
-        <xsl:when test="$resource = 'ListValue'">
-          <xsl:call-template name="contextattributeimpllist"/>
-        </xsl:when>
-        <xsl:when test="$resource = 'PropertySetValue'">
-          <xsl:call-template name="contextattributeimplprops"/>
-        </xsl:when>
-        <xsl:when test="$resource = 'SingleElement'">
-          <xsl:call-template name="contextattributeimplprops"/>
-        </xsl:when>
-        <xsl:otherwise/>
-      </xsl:choose>
-    </xsl:for-each>
+    <xsl:value-of select="$switchbody"/>
     <xsl:text>
     case OOXML_TOKENS_END: // prevent warning
       break;
     default:
       break;
-    }
+    }</xsl:text>
+    </xsl:if>
+    <xsl:text>
     
     return bResult;
-}
-    </xsl:text>
+}</xsl:text>
   </xsl:template>
 
   <xsl:template name="contexthasdefault">
@@ -1071,6 +1124,17 @@ rtl::OUString </xsl:text>
     </xsl:for-each>
   </xsl:template>
 
+  <xsl:template name="valueconstantdecls">
+    <xsl:for-each select="//rng:value[generate-id(key('value-with-content', text())[1]) = generate-id(.)]">
+      <xsl:text>
+extern rtl::OUString </xsl:text>
+      <xsl:call-template name="valuestringname">
+        <xsl:with-param name="string" select="."/>
+      </xsl:call-template>
+      <xsl:text>;</xsl:text>
+    </xsl:for-each>
+  </xsl:template>
+
   <xsl:template name="valueconstructorimpl">
     <xsl:variable name="name" select="@name"/>
     <xsl:variable name="classname">
@@ -1211,13 +1275,7 @@ doctok::Id OOXMLContext::getIdFromRefs(TokenEnum_t nToken)
   </xsl:template>
 
   <xsl:template name="elementimplany">
-    <xsl:text>
-OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
-{
-    OOXMLContext::Pointer pResult;
-
-    switch (nToken)
-    { </xsl:text>
+    <xsl:variable name="switchbody">
     <xsl:for-each select=".//namespace">
       <xsl:variable name="nsname" select="@name"/>
     <xsl:for-each select=".//rng:element[@name]">
@@ -1244,11 +1302,23 @@ OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
       </xsl:if>
     </xsl:for-each>
     </xsl:for-each>
+    </xsl:variable>
+    <xsl:text>
+OOXMLContext::Pointer_t getAnyContext(TokenEnum_t nToken)
+{
+    OOXMLContext::Pointer pResult;
+    </xsl:text>
+    <xsl:if test="string-length($switchbody) > 0">
+    <xsl:text>
+    switch (nToken)
+    { </xsl:text>
     <xsl:text>
     default:
        break;
     }
-    
+    </xsl:text>
+    </xsl:if>
+    <xsl:text>
     return pResult;
 }&#xa;</xsl:text>
   </xsl:template>
@@ -1305,5 +1375,51 @@ namespace writerfilter { namespace NS_ooxml
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
+
+  <xsl:template name="gperfinputelements">
+    <xsl:text>
+%{
+#include "OOXMLtokens.hxx"
+
+namespace ooxml { namespace tokenmap { namespace elements {
+%}
+struct token { char * name; TokenEnum_t nToken; };
+%%</xsl:text>
+    <xsl:for-each select=".//rng:element[@enumname]">
+      <xsl:if test="generate-id(.) = generate-id(key('same-element-enum', @enumname)[1])">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:value-of select="@qname"/>
+        <xsl:text>, </xsl:text>
+        <xsl:call-template name="elementname">
+          <xsl:with-param name="name" select="@enumname"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:text>
+%%&#xa;</xsl:text>
+}}}&#xa;</xsl:template>
+
+<xsl:template name="gperfinputattributes">
+    <xsl:text>
+%{
+#include "OOXMLtokens.hxx"
+
+namespace ooxml { namespace tokenmap { namespace attributes {
+%}
+struct token { char * name; TokenEnum_t nToken; };
+%%</xsl:text>
+    <xsl:for-each select=".//rng:attribute[@enumname]">
+      <xsl:if test="generate-id(.) = generate-id(key('same-attribute-enum', @enumname)[1])">
+        <xsl:text>&#xa;</xsl:text>
+        <xsl:value-of select="@qname"/>
+        <xsl:text>, </xsl:text>
+        <xsl:call-template name="attrname">
+          <xsl:with-param name="name" select="@enumname"/>
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:for-each>
+    <xsl:text>
+%%&#xa;
+}}}&#xa;</xsl:text></xsl:template>
 
 </xsl:stylesheet>
