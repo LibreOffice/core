@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-28 09:17:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,18 @@ namespace ooxml
 {
 
 using namespace doctok;
+
+OOXMLProperty::~OOXMLProperty()
+{
+}
+
+OOXMLPropertySet::~OOXMLPropertySet()
+{
+}
+
+OOXMLTable::~OOXMLTable()
+{
+}
 
 OOXMLPropertyImpl::OOXMLPropertyImpl(Id id, OOXMLValue::Pointer_t pValue,
                                      OOXMLPropertyImpl::Type_t eType)
@@ -447,6 +459,50 @@ OOXMLListValue::OOXMLListValue()
 
 OOXMLListValue::~OOXMLListValue()
 {
+}
+
+/*
+  class OOXMLTableImpl
+ */
+
+OOXMLTableImpl::OOXMLTableImpl()
+{
+}
+
+OOXMLTableImpl::~OOXMLTableImpl()
+{
+}
+
+void OOXMLTableImpl::resolve(Table & rTable)
+{
+    int nPos = 0;
+
+    PropertySets_t::iterator it = mPropertySets.begin();
+    PropertySets_t::iterator itEnd = mPropertySets.begin();
+
+    while (it != itEnd)
+    {
+        doctok::Reference<Properties>::Pointer_t pProperties
+            ((*it)->clone());
+        rTable.entry(nPos, pProperties);
+        ++nPos;
+        it++;
+    }
+}
+
+void OOXMLTableImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
+{
+    mPropertySets.push_back(pPropertySet);
+}
+
+string OOXMLTableImpl::getType() const
+{
+    return "OOXMLTableImpl";
+}
+
+OOXMLTable * OOXMLTableImpl::clone() const
+{
+    return new OOXMLTableImpl(*this);
 }
 
 }

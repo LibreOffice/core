@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-28 09:17:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:40:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,9 @@ struct OOXMLPropertySetImplCompare
 
 class OOXMLPropertySetImpl : public OOXMLPropertySet
 {
+public:
     typedef vector<OOXMLProperty::Pointer_t> OOXMLProperties_t;
+private:
     OOXMLProperties_t mProperties;
 public:
     OOXMLPropertySetImpl();
@@ -131,6 +133,9 @@ public:
     virtual string getType() const;
     virtual void add(OOXMLProperty::Pointer_t pProperty);
     virtual OOXMLPropertySet * clone() const;
+
+    OOXMLProperties_t::iterator begin();
+    OOXMLProperties_t::iterator end();
 };
 
 class OOXMLPropertySetValue : public OOXMLValue
@@ -179,6 +184,22 @@ class OOXMLListValue : public OOXMLIntegerValue
 public:
     OOXMLListValue();
     virtual ~OOXMLListValue();
+};
+
+class OOXMLTableImpl : public OOXMLTable
+{
+private:
+    typedef vector<OOXMLPropertySet::Pointer_t> PropertySets_t;
+    PropertySets_t mPropertySets;
+
+public:
+    OOXMLTableImpl();
+    virtual ~OOXMLTableImpl();
+
+    virtual void resolve(Table & rTable);
+    virtual void add(OOXMLPropertySet::Pointer_t pPropertySet);
+    virtual string getType() const;
+    virtual OOXMLTable * clone() const;
 };
 
 }  // namespace ooxml
