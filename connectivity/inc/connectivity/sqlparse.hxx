@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlparse.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:12:50 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 12:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,7 @@
 #ifndef FLEX_SCANNER
 #ifndef BISON_INCLUDED
 #define BISON_INCLUDED
-#include <sqlbison.hxx>
+#include "sqlbison.hxx"
 #endif
 #endif
 #endif
