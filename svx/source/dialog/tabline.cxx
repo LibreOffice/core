@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:42:36 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 17:04:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,7 +124,7 @@ SvxLineTabDialog::SvxLineTabDialog
     SetCurPageId( RID_SVXPAGE_LINE );
 
     CancelButton& rBtnCancel = GetCancelButton();
-    rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdl ) );
+    rBtnCancel.SetClickHdl( LINK( this, SvxLineTabDialog, CancelHdlImpl ) );
 //! rBtnCancel.SetText( SVX_RESSTR( RID_SVXSTR_CLOSE ) );
 }
 
@@ -190,14 +190,14 @@ short SvxLineTabDialog::Ok()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxLineTabDialog, CancelHdl, void *, EMPTYARG )
+IMPL_LINK_INLINE_START( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
 {
     SavePalettes();
 
     EndDialog( RET_CANCEL );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdl, void *, EMPTYARG )
+IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
