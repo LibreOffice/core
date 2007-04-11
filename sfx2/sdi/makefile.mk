@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:22:03 $
+#   last change: $Author: vg $ $Date: 2007-04-11 21:32:32 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@ SDI1EXPORT=sfx
 # --- Files --------------------------------------------------------
 
 SVSDI1DEPEND= \
-        $(PRJ)$/inc$/sfxsids.hrc \
+        $(PRJ)$/inc$/sfx2$/sfxsids.hrc \
         sfx.sdi	\
         appslots.sdi \
         sfxslots.sdi \
