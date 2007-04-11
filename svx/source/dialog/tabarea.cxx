@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabarea.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:28:33 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 17:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ SvxAreaTabDialog::SvxAreaTabDialog
     SetCurPageId( RID_SVXPAGE_AREA );
 
     CancelButton& rBtnCancel = GetCancelButton();
-    rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdl ) );
+    rBtnCancel.SetClickHdl( LINK( this, SvxAreaTabDialog, CancelHdlImpl ) );
 //! rBtnCancel.SetText( SVX_RESSTR( RID_SVXSTR_CLOSE ) );
 }
 
@@ -234,14 +234,14 @@ short SvxAreaTabDialog::Ok()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxAreaTabDialog, CancelHdl, void *, EMPTYARG)
+IMPL_LINK_INLINE_START( SvxAreaTabDialog, CancelHdlImpl, void *, EMPTYARG)
 {
     SavePalettes();
 
     EndDialog( RET_CANCEL );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxAreaTabDialog, CancelHdl, void *, p )
+IMPL_LINK_INLINE_END( SvxAreaTabDialog, CancelHdlImpl, void *, p )
 
 // -----------------------------------------------------------------------
 
