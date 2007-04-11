@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:48:46 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,6 +57,41 @@ OOXMLDocumentImpl::~OOXMLDocumentImpl()
 {
 }
 
+void OOXMLDocumentImpl::resolveSubStream(Stream & rStream,
+                                         OOXMLStream::StreamType_t nType)
+{
+    OOXMLStream::Pointer_t pStream
+        (OOXMLDocumentFactory::createStream(mpStream, nType));
+
+    uno::Reference < xml::sax::XParser > oSaxParser =
+        pStream->getParser();
+
+    if (oSaxParser.is())
+    {
+        uno::Reference<xml::sax::XDocumentHandler>
+            xDocumentHandler
+            (static_cast<cppu::OWeakObject *>
+             (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
+        oSaxParser->setDocumentHandler( xDocumentHandler );
+
+        uno::Reference<io::XInputStream> xInputStream =
+            pStream->getInputStream();
+
+        //                 uno::Sequence<sal_Int8> aSeq(1024);
+        //                 while (xStylesInputStream->readBytes(aSeq, 1024) > 0)
+        //                 {
+        //                     string tmpStr(reinterpret_cast<char *>(&aSeq[0]));
+
+        //                     clog << tmpStr;
+        //                 }
+        struct xml::sax::InputSource oInputSource;
+        oInputSource.aInputStream = xInputStream;
+        oSaxParser->parseStream(oInputSource);
+
+        xInputStream->closeInput();
+    }
+}
+
 void OOXMLDocumentImpl::resolve(Stream & rStream)
 {
     {
@@ -69,6 +104,8 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
                 (static_cast<cppu::OWeakObject *>
                  (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
             oSaxParser->setDocumentHandler( xDocumentHandler );
+
+            resolveSubStream(rStream, OOXMLStream::NUMBERING);
 
             OOXMLStream::Pointer_t pStylesStream
                 (OOXMLDocumentFactory::createStream(mpStream,

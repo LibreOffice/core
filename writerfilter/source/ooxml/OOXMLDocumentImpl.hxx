@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 12:26:24 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,6 +50,8 @@ public:
     OOXMLDocumentImpl(OOXMLStream::Pointer_t pStream);
     virtual ~OOXMLDocumentImpl();
 
+    virtual void resolveSubStream(Stream & rStream,
+                                  OOXMLStream::StreamType_t nType);
     virtual void resolve(Stream & rStream);
 
     virtual string getType() const;
