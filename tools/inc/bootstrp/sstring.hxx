@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sstring.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:15 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:07:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,8 +36,8 @@
 #ifndef _SSTRING_HXX
 #define _SSTRING_HXX
 
-#include <string.hxx>
-#include <list.hxx>
+#include <tools/string.hxx>
+#include <tools/list.hxx>
 
 #define NOT_THERE       LIST_ENTRY_NOTFOUND
 
