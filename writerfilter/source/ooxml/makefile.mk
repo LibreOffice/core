@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.2 $
+#  $Revision: 1.3 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-02-26 15:32:41 $
+#  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:34:36 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,6 @@ PRJ=..$/..
 PRJNAME=writerfilter
 TARGET=ooxml
 #LIBTARGET=NO
-ENABLE_EXCEPTIONS=TRUE
 #USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -52,6 +51,8 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION #-DDEBUG_DOCTOK_DUMP
 
 SLOFILES= \
     $(SLO)$/OOXMLresources.obj \
+    $(SLO)$/OOXMLvalues.obj \
+    $(SLO)$/TokenMapInit.obj \
     $(SLO)$/OOXMLPropertySetImpl.obj \
     $(SLO)$/OOXMLContext.obj \
     $(SLO)$/NamespaceMapper.obj \
