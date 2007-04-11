@@ -4,9 +4,9 @@
  *
  *  $RCSfile: command.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 13:31:45 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:06:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include <iostream.h>
 
-#include "stream.hxx"
+#include <tools/stream.hxx>
 #define STRLEN 100
 #ifndef UNX
 #define TMPNAME "\\command.tmp"
