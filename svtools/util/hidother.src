@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:59:43 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 19:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,7 +33,7 @@
  *
  ************************************************************************/
 
-#include "../inc/helpid.hrc"         // HID_XXX
+#include "../inc/svtools/helpid.hrc"         // HID_XXX
 
 hidspecial HID_TEMPLATEDLG_ICONCTRL             { HelpID = HID_TEMPLATEDLG_ICONCTRL; }
 hidspecial HID_TEMPLATEDLG_FILEVIEW             { HelpID = HID_TEMPLATEDLG_FILEVIEW; };
