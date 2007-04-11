@@ -4,9 +4,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:04:21 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 17:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,7 @@
 #endif
 
 #ifndef _SVDSOB_HXX
-#include <svdsob.hxx>
+#include <svx/svdsob.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_COLORCFG_HXX
