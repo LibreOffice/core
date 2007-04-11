@@ -4,9 +4,9 @@
  *
  *  $RCSfile: EnhancedCustomShapeEngine.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:14:07 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 17:03:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,7 @@
 #include "unoshape.hxx"
 #endif
 #ifndef _SVX_UNOPAGE_HXX
-#include "unopage.hxx"
+#include "svx/unopage.hxx"
 #endif
 #ifndef _SVX_UNOAPI_HXX_
 #include "unoapi.hxx"
