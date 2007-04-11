@@ -22,9 +22,9 @@ mkdir: %_DEST%\inc%_EXT%\transex3
 ..\scripts\localize.pl %_DEST%\bin%_EXT%\localize.pl
 ..\scripts\localize %_DEST%\bin%_EXT%\localize
 
-hedabu: ..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
-hedabu: ..\inc\directory.hxx %_DEST%\inc%_EXT%\transex3\directory.hxx
-hedabu: ..\inc\file.hxx %_DEST%\inc%_EXT%\transex3\file.hxx
+..\inc\export.hxx %_DEST%\inc%_EXT%\transex3\export.hxx
+..\inc\transex3\directory.hxx %_DEST%\inc%_EXT%\transex3\directory.hxx
+..\inc\transex3\file.hxx %_DEST%\inc%_EXT%\transex3\file.hxx
 
 ..\inc\utf8conv.hxx %_DEST%\inc%_EXT%\transex3\utf8conv.hxx
 ..\%__SRC%\lib\transex.lib %_DEST%\lib%_EXT%\transex.lib
