@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-02 16:33:49 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 12:57:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,7 @@
 
 #include "runtime.hxx"
 #include "stdobj.hxx"
-#include "stdobj1.hxx"
+#include "sbstdobj.hxx"
 #include "rtlproto.hxx"
 #include "sbintern.hxx"
 
