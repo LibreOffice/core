@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testtoolloader.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:05:15 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:22:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_tools.hxx"
 
-#include "testtoolloader.hxx"
+#include "tools/testtoolloader.hxx"
 
 #ifndef _OSL_MODULE_H_
 #include <osl/module.h>
@@ -51,13 +51,13 @@
 #include <vos/process.hxx>
 #endif
 #ifndef _SOLAR_H
-#include "solar.h"
+#include "tools/solar.h"
 #endif
 #ifndef _STRING_HXX
-#include "string.hxx"
+#include "tools/string.hxx"
 #endif
 #ifndef _TOOLS_DEBUG_HXX
-#include "debug.hxx"
+#include "tools/debug.hxx"
 #endif
 
 using namespace rtl;
