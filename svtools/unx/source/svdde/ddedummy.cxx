@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ddedummy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:32:17 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 19:46:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_svtools.hxx"
 #ifndef _SVDDE_HXX
-#include <svdde.hxx>
+#include <svtools/svdde.hxx>
 #endif
 #ifndef INCLUDED_RTL_INSTANCE_HXX
 #include <rtl/instance.hxx>
