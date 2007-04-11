@@ -1,0 +1,291 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: bindings.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 21:16:38 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef _SFX_BINDINGS_HXX
+#define _SFX_BINDINGS_HXX
+
+#ifndef _SAL_CONFIG_H_
+#include "sal/config.h"
+#endif
+
+#ifndef INCLUDED_SFX2_DLLAPI_H
+#include "sfx2/dllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
+#include <com/sun/star/frame/XFrame.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
+#include <com/sun/star/frame/XDispatchProvider.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XDISPATCHRECORDERSUPPLIER_HPP_
+#include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
+#endif
+
+//________________________________________________________________________________________________________________
+//  some other includes
+//________________________________________________________________________________________________________________
+
+#include <sfx2/minarray.hxx>
+#include <sfx2/viewfrm.hxx>
+
+//________________________________________________________________________________________________________________
+//  forwards, typedefs, declarations
+//________________________________________________________________________________________________________________
+
+class SfxConfigManager;
+class SystemWindow;
+class SfxArg;
+class SfxSlot;
+class SfxSlotServer;
+class SfxControllerItem;
+class SfxStateCache;
+class SfxItemSet;
+class SfxDispatcher;
+class SfxBindings;
+class SfxBindings_Impl;
+class Timer;
+struct SfxFoundCache_Impl;
+class SfxFoundCacheArr_Impl;
+class SfxWorkWindow;
+class SfxUnoControllerItem;
+typedef SfxUnoControllerItem* SfxUnoControllerItemPtr;
+SV_DECL_PTRARR( SfxUnoControllerArr_Impl, SfxUnoControllerItemPtr, 20, 20 )
+
+//________________________________________________________________________________________________________________
+//  defines
+//________________________________________________________________________________________________________________
+
+#define SFX_CALLMODE_SLOT           0x00    // sync/async vom Slot
+#define SFX_CALLMODE_SYNCHRON       0x01    // synchron im selben Stackframe
+#define SFX_CALLMODE_ASYNCHRON      0x02    // asynchron per AppEvent
+#define SFX_CALLMODE_RECORD         0x04    // beim Recorden ber"ucksichtigen
+#define SFX_CALLMODE_API            0x08    // Call von der API (silent)
+#define SFX_CALLMODE_MODAL          0x10    // trotz ModalMode
+
+#define SFX_CALLMODE_STANDARD       SFX_CALLMODE_RECORD
+typedef sal_uInt16 SfxCallMode;
+
+enum SfxPopupAction
+{
+    SFX_POPUP_DELETE,
+    SFX_POPUP_HIDE,
+    SFX_POPUP_SHOW
+};
+
+//====================================================================
+class SFX2_DLLPUBLIC SfxBindings: public SfxBroadcaster
+
+/*  [Beschreibung]
+
+    In jeder SFx-Applikation existiert "uber die Laufzeit von vor
+    <SfxApplication::Init()> bis nach <SfxApplication::Exit()> eine Instanz
+    der Klasse SfxBindings. Sie wird von der SfxApplication automatisch
+    angelegt und zerst"ort. Instanzen werden aber i.d.R. "uber das
+    Makro <SFX_BINDINGS> oder den zugeh"origen <SfxViewFrame> besorgt
+    werden. Bestimmte SfxViewFrame Subklassen (z.B. <SfxInPlaceFrame>)
+    legen ihre eigene Instanz der SfxBindings an.
+
+    Die SfxBindings verwalten alle in den an ihr angemeldeten Controllern
+    gebundenen Slot-Ids und cachen die jeweiligen <Slot-Server>
+    (so nenne wir die Kombination aus SfxShell-Instanz und SfxSlot).
+    In den SfxBindings ist gespeichert, ob und welche Controller dirty
+    sind sowie welche Slot-Server-Caches jeweils dirty sind. Sie fa"st
+    Status-Anfragen (Aufrufe der in der IDL genannten Status-Methoden)
+    zusammen, die von derselben Status-Methode bedient werden, und sorgt
+    f"ur die Simulation der <Pseudo-Slots>.
+*/
+
+{
+friend class SfxApplication;
+friend class SfxShell;
+friend class SfxBindings_Impl;
+
+    SfxBindings_Impl*pImp;          // Daten der Bindings-Instanz
+    SfxDispatcher*   pDispatcher;   // zu verwendender Dispatcher
+    sal_uInt16       nRegLevel;      // Lock-Level waehrend Reconfig
+
+//#if 0 // _SOLAR__PRIVATE
+private:
+    SAL_DLLPRIVATE const SfxPoolItem*  Execute_Impl( sal_uInt16 nSlot, const SfxPoolItem **pArgs, sal_uInt16 nModi,
+                                    SfxCallMode nCall, const SfxPoolItem **pInternalArgs, BOOL bGlobalOnly=FALSE);
+    SAL_DLLPRIVATE void SetSubBindings_Impl( SfxBindings* );
+    SAL_DLLPRIVATE void UpdateSlotServer_Impl(); // SlotServer aktualisieren
+    SAL_DLLPRIVATE SfxItemSet* CreateSet_Impl( SfxStateCache* &pCache,
+                                    const SfxSlot* &pRealSlot,
+                                    const SfxSlotServer**,
+                                    SfxFoundCacheArr_Impl& );
+    SAL_DLLPRIVATE sal_uInt16 GetSlotPos( sal_uInt16 nId, sal_uInt16 nStartSearchAt = 0 );
+    SAL_DLLPRIVATE void Update_Impl( SfxStateCache* pCache );
+    SAL_DLLPRIVATE void UpdateControllers_Impl(
+                            const SfxInterface* pIF,
+                            const SfxFoundCache_Impl* pFound,
+                            const SfxPoolItem *pItem,
+                            SfxItemState eItemState );
+    DECL_DLLPRIVATE_LINK( NextJob_Impl, Timer * );
+//#endif
+
+public:
+                     SfxBindings();
+                     ~SfxBindings();
+
+    void             HidePopups( bool bHide = true );
+    SAL_DLLPRIVATE void HidePopupCtrls_Impl( FASTBOOL bHide = sal_True );
+
+    void             SetDispatcher(SfxDispatcher *pDisp);
+
+    void             Update( sal_uInt16 nId ); // z.B. aus Menu::Activate
+    void             Update();
+    SAL_DLLPRIVATE void StartUpdate_Impl(sal_Bool bComplete=sal_False);
+    void             Invalidate( sal_uInt16 nId );
+    void             Invalidate( const sal_uInt16* pIds );
+    void             InvalidateShell( const SfxShell &rSh, sal_Bool bDeep = sal_False );
+    void             InvalidateAll( sal_Bool bWithMsg );
+    void             SetState( const SfxItemSet &rSet );
+    void             SetState( const SfxPoolItem &rItem );
+    void             Invalidate( sal_uInt16 nId, sal_Bool bWithItem, sal_Bool bWithMsg=sal_False);
+    void             Invalidate( sal_uInt16 nId, sal_Bool bWithMsg);
+    sal_Bool         IsInUpdate() const;
+    void             SetVisibleState( sal_uInt16 nId, sal_Bool bShow );
+
+    sal_Bool         IsBound( sal_uInt16 nMsgId, sal_uInt16 nStartSearchAt = 0 );
+
+    const SfxSlot*   GetSlot( sal_uInt16 nMsgId );
+    SfxStateCache*   GetStateCache( sal_uInt16 nId, sal_uInt16 *pPos = 0 );
+    SAL_DLLPRIVATE SfxStateCache* GetAnyStateCache_Impl( sal_uInt16 nId );
+    SfxItemState     QueryState( sal_uInt16 nSID, SfxPoolItem* &rpState );
+
+    const SfxPoolItem*  ExecuteSynchron( sal_uInt16 nSlot,
+                                 const SfxPoolItem **pArgs = 0,
+                                 sal_uInt16 nModi = 0,
+                                 const SfxPoolItem **pInternalArgs = 0);
+    sal_Bool         Execute( sal_uInt16 nSlot,
+                                 const SfxPoolItem **pArgs = 0,
+                                 sal_uInt16 nModi = 0,
+                                 SfxCallMode nCall = SFX_CALLMODE_SLOT,
+                                 const SfxPoolItem **pInternalArgs = 0);
+
+    SAL_DLLPRIVATE void SetDispatchProvider_Impl( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & rFrame );
+    SAL_DLLPRIVATE const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider > & GetDispatchProvider_Impl() const;
+    void             SetActiveFrame( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > & rFrame );
+    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetActiveFrame() const;
+                     // Reconfig
+    int              IsInRegistrations() const;
+    sal_uInt16           EnterRegistrations(const char *pFile = 0, int nLine = 0);
+    void             LeaveRegistrations( sal_uInt16 nLevel = USHRT_MAX, const char *pFile = 0, int nLine = 0 );
+    void             Register( SfxControllerItem& rBinding );
+    void             Release( SfxControllerItem& rBinding );
+    SystemWindow*    GetSystemWindow() const;
+    SfxDispatcher*   GetDispatcher() const
+                     { return pDispatcher; }
+    com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder > GetRecorder() const;
+    com::sun::star::uno::Reference < com::sun::star::frame::XDispatch >
+                    GetDispatch( const SfxSlot*, const com::sun::star::util::URL& aURL, sal_Bool bMasterCommand );
+//#if 0 // _SOLAR__PRIVATE
+    SAL_DLLPRIVATE void ContextChanged_Impl();
+    SAL_DLLPRIVATE void Execute_Impl( SfxRequest& rReq, const SfxSlot* pSlot, SfxShell* pShell );
+    SAL_DLLPRIVATE void DeleteControllers_Impl();
+    SAL_DLLPRIVATE SfxPopupAction GetPopupAction_Impl() const;
+    SAL_DLLPRIVATE SfxDispatcher* GetDispatcher_Impl()  { return pDispatcher; }
+    SAL_DLLPRIVATE void ClearCache_Impl( sal_uInt16 nSlotId );
+    SAL_DLLPRIVATE sal_Bool IsInUpdate_Impl() const{ return IsInUpdate(); }
+    SAL_DLLPRIVATE void RegisterInternal_Impl( SfxControllerItem& rBinding );
+    SAL_DLLPRIVATE void Register_Impl( SfxControllerItem& rBinding, BOOL );
+    SAL_DLLPRIVATE SfxWorkWindow* GetWorkWindow_Impl() const;
+    SAL_DLLPRIVATE void SetWorkWindow_Impl( SfxWorkWindow* );
+    SAL_DLLPRIVATE SfxBindings* GetSubBindings_Impl( sal_Bool bTop = sal_False ) const;
+    SAL_DLLPRIVATE void InvalidateUnoControllers_Impl();
+    SAL_DLLPRIVATE void RegisterUnoController_Impl( SfxUnoControllerItem* );
+    SAL_DLLPRIVATE void ReleaseUnoController_Impl( SfxUnoControllerItem* );
+    SAL_DLLPRIVATE BOOL ExecuteCommand_Impl( const String& rCommand );
+    SAL_DLLPRIVATE void SetRecorder_Impl( com::sun::star::uno::Reference< com::sun::star::frame::XDispatchRecorder >& );
+    SAL_DLLPRIVATE void ExecuteGlobal_Impl( USHORT nId );
+    SAL_DLLPRIVATE void InvalidateSlotsInMap_Impl();
+    SAL_DLLPRIVATE void AddSlotToInvalidateSlotsMap_Impl( USHORT nId );
+//#endif
+};
+
+#ifdef DBG_UTIL
+#define ENTERREGISTRATIONS() EnterRegistrations(__FILE__, __LINE__)
+#define LEAVEREGISTRATIONS() LeaveRegistrations(USHRT_MAX, __FILE__, __LINE__)
+#define DENTERREGISTRATIONS(  ) \
+        EnterRegistrations( (ByteString(__FILE__).Append('(').Append(ByteString::CreateFromInt32((sal_Int32)this).Append(')'))).GetBufferAccess(), __LINE__ )
+#define DLEAVEREGISTRATIONS(  ) \
+        LeaveRegistrations( USHRT_MAX, (ByteString(__FILE__).Append('(').Append(ByteString::CreateFromInt32((sal_Int32)this).Append(')'))).GetBufferAccess(), __LINE__ )
+#else
+#define ENTERREGISTRATIONS() EnterRegistrations()
+#define LEAVEREGISTRATIONS() LeaveRegistrations()
+#define DENTERREGISTRATIONS(  ) EnterRegistrations()
+#define DLEAVEREGISTRATIONS(  ) LeaveRegistrations()
+#endif
+
+//--------------------------------------------------------------------
+
+inline int SfxBindings::IsInRegistrations() const
+
+/*  [Beschreibung]
+
+    Stellt fest, ob an der SfxBindings Instanz gerade <SfxContollerItems>
+    an- oder abgemeldet werden, also noch <SfxBindings::EnterRegistrations()>
+    Aufrufe nicht mit <SfxBindings::EnterRegistrations()> geschlo"sen wurden.
+
+    [R"uckgabewert]
+
+    int                 sal_True
+                        Die SfxBindings Instanz ist gerade im Registrierungs-
+                        Modus. Es erfolgen also keine Status-Updates.
+
+                        sal_False
+                        Die SfxBindings Instanz ist gerade im normalen
+                        Modus. Es k"oennen also Status-Updates erfolgen.
+*/
+
+{
+    return 0 != nRegLevel;
+}
+
+//--------------------------------------------------------------------
+
+#endif
+
