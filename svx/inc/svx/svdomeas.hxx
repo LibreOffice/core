@@ -1,0 +1,233 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: svdomeas.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 16:24:17 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SVDOMEAS_HXX
+#define _SVDOMEAS_HXX
+
+#ifndef _SVDOTEXT_HXX
+#include <svx/svdotext.hxx>
+#endif
+
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
+//************************************************************
+//   Vorausdeklarationen
+//************************************************************
+
+class SdrOutliner;
+struct ImpMeasureRec;
+struct ImpMeasurePoly;
+
+namespace sdr
+{
+    namespace properties
+    {
+        class MeasureProperties;
+    } // end of namespace properties
+} // end of namespace sdr
+
+//************************************************************
+//   Hilfsklasse SdrMeasureObjGeoData
+//************************************************************
+
+class SdrMeasureObjGeoData : public SdrTextObjGeoData
+{
+public:
+    Point                       aPt1;
+    Point                       aPt2;
+
+public:
+    SdrMeasureObjGeoData();
+    virtual ~SdrMeasureObjGeoData();
+};
+
+//************************************************************
+//   SdrMeasureObj
+//************************************************************
+
+class SVX_DLLPUBLIC SdrMeasureObj : public SdrTextObj
+{
+    virtual sdr::properties::BaseProperties* CreateObjectSpecificProperties();
+
+    // to allow sdr::properties::MeasureProperties access to SetTextDirty()
+    friend class sdr::properties::MeasureProperties;
+
+    friend class                SdrMeasureField;
+
+protected:
+    Point                       aPt1;
+    Point                       aPt2;
+    FASTBOOL                    bTextDirty;
+
+protected:
+    void ImpTakeAttr(ImpMeasureRec& rRec) const;
+    void ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly& rPol) const;
+    basegfx::B2DPolyPolygon ImpCalcXPoly(const ImpMeasurePoly& rPol) const;
+    void ImpEvalDrag(ImpMeasureRec& rRec, const SdrDragStat& rDrag) const;
+    void SetTextDirty() { bTextDirty=TRUE; SetTextSizeDirty(); if (!bBoundRectDirty) { bBoundRectDirty = sal_True; SetRectsDirty(sal_True); } }
+    void UndirtyText() const;
+
+    virtual SdrObjGeoData* NewGeoData() const;
+    virtual void SaveGeoData(SdrObjGeoData& rGeo) const;
+    virtual void RestGeoData(const SdrObjGeoData& rGeo);
+
+public:
+    TYPEINFO();
+    SdrMeasureObj();
+    SdrMeasureObj(const Point& rPt1, const Point& rPt2);
+    virtual ~SdrMeasureObj();
+
+    virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const;
+    virtual UINT16 GetObjIdentifier() const;
+    virtual sal_Bool DoPaintObject(XOutputDevice& rOut, const SdrPaintInfoRec& rInfoRec) const;
+    virtual void TakeUnrotatedSnapRect(Rectangle& rRect) const;
+    virtual SdrObject* CheckHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
+    virtual void operator=(const SdrObject& rObj);
+
+    virtual void TakeObjNameSingul(String& rName) const;
+    virtual void TakeObjNamePlural(String& rName) const;
+
+    virtual basegfx::B2DPolyPolygon TakeXorPoly(sal_Bool bDetail) const;
+    virtual sal_uInt32 GetHdlCount() const;
+    virtual SdrHdl* GetHdl(sal_uInt32 nHdlNum) const;
+    virtual FASTBOOL HasSpecialDrag() const;
+    virtual FASTBOOL BegDrag(SdrDragStat& rDrag) const;
+    virtual FASTBOOL MovDrag(SdrDragStat& rDrag) const;
+    virtual FASTBOOL EndDrag(SdrDragStat& rDrag);
+    virtual void BrkDrag(SdrDragStat& rDrag) const;
+
+    virtual String GetDragComment(const SdrDragStat& rDrag, FASTBOOL bUndoDragComment, FASTBOOL bCreateComment) const;
+    virtual basegfx::B2DPolyPolygon TakeDragPoly(const SdrDragStat& rDrag) const;
+
+    virtual FASTBOOL BegCreate(SdrDragStat& rStat);
+    virtual FASTBOOL MovCreate(SdrDragStat& rStat);
+    virtual FASTBOOL EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd);
+    virtual FASTBOOL BckCreate(SdrDragStat& rStat);
+    virtual void BrkCreate(SdrDragStat& rStat);
+    virtual basegfx::B2DPolyPolygon TakeCreatePoly(const SdrDragStat& rDrag) const;
+    virtual Pointer GetCreatePointer() const;
+
+    virtual void NbcMove(const Size& rSiz);
+    virtual void NbcResize(const Point& rRef, const Fraction& xFact, const Fraction& yFact);
+    virtual void NbcRotate(const Point& rRef, long nWink, double sn, double cs);
+    virtual void NbcMirror(const Point& rRef1, const Point& rRef2);
+    virtual void NbcShear(const Point& rRef, long nWink, double tn, FASTBOOL bVShear);
+    virtual long GetRotateAngle() const;
+    virtual void RecalcBoundRect();
+    virtual void RecalcSnapRect();
+
+    virtual sal_uInt32 GetSnapPointCount() const;
+    virtual Point GetSnapPoint(sal_uInt32 i) const;
+
+    virtual sal_Bool IsPolyObj() const;
+    virtual sal_uInt32 GetPointCount() const;
+    virtual Point GetPoint(sal_uInt32 i) const;
+    virtual void NbcSetPoint(const Point& rPnt, sal_uInt32 i);
+
+    virtual SdrObject* DoConvertToPolyObj(BOOL bBezier) const;
+    virtual ::std::auto_ptr< SdrLineGeometry > CreateLinePoly(sal_Bool bForceOnePixel, sal_Bool bForceTwoPixel, sal_Bool bIsLineDraft) const;
+
+    virtual sal_Bool BegTextEdit(SdrOutliner& rOutl);
+    virtual const Size& GetTextSize() const;
+    virtual void TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, FASTBOOL bNoEditText=FALSE,
+        Rectangle* pAnchorRect=NULL, BOOL bLineWidth=TRUE ) const;
+    virtual void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
+    virtual void TakeTextEditArea(Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
+    virtual SdrObject* CheckTextEditHit(const Point& rPnt, USHORT nTol, const SetOfByte* pVisiLayer) const;
+    virtual USHORT GetOutlinerViewAnchorMode() const;
+    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject);
+    virtual OutlinerParaObject* GetOutlinerParaObject() const;
+
+    virtual FASTBOOL CalcFieldValue(const SvxFieldItem& rField, USHORT nPara, USHORT nPos,
+        FASTBOOL bEdit, Color*& rpTxtColor, Color*& rpFldColor, String& rRet) const;
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+//
+// Creating:
+// ~~~~~~~~~
+// Dragging von Bezugspunkt 1 zu Bezugspunkt 2 -> Bezugskante
+//
+// Die Defaults:
+// ~~~~~~~~~~~~~
+// Masslinie und Masshilfslinien: Haarlinien solid schwarz
+// Pfeile:     2mm x 4mm
+// Textgroesse
+//                              ___
+//     |        Masszahl       | 2mm
+//     |<--------------------->|---
+//     |                       | 8mm
+//     |                       |
+//    Pt1============#        Pt2-- <----Bezugskante (von Pt1 nach Pt2)
+//     #             #         |___ <- Ueberstand der Masshilfslinie(n)
+//     #             #=========#
+//     # Zu bemassendes Objekt #
+//     #=======================#
+//
+// Attribute:
+// ~~~~~~~~~~
+// 1. Wo steht der Text: mitte, rechts oder links (def=automatik)
+// 2. Text oberhalb der Linie oder unterhalb oder Linie unterbrochen durch Text (def=automatik)
+// 3. Den Abstand der Masslinie zur Bezugskante (=zum bemassten Objekt).
+//    Default=8mm
+// 4. Masslinie unterhalb der Bezugskante (default=nein)
+// 5. Die Ueberlaenge(n) der Masshilfslinien ueber die Bezugskante (2x, default=0)
+// 6. Den Ueberhang der Masshilfslinien ueber die Masslinie (default=2mm)
+// 7. Den Abstand der Masshilfslinien zur Bezugskante
+//
+// Dragging:                    Handle          Shift
+// ~~~~~~~~~
+// -  Die Bezugspunkte        SolidQuadHdl   nur die Laenge
+// 1.+2. Anpacken des Textes
+// 3.+4. Hdl am Pfeil (2x)    SolidQuadHdl   nur den Bool
+// 5.    Hdl am Endpunkt      CircHdl        beide Laengen?
+// 6.+7. Kein Dragging
+//
+// Offen:
+// ~~~~~~
+// - Radien (gleich als Typ verankern
+//
+// Special:
+// ~~~~~~~~
+// Connecting an max. 2 Objekte
+// -> Bei Copy, etc. den entspr. Code der Verbinder verwenden?!?
+// wird wohl recht kompliziert werden ...
+//
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+#endif //_SVDOMEAS_HXX
+
