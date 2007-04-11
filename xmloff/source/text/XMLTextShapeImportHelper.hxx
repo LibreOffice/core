@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextShapeImportHelper.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 15:26:14 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 13:37:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #endif
 
 #ifndef _XMLOFF_SHAPEIMPORT_HXX_
-#include "shapeimport.hxx"
+#include <xmloff/shapeimport.hxx>
 #endif
 
 class XMLOFF_DLLPUBLIC XMLTextShapeImportHelper : public XMLShapeImportHelper
