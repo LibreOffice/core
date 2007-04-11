@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 12:18:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,9 @@
  *
  *  $RCSfile: resourceids.xsl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-12 12:18:53 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:43:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,6 +117,10 @@
 */
 #ifndef INCLUDED_OOXML_RESOURCEIDS_HXX
 #define INCLUDED_OOXML_RESOURCEIDS_HXX
+
+#ifndef INCLUDED_QNAME_HXX
+#include &lt;odiapi/qname/QName.hxx&gt;
+#endif
       </xsl:text>
     <xsl:call-template name="defineooxmlids"/>
     <xsl:text>
