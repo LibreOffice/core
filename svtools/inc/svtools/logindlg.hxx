@@ -1,0 +1,137 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: logindlg.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 19:27:08 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SVTOOLS_LOGINDLG_HXX_
+#define _SVTOOLS_LOGINDLG_HXX_
+
+#ifndef INCLUDED_SVTDLLAPI_H
+#include "svtools/svtdllapi.h"
+#endif
+
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
+#ifndef _SV_FIXED_HXX
+#include <vcl/fixed.hxx>
+#endif
+
+//============================================================================
+#define LF_NO_PATH              0x0001  // hide "path"
+#define LF_NO_USERNAME          0x0002  // hide "name"
+#define LF_NO_PASSWORD          0x0004  // hide "password"
+#define LF_NO_SAVEPASSWORD      0x0008  // hide "save password"
+#define LF_NO_ERRORTEXT         0x0010  // hide message
+#define LF_PATH_READONLY        0x0020  // "path" readonly
+#define LF_USERNAME_READONLY    0x0040  // "name" readonly
+#define LF_NO_ACCOUNT           0x0080  // hide "account"
+
+//............................................................................
+namespace svt
+{
+//............................................................................
+
+//============================================================================
+class SVT_DLLPUBLIC LoginDialog : public ModalDialog
+{
+    FixedInfo       aErrorInfo;
+    FixedLine       aErrorGB;
+    FixedInfo       aRequestInfo;
+    FixedText       aPathFT;
+    Edit            aPathED;
+    FixedInfo       aPathInfo;
+    PushButton      aPathBtn;
+    FixedText       aNameFT;
+    Edit            aNameED;
+    FixedInfo       aNameInfo;
+    FixedText       aPasswordFT;
+    Edit            aPasswordED;
+    FixedText       aAccountFT;
+    Edit            aAccountED;
+    CheckBox        aSavePasswdBtn;
+    FixedLine       aLoginGB;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
+
+    SVT_DLLPRIVATE void         HideControls_Impl( USHORT nFlags );
+
+    DECL_DLLPRIVATE_LINK( OKHdl_Impl, OKButton * );
+    DECL_DLLPRIVATE_LINK( PathHdl_Impl, PushButton * );
+
+public:
+    LoginDialog( Window* pParent, USHORT nFlags,
+                 const String& rServer, const String* pRealm = NULL );
+
+    String          GetPath() const { return aPathED.GetText(); }
+    void            SetPath( const String& rNewPath )
+                        { aPathED.SetText( rNewPath );
+                          aPathInfo.SetText( rNewPath );}
+    String          GetName() const { return aNameED.GetText(); }
+    void            SetName( const String& rNewName );
+    String          GetPassword() const { return aPasswordED.GetText(); }
+    void            SetPassword( const String& rNew )
+                        { aPasswordED.SetText( rNew ); }
+    String          GetAccount() const { return aAccountED.GetText(); }
+    void            SetAccount( const String& rNew )
+                        { aAccountED.SetText( rNew ); }
+    BOOL            IsSavePassword() const
+                        { return aSavePasswdBtn.IsChecked(); }
+    void            SetSavePassword( BOOL bSave )
+                        { aSavePasswdBtn.Check( bSave ); }
+    void            SetSavePasswordText( const String& rTxt )
+                        { aSavePasswdBtn.SetText( rTxt ); }
+    void            SetErrorText( const String& rTxt )
+                        { aErrorInfo.SetText( rTxt ); }
+    void            SetLoginRequestText( const String& rTxt )
+                        { aRequestInfo.SetText( rTxt ); }
+    void            ClearPassword();
+    void            ClearAccount();
+};
+
+//............................................................................
+}   // namespace svt
+//............................................................................
+
+#endif // _SVTOOLS_LOGINDLG_HXX_
+
