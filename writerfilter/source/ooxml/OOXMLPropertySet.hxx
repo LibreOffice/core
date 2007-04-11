@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySet.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-05 16:25:43 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:38:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,8 @@ class OOXMLProperty : public Sprm
 public:
     typedef boost::shared_ptr<OOXMLProperty> Pointer_t;
 
+    virtual ~OOXMLProperty();
+
     virtual sal_uInt32 getId() const = 0;
     virtual Value::Pointer_t getValue() = 0;
     virtual doctok::Reference<BinaryObj>::Pointer_t getBinary() = 0;
@@ -62,13 +64,23 @@ class OOXMLPropertySet : public doctok::Reference<Properties>
 public:
     typedef boost::shared_ptr<OOXMLPropertySet> Pointer_t;
 
-    virtual ~OOXMLPropertySet() {}
+    virtual ~OOXMLPropertySet();
+
     virtual void resolve(Properties & rHandler) = 0;
     virtual string getType() const = 0;
     virtual void add(OOXMLProperty::Pointer_t pProperty) = 0;
     virtual OOXMLPropertySet * clone() const = 0;
 };
 
+class OOXMLTable : public doctok::Reference<Table>
+{
+public:
+    virtual ~OOXMLTable();
+
+    virtual void resolve(Table & rTable) = 0;
+    virtual void add(OOXMLPropertySet::Pointer_t pProperty) = 0;
+    virtual OOXMLTable * clone() const = 0;
+};
 }
 
 #endif // INCLUDED_OOXML_PROPERTY_SET_HXX
