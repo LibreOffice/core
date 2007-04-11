@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmp.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:11:28 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 18:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@ using namespace std;
 
 #include <vcl/svapp.hxx>
 
-#include "solar.hrc"
+#include "svtools/solar.hrc"
 #include "filedlg.hxx"
 #include "bmpcore.hxx"
 #include "bmp.hrc"
