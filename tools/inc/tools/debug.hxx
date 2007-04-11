@@ -1,0 +1,772 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: debug.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:09:57 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _TOOLS_DEBUG_HXX
+#define _TOOLS_DEBUG_HXX
+
+#ifndef INCLUDED_TOOLSDLLAPI_H
+#include "tools/toolsdllapi.h"
+#endif
+
+#ifndef _SAL_TYPES_H
+#include <sal/types.h>
+#endif
+
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
+#ifdef HPUX
+// Workaround aCC-Compiler (v1.04, v1.06) dtor bug:
+// A single ";" as first statement in a dtor
+// results in wrong code (check for delete with a
+// NULL-pointer missing or unreliable)
+#define HPUX_DTOR_BUG (1==1)
+#else
+#define HPUX_DTOR_BUG
+#endif
+
+// ------------
+// - DBG_UITL -
+// ------------
+
+#ifdef DBG_UTIL
+
+// --- Dbg-Daten ---
+
+typedef void (*DbgPrintLine)( const sal_Char* pLine );
+typedef const sal_Char* (*DbgUsr)(const void* pThis );
+typedef void (*DbgTestSolarMutexProc)();
+
+#define DBG_BUF_MAXLEN              16384
+
+#define DBG_TEST_XTOR               (0x00000FFF)
+#define DBG_TEST_XTOR_THIS          (0x00000001)
+#define DBG_TEST_XTOR_FUNC          (0x00000002)
+#define DBG_TEST_XTOR_EXIT          (0x00000004)
+#define DBG_TEST_XTOR_REPORT        (0x00000008)
+#define DBG_TEST_XTOR_TRACE         (0x00000010)
+
+#define DBG_TEST_MEM                (0x00FFF000)
+#define DBG_TEST_MEM_INIT           (0x00001000)
+#define DBG_TEST_MEM_OVERWRITE      (0x00002000)
+#define DBG_TEST_MEM_OVERWRITEFREE  (0x00004000)
+#define DBG_TEST_MEM_POINTER        (0x00008000)
+#define DBG_TEST_MEM_REPORT         (0x00010000)
+#define DBG_TEST_MEM_TRACE          (0x00020000)
+#define DBG_TEST_MEM_NEWDEL         (0x00040000)
+#define DBG_TEST_MEM_XTOR           (0x00080000)
+#define DBG_TEST_MEM_SYSALLOC       (0x00100000)
+#define DBG_TEST_MEM_LEAKREPORT     (0x00200000)
+
+#define DBG_TEST_PROFILING          (0x01000000)
+#define DBG_TEST_RESOURCE           (0x02000000)
+#define DBG_TEST_DIALOG             (0x04000000)
+#define DBG_TEST_BOLDAPPFONT        (0x08000000)
+
+#define DBG_OUT_NULL                0
+#define DBG_OUT_FILE                1
+#define DBG_OUT_WINDOW              2
+#define DBG_OUT_SHELL               3
+#define DBG_OUT_MSGBOX              4
+#define DBG_OUT_TESTTOOL            5
+#define DBG_OUT_DEBUGGER            6
+#define DBG_OUT_COREDUMP            7
+
+#define DBG_OUT_COUNT               8
+
+// user (runtime) defined output channels
+#define DBG_OUT_USER_CHANNEL_0    100
+
+#define DBGGUI_RESTORE              0
+#define DBGGUI_MINIMIZE             1
+#define DBGGUI_MAXIMIZE             2
+
+struct DbgData
+{
+    ULONG       nTestFlags;
+    ULONG       bOverwrite;
+    ULONG       nTraceOut;
+    ULONG       nWarningOut;
+    ULONG       nErrorOut;
+    ULONG       bHookOSLAssert;
+    BYTE        bMemInit;
+    BYTE        bMemBound;
+    BYTE        bMemFree;
+    sal_Char    aDebugName[260];
+    sal_Char    aInclFilter[512];
+    sal_Char    aExclFilter[512];
+    sal_Char    aInclClassFilter[512];
+    sal_Char    aExclClassFilter[512];
+    sal_Char    aDbgWinState[50];           // DbgGUIData for VCL
+};
+
+struct DbgDataType
+{
+    void*       pData;
+    sal_Char const *   pName;
+};
+
+// --- Dbg-Prototypen ---
+
+#define DBG_FUNC_DEBUGSTART         1
+#define DBG_FUNC_DEBUGEND           2
+#define DBG_FUNC_GLOBALDEBUGEND     3
+#define DBG_FUNC_GETDATA            4
+#define DBG_FUNC_SAVEDATA           5
+#define DBG_FUNC_SETPRINTMSGBOX     6
+#define DBG_FUNC_SETPRINTWINDOW     7
+#define DBG_FUNC_SETPRINTSHELL      8
+#define DBG_FUNC_SETPRINTTESTTOOL   9
+#define DBG_FUNC_MEMTEST            10
+#define DBG_FUNC_XTORINFO           11
+#define DBG_FUNC_MEMINFO            12
+#define DBG_FUNC_COREDUMP           13
+#define DBG_FUNC_ALLERROROUT        14
+#define DBG_FUNC_SETTESTSOLARMUTEX  15
+#define DBG_FUNC_TESTSOLARMUTEX     16
+#define DBG_FUNC_PRINTFILE          17
+#define DBG_FUNC_GETPRINTMSGBOX     18
+#define DBG_FUNC_FILTERMESSAGE      19          // new for #i38967
+#define DBG_FUNC_UPDATEOSLHOOK      20
+
+TOOLS_DLLPUBLIC void* DbgFunc( USHORT nAction, void* pData = NULL );
+
+inline void DbgUpdateOslHook( DbgData* pData )
+{
+    DbgFunc( DBG_FUNC_UPDATEOSLHOOK, pData );
+}
+
+inline void DbgDebugStart()
+{
+    DbgFunc( DBG_FUNC_DEBUGSTART );
+}
+
+inline void DbgDebugEnd()
+{
+    DbgFunc( DBG_FUNC_DEBUGEND );
+}
+
+inline void DbgGlobalDebugEnd()
+{
+    DbgFunc( DBG_FUNC_GLOBALDEBUGEND );
+}
+
+inline void DbgSetPrintMsgBox( DbgPrintLine pProc )
+{
+    DbgFunc( DBG_FUNC_SETPRINTMSGBOX, (void*)(long)pProc );
+}
+
+inline DbgPrintLine DbgGetPrintMsgBox()
+{
+    return (DbgPrintLine)(long)DbgFunc( DBG_FUNC_GETPRINTMSGBOX );
+}
+
+inline void DbgSetPrintWindow( DbgPrintLine pProc )
+{
+    DbgFunc( DBG_FUNC_SETPRINTWINDOW, (void*)(long)pProc );
+}
+
+inline void DbgSetPrintShell( DbgPrintLine pProc )
+{
+    DbgFunc( DBG_FUNC_SETPRINTSHELL, (void*)(long)pProc );
+}
+
+inline void DbgSetPrintTestTool( DbgPrintLine pProc )
+{
+    DbgFunc( DBG_FUNC_SETPRINTTESTTOOL, (void*)(long)pProc );
+}
+
+typedef USHORT DbgChannelId;
+/** registers a user-defined channel for emitting the diagnostic messages
+
+    Note that such a user-defined channel cannot be revoked during the lifetime
+    of the process. Thus, it's the caller's responsibility to ensure that the
+    procedure to which ->pProc points remains valid.
+
+    @param pProc
+        the function for emitting the diagnostic messages
+    @return
+        a unique number for this channel, which can be used for ->DbgData::nErrorOut,
+        ->DbgData::nWarningOut and ->DbgData::nTraceOut
+    @see DBG_OUT_USER_CHANNEL_0
+
+    (In theory, this function could replace the other hard-coded channels. Well, at least
+    the ones for MsgBox, Window, Shell, TestTool. Perhaps in the next life ...)
+*/
+TOOLS_DLLPUBLIC DbgChannelId DbgRegisterUserChannel( DbgPrintLine pProc );
+
+inline BOOL DbgFilterMessage( const char* pMsg )
+{
+    return (BOOL)(long) DbgFunc( DBG_FUNC_FILTERMESSAGE, (void*)pMsg );
+}
+
+inline int DbgIsAllErrorOut()
+{
+    return (DbgFunc( DBG_FUNC_ALLERROROUT ) != 0);
+}
+
+inline DbgData* DbgGetData()
+{
+    return (DbgData*)DbgFunc( DBG_FUNC_GETDATA );
+}
+
+inline void DbgSaveData( const DbgData& rData )
+{
+    DbgFunc( DBG_FUNC_SAVEDATA, (void*)&rData );
+}
+
+inline ULONG DbgIsTraceOut()
+{
+    DbgData* pData = DbgGetData();
+    if ( pData )
+        return (pData->nTraceOut != DBG_OUT_NULL);
+    else
+        return FALSE;
+}
+
+inline ULONG DbgIsWarningOut()
+{
+    DbgData* pData = DbgGetData();
+    if ( pData )
+        return (pData->nWarningOut != DBG_OUT_NULL);
+    else
+        return FALSE;
+}
+
+inline ULONG DbgIsErrorOut()
+{
+    DbgData* pData = DbgGetData();
+    if ( pData )
+        return (pData->nErrorOut != DBG_OUT_NULL);
+    else
+        return FALSE;
+}
+
+inline ULONG DbgGetErrorOut()   // Testtool: test wether to collect OSL_ASSERTions as well
+{
+    DbgData* pData = DbgGetData();
+    if ( pData )
+        return pData->nErrorOut;
+    else
+        return DBG_OUT_NULL;
+}
+
+inline ULONG DbgIsAssertWarning()
+{
+    return DbgIsWarningOut();
+}
+
+inline ULONG DbgIsAssert()
+{
+    return DbgIsErrorOut();
+}
+
+inline ULONG DbgIsResource()
+{
+    DbgData* pData = DbgGetData();
+    if ( pData )
+        return pData->nTestFlags & DBG_TEST_RESOURCE;
+    else
+        return FALSE;
+}
+
+inline ULONG DbgIsDialog()
+{
+    DbgData* pData = DbgGetData();
+    if ( pData )
+        return pData->nTestFlags & DBG_TEST_DIALOG;
+    else
+        return FALSE;
+}
+
+inline ULONG DbgIsBoldAppFont()
+{
+    DbgData* pData = DbgGetData();
+    if ( pData )
+        return pData->nTestFlags & DBG_TEST_BOLDAPPFONT;
+    else
+        return FALSE;
+}
+
+inline void DbgXtorInfo( sal_Char* pBuf )
+{
+    DbgFunc( DBG_FUNC_XTORINFO, (void*)pBuf );
+}
+
+inline void DbgMemInfo( sal_Char* pBuf )
+{
+    DbgFunc( DBG_FUNC_MEMINFO, (void*)pBuf );
+}
+
+inline void DbgCoreDump()
+{
+    DbgFunc( DBG_FUNC_COREDUMP );
+}
+
+inline void DbgSetTestSolarMutex( DbgTestSolarMutexProc pProc )
+{
+    DbgFunc( DBG_FUNC_SETTESTSOLARMUTEX, (void*)(long)pProc );
+}
+
+inline void DbgTestSolarMutex()
+{
+    DbgFunc( DBG_FUNC_TESTSOLARMUTEX );
+}
+
+inline void DbgPrintFile( const sal_Char* pLine )
+{
+    DbgFunc( DBG_FUNC_PRINTFILE, (void*)(sal_Char*)pLine );
+}
+
+// --- Dbg-StackTree-Functions ---
+
+TOOLS_DLLPUBLIC void DbgStartStackTree();
+TOOLS_DLLPUBLIC void DbgEndStackTree();
+void* DbgGetStackTree( ULONG nAlloc = 0 );
+void DbgFreeStackTree( void* p, ULONG nAlloc = 0 );
+void DbgPrintStackTree( void* p );
+
+// --- Dbg-Output ---
+
+#define DBG_OUT_TRACE               1
+#define DBG_OUT_WARNING             2
+#define DBG_OUT_ERROR               3
+
+TOOLS_DLLPUBLIC void DbgOut( const sal_Char* pMsg, USHORT nOutType = DBG_OUT_TRACE,
+             const sal_Char* pFile = NULL, USHORT nLine = 0 );
+TOOLS_DLLPUBLIC void DbgOutTypef( USHORT nOutType, const sal_Char* pFStr, ... );
+TOOLS_DLLPUBLIC void DbgOutf( const sal_Char* pFStr, ... );
+TOOLS_DLLPUBLIC void ImpDbgOutfBuf( sal_Char* pBuf, const sal_Char* pFStr, ... );
+
+inline void DbgTrace( const sal_Char* pMsg,
+                      const sal_Char* pFile = NULL, USHORT nLine = 0 )
+{
+    DbgOut( pMsg, DBG_OUT_TRACE, pFile, nLine );
+}
+
+inline void DbgWarning( const sal_Char* pMsg,
+                        const sal_Char* pFile = NULL, USHORT nLine = 0 )
+{
+    DbgOut( pMsg, DBG_OUT_WARNING, pFile, nLine );
+}
+
+inline void DbgError( const sal_Char* pMsg,
+                      const sal_Char* pFile = NULL, USHORT nLine = 0 )
+{
+    DbgOut( pMsg, DBG_OUT_ERROR, pFile, nLine );
+}
+
+// --- Dbg-Test-Functions ---
+
+inline void DbgMemTest( void* p = NULL )
+{
+    DbgFunc( DBG_FUNC_MEMTEST, p );
+}
+
+#define DBG_PROF_START              1
+#define DBG_PROF_STOP               2
+#define DBG_PROF_CONTINUE           3
+#define DBG_PROF_PAUSE              4
+
+TOOLS_DLLPUBLIC void DbgProf( USHORT nAction, DbgDataType* );
+
+#define DBG_XTOR_CTOR               1
+#define DBG_XTOR_DTOR               2
+#define DBG_XTOR_CHKTHIS            3
+#define DBG_XTOR_CHKOBJ             4
+#define DBG_XTOR_DTOROBJ            0x8000
+
+TOOLS_DLLPUBLIC void DbgXtor( DbgDataType* pDbgData,
+              USHORT nAction, const void* pThis, DbgUsr fDbgUsr );
+
+class DbgXtorObj
+{
+private:
+    DbgDataType*    pDbgData;
+    const void*     pThis;
+    DbgUsr          fDbgUsr;
+    USHORT          nAction;
+
+public:
+                    DbgXtorObj( DbgDataType* pData,
+                                USHORT nAct, const void* pThs, DbgUsr fUsr )
+                    {
+                        DbgXtor( pData, nAct, pThs, fUsr );
+                        pDbgData = pData;
+                        nAction  = nAct;
+                        pThis    = pThs;
+                        fDbgUsr  = fUsr;
+                    }
+
+                    ~DbgXtorObj()
+                    {
+                        DbgXtor( pDbgData, nAction | DBG_XTOR_DTOROBJ,
+                                 pThis, fDbgUsr );
+                    }
+};
+
+// --- Dbg-Defines (intern) ---
+
+#define DBG_FUNC( aName )                   DbgName_##aName()
+#define DBG_NAME( aName )                   static DbgDataType aImpDbgData_##aName = { 0, #aName }; \
+                                            DbgDataType* DBG_FUNC( aName ) { return &aImpDbgData_##aName; }
+#define DBG_NAMEEX_VISIBILITY( aName, vis ) vis DbgDataType* DBG_FUNC( aName );
+#define DBG_NAMEEX( aName )                 DBG_NAMEEX_VISIBILITY( aName, )
+
+// --- Dbg-Defines (extern) ---
+
+#define DBG_DEBUGSTART()                    DbgDebugStart()
+#define DBG_DEBUGEND()                      DbgDebugEnd()
+#define DBG_GLOBALDEBUGEND()                DbgGlobalDebugEnd()
+
+#define DBG_STARTAPPEXECUTE()               DbgStartStackTree()
+#define DBG_ENDAPPEXECUTE()                 DbgEndStackTree()
+
+#define DBG_MEMTEST()                       DbgMemTest()
+#define DBG_MEMTEST_PTR( p )                DbgMemTest( (void*)p )
+
+#define DBG_COREDUMP()                      DbgCoreDump()
+
+#define DBG_PROFSTART( aName )                      \
+    DbgProf( DBG_PROF_START, DBG_FUNC( aName ) )
+
+#define DBG_PROFSTOP( aName )                       \
+    DbgProf( DBG_PROF_STOP, DBG_FUNC( aName ) )
+
+#define DBG_PROFCONTINUE( aName )                   \
+    DbgProf( DBG_PROF_CONTINUE, DBG_FUNC( aName ) )
+
+#define DBG_PROFPAUSE( aName )                      \
+    DbgProf( DBG_PROF_PAUSE, DBG_FUNC( aName ) )
+
+#define DBG_CTOR( aName, fTest )                    \
+    DbgXtorObj aDbgXtorObj( DBG_FUNC( aName ),      \
+                            DBG_XTOR_CTOR,          \
+                            (const void*)this,      \
+                            fTest )
+
+#define DBG_DTOR( aName, fTest )                    \
+    DbgXtorObj aDbgXtorObj( DBG_FUNC( aName ),      \
+                            DBG_XTOR_DTOR,          \
+                            (const void*)this,      \
+                            fTest )
+
+#define DBG_CHKTHIS( aName, fTest )                 \
+    DbgXtorObj aDbgXtorObj( DBG_FUNC( aName ),      \
+                            DBG_XTOR_CHKTHIS,       \
+                            (const void*)this,      \
+                            fTest )
+
+#define DBG_CHKOBJ( pObj, aName, fTest )            \
+    DbgXtor( DBG_FUNC( aName ), DBG_XTOR_CHKOBJ,    \
+             (const void*)pObj, (DbgUsr)fTest )
+
+#define DBG_ASSERTWARNING( sCon, aWarning )         \
+    if ( DbgIsAssertWarning() )                     \
+    {                                               \
+        if ( !( sCon ) )                            \
+        {                                           \
+            DbgWarning( aWarning, __FILE__,         \
+                        __LINE__ );                 \
+        }                                           \
+    }
+
+#define DBG_ASSERT( sCon, aError )                  \
+    if ( DbgIsAssert() )                            \
+    {                                               \
+        if ( !( sCon ) )                            \
+        {                                           \
+            DbgError( aError,                       \
+                      __FILE__, __LINE__ );         \
+        }                                           \
+    }
+
+#ifdef DBG_BINFILTER
+#define DBG_BF_ASSERT( sCon, aError )                  \
+    if ( !( sCon ) )                            \
+    {                                           \
+        DbgError( aError,                       \
+                  __FILE__, __LINE__ );         \
+    }
+#else
+#define DBG_BF_ASSERT( sCon, aError )
+#endif
+
+#define DBG_TRACE( aTrace )                         \
+{                                                   \
+    if ( DbgIsTraceOut() )                          \
+        DbgTrace( aTrace );                         \
+}
+#define DBG_TRACE1( aTrace, x1 )                    \
+{                                                   \
+    if ( DbgIsTraceOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
+                     x1 );                          \
+    }                                               \
+}
+#define DBG_TRACE2( aTrace, x1, x2 )                \
+{                                                   \
+    if ( DbgIsTraceOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
+                     x1, x2 );                      \
+    }                                               \
+}
+#define DBG_TRACE3( aTrace, x1, x2, x3 )            \
+{                                                   \
+    if ( DbgIsTraceOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
+                     x1, x2, x3 );                  \
+    }                                               \
+}
+#define DBG_TRACE4( aTrace, x1, x2, x3, x4 )        \
+{                                                   \
+    if ( DbgIsTraceOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
+                     x1, x2, x3, x4 );              \
+    }                                               \
+}
+#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 )    \
+{                                                   \
+    if ( DbgIsTraceOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_TRACE, aTrace,         \
+                     x1, x2, x3, x4, x5 );          \
+    }                                               \
+}
+#define DBG_TRACEFILE( aTrace )                     \
+{                                                   \
+    if ( DbgIsTraceOut() )                          \
+        DbgTrace( aTrace, __FILE__, __LINE__ );     \
+}
+
+#define DBG_WARNING( aWarning )                     \
+{                                                   \
+    if ( DbgIsWarningOut() )                        \
+        DbgWarning( aWarning );                     \
+}
+#define DBG_WARNING1( aWarning, x1 )                \
+{                                                   \
+    if ( DbgIsWarningOut() )                        \
+    {                                               \
+        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
+                     x1 );                          \
+    }                                               \
+}
+#define DBG_WARNING2( aWarning, x1, x2 )            \
+{                                                   \
+    if ( DbgIsWarningOut() )                        \
+    {                                               \
+        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
+                     x1, x2 );                      \
+    }                                               \
+}
+#define DBG_WARNING3( aWarning, x1, x2, x3 )        \
+{                                                   \
+    if ( DbgIsWarningOut() )                        \
+    {                                               \
+        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
+                     x1, x2, x3 );                  \
+    }                                               \
+}
+#define DBG_WARNING4( aWarning, x1, x2, x3, x4 )    \
+{                                                   \
+    if ( DbgIsWarningOut() )                        \
+    {                                               \
+        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
+                     x1, x2, x3, x4 );              \
+    }                                               \
+}
+#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 )\
+{                                                   \
+    if ( DbgIsWarningOut() )                        \
+    {                                               \
+        DbgOutTypef( DBG_OUT_WARNING, aWarning,     \
+                     x1, x2, x3, x4, x5 );          \
+    }                                               \
+}
+#define DBG_WARNINGFILE( aWarning )                 \
+{                                                   \
+    if ( DbgIsWarningOut() )                        \
+        DbgWarning( aWarning, __FILE__, __LINE__ ); \
+}
+
+#define DBG_ERROR( aError )                         \
+{                                                   \
+    if ( DbgIsErrorOut() )                          \
+        DbgError( aError );                         \
+}
+#define DBG_ERROR1( aError, x1 )                    \
+{                                                   \
+    if ( DbgIsErrorOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_ERROR, aError,         \
+                     x1 );                          \
+    }                                               \
+}
+#define DBG_ERROR2( aError, x1, x2 )                \
+{                                                   \
+    if ( DbgIsErrorOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_ERROR, aError,         \
+                     x1, x2 );                      \
+    }                                               \
+}
+#define DBG_ERROR3( aError, x1, x2, x3 )            \
+{                                                   \
+    if ( DbgIsErrorOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_ERROR, aError,         \
+                     x1, x2, x3 );                  \
+    }                                               \
+}
+#define DBG_ERROR4( aError, x1, x2, x3, x4 )        \
+{                                                   \
+    if ( DbgIsErrorOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_ERROR, aError,         \
+                     x1, x2, x3, x4 );              \
+    }                                               \
+}
+#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 )    \
+{                                                   \
+    if ( DbgIsErrorOut() )                          \
+    {                                               \
+        DbgOutTypef( DBG_OUT_ERROR, aError,         \
+                     x1, x2, x3, x4, x5 );          \
+    }                                               \
+}
+#define DBG_ERRORFILE( aError )                     \
+{                                                   \
+    if ( DbgIsErrorOut() )                          \
+        DbgError( aError, __FILE__, __LINE__ );     \
+}
+
+#define DBG_TESTSOLARMUTEX() { DbgTestSolarMutex(); }
+
+// --- Dbg-Defines (An/Ausschlaten) ---
+
+#define DBG_INSTOUTTRACE( nOut )            \
+{                                           \
+    DbgGetData()->nTraceOut = nOut;         \
+}
+
+#define DBG_INSTOUTWARNING( nOut )          \
+{                                           \
+    DbgGetData()->nWarningOut = nOut;       \
+}
+
+#define DBG_INSTOUTERROR( nOut )            \
+{                                           \
+    DbgGetData()->nErrorOut = nOut;         \
+}
+
+#else
+
+// ---------------
+// - NO DBG_UITL -
+// ---------------
+
+struct DbgData;
+struct DbgGUIData;
+struct DbgDataType;
+
+typedef void (*DbgPrintLine)( const sal_Char* pLine );
+typedef const sal_Char* (*DbgUsr)(const void* pThis );
+
+#define DBG_DEBUGSTART()
+#define DBG_DEBUGEND()
+#define DBG_GLOBALDEBUGEND()
+
+#define DBG_STARTAPPEXECUTE()
+#define DBG_ENDAPPEXECUTE()
+
+#define DBG_MEMTEST()                       HPUX_DTOR_BUG
+#define DBG_MEMTEST_PTR( p )                HPUX_DTOR_BUG
+
+#define DBG_COREDUMP()
+
+#define DBG_NAME( aName )
+#define DBG_NAMEEX( aName )
+#define DBG_NAMEEX_VISIBILITY( aName, vis )
+
+#define DBG_PROFSTART( aName )
+#define DBG_PROFSTOP( aName )
+#define DBG_PROFCONTINUE( aName )
+#define DBG_PROFPAUSE( aName )
+
+#define DBG_CTOR( aName, fTest )
+#define DBG_DTOR( aName, fTest )            HPUX_DTOR_BUG
+#define DBG_CHKTHIS( aName, fTest )         HPUX_DTOR_BUG
+#define DBG_CHKOBJ( pObj, aName, fTest )    HPUX_DTOR_BUG
+
+#define DBG_ASSERTWARNING( sCon, aWarning )
+#define DBG_ASSERT( sCon, aError )
+#define DBG_BF_ASSERT( sCon, aError )
+#define DBG_TRACE( aTrace )
+#define DBG_TRACE1( aTrace, x1 )
+#define DBG_TRACE2( aTrace, x1, x2 )
+#define DBG_TRACE3( aTrace, x1, x2, x3 )
+#define DBG_TRACE4( aTrace, x1, x2, x3, x4 )
+#define DBG_TRACE5( aTrace, x1, x2, x3, x4, x5 )
+#define DBG_TRACEFILE( aTrace )
+#define DBG_WARNING( aWarning )
+#define DBG_WARNING1( aWarning, x1 )
+#define DBG_WARNING2( aWarning, x1, x2 )
+#define DBG_WARNING3( aWarning, x1, x2, x3 )
+#define DBG_WARNING4( aWarning, x1, x2, x3, x4 )
+#define DBG_WARNING5( aWarning, x1, x2, x3, x4, x5 )
+#define DBG_WARNINGFILE( aWarning )
+#define DBG_ERROR( aError )
+#define DBG_ERROR1( aError, x1 )
+#define DBG_ERROR2( aError, x1, x2 )
+#define DBG_ERROR3( aError, x1, x2, x3 )
+#define DBG_ERROR4( aError, x1, x2, x3, x4 )
+#define DBG_ERROR5( aError, x1, x2, x3, x4, x5 )
+#define DBG_ERRORFILE( aError )
+
+#define DBG_TESTSOLARMUTEX()
+
+#define DBG_INSTOUTTRACE( nOut )
+#define DBG_INSTOUTWARNING( nOut )
+#define DBG_INSTOUTERROR( nOut )
+
+#endif
+
+#endif  // _TOOLS_DEBUG_HXX
