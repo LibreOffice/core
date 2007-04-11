@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stylepool.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:24:18 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 18:58:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,7 @@
 #include <rtl/ustring.hxx>
 
 #ifndef _SFXITEMSET_HXX
-#include "itemset.hxx"
+#include <svtools/itemset.hxx>
 #endif
 
 class StylePoolImpl;
