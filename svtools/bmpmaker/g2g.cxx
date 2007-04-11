@@ -4,9 +4,9 @@
  *
  *  $RCSfile: g2g.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:12:20 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 18:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,7 @@
 #include <tools/fsys.hxx>
 #include <tools/stream.hxx>
 #include <vcl/svapp.hxx>
-#include "filter.hxx"
+#include "svtools/filter.hxx"
 
 #define EXIT_NOERROR                0x00000000
 #define EXIT_COMMONERROR            0x00000001
