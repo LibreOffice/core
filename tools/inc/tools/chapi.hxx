@@ -1,0 +1,78 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: chapi.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:08:46 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _CHAPI_HXX
+#define _CHAPI_HXX
+
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
+class ChannelAgentItem;
+class INetURLObject;
+class String;
+
+enum RequestType {
+    REQTYP_LOCAL_FILE   = 1,
+    REQTYP_MEMORY       = 2
+};
+
+class ChApi
+{
+public:
+    virtual ~ChApi() {}
+
+    virtual void    ShutDownAgent() = 0;
+    virtual void    SetLastSuccUpd() = 0;
+
+    virtual void    GetChannelObject( const INetURLObject& rURL, RequestType eStreamType,
+                            const String& rFileName ) = 0;
+    virtual void    AddChannelItem( const String& aChName, const INetURLObject& aTransmitter,
+                            const String& aChannel, USHORT nUpdPeriode,
+                            const String& rChAgentName ) = 0;
+    virtual void    DelChannelItem( const String& aChName ) = 0;
+    virtual void    SetChTransmitter( const String& aChName, const String& rNewVal ) = 0;
+    virtual void    SetChannel( const String& aChName, const String& rNewVal ) = 0;
+    virtual void    SetChannelName( const String& aChName, const String& rNewVal ) = 0;
+    virtual void    SetChUpdPeriode( const String& aChName, USHORT nUpdPeriode ) = 0;
+    virtual void    SetChannelAgentName( const String& aChName, const String& rNewVal ) = 0;
+
+    virtual void    SetUpdateTransmitter(ChannelAgentItem* pAgent, const INetURLObject& rTransmitter) = 0;
+};
+
+////////////////////////////////////////////////////////////////////////////////
+//
+
+#endif //_CHAPI_HXX
