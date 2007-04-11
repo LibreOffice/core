@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.193 $
+#   $Revision: 1.194 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:17:02 $
+#   last change: $Author: vg $ $Date: 2007-04-11 19:47:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,9 +62,9 @@ SOLARINC+=$(DAOINC)
 INCLUDE:=
 .EXPORT : INCLUDE
 .IF "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) $(INCLOCPRJ:^"-I":s/-I-I/-I/) -I$(INCPCH) -I$(INC)$/$(PRJNAME) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ELSE		# "$(PRJINC)"!=""
-INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
+INCLUDE!:=-I. $(ENVINCPRE) $(INCPRE:^"-I":s/-I-I/-I/) -I$(INCLOCAL) -I$(INCPCH) -I$(INC)$/$(PRJNAME) -I$(INC) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(null,$(UNOINCLUDES) $(NULL) -I$(UNOINCLUDES)) -I$(INCEXT) -I$(PRJ)$/res -I$(INCPOST)
 .ENDIF		# "$(PRJINC)"!=""
 INCLUDE_C=$(subst,$/stl$(SPACECHAR),dont_use_stl$(SPACECHAR) $(INCLUDE))
 .EXPORT : LIB
