@@ -1,0 +1,277 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: edit.hxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2007-04-11 17:52:22 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+
+#ifndef _SV_EDIT_HXX
+#define _SV_EDIT_HXX
+
+#ifndef _SV_SV_H
+#include <vcl/sv.h>
+#endif
+
+#ifndef _VCL_DLLAPI_H
+#include <vcl/dllapi.h>
+#endif
+
+#ifndef _SV_TIMER_HXX
+#include <vcl/timer.hxx>
+#endif
+#ifndef _SV_CTRL_HXX
+#include <vcl/ctrl.hxx>
+#endif
+#ifndef _SV_MENU_HXX
+#include <vcl/menu.hxx>
+#endif
+
+#ifndef _VCL_DNDHELP_HXX
+#include <vcl/dndhelp.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
+#include <com/sun/star/uno/Reference.h>
+#endif
+
+namespace com {
+namespace sun {
+namespace star {
+namespace i18n {
+    class XBreakIterator;
+    class XExtendedInputSequenceChecker;
+}}}}
+
+class ImplSubEdit;
+struct DDInfo;
+struct Impl_IMEInfos;
+
+// --------------
+// - Edit-Types -
+// --------------
+
+#define EDIT_NOLIMIT                STRING_LEN
+#define EDIT_UPDATEDATA_TIMEOUT     350
+
+typedef XubString (*FncGetSpecialChars)( Window* pWin, const Font& rFont );
+
+// --------
+// - Edit -
+// --------
+
+enum AutocompleteAction{ AUTOCOMPLETE_KEYINPUT, AUTOCOMPLETE_TABFORWARD, AUTOCOMPLETE_TABBACKWARD };
+
+class VCL_DLLPUBLIC Edit : public Control, public vcl::unohelper::DragAndDropClient
+{
+private:
+    Edit*               mpSubEdit;
+    Timer*              mpUpdateDataTimer;
+    DDInfo*             mpDDInfo;
+    Impl_IMEInfos*      mpIMEInfos;
+    XubString           maText;
+    XubString           maSaveValue;
+    XubString           maUndoText;
+    XubString           maRedoText;
+    long                mnXOffset;
+    Selection           maSelection;
+    USHORT              mnAlign;
+    xub_StrLen          mnMaxTextLen;
+    AutocompleteAction  meAutocompleteAction;
+    xub_Unicode         mcEchoChar;
+    BOOL                mbModified:1,
+                        mbInternModified:1,
+                        mbReadOnly:1,
+                        mbInsertMode:1,
+                        mbClickedInSelection:1,
+                        mbIsSubEdit:1,
+                        mbInMBDown:1,
+                        mbActivePopup:1;
+    Link                maModifyHdl;
+    Link                maUpdateDataHdl;
+    Link                maAutocompleteHdl;
+
+//#if 0 // _SOLAR__PRIVATE
+    DECL_DLLPRIVATE_LINK(      ImplUpdateDataHdl, Timer* );
+
+    SAL_DLLPRIVATE void        ImplInitEditData();
+    SAL_DLLPRIVATE void        ImplModified();
+    SAL_DLLPRIVATE XubString   ImplGetText() const;
+    SAL_DLLPRIVATE void        ImplRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN, bool bLayout = false );
+    SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode );
+    SAL_DLLPRIVATE void        ImplSetText( const XubString& rStr, const Selection* pNewSelection = 0 );
+    SAL_DLLPRIVATE void        ImplInsertText( const XubString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
+    SAL_DLLPRIVATE String      ImplGetValidString( const String& rString ) const;
+    SAL_DLLPRIVATE void        ImplClearBackground( long nXStart, long nXEnd );
+    SAL_DLLPRIVATE void        ImplShowCursor( BOOL bOnlyIfVisible = TRUE );
+    SAL_DLLPRIVATE void        ImplAlign();
+    SAL_DLLPRIVATE void        ImplAlignAndPaint();
+    SAL_DLLPRIVATE xub_StrLen  ImplGetCharPos( const Point& rWindowPos ) const;
+    SAL_DLLPRIVATE void        ImplSetCursorPos( xub_StrLen nChar, BOOL bSelect );
+    SAL_DLLPRIVATE void        ImplShowDDCursor();
+    SAL_DLLPRIVATE void        ImplHideDDCursor();
+    SAL_DLLPRIVATE BOOL        ImplHandleKeyEvent( const KeyEvent& rKEvt );
+    SAL_DLLPRIVATE void        ImplCopyToSelectionClipboard();
+    SAL_DLLPRIVATE void        ImplCopy( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
+    SAL_DLLPRIVATE void        ImplPaste( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::clipboard::XClipboard >& rxClipboard );
+    SAL_DLLPRIVATE long        ImplGetExtraOffset() const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XExtendedInputSequenceChecker > ImplGetInputSequenceChecker() const;
+    SAL_DLLPRIVATE ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator() const;
+//#endif
+
+protected:
+//#if 0 // _SOLAR__PRIVATE
+    using Window::ImplInit;
+    SAL_DLLPRIVATE void        ImplInit( Window* pParent, WinBits nStyle );
+    SAL_DLLPRIVATE WinBits     ImplInitStyle( WinBits nStyle );
+    SAL_DLLPRIVATE void        ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground );
+    SAL_DLLPRIVATE void        ImplLoadRes( const ResId& rResId );
+    SAL_DLLPRIVATE void        ImplSetSelection( const Selection& rSelection, BOOL bPaint = TRUE );
+//#endif
+    SAL_DLLPRIVATE int         ImplGetNativeControlType();
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener > mxDnDListener;
+
+    // DragAndDropClient
+    using vcl::unohelper::DragAndDropClient::dragEnter;
+    using vcl::unohelper::DragAndDropClient::dragExit;
+    using vcl::unohelper::DragAndDropClient::dragOver;
+    virtual void        dragGestureRecognized( const ::com::sun::star::datatransfer::dnd::DragGestureEvent& dge ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void        dragDropEnd( const ::com::sun::star::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void        drop( const ::com::sun::star::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void        dragEnter( const ::com::sun::star::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void        dragExit( const ::com::sun::star::datatransfer::dnd::DropTargetEvent& dte ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void        dragOver( const ::com::sun::star::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (::com::sun::star::uno::RuntimeException);
+
+    protected:
+    virtual void FillLayoutData() const;
+
+                        Edit( WindowType nType );
+
+public:
+    // public because needed in button.cxx
+    SAL_DLLPRIVATE bool        ImplUseNativeBorder( WinBits nStyle );
+
+                        Edit( Window* pParent, WinBits nStyle = WB_BORDER );
+                        Edit( Window* pParent, const ResId& rResId );
+                        virtual ~Edit();
+
+    virtual void        MouseButtonDown( const MouseEvent& rMEvt );
+    virtual void        MouseButtonUp( const MouseEvent& rMEvt );
+    virtual void        KeyInput( const KeyEvent& rKEvt );
+    virtual void        Paint( const Rectangle& rRect );
+    virtual void        Resize();
+    virtual void        Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, ULONG nFlags );
+    virtual void        GetFocus();
+    virtual void        LoseFocus();
+    virtual void        Tracking( const TrackingEvent& rTEvt );
+    virtual void        Command( const CommandEvent& rCEvt );
+    virtual void        StateChanged( StateChangedType nType );
+    virtual void        DataChanged( const DataChangedEvent& rDCEvt );
+    virtual Window*     GetPreferredKeyInputWindow();
+
+    virtual void        Modify();
+    virtual void        UpdateData();
+
+    static BOOL         IsCharInput( const KeyEvent& rKEvt );
+
+    virtual void        SetModifyFlag();
+    virtual void        ClearModifyFlag();
+    virtual BOOL        IsModified() const { return mpSubEdit ? mpSubEdit->mbModified : mbModified; }
+
+    virtual void        EnableUpdateData( ULONG nTimeout = EDIT_UPDATEDATA_TIMEOUT );
+    virtual void        DisableUpdateData() { delete mpUpdateDataTimer; mpUpdateDataTimer = NULL; }
+    virtual ULONG       IsUpdateDataEnabled() const;
+
+    void                SetEchoChar( xub_Unicode c );
+    xub_Unicode         GetEchoChar() const { return mcEchoChar; }
+
+    virtual void        SetReadOnly( BOOL bReadOnly = TRUE );
+    virtual BOOL        IsReadOnly() const { return mbReadOnly; }
+
+    void                SetInsertMode( BOOL bInsert );
+    BOOL                IsInsertMode() const;
+
+    virtual void        SetMaxTextLen( xub_StrLen nMaxLen = EDIT_NOLIMIT );
+    virtual xub_StrLen  GetMaxTextLen() const { return mnMaxTextLen; }
+
+    virtual void        SetSelection( const Selection& rSelection );
+    virtual const Selection&    GetSelection() const;
+
+    virtual void        ReplaceSelected( const XubString& rStr );
+    virtual void        DeleteSelected();
+    virtual XubString   GetSelected() const;
+
+    virtual void        Cut();
+    virtual void        Copy();
+    virtual void        Paste();
+    void                Undo();
+
+    virtual void        SetText( const XubString& rStr );
+    virtual void        SetText( const XubString& rStr, const Selection& rNewSelection );
+    virtual XubString   GetText() const;
+
+    void                SaveValue() { maSaveValue = GetText(); }
+    const XubString&    GetSavedValue() const { return maSaveValue; }
+
+    virtual void        SetModifyHdl( const Link& rLink ) { maModifyHdl = rLink; }
+    virtual const Link& GetModifyHdl() const { return maModifyHdl; }
+    virtual void        SetUpdateDataHdl( const Link& rLink ) { maUpdateDataHdl = rLink; }
+    virtual const Link& GetUpdateDataHdl() const { return maUpdateDataHdl; }
+
+    void                SetSubEdit( Edit* pEdit );
+    Edit*               GetSubEdit() const { return mpSubEdit; }
+
+    void                SetAutocompleteHdl( const Link& rHdl );
+    const Link&         GetAutocompleteHdl() const { return maAutocompleteHdl; }
+    AutocompleteAction  GetAutocompleteAction() const { return meAutocompleteAction; }
+
+    virtual Size        CalcMinimumSize() const;
+    virtual Size        CalcSize( USHORT nChars ) const;
+    virtual xub_StrLen  GetMaxVisChars() const;
+
+    xub_StrLen          GetCharPos( const Point& rWindowPos ) const;
+
+    static void                 SetGetSpecialCharsFunction( FncGetSpecialChars fn );
+    static FncGetSpecialChars   GetGetSpecialCharsFunction();
+
+    static PopupMenu*   CreatePopupMenu();
+    static void         DeletePopupMenu( PopupMenu* pMenu );
+};
+
+inline ULONG Edit::IsUpdateDataEnabled() const
+{
+    if ( mpUpdateDataTimer )
+        return mpUpdateDataTimer->GetTimeout();
+    else
+        return FALSE;
+}
+
+#endif  // _SV_EDIT_HXX
