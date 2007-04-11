@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parser.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:51:20 $
+ *  last change: $Author: vg $ $Date: 2007-04-11 20:22:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,11 +37,11 @@
 #include "precompiled_tools.hxx"
 
 #include <stdio.h>
-#include <stream.hxx>
-#include <fsys.hxx>
+#include <tools/stream.hxx>
+#include <tools/fsys.hxx>
 
-#include "iparser.hxx"
-#include "geninfo.hxx"
+#include "tools/iparser.hxx"
+#include "tools/geninfo.hxx"
 
 
 
