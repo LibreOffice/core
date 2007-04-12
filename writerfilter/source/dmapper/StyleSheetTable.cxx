@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-02-21 13:36:00 $
+ *  last change: $Author: os $ $Date: 2007-04-12 13:26:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,9 @@
 #endif
 #ifndef _COM_SUN_STAR_STYLE_XSTYLE_HPP_
 #include <com/sun/star/style/XStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TEXT_WRITINGMODE_HPP_
+#include <com/sun/star/text/WritingMode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -670,7 +673,7 @@ uno::Sequence< ::rtl::OUString > PropValVector::getNames()
 /*-- 21.06.2006 13:35:48---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTextDocument)
+void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTextDocument, FontTablePtr rFontTable)
 {
     try
     {
@@ -703,7 +706,6 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.CharacterStyle"))),
                                     uno::UNO_QUERY_THROW);
                 }
-                uno::Sequence< beans::PropertyValue > aPropValues = aIt->pProperties->GetPropertyValues();
                 if(aIt->nBaseStyleIdentifier != 0xfff )
                 {
                     //find the name of the base style
@@ -715,7 +717,45 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                             break;
                         }
                 }
+                else if( aIt->nStyleTypeCode == STYLE_TYPE_PARA )
+                {
+                    //now it's time to set the default parameters - for paragraph styles
+                    //Fonts: Western first entry in font table
+                    //CJK: second entry
+                    //CTL: third entry, if it exists
 
+                    sal_uInt32 nFontCount = rFontTable->size();
+                    if( nFontCount > 2 )
+                    {
+                        uno::Any aTwoHundredTwip = uno::makeAny(120.);
+//                      font size to 200 twip for all if not set
+                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT        , aTwoHundredTwip, false);
+//                      western font not already set -> apply first font
+                        const FontEntry* pWesternFontEntry = rFontTable->getFontEntry( 0 );
+                        aIt->pProperties->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pWesternFontEntry->sFontName ), false);
+//                      CJK  ... apply second font
+                        const FontEntry* pCJKFontEntry  = rFontTable->getFontEntry( 2 );
+                        aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( pCJKFontEntry->sFontName ), false);
+                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN  , aTwoHundredTwip, false);
+//                      CTL  ... apply third font, if available
+                        if( nFontCount > 3 )
+                        {
+                            const FontEntry* pCTLFontEntry  = rFontTable->getFontEntry( 3 );
+                            aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( pCTLFontEntry->sFontName ), false);
+                            aIt->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredTwip, false);
+                        }
+                    }
+//                  Widow/Orphan -> set both to two if not already set
+                    uno::Any aTwo = uno::makeAny(sal_Int8(2));
+                    aIt->pProperties->Insert(PROP_PARA_WIDOWS, aTwo, false);
+                    aIt->pProperties->Insert(PROP_PARA_ORPHANS, aTwo, false);
+//                  Left-to-right direction if not already set
+                    aIt->pProperties->Insert(PROP_WRITING_MODE, uno::makeAny( sal_Int16(text::WritingMode_LR_TB) ), false);
+//                  font color COL_AUTO if not already set
+                    aIt->pProperties->Insert(PROP_CHAR_COLOR, uno::makeAny( sal_Int32(0xffffffff) ), false);
+                }
+
+                uno::Sequence< beans::PropertyValue > aPropValues = aIt->pProperties->GetPropertyValues();
                 bool bAddFollowStyle = false;
                 if(bParaStyle && aIt->nNextStyleIdentifier >= 0 )
                 {
