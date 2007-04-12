@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.88 $
+#   $Revision: 1.89 $
 #
-#   last change: $Author: vg $ $Date: 2007-04-11 18:18:39 $
+#   last change: $Author: vg $ $Date: 2007-04-12 15:17:41 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ HXXDEPNLST= $(INC)$/vcl$/accel.hxx       \
             $(INC)$/vcl$/keycodes.hxx    \
             $(INC)$/vcl$/keycod.hxx      \
             $(INC)$/vcl$/image.hxx       \
-            $(INC)$/lstbox.h             \
+            $(INC)$/vcl$/lstbox.h             \
             $(INC)$/vcl$/lstbox.hxx      \
             $(INC)$/vcl$/mapmod.hxx      \
             $(INC)$/vcl$/metaact.hxx     \

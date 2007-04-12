@@ -67,7 +67,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl\plug\vcl
 ..\inc\vcl\keycodes.hxx %_DEST%\inc%_EXT%\vcl\keycodes.hxx
 ..\inc\vcl\lineinfo.hxx %_DEST%\inc%_EXT%\vcl\lineinfo.hxx
 ..\inc\vcl\longcurr.hxx %_DEST%\inc%_EXT%\vcl\longcurr.hxx
-..\inc\lstbox.h %_DEST%\inc%_EXT%\vcl\lstbox.h
+..\inc\vcl\lstbox.h %_DEST%\inc%_EXT%\vcl\lstbox.h
 ..\inc\vcl\lstbox.hxx %_DEST%\inc%_EXT%\vcl\lstbox.hxx
 ..\inc\vcl\mapmod.hxx %_DEST%\inc%_EXT%\vcl\mapmod.hxx
 ..\inc\vcl\mapunit.hxx %_DEST%\inc%_EXT%\vcl\mapunit.hxx
