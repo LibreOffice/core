@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: os $ $Date: 2007-04-10 14:21:31 $
+#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:43:14 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,11 +54,13 @@ ODIAPILIB=-lodiapi
 RTFTOKLIB=-lrtftok
 DOCTOKLIB=-ldoctok
 OOXMLLIB=-looxml
+RESOURCEMODELLIB=-lresourcemodel
 .ELIF "$(GUI)"=="WNT"
 ODIAPILIB=$(LB)$/iodiapi.lib
 RTFTOKLIB=$(LB)$/irtftok.lib
 DOCTOKLIB=$(LB)$/idoctok.lib
 OOXMLLIB=$(LB)$/iooxml.lib
+RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
 .ENDIF
 
 SHL1STDLIBS=$(SALLIB)\
@@ -69,7 +71,8 @@ SHL1STDLIBS=$(SALLIB)\
     $(ODIAPILIB) \
     $(RTFTOKLIB) \
     $(DOCTOKLIB) \
-    $(OOXMLLIB)
+    $(OOXMLLIB) \
+    $(RESOURCEMODELLIB)
 
 SHL1LIBS=\
     $(SLB)$/debugservices_xxml.lib \

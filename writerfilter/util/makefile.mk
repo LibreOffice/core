@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: fridrich_strba $ $Date: 2007-03-08 12:20:22 $
+#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:43:56 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,6 +73,7 @@ LIB2FILES=  \
     $(SLB)$/ooxml.lib \
     $(SLB)$/doctok.lib \
     $(SLB)$/rtftok.lib \
+    $(SLB)$/resourcemodel.lib \
     $(SLB)$/dmapper.lib \
     $(SLB)$/filter.lib
 
