@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:37:38 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:19:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,39 +106,8 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             oSaxParser->setDocumentHandler( xDocumentHandler );
 
             resolveSubStream(rStream, OOXMLStream::NUMBERING);
-
-            OOXMLStream::Pointer_t pStylesStream
-                (OOXMLDocumentFactory::createStream(mpStream,
-                                                    OOXMLStream::TYPES));
-
-            uno::Reference < xml::sax::XParser > oStylesSaxParser =
-                pStylesStream->getParser();
-
-            if (oStylesSaxParser.is())
-            {
-                uno::Reference<xml::sax::XDocumentHandler>
-                    xStylesDocumentHandler
-                    (static_cast<cppu::OWeakObject *>
-                     (new OOXMLSaxHandler(rStream)), uno::UNO_QUERY);
-                oStylesSaxParser->setDocumentHandler( xStylesDocumentHandler );
-
-                uno::Reference<io::XInputStream> xStylesInputStream =
-                    pStylesStream->getInputStream();
-
-//                 uno::Sequence<sal_Int8> aSeq(1024);
-//                 while (xStylesInputStream->readBytes(aSeq, 1024) > 0)
-//                 {
-//                     string tmpStr(reinterpret_cast<char *>(&aSeq[0]));
-
-//                     clog << tmpStr;
-//                 }
-                struct xml::sax::InputSource oStylesInputSource;
-                oStylesInputSource.aInputStream = xStylesInputStream;
-                oStylesSaxParser->parseStream(oStylesInputSource);
-
-                xStylesInputStream->closeInput();
-
-            }
+            resolveSubStream(rStream, OOXMLStream::FONTTABLE);
+            resolveSubStream(rStream, OOXMLStream::STYLES);
 
             uno::Reference<io::XInputStream> xInputStream =
                 mpStream->getInputStream();

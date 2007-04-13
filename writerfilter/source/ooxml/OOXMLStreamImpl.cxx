@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLStreamImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:42:20 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:23:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,17 +77,21 @@ void OOXMLStreamImpl::init()
     static rtl::OUString sDocumentType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument"));
     static rtl::OUString sStylesType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles"));
     static rtl::OUString sNumberingType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/numbering"));
+    static rtl::OUString sFonttableType(RTL_CONSTASCII_USTRINGPARAM("http://schemas.openxmlformats.org/officeDocument/2006/relationships/fontTable"));
     static rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("Target"));
 
     rtl::OUString sStreamType(sDocumentType);
 
     switch (mnStreamType)
     {
-    case TYPES:
+    case STYLES:
         sStreamType = sStylesType;
         break;
     case NUMBERING:
         sStreamType = sNumberingType;
+        break;
+    case FONTTABLE:
+        sStreamType = sFonttableType;
         break;
     default:
         break;
