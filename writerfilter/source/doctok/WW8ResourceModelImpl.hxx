@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:24:52 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -398,26 +398,6 @@ public:
     }
 
     void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
-};
-
-class QNameToString
-{
-    typedef boost::shared_ptr<QNameToString> Pointer_t;
-
-    static Pointer_t pInstance;
-
-    map < writerfilter::QName_t, string > mMap;
-
-protected:
-    /**
-       Generated.
-     */
-    QNameToString();
-
-public:
-    static Pointer_t Instance();
-
-    string operator()(writerfilter::QName_t qName);
 };
 
 void dump(OutputWithDepth<string> & o, const char * name, doctok::Reference<Properties>::Pointer_t props);

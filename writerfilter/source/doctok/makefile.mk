@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:16:41 $
+#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:34:16 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION #-DDEBUG_DOCTOK_DUMP
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/qnametostr.obj \
     $(SLO)$/WW8Annotation.obj \
     $(SLO)$/WW8OutputWithDepth.obj \
     $(SLO)$/WW8Text.obj \
@@ -81,9 +80,17 @@ SLOFILES= \
 
 SHL1TARGET=$(TARGET)
 
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+RESOURCEMODELLIB=-lresourcemodel
+.ELIF "$(GUI)"=="WNT"
+RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+.ENDIF
+
+
 SHL1STDLIBS=$(SALLIB)\
     $(CPPULIB)\
-    $(CPPUHELPERLIB)
+    $(CPPUHELPERLIB) \
+    $(RESOURCEMODELLIB)
 SHL1IMPLIB=i$(SHL1TARGET)
 #SHL1USE_EXPORTS=name
 SHL1USE_EXPORTS=ordinal

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-16 12:26:03 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <WW8OutputWithDepth.hxx>
 #include <doctok/TableManager.hxx>
 #include <rtl/string.hxx>
+#include <resourcemodel/QNameToString.hxx>
 
 namespace doctok
 {
@@ -860,21 +861,6 @@ Stream::Pointer_t createStreamHandler()
 Stream::Pointer_t createAnalyzer()
 {
     return Stream::Pointer_t(new WW8Analyzer());
-}
-
-QNameToString::Pointer_t QNameToString::pInstance;
-
-QNameToString::Pointer_t QNameToString::Instance()
-{
-    if (pInstance.get() == NULL)
-        pInstance = QNameToString::Pointer_t(new QNameToString());
-
-    return pInstance;
-}
-
-string QNameToString::operator()(writerfilter::QName_t qName)
-{
-    return mMap[qName];
 }
 
 void dump(OutputWithDepth<string> & /*o*/, const char * /*name*/,
