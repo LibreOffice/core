@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:34:36 $
+#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:15:58 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,7 @@ TARGET=ooxml
 
 #CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501 
 #CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
-CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION #-DDEBUG_DOCTOK_DUMP
+CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION -DDEBUG_OOXML_ELEMENT
 
 
 # --- Files --------------------------------------------------------
@@ -64,10 +64,17 @@ SLOFILES= \
 
 SHL1TARGET=$(TARGET)
 
+.IF "$(GUI)"=="UNX" || "$(GUI)"=="MAC"
+RESOURCEMODELLIB=-lresourcemodel
+.ELIF "$(GUI)"=="WNT"
+RESOURCEMODELLIB=$(LB)$/iresourcemodel.lib
+.ENDIF
+
 SHL1STDLIBS=$(SALLIB)\
     $(CPPULIB)\
     $(CPPUHELPERLIB) \
-    $(COMPHELPERLIB)
+    $(COMPHELPERLIB) \
+    $(RESOURCEMODELLIB)
 SHL1IMPLIB=i$(SHL1TARGET)
 #SHL1USE_EXPORTS=name
 SHL1USE_EXPORTS=ordinal
