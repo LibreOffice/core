@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ustring.c,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 14:06:19 $
+ *  last change: $Author: vg $ $Date: 2007-04-13 16:02:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,9 +76,9 @@
  */
 static rtl_uString const aImplEmpty_rtl_uString =
 {
-    SAL_STRING_STATIC_FLAG|1, /* sal_Int32    refCount;   */
-    0,                        /* sal_Int32    length;     */
-    { 0 }                     /* sal_Unicode  buffer[1];  */
+    (sal_Int32) (SAL_STRING_INTERN_FLAG|SAL_STRING_STATIC_FLAG|1), /*sal_Int32    refCount; */
+    0,                                               /*sal_Int32    length;   */
+    { 0 }                                            /*sal_Unicode  buffer[1];*/
 };
 
 /* ======================================================================= */
