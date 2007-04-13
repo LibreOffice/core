@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2007-02-05 13:47:59 $
+ *  last change: $Author: os $ $Date: 2007-04-13 09:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,9 @@
 #ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
 #endif
+#ifndef INCLUDED_FONTTABLE_HXX
+#include <FontTable.hxx>
+#endif
 #ifndef INCLUDED_WW8_RESOURCE_MODEL_HXX
 #include <doctok/WW8ResourceModel.hxx>
 #endif
@@ -51,6 +54,8 @@ namespace com{ namespace sun { namespace star { namespace text{
 }}}}
 namespace dmapper
 {
+
+
 enum StyleType
 {
     STYLE_TYPE_UNKNOWN,
@@ -94,7 +99,7 @@ public:
     // Table
     virtual void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
 
-    void ApplyStyleSheets(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument);
+    void ApplyStyleSheets(::com::sun::star::uno::Reference< ::com::sun::star::text::XTextDocument> xTextDocument, FontTablePtr rFontTable);
     const StyleSheetEntry* FindStyleSheetByISTD(sal_Int32 nIndex);
     // returns the parent of the one with the given name - if empty the parent of the current style sheet is returned
     const StyleSheetEntry* FindParentStyleSheet(sal_Int32 nBaseStyleIdentifier);

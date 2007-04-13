@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2007-02-21 12:25:07 $
+ *  last change: $Author: os $ $Date: 2007-04-13 09:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,9 @@ class PropertyMap : public _PropertyMap
         virtual ~PropertyMap();
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > GetPropertyValues();
-    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny );
+    /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
+     */
+    void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
 
     void insert(const boost::shared_ptr<PropertyMap> pMap);
 

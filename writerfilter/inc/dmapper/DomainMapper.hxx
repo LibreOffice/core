@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-05 19:56:39 $
+ *  last change: $Author: os $ $Date: 2007-04-13 09:35:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,6 @@ namespace dmapper
 using namespace std;
 
 class PropertyMap;
-class FontTable;
-class ListTable;
 
 class DomainMapper_Impl;
 

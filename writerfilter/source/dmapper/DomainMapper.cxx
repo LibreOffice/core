@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-10 09:31:00 $
+ *  last change: $Author: os $ $Date: 2007-04-13 09:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1563,7 +1563,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_ooxml::LN_CT_Highlight_val:
             {
                 sal_Int32 nColor = 0;
-                if (mbIsHighlightSet = getColorFromIndex(nIntValue, nColor))
+                if(true ==( mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)))
                     m_pImpl->GetTopContext()->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
                 else if (mnBackgroundColor)
                     m_pImpl->GetTopContext()->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
@@ -3290,7 +3290,7 @@ void DomainMapper::table(doctok::Id name, doctok::Reference<Table>::Pointer_t re
         //same as above to import style sheets
         m_pImpl->SetStyleSheetImport( true );
         ref->resolve( *m_pImpl->GetStyleSheetTable() );
-        m_pImpl->GetStyleSheetTable()->ApplyStyleSheets(m_pImpl->GetTextDocument());
+        m_pImpl->GetStyleSheetTable()->ApplyStyleSheets(m_pImpl->GetTextDocument(), m_pImpl->GetFontTable());
         m_pImpl->SetStyleSheetImport( false );
         break;
     case NS_rtf::LN_LISTTABLE:

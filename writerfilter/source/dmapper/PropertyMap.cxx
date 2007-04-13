@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2007-03-08 09:19:17 $
+ *  last change: $Author: os $ $Date: 2007-04-13 09:35:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,13 +125,17 @@ uno::Sequence< beans::PropertyValue > PropertyMap::GetPropertyValues()
 /*-------------------------------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny )
+void PropertyMap::Insert( PropertyIds eId, const uno::Any& rAny, bool bOverwrite )
 {
     const ::rtl::OUString& rInsert = PropertyNameSupplier::
                            GetPropertyNameSupplier().GetName(eId);
     PropertyMap::iterator aElement = find(rInsert);
     if( aElement != end())
+    {
+        if(!bOverwrite)
+            return;
         erase( aElement );
+    }
     _PropertyMap::insert( PropertyMap::value_type
                           (rInsert,
                            rAny));
