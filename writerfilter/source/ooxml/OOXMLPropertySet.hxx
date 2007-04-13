@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySet.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:38:17 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:20:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 namespace ooxml
 {
 using namespace doctok;
+
 class OOXMLProperty : public Sprm
 {
 public:
@@ -78,7 +79,6 @@ public:
     virtual ~OOXMLTable();
 
     virtual void resolve(Table & rTable) = 0;
-    virtual void add(OOXMLPropertySet::Pointer_t pProperty) = 0;
     virtual OOXMLTable * clone() const = 0;
 };
 }
