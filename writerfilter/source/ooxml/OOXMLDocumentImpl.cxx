@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:19:23 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-13 13:36:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,18 +77,22 @@ void OOXMLDocumentImpl::resolveSubStream(Stream & rStream,
         uno::Reference<io::XInputStream> xInputStream =
             pStream->getInputStream();
 
-        //                 uno::Sequence<sal_Int8> aSeq(1024);
-        //                 while (xStylesInputStream->readBytes(aSeq, 1024) > 0)
-        //                 {
-        //                     string tmpStr(reinterpret_cast<char *>(&aSeq[0]));
+        if (xInputStream.is())
+        {
 
-        //                     clog << tmpStr;
-        //                 }
-        struct xml::sax::InputSource oInputSource;
-        oInputSource.aInputStream = xInputStream;
-        oSaxParser->parseStream(oInputSource);
+            //                 uno::Sequence<sal_Int8> aSeq(1024);
+            //                 while (xStylesInputStream->readBytes(aSeq, 1024) > 0)
+            //                 {
+            //                     string tmpStr(reinterpret_cast<char *>(&aSeq[0]));
 
-        xInputStream->closeInput();
+            //                     clog << tmpStr;
+            //                 }
+            struct xml::sax::InputSource oInputSource;
+            oInputSource.aInputStream = xInputStream;
+            oSaxParser->parseStream(oInputSource);
+
+            xInputStream->closeInput();
+        }
     }
 }
 
