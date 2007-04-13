@@ -13234,7 +13234,7 @@
   </define>
   <define name="CT_FontFamily">
     <attribute name="val">
-      <text/>
+      <ref name="ST_FontFamily"/>
       <xs:documentation>Font Family Value</xs:documentation>
     </attribute>
   </define>
@@ -13253,7 +13253,7 @@
   </define>
   <define name="CT_Pitch">
     <attribute name="val">
-      <text/>
+      <ref name="ST_Pitch"/>
       <xs:documentation>Value</xs:documentation>
     </attribute>
   </define>
@@ -14008,54 +14008,94 @@
     </zeroOrMore>
   </define>
 </grammar>
-<resource name="CT_Numbering" resource="Properties"/>
-<resource name="CT_AbstractNum" resource="PropertySetValue">
-  <element name="nsid" tokenid="ooxml:CT_AbstractNum_nsid"/>
-  <element name="multiLevelType" tokenid="ooxml:CT_AbstractNum_multiLevelType"/>
-  <element name="tmpl" tokenid="ooxml:CT_AbstractNum_tmpl"/>
-  <element name="name" tokenid="ooxml:CT_AbstractNum_name"/>
-  <element name="styleLink" tokenid="ooxml:CT_AbstractNum_styleLink"/>
-  <element name="numStyleLink" tokenid="ooxml:CT_AbstractNum_numStyleLink"/>
-  <element name="lvl" tokenid="ooxml:CT_AbstractNum_lvl"/>
+<resource name="CT_Panose" resource="HexValue"/>
+<reosurce name="CT_UcharHexNumber" resource="HexValue"/>
+<resource name="CT_FontFamily" resource="ListValue"/>
+<resource name="ST_FontFamily" resource="List">
+  <value name="decorative" tokenid="ooxml:Value_ST_FontFamily_decorative">decorative</value>
+  <value name="modern" tokenid="ooxml:Value_ST_FontFamily_modern">modern</value>
+  <value name="roman" tokenid="ooxml:Value_ST_FontFamily_roman">roman</value>
+  <value name="script" tokenid="ooxml:Value_ST_FontFamily_script">script</value>
+  <value name="swiss" tokenid="ooxml:Value_ST_FontFamily_swiss">swiss</value>
+  <value name="auto" tokenid="ooxml:Value_ST_FontFamily_auto">auto</value>
+</resource>
+<resource name="ST_Pitch" resource="List">
+  <value name="fixed" tokenid="ooxml:Value_ST_Pitch_fixed">fixed</value>
+  <value name="variable" tokenid="ooxml:Value_ST_Pitch_variable">variable</value>
+  <value name="default" tokenid="ooxml:Value_ST_Pitch_default">default</value>
+</resource>
+<resource name="CT_Pitch" resource="ListValue"/>
+<resource name="CT_Font" resource="Properties">
+  <sprm name="altName" tokenid="ooxml:CT_Font_altName"/>
+  <sprm name="panose1" tokenid="ooxml:CT_Font_panose1"/>
+  <sprm name="charset" tokenid="ooxml:CT_Font_charset"/>
+  <sprm name="family" tokenid="ooxml:CT_Font_family"/>
+  <sprm name="notTrueType" tokenid="ooxml:CT_Font_notTrueType"/>
+  <sprm name="pitch" tokenid="ooxml:CT_Font_pitch"/>
+  <sprm name="sig" tokenid="ooxml:CT_Font_sig"/>
+  <sprm name="embedRegular" tokenid="ooxml:CT_Font_embedRegular"/>
+  <sprm name="embedBold" tokenid="ooxml:CT_Font_embedBold"/>
+  <sprm name="embedItalic" tokenid="ooxml:CT_Font_embedItalic"/>
+  <sprm name="embedBoldItalic" tokenid="ooxml:CT_Font_embedBoldItalic"/>
+  <attribute name="name" tokenid="ooxml:CT_Font_name"/>
+</resource>
+<resource name="CT_FontsList" resource="Table" tokenid="rtf:FONTTABLE"/>
+<resource name="CT_Numbering" resource="Properties">
+  <sprm name="numPicBullet" tokenid="ooxml:CT_Numbering_numPicBullet"/>
+  <sprm name="abstractNum" tokenid="ooxml:CT_Numbering_abstractNum"/>
+  <sprm name="num" tokenid="ooxml:CT_Numbering_num"/>
+  <sprm name="numIdMacAtCleanup" tokenid="ooxml:CT_Numbering_numIdMacAtCleanup"/>
+</resource>
+<resource name="numbering" resource="Stream"/>
+<resource name="CT_AbstractNum" resource="Properties">
+  <sprm name="nsid" tokenid="ooxml:CT_AbstractNum_nsid"/>
+  <sprm name="multiLevelType" tokenid="ooxml:CT_AbstractNum_multiLevelType"/>
+  <sprm name="tmpl" tokenid="ooxml:CT_AbstractNum_tmpl"/>
+  <sprm name="name" tokenid="ooxml:CT_AbstractNum_name"/>
+  <sprm name="styleLink" tokenid="ooxml:CT_AbstractNum_styleLink"/>
+  <sprm name="numStyleLink" tokenid="ooxml:CT_AbstractNum_numStyleLink"/>
+  <sprm name="lvl" tokenid="ooxml:CT_AbstractNum_lvl"/>
   <attribute name="abstractNumId" tokenid="ooxml:CT_AbstractNum_abstractNumId"/>
 </resource>
+<resource name="CT_MultiLevelType" resource="ListValue"/>
 <resource name="ST_MultiLevelType" resource="List">
   <value tokenid="ooxml:Value_ST_MultiLevelType_singleLevel">singleLevel</value>
-  <value tokenid="ooxml:Value_ST_MultiLevelType_multilevel">multilevel</value>    <value tokenid="ooxml:Value_ST_MultiLevelType_hybridMultilevel">hybridMultilevel</value>
+  <value tokenid="ooxml:Value_ST_MultiLevelType_multilevel">multilevel</value>
+  <value tokenid="ooxml:Value_ST_MultiLevelType_hybridMultilevel">hybridMultilevel</value>
 </resource>
-<resource name="CT_Lvl" resource="PropertySetValue">
-  <element name="start" tokenid="ooxml:CT_Lvl_start"/>
-  <element name="numFmt" tokenid="ooxml:CT_Lvl_numFmt"/>
-  <element name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
-  <element name="pStyle" tokenid="ooxml:CT_Lvl_pStyle"/>
-  <element name="isLgl" tokenid="ooxml:CT_Lvl_isLgl"/>
-  <element name="suff" tokenid="ooxml:CT_Lvl_suff"/>
-  <element name="lvlText" tokenid="ooxml:CT_Lvl_lvlText"/>
-  <element name="lvlPicBulletId" tokenid="ooxml:CT_Lvl_lvlPicBulletId"/>
-  <element name="legacy" tokenid="ooxml:CT_Lvl_legacy"/>
-  <element name="lvlJc" tokenid="ooxml:CT_Lvl_lvlJc"/>
-  <element name="pPr" tokenid="ooxml:CT_Lvl_pPr"/>
-  <element name="rPr" tokenid="ooxml:CT_Lvl_rPr"/>
+<resource name="CT_Lvl" resource="Properties">
+  <sprm name="start" tokenid="ooxml:CT_Lvl_start"/>
+  <sprm name="numFmt" tokenid="ooxml:CT_Lvl_numFmt"/>
+  <sprm name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
+  <sprm name="pStyle" tokenid="ooxml:CT_Lvl_pStyle"/>
+  <sprm name="isLgl" tokenid="ooxml:CT_Lvl_isLgl"/>
+  <sprm name="suff" tokenid="ooxml:CT_Lvl_suff"/>
+  <sprm name="lvlText" tokenid="ooxml:CT_Lvl_lvlText"/>
+  <sprm name="lvlPicBulletId" tokenid="ooxml:CT_Lvl_lvlPicBulletId"/>
+  <sprm name="legacy" tokenid="ooxml:CT_Lvl_legacy"/>
+  <sprm name="lvlJc" tokenid="ooxml:CT_Lvl_lvlJc"/>
+  <sprm name="pPr" tokenid="ooxml:CT_Lvl_pPr"/>
+  <sprm name="rPr" tokenid="ooxml:CT_Lvl_rPr"/>
   <attribute name="ilvl" tokenid="ooxml:CT_Lvl_ilvl"/>
   <attribute name="tplc" tokenid="ooxml:CT_Lvl_tplc"/>
   <attribute name="tentative" tokenid="ooxml:CT_Lvl_tentative"/>
 </resource>
-<resource name="CT_LvlLegacy" resource="PropertySetValue">
+<resource name="CT_LvlLegacy" resource="Properties">
   <attribute name="legacy" tokenid="ooxml:CT_LvlLegacy_legacy"/>
   <attribute name="legacySpace" tokenid="ooxml:CT_LvlLegacy_legacySpace"/>
   <attribute name="legacyIndent" tokenid="ooxml:CT_LvlLegacy_legacyIndent"/>
 </resource>
-<resource name="CT_Num" resource="PropertySetValue">
-  <element name="abstractNumId" tokenid="ooxml:CT_Num_abstractNumId"/>
-  <element name="lvlOverride" tokenid="ooxml:CT_Num_lvlOverride"/>
+<resource name="CT_Num" resource="Properties">
+  <sprm name="abstractNumId" tokenid="ooxml:CT_Num_abstractNumId"/>
+  <sprm name="lvlOverride" tokenid="ooxml:CT_Num_lvlOverride"/>
   <attribute name="numId" tokenid="ooxml:CT_Num_numId"/>
 </resource>
-<resource name="CT_NumLvl" resource="PropertySetValue">
-  <element name="startOverride" tokenid="ooxml:CT_NumLvl_startOverride"/>
-  <element name="lvl" tokenid="ooxml:CT_NumLvl_lvl"/>
+<resource name="CT_NumLvl" resource="Properties">
+  <sprm name="startOverride" tokenid="ooxml:CT_NumLvl_startOverride"/>
+  <sprm name="lvl" tokenid="ooxml:CT_NumLvl_lvl"/>
   <attribute name="ilvl" tokenid="ooxml:CT_NumLvl_ilvl"/>
 </resource>
-<resource name="CT_Color" resource="PropertySetValue">
+<resource name="CT_Color" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_Color_val"/>
   <attribute name="themeColor" tokenid="ooxml:CT_Color_themeColor"/>
   <attribute name="themeTint" tokenid="ooxml:CT_Color_themeTint"/>
@@ -14066,19 +14106,19 @@
   <value tokenid="ooxml:Value_ST_HexColorAuto_auto">auto</value>
 </resource>
 <resource name="ST_HexColor" resource="Hex"/>
-<resource name="CT_Underline" resource="PropertySetValue">
+<resource name="CT_Underline" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_Underline_val" default="single"/>
   <attribute name="color" tokenid="ooxml:CT_Underline_color"/>
   <attribute name="themeColor" tokenid="ooxml:CT_Underline_themeColor"/>
   <attribute name="themeTint" tokenid="ooxml:CT_Underline_themeTint"/>
   <attribute name="themeShade" tokenid="ooxml:CT_Underline_themeShade"/>
 </resource>
-<resource name="CT_Language" resource="PropertySetValue">
+<resource name="CT_Language" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_Language_val"/>
   <attribute name="eastAsia" tokenid="ooxml:CT_Language_eastAsia"/>
   <attribute name="bidi" tokenid="ooxml:CT_Language_bidi"/>
 </resource>
-<resource name="CT_Em" resource="PropertySetValue">
+<resource name="CT_Em" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_Em_val"/>
 </resource>
 <resource name="ST_Em" resource="List">
@@ -14088,7 +14128,7 @@
   <value tokenid="3">circle</value>
   <value tokenid="4">underDot</value>
 </resource>
-<resource name="CT_Shd" resource="PropertySetValue">
+<resource name="CT_Shd" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_Shd_val"/>
   <attribute name="color" tokenid="ooxml:CT_Shd_color"/>
   <attribute name="themeColor" tokenid="ooxml:CT_Shd_themeColor"/>
@@ -14099,7 +14139,7 @@
   <attribute name="themeFillTint" tokenid="ooxml:CT_Shd_themeFillTint"/>
   <attribute name="themeFillShade" tokenid="ooxml:CT_Shd_themeFillShade"/>
 </resource>
-<resource name="CT_Fonts" resource="PropertySetValue">
+<resource name="CT_Fonts" resource="Properties">
   <attribute name="hint" tokenid="ooxml:CT_Fonts_hint"/>
   <attribute name="ascii" tokenid="ooxml:CT_Fonts_ascii"/>
   <attribute name="hAnsi" tokenid="ooxml:CT_Fonts_hAnsi"/>
@@ -14201,7 +14241,7 @@
 </resource>
 <resource name="CT_RPr" resource="Properties"/>
 <resource name="CT_OnOff" resource="BooleanValue"/>
-<resource name="CT_FramePr" resource="PropertySetValue">
+<resource name="CT_FramePr" resource="Properties">
   <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
   <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
   <sprm name="w" tokenid="0x841a"/>
@@ -14218,33 +14258,33 @@
   <attribute name="hRule" tokenid="ooxml:CT_FramePr_hRule"/>
   <sprm name="anchorLock" tokenid="0x2430"/>
 </resource>
-<resource name="CT_NumPr" resource="PropertySetValue">
+<resource name="CT_NumPr" resource="Properties">
   <sprm name="ilvl" tokenid="0x260a"/>
   <sprm name="numId" tokenid="0x460b"/>
   <attribute name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
   <attribute name="ins" tokenid="ooxml:CT_NumPr_ins"/>
 </resource>
-<resource name="CT_DecimalNumber" resource="PropertySetValue">
+<resource name="CT_DecimalNumber" resource="IntegerValue">
   <attribute name="val" tokenid="ooxml:CT_DecimalNumber_val"/>
 </resource>
 <resource name="ST_DecimalNumber" resource="Integer"/>
-<resource name="CT_SignedTwipsMeasure" resource="PropertySetValue">
+<resource name="CT_SignedTwipsMeasure" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val"/>
 </resource>
 <resource name="ST_SignedTwipsMeasure" resource="Integer"/>
-<resource name="CT_TwipsMeasure" resource="PropertySetValue">
+<resource name="CT_TwipsMeasure" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val"/>
 </resource>
 <resource name="ST_TwipsMeasure" resource="Integer"/>
-<resource name="CT_SignedHpsMeasure" resource="PropertySetValue">
+<resource name="CT_SignedHpsMeasure" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_SignedHpsMeasure_val"/>
 </resource>
 <resource name="ST_SignedHpsMeasure" resource="Integer"/>
-<resource name="CT_HpsMeasure" resource="PropertySetValue">
+<resource name="CT_HpsMeasure" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_HpsMeasure_val"/>
 </resource>
 <resource name="ST_HpsMeasure" resource="Integer"/>
-<resource name="CT_Ind" resource="PropertySetValue">
+<resource name="CT_Ind" resource="Properties">
   <attribute name="left" tokenid="ooxml:CT_Ind_left"/>
   <attribute name="leftChars" tokenid="ooxml:CT_Ind_leftChars"/>
   <attribute name="right" tokenid="ooxml:CT_Ind_right"/>
@@ -14290,10 +14330,10 @@
   <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
 </resource>
 <resource name="CT_PPr" resource="Properties"/>
-<resource name="CT_Tabs" resource="PropertySetValue">
+<resource name="CT_Tabs" resource="Properties">
   <attribute name="tab" tokenid="ooxml:CT_Tabs_tab"/>
 </resource>
-<resource name="CT_TabStop" resource="PropertySetValue">
+<resource name="CT_TabStop" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_TabStop_val"/>
   <attribute name="leader" tokenid="ooxml:CT_TabStop_leader"/>
   <attribute name="pos" tokenid="ooxml:CT_TabStop_pos"/>
@@ -14335,7 +14375,7 @@
   <value tokenid="43">wavyDouble</value>
   <value tokenid="0">none</value>
 </resource>
-<resource name="CT_Jc" resource="PropertySetValue">
+<resource name="CT_Jc" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_Jc_val"/>
 </resource>
 <resource name="ST_Jc" resource="List">
@@ -14350,7 +14390,7 @@
   <value tokenid="ooxml:Value_ST_Jc_lowKashida">lowKashida</value>
   <value tokenid="ooxml:Value_ST_Jc_thaiDistribute">thaiDistribute</value>
 </resource>
-<resource name="CT_PBdr" resource="PropertySetValue">
+<resource name="CT_PBdr" resource="Properties">
   <sprm name="top" tokenid="0x6424"/>
   <sprm name="left" tokenid="0x6425"/>
   <sprm name="bottom" tokenid="0x6426"/>
@@ -14358,7 +14398,7 @@
   <sprm name="between" tokenid="0x6428"/>
   <sprm name="bar" tokenid="0x6429"/>
 </resource>
-<resource name="CT_Border" resource="PropertySetValue">
+<resource name="CT_Border" resource="Properties">
   <attribute name="val" tokenid="rtf:BRCTYPE"/>
   <attribute name="color" tokenid="ooxml:CT_Border_color"/>
   <attribute name="themeColor" tokenid="ooxml:CT_Border_themeColor"/>
@@ -14596,7 +14636,7 @@
   <attribute name="ptab" tokenid="ooxml:EG_RunInnerContent_ptab"/>
   <attribute name="lastRenderedPageBreak" tokenid="ooxml:EG_RunInnerContent_lastRenderedPageBreak"/>
 </resource>
-<resource name="CT_Sym" resource="PropertySetValue">
+<resource name="CT_Sym" resource="Properties">
   <attribute name="font" tokenid="ooxml:CT_Sym_font"/>
   <attribute name="char" tokenid="ooxml:CT_Sym_char"/>
 </resource>
@@ -14621,7 +14661,7 @@
   <value tokenid="ooxml:Value_ST_BrClear_right">right</value>
   <value tokenid="ooxml:Value_ST_BrClear_all">all</value>
 </resource>
-<resource name="CT_PTab" resource="PropertySetValue">
+<resource name="CT_PTab" resource="Properties">
   <attribute name="alignment" tokenid="ooxml:CT_PTab_alignment"/>
   <attribute name="relativeTo" tokenid="ooxml:CT_PTab_relativeTo"/>
   <attribute name="leader" tokenid="ooxml:CT_PTab_leader"/>
@@ -14642,7 +14682,7 @@
   <value tokenid="ooxml:Value_ST_PTabLeader_underscore">underscore</value>
   <value tokenid="ooxml:Value_ST_PTabLeader_middleDot">middleDot</value>
 </resource>
-<resource name="CT_Spacing" resource="PropertySetValue">
+<resource name="CT_Spacing" resource="Properties">
   <attribute name="before" tokenid="ooxml:CT_Spacing_before"/>
   <attribute name="beforeLines" tokenid="ooxml:CT_Spacing_beforeLines"/>
   <attribute name="beforeAutospacing" tokenid="ooxml:CT_Spacing_beforeAutospacing"/>
@@ -14652,7 +14692,7 @@
   <attribute name="line" tokenid="ooxml:CT_Spacing_line"/>
   <attribute name="lineRule" tokenid="ooxml:CT_Spacing_lineRule"/>
 </resource>
-<resource name="CT_Highlight" resource="PropertySetValue">
+<resource name="CT_Highlight" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_Highlight_val"/>
 </resource>
 <resource name="ST_HighlightColor" resource="List">
@@ -14714,11 +14754,11 @@
   <value tokenid="ooxml:Value_ST_Shd_pct90">pct90</value>
   <value tokenid="ooxml:Value_ST_Shd_pct95">pct95</value>
 </resource>
-<resource name="CT_TextScale" resource="PropertySetValue">
+<resource name="CT_TextScale" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_TextScale_val"/>
 </resource>
 <resource name="ST_TextScale" resource="Integer"/>
-<resource name="CT_TextEffect" resource="PropertySetValue">
+<resource name="CT_TextEffect" resource="Properties">
   <attribute name="val" tokenid="ooxml:CT_TextEffect_val"/>
 </resource>
 <resource name="ST_TextEffect" resource="List">
@@ -14732,7 +14772,7 @@
 </resource>
 <resource name="ST_PointMeasure" resource="Integer"/>
 <resource name="ST_EighthPointMeasure" resource="Integer"/>
-<resource name="CT_EastAsianLayout" resource="PropertySetValue">
+<resource name="CT_EastAsianLayout" resource="Properties">
   <attribute name="id" tokenid="ooxml:CT_EastAsianLayout_id"/>
   <attribute name="combine" tokenid="ooxml:CT_EastAsianLayout_combine"/>
   <attribute name="combineBrackets" tokenid="ooxml:CT_EastAsianLayout_combineBrackets"/>
