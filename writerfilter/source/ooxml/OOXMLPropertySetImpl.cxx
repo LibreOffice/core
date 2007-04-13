@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:40:22 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,11 +34,14 @@
  ************************************************************************/
 
 #include "OOXMLPropertySetImpl.hxx"
-#include <stdio.h>
+#include <iostream>
+#include <resourcemodel/QNameToString.hxx>
+
+#define DEBUG_RESOLVE
 
 namespace ooxml
 {
-
+using namespace ::std;
 using namespace doctok;
 
 OOXMLProperty::~OOXMLProperty()
@@ -117,7 +120,7 @@ doctok::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
 
 string OOXMLPropertyImpl::getName() const
 {
-    return "??";
+    return (*QNameToString::Instance())(mId);
 }
 
 string OOXMLPropertyImpl::toString() const
@@ -154,6 +157,10 @@ void OOXMLPropertyImpl::resolve(doctok::Properties & rProperties)
         rProperties.attribute(mId, *getValue());
         break;
     }
+
+#ifdef DEBUG_RESOLVE
+    clog << toString() << endl;
+#endif
 }
 
 /*
@@ -331,6 +338,9 @@ string OOXMLPropertySetImpl::getType() const
 
 void OOXMLPropertySetImpl::add(OOXMLProperty::Pointer_t pProperty)
 {
+    if (pProperty->getId() == 0x0)
+        clog << "zero property" << endl;
+
     mProperties.push_back(pProperty);
 }
 
@@ -478,19 +488,22 @@ void OOXMLTableImpl::resolve(Table & rTable)
     int nPos = 0;
 
     PropertySets_t::iterator it = mPropertySets.begin();
-    PropertySets_t::iterator itEnd = mPropertySets.begin();
+    PropertySets_t::iterator itEnd = mPropertySets.end();
 
     while (it != itEnd)
     {
         doctok::Reference<Properties>::Pointer_t pProperties
-            ((*it)->clone());
-        rTable.entry(nPos, pProperties);
+            ((*it)->getProperties());
+
+        if (pProperties.get() != NULL)
+            rTable.entry(nPos, pProperties);
+
         ++nPos;
         it++;
     }
 }
 
-void OOXMLTableImpl::add(OOXMLPropertySet::Pointer_t pPropertySet)
+void OOXMLTableImpl::add(ValuePointer_t pPropertySet)
 {
     mPropertySets.push_back(pPropertySet);
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:40:22 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:21:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -188,8 +188,10 @@ public:
 
 class OOXMLTableImpl : public OOXMLTable
 {
+public:
+    typedef boost::shared_ptr<OOXMLValue> ValuePointer_t;
 private:
-    typedef vector<OOXMLPropertySet::Pointer_t> PropertySets_t;
+    typedef vector<ValuePointer_t> PropertySets_t;
     PropertySets_t mPropertySets;
 
 public:
@@ -197,7 +199,7 @@ public:
     virtual ~OOXMLTableImpl();
 
     virtual void resolve(Table & rTable);
-    virtual void add(OOXMLPropertySet::Pointer_t pPropertySet);
+    virtual void add(ValuePointer_t pPropertySet);
     virtual string getType() const;
     virtual OOXMLTable * clone() const;
 };
