@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-11 10:48:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:24:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -649,9 +649,6 @@ void </xsl:text>
             pResult = OOXMLContext::Pointer_t
                (</xsl:text>
                <xsl:for-each select="./rng:ref">
-                 <xsl:text>/*</xsl:text>
-                 <xsl:value-of select="@name"/>
-                 <xsl:text>*/</xsl:text>
                  <xsl:call-template name="contextnew"/>
                </xsl:for-each>
            <xsl:text>);</xsl:text>
@@ -667,26 +664,13 @@ void </xsl:text>
 OOXMLContext::Pointer_t
 </xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:choose>
-      <xsl:when test="string-length($switchbody) > 0">
-        <xsl:text>::element(TokenEnum_t nToken)</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>::element(TokenEnum_t /*nToken*/)</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>
+    <xsl:text>::element(TokenEnum_t nToken)
 {
-#ifdef DEBUG_OOXML_ELEMENT
-    clog &lt;&lt; "-->" &lt;&lt; "</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text> "&lt;&lt; nToken &lt;&lt; endl;
-#endif
-
     OOXMLContext::Pointer_t pResult;
     </xsl:text>
-    <xsl:if test="string-length($switchbody) > 0">
-      <xsl:text>
+    <xsl:choose>
+      <xsl:when test="string-length($switchbody) > 0">
+        <xsl:text>
     switch (nToken)
     {</xsl:text>
     <xsl:value-of select="$switchbody"/>
@@ -697,17 +681,14 @@ OOXMLContext::Pointer_t
      default:
          pResult = elementFromRefs(nToken);
               break;
-     }
-       </xsl:text>
-    </xsl:if>
+     }</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>
+     pResult = elementFromRefs(nToken);</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
      <xsl:text>
-
-#ifdef DEBUG_OOXML_ELEMENT
-    clog &lt;&lt; "&lt;--" &lt;&lt; "</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text> " &lt;&lt; (pResult.get() != NULL) &lt;&lt; endl;
-#endif
-
     return pResult;
 }
      </xsl:text>
@@ -736,7 +717,7 @@ OOXMLContext::Pointer_t
     </xsl:variable>
     <xsl:variable name="mydefine" select="@name"/>
     <xsl:variable name="switchbody">
-    <xsl:if test="$resource = 'Property' or $resource = 'PropertySetValue' or $resource = 'SingleElement'">
+    <xsl:if test="$resource = 'Properties' or $resource = 'Property' or $resource = 'SingleElement'">
     <xsl:for-each select="//resource[@name=$mydefine]">
       <xsl:for-each select="attribute|sprm">
       <xsl:variable name="sprmname" select="@name"/>
@@ -748,17 +729,9 @@ OOXMLContext::Pointer_t
         <xsl:call-template name="caselabelattribute"/>
       </xsl:for-each>
       <xsl:text>
-        {
-            clog &lt;&lt; "</xsl:text>
-            <xsl:value-of select="$classname"/>
-            <xsl:text>: </xsl:text>
-            <xsl:value-of select="$sprmname"/>
-            <xsl:text>" &lt;&lt; endl;
-            
-            nResult = </xsl:text>
-            <xsl:call-template name="processtokenid"/>
+        nResult = </xsl:text>
+        <xsl:call-template name="processtokenid"/>
         <xsl:text>;
-        }
         break;</xsl:text>
     </xsl:for-each>
     </xsl:for-each>
@@ -768,27 +741,13 @@ OOXMLContext::Pointer_t
 doctok::Id
 </xsl:text>
     <xsl:value-of select="$classname"/>
-    <xsl:choose>
-      <xsl:when test="string-length($switchbody) > 0">
-        <xsl:text>::getId(TokenEnum_t nToken)</xsl:text>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:text>::getId(TokenEnum_t /*nToken*/)</xsl:text>
-      </xsl:otherwise>
-    </xsl:choose>
-    <xsl:text>
+    <xsl:text>::getId(TokenEnum_t nToken)
 {
     doctok::Id nResult = 0x0;
-
-#ifdef DEBUG_GETID
-    clog &lt;&lt; "-->getId::</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>" &lt;&lt; endl;
-#endif
-
     </xsl:text>
-    <xsl:if test="string-length($switchbody) > 0">
-    <xsl:text>
+    <xsl:choose>
+      <xsl:when test="string-length($switchbody) > 0">
+        <xsl:text>
     switch (nToken)
     {</xsl:text>
     <xsl:value-of select="$switchbody"/>
@@ -799,15 +758,13 @@ doctok::Id
         nResult = getIdFromRefs(nToken);
         break;
     }</xsl:text>
-    </xsl:if>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>
+    nResult = getIdFromRefs(nToken);</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:text>
-
-#ifdef DEBUG_GETID
-    clog &lt;&lt; "&gt;--getId::</xsl:text>
-    <xsl:value-of select="$classname"/>
-    <xsl:text>" &lt;&lt; endl;
-#endif
-
     return nResult;  
 }
     </xsl:text>
@@ -933,7 +890,7 @@ doctok::Id
           <xsl:when test="$resource = 'ListValue'">
             <xsl:call-template name="contextattributeimpllist"/>
           </xsl:when>
-          <xsl:when test="$resource = 'PropertySetValue'">
+          <xsl:when test="$resource = 'Properties'">
             <xsl:call-template name="contextattributeimplprops"/>
           </xsl:when>
           <xsl:when test="$resource = 'SingleElement'">
@@ -998,11 +955,6 @@ bool </xsl:text>
     <xsl:call-template name="contextparent"/>
     <xsl:text>(rContext)
 {
-#ifdef DEBUG_OOXML_MEMORY
-   clog &lt;&lt; "--></xsl:text>
-   <xsl:value-of select="$classname"/>
-   <xsl:text>" &lt;&lt; endl;
-#endif
 </xsl:text>
     <xsl:choose>
       <xsl:when test="$resource/action[@name='start' and @action='startParagraphGroup']">
@@ -1014,7 +966,7 @@ bool </xsl:text>
     mrStream.startCharacterGroup();</xsl:text>
       </xsl:when>
     </xsl:choose>
-    <xsl:if test="$resource/@resource='PropertySetValue'">
+    <xsl:if test="$resource/@resource='Properties'">
       <xsl:for-each select="$resource//attribute[@default]">
         /*<xsl:value-of select="@name"/>*/
         <xsl:variable name="attrname" select="@name"/>
@@ -1033,6 +985,14 @@ bool </xsl:text>
     </xsl:call-template>
     <xsl:text>);</xsl:text>
       </xsl:for-each>
+    </xsl:if>
+    <xsl:if test="$resource/@resource='Table'">
+      <xsl:text>
+    setId(</xsl:text>
+    <xsl:call-template name="idtoqname">
+      <xsl:with-param name="id" select="$resource/@tokenid"/>
+    </xsl:call-template>
+    <xsl:text>);</xsl:text>
     </xsl:if>
     <xsl:text>
 }&#xa;</xsl:text>
@@ -1062,11 +1022,6 @@ bool </xsl:text>
     mrStream.endCharacterGroup();</xsl:text>
     </xsl:if>
     <xsl:text>
-#ifdef DEBUG_OOXML_MEMORY
-   clog &lt;&lt; "&lt;--</xsl:text>
-   <xsl:value-of select="$classname"/>
-   <xsl:text>" &lt;&lt; endl;
-#endif
 }&#xa;</xsl:text>
   </xsl:template>
 
