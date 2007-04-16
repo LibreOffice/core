@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:53:32 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,8 +54,11 @@
 #define _SVSTDARR_STRINGSDTOR
 #include <svtools/svstdarr.hxx>
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
 #endif
 #ifndef _UNOTOOLS_INTLWRAPPER_HXX
 #include <unotools/intlwrapper.hxx>
@@ -71,6 +74,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 #include "sfxhelp.hxx"
@@ -103,7 +109,14 @@
 #include "appdata.hxx"
 #include "objshimp.hxx"
 #include "viewfrm.hxx"
+
+#include <comphelper/configurationhelper.hxx>
+
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::uno;
+
 //=========================================================================
 
 // Fenster wird ab jetzt dynamisch erstellt. Daher hier R"ander usw.
@@ -776,6 +789,8 @@ SfxCommonTemplateDialog_Impl::SfxCommonTemplateDialog_Impl( SfxBindings* pB, Sfx
     pStyleSheetPool         ( NULL ),
     pTreeBox                ( NULL ),
     pCurObjShell            ( NULL ),
+    xModuleManager          ( ::comphelper::getProcessServiceFactory()->createInstance(
+                                DEFINE_CONST_UNICODE("com.sun.star.frame.ModuleManager") ), UNO_QUERY ),
 
     aFmtLb                  ( this, WB_BORDER | WB_TABSTOP | WB_SORT ),
     aFilterLb               ( pW, WB_BORDER | WB_DROPDOWN | WB_TABSTOP ),
@@ -900,7 +915,9 @@ void SfxCommonTemplateDialog_Impl::ReadResource()
     else
         pStyleFamilies = new SfxStyleFamilies( aFamId );
 
-    nActFilter = pCurObjShell ? pCurObjShell->Get_Impl()->nStyleFilter : 0xFFFF;
+    nActFilter = pCurObjShell ? static_cast< USHORT >( LoadFactoryStyleFilter( pCurObjShell ) ) : 0xFFFF;
+    if ( pCurObjShell && 0xFFFF == nActFilter )
+        nActFilter = pCurObjShell->pImp->nStyleFilter;
 
         // Einfuegen in die Toolbox
         // umgekehrte Reihenfolge, da immer vorne eingefuegt wird.
@@ -1450,9 +1467,9 @@ void SfxCommonTemplateDialog_Impl::SetFamilyState( USHORT nSlotId, const SfxTemp
 void SfxCommonTemplateDialog_Impl::Update_Impl()
 {
     BOOL bDocChanged=FALSE;
-    SfxStyleSheetBasePool *pNewPool = 0;
-    SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
-    SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
+    SfxStyleSheetBasePool* pNewPool = NULL;
+    SfxViewFrame* pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
+    SfxObjectShell* pDocShell = pViewFrame->GetObjectShell();
     if( pDocShell )
         pNewPool = pDocShell->GetStyleSheetPool();
 
@@ -1512,7 +1529,10 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      {
          // andere DocShell -> alles neu
          CheckItem( nActFamily, TRUE );
-         nActFilter = pDocShell->Get_Impl()->nStyleFilter;
+         nActFilter = static_cast< USHORT >( LoadFactoryStyleFilter( pDocShell ) );
+         if ( 0xFFFF == nActFilter )
+            nActFilter = pDocShell->pImp->nStyleFilter;
+
          nAppFilter = pItem->GetValue();
          if(!pTreeBox)
          {
@@ -1677,7 +1697,10 @@ void SfxCommonTemplateDialog_Impl::FilterSelect(
         SfxViewFrame *pViewFrame = pBindings->GetDispatcher_Impl()->GetFrame();
         SfxObjectShell *pDocShell = pViewFrame->GetObjectShell();
         if (pDocShell)
+        {
             pDocShell->Get_Impl()->nStyleFilter = nActFilter;
+            SaveFactoryStyleFilter( pDocShell, nActFilter );
+        }
 
         SfxStyleSheetBasePool *pOldStyleSheetPool = pStyleSheetPool;
         pStyleSheetPool = pDocShell? pDocShell->GetStyleSheetPool(): 0;
@@ -1909,6 +1932,65 @@ void SfxCommonTemplateDialog_Impl::ActionSelect(USHORT nEntry)
     }
 }
 
+//-------------------------------------------------------------------------
+
+static rtl::OUString getModuleIdentifier( const Reference< XModuleManager >& i_xModMgr, SfxObjectShell* i_pObjSh )
+{
+    DBG_ASSERT( i_xModMgr.is(), "getModuleIdentifier(): no XModuleManager" );
+    DBG_ASSERT( i_pObjSh, "getModuleIdentifier(): no ObjectShell" );
+
+    ::rtl::OUString sIdentifier;
+
+    try
+    {
+        sIdentifier = i_xModMgr->identify( i_pObjSh->GetModel() );
+    }
+    catch ( ::com::sun::star::frame::UnknownModuleException& )
+    {
+        DBG_WARNING( "getModuleIdentifier(): unknown module" );
+    }
+    catch ( Exception& )
+    {
+        DBG_ERRORFILE( "getModuleIdentifier(): exception of XModuleManager::identify()" );
+    }
+
+    return sIdentifier;
+}
+
+//-------------------------------------------------------------------------
+
+sal_Int32 SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh )
+{
+    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
+    sal_Int32 nFilter = -1;
+
+    Sequence< PropertyValue > lProps;
+    Reference< ::com::sun::star::container::XNameAccess > xContainer( xModuleManager, UNO_QUERY );
+    if ( xContainer.is() )
+    {
+        ::comphelper::SequenceAsHashMap aFactoryProps(
+            xContainer->getByName( getModuleIdentifier( xModuleManager, i_pObjSh ) ) );
+        sal_Int32 nDefault = -1;
+        nFilter = aFactoryProps.getUnpackedValueOrDefault( DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter"), nDefault );
+    }
+
+    return nFilter;
+}
+
+//-------------------------------------------------------------------------
+
+void SfxCommonTemplateDialog_Impl::SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter )
+{
+    DBG_ASSERT( i_pObjSh, "SfxCommonTemplateDialog_Impl::LoadFactoryStyleFilter(): no ObjectShell" );
+    Reference< ::com::sun::star::container::XNameReplace > xContainer( xModuleManager, UNO_QUERY );
+    if ( xContainer.is() )
+    {
+        Sequence< PropertyValue > lProps(1);
+        lProps[0].Name = DEFINE_CONST_UNICODE("ooSetupFactoryStyleFilter");
+        lProps[0].Value = makeAny( i_nFilter );;
+        xContainer->replaceByName( getModuleIdentifier( xModuleManager, i_pObjSh ), makeAny( lProps ) );
+    }
+}
 
 //-------------------------------------------------------------------------
 
