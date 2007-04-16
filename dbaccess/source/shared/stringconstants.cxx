@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stringconstants.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:32:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:26:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,6 +241,7 @@ IMPLEMENT_CONSTASCII_USTRING(SERVICE_NAME_REPORT_COLLECTION,    "com.sun.star.sd
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_NAME_QUERY_COLLECTION,     "com.sun.star.sdb.Queries");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_NAME_TABLE_COLLECTION,     "com.sun.star.sdb.Tables");
 IMPLEMENT_CONSTASCII_USTRING(SERVICE_NAME_SINGLESELECTQUERYCOMPOSER, "com.sun.star.sdb.SingleSelectQueryComposer");
+IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_APPLICATIONCONTROLLER, "org.openoffice.comp.dbu.OApplicationController");
 
 // info properties
 IMPLEMENT_CONSTASCII_USTRING(INFO_JDBCDRIVERCLASS,"JavaDriverClass");
