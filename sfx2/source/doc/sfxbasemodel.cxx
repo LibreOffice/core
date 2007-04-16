@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.120 $
+ *  $Revision: 1.121 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:50:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,10 @@
 #include <com/sun/star/embed/Aspects.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
+#endif
+
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
 #endif
@@ -213,6 +217,7 @@
 #include <svtools/transfer.hxx>
 #include <rtl/logfile.hxx>
 #include <framework/configimporter.hxx>
+#include <comphelper/enumhelper.hxx>
 
 //________________________________________________________________________________________________________
 //  includes of my own project
@@ -289,6 +294,7 @@
 #include "msgpool.hxx"
 
 using namespace com::sun::star;
+namespace css = ::com::sun::star;
 
 //________________________________________________________________________________________________________
 //  defines
@@ -371,6 +377,8 @@ struct IMPL_SfxBaseModel_DataContainer
     REFERENCE< XUICONFIGURATIONMANAGER >                m_xUIConfigurationManager;
     OStorageModifyListen_Impl*                          m_pStorageModifyListen;
     ::rtl::OUString                                 m_aPreusedFilterName;
+    ::rtl::OUString                                 m_sModuleIdentifier;
+    ::rtl::OUString                                 m_sExternalTitle;
 
     IMPL_SfxBaseModel_DataContainer(    MUTEX&          aMutex          ,
                                                                         SfxObjectShell* pObjectShell    )
@@ -706,6 +714,8 @@ ANY SAL_CALL SfxBaseModel::queryInterface( const UNOTYPE& rType ) throw( RUNTIME
     {
         aReturn = ::cppu::queryInterface(   rType                                           ,
                                             static_cast< XSTORABLE2*            > ( this )  ,
+                                            static_cast< XMODULE*               > ( this )  ,
+                                            static_cast< XMODEL2*               > ( this )  ,
                                                static_cast< XSTORAGEBASEDDOCUMENT* > ( this )   );
     }
 
@@ -781,7 +791,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XSTARBASICACCESS       >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XEVENTBROADCASTER      >*)NULL ) );
 
-            static OTYPECOLLECTION aTypeCollection     ( ::getCppuType(( const REFERENCE< XVIEWDATASUPPLIER      >*)NULL ) ,
+            static OTYPECOLLECTION aTypeCollection1     ( ::getCppuType(( const REFERENCE< XVIEWDATASUPPLIER      >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XTRANSFERABLE          >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XPRINTJOBBROADCASTER   >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
@@ -795,8 +805,13 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XUICONFIGURATIONMANAGERSUPPLIER >*)NULL ) ,
                                                          aTypeCollectionFirst.getTypes()                                   );
 
+            static OTYPECOLLECTION aTypeCollection2     ( ::getCppuType(( const REFERENCE< XMODULE      >*)NULL ) ,
+                                                          ::getCppuType(( const REFERENCE< XMODEL2      >*)NULL ) ,
+                                                         aTypeCollection1.getTypes()                                   );
+
             // ... and set his address to static pointer!
-            pTypeCollection = &aTypeCollection ;
+            // ... and set his address to static pointer!
+            pTypeCollection = &aTypeCollection2 ;
         }
     }
 
@@ -4262,3 +4277,80 @@ void SAL_CALL SfxBaseModel::removeStorageChangeListener(
 }
 
 
+// css.frame.XModule
+ void SAL_CALL SfxBaseModel::setIdentifier(const ::rtl::OUString& Identifier)
+    throw (css::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return;
+    m_pData->m_sModuleIdentifier = Identifier;
+}
+
+//=============================================================================
+// css.frame.XModule
+ ::rtl::OUString SAL_CALL SfxBaseModel::getIdentifier()
+    throw (css::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return ::rtl::OUString();
+    if (m_pData->m_sModuleIdentifier.getLength() > 0)
+        return m_pData->m_sModuleIdentifier;
+    if (m_pData->m_pObjectShell)
+        return m_pData->m_pObjectShell->GetFactory().GetDocumentServiceName();
+    return ::rtl::OUString();
+}
+
+//=============================================================================
+// css::frame::XModel2
+css::uno::Reference< css::container::XEnumeration > SAL_CALL SfxBaseModel::getControllers()
+    throw (css::uno::RuntimeException)
+{
+    // object already disposed?
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    if ( impl_isDisposed() )
+        return css::uno::Reference< css::container::XEnumeration >();
+
+    sal_Int32 c = m_pData->m_seqControllers.getLength();
+    sal_Int32 i = 0;
+    css::uno::Sequence< css::uno::Any > lEnum(c);
+    for (i=0; i<c; ++i)
+        lEnum[i] <<= m_pData->m_seqControllers[i];
+
+    ::comphelper::OAnyEnumeration*                      pEnum = new ::comphelper::OAnyEnumeration(lEnum);
+    css::uno::Reference< css::container::XEnumeration > xEnum(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY_THROW);
+    return xEnum;
+}
+
+//=============================================================================
+// css::frame::XModel2
+css::uno::Sequence< ::rtl::OUString > SAL_CALL SfxBaseModel::getAvailableViewControllerNames()
+    throw (css::uno::RuntimeException)
+{
+    return css::uno::Sequence< ::rtl::OUString >();
+}
+
+//=============================================================================
+// css::frame::XModel2
+css::uno::Reference< css::frame::XController > SAL_CALL SfxBaseModel::createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& /*Frame          */,
+                                                                                                        css::uno::Reference< css::awt::XWindow >&  /*ComponentWindow*/)
+    throw (css::uno::RuntimeException         ,
+           css::lang::IllegalArgumentException,
+           css::uno::Exception                )
+{
+    return css::uno::Reference< css::frame::XController >();
+}
+
+//=============================================================================
+// css::frame::XModel2
+css::uno::Reference< css::frame::XController > SAL_CALL SfxBaseModel::createViewController(const ::rtl::OUString&                                 /*ViewName       */,
+                                                                                           const css::uno::Sequence< css::beans::PropertyValue >& /*Arguments      */,
+                                                                                           const css::uno::Reference< css::frame::XFrame >&       /*Frame          */,
+                                                                                                 css::uno::Reference< css::awt::XWindow >&        /*ComponentWindow*/)
+    throw (css::uno::RuntimeException         ,
+           css::lang::IllegalArgumentException,
+           css::uno::Exception                )
+{
+    return css::uno::Reference< css::frame::XController >();
+}
