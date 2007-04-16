@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdocumentclassification.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:15:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@ namespace svxform
         ePresentationDocument,
         eEnhancedForm,
         eDatabaseForm,
+        eDatabaseReport,
 
         eUnknownDocumentType
     };
@@ -71,10 +72,6 @@ namespace svxform
     public:
         /** classifies a document model
         */
-        static bool isEnhancedForm(
-                                const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocumentModel
-                            ) SAL_THROW(());
-
         static DocumentType classifyDocument(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& _rxDocumentModel
                             ) SAL_THROW(());
@@ -82,6 +79,14 @@ namespace svxform
         static DocumentType classifyHostDocument(
                                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxFormComponent
                             ) SAL_THROW(());
+
+        static  DocumentType getDocumentTypeForModuleIdentifier(
+                                const ::rtl::OUString& _rModuleIdentifier
+                            );
+
+        static  ::rtl::OUString getModuleIdentifierForDocumentType(
+                                DocumentType _eType
+                            );
     };
 
 //........................................................................
