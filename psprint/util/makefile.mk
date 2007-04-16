@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:03:01 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 14:17:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -102,6 +102,10 @@ SHL1STDLIBS=$(UNOTOOLSLIB)		\
             -lX11
 .IF "$(SOLAR_JAVA)"!=""
 SHL1STDLIBS+=$(JVMFWKLIB)
+.ENDIF
+
+.IF "$(LIBPAPER_LINK)" == "YES"
+SHL1STDLIBS += -lpaper
 .ENDIF
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
