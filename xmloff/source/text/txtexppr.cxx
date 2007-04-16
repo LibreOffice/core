@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:38:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:13:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,6 +588,14 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_UNDERLINE_COLOR:       pUnderlineColorState = propertie; break;
         case CTF_UNDERLINE_HASCOLOR:    pUnderlineHasColorState = propertie; break;
         case CTF_NUMBERINGSTYLENAME:    pListStyleName = propertie; break;
+        case CTF_ISNUMBERING:
+            {
+                if( GetExport().isExperimentalOdfExportEnabled() )
+                {
+                    propertie->mnIndex = -1;
+                }
+                break;
+            }
         }
     }
 
