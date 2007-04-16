@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-13 13:36:58 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:08:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
