@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-05 13:51:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:16:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,6 +112,7 @@
 #include <sal/alloca.h>
 
 #include <set>
+#include <hash_set>
 
 #include <adobeenc.tab> // get encoding table for AFM metrics
 
@@ -740,6 +741,35 @@ bool PrintFontManager::TrueTypeFontFile::queryMetricPage( int nPage, MultiAtomPr
 
 // -------------------------------------------------------------------------
 
+/* #i73387# There seem to be fonts with a rather unwell chosen family name
+*  consider e.g. "Helvetica Narrow" which defines its family as "Helvetica"
+*  It can really only be distinguished by its PSName and FullName. Both of
+*  which are not user presentable in OOo. So replace it by something sensible.
+*
+*  If other fonts feature this behaviour, insert them to the map.
+*/
+static bool familyNameOverride( const OUString& i_rPSname, OUString& o_rFamilyName )
+{
+    static std::hash_map< OUString, OUString, OUStringHash > aPSNameToFamily( 16 );
+    if( aPSNameToFamily.empty() ) // initialization
+    {
+        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow" ) ) ] =
+                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
+        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow-Bold" ) ) ] =
+                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
+        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow-BoldOblique" ) ) ] =
+                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
+        aPSNameToFamily[ OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica-Narrow-Oblique" ) ) ] =
+                         OUString( RTL_CONSTASCII_USTRINGPARAM( "Helvetica Narrow" ) );
+    }
+    std::hash_map<OUString,OUString,OUStringHash>::const_iterator it =
+       aPSNameToFamily.find( i_rPSname );
+    bool bReplaced = (it != aPSNameToFamily.end() );
+    if( bReplaced )
+        o_rFamilyName = it->second;
+    return bReplaced;
+};
+
 bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, MultiAtomProvider* pProvider, bool bFillEncodingvector, bool bOnlyGlobalAttributes )
 {
     PrintFontManager& rManager( PrintFontManager::get() );
@@ -757,25 +787,35 @@ bool PrintFontManager::PrintFont::readAfmMetrics( const OString& rFileName, Mult
     m_aEncodingVector.clear();
     // fill in global info
 
+    // PSName
+    OUString aPSName( OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 ) );
+    m_nPSName = pProvider->getAtom( ATOM_PSNAME, aPSName, sal_True );
+
     // family name (if not already set)
     OUString aFamily;
     if( ! m_nFamilyName )
     {
-        aFamily = OUString( OStringToOUString( pInfo->gfi->familyName, RTL_TEXTENCODING_ISO_8859_1 ) );
+        aFamily = OStringToOUString( pInfo->gfi->familyName, RTL_TEXTENCODING_ISO_8859_1 );
         if( ! aFamily.getLength() )
         {
             aFamily = OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 );
             sal_Int32 nIndex  = 0;
             aFamily = aFamily.getToken( 0, '-', nIndex );
         }
+        familyNameOverride( aPSName, aFamily );
         m_nFamilyName = pProvider->getAtom( ATOM_FAMILYNAME, aFamily, sal_True );
     }
     else
         aFamily = pProvider->getString( ATOM_FAMILYNAME, m_nFamilyName );
 
-    // PSName
-    OUString aPSName( OStringToOUString( pInfo->gfi->fontName, RTL_TEXTENCODING_ISO_8859_1 ) );
-    m_nPSName = pProvider->getAtom( ATOM_PSNAME, aPSName, sal_True );
+    // style name: if fullname begins with family name
+    // interpret the rest of fullname as style
+    if( ! m_aStyleName.getLength() && pInfo->gfi->fullName && *pInfo->gfi->fullName )
+    {
+        OUString aFullName( OStringToOUString( pInfo->gfi->fullName, RTL_TEXTENCODING_ISO_8859_1 ) );
+        if( aFullName.indexOf( aFamily ) == 0 )
+            m_aStyleName = WhitespaceToSpace( aFullName.copy( aFamily.getLength() ) );
+    }
 
     // italic
     if( pInfo->gfi->italicAngle > 0 )
@@ -2534,69 +2574,117 @@ equalEncoding (rtl_TextEncoding from, rtl_TextEncoding to)
     return from == to;
 }
 
+namespace {
+    struct BuiltinFontIdentifier
+    {
+        OUString            aFamily;
+        italic::type        eItalic;
+        weight::type        eWeight;
+        pitch::type         ePitch;
+        rtl_TextEncoding    aEncoding;
+
+        BuiltinFontIdentifier( const OUString& rFam,
+                               italic::type eIt,
+                               weight::type eWg,
+                               pitch::type ePt,
+                               rtl_TextEncoding enc ) :
+            aFamily( rFam ),
+            eItalic( eIt ),
+            eWeight( eWg ),
+            ePitch( ePt ),
+            aEncoding( enc )
+        {}
+
+        bool operator==( const BuiltinFontIdentifier& rRight ) const
+        {
+            return equalItalic( eItalic, rRight.eItalic ) &&
+                   equalWeight( eWeight, rRight.eWeight ) &&
+                   equalPitch( ePitch, rRight.ePitch ) &&
+                   equalEncoding( aEncoding, rRight.aEncoding ) &&
+                   aFamily.equalsIgnoreAsciiCase( rRight.aFamily );
+        }
+    };
+
+    struct BuiltinFontIdentifierHash
+    {
+        size_t operator()( const BuiltinFontIdentifier& rFont ) const
+        {
+            return rFont.aFamily.hashCode() ^ rFont.eItalic ^ rFont.eWeight ^ rFont.ePitch ^ rFont.aEncoding;
+        }
+    };
+}
+
 void PrintFontManager::getFontList( ::std::list< fontID >& rFontIDs, const PPDParser* pParser ) const
 {
     rFontIDs.clear();
-    ::std::hash_map< fontID, PrintFont* >::const_iterator it;
-    ::std::list< PrintFont* > aBuiltinFonts;
+    std::hash_map< fontID, PrintFont* >::const_iterator it;
+    std::set<int> aBuiltinPSNames;
+    std::hash_set< BuiltinFontIdentifier,
+                   BuiltinFontIdentifierHash
+                   > aBuiltinFonts;
+
+    /*
+    * Note: there are two easy steps making this faster:
+    * first: insert the printer builtins first, then the not builtins,
+    * if they do not match.
+    * drawback: this would change the sequence of fonts; this could have
+    * subtle, unknown consequences in vcl font matching
+    * second: instead of comparing attributes to see whether a softfont
+    * is duplicate to a builtin one could simply compare the PSName (which is
+    * supposed to be unique), which at this point is just an int.
+    * drawback: this could change which fonts are listed; especially TrueType
+    * fonts often have a rather dubious PSName, so this could change the
+    * font list not so subtle.
+    * Until getFontList for a printer becomes a performance issue (which is
+    * currently not the case), best stay with the current algorithm.
+    */
+
+    // fill sets of printer supported fonts
+    if( pParser )
+    {
+        int nFonts = pParser->getFonts();
+        for( int i = 0; i < nFonts; i++ )
+            aBuiltinPSNames.insert( m_pAtoms->getAtom( ATOM_PSNAME, pParser->getFont( i ) ) );
+        for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
+        {
+            if( it->second->m_eType == fonttype::Builtin &&
+                aBuiltinPSNames.find( it->second->m_nPSName ) != aBuiltinPSNames.end() )
+            {
+                PrintFont* pFont = it->second;
+                aBuiltinFonts.insert( BuiltinFontIdentifier(
+                    m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ),
+                    pFont->m_eItalic,
+                    pFont->m_eWeight,
+                    pFont->m_ePitch,
+                    pFont->m_aEncoding
+                    ) );
+            }
+        }
+    }
 
     for( it = m_aFonts.begin(); it != m_aFonts.end(); ++it )
     {
-        if( pParser && it->second->m_eType == fonttype::Builtin )
+        if( pParser )
         {
-            int nFonts = pParser->getFonts();
-            String aPSName = m_pAtoms->getString( ATOM_PSNAME, it->second->m_nPSName );
-            for( int j = 0; j < nFonts; j++ )
+            PrintFont* pFont = it->second;
+            if( it->second->m_eType == fonttype::Builtin &&
+                aBuiltinPSNames.find( it->second->m_nPSName ) != aBuiltinPSNames.end() )
             {
-                if( aPSName.Equals( pParser->getFont( j ) ) )
-                {
-                    rFontIDs.push_back( it->first );
-                    aBuiltinFonts.push_back( it->second );
-                    break;
-                }
+                rFontIDs.push_back( it->first );
+            }
+            else if( aBuiltinFonts.find( BuiltinFontIdentifier(
+                m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ),
+                pFont->m_eItalic,
+                pFont->m_eWeight,
+                pFont->m_ePitch,
+                pFont->m_aEncoding
+                ) ) == aBuiltinFonts.end() )
+            {
+                rFontIDs.push_back( it->first );
             }
         }
         else
             rFontIDs.push_back( it->first );
-    }
-
-    if( pParser )
-    {
-        // remove doubles for builtins
-        ::std::list< fontID >::iterator font_it;
-        ::std::list< fontID >::iterator temp_it;
-        font_it = rFontIDs.begin();
-        while( font_it != rFontIDs.end() )
-        {
-            temp_it = font_it;
-            ++temp_it;
-            PrintFont* pFont = getFont( *font_it );
-            if( pFont->m_eType != fonttype::Builtin )
-            {
-                const OUString& rFontFamily( m_pAtoms->getString( ATOM_FAMILYNAME, pFont->m_nFamilyName ) );
-
-                for( ::std::list< PrintFont* >::const_iterator bit = aBuiltinFonts.begin();
-                     bit != aBuiltinFonts.end(); ++bit )
-                {
-                    if( ! equalItalic  (pFont->m_eItalic, (*bit)->m_eItalic) )
-                        continue;
-                    if( ! equalWeight  (pFont->m_eWeight, (*bit)->m_eWeight) )
-                        continue;
-                    if( ! equalPitch   (pFont->m_ePitch,  (*bit)->m_ePitch) )
-                        continue;
-                    if( ! equalEncoding(pFont->m_aEncoding, (*bit)->m_aEncoding) )
-                        continue;
-                    const OUString& rBuiltinFamily( m_pAtoms->getString( ATOM_FAMILYNAME, (*bit)->m_nFamilyName ) );
-                    if( rFontFamily.equalsIgnoreAsciiCase( rBuiltinFamily ) )
-                    {
-                        // remove double
-                        rFontIDs.erase( font_it );
-                        break;
-                    }
-                }
-            }
-            font_it = temp_it;
-        }
     }
 }
 
