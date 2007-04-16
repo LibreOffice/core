@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:49:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -285,7 +285,7 @@ public:
     ~XMLShapePropertySetMapper();
 };
 
-class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper
+class XMLShapeExportPropertyMapper : public SvXMLExportPropertyMapper2
 {
 private:
     XMLTextListAutoStylePool *mpListAutoPool;
