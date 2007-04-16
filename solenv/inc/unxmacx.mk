@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxmacx.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:11:11 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 11:12:53 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -151,7 +151,6 @@ MODULES_WITH_WARNINGS := \
     r_tools \
     starmath \
     sw \
-    vcl \
     xmlsecurity
 
 # Currently, there is no nas support for OS X...
@@ -162,8 +161,13 @@ STDLIBCPP=-lstdc++
 # ---------------------------------
 #  STLport library names
 # ---------------------------------
+.IF "$(USE_STLP_DEBUG)" != ""
+LIBSTLPORT=-lstlport_gcc_stldebug
+LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc_stldebug.a
+.ELSE # "$(USE_STLP_DEBUG" != ""
 LIBSTLPORT=-lstlport_gcc
-LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib/libstlport_gcc.a
+LIBSTLPORTST=$(SOLARVERSION)$/$(INPATH)$/lib$/libstlport_gcc.a
+.ENDIF # "$(USE_STLP_DEBUG" != ""
 
 # ---------------------------------
 #  Link stage flags
