@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-20 02:44:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:24:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,8 +41,8 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XDOCUMENTSUBSTORAGESUPPLIER_HPP_
 #include <com/sun/star/document/XDocumentSubStorageSupplier.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODEL2_HPP_
+#include <com/sun/star/frame/XModel2.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XMODIFIABLE_HPP_
 #include <com/sun/star/util/XModifiable.hpp>
@@ -98,7 +98,7 @@ class ODatabaseContext;
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >
     ODatabaseDocument_CreateInstance(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&);
 
-typedef ::cppu::WeakComponentImplHelper10<  ::com::sun::star::frame::XModel
+typedef ::cppu::WeakComponentImplHelper10<  ::com::sun::star::frame::XModel2
                             ,   ::com::sun::star::util::XModifiable
                             ,   ::com::sun::star::frame::XStorable
                             ,   ::com::sun::star::document::XEventBroadcaster
@@ -253,6 +253,12 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL getCurrentController(  ) throw (::com::sun::star::uno::RuntimeException) ;
     virtual void SAL_CALL setCurrentController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController >& Controller ) throw (::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException) ;
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL getCurrentSelection(  ) throw (::com::sun::star::uno::RuntimeException) ;
+
+// ::com::sun::star::frame::XModel2
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration > SAL_CALL getControllers(  ) throw (::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableViewControllerNames(  ) throw (::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL createDefaultViewController( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& ComponentWindow ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XController > SAL_CALL createViewController( const ::rtl::OUString& ViewName, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& Arguments, const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& Frame, ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow >& ComponentWindow ) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException) ;
 
 // ::com::sun::star::frame::XStorable
     virtual sal_Bool SAL_CALL hasLocation(  ) throw (::com::sun::star::uno::RuntimeException) ;
