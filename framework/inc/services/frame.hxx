@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:31:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:32:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -472,6 +472,7 @@ class Frame :   // interfaces
         void                                                    implts_stopWindowListening      (                                                                        );
         void                                                    implts_saveWindowAttributes     (                                                                        );
         void                                                    implts_checkSuicide             (                                                                        );
+        void                                                    implts_forgetSubFrames          (                                                                        );
         DECL_LINK( implts_windowClosing, void* );
         css::uno::Reference< css::awt::XTopWindow >             impl_searchTopWindow            ( const css::uno::Reference< css::awt::XWindow >&       xWindow          );
 
