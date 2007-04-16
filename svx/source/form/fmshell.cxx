@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:25:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -866,7 +866,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_MORE_CONTROLS:
         case SID_FM_FORM_DESIGN_TOOLS:
         {
-            FormToolboxes aToolboxAccess( GetImpl()->getHostFrame(), GetImpl()->getDocumentType() );
+            FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
             aToolboxAccess.toggleToolbox( nSlot );
             rReq.Done();
         }
@@ -1162,7 +1162,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_MORE_CONTROLS:
             case SID_FM_FORM_DESIGN_TOOLS:
             {
-                FormToolboxes aToolboxAccess( GetImpl()->getHostFrame(), GetImpl()->getDocumentType() );
+                FormToolboxes aToolboxAccess( GetImpl()->getHostFrame() );
                 rSet.Put( SfxBoolItem( nWhich, aToolboxAccess.isToolboxVisible( nWhich ) ) );
             }
             break;
@@ -1174,9 +1174,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 break;
 
             case SID_FM_USE_WIZARDS:
-                if  ( GetImpl()->isEnhancedForm()
-                    ||  !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE )
-                    )
+                if  ( !SvtModuleOptions().IsModuleInstalled( SvtModuleOptions::E_SDATABASE ) )
                     rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
                 else if (!m_bDesignMode || !GetFormModel())
                     rSet.DisableItem( nWhich );
@@ -1210,13 +1208,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_FILECONTROL:
             case SID_FM_CURRENCYFIELD:
             case SID_FM_PATTERNFIELD:
-                if ( GetImpl()->isEnhancedForm() )
-                {
-                    // in XForms mode, several controls are disabled:
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
-                    break;
-                }
-                // NO break here!
             case SID_FM_IMAGEBUTTON:
             case SID_FM_RADIOBUTTON:
             case SID_FM_COMBOBOX:
@@ -1284,10 +1275,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.Put( SfxBoolItem( nWhich, GetViewShell()->GetViewFrame()->HasChildWindow(nWhich)) );
                 else
                     rSet.DisableItem(nWhich);
-
-                // special case for data navigator: hide if not in XML form document
-                if ( nWhich == SID_FM_SHOW_DATANAVIGATOR && !GetImpl()->isEnhancedForm() )
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
             }   break;
 
             case SID_FM_SHOW_PROPERTY_BROWSER:
@@ -1322,12 +1309,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 if (GetImpl()->IsSelectionUpdatePending())
                     GetImpl()->ForceUpdateSelection(sal_False);
 
-                if ( GetImpl()->isEnhancedForm() )
-                {
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
-                    break;
-                }
-
                 if ( !m_pFormView || !m_bDesignMode || !GetImpl()->getCurrentForm().is() )
                     rSet.DisableItem( nWhich );
                 else
@@ -1349,9 +1330,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 rSet.Put(SfxUInt16Item(nWhich, m_nLastSlot));
                 break;
             case SID_FM_DESIGN_MODE:
-                if ( GetImpl()->isEnhancedForm() )
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
-                else if (!m_pFormView || GetImpl()->IsReadonlyDoc() )
+                if (!m_pFormView || GetImpl()->IsReadonlyDoc() )
                     rSet.DisableItem( nWhich );
                 else
                     rSet.Put( SfxBoolItem(nWhich, m_bDesignMode) );
@@ -1397,13 +1376,6 @@ void FmFormShell::GetState(SfxItemSet &rSet)
             case SID_FM_CONVERTTO_IMAGECONTROL  :
             case SID_FM_CONVERTTO_SCROLLBAR     :
             case SID_FM_CONVERTTO_NAVIGATIONBAR :
-                if ( GetImpl()->isEnhancedForm() )
-                {
-                    rSet.Put( SfxVisibilityItem( nWhich, sal_False ) );
-                    break;
-                }
-                // NO break here!
-
             case SID_FM_CONVERTTO_IMAGEBUTTON   :
             case SID_FM_CONVERTTO_EDIT          :
             case SID_FM_CONVERTTO_BUTTON        :
