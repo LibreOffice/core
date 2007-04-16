@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:27:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2607,7 +2607,6 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
     const char* pService = "com.sun.star.drawing.OLE2Shape";
 
     sal_Bool bIsPresShape = maPresentationClass.getLength() && GetImport().GetShapeImport()->IsPresentationShapesSupported();
-;
 
     if( bIsPresShape )
     {
@@ -3361,6 +3360,61 @@ void SdXMLFrameShapeContext::StartElement(const uno::Reference< xml::sax::XAttri
 
 void SdXMLFrameShapeContext::EndElement()
 {
+    if( !mxImplContext.Is() )
+    {
+        // now check if this is an empty presentation object
+        sal_Int16 nAttrCount = mxAttrList.is() ? mxAttrList->getLength() : 0;
+        for(sal_Int16 a(0); a < nAttrCount; a++)
+        {
+            OUString aLocalName;
+            sal_uInt16 nPrefix = GetImport().GetNamespaceMap().GetKeyByAttrName(mxAttrList->getNameByIndex(a), &aLocalName);
+
+            if( nPrefix == XML_NAMESPACE_PRESENTATION )
+            {
+                if( IsXMLToken( aLocalName, XML_PLACEHOLDER ) )
+                {
+                    mbIsPlaceholder = IsXMLToken( mxAttrList->getValueByIndex(a), XML_TRUE );
+                }
+                else if( IsXMLToken( aLocalName, XML_CLASS ) )
+                {
+                    maPresentationClass = mxAttrList->getValueByIndex(a);
+                }
+            }
+        }
+
+        if( (maPresentationClass.getLength() != 0) && mbIsPlaceholder )
+        {
+            uno::Reference< xml::sax::XAttributeList> xEmpty;
+
+            enum XMLTokenEnum eToken = XML_TEXT_BOX;
+
+            if( IsXMLToken( maPresentationClass, XML_GRAPHIC ) )
+            {
+                eToken = XML_IMAGE;
+
+            }
+            else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_PAGE ) )
+            {
+                eToken = XML_PAGE_THUMBNAIL;
+            }
+            else if( IsXMLToken( maPresentationClass, XML_PRESENTATION_CHART ) ||
+                     IsXMLToken( maPresentationClass, XML_PRESENTATION_TABLE ) ||
+                     IsXMLToken( maPresentationClass, XML_PRESENTATION_OBJECT ) )
+            {
+                eToken = XML_OBJECT;
+            }
+
+            mxImplContext = GetImport().GetShapeImport()->CreateFrameChildContext(
+                    GetImport(), XML_NAMESPACE_DRAW, GetXMLToken( eToken ), mxAttrList, mxShapes, xEmpty );
+
+            if( mxImplContext.Is() )
+            {
+                mxImplContext->StartElement( mxAttrList );
+                mxImplContext->EndElement();
+            }
+        }
+    }
+
     mxImplContext = 0;
     SdXMLShapeContext::EndElement();
 }
