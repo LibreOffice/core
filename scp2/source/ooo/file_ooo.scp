@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_ooo.scp,v $
  *
- *  $Revision: 1.185 $
+ *  $Revision: 1.186 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:59:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 11:18:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -662,7 +662,7 @@ File gid_File_Html_Thirdpartylicensereadme
 #ifndef MACOSX
     Dir = PREDEFINED_PROGDIR;
 #else
-    Dir = gid_Dir_Bundle_Contents_Macos;
+    Dir = gid_Dir_License;
 #endif
     Styles = (WORKSTATION);
     TXT_FILE_BODY;
