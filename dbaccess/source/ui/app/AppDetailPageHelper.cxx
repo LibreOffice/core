@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppDetailPageHelper.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 12:00:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:26:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1118,7 +1118,7 @@ void OAppDetailPageHelper::showPreview( const ::rtl::OUString& _sDataSourceName,
 
         Reference< XDatabaseDocumentUI > xApplication( getBorderWin().getView()->getController(), UNO_QUERY );
         ::std::auto_ptr< DatabaseObjectView > pDispatcher( new ResultSetBrowser(
-            getBorderWin().getView()->getORB(), xApplication, _bTable
+            getBorderWin().getView()->getORB(), xApplication, NULL, _bTable
         ) );
         pDispatcher->setTargetFrame( m_xFrame );
 
