@@ -4,9 +4,9 @@
  *
  *  $RCSfile: layoutmanager.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-26 15:29:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:42:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,10 +60,6 @@
 #include <uielement/menubarwrapper.hxx>
 #endif
 
-#ifndef __FRAMEWORK_HELPER_MODULEIDENTIFIER_HXX_
-#include <helper/moduleidentifier.hxx>
-#endif
-
 #ifndef __FRAMEWORK_CLASSES_ADDONSOPTIONS_HXX_
 #include <classes/addonsoptions.hxx>
 #endif
@@ -113,6 +109,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTICOMPONENTFACTORY_HPP_
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_XSYSTEMDEPENDENTMENUPEER_HPP_
 #include <com/sun/star/awt/XSystemDependentMenuPeer.hpp>
@@ -353,6 +352,18 @@ static sal_Bool implts_isPreviewModel( const Reference< XModel >& xModel )
     }
     else
         return sal_False;
+}
+
+static sal_Bool implts_isFrameOrWindowTop( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    if (xFrame->isTop())
+        return sal_True;
+
+    css::uno::Reference< css::awt::XTopWindow > xWindowCheck(xFrame->getContainerWindow(), css::uno::UNO_QUERY); // dont use _THROW here ... its a check only
+    if (xWindowCheck.is())
+        return sal_True;
+
+    return sal_False;
 }
 
 //*****************************************************************************************************************
@@ -3587,8 +3598,10 @@ throw (::com::sun::star::uno::RuntimeException)
              m_xContainerWindow.is() )
         {
             rtl::OUString aModuleIdentifier;
+            Reference< XDispatchProvider > xDispatchProvider;
+
             MenuBar* pMenuBar = new MenuBar;
-            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, aModuleIdentifier, pMenuBar, sal_True, sal_True );
+            m_pInplaceMenuBar = new MenuBarManager( m_xSMGR, m_xFrame, xDispatchProvider, aModuleIdentifier, pMenuBar, sal_True, sal_True );
             m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
@@ -4042,10 +4055,10 @@ throw (RuntimeException)
             {
                 vos::OGuard aGuard( Application::GetSolarMutex() );
                 // PB 2004-12-15 #i38743# don't create a menubar if frame isn't top
-                if ( !m_xMenuBar.is() && xFrame->isTop() )
+                if ( !m_xMenuBar.is() && implts_isFrameOrWindowTop(xFrame) )
                     m_xMenuBar = implts_createElement( aName );
 
-                if ( m_xMenuBar.is() && xFrame->isTop() )
+                if ( m_xMenuBar.is() && implts_isFrameOrWindowTop(xFrame) )
                 {
                     Window* pWindow = VCLUnoHelper::GetWindow( m_xContainerWindow );
                     while ( pWindow && !pWindow->IsSystemWindow() )
@@ -4094,13 +4107,13 @@ throw (RuntimeException)
             }
             aWriteLock.unlock();
         }
-        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && ( xFrame->isTop() || implts_isEmbeddedLayoutManager() ))
+        else if ( aElementType.equalsIgnoreAsciiCaseAscii( "statusbar" ) && ( implts_isFrameOrWindowTop(xFrame) || implts_isEmbeddedLayoutManager() ))
         {
             implts_createStatusBar( aName );
         }
         else if ( aElementType.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
                   aElementName.equalsIgnoreAsciiCaseAscii( "progressbar" ) &&
-                  xFrame->isTop() )
+                  implts_isFrameOrWindowTop(xFrame) )
         {
             implts_createProgressBar();
         }
