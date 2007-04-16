@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:06:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:21:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1384,8 +1384,6 @@ PDFWriterImpl::PDFWriterImpl( const PDFWriter::PDFWriterContext& rContext )
         m_nCurrentPage( -1 ),
         m_nResourceDict( -1 ),
         m_nFontDictObject( -1 ),
-        m_nZaDbObject( -1 ),
-        m_nHelvRegObject( -1 ),
         m_pCodec( NULL ),
         m_aDocDigest( rtl_digest_createMD5() ),
         m_aCipher( (rtlCipher)NULL ),
@@ -3352,6 +3350,18 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     return nFontDescriptor;
 }
 
+void PDFWriterImpl::appendBuiltinFontsToDict( OStringBuffer& rDict ) const
+{
+    for( std::map< sal_Int32, sal_Int32 >::const_iterator it =
+         m_aBuiltinFontToObjectMap.begin(); it != m_aBuiltinFontToObjectMap.end(); ++it )
+    {
+        rDict.append( m_aBuiltinFonts[it->first].getNameObject() );
+        rDict.append( ' ' );
+        rDict.append( it->second );
+        rDict.append( " 0 R" );
+    }
+}
+
 bool PDFWriterImpl::emitFonts()
 {
     if( ! m_pReferenceDevice->ImplGetGraphics() )
@@ -3555,18 +3565,14 @@ bool PDFWriterImpl::emitFonts()
             if( ((++ni) & 7) == 0 )
                 aFontDict.append( '\n' );
     }
-    // emit helvetica and ZapfDingbats font for widget apperances / variable text
-    if( ! m_aWidgets.empty() )
+    // emit builtin font for widget apperances / variable text
+    for( std::map< sal_Int32, sal_Int32 >::iterator it = m_aBuiltinFontToObjectMap.begin();
+         it != m_aBuiltinFontToObjectMap.end(); ++it )
     {
-        ImplPdfBuiltinFontData aHelvData(m_aBuiltinFonts[4]);
-        aFontDict.append( "/HelvReg " );
-        aFontDict.append( emitBuiltinFont( &aHelvData, getHelvRegObject() ) );
-        aFontDict.append( " 0 R" );
-        ImplPdfBuiltinFontData aZapfData(m_aBuiltinFonts[13]);
-        aFontDict.append( "/ZaDb " );
-        aFontDict.append( emitBuiltinFont( &aZapfData, getZaDbObject() ) );
-        aFontDict.append( " 0 R" );
+        ImplPdfBuiltinFontData aData(m_aBuiltinFonts[it->first]);
+        it->second = emitBuiltinFont( &aData, it->second );
     }
+    appendBuiltinFontsToDict( aFontDict );
     aFontDict.append( "\n>>\nendobj\n\n" );
 
     CHECK_RETURN( updateObject( getFontDictObject() ) );
@@ -3905,6 +3911,10 @@ Font PDFWriterImpl::replaceFont( const Font& rControlFont, const Font&  rAppSetF
             aFont.SetSize( Size( 0, rControlFont.GetHeight() ) );
         else
             bAdjustSize = true;
+        if( rControlFont.GetItalic() != ITALIC_DONTKNOW )
+            aFont.SetItalic( rControlFont.GetItalic() );
+        if( rControlFont.GetWeight() != WEIGHT_DONTKNOW )
+            aFont.SetWeight( rControlFont.GetWeight() );
     }
     else if( ! aFont.GetHeight() )
     {
@@ -3919,6 +3929,34 @@ Font PDFWriterImpl::replaceFont( const Font& rControlFont, const Font&  rAppSetF
         aFont.SetSize( aFontSize );
     }
     return aFont;
+}
+
+sal_Int32 PDFWriterImpl::getBestBuiltinFont( const Font& rFont )
+{
+    sal_Int32 nBest = 4; // default to Helvetica
+    OUString aFontName( rFont.GetName() );
+    aFontName = aFontName.toAsciiLowerCase();
+
+    if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "times" ) ) ) != -1 )
+        nBest = 8;
+    else if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "courier" ) ) ) != -1 )
+        nBest = 0;
+    else if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "dingbats" ) ) ) != -1 )
+        nBest = 13;
+    else if( aFontName.indexOf( OUString( RTL_CONSTASCII_USTRINGPARAM( "symbol" ) ) ) != -1 )
+        nBest = 12;
+    if( nBest < 12 )
+    {
+        if( rFont.GetItalic() == ITALIC_OBLIQUE || rFont.GetItalic() == ITALIC_NORMAL )
+            nBest += 1;
+        if( rFont.GetWeight() > WEIGHT_MEDIUM )
+            nBest += 2;
+    }
+
+    if( m_aBuiltinFontToObjectMap.find( nBest ) == m_aBuiltinFontToObjectMap.end() )
+        m_aBuiltinFontToObjectMap[ nBest ] = createObject();
+
+    return nBest;
 }
 
 static inline const Color& replaceColor( const Color& rCol1, const Color& rCol2 )
@@ -3954,7 +3992,11 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     // (that is before endRedirect())
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetButtonTextColor() ), aDA );
-    aDA.append( " /HelvReg " );
+    Font aDummyFont( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ), aFont.GetSize() );
+    sal_Int32 nDummyBuiltin = getBestBuiltinFont( aDummyFont );
+    aDA.append( ' ' );
+    aDA.append( m_aBuiltinFonts[nDummyBuiltin].getNameObject() );
+    aDA.append( ' ' );
     m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aFont.GetHeight() ), aDA );
     aDA.append( " Tf" );
     rButton.m_aDAString = aDA.makeStringAndClear();
@@ -3984,7 +4026,6 @@ Font PDFWriterImpl::drawFieldBorder( PDFWidget& rIntern,
                                      const StyleSettings& rSettings )
 {
     Font aFont = replaceFont( rWidget.TextFont, rSettings.GetFieldFont() );
-    aFont.SetName( String( RTL_CONSTASCII_USTRINGPARAM( "Helvetica" ) ) );
 
     if( rWidget.Background || rWidget.Border )
     {
@@ -4039,11 +4080,14 @@ void PDFWriterImpl::createDefaultEditAppearance( PDFWidget& rEdit, const PDFWrit
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rEdit, rWidget, rSettings );
+    sal_Int32 nBest = getBestBuiltinFont( aFont );
 
     // prepare DA string
     OStringBuffer aDA( 32 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetFieldTextColor() ), aDA );
-    aDA.append( " /HelvReg " );
+    aDA.append( ' ' );
+    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetHeight() ), aDA );
     aDA.append( " Tf" );
 
@@ -4076,6 +4120,7 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
 
     // prepare font to use, draw field border
     Font aFont = drawFieldBorder( rBox, rWidget, rSettings );
+    sal_Int32 nBest = getBestBuiltinFont( aFont );
 
     beginRedirect( pListBoxStream, rBox.m_aRect );
     OStringBuffer aAppearance( 64 );
@@ -4124,7 +4169,9 @@ void PDFWriterImpl::createDefaultListBoxAppearance( PDFWidget& rBox, const PDFWr
     }
 #endif
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetFieldTextColor() ), aDA );
-    aDA.append( " /HelvReg " );
+    aDA.append( ' ' );
+    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aFont.GetHeight() ), aDA );
     aDA.append( " Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
@@ -4192,7 +4239,10 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    aDA.append( " /ZaDb 0 Tf" );
+    sal_Int32 nBest = getBestBuiltinFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "ZapfDingbats" ) ), aFont.GetSize() ) );
+    aDA.append( ' ' );
+    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( " 0 Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
     rBox.m_aMKDict = "/CA";
     rBox.m_aMKDictCAString = "8";
@@ -4212,7 +4262,9 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
     beginRedirect( pCheckStream, aCheckRect );
     aDA.append( "/Tx BMC\nq BT\n" );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    aDA.append( " /ZaDb " );
+    aDA.append( ' ' );
+    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( ' ' );
     m_aPages[ m_nCurrentPage ].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
     aDA.append( " Tf\n" );
     m_aPages[ m_nCurrentPage ].appendMappedLength( nCharXOffset, aDA );
@@ -4294,7 +4346,10 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    aDA.append( " /ZaDb 0 Tf" );
+    sal_Int32 nBest = getBestBuiltinFont( Font( String( RTL_CONSTASCII_USTRINGPARAM( "ZapfDingbats" ) ), aFont.GetSize() ) );
+    aDA.append( ' ' );
+    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( " 0 Tf" );
     rBox.m_aDAString = aDA.makeStringAndClear();
 //to encrypt this (el)
     rBox.m_aMKDict = "/CA";
@@ -4310,7 +4365,9 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
     beginRedirect( pCheckStream, aCheckRect );
     aDA.append( "/Tx BMC\nq BT\n" );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    aDA.append( " /ZaDb " );
+    aDA.append( ' ' );
+    aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
+    aDA.append( ' ' );
     m_aPages[m_nCurrentPage].appendMappedLength( sal_Int32( aCheckRect.GetHeight() ), aDA );
     aDA.append( " Tf\n0 0 Td\nET\nQ\n" );
     writeBuffer( aDA.getStr(), aDA.getLength() );
@@ -4649,11 +4706,9 @@ bool PDFWriterImpl::emitWidgetAnnotations()
         }
         if( rWidget.m_aDAString.getLength() )
         {
-            aLine.append( "/DR<</Font<</ZaDb " );
-            aLine.append( getZaDbObject() );
-            aLine.append( " 0 R/HelvReg " );
-            aLine.append( getHelvRegObject() );
-            aLine.append( " 0 R>>>>\n" );
+            aLine.append( "/DR<</Font<<" );
+            appendBuiltinFontsToDict( aLine );
+            aLine.append( ">>>>\n" );
             aLine.append( "/DA" );
             appendLiteralStringEncrypt( rWidget.m_aDAString, rWidget.m_nObject, aLine );
             aLine.append( "\n" );
