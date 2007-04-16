@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 12:06:29 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 15:33:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ MODULEFILES= \
     Setup-base.xcu   \
     Setup-math.xcu
 
-LOCALIZEDFILES=
+LOCALIZEDFILES=Setup.xcu
 
 SAMPLEFILES= \
     LDAP.xcu.sample
