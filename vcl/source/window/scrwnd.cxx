@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:20:32 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:21:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,9 +124,17 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
 
 ImplWheelWindow::~ImplWheelWindow()
 {
+    ImplStop();
+    delete mpTimer;
+}
+
+// ------------------------------------------------------------------------
+
+void ImplWheelWindow::ImplStop()
+{
     ReleaseMouse();
     mpTimer->Stop();
-    delete mpTimer;
+    Show(FALSE);
 }
 
 // ------------------------------------------------------------------------
@@ -406,7 +414,10 @@ IMPL_LINK( ImplWheelWindow, ImplScrollHdl, Timer*, EMPTYARG )
         if ( !ImplCallPreNotify( aNCmdEvt ) )
         {
             const ULONG nTime = Time::GetSystemTicks();
+            ImplDelData aDel( this );
             pWindow->Command( aCEvt );
+            if( aDel.IsDead() )
+                return 0;
             mnRepaintTime = Max( Time::GetSystemTicks() - nTime, 1UL );
             ImplRecalcScrollValues();
         }
