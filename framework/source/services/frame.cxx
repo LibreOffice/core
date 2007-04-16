@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 08:09:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:43:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,6 +80,10 @@
 #include <classes/taskcreator.hxx>
 #endif
 
+#ifndef __FRAMEWORK_TARGETHELPER_HXX_
+#include <loadenv/targethelper.hxx>
+#endif
+
 #ifndef __FRAMEWORK_CLASSES_FRAMELISTANALYZER_HXX_
 #include <classes/framelistanalyzer.hxx>
 #endif
@@ -118,6 +122,10 @@
 
 #ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
 #include <com/sun/star/util/XURLTransformer.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_XCLOSEABLE_HPP_
+#include <com/sun/star/util/XCloseable.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XDEVICE_HPP_
@@ -583,7 +591,7 @@ void SAL_CALL Frame::setActiveFrame( const css::uno::Reference< css::frame::XFra
     // m_aChildFrameContainer is threadsafe himself and he live if we live!!!
     // ...and our transaction is non breakable too ...
     css::uno::Reference< css::frame::XFrame > xActiveChild = m_aChildFrameContainer.getActive();
-    EActiveState                              eActiveState = m_eActiveState                    ;
+    EActiveState                              eActiveState = m_eActiveState             ;
 
     aWriteLock.unlock();
     /* UNSAFE AREA --------------------------------------------------------------------------------------------- */
@@ -852,7 +860,7 @@ void SAL_CALL Frame::setName( const ::rtl::OUString& sName ) throw( css::uno::Ru
     WriteGuard aWriteLock( m_aLock );
     // Set new name ... but look for invalid special target names!
     // They are not allowed to set.
-    if (TargetCheck::isValidFrameName(sName))
+    if (TargetHelper::isValidNameForFrame(sName))
         m_sName = sName;
     aWriteLock.unlock();
     /* } SAFE */
@@ -1209,7 +1217,7 @@ void SAL_CALL Frame::activate() throw( css::uno::RuntimeException )
     // he is threadsafe himself and live if we live.
     // We use a registered transaction to prevent us against
     // breaks during this operation!
-    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                              ;
+    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                                ;
     css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY )                                ;
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     css::uno::Reference< css::awt::XWindow >            xComponentWindow( m_xComponentWindow, css::uno::UNO_QUERY )                       ;
@@ -1305,7 +1313,7 @@ void SAL_CALL Frame::deactivate() throw( css::uno::RuntimeException )
     WriteGuard aWriteLock( m_aLock );
 
     // Copy neccessary member and free the lock.
-    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                              ;
+    css::uno::Reference< css::frame::XFrame >           xActiveChild    = m_aChildFrameContainer.getActive()                                     ;
     css::uno::Reference< css::frame::XFramesSupplier >  xParent         ( m_xParent, css::uno::UNO_QUERY )                                ;
     css::uno::Reference< css::frame::XFrame >           xThis           ( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     EActiveState                                        eState          = m_eActiveState                                                  ;
@@ -1834,6 +1842,42 @@ void SAL_CALL Frame::removeCloseListener( const css::uno::Reference< css::util::
     m_aListenerContainer.removeInterface( ::getCppuType( ( const css::uno::Reference< css::util::XCloseListener >* ) NULL ), xListener );
 }
 
+/*-****************************************************************************************************/
+void Frame::implts_forgetSubFrames()
+{
+    // SAFE ->
+    ReadGuard aReadLock(m_aLock);
+    css::uno::Reference< css::container::XIndexAccess > xContainer(m_xFramesHelper, css::uno::UNO_QUERY_THROW);
+    aReadLock.unlock();
+    // <- SAFE
+
+    sal_Int32 c = xContainer->getCount();
+    sal_Int32 i = 0;
+
+    for (i=0; i<c; ++i)
+    {
+        try
+        {
+            css::uno::Reference< css::frame::XFrame > xFrame;
+            xContainer->getByIndex(i) >>= xFrame;
+            if (xFrame.is())
+                xFrame->setCreator(css::uno::Reference< css::frame::XFramesSupplier >());
+        }
+        catch(const css::uno::Exception&)
+        {
+            // Ignore errors here.
+            // Nobody can guarantee a stable index in multi threaded environments .-)
+        }
+    }
+
+    // SAFE ->
+    WriteGuard aWriteLock(m_aLock);
+    m_xFramesHelper.clear(); // clear uno reference
+    m_aChildFrameContainer.clear(); // clear container content
+    aWriteLock.unlock();
+    // <- SAFE
+}
+
 /*-****************************************************************************************************//**
     @short      destroy instance
     @descr      The owner of this object calles the dispose method if the object
@@ -1947,8 +1991,7 @@ void SAL_CALL Frame::dispose() throw( css::uno::RuntimeException )
         Otherwise we get a null reference and could finish removing successfuly.
         => You see: Order of calling operations is important!!!
      */
-    m_aChildFrameContainer.clear();
-    m_xFramesHelper.clear();
+    implts_forgetSubFrames();
 
     // Release some other references.
     // This calls should be easy ... I hope it :-)
@@ -2375,7 +2418,7 @@ void SAL_CALL Frame::windowClosing( const css::lang::EventObject& ) throw( css::
     css::uno::Reference< css::util::XURLTransformer > xParser(xFactory->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY_THROW);
     xParser->parseStrict(aURL);
 
-    css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_TOP, 0);
+    css::uno::Reference< css::frame::XDispatch > xCloser = queryDispatch(aURL, SPECIALTARGET_SELF, 0);
     if (xCloser.is())
         xCloser->dispatch(aURL, css::uno::Sequence< css::beans::PropertyValue >());
 
