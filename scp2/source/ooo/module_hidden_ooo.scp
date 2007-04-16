@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_hidden_ooo.scp,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:59:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 11:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -477,6 +477,7 @@ Module gid_Module_Root_Files_5
 	gid_File_Lib_Sunpro5_Uno,
 	gid_File_Lib_Gconfebe,
 	gid_File_Lib_Wininetbe,
+	gid_File_Lib_Macbe,
 	gid_File_Lib_Unicows,
 	gid_File_Lib_Uwinapi,
 	gid_File_Lib_Msvcp70_So,
