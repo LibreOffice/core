@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-28 15:40:53 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 15:40:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,12 @@ TARGET=doc
 
 # --- Files --------------------------------------------------------
 
-SLOFILES =	\
+EXCEPTIONSFILES = \
+                $(SLO)$/doclay.obj \
+                $(SLO)$/docxforms.obj \
+                $(SLO)$/docnew.obj
+
+SLOFILES =	$(EXCEPTIONSFILES) \
         $(SLO)$/SwStyleNameMapper.obj \
         $(SLO)$/acmplwrd.obj \
         $(SLO)$/dbgoutsw.obj \
@@ -63,10 +68,8 @@ SLOFILES =	\
         $(SLO)$/docfly.obj \
         $(SLO)$/docfmt.obj \
         $(SLO)$/docftn.obj \
-        $(SLO)$/doclay.obj \
         $(SLO)$/docglbl.obj \
         $(SLO)$/docglos.obj \
-        $(SLO)$/docnew.obj \
         $(SLO)$/docnum.obj \
         $(SLO)$/docredln.obj \
         $(SLO)$/docruby.obj \
@@ -89,12 +92,7 @@ SLOFILES =	\
         $(SLO)$/tblrwcl.obj \
         $(SLO)$/visiturl.obj \
         $(SLO)$/htmltbl.obj \
-        $(SLO)$/docxforms.obj \
         $(SLO)$/headerfooterhelper.obj
-
-EXCEPTIONSFILES = \
-                $(SLO)$/doclay.obj \
-                $(SLO)$/docnew.obj
 
 # --- Tagets -------------------------------------------------------
 
