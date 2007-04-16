@@ -4,9 +4,9 @@
  *
  *  $RCSfile: TextDocument.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:31:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:53:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,60 +100,56 @@ public class TextDocument {
     public com.sun.star.lang.Locale CharLocale;
     public XStorable xStorable;
 
-    //creates an instance of TextDocument and creates a blank frame
-    public TextDocument(XMultiServiceFactory xMSF, XTerminateListener listener) {
-        this(xMSF, listener, "_blank");
-    }
-
-//  creates an instance of TextDocument and creates a named frame
+    // creates an instance of TextDocument and creates a named frame. No document is actually loaded into this frame.
     public TextDocument(XMultiServiceFactory xMSF, XTerminateListener listener, String FrameName) {
         this.xMSF = xMSF;
         xFrame = OfficeDocument.createNewFrame(xMSF, listener, FrameName);
     }
 
-    //creates an instance of TextDocument and creates a frame with an empty document
-    public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, XTerminateListener listener, String _sUrl, boolean bShowPreview) {
+    // creates an instance of TextDocument by loading a given URL as preview
+    public TextDocument(XMultiServiceFactory xMSF, String _sPreviewURL, boolean bShowStatusIndicator, XTerminateListener listener ) {
         this.xMSF = xMSF;
+
+        xFrame = OfficeDocument.createNewFrame(xMSF, listener);
+        xTextDocument = loadAsPreview( _sPreviewURL, true );
+        xComponent = (XComponent)UnoRuntime.queryInterface(XComponent.class, xTextDocument);
+
+        if ( bShowStatusIndicator )
+            showStatusIndicator();
+        init();
+    }
+
+    // creates an instance of TextDocument from the desktop's current frame
+    public TextDocument( XMultiServiceFactory xMSF, boolean bShowStatusIndicator, XTerminateListener listener ) {
+        this.xMSF = xMSF;
+
         XDesktop xDesktop = Desktop.getDesktop(xMSF);
-        if (bgetCurrentFrame) {
-            XFramesSupplier xFrameSupplier = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
-            xFrame = xFrameSupplier.getActiveFrame();
-            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
-            xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
-        } else {
-            xFrame = OfficeDocument.createNewFrame(xMSF, listener);
-            if (bShowPreview){
-                xTextDocument = loadAsPreview(_sUrl, true);
-            }
-            else{
-                Object oDoc = OfficeDocument.load(xFrame, "private:factory/swriter", "_self", new PropertyValue[]{});
-                xTextDocument = (XTextDocument) oDoc;
-            }
-            xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
-        }
-        if (bshowStatusIndicator) {
-            XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
-            xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
-            xProgressBar.start("", 100);
-            xProgressBar.setValue(5);
-        }
-        xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
-        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
-        xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
-        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
-        xDocInfo = xDocInfoSuppl.getDocumentInfo();
-        CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
-        xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDocument);
-        xText = xTextDocument.getText();
+        XFramesSupplier xFrameSupplier = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
+        xFrame = xFrameSupplier.getActiveFrame();
+        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xFrame.getController().getModel());
+        xTextDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
+
+        if ( bShowStatusIndicator )
+            showStatusIndicator();
+        init();
     }
 
-    //creates an instance of TextDocument and creates a frame with an empty document
-    public TextDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, XTerminateListener listener) {
-        this(xMSF, bshowStatusIndicator, bgetCurrentFrame, listener, "", false);
+    // creates an instance of TextDocument containing a blank text document
+    public TextDocument(XMultiServiceFactory xMSF, PropertyValue[] _aLoadArguments, boolean bShowStatusIndicator, XTerminateListener listener ) {
+        this.xMSF = xMSF;
+
+        XDesktop xDesktop = Desktop.getDesktop(xMSF);
+        xFrame = OfficeDocument.createNewFrame(xMSF, listener);
+        Object oDoc = OfficeDocument.load(xFrame, "private:factory/swriter", "_self", _aLoadArguments);
+        xTextDocument = (XTextDocument) oDoc;
+        xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xTextDocument);
+
+        if (bShowStatusIndicator)
+            showStatusIndicator();
+        init();
     }
 
-
-    //creates an instance of TextDocument and creates a frame with an empty document
+    //creates an instance of TextDocument from a given XTextDocument
     public TextDocument(XMultiServiceFactory xMSF,XTextDocument _textDocument, boolean bshowStatusIndicator) {
         this.xMSF = xMSF;
                 xFrame = _textDocument.getCurrentController().getFrame();
@@ -176,6 +172,24 @@ public class TextDocument {
         xText = xTextDocument.getText();
     }
 
+
+    private void init() {
+        xWindowPeer = (XWindowPeer) UnoRuntime.queryInterface(XWindowPeer.class, xFrame.getComponentWindow());
+        xMSFDoc = (XMultiServiceFactory) UnoRuntime.queryInterface(XMultiServiceFactory.class, xTextDocument);
+        xNumberFormatsSupplier = (XNumberFormatsSupplier) UnoRuntime.queryInterface(XNumberFormatsSupplier.class, xTextDocument);
+        XDocumentInfoSupplier xDocInfoSuppl = (XDocumentInfoSupplier) UnoRuntime.queryInterface(XDocumentInfoSupplier.class, xTextDocument);
+        xDocInfo = xDocInfoSuppl.getDocumentInfo();
+        CharLocale = (Locale) Helper.getUnoStructValue((Object) xComponent, "CharLocale");
+        xStorable = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDocument);
+        xText = xTextDocument.getText();
+    }
+
+    private void showStatusIndicator() {
+        XStatusIndicatorFactory xStatusIndicatorFactory = (XStatusIndicatorFactory) UnoRuntime.queryInterface(XStatusIndicatorFactory.class, xFrame);
+        xProgressBar = xStatusIndicatorFactory.createStatusIndicator();
+        xProgressBar.start("", 100);
+        xProgressBar.setValue(5);
+    }
 
     public XTextDocument loadAsPreview(String sDefaultTemplate, boolean asTemplate) {
         PropertyValue loadValues[] = new PropertyValue[3];
