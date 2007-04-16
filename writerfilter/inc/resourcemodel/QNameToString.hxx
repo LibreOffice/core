@@ -4,9 +4,9 @@
  *
  *  $RCSfile: QNameToString.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:00:24 $
+ *  last change: $Author: os $ $Date: 2007-04-16 11:03:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@ public:
     string operator()(writerfilter::QName_t qName);
 };
 
-class SprmIdToString
+class WRITERFILTER_DLLPUBLIC SprmIdToString
 {
     typedef boost::shared_ptr<SprmIdToString> Pointer_t;
 
