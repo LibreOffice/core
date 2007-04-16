@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:46:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:26:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1173,7 +1173,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        QueryDesigner aDesigner( getORB(), this, sal_True, SID_DB_NEW_VIEW_SQL == _nId );
+                        QueryDesigner aDesigner( getORB(), this, m_xCurrentFrame, sal_True, SID_DB_NEW_VIEW_SQL == _nId );
 
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
@@ -1222,7 +1222,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                     SharedConnection xConnection( ensureConnection() );
                     if ( xConnection.is() )
                     {
-                        RelationDesigner aDesigner( getORB(), this );
+                        RelationDesigner aDesigner( getORB(), this, m_xCurrentFrame );
                         Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                         Reference< XComponent > xComponent( aDesigner.createNew( xDataSource ), UNO_QUERY );
                         addDocumentListener( xComponent, NULL );
@@ -1678,7 +1678,7 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                     {
                         if ( _eType == E_TABLE )
                         {
-                            pDesigner.reset( new TableDesigner( getORB(), this ) );
+                            pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
                         }
                         else
                         {
@@ -1686,13 +1686,13 @@ Reference< XComponent > OApplicationController::openElement(const ::rtl::OUStrin
                                 (   ( _nInstigatorCommand == SID_DB_APP_EDIT_SQL_VIEW )
                                 &&  ( _eType == E_QUERY )
                                 );
-                            pDesigner.reset( new QueryDesigner( getORB(), this, sal_False, bQuerySQLMode ) );
+                            pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, sal_False, bQuerySQLMode ) );
                         }
                         aDataSource <<= m_xDataSource;
                     }
                     else
                     {
-                        pDesigner.reset( new ResultSetBrowser( getORB(), this, _eType == E_TABLE ) );
+                        pDesigner.reset( new ResultSetBrowser( getORB(), this, m_xCurrentFrame, _eType == E_TABLE ) );
 
                         aArgs.realloc(1);
                         aArgs[0].Name = PROPERTY_SHOWMENU;
@@ -1806,11 +1806,11 @@ void OApplicationController::newElement( ElementType _eType, sal_Bool _bSQLView 
                 {
                     if ( _eType == E_TABLE )
                     {
-                        pDesigner.reset( new TableDesigner( getORB(), this ) );
+                        pDesigner.reset( new TableDesigner( getORB(), this, m_xCurrentFrame ) );
                     }
                     else
                     {
-                        pDesigner.reset( new QueryDesigner( getORB(), this, sal_False, _bSQLView ) );
+                        pDesigner.reset( new QueryDesigner( getORB(), this, m_xCurrentFrame, sal_False, _bSQLView ) );
                     }
                     Reference< XDataSource > xDataSource( m_xDataSource, UNO_QUERY );
                     Reference< XComponent > xComponent( pDesigner->createNew( xDataSource ), UNO_QUERY );
