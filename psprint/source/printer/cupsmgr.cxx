@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cupsmgr.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-03 15:24:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:16:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -676,6 +676,9 @@ const PPDParser* CUPSManager::createCUPSParser( const OUString& rPrinter )
                         // remember the default context for later use
                         PPDContext& rContext = m_aDefaultContexts[ aPrinter ];
                         rContext.setParser( pNewParser );
+                        // set system default paper; printer CUPS PPD options
+                        // may overwrite it
+                        setDefaultPaper( rContext );
                         for( int i = 0; i < pPPD->num_groups; i++ )
                             updatePrinterContextInfo( pPPD->groups + i, rContext );
 
