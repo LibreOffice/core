@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-08 08:31:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:33:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,10 @@
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
+#endif
+
 //_______________________________________________
 // other includes
 
@@ -103,10 +107,6 @@
 
 //_______________________________________________
 // definition
-
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
 
 namespace framework
 {
@@ -124,6 +124,35 @@ class TaskCreatorService : public  css::lang::XTypeProvider
 {
     //___________________________________________
     // types
+
+    public:
+
+        /// [XFrame] if it's set, it will be used as parent frame for the new created frame.
+        static const ::rtl::OUString ARGUMENT_PARENTFRAME;
+
+        /** [OUString] if it's not a special name (beginning with "_" ... which are not allowed here!)
+                       it will be set as the API name of the new created frame.
+         */
+        static const ::rtl::OUString ARGUMENT_FRAMENAME;
+
+        /// [sal_Bool] If its set to TRUE we will make the new created frame visible.
+        static const ::rtl::OUString ARGUMENT_MAKEVISIBLE;
+
+        /** [sal_Bool] If not "ContainerWindow" property is set it force creation of a
+                       top level window as new container window.
+         */
+        static const ::rtl::OUString ARGUMENT_CREATETOPWINDOW;
+
+        /// [Rectangle] Place the new created frame on this place and resize the container window.
+        static const ::rtl::OUString ARGUMENT_POSSIZE;
+
+        /// [XWindow] an outside created window, used as container window of the new created frame.
+        static const ::rtl::OUString ARGUMENT_CONTAINERWINDOW;
+
+        /** [sal_Bool] enable/disable special mode, where this frame will be part of
+                       the persistent window state feature suitable for any office module window
+         */
+        static const ::rtl::OUString ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
 
     //___________________________________________
     // member
@@ -162,9 +191,16 @@ class TaskCreatorService : public  css::lang::XTypeProvider
 
     private:
 
-        css::uno::Reference< css::frame::XFrame > implts_createSystemTask( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
-                                                                           const ::rtl::OUString&                                      sName    ,
-                                                                                 sal_Bool                                              bVisible );
+        css::uno::Reference< css::awt::XWindow > implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
+                                                                               const css::awt::Rectangle&                      aPosSize      ,
+                                                                                     sal_Bool                                  bTopWindow    );
+
+        css::uno::Reference< css::frame::XFrame > implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame     ,
+                                                                      const css::uno::Reference< css::awt::XWindow >&  xContainerWindow ,
+                                                                      const ::rtl::OUString&                           sName            );
+
+        void implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame );
+
         ::rtl::OUString impl_filterNames( const ::rtl::OUString& sName );
 };
 
