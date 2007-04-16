@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistence.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:20:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:50:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,6 +75,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XCOMPONENTLOADER_HPP_
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
+#include <com/sun/star/frame/XModule.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
@@ -246,7 +249,7 @@ uno::Reference< io::XInputStream > createTempInpStreamFromStor(
 }
 
 //------------------------------------------------------
-static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument )
+static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument, const ::rtl::OUString& aModuleName )
 {
     if ( xDocument.is() )
     {
@@ -254,6 +257,17 @@ static void SetDocToEmbedded( const uno::Reference< frame::XModel > xDocument )
         aSeq[0].Name = ::rtl::OUString::createFromAscii( "SetEmbedded" );
         aSeq[0].Value <<= sal_True;
         xDocument->attachResource( ::rtl::OUString(), aSeq );
+
+        if ( aModuleName.getLength() )
+        {
+            try
+            {
+                uno::Reference< frame::XModule > xModule( xDocument, uno::UNO_QUERY_THROW );
+                xModule->setIdentifier( aModuleName );
+            }
+            catch( uno::Exception& )
+            {}
+        }
     }
 }
 
@@ -327,7 +341,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::InitNewDocument_Impl()
     try
     {
         // set the document mode to embedded
-        SetDocToEmbedded( xModel );
+        SetDocToEmbedded( xModel, m_aModuleName );
 
         // init document as a new
         xLoadable->initNew();
@@ -390,7 +404,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadLink_Impl()
     try
     {
         // the document is not really an embedded one, it is a link
-        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ) );
+        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
 
         // load the document
         xLoadable->load( aArgs );
@@ -515,7 +529,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::LoadDocumentFromStorag
     try
     {
         // set the document mode to embedded
-        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ) );
+        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
         if ( xDoc.is() )
             xDoc->loadFromStorage( xStorage, aArgs );
         else
@@ -780,7 +794,7 @@ uno::Reference< util::XCloseable > OCommonEmbeddedObject::CreateDocFromMediaDesc
     try
     {
         // set the document mode to embedded
-        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ) );
+        SetDocToEmbedded( uno::Reference < frame::XModel >( xDocument, uno::UNO_QUERY ), m_aModuleName );
 
         xLoadable->load( addAsTemplate( aMedDescr ) );
     }
@@ -975,6 +989,16 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
             sal_Int64 nMiscStatus=0;
             lObjArgs[nObjInd].Value >>= nMiscStatus;
             m_nMiscStatus |= nMiscStatus;
+        }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "OutplaceFrameProperties" ) )
+        {
+            uno::Sequence< uno::Any > aOutFrameProps;
+            if ( lObjArgs[nObjInd].Value >>= aOutFrameProps )
+                m_pDocHolder->SetOutplaceFrameProperties( aOutFrameProps );
+        }
+        else if ( lObjArgs[nObjInd].Name.equalsAscii( "ModuleName" ) )
+        {
+            lObjArgs[nObjInd].Value >>= m_aModuleName;
         }
 
     sal_Int32 nStorageMode = m_bReadOnly ? embed::ElementModes::READ : embed::ElementModes::READWRITE;
