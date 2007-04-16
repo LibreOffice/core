@@ -4,9 +4,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.195 $
+#   $Revision: 1.196 $
 #
-#   last change: $Author: vg $ $Date: 2007-04-13 14:29:53 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 13:45:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -1045,6 +1045,11 @@ CONVERTUNIXTEXT:=$(UNIXTEXT)
 .ENDIF			# "$(GUI)"=="UNX"
 .ENDIF			# "$(UNIXTEXT)"!=""
 
+.IF "$(EXTUPDATEINFO_NAME)"!=""
+EXTUPDATEINFO_DEST:=$(MISC)$/$(EXTUPDATEINFO_NAME)
+EXTUPDATEINFO_SOURCE*=description.xml
+.ENDIF			# "$(EXTUPDATEINFO_NAME)"!=""
+
 .IF "$(JAVACLASSFILES:s/DEFINED//)"!="" || "$(javauno)"!=""
 .IF "$(L10N_framework)"==""
 TARGETDPJ=$(MISC)$/$(TARGET).dpj
@@ -1262,6 +1267,7 @@ ALLTAR: \
                 $(SIGNFORJARSIGNER) \
         $(CONVERTUNIXTEXT) \
         $(LOCALIZE_ME_DEST)\
+        $(EXTUPDATEINFO_DEST) \
         last_target
 
 ALLTAR : "$(SOLARINCDIR)$/$(UPD)minor.mk"
@@ -1417,6 +1423,11 @@ $(UNIXTEXT) : $(UNIXTEXT:f)
     @tr -d "\015" < $(@:f) > $@
 
 .ENDIF			# "$(UNIXTEXT)"!=""
+
+.IF "$(EXTUPDATEINFO_NAME)"!=""
+$(EXTUPDATEINFO_DEST) : $(EXTUPDATEINFO_SOURCE)
+    $(PERL) $(SOLARENV)$/bin/make_ext_update_info.pl --out $(EXTUPDATEINFO_DEST) $(foreach,i,$(EXTUPDATEINFO_URLS) --update-url "$i") $(EXTUPDATEINFO_SOURCE)
+.ENDIF			# "$(EXTUPDATEINFO_NAME)"!=""
 
 makedoc:
         @@-mkdir $(OUT)$/ucrdoc
