@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:33:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:11:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1915,7 +1915,8 @@ void SdXMLExport::ImpWritePresentationStyles()
                     XMLStyleExport aStEx(*this, OUString(), GetAutoStylePool().get());
                     const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
-                    OUString aPrefix = xNamed->getName();
+                    OUString aPrefix( xNamed->getName() );
+
                     aPrefix += OUString(RTL_CONSTASCII_USTRINGPARAM("-"));
                     aStEx.exportStyleFamily(xNamed->getName(),
                         OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_PRESENTATION_NAME)),
