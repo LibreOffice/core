@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:05:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:27:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,6 +90,8 @@ namespace dbaui
     private:
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         m_xORB;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >
+                        m_xParentFrame;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XComponentLoader >
                         m_xFrameLoader;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >
@@ -137,6 +139,7 @@ namespace dbaui
         DatabaseObjectView(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
             const ::rtl::OUString& _rComponentURL
         );
         virtual ~DatabaseObjectView(){}
@@ -202,6 +205,7 @@ namespace dbaui
         QueryDesigner(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
             sal_Bool _bCreateView,
             sal_Bool _bPreferSQLView
         );
@@ -228,7 +232,8 @@ namespace dbaui
     public:
         TableDesigner(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
         );
 
     private:
@@ -263,6 +268,7 @@ namespace dbaui
         ResultSetBrowser(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame,
             sal_Bool _bTable
         );
 
@@ -275,7 +281,8 @@ namespace dbaui
     public:
         RelationDesigner(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdb::application::XDatabaseDocumentUI >& _rxApplication,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxParentFrame
         );
     };
 
