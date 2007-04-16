@@ -4,9 +4,9 @@
  *
  *  $RCSfile: base14.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:56:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,8 +37,28 @@
 #include "precompiled_vcl.hxx"
 
 #include "pdfwriter_impl.hxx"
+#include <rtl/strbuf.hxx>
 
 using namespace vcl;
+using namespace rtl;
+
+OString PDFWriterImpl::BuiltinFont::getNameObject() const
+{
+    OStringBuffer aBuf( 16 );
+    aBuf.append( '/' );
+    const char* pRun = m_pPSName;
+
+    unsigned int nCopied = 0;
+    while( *pRun )
+    {
+        if( *pRun >= 'A' && *pRun <= 'Z' )
+            nCopied = 0;
+        if( nCopied++ < 2 )
+            aBuf.append( *pRun );
+        pRun++;
+    }
+    return aBuf.makeStringAndClear();
+}
 
 const PDFWriterImpl::BuiltinFont PDFWriterImpl::m_aBuiltinFonts[ 14 ] = {
 { "Courier", // family name
