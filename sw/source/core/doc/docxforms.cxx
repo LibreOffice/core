@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docxforms.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:55:25 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 15:40:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,10 @@
 #include <doc.hxx>
 #endif
 
+#ifndef _SWDOCSH_HXX
+#include <docsh.hxx>
+#endif
+
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_HXX_
 #include <com/sun/star/uno/Reference.hxx>
 #endif
@@ -53,6 +57,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
+#include <com/sun/star/frame/XModule.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_XFORMS_XMODEL_HPP_
@@ -67,6 +75,10 @@
 #include <unotools/processfactory.hxx>
 #endif
 
+#ifndef TOOLS_DIAGNOSE_EX_H
+#include <tools/diagnose_ex.h>
+#endif
+
 
 using com::sun::star::uno::Reference;
 using com::sun::star::uno::XInterface;
@@ -75,6 +87,8 @@ using com::sun::star::uno::makeAny;
 using com::sun::star::container::XNameContainer;
 using com::sun::star::xforms::XModel;
 using com::sun::star::xforms::XFormsUIHelper1;
+using com::sun::star::frame::XModule;
+using com::sun::star::uno::Exception;
 using rtl::OUString;
 
 
@@ -99,30 +113,46 @@ void SwDoc::initXForms( bool bCreateDefaultModel )
 {
     DBG_ASSERT( ! isXForms(), "please initialize only once" );
 
-    // create XForms components
-    xXForms.set( lcl_createInstance( "com.sun.star.xforms.XForms" ),
-                 UNO_QUERY );
-    DBG_ASSERT( xXForms.is(), "can't create XForms container" );
-
-    // create default model
-    if( bCreateDefaultModel && xXForms.is() )
+    try
     {
-        OUString sName(RTL_CONSTASCII_USTRINGPARAM("Model 1"));
-        Reference<XModel> xModel(
-            lcl_createInstance( "com.sun.star.xforms.Model" ),
-            UNO_QUERY );
-        DBG_ASSERT( xModel.is(), "no model?" );
-        if( xModel.is() )
-        {
-            xModel->setID( sName );
-            Reference<XFormsUIHelper1>( xModel, UNO_QUERY )->newInstance(
-                OUString(RTL_CONSTASCII_USTRINGPARAM("Instance 1")),
-                OUString(), sal_True );
-            xModel->initialize();
-            xXForms->insertByName( sName, makeAny( xModel ) );
-        }
-        DBG_ASSERT( xXForms->hasElements(), "can't create XForms model" );
-    }
+        // create XForms components
+        xXForms.set( lcl_createInstance( "com.sun.star.xforms.XForms" ),
+                    UNO_QUERY );
+        DBG_ASSERT( xXForms.is(), "can't create XForms container" );
 
-    DBG_ASSERT( isXForms(), "initialization failed" );
+        // change our module identifier, to be able to have a dedicated UI
+        Reference< XModule > xModule;
+        SwDocShell* pShell( GetDocShell() );
+        if ( pShell )
+            xModule = xModule.query( pShell->GetModel() );
+        DBG_ASSERT( xModule.is(), "SwDoc::initXForms: no XModule at the document!" );
+        if ( xModule.is() )
+            xModule->setIdentifier( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.xforms.XMLFormDocument" ) ) );
+
+        // create default model
+        if( bCreateDefaultModel && xXForms.is() )
+        {
+            OUString sName(RTL_CONSTASCII_USTRINGPARAM("Model 1"));
+            Reference<XModel> xModel(
+                lcl_createInstance( "com.sun.star.xforms.Model" ),
+                UNO_QUERY );
+            DBG_ASSERT( xModel.is(), "no model?" );
+            if( xModel.is() )
+            {
+                xModel->setID( sName );
+                Reference<XFormsUIHelper1>( xModel, UNO_QUERY )->newInstance(
+                    OUString(RTL_CONSTASCII_USTRINGPARAM("Instance 1")),
+                    OUString(), sal_True );
+                xModel->initialize();
+                xXForms->insertByName( sName, makeAny( xModel ) );
+            }
+            DBG_ASSERT( xXForms->hasElements(), "can't create XForms model" );
+        }
+
+        DBG_ASSERT( isXForms(), "initialization failed" );
+    }
+    catch( const Exception& )
+    {
+        DBG_UNHANDLED_EXCEPTION();
+    }
 }
