@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enumhelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 02:30:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:57:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,8 @@
 #ifndef _COMPHELPER_ENUMHELPER_HXX_
 #define _COMPHELPER_ENUMHELPER_HXX_
 
+#include <vector>
+
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
@@ -47,6 +49,9 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XEVENTLISTENER_HPP_
 #include <com/sun/star/lang/XEventListener.hpp>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
 #endif
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -136,6 +141,29 @@ public:
 private:
     COMPHELPER_DLLPRIVATE void impl_startDisposeListening();
     COMPHELPER_DLLPRIVATE void impl_stopDisposeListening();
+};
+
+//==================================================================
+//= OAnyEnumeration
+//==================================================================
+/** provides an <type scope="com.sun.star.container">XEnumeration</type>
+    for an outside set vector of Any's.
+
+*/
+class COMPHELPER_DLLPUBLIC OAnyEnumeration : private OEnumerationLock
+                                           , public  ::cppu::WeakImplHelper1< starcontainer::XEnumeration >
+{
+    sal_Int32                         m_nPos;
+    staruno::Sequence< staruno::Any > m_lItems;
+
+public:
+    OAnyEnumeration(const staruno::Sequence< staruno::Any >& lItems);
+    virtual ~OAnyEnumeration();
+
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw(staruno::RuntimeException);
+    virtual staruno::Any SAL_CALL nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException);
+
 };
 
 //.........................................................................
