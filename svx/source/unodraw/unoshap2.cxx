@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unoshap2.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 15:17:49 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:42:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1217,17 +1217,29 @@ void SAL_CALL B2DPolyPolygonToSvxPointSequenceSequence( const basegfx::B2DPolyPo
         // Einzelpolygon holen
         const basegfx::B2DPolygon aPoly(rPolyPoly.getB2DPolygon(a));
 
+        // #i75974# take closed stae into account, the API polygon still uses the old closed definition
+        // with last/first point are identical (cannot hold information about open polygons with identical
+        // first and last point, though)
+        const sal_uInt32 nPointCount(aPoly.count());
+        const bool bIsClosed(aPoly.isClosed());
+
         // Platz in Arrays schaffen
-        pOuterSequence->realloc(aPoly.count());
+        pOuterSequence->realloc(bIsClosed ? nPointCount + 1 : nPointCount);
 
         // Pointer auf arrays holen
         awt::Point* pInnerSequence = pOuterSequence->getArray();
 
-        for(sal_uInt32 b(0L); b < aPoly.count(); b++)
+        for(sal_uInt32 b(0L); b < nPointCount; b++)
         {
             const basegfx::B2DPoint aPoint(aPoly.getB2DPoint(b));
             *pInnerSequence = awt::Point( basegfx::fround(aPoint.getX()), basegfx::fround(aPoint.getY()) );
             pInnerSequence++;
+        }
+
+        // #i75974# copy first point
+        if(bIsClosed)
+        {
+            *pInnerSequence = *pOuterSequence->getArray();
         }
 
         pOuterSequence++;
