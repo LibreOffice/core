@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:42:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:37:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,12 +82,20 @@
 #include <com/sun/star/frame/CommandGroup.hpp>
 #endif
 
+#ifndef __COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
+#endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+
 //_______________________________________________
 // includes of other projects
 
-#ifndef _SV_SVAPP_HXX
+#include <vcl/window.hxx>
 #include <vcl/svapp.hxx>
-#endif
+#include <vos/mutex.hxx>
 
 //_______________________________________________
 // namespace
@@ -124,15 +132,16 @@ DEFINE_XTYPEPROVIDER_4(CloseDispatcher                         ,
                        css::frame::XDispatch                   )
 
 //-----------------------------------------------
-CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR      ,
-                                 const css::uno::Reference< css::frame::XFrame >&              xCloseFrame)
+CloseDispatcher::CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                                 const css::uno::Reference< css::frame::XFrame >&              xFrame ,
+                                 const ::rtl::OUString&                                        sTarget)
     : ThreadHelpBase     (&Application::GetSolarMutex()                   )
     , ::cppu::OWeakObject(                                                )
     , m_xSMGR            (xSMGR                                           )
-    , m_xCloseFrame      (xCloseFrame                                     )
     , m_aAsyncCallback   (LINK( this, CloseDispatcher, impl_asyncCallback))
     , m_lStatusListener  (m_aLock.getShareableOslMutex()                  )
 {
+    m_xCloseFrame = CloseDispatcher::static_impl_searchRightTargetFrame(xFrame, sTarget);
 }
 
 //-----------------------------------------------
@@ -380,6 +389,7 @@ IMPL_LINK( CloseDispatcher, impl_asyncCallback, void*, EMPTYARG )
                )
                 bCloseFrame = sal_True;
 
+            else
             // c3) there is no other (visible) frame open ...
             //     The help module will be ignored everytimes!
             //     But we have to decide if we must terminate the
@@ -575,6 +585,53 @@ void CloseDispatcher::implts_notifyResultListener(const css::uno::Reference< css
         aResult);
 
     xListener->dispatchFinished(aEvent);
+}
+
+//-----------------------------------------------
+css::uno::Reference< css::frame::XFrame > CloseDispatcher::static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
+                                                                                              const ::rtl::OUString&                           sTarget)
+{
+    if (sTarget.equalsIgnoreAsciiCaseAscii("_self"))
+        return xFrame;
+
+    OSL_ENSURE((sTarget.getLength() < 1), "CloseDispatch used for unexpected target. Magic things will happen now .-)");
+
+    css::uno::Reference< css::frame::XFrame > xTarget = xFrame;
+    while(sal_True)
+    {
+        // a) top frames wil be closed
+        if (xTarget->isTop())
+            return xTarget;
+
+        // b) even child frame containing top level windows (e.g. query designer of database) will be closed
+        css::uno::Reference< css::awt::XWindow >    xWindow        = xTarget->getContainerWindow();
+        css::uno::Reference< css::awt::XTopWindow > xTopWindowCheck(xWindow, css::uno::UNO_QUERY);
+        if (xTopWindowCheck.is())
+        {
+            // b1) Note: Toolkit interface XTopWindow sometimes is used by real VCL-child-windows also .-)
+            //     Be sure that these window is realy a "top system window".
+            //     Attention ! Checking Window->GetParent() isnt the right approach here.
+            //     Because sometimes VCL create "implicit border windows" as parents even we created
+            //     a simple XWindow using the toolkit only .-(
+            ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+            Window* pWindow = VCLUnoHelper::GetWindow( xWindow );
+            if (
+                (pWindow                  ) &&
+                (pWindow->IsSystemWindow())
+               )
+                return xTarget;
+        }
+
+        // c) try to find better results on parent frame
+        //    If no parent frame exists (because this frame is used outside the desktop tree)
+        //    the given frame must be used directly.
+        css::uno::Reference< css::frame::XFrame > xParent(xTarget->getCreator(), css::uno::UNO_QUERY);
+        if ( ! xParent.is())
+            return xTarget;
+
+        // c1) check parent frame inside next loop ...
+        xTarget = xParent;
+    }
 }
 
 } // namespace framework
