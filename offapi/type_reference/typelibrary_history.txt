@@ -109,4 +109,8 @@
   update reference type library with the released version of OOo2.0.4. The
   new reference type library is taken from the release source tree OOD680m5.
 
+04/03/07 (JSC): TaskID=i76046
+  update reference type library with the rleased version of OO0.2.2.0. The new
+  reference type library is taken from the release source tree OOF680 m14.
+
   
