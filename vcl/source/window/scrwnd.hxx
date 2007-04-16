@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 19:40:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:22:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ public:
                         ImplWheelWindow( Window* pParent );
                         ~ImplWheelWindow();
 
+    void                ImplStop();
     void                ImplSetWheelMode( ULONG nWheelMode );
     ULONG               ImplGetWheelMode() const { return mnWheelMode; }
 };
