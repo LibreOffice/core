@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequenceashashmap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-29 11:16:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:58:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,6 +306,24 @@ class COMPHELPER_DLLPUBLIC SequenceAsHashMap : public SequenceAsHashMapBase
 
             return sal_False;
         }
+
+        //---------------------------------------
+        /** @short  check if all items of given map
+                    exists in these called map also.
+
+            @descr  Every item of the given map must exists
+                    with same name and value inside these map.
+                    But these map can contain additional items
+                    which are not part of the search-map.
+
+            @param  rCheck
+                    the map containing all items for checking.
+
+            @return
+                    TRUE if all items of Rcheck could be found
+                    in these map; FALSE otherwise.
+         */
+        sal_Bool match(const SequenceAsHashMap& rCheck) const;
 
         //---------------------------------------
         /** @short  can be used to generate a file dump of
