@@ -4,9 +4,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:59:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:41:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,7 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
     ReadGuard aReadLock(m_aLock);
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR ;
     css::uno::Reference< css::frame::XFrame >              xFrame(m_xFrame.get(), css::uno::UNO_QUERY);
-//    sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
+    sal_Bool                                               bRestoreWindowState = !m_bWindowStateAlreadySet;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
 
@@ -210,7 +210,6 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 
     switch(aEvent.Action)
     {
-        /*
         case css::frame::FrameAction_COMPONENT_ATTACHED :
             {
                 if (bRestoreWindowState)
@@ -225,7 +224,6 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
                 }
             }
             break;
-        */
 
         case css::frame::FrameAction_COMPONENT_REATTACHED :
             {
@@ -368,10 +366,9 @@ void PersistentWindowState::implst_setWindowStateOnConfig(const css::uno::Refere
 
 
 //*********************************************************************************************************
-void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& /*xWindow*/     ,
-                                                          const ::rtl::OUString&                          /*sWindowState*/)
+void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Reference< css::awt::XWindow >& xWindow     ,
+                                                          const ::rtl::OUString&                          sWindowState)
 {
-    /*
     if (
         (!xWindow.is()                ) ||
         ( sWindowState.getLength() < 1)
@@ -403,7 +400,6 @@ void PersistentWindowState::implst_setWindowStateOnWindow(const css::uno::Refere
 
     aSolarLock.clear();
     // <- SOLAR SAFE ------------------------
-    */
 }
 
 } // namespace framework
