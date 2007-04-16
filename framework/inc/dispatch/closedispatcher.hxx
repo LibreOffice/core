@@ -4,9 +4,9 @@
  *
  *  $RCSfile: closedispatcher.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 09:41:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:31:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,11 +210,15 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     an un oservice manager, which is needed to create uno resource
                     internaly.
 
-            @param  xCloseFrame
-                    the frame, where we must work on.
+            @param  xFrame
+                    the frame where the corresponding dispatch was started.
+
+            @param  sTarget
+                    help us to find the right target for this close operation.
          */
-        CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR      ,
-                        const css::uno::Reference< css::frame::XFrame >&              xCloseFrame);
+        CloseDispatcher(const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR  ,
+                        const css::uno::Reference< css::frame::XFrame >&              xFrame ,
+                        const ::rtl::OUString&                                        sTarget);
 
         //---------------------------------------
         /** @short  does nothing real. */
@@ -346,6 +350,29 @@ class CloseDispatcher : public css::lang::XTypeProvider
         void implts_notifyResultListener(const css::uno::Reference< css::frame::XDispatchResultListener >& xListener,
                                                sal_Int16                                                   nState   ,
                                          const css::uno::Any&                                              aResult  );
+
+        //---------------------------------------
+        /** @short  try to find the right target frame where this close request
+                    must be realy done.
+
+            @descr  The problem behind: closing some resources depends sometimes from the
+                    context where its dispatched. Sometimes the start frame of the dispatch
+                    has to be closed itself (target=_self) ... sometimes it's parent frame
+                    has to be closed - BUT(!) it means a parent frame containing a top level
+                    window. _top cant be used then for dispatch - because it adress TopFrames
+                    not frames containg top level windows. So normaly _magic (which btw does not
+                    exists at the moment .-) ) should be used. So we interpret target=<empty>
+                    as _magic !
+
+            @param  xFrame
+                    start point for search of right dispatch frame.
+
+            @param  sTarget
+                    give us an idea how this target frame must be searched.
+        */
+
+        static css::uno::Reference< css::frame::XFrame > static_impl_searchRightTargetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame ,
+                                                                                            const ::rtl::OUString&                           sTarget);
 
 }; // class CloseDispatcher
 
