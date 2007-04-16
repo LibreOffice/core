@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:24:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,6 +132,8 @@ public:
         FontWeight                  m_eWeight;                   // Weight
         FontItalic                  m_eItalic;                   // Italic
         int                         m_aWidths[256];              // character metrics
+
+        rtl::OString getNameObject() const;
     };
 
 
@@ -637,8 +639,7 @@ private:
     sal_Int32                           m_nResourceDict;
     ResourceDict                        m_aGlobalResourceDict;
     sal_Int32                           m_nFontDictObject;
-    sal_Int32                           m_nZaDbObject;
-    sal_Int32                           m_nHelvRegObject;
+    std::map< sal_Int32, sal_Int32 >    m_aBuiltinFontToObjectMap;
 
     PDFWriter::PDFWriterContext         m_aContext;
     oslFileHandle                       m_aFile;
@@ -921,23 +922,10 @@ i12626
             m_nFontDictObject = createObject();
         return m_nFontDictObject;
     }
-    /* get the object for HelvReg font */
-    sal_Int32 getHelvRegObject()
-    {
-        if( m_nHelvRegObject <= 0 )
-            m_nHelvRegObject = createObject();
-        return m_nHelvRegObject;
-    }
-    /* get the object for ZaDb font */
-    sal_Int32 getZaDbObject()
-    {
-        if( m_nZaDbObject <= 0 )
-            m_nZaDbObject = createObject();
-        return m_nZaDbObject;
-    }
     /* push resource into current (redirected) resource dict */
     void pushResource( ResourceKind eKind, const rtl::OString& rResource, sal_Int32 nObject );
 
+    void appendBuiltinFontsToDict( rtl::OStringBuffer& rDict ) const;
     /* writes a the font dictionary and emits all font objects
      * returns object id of font directory (or 0 on error)
      */
@@ -992,6 +980,7 @@ i12626
     // default appearences for widgets
     sal_Int32 findRadioGroupWidget( const PDFWriter::RadioButtonWidget& rRadio );
     Font replaceFont( const Font& rControlFont, const Font& rAppSetFont );
+    sal_Int32 getBestBuiltinFont( const Font& rFont );
 
     // used for edit and listbox
     Font drawFieldBorder( PDFWidget&, const PDFWriter::AnyWidget&, const StyleSettings& );
