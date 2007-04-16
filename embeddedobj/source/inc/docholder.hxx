@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:04:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:51:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,8 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::XDockingAreaAcceptor > m_xCachedDocAreaAcc;
 
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > m_aOutplaceFrameProps;
+
 
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetDocFrame();
     sal_Bool LoadDocToFrame( sal_Bool );
@@ -182,6 +184,9 @@ public:
 
     void SetContainerName(const rtl::OUString& aContainerName);
     rtl::OUString GetContainerName() const { return m_aContainerName; }
+
+    void SetOutplaceFrameProperties( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > aProps )
+        { m_aOutplaceFrameProps = aProps; }
 
     void PlaceFrame( const ::com::sun::star::awt::Rectangle& aNewRect );
 
