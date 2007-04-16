@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 14:00:54 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 15:36:50 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -53,6 +53,8 @@ XCSFILES= \
     ChartCommands.xcs \
     DbuCommands.xcs \
     BaseWindowState.xcs \
+    WriterFormWindowState.xcs \
+    WriterReportWindowState.xcs \
     DbBrowserWindowState.xcs \
     DrawImpressCommands.xcs \
     GenericCommands.xcs \
@@ -72,6 +74,7 @@ XCSFILES= \
     MathWindowState.xcs \
     StartModuleWindowState.xcs \
     WriterWindowState.xcs \
+    XFormsWindowState.xcs \
     WriterGlobalWindowState.xcs \
     WriterWebWindowState.xcs \
     Effects.xcs \
