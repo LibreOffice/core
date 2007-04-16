@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:21:35 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:09:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,14 @@ public:
 
 class OOXMLPropertyImpl : public OOXMLProperty
 {
+public:
+    enum Type_t { SPRM, ATTRIBUTE };
+private:
     Id mId;
     mutable OOXMLValue::Pointer_t mpValue;
+    Type_t meType;
 
 public:
-    enum Type_t { SPRM, ATTRIBUTE } meType;
     typedef boost::shared_ptr<OOXMLProperty> Pointer_t;
 
     OOXMLPropertyImpl(Id id, OOXMLValue::Pointer_t pValue, Type_t eType);
