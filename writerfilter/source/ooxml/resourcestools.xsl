@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:24:20 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:11:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -801,7 +801,14 @@ doctok::Id
         break;</xsl:text>
   </xsl:template>
 
-  <xsl:template name="contextattributeimpllist">
+   <xsl:template name="contextattributeimplstring">
+    <xsl:call-template name="caselabelattribute"/>
+    <xsl:text>
+        mpValue = OOXMLValue::Pointer_t(new OOXMLStringValue(rValue));
+        break;</xsl:text>
+  </xsl:template>
+
+ <xsl:template name="contextattributeimpllist">
     <xsl:call-template name="caselabelattribute"/>
     <xsl:for-each select=".//rng:ref">
       <xsl:text>
@@ -886,6 +893,9 @@ doctok::Id
           </xsl:when>
           <xsl:when test="$resource = 'HexValue'">
             <xsl:call-template name="contextattributeimplhex"/>
+          </xsl:when>
+          <xsl:when test="$resource = 'StringValue'">
+            <xsl:call-template name="contextattributeimplstring"/>
           </xsl:when>
           <xsl:when test="$resource = 'ListValue'">
             <xsl:call-template name="contextattributeimpllist"/>
