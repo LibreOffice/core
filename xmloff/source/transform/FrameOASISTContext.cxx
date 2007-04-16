@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FrameOASISTContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:24:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,6 +88,12 @@ sal_Bool XMLFrameOASISTransformerContext::IsLinkedEmbeddedObject(
             IsXMLToken( aLocalName, XML_HREF ) )
         {
             OUString sHRef( rAttrList->getValueByIndex( i ) );
+            if (sHRef.getLength() == 0)
+            {
+                // When the href is empty then the object is not linked but
+                // a placeholder.
+                return sal_False;
+            }
             GetTransformer().ConvertURIToOOo( sHRef, sal_True );
             return !(sHRef.getLength() && '#'==sHRef[0]);
         }
