@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-14 15:33:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 12:04:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -415,14 +415,30 @@ ULONG SwXMLTextBlocks::PutBlock( SwPaM& rPam, const String& rLong )
     sal_Bool bHasChildren = pDocSh && pDocSh->GetEmbeddedObjectContainer().HasEmbeddedObjects();
     if( !nRes && bHasChildren )
     {
+        // we have to write to the temporary storage first, since the used below functions are optimized
+        // TODO/LATER: it is only a temporary solution, that should be changed soon, the used methods should be
+        // called without optimization
+
+        try
+        {
+
+        uno::Reference< embed::XStorage > xTempStorage =
+                ::comphelper::OStorageHelper::GetTemporaryStorage();
+
         // TODO/LATER: no progress bar?!
         // TODO/MBA: strange construct
-        xMedium = new SfxMedium( xRoot, GetBaseURL() );
+        xMedium = new SfxMedium( xTempStorage, GetBaseURL() );
         sal_Bool bOK = pDocSh->SaveAsChildren( *xMedium );
         if( bOK )
             bOK = pDocSh->SaveCompletedChildren( sal_True );
         if( !bOK )
             nRes = ERR_SWG_WRITE_ERROR;
+
+        xTempStorage->copyToStorage( xRoot );
+
+        }
+        catch( uno::Exception& )
+        {}
     }
 
     try
