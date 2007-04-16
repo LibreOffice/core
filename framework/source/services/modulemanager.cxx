@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modulemanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:11:01 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,44 +69,67 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
+#include <com/sun/star/frame/XModule.hpp>
+#endif
+
+#ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
+#include <comphelper/configurationhelper.hxx>
+#endif
+
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
+#endif
+
+#ifndef _COMPHELPER_SEQUENCEASVECTOR_HXX_
+#include <comphelper/sequenceasvector.hxx>
+#endif
+
+#ifndef _COMPHELPER_ENUMHELPER_HXX_
+#include <comphelper/enumhelper.hxx>
+#endif
+
 //_______________________________________________
 // other includes
-
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
 
 namespace framework
 {
 
-/*-----------------------------------------------
-    04.12.2003 09:32
------------------------------------------------*/
-DEFINE_XINTERFACE_5(ModuleManager                                   ,
-                    OWeakObject                                     ,
-                    DIRECT_INTERFACE(css::lang::XTypeProvider      ),
-                    DIRECT_INTERFACE(css::lang::XServiceInfo       ),
-                    DIRECT_INTERFACE(css::container::XNameAccess   ),
-                    DIRECT_INTERFACE(css::container::XElementAccess),
-                    DIRECT_INTERFACE(css::frame::XModuleManager   ))
+static const ::rtl::OUString CFGPATH_FACTORIES     = ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
+static const ::rtl::OUString MODULEPROP_IDENTIFIER = ::rtl::OUString::createFromAscii("ooSetupFactoryModuleIdentifier" );
 
 /*-----------------------------------------------
     04.12.2003 09:32
 -----------------------------------------------*/
-DEFINE_XTYPEPROVIDER_5(ModuleManager                 ,
-                       css::lang::XTypeProvider      ,
-                       css::lang::XServiceInfo       ,
-                       css::container::XNameAccess   ,
-                       css::container::XElementAccess,
-                       css::frame::XModuleManager   )
+DEFINE_XINTERFACE_7(ModuleManager                                    ,
+                    OWeakObject                                      ,
+                    DIRECT_INTERFACE(css::lang::XTypeProvider       ),
+                    DIRECT_INTERFACE(css::lang::XServiceInfo        ),
+                    DIRECT_INTERFACE(css::container::XNameReplace   ),
+                    DIRECT_INTERFACE(css::container::XNameAccess    ),
+                    DIRECT_INTERFACE(css::container::XElementAccess ),
+                    DIRECT_INTERFACE(css::container::XContainerQuery),
+                    DIRECT_INTERFACE(css::frame::XModuleManager     ))
+
+/*-----------------------------------------------
+    04.12.2003 09:32
+-----------------------------------------------*/
+DEFINE_XTYPEPROVIDER_7(ModuleManager                  ,
+                       css::lang::XTypeProvider       ,
+                       css::lang::XServiceInfo        ,
+                       css::container::XNameReplace   ,
+                       css::container::XNameAccess    ,
+                       css::container::XElementAccess ,
+                       css::container::XContainerQuery,
+                       css::frame::XModuleManager     )
 
 /*-----------------------------------------------
     04.12.2003 09:35
 -----------------------------------------------*/
 DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(ModuleManager                   ,
-                                 ::cppu::OWeakObject             ,
-                                 SERVICENAME_MODULEMANAGER       ,
-                                 IMPLEMENTATIONNAME_MODULEMANAGER)
+                                       ::cppu::OWeakObject             ,
+                                       SERVICENAME_MODULEMANAGER       ,
+                                       IMPLEMENTATIONNAME_MODULEMANAGER)
 
 /*-----------------------------------------------
     04.12.2003 09:35
@@ -150,53 +173,113 @@ ModuleManager::~ModuleManager()
 {
     // valid parameter?
     css::uno::Reference< css::frame::XFrame >      xFrame     (xModule, css::uno::UNO_QUERY);
+    css::uno::Reference< css::awt::XWindow >       xWindow    (xModule, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XController > xController(xModule, css::uno::UNO_QUERY);
     css::uno::Reference< css::frame::XModel >      xModel     (xModule, css::uno::UNO_QUERY);
 
     if (
         (!xFrame.is()     ) &&
+        (!xWindow.is()    ) &&
         (!xController.is()) &&
         (!xModel.is()     )
        )
     {
         throw css::lang::IllegalArgumentException(
-                ::rtl::OUString::createFromAscii("Not a XFrame, XController nor a XModel reference."),
+                ::rtl::OUString::createFromAscii("Given module is not a frame nor a window, controller or model."),
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
     }
 
-    // frame empty?
-    // controller/model?
-    // all needed interfaces available?
-    css::uno::Reference< css::lang::XServiceInfo > xInfo;
     if (xFrame.is())
+    {
         xController = xFrame->getController();
+        xWindow     = xFrame->getComponentWindow();
+    }
     if (xController.is())
         xModel = xController->getModel();
 
-    if (xModel.is())
-        xInfo = css::uno::Reference< css::lang::XServiceInfo >(xModel, css::uno::UNO_QUERY);
-    else if (xController.is())
-        xInfo = css::uno::Reference< css::lang::XServiceInfo >(xController, css::uno::UNO_QUERY);
-    else if (xFrame.is()) // needed for detection of special modules (like e.g. help)!
-        xInfo = css::uno::Reference< css::lang::XServiceInfo >(xFrame, css::uno::UNO_QUERY);
+    // modules are implemented by the deepest component in hierarchy ...
+    // Means: model -> controller -> window
+    // No fallbacks to higher components are allowed !
+    // Note : A frame provides access to module components only ... but it's not a module by himself.
 
-    if (!xInfo.is())
+    ::rtl::OUString sModule;
+    if (xModel.is())
+        sModule = implts_identify(xModel);
+    else
+    if (xController.is())
+        sModule = implts_identify(xController);
+    else
+    if (xWindow.is())
+        sModule = implts_identify(xWindow);
+
+    if (sModule.getLength() < 1)
         throw css::frame::UnknownModuleException(
-                ::rtl::OUString::createFromAscii("Cant classify given module."),
+                ::rtl::OUString::createFromAscii("Cant find suitable module for the given component."),
                 static_cast< ::cppu::OWeakObject* >(this));
+
+    return sModule;
+}
+
+/*-----------------------------------------------
+    08.03.2007 09:55
+-----------------------------------------------*/
+void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
+                                           const css::uno::Any&   aValue)
+    throw (css::lang::IllegalArgumentException   ,
+           css::container::NoSuchElementException,
+           css::lang::WrappedTargetException     ,
+           css::uno::RuntimeException            )
+{
+    ::comphelper::SequenceAsHashMap lProps(aValue);
+    if (lProps.size() < 1)
+    {
+        throw css::lang::IllegalArgumentException(
+                ::rtl::OUString::createFromAscii("No properties given to replace part of module."),
+                static_cast< css::container::XNameAccess* >(this),
+                2);
+    }
 
     // SAFE -> ----------------------------------
     ReadGuard aReadLock(m_aLock);
-    // TODO
-    // Please migrate to new method impl_identifyNew() in case every office module
-    // supports it right service name and can be asked directly ...
-
-    // throws an UnknownModuleException in case module has no configuration!
-    ::rtl::OUString sIdentifier = impl_identify(xInfo);
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
     // <- SAFE ----------------------------------
-    return sIdentifier;
+
+    // get access to the element
+    // Note: Dont use impl_getConfig() method here. Because it creates a readonly access only, further
+    // it cache it as a member of this module manager instance. If we change some props there ... but dont
+    // flush changes (because an error occured) we will read them later. If we use a different config access
+    // we can close it without a flush ... and our read data wont be affected .-)
+    css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
+                                                                        xSMGR,
+                                                                        CFGPATH_FACTORIES,
+                                                                        ::comphelper::ConfigurationHelper::E_STANDARD);
+    css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
+    css::uno::Reference< css::container::XNameReplace > xModule  ;
+
+    xModules->getByName(sName) >>= xModule;
+    if (!xModule.is())
+    {
+        throw css::uno::RuntimeException(
+                ::rtl::OUString::createFromAscii("Was not able to get write access to the requested module entry inside configuration."),
+                static_cast< css::container::XNameAccess* >(this));
+    }
+
+    ::comphelper::SequenceAsHashMap::const_iterator pProp;
+    for (  pProp  = lProps.begin();
+           pProp != lProps.end()  ;
+         ++pProp                  )
+    {
+        const ::rtl::OUString& sPropName  = pProp->first;
+        const css::uno::Any&   aPropValue = pProp->second;
+
+        // let "NoSuchElementException" out ! We support the same API ...
+        // and without a flush() at the end all changed data before will be ignored !
+        xModule->replaceByName(sPropName, aPropValue);
+    }
+
+    ::comphelper::ConfigurationHelper::flush(xCfg);
 }
 
 /*-----------------------------------------------
@@ -208,39 +291,32 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
           css::uno::RuntimeException            )
 {
     // get access to the element
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_openConfig();
+    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
     css::uno::Any aElement = xCFG->getByName(sName);
 
-    css::uno::Reference< css::container::XNameAccess > xElement;
-    aElement >>= xElement;
-    if (!xElement.is())
+    css::uno::Reference< css::container::XNameAccess > xModule;
+    aElement >>= xModule;
+    if (!xModule.is())
     {
-        throw css::container::NoSuchElementException(
-                ::rtl::OUString::createFromAscii("The module configuration seems to be corrupted."),
+        throw css::uno::RuntimeException(
+                ::rtl::OUString::createFromAscii("Was not able to get write access to the requested module entry inside configuration."),
                 static_cast< css::container::XNameAccess* >(this));
     }
 
-    // convert it to seq< PropertyValue >!
-    const css::uno::Sequence< ::rtl::OUString > lProps = xElement->getElementNames();
-    const ::rtl::OUString*                      pProps = lProps.getConstArray();
-          sal_Int32                             c      = lProps.getLength();
+    // convert it to seq< PropertyValue >
+    const css::uno::Sequence< ::rtl::OUString > lPropNames = xModule->getElementNames();
+          ::comphelper::SequenceAsHashMap       lProps     ;
+          sal_Int32                             c          = lPropNames.getLength();
+          sal_Int32                             i          = 0;
 
-    css::uno::Sequence< css::beans::PropertyValue > lElement(c);
-    css::beans::PropertyValue*                      pElement = lElement.getArray();
-
-    for (sal_Int32 i=0; i<c; ++i)
+    lProps[MODULEPROP_IDENTIFIER] <<= sName;
+    for (i=0; i<c; ++i)
     {
-        pElement[i].Name  = pProps[i];
-        pElement[i].Value = xElement->getByName(pProps[i]);
+        const ::rtl::OUString& sPropName         = lPropNames[i];
+                               lProps[sPropName] = xModule->getByName(sPropName);
     }
 
-    /*  TODO
-        a) add some implicit properties for readonly/mandatory ...
-        b) catch exception during property access ...
-           But how they should be handled?
-     */
-
-    return css::uno::makeAny(lElement);
+    return css::uno::makeAny(lProps.getAsConstPropertyValueList());
 }
 
 /*-----------------------------------------------
@@ -249,7 +325,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
 css::uno::Sequence< ::rtl::OUString > SAL_CALL ModuleManager::getElementNames()
     throw(css::uno::RuntimeException)
 {
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_openConfig();
+    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
     return xCFG->getElementNames();
 }
 
@@ -259,7 +335,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL ModuleManager::getElementNames()
 sal_Bool SAL_CALL ModuleManager::hasByName(const ::rtl::OUString& sName)
     throw(css::uno::RuntimeException)
 {
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_openConfig();
+    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
     return xCFG->hasByName(sName);
 }
 
@@ -278,55 +354,81 @@ css::uno::Type SAL_CALL ModuleManager::getElementType()
 sal_Bool SAL_CALL ModuleManager::hasElements()
     throw(css::uno::RuntimeException)
 {
-    css::uno::Reference< css::container::XNameAccess > xCFG = implts_openConfig();
+    css::uno::Reference< css::container::XNameAccess > xCFG = implts_getConfig();
     return xCFG->hasElements();
+}
+
+/*-----------------------------------------------
+    07.03.2007 12:55
+-----------------------------------------------*/
+css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const ::rtl::OUString&)
+    throw(css::uno::RuntimeException)
+{
+    throw css::uno::RuntimeException(::rtl::OUString::createFromAscii("Not implemented yet!"), static_cast< css::frame::XModuleManager* >(this));
+    return css::uno::Reference< css::container::XEnumeration >();
+}
+
+/*-----------------------------------------------
+    07.03.2007 12:55
+-----------------------------------------------*/
+css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
+    throw(css::uno::RuntimeException)
+{
+    ::comphelper::SequenceAsHashMap                 lSearchProps (lProperties);
+    css::uno::Sequence< ::rtl::OUString >           lModules     = getElementNames();
+    sal_Int32                                       c            = lModules.getLength();
+    sal_Int32                                       i            = 0;
+    ::comphelper::SequenceAsVector< css::uno::Any > lResult      ;
+
+    for (i=0; i<c; ++i)
+    {
+        try
+        {
+            const ::rtl::OUString&                sModule      = lModules[i];
+                  ::comphelper::SequenceAsHashMap lModuleProps = getByName(sModule);
+
+            if (lModuleProps.match(lSearchProps))
+                lResult.push_back(css::uno::makeAny(lModuleProps.getAsConstPropertyValueList()));
+        }
+        catch(const css::uno::Exception&)
+            {}
+    }
+
+    ::comphelper::OAnyEnumeration*                      pEnum = new ::comphelper::OAnyEnumeration(lResult.getAsConstList());
+    css::uno::Reference< css::container::XEnumeration > xEnum(static_cast< css::container::XEnumeration* >(pEnum), css::uno::UNO_QUERY_THROW);
+    return xEnum;
 }
 
 /*-----------------------------------------------
     14.12.2003 09:45
 -----------------------------------------------*/
-css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_openConfig()
+css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConfig()
     throw(css::uno::RuntimeException)
 {
     // SAFE -> ----------------------------------
-    WriteGuard aWriteLock(m_aLock);
+    ReadGuard aReadLock(m_aLock);
     if (m_xCFG.is())
         return m_xCFG;
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE ----------------------------------
 
-    css::uno::Reference< css::uno::XInterface > xCFG;
+    css::uno::Reference< css::uno::XInterface > xCfg;
     try
     {
-        css::uno::Reference< css::lang::XMultiServiceFactory > xConfigProvider(
-            m_xSMGR->createInstance(SERVICENAME_CFGPROVIDER), css::uno::UNO_QUERY);
-
-        if (!xConfigProvider.is())
-            throw css::uno::RuntimeException(
-                    ::rtl::OUString::createFromAscii("Could not locate configuration service."),
-                    static_cast< css::container::XNameAccess* >(this));
-
-        // set root path
-        css::uno::Sequence< css::uno::Any > lParams(1);
-        css::beans::PropertyValue           aParam;
-        aParam.Name    = ::rtl::OUString::createFromAscii("nodepath");
-        aParam.Value <<= ::rtl::OUString::createFromAscii("/org.openoffice.Setup/Office/Factories");
-        lParams[0]   <<= aParam;
-
-        // open it
-        xCFG = xConfigProvider->createInstanceWithArguments(SERVICENAME_CFGREADACCESS, lParams);
+        xCfg = ::comphelper::ConfigurationHelper::openConfig(
+                    xSMGR,
+                    CFGPATH_FACTORIES,
+                    ::comphelper::ConfigurationHelper::E_READONLY);
     }
-    catch(const css::uno::RuntimeException&)
-        { throw; }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
     catch(const css::uno::Exception&)
-        { xCFG.clear(); }
+        { xCfg.clear(); }
 
-    m_xCFG = css::uno::Reference< css::container::XNameAccess >(xCFG, css::uno::UNO_QUERY);
-    if (!m_xCFG.is())
-    {
-        throw css::uno::RuntimeException(
-                ::rtl::OUString::createFromAscii("Could not open configuration package /org.openoffice.Setup/Office/Factories."),
-                static_cast< css::container::XNameAccess* >(this));
-    }
-
+    // SAFE -> ----------------------------------
+    WriteGuard aWriteLock(m_aLock);
+    m_xCFG = css::uno::Reference< css::container::XNameAccess >(xCfg, css::uno::UNO_QUERY_THROW);
     return m_xCFG;
     // <- SAFE ----------------------------------
 }
@@ -334,23 +436,33 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_openCon
 /*-----------------------------------------------
     30.01.2004 07:54
 -----------------------------------------------*/
-::rtl::OUString ModuleManager::impl_identify(const css::uno::Reference< css::lang::XServiceInfo >& xModule)
-    throw(css::frame::UnknownModuleException)
+::rtl::OUString ModuleManager::implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent)
 {
+    // Search for an optional (!) interface XModule first.
+    // Its used to overrule an existing service name. Used e.g. by our database form designer
+    // which uses a writer module internaly.
+    css::uno::Reference< css::frame::XModule > xModule(xComponent, css::uno::UNO_QUERY);
+    if (xModule.is())
+        return xModule->getIdentifier();
+
+    // detect modules in a generic way ...
+    // comparing service names with configured entries ...
+    css::uno::Reference< css::lang::XServiceInfo > xInfo(xComponent, css::uno::UNO_QUERY);
+    if (!xInfo.is())
+        return ::rtl::OUString();
+
     const css::uno::Sequence< ::rtl::OUString > lKnownModules = getElementNames();
     const ::rtl::OUString*                      pKnownModules = lKnownModules.getConstArray();
           sal_Int32                             c             = lKnownModules.getLength();
+          sal_Int32                             i             = 0;
 
-    // detect modules in a generic way ...
-    for (sal_Int32 m=0; m<c; ++m)
+    for (i=0; i<c; ++i)
     {
-        if (xModule->supportsService(pKnownModules[m]))
-            return pKnownModules[m];
+        if (xInfo->supportsService(pKnownModules[i]))
+            return pKnownModules[i];
     }
 
-    throw css::frame::UnknownModuleException(
-            ::rtl::OUString::createFromAscii("Cant classify given module."),
-            static_cast< ::cppu::OWeakObject* >(this));
+    return ::rtl::OUString();
 }
 
 } // namespace framework
