@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:11:42 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 14:34:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,7 @@ public:
     virtual doctok::Id getIdFromRefs(TokenEnum_t nToken);
     virtual void  characters(const rtl::OUString &amp; str); 
 
-    virtual string getType() { return "</xsl:text>
+    virtual string getType() const { return "</xsl:text>
     <xsl:value-of select="$classname"/>
     <xsl:text>"; }</xsl:text>
     <xsl:text>
