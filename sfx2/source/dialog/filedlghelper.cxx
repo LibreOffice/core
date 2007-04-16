@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.128 $
+ *  $Revision: 1.129 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:56:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:55:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,9 @@
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
+#endif
+#ifndef _COMPHELPER_SEQUENCEASHASHMAP_HXX_
+#include <comphelper/sequenceashashmap.hxx>
 #endif
 
 #ifndef _URLOBJ_HXX
@@ -1749,7 +1752,7 @@ void FileDialogHelper_Impl::setFilter( const OUString& rFilter )
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::createMatcher( const String& rFactory )
 {
-    mpMatcher = new SfxFilterMatcher( rFactory );
+    mpMatcher = new SfxFilterMatcher( SfxObjectShell::GetServiceNameFromFactory(rFactory) );
     mbDeleteMatcher = sal_True;
 }
 
@@ -1790,14 +1793,8 @@ void FileDialogHelper_Impl::addFilters( sal_Int64 nFlags,
     // create the list of filters
     ::rtl::OUStringBuffer sQuery(256);
     sQuery.appendAscii("getSortedFilterList()");
-    if ( rFactory.Len() )
-    {
-        // translate short to long name
-        SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByShortName(rFactory);
-        ::rtl::OUString            sFactory = SvtModuleOptions().GetFactoryName(eFactory);
-        sQuery.appendAscii(":module=");
-        sQuery.append     (sFactory  );
-    }
+    sQuery.appendAscii(":module="                                       );
+    sQuery.append     (rFactory                                         ); // use long name here !
     sQuery.appendAscii(":iflags="                                       );
     sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nMustFlags));
     sQuery.appendAscii(":eflags="                                       );
@@ -2261,7 +2258,7 @@ FileDialogHelper::FileDialogHelper(
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, rFact, nMust, nDont );
+    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
 // ------------------------------------------------------------------------
@@ -2285,7 +2282,7 @@ FileDialogHelper::FileDialogHelper(
     mxImp = mpImp;
 
     // create the list of filters
-    mpImp->addFilters( nFlags, rFact, nMust, nDont );
+    mpImp->addFilters( nFlags, SfxObjectShell::GetServiceNameFromFactory(rFact), nMust, nDont );
 }
 
 // ------------------------------------------------------------------------
@@ -2299,6 +2296,34 @@ FileDialogHelper::FileDialogHelper(
 }
 
 // ------------------------------------------------------------------------
+FileDialogHelper::FileDialogHelper(
+    sal_Int16 nDialogType,
+    sal_Int64 nFlags,
+    const ::rtl::OUString& aFilterUIName,
+    const ::rtl::OUString& aExtName,
+    Window* _pPreferredParent )
+{
+    mpImp = new FileDialogHelper_Impl( this, nDialogType, nFlags, _pPreferredParent );
+    mxImp = mpImp;
+
+    // the wildcard here is expected in form "*.extension"
+    ::rtl::OUString aWildcard;
+    if ( aExtName.indexOf( (sal_Unicode)'*' ) != 0 )
+    {
+        if ( aExtName.getLength() && aExtName.indexOf( (sal_Unicode)'.' ) != 0 )
+            aWildcard = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*." ) );
+        else
+            aWildcard = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "*" ) );
+    }
+
+    aWildcard += aExtName;
+
+    ::rtl::OUString aUIString =
+        ::sfx2::addExtension( aFilterUIName, aWildcard, ( WB_OPEN == ( nFlags & WB_OPEN ) ), *mpImp );
+    AddFilter( aUIString, aWildcard );
+}
+
+// ------------------------------------------------------------------------
 FileDialogHelper::~FileDialogHelper()
 {
     mpImp->dispose();
@@ -2308,7 +2333,7 @@ FileDialogHelper::~FileDialogHelper()
 // ------------------------------------------------------------------------
 void FileDialogHelper::CreateMatcher( const String& rFactory )
 {
-    mpImp->createMatcher( rFactory );
+    mpImp->createMatcher( SfxObjectShell::GetServiceNameFromFactory(rFactory) );
 }
 
 // ------------------------------------------------------------------------
