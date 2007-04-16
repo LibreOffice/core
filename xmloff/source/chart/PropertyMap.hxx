@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 18:00:28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:32:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,6 +93,8 @@
 #define XML_SCH_CONTEXT_STEP_MAIN                   ( XML_SCH_CTF_START + 3 )
 #define XML_SCH_CONTEXT_ORIGIN                      ( XML_SCH_CTF_START + 4 )
 #define XML_SCH_CONTEXT_LOGARITHMIC                 ( XML_SCH_CTF_START + 5 )
+#define XML_SCH_CONTEXT_STOCK_WITH_VOLUME           ( XML_SCH_CTF_START + 6 )
+#define XML_SCH_CONTEXT_LINES_USED                  ( XML_SCH_CTF_START + 7 )
 
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_INNER     ( XML_SCH_CTF_START + 10 )
 #define XML_SCH_CONTEXT_SPECIAL_TICKS_MAJ_OUTER     ( XML_SCH_CTF_START + 11 )
@@ -131,7 +133,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
 {
     // chart subtypes
     MAP_ENTRY( "UpDown", CHART, XML_JAPANESE_CANDLE_STICK, XML_TYPE_BOOL ), // formerly XML_STOCK_UPDOWN_BARS
-    MAP_ENTRY( "Volume", CHART, XML_STOCK_WITH_VOLUME, XML_TYPE_BOOL ),
+     MAP_CONTEXT( "Volume", CHART, XML_STOCK_WITH_VOLUME, XML_TYPE_BOOL, STOCK_WITH_VOLUME ),
     MAP_ENTRY( "Dim3D", CHART, XML_THREE_DIMENSIONAL, XML_TYPE_BOOL ),
     MAP_ENTRY( "Deep", CHART, XML_DEEP, XML_TYPE_BOOL ),
     MAP_ENTRY( "Lines", CHART, XML_LINES, XML_TYPE_BOOL ),
@@ -150,7 +152,7 @@ const XMLPropertyMapEntry aXMLChartPropMap[] =
     MAP_ENTRY( "Vertical", CHART, XML_VERTICAL, XML_TYPE_BOOL ),
     // #i32368# property should no longer be used as XML-property (in OASIS
     // format), but is still ex-/imported for compatibility with the OOo file format
-     MAP_ENTRY( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER ),
+      MAP_CONTEXT( "NumberOfLines", CHART, XML_LINES_USED, XML_TYPE_NUMBER, LINES_USED  ),
     MAP_ENTRY( "StackedBarsConnected", CHART, XML_CONNECT_BARS, XML_TYPE_BOOL ),
     // spline settings
     MAP_ENTRY( "SplineOrder", CHART, XML_SPLINE_ORDER, XML_TYPE_NUMBER ),
