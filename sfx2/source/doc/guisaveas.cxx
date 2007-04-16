@@ -4,9 +4,9 @@
  *
  *  $RCSfile: guisaveas.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:49:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:56:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,6 +152,7 @@
 
 const ::rtl::OUString aFilterOptionsString = ::rtl::OUString::createFromAscii( "FilterOptions" );
 const ::rtl::OUString aFilterDataString    = ::rtl::OUString::createFromAscii( "FilterData" );
+const ::rtl::OUString aFilterFlagsString   = ::rtl::OUString::createFromAscii( "FilterFlags" );
 
 using namespace ::com::sun::star;
 
@@ -224,9 +225,9 @@ class ModelData_Impl
     uno::Reference< frame::XStorable2 > m_xStorable2;
     uno::Reference< util::XModifiable > m_xModifiable;
 
-    ::rtl::OUString m_aDocumentServiceName;
+    ::rtl::OUString m_aModuleName;
     ::comphelper::SequenceAsHashMap* m_pDocumentPropsHM;
-    ::comphelper::SequenceAsHashMap* m_pDocServicePropsHM;
+    ::comphelper::SequenceAsHashMap* m_pModulePropsHM;
 
     ::comphelper::SequenceAsHashMap m_aMediaDescrHM;
 
@@ -248,15 +249,17 @@ public:
 
     const ::comphelper::SequenceAsHashMap& GetDocProps();
 
-    ::rtl::OUString GetDocumentServiceName();
-    const ::comphelper::SequenceAsHashMap& GetDocumentServiceProps();
+    ::rtl::OUString GetModuleName();
+    const ::comphelper::SequenceAsHashMap& GetModuleProps();
 
     void CheckInteractionHandler();
 
 
+    ::rtl::OUString GetDocServiceName();
     uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilterCheckFlags( sal_Int32 nMust, sal_Int32 nDont );
     uno::Sequence< beans::PropertyValue > GetDocServiceAnyFilter( sal_Int32 nMust, sal_Int32 nDont );
     uno::Sequence< beans::PropertyValue > GetPreselectedFilter_Impl( sal_Int8 nStoreMode );
+    uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilter();
 
     sal_Bool ExecuteFilterDialog_Impl( const ::rtl::OUString& aFilterName );
 
@@ -266,8 +269,6 @@ public:
     sal_Int8 CheckFilter( const ::rtl::OUString& );
 
     sal_Bool CheckFilterOptionsDialogExistence();
-
-    uno::Sequence< beans::PropertyValue > GetDocServiceDefaultFilter();
 
     sal_Bool OutputFileDialog( sal_Int8 nStoreMode,
                                 const ::comphelper::SequenceAsHashMap& aPreselectedFilterPropsHM,
@@ -284,7 +285,7 @@ ModelData_Impl::ModelData_Impl( SfxStoringHelper& aOwner,
 : m_pOwner( &aOwner )
 , m_xModel( xModel )
 , m_pDocumentPropsHM( NULL )
-, m_pDocServicePropsHM( NULL )
+, m_pModulePropsHM( NULL )
 , m_aMediaDescrHM( aMediaDescr )
 {
     CheckInteractionHandler();
@@ -297,8 +298,8 @@ ModelData_Impl::~ModelData_Impl()
     if ( m_pDocumentPropsHM )
         delete m_pDocumentPropsHM;
 
-    if ( m_pDocServicePropsHM )
-        delete m_pDocServicePropsHM;
+    if ( m_pModulePropsHM )
+        delete m_pModulePropsHM;
 }
 
 //-------------------------------------------------------------------------
@@ -369,31 +370,37 @@ const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetDocProps()
 }
 
 //-------------------------------------------------------------------------
-::rtl::OUString ModelData_Impl::GetDocumentServiceName()
+::rtl::OUString ModelData_Impl::GetModuleName()
 {
-    if ( !m_aDocumentServiceName.getLength() )
+    if ( !m_aModuleName.getLength() )
     {
-        m_aDocumentServiceName = m_pOwner->GetModuleManager()->identify(
+        m_aModuleName = m_pOwner->GetModuleManager()->identify(
                                                 uno::Reference< uno::XInterface >( m_xModel, uno::UNO_QUERY ) );
-        if ( !m_aDocumentServiceName.getLength() )
+        if ( !m_aModuleName.getLength() )
             throw uno::RuntimeException(); // TODO:
     }
-    return m_aDocumentServiceName;
+    return m_aModuleName;
 }
 
 //-------------------------------------------------------------------------
-const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetDocumentServiceProps()
+const ::comphelper::SequenceAsHashMap& ModelData_Impl::GetModuleProps()
 {
-    if ( !m_pDocServicePropsHM )
+    if ( !m_pModulePropsHM )
     {
-        uno::Sequence< beans::PropertyValue > aDocServiceProps;
-        m_pOwner->GetNamedModuleManager()->getByName( GetDocumentServiceName() ) >>= aDocServiceProps;
-        if ( !aDocServiceProps.getLength() )
+        uno::Sequence< beans::PropertyValue > aModuleProps;
+        m_pOwner->GetNamedModuleManager()->getByName( GetModuleName() ) >>= aModuleProps;
+        if ( !aModuleProps.getLength() )
             throw uno::RuntimeException(); // TODO;
-        m_pDocServicePropsHM = new ::comphelper::SequenceAsHashMap( aDocServiceProps );
+        m_pModulePropsHM = new ::comphelper::SequenceAsHashMap( aModuleProps );
     }
 
-    return *m_pDocServicePropsHM;
+    return *m_pModulePropsHM;
+}
+
+//-------------------------------------------------------------------------
+::rtl::OUString ModelData_Impl::GetDocServiceName()
+{
+    return GetModuleProps().getUnpackedValueOrDefault(::rtl::OUString::createFromAscii( "ooSetupFactoryDocumentService" ), ::rtl::OUString());
 }
 
 //-------------------------------------------------------------------------
@@ -427,7 +434,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceDefaultFilter
 {
     uno::Sequence< beans::PropertyValue > aProps;
 
-    ::rtl::OUString aFilterName = GetDocumentServiceProps().getUnpackedValueOrDefault(
+    ::rtl::OUString aFilterName = GetModuleProps().getUnpackedValueOrDefault(
                                                                 ::rtl::OUString::createFromAscii( "ooSetupFactoryDefaultFilter" ),
                                                                 ::rtl::OUString() );
 
@@ -460,7 +467,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetDocServiceAnyFilter( sa
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
     aSearchRequest[0].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
-    aSearchRequest[0].Value <<= GetDocumentServiceName();
+    aSearchRequest[0].Value <<= GetDocServiceName();
 
     return SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
 }
@@ -480,7 +487,7 @@ uno::Sequence< beans::PropertyValue > ModelData_Impl::GetPreselectedFilter_Impl(
         aSearchRequest[0].Name = ::rtl::OUString::createFromAscii( "Type" );
         aSearchRequest[0].Value <<= ::rtl::OUString::createFromAscii( "pdf_Portable_Document_Format" );
         aSearchRequest[1].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
-        aSearchRequest[1].Value <<= GetDocumentServiceName();
+        aSearchRequest[1].Value <<= GetDocServiceName();
 
         aFilterProps = SfxStoringHelper::SearchForFilter( m_pOwner->GetFilterQuery(), aSearchRequest, nMust, nDont );
     }
@@ -728,7 +735,7 @@ sal_Bool ModelData_Impl::CheckFilterOptionsDialogExistence()
 {
     uno::Sequence< beans::NamedValue > aSearchRequest( 1 );
     aSearchRequest[0].Name = ::rtl::OUString::createFromAscii( "DocumentService" );
-    aSearchRequest[0].Value <<= GetDocumentServiceName();
+    aSearchRequest[0].Value <<= GetDocServiceName();
 
     uno::Reference< container::XEnumeration > xFilterEnum =
                                     m_pOwner->GetFilterQuery()->createSubSetEnumerationByProperties( aSearchRequest );
@@ -788,25 +795,19 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     if( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
-        aDialogMode = com::sun::star::ui::dialogs::TemplateDescription::
-            FILESAVE_AUTOEXTENSION_SELECTION;
+        if ( nStoreMode & PDFEXPORT_REQUESTED )
+            aDialogMode = com::sun::star::ui::dialogs::TemplateDescription::
+                FILESAVE_AUTOEXTENSION;
+        else
+            aDialogMode = com::sun::star::ui::dialogs::TemplateDescription::
+                FILESAVE_AUTOEXTENSION_SELECTION;
         aDialogFlags = SFXWB_EXPORT;
     }
 
     sfx2::FileDialogHelper* pFileDlg = NULL;
 
-    // TODO/LATER: ooSetupFactoryShortName should be used, but for star web it returns sweb
-    ::rtl::OUString aDocServiceShortName = GetDocumentServiceProps().getUnpackedValueOrDefault(
-                                                ::rtl::OUString::createFromAscii( "ooSetupFactoryEmptyDocumentURL" ),
-                                                ::rtl::OUString() );
-    ::rtl::OUString aPrefix = ::rtl::OUString::createFromAscii( "private:factory/" );
-    if ( aDocServiceShortName.match( aPrefix ) )
-        aDocServiceShortName = aDocServiceShortName.copy( aPrefix.getLength() );
-    sal_Int32 nParamPos = aDocServiceShortName.indexOf( '?' );
-    if ( nParamPos != -1 )
-        aDocServiceShortName = aDocServiceShortName.copy( 0, nParamPos );
-
-    DBG_ASSERT( aDocServiceShortName.getLength(), "No short name for document service!" );
+    ::rtl::OUString aDocServiceName = GetDocServiceName();
+    DBG_ASSERT( aDocServiceName.getLength(), "No document service for this module set!" );
 
     sal_Int32 nMust = getMustFlags( nStoreMode );
     sal_Int32 nDont = getDontFlags( nStoreMode );
@@ -814,17 +815,31 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
-        // This is the normal dialog
-        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceShortName, nMust, nDont );
+        if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && aPreselectedFilterPropsHM.size() )
+        {
+            // this is a PDF export
+            // the filter options has been shown already
+            ::rtl::OUString aFilterUIName = aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
+                                                        ::rtl::OUString::createFromAscii( "UIName" ),
+                                                        ::rtl::OUString() );
 
-        if( aDocServiceShortName.equalsAscii( "sdraw" ) )
-            eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
-        if( aDocServiceShortName.equalsAscii( "simpress" ) )
-            eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
+            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf" ) ) );
+            pFileDlg->SetCurrentFilter( aFilterUIName );
+        }
+        else
+        {
+            // This is the normal dialog
+            pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nMust, nDont );
+        }
+
+        if( aDocServiceName.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
+               eCtxt = sfx2::FileDialogHelper::SD_EXPORT;
+        if( aDocServiceName.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
+               eCtxt = sfx2::FileDialogHelper::SI_EXPORT;
         if ( eCtxt != sfx2::FileDialogHelper::UNKNOWN_CONTEXT )
-            pFileDlg->SetContext( eCtxt );
+               pFileDlg->SetContext( eCtxt );
 
-        pFileDlg->CreateMatcher( aDocServiceShortName );
+        pFileDlg->CreateMatcher( aDocServiceName );
 
         uno::Reference< ui::dialogs::XFilePicker > xFilePicker = pFileDlg->GetFilePicker();
         uno::Reference< ui::dialogs::XFilePickerControlAccess > xControlAccess =
@@ -838,17 +853,12 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
             aCtrlText = ::rtl::OUString( String( SfxResId( STR_LABEL_FILEFORMAT ) ) );
             xControlAccess->setLabel( ui::dialogs::CommonFilePickerElementIds::LISTBOX_FILTER_LABEL, aCtrlText );
         }
-
-        if ( ( nStoreMode & PDFEXPORT_REQUESTED ) && aPreselectedFilterPropsHM.size() )
-            pFileDlg->SetCurrentFilter( aPreselectedFilterPropsHM.getUnpackedValueOrDefault(
-                                                        ::rtl::OUString::createFromAscii( "UIName" ),
-                                                        ::rtl::OUString() ) );
     }
     else
     {
         // This is the normal dialog
-        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceShortName, nMust, nDont );
-        pFileDlg->CreateMatcher( aDocServiceShortName );
+        pFileDlg = new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aDocServiceName, nMust, nDont );
+        pFileDlg->CreateMatcher( aDocServiceName );
     }
 
     // the last used name might be provided by aUserSelectedName from the old selection
@@ -1278,6 +1288,9 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                             ERRCODE_IO_INVALIDPARAMETER );
 
     ::comphelper::SequenceAsHashMap aFilterPropsHM( aFilterProps );
+    ::rtl::OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
+                                                                    ::rtl::OUString::createFromAscii( "Name" ),
+                                                                    ::rtl::OUString() );
 
     ::rtl::OUString aFilterFromMediaDescr = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
                                                     ::rtl::OUString::createFromAscii( "FilterName" ),
@@ -1288,6 +1301,20 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
 
     sal_Bool bUseFilterOptions = sal_False;
     ::comphelper::SequenceAsHashMap::const_iterator aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "URL" ) );
+
+    if ( ( nStoreMode & EXPORT_REQUESTED ) && ( nStoreMode & PDFEXPORT_REQUESTED ) && !( nStoreMode & PDFDIRECTEXPORT_REQUESTED ) )
+    {
+        // this is PDF export, the filter options dialog should be shown before the export
+        if ( aModelData.GetMediaDescr().find( aFilterFlagsString ) == aModelData.GetMediaDescr().end()
+          && aModelData.GetMediaDescr().find( aFilterOptionsString ) == aModelData.GetMediaDescr().end()
+          && aModelData.GetMediaDescr().find( aFilterDataString ) == aModelData.GetMediaDescr().end() )
+        {
+            // execute filter options dialog since no options are set in the media descriptor
+            if ( aModelData.ExecuteFilterDialog_Impl( aFilterName ) )
+                bDialogUsed = sal_True;
+        }
+    }
+
     if ( aFileNameIter == aModelData.GetMediaDescr().end() )
     {
         sal_Bool bExit = sal_False;
@@ -1298,10 +1325,10 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             if ( nStoreMode == SAVEAS_REQUESTED )
             {
                 // in case of saving check filter for possible alien warning
-                ::rtl::OUString aFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
+                ::rtl::OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
                                                                                 ::rtl::OUString::createFromAscii( "FilterName" ),
                                                                                 ::rtl::OUString() );
-                sal_Int8 nStatusSave = aModelData.CheckFilter( aFilterName );
+                sal_Int8 nStatusSave = aModelData.CheckFilter( aSelFilterName );
                 if ( nStatusSave == STATUS_SAVEAS_STANDARDNAME )
                 {
                     // switch to best filter
@@ -1339,11 +1366,6 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         }
     }
 
-    // now we can get the filename from the SfxRequest
-    // if it is not set the preselected filter is used
-    ::rtl::OUString aFilterName = aFilterPropsHM.getUnpackedValueOrDefault(
-                                                                    ::rtl::OUString::createFromAscii( "Name" ),
-                                                                    ::rtl::OUString() );
     if ( aFileNameIter != aModelData.GetMediaDescr().end() )
     {
         ::rtl::OUString aFileName;
@@ -1373,7 +1395,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                             aModelData.GetMediaDescr().find( ::rtl::OUString::createFromAscii( "FilterFlags" ) );
     sal_Bool bFilterFlagsSet = ( aIter != aModelData.GetMediaDescr().end() );
 
-    if( !( nStoreMode & PDFDIRECTEXPORT_REQUESTED ) && !bFilterFlagsSet
+    if( !( nStoreMode & PDFEXPORT_REQUESTED ) && !bFilterFlagsSet
         && ( ( nStoreMode & EXPORT_REQUESTED ) || bUseFilterOptions ) )
     {
         // execute filter options dialog
