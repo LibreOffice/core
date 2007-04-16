@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentcontroller.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:17:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:28:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,7 +71,7 @@ namespace dbaui
         ,m_xController( _rxController )
     {
         DBG_CTOR( ModelControllerConnector, NULL );
-        DBG_ASSERT( m_xModel.is() && m_xController.is(), "ModelControllerConnector::ModelControllerConnector: invalid model or controller!" );
+        DBG_ASSERT( _rxModel.is() && m_xController.is(), "ModelControllerConnector::ModelControllerConnector: invalid model or controller!" );
         impl_connect();
     }
 
@@ -124,8 +124,9 @@ namespace dbaui
     {
         try
         {
-            if ( m_xModel.is() && m_xController.is() )
-                m_xModel->connectController( m_xController );
+            Reference< XModel > xModel = m_xModel;
+            if ( xModel.is() && m_xController.is() )
+                xModel->connectController( m_xController );
         }
         catch( const Exception& )
         {
@@ -138,8 +139,9 @@ namespace dbaui
     {
         try
         {
-            if ( m_xModel.is() && m_xController.is() )
-                m_xModel->disconnectController( m_xController );
+            Reference< XModel > xModel = m_xModel;
+            if ( xModel.is() && m_xController.is() )
+                xModel->disconnectController( m_xController );
         }
         catch( const Exception& )
         {
