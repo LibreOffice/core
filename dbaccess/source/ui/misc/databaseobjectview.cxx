@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databaseobjectview.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:49:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:28:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,9 @@
 #endif
 
 /** === begin UNO includes === **/
+#ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDER_HPP_
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
@@ -64,6 +67,12 @@
 #endif
 #ifndef _COM_SUN_STAR_SDB_APPLICATION_XTABLEUIPROVIDER_HPP_
 #include <com/sun/star/sdb/application/XTableUIProvider.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_RECTANGLE_HPP_
+#include <com/sun/star/awt/Rectangle.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -98,14 +107,19 @@ namespace dbaui
     using namespace ::com::sun::star::frame;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    using namespace ::com::sun::star::awt;
 
     //======================================================================
     //= DatabaseObjectView
     //======================================================================
     DatabaseObjectView::DatabaseObjectView( const Reference< XMultiServiceFactory >& _rxORB,
-            const Reference< XDatabaseDocumentUI >& _rxApplication, const ::rtl::OUString& _rComponentURL )
-        :m_xORB( _rxORB )
-        ,m_xApplication( _rxApplication )
+            const Reference< XDatabaseDocumentUI >& _rxApplication,
+            const Reference< XFrame >& _rxParentFrame,
+            const ::rtl::OUString& _rComponentURL )
+        :m_xORB         ( _rxORB         )
+        ,m_xParentFrame ( _rxParentFrame )
+        ,m_xFrameLoader (                )
+        ,m_xApplication ( _rxApplication )
         ,m_sComponentURL( _rComponentURL )
     {
         OSL_ENSURE( m_xORB.is(), "DatabaseObjectView::DatabaseObjectView: invalid service factory!" );
@@ -151,49 +165,34 @@ namespace dbaui
             try
             {
                 // get the desktop object
-                sal_Int32 nFrameSearchFlag = FrameSearchFlag::SELF;
-                ::rtl::OUString sTarget(RTL_CONSTASCII_USTRINGPARAM("_self"));
                 if ( !m_xFrameLoader.is() )
                 {
-                    m_xFrameLoader.set(m_xORB->createInstance(SERVICE_FRAME_DESKTOP),UNO_QUERY);
-                    nFrameSearchFlag = FrameSearchFlag::TASKS | FrameSearchFlag::CREATE;
-                    sTarget = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_blank"));
+                    Reference< XSingleServiceFactory > xFact(m_xORB->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.TaskCreator")), UNO_QUERY_THROW);
+                    Sequence< Any > lArgs(2);
+                    NamedValue      aProp;
+                    sal_Int32       nArg = 0;
+
+                    aProp.Name    = ::rtl::OUString::createFromAscii("ParentFrame");
+                    aProp.Value <<= m_xParentFrame;
+                    lArgs[nArg++] <<= aProp;
+
+                    aProp.Name    = ::rtl::OUString::createFromAscii("TopWindow");
+                    aProp.Value <<= sal_True;
+                    lArgs[nArg++] <<= aProp;
+
+                    m_xFrameLoader.set(xFact->createInstanceWithArguments(lArgs), UNO_QUERY_THROW);
                 }
 
-                OSL_ENSURE( m_xFrameLoader.is(), "DatabaseObjectView::doDispatch: invalid frame loader!" );
+                Reference< XComponentLoader > xFrameLoader(m_xFrameLoader, UNO_QUERY_THROW);
+                xReturn = xFrameLoader->loadComponentFromURL(
+                    m_sComponentURL,
+                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
+                    0,
+                    _rArgs
+                );
 
-                if ( m_xFrameLoader.is() )
-                {
-                    // create a new frame and remove it from the desktop, so we care for it
-                    Reference<XFrame> xFrame = Reference<XFrame>(m_xFrameLoader,UNO_QUERY)->findFrame(sTarget,nFrameSearchFlag);
-                    /*
-                    ... no ... dont remove the frame from the desktop tree.
-                    Otherwhise it can happen that sometimes no active frame will be defined
-                    and some funstions behind the menu of this frame cant work.
-
-                    see #124984# for further informations
-                    */
-
-                    Reference<XFramesSupplier> xSup(m_xFrameLoader,UNO_QUERY);
-                    if ( xSup.is() )
-                    {
-                        Reference<XFrames> xFrames = xSup->getFrames();
-                        xFrames->remove(xFrame);
-                    }
-
-                    Reference<XComponentLoader> xFrameLoad(xFrame,UNO_QUERY);
-                    if ( xFrameLoad.is() )
-                    {
-                        xReturn = xFrameLoad->loadComponentFromURL(
-                            m_sComponentURL,
-                            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("_self")),
-                            FrameSearchFlag::SELF,
-                            _rArgs
-                        );
-                        if ( xReturn.is() )
-                            xReturn.set(xFrame,UNO_QUERY);
-                    }
-                }
+                if ( xReturn.is() )
+                    xReturn.set(m_xFrameLoader,UNO_QUERY);
             }
             catch(Exception&)
             {
@@ -235,8 +234,9 @@ namespace dbaui
     //======================================================================
     //----------------------------------------------------------------------
     QueryDesigner::QueryDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
+        const Reference< XFrame >& _rxParentFrame,
         sal_Bool _bCreateView, sal_Bool _bPreferSQLView )
-        :DatabaseObjectView( _rxORB, _rxApplication, static_cast< ::rtl::OUString >( URL_COMPONENT_QUERYDESIGN ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_QUERYDESIGN ) )
         ,m_bCreateView( _bCreateView )
         ,m_bPreferSQLView( _bPreferSQLView )
     {
@@ -271,8 +271,8 @@ namespace dbaui
     //= TableDesigner
     //======================================================================
     //----------------------------------------------------------------------
-    TableDesigner::TableDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication )
-        :DatabaseObjectView( _rxORB, _rxApplication, static_cast< ::rtl::OUString >( URL_COMPONENT_TABLEDESIGN ) )
+    TableDesigner::TableDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_TABLEDESIGN ) )
     {
     }
 
@@ -341,9 +341,9 @@ namespace dbaui
     //= ResultSetBrowser
     //======================================================================
     //----------------------------------------------------------------------
-    ResultSetBrowser::ResultSetBrowser( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication,
+    ResultSetBrowser::ResultSetBrowser( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame,
             sal_Bool _bTable )
-        :DatabaseObjectView( _rxORB, _rxApplication, static_cast < ::rtl::OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast < ::rtl::OUString >( URL_COMPONENT_DATASOURCEBROWSER ) )
         ,m_bTable(_bTable)
     {
     }
@@ -390,8 +390,8 @@ namespace dbaui
     //= RelationDesigner
     //======================================================================
     //----------------------------------------------------------------------
-    RelationDesigner::RelationDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication )
-        :DatabaseObjectView( _rxORB, _rxApplication, static_cast< ::rtl::OUString >( URL_COMPONENT_RELATIONDESIGN ) )
+    RelationDesigner::RelationDesigner( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XDatabaseDocumentUI >& _rxApplication, const Reference< XFrame >& _rxParentFrame )
+        :DatabaseObjectView( _rxORB, _rxApplication, _rxParentFrame, static_cast< ::rtl::OUString >( URL_COMPONENT_RELATIONDESIGN ) )
     {
     }
 
