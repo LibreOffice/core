@@ -14760,7 +14760,7 @@
       <attribute name="eastAsiaTheme" tokenid="ooxml:CT_Fonts_eastAsiaTheme"/>
       <attribute name="cstheme" tokenid="ooxml:CT_Fonts_cstheme"/>
     </resource>
-    <resource name="EG_RPrBase" resource="Property">
+    <resource name="EG_RPrBase" resource="Properties">
       <sprm name="rStyle" tokenid="0x0"/>
       <sprm name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
       <sprm name="b" tokenid="0x835"/>
