@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:09:01 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:46:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -248,8 +248,16 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
                 // interaction which is done by the menu bar manager. This must be requested by a special property called "MenuOnly". Be careful
                 // a menu bar created with this property is not fully supported. It must be attached to a real menu bar manager to have full
                 // support. This feature is currently used for "Inplace editing"!
-                // #110897# MenuBarManager* pMenuBarManager = new MenuBarManager( xFrame, pVCLMenuBar, sal_False, sal_True );
-                MenuBarManager* pMenuBarManager = new MenuBarManager( getServiceFactory(), xFrame, aModuleIdentifier, pVCLMenuBar, sal_False, sal_True );
+                Reference< XDispatchProvider > xDispatchProvider;
+
+                // #110897#
+                MenuBarManager* pMenuBarManager = new MenuBarManager( getServiceFactory(),
+                                                                      xFrame,
+                                                                      xDispatchProvider,
+                                                                      aModuleIdentifier,
+                                                                      pVCLMenuBar,
+                                                                      sal_False,
+                                                                      sal_True );
 
                 m_xMenuBarManager = Reference< XComponent >( static_cast< OWeakObject *>( pMenuBarManager ), UNO_QUERY );
             }
