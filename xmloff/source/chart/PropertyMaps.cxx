@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:32:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,6 +269,16 @@ void XMLChartExportPropertyMapper::ContextFilter(
             // elemet-item symbol-image is used now
             case XML_SCH_CONTEXT_SPECIAL_SYMBOL_IMAGE_NAME:
                 property->mnIndex = -1;
+                break;
+
+            case XML_SCH_CONTEXT_STOCK_WITH_VOLUME:
+            case XML_SCH_CONTEXT_LINES_USED:
+                // note this avoids export of the properties in OASIS format,
+                // but also for the OOo XML Flat format (used by binfilter),
+                // because there, the transformation to OOo is done after the
+                // complete export of the chart in OASIS format.
+                if( mrExport.getExportFlags() & EXPORT_OASIS )
+                    property->mnIndex = -1;
                 break;
 
             case XML_SCH_CONTEXT_SPECIAL_STEP_HELP:
