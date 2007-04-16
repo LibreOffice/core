@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:SpinButton" toolbar:helpid="helpid:10769"  toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:Imagebutton" toolbar:helpid="helpid:10604"  toolbar:style="radio auto" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:DateField" toolbar:helpid="helpid:10704" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:TimeField" toolbar:helpid="helpid:10705" toolbar:style="radio auto" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:NumericField" toolbar:helpid="helpid:10706" toolbar:style="radio auto" />
+ <toolbar:toolbaritem xlink:href=".uno:GroupBox" toolbar:helpid="helpid:10598"  toolbar:style="radio auto" />
+</toolbar:toolbar>
