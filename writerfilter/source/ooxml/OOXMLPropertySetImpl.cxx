@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:21:35 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:10:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -120,7 +120,12 @@ doctok::Reference<Properties>::Pointer_t OOXMLPropertyImpl::getProps()
 
 string OOXMLPropertyImpl::getName() const
 {
-    return (*QNameToString::Instance())(mId);
+    string sResult = (*QNameToString::Instance())(mId);
+
+    if (sResult.length() == 0)
+        sResult = (*SprmIdToString::Instance())(mId);
+
+    return sResult;
 }
 
 string OOXMLPropertyImpl::toString() const
