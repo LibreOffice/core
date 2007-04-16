@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:03:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:50:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
 #include <com/sun/star/frame/XModel.hpp>
@@ -147,6 +150,9 @@
 #ifndef _COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_STATECHANGEINPROGRESSEXCEPTION_HPP_
 #include <com/sun/star/embed/StateChangeInProgressException.hpp>
 #endif
@@ -200,11 +206,14 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
                             sal_Int32 nTargetIndex,
                             const uno::Reference< container::XIndexAccess >& xSourceMenu,
                             sal_Int32 nSourceIndex,
-                            const ::rtl::OUString aContModuleName )
+                            const ::rtl::OUString aContModuleName,
+                            const uno::Reference< frame::XDispatchProvider >& xSourceDisp )
 {
     sal_Int32 nInd = 0;
     ::rtl::OUString aModuleIdentPropName( RTL_CONSTASCII_USTRINGPARAM( "ModuleIdentifier" ) );
+    ::rtl::OUString aDispProvPropName( RTL_CONSTASCII_USTRINGPARAM( "DispatchProvider" ) );
     sal_Bool bModuleNameSet = sal_False;
+    sal_Bool bDispProvSet = sal_False;
 
     uno::Sequence< beans::PropertyValue > aSourceProps;
     xSourceMenu->getByIndex( nSourceIndex ) >>= aSourceProps;
@@ -217,15 +226,27 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
             aTargetProps[nInd].Value <<= aContModuleName;
             bModuleNameSet = sal_True;
         }
+        else if ( aTargetProps[nInd].Name.equals( aDispProvPropName ) )
+        {
+            aTargetProps[nInd].Value <<= xSourceDisp;
+            bDispProvSet = sal_True;
+        }
         else
             aTargetProps[nInd].Value = aSourceProps[nInd].Value;
     }
 
     if ( !bModuleNameSet && aContModuleName.getLength() )
     {
-        aTargetProps.realloc( nInd + 1 );
-        aTargetProps[nInd].Name = aModuleIdentPropName;
-        aTargetProps[nInd].Value <<= aContModuleName;
+        aTargetProps.realloc( ++nInd );
+        aTargetProps[nInd-1].Name = aModuleIdentPropName;
+        aTargetProps[nInd-1].Value <<= aContModuleName;
+    }
+
+    if ( !bDispProvSet && xSourceDisp.is() )
+    {
+        aTargetProps.realloc( ++nInd );
+        aTargetProps[nInd-1].Name = aDispProvPropName;
+        aTargetProps[nInd-1].Value <<= xSourceDisp;
     }
 
     xTargetMenu->insertByIndex( nTargetIndex, uno::makeAny( aTargetProps ) );
@@ -244,6 +265,13 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
   m_nNoBorderResizeReact( 0 ),
   m_nNoResizeReact( 0 )
 {
+    m_aOutplaceFrameProps.realloc( 2 );
+    beans::NamedValue aArg;
+
+    aArg.Name = ::rtl::OUString::createFromAscii("TopWindow");
+    aArg.Value <<= sal_True;
+    m_aOutplaceFrameProps[0] <<= aArg;
+
     const ::rtl::OUString aServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.frame.Desktop" ) );
     uno::Reference< frame::XDesktop > xDesktop( m_xFactory->createInstance( aServiceName ), uno::UNO_QUERY );
     if ( xDesktop.is() )
@@ -257,7 +285,13 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
         {
         }
         m_refCount--;
+
+        aArg.Name = ::rtl::OUString::createFromAscii("ParentFrame");
+        aArg.Value <<= xDesktop; //TODO/LATER: should use parent document frame
+        m_aOutplaceFrameProps[1] <<= aArg;
     }
+    else
+        m_aOutplaceFrameProps.realloc( 1 );
 }
 
 //---------------------------------------------------------------------------
@@ -526,26 +560,32 @@ sal_Bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& 
             throw uno::RuntimeException(); // TODO: can not create own window
 
         // create a frame based on the specified window
-        uno::Reference< frame::XFrame > xFrame(
-                m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Frame" ) ),
-                    uno::UNO_QUERY );
-        if ( !xFrame.is() )
-            throw uno::RuntimeException(); // TODO: can not create a new frame
+        uno::Reference< lang::XSingleServiceFactory > xFrameFact(
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.TaskCreator" ) ),
+            uno::UNO_QUERY_THROW );
 
-        xFrame->initialize( xOwnWindow );
+        uno::Sequence< uno::Any > aArgs( 2 );
+        beans::NamedValue aArg;
 
-        // the dispatch provider may not be a frame
-        uno::Reference< frame::XFramesSupplier > xFramesSupplier( xContDisp, uno::UNO_QUERY );
-        if ( xFramesSupplier.is() )
+        aArg.Name    = ::rtl::OUString::createFromAscii("ContainerWindow");
+        aArg.Value <<= xOwnWindow;
+        aArgs[0] <<= aArg;
+
+        uno::Reference< frame::XFrame > xContFrame( xContDisp, uno::UNO_QUERY );
+        if ( xContFrame.is() )
         {
-            uno::Reference< frame::XFrames > xFrames = xFramesSupplier->getFrames();
-            if ( xFrames.is() )
-                xFrames->append( xFrame );
+            aArg.Name    = ::rtl::OUString::createFromAscii("ParentFrame");
+            aArg.Value <<= xContFrame;
+            aArgs[1] <<= aArg;
         }
+        else
+            aArgs.realloc( 1 );
+
+        // the call will create, initialize the frame, and register it in the parent
+        m_xFrame.set( xFrameFact->createInstanceWithArguments( aArgs ), uno::UNO_QUERY_THROW );
 
         m_xHatchWindow = xHWindow;
         m_xOwnWindow = xOwnWindow;
-        m_xFrame = xFrame;
 
         if ( !SetFrameLMVisibility( m_xFrame, sal_False ) )
         {
@@ -595,16 +635,23 @@ uno::Reference< container::XIndexAccess > DocumentHolder::RetrieveOwnMenu_Impl()
 
     uno::Reference< ::com::sun::star::ui::XUIConfigurationManagerSupplier > xUIConfSupplier(
                 m_xComponent,
-                uno::UNO_QUERY_THROW );
-    uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xUIConfigManager(
-                xUIConfSupplier->getUIConfigurationManager(),
-                uno::UNO_QUERY_THROW );
+                uno::UNO_QUERY );
+    uno::Reference< ::com::sun::star::ui::XUIConfigurationManager > xUIConfigManager;
+    if( xUIConfSupplier.is())
+    {
+        xUIConfigManager.set(
+            xUIConfSupplier->getUIConfigurationManager(),
+            uno::UNO_QUERY_THROW );
+    }
 
     try
     {
-        xResult = xUIConfigManager->getSettings(
+        if( xUIConfigManager.is())
+        {
+            xResult = xUIConfigManager->getSettings(
                 ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/menubar/menubar" ) ),
                 sal_False );
+        }
     }
     catch( uno::Exception )
     {}
@@ -673,10 +720,10 @@ void DocumentHolder::FindConnectPoints(
 //---------------------------------------------------------------------------
 uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
         const uno::Reference< container::XIndexAccess >& xContMenu,
-        const uno::Reference< frame::XDispatchProvider >& /*xContDisp*/,
+        const uno::Reference< frame::XDispatchProvider >& xContDisp,
         const ::rtl::OUString& aContModuleName,
         const uno::Reference< container::XIndexAccess >& xOwnMenu,
-        const uno::Reference< frame::XDispatchProvider >& /*xOwnDisp*/ )
+        const uno::Reference< frame::XDispatchProvider >& xOwnDisp )
     throw ( uno::Exception )
 {
     // TODO/LATER: use dispatch providers on merge
@@ -706,18 +753,18 @@ uno::Reference< container::XIndexAccess > DocumentHolder::MergeMenuesForInplace(
         {
             if ( nContPoints[0] >= 0 && nContPoints[0] < xContMenu->getCount() )
             {
-                InsertMenu_Impl( xMergedMenu, nInd, xContMenu, nContPoints[0], aContModuleName );
+                InsertMenu_Impl( xMergedMenu, nInd, xContMenu, nContPoints[0], aContModuleName, xContDisp );
             }
         }
         else if ( nOwnPoints[1] == nInd )
         {
             if ( nContPoints[1] >= 0 && nContPoints[1] < xContMenu->getCount() )
             {
-                InsertMenu_Impl( xMergedMenu, nInd, xContMenu, nContPoints[1], aContModuleName );
+                InsertMenu_Impl( xMergedMenu, nInd, xContMenu, nContPoints[1], aContModuleName, xContDisp );
             }
         }
         else
-            InsertMenu_Impl( xMergedMenu, nInd, xOwnMenu, nInd, ::rtl::OUString() );
+            InsertMenu_Impl( xMergedMenu, nInd, xOwnMenu, nInd, ::rtl::OUString(), xOwnDisp );
     }
 
     return uno::Reference< container::XIndexAccess >( xMergedMenu, uno::UNO_QUERY_THROW );
@@ -904,14 +951,11 @@ uno::Reference< frame::XFrame > DocumentHolder::GetDocFrame()
     // the frame for outplace activation
     if ( !m_xFrame.is() )
     {
-        uno::Reference< frame::XFrame > xDesktopFrame(
-            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.Desktop" ) ),
-            uno::UNO_QUERY );
+        uno::Reference< lang::XSingleServiceFactory > xFrameFact(
+            m_xFactory->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.frame.TaskCreator" ) ),
+            uno::UNO_QUERY_THROW );
 
-        if( !xDesktopFrame.is() )
-            throw uno::RuntimeException();
-
-        m_xFrame = xDesktopFrame->findFrame( rtl::OUString::createFromAscii( "_blank" ), 0 );
+        m_xFrame.set(xFrameFact->createInstanceWithArguments( m_aOutplaceFrameProps ), uno::UNO_QUERY_THROW);
 
         uno::Reference< frame::XDispatchProviderInterception > xInterception( m_xFrame, uno::UNO_QUERY );
         if ( xInterception.is() )
