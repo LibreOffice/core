@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:31:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:52:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
             curproperties[2] = Properties.createProperty("Command", "Table2");
 
             Dataimport CurDataimport = new Dataimport(xMSF);
-            TextDocument oTextDocument = new TextDocument(xMSF, true, true, null);
+            TextDocument oTextDocument = new TextDocument(xMSF, true, null);
             CurDataimport.createReport(xMSF, oTextDocument.xTextDocument, curproperties);
 
         } catch (Exception e) {
@@ -218,7 +218,7 @@ public class Dataimport extends UnoDialog2 implements com.sun.star.awt.XActionLi
 
 
     public void createReport(final XMultiServiceFactory xMSF,XTextDocument _textDocument, PropertyValue[] properties) {
-        CurReportDocument = new ReportDocument(xMSF, _textDocument,false, oResource);
+        CurReportDocument = new ReportDocument(xMSF, _textDocument,oResource);
         CurProperties = properties;
         showProgressDisplay(xMSF, true);
         importReportData(xMSF, this, CurReportDocument);
