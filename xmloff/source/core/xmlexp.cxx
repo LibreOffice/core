@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:15:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:08:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,8 +42,6 @@
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
 #endif
-
-
 
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -408,6 +406,8 @@ void SvXMLExport::_InitCtor()
     // --> OD 2006-03-10 #i51726# - determine model type
     _DetermineModelType();
     // <--
+
+    mbEnableExperimentalOdfExport = getenv("ENABLE_EXPERIMENTAL_ODF_EXPORT") != NULL;
 }
 
 // --> OD 2006-03-14 #i51726#
