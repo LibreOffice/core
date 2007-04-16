@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XModuleManager.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 01:24:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:17:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,8 @@ module com { module sun { module star { module frame {
 interface XModuleManager : com::sun::star::uno::XInterface
 {
     //-------------------------------------------
-    /** @short  identifies the given module.
+    /**
+       @short  identifies the given module.
 
        @descr  This identifier can then be used at the service <type>ModuleManager</type>
                to get more information about this module.
@@ -68,6 +69,9 @@ interface XModuleManager : com::sun::star::uno::XInterface
                For identification the interface <type scope="com::sun::star::lang">XServiceInfo</type>
                is requested on the given module. Because all module service registrations must be unique
                this value can be queried and checked against the configuration.
+
+               Since OOo 2.3.0 also the optional interface <type>XModule</type> will be used.
+               If its exists it will be preferred.
 
        @param  Module
                Possible objects for this parameter can be the following one:
