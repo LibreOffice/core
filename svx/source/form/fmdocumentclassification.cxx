@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmdocumentclassification.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:06:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:20:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,6 +39,9 @@
 #ifndef SVX_SOURCE_FORM_FMDOCUMENTCLASSIFICATION_HXX
 #include "fmdocumentclassification.hxx"
 #endif
+#ifndef SVX_DBTOOLSCLIENT_HXX
+#include "dbtoolsclient.hxx"
+#endif
 
 /** === begin UNO includes === **/
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
@@ -53,11 +56,12 @@
 #ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
 #include <com/sun/star/sdbc/XConnection.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
+#include <com/sun/star/frame/XModule.hpp>
+#endif
 /** === end UNO includes === **/
 
-#ifndef SVX_DBTOOLSCLIENT_HXX
-#include "dbtoolsclient.hxx"
-#endif
+#include <tools/diagnose_ex.h>
 
 //........................................................................
 namespace svxform
@@ -71,6 +75,7 @@ namespace svxform
         using ::com::sun::star::container::XChild;
         using ::com::sun::star::frame::XModel;
         using ::com::sun::star::uno::UNO_QUERY;
+        using ::com::sun::star::frame::XModule;
 
         //....................................................................
         template< class TYPE >
@@ -104,28 +109,40 @@ namespace svxform
     using namespace ::com::sun::star::sdbc;
 
     //====================================================================
+    //====================================================================
+    namespace
+    {
+        //----------------------------------------------------------------
+        struct ModuleInfo
+        {
+            const sal_Char* pAsciiModuleOrServiceName;
+            DocumentType    eType;
+        };
+
+        //----------------------------------------------------------------
+        const ModuleInfo* lcl_getModuleInfo()
+        {
+            static const ModuleInfo aModuleInfo[] =
+            {
+                { "com.sun.star.text.TextDocument", eTextDocument },
+                { "com.sun.star.text.WebDocument", eWebDocument },
+                { "com.sun.star.sheet.SpreadsheetDocument", eSpreadsheetDocument },
+                { "com.sun.star.drawing.DrawingDocument", eDrawingDocument },
+                { "com.sun.star.presentation.PresentationDocument", ePresentationDocument },
+                { "com.sun.star.xforms.XMLFormDocument", eEnhancedForm },
+                { "com.sun.star.sdb.FormDesign", eDatabaseForm },
+                { "com.sun.star.sdb.TextReportDesign", eDatabaseReport },
+                { "com.sun.star.text.GlobalDocument", eTextDocument },
+                { NULL, eUnknownDocumentType }
+            };
+            return aModuleInfo;
+        }
+    }
+
+    //====================================================================
     //= DocumentClassification
     //====================================================================
     //--------------------------------------------------------------------
-
-    bool DocumentClassification::isEnhancedForm( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
-    {
-        if( !_rxDocumentModel.is() )
-            return false;
-        try
-        {
-            Reference< XNameContainer > xXForms;
-            Reference< XFormsSupplier > xSuppForms( _rxDocumentModel, UNO_QUERY );
-            xXForms = xSuppForms.is() ? xSuppForms->getXForms() : Reference< XNameContainer >();
-            if ( xXForms.is() )
-                return true;
-        }
-        catch( const Exception& )
-        {
-        }
-        return false;
-    }
-
     DocumentType DocumentClassification::classifyDocument( const Reference< XModel >& _rxDocumentModel ) SAL_THROW(())
     {
         DocumentType eType( eUnknownDocumentType );
@@ -136,32 +153,30 @@ namespace svxform
 
         try
         {
-            if( DocumentClassification::isEnhancedForm( _rxDocumentModel ) )
-                return eEnhancedForm;
+            // first, check whether the document has a ModuleIdentifier which we know
+            ::rtl::OUString sModuleIdentifier;
+            Reference< XModule > xModule( _rxDocumentModel, UNO_QUERY );
+            if ( xModule.is() )
+                eType = getDocumentTypeForModuleIdentifier( xModule->getIdentifier() );
+            if ( eType != eUnknownDocumentType )
+                return eType;
 
-            // check for database forms before asking the service info
-            if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxDocumentModel ) )
-                eType = eDatabaseForm;
-            else
+            // second, check whether it supports one of the services we know
+            Reference< XServiceInfo > xSI( _rxDocumentModel, UNO_QUERY_THROW );
+            const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
+            while ( pModuleInfo->pAsciiModuleOrServiceName )
             {
-                Reference< XServiceInfo > xSI( _rxDocumentModel, UNO_QUERY_THROW );
-                if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.WebDocument" ) ) ) )
-                    eType = eWebDocument;
-                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.TextDocument" ) ) ) )
-                    eType = eTextDocument;
-                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.text.GlobalDocument" ) ) ) )
-                    eType = eTextDocument;
-                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.sheet.SpreadsheetDocument" ) ) ) )
-                    eType = eSpreadsheetDocument;
-                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.presentation.PresentationDocument" ) ) ) )
-                    eType = ePresentationDocument;
-                else if ( xSI->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.DrawingDocument" ) ) ) )
-                    eType = eDrawingDocument;
+                if ( xSI->supportsService( ::rtl::OUString::createFromAscii( pModuleInfo->pAsciiModuleOrServiceName ) ) )
+                    return pModuleInfo->eType;
+                ++pModuleInfo;
             }
+
+            // last: uhm, there is no last resort
+            OSL_ENSURE( false, "DocumentClassification::classifyDocument: unknown document!" );
         }
         catch( const Exception& )
         {
-            OSL_ENSURE( sal_False, "DocumentClassification::classifyDocument: caught an exception!" );
+            DBG_UNHANDLED_EXCEPTION();
         }
 
         return eType;
@@ -185,6 +200,32 @@ namespace svxform
         }
 
         return eType;
+    }
+
+    //--------------------------------------------------------------------
+    DocumentType DocumentClassification::getDocumentTypeForModuleIdentifier( const ::rtl::OUString& _rModuleIdentifier )
+    {
+        const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
+        while ( pModuleInfo->pAsciiModuleOrServiceName )
+        {
+            if ( _rModuleIdentifier.equalsAscii( pModuleInfo->pAsciiModuleOrServiceName ) )
+                return pModuleInfo->eType;
+            ++pModuleInfo;
+        }
+        return eUnknownDocumentType;
+    }
+
+    //--------------------------------------------------------------------
+    ::rtl::OUString DocumentClassification::getModuleIdentifierForDocumentType( DocumentType _eType )
+    {
+        const ModuleInfo* pModuleInfo = lcl_getModuleInfo();
+        while ( pModuleInfo->pAsciiModuleOrServiceName )
+        {
+            if ( pModuleInfo->eType == _eType )
+                return ::rtl::OUString::createFromAscii( pModuleInfo->pAsciiModuleOrServiceName );
+            ++pModuleInfo;
+        }
+        return ::rtl::OUString();
     }
 
 //........................................................................
