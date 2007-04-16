@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autorecovery.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 13:28:27 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:42:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -269,7 +269,6 @@ static const ::rtl::OUString TYPE_PROP_EXTENSIONS            = ::rtl::OUString::
 static const ::rtl::OUString DOCINFO_PROP_TEMPLATE           = ::rtl::OUString::createFromAscii("TemplateFileName");
 
 // setup.xcu
-static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYSHORTNAME = ::rtl::OUString::createFromAscii("ooSetupFactoryShortName"       );
 static const ::rtl::OUString CFG_ENTRY_PROP_EMPTYDOCUMENTURL = ::rtl::OUString::createFromAscii("ooSetupFactoryEmptyDocumentURL");
 static const ::rtl::OUString CFG_ENTRY_PROP_DEFAULTFILTER    = ::rtl::OUString::createFromAscii("ooSetupFactoryDefaultFilter"   );
 
