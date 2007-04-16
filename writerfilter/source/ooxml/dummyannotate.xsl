@@ -5,9 +5,9 @@
  *
  *  $RCSfile: dummyannotate.xsl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-03 07:58:25 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:14:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -690,7 +690,7 @@
       <xsl:attribute name="name">
         <xsl:value-of select="@name"/>
       </xsl:attribute>
-      <xsl:attribute name="resource">AttributeValue</xsl:attribute>
+      <xsl:attribute name="resource">List</xsl:attribute>
       <xsl:for-each select=".//rng:value">
         <xsl:element name="value">
           <xsl:attribute name="tokenid">
@@ -705,7 +705,71 @@
     </xsl:element>
   </xsl:template>
 
+  <xsl:template match="rng:define" mode="resourcesPropertySetValue">
+    <xsl:variable name="name" select="@name"/>
+    <xsl:element name="resource">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:attribute name="resource">
+        <xsl:text>Properties</xsl:text>
+      </xsl:attribute>
+      <xsl:for-each select=".//rng:element">
+        <xsl:element name="sprm">
+          <xsl:attribute name="name">
+            <xsl:value-of select="@name"/>
+          </xsl:attribute>
+          <xsl:attribute name="tokenid">
+            <xsl:text>ooxml:</xsl:text>
+            <xsl:value-of select="$name"/>
+            <xsl:text>_</xsl:text>
+            <xsl:value-of select="@name"/>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:for-each>
+      <xsl:for-each select=".//rng:attribute">
+        <xsl:element name="attribute">
+          <xsl:attribute name="name">
+            <xsl:value-of select="@name"/>
+          </xsl:attribute>
+          <xsl:attribute name="tokenid">
+            <xsl:text>ooxml:</xsl:text>
+            <xsl:value-of select="$name"/>
+            <xsl:text>_</xsl:text>
+            <xsl:value-of select="@name"/>
+          </xsl:attribute>
+        </xsl:element>
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
+  <xsl:template match="rng:define" mode="resourcevalues">
+    <xsl:variable name="definename" select="@name"/>
+    <xsl:element name="resource">
+      <xsl:attribute name="name">
+        <xsl:value-of select="@name"/>
+      </xsl:attribute>
+      <xsl:attribute name="resource">List</xsl:attribute>
+      <xsl:for-each select=".//rng:value">
+        <xsl:element name="value">
+          <xsl:attribute name="name">
+            <xsl:value-of select="."/>
+          </xsl:attribute>
+          <xsl:attribute name="tokenid">
+            <xsl:text>ooxml:Value_</xsl:text>
+            <xsl:value-of select="$definename"/>
+            <xsl:text>_</xsl:text>
+            <xsl:value-of select="."/>
+          </xsl:attribute>
+          <xsl:value-of select="."/>
+        </xsl:element>
+      </xsl:for-each>
+    </xsl:element>
+  </xsl:template>
+
   <xsl:template match="/">
-    <xsl:apply-templates select="//rng:define[@name='EG_RPrBase']" mode="dummydoc"/>
+    <out>
+      <xsl:apply-templates select="//rng:define[@name='CT_FontSig']" mode="resourcesPropertySetValue"/>
+    </out>
   </xsl:template>
 </xsl:stylesheet>
