@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formtoolbars.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:22:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:22:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,6 @@ namespace svxform
     class FormToolboxes
     {
     private:
-        DocumentType    m_eDocumentType;
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager >
                         m_xLayouter;
 
@@ -68,15 +67,9 @@ namespace svxform
         /** constructs an instance
             @param _rxFrame
                 the frame to analyze
-            @param _eDocType
-                the type of the document in <arg>_rxFrame</arg>. May be eUnknownDocumentType, in this
-                case, it will be determined automatically.
-                If you, for whatever reason, already know the document type, then you can pass it here
-                for performance reasons
         */
         FormToolboxes(
-            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,
-            DocumentType _eDocType
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame
         );
 
     public:
