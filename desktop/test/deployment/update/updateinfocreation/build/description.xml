@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<description xmlns="http://openoffice.org/extensions/description/2006"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     xmlns:d="http://openoffice.org/extensions/description/2006" >
+  <identifier value="org.openoffice.extensions.testarea.desktop.updateinfo"/>
+  <version value="2.0" />
+  <dependencies >
+    <OpenOffice.org-minimal-version value="2.1" d:name="OpenOffice.org 2.1"/>
+  </dependencies>
+  <update-information>
+    <src xlink:href="http://update.services.openoffice.org/ProductUpdateService/check.Update?product=extension&amp;extensionid=org.openoffice.extensions.testarea.desktop.updateinfo&amp;refresh=true"/>
+  </update-information>
+</description>
