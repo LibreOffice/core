@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:29:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:11:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -908,7 +908,8 @@ SvXMLShapeContext* XMLShapeImportHelper::CreateFrameChildContext(
     const SvXMLTokenMap& rTokenMap = GetFrameShapeElemTokenMap();
 
     SvXMLAttributeList *pAttrList = new SvXMLAttributeList( rAttrList );
-    pAttrList->AppendAttributeList( rFrameAttrList );
+    if( rFrameAttrList.is() )
+        pAttrList->AppendAttributeList( rFrameAttrList );
     uno::Reference < xml::sax::XAttributeList > xAttrList = pAttrList;
 
 
