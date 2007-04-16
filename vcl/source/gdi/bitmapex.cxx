@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bitmapex.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:57:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:20:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -162,6 +162,12 @@ BitmapEx::BitmapEx( const Bitmap& rBmp, const AlphaMask& rAlphaMask ) :
 {
     DBG_ASSERT( !rAlphaMask || rBmp.GetSizePixel() == rAlphaMask.GetSizePixel(),
                 "BitmapEx::BitmapEx(): size mismatch for bitmap and alpha mask." );
+
+    // #i75531# the workaround below can go when
+    // X11SalGraphics::drawAlphaBitmap()'s render acceleration
+    // can handle the bitmap depth mismatch directly
+    if( aBitmap.GetBitCount() < aMask.GetBitCount() )
+        aBitmap.Convert( BMP_CONVERSION_24BIT );
 }
 
 // ------------------------------------------------------------------
