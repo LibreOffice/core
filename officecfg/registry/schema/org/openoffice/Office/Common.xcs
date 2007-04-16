@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:15:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 15:35:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5348,39 +5348,44 @@ Dymamic border coloring means that when the mouse is hovered over a control, and
 				<info>
 					<desc>specifies certain default layout settings for form controls. All those settings can be overruled in concrete documents, they specify creation-time defaults only.</desc>
 				</info>
-				<node-ref oor:name="TextDocument" oor:node-type="ApplicationControlLayout">
+                <node-ref oor:name="com.sun.star.text.TextDocument" oor:node-type="ApplicationControlLayout">
 					<info>
 						<desc>specifies certain default layout settings for form controls in text documents</desc>
 					</info>
 				</node-ref>
-				<node-ref oor:name="WebDocument" oor:node-type="ApplicationControlLayout">
+                <node-ref oor:name="com.sun.star.text.WebDocument" oor:node-type="ApplicationControlLayout">
 					<info>
 						<desc>specifies certain default layout settings for form controls in web pages</desc>
 					</info>
 				</node-ref>
-				<node-ref oor:name="SpreadsheetDocument" oor:node-type="ApplicationControlLayout">
+                <node-ref oor:name="com.sun.star.sheet.SpreadsheetDocument" oor:node-type="ApplicationControlLayout">
 					<info>
 						<desc>specifies certain default layout settings for form controls in spreadsheet documents</desc>
 					</info>
 				</node-ref>
-				<node-ref oor:name="DrawingDocument" oor:node-type="ApplicationControlLayout">
+                <node-ref oor:name="com.sun.star.drawing.DrawingDocument" oor:node-type="ApplicationControlLayout">
 					<info>
 						<desc>specifies certain default layout settings for form controls in drawing documents</desc>
 					</info>
 				</node-ref>
-				<node-ref oor:name="PresentationDocument" oor:node-type="ApplicationControlLayout">
+                <node-ref oor:name="com.sun.star.presentation.PresentationDocument" oor:node-type="ApplicationControlLayout">
 					<info>
 						<desc>specifies certain default layout settings for form controls in presentation documents</desc>
 					</info>
 				</node-ref>
-				<node-ref oor:name="XMLFormDocument" oor:node-type="ApplicationControlLayout">
+                <node-ref oor:name="com.sun.star.text.XMLFormDocument" oor:node-type="ApplicationControlLayout">
 					<info>
 						<desc>specifies certain default layout settings for form controls in XML form documents</desc>
 					</info>
 				</node-ref>
-				<node-ref oor:name="DatabaseFormDocument" oor:node-type="ApplicationControlLayout">
+                <node-ref oor:name="com.sun.star.sdb.FormDesign" oor:node-type="ApplicationControlLayout">
 					<info>
 						<desc>specifies certain default layout settings for form controls in database form documents</desc>
+					</info>
+				</node-ref>
+                <node-ref oor:name="com.sun.star.sdb.TextReportDesign" oor:node-type="ApplicationControlLayout">
+					<info>
+						<desc>specifies certain default layout settings for form controls in database text report documents.</desc>
 					</info>
 				</node-ref>
 			</group>
