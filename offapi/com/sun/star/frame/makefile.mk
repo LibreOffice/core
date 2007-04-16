@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.31 $
+#   $Revision: 1.32 $
 #
-#   last change: $Author: rt $ $Date: 2006-12-01 17:07:24 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 16:18:09 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -136,6 +136,8 @@ IDLFILES=\
     XMenuBarAcceptor.idl\
     XMenuBarMergingAcceptor.idl\
     XModel.idl\
+    XModel2.idl\
+    XModule.idl\
     XModuleManager.idl\
     XNotifyingDispatch.idl\
     XPopupMenuController.idl\
