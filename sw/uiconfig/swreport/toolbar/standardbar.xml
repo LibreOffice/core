@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:OpenUrl" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:AddDirect" toolbar:helpid="5537"/>
+ <toolbar:toolbaritem xlink:href=".uno:NewDoc" toolbar:visible="false" toolbar:helpid="5500"/>
+ <toolbar:toolbaritem xlink:href=".uno:Open" toolbar:helpid="5501"/>
+ <toolbar:toolbaritem xlink:href=".uno:Save" toolbar:helpid="5505"/>
+ <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false" toolbar:helpid="5502"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:helpid="5331"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:EditDoc" toolbar:helpid="6312"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF" toolbar:helpid="6674"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:helpid="5509"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrintPreview" toolbar:helpid="5325"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellDialog" toolbar:helpid="20622"/>
+ <toolbar:toolbaritem xlink:href=".uno:SpellOnline" toolbar:helpid="12021"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Cut" toolbar:helpid="5710"/>
+ <toolbar:toolbaritem xlink:href=".uno:Copy" toolbar:helpid="5711"/>
+ <toolbar:toolbaritem xlink:href=".uno:Paste" toolbar:helpid="5712"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatPaintbrush" toolbar:helpid="5715"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Undo" toolbar:helpid="5701"/>
+ <toolbar:toolbaritem xlink:href=".uno:Redo" toolbar:helpid="5700"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:HyperlinkDialog" toolbar:helpid="5678"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertTable" toolbar:helpid="20330"/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertDraw" toolbar:helpid="10244"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:SearchDialog" toolbar:helpid="5961"/>
+ <toolbar:toolbaritem xlink:href=".uno:Navigator" toolbar:helpid="10366"/>
+ <toolbar:toolbaritem xlink:href=".uno:Gallery" toolbar:helpid="5960"/>
+ <toolbar:toolbaritem xlink:href=".uno:ViewDataSourceBrowser" toolbar:helpid="6660"/>
+ <toolbar:toolbaritem xlink:href=".uno:ControlCodes" toolbar:helpid="20224"/>
+ <toolbar:toolbaritem xlink:href=".uno:Zoom" toolbar:helpid="10000"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:HelpIndex"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false" toolbar:helpid="5402"/>
+</toolbar:toolbar>
