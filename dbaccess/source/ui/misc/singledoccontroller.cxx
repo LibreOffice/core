@@ -4,9 +4,9 @@
  *
  *  $RCSfile: singledoccontroller.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:36:28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -206,8 +206,6 @@ namespace dbaui
 
         disconnect();
 
-        m_aModelConnector.clear();
-
         attachFrame( Reference < XFrame >() );
 
         m_xDataSource.clear();
@@ -401,10 +399,6 @@ namespace dbaui
 
         Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
         m_xDataSource.set( xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(), UNO_QUERY );
-
-        m_aModelConnector.clear();
-        if ( m_xDataSource.is() )
-            m_aModelConnector = ModelControllerConnector( _rxModel, this );
 
         return sal_True;
     }
