@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: obo $ $Date: 2006-09-15 13:59:41 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 15:34:45 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,38 +44,6 @@ PACKAGE=org.openoffice.Office.UI
 # --- Targets ------------------------------------------------------
 
 
-XCUFILES= \
-    Controller.xcu \
-    Factories.xcu \
-    BasicIDECommands.xcu \
-    BibliographyCommands.xcu \
-    CalcCommands.xcu \
-    ChartCommands.xcu \
-    ChartWindowState.xcu \
-    DbuCommands.xcu \
-    BaseWindowState.xcu \
-    DbQueryWindowState.xcu \
-    DbTableWindowState.xcu \
-    DbRelationWindowState.xcu \
-    DbBrowserWindowState.xcu \
-    DrawImpressCommands.xcu \
-    Effects.xcu \
-    GenericCommands.xcu \
-    MathCommands.xcu \
-    StartModuleCommands.xcu \
-    BasicIDEWindowState.xcu \
-    CalcWindowState.xcu \
-    DrawWindowState.xcu \
-    ImpressWindowState.xcu \
-    MathWindowState.xcu \
-    StartModuleWindowState.xcu \
-    WriterWindowState.xcu \
-    WriterGlobalWindowState.xcu \
-    WriterWebWindowState.xcu \
-    WriterCommands.xcu\
-    GenericCategories.xcu \
-    GlobalSettings.xcu
-
 LOCALIZEDFILES= \
     BasicIDECommands.xcu \
     BibliographyCommands.xcu \
@@ -84,6 +52,8 @@ LOCALIZEDFILES= \
     ChartWindowState.xcu \
     DbuCommands.xcu \
     BaseWindowState.xcu \
+    WriterFormWindowState.xcu \
+    WriterReportWindowState.xcu \
     DbQueryWindowState.xcu \
     DbTableWindowState.xcu \
     DbRelationWindowState.xcu \
@@ -100,10 +70,17 @@ LOCALIZEDFILES= \
     MathWindowState.xcu \
     StartModuleWindowState.xcu \
     WriterWindowState.xcu \
+    XFormsWindowState.xcu \
     WriterGlobalWindowState.xcu \
     WriterWebWindowState.xcu \
     WriterCommands.xcu\
     GenericCategories.xcu
+
+XCUFILES= \
+    $(LOCALIZEDFILES) \
+    Controller.xcu \
+    Factories.xcu \
+    GlobalSettings.xcu
 
 .INCLUDE :  target.mk
 
