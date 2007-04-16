@@ -4,9 +4,8 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.18 $
- *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:04:40 $
+ *  $Revision: 1.19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:33:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +166,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
             AddonMenu*          pAddonMenu,
             sal_Bool            bDelete,
             sal_Bool            bDeleteChildren );
@@ -175,7 +174,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            const ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
             AddonPopupMenu*     pAddonMenu,
             sal_Bool            bDelete,
             sal_Bool            bDeleteChildren );
@@ -184,7 +183,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         // #110897#
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
-            com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
             const rtl::OUString& aModuleIdentifier,
             Menu* pMenu,
             sal_Bool bDelete,
@@ -231,8 +231,18 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
                                                const ::rtl::OUString& rModuleIdentifier,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer,
                                                const ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer >& rTransformer );
-        static void FillMenu( USHORT& nId, Menu* pMenu, const ::rtl::OUString& rModuleIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
-        void FillMenuManager( Menu* pMenu, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren );
+        static void FillMenu( USHORT& nId,
+                              Menu* pMenu,
+                              const ::rtl::OUString& rModuleIdentifier,
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer,
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider );
+
+        void FillMenuManager( Menu* pMenu,
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame,
+                              const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >& rDispatchProvider,
+                              const rtl::OUString& rModuleIdentifier,
+                              sal_Bool bDelete,
+                              sal_Bool bDeleteChildren );
         void SetItemContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
         void GetPopupController( PopupControllerCache& rPopupController );
 
@@ -289,30 +299,31 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         MenuItemHandler* GetMenuItemHandler( USHORT nItemId );
         sal_Bool         CreatePopupMenuController( MenuItemHandler* pMenuItemHandler );
 
-        sal_Bool                                                                                       m_bDisposed : 1,
-                                                                                     m_bInitialized : 1,
-                                                                                     m_bDeleteMenu : 1,
-                                                                                     m_bDeleteChildren : 1,
-                                                                                     m_bActive : 1,
-                                                                                     m_bIsBookmarkMenu : 1,
-                                                                                     m_bWasHiContrast : 1,
-                                                                                     m_bShowMenuImages : 1;
-        sal_Bool                                                                                       m_bModuleIdentified : 1,
-                                                                                                       m_bRetrieveImages : 1,
-                                                                                                       m_bAcceleratorCfg : 1;
-        ::rtl::OUString                                                                      m_aMenuItemCommand;
-        ::rtl::OUString                                                                                m_aModuleIdentifier;
-        Menu*                                                                          m_pVCLMenu;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                            m_xFrame;
-        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >                   m_xUICommandLabels;
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration >         m_xPopupMenuControllerRegistration;
-        ::std::vector< MenuItemHandler* >                                                                m_aMenuItemHandlerVector;
-        ::cppu::OMultiTypeInterfaceContainerHelper                                                     m_aListenerContainer;   /// container for ALL Listener
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                        m_xDocImageManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                        m_xModuleImageManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xDocAcceleratorManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xModuleAcceleratorManager;
-        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >            m_xGlobalAcceleratorManager;
+        sal_Bool                                                                               m_bDisposed : 1,
+                                                                                               m_bInitialized : 1,
+                                                                                               m_bDeleteMenu : 1,
+                                                                                               m_bDeleteChildren : 1,
+                                                                                               m_bActive : 1,
+                                                                                               m_bIsBookmarkMenu : 1,
+                                                                                               m_bWasHiContrast : 1,
+                                                                                               m_bShowMenuImages : 1;
+        sal_Bool                                                                               m_bModuleIdentified : 1,
+                                                                                               m_bRetrieveImages : 1,
+                                                                                               m_bAcceleratorCfg : 1;
+        ::rtl::OUString                                                                        m_aMenuItemCommand;
+        ::rtl::OUString                                                                        m_aModuleIdentifier;
+        Menu*                                                                                  m_pVCLMenu;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >                    m_xFrame;
+        ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >           m_xUICommandLabels;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XUIControllerRegistration > m_xPopupMenuControllerRegistration;
+        ::std::vector< MenuItemHandler* >                                                      m_aMenuItemHandlerVector;
+        ::cppu::OMultiTypeInterfaceContainerHelper                                             m_aListenerContainer;   /// container for ALL Listener
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatchProvider >         m_xDispatchProvider;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xDocImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XImageManager >                m_xModuleImageManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xDocAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xModuleAcceleratorManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::ui::XAcceleratorConfiguration >    m_xGlobalAcceleratorManager;
         // #110897#
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >               mxServiceFactory;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >                  m_xDeferedItemContainer;
