@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:36:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:42:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1447,32 +1447,8 @@ FASTBOOL ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCm
         return bRet;
     }
 
-    OutputDevice* pOut=pView==NULL ? NULL : pView->GetFirstOutputDevice(); // GetWin(0);
-    long nCloseDist=0;
-    FASTBOOL bCloseOnEnd=FALSE;
-    if (pView!=NULL && pOut!=NULL && pView->IsAutoClosePolys() && !bIncomp) {
-        nCloseDist=pView->GetAutoCloseDistPix();
-        nCloseDist=pOut->PixelToLogic(Size(nCloseDist,0)).Width();
-        if (nCloseDist<1) nCloseDist=1;
-        Point aPt0(rStat.GetStart());
-        Point aPt1(rStat.GetNow());
-        long dx=aPt0.X()-aPt1.X(); if (dx<0) dx=-dx;
-        long dy=aPt0.Y()-aPt1.Y(); if (dy<0) dy=-dy;
-        bCloseOnEnd=dx<=nCloseDist && dy<=nCloseDist;
-    }
-
     if (!pU->bMixedCreate && IsFreeHand(pU->eStartKind)) {
         if (rStat.GetPointAnz()>=2) eCmd=SDRCREATE_FORCEEND;
-        if (eCmd==SDRCREATE_FORCEEND && (bCloseOnEnd || IsClosed(meObjectKind)))
-        {
-            basegfx::B2DPolyPolygon aTempPolyPolygon(aPathPolygon.getB2DPolyPolygon());
-
-            if(!aTempPolyPolygon.isClosed())
-            {
-                aTempPolyPolygon.setClosed(true);
-                aPathPolygon = XPolyPolygon(aTempPolyPolygon);
-            }
-        }
         bRet=eCmd==SDRCREATE_FORCEEND;
         if (bRet) {
             mbCreating=FALSE;
@@ -1562,17 +1538,6 @@ FASTBOOL ImpPathForDragAndCreate::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCm
         mbCreating=FALSE;
         delete pU;
         rStat.SetUser(NULL);
-        if (bCloseOnEnd || IsClosed(meObjectKind))
-        {
-            //mrSdrPathObject.ImpSetClosed(TRUE);
-            basegfx::B2DPolyPolygon aTempPolyPolygon(aPathPolygon.getB2DPolyPolygon());
-
-            if(!aTempPolyPolygon.isClosed())
-            {
-                aTempPolyPolygon.setClosed(true);
-                aPathPolygon = XPolyPolygon(aTempPolyPolygon);
-            }
-        }
     }
     return bRet;
 }
@@ -1855,6 +1820,37 @@ void SdrPathObj::ImpForceKind()
         // #i10659# for SdrTextObj, keep aRect up to date
         aRect = ImpGetBoundRect(GetPathPoly());
     }
+
+    // #i75974# adapt polygon state to object type. This may include a reinterpretation
+    // of a closed geometry as open one, but with identical first and last point
+    for(sal_uInt32 a(0); a < maPathPolygon.count(); a++)
+    {
+        basegfx::B2DPolygon aCandidate(maPathPolygon.getB2DPolygon(a));
+
+        if((bool)IsClosed() != aCandidate.isClosed())
+        {
+            if(aCandidate.isClosed())
+            {
+                // add first point as last point
+                if(aCandidate.count())
+                {
+                    aCandidate.append(aCandidate.getB2DPoint(0));
+                }
+
+                // open polygon
+                aCandidate.setClosed(false);
+            }
+            else
+            {
+                // remove evtl. equal start and end points and close it
+                basegfx::tools::checkClosed(aCandidate);
+                aCandidate.setClosed(true);
+            }
+
+            // write back
+            maPathPolygon.setB2DPolygon(a, aCandidate);
+        }
+    }
 }
 
 void SdrPathObj::ImpSetClosed(sal_Bool bClose)
@@ -1871,8 +1867,6 @@ void SdrPathObj::ImpSetClosed(sal_Bool bClose)
             default: break;
         }
 
-        // close the polygon
-        maPathPolygon.setClosed(true);
         bClosedObj = TRUE;
     }
     else
@@ -1886,8 +1880,6 @@ void SdrPathObj::ImpSetClosed(sal_Bool bClose)
             default: break;
         }
 
-        // open the polygon
-        maPathPolygon.setClosed(false);
         bClosedObj = FALSE;
     }
 
@@ -2426,6 +2418,40 @@ FASTBOOL SdrPathObj::EndCreate(SdrDragStat& rStat, SdrCreateCmd eCmd)
     if(bRetval && mpDAC)
     {
         SetPathPoly(mpDAC->getModifiedPolyPolygon());
+
+        // #i75974# Check for AutoClose feature. Moved here from ImpPathForDragAndCreate::EndCreate
+        // to be able to use the type-changing ImpSetClosed method
+        if(!IsClosedObj())
+        {
+            SdrView* pView = rStat.GetView();
+
+            if(pView && pView->IsAutoClosePolys() && !pView->IsUseIncompatiblePathCreateInterface())
+            {
+                OutputDevice* pOut = pView->GetFirstOutputDevice();
+
+                if(pOut)
+                {
+                    if(GetPathPoly().count())
+                    {
+                        const basegfx::B2DPolygon aCandidate(GetPathPoly().getB2DPolygon(0));
+
+                        if(aCandidate.count() > 2)
+                        {
+                            // check distance of first and last point
+                            const sal_Int32 nCloseDist(pOut->PixelToLogic(Size(pView->GetAutoCloseDistPix(), 0)).Width());
+                            const basegfx::B2DVector aDistVector(aCandidate.getB2DPoint(aCandidate.count() - 1) - aCandidate.getB2DPoint(0));
+
+                            if(aDistVector.getLength() <= (double)nCloseDist)
+                            {
+                                // close it
+                                ImpSetClosed(true);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         impDeleteDAC();
     }
 
@@ -3145,10 +3171,6 @@ void SdrPathObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
 
     // copy poly
     basegfx::B2DPolyPolygon aNewPolyPolygon(rPolyPolygon);
-
-    // API sets polygon data, but that needs to be adapted to object type, so
-    // correct state of the polygon here.
-    aNewPolyPolygon.setClosed(IsClosed());
 
     // reset object shear and rotations
     aGeo.nDrehWink = 0;
