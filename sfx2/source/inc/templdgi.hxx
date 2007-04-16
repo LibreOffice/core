@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templdgi.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:57:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:57:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,6 +76,8 @@ class SfxTemplateDialog_Impl;
 class SfxCommonTemplateDialog_Impl;
 class SfxTemplateDialogWrapper;
 class SfxDockingWindow;
+
+namespace com { namespace sun { namespace star { namespace frame { class XModuleManager; } } } }
 
 // class DropListBox_Impl ------------------------------------------------
 
@@ -161,6 +163,8 @@ protected:
     SfxStyleSheetBasePool*      pStyleSheetPool;
     SvTreeListBox*              pTreeBox;
     SfxObjectShell*             pCurObjShell;
+    ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager >
+                                xModuleManager;
 
     SfxActionListBox            aFmtLb;
     ListBox                     aFilterLb;
@@ -239,6 +243,9 @@ protected:
     void                FamilySelect( USHORT nId );
     void                SetFamily( USHORT nId );
     void                ActionSelect( USHORT nId );
+
+    sal_Int32           LoadFactoryStyleFilter( SfxObjectShell* i_pObjSh );
+    void                SaveFactoryStyleFilter( SfxObjectShell* i_pObjSh, sal_Int32 i_nFilter );
 
 public:
     TYPEINFO();
