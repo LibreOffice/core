@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 15:06:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,10 @@
 #define GLOBAL_DEFAULTS_GROUP "__Global_Printer_Defaults__"
 
 #include <hash_set>
+
+#ifdef LIBPAPER_LINK
+#include <paper.h>
+#endif
 
 using namespace psp;
 using namespace rtl;
@@ -123,10 +127,12 @@ PrinterInfoManager& PrinterInfoManager::get()
 PrinterInfoManager::PrinterInfoManager( Type eType ) :
     m_pQueueInfo( NULL ),
     m_eType( eType ),
-    m_bUseIncludeFeature( false )
+    m_bUseIncludeFeature( false ),
+    m_aSystemDefaultPaper( RTL_CONSTASCII_USTRINGPARAM( "A4" ) )
 {
     if( eType == Default )
         m_pQueueInfo = new SystemQueueInfo();
+    initSystemDefaultPaper();
 }
 
 // -----------------------------------------------------------------
@@ -134,6 +140,99 @@ PrinterInfoManager::PrinterInfoManager( Type eType ) :
 PrinterInfoManager::~PrinterInfoManager()
 {
     delete m_pQueueInfo;
+}
+
+// -----------------------------------------------------------------
+
+void PrinterInfoManager::initSystemDefaultPaper()
+{
+    bool bSuccess = false;
+    const char* pPaper;
+#ifndef LIBPAPER_LINK
+    // try libpaper
+    OUString aModName( RTL_CONSTASCII_USTRINGPARAM( "libpaper.so.1" ) );
+    OUString aInitName( RTL_CONSTASCII_USTRINGPARAM( "paperinit" ) );
+    OUString aDoneName( RTL_CONSTASCII_USTRINGPARAM( "paperdone" ) );
+    OUString aSystemName( RTL_CONSTASCII_USTRINGPARAM( "systempapername" ) );
+    oslModule hMod = osl_loadModule( aModName.pData, SAL_LOADMODULE_NOW );
+    if( hMod )
+    {
+        int (*init)() = (int(*)())osl_getFunctionSymbol( hMod, aInitName.pData );
+        int (*done)() = (int(*)())osl_getFunctionSymbol( hMod, aDoneName.pData );
+        const char* (*sys)() = (const char*(*)())osl_getFunctionSymbol( hMod, aSystemName.pData );
+        if( init && done && sys )
+        {
+            init();
+            pPaper = sys();
+#else
+        paperinit();
+        pPaper = systempapername();
+#endif
+            if( pPaper && *pPaper )
+            {
+                m_aSystemDefaultPaper = OUString( OStringToOUString( pPaper, osl_getThreadTextEncoding() ) );
+                bSuccess = true;
+                #if OSL_DEBUG_LEVEL > 1
+                fprintf( stderr, "paper from libpaper = %s\n", pPaper );
+                #endif
+            }
+#ifndef LIBPAPER_LINK
+            done();
+        }
+        osl_unloadModule( hMod );
+#else
+    paperdone();
+#endif
+        if( bSuccess )
+            return;
+#ifndef LIBPAPER_LINK
+    }
+#endif
+
+    // default value is Letter for US (en_US), Cannada (en_CA, fr_CA); else A4
+    // en will be interpreted as en_US
+
+    // note: at this point m_aSystemDefaultPaper is set to "A4" from the constructor
+
+    // check for LC_PAPER
+    const char* pPaperLang = getenv( "LC_PAPER" );
+    if( pPaperLang && *pPaperLang )
+    {
+        OString aLang( pPaperLang );
+        if( aLang.getLength() > 5 )
+            aLang = aLang.copy( 0, 5 );
+        if( aLang.getLength() == 5 )
+        {
+            if(    aLang.equalsIgnoreAsciiCase( "en_us" )
+                || aLang.equalsIgnoreAsciiCase( "en_ca" )
+            || aLang.equalsIgnoreAsciiCase( "fr_ca" )
+            )
+                m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
+        }
+        else if( aLang.getLength() == 2 && aLang.equalsIgnoreAsciiCase( "en" ) )
+            m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
+        return;
+    }
+
+    // use process locale to determine paper
+    rtl_Locale* pLoc = NULL;
+    osl_getProcessLocale( &pLoc );
+    if( pLoc )
+    {
+        if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Language->buffer, pLoc->Language->length, "en") )
+        {
+            if(    0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "us")
+                || 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "ca")
+                || pLoc->Country->length == 0
+                )
+                m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
+        }
+        else if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Language->buffer, pLoc->Language->length, "fr") )
+        {
+            if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "ca") )
+                m_aSystemDefaultPaper = OUString( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) );
+        }
+    }
 }
 
 // -----------------------------------------------------------------
@@ -279,7 +378,7 @@ void PrinterInfoManager::initialize()
                     m_aGlobalDefaults.m_aFontSubstitutes[ OStringToOUString( aKey.Copy( 10 ), RTL_TEXTENCODING_ISO_8859_1 ) ] = OStringToOUString( aValue, RTL_TEXTENCODING_ISO_8859_1 );
                 }
             }
-            setDefaultPaper( m_aGlobalDefaults );
+            setDefaultPaper( m_aGlobalDefaults.m_aContext );
             #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "global settings: fontsubst = %s, %d substitutes\n", m_aGlobalDefaults.m_bPerformFontSubstitution ? "true" : "false", m_aGlobalDefaults.m_aFontSubstitutes.size() );
             #endif
@@ -479,7 +578,7 @@ void PrinterInfoManager::initialize()
                     }
                 }
 
-                setDefaultPaper( aPrinter.m_aInfo );
+                setDefaultPaper( aPrinter.m_aInfo.m_aContext );
                 fillFontSubstitutions( aPrinter.m_aInfo );
 
                 // finally insert printer
@@ -1043,87 +1142,48 @@ void PrinterInfoManager::setupJobContextData( JobData& rData )
     }
 }
 
-void PrinterInfoManager::setDefaultPaper( PrinterInfo& rInfo ) const
+void PrinterInfoManager::setDefaultPaper( PPDContext& rContext ) const
 {
-    if( ! rInfo.m_pParser || ! rInfo.m_aContext.getParser() )
+    if(  ! rContext.getParser() )
         return;
 
-    const PPDKey* pPageSizeKey = rInfo.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+    const PPDKey* pPageSizeKey = rContext.getParser()->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
     if( ! pPageSizeKey )
         return;
 
-    int nModified = rInfo.m_aContext.countValuesModified();
+    int nModified = rContext.countValuesModified();
     while( nModified-- &&
-        rInfo.m_aContext.getModifiedKey( nModified ) != pPageSizeKey )
+        rContext.getModifiedKey( nModified ) != pPageSizeKey )
     ;
 
     if( nModified >= 0 ) // paper was set already, do not modify
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "not setting default paper, already set %s\n",
-        OUStringToOString( rInfo.m_aContext.getValue( pPageSizeKey )->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        OUStringToOString( rContext.getValue( pPageSizeKey )->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
         return;
     }
 
     // paper not set, fill in default value
-    // default value is Letter for US (en_US), Cannada (en_CA, fr_CA); else A4
-    // en will be interpreted as en_US
     const PPDValue* pPaperVal = NULL;
-
-    // check for LC_PAPER
-    const char* pPaperLang = getenv( "LC_PAPER" );
-    if( pPaperLang && *pPaperLang )
+    int nValues = pPageSizeKey->countValues();
+    for( int i = 0; i < nValues && ! pPaperVal; i++ )
     {
-        OString aLang( pPaperLang );
-        if( aLang.getLength() > 5 )
-            aLang = aLang.copy( 0, 5 );
-        if( aLang.getLength() == 5 )
-        {
-            if(    aLang.equalsIgnoreAsciiCase( "en_us" )
-                || aLang.equalsIgnoreAsciiCase( "en_ca" )
-            || aLang.equalsIgnoreAsciiCase( "fr_ca" )
-            )
-            pPaperVal = pPageSizeKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) ) );
-            else
-                pPaperVal = pPageSizeKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "A4" ) ) );
-        }
-        else if( aLang.getLength() == 2 && aLang.equalsIgnoreAsciiCase( "en" ) )
-            pPaperVal = pPageSizeKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) ) );
-        else
-            pPaperVal = pPageSizeKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "A4" ) ) );
+        const PPDValue* pVal = pPageSizeKey->getValue( i );
+        if( pVal->m_aOption.EqualsIgnoreCaseAscii( m_aSystemDefaultPaper.getStr() ) )
+            pPaperVal = pVal;
     }
-
-    // use process locale to determine paper
-    if( !pPaperVal )
-    {
-        rtl_Locale* pLoc = NULL;
-        osl_getProcessLocale( &pLoc );
-        if( pLoc )
-        {
-            pPaperVal = pPageSizeKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "A4" ) ) );
-            if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Language->buffer, pLoc->Language->length, "en") )
-            {
-                if(    0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "us")
-                    || 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "ca")
-                || pLoc->Country->length == 0
-                )
-                pPaperVal = pPageSizeKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) ) );
-            }
-            else if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Language->buffer, pLoc->Language->length, "fr") )
-            {
-                if( 0 == rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pLoc->Country->buffer, pLoc->Country->length, "ca") )
-                    pPaperVal = pPageSizeKey->getValue( String( RTL_CONSTASCII_USTRINGPARAM( "Letter" ) ) );
-            }
-        }
-    }
-
     if( pPaperVal )
     {
         #if OSL_DEBUG_LEVEL > 1
         fprintf( stderr, "setting default paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
         #endif
-        rInfo.m_aContext.setValue( pPageSizeKey, pPaperVal );
+        rContext.setValue( pPageSizeKey, pPaperVal );
+        #if OSL_DEBUG_LEVEL > 1
+        pPaperVal = rContext.getValue( pPageSizeKey );
+        fprintf( stderr, "-> got paper %s\n", OUStringToOString( pPaperVal->m_aOption, RTL_TEXTENCODING_ISO_8859_1 ).getStr() );
+        #endif
     }
 }
 
