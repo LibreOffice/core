@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.1 $
+#  $Revision: 1.2 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:05:32 $
+#  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:15:41 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,8 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION
 # --- Files --------------------------------------------------------
 
 SLOFILES= \
-    $(SLO)$/qnametostr.obj
+    $(SLO)$/qnametostr.obj \
+    $(SLO)$/sprmcodetostr.obj
 
 SHL1TARGET=$(TARGET)
 
