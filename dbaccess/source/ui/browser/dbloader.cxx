@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:57:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -294,7 +294,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
                 try
                 {
                     xController->attachModel(xModel);
-                    xModel->setCurrentController(xController);
+                    //xModel->setCurrentController(xController);
                 }
                 catch( const Exception& )
                 {
