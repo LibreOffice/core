@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:26:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1190,46 +1190,55 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
         SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
-        if( !bIsEmptyPresObj )
+        if( !bIsEmptyPresObj || !mrExport.isExperimentalOdfExportEnabled() )
         {
-            OUString aStreamURL;
-            OUString aStr;
-
-            xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sImageURL;
-            aStr = mrExport.AddEmbeddedGraphicObject( sImageURL );
-            mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
-
-            if( aStr.getLength() )
+            if( !bIsEmptyPresObj )
             {
-                if( aStr[ 0 ] == '#' )
+                OUString aStreamURL;
+                OUString aStr;
+
+                xPropSet->getPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sImageURL;
+                aStr = mrExport.AddEmbeddedGraphicObject( sImageURL );
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
+
+                if( aStr.getLength() )
                 {
-                    aStreamURL = OUString::createFromAscii( "vnd.sun.star.Package:" );
-                    aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                    if( aStr[ 0 ] == '#' )
+                    {
+                        aStreamURL = OUString::createFromAscii( "vnd.sun.star.Package:" );
+                        aStreamURL = aStreamURL.concat( aStr.copy( 1, aStr.getLength() - 1 ) );
+                    }
+
+                    // update stream URL for load on demand
+                    uno::Any aAny;
+                    aAny <<= aStreamURL;
+                    xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL")), aAny );
+
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                    mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
                 }
-
-                // update stream URL for load on demand
-                uno::Any aAny;
-                aAny <<= aStreamURL;
-                xPropSet->setPropertyValue( OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicStreamURL")), aAny );
-
+            }
+            else
+            {
+                OUString aStr;
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aStr );
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
-
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
-
                 mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
             }
-        }
 
-        {
-            SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True);
-
-            if( sImageURL.getLength() )
             {
-                // optional office:binary-data
-                mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
+                SvXMLElementExport aOBJ(mrExport, XML_NAMESPACE_DRAW, XML_IMAGE, sal_True, sal_True);
+
+                if( sImageURL.getLength() )
+                {
+                    // optional office:binary-data
+                    mrExport.AddEmbeddedGraphicObjectAsBase64( sImageURL );
+                }
+                if( !bIsEmptyPresObj )
+                    ImpExportText( xShape );
             }
-            if( !bIsEmptyPresObj )
-                ImpExportText( xShape );
         }
 
         ImpExportEvents( xShape );
@@ -1616,6 +1625,7 @@ void XMLShapeExport::ImpExportOLE2Shape(
         SvXMLElementExport aElement( mrExport, XML_NAMESPACE_DRAW,
                                   XML_FRAME, bCreateNewline, sal_True );
 
+        if( !bIsEmptyPresObj || !mrExport.isExperimentalOdfExportEnabled() )
         {
             if (pAttrList)
             {
@@ -1669,6 +1679,17 @@ void XMLShapeExport::ImpExportOLE2Shape(
                     }
                 }
             }
+            else
+            {
+                // export empty href for empty placeholders to be valid odf
+                OUString sEmptyURL;
+
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, sEmptyURL );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_EMBED );
+                mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONLOAD );
+            }
+
             enum XMLTokenEnum eElem = sClassId.getLength() ? XML_OBJECT_OLE : XML_OBJECT;
             SvXMLElementExport aElem( mrExport, XML_NAMESPACE_DRAW, eElem, sal_True, sal_True );
 
