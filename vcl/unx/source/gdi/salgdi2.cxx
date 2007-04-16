@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 15:48:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:23:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -861,6 +861,7 @@ bool X11SalGraphics::drawAlphaBitmap( const SalTwoRect& rTR,
     //#i75249# workaround for ImplGetDDB() giving us back a different depth than
     // we requested. E.g. mask pixmaps are always compatible with the drawable
     // TODO: find an appropriate picture format for these cases
+    //       then remove the workaround below and the one for #i75531#
     if( nDepth != pSrcDDB->ImplGetDepth() )
         return false;
 
