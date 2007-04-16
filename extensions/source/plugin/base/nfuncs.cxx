@@ -4,9 +4,9 @@
  *
  *  $RCSfile: nfuncs.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:08:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:24:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -544,6 +544,33 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
     if( ! pImpl )
         return 0;
 
+    NPError aResult( NPERR_NO_ERROR );
+
+    switch( variable )
+    {
+        case NPNVxDisplay:
+            // Unix only, handled in sysdep part
+        case NPNVxtAppContext:
+            // Unix only, handled in sysdep part
+         default:
+            aResult = NPERR_INVALID_PARAM;
+            break;
+        case NPNVjavascriptEnabledBool:
+            // no javascript
+            *(NPBool*)value = false;
+            break;
+        case NPNVasdEnabledBool:
+            // no SmartUpdate
+            *(NPBool*)value = false;
+            break;
+        case NPNVisOfflineBool:
+            // no offline browsing
+            *(NPBool*)value = false;
+            break;
+    }
+    /*
+    provisional code should there ever be NPNVariables that we actually
+    want to query from the PluginContext
     ::rtl::OUString aValue;
     try
     {
@@ -557,8 +584,9 @@ NPError SAL_CALL NP_LOADDS  NPN_GetValue( NPP instance, NPNVariable variable, vo
         pImpl->leavePluginCallback();
         return e.ErrorCode;
     }
+    */
 
-    return NPERR_NO_ERROR;
+    return aResult;
 }
 
 void SAL_CALL NP_LOADDS  NPN_ReloadPlugins(NPBool reloadPages)
