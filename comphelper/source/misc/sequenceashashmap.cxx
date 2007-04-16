@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sequenceashashmap.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:14:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -259,6 +259,31 @@ const css::uno::Sequence< css::beans::PropertyValue > SequenceAsHashMap::getAsCo
     css::uno::Sequence< css::beans::PropertyValue > lReturn;
     (*this) >> lReturn;
     return lReturn;
+}
+
+/*-----------------------------------------------
+    07.03.2007 12:45
+-----------------------------------------------*/
+sal_Bool SequenceAsHashMap::match(const SequenceAsHashMap& rCheck) const
+{
+    const_iterator pCheck;
+    for (  pCheck  = rCheck.begin();
+           pCheck != rCheck.end()  ;
+         ++pCheck                  )
+    {
+        const ::rtl::OUString& sCheckName  = pCheck->first;
+        const css::uno::Any&   aCheckValue = pCheck->second;
+              const_iterator   pFound      = find(sCheckName);
+
+        if (pFound == end())
+            return sal_False;
+
+        const css::uno::Any& aFoundValue = pFound->second;
+        if (aFoundValue != aCheckValue)
+            return sal_False;
+    }
+
+    return sal_True;
 }
 
 /*-----------------------------------------------
