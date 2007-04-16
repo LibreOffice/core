@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sessionlistener.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:39:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:32:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,10 +41,6 @@
 
 #ifndef __FRAMEWORK_CLASSES_FILTERCACHE_HXX_
 #include <classes/filtercache.hxx>
-#endif
-
-#ifndef __FRAMEWORK_CLASSES_ARGUMENTANALYZER_HXX_
-#include <classes/argumentanalyzer.hxx>
 #endif
 
 #ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
