@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:40:25 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,6 +87,9 @@
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPPLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
 #include <com/sun/star/ucb/InsertCommandArgument.hpp>
 #endif
@@ -137,6 +140,9 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCLOSEBROADCASTER_HPP_
 #include <com/sun/star/util/XCloseBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
+#include <com/sun/star/frame/XModule.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DATATRANSFER_DATAFLAVOR_HPP_
 #include <com/sun/star/datatransfer/DataFlavor.hpp>
@@ -656,6 +662,30 @@ void ODocumentDefinition::impl_removeFrameFromDesktop_throw( const Reference< XF
 }
 
 // -----------------------------------------------------------------------------
+void ODocumentDefinition::impl_appendFrameToDocumentFrames_throw( const Reference< XFrame >& _rxFrame )
+{
+    Reference< XModel > xDatabaseDocumentModel;
+    if ( m_pImpl->m_pDataSource )
+        xDatabaseDocumentModel = m_pImpl->m_pDataSource->getModel_noCreate();
+
+    Reference< XController > xDatabaseDocumentController;
+    if ( xDatabaseDocumentModel.is() )
+        xDatabaseDocumentController = xDatabaseDocumentModel->getCurrentController();
+
+    Reference< XFramesSupplier > xDatabaseDocumentFramesSupp;
+    if ( xDatabaseDocumentController.is() )
+        xDatabaseDocumentFramesSupp = xDatabaseDocumentFramesSupp.query( xDatabaseDocumentController->getFrame() );
+
+    Reference< XFrames > xDatabaseDocumentFrames;
+    if ( xDatabaseDocumentFramesSupp.is() )
+        xDatabaseDocumentFrames = xDatabaseDocumentFramesSupp->getFrames();
+
+    OSL_ENSURE( xDatabaseDocumentFrames.is(), "ODocumentDefinition::impl_appendFrameToDocumentFrames_throw: cannot append the component frame to the document's frame!" );
+    if ( xDatabaseDocumentFrames.is() )
+        xDatabaseDocumentFrames->append( _rxFrame );
+}
+
+// -----------------------------------------------------------------------------
 void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMode )
 {
     try
@@ -671,11 +701,17 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMo
             m_xListener = new OEmbedObjectHolder(m_xEmbeddedObject,this);
 
         Reference< XFrame > xFrame( xController->getFrame() );
-        // raise the window to top (especially necessary if this is not the first activation)
         if ( xFrame.is() )
         {
+            // raise the window to top (especially necessary if this is not the first activation)
             Reference< XTopWindow > xTopWindow( xFrame->getContainerWindow(), UNO_QUERY_THROW );
             xTopWindow->toFront();
+
+            // remove the frame from the desktop's frame collection because we need full control of it.
+            impl_removeFrameFromDesktop_throw( xFrame );
+
+            // ensure that the component's frame is a child of the database document's frame
+            impl_appendFrameToDocumentFrames_throw( xFrame );
         }
 
         // ensure that we ourself are kept alive as long as the embedded object's frame is
@@ -685,9 +721,6 @@ void ODocumentDefinition::impl_onActivateEmbeddedObject( bool _bOpenedInDesignMo
         // init the edit view
         if ( _bOpenedInDesignMode )
             impl_initObjectEditView( xController );
-
-        // remove the frame from the desktop's frame collection because we need full control of it.
-        impl_removeFrameFromDesktop_throw( xFrame );
     }
     catch( const RuntimeException& )
     {
@@ -893,6 +926,14 @@ Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 Co
 
                     if ( !bOpenForMail )
                     {
+                        Reference< XModule> xModule(xModel,UNO_QUERY);
+                        if ( xModule.is() )
+                        {
+                            if ( m_bForm )
+                                xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.FormDesign")));
+                            else
+                                xModule->setIdentifier(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.TextReportDesign")));
+                        }
                         m_xEmbeddedObject->changeState(EmbedStates::ACTIVE);
                         impl_onActivateEmbeddedObject( bOpenInDesign );
                     }
