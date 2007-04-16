@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshimp.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 17:38:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:21:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -658,10 +658,7 @@ Reference< XModel > FmXFormShell::getContextDocument() const
 bool
 FmXFormShell::isEnhancedForm() const
 {
-    if ( m_eDocumentType != eUnknownDocumentType )
-        return m_eDocumentType == eEnhancedForm;
-
-    return DocumentClassification::isEnhancedForm( getContextDocument() );
+    return getDocumentType() == eEnhancedForm;
 }
 
 //------------------------------------------------------------------
@@ -3854,22 +3851,11 @@ IMPL_LINK( FmXFormShell, OnFirstTimeActivation, void*, /*NOTINTERESTEDIN*/ )
 
     if  ( pDocument && !pDocument->HasName() )
     {
-        switch ( getDocumentType() )
+        if ( isEnhancedForm() )
         {
-        case eEnhancedForm:
+            // show the data navigator
             if ( !m_pShell->GetViewShell()->GetViewFrame()->HasChildWindow( SID_FM_SHOW_DATANAVIGATOR ) )
                 m_pShell->GetViewShell()->GetViewFrame()->ToggleChildWindow( SID_FM_SHOW_DATANAVIGATOR );
-
-            // NO break
-        case eDatabaseForm:
-        {   // this is a new form document -> show some toolboxes
-            FormToolboxes aToolboxAccess( getHostFrame(), getDocumentType() );
-            aToolboxAccess.showToolbox( SID_FM_FORM_DESIGN_TOOLS );
-            aToolboxAccess.showToolbox( SID_FM_CONFIG );
-        }
-        break;
-        default:
-            break;
         }
     }
 
