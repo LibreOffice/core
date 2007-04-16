@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:25:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 15:34:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -118,6 +118,12 @@
 					<desc>Specifies the default file format for saving documents inside this office module.</desc>
                         </info>
                         </prop>
+			<prop oor:name="ooSetupFactoryDocumentService" oor:type="xs:string">
+				<!-- UIHints: setup -->
+				<info>
+					<desc>Its the service name of the document model used by this module. E.g. filter match against those service name.</desc>
+				</info>
+			</prop>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
 				<!-- UIHints: setup -->
@@ -155,6 +161,13 @@
 					<desc>Specifies the ID of the icon for the factory</desc>
 				</info>
 				<value>0</value>
+			</prop>
+			<prop oor:name="ooSetupFactoryStyleFilter" oor:type="xs:int">
+				<!-- UIHints: setup -->
+				<info>
+					<desc>Specifies the ID of the style filter (Stylist) for the factory</desc>
+				</info>
+				<value>-1</value>
 			</prop>
 			<prop oor:name="ooSetupFactoryCommandConfigRef" oor:type="xs:string">
 				<info>
