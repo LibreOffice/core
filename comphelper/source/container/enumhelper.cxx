@@ -4,9 +4,9 @@
  *
  *  $RCSfile: enumhelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 17:07:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:58:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -265,6 +265,43 @@ void OEnumerationByIndex::impl_stopDisposeListening()
         m_bListening = sal_False;
     }
     --m_refCount;
+}
+
+//==================================================================
+//= OAnyEnumeration
+//==================================================================
+
+//------------------------------------------------------------------------------
+OAnyEnumeration::OAnyEnumeration(const staruno::Sequence< staruno::Any >& lItems)
+    :m_nPos(0)
+    ,m_lItems(lItems)
+{
+}
+
+//------------------------------------------------------------------------------
+OAnyEnumeration::~OAnyEnumeration()
+{
+}
+
+//------------------------------------------------------------------------------
+sal_Bool SAL_CALL OAnyEnumeration::hasMoreElements(  ) throw(staruno::RuntimeException)
+{
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+
+    return (m_lItems.getLength() > m_nPos);
+}
+
+//------------------------------------------------------------------------------
+staruno::Any SAL_CALL OAnyEnumeration::nextElement(  )
+        throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException)
+{
+    if ( ! hasMoreElements())
+        throw starcontainer::NoSuchElementException();
+
+    ::osl::ResettableMutexGuard aLock(m_aLock);
+    sal_Int32 nPos = m_nPos;
+    ++m_nPos;
+    return m_lItems[nPos];
 }
 
 //.........................................................................
