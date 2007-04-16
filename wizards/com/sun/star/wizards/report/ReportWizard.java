@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:32:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -315,7 +315,7 @@ public class ReportWizard extends WizardDialog implements XTextListener, XComple
         if (ReportPath.equals(""))
             return ret;
         DBGPROPERTYVALUE = CurPropertyValue;
-        CurReportDocument =  new ReportDocument(xMSF, true, oResource, ReportPath + "/stl-default.ott", true);
+        CurReportDocument =  new ReportDocument(xMSF, ReportPath + "/stl-default.ott", oResource );
         CurDBMetaData = CurReportDocument.CurDBMetaData;
         if (CurDBMetaData.getConnection(CurPropertyValue)){
             CurReportDocument.xProgressBar.setValue(20);
