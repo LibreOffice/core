@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:03:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:56:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1019,9 +1019,14 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
         aFact.Erase( nPos, aFact.Len() );
         aParam.Erase(0,1);
     }
-
     aFact.EraseAllChars('4').ToLowerAscii();
-    ::rtl::OUString aServiceName;
+
+    // HACK: sometimes a real document service name is given here instead of
+    // a factory short name. Set return value directly to this service name as fallback
+    // in case next lines of code does nothing ...
+    // use rFact instead of normed aFact value !
+    ::rtl::OUString aServiceName = rFact;
+
     if ( aFact.EqualsAscii("swriter") )
     {
         aServiceName = ::rtl::OUString::createFromAscii("com.sun.star.text.TextDocument");
