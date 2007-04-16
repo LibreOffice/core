@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: kz $ $Date: 2006-12-13 15:05:39 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 16:38:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -62,11 +62,6 @@ SLOFILES=			$(SLO)$/interceptionhelper.obj				\
                     $(SLO)$/closedispatcher.obj                 \
                     $(SLO)$/systemexec.obj						\
                     $(SLO)$/popupmenudispatcher.obj
-
-#                    $(SLO)$/basedispatcher.obj                  \
-#                    $(SLO)$/blankdispatcher.obj                 \
-#                    $(SLO)$/createdispatcher.obj                \
-#                    $(SLO)$/selfdispatcher.obj                  \
 
 # --- Targets ------------------------------------------------------
 
