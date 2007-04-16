@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:09:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 15:33:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -541,7 +541,7 @@
   </node>
   <node oor:name="Forms">
     <node oor:name="ControlLayout">
-      <node oor:name="XMLFormDocument">
+      <node oor:name="com.sun.star.text.XMLFormDocument">
         <prop oor:name="VisualEffect" oor:type="xs:string">
           <value>flat</value>
         </prop>
@@ -549,7 +549,7 @@
           <value>true</value>
         </prop>
       </node>
-      <node oor:name="DatabaseFormDocument">
+      <node oor:name="com.sun.star.sdb.FormDesign">
         <prop oor:name="VisualEffect" oor:type="xs:string">
           <value>flat</value>
         </prop>
