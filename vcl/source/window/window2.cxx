@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window2.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:23:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:22:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -828,7 +828,8 @@ void Window::EndAutoScroll()
     {
         pSVData->maWinData.mpAutoScrollWin = NULL;
         pSVData->maWinData.mnAutoScrollFlags = 0;
-        delete pSVData->maAppData.mpWheelWindow;
+        pSVData->maAppData.mpWheelWindow->ImplStop();
+        pSVData->maAppData.mpWheelWindow->doLazyDelete();
         pSVData->maAppData.mpWheelWindow = NULL;
     }
 }
