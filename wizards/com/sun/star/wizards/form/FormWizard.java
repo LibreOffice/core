@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormWizard.java,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:30:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:52:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@ public class FormWizard extends WizardDialog{
     public XComponent[] startFormWizard(XMultiServiceFactory _xMSF, PropertyValue[] CurPropertyValue){
         XComponent[] ret = null;
         try{
-            curFormDocument =  new FormDocument(xMSF, true, false, oResource);
+            curFormDocument =  new FormDocument(xMSF, oResource);
             if (curFormDocument.oMainFormDBMetaData.getConnection(CurPropertyValue)){
                 curFormDocument.oSubFormDBMetaData.getConnection(new PropertyValue[]{Properties.createProperty("ActiveConnection", curFormDocument.oMainFormDBMetaData.DBConnection)});
                 curFormDocument.xProgressBar.setValue(20);
