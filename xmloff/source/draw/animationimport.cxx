@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationimport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:26:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,6 +37,7 @@
 #include "precompiled_xmloff.hxx"
 
 #include <tools/debug.hxx>
+#include <tools/time.hxx>
 
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
@@ -361,6 +362,7 @@ const SvXMLTokenMap& AnimationsImportHelperImpl::getAnimationNodeAttributeTokenM
             { XML_NAMESPACE_SMIL, XML_CALCMODE,                 (sal_uInt16)ANA_CalcMode },
             { XML_NAMESPACE_SMIL, XML_ACCUMULATE,               (sal_uInt16)ANA_Accumulate },
             { XML_NAMESPACE_PRESENTATION, XML_ADDITIVE,         (sal_uInt16)ANA_AdditiveMode },
+            { XML_NAMESPACE_SMIL, XML_ADDITIVE,         (sal_uInt16)ANA_AdditiveMode },
             { XML_NAMESPACE_SMIL, XML_KEYSPLINES,               (sal_uInt16)ANA_KeySplines },
             { XML_NAMESPACE_SVG, XML_PATH,                      (sal_uInt16)ANA_Path },
             { XML_NAMESPACE_ANIMATION, XML_COLOR_INTERPOLATION, (sal_uInt16)ANA_ColorSpace },
@@ -1277,7 +1279,24 @@ void AnimationNodeContext::init_node(  const ::com::sun::star::uno::Reference< :
             case ANA_IterateInterval:
             {
                 if( xIter.is() )
-                    xIter->setIterateInterval( rValue.toDouble() );
+                {
+                    double fInterval = 0.0;
+                    if( rValue.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("P")) )
+                    {
+                        ::Time aTime;
+                        sal_Int32 nSecondsFraction = 0;
+                        if( SvXMLUnitConverter::convertTimeDuration( rValue, aTime, &nSecondsFraction ) )
+                        {
+                            fInterval = ((((aTime.GetHour() * 60) + aTime.GetMin()) * 60) + aTime.GetSec()) + (nSecondsFraction / 1000.0);
+                        }
+                    }
+                    else
+                    {
+                        fInterval = rValue.toDouble();
+                    }
+
+                    xIter->setIterateInterval( fInterval );
+                }
             }
             break;
 
