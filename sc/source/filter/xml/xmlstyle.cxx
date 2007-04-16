@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:43:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:34:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -750,7 +750,7 @@ void ScXMLAutoStylePoolP::exportStyleContent(
                                                 sCondition += xSheetCondition->getFormula1();
                                                 sCondition += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(")"));
                                                 rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_CONDITION, sCondition);
-                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, sStyleName);
+                                                rScXMLExport.AddAttribute(XML_NAMESPACE_STYLE, XML_APPLY_STYLE_NAME, rScXMLExport.EncodeStyleName( sStyleName ));
                                                 OUString sOUBaseAddress;
                                                 ScXMLConverter::GetStringFromAddress( sOUBaseAddress,
                                                     xSheetCondition->getSourcePosition(), rScXMLExport.GetDocument() );
