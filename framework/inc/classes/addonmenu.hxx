@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonmenu.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:01:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:30:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,11 +66,11 @@ namespace framework
 class AddonMenu : public PopupMenu
 {
     public:
-                        AddonMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+                        AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
                         ~AddonMenu();
 
     private:
-        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& m_xFrame;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > m_xFrame;
 };
 
 class AddonMenuManager;
@@ -89,10 +89,10 @@ class AddonPopupMenu : public PopupMenu
         void                    Initialize( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonPopupMenuDefinition );
 
     private:
-                                AddonPopupMenu( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
+                                AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
-        rtl::OUString                                                       m_aCommandURL;
-        ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame >&  m_xFrame;
+        rtl::OUString                                                     m_aCommandURL;
+        ::com::sun::star::uno::Reference< com::sun::star::frame::XFrame > m_xFrame;
 
     friend class AddonMenuManager;
 };
@@ -112,21 +112,21 @@ class AddonMenuManager
         static sal_Bool   IsAddonMenuId( USHORT nId ) { return (( nId >= ADDONMENU_ITEMID_START ) && ( nId < ADDONMENU_ITEMID_END )); }
 
         // Check if the context string matches the provided xModel context
-        static sal_Bool   IsCorrectContext( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContext );
+        static sal_Bool   IsCorrectContext( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rModel, const rtl::OUString& aContext );
 
         // Factory method to create different Add-On menu types
-        static PopupMenu* CreatePopupMenuType( MenuType eMenuType, com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
+        static PopupMenu* CreatePopupMenuType( MenuType eMenuType, const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame );
 
         // Create the Add-Ons menu
-        static AddonMenu* CreateAddonMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
+        static AddonMenu* CreateAddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame );
 
         // Merge the Add-Ons help menu items into the given menu bar at a defined pos
-        static void       MergeAddonHelpMenu( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+        static void       MergeAddonHelpMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
                                               MenuBar* pMergeMenuBar );
 
         // Merge the addon popup menus into the given menu bar at the provided pos.
-        static void       MergeAddonPopupMenus( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                                com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel,
+        static void       MergeAddonPopupMenus( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+                                                const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel,
                                                 USHORT   nMergeAtPos,
                                                 MenuBar* pMergeMenuBar );
 
@@ -139,8 +139,8 @@ class AddonMenuManager
                                      USHORT      nInsPos,
                                      USHORT&     nUniqueMenuId,
                                      com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > > aAddonMenuDefinition,
-                                     com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
-                                     com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel );
+                                     const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+                                     const com::sun::star::uno::Reference< com::sun::star::frame::XModel >& rModel );
 
         // Retrieve the menu entry property values from a sequence
         static void       GetMenuEntry( const com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue >& rAddonMenuEntry,
