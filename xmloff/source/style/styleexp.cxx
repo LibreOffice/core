@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styleexp.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 12:15:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:12:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,8 +183,8 @@ sal_Bool XMLStyleExport::exportStyle(
     sName += rStyle->getName();
 
     sal_Bool bEncoded = sal_False;
-    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME,
-                              GetExport().EncodeStyleName( sName, &bEncoded ) );
+    const OUString sEncodedStyleName(GetExport().EncodeStyleName( sName, &bEncoded ));
+    GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_NAME, sEncodedStyleName );
 
     if( bEncoded )
         GetExport().AddAttribute( XML_NAMESPACE_STYLE, XML_DISPLAY_NAME,
@@ -311,11 +311,20 @@ sal_Bool XMLStyleExport::exportStyle(
         // <style:style>
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_STYLE, XML_STYLE,
                                   sal_True, sal_True );
+
+        SvXMLExportPropertyMapper2* pPropMapper2 = dynamic_cast< SvXMLExportPropertyMapper2* >( rPropMapper.get() );
+        if( pPropMapper2 )
+            pPropMapper2->SetStyleName( sEncodedStyleName );
+
         // <style:properties>
         ::std::vector< XMLPropertyState > xPropStates =
             rPropMapper->Filter( xPropSet );
         rPropMapper->exportXML( GetExport(), xPropStates,
                                 XML_EXPORT_FLAG_IGN_WS );
+
+        if( pPropMapper2 )
+            pPropMapper2->SetStyleName( OUString() );
+
         exportStyleContent( rStyle );
 
         // <script:events>, if they are supported by this style
