@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.41 $
+#   $Revision: 1.42 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:27:33 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 11:13:46 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -146,10 +146,6 @@ SHL1STDLIBS+=$(LIBSTLPORT)
 #stlport is not lost on me
 .IF "$(USE_SYSTEM_STL)"=="YES"
 SHL1STDLIBS+=$(LIBSTLPORT)
-.ELSE
-.IF "$(OS)"=="MACOSX"
-SHL1STDLIBS+=-lstlport_gcc
-.ENDIF
 .ENDIF
 
 .IF "$(OS)"=="MACOSX"
