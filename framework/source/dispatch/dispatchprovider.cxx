@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:53:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:38:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -411,14 +411,6 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
 
     ::rtl::OUString sTargetName = sTargetFrameName;
 
-    if (
-        (aURL.Complete.equalsAscii(".uno:CloseDoc")) ||
-        (aURL.Complete.equalsAscii(".uno:CloseWin"))
-       )
-    {
-        sTargetName = SPECIALTARGET_TOP;
-    }
-
     //-----------------------------------------------------------------------------------------------------
     // I) handle special cases which not right for using findFrame() first
     //-----------------------------------------------------------------------------------------------------
@@ -517,22 +509,10 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
     {
         if (xFrame->isTop())
         {
-            // There exist a hard coded interception for special URLs.
-            if (
-                (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
-                (aURL.Complete.equalsAscii(".uno:CloseWin"  )) ||
-                (aURL.Complete.equalsAscii(".uno:CloseFrame"))
-               )
-            {
-                xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
-            }
-            else
-            {
-                // If we are this top frame itself (means our owner frame)
-                // we should call ourself recursiv with a better target "_self".
-                // So we can share the same code! (see reaction for "_self" inside this methode too.)
-                xDispatcher = this->queryDispatch(aURL,SPECIALTARGET_SELF,0);
-            }
+            // If we are this top frame itself (means our owner frame)
+            // we should call ourself recursiv with a better target "_self".
+            // So we can share the same code! (see reaction for "_self" inside this method too.)
+            xDispatcher = this->queryDispatch(aURL,SPECIALTARGET_SELF,0);
         }
         else
         {
@@ -557,12 +537,25 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_queryFrame
         (sTargetName.getLength()<1      )
        )
     {
-        // Ask our controller for his agreement for these dispatched URL ...
-        // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
-        // But in case of e.g. the bibliography not all queries will be handled successfully here.
-        css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
-        if (xController.is())
-            xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
+        // There exist a hard coded interception for special URLs.
+        if (
+            (aURL.Complete.equalsAscii(".uno:CloseDoc"  )) ||
+            (aURL.Complete.equalsAscii(".uno:CloseWin"  )) ||
+            (aURL.Complete.equalsAscii(".uno:CloseFrame"))
+           )
+        {
+            xDispatcher = implts_getOrCreateDispatchHelper( E_CLOSEDISPATCHER, xFrame );
+        }
+
+        if ( ! xDispatcher.is())
+        {
+            // Ask our controller for his agreement for these dispatched URL ...
+            // because some URLs are internal and can be handled faster by SFX - which most is the current controller!
+            // But in case of e.g. the bibliography not all queries will be handled successfully here.
+            css::uno::Reference< css::frame::XDispatchProvider > xController( xFrame->getController(), css::uno::UNO_QUERY );
+            if (xController.is())
+                xDispatcher = xController->queryDispatch(aURL, SPECIALTARGET_SELF, 0);
+        }
 
         // If controller has no fun to dispatch these URL - we must search another right dispatcher.
         // Search for any registered protocol handler first.
@@ -813,7 +806,7 @@ css::uno::Reference< css::frame::XDispatch > DispatchProvider::implts_getOrCreat
 
         case E_CLOSEDISPATCHER :
                 {
-                    CloseDispatcher* pDispatcher = new CloseDispatcher( xFactory, xOwner );
+                    CloseDispatcher* pDispatcher = new CloseDispatcher( xFactory, xOwner, sTarget );
                     xDispatchHelper = css::uno::Reference< css::frame::XDispatch >( static_cast< ::cppu::OWeakObject* >(pDispatcher), css::uno::UNO_QUERY );
                 }
                 break;
