@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:04:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:09:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2765,7 +2765,7 @@ namespace xmloff { namespace token {
         TOKEN( "twoBoxBottom",              XML_TWOBOXBOTTOM ),
         TOKEN( "twoBoxLeft",                    XML_TWOBOXLEFT ),
         TOKEN( "twoBoxRight",                   XML_TWOBOXRIGHT ),
-        TOKEN( "fourBoxVertical ",          XML_FOURBOXVERTICAL ),
+        TOKEN( "fourBoxVertical",           XML_FOURBOXVERTICAL ),
         TOKEN( "fourBoxHorizontal",         XML_FOURBOXHORIZONTAL ),
         TOKEN( "verticalLeft",              XML_VERTICALLEFT ),
         TOKEN( "verticalRight",             XML_VERTICALRIGHT ),
