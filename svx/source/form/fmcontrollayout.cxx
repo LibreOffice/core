@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmcontrollayout.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:49:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:20:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,35 +69,6 @@ namespace svxform
     using namespace ::com::sun::star::awt;
     using namespace ::com::sun::star::beans;
     using namespace ::com::sun::star::form;
-
-    //--------------------------------------------------------------------
-    namespace
-    {
-        const sal_Char* lcl_getApplikationNodeName( DocumentType _eDocType )
-        {
-            switch( _eDocType )
-            {
-            case eTextDocument:
-                return "TextDocument";
-            case eWebDocument:
-                return "WebDocument";
-            case eSpreadsheetDocument:
-                return "SpreadsheetDocument";
-            case eDrawingDocument:
-                return "DrawingDocument";
-            case ePresentationDocument:
-                return "PresentationDocument";
-            case eEnhancedForm:
-                return "XMLFormDocument";
-            case eDatabaseForm:
-                return "DatabaseFormDocument";
-            default:
-                break;
-            }
-            DBG_ERROR( "lcl_getApplikationNodeName: unknown doc type!" );
-            return "TextDocument";
-        }
-    }
 
     //====================================================================
     //= ControlLayouter
@@ -171,7 +142,7 @@ namespace svxform
     ::utl::OConfigurationNode ControlLayouter::getLayoutSettings( DocumentType _eDocType )
     {
         ::rtl::OUString sConfigName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/org.openoffice.Office.Common/Forms/ControlLayout/" ) );
-        sConfigName += ::rtl::OUString::createFromAscii( lcl_getApplikationNodeName( _eDocType ) );
+        sConfigName += DocumentClassification::getModuleIdentifierForDocumentType( _eDocType );
         return OConfigurationTreeRoot::createWithServiceFactory(
             ::comphelper::getProcessServiceFactory(),    // TODO
             sConfigName );
