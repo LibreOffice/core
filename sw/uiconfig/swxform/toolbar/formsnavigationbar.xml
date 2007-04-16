@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <toolbar:toolbaritem xlink:href=".uno:RecSearch" toolbar:helpid="10725"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:RecText" toolbar:helpid="10624"/>
+ <toolbar:toolbaritem xlink:href=".uno:AbsoluteRecord" toolbar:helpid="10622"/>
+ <toolbar:toolbaritem xlink:href=".uno:RecFromText" toolbar:helpid="10625"/>
+ <toolbar:toolbaritem xlink:href=".uno:RecTotal" toolbar:helpid="10626"/>
+ <toolbar:toolbaritem xlink:href=".uno:FirstRecord" toolbar:helpid="10616"/>
+ <toolbar:toolbaritem xlink:href=".uno:PrevRecord" toolbar:helpid="10618"/>
+ <toolbar:toolbaritem xlink:href=".uno:NextRecord" toolbar:helpid="10617"/>
+ <toolbar:toolbaritem xlink:href=".uno:LastRecord" toolbar:helpid="10619"/>
+ <toolbar:toolbaritem xlink:href=".uno:NewRecord" toolbar:helpid="10620"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:RecSave" toolbar:helpid="10627"/>
+ <toolbar:toolbaritem xlink:href=".uno:RecUndo" toolbar:helpid="10630"/>
+ <toolbar:toolbaritem xlink:href=".uno:DeleteRecord" toolbar:helpid="10621"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:Refresh" toolbar:helpid="10724"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:OrderCrit" toolbar:helpid="10714"/>
+ <toolbar:toolbaritem xlink:href=".uno:Sortup" toolbar:helpid="10712"/>
+ <toolbar:toolbaritem xlink:href=".uno:SortDown" toolbar:helpid="10713"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:AutoFilter" toolbar:helpid="10716"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormFiltered" toolbar:helpid="10723"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormFilter" toolbar:helpid="10729"/>
+ <toolbar:toolbaritem xlink:href=".uno:RemoveFilterSort" toolbar:helpid="10711"/>
+ <toolbar:toolbarseparator/>
+ <toolbar:toolbaritem xlink:href=".uno:ViewFormAsGrid" toolbar:helpid="10761"/>
+</toolbar:toolbar>
