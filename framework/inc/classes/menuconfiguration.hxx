@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuconfiguration.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:06:27 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:31:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,7 @@
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
+#include <com/sun/star/frame/XDispatchProvider.hpp>
 
 //_________________________________________________________________________________________________________________
 //  includes of other projects
@@ -66,6 +67,7 @@
 
 #include <vcl/menu.hxx>
 #include <vcl/toolbox.hxx>
+#include <cppuhelper/weak.hxx>
 
 #define BOOKMARK_NEWMENU        ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_new" ))
 #define BOOKMARK_WIZARDMENU     ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:menu_bookmark_wizard" ))
@@ -93,11 +95,13 @@ class MenuConfiguration
     public:
         struct Attributes
         {
+            Attributes() {}
             Attributes( const ::rtl::OUString& aFrame, const ::rtl::OUString& aImageIdStr ) :
                 aTargetFrame( aFrame ), aImageId( aImageIdStr ) {}
 
             ::rtl::OUString aTargetFrame;
             ::rtl::OUString aImageId;
+            ::com::sun::star::uno::WeakReference< ::com::sun::star::frame::XDispatchProvider > xDispatchProvider;
         };
 
         MenuConfiguration(
