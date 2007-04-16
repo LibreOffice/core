@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlghelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:20:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 15:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,6 +220,13 @@ public:
                             FileDialogHelper( sal_Int16 nDialogType,
                                               sal_Int64 nFlags,
                                               Window* _pPreferredParent = NULL );
+
+                            FileDialogHelper( sal_Int16 nDialogType,
+                                              sal_Int64 nFlags,
+                                              const ::rtl::OUString& aFilterUIName,
+                                              const ::rtl::OUString& aExtName,
+                                              Window* _pPreferredParent = NULL );
+
 
     virtual                 ~FileDialogHelper();
 

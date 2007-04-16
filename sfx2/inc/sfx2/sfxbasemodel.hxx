@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:28:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 15:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,11 @@
 #ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
+#include <com/sun/star/frame/XModule.hpp>
+#endif
+
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -297,6 +302,16 @@
 
 #define XUICONFIGURATIONMANAGERSUPPLIER ::com::sun::star::ui::XUIConfigurationManagerSupplier
 #define XUICONFIGURATIONMANAGER ::com::sun::star::ui::XUIConfigurationManager
+#define XMODULE ::com::sun::star::frame::XModule
+
+//________________________________________________________________________________________________________
+//  namespace
+//________________________________________________________________________________________________________
+#ifdef css
+    #error "clas on using css as namespace define .-)
+#else
+    #define css ::com::sun::star
+#endif
 
 //________________________________________________________________________________________________________
 //  forwards
@@ -344,7 +359,7 @@ class SFX2_DLLPUBLIC SfxBaseModel   :   public XTYPEPROVIDER
                     ,   public XEVENTBROADCASTER
                     ,   public XEVENTLISTENER
                     ,   public XEVENTSSUPPLIER
-                    ,   public XMODEL
+                    ,   public XMODEL2
                     ,   public XMODIFIABLE
                     ,   public XPRINTABLE
                     ,   public XPRINTJOBBROADCASTER
@@ -360,6 +375,7 @@ class SFX2_DLLPUBLIC SfxBaseModel   :   public XTYPEPROVIDER
                     ,   public XUICONFIGURATIONMANAGERSUPPLIER
                     ,   public XVISUALOBJECT
                     ,   public XUNOTUNNEL
+                    ,   public XMODULE
                     ,   public IMPL_SfxBaseModel_MutexContainer
                     ,   public SfxListener
                     ,   public OWEAKOBJECT
@@ -820,6 +836,30 @@ public:
     virtual REFERENCE< XINTERFACE > SAL_CALL getCurrentSelection() throw (::com::sun::star::uno::RuntimeException);
 
     //____________________________________________________________________________________________________
+    //  XModel2
+    //____________________________________________________________________________________________________
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL getControllers()
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getAvailableViewControllerNames()
+        throw (css::uno::RuntimeException);
+
+    virtual css::uno::Reference< css::frame::XController > SAL_CALL createDefaultViewController(const css::uno::Reference< css::frame::XFrame >& Frame          ,
+                                                                                                      css::uno::Reference< css::awt::XWindow >&  ComponentWindow)
+        throw (css::uno::RuntimeException         ,
+               css::lang::IllegalArgumentException,
+               css::uno::Exception                );
+
+    virtual css::uno::Reference< css::frame::XController > SAL_CALL createViewController(const ::rtl::OUString&                                 ViewName       ,
+                                                                                         const css::uno::Sequence< css::beans::PropertyValue >& Arguments      ,
+                                                                                         const css::uno::Reference< css::frame::XFrame >&       Frame          ,
+                                                                                               css::uno::Reference< css::awt::XWindow >&        ComponentWindow)
+        throw (css::uno::RuntimeException         ,
+               css::lang::IllegalArgumentException,
+               css::uno::Exception                );
+
+    //____________________________________________________________________________________________________
+
     //  XModifiable
     //____________________________________________________________________________________________________
 
@@ -1300,6 +1340,13 @@ public:
 
     virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
 
+    // css.frame.XModule
+    virtual void SAL_CALL setIdentifier(const ::rtl::OUString& sIdentifier)
+        throw (css::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getIdentifier()
+        throw (css::uno::RuntimeException);
+
+
     //____________________________________________________________________________________________________
     //  SfxListener
     //____________________________________________________________________________________________________
@@ -1431,5 +1478,9 @@ private:
     IMPL_SfxBaseModel_DataContainer*    m_pData ;
 
 } ; // class SfxBaseModel
+
+
+#undef css
+
 
 #endif // _SFX_SFXBASEMODEL_HXX_
