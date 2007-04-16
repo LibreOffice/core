@@ -4,9 +4,9 @@
  *
  *  $RCSfile: targets.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:00:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,98 +73,6 @@ namespace framework{
 #define SPECIALTARGET_MENUBAR               DECLARE_ASCII(SPECIALTARGET_ASCII_MENUBAR    )
 #define SPECIALTARGET_HELPAGENT             DECLARE_ASCII(SPECIALTARGET_ASCII_HELPAGENT  )
 #define SPECIALTARGET_HELPTASK              DECLARE_ASCII(SPECIALTARGET_ASCII_HELPTASK   )
-
-class TargetCheck
-{
-    public:
-
-    //_______________________________________________________________________
-    /**
-        it checks the given unknown target name, if it's the expected special one.
-
-        @param  sCheckTarget
-                    must be the unknwon target name, which should be checked
-
-        @param  sSpecialTarget
-                    represent the expected target name
-
-        @return It returns <TRUE/> if <var>sCheckTarget</var> represent the expected
-                <var>sSpecialTarget</var> value; <FALSE/> otherwhise.
-                Compare will be done by ignoring case.
-     */
-    static sal_Bool matchSpecialTarget( /*IN*/ const ::rtl::OUString& sCheckTarget   ,
-                                        /*IN*/ const ::rtl::OUString& sSpecialTarget )
-    {
-        return sCheckTarget.equalsIgnoreAsciiCase(sSpecialTarget);
-    }
-
-    //_______________________________________________________________________
-    /**
-        reject not allowed target names for frames.
-
-        Some special targets are allowed for searching only ...
-        Some other ones must be set as a frame name realy to locate it.
-        This method filter such target names.
-
-        @param  sName
-                    the target name, which the outside code will set as a frame name.
-
-        @return It returns <TRUE/> if <var>sName</var> is allowed as frame name; <FALSE/> otherwhise.
-                Compare will be done by ignoring case.
-     */
-    static sal_Bool isValidFrameName( /*IN*/ const ::rtl::OUString& sName )
-    {
-        return  (
-                    !TargetCheck::matchSpecialTarget(sName,SPECIALTARGET_SELF   ) ||
-                    !TargetCheck::matchSpecialTarget(sName,SPECIALTARGET_PARENT ) ||
-                    !TargetCheck::matchSpecialTarget(sName,SPECIALTARGET_TOP    ) ||
-                    !TargetCheck::matchSpecialTarget(sName,SPECIALTARGET_BLANK  ) ||
-                    !TargetCheck::matchSpecialTarget(sName,SPECIALTARGET_DEFAULT)
-                );
-    }
-
-    //_______________________________________________________________________
-    /**
-        it checks, if the given target name is a well known special one anyway.
-        Special targets are defined above ...
-
-        @param  sTarget
-                    must be the unknwon target name, which should be checked
-
-        @return It returns <TRUE/> if <var>sTarget</var> represent a special one;
-                <FALSE/> otherwhise.
-     */
-    static sal_Bool isSpecialTarget( /*IN*/ const ::rtl::OUString& sTarget )
-    {
-        return  (
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_SELF     ) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_PARENT   ) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_TOP      ) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_BLANK    ) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_DEFAULT  ) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_BEAMER   ) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_MENUBAR  ) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_HELPAGENT) ||
-                    TargetCheck::matchSpecialTarget(sTarget,SPECIALTARGET_HELPTASK )
-                );
-    }
-
-    //_______________________________________________________________________
-    /**
-        it checks, if the given target name can be valid
-        Of course we can't check unknwon names, which are not special ones.
-        But we decide, that it's not allowed to use "_" as first sign
-        and the value doesn't represent such special target.
-        We reserve this letter for our own purposes.
-     */
-    static sal_Bool isValidTarget( /*IN*/ const ::rtl::OUString& sTarget )
-    {
-        sal_Int32 nPosOf_  = sTarget.indexOf('_');
-        sal_Bool  bSpecial = TargetCheck::isSpecialTarget(sTarget);
-
-        return (( nPosOf_ == 0 && bSpecial ) || ( nPosOf_ != 0 && ! bSpecial ));
-    }
-};
 
 }       //  namespace framework
 
