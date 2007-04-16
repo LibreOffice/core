@@ -4,9 +4,9 @@
  *
  *  $RCSfile: databasedocument.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:29:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:23:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,6 +45,7 @@
 #include "dbastrings.hrc"
 #endif
 #include <comphelper/documentconstants.hxx>
+#include <comphelper/enumhelper.hxx>
 #ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #endif
@@ -1186,6 +1187,40 @@ Reference< XInterface > ODatabaseDocument::getThis()
 {
     return *this;
 }
+// -----------------------------------------------------------------------------
+struct CreateAny : public ::std::unary_function< Reference<XController>, Any>
+        {
+            Any operator() (const Reference<XController>& lhs) const
+            {
+                return makeAny(lhs);
+            }
+        };
+// XModel2
+Reference< XEnumeration > SAL_CALL ODatabaseDocument::getControllers(  ) throw (RuntimeException)
+{
+    ModelMethodGuard aGuard( *this );
+    uno::Sequence< Any> aController(m_pImpl->m_aControllers.size());
+    ::std::transform(m_pImpl->m_aControllers.begin(),m_pImpl->m_aControllers.end(),aController.getArray(),CreateAny());
+    return new ::comphelper::OAnyEnumeration(aController);
+}
+// -----------------------------------------------------------------------------
+Sequence< ::rtl::OUString > SAL_CALL ODatabaseDocument::getAvailableViewControllerNames(  ) throw (RuntimeException)
+{
+    Sequence< ::rtl::OUString > aNames(1);
+    aNames[0] = SERVICE_SDB_APPLICATIONCONTROLLER;
+    return aNames;
+}
+// -----------------------------------------------------------------------------
+Reference< XController > SAL_CALL ODatabaseDocument::createDefaultViewController( const Reference< XFrame >& /*Frame*/, Reference< ::com::sun::star::awt::XWindow >& /*ComponentWindow*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
+{
+    return Reference< XController >();
+}
+// -----------------------------------------------------------------------------
+Reference< XController > SAL_CALL ODatabaseDocument::createViewController( const ::rtl::OUString& /*ViewName*/, const Sequence< PropertyValue >& /*Arguments*/, const Reference< XFrame >& /*Frame*/, Reference< ::com::sun::star::awt::XWindow >& /*ComponentWindow*/ ) throw (IllegalArgumentException, Exception, RuntimeException)
+{
+    return Reference< XController >();
+}
+// -----------------------------------------------------------------------------
 
 //------------------------------------------------------------------
 //........................................................................
