@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menubarfactory.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:27:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:47:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,10 +54,6 @@
 
 #ifndef __FRAMEWORK_UIELEMENT_MENUBARWRAPPER_HXX_
 #include <uielement/menubarwrapper.hxx>
-#endif
-
-#ifndef __FRAMEWORK_HELPER_MODULEIDENTIFIER_HXX_
-#include <helper/moduleidentifier.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
