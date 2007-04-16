@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreatorsrv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2006-10-30 08:11:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,8 +55,8 @@
 #include <threadhelp/writeguard.hxx>
 #endif
 
-#ifndef __FRAMEWORK_TARGETS_H_
-#include <targets.h>
+#ifndef __FRAMEWORK_TARGETHELPER_HXX_
+#include <loadenv/targethelper.hxx>
 #endif
 
 #ifndef __FRAMEWORK_SERVICES_H_
@@ -80,6 +80,10 @@
 
 #ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
 #include <com/sun/star/frame/XDesktop.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_WINDOWDESCRIPTOR_HPP_
@@ -108,28 +112,33 @@
 //_______________________________________________
 // namespaces
 
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
 namespace framework
 {
 
 //-----------------------------------------------
-DEFINE_XINTERFACE_3(TaskCreatorService                                       ,
+const ::rtl::OUString TaskCreatorService::ARGUMENT_PARENTFRAME                   = ::rtl::OUString::createFromAscii("ParentFrame"                   ); // XFrame
+const ::rtl::OUString TaskCreatorService::ARGUMENT_FRAMENAME                     = ::rtl::OUString::createFromAscii("FrameName"                     ); // OUString
+const ::rtl::OUString TaskCreatorService::ARGUMENT_MAKEVISIBLE                   = ::rtl::OUString::createFromAscii("MakeVisible"                   ); // sal_Bool
+const ::rtl::OUString TaskCreatorService::ARGUMENT_CREATETOPWINDOW               = ::rtl::OUString::createFromAscii("CreateTopWindow"               ); // sal_Bool
+const ::rtl::OUString TaskCreatorService::ARGUMENT_POSSIZE                       = ::rtl::OUString::createFromAscii("PosSize"                       ); // Rectangle
+const ::rtl::OUString TaskCreatorService::ARGUMENT_CONTAINERWINDOW               = ::rtl::OUString::createFromAscii("ContainerWindow"               ); // XWindow
+const ::rtl::OUString TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE  = ::rtl::OUString::createFromAscii("SupportPersistentWindowState"  ); // sal_Bool
+
+//-----------------------------------------------
+DEFINE_XINTERFACE_3(TaskCreatorService                                ,
                     OWeakObject                                       ,
                     DIRECT_INTERFACE(css::lang::XTypeProvider        ),
                     DIRECT_INTERFACE(css::lang::XServiceInfo         ),
                     DIRECT_INTERFACE(css::lang::XSingleServiceFactory))
 
 //-----------------------------------------------
-DEFINE_XTYPEPROVIDER_3(TaskCreatorService                     ,
+DEFINE_XTYPEPROVIDER_3(TaskCreatorService              ,
                        css::lang::XTypeProvider        ,
                        css::lang::XServiceInfo         ,
                        css::lang::XSingleServiceFactory)
 
 //-----------------------------------------------
-DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(TaskCreatorService                       ,
+DEFINE_XSERVICEINFO_ONEINSTANCESERVICE(TaskCreatorService                ,
                                        ::cppu::OWeakObject               ,
                                        SERVICENAME_TASKCREATOR           ,
                                        IMPLEMENTATIONNAME_FWK_TASKCREATOR)
@@ -172,20 +181,21 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     throw(css::uno::Exception       ,
           css::uno::RuntimeException)
 {
-    static ::rtl::OUString PROP_TARGETNAME       = ::rtl::OUString::createFromAscii("TargetName");
-    static ::rtl::OUString PROP_FRAME            = ::rtl::OUString::createFromAscii("Frame"     );
-    static ::rtl::OUString PROP_VISIBLE          = ::rtl::OUString::createFromAscii("Visible"   );
-    static ::rtl::OUString DEFAULTVAL_TARGETNAME = ::rtl::OUString::createFromAscii("_default"  );
-    static sal_Bool        DEFAULTVAL_VISIBLE    = sal_False                                     ;
+    static ::rtl::OUString     DEFAULTVAL_FRAMENAME                     = ::rtl::OUString();
+    static sal_Bool            DEFAULTVAL_MAKEVISIBLE                   = sal_False;
+    static sal_Bool            DEFAULTVAL_CREATETOPWINDOW               = sal_True;
+    static css::awt::Rectangle DEFAULTVAL_POSSIZE                       = css::awt::Rectangle(0, 0, 0, 0); // only possize=[0,0,0,0] triggers default handling of vcl !
+    static sal_Bool            DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE = sal_False;
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
-    ::rtl::OUString                           sTarget  = lArgs.getUnpackedValueOrDefault(PROP_TARGETNAME, DEFAULTVAL_TARGETNAME );
-    sal_Bool                                  bVisible = lArgs.getUnpackedValueOrDefault(PROP_VISIBLE   , DEFAULTVAL_VISIBLE);
-    css::uno::Reference< css::frame::XFrame > xFrame   = lArgs.getUnpackedValueOrDefault(PROP_FRAME     , css::uno::Reference< css::frame::XFrame >());
-
-    // Check incoming parameter. We don't allow special target names like e.g. "_blank"
-    ::rtl::OUString sRightName = impl_filterNames(sTarget);
+    css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_PARENTFRAME                  , css::uno::Reference< css::frame::XFrame >());
+    ::rtl::OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_FRAMENAME                    , DEFAULTVAL_FRAMENAME                       );
+    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_MAKEVISIBLE                  , DEFAULTVAL_MAKEVISIBLE                     );
+    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_CREATETOPWINDOW              , DEFAULTVAL_CREATETOPWINDOW                 );
+    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_POSSIZE                      , DEFAULTVAL_POSSIZE                         );
+    css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_CONTAINERWINDOW              , css::uno::Reference< css::awt::XWindow >() );
+    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE , DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE   );
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );
@@ -193,134 +203,169 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
     aReadLock.unlock();
     /* } SAFE */
 
-    css::uno::Reference< css::frame::XFramesSupplier > xDesktop( xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
-    css::uno::Reference< css::uno::XInterface >        xTask   ( implts_createSystemTask(xDesktop, sRightName, bVisible), css::uno::UNO_QUERY_THROW);
-    return xTask;
+    // We use FrameName property to set it as API name of the new created frame later.
+    // But those frame names must be different from the set of special target names as e.g. _blank, _self etcpp !
+    ::rtl::OUString sRightName = impl_filterNames(sFrameName);
+
+    // if no external frame window was given ... create a new one.
+    if ( ! xContainerWindow.is())
+    {
+        css::uno::Reference< css::awt::XWindow > xParentWindow;
+        if (xParentFrame.is())
+            xParentWindow = xParentFrame->getContainerWindow();
+
+        // Parent has no own window ...
+        // So we have to create a top level window always !
+        if ( ! xParentWindow.is())
+            bCreateTopWindow = sal_True;
+
+        xContainerWindow = implts_createContainerWindow(xParentWindow, aPosSize, bCreateTopWindow);
+    }
+
+    // create the new frame
+    css::uno::Reference< css::frame::XFrame > xFrame = implts_createFrame(xParentFrame, xContainerWindow, sRightName);
+
+    // special freature:
+    // A special listener will restore pos/size states in case
+    // a component was loaded into the frame first time.
+    if (bSupportPersistentWindowState)
+        implts_establishWindowStateListener(xFrame);
+
+    // Make it visible directly here ...
+    // if its required from outside.
+    if (bVisible)
+        xContainerWindow->setVisible(bVisible);
+
+    return css::uno::Reference< css::uno::XInterface >(xFrame, css::uno::UNO_QUERY_THROW);
 }
 
-/*-****************************************************************************************************//**
-    @short      create a new task with a system window inside
-    @descr      With this method you can create a new empty system task. We create the task and the container
-                window inside of it. Created node will be a child of given parent - which can be the desktop only.
-
-    @param      xDesktop
-                    only the desktop can be the parent of such new created task frame
-    @param      sName
-                    the new name for this task (filtered!)
-    @param      bVisible
-                    used to set the state of frame container window after creation
-
-    @return     A reference to the new created task or <NULL/> if it failed.
-
-    @threadsafe yes
-    @modified   16.05.2002 10:44, as96863
-*//*-*****************************************************************************************************/
-css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createSystemTask( const css::uno::Reference< css::frame::XFramesSupplier >&   xDesktop ,
-                                                                                const ::rtl::OUString&                                      sName    ,
-                                                                                      sal_Bool                                              bVisible )
+//-----------------------------------------------
+css::uno::Reference< css::awt::XWindow > TaskCreatorService::implts_createContainerWindow( const css::uno::Reference< css::awt::XWindow >& xParentWindow ,
+                                                                                           const css::awt::Rectangle&                      aPosSize      ,
+                                                                                                 sal_Bool                                  bTopWindow    )
 {
-    css::uno::Reference< css::frame::XFrame > xTask;
-
-    // get toolkit to create task container window
-    /* SAFE { */
+    // SAFE  ->
     ReadGuard aReadLock( m_aLock );
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
     aReadLock.unlock();
-    /* } SAFE */
+    // <- SAFE
+
+    // get toolkit to create task container window
     css::uno::Reference< css::awt::XToolkit > xToolkit( xSMGR->createInstance( SERVICENAME_VCLTOOLKIT ), css::uno::UNO_QUERY_THROW);
+
+    // Check if child frames can be created realy. We need at least a valid window at the parent frame ...
+    css::uno::Reference< css::awt::XWindowPeer > xParentWindowPeer;
+    if ( ! bTopWindow)
+    {
+        if ( ! xParentWindow.is())
+            bTopWindow = sal_False;
+        else
+            xParentWindowPeer = css::uno::Reference< css::awt::XWindowPeer >(xParentWindow, css::uno::UNO_QUERY_THROW);
+    }
 
     // describe window properties.
     css::awt::WindowDescriptor aDescriptor;
-    aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
-    aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")                         ;
-    aDescriptor.ParentIndex         =   -1                                              ;
-    aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
-    aDescriptor.Bounds              =   css::awt::Rectangle(0,0,0,0)                    ;
-    aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
-                                        css::awt::WindowAttribute::MOVEABLE             |
-                                        css::awt::WindowAttribute::SIZEABLE             |
-                                        css::awt::WindowAttribute::CLOSEABLE            |
-                                        css::awt::VclWindowPeerAttribute::CLIPCHILDREN  ;
+    if (bTopWindow)
+    {
+        aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
+        aDescriptor.WindowServiceName   =   DECLARE_ASCII("window")                         ;
+        aDescriptor.ParentIndex         =   -1                                              ;
+        aDescriptor.Parent              =   css::uno::Reference< css::awt::XWindowPeer >()  ;
+        aDescriptor.Bounds              =   aPosSize                                        ;
+        aDescriptor.WindowAttributes    =   css::awt::WindowAttribute::BORDER               |
+                                            css::awt::WindowAttribute::MOVEABLE             |
+                                            css::awt::WindowAttribute::SIZEABLE             |
+                                            css::awt::WindowAttribute::CLOSEABLE            |
+                                            css::awt::VclWindowPeerAttribute::CLIPCHILDREN  ;
+    }
+    else
+    {
+        aDescriptor.Type                =   css::awt::WindowClass_TOP                       ;
+        aDescriptor.WindowServiceName   =   DECLARE_ASCII("dockingwindow")                  ;
+        aDescriptor.ParentIndex         =   1                                               ;
+        aDescriptor.Parent              =   xParentWindowPeer                               ;
+        aDescriptor.Bounds              =   aPosSize                                        ;
+        aDescriptor.WindowAttributes    =   css::awt::VclWindowPeerAttribute::CLIPCHILDREN  ;
+    }
+
     // create a new blank container window and get access to parent container to append new created task.
     css::uno::Reference< css::awt::XWindowPeer > xPeer      = xToolkit->createWindow( aDescriptor );
     css::uno::Reference< css::awt::XWindow >     xWindow    ( xPeer, css::uno::UNO_QUERY );
-    xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
-    css::uno::Reference< css::frame::XFrames >   xContainer = xDesktop->getFrames();
-    if (
-        ( xWindow.is()    ) &&
-        ( xContainer.is() )
-       )
-    {
-        // create new top level frame.
-        xTask = css::uno::Reference< css::frame::XFrame >( xSMGR->createInstance( SERVICENAME_FRAME ), css::uno::UNO_QUERY );
-        if (xTask.is())
-        {
-            // Set window on task.
-            // Do it before you call other interface methods on task-object ...
-            // because this object must be initialized before you can do such things.
-            // Otherwise he throw an exception for UNINITIALIZED working mode!
+    if ( ! xWindow.is())
+        throw css::uno::Exception(::rtl::OUString::createFromAscii("TaskCreator service was not able to create suitable frame window."),
+                                  static_cast< ::cppu::OWeakObject* >(this));
+    if (bTopWindow)
+        xPeer->setBackground(::svtools::ColorConfig().GetColorValue(::svtools::APPBACKGROUND).nColor);
+    else
+        xPeer->setBackground(0xffffffff);
 
-            // Don't forget to create tree-bindings! use given parent as parent node of new task ...
-            // ... and append it to his container.
-            // (task member xParent will automaticly set by "append()" call!)
-
-            xTask->initialize  ( xWindow );
-            xTask->setName     ( sName   );
-            xContainer->append ( xTask   );
-
-            if (bVisible)
-                xWindow->setVisible(bVisible);
-
-            // Special feature: It's allowed for system tasks only - not for browser plugged ones!
-            // We must create a special listener service and couple it with the new created task frame.
-            // He will restore or save the window state of it ...
-            // See used classes for further informations too.
-            PersistentWindowState* pPersistentStateHandler = new PersistentWindowState(xSMGR);
-            css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pPersistentStateHandler), css::uno::UNO_QUERY);
-            // This will start listening at the task frame ... and then these two objects hold herself alive!
-            // We can forget xInit without any problems.
-            css::uno::Sequence< css::uno::Any > lInitData(1);
-            lInitData[0] <<= xTask;
-            xInit->initialize(lInitData);
-        }
-    }
-
-    return xTask;
+    return xWindow;
 }
 
-/*-****************************************************************************************************//**
-    @short      decide which names are correct frame names
-    @descr      Not all names are allowed as frame name. e.g. special targets like "_blank" are forbidden.
-                They are used to force creation of new tasks and can make trouble during search off already
-                existing ones.
+//-----------------------------------------------
+css::uno::Reference< css::frame::XFrame > TaskCreatorService::implts_createFrame( const css::uno::Reference< css::frame::XFrame >& xParentFrame    ,
+                                                                                  const css::uno::Reference< css::awt::XWindow >&  xContainerWindow,
+                                                                                  const ::rtl::OUString&                           sName           )
+{
+    // SAFE  ->
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE
 
-    @attention  "_beamer" is a valid name - because:
-                It exist one beamer for one task tree only.
-                If he exist, we can find it - otherwhise he will be created by our task-frame!
+    // create new frame.
+    css::uno::Reference< css::frame::XFrame > xNewFrame( xSMGR->createInstance( SERVICENAME_FRAME ), css::uno::UNO_QUERY_THROW );
 
-    @param      sName
-                    whished name by user
+    // Set window on frame.
+    // Do it before calling any other interface methods ...
+    // The new created frame must be initialized before you can do anything else there.
+    xNewFrame->initialize( xContainerWindow );
 
-    @return     The given name of user if it is an allowed one - or an empty string if not.
+    // Put frame to the frame tree.
+    // Note: The property creator/parent will be set on the new putted frame automaticly ... by the parent container.
+    if (xParentFrame.is())
+    {
+        css::uno::Reference< css::frame::XFramesSupplier > xSupplier  (xParentFrame, css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::frame::XFrames >         xContainer = xSupplier->getFrames();
+        xContainer->append( xNewFrame );
+    }
 
-    @threadsafe not neccessary
-    @modified   16.05.2002 10:32, as96863
-*//*-*****************************************************************************************************/
+    // Set it's API name (if there is one from outside)
+    if (sName.getLength())
+        xNewFrame->setName( sName );
+
+    return xNewFrame;
+}
+
+//-----------------------------------------------
+void TaskCreatorService::implts_establishWindowStateListener( const css::uno::Reference< css::frame::XFrame >& xFrame )
+{
+    // SAFE  ->
+    ReadGuard aReadLock( m_aLock );
+    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = m_xSMGR;
+    aReadLock.unlock();
+    // <- SAFE
+
+    // Special feature: It's allowed for frames using a top level window only!
+    // We must create a special listener service and couple it with the new created task frame.
+    // He will restore or save the window state of it ...
+    // See used classes for further informations too.
+    PersistentWindowState* pPersistentStateHandler = new PersistentWindowState(xSMGR);
+    css::uno::Reference< css::lang::XInitialization > xInit(static_cast< ::cppu::OWeakObject* >(pPersistentStateHandler), css::uno::UNO_QUERY_THROW);
+
+    // This will start listening at this frame ... and then these two objects hold herself alive!
+    // We can forget xInit without any problems.
+    css::uno::Sequence< css::uno::Any > lInitData(1);
+    lInitData[0] <<= xFrame;
+    xInit->initialize(lInitData);
+}
+
+//-----------------------------------------------
 ::rtl::OUString TaskCreatorService::impl_filterNames( const ::rtl::OUString& sName )
 {
-    ::rtl::OUString sFiltered( sName );
-    if(
-        ( sName == SPECIALTARGET_BLANK      )   ||
-        ( sName == SPECIALTARGET_DEFAULT    )   ||
-        ( sName == SPECIALTARGET_SELF       )   ||
-        ( sName == SPECIALTARGET_PARENT     )   ||
-        ( sName == SPECIALTARGET_TOP        )   ||
-        ( sName == SPECIALTARGET_MENUBAR    )   ||
-        ( sName == SPECIALTARGET_HELPAGENT  )
-       )
-    {
-        sFiltered = ::rtl::OUString();
-    }
+    ::rtl::OUString sFiltered;
+    if (TargetHelper::isValidNameForFrame(sName))
+        sFiltered = sName;
     return sFiltered;
 }
 
