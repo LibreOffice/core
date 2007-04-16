@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:22:56 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-03-08 16:22:56 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,6 @@ extern WW8OutputWithDepth output;
 using namespace ::std;
 </xsl:text>
 <xsl:apply-templates select='.//UML:Class' mode='class'/>
-<xsl:apply-templates select='//UML:Model' mode='sprmcodetostr'/>
 <xsl:apply-templates select='//UML:Model' mode='createsprmprops'/>
 <xsl:apply-templates select='//UML:Model' mode='createsprmbinary'/>
 <xsl:apply-templates select='//UML:Model' mode='createdffrecord'/>
@@ -489,15 +488,6 @@ using namespace ::std;
    }
     </xsl:text>
   </xsl:template>
-
-<xsl:template match='UML:Model' mode='sprmcodetostr'>
-SprmIdToString::SprmIdToString()
-{
-<xsl:variable name='tmp'>map &lt; sal_uInt32, string &gt; </xsl:variable>
-<xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="ww8sprm"]'>
-    mMap[<xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="sprmcode"]//UML:TaggedValue.dataValue'/>] = "<xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="sprmid"]//UML:TaggedValue.dataValue'/>";</xsl:for-each>
-}
-</xsl:template>
 
 <xsl:template match='UML:Model' mode='createsprmprops'>
 doctok::Reference &lt; Properties &gt; ::Pointer_t createSprmProps

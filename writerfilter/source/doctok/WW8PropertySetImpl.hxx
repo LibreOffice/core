@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PropertySetImpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:32 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,26 +151,6 @@ public:
     virtual bool equal(const WW8PropertySetIterator & rIt) const;
 
     virtual string toString() const;
-};
-
-
-class SprmIdToString
-{
-    typedef boost::shared_ptr<SprmIdToString> Pointer_t;
-
-    static Pointer_t pInstance;
-
-    map<sal_uInt32, string> mMap;
-
-protected:
-    /**
-       Generated automatically.
-    */
-    SprmIdToString();
-
-public:
-    static Pointer_t Instance();
-    string operator()(sal_uInt32 nId);
 };
 
 ::doctok::Reference<Properties>::Pointer_t createSprmProps

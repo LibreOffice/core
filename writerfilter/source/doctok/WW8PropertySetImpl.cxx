@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8PropertySetImpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-01-30 13:24:14 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,7 @@
 #include "WW8DocumentImpl.hxx"
 #include "WW8ResourceModelImpl.hxx"
 #include <doctok/resourceids.hxx>
+#include <resourcemodel/QNameToString.hxx>
 
 namespace doctok
 {
@@ -402,21 +403,6 @@ string WW8PropertySetIteratorImpl::toString() const
     sResult += sBuffer;
 
     return sResult;
-}
-
-SprmIdToString::Pointer_t SprmIdToString::pInstance;
-
-SprmIdToString::Pointer_t SprmIdToString::Instance()
-{
-    if (pInstance.get() == NULL)
-        pInstance = SprmIdToString::Pointer_t(new SprmIdToString());
-
-    return pInstance;
-}
-
-string SprmIdToString::operator()(sal_uInt32 nId)
-{
-    return mMap[nId];
 }
 
 }
