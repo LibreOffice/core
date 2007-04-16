@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:48:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:10:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1274,7 +1274,7 @@ XMLShapePropertySetMapper::~XMLShapePropertySetMapper()
 // ----------------------------------------
 
 XMLShapeExportPropertyMapper::XMLShapeExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, XMLTextListAutoStylePool *pListAutoPool, SvXMLExport& rExport )
-: SvXMLExportPropertyMapper( rMapper )
+: SvXMLExportPropertyMapper2( rMapper )
 , mpListAutoPool( pListAutoPool )
 , mrExport( rExport )
 , maNumRuleExp( rExport )
@@ -1611,10 +1611,9 @@ void XMLShapeExportPropertyMapper::handleElementItem(
                 // only export list-styles as elements in styles section
                 if( !mbIsInAutoStyles )
                 {
-                    OUString sName;
-                    uno::Reference< container::XIndexReplace > xNumRule;
-                    if( rProperty.maValue >>= xNumRule )
-                        ((XMLShapeExportPropertyMapper*)this)->maNumRuleExp.exportNumberingRule( sName, xNumRule );
+                    uno::Reference< container::XIndexReplace > xNumRule( rProperty.maValue, uno::UNO_QUERY );
+                    if( xNumRule.is() )
+                        const_cast<XMLShapeExportPropertyMapper*>(this)->maNumRuleExp.exportNumberingRule( maStyleName, xNumRule );
                 }
             }
             break;
