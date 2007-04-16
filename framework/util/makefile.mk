@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.110 $
+#   $Revision: 1.111 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:13:01 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 16:47:35 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -63,7 +63,6 @@ LIB1OBJFILES=   \
                 $(SLO)$/itemcontainer.obj                       \
                 $(SLO)$/rootitemcontainer.obj                   \
                 $(SLO)$/constitemcontainer.obj                  \
-                $(SLO)$/moduleidentifier.obj                    \
                 $(SLO)$/propertysethelper.obj
 
 
