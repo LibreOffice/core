@@ -1,0 +1,154 @@
+/*************************************************************************
+ *
+ *  OpenOffice.org - a multi-platform office productivity suite
+ *
+ *  $RCSfile: XModel2.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:17:11 $
+ *
+ *  The Contents of this file are made available subject to
+ *  the terms of GNU Lesser General Public License Version 2.1.
+ *
+ *
+ *    GNU Lesser General Public License Version 2.1
+ *    =============================================
+ *    Copyright 2005 by Sun Microsystems, Inc.
+ *    901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *    This library is free software; you can redistribute it and/or
+ *    modify it under the terms of the GNU Lesser General Public
+ *    License version 2.1, as published by the Free Software Foundation.
+ *
+ *    This library is distributed in the hope that it will be useful,
+ *    but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *    Lesser General Public License for more details.
+ *
+ *    You should have received a copy of the GNU Lesser General Public
+ *    License along with this library; if not, write to the Free Software
+ *    Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *    MA  02111-1307  USA
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_frame_XModel2_idl__
+#define __com_sun_star_frame_XModel2_idl__
+
+#ifndef __com_sun_star_frame_XModel_idl__
+#include <com/sun/star/frame/XModel.idl>
+#endif
+
+#ifndef __com_sun_star_container_XEnumeration_idl__
+#include <com/sun/star/container/XEnumeration.idl>
+#endif
+
+#ifndef __com_sun_star_awt_XWindow_idl__
+#include <com/sun/star/awt/XWindow.idl>
+#endif
+
+#ifndef __com_sun_star_lang_IllegalArgumentException_idl__
+#include <com/sun/star/lang/IllegalArgumentException.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module frame {
+
+//=============================================================================
+/** extends interface XModel.
+
+    The foloowing functions are added:
+
+    - enumeration of all currently connected controller objects.
+      (not getCurrentController() only, which depends on focus)
+
+    - establish new view controller factory methods, which will make
+      it possible to create new views for this model.
+ */
+interface XModel2 : com::sun::star::frame::XModel
+{
+    //-------------------------------------------------------------------------
+    /** provides list of all currently connected controller objects.
+
+        <p>
+        Please note: Because this interface will might be used inside
+        multi threaded environments those list can contain still disposed items
+        or it new added controller will be missing (if they was added after this
+        enumeration was created).
+        </P>
+
+        @returns
+            list of controller objects.
+            Enumeration can be empty but not NULL.
+     */
+    com::sun::star::container::XEnumeration getControllers();
+
+    //-------------------------------------------------------------------------
+    /** provides the available names of the factory to be used to create views.
+
+        @see createView()
+
+        @returns
+            sequence of all view names
+     */
+    sequence< string > getAvailableViewControllerNames();
+
+    //-------------------------------------------------------------------------
+    /** creates the default view instance for this model.
+
+        @param Frame
+               used to place the new created view there
+
+        @param ComponentWindow
+               returns a suitable component window for the new created view controller
+
+        @return the new view controller instance
+
+        @throw  IllegalArgumentException
+                if one of the given parameter was wrong
+
+        @throw  Exception
+                if creation of a new view failed by other reasons
+     */
+    com::sun::star::frame::XController createDefaultViewController( [in]  com::sun::star::frame::XFrame Frame          ,
+                                                                    [out] com::sun::star::awt::XWindow  ComponentWindow)
+        raises (com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::uno::Exception                );
+
+    //-------------------------------------------------------------------------
+    /** creates a new view instance classified by the specified name and arguments.
+
+        @param ViewName
+               classified name of instance
+
+        @param Arguments
+               arguments used for creation
+
+        @param Frame
+               used to place the new created view there
+
+        @param ComponentWindow
+               returns a suitable component window for the new created view controller
+
+        @return the new view controller instance
+
+        @throw  IllegalArgumentException
+                if one of the given parameter was wrong
+
+        @throw  Exception
+                if creation of a new view failed by other reasons
+     */
+    com::sun::star::frame::XController createViewController( [in]  string                                           ViewName       ,
+                                                             [in]  sequence< com::sun::star::beans::PropertyValue > Arguments      ,
+                                                             [in]  com::sun::star::frame::XFrame                    Frame          ,
+                                                             [out] com::sun::star::awt::XWindow                     ComponentWindow)
+        raises (com::sun::star::lang::IllegalArgumentException,
+                com::sun::star::uno::Exception                );
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
