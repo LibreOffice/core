@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printerinfomanager.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 10:55:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 14:15:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,6 +146,7 @@ protected:
 
     Type                              m_eType;
     bool                              m_bUseIncludeFeature;
+    rtl::OUString                     m_aSystemDefaultPaper;
 
     PrinterInfoManager( Type eType = Default );
     virtual ~PrinterInfoManager();
@@ -159,7 +160,9 @@ protected:
     // fill default paper if not configured in config file
     // default paper is e.g. locale dependent
     // if a paper is already set it will not be overwritten
-    void setDefaultPaper( PrinterInfo& rInfo ) const;
+    void setDefaultPaper( PPDContext& rInfo ) const;
+
+    void initSystemDefaultPaper();
 public:
 
     // there can only be one
