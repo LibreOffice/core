@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FormDocument.java,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 14:18:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:52:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,10 @@ public class FormDocument extends TextDocument {
     final static String SOMAINFORM = "MainForm";
     final static String SOSUBFORM = "SubForm";
 
+    private final static PropertyValue MODULE_IDENTIFIER = new PropertyValue( "ModuleIdentifier", -1, "com.sun.star.sdb.FormDesign", com.sun.star.beans.PropertyState.DIRECT_VALUE );
 
-    public FormDocument(XMultiServiceFactory xMSF, boolean bshowStatusIndicator, boolean bgetCurrentFrame, Resource oResource) {
-    super(xMSF, bshowStatusIndicator, bgetCurrentFrame, null, "private:factory/swriter", false);
+    public FormDocument(XMultiServiceFactory xMSF, Resource oResource) {
+    super(xMSF, new PropertyValue[]{ MODULE_IDENTIFIER }, true, null);
     try {
         oFormHandler = new FormHandler(xMSF, xTextDocument);
         oFormHandler.setDrawObjectsCaptureMode(false);
@@ -111,7 +112,6 @@ public class FormDocument extends TextDocument {
     } catch (Exception e) {
         e.printStackTrace(System.out);
     }}
-
 
     public void addUIFormController(UIControlArranger _curUIControlArranger){
         this.curUIControlArranger = _curUIControlArranger;
