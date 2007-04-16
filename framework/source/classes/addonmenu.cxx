@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addonmenu.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:39:28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:34:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,7 +110,7 @@ const USHORT SID_ONLINE_REGISTRATION = (SID_SFX_START + 1537);
 namespace framework
 {
 
-AddonMenu::AddonMenu( ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
+AddonMenu::AddonMenu( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame ) :
     m_xFrame( rFrame )
 {
 }
@@ -141,7 +141,7 @@ sal_Bool AddonPopupMenu::IsCommandURLPrefix( const OUString& aCmdURL )
     return aCmdURL.matchAsciiL( aPrefixCharBuf, sizeof( aPrefixCharBuf )-1, 0 );
 }
 
-AddonPopupMenu::AddonPopupMenu( com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame ) :
+AddonPopupMenu::AddonPopupMenu( const com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame ) :
     m_xFrame( rFrame )
 {
 }
@@ -163,7 +163,7 @@ AddonPopupMenu::~AddonPopupMenu()
 
 // ------------------------------------------------------------------------
 
-static Reference< XModel > GetModelFromFrame( Reference< XFrame >& rFrame )
+static Reference< XModel > GetModelFromFrame( const Reference< XFrame >& rFrame )
 {
     // Query for the model to get check the context information
     Reference< XModel > xModel;
@@ -190,7 +190,7 @@ sal_Bool AddonMenuManager::HasAddonHelpMenuElements()
 }
 
 // Factory method to create different Add-On menu types
-PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, Reference< XFrame >& rFrame )
+PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, const Reference< XFrame >& rFrame )
 {
     if ( eMenuType == ADDON_MENU )
         return new AddonMenu( rFrame );
@@ -201,7 +201,7 @@ PopupMenu* AddonMenuManager::CreatePopupMenuType( MenuType eMenuType, Reference<
 }
 
 // Create the Add-Ons menu
-AddonMenu* AddonMenuManager::CreateAddonMenu( Reference< XFrame >& rFrame )
+AddonMenu* AddonMenuManager::CreateAddonMenu( const Reference< XFrame >& rFrame )
 {
     AddonsOptions aOptions;
     AddonMenu*  pAddonMenu      = NULL;
@@ -249,7 +249,7 @@ static USHORT FindMenuId( Menu* pMenu, const String aCommand )
 
 
 // Merge the Add-Ons help menu items into the given menu bar at a defined pos
-void AddonMenuManager::MergeAddonHelpMenu( Reference< XFrame >& rFrame, MenuBar* pMergeMenuBar )
+void AddonMenuManager::MergeAddonHelpMenu( const Reference< XFrame >& rFrame, MenuBar* pMergeMenuBar )
 {
     if ( pMergeMenuBar )
     {
@@ -307,8 +307,8 @@ void AddonMenuManager::MergeAddonHelpMenu( Reference< XFrame >& rFrame, MenuBar*
 }
 
 // Merge the addon popup menus into the given menu bar at the provided pos.
-void AddonMenuManager::MergeAddonPopupMenus( Reference< XFrame >& rFrame,
-                                             Reference< XModel >& rModel,
+void AddonMenuManager::MergeAddonPopupMenus( const Reference< XFrame >& rFrame,
+                                             const Reference< XModel >& rModel,
                                              USHORT               nMergeAtPos,
                                              MenuBar*             pMergeMenuBar )
 {
@@ -367,8 +367,8 @@ void AddonMenuManager::BuildMenu( PopupMenu*                            pCurrent
                                   USHORT                                nInsPos,
                                   USHORT&                               nUniqueMenuId,
                                   Sequence< Sequence< PropertyValue > > aAddonMenuDefinition,
-                                  Reference< XFrame >&                  rFrame,
-                                  Reference< XModel >&                  rModel )
+                                  const Reference< XFrame >&            rFrame,
+                                  const Reference< XModel >&            rModel )
 {
     Sequence< Sequence< PropertyValue > >   aAddonSubMenu;
     BOOL                                    bInsertSeparator    = FALSE;
@@ -467,7 +467,7 @@ void AddonMenuManager::GetMenuEntry( const Sequence< PropertyValue >& rAddonMenu
 }
 
 // Check if the context string matches the provided xModel context
-sal_Bool AddonMenuManager::IsCorrectContext( Reference< XModel >& rModel, const OUString& aContext )
+sal_Bool AddonMenuManager::IsCorrectContext( const Reference< XModel >& rModel, const OUString& aContext )
 {
     if ( rModel.is() )
     {
