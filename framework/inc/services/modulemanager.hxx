@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modulemanager.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 11:00:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:32:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,6 +59,10 @@
 #include <general.h>
 #endif
 
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
+
 #ifndef __FRAMEWORK_STDTYPES_H_
 #include <stdtypes.h>
 #endif
@@ -86,8 +90,12 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
-#include <com/sun/star/container/XNameAccess.hpp>
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEREPLACE_HPP_
+#include <com/sun/star/container/XNameReplace.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
 #endif
 
 //_______________________________________________
@@ -100,10 +108,6 @@
 //_______________________________________________
 // definition
 
-#ifndef css
-namespace css = ::com::sun::star;
-#endif
-
 namespace framework
 {
 
@@ -114,7 +118,8 @@ namespace framework
 class ModuleManager : public  css::lang::XTypeProvider
                     , public  css::lang::XServiceInfo
                     , public  css::frame::XModuleManager
-                    , public  css::container::XNameAccess // => XElementAccess
+                    , public  css::container::XNameReplace // => XNameAccess, XElementAccess
+                    , public  css::container::XContainerQuery
                     // attention! Must be the first base class to guarentee right initialize lock ...
                     , private ThreadHelpBase
                     , public  ::cppu::OWeakObject
@@ -156,6 +161,14 @@ class ModuleManager : public  css::lang::XTypeProvider
                   css::frame::UnknownModuleException,
                   css::uno::RuntimeException         );
 
+        // XNameReplace
+        virtual void SAL_CALL replaceByName(const ::rtl::OUString& sName ,
+                                            const css::uno::Any&   aValue)
+            throw (css::lang::IllegalArgumentException   ,
+                   css::container::NoSuchElementException,
+                   css::lang::WrappedTargetException     ,
+                   css::uno::RuntimeException            );
+
         // XNameAccess
         virtual css::uno::Any SAL_CALL getByName(const ::rtl::OUString& sName)
             throw(css::container::NoSuchElementException,
@@ -175,6 +188,12 @@ class ModuleManager : public  css::lang::XTypeProvider
         virtual sal_Bool SAL_CALL hasElements()
             throw(css::uno::RuntimeException);
 
+        // XContainerQuery
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const ::rtl::OUString& sQuery)
+            throw(css::uno::RuntimeException);
+
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
+            throw(css::uno::RuntimeException);
     //___________________________________________
     // helper
 
@@ -184,10 +203,15 @@ class ModuleManager : public  css::lang::XTypeProvider
         /** @short  open the underlying configuration.
 
             @descr  This method must be called everytimes
-                    a configuartion call is needed. Because
+                    a (reaonly!) configuration is needed. Because
                     method works together with the member
                     m_xCFG, open it on demand and cache it
                     afterwards.
+
+                    Note: A writable configuration access
+                    must be created explicitly. Otherwise
+                    we cant make sure that broken write requests
+                    wont affect our read access !
 
             @return [com.sun.star.container.XNameAccess]
                     the configuration object
@@ -197,28 +221,31 @@ class ModuleManager : public  css::lang::XTypeProvider
 
             @threadsafe
           */
-        css::uno::Reference< css::container::XNameAccess > implts_openConfig()
+        css::uno::Reference< css::container::XNameAccess > implts_getConfig()
             throw(css::uno::RuntimeException);
 
         //---------------------------------------
         /** @short  makes the real identification of the module.
 
-            @descr  The interface method identify() tries to full fill the
-                    requirements (means it check for the right interfaces and throw
-                    all supported exceptions). So this method impl_identify() is called
-                    with a valid parameter everytimes and can be concentrated to the real
-                    detection.
+            @descr  It checks for the optional but preferred interface
+                    XModule first. If this module does not exists at the
+                    given component it tries to use XServiceInfo instead.
 
-            @param  xModule
+                    Note: This method try to locate a suitable module name.
+                    Nothing else. Selecting the right component and throwing suitable
+                    exceptions must be done outside.
+
+            @see    identify()
+
+            @param  xComponent
                     the module for identification.
 
-            @return The identifier (uno service name) of the given module.
+            @return The identifier of the given module.
+                    Can be empty if given component is not a real module !
 
-            @throw  css::frame::UnknownModuleException
-                    if the module has no valid configuration.
+            @threadsafe
          */
-        ::rtl::OUString impl_identify(const css::uno::Reference< css::lang::XServiceInfo >& xModule)
-            throw(css::frame::UnknownModuleException);
+        ::rtl::OUString implts_identify(const css::uno::Reference< css::uno::XInterface >& xComponent);
 };
 
 } // namespace framework
