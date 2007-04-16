@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.29 $
+#   $Revision: 1.30 $
 #
-#   last change: $Author: vg $ $Date: 2006-05-24 13:39:09 $
+#   last change: $Author: ihi $ $Date: 2007-04-16 16:39:47 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,6 @@ SLOFILES=			$(SLO)$/timerhelper.obj	 						\
                     $(SLO)$/popupmenucontrollerbase.obj             \
                     $(SLO)$/dockingareadefaultacceptor.obj          \
                     $(SLO)$/uiconfigelementwrapperbase.obj          \
-                    $(SLO)$/moduleidentifier.obj                    \
                     $(SLO)$/shareablemutex.obj                      \
                     $(SLO)$/vclstatusindicator.obj                  \
                     $(SLO)$/wakeupthread.obj                        \
