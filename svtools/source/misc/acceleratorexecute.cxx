@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acceleratorexecute.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:09:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:49:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,20 +43,28 @@
 //===============================================
 // includes
 
-#ifndef __com_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#ifndef __COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
 #include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
-#ifndef __com_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
+#ifndef __COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
+
+#ifndef __COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
 
-#ifndef __com_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#ifndef __COM_SUN_STAR_UI_XMODULEUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XModuleUIConfigurationManagerSupplier.hpp>
 #endif
 
-#ifndef __com_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
+#ifndef __COM_SUN_STAR_UI_XUICONFIGURATIONMANAGERSUPPLIER_HPP_
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#endif
+
+#ifndef __COM_SUN_STAR_AWT_XTOPWINDOW_HPP_
+#include <com/sun/star/awt/XTopWindow.hpp>
 #endif
 
 #ifndef __COM_SUN_STAR_AWT_KEYMODIFIER_HPP_
@@ -71,17 +79,25 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
 
-#ifndef __com_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#ifndef __COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
 #include <com/sun/star/lang/DisposedException.hpp>
 #endif
+
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/helper/vclunohelper.hxx>
+#endif
+
+#include <vcl/window.hxx>
+#include <vcl/svapp.hxx>
+#include <vos/mutex.hxx>
 
 //===============================================
 // namespace
 
+namespace  css = ::com::sun::star;
+
 namespace svt
 {
-
-namespace  css = ::com::sun::star;
 
 //===============================================
 // definitions
