@@ -4,9 +4,9 @@
  *
  *  $RCSfile: animationexport.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:32:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:09:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -135,6 +135,7 @@
 #endif
 
 #include <tools/debug.hxx>
+#include <tools/time.hxx>
 
 #ifndef __COMPHELPER_UNOINTERFACETOUNIQUEIDENTIFIERMAPPER__
 #include "unointerfacetouniqueidentifiermapper.hxx"
@@ -1013,9 +1014,19 @@ void AnimationsExporterImpl::exportContainer( const Reference< XTimeContainer >&
             double fTemp = xIter->getIterateInterval();
             if( fTemp )
             {
-                sTmp.append( fTemp );
-                sTmp.append( (sal_Unicode)'s' );
-                mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, sTmp.makeStringAndClear() );
+                if( mrExport.isExperimentalOdfExportEnabled() )
+                {
+                    // issue 146582
+                    sal_Int32 nSecondsFraction = static_cast<sal_Int32>(fTemp * 1000 ) % 1000;
+                    ::Time aTime( static_cast<sal_Int32>( fTemp * 100 ) );
+                    mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, SvXMLUnitConverter::convertTimeDuration( aTime, nSecondsFraction ) );
+                }
+                else
+                {
+                    sTmp.append( fTemp );
+                    sTmp.append( (sal_Unicode)'s' );
+                    mrExport.AddAttribute( XML_NAMESPACE_ANIMATION, XML_ITERATE_INTERVAL, sTmp.makeStringAndClear() );
+                }
             }
         }
 
@@ -1180,7 +1191,7 @@ void AnimationsExporterImpl::exportAnimate( const Reference< XAnimate >& xAnimat
                     mrExport.AddAttribute( XML_NAMESPACE_SMIL, XML_ACCUMULATE, XML_SUM );
 
                 nTemp = xAnimate->getAdditive();
-                if( nTemp != AnimationAdditiveMode::REPLACE )
+                if( nTemp != AnimationAdditiveMode::BASE )
                 {
                     SvXMLUnitConverter::convertEnum( sTmp, (USHORT)nTemp, getAnimationsEnumMap(Animations_EnumMap_AdditiveMode) );
                     mrExport.AddAttribute( XML_NAMESPACE_PRESENTATION, XML_ADDITIVE, sTmp.makeStringAndClear() );
