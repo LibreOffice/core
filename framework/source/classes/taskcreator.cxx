@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taskcreator.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:31:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 16:36:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,6 +44,10 @@
 #include <classes/taskcreator.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_TASKCREATORSRV_HXX_
+#include "services/taskcreatorsrv.hxx"
+#endif
+
 #ifndef __FRAMEWORK_THREADHELP_READGUARD_HXX_
 #include <threadhelp/readguard.hxx>
 #endif
@@ -62,6 +66,10 @@
 
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_BEANS_NAMEDVALUE_HPP_
+#include <com/sun/star/beans/NamedValue.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -169,18 +177,30 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
         xCreator = css::uno::Reference< css::lang::XSingleServiceFactory >(
                     xSMGR->createInstance(IMPLEMENTATIONNAME_FWK_TASKCREATOR), css::uno::UNO_QUERY_THROW);
 
-    css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstance(), css::uno::UNO_QUERY_THROW);
+    css::uno::Sequence< css::uno::Any > lArgs(5);
+    css::beans::NamedValue              aArg    ;
 
-    if (
-        (bVisible  ) &&
-        (xTask.is())
-       )
-    {
-        css::uno::Reference< css::awt::XWindow > xWindow = xTask->getContainerWindow();
-        if (xWindow.is())
-            xWindow->setVisible(sal_True);
-    }
+    aArg.Name    = TaskCreatorService::ARGUMENT_PARENTFRAME;
+    aArg.Value <<= css::uno::Reference< css::frame::XFrame >(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
+    lArgs[0]   <<= aArg;
 
+    aArg.Name    = TaskCreatorService::ARGUMENT_CREATETOPWINDOW;
+    aArg.Value <<= sal_True;
+    lArgs[1]   <<= aArg;
+
+    aArg.Name    = TaskCreatorService::ARGUMENT_MAKEVISIBLE;
+    aArg.Value <<= bVisible;
+    lArgs[2]   <<= aArg;
+
+    aArg.Name    = TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
+    aArg.Value <<= sal_True;
+    lArgs[3]   <<= aArg;
+
+    aArg.Name    = TaskCreatorService::ARGUMENT_FRAMENAME;
+    aArg.Value <<= sName;
+    lArgs[4]   <<= aArg;
+
+    css::uno::Reference< css::frame::XFrame > xTask(xCreator->createInstanceWithArguments(lArgs), css::uno::UNO_QUERY_THROW);
     return xTask;
 }
 
