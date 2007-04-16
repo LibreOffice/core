@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:49:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-16 13:13:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1098,6 +1098,17 @@ OUString XMLTextImportHelper::SetStyleAndAttrs(
             }
 
             xPropSet->setPropertyValue( sNumberingLevel, makeAny(nLevel) );
+
+            // #i36217# for impress/draw hard set the IsNumbering property
+            // since we may not export it in future versions
+            {
+                static const OUString sIsNumbering( RTL_CONSTASCII_USTRINGPARAM( "IsNumbering" ) );
+                if( xPropSetInfo->hasPropertyByName( sIsNumbering ) )
+                {
+                    sal_Bool bTmp = pListItem ? sal_True : sal_False;
+                    xPropSet->setPropertyValue( sIsNumbering, Any( bTmp ) );
+                }
+            }
 
             if( pListBlock->IsRestartNumbering() )
             {
