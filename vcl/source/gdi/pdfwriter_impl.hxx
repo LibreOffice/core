@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:21:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-17 13:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,6 +77,9 @@
 #endif
 #ifndef _RTL_DIGEST_H_
 #include <rtl/digest.h>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XURLTRANSFORMER_HPP_
+#include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
 #include "pdffontcache.hxx"
@@ -584,6 +587,9 @@ private:
        link id is always the link's position in this vector
     */
     std::vector<PDFLink>                m_aLinks;
+    /* makes correctly encoded for export to PDF URLS
+    */
+    com::sun::star::uno::Reference< com::sun::star::util::XURLTransformer > m_xTrans;
     /* maps arbitrary link ids for structure attributes to real link ids
        (for setLinkPropertyId)
     */
