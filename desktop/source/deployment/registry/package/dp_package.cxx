@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_package.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 13:18:04 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:32:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -735,10 +735,11 @@ bool BackendImpl::PackageImpl::checkDependencies(
             if (approve == true)
                 return true;
             else
-                throw css::deployment::DeploymentException(
-                    OUSTR("Extension Manager: User declined the license."),
-                    static_cast<OWeakObject*>(this),
-                    Any( css::deployment::LicenseException(OUSTR("User declined the license."), 0, m_name, sLicense)));
+                return false;
+                //throw css::deployment::DeploymentException(
+                //    OUSTR("Extension Manager: User declined the license."),
+                //    static_cast<OWeakObject*>(this),
+                //    Any( css::deployment::LicenseException(OUSTR("User declined the license."), 0, m_name, sLicense)));
         }
         return true;
     } catch (css::ucb::CommandFailedException&) {
