@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signaturecreatorimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:38:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,7 @@ void SAL_CALL SignatureCreatorImpl::addSignatureCreationResultListener(
 }
 
 void SAL_CALL SignatureCreatorImpl::removeSignatureCreationResultListener(
-    const cssu::Reference< cssxc::sax::XSignatureCreationResultListener >& listener )
+    const cssu::Reference< cssxc::sax::XSignatureCreationResultListener >&)
     throw (cssu::RuntimeException)
 {
 }
@@ -250,8 +250,7 @@ void SAL_CALL SignatureCreatorImpl::removeSignatureCreationResultListener(
 void SAL_CALL SignatureCreatorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
     throw (cssu::Exception, cssu::RuntimeException)
 {
-    sal_Int32 nLength = aArguments.getLength();
-    OSL_ASSERT(nLength == 5);
+    OSL_ASSERT(aArguments.getLength() == 5);
 
     rtl::OUString ouTempString;
 

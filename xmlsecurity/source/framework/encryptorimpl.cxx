@@ -4,9 +4,9 @@
  *
  *  $RCSfile: encryptorimpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:38:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,7 +201,7 @@ void EncryptorImpl::startEngine( const cssu::Reference<
 }
 
 /* XReferenceCollector */
-void SAL_CALL EncryptorImpl::setReferenceCount( sal_Int32 count )
+void SAL_CALL EncryptorImpl::setReferenceCount(sal_Int32)
     throw (cssu::Exception, cssu::RuntimeException)
 {
     /*
@@ -225,7 +225,7 @@ void SAL_CALL EncryptorImpl::addEncryptionResultListener( const cssu::Reference<
     tryToPerform();
 }
 
-void SAL_CALL EncryptorImpl::removeEncryptionResultListener( const cssu::Reference< cssxc::sax::XEncryptionResultListener >& listener )
+void SAL_CALL EncryptorImpl::removeEncryptionResultListener( const cssu::Reference< cssxc::sax::XEncryptionResultListener >&)
         throw (cssu::RuntimeException)
 {
 }
@@ -234,8 +234,7 @@ void SAL_CALL EncryptorImpl::removeEncryptionResultListener( const cssu::Referen
 void SAL_CALL EncryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
     throw (cssu::Exception, cssu::RuntimeException)
 {
-    sal_Int32 nLength = aArguments.getLength();
-    OSL_ASSERT(nLength == 5);
+    OSL_ASSERT(aArguments.getLength() == 5);
 
     rtl::OUString ouTempString;
 
