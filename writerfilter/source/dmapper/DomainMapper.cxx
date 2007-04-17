@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2007-04-13 09:35:20 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-17 15:05:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ namespace dmapper{
 DomainMapper::DomainMapper( const uno::Reference< uno::XComponentContext >& xContext,
                             uno::Reference< lang::XComponent > xModel) :
     m_pImpl( new DomainMapper_Impl( *this, xContext, xModel )),
-    mnHpsMeasure(0), mnTwipsMeasure(0), mnBackgroundColor(0), mbIsHighlightSet(false)
+    mnBackgroundColor(0), mbIsHighlightSet(false)
 {
 }
 /*-- 09.06.2006 09:52:12---------------------------------------------------
@@ -132,7 +132,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
 
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
-    bool bExchangeLeftRight = false;
+    // printf("*** attribute *** 0x%.8x *** 0x%.8x *** %s *** attribute ***\n", (unsigned int)Name, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
     if( Name >= NS_rtf::LN_WIDENT && Name <= NS_rtf::LN_LCBSTTBFUSSR )
         m_pImpl->GetFIB().SetData( Name, nIntValue );
     else
@@ -403,7 +403,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_LCBSTTBFNM:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 
-        case NS_rtf::LN_FCDOCUNDO:
+        case NS_rtf::LN_FCDOCUNDO:printf
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 
         case NS_rtf::LN_LCBDOCUNDO:
@@ -1511,10 +1511,6 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_ooxml::LN_CT_Fonts_cs:
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( val.getString() ));
             break;
-        case NS_ooxml::LN_CT_Jc_val:
-            handleParaJustification(nIntValue, m_pImpl->GetTopContext(), bExchangeLeftRight);
-            break;
-
         case NS_ooxml::LN_CT_Spacing_before:
             m_pImpl->GetTopContext()->Insert(PROP_PARA_TOP_MARGIN, uno::makeAny( ConversionHelper::convertToMM100( nIntValue ) ));
             break;
@@ -1533,15 +1529,6 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
                 m_pImpl->GetTopContext()->Insert(PROP_PARA_LINE_SPACING, uno::makeAny( aSpacing ));
             }
             break;
-        case NS_ooxml::LN_CT_HpsMeasure_val:
-        case NS_ooxml::LN_CT_SignedHpsMeasure_val:
-            mnHpsMeasure = nIntValue;
-            break;
-
-        case NS_ooxml::LN_CT_SignedTwipsMeasure_val:
-        case NS_ooxml::LN_CT_TwipsMeasure_val:
-            mnTwipsMeasure = nIntValue;
-            break;
 
         case NS_ooxml::LN_CT_Ind_left:
             m_pImpl->GetTopContext()->Insert(
@@ -1558,24 +1545,6 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_ooxml::LN_CT_Ind_firstLine:
             m_pImpl->GetTopContext()->Insert(
                 PROP_PARA_FIRST_LINE_INDENT, uno::makeAny( ConversionHelper::convertToMM100(nIntValue ) ));
-            break;
-
-        case NS_ooxml::LN_CT_Highlight_val:
-            {
-                sal_Int32 nColor = 0;
-                if(true ==( mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)))
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
-                else if (mnBackgroundColor)
-                    m_pImpl->GetTopContext()->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
-            }
-            break;
-
-        case NS_ooxml::LN_CT_TextScale_val:
-            m_pImpl->GetTopContext()->Insert(PROP_CHAR_SCALE_WIDTH, uno::makeAny( sal_Int16(nIntValue) ));
-            break;
-
-        case NS_ooxml::LN_CT_Em_val:
-            m_pImpl->GetTopContext()->Insert(PROP_CHAR_EMPHASIS, uno::makeAny ( getEmphasisValue (nIntValue)));
             break;
 
         case NS_ooxml::LN_CT_EastAsianLayout_id:
@@ -1599,13 +1568,6 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             break;
         case NS_ooxml::LN_CT_EastAsianLayout_vertCompress:
             m_pImpl->GetTopContext()->Insert(PROP_CHAR_ROTATION_IS_FIT_TO_LINE, uno::makeAny ( nIntValue ? true : false));
-            break;
-
-        case NS_ooxml::LN_CT_TextEffect_val:
-            if (nIntValue)
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_FLASH, uno::makeAny ( true ));
-            else
-                m_pImpl->GetTopContext()->Insert(PROP_CHAR_FLASH, uno::makeAny ( false ));
             break;
 
         default:
@@ -1645,7 +1607,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     doctok::Value::Pointer_t pValue = sprm_.getValue();
     sal_Int32 nIntValue = pValue->getInt();
     rtl::OUString sStringValue = pValue->getString();
-
+    // printf("*** sprm *** 0x%.8x *** sprm *** 0x%.8x *** %s *** sprm ***\n", (unsigned int)nId, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
     /* WRITERFILTERSTATUS: table: sprmdata */
 
     switch(nId)
@@ -2050,9 +2012,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x2A0C:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         {
-            sal_Int32 nColor;
-            if (getColorFromIndex(nIntValue, nColor))
-                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny ( nColor ));
+            sal_Int32 nColor = 0;
+            if(true ==( mbIsHighlightSet = getColorFromIndex(nIntValue, nColor)))
+                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( nColor ));
+            else if (mnBackgroundColor)
+                rContext->Insert(PROP_CHAR_BACK_COLOR, uno::makeAny( mnBackgroundColor ));
         }
         break;  // sprmCHighlight
     case 0x680E:
@@ -2274,6 +2238,21 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmCHpsInc
     case 0x4845:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
+        {
+        // FIXME: ww8 filter in ww8par6.cxx has a Read_SubSuperProp function
+        // that counts the escapement from this value and font size. So it will be
+        // on our TODO list
+            sal_Int16 nEscapement = 0;
+            sal_Int8 nProp  = 100;
+            if (nIntValue < 0)
+                nEscapement = -58;
+            else if (nIntValue > 0)
+                nEscapement = 58;
+            else /* (nIntValue == 0) */
+                nProp = 0;
+            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
+            rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
+        }
         break;  // sprmCHpsPos
     case 0x2A46:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
@@ -2980,8 +2959,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
         {
             //contains a color as 0xTTRRGGBB while SO uses 0xTTRRGGBB
-            doctok::Reference<Properties>::Pointer_t pProperties = sprm_.getProps();
-
             sal_Int32 nColor = ConversionHelper::ConvertColor(nIntValue);
             rContext->Insert(PROP_CHAR_COLOR, uno::makeAny( nColor ) );
         }
@@ -3041,54 +3018,13 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     // TEMPORARY SOLUTION: have to find how to make this attribute instead of sprm
     case NS_ooxml::LN_EG_RPrBase_color:
     case NS_ooxml::LN_EG_RPrBase_rFonts:
-    case NS_ooxml::LN_CT_PPrBase_jc:
-    case NS_ooxml::LN_CT_PPrBase_spacing:
-    case NS_ooxml::LN_CT_PPrBase_ind:
     case NS_ooxml::LN_EG_RPrBase_bdr:
-    case NS_ooxml::LN_EG_RPrBase_em:
-    case NS_ooxml::LN_EG_RPrBase_highlight:
-    case NS_ooxml::LN_EG_RPrBase_w:
     case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
     case NS_ooxml::LN_EG_RPrBase_u:
-    case NS_ooxml::LN_EG_RPrBase_effect:
-        resolveSprmProps(sprm_);
-        break;
-
+    case NS_ooxml::LN_CT_PPrBase_spacing:
+    case NS_ooxml::LN_CT_PPrBase_ind:
     case NS_ooxml::LN_CT_PPrBase_tabs:
         resolveSprmProps(sprm_);
-        break;
-
-    case NS_ooxml::LN_EG_RPrBase_szCs:
-        resolveSprmProps(sprm_);
-        rContext->Insert( PROP_CHAR_HEIGHT_COMPLEX, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
-        break;
-
-    case NS_ooxml::LN_EG_RPrBase_sz:
-        resolveSprmProps(sprm_);
-        rContext->Insert( PROP_CHAR_HEIGHT, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
-        rContext->Insert( PROP_CHAR_HEIGHT_ASIAN, uno::makeAny( (double)mnHpsMeasure/2.0 ) );
-        break;
-
-    case NS_ooxml::LN_EG_RPrBase_spacing:
-        mnTwipsMeasure = 0;
-        resolveSprmProps(sprm_);
-        rContext->Insert(PROP_CHAR_CHAR_KERNING, uno::makeAny( sal_Int16(ConversionHelper::convertToMM100(sal_Int16(mnTwipsMeasure))) ) );
-        break;
-    case NS_ooxml::LN_EG_RPrBase_position:
-        mnHpsMeasure = 0;
-        resolveSprmProps(sprm_);
-        {
-            sal_Int16 nEscapement = 0;
-            sal_Int8 nProp  = 100;
-            if (mnHpsMeasure < 0)
-                nEscapement = -58;
-            else if (mnHpsMeasure > 0)
-                nEscapement = 58;
-            else /* (mnHpsMeasure == 0) */
-                nProp = 0;
-            rContext->Insert(PROP_CHAR_ESCAPEMENT,         uno::makeAny( nEscapement ) );
-            rContext->Insert(PROP_CHAR_ESCAPEMENT_HEIGHT,  uno::makeAny( nProp ) );
-        }
         break;
 
     default:

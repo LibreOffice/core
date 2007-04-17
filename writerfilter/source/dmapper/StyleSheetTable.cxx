@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2007-04-12 13:26:58 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-17 15:05:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -727,22 +727,22 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     sal_uInt32 nFontCount = rFontTable->size();
                     if( nFontCount > 2 )
                     {
-                        uno::Any aTwoHundredTwip = uno::makeAny(120.);
-//                      font size to 200 twip for all if not set
-                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT        , aTwoHundredTwip, false);
+                        uno::Any aTwoHundredFortyTwip = uno::makeAny(12.);
+//                      font size to 240 twip (12 pts) for all if not set
+                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT        , aTwoHundredFortyTwip, false);
 //                      western font not already set -> apply first font
                         const FontEntry* pWesternFontEntry = rFontTable->getFontEntry( 0 );
                         aIt->pProperties->Insert(PROP_CHAR_FONT_NAME, uno::makeAny( pWesternFontEntry->sFontName ), false);
 //                      CJK  ... apply second font
                         const FontEntry* pCJKFontEntry  = rFontTable->getFontEntry( 2 );
                         aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_ASIAN, uno::makeAny( pCJKFontEntry->sFontName ), false);
-                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN  , aTwoHundredTwip, false);
+                        aIt->pProperties->Insert(PROP_CHAR_HEIGHT_ASIAN  , aTwoHundredFortyTwip, false);
 //                      CTL  ... apply third font, if available
                         if( nFontCount > 3 )
                         {
                             const FontEntry* pCTLFontEntry  = rFontTable->getFontEntry( 3 );
                             aIt->pProperties->Insert(PROP_CHAR_FONT_NAME_COMPLEX, uno::makeAny( pCTLFontEntry->sFontName ), false);
-                            aIt->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredTwip, false);
+                            aIt->pProperties->Insert(PROP_CHAR_HEIGHT_COMPLEX, aTwoHundredFortyTwip, false);
                         }
                     }
 //                  Widow/Orphan -> set both to two if not already set

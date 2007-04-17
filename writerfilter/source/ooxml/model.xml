@@ -14064,19 +14064,19 @@
     <resource name="ST_DecimalNumber" resource="Integer"/>
     <resource name="CT_DecimalNumber" resource="IntegerValue"/>
     <resource name="ST_TwipsMeasure" resource="Integer"/>
-    <resource name="CT_TwipsMeasure" resource="Properties">
+    <resource name="CT_TwipsMeasure" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_TwipsMeasure_val"/>
     </resource>
     <resource name="ST_SignedTwipsMeasure" resource="Integer"/>
-    <resource name="CT_SignedTwipsMeasure" resource="Properties">
+    <resource name="CT_SignedTwipsMeasure" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_SignedTwipsMeasure_val"/>
     </resource>
     <resource name="ST_HpsMeasure" resource="Integer"/>
-    <resource name="CT_HpsMeasure" resource="Properties">
+    <resource name="CT_HpsMeasure" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_HpsMeasure_val"/>
     </resource>
     <resource name="ST_SignedHpsMeasure" resource="Integer"/>
-    <resource name="CT_SignedHpsMeasure" resource="Properties">
+    <resource name="CT_SignedHpsMeasure" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_SignedHpsMeasure_val"/>
     </resource>
     <resource name="CT_MacroName" resource="StringValue" generated="yes"/>
@@ -14085,7 +14085,7 @@
     <resource name="ST_String" resource="String"/>
     <resource name="CT_String" resource="StringValue" generated="yes"/>
     <resource name="ST_TextScale" resource="Integer"/>
-    <resource name="CT_TextScale" resource="Properties">
+    <resource name="CT_TextScale" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_TextScale_val"/>
     </resource>
     <resource name="ST_HighlightColor" resource="List">
@@ -14107,7 +14107,7 @@
       <value tokenid="16">lightGray</value>
       <value tokenid="0">none</value>
     </resource>
-    <resource name="CT_Highlight" resource="Properties">
+    <resource name="CT_Highlight" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_Highlight_val"/>
     </resource>
     <resource name="ST_HexColorAuto" resource="List">
@@ -14159,7 +14159,7 @@
       <value tokenid="5">antsRed</value>
       <value tokenid="6">shimmer</value>
     </resource>
-    <resource name="CT_TextEffect" resource="Properties">
+    <resource name="CT_TextEffect" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_TextEffect_val"/>
     </resource>
     <resource name="ST_Border" resource="List">
@@ -14426,7 +14426,7 @@
       <value tokenid="3">circle</value>
       <value tokenid="4">underDot</value>
     </resource>
-    <resource name="CT_Em" resource="Properties">
+    <resource name="CT_Em" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_Em_val"/>
     </resource>
     <resource name="CT_Language" resource="Properties">
@@ -14519,7 +14519,7 @@
       <value tokenid="ooxml:Value_ST_Jc_lowKashida">lowKashida</value>
       <value tokenid="ooxml:Value_ST_Jc_thaiDistribute">thaiDistribute</value>
     </resource>
-    <resource name="CT_Jc" resource="Properties">
+    <resource name="CT_Jc" resource="ListValue">
       <attribute name="val" tokenid="ooxml:CT_Jc_val"/>
     </resource>
     <resource name="CT_View" resource="StringValue" generated="yes"/>
@@ -14549,7 +14549,7 @@
       <attribute name="tab" tokenid="ooxml:CT_Tabs_tab"/>
     </resource>
     <resource name="CT_TextboxTightWrap" resource="StringValue" generated="yes"/>
-    <resource name="CT_PPrBase" resource="Property">
+    <resource name="CT_PPrBase" resource="Properties">
       <sprm name="pStyle" tokenid="0x0"/>
       <sprm name="keepNext" tokenid="0x2406"/>
       <sprm name="keepLines" tokenid="0x2405"/>
@@ -14576,7 +14576,7 @@
       <sprm name="contextualSpacing" tokenid="0x246d"/>
       <sprm name="mirrorIndents" tokenid="0x2470"/>
       <sprm name="suppressOverlap" tokenid="0x2462"/>
-      <sprm name="jc" tokenid="ooxml:CT_PPrBase_jc"/>
+      <sprm name="jc" tokenid="0x2403"/>
       <sprm name="textDirection" tokenid="0x443a"/>
       <sprm name="textAlignment" tokenid="0x4439"/>
       <sprm name="textboxTightWrap" tokenid="0x2471"/>
@@ -14780,22 +14780,22 @@
       <sprm name="vanish" tokenid="0x83c"/>
       <sprm name="webHidden" tokenid="0x83c"/>
       <sprm name="color" tokenid="ooxml:EG_RPrBase_color"/>
-      <sprm name="spacing" tokenid="ooxml:EG_RPrBase_spacing"/>
-      <sprm name="w" tokenid="ooxml:EG_RPrBase_w"/>
+      <sprm name="spacing" tokenid="0x8840"/>
+      <sprm name="w" tokenid="0x4852"/>
       <sprm name="kern" tokenid="0x484b"/>
-      <sprm name="position" tokenid="ooxml:EG_RPrBase_position"/>
-      <sprm name="sz" tokenid="ooxml:EG_RPrBase_sz"/>
-      <sprm name="szCs" tokenid="ooxml:EG_RPrBase_szCs"/>
-      <sprm name="highlight" tokenid="ooxml:EG_RPrBase_highlight"/>
+      <sprm name="position" tokenid="0x4845"/>
+      <sprm name="sz" tokenid="0x4843"/>
+      <sprm name="szCs" tokenid="0x4861"/>
+      <sprm name="highlight" tokenid="0x2a0c"/>
       <sprm name="u" tokenid="ooxml:EG_RPrBase_u"/>
-      <sprm name="effect" tokenid="ooxml:EG_RPrBase_effect"/>
+      <sprm name="effect" tokenid="0x2859"/>
       <sprm name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
       <sprm name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
       <sprm name="fitText" tokenid="0xca76"/>
       <sprm name="vertAlign" tokenid="0x0"/>
       <sprm name="rtl" tokenid="0x0"/>
       <sprm name="cs" tokenid="0x882"/>
-      <sprm name="em" tokenid="ooxml:EG_RPrBase_em"/>
+      <sprm name="em" tokenid="0x2a34"/>
       <sprm name="lang" tokenid="0x0"/>
       <sprm name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
       <sprm name="specVanish" tokenid="0x818"/>
