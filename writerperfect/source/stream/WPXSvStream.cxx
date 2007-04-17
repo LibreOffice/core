@@ -3,6 +3,7 @@
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
+#include <limits>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
@@ -59,7 +60,12 @@ long WPXSvInputStream::tell()
     if ((mnLength == 0) || !mxStream.is() || !mxSeekable.is())
         return -1L;
     else
-        return (long)mxSeekable->getPosition();
+    {
+        sal_Int64 tmpPosition = mxSeekable->getPosition();
+        if ((tmpPosition < 0) || (tmpPosition > (std::numeric_limits<long>::max)()))
+            return -1L;
+        return (long)tmpPosition;
+    }
 }
 
 int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
@@ -68,24 +74,28 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
         return -1;
 
     sal_Int64 tmpPosition = mxSeekable->getPosition();
+    if ((tmpPosition < 0) || (tmpPosition > (std::numeric_limits<long>::max)()))
+        return -1;
+
+    sal_Int64 tmpOffset = offset;
     if (seekType == WPX_SEEK_CUR)
-        offset += tmpPosition;
+        tmpOffset += tmpPosition;
 
     int retVal = 0;
-    if (offset < 0)
+    if (tmpOffset < 0)
     {
-        offset = 0;
+        tmpOffset = 0;
         retVal = -1;
     }
     if (offset > mnLength)
     {
-        offset = mnLength;
+        tmpOffset = mnLength;
         retVal = -1;
     }
 
     try
     {
-        mxSeekable->seek(offset);
+        mxSeekable->seek(tmpOffset);
         return retVal;
     }
     catch (...)
