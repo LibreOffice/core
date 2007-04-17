@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:43:57 $
+#   last change: $Author: ihi $ $Date: 2007-04-17 10:30:07 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -86,7 +86,7 @@ UNOTYPES = \
 # in CLR meta-data - use of this type may lead to a runtime exception":
 .IF "$(CCNUMVER)" >= "001399999999"
 CFLAGSCXX += -clr:oldSyntax -AI $(OUT)$/bin -wd4339
-LINKFLAGS += -MANIFEST:NO -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
+LINKFLAGS += -NOENTRY -NODEFAULTLIB:nochkclr.obj -INCLUDE:__DllMainCRTStartup@12
 .ELSE
 CFLAGSCXX += -clr -AI $(OUT)$/bin -wd4339
 #see  Microsoft Knowledge Base Article - 814472
@@ -141,22 +141,44 @@ $(ASSEMBLY_ATTRIBUTES) : assembly.cxx $(BIN)$/cliuno.snk $(BIN)$/cliureversion.m
     echo $(ECHOQUOTE) \
     [assembly:System::Reflection::AssemblyKeyFile($(ASSEMBLY_KEY_X))]; $(ECHOQUOTE) \
     >> $(OUT)$/misc$/assembly_cppuhelper.cxx
+    
+    
 
 #make sure we build cli_cppuhelper after the version changed
 $(SHL1OBJS) : $(BIN)$/cli_cppuhelper.config
 
-ALLTAR : $(POLICY_ASSEMBLY_FILE)
+SIGN= $(MISC)$/cppuhelper_is_signed_flag
+
+ALLTAR : $(POLICY_ASSEMBLY_FILE) $(SIGN)
+
+
+
+$(SIGN): $(SHL1TARGETN)
+    $(WRAPCMD) sn.exe -R $(BIN)$/$(TARGET).dll	$(BIN)$/cliuno.snk	 && $(TOUCH) $@
 
 #do not forget to deliver cli_cppuhelper.config. It is NOT embedded in the policy file.
+.IF "$(CCNUMVER)" >= "001399999999"		
+#.NET 2 and higher	
 $(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
     $(WRAPCMD) AL.exe -out:$@ \
             -version:$(CLI_CPPUHELPER_POLICY_VERSION) \
             -keyfile:$(BIN)$/cliuno.snk \
-            -link:$(BIN)$/cli_cppuhelper.config
+            -link:$(BIN)$/cli_cppuhelper.config \
+            -platform:x86
+.ELSE
+#.NET 1.1: platform flag not needed
+$(POLICY_ASSEMBLY_FILE) : $(BIN)$/cli_cppuhelper.config
+    $(WRAPCMD) AL.exe -out:$@ \
+            -version:$(CLI_CPPUHELPER_POLICY_VERSION) \
+            -keyfile:$(BIN)$/cliuno.snk \
+            -link:$(BIN)$/cli_cppuhelper.config		
+.ENDIF			
 
 #Create the config file that is used with the policy assembly
 $(BIN)$/cli_cppuhelper.config: cli_cppuhelper_config $(BIN)$/cliureversion.mk
     $(PERL) $(PRJ)$/source$/scripts$/subst_template.pl \
     $< $@
+    
+    
 
 .ENDIF			# "$(BUILD_FOR_CLI)" != ""
