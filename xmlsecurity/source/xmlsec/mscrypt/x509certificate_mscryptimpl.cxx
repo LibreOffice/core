@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:44:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:25:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -326,7 +326,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
             if( xExtn == NULL )
                 throw RuntimeException() ;
 
-            xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), pExtn->fCritical ) ;
+            xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), sal::static_int_cast<sal_Bool>(pExtn->fCritical) ) ;
 
             xExtns[i] = xExtn ;
         }
@@ -337,7 +337,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
     }
 }
 
-::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl :: findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& oid ) throw (::com::sun::star::uno::RuntimeException) {
+::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl :: findCertificateExtension( const ::com::sun::star::uno::Sequence< sal_Int8 >& /*oid*/ ) throw (::com::sun::star::uno::RuntimeException) {
     if( m_pCertContext != NULL && m_pCertContext->pCertInfo != NULL && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
         CERT_EXTENSION* pExtn ;
@@ -353,7 +353,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl :: getVersion() throw ( ::com::su
                 if( xExtn == NULL )
                     throw RuntimeException() ;
 
-                xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), pExtn->fCritical ) ;
+                xExtn->setCertExtn( pExtn->Value.pbData, pExtn->Value.cbData, ( unsigned char* )pExtn->pszObjId, strlen( pExtn->pszObjId ), sal::static_int_cast<sal_Bool>(pExtn->fCritical) ) ;
             }
         }
 
