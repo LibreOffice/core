@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmldocumentwrapper_xmlsecimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:43:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ XMLDocumentWrapper_XmlSecImpl::XMLDocumentWrapper_XmlSecImpl( )
     /*
      * creates the virtual root element
      */
-    saxHelper.startElement(rtl::OUString(RTL_UTF8_USTRINGPARAM( "root" )), NULL);
+    saxHelper.startElement(rtl::OUString(RTL_UTF8_USTRINGPARAM( "root" )), cssu::Sequence<cssxcsax::XMLAttribute>());
 
     m_pRootElement = saxHelper.getCurrentNode();
     m_pCurrentElement = m_pRootElement;
@@ -505,8 +505,10 @@ xmlNodePtr XMLDocumentWrapper_XmlSecImpl::checkElement( const cssu::Reference< c
         }
 
         XMLElementWrapper_XmlSecImpl* pElement
-            = ( XMLElementWrapper_XmlSecImpl* )xNodTunnel->getSomething(
-                XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
+            = reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
+                sal::static_int_cast<sal_uIntPtr>(
+                    xNodTunnel->getSomething(
+                        XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ))) ;
 
         if( pElement == NULL ) {
             throw cssu::RuntimeException() ;
@@ -593,7 +595,6 @@ sal_Int32 XMLDocumentWrapper_XmlSecImpl::recursiveDelete(
                 break;
             default:
                 throw cssu::RuntimeException();
-                break;
             }
 
             pChild = pNextSibling;
@@ -970,7 +971,6 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::generateSAXEvents(
             break;
         default:
             throw cssu::RuntimeException();
-            break;
         }
 
         if (xSAXEventKeeper->isBlocking())
@@ -1111,7 +1111,7 @@ void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_processingInstruction( const rtl::
     processingInstruction( aTarget, aData );
 }
 
-void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_setDocumentLocator( sal_Int32 columnNumber, sal_Int32 lineNumber, const rtl::OUString& publicId, const rtl::OUString& systemId )
+void SAL_CALL XMLDocumentWrapper_XmlSecImpl::_setDocumentLocator( sal_Int32 /*columnNumber*/, sal_Int32 /*lineNumber*/, const rtl::OUString& /*publicId*/, const rtl::OUString& /*systemId*/ )
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
 }
@@ -1139,7 +1139,7 @@ cssu::Sequence< rtl::OUString > SAL_CALL XMLDocumentWrapper_XmlSecImpl_getSuppor
 #undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
+    const cssu::Reference< cssl::XMultiServiceFactory > &)
     throw( cssu::Exception )
 {
     return (cppu::OWeakObject*) new XMLDocumentWrapper_XmlSecImpl( );
