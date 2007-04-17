@@ -1,3 +1,1 @@
 ..\%__SRC%\class\sandbox.jar %_DEST%\bin%_EXT%\sandbox.jar
-
-..\%__SRC%\bin\sandbox_src.zip %COMMON_DEST%\bin%_EXT%\sandbox_src.zip
