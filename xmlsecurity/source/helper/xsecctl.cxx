@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsecctl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:40:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:21:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,9 +80,9 @@ const sal_Int8 XML_MAXDIGITSCOUNT_DATETIME = 6;
 
 XSecController::XSecController( )
     :m_nNextSecurityId(1),
-      m_bIsSAXEventKeeperSticky(false),
       m_bIsSAXEventKeeperConnected(false),
      m_nStatusOfSecurityComponents(UNINITIALIZED),
+      m_bIsSAXEventKeeperSticky(false),
      m_pErrorMessage(NULL),
      m_pXSecParser(NULL)
 {
@@ -99,7 +99,7 @@ XSecController::~XSecController()
 /** convert string to number with optional min and max values */
 sal_Bool XSecController::convertNumber( sal_Int32& rValue,
                                         const rtl::OUString& rString,
-                                        sal_Int32 nMin, sal_Int32 nMax )
+                                        sal_Int32 /*nMin*/, sal_Int32 /*nMax*/ )
 {
     sal_Bool bNeg = sal_False;
     rValue = 0;
@@ -1494,7 +1494,7 @@ void SAL_CALL XSecController::collectionStatusChanged(
     checkChainingStatus();
 }
 
-void SAL_CALL XSecController::bufferStatusChanged( sal_Bool isBufferEmpty )
+void SAL_CALL XSecController::bufferStatusChanged( sal_Bool /*isBufferEmpty*/)
     throw (cssu::RuntimeException)
 {
     /*

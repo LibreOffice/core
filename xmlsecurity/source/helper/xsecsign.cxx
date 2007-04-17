@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsecsign.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:41:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:21:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,7 +236,7 @@ void XSecController::collectToSign( sal_Int32 securityId, const rtl::OUString& r
     }
 }
 
-void XSecController::signAStream( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& objectURL, sal_Bool isBinary)
+void XSecController::signAStream( sal_Int32 securityId, const rtl::OUString& uri, const rtl::OUString& /*objectURL*/, sal_Bool isBinary)
 {
         sal_Int32 type = ((isBinary==sal_True)?TYPE_BINARYSTREAM_REFERENCE:TYPE_XMLSTREAM_REFERENCE);
 
