@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.106 $
+ *  $Revision: 1.107 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:21:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-17 13:56:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,6 +62,9 @@
 #include <osl/file.h>
 #include <rtl/crc.h>
 #include <rtl/digest.h>
+#include <comphelper/processfactory.hxx>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/util/URL.hpp>
 
 #include "implncvt.hxx"
 
@@ -9215,7 +9218,26 @@ sal_Int32 PDFWriterImpl::setLinkURL( sal_Int32 nLinkId, const OUString& rURL )
         return -1;
 
     m_aLinks[ nLinkId ].m_nDest = -1;
-    m_aLinks[ nLinkId ].m_aURL  = escapeStringLiteral( rURL );
+
+    using namespace ::com::sun::star;
+
+    if (!m_xTrans.is())
+    {
+        uno::Reference< lang::XMultiServiceFactory > xFact( comphelper::getProcessServiceFactory() );
+        if( xFact.is() )
+        {
+            m_xTrans = uno::Reference < util::XURLTransformer >(
+                xFact->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer" ) ) ), uno::UNO_QUERY );
+        }
+    }
+
+    util::URL aURL;
+    aURL.Complete = rURL;
+
+    if (m_xTrans.is())
+        m_xTrans->parseStrict( aURL );
+
+    m_aLinks[ nLinkId ].m_aURL  = escapeStringLiteral( aURL.Complete );
 
     return 0;
 }
