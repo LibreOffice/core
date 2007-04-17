@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:30:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:24:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,11 @@
 
 #ifndef _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
 #define _XSECURITYENVIRONMENT_MSCRYPTIMPL_HXX_
+
+#pragma warning(push,1)
+#include <windows.h>
+#include <wincrypt.h>
+#pragma warning(pop)
 
 #ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
@@ -93,10 +98,6 @@
 #endif
 
 #include <list>
-
-#include <windows.h>
-#include <wincrypt.h>
-
 #include "xmlsec/xmlsec.h"
 
 class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper4<
