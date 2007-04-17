@@ -4,9 +4,9 @@
  *
  *  $RCSfile: elementcollector.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:37:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,9 +58,9 @@ ElementCollector::ElementCollector(
     :ElementMark(nSecurityId, nBufferId),
      m_nPriority(nPriority),
      m_bToModify(bToModify),
-     m_xReferenceResolvedListener(xReferenceResolvedListener),
       m_bAbleToNotify(false),
-      m_bNotified(false)
+      m_bNotified(false),
+     m_xReferenceResolvedListener(xReferenceResolvedListener)
 /****** ElementCollector/ElementCollector *************************************
  *
  *   NAME

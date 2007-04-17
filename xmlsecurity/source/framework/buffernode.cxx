@@ -4,9 +4,9 @@
  *
  *  $RCSfile: buffernode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:36:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:16:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,10 +49,10 @@ namespace cssxw = com::sun::star::xml::wrapper;
 namespace cssxc = com::sun::star::xml::crypto;
 
 BufferNode::BufferNode( const cssu::Reference< cssxw::XXMLElementWrapper >& xXMLElement )
-    :m_xXMLElement(xXMLElement),
-     m_pParent(NULL),
+    :m_pParent(NULL),
      m_pBlocker(NULL),
-     m_bAllReceived(false)
+     m_bAllReceived(false),
+     m_xXMLElement(xXMLElement)
 {
 }
 
