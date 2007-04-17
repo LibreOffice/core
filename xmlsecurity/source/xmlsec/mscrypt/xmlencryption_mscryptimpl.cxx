@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlencryption_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:44:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:25:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ SAL_CALL XMLEncryption_MSCryptImpl :: encrypt(
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
     xmlNodePtr pEncryptedData = NULL ;
-    xmlNodePtr pEncryptedKey = NULL ;
     xmlNodePtr pContent = NULL ;
 
     if( !aTemplate.is() )
@@ -240,7 +239,6 @@ XMLEncryption_MSCryptImpl :: decrypt(
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
     xmlNodePtr pEncryptedData = NULL ;
-    xmlNodePtr pContent = NULL ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -360,7 +358,7 @@ XMLEncryption_MSCryptImpl :: decrypt(
 }
 
 /* XInitialization */
-void SAL_CALL XMLEncryption_MSCryptImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL XMLEncryption_MSCryptImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
     // TBD
 } ;
 
