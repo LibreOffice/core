@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentsignaturehelper.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:40:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:20:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,7 +82,7 @@ void ImplFillElementList( std::vector< rtl::OUString >& rList, const uno::Refere
     }
 }
 
-std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString rRootStorageName, DocumentSignatureMode eMode )
+std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const uno::Reference < embed::XStorage >& rxStore, const ::rtl::OUString /*rRootStorageName*/, DocumentSignatureMode eMode )
 {
     std::vector< rtl::OUString > aElements;
     ::rtl::OUString aSep( RTL_CONSTASCII_USTRINGPARAM( "/" ) );
@@ -124,8 +124,8 @@ std::vector< rtl::OUString > DocumentSignatureHelper::CreateElementList( const u
                 {
                     if ( ( pNames[n].match( aMatchStr ) ) && rxStore->isStorageElement( pNames[n] ) )
                     {
-                        uno::Reference < embed::XStorage > xSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
-                        ImplFillElementList( aElements, xSubStore, pNames[n]+aSep, true );
+                        uno::Reference < embed::XStorage > xTmpSubStore = rxStore->openStorageElement( pNames[n], embed::ElementModes::READ );
+                        ImplFillElementList( aElements, xTmpSubStore, pNames[n]+aSep, true );
                     }
                 }
             }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignaturehelper2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:40:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:21:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -173,7 +173,7 @@ UriBindingHelper::UriBindingHelper( const com::sun::star::uno::Reference < com::
 }
 
 
-void SAL_CALL UriBindingHelper::setUriBinding( const rtl::OUString& uri, const uno::Reference< io::XInputStream >& aInputStream )
+void SAL_CALL UriBindingHelper::setUriBinding( const rtl::OUString& /*uri*/, const uno::Reference< io::XInputStream >&)
     throw (uno::Exception, uno::RuntimeException)
 {
 }
