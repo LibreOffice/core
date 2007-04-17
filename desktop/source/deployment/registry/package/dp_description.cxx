@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_description.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:30:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:32:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,6 +122,13 @@ ExtensionDescription::ExtensionDescription(
             throw cssu::Exception(
                 sDescriptionUri + OUSTR(" contains no root element."), 0);
         }
+
+        if ( ! xRoot->getTagName().equals(OUSTR("description")))
+        {
+            throw cssu::Exception(
+                sDescriptionUri + OUSTR(" does not contain the root element <description>."), 0);
+        }
+
         m_xRoot = cssu::Reference<css::xml::dom::XNode>(
             xRoot, cssu::UNO_QUERY_THROW);
         ::rtl::OUString nsDescription = xRoot->getNamespaceURI();
@@ -138,9 +145,7 @@ ExtensionDescription::ExtensionDescription(
     } catch (css::uno::Exception & e) {
         css::uno::Any a(cppu::getCaughtException());
         throw css::deployment::DeploymentException(
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DeploymentException: "))
-             + e.Message),
-            css::uno::Reference< css::uno::XInterface >(), a);
+            e.Message, css::uno::Reference< css::uno::XInterface >(), a);
     }
 }
 
