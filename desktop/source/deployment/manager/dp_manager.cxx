@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:54:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,6 +143,7 @@ void PackageManagerImpl::initActivationLayer(
                     ActivePackages::Data dbData;
                     insertToActivationLayer(
                         mediaType, sourceContent, title, &dbData );
+
                     insertToActivationLayerDB( title, dbData );
                         //TODO #i73136#: insertToActivationLayerDB needs id not
                         // title, but the whole m_activePackages.getLength()==0
@@ -726,10 +727,11 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
             OSL_ASSERT( xPackage.is() );
             if (xPackage.is())
             {
-                OUString id( dp_misc::getIdentifier( xPackage ) );
                 bool install = false;
+                OUString id;
                 try
                 {
+                    id = dp_misc::getIdentifier( xPackage );
                     //checkInstall throws an exception if the user denies the installation
                     checkInstall(xPackage, xCmdEnv);
                     //checkUpdate throws an exception if the user cancels the interaction.
