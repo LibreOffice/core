@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:58:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 13:37:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1011,7 +1011,8 @@ int SfxDispatcher::GetShellAndSlot_Impl
         *ppSlot = aSvr.GetSlot();
         if ( 0 == (*ppSlot)->GetExecFnc() && bRealSlot )
             *ppSlot = (*ppShell)->GetInterface()->GetRealSlot(*ppSlot);
-        if ( (0 == *ppSlot) || (0 == (*ppSlot)->GetExecFnc()) )
+        // Check only real slots as enum slots don't have an execute function!
+        if ( bRealSlot && ((0 == *ppSlot) || (0 == (*ppSlot)->GetExecFnc()) ))
             return sal_False;
 
 #ifdef DBG_UTILx
