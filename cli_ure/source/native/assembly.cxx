@@ -4,9 +4,9 @@
  *
  *  $RCSfile: assembly.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:51:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:29:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,5 +40,5 @@
 
 [assembly:System::Reflection::AssemblyProduct( "CLI-UNO Language Binding" )];
 [assembly:System::Reflection::AssemblyDescription( "CLI-UNO Helper Library" )];
-[assembly:System::Reflection::AssemblyDelaySign(false)];
+[assembly:System::Reflection::AssemblyDelaySign(true)];
 [assembly:System::Reflection::AssemblyCompany( "OpenOffice.org" )];
