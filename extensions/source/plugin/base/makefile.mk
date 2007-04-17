@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: rt $ $Date: 2006-03-08 14:16:22 $
+#   last change: $Author: rt $ $Date: 2007-04-17 13:39:10 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,6 +46,10 @@ INCPRE+=-I$(SOLARINCDIR)$/mozilla$/plugin
 INCPRE+=-I$(SOLARINCDIR)$/mozilla$/java
 INCPRE+=-I$(SOLARINCDIR)$/mozilla$/nspr
 CDEFS+=-DOJI
+.ENDIF
+
+.IF "$(DISABLE_XAW)" != ""
+CDEFS+=-DDISABLE_XAW
 .ENDIF
 
 .IF "$(WITH_MOZILLA)" != "NO"
