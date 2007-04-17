@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxhelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-14 15:32:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:22:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -436,7 +436,7 @@ void SAXHelper::processingInstruction(
  * In this case, locator is useless.
  */
 void SAXHelper::setDocumentLocator(
-    const cssu::Reference< cssxs::XLocator > & xLocator )
+    const cssu::Reference< cssxs::XLocator > &)
     throw( cssxs::SAXException , cssu::RuntimeException )
 {
     //--Pseudo code if necessary
