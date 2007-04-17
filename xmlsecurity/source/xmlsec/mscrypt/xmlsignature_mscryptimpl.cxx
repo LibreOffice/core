@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignature_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:45:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:26:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -306,7 +306,7 @@ SAL_CALL XMLSignature_MSCryptImpl :: validate(
 }
 
 /* XInitialization */
-void SAL_CALL XMLSignature_MSCryptImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL XMLSignature_MSCryptImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
     // TBD
 } ;
 
