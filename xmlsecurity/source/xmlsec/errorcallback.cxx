@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errorcallback.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:42:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,20 +154,22 @@ using namespace ::com::sun::star::xml::crypto;
 //  }
 // }
 
-void errorCallback(const char *file,
-        int line,
-        const char *func,
-        const char *errorObject,
-        const char *errorSubject,
-        int reason,
-        const char *msg)
+
+extern "C"
+void errorCallback(const char * /*file*/,
+                   int /*line*/,
+                   const char * /*func*/,
+                   const char * /*errorObject*/,
+                   const char * /*errorSubject*/,
+                   int /*reason*/,
+                   const char  * /*msg*/)
 {
 #if OSL_DEBUG_LEVEL > 1
-    const char * afunc = func ? func : "";
-    const char * errObj = errorObject ? errorObject : "";
-    const char * errSub = errorSubject ? errorSubject : "";
-    const char * amsg = msg ? msg : "";
-    fprintf(stdout, "xmlsec error: %s, %s,  %s, %i %s  \n", afunc, errObj, errSub, reason, amsg);
+//     const char * afunc = func ? func : "";
+//     const char * errObj = errorObject ? errorObject : "";
+//     const char * errSub = errorSubject ? errorSubject : "";
+//     const char * amsg = msg ? msg : "";
+//  fprintf(stdout, "xmlsec error: %s, %s,  %s, %i %s  \n", afunc, errObj, errSub, reason, amsg);
 #endif
     //ToDo write log message
 //  if (g_xErrorRecorder.is() && !g_bErrorRecorded)
