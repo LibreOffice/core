@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignature_nssimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:46:52 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,10 @@ SAL_CALL XMLSignature_NssImpl :: generate(
         throw RuntimeException() ;
     }
 
-    XMLElementWrapper_XmlSecImpl* pElement = ( XMLElementWrapper_XmlSecImpl* )xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
+    XMLElementWrapper_XmlSecImpl* pElement =
+        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
     if( pElement == NULL ) {
         throw RuntimeException() ;
     }
@@ -154,7 +157,10 @@ SAL_CALL XMLSignature_NssImpl :: generate(
         throw RuntimeException() ;
 #endif
 
-    SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+    SecurityEnvironment_NssImpl* pSecEnv =
+        reinterpret_cast<SecurityEnvironment_NssImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
     if( pSecEnv == NULL )
         throw RuntimeException() ;
 
@@ -229,7 +235,10 @@ SAL_CALL XMLSignature_NssImpl :: validate(
         throw RuntimeException() ;
     }
 
-    XMLElementWrapper_XmlSecImpl* pElement = ( XMLElementWrapper_XmlSecImpl* )xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
+    XMLElementWrapper_XmlSecImpl* pElement =
+        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xNodTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
     if( pElement == NULL )
         throw RuntimeException() ;
 
@@ -258,7 +267,10 @@ SAL_CALL XMLSignature_NssImpl :: validate(
              throw RuntimeException() ;
         }
 
-        SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+        SecurityEnvironment_NssImpl* pSecEnv =
+            reinterpret_cast<SecurityEnvironment_NssImpl*>(
+                sal::static_int_cast<sal_uIntPtr>(
+                    xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
         if( pSecEnv == NULL )
             throw RuntimeException() ;
 
@@ -309,7 +321,7 @@ SAL_CALL XMLSignature_NssImpl :: validate(
 }
 
 /* XInitialization */
-void SAL_CALL XMLSignature_NssImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL XMLSignature_NssImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
     // TBD
 } ;
 

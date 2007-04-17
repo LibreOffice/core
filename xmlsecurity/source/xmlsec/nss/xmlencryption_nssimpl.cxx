@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlencryption_nssimpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:46:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:28:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,7 +105,6 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
     xmlNodePtr pEncryptedData = NULL ;
-    xmlNodePtr pEncryptedKey = NULL ;
     xmlNodePtr pContent = NULL ;
 
     if( !aTemplate.is() )
@@ -126,7 +125,9 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
         throw RuntimeException() ;
 #endif
 
-    SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+    SecurityEnvironment_NssImpl* pSecEnv =
+        reinterpret_cast<SecurityEnvironment_NssImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
     if( pSecEnv == NULL )
         throw RuntimeException() ;
 
@@ -141,7 +142,10 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
         throw RuntimeException() ;
     }
 
-    XMLElementWrapper_XmlSecImpl* pTemplate = ( XMLElementWrapper_XmlSecImpl* )xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
+    XMLElementWrapper_XmlSecImpl* pTemplate =
+        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
     if( pTemplate == NULL ) {
         throw RuntimeException() ;
     }
@@ -157,7 +161,10 @@ SAL_CALL XMLEncryption_NssImpl :: encrypt(
         throw XMLEncryptionException() ;
     }
 
-    XMLElementWrapper_XmlSecImpl* pTarget = ( XMLElementWrapper_XmlSecImpl* )xTgtTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
+    XMLElementWrapper_XmlSecImpl* pTarget =
+        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xTgtTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
     if( pTarget == NULL ) {
         throw RuntimeException() ;
     }
@@ -273,7 +280,6 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
     xmlSecKeysMngrPtr pMngr = NULL ;
     xmlSecEncCtxPtr pEncCtx = NULL ;
     xmlNodePtr pEncryptedData = NULL ;
-    xmlNodePtr pContent = NULL ;
 
     if( !aTemplate.is() )
         throw RuntimeException() ;
@@ -292,7 +298,10 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
         throw RuntimeException() ;
     }
 
-    XMLElementWrapper_XmlSecImpl* pTemplate = ( XMLElementWrapper_XmlSecImpl* )xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() ) ;
+    XMLElementWrapper_XmlSecImpl* pTemplate =
+        reinterpret_cast<XMLElementWrapper_XmlSecImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xTplTunnel->getSomething( XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId() )));
     if( pTemplate == NULL ) {
         throw RuntimeException() ;
     }
@@ -329,7 +338,10 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
              throw RuntimeException() ;
         }
 
-        SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+        SecurityEnvironment_NssImpl* pSecEnv =
+            reinterpret_cast<SecurityEnvironment_NssImpl*>(
+                sal::static_int_cast<sal_uIntPtr>(
+                    xSecTunnel->getSomething( SecurityEnvironment_NssImpl::getUnoTunnelId() )));
         if( pSecEnv == NULL )
             throw RuntimeException() ;
 
@@ -378,7 +390,7 @@ SAL_CALL XMLEncryption_NssImpl :: decrypt(
 }
 
 /* XInitialization */
-void SAL_CALL XMLEncryption_NssImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL XMLEncryption_NssImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
     // TBD
 } ;
 
