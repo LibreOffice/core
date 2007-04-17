@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:35:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:15:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -467,7 +467,7 @@ void DigitalSignaturesDialog::ImplFillSignaturesBox()
             if ( bSigValid )
             {
                 // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
-                int nRealCount = 0;
+                unsigned int nRealCount = 0;
                 for ( int i = rInfo.vSignatureReferenceInfors.size(); i; )
                 {
                     const SignatureReferenceInformation& rInf = rInfo.vSignatureReferenceInfors[--i];

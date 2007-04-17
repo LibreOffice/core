@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:35:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:16:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,7 @@
 using namespace ::com::sun::star;
 
 
-IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMTYARG )
+IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMPTYARG )
 {
     mpLevelTP->ClosePage();
     mpTrustSrcTP->ClosePage();
@@ -188,7 +188,7 @@ MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pD
 
 }
 
-IMPL_LINK( MacroSecurityLevelTP, RadioButtonHdl, RadioButton*, EMTYARG )
+IMPL_LINK( MacroSecurityLevelTP, RadioButtonHdl, RadioButton*, EMPTYARG )
 {
     USHORT nNewLevel = 0;
     if( maVeryHighRB.IsChecked() )
@@ -223,7 +223,7 @@ void MacroSecurityTrustedSourcesTP::ImplCheckButtons()
 }
 
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
+IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMPTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
@@ -245,7 +245,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, ViewCertPBHdl, void*, EMTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
+IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMPTYARG )
 {
     if( maTrustCertLB.FirstSelected() )
     {
@@ -259,7 +259,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveCertPBHdl, void*, EMTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMTYARG )
+IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMPTYARG )
 {
     try
     {
@@ -300,7 +300,7 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, AddLocPBHdl, void*, EMTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
+IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMPTYARG )
 {
     USHORT  nSel = maTrustFileLocLB.GetSelectEntryPos();
     if( nSel != LISTBOX_ENTRY_NOTFOUND )
@@ -322,13 +322,13 @@ IMPL_LINK( MacroSecurityTrustedSourcesTP, RemoveLocPBHdl, void*, EMTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl, void*, EMTYARG )
+IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustCertLBSelectHdl, void*, EMPTYARG )
 {
     ImplCheckButtons();
     return 0;
 }
 
-IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl, void*, EMTYARG )
+IMPL_LINK( MacroSecurityTrustedSourcesTP, TrustFileLocLBSelectHdl, void*, EMPTYARG )
 {
     ImplCheckButtons();
     return 0;
