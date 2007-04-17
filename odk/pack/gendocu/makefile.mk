@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:22:33 $
+#   last change: $Author: rt $ $Date: 2007-04-17 13:38:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,6 @@ JAVA_SRC_FILES=\
         $(JAVA_SRC_DIR)$/jut_src.zip \
         $(JAVA_SRC_DIR)$/juh_src.zip \
         $(JAVA_SRC_DIR)$/ridl_src.zip \
-        $(JAVA_SRC_DIR)$/sandbox_src.zip \
         $(JAVA_SRC_DIR)$/unoloader_src.zip
 
 JAVA_BEAN_SRC_FILES=\
