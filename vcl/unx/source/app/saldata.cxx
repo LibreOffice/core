@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:25:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-17 13:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -529,13 +529,20 @@ static void PrintXError( Display *pDisplay, XErrorEvent *pEvent )
     XGetErrorText( pDisplay, pEvent->error_code, msg, sizeof( msg ) );
 #endif
     fprintf( stderr, "X-Error: %s\n", msg );
-    if( pEvent->request_code > capacityof( XRequest ) )
-        fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
-    else if( XRequest[pEvent->request_code] )
-        fprintf( stderr, "\tMajor opcode: %d (%s)\n",
-                 pEvent->request_code, XRequest[pEvent->request_code] );
+    if( pEvent->request_code < capacityof( XRequest ) )
+    {
+        const char* pName = XRequest[pEvent->request_code];
+        if( !pName )
+            pName = "BadRequest?";
+        fprintf( stderr, "\tMajor opcode: %d (%s)\n", pEvent->request_code, pName );
+    }
     else
-        fprintf( stderr, "\tMajor opcode: %d (BadRequest?)\n", pEvent->request_code );
+    {
+        fprintf( stderr, "\tMajor opcode: %d\n", pEvent->request_code );
+        // TODO: also display extension name?
+        fprintf( stderr, "\tMinor opcode: %d\n", pEvent->minor_code );
+    }
+
     fprintf( stderr, "\tResource ID:  0x%lx\n",
              pEvent->resourceid );
     fprintf( stderr, "\tSerial No:    %ld (%ld)\n",
