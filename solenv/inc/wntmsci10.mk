@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:18:46 $
+#   last change: $Author: ihi $ $Date: 2007-04-17 10:14:30 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -219,8 +219,7 @@ MODULES_WITH_WARNINGS := \
     soldep \
     starmath \
     sw \
-    writerperfect \
-    xmlsecurity
+    writerperfect
 
 CDEFS+=-DSTLPORT_VERSION=400 -DWINVER=0x400 -D_WIN32_IE=0x400
 CDEFS+=-D_MT
