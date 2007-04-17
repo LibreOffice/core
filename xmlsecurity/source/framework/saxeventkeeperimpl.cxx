@@ -4,9 +4,9 @@
  *
  *  $RCSfile: saxeventkeeperimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:38:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,13 +61,13 @@ namespace cssxs = com::sun::star::xml::sax;
 #define _USECOMPRESSEDDOCUMENTHANDLER
 
 SAXEventKeeperImpl::SAXEventKeeperImpl( )
-    :m_nNextElementMarkId(1),
+    :m_pRootBufferNode(NULL),
+     m_pCurrentBufferNode(NULL),
+     m_nNextElementMarkId(1),
      m_pNewBlocker(NULL),
      m_pCurrentBlockingBufferNode(NULL),
-     m_pRootBufferNode(NULL),
-     m_pCurrentBufferNode(NULL),
-     m_bIsForwarding(false),
-     m_bIsReleasing(false)
+     m_bIsReleasing(false),
+     m_bIsForwarding(false)
 {
     m_vElementMarkBuffers.reserve(2);
     m_vNewElementCollectors.reserve(2);
@@ -1216,8 +1216,8 @@ void SAL_CALL SAXEventKeeperImpl::addReferenceResolvedListener(
 }
 
 void SAL_CALL SAXEventKeeperImpl::removeReferenceResolvedListener(
-    sal_Int32 referenceId,
-    const cssu::Reference< cssxc::sax::XReferenceResolvedListener >& listener )
+    sal_Int32 /*referenceId*/,
+    const cssu::Reference< cssxc::sax::XReferenceResolvedListener >&)
     throw (cssu::RuntimeException)
 {
 }
@@ -1231,7 +1231,7 @@ void SAL_CALL SAXEventKeeperImpl::addSAXEventKeeperStatusChangeListener(
 }
 
 void SAL_CALL SAXEventKeeperImpl::removeSAXEventKeeperStatusChangeListener(
-    const cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >& listener )
+    const cssu::Reference< cssxc::sax::XSAXEventKeeperStatusChangeListener >&)
     throw (cssu::RuntimeException)
 {
 }
@@ -1409,7 +1409,7 @@ void SAL_CALL SAXEventKeeperImpl::processingInstruction(
         }
 }
 
-void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const cssu::Reference< cssxs::XLocator >& xLocator )
+void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const cssu::Reference< cssxs::XLocator >&)
     throw (cssxs::SAXException, cssu::RuntimeException)
 {
 }
@@ -1418,9 +1418,7 @@ void SAL_CALL SAXEventKeeperImpl::setDocumentLocator( const cssu::Reference< css
 void SAL_CALL SAXEventKeeperImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
     throw (cssu::Exception, cssu::RuntimeException)
 {
-    sal_Int32 nLength = aArguments.getLength();
-
-    OSL_ASSERT(nLength == 1);
+    OSL_ASSERT(aArguments.getLength() == 1);
 
     aArguments[0] >>= m_xXMLDocument;
     m_xDocumentHandler = cssu::Reference< cssxs::XDocumentHandler >(
@@ -1455,7 +1453,7 @@ cssu::Sequence< rtl::OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceN
 #undef SERVICE_NAME
 
 cssu::Reference< cssu::XInterface > SAL_CALL SAXEventKeeperImpl_createInstance(
-    const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
+    const cssu::Reference< cssl::XMultiServiceFactory > &)
     throw( cssu::Exception )
 {
     return (cppu::OWeakObject*) new SAXEventKeeperImpl();
