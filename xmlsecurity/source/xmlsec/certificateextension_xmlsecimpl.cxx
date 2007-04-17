@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateextension_xmlsecimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:42:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:22:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ void CertificateExtension_XmlSecImpl :: setCertExtn( unsigned char* value, unsig
 
         m_xExtnValue = extnv ;
     } else {
-        m_xExtnValue = NULL ;
+        m_xExtnValue = Sequence<sal_Int8>();
     }
 
     if( id != NULL && idlen != 0 ) {
@@ -103,7 +103,7 @@ void CertificateExtension_XmlSecImpl :: setCertExtn( unsigned char* value, unsig
 
         m_xExtnId = extnId ;
     } else {
-        m_xExtnId = NULL ;
+        m_xExtnId =  Sequence<sal_Int8>();
     }
 
     m_critical = critical ;
