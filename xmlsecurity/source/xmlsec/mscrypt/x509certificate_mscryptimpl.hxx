@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x509certificate_mscryptimpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:31:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,11 @@
 
 #ifndef _X509CERTIFICATE_MSCRYPTIMPL_HXX_
 #define _X509CERTIFICATE_MSCRYPTIMPL_HXX_
+
+#pragma warning(push,1)
+#include "Windows.h"
+#include "WinCrypt.h"
+#pragma warning(pop)
 
 #ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
@@ -67,9 +72,6 @@
 #ifndef _COM_SUN_STAR_SECURITY_XCERTIFICATE_HPP_
 #include <com/sun/star/security/XCertificate.hpp>
 #endif
-
-#include "Windows.h"
-#include "WinCrypt.h"
 
 class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper2<
     ::com::sun::star::security::XCertificate ,
