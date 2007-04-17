@@ -4,9 +4,9 @@
  *
  *  $RCSfile: x509certificate_nssimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:46:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:28:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
         return serial ;
     } else {
-        return NULL ;
+        return ::com::sun::star::uno::Sequence< sal_Int8 >();
     }
 }
 
@@ -186,7 +186,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
         return issuerUid ;
     } else {
-        return NULL ;
+        return ::com::sun::star::uno::Sequence< sal_Int8 >();
     }
 }
 
@@ -198,7 +198,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
         return subjectUid ;
     } else {
-        return NULL ;
+        return ::com::sun::star::uno::Sequence< sal_Int8 >();
     }
 }
 
@@ -225,7 +225,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
         return xExtns ;
     } else {
-        return NULL ;
+        return ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::security::XCertificateExtension > > ();
     }
 }
 
@@ -267,7 +267,7 @@ sal_Int16 SAL_CALL X509Certificate_NssImpl :: getVersion() throw ( ::com::sun::s
 
         return rawCert ;
     } else {
-        return NULL ;
+        return ::com::sun::star::uno::Sequence< sal_Int8 >();
     }
 }
 
@@ -313,7 +313,7 @@ void X509Certificate_NssImpl :: setRawCert( Sequence< sal_Int8 > rawCert ) throw
 /* XUnoTunnel */
 sal_Int64 SAL_CALL X509Certificate_NssImpl :: getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException ) {
     if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
-        return ( sal_Int64 )this ;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0 ;
 }
@@ -336,7 +336,8 @@ const Sequence< sal_Int8>& X509Certificate_NssImpl :: getUnoTunnelId() {
 X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Reference< XInterface > xObj ) {
     Reference< XUnoTunnel > xUT( xObj , UNO_QUERY ) ;
     if( xUT.is() ) {
-        return ( X509Certificate_NssImpl* )xUT->getSomething( getUnoTunnelId() ) ;
+        return reinterpret_cast<X509Certificate_NssImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( getUnoTunnelId() )));
     } else
         return NULL ;
 }
@@ -378,7 +379,7 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
     }
     else
     {
-        return NULL;
+        return ::com::sun::star::uno::Sequence< sal_Int8 >();
     }
 }
 
@@ -415,7 +416,7 @@ X509Certificate_NssImpl* X509Certificate_NssImpl :: getImplementation( const Ref
         }
     }
 
-    return NULL ;
+    return ::com::sun::star::uno::Sequence< sal_Int8 >();
 }
 
 ::rtl::OUString SAL_CALL X509Certificate_NssImpl::getSignatureAlgorithm()
