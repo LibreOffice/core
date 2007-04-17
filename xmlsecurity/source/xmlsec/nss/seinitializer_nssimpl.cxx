@@ -4,9 +4,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:45:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,8 @@ bool nsscrypto_initialize( const char* token ) {
     return true ;
 }
 
-void nsscrypto_finalize() {
+// must be extern "C" because we pass the function pointer to atexit
+extern "C" void nsscrypto_finalize() {
     PK11_LogoutAll();
     NSS_Shutdown();
 }
@@ -240,7 +241,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         }
     }
     else
-        atexit( nsscrypto_finalize ) ;
+        atexit(nsscrypto_finalize );
 
     pCertHandle = CERT_GetDefaultCertDB() ;
 
@@ -257,8 +258,9 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
         cssu::Reference< cssl::XUnoTunnel > xEnvTunnel( xSecEnv , cssu::UNO_QUERY ) ;
         if( !xEnvTunnel.is() )
             return NULL;
-        SecurityEnvironment_NssImpl* pSecEnv = ( SecurityEnvironment_NssImpl* )xEnvTunnel->getSomething(
-            SecurityEnvironment_NssImpl::getUnoTunnelId() ) ;
+        SecurityEnvironment_NssImpl* pSecEnv = reinterpret_cast<SecurityEnvironment_NssImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(
+                xEnvTunnel->getSomething(SecurityEnvironment_NssImpl::getUnoTunnelId() ))) ;
         pSecEnv->setCertDb(pCertHandle);
 
         sal_Int32 n = xSecCtx->addSecurityEnvironment(xSecEnv);
@@ -274,7 +276,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
 }
 
-void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const cssu::Reference< cssxc::XXMLSecurityContext >& securityContext )
+void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const cssu::Reference< cssxc::XXMLSecurityContext >& )
     throw (cssu::RuntimeException)
 {
     /*
