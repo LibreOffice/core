@@ -4,9 +4,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 08:07:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-17 13:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -737,16 +737,29 @@ ConvertTextItem16( XTextItem16* pTextItem, rtl_TextEncoding nEncoding )
 void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
 {
     Display* pDisplay = GetXDisplay();
-    Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
-    X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
     XRenderPeer& rRenderPeer = XRenderPeer::GetInstance();
-    XRenderPictFormat* pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
 
-    // create xrender Picture for font foreground
-    int nVisualDepth = pVisualFormat ? pVisualFormat->depth : GetDisplay()->GetVisual(m_nScreen).GetDepth();
+    // find a XRenderPictFormat compatible with the Drawable
+    XRenderPictFormat* pVisualFormat = static_cast<XRenderPictFormat*>(GetXRenderFormat());
+    if( !pVisualFormat )
+    {
+        Visual* pVisual = GetDisplay()->GetVisual( m_nScreen ).GetVisual();
+        pVisualFormat = rRenderPeer.FindVisualFormat( pVisual );
+        // cache the XRenderPictFormat
+        SetXRenderFormat( static_cast<void*>(pVisualFormat) );
+    }
+
+    DBG_ASSERT( pVisualFormat!=NULL, "no matching XRenderPictFormat for text" );
+    if( !pVisualFormat )
+        return;
+
+    // get a XRenderPicture for the font foreground
+    const int nVisualDepth = pVisualFormat->depth;
     SalDisplay::RenderEntry& rEntry = GetDisplay()->GetRenderEntries( m_nScreen )[ nVisualDepth ];
     if( !rEntry.m_aPicture )
     {
+        // create and cache XRenderPicture for the font foreground
+#ifdef DEBUG
         int iDummy;
         unsigned uDummy;
         XLIB_Window wDummy;
@@ -754,6 +767,8 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
         ::XGetGeometry( pDisplay, hDrawable_, &wDummy, &iDummy, &iDummy,
                       &uDummy, &uDummy, &uDummy, &nDrawDepth );
         DBG_ASSERT( static_cast<unsigned>(nVisualDepth) == nDrawDepth, "depth messed up for XRender" );
+#endif
+
         rEntry.m_aPixmap = ::XCreatePixmap( pDisplay, hDrawable_, 1, 1, nVisualDepth );
 
         XRenderPictureAttributes aAttr;
@@ -783,6 +798,7 @@ void X11SalGraphics::DrawServerAAFontString( const ServerFontLayout& rLayout )
         rRenderPeer.SetPictureClipRegion( aDst, pClipRegion_ );
 
     ServerFont& rFont = rLayout.GetServerFont();
+    X11GlyphPeer& rGlyphPeer = X11GlyphCache::GetInstance().GetPeer();
     GlyphSet aGlyphSet = rGlyphPeer.GetGlyphSet( rFont, m_nScreen );
 
     Point aPos;
