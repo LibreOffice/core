@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: rt $ $Date: 2005-09-08 17:11:31 $
+#   last change: $Author: rt $ $Date: 2007-04-17 13:37:39 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,6 @@ TARGET  = lib_sandbox_util
 JARCLASSDIRS	= com$/sun$/star$/lib$/sandbox
 JARTARGET		= sandbox.jar
 JARCOMPRESS 	= TRUE
-
-# Special work necessary for building java reference with javadoc.
-# The source of puplic APIs must be delivered and used later in the
-# odk module.
-ZIP1TARGET=sandbox_src
-ZIP1FLAGS=-u -r
-ZIP1DIR=$(PRJ)
-ZIP1LIST=com -x "*makefile.mk"
 
 # --- Targets ------------------------------------------------------
 
