@@ -4,9 +4,9 @@
  *
  *  $RCSfile: documentdigitalsignatures.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:34:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:15:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,8 +34,8 @@
  ************************************************************************/
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_xmlsecurity.hxx"
 
+#include "precompiled_xmlsecurity.hxx"
 
 #include <documentdigitalsignatures.hxx>
 #include <xmlsecurity/digitalsignaturesdialog.hxx>
@@ -97,6 +97,8 @@
 #endif
 
 #include <stdio.h>
+
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
@@ -304,7 +306,7 @@ Sequence< ::com::sun::star::security::DocumentSignatureInformation > DocumentDig
             if ( rSigInfo.SignatureIsValid )
             {
                 // Can only be valid if ALL streams are signed, which means real stream count == signed stream count
-                int nRealCount = 0;
+                unsigned int nRealCount = 0;
                 for ( int i = rInfo.vSignatureReferenceInfors.size(); i; )
                 {
                     const SignatureReferenceInformation& rInf = rInfo.vSignatureReferenceInfors[--i];
@@ -360,7 +362,6 @@ void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::st
     ::rtl::OUString sSerialNum = bigIntegerToNumericString( Author->getSerialNumber() );
 
     Sequence< SvtSecurityOptions::Certificate > aTrustedAuthors = SvtSecurityOptions().GetTrustedAuthors();
-    sal_Int32 nCnt = aTrustedAuthors.getLength();
     const SvtSecurityOptions::Certificate* pAuthors = aTrustedAuthors.getConstArray();
     const SvtSecurityOptions::Certificate* pAuthorsEnd = pAuthors + aTrustedAuthors.getLength();
     for ( ; pAuthors != pAuthorsEnd; ++pAuthors )
@@ -384,11 +385,18 @@ void DocumentDigitalSignatures::showCertificate( const Reference< ::com::sun::st
 
     ::com::sun::star::uno::Reference< ::com::sun::star::ucb::XContentProvider > xContentProvider;
     ::ucb::ContentBroker* pBroker = NULL;
-    if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucb::ContentBroker::get() ) )
-        xContentProvider = pBroker->getContentProviderInterface();
+
+    //warning free code
+    //if ( aLocObj.GetProtocol() == INET_PROT_FILE && ( pBroker = ::ucb::ContentBroker::get() ) )
+    //  xContentProvider = pBroker->getContentProviderInterface();
+    if ( aLocObj.GetProtocol() == INET_PROT_FILE)
+    {
+        pBroker = ::ucb::ContentBroker::get();
+        if (pBroker)
+            xContentProvider = pBroker->getContentProviderInterface();
+    }
 
     Sequence< ::rtl::OUString > aSecURLs = SvtSecurityOptions().GetSecureURLs();
-    sal_Int32 nCnt = aSecURLs.getLength();
     const ::rtl::OUString* pSecURLs = aSecURLs.getConstArray();
     const ::rtl::OUString* pSecURLsEnd = pSecURLs + aSecURLs.getLength();
     for ( ; pSecURLs != pSecURLsEnd && !bFound; ++pSecURLs )
