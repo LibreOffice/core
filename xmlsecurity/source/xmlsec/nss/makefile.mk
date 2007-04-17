@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:04:08 $
+#   last change: $Author: ihi $ $Date: 2007-04-17 10:26:58 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -97,21 +97,21 @@ INCPOST += \
 $(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
-.IF "$(OS)" == "LINUX"
-CFLAGS +=   -fPIC -g
-CFLAGSCXX += \
-            -fno-rtti -Wall -Wconversion -Wpointer-arith \
-            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-            -Wno-long-long -pthread
-CDEFS     += -DTRACING
-.ELIF "$(OS)" == "NETBSD"
-CFLAGS +=   -fPIC
-CFLAGSCXX += \
-            -fno-rtti -Wall -Wconversion -Wpointer-arith \
-            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
-            -Wno-long-long
-CDEFS     += -DTRACING
-.ENDIF
+#.IF "$(OS)" == "LINUX"
+#CFLAGS +=   -fPIC -g
+#CFLAGSCXX += \
+#            -fno-rtti -Wall -Wconversion -Wpointer-arith \
+#            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
+#            -Wno-long-long -pthread
+#CDEFS     += -DTRACING
+#.ELIF "$(OS)" == "NETBSD"
+#CFLAGS +=   -fPIC
+#CFLAGSCXX += \
+#            -fno-rtti -Wall -Wconversion -Wpointer-arith \
+#            -Wbad-function-cast -Wcast-align -Woverloaded-virtual -Wsynth \
+#            -Wno-long-long
+#CDEFS     += -DTRACING
+#.ENDIF
 .ENDIF
 
 CDEFS += -DXMLSEC_CRYPTO_NSS -DXMLSEC_NO_XSLT
