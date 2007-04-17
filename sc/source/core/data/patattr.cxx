@@ -4,9 +4,9 @@
  *
  *  $RCSfile: patattr.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:07:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 13:41:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -949,7 +949,7 @@ SfxStyleSheetBase* lcl_CopyStyleToPool
              rSrcSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pSrcItem ) == SFX_ITEM_SET )
         {
             ULONG nOldFormat = static_cast<const SfxUInt32Item*>(pSrcItem)->GetValue();
-            ULONG* pNewFormat = static_cast<ULONG*>(pFormatExchangeList->Get( nOldFormat ));
+            sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pFormatExchangeList->Get( nOldFormat ));
             if (pNewFormat)
                 rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, *pNewFormat ) );
         }
@@ -1054,7 +1054,7 @@ ScPatternAttr* ScPatternAttr::PutInPool( ScDocument* pDestDoc, ScDocument* pSrcD
                 //  Zahlformate nach Exchange-Liste
 
                 ULONG nOldFormat = ((const SfxUInt32Item*)pSrcItem)->GetValue();
-                ULONG* pNewFormat = (ULONG*)pDestDoc->GetFormatExchangeList()->Get(nOldFormat);
+                sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pDestDoc->GetFormatExchangeList()->Get(nOldFormat));
                 if (pNewFormat)
                     pNewItem = new SfxUInt32Item( ATTR_VALUE_FORMAT, (UINT32) (*pNewFormat) );
             }
