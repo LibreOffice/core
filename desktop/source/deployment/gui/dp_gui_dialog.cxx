@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:30:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:31:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -516,13 +516,13 @@ void DialogImpl::installExtensions()
     for ( sal_Int32 pos = 0;
           !currentCmdEnv->isAborted() && pos < m_arExtensions.getLength(); ++pos )
     {
-        OUString file;
-        file = m_arExtensions[ pos ];
-        currentCmdEnv->progressSection(
-            ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
-                OUSTR("Title") ).get<OUString>(), xAbortChannel );
         try
         {
+            OUString file;
+            file = m_arExtensions[ pos ];
+            currentCmdEnv->progressSection(
+                ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
+                    OUSTR("Title") ).get<OUString>(), xAbortChannel );
             Reference<deployment::XPackage> xPackage(
                 xPackageManager->addPackage(
                     file, OUString() /* detect media-type */,
