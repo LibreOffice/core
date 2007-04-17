@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlencryptiontemplateimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:39:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:19:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,9 @@ using ::com::sun::star::xml::wrapper::XXMLElementWrapper ;
 using ::com::sun::star::xml::crypto::XXMLEncryptionTemplate ;
 
 XMLEncryptionTemplateImpl :: XMLEncryptionTemplateImpl( const Reference< XMultiServiceFactory >& aFactory )
-    : m_xServiceManager( aFactory ),
-      m_xTemplate( NULL ),
+    : m_xTemplate( NULL ),
       m_xTarget( NULL ),
+      m_xServiceManager( aFactory ),
       m_nStatus ( ::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN ) {
 }
 
@@ -107,7 +107,8 @@ void SAL_CALL XMLEncryptionTemplateImpl::setStatus(
 }
 
 /* XInitialization */
-void SAL_CALL XMLEncryptionTemplateImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL XMLEncryptionTemplateImpl :: initialize( const Sequence< Any >& /*aArguments*/ )
+    throw( Exception, RuntimeException ) {
     // TBD
 } ;
 
