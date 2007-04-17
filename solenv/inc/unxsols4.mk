@@ -4,9 +4,9 @@
 #
 #   $RCSfile: unxsols4.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: obo $ $Date: 2007-03-09 09:13:12 $
+#   last change: $Author: ihi $ $Date: 2007-04-17 10:14:17 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -121,8 +121,7 @@ MODULES_WITH_WARNINGS := \
     r_tools \
     soldep \
     starmath \
-    sw \
-    xmlsecurity
+    sw
 
 STDOBJVCL=$(L)$/salmain.o
 
