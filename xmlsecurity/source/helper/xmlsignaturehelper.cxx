@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:40:25 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,11 +258,12 @@ bool XMLSignatureHelper::CreateAndWriteSignature( const uno::Reference< xml::sax
     /*
      * create a signature listener
      */
+/*
     ImplXMLSignatureListener* pSignatureListener = new ImplXMLSignatureListener(
                                                     LINK( this, XMLSignatureHelper, SignatureCreationResultListener ),
                                                     LINK( this, XMLSignatureHelper, SignatureVerifyResultListener ),
                                                     LINK( this, XMLSignatureHelper, StartVerifySignatureElement ) );
-
+*/
     /*
      * configure the signature creation listener
      */
