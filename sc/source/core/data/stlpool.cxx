@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:08:48 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 13:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ void ScStyleSheetPool::CopyStyleFrom( ScStyleSheetPool* pSrcPool,
                  rSourceSet.GetItemState( ATTR_VALUE_FORMAT, FALSE, &pItem ) == SFX_ITEM_SET )
             {
                 ULONG nOldFormat = static_cast<const SfxUInt32Item*>(pItem)->GetValue();
-                ULONG* pNewFormat = static_cast<ULONG*>(pDoc->GetFormatExchangeList()->Get( nOldFormat ));
+                sal_uInt32* pNewFormat = static_cast<sal_uInt32*>(pDoc->GetFormatExchangeList()->Get( nOldFormat ));
                 if (pNewFormat)
                     rDestSet.Put( SfxUInt32Item( ATTR_VALUE_FORMAT, *pNewFormat ) );
             }
