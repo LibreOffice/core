@@ -4,9 +4,9 @@
 #
 #   $RCSfile: rules.mk,v $
 #
-#   $Revision: 1.85 $
+#   $Revision: 1.86 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:43:45 $
+#   last change: $Author: rt $ $Date: 2007-04-17 13:27:19 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -354,11 +354,25 @@ not_existing$/s_%.dpcc : %.c;@noop $(assign all_local_slo+:=$<)
 not_existing$/o_%.dpcc : %.c;@noop $(assign all_local_obj+:=$<)
 
 $(MISC)$/%.dpslo :
-    $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(all_local_slo) $(all_misc_slo)) > $@
+# faster but unusable with current source (e.g. external include guards)
+#	$(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $(all_local_slo) $(all_misc_slo)) > $@
+# slower but with correct output
+    @@$(RM) $@
+    @$(TOUCH) $@
+    @$(foreach,i,$(all_local_slo) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+    @$(foreach,i,$(all_misc_slo) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(SLO) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+# for both
     $(TYPE) $(mktmp $(foreach,i,$(all_local_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n")) $(foreach,i,$(all_misc_slo:b:+".obj") $@ : $(SLO)$/$(i:+"\n"))) >> $@
 
 $(MISC)$/%.dpobj :
-    $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(all_local_obj) $(all_misc_obj)) > $@
+# faster but unusable with current source (e.g. external include guards)
+#	$(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSOBJ) $(CDEFSMT) $(all_local_obj) $(all_misc_obj)) > $@
+# slower but with correct output
+    @@$(RM) $@
+    @$(TOUCH) $@
+    @$(foreach,i,$(all_local_obj) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+    @$(foreach,i,$(all_misc_obj) $(shell $(MAKEDEPEND) @$(mktmp -f - -p$(OBJ) $(MKDEPFLAGS) $(CDEFS) $(CDEFSSLO) $(CDEFSMT) $i ) >> $@ ))
+# for both
     $(TYPE) $(mktmp $(foreach,i,$(all_local_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n")) $(foreach,i,$(all_misc_obj:b:+".obj") $@ : $(OBJ)$/$(i:+"\n"))) >> $@
 
 # see also %.dpslo 
