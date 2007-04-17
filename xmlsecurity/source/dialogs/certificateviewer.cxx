@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:35:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:15:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ namespace
         _rCtrl.SetPosPixel( _rStartIn_EndOut );
         _rStartIn_EndOut.X() += XmlSec::ShrinkToFitWidth( _rCtrl, _nOffs );
     }
-};
+}
 
 CertificateViewer::CertificateViewer(
         Window* _pParent,
