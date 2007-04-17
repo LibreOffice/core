@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vclprocessor2d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:17 $
+ *  last change: $Author: hdu $ $Date: 2007-04-17 10:02:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -322,12 +322,12 @@ namespace drawinglayer
                 for(sal_uInt32 a(0L); a < aClippedPolyPolygon.count(); a++)
                 {
                     const basegfx::B2DPolygon aClippedPolygon(aClippedPolyPolygon.getB2DPolygon(a));
-                    mpOutputDevice->DrawPolyLine(Polygon(aClippedPolygon));
+                    mpOutputDevice->DrawPolyLine(aClippedPolygon,0.0);
                 }
             }
             else
             {
-                mpOutputDevice->DrawPolyLine(Polygon(aLocalPolygon));
+                mpOutputDevice->DrawPolyLine(aLocalPolygon,0.0);
             }
         }
 
@@ -352,7 +352,7 @@ namespace drawinglayer
 
                     mpOutputDevice->SetFillColor(Color(aModifiedColor));
                     mpOutputDevice->SetLineColor();
-                    mpOutputDevice->DrawPolygon(Polygon(aPolygon));
+                    mpOutputDevice->DrawPolygon(aPolygon);
 
                     bPainted = true;
                 }
@@ -426,7 +426,7 @@ namespace drawinglayer
 
                             mpOutputDevice->SetFillColor(Color(aModifiedColor));
                             mpOutputDevice->SetLineColor();
-                            mpOutputDevice->DrawPolygon(Polygon(aPolygon));
+                            mpOutputDevice->DrawPolygon(aPolygon);
 
                             bPainted = true;
                         }
@@ -574,7 +574,7 @@ namespace drawinglayer
                 aLocalPolyPolygon = basegfx::tools::clipPolyPolygonOnPolyPolygon(aLocalPolyPolygon, maCurrentClipPolyPolygon, false, false);
             }
 
-            mpOutputDevice->DrawPolyPolygon(PolyPolygon(aLocalPolyPolygon));
+            mpOutputDevice->DrawPolyPolygon(aLocalPolyPolygon);
         }
 
         // direct draw of MetaFile
@@ -680,7 +680,7 @@ namespace drawinglayer
                             VirtualDevice& rMask = aBufferDevice.getMask();
                             rMask.SetLineColor();
                             rMask.SetFillColor(COL_BLACK);
-                            rMask.DrawPolyPolygon(PolyPolygon(aMask));
+                            rMask.DrawPolyPolygon(aMask);
 
                             // dump buffer to outdev
                             aBufferDevice.paint();
