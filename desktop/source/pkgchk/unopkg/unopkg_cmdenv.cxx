@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unopkg_cmdenv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:57:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:33:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -310,6 +310,7 @@ void CommandEnvironmentImpl::handle(
     }
     else if (request >>= licExc)
     {
+        bLicenseException = true;
         printLicense(licExc.Text, approve, abort);
     }
        else if (request >>= instExc)
@@ -330,16 +331,14 @@ void CommandEnvironmentImpl::handle(
             return; // unknown request => no selection at all
     }
 
-    if (abort && !bLicenseException) {
-        OUString msg;
-        if (! m_option_verbose)
-            msg = reinterpret_cast<Exception const *>(
-                request.getValue() )->Message;
-        if (msg.getLength() == 0)
-            msg = ::comphelper::anyToString(request);
+    //In case of a user declining a license abort is true but this is intended,
+    //therefore no logging
+    if (abort && m_option_verbose && !bLicenseException)
+    {
+        OUString msg = ::comphelper::anyToString(request);
         fprintf( stderr, "\nERROR: %s\n",
-                 ::rtl::OUStringToOString(
-                     msg, osl_getThreadTextEncoding() ).getStr() );
+            ::rtl::OUStringToOString(
+            msg, osl_getThreadTextEncoding() ).getStr() );
     }
 
     // select:
