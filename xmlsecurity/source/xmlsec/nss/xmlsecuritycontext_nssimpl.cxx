@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsecuritycontext_nssimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:46:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:28:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,8 +71,8 @@ using ::com::sun::star::xml::crypto::XXMLSecurityContext ;
 
 XMLSecurityContext_NssImpl :: XMLSecurityContext_NssImpl( const Reference< XMultiServiceFactory >& aFactory )
     ://i39448 : m_pKeysMngr( NULL ) ,
-    m_nDefaultEnvIndex(-1) ,
-    m_xServiceManager( aFactory )//,
+    m_xServiceManager( aFactory ) ,
+    m_nDefaultEnvIndex(-1)
     //m_xSecurityEnvironment( NULL )
 {
     //Init xmlsec library
@@ -249,7 +249,7 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_NssImpl :: getSecu
 
 
 /* XInitialization */
-void SAL_CALL XMLSecurityContext_NssImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL XMLSecurityContext_NssImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
     // TBD
 } ;
 
