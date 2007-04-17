@@ -4,9 +4,9 @@
  *
  *  $RCSfile: util.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:46:48 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:30:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -778,88 +778,64 @@ bool getJREInfoByPath(const rtl::OUString& path,
     return ret;
 }
 
-/** Checks if the path is a directory. If it is a link to a directory than
-    it is resolved.
-    In case of an error the returned string has the length 0
+/** Checks if the path is a directory. Links are resolved.
+    In case of an error the returned string has the length 0.
+    Otherwise the returned string is the "resolved" file URL.
  */
 OUString resolveDirPath(const OUString & path)
 {
-    OUString sResolved = path;
     OUString ret;
-    while (1)
-    {
-        DirectoryItem item;
-        if (DirectoryItem::get(sResolved, item) == File::E_None)
-        {
-            FileStatus status(FileStatusMask_Type |
-                              FileStatusMask_LinkTargetURL |
-                              FileStatusMask_FileURL);
+    OUString sResolved;
+    if (File::getAbsoluteFileURL(
+        rtl::OUString(), path, sResolved) != File::E_None)
+        return OUString();
 
-            if (item.getFileStatus(status) == File::E_None)
-            {
-                FileStatus::Type t = status.getFileType();
-                if (t == FileStatus::Directory)
-                {
-                    ret = sResolved;
-                    break;
-                }
-                else if ( t == FileStatus::Link )
-                {
-                    sResolved = status.getLinkTargetURL();
-                }
-                else
-                {
-                    break;
-                }
-            }
-            else
-                break;
-            }
-        else
-            break;
+    //check if this is a valid path and if it is a directory
+    DirectoryItem item;
+    if (DirectoryItem::get(sResolved, item) == File::E_None)
+    {
+        FileStatus status(FileStatusMask_Type |
+                          FileStatusMask_LinkTargetURL |
+                          FileStatusMask_FileURL);
+
+        if (item.getFileStatus(status) == File::E_None
+            && status.getFileType() == FileStatus::Directory)
+        {
+            ret = sResolved;
+        }
     }
+    else
+        return OUString();
     return ret;
 }
 /** Checks if the path is a file. If it is a link to a file than
     it is resolved.
-    In case of an error the returned string has the length 0
  */
 OUString resolveFilePath(const OUString & path)
 {
-    OUString sResolved = path;
     OUString ret;
-    while (1)
-    {
-        DirectoryItem item;
-        if (DirectoryItem::get(sResolved, item) == File::E_None)
-        {
-            FileStatus status(FileStatusMask_Type |
-                              FileStatusMask_LinkTargetURL |
-                              FileStatusMask_FileURL);
+    OUString sResolved;
 
-            if (item.getFileStatus(status) == File::E_None)
-            {
-                FileStatus::Type t = status.getFileType();
-                if (t == FileStatus::Regular)
-                {
-                    ret = sResolved;
-                    break;
-                }
-                else if ( t == FileStatus::Link )
-                {
-                    sResolved = status.getLinkTargetURL();
-                }
-                else
-                {
-                    break;
-                }
-            }
-            else
-                break;
-            }
-        else
-            break;
+    if (File::getAbsoluteFileURL(
+        rtl::OUString(), path, sResolved) != File::E_None)
+        return OUString();
+
+    //check if this is a valid path to a file or and if it is a link
+    DirectoryItem item;
+    if (DirectoryItem::get(sResolved, item) == File::E_None)
+    {
+        FileStatus status(FileStatusMask_Type |
+                          FileStatusMask_LinkTargetURL |
+                          FileStatusMask_FileURL);
+        if (item.getFileStatus(status) == File::E_None
+            && status.getFileType() == FileStatus::Regular)
+        {
+            ret = sResolved;
+        }
     }
+    else
+        return OUString();
+
     return ret;
 }
 
@@ -883,6 +859,9 @@ rtl::Reference<VendorBase> getJREInfoByPath(
 
     //check if the directory path is good, that is a JRE was already recognized.
     //Then we need not detect it again
+    //For example, a sun JKD contains <jdk>/bin/java and <jdk>/jre/bin/java.
+    //When <jdk>/bin/java has been found then we need not find <jdk>/jre/bin/java.
+    //Otherwise we would execute java two times for evers JDK found.
     MapIt entry2 = find_if(mapJREs.begin(), mapJREs.end(),
                            SameOrSubDirJREMap(sResolvedDir));
     if (entry2 != mapJREs.end())
@@ -918,6 +897,7 @@ rtl::Reference<VendorBase> getJREInfoByPath(
             else
                 sFullPath = sResolvedDir +
                 OUString(RTL_CONSTASCII_USTRINGPARAM("/")) + (*i);
+
 
             sFilePath = resolveFilePath(sFullPath);
 
@@ -1022,11 +1002,11 @@ rtl::Reference<VendorBase> getJREInfoByPath(
         }
     }
     if (ret.is() == false)
-        vecBadPaths.push_back(sResolvedDir);
+        vecBadPaths.push_back(sFilePath);
     else
     {
         JFW_TRACE2(OUSTR("[Java framework] sunjavaplugin"SAL_DLLEXTENSION ": ")
-                   + OUSTR("Detected another JRE: ") + sResolvedDir
+                   + OUSTR("Found JRE: ") + sResolvedDir
                    + OUSTR(" \n at: ") + path + OUSTR(".\n"));
 
         mapJREs.insert(MAPJRE::value_type(sResolvedDir, ret));
