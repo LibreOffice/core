@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-26 13:13:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:24:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,6 +36,11 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_xmlsecurity.hxx"
 
+#pragma warning(push,1)
+#include "Windows.h"
+#include "WinCrypt.h"
+#pragma warning(pop)
+
 #ifndef _SAL_CONFIG_H_
 #include <sal/config.h>
 #endif
@@ -51,9 +56,6 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
-
-#include "Windows.h"
-#include "WinCrypt.h"
 
 #include <xmlsec/xmlsec.h>
 #include <xmlsec/keysmngr.h>
@@ -136,7 +138,7 @@ SecurityEnvironment_MSCryptImpl :: ~SecurityEnvironment_MSCryptImpl() {
 }
 
 /* XInitialization */
-void SAL_CALL SecurityEnvironment_MSCryptImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL SecurityEnvironment_MSCryptImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
     //TODO
 } ;
 
@@ -451,15 +453,17 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
     sal_Int32 length ;
     X509Certificate_MSCryptImpl* xcert ;
     std::list< X509Certificate_MSCryptImpl* > certsList ;
-    PCCERT_CONTEXT pCertContext ;
+    PCCERT_CONTEXT pCertContext = NULL;
 
     //firstly, we try to find private keys in given key store.
     if( m_hKeyStore != NULL ) {
-        pCertContext = NULL ;
-        while( pCertContext = CertEnumCertificatesInStore( m_hKeyStore, pCertContext ) ) {
+        pCertContext = CertEnumCertificatesInStore( m_hKeyStore, pCertContext );
+        while (pCertContext)
+        {
             xcert = MswcryCertContextToXCert( pCertContext ) ;
             if( xcert != NULL )
                 certsList.push_back( xcert ) ;
+            pCertContext = CertEnumCertificatesInStore( m_hKeyStore, pCertContext );
         }
     }
 
@@ -485,8 +489,9 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
         */
         hSystemKeyStore = CertOpenSystemStore( 0, "MY" ) ;
         if( hSystemKeyStore != NULL ) {
-            pCertContext = NULL ;
-            while( pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext ) ) {
+            pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
+            while (pCertContext)
+            {
                 // Add By CP for checking whether the certificate is a personal certificate or not.
                 if(!(CryptAcquireCertificatePrivateKey(pCertContext,
                         CRYPT_ACQUIRE_COMPARE_KEY_FLAG,
@@ -496,6 +501,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
                         NULL)))
                 {
                     // Not Privatekey found. SKIP this one; By CP
+                    pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
                     continue;
                 }
                 // then TODO : Check the personal cert is valid or not.
@@ -504,6 +510,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
                 xcert = MswcryCertContextToXCert( pCertContext ) ;
                 if( xcert != NULL )
                     certsList.push_back( xcert ) ;
+                pCertContext = CertEnumCertificatesInStore( hSystemKeyStore, pCertContext );
             }
         }
 
@@ -529,7 +536,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: getPer
 
 Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException ) {
     unsigned int i ;
-    sal_Int8 found = 0 ;
+//  sal_Int8 found = 0 ;
     LPSTR   pszName ;
     X509Certificate_MSCryptImpl *xcert = NULL ;
     PCCERT_CONTEXT pCertContext = NULL ;
@@ -559,9 +566,9 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
         return NULL ;
     }
 
-    if( !( certInfo.Issuer.pbData = ( BYTE* )malloc( certInfo.Issuer.cbData ) ) ) {
+    certInfo.Issuer.pbData = ( BYTE* )malloc( certInfo.Issuer.cbData );
+    if(!certInfo.Issuer.pbData)
         throw RuntimeException() ;
-    }
 
     if( ! ( CertStrToName(
         X509_ASN_ENCODING | PKCS_7_ASN_ENCODING ,
@@ -577,7 +584,8 @@ Reference< XCertificate > SecurityEnvironment_MSCryptImpl :: getCertificate( con
 
     //Get the SerialNumber
     cryptSerialNumber.cbData = serialNumber.getLength() ;
-    if( !( cryptSerialNumber.pbData = ( BYTE* )malloc( cryptSerialNumber.cbData ) ) )
+    cryptSerialNumber.pbData = ( BYTE* )malloc( cryptSerialNumber.cbData);
+    if (!cryptSerialNumber.pbData)
     {
         free( certInfo.Issuer.pbData ) ;
         throw RuntimeException() ;
@@ -801,18 +809,18 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_MSCryptImpl :: buildC
             hAdditionalStore = NULL;
 
         //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
-        if( ! (bChain = CertGetCertificateChain(
-                NULL ,
-                pCertContext ,
-                NULL , //use current system time
-                hAdditionalStore,
-                &chainPara ,
-                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
-                NULL ,
-                &pChainContext)))
-        {
-            pChainContext = NULL ;
-        }
+        bChain = CertGetCertificateChain(
+            NULL ,
+            pCertContext ,
+            NULL , //use current system time
+            hAdditionalStore,
+            &chainPara ,
+            CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+            NULL ,
+            &pChainContext);
+        if (!bChain)
+            pChainContext = NULL;
+
         //Close the additional store
        CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
@@ -959,18 +967,19 @@ sal_Int32 SecurityEnvironment_MSCryptImpl :: verifyCertificate( const ::com::sun
             hAdditionalStore = NULL;
 
         //CertGetCertificateChain searches by default in MY, CA, ROOT and TRUST
-        if( !(bChain = CertGetCertificateChain(
-                NULL ,
-                pCertContext ,
-                NULL , //use current system time
-                hAdditionalStore,
-                &chainPara ,
-                CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
-                NULL ,
-                &pChainContext)))
-        {
-            pChainContext = NULL ;
-        }
+        bChain = CertGetCertificateChain(
+            NULL ,
+            pCertContext ,
+            NULL , //use current system time
+            hAdditionalStore,
+            &chainPara ,
+            CERT_CHAIN_REVOCATION_CHECK_CHAIN | CERT_CHAIN_TIMESTAMP_TIME ,
+            NULL ,
+            &pChainContext);
+
+        if (!bChain)
+            pChainContext = NULL;
+
         //Close the additional store
        CertCloseStore(hCollectionStore, CERT_CLOSE_STORE_CHECK_FLAG);
     }
