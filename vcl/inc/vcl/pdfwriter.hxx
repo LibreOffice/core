@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:02:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-17 14:02:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -850,10 +850,8 @@ The following structure describes the permissions used in PDF security
 
         @param rURL
         the URL the link shall point to.
-        there will be no error checking or any kind of
-        conversion done to this parameter execept this:
-        it will be output as 7bit Ascii. The URL
-        will appear literally in the PDF file produced
+        The URL will be parsed (and corrected) by the <code>com.sun.star.util.URLTransformer</code>
+        service; the result will then appear literally in the PDF file produced
 
         @returns
         0 for success
