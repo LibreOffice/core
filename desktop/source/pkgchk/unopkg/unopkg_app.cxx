@@ -5,9 +5,9 @@
  *
  *  $RCSfile: unopkg_app.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:57:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:32:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ SAL_IMPLEMENT_MAIN()
         }
         else {
             oslProcessError rc = osl_getCommandArg( 0, &subCommand.pData );
-            if (rc == osl_Process_E_None )
+            if (rc != osl_Process_E_None )
                 OSL_ASSERT(0);
             ++nPos;
             subCommand = subCommand.trim();
@@ -238,7 +238,7 @@ SAL_IMPLEMENT_MAIN()
                      !readArgument( &deploymentContext, info_context, &nPos ))
             {
                 oslProcessError rc = osl_getCommandArg( nPos, &cmdArg.pData );
-                if (rc == osl_Process_E_None )
+                if (rc != osl_Process_E_None )
                     OSL_ASSERT(0);
                 ++nPos;
                 cmdArg = cmdArg.trim();
@@ -428,10 +428,12 @@ SAL_IMPLEMENT_MAIN()
                      ::com::sun::star::uno::Exception const *>(
                          exc.Cause.getValue())->Message, textenc).getStr() );
     }
-    catch (::com::sun::star::uno::Exception &) {
+    catch (::com::sun::star::uno::Exception & e ) {
         Any exc( ::cppu::getCaughtException() );
+
         fprintf( stderr, "\nERROR: %s\n", ::rtl::OUStringToOString(
-                     ::comphelper::anyToString(exc), textenc ).getStr() );
+            option_verbose  ? e.Message + OUSTR("\nException details: \n") +
+            ::comphelper::anyToString(exc) : e.Message, textenc).getStr() );
     }
     fprintf( stderr, "\n%s failed.\n", APP_NAME );
     return 1;
