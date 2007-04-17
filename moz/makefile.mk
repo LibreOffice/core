@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 13:53:44 $
+#   last change: $Author: ihi $ $Date: 2007-04-17 08:54:13 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -103,7 +103,7 @@ MOZILLA_CONFIGURE_FLAGS= $(SYSBASE_X11) --disable-tests \
                 --without-system-zlib \
                 --disable-installer \
                 --disable-accessibility \
-                 --disable-xpfe-components \
+                --disable-xpfe-components \
                 --disable-mathml \
                 --disable-oji \
                 --disable-profilesharing \
@@ -165,8 +165,8 @@ SYSTEM_JPEG:=
 # For W32-tcsh CC and CXX must not contain the wrapper, and W32-4nt ( in
 # some cases ) doesn't work with DOS path notation when building mozilla.
 .IF "$(COM)"=="GCC"
-CC:=$(CC:s/guw.pl //:s/ -mno-cygwin//)
-CXX:=$(CXX:s/guw.pl //:s/ -mno-cygwin//)
+CC:=$(CC:s/guw.exe //:s/ -mno-cygwin//)
+CXX:=$(CXX:s/guw.exe //:s/ -mno-cygwin//)
 CPP:=$(CC) -E
 LD:=ld
 LIBS:=-lsupc++
@@ -186,7 +186,11 @@ PATH!:=$(PATH):$(shell cygpath $(MOZ_TOOLS_DOS))/bin:$(shell cygpath $(MOZ_TOOLS
 .ELSE
 PATH!:=$(shell cygpath $(MOZ_TOOLS_DOS))/vc71/bin:$(shell cygpath $(MOZ_TOOLS_DOS))/bin:$(PATH)
 .ENDIF
+.IF "$(USE_SHELL)"=="tcsh"
 SET_MOZ_TOOLS_INSTALL_BAT:=setenv MOZ_TOOLS "$(MOZ_TOOLS_DOS)"
+.ELSE
+SET_MOZ_TOOLS_INSTALL_BAT:=MOZ_TOOLS="$(MOZ_TOOLS_DOS)"; export MOZ_TOOLS
+.ENDIF
 .ELSE # "$(USE_SHELL)"!="4nt"
 # MOZ_TOOLS must contain an absolute path
 MOZ_TOOLS_DOS:=$(shell echo %@SFN[$(MISC)])\build\moztoolsinst
