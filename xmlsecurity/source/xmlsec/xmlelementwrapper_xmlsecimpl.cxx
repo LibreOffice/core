@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlelementwrapper_xmlsecimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:43:21 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,7 +115,7 @@ cssu::Sequence< rtl::OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupport
 
 cssu::Reference< cssu::XInterface > SAL_CALL
     XMLElementWrapper_XmlSecImpl_createInstance(
-        const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
+        const cssu::Reference< cssl::XMultiServiceFactory > &)
     throw( cssu::Exception )
 {
     return (cppu::OWeakObject*) new XMLElementWrapper_XmlSecImpl(NULL);
