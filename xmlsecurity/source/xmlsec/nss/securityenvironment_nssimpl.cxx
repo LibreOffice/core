@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:45:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:27:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,7 +97,7 @@ using ::com::sun::star::security::XCertificate ;
 extern X509Certificate_NssImpl* NssCertToXCert( CERTCertificate* cert ) ;
 extern X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* ) ;
 
-char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* arg )
+char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* /*arg*/ )
 {
     uno::Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     if ( xMSF.is() )
@@ -127,7 +127,7 @@ char* GetPasswordFunction( PK11SlotInfo* pSlot, PRBool bRetry, void* arg )
     return NULL;
 }
 
-SecurityEnvironment_NssImpl :: SecurityEnvironment_NssImpl( const Reference< XMultiServiceFactory >& aFactory ) :
+SecurityEnvironment_NssImpl :: SecurityEnvironment_NssImpl( const Reference< XMultiServiceFactory >& ) :
 m_pHandler( NULL ) , m_tSymKeyList() , m_tPubKeyList() , m_tPriKeyList() {
 
     PK11_SetPasswordFunc( GetPasswordFunction ) ;
@@ -165,7 +165,7 @@ SecurityEnvironment_NssImpl :: ~SecurityEnvironment_NssImpl() {
 }
 
 /* XInitialization */
-void SAL_CALL SecurityEnvironment_NssImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL SecurityEnvironment_NssImpl :: initialize( const Sequence< Any >& ) throw( Exception, RuntimeException ) {
     // TBD
 } ;
 
@@ -219,7 +219,7 @@ sal_Int64 SAL_CALL SecurityEnvironment_NssImpl :: getSomething( const Sequence< 
     throw( RuntimeException )
 {
     if( aIdentifier.getLength() == 16 && 0 == rtl_compareMemory( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
-        return ( sal_Int64 )this ;
+        return sal::static_int_cast<sal_Int64>(reinterpret_cast<sal_uIntPtr>(this));
     }
     return 0 ;
 }
@@ -242,7 +242,8 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl :: getUnoTunnelId() {
 SecurityEnvironment_NssImpl* SecurityEnvironment_NssImpl :: getImplementation( const Reference< XInterface > xObj ) {
     Reference< XUnoTunnel > xUT( xObj , UNO_QUERY ) ;
     if( xUT.is() ) {
-        return ( SecurityEnvironment_NssImpl* )xUT->getSomething( getUnoTunnelId() ) ;
+        return reinterpret_cast<SecurityEnvironment_NssImpl*>(
+            sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( getUnoTunnelId() ))) ;
     } else
         return NULL ;
 }
@@ -546,7 +547,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates() throw( SecurityException 
         return certSeq ;
     }
 
-    return NULL ;
+    return Sequence< Reference < XCertificate > > ();
 }
 
 Reference< XCertificate > SecurityEnvironment_NssImpl :: getCertificate( const OUString& issuerName, const Sequence< sal_Int8 >& serialNumber ) throw( SecurityException , RuntimeException )
@@ -666,7 +667,8 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCerti
         throw RuntimeException() ;
     }
 
-    xcert = ( X509Certificate_NssImpl* )xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ) ;
+    xcert = reinterpret_cast<X509Certificate_NssImpl*>(
+        sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
     if( xcert == NULL ) {
         throw RuntimeException() ;
     }
@@ -708,7 +710,7 @@ Sequence< Reference < XCertificate > > SecurityEnvironment_NssImpl :: buildCerti
         return xCertChain ;
     }
 
-    return NULL ;
+    return Sequence< Reference < XCertificate > >();
 }
 
 Reference< XCertificate > SecurityEnvironment_NssImpl :: createCertificateFromRaw( const Sequence< sal_Int8 >& rawCertificate ) throw( SecurityException , RuntimeException ) {
@@ -756,7 +758,8 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
         throw RuntimeException() ;
     }
 
-    xcert = ( X509Certificate_NssImpl* )xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ) ;
+    xcert = reinterpret_cast<X509Certificate_NssImpl*>(
+       sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
     if( xcert == NULL ) {
         throw RuntimeException() ;
     }
@@ -769,7 +772,7 @@ sal_Int32 SecurityEnvironment_NssImpl :: verifyCertificate( const ::com::sun::st
 
         //Get the system clock time
         timeboundary = PR_Now() ;
-        SECCertificateUsage usage = NULL;
+        SECCertificateUsage usage = 0;
         if( m_pHandler != NULL )
         {
             status = CERT_VerifyCertificate(
@@ -824,7 +827,8 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
         throw RuntimeException() ;
     }
 
-    xcert = ( X509Certificate_NssImpl* )xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ) ;
+    xcert = reinterpret_cast<X509Certificate_NssImpl*>(
+        sal::static_int_cast<sal_uIntPtr>(xCertTunnel->getSomething( X509Certificate_NssImpl::getUnoTunnelId() ))) ;
     if( xcert == NULL ) {
         throw RuntimeException() ;
     }
@@ -918,7 +922,6 @@ X509Certificate_NssImpl* NssPrivKeyToXCert( SECKEYPrivateKey* priKey )
 xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() throw( Exception, RuntimeException ) {
 
     unsigned int i ;
-    PK11SlotInfo* slot = NULL ;
     CERTCertDBHandle* handler = NULL ;
     PK11SymKey* symKey = NULL ;
     SECKEYPublicKey* pubKey = NULL ;
