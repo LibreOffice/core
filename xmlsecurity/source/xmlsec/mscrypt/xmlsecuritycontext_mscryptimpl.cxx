@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlsecuritycontext_mscryptimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:44:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:26:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -147,7 +147,7 @@ sal_Int32 SAL_CALL XMLSecurityContext_MSCryptImpl::getDefaultSecurityEnvironment
     return 0;
 }
 
-void SAL_CALL XMLSecurityContext_MSCryptImpl::setDefaultSecurityEnvironmentIndex( sal_Int32 nDefaultEnvIndex )
+void SAL_CALL XMLSecurityContext_MSCryptImpl::setDefaultSecurityEnvironmentIndex( sal_Int32 /*nDefaultEnvIndex*/ )
     throw (::com::sun::star::uno::RuntimeException)
 {
     //dummy
@@ -274,7 +274,7 @@ Reference< XSecurityEnvironment > SAL_CALL XMLSecurityContext_MSCryptImpl :: get
 #endif
 
 /* XInitialization */
-void SAL_CALL XMLSecurityContext_MSCryptImpl :: initialize( const Sequence< Any >& aArguments ) throw( Exception, RuntimeException ) {
+void SAL_CALL XMLSecurityContext_MSCryptImpl :: initialize( const Sequence< Any >& /*aArguments*/ ) throw( Exception, RuntimeException ) {
     // TBD
 } ;
 
