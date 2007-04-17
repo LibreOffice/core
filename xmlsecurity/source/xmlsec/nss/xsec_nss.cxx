@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsec_nss.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:47:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:29:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,7 @@ using namespace ::com::sun::star::registry;
 extern "C"
 {
 
-sal_Bool SAL_CALL nss_component_writeInfo( void* pServiceManager , void* pRegistryKey )
+sal_Bool SAL_CALL nss_component_writeInfo( void* /*pServiceManager*/ , void* pRegistryKey )
 {
     sal_Bool result = sal_False;
     sal_Int32 i ;
@@ -142,7 +142,7 @@ sal_Bool SAL_CALL nss_component_writeInfo( void* pServiceManager , void* pRegist
     return result;
 }
 
-void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* pRegistryKey )
+void* SAL_CALL nss_component_getFactory( const sal_Char* pImplName , void* pServiceManager , void* /*pRegistryKey*/ )
 {
     void* pRet = 0;
     Reference< XSingleServiceFactory > xFactory ;
