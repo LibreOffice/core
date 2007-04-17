@@ -4,9 +4,9 @@
  *
  *  $RCSfile: decryptorimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:36:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:17:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -191,7 +191,7 @@ void SAL_CALL DecryptorImpl::addDecryptionResultListener( const cssu::Reference<
     tryToPerform();
 }
 
-void SAL_CALL DecryptorImpl::removeDecryptionResultListener( const cssu::Reference< cssxc::sax::XDecryptionResultListener >& listener )
+void SAL_CALL DecryptorImpl::removeDecryptionResultListener( const cssu::Reference< cssxc::sax::XDecryptionResultListener >&)
         throw (cssu::RuntimeException)
 {
 }
@@ -200,8 +200,7 @@ void SAL_CALL DecryptorImpl::removeDecryptionResultListener( const cssu::Referen
 void SAL_CALL DecryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
     throw (cssu::Exception, cssu::RuntimeException)
 {
-    sal_Int32 nLength = aArguments.getLength();
-    OSL_ASSERT(nLength == 5);
+    OSL_ASSERT(aArguments.getLength() == 5);
 
     rtl::OUString ouTempString;
 
