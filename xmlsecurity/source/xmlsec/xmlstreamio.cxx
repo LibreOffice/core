@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlstreamio.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:43:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:23:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,6 +61,7 @@ static char enableXmlStreamIO = 0x00 ;
 
 ::com::sun::star::uno::Reference< ::com::sun::star::xml::crypto::XUriBinding > m_xUriBinding ;
 
+extern "C"
 int xmlStreamMatch( const char* uri )
 {
     ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream ;
@@ -78,6 +79,7 @@ int xmlStreamMatch( const char* uri )
     return 0 ;
 }
 
+extern "C"
 void* xmlStreamOpen( const char* uri )
 {
     ::com::sun::star::uno::Reference< com::sun::star::io::XInputStream > xInputStream ;
@@ -99,6 +101,7 @@ void* xmlStreamOpen( const char* uri )
     return NULL ;
 }
 
+extern "C"
 int xmlStreamRead( void* context, char* buffer, int len )
 {
     int numbers ;
@@ -123,6 +126,7 @@ int xmlStreamRead( void* context, char* buffer, int len )
     return numbers ;
 }
 
+extern "C"
 int xmlStreamClose( void * context )
 {
     ::com::sun::star::io::XInputStream* pInputStream ;
