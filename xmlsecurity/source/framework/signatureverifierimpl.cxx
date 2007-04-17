@@ -4,9 +4,9 @@
  *
  *  $RCSfile: signatureverifierimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:39:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:19:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,7 +184,7 @@ void SAL_CALL SignatureVerifierImpl::addSignatureVerifyResultListener(
 }
 
 void SAL_CALL SignatureVerifierImpl::removeSignatureVerifyResultListener(
-    const cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >& listener )
+    const cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >&)
     throw (cssu::RuntimeException)
 {
 }
@@ -194,8 +194,7 @@ void SAL_CALL SignatureVerifierImpl::initialize(
     const cssu::Sequence< cssu::Any >& aArguments )
     throw (cssu::Exception, cssu::RuntimeException)
 {
-    sal_Int32 nLength = aArguments.getLength();
-    OSL_ASSERT(nLength == 5);
+    OSL_ASSERT(aArguments.getLength() == 5);
 
     rtl::OUString ouTempString;
 

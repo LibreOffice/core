@@ -4,9 +4,9 @@
  *
  *  $RCSfile: securityengine.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:38:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,8 +53,8 @@ namespace cssxw = com::sun::star::xml::wrapper;
 SecurityEngine::SecurityEngine( const cssu::Reference< cssl::XMultiServiceFactory >& rxMSF )
     :mxMSF( rxMSF ),
      m_nIdOfTemplateEC(-1),
-     m_nIdOfKeyEC(-1),
      m_nNumOfResolvedReferences(0),
+     m_nIdOfKeyEC(-1),
      m_bMissionDone(false),
      m_nSecurityId(-1),
      m_nStatus(::com::sun::star::xml::crypto::SecurityOperationStatus_UNKNOWN)
@@ -62,7 +62,7 @@ SecurityEngine::SecurityEngine( const cssu::Reference< cssl::XMultiServiceFactor
 }
 
 /* XReferenceResolvedListener */
-void SAL_CALL SecurityEngine::referenceResolved( sal_Int32 referenceId )
+void SAL_CALL SecurityEngine::referenceResolved( sal_Int32 /*referenceId*/)
     throw (com::sun::star::uno::Exception, com::sun::star::uno::RuntimeException)
 {
     m_nNumOfResolvedReferences++;
