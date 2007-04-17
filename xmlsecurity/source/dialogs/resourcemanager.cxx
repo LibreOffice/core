@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourcemanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:35:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:16:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -150,8 +150,8 @@ namespace XmlSec
                     if( c == cEqualSign )
                         e = _bPreserveId? PRE_CONT : CONT;
                     break;
-//              case EQUALSIGN:
-//                  break;
+                case EQUALSIGN:
+                    break;
                 case PRE_CONT:
                     if( c != cSpace )
                     {
@@ -193,7 +193,7 @@ namespace XmlSec
         xub_StrLen nContStart = _rRawString.Search( _rPartId );
         if( nContStart != STRING_NOTFOUND )
         {
-            nContStart += _rPartId.Len();
+            nContStart = nContStart + _rPartId.Len();
             ++nContStart;                   // now it's start of content, directly after Id
 
             xub_StrLen  nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
@@ -214,7 +214,7 @@ namespace XmlSec
     {
         // search over some parts to find a string
         //static char* aIDs[] = { "CN", "OU", "O", "E", NULL };
-        static char* aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
+        static char const * aIDs[] = { "CN=", "OU=", "O=", "E=", NULL };// By CP
         String sPart;
         int i = 0;
         while ( aIDs[i] )
@@ -223,7 +223,7 @@ namespace XmlSec
             xub_StrLen nContStart = _rRawString.Search( sPartId );
             if ( nContStart != STRING_NOTFOUND )
             {
-                nContStart += sPartId.Len();
+                nContStart = nContStart + sPartId.Len();
                 //++nContStart;                   // now it's start of content, directly after Id // delete By CP
                 xub_StrLen nContEnd = _rRawString.Search( sal_Unicode( ',' ), nContStart );
                 sPart = String( _rRawString, nContStart, nContEnd - nContStart );
