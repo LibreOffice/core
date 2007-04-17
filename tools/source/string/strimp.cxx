@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strimp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 01:03:23 $
+ *  last change: $Author: sb $ $Date: 2007-04-17 11:45:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,7 +220,7 @@ static STRINGDATA* _ImplCopyData( STRINGDATA* pData )
 
 inline void STRING::ImplCopyData()
 {
-    DBG_ASSERT( (mpData->mnRefCount > 0), "String::ImplCopyData() - RefCount == 0" );
+    DBG_ASSERT( (mpData->mnRefCount != 0), "String::ImplCopyData() - RefCount == 0" );
 
     // ist es ein referenzierter String, dann die Daten abkoppeln
     if ( mpData->mnRefCount != 1 )
