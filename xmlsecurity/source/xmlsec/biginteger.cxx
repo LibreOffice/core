@@ -4,9 +4,9 @@
  *
  *  $RCSfile: biginteger.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:41:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-17 10:22:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,13 +60,13 @@ Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
 
         if( xmlSecBnInitialize( &bn, 0 ) < 0 ) {
             xmlFree( chNumeral ) ;
-            return NULL ;
+            return Sequence< sal_Int8 >();
         }
 
         if( xmlSecBnFromDecString( &bn, chNumeral ) < 0 ) {
             xmlFree( chNumeral ) ;
             xmlSecBnFinalize( &bn ) ;
-            return NULL ;
+            return Sequence< sal_Int8 >();
         }
 
         xmlFree( chNumeral ) ;
@@ -74,13 +74,13 @@ Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
         length = xmlSecBnGetSize( &bn ) ;
         if( length <= 0 ) {
             xmlSecBnFinalize( &bn ) ;
-            return NULL ;
+            return Sequence< sal_Int8 >();
         }
 
         bnInteger = xmlSecBnGetData( &bn ) ;
         if( bnInteger == NULL ) {
             xmlSecBnFinalize( &bn ) ;
-            return NULL ;
+            return Sequence< sal_Int8 >();
         }
 
         Sequence< sal_Int8 > integer( length ) ;
@@ -93,7 +93,7 @@ Sequence< sal_Int8 > numericStringToBigInteger ( OUString numeral )
         return integer ;
     }
 
-    return NULL ;
+    return Sequence< sal_Int8 >();
 }
 
 OUString bigIntegerToNumericString ( Sequence< sal_Int8 > integer )
