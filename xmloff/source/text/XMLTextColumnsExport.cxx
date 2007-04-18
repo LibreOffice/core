@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLTextColumnsExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:38:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ void XMLTextColumnsExport::exportXML( const Any& rAny )
     sal_Int32 nCount = aColumns.getLength();
 
     OUStringBuffer sValue;
-    GetExport().GetMM100UnitConverter().convertNumber( sValue, nCount );
+    GetExport().GetMM100UnitConverter().convertNumber( sValue, nCount ? nCount : 1 );
     GetExport().AddAttribute( XML_NAMESPACE_FO, XML_COLUMN_COUNT,
                               sValue.makeStringAndClear() );
 
