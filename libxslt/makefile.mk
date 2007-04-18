@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: cmc $ $Date: 2007-01-03 13:06:50 $
+#   last change: $Author: cmc $ $Date: 2007-04-18 09:06:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,9 @@ xslt_CFLAGS+=-I$(SYSBASE)$/usr$/include -I$(SOLARINCDIR)$/external
 .IF "$(COMNAME)"=="sunpro5"
 xslt_CFLAGS+=$(C_RESTRICTIONFLAGS)
 .ENDIF			# "$(COMNAME)"=="sunpro5"
-xslt_LDFLAGS+=-L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lxml2
+.IF "$(OS)"=="SOLARIS" || "$(OS)"=="LINUX"
+xslt_LDFLAGS+=-L$(SYSBASE)$/lib -L$(SYSBASE)$/usr$/lib -L$(SOLARLIBDIR) -lpthread -ldl
+.ENDIF
 .ENDIF			# "$(SYSBASE)"!=""
 CONFIGURE_DIR=
 CONFIGURE_ACTION=chmod 777 libxml2-config && .$/configure
@@ -90,9 +92,9 @@ OUT2INC=libxslt$/*.h
 OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
 OUT2BIN+=xsltproc$/.libs$/xsltproc
 .ELIF "$(OS)"=="WNT"
-OUT2LIB+=libxslt$/win32$/bin.msvc$/*.lib
-OUT2BIN+=libxslt$/win32$/bin.msvc$/*.dll
-OUT2BIN+=xsltproc$/win32$/bin.msvc$/*.exe*
+OUT2LIB+=win32$/bin.msvc$/*.lib
+OUT2BIN+=win32$/bin.msvc$/*.dll
+OUT2BIN+=win32$/bin.msvc$/*.exe*
 .ELSE
 OUT2LIB+=libxslt$/.libs$/libxslt.so*
 OUT2BIN+=xsltproc$/.libs$/xsltproc
