@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmltble.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:55:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:53:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -947,7 +947,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                         AddAttribute( XML_NAMESPACE_OFFICE,
                                     XML_VALUE_TYPE, XML_STRING );
                     }
-                    else if (-1 != nNumberFormat)
+                    else if ( (-1 != nNumberFormat) && (xText->getString().getLength() > 0) )
                     {
                         // number format key:
                         // (export values only if cell contains text;
@@ -955,7 +955,7 @@ void SwXMLExport::ExportTableBox( const SwTableBox& rBox,
                         XMLNumberFormatAttributesExportHelper::
                             SetNumberFormatAttributes(
                                 *this, nNumberFormat, xCell->getValue(),
-                                (xText->getString().getLength() > 0) );
+                                 sal_True );
                     }
                     // else: invalid key; ignore
 
