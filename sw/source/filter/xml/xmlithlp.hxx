@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlithlp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:24:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -114,6 +114,7 @@ extern const struct SvXMLEnumMapEntry psXML_BrushVertPos[];
 extern const struct SvXMLEnumMapEntry psXML_BreakType[];
 extern const struct SvXMLEnumMapEntry aXMLTableAlignMap[];
 extern const struct SvXMLEnumMapEntry aXMLTableVAlignMap[];
+extern const struct SvXMLEnumMapEntry aXML_KeepTogetherType[];
 
 
 #endif
