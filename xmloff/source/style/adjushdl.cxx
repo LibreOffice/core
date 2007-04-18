@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adjushdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:47:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:49:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,6 +79,8 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
     { XML_CENTER,       style::ParagraphAdjust_CENTER },
     { XML_JUSTIFY,      style::ParagraphAdjust_BLOCK },
     { XML_JUSTIFIED,    style::ParagraphAdjust_BLOCK }, // obsolete
+    { XML_LEFT,         style::ParagraphAdjust_LEFT },
+    { XML_RIGHT,        style::ParagraphAdjust_RIGHT },
     { XML_TOKEN_INVALID, 0 }
 };
 
