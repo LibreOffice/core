@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:35:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:49:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -518,7 +518,6 @@ void SfxXMLMetaExport::Export()
     {
         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );
-        rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ROLE, XML_TEMPLATE );
 
         //  template URL
         rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF,
