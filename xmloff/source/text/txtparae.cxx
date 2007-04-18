@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.134 $
+ *  $Revision: 1.135 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-22 11:50:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:50:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2773,9 +2773,10 @@ void XMLTextParagraphExport::exportContour(
 
     if( rPropSetInfo->hasPropertyByName( sIsAutomaticContour ) )
     {
-        if( *(sal_Bool *)rPropSet->getPropertyValue( sIsAutomaticContour ).getValue() )
-            GetExport().AddAttribute( XML_NAMESPACE_DRAW,
-                                      XML_RECREATE_ON_EDIT, XML_TRUE );
+        sal_Bool bTmp = *(sal_Bool *)rPropSet->getPropertyValue(
+                                            sIsAutomaticContour ).getValue();
+        GetExport().AddAttribute( XML_NAMESPACE_DRAW,
+                      XML_RECREATE_ON_EDIT, bTmp ? XML_TRUE : XML_FALSE );
     }
 
     // write object now
