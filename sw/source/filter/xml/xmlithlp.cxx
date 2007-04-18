@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlithlp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:30:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -458,3 +458,12 @@ const struct  SvXMLEnumMapEntry aXMLTableVAlignMap[] =
     { XML_BOTTOM,               VERT_BOTTOM     },
     { XML_TOKEN_INVALID, 0 }
 };
+
+const struct SvXMLEnumMapEntry aXML_KeepTogetherType[] =
+{
+        { XML_ALWAYS,       0 },
+        { XML_AUTO,         1 },
+        { XML_TOKEN_INVALID, 0}
+};
+
+
