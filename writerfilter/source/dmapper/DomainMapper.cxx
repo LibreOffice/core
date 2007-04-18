@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-17 15:05:38 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-18 19:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -403,7 +403,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_LCBSTTBFNM:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 
-        case NS_rtf::LN_FCDOCUNDO:printf
+        case NS_rtf::LN_FCDOCUNDO:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
 
         case NS_rtf::LN_LCBDOCUNDO:
