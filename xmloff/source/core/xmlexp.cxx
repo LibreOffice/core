@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:08:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:48:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1029,12 +1029,22 @@ void SvXMLExport::ImplExportSettings()
 {
     CheckAttrList();
 
+    uno::Sequence<beans::PropertyValue> aViewProps;
+    GetViewSettingsAndViews(aViewProps);
+
+    uno::Sequence<beans::PropertyValue> aConfigProps;
+    GetConfigurationSettings(aConfigProps);
+
     {
-        SvXMLElementExport aElem( *this, XML_NAMESPACE_OFFICE, XML_SETTINGS,
+        SvXMLElementExport aElem( *this,
+                                aViewProps.getLength() || aConfigProps.getLength(),
+                                XML_NAMESPACE_OFFICE, XML_SETTINGS,
                                 sal_True, sal_True );
         XMLSettingsExportHelper aSettingsExportHelper(*this);
-        _ExportViewSettings(aSettingsExportHelper);
-        _ExportConfigurationSettings(aSettingsExportHelper);
+        if( aViewProps.getLength() )
+            _ExportViewSettings2(aSettingsExportHelper, aViewProps );
+        if( aConfigProps.getLength() )
+            _ExportConfigurationSettings2(aSettingsExportHelper, aConfigProps );
     }
 }
 
@@ -1390,36 +1400,32 @@ void SvXMLExport::_ExportMeta()
     aMeta.Export();
 }
 
-void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper)
+void SvXMLExport::_ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper )
 {
-    uno::Sequence<beans::PropertyValue> aProps;
-    GetViewSettings(aProps);
-    uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
-    if(xViewDataSupplier.is())
-    {
-        uno::Reference<container::XIndexAccess> xIndexAccess;
-        xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
-        xIndexAccess = xViewDataSupplier->getViewData();
-        if(xIndexAccess.is())
-        {
-            sal_Int32 nOldLength(aProps.getLength());
-            aProps.realloc(nOldLength + 1);
-            beans::PropertyValue aProp;
-            aProp.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Views"));
-            aProp.Value <<= xIndexAccess;
-            aProps[nOldLength] = aProp;
-        }
-    }
-    OUString sViewSettings(GetXMLToken(XML_VIEW_SETTINGS));
-    rSettingsExportHelper.exportSettings(aProps, sViewSettings);
+    uno::Sequence<beans::PropertyValue> aViewProps;
+    GetViewSettingsAndViews(aViewProps);
+    if( aViewProps.getLength() )
+        _ExportViewSettings2(rSettingsExportHelper, aViewProps );
 }
 
-void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rSettingsExportHelper)
+void SvXMLExport::_ExportViewSettings2(const XMLSettingsExportHelper& rSettingsExportHelper, uno::Sequence<beans::PropertyValue>& rProps )
 {
-    uno::Sequence<beans::PropertyValue> aProps;
-    GetConfigurationSettings(aProps);
+    OUString sViewSettings(GetXMLToken(XML_VIEW_SETTINGS));
+    rSettingsExportHelper.exportSettings(rProps, sViewSettings);
+}
+
+void SvXMLExport::_ExportConfigurationSettings(const XMLSettingsExportHelper& rSettingsExportHelper )
+{
+    uno::Sequence<beans::PropertyValue> aConfigProps;
+    GetConfigurationSettings(aConfigProps);
+    if( aConfigProps.getLength() )
+        _ExportConfigurationSettings2(rSettingsExportHelper, aConfigProps );
+}
+
+void SvXMLExport::_ExportConfigurationSettings2(const XMLSettingsExportHelper& rSettingsExportHelper, uno::Sequence<beans::PropertyValue>& rProps )
+{
     OUString sConfigurationSettings(GetXMLToken(XML_CONFIGURATION_SETTINGS));
-    rSettingsExportHelper.exportSettings(aProps, sConfigurationSettings);
+    rSettingsExportHelper.exportSettings(rProps, sConfigurationSettings);
 }
 
 void SvXMLExport::_ExportScripts()
@@ -1708,6 +1714,47 @@ XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()
 xmloff::OFormLayerXMLExport* SvXMLExport::CreateFormExport()
 {
     return new xmloff::OFormLayerXMLExport(*this);
+}
+
+void SvXMLExport::GetViewSettingsAndViews(uno::Sequence<beans::PropertyValue>& rProps)
+{
+    GetViewSettings(rProps);
+    uno::Reference<document::XViewDataSupplier> xViewDataSupplier(GetModel(), uno::UNO_QUERY);
+    if(xViewDataSupplier.is())
+    {
+        uno::Reference<container::XIndexAccess> xIndexAccess;
+        xViewDataSupplier->setViewData( xIndexAccess ); // make sure we get a newly created sequence
+        xIndexAccess = xViewDataSupplier->getViewData();
+        sal_Bool bAdd = sal_False;
+        uno::Any aAny;
+        if(xIndexAccess.is() && xIndexAccess->hasElements() )
+        {
+            sal_Int32 nCount = xIndexAccess->getCount();
+            for (sal_Int32 i = 0; i < nCount; i++)
+            {
+                aAny = xIndexAccess->getByIndex(i);
+                uno::Sequence<beans::PropertyValue> aProps;
+                if( aAny >>= aProps )
+                {
+                    if( aProps.getLength() > 0 )
+                    {
+                        bAdd = sal_True;
+                        break;
+                    }
+                }
+            }
+        }
+
+        if( bAdd )
+        {
+            sal_Int32 nOldLength(rProps.getLength());
+            rProps.realloc(nOldLength + 1);
+            beans::PropertyValue aProp;
+            aProp.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("Views"));
+            aProp.Value <<= xIndexAccess;
+            rProps[nOldLength] = aProp;
+        }
+    }
 }
 
 void SvXMLExport::GetViewSettings(uno::Sequence<beans::PropertyValue>&)
