@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:13:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:50:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,6 +210,7 @@ void XMLTextExportPropertySetMapper::handleSpecialItem(
     case CTF_SECTION_ENDNOTE_NUM_PREFIX:
     case CTF_SECTION_ENDNOTE_NUM_SUFFIX:
     case CTF_DEFAULT_OUTLINE_LEVEL:
+    case CTF_OLD_FLOW_WITH_TEXT:
         // There's nothing to do here!
         break;
     default:
