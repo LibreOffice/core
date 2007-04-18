@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtprmap.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:06:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 08:00:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,8 @@
 // <--
 #define CTF_PARA_ADJUSTLAST                 (XML_TEXT_CTF_START + 139)
 #define CTF_DEFAULT_OUTLINE_LEVEL           (XML_TEXT_CTF_START + 140)
-#define CTF_ISNUMBERING                     (XML_TEXT_CTF_START + 141)
+#define CTF_OLD_FLOW_WITH_TEXT              (XML_TEXT_CTF_START + 141)
+#define CTF_ISNUMBERING                     (XML_TEXT_CTF_START + 142)
 #define TEXT_PROP_MAP_TEXT 0
 #define TEXT_PROP_MAP_PARA 1
 #define TEXT_PROP_MAP_FRAME 2
