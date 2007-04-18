@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:29:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:52:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -882,10 +882,18 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
             SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
             DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
 
-            sal_Bool bValue;
-            bOk = rUnitConverter.convertBool( bValue, rValue );
-            if( bOk )
-                pSplit->SetValue( bValue );
+            if( IsXMLToken( rValue, XML_AUTO ) ||
+                 IsXMLToken( rValue, XML_TRUE ) )
+            {
+                pSplit->SetValue( sal_True );
+                bOk = sal_True;
+            }
+            else if( IsXMLToken( rValue, XML_ALWAYS ) ||
+                     IsXMLToken( rValue, XML_FALSE ) )
+            {
+                pSplit->SetValue( sal_False );
+                bOk = sal_True;
+            }
         }
         break;
 
