@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexpit.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:28:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:51:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,8 @@
 #include "xmlithlp.hxx"
 #endif
 
+#include "fmtrowsplt.hxx"
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -204,6 +206,18 @@ void SvXMLExportItemMapper::exportXML( SvXMLAttributeList& rAttrList,
 {
     if( 0 != (rEntry.nMemberId & MID_SW_FLAG_SPECIAL_ITEM_EXPORT) )
     {
+        if( rItem.ISA( SwFmtRowSplit ) )
+        {
+            OUStringBuffer aOut;
+            const SfxBoolItem* pSplit = PTR_CAST(SfxBoolItem, &rItem);
+            DBG_ASSERT( pSplit != NULL, "Wrong Which-ID" );
+            sal_uInt16 eEnum = pSplit->GetValue() ? 1 : 0;
+            rUnitConverter.convertEnum( aOut, eEnum, aXML_KeepTogetherType );
+            OUString aValue = aOut.makeStringAndClear();
+            OUString sName( rNamespaceMap.GetQNameByKey( rEntry.nNameSpace,
+                            GetXMLToken(rEntry.eLocalName) ) );
+            rAttrList.AddAttribute( sName, aValue );
+        }
         if( rItem.ISA( SvXMLAttrContainerItem ) )
         {
             SvXMLNamespaceMap *pNewNamespaceMap = 0;
