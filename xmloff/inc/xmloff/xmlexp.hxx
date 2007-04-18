@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlexp.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 13:06:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-18 07:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,6 +260,9 @@ private:
         // <office:master-styles>
     SAL_DLLPRIVATE void ImplExportContent(); // <office:body>
     virtual void SetBodyAttributes();
+    void GetViewSettingsAndViews(com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
+    void _ExportViewSettings2(const XMLSettingsExportHelper& rSettingsExportHelper,com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
+    void _ExportConfigurationSettings2(const XMLSettingsExportHelper& rSettingsExportHelper,com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& rProps);
 
 protected:
     void setExportFlags( sal_uInt16 nExportFlags ) { mnExportFlags = nExportFlags; }
@@ -273,10 +276,12 @@ protected:
 
     // This method can be overloaded to export the content of <office:view-settings>.
     // There is no default implementation.
+    // DEPRECATED - not called any longer
     virtual void _ExportViewSettings(const XMLSettingsExportHelper& rSettingsExportHelper);
 
     // This method can be overloaded to export the content of <office:configuration-settings>.
     // There is no default implementation.
+    // DEPRECATED - not called any longer
     virtual void _ExportConfigurationSettings(const XMLSettingsExportHelper& rSettingsExportHelper);
 
     // This method can be overloaded to export the content of <office:scripts>.
