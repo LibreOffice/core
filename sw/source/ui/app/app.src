@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:00:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:45:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,16 +55,12 @@ String RID_SW_NAME
 
 String STR_PRINT_MERGE_MACRO
 {
-    Text [ de ] = "Serienbriefe drucken" ;
     Text [ en-US ] = "Print form letters" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_PAGE_COUNT_MACRO
 {
-    Text [ de ] = "Änderung der Seitenanzahl" ;
     Text [ en-US ] = "Changing the page count" ;
-    Text [ x-comment ] = " ";
 };
 
  // Image-Liste ----------------------------------------------------------------
@@ -123,24 +119,8 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
     {
         SfxStyleFamilyItem
         {
-            Text [ de ] = "Absatzvorlagen" ;
             Text [ en-US ] = "Paragraph Styles" ;
-            Text [ x-comment ] = " ";
             StyleFamily = SFX_STYLE_FAMILY_PARA ;
-            FilterList [ de ] =
-            {
-                < "Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
-                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-                < "Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
-                < "Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
-                < "Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
-                < "Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
-                < "Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
-                < "Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
-                < "HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
-                < "Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
-            };
         FilterList [ en-US ] =
         {
          < "All Styles" ; SFXSTYLEBIT_ALL ; > ;
@@ -155,106 +135,43 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "HTML Styles" ; SWSTYLEBIT_HTML ; > ;
             < "Conditional Styles" ; SWSTYLEBIT_CONDCOLL ; > ;
         };
-        FilterList [ x-comment ] =
-        {
-         < "Alle; Alle Vorlagen" ; SFXSTYLEBIT_ALL ; > ;
-            < "Verw; Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-            < "Benu; Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Auto; Automatisch" ; SFXSTYLEBIT_AUTO ; > ;
-            < "Text; Textvorlagen" ; SWSTYLEBIT_TEXT ; > ;
-            < "Kapi; Kapitelvorlagen" ; SWSTYLEBIT_CHAPTER ; > ;
-            < "List; Listenvorlagen" ; SWSTYLEBIT_LIST ; > ;
-            < "Verz; Verzeichnisvorlagen" ; SWSTYLEBIT_IDX ; > ;
-            < "Vorl; Vorlagen Sonderbereiche" ; SWSTYLEBIT_EXTRA ; > ;
-            < "HTML; HTML Vorlagen" ; SWSTYLEBIT_HTML ; > ;
-            < "Bedi; Bedingte Vorlagen" ; SWSTYLEBIT_CONDCOLL ; > ;
-        };
     };
         SfxStyleFamilyItem
         {
-            Text [ de ] = "Zeichenvorlagen" ;
             Text [ en-US ] = "Character Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_CHAR ;
-            FilterList [ de ] =
-            {
-                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
-                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-            };
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
                 < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
                 < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
-        FilterList [ x-comment ] =
-        {
-            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
-            < " " ; SFXSTYLEBIT_USED ; > ;
-            < " " ; SFXSTYLEBIT_USERDEF ; > ;
-        };
-        Text [ x-comment ] = " ";
     };
         SfxStyleFamilyItem
         {
-            Text [ de ] = "Rahmenvorlagen" ;
             Text [ en-US ] = "Frame Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_FRAME ;
-            FilterList [ de ] =
-            {
-                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
-                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-            };
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
                 < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
                 < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
-        FilterList [ x-comment ] =
-        {
-            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
-            < " " ; SFXSTYLEBIT_USED ; > ;
-            < " " ; SFXSTYLEBIT_USERDEF ; > ;
-        };
-        Text [ x-comment ] = " ";
     };
         SfxStyleFamilyItem
         {
-            Text [ de ] = "Seitenvorlagen" ;
             Text [ en-US ] = "Page Styles" ;
             StyleFamily = SFX_STYLE_FAMILY_PAGE ;
-            FilterList [ de ] =
-            {
-                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
-                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-            };
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
                 < "Applied Styles" ; SFXSTYLEBIT_USED ; > ;
                 < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
-        FilterList [ x-comment ] =
-        {
-            < "Alle" ; SFXSTYLEBIT_ALL ; > ;
-            < " " ; SFXSTYLEBIT_USED ; > ;
-            < " " ; SFXSTYLEBIT_USERDEF ; > ;
-        };
-        Text [ x-comment ] = " ";
     };
         SfxStyleFamilyItem
         {
-            Text [ de ] = "Listenformatvorlagen" ;
             StyleFamily = SFX_STYLE_FAMILY_PSEUDO ;
-            FilterList [ de ] =
-            {
-                < "Alle" ; SFXSTYLEBIT_ALL ; > ;
-                < "Verwendete Vorlagen" ; SFXSTYLEBIT_USED ; > ;
-                < "Benutzervorlagen" ; SFXSTYLEBIT_USERDEF ; > ;
-            };
             FilterList [ en-US ] =
             {
                 < "All" ; SFXSTYLEBIT_ALL ; > ;
@@ -262,13 +179,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
                 < "Custom Styles" ; SFXSTYLEBIT_USERDEF ; > ;
             };
             Text [ en-US ] = "List Styles" ;
-        FilterList [ x-comment ] =
-        {
-            < " " ; SFXSTYLEBIT_ALL ; > ;
-            < " " ; SFXSTYLEBIT_USED ; > ;
-            < " " ; SFXSTYLEBIT_USERDEF ; > ;
-        };
-        Text [ x-comment ] = "��; ��? ����? ��E";
     };
     };
 
@@ -294,99 +204,74 @@ Bitmap BMP_STYLES_FAMILY_NUM_HC { File = "styfamnu_h.bmp" ; };
 
 String STR_ENV_TITLE
 {
-    Text [ de ] = "Briefumschlag" ;
     Text [ en-US ] = "Envelope" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_LAB_TITLE
 {
-    Text [ de ] = "Etiketten" ;
     Text [ en-US ] = "Labels" ;
-    Text [ x-comment ] = " ";
 };
 
  // ShortName!!!
 String STR_HUMAN_SWDOC_NAME
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_WRITER_DOCUMENT_FULLTYPE
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Textdokument" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Text Document";
-    Text [ x-comment ] = " ";
 };
 
 
 String STR_CANTOPEN
 {
-    Text [ de ] = "Kann das Dokument nicht öffnen." ;
     Text [ en-US ] = "Cannot open document." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_CANTCREATE
 {
-    Text [ de ] = "Das Dokument konnte nicht erzeugt werden." ;
     Text [ en-US ] = "Can't create document.";
-    Text [ x-comment ] = " ";
 };
 String STR_DLLNOTFOUND
 {
-    Text [ de ] = "Filter nicht gefunden." ;
     Text [ en-US ] = "Filter not found." ;
-    Text [ x-comment ] = " ";
 };
 
 
 String STR_UNBENANNT
 {
-    Text [ de ] = "Unbenannt" ;
     Text [ en-US ] = "Untitled" ;
-    Text [ x-comment ] = " ";
 };
 
 
 String STR_LOAD_GLOBAL_DOC
 {
-    Text [ de ] = "Name und Pfad des Globaldokuments" ;
     Text [ en-US ] = "Name and Path of Master Document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_LOAD_HTML_DOC
 {
-    Text [ de ] = "Name und Pfad des HTML Dokuments" ;
     Text [ en-US ] = "Name and Path of the HTML Document" ;
-    Text [ x-comment ] = " ";
 };
 
 InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Fehler beim Versenden der Nachricht." ;
     Message [ en-US ] = "Error sending mail." ;
-    Message [ x-comment ] = " ";
 };
 InfoBox MSG_ERROR_PASSWD
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Fehlerhaftes Kennwort." ;
     Message [ en-US ] = "Invalid password" ;
-    Message [ x-comment ] = " ";
 };
 
 /*
  * auskommentiert, da die Toolbox z. Zt. nicht aus der Resource
  * geladen werden kann
 Window WIN_TOOLBOX {
-HelpText [ de ] = "Die Objektleiste enth�lt, je nach Bedarf, Buttons f�r die "
        "Bearbeitung von Text, Rahmen, Grafik, Tabellen oder "
        "Numerierungen.";
 HelpText [ en-US ] = "The objectbar contains, depending on your current "
@@ -400,16 +285,12 @@ HelpText [ en-US ] = "The objectbar contains, depending on your current "
 
 String STR_FMT_STD
 {
-    Text [ de ] = "(keins)" ;
     Text [ en-US ] = "(none)" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_DOC_STAT
 {
-    Text [ de ] = "Statistik" ;
     Text [ en-US ] = "Statistics" ;
-    Text [ x-comment ] = " ";
 };
 
  // ----------------------------
@@ -418,128 +299,92 @@ String STR_DOC_STAT
 
 String STR_STATSTR_W4WREAD
 {
-    Text [ de ] = "Dokument wird importiert..." ;
     Text [ en-US ] = "Importing document..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_W4WWRITE
 {
-    Text [ de ] = "Dokument wird exportiert..." ;
     Text [ en-US ] = "Exporting document..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_SWGREAD
 {
-    Text [ de ] = "Dokument wird geladen..." ;
     Text [ en-US ] = "Loading document..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_SWGWRITE
 {
-    Text [ de ] = "Dokument wird gespeichert..." ;
     Text [ en-US ] = "Saving document..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_REFORMAT
 {
-    Text [ de ] = "Neuformatierung des Dokumentes..." ;
     Text [ en-US ] = "Repagination..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_AUTOFORMAT
 {
-    Text [ de ] = "Autoformatierung des Dokumentes..." ;
     Text [ en-US ] = "Formatting document automatically..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_IMPGRF
 {
-    Text [ de ] = "Grafik wird importiert..." ;
     Text [ en-US ] = "Importing graphics..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_SEARCH
 {
-    Text [ de ] = "Suche..." ;
     Text [ en-US ] = "Search..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_FORMAT
 {
-    Text [ de ] = "Formatiere..." ;
     Text [ en-US ] = "Formatting..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_PRINT
 {
-    Text [ de ] = "Drucke..." ;
     Text [ en-US ] = "Printing..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_LAYOUTINIT
 {
-    Text [ de ] = "Konvertiere..." ;
     Text [ en-US ] = "Converting..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_LETTER
 {
-    Text [ de ] = "Brief" ;
     Text [ en-US ] = "Letter" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_SPELL
 {
-    Text [ de ] = "Rechtschreibprüfung..." ;
     Text [ en-US ] = "Spellcheck..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_HYPHEN
 {
-    Text [ de ] = "Silbentrennung..." ;
     Text [ en-US ] = "Hyphenation..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_TOX_INSERT
 {
-    Text [ de ] = "Verzeichnis wird eingefügt..." ;
     Text [ en-US ] = "Inserting Index..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_TOX_UPDATE
 {
-    Text [ de ] = "Verzeichnis wird aktualisiert..." ;
     Text [ en-US ] = "Updating Index..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_SUMMARY
 {
-    Text [ de ] = "Abstrakt wird erstellt..." ;
     Text [ en-US ] = "Creating abstract..." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_STATSTR_SWGPRTOLENOTIFY
 {
-    Text [ de ] = "Objekte Anpassen..." ;
     Text [ en-US ] = "Adapt Objects...";
-    Text [ x-comment ] = " ";
 };
 
 
@@ -547,9 +392,7 @@ QueryBox MSG_COMCORE_ASKSEARCH
 {
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Zum Fortsetzen des Vorgangs, muss die Rückgängig-Funktion abgeschaltet werden. Wollen Sie die Rückgängig-Funktion abschalten?";
     Message [ en-US ] = "To proceed with this action, you must first turn off the \"undo\" function. Do you want to turn off the \"undo\" function?" ;
-    Message [ x-comment ] = " ";
 };
 
 Bitmap RID_GRAPHIC_REPLACEBMP
@@ -564,119 +407,88 @@ Bitmap RID_GRAPHIC_ERRORBMP
 
 String STR_TABLE_DEFNAME
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_GRAPHIC_DEFNAME
 {
-    Text[ de ] = "Grafik" ;
     Text[ en-US ] = "graphics" ;
 };
 
 String STR_OBJECT_DEFNAME
 {
-    Text [ de ] = "Objekt" ;
     Text [ en-US ] = "Object" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_FRAME_DEFNAME
 {
-    Text [ de ] = "Rahmen" ;
     Text [ en-US ] = "Frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REGION_DEFNAME
 {
-    Text [ de ] = "Bereich" ;
     Text [ en-US ] = "Section" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NUMRULE_DEFNAME
 {
-    Text [ de ] = "Nummerierung" ;
     Text [ en-US ] = "Numbering" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EMPTYPAGE
 {
-    Text [ de ] = "leere Seite" ;
     Text [ en-US ] = "blank page" ;
-    Text [ x-comment ] = " ";
 };
 
 QueryBox MSG_CLPBRD_CLEAR
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?" ;
     Message [ en-US ] = "You have a large amount of data saved in the clipboard.\nShould the clipboard contents remain available for other applications?" ;
-    Message [ x-comment ] = " ";
 };
 
 QueryBox MSG_SAVE_HTML_QUERY
 {
     BUTTONS = WB_YES_NO_CANCEL ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Die Umwandlung in das HTML-Format \nkann Informationsverlust verursachen. \nMöchten Sie das Dokument speichern?" ;
     Message [ en-US ] = "Conversion into HTML format \nmay cause information loss. \nDo you want to save the document?" ;
-    Message [ x-comment ] = " ";
 };
 QueryBox MSG_SAVEAS_HTML_QUERY
 {
     BUTTONS = WB_YES_NO;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Die Quelltextansicht kann nur angezeigt werden, wenn das Dokument im HTML-Format gespeichert wurde.\nMöchten Sie das Dokument jetzt im HTML-Format speichern?" ;
     Message [ en-US ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
 };
 String STR_ABSTRACT_TITLE
 {
-    Text [ de ] = "Abstrakt : " ;
     Text [ en-US ] = "Abstract: " ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_FDLG_TEMPLATE_BUTTON
 {
-    Text [ de ] = "Vorlage" ;
     Text [ en-US ] = "Style" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_FDLG_TEMPLATE_NAME
 {
-    Text [ de ] = "Formatvorlagen: " ;
     Text [ en-US ] = "Styles: " ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_PAGEOFFSET
 {
-    Text [ de ] = "Seitennummer: " ;
     Text [ en-US ] = "Page number: " ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGEBREAK
 {
-    Text [ de ] = "Umbruch vor neuer Seite" ;
     Text [ en-US ] = "Break before new page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_WESTERN_FONT
 {
-    Text [ de ] = "Westlicher Text: " ;
     Text [ en-US ] = "Western text: ";
 };
 String STR_CJK_FONT
 {
-    Text [ de ] = "Asiatischer Text: " ;
     Text [ en-US ] = "Asian text: ";
 };
 String STR_REDLINE_UNKNOWN_AUTHOR
 {
-    Text [ de ] = "unbekannt" ;
     Text [ en-US ] = "unknown";
 };
 
@@ -684,7 +496,6 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
 {
     BUTTONS = WB_YES_NO_CANCEL;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Diese Aktion löscht die Liste der Arbeitsschritte, die rückgängig gemacht werden können. Bisher gemachte Änderungen am Dokument bleiben erhalten, können jedoch nicht mehr rückgängig gemacht werden. Wollen Sie mit der Formatierung fortfahren?";
     Message [ en-US ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
 };
 /*QueryBox MSG_INS_MERGE_FIELDS
@@ -692,7 +503,6 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     HelpId = HID_MAIL_MERGE_INSERT_FIELDS;
     Buttons = WB_OK_CANCEL ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "M�chten Sie Namen und Adressen aus einer Datenbank verwenden?";
     Message [ en-US ] = "Do you want to use names and addresses from a database?";
 };
 */
@@ -701,7 +511,6 @@ QueryBox MSG_PRINT_AS_MERGE
     HelpId = HID_PRINT_AS_MERGE;
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_YES ;
-    Message [ de ] = "Ihr Dokument enthält Adressdatenbank-Felder. Möchten Sie einen Serienbrief drucken?";
     Message [ en-US ] = "Your document contains address database fields. Do you want to print a form letter?";
 };
 ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
@@ -722,14 +531,12 @@ ModalDialog DLG_MERGE_SOURCE_UNAVAILABLE
         Pos = MAP_APPFONT ( 12 , 6 ) ;
         Size = MAP_APPFONT ( 178 , 40 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Die Datenquelle \'%1\' wurde nicht gefunden.\nAus diesem Grund konnte keine Verbindung zur Datenquelle erstellt werden.\n\nBitte Überprüfen Sie die Verbindungseinstellungen.";
         Text [ en-US ] = "The data source \'%1\' was not found. Thus the connection to the data source could not be established.\n\nPlease check the connections settings.";
     };
     OKButton PB_MERGE_OK
     {
         Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 125 , 14 ) ;
-        Text [ de ] = "~Verbindungseinstellungen Überprüfen...";
         Text [ en-US ] = "Check Connection Settings...";
     };
     CancelButton PB_MERGE_CANCEL
@@ -742,19 +549,15 @@ WarningBox MSG_DATA_SOURCES_UNAVAILABLE
 {
     HelpId = HID_DATA_SOURCES_UNAVAILABLE;
     Buttons = WB_OK_CANCEL;
-    Message [ de ] = "Es wurde noch keine Datenquelle eingerichtet. Sie benötigen eine Datenquelle, um Daten (z.B. Namen und Adressen aus einer Datenbank) an die Felder zu liefern.";
     Message [ en-US ] = "No data source has been set up yet. You need a data source, such as a database, to supply data (for example, names and addresses) for the fields.";
 };
 
 String RID_MODULE_TOOLBOX
 {
-    Text [ de ] = "Funktionsleiste (Lesemodus)" ;
     Text [ en-US ] = "Function Bar (viewing mode)" ;
-    Text [ x-comment ] = " ";
 };
 String  STR_DONT_ASK_AGAIN
 {
-    Text [ de ] = "~Diese Warnung nicht mehr anzeigen" ;
     Text [ en-US ] = "~Do not show warning again" ;
 };
 
@@ -839,7 +642,6 @@ WarningBox MSG_DISABLE_READLINE_QUESTION
 {
     BUTTONS = WB_YES_NO;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Im aktuellen Dokument werden Änderungen aufgezeichnet aber nicht als Solche angezeigt. In umfangreichen Dokumenten, kann es dadurch zu Verzögerungen beim Bearbeiten des Dokumentes kommen. Wollen Sie die Änderungen anzeigen, um Wartezeiten zu vermeiden?";
     Message [ en-US ] = "In the current document, changes are being recorded but not shown as such. In large documents, delays can occur when the document is edited. Do you want to show the changes to avoid delays?";
 };
 
