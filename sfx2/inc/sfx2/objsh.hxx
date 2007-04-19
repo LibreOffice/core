@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objsh.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:26:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -731,6 +731,10 @@ public:
     SAL_DLLPRIVATE static SEQUENCE< OUSTRING > GetEventNames_Impl();
     SAL_DLLPRIVATE void InitBasicManager_Impl();
     SAL_DLLPRIVATE SfxObjectShell_Impl* Get_Impl() { return pImp; }
+
+    SAL_DLLPRIVATE static sal_Bool UseInteractionToHandleError(
+                    const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& xHandler,
+                    sal_uInt32 nError );
     SAL_DLLPRIVATE const SfxObjectShell_Impl* Get_Impl() const { return pImp; }
 
     SAL_DLLPRIVATE void SetCreateMode_Impl( SfxObjectCreateMode nMode );
