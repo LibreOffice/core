@@ -4,9 +4,9 @@
  *
  *  $RCSfile: olmenu.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:07:27 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:17:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,20 +45,16 @@ Menu MN_SPELL_POPUP
         {
             Identifier = MN_SPELLING ;
             HelpID = HID_LINGU_SPELLING_DLG ;
-            Text [ de ] = "~RechtschreibprÃ¼fung..." ;
-            Text [ x-comment ] = "; triple dots (...) are required now at the end of the text";
             Text [ en-US ] = "~Spellcheck..." ;
         };
         MenuItem
         {
             Identifier = MN_INSERT ;
             HelpID = HID_LINGU_ADD_WORD ;
-            Text [ de ] = "~Aufnehmen" ;
             SubMenu = Menu
             {
             };
             Text [ en-US ] = "~Add" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -66,46 +62,34 @@ Menu MN_SPELL_POPUP
             HelpID = HID_LINGU_IGNORE_WORD ;
             /* ### ACHTUNG: Neuer Text in Resource? Alle i~gnorieren : ~Ignorieren */
             /* ### ACHTUNG: Neuer Text in Resource? Alle i~gnorieren : ~Ignorieren */
-            Text [ de ] = "Alle i~gnorieren" ;
             Text [ en-US ] = "Ignore All" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_AUTOCORR ;
             HelpID = HID_LINGU_AUTOCORR ;
-            Text [ de ] = "Auto~Korrektur" ;
             SubMenu = Menu
             {
             };
             Text [ en-US ] = "AutoCorrect" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
 String STR_WORD
 {
-    Text [ de ] = "Wort ist " ;
     Text [ en-US ] = "Word is " ;
-    Text [ x-comment ] = "EM June 2003: This string appears in front of any language. E.g. \"Word is German\", \"Word is French\", \"Word is Spanish\". This is in conjunction with Spellchecking: right click foreign word which is marked as misspelled to see entry on menu that opens.";
 };
 String STR_PARAGRAPH
 {
-    Text [ de ] = "Absatz ist " ;
     Text [ en-US ] = "Paragraph is " ;
-    Text [ x-comment ] = " ";
 };
 String STR_SPELL_OK
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibprüfung ist abgeschlossen! : Die Rechtschreibpr³fung ist abgeschlossen! */
-    Text [ de ] = "Die RechtschreibprÃ¼fung ist abgeschlossen!" ;
     Text [ en-US ] = "The spellcheck is complete." ;
-    Text [ x-comment ] = " ";
 };
 String STR_HYP_OK
 {
-    Text [ de ] = "Die Silbentrennung ist abgeschlossen!" ;
     Text [ en-US ] = "Hyphenation completed" ;
-    Text [ x-comment ] = " ";
 };
 
