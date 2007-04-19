@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scstyles.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:36:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:49:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             < STR_STYLE_FILTER_USED ; SFXSTYLEBIT_USED ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
-            Text [ de ] = "Zellvorlagen" ;
             Text [ en-US ] = "Cell Styles" ;
 };
         SfxStyleFamilyItem
@@ -58,7 +57,6 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             IMPL_FAMILY ( SFX_STYLE_FAMILY_PAGE ,
             < STR_STYLE_FILTER_ALL ; SFXSTYLEBIT_ALL ; > ;
             < STR_STYLE_FILTER_USERDEF ; SFXSTYLEBIT_USERDEF ; > ; ) ;
-            Text [ de ] = "Seitenvorlagen" ;
             Text [ en-US ] = "Page Styles" ;
 };
     };
