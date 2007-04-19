@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:03:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:55:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,28 +46,24 @@ TabPage DLG_MM_LAYOUT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Layout des Adressblocks und der Briefanrede anpassen" ;
         Text[ en-US ] = "Adjust layout of address block and salutation";
     };
     FixedLine       FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Adressblock-Position" ;
         Text[ en-US ] = "Address block position";
     };
     CheckBox CB_ALIGN
     {
         Pos = MAP_APPFONT ( 6 , 40 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Am Text ausrichten" ;
         Text[ en-US ] = "Align to text body";
     };
     FixedText       FT_LEFT
     {
         Pos = MAP_APPFONT ( 15 , 54 ) ;
         Size = MAP_APPFONT ( 63 , 8 ) ;
-        Text [ de ] = "Von links" ;
         Text[ en-US ] = "From ~left";
     };
     MetricField     MF_LEFT
@@ -91,7 +87,6 @@ TabPage DLG_MM_LAYOUT_PAGE
     {
         Pos = MAP_APPFONT ( 15 , 69 ) ;
         Size = MAP_APPFONT ( 62 , 8 ) ;
-        Text [ de ] = "Von oben" ;
         Text[ en-US ] = "~From top";
     };
     MetricField     MF_TOP
@@ -115,35 +110,30 @@ TabPage DLG_MM_LAYOUT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Briefanrede-Position" ;
         Text[ en-US ] = "Salutation position";
     };
     FixedText       FT_UP
     {
         Pos = MAP_APPFONT ( 15 , 98 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
-        Text [ de ] = "Nach" ;
         Text[ en-US ] = "Move";
     };
     PushButton      MF_UP
     {
         Pos = MAP_APPFONT ( 68 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Oben" ;
         Text[ en-US ] = "~Up";
     };
     FixedText       FT_DOWN
     {
         Pos = MAP_APPFONT ( 15 , 115 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
-        Text [ de ] = "Nach" ;
         Text[ en-US ] = "Move";
     };
     PushButton      PB_DOWN
     {
         Pos = MAP_APPFONT ( 68 , 113 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Unten" ;
         Text[ en-US ] = "~Down";
     };
     Window          WIN_EXAMPLECONTAINER
@@ -157,7 +147,6 @@ TabPage DLG_MM_LAYOUT_PAGE
         Pos = MAP_APPFONT ( 161 , 185 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Right = TRUE;
-        Text [ de ] = "Ansicht" ;
         Text[ en-US ] = "~Zoom";
     };
     ListBox        LB_ZOOM
@@ -166,10 +155,6 @@ TabPage DLG_MM_LAYOUT_PAGE
         Size = MAP_APPFONT ( 50 , 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
-        StringList [de] =                \
-        {                           \
-            < "Ganze Seite" ; > ;       \
-        };                          \
         StringList [en-US]=    \
         {                           \
             < "Entire page" ; > ;        \
