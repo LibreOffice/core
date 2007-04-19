@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swcli.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:13:04 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,32 +81,13 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
 
     SwWrtShell &rSh  = ((SwView*)GetViewShell())->GetWrtShell();
 
-    // Falls der Server nicht mit dem Maástab des Containers syncronisiert
-    // ist, wird durch das Setzen und Abfragen der VisArea die Server
-    // Einstellung ermittelt.
-    // Niemals Koordinatentransformationen mit dem Rectangle vornehmen!!!
+    rSh.StartAllAction();
 
-    /*
-    Window *pWin = rSh.GetWin();
-    Rectangle aLogRect( PixelObjVisAreaToLogic( rObjRect ) );
-    if ( pEnv->GetObjAreaPixel().GetSize() != rObjRect.GetSize() )
-        // sichtbaren Ausschnitt setzen und abfragen
-        aLogRect = pIPObj->SetGetVisArea( aLogRect );
+    // the aLogRect will get the preliminary size now
+    aLogRect.SetSize( rSh.RequestObjectResize( SwRect( aLogRect ), GetObject() ) );
 
-    Size aBla( aLogRect.GetSize() );
-    aBla.Width() = Fraction( aBla.Width()  ) * GetEnv()->GetScaleWidth();
-    aBla.Height()= Fraction( aBla.Height() ) * GetEnv()->GetScaleHeight();
-    aLogRect.SetSize( aBla );
-
-    const MapMode aTmp( pIPObj->GetMapUnit() );
-    aLogRect.SetSize( pWin->LogicToLogic( aLogRect.GetSize(), aTmp, MAP_TWIP ) );
-
-    //#52207# Hat sich die Position wirklich geaendert (Umrechnungsfehler vermeiden)?
-    if ( GetObjAreaPixel().TopLeft() != rObjRect.TopLeft() )
-        aLogRect.SetPos ( pWin->PixelToLogic( rObjRect.TopLeft()));
-    else
-        aLogRect.SetPos( Point( LONG_MIN, LONG_MIN ) );*/
-
+    // the EndAllAction() call will trigger CalcAndSetScale() call,
+    // so the embedded object must get the correct size before
     if ( aLogRect.GetSize() != GetScaledObjArea().GetSize() )
     {
         // size has changed, so first change visual area of the object before we resize its view
@@ -124,8 +105,6 @@ void SwOleClient::RequestNewObjectArea( Rectangle& aLogRect )
         GetObject()->setVisualAreaSize( GetAspect(), awt::Size( aNewSize.Width(), aNewSize.Height() ) );
     }
 
-    rSh.StartAllAction();
-    rSh.RequestObjectResize( SwRect( aLogRect ), GetObject());
     rSh.EndAllAction();
 
     SwRect aFrm( rSh.GetAnyCurRect( RECT_FLY_EMBEDDED,     0, GetObject() )),
