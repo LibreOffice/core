@@ -4,9 +4,9 @@
  *
  *  $RCSfile: solvrdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:10:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModelessDialog RID_SCDLG_SOLVER
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 64 ) ;
-    Text [ de ] = "Zielwertsuche" ;
     Text [ en-US ] = "Goal Seek" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -49,9 +48,7 @@ ModelessDialog RID_SCDLG_SOLVER
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Formelzelle" ;
         Text [ en-US ] = "~Formula cell" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FORMULACELL
     {
@@ -62,21 +59,16 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_FORMULACELL
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 145 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_TARGETVAL
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Zielwert" ;
         Text [ en-US ] = "Target ~value" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TARGETVAL
     {
@@ -89,9 +81,7 @@ ModelessDialog RID_SCDLG_SOLVER
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Variable Zelle" ;
         Text [ en-US ] = "Variable ~cell" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_VARCELL
     {
@@ -102,21 +92,16 @@ ModelessDialog RID_SCDLG_SOLVER
     };
     ImageButton RB_VARCELL
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 145 , 45 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedLine FL_VARIABLES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text [ de ] = "Vorgaben" ;
         Text [ en-US ] = "Default settings" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -140,28 +125,19 @@ ModelessDialog RID_SCDLG_SOLVER
     String STR_INVALIDVAL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Unzul‰ssiger Zielwert! : Unzulıssiger Zielwert! */
-        Text [ de ] = "Unzul√§ssiger Zielwert!" ;
         Text [ en-US ] = "Invalid target value." ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALIDVAR
     {
-        Text [ de ] = "Undefinierter Name als variable Zelle!" ;
         Text [ en-US ] = "Undefined name for variable cell." ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALIDFORM
     {
-        Text [ de ] = "Undefinierter Name als Formelzelle!" ;
         Text [ en-US ] = "Undefined name as formula cell." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOFORMULA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zelle muﬂ eine Formel enthalten! : Zelle muò eine Formel enthalten! */
-        Text [ de ] = "Zelle muss eine Formel enthalten!" ;
         Text [ en-US ] = "Cell must contain a formula." ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
