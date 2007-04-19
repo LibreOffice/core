@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:36:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:01:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@ TabPage SID_REDLIN_FILTER_PAGE
 {
     String STR_FILTER
     {
-        Text [ de ] = "Filter" ;
         Text [ en-US ] = "Filter" ;
-        Text [ x-comment ] = " ";
     };
     HelpId = HID_REDLINING_FILTER_PAGE ;
     OutputSize = TRUE ;
@@ -55,11 +53,9 @@ TabPage SID_REDLIN_FILTER_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Datum" ;
         TabStop = TRUE ;
         HelpId = HID_REDLINING_FILTER_CB_DATE ;
         Text [ en-US ] = "~Date" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DATE
     {
@@ -70,15 +66,6 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 78 , 99 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "vor dem" ; Default ; > ;
-            < "seit dem" ; Default ; > ;
-            < "gleich dem" ; Default ; > ;
-            < "ungleich dem" ; Default ; > ;
-            < "zwischen dem" ; Default ; > ;
-            < "seit dem Speichern" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "earlier than" ; Default ; > ;
@@ -88,15 +75,6 @@ TabPage SID_REDLIN_FILTER_PAGE
             < "between" ; Default ; > ;
             < "since saving" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     DateField DF_DATE
     {
@@ -144,10 +122,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        QuickHelpText [ de ] = "Datum/Uhrzeit einstellen" ;
         QuickHelpText [ en-US ] = "Set Date/Time" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_DATE2
     {
@@ -155,9 +130,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 78 , 8 ) ;
         Right = TRUE ;
         Disable = TRUE ;
-        Text [ de ] = "~und dem" ;
         Text [ en-US ] = "and" ;
-        Text [ x-comment ] = " ";
     };
     DateField DF_DATE2
     {
@@ -205,20 +178,15 @@ TabPage SID_REDLIN_FILTER_PAGE
             ImageBitmap = Bitmap { File = "time.bmp" ; };
             MASKCOLOR
         };
-        QuickHelpText [ de ] = "Datum/Uhrzeit einstellen" ;
         QuickHelpText [ en-US ] = "Set Date/Time" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     CheckBox CB_AUTOR
     {
         HelpId = HID_REDLINING_FILTER_CB_AUTOR ;
         Pos = MAP_APPFONT ( 6 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Autor" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Author" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_AUTOR
     {
@@ -235,10 +203,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         HelpId = HID_REDLINING_FILTER_CB_RANGE ;
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Bereich" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Range" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_RANGE
     {
@@ -251,9 +217,7 @@ TabPage SID_REDLIN_FILTER_PAGE
     };
     String STR_ACTION
     {
-        Text [ de ] = "A~ktion" ;
         Text [ en-US ] = "A~ction" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ACTION
     {
@@ -273,21 +237,16 @@ TabPage SID_REDLIN_FILTER_PAGE
         Size = MAP_APPFONT ( 12 , 12 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
-        Text [ de ] = "..." ;
-        QuickHelpText [ de ] = "Tabellenreferenz einstellen" ;
         QuickHelpText [ en-US ] = "Set Reference" ;
         Text [ en-US ] = "..." ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_COMMENT
     {
         HelpId = HID_REDLINING_FILTER_CB_COMMENT ;
         Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Be~schreibung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Comment";
-        Text [ x-comment ] = " ";
     };
     Edit ED_COMMENT
     {
@@ -313,9 +272,7 @@ TabPage SID_REDLIN_VIEW_PAGE
     Hide = TRUE ;
     String STR_VIEW
     {
-        Text [ de ] = "Liste" ;
         Text [ en-US ] = "List" ;
-        Text [ x-comment ] = " ";
     };
     Control DG_VIEW
     {
@@ -327,79 +284,59 @@ TabPage SID_REDLIN_VIEW_PAGE
     PushButton PB_ACCEPT
     {
         HelpId = HID_REDLINING_VIEW_PB_ACCEPT ;
-        Text [ de ] = "~Akzeptieren" ;
         Pos = MAP_APPFONT ( 3 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Accept" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_REJECT
     {
         HelpId = HID_REDLINING_VIEW_PB_REJECT ;
-        Text [ de ] = "A~blehnen" ;
         Pos = MAP_APPFONT ( 69 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "~Reject" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_ACCEPTALL
     {
         HelpId = HID_REDLINING_VIEW_PB_ACCEPTALL ;
-        Text [ de ] = "Alle ak~zeptieren" ;
         Pos = MAP_APPFONT ( 141 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "A~ccept All" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_REJECTALL
     {
         HelpId = HID_REDLINING_VIEW_PB_REJECTALL ;
-        Text [ de ] = "Alle ab~lehnen" ;
         Pos = MAP_APPFONT ( 207 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "R~eject All" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton PB_UNDO
     {
         HelpId = HID_REDLINING_VIEW_PB_UNDO ;
-        Text [ de ] = "~Rückgängig" ;
         Hide = TRUE;
         Pos  = MAP_APPFONT ( 279 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Text [ en-US ] = "Undo";
-        Text [ x-comment ] = " ";
     };
     String STR_TITLE1
     {
-        Text [ de ] = "Aktion" ;
         Text [ en-US ] = "Action" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TITLE2
     {
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TITLE3
     {
-        Text [ de ] = "Autor" ;
         Text [ en-US ] = "Author" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TITLE4
     {
-        Text [ de ] = "Datum" ;
         Text [ en-US ] = "Date" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TITLE5
     {
-        Text [ de ] = "Beschreibung" ;
         Text [ en-US ] = "Comment" ;
-        Text [ x-comment ] = " ";
     };
 };
 
