@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdict.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:58:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,17 +49,13 @@ ModalDialog RID_SFXDLG_NEWDICT
     Moveable = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch anlegen : Benutzerw÷rterbuch anlegen */
-    Text [ de ] = "BenutzerwÃ¶rterbuch anlegen" ;
     Text [ en-US ] = "New Dictionary" ;
-    Text [ x-comment ] = " ";
     FixedText FT_DICTNAME
     {
         Pos = MAP_APPFONT ( 11 , 15 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
         LeftLabel = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_DICTNAME
     {
@@ -72,10 +68,8 @@ ModalDialog RID_SFXDLG_NEWDICT
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Sprache" ;
         Text [ en-US ] = "~Language" ;
         LeftLabel = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DICTLANG
     {
@@ -88,9 +82,7 @@ ModalDialog RID_SFXDLG_NEWDICT
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "~Ausnahme (-)" ;
         Text [ en-US ] = "~Exception (-)" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GB_NEWDICT
     {
@@ -98,9 +90,7 @@ ModalDialog RID_SFXDLG_NEWDICT
         Size = MAP_APPFONT ( 145 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
         /* ### ACHTUNG: Neuer Text in Resource? Wörterbuch : W÷rterbuch */
-        Text [ de ] = "WÃ¶rterbuch" ;
         Text [ en-US ] = "Dictionary" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_NEWDICT_OK
     {
@@ -131,7 +121,6 @@ ModalDialog RID_SFXDLG_EDITDICT
 
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerwörterbuch bearbeiten : Benutzerw÷rterbuch bearbeiten */
-    Text [ de ] = "BenutzerwÃ¶rterbuch bearbeiten" ;
     Text [ en-US ] = "Edit Custom Dictionary" ;
 
     Moveable = TRUE ;
@@ -139,9 +128,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         Pos = MAP_APPFONT ( 12 , 10 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text [ de ] = "~Buch" ;
         Text [ en-US ] = "~Book" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ALLDICTS
     {
@@ -154,9 +141,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 86 , 10 ) ;
-        Text [ de ] = "S~prache" ;
         Text [ en-US ] = "~Language" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DICTLANG
     {
@@ -177,9 +162,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         Pos = MAP_APPFONT ( 13 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Wort" ;
         Text [ en-US ] = "~Word";
-        Text [ x-comment ] = " ";
     };
     Edit ED_WORD
     {
@@ -192,9 +175,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         Pos = MAP_APPFONT ( 84 , 46 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Vorschlag" ;
         Text [ en-US ] = "Replace ~By:";
-        Text [ x-comment ] = " ";
     };
 
     Edit ED_REPLACE
@@ -209,19 +190,15 @@ ModalDialog RID_SFXDLG_EDITDICT
     {
         Pos = MAP_APPFONT ( 209 , 56 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
-        Text [ de ] = "~Neu" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~New" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_DELETE_REPLACE
     {
         Pos = MAP_APPFONT ( 209 , 71 ) ;
         Size = MAP_APPFONT ( 55 , 12 ) ;
-        Text [ de ] = "~LÃ¶schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Delete" ;
-        Text [ x-comment ] = " ";
     };
     Control TLB_REPLACE
     {
@@ -233,9 +210,7 @@ ModalDialog RID_SFXDLG_EDITDICT
     };
     String STR_MODIFY
     {
-        Text [ de ] = "~Ersetzen" ;
         Text [ en-US ] = "~Replace" ;
-        Text [ x-comment ] = " ";
     };
 
 
@@ -253,19 +228,14 @@ ModalDialog RID_SFXDLG_EDITDICT
 
         /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
         /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
-        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_OPT_DOUBLE_DICTS
 {
-    Text [ de ] = "Der angegebene Name ist schon vorhanden.\nBitte geben Sie einen neuen Namen ein." ;
     Text [ en-US ] = "The specified name already exists.\nPlease enter a new name." ;
-    Text [ x-comment ] = " ";
 };
  // RID_SFXQB_SET_LANGUAGE ------------------------------------------------
 QueryBox RID_SFXQB_SET_LANGUAGE
@@ -276,9 +246,7 @@ QueryBox RID_SFXQB_SET_LANGUAGE
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : Möchten Sie die Sprache des Wörterbuches ''%1'' ändern? */
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
     /* ### ACHTUNG: Neuer Text in Resource? Möchten Sie die Sprache des Wörterbuches '%1' ändern? : M÷chten Sie die Sprache des W÷rterbuches '%1' õndern? */
-    Message [ de ] = "MÃ¶chten Sie die Sprache des WÃ¶rterbuches '%1' Ã¤ndern?" ;
     Message [ en-US ] = "Do you want to change the '%1' dictionary language?" ;
-    Message [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
