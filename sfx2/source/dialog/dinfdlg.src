@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:32:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:09:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@
  // TP_DOCINFODESC --------------------------------------------------------
 String STR_SFX_NEWOFFICEDOC
 {
-    Text [ de ] = "%PRODUCTNAME Dokument" ;
     Text [ en-US ] = "%PRODUCTNAME document" ;
 };
 
@@ -57,9 +56,7 @@ TabPage TP_DOCINFODESC
         Pos = MAP_APPFONT ( 6 , 7 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "~Titel" ;
         Text [ en-US ] = "~Title" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TITLE
     {
@@ -74,9 +71,7 @@ TabPage TP_DOCINFODESC
         Pos = MAP_APPFONT ( 6 , 22 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "Th~ema" ;
         Text [ en-US ] = "~Subject" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_THEMA
     {
@@ -91,9 +86,7 @@ TabPage TP_DOCINFODESC
         Pos = MAP_APPFONT ( 6 , 37 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "~Schlüsselwörter" ;
         Text [ en-US ] = "~Keywords" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_KEYWORDS
     {
@@ -108,9 +101,7 @@ TabPage TP_DOCINFODESC
         Pos = MAP_APPFONT ( 6 , 52 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "~Kommentar" ;
         Text [ en-US ] = "~Comments" ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit ED_COMMENT
     {
@@ -150,7 +141,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 37 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Typ:" ;
         Text [ en-US ] = "Type:" ;
     };
     FixedText FT_FILE_SHOW_TYP
@@ -162,14 +152,12 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 163 , 37 ) ;
         Size = MAP_APPFONT ( 91 , RSC_CD_CHECKBOX_HEIGHT ) ;
-        Text [ de ] = "~Schreibgeschützt" ;
         Text [ en-US ] = "~Read-only" ;
     };
     FixedText FT_FILE
     {
         Pos = MAP_APPFONT ( 6 , 49 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Ort:" ;
         Text [ en-US ] = "Location:" ;
     };
     FixedText FT_FILE_VAL
@@ -181,7 +169,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 61 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Größe:" ;
         Text [ en-US ] = "Size:" ;
     };
     FixedText FT_FILE_SHOW_SIZE
@@ -198,7 +185,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 80 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Erstellt am:" ;
         Text [ en-US ] = "Created:" ;
     };
     FixedText FT_CREATE_VAL
@@ -210,7 +196,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Geändert am:" ;
         Text [ en-US ] = "Modified:" ;
     };
     FixedText FT_CHANGE_VAL
@@ -222,7 +207,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 104 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Digital signiert:" ;
         Text [ en-US ] = "Digitally signed:" ;
     };
     FixedText FT_SIGNED_VAL
@@ -234,19 +218,16 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 204 , 101 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "Digitale ~Signatur...";
         Text [ en-US ] = "Digital Signature...";
     };
     String STR_MULTSIGNED
     {
-        Text [ de ] = "Mehrfach signiertes Dokument" ;
         Text [ en-US ] = "Multiply signed document" ;
     };
     FixedText FT_PRINT
     {
         Pos = MAP_APPFONT ( 6 , 116 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Letzter Druck:" ;
         Text [ en-US ] = "Last printed:" ;
         };
     FixedText FT_PRINT_VAL
@@ -258,7 +239,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 128 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Gesamtbearbeitungszeit:" ;
         Text [ en-US ] = "Total editing time:" ;
         };
     FixedText FT_TIMELOG_VAL
@@ -270,7 +250,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 6 , 140 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Version:" ;
         Text [ en-US ] = "Revision number:" ;
         };
     FixedText FT_DOCNO_VAL
@@ -283,7 +262,6 @@ TabPage TP_DOCINFODOC
         Pos = MAP_APPFONT ( 204 , 150 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Hide = TRUE;
-        Text [ de ] = "~Löschen";
         Text [ en-US ] = "~Delete";
         };
     CheckBox CB_USE_USERDATA
@@ -291,7 +269,6 @@ TabPage TP_DOCINFODOC
         Pos = MAP_APPFONT ( 6 , 152 ) ;
         Size = MAP_APPFONT ( 192 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Hide = TRUE;
-        Text [ de ] = "~Benutzerdaten verwenden" ;
         Text [ en-US ] = "~Apply user data";
         };
     FixedLine FL_FILE_3
@@ -303,7 +280,6 @@ TabPage TP_DOCINFODOC
     {
         Pos = MAP_APPFONT ( 5 , 172 ) ;
         Size = MAP_APPFONT ( 45 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Vorlage:" ;
         Text [ en-US ] = "Template:" ;
         };
     FixedText FT_TEMPL_VAL
@@ -313,9 +289,7 @@ TabPage TP_DOCINFODOC
     };
     String STR_UNKNOWNSIZE
     {
-        Text [ de ] = "unbekannt" ;
         Text [ en-US ] = "unknown" ;
-        Text [ x-comment ] = " ";
         };
 };
 
@@ -382,7 +356,6 @@ TabPage TP_DOCINFOUSER
     {
         Pos = MAP_APPFONT ( 194 , 165 ) ;
         Size = MAP_APPFONT ( 60 , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "~Infofelder..." ;
         Text [ en-US ] = "~Info fields..." ;
     };
 };
@@ -399,7 +372,6 @@ TabPage TP_DOCINFORELOAD
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL_0 , ROW_0 ) ;
         Size = MAP_APPFONT( COL_7 - COL_1 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
-        Text [ de ] = "Keine automatische Aktualisierung" ;
         Text [ en-US ] = "Do not refresh automatically" ;
     };
 
@@ -408,14 +380,12 @@ TabPage TP_DOCINFORELOAD
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL_0, ROW_1 ) ;
         Size = MAP_APPFONT( COL_7 - COL_1, RSC_CD_RADIOBUTTON_HEIGHT ) ;
-        Text [ de ] = "Dieses Dokument aktualisieren" ;
         Text [ en-US ] = "Refresh this document" ;
     };
     FixedText FT_EVERY
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_2 ) ;
         Size = MAP_APPFONT ( WIDTH_FT1 , RSC_CD_RADIOBUTTON_HEIGHT ) ;
-        Text [ de ] = "alle" ;
         Text [ en-US ] = "every" ;
     };
     NumericField ED_RELOAD
@@ -435,7 +405,6 @@ TabPage TP_DOCINFORELOAD
     {
         Pos = MAP_APPFONT ( COL_4 , ROW_2 ) ;
         Size = MAP_APPFONT ( COL_7 - COL_4 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Sekunden" ;
         Text [ en-US ] = "seconds" ;
     };
 
@@ -444,14 +413,12 @@ TabPage TP_DOCINFORELOAD
         TabStop = TRUE ;
         Pos = MAP_APPFONT( COL_0, ROW_3 ) ;
         Size = MAP_APPFONT( COL_7 - COL_1, RSC_CD_RADIOBUTTON_HEIGHT ) ;
-        Text [ de ] = "Von diesem Dokument weiterleiten" ;
         Text [ en-US ] = "Redirect from this document" ;
     };
     FixedText FT_AFTER
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_4 ) ;
         Size = MAP_APPFONT ( WIDTH_FT1 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "nach" ;
         Text [ en-US ] = "after" ;
     };
     NumericField ED_FORWARD
@@ -471,14 +438,12 @@ TabPage TP_DOCINFORELOAD
     {
         Pos = MAP_APPFONT ( COL_4 , ROW_4 ) ;
         Size = MAP_APPFONT ( COL_7 - COL_4 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Sekunden" ;
         Text [ en-US ] = "seconds" ;
     };
     FixedText FT_URL
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_5 ) ;
         Size = MAP_APPFONT ( WIDTH_FT1 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "an URL" ;
         Text [ en-US ] = "to URL" ;
     };
     Edit ED_URL
@@ -497,7 +462,6 @@ TabPage TP_DOCINFORELOAD
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_6 ) ;
         Size = MAP_APPFONT ( WIDTH_FT1 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "an Frame" ;
         Text [ en-US ] = "to frame" ;
     };
     ComboBox CB_FRAME
@@ -508,7 +472,6 @@ TabPage TP_DOCINFORELOAD
     };
     String STR_FORWARD_ERRMSSG
     {
-        Text [ de ] = "Wenn Sie die Option \"%PLACEHOLDER%\" wählen, müssen Sie eine URL angeben." ;
         Text [ en-US ] = "If you select the option \"%PLACEHOLDER%\", you must enter a URL." ;
     };
 
@@ -521,7 +484,6 @@ TabDialog SID_DOCINFO
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
-    Text [ de ] = "Eigenschaften von " ;
     Text [ en-US ] = "Properties of " ;
     TabControl 1
     {
@@ -531,25 +493,21 @@ TabDialog SID_DOCINFO
             PageItem
             {
                 Identifier = TP_DOCINFODOC ;
-                Text [ de ] = "Allgemein" ;
                 Text [ en-US ] = "General" ;
             };
             PageItem
             {
                 Identifier = TP_DOCINFODESC ;
-                Text [ de ] = "Beschreibung" ;
                 Text [ en-US ] = "Description" ;
             };
             PageItem
             {
                 Identifier = TP_DOCINFOUSER ;
-                Text [ de ] = "Benutzer" ;
                 Text [ en-US ] = "User Defined" ;
             };
             PageItem
             {
                 Identifier = TP_DOCINFORELOAD ;
-                Text [ de ] = "Internet" ;
                 Text [ en-US ] = "Internet" ;
             };
         };
