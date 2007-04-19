@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldui.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:08:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,7 @@
  --------------------------------------------------------------------*/
 String STR_FLD_EDIT_DLG
 {
-    Text [ de ] = "Feldbefehl bearbeiten" ;
     Text [ en-US ] = "Edit Fields" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Strings fuer die Types
@@ -53,90 +51,62 @@ String STR_FLD_EDIT_DLG
  //
 String STR_DATEFLD
 {
-    Text [ de ] = "Datum" ;
     Text [ en-US ] = "Date" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TIMEFLD
 {
-    Text [ de ] = "Uhrzeit" ;
     Text [ en-US ] = "Time" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILENAMEFLD
 {
-    Text [ de ] = "Dateiname" ;
     Text [ en-US ] = "File name" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DBNAMEFLD
 {
-    Text [ de ] = "Datenbankname" ;
     Text [ en-US ] = "Database Name" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAPTERFLD
 {
-    Text [ de ] = "Kapitel" ;
     Text [ en-US ] = "Chapter" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGENUMBERFLD
 {
-    Text [ de ] = "Seitennummer" ;
     Text [ en-US ] = "Page numbers" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DOCSTATFLD
 {
-    Text [ de ] = "Statistik" ;
     Text [ en-US ] = "Statistics" ;
-    Text [ x-comment ] = " ";
 };
 String STR_AUTHORFLD
 {
-    Text [ de ] = "Benutzer" ;
     Text [ en-US ] = "Author" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TEMPLNAMEFLD
 {
-    Text [ de ] = "Dokumentvorlage" ;
     Text [ en-US ] = "Templates" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EXTUSERFLD
 {
-    Text [ de ] = "Absender" ;
     Text [ en-US ] = "Sender" ;
-    Text [ x-comment ] = " ";
 };
  //
  // Bereich Funktionen
  //
 String STR_SETFLD
 {
-    Text [ de ] = "Variable setzen" ;
     Text [ en-US ] = "Set variable" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GETFLD
 {
-    Text [ de ] = "Variable anzeigen" ;
     Text [ en-US ] = "Show variable" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FORMELFLD
 {
-    Text [ de ] = "Formel einfügen" ;
     Text [ en-US ] = "Insert Formula" ;
-    Text [ x-comment ] = " ";
 };
 String STR_INPUTFLD
 {
-    Text [ de ] = "Eingabefeld" ;
     Text [ en-US ] = "Input field" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SETINPUTFLD
 {
@@ -145,72 +115,50 @@ String STR_SETINPUTFLD
     /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
     /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
     /* ### ACHTUNG: Neuer Text in Resource? Eingabefeld (Variable) : Eingabefeld (Varibale) */
-    Text [ de ] = "Eingabefeld (Variable)" ;
     Text [ en-US ] = "Input field (variable)" ;
-    Text [ x-comment ] = " ";
 };
 String STR_USRINPUTFLD
 {
-    Text [ de ] = "Eingabefeld (Benutzer)" ;
     Text [ en-US ] = "Input field (user)" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONDTXTFLD
 {
-    Text [ de ] = "Bedingter Text" ;
     Text [ en-US ] = "Conditional text" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DDEFLD
 {
-    Text [ de ] = "DDE-Feld" ;
     Text [ en-US ] = "DDE field" ;
-    Text [ x-comment ] = " ";
 };
 String STR_MACROFLD
 {
-    Text [ de ] = "Makro ausführen" ;
     Text [ en-US ] = "Execute macro" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SEQFLD
 {
-    Text [ de ] = "Nummernkreis" ;
     Text [ en-US ] = "Number range" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SETREFPAGEFLD
 {
-    Text [ de ] = "Seitenvariable setzen" ;
     Text [ en-US ] = "Set page variable" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GETREFPAGEFLD
 {
-    Text [ de ] = "Seitenvariable anzeigen" ;
     Text [ en-US ] = "Show page variable" ;
-    Text [ x-comment ] = " ";
 };
 String STR_INTERNETFLD
 {
-    Text [ de ] = "URL laden" ;
     Text [ en-US ] = "Load URL" ;
-    Text [ x-comment ] = " ";
 };
 String STR_JUMPEDITFLD
 {
-    Text [ de ] = "Plat~zhalter" ;
     Text [ en-US ] = "Placeholder" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COMBINED_CHARS
 {
-    Text [ de ] = "Zeichen kombinieren" ;
     Text [ en-US ] = "Combine characters";
 };
 String STR_DROPDOWN
 {
-    Text [ de ] = "Eingabeliste" ;
     Text [ en-US ] = "Input list" ;
 };
  //
@@ -218,188 +166,132 @@ String STR_DROPDOWN
  //
 String STR_SETREFFLD
 {
-    Text [ de ] = "Referenz setzen" ;
     Text [ en-US ] = "Set Reference" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GETREFFLD
 {
-    Text [ de ] = "Referenz einfügen" ;
     Text [ en-US ] = "Insert Reference" ;
-    Text [ x-comment ] = " ";
 };
  //
  //  Bereich Datenbank
  //
 String STR_DBFLD
 {
-    Text [ de ] = "Seriendruck-Feld" ;
     Text [ en-US ] = "Mail merge fields" ;
-    Text [ x-comment ] = "EM April 2003: German should be \"Seriendruck-Felder\"";
 };
 String STR_DBNEXTSETFLD
 {
-    Text [ de ] = "Nächster Datensatz" ;
     Text [ en-US ] = "Next record" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DBNUMSETFLD
 {
-    Text [ de ] = "Beliebiger Datensatz" ;
     Text [ en-US ] = "Any record" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DBSETNUMBERFLD
 {
-    Text [ de ] = "Datensatznummer" ;
     Text [ en-US ] = "Record number" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PREVPAGEFLD
 {
-    Text [ de ] = "Vorherige Seite" ;
     Text [ en-US ] = "Previous page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NEXTPAGEFLD
 {
-    Text [ de ] = "Nächste Seite" ;
     Text [ en-US ] = "Next page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HIDDENTXTFLD
 {
-    Text [ de ] = "Versteckter Text" ;
     Text [ en-US ] = "Hidden text" ;
-    Text [ x-comment ] = " ";
 };
  //
  //  Bereich Benutzerfelder
  //
 String STR_USERFLD
 {
-    Text [ de ] = "Benutzerfeld" ;
     Text [ en-US ] = "User Field" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POSTITFLD
 {
-    Text [ de ] = "Notiz" ;
     Text [ en-US ] = "Note" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SCRIPTFLD
 {
-    Text [ de ] = "Script" ;
     Text [ en-US ] = "Script" ;
-    Text [ x-comment ] = " ";
 };
 String STR_AUTHORITY
 {
-    Text [ de ] = "Eintrag Literaturverzeichnis" ;
     Text [ en-US ] = "Bibliography entry";
-    Text [ x-comment ] = " ";
 };
 String STR_HIDDENPARAFLD
 {
-    Text [ de ] = "Versteckter Absatz" ;
     Text [ en-US ] = "Hidden Paragraph" ;
-    Text [ x-comment ] = " ";
 };
  //
  // Bereich DokumentInfo
  //
 String STR_DOCINFOFLD
 {
-    Text [ de ] = "Dokumentinfo" ;
     Text [ en-US ] = "DocInformation" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: SubCmd-Strings
  --------------------------------------------------------------------*/
 String FLD_DATE_STD
 {
-    Text [ de ] = "Datum" ;
     Text [ en-US ] = "Date";
-    Text [ x-comment ] = " ";
 };
 String FLD_DATE_FIX
 {
-    Text [ de ] = "Datum (fix)" ;
     Text [ en-US ] = "Date (fixed)" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_TIME_STD
 {
-    Text [ de ] = "Uhrzeit" ;
     Text [ en-US ] = "Time";
-    Text [ x-comment ] = " ";
 };
 String FLD_TIME_FIX
 {
-    Text [ de ] = "Uhrzeit (fix)" ;
     Text [ en-US ] = "Time (fixed)" ;
-    Text [ x-comment ] = " ";
 };
  //
  //  SubCmd Statistik
  //
 String FLD_STAT_TABLE
 {
-    Text [ de ] = "Tabellen" ;
     Text [ en-US ] = "Tables" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_STAT_CHAR
 {
-    Text [ de ] = "Zeichen" ;
     Text [ en-US ] = "Characters" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_STAT_WORD
 {
-    Text [ de ] = "Wörter" ;
     Text [ en-US ] = "Words" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_STAT_PARA
 {
-    Text [ de ] = "Absätze" ;
     Text [ en-US ] = "Paragraphs" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_STAT_GRF
 {
-    Text [ de ] = "Grafiken" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_STAT_OBJ
 {
-    Text [ de ] = "Objekte" ;
     Text [ en-US ] = "Objects" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_STAT_PAGE
 {
-    Text [ de ] = "Seiten" ;
     Text [ en-US ] = "Pages" ;
-    Text [ x-comment ] = " ";
 };
  //  SubCmd DDETypen
  //
 String FMT_DDE_HOT
 {
-    Text [ de ] = "DDE automatisch" ;
     Text [ en-US ] = "DDE automatic" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_DDE_NORMAL
 {
-    Text [ de ] = "DDE manuell" ;
     Text [ en-US ] = "DDE manual" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_INPUT_TEXT
 {
@@ -410,104 +302,71 @@ String FLD_INPUT_TEXT
  --------------------------------------------------------------------*/
 String FLD_EU_FIRMA
 {
-    Text [ de ] = "Firma" ;
     Text [ en-US ] = "Company" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_VORNAME
 {
-    Text [ de ] = "Vorname" ;
     Text [ en-US ] = "First Name" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_NAME
 {
-    Text [ de ] = "Nachname" ;
     Text [ en-US ] = "Last Name" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_ABK
 {
-    Text [ de ] = "Kürzel" ;
     Text [ en-US ] = "Initials" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_STRASSE
 {
-    Text [ de ] = "Straße" ;
     Text [ en-US ] = "Street" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_LAND
 {
-    Text [ de ] = "Land" ;
     Text [ en-US ] = "Country" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_PLZ
 {
-    Text [ de ] = "PLZ" ;
     Text [ en-US ] = "Zip code" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_ORT
 {
-    Text [ de ] = "Ort" ;
     Text [ en-US ] = "City" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_TITEL
 {
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Title" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_POS
 {
-    Text [ de ] = "Position" ;
     Text [ en-US ] = "Position" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_TELPRIV
 {
-    Text [ de ] = "Tel. (Privat)" ;
     Text [ en-US ] = "Tel. (Home)" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_TELFIRMA
 {
-    Text [ de ] = "Tel. (Geschäft)" ;
     Text [ en-US ] = "Tel. (Work)" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_FAX
 {
-    Text [ de ] = "FAX" ;
     Text [ en-US ] = "FAX" ;
 };
 String FLD_EU_EMAIL
 {
-    Text [ de ] = "E-Mail" ;
     Text [ en-US ] = "E-mail" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_EU_STATE
 {
-    Text [ de ] = "Staat" ;
     Text [ en-US ] = "State" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_PAGEREF_OFF
 {
-    Text [ de ] = "aus" ;
     Text [ en-US ] = "off" ;
-    Text [ x-comment ] = " ";
 };
 String FLD_PAGEREF_ON
 {
-    Text [ de ] = "an" ;
     Text [ en-US ] = "on" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Pfadname
@@ -515,66 +374,47 @@ String FLD_PAGEREF_ON
  // Formate FileName
 String FMT_FF_NAME
 {
-    Text [ de ] = "Dateiname" ;
     Text [ en-US ] = "File name" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_FF_NAME_NOEXT
 {
-    Text [ de ] = "Dateiname ohne Erweiterung" ;
     Text [ en-US ] = "File name without extension" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_FF_PATHNAME
 {
-    Text [ de ] = "Pfad/Dateiname" ;
     Text [ en-US ] = "Path/File name" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_FF_PATH
 {
-    Text [ de ] = "Pfad" ;
     Text [ en-US ] = "Path" ;
 };
 String FMT_FF_UI_NAME
 {
-    Text [ de ] = "Vorlage" ;
     Text [ en-US ] = "Style" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_FF_UI_RANGE
 {
-    Text [ de ] = "Bereich" ;
     Text [ en-US ] = "Category" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Format Kapitel
  --------------------------------------------------------------------*/
 String FMT_CHAPTER_NAME
 {
-    Text [ de ] = "Kapitelname" ;
     Text [ en-US ] = "Chapter name" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_CHAPTER_NO
 {
-    Text [ de ] = "Kapitelnummer" ;
     Text [ en-US ] = "Chapter number" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_CHAPTER_NO_NOSEPARATOR
 {
-    Text [ de ] = "Kapitelnummer ohne Trennzeichen" ;
     Text [ en-US ] = "Chapter number without separator" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_CHAPTER_NAMENO
 {
     /* ### ACHTUNG: Neuer Text in Resource? Kapitelnummer und Name : Nummer und Name */
-    Text [ de ] = "Kapitelnummer und Name" ;
     Text [ en-US ] = "Chapter number and name" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Formate
@@ -597,204 +437,142 @@ String FMT_NUM_SABC_N
 };
 String FMT_NUM_ROMAN
 {
-    Text [ de ] = "Römisch (I II III)" ;
     Text [ en-US ] = "Roman (I II III)" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_NUM_SROMAN
 {
-    Text [ de ] = "Römisch (i ii iii)" ;
     Text [ en-US ] = "Roman (i ii iii)" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_NUM_ARABIC
 {
-    Text [ de ] = "Arabisch (1 2 3)" ;
     Text [ en-US ] = "Arabic (1 2 3)" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_NUM_PAGEDESC
 {
-    Text [ de ] = "Wie Seitenvorlage" ;
     Text [ en-US ] = "As Page Style" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_NUM_PAGESPECIAL
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Author
  --------------------------------------------------------------------*/
 String FMT_AUTHOR_NAME
 {
-    Text [ de ] = "Name" ;
     Text [ en-US ] = "Name" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_AUTHOR_SCUT
 {
-    Text [ de ] = "Kürzel" ;
     Text [ en-US ] = "Initials" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   Varibale setzen
  --------------------------------------------------------------------*/
 String FMT_SETVAR_SYS
 {
-    Text [ de ] = "System" ;
     Text [ en-US ] = "System" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_SETVAR_TEXT
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_GETVAR_NAME
 {
-    Text [ de ] = "Name" ;
     Text [ en-US ] = "Name" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_GETVAR_TEXT
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_USERVAR_CMD
 {
-    Text [ de ] = "Formel" ;
     Text [ en-US ] = "Formula" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_USERVAR_TEXT
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_DBFLD_DB
 {
-    Text [ de ] = "Datenbank" ;
     Text [ en-US ] = "Database" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_DBFLD_SYS
 {
-    Text [ de ] = "System" ;
     Text [ en-US ] = "System" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Ablagefelder
  --------------------------------------------------------------------*/
 String FMT_REG_AUTHOR
 {
-    Text [ de ] = "Autor" ;
     Text [ en-US ] = "Author" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REG_TIME
 {
-    Text [ de ] = "Uhrzeit" ;
     Text [ en-US ] = "Time" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REG_DATE
 {
-    Text [ de ] = "Datum" ;
     Text [ en-US ] = "Date" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Formate Referenzen
  --------------------------------------------------------------------*/
 String FMT_REF_TEXT
 {
-    Text [ de ] = "Referenztext" ;
     Text [ en-US ] = "Reference" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REF_PAGE
 {
-    Text [ de ] = "Seite" ;
     Text [ en-US ] = "Page" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REF_CHAPTER
 {
-    Text [ de ] = "Kapitel" ;
     Text [ en-US ] = "Chapter" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REF_UPDOWN
 {
-    Text [ de ] = "Oberhalb/Unterhalb" ;
     Text [ en-US ] = "Above/Below" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REF_PAGE_PGDSC
 {
-    Text [ de ] = "Wie Seitenvorlage" ;
     Text [ en-US ] = "As Page Style" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REF_ONLYNUMBER
 {
-    Text [ de ] = "Kategorie und Nummer" ;
     Text [ en-US ] = "Category and Number" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REF_ONLYCAPTION
 {
-    Text [ de ] = "Beschriftungstext" ;
     Text [ en-US ] = "Caption Text" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_REF_ONLYSEQNO
 {
-    Text [ de ] = "Nummer" ;
     Text [ en-US ] = "Numbering";
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Platzhalter
  --------------------------------------------------------------------*/
 String FMT_MARK_TEXT
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_MARK_TABLE
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_MARK_FRAME
 {
-    Text [ de ] = "Rahmen" ;
     Text [ en-US ] = "Frame" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_MARK_GRAFIC
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String FMT_MARK_OLE
 {
-    Text [ de ] = "Objekt" ;
     Text [ en-US ] = "Object" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung: Nur-Text
@@ -808,100 +586,70 @@ String FMT_TEXT
  --------------------------------------------------------------------*/
 String STR_ALL
 {
-    Text [ de ] = "Alle" ;
     Text [ en-US ] = "All" ;
-    Text [ x-comment ] = " ";
 };
 String STR_INSERT
 {
-    Text [ de ] = "Einfügen" ;
     Text [ en-US ] = "Insert" ;
-    Text [ x-comment ] = " ";
 };
 /*--------------------------------------------------------------------
     Beschreibung:   AustauschStrings fuer Edit/NameFT
  --------------------------------------------------------------------*/
 String STR_COND
 {
-    Text [ de ] = "Bedin~gung" ;
     Text [ en-US ] = "~Condition" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TEXT
 {
-    Text [ de ] = "Dann, Sonst" ;
     Text [ en-US ] = "Then, Else" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DDE_CMD
 {
-    Text [ de ] = "DDE Anweisung" ;
     Text [ en-US ] = "DDE Statement" ;
-    Text [ x-comment ] = " ";
 };
 String STR_INSTEXT
 {
-    Text [ de ] = "~Versteckter Text" ;
     Text [ en-US ] = "Hidden t~ext" ;
 };
 String STR_MACNAME
 {
-    Text [ de ] = "~Makroname" ;
     Text [ en-US ] = "~Macro name" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PROMPT
 {
-    Text [ de ] = "H~inweis" ;
     Text [ en-US ] = "~Reference" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COMBCHRS_FT
 {
-    Text [ de ] = "Ze~ichen" ;
     Text [ en-US ] = "Ch~aracters";
 };
 String STR_SETNO
 {
-    Text [ de ] = "Satznummer" ;
     Text [ en-US ] = "Record number" ;
-    Text [ x-comment ] = " ";
 };
 String STR_OFFSET
 {
-    Text [ de ] = "Ko~rrektur" ;
     Text [ en-US ] = "O~ffset" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VALUE
 {
-    Text [ de ] = "~Wert" ;
     Text [ en-US ] = "Value" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FORMULA
 {
-    Text [ de ] = "Formel" ;
     Text [ en-US ] = "Formula" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LEVEL
 {
-    Text [ de ] = "Ebene" ;
     Text [ en-US ] = "Layer " ;
-    Text [ x-comment ] = " ";
 };
 String STR_URLPROMPT
 {
-    Text [ de ] = "~URL" ;
     Text [ en-US ] = "~URL" ;
-    Text [ x-comment ] = " ";
 };
 String STR_ALL_DATABASE
 {
-    Text [ de ] = "<Alle>" ;
     Text [ en-US ] = "<All>" ;
-    Text [ x-comment ] = " ";
 };
 ImageButton BTN_FLDEDT_PREV
 {
@@ -921,13 +669,11 @@ ImageButton BTN_FLDEDT_NEXT
 };
 PushButton PB_FLDEDT_ADDRESS
 {
-    Text [ de ] = "Bearbeiten" ;
     Pos = MAP_APPFONT ( 294 , 100 ) ;
     Size = MAP_APPFONT ( 24 , 14 ) ;
     TabStop = TRUE ;
     Hide = TRUE ;
     Text [ en-US ] = "Edit" ;
     Helpid = HID_DLG_FLDEDT_ADDRESS ;
-    Text [ x-comment ] = " ";
 };
 
