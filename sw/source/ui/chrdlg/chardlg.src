@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:50:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:47:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabDialog DLG_CHAR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Zeichen" ;
     Text [ en-US ] = "Character" ;
     Moveable = TRUE ;
     TabControl 1
@@ -53,14 +52,12 @@ TabDialog DLG_CHAR
             PageItem
             {
                 Identifier = TP_CHAR_STD ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = TP_CHAR_STD ;
             };
             PageItem
             {
                 Identifier = TP_CHAR_EXT ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
                 PageResID = TP_CHAR_EXT ;
             };
@@ -68,38 +65,32 @@ TabDialog DLG_CHAR
             {
                 Identifier = TP_CHAR_POS ;
                 PageResID = TP_CHAR_POS ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position";
             };
             PageItem
             {
                 Identifier = TP_CHAR_TWOLN ;
                 PageResID = TP_CHAR_TWOLN;
-                Text [ de ] = "Asiatisches Layout" ;
                 Text [ en-US ] = "Asian Layout";
             };
             PageItem
             {
                 Identifier = TP_CHAR_URL ;
-                Text [ de ] = "Hyperlink" ;
                 Text [ en-US ] = "Hyperlink" ;
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
             };
         };
     };
-    Text [ x-comment ] = "; ËÎË: —ËÏ‚ÓÎ - -";
 };
 TabDialog DLG_DRAWCHAR
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Schrift" ;
     Text [ en-US ] = "Font" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -111,7 +102,6 @@ TabDialog DLG_DRAWCHAR
             PageItem
             {
                 Identifier = TP_CHAR_STD ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = TP_CHAR_STD ;
             };
@@ -128,14 +118,12 @@ TabPage TP_CHAR_URL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Hyperlink" ;
         Text [ en-US ] = "Hyperlink" ;
     };
     FixedText FT_URL
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "U~RL" ;
         Text [ en-US ] = "~URL" ;
     };
     Edit ED_URL
@@ -149,7 +137,6 @@ TabPage TP_CHAR_URL
     {
         Pos = MAP_APPFONT ( 198 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ausw√§hlen..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Browse..." ;
     };
@@ -157,7 +144,6 @@ TabPage TP_CHAR_URL
     {
         Pos = MAP_APPFONT ( 12 , 33 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "Te~xt" ;
         Text [ en-US ] = "Te~xt";
     };
     Edit ED_TEXT
@@ -172,7 +158,6 @@ TabPage TP_CHAR_URL
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
     };
     Edit ED_NAME
@@ -187,7 +172,6 @@ TabPage TP_CHAR_URL
     {
         Pos = MAP_APPFONT ( 12 , 65 ) ;
         Size = MAP_APPFONT ( 73 , 10 ) ;
-        Text [ de ] = "~Frame" ;
         Text [ en-US ] = "~Target frame" ;
     };
     ComboBox LB_TARGET
@@ -204,21 +188,18 @@ TabPage TP_CHAR_URL
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Ereignisse..." ;
         Text [ en-US ] = "~Events..." ;
     };
     FixedLine FL_STYLE
     {
         Pos = MAP_APPFONT ( 6 , 104 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Zeichenvorlagen" ;
         Text [ en-US ] = "Character Styles" ;
     };
     FixedText FT_VISITED
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "~Besuchter Link" ;
         Text [ en-US ] = "~Visited links" ;
     };
     ListBox LB_VISITED
@@ -235,7 +216,6 @@ TabPage TP_CHAR_URL
     {
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 73 , 10 ) ;
-        Text [ de ] = "~Unbesuchter Link" ;
         Text [ en-US ] = "Unvisited ~links" ;
     };
     ListBox LB_NOT_VISITED
