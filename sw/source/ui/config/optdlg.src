@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:47:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,37 +59,31 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Hilfslinien" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Guides";
     };
     CheckBox CB_CROSS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Hilf~slinien beim Verschieben" ;
         Text [ en-US ] = "Guides ~while moving";
     };
     CheckBox CB_HANDLE
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Einfa~che Griffe" ;
         Text [ en-US ] = "Sim~ple handles";
     };
     CheckBox CB_BIGHANDLE
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "G~roße Griffe" ;
         Text [ en-US ] = "Large handles";
     };
     FixedLine FL_WINDOW
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Ansicht";
         Group = TRUE ;
         Text [ en-US ] = "View";
     };
@@ -97,30 +91,25 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Horizontale Bildla~ufleiste" ;
         Text [ en-US ] = "H~orizontal scrollbar" ;
     };
     CheckBox CB_VSCROLL
     {
         Pos = MAP_APPFONT ( 136 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "~Vertikale Bildlaufleiste" ;
         Text [ en-US ] = "~Vertical scrollbar" ;
     };
     CheckBox CB_ANY_RULER
     {
         Pos = MAP_APPFONT ( 136 , 40 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text [ de ] = "Line~al" ;
         Text [ en-US ] = "R~uler" ;
     };
     CheckBox CB_HRULER
     {
         Pos = MAP_APPFONT ( 142 , 53 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "Horizontales ~Lineal" ;
         Text [ en-US ] = "Hori~zontal ruler" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_HMETRIC
     {
@@ -132,15 +121,12 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 142 , 66 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "Vertik~ales Lineal" ;
         Text [ en-US ] = "Verti~cal ruler" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_VRULER_RIGHT
     {
         Pos = MAP_APPFONT ( 148 , 79 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Rechts ausgerichtet" ;
         Text [ en-US ] = "Right-aligned";
     };
     ListBox LB_VMETRIC
@@ -153,66 +139,51 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 136 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "~Weiches Scrollen" ;
         Text [ en-US ] = "S~mooth scroll" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_DISP
     {
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Anzeigen" ;
         Text [ en-US ] = "Display" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_GRF
     {
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "~Grafiken und Objekte" ;
         Text [ en-US ] = "~Graphics and objects" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_TBL
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "~Tabellen          " ;
         Text [ en-US ] = "~Tables " ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_DRWFAST
     {
         Pos = MAP_APPFONT ( 12 , 93 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Zeichnungen und ~Kontrollfelder" ;
         Text [ en-US ] = "Dra~wings and controls" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_FIELD
     {
         Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "F~eldnamen" ;
         Text [ en-US ] = "~Field codes" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_POSTIT
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "N~otizen" ;
         Text [ en-US ] = "~Notes" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SETTINGS
     {
         Pos = MAP_APPFONT ( 130 , 122 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Einstellungen";
         Text [ en-US ] = "Settings";
         Hide = TRUE;
     };
@@ -220,9 +191,7 @@ TabPage TP_CONTENT_OPT
     {
         Pos = MAP_APPFONT ( 136 , 135 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Maßeinheit";
         Text [ en-US ] = "Measurement unit";
-        Text [ x-comment ] = " ";
         Hide = TRUE;
     };
     ListBox LB_METRIC
@@ -248,60 +217,46 @@ TabPage TP_OPTPRINT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
-        Text [ de ] = "Inhalt" ;
         Text [ en-US ] = "Contents" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PGRF
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Grafiken" ;
         Text [ en-US ] = "~Graphics" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PTAB
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Tabellen" ;
         Text [ en-US ] = "~Tables" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PDRAW
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Zei~chnungen" ;
         Text [ en-US ] = "Dra~wings" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_CTRLFLD
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Kontroll~felder" ;
         Text [ en-US ] = "Control~s" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_BACKGROUND
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "H~intergrund" ;
         Text [ en-US ] = "Ba~ckground" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_BLACK_FONT
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Sch~warz drucken" ;
         Text [ en-US ] = "Print blac~k" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SEP_PRT_LEFT
     {
@@ -313,50 +268,39 @@ TabPage TP_OPTPRINT_PAGE
     {
         Pos = MAP_APPFONT ( 90 , 3 ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
-        Text [ de ] = "Seiten" ;
         Text [ en-US ] = "Pages" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_LEFTP
     {
         Pos = MAP_APPFONT ( 96 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Linke Seiten" ;
         Text [ en-US ] = "~Left pages" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_RIGHTP
     {
         Pos = MAP_APPFONT ( 96 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Rechte Seiten" ;
         Text [ en-US ] = "~Right pages" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_REVERSE
     {
         Pos = MAP_APPFONT ( 96 , 40 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Umgekehrt" ;
         Text [ en-US ] = "Re~versed" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PROSPECT
     {
         Pos = MAP_APPFONT ( 96 , 53 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Pr~ospekt" ;
         Text [ en-US ] = "Broch~ure" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PROSPECT_RTL
     {
         Pos = MAP_APPFONT ( 103 , 66 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Rechts nach Links" ;
         Text [ en-US ] = "Right to Left" ;
         Text [ x-comment ] = " ";
     };
@@ -364,35 +308,27 @@ TabPage TP_OPTPRINT_PAGE
     {
         Pos = MAP_APPFONT ( 180 , 14 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "~Keine" ;
         Text [ en-US ] = "~None" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_ONLY
     {
         Pos = MAP_APPFONT ( 180 , 27 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "~Nur Notizen" ;
         Text [ en-US ] = "Notes ~only" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_END
     {
         Pos = MAP_APPFONT ( 180 , 40 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "Dokument~ende" ;
         Text [ en-US ] = "End of docu~ment" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_PAGEEND
     {
         Pos = MAP_APPFONT ( 180 , 53 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "~Seitenende" ;
         Text [ en-US ] = "~End of page" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SEP_PRT_RIGHT
     {
@@ -404,16 +340,13 @@ TabPage TP_OPTPRINT_PAGE
     {
         Pos = MAP_APPFONT ( 174 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Notizen" ;
         Text [ en-US ] = "Notes" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_4
     {
         Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Sonstiges" ;
         Group = TRUE ;
         Text [ en-US ] = "Other";
     };
@@ -422,14 +355,12 @@ TabPage TP_OPTPRINT_PAGE
         Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Automatisch eingefügte ~Leerseiten drucken";
         Text [ en-US ] = "Print ~automatically inserted blank pages";
     };
     CheckBox CB_SINGLEJOBS
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "Einzelne Druck~jobs erzeugen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Create s~ingle print jobs" ;
     };
@@ -438,16 +369,13 @@ TabPage TP_OPTPRINT_PAGE
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Papierschacht aus ~Druckereinstellung" ;
         Text [ en-US ] = "~Paper tray from printer settings";
-        Text [ x-comment ] = "; EM19; EM19.3.01: appears to be the continuation of \"Paper tray...\" so NO cap at start.";
     };
     FixedText FT_FAX
     {
         Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Group = TRUE ;
-        Text [ de ] = "Fa~x" ;
         Text [ en-US ] = "~Fax";
     };
     ListBox LB_FAX
@@ -461,7 +389,6 @@ TabPage TP_OPTPRINT_PAGE
     };
     String ST_NONE
     {
-        Text [ de ] = "<Keins>" ;
         Text [ en-US ] = "<None>";
     };
 };
@@ -479,21 +406,18 @@ TabPage TP_STD_FONT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Grundschriften (%1)" ;
         Text [ en-US ] = "Basic fonts (%1)";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 63 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Schriftart";
         Text [ en-US ] = "Font";
     };
     FixedText FT_SIZE
     {
         Pos = MAP_APPFONT ( 204 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Sc~hriftgrad";
         Text [ en-US ] = "Size";
     };
     MetricBox LB_STANDARD_SIZE
@@ -535,46 +459,36 @@ TabPage TP_STD_FONT
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Standard" ;
         Left = TRUE ;
         Text [ en-US ] = "De~fault" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Überschrift" ;
         Text [ en-US ] = "Headin~g" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LIST
     {
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Liste" ;
         Text [ en-US ] = "~List" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LABEL
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Beschriftung" ;
         Text [ en-US ] = "C~aption" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_IDX
     {
         Pos = MAP_APPFONT ( 12 , 94 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Verzeichnis" ;
         Text [ en-US ] = "~Index" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ComboBox LB_STANDARD
     {
@@ -620,31 +534,24 @@ TabPage TP_STD_FONT
     {
         Pos = MAP_APPFONT ( 12 , 111 ) ;
         Size = MAP_APPFONT ( 147 , 10 ) ;
-        Text [ de ] = "~Nur für das aktuelle Dokument" ;
         Text [ en-US ] = "C~urrent document only" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_STANDARD
     {
         Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "S~tandard" ;
         Text [ en-US ] = "~Default" ;
-        Text [ x-comment ] = " ";
     };
     String ST_SCRIPT_ASIAN
     {
-        Text [ de ] = "asiatisch" ;
         Text [ en-US ] = "Asian";
     };
     String ST_SCRIPT_CTL
     {
-        Text [ de ] = "CTL" ;
         Text [ en-US ] = "CTL";
     };
     String ST_SCRIPT_WESTERN
     {
-        Text [ de ] = "westlich" ;
         Text [ en-US ] = "Western";
     };
 };
@@ -662,44 +569,35 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 113 , 8 ) ;
-        Text [ de ] = "Standard" ;
         Text [ en-US ] = "Default";
     };
     CheckBox CB_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
-        Text [ de ] = "Übe~rschrift" ;
         TabStop = TRUE ;
         Text [ en-US ] = "H~eading";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_REPEAT_HEADER
     {
         Pos = MAP_APPFONT ( 21 , 27 ) ;
         Size = MAP_APPFONT ( 99 , 10 ) ;
-        Text [ de ] = "Auf jeder Seite ~wiederholen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Re~peat on each page";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_DONT_SPLIT
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
-        Text [ de ] = "~Nicht trennen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Do not split";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_BORDER
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 107 , 10 ) ;
-        Text [ de ] = "~Umrandung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "B~order";
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_TABLE_SEPARATOR
     {
@@ -711,58 +609,46 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 125 , 3 ) ;
         Size = MAP_APPFONT ( 129 , 8 ) ;
-        Text [ de ] = "Eingabe in Tabellen" ;
         Text [ en-US ] = "Input in tables";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_NUMFORMATTING
     {
         Pos = MAP_APPFONT ( 131 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Zahlen~erkennung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Number recognition";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_NUMFMT_FORMATTING
     {
         Pos = MAP_APPFONT ( 140 , 27 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        Text [ de ] = "Zahlenformater~kennung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Number format recognition";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_NUMALIGNMENT
     {
         Pos = MAP_APPFONT ( 140 , 40 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        Text [ de ] = "Au~srichtung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Alignment";
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_MOVE
     {
         Pos = MAP_APPFONT ( 6 , 69 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Tastaturbedienung" ;
         Text [ en-US ] = "Keyboard handling";
     };
     FixedText FT_MOVE
     {
         Pos = MAP_APPFONT ( 12 , 80) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Zellen verschieben" ;
         Text [ en-US ] = "Move cells";
     };
     FixedText FT_ROWMOVE
     {
         Pos = MAP_APPFONT ( 21 , 93 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "~Zeile" ;
         Text [ en-US ] = "~Row" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_ROWMOVE
     {
@@ -784,9 +670,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 21 , 108 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "Sp~alte" ;
         Text [ en-US ] = "~Column" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_COLMOVE
     {
@@ -808,16 +692,13 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 136 , 80 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Zelle einfügen" ;
         Text [ en-US ] = "Insert cell";
     };
     FixedText FT_ROWINSERT
     {
         Pos = MAP_APPFONT ( 145 , 93 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "Zei~le" ;
         Text [ en-US ] = "Ro~w" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_ROWINSERT
     {
@@ -839,9 +720,7 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 145 , 108 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "S~palte" ;
         Text [ en-US ] = "Colu~mn" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_COLINSERT
     {
@@ -863,58 +742,45 @@ TabPage TP_OPTTABLE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 230 , 8 ) ;
-        Text [ de ] = "Verhalten während des Verschiebens" ;
         Text [ en-US ] = "Behavior of rows/columns";
     };
     RadioButton RB_FIX
     {
         Pos = MAP_APPFONT ( 21 , 133 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Fix" ;
         Text [ en-US ] = "~Fixed" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FIX
     {
         Pos = MAP_APPFONT ( 93 , 133 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text [ de ] = "Veränderungen wirken sich nur auf den direkten Nachbarn aus" ;
         WordBreak = TRUE ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Changes affect the adjacent area only";
     };
     RadioButton RB_FIXPROP
     {
         Pos = MAP_APPFONT ( 21 , 151 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "F~ix, proportional" ;
         Text [ en-US ] = "Fi~xed, proportional" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FIXPROP
     {
         Pos = MAP_APPFONT ( 93 , 151 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text [ de ] = "Veränderungen wirken sich auf die gesamte Tabelle aus" ;
         WordBreak = TRUE ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Changes affect the entire table";
     };
     RadioButton RB_VAR
     {
         Pos = MAP_APPFONT ( 21 , 169 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Variabel" ;
         Text [ en-US ] = "~Variable" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_VAR
     {
         Pos = MAP_APPFONT ( 93 , 169 ) ;
         Size = MAP_APPFONT ( 155 , 16 ) ;
-        Text [ de ] = "Veränderungen wirken sich auf die Tabellengröße aus" ;
         WordBreak = TRUE ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Changes affect the table size";
     };
 };
@@ -934,7 +800,6 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Anzeigen von" ;
         Group = TRUE ;
         Text [ en-US ] = "Display of";
     };
@@ -942,71 +807,56 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Absatz~ende" ;
         Text [ en-US ] = "Pa~ragraph end" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SHYPH
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "~Benutzerdefinierte Trenner" ;
         Text [ en-US ] = "Custom h~yphens" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SPACE
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Lee~rzeichen" ;
         Text [ en-US ] = "Spac~es" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_HSPACE
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Ge~schützte Leerzeichen" ;
         Text [ en-US ] = "Non-breaking s~paces" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_TAB
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Tabulat~oren" ;
         Text [ en-US ] = "Ta~bs" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_BREAK
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Umbr~üche" ;
         Text [ en-US ] = "Brea~ks" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_CHAR_HIDDEN
     {
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Aus~geblendeter Text" ;
         Text [ en-US ] = "Hidden text" ;
     };
     CheckBox CB_FLD_HIDDEN
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Feldbefehle: Verste~ckter Text" ;
         Text [ en-US ] = "Fields: Hidden te~xt" ;
     };
     CheckBox CB_FLD_HIDDEN_PARA
     {
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "Feldbefehle: ~Versteckte Absätze" ;
         Text [ en-US ] = "Fields: Hidden p~aragraphs" ;
     };
     FixedLine FL_SEPARATOR_SHDW
@@ -1019,68 +869,53 @@ TabPage TP_OPTSHDWCRSR
     {
         Pos = MAP_APPFONT ( 130 , 3 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Direkt-Cursor" ;
         Text [ en-US ] = "Direct cursor" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SHDWCRSONOFF
     {
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Direkt-Cursor" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Text [ en-US ] = "~Direct cursor" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SHDWCRSFILLMODE
     {
         Pos = MAP_APPFONT ( 136 , 27 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "Einfügen" ;
         Left = TRUE ;
         Text [ en-US ] = "Insert" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SHDWCRSFILLMARGIN
     {
         Pos = MAP_APPFONT ( 145 , 39 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Absatzausrichtung" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Text [ en-US ] = "Para~graph alignment" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SHDWCRSFILLINDENT
     {
         Pos = MAP_APPFONT ( 145 , 52 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "li~nker Absatzrand" ;
         Text [ en-US ] = "~Left paragraph margin" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SHDWCRSFILLTAB
     {
         Pos = MAP_APPFONT ( 145 , 66 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Tabulator" ;
         Text [ en-US ] = "~Tabs" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SHDWCRSFILLSPACE
     {
         Pos = MAP_APPFONT ( 145 , 79 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Tabulator und ~Leerzeichen" ;
         Text [ en-US ] = "Tabs a~nd spaces" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_CRSR_OPT
     {
         Pos = MAP_APPFONT ( 130 , 96 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Cursor in geschützten Zonen" ;
         Text [ en-US ] = "Cursor in protected areas";
     };
     CheckBox CB_ALLOW_IN_PROT
@@ -1089,9 +924,7 @@ TabPage TP_OPTSHDWCRSR
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ de ] = "Z~ulassen" ;
         Text [ en-US ] = "Enable";
-        Text [ x-comment ] = " ";
     };
 };
 
