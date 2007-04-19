@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editeng.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:53:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,57 +38,47 @@
 
 String RID_EDITUNDO_DEL
 {
-    Text [ de ] = "Löschen" ;
     Text [ en-US ] = "Delete" ;
 };
 
 String RID_EDITUNDO_MOVE
 {
-    Text [ de ] = "Verschieben" ;
     Text [ en-US ] = "Move" ;
 };
 
 String RID_EDITUNDO_INSERT
 {
-    Text [ de ] = "Einfügen" ;
     Text [ en-US ] = "Insert" ;
 };
 
 String RID_EDITUNDO_REPLACE
 {
-    Text [ de ] = "Ersetzen" ;
     Text [ en-US ] = "Replace" ;
 };
 
 String RID_EDITUNDO_SETATTRIBS
 {
-    Text [ de ] = "Attribute anwenden" ;
     Text [ en-US ] = "Apply attributes" ;
 };
 
 String RID_EDITUNDO_RESETATTRIBS
 {
-    Text [ de ] = "Attribute zurücksetzen" ;
     Text [ en-US ] = "Reset attributes" ;
 };
 
 String RID_EDITUNDO_INDENT
 {
-    Text [ de ] = "Einrücken" ;
     Text [ en-US ] = "Indent" ;
 };
 
 String RID_EDITUNDO_SETSTYLE
 {
-    Text [ de ] = "Vorlagen anwenden" ;
     Text [ en-US ] = "Apply Styles" ;
 };
 
 String RID_EDITUNDO_TRANSLITERATE
 {
-    Text [ de ] = "Groß-/Kleinschreibung";
     Text [ en-US ] = "Case/Characters";
-    Text [ x-comment ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
 };
 
 
@@ -100,9 +90,7 @@ Menu RID_MENU_SPELL
         {
             Identifier = MN_SPELLING ;
             HelpId = HID_EDITENG_SPELLER_START;
-            Text [ de ] = "~Rechtschreibprüfung..." ;
             Text [ en-US ] = "~Spellcheck..." ;
-            Text [ x-comment ] = "; triple dots (...) are required now at the end of the text";
         };
         MenuItem
         {
@@ -111,14 +99,12 @@ Menu RID_MENU_SPELL
             SubMenu = Menu
             {
             };
-            Text [ de ] = "~Aufnehmen" ;
             Text [ en-US ] = "~Add" ;
         };
         MenuItem
         {
             Identifier = MN_IGNORE ;
             HelpId = HID_EDITENG_SPELLER_IGNORE;
-            Text [ de ] = "Alle i~gnorieren" ;
             Text [ en-US ] = "Ignore All" ;
         };
         MenuItem
@@ -128,7 +114,6 @@ Menu RID_MENU_SPELL
             SubMenu = Menu
             {
             };
-            Text [ de ] = "Auto~Korrektur" ;
             Text [ en-US ] = "AutoCorrect" ;
         };
     };
@@ -137,13 +122,11 @@ Menu RID_MENU_SPELL
 
 String RID_STR_WORD
 {
-    Text [ de ] = "Wort ist %x";
     Text [ en-US ] = "Word is %x";
 };
 
 String RID_STR_PARAGRAPH
 {
-    Text [ de ] = "Absatz ist %x";
     Text [ en-US ] = "Paragraph is %x";
 };
 
