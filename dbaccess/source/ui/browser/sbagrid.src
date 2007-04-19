@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbagrid.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:24:27 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:55:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,7 +57,6 @@ Menu RID_SBA_GRID_COLCTXMENU
         {
             Identifier = ID_BROWSER_COLATTRSET ;
             HelpID = HID_BROWSER_COLUMNFORMAT ;
-            Text [ de ] = "Spalten~formatierung..." ;
             Text [ en-US ] = "Column ~Format..." ;
         };
         MenuItem
@@ -69,7 +68,6 @@ Menu RID_SBA_GRID_COLCTXMENU
         {
             Identifier = ID_BROWSER_COLUMNINFO ;
             HelpID = HID_BROWSER_COLUMNINFO ;
-            Text [ de ] = "Spaltenb~eschreibung kopieren";
             Text [ en-US ] = "Copy Column D~escription";
         };
     };
@@ -83,14 +81,12 @@ Menu RID_SBA_GRID_ROWCTXMENU
         {
             Identifier = ID_BROWSER_TABLEATTR ;
             HelpID = HID_BROWSER_TABLEFORMAT ;
-            Text [ de ] = "Tabellenformatierung..." ;
             Text [ en-US ] = "Table Format..." ;
         };
         MenuItem
         {
             Identifier = ID_BROWSER_ROWHEIGHT ;
             HelpID = HID_BROWSER_ROWHEIGHT ;
-            Text [ de ] = "Zeilenhöhe..." ;
             Text [ en-US ] = "Row Height..." ;
         };
     };
@@ -98,62 +94,50 @@ Menu RID_SBA_GRID_ROWCTXMENU
 
 String RID_STR_UNDO_MODIFY_RECORD
 {
-    Text [ de ] = "Rückgängig: Dateneingabe" ;
     Text [ en-US ] = "Undo: Data Input";
 };
 
 String RID_STR_SAVE_CURRENT_RECORD
 {
-    Text [ de ] = "Aktuellen Datensatz speichern" ;
     Text [ en-US ] = "Save current record";
 };
 
 String STR_QRY_TITLE
 {
-    Text [ de ] = "Abfrage #" ;
     Text [ en-US ] = "Query #" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TBL_TITLE
 {
-    Text [ de ] = "Tabelle #" ;
     Text [ en-US ] = "Table #" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VIEW_TITLE
 {
-    Text [ de ] = "Ansicht #" ;
     Text [ en-US ] = "View #" ;
 };
 
 String STR_NAME_ALREADY_EXISTS
 {
-    Text [ de ] = "Der Name \"#\" existiert bereits." ;
     Text [ en-US ] = "The name \"#\" already exists.";
 };
 
 
 String STR_NO_COLUMNNAME_MATCHING
 {
-    Text [ de ] = "Es konnten keine übereinstimmenden Spaltennamen gefunden werden!" ;
     Text [ en-US ] = "No matching column names were found.";
 };
 
 String STR_ERROR_OCCURED_WHILE_COPYING
 {
-    Text [ de ] = "Es ist ein Fehler aufgetreten! Wollen Sie den Kopiervorgang fortsetzen?" ;
     Text [ en-US ] = "An error occurred. Do you want to continue copying?";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_NAME
 {
-    Text [ de ] = "Tabellenansicht der Datenquelle" ;
     Text [ en-US ] = "Data source table view";
 };
 
 String STR_DATASOURCE_GRIDCONTROL_DESC
 {
-    Text [ de ] = "Zeigt die ausgewählte Tabelle oder Abfrage an." ;
     Text [ en-US ] = "Shows the selected table or query.";
 };
 
