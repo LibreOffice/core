@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediatyp.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:55:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:19:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,7 +36,7 @@
 //
 //  Internet Media Type Presentations
 //
-// $Author: hr $ $Date: 2005-09-23 14:55:18 $ $Revision: 1.4 $
+// $Author: ihi $ $Date: 2007-04-19 16:19:41 $ $Revision: 1.5 $
 //============================================================================
 
 #ifndef _SVTOOLS_HRC
@@ -45,503 +45,362 @@
 
 String STR_SVT_MIMETYPE_APP_OCTSTREAM
 {
-    Text [ de ] = "Binärdatei" ;
     Text [ en-US ] = "Binary file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_PDF
 {
-    Text [ de ] = "PDF-Datei" ;
     Text [ en-US ] = "PDF file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_RTF
 {
-    Text [ de ] = "RTF-Datei" ;
     Text [ en-US ] = "RTF File" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_MSWORD
 {
-    Text [ de ] = "MS-Word-Dokument" ;
     Text [ en-US ] = "MS-Word document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARCALC
 {
-    Text [ de ] = "%PRODUCTNAME Tabelle" ;
     Text [ en-US ] = "%PRODUCTNAME Spreadsheet" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARCHART
 {
-    Text [ de ] = "%PRODUCTNAME Diagramm" ;
     Text [ en-US ] = "%PRODUCTNAME Chart" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARDRAW
 {
-    Text [ de ] = "%PRODUCTNAME Zeichnung" ;
     Text [ en-US ] = "%PRODUCTNAME Drawing" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARIMAGE
 {
-    Text [ de ] = "%PRODUCTNAME Bild" ;
     Text [ en-US ] = "%PRODUCTNAME Image" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARMATH
 {
-    Text [ de ] = "%PRODUCTNAME Formel" ;
     Text [ en-US ] = "%PRODUCTNAME Formula" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARWRITER
 {
-    Text [ de ] = "%PRODUCTNAME Text" ;
     Text [ en-US ] = "%PRODUCTNAME Text" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_ZIP
 {
-    Text [ de ] = "ZIP-Datei" ;
     Text [ en-US ] = "ZIP file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_JAR
 {
-    Text [ de ] = "JAR-Datei" ;
     Text [ en-US ] = "JAR file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_AUDIO_AIFF
 {
-    Text [ de ] = "Audio-Datei" ;
     Text [ en-US ] = "Audio file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_AUDIO_BASIC
 {
-    Text [ de ] = "Audio-Datei" ;
     Text [ en-US ] = "Audio file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_AUDIO_MIDI
 {
-    Text [ de ] = "Audio-Datei" ;
     Text [ en-US ] = "Audio file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_AUDIO_WAV
 {
-    Text [ de ] = "Audio-Datei" ;
     Text [ en-US ] = "Audio file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_IMAGE_GIF
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_IMAGE_JPEG
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_IMAGE_PCX
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_IMAGE_BMP
 {
-    Text [ de ] = "Bitmap" ;
     Text [ en-US ] = "Bitmap" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_TEXT_HTML
 {
-    Text [ de ] = "HTML-Dokument" ;
     Text [ en-US ] = "HTML document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_TEXT_PLAIN
 {
-    Text [ de ] = "Textdatei" ;
     Text [ en-US ] = "Text file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_TEXT_URL
 {
-    Text [ de ] = "Bookmark" ;
     Text [ en-US ] = "Bookmark" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_TEXT_VCARD
 {
-    Text [ de ] = "vCard-Datei" ;
     Text [ en-US ] = "vCard file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_VIDEO_VDO
 {
-    Text [ de ] = "Video-Datei" ;
     Text [ en-US ] = "Video file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_VIDEO_MSVIDEO
 {
-    Text [ de ] = "Video-Datei" ;
     Text [ en-US ] = "Video file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_X_STARMAIL
 {
-    Text [ de ] = "Nachricht" ;
     Text [ en-US ] = "Message" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_X_VRML
 {
-    Text [ de ] = "VRML-Datei" ;
     Text [ en-US ] = "VRML file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARIMPRESS
 {
-    Text [ de ] = "%PRODUCTNAME Präsentation" ;
     Text [ en-US ] = "%PRODUCTNAME Presentation" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_IMPRESSPACKED
 {
-    Text [ de ] = "%PRODUCTNAME Präsentation (gepackt)" ;
     Text [ en-US ] = "%PRODUCTNAME Presentation (packed)";
 };
 
 String STR_SVT_MIMETYPE_APP_STARHELP
 {
-    Text [ de ] = "%PRODUCTNAME Hilfe" ;
     Text [ en-US ] = "%PRODUCTNAME Help" ;
-    Text [ x-comment ] = " ";
 };
 
 
 String STR_SVT_MIMETYPE_CNT_MSG
 {
-    Text [ de ] = "Nachricht" ;
     Text [ en-US ] = "Message" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_DOCUMENT
 {
-    Text [ de ] = "Dokument" ;
     Text [ en-US ] = "Document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_POP3BOX
 {
-    Text [ de ] = "POP3-Account" ;
     Text [ en-US ] = "POP3 Account" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_IMAPBOX
 {
-    Text [ de ] = "IMAP-Account" ;
     Text [ en-US ] = "IMAP Account" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_IMAPFLD
 {
-    Text [ de ] = "Ordner" ;
     Text [ en-US ] = "Folder" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_VIMBOX
 {
-    Text [ de ] = "VIM-Account" ;
     Text [ en-US ] = "VIM Account" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_VIMINBOX
 {
-    Text [ de ] = "Eingangskorb" ;
     Text [ en-US ] = "Inbox" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_BBBOX
 {
-    Text [ de ] = "Newsgruppen" ;
     Text [ en-US ] = "Newsgroups" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_VIM_BB
 {
-    Text [ de ] = "Newsgruppe" ;
     Text [ en-US ] = "Newsgroup" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_NEWSBOX
 {
-    Text [ de ] = "News" ;
     Text [ en-US ] = "News" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_NEWSGRP
 {
-    Text [ de ] = "Gruppe" ;
     Text [ en-US ] = "Group" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_OUTBOX
 {
-    Text [ de ] = "Ausgangskorb" ;
     Text [ en-US ] = "Outbox" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FTPBOX
 {
-    Text [ de ] = "FTP-Account" ;
     Text [ en-US ] = "FTP Account" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FTPFLD
 {
-    Text [ de ] = "FTP-Ordner" ;
     Text [ en-US ] = "FTP Folder" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FTPFILE
 {
-    Text [ de ] = "FTP-Datei" ;
     Text [ en-US ] = "FTP File" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FTPLINK
 {
-    Text [ de ] = "FTP-Verknüpfung" ;
     Text [ en-US ] = "FTP Link" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_HTTPBOX
 {
-    Text [ de ] = "HTTP" ;
     Text [ en-US ] = "HTTP" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FSYSBOX
 {
-    Text [ de ] = "Arbeitsplatz" ;
     Text [ en-US ] = "Workplace" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FSYSFLD
 {
-    Text [ de ] = "Ordner" ;
     Text [ en-US ] = "Folder" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FSYSFILE
 {
-    Text [ de ] = "Datei" ;
     Text [ en-US ] = "File" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FSYSURLFILE
 {
-    Text [ de ] = "Verknüpfung" ;
     Text [ en-US ] = "Link" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_PUBLBOX
 {
-    Text [ de ] = "Projekt" ;
     Text [ en-US ] = "Project" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_SRCHBOX
 {
-    Text [ de ] = "Suche" ;
     Text [ en-US ] = "Find" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_SUBSCRBOX
 {
-    Text [ de ] = "Abonnements" ;
     Text [ en-US ] = "Subscriptions" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_BOOKMARK
 {
-    Text [ de ] = "Bookmark Abonnement" ;
     Text [ en-US ] = "Bookmark subscription" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_CDF
 {
-    Text [ de ] = "Channel Abonnement" ;
     Text [ en-US ] = "Channel subscription" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_CDFSUB
 {
-    Text [ de ] = "Channel Abonnement" ;
     Text [ en-US ] = "Channel subscription" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_CDFITEM
 {
-    Text [ de ] = "Channel Abonnement" ;
     Text [ en-US ] = "Channel subscription" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_STARCHANNEL
 {
-    Text [ de ] = "StarChannel" ;
     Text [ en-US ] = "StarChannel" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_TRASHBOX
 {
-    Text [ de ] = "Papierkorb" ;
     Text [ en-US ] = "Recycle Bin" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_TRASH
 {
-    Text [ de ] = "Gelöschtes Objekt" ;
     Text [ en-US ] = "Deleted Object" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_REMOV_VOL
 {
-    Text [ de ] = "Lokales Laufwerk" ;
     Text [ en-US ] = "Local drive" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_FIX_VOL
 {
-    Text [ de ] = "Lokales Laufwerk" ;
     Text [ en-US ] = "Local drive" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_REM_VOL
 {
-    Text [ de ] = "Netzwerkverbindung" ;
     Text [ en-US ] = "Network connection" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_RAM_VOL
 {
-    Text [ de ] = "RAM-Disk" ;
     Text [ en-US ] = "RAM Disk" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_CDROM
 {
-    Text [ de ] = "CD-ROM-Laufwerk" ;
     Text [ en-US ] = "CD-ROM drive" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_DISK_35
 {
-    Text [ de ] = "3,5\"-Diskette" ;
     Text [ en-US ] = "3.5'' Disk" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_DISK_525
 {
-    Text [ de ] = "5,25\"-Diskette" ;
     Text [ en-US ] = "5.25'' Disk" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_TAPEDRIVE
 {
-    Text [ de ] = "Bandlaufwerk" ;
     Text [ en-US ] = "Tape drive" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_GAL
 {
-    Text [ de ] = "Gallery" ;
     Text [ en-US ] = "Gallery";
 };
 
 String STR_SVT_MIMETYPE_APP_GAL_THEME
 {
-    Text [ de ] = "Gallery-Thema" ;
     Text [ en-US ] = "Gallery theme" ;
 };
 
@@ -552,236 +411,181 @@ String STR_SVT_MIMETYPE_CNT_SEPARATOR
 
 String STR_SVT_MIMETYPE_APP_STARW_GLOB
 {
-    Text [ de ] = "%PRODUCTNAME Globaldokument" ;
     Text [ en-US ] = "%PRODUCTNAME Master Document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_SDM
 {
-    Text [ de ] = "Nachricht" ;
     Text [ en-US ] = "Message" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_SMD
 {
-    Text [ de ] = "Nachricht" ;
     Text [ en-US ] = "Message" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_STARW_WEB
 {
-    Text [ de ] = "%PRODUCTNAME Writer/Web" ;
     Text [ en-US ] = "%PRODUCTNAME Writer/Web" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_SCHEDULE
 {
-    Text [ de ] = "Aufgaben & Termine" ;
     Text [ en-US ] = "Tasks & Events" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_SCHEDULE_EVT
 {
-    Text [ de ] = "%PRODUCTNAME Terminansicht" ;
     Text [ en-US ] = "%PRODUCTNAME Events View" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_SCHEDULE_TASK
 {
-    Text [ de ] = "%PRODUCTNAME Aufgabenansicht" ;
     Text [ en-US ] = "%PRODUCTNAME Task View" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_SCHEDULE_FEVT
 {
-    Text [ de ] = "%PRODUCTNAME Termin" ;
     Text [ en-US ] = "%PRODUCTNAME Event" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_SCHEDULE_FTASK
 {
-    Text [ de ] = "%PRODUCTNAME Aufgabe" ;
     Text [ en-US ] = "%PRODUCTNAME Task" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_FRAMESET
 {
-    Text [ de ] = "Frameset Dokument" ;
     Text [ en-US ] = "Frameset Document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_MACRO
 {
-    Text [ de ] = "Makro Datei" ;
     Text [ en-US ] = "Macro file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_SFSYSFOLDER
 {
-    Text [ de ] = "Systemordner" ;
     Text [ en-US ] = "System folder" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_CNT_SFSYSFILE
 {
-    Text [ de ] = "Systemobjekt" ;
     Text [ en-US ] = "System object" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_TEMPLATE
 {
-    Text [ de ] = "%PRODUCTNAME Vorlage" ;
     Text [ en-US ] = "%PRODUCTNAME Template";
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_IMAGE_GENERIC
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics";
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_MSEXCEL
 {
-    Text [ de ] = "MS-Excel-Dokument" ;
     Text [ en-US ] = "MS Excel document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_MSEXCEL_TEMPL
 {
-    Text [ de ] = "MS-Excel-Vorlage" ;
     Text [ en-US ] = "MS Excel Template" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_APP_MSPPOINT
 {
-    Text [ de ] = "MS-Power-Point-Dokument" ;
     Text [ en-US ] = "MS PowerPoint document" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_TEXT_VCALENDAR
 {
-    Text [ de ] = "vCalendar-Datei" ;
     Text [ en-US ] = "vCalendar-file" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_MIMETYPE_TEXT_ICALENDAR
 {
-    Text [ de ] = "iCalendar-Datei" ;
     Text [ en-US ] = "iCalendar-File";
 };
 
 String STR_SVT_MIMETYPE_TEXT_XMLICALENDAR
 {
-    Text [ de ] = "XML-iCalendar-Datei" ;
     Text [ en-US ] = "XML-iCalendar-File";
 };
 
 String STR_SVT_MIMETYPE_TEXT_CDE_CALENDAR_APP
 {
-    Text [ de ] = "CDE-Calendar-Datei" ;
     Text [ en-US ] = "CDE-Calendar-File";
 };
 
 String STR_SVT_MIMETYPE_INET_MSG_RFC822
 {
-    Text [ de ] = "message/rfc822" ;
     Text [ en-US ] = "message/rfc822" ;
 };
 
 String STR_SVT_MIMETYPE_INET_MULTI_ALTERNATIVE
 {
-    Text [ de ] = "multipart/alternative" ;
     Text [ en-US ] = "multipart/alternative" ;
 };
 
 String STR_SVT_MIMETYPE_INET_MULTI_DIGEST
 {
-    Text [ de ] = "multipart/digest" ;
     Text [ en-US ] = "multipart/digest" ;
 };
 
 String STR_SVT_MIMETYPE_INET_MULTI_PARALLEL
 {
-    Text [ de ] = "multipart/parallel" ;
     Text [ en-US ] = "multipart/parallel" ;
 };
 
 String STR_SVT_MIMETYPE_INET_MULTI_RELATED
 {
-    Text [ de ] = "multipart/related" ;
     Text [ en-US ] = "multipart/related" ;
 };
 
 String STR_SVT_MIMETYPE_INET_MULTI_MIXED
 {
-    Text [ de ] = "multipart/mixed" ;
     Text [ en-US ] = "multipart/mixed" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXCALC
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Tabellendokument" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Spreadsheet" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXCHART
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Diagramm" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Chart" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXDRAW
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Zeichnung" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Drawing" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXMATH
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formel" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Formula" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXWRITER
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Textdokument" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Text Document" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXIMPRESS
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentation" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXGLOBAL
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Globaldokument" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Master Document" ;
 };
 
 String STR_SVT_MIMETYPE_APP_SXIPACKED
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Präsentation (gepackt)" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTXMLFILEFORMATVERSION Presentation (packed)" ;
 };
 
