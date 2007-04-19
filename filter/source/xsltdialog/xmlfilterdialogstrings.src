@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfilterdialogstrings.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:21:52 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,37 +38,31 @@
 
 String STR_COLUMN_HEADER_NAME
 {
-    Text [ de ] = "Name";
     Text [ en-US ]      = "Name";
 };
 
 String STR_COLUMN_HEADER_TYPE
 {
-    Text [ de ] = "Type";
     Text [ en-US ]      = "Type";
 };
 
 String STR_UNKNOWN_APPLICATION
 {
-    Text [ de ] = "Unbekannt";
     Text [ en-US ]      = "Unknown";
 };
 
 String STR_IMPORT_ONLY
 {
-    Text [ de ] = "Import Filter";
     Text [ en-US ]      = "import filter";
 };
 
 String STR_IMPORT_EXPORT
 {
-    Text [ de ] = "Import/Export Filter";
     Text [ en-US ]      = "import/export filter";
 };
 
 String STR_EXPORT_ONLY
 {
-    Text [ de ] = "Export Filter";
     Text [ en-US ]      = "export filter";
 };
 
@@ -114,49 +108,41 @@ String STR_APPL_NAME_OASIS_DRAW
 
 String STR_WARN_DELETE
 {
-    Text [ de ] = "Wollen Sie wirklich den XML-Filter '%s' löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
     Text [ en-US ]      = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
 };
 
 String STR_ERROR_FILTER_NAME_EXISTS
 {
-    Text [ de ] = "Es existiert bereits ein XML-Filter mit dem Namen '%s'. Bitte wählen Sie einen anderen Namen.";
     Text [ en-US ]  = "An XML filter with the name '%s' already exists. Please enter a different name.";
 };
 
 String STR_ERROR_TYPE_NAME_EXISTS
 {
-    Text [ de ] = "Der Name auf der  Benutzeroberfläche '%s1' wird bereits von dem XML-Filter '%s2' verwendet. Bitte wählen Sie einen anderen Namen.";
     Text [ en-US ]  = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
 };
 
 String STR_ERROR_DTD_NOT_FOUND
 {
-    Text [ de ] = "Die DTD konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
     Text [ en-US ]  = "The DTD could not be found. Please enter a valid path.";
 };
 
 String STR_ERROR_EXPORT_XSLT_NOT_FOUND
 {
-    Text [ de ] = "Die Export-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
     Text [ en-US ]  = "The XSLT for export cannot be found. Please enter a valid path.";
 };
 
 String STR_ERROR_IMPORT_XSLT_NOT_FOUND
 {
-    Text [ de ] = "Die Import-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
     Text [ en-US ]  = "The XSLT for import cannot be found. Please enter a valid path.";
 };
 
 String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
 {
-    Text [ de ] = "Die angegebene Import-Dokumentvorlage konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
     Text [ en-US ]  = "The given import template cannot be found. Please enter a valid path.";
 };
 
 String STR_NOT_SPECIFIED
 {
-    Text [ de ] = "Nicht spezifiziert";
     Text [ en-US ]      = "Not specified";
 };
 
@@ -167,13 +153,11 @@ String STR_NO_ERRORS_FOUND
 
 String STR_DEFAULT_FILTER_NAME
 {
-    Text [ de ] = "Neuer Filter";
     Text [ en-US ]  = "New Filter";
 };
 
 String STR_DEFAULT_UI_NAME
 {
-    Text [ de ] = "Unbenannt";
     Text [ en-US ]  = "Untitled";
 };
 
@@ -184,43 +168,36 @@ String STR_DEFAULT_EXTENSION
 
 String STR_UNDEFINED_FILTER
 {
-    Text [ de ] = "Undefinierter Filter";
     Text [ en-US ]  = "undefined filter";
 };
 
 String STR_FILTER_HAS_BEEN_SAVED
 {
-    Text [ de ] = "Der XML-Filter '%s' wurde als Paket '%s' gesichert.";
     Text [ en-US ]  = "The XML filter '%s' has been saved as package '%s'. ";
 };
 
 String STR_FILTERS_HAVE_BEEN_SAVED
 {
-    Text [ de ] = "%s XML-Filter wurden in dem Paket '%s' gesichert.";
     Text [ en-US ]  = "%s XML filters have been saved in the package '%s'.";
 };
 
 String STR_FILTER_PACKAGE
 {
-    Text [ de ] = "XSLT Filter Paket";
     Text [ en-US ]  = "XSLT filter package";
 };
 
 String STR_FILTER_INSTALLED
 {
-    Text [ de ] = "Der XML-Filter '%s' wurde erfolgreich installiert.";
     Text [ en-US ]  = "The XML filter '%s' has been installed successfully.";
 };
 
 String STR_FILTERS_INSTALLED
 {
-    Text [ de ] = "%s XML-Filter wurden erfolgreich installiert.";
     Text [ en-US ]  = "%s XML filters have been installed successfully.";
 };
 
 String STR_NO_FILTERS_FOUND
 {
-    Text [ de ] = "Es wurde kein XML-Filter installiert, weil das Paket '%s' keine XML-Filter enthält.";
     Text [ en-US ]  = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
 };
 
