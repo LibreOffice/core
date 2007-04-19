@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmdirlbox.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:38:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:04:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,19 +39,16 @@
 
 String RID_SVXSTR_FRAMEDIR_LTR
 {
-    Text [ de ] = "Links-nach-rechts";
     Text [ en-US ] = "Left-to-right";
 };
 
 String RID_SVXSTR_FRAMEDIR_RTL
 {
-    Text [ de ] = "Rechts-nach-links";
     Text [ en-US ] = "Right-to-left";
 };
 
 String RID_SVXSTR_FRAMEDIR_SUPER
 {
-    Text [ de ] = "Einstellungen des übergeordneten Objektes verwenden";
     Text [ en-US ] = "Use superordinate object settings";
 };
 
@@ -59,25 +56,21 @@ String RID_SVXSTR_FRAMEDIR_SUPER
 
 String RID_SVXSTR_PAGEDIR_LTR_HORI
 {
-    Text [ de ] = "Links-nach-rechts (horizontal)";
     Text [ en-US ] = "Left-to-right (horizontal)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_HORI
 {
-    Text [ de ] = "Rechts-nach-links (horizontal)";
     Text [ en-US ] = "Right-to-left (horizontal)";
 };
 
 String RID_SVXSTR_PAGEDIR_RTL_VERT
 {
-    Text [ de ] = "Rechts-nach-links (vertikal)";
     Text [ en-US ] = "Right-to-left (vertical)";
 };
 
 String RID_SVXSTR_PAGEDIR_LTR_VERT
 {
-    Text [ de ] = "Links-nach-rechts (vertikal)";
     Text [ en-US ] = "Left-to-right (vertical)";
 };
 
