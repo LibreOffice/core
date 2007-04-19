@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:44:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,37 +37,30 @@
 
 String STR_BASICKEY_FORMAT_ON
 {
-    Text [ de ] = "Ein" ;
     Text [ en-US ] = "On" ;
 };
 String STR_BASICKEY_FORMAT_OFF
 {
-    Text [ de ] = "Aus" ;
     Text [ en-US ] = "Off" ;
 };
 String STR_BASICKEY_FORMAT_TRUE
 {
-    Text [ de ] = "Wahr" ;
     Text [ en-US ] = "True" ;
 };
 String STR_BASICKEY_FORMAT_FALSE
 {
-    Text [ de ] = "Falsch" ;
     Text [ en-US ] = "False" ;
 };
 String STR_BASICKEY_FORMAT_YES
 {
-    Text [ de ] = "Ja" ;
     Text [ en-US ] = "Yes" ;
 };
 String STR_BASICKEY_FORMAT_NO
 {
-    Text [ de ] = "Nein" ;
     Text [ en-US ] = "No" ;
 };
 String STR_BASICKEY_FORMAT_CURRENCY
 {
-    Text [ de ] = "@0.00 $;@(0.00 $)" ;
     Text [ en-US ] = "@0.00 $;@(0.00 $)" ;
 };
 
