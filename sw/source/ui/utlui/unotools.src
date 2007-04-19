@@ -4,9 +4,9 @@
  *
  *  $RCSfile: unotools.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:16:46 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:38:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,12 @@ ModalDialog DLG_RENAME_XNAMED
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 60 ) ;
-    Text [ de ] = "Objekt umbenennen: " ;
     Moveable = TRUE ;
     FixedText FT_NEW_NAME
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Neuer Name" ;
         Text [ en-US ] = "New name";
-        Text [ x-comment ] = " ";
     };
     Edit ED_NEW_NAME
     {
@@ -63,9 +60,7 @@ ModalDialog DLG_RENAME_XNAMED
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Name ändern";
         Text [ en-US ] = "Change name";
-        Text [ x-comment ] = " ";
     };
     OKButton PB_OK
     {
@@ -90,30 +85,15 @@ ModalDialog DLG_RENAME_XNAMED
         Group = TRUE ;
     };
     Text [ en-US ] = "Rename object: ";
-    Text [ x-comment ] = " ";
 };
 String STR_SERVICE_UNAVAILABLE
 {
-    Text [ de ] = "Der folgende Service ist nicht verfügbar: " ;
     Text [ en-US ] = "The following service is not available: ";
-    Text [ x-comment ] = " ";
 };
 Resource RES_FRMEX_MENU
 {
     StringArray 1
     {
-        ItemList [ de ] =
-        {
-            < "~Maßstab" ;         ST_MENU_ZOOM; > ;
-            < "Nach ~oben" ;    ST_MENU_UP;     > ;
-            < "Nach ~unten" ;   ST_MENU_DOWN; > ;
-        };
-    ItemList [ x-comment ] =
-    {
-            < " " ;         ST_MENU_ZOOM; > ;
-        < "; Nach ~oben" ;  ST_MENU_UP;     > ;
-        < "; Nach ~unten" ;     ST_MENU_DOWN; > ;
-    };
     ItemList [ en-US ] =
     {
             < "~Zoom" ;         ST_MENU_ZOOM; > ;
