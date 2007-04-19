@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:49:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,27 +50,22 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     HelpID = HID_AREA_TRANSPARENCE;
     Hide = TRUE;
     Size = MAP_APPFONT ( 260 , 185 );
-    Text [ de ] = "Transparenz" ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Transparenzmodus" ;
         Text [ en-US ] = "Transparency mode";
     };
     RadioButton RBT_TRANS_OFF
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text [ de ] = "~Keine Transparenz" ;
         Text [ en-US ] = "~No transparency";
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_TRANS_LINEAR
     {
         Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Transparenz" ;
         Text [ en-US ] = "~Transparency";
     };
     MetricField MTR_TRANSPARENT
@@ -92,16 +87,13 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text [ de ] = "~Verlauf" ;
         Text [ en-US ] = "Gradient";
     };
     FixedText FT_TRGR_TYPE
     {
         Pos = MAP_APPFONT ( 21 , 56 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "Ty~p" ;
         Text [ en-US ] = "Ty~pe";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_TRGR_GRADIENT_TYPES
     {
@@ -110,24 +102,6 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Size = MAP_APPFONT ( 53 , 63 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Linear" ; Default ; > ;
-            < "Axial" ; Default ; > ;
-            < "Radial" ; Default ; > ;
-            < "Ellipsoid" ; Default ; > ;
-            < "Quadratisch" ; Default ; > ;
-            < "Rechteckig" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-            < "; Line; Line; Linear" ; Default ; > ;
-            < "; Axia; Axia; Axial" ; Default ; > ;
-            < "; Radi; Radi; Radial" ; Default ; > ;
-            < "; Elli; Elli; Ellipsoid" ; Default ; > ;
-            < "; Quad; Quad; Quadratisch" ; Default ; > ;
-            < "; Rech; Rech; Rechteckig" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Linear" ; Default ; > ;
@@ -142,9 +116,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 21 , 72 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "Zentrum ~X" ;
         Text [ en-US ] = "Center ~X";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_TRGR_CENTER_X
     {
@@ -165,9 +137,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 21 , 88 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "Zentrum ~Y" ;
         Text [ en-US ] = "Center ~Y";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_TRGR_CENTER_Y
     {
@@ -188,9 +158,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 21 , 104 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "~Angle";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_TRGR_ANGLE
     {
@@ -202,7 +170,6 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Spin = TRUE ;
         Maximum = 359 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         Last = 359 ;
         SpinSize = 15 ;
         CustomUnitText [ en-US ] = " degrees";
@@ -211,7 +178,6 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 15 + TRANS_GRAD_OFFSET_X, 56 + TRANS_GRAD_OFFSET_Y) ;
         Size = MAP_APPFONT ( 41, 8 ) ;
-        Text [ de ] = "~Rand" ;
         Text [ en-US ] = "~Border";
     };
     MetricField MTR_TRGR_BORDER
@@ -233,7 +199,6 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 21 , 136 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "~Startwert" ;
         Text [ en-US ] = "~Start value";
     };
     MetricField MTR_TRGR_START_VALUE
@@ -255,7 +220,6 @@ TabPage RID_SVXPAGE_TRANSPARENCE
     {
         Pos = MAP_APPFONT ( 21 , 152 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "~Endwert" ;
         Text [ en-US ] = "~End value";
     };
     MetricField MTR_TRGR_END_VALUE
@@ -294,15 +258,12 @@ TabPage RID_SVXPAGE_AREA
     Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpID = HID_AREA_AREA ;
     Hide = TRUE ;
-    Text [ de ] = "Fläche" ;
     Text [ en-US ] = "Area" ;
-    Text [ x-comment ] = " ";
 
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 120, 8 ) ;
-        Text [ de ] = "Füllung" ;
         Text [ en-US ] = "Fill";
     };
     ListBox LB_AREA_TYPE
@@ -311,14 +272,6 @@ TabPage RID_SVXPAGE_AREA
         Size = MAP_APPFONT ( 108 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList [ de ] =
-        {
-            < "Keine" ; Default ; > ;
-            < "Farbe" ; Default ; > ;
-            < "Farbverlauf" ; Default ; > ;
-            < "Schraffur" ; Default ; > ;
-            < "Bitmap" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "None" ; Default ; > ;
@@ -381,18 +334,14 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
-        Text [ de ] = "Schrittweite" ;
         Text [ en-US ] = "Increments" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_STEPCOUNT
     {
         Pos = MAP_APPFONT ( 138 , 15 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text [ de ] = "~Automatisch" ;
         TabStop = TRUE ;
         Text [ en-US ] = "A~utomatic" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_STEPCOUNT
     {
@@ -416,9 +365,7 @@ TabPage RID_SVXPAGE_AREA
         Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 122 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "H~intergrundfarbe" ;
         Text [ en-US ] = "~Background color" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_HATCHBCKGRDCOLOR
     {
@@ -436,35 +383,27 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 132 , 3  ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
-        Text [ de ] = "Größe" ;
         Text [ en-US ] = "Size" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_ORIGINAL
     {
         Pos = MAP_APPFONT ( 138 , 15 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Original" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Original" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_SCALE
     {
         Pos = MAP_APPFONT ( 138 , 30 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "Re~lativ" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Re~lative" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_X_SIZE
     {
         Pos = MAP_APPFONT ( 187 , 15 ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
-        Text [ de ] = "B~reite" ;
         Text [ en-US ] = "Wi~dth" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_X_SIZE
     {
@@ -488,9 +427,7 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 187 , 31  ) ;
         Size = MAP_APPFONT ( 24 , 8 ) ;
-        Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "H~eight" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_Y_SIZE
     {
@@ -515,9 +452,7 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 132 , 47 ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
-        Text [ x-comment ] = " ";
     };
 
     Control CTL_POSITION
@@ -531,17 +466,13 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 138 , 89  ) ;
         Size = MAP_APPFONT ( 39 , 8 ) ;
-        Text [ de ] = "~X-Offset" ;
         Text [ en-US ] = "~X Offset" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_Y_OFFSET
     {
         Pos = MAP_APPFONT ( 139 , 104 ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
-        Text [ de ] = "~Y-Offset" ;
         Text [ en-US ] = "~Y Offset" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_X_OFFSET
     {
@@ -577,43 +508,33 @@ TabPage RID_SVXPAGE_AREA
     {
         Pos = MAP_APPFONT ( 138 , 117  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text [ de ] = "Ka~cheln" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Tile" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_STRETCH
     {
         Pos = MAP_APPFONT ( 194 , 117  ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text [ de ] = "A~npassen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Auto~Fit" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_OFFSET
     {
         Pos = MAP_APPFONT ( 132 , 133  ) ;
         Size = MAP_APPFONT ( 122 , 8 ) ;
-        Text [ de ] = "Verschiebung" ;
         Text [ en-US ] = "Offset" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_ROW
     {
         Pos = MAP_APPFONT ( 138 , 144  ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "~Zeile" ;
         Text [ en-US ] = "Ro~w" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_COLUMN
     {
         Pos = MAP_APPFONT ( 138 , 158 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "S~palte" ;
         Text [ en-US ] = "Colu~mn" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_OFFSET
     {
@@ -637,32 +558,25 @@ TabPage RID_SVXPAGE_SHADOW
     HelpID = HID_AREA_SHADOW ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Schatten" ;
     Text [ en-US ] = "Shadow" ;
-    Text [ x-comment ] = " ";
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     TriStateBox TSB_SHOW_SHADOW
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
-        Text [ de ] = "~Schatten anwenden" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Use shadow";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POSITION
     {
         Pos = MAP_APPFONT ( 12 , 33  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Ausrichtung" ;
         Text [ en-US ] = "~Position";
-        Text [ x-comment ] = " ";
     };
     Control CTL_POSITION
     {
@@ -676,9 +590,7 @@ TabPage RID_SVXPAGE_SHADOW
     {
         Pos = MAP_APPFONT ( 12 , 69  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Distanz" ;
         Text [ en-US ] = "~Distance";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -710,17 +622,13 @@ TabPage RID_SVXPAGE_SHADOW
     {
         Pos = MAP_APPFONT ( 12 , 88  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Farbe" ;
         Text [ en-US ] = "~Color" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TRANSPARENT
     {
         Pos = MAP_APPFONT ( 12 , 107  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Transparenz" ;
         Text [ en-US ] = "~Transparency";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_SHADOW_TRANSPARENT
     {
@@ -750,23 +658,19 @@ TabPage RID_SVXPAGE_HATCH
 {
     HelpID = HID_AREA_HATCH ;
     Hide = TRUE ;
-    Text [ de ] = "Schraffuren" ;
     Text [ en-US ] = "Hatching" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText FT_LINE_DISTANCE
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
-        Text [ de ] = "~Abstand" ;
         Text [ en-US ] = "~Spacing" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -788,9 +692,7 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 12 , 41  ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "A~ngle" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -802,11 +704,9 @@ TabPage RID_SVXPAGE_HATCH
         Spin = TRUE ;
         Maximum = 359 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         CustomUnitText [ en-US ] = " degrees" ;
         Last = 359 ;
         SpinSize = 15 ;
-        CustomUnitText [ x-comment ] = " ";
     };
     Control CTL_ANGLE
     {
@@ -820,9 +720,7 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Li~nientyp" ;
         Text [ en-US ] = "~Line type" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LINE_TYPE
     {
@@ -831,32 +729,18 @@ TabPage RID_SVXPAGE_HATCH
         Size = MAP_APPFONT ( 62 , 62 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Einfach" ; Default ; > ;
-            < "Gekreuzt" ; Default ; > ;
-            < "Dreifach" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Single" ; Default ; > ;
             < "Crossed" ; Default ; > ;
             < "Triple" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     FixedText FT_LINE_COLOR
     {
         Pos = MAP_APPFONT ( 12 , 150 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
-        Text [ de ] = "Linien~farbe" ;
         Text [ en-US ] = "Line ~color" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LINE_COLOR
     {
@@ -884,35 +768,28 @@ TabPage RID_SVXPAGE_HATCH
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_MODIFY
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT ( 197 , 68  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Schraffurentabelle laden" ;
         QuickHelpText [ en-US ] = "Load Hatches List" ;
         ButtonImage = Image
         {
@@ -922,17 +799,12 @@ TabPage RID_SVXPAGE_HATCH
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_SAVE
     {
         Pos = MAP_APPFONT ( 197 , 124 ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Schraffurentabelle sichern" ;
         QuickHelpText [ en-US ] = "Save Hatches List" ;
         ButtonImage = Image
         {
@@ -942,33 +814,25 @@ TabPage RID_SVXPAGE_HATCH
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_BITMAP -------------------------------------------------------
 TabPage RID_SVXPAGE_BITMAP
 {
     HelpID = HID_AREA_BITMAP ;
     Hide = TRUE ;
-    Text [ de ] = "Bitmapmuster" ;
     Text [ en-US ] = "Bitmap Patterns" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText FT_PIXEL_EDIT
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 85 , 8 ) ;
-        Text [ de ] = "Muster Editor" ;
         Text [ en-US ] = "Pattern Editor";
     };
     Control CTL_PIXEL
@@ -982,9 +846,7 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 85 , 8 ) ;
-        Text [ de ] = "~Vordergrundfarbe" ;
         Text [ en-US ] = "~Foreground color";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COLOR
     {
@@ -999,9 +861,7 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 85 , 8 ) ;
-        Text [ de ] = "Hi~ntergrundfarbe" ;
         Text [ en-US ] = "~Background color";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_BACKGROUND_COLOR
     {
@@ -1015,7 +875,6 @@ TabPage RID_SVXPAGE_BITMAP
     FixedText FT_BITMAPS_HIDDEN
     {
         // Hidden label that provides the name for the bitmaps list box.
-        Text [ de ] = "Bitmap" ;
         Text [ en-US ] = "Bitmap";
     };
     ListBox LB_BITMAPS
@@ -1035,44 +894,35 @@ TabPage RID_SVXPAGE_BITMAP
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_MODIFY
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_IMPORT
     {
         Pos = MAP_APPFONT ( 197 , 50  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "I~mport..." ;
         Text [ en-US ] = "~Import..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Bitmaptabelle laden" ;
         QuickHelpText [ en-US ] = "Load Bitmap List" ;
         ButtonImage = Image
         {
@@ -1082,14 +932,12 @@ TabPage RID_SVXPAGE_BITMAP
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_SAVE
     {
         Pos = MAP_APPFONT ( 197 , 124  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Bitmaptabelle sichern" ;
         QuickHelpText [ en-US ] = "Save Bitmap List" ;
         ButtonImage = Image
         {
@@ -1099,32 +947,26 @@ TabPage RID_SVXPAGE_BITMAP
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_GRADIENT -----------------------------------------------------
 TabPage RID_SVXPAGE_GRADIENT
 {
     HelpID = HID_AREA_GRADIENT ;
     Hide = TRUE ;
-    Text [ de ] = "Farbverläufe" ;
     Text [ en-US ] = "Gradients" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_PROP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 16  ) ;
         Size = MAP_APPFONT ( 26 , 8 ) ;
-        Text [ de ] = "~Typ" ;
         Text [ en-US ] = "Ty~pe" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_GRADIENT_TYPES
     {
@@ -1133,15 +975,6 @@ TabPage RID_SVXPAGE_GRADIENT
         Size = MAP_APPFONT ( 48, 63 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Linear" ; Default ; > ;
-            < "Axial" ; Default ; > ;
-            < "Radial" ; Default ; > ;
-            < "Ellipsoid" ; Default ; > ;
-            < "Quadratisch" ; Default ; > ;
-            < "Rechteckig" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Linear" ; Default ; > ;
@@ -1151,23 +984,12 @@ TabPage RID_SVXPAGE_GRADIENT
             < "Square" ; Default ; > ;
             < "Rectangular" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     FixedText FT_CENTER_X
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text [ de ] = "Zentrum ~X" ;
         Text [ en-US ] = "Center ~X" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_CENTER_X
     {
@@ -1188,9 +1010,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 12 , 48  ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text [ de ] = "Zentrum ~Y" ;
         Text [ en-US ] = "Center ~Y" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_CENTER_Y
     {
@@ -1211,9 +1031,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "A~ngle" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_ANGLE
     {
@@ -1225,19 +1043,15 @@ TabPage RID_SVXPAGE_GRADIENT
         Spin = TRUE ;
         Maximum = 359 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         CustomUnitText [ en-US ] = " degrees" ;
         Last = 359 ;
         SpinSize = 15 ;
-        CustomUnitText [ x-comment ] = " ";
     };
     FixedText FT_BORDER
     {
         Pos = MAP_APPFONT ( 12 , 80  ) ;
         Size = MAP_APPFONT ( 32 , 8 ) ;
-        Text [ de ] = "~Rand" ;
         Text [ en-US ] = "~Border" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_BORDER
     {
@@ -1258,9 +1072,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 32 , 8 ) ;
-        Text [ de ] = "~Von" ;
         Text [ en-US ] = "~From" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COLOR_FROM
     {
@@ -1290,9 +1102,7 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 32 , 8 ) ;
-        Text [ de ] = "~Bis" ;
         Text [ en-US ] = "~To" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COLOR_TO
     {
@@ -1335,35 +1145,28 @@ TabPage RID_SVXPAGE_GRADIENT
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_MODIFY
     {
         Pos = MAP_APPFONT ( 197 , 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT ( 197 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Farbverlauftabelle laden" ;
         QuickHelpText [ en-US ] = "Load Gradients List" ;
         ButtonImage = Image
         {
@@ -1373,14 +1176,12 @@ TabPage RID_SVXPAGE_GRADIENT
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_SAVE
     {
         Pos = MAP_APPFONT ( 197 , 124  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Farbverlauftabelle sichern" ;
         QuickHelpText [ en-US ] = "Save Gradients List" ;
         ButtonImage = Image
         {
@@ -1390,16 +1191,13 @@ TabPage RID_SVXPAGE_GRADIENT
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_COLOR --------------------------------------------------------
 TabPage RID_SVXPAGE_COLOR
 {
     HelpId = HID_OPTIONS_COLOR ;
     Hide = TRUE ;
-    Text [ de ] = "Farben" ;
     Text [ en-US ] = "Colors" ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
@@ -1407,16 +1205,13 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248, 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 16  ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_NAME
     {
@@ -1429,9 +1224,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text [ de ] = "~Farbe" ;
         Text [ en-US ] = "C~olor" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COLOR
     {
@@ -1447,9 +1240,7 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 42 , 48 ) ;
         Size = MAP_APPFONT ( 94 , 8 ) ;
-        Text [ de ] = "Farbtabelle" ;
         Text [ en-US ] = "Color table" ;
-        Text [ x-comment ] = " ";
     };
     Control CTL_COLORTABLE
     {
@@ -1479,21 +1270,11 @@ TabPage RID_SVXPAGE_COLOR
         Size = MAP_APPFONT ( 34 , 12 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "RGB" ; Default ; > ;
-            < "CMYK" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "RGB" ; Default ; > ;
             < "CMYK" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     FixedText FT_1
     {
@@ -1575,44 +1356,35 @@ TabPage RID_SVXPAGE_COLOR
     {
         Pos = MAP_APPFONT ( 197 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_WORK_ON
     {
         Pos = MAP_APPFONT ( 197 , 50 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "B~earbeiten..." ;
         Text [ en-US ] = "~Edit..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT ( 197 , 68  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_MODIFY
     {
         Pos = MAP_APPFONT ( 197, 32  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern" ;
         Text [ en-US ] = "~Modify" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 197 , 104  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Farbtabelle laden" ;
         QuickHelpText [ en-US ] = "Load Color List" ;
         ButtonImage = Image
         {
@@ -1622,14 +1394,12 @@ TabPage RID_SVXPAGE_COLOR
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_SAVE
     {
         Pos = MAP_APPFONT ( 197 , 124  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Farbtabelle sichern" ;
         QuickHelpText [ en-US ] = "Save Color List" ;
         ButtonImage = Image
         {
@@ -1639,9 +1409,7 @@ TabPage RID_SVXPAGE_COLOR
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_AREA ----------------------------------------------------------
 TabDialog RID_SVXDLG_AREA
@@ -1649,7 +1417,6 @@ TabDialog RID_SVXDLG_AREA
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Fläche" ;
     Text [ en-US ] = "Area" ;
     Moveable = TRUE ;
     TabControl 1
@@ -1661,60 +1428,46 @@ TabDialog RID_SVXDLG_AREA
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
-                Text [ de ] = "Fläche" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_SHADOW ;
-                Text [ de ] = "Schatten" ;
                 PageResID = RID_SVXPAGE_SHADOW ;
                 Text [ en-US ] = "Shadow" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TRANSPARENCE ;
-                Text [ de ] = "Transparenz" ;
                 Text [ en-US ] = "Transparency";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_COLOR ;
-                Text [ de ] = "Farben" ;
                 Text [ en-US ] = "Colors" ;
                 PageResID = RID_SVXPAGE_COLOR ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_GRADIENT ;
-                Text [ de ] = "Farbverläufe" ;
                 Text [ en-US ] = "Gradients" ;
                 PageResID = RID_SVXPAGE_GRADIENT ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_HATCH ;
-                Text [ de ] = "Schraffuren" ;
                 Text [ en-US ] = "Hatching" ;
                 PageResID = RID_SVXPAGE_HATCH ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_BITMAP ;
-                Text [ de ] = "Bitmapmuster" ;
                 Text [ en-US ] = "Bitmaps" ;
                 PageResID = RID_SVXPAGE_BITMAP ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 
 Image RID_SVXIMG_LOAD_H
