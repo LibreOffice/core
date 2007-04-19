@@ -4,9 +4,9 @@
  *
  *  $RCSfile: statusindicatorfactory.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:00:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:20:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -499,9 +499,12 @@ void StatusIndicatorFactory::implts_makeParentVisibleIfAllowed()
 
     if (xParentWindow.is())
         xParentWindow->setVisible(sal_True);
+    /*
+    #i75167# dont disturb window manager handling .-)
     css::uno::Reference< css::awt::XTopWindow > xParentWindowTop(xParentWindow, css::uno::UNO_QUERY);
     if (xParentWindowTop.is())
         xParentWindowTop->toFront();
+    */
 }
 
 //-----------------------------------------------
