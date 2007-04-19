@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_manager.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:24:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:40:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,30 +39,25 @@
 String RID_STR_COPYING_PACKAGE
 {
     Text [ en-US ] = "Copying: ";
-    Text [ de ] = "Kopiere: ";
 };
 
 String RID_STR_ERROR_WHILE_ADDING
 {
     Text [ en-US ] = "Error while adding: ";
-    Text [ de ] = "Fehler beim Hinzufügen von: ";
 };
 
 String RID_STR_ERROR_WHILE_REMOVING
 {
     Text [ en-US ] = "Error while removing: ";
-    Text [ de ] = "Fehler beim Entfernen von: ";
 };
 
 String RID_STR_PACKAGE_ALREADY_ADDED
 {
     Text [ en-US ] = "Extension has already been added: ";
-    Text [ de ] = "Extension ist bereits vorhanden: ";
 };
 
 String RID_STR_NO_SUCH_PACKAGE
 {
     Text [ en-US ] = "There is no such extension deployed: ";
-    Text [ de ] = "Extension ist nicht bekannt: ";
 };
 
