@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphf.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:22:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:35:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,9 +40,7 @@ PushButton RID_SCBTN_HFEDIT
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 50 , 14 ) ;
-    Text [ de ] = "Bearbei~ten..." ;
     Text [ en-US ] = "~Edit..." ;
-    Text [ x-comment ] = " ";
 };
 
 
