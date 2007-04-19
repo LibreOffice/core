@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationSchemesPane.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:26:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:15:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,48 +39,40 @@ ModalDialog DLG_CUSTOMANIMATION_SCHEMES_PANE
 {
     DialogControl = TRUE;
 
-    Text [ de ] = "Animationsschema";
     Text [ en-US ] = "Animation Schemes";
 
     Fixedline 1
     {
-        Text [ de ] = "Für ausgewählte Folien übernehmen";
         Text [ en-US ] = "Apply to selected slides";
     };
 
     PushButton 1
     {
-        Text [ de ] = "Für alle Folien übernehmen";
         Text [ en-US ] = "Apply to All Slides";
     };
 
     PushButton 2
     {
-        Text [ de ] = "Wiedergabe";
         Text [ en-US ] = "Play";
     };
 
     PushButton 3
     {
-        Text [ de ] = "Bildschirmpräsentation";
         Text [ en-US ] = "Slide Show";
     };
 
     Checkbox 4
     {
-        Text [ de ] = "Automatische Vorschau";
         Text [ en-US ] = "Automatic preview";
     };
 
     String 2
     {
-        Text [ de ] = "Keine Animation";
         Text [ en-US ] = "No Animation";
     };
 
     String 3
     {
-        Text [ de ] = "Zuletzt benutzte Schemas";
         Text [ en-US ] = "Recently used Schemes";
     };
 };
