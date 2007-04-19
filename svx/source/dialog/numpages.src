@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpages.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:25:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:15:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,9 +52,7 @@ TabPage RID_SVXPAGE_PICK_BULLET
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection" ;
-        Text [ x-comment ] = " ";
     };
     Control VS_VALUES
     {
@@ -78,9 +76,7 @@ TabPage RID_SVXPAGE_PICK_SINGLE_NUM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection" ;
-        Text [ x-comment ] = " ";
     };
     Control VS_VALUES
     {
@@ -104,9 +100,7 @@ TabPage RID_SVXPAGE_PICK_NUM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection" ;
-        Text [ x-comment ] = " ";
     };
     Control VS_VALUES
     {
@@ -130,9 +124,7 @@ TabPage RID_SVXPAGE_PICK_BMP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection" ;
-        Text [ x-comment ] = " ";
     };
     Control VS_VALUES
     {
@@ -143,22 +135,18 @@ TabPage RID_SVXPAGE_PICK_BMP
     };
     CheckBox CB_LINKED
     {
-        Text [ de ] = "Grafiken ~verknüpfen" ;
         Pos = MAP_APPFONT ( 9 , 169 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Link graphics";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ERROR
     {
         Pos = MAP_APPFONT ( 9 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 30 ) ;
-        Text [ de ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden." ;
         Text [ en-US ] = "The Gallery theme 'Bullets' is empty (no graphics)." ;
         Hide = TRUE ;
         WordBreak = TRUE ;
-        Text [ x-comment ] = " ";
     };
 };
 /**************************************************************************/
@@ -176,9 +164,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Ebene" ;
         Text [ en-US ] = "Level" ;
-        Text [ x-comment ] = " ";
     };
     MultiListBox LB_LEVEL
     {
@@ -193,17 +179,13 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Format" ;
         Text [ en-US ] = "Format" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FMT
     {
         Pos = MAP_APPFONT ( 50 , 27 ) ;
         Size = MAP_APPFONT ( 50, 8 ) ;
-        Text [ de ] = "~Nummerierung" ;
         Text [ en-US ] = "~Numbering" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_FMT
     {
@@ -212,29 +194,6 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-            < "Grafik verknüpft" ;             0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-            < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-            < "Landesspezifische Zahlzeichen" ;         12 /*NATIVE_NUMBERING                   */; > ;
-            < "А, Б, .., Аа, Аб, ... (Bulgarisch)" ;    38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */; > ;
-            < "а, б, .., аа, аб, ... (Bulgarisch)" ;    39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */; > ;
-            < "А, Б, .., Аа, Бб, ... (Bulgarisch)" ;    40 /*CHARS_CYRILLIC_UPPER_LETTER_N_BG   */; > ;
-            < "а, б, .., аа, бб, ... (Bulgarisch)" ;    41 /*CHARS_CYRILLIC_LOWER_LETTER_N_BG   */; > ;
-            < "А, Б, .., Аа, Аб, ... (Russisch)" ;      42 /*CHARS_CYRILLIC_UPPER_LETTER_RU     */; > ;
-            < "а, б, .., аа, аб, ... (Russisch)" ;      43 /*CHARS_CYRILLIC_LOWER_LETTER_RU     */; > ;
-            < "А, Б, .., Аа, Бб, ... (Russisch)" ;      44 /*CHARS_CYRILLIC_UPPER_LETTER_N_RU   */; > ;
-            < "а, б, .., аа, бб, ... (Russisch)" ;      45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */; > ;
-        };
         StringList [ en-US ] =
         {
             < "1, 2, 3, ... " ;                 4/*SVX_NUM_ARABIC              */; > ;
@@ -259,29 +218,13 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "а, б, .., аа, бб, ... (Russian)" ;       45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */; > ;
 
         };
-        StringList [ x-comment ] =
-        {
-            < " " ;                 4/*SVX_NUM_ARABIC              */; > ;
-            < " " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-            < " " ;                 1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-            < " " ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
-            < " " ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < " " ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-            < " " ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < " " ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < " " ;                     8/*SVX_NUM_BITMAP              */; > ;
-            < "; This is found in a text doc under Format - Numbering/Bullets - Options - Format area - Numbering list box. EM10May00 - Grafik verkn�pft - Grafik verkn�pft" ;          0x88/*SVX_NUM_BITMAP|0x80      */; > ;
-            < "; Keine" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-        };
     };
     FixedText FT_PREFIX
     {
         Pos = MAP_APPFONT ( 50 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Davor" ;
         Text [ en-US ] = "Before" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_PREFIX
     {
@@ -296,10 +239,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 59 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Dahin~ter" ;
         Text [ en-US ] = "After" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SUFFIX
     {
@@ -314,9 +255,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Zeichen~vorlage" ;
         Text [ en-US ] = "~Character Style" ;
-        Text [ x-comment ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
     ListBox LB_CHARFMT
     {
@@ -329,10 +268,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Farbe" ;
         Hide = TRUE;
         Text [ en-US ] = "Color";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_BUL_COLOR
     {
@@ -346,10 +283,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Relative Größe" ;
         Hide = TRUE;
         Text [ en-US ] = "~Relative size";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_BUL_REL_SIZE
     {
@@ -371,9 +306,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "V~ollständig" ;
         Text [ en-US ] = "Show sublevels" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_ALL_LEVEL
     {
@@ -394,10 +327,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 107 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Be~ginn bei" ;
         Text [ en-US ] = "Start at" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_START
     {
@@ -418,10 +349,8 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     {
         Pos = MAP_APPFONT ( 50 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Ausri~chtung" ;
         Text [ en-US ] = "~Alignment" ;
         Hide = TRUE;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ALIGN
     {
@@ -430,30 +359,16 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE;
-        StringList [ de ] =
-        {
-            < "Links" ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Left" ; > ;
             < "Centered" ; > ;
             < "Right" ; > ;
         };
-        StringList [ x-comment ] =
-        {
-            < " " ; > ;
-            < "; Zentriert" ; > ;
-            < "; Rechts" ; > ;
-        };
     };
     String STR_BULLET
     {
-        Text [ de ] = "Ze~ichen" ;
         Text [ en-US ] = "Character" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_BULLET
     {
@@ -468,9 +383,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Grafik" ;
         Text [ en-US ] = "Graphics" ;
-        Text [ x-comment ] = " ";
     };
     MenuButton MB_BITMAP
     {
@@ -478,7 +391,6 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Pos = MAP_APPFONT ( 103 , 41 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Aus~wahl..." ;
         ButtonMenu = Menu
         {
             ItemList  =
@@ -486,30 +398,24 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
                 MenuItem
                 {
                     Identifier = MN_GRAPHIC_DLG ;
-                    Text [ de ] = "Aus Datei..." ;
                      //                    HelpID = HID_NUM_NAMED_NUMS ;
                     Text [ en-US ] = "From file..." ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = MN_GALLERY ;
-                    Text [ de ] = "Gallery" ;
                     Text [ en-US ] = "Gallery";
                 };
             };
         };
         Text [ en-US ] = "Select..." ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SIZE
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 61 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "Width" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_WIDTH
     {
@@ -535,9 +441,7 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "Height" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_HEIGHT
     {
@@ -563,18 +467,14 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 91 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Abg~leich" ;
         Text [ en-US ] = "Keep ratio" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ORIENT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 50 , 105 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "A~usrichtung" ;
         Text [ en-US ] = "Alignment" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ORIENT
     {
@@ -584,18 +484,6 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Basis oben" ; > ;
-            < "Basis zentriert" ; > ;
-            < "Basis unten" ; > ;
-            < "Zeichen oben" ; > ;
-            < "Zeichen zentriert" ; > ;
-            < "Zeichen unten" ; > ;
-            < "Zeile oben" ; > ;
-            < "Zeile zentriert" ; > ;
-            < "Zeile unten" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Top of baseline" ; > ;
@@ -608,34 +496,18 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
             < "Center of line" ; > ;
             < "Bottom of line" ; > ;
         };
-        StringList [ x-comment ] =
-        {
-            < "; Basis oben" ; > ;
-            < " " ; > ;
-            < " " ; > ;
-            < "; Zeichen oben" ; > ;
-            < "; Zeichen zentriert" ; > ;
-            < "; Zeichen unten" ; > ;
-            < "; Zeile oben" ; > ;
-            < " " ; > ;
-            < " " ; > ;
-        };
     };
     FixedLine FL_SAME_LEVEL
     {
         Pos = MAP_APPFONT ( 47 , 156 ) ;
         Size = MAP_APPFONT ( 126 , 8 ) ;
-        Text [ de ] = "Alle Ebenen" ;
         Text [ en-US ] = "All levels" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SAME_LEVEL
     {
         Pos = MAP_APPFONT ( 53 , 167 ) ;
         Size = MAP_APPFONT ( 114 , 10 ) ;
-        Text [ de ] = "~Fortlaufende Nu~mmerierung" ;
         Text [ en-US ] = "~Consecutive numbering" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
@@ -645,7 +517,6 @@ TabPage RID_SVXPAGE_NUM_OPTIONS
     };
     String ST_POPUP_EMPTY_ENTRY
     {
-        Text [ de ] = "Es sind keine Grafiken im Gallery-Thema 'Bullets' vorhanden." ;
         Text [ en-US ] = "There are no graphics in the 'Bullets' Gallery theme.";
     };
 
@@ -665,9 +536,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 50, 8 ) ;
-        Text [ de ] = "~Ebene" ;
         Text [ en-US ] = "Level" ;
-        Text [ x-comment ] = " ";
     };
     MultiListBox LB_LEVEL
     {
@@ -682,26 +551,20 @@ TabPage RID_SVXPAGE_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Position und Abstand" ;
         Group = TRUE ;
         Text [ en-US ] = "Position and spacing" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_BORDERDIST
     {
         Pos = MAP_APPFONT ( 50 , 27 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text [ de ] = "Ein~rückung";
         Text [ en-US ] = "Indent" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_RELATIVE
     {
         Pos = MAP_APPFONT ( 202 , 27 ) ;
         Size = MAP_APPFONT ( 52 , 10 ) ;
-        Text [ de ] = "Relati~v" ;
         Text [ en-US ] = "Relati~ve" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_BORDERDIST
     {
@@ -725,9 +588,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 50 , 43 ) ;
         Size = MAP_APPFONT ( 105 , 8 ) ;
-        Text [ de ] = "Abstand zum Te~xt" ;
         Text [ en-US ] = "Spacing to text" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_INDENT
     {
@@ -751,9 +612,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 50 , 59 ) ;
         Size = MAP_APPFONT ( 105 , 8 ) ;
-        Text [ de ] = "~Mindestabstand Nummer <-> Text" ;
         Text [ en-US ] = "Minimum space numbering <-> text" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_NUMDIST
     {
@@ -777,9 +636,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
         Size = MAP_APPFONT ( 105 , 8 ) ;
-        Text [ de ] = "Ausri~chtung der Nummerierung" ;
         Text [ en-US ] = "N~umbering alignment" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ALIGN
     {
@@ -787,32 +644,18 @@ TabPage RID_SVXPAGE_NUM_POSITION
         Size = MAP_APPFONT ( 40 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Links" ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Left" ; > ;
             < "Centered" ; > ;
             < "Right" ; > ;
         };
-        StringList [ x-comment ] =
-        {
-            < "; Links" ; > ;
-            < "; Zentriert" ; > ;
-            < "; Rechts" ; > ;
-        };
     };
     PushButton PB_STANDARD
     {
         Pos = MAP_APPFONT ( 198 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Standard" ;
         Text [ en-US ] = "Default" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
@@ -824,9 +667,7 @@ TabPage RID_SVXPAGE_NUM_POSITION
 
 String RID_STR_EDIT_GRAPHIC
 {
-    Text [ de ] = "Verknüpfen" ;
     Text [ en-US ] = "Link" ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_FULLNUMS_1 { Text = "1.|1.1|a)|61589|61589" ; };
 String RID_STR_FULLNUMS_2 { Text = "1.|a)|61589|61589|61589" ; };
@@ -840,123 +681,99 @@ String RID_STR_FULLNUMS_7_HTML { Text = "I.|I.|I|I.|I." ; };
 
 String RID_SVXSTR_BULLET_DESCRIPTION_0
 {
-    Text [ de ] = "Kleine ausgefüllte kreisförmige Gliederungspunkte";
     Text [en-US] = "Solid small circular bullets";
 };
 String RID_SVXSTR_BULLET_DESCRIPTION_1
 {
-    Text [ de ] = "Große ausgefüllte kreisförmige Gliederungspunkte";
     Text [en-US] = "Solid large circular bullets";
 };
 String RID_SVXSTR_BULLET_DESCRIPTION_2
 {
-    Text [ de ] = "Ausgefüllte diamantförmige Gliederungspunkte";
     Text [en-US] = "Solid diamond bullets";
 };
 String RID_SVXSTR_BULLET_DESCRIPTION_3
 {
-    Text [ de ] = "Große ausgefüllte quadratische Gliederungspunkte";
     Text [en-US] = "Solid large square bullets";
 };
 String RID_SVXSTR_BULLET_DESCRIPTION_4
 {
-    Text [ de ] = "Ausgefüllte nach rechts zeigende Pfeile als Gliederungspunkte";
     Text [en-US] = "Right pointing arrow bullets filled out";
 };
 String RID_SVXSTR_BULLET_DESCRIPTION_5
 {
-    Text [ de ] = "Nach rechts zeigende Pfeile als Gliederungspunkte";
     Text [en-US] = "Right pointing arrow bullets";
 };
 String RID_SVXSTR_BULLET_DESCRIPTION_6
 {
-    Text [ de ] = "Kreuzmarken als Gliederungspunkte";
     Text [en-US] = "Check mark bullets";
 };
 String RID_SVXSTR_BULLET_DESCRIPTION_7
 {
-    Text [ de ] = "Haken als Gliederungspunkte";
     Text [en-US] = "Tick mark bullets";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_0
 {
-    Text [ de ] = "Nummer 1) 2) 3)";
     Text [en-US] = "Number 1) 2) 3)";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_1
 {
-    Text [ de ] = "Nummer 1. 2. 3.";
     Text [en-US] = "Number 1. 2. 3.";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_2
 {
-    Text [ de ] = "Nummer (1) (2) (3)";
     Text [en-US] = "Number (1) (2) (3)";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_3
 {
-    Text [ de ] = "Große römische Zahlen I. II. III.";
     Text [en-US] = "Uppercase Roman number I. II. III.";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_4
 {
-    Text [ de ] = "Großbuchstaben A) B) C)";
     Text [en-US] = "Uppercase letter A) B) C)";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_5
 {
-    Text [ de ] = "Kleinbuchstaben a) b) c)";
     Text [en-US] = "Lowercase letter a) b) c)";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_6
 {
-    Text [ de ] = "Kleinbuchstaben (a) (b) (c)";
     Text [en-US] = "Lowercase letter (a) (b) (c)";
 };
 String RID_SVXSTR_SINGLENUM_DESCRIPTION_7
 {
-    Text [ de ] = "Kleine römische Zahlen i. ii. iii.";
     Text [en-US] = "Lowercase Roman number i. ii. iii.";
 };
 
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_0
 {
-    Text [ de ] = "Numerisch, numerisch, kleine Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
     Text [en-US] = "Numeric, numeric, lowercase letters, solid small circular bullet";
 };
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_1
 {
-    Text [ de ] = "Numerisch, kleine Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
     Text [en-US] = "Numeric, lowercase letters, solid small circular bullet";
 };
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_2
 {
-    Text [ de ] = "Numerisch, kleine Buchstaben, kleine römische Zahlen, große Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
     Text [en-US] = "Numeric, lowercase letters, lowercase Roman, uppercase letters, solid small circular bullet";
 };
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_3
 {
-    Text [ de ] = "Numerisch";
     Text [en-US] = "Numeric";
 };
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_4
 {
-    Text [ de ] = "Große römische Zahlen, große Buchstaben, kleine römische Zahlen, kleine Buchstaben, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
     Text [en-US] = "Uppercase Roman, uppercase letters, lowercase Roman, lowercase letters, solid small circular bullet";
 };
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_5
 {
-    Text [ de ] = "Große Buchstaben, große römische Zahlen, kleine Buchstaben, kleine römische Zahlen, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
     Text [en-US] = "Uppercase letters, uppercase Roman, lowercase letters, lowercase Roman, solid small circular bullet";
 };
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_6
 {
-    Text [ de ] = "Numerisch, vollständig";
     Text [en-US] = "Numeric with all sublevels";
 };
 String RID_SVXSTR_OUTLINENUM_DESCRIPTION_7
 {
-    Text [ de ] = "Nach rechts zeigender Pfeil als Gliederungspunkt, ausgefüllte schwarzer nach rechts zeigender Pfeil als Gliederungspunkt, ausgefüllter schwarzer diamantförmiger Gliederungspunkt, kleiner ausgefüllter kreisförmiger Gliederungspunkt";
     Text [en-US] = "Right pointing bullet, right pointing arrow bullet, solid diamond bullet, solid small circular bullet";
 };
 
