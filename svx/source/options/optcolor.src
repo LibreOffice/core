@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:58:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:35:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,14 +50,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Farbschema" ;
         Text [ en-US ] = "Color scheme";
     };
     FixedText FT_COLORSCHEME
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Schema" ;
         Text [ en-US ] = "Scheme";
     };
     ListBox LB_COLORSCHEME
@@ -72,14 +70,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
     {
         Pos = MAP_APPFONT ( 145, 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Speichern..." ;
         Text [ en-US ] = "Save...";
     };
     PushButton PB_DELETESCHEME
     {
         Pos = MAP_APPFONT ( 198 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Löschen" ;
         Text [ en-US ] = "Delete";
     };
     FixedLine FL_CUSTOMCOLORS
@@ -87,7 +83,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
         Pos = MAP_APPFONT ( 6 , 34 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
 
-        Text [ de ] = "Benutzerdefinierte Farben" ;
         Text [ en-US ] = "Custom colors";
     };
     Control CT_COLORCONFIG
@@ -105,22 +100,18 @@ TabPage RID_SVXPAGE_COLORCONFIG
         };
         String ST_ON
         {
-            Text [ de ] = "Ein" ;
             Text [ en-US ] = "On";
         };
         String ST_UIELEM
         {
-            Text [ de ] = "Elemente der Benutzeroberfläche" ;
             Text [ en-US ] = "User interface elements";
         };
         String ST_COLSET
         {
-            Text [ de ] = "Farbeinstellung" ;
             Text [ en-US ] = "Color setting";
         };
         String ST_PREVIEW
         {
-            Text [ de ] = "Vorschau" ;
             Text [ en-US ] = "Preview";
         };
         Window WN_SCROLL
@@ -165,14 +156,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_GENERAL
             {
                 FT_SEP_POS_SIZE( 0 );
-                Text [ de ] = "Allgemein" ;
                 Text [ en-US ] = "General";
             };
 
             FixedText FT_DOCCOLOR
             {
                 FT_POS_SIZE( 1 );
-                Text [ de ] = "Dokumenthintergrund" ;
                 Text [ en-US ] = "Document background";
             };
             LB_WN( DOCCOLOR, 1 )
@@ -180,7 +169,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_DOCBOUND
             {
                 CB_POS_SIZE( 2 );
-                Text [ de ] = "Textbegrenzungen" ;
                 Text [ en-US ] = "Text boundaries";
             };
             LB_WN( DOCBOUND, 2 )
@@ -188,7 +176,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_APPBACKGROUND
             {
                 FT_POS_SIZE( 3 );
-                Text [ de ] = "Hintergrund der Anwendung" ;
                 Text [ en-US ] = "Application background";
             };
             LB_WN( APPBACKGROUND, 3 )
@@ -196,7 +183,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_OBJECTBOUNDARIES
             {
                 CB_POS_SIZE( 4 );
-                Text [ de ] = "Objektumrandungen" ;
                 Text [ en-US ] = "Object boundaries";
             };
             LB_WN( OBJECTBOUNDARIES, 4 )
@@ -204,7 +190,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_TABLEBOUNDARIES
             {
                 CB_POS_SIZE( 5 );
-                Text [ de ] = "Tabellenbegrenzungen" ;
                 Text [ en-US ] = "Table boundaries";
             };
             LB_WN( TABLEBOUNDARIES, 5 )
@@ -212,7 +197,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_FONTCOLOR
             {
                 FT_POS_SIZE( 6 );
-                Text [ de ] = "Schriftfarbe" ;
                 Text [ en-US ] = "Font color";
             };
             LB_WN( FONTCOLOR, 6 )
@@ -220,7 +204,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_LINKS
             {
                 CB_POS_SIZE( 7 );
-                Text [ de ] = "Unbesuchte Verknüpfungen" ;
                 Text [ en-US ] = "Unvisited links";
             };
             LB_WN( LINKS, 7 )
@@ -228,7 +211,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_LINKSVISITED
             {
                 CB_POS_SIZE( 8 );
-                Text [ de ] = "Besuchte Verknüpfungen" ;
                 Text [ en-US ] = "Visited links";
             };
             LB_WN( LINKSVISITED, 8 )
@@ -236,7 +218,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_SPELL
             {
                 FT_POS_SIZE( 9 );
-                Text [ de ] = "AutoRechtschreibprüfung" ;
                 Text [ en-US ] = "AutoSpellcheck";
             };
             LB_WN( SPELL, 9 )
@@ -244,14 +225,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_WRITER
             {
                 FT_SEP_POS_SIZE( 10 );
-                Text [ de ] = "Textdokument" ;
                 Text [ en-US ] = "Text Document";
             };
 
             FixedText FT_WRITERTEXTGRID
             {
                 FT_POS_SIZE( 11 );
-                Text [ de ] = "Raster" ;
                 Text [ en-US ] = "Grid";
             };
             LB_WN( WRITERTEXTGRID, 11 )
@@ -259,7 +238,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_WRITERFIELDSHADINGS
             {
                 CB_POS_SIZE( 12 );
-                Text [ de ] = "Feldhinterlegung" ;
                 Text [ en-US ] = "Field shadings";
             };
             LB_WN( WRITERFIELDSHADINGS, 12 )
@@ -267,7 +245,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_WRITERIDXSHADINGS
             {
                 CB_POS_SIZE( 13 );
-                Text [ de ] = "Verzeichnishinterlegung" ;
                 Text [ en-US ] = "Index and table shadings";
             };
             LB_WN( WRITERIDXSHADINGS, 13 )
@@ -275,7 +252,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_WRITERNOTESINDICATOR
             {
                 FT_POS_SIZE( 14 );
-                Text [ de ] = "Notizanzeiger" ;
                 Text [ en-US ] = "Note indicator";
             };
             LB_WN( WRITERNOTESINDICATOR, 14 )
@@ -283,7 +259,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_WRITERSCRIPTINDICATOR
             {
                 FT_POS_SIZE( 15 );
-                Text [ de ] = "Skriptanzeiger" ;
                 Text [ en-US ] = "Script indicator";
             };
             LB_WN( WRITERSCRIPTINDICATOR, 15 )
@@ -291,7 +266,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             CheckBox CB_WRITERSECTIONBOUNDARIES
             {
                 CB_POS_SIZE( 16 );
-                Text [ de ] = "Bereichsumrandungen" ;
                 Text [ en-US ] = "Section boundaries";
             };
             LB_WN( WRITERSECTIONBOUNDARIES, 16 )
@@ -299,7 +273,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_WRITERPAGEBREAKS
             {
                 FT_POS_SIZE( 17 );
-                Text [ de ] = "Seiten- und Spaltenumbrüche" ;
                 Text [ en-US ] = "Page and column breaks";
             };
             LB_WN( WRITERPAGEBREAKS, 17 )
@@ -307,7 +280,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_WRITERDIRECTCURSOR
             {
                 FT_POS_SIZE( 18 );
-                Text [ de ] = "Direkt-Cursor" ;
                 Text [ en-US ] = "Direct cursor";
             };
             LB_WN( WRITERDIRECTCURSOR, 18 )
@@ -315,14 +287,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_HTML
             {
                 FT_SEP_POS_SIZE( 19 );
-                Text [ de ] = "HTML-Dokument" ;
                 Text [ en-US ] = "HTML Document";
             };
 
             FixedText FT_HTMLSGML
             {
                 FT_POS_SIZE( 20 );
-                Text [ de ] = "SGML Syntax-Hervorhebung" ;
                 Text [ en-US ] = "SGML syntax highlighting";
             };
             LB_WN( HTMLSGML, 20 )
@@ -330,7 +300,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_HTMLCOMMENT
             {
                 FT_POS_SIZE( 21 );
-                Text [ de ] = "Kommentar-Hervorhebung" ;
                 Text [ en-US ] = "Comment highlighting";
             };
             LB_WN( HTMLCOMMENT, 21 )
@@ -338,7 +307,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_HTMLKEYWORD
             {
                 FT_POS_SIZE( 22 );
-                Text [ de ] = "Schlüsselwort-Hervorhebung" ;
                 Text [ en-US ] = "Keyword highlighting";
             };
             LB_WN( HTMLKEYWORD, 22 )
@@ -346,7 +314,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_HTMLUNKNOWN
             {
                 FT_POS_SIZE( 23 );
-                Text [ de ] = "Text" ;
                 Text [ en-US ] = "Text";
             };
             LB_WN( HTMLUNKNOWN, 23 )
@@ -354,14 +321,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALC
             {
                 FT_SEP_POS_SIZE( 24 );
-                Text [ de ] = "Tabellendokument" ;
                 Text [ en-US ] = "Spreadsheet";
             };
 
             FixedText FT_CALCGRID
             {
                 FT_POS_SIZE( 25 );
-                Text [ de ] = "Gitterlinien" ;
                 Text [ en-US ] = "Grid lines";
             };
             LB_WN( CALCGRID, 25 )
@@ -369,7 +334,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCPAGEBREAK
             {
                 FT_POS_SIZE( 26 );
-                Text [ de ] = "Seitenumbrüche" ;
                 Text [ en-US ] = "Page breaks";
             };
             LB_WN( CALCPAGEBREAK, 26 )
@@ -377,7 +341,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCPAGEBREAKMANUAL
             {
                 FT_POS_SIZE( 27 );
-                Text [ de ] = "Manuelle Seitenumbrüche" ;
                 Text [ en-US ] = "Manual page breaks";
             };
             LB_WN( CALCPAGEBREAKMANUAL, 27 )
@@ -385,7 +348,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCPAGEBREAKAUTO
             {
                 FT_POS_SIZE( 28 );
-                Text [ de ] = "Automatische Seitenumbrüche" ;
                 Text [ en-US ] = "Automatic page breaks";
             };
             LB_WN( CALCPAGEBREAKAUTO, 28 )
@@ -393,7 +355,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCDETECTIVE
             {
                 FT_POS_SIZE( 29 );
-                Text [ de ] = "Detektiv" ;
                 Text [ en-US ] = "Detective";
             };
             LB_WN( CALCDETECTIVE, 29 )
@@ -401,7 +362,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCDETECTIVEERROR
             {
                 FT_POS_SIZE( 30 );
-                Text [ de ] = "Detektiv-Fehler" ;
                 Text [ en-US ] = "Detective error";
             };
             LB_WN( CALCDETECTIVEERROR, 30 )
@@ -409,7 +369,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCREFERENCE
             {
                 FT_POS_SIZE( 31 );
-                Text [ de ] = "Referenzen" ;
                 Text [ en-US ] = "References";
             };
             LB_WN( CALCREFERENCE, 31 )
@@ -417,7 +376,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_CALCNOTESBACKGROUND
             {
                 FT_POS_SIZE( 32 );
-                Text [ de ] = "Notizhintergrund" ;
                 Text [ en-US ] = "Notes background";
             };
             LB_WN( CALCNOTESBACKGROUND, 32 )
@@ -425,14 +383,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_DRAW
             {
                 FT_SEP_POS_SIZE( 33 );
-                Text [ de ] = "Zeichnung / Präsentation" ;
                 Text [ en-US ] = "Drawing / Presentation";
             };
 
             FixedText FT_DRAWGRID
             {
                 FT_POS_SIZE( 34 );
-                Text [ de ] = "Raster" ;
                 Text [ en-US ] = "Grid";
             };
             LB_WN( DRAWGRID, 34 )
@@ -440,15 +396,12 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_BASIC
             {
                 FT_SEP_POS_SIZE( 35 );
-                Text [ de ] = "Basic Syntaxhervorhebung" ;
-                Text [ x-comment ] = "; EM July 31, 2002: Title of a section";
                 Text [ en-US ] = "Basic Syntax Highlighting";
             };
 
             FixedText FT_BASICIDENTIFIER
             {
                 FT_POS_SIZE( 36 );
-                Text [ de ] = "Bezeichner" ;
                 Text [ en-US ] = "Identifier";
             };
             LB_WN( BASICIDENTIFIER, 36 )
@@ -456,7 +409,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_BASICCOMMENT
             {
                 FT_POS_SIZE( 37 );
-                Text [ de ] = "Kommentar" ;
                 Text [ en-US ] = "Comment";
             };
             LB_WN( BASICCOMMENT, 37 )
@@ -464,7 +416,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_BASICNUMBER
             {
                 FT_POS_SIZE( 38 );
-                Text [ de ] = "Zahl" ;
                 Text [ en-US ] = "Number";
             };
             LB_WN( BASICNUMBER, 38 )
@@ -472,7 +423,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_BASICSTRING
             {
                 FT_POS_SIZE( 39 );
-                Text [ de ] = "Zeichenkette" ;
                 Text [ en-US ] = "String";
             };
             LB_WN( BASICSTRING, 39 )
@@ -480,7 +430,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_BASICOPERATOR
             {
                 FT_POS_SIZE( 40 );
-                Text [ de ] = "Operator" ;
                 Text [ en-US ] = "Operator";
             };
             LB_WN( BASICOPERATOR, 40 )
@@ -488,7 +437,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_BASICKEYWORD
             {
                 FT_POS_SIZE( 41 );
-                Text [ de ] = "Reservierter Ausdruck" ;
                 Text [ en-US ] = "Reserved expression";
             };
             LB_WN( BASICKEYWORD, 41 )
@@ -496,7 +444,6 @@ TabPage RID_SVXPAGE_COLORCONFIG
             FixedText FT_BASICERROR
             {
                 FT_POS_SIZE( 42 );
-                Text [ de ] = "Fehler" ;
                 Text [ en-US ] = "Error";
             };
             LB_WN( BASICERROR, 42 )
@@ -508,22 +455,18 @@ QueryBox RID_SVXQB_DELETE_COLOR_CONFIG
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Soll das Farbschema wirklich gelöscht werden?" ;
     Message [ en-US ] = "Do you really want to delete the color scheme?" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_DELETE
 {
-    Text [ de ] = "Löschen des Schemas bestätigen" ;
     Text [ en-US ] = "Color Scheme Deletion" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE1
 {
-    Text [ de ] = "Schema speichern" ;
     Text [ en-US ] = "Save scheme" ;
 };
 String RID_SVXSTR_COLOR_CONFIG_SAVE2
 {
-    Text [ de ] = "Name des Farbschemas" ;
     Text [ en-US ] = "Name of color scheme" ;
 };
 
