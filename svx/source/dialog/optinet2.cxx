@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:07:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:16:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -347,32 +347,35 @@ void SvxNoSpaceEdit::Modify()
 /********************************************************************/
 
 SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
+
     SfxTabPage( pParent, ResId( RID_SVXPAGE_INET_PROXY, DIALOG_MGR() ), rSet ),
-    aOptionGB   (this, ResId(GB_SETTINGS)),
 
-    aProxyModeFT  (this, ResId(FT_PROXYMODE)),
-    aProxyModeLB  (this, ResId(LB_PROXYMODE)),
+    aOptionGB           (this, ResId( GB_SETTINGS       )),
 
-    aHttpProxyFT      (this, ResId( FT_HTTP_PROXY     )),
-    aHttpProxyED      (this, ResId( ED_HTTP_PROXY     )),
-    aHttpPortFT       (this, ResId( FT_HTTP_PORT      )),
-    aHttpPortED       (this, ResId( ED_HTTP_PORT      ), TRUE),
+    aProxyModeFT        (this, ResId( FT_PROXYMODE      )),
+    aProxyModeLB        (this, ResId( LB_PROXYMODE      )),
 
-    aFtpProxyFT       (this, ResId( FT_FTP_PROXY      )),
-    aFtpProxyED       (this, ResId( ED_FTP_PROXY      )),
-    aFtpPortFT        (this, ResId( FT_FTP_PORT       )),
-    aFtpPortED        (this, ResId( ED_FTP_PORT       ), TRUE),
+    aHttpProxyFT        (this, ResId( FT_HTTP_PROXY     )),
+    aHttpProxyED        (this, ResId( ED_HTTP_PROXY     )),
+    aHttpPortFT         (this, ResId( FT_HTTP_PORT      )),
+    aHttpPortED         (this, ResId( ED_HTTP_PORT      ), TRUE),
 
-    aNoProxyForFT     (this, ResId( FT_NOPROXYFOR     )),
-    aNoProxyForED     (this, ResId( ED_NOPROXYFOR     )),
-    aNoProxyDescFT    (this, ResId( ED_NOPROXYDESC    )),
-    sFromBrowser        (       ResId( ST_PROXY_FROM_BROWSER ) ),
-    aProxyModePN(RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType")),
-    aHttpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName")),
-    aHttpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort")),
-    aFtpProxyPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName")),
-    aFtpPortPN(RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort")),
-    aNoProxyDescPN(RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"))
+    aFtpProxyFT         (this, ResId( FT_FTP_PROXY      )),
+    aFtpProxyED         (this, ResId( ED_FTP_PROXY      )),
+    aFtpPortFT          (this, ResId( FT_FTP_PORT       )),
+    aFtpPortED          (this, ResId( ED_FTP_PORT       ), TRUE),
+
+    aNoProxyForFT       (this, ResId( FT_NOPROXYFOR     )),
+    aNoProxyForED       (this, ResId( ED_NOPROXYFOR     )),
+    aNoProxyDescFT      (this, ResId( ED_NOPROXYDESC    )),
+    sFromBrowser        (      ResId( ST_PROXY_FROM_BROWSER ) ),
+    aProxyModePN(       RTL_CONSTASCII_USTRINGPARAM("ooInetProxyType")),
+    aHttpProxyPN(       RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyName")),
+    aHttpPortPN(        RTL_CONSTASCII_USTRINGPARAM("ooInetHTTPProxyPort")),
+    aFtpProxyPN(        RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyName")),
+    aFtpPortPN(         RTL_CONSTASCII_USTRINGPARAM("ooInetFTPProxyPort")),
+    aNoProxyDescPN(     RTL_CONSTASCII_USTRINGPARAM("ooInetNoProxy"))
+
 {
     FreeResource();
 
@@ -409,10 +412,12 @@ SvxProxyTabPage::SvxProxyTabPage(Window* pParent, const SfxItemSet& rSet ) :
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) ),
                     aArgumentList );
         }
-
-        catch (RuntimeException e) {
+        catch ( RuntimeException& )
+        {
         }
     }
+
+    ArrangeControls_Impl();
 }
 
 /*-----------------12.08.96 14.55-------------------
@@ -682,6 +687,52 @@ BOOL SvxProxyTabPage::FillItemSet(SfxItemSet& )
 
     return bModified;
 }
+
+void SvxProxyTabPage::ArrangeControls_Impl()
+{
+    //-->Calculate dynamical width of controls, add buy wuy for i71445 Time: 2007.02.27
+    long nWidth = aProxyModeFT.GetCtrlTextWidth( aProxyModeFT.GetText() );
+    long nTemp = aHttpProxyFT.GetCtrlTextWidth( aHttpProxyFT.GetText() );
+    if ( nTemp > nWidth )
+        nWidth = nTemp;
+    nTemp = aFtpProxyFT.GetCtrlTextWidth( aFtpProxyFT.GetText() );
+    if ( nTemp > nWidth )
+        nWidth = nTemp;
+    nTemp = aNoProxyForFT.GetCtrlTextWidth( aNoProxyForFT.GetText() );
+    if ( nTemp > nWidth )
+        nWidth = nTemp;
+
+    nWidth += 10; // To be sure the length of the FixedText is enough on all platforms
+    const long nFTWidth = aProxyModeFT.GetSizePixel().Width();
+    if ( nWidth > nFTWidth )
+    {
+        Size aNewSize = aProxyModeFT.GetSizePixel();
+        aNewSize.Width() = nWidth;
+
+        aProxyModeFT.SetSizePixel( aNewSize );
+        aHttpProxyFT.SetSizePixel( aNewSize );
+        aFtpProxyFT.SetSizePixel( aNewSize );
+        aNoProxyForFT.SetSizePixel( aNewSize );
+
+        const long nDelta = nWidth - nFTWidth;
+        Point aNewPos = aProxyModeLB.GetPosPixel();
+        aNewPos.X() += nDelta;
+
+        aProxyModeLB.SetPosPixel( aNewPos );
+
+        aNewSize = aHttpProxyED.GetSizePixel();
+        aNewSize.Width() -= nDelta;
+
+        aNewPos.Y() = aHttpProxyED.GetPosPixel().Y();
+        aHttpProxyED.SetPosSizePixel( aNewPos, aNewSize );
+        aNewPos.Y() = aFtpProxyED.GetPosPixel().Y();
+        aFtpProxyED.SetPosSizePixel( aNewPos, aNewSize );
+        aNewPos.Y() = aNoProxyForED.GetPosPixel().Y();
+        aNoProxyForED.SetPosSizePixel( aNewPos, aNewSize );
+    }
+    //<--End buy wuy for i71445 Time: 2007.02.27
+}
+
 /*-----------------12.08.96 13.38-------------------
 
 --------------------------------------------------*/
