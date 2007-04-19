@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:06:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:37:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,9 +41,7 @@
     {\
         Identifier = FID_CELL_FORMAT ; \
         HelpId = FID_CELL_FORMAT ; \
-        Text [ de ] = "~Zellen formatieren..." ; \
         Text [ en-US ] = "~Format Cells..." ; \
-        Text [ x-comment ] = " ";\
     };
 
 
@@ -52,28 +50,22 @@
     {\
         Identifier = SID_CUT ; \
         HelpId = SID_CUT ; \
-        Text [ de ] = "Auss~chneiden" ; \
         Text [ en-US ] = "Cu~t" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Die Selektion in die Zwischenablage kopieren und löschen : Die Selektion in die Zwischenablage kopieren und l÷schen */\
-        Text [ x-comment ] = " ";\
     };\
     MenuItem\
     {\
         Identifier = SID_COPY ; \
         HelpId = SID_COPY ; \
-        Text [ de ] = "Kopie~ren" ; \
         Text [ en-US ] = "~Copy" ; \
-        Text [ x-comment ] = " ";\
     };\
     MenuItem\
     {\
         Identifier = SID_PASTE ; \
         HelpId = SID_PASTE ; \
         /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */\
-        Text [ de ] = "E~infÃ¼gen" ; \
         Text [ en-US ] = "~Paste" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Den Inhalt der Zwischenablage einfügen : Den Inhalt der Zwischenablage einf³gen */\
-        Text [ x-comment ] = " ";\
     };
 
  //-------------------------------------------------------------------------------
@@ -91,7 +83,6 @@ Menu RID_POPUP_ROWHEADER
             Identifier = FID_ROW_HEIGHT ;
             HelpId = FID_ROW_HEIGHT ;
             /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe... : Zeilenh÷he... */
-            Text [ de ] = "Zeile~nhÃ¶he..." ;
             Text [ en-US ] = "Row Hei~ght..." ;
         };
         MenuItem
@@ -99,10 +90,8 @@ Menu RID_POPUP_ROWHEADER
             Identifier = FID_ROW_OPT_HEIGHT ;
             HelpId = FID_ROW_OPT_HEIGHT ;
             /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe... : Optimale Zeilenh÷he... */
-            Text [ de ] = "~Optimale ZeilenhÃ¶he..." ;
             Text [ en-US ] = "Optimal ~Row Height..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe einstellen : Optimale Zeilenh÷he einstellen */
-            Text [ x-comment ] = " ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -112,30 +101,24 @@ Menu RID_POPUP_ROWHEADER
             Identifier = FID_INS_ROW ;
             HelpId = FID_INS_ROW ;
             /* ### ACHTUNG: Neuer Text in Resource? Zeilen einfügen : Zeilen einf³gen */
-            Text [ de ] = "Zeilen ~einfÃ¼gen" ;
             Text [ en-US ] = "~Insert Rows" ;
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen einfügen : Ganze Zeilen einf³gen */
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_DEL_ROWS ;
             HelpId = SID_DEL_ROWS ;
             /* ### ACHTUNG: Neuer Text in Resource? Zeilen löschen : Zeilen l÷schen */
-            Text [ de ] = "Zeilen ~lÃ¶schen" ;
             Text [ en-US ] = "~Delete Rows" ;
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen löschen : Ganze Zeilen l÷schen */
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
             HelpId = SID_DELETE ;
             /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
-            Text [ de ] = "Inhalte l~Ã¶schen..." ;
             Text [ en-US ] = "De~lete Contents..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
-            Text [ x-comment ] = " ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -144,17 +127,13 @@ Menu RID_POPUP_ROWHEADER
         {
             Identifier = FID_ROW_HIDE ;
             HelpId = FID_ROW_HIDE ;
-            Text [ de ] = "~Ausblenden" ;
             Text [ en-US ] = "~Hide" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = FID_ROW_SHOW ;
             HelpId = FID_ROW_SHOW ;
-            Text [ de ] = "Ein~blenden" ;
             Text [ en-US ] = "~Show" ;
-            Text [ x-comment ] = " ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -164,9 +143,7 @@ Menu RID_POPUP_ROWHEADER
         {
             Identifier = FID_PASTE_CONTENTS ;
             HelpId = FID_PASTE_CONTENTS ;
-            Text [ de ] = "In~halte einfÃ¼gen..." ;
             Text [ en-US ] = "P~aste Special..." ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -185,18 +162,14 @@ Menu RID_POPUP_COLHEADER
         {
             Identifier = FID_COL_WIDTH ;
             HelpId = FID_COL_WIDTH ;
-            Text [ de ] = "Spalte~nbreite..." ;
             Text [ en-US ] = "Col~umn Width..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Spaltenbreite ändern : Spaltenbreite õndern */
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = FID_COL_OPT_WIDTH ;
             HelpId = FID_COL_OPT_WIDTH ;
-            Text [ de ] = "~Optimale Spaltenbreite..." ;
             Text [ en-US ] = "O~ptimal Column Width..." ;
-            Text [ x-comment ] = " ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -206,30 +179,24 @@ Menu RID_POPUP_COLHEADER
             Identifier = FID_INS_COLUMN ;
             HelpId = FID_INS_COLUMN ;
             /* ### ACHTUNG: Neuer Text in Resource? Spalten einfügen : Spalten einf³gen */
-            Text [ de ] = "Spalten ~einfÃ¼gen" ;
             Text [ en-US ] = "~Insert Columns" ;
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten einfügen : Ganze Spalten einf³gen */
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_DEL_COLS ;
             HelpId = SID_DEL_COLS ;
             /* ### ACHTUNG: Neuer Text in Resource? Spalten löschen : Spalten l÷schen */
-            Text [ de ] = "Spalten ~lÃ¶schen" ;
             Text [ en-US ] = "~Delete Columns" ;
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten löschen : Ganze Spalten l÷schen */
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_DELETE ;
             HelpId = SID_DELETE ;
             /* ### ACHTUNG: Neuer Text in Resource? Inhalte l~öschen... : Inhalte l~÷schen... */
-            Text [ de ] = "Inhalte l~Ã¶schen..." ;
             Text [ en-US ] = "D~elete Contents..." ;
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
-            Text [ x-comment ] = " ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -238,17 +205,13 @@ Menu RID_POPUP_COLHEADER
         {
             Identifier = FID_COL_HIDE ;
             HelpId = FID_COL_HIDE ;
-            Text [ de ] = "~Ausblenden" ;
             Text [ en-US ] = "~Hide" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = FID_COL_SHOW ;
             HelpId = FID_COL_SHOW ;
-            Text [ de ] = "Ein~blenden" ;
             Text [ en-US ] = "~Show" ;
-            Text [ x-comment ] = " ";
         };
          //------------------------------
         MenuItem { Separator = TRUE ; };
@@ -258,9 +221,7 @@ Menu RID_POPUP_COLHEADER
         {
             Identifier = FID_PASTE_CONTENTS ;
             HelpId = FID_PASTE_CONTENTS ;
-            Text [ de ] = "In~halte einfÃ¼gen..." ;
             Text [ en-US ] = "Paste ~Special..." ;
-            Text [ x-comment ] = " ";
         };
     };
 };
