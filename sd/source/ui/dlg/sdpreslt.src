@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdpreslt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:37:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:30:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,16 +41,13 @@ ModalDialog DLG_PRESLT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 212 , 185 ) ;
-    Text [ de ] = "Seitenvorlage" ;
     Moveable = TRUE ;
     FixedText FT_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? W‰hlen Sie eine ~Seitenvorlage : Wıhlen Sie eine ~Seitenvorlage */
-        Text [ de ] = "W√§hlen Sie eine ~Seitenvorlage" ;
         Text [ en-US ] = "~Select a slide design" ;
-        Text [ x-comment ] = " ";
     };
     Control VS_LAYOUT
     {
@@ -77,28 +74,22 @@ ModalDialog DLG_PRESLT
     {
         Pos = MAP_APPFONT ( 6 , 158 ) ;
         Size = MAP_APPFONT ( 120 , 12 ) ;
-        Text [ de ] = "Hintergrundseite ~austauschen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Exchange background page" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_CHECK_MASTERS
     {
         Pos = MAP_APPFONT ( 6 , 170 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
-        Text [ de ] = "Nicht ~verwendete Hintergrundseiten l√∂schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Delete unused backgrounds";
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 156 , 155 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Laden..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Load..." ;
-        Text [ x-comment ] = " ";
     };
     HelpButton BTN_HELP
     {
@@ -107,7 +98,6 @@ ModalDialog DLG_PRESLT
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Slide Design" ;
-    Text [ x-comment ] = " ";
 };
 
 
