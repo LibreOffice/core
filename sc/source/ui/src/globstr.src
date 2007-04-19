@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:28:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:37:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,2546 +42,1763 @@ Resource RID_GLOBSTR
     String STR_UNDO_INSERTCELLS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen : Einf≥gen */
-        Text [ de ] = "Einf√ºgen" ;
         Text [ en-US ] = "Insert" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELETECELLS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Lˆschen : L˜schen */
-        Text [ de ] = "L√∂schen" ;
         Text [ en-US ] = "Delete" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_CUT
     {
-        Text [ de ] = "Ausschneiden" ;
         Text [ en-US ] = "Cut" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PASTE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen : Einf≥gen */
-        Text [ de ] = "Einf√ºgen" ;
         Text [ en-US ] = "Insert" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DRAGDROP
     {
-        Text [ de ] = "Drag&Drop" ;
         Text [ en-US ] = "Drag and Drop" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_MOVE
     {
-        Text [ de ] = "Verschieben" ;
         Text [ en-US ] = "Move" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_COPY
     {
-        Text [ de ] = "Kopieren" ;
         Text [ en-US ] = "Copy" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELETECONTENTS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Lˆschen : L˜schen */
-        Text [ de ] = "L√∂schen" ;
         Text [ en-US ] = "Delete" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_SELATTR
     {
-        Text [ de ] = "Attribute" ;
         Text [ en-US ] = "Attributes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_SELATTRLINES
     {
-        Text [ de ] = "Attribute/Linien" ;
         Text [ en-US ] = "Attributes/Lines" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_COLWIDTH
     {
-        Text [ de ] = "Spaltenbreite" ;
         Text [ en-US ] = "Column Width" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_OPTCOLWIDTH
     {
-        Text [ de ] = "optimale Spaltenbreite" ;
         Text [ en-US ] = "Optimal Column Width" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_ROWHEIGHT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenhˆhe : Zeilenh˜he */
-        Text [ de ] = "Zeilenh√∂he" ;
         Text [ en-US ] = "Row height" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_OPTROWHEIGHT
     {
         /* ### ACHTUNG: Neuer Text in Resource? optimale Zeilenhˆhe : optimale Zeilenh˜he */
-        Text [ de ] = "optimale Zeilenh√∂he" ;
         Text [ en-US ] = "Optimal Row Height" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_AUTOFILL
     {
         /* ### ACHTUNG: Neuer Text in Resource? F¸llen : F≥llen */
-        Text [ de ] = "F√ºllen" ;
         Text [ en-US ] = "Fill" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_MERGE
     {
-        Text [ de ] = "Zusammenfassen" ;
         Text [ en-US ] = "Merge" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REMERGE
     {
-        Text [ de ] = "Zusammenfassung aufheben" ;
         Text [ en-US ] = "Split" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_AUTOFORMAT
     {
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Auto-Format */
-        Text [ de ] = "AutoFormat" ;
         Text [ en-US ] = "AutoFormat" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REPLACE
     {
-        Text [ de ] = "Ersetzen" ;
         Text [ en-US ] = "Replace" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_CURSORATTR
     {
-        Text [ de ] = "Attribute" ;
         Text [ en-US ] = "Attributes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_ENTERDATA
     {
-        Text [ de ] = "Eingabe" ;
         Text [ en-US ] = "Input" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_INSCOLBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spaltenumbruch einf¸gen : Spaltenumbruch einf≥gen */
-        Text [ de ] = "Spaltenumbruch einf√ºgen" ;
         Text [ en-US ] = "Insert Column Break" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELCOLBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spaltenumbruch lˆschen : Spaltenumbruch l˜schen */
-        Text [ de ] = "Spaltenumbruch l√∂schen" ;
         Text [ en-US ] = "Delete column break" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_INSROWBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenumbruch einf¸gen : Zeilenumbruch einf≥gen */
-        Text [ de ] = "Zeilenumbruch einf√ºgen" ;
         Text [ en-US ] = "Insert Row Break" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELROWBREAK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenumbruch lˆschen : Zeilenumbruch l˜schen */
-        Text [ de ] = "Zeilenumbruch l√∂schen" ;
         Text [ en-US ] = "Delete row break" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DOOUTLINE
     {
-        Text [ de ] = "Detail einblenden" ;
         Text [ en-US ] = "View Details" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REDOOUTLINE
     {
-        Text [ de ] = "Detail ausblenden" ;
         Text [ en-US ] = "Hide details" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_MAKEOUTLINE
     {
-        Text [ de ] = "Gruppierung" ;
         Text [ en-US ] = "Group" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REMAKEOUTLINE
     {
-        Text [ de ] = "Gruppierung aufheben" ;
         Text [ en-US ] = "Ungroup" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_OUTLINELEVEL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gliederungsebene ausw‰hlen : Gliederungsebene auswıhlen */
-        Text [ de ] = "Gliederungsebene ausw√§hlen" ;
         Text [ en-US ] = "Select outline level" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DOOUTLINEBLK
     {
-        Text [ de ] = "Detail einblenden" ;
         Text [ en-US ] = "View Details" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REDOOUTLINEBLK
     {
-        Text [ de ] = "Detail ausblenden" ;
         Text [ en-US ] = "Hide details" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REMOVEALLOTLNS
     {
-        Text [ de ] = "Gliederung entfernen" ;
         Text [ en-US ] = "Clear Outline" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_AUTOOUTLINE
     {
         /* ### ACHTUNG: Neuer Text in Resource? AutoGliederung : Auto-Gliederung */
-        Text [ de ] = "AutoGliederung" ;
         Text [ en-US ] = "AutoOutline" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_SUBTOTALS
     {
-        Text [ de ] = "Teilergebnisse" ;
         Text [ en-US ] = "Subtotals" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_SORT
     {
-        Text [ de ] = "Sortieren" ;
         Text [ en-US ] = "Sort" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_QUERY
     {
-        Text [ de ] = "Filtern" ;
         Text [ en-US ] = "Filter" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DBDATA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenbankbereiche ‰ndern : Datenbankbereiche ındern */
-        Text [ de ] = "Datenbankbereiche √§ndern" ;
         Text [ en-US ] = "Change Database Range" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_IMPORTDATA
     {
-        Text [ de ] = "Importieren" ;
         Text [ en-US ] = "Importing" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REPEATDB
     {
-        Text [ de ] = "Bereich aktualisieren" ;
         Text [ en-US ] = "Refresh range" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_GRAFEDIT
     {
-        Text [ de ] = "Grafik bearbeiten" ;
         Text [ en-US ] = "Edit graphics" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_LISTNAMES
     {
-        Text [ de ] = "Namen auflisten" ;
         Text [ en-US ] = "List names" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PIVOT_NEW
     {
-        Text [ de ] = "Datenpilot-Tabelle anlegen" ;
         Text [ en-US ] = "Create DataPilot Table" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PIVOT_MODIFY
     {
-        Text [ de ] = "Datenpilot-Tabelle bearbeiten" ;
         Text [ en-US ] = "Edit DataPilot Table" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PIVOT_DELETE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenpilot-Tabelle lˆschen : Datenpilot-Tabelle l˜schen */
-        Text [ de ] = "Datenpilot-Tabelle l√∂schen" ;
         Text [ en-US ] = "Delete DataPilot Table" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_CONSOLIDATE
     {
-        Text [ de ] = "Konsolidieren" ;
         Text [ en-US ] = "Consolidate" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_USESCENARIO
     {
-        Text [ de ] = "Szenario anwenden" ;
         Text [ en-US ] = "Use scenario" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_MAKESCENARIO
     {
-        Text [ de ] = "Szenario anlegen" ;
         Text [ en-US ] = "Create scenario" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_EDITSCENARIO
     {
-        Text [ de ] = "Szenario bearbeiten" ;
         Text [ en-US ] = "Edit scenario" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_APPLYCELLSTYLE
     {
-        Text [ de ] = "Zellvorlage anwenden" ;
         Text [ en-US ] = "Apply Cell Style" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_EDITCELLSTYLE
     {
-        Text [ de ] = "Zellvorlage bearbeiten" ;
         Text [ en-US ] = "Edit Cell Style";
     };
     String STR_UNDO_APPLYPAGESTYLE
     {
-        Text [ de ] = "Seitenvorlage anwenden" ;
         Text [ en-US ] = "Apply Page Style";
     };
     String STR_UNDO_EDITPAGESTYLE
     {
-        Text [ de ] = "Seitenvorlage bearbeiten" ;
         Text [ en-US ] = "Edit Page Style";
     };
     String STR_UNDO_DETADDPRED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorg‰nger : Spur zum Vorgınger */
-        Text [ de ] = "Spur zum Vorg√§nger" ;
         Text [ en-US ] = "Trace Precedents" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETDELPRED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Spur zum Vorg‰nger entfernen : Spur zum Vorgınger entfernen */
-        Text [ de ] = "Spur zum Vorg√§nger entfernen" ;
         Text [ en-US ] = "Remove Precedent" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETADDSUCC
     {
-        Text [ de ] = "Spur zum Nachfolger" ;
         Text [ en-US ] = "Trace Dependents" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETDELSUCC
     {
-        Text [ de ] = "Spur zum Nachfolger entfernen" ;
         Text [ en-US ] = "Remove Dependent" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETADDERROR
     {
-        Text [ de ] = "Spur zum Fehler" ;
         Text [ en-US ] = "Trace Error" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETDELALL
     {
-        Text [ de ] = "Alle Spuren entfernen" ;
         Text [ en-US ] = "Remove all Traces" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETINVALID
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltige Daten einkreisen : Ung≥ltige Daten einkreisen */
-        Text [ de ] = "Ung√ºltige Daten einkreisen" ;
         Text [ en-US ] = "Mark invalid data" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DETREFRESH
     {
-        Text [ de ] = "Spuren aktualisieren" ;
         Text [ en-US ] = "Refresh Traces" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_CHARTDATA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenbereich von Diagramm ‰ndern : Datenbereich von Diagramm ındern */
-        Text [ de ] = "Datenbereich von Diagramm √§ndern" ;
         Text [ en-US ] = "Modify chart data range" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_ORIGINALSIZE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Originalgrˆﬂe : Originalgr˜òe */
-        Text [ de ] = "Originalgr√∂√üe" ;
         Text [ en-US ] = "Original Size" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_UPDATELINK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verkn¸pfung aktualisieren : Verkn≥pfung aktualisieren */
-        Text [ de ] = "Verkn√ºpfung aktualisieren" ;
         Text [ en-US ] = "Update Link" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REMOVELINK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verkn¸pfung aufheben : Verkn≥pfung aufheben */
-        Text [ de ] = "Verkn√ºpfung aufheben" ;
         Text [ en-US ] = "Unlink" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_INSERTAREALINK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verkn¸pfung einf¸gen : Verkn≥pfung einf≥gen */
-        Text [ de ] = "Verkn√ºpfung einf√ºgen" ;
         Text [ en-US ] = "Insert Link" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_ENTERMATRIX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Matrixformel einf¸gen : Matrixformel einf≥gen */
-        Text [ de ] = "Matrixformel einf√ºgen" ;
         Text [ en-US ] = "Insert Array Formula" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_SHOWNOTE
     {
-        Text [ de ] = "Notiz anzeigen" ;
         Text [ en-US ] = "Show Note" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_HIDENOTE
     {
-        Text [ de ] = "Notiz ausblenden" ;
         Text [ en-US ] = "Hide note" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_EDITNOTE
     {
-        Text [ de ] = "Notiz bearbeiten" ;
         Text [ en-US ] = "Edit Note" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DEC_INDENT
     {
-        Text [ de ] = "Einzug vermindern" ;
         Text [ en-US ] = "Decrease Indent" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_INC_INDENT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einzug erhˆhen : Einzug erh˜hen */
-        Text [ de ] = "Einzug erh√∂hen" ;
         Text [ en-US ] = "Increase Indent" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PROTECT_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle sch¸tzen : Tabelle sch≥tzen */
-        Text [ de ] = "Tabelle sch√ºtzen" ;
         Text [ en-US ] = "Protect sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_UNPROTECT_TAB
     {
-        Text [ de ] = "Tabellenschutz aufheben" ;
         Text [ en-US ] = "Unprotect sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PROTECT_DOC
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dokument sch¸tzen : Dokument sch≥tzen */
-        Text [ de ] = "Dokument sch√ºtzen" ;
         Text [ en-US ] = "Protect document" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_UNPROTECT_DOC
     {
-        Text [ de ] = "Dokumentschutz aufheben" ;
         Text [ en-US ] = "Unprotect document" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PRINTRANGES
     {
-        Text [ de ] = "Druckbereiche" ;
         Text [ en-US ] = "Print range" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_REMOVEBREAKS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Seitenumbr¸che lˆschen : Seitenumbr≥che l˜schen */
-        Text [ de ] = "Seitenumbr√ºche l√∂schen" ;
         Text [ en-US ] = "Delete Page Breaks" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_PRINTSCALE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Skalierung ‰ndern : Skalierung ındern */
-        Text [ de ] = "Skalierung √§ndern" ;
         Text [ en-US ] = "Change Scale" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DRAG_BREAK
     {
-        Text [ de ] = "Seitenumbruch verschieben" ;
         Text [ en-US ] = "Move Page Break" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_RANGENAMES
     {
-        Text [ de ] = "Bereichsnamen bearbeiten" ;
         Text [ en-US ] = "Edit range names" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_TRANSLITERATE
     {
-        Text [ de ] = "Gro√ü-/Kleinschreibung" ;
         Text [ en-US ] = "Case/Characters";
-        Text [ x-comment ] = "; nk03.04.01: hier passt Englisch Uebesetzung besser.";
     };
     String STR_DB_NONAME
     {
-        Text [ de ] = "unbenannt" ;
         Text [ en-US ] = "unnamed" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DBNAME_IMPORT
     {
-        Text [ de ] = "Import" ;
         Text [ en-US ] = "Import" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_DOSUBTOTALS_0
     {
-        Text [ de ] = "%PRODUCTNAME Calc" ;
         Text [ en-US ] = "%PRODUCTNAME Calc" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_DOSUBTOTALS_1
     {
         /* ### ACHTUNG: Neuer Text in Resource? Daten lˆschen? : Daten l˜schen? */
-        Text [ de ] = "Daten l√∂schen?" ;
         Text [ en-US ] = "Delete data?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_DOSUBTOTALS_2
     {
         /* ### ACHTUNG: Neuer Text in Resource? Kann keine Zeilen einf¸gen : Kann keine Zeilen einf≥gen */
-        Text [ de ] = "Kann keine Zeilen einf√ºgen" ;
         Text [ en-US ] = "Unable to insert rows" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_REPEATDB_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Keine Operationen auszuf¸hren : Keine Operationen auszuf≥hren */
-        Text [ de ] = "Keine Operationen auszuf√ºhren" ;
         Text [ en-US ] = "No operations to execute" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_MAKEAUTOFILTER_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Bereich enth‰lt keine Spaltenkˆpfe.\nSoll die erste Zeile als Spaltenkˆpfe verwendet werden? : Der Bereich enthılt keine Spaltenk˜pfe.\nSoll die erste Zeile als Spaltenk˜pfe verwendet werden? */
-        Text [ de ] = "Der Bereich enth√§lt keine Spaltenk√∂pfe.\nSoll die erste Zeile als Spaltenk√∂pfe verwendet werden?" ;
         Text [ en-US ] = "The range does not contain column headers.\nDo you want the first line to be used as column header?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_IMPORTDATA_0
     {
-        Text [ de ] = "Fehler beim Importieren!" ;
         Text [ en-US ] = "Error while importing data!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DATABASE_NOTFOUND
     {
-        Text [ de ] = "Die Datenbank '#' konnte nicht ge√∂ffnet werden." ;
         Text [ en-US ] = "The database '#' could not be opened." ;
-        Text [ x-comment ] = " ";
     };
     String STR_QUERY_NOTFOUND
     {
-        Text [ de ] = "Die Abfrage '#' konnte nicht ge√∂ffnet werden." ;
         Text [ en-US ] = "The query '#' could not be opened." ;
-        Text [ x-comment ] = " ";
     };
     String STR_DATABASE_ABORTED
     {
-        Text [ de ] = "Der Datenbank-Import wurde abgebrochen." ;
         Text [ en-US ] = "Database import terminated." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PROGRESS_IMPORT
     {
         /* ### ACHTUNG: Neuer Text in Resource? # Datens‰tze importiert... : # Datensıtze importiert... */
-        Text [ de ] = "# Datens√§tze importiert..." ;
         Text [ en-US ] = "# records imported..." ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_MAKEOUTLINE_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gruppierung nicht mˆglich : Gruppierung nicht m˜glich */
-        Text [ de ] = "Gruppierung nicht m√∂glich" ;
         Text [ en-US ] = "Grouping not possible" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_REMOVEOUTLINE_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Aufheben nicht mˆglich : Aufheben nicht m˜glich */
-        Text [ de ] = "Aufheben nicht m√∂glich" ;
         Text [ en-US ] = "Ungrouping not possible" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_PASTEFROMCLIP_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Einf¸gen auf Mehrfachselektion nicht mˆglich : Einf≥gen auf Mehrfachselektion nicht m˜glich */
-        Text [ de ] = "Einf√ºgen auf Mehrfachselektion nicht m√∂glich" ;
         Text [ en-US ] = "Insert into multiple selection not possible" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_PASTEFROMCLIP_1
     {
-        Text [ de ] = "Zusammenfassen nicht verschachteln!" ;
         Text [ en-US ] = "Cell merge not possible if cells already merged!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_MOVEBLOCKTO_0
     {
-        Text [ de ] = "Zusammenfassen nicht verschachteln!" ;
         Text [ en-US ] = "Cell merge not possible if cells already merged!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_APPLYPATTLINES_0
     {
-        Text [ de ] = "Rahmen nicht auf Mehrfachselektion" ;
         Text [ en-US ] = "Cannot apply borders to multiple selection" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_INSERTCELLS_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Kann nicht in zusammengefaﬂte Bereiche einf¸gen : Kann nicht in zusammengefaòte Bereiche einf≥gen */
-        Text [ de ] = "Kann nicht in zusammengefasste Bereiche einf√ºgen" ;
         Text [ en-US ] = "Inserting into merged ranges not possible" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_DELETECELLS_0
     {
         /* ### ACHTUNG: Neuer Text in Resource? Kann nicht aus zusammengefaﬂten Bereichen lˆschen : Kann nicht aus zusammengefaòten Bereichen l˜schen */
-        Text [ de ] = "Kann nicht aus zusammengefassten Bereichen l√∂schen" ;
         Text [ en-US ] = "Deleting in merged ranges not possible" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_MERGECELLS_0
     {
-        Text [ de ] = "Zusammenfassungen nicht verschachteln !" ;
         Text [ en-US ] = "Cell merge not possible if cells already merged" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SORT_ERR_MERGED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Bereiche mit zusammengefaﬂten Zellen kˆnnen nur ohne Formate sortiert werden. : Bereiche mit zusammengefaòten Zellen k˜nnen nur ohne Formate sortiert werden. */
-        Text [ de ] = "Bereiche mit zusammengefassten Zellen k√∂nnen nur ohne Formate sortiert werden." ;
         Text [ en-US ] = "Ranges containing merged cells can only be sorted without formats." ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_0
     {
-        Text [ de ] = "Suchbegriff nicht gefunden." ;
         Text [ en-US ] = "Search key not found." ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_0
     {
-        Text [ de ] = "Die Zielwertsuche war erfolgreich.\n" ;
         Text [ en-US ] = "Goal Seek successful.\n" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_1
     {
-        Text [ de ] = "Soll das Ergebnis (" ;
         Text [ en-US ] = "Insert result (" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_2
     {
         /* ### ACHTUNG: Neuer Text in Resource? ) in die aktuelle Zelle ¸bernommen werden? : ) in die aktuelle Zelle ≥bernommen werden? */
-        Text [ de ] = ") in die aktuelle Zelle √ºbernommen werden?" ;
         Text [ en-US ] = ") into current cell?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_3
     {
-        Text [ de ] = "Die Zielwertsuche war erfolglos.\n" ;
         Text [ en-US ] = "Goal Seek not successful.\n" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_4
     {
-        Text [ de ] = "Es konnte kein exakter Wert gefunden werden.\n" ;
         Text [ en-US ] = "No exact value found. \n" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_5
     {
         /* ### ACHTUNG: Neuer Text in Resource? Soll die beste N‰herung ( : Soll die beste Nıherung ( */
-        Text [ de ] = "Soll die beste N√§herung (" ;
         Text [ en-US ] = "Insert closest value (" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SOLVE_6
     {
         /* ### ACHTUNG: Neuer Text in Resource? ) ¸bernommen werden? : ) ≥bernommen werden? */
-        Text [ de ] = ") √ºbernommen werden?" ;
         Text [ en-US ] = ")?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABLE_GESAMTERGEBNIS
     {
-        Text [ de ] = "Gesamtergebnis" ;
         Text [ en-US ] = "Grand Total" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABLE_ERGEBNIS
     {
-        Text [ de ] = "Ergebnis" ;
         Text [ en-US ] = "Result" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_SPELLING
     {
-        Text [ de ] = "Rechtschreibung" ;
         Text [ en-US ] = "Spellcheck" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABLE_UND
     {
-        Text [ de ] = "UND" ;
         Text [ en-US ] = "AND" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABLE_ODER
     {
-        Text [ de ] = "ODER" ;
         Text [ en-US ] = "OR" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABLE_DEF
     {
-        Text [ de ] = "Tabelle" ;
         Text [ en-US ] = "Sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MOVE_TO_END
     {
-        Text [ de ] = "- ans Ende stellen -" ;
         Text [ en-US ] = "- move to end position -" ;
-        Text [ x-comment ] = " ";
     };
     String STR_BOX_YNI
     {
-        Text [ de ] = "Nicht implementiert in diesem Build" ;
         Text [ en-US ] = "Not implemented in this build." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NO_REF_TABLE
     {
-        Text [ de ] = "#REF!" ;
         Text [ en-US ] = "#REF!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_INVALID_DBAREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Datenbereich muﬂ mindestens eine Daten-Zeile enthalten. : Der Datenbereich muò mindestens eine Daten-Zeile enthalten. */
-        Text [ de ] = "Der Datenbereich muss mindestens eine Daten-Zeile enthalten." ;
         Text [ en-US ] = "The data range must contain at least one row." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_NODATA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Datenpilot-Tabelle muﬂ mindestens einen Eintrag enthalten. : Die Datenpilot-Tabelle muò mindestens einen Eintrag enthalten. */
-        Text [ de ] = "Die Datenpilot-Tabelle muss mindestens einen Eintrag enthalten." ;
         Text [ en-US ] = "The DataPilot table must contain at least one entry." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_MOVENOTALLOWED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Datenbereich kann nicht gelˆscht werden. : Der Datenbereich kann nicht gel˜scht werden. */
-        Text [ de ] = "Der Datenbereich kann nicht gel√∂scht werden." ;
         Text [ en-US ] = "The data range can not be deleted." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_ERROR
     {
-        Text [ de ] = "Fehler beim Erstellen der Datenpilot-Tabelle." ;
         Text [ en-US ] = "Error creating the Data Pilot Table." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_OVERLAP
     {
         /* ### ACHTUNG: Neuer Text in Resource? Datenpilot-Tabellen d¸rfen sich nicht ¸berlappen. : Datenpilot-Tabellen d≥rfen sich nicht ≥berlappen. */
-        Text [ de ] = "Datenpilot-Tabellen d√ºrfen sich nicht √ºberlappen." ;
         Text [ en-US ] = "DataPilot tables can not overlap." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_NOTEMPTY
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Zielbereich ist nicht leer. Soll er ¸berschrieben werden? : Der Zielbereich ist nicht leer. Soll er ≥berschrieben werden? */
-        Text [ de ] = "Der Zielbereich ist nicht leer. Soll er √ºberschrieben werden?" ;
         Text [ en-US ] = "The destination range is not empty. Overwrite existing contents?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DATAPILOT_SUBTOTAL
     {
-        Text [ de ] = "Der Quellbereich enth√§lt Teilergebnisse, die das Ergebnis verf√§lschen k√∂nnen. Soll er trotzdem verwendet werden?";
         Text [ en-US ] = "The source range contains subtotals which may distort the results. Use it anyway?";
     };
     String STR_PIVOT_PROGRESS
     {
-        Text [ de ] = "Datenpilot-Tabelle erstellen" ;
         Text [ en-US ] = "Create DataPilot Table" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_TOTAL
     {
-        Text [ de ] = "Gesamt" ;
         Text [ en-US ] = "Total" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_DATA
     {
-        Text [ de ] = "Daten" ;
         Text [ en-US ] = "Data" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_SUM
     {
-        Text [ de ] = "SUMME" ;
         Text [ en-US ] = "SUM" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_COUNT
     {
-        Text [ de ] = "ANZAHL" ;
         Text [ en-US ] = "COUNT" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_AVG
     {
-        Text [ de ] = "MITTELWERT" ;
         Text [ en-US ] = "AVERAGE" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_MAX
     {
-        Text [ de ] = "MAX" ;
         Text [ en-US ] = "MAX" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_MIN
     {
-        Text [ de ] = "MIN" ;
         Text [ en-US ] = "MIN" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_PROD
     {
-        Text [ de ] = "PRODUKT" ;
         Text [ en-US ] = "PRODUCT" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_COUNT2
     {
-        Text [ de ] = "ANZAHL2" ;
         Text [ en-US ] = "COUNTA" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_STDDEV
     {
-        Text [ de ] = "STABW" ;
         Text [ en-US ] = "STDEV" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_STDDEV2
     {
-        Text [ de ] = "STABWN" ;
         Text [ en-US ] = "STDEVP" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_VAR
     {
-        Text [ de ] = "VARIANZ" ;
         Text [ en-US ] = "VAR" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOTFUNC_VAR2
     {
-        Text [ de ] = "VARIANZEN" ;
         Text [ en-US ] = "VARP" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABLE
     {
-        Text [ de ] = "Tabelle" ;
         Text [ en-US ] = "Sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_COLUMN
     {
-        Text [ de ] = "Spalte" ;
         Text [ en-US ] = "Column" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ROW
     {
-        Text [ de ] = "Zeile" ;
         Text [ en-US ] = "Row" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PAGE
     {
-        Text [ de ] = "Seite" ;
         Text [ en-US ] = "Page" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LOAD_DOC
     {
-        Text [ de ] = "Dokument laden" ;
         Text [ en-US ] = "Load document" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SAVE_DOC
     {
-        Text [ de ] = "Dokument speichern" ;
         Text [ en-US ] = "Save document" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_INVALID_TABREF
     {
-        Text [ de ] = "<unbekannte Tabellenreferenz>" ;
         Text [ en-US ] = "<unknown table reference>" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AREA_ALREADY_INSERTED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dieser Bereich wurde bereits eingef¸gt. : Dieser Bereich wurde bereits eingef≥gt. */
-        Text [ de ] = "Dieser Bereich wurde bereits eingef√ºgt." ;
         Text [ en-US ] = "This range has already been inserted." ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALID_TABREF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltiger Tabellenbezug. : Ung≥ltiger Tabellenbezug. */
-        Text [ de ] = "Ung√ºltiger Tabellenbezug." ;
         Text [ en-US ] = "Invalid sheet reference." ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALID_QUERYAREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dieser Bereich enth‰lt keine g¸ltige Abfrage. : Dieser Bereich enthılt keine g≥ltige Abfrage. */
-        Text [ de ] = "Dieser Bereich enth√§lt keine g√ºltige Abfrage." ;
         Text [ en-US ] = "This range does not contain a valid query." ;
-        Text [ x-comment ] = " ";
     };
     String STR_REIMPORT_EMPTY
     {
         /* ### ACHTUNG: Neuer Text in Resource? Dieser Bereich enth‰lt keine importierten Daten. : Dieser Bereich enthılt keine importierten Daten. */
-        Text [ de ] = "Dieser Bereich enth√§lt keine importierten Daten." ;
         Text [ en-US ] = "This range does not contain imported data." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOMULTISELECT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Diese Funktion l‰ﬂt sich nicht auf Mehrfachselektionen anwenden. : Diese Funktion lıòt sich nicht auf Mehrfachselektionen anwenden. */
-        Text [ de ] = "Diese Funktion l√§sst sich nicht auf Mehrfachselektionen anwenden." ;
         Text [ en-US ] = "This function cannot be used with multiple selections." ;
-        Text [ x-comment ] = " ";
     };
     String STR_FILL_SERIES_PROGRESS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Reihe Auff¸llen... : Reihe Auff≥llen... */
-        Text [ de ] = "Reihe Auff√ºllen..." ;
         Text [ en-US ] = "Fill Row..." ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNKNOWN_FILTER
     {
-        Text [ de ] = "Unbekannter Filter: " ;
         Text [ en-US ] = "Unknown filter: " ;
-        Text [ x-comment ] = " ";
     };
     String STR_NO_NAME_REF
     {
-        Text [ de ] = "#NAME?" ;
         Text [ en-US ] = "#NAME?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NO_ADDIN
     {
-        Text [ de ] = "#ADDIN?" ;
         Text [ en-US ] = "#ADDIN?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NO_MACRO
     {
-        Text [ de ] = "#MAKRO?" ;
         Text [ en-US ] = "#MACRO?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_THESAURUS
     {
-        Text [ de ] = "Thesaurus" ;
         Text [ en-US ] = "Thesaurus" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FILL_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabellen f¸llen : Tabellen f≥llen */
-        Text [ de ] = "Tabellen f√ºllen" ;
         Text [ en-US ] = "Fill Sheets" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NO_VALUE
     {
-        Text [ de ] = "#WERT!" ;
         Text [ en-US ] = "#VALUE!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UPDATE_SCENARIO
     {
-        Text [ de ] = "Szenario um die markierten Bereiche erweitern?" ;
         Text [ en-US ] = "Add selected ranges to current scenario?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_NEWSCENARIO
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zum Anlegen eines Szenarios m¸ssen die Szenariobereiche markiert werden. : Zum Anlegen eines Szenarios m≥ssen die Szenariobereiche markiert werden. */
-        Text [ de ] = "Zum Anlegen eines Szenarios m√ºssen die Szenariobereiche markiert werden." ;
         Text [ en-US ] = "The scenario ranges must be selected in order to be able to create a new scenario." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOAREASELECTED
     {
-        Text [ de ] = "Kein Bereich markiert." ;
         Text [ en-US ] = "A range has not been selected." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NEWTABNAMENOTUNIQUE
     {
-        Text [ de ] = "Dieser Tabellenname wurde bereits vergeben." ;
         Text [ en-US ] = "This name already exists." ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALIDTABNAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltiger Tabellenname. : Ung≥ltiger Tabellenname. */
-        Text [ de ] = "Ung√ºltiger Tabellenname." ;
         Text [ en-US ] = "Invalid sheet name." ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCENARIO
     {
-        Text [ de ] = "Szenario" ;
         Text [ en-US ] = "Scenario" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_TABLE
     {
-        Text [ de ] = "Datenpilot" ;
         Text [ en-US ] = "DataPilot" ;
-        Text [ x-comment ] = " ";
     };
      //                      Texte fuer Ueberschriften bei Teilergebnis etc.
     String STR_FUN_TEXT_SUM
     {
-        Text [ de ] = "Summe" ;
         Text [ en-US ] = "Sum" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_COUNT
     {
-        Text [ de ] = "Anzahl" ;
         Text [ en-US ] = "Count" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_COUNT2
     {
-        Text [ de ] = "Anzahl2" ;
         Text [ en-US ] = "CountA" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_AVG
     {
-        Text [ de ] = "Mittelwert" ;
         Text [ en-US ] = "Average" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_MAX
     {
-        Text [ de ] = "Max" ;
         Text [ en-US ] = "Max" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_MIN
     {
-        Text [ de ] = "Min" ;
         Text [ en-US ] = "Min" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_PRODUCT
     {
-        Text [ de ] = "Produkt" ;
         Text [ en-US ] = "Product" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_STDDEV
     {
-        Text [ de ] = "StAbw" ;
         Text [ en-US ] = "StDev" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUN_TEXT_VAR
     {
-        Text [ de ] = "Varianz" ;
         Text [ en-US ] = "Var" ;
-        Text [ x-comment ] = " ";
     };
     /*  String STR_GOALSEEK
     {
-    Text [ de ] = "ZIELWERTSUCHE";
     Text [ en-US ] = "GOAL SEEK";
     };
 */
     String STR_NOCHARTATCURSOR
     {
-        Text [ de ] = "Kein Diagramm an dieser Position gefunden." ;
         Text [ en-US ] = "No chart found at this position." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_NOTFOUND
     {
-        Text [ de ] = "Keine Datenpilot-Tabelle an dieser Position gefunden." ;
         Text [ en-US ] = "No DataPilot table found at this position." ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERROR_STR
     {
-        Text [ de ] = "Err:" ;
         Text [ en-US ] = "Err:" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NV_STR
     {
-        Text [ de ] = "#NV" ;
          //      Text[danish_wrong] = "#IKKE TILG∆NGELIG";       /* zu lang, muss in eine Zelle passen */
         Text [ en-US ] = "#N/A" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOREF_STR
     {
-        Text [ de ] = "#BEZUG!" ;
          //      Text[danish_wrong] = "#IKKE TILG∆NGELIG";       /* zu lang, muss in eine Zelle passen */
         Text [ en-US ] = "#REF!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_EMPTYDATA
     {
-        Text [ de ] = "(leer)" ;
         Text [ en-US ] = "(empty)" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PRINT_INVALID_AREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltiger Druckbereich : Ung≥ltiger Druckbereich */
-        Text [ de ] = "Ung√ºltiger Druckbereich" ;
         Text [ en-US ] = "Invalid print range" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PAGESTYLE
     {
-        Text [ de ] = "Seitenvorlage" ;
         Text [ en-US ] = "Page Style" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HEADER
     {
-        Text [ de ] = "Kopfzeile" ;
         Text [ en-US ] = "Header" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FOOTER
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fuﬂzeile : Fuòzeile */
-        Text [ de ] = "Fu√üzeile" ;
         Text [ en-US ] = "Footer" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TEXTATTRS
     {
-        Text [ de ] = "Textattribute" ;
         Text [ en-US ] = "Text Attributes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HFCMD_DELIMITER
     {
-        Text [ de ] = "\\" ;
         Text [ en-US ] = "\\" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HFCMD_PAGE
     {
-        Text [ de ] = "SEITE" ;
         Text [ en-US ] = "PAGE" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HFCMD_PAGES
     {
-        Text [ de ] = "SEITEN" ;
         Text [ en-US ] = "PAGES" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HFCMD_DATE
     {
-        Text [ de ] = "DATUM" ;
         Text [ en-US ] = "DATE" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HFCMD_TIME
     {
-        Text [ de ] = "ZEIT" ;
         Text [ en-US ] = "TIME" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HFCMD_FILE
     {
-        Text [ de ] = "DATEI" ;
         Text [ en-US ] = "FILE" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HFCMD_TABLE
     {
-        Text [ de ] = "TABELLE" ;
         Text [ en-US ] = "SHEET" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PROTECTIONERR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Gesperrte Zellen kˆnnen nicht ge‰ndert werden. : Gesperrte Zellen k˜nnen nicht geındert werden. */
-        Text [ de ] = "Gesperrte Zellen k√∂nnen nicht ge√§ndert werden." ;
         Text [ en-US ] = "Protected cells can not be modified." ;
-        Text [ x-comment ] = " ";
     };
     String STR_READONLYERR
     {
-        Text [ de ] = "Dokument ist nur zum Lesen ge√∂ffnet." ;
         Text [ en-US ] = "Document opened in read-only mode.";
-        Text [ x-comment ] = " ";
     };
     String STR_MATRIXFRAGMENTERR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Teil einer Matrix kann nicht ge‰ndert werden. : Teil einer Matrix kann nicht geındert werden. */
-        Text [ de ] = "Sie k√∂nnen nicht nur einen Teil einer Matrix √§ndern." ;
         Text [ en-US ] = "You cannot change only part of an array." ;
-        Text [ x-comment ] = "; EM Dec 2002: In other words, you can only change the whole thing.";
     };
     String STR_PAGEHEADER
     {
-        Text [ de ] = "Kopfzeile" ;
         Text [ en-US ] = "Header" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PAGEFOOTER
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fuﬂzeile : Fuòzeile */
-        Text [ de ] = "Fu√üzeile" ;
         Text [ en-US ] = "Footer" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_ARG
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ung¸ltiges Argument : Fehler: Ung≥ltiges Argument */
-        Text [ de ] = "Fehler: Ung√ºltiges Argument" ;
         Text [ en-US ] = "Error: Invalid argument" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_PAR
     {
-        Text [ de ] = "Fehler in der Parameterliste" ;
         Text [ en-US ] = "Error in parameter list" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_FPO
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ung¸ltige Gleitkommaoperation : Fehler: Ung≥ltige Gleitkommaoperation */
-        Text [ de ] = "Fehler: Ung√ºltige Gleitkommaoperation" ;
         Text [ en-US ] = "Error: Invalid floating point operation" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_CHAR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ung¸ltiges Zeichen : Fehler: Ung≥ltiges Zeichen */
-        Text [ de ] = "Fehler: Ung√ºltiges Zeichen" ;
         Text [ en-US ] = "Error: Invalid character" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_ILL_SEP
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: ung¸ltiges Semikolon : Fehler: ung≥ltiges Semikolon */
-        Text [ de ] = "Fehler: ung√ºltiges Semikolon" ;
         Text [ en-US ] = "Error: Invalid semicolon" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_PAIR
     {
-        Text [ de ] = "Fehler in der Klammerung" ;
         Text [ en-US ] = "Error: in bracketing" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_OP_EXP
     {
-        Text [ de ] = "Fehler: Fehlender Operator" ;
         Text [ en-US ] = "Error: Operator missing" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_VAR_EXP
     {
-        Text [ de ] = "Fehler: Fehlende Variable" ;
         Text [ en-US ] = "Error: Variable missing" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_CODE_OVF
     {
-        Text [ de ] = "Fehler: Formel zu lang" ;
         Text [ en-US ] = "Error: Formula overflow" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_STR_OVF
     {
-        Text [ de ] = "Fehler: Zeichenkette zu lang" ;
         Text [ en-US ] = "Error: String overflow" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_STACK_OVF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Interner ‹berlauf : Fehler: Interner öberlauf */
-        Text [ de ] = "Fehler: Interner √úberlauf" ;
         Text [ en-US ] = "Error: Internal overflow" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_SYNTAX
     {
-        Text [ de ] = "Interner Syntaxfehler" ;
         Text [ en-US ] = "Internal syntactical error" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_CIRC_REF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Zirkul‰re Referenz : Fehler: Zirkulıre Referenz */
-        Text [ de ] = "Fehler: Zirkul√§re Referenz" ;
         Text [ en-US ] = "Error: Circular reference" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NO_NAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ung¸ltiger Name : Fehler: Ung≥ltiger Name */
-        Text [ de ] = "Fehler: Ung√ºltiger Name" ;
         Text [ en-US ] = "Error: Invalid name" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NO_ADDIN
     {
-        Text [ de ] = "Fehler: AddIn nicht gefunden" ;
         Text [ en-US ] = "Error: Add-in not found" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NO_MACRO
     {
-        Text [ de ] = "Fehler: Makro nicht gefunden" ;
         Text [ en-US ] = "Error: Macro not found" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NO_REF
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Ung¸ltiger Bezug : Fehler: Ung≥ltiger Bezug */
-        Text [ de ] = "Fehler: Ung√ºltiger Bezug" ;
         /*
 */
         Text [ en-US ] = "Error: Not a valid reference" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NO_CONV
     {
-        Text [ de ] = "Fehler: Rechenverfahren konvergiert nicht" ;
         Text [ en-US ] = "Error: Calculation does not converge" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NO_VALUE
     {
-        Text [ de ] = "Fehler: kein Ergebnis" ;
         Text [ en-US ] = "Error: No result" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LONG_ERR_NV
     {
         /* ### ACHTUNG: Neuer Text in Resource? Fehler: Wert nicht verf¸gbar : Fehler: Wert nicht verf≥gbar */
-        Text [ de ] = "Fehler: Wert nicht verf√ºgbar" ;
         Text [ en-US ] = "Error: Value not available" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ODER_SO
     {
-        Text [ de ] = "%s oder so" ;
         Text [ en-US ] = "%s or similar" ;
-        Text [ x-comment ] = " ";
     };
     String STR_GRIDCOLOR
     {
-        Text [ de ] = "Gitterfarbe" ;
         Text [ en-US ] = "Grid color" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MERGE_NOTEMPTY
     {
-        Text [ de ] = "Soll der Inhalt der verdeckten Zellen in die erste Zelle verschoben werden?" ;
         Text [ en-US ] = "Should the contents of the hidden cells be moved into the first cell?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CELL_FILTER
     {
-        Text [ de ] = "Filter" ;
         Text [ en-US ] = "Filter" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TARGETNOTFOUND
     {
-        Text [ de ] = "Der Zieldatenbankbereich existiert nicht." ;
         Text [ en-US ] = "The target database range does not exist." ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALID_EPS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltige Schrittweite : Ung≥ltige Schrittweite */
-        Text [ de ] = "Ung√ºltige Schrittweite" ;
         Text [ en-US ] = "Invalid increment" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABLE_OP
     {
-        Text [ de ] = "MEHRFACHOPERATION" ;
         Text [ en-US ] = "MULTIPLE.OPERATIONS" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_TABOP
     {
-        Text [ de ] = "Mehrfachoperation" ;
         Text [ en-US ] = "Multiple operations" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALID_AFNAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ung¸ltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nW‰hlen Sie einen anderen Namen. : Sie haben einen ung¸ltigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nW‰hlen Sie einen anderen Namen. */
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ung¸ltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nW‰hlen Sie einen anderen Namen. : Sie haben einen ung¸ltigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nW‰hlen Sie einen anderen Namen. */
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ung¸ltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nW‰hlen Sie einen anderen Namen. : Sie haben einen ung≥ltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWıhlen Sie einen anderen Namen. */
-        Text [ de ] = "Sie haben einen ung√ºltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nW√§hlen Sie einen anderen Namen." ;
         Text [ en-US ] = "You have entered an invalid name.\nAutoFormat could not be created. \nTry again using a different name." ;
-        Text [ x-comment ] = " ";
     };
     String STR_AREA
     {
-        Text [ de ] = "Bereich" ;
         Text [ en-US ] = "Range" ;
-        Text [ x-comment ] = " ";
     };
     String STR_YES
     {
-        Text [ de ] = "Ja" ;
         Text [ en-US ] = "Yes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NO
     {
-        Text [ de ] = "Nein" ;
         Text [ en-US ] = "No" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PROTECTION
     {
-        Text [ de ] = "Schutz" ;
         Text [ en-US ] = "Protection" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FORMULAS
     {
-        Text [ de ] = "Formeln" ;
         Text [ en-US ] = "Formulas" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HIDE
     {
-        Text [ de ] = "Ausblenden" ;
         Text [ en-US ] = "Hide" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PRINT
     {
-        Text [ de ] = "Drucken" ;
         Text [ en-US ] = "Print" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALID_AFAREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Um das AutoFormat anwenden zu kˆnnen,\nmuﬂ ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. : Um das Autoformat anwenden zu kˆnnen,\nmuﬂ ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. */
         /* ### ACHTUNG: Neuer Text in Resource? Um das AutoFormat anwenden zu kˆnnen,\nmuﬂ ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. : Um das Autoformat anwenden zu kˆnnen,\nmuﬂ ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. */
         /* ### ACHTUNG: Neuer Text in Resource? Um das AutoFormat anwenden zu kˆnnen,\nmuﬂ ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. : Um das AutoFormat anwenden zu k˜nnen,\nmuò ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein. */
-        Text [ de ] = "Um das AutoFormat anwenden zu k√∂nnen,\nmu√ü ein Tabellenbereich von mindestens\n3x3 Zellen markiert sein." ;
         Text [ en-US ] = "To apply an AutoFormat,\na table range of at least\n3x3 cells must be selected." ;
-        Text [ x-comment ] = " ";
     };
     String STR_CASCADE
     {
-        Text [ de ] = " (verschachtelt)" ;
         Text [ en-US ] = "(nested)" ;
-        Text [ x-comment ] = " ";
     };
     String STR_OPTIONAL
     {
-        Text [ de ] = " (optional)" ;
         Text [ en-US ] = "(optional)" ;
-        Text [ x-comment ] = " ";
     };
     String STR_REQUIRED
     {
-        Text [ de ] = " (erforderlich)" ;
         Text [ en-US ] = "(required)" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALID
     {
         /* ### ACHTUNG: Neuer Text in Resource? ung¸ltig : ung≥ltig */
-        Text [ de ] = "ung√ºltig" ;
         Text [ en-US ] = "invalid" ;
-        Text [ x-comment ] = " ";
     };
     String STR_EDITFUNCTION
     {
-        Text [ de ] = "Funktion bearbeiten" ;
         Text [ en-US ] = "Edit Function" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOTES
     {
-        Text [ de ] = "Notizen" ;
         Text [ en-US ] = "Notes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_QUERY_DELTAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie die aktuelle Tabelle(n) lˆschen? : Wollen Sie die aktuelle Tabelle endg≥ltig l˜schen? */
-        Text [ de ] = "Wollen Sie die ausgew√§hlten Tabellen l√∂schen?" ;
         Text [ en-US ] = "Are you sure you want to permanently delete the current sheet(s)?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_QUERY_DELSCENARIO
     {
-        Text [ de ] = "Wollen Sie das ausgew√§hlte Szenario l√∂schen?" ;
         Text [ en-US ] = "Are you sure you want to delete the selected scenario?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_EXPORT_ASCII_WARNING
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Thesaurus ist nicht verf¸gbar : Der Thesaurus ist nicht verf≥gbar */
-        Text [ de ] = "Der Thesaurus ist nicht verf√ºgbar" ;
         Text [ en-US ] = "Thesaurus is not available" ;
-        Text [ x-comment ] = " ";
     };
     String STR_IMPORT_ERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibpr¸fung ist nicht verf¸gbar : Die Rechtschreibpr≥fung ist nicht verf≥gbar */
-        Text [ de ] = "Die Rechtschreibpr√ºfung ist nicht verf√ºgbar" ;
         Text [ en-US ] = "Spellcheck not available" ;
-        Text [ x-comment ] = " ";
     };
     String STR_IMPORT_ASCII
     {
-        Text [ de ] = "Textimport" ;
         Text [ en-US ] = "Import text files" ;
-        Text [ x-comment ] = " ";
     };
     String STR_EXPORT_ASCII
     {
-        Text [ de ] = "Textexport" ;
         Text [ en-US ] = "Export of text files" ;
-        Text [ x-comment ] = " ";
     };
     String STR_IMPORT_LOTUS
     {
-        Text [ de ] = "Lotusimport" ;
         Text [ en-US ] = "Import Lotus files" ;
-        Text [ x-comment ] = " ";
     };
     String STR_IMPORT_DBF
     {
-        Text [ de ] = "DBaseimport" ;
         Text [ en-US ] = "Import DBase files" ;
-        Text [ x-comment ] = " ";
     };
     String STR_EXPORT_DBF
     {
-        Text [ de ] = "DBase-Export" ;
         Text [ en-US ] = "DBase export";
     };
     String STR_EXPORT_DIF
     {
-        Text [ de ] = "Dif-Export" ;
         Text [ en-US ] = "Dif Export" ;
-        Text [ x-comment ] = " ";
     };
     String STR_IMPORT_DIF
     {
-        Text [ de ] = "Dif-Import" ;
         Text [ en-US ] = "Dif Import" ;
-        Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_STANDARD
     {
-        Text [ de ] = "Standard" ;
         Text [ en-US ] = "Default" ;
-        Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_RESULT
     {
-        Text [ de ] = "Ergebnis" ;
         Text [ en-US ] = "Result" ;
-        Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_RESULT1
     {
-        Text [ de ] = "Ergebnis2" ;
         Text [ en-US ] = "Result2" ;
-        Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_HEADLINE
     {
         /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift : öberschrift */
-        Text [ de ] = "√úberschrift" ;
         Text [ en-US ] = "Heading" ;
-        Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_HEADLINE1
     {
         /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift1 : öberschrift1 */
-        Text [ de ] = "√úberschrift1" ;
         Text [ en-US ] = "Heading1" ;
-        Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_REPORT
     {
-        Text [ de ] = "Bericht" ;
         Text [ en-US ] = "Report" ;
-        Text [ x-comment ] = " ";
     };
     String STR_STYLENAME_REPORT1
     {
-        Text [ de ] = "Bericht1" ;
         Text [ en-US ] = "Report1" ;
-        Text [ x-comment ] = " ";
     };
     String STR_IMPORT_EXCEL_WARNING
     {
         /* ### ACHTUNG: Neuer Text in Resource?  ist f¸r die Pr¸fung nicht verf¸gbar. \n‹berpr¸fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew¸nschte Sprache :  ist f≥r die Pr≥fung nicht verf≥gbar. \nöberpr≥fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew≥nschte Sprache */
-        Text [ de ] = " ist f√ºr die Pr√ºfung nicht verf√ºgbar. \n√úberpr√ºfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew√ºnschte Sprache" ;
         Text [ en-US ] = "is not available for spellchecking\nPlease check your installation and install \nthe desired language if necessary" ;
-        Text [ x-comment ] = " ";
     };
     String STR_THESAURUS_NO_STRING
     {
         /* ### ACHTUNG: Neuer Text in Resource? Thesaurus nur in Textzellen mˆglich! : Thesaurus nur in Textzellen m˜glich! */
-        Text [ de ] = "Thesaurus nur in Textzellen m√∂glich!" ;
         Text [ en-US ] = "Thesaurus can only be used in text cells!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SPELLING_BEGIN_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Soll die Rechtschreibpr¸fung am Tabellenanfang fortgesetzt werden? : Soll die Rechtschreibpr≥fung am Tabellenanfang fortgesetzt werden? */
-        Text [ de ] = "Soll die Rechtschreibpr√ºfung am Tabellenanfang fortgesetzt werden?" ;
         Text [ en-US ] = "Should the spellcheck be continued at the beginning of the current sheet?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SPELLING_NO_LANG
     {
         /* ### ACHTUNG: Neuer Text in Resource?  ist f¸r den Thesaurus nicht verf¸gbar. \n‹berpr¸fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew¸nschte Sprache :  ist f≥r den Thesaurus nicht verf≥gbar. \nöberpr≥fen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew≥nschte Sprache */
-        Text [ de ] = " ist f√ºr den Thesaurus nicht verf√ºgbar. \n√úberpr√ºfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew√ºnschte Sprache" ;
         Text [ en-US ] = "is not available for the thesaurus.\nPlease check your installation and install \nthe desired language if necessary" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SPELLING_STOP_OK
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Rechtschreibpr¸fung dieser Tabelle ist abgeschlossen! : Die Rechtschreibpr≥fung dieser Tabelle ist abgeschlossen! */
-        Text [ de ] = "Die Rechtschreibpr√ºfung dieser Tabelle ist abgeschlossen!" ;
         Text [ en-US ] = "The spellcheck of this sheet has been completed." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOLANGERR
     {
-        Text [ de ] = "Keine Sprache eingestellt" ;
         Text [ en-US ] = "No language set" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_INSERT_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle einf¸gen : Tabelle einf≥gen */
-        Text [ de ] = "Tabellen einf√ºgen" ;
         Text [ en-US ] = "Insert Sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_DELETE_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle lˆschen : Tabelle l˜schen */
-        Text [ de ] = "Tabellen l√∂schen" ;
         Text [ en-US ] = "Delete Sheets" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_RENAME_TAB
     {
-        Text [ de ] = "Tabelle umbenennen" ;
         Text [ en-US ] = "Rename Sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_MOVE_TAB
     {
-        Text [ de ] = "Tabellen verschieben" ;
         Text [ en-US ] = "Move Sheets" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_COPY_TAB
     {
-        Text [ de ] = "Tabellen kopieren" ;
         Text [ en-US ] = "Copy Sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_APPEND_TAB
     {
         /* ### ACHTUNG: Neuer Text in Resource? Tabelle anh‰ngen : Tabelle anhıngen */
-        Text [ de ] = "Tabelle anh√§ngen" ;
         Text [ en-US ] = "Append sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_SHOWTAB
     {
-        Text [ de ] = "Tabelle einblenden" ;
         Text [ en-US ] = "Show Sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_HIDETAB
     {
-        Text [ de ] = "Tabelle ausblenden" ;
         Text [ en-US ] = "Hide sheet" ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_TAB_RTL
     {
-        Text [ de ] = "Tabelle wenden" ;
         Text [ en-US ] = "Flip sheet" ;
     };
     String STR_UNDO_TAB_R1C1
     {
         Text [ en-US ] = "Toggle the use of R1C1 notation" ;
-        Text[ de ] = "Verwendung der R1C1-Notation umschalten";
-        Text[ es ] = "Alternar el uso de la notaci√≥n R1C1";
-        Text[ fr ] = "Activer/D√©sactiver l'usage de la notation R1C1";
-        Text[ it ] = "Alterna l'utilizzo della notazione R1C1";
-        Text[ ja ] = "R1C1Ë°®Ë®ò„ÅÆ‰ΩøÁî®„Çí„Éà„Ç∞„É´„Åô„Çã";
-        Text[ pt-BR ] = "Alterna o uso da nota√ß√£o R1C1";
-        Text[ zh-CN ] = "ÂàáÊç¢‰ΩøÁî® R1C1 Ë°®Á§∫Ê≥ï";
-        Text[ zh-TW ] = "ÂàáÊèõ‰ΩøÁî® R1C1 Ê®ôË®ò";
     };
     String STR_CHART_MAINTITLE
     {
-        Text [ de ] = "Haupttitel" ;
         Text [ en-US ] = "Main Title" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHART_SUBTITLE
     {
-        Text [ de ] = "Untertitel" ;
         Text [ en-US ] = "Subtitle" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHART_XTITLE
     {
-        Text [ de ] = "X-Achsentitel" ;
         Text [ en-US ] = "X axis title" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHART_YTITLE
     {
-        Text [ de ] = "Y-Achsentitel" ;
         Text [ en-US ] = "Y axis title" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHART_ZTITLE
     {
-        Text [ de ] = "Z-Achsentitel" ;
         Text [ en-US ] = "Z axis title" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ABSREFLOST
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die neue Tabelle enth‰lt absolute Referenzen auf andere Tabellen, die nicht mehr stimmen m¸ssen! : Die neue Tabelle enthılt absolute Referenzen auf andere Tabellen, die nicht mehr stimmen m≥ssen! */
-        Text [ de ] = "Die neue Tabelle enth√§lt absolute Referenzen auf andere Tabellen, die nicht mehr stimmen m√ºssen!" ;
         Text [ en-US ] = "The new table contains absolute references to other tables which may be incorrect!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NAMECONFLICT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname ver‰ndert! : Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname verındert! */
-        Text [ de ] = "Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname ver√§ndert!" ;
         Text [ en-US ] = "Due to identical names, an existing range name in the destination document has been altered!" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_AUTOFILTER
     {
         /* ### ACHTUNG: Neuer Text in Resource? AutoFilter nicht mˆglich : AutoFilter nicht m˜glich */
-        Text [ de ] = "AutoFilter nicht m√∂glich" ;
         Text [ en-US ] = "AutoFilter not possible" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_1
     {
         /* ### ACHTUNG: Neuer Text in Resource? StarCalc hat bis zum Anfang der Tabelle gesucht. Mˆchten Sie die Suche am Tabellenende fortsetzen? : StarCalc hat bis zum Anfang der Tabelle gesucht. M˜chten Sie die Suche am Tabellenende fortsetzen? */
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. M√∂chten Sie die Suche am Tabellenende fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the beginning of the sheet. Do you want to continue at the end?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_2
     {
         /* ### ACHTUNG: Neuer Text in Resource? StarCalc hat bis zum Ende der Tabelle gesucht. Mˆchten Sie die Suche am Tabellenanfang fortsetzen? : StarCalc hat bis zum Ende der Tabelle gesucht. M˜chten Sie die Suche am Tabellenanfang fortsetzen? */
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. M√∂chten Sie die Suche am Tabellenanfang fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the end of the sheet. Do you want to continue at the beginning?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_3
     {
-        Text [ de ] = "Suchen & Ersetzen" ;
         Text [ en-US ] = "Find & Replace" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_4
     {
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. M√∂chten Sie die Suche am Dokumentende fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the beginning of the document. Do you want to continue at the end?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MSSG_SEARCHANDREPLACE_5
     {
-        Text [ de ] = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. M√∂chten Sie die Suche am Dokumentanfang fortsetzen?" ;
         Text [ en-US ] = "%PRODUCTNAME Calc has searched to the end of the document. Do you want to continue at the beginning?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CREATENAME_REPLACE
     {
-        Text [ de ] = "Vorhandene Definition von # ersetzen?" ;
         Text [ en-US ] = "Replace existing definition of #?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CREATENAME_MARKERR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Falsche Markierung f¸r Bereichsnamen : Falsche Markierung f≥r Bereichsnamen */
-        Text [ de ] = "Falsche Markierung f√ºr Bereichsnamen" ;
         Text [ en-US ] = "Invalid selection for range names" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CONSOLIDATE_ERR1
     {
         /* ### ACHTUNG: Neuer Text in Resource? Verbindungen kˆnnen nicht oberhalb der Quelldaten eingef¸gt werden. : Verbindungen k˜nnen nicht oberhalb der Quelldaten eingef≥gt werden. */
-        Text [ de ] = "Verbindungen k√∂nnen nicht oberhalb der Quelldaten eingef√ºgt werden." ;
         Text [ en-US ] = "References can not be inserted above the source data." ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCENARIO_NOTFOUND
     {
-        Text [ de ] = "Szenario nicht gefunden" ;
         Text [ en-US ] = "Scenario not found" ;
-        Text [ x-comment ] = " ";
     };
     String STR_QUERY_DELENTRY
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie den Eintrag # wirklich lˆschen? : Wollen Sie den Eintrag # wirklich l˜schen? */
-        Text [ de ] = "Wollen Sie den Eintrag # wirklich l√∂schen?" ;
         Text [ en-US ] = "Do you really want to delete the entry #?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_VOBJ_OBJECT
     {
-        Text [ de ] = "Objekte/Grafiken" ;
         Text [ en-US ] = "Objects/graphics" ;
-        Text [ x-comment ] = " ";
     };
     String STR_VOBJ_CHART
     {
-        Text [ de ] = "Diagramme" ;
         Text [ en-US ] = "Charts" ;
-        Text [ x-comment ] = " ";
     };
     String STR_VOBJ_DRAWINGS
     {
-        Text [ de ] = "Zeichenobjekte" ;
         Text [ en-US ] = "Drawing Objects" ;
-        Text [ x-comment ] = " ";
     };
     String STR_VOBJ_MODE_SHOW
     {
-        Text [ de ] = "Anzeigen" ;
         Text [ en-US ] = "Show" ;
-        Text [ x-comment ] = " ";
     };
     String STR_VOBJ_MODE_HIDE
     {
-        Text [ de ] = "Ausblenden" ;
         Text [ en-US ] = "Hide" ;
-        Text [ x-comment ] = " ";
     };
     String STR_VOBJ_MODE_DUMMY
     {
-        Text [ de ] = "Platzhalter" ;
         Text [ en-US ] = "Placeholders" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_TOPDOWN
     {
-        Text [ de ] = "Von oben nach unten" ;
         Text [ en-US ] = "Top to bottom" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_LEFTRIGHT
     {
-        Text [ de ] = "Von Links-nach-rechts" ;
         Text [ en-US ] = "Left-to-right" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_NOTES
     {
-        Text [ de ] = "Notizen" ;
         Text [ en-US ] = "Notes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_GRID
     {
-        Text [ de ] = "Tabellengitter" ;
         Text [ en-US ] = "Grid" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_HEADERS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilen- & Spaltenkˆpfe : Zeilen- & Spaltenk˜pfe */
-        Text [ de ] = "Zeilen- & Spaltenk√∂pfe" ;
         Text [ en-US ] = "Row & Column Headers" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_FORMULAS
     {
-        Text [ de ] = "Formeln" ;
         Text [ en-US ] = "Formulas" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_NULLVALS
     {
-        Text [ de ] = "Nullwerte" ;
         Text [ en-US ] = "Zero Values" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_PRINTDIR
     {
-        Text [ de ] = "Druckrichtung" ;
         Text [ en-US ] = "Print direction" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_FIRSTPAGENO
     {
-        Text [ de ] = "Erste Seitenzahl" ;
         Text [ en-US ] = "First page number" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_SCALE
     {
-        Text [ de ] = "Ausdruck verkleinern/vergr√∂√üern" ;
         Text [ en-US ] = "Reduce/enlarge printout" ;
     };
     String STR_SCATTR_PAGE_SCALETOPAGES
     {
-        Text [ de ] = "Druckbereich(e) auf Seitenzahl anpassen" ;
         Text [ en-US ] = "Fit print range(s) on number of pages" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SCATTR_PAGE_SCALETO
     {
-        Text [ de ] = "Druckbereich(e) auf Breite/H√∂he anpassen" ;
         Text [ en-US ] = "Fit print range(s) to width/height" ;
     };
     String STR_SCATTR_PAGE_SCALE_WIDTH
     {
-        Text [ de ] = "Breite" ;
         Text [ en-US ] = "Width" ;
     };
     String STR_SCATTR_PAGE_SCALE_HEIGHT
     {
-        Text [ de ] = "H√∂he" ;
         Text [ en-US ] = "Height" ;
     };
     String STR_SCATTR_PAGE_SCALE_PAGES
     {
-        Text [ de ] = "%1 Seite(n)" ;
         Text [ en-US ] = "%1 page(s)" ;
     };
     String STR_SCATTR_PAGE_SCALE_AUTO
     {
-        Text [ de ] = "automatisch" ;
         Text [ en-US ] = "automatic" ;
     };
     String STR_DOC_STAT
     {
-        Text [ de ] = "Statistik" ;
         Text [ en-US ] = "Statistics" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LINKERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Verkn¸pfung konnte nicht aktualisiert werden. : Die Verkn≥pfung konnte nicht aktualisiert werden. */
-        Text [ de ] = "Die Verkn√ºpfung konnte nicht aktualisiert werden." ;
         Text [ en-US ] = "The link could not be updated." ;
-        Text [ x-comment ] = " ";
     };
     String STR_LINKERRORFILE
     {
-        Text [ de ] = "Datei:" ;
         Text [ en-US ] = "File:" ;
-        Text [ x-comment ] = " ";
     };
     String STR_LINKERRORTAB
     {
-        Text [ de ] = "Tabelle:" ;
         Text [ en-US ] = "Sheet:" ;
-        Text [ x-comment ] = " ";
     };
     String STR_OVERVIEW
     {
         /* ### ACHTUNG: Neuer Text in Resource? ‹bersicht : öbersicht */
-        Text [ de ] = "√úbersicht" ;
         Text [ en-US ] = "Overview" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOC_INFO
     {
-        Text [ de ] = "Dokumentinfo" ;
         Text [ en-US ] = "Doc.Information" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOC_CREATED
     {
-        Text [ de ] = "Erstellt" ;
         Text [ en-US ] = "Created" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOC_MODIFIED
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ver‰ndert : Verındert */
-        Text [ de ] = "Ver√§ndert" ;
         Text [ en-US ] = "Modified" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOC_PRINTED
     {
-        Text [ de ] = "Ausgedruckt" ;
         Text [ en-US ] = "Printed" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOC_THEME
     {
-        Text [ de ] = "Thema" ;
         Text [ en-US ] = "Subject" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOC_KEYWORDS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Schl¸sselworte : Schl≥sselworte */
-        Text [ de ] = "Schl√ºsselworte" ;
         Text [ en-US ] = "Key words" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOC_COMMENT
     {
-        Text [ de ] = "Bemerkungen" ;
         Text [ en-US ] = "Comments" ;
-        Text [ x-comment ] = " ";
     };
     String STR_BY
     {
-        Text [ de ] = "von" ;
         Text [ en-US ] = "by" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ON
     {
-        Text [ de ] = "am" ;
         Text [ en-US ] = "on" ;
-        Text [ x-comment ] = " ";
     };
     String STR_RELOAD_TABLES
     {
          // ### ACHTUNG: Neuer Text in Resource? Diese Datei enth‰lt Verkn¸pfungen zu anderen Dateien.\nSollen diese aktualisiert werden? : Diese Datei enth‰lt verkn¸pfte Tabellen.\nSollen diese aktualisiert werden?
         /* ### ACHTUNG: Neuer Text in Resource? Diese Datei enth‰lt Verkn¸pfungen zu anderen Dateien.\nSollen diese aktualisiert werden? : Diese Datei enthılt Verkn≥pfungen zu anderen Dateien.\nSollen diese aktualisiert werden? */
-        Text [ de ] = "Diese Datei enth√§lt Verkn√ºpfungen zu anderen Dateien.\nSollen diese aktualisiert werden?" ;
         Text [ en-US ] = "This file contains links to other files.\nShould they be updated?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_REIMPORT_AFTER_LOAD
     {
         /* ### ACHTUNG: Neuer Text in Resource? Diese Datei enth‰lt Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden? : Diese Datei enthılt Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden? */
-        Text [ de ] = "Diese Datei enth√§lt Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden?" ;
         Text [ en-US ] = "This file contains queries. The results of these queries were not saved.\nDo you want these queries to be repeated?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FILTER_TOOMANY
     {
-        Text [ de ] = "Zuviele Bedingungen" ;
         Text [ en-US ] = "Too many conditions" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INSERT_FULL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ausgef¸llte Zellen kˆnnen nicht ¸ber\ndas Blatt hinaus verschoben werden. : Ausgef≥llte Zellen k˜nnen nicht ≥ber\ndas Blatt hinaus verschoben werden. */
-        Text [ de ] = "Ausgef√ºllte Zellen k√∂nnen nicht √ºber\ndas Blatt hinaus verschoben werden." ;
         Text [ en-US ] = "Filled cells cannot be shifted\nbeyond the sheet." ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABINSERT_ERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Tabelle konnte nicht eingef¸gt werden. : Die Tabelle konnte nicht eingef≥gt werden. */
-        Text [ de ] = "Die Tabelle konnte nicht eingef√ºgt werden." ;
         Text [ en-US ] = "The table could not be inserted." ;
-        Text [ x-comment ] = " ";
     };
     String STR_TABREMOVE_ERROR
     {
-        Text [ de ] = "Die Tabellen konnten nicht gel√∂scht werden." ;
         Text [ en-US ] = "The sheets could not be deleted." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PASTE_ERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der Inhalt der Zwischenablage konnte nicht eingef¸gt werden. : Der Inhalt der Zwischenablage konnte nicht eingef≥gt werden. */
-        Text [ de ] = "Der Inhalt der Zwischenablage konnte nicht eingef√ºgt werden." ;
         Text [ en-US ] = "The contents of the clipboard could not be pasted." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PASTE_FULL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Es kann nicht ¸ber das Blatt hinaus eingef¸gt werden. : Es kann nicht ≥ber das Blatt hinaus eingef≥gt werden. */
-        Text [ de ] = "Es kann nicht √ºber das Blatt hinaus eingef√ºgt werden." ;
         Text [ en-US ] = "There is not enough space on the sheet to insert here." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PASTE_BIGGER
     {
-        Text [ de ] = "Der Inhalt der Zwischenablage ist gr√∂√üer als der ausgew√§hlte Bereich.\nM√∂chten Sie trotzdem einf√ºgen?" ;
         Text [ en-US ] = "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?";
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_NOREF
     {
-        Text [ de ] = "Keine Referenzen gefunden." ;
         Text [ en-US ] = "No references found." ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_LINKOVERLAP
     {
         /* ### ACHTUNG: Neuer Text in Resource? Quell- und Zielbereich d¸rfen sich nicht ¸berlappen. : Quell- und Zielbereich d≥rfen sich nicht ≥berlappen. */
-        Text [ de ] = "Quell- und Zielbereich d√ºrfen sich nicht √ºberlappen." ;
         Text [ en-US ] = "Source and destination must not overlap." ;
-        Text [ x-comment ] = " ";
     };
     String STR_GRAPHICNAME
     {
-        Text [ de ] = "Grafik" ;
         Text [ en-US ] = "Graphics" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALIDNAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltiger Name. : Ung≥ltiger Name. */
-        Text [ de ] = "Ung√ºltiger Name." ;
         Text [ en-US ] = "Invalid name." ;
-        Text [ x-comment ] = " ";
     };
     String STR_VALID_MACRONOTFOUND
     {
-        Text [ de ] = "Das eingestellte Makro wurde nicht gefunden." ;
         Text [ en-US ] = "Selected macro not found." ;
-        Text [ x-comment ] = " ";
     };
     String STR_VALID_DEFERROR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Der eingegebene Wert ist ung¸ltig. : Der eingegebene Wert ist ung≥ltig. */
-        Text [ de ] = "Der eingegebene Wert ist ung√ºltig." ;
         Text [ en-US ] = "Invalid value." ;
-        Text [ x-comment ] = " ";
     };
     String STR_PROGRESS_CALCULATING
     {
-        Text [ de ] = "berechnen" ;
         Text [ en-US ] = "calculating" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PROGRESS_SORTING
     {
-        Text [ de ] = "sortieren" ;
         Text [ en-US ] = "sorting" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PROGRESS_HEIGHTING
     {
         /* ### ACHTUNG: Neuer Text in Resource? Zeilenhˆhen anpassen : Zeilenh˜hen anpassen */
-        Text [ de ] = "Zeilenh√∂hen anpassen" ;
         Text [ en-US ] = "Adapt row height" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PROGRESS_COMPARING
     {
-        Text [ de ] = "Vergleiche #" ;
         Text [ en-US ] = "Compare #" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DETINVALID_OVERFLOW
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die maximale Anzahl ung¸ltiger Zellen wurde ¸berschritten.\nEs wurden nicht alle ung¸ltigen Zellen markiert. : Die maximale Anzahl ung≥ltiger Zellen wurde ≥berschritten.\nEs wurden nicht alle ung≥ltigen Zellen markiert. */
-        Text [ de ] = "Die maximale Anzahl ung√ºltiger Zellen wurde √ºberschritten.\nEs wurden nicht alle ung√ºltigen Zellen markiert." ;
         Text [ en-US ] = "The maximum number of invalid cells has been exceeded.\nNot all invalid cells have been marked." ;
-        Text [ x-comment ] = " ";
     };
     String STR_QUICKHELP_DELETE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Inhalte lˆschen : Inhalte l˜schen */
-        Text [ de ] = "Inhalte l√∂schen" ;
         Text [ en-US ] = "Delete contents" ;
-        Text [ x-comment ] = " ";
     };
     String STR_QUICKHELP_REF
     {
-        Text [ de ] = "%1 Z x %2 S" ;
         Text [ en-US ] = "%1 R  x %2 C" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FUNCTIONLIST_MORE
     {
-        Text [ de ] = "Andere..." ;
         Text [ en-US ] = "More..." ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_INVALID_AREA
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung¸ltiger Bereich : Ung≥ltiger Bereich */
-        Text [ de ] = "Ung√ºltiger Bereich" ;
         Text [ en-US ] = "Invalid range" ;
-        Text [ x-comment ] = " ";
     };
      // Vorlagen fuer Pivottabellen
     String STR_PIVOT_STYLE_INNER
     {
-        Text [ de ] = "Datenpilot Wert" ;
         Text [ en-US ] = "DataPilot Value" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_STYLE_RESULT
     {
-        Text [ de ] = "Datenpilot Ergebnis" ;
         Text [ en-US ] = "DataPilot Result" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_STYLE_CATEGORY
     {
-        Text [ de ] = "Datenpilot Kategorie" ;
         Text [ en-US ] = "DataPilot Category" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_STYLE_TITLE
     {
-        Text [ de ] = "Datenpilot Titel" ;
         Text [ en-US ] = "DataPilot Title" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_STYLE_FIELDNAME
     {
-        Text [ de ] = "Datenpilot Feld" ;
         Text [ en-US ] = "DataPilot Field" ;
-        Text [ x-comment ] = " ";
     };
     String STR_PIVOT_STYLE_TOP
     {
-        Text [ de ] = "Datenpilot Ecke" ;
         Text [ en-US ] = "DataPilot Corner" ;
-        Text [ x-comment ] = " ";
     };
     String STR_OPERATION_FILTER
     {
-        Text [ de ] = "Filter" ;
         Text [ en-US ] = "Filter" ;
-        Text [ x-comment ] = " ";
     };
     String STR_OPERATION_SORT
     {
-        Text [ de ] = "Sortierung" ;
         Text [ en-US ] = "Sort" ;
-        Text [ x-comment ] = " ";
     };
     String STR_OPERATION_SUBTOTAL
     {
-        Text [ de ] = "Teilergebnisse" ;
         Text [ en-US ] = "Subtotals" ;
-        Text [ x-comment ] = " ";
     };
     String STR_OPERATION_NONE
     {
-        Text [ de ] = "keine" ;
         Text [ en-US ] = "None" ;
-        Text [ x-comment ] = " ";
     };
     String STR_IMPORT_REPLACE
     {
-        Text [ de ] = "Wollen Sie den Inhalt von # ersetzen?" ;
         Text [ en-US ] = "Do you want to replace the contents of #?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TIP_WIDTH
     {
-        Text [ de ] = "Breite:" ;
         Text [ en-US ] = "Width:" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TIP_HEIGHT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Hˆhe: : H˜he: */
-        Text [ de ] = "H√∂he:" ;
         Text [ en-US ] = "Height:" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TIP_HIDE
     {
-        Text [ de ] = "Ausblenden" ;
         Text [ en-US ] = "Hide" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_INSERTOBJ
     {
-        Text [ de ] = "Das Objekt konnte nicht eingef√ºgt werden." ;
         Text [ en-US ] = "The object could not be inserted." ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHANGED_BLANK
     {
-        Text [ de ] = "<leer>" ;
         Text [ en-US ] = "<empty>" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHANGED_CELL
     {
-        Text [ de ] = "Zelle #1 von '#2' zu '#3' ge√§ndert" ;
         Text [ en-US ] = "Cell #1 changed from '#2' to '#3'" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHANGED_INSERT
     {
-        Text [ de ] = "#1 eingef√ºgt" ;
         Text [ en-US ] = "#1 inserted" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHANGED_DELETE
     {
-        Text [ de ] = "#1 gel√∂scht" ;
         Text [ en-US ] = "#1deleted" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHANGED_MOVE
     {
-        Text [ de ] = "Bereich von #1 nach #2 verschoben" ;
         Text [ en-US ] = "Range moved from #1 to #2" ;
-        Text [ x-comment ] = " ";
     };
     String STR_END_REDLINING_TITLE
     {
-        Text [ de ] = "Aufzeichnung beenden" ;
         Text [ en-US ] = "Exit Recording" ;
-        Text [ x-comment ] = " ";
     };
     String STR_END_REDLINING
     {
-        Text [ de ] = "Mit dieser Aktion wird die Aufzeichnung von √Ñnderungen beendet.\nDie Information √ºber √Ñnderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
         Text [ en-US ] = "This action will exit the change recording mode.\nAny information about changes will be lost.\n\nExit change recording mode?\n\n" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CLOSE_ERROR_LINK
     {
-        Text [ de ] = "Das Dokument kann nicht geschlossen werden, w√§hrend eine Verkn√ºpfung aktualisiert wird." ;
         Text [ en-US ] = "The document can not be closed while a link is being updated." ;
-        Text [ x-comment ] = " ";
     };
     String STR_UNDO_RESIZEMATRIX
     {
-        Text [ de ] = "Matrixbereich anpassen" ;
         Text [ en-US ] = "Adapt array area";
-        Text [ x-comment ] = " ";
     };
     String STR_TIP_RESIZEMATRIX
     {
-        Text [ de ] = "Matrixformel %1 Z x %2 S" ;
         Text [ en-US ] = "Array formula  %1 R x %2 C";
-        Text [ x-comment ] = " ";
     };
     String STR_MACRO_WARNING
     {
-        Text [ de ] = "Das Dokument enth√§lt Makro-Aufrufe.\nSollen diese ausgef√ºhrt werden?";
         Text [ en-US ] = "This document contains macro function calls.\nDo you want to run them?";
-        Text [ x-comment ] = " ";
     };
 
     String STR_UNDO_HANGULHANJA
     {
-        Text [ de ] = "Hangul/Hanja Konvertierung";
         Text [ en-US ] = "Hangul/Hanja Conversion";
     };
 
     String STR_NAME_INPUT_CELL
     {
-        Text [ de ]  = "Zelle ausw√§hlen";
         Text [ en-US ] = "Select Cell";
     };
     String STR_NAME_INPUT_RANGE
     {
-        Text [ de ]  = "Bereich ausw√§hlen";
         Text [ en-US ] = "Select Range";
     };
     String STR_NAME_INPUT_DBRANGE
     {
-        Text [ de ]  = "Datenbankbereich ausw√§hlen";
         Text [ en-US ] = "Select Database Range";
     };
     String STR_NAME_INPUT_ROW
     {
-        Text [ de ]  = "Gehe zu Zeile";
         Text [ en-US ] = "Go To Row";
     };
     String STR_NAME_INPUT_SHEET
     {
-        Text [ de ]  = "Gehe zu Tabelle";
         Text [ en-US ] = "Go To Sheet";
     };
     String STR_NAME_INPUT_DEFINE
     {
-        Text [ de ]  = "Bereich benennen";
         Text [ en-US ] = "Define Name for Range";
     };
     String STR_NAME_ERROR_SELECTION
     {
-        Text [ de ]  = "Der ausgew√§hlte Bereich muss rechteckig sein, um ihn benennen zu k√∂nnen.";
         Text [ en-US ] = "The selection needs to be rectangular in order to name it.";
     };
     String STR_NAME_ERROR_NAME
     {
-        Text [ de ]  = "Sie m√ºssen entweder einen g√ºltigen Zellbezug oder einen g√ºltigen Namen f√ºr den ausgew√§hlten Bereich angeben.";
         Text [ en-US ] = "You must enter a valid reference or type a valid name for the selected range.";
     };
 
     String STR_CHANGED_MOVE_REJECTION_WARNING
     {
-        Text [ de ] = "ACHTUNG: Diese Aktion kann zu unbeabsichtigten √Ñnderungen von Zellreferenzen in Formeln gef√ºhrt haben!";
         Text[ en-US ] = "WARNING: This action may have resulted in unintended changes to cell references in formulas.";
     };
 
     String STR_CHANGED_DELETE_REJECTION_WARNING
     {
-        Text [ de ] = "ACHTUNG: Diese Aktion kann dazu gef√ºhrt haben, dass Referenzen auf den gel√∂schten Bereich nicht wieder hergestellt wurden.";
         Text[ en-US ] = "WARNING: This action may have resulted in references to the deleted area not being restored.";
     };
 
     String STR_HF_NONE_IN_BRACKETS
     {
-        Text [ de ]  = "(keine)";
         Text [ en-US ] = "(none)";
-        Text [ x-comment ] = "(keine) refers to text Kopfzeile or Fuﬂzeile" ;
     };
 
     String STR_HF_OF
     {
-        Text [ de ]  = "von";
         Text [ en-US ] = "of";
     };
 
     String STR_HF_OF_QUESTION
     {
-        Text [ de ]  = "von ?";
         Text [ en-US ] = "of ?";
     };
 
     String STR_HF_CREATED_BY
     {
-        Text [ de ]  = "Erstellt von";
         Text [ en-US ] = "Created by";
     };
 
     String STR_HF_CONFIDENTIAL
     {
-        Text [ de ]  = "Vertraulich";
         Text [ en-US ] = "Confidential";
     };
 
     String STR_HF_CUSTOMIZED
     {
-        Text [ de ]  = "Benutzerdefiniert" ;
         Text [ en-US ] = "Customized";
     };
 
     String STR_HF_CUSTOM_FOOTER
     {
-        Text [ de ]  = "Benutzerdefiniert" ;
         Text [ en-US ] = "Custom footer";
-        Text [ x-comment ] = "German text shortened.";
     };
 
     String STR_UNDO_CHINESE_TRANSLATION
     {
-        Text [ de ]= "Chinesische √úbersetzung";
         Text [ en-US ] = "Chinese translation";
     };
 
     String STR_ERR_DATAPILOT_INPUT
     {
-        Text [ de ] = "Sie k√∂nnen diesen Teil der Datenpilot-Tabelle nicht √§ndern.";
         Text[ en-US ] = "You cannot change this part of the DataPilot table.";
     };
 
     String STR_RECALC_MANUAL
     {
-        Text [ de ] = "Manuell";
         Text [ en-US ] = "Manual";
     };
     String STR_RECALC_AUTO
     {
-        Text [ de ] = "Automatisch";
         Text [ en-US ] = "Automatic";
     };
 };
