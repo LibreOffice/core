@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:56:21 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:29:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,126 +39,98 @@
 
 String RID_GALLERYSTR_THEME_3D
 {
-    Text [ de ] = "3D-Effekte";
     Text [ en-US ] = "3D Effects";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_ANIMATIONS
 {
-    Text [ de ] = "Animationen";
     Text [ en-US ] = "Animations";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BULLETS
 {
-    Text [ de ] = "Bullets";
     Text [ en-US ] = "Bullets";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_OFFICE
 {
-    Text [ de ] = "Büro";
     Text [ en-US ] = "Office";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FLAGS
 {
-    Text [ de ] = "Flaggen";
     Text [ en-US ] = "Flags";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_FLOWCHARTS
 {
-    Text [ de ] = "Flussdiagramme";
     Text [ en-US ] = "Flow Charts";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_EMOTICONS
 {
-    Text [ de ] = "Emoticons";
     Text [ en-US ] = "Emoticons";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PHOTOS
 {
-    Text [ de ] = "Fotos";
     Text [ en-US ] = "Pictures";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_BACKGROUNDS
 {
-    Text [ de ] = "Hintergründe";
     Text [ en-US ] = "Backgrounds";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_HOMEPAGE
 {
-    Text [ de ] = "Homepage";
     Text [ en-US ] = "Homepage";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_INTERACTION
 {
-    Text [ de ] = "Interaktion";
     Text [ en-US ] = "Interaction";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MAPS
 {
-    Text [ de ] = "Karten";
     Text [ en-US ] = "Maps";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_PEOPLE
 {
-    Text [ de ] = "Personen";
     Text [ en-US ] = "People";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SURFACES
 {
-    Text [ de ] = "Oberflächen";
     Text [ en-US ] = "Surfaces";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
@@ -181,34 +153,27 @@ String RID_GALLERYSTR_THEME_POWERPOINT
 
 String RID_GALLERYSTR_THEME_RULERS
 {
-    Text [ de ] = "Begrenzungen";
     Text [ en-US ] = "Rulers";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SOUNDS
 {
-    Text [ de ] = "Klänge";
     Text [ en-US ] = "Sounds";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_SYMBOLS
 {
-    Text [ de ] = "Symbole";
     Text [ en-US ] = "Symbols";
-    Text [ x-comment ] = " ";
 };
 
 // -----------------------------------------------------------------------------
 
 String RID_GALLERYSTR_THEME_MYTHEME
 {
-    Text [ de ] = "Eigenes Thema";
     Text [ en-US ] = "My Theme";
 };
 
@@ -224,7 +189,6 @@ String RID_GALLERYSTR_THEME_USERSOUNDS
 
 String RID_GALLERYSTR_THEME_ARROWS
 {
-    Text [ de ] = "Pfeile";
     Text [ en-US ] = "Arrows";
 };
 
@@ -232,7 +196,6 @@ String RID_GALLERYSTR_THEME_ARROWS
 
 String RID_GALLERYSTR_THEME_BALLOONS
 {
-    Text [ de ] = "Sprechblasen";
     Text [ en-US ] = "Balloons";
 };
 
@@ -240,7 +203,6 @@ String RID_GALLERYSTR_THEME_BALLOONS
 
 String RID_GALLERYSTR_THEME_KEYBOARD
 {
-    Text [ de ] = "Tastatur";
     Text [ en-US ] = "Keyboard";
 };
 
@@ -248,7 +210,6 @@ String RID_GALLERYSTR_THEME_KEYBOARD
 
 String RID_GALLERYSTR_THEME_TIME
 {
-    Text [ de ] = "Zeit";
     Text [ en-US ] = "Time";
 };
 
@@ -256,7 +217,6 @@ String RID_GALLERYSTR_THEME_TIME
 
 String RID_GALLERYSTR_THEME_PRESENTATION
 {
-    Text [ de ] = "Präsentation";
     Text [ en-US ] = "Presentation";
 };
 
@@ -264,7 +224,6 @@ String RID_GALLERYSTR_THEME_PRESENTATION
 
 String RID_GALLERYSTR_THEME_CALENDAR
 {
-    Text [ de ] = "Kalender";
     Text [ en-US ] = "Calendar";
 };
 
@@ -272,7 +231,6 @@ String RID_GALLERYSTR_THEME_CALENDAR
 
 String RID_GALLERYSTR_THEME_NAVIGATION
 {
-    Text [ de ] = "Navigation";
     Text [ en-US ] = "Navigation";
 };
 
@@ -280,7 +238,6 @@ String RID_GALLERYSTR_THEME_NAVIGATION
 
 String RID_GALLERYSTR_THEME_COMMUNICATION
 {
-    Text [ de ] = "Kommunikation";
     Text [ en-US ] = "Communication";
 };
 
@@ -288,7 +245,6 @@ String RID_GALLERYSTR_THEME_COMMUNICATION
 
 String RID_GALLERYSTR_THEME_FINANCES
 {
-    Text [ de ] = "Finanzen";
     Text [ en-US ] = "Finances";
 };
 
@@ -296,7 +252,6 @@ String RID_GALLERYSTR_THEME_FINANCES
 
 String RID_GALLERYSTR_THEME_COMPUTER
 {
-    Text [ de ] = "Computer";
     Text [ en-US ] = "Computers";
 };
 
@@ -304,7 +259,6 @@ String RID_GALLERYSTR_THEME_COMPUTER
 
 String RID_GALLERYSTR_THEME_CLIMA
 {
-    Text [ de ] = "Klima";
     Text [ en-US ] = "Climate";
 };
 
@@ -312,7 +266,6 @@ String RID_GALLERYSTR_THEME_CLIMA
 
 String RID_GALLERYSTR_THEME_EDUCATION
 {
-    Text [ de ] = "Schule & Uni";
     Text [ en-US ] = "School & University";
 };
 
@@ -320,7 +273,6 @@ String RID_GALLERYSTR_THEME_EDUCATION
 
 String RID_GALLERYSTR_THEME_TROUBLE
 {
-    Text [ de ] = "Problemlösungen";
     Text [ en-US ] = "Problem Solving";
 };
 
@@ -328,9 +280,7 @@ String RID_GALLERYSTR_THEME_TROUBLE
 
 String RID_GALLERYSTR_THEME_SCREENBEANS
 {
-    Text [ de ] = "ScreenBeans";
     Text [ en-US ] = "Screen Beans";
-    Text [ x-comment ] = "; EM9.10.01: I checked the name and it is trademarked, so keep capitalized and two words (i.e. German is wrong).";
 };
 
 // -----------------------------------------------------------------------------
