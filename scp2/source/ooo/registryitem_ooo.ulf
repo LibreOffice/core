@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_ooo.ulf,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:16:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:32:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,24 +35,18 @@
 
 [STR_REG_VAL_NEW]
 en-US = "&New"
-de = "&Neu"
 
 [STR_REG_VAL_INSTALL]
 en-US = "&Install"
-de = "&Installiere"
 
 [STR_REG_VAL_SO52_CHART_OOO]
 en-US = "StarOffice 5.0 Chart"
-de = "StarOffice 5.0 Diagramm"
 
 [STR_REG_VAL_SO60_CONFIGFILE]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Configuration File"
-de = "%PRODUCTNAME %SXWFORMATVERSION Konfigurationsdatei"
 
 [STR_REG_VAL_SO50_TEMPLATE_OOO]
 en-US = "StarOffice 5.0 Template"
-de = "StarOffice 5.0 Vorlage"
 
 [STR_REG_VAL_APPCAPABILITY_DESCRIPTION_OOO]
 en-US = "OpenOffice.org"
-de = "OpenOffice.org"
