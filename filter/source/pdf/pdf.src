@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdf.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:49:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:11:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@
 
 String PDF_PROGRESS_BAR
 {
-    Text [ de ] = "Exportieren als PDF";
     Text [ en-US ] = "Export as PDF";
 };
 
