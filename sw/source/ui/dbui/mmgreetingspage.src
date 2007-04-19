@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:03:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:55:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,12 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 17 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 226 , 10 ) ;                                           \
-        Text [ de ] = "Personalisierte Briefanrede einfügen" ;                              \
         Text[ en-US ] = "Insert personalized salutation";                    \
     };                                                                              \
     FixedText   FT_FEMALE                                                           \
     {                                                                               \
         Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 32 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 50 , 8 ) ;                                             \
-        Text [ de ] = "Weiblich" ;                                                         \
         Text[ en-US ] = "~Female";                                              \
     };                                                                              \
     ListBox     LB_FEMALE                                                           \
@@ -62,14 +60,12 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 198 + LEFT_OFFSET , 29 + TOP_OFFSET ) ;                                            \
         Size = MAP_APPFONT ( 50 , 14 ) ;                                            \
-        Text [ de ] = "Neu..." ;                                                           \
         Text[ en-US ] = "~New...";                                              \
     };                                                                              \
     FixedText   FT_MALE                                                             \
     {                                                                               \
         Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 49 + TOP_OFFSET ) ;                                             \
         Size = MAP_APPFONT ( 50 , 8 ) ;                                             \
-        Text [ de ] = "Männlich" ;                                                         \
         Text[ en-US ] = "~Male";                                                \
     };                                                                              \
     ListBox     LB_MALE                                                             \
@@ -83,21 +79,18 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 198 + LEFT_OFFSET , 48 + TOP_OFFSET ) ;                                            \
         Size = MAP_APPFONT ( 50 , 14 ) ;                                            \
-        Text [ de ] = "Neu..." ;                                                           \
         Text[ en-US ] = "N~ew...";                                              \
     };                                                                              \
     FixedText   FI_FEMALE                                                       \
     {                                                                               \
         Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 67 + TOP_OFFSET ) ;                                             \
         Size = MAP_APPFONT ( 225 , 8 ) ;                                            \
-        Text [ de ] = "Adresslistenwert für einen weiblichen Empfänger" ;                     \
         Text[ en-US ] = "Address list field indicating a female recipient";     \
     };                                                                              \
     FixedText   FT_FEMALECOLUMN                                                     \
     {                                                                               \
         Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 80 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
-        Text [ de ] = "Spaltentitel" ;                     \
         Text[ en-US ] = "Field name";           \
     };                                                                              \
     ListBox LB_FEMALECOLUMN                                                         \
@@ -106,10 +99,6 @@
         Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
-        StringList [ de ] =                \
-        {                           \
-            < "< nicht verf�gbar >" ; > ;       \
-        };                          \
         StringList [en-US]=    \
         {                           \
             < "< not available >" ; > ;        \
@@ -119,7 +108,6 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 18 + LEFT_OFFSET , 95 + TOP_OFFSET ) ;                  \
         Size = MAP_APPFONT ( 50 , 8 ) ;                                            \
-        Text [ de ] = "Feldinhalt" ;                     \
         Text[ en-US ] = "Field value";           \
     };                                                                              \
     ComboBox CB_FEMALEFIELD                                                         \
@@ -133,7 +121,6 @@
     {                                                                               \
         Pos = MAP_APPFONT ( 12 + LEFT_OFFSET , 113 + TOP_OFFSET ) ;                                             \
         Size = MAP_APPFONT ( 180 , 8 ) ;                                            \
-        Text [ de ] = "Allgemeine Briefanrede";                     \
         Text[ en-US ] = "General salutation";           \
     };                                                                              \
     ComboBox     CB_NEUTRAL                                                         \
@@ -157,14 +144,12 @@ TabPage DLG_MM_GREETINGS_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Briefanrede erstellen";
         Text [ en-US ] = "Create a salutation";
     };
     CheckBox    CB_GREETINGLINE
     {
         Pos = MAP_APPFONT ( 12 , 27 );
         Size = MAP_APPFONT ( 242 , 10 );
-        Text [ de ] = "Eine Briefanrede in das Dokument einfügen" ;
         Text[ en-US ] = "This document should contain a salutation";
     };
     GREETINGS_BODY
@@ -172,7 +157,6 @@ TabPage DLG_MM_GREETINGS_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 168 ) ;
         Size = MAP_APPFONT ( 242 , 8 ) ;
-        Text [ de ] = "Vorschau" ;
         Text[ en-US ] = "Preview";
     };
     Window          WIN_PREVIEW
@@ -185,7 +169,6 @@ TabPage DLG_MM_GREETINGS_PAGE
     {
         Pos = MAP_APPFONT ( 204 , 179 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Felder wählen..." ;
         Text[ en-US ] = "~Match fields...";
     };
     FixedText       FI_DOCINDEX
@@ -199,7 +182,6 @@ TabPage DLG_MM_GREETINGS_PAGE
         Pos = MAP_APPFONT ( 177 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_PREV;
-        QuickHelpText [ de ] = "Vorige Briefanrede ansehen" ;
         QuickHelpText[ en-US ] = "Preview Previous Salutation";
     };
     ImageButton     IB_NEXTSET
@@ -207,12 +189,10 @@ TabPage DLG_MM_GREETINGS_PAGE
         Pos = MAP_APPFONT ( 188 , 204 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
-        QuickHelpText [ de ] = "Nächste Briefanrede ansehen" ;
         QuickHelpText[ en-US ] = "Preview Next Salutation";
     };
     String STR_DOCUMENT
     {
-        Text [ de ] = "Dokument: %1" ;
         Text[ en-US ] = "Document: %1";
     };
 };
@@ -228,13 +208,11 @@ ModalDialog DLG_MM_MAILBODY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
-    Text [ de ] = "E-Mail-Nachricht";
     Text [ en-US ] = "E-Mail Message";
     CheckBox    CB_GREETINGLINE
     {
         Pos = MAP_APPFONT ( 6  , 3 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Eine Briefanrede in die E-Mail-Nachrichteinfügen" ;
         Text[ en-US ] = "This e-mail should contain a salutation";
     };
     GREETINGS_BODY
@@ -242,7 +220,6 @@ ModalDialog DLG_MM_MAILBODY
     {
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 174 , 8 ) ;
-        Text [ de ] = "Schreiben Sie Ihre Nachricht hier" ;
         Text[ en-US ] = "Write your message here";
     };
     MultiLineEdit MLE_BODY
