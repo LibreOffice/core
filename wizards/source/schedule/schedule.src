@@ -4,9 +4,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:16:49 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:01:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,164 +86,129 @@
 
 String dlgCalTitle
 {
-Text [ de ] = "%PRODUCTNAME Kalender";
 Text [ en-US ] = "%PRODUCTNAME Calendar";
 };
 
 String  dlgCalTitleBack
 {
-Text [ de ] = "Zurück";
 Text [ en-US ] = "Back";
 };
 
 String  dlgCalTitleOwnData
 {
-Text [ de ] = "Eigene Daten";
 Text [ en-US ] = "Personal Data";
 };
 
 String dlgSchdlTitle
 {
-Text [ de ] = "Feiertagsberechnung";
 Text [ en-US ] = "Add Holidays to Calendar";
-    Text [ x-comment ] = " ";
 };
 
 String dlgOK
 {
-Text [ de ] = "Fertig stellen";
 Text [ en-US ] = "Create";
 };
 
 String dlgCancel
 {
-Text [ de ] = "Abbrechen";
 Text [ en-US ] = "Cancel";
 };
 
 String  dlgCalFrameOption
 {
-Text [ de ] = "Kalender";
 Text [ en-US ] = "Calendar";
 };
 
 String  dlgCalOptionYear
 {
-Text [ de ] = "~Jahresübersicht";
 Text [ en-US ] = "~Year Overview";
 };
 
 String  dlgCalOptionMonth
 {
-Text [ de ] = "~Monat";
 Text [ en-US ] = "~Month";
 };
 
 String dlgSchdlDescription
 {
-Text [ de ] = "Feiertagsberechnung für";
 Text [ en-US ] = "Add holidays for";
-    Text [ x-comment ] = " ";
 };
 
 String dlgSchdlCountry
 {
-Text [ de ] = "Deutschland";
 Text [ en-US ] = "USA";
-    Text [ x-comment ] = " ";
 };
 
 String dlgTime
 {
-Text [ de ] = "Zeitraum";
 Text [ en-US ] = "Time Frame";
 };
 
 String dlgYear
 {
-Text [ de ] = "Jahr";
 Text [ en-US ] = "Year";
-    Text [ x-comment ] = " ";
 };
 
 String dlgCalMonth
 {
-Text [ de ] = "Monat";
 Text [ en-US ] = "Month";
-    Text [ x-comment ] = " ";
 };
 
 String  dlgSpecificBankholidays
 {
-Text [ de ] = "Bundeslandspezifische Feiertage";
 Text [ en-US ] = "-";
 };
 
 String  dlgCalOwnData
 {
-Text [ de ] = "Eigene Daten";
 Text [ en-US ] = "Personal Data";
 };
 
 String dlgCalInsert
 {
-Text [ de ] = "~Einfügen";
 Text [ en-US ] = "~Insert";
 };
 
 String dlgCalDelete
 {
-Text [ de ] = "Ent~fernen";
 Text [ en-US ] = "~Delete";
 };
 
 String dlgCalNewEvent
 {
-Text [ de ] = "Neues Ereignis";
 Text [ en-US ] = "New Event";
 };
 
 String dlgCalEvent
 {
-Text [ de ] = "Ereignis";
 Text [ en-US ] = "Event";
 };
 
 String dlgCalEventOnce
 {
-Text [ de ] = "Einmalig";
 Text [ en-US ] = "One-Time";
 };
 
 String dlgCalEventDay
 {
-Text [ de ] = "Tag";
 Text [ en-US ] = "Day";
-    Text [ x-comment ] = " ";
 };
 
 String dlgCalEventMonth
 {
-Text [ de ] = "Monat";
 Text [ en-US ] = "Month";
-    Text [ x-comment ] = " ";
 };
 
 String dlgCalEventYear
 {
-Text [ de ] = "Jahr";
 Text [ en-US ] = "Year";
-    Text [ x-comment ] = " ";
 };
 
 // --------------------------------------------------------------------
 
 String dlgBitmapFile
 {
-Text [ de ] = "germany.wmf";
-Text [ x-comment ] = "; Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
 Text [ en-US ] = "usa.bmp";
-    Text [ x-comment ] = "; Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
 
 };
 
@@ -251,7 +216,6 @@ Text [ en-US ] = "usa.bmp";
 
 String dlgState
 {
-Text [ de ] = "Allgemeine Feiertage";
 Text [ en-US ] = "Public holidays";
 };
 
@@ -260,73 +224,61 @@ Text [ en-US ] = "Public holidays";
 
 String dlgMonth
 {
-Text [ de ] = "Januar";
 Text [ en-US ] = "January";
 };
 
 String dlgMonth+1
 {
-Text [ de ] = "Februar";
 Text [ en-US ] = "February";
 };
 
 String dlgMonth+2
 {
-Text [ de ] = "März";
 Text [ en-US ] = "March";
 };
 
 String dlgMonth+3
 {
-Text [ de ] = "April";
 Text [ en-US ] = "April";
 };
 
 String dlgMonth+4
 {
-Text [ de ] = "Mai";
 Text [ en-US ] = "May";
 };
 
 String dlgMonth+5
 {
-Text [ de ] = "Juni";
 Text [ en-US ] = "June";
 };
 
 String dlgMonth+6
 {
-Text [ de ] = "Juli";
 Text [ en-US ] = "July";
 };
 
 String dlgMonth+7
 {
-Text [ de ] = "August";
 Text [ en-US ] = "August";
 };
 
 String dlgMonth+8
 {
-Text [ de ] = "September";
 Text [ en-US ] = "September";
 };
 
 String dlgMonth+9
 {
-Text [ de ] = "Oktober";
 Text [ en-US ] = "October";
 };
 
 String dlgMonth+10
 {
-Text [ de ] = "November";
 Text [ en-US ] = "November";
 };
 
 String dlgMonth+11
 {
-Text [ de ] = "Dezember";
 Text [ en-US ] = "December";
 };
 
@@ -334,66 +286,52 @@ Text [ en-US ] = "December";
 
 String msgCalErrorTitle
 {
-Text [ de ] = "Jahres- / Monatskalender";
 Text [ en-US ] = "Yearly / Monthly Calendar";
 };
 
 String msgCalError
 {
-Text [ de ] = "Bei der Erstellung des Kalenders ist ein Fehler aufgetreten.";
 Text [ en-US ] = "An error occurred while creating the calendar.";
 };
 
 String msgCalRemoveTitle
 {
-Text [ de ] = "Ereigniseinträge entfernen";
 Text [ en-US ] = "Delete event entries";
 };
 
 String msgCalRemove
 {
-Text [ de ] = "Sollen die selektierten Einträge entfernt werden?";
 Text [ en-US ] = "Delete the selected entries?";
-    Text [ x-comment ] = " ";
 };
 
 // --------------------------------------------------------------------
 
 String stlWorkday
 {
-Text [ de ] = "Arbeitswoche";
 Text [ en-US ] = "Workweek";
-    Text [ x-comment ] = " ";
 };
 
 String stlWeekend
 {
-Text [ de ] = "Wochenende";
 Text [ en-US ] = "Weekend";
-    Text [ x-comment ] = " ";
 };
 
 // --------------------------------------------------------------------
 
 String  nameCalYear
 {
-Text [ de ] = "Kalender";
 Text [ en-US ] = "Calendar";
 };
 
 String  nameCalMonth
 {
-Text [ de ] = "Monat";
 Text [ en-US ] = "Month";
-    Text [ x-comment ] = "; This Resource is the prefix for a sheet name eg. in the form like 'Month February'.";
-    Text [ x-comment ] = "; This Resource is the prefix for a sheet name eg. in the form like 'Month February'.";
 };
 
 
 
 String  sProgress
 {
-Text [ de ] = "Fortschritt:";
 Text [ en-US ] = "Progress:";
 };
 
