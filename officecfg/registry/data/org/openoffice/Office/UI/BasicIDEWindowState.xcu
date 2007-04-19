@@ -5,9 +5,9 @@
  *
  *  $RCSfile: BasicIDEWindowState.xcu,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:33:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:20:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Standard</value>
-                    <value xml:lang="de">Standard</value>
+
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -70,7 +70,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Macro</value>
-                    <value xml:lang="de">Makro</value>
+
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -88,7 +88,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Language</value>
-                    <value xml:lang="de">Sprache</value>
+
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -97,7 +97,7 @@
             <node oor:name="private:resource/toolbar/insertcontrolsbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Toolbox</value>
-                    <value xml:lang="de">Werkzeugleiste</value>
+
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>False</value>
@@ -118,7 +118,7 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Full Screen</value>
-                    <value xml:lang="de">Ganzer Bildschirm</value>
+
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
