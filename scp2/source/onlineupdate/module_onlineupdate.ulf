@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_onlineupdate.ulf,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:09:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:29:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,10 +34,8 @@
  ************************************************************************/
 
 [STR_NAME_MODULE_OPT_ONLINEUPDATE]
-de = "Online Update"
 en-US = "Online Update"
 
 [STR_DESC_MODULE_OPT_ONLINEUPDATE]
-de = "Informiert Sie über das Erscheinen eines neuen Updates von %PRODUCTNAME."
 en-US = "Get automatically notified when a new update of %PRODUCTNAME becomes available." 
 
