@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:16:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:18:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -663,17 +663,16 @@ void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream && bLocalize ) {
-    if (( pStackData->sText[ ByteString("de") ].Len() &&
-        ( pStackData->sText[ ByteString("en-US") ].Len()
-        )) ||
+    if (( pStackData->sText[ ByteString("en-US") ].Len()
+        ) ||
             ( bForce &&
                 ( pStackData->sText[ ByteString("de") ].Len() ||
                     pStackData->sText[ ByteString("en-US") ].Len() )))
         {
-            ByteString sFallback = pStackData->sText[ ByteString("de") ];
+            ByteString sFallback = pStackData->sText[ ByteString("en-US") ];
 
-            if ( pStackData->sText[ ByteString("en-US") ].Len())
-                sFallback = pStackData->sText[ ByteString("en-US") ];
+            //if ( pStackData->sText[ ByteString("en-US") ].Len())
+            //  sFallback = pStackData->sText[ ByteString("en-US") ];
 
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
@@ -709,7 +708,7 @@ void CfgExport::WorkOnRessourceEnd()
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
-                    if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
+                    //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
                     pOutputStream->WriteLine( sOutput );
             }
         }
@@ -790,8 +789,8 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
-        if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
-            bGerman = TRUE;
+        //if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
+        //  bGerman = TRUE;
         if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
             bEnglish = TRUE;
 
@@ -832,7 +831,7 @@ void CfgMerge::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
 
-    if ( pMergeDataFile && pResData && bLocalize && (( bGerman && bEnglish ) || bForce )) {
+    if ( pMergeDataFile && pResData && bLocalize && (( bEnglish ) || bForce )) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrysCaseSensitive( pResData );
         if ( pEntrys ) {
             ByteString sCur;
@@ -843,7 +842,7 @@ void CfgMerge::WorkOnRessourceEnd()
                 ByteString sContent;
                 pEntrys->GetText( sContent, STRING_TYP_TEXT, sCur , TRUE );
                 if (
-                    ( !sCur.EqualsIgnoreCaseAscii("de") )    &&
+                    // (!sCur.EqualsIgnoreCaseAscii("de") )    &&
                     ( !sCur.EqualsIgnoreCaseAscii("en-US") ) &&
 
                     ( sContent != "-" ) && ( sContent.Len()))
