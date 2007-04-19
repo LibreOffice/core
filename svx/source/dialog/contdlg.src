@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:36:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:01:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 270 , 213 ) ;
-    Text [ de ] = "Kontur-Editor" ;
     Text [ en-US ] = "Contour Editor" ;
-    Text [ x-comment ] = " ";
     Sizeable = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -64,9 +62,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_APPLY ;
                 HelpId = HID_CONTDLG_APPLY ;
-                Text [ de ] = "Zuweisen" ;
                 Text [ en-US ] = "Apply" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -76,10 +72,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_WORKPLACE ;
                 HelpId = HID_CONTDLG_WORKPLACE ;
-                Text [ de ] = "Arbeitsbereich" ;
                 Text [ en-US ] = "Workspace" ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -89,41 +83,33 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_SELECT ;
                 HelpId = HID_CONTDLG_SELECT ;
-                Text [ de ] = "Auswahl" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Select" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_RECT ;
                 HelpId = HID_CONTDLG_RECT ;
-                Text [ de ] = "Rechteck" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Rectangle" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_CIRCLE ;
                 HelpId = HID_CONTDLG_CIRCLE ;
-                Text [ de ] = "Ellipse" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Ellipse" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_POLY ;
                 HelpId = HID_CONTDLG_POLY ;
-                Text [ de ] = "Polygon" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Polygon" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -133,38 +119,30 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_POLYEDIT ;
                 HelpId = HID_CONTDLG_POLYEDIT ;
-                Text [ de ] = "Punkte bearbeiten" ;
                 Text [ en-US ] = "Edit Points" ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_POLYMOVE ;
                 HelpId = HID_CONTDLG_POLYMOVE ;
-                Text [ de ] = "Punkte verschieben" ;
                 Text [ en-US ] = "Move Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_POLYINSERT ;
                 HelpId = HID_CONTDLG_POLYINSERT ;
-                Text [ de ] = "Punkte einfügen" ;
                 Text [ en-US ] = "Insert Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_POLYDELETE ;
                 HelpId = HID_CONTDLG_POLYDELETE ;
-                Text [ de ] = "Punkte löschen" ;
                 Text [ en-US ] = "Delete Points" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -174,9 +152,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
             {
                 Identifier = TBI_AUTOCONTOUR ;
                 HelpId = HID_CONTDLG_AUTOCONTOUR ;
-                Text [ de ] = "AutoKontur" ;
                 Text [ en-US ] = "AutoContour" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -187,9 +163,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Identifier = TBI_UNDO ;
                 HelpId = HID_CONTDLG_UNDO ;
 
-                Text [ de ] = "Rückgängig " ;
                 Text [ en-US ] = "Undo " ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -197,18 +171,14 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 HelpId = HID_CONTDLG_REDO ;
 
 
-                Text [ de ] = "Wiederherstellen " ;
                 Text [ en-US ] = "Redo " ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_PIPETTE ;
                 HelpId = HID_CONTDLG_PIPETTE ;
-                Text [ de ] = "Pipette" ;
                 Text [ en-US ] = "Eyedropper" ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -224,11 +194,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
         Last = 99 ;
         SpinSize = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " %" ;
-        QuickHelpText [ de ] = "Farbtoleranz" ;
         QuickHelpText [ en-US ] = "Color Tolerance" ;
         CustomUnitText [ en-US ] = "%" ;
-        CustomUnitText [ x-comment ] = " ";
     };
     Control CTL_CONTOUR
     {
@@ -274,27 +241,19 @@ FloatingWindow RID_SVXDLG_CONTOUR
 /******************************************************************************/
 String STR_CONTOURDLG_MODIFY
 {
-    Text [ de ] = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?" ;
     Text [ en-US ] = "The contour has been modified.\nDo you want to save the changes?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTOURDLG_NEWPIPETTE
 {
-    Text [ de ] = "Möchten Sie eine neue Kontur erzeugen?" ;
     Text [ en-US ] = "Do you want to create a new contour?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTOURDLG_WORKPLACE
 {
-    Text [ de ] = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?" ;
     Text [ en-US ] = "Setting a new workspace will\ncause the contour to be deleted.\nAre you sure you want to continue?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTOURDLG_LINKED
 {
-    Text [ de ] = "Diese Grafik ist mit dem Dokument verknüpft. Möchten Sie die Verknüpfung aufheben, um die Grafik zu bearbeiten?" ;
     Text [ en-US ] = "This graphic object is linked to the document. Do you want to unlink the graphics in order to edit it?" ;
-    Text [ x-comment ] = " ";
 };
 /******************************************************************************/
 
