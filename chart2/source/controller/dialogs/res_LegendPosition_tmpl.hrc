@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_LegendPosition_tmpl.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:13:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:02:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ RadioButton RBT_LEFT \
 { \
     Pos = MAP_APPFONT ( 12 , ypos  ) ; \
     Size = MAP_APPFONT ( 55 , 10 ) ; \
-    Text [ de ] = "~Links" ; \
     Text [ en-US ] = "~Left" ; \
     TabStop = TRUE ; \
     Text [ x-comment ] = " "; \
@@ -49,7 +48,6 @@ RadioButton RBT_TOP \
 { \
     Pos = MAP_APPFONT ( 12 , ypos+14  ) ; \
     Size = MAP_APPFONT ( 55 , 10 ) ; \
-    Text [ de ] = "~Oben" ; \
     Text [ en-US ] = "~Top" ; \
     TabStop = TRUE ; \
     Text [ x-comment ] = " "; \
@@ -58,7 +56,6 @@ RadioButton RBT_RIGHT \
 { \
     Pos = MAP_APPFONT ( 12 , ypos+28  ) ; \
     Size = MAP_APPFONT ( 55 , 10 ) ; \
-    Text [ de ] = "~Rechts" ; \
     Text [ en-US ] = "~Right" ; \
     TabStop = TRUE ; \
     Text [ x-comment ] = " "; \
@@ -67,7 +64,6 @@ RadioButton RBT_BOTTOM \
 { \
     Pos = MAP_APPFONT ( 12 , ypos+42  ) ; \
     Size = MAP_APPFONT ( 55 , 10 ) ; \
-    Text [ de ] = "~Unten" ; \
     Text [ en-US ] = "~Bottom" ; \
     TabStop = TRUE ; \
     Text [ x-comment ] = " "; \
