@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formats.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:52:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:11:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,398 +37,266 @@
 
 String STR_FORMAT_STRING
 {
-    Text [ de ] = "Unformatierter Text" ;
     Text [ en-US ] = "Unformatted text" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_BITMAP
 {
-    Text [ de ] = "Bitmap";
     Text [ en-US ] = "Bitmap";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_GDIMETAFILE
 {
-    Text [ de ] = "GDI Metafile";
     Text [ en-US ] = "GDI metafile";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_RTF
 {
-    Text [ de ] = "Formatierter Text [RTF]" ;
     Text [ en-US ] = "Formatted text [RTF]" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_DRAWING
 {
-    Text [ de ] = "Zeichnungsformat";
     Text [ en-US ] = "Drawing format";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_SVXB
 {
-    Text [ de ] = "SVXB (StarView Bitmap/Animation)";
     Text [ en-US ] = "SVXB (StarView bitmap/animation)";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_INTERNALLINK_STATE
 {
-    Text [ de ] = "Status Info vom Svx Internal Link";
     Text [ en-US ] = "Status Info from Svx Internal Link";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_SOLK
 {
-    Text [ de ] = "SOLK (%PRODUCTNAME Link)";
     Text [ en-US ] = "SOLK (%PRODUCTNAME Link)";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_NETSCAPE_BOOKMARK
 {
-    Text [ de ] = "Netscape Lesezeichen";
     Text [ en-US ] = "Netscape Bookmark";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARSERVER
 {
-    Text [ de ] = "Star Server Format";
     Text [ en-US ] = "Star server format";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STAROBJECT
 {
-    Text [ de ] = "Star Objekt Format";
     Text [ en-US ] = "Star object format";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_APPLETOBJECT
 {
-    Text [ de ] = "Applet Objekt";
     Text [ en-US ] = "Applet object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_PLUGIN_OBJECT
 {
-    Text [ de ] = "PlugIn Objekt";
     Text [ en-US ] = "Plug-in object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITER_30
 {
-    Text [ de ] = "StarWriter 3.0 Objekt";
     Text [ en-US ] = "StarWriter 3.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITER_40
 {
-    Text [ de ] = "StarWriter 4.0 Objekt";
     Text [ en-US ] = "StarWriter 4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITER_50
 {
-    Text [ de ] = "StarWriter 5.0 Objekt";
     Text [ en-US ] = "StarWriter 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERWEB_40
 {
-    Text [ de ] = "StarWriter/Web 4.0 Objekt";
     Text [ en-US ] = "StarWriter/Web 4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERWEB_50
 {
-    Text [ de ] = "StarWriter/Web 5.0 Objekt";
     Text [ en-US ] = "StarWriter/Web 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERGLOB_40
 {
-    Text [ de ] = "StarWriter/Global 4.0 Objekt";
     Text [ en-US ] = "StarWriter/Master 4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERGLOB_50
 {
-    Text [ de ] = "StarWriter/Global 5.0 Objekt";
     Text [ en-US ] = "StarWriter/Master 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARDRAW
 {
-    Text [ de ] = "StarDraw Objekt";
     Text [ en-US ] = "StarDraw object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARDRAW_40
 {
-    Text [ de ] = "StarDraw 4.0 Objekt";
     Text [ en-US ] = "StarDraw 4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARIMPRESS_50
 {
-    Text [ de ] = "StarImpress 5.0 Objekt";
     Text [ en-US ] = "StarImpress 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARDRAW_50
 {
-    Text [ de ] = "StarDraw 5.0 Objekt";
     Text [ en-US ] = "StarDraw 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCALC
 {
-    Text [ de ] = "StarCalc Objekt";
     Text [ en-US ] = "StarCalc object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCALC_40
 {
-    Text [ de ] = "StarCalc  4.0 Objekt";
     Text [ en-US ] = "StarCalc  4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCALC_50
 {
-    Text [ de ] = "StarCalc 5.0 Objekt";
     Text [ en-US ] = "StarCalc 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCHART
 {
-    Text [ de ] = "StarChart Objekt";
     Text [ en-US ] = "StarChart object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCHART_40
 {
-    Text [ de ] = "StarChart 4.0 Objekt";
     Text [ en-US ] = "StarChart 4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCHART_50
 {
-    Text [ de ] = "StarChart 5.0 Objekt";
     Text [ en-US ] = "StarChart 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARIMAGE
 {
-    Text [ de ] = "StarImage Objekt";
     Text [ en-US ] = "StarImage object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARIMAGE_40
 {
-    Text [ de ] = "StarImage 4.0 Objekt";
     Text [ en-US ] = "StarImage 4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARIMAGE_50
 {
-    Text [ de ] = "StarImage 5.0 Objekt";
     Text [ en-US ] = "StarImage 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARMATH
 {
-    Text [ de ] = "StarMath Objekt";
     Text [ en-US ] = "StarMath object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARMATH_40
 {
-    Text [ de ] = "StarMath 4.0 Objekt";
     Text [ en-US ] = "StarMath 4.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARMATH_50
 {
-    Text [ de ] = "StarMath 5.0 Objekt";
     Text [ en-US ] = "StarMath 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STAROBJECT_PAINTDOC
 {
-    Text [ de ] = "StarObject Paint Objekt";
     Text [ en-US ] = "StarObject Paint object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_HTML
 {
-    Text [ de ] = "HTML (HyperText Markup Language)";
     Text [ en-US ] = "HTML (HyperText Markup Language)";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_HTML_SIMPLE
 {
-    Text [ de ] = "HTML Format";
     Text [ en-US ] = "HTML format";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_BIFF_5
 {
-    Text [ de ] = "Biff5 (Microsoft Excel 5.0/95)";
     Text [ en-US ] = "Biff5 (Microsoft Excel 5.0/95)";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_BIFF_8
 {
-    Text [ de ] = "Biff8 (Microsoft Excel 97/2000/XP)";
     Text [ en-US ] = "Biff8 (Microsoft Excel 97/2000/XP)";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_SYLK
 {
-    Text [ de ] = "Sylk";
     Text [ en-US ] = "Sylk";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_LINK
 {
-    Text [ de ] = "DDE Verknüpfung" ;
     Text [ en-US ] = "DDE link" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_DIF
 {
-    Text [ de ] = "DIF";
     Text [ en-US ] = "DIF";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_MSWORD_DOC
 {
-    Text [ de ] = "Microsoft Word Objekt";
     Text [ en-US ] = "Microsoft Word object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STAR_FRAMESET_DOC
 {
-    Text [ de ] = "StarFrameSet Objekt";
     Text [ en-US ] = "StarFrameSet object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_OFFICE_DOC
 {
-    Text [ de ] = "Office Dokument Objekt";
     Text [ en-US ] = "Office document object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_NOTES_DOCINFO
 {
-    Text [ de ] = "Notes Dokument Info";
     Text [ en-US ] = "Notes document info";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_SFX_DOC
 {
-    Text [ de ] = "Sfx Dokument";
     Text [ en-US ] = "Sfx document";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCHARTDOCUMENT_50
 {
-    Text [ de ] = "StarChart 5.0 Objekt";
     Text [ en-US ] = "StarChart 5.0 object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_GRAPHOBJ
 {
-    Text [ de ] = "Graphic Objekt";
     Text [ en-US ] = "Graphic object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITER_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERWEB_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Web Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Web object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARWRITERGLOB_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Global Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Writer/Master object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARDRAW_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Draw Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Draw object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARIMPRESS_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Impress Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Impress object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCALC_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Calc Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Calc object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARCHART_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Chart Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Chart object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_STARMATH_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Math Objekt";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Math object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_WMF
 {
-    Text [ de ] = "Windows Metafile";
     Text [ en-US ] = "Windows metafile";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_DBACCESS_QUERY
 {
-    Text [ de ] = "Datenquellen Objekt";
     Text [ en-US ] = "Data source object";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_DBACCESS_TABLE
 {
-    Text [ de ] = "Datenquellen Tabelle";
     Text [ en-US ] = "Data source table";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_DBACCESS_COMMAND
 {
-    Text [ de ] = "SQL Abfrage";
     Text [ en-US ] = "SQL query";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_DIALOG_60
 {
-    Text [ de ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION Dialog";
     Text [ en-US ] = "%PRODUCTXMLFILEFORMATNAME %PRODUCTXMLFILEFORMATVERSION dialog";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_FILEGRPDESCRIPTOR
 {
-    Text [ de ] = "Hyperlink";
     Text [ en-US ] = "Link";
-    Text [ x-comment ] = " ";
 };
 String STR_FORMAT_ID_HTML_NO_COMMENT
 {
-    Text [ de ] = "HTML Format ohne Kommentare";
     Text [ en-US ] = "HTML format without comments";
-    Text [ x-comment ] = " ";
 };
 
