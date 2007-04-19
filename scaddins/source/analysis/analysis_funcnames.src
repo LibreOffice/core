@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysis_funcnames.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:07:46 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:51:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,559 +42,466 @@ Resource RID_ANALYSIS_FUNCTION_NAMES
 
     String ANALYSIS_FUNCNAME_Workday
     {
-        Text [ de ] = "ARBEITSTAG";
         Text [ en-US ] = "WORKDAY";
     };
 
     String ANALYSIS_FUNCNAME_Yearfrac
     {
-        Text [ de ] = "BRTEILJAHRE";
         Text [ en-US ] = "YEARFRAC";
     };
 
     String ANALYSIS_FUNCNAME_Edate
     {
-        Text [ de ] = "EDATUM";
         Text [ en-US ] = "EDATE";
     };
 
     String ANALYSIS_FUNCNAME_Weeknum
     {
-        Text [ de ] = "KALENDERWOCHE";
         Text [ en-US ] = "WEEKNUM";
     };
 
     String ANALYSIS_FUNCNAME_Eomonth
     {
-        Text [ de ] = "MONATSENDE";
         Text [ en-US ] = "EOMONTH";
     };
 
     String ANALYSIS_FUNCNAME_Networkdays
     {
-        Text [ de ] = "NETTOARBEITSTAGE";
         Text [ en-US ] = "NETWORKDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Amordegrc
     {
-        Text [ de ] = "AMORDEGRK";
         Text [ en-US ] = "AMORDEGRC";
     };
 
     String ANALYSIS_FUNCNAME_Amorlinc
     {
-        Text [ de ] = "AMORLINEARK";
         Text [ en-US ] = "AMORLINC";
     };
 
     String ANALYSIS_FUNCNAME_Accrint
     {
-        Text [ de ] = "AUFGELZINS";
         Text [ en-US ] = "ACCRINT";
     };
 
     String ANALYSIS_FUNCNAME_Accrintm
     {
-        Text [ de ] = "AUFGELZINSF";
         Text [ en-US ] = "ACCRINTM";
     };
 
     String ANALYSIS_FUNCNAME_Received
     {
-        Text [ de ] = "AUSZAHLUNG";
         Text [ en-US ] = "RECEIVED";
     };
 
     String ANALYSIS_FUNCNAME_Disc
     {
-        Text [ de ] = "DISAGIO";
         Text [ en-US ] = "DISC";
     };
 
     String ANALYSIS_FUNCNAME_Duration
     {
-        Text [ de ] = "DURATION";
         Text [ en-US ] = "DURATION";
     };
 
     String ANALYSIS_FUNCNAME_Effect
     {
-        Text [ de ] = "EFFEKTIV";
         Text [ en-US ] = "EFFECT";
     };
 
     String ANALYSIS_FUNCNAME_Cumprinc
     {
-        Text [ de ] = "KUMKAPITAL";
         Text [ en-US ] = "CUMPRINC";
     };
 
     String ANALYSIS_FUNCNAME_Cumipmt
     {
-        Text [ de ] = "KUMZINSZ";
         Text [ en-US ] = "CUMIPMT";
     };
 
     String ANALYSIS_FUNCNAME_Price
     {
-        Text [ de ] = "KURS";
         Text [ en-US ] = "PRICE";
     };
 
     String ANALYSIS_FUNCNAME_Pricedisc
     {
-        Text [ de ] = "KURSDISAGIO";
         Text [ en-US ] = "PRICEDISC";
     };
 
     String ANALYSIS_FUNCNAME_Pricemat
     {
-        Text [ de ] = "KURSFÄLLIG";
         Text [ en-US ] = "PRICEMAT";
     };
 
     String ANALYSIS_FUNCNAME_Mduration
     {
-        Text [ de ] = "MDURATION";
         Text [ en-US ] = "MDURATION";
     };
 
     String ANALYSIS_FUNCNAME_Nominal
     {
-        Text [ de ] = "NOMINAL";
         Text [ en-US ] = "NOMINAL";
     };
 
     String ANALYSIS_FUNCNAME_Dollarfr
     {
-        Text [ de ] = "NOTIERUNGBRU";
         Text [ en-US ] = "DOLLARFR";
     };
 
     String ANALYSIS_FUNCNAME_Dollarde
     {
-        Text [ de ] = "NOTIERUNGDEZ";
         Text [ en-US ] = "DOLLARDE";
     };
 
     String ANALYSIS_FUNCNAME_Yield
     {
-        Text [ de ] = "RENDITE";
         Text [ en-US ] = "YIELD";
     };
 
     String ANALYSIS_FUNCNAME_Yielddisc
     {
-        Text [ de ] = "RENDITEDIS";
         Text [ en-US ] = "YIELDDISC";
     };
 
     String ANALYSIS_FUNCNAME_Yieldmat
     {
-        Text [ de ] = "RENDITEFÄLL";
         Text [ en-US ] = "YIELDMAT";
     };
 
     String ANALYSIS_FUNCNAME_Tbilleq
     {
-        Text [ de ] = "TBILLÄQUIV";
         Text [ en-US ] = "TBILLEQ";
     };
 
     String ANALYSIS_FUNCNAME_Tbillprice
     {
-        Text [ de ] = "TBILLKURS";
         Text [ en-US ] = "TBILLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Tbillyield
     {
-        Text [ de ] = "TBILLRENDITE";
         Text [ en-US ] = "TBILLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddfprice
     {
-        Text [ de ] = "UNREGER.KURS";
         Text [ en-US ] = "ODDFPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddfyield
     {
-        Text [ de ] = "UNREGER.REND";
         Text [ en-US ] = "ODDFYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Oddlprice
     {
-        Text [ de ] = "UNREGLE.KURS";
         Text [ en-US ] = "ODDLPRICE";
     };
 
     String ANALYSIS_FUNCNAME_Oddlyield
     {
-        Text [ de ] = "UNREGLE.REND";
         Text [ en-US ] = "ODDLYIELD";
     };
 
     String ANALYSIS_FUNCNAME_Xirr
     {
-        Text [ de ] = "XINTZINSFUSS";
         Text [ en-US ] = "XIRR";
     };
 
     String ANALYSIS_FUNCNAME_Xnpv
     {
-        Text [ de ] = "XKAPITALWERT";
         Text [ en-US ] = "XNPV";
     };
 
     String ANALYSIS_FUNCNAME_Intrate
     {
-        Text [ de ] = "ZINSSATZ";
         Text [ en-US ] = "INTRATE";
     };
 
     String ANALYSIS_FUNCNAME_Coupncd
     {
-        Text [ de ] = "ZINSTERMNZ";
         Text [ en-US ] = "COUPNCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupdays
     {
-        Text [ de ] = "ZINSTERMTAGE";
         Text [ en-US ] = "COUPDAYS";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaysnc
     {
-        Text [ de ] = "ZINSTERMTAGNZ";
         Text [ en-US ] = "COUPDAYSNC";
     };
 
     String ANALYSIS_FUNCNAME_Coupdaybs
     {
-        Text [ de ] = "ZINSTERMTAGVA";
         Text [ en-US ] = "COUPDAYBS";
     };
 
     String ANALYSIS_FUNCNAME_Couppcd
     {
-        Text [ de ] = "ZINSTERMVZ";
         Text [ en-US ] = "COUPPCD";
     };
 
     String ANALYSIS_FUNCNAME_Coupnum
     {
-        Text [ de ] = "ZINSTERMZAHL";
         Text [ en-US ] = "COUPNUM";
     };
 
     String ANALYSIS_FUNCNAME_Fvschedule
     {
-        Text [ de ] = "ZW2";
         Text [ en-US ] = "FVSCHEDULE";
     };
 
     String ANALYSIS_FUNCNAME_Iseven
     {
-        Text [ de ] = "ISTGERADE";
         Text [ en-US ] = "ISEVEN";
     };
 
     String ANALYSIS_FUNCNAME_Isodd
     {
-        Text [ de ] = "ISTUNGERADE";
         Text [ en-US ] = "ISODD";
     };
 
     String ANALYSIS_FUNCNAME_Gcd
     {
-        Text [ de ] = "GGT";
         Text [ en-US ] = "GCD";
     };
 
     String ANALYSIS_FUNCNAME_Lcm
     {
-        Text [ de ] = "KGV";
         Text [ en-US ] = "LCM";
     };
 
     String ANALYSIS_FUNCNAME_Multinomial
     {
-        Text [ de ] = "POLYNOMIAL";
         Text [ en-US ] = "MULTINOMIAL";
     };
 
     String ANALYSIS_FUNCNAME_Seriessum
     {
-        Text [ de ] = "POTENZREIHE";
         Text [ en-US ] = "SERIESSUM";
     };
 
     String ANALYSIS_FUNCNAME_Quotient
     {
-        Text [ de ] = "QUOTIENT";
         Text [ en-US ] = "QUOTIENT";
     };
 
     String ANALYSIS_FUNCNAME_Mround
     {
-        Text [ de ] = "VRUNDEN";
         Text [ en-US ] = "MROUND";
     };
 
     String ANALYSIS_FUNCNAME_Sqrtpi
     {
-        Text [ de ] = "WURZELPI";
         Text [ en-US ] = "SQRTPI";
     };
 
     String ANALYSIS_FUNCNAME_Randbetween
     {
-        Text [ de ] = "ZUFALLSBEREICH";
         Text [ en-US ] = "RANDBETWEEN";
     };
 
     String ANALYSIS_FUNCNAME_Besseli
     {
-        Text [ de ] = "BESSELI";
         Text [ en-US ] = "BESSELI";
     };
 
     String ANALYSIS_FUNCNAME_Besselj
     {
-        Text [ de ] = "BESSELJ";
         Text [ en-US ] = "BESSELJ";
     };
 
     String ANALYSIS_FUNCNAME_Besselk
     {
-        Text [ de ] = "BESSELK";
         Text [ en-US ] = "BESSELK";
     };
 
     String ANALYSIS_FUNCNAME_Bessely
     {
-        Text [ de ] = "BESSELY";
         Text [ en-US ] = "BESSELY";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Dec
     {
-        Text [ de ] = "BININDEZ";
         Text [ en-US ] = "BIN2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Hex
     {
-        Text [ de ] = "BININHEX";
         Text [ en-US ] = "BIN2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Bin2Oct
     {
-        Text [ de ] = "BININOKT";
         Text [ en-US ] = "BIN2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Delta
     {
-        Text [ de ] = "DELTA";
         Text [ en-US ] = "DELTA";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Bin
     {
-        Text [ de ] = "DEZINBIN";
         Text [ en-US ] = "DEC2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Hex
     {
-        Text [ de ] = "DEZINHEX";
         Text [ en-US ] = "DEC2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Dec2Oct
     {
-        Text [ de ] = "DEZINOKT";
         Text [ en-US ] = "DEC2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Erf
     {
-        Text [ de ] = "GAUSSFEHLER";
         Text [ en-US ] = "ERF";
     };
 
     String ANALYSIS_FUNCNAME_Erfc
     {
-        Text [ de ] = "GAUSSFKOMPL";
         Text [ en-US ] = "ERFC";
     };
 
     String ANALYSIS_FUNCNAME_Gestep
     {
-        Text [ de ] = "GGANZZAHL";
         Text [ en-US ] = "GESTEP";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Bin
     {
-        Text [ de ] = "HEXINBIN";
         Text [ en-US ] = "HEX2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Dec
     {
-        Text [ de ] = "HEXINDEZ";
         Text [ en-US ] = "HEX2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Hex2Oct
     {
-        Text [ de ] = "HEXINOKT";
         Text [ en-US ] = "HEX2OCT";
     };
 
     String ANALYSIS_FUNCNAME_Imabs
     {
-        Text [ de ] = "IMABS";
         Text [ en-US ] = "IMABS";
     };
 
     String ANALYSIS_FUNCNAME_Imaginary
     {
-        Text [ de ] = "IMAGINÄRTEIL";
         Text [ en-US ] = "IMAGINARY";
     };
 
     String ANALYSIS_FUNCNAME_Impower
     {
-        Text [ de ] = "IMAPOTENZ";
         Text [ en-US ] = "IMPOWER";
     };
 
     String ANALYSIS_FUNCNAME_Imargument
     {
-        Text [ de ] = "IMARGUMENT";
         Text [ en-US ] = "IMARGUMENT";
     };
 
     String ANALYSIS_FUNCNAME_Imcos
     {
-        Text [ de ] = "IMCOS";
         Text [ en-US ] = "IMCOS";
     };
 
     String ANALYSIS_FUNCNAME_Imdiv
     {
-        Text [ de ] = "IMDIV";
         Text [ en-US ] = "IMDIV";
     };
 
     String ANALYSIS_FUNCNAME_Imexp
     {
-        Text [ de ] = "IMEXP";
         Text [ en-US ] = "IMEXP";
     };
 
     String ANALYSIS_FUNCNAME_Imconjugate
     {
-        Text [ de ] = "IMKONJUGIERTE";
         Text [ en-US ] = "IMCONJUGATE";
     };
 
     String ANALYSIS_FUNCNAME_Imln
     {
-        Text [ de ] = "IMLN";
         Text [ en-US ] = "IMLN";
     };
 
     String ANALYSIS_FUNCNAME_Imlog10
     {
-        Text [ de ] = "IMLOG10";
         Text [ en-US ] = "IMLOG10";
     };
 
     String ANALYSIS_FUNCNAME_Imlog2
     {
-        Text [ de ] = "IMLOG2";
         Text [ en-US ] = "IMLOG2";
     };
 
     String ANALYSIS_FUNCNAME_Improduct
     {
-        Text [ de ] = "IMPRODUKT";
         Text [ en-US ] = "IMPRODUCT";
     };
 
     String ANALYSIS_FUNCNAME_Imreal
     {
-        Text [ de ] = "IMREALTEIL";
         Text [ en-US ] = "IMREAL";
     };
 
     String ANALYSIS_FUNCNAME_Imsin
     {
-        Text [ de ] = "IMSIN";
         Text [ en-US ] = "IMSIN";
     };
 
     String ANALYSIS_FUNCNAME_Imsub
     {
-        Text [ de ] = "IMSUB";
         Text [ en-US ] = "IMSUB";
     };
 
     String ANALYSIS_FUNCNAME_Imsum
     {
-        Text [ de ] = "IMSUMME";
         Text [ en-US ] = "IMSUM";
     };
 
     String ANALYSIS_FUNCNAME_Imsqrt
     {
-        Text [ de ] = "IMWURZEL";
         Text [ en-US ] = "IMSQRT";
     };
 
     String ANALYSIS_FUNCNAME_Complex
     {
-        Text [ de ] = "KOMPLEXE";
         Text [ en-US ] = "COMPLEX";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Bin
     {
-        Text [ de ] = "OKTINBIN";
         Text [ en-US ] = "OCT2BIN";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Dec
     {
-        Text [ de ] = "OKTINDEZ";
         Text [ en-US ] = "OCT2DEC";
     };
 
     String ANALYSIS_FUNCNAME_Oct2Hex
     {
-        Text [ de ] = "OKTINHEX";
         Text [ en-US ] = "OCT2HEX";
     };
 
     String ANALYSIS_FUNCNAME_Convert
     {
-        Text [ de ] = "UMWANDELN";
         Text [ en-US ] = "CONVERT";
     };
 
     String ANALYSIS_FUNCNAME_Factdouble
     {
-        Text [ de ] = "ZWEIFAKULTÄT";
         Text [ en-US ] = "FACTDOUBLE";
     };
 
