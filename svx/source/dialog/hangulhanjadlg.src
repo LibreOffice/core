@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanjadlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-13 17:19:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:05:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
     Moveable = TRUE ;
     SVLook = TRUE;
 
-    Text [ de ] = "Hangul/Hanja Konvertierung";
     Text [ en-US ] = "Hangul/Hanja Conversion";
 
     PushButton PB_FIND
@@ -56,7 +55,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 192, 23 );
         Size = MAP_APPFONT( 30, 14 );
 
-        Text [ de ] = "Suchen";
         Text [ en-US ] = "~Find";
     };
 
@@ -72,7 +70,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 6, 81 );
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Format";
         Text [ en-US ] = "Format";
     };
 
@@ -83,7 +80,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
         Group = TRUE;
 
-        Text [ de ] = "Hangul/Hanja";
         Text [ en-US ] = "~Hangul/Hanja";
     };
 
@@ -92,7 +88,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 109, 81 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text [ de ] = "Hanja (Hangul)";
         Text [ en-US ] = "Hanja (Han~gul)";
     };
 
@@ -101,7 +96,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 167, 81 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text [ de ] = "Hangul (Hanja)";
         Text [ en-US ] = "Hang~ul (Hanja)";
     };
 
@@ -111,7 +105,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text [ de ] = "Hangul";
         Text [ en-US ] = "Hangu~l";
     };
 
@@ -121,7 +114,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text [ de ] = "Hangul";
         Text [ en-US ] = "Hang~ul";
     };
 
@@ -131,7 +123,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text [ de ] = "Hanja";
         Text [ en-US ] = "Han~ja";
     };
 
@@ -141,7 +132,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Size = MAP_APPFONT( 55, 16 );
 
         // this is the _primary_ text
-        Text [ de ] = "Hanja";
         Text [ en-US ] = "Ha~nja";
     };
 
@@ -150,7 +140,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 6, 134 );
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Konvertierung";
         Text [ en-US ] = "Conversion";
     };
 
@@ -159,7 +148,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 51, 134 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text [ de ] = "Nur Hangul";
         Text [ en-US ] = "Hangul ~only";
     };
 
@@ -168,7 +156,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
         Pos = MAP_APPFONT( 109, 134 );
         Size = MAP_APPFONT( 55, 8 );
 
-        Text [ de ] = "Nur Hanja";
         Text [ en-US ] = "Hanja onl~y";
     };
 
@@ -185,19 +172,16 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA
 
         WordBreak = TRUE;
 
-        Text [ de ] = "Einzelne Zeichen ersetzen";
         Text [ en-US ] = "Replace b~y character";
     };
 
     String STR_HANGUL
     {
-        Text [ de ] = "Hangul";
         Text [ en-US ] = "Hangul";
     };
 
     String STR_HANJA
     {
-        Text [ de ] = "Hanja";
         Text [ en-US ] = "Hanja";
     };
 };
@@ -210,7 +194,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     HelpId = HID_HANGULHANJA_OPT_DLG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( HHO_DLGWIDTH , HHx_DLGHIGHT ) ;
-    Text[ de ] = "Hangul/Hanja Optionen" ;
     Text [ en-US ] = "Hangul/Hanja Options" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -219,7 +202,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     {
         Pos = MAP_APPFONT ( HHO_COL_1 , HHO_ROW_1 ) ;
         Size = MAP_APPFONT ( HHO_COL_2 - HHO_COL_1, 8 ) ;
-        Text [ de ] = "Benutzerwörterbücher";
         Text[ en-US ] = "User-defined dictionaries";
     };
     Control LB_DICTS
@@ -234,49 +216,42 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_OPT
     {
         Pos = MAP_APPFONT ( HHO_COL_1 , HHO_ROW_8 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_1, 8 ) ;
-        Text [ de ] = "Optionen";
         Text[ en-US ] = "Options";
     };
     CheckBox CB_IGNOREPOST
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_9 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text [ de ] = "Nachstehendes Wort ignorieren " ;
         Text[ en-US ] = "Ignore post-positional word";
     };
     CheckBox CB_SHOWRECENTLYFIRST
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_11 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text [ de ] = "Zuletzt benutzte Einträge zuerst zeigen" ;
         Text [ en-US ] = "Show recently used entries first";
     };
     CheckBox CB_AUTOREPLACEUNIQUE
     {
         Pos = MAP_APPFONT ( HHO_COL_1a, HHO_ROW_12 ) ;
         Size = MAP_APPFONT ( HHO_COL_6 - HHO_COL_1a , 12 ) ;
-        Text [ de ] = "Alle eindeutigen Einträge automatisch ersetzen" ;
         Text [ en-US ] = "Replace all unique entries automatically";
     };
     PushButton PB_HHO_NEW
     {
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_2 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
-        Text [ de ] = "Neu..." ;
         Text [ en-US ] = "New...";
     };
     PushButton PB_HHO_EDIT
     {
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_4 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
-        Text [ de ] = "Bearbeiten..." ;
         Text [ en-US ] = "Edit...";
     };
     PushButton PB_HHO_DELETE
     {
         Pos = MAP_APPFONT ( HHO_COL_3 , HHO_ROW_6 ) ;
         Size = MAP_APPFONT ( HHO_COL_4 - HHO_COL_3 , 14 ) ;
-        Text [ de ] = "Löschen" ;
         Text [ en-US ] = "Delete";
     };
     OKButton PB_HHO_OK
@@ -307,14 +282,12 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_NEWDICT
     Size = MAP_APPFONT ( 213 , 66 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Benutzerwörterbuch anlegen" ;
     Text [ en-US ] = "New Dictionary" ;
 
     FixedLine FL_NEWDICT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 145 , 8 ) ;
-        Text [ de ] = "Wörterbuch" ;
         Text [ en-US ] = "Dictionary" ;
     };
     FixedText FT_DICTNAME
@@ -322,7 +295,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_NEWDICT
         Pos = MAP_APPFONT ( 11 , 15 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
     };
     Edit ED_DICTNAME
@@ -360,21 +332,18 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     HelpId = HID_HANGULHANJA_EDIT_DLG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( HHE_DLGWIDTH , HHx_DLGHIGHT ) ;
-    Text[ de ] = "Benutzerwörterbuch bearbeiten" ;
     Text [ en-US ] = "Edit Custom Dictionary" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
 
     String STR_EDITHINT
     {
-        Text [ de ] = "[Text hier eingeben]";
         Text [ en-US ] = "[Enter text here]";
     };
     FixedText FT_BOOK
     {
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_2 ) ;
         Size = MAP_APPFONT ( HHE_COL_2 - HHE_COL_1, 8 ) ;
-        Text [ de ] = "Buch";
         Text [ en-US ] = "Book";
     };
     ListBox LB_BOOK
@@ -388,7 +357,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_4 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_1, 8 ) ;
-        Text [ de ] = "Original";
         Text [ en-US ] = "Original";
     };
     ComboBox LB_ORIGINAL
@@ -402,7 +370,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_1 , HHE_ROW_10 ) ;
         Size = MAP_APPFONT ( HHE_COL_4 - HHE_COL_1, 8 ) ;
-        Text [ de ] = "Vorschläge (max. 8)";
         Text [ en-US ] = "Suggestions (max. 8)";
     };
     Edit ED_1
@@ -444,14 +411,12 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_a1 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "Neu" ;
         Text [ en-US ] = "New";
     };
     PushButton PB_HHE_DELETE
     {
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_a3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "Löschen" ;
         Text [ en-US ] = "Delete";
     };
     HelpButton PB_HHE_HELP
@@ -463,7 +428,6 @@ ModalDialog RID_SVX_MDLG_HANGULHANJA_EDIT
     {
         Pos = MAP_APPFONT ( HHE_COL_5 , HHE_ROW_13 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "Schliessen" ;
         Text [ en-US ] = "Close";
     };
 };
