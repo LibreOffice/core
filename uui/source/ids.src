@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ids.src,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 16:09:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:24:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,6 +49,13 @@ String RID_SAVE_PASSWORD
 {
     Text [ de ] = "Kennwort dauerhaft ~speichern";
     Text [ en-US ] = "~Remember password";
+};
+
+
+String( STR_WARNING_BROKENSIGNATURE_TITLE )
+{
+    Text [ de ] = "Ungültige Dokumentsignatur" ;
+    Text [ en-US ] = "Invalid Document Signature" ;
 };
 
 Resource RID_UUI_ERRHDL
