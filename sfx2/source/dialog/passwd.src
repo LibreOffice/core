@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:25:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:12:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,16 +45,13 @@ ModalDialog DLG_PASSWD
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 200, 68 );
-    Text [ de ] = "Kennwort eingeben" ;
     Text [ en-US ] = "Enter Password" ;
     Moveable = TRUE ;
     FixedText FT_PASSWD_USER
     {
         Pos = MAP_APPFONT( 12, 15 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Benutzer";
         Text [ en-US ] = "~User";
-        Text [ x-comment ] = " ";
     };
     Edit ED_PASSWD_USER
     {
@@ -66,9 +63,7 @@ ModalDialog DLG_PASSWD
     {
         Pos = MAP_APPFONT( 12, 30 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Kennwort";
         Text [ en-US ] = "~Password";
-        Text [ x-comment ] = " ";
     };
     Edit ED_PASSWD_PASSWORD
     {
@@ -81,7 +76,6 @@ ModalDialog DLG_PASSWD
     {
         Pos = MAP_APPFONT( 12, 45 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Bestätigen";
         Text [ en-US ] = "~Confirm";
     };
     Edit ED_PASSWD_CONFIRM
@@ -95,9 +89,7 @@ ModalDialog DLG_PASSWD
     {
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 132, 8 );
-        Text [ de ] = "Kennwort" ;
         Text [ en-US ] = "Password" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -118,11 +110,8 @@ ModalDialog DLG_PASSWD
     };
     String STR_PASSWD_CONFIRM
     {
-        Text [ de ] = "Kennwort bestätigen" ;
         Text [ en-US ] = "Confirm password" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 // ********************************************************************** EOF
