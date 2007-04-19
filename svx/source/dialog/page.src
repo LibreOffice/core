@@ -4,9 +4,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 16:02:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:17:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,12 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Papierformat" ;
         Text [ en-US ] = "Paper format" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PAPER_FORMAT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Format" ;
         Text [ en-US ] = "~Format";
     };
     ListBox LB_PAPER_SIZE
@@ -73,10 +70,8 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_PAPER_WIDTH
     {
@@ -96,10 +91,8 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "Höh~e" ;
         Text [ en-US ] = "~Height" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_PAPER_HEIGHT
     {
@@ -119,7 +112,6 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "Ausrichtung" ;
         Text [ en-US ] = "Orientation";
     };
     RadioButton RB_PORTRAIT
@@ -127,15 +119,12 @@ TabPage RID_SVXPAGE_PAGE
         Pos = MAP_APPFONT ( 50 , 62 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
         Check = TRUE ;
-        Text [ de ] = "Ho~chformat" ;
         Text [ en-US ] = "~Portrait" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_LANDSCAPE
     {
         Pos = MAP_APPFONT ( 50 , 74 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text [ de ] = "~Querformat" ;
         Text [ en-US ] = "L~andscape";
     };
     Window WN_BSP
@@ -150,7 +139,6 @@ TabPage RID_SVXPAGE_PAGE
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Left = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Te~xtfluss" ;
         Text [ en-US ] = "~Text direction";
     };
     ListBox LB_TEXT_FLOW
@@ -166,7 +154,6 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 113 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Papierzufuhr" ;
         Left = TRUE ;
         Text [ en-US ] = "Paper ~tray";
     };
@@ -181,17 +168,14 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 90 ) ;
         Size = MAP_APPFONT ( 95 , 8 ) ;
-        Text [ de ] = "Seitenränder" ;
         Text [ en-US ] = "Margins";
     };
     FixedText FT_LEFT_MARGIN
     {
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_LEFT_MARGIN
     {
@@ -211,10 +195,8 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "~Right" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_RIGHT_MARGIN
     {
@@ -234,10 +216,8 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 135 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Oben" ;
         Text [ en-US ] = "~Top" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_TOP_MARGIN
     {
@@ -257,10 +237,8 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 151 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Unten" ;
         Text [ en-US ] = "~Bottom" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_BOTTOM_MARGIN
     {
@@ -286,16 +264,13 @@ TabPage RID_SVXPAGE_PAGE
     {
         Pos = MAP_APPFONT ( 107, 90 ) ;
         Size = MAP_APPFONT ( 147 , 8 ) ;
-        Text [ de ] = "Layouteinstellungen" ;
         Text [ en-US ] = "Layout settings";
     };
     FixedText FT_PAGELAYOUT
     {
         Pos = MAP_APPFONT ( 113 , 103 ) ;
         Size = MAP_APPFONT ( 54 , 8 ) ;
-        Text [ de ] = "~Seitenlayout" ;
         Text [ en-US ] = "Page layout" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LAYOUT
     {
@@ -303,13 +278,6 @@ TabPage RID_SVXPAGE_PAGE
         Pos = MAP_APPFONT ( 170, 101 ) ;
         Size = MAP_APPFONT ( 78 , 44 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Rechts und Links" ; Default ; > ;
-            < "Gespiegelt" ; Default ; > ;
-            < "Nur Rechts" ; Default ; > ;
-            < "Nur Links" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Right and left" ; Default ; > ;
@@ -317,19 +285,11 @@ TabPage RID_SVXPAGE_PAGE
             < "Only right" ; Default ; > ;
             < "Only left" ; Default ; > ;
         };
-        StringList [ x-comment ] =
-        {
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-        };
     };
     FixedText FT_NUMBER_FORMAT
     {
         Pos = MAP_APPFONT ( 113 , 119 ) ;
         Size = MAP_APPFONT ( 54 , 8 ) ;
-        Text [ de ] = "For~mat" ;
         Text [ en-US ] = "For~mat";
     };
     ListBox LB_NUMBER_FORMAT
@@ -338,15 +298,6 @@ TabPage RID_SVXPAGE_PAGE
         Pos = MAP_APPFONT ( 170 , 117 ) ;
         Size = MAP_APPFONT ( 78 , 64 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "A, B, C, ..." ; Default ; > ;
-            < "a, b, c, ..." ; Default ; > ;
-            < "I, II, III, ..." ; Default ; > ;
-            < "i, ii, iii, ..." ; Default ; > ;
-            < "1, 2, 3, ..." ; Default ; > ;
-            < "Ohne" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "A, B, C, ..." ; Default ; > ;
@@ -356,22 +307,12 @@ TabPage RID_SVXPAGE_PAGE
             < "1, 2, 3, ..." ; Default ; > ;
             < "None" ; Default ; > ;
         };
-        StringList [ x-comment ] =
-        {
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-        };
     };
     FixedText FT_TBL_ALIGN
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113 , 133 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Tabellenausrichtung" ;
         Text [ en-US ] = "Table alignment";
     };
     CheckBox CB_HORZ
@@ -379,26 +320,20 @@ TabPage RID_SVXPAGE_PAGE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 175 , 133 ) ;
         Size = MAP_APPFONT ( 73 , 10 ) ;
-        Text [ de ] = "Hor~izontal" ;
         Text [ en-US ] = "Hori~zontal" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_VERT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 175 , 147 ) ;
         Size = MAP_APPFONT ( 73 , 10 ) ;
-        Text [ de ] = "~Vertikal" ;
         Text [ en-US ] = "~Vertical" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_ADAPT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 113 , 133 ) ;
         Size = MAP_APPFONT ( 135 , 10 ) ;
-        Text [ x-comment ] = "; pb: changed from 'Seitenformat' to 'Papierformat'";
-        Text [ de ] = "Objekt ~an Papierformat anpassen" ;
         Text [ en-US ] = "~Fit object to paper format";
     };
     /* Registerhaltigkeit (fuer SW) */
@@ -407,18 +342,14 @@ TabPage RID_SVXPAGE_PAGE
         Pos = MAP_APPFONT ( 113 , 133 ) ;
         Size = MAP_APPFONT ( 135 , 10 ) ;
         Hide = TRUE ;
-        Text [ de ] = "Registerhaltig~keit" ;
         Text [ en-US ] = "Register-true" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_REGISTER
     {
         Pos = MAP_APPFONT ( 122 , 147 ) ;
         Size = MAP_APPFONT ( 126 , 8 ) ;
-        Text [ de ] = "Referenzabsa~tzvorlage" ;
         Text [ en-US ] = "Reference ~Style" ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_REGISTER
     {
@@ -432,29 +363,21 @@ TabPage RID_SVXPAGE_PAGE
     };
     String STR_INSIDE
     {
-        Text [ de ] = "I~nnen" ;
         Text [ en-US ] = "I~nner" ;
-        Text [ x-comment ] = " ";
     };
     String STR_OUTSIDE
     {
-        Text [ de ] = "Au~ßen" ;
         Text [ en-US ] = "O~uter" ;
-        Text [ x-comment ] = " ";
     };
     String STR_QUERY_PRINTRANGE
     {
-        Text [ de ] = "Ihre Einstellungen für die Ränder liegen außerhalb des Druckbereichs.\n\nWollen Sie trotzdem diese Einstellungen übernehmen?" ;
         Text [ en-US ] = "The margin settings are out of print range.\n\nDo you still want to apply these settings?";
-        Text [ x-comment ] = " ";
     };
 };
  // App-spezifische Res
 String RID_SVXSTR_WRITER_PAGE
 {
-    Text [ de ] = "Folgeseite" ;
     Text [ en-US ] = "Continuation page" ;
-    Text [ x-comment ] = " ";
 };
  // Papierformate
 String RID_SVXSTR_PAPER_A0
@@ -503,9 +426,7 @@ String RID_SVXSTR_PAPER_TABLOID
 };
 String RID_SVXSTR_PAPER_USER
 {
-    Text [ de ] = "Benutzer" ;
     Text [ en-US ] = "User Defined" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_PAPER_B6
 {
@@ -537,9 +458,7 @@ String RID_SVXSTR_PAPER_DIA
 };
 String RID_SVXSTR_PAPER_SCREEN
 {
-    Text [ de ] = "Bildschirm" ;
     Text [ en-US ] = "Screen" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_PAPER_A
 {
@@ -619,66 +538,6 @@ String RID_SVXSTR_PAPER_B6_JIS
 };
 StringArray RID_SVXSTRARY_PAPERSIZE_STD
 {
-    ItemList [ de ] =
-    {
-        < "A3" ; PAPERSIZE_A3 ; > ;
-        < "A4" ; PAPERSIZE_A4 ; > ;
-        < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "Letter" ; PAPERSIZE_LETTER ; > ;
-        < "Legal" ; PAPERSIZE_LEGAL ; > ;
-        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "Benutzer" ; PAPERSIZE_USER ; > ;
-        < "C4" ; PAPERSIZE_C4 ; > ;
-        < "C5" ; PAPERSIZE_C5 ; > ;
-        < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C6/5" ; PAPERSIZE_C65 ; > ;
-        < "DL" ; PAPERSIZE_DL ; > ;
-        < "Env. #6¾" ; PAPERSIZE_COM675; > ;
-        < "Env. Monarch" ; PAPERSIZE_MONARCH; > ;
-        < "Env. #9" ; PAPERSIZE_COM9; > ;
-        < "Env. #10" ; PAPERSIZE_COM10; > ;
-        < "Env. #11" ; PAPERSIZE_COM11; > ;
-        < "Env. #12" ; PAPERSIZE_COM12; > ;
-        < "16 kai" ; PAPERSIZE_KAI16; > ;
-        < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
-    };
-    ItemList [ x-comment ] =
-    {
-             < "; A3" ; PAPERSIZE_A3 ; > ;
-        < "; A4" ; PAPERSIZE_A4 ; > ;
-        < "; A5" ; PAPERSIZE_A5 ; > ;
-        < "; B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "; B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "; B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "; B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "; B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "; B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "; Letter" ; PAPERSIZE_LETTER ; > ;
-        < "; Legal" ; PAPERSIZE_LEGAL ; > ;
-        < "; Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "; Benutzer" ; PAPERSIZE_USER ; > ;
-        < "; C4" ; PAPERSIZE_C4 ; > ;
-        < "; C5" ; PAPERSIZE_C5 ; > ;
-        < "; C6" ; PAPERSIZE_C6 ; > ;
-        < "; C6/5" ; PAPERSIZE_C65 ; > ;
-        < "; DL" ; PAPERSIZE_DL ; > ;
-        < "; Env. #6¾" ; PAPERSIZE_COM675; > ;
-        < "; Env. Monarch" ; PAPERSIZE_MONARCH; > ;
-        < "; Env. #9" ; PAPERSIZE_COM9; > ;
-        < "; Env. #10" ; PAPERSIZE_COM10; > ;
-        < "; Env. #11" ; PAPERSIZE_COM11; > ;
-        < "; Env. #12" ; PAPERSIZE_COM12; > ;
-        < "; 16 kai" ; PAPERSIZE_KAI16; > ;
-        < "; 32 kai" ; PAPERSIZE_KAI32; > ;
-        < "; 32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
-    };
     ItemList [ en-US ] =
     {
              < "A3" ; PAPERSIZE_A3 ; > ;
@@ -712,64 +571,6 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
     };
 StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
 {
-    ItemList [ de ] =
-    {
-        < "A0" ; PAPERSIZE_A0 ; > ;
-        < "A1" ; PAPERSIZE_A1 ; > ;
-        < "A2" ; PAPERSIZE_A2 ; > ;
-        < "A3" ; PAPERSIZE_A3 ; > ;
-        < "A4" ; PAPERSIZE_A4 ; > ;
-        < "A5" ; PAPERSIZE_A5 ; > ;
-        < "B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "Letter" ; PAPERSIZE_LETTER ; > ;
-        < "Legal" ; PAPERSIZE_LEGAL ; > ;
-        < "Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "Benutzer" ; PAPERSIZE_USER ; > ;
-        < "C4" ; PAPERSIZE_C4 ; > ;
-        < "C5" ; PAPERSIZE_C5 ; > ;
-        < "C6" ; PAPERSIZE_C6 ; > ;
-        < "C6/5" ; PAPERSIZE_C65 ; > ;
-        < "DL" ; PAPERSIZE_DL ; > ;
-        < "Dia" ; PAPERSIZE_DIA ; > ;
-        < "Bildschirm" ; PAPERSIZE_SCREEN ; > ;
-        < "16 kai" ; PAPERSIZE_KAI16; > ;
-        < "32 kai" ; PAPERSIZE_KAI32; > ;
-        < "32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
-    };
-    ItemList [ x-comment ] =
-    {
-             < "; A0" ; PAPERSIZE_A0 ; > ;
-        < "; A1" ; PAPERSIZE_A1 ; > ;
-        < "; A2" ; PAPERSIZE_A2 ; > ;
-        < "; A3" ; PAPERSIZE_A3 ; > ;
-        < "; A4" ; PAPERSIZE_A4 ; > ;
-        < "; A5" ; PAPERSIZE_A5 ; > ;
-        < "; B4 (ISO)" ; PAPERSIZE_B4 ; > ;
-        < "; B5 (ISO)" ; PAPERSIZE_B5 ; > ;
-        < "; B6 (ISO)" ; PAPERSIZE_B6 ; > ;
-        < "; B4 (JIS)" ; PAPERSIZE_B4_JIS ; > ;
-        < "; B5 (JIS)" ; PAPERSIZE_B5_JIS ; > ;
-        < "; B6 (JIS)" ; PAPERSIZE_B6_JIS ; > ;
-        < "; Letter" ; PAPERSIZE_LETTER ; > ;
-        < "; Legal" ; PAPERSIZE_LEGAL ; > ;
-        < "; Tabloid" ; PAPERSIZE_TABLOID ; > ;
-        < "; Benutzer" ; PAPERSIZE_USER ; > ;
-        < "; C4" ; PAPERSIZE_C4 ; > ;
-        < "; C5" ; PAPERSIZE_C5 ; > ;
-        < "; C6" ; PAPERSIZE_C6 ; > ;
-        < "; C6/5" ; PAPERSIZE_C65 ; > ;
-        < "; DL" ; PAPERSIZE_DL ; > ;
-        < "; Dia" ; PAPERSIZE_DIA ; > ;
-        < "; Bildschirm" ; PAPERSIZE_SCREEN ; > ;
-        < "; 16 kai" ; PAPERSIZE_KAI16; > ;
-        < "; 32 kai" ; PAPERSIZE_KAI32; > ;
-        < "; 32 kai groß" ; PAPERSIZE_KAI32BIG; > ;
-    };
     ItemList [ en-US ] =
     {
              < "A0" ; PAPERSIZE_A0 ; > ;
@@ -802,13 +603,10 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
     };
 String RID_SVXSTR_PAPERBIN
 {
-    Text [ de ] = "Schacht" ;
     Text [ en-US ] = "Paper tray" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_PAPERBIN_SETTINGS
 {
-    Text [ de ] = "[Aus Druckereinstellung]" ;
     Text [ en-US ] = "[From printer settings]" ;
 };
  // ********************************************************************** EOF
