@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:52:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:18:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,8 +331,10 @@ void Export::RemoveUTF8ByteOrderMarkerFromFile( const ByteString &rFilename ){
 }
 
 // Merge it into source code!
-bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
-    static ByteStringBoolHashMap aHash;
+//bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
+//    (void) rPrj;
+//  return true;
+/*  static ByteStringBoolHashMap aHash;
 
     if( aHash.find( rPrj ) != aHash.end() ){
         return aHash[ rPrj ];
@@ -348,8 +350,8 @@ bool Export::isMergingGermanAllowed( const ByteString& rPrj ){
     DirEntry aFlagfile( sFile );
 
     aHash[ rPrj ] = !aFlagfile.Exists();
-    return aHash[ rPrj ];
-}
+    return aHash[ rPrj ];*/
+//}
 /*****************************************************************************/
 void Export::UnquotHTML( ByteString &rString )
 /*****************************************************************************/
@@ -383,13 +385,12 @@ void Export::UnquotHTML( ByteString &rString )
     }
     rString = sReturn;
 }
+bool Export::isSourceLanguage( const ByteString &sLanguage )
+{
+    return !isAllowed( sLanguage );
+}
 bool Export::isAllowed( const ByteString &sLanguage ){
-    // CAREFUL, ONLY MERGE SOURCE LANGUAGES IF YOUR KNOW WHAT YOU DO!!!
-#ifdef MERGE_SOURCE_LANGUAGES
-    return true;
-#else
-    return ! ( sLanguage.EqualsIgnoreCaseAscii("de") || sLanguage.EqualsIgnoreCaseAscii("en-US") );
-#endif
+    return ! ( sLanguage.EqualsIgnoreCaseAscii("en-US") );
 }
 /*****************************************************************************/
 bool Export::LanguageAllowed( const ByteString &nLanguage )
