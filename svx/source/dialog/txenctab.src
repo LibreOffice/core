@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:52:28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,97 +45,6 @@
  // RID_SVXSTR_TEXTENCODING_TABLE ----------------------------------------------------
 StringArray RID_SVXSTR_TEXTENCODING_TABLE
 {
-    PairedList [ de ] =
-    {
-        < "Westeuropa (Windows-1252/WinLatin 1)"            ; RTL_TEXTENCODING_MS_1252          ; > ;
-        < "Westeuropa (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_ROMAN      ; > ;
-        < "Westeuropa (DOS/OS2-850/International)"          ; RTL_TEXTENCODING_IBM_850          ; > ;
-        < "Westeuropa (DOS/OS2-437/US)"                     ; RTL_TEXTENCODING_IBM_437          ; > ;
-        < "Westeuropa (DOS/OS2-860/Portugiesisch)"          ; RTL_TEXTENCODING_IBM_860          ; > ;
-        < "Westeuropa (DOS/OS2-861/Isländisch)"                ; RTL_TEXTENCODING_IBM_861          ; > ;
-        < "Westeuropa (DOS/OS2-863/Französisch (Kand.))"   ; RTL_TEXTENCODING_IBM_863          ; > ;
-        < "Westeuropa (DOS/OS2-865/Nordisch)"               ; RTL_TEXTENCODING_IBM_865          ; > ;
-        < "Westeuropa (ASCII/US)"                           ; RTL_TEXTENCODING_ASCII_US         ; > ;
-        < "Westeuropa (ISO-8859-1)"                         ; RTL_TEXTENCODING_ISO_8859_1       ; > ;
-        < "Osteuropa (ISO-8859-2)"                          ; RTL_TEXTENCODING_ISO_8859_2       ; > ;
-        < "Latin 3 (ISO-8859-3)"                            ; RTL_TEXTENCODING_ISO_8859_3       ; > ;
-        < "Baltisch (ISO-8859-4)"                           ; RTL_TEXTENCODING_ISO_8859_4       ; > ;
-        < "Kyrillisch (ISO-8859-5)"                         ; RTL_TEXTENCODING_ISO_8859_5       ; > ;
-        < "Arabisch (ISO-8859-6)"                           ; RTL_TEXTENCODING_ISO_8859_6       ; > ;
-        < "Griechisch (ISO-8859-7)"                         ; RTL_TEXTENCODING_ISO_8859_7       ; > ;
-        < "Hebräisch (ISO-8859-8)"                         ; RTL_TEXTENCODING_ISO_8859_8       ; > ;
-        < "Türkisch (ISO-8859-9)"                          ; RTL_TEXTENCODING_ISO_8859_9       ; > ;
-        < "Westeuropa (ISO-8859-14)"                        ; RTL_TEXTENCODING_ISO_8859_14      ; > ;
-        < "Westeuropa (ISO-8859-15/EURO)"                   ; RTL_TEXTENCODING_ISO_8859_15      ; > ;
-        < "Griechisch (DOS/OS2-737)"                        ; RTL_TEXTENCODING_IBM_737          ; > ;
-        < "Baltisch (DOS/OS2-775)"                          ; RTL_TEXTENCODING_IBM_775          ; > ;
-        < "Osteuropa (DOS/OS2-852)"                         ; RTL_TEXTENCODING_IBM_852          ; > ;
-        < "Kyrillisch (DOS/OS2-855)"                        ; RTL_TEXTENCODING_IBM_855          ; > ;
-        < "Türkisch (DOS/OS2-857)"                         ; RTL_TEXTENCODING_IBM_857          ; > ;
-        < "Hebräisch (DOS/OS2-862)"                            ; RTL_TEXTENCODING_IBM_862          ; > ;
-        < "Arabisch (DOS/OS2-864)"                          ; RTL_TEXTENCODING_IBM_864          ; > ;
-        < "Kyrillisch (DOS/OS2-866/Russisch)"               ; RTL_TEXTENCODING_IBM_866          ; > ;
-        < "Griechisch (DOS/OS2-869/Modern)"                 ; RTL_TEXTENCODING_IBM_869          ; > ;
-        < "Osteuropa (Windows-1250/WinLatin 2)"             ; RTL_TEXTENCODING_MS_1250          ; > ;
-        < "Kyrillisch (Windows-1251)"                       ; RTL_TEXTENCODING_MS_1251          ; > ;
-        < "Griechisch (Windows-1253)"                       ; RTL_TEXTENCODING_MS_1253          ; > ;
-        < "Türkisch (Windows-1254)"                            ; RTL_TEXTENCODING_MS_1254          ; > ;
-        < "Hebräisch (Windows-1255)"                       ; RTL_TEXTENCODING_MS_1255          ; > ;
-        < "Arabisch (Windows-1256)"                         ; RTL_TEXTENCODING_MS_1256          ; > ;
-        < "Baltisch (Windows-1257)"                         ; RTL_TEXTENCODING_MS_1257          ; > ;
-//      < "Vietnamesisch (Windows-1258)"                    ; RTL_TEXTENCODING_MS_1258          ; > ;
-//      < "Arabisch (Apple Macintosh)"                      ; RTL_TEXTENCODING_APPLE_ARABIC     ; > ;
-        < "Osteuropa (Apple Macintosh)"                     ; RTL_TEXTENCODING_APPLE_CENTEURO   ; > ;
-        < "Osteuropa (Apple Macintosh/Kroatisch)"           ; RTL_TEXTENCODING_APPLE_CROATIAN   ; > ;
-        < "Kyrillisch (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_CYRILLIC   ; > ;
-//      < "Devanagari (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_DEVANAGARI ; > ;
-//      < "Farsi (Apple Macintosh)"                         ; RTL_TEXTENCODING_APPLE_FARSI      ; > ;
-        < "Griechisch (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_GREEK      ; > ;
-//      < "Gujarati (Apple Macintosh)"                      ; RTL_TEXTENCODING_APPLE_GUJARATI   ; > ;
-//      < "Gurmukhi (Apple Macintosh)"                      ; RTL_TEXTENCODING_APPLE_GURMUKHI   ; > ;
-//      < "Hebr�isch (Apple Macintosh)"                     ; RTL_TEXTENCODING_APPLE_HEBREW     ; > ;
-        < "Westeuropa (Apple Macintosh/Isländisch)"            ; RTL_TEXTENCODING_APPLE_ICELAND    ; > ;
-        < "Osteuropa (Apple Macintosh/Rumänisch)"          ; RTL_TEXTENCODING_APPLE_ROMANIAN   ; > ;
-//      < "Thai (Apple Macintosh)"                          ; RTL_TEXTENCODING_APPLE_THAI       ; > ;
-        < "Türkisch (Apple Macintosh)"                     ; RTL_TEXTENCODING_APPLE_TURKISH    ; > ;
-        < "Kyrillisch (Apple Macintosh/Ukrainisch)"         ; RTL_TEXTENCODING_APPLE_UKRAINIAN  ; > ;
-        < "Chinesisch vereinfacht (Apple Macintosh)"        ; RTL_TEXTENCODING_APPLE_CHINSIMP   ; > ;
-         < "Chinesisch traditionell (Apple Macintosh)"      ; RTL_TEXTENCODING_APPLE_CHINTRAD   ; > ;
-        < "Japanisch (Apple Macintosh)"                     ; RTL_TEXTENCODING_APPLE_JAPANESE   ; > ;
-        < "Koreanisch (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_KOREAN     ; > ;
-        < "Japanisch (Windows-932)"                         ; RTL_TEXTENCODING_MS_932           ; > ;
-        < "Chinesisch vereinfacht (Windows-936)"            ; RTL_TEXTENCODING_MS_936           ; > ;
-        < "Koreanisch (Windows-949)"                        ; RTL_TEXTENCODING_MS_949           ; > ;
-        < "Chinesisch traditionell (Windows-950)"           ; RTL_TEXTENCODING_MS_950           ; > ;
-        < "Japanisch (Shift-JIS)"                           ; RTL_TEXTENCODING_SHIFT_JIS        ; > ;
-        < "Chinesisch vereinfacht (GB-2312)"                ; RTL_TEXTENCODING_GB_2312          ; > ;
-        < "Chinesisch vereinfacht (GB-18030)"               ; RTL_TEXTENCODING_GB_18030         ; > ;
-        < "Chinesisch traditionell (GBT-12345)"             ; RTL_TEXTENCODING_GBT_12345        ; > ;
-        < "Chinesisch vereinfacht (GBK/GB-2312-80)"         ; RTL_TEXTENCODING_GBK              ; > ;
-        < "Chinesisch traditionell (Big5)"                  ; RTL_TEXTENCODING_BIG5             ; > ;
-        < "Chinesisch traditionell (Big5-HKSCS)"            ; RTL_TEXTENCODING_BIG5_HKSCS       ; > ;
-        < "Japanisch (EUC-JP)"                              ; RTL_TEXTENCODING_EUC_JP           ; > ;
-        < "Chinesisch vereinfacht (EUC-CN)"                 ; RTL_TEXTENCODING_EUC_CN           ; > ;
-        < "Chinesisch traditionell (EUC-TW)"                ; RTL_TEXTENCODING_EUC_TW           ; > ;
-        < "Japanisch (ISO-2022-JP)"                         ; RTL_TEXTENCODING_ISO_2022_JP      ; > ;
-        < "Chinesisch vereinfacht (ISO-2022-CN)"            ; RTL_TEXTENCODING_ISO_2022_CN      ; > ;
-        < "Kyrillisch (KOI8-R)"                             ; RTL_TEXTENCODING_KOI8_R           ; > ;
-        < "Unicode (UTF-7)"                                 ; RTL_TEXTENCODING_UTF7             ; > ;
-        < "Unicode (UTF-8)"                                 ; RTL_TEXTENCODING_UTF8             ; > ;
-        < "Osteuropa (ISO-8859-10)"                         ; RTL_TEXTENCODING_ISO_8859_10      ; > ;
-        < "Osteuropa (ISO-8859-13)"                         ; RTL_TEXTENCODING_ISO_8859_13      ; > ;
-        < "Koreanisch (EUC-KR)"                             ; RTL_TEXTENCODING_EUC_KR           ; > ;
-        < "Koreanisch (ISO-2022-KR)"                        ; RTL_TEXTENCODING_ISO_2022_KR      ; > ;
-//      < "(JIS-X-0201)"                                    ; RTL_TEXTENCODING_JIS_X_0201       ; > ;
-//      < "(JIS-X-0208)"                                    ; RTL_TEXTENCODING_JIS_X_0208       ; > ;
-//      < "(JIS-X-0212)"                                    ; RTL_TEXTENCODING_JIS_X_0212       ; > ;
-        < "Koreanisch (Windows-Johab-1361)"                 ; RTL_TEXTENCODING_MS_1361          ; > ;
-        < "Unicode"                                         ; RTL_TEXTENCODING_UCS2             ; > ;
-        < "Thai (ISO-8859-11/TIS-620)"                                  ; RTL_TEXTENCODING_TIS_620          ; > ;
-        < "Thai (Windows-874)"                              ; RTL_TEXTENCODING_MS_874           ; > ;
-        < "Kyrillisch (KOI8-U)"                             ; RTL_TEXTENCODING_KOI8_U           ; > ;
-        < "Kyrillisch (PT154)"                              ; RTL_TEXTENCODING_PT154            ; > ;
-    };
     PairedList [ en-US ] =
     {
          < "Western Europe (Windows-1252/WinLatin 1)"           ; RTL_TEXTENCODING_MS_1252          ; > ;
