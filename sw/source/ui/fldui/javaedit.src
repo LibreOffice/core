@@ -4,9 +4,9 @@
  *
  *  $RCSfile: javaedit.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:04:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:10:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,12 @@ ModalDialog DLG_JAVAEDIT
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 248 , 157 ) ;
-    Text [ de ] = "Script bearbeiten" ;
     Moveable = TRUE ;
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
-        Text [ de ] = "Script-T~yp" ;
         Text [ en-US ] = "Script type" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TYPE
     {
@@ -65,12 +62,10 @@ ModalDialog DLG_JAVAEDIT
     };
     RadioButton RB_URL
     {
-        Text [ de ] = "~URL" ;
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "URL" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_URL
     {
@@ -90,11 +85,9 @@ ModalDialog DLG_JAVAEDIT
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text [ de ] = "~Text" ;
         Text [ en-US ] = "~Text" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit ED_EDIT
     {
@@ -111,9 +104,7 @@ ModalDialog DLG_JAVAEDIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 179 , 8 ) ;
-        Text [ de ] = "Inhalt" ;
         Text [ en-US ] = "Contents" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_POST_OK
     {
@@ -146,19 +137,14 @@ ModalDialog DLG_JAVAEDIT
      // lokale Strings
     String STR_JAVA_EDIT
     {
-        Text [ de ] = "Script bearbeiten" ;
         Text [ en-US ] = "Edit Script" ;
-        Text [ x-comment ] = " ";
     };
     String STR_JAVA_INSERT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Script einfügen : Script einf³gen */
-        Text [ de ] = "Script einfÃ¼gen" ;
         Text [ en-US ] = "Insert Script" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Edit Script" ;
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
