@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numberingtypelistbox.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-06 09:13:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:21:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,28 +40,6 @@ Resource STRRES_NUMTYPES
     StringArray 1
     {
 
-        ItemList [ de ] =
-        {
-            < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
-            < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-            < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-            < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
-            < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
-            < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-            < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-            < "Bullet" ;                    6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-            < "Grafik" ;                    8/*SVX_NUM_BITMAP              */; > ;
-            < "Keine" ;                     5/*SVX_NUM_NUMBER_NONE         */; > ;
-            < "Landesspezifische Zahlzeichen" ;         12 /*NATIVE_NUMBERING                   */; > ;
-            < "А, Б, .., Аа, Аб, ... (Bulgarisch)" ;    38 /*CHARS_CYRILLIC_UPPER_LETTER_BG     */; > ;
-            < "а, б, .., аа, аб, ... (Bulgarisch)" ;    39 /*CHARS_CYRILLIC_LOWER_LETTER_BG     */; > ;
-            < "А, Б, .., Аа, Бб, ... (Bulgarisch)" ;    40 /*CHARS_CYRILLIC_UPPER_LETTER_N_BG   */; > ;
-            < "а, б, .., аа, бб, ... (Bulgarisch)" ;    41 /*CHARS_CYRILLIC_LOWER_LETTER_N_BG   */; > ;
-            < "А, Б, .., Аа, Аб, ... (Russisch)" ;      42 /*CHARS_CYRILLIC_UPPER_LETTER_RU     */; > ;
-            < "а, б, .., аа, аб, ... (Russisch)" ;      43 /*CHARS_CYRILLIC_LOWER_LETTER_RU     */; > ;
-            < "А, Б, .., Аа, Бб, ... (Russisch)" ;      44 /*CHARS_CYRILLIC_UPPER_LETTER_N_RU   */; > ;
-            < "а, б, .., аа, бб, ... (Russisch)" ;      45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */; > ;
-        };
         ItemList [ en-US ] =
         {
             < "1, 2, 3, ..." ;              4/*SVX_NUM_ARABIC              */; > ;
@@ -84,19 +62,6 @@ Resource STRRES_NUMTYPES
             < "А, Б, .., Аа, Бб, ... (Russian)" ;       44 /*CHARS_CYRILLIC_UPPER_LETTER_N_RU   */; > ;
             < "а, б, .., аа, бб, ... (Russian)" ;       45 /*CHARS_CYRILLIC_LOWER_LETTER_N_RU   */; > ;
         };
-    ItemList [ x-comment ] =
-    {
-            < " " ;                 4/*SVX_NUM_ARABIC              */; > ;
-        < " " ;                 0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
-        < " " ;                 1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
-        < " " ;         2/*SVX_NUM_ROMAN_UPPER         */; > ;
-        < " " ;             3/*SVX_NUM_ROMAN_LOWER         */; > ;
-        < " " ;     9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
-        < " " ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
-        < " " ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
-        < " " ;                     8/*SVX_NUM_BITMAP              */; > ;
-        < "; Keine" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
-    };
     };
 };
 
