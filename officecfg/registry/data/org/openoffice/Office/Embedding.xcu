@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Embedding.xcu,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-02-01 18:36:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,7 @@
         </node>
         <node oor:name="SHOW" oor:op="replace">
             <prop oor:name="VerbUIName">
-                 <value xml:lang="de">~Bearbeiten</value>
+
                  <value xml:lang="en-US">~Edit</value>
                 <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
             </prop>
@@ -57,7 +57,7 @@
         </node>
         <node oor:name="OPEN" oor:op="replace">
             <prop oor:name="VerbUIName">
-                 <value xml:lang="de">~Öffnen</value>
+
                  <value xml:lang="en-US">~Open</value>
                 <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
             </prop>
@@ -94,7 +94,7 @@
         </node>
             <node oor:name="PROPERTIES" oor:op="replace">
             <prop oor:name="VerbUIName">
-                <value xml:lang="de">~Eigenschaften...</value>
+
                 <value xml:lang="en-US">Propert~ies...</value>
                 <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
             </prop>
@@ -104,7 +104,7 @@
         </node>
         <node oor:name="SAVECOPYAS" oor:op="replace">
             <prop oor:name="VerbUIName">
-                 <value xml:lang="de">Kopie Speichern ~unter...</value>
+
                  <value xml:lang="en-US">Save Copy ~as...</value>
                 <value xml:lang="x-comment">This strings are copied from resource files in sfx2 project. The translation could be copied as well if it is possible.</value>
             </prop>
@@ -180,7 +180,7 @@
     <node oor:name="ObjectNames">
         <node oor:name="Calc" oor:op="replace" install:module="calc">
             <prop oor:name="ObjectUIName">
-                <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Tabelle</value>
+
                  <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Spreadsheet</value>
             </prop>
             <prop oor:name="ClassID">
@@ -189,7 +189,7 @@
         </node>
         <node oor:name="Chart" oor:op="replace" install:module="chart">
             <prop oor:name="ObjectUIName">
-                <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Diagramm</value>
+
                  <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Chart</value>
             </prop>
             <prop oor:name="ClassID">
@@ -198,7 +198,7 @@
         </node>
         <node oor:name="Draw" oor:op="replace" install:module="draw">
             <prop oor:name="ObjectUIName">
-                <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Zeichnung</value>
+
                  <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Drawing</value>
             </prop>
             <prop oor:name="ClassID">
@@ -207,7 +207,7 @@
         </node>
         <node oor:name="Impress" oor:op="replace" install:module="impress">
             <prop oor:name="ObjectUIName">
-                <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Präsentation</value>
+
                  <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Presentation</value>
             </prop>
             <prop oor:name="ClassID">
@@ -216,7 +216,7 @@
         </node>
         <node oor:name="Math" oor:op="replace" install:module="math">
             <prop oor:name="ObjectUIName">
-                <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Formel</value>
+
                  <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Formula</value>
             </prop>
             <prop oor:name="ClassID">
@@ -225,7 +225,7 @@
         </node>
         <node oor:name="Writer" oor:op="replace" install:module="writer">
             <prop oor:name="ObjectUIName">
-                <value xml:lang="de">%PRODUCTNAME %PRODUCTVERSION Text</value>
+
                  <value xml:lang="en-US">%PRODUCTNAME %PRODUCTVERSION Text</value>
             </prop>
             <prop oor:name="ClassID">
