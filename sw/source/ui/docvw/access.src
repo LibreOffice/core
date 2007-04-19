@@ -4,9 +4,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:00:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:03:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,72 +37,58 @@
 
 String STR_ACCESS_DOC_NAME
 {
-    Text [ de ] = "Dokument-Ansicht" ;
     Text [ en-US ] = "Document view";
 };
 String STR_ACCESS_DOC_DESC
 {
-    Text [ de ] = "Dokument-Ansicht" ;
     Text [ en-US ] = "Document view";
 };
 String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
-    Text [ de ] = "Überschrift Nummer $(ARG2): $(ARG1)" ;
     Text [ en-US ] = "Heading number $(ARG2): $(ARG1)";
 };
 String STR_ACCESS_HEADER_NAME
 {
-    Text [ de ] = "Kopfzeile $(ARG1)" ;
     Text [ en-US ] = "Header $(ARG1)";
 };
 String STR_ACCESS_HEADER_DESC
 {
-    Text [ de ] = "Kopfzeile Seite $(ARG1)" ;
     Text [ en-US ] = "Header page $(ARG1)";
 };
 String STR_ACCESS_FOOTER_NAME
 {
-    Text [ de ] = "Fußzeile $(ARG1)" ;
     Text [ en-US ] = "Footer $(ARG1)";
 };
 String STR_ACCESS_FOOTER_DESC
 {
-    Text [ de ] = "Fußzeile Seite $(ARG1)" ;
     Text [ en-US ] = "Footer page $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_NAME
 {
-    Text [ de ] = "Fußnote $(ARG1)" ;
     Text [ en-US ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_DESC
 {
-    Text [ de ] = "Fußnote $(ARG1)" ;
     Text [ en-US ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_NAME
 {
-    Text [ de ] = "Endnote $(ARG1)" ;
     Text [ en-US ] = "Endnote $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_DESC
 {
-    Text [ de ] = "Endnote $(ARG1)" ;
     Text [ en-US ] = "Endnote $(ARG1)";
 };
 String STR_ACCESS_TABLE_DESC
 {
-    Text [ de ] = "$(ARG1) auf Seite $(ARG2)" ;
     Text [ en-US ] = "$(ARG1) on page $(ARG2)";
 };
 String STR_ACCESS_PAGE_NAME
 {
-    Text [ de ] = "Seite $(ARG1)" ;
     Text [ en-US ] = "Page $(ARG1)";
 };
 String STR_ACCESS_PAGE_DESC
 {
-    Text [ de ] = "Seite: $(ARG1)" ;
     Text [ en-US ] = "Page: $(ARG1)";
 };
 
