@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:38:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,358 +49,287 @@
 ///////////////////////////////
 String S_GPF_ABORT
 {
-    Text [ de ] = "Programm abgebrochen mit GPF";
     Text[ en-US ] = "Program aborted with GPF";
 };
 String S_APP_SHUTDOWN
 {
-    Text [ de ] = "Applikation wurde Beendet";
     Text[ en-US ] = "Application has been shut down";
 };
 String S_SID_EXECUTE_FAILED_NO_DISPATCHER
 {
-    Text [ de ] = "Konnte Slot ID nicht ausführen: Kein ActiveDispatcher";
     Text[ en-US ] = "Slot ID cannot be executed. No ActiveDispatcher";
 };
 String S_SID_EXECUTE_FAILED
 {
-    Text [ de ] = "Konnte Slot ID nicht ausführen";
     Text[ en-US ] = "Slot ID could not be execute";
 };
 String S_UNO_PROPERTY_NITIALIZE_FAILED
 {
-    Text [ de ] = "UnoSlot: Konnte Properties nicht initialisieren.";
     Text[ en-US ] = "UnoSlot: Properties could not be initialized";
 };
 String S_RESETAPPLICATION_FAILED_COMPLEX
 {
-    Text [ de ] = "ResetApplication fehlgeschlagen: Zu komplex";
     Text[ en-US ] = "ResetApplication failed: too complex";
 };
 String S_RESETAPPLICATION_FAILED_UNKNOWN
 {
-    Text [ de ] = "ResetApplication fehlgeschlagen: Unbekannter Fenstertyp";
     Text[ en-US ] = "ResetApplication failed: unknown window type";
 };
 String S_NO_ACTIVE_WINDOW
 {
-    Text [ de ] = "Kein aktives Fenster gefunden (GetNextCloseWindow)";
     Text[ en-US ] = "No active window found (GetNextCloseWindow)";
 };
 String S_NO_DIALOG_IN_GETACTIVE
 {
-    Text [ de ] = "GetActive liefert keinen Dialog zurück! Bitte Entwicklung informieren";
     Text[ en-US ] = "GetActive does not return a dialog! Inform development";
 };
 String S_NO_POPUP
 {
-    Text [ de ] = "Kein PopupMenu geöffnet";
     Text[ en-US ] = "Pop-up menu not open";
 };
 String S_NO_SUBMENU
 {
-    Text [ de ] = "Untermenü nicht vorhanden";
     Text[ en-US ] = "Submenu does not exist";
 };
 String S_CONTROLTYPE_NOT_SUPPORTED
 {
-    Text [ de ] = "ControlType ($Arg1) wird nicht unterstützt";
     Text[ en-US ] = "ControlType ($Arg1) is not supported";
 };
 String S_SELECTION_BY_ATTRIBUTE_ONLY_DIRECTORIES
 {
-    Text [ de ] = "Selektion nach Attributen nur für Directories möglich.";
     Text[ en-US ] = "Selection by attributes only possible for directories";
 };
 String S_NO_MORE_FILES
 {
-    Text [ de ] = "Keine weiteren Dateien";
     Text[ en-US ] = "No more files";
 };
 String S_UNKNOWN_METHOD
 {
-    Text [ de ] = "Unbekannte Methode '($Arg1)' an ($Arg2)";
     Text[ en-US ] = "Unknown method '($Arg1)' on ($Arg2)";
 };
 String S_INVALID_PARAMETERS
 {
-    Text [ de ] = "Ungültige Parameter";
     Text[ en-US ] = "Invalid Parameters";
 };
 String S_POINTER_OUTSIDE_APPWIN
 {
-    Text [ de ] = "Pointer nicht innerhalb des Applikationsfensters bei '($Arg1)'";
     Text[ en-US ] = "Pointer not inside application window at '($Arg1)'";
 };
 String S_UNKNOWN_COMMAND
 {
-    Text [ de ] = "Unbekannter Befehl '($Arg1)'";
     Text[ en-US ] = "Unknown command '($Arg1)'";
 };
 String S_WIN_NOT_FOUND
 {
-    Text [ de ] = "Konnte ($Arg1) nicht finden.";
     Text[ en-US ] = "($Arg1) could not be found";
 };
 String S_WIN_INVISIBLE
 {
-    Text [ de ] = "($Arg1) ist unsichtbar.";
     Text[ en-US ] = "($Arg1) is not visible";
 };
 String S_WIN_DISABLED
 {
-    Text [ de ] = "Konnte auf ($Arg1) nicht zugreifen.";
     Text[ en-US ] = "($Arg1) could not be accessed.";
 };
 String S_NUMBER_TOO_BIG
 {
-    Text [ de ] = "Eintragsnummer ($Arg2) zu groß in ($Arg1). Maximum ist ($Arg3)";
     Text[ en-US ] = "Entry number ($Arg2) is too large in ($Arg1). Max. allowed is ($Arg3)";
 };
 String S_NUMBER_TOO_SMALL
 {
-    Text [ de ] = "Eintragsnummer ($Arg2) zu klein in ($Arg1). Minimum ist ($Arg3)";
     Text[ en-US ] = "The entry number ($Arg2) is too small in ($Arg1). Min allowed is ($Arg3)";
 };
 String S_WINDOW_DISAPPEARED
 {
-    Text [ de ] = "Window zwischenzeitlich verschwunden bei ($Arg1)";
     Text[ en-US ] = "Window disappeared in the meantime at ($Arg1)";
 };
 String S_ERROR_SAVING_IMAGE
 {
-    Text [ de ] = "Fehler #($Arg1) beim Speichern des Bildes";
     Text[ en-US ] = "Error #($Arg1) when saving the image";
 };
 String S_INVALID_POSITION
 {
-    Text [ de ] = "Ungültige Positionsangabe bei ($Arg1)";
     Text[ en-US ] = "Invalid positon at ($Arg1)";
 };
 String S_SPLITWIN_NOT_FOUND
 {
-    Text [ de ] = "Konnte SplitWindow nicht finden bei ($Arg1)";
     Text[ en-US ] = "SplitWindow not found at ($Arg1)";
 };
 String S_INTERNAL_ERROR
 {
-    Text [ de ] = "Interner Fehler bei ($Arg1)";
     Text[ en-US ] = "Internal error at ($Arg1)";
 };
 String S_NO_STATUSBAR
 {
-    Text [ de ] = "Keine StatusBar vorhanden bei ($Arg1)";
     Text[ en-US ] = "No status bar at ($Arg1)";
 };
 String S_ITEMS_INVISIBLE
 {
-    Text [ de ] = "Die Items sind ausgeblendet bei ($Arg1)";
     Text[ en-US ] = "The items are hidden at ($Arg1)";
 };
 String S_TABPAGE_NOT_FOUND
 {
-    Text [ de ] = "Tabpage nicht gefunden bei ($Arg1)";
     Text[ en-US ] = "Tab page not found at ($Arg1)";
 };
 String S_TRISTATE_NOT_ALLOWED
 {
-    Text [ de ] = "Tristate darf nicht gesetzt werden bei ($Arg1)";
     Text[ en-US ] = "Tristate cannot be set at ($Arg1)";
 };
 String S_ERROR_IN_SET_TEXT
 {
-    Text [ de ] = "SetText hat nicht funktioniert";
     Text[ en-US ] = "Set text did not function";
 };
 String S_ATTEMPT_TO_WRITE_READONLY
 {
-    Text [ de ] = "Schreibversuch auf ReadOnly ($Arg1)";
     Text[ en-US ] = "Attempt to write on read-only ($Arg1)";
 };
 String S_NO_SELECT_FALSE
 {
-    Text [ de ] = "Select FALSE nicht erlaubt. Bitte MultiSelect verwenden bei ($Arg1)";
     Text[ en-US ] = "Select FALSE not allowed. Use MultiSelect at ($Arg1)";
 };
 String S_ENTRY_NOT_FOUND
 {
-    Text [ de ] = "Eintrag \"($Arg2)\" bei ($Arg1) nicht gefunden";
     Text[ en-US ] = "\"($Arg2)\" entry at ($Arg1) not found";
 };
 String S_METHOD_FAILED
 {
-    Text [ de ] = "($Arg1) von Eintrag \"($Arg2)\" ist fehlgeschlagen";
     Text[ en-US ] = "($Arg1) of entry \"($Arg2)\" failed";
 };
 String S_HELPID_ON_TOOLBOX_NOT_FOUND
 {
-    Text [ de ] = "HelpID auf ToolBox nicht gefunden bei ($Arg1)";
     Text[ en-US ] = "HelpID in ToolBox not found at ($Arg1)";
 };
 String S_BUTTON_DISABLED_ON_TOOLBOX
 {
-    Text [ de ] = "Der Button ist disabled in ToolBox bei ($Arg1)";
     Text[ en-US ] = "The button is disabled in ToolBox at ($Arg1)";
 };
 String S_BUTTON_HIDDEN_ON_TOOLBOX
 {
-    Text [ de ] = "Der Button ist hidden in ToolBox bei ($Arg1)";
     Text[ en-US ] = "The button is hidden in ToolBox at ($Arg1)";
 };
 String S_CANNOT_MAKE_BUTTON_VISIBLE_IN_TOOLBOX
 {
-    Text [ de ] = "Button konnte nicht sichtbar gemacht werden in ToolBox bei ($Arg1)";
     Text[ en-US ] = "Button cannot be made visible in ToolBox at ($Arg1)";
 };
 String S_TEAROFF_FAILED
 {
-    Text [ de ] = "TearOff Fehlgeschlagen in ToolBox bei ($Arg1)";
     Text[ en-US ] = "TearOff failed in ToolBox at ($Arg1)";
 };
 
 // Has to stay in for old res files
 String S_NO_SELECTED_ENTRY_DEPRECATED
 {
-    Text [ de ] = "Es ist kein Eintrag ausgewählt in TreeListBox bei ($Arg1)";
     Text[ en-US ] = "No entry is selected in TreeListBox at ($Arg1)";
 };
 String S_NO_SELECTED_ENTRY
 {
-    Text [ de ] = "Es ist kein Eintrag ausgewählt in ($Arg2) bei ($Arg1)";
     Text[ en-US ] = "No entry is selected in ($Arg2) at ($Arg1)";
 };
 String S_SELECT_DESELECT_VIA_STRING_NOT_IMPLEMENTED
 {
-    Text [ de ] = "Select/Deselect mit String nicht implementiert bei ($Arg1)";
     Text[ en-US ] = "Select/Deselect with string not implemented at ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_FLOATING_MODE
 {
-    Text [ de ] = "Methode nur bei frei schwebenden Fenstern erlaubt bei ($Arg1)";
     Text[ en-US ] = "Method only allowed in floating mode at ($Arg1)";
 };
 String S_ALLOWED_ONLY_IN_DOCKING_MODE
 {
-    Text [ de ] = "Methode nur im angedockten Modus erlaubt bei ($Arg1)";
     Text[ en-US ] = "Method only allowed in docking mode at ($Arg1)";
 };
 String S_SIZE_NOT_CHANGEABLE
 {
-    Text [ de ] = "Größe ist nicht veränderbar bei ($Arg1)";
     Text[ en-US ] = "Size cannot be altered at ($Arg1)";
 };
 String S_NO_OK_BUTTON
 {
-    Text [ de ] = "Kein OK Button Vorhanden bei ($Arg1)";
     Text[ en-US ] = "There is no OK button at ($Arg1)";
 };
 String S_NO_CANCEL_BUTTON
 {
-    Text [ de ] = "Kein Abbrechen Button Vorhanden bei ($Arg1)";
     Text[ en-US ] = "There is no Cancel button at ($Arg1)";
 };
 String S_NO_YES_BUTTON
 {
-    Text [ de ] = "Kein Ja Button Vorhanden bei ($Arg1)";
     Text[ en-US ] = "There is no Yes button at ($Arg1)";
 };
 String S_NO_NO_BUTTON
 {
-    Text [ de ] = "Kein Nein Button Vorhanden bei ($Arg1)";
     Text[ en-US ] = "There is no No button at ($Arg1)";
 };
 String S_NO_RETRY_BUTTON
 {
-    Text [ de ] = "Kein Wiederholen Button Vorhanden bei ($Arg1)";
     Text[ en-US ] = "There is no Repeat button at ($Arg1)";
 };
 String S_NO_HELP_BUTTON
 {
-    Text [ de ] = "Kein Hilfe Button Vorhanden bei ($Arg1)";
     Text[ en-US ] = "There is no Help button at ($Arg1)";
 };
 String S_NO_DEFAULT_BUTTON
 {
-    Text [ de ] = "Kein Default Button Definiert bei ($Arg1)";
     Text[ en-US ] = "There is no Default button defined at ($Arg1)";
 };
 String S_BUTTON_ID_NOT_THERE
 {
-    Text [ de ] = "Kein Button mit der ID ($Arg1) Vorhanden bei ($Arg2)";
     Text[ en-US ] = "There is no button with ID ($Arg1) at ($Arg2)";
 };
 String S_BUTTONID_REQUIRED
 {
-    Text [ de ] = "Es muss eine ButtonId angegeben werden bei ($Arg1)";
     Text[ en-US ] = "A button ID needs to be given at ($Arg1)";
 };
 String S_UNKNOWN_TYPE
 {
-    Text [ de ] = "Unbekannter Objekttyp ($Arg1) aus UId oder Methode '($Arg2)' nicht unterstützt";
     Text[ en-US ] = "Unknown object type ($Arg1) from UId or method '($Arg2)' not supported";
 };
 String S_UNPACKING_STORAGE_FAILED
 {
-    Text [ de ] = "Entpacken der Storage \"($Arg1)\" nach \"($Arg2)\" ist fehlgeschlagen";
     Text[ en-US ] = "Unpacking storage \"($Arg1)\" to \"($Arg2)\" failed";
 };
 String S_NO_LIST_BOX_BUTTON
 {
-    Text [ de ] = "ListBoxButton nicht vorhanden bei ($Arg1)";
     Text[ en-US ] = "ListBoxButton does not exist in ($Arg1)";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
 {
-    Text [ de ] = "Konnte UNO Url \"($Arg1)\"nicht ausführen: Keinen Dispatcher gefunden";
     Text[ en-US ] = "UNO URL \"($Arg1)\" could not be executed: No dispatcher was found.";
 };
 String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
 {
-    Text [ de ] = "Konnte UNO Url \"($Arg1)\"nicht ausführen: Kein ActiveFrame am Desktop";
     Text[ en-US ] = "UNO URL \"($Arg1)\" could not be executed: No ActiveFrame on desktop.";
 };
 String S_NO_MENU
 {
-    Text [ de ] = "Kein Menü Vorhanden bei ($Arg1)";
     Text[ en-US ] = "There is no menu at ($Arg1)";
 };
 String S_UNO_URL_EXECUTE_FAILED_DISABLED
 {
-    Text [ de ] = "Konnte UNO Url \"($Arg1)\"nicht ausführen: Disabled";
     Text[ en-US ] = "UNO URL \"($Arg1)\" could not be run: Disabled";
 };
 String S_NO_SCROLLBAR
 {
-    Text [ de ] = "Keine ScrollBar vorhanden bei ($Arg1)";
     Text[ en-US ] = "No scroll bar at ($Arg1)";
 };
 String S_NO_SAX_PARSER
 {
-    Text [ de ] = "Keine SAX Parser bei ($Arg1). Zuerst mit 'SAXReadFile' initialisieren.";
     Text[ en-US ] = "No SAX Parser when using ($Arg1). Initialize with 'SAXReadFile' first.";
 };
 String S_CANNOT_CREATE_DIRECTORY
 {
-    Text [ de ] = "Kann Verzeichnis nicht erstellen: \"($Arg1)\"";
     Text[ en-US ] = "Cannot create Directory: \"($Arg1)\"";
 };
 String S_DIRECTORY_NOT_EMPTY
 {
-    Text [ de ] = "Verzeichnis muss leer sein um darin zu entpacken. Verzeichnis: \"($Arg1)\"";
     Text[ en-US ] = "Directory has to be Empty to unpack to. Directory: \"($Arg1)\"";
 };
 String S_DEPRECATED
 {
-    Text [ de ] = "Veraltet! Bitte das Script ändern";
     Text[ en-US ] = "Deprecated! Please change the script.";
 };
 String S_SIZE_BELOW_MINIMUM
 {
-    Text [ de ] = "Die Größe ist unter dem Minimum. x=($Arg1) ,y=($Arg2)";
     Text[ en-US ] = "The Size is below the minimum. x=($Arg1) ,y=($Arg2)";
 };
 String S_CANNOT_FIND_FLOATING_WIN
 {
-    Text [ de ] = "Kann FloatingWindow für frei schwebendes DockingWindow nicht finden";
     Text[ en-US ] = "Cannot find FloatingWindow for floating DockingWindow at ($Arg1).";
 };
