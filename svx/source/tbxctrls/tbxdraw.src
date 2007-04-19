@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxdraw.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:53:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:43:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ FloatingWindow RID_SVXTBX_DRAW
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpID = HID_DRAWTOOL_TBX ;
-    Text [ de ] = "Zeichenfunktionen" ;
     ToolBox TBX_DRAW
     {
         HelpId = HID_SVXTBX_DRAW ;
@@ -60,52 +59,41 @@ FloatingWindow RID_SVXTBX_DRAW
                 Identifier = SID_OBJECT_SELECT ;
                 HelpID = SID_OBJECT_SELECT ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Auswahl" ;
                 Text [ en-US ] = "Selection" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_LINE ;
                 HelpID = SID_DRAW_LINE ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Linie" ;
                 Text [ en-US ] = "Line" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_RECT ;
                 HelpID = SID_DRAW_RECT ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Rechteck" ;
                 Text [ en-US ] = "Rectangle" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_ELLIPSE ;
                 HelpID = SID_DRAW_ELLIPSE ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Ellipse" ;
                 Text [ en-US ] = "Ellipse" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_POLYGON_NOFILL ;
                 HelpID = SID_DRAW_POLYGON_NOFILL ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Polygon" ;
                 Text [ en-US ] = "Polygon" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_BEZIER_NOFILL ;
                 HelpID = SID_DRAW_BEZIER_NOFILL ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Kurve" ;
                 Text [ en-US ] = "Curve";
             };
             ToolBoxItem
@@ -113,7 +101,6 @@ FloatingWindow RID_SVXTBX_DRAW
                 Identifier = SID_DRAW_FREELINE_NOFILL ;
                 HelpID = SID_DRAW_FREELINE_NOFILL ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Freihandlinie" ;
                 Text [ en-US ] = "Freeform Line";
             };
             ToolBoxItem
@@ -121,43 +108,34 @@ FloatingWindow RID_SVXTBX_DRAW
                 Identifier = SID_DRAW_ARC ;
                 HelpID = SID_DRAW_ARC ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Kreisbogen" ;
                 Text [ en-US ] = "Arc" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_PIE ;
                 HelpID = SID_DRAW_PIE ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Ellipsensektor" ;
                 Text [ en-US ] = "Ellipse Pie" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_CIRCLECUT ;
                 HelpID = SID_DRAW_CIRCLECUT ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Kreissegment" ;
                 Text [ en-US ] = "Circle Segment" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_TEXT ;
                 HelpID = SID_DRAW_TEXT ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Text" ;
                 Text [ en-US ] = "Text" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_TEXT_VERTICAL ;
                 HelpID = SID_DRAW_TEXT_VERTICAL ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Vertikaler Text" ;
                 Text [ en-US ] = "Vertical Text";
             };
             ToolBoxItem
@@ -165,31 +143,25 @@ FloatingWindow RID_SVXTBX_DRAW
                 Identifier = SID_DRAW_TEXT_MARQUEE ;
                 HelpID = SID_DRAW_TEXT_MARQUEE ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Lauftext" ;
                 Text [ en-US ] = "Text Animation" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_CAPTION ;
                 HelpID = SID_DRAW_CAPTION ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Legende" ;
                 Text [ en-US ] = "Callouts" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_DRAW_CAPTION_VERTICAL ;
                 HelpID = SID_DRAW_CAPTION_VERTICAL ;
                 RadioCheck = TRUE ;
-                Text [ de ] = "Vertikale Legende" ;
                 Text [ en-US ] = "Vertical Callout";
             };
         };
     };
     Text [ en-US ] = "Draw Functions" ;
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_SVXTBX_ALIGNMENT
 {
@@ -198,7 +170,6 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
     Hide = TRUE ;
     HelpID = HID_ALIGN_TBX ;
     SVLook = TRUE ;
-    Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
     ToolBox TBX_ALIGNMENT
     {
@@ -211,53 +182,40 @@ FloatingWindow RID_SVXTBX_ALIGNMENT
             {
                 Identifier = SID_OBJECT_ALIGN_LEFT ;
                 HelpID = SID_OBJECT_ALIGN_LEFT ;
-                Text [ de ] = "Links" ;
                 Text [ en-US ] = "Left" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_OBJECT_ALIGN_CENTER ;
                 HelpID = SID_OBJECT_ALIGN_CENTER ;
-                Text [ de ] = "Zentriert" ;
                 Text [ en-US ] = "Center" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_OBJECT_ALIGN_RIGHT ;
                 HelpID = SID_OBJECT_ALIGN_RIGHT ;
-                Text [ de ] = "Rechts" ;
                 Text [ en-US ] = "Right" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_OBJECT_ALIGN_UP ;
                 HelpID = SID_OBJECT_ALIGN_UP ;
-                Text [ de ] = "Oben" ;
                 Text [ en-US ] = "Top" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_OBJECT_ALIGN_MIDDLE ;
                 HelpID = SID_OBJECT_ALIGN_MIDDLE ;
-                Text [ de ] = "Mitte" ;
                 Text [ en-US ] = "Centered" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = SID_OBJECT_ALIGN_DOWN ;
                 HelpID = SID_OBJECT_ALIGN_DOWN ;
-                Text [ de ] = "Unten" ;
                 Text [ en-US ] = "Bottom" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
