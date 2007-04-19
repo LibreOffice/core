@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-26 10:27:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:00:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,14 +58,12 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( 4, 3 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 8, 8 );
-        Text [ de ] = "SQL Kommando";
         Text [ en-US ] = "SQL command";
     };
     FixedText FT_SQL
     {
         Pos = MAP_APPFONT( 7, 15 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 8 );
-        Text [ de ] = "auszuführendes Kommando";
         Text [ en-US ] = "Command to execute";
     };
     MultiLineEdit ME_SQL
@@ -81,7 +79,6 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( WINDOW_SIZE_X - BUTTON_SIZE_X - 7, 109 );
         Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
-        Text [ de ] = "Ausführen";
         Text [ en-US ] = "Execute";
         DefButton = TRUE;
     };
@@ -89,7 +86,6 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( 7, 110 + BUTTON_SIZE_Y + 3 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 14, 8 );
-        Text [ de ] = "Vorherige Kommandos";
         Text [ en-US ] = "Previous commands";
     };
     ListBox LB_HISTORY
@@ -104,7 +100,6 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( 4, 138 + BUTTON_SIZE_Y + 4 );
         Size = MAP_APPFONT( WINDOW_SIZE_X - 8, 8 );
-        Text [ de ] = "Status";
         Text [ en-US ] = "Status";
     };
     MultiLineEdit ME_STATUS
@@ -129,24 +124,19 @@ ModalDialog DLG_DIRECTSQL
     {
         Pos = MAP_APPFONT( WINDOW_SIZE_X - 7 - BUTTON_SIZE_X, 207 + BUTTON_SIZE_Y );
         Size = MAP_APPFONT( BUTTON_SIZE_X, BUTTON_SIZE_Y );
-        Text [ de ] = "Schließen";
         Text [ en-US ] = "Close";
     };
 
-    Text [ de ] = "SQL Statement ausführen" ;
     Text [ en-US ]  = "Execute SQL Statement" ;
-    Text [ x-comment ] = "; zl: statement means SQL commandos which are directly executed.";
 };
 
 String STR_COMMAND_EXECUTED_SUCCESSFULLY
 {
-    Text [ de ] = "Befehl erfolgreich ausgeführt." ;
     Text [ en-US ] = "Command successfully executed." ;
 };
 
 String STR_DIRECTSQL_CONNECTIONLOST
 {
-    Text [ de ] = "Die Verbindung zur Datenbank wurde gelöscht. Dieser Dialog wird geschlossen.";
     Text [ en-US ] = "The connection to the database has been lost. This dialog will be closed.";
 };
 
