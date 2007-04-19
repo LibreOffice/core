@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docstdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:58:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:58:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,72 +46,56 @@ TabPage TP_DOC_STAT
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Seiten:" ;
         Text [ en-US ] = "Number of Pages:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 18 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Tabellen:" ;
         Text [ en-US ] = "Number of Tables:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_GRF
     {
         Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Grafiken:" ;
         Text [ en-US ] = "Number of Graphics:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_OLE
     {
         Pos = MAP_APPFONT ( 6 , 42 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl OLE-Objekte:" ;
         Text [ en-US ] = "Number of OLE Objects:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PARA
     {
         Pos = MAP_APPFONT ( 6 , 54 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Absätze:" ;
         Text [ en-US ] = "Number of Paragraphs:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_WORD
     {
         Pos = MAP_APPFONT ( 6 , 68 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Wörter:" ;
         Text [ en-US ] = "Number of Words:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CHAR
     {
         Pos = MAP_APPFONT ( 6 , 82 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Zeichen:" ;
         Text [ en-US ] = "Number of Characters:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LINE
     {
         Pos = MAP_APPFONT ( 6 , 96 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Zeilen:" ;
         Text [ en-US ] = "Number of Lines:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PAGE_COUNT
     {
@@ -166,9 +150,7 @@ TabPage TP_DOC_STAT
     {
         Pos = MAP_APPFONT ( 204 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Aktualisieren" ;
         Text [ en-US ] = "~Update" ;
-        Text [ x-comment ] = " ";
     };
 };
 
