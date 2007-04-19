@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimation.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:25:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:14:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,19 +42,16 @@ Menu RID_EFFECT_CONTEXTMENU
         MenuItem
         {
             Identifier = CM_WITH_CLICK ;
-            Text [ de ] = "Beim ~Klicken" ;
             Text [ en-US ] = "Start On ~Click" ;
         };
         MenuItem
         {
             Identifier = CM_WITH_PREVIOUS ;
-            Text [ de ] = "Mit ~Vorheriger" ;
             Text [ en-US ] = "Start ~With Previous" ;
         };
         MenuItem
         {
             Identifier = CM_AFTER_PREVIOUS;
-            Text [ de ] = "~Nach Vorheriger" ;
             Text [ en-US ] = "Start ~After Previous" ;
         };
         MenuItem
@@ -64,19 +61,16 @@ Menu RID_EFFECT_CONTEXTMENU
         MenuItem
         {
             Identifier = CM_OPTIONS;
-            Text [ de ] = "~Effektoptionen..." ;
             Text [ en-US ] = "~Effect Options..." ;
         };
         MenuItem
         {
             Identifier = CM_DURATION;
-            Text [ de ] = "~Anzeigedauer..." ;
             Text [ en-US ] = "~Timing..." ;
         };
         MenuItem
         {
             Identifier = CM_REMOVE;
-            Text [ de ] = "En~tfernen" ;
             Text [ en-US ] = "~Remove" ;
         };
     };
@@ -89,25 +83,21 @@ Menu RID_CUSTOMANIMATION_FONTSIZE_POPUP
         MenuItem
         {
             Identifier = CM_SIZE_25 ;
-            Text [ de ] = "Winzig" ;
             Text [ en-US ] = "Tiny" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_50 ;
-            Text [ de ] = "Kleiner" ;
             Text [ en-US ] = "Smaller" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_150 ;
-            Text [ de ] = "Größer" ;
             Text [ en-US ] = "Larger" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_400 ;
-            Text [ de ] = "Riesengroß" ;
             Text [ en-US ] = "Extra large" ;
         };
     };
@@ -120,25 +110,21 @@ Menu RID_CUSTOMANIMATION_SCALE_POPUP
         MenuItem
         {
             Identifier = CM_SIZE_25 ;
-            Text [ de ] = "Winzig" ;
             Text [ en-US ] = "Tiny" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_50 ;
-            Text [ de ] = "Kleiner" ;
             Text [ en-US ] = "Smaller" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_150 ;
-            Text [ de ] = "Größer" ;
             Text [ en-US ] = "Larger" ;
         };
         MenuItem
         {
             Identifier = CM_SIZE_400 ;
-            Text [ de ] = "Riesengroß" ;
             Text [ en-US ] = "Extra large" ;
         };
         MenuItem
@@ -148,21 +134,18 @@ Menu RID_CUSTOMANIMATION_SCALE_POPUP
         MenuItem
         {
             Identifier = CM_HORIZONTAL  ;
-            Text [ de ] = "Horizontal" ;
             Text [ en-US ] = "Horizontal" ;
 
         };
         MenuItem
         {
             Identifier = CM_VERTICAL ;
-            Text [ de ] = "Vertikal" ;
             Text [ en-US ] = "Vertical" ;
 
         };
         MenuItem
         {
             Identifier = CM_BOTH ;
-            Text [ de ] = "Beide" ;
             Text [ en-US ] = "Both" ;
 
         };
@@ -176,25 +159,21 @@ Menu RID_CUSTOMANIMATION_ROTATION_POPUP
         MenuItem
         {
             Identifier = CM_QUARTER_SPIN ;
-            Text [ de ] = "Vierteldrehung" ;
             Text [ en-US ] = "Quarter spin" ;
         };
         MenuItem
         {
             Identifier = CM_HALF_SPIN ;
-            Text [ de ] = "Halbe Drehung" ;
             Text [ en-US ] = "Half spin" ;
         };
         MenuItem
         {
             Identifier = CM_FULL_SPIN;
-            Text [ de ] = "Komplette Drehung" ;
             Text [ en-US ] = "Full spin" ;
         };
         MenuItem
         {
             Identifier = CM_TWO_SPINS;
-            Text [ de ] = "Zwei Drehungen" ;
             Text [ en-US ] = "Two spins" ;
         };
         MenuItem
@@ -204,13 +183,11 @@ Menu RID_CUSTOMANIMATION_ROTATION_POPUP
         MenuItem
         {
             Identifier = CM_CLOCKWISE;
-            Text [ de ] = "Im Uhrzeigersinn" ;
             Text [ en-US ] = "Clockwise" ;
         };
         MenuItem
         {
             Identifier = CM_COUNTERCLOCKWISE;
-            Text [ de ] = "Gegen den Uhrzeigersinn" ;
             Text [ en-US ] = "Counter-clockwise" ;
         };
     };
@@ -223,19 +200,16 @@ Menu RID_CUSTOMANIMATION_FONTSTYLE_POPUP
         MenuItem
         {
             Identifier = CM_BOLD ;
-            Text [ de ] = "Fett" ;
             Text [ en-US ] = "Bold" ;
         };
         MenuItem
         {
             Identifier = CM_ITALIC ;
-            Text [ de ] = "Kursiv" ;
             Text [ en-US ] = "Italic" ;
         };
         MenuItem
         {
             Identifier = CM_UNDERLINED ;
-            Text [ de ] = "Unterstrichen" ;
             Text [ en-US ] = "Underlinded" ;
         };
     };
@@ -243,223 +217,186 @@ Menu RID_CUSTOMANIMATION_FONTSTYLE_POPUP
 
 String STR_CUSTOMANIMATION_DURATION_VERY_SLOW
 {
-    Text [ de ] = "Sehr langsam";
     Text [ en-US ] = "Very slow";
 };
 
 String STR_CUSTOMANIMATION_DURATION_SLOW
 {
-    Text [ de ] = "Langsam";
     Text [ en-US ] = "Slow";
 };
 
 String STR_CUSTOMANIMATION_DURATION_NORMAL
 {
-    Text [ de ] = "Mittel";
     Text [ en-US ] = "Medium";
 };
 
 String STR_CUSTOMANIMATION_DURATION_FAST
 {
-    Text [ de ] = "Schnell";
     Text [ en-US ] = "Fast";
 };
 
 String STR_CUSTOMANIMATION_DURATION_VERY_FAST
 {
-    Text [ de ] = "Sehr schnell";
     Text [ en-US ] = "Very fast";
 };
 
 String STR_CUSTOMANIMATION_REPEAT_NONE
 {
-    Text [ de ] = "Keine";
     Text [ en-US ] = "none";
 };
 
 String STR_CUSTOMANIMATION_REPEAT_UNTIL_NEXT_CLICK
 {
-    Text [ de ] = "Bis zum nächsten Klick";
     Text [ en-US ] = "Until next click";
 };
 
 String STR_CUSTOMANIMATION_REPEAT_UNTIL_END_OF_SLIDE
 {
-    Text [ de ] = "Bis zum Ende der Folie";
     Text [ en-US ] = "Until end of slide";
 };
 
 String STR_CUSTOMANIMATION_DIRECTION_PROPERTY
 {
-    Text [ de ] = "Richtung";
     Text [ en-US ] = "Direction";
 };
 
 String STR_CUSTOMANIMATION_ZOOM_PROPERTY
 {
-    Text [ de ] = "Zoom";
     Text [ en-US ] = "Zoom";
 };
 
 String STR_CUSTOMANIMATION_SPOKES_PROPERTY
 {
-    Text [ de ] = "Speichen";
     Text [ en-US ] = "Spokes";
 };
 
 String STR_CUSTOMANIMATION_FIRST_COLOR_PROPERTY
 {
-    Text [ de ] = "Erste Farbe";
     Text [ en-US ] = "First color";
 };
 
 String STR_CUSTOMANIMATION_SECOND_COLOR_PROPERTY
 {
-    Text [ de ] = "Zweite Farbe";
     Text [ en-US ] = "Second color";
 };
 
 String STR_CUSTOMANIMATION_FILL_COLOR_PROPERTY
 {
-    Text [ de ] = "Füllfarbe";
     Text [ en-US ] = "Fill color";
 };
 
 String STR_CUSTOMANIMATION_STYLE_PROPERTY
 {
-    Text [ de ] = "Formatvorlage";
     Text [ en-US ] = "Style";
 };
 
 String STR_CUSTOMANIMATION_FONT_PROPERTY
 {
-    Text [ de ] = "Schriftart";
     Text [ en-US ] = "Font";
 };
 
 String STR_CUSTOMANIMATION_FONT_COLOR_PROPERTY
 {
-    Text [ de ] = "Schriftfarbe";
     Text [ en-US ] = "Font color";
 };
 
 String STR_CUSTOMANIMATION_FONT_SIZE_STYLE_PROPERTY
 {
-    Text [ de ] = "Art";
     Text [ en-US ] = "Style";
 };
 
 String STR_CUSTOMANIMATION_FONT_STYLE_PROPERTY
 {
-    Text [ de ] = "Schriftschnitt";
     Text [ en-US ] = "Typeface";
 };
 
 String STR_CUSTOMANIMATION_LINE_COLOR_PROPERTY
 {
-    Text [ de ] = "Linienfarbe";
     Text [ en-US ] = "Line color";
 };
 
 String STR_CUSTOMANIMATION_SIZE_PROPERTY
 {
-    Text [ de ] = "Schriftgrad";
     Text [ en-US ] = "Font size";
 };
 
 String STR_CUSTOMANIMATION_SCALE_PROPERTY
 {
-    Text [ de ] = "Größe";
     Text [ en-US ] = "Size";
 };
 
 String STR_CUSTOMANIMATION_AMOUNT_PROPERTY
 {
-    Text [ de ] = "Betrag";
     Text [ en-US ] = "Amount";
 };
 
 String STR_CUSTOMANIMATION_COLOR_PROPERTY
 {
-    Text [ de ] = "Farbe";
     Text [ en-US ] = "Color";
 };
 
 String STR_CUSTOMANIMATION_NO_SOUND
 {
-    Text [ de ] = "(Ohne Klang)";
     Text [ en-US ] = "(No sound)";
 };
 
 String STR_CUSTOMANIMATION_STOP_PREVIOUS_SOUND
 {
-    Text [ de ] = "(Vorherigen Klang Anhalten)";
     Text [ en-US ] = "(Stop previous sound)";
 };
 
 String STR_CUSTOMANIMATION_BROWSE_SOUND
 {
-    Text [ de ] = "Anderer Klang...";
     Text [ en-US ] = "Other sound...";
 };
 
 String STR_CUSTOMANIMATION_SAMPLE
 {
-    Text [ de ] = "Beispiel";
     Text [ en-US ] = "Sample";
 };
 
 String STR_CUSTOMANIMATION_1_SPOKES
 {
-    Text [ de ] = "1 Speiche";
     Text [ en-US ] = "1 Spoke";
 };
 
 String STR_CUSTOMANIMATION_2_SPOKES
 {
-    Text [ de ] = "2 Speichen";
     Text [ en-US ] = "2 Spokes";
 };
 
 String STR_CUSTOMANIMATION_3_SPOKES
 {
-    Text [ de ] = "3 Speichen";
     Text [ en-US ] = "3 Spokes";
 };
 
 String STR_CUSTOMANIMATION_4_SPOKES
 {
-    Text [ de ] = "4 Speichen";
     Text [ en-US ] = "4 Spokes";
 };
 
 String STR_CUSTOMANIMATION_8_SPOKES
 {
-    Text [ de ] = "8 Speichen";
     Text [ en-US ] = "8 Spokes";
 };
 
 String STR_CUSTOMANIMATION_INSTANT
 {
-    Text [ de ] = "Augenblicklich";
     Text [ en-US ] = "Instant";
 };
 
 String STR_CUSTOMANIMATION_GRADUAL
 {
-    Text [ de ] = "Schrittweise";
     Text [ en-US ] = "Gradual";
 };
 
 String STR_CUSTOMANIMATION_TRIGGER
 {
-    Text [ de ] = "Auslöser";
     Text [ en-US ] = "Trigger";
 };
 
 String STR_CUSTOMANIMATION_LIST_HELPTEXT
 {
-    Text [ de ] = "Erst ein Element auf dieser Folie auswählen und dann auf 'Hinzufügen...' klicken, um die Animation hinzuzufügen.";
     Text [ en-US ] = "First select the slide element and then click 'Add...' to add an animation effect.";
 };
 
