@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:59:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:25:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog RID_SCDLG_DAPITYPE
     HelpId = HID_DATAPILOT_TYPE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 63 ) ;
-    Text [ de ] = "Quelle auswählen" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
@@ -69,39 +68,30 @@ ModalDialog RID_SCDLG_DAPITYPE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
-        Text [ de ] = "~Aktuelle Selektion" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Current selection";
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DATABASE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
-        Text [ de ] = "~In %PRODUCTNAME angemeldete Datenquelle" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Data source registered in %PRODUCTNAME";
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_EXTERNAL
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
-        Text [ de ] = "~Externe Quelle/Schnittstelle" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~External source/interface";
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Select Source";
-    Text [ x-comment ] = " ";
 };
 
 
@@ -114,7 +104,6 @@ ModalDialog RID_SCDLG_DAPISERVICE
     HelpId = HID_DATAPILOT_SERVICE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 94 ) ;
-    Text [ de ] = "Externe Datenquelle" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
@@ -140,9 +129,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Service" ;
         Text [ en-US ] = "~Service";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_SERVICE
     {
@@ -156,9 +143,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Quelle" ;
         Text [ en-US ] = "So~urce";
-        Text [ x-comment ] = " ";
     };
     Edit ED_SOURCE
     {
@@ -171,9 +156,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name";
-        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -186,9 +169,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Benutzer" ;
         Text [ en-US ] = "Us~er";
-        Text [ x-comment ] = " ";
     };
     Edit ED_USER
     {
@@ -201,9 +182,7 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 12 , 78 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Kennwort" ;
         Text [ en-US ] = "~Password";
-        Text [ x-comment ] = " ";
     };
     Edit ED_PASSWD
     {
@@ -217,12 +196,9 @@ ModalDialog RID_SCDLG_DAPISERVICE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "External Source";
-    Text [ x-comment ] = " ";
 };
 
 
@@ -235,7 +211,6 @@ ModalDialog RID_SCDLG_DAPIDATA
     HelpId = HID_DATAPILOT_DATABASE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 241 , 63 ) ;
-    Text [ de ] = "Datenquelle auswählen" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
     OKButton BTN_OK
@@ -262,9 +237,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Datenbank" ;
         Text [ en-US ] = "~Database";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DATABASE
     {
@@ -279,9 +252,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "Daten~quelle" ;
         Text [ en-US ] = "Data so~urce";
-        Text [ x-comment ] = " ";
     };
     ComboBox CB_OBJECT
     {
@@ -296,9 +267,7 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Art" ;
         Text [ en-US ] = "~Type";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_OBJTYPE
     {
@@ -307,20 +276,6 @@ ModalDialog RID_SCDLG_DAPIDATA
         Size = MAP_APPFONT ( 110 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Tabelle" ; Default ; > ;
-            < "Abfrage" ; Default ; > ;
-            < "Sql" ; Default ; > ;
-            < "Sql [Native]" ; Default ; > ;
-        };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     StringList [ en-US ] =
     {
             < "Sheet" ; Default ; > ;
@@ -334,12 +289,9 @@ ModalDialog RID_SCDLG_DAPIDATA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Select Data Source";
-    Text [ x-comment ] = " ";
 };
 
 
