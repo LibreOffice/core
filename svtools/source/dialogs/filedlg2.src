@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filedlg2.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:51:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:11:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,93 +36,63 @@
 #include <filedlg2.hrc>
 String STR_FILEDLG_SELECT
 {
-    Text [ de ] = "Verzeichnis auswählen" ;
     Text [ en-US ] = "Select Directory" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_CANTCHDIR
 {
-    Text [ de ] = "Kann nicht in Verzeichnis wechseln" ;
     Text [ en-US ] = "Cannot change to directory" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_OPEN
 {
-    Text [ de ] = "Öffnen" ;
     Text [ en-US ] = "Open" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_FILE
 {
-    Text [ de ] = "~Datei" ;
     Text [ en-US ] = "~File" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_DIR
 {
-    Text [ de ] = "~Verzeichnis" ;
     Text [ en-US ] = "~Directory" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_TYPE
 {
-    Text [ de ] = "Datei~typ" ;
     Text [ en-US ] = "File ~type" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_CANTOPENFILE
 {
-    Text [ de ] = "Kann Datei nicht öffnen" ;
     Text [ en-US ] = "Can't open file" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_CANTOPENDIR
 {
-    Text [ de ] = "Kann Verzeichnis nicht öffnen" ;
     Text [ en-US ] = "Can't open directory" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_OVERWRITE
 {
-    Text [ de ] = "Datei existiert. \nDatei überschreiben?" ;
     Text [ en-US ] = "This file already exists. \nOverwrite ?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_GOUP
 {
-    Text [ de ] = "Eine Ebene höher" ;
     Text [ en-US ] = "Up One Level" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_SAVE
 {
-    Text [ de ] = "Speichern" ;
     Text [ en-US ] = "Save" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_DRIVES
 {
-    Text [ de ] = "~Laufwerke" ;
     Text [ en-US ] = "D~rive" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_HOME
 {
-    Text [ de ] = "Benutzer Verzeichnis" ;
     Text [ en-US ] = "User Directory" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_NEWDIR
 {
-    Text [ de ] = "Verzeichnis anlegen" ;
     Text [ en-US ] = "Create Directory" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_ASKNEWDIR
 {
-    Text [ de ] = "Soll das Verzeichnis %s angelegt werden ?" ;
     Text [ en-US ] = "Do you want the directory %s to be created ?" ;
-    Text [ x-comment ] = " ";
 };
 
 
