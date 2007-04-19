@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortdlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-31 18:38:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,27 +51,21 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 172 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "A~ufsteigend" ;
         Text [ en-US ] = "~Ascending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DOWN1
     {
         Pos = MAP_APPFONT ( 172 , 28 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "A~bsteigend" ;
         Text [ en-US ] = "~Descending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT1
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "~Sortieren nach" ;
         Text [ en-US ] = "Sort ~by" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_SORT2
     {
@@ -85,27 +79,21 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 172 , 55 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "Au~fsteigend" ;
         Text [ en-US ] = "A~scending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DOWN2
     {
         Pos = MAP_APPFONT ( 172 , 69 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "Abstei~gend" ;
         Text [ en-US ] = "D~escending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT2
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "~Anschließend nach" ;
         Text [ en-US ] = "Then b~y" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_SORT3
     {
@@ -119,27 +107,21 @@ TabPage RID_SCPAGE_SORT_FIELDS
     {
         Pos = MAP_APPFONT ( 172 , 96 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "Aufs~teigend" ;
         Text [ en-US ] = "As~cending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DOWN3
     {
         Pos = MAP_APPFONT ( 172 , 110 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "Absteigen~d" ;
         Text [ en-US ] = "Desce~nding" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT3
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "A~nschließend nach" ;
         Text [ en-US ] = "T~hen by" ;
-        Text [ x-comment ] = " ";
     };
 };
 TabPage RID_SCPAGE_SORT_OPTIONS
@@ -153,10 +135,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 6 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Groß-/Kleinschreibung beachten" ;
         Text [ en-US ] = "Case ~sensitive" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_LABEL
     {
@@ -166,31 +146,25 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     };
     String STR_COL_LABEL
     {
-        Text [ de ] = "Bereich ~enthält Spaltenbeschriftungen" ;
         Text [ en-US ] = "Range contains column la~bels" ;
     };
     String STR_ROW_LABEL
     {
-        Text [ de ] = "Bereich ~enthält Zeilenbeschriftungen" ;
         Text [ en-US ] = "Range contains ~row labels" ;
     };
     CheckBox BTN_FORMATS
     {
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Formate einschließen" ;
         Text [ en-US ] = "Include ~formats" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_COPYRESULT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Sortierergebnis ~ausgeben nach" ;
         Text [ en-US ] = "~Copy sort results to:" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_OUTAREA
     {
@@ -212,10 +186,8 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Benutzerdefinierte Sortierreihenfolge" ;
         Text [ en-US ] = "Custom sort ~order" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_SORT_USER
     {
@@ -230,7 +202,6 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 101 , 8 ) ;
-        Text [ de ] = "S~prache" ;
         Text [ en-US ] = "~Language";
     };
     ListBox LB_LANGUAGE
@@ -246,7 +217,6 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 119 , 104 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Op~tionen" ;
         Text [ en-US ] = "O~ptions";
     };
     ListBox LB_ALGORITHM
@@ -261,35 +231,27 @@ TabPage RID_SCPAGE_SORT_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 133 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Richtung" ;
         Text [ en-US ] = "Direction" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_TOP_DOWN
     {
         Pos = MAP_APPFONT ( 12 , 144 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Von ~oben nach unten (Zeilen sortieren)" ;
         Text [ en-US ] = "~Top to bottom (sort rows)" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_LEFT_RIGHT
     {
         Pos = MAP_APPFONT ( 12 , 158 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Von ~links nach rechts (Spalten sortieren)" ;
         Text [ en-US ] = "L~eft to right (sort columns)" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_AREA_LABEL
     {
         Pos = MAP_APPFONT ( 6 , 171 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Datenbereich:" ;
         Text [ en-US ] = "Data area:" ;
-        Text [ x-comment ] = " ";
     };
 };
 TabDialog RID_SCDLG_SORT
@@ -297,7 +259,6 @@ TabDialog RID_SCDLG_SORT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 175 ) ;
-    Text [ de ] = "Sortieren" ;
     Text [ en-US ] = "Sort" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -312,17 +273,13 @@ TabDialog RID_SCDLG_SORT
             {
                 Identifier = TP_FIELDS ;
                 PageResID = TP_FIELDS ;
-                Text [ de ] = "Sortierkriterien" ;
                 Text [ en-US ] = "Sort Criteria" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_OPTIONS ;
                 PageResID = TP_OPTIONS ;
-                Text [ de ] = "Optionen" ;
                 Text [ en-US ] = "Options" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -350,7 +307,6 @@ TabDialog RID_SCDLG_SORT
         Size = MAP_APPFONT ( 40 , 12 ) ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
