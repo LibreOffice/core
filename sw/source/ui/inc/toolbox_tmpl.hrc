@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox_tmpl.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:10:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:15:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,6 @@
     ToolBoxItem\
     {\
         ITEM_TOOLBAR_BACKGROUND_COLOR\
-        Text [ de ] = "Absatzhintergrund" ; \
         Text [ en-US ] = "Paragraph Background" ; \
         Text [ x-comment ] = " ";\
     };
@@ -518,7 +517,6 @@
     {\
         Identifier = FN_FORMAT_FRAME_DLG;\
         HelpID = FN_FORMAT_GRAFIC_DLG;\
-        Text [ de ] = "Grafik Eigenschaften";\
         Text [ en-US ] = "Graphics Properties";\
         Text [ x-comment ] = " ";\
     };
@@ -529,7 +527,6 @@
     {\
         Identifier = FN_FORMAT_FRAME_DLG;\
         HelpID = FN_FORMAT_FRAME_DLG;\
-        Text [ de ] = "Objekt Eigenschaften";\
         Text [ en-US ] = "Object Properties";\
         Text [ x-comment ] = " ";\
     };
