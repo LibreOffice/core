@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:59:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:45:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ TabDialog RID_TABDLG_FONTDIALOG
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Zeichen" ;
     Text [ en-US ] = "Character" ;
     Moveable = TRUE ;
     TabControl 1
@@ -56,14 +55,12 @@ TabDialog RID_TABDLG_FONTDIALOG
             {
                 Identifier = TABPAGE_CHARACTERS ;
                 PageResID = TABPAGE_CHARACTERS ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
             };
             PageItem
             {
                 Identifier = TABPAGE_CHARACTERS_EXT ;
                 PageResID = TABPAGE_CHARACTERS_EXT ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
             };
         };
