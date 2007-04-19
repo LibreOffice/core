@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 17:08:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:17:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,110 +41,76 @@
  // Strings ---------------------------------------------------------------
 String STR_NODEFPRINTER
 {
-    Text [ de ] = "Kein Standarddrucker gefunden.\nBitte wählen Sie einen Drucker aus und versuchen Sie es noch einmal." ;
     Text [ en-US ] = "No default printer found.\nPlease choose a printer and try again." ;
-    Text [ x-comment ] = " ";
 };
 String STR_NOSTARTPRINTER
 {
-    Text [ de ] = "Der Drucker konnte nicht gestartet werden.\nBitte überprüfen Sie Ihre Druckerkonfiguration." ;
     Text [ en-US ] = "Could not start printer.\nPlease check your printer configuration." ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRINTER_NOTAVAIL
 {
-    Text [ de ] = "Das Dokument wurde für den Drucker $1 formatiert. Der Drucker ist nicht vorhanden.\nSoll der Standarddrucker $2 verwendet werden?" ;
     Text [ en-US ] = "This document has been formatted for the printer $1. The specified printer is not available. \nDo you want to use the standard printer $2 ?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRINT_OPTIONS
 {
-    Text [ de ] = "Zusätze..." ;
     Text [ en-US ] = "Options..." ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRINT_OPTIONS_TITLE
 {
-    Text [ de ] = "Drucker Zusätze" ;
     Text [ en-US ] = "Printer Options" ;
-    Text [ x-comment ] = " ";
 };
 String STR_ERROR_PRINTER_BUSY
 {
-    Text [ de ] = "Drucker bereits in Betrieb" ;
     Text [ en-US ] = "Printer busy" ;
-    Text [ x-comment ] = " ";
 };
 String STR_ERROR_PRINT
 {
-    Text [ de ] = "Fehler beim Drucken" ;
     Text [ en-US ] = "Error while printing" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRINTING
 {
-    Text [ de ] = "Drucke" ;
     Text [ en-US ] = "Printing" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGE
 {
-    Text [ de ] = "Seite " ;
     Text [ en-US ] = "Page " ;
-    Text [ x-comment ] = " ";
 };
 String STR_ERROR_SAVE_TEMPLATE
 {
-    Text [ de ] = "Fehler beim Schreiben der Vorlage " ;
     Text [ en-US ] = "Error saving template " ;
-    Text [ x-comment ] = " ";
 };
 String STR_READONLY
 {
-    Text [ de ] = " (schreibgeschützt)" ;
     Text [ en-US ] = " (read-only)" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRINT_NEWORI
 {
-    Text [ de ] = "Sie haben die Seitenorientierungseinstellung geändert.\nSollen die geänderten Einstellungen in das Dokument\nübernommen werden?" ;
     Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
 };
 String STR_PRINT_NEWSIZE
 {
-    Text [ de ] = "Sie haben die Seitengröße geändert.\nSollen die geänderten Einstellungen in das\nDokument übernommen werden?" ;
     Text [ en-US ] = "The page size has been modified.\nShould the new settings be saved\nin the active document?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRINT_NEWORISIZE
 {
-    Text [ de ] = "Sie haben die Seitengröße und die\nSeitenorientierung geändert. Sollen\ndie geänderten Einstellungen in das\nDokument übernommen werden?" ;
     Text [ en-US ] = "The page size and orientation have been modified.\nWould you like to save the new settings in the\nactive document?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PREVIEW_DOCINFO
 {
-    Text [ de ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Titel:</b><dd>$(TITEL)<dt><b>Thema:</b><dd>$(THEME)<dt><b>Schl&uuml;sselworte:</b><dd>$(KEYWORDS)<dt><b>Beschreibung:</b><dd>$(TEXT)</dl></font></body></html>" ;
     Text [ en-US ] = "<html><body BGCOLOR=\"#c0c0c0\"><font FACE=\"Arial\"><dl><dt><b>Title:</b><dd>$(TITEL)<dt><b>Subject:</b><dd>$(THEME)<dt><b>Keywords:</b><dd>$(KEYWORDS)<dt><b>Description:</b><dd>$(TEXT)</dl></font></body></html>" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PREVIEW_NODOCINFO
 {
-    Text [ de ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>Keine Dokumenteigenschaften vorhanden.</B></FONT></P></BODY></HTML>" ;
     Text [ en-US ] = "<HTML><BODY BGCOLOR=\"#c0c0c0\"><BR><BR><P><FONT FACE=\"Arial\"><B>No document properties found.</B></FONT></P></BODY></HTML>" ;
-    Text [ x-comment ] = " ";
 };
  // -----------------------------------------------------------------------
 InfoBox MSG_CANT_CLOSE
 {
-    Message [ de ] = "Das Dokument kann zur Zeit nicht geschlossen werden,\nda noch ein Druckauftrag läuft." ;
     Message [ en-US ] = "The document cannot be closed because a\n print job is being carried out." ;
-    Message [ x-comment ] = " ";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 
 #define DLG_PRINTMONITOR_TEXT \
-    Text [ de ] = "Druckmonitor" ; \
     Text [ en-US ] = "Print Monitor" ; \
 
 ModelessDialog DLG_PRINTMONITOR
@@ -167,9 +133,7 @@ ModelessDialog DLG_PRINTMONITOR
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         Center = TRUE ;
-        Text [ de ] = "wird ausgegeben auf" ;
         Text [ en-US ] = "is being printed on" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PRINTER
     {
@@ -196,9 +160,7 @@ InfoBox MSG_ERROR_SEND_MAIL
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Fehler beim Versenden der Nachricht. Mögliche Fehler sind ein fehlendes Benutzerkonto oder ein fehlerhaftes Setup.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME oder die ihres e-mail Programms." ;
     Message [ en-US ] = "An error occurred in sending the message. Possible errors could be a missing user account or a defective setup.\nPlease check the %PRODUCTNAME settings or your e-mail program settings." ;
-    Message [ x-comment ] = " ";
 };
 
  // QueryBoxen ------------------------------------------------------------
@@ -206,13 +168,10 @@ QueryBox MSG_QUERY_OPENASTEMPLATE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Das Dokument kann nicht (z.B. aufgrund fehlender Rechte) bearbeitet werden. Wollen Sie statt dessen mit einer Kopie weiter arbeiten?" ;
     Message [ en-US ] = "This document cannot be edited, possibly due to missing access rights. Do you want to edit a copy of the document?" ;
-    Message [ x-comment ] = " ";
 };
 String STR_REPAIREDDOCUMENT
 {
-    Text [ de ] = " (repariertes Dokument)" ;
     Text [ en-US ] = " (repaired document)" ;
 };
 
