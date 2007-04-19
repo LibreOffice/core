@@ -4,9 +4,9 @@
  *
  *  $RCSfile: navipi.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:03:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:33:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,6 @@ Window RID_SCDLG_NAVIGATOR
     OutputSize = TRUE ;
     DialogControl = TRUE ;
     Hide = TRUE ;
-    Text [ de ] = "Navigator" ;
     Text [ en-US ] = "Navigator" ;
      //    Closeable = TRUE ;
      //    Moveable = TRUE ;
@@ -88,9 +87,7 @@ Window RID_SCDLG_NAVIGATOR
         Pos = MAP_APPFONT ( 2 , 19 ) ;
          // an kleinere Toolbox-Bitmaps angepasst
         Size = MAP_APPFONT ( 19 , 10 ) ;
-        Text [ de ] = "Zeile" ;
         Text [ en-US ] = "Row" ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_ROW
     {
@@ -106,16 +103,13 @@ Window RID_SCDLG_NAVIGATOR
         SpinSize = 1 ;
         Minimum = 1 ;
         First = 1 ;
-        QuickHelpText [ de ] = "Zeile" ;
         QuickHelpText [ en-US ] = "Row" ;
     };
     FixedText FT_COL
     {
         Pos = MAP_APPFONT ( 2 , 5 ) ;
         Size = MAP_APPFONT ( 23 , 10 ) ;
-        Text [ de ] = "Spalte" ;
         Text [ en-US ] = "Column" ;
-        Text [ x-comment ] = " ";
     };
     SpinField ED_COL
     {
@@ -126,11 +120,7 @@ Window RID_SCDLG_NAVIGATOR
         Right = TRUE ;
         Repeat = TRUE ;
         Spin = TRUE ;
-        QuickHelpText [ de ] = "Spalte" ;
         QuickHelpText [ en-US ] = "Column" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     Control LB_ENTRIES
     {
@@ -151,11 +141,7 @@ Window RID_SCDLG_NAVIGATOR
         Size = MAP_APPFONT ( 82 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        QuickHelpText [ de ] = "Dokument" ;
         QuickHelpText [ en-US ] = "Document" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageList IL_CMD
     {
@@ -182,25 +168,19 @@ Window RID_SCDLG_NAVIGATOR
             {
                 Identifier = IID_DATA ;
                 HelpId = HID_SC_NAVIPI_DATA ;
-                Text [ de ] = "Datenbereich" ;
                 Text [ en-US ] = "Data Range" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = IID_UP ;
                 HelpId = HID_SC_NAVIPI_UP ;
-                Text [ de ] = "Anfang" ;
                 Text [ en-US ] = "Start" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = IID_DOWN ;
                 HelpId = HID_SC_NAVIPI_DOWN ;
-                Text [ de ] = "Ende" ;
                 Text [ en-US ] = "End" ;
-                Text [ x-comment ] = " ";
             };
              //--------------------------------------------
              //         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR; };
@@ -212,89 +192,64 @@ Window RID_SCDLG_NAVIGATOR
             {
                 Identifier = IID_ZOOMOUT ;
                 HelpId = HID_SC_NAVIPI_ZOOM ;
-                Text [ de ] = "Inhalte" ;
                 Text [ en-US ] = "Contents" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = IID_CHANGEROOT ;
                 HelpId = HID_SC_NAVIPI_ROOT ;
-                Text [ de ] = "Umschalten" ;
                 Text [ en-US ] = "Toggle" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = IID_SCENARIOS ;
                 HelpId = HID_SC_NAVIPI_SCEN ;
-                Text [ de ] = "Szenarien" ;
                 Text [ en-US ] = "Scenarios" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = IID_DROPMODE ;
                 HelpId = HID_SC_NAVIPI_DROP ;
                 DropDown = TRUE ;
-                Text [ de ] = "Dragmodus" ;
                 Text [ en-US ] = "Drag Mode" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
     String STR_DRAGMODE
     {
-        Text [ de ] = "Dragmodus" ;
         Text [ en-US ] = "Drag Mode" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DISPLAY
     {
-        Text [ de ] = "Anzeige" ;
         Text [ en-US ] = "Display" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ACTIVE
     {
-        Text [ de ] = "aktiv" ;
         Text [ en-US ] = "active" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOTACTIVE
     {
-        Text [ de ] = "inaktiv" ;
         Text [ en-US ] = "inactive" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HIDDEN
     {
-        Text [ de ] = "versteckt" ;
         Text [ en-US ] = "hidden" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ACTIVEWIN
     {
-        Text [ de ] = "Aktives Fenster" ;
         Text [ en-US ] = "Active Window" ;
-        Text [ x-comment ] = " ";
     };
 
     String STR_QHLP_SCEN_LISTBOX
     {
-        Text [ de ] = "Name des Szenarios" ;
         Text [ en-US ] = "Scenario Name";
-        Text [ x-comment ] = " ";
     };
 
     String STR_QHLP_SCEN_COMMENT
     {
-        Text [ de ] = "Kommentar" ;
         Text [ en-US ] = "Comment";
-        Text [ x-comment ] = " ";
     };
 
-    Text [ x-comment ] = " ";
 };
 
 
@@ -346,55 +301,38 @@ Image RID_IMG_H_DROP_COPY
 
 String SCSTR_CONTENT_ROOT
 {
-    Text [ de ] = "Inhalte" ;
     Text [ en-US ] = "Contents" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_TABLE
 {
-    Text [ de ] = "Tabellen" ;
     Text [ en-US ] = "Sheets" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_RANGENAME
 {
-    Text [ de ] = "Bereichsnamen" ;
     Text [ en-US ] = "Range names" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_DBAREA
 {
-    Text [ de ] = "Datenbankbereiche" ;
     Text [ en-US ] = "Database Ranges" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_GRAPHIC
 {
-    Text [ de ] = "Grafiken" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_OLEOBJECT
 {
-    Text [ de ] = "OLE-Objekte" ;
     Text [ en-US ] = "OLE objects" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_NOTE
 {
-    Text [ de ] = "Notizen" ;
     Text [ en-US ] = "Notes" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_AREALINK
 {
-    Text [ de ] = "Verknüpfte Bereiche" ;
     Text [ en-US ] = "Linked areas" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CONTENT_DRAWING
 {
-    Text [ de ] = "Zeichenobjekte" ;
     Text [ en-US ] = "Drawing objects";
 };
  // PopupMenu -------------------------------------------------------------
@@ -406,25 +344,19 @@ Menu RID_POPUP_DROPMODE
         {
             Identifier = RID_DROPMODE_URL ;
             HelpId = HID_SC_DROPMODE_URL ;
-            Text [ de ] = "Als Hyperlink einfügen" ;
             Text [ en-US ] = "Insert as Hyperlink" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_DROPMODE_LINK ;
             HelpId = HID_SC_DROPMODE_LINK ;
-            Text [ de ] = "Als Verknüpfung einfügen" ;
             Text [ en-US ] = "Insert as Link" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_DROPMODE_COPY ;
             HelpId = HID_SC_DROPMODE_COPY ;
-            Text [ de ] = "Als Kopie einfügen" ;
             Text [ en-US ] = "Insert as Copy" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -436,17 +368,13 @@ Menu RID_POPUP_NAVIPI_SCENARIO
         {
             Identifier = RID_NAVIPI_SCENARIO_DELETE ;
             HelpId = HID_SC_SCENARIO_DELETE ;
-            Text [ de ] = "Löschen" ;
             Text [ en-US ] = "Delete" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_NAVIPI_SCENARIO_EDIT ;
             HelpId = HID_SC_SCENARIO_EDIT ;
-            Text [ de ] = "Eigenschaften..." ;
             Text [ en-US ] = "Properties..." ;
-            Text [ x-comment ] = " ";
         };
     };
 };

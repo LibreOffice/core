@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:04:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:34:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,39 +35,25 @@
 /* StarView ressource file */
 #include "hfedtdlg.hrc"
 #define HFEDIT_DLGTITLE \
-    Text [ de ] = "Kopf-/Fußzeilen" ; \
     Text [ en-US ] = "Headers/Footers" ; \
-    Text [ x-comment ] = " ";\
 
 #define HEADER \
-    Text [ de ] = "Kopfzeile" ; \
     Text [ en-US ] = "Header" ; \
-    Text [ x-comment ] = " ";\
 
 #define FOOTER \
-    Text [ de ] = "Fußzeile" ; \
     Text [ en-US ] = "Footer" ; \
-    Text [ x-comment ] = " ";\
 
 #define HEADER_RIGHT \
-    Text [ de ] = "Kopfzeile (rechts)" ; \
     Text [ en-US ] = "Header (right)" ; \
-    Text [ x-comment ] = " ";\
 
 #define HEADER_LEFT \
-    Text [ de ] = "Kopfzeile (links)" ; \
     Text [ en-US ] = "Header (left)" ; \
-    Text [ x-comment ] = " ";\
 
 #define FOOTER_RIGHT \
-    Text [ de ] = "Fußzeile (rechts)" ; \
     Text [ en-US ] = "Footer (right)" ; \
-    Text [ x-comment ] = " ";\
 
 #define FOOTER_LEFT \
-    Text [ de ] = "Fußzeile (links)" ; \
     Text [ en-US ] = "Footer (left)" ; \
-    Text [ x-comment ] = " ";\
 
  //------------------------------------------------------------------------
  // Bearbeiten vom Seitendialog aus aufgerufen
@@ -77,7 +63,6 @@ TabDialog RID_SCDLG_HFED_HEADER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
-    Text [ de ] = "Kopfzeilen" ;
     Text [ en-US ] = "Headers" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
@@ -103,14 +88,12 @@ TabDialog RID_SCDLG_HFED_HEADER
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 TabDialog RID_SCDLG_HFED_FOOTER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 270 , 140 ) ;
-    Text [ de ] = "Fußzeilen" ;
     Text [ en-US ] = "Footers" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
@@ -136,7 +119,6 @@ TabDialog RID_SCDLG_HFED_FOOTER
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  //------------------------------------------------------------------------
  // Bearbeiten/Kopf-Fusszeile:
@@ -464,7 +446,6 @@ TabPage RID_HFBASE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "~Linker Bereich" ;
         Text [ en-US ] = "~Left area" ;
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
@@ -480,7 +461,6 @@ TabPage RID_HFBASE
     {
         Pos = MAP_APPFONT ( 90 , 6 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "~Mittlerer Bereich" ;
         Text [ en-US ] = "~Center area" ;
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
@@ -496,7 +476,6 @@ TabPage RID_HFBASE
     {
         Pos = MAP_APPFONT ( 174 , 6 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "~Rechter Bereich" ;
         Text [ en-US ] = "R~ight area" ;
     };
     /*      "Control" braucht eigene HelpId, darum in der Ableitung:
@@ -512,7 +491,6 @@ TabPage RID_HFBASE
     {
         Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
-        Text [ de ] = "~Kopfzeile" ;
         Text [ en-US ] = "Hea~der" ;
     };
 
@@ -529,9 +507,7 @@ TabPage RID_HFBASE
     {
         Pos = MAP_APPFONT ( 12 , 124 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
-                Text [ de ]  = "Benutzerdefiniert" ;
         Text [ en-US ] = "Custom header" ;
-        Text [ x-comment ] = "German text shortened." ;
     };
 
     ImageButton BTN_TEXT
@@ -540,9 +516,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 90 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Textattribute" ;
         QuickHelpText [ en-US ] = "Text Attributes" ;
-        QuickHelpText [ x-comment ] = " ";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "text.bmp" ; };
@@ -560,9 +534,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 113 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Dateiname" ;
         QuickHelpText [ en-US ] = "File Name" ;
-        QuickHelpText [ x-comment ] = " ";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "file.bmp" ; };
@@ -583,27 +555,21 @@ TabPage RID_HFBASE
             {
                 Identifier = FILE_COMMAND_TITEL ;
                 HelpID = HID_FCOMMAND_TITEL ;
-                Text [ de ] = "Titel" ;
                 Text [ en-US ] = "Title";
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FILE_COMMAND_FILENAME;
                 HelpID = HID_FCOMMAND_FILENAME;
-                Text [ de ] = "Dateiname" ;
                 RadioCheck = TRUE ;
                 Text [ en-US ] = "File Name";
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FILE_COMMAND_PATH;
                 HelpID = HID_FCOMMAND_PATH;
-                Text [ de ] = "Pfad/Dateiname" ;
                 RadioCheck = TRUE ;
                 Text [ en-US ] = "Path/File Name";
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -614,9 +580,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 130 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Tabellenname" ;
         QuickHelpText [ en-US ] = "Sheet Name" ;
-        QuickHelpText [ x-comment ] = " ";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "table.bmp" ; };
@@ -634,9 +598,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 150 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Seite" ;
         QuickHelpText [ en-US ] = "Page" ;
-        QuickHelpText [ x-comment ] = " ";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "page.bmp" ; };
@@ -654,9 +616,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 167 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Seiten" ;
         QuickHelpText [ en-US ] = "Pages" ;
-        QuickHelpText [ x-comment ] = " ";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "pages.bmp" ; };
@@ -674,9 +634,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 187 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Datum" ;
         QuickHelpText [ en-US ] = "Date" ;
-        QuickHelpText [ x-comment ] = " ";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "date.bmp" ; };
@@ -694,9 +652,7 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 204 , 122 ) ;
         Size = MAP_APPFONT ( 15 , 15 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Uhrzeit" ;
         QuickHelpText [ en-US ] = "Time" ;
-        QuickHelpText [ x-comment ] = " ";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "time.bmp" ; };
@@ -713,17 +669,13 @@ TabPage RID_HFBASE
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 240 , 24 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Benutzen Sie die Schaltflächen, um die Schriftart zu verändern oder Feldbefehle wie Datum, Uhrzeit, etc. einzufügen." ;
         Text [ en-US ] = "Use the buttons to change the font or insert field commands such as date, time, etc." ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_INFO
     {
         Pos = MAP_APPFONT ( 6 , 144 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Hinweis" ;
         Text [ en-US ] = "Note" ;
-        Text [ x-comment ] = " ";
     };
 };
  // Kombinationen: Header/Footer links/rechts
