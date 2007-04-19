@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:08:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:37:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 
  // SID_SFXPAGE_SAVE ------------------------------------------------------
 #define TEXT_SAVEPAGE \
-    Text [ de ] = "Speichern" ; \
     Text [ en-US ] = "Save" ;\
 
 TabPage RID_SFXPAGE_SAVE
@@ -56,28 +55,24 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Laden" ;
         Text [ en-US ] = "Load";
     };
     CheckBox CB_LOAD_SETTINGS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "~Benutzerspezifische Einstellungen mit dem Dokument laden" ;
         Text [ en-US ] = "Load user-specific settings with the document";
     };
     FixedLine GB_SAVE
     {
         Pos = MAP_APPFONT ( 6 , 25 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Speichern" ;
         Text [ en-US ] = "Save" ;
     };
     CheckBox BTN_DOCINFO
     {
         Pos = MAP_APPFONT ( 12 , 36 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "E~igenschaften vorher bearbeiten" ;
         Text [ en-US ] = "~Edit document properties before saving" ;
         TabStop = TRUE ;
     };
@@ -91,14 +86,12 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "~Sicherungskopie immer erstellen" ;
         Text [ en-US ] = "Al~ways create backup copy" ;
     };
     CheckBox BTN_AUTOSAVE
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Speichern von ~AutoWiederherstellungsinfo alle" ;
         Text [ en-US ] = "Save ~AutoRecovery information every" ;
     };
     NumericField ED_AUTOSAVE
@@ -121,14 +114,12 @@ TabPage RID_SFXPAGE_SAVE
     {
         Pos = MAP_APPFONT ( 204 , 62 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "Minuten" ;
         Text [ en-US ] = "Minutes" ;
     };
     CheckBox BTN_NOPRETTYPRINTING
     {
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "XML-Format auf Größe optimieren" ;
         Text [ en-US ] = "Size optimization for XML format" ;
     };
     CheckBox BTN_WARNALIENFORMAT
@@ -136,51 +127,43 @@ TabPage RID_SFXPAGE_SAVE
         Pos = MAP_APPFONT ( 12 , 88 ) ;
         Size = MAP_APPFONT ( 248 , 16 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Immer warnen, wenn nicht im OpenDocument oder im Standardformat gespeichert werden soll" ;
         Text [ en-US ] = "Warn when not saving in OpenDocument or default format" ;
     };
     FixedLine GB_RELATIVE
     {
         Pos = MAP_APPFONT ( 6 , 106 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "URLs relativ speichern" ;
         Text [ en-US ] = "Save URLs relative to" ;
     };
     CheckBox BTN_RELATIVE_FSYS
     {
         Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "im Da~teisystem" ;
         Text [ en-US ] = "~File system" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = "; LS 21.12.99 Vorsicht, nicht viel Platz! - - - -";
     };
     CheckBox BTN_RELATIVE_INET
     {
         Pos = MAP_APPFONT ( 136 , 117 ) ;
         Size = MAP_APPFONT ( 108 , 10 ) ;
-        Text [ de ] = "im Int~ernet" ;
         Text [ en-US ] = "~Internet" ;
     };
     FixedLine FL_FILTER
     {
         Pos = MAP_APPFONT ( 6 , 128 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Standard Dateiformat" ;
         Text [ en-US ] = "Default file format";
     };
     FixedText FT_APP
     {
         Pos = MAP_APPFONT ( 12 , 138 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "~Dokumenttyp" ;
         Text [ en-US ] = "D~ocument type";
     };
     FixedText FT_FILTER
     {
         Pos = MAP_APPFONT ( 136 , 138 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Immer spei~chern als" ;
         Text [ en-US ] = "Always sa~ve as";
     };
     ListBox LB_APP
@@ -189,16 +172,6 @@ TabPage RID_SFXPAGE_SAVE
         Size = MAP_APPFONT ( 108 , 58 ) ;
         Border = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "Textdokument" ;      APP_WRITER    ; > ;
-            < "HTML-Dokument" ;     APP_WRITER_WEB;  > ;
-            < "Globaldokument" ;    APP_WRITER_GLOBAL;  > ;
-            < "Tabellendokument" ;  APP_CALC      ; > ;
-            < "Präsentation" ;     APP_IMPRESS   ; > ;
-            < "Zeichnung" ;         APP_DRAW      ; > ;
-            < "Formel" ;            APP_MATH      ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Text document" ;     APP_WRITER    ; > ;
@@ -229,7 +202,6 @@ TabPage RID_SFXPAGE_SAVE
         Pos = MAP_APPFONT ( 12 , 164 ) ;
         Size = MAP_APPFONT ( 250 , 16 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Hinweis: Wenn Sie nicht OpenDocument als Standardformat verwenden, kann dies zum Verlust von Formatierungen oder Inhalten führen." ;
         Text [ en-US ] = "Note: Not using OpenDocument as the default format may cause formatting or content to be lost.";
     };
 };
@@ -255,8 +227,6 @@ ModalDialog RID_SVXDLG_FILTER_WARNING
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 175, 4 * 9 );
         Wordbreak = TRUE;
-        Text [ de ] = "Verwenden von \"%1\" als Standard-Dateiformat kann zu Informationsverlust führen.\n"\
-        "Sollen die Dateiformat�nderungen �bernommen werden?" ;
         Text [ en-US ] = "Using \"%1\" as default file format may cause information loss.\n";
     };
     OKButton PB_OK
