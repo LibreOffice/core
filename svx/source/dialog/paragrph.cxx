@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:36:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:17:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,7 +130,7 @@ static USHORT pAlignRanges[] =
 static USHORT pExtRanges[] =
 {
     SID_ATTR_PARA_PAGEBREAK,        // 10037 -
-    SID_ATTR_PARA_ORPHANS,          // 10041
+    SID_ATTR_PARA_WIDOWS,           // 10041
     SID_ATTR_PARA_MODEL,            // 10065 -
     SID_ATTR_PARA_KEEP,             // 10066
     0
