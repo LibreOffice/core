@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thesdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:51:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:23:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModalDialog RID_SVXDLG_THESAURUS
     HelpId = SID_THESAURUS ;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 285 , 116 ) ;
-    Text [ de ] = "Thesaurus" ;
     Text [ en-US ] = "Thesaurus" ;
     Moveable = TRUE ;
     SvLook = TRUE ;
@@ -64,17 +63,13 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 219 , 40 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Nachschlagen" ;
         Text [ en-US ] = "~Search" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_LANGUAGE
     {
         Pos = MAP_APPFONT ( 219 , 57 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "S~prache..." ;
         Text [ en-US ] = "~Language..." ;
-        Text [ x-comment ] = " ";
     };
     HelpButton BTN_THES_HELP
     {
@@ -85,10 +80,8 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ de ] = "~Wort" ;
         Text [ en-US ] = "~Word" ;
         LEFT = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_WORD
     {
@@ -100,10 +93,8 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ de ] = "~Bedeutung " ;
         Text [ en-US ] = "~Meaning " ;
         LEFT = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_MEAN
     {
@@ -116,10 +107,8 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 111 , 43 ) ;
         Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ de ] = "~Synonym" ;
         Text [ en-US ] = "Sy~nonym" ;
         LEFT = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_SYNON
     {
@@ -132,10 +121,8 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 111 , 14 ) ;
         Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ de ] = "~Ersetzen" ;
         Text [ en-US ] = "~Replace" ;
         LEFT = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_REPL
     {
@@ -148,17 +135,12 @@ ModalDialog RID_SVXDLG_THESAURUS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 207 , 8 ) ;
-        Text [ de ] = "Variationen" ;
         Text [ en-US ] = "Variations" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_WORDNOTFOUND
     {
-        Text [ de ] = "Wort nicht im Thesaurus enthalten" ;
         Text [ en-US ] = "Word not found in thesaurus" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_THES_LANGUAGE ----------------------------------------------
 ModalDialog RID_SVXDLG_THES_LANGUAGE
@@ -169,7 +151,6 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     Size = MAP_APPFONT ( 170 , 86 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Sprache ausw‰hlen : Sprache auswıhlen */
     /* ### ACHTUNG: Neuer Text in Resource? Sprache ausw‰hlen : Sprache auswıhlen */
-    Text [ de ] = "Sprache ausw√§hlen" ;
     Text [ en-US ] = "Select Language" ;
     Moveable = TRUE ;
     ListBox LB_THES_LANGUAGE
@@ -183,9 +164,7 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_LANG_OK
     {
@@ -203,7 +182,6 @@ ModalDialog RID_SVXDLG_THES_LANGUAGE
         Pos = MAP_APPFONT ( 114 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
