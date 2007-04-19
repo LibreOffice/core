@@ -4,9 +4,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 09:52:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:29:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ ModalDialog DLG_START_PRESENTATION
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 256, 205 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Bildschirmpr‰sentation : Bildschirmprısentation */
-    Text [ de ] = "Bildschirmpr√§sentation" ;
     Text [ en-US ] = "Slide Show" ;
     Moveable = TRUE ;
 
@@ -74,27 +73,21 @@ ModalDialog DLG_START_PRESENTATION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 187, 8 ) ;
-        Text [ de ] = "Umfang" ;
         Text [ en-US ] = "Range" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_ALL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 12 ) ;
-        Text [ de ] = "~Alle Folien" ;
         Text [ en-US ] = "All ~slides" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_AT_DIA
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
-        Text [ de ] = "Ab ~Folie" ;
         Text [ en-US ] = "~From:" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DIAS
     {
@@ -109,10 +102,8 @@ ModalDialog DLG_START_PRESENTATION
     {
         Pos = MAP_APPFONT ( 12 , 38 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
-        Text [ de ] = "~Individuelle Bildschirmpr√§sentation" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Custom Slide Show" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_CUSTOMSHOW
     {
@@ -127,43 +118,34 @@ ModalDialog DLG_START_PRESENTATION
     {
         Pos = MAP_APPFONT ( 6, 73 ) ;
         Size = MAP_APPFONT ( 90, 8 );
-        Text [ de ] = "Art" ;
         Text [ en-US ] = "Type" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_STANDARD
     {
         Pos = MAP_APPFONT ( 12, 84 ) ;
         Size = MAP_APPFONT ( 81, 12 ) ;
-        Text [ de ] = "S~tandard" ;
         Text [ en-US ] = "~Default" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_WINDOW
     {
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 81 , 12 ) ;
-        Text [ de ] = "~Fenster" ;
         Text [ en-US ] = "~Window" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_AUTO
     {
         Pos = MAP_APPFONT ( 12 , 108 ) ;
         Size = MAP_APPFONT ( 81 , 12 ) ;
-        Text [ de ] = "A~uto" ;
         Text [ en-US ] = "A~uto" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
 /*
     FixedText FT_PAUSE
     {
         Pos = MAP_APPFONT ( 32, 124 ) ;
         Size = MAP_APPFONT ( 25, 12 ) ;
-        Text [ de ] = "Pause:" ;
         Text [ en-US ] = "Pause:" ;
     };
 */
@@ -189,92 +171,71 @@ ModalDialog DLG_START_PRESENTATION
             Minute = 59 ;
             Second = 59 ;
         };
-        QuickHelpText [ de ] = "Pausendauer" ;
         QuickHelpText [ en-US ] = "Duration of pause" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     CheckBox CBX_AUTOLOGO
     {
         Pos = MAP_APPFONT ( 32 , 138 ) ;
         Size = MAP_APPFONT ( 61 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Logo einblenden" ;
         Text [ en-US ] = "Show ~logo" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedLine GRP_OPTIONS
     {
         Pos = MAP_APPFONT ( 102 , 73 ) ;
         Size = MAP_APPFONT ( 148, 8 );
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_MANUEL
     {
         Pos = MAP_APPFONT ( 108 , 84 ) ;
         Size = MAP_APPFONT ( 139 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Folienwechsel ~manuell" ;
         Text [ en-US ] = "Change slides ~manually" ;
     };
     CheckBox CBX_MOUSEPOINTER
     {
         Pos = MAP_APPFONT ( 108, 96 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
-        Text [ de ] = "Maus~zeiger sichtbar" ;
         Text [ en-US ] = "Mouse pointer ~visible" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_PEN
     {
         Pos = MAP_APPFONT ( 108, 108 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
-        Text [ de ] = "Mauszeiger als ~Stift" ;
         Text [ en-US ] = "Mouse pointer as ~pen" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_NAVIGATOR
     {
         Pos = MAP_APPFONT ( 108, 120 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
-        Text [ de ] = "~Navigator sichtbar" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Navigator visible" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_ANIMATION_ALLOWED
     {
         Pos = MAP_APPFONT ( 108, 132 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Animati~onen zulassen" ;
         Text [ en-US ] = "~Animations allowed" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_CHANGE_PAGE
     {
         Pos = MAP_APPFONT ( 108, 144 ) ;
         Size = MAP_APPFONT ( 139, 12 ) ;
-        Text [ de ] = "Folienwechsel bei ~Klick auf Hintergrund" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Change slides by clic~king on background" ;
-        Text [ x-comment ] = "; RB: bitte auf die L‰nge des Textes achten. Der Text soll nicht die L‰nge des deutschen Textes ¸berschreiten.";
     };
     CheckBox CBX_ALWAYS_ON_TOP
     {
         Pos = MAP_APPFONT ( 108, 156 ) ;
         Size = MAP_APPFONT ( 145, 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Pr‰sentation immer im ~Vordergrund : Prısentation immer im ~Vordergrund */
-        Text [ de ] = "Bildschirmpr√§sentation immer im ~Vordergrund" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Presentation always ~on top" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedLine GRP_MONITOR
@@ -282,9 +243,7 @@ ModalDialog DLG_START_PRESENTATION
         Pos = MAP_APPFONT ( 6, 174 ) ;
         Size = MAP_APPFONT ( 244, 8 );
         Hide = TRUE;
-        Text [ de ] = "Mehrere Bildschirme" ;
         Text [ en-US ] = "Multiple monitors" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_MONITOR
@@ -293,9 +252,7 @@ ModalDialog DLG_START_PRESENTATION
         Pos = MAP_APPFONT ( 12 , 185 + 2  ) ;
         Size = MAP_APPFONT( 70, 8 );
         Hide = TRUE;
-        Text [ de ] = "~Pr√§sentationsbildschirm" ;
         Text [ en-US ] = "P~resentation monitor" ;
-        Text [ x-comment ] = " ";
     };
 
     ListBox LB_MONITOR
@@ -312,21 +269,17 @@ ModalDialog DLG_START_PRESENTATION
 
     String STR_PRIMARY_MONITOR
     {
-        Text [ de ] = "Bildschirm %N (prim√§r)";
         Text [ en-US ] = "Monitor %N (primary)";
     };
 
     String STR_MONITOR
     {
-        Text [ de ] = "Bildschirm %N";
         Text [ en-US ] = "Monitor %N";
     };
 
     String STR_ALL_MONITORS
     {
-        Text [ de ] = "Alle Bildschirme";
         Text [ en-US ] = "All monitors";
     };
 
-    Text [ x-comment ] = " ";
 };
