@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 16:16:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:24:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ ModalDialog DLG_ASS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 272 , 190 ) ;
-    Text [ de ] = "Präsentations-Assistent" ;
     Text[ en-US ] = "Presentation Wizard";
 
     HelpId = HID_SD_AUTOPILOT_PAGE1 ;
@@ -60,9 +59,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 144 , 140  );
         Size = MAP_APPFONT ( 122 , 10 );
         TabStop = TRUE;
-        Text [ de ] = "~Vorschau";
         Text [ en-US ] = "~Preview";
-        Text [ x-comment ] = " ";
     };
 
     CheckBox CB_STARTWITH
@@ -70,7 +67,6 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 144 , 154  );
         Size = MAP_APPFONT ( 122 , 10 );
         TabStop = TRUE;
-        Text [ de ] = "Diesen Assistenten ~nicht mehr zeigen" ;
         Text [ en-US ] = "~Do not show this wizard again" ;
     };
 
@@ -91,37 +87,29 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 6 , 37  );
         Size =MAP_APPFONT ( 132 , 8 );
-        Text [ de ] = "Art";
         Text [ en-US ] = "Type";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE1_EMPTY
     {
         Pos = MAP_APPFONT ( 12 , 48  );
         Size = MAP_APPFONT ( 130 , 10 );
-        Text [ de ] = "~Leere Präsentation";
         TabStop = TRUE;
         Text [ en-US ] = "~Empty presentation";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE1_TEMPLATE
     {
         Pos = MAP_APPFONT ( 12 , 62  );
         Size = MAP_APPFONT ( 130 , 10 );
-        Text [ de ] = "~Aus Vorlage";
         Text [ en-US ] = "~From template";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE1_OPEN
     {
         Pos = MAP_APPFONT ( 12 , 76  );
         Size = MAP_APPFONT ( 130 , 10 );
-        Text [ de ] = "~Öffnen einer vorhandenen Präsentation";
         Text [ en-US ] = "~Open existing presentation";
-        Text [ x-comment ] = " ";
     };
 
     PushButton PB_PAGE1_OPEN
@@ -176,9 +164,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 37  ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Wählen Sie eine ~Seitenvorlage" ;
         Text [ en-US ] = "~Select a slide design" ;
-        Text [ x-comment ] = " ";
     };
 
     ListBox LB_PAGE2_REGION
@@ -203,9 +189,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 110  ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Wählen Sie ein Ausgabemedium" ;
         Text [ en-US ] = "Select an output medium" ;
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE2_MEDIUM5
@@ -213,9 +197,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 12 , 121  );
         Size = MAP_APPFONT ( 59 , 10 );
-        Text [ de ] = "~Original";
         Text [ en-US ] = "~Original";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE2_MEDIUM1
@@ -223,9 +205,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 75 , 121  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "~Bildschirm";
         Text [ en-US ] = "Sc~reen";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE2_MEDIUM2
@@ -234,9 +214,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 75 , 135  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Dia" ;
         Text [ en-US ] = "Sli~de" ;
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE2_MEDIUM3
@@ -245,9 +223,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 12 , 135  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Overhead~folie" ;
         Text [ en-US ] = "O~verhead sheet" ;
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE2_MEDIUM4
@@ -255,10 +231,8 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 149  ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "~Papier" ;
         TabStop = TRUE ;
         Text [ en-US ] = "P~aper" ;
-        Text [ x-comment ] = " ";
     };
 
     // Seite 3
@@ -277,9 +251,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 37  );
         Size = MAP_APPFONT ( 132 , 8 );
-        Text [ de ] = "Wählen Sie einen Folienwechsel";
         Text [ en-US ] = "Select a slide transition";
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_PAGE3_EFFECT
@@ -287,9 +259,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 49  );
         Size = MAP_APPFONT ( 60 , 10 );
-        Text [ de ] = "~Effekt";
         Text [ en-US ] = "~Effect";
-        Text [ x-comment ] = " ";
     };
 
     ListBox LB_PAGE3_EFFECT
@@ -307,9 +277,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 65  );
         Size = MAP_APPFONT ( 60 , 10 );
-        Text [ de ] = "~Geschwindigkeit";
         Text [ en-US ] = "~Speed";
-        Text [ x-comment ] = " ";
     };
 
     ListBox LB_PAGE3_SPEED
@@ -327,9 +295,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 6 , 83  );
         Size = MAP_APPFONT ( 132 , 8 );
-        Text [ de ] = "Wählen Sie die Art der Präsentation";
         Text [ en-US ] = "Select the presentation type";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE3_LIVE
@@ -337,9 +303,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 12 , 94  );
         Size = MAP_APPFONT ( 120 , 10 );
-        Text [ de ] = "~Standard";
         Text [ en-US ] = "~Default";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton RB_PAGE3_KIOSK
@@ -347,9 +311,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 12 , 108  );
         Size = MAP_APPFONT ( 120 , 10 );
-        Text [ de ] = "~Automatisch";
         Text [ en-US ] = "~Automatic";
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_PAGE3_TIME
@@ -357,9 +319,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 21 , 123  );
         Size = MAP_APPFONT ( 55 , 10 );
-        Text [ de ] = "Stand~dauer";
         Text [ en-US ] = "D~uration of page";
-        Text [ x-comment ] = " ";
     };
 
     TimeField TMF_PAGE3_TIME
@@ -392,9 +352,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE;
         Pos = MAP_APPFONT ( 21 , 139  );
         Size = MAP_APPFONT ( 55 , 10 );
-        Text [ de ] = "~Pausendauer";
         Text [ en-US ] = "Du~ration of pause";
-        Text [ x-comment ] = " ";
     };
 
     TimeField TMF_PAGE3_BREAK
@@ -428,9 +386,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 21 , 154  );
         Size = MAP_APPFONT ( 111 , 10 );
         TabStop = TRUE;
-        Text [ de ] = "~Logo einblenden";
         Text [ en-US ] = "Sh~ow logo";
-        Text [ x-comment ] = " ";
     };
 
     // Seite 4
@@ -449,9 +405,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 37  );
         Size = MAP_APPFONT ( 260 , 8 );
-        Text [ de ] = "Nennen Sie Ihre Grundgedanken" ;
         Text [ en-US ] = "Describe your basic ideas" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_PAGE4_ASKNAME
@@ -459,10 +413,8 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wie ist Ihr Name oder der Name Ihrer Firma?" ;
         Text [ en-US ] = "What is your name or the name of your company?" ;
 
-        Text [ x-comment ] = " ";
     };
     Edit EDT_PAGE4_ASKNAME
     {
@@ -477,9 +429,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Was ist der Themenbereich Ihrer Präsentation?" ;
         Text [ en-US ] = "What is the subject of your presentation?" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_PAGE4_ASKTOPIC
     {
@@ -494,9 +444,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 12 , 106 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Weitere darzustellende Gedanken?" ;
         Text [ en-US ] = "Further ideas to be presented?" ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit EDT_PAGE4_ASKINFORMATION
     {
@@ -525,9 +473,7 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 39 );
         Size = MAP_APPFONT ( 132 , 8 );
-        Text [ de ] = "~Wählen Sie die gewünschten Seiten";
         Text [ en-US ] = "Ch~oose your pages";
-        Text [ x-comment ] = " ";
     };
 
     Control CT_PAGE5_PAGELIST
@@ -545,9 +491,7 @@ ModalDialog DLG_ASS
         Pos = MAP_APPFONT ( 6 , 154  );
         Size = MAP_APPFONT ( 132 , 10 );
         TabStop = TRUE ;
-        Text [ de ] = "~Zusammenfassung erstellen";
         Text [ en-US ] = "C~reate summary";
-        Text [ x-comment ] = " ";
     };
 
     // generell
@@ -572,10 +516,8 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 112 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "<< ~Zurück" ;
         TabStop = TRUE ;
         Text [ en-US ] = "<< ~Back" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BUT_NEXT
@@ -584,10 +526,8 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 165 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Weiter >>" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Next >>" ;
-        Text [ x-comment ] = " ";
     };
 
     OKButton BUT_FINISH
@@ -595,7 +535,6 @@ ModalDialog DLG_ASS
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 218 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Fertig stellen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Create" ;
     };
