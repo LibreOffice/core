@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:08:28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:18:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ ModalDialog DLG_GLOSSARY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 375 , 164 ) ;
-    Text [ de ] = "AutoText" ;
     Text [ en-US ] = "AutoText" ;
     Moveable = TRUE ;
     CheckBox CB_INSERT_TIP
@@ -52,18 +51,14 @@ ModalDialog DLG_GLOSSARY
         Pos = MAP_APPFONT ( 12 , 12 ) ;
         Size = MAP_APPFONT ( 200 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Rest des Namens bei der Eingabe als Tipp anzeigen" ;
         Text [ en-US ] = "~Display remainder of name as suggestion while typing" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -78,10 +73,8 @@ ModalDialog DLG_GLOSSARY
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 143 , 31 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~KÃ¼rzel" ;
         Text [ en-US ] = "~Shortcut" ;
         Right = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SHORTNAME
     {
@@ -102,7 +95,6 @@ ModalDialog DLG_GLOSSARY
          //        CurPos = 0 ;
         String ST_READONLY
         {
-            Text [ de ] = "schreibgeschÃ¼tzt" ;
             Text [ en-US ] = "read-only";
         };
     };
@@ -110,26 +102,20 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT (    6 , 134 ) ;
         Size = MAP_APPFONT ( 221 , 8 ) ;
-        Text [ de ] = "VerknÃ¼pfungen relativ speichern";
         Text [ en-US ] = "Save links relative to";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_FILE_REL
     {
         Pos = MAP_APPFONT ( 14 , 145 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
-        Text [ de ] = "Im ~Dateisystem" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~File system" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_NET_REL
     {
         Pos = MAP_APPFONT ( 109 , 145 ) ;
         Size = MAP_APPFONT ( 90 , 12 ) ;
-        Text [ de ] = "Im ~Internet" ;
         Text [ en-US ] = "Inte~rnet" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_EXAMPLE
     {
@@ -146,31 +132,25 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT ( 231 , 145 ) ;
         Size = MAP_APPFONT ( 82 , 12 ) ;
-        Text [ de ] = "~Vorschau anzeigen" ;
         Text [ en-US ] = "Sho~w preview";
-        Text [ x-comment ] = " ";
     };
     OKButton PB_INSERT
     {
         Pos = MAP_APPFONT ( 319 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen : ~Einf³gen */
-        Text [ de ] = "~EinfÃ¼gen" ;
         Text [ en-US ] = "~Insert" ;
         /* ### ACHTUNG: Neuer Text in Resource? Fügt den aktuellen Textblock ein und schließt das Dialogfeld : F³gt den aktuellen Textblock ein und schlie˜t das Dialogfeld */
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CancelButton PB_CLOSE
     {
         Pos = MAP_APPFONT ( 319 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Schließen : ~Schlie˜en */
-        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     HelpButton PB_HELP
     {
@@ -181,32 +161,25 @@ ModalDialog DLG_GLOSSARY
     {
         Pos = MAP_APPFONT ( 319 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "AutoTe~xt" ;
         Text [ en-US ] = "AutoTe~xt" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_BIB
     {
         Pos = MAP_APPFONT ( 319 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Bereiche..." ;
         Text [ en-US ] = "C~ategories..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_PATH
     {
         Pos = MAP_APPFONT ( 319 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Pfad..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Path..." ;
-        Text [ x-comment ] = " ";
     };
     String ST_READONLY_PATH
     {
-        Text [ de ] = "FÃ¼r die Verzeichnisse fÃ¼r 'AutoText' sind sind keine Schreibrechte vorhanden. MÃ¶chten Sie den Pfaddialog aufrufen?" ;
         Text [ en-US ] = "The 'AutoText' directories are read-only. Do you want to call the path settings dialog?";
     };
     Menu MNU_EDIT
@@ -217,58 +190,44 @@ ModalDialog DLG_GLOSSARY
             {
                 Identifier = FN_GL_DEFINE ;
                 HelpID = HID_MD_GLOS_DEFINE ;
-                Text [ de ] = "~Neu" ;
                 Text [ en-US ] = "~New" ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FN_GL_DEFINE_TEXT ;
                 HelpID = HID_MD_GLOS_DEFINE_TEXT ;
-                Text [ de ] = "Neu (nur ~Text)" ;
                 Text [ en-US ] = "New (text only)" ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FN_GL_COPY_TO_CLIPBOARD;
                 HelpID = HID_MD_COPY_TO_CLIPBOARD;
-                Text [ de ] = "~Kopieren";
                 Text [ en-US ] = "~Copy";
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FN_GL_REPLACE ;
                 HelpID = HID_MD_GLOS_REPLACE ;
-                Text [ de ] = "~Ersetzen" ;
                 Text [ en-US ] = "Replace" ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FN_GL_REPLACE_TEXT;
                 HelpID = HID_MD_GLOS_REPLACE;
-                Text [ de ] = "E~rsetzen (nur Text)" ;
                 Text [ en-US ] = "Rep~lace (text only)" ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FN_GL_RENAME ;
                 HelpID = HID_MD_GLOS_RENAME ;
-                Text [ de ] = "~Umbenennen..." ;
                 Text [ en-US ] = "Rename..." ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = FN_GL_DELETE ;
                 HelpID = HID_MD_GLOS_DELETE ;
                 /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                Text [ de ] = "~LÃ¶schen" ;
                 Text [ en-US ] = "~Delete" ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
@@ -278,9 +237,7 @@ ModalDialog DLG_GLOSSARY
             {
                 Identifier = FN_GL_EDIT ;
                 HelpID = HID_MD_GLOS_EDIT ;
-                Text [ de ] = "~Bearbeiten" ;
                 Text [ en-US ] = "~Edit" ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
@@ -290,9 +247,7 @@ ModalDialog DLG_GLOSSARY
             {
                 Identifier = FN_GL_MACRO ;
                 HelpID = HID_MD_GLOS_MACRO ;
-                Text [ de ] = "~Makro..." ;
                 Text [ en-US ] = "~Macro..." ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
@@ -302,45 +257,34 @@ ModalDialog DLG_GLOSSARY
             {
                 Identifier = FN_GL_IMPORT;
                 HelpID = HID_MD_GLOS_IMPORT ;
-                Text [ de ] = "~Importieren..." ;
                 Text [ en-US ] = "~Import...";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 InfoBox MSG_DOUBLE_SHORTNAME
 {
     /* ### ACHTUNG: Neuer Text in Resource? Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben! : K³rzel wird bereits verwendet. Bitte einen anderen Namen vergeben! */
-    Message [ de ] = "KÃ¼rzel wird bereits verwendet. Bitte einen anderen Namen vergeben!" ;
     Message [ en-US ] = "Shortcut name already exists. Please choose another name." ;
-    Message [ x-comment ] = " ";
 };
 QueryBox MSG_QUERY_DELETE
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Soll der AutoText gelöscht werden? : Soll der AutoText gel÷scht werden? */
-    Message [ de ] = "Soll der AutoText gelÃ¶scht werden?" ;
     Message [ en-US ] = "Delete AutoText?" ;
-    Message [ x-comment ] = " ";
 };
 String STR_QUERY_DELETE_GROUP1
 {
-    Text [ de ] = "Soll der Bereich " ;
     Text [ en-US ] = "Delete the category " ;
-    Text [ x-comment ] = " ";
 };
 String STR_QUERY_DELETE_GROUP2
 {
     /* ### ACHTUNG: Neuer Text in Resource?  gelöscht werden? :  gel÷scht werden? */
-    Text [ de ] = " gelÃ¶scht werden?" ;
     Text [ en-US ] = "?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_GLOSSARY
 {
-    Text [ de ] = "AutoText :" ;
     Text [ en-US ] = "AutoText :" ;
 };
 ModalDialog DLG_RENAME_GLOS
@@ -348,7 +292,6 @@ ModalDialog DLG_RENAME_GLOS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 287 , 47 ) ;
-    Text [ de ] = "AutoText umbenennen" ;
     Moveable = TRUE ;
     HelpID = HID_RENAME_GLOSSARY ;
     OKButton BT_OKNEW
@@ -369,9 +312,7 @@ ModalDialog DLG_RENAME_GLOS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Na~me" ;
         Text [ en-US ] = "Na~me" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_ON
     {
@@ -385,9 +326,7 @@ ModalDialog DLG_RENAME_GLOS
     {
         Pos = MAP_APPFONT ( 147 , 14 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "KÃ¼~rzel" ;
         Text [ en-US ] = "Short~cut" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_OS
     {
@@ -401,9 +340,7 @@ ModalDialog DLG_RENAME_GLOS
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "~Neu" ;
         Text [ en-US ] = "~New" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_NN
     {
@@ -417,9 +354,7 @@ ModalDialog DLG_RENAME_GLOS
     {
         Pos = MAP_APPFONT ( 147 , 29 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~KÃ¼rzel" ;
         Text [ en-US ] = "~Shortcut" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_NS
     {
@@ -435,16 +370,13 @@ ModalDialog DLG_RENAME_GLOS
         Size = MAP_APPFONT ( 219 , 8 ) ;
     };
     Text [ en-US ] = "Rename AutoText" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SAVE_GLOSSARY
 {
-    Text [ de ] = "AutoText speichern";
     Text[ en-US ] = "Save AutoText";
 };
 InfoBox MSG_NO_GLOSSARIES
 {
-    Message [ de ] = "Diese Datei enthÃ¤lt keinen AutoText." ;
     Message [ en-US ] = "There is no AutoText in this file.";
 };
 
