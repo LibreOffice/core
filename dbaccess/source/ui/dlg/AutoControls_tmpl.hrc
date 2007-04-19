@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AutoControls_tmpl.hrc,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:11:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:57:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X , 8 ) ;                                                         \
         Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;              \
-        Text [ de ] = "" ;                                                                          \
         Text[ en-US ]  = "";                                                                        \
         WordBreak = TRUE;                                                                           \
     };                                                                                              \
@@ -122,7 +121,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X , INIT_Y ) ;                                                    \
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , AUTO_LINECOUNT * FIXEDTEXT_HEIGHT ) ;    \
-        Text [ de ] = "" ;                                                                          \
         Text[ en-US ]  = "";                                                                        \
         WordBreak = TRUE;                                                                           \
     };
@@ -134,7 +132,6 @@
     FixedText FT_AUTOBROWSEURL {                                                                    \
         Pos = MAP_APPFONT ( AUTO_X , AUTO_Y ) ;                                                     \
         Size = MAP_APPFONT ( AUTOPAGE_X - AUTO_X - 6 , FIXEDTEXT_HEIGHT ) ;                     \
-        Text [ de ] = "" ;                                                                          \
         Text[ en-US ]  = "";                                                                        \
     };                                                                                              \
                                                                                                     \
@@ -154,7 +151,6 @@
          Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;                                      \
           HelpId = (AUTO_HID + 1);                                                                  \
         TabStop = TRUE ;                                                                            \
-          Text [ de ] = "Durchsuchen" ;                                                                 \
          Text[ en-US ]  = "Browse";                                                                  \
     };
 
@@ -166,7 +162,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X , AUTO_Y + 2) ;                                                 \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;           \
-         Text [ de ] = "Name der Datenbank" ;                                                        \
          Text[ en-US ]  = "Name of the database";                                                    \
     };                                                                                              \
                                                                                                     \
@@ -187,7 +182,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT (START_X , AUTO_Y + 2 )  ;                                                \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT );            \
-        Text[ de ] = "~Rechnername";                                                                \
         Text [ en-US ]  = "Server ~URL" ;                                                           \
     };                                                                                              \
                                                                                                     \
@@ -208,7 +202,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT (START_X , AUTO_Y + 2 )  ;                                                \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;           \
-        Text[ de ] = "Basis-~DN";                                                                   \
         Text [ en-US ]  = "Base ~DN" ;                                                              \
     };                                                                                              \
                                                                                                     \
@@ -229,7 +222,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT (START_X , AUTO_Y +2)  ;                                                    \
         Size = MAP_APPFONT ( EDIT_X - START_X - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ;           \
-        Text[ de ] = "~Portnummer";                                                                 \
         Text [ en-US ]  = "~Port number" ;                                                          \
     };                                                                                              \
                                                                                                     \
@@ -247,7 +239,6 @@
         HelpId = AUTO_HID + 1 ;                                                                     \
         Pos = MAP_APPFONT (EDIT_X + 22 + UNRELATED_CONTROLS, AUTO_Y +2)  ;                              \
         Size = MAP_APPFONT ( WIZARD_PAGE_X - EDIT_X - 22 - UNRELATED_CONTROLS , FIXEDTEXT_HEIGHT ) ; \
-        Text[ de ] = "";                                                                            \
         Text[ en-US ]   = "" ;                                                                      \
     };
 
@@ -258,7 +249,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X  , AUTO_Y) ;                                                    \
         Size = MAP_APPFONT ( AUTOPAGE_X - 2*START_X , FIXEDTEXT_HEIGHT ) ;                           \
-        Text [ de ] = "~Geben Sie den Dateityp an, auf den Sie zugreifen möchten" ;                 \
         Text[ en-US ]  = "Specify the type of files you want to access" ;                           \
     };                                                                                              \
                                                                                                     \
@@ -267,7 +257,6 @@
         HelpId = HID_PAGE_DBWIZARD_TEXT_RB_ACCESSTXTFILES;                                                  \
         Pos = MAP_APPFONT (START_X + 6 , AUTO_Y + FIXEDTEXT_HEIGHT + RELATED_CONTROLS);             \
         Size = MAP_APPFONT ( AUTOPAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;                                 \
-        Text[ de ] = "Einfache Textdateien (*.txt)";                                                \
         Text[ en-US ] = "Plain text files (*.txt)" ;                                                \
     };                                                                                              \
                                                                                                     \
@@ -276,7 +265,6 @@
         HelpId = HID_PAGE_DBWIZARD_TEXT_RB_ACCESSCSVFILES;                                           \
         Pos = MAP_APPFONT (START_X + 6 , AUTO_Y + 2*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS);         \
         Size = MAP_APPFONT ( AUTOPAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;                                 \
-        Text[ de ] = "'Comma separated value' Dateien (*.csv)";                                     \
         Text[ en-US ] = "'Comma separated value' files (*.csv)" ;                                    \
     };                                                                                              \
                                                                                                     \
@@ -285,7 +273,6 @@
         HelpId = HID_PAGE_DBWIZARD_TEXT_RB_ACCESSOTHERFILES;                                                \
         Pos = MAP_APPFONT (START_X + 6 , AUTO_Y + 3*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS);         \
         Size = MAP_APPFONT ( 50 , FIXEDTEXT_HEIGHT ) ;                                              \
-        Text[ de ] = "Sonstige:";                                                                   \
         Text[ en-US ] = "Custom:" ;                                                                 \
     };                                                                                              \
                                                                                                     \
@@ -302,7 +289,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT (START_X + 130 , AUTO_Y + 3*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS);       \
         Size = MAP_APPFONT ( AUTOPAGE_X - 6 -(START_X + 130), FIXEDTEXT_HEIGHT ) ;                  \
-        Text[ de ] = "For example: *.abc";                                                          \
         Text[ en-US ] = "Custom: *.abc" ;                                                           \
     };                                                                                              \
                                                                                                     \
@@ -310,7 +296,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X , AUTO_Y + 50) ;                                                \
         Size = MAP_APPFONT ( AUTOPAGE_X - 2 * START_X , FIXEDTEXT_HEIGHT ) ;                        \
-        Text [ de ] = "Zeilenformat";                                                               \
         Text[ en-US ]  = "Row Format";                                                              \
     };                                                                                              \
                                                                                                     \
@@ -320,7 +305,6 @@
         Pos = MAP_APPFONT ( EDIT_X , AUTO_Y + 50 + FIXEDTEXT_HEIGHT + RELATED_CONTROLS + 1) ;       \
         Size = MAP_APPFONT ( 150 , CHECKBOX_HEIGHT ) ;                                              \
         HelpId = HID_DSADMIN_TEXT_HEADER;                                                           \
-        Text [ de ] = "~Text enthält Kopfzeile" ;                                                   \
         Text [ en-US ] = "~Text contains headers" ;                                                 \
     };                                                                                              \
                                                                                                     \
@@ -329,7 +313,6 @@
     {                                                                                               \
         Pos = MAP_APPFONT ( START_X + INDENTED_X , AUTO_Y +50 + UNRELATED_CONTROLS + RELATED_CONTROLS + FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT) ;   \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                       \
-        Text [ de ] = "~Feldtrenner" ;                                                               \
         Text[ en-US ]  = "Field separator" ;                                                               \
     };                                                                                                          \
     ComboBox CM_AUTOFIELDSEPARATOR                                                                                  \
@@ -345,7 +328,6 @@
     {                                                                                                                       \
         Pos = MAP_APPFONT ( START_X + INDENTED_X, AUTO_Y +50 + 2*UNRELATED_CONTROLS + RELATED_CONTROLS + 2*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;          \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                                              \
-        Text [ de ] = "T~exttrenner" ;                                                                                             \
         Text[ en-US ]  = "Text separator" ;                                                                            \
     };                                                                                                                      \
     ComboBox CM_AUTOTEXTSEPARATOR                                                                                               \
@@ -361,14 +343,12 @@
     {                                                                                                                       \
         Pos = MAP_APPFONT (START_X + INDENTED_X , AUTO_Y +50 + 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ;          \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                                              \
-        Text [ de ] = "~Dezimaltrennzeichen" ;                                                                                     \
         Text[ en-US ]  = "Decimal separator" ;                                                                         \
     };                                                                                                                      \
     ComboBox CM_AUTODECIMALSEPARATOR                                                                                            \
     {                                                                                                                       \
         Pos = MAP_APPFONT ( EDIT_X , AUTO_Y +50 + 3*UNRELATED_CONTROLS + RELATED_CONTROLS + 3*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT -1 ) ;  \
         Size = MAP_APPFONT ( 32 , 60 ) ;                                                                                    \
-        Text [ de ] = ";" ;                                                                                                        \
         TabStop = TRUE ;                                                                                                    \
         MaxTextLength = 1 ;                                                                                                 \
         DropDown = TRUE ;                                                                                                   \
@@ -385,7 +365,6 @@
     {                                                                                                                       \
         Pos = MAP_APPFONT ( START_X + INDENTED_X , AUTO_Y +50 + 4*UNRELATED_CONTROLS + RELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + CHECKBOX_HEIGHT ) ; \
         Size = MAP_APPFONT ( EDIT_X - 7 , FIXEDTEXT_HEIGHT ) ;                                                              \
-        Text [ de ] = "T~ausendertrennzeichen" ;                                                                                   \
         Text[ en-US ]  = "Thousands separator" ;                                                                       \
     };                                                                                                                      \
     ComboBox CM_AUTOTHOUSANDSSEPARATOR                                                                                          \
@@ -406,7 +385,6 @@
                                                                                                                             \
     String STR_AUTOTEXT_FIELD_SEP_NONE                                                                                      \
     {                                                                                                                       \
-        Text [ de ] = "{Keiner}" ;                                                                                          \
         Text[ en-US ]  = "{None}";                                                                                          \
     };                                                                                                                      \
                                                                                                                             \
@@ -419,24 +397,20 @@
     String STR_AUTOFIELDSEPARATORLIST                                                                                       \
     {                                                                                                                       \
         Text [ x-comment ] = "EM Dec 2002: \'Space\' refers to what you get when you hit the space bar on your keyboard.";  \
-        Text [ de ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Leerzeichen}\t32" ;                                                  \
         Text [ en-US ] = ";\t59\t,\t44\t:\t58\t{Tab}\t9\t{Space}\t32" ;                                                     \
     };                                                                                                                      \
                                                                                                                             \
                                                                                                                             \
     String STR_AUTODELIMITER_MISSING                                                                                        \
     {                                                                                                                       \
-        Text [ de ] = "#1 muss angegeben sein." ;                                                                           \
         Text[ en-US ]  = "#1 must be set." ;                                                                                \
     };                                                                                                                      \
     String STR_AUTODELIMITER_MUST_DIFFER                                                                                    \
     {                                                                                                                       \
-        Text [ de ] = "#1 und #2 müssen unterschiedlich sein." ;                                                            \
         Text[ en-US ]  = "#1 and #2 must be different." ;                                                                   \
     };                                                                                                                      \
     String STR_AUTONO_WILDCARDS                                                                                             \
     {                                                                                                                       \
-        Text [ de ] = "Platzhalter wie *,? sind in der #1 nicht möglich." ;                                                 \
         Text[ en-US ]  = "Wildcards such as ?,* are not allowed in #1." ;                                                   \
     };
 
@@ -468,7 +442,6 @@
      {                                                                                 \
         Pos = MAP_APPFONT ( 6 , AUTO_Y) ;                                             \
         Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;                       \
-        Text [ de ] = "JDBC ~Treiberklasse" ;                                         \
         Text [ en-US ] = "JDBC d~river class";                                        \
     };                                                                                \
                                                                                       \
@@ -488,7 +461,6 @@
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;                                                       \
          Size = MAP_APPFONT (50, 14);                                                                               \
          HelpId = AUTO_HID + 1;                                                                         \
-        Text [ de ] = "Klasse testen";                                                                               \
         Text[ en-US ]  = "Test class" ;                                                                             \
     };
 
