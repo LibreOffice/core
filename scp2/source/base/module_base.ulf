@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_base.ulf,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:19:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:21:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,27 +34,21 @@
  ************************************************************************/
 
 [STR_NAME_MODULE_PRG_BASE]
-de = "%PRODUCTNAME Base"
 en-US = "%PRODUCTNAME Base"
 
 [STR_DESC_MODULE_PRG_BASE]
-de = "Erstellen und Bearbeiten von Datenbanken mit %PRODUCTNAME Base."
 en-US = "Create and edit databases by using %PRODUCTNAME Base."
 
 [STR_NAME_MODULE_PRG_BASE_BIN]
-de = "Programmodul"
 en-US = "Program Module"
 
 [STR_DESC_MODULE_PRG_BASE_BIN]
-de = "Die Anwendung %PRODUCTNAME Base"
 en-US = "The application %PRODUCTNAME Base"
 
 [STR_NAME_MODULE_PRG_BASE_HELP]
-de = "%PRODUCTNAME Base Hilfe"
 en-US = "%PRODUCTNAME Base Help"
 
 [STR_DESC_MODULE_PRG_BASE_HELP]
-de = "Die %PRODUCTNAME-Hilfe für %PRODUCTNAME Base."
 en-US = "Help about %PRODUCTNAME Base"
 
 
