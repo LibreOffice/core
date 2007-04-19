@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helptext.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:41:20 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:55:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,143 +41,109 @@
 
 String SV_HELPTEXT_CLOSE
 {
-    Text [ de ] = "Schließen" ;
     Text [ en-US ] = "Close";
-    Text [ x-comment ] = " ";
 };
 String SV_HELPTEXT_CLOSEDOCUMENT
 {
-    Text [ de ] = "Dokument schließen";
     Text [ en-US ] = "Close Document";
 };
 String SV_HELPTEXT_MINIMIZE
 {
-    Text [ de ] = "Minimieren" ;
     Text [ en-US ] = "Minimize";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_MAXIMIZE
 {
-    Text [ de ] = "Maximieren" ;
     Text [ en-US ] = "Maximize";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_RESTORE
 {
-    Text [ de ] = "Wiederherstellen" ;
     Text [ en-US ] = "Restore";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_ROLLDOWN
 {
-    Text [ de ] = "Aufklappen" ;
     Text [ en-US ] = "Drop down";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_ROLLUP
 {
-    Text [ de ] = "Zuklappen" ;
     Text [ en-US ] = "Roll up";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_HELP
 {
-    Text [ de ] = "Hilfe" ;
     Text [ en-US ] = "Help";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_ALWAYSVISIBLE
 {
-    Text [ de ] = "Immer sichtbar" ;
     Text [ en-US ] = "Always visible";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_FADEIN
 {
-    Text [ de ] = "Einblenden" ;
     Text [ en-US ] = "Show";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_FADEOUT
 {
-    Text [ de ] = "Ausblenden" ;
     Text [ en-US ] = "Hide";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_SPLITFLOATING
 {
-    Text [ de ] = "Schwebend" ;
     Text [ en-US ] = "Floating";
-    Text [ x-comment ] = " ";
 };
 
 String SV_HELPTEXT_SPLITFIXED
 {
-    Text [ de ] = "Fixieren" ;
     Text [ en-US ] = "Stick";
-    Text [ x-comment ] = " ";
 };
 
 String SV_SHORTCUT_HELP
 {
-    Text [ de ] = "Hilfe" ;
     Text [ en-US ] = "Help" ;
 };
 
 String SV_SHORTCUT_CONTEXTHELP
 {
-    Text [ de ] = "Kontexthilfe" ;
     Text [ en-US ] = "Context Help";
 };
 
 String SV_SHORTCUT_ACTIVEHELP
 {
-    Text [ de ] = "Aktive Hilfe" ;
     Text [ en-US ] = "Extended Tips";
 };
 
 String SV_SHORTCUT_DOCKUNDOCK
 {
-    Text [ de ] = "Fenster an-/abdocken" ;
     Text [ en-US ] = "Dock/Undock Windows";
 };
 
 String SV_SHORTCUT_NEXTSUBWINDOW
 {
-    Text [ de ] = "Zur nächsten Symbolleiste/Fenster" ;
     Text [ en-US ] = "To Next Toolbar/Window";
 };
 
 String SV_SHORTCUT_PREVSUBWINDOW
 {
-    Text [ de ] = "Zur vorigen Symbolleiste/Fenster" ;
     Text [ en-US ] = "To Previous Toolbar/Window";
 };
 
 String SV_SHORTCUT_TODOCUMENT
 {
-    Text [ de ] = "Zum Dokument" ;
     Text [ en-US ] = "To Document";
 };
 
 String SV_SHORTCUT_MENUBAR
 {
-    Text [ de ] = "Zur Menüleiste" ;
     Text [ en-US ] = "To Menu Bar";
 };
 
 String SV_SHORTCUT_SPLITTER
 {
-    Text [ de ] = "Trenner für geteiltes Fenster" ;
     Text [ en-US ] = "Split window separator" ;
 };
 
