@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filter.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:06:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:37:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ ModelessDialog RID_SCDLG_FILTER
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 298 , 83 ) ;
-    Text [ de ] = "Standardfilter" ;
     Text [ en-US ] = "Standard Filter" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -48,28 +47,24 @@ ModelessDialog RID_SCDLG_FILTER
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 44 , 8 ) ;
-        Text [ de ] = "Verknüpfung" ;
         Text [ en-US ] = "Operator" ;
     };
     FixedText FT_FIELD
     {
         Pos = MAP_APPFONT ( 58 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Feldname" ;
         Text [ en-US ] = "Field name" ;
     };
     FixedText FT_COND
     {
         Pos = MAP_APPFONT ( 122 , 14 ) ;
         Size = MAP_APPFONT ( 47 , 8 ) ;
-        Text [ de ] = "Bedingung" ;
         Text [ en-US ] = "Condition" ;
     };
     FixedText FT_VAL
     {
         Pos = MAP_APPFONT ( 173 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Wert" ;
         Text [ en-US ] = "Value" ;
     };
     ListBox LB_OP1
@@ -79,11 +74,6 @@ ModelessDialog RID_SCDLG_FILTER
         Size = MAP_APPFONT ( 40 , 46 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "UND" ; Default ; > ;
-            < "ODER" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -97,11 +87,6 @@ ModelessDialog RID_SCDLG_FILTER
         Size = MAP_APPFONT ( 40 , 46 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "UND" ; Default ; > ;
-            < "ODER" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -139,19 +124,6 @@ ModelessDialog RID_SCDLG_FILTER
         Size = MAP_APPFONT ( 47 , 105 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "=" ; Default ; > ;
-            < "<" ; Default ; > ;
-            < ">" ; Default ; > ;
-            < "<=" ; Default ; > ;
-            < ">=" ; Default ; > ;
-            < "<>" ; Default ; > ;
-            < "größte" ; Default ; > ;
-            < "kleinste" ; Default ; > ;
-            < "größte %" ; Default ; > ;
-            < "kleinste %" ; Default ; > ;
-        };
         stringlist [ en-US ] =
         {
             < "=" ; Default ; > ;
@@ -173,19 +145,6 @@ ModelessDialog RID_SCDLG_FILTER
         Size = MAP_APPFONT ( 47 , 105 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "=" ; Default ; > ;
-            < "<" ; Default ; > ;
-            < ">" ; Default ; > ;
-            < "<=" ; Default ; > ;
-            < ">=" ; Default ; > ;
-            < "<>" ; Default ; > ;
-            < "größte" ; Default ; > ;
-            < "kleinste" ; Default ; > ;
-            < "größte %" ; Default ; > ;
-            < "kleinste %" ; Default ; > ;
-        };
         stringlist [ en-US ] =
         {
             < "=" ; Default ; > ;
@@ -207,19 +166,6 @@ ModelessDialog RID_SCDLG_FILTER
         Size = MAP_APPFONT ( 47 , 105 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "=" ; Default ; > ;
-            < "<" ; Default ; > ;
-            < ">" ; Default ; > ;
-            < "<=" ; Default ; > ;
-            < ">=" ; Default ; > ;
-            < "<>" ; Default ; > ;
-            < "größte" ; Default ; > ;
-            < "kleinste" ; Default ; > ;
-            < "größte %" ; Default ; > ;
-            < "kleinste %" ; Default ; > ;
-        };
         stringlist [ en-US ] =
         {
             < "=" ; Default ; > ;
@@ -259,7 +205,6 @@ ModelessDialog RID_SCDLG_FILTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 230 , 8 ) ;
-        Text [ de ] = "Filterkriterien" ;
         Text [ en-US ] = "Filter criteria";
     };
     CheckBox BTN_CASE
@@ -268,7 +213,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Groß-/Kleinschreibung" ;
         Text [ en-US ] = "Case ~sensitive" ;
     };
     CheckBox BTN_REGEXP
@@ -277,7 +221,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 142 , 86 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Regulärer Ausdruck" ;
         Text [ en-US ] = "Regular ~expression" ;
     };
     CheckBox BTN_HEADER
@@ -286,7 +229,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Bereich enthält ~Spaltenbeschriftungen" ;
         Text [ en-US ] = "Range contains ~column labels" ;
     };
     CheckBox BTN_UNIQUE
@@ -295,7 +237,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 142 , 100 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Keine ~Duplikate" ;
         Text [ en-US ] = "~No duplication" ;
     };
     CheckBox BTN_COPY_RESULT
@@ -304,7 +245,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Filterergebnis ~ausgeben nach" ;
         Text [ en-US ] = "Copy ~results to..." ;
     };
     CheckBox BTN_DEST_PERS
@@ -313,7 +253,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 142 , 114 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Persistent" ;
         Text [ en-US ] = "~Keep filter criteria" ;
     };
     ListBox LB_COPY_AREA
@@ -338,7 +277,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 221 , 125 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ de ] = "Verkleinern" ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
     FixedLine FL_OPTIONS
@@ -346,7 +284,6 @@ ModelessDialog RID_SCDLG_FILTER
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 75 ) ;
         Size = MAP_APPFONT ( 230 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
     };
     FixedText FT_DBAREA
@@ -355,7 +292,6 @@ ModelessDialog RID_SCDLG_FILTER
         Pos = MAP_APPFONT ( 66 , 144 ) ;
         Size = MAP_APPFONT ( 167 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "dummy" ;
         Text [ en-US ] = "dummy" ;
     };
     FixedText FT_DBAREA_LABEL
@@ -363,7 +299,6 @@ ModelessDialog RID_SCDLG_FILTER
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 144 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
-        Text [ de ] = "Datenbereich:" ;
         Text [ en-US ] = "Data range:" ;
     };
     OKButton BTN_OK
@@ -402,7 +337,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 278 , 83 ) ;
-    Text [ de ] = "Spezialfilter" ;
     Text [ en-US ] = "Advanced Filter" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -410,7 +344,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 210 , 8 ) ;
-        Text [ de ] = "~Filterkriterien befinden sich in" ;
         Text [ en-US ] = "Read ~filter criteria from" ;
     };
     ListBox LB_CRITERIA_AREA
@@ -433,7 +366,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 201 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ de ] = "Verkleinern" ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
     CheckBox BTN_CASE
@@ -442,7 +374,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Groß-/Kleinschreibung" ;
         Text [ en-US ] = "~Case sensitive" ;
     };
     CheckBox BTN_REGEXP
@@ -451,7 +382,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 142 , 43 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Regulärer Ausdruck" ;
         Text [ en-US ] = "Regular ~expressions" ;
     };
     CheckBox BTN_HEADER
@@ -460,7 +390,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 12 , 57 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Bereich enthält ~Spaltenbeschriftungen" ;
         Text [ en-US ] = "Range c~ontains column labels" ;
     };
     CheckBox BTN_UNIQUE
@@ -469,7 +398,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 142 , 57 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Keine ~Duplikate" ;
         Text [ en-US ] = "~No duplication" ;
     };
     CheckBox BTN_COPY_RESULT
@@ -478,7 +406,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 12 , 71 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Filterergebnis ~ausgeben nach" ;
         Text [ en-US ] = "Co~py results to" ;
     };
     CheckBox BTN_DEST_PERS
@@ -487,7 +414,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 142 , 71 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Persistent" ;
         Text [ en-US ] = "~Keep filter criteria" ;
     };
     ListBox LB_COPY_AREA
@@ -512,7 +438,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 201 , 82 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
-        QuickHelpText [ de ] = "Verkleinern" ;
         QuickHelpText [ en-US ] = "Shrink" ;
     };
     FixedLine FL_OPTIONS
@@ -520,7 +445,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 210 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
     };
     FixedText FT_DBAREA
@@ -529,7 +453,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Pos = MAP_APPFONT ( 58 , 101 ) ;
         Size = MAP_APPFONT ( 155 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "dummy" ;
         Text [ en-US ] = "dummy" ;
     };
     FixedText FT_DBAREA_LABEL
@@ -537,7 +460,6 @@ ModelessDialog RID_SCDLG_SPEC_FILTER
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Datenbereich:" ;
         Text [ en-US ] = "Data range:" ;
     };
     OKButton BTN_OK
@@ -576,7 +498,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 298 , 83 ) ;
-    Text [ de ] = "Filter" ;
     Text [ en-US ] = "Filter" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -584,28 +505,24 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "Verknüpfung" ;
         Text [ en-US ] = "Operator" ;
     };
     FixedText FT_FIELD
     {
         Pos = MAP_APPFONT ( 58 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Feldname" ;
         Text [ en-US ] = "Field name" ;
     };
     FixedText FT_COND
     {
         Pos = MAP_APPFONT ( 122 , 14 ) ;
         Size = MAP_APPFONT ( 47 , 8 ) ;
-        Text [ de ] = "Bedingung" ;
         Text [ en-US ] = "Condition" ;
     };
     FixedText FT_VAL
     {
         Pos = MAP_APPFONT ( 173 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Wert" ;
         Text [ en-US ] = "Value" ;
     };
     ListBox LB_OP1
@@ -615,11 +532,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Size = MAP_APPFONT ( 40 , 46 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "UND" ; Default ; > ;
-            < "ODER" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -633,11 +545,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Size = MAP_APPFONT ( 40 , 46 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "UND" ; Default ; > ;
-            < "ODER" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -675,15 +582,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Size = MAP_APPFONT ( 47 , 65 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "=" ; Default ; > ;
-            < "<" ; Default ; > ;
-            < ">" ; Default ; > ;
-            < "<=" ; Default ; > ;
-            < ">=" ; Default ; > ;
-            < "<>" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "=" ; Default ; > ;
@@ -701,15 +599,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Size = MAP_APPFONT ( 47 , 65 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "=" ; Default ; > ;
-            < "<" ; Default ; > ;
-            < ">" ; Default ; > ;
-            < "<=" ; Default ; > ;
-            < ">=" ; Default ; > ;
-            < "<>" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "=" ; Default ; > ;
@@ -727,15 +616,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Size = MAP_APPFONT ( 47 , 65 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "=" ; Default ; > ;
-            < "<" ; Default ; > ;
-            < ">" ; Default ; > ;
-            < "<=" ; Default ; > ;
-            < ">=" ; Default ; > ;
-            < "<>" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "=" ; Default ; > ;
@@ -771,7 +651,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 230 , 8 ) ;
-        Text [ de ] = "Filterkriterien" ;
         Text [ en-US ] = "Filter criteria";
     };
     CheckBox BTN_CASE
@@ -780,7 +659,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 221 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Groß-/Kleinschreibung" ;
         Text [ en-US ] = "~Case sensitive" ;
     };
     CheckBox BTN_REGEXP
@@ -789,7 +667,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 221 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Regulärer Ausdruck" ;
         Text [ en-US ] = "~Regular expression" ;
     };
     CheckBox BTN_UNIQUE
@@ -798,7 +675,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 221 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Keine ~Duplikate" ;
         Text [ en-US ] = "~No duplication" ;
     };
     FixedLine FL_OPTIONS
@@ -806,7 +682,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 75 ) ;
         Size = MAP_APPFONT ( 230 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
     };
     FixedText FT_DBAREA
@@ -815,7 +690,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Pos = MAP_APPFONT ( 70 , 130 ) ;
         Size = MAP_APPFONT ( 166 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "dummy" ;
         Text [ en-US ] = "dummy" ;
     };
     FixedText FT_DBAREA_LABEL
@@ -823,7 +697,6 @@ ModalDialog RID_SCDLG_PIVOTFILTER
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 130 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
-        Text [ de ] = "Datenbereich:" ;
         Text [ en-US ] = "Data range:" ;
     };
     OKButton BTN_OK
