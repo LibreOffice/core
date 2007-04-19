@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_translationdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:05:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,14 +72,12 @@ ModalDialog DLG_CHINESETRANSLATION
     Moveable = TRUE ;
     SVLook = TRUE;
 
-    Text [ de ] = "Chinesische Übersetzung";
     Text [ en-US ] = "Chinese Translation";
 
     FixedLine FL_DIRECTION
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_1 ) ;
         Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Übersetzungsrichtung";
         Text [ en-US ] = "Translation direction";
     };
 
@@ -90,7 +88,6 @@ ModalDialog DLG_CHINESETRANSLATION
         Pos = MAP_APPFONT( COL_3, ROW_4 );
         Size = MAP_APPFONT ( FULL_WIDTH - COL_3 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT ) ;
 
-        Text [ de ] = "Zeichenvarianten aus Taiwan, Hongkong und Macao benutzen";
         Text [ en-US ] = "~Use Taiwan, Hong Kong SAR, and Macao SAR character variants";
     };
 
@@ -98,7 +95,6 @@ ModalDialog DLG_CHINESETRANSLATION
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_5 ) ;
         Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Allgemeine Begriffe";
         Text [ en-US ] = "Common terms";
     };
 
@@ -107,7 +103,6 @@ ModalDialog DLG_CHINESETRANSLATION
         Pos = MAP_APPFONT( COL_2, ROW_6 );
         Size = MAP_APPFONT ( COL_4 - COL_2, RSC_CD_CHECKBOX_HEIGHT ) ;
 
-        Text [ de ] = "Allgemeine Begriffe übersetzen";
         Text [ en-US ] = "Translate ~common terms";
     };
 
@@ -116,7 +111,6 @@ ModalDialog DLG_CHINESETRANSLATION
         Pos = MAP_APPFONT( COL_4, ROW_6-(RSC_CD_PUSHBUTTON_HEIGHT-RSC_CD_CHECKBOX_HEIGHT)/2 );
         Size = MAP_APPFONT( EDITBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
 
-        Text [ de ] = "Begriffe bearbeiten...";
         Text [ en-US ] = "~Edit Terms...";
     };
 

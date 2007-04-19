@@ -62,67 +62,54 @@ ToolBox RID_SVX_EXTRUSION_BAR
 
 String RID_SVX_EXTRUSION_BAR
 {
-    Text [ de ] = "Extrusion";
     Text [ en-US ] = "Extrusion";
 };
 
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ON_OFF
 {
-    Text [ de ] = "Extrusion ein/aus anwenden";
     Text [ en-US ] = "Apply Extrusion On/Off";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_DOWN
 {
-    Text [ de ] = "Nach unten kippen";
     Text [ en-US ] = "Tilt Down";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_UP
 {
-    Text [ de ] = "Nach oben kippen";
     Text [ en-US ] = "Tilt Up";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_LEFT
 {
-    Text [ de ] = "Nach links kippen";
     Text [ en-US ] = "Tilt Left";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ROTATE_RIGHT
 {
-    Text [ de ] = "Nach rechts kippen";
     Text [ en-US ] = "Tilt Right";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_DEPTH
 {
-    Text [ de ] = "Extrusions Tiefe ändern";
     Text [ en-US ] = "Change Extrusion Depth";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_ORIENTATION
 {
-    Text [ de ] = "Richtung ändern";
     Text [ en-US ] = "Change Orientation";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_PROJECTION
 {
-    Text [ de ] = "Projektionsmodus wechseln";
     Text [ en-US ] = "Change Projection Type";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_LIGHTING
 {
-    Text [ de ] = "Beläuchtung ändern";
     Text [ en-US ] = "Change Lighting";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_BRIGHTNESS
 {
-    Text [ de ] = "Helligkeit ändern";
     Text [ en-US ] = "Change Brightness";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_SURFACE
 {
-    Text [ de ] = "Oberfläche ändern";
     Text [ en-US ] = "Change Extrusion Surface";
 };
 String RID_SVXSTR_UNDO_APPLY_EXTRUSION_COLOR
 {
-    Text [ de ] = "Extrusionsfarbe wechseln";
     Text [ en-US ] = "Change Extrusion Color";
 };
