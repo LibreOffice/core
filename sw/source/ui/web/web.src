@@ -4,9 +4,9 @@
  *
  *  $RCSfile: web.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:35:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,44 +47,31 @@
 
 String STR_HUMAN_SWWEBDOC_NAME
 {
-    Text [ de ] = "HTML" ;
     Text [ en-US ] = "HTML" ;
-    Text [ x-comment ] = " ";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_40
 {
-    Text [ de ] = "%PRODUCTNAME 4.0 HTML" ;
     Text [ en-US ] = "%PRODUCTNAME 4.0 HTML" ;
-    Text [ x-comment ] = " ";
 };
 String STR_WRITER_WEBDOC_FULLTYPE_50
 {
-    Text [ de ] = "%PRODUCTNAME 5.0 HTML" ;
     Text [ en-US ] = "%PRODUCTNAME 5.0 HTML" ;
-    Text [ x-comment ] = " ";
 };
 String STR_WRITER_WEBDOC_FULLTYPE
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION HTML-Dokument" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION HTML Document";
 };
 String STR_SHELLNAME_WEBTEXT
 {
-    Text [ de ] = "Text/Web" ;
     Text [ en-US ] = "Text/Web" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SHELLNAME_WEBFRAME
 {
-    Text [ de ] = "Rahmen/Web" ;
     Text [ en-US ] = "Frame/Web" ;
-    Text [ x-comment ] = " ";
 };
 String RID_WEBTOOLS_TOOLBOX
 {
-    Text [ de ] = "Werkzeugleiste/Web" ;
     Text [ en-US ] = "Main Toolbar/Web" ;
-    Text [ x-comment ] = " ";
 };
 ToolBox RID_WEBTOOLS_TOOLBOX
 {
@@ -209,9 +196,7 @@ ToolBox RID_WEBTOOLS_TOOLBOX
 *************************************************************************/
 String RID_WEBTEXT_TOOLBOX
 {
-    Text [ de ] = "Textobjektleiste/Web" ;
     Text [ en-US ] = "Text Object Bar/Web" ;
-    Text [ x-comment ] = " ";
 };
 ToolBox RID_WEBTEXT_TOOLBOX
 {
@@ -243,9 +228,7 @@ ToolBox RID_WEBTEXT_TOOLBOX
 };
 String RID_WEBFRAME_TOOLBOX
 {
-    Text [ de ] = "Rahmenobjektleiste/Web" ;
     Text [ en-US ] = "Frame Object Bar/Web" ;
-    Text [ x-comment ] = " ";
 };
 ToolBox RID_WEBFRAME_TOOLBOX
 {
@@ -287,9 +270,7 @@ ToolBox RID_WEBFRAME_TOOLBOX
 };
 String RID_WEBGRAPHIC_TOOLBOX
 {
-    Text [ de ] = "Grafikobjektleiste/Web" ;
     Text [ en-US ] = "Graphics Object Bar/Web" ;
-    Text [ x-comment ] = " ";
 };
 ToolBox RID_WEBGRAPHIC_TOOLBOX
 {
@@ -327,7 +308,6 @@ ToolBox RID_WEBGRAPHIC_TOOLBOX
 };
 String RID_WEBOLE_TOOLBOX
 {
-    Text [ de ] = "Objekt/Web" ;
     Text [ en-US ] = "Object/Web" ;
 };
 ToolBox RID_WEBOLE_TOOLBOX
