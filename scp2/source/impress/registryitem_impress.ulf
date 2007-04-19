@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_impress.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:30:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:26:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,28 +35,21 @@
 
 [STR_REG_VAL_NEW]
 en-US = "&New"
-de = "&Neu"
 
 [STR_REG_VAL_SO51_PRESENT_OOO]
 en-US = "StarOffice 5.0 Presentation"
-de = "StarOffice 5.0 Präsentation"
 
 [STR_REG_VAL_SO60_SHOW]
 en-US = "Show"
-de = "Abspielen"
 
 [STR_REG_VAL_SO60_PRESENT]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Presentation"
-de = "%PRODUCTNAME %SXWFORMATVERSION Präsentation"
 
 [STR_REG_VAL_SO60_IMPRESS_TEMPLATE]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Presentation Template"
-de = "%PRODUCTNAME %SXWFORMATVERSION Präsentationsvorlage"
 
 [STR_REG_VAL_OO_PRESENT]
 en-US = "OpenDocument Presentation"
-de = "OpenDocument Präsentation"
 
 [STR_REG_VAL_OO_PRESENT_TEMPLATE]
 en-US = "OpenDocument Presentation Template"
-de = "OpenDocument Präsentationsdokumentvorlage"
