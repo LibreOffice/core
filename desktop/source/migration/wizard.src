@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 18:36:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ String STR_STATE_REGISTRATION
 
 String STR_WELCOME_MIGRATION
 {
-    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen, dem Übertragen von Benutzer Daten aus %OLD_VERSION und die Registrierung von %PRODUCTNAME führen.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
+    Text [ de ]    = "Dieser Assistent wird Sie durch die Lizenzbedingungen, das Übertragen der Benutzerdaten aus %OLD_VERSION und die Registrierung von %PRODUCTNAME führen.\n\nKlicken Sie auf 'Weiter', um fortzufahren.";
     Text [ en-US ] = "This wizard will guide you through the license agreement, the transfer of user data from %OLD_VERSION and the registration of %PRODUCTNAME.\n\nClick 'Next' to continue.";
 
 };
