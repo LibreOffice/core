@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddok.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:37:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:08:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,12 @@ TabPage TP_FLD_DOK
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Dokument" ;
     FixedText FT_DOKTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Feldtyp" ;
         Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKTYPE
     {
@@ -65,10 +62,8 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Auswahl" ;
         Text [ en-US ] = "S~elect" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKSELECTION
     {
@@ -81,10 +76,8 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
         Text [ en-US ] = "F~ormat" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKFORMAT
     {
@@ -109,11 +102,9 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 170 , 155 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "Ko~rrektur" ;
         Text [ en-US ] = "O~ffset" ;
         Left = TRUE ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_DOKVALUE
     {
@@ -157,10 +148,8 @@ TabPage TP_FLD_DOK
     {
         Pos = MAP_APPFONT ( 170 , 170 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
-        Text [ de ] = "~Inhalt fixieren" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Fixed content" ;
-        Text [ x-comment ] = " ";
     };
     Bitmap BMP_DOKROOT_OPENED
     {
@@ -172,18 +161,13 @@ TabPage TP_FLD_DOK
     };
     String STR_DOKDATEOFF
     {
-        Text [ de ] = "Ko~rrektur in Tagen" ;
         Text [ en-US ] = "Offs~et in days" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DOKTIMEOFF
     {
-        Text [ de ] = "Ko~rrektur in Minuten" ;
         Text [ en-US ] = "Offs~et in minutes" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Document" ;
-    Text [ x-comment ] = " ";
 };
 
 
