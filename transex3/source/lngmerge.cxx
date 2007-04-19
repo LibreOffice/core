@@ -4,8 +4,8 @@
  *
  *  $RCSfile: lngmerge.cxx,v $
  *
- *  $Revision: 1.27 $
- *  last change: $Author: obo $ $Date: 2006-09-17 08:18:54 $
+ *  $Revision: 1.28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:19:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -184,8 +184,8 @@ BOOL LngParser::CreateSDF(
             sOutput += sCur; sOutput += "\t";
             sOutput += sAct; sOutput += "\t\t\t\t";
             sOutput += sTimeStamp;
-            if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj ) ) )
-                aSDFStream.WriteLine( sOutput );
+            //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj ) ) )
+            aSDFStream.WriteLine( sOutput );
         }
     }
  }
@@ -216,6 +216,7 @@ BOOL LngParser::Merge(
     const ByteString &rSDFFile, const ByteString &rDestinationFile , const ByteString& rPrj )
 /*****************************************************************************/
 {
+    (void) rPrj;
     Export::InitLanguages( true );
     SvFileStream aDestination(
         String( rDestinationFile, RTL_TEXTENCODING_ASCII_US ),
@@ -328,9 +329,9 @@ BOOL LngParser::Merge(
         if ( nLastLangPos ) {
             for( unsigned int n = 0; n < aLanguages.size(); n++ ){
                 sCur = aLanguages[ n ];
-                if(   ( !sCur.EqualsIgnoreCaseAscii("de") ||
-                      ( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
-                    &&!sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
+                if(   //( !sCur.EqualsIgnoreCaseAscii("de") ||
+                      //( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( rPrj ) ) )
+                    !sCur.EqualsIgnoreCaseAscii("en-US") && !Text[ sCur ].Len() && pEntrys ){
 
                     ByteString sNewText;
                     pEntrys->GetText( sNewText, STRING_TYP_TEXT, sCur, TRUE );
