@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:24:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:13:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,6 +169,9 @@
 #include <HandleAnchorNodeChg.hxx>
 #endif
 // <--
+
+#include <frmatr.hxx>
+
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -1483,11 +1486,21 @@ void SwFEShell::SetObjRect( const SwRect& rRect )
 #*  Update      :  MA 13. Jul. 95
 #***********************************************************************/
 
-void SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference < embed::XEmbeddedObject >& xObj )
+Size SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference < embed::XEmbeddedObject >& xObj )
 {
+    Size aResult;
+
     SwFlyFrm *pFly = FindFlyFrm( xObj );
     if ( !pFly )
-        return;
+    {
+        aResult = GetAnyCurRect( RECT_FLY_EMBEDDED, 0, xObj ).SSize();
+        return aResult;
+    }
+
+    aResult = pFly->Prt().SSize();
+
+    sal_Bool bPosProt = pFly->GetFmt()->GetProtect().IsPosProtected();
+    sal_Bool bSizeProt = pFly->GetFmt()->GetProtect().IsSizeProtected();
 
     StartAllAction();
 
@@ -1496,8 +1509,7 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     //Clippen. Die richtige Darstellung wird per Scalierung erledigt.
     //Die Scalierung wird von SwNoTxtFrm::Format durch einen Aufruf von
     //SwWrtShell::CalcAndSetScale() erledigt.
-
-    if ( rRect.SSize() != pFly->Prt().SSize() )
+    if ( rRect.SSize() != pFly->Prt().SSize() && !bSizeProt )
     {
          Size aSz( rRect.SSize() );
 
@@ -1552,7 +1564,7 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
             aSz.Width() += pFly->Frm().Width() - pFly->Prt().Width();
             aSz.Height()+= pFly->Frm().Height()- pFly->Prt().Height();
         }
-        pFly->ChgSize( aSz );
+        aResult = pFly->ChgSize( aSz );
 
         //Wenn sich das Objekt aendert ist die Kontur hoechstwahrscheinlich daneben.
         ASSERT( pFly->Lower()->IsNoTxtFrm(), "Request ohne NoTxt" );
@@ -1566,7 +1578,7 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
     //ausgezeichneten Werten transportiert.
     Point aPt( pFly->Prt().Pos() );
     aPt += pFly->Frm().Pos();
-    if ( rRect.Top() != LONG_MIN && rRect.Pos() != aPt )
+    if ( rRect.Top() != LONG_MIN && rRect.Pos() != aPt && !bPosProt )
     {
         aPt = rRect.Pos();
         aPt.X() -= pFly->Prt().Left();
@@ -1589,6 +1601,8 @@ void SwFEShell::RequestObjectResize( const SwRect &rRect, const uno::Reference <
         }
     }
     EndAllAction();
+
+    return aResult;
 }
 
 
