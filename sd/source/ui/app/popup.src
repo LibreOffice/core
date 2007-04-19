@@ -4,9 +4,9 @@
  *
  *  $RCSfile: popup.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:30:48 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:20:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -286,27 +286,21 @@ Menu RID_LAYERTAB_POPUP
             Identifier = SID_INSERTLAYER ;
             HelpID = SID_INSERTLAYER ;
             /* ### ACHTUNG: Neuer Text in Resource? ~Ebene einf�gen... : ~Ebene einf�gen... */
-            Text [ de ] = "~Ebene einfügen..." ;
             Text [ en-US ] = "~Insert Layer..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_MODIFYLAYER ;
             HelpID = SID_MODIFYLAYER ;
             /* ### ACHTUNG: Neuer Text in Resource? E~bene �ndern... : E~bene �ndern... */
-            Text [ de ] = "E~bene ändern..." ;
             Text [ en-US ] = "Modify La~yer..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_DELETE_LAYER ;
             HelpID = SID_DELETE_LAYER ;
             /* ### ACHTUNG: Neuer Text in Resource? Ebe~ne l�schen... : Ebe~ne l�schen... */
-            Text [ de ] = "Ebe~ne löschen..." ;
             Text [ en-US ] = "Delete ~Layer..." ;
-            Text [ x-comment ] = " ";
         };
         MN_RENAME_LAYER
     };
@@ -320,14 +314,12 @@ Menu RID_TASKPANE_MASTERPAGESSELECTOR_POPUP
         {
             Identifier = SID_TP_APPLY_TO_ALL_SLIDES;
             HelpID = SID_TP_APPLY_TO_ALL_SLIDES;
-            Text [ de ] = "Für alle Folien übernehmen" ;
             Text [ en-US ] = "~Apply to All Slides";
         };
         MenuItem
         {
             Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
             HelpID = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            Text [ de ] = "Für ausgewählte Folien übernehmen" ;
             Text [ en-US ] = "Apply to ~Selected Slides";
         };
 
@@ -337,14 +329,12 @@ Menu RID_TASKPANE_MASTERPAGESSELECTOR_POPUP
         {
             Identifier = SID_TP_SHOW_LARGE_PREVIEW;
             HelpID = SID_TP_SHOW_LARGE_PREVIEW;
-            Text [ de ] = "Große Vorschau anzeigen";
             Text[ en-US ] = "Show ~Large Preview";
         };
         MenuItem
         {
             Identifier = SID_TP_SHOW_SMALL_PREVIEW;
             HelpID = SID_TP_SHOW_SMALL_PREVIEW;
-            Text [ de ] = "Kleine Vorschau anzeigen";
             Text[ en-US ] = "Show S~mall Preview";
         };
     };
@@ -358,7 +348,6 @@ Menu RID_TASKPANE_LAYOUTMENU_POPUP
         {
             Identifier = SID_TP_APPLY_TO_SELECTED_SLIDES;
             HelpID = SID_TP_APPLY_TO_SELECTED_SLIDES;
-            Text [ de ] = "Für ausgewählte Folien übernehmen" ;
             Text [ en-US ] = "Apply to ~Selected Slides";
         };
 
@@ -368,7 +357,6 @@ Menu RID_TASKPANE_LAYOUTMENU_POPUP
         {
             Identifier = SID_INSERTPAGE;
             HelpID = SID_INSERTPAGE;
-            Text [ de ] = "Folie einfügen";
             Text [ en-US ] = "~Insert Slide";
         };
     };
