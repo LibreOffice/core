@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:23:04 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:06:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,50 +54,42 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 162 ) ;
-    Text [ de ] = "Hyperlink" ;
     Text [ en-US ] = "Hyperlink" ;
 
     FixedLine GRP_LINKTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Art des Hyperlinks" ;
         Text [ en-US ] = "Hyperlink type" ;
     };
     RadioButton RB_LINKTYP_INTERNET
     {
         Pos = MAP_APPFONT( COL_2, 13 );
         Size = MAP_APPFONT( 57, 10 );
-        Text [ de ] = "~Web";
         Text [ en-US ] = "~Web";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_LINKTYP_FTP
     {
         Pos = MAP_APPFONT( 114 + COL_DIFF, 13 );
         Size = MAP_APPFONT( 56 - COL_DIFF, 10 );
-        Text [ de ] = "FT~P";
         Text [ en-US ] = "~FTP";
     };
     RadioButton RB_LINKTYP_TELNET
     {
         Pos = MAP_APPFONT( 173, 13 );
         Size = MAP_APPFONT( 56, 10 );
-        Text [ de ] = "T~elnet";
         Text [ en-US ] = "~Telnet";
     };
     FixedText FT_TARGET_HTML
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF, 8 ) ;
-        Text [ de ] = "Sprungzie~l";
         Text [ en-US ] = "Tar~get" ;
     };
     FixedText FT_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Loginname";
         Text [ en-US ] = "~Login name" ;
     };
     Edit ED_LOGIN
@@ -110,9 +102,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     {
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Kennwort";
         Text [ en-US ] = "~Password" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_PASSWD
     {
@@ -126,19 +116,15 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Pos = MAP_APPFONT ( COL_2 , 75 ) ;
         Size = MAP_APPFONT ( 89 - COL_DIFF , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Anonymer Ben~utzer" ;
         Text [ en-US ] = "Anonymous ~user" ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_BROWSE
     {
         Pos = MAP_APPFONT ( 235, 24 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "WWW-Browser" ;
         Text [ en-US ] = "WWW Browser";
 
-        QuickHelpText [ de ] = "WWW-Browser" ;
         QuickHelpText [ en-US ] = "WWW Browser" ;
         ButtonImage = Image
         {
@@ -156,10 +142,8 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Pos = MAP_APPFONT ( 235, 40+2 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Sprungziel im Dokument" ;
         Text [ en-US ] = "Target in Document";
 
-        QuickHelpText [ de ] = "Sprungziel im Dokument" ;
         QuickHelpText [ en-US ] = "Target in Document" ;
         ButtonImage = Image
         {
@@ -176,14 +160,12 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Weitere Einstellungen" ;
         Text [ en-US ] = "Further settings" ;
     };
     FixedText FT_FRAME
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Frame";
         Text [ en-US ] = "F~rame" ;
     };
     ComboBox CB_FRAME
@@ -199,7 +181,6 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     {
         Pos = MAP_APPFONT ( 126 , 105 ) ;
         Size = MAP_APPFONT ( 33 , 8 ) ;
-        Text [ de ] = "F~orm";
         Text [ en-US ] = "F~orm" ;
     };
     ListBox LB_FORM
@@ -211,11 +192,6 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         DropDown = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        StringList [ de ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Text" ; Default ; > ;
@@ -226,7 +202,6 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     {
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "Te~xt";
         Text [ en-US ] = "Te~xt" ;
     };
     Edit ED_INDICATION
@@ -239,7 +214,6 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
     {
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "N~ame";
         Text [ en-US ] = "N~ame" ;
     };
     Edit ED_TEXT
@@ -253,9 +227,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Ereignisse" ;
 
-        QuickHelpText [ de ] = "Ereignisse" ;
         QuickHelpText [ en-US ] = "Events" ;
         ButtonImage = Image
         {
@@ -284,44 +256,36 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 162 ) ;
-    Text [ de ] = "Hyperlink" ;
     Text [ en-US ] = "Hyperlink" ;
 
     FixedLine GRP_MAILNEWS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Mail & News" ;
         Text [ en-US ] = "Mail & news" ;
     };
     RadioButton RB_LINKTYP_MAIL
     {
         Pos = MAP_APPFONT( COL_2, 13 );
         Size = MAP_APPFONT( 56 - COL_DIFF, 10 );
-        Text [ de ] = "~E-Mail";
         Text [ en-US ] = "~E-mail";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_LINKTYP_NEWS
     {
         Pos = MAP_APPFONT( 113, 13 );
         Size = MAP_APPFONT( 56, 10 );
-        Text [ de ] = "~News";
         Text [ en-US ] = "~News";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_RECEIVER
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "E~mpfänger";
         Text [ en-US ] = "Re~ceiver" ;
     };
     FixedText FT_SUBJECT
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Betreff";
         Text [ en-US ] = "~Subject" ;
     };
     Edit ED_SUBJECT
@@ -342,9 +306,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
             MASKCOLOR
         };
 
-        Text [ de ] = "Datenquellen..." ;
         Text [ en-US ] = "Data Sources...";
-        QuickHelpText [ de ] = "Datenquellen..." ;
         QuickHelpText [ en-US ] = "Data Sources..." ;
     };
     Image IMG_ADRESSBOOK_HC
@@ -357,14 +319,12 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Weitere Einstellungen" ;
         Text [ en-US ] = "Further settings" ;
     };
     FixedText FT_FRAME
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Frame";
         Text [ en-US ] = "F~rame" ;
     };
     ComboBox CB_FRAME
@@ -380,7 +340,6 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     {
         Pos = MAP_APPFONT ( 126 , 105 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text [ de ] = "F~orm";
         Text [ en-US ] = "F~orm" ;
     };
     ListBox LB_FORM
@@ -392,11 +351,6 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         DropDown = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        StringList [ de ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Text" ; Default ; > ;
@@ -407,7 +361,6 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     {
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "Te~xt";
         Text [ en-US ] = "Te~xt" ;
     };
     Edit ED_INDICATION
@@ -420,7 +373,6 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
     {
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "N~ame";
         Text [ en-US ] = "N~ame" ;
     };
     Edit ED_TEXT
@@ -434,8 +386,6 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Ereignisse" ;
-        QuickHelpText [ de ] = "Ereignisse" ;
         QuickHelpText [ en-US ] = "Events" ;
         ButtonImage = Image
         {
@@ -464,22 +414,18 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 162 ) ;
-    Text [ de ] = "Hyperlink" ;
     Text [ en-US ] = "Hyperlink" ;
 
     FixedLine GRP_DOCUMENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Dokument" ;
         Text [ en-US ] = "Document" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PATH_DOC
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Pfad";
         Text [ en-US ] = "~Path" ;
     };
     ImageButton BTN_FILEOPEN
@@ -487,15 +433,12 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Pos = MAP_APPFONT ( 235, 14 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Datei öffnen" ;
-        QuickHelpText [ de ] = "Datei öffnen" ;
         QuickHelpText [ en-US ] = "Open File" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "fileopen.bmp" ; };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
         Text [ en-US ] = "Open File";
     };
     Image IMG_FILEOPEN_HC
@@ -508,14 +451,12 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Sprungziel im Dokument" ;
         Text [ en-US ] = "Target in document" ;
     };
     FixedText FT_TARGET_DOC
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "Sprungzie~l";
         Text [ en-US ] = "Targ~et" ;
     };
     Edit ED_TARGET_DOC
@@ -528,25 +469,19 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "URL";
         Text [ en-US ] = "URL" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FULL_URL
     {
         Pos = MAP_APPFONT ( COL_2 , 70 ) ;
         Size = MAP_APPFONT ( 176 - COL_DIFF , 12 ) ;
-        Text [ de ] = "Testtext";
         Text [ en-US ] = "Test text" ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_BROWSE
     {
         Pos = MAP_APPFONT ( 235, 51 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Sprungziel im Dokument" ;
-        QuickHelpText [ de ] = "Sprungziel im Dokument" ;
         QuickHelpText [ en-US ] = "Target in Document" ;
         ButtonImage = Image
         {
@@ -565,14 +500,12 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Weitere Einstellungen" ;
         Text [ en-US ] = "Further settings" ;
     };
     FixedText FT_FRAME
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Frame";
         Text [ en-US ] = "F~rame" ;
     };
     ComboBox CB_FRAME
@@ -588,7 +521,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     {
         Pos = MAP_APPFONT ( 126 , 105 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text [ de ] = "F~orm";
         Text [ en-US ] = "F~orm" ;
     };
     ListBox LB_FORM
@@ -600,11 +532,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         DropDown = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        StringList [ de ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Text" ; Default ; > ;
@@ -615,7 +542,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     {
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "Te~xt";
         Text [ en-US ] = "Te~xt" ;
     };
     Edit ED_INDICATION
@@ -628,7 +554,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
     {
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "N~ame";
         Text [ en-US ] = "N~ame" ;
     };
     Edit ED_TEXT
@@ -642,8 +567,6 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Ereignisse" ;
-        QuickHelpText [ de ] = "Ereignisse" ;
         QuickHelpText [ en-US ] = "Events" ;
         ButtonImage = Image
         {
@@ -672,36 +595,30 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 162 ) ;
-    Text [ de ] = "Hyperlink" ;
     Text [ en-US ] = "Hyperlink" ;
 
     FixedLine GRP_NEWDOCUMENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Neues Dokument" ;
         Text [ en-US ] = "New document" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_EDITNOW
     {
         Pos = MAP_APPFONT( COL_2, 13 );
         Size = MAP_APPFONT( 85 - COL_DIFF, 10 );
-        Text [ de ] = "Sofort ~bearbeiten";
         Text [ en-US ] = "Edit ~now";
     };
     RadioButton RB_EDITLATER
     {
         Pos = MAP_APPFONT( 142, 13 );
         Size = MAP_APPFONT( 84, 10 );
-        Text [ de ] = "~Später bearbeiten";
         Text [ en-US ] = "Edit ~later";
     };
     FixedText FT_PATH_NEWDOC
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Datei";
         Text [ en-US ] = "~File" ;
     };
     Edit ED_PATH_NEWDOC
@@ -714,9 +631,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "Dateit~yp";
         Text [ en-US ] = "File ~type" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DOCUMENT_TYPES
     {
@@ -731,9 +646,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Pos = MAP_APPFONT ( 235, 24 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Pfad auswählen" ;
 
-        QuickHelpText [ de ] = "Pfad auswählen" ;
         QuickHelpText [ en-US ] = "Select Path" ;
         ButtonImage = Image
         {
@@ -752,14 +665,12 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Weitere Einstellungen" ;
         Text [ en-US ] = "Further settings" ;
     };
     FixedText FT_FRAME
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "~Frame";
         Text [ en-US ] = "F~rame" ;
     };
     ComboBox CB_FRAME
@@ -775,7 +686,6 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     {
         Pos = MAP_APPFONT ( 126 , 105 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text [ de ] = "F~orm";
         Text [ en-US ] = "F~orm" ;
     };
     ListBox LB_FORM
@@ -787,11 +697,6 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         DropDown = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        StringList [ de ] =
-        {
-            < "Text" ; Default ; > ;
-            < "Schaltfläche" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Text" ; Default ; > ;
@@ -802,7 +707,6 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     {
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "Te~xt";
         Text [ en-US ] = "Te~xt" ;
     };
     Edit ED_INDICATION
@@ -815,7 +719,6 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
     {
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 39 + COL_DIFF , 8 ) ;
-        Text [ de ] = "N~ame";
         Text [ en-US ] = "N~ame" ;
     };
     Edit ED_TEXT
@@ -829,8 +732,6 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Pos = MAP_APPFONT ( 235, 103-1 ) ;
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_HEIGHT, HYPERDLG_IMGBUTTON_HEIGHT );
         TabStop = TRUE ;
-        Text [ de ] = "Ereignisse" ;
-        QuickHelpText [ de ] = "Ereignisse" ;
         QuickHelpText [ en-US ] = "Events" ;
         ButtonImage = Image
         {
@@ -857,7 +758,6 @@ ModalDialog RID_SVXDLG_NEWHYPERLINK
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 325 , 185 ) ;
-    Text [ de ] = "Hyperlink" ;
     Text [ en-US ] = "Hyperlink" ;
     Moveable = TRUE ;
 };
@@ -870,99 +770,78 @@ ModalDialog RID_SVXDLG_NEWHYPERLINK
 
 String RID_SVXSTR_HYPDLG_APPLYBUT
 {
-    Text [ de ] = "Übernehmen" ;
     Text [ en-US ] = "Apply" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_HYPDLG_CLOSEBUT
 {
-    Text [ de ] = "Schließen" ;
     Text [ en-US ] = "Close" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_HYPDLG_MACROACT1
 {
-    Text [ de ] = "Maus über Objekt" ;
     Text [ en-US ] = "Mouse over object" ;
 };
 String RID_SVXSTR_HYPDLG_MACROACT2
 {
-    Text [ de ] = "Hyperlink auslösen" ;
     Text [ en-US ] = "Trigger hyperlink" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_HYPDLG_MACROACT3
 {
-    Text [ de ] = "Maus verlässt Objekt" ;
     Text [ en-US ] = "Mouse leaves object" ;
 };
 
 String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
 {
-    Text [ de ] = "Geben Sie bitte einen gültigen Dateinamen ein.";
     Text [ en-US ] = "Please type in a valid file name." ;
-    Text [ x-comment ] = " ";
 };
 
 String RID_SVXSTR_HYPERDLG_HLINETTP
 {
-    Text [ de ] = "Internet";
     Text [ en-US ] = "Internet" ;
 };
 String RID_SVXSTR_HYPERDLG_HLINETTP_HELP
 {
-    Text [ de ] = "Erstellen Sie einen Hyperlink zu einer Webseite, einem FTP Server oder einer Telnet-Verbindung." ;
     Text [ en-US ] = "This is where you create a hyperlink to a Web page, FTP server or Telnet connection." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLMAILTP
 {
-    Text [ de ] = "Mail & News";
     Text [ en-US ] = "Mail & News" ;
 };
 String RID_SVXSTR_HYPERDLG_HLMAILTP_HELP
 {
-    Text [ de ] = "Erstellen Sie einen Hyperlink auf eine Mail-Adresse oder zu einem News-Forum." ;
     Text [ en-US ] = "This is where you create a hyperlink to an e-mail address or newsgroup." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCTP
 {
-    Text [ de ] = "Dokument";
     Text [ en-US ] = "Document" ;
 };
 String RID_SVXSTR_HYPERDLG_HLDOCTP_HELP
 {
-    Text [ de ] = "Erstellen Sie einen Hyperlink zu einem bestehenden Dokument oder ein Ziel innerhalb eines Dokumentes." ;
     Text [ en-US ] = "This is where you create a hyperlink to an existing document or a target within a document." ;
 };
 
 String RID_SVXSTR_HYPERDLG_HLDOCNTP
 {
-    Text [ de ] = "Neues Dokument";
     Text [ en-US ] = "New Document" ;
 };
 String RID_SVXSTR_HYPERDLG_HLDOCNTP_HELP
 {
-    Text [ de ] = "Erstellen Sie ein neues Dokument, auf das dann der neue Hyperlink verweist." ;
     Text [ en-US ] = "This is where you create a new document to which the new link points." ;
 };
 
 String RID_SVXSTR_HYPERDLG_FORM_BUTTON
 {
-    Text [ de ] = "Schaltfläche" ;
     Text [ en-US ] = "Button" ;
 };
 
 String RID_SVXSTR_HYPERDLG_FROM_TEXT
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
 };
 
 String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
 {
-    Text [ de ] = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
