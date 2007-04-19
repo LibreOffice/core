@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pubdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:24:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:13:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog DLG_PUBLISHING
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 272 , 190 ) ;
-    Text [ de ] = "HTML-Export" ;
     Text [ en-US ] = "HTML Export" ;
     Moveable = TRUE ;
 
@@ -63,7 +62,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Design zuweisen" ;
         Text [ en-US ] = "Assign design";
     };
 
@@ -71,18 +69,14 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 12, 50 );
         Size = MAP_APPFONT( 153, 10 );
-        Text [ de ] = "~Neues Design";
         Text [ en-US ] = "New design";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton PAGE1_OLD_DESIGN
     {
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 153, 10 );
-        Text [ de ] = "~Existierendes Design";
         Text [ en-US ] = "Existing Design";
-        Text [ x-comment ] = " ";
     };
 
     ListBox PAGE1_DESIGNS
@@ -98,20 +92,16 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 168 , 75 ) ;
         Size = MAP_APPFONT ( 92 , 14 ) ;
-        Text [ de ] = "Markiertes Design ~löschen" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text [ en-US ] = "Delete Selected Design";
-        Text [ x-comment ] = " ";
     };
 
     FixedText PAGE1_DESC
     {
         Pos = MAP_APPFONT ( 12 , 142 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Wählen Sie ein existierendes Design, oder erstellen Sie ein neues" ;
         Text [ en-US ] = "Select an existing design or create a new one";
-        Text [ x-comment ] = " ";
     };
 
 
@@ -133,43 +123,34 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6, 38 ) ;
         Size = MAP_APPFONT ( 124, 8 ) ;
-        Text [ de ] = "Art der Veröffentlichung" ;
         Text [ en-US ] = "Publication type";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton PAGE2_STANDARD
     {
         Pos = MAP_APPFONT( 12, 50 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "Standard ~HTML Format";
         Text [ en-US ] = "Standard H~TML format";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton PAGE2_FRAMES
     {
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "Standard HTML mit ~Frames";
         Text [ en-US ] = "Standard HTML with ~frames";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton PAGE2_KIOSK
     {
         Pos = MAP_APPFONT( 12, 76 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~Automatisch";
         Text [ en-US ] = "~Automatic";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton PAGE2_WEBCAST
     {
         Pos = MAP_APPFONT( 12, 89 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~WebCast";
         Text [ en-US ] = "~WebCast";
     };
 
@@ -221,7 +202,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 138, 38 );
         Size = MAP_APPFONT( 128, 8 );
-        Text [ de ] = "Zusätze" ;
         Text [ en-US ] = "Options";
     };
 
@@ -229,9 +209,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 49 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~Titelseite erzeugen";
         Text [ en-US ] = "Create title page";
-        Text [ x-comment ] = " ";
     };
 
     FixedLine PAGE2_VERT
@@ -245,9 +223,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 63 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~Notizen anzeigen";
         Text [ en-US ] = "Show notes";
-        Text [ x-comment ] = " ";
     };
 
     ///////////////////////////////
@@ -258,7 +234,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 138, 38 );
         Size = MAP_APPFONT( 128, 8 );
-        Text [ de ] = "Seitenwechsel" ;
         Text [ en-US ] = "Advance slides" ;
     };
 
@@ -267,7 +242,6 @@ ModalDialog DLG_PUBLISHING
         Pos = MAP_APPFONT ( 144 , 49 ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Wie im Dokument angegeben" ;
         Text [ en-US ] = "~As stated in document" ;
     };
 
@@ -276,16 +250,13 @@ ModalDialog DLG_PUBLISHING
         Pos = MAP_APPFONT ( 144 , 63 ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "~Automatic" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedText PAGE2_DURATION_TXT
     {
         Pos = MAP_APPFONT ( 154, 77 ) ;
         Size = MAP_APPFONT ( 40, 10 ) ;
-        Text [ de ] = "~Standdauer:" ;
         Text [ en-US ] = "~Slide view time:" ;
     };
 
@@ -311,7 +282,6 @@ ModalDialog DLG_PUBLISHING
             Minute = 59 ;
             Second = 59 ;
         };
-        QuickHelpText [ de ] = "Stand~dauer" ;
         QuickHelpText [ en-US ] = "~Duration of page";
     };
 
@@ -319,9 +289,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 154, 91 );
         Size = MAP_APPFONT ( 108, 10 );
-        Text [ de ] = "~Endlos" ;
         Text [ en-US ] = "~Endless" ;
-        Text [ x-comment ] = " ";
     };
 
     /////////////////////////////////
@@ -332,7 +300,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 138, 38 );
         Size = MAP_APPFONT( 128, 8 );
-        Text [ de ] = "WebCast" ;
         Text [ en-US ] = "WebCast" ;
     };
 
@@ -340,7 +307,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 49 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~Active Server Pages (ASP)";
         Text [ en-US ] = "~Active Server Pages (ASP)";
     };
 
@@ -348,7 +314,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 63 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~Perl";
         Text [ en-US ] = "Perl" ;
     };
 
@@ -356,9 +321,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 154, 76 );
         Size = MAP_APPFONT( 105, 10 );
-        Text [ de ] = "~URL für Zuhörer";
         Text [ en-US ] = "~URL for listeners";
-        Text [ x-comment ] = " ";
     };
 
     Edit PAGE2_INDEX
@@ -373,9 +336,7 @@ ModalDialog DLG_PUBLISHING
     {
         Pos  = MAP_APPFONT( 154, 104 );
         Size = MAP_APPFONT( 105, 10 );
-        Text [ de ] = "URL für ~Präsentation:";
         Text [ en-US ] = "URL for ~presentation:";
-        Text [ x-comment ] = " ";
     };
 
     Edit PAGE2_URL
@@ -390,7 +351,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos  = MAP_APPFONT( 154, 132 );
         Size = MAP_APPFONT( 105, 10 );
-        Text [ de ] = "URL für ~Perl Skripte:";
         Text [ en-US ] = "URL for ~Perl scripts:";
     };
 
@@ -425,7 +385,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6, 38 ) ;
         Size = MAP_APPFONT ( 124, 8 ) ;
-        Text [ de ] = "Grafiken speichern als" ;
         Text [ en-US ] = "Save graphics as";
     };
 
@@ -433,7 +392,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 12, 49 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~GIF";
         Text [ en-US ] = "~GIF";
     };
 
@@ -441,7 +399,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "~JPG";
         Text [ en-US ] = "~JPG";
     };
 
@@ -457,7 +414,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 49, 79 );
         Size = MAP_APPFONT( 79, 10 );
-        Text [ de ] = "Qualität";
         Text [ en-US ] = "Quality";
     };
 
@@ -476,7 +432,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 138, 38 );
         Size = MAP_APPFONT( 128, 8 );
-        Text [ de ] = "Monitorauflösung";
         Text [ en-US ] = "Monitor resolution";
     };
 
@@ -484,7 +439,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 49 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "Niedrige Auflösung (~640x480 Pixel)";
         Text [ en-US ] = "Low resolution (~640x480 pixels)";
     };
 
@@ -492,7 +446,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 144, 63 );
         Size = MAP_APPFONT( 116, 10 );
-        Text [ de ] = "Mittlere Auflösung (~800x600 Pixel)";
         Text [ en-US ] = "Medium resolution (~800x600 pixels)";
     };
 
@@ -500,7 +453,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 144, 77 ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
-        Text [ de ] = "Hohe Auflösung (~1024x768 Pixel)";
         Text [ en-US ] = "High resolution (~1024x768 pixels)";
     };
 
@@ -512,16 +464,13 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 6, 100 );
         Size = MAP_APPFONT( 258, 8 );
-        Text [ de ] = "Effekte";
         Text [ en-US ] = "Effects";
-        Text [ x-comment ] = " ";
     };
 
     CheckBox PAGE3_SLD_SOUND
     {
         Pos = MAP_APPFONT ( 12, 111 );
         Size = MAP_APPFONT ( 252, 10 );
-        Text [ de ] = "~Klänge beim Seitenwechsel exportieren" ;
         Text [ en-US ] = "~Export sounds when slide advances" ;
 
     };
@@ -543,7 +492,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Informationen für die Titelseite" ;
         Text [ en-US ] = "Information for the title page";
     };
 
@@ -551,7 +499,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 12, 51 );
         Size = MAP_APPFONT ( 121, 8 );
-        Text [ de ] ="~Autor";
         Text [ en-US ] = "~Author";
     };
 
@@ -567,8 +514,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 12, 67 );
         Size = MAP_APPFONT ( 121, 8 );
-        Text [ de ] = "E-~Mail-Adresse";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "E-~mail address";
     };
 
@@ -584,8 +529,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 12, 83 );
         Size = MAP_APPFONT ( 121, 8 );
-        Text [ de ] = "Ihre ~Homepage";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Your hom~epage";
     };
 
@@ -601,7 +544,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Weitere ~Informationen" ;
         Text [ en-US ] = "Additional ~information";
     };
 
@@ -620,7 +562,6 @@ ModalDialog DLG_PUBLISHING
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 252 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Link auf Kopie der ~Originalpräsentation" ;
         Text [ en-US ] = "Link to a copy of the ~original presentation";
     };
 
@@ -629,7 +570,6 @@ ModalDialog DLG_PUBLISHING
         Pos = MAP_APPFONT ( 12 , 152 ) ;
         Size = MAP_APPFONT ( 252 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Hinweis: 'Erzeugt mit %PRODUCTNAME'" ;
         Text [ en-US ] = "Note: 'Created with %PRODUCTNAME'";
     };
 
@@ -650,18 +590,14 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Schaltflächenstil auswählen" ;
         Text [ en-US ] = "Select button style";
-        Text [ x-comment ] = " ";
     };
 
     CheckBox PAGE5_TEXTONLY
     {
         Pos = MAP_APPFONT ( 12, 50 );
         Size = MAP_APPFONT ( 243, 10 );
-        Text [ de ] = "Nur ~Text";
         Text [ en-US ] = "~Text only";
-        Text [ x-comment ] = " ";
     };
 
     Control PAGE5_BUTTONS
@@ -689,25 +625,20 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 258 , 8 ) ;
-        Text [ de ] = "Farbschema auswählen" ;
         Text [ en-US ] = "Select color scheme";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton PAGE6_DOCCOLORS
     {
         Pos = MAP_APPFONT( 12, 50 );
         Size = MAP_APPFONT( 246, 10 );
-        Text [ de ] = "Farbschema aus Dokument ü~bernehmen";
         Text [ en-US ] = "~Apply color scheme from document";
-        Text [ x-comment ] = " ";
     };
 
     RadioButton PAGE6_DEFAULT
     {
         Pos = MAP_APPFONT( 12, 63 );
         Size = MAP_APPFONT( 246, 10 );
-        Text [ de ] = "~Browser Farben verwenden";
         Text [ en-US ] = "Use ~browser colors";
     };
 
@@ -715,7 +646,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 12, 76 );
         Size = MAP_APPFONT( 246, 10 );
-        Text [ de ] = "~Eigenes Farbschema verwenden";
         Text [ en-US ] = "~Use custom color scheme";
     };
 
@@ -723,34 +653,27 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 21, 89 );
         Size = MAP_APPFONT( 72, 14 );
-        Text [ de ] = "~Text";
         Text [ en-US ] = "Text";
-        Text [ x-comment ] = " ";
     };
 
     PushButton PAGE6_LINK
     {
         Pos = MAP_APPFONT( 21, 106 );
         Size = MAP_APPFONT( 72, 14 );
-        Text [ de ] = "Hyper~link";
         Text [ en-US ] = "Hyper~link";
-        Text [ x-comment ] = " ";
     };
 
     PushButton PAGE6_ALINK
     {
         Pos = MAP_APPFONT( 21, 123 );
         Size = MAP_APPFONT( 72, 14 );
-        Text [ de ] = "~Aktiver Link";
         Text [ en-US ] = "Active Li~nk";
-        Text [ x-comment ] = " ";
     };
 
     PushButton PAGE6_VLINK
     {
         Pos = MAP_APPFONT( 21, 140 );
         Size = MAP_APPFONT( 72, 14 );
-        Text [ de ] = "~Gesichteter Link";
         Text [ en-US ] = "~Visited Link";
     };
 
@@ -765,7 +688,6 @@ ModalDialog DLG_PUBLISHING
     {
         Pos = MAP_APPFONT( 199, 89 );
         Size = MAP_APPFONT( 60, 14 );
-        Text [ de ] = "~Hintergrund";
         Text [ en-US ] = "Bac~kground";
     };
 
@@ -782,10 +704,8 @@ ModalDialog DLG_PUBLISHING
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 112 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "<< ~Zurück" ;
         TabStop = TRUE ;
         Text [ en-US ] = "<< Back" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BUT_NEXT
@@ -794,10 +714,8 @@ ModalDialog DLG_PUBLISHING
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 165 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Weiter >>" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Next >>" ;
-        Text [ x-comment ] = " ";
     };
 
     OKButton BUT_FINISH
@@ -805,10 +723,8 @@ ModalDialog DLG_PUBLISHING
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 218 , 170 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Fertig stellen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Create" ;
-        Text [ x-comment ] = " ";
     };
 
     CancelButton BUT_CANCEL
@@ -825,7 +741,6 @@ ModalDialog DLG_PUBLISHING
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 
 ModalDialog DLG_DESIGNNAME
@@ -834,7 +749,6 @@ ModalDialog DLG_DESIGNNAME
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 40 ) ;
-    Text [ de ] = "Name fuer HTML-Design" ;
     Moveable = TRUE ;
 
     Edit EDT_NAME
@@ -852,9 +766,7 @@ ModalDialog DLG_DESIGNNAME
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
         TabStop = TRUE ;
-        Text [ de ] = "~Speichern" ;
         Text [ en-US ] = "~Save";
-        Text [ x-comment ] = " ";
     };
 
     CancelButton BTN_NOSAVE
@@ -863,12 +775,9 @@ ModalDialog DLG_DESIGNNAME
         Pos = MAP_APPFONT ( 80 , 22 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Nicht speichern";
         Text [ en-US ] = "Do Not Save";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Name HTML Design";
-    Text [ x-comment ] = " ";
 };
 
 
