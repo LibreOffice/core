@@ -4,9 +4,9 @@
  *
  *  $RCSfile: align.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:32:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:58:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
 {
     HelpId = HID_ALIGNMENT ;
     Hide = TRUE ;
-    Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
@@ -56,14 +55,12 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Textausrichtung" ;
         Text [ en-US ] = "Text alignment";
     };
     FixedText FT_HORALIGN
     {
         Pos = MAP_APPFONT ( 12 ,14 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "H~orizontal" ;
         Text [ en-US ] = "Hori~zontal";
     };
     ListBox LB_HORALIGN
@@ -73,15 +70,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Size = MAP_APPFONT ( 100 , 60 );
         TabStop = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "Standard" ; ALIGNDLG_HORALIGN_STD ; > ;
-            < "Links" ; ALIGNDLG_HORALIGN_LEFT ; > ;
-            < "Zentriert" ; ALIGNDLG_HORALIGN_CENTER ; > ;
-            < "Rechts" ; ALIGNDLG_HORALIGN_RIGHT ; > ;
-            < "Block" ; ALIGNDLG_HORALIGN_BLOCK ; > ;
-            < "Ausgefüllt" ; ALIGNDLG_HORALIGN_FILL ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Default" ; ALIGNDLG_HORALIGN_STD ; > ;
@@ -96,7 +84,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 118 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "Einzu~g" ;
         Text [ en-US ] = "I~ndent" ;
     };
     MetricField ED_INDENT
@@ -115,7 +102,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 160 , 14 ) ;
         Size = MAP_APPFONT ( 88 , 8 ) ;
-        Text [ de ] = "~Vertikal" ;
         Text [ en-US ] = "~Vertical";
     };
     ListBox LB_VERALIGN
@@ -125,13 +111,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Size = MAP_APPFONT ( 88 , 60 );
         TabStop = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "Standard" ; ALIGNDLG_VERALIGN_STD ; > ;
-            < "Oben" ; ALIGNDLG_VERALIGN_TOP ; > ;
-            < "Mitte" ; ALIGNDLG_VERALIGN_MID ; > ;
-            < "Unten" ; ALIGNDLG_VERALIGN_BOTTOM ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Default" ; ALIGNDLG_VERALIGN_STD ; > ;
@@ -144,7 +123,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Textorientierung" ;
         Text [ en-US ] = "Text orientation" ;
     };
     TriStateBox BTN_TXTSTACKED
@@ -152,7 +130,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Pos = MAP_APPFONT ( 133 , 54 ) ;
         Size = MAP_APPFONT ( 115 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Senkrecht gestapelt";
         Text[ en-US ] = "Ve~rtically stacked";
     };
     Control CTR_DIAL
@@ -166,7 +143,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 72 , 54 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "De~grees";
     };
     NumericField NF_DEGREES
@@ -186,7 +162,6 @@ TabPage RID_SVXPAGE_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 72 , 83 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Bezugs~kante" ;
         Text [ en-US ] = "Re~ference edge" ;
     };
     Control CTR_BORDER_LOCK
@@ -201,42 +176,36 @@ TabPage RID_SVXPAGE_ALIGNMENT
         Pos = MAP_APPFONT ( 143 , 68 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Asiatischer ~Layoutmodus" ;
         Text [ en-US ] = "Asian layout ~mode" ;
     };
     FixedLine FL_WRAP
     {
         Pos = MAP_APPFONT ( 6 , 115 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties" ;
     };
     TriStateBox BTN_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Automatischer Zeilenumbru~ch" ;
         Text [ en-US ] = "~Wrap text automatically" ;
     };
     TriStateBox BTN_HYPH
     {
         Pos = MAP_APPFONT ( 22 , 139 ) ;
         Size = MAP_APPFONT ( 226 , 10 ) ;
-        Text [ de ] = "Silben~trennung aktiv" ;
         Text [ en-US ] = "Hyphenation ~active";
     };
     TriStateBox BTN_SHRINK
     {
         Pos = MAP_APPFONT( 12, 152 );
         Size = MAP_APPFONT( 236, 10 );
-        Text [ de ] = "~An Zellgröße anpassen";
         Text [ en-US ] = "~Shrink to fit cell size";
     };
     FixedText FT_TEXTFLOW
     {
         Pos = MAP_APPFONT( 12 , 170 );
         Size = MAP_APPFONT( 64 , 8 );
-        Text [ de ] = "Te~xtrichtung";
         Text [ en-US ] = "Te~xt direction";
     };
     ListBox LB_FRAMEDIR
@@ -272,17 +241,14 @@ TabPage RID_SVXPAGE_ALIGNMENT
     };
     String STR_BOTTOMLOCK
     {
-        Text [ de ] = "Textausdehnung von unterer Zellkante aus." ;
         Text [ en-US ] = "Text Extension From Lower Cell Border" ;
     };
     String STR_TOPLOCK
     {
-        Text [ de ] = "Textausdehnung von oberer Zellkante aus." ;
         Text [ en-US ] = "Text Extension From Upper Cell Border" ;
     };
     String STR_CELLLOCK
     {
-        Text [ de ] = "Textausdehnung nur innerhalb der Zelle." ;
         Text [ en-US ] = "Text Extension Inside Cell" ;
     };
 };
