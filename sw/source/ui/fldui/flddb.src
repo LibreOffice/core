@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddb.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:03:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:07:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,12 +42,10 @@ TabPage TP_FLD_DB
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Datenbank" ;
     FixedText FT_DBTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Feldtyp" ;
         Text [ en-US ] = "~Type" ;
         Left = TRUE ;
     };
@@ -72,7 +70,6 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 6 , 126 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "Bedin~gung" ;
         Text [ en-US ] = "~Condition" ;
         Left = TRUE ;
     };
@@ -88,7 +85,6 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 6 , 156 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "Sat~znummer" ;
         Text [ en-US ] = "Record number" ;
         Left = TRUE ;
     };
@@ -104,7 +100,6 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 166 , 8 ) ;
-        Text [ de ] = "Datenbank~auswahl" ;
         Left = TRUE ;
         Text [ en-US ] = "Database s~election" ;
     };
@@ -119,14 +114,12 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 88 , 123) ;
         Size = MAP_APPFONT ( 105 , 8 ) ;
-        Text [ de ] = "Datenbankdatei hinzufügen" ;
         Text [ en-US ] = "Add database file" ;
     };
     PushButton PB_ADDDB
     {
         Pos = MAP_APPFONT ( 198 , 121) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ]  = "~Durchsuchen..." ;
         Text [ en-US ] = "Browse..." ;
     };
 
@@ -134,7 +127,6 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 94 , 153 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "A~us Datenbank" ;
         Check = TRUE ;
         Text [ en-US ] = "From database" ;
     };
@@ -142,7 +134,6 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 94 , 166 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Se~lbst definiert" ;
         Text [ en-US ] = "User-defined" ;
     };
     ListBox LB_DBNUMFORMAT
@@ -169,7 +160,6 @@ TabPage TP_FLD_DB
     {
         Pos = MAP_APPFONT ( 88 , 141 ) ;
         Size = MAP_APPFONT ( 166 , 8 ) ;
-        Text [ de ] = "Format" ;
         Text [ en-US ] = "Format" ;
     };
     FixedLine FL_DBFORMAT_VERT
