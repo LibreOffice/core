@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontsubs.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 10:23:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:03:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,19 +60,15 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "~Ersetzungstabelle anwenden" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Apply replacement table";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FONT1
     {
         Pos = MAP_APPFONT ( 6 , 20 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Schriftart" ;
         Left = TRUE ;
         Text [ en-US ] = "~Font";
-        Text [ x-comment ] = " ";
     };
     ComboBox CB_FONT1
     {
@@ -90,10 +86,8 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     {
         Pos = MAP_APPFONT ( 110 , 20 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Ersetzen ~durch" ;
         Left = TRUE ;
         Text [ en-US ] = "Re~place with";
-        Text [ x-comment ] = " ";
     };
     ComboBox CB_FONT2
     {
@@ -129,17 +123,13 @@ TabPage RID_SVX_FONT_SUBSTITUTION
             {
                 Identifier = BT_SUBSTAPPLY ;
                 HelpID = HID_OFA_SUBST_APPLY ;
-                Text [ de ] = "Übernehmen" ;
                 Text [ en-US ] = "Apply" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = BT_SUBSTDELETE ;
                 HelpID = HID_OFA_SUBST_DELETE ;
-                Text [ de ] = "Löschen" ;
                 Text [ en-US ] = "Delete" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -154,14 +144,12 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     {
         Pos = MAP_APPFONT ( 6 , 129 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schrifteinstellungen für HTML- und Basic-Quelltexte" ;
         Text [ en-US ] = "Font settings for HTML and Basic sources" ;
     };
     FixedText FT_FONTNAME
     {
         Pos = MAP_APPFONT ( 6 , 142 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "Schriftarten" ;
         Text [ en-US ] = "Fonts" ;
     };
     ListBox LB_FONTNAME
@@ -177,14 +165,12 @@ TabPage RID_SVX_FONT_SUBSTITUTION
         Pos = MAP_APPFONT ( 65 , 155 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Nur die nicht-proportionalen Schriften" ;
         Text [ en-US ] = "Non-proportional fonts only" ;
     };
     FixedText FT_FONTHEIGHT
     {
         Pos = MAP_APPFONT ( 6 , 171 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~Größe";
         Text [ en-US ] ="~Size";
     };
     ListBox LB_FONTHEIGHT
@@ -197,31 +183,22 @@ TabPage RID_SVX_FONT_SUBSTITUTION
     };
     String STR_HEADER1
     {
-        Text [ de ] = "Immer" ;
         Text [ en-US ] = "Always";
-        Text [ x-comment ] = " ";
     };
     String STR_HEADER2
     {
-        Text [ de ] = "Nur Bildschirm" ;
         Text [ en-US ] = "Screen only";
-        Text [ x-comment ] = " ";
     };
     String STR_HEADER3
     {
-        Text [ de ] = "Schriftart" ;
         Text [ en-US ] = "Font";
-        Text [ x-comment ] = " ";
     };
     String STR_HEADER4
     {
-        Text [ de ] = "Ersetzen durch" ;
         Text [ en-US ] = "Replace with";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOMATIC
     {
-        Text [ de ] = "Automatisch" ;
         Text [ en-US ] = "Automatic";
     };
     Bitmap CHKBUT_UNCHECKED
