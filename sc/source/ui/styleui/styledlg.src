@@ -4,9 +4,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:11:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:50:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ TabDialog RID_SCDLG_STYLES_PAR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Zellvorlage" ;
     Text [ en-US ] = "Cell Style" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -54,68 +53,52 @@ TabDialog RID_SCDLG_STYLES_PAR
             PageItem
             {
                 Identifier = TP_NUMBER ;
-                Text [ de ] = "Zahlen" ;
                 Text [ en-US ] = "Numbers" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FONT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Schrift : Zeichen */
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FONTEFF ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects";
             };
             PageItem
             {
                 Identifier = TP_ALIGNMENT ;
-                Text [ de ] = "Ausrichtung" ;
                 Text [ en-US ] = "Alignment" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_ASIAN ;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PROTECTION ;
-                Text [ de ] = "Zellschutz" ;
                 Text [ en-US ] = "Cell Protection" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 TabDialog RID_SCDLG_STYLES_PAGE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 165 ) ;
-    Text [ de ] = "Seitenvorlage" ;
     Text [ en-US ] = "Page Style" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -129,48 +112,35 @@ TabDialog RID_SCDLG_STYLES_PAGE
             PageItem
             {
                 Identifier = TP_PAGE_STD ;
-                Text [ de ] = "Seite" ;
                 Text [ en-US ] = "Page" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PAGE_HEADER ;
-                Text [ de ] = "Kopfzeile" ;
                 Text [ en-US ] = "Header" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PAGE_FOOTER ;
-                Text [ de ] = "Fußzeile" ;
                 Text [ en-US ] = "Footer" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_TABLE ;
-                Text [ de ] = "Tabelle" ;
                 Text [ en-US ] = "Sheet" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 
 
