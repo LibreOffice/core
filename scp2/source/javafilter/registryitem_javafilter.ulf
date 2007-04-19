@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_javafilter.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:32:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:27:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,45 +34,34 @@
  ************************************************************************/
 
 [STR_VALUE__43887C67_4D5D_4127_BAAC_87A288494C7C_]
-de = "Pocket Excel"
 en-US = "Pocket Excel"
 
 [STR_VALUE__43887C67_4D5D_4127_BAAC_87A288494C7C__PEGASUSFILTER_DESCRIPTION]
-de = "Pocket Excel Workbook"
 en-US = "Pocket Excel Workbook"
 
 [STR_VALUE__BDD611C3_7BAB_460F_8711_5B9AC9EF6020_]
-de = "%PRODUCTNAME Writer"
 en-US = "%PRODUCTNAME Writer"
 
 [STR_VALUE__BDD611C3_7BAB_460F_8711_5B9AC9EF6020__PEGASUSFILTER_DESCRIPTION]
-de = "%PRODUCTNAME Writer XML Dokument"
 en-US = "%PRODUCTNAME Writer XML Document"
 
 [STR_VALUE__C6AB3E74_9F4F_4370_8120_A8A6FABB7A7C_]
-de = "%PRODUCTNAME Calc"
 en-US = "%PRODUCTNAME Calc"
 
 [STR_VALUE__C6AB3E74_9F4F_4370_8120_A8A6FABB7A7C__PEGASUSFILTER_DESCRIPTION]
-de = "%PRODUCTNAME Calc XML Dokument"
 en-US = "%PRODUCTNAME Calc XML Document"
 
 [STR_VALUE__CB43F086_838D_4FA4_B5F6_3406B9A57439_]
-de = "Pocket Word"
 en-US = "Pocket Word"
 
 [STR_VALUE__CB43F086_838D_4FA4_B5F6_3406B9A57439__PEGASUSFILTER_DESCRIPTION]
-de = "Pocket Word Dokument - Pocket PC"
 en-US = "Pocket Word Document - Pocket PC"
 
 [STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_CLASSPATH]
-de = "Die %PRODUCTNAME-Filter für mobile Geräte können nicht gefunden werden."
 en-US = "The %PRODUCTNAME mobile device filters cannot be located."
 
 [STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVA]
-de = "Eine Installation von Java 1.4 kann nicht gefunden werden."
 en-US = "A Java 1.4 installation cannot be located."
 
 [STR_VALUE_HKLM_SOFT_SUN_STAROFFICE_XMERGESYNC_MSGS_ERROR_JAVAINIT]
-de = "Ein Fehler ist während der Initialisierung der Java-Laufzeitumgebung aufgetreten."
 en-US = "There was an error while initializing the Java Runtime Environment."
