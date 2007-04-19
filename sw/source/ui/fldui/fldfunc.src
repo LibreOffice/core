@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldfunc.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:03:21 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:08:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,12 @@ TabPage TP_FLD_FUNC
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Funktionen" ;
     FixedText FT_FUNCTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Feldtyp" ;
         Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_FUNCTYPE
     {
@@ -65,11 +62,9 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Auswahl" ;
         Text [ en-US ] = "S~elect" ;
         Hide = TRUE ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_FUNCSELECTION
     {
@@ -85,10 +80,8 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
         Text [ en-US ] = "F~ormat" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_FUNCFORMAT
     {
@@ -101,10 +94,8 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "Na~me" ;
         Left = TRUE ;
         Text [ en-US ] = "Na~me" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCNAME
     {
@@ -118,10 +109,8 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 30 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "~Wert" ;
         Text [ en-US ] = "~Value" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCVALUE
     {
@@ -135,11 +124,9 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 30 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "~Dann" ;
         Left = TRUE ;
         Hide = TRUE ;
         Text [ en-US ] = "Then" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCCOND1
     {
@@ -154,11 +141,9 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 170 , 57 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "So~nst" ;
         Left = TRUE ;
         Hide = TRUE ;
         Text [ en-US ] = "Else" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FUNCCOND2
     {
@@ -173,18 +158,15 @@ TabPage TP_FLD_FUNC
     {
         Pos = MAP_APPFONT ( 204 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "M~akro..." ;
         Text [ en-US ] = "~Macro..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LISTITEM
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Eintrag" ;
         Text [ en-US ] = "Ite~m" ;
     };
     Edit ED_LISTITEM
@@ -201,7 +183,6 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 170 , 29 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text [ de ] = "Hi~nzufügen" ;
         Text [ en-US ] = "~Add" ;
     };
     FixedText FT_LISTITEMS
@@ -209,7 +190,6 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 170 , 46 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Listeneinträge" ;
         Text [ en-US ] = "Items on ~list" ;
     };
     ListBox LB_LISTITEMS
@@ -226,7 +206,6 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 203 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text [ de ] = "Entfernen" ;
         Text [ en-US ] = "~Remove" ;
     };
     PushButton PB_LISTUP
@@ -234,7 +213,6 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 203 , 121 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text [ de ] = "Nach ~oben" ;
         Text [ en-US ] = "Move ~Up" ;
     };
     PushButton PB_LISTDOWN
@@ -242,7 +220,6 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 203 , 138 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Hide = TRUE;
-        Text [ de ] = "Nach ~unten" ;
         Text [ en-US ] = "Move Do~wn" ;
     };
     FixedText FT_LISTNAME
@@ -250,7 +227,6 @@ TabPage TP_FLD_FUNC
         Pos = MAP_APPFONT ( 170 , 156 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Name" ;
         Text [ en-US ] = "Na~me" ;
     };
     Edit ED_LISTNAME
@@ -263,7 +239,6 @@ TabPage TP_FLD_FUNC
         Hide = TRUE;
     };
     Text [ en-US ] = "Functions" ;
-    Text [ x-comment ] = " ";
 };
 
 
