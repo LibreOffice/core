@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdraw.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:34:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:30:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
     {\
         Identifier = SID_TEXT_STANDARD ; \
         HelpID = SID_TEXT_STANDARD ; \
-        Text [ de ] = "Standar~d" ; \
         Text [ en-US ] = "~Default" ; \
         Text [ x-comment ] = " ";\
     };
@@ -56,7 +55,6 @@
     {\
         Identifier = RID_MN_FORMAT_STYLE ; \
         HelpID = RID_MN_FORMAT_STYLE ; \
-        Text [ de ] = "Sti~l" ; \
         Text [ en-US ] = "~Style" ; \
         SubMenu = Menu\
         {\
@@ -94,7 +92,6 @@
                 {\
                     Identifier = SID_SET_SUPER_SCRIPT ; \
                     HelpID = SID_SET_SUPER_SCRIPT ; \
-                    Text [ de ] = "~Hochstellen" ; \
                     Text [ en-US ] = "~Superscript" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -102,7 +99,6 @@
                 {\
                     Identifier = SID_SET_SUB_SCRIPT ; \
                     HelpID = SID_SET_SUB_SCRIPT ; \
-                    Text [ de ] = "~Tiefstellen" ; \
                     Text [ en-US ] = "S~ubscript" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -114,7 +110,6 @@
     {\
         Identifier = RID_MN_FORMAT_ALGN ; \
         HelpID = RID_MN_FORMAT_ALGN ; \
-        Text [ de ] = "~Ausrichtung" ; \
         Text [ en-US ] = "~Alignment" ; \
         RadioCheck = TRUE ; \
         SubMenu = Menu\
@@ -126,7 +121,6 @@
                     Identifier = SID_ALIGNLEFT ; \
                     HelpID = SID_ATTR_PARA_ADJUST_LEFT ; \
                     RadioCheck = TRUE ; \
-                    Text [ de ] = "~Links" ; \
                     Text [ en-US ] = "~Left" ;\
                     Text [ x-comment ] = " ";   \
                 };\
@@ -135,7 +129,6 @@
                     Identifier = SID_ALIGNRIGHT ; \
                     HelpID = SID_ATTR_PARA_ADJUST_RIGHT ; \
                     RadioCheck = TRUE ; \
-                    Text [ de ] = "~Rechts" ; \
                     Text [ en-US ] = "~Right" ;\
                 };\
                 MenuItem\
@@ -143,7 +136,6 @@
                     Identifier = SID_ALIGNCENTERHOR ; \
                     HelpID = SID_ATTR_PARA_ADJUST_CENTER ; \
                     RadioCheck = TRUE ; \
-                    Text [ de ] = "~Zentriert" ; \
                     Text [ en-US ] = "~Centered" ;\
                 };\
                 MenuItem\
@@ -151,7 +143,6 @@
                     Identifier = SID_ALIGNBLOCK ; \
                     HelpID = SID_ATTR_PARA_ADJUST_BLOCK ; \
                     RadioCheck = TRUE ; \
-                    Text [ de ] = "~Blocksatz" ; \
                     Text [ en-US ] = "~Justified" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -163,7 +154,6 @@
     {\
         Identifier = RID_MN_FORMAT_LINESPACE ; \
         HelpID = RID_MN_FORMAT_LINESPACE ; \
-        Text [ de ] = "~Zeilenabstand" ; \
         Text [ en-US ] = "~Line Spacing" ; \
         _MenuItemFlags = MIB_RADIOCHECK ; \
         SubMenu = Menu\
@@ -205,7 +195,6 @@
     {\
         Identifier = SID_DRAWTEXT_ATTR_DLG ; \
         HelpID = SID_DRAWTEXT_ATTR_DLG ; \
-        Text [ de ] = "~Text..." ; \
         Text [ en-US ] = "Te~xt..." ; \
         /* ### ACHTUNG: Neuer Text in Resource? Textattribute für die selektierten Textobjekte festlegen : Textattribute f³r die selektierten Textobjekte festlegen */\
         Text [ x-comment ] = " ";\
@@ -217,7 +206,6 @@
         Identifier = SID_ORIGINALSIZE ; \
         HelpId = SID_ORIGINALSIZE ; \
         /* ### ACHTUNG: Neuer Text in Resource? Originalgröße : Originalgr÷˜e */\
-        Text [ de ] = "Original~grÃ¶ÃŸe" ; \
         Text [ en-US ] = "~Original Size" ; \
         Text [ x-comment ] = " ";\
     };
@@ -227,7 +215,6 @@
     {\
         Identifier = SID_RENAME_OBJECT ; \
         HelpId = SID_RENAME_OBJECT ; \
-        Text [ de ] = "Name..." ; \
         Text [ en-US ] = "Name...";\
     };
 
@@ -237,7 +224,6 @@
     {\
         Identifier = SID_TITLE_DESCRIPTION_OBJECT; \
         HelpId = SID_TITLE_DESCRIPTION_OBJECT; \
-        Text [ de ] = "Beschreibung..." ; \
         Text [ en-US ] = "Description...";\
     };
 
@@ -246,7 +232,6 @@
     {\
         Identifier = SUBMENU_OBJMIRROR ; \
         HelpID = HID_SCMENU_OBJMIRROR ; \
-        Text [ de ] = "Sp~iegeln" ; \
         Text [ en-US ] = "~Flip" ; \
         SubMenu = Menu\
         {\
@@ -256,7 +241,6 @@
                 {\
                     Identifier = SID_MIRROR_VERTICAL ; \
                     HelpId = SID_MIRROR_VERTICAL ; \
-                    Text [ de ] = "~Vertikal" ; \
                     Text [ en-US ] = "~Vertically" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -264,7 +248,6 @@
                 {\
                     Identifier = SID_MIRROR_HORIZONTAL ; \
                     HelpId = SID_MIRROR_HORIZONTAL ; \
-                    Text [ de ] = "~Horizontal" ; \
                     Text [ en-US ] = "~Horizontal" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -278,7 +261,6 @@
     {\
         Identifier = SUBMENU_OBJARRANGE ; \
         HelpID = HID_SCMENU_OBJARRANGE ; \
-        Text [ de ] = "~Anordnung" ; \
         Text [ en-US ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -293,7 +275,6 @@
                     Identifier = SID_FRAME_UP ; \
                     HelpId = SID_FRAME_UP ; \
                     /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
-                    Text [ de ] = "W~eiter nach vorn" ; \
                     Text [ en-US ] = "Bring ~Forward" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -302,7 +283,6 @@
                     Identifier = SID_FRAME_DOWN ; \
                     HelpId = SID_FRAME_DOWN ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
-                    Text [ de ] = "Weiter ~nach hinten" ; \
                     Text [ en-US ] = "Send Back~ward" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -329,7 +309,6 @@
     {\
         Identifier = SUBMENU_ANCHOR ; \
         HelpID = HID_SCMENU_ANCHOR ; \
-        Text [ de ] = "~Verankerung" ; \
         Text [ en-US ] = "An~chor" ; \
         SubMenu = Menu\
         {\
@@ -339,7 +318,6 @@
                 {\
                     Identifier = SID_ANCHOR_PAGE ; \
                     HelpId = SID_ANCHOR_PAGE ; \
-                    Text [ de ] = "An der ~Seite" ; \
                     Text [ en-US ] = "To P~age" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -347,7 +325,6 @@
                 {\
                     Identifier = SID_ANCHOR_CELL ; \
                     HelpId = SID_ANCHOR_CELL ; \
-                    Text [ de ] = "An der ~Zelle" ; \
                     Text [ en-US ] = "To ~Cell" ; \
                     Text [ x-comment ] = " ";\
                 };\
@@ -361,7 +338,6 @@
     {\
         Identifier = SID_OBJECT_ALIGN ; \
         HelpId = SID_OBJECT_ALIGN ; \
-        Text [ de ] = "Aus~richtung" ; \
         Text [ en-US ] = "A~lignment" ; \
         SubMenu = Menu\
         {\
@@ -408,7 +384,6 @@
  //
 String RID_DRAW_OBJECTBAR
 {
-    Text [ de ] = "Zeichenobjektleiste" ;
     Text [ en-US ] = "Drawing Object Bar" ;
     Text [ x-comment ] = " ";
 };
@@ -561,7 +536,6 @@ ToolBox RID_DRAW_OBJECTBAR
  //
 String RID_TEXT_TOOLBOX
 {
-    Text [ de ] = "Textobjektleiste" ;
     Text [ en-US ] = "Text Object Bar" ;
     Text [ x-comment ] = " ";
 };
@@ -1068,7 +1042,6 @@ ToolBox RID_TEXT_TOOLBOX
  //
 String RID_GRAPHIC_OBJECTBAR
 {
-    Text [ de ] = "Grafikobjektleiste" ;
     Text [ en-US ] = "Graphics Object Bar";
 };
 ToolBox RID_GRAPHIC_OBJECTBAR
@@ -1253,7 +1226,6 @@ ToolBox RID_GRAPHIC_OBJECTBAR
 String RID_POPUP_DRAW
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
-    Text [ de ] = "Popup-MenÃ¼ fÃ¼r Zeichenobjekte" ;
     Text [ en-US ] = "Pop-up menu for drawing objects" ;
     Text [ x-comment ] = " ";
 };
@@ -1488,7 +1460,6 @@ Menu RID_POPUP_CHART
             Identifier = SID_OPENDLG_MODCHART ;
             HelpId = SID_OPENDLG_MODCHART ;
             /* ### ACHTUNG: Neuer Text in Resource? Datenbereich ändern... : Datenbereich õndern... */
-            Text [ de ] = "~Datenbereich Ã¤ndern..." ;
             Text [ en-US ] = "~Modify Data Range..." ;
             Text [ x-comment ] = " ";
         };
@@ -1506,7 +1477,6 @@ Menu RID_POPUP_CHART
 String RID_POPUP_DRAWTEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Text-Objekte : Popup-Men³ f³r Text-Objekte */
-    Text [ de ] = "Popup-MenÃ¼ fÃ¼r Text-Objekte" ;
     Text [ en-US ] = "Pop-up menu for text objects" ;
     Text [ x-comment ] = " ";
 };
