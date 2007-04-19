@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:36:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,16 +50,13 @@ TabPage RID_SFXPAGE_GENERAL
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Benutzerdaten" ;
     Text [ en-US ] = "User Data" ;
     FixedText FT_COMPANY
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 0 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Firma" ;
         Text [ en-US ] = "~Company" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_COMPANY
     {
@@ -72,9 +69,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 1 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Vor-/Name/Kürzel" ;
         Text [ en-US ] = "First/Last ~name/Initials" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME_RUSS
     {
@@ -82,7 +77,6 @@ TabPage RID_SFXPAGE_GENERAL
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
-        Text [ de ] = "~Name/Vorname/Vatersname/Kürzel" ;
         Text [ en-US ] = "Last Name/First name/Father's name/Initials";
     };
     Edit ED_FATHERNAME
@@ -115,9 +109,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 2 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Straße" ;
         Text [ en-US ] = "~Street" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_STREET_RUSS
     {
@@ -125,7 +117,6 @@ TabPage RID_SFXPAGE_GENERAL
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
         Hide = TRUE;
-        Text [ de ] = "~Straße/Wohnungsnummer" ;
         Text [ en-US ] = "Street/Apartment number";
     };
     Edit ED_STREET
@@ -146,9 +137,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 3 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "PL~Z/Ort" ;
         Text [ en-US ] = "Zip/City";
-        Text [ x-comment ] = " ";
     };
     Edit ED_PLZ
     {
@@ -185,9 +174,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 4 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Land/Region" ;
         Text [ en-US ] = "Country/Region";
-        Text [ x-comment ] = " ";
     };
     Edit ED_COUNTRY
     {
@@ -200,9 +187,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 5 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "~Titel/Position" ;
         Text [ en-US ] = "~Title/Position" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TITLE
     {
@@ -220,10 +205,8 @@ TabPage RID_SFXPAGE_GENERAL
     {
         Pos = MAP_APPFONT ( LEFT , FLINE ( 6 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
-        Text [ de ] = "T~el. (Priv/Ge.)" ;
         Text [ en-US ] = "Tel. (Home/Work)" ;
         LeftLabel = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TELPRIVAT
     {
@@ -242,9 +225,7 @@ TabPage RID_SFXPAGE_GENERAL
         Pos = MAP_APPFONT ( LEFT , FLINE ( 7 ) ) ;
         Size = MAP_APPFONT ( MID-LEFT-2 , FLINEH ) ;
         LeftLabel = TRUE ;
-        Text [ de ] = "Fa~x/E-Mail" ;
         Text [ en-US ] = "Fa~x / E-mail" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FAX
     {
@@ -262,34 +243,25 @@ TabPage RID_SFXPAGE_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = " Anschrift " ;
         Text [ en-US ] = "Address " ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_USEDATA
     {
         Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "~Daten für Dokumenteigenschaften verwenden" ;
         Text [ en-US ] = "Use data for document properties";
-        Text [ x-comment ] = " ";
     };
 
      // extra Resourcen f"ur die amerikanische Postadresse
     String STR_US_STATE
     {
-        Text [ de ] = "Stadt/Staat/PL~Z";
         Text [ en-US ] = "City/State/Zip";
-        Text [ x-comment ] = " ";
     };
     String STR_QUERY_REG
     {
-        Text [ de ] = "Bitte beachten Sie, dass Straße, Postleitzahl und Ort für die Berechnung des Registrierungsschlüssels herangezogen werden. Bis zur Registrierung können diese Benutzerdaten nicht mehr geändert werden.  Wollen Sie diese Benutzerdaten jetzt noch ändern?" ;
         Text [ en-US ] = "Note that street, Zip code and city are used to generate the registration key. You will not be able to change the user data again until the registration has been carried out. Do you want to modify the user data now?";
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 // RID_SVXQB_CHANGEDATA ---------------------------------------------------
@@ -298,27 +270,13 @@ QueryBox RID_SVXQB_CHANGEDATA
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Sie haben die Benutzerdaten geändert.\nBitte bedenken Sie, dass dadurch die Registrierung verfällt.\nSie benötigen einen neuen Registrierungsschlüssel, der innerhalb der nächsten 30 Tage eingegeben werden muss.\nDas Registrierungsformular finden Sie im Menü Hilfe - Registrierung...\nWollen Sie die Benutzerdaten wirklich ändern?";
     Message [ en-US ] = "The User Data have been changed.\nNote that, if you continue, the registration key will become invalid.\nTherefore, a new registration key is needed within 30 days.\nYou can find the registration form in the menu Help - Registration...\nDo you really want to change your User Data?";
-    Message [ x-comment ] = " ";
 };
 
  // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
 
 StringArray RID_SVXSTR_FIELDUNIT_TABLE
 {
-    ItemList [ de ] =
-    {
-        < "Millimeter" ; FUNIT_MM ; > ;
-        < "Zentimeter" ; FUNIT_CM ; > ;
-        < "Meter" ; FUNIT_M ; > ;
-        < "Kilometer" ; FUNIT_KM ; > ;
-        < "Zoll" ; FUNIT_INCH ; > ;
-        < "Fuß" ; FUNIT_FOOT ; > ;
-        < "Meilen" ; FUNIT_MILE ; > ;
-        < "Pica" ; FUNIT_PICA ; > ;
-        < "Point" ; FUNIT_POINT ; > ;
-    };
     ItemList [ en-US ] =
     {
         < "Millimeter" ; FUNIT_MM ; > ;
@@ -330,18 +288,6 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Miles" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Point" ; FUNIT_POINT ; > ;
-    };
- ItemList [ x-comment ] =
-    {
-            < " " ; FUNIT_MM ; > ;
-        < " " ; FUNIT_CM ; > ;
-        < " " ; FUNIT_M ; > ;
-        < " " ; FUNIT_KM ; > ;
-        < " " ; FUNIT_INCH ; > ;
-        < " " ; FUNIT_FOOT ; > ;
-        < " " ; FUNIT_MILE ; > ;
-        < " " ; FUNIT_PICA ; > ;
-        < " " ; FUNIT_POINT ; > ;
     };
     };
 
