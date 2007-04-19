@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 11:56:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:16:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~1" ;
         Text [ en-US ] = "Size ~1" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE1
     {
@@ -73,9 +71,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~2" ;
         Text [ en-US ] = "Size ~2" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE2
     {
@@ -97,9 +93,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~3" ;
         Text [ en-US ] = "Size ~3" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE3
     {
@@ -121,9 +115,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~4" ;
         Text [ en-US ] = "Size ~4" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE4
     {
@@ -145,9 +137,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 80 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~5" ;
         Text [ en-US ] = "Size ~5" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE5
     {
@@ -169,9 +159,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~6" ;
         Text [ en-US ] = "Size ~6" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE6
     {
@@ -193,9 +181,7 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Größe ~7" ;
         Text [ en-US ] = "Size ~7" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SIZE7
     {
@@ -217,52 +203,40 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text [ de ] = "Schriftgrößen" ;
         Text [ en-US ] = "Font sizes" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GB_IMPORT
     {
         Pos = MAP_APPFONT ( 87 , 3 ) ;
         Size = MAP_APPFONT ( 167 , 8 ) ;
-        Text [ de ] = "Import" ;
         Text [ en-US ] = "Import" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_NUMBERS_ENGLISH_US
     {
         Pos = MAP_APPFONT ( 93 , 14 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Gebietsschema '%ENGLISHUSLOCALE' für Zahlen" ;
         Text [ en-US ] = "~Use '%ENGLISHUSLOCALE' locale for numbers" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_UNKNOWN_TAGS
     {
         Pos = MAP_APPFONT ( 93 , 28 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Unbekannte HTML-Tags als Felder importieren" ;
         Text [ en-US ] = "~Import unknown HTML tags as fields" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_IGNORE_FONTNAMES
     {
         Pos = MAP_APPFONT ( 93 , 42 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Font-Einstellungen ignorieren" ;
         Text [ en-US ] = "Ignore ~font settings" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GB_EXPORT
     {
         Pos = MAP_APPFONT ( 87 , 58 ) ;
         Size = MAP_APPFONT ( 167 , 8 ) ;
-        Text [ de ] = "Export" ;
         Text [ en-US ] = "Export" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_EXPORT
     {
@@ -288,32 +262,25 @@ TabPage RID_OFAPAGE_HTMLOPT
     {
         Pos = MAP_APPFONT ( 99 , 102 ) ;
         Size = MAP_APPFONT ( 149 , 10 ) ;
-        Text [ de ] = "~Warnung anzeigen";
         Text [ en-US ] = "Display ~warning";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PRINT_EXTENSION
     {
         Pos = MAP_APPFONT ( 93 , 116 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
-        Text [ de ] = "~Drucklayout" ;
         Text [ en-US ] = "~Print layout" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_LOCAL_GRF
     {
         Pos = MAP_APPFONT ( 93 , 130 ) ;
         Size = MAP_APPFONT ( 155 , 10 ) ;
-        Text [ de ] = "~Lokale Grafiken in das Internet kopieren" ;
         Text [ en-US ] = "~Copy local graphics to Internet" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_CHARSET
     {
         Pos = MAP_APPFONT ( 93 , 144 ) ;
         Size = MAP_APPFONT ( 65 , 8 ) ;
-        Text [ de ] = "Z~eichensatz" ;
         Text [ en-US ] = "Character set";
     };
     ListBox LB_CHARSET
