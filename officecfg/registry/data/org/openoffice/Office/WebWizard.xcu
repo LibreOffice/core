@@ -5,9 +5,9 @@
  *
  *  $RCSfile: WebWizard.xcu,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:28:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:16:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Original file format</value>
-                    <value xml:lang="de">Original-Dateiformat</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.CopyExporter</value>
@@ -83,7 +83,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML</value>
-                    <value xml:lang="de">HTML</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.FilterExporter</value>
@@ -128,7 +128,7 @@
                     <value>1</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">HTML</value>
+
                     <value xml:lang="en-US">HTML</value>
                 </prop>
                 <prop oor:name="ExporterClass">
@@ -174,7 +174,7 @@
                     <value>2</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">HTML</value>
+
                     <value xml:lang="en-US">HTML</value>
                 </prop>
                 <prop oor:name="ExporterClass">
@@ -255,7 +255,7 @@
                     <value>3</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">HTML</value>
+
                     <value xml:lang="en-US">HTML</value>
                 </prop>
                 <prop oor:name="ExporterClass">
@@ -337,7 +337,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druck</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -383,7 +383,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druck</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -429,7 +429,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druck</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -475,7 +475,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Print optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druck</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -521,7 +521,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -572,7 +572,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -623,7 +623,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -674,7 +674,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">PDF - Press optimized</value>
-                    <value xml:lang="de">PDF - Optimiert für Druckvorstufe</value>
+
                 </prop>
                 <prop oor:name="ExporterClass">
                     <value>com.sun.star.wizards.web.export.ConfiguredExporter</value>
@@ -724,7 +724,7 @@
                     <value>30</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">Flash</value>
+
                     <value xml:lang="en-US">Flash</value>
                 </prop>
                 <prop oor:name="ExporterClass">
@@ -770,7 +770,7 @@
                     <value>31</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">Flash</value>
+
                     <value xml:lang="en-US">Flash</value>
                 </prop>
                 <prop oor:name="ExporterClass">
@@ -819,7 +819,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Table with 3 columns</value>
-                    <value xml:lang="de">Tabelle mit 3 Spalten</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>table_3</value>
@@ -831,7 +831,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Table with 2 columns</value>
-                    <value xml:lang="de">Tabelle mit 2 Spalten</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>table_2</value>
@@ -843,7 +843,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Simple</value>
-                    <value xml:lang="de">Einfach</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>simple</value>
@@ -855,7 +855,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Diagonal</value>
-                    <value xml:lang="de">Diagonal</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>diagonal</value>
@@ -867,7 +867,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Zigzag</value>
-                    <value xml:lang="de">Zickzack</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>zigzag</value>
@@ -879,7 +879,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, left</value>
-                    <value xml:lang="de">HTML-Frameset, links</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>frame_left</value>
@@ -891,7 +891,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, right</value>
-                    <value xml:lang="de">HTML-Frameset, rechts</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>frame_right</value>
@@ -903,7 +903,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, top</value>
-                    <value xml:lang="de">HTML-Frameset, oben</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>frame_top</value>
@@ -915,7 +915,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">HTML frameset, bottom</value>
-                    <value xml:lang="de">HTML-Frameset, unten</value>
+
                 </prop>
                 <prop oor:name="FSName">
                     <value>frame_bottom</value>
@@ -929,7 +929,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Beige</value>
-                    <value xml:lang="de">Beige</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>beige.css</value>
@@ -947,7 +947,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Bright</value>
-                    <value xml:lang="de">Hell</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>bg.css</value>
@@ -965,7 +965,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Bright Blue</value>
-                    <value xml:lang="de">Hellblau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>bgr.css</value>
@@ -983,7 +983,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Gray</value>
-                    <value xml:lang="de">Grau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>bgrey.css</value>
@@ -1001,7 +1001,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Blue</value>
-                    <value xml:lang="de">Blau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>bwb.css</value>
@@ -1019,7 +1019,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Contrast</value>
-                    <value xml:lang="de">Kontrast</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>bwo.css</value>
@@ -1035,7 +1035,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Blue &amp; Black</value>
-                    <value xml:lang="de">Schwarz &amp; Blau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>dark.css</value>
@@ -1053,7 +1053,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Dark Red</value>
-                    <value xml:lang="de">Dunkelrot</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>dp.css</value>
@@ -1071,7 +1071,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Light Gray</value>
-                    <value xml:lang="de">Hellgrau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>grey.css</value>
@@ -1088,7 +1088,7 @@
                     <value>9</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">Wald</value>
+
                     <value xml:lang="en-US">Forest</value>
                 </prop>
                 <prop oor:name="CssHref">
@@ -1107,7 +1107,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Orange &amp; Blue</value>
-                    <value xml:lang="de">Orange &amp; Blau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>rgb.css</value>
@@ -1124,7 +1124,7 @@
                     <value>11</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">Marine</value>
+
                     <value xml:lang="en-US">Marine</value>
                 </prop>
                 <prop oor:name="CssHref">
@@ -1142,7 +1142,7 @@
                     <value>12</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">Orange</value>
+
                     <value xml:lang="en-US">Orange</value>
                 </prop>
                 <prop oor:name="CssHref">
@@ -1160,7 +1160,7 @@
                     <value>13</value>
                 </prop>
                 <prop oor:name="Name"  >
-                    <value xml:lang="de">Eisblau</value>
+
                     <value xml:lang="en-US">Ice Blue</value>
                 </prop>
                 <prop oor:name="CssHref">
@@ -1179,7 +1179,7 @@
                 </prop>
                 <prop oor:name="Name"  >
                     <value xml:lang="en-US">Blue &amp; Gray</value>
-                    <value xml:lang="de">Blau &amp; Grau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>ice.css</value>
@@ -1196,7 +1196,7 @@
                     <value>15</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">Wasser</value>
+
                     <value xml:lang="en-US">Water</value>
                 </prop>
                 <prop oor:name="CssHref">
@@ -1214,7 +1214,7 @@
                     <value>16</value>
                 </prop>
                 <prop oor:name="Name"  >
-                    <value xml:lang="de">Rot</value>
+
                     <value xml:lang="en-US">Red</value>
                 </prop>
                 <prop oor:name="CssHref">
@@ -1233,7 +1233,7 @@
                 </prop>
                 <prop oor:name="Name"  >
                     <value xml:lang="en-US">Colorful</value>
-                    <value xml:lang="de">Farbenfroh</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>strange.css</value>
@@ -1251,7 +1251,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Green &amp; Red</value>
-                    <value xml:lang="de">Grün &amp; Rot</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>greenred.css</value>
@@ -1269,7 +1269,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Violet</value>
-                    <value xml:lang="de">Lila</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>violet.css</value>
@@ -1286,7 +1286,7 @@
                     <value>20</value>
                 </prop>
                 <prop oor:name="Name" >
-                    <value xml:lang="de">Grün</value>
+
                     <value xml:lang="en-US">Green</value>
                 </prop>
                 <prop oor:name="CssHref">
@@ -1324,7 +1324,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Round, 3D, blue &amp; gray</value>
-                    <value xml:lang="de">3D, rund, blau &amp; grau</value>
+
                 </prop>
                 <prop oor:name="FNPrefix">
                     <value>blu</value>
@@ -1339,7 +1339,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Round, 3D, blue &amp; green</value>
-                    <value xml:lang="de">3D, rund, blau &amp; grün</value>
+
                 </prop>
                 <prop oor:name="FNPrefix">
                     <value>gre</value>
@@ -1354,7 +1354,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Cubic, 3D, orange &amp; blue</value>
-                    <value xml:lang="de">3D, Würfel, orange &amp; blau</value>
+
                 </prop>
                 <prop oor:name="FNPrefix">
                     <value>cub</value>
@@ -1369,7 +1369,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Round, flat, black &amp; gray</value>
-                    <value xml:lang="de">Flach, rund, schwarz &amp; grau</value>
+
                 </prop>
                 <prop oor:name="FNPrefix">
                     <value>sim</value>
@@ -1387,7 +1387,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">%PRODNAME documents</value>
-                    <value xml:lang="de">%PRODNAME-Dokumente</value>
+
                 </prop>
                 <prop oor:name="Filter">
                     <value>*.odt;*.ott;*.odm;*.ods;*.ots;*.odp;*.otp;*.odg;*.otg;*.odf;*.sxw;*.sxc;*.sxd;*.sxi;*.stw;*.stc;*.std;*.sti;*.sdw;*.sdc;*.sdd;*.sdi;*.sda;*.sdp;*.vor;</value>
@@ -1399,7 +1399,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Microsoft Office documents</value>
-                    <value xml:lang="de">Microsoft Office-Dokumente</value>
+
                 </prop>
                 <prop oor:name="Filter">
                     <value>*.doc;*.xls;*.ppt;*.pps</value>
@@ -1411,7 +1411,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">Graphics files</value>
-                    <value xml:lang="de">Grafikdateien</value>
+
                 </prop>
                 <prop oor:name="Filter">
                     <value>*.jpg;*.gif;*.png;*.bmp;*.tiff;*.jpeg;*.jpe</value>
@@ -1423,7 +1423,7 @@
                 </prop>
                 <prop oor:name="Name" >
                     <value xml:lang="en-US">All files</value>
-                    <value xml:lang="de">Alle Dateien</value>
+
                 </prop>
                 <prop oor:name="Filter">
                     <value>*</value>
