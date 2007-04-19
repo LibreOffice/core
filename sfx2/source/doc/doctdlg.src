@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:40:32 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,17 +43,13 @@ ModalDialog DLG_DOC_TEMPLATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 128 ) ;
-    Text [ de ] = "Dokumentvorlagen" ;
     Text [ en-US ] = "Templates" ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedLine FL_EDIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text [ de ] = "Neue Dokumentvorlage" ;
         Text [ en-US ] = "New template" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -65,17 +61,13 @@ ModalDialog DLG_DOC_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text [ de ] = "Vorlagen" ;
         Text [ en-US ] = "Templates" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SECTION
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
-        Text [ de ] = "~Bereiche" ;
         Text [ en-US ] = "~Categories" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_SECTION
     {
@@ -87,9 +79,7 @@ ModalDialog DLG_DOC_TEMPLATE
     {
         Pos = MAP_APPFONT ( 115 , 43 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
-        Text [ de ] = "~Vorlagen" ;
         Text [ en-US ] = "~Templates" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_STYLESHEETS
     {
@@ -118,17 +108,13 @@ ModalDialog DLG_DOC_TEMPLATE
     {
         Pos = MAP_APPFONT ( 224 , 62 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Bearbeiten" ;
         Text [ en-US ] = "~Edit" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BT_ORGANIZE
     {
         Pos = MAP_APPFONT ( 224 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Ver~walten..." ;
         Text [ en-US ] = "~Organizer..." ;
-        Text [ x-comment ] = " ";
     };
 };
 
