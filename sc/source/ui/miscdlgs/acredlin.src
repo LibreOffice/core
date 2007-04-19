@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:02:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:31:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModelessDialog RID_SCDLG_CHANGES
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 282 , 142 ) ;
-    Text [ de ] = "Änderungen akzeptieren oder verwerfen" ;
     Moveable = TRUE ;
     Sizeable = TRUE ;
     Closeable = TRUE ;
@@ -60,14 +59,12 @@ ModelessDialog RID_SCDLG_CHANGES
     };
     FixedText FT_ASSIGN
     {
-        Text [ de ] = "Bereich" ;
         Hide = TRUE ;
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 128 , 12 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "Range" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_ASSIGN
     {
@@ -80,108 +77,74 @@ ModelessDialog RID_SCDLG_CHANGES
     ImageButton RB_ASSIGN
     {
         Hide = TRUE ;
-        QuickHelpText [ de ] = "Verkleinern/Vergrößern" ;
         Pos = MAP_APPFONT ( 142 , 118 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Minimize/Maximize" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     String STR_INSERT_COLS
     {
-        Text [ de ] = "Spalte eingefügt" ;
         Text [ en-US ] = "Column inserted" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INSERT_ROWS
     {
-        Text [ de ] = "Zeile eingefügt" ;
         Text [ en-US ] = "Row inserted " ;
-        Text [ x-comment ] = " ";
     };
     String STR_INSERT_TABS
     {
-        Text [ de ] = "Tabelle eingefügt" ;
         Text [ en-US ] = "Sheet inserted " ;
-        Text [ x-comment ] = " ";
     };
     String STR_DELETE_COLS
     {
-        Text [ de ] = "Spalte gelöscht" ;
         Text [ en-US ] = "Column deleted" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DELETE_ROWS
     {
-        Text [ de ] = "Zeile gelöscht" ;
         Text [ en-US ] = "Row deleted" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DELETE_TABS
     {
-        Text [ de ] = "Tabelle gelöscht" ;
         Text [ en-US ] = "Sheet deleted" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MOVE
     {
-        Text [ de ] = "Bereich verschoben" ;
         Text [ en-US ] = "Range moved" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CONTENT
     {
-        Text [ de ] = "Inhaltsänderung" ;
         Text [ en-US ] = "Changed contents" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CONTENT_WITH_CHILD
     {
-        Text [ de ] = "Inhaltsänderung" ;
         Text [ en-US ] = "Changed contents" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHILD_CONTENT
     {
-        Text [ de ] = "Änderung zu " ;
         Text [ en-US ] = "Changed to " ;
-        Text [ x-comment ] = " ";
     };
     String STR_CHILD_ORGCONTENT
     {
-        Text [ de ] = "Original" ;
         Text [ en-US ] = "Original" ;
-        Text [ x-comment ] = " ";
     };
     String STR_REJECT
     {
-        Text [ de ] = "Änderung verworfen" ;
         Text [ en-US ] = "Changes rejected" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ACCEPTED
     {
-        Text [ de ] = "Akzeptierte" ;
         Text [ en-US ] = "Accepted" ;
-        Text [ x-comment ] = " ";
     };
     String STR_REJECTED
     {
-        Text [ de ] = "Abgelehnte" ;
         Text [ en-US ] = "Rejected" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NO_ENTRY
     {
-        Text [ de ] = "Kein Eintrag" ;
         Text [ en-US ] = "No Entry" ;
-        Text [ x-comment ] = " ";
     };
     String STR_EMPTY
     {
-        Text [ de ] = "<leer>" ;
         Text [ en-US ] = "<empty>" ;
-        Text [ x-comment ] = " ";
     };
     Bitmap BMP_STR_CLOSE
     {
@@ -200,7 +163,6 @@ ModelessDialog RID_SCDLG_CHANGES
         File = "basbrk.bmp" ;
     };
     Text [ en-US ] = "Accept or Reject Changes" ;
-    Text [ x-comment ] = " ";
 };
 Menu RID_POPUP_CHANGES
 {
@@ -210,15 +172,12 @@ Menu RID_POPUP_CHANGES
         {
             Identifier = SC_CHANGES_COMMENT ;
             HelpId = HID_SC_CHANGES_COMMENT ;
-            Text [ de ] = "Kommentar bearbeiten..." ;
             Text [ en-US ] = "Edit Comment..." ;
 
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SC_SUB_SORT ;
-            Text [ de ] = "Sortiere" ;
             RadioCheck = TRUE ;
             SubMenu = Menu
             {
@@ -228,51 +187,40 @@ Menu RID_POPUP_CHANGES
                     {
                         Identifier = SC_SORT_ACTION ;
                         HelpID = HID_SC_SORT_ACTION ;
-                        Text [ de ] = "Aktion" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Action" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SC_SORT_POSITION ;
                         HelpID = HID_SORT_POSITION ;
-                        Text [ de ] = "Position" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Position" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SC_SORT_AUTHOR ;
                         HelpID = HID_SC_SORT_AUTHOR ;
-                        Text [ de ] = "Autor" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Author" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SC_SORT_DATE ;
                         HelpID = HID_SC_SORT_DATE ;
-                        Text [ de ] = "Datum" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Date" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SC_SORT_COMMENT ;
                         HelpID = HID_SC_SORT_COMMENT ;
-                        Text [ de ] = "Beschreibung" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Description" ;
-                        Text [ x-comment ] = " ";
                     };
                 };
             };
             Text [ en-US ] = "Sorting" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
