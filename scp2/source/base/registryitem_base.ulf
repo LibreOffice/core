@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_base.ulf,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:20:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:22:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,4 +35,3 @@
 
 [STR_REG_VAL_OO_DATABASE]
 en-US = "OpenDocument Database"
-de = "OpenDocument Datenbank"
