@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:46:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,12 @@ ModalDialog RID_SVXDLG_POSTIT
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 198 , 134 ) ;
-    Text [ de ] = "Notiz" ;
     Text [ en-US ] = "Note" ;
     Moveable = TRUE ;
     FixedText FT_LASTEDITLABEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text [ de ] = "Autor" ;
         Text [ en-US ] = "Author" ;
         Left = TRUE ;
     };
@@ -66,7 +64,6 @@ ModalDialog RID_SVXDLG_POSTIT
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Text" ;
         Text [ en-US ] = "~Text" ;
         Left = TRUE ;
     };
@@ -84,7 +81,6 @@ ModalDialog RID_SVXDLG_POSTIT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 129 , 8 ) ;
-        Text [ de ] = "Inhalt" ;
         Text [ en-US ] = "Contents" ;
     };
     OKButton BTN_POST_OK
@@ -119,27 +115,23 @@ ModalDialog RID_SVXDLG_POSTIT
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "E~infÃ¼gen" ;
         Text [ en-US ] = "~Insert";
     };
     PushButton BTN_AUTHOR
     {
         Pos = MAP_APPFONT ( 75 , 114 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Autor" ;
         Text [ en-US ] = "Author" ;
     };
      // lokale Strings
     String STR_NOTIZ_EDIT
     {
-        Text [ de ] = "Notiz bearbeiten" ;
         Text [ en-US ] = "Edit Note" ;
     };
     String STR_NOTIZ_INSERT
     {
         /* ### ACHTUNG: Neuer Text in Resource? Notiz einfügen : Notiz einf³gen */
         /* ### ACHTUNG: Neuer Text in Resource? Notiz einfügen : Notiz einf³gen */
-        Text [ de ] = "Notiz einfÃ¼gen" ;
         Text [ en-US ] = "Insert note" ;
     };
 };
