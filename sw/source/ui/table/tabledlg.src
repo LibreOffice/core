@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabledlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:14:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:28:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@
 #include "tabledlg.hrc"
 #include "helpid.h"
 #define TEXT_TEXTFLOW  \
-    Text [ de ] = "Textfluss" ; \
     Text [ en-US ] = "Text Flow" ; \
-    Text [ x-comment ] = " ";   \
 
 /**************************************************************************/
 /*                                                                        */
@@ -50,7 +48,6 @@ TabDialog DLG_FORMAT_TABLE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Tabellenformat" ;
     Text [ en-US ] = "Table Format" ;
     Moveable = TRUE ;
     TabControl 1
@@ -61,10 +58,8 @@ TabDialog DLG_FORMAT_TABLE
             PageItem
             {
                 Identifier = TP_FORMAT_TABLE ;
-                Text [ de ] = "Tabelle" ;
                 Text [ en-US ] = "Table" ;
                 PageResID = TP_FORMAT_TABLE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
@@ -74,30 +69,23 @@ TabDialog DLG_FORMAT_TABLE
             PageItem
             {
                 Identifier = TP_TABLE_COLUMN ;
-                Text [ de ] = "Spalten" ;
                 Text [ en-US ] = "Columns" ;
                 PageResID = TP_TABLE_COLUMN ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
                 PageResID = TP_BORDER ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -114,9 +102,7 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -129,9 +115,7 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Br~eite" ;
         Text [ en-US ] = "W~idth" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_WIDTH
     {
@@ -155,42 +139,33 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 118 , 32 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
-        Text [ de ] = "Relati~v" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Relati~ve" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 184 , 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_FULL
     {
         Pos = MAP_APPFONT ( 202 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "A~utomatic" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_LEFT
     {
         Pos = MAP_APPFONT ( 202 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_FROM_LEFT
     {
         Pos = MAP_APPFONT ( 202 , 42 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Von l~inks" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~From left";
     };
@@ -198,52 +173,40 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 202 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "R~ight" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CENTER
     {
         Pos = MAP_APPFONT ( 202 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Zen~triert" ;
         Text [ en-US ] = "~Center" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_FREE
     {
         Pos = MAP_APPFONT ( 202 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Manuell" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Manual" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_POS
     {
         Pos = MAP_APPFONT ( 196 , 3 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
-        Text [ de ] = "Ausrichtung" ;
         Text [ en-US ] = "Alignment" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_DIST
     {
         Pos = MAP_APPFONT ( 6 , 48 ) ;
         Size = MAP_APPFONT ( 184 , 8 ) ;
-        Text [ de ] = "Abstände" ;
         Text [ en-US ] = "Spacing" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LEFT_DIST
     {
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Nach lin~ks" ;
         Text [ en-US ] = "Lef~t" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_LEFT_DIST
     {
@@ -266,9 +229,7 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Nach recht~s" ;
         Text [ en-US ] = "Ri~ght" ;
-        Text [ x-comment ] = " ";
     };
 
     MetricField ED_RIGHT_DIST
@@ -292,9 +253,7 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 93 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Nach ~oben" ;
         Text [ en-US ] = "~Above" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_TOP_DIST
     {
@@ -317,9 +276,7 @@ TabPage TP_FORMAT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 109 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Nach ~unten" ;
         Text [ en-US ] = "~Below" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_BOTTOM_DIST
     {
@@ -343,7 +300,6 @@ TabPage TP_FORMAT_TABLE
         Pos = MAP_APPFONT ( 6 , 125 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText   FT_TEXTDIRECTION
@@ -351,7 +307,6 @@ TabPage TP_FORMAT_TABLE
         Pos = MAP_APPFONT ( 12 , 138 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "~Textfluss" ;
         Text [ en-US ] = "Text ~direction";
     };
     ListBox     LB_TEXTDIRECTION
@@ -361,23 +316,11 @@ TabPage TP_FORMAT_TABLE
         Size = MAP_APPFONT ( 176 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
-        StringList [ de ] =
-        {
-            < "Links-nach-rechts" ; 0; > ;
-            < "Rechts-nach-links" ; 1; > ;
-            < "Einstellungen des übergeordneten Objektes verwenden" ; 4; > ;
-        };
     StringList [ en-US ] =
     {
          < "Left-to-right" ; 0; > ;
         < "Right-to-left" ; 1; > ;
         < "Use superordinate object settings" ; 4; > ;
-    };
-    StringList [ x-comment ] =
-    {
-         < "; Links nach rechts" ; 0; > ;
-        < "; Rechts nach links" ; 1; > ;
-        < "; Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
     };
     };
 };
@@ -396,27 +339,21 @@ TabPage TP_TABLE_COLUMN
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
-        Text [ de ] = "~Tabellenbreite anpassen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Adapt table ~width" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PROP
     {
         Pos = MAP_APPFONT ( 6 , 20 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
-        Text [ de ] = "~Spalten gleichmäßig ändern" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Ad~just columns proportionally" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SPACE
     {
         Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 85 , 8 ) ;
-        Text [ de ] = "Noch verfügbarer Platz" ;
         Text [ en-US ] = "Remaining space" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_SPACE
     {
@@ -617,9 +554,7 @@ TabPage TP_TABLE_COLUMN
     {
         Pos = MAP_APPFONT ( 6 , 50 ) ;
         Size = MAP_APPFONT ( 240 , 8 ) ;
-        Text [ de ] = "Spaltenbreite" ;
         Text [ en-US ] = "Column width" ;
-        Text [ x-comment ] = " ";
     };
 };
 /**************************************************************************/
@@ -644,21 +579,17 @@ TabPage TP_TABLE_TEXTFLOW
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Umbruch" ;
         Text [ en-US ] = "~Break" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_BREAKPAGE
     {
         Pos = MAP_APPFONT ( 105 , 14 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text [ de ] = "~Seite" ;
         Text [ en-US ] = "~Page" ;
         Group = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_BREAKCOLUMN
     {
@@ -666,40 +597,32 @@ TabPage TP_TABLE_TEXTFLOW
         Pos = MAP_APPFONT ( 176 , 14 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
          // ### ACHTUNG: Neuer Text in Resource? S~palte : ~Spalte
-        Text [ de ] = "S~palte" ;
         Text [ en-US ] = "Col~umn" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_PAGEBREAKBEFORE
     {
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 105 , 28 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text [ de ] = "~davor" ;
         Text [ en-US ] = "Be~fore" ;
         Group = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_PAGEBREAKAFTER
     {
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 176 , 28 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text [ de ] = "da~nach" ;
         Text [ en-US ] = "~After" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_PAGECOLL
     {
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "mit Seitenvor~lage" ;
         Text [ en-US ] = "With Page St~yle" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
     ListBox LB_PAGECOLL
     {
@@ -712,9 +635,7 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 171 , 44 ) ;
         Size = MAP_APPFONT ( 47 , 10 ) ;
-        Text [ de ] = "Se~itennummer" ;
         Text [ en-US ] = "Page ~number" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_PAGENUM
     {
@@ -735,7 +656,6 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "Trennung der Ta~belle an Seiten- und Spaltenenden zulassen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Allow ~table to split across pages and columns" ;
     };
@@ -744,14 +664,12 @@ TabPage TP_TABLE_TEXTFLOW
         Pos = MAP_APPFONT ( 21 , 71 ) ;
         Size = MAP_APPFONT ( 194 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Zeilenumb~ruch an Seiten- und Spaltenenden zulassen" ;
         Text [ en-US ] = "Allow row to break a~cross pages and columns" ;
     };
     CheckBox CB_KEEP
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "Mit folgendem Absatz ~zusammenhalten" ;
         Text [ en-US ] = "~Keep with next paragraph" ;
         TabStop = TRUE ;
     };
@@ -760,14 +678,12 @@ TabPage TP_TABLE_TEXTFLOW
         Pos = MAP_APPFONT ( 12 , 99 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Überschrift ~wiederholen" ;
         Text [ en-US ] = "R~epeat heading" ;
     };
     FixedText FT_REPEAT_HEADER
     {
         Pos = MAP_APPFONT ( 31 , 114 ) ;
         Size = MAP_APPFONT ( 95 , 10 ) ;
-        Text [ de ] = "Die ersten%POSITION_OF_CONTROLZeilen" ;
         Text [ en-US ] = "The first%POSITION_OF_CONTROLrows" ;
     };
     NumericField NF_REPEAT_HEADER
@@ -792,7 +708,6 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text [ de ] = "Textrichtung" ;
         Text [ en-US ] = "~Text direction" ;
     };
     ListBox LB_TEXTDIRECTION
@@ -801,12 +716,6 @@ TabPage TP_TABLE_TEXTFLOW
         Size = MAP_APPFONT ( 166 , 50 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList [ de ] =
-        {
-            < "Links-nach-rechts" ; 0; > ;
-            < "Rechts-nach-links (vertikal)" ; 2; > ;
-            < "Einstellungen des übergeordneten Objektes verwenden" ; 4; > ;
-        };
         StringList [ en-US ] =
         {
              < "Left-to-right" ; 0; > ;
@@ -818,7 +727,6 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 6 , 149 ) ;
         Size = MAP_APPFONT ( 251 , 8 ) ;
-        Text [ de ] = "Ausrichtung" ;
         Text [ en-US ] = "Alignment" ;
     };
 
@@ -826,7 +734,6 @@ TabPage TP_TABLE_TEXTFLOW
     {
         Pos = MAP_APPFONT ( 12 , 164 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text [ de ] = "Vertikale Ausrichtung" ;
         Text [ en-US ] = "~Vertical alignment" ;
     };
     ListBox LB_VERTORIENT
@@ -835,12 +742,6 @@ TabPage TP_TABLE_TEXTFLOW
         Size = MAP_APPFONT ( 61 , 50 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList [ de ] =
-        {
-            < "Oben" ; 0; > ;
-            < "Mitte" ; 1; > ;
-            < "Unten" ; 2; > ;
-        };
         StringList [ en-US ] =
         {
             < "Top" ; 0; > ;
@@ -851,8 +752,6 @@ TabPage TP_TABLE_TEXTFLOW
 };
 InfoBox MSG_WRONG_TABLENAME
 {
-    Message [ de ] = "Der Name der Tabelle darf keine Leerzeichen enthalten." ;
     Message [ en-US ] = "The name of the table must not contain spaces." ;
-    Message [ x-comment ] = " ";
 };
 
