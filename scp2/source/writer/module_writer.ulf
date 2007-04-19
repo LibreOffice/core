@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_writer.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:36:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,27 +34,21 @@
  ************************************************************************/
 
 [STR_NAME_MODULE_PRG_WRT]
-de = "%PRODUCTNAME Writer"
 en-US = "%PRODUCTNAME Writer"
 
 [STR_DESC_MODULE_PRG_WRT]
-de = "Erstellen und Bearbeiten von Text und Grafiken in Briefen, Reports, Dokumenten und Web-Seiten mit %PRODUCTNAME Writer."
 en-US = "Create and edit text and graphics in letters, reports, documents and Web pages by using %PRODUCTNAME Writer."
 
 [STR_NAME_MODULE_PRG_WRT_BIN]
-de = "Programmodul"
 en-US = "Program Module"
 
 [STR_DESC_MODULE_PRG_WRT_BIN]
-de = "Die Anwendung %PRODUCTNAME Writer"
 en-US = "The application %PRODUCTNAME Writer"
 
 [STR_NAME_MODULE_PRG_WRT_HELP]
-de = "%PRODUCTNAME Writer Hilfe"
 en-US = "%PRODUCTNAME Writer Help"
 
 [STR_DESC_MODULE_PRG_WRT_HELP]
-de = "Die %PRODUCTNAME-Hilfe für %PRODUCTNAME Writer."
 en-US = "Help about %PRODUCTNAME Writer"
 
 
