@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:47:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2066,7 +2066,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
 |*
 |*************************************************************************/
 
-void SwFlyFrm::ChgSize( const Size& aNewSize )
+Size SwFlyFrm::ChgSize( const Size& aNewSize )
 {
     // --> OD 2006-01-19 #i53298#
     // If the fly frame anchored at-paragraph or at-character contains an OLE
@@ -2104,7 +2104,10 @@ void SwFlyFrm::ChgSize( const Size& aNewSize )
         // <--
         // uebers Doc fuers Undo!
         pFmt->GetDoc()->SetAttr( aSz, *pFmt );
+        return aSz.GetSize();
     }
+    else
+        return Frm().SSize();
 }
 
 /*************************************************************************
