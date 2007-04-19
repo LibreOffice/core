@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:20:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:45:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 178 , 116 ) ;
-    Text [ de ] = "Haltepunkte verwalten" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
     ComboBox RID_CB_BRKPOINTS
@@ -66,45 +65,35 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
     {
         Pos = MAP_APPFONT ( 122 , 57 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Neu" ;
         TabStop = TRUE ;
         Text [ en-US ] = "New" ;
-        Text [ x-comment ] = " ";
     };
     PushButton RID_PB_DEL
     {
         Pos = MAP_APPFONT ( 122 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Löschen : L÷schen */
-        Text [ de ] = "LÃ¶schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Delete" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox RID_CHKB_ACTIVE
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
-        Text [ de ] = "Aktiv" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Active" ;
-        Text [ x-comment ] = " ";
     };
     FixedText RID_FT_PASS
     {
         Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 35 , 10 ) ;
-        Text [ de ] = "Durchlauf:" ;
         Text [ en-US ] = "Pass Count:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText RID_FT_BRKPOINTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Haltepunkte" ;
         Text [ en-US ] = "Breakpoints" ;
-        Text [ x-comment ] = " ";
     };
     NumericField RID_FLD_PASS
     {
@@ -114,7 +103,6 @@ ModalDialog RID_BASICIDE_BREAKPOINTDLG
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Manage Breakpoints" ;
-    Text [ x-comment ] = " ";
 };
 
 
