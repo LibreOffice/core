@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Writer.xcu,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 12:37:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,15 +38,12 @@
   <node oor:name="MailMergeWizard">
     <prop oor:name="FemaleGreetingLines">
       <value xml:lang="en-US" oor:separator=";">Dear Mrs. &lt;2&gt;,</value>
-      <value xml:lang="de" oor:separator=";">Sehr geehrte Frau &lt;2&gt;,;Liebe Frau &lt;2&gt;,;Hallo Frau &lt;2&gt;,;Hallo &lt;1&gt;,</value>
     </prop>
     <prop oor:name="MaleGreetingLines">
       <value xml:lang="en-US" oor:separator=";">Dear Mr. &lt;2&gt;,</value>
-      <value xml:lang="de" oor:separator=";">Sehr geehrter Herr &lt;2&gt;,;Lieber Herr &lt;2&gt;,;Hallo Herr &lt;2&gt;,;Hallo &lt;1&gt;,</value>
     </prop>
     <prop oor:name="NeutralGreetingLines">
       <value xml:lang="en-US" oor:separator=";">To whom it may concern,;Dear Friends,;Dear Sir or Madam,;Hello,</value>
-      <value xml:lang="de" oor:separator=";">Sehr geehrte Damen und Herren,;Liebe Freunde,;Liebe Vereinsmitglieder,;Hallo,</value>
     </prop>
     <prop oor:name="IsHideEmptyParagraphs" >
      <value>true</value>
@@ -69,12 +66,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Table</value>
-              <value xml:lang="de">Tabelle</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -82,12 +79,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Text</value>
-              <value xml:lang="de">Text</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -95,12 +92,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -110,12 +107,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -123,12 +120,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -136,12 +133,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -149,12 +146,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -162,12 +159,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -175,12 +172,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
@@ -188,12 +185,12 @@
           <node oor:name="Settings">
             <prop oor:name="Category">
               <value xml:lang="en-US">Illustration</value>
-              <value xml:lang="de">Abbildung</value>
+
             </prop>
             <prop oor:name="CaptionText">
               <value xml:lang="en-US">: </value>
-              <value xml:lang="de">: </value>
-              <value xml:lang="fr">: </value>
+
+
             </prop>
           </node>
         </node>
