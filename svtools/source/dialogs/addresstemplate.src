@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:51:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:10:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,12 +52,10 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Size = MAP_APPFONT ( 260 , 88 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
     Hide = TRUE ;
     Moveable = TRUE ;
-    Text [ de ] = "Vorlagen: Adressbuch-Zuordnung";
     Text [ en-US ] = "Templates: Address Book Assignment";
 
     FixedLine FL_DATASOURCEFRAME
     {
-        Text [ de ] = "Adressbuchquelle";
         Text [ en-US ] = "Address Book Source";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 2 ) ;
@@ -65,7 +63,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     FixedText FT_DATASOURCE
     {
-        Text [ de ] = "Datenquelle";
         Text [ en-US ] = "Data source";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 12 , 15 ) ;
@@ -84,7 +81,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     PushButton PB_ADMINISTATE_DATASOURCES
     {
-        Text [ de ] = "~Administrieren ...";
         Text [ en-US ] = "~Administrate...";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 204, 13 ) ;
@@ -93,7 +89,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     FixedText FT_TABLE
     {
-        Text [ de ] = "Tabelle";
         Text [ en-US ] = "Table";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 12 , 32 ) ;
@@ -112,7 +107,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     };
     FixedText FT_FIELDS
     {
-        Text [ de ] = "Feldzuordnung";
         Text [ en-US ] = "Field assignment";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6, 30 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_Y  ) ;
@@ -207,165 +201,132 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
 
     String STR_NO_FIELD_SELECTION
     {
-        Text [ de ] = "<kein>";
         Text [ en-US ] = "<none>";
         };
 
     String STR_FIELD_COMPANY
     {
-        Text [ de ] = "Firma";
         Text [ en-US ] = "Company";
         };
     String STR_FIELD_DEPARTMENT
     {
-        Text [ de ] = "Abteilung";
         Text [ en-US ] = "Department";
         };
     String STR_FIELD_FIRSTNAME
     {
-        Text [ de ] = "Vorname";
         Text [ en-US ] = "First name";
         };
     String STR_FIELD_LASTNAME
     {
-        Text [ de ] = "Name";
         Text [ en-US ] = "Last name";
         };
     String STR_FIELD_STREET
     {
-        Text [ de ] = "Straße";
         Text [ en-US ] = "Street";
         };
     String STR_FIELD_COUNTRY
     {
-        Text [ de ] = "Land";
         Text [ en-US ] = "Country";
         };
     String STR_FIELD_ZIPCODE
     {
-        Text [ de ] = "PLZ";
         Text [ en-US ] = "ZIP Code";
         };
     String STR_FIELD_CITY
     {
-        Text [ de ] = "Ort";
         Text [ en-US ] = "City";
         };
     String STR_FIELD_TITLE
     {
-        Text [ de ] = "Titel";
         Text [ en-US ] = "Title";
         };
     String STR_FIELD_POSITION
     {
-        Text [ de ] = "Position";
         Text [ en-US ] = "Position";
         };
     String STR_FIELD_ADDRFORM
     {
-        Text [ de ] = "Anrede";
         Text [ en-US ] = "Addr. Form";
         };
     String STR_FIELD_INITIALS
     {
-        Text [ de ] = "Kürzel";
         Text [ en-US ] = "Initials";
         };
     String STR_FIELD_SALUTATION
     {
-        Text [ de ] = "Grußformel";
         Text [ en-US ] = "Complimentary close";
         };
     String STR_FIELD_HOMETEL
     {
-        Text [ de ] = "Telefon priv.";
         Text [ en-US ] = "Tel: Home";
         };
     String STR_FIELD_WORKTEL
     {
-        Text [ de ] = "Telefon gesch.";
         Text [ en-US ] = "Tel: Work";
         };
     String STR_FIELD_FAX
     {
-        Text [ de ] = "FAX";
         Text [ en-US ] = "FAX";
         };
     String STR_FIELD_EMAIL
     {
-        Text [ de ] = "E-Mail";
         Text [ en-US ] = "E-mail";
         };
     String STR_FIELD_URL
     {
-        Text [ de ] = "URL";
         Text [ en-US ] = "URL";
         };
     String STR_FIELD_NOTE
     {
-        Text [ de ] = "Notiz";
         Text [ en-US ] = "Note";
         };
     String STR_FIELD_USER1
     {
-        Text [ de ] = "Benutzer 1";
         Text [ en-US ] = "User 1";
         };
     String STR_FIELD_USER2
     {
-        Text [ de ] = "Benutzer 2";
         Text [ en-US ] = "User 2";
         };
     String STR_FIELD_USER3
     {
-        Text [ de ] = "Benutzer 3";
         Text [ en-US ] = "User 3";
         };
     String STR_FIELD_USER4
     {
-        Text [ de ] = "Benutzer 4";
         Text [ en-US ] = "User 4";
         };
 
     String STR_FIELD_ID
     {
-        Text [ de ] = "ID";
         Text [ en-US ] = "ID";
         };
     String STR_FIELD_STATE
     {
-        Text [ de ] = "Bund.land";
         Text [ en-US ] = "State";
-        Text [ x-comment ] = "; der punkt in \"German (49) Bund.land \" ist wahrscheinlich ein \"es\" in punktgr?se -100 (j.). In Holland gibt es keine Bundesl�nder. Was machen wir mit der �bersetzung?";
         };
     String STR_FIELD_OFFICETEL
     {
-        Text [ de ] = "Telefon Büro";
         Text [ en-US ] = "Tel: Office";
         };
     String STR_FIELD_PAGER
     {
-        Text [ de ] = "Telefon Funk";
         Text [ en-US ] = "Pager";
         };
     String STR_FIELD_MOBILE
     {
-        Text [ de ] = "Handy";
         Text [ en-US ] = "Mobile";
         };
     String STR_FIELD_TELOTHER
     {
-        Text [ de ] = "Telefon andere";
         Text [ en-US ] = "Tel: Other";
         };
     String STR_FIELD_CALENDAR
     {
-        Text [ de ] = "Kalender";
         Text [ en-US ] = "Calendar";
         };
     String STR_FIELD_INVITE
     {
-        Text [ de ] = "Einladen";
         Text [ en-US ] = "Invite";
         };
 };
