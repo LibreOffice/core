@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 16:31:27 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:08:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,58 +42,38 @@
     Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 #define PUSHBUTTON_TEXT_SAVE \
-    Text [ de ] = "~Speichern..." ; \
     Text [ en-US ] = "~Save..." ; \
-    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_RESET \
-    Text [ de ] = "Zur~ücksetzen" ; \
     Text [ en-US ] = "R~eset" ; \
-    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_LOAD \
-    Text [ de ] = "La~den..." ; \
     Text [ en-US ] = "~Load..." ; \
-    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_REMOVE \
-    Text [ de ] = "~Löschen" ; \
     Text [ en-US ] = "~Delete" ; \
-    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_CHANGE \
-    Text [ de ] = "~Ändern" ; \
     Text [ en-US ] = "~Modify" ; \
-    Text [ x-comment ] = " ";\
 
 #define PUSHBUTTON_TEXT_NEW \
-    Text [ de ] = "~Neu" ; \
     Text [ en-US ] = "~New" ; \
-    Text [ x-comment ] = " ";\
 
 #define FIXEDTEXT_TEXT_GROUP \
-    Text [ de ] = "~Bereich" ; \
     Text [ en-US ] = "~Category" ; \
-    Text [ x-comment ] = " ";\
 
 #define FIXEDTEXT_TEXT_FUNCTION \
-    Text [ de ] = "~Funktion" ; \
     Text [ en-US ] = "Function" ; \
-    Text [ x-comment ] = " ";\
 
 #define GROUPBOX_TEXT_FUNCTIONS \
-    Text [ de ] = "Funktionen" ; \
     Text [ en-US ] = "Functions" ; \
-    Text [ x-comment ] = " ";\
 
 String STR_MYMACROS
 {
-    Text [ de ] = "Meine Makros";
     Text [ en-US ] = "My Macros";
 };
 String STR_PRODMACROS
 {
-    Text [ de ] = "%PRODUCTNAME Makros";
     Text [ en-US ] = "%PRODUCTNAME Macros";
 };
 Image IMG_HARDDISK
@@ -174,7 +154,6 @@ TabPage TP_CONFIG_ACCEL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 183 , 8 ) ;
-        Text [ de ]  = "Tastenkombinationen" ;
         Group = TRUE ;
         Text [ en-US ] = "Shortcut keys";
     };
@@ -229,10 +208,8 @@ TabPage TP_CONFIG_ACCEL
     {
         Pos = MAP_APPFONT ( 136 , 151 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Tasten" ;
         Text [ en-US ] = "~Keys" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Control BOX_ACC_KEY
     {
@@ -269,159 +246,112 @@ TabPage TP_CONFIG_ACCEL
  // Strings ---------------------------------------------------------------
 String STR_NEW
 {
-    Text [ de ] = "Neu" ;
     Text [ en-US ] = "New" ;
-    Text [ x-comment ] = " ";
 };
 String STR_OPEN
 {
-    Text [ de ] = "Öffnen" ;
     Text [ en-US ] = "Open" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SAVE
 {
-    Text [ de ] = "Speichern" ;
     Text [ en-US ] = "Save" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SAVEAS
 {
-    Text [ de ] = "Speichern als" ;
     Text [ en-US ] = "Save As" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRINT
 {
-    Text [ de ] = "Drucken" ;
     Text [ en-US ] = "Print" ;
-    Text [ x-comment ] = " ";
 };
 String STR_QUIT
 {
-    Text [ de ] = "Beenden" ;
     Text [ en-US ] = "Exit" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CUT
 {
-    Text [ de ] = "Ausschneiden" ;
     Text [ en-US ] = "Cut" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COPY
 {
-    Text [ de ] = "Kopieren" ;
     Text [ en-US ] = "Copy" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PASTE
 {
-    Text [ de ] = "Einfügen" ;
     Text [ en-US ] = "Paste" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DELETE
 {
-    Text [ de ] = "Löschen" ;
     Text [ en-US ] = "Delete" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FIND
 {
-    Text [ de ] = "Suchen" ;
     Text [ en-US ] = "Search" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FINDBACKWARD
 {
-    Text [ de ] = "Rückwärts suchen" ;
     Text [ en-US ] = "Search backward" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PROPERTIES
 {
-    Text [ de ] = "Eigenschaften" ;
     Text [ en-US ] = "Properties" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FRONT
 {
-    Text [ de ] = "Nach vorn" ;
     Text [ en-US ] = "To front" ;
-    Text [ x-comment ] = " ";
 };
  // MessageBoxes ----------------------------------------------------------
 QueryBox QBX_MNUCFG_UNDEFINED_FUNCTIONS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Es existieren noch undefinierte Funktionen (???).\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
     Message [ en-US ] = "There are still undefined functions (???).\n\nDo you want to accept the configuration anyway?" ;
-    Message [ x-comment ] = " ";
 };
 QueryBox QBX_MNUCFG_POPUP_FUNCTIONS
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Es existieren noch Einträge mit Funktionen, die nur Popups zugewiesen werden können.\n\nWollen Sie diese Konfiguration trotzdem übernehmen?" ;
     Message [ en-US ] = "There are still entries with functions that can only be assigned to pop-ups.\n\nContinue anyway?" ;
-    Message [ x-comment ] = " ";
 };
 InfoBox IBX_MNUCFG_ALREADY_INCLUDED
 {
-    Message [ de ] = "Die Funktion ist bereits in diesem Popup enthalten." ;
     Message [ en-US ] = "Function is already included in this popup." ;
-    Message [ x-comment ] = " ";
 };
 String STR_LOADMENUCONFIG
 {
-    Text [ de ] = "Menükonfiguration laden" ;
     Text [ en-US ] = "Load Menu Configuration" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SAVEMENUCONFIG
 {
-    Text [ de ] = "Menükonfiguration speichern" ;
     Text [ en-US ] = "Save Menu Configuration" ;
 };
 String STR_LOADACCELCONFIG
 {
-    Text [ de ] = "Tastaturkonfiguration laden" ;
     Text [ en-US ] = "Load Keyboard Configuration" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SAVEACCELCONFIG
 {
-    Text [ de ] = "Tastaturkonfiguration speichern" ;
     Text [ en-US ] = "Save Keyboard Configuration" ;
 };
 String STR_LOADSTATBARCONFIG
 {
-    Text [ de ] = "Statusleistenkonfiguration laden" ;
     Text [ en-US ] = "Load Status Bar Configuration" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SAVESTATBARCONFIG
 {
-    Text [ de ] = "Statusleistenkonfiguration speichern" ;
     Text [ en-US ] = "Save Status Bar Configuration" ;
 };
 String STR_MENU
 {
-    Text [ de ] = "Menü" ;
     Text [ en-US ] = "Menu" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TOOLBAR_SEPARATOR
 {
-    Text [ de ] = "Trenner" ;
     Text [ en-US ] = "Separator";
 };
 
 String STR_TOOLBAR_SPACE
 {
-    Text [ de ] = "Unsichtbarer Trenner" ;
     Text [ en-US ] = "Invisible separator";
 };
 
