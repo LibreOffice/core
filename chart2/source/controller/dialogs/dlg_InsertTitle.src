@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:10:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:00:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog DLG_TITLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 88 ) ;
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Titles" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -87,48 +86,37 @@ ModalDialog DLG_TITLE
     {
         Pos = MAP_APPFONT ( 6 , 6  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ de ] = "~Haupttitel" ;
         Text [ en-US ] = "~Main Title" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_SUBTITLE
     {
         Pos = MAP_APPFONT ( 6 , 22  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ de ] = "~Untertitel" ;
         Text [ en-US ] = "~Subtitle" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TITLE_X_AXIS
     {
         Pos = MAP_APPFONT ( 6 , 38  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ de ] = "~X-Achse" ;
         Text [ en-US ] = "~X axis" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TITLE_Y_AXIS
     {
         Pos = MAP_APPFONT ( 6 , 54  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ de ] = "~Y-Achse" ;
         Text [ en-US ] = "~Y axis" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TITLE_Z_AXIS
     {
         Pos = MAP_APPFONT ( 6 , 70  ) ;
         Size = MAP_APPFONT ( 68 , 12 ) ;
-        Text [ de ] = "~Z-Achse" ;
         Text [ en-US ] = "~Z axis" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
