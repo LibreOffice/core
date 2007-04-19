@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xrmmerge.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:53:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:19:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -599,8 +599,8 @@ void XRMResExport::EndOfText(
         char cSearch = 0x00;
         ByteString sSearch( cSearch );
 
-         if ( !pResData->sText[ ByteString("en-US") ].Len() )
-            pResData->sText[ ByteString("en-US") ] = pResData->sText[ ByteString("de") ];
+     // if ( !pResData->sText[ ByteString("en-US") ].Len() )
+    //        pResData->sText[ ByteString("en-US") ] = pResData->sText[ ByteString("de") ];
 
         Export::FillInFallbacks( pResData );
 
@@ -626,8 +626,8 @@ void XRMResExport::EndOfText(
                 sOutput += sTimeStamp;
 
                 sOutput.SearchAndReplaceAll( sSearch, "_" );
-                if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
-                    pOutputStream->WriteLine( sOutput );
+                //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( sPrj ) ) )
+                pOutputStream->WriteLine( sOutput );
             }
     }
     delete pResData;
@@ -724,7 +724,7 @@ void XRMResMerge::EndOfText(
                 ByteString sContent;
 //<<<<<<< xrmmerge.cxx
                 if ( !sCur.EqualsIgnoreCaseAscii("en-US")  &&
-              ( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( sPrj ) )) &&
+            //  ( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && Export::isMergingGermanAllowed( sPrj ) )) &&
 //=======
 //              if ( Export::isAllowed( sCur ) &&
 //>>>>>>> 1.17
