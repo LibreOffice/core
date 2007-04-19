@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:14:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:01:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: hr $ $Date: 2005-09-23 14:14:44 $ $Revision: 1.30 $
+ // $Author: ihi $ $Date: 2007-04-19 15:01:27 $ $Revision: 1.31 $
  //
  //---------------------------------------------------------------------------
 
@@ -60,14 +60,12 @@ ModalDialog DLG_ROWHEIGHT
     SVLook = TRUE ;
     HelpId = HID_DLG_ROWHEIGHT ;
     Size = MAP_APPFONT ( 159 , 59 ) ;
-    Text [ de ] = "Zeilenhöhe" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText FT_VALUE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 23 , 10 ) ;
-        Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "~Height" ;
     };
     MetricField MF_VALUE
@@ -88,7 +86,6 @@ ModalDialog DLG_ROWHEIGHT
         Pos = MAP_APPFONT ( 36 , 25 ) ;
         Size = MAP_APPFONT ( 62 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "~Automatic";
     };
     OKButton PB_OK
@@ -118,14 +115,12 @@ ModalDialog DLG_COLWIDTH
     SVLook = TRUE ;
     HelpId = HID_DLG_COLWIDTH ;
     Size = MAP_APPFONT ( 159 , 59 ) ;
-    Text [ de ] = "Spaltenbreite" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedText FT_VALUE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 23 , 10 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
     };
     MetricField MF_VALUE
@@ -145,7 +140,6 @@ ModalDialog DLG_COLWIDTH
     {
         Pos = MAP_APPFONT ( 36 , 25 ) ;
         Size = MAP_APPFONT ( 62 , 12 ) ;
-        Text [ de ] = "~Automatisch" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Automatic";
     };
