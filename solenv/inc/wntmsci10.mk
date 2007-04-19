@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-17 10:14:30 $
+#   last change: $Author: obo $ $Date: 2007-04-19 16:00:16 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -234,20 +234,20 @@ LINKFLAGS=/MAP /OPT:NOREF
 .ENDIF
 
 .IF "$(linkinc)" != ""
-LINKFLAGS=/NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv /INCREMENTAL:YES
+LINKFLAGS=-NODEFAULTLIB -DEBUG:full -DEBUGTYPE:cv -INCREMENTAL:YES
 MAPFILE=
 .ELSE # "$(linkinc)" != ""
 .IF "$(PRODUCT)"!="full"
-LINKFLAGS+= /NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv
+LINKFLAGS+= -NODEFAULTLIB -DEBUG:full -DEBUGTYPE:cv
 .ELSE # "$(PRODUCT)"!="full"
-LINKFLAGS+= /NODEFAULTLIB /RELEASE /DEBUG:full
+LINKFLAGS+= -NODEFAULTLIB -RELEASE -DEBUG:full
 .ENDIF # "$(PRODUCT)"!="full"
 MAPFILE=-out:$$@
 .ENDIF # "$(linkinc)" != ""
 
 .IF "$(bndchk)" != ""
-LINK=nmlink $(COMMENTFLAG) $(NOLOGO) /MACHINE:IX86
-LINKFLAGS=/NODEFAULTLIB /DEBUG:full /DEBUGTYPE:cv
+LINK=nmlink $(COMMENTFLAG) $(NOLOGO) -MACHINE:IX86
+LINKFLAGS=-NODEFAULTLIB -DEBUG:full -DEBUGTYPE:cv
 .ENDIF
 
 .IF "$(truetime)" != ""
@@ -260,9 +260,9 @@ LINKFLAGSSHLGUI=/SUBSYSTEM:WINDOWS,4.0 /DLL
 LINKFLAGSAPPCUI=/SUBSYSTEM:CONSOLE /BASE:0x1b000000
 LINKFLAGSSHLCUI=/SUBSYSTEM:CONSOLE /DLL
 LINKFLAGSTACK=/STACK:
-LINKFLAGSPROF=/DEBUG:mapped,partial /DEBUGTYPE:coff cap.lib
-LINKFLAGSWST=/DEBUG:mapped,partial /DEBUGTYPE:coff wst.lib /NODEFAULTLIB
-LINKFLAGSDEBUG=/DEBUG:full /DEBUGTYPE:cv
+LINKFLAGSPROF=-DEBUG:mapped,partial -DEBUGTYPE:coff cap.lib
+LINKFLAGSWST=-DEBUG:mapped,partial -DEBUGTYPE:coff wst.lib -NODEFAULTLIB
+LINKFLAGSDEBUG=-DEBUG:full -DEBUGTYPE:cv
 LINKFLAGSOPT=
 
 UWINAPILIB*=uwinapi.lib
