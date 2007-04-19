@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:11:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,21 +42,18 @@ ModalDialog DLG_ASCII_FILTER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 239 , 80 ) ;
-    Text [ de ] = "ASCII Filter Optionen" ;
     Moveable = TRUE ;
     FixedLine FL_1
     {
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 170 , 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText FT_CHARSET
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
-        Text [ de ] = "Z~eichensatz" ;
         Text [ en-US ] = "~Character set";
     };
     ListBox LB_CHARSET
@@ -71,7 +68,6 @@ ModalDialog DLG_ASCII_FILTER
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
-        Text [ de ] = "~Grundschrift" ;
         Text [ en-US ] = "Default fonts";
     };
     ListBox LB_FONT
@@ -86,9 +82,7 @@ ModalDialog DLG_ASCII_FILTER
     {
         Pos = MAP_APPFONT ( 12 , 47 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
-        Text [ de ] = "~Sprache" ;
         Text [ en-US ] = "Lan~guage";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LANGUAGE
     {
@@ -102,9 +96,7 @@ ModalDialog DLG_ASCII_FILTER
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 66 , 8 ) ;
-        Text [ de ] = "~Absatzumbruch" ;
         Text [ en-US ] = "~Paragraph break";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CRLF
     {
@@ -112,27 +104,21 @@ ModalDialog DLG_ASCII_FILTER
         Size = MAP_APPFONT ( 40 , 10 ) ;
         TabStop = TRUE ;
         Check = TRUE;
-        Text [ de ] = "~CR & LF" ;
         Text [ en-US ] = "~CR & LF";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CR
     {
         Pos = MAP_APPFONT ( 121 , 64 ) ;
         Size = MAP_APPFONT ( 20 , 10 ) ;
 //        TabStop = TRUE ;
-        Text [ de ] = "C~R" ;
         Text [ en-US ] = "C~R";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_LF
     {
         Pos = MAP_APPFONT ( 155 , 64 ) ;
         Size = MAP_APPFONT ( 20 , 10 ) ;
 //        TabStop = TRUE ;
-        Text [ de ] = "~LF" ;
         Text [ en-US ] = "~LF";
-        Text [ x-comment ] = " ";
     };
 
     OKButton PB_OK
@@ -156,12 +142,9 @@ ModalDialog DLG_ASCII_FILTER
     };
     String STR_SYS_CHARSET
     {
-        Text [ de ] = "System" ;
         Text [ en-US ] = "System";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "ASCII Filter Options";
-    Text [ x-comment ] = " ";
 };
 
 
