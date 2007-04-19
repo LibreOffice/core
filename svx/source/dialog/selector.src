@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:26:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:19:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,62 +40,52 @@
     Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 #define FIXEDTEXT_DIALOG_DESCRIPTION \
-Text [ de ]  = "Wählen Sie zuerst die Bibliothek, die das gewünschte Makro enthält. Dann wählen Sie das Makro unter 'Name des Makros'." ; \
 Text [ en-US ] = "Select the library that contains the macro you want. Then select the macro under 'Macro name'." ;\
 
 String STR_SELECTOR_ADD_COMMANDS
 {
-  TEXT [ de ]  = "Befehle hinzufügen" ;
   TEXT [ en-US ] = "Add Commands" ;
 };
 
 String STR_SELECTOR_MACROS
 {
-  Text [ de ] = "%PRODUCTNAME Makros" ;
   Text [ en-US ] = "%PRODUCTNAME Macros" ;
 };
 
 String STR_SELECTOR_CATEGORIES
 {
-    Text [ de ] = "~Bereich" ;
     Text [ en-US ] = "~Category" ;
 };
 
 String STR_SELECTOR_COMMANDS
 {
-  Text [ de ] = "Befehle" ;
   Text [ en-US ] = "Commands" ;
 };
 
 String STR_SELECTOR_ADD
 {
-  TEXT [ de ]  = "Hinzufügen" ;
   TEXT [ en-US ] = "Add" ;
 };
 
 String STR_SELECTOR_RUN
 {
-  TEXT [ de ]  = "Ausführen" ;
   TEXT [ en-US ] = "Run" ;
 
 };
 
 String STR_SELECTOR_CLOSE
 {
-  TEXT [ de ]  = "Schließen" ;
   TEXT [ en-US ] = "Close" ;
 
 };
 
 String STR_SELECTOR_ADD_COMMANDS_DESCRIPTION
 {
-  TEXT[ de ] = "Um Befehle einer Symbolleiste hinzuzufügen, wählen Sie zuerst eine Kategorie und dann den Befehl. Ziehen Sie den Befehl in die Befehlsliste auf der Registerseite 'Symbolleisten' im Dialog 'Anpassen'.";
   TEXT [ en-US ] = "To add a command to a toolbar, select the category and then the command. Then drag the command to the Commands list of the Toolbars tab page in the Customize dialog.";
 };
 
 String STR_BASICMACROS
 {
-    Text [ de ] = "BASIC-Makros" ;
     Text [ en-US ] = "BASIC Macros" ;
 };
 
@@ -104,7 +94,6 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
 {
   OutputSize = TRUE ;
   Size = MAP_APPFONT ( 256 , 233 ) ;
-  Text [ de ] = "Makro-Selektor" ;
   Text [ en-US ] = "Macro Selector" ;
   HelpId = HID_SELECTOR_DIALOG;
   SvLook = TRUE ;
@@ -125,7 +114,6 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Size = MAP_APPFONT ( 83 , 8 ) ;
     Group = TRUE ;
     Left = TRUE ;
-    Text [ de ] = "Bibliothek" ;
     Text [ en-US ] = "Library" ;
   };
   Control BOX_SELECTOR_CATEGORIES
@@ -137,12 +125,10 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     HelpId = HID_SELECTOR_CATEGORIES;
     String STR_MYMACROS
     {
-        Text [ de ] = "Meine Makros";
         Text [ en-US ] = "My Macros";
     };
     String STR_PRODMACROS
     {
-        Text [ de ] = "%PRODUCTNAME Makros";
         Text [ en-US ] = "%PRODUCTNAME Macros";
     };
     Image IMG_HARDDISK
@@ -191,7 +177,6 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Pos = MAP_APPFONT ( 101 , 62 ) ;
     Size = MAP_APPFONT ( 93 , 8 ) ;
     Left = TRUE ;
-    Text [ de ] = "Name des Makros" ;
     Text [ en-US ] = "Macro name" ;
   };
   Control BOX_SELECTOR_COMMANDS
@@ -223,7 +208,6 @@ ModelessDialog RID_DLG_SCRIPTSELECTOR
     Pos = MAP_APPFONT ( 6 , 168 ) ;
     Size = MAP_APPFONT ( 224 , 8 ) ;
     Group = TRUE ;
-    Text [ de ] = "Beschreibung" ;
     Text [ en-US ] = "Description" ;
   };
   FixedText TXT_SELECTOR_DESCRIPTION
