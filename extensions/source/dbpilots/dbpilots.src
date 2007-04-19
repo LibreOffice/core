@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbpilots.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 19:27:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:44:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@
 
 ModalDialog RID_DLG_GROUPBOXWIZARD
 {
-    Text [ de ] = "Gruppenelement-Assistent";
     Text [ en-US ] = "Group Element Wizard";
 
     OutputSize      = TRUE ;
@@ -66,25 +65,21 @@ ModalDialog RID_DLG_GRIDWIZARD
     Closeable       = TRUE ;
     Hide            = TRUE;
 
-    Text [ de ] = "Tabellenelement-Assistent";
     Text [ en-US ] = "Table Element Wizard";
 };
 
 String RID_STR_LISTWIZARD_TITLE
 {
-    Text [ de ] = "Listenfeld-Assistent";
     Text [ en-US ] = "List Box Wizard";
 };
 
 String RID_STR_COMBOWIZARD_TITLE
 {
-    Text[ de ] = "Kombinationsfeld-Assistent";
     Text [ en-US ] = "Combo Box Wizard";
 };
 
 String RID_STR_COULDNOTOPENTABLE
 {
-    Text [ de ] = "Die Tabelle Verbindung zur Datenquelle konnte nicht hergestellt werden.";
     Text [ en-US ] = "The table connection to the data source could not be established.";
 };
 
