@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glosbib.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:08:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:18:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,46 +43,37 @@ ModalDialog DLG_BIB_BASE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 349 , 121 ) ;
     Moveable = TRUE ;
-    Text [ de ]= "Bereiche bearbeiten" ;
     Text [ en-US ] = "Edit Categories" ;
     PushButton PB_NEW
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 293 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Neu" ;
         Text [ en-US ] = "~New" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_DELETE
     {
         Pos = MAP_APPFONT ( 293 , 83 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
         Disable = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_RENAME
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 293 , 100 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Umbenennen" ;
         Text [ en-US ] = "~Rename" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_BIB
     {
         Pos = MAP_APPFONT ( 12 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Bereichstitel" ;
         Text [ en-US ] = "Category" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BT_OK
     {
@@ -115,7 +106,6 @@ ModalDialog DLG_BIB_BASE
     {
         Pos = MAP_APPFONT ( 174 , 3 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Pfad" ;
         Text [ en-US ] = "Path";
     };
     ListBox LB_PATH
@@ -131,7 +121,6 @@ ModalDialog DLG_BIB_BASE
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Auswahlliste" ;
         Text [ en-US ] = "Selection list";
     };
     Control TLB_GROUPS
@@ -153,12 +142,10 @@ ModalDialog DLG_BIB_BASE
 #endif
         Sort = TRUE ;
     };*/
-    Text [ x-comment ] = " ";
 };
 /*
 String STR_GLOSSARY_BIB_DLG
 {
-    Text [ de ]= "Bereiche bearbeiten" ;
     Text [ en-US ] = "Edit Categories" ;
 };*/
 
