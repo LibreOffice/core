@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labdlg.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:42:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:08:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ TabPage RID_SVXPAGE_CAPTION
     Hide = TRUE ;
     //Size = MAP_APPFONT ( 189 , 97 ) ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Legende" ;
     Text [ en-US ] = "Callouts" ;
     Control CT_CAPTTYPE
     {
@@ -58,9 +57,7 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 6 , 53  ) ;
         Size = MAP_APPFONT ( 42 , 8 ) ;
-        Text [ de ] = "~Abstand" ;
         Text [ en-US ] = "~Spacing" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_ABSTAND
     {
@@ -80,9 +77,7 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 106 , 53  ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "~Angle" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_WINKEL
     {
@@ -92,14 +87,6 @@ TabPage RID_SVXPAGE_CAPTION
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Beliebig" ; 1 ; > ;
-            < "30 Grad" ; 3000 ; > ;
-            < "45 Grad" ; 4500 ; > ;
-            < "60 Grad" ; 6000 ; > ;
-            < "90 Grad" ; 9000 ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Free" ; 1 ; > ;
@@ -108,22 +95,12 @@ TabPage RID_SVXPAGE_CAPTION
             < "60 Degrees" ; 6000 ; > ;
             < "90 Degrees" ; 9000 ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; 1 ; > ;
-        < " " ; 3000 ; > ;
-        < " " ; 4500 ; > ;
-        < " " ; 6000 ; > ;
-        < " " ; 9000 ; > ;
-    };
     };
     FixedText FT_ANSATZ
     {
         Pos = MAP_APPFONT ( 6 , 69  ) ;
         Size = MAP_APPFONT ( 42 , 8 ) ;
-        Text [ de ] = "A~nsatz" ;
         Text [ en-US ] = "~Extension" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ANSATZ
     {
@@ -133,14 +110,6 @@ TabPage RID_SVXPAGE_CAPTION
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Optimal" ; 4 ; > ;
-            < "Von oben" ; 3 ; > ;
-            < "Von links" ; 3 ; > ;
-            < "Horizontal" ; 1 ; > ;
-            < "Vertikal" ; 2 ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Optimal" ; 4 ; > ;
@@ -149,22 +118,12 @@ TabPage RID_SVXPAGE_CAPTION
             < "Horizontal" ; 1 ; > ;
             < "Vertical" ; 2 ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; 4 ; > ;
-        < " " ; 3 ; > ;
-        < " " ; 3 ; > ;
-        < " " ; 1 ; > ;
-        < " " ; 2 ; > ;
-    };
     };
     FixedText FT_UM
     {
         Pos = MAP_APPFONT ( 106 , 69  ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Um" ;
         Text [ en-US ] = "~By" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_ANSATZ
     {
@@ -184,9 +143,7 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 106 , 69  ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "~Position" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ANSATZ_REL
     {
@@ -202,9 +159,7 @@ TabPage RID_SVXPAGE_CAPTION
         Size = MAP_APPFONT ( 42 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~L‰nge : ~Lınge */
         /* ### ACHTUNG: Neuer Text in Resource? ~L‰nge : ~Lınge */
-        Text [ de ] = "~L√§nge" ;
         Text [ en-US ] = "~Length" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_LAENGE
     {
@@ -224,46 +179,32 @@ TabPage RID_SVXPAGE_CAPTION
     {
         Pos = MAP_APPFONT ( 106 , 84  ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Optimal" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Optimal" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_1
     {
-        Text [ de ] = "Gerade Linie" ;
         Text [ en-US ] = "Straight Line" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_2
     {
-        Text [ de ] = "Abgewinkelte Linie" ;
         Text [ en-US ] = "Angled Line" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_3
     {
-        Text [ de ] = "Abgewinkelte Linie einfach geknickt" ;
         Text [ en-US ] = "Angled Connector Line" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CAPTTYPE_4
     {
-        Text [ de ] = "Abgewinkelte Linie doppelt geknickt" ;
         Text [ en-US ] = "Double-angled line" ;
-        Text [ x-comment ] = " ";
     };
     String STR_HORZ_LIST
     {
-        Text [ de ] = "Oben;Mitte;Unten" ;
         Text [ en-US ] = "Top;Middle;Bottom" ;
-        Text [ x-comment ] = " ";
     };
     String STR_VERT_LIST
     {
-        Text [ de ] = "Links;Mitte;Rechts" ;
         Text [ en-US ] = "Left;Middle;Right" ;
-        Text [ x-comment ] = " ";
     };
     Bitmap BMP_CAPTTYPE_1
     {
@@ -297,12 +238,10 @@ TabPage RID_SVXPAGE_CAPTION
     {
         File = "legtyp4_hc.bmp" ;
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_CAPTION ----------------------------------------------------
 
 #define  _POS_SIZE_TEXT \
-                Text [ de ] = "Position und Gr√∂√üe" ;                           \
                 Text [ en-US ] = "Position and Size" ;             \
 
 TabDialog RID_SVXDLG_CAPTION\
@@ -310,7 +249,6 @@ TabDialog RID_SVXDLG_CAPTION\
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 237 , 161 ) ;
-    Text [ de ] = "Legende" ;\
     Text [ en-US ] = "Callouts" ;\
     Moveable = TRUE ;
     TabControl TAB_CONTROL\
@@ -335,14 +273,11 @@ TabDialog RID_SVXDLG_CAPTION\
             PageItem
             {
                 Identifier = RID_SVXPAGE_CAPTION ;
-                Text [ de ] = "Legende" ;
                 PageResID = RID_SVXPAGE_CAPTION ;
                 Text [ en-US ] = "Callout" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
