@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 10:08:27 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,378 +38,262 @@
 
 String SCSTR_APPLICATION
 {
-    Text [ de ] = "%PRODUCTNAME Calc 6.0" ;
     Text [ en-US ] = "%PRODUCTNAME Calc 6.0";
-    Text [ x-comment ] = " ";
 };
 String SCSTR_50_APPLICATION
 {
-    Text [ de ] = "StarCalc 5.0" ;
     Text [ en-US ] = "StarCalc  5.0" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_40_APPLICATION
 {
-    Text [ de ] = "StarCalc 4.0" ;
     Text [ en-US ] = "StarCalc 4.0" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_30_APPLICATION
 {
-    Text [ de ] = "StarCalc 3.0" ;
     Text [ en-US ] = "StarCalc 3.0" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_LONG_SCDOC_NAME
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Tabelle" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Spreadsheet";
-    Text [ x-comment ] = " ";
 };
 String SCSTR_50_LONG_DOCNAME
 {
-    Text [ de ] = "%PRODUCTNAME 5.0 Tabelle" ;
     Text [ en-US ] = "%PRODUCTNAME 5.0 Spreadsheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_40_LONG_DOCNAME
 {
-    Text [ de ] = "%PRODUCTNAME 4.0 Tabelle" ;
     Text [ en-US ] = "%PRODUCTNAME 4.0 Spreadsheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_30_LONG_DOCNAME
 {
-    Text [ de ] = "StarCalc 3.0 Tabelle" ;
     Text [ en-US ] = "StarCalc 3.0 Spreadsheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_SHORT_SCDOC_NAME
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Spreadsheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_HUMAN_SCDOC_NAME
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Spreadsheet" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_DOCSHELL
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Sheet" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_TABVIEWSHELL
 {
-    Text [ de ] = "Zellen" ;
     Text [ en-US ] = "Cells" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CELLSHELL
 {
-    Text [ de ] = "Zellfunktionen" ;
     Text [ en-US ] = "Functions for Cells";
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_FORMATSHELL
 {
-    Text [ de ] = "Zellformate" ;
     Text [ en-US ] = "Formats for Cells";
-    Text [ x-comment ] = " ";
 };
 
 
 String SCSTR_DRAWSHELL
 {
-    Text [ de ] = "Grafikobjekte" ;
     Text [ en-US ] = "Graphics objects" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_DRAWTEXTSHELL
 {
-    Text [ de ] = "Textobjekte" ;
     Text [ en-US ] = "Text objects" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_DRAWFORMSHELL
 {
-    Text [ de ] = "Formularobjekte" ;
     Text [ en-US ] = "Form objects";
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CHARTSHELL
 {
-    Text [ de ] = "Chart-Objekte" ;
     Text [ en-US ] = "Chart objects";
 };
 
 String SCSTR_OLEOBJECTSHELL
 {
-    Text [ de ] = "OLE-Objekte" ;
     Text [ en-US ] = "OLE objects";
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_GRAPHICSHELL
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics";
 };
 String SCSTR_PAGEBREAKSHELL
 {
-    Text [ de ] = "Seitenumbruch" ;
     Text [ en-US ] = "Pagebreak";
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_EDITSHELL
 {
-    Text [ de ] = "Textbearbeitung" ;
     Text [ en-US ] = "Text editing" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_PREVIEWSHELL
 {
-    Text [ de ] = "Druckvorschau" ;
     Text [ en-US ] = "Print Preview" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_PIVOTSHELL
 {
-    Text [ de ] = "Datenpilot-Tabellen" ;
     Text [ en-US ] = "Data Pilot Tables" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_AUDITSHELL
 {
-    Text [ de ] = "Detektiv-Füll-Modus" ;
     Text [ en-US ] = "Detective Fill Mode" ;
-    Text [ x-comment ] = " ";
 };
 
  // -----------------------------------------------------------------------
 
 String STR_ROWHEIGHT
 {
-    Text [ de ] = "Höhe" ;
     Text [ en-US ] = "Height" ;
-    Text [ x-comment ] = " ";
 };
 String STR_OPT_ROWHEIGHT
 {
-    Text [ de ] = "Extra" ;
     Text [ en-US ] = "Add" ;
-    Text [ x-comment ] = " ";
 };
 String STR_ROWHEIGHT_TITLE
 {
-    Text [ de ] = "Zeilenhöhe" ;
     Text [ en-US ] = "Row Height" ;
-    Text [ x-comment ] = " ";
 };
 String STR_OPT_ROWHEIGHT_TITLE
 {
-    Text [ de ] = "Optimale Zeilenhöhe" ;
     Text [ en-US ] = "Optimal Row Height" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COLWIDTH
 {
-    Text [ de ] = "Breite" ;
     Text [ en-US ] = "Width" ;
-    Text [ x-comment ] = " ";
 };
 String STR_OPT_COLWIDTH
 {
-    Text [ de ] = "Extra" ;
     Text [ en-US ] = "Add" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COLWIDTH_TITLE
 {
-    Text [ de ] = "Spaltenbreite" ;
     Text [ en-US ] = "Column Width" ;
-    Text [ x-comment ] = " ";
 };
 String STR_OPT_COLWIDTH_TITLE
 {
-    Text [ de ] = "Optimale Spaltenbreite" ;
     Text [ en-US ] = "Optimal Column Width" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_UNDEFINED
 {
-    Text [ de ] = "- undefiniert -" ;
     Text [ en-US ] = "- undefined -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_NONE
 {
-    Text [ de ] = "- keiner -" ;
     Text [ en-US ] = "- none -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_EMPTY
 {
-    Text [ de ] = "- leer -" ;
     Text [ en-US ] = "- empty -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_NOTEMPTY
 {
-    Text [ de ] = "- nicht leer -" ;
     Text [ en-US ] = "- not empty -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_NEWTABLE
 {
-    Text [ de ] = "- neue Tabelle -" ;
     Text [ en-US ] = "- new sheet -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_ALL
 {
-    Text [ de ] = "- alle -" ;
     Text [ en-US ] = "- all -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_STDFILTER
 {
-    Text [ de ] = "- Standard -" ;
     Text [ en-US ] = "- Standard -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_TOP10FILTER
 {
-    Text [ de ] = "- Top 10 -" ;
     Text [ en-US ] = "- Top 10 -" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_NONAME
 {
-    Text [ de ] = "unbenannt" ;
     Text [ en-US ] = "unnamed" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_COLUMN
 {
-    Text [ de ] = "Spalte" ;
     Text [ en-US ] = "Column" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_ROW
 {
-    Text [ de ] = "Zeile" ;
     Text [ en-US ] = "Row" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_NEW
 {
-    Text [ de ] = "~Neu" ;
     Text [ en-US ] = "~New" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_ADD
 {
-    Text [ de ] = "~Hinzufügen" ;
     Text [ en-US ] = "~Add" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_REMOVE
 {
-    Text [ de ] = "~Löschen" ;
     Text [ en-US ] = "~Delete" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CANCEL
 {
-    Text [ de ] = "Ab~brechen" ;
     Text [ en-US ] = "Cance~l" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_MODIFY
 {
-    Text [ de ] = "~Ändern" ;
     Text [ en-US ] = "Modif~y" ;
-    Text [ x-comment ] = " ";
 };
 
 
 String SCSTR_SHOWTABLE
 {
-    Text [ de ] = "Tabelle einblenden" ;
     Text [ en-US ] = "Show Sheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_HIDDENTABLES
 {
-    Text [ de ] = "Ausgeblendete Tabellen" ;
     Text [ en-US ] = "Hidden Sheets" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_SELECTDB
 {
-    Text [ de ] = "Datenbankbereich wählen" ;
     Text [ en-US ] = "Select Database Range" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_AREAS
 {
-    Text [ de ] = "~Bereiche" ;
     Text [ en-US ] = "Ranges" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_TABLE
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Sheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_NAME
 {
-    Text [ de ] = "Name" ;
     Text [ en-US ] = "Name" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_INSTABLE
 {
-    Text [ de ] = "Tabelle einfügen" ;
     Text [ en-US ] = "Insert Sheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_APDTABLE
 {
-    Text [ de ] = "Tabelle anhängen" ;
     Text [ en-US ] = "Append Sheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_RENAMETAB
 {
-    Text [ de ] = "Tabelle umbenennen" ;
     Text [ en-US ] = "Rename Sheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_RENAMEOBJECT
 {
-    Text [ de ] = "Objekt benennen" ;
     Text [ en-US ] = "Name Object";
 };
 String STR_INSERTGRAPHIC
 {
-    Text [ de ] = "Bild einfügen" ;
     Text [ en-US ] = "Insert Picture" ;
 };
 
@@ -417,247 +301,174 @@ String STR_INSERTGRAPHIC
 
 String SCSTR_HOR_JUSTIFY_LEFT
 {
-    Text [ de ] = "Ausrichtung nach links" ;
     Text [ en-US ] = "Align left" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_HOR_JUSTIFY_CENTER
 {
-    Text [ de ] = "Horizontal zentriert" ;
     Text [ en-US ] = "Centered horizontally" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_HOR_JUSTIFY_RIGHT
 {
-    Text [ de ] = "Ausrichtung nach rechts" ;
     Text [ en-US ] = "Align right" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_HOR_JUSTIFY_BLOCK
 {
-    Text [ de ] = "Blockausrichtung" ;
     Text [ en-US ] = "Justify" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_HOR_JUSTIFY_REPEAT
 {
-    Text [ de ] = "Ausrichtung wiederholen" ;
     Text [ en-US ] = "Repeat alignment" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_HOR_JUSTIFY_STANDARD
 {
-    Text [ de ] = "Horizontale Ausrichtung Standard" ;
     Text [ en-US ] = "Horizontal alignment default" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_VER_JUSTIFY_TOP
 {
-    Text [ de ] = "Ausrichtung nach oben" ;
     Text [ en-US ] = "Align to top" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_VER_JUSTIFY_CENTER
 {
-    Text [ de ] = "Vertikal zentriert" ;
     Text [ en-US ] = "Centered vertically" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_VER_JUSTIFY_BOTTOM
 {
-    Text [ de ] = "Ausrichtung nach unten" ;
     Text [ en-US ] = "Align to bottom" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_VER_JUSTIFY_STANDARD
 {
-    Text [ de ] = "Vertikale Ausrichtung Standard" ;
     Text [ en-US ] = "Vertical alignment default" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_ORIENTATION_TOPBOTTOM
 {
-    Text [ de ] = "Von oben nach unten" ;
     Text [ en-US ] = "Top to bottom" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_ORIENTATION_BOTTOMTOP
 {
-    Text [ de ] = "Von unten nach oben" ;
     Text [ en-US ] = "Bottom to Top" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_ORIENTATION_STANDARD
 {
-    Text [ de ] = "Schreibrichtung Standard" ;
     Text [ en-US ] = "Default orientation" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_PROTECTDOC
 {
-    Text [ de ] = "Dokument schützen" ;
     Text [ en-US ] = "Protect Document" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_UNPROTECTDOC
 {
-    Text [ de ] = "Dokumentschutz aufheben" ;
     Text [ en-US ] = "Unprotect document" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_PROTECTTAB
 {
-    Text [ de ] = "Tabelle schützen" ;
     Text [ en-US ] = "Protect Sheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_UNPROTECTTAB
 {
-    Text [ de ] = "Tabellenschutz aufheben" ;
     Text [ en-US ] = "Unprotect sheet" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CHG_PROTECT
 {
-    Text [ de ] = "Aufzeichnung schützen" ;
     Text [ en-US ] = "Protect Records" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_CHG_UNPROTECT
 {
-    Text [ de ] = "Aufzeichnungsschutz aufheben" ;
     Text [ en-US ] = "Unprotect Records" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_PASSWORD
 {
-    Text [ de ] = "Kennwort:" ;
     Text [ en-US ] = "Password:" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_PASSWORDOPT
 {
-    Text [ de ] = "Kennwort (optional):" ;
     Text [ en-US ] = "Password (optional):" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_WRONGPASSWORD
 {
-    Text [ de ] = "Falsches Kennwort" ;
     Text [ en-US ] = "Incorrect Password" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_END
 {
-    Text [ de ] = "~Ende" ;
     Text [ en-US ] = "~End" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_STAT_PRINT
 {
-    Text [ de ] = "Drucke..." ;
     Text [ en-US ] = "Printing..." ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_UNKNOWN
 {
-    Text [ de ] = "Unbekannt" ;
     Text [ en-US ] = "Unknown" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CHAR_ATTRS
 {
-    Text [ de ] = "Zeichenattribute" ;
     Text [ en-US ] = "Font Attributes" ;
-    Text [ x-comment ] = " ";
 };
 
 
 String SCSTR_CLPBRD_CLEAR
 {
-    Text [ de ] = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?" ;
     Text [ en-US ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CFG_APP
 {
-    Text [ de ] = "Systemoptionen" ;
     Text [ en-US ] = "System Options" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CFG_DOC
 {
-    Text [ de ] = "Dokumentoptionen" ;
     Text [ en-US ] = "Document Options" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CFG_VIEW
 {
-    Text [ de ] = "Ansichtoptionen" ;
     Text [ en-US ] = "View Options" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CFG_INPUT
 {
-    Text [ de ] = "Eingabeoptionen" ;
     Text [ en-US ] = "Input Options" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CFG_SPELLCHECK
 {
-    Text [ de ] = "Rechtschreiboptionen" ;
     Text [ en-US ] = "Spelling Options" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CFG_PRINT
 {
-    Text [ de ] = "Druckoptionen" ;
     Text [ en-US ] = "Print Options" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_CFG_NAVIPI
 {
-    Text [ de ] = "Navigator-Einstellungen" ;
     Text [ en-US ] = "Navigator Settings" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_VALID_MINIMUM
 {
-    Text [ de ] = "~Minimum" ;
     Text [ en-US ] = "~Minimum" ;
 };
 String SCSTR_VALID_MAXIMUM
 {
-    Text [ de ] = "~Maximum" ;
     Text [ en-US ] = "~Maximum" ;
 };
 String SCSTR_VALID_VALUE
 {
-    Text [ de ] = "~Wert" ;
     Text [ en-US ] = "~Value" ;
 };
 String SCSTR_VALID_RANGE
 {
-    Text [ de ] = "~Quelle" ;
     Text [ en-US ] = "~Source" ;
 };
 String SCSTR_VALID_LIST
 {
-    Text [ de ] = "~Einträge" ;
     Text [ en-US ] = "~Entries" ;
 };
 
@@ -665,23 +476,17 @@ String SCSTR_VALID_LIST
 
 String SCSTR_CHARSET_USER
 {
-    Text [ de ] = "System" ;
     Text [ en-US ] = "System" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_COLUMN_USER
 {
-    Text [ de ] = "Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);US-Englisch;ausblenden" ;
     Text [ en-US ] = "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide" ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_FIELDSEP
 {
-    Text [ de ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{Leer}\t32" ;
     Text [ en-US ] = ",\t44\t;\t59\t:\t58\t{Tab}\t9\t{space}\t32 " ;
-    Text [ x-comment ] = " ";
 };
 
 String SCSTR_TEXTSEP
@@ -691,111 +496,86 @@ String SCSTR_TEXTSEP
 
 String SCSTR_FORMULA_AUTOCORRECTION
 {
-    Text [ de ] = "%PRODUCTNAME Calc hat einen Fehler in der eingegebenen Formel gefunden.\nWollen Sie die unten vorgeschlagene Korrektur akzeptieren?\n\n" ;
     Text [ en-US ] = "%PRODUCTNAME Calc found an error in the formula entered.\nDo you want to accept the correction proposed below?\n\n" ;
-    Text [ x-comment ] = " ";
 };
 
 //! the graphics filter error strings should be moved to svx or offapp!
 
 String SCSTR_GRFILTER_OPENERROR
 {
-    Text [ de ] = "Grafikdatei kann nicht geöffnet werden" ;
     Text [ en-US ] = "Graphics file can not be opened" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_GRFILTER_IOERROR
 {
-    Text [ de ] = "Grafikdatei kann nicht gelesen werden" ;
     Text [ en-US ] = "Graphics file can not be read" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_GRFILTER_FORMATERROR
 {
-    Text [ de ] = "Unbekanntes Grafikformat" ;
     Text [ en-US ] = "Unknown graphic format" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_GRFILTER_VERSIONERROR
 {
-    Text [ de ] = "Die Version der Grafikdatei wird nicht unterstützt" ;
     Text [ en-US ] = "This graphic file version is not supported" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_GRFILTER_FILTERERROR
 {
-    Text [ de ] = "Grafikfilter nicht gefunden" ;
     Text [ en-US ] = "Graphics filter not found" ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_GRFILTER_TOOBIG
 {
-    Text [ de ] = "Nicht genug Speicher zum Einfügen der Grafik" ;
     Text [ en-US ] = "Not enough memory available to insert graphics." ;
-    Text [ x-comment ] = " ";
 };
 String SCSTR_UNDO_GRAFFILTER
 {
-    Text [ de ] = "Grafikfilter" ;
     Text [ en-US ] = "Graphics Filter" ;
 };
 
 // #98185#
 String STR_CAPTION_DEFAULT_TEXT
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 
 // Select tables dialog title
 String STR_DLG_SELECTTABLES_TITLE
 {
-    Text [ de ] = "Tabellen auswählen";
     Text [ en-US ] = "Select Sheets";
 };
 
 // Select tables dialog listbox
 String STR_DLG_SELECTTABLES_LBNAME
 {
-    Text [ de ] = "~Ausgewählte Tabellen";
     Text [ en-US ] = "~Selected sheets";
 };
 
 String STR_REPLCELLSWARN
 {
-    Text [ de ] = "Die Zellen, in die Sie Daten einfügen wollen, enthalten bereits Daten.\nWollen Sie die vorhandenen Daten wirklich überschreiben?";
     Text [ en-US ] = "You are pasting data into cells that already contain data.\nDo you really want to overwrite the existing data?";
 };
 
 
 String STR_ACC_CSVRULER_NAME
 {
-    Text [ de ] = "Lineal";
     Text [ en-US ] = "Ruler";
 };
 
 String STR_ACC_CSVRULER_DESCR
 {
-    Text [ de ] = "Dieses Lineal verwaltet Objekte an festen Positionen.";
     Text [ en-US ] = "This ruler manages objects at fixed positions.";
 };
 
 String STR_ACC_CSVGRID_NAME
 {
-    Text [ de ] = "Vorschau";
     Text [ en-US ] = "Preview";
 };
 
 String STR_ACC_CSVGRID_DESCR
 {
-    Text [ de ] = "Diese Tabelle zeigt die Anordnung der Daten, wie sie im Dokument erscheinen.";
     Text [ en-US ] = "This sheet shows how the data will be arranged in the document.";
 };
 
 String STR_ACC_DOC_NAME
 {
-    Text [ de ] = "Dokumentenansicht";
     Text [ en-US ] = "Document view";
 };
 
@@ -806,7 +586,6 @@ String STR_ACC_DOC_DESCR
 
 String STR_ACC_TABLE_NAME
 {
-    Text [ de ] = "Tabelle %1";
     Text [ en-US ] = "Sheet %1";
 };
 
@@ -817,7 +596,6 @@ String STR_ACC_TABLE_DESCR
 
 String STR_ACC_CELL_NAME
 {
-    Text [ de ] = "Zelle %1";
     Text [ en-US ] = "Cell %1";
 };
 
@@ -828,7 +606,6 @@ String STR_ACC_CELL_DESCR
 
 String STR_ACC_PREVIEWDOC_NAME
 {
-    Text [ de ] = "Seitenvorschau";
     Text [ en-US ] = "Page preview";
 };
 
@@ -849,7 +626,6 @@ String STR_ACC_HEADERCELL_DESCR
 
 String STR_ACC_LEFTAREA_NAME
 {
-    Text [ de ] = "Linker Bereich";
     Text [ en-US ] = "Left area";
 };
 
@@ -860,7 +636,6 @@ String STR_ACC_LEFTAREA_DESCR
 
 String STR_ACC_CENTERAREA_NAME
 {
-    Text [ de ] = "Mittlerer Bereich";
     Text [ en-US ] = "Center area";
 };
 
@@ -871,7 +646,6 @@ String STR_ACC_CENTERAREA_DESCR
 
 String STR_ACC_RIGHTAREA_NAME
 {
-    Text [ de ] = "Rechter Bereich";
     Text [ en-US ] = "Right area";
 };
 
@@ -882,7 +656,6 @@ String STR_ACC_RIGHTAREA_DESCR
 
 String STR_ACC_HEADER_NAME
 {
-    Text [ de ] = "Kopfzeile Seite %1";
     Text [ en-US ] = "Header of page %1";
 };
 
@@ -893,7 +666,6 @@ String STR_ACC_HEADER_DESCR
 
 String STR_ACC_FOOTER_NAME
 {
-    Text [ de ] = "Fußzeile Seite %1";
     Text [ en-US ] = "Footer of page %1";
 };
 
@@ -904,19 +676,16 @@ String STR_ACC_FOOTER_DESCR
 
 String STR_ACC_EDITLINE_NAME
 {
-    Text [ de ] = "Editzeile";
     Text [ en-US ] = "Input line";
 };
 
 String STR_ACC_EDITLINE_DESCR
 {
-    Text [ de ] = "Hier können Sie Text, Zahlen und Formeln eingeben und bearbeiten.";
     Text [ en-US ] = "This is where you enter or edit text, numbers and formulas.";
 };
 
 String STR_ACC_EDITCELL_NAME
 {
-    Text [ de ] = "Zelle %1";
     Text [ en-US ] = "Cell %1";
 };
 
@@ -927,32 +696,26 @@ String STR_ACC_EDITCELL_DESCR
 
 String STR_ACC_DATAPILOT_ROW_DESCR
 {
-    Text [ de ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Zeile angezeigt.";
     Text [ en-US ] = "Fields that you drop here will be displayed as rows in the final DataPilot table.";
 };
 
 String STR_ACC_DATAPILOT_COL_DESCR
 {
-    Text [ de ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle als Spalte angezeigt.";
     Text [ en-US ] = "Fields that you drop here will be displayed as columns in the final DataPilot table.";
 };
 
 String STR_ACC_DATAPILOT_DATA_DESCR
 {
-    Text [ de ] = "Felder, die Sie hier anordnen, werden in der fertigen Datenpilot-Tabelle für Berechnungen genutzt.";
     Text [ en-US ] = "Fields that you drop here will be used for calculations in the final DataPilot table.";
 };
 
 String STR_ACC_DATAPILOT_SEL_DESCR
 {
-    Text [ de ] = "Hier sind die Felder aufgelistet, die Sie in einen der drei anderen Bereiche bewegen können.";
-    Text [ x-comment ] = "EM O; EM Oct 2002: (not \"range\") In the datapilot dialog, description of controls";
     Text [ en-US ] = "Lists the fields that you can drag to one of the other three areas.";
 };
 
 String SCSTR_MEDIASHELL
 {
-    Text [ de ] = "Medienwiedergabe" ;
     Text [ en-US ] = "Media Playback";
 };
 
