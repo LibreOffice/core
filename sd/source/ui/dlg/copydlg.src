@@ -4,9 +4,9 @@
  *
  *  $RCSfile: copydlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:30:48 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:23:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ ModalDialog DLG_COPY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 204 , 177 ) ;
-    Text [ de ] = "Duplizieren" ;
     Text [ en-US ] = "Duplicate" ;
     Moveable = TRUE ;
     OKButton BTN_OK
@@ -68,9 +67,7 @@ ModalDialog DLG_COPY
     {
         Pos = MAP_APPFONT ( 6 , 9 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Anzahl an ~Kopien" ;
         Text [ en-US ] = "Number of ~copies" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_COPIES
     {
@@ -91,7 +88,6 @@ ModalDialog DLG_COPY
     {
         Pos = MAP_APPFONT ( 122 , 6 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
-        QuickHelpText [ de ] = "Werte von Selektion aufnehmen" ;
         ButtonImage = Image
         {
             ImageBitmap = Bitmap { File = "pipette.bmp" ; };
@@ -99,16 +95,13 @@ ModalDialog DLG_COPY
         };
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Values from Selection" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     PushButton BTN_SET_DEFAULT
     {
         Pos = MAP_APPFONT ( 148 , 63  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Standard" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Default";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -121,27 +114,21 @@ ModalDialog DLG_COPY
         Maximum = 359 ;
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         Last = 359 ;
         SpinSize = 5 ;
         CustomUnitText [ en-US ] = " degrees" ;
-        CustomUnitText [ x-comment ] = " ";
     };
     FixedText FT_ANGLE
     {
         Pos = MAP_APPFONT ( 12 , 71 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Drehwinkel" ;
         Text [ en-US ] = "~Angle" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_MOVE_X
     {
         Pos = MAP_APPFONT ( 12 , 39 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~X-Achse" ;
         Text [ en-US ] = "~X axis" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_MOVE_X
     {
@@ -215,49 +202,37 @@ ModalDialog DLG_COPY
     {
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Y-Achse" ;
         Text [ en-US ] = "~Y axis" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Höh~e" ;
         Text [ en-US ] = "~Height" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_MOVEMENT
     {
         Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-        Text [ de ] = "Verschiebung" ;
         Text [ en-US ] = "Placement" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_ENLARGEMENT
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-        Text [ de ] = "Vergrößerung" ;
         Text [ en-US ] = "Enlargement" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_COLOR
     {
         Pos = MAP_APPFONT ( 6 , 132 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-        Text [ de ] = "Farben" ;
         Text [ en-US ] = "Colors" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_START_COLOR
     {
@@ -272,9 +247,7 @@ ModalDialog DLG_COPY
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Anfang" ;
         Text [ en-US ] = "~Start" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_END_COLOR
     {
@@ -289,11 +262,8 @@ ModalDialog DLG_COPY
     {
         Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "E~nde" ;
         Text [ en-US ] = "~End" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
