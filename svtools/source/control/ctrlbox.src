@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctrlbox.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:50:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:09:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,6 @@ IMAGE RID_IMG_BITMAPFONT_HC
 
 String STR_SVT_AUTOMATIC_COLOR
 {
-    Text [ de ] = "Automatisch";
     Text [ en-US ] = "Automatic";
 };
 
@@ -88,148 +87,126 @@ String STR_SVT_AUTOMATIC_COLOR
 String STR_SVT_COLLATE_ALPHANUMERIC
 {
     /* alphanumeric sorting algorithm */
-    Text [ de ] = "Alphanumerisch" ;
     Text [ en-US ] = "Alphanumeric";
 };
 
 String STR_SVT_COLLATE_NORMAL
 {
     /* default or normal sorting algorithm */
-    Text [ de ] = "Normal" ;
     Text [ en-US ] = "Normal";
 };
 
 String STR_SVT_COLLATE_CHARSET
 {
     /* default or normal sorting algorithm */
-    Text [ de ] = "Zeichensatz" ;
     Text [ en-US ] = "Character set";
 };
 
 String STR_SVT_COLLATE_DICTIONARY
 {
     /* german dictionary word order / sorting */
-    Text [ de ] = "Wörterbuch" ;
     Text [ en-US ] = "Dictionary";
 };
 
 String STR_SVT_COLLATE_PINYIN
 {
     /* chinese sorting algorithm */
-    Text [ de ] = "Pinyin" ;
     Text [ en-US ] = "Pinyin";
 };
 
 String STR_SVT_COLLATE_STROKE
 {
     /* chinese sorting algorithm */
-    Text [ de ] = "Stroke" ;
     Text [ en-US ] = "Stroke";
 };
 
 String STR_SVT_COLLATE_RADICAL
 {
     /* chinese sorting algorithm */
-    Text [ de ] = "Radical" ;
     Text [ en-US ] = "Radical";
 };
 
 String STR_SVT_COLLATE_UNICODE
 {
     /* sorting according to the unicode code point of the character */
-    Text [ de ] = "Unicode" ;
     Text [ en-US ] = "Unicode";
 };
 
 String STR_SVT_COLLATE_ZHUYIN
 {
     /* chinese sorting algorithm */
-    Text [ de ] = "Zhuyin" ;
     Text [ en-US ] = "Zhuyin";
 };
 
 String STR_SVT_COLLATE_PHONEBOOK
 {
     /* phone book sorting algorithm. e.g. German */
-    Text [ de ] = "Telefonbuch" ;
     Text [ en-US ] = "Phone book";
 };
 
 String STR_SVT_COLLATE_PHONETIC_F
 {
-    Text [ de ] = "Phonetisch (alphanumerisch zuerst)";
     Text [ en-US ] = "Phonetic (alphanumeric first)";
 };
 
 String STR_SVT_COLLATE_PHONETIC_L
 {
-    Text [ de ] = "Phonetisch (alphanumerisch zuletzt)";
     Text [ en-US ] = "Phonetic (alphanumeric last)";
 };
 
 String STR_SVT_INDEXENTRY_ALPHANUMERIC
 {
     /* alphanumeric indexentry algorithm */
-    Text [ de ] = "Alphanumerisch" ;
     Text [ en-US ] = "Alphanumeric";
 };
 
 String STR_SVT_INDEXENTRY_DICTIONARY
 {
     /* korean dictionary indexentry algorithm */
-    Text [ de ] = "Wörterbuch" ;
     Text [ en-US ] = "Dictionary";
 };
 
 String STR_SVT_INDEXENTRY_PINYIN
 {
     /* chinese sorting algorithm */
-    Text [ de ] = "Pinyin" ;
     Text [ en-US ] = "Pinyin";
 };
 
 String STR_SVT_INDEXENTRY_RADICAL
 {
     /* chinese indexentry algorithm */
-    Text [ de ] = "Radical" ;
     Text [ en-US ] = "Radical";
 };
 
 String STR_SVT_INDEXENTRY_STROKE
 {
     /* chinese indexentry algorithm */
-    Text [ de ] = "Stroke" ;
     Text [ en-US ] = "Stroke";
 };
 
 String STR_SVT_INDEXENTRY_ZHUYIN
 {
     /* chinese indexentry algorithm */
-    Text [ de ] = "Zhuyin" ;
     Text [ en-US ] = "Zhuyin";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FS
 {
-    Text [ de ] = "Phonetisch (alphanumerisch zuerst, nach Silben gruppiert)";
     Text [ en-US ] = "Phonetic (alphanumeric first, grouped by syllables)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_FC
 {
-    Text [ de ] = "Phonetisch (alphanumerisch zuerst, nach  Konsonanten gruppiert)";
     Text [ en-US ] = "Phonetic (alphanumeric first, grouped by consonants)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LS
 {
-    Text [ de ] = "Phonetisch (alphanumerisch zuletzt, nach Silben gruppiert)";
     Text [ en-US ] = "Phonetic (alphanumeric last, grouped by syllables)";
 };
 
 String STR_SVT_INDEXENTRY_PHONETIC_LC
 {
-    Text [ de ] = "Phonetisch (alphanumerisch zuletzt, nach Konsonanten gruppiert)";
     Text [ en-US ] = "Phonetic (alphanumeric last, grouped by consonants)";
 };
 
