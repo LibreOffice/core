@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertAxis_Grid.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:44:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ ModalDialog DLG_AXIS_OR_GRID
     SVLook = TRUE ;
     //Size = MAP_APPFONT ( 160 , 99 ) ;
     Size = MAP_APPFONT ( 160 , 113 ) ;
-    Text [ de ] = "Achsen" ;
     Text [ en-US ] = "Axes" ;
     Moveable = TRUE ;
 
@@ -52,7 +51,6 @@ ModalDialog DLG_AXIS_OR_GRID
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Hauptachse" ;
         Text [ en-US ] = "Major axis" ;
     };
     FixedLine FL_PRIMARY_GRID
@@ -60,7 +58,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Hauptgitter" ;
         Text [ en-US ] = "Main grid" ;
     };
     CheckBox CB_X_PRIMARY
@@ -68,7 +65,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Pos = MAP_APPFONT ( 12 , 14  );
         Size = MAP_APPFONT ( 80 , 10 );
         TabStop = TRUE;
-        Text[ de ]= "~X-Achse";
         Text [ en-US ] = "~X axis";
     };
     CheckBox CB_Y_PRIMARY
@@ -76,7 +72,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Pos = MAP_APPFONT ( 12 , 28  );
         Size = MAP_APPFONT ( 80 , 10 );
         TabStop = TRUE;
-        Text[ de ]= "~Y-Achse";
         Text [ en-US ] = "~Y axis";
     };
     CheckBox CB_Z_PRIMARY
@@ -84,7 +79,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Pos = MAP_APPFONT ( 12 , 42  );
         Size = MAP_APPFONT ( 80 , 10 );
         TabStop = TRUE;
-        Text[ de ]= "~Z-Achse";
         Text [ en-US ] = "~Z axis";
     };
 
@@ -92,7 +86,6 @@ ModalDialog DLG_AXIS_OR_GRID
     {
         Pos = MAP_APPFONT ( 6 , 58  ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Sekundäre Achse" ;
         Text [ en-US ] = "Secondary axis" ;
     };
     FixedLine FL_SECONDARY_GRID
@@ -100,7 +93,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 58  ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Hilfsgitter" ;
         Text [ en-US ] = "Minor grid" ;
     };
     CheckBox CB_X_SECONDARY
@@ -108,7 +100,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Pos = MAP_APPFONT ( 12 , 69  );
         Size = MAP_APPFONT ( 80 , 10 );
         TabStop = TRUE;
-        Text[ de ]= "X-~Achse";
         Text [ en-US ] = "X ~axis";
     };
     CheckBox CB_Y_SECONDARY
@@ -116,7 +107,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Pos = MAP_APPFONT ( 12 , 83  );
         Size = MAP_APPFONT ( 80 , 10 );
         TabStop = TRUE;
-        Text[ de ]= "Y-A~chse";
         Text [ en-US ] = "Y ax~is";
     };
     CheckBox CB_Z_SECONDARY
@@ -124,7 +114,6 @@ ModalDialog DLG_AXIS_OR_GRID
         Pos = MAP_APPFONT ( 12 , 97  );
         Size = MAP_APPFONT ( 80 , 10 );
         TabStop = TRUE;
-        Text[ de ]= "Z-Ac~hse";
         Text [ en-US ] = "Z axi~s";
     };
     BUTTONS_OK_CANCEL_HELP_STACKED(104)
