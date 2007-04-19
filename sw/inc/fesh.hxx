@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:07:20 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:12:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -407,7 +407,8 @@ public:
     //als Rahmenattribute eingestellt. Wenn die Werte nicht erlaubt sind,
     //so wird von der Formatierung geclippt und eine Scalierung eingestellt.
     //siehe CalcAndSetScale().
-    void RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
+    // The return value is the applied size.
+    Size RequestObjectResize( const SwRect &rRect, const ::com::sun::star::uno::Reference < ::com::sun::star::embed::XEmbeddedObject >& );
 
     //Der Client fuer das OleObject muss bezueglich der Scalierung auf dem
     //neuesten Stand gehalten werden. Impl in der WrtShell.
