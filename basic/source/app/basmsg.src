@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basmsg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:38:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:49:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,17 +49,14 @@
 ///////////////////////////////
 String S_PROG_START
 {
-    Text [ de ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ en-US ] = "Program start: ($Arg1); ($Arg2)";
 };
 String S_ERROR_OUTSIDE_TESTCASE
 {
-    Text [ de ] = "Fehler außerhalb eines Testcase.";
     Text[ en-US ] = "Error outside of test case";
 };
 String S_WARNING_PREFIX
 {
-    Text [ de ] = "Warnung: ";
     Text[ en-US ] = "Warning: ";
 };
 
