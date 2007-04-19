@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:03:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:55:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,60 +49,48 @@ Menu MENU_TABLETREE_POPUP
         MenuItem
         {
             Identifier = MID_SORT_ASCENDING;
-            Text [ de ] = "Aufsteigend Sortieren" ;
             Text [ en-US ] = "Sort Ascending";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MID_SORT_DECENDING;
-            Text [ de ] = "Absteigend Sortieren" ;
             Text [ en-US ] = "Sort Descending";
-            Text [ x-comment ] = " ";
         };
     };
 };
 
 String STR_COULDNOTCREATE_DRIVERMANAGER
 {
-    Text [ de ] = "Es konnte keine Verbindung zum SDBC-Treiber-Manager (#servicename#) hergestellt werden.";
     Text [ en-US ] = "Cannot connect to the SDBC driver manager (#servicename#).";
 };
 
 String STR_NOREGISTEREDDRIVER
 {
-    Text [ de ] = "Es ist kein Treiber für die URL #connurl# registriert!";
     Text [ en-US ] = "A driver is not registered for the URL #connurl#.";
 };
 
 String STR_COULDNOTCONNECT
 {
-    Text [ de ] = "Es konnte keine Verbindung für den URL #connurl# aufgebaut werden.";
     Text [ en-US ] = "No connection could be established for the URL #connurl#.";
 };
 String STR_COULDNOTCONNECT_PLEASECHECK
 {
-    Text [ de ] = "Bitte überprüfen Sie die aktuellen Einstellungen, zum Beispiel hinsichtlich Benutzername und Kennwort.";
     Text [ en-US ] = "Please check the current settings, for example user name and password.";
 };
 String STR_NOTABLEINFO
 {
-    Text [ de ] = "Die Verbindung wurde erfolgreich hergestellt, aber es konnten keine Informationen über Tabellen in der Datenbank ermittelt werden.";
     Text [ en-US ] = "Successfully connected, but information about database tables is not available.";
 };
 String STR_ALL_TABLES
 {
-    Text [ de ] = "Alle Tabellen";
     Text [ en-US ] = "All tables";
 };
 String STR_ALL_VIEWS
 {
-    Text [ de ] = "Alle Tabellensichten";
     Text [ en-US ] = "All views";
 };
 String STR_ALL_TABLES_AND_VIEWS
 {
-    Text [ de ] = "Alle Tabellen und Tabellensichten";
     Text [ en-US ] = "All tables and views";
 };
 
