@@ -4,9 +4,9 @@
  *
  *  $RCSfile: internationaloptions.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:41:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:07:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
     {
         Pos = MAP_APPFONT( COL_0, ROW_0 );
         Size = MAP_APPFONT( WIDTH2END( COL_0 ), HEIGHT_FL );
-        Text [ de ] = "Standard Textrichtung";
         Text [ en-US ] = "Default text direction";
     };
 
@@ -57,7 +56,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
         Pos = MAP_APPFONT( COL_1, ROW_1 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_RB );
         Group = TRUE;
-        Text [ de ] = "~Links-nach-rechts";
         Text [ en-US ] = "~Left-to-right";
     };
 
@@ -65,7 +63,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
     {
         Pos = MAP_APPFONT( COL_1, ROW_2 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_RB );
-        Text [ de ] = "~Rechts-nach-links";
         Text [ en-US ] = "~Right-to-left";
     };
 
@@ -73,7 +70,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
     {
         Pos = MAP_APPFONT( COL_0, ROW_3 );
         Size = MAP_APPFONT( WIDTH2END( COL_0 ), HEIGHT_FL );
-        Text [ de ] = "Tabellenansicht";
         Text [ en-US ] = "Sheet view";
     };
 
@@ -81,7 +77,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
     {
         Pos = MAP_APPFONT( COL_1, ROW_4 );
         Size = MAP_APPFONT( WIDTH2END( COL_1 ), HEIGHT_CB );
-        Text [ de ] = "Rechts-~nach-links";
         Text [ en-US ] = "Right-~to-left";
     };
 
@@ -89,7 +84,6 @@ TabPage RID_OFA_TP_INTERNATIONAL
     {
         Pos = MAP_APPFONT( COL_2, ROW_5 );
         Size = MAP_APPFONT( WIDTH2END( COL_2 ), HEIGHT_CB );
-        Text [ de ] = "Nur für ~aktuelles Dokument";
         Text [ en-US ] = "~Current document only";
     };
 };
