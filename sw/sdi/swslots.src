@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.129 $
+ *  $Revision: 1.130 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:39:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:44:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,1821 +37,1459 @@
 #include "globals.hrc"
 SfxSlotInfo FN_ABSTRACT_NEWDOC
 {
-    Slotname [ de ] = "Dokument aus Abstrakt";
     Slotname [ en-US ] = "Document From Abstract";
 };
 SfxSlotInfo FN_ABSTRACT_STARIMPRESS
 {
-    Slotname [ de ] = "Präsentation aus Abstrakt";
     Slotname [ en-US ] = "Presentation from Abstract";
 };
 SfxSlotInfo FN_ADD_UNKNOWN
 {
-    Slotname [ de ] = "Unbekannte Wörter aufnehmen";
     Slotname [ en-US ] = "Add Unknown Words";
 };
 SfxSlotInfo FN_AUTO_CORRECT
 {
-    Slotname [ de ] = "AutoKorrektur";
     Slotname [ en-US ] = "AutoCorrect";
 };
 SfxSlotInfo FN_AUTOFORMAT_APPLY
 {
-    Slotname [ de ] = "AutoFormat-Optionen anwenden";
     Slotname [ en-US ] = "Apply AutoFormat Options";
 };
 SfxSlotInfo FN_AUTOFORMAT_AUTO
 {
-    Slotname [ de ] = "AutoFormat bei Eingabe";
     Slotname [ en-US ] = "AutoFormat While Typing";
 };
 SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
 {
-    Slotname [ de ] = "AutoFormat-Optionen anwenden und Änderungen bestätigen";
     Slotname [ en-US ] = "Apply AutoFormat Options and confirm Changes";
 };
 SfxSlotInfo FN_BACKSPACE
 {
-    Slotname [ de ] = "Rückschritt";
     Slotname [ en-US ] = "Backspace";
 };
 SfxSlotInfo FN_CALC_TABLE
 {
-    Slotname [ de ] = "Tabelle berechnen";
     Slotname [ en-US ] = "Calculate Table";
 };
 SfxSlotInfo FN_CALCULATE
 {
-    Slotname [ de ] = "Auswahl berechnen";
     Slotname [ en-US ] = "Calculate Selection";
 };
 SfxSlotInfo FN_CHANGE_DBFIELD
 {
-    Slotname [ de ] = "Datenbank ändern";
     Slotname [ en-US ] = "Change Database";
 };
 SfxSlotInfo FN_CHANGE_PAGENUM
 {
-    Slotname [ de ] = "Seitennummer";
     Slotname [ en-US ] = "Page Number";
 };
 SfxSlotInfo FN_CHAR_LEFT
 {
-    Slotname [ de ] = "Zeichen links";
     Slotname [ en-US ] = "To Character Left";
 };
 SfxSlotInfo FN_CHAR_LEFT_SEL
 {
-    Slotname [ de ] = "Zeichen links selektieren";
     Slotname [ en-US ] = "Select Character Left";
 };
 SfxSlotInfo FN_CHAR_RIGHT
 {
-    Slotname [ de ] = "Zeichen rechts";
     Slotname [ en-US ] = "Go Right";
 };
 SfxSlotInfo FN_CHAR_RIGHT_SEL
 {
-    Slotname [ de ] = "Zeichen rechts selektieren";
     Slotname [ en-US ] = "Select Character Right";
 };
 SfxSlotInfo FN_CNTNT_TO_NEXT_FRAME
 {
-    Slotname [ de ] = "Zum nächsten Rahmen";
     Slotname [ en-US ] = "To Next Frame";
 };
 SfxSlotInfo FN_CONVERT_TEXT_TABLE
 {
-    Slotname [ de ] = "Konvertiere Tabelle/Text";
     Slotname [ en-US ] = "Convert Table/Text";
 };
 SfxSlotInfo FN_DEC_INDENT_OFFSET
 {
-    Slotname [ de ] = "Einzug um Betrag vermindern";
     Slotname [ en-US ] = "Decrement Indent Value";
 };
 SfxSlotInfo FN_DELETE_BACK_LINE
 {
-    Slotname [ de ] = "Bis Zeilenanfang löschen";
     Slotname [ en-US ] = "Delete to Start of Line";
 };
 SfxSlotInfo FN_DELETE_BACK_PARA
 {
-    Slotname [ de ] = "Bis Absatzanfang löschen";
     Slotname [ en-US ] = "Delete to Start of Paragraph";
 };
 SfxSlotInfo FN_DELETE_BACK_SENT
 {
-    Slotname [ de ] = "Bis Satzanfang löschen";
     Slotname [ en-US ] = "Delete to Start of Sentence";
 };
 SfxSlotInfo FN_DELETE_BACK_WORD
 {
-    Slotname [ de ] = "Bis Wortanfang löschen";
     Slotname [ en-US ] = "Delete to Start of Word";
 };
 SfxSlotInfo FN_DELETE_LINE
 {
-    Slotname [ de ] = "Bis Zeilenende löschen";
     Slotname [ en-US ] = "Delete to End of Line";
 };
 SfxSlotInfo FN_DELETE_PARA
 {
-    Slotname [ de ] = "Bis Absatzende löschen";
     Slotname [ en-US ] = "Delete to End of Paragraph";
 };
 SfxSlotInfo FN_DELETE_SENT
 {
-    Slotname [ de ] = "Bis Satzende löschen";
     Slotname [ en-US ] = "Delete to End of Sentence";
 };
 SfxSlotInfo FN_DELETE_WHOLE_LINE
 {
-    Slotname [ de ] = "Zeile löschen";
     Slotname [ en-US ] = "Delete Row";
 };
 SfxSlotInfo FN_DELETE_WORD
 {
-    Slotname [ de ] = "Bis Wortende löschen";
     Slotname [ en-US ] = "Delete to End of Word";
 };
 SfxSlotInfo FN_DRAW_WRAP_DLG
 {
-    Slotname [ de ] = "Textumlauf";
     Slotname [ en-US ] = "Text Wrap";
 };
 SfxSlotInfo FN_DRAWTEXT_ATTR_DLG
 {
-    Slotname [ de ] = "Textattribute";
     Slotname [ en-US ] = "Text Attributes";
 };
 SfxSlotInfo FN_EDIT_FIELD
 {
-    Slotname [ de ] = "Feldbefehl";
     Slotname [ en-US ] = "Fields";
 };
 SfxSlotInfo FN_EDIT_FOOTNOTE
 {
-    Slotname [ de ] = "Fußnote";
     Slotname [ en-US ] = "Footnote";
 };
 SfxSlotInfo FN_EDIT_FORMULA
 {
-    Slotname [ de ] = "Rechenleiste";
     Slotname [ en-US ] = "Formula Bar";
 };
 SfxSlotInfo FN_EDIT_IDX_ENTRY_DLG
 {
-    Slotname [ de ] = "Verzeichniseintrag";
     Slotname [ en-US ] = "Index Entry";
 };
 SfxSlotInfo FN_EDIT_LINK_DLG
 {
-    Slotname [ de ] = "Verknüpfungen";
     Slotname [ en-US ] = "Links";
 };
 SfxSlotInfo FN_EDIT_REGION
 {
-    Slotname [ de ] = "Bereiche";
     Slotname [ en-US ] = "Sections";
 };
 SfxSlotInfo FN_END_DOC_DIRECT
 {
-    Slotname [ de ] = "Direkt zum Dokumentende";
     Slotname [ en-US ] = "Directly to Document End";
 };
 SfxSlotInfo FN_END_OF_COLUMN
 {
-    Slotname [ de ] = "Zum Spaltenende";
     Slotname [ en-US ] = "To Column End";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT
 {
-    Slotname [ de ] = "Zum Dokumentende";
     Slotname [ en-US ] = "To Document End";
 };
 SfxSlotInfo FN_END_OF_DOCUMENT_SEL
 {
-    Slotname [ de ] = "Bis Dokumentende selektieren";
     Slotname [ en-US ] = "Select to Document End";
 };
 SfxSlotInfo FN_END_OF_LINE
 {
-    Slotname [ de ] = "Zum Zeilenende";
     Slotname [ en-US ] = "To End of Line";
 };
 SfxSlotInfo FN_END_OF_LINE_SEL
 {
-    Slotname [ de ] = "Bis Zeilenende selektieren";
     Slotname [ en-US ] = "Select to End of Line";
 };
 SfxSlotInfo FN_END_OF_NEXT_COLUMN
 {
-    Slotname [ de ] = "Zum Ende nächster Spalte";
     Slotname [ en-US ] = "To End of Next Column";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE
 {
-    Slotname [ de ] = "Zum Ende nächster Seite";
     Slotname [ en-US ] = "To End of Next Page";
 };
 SfxSlotInfo FN_END_OF_NEXT_PAGE_SEL
 {
-    Slotname [ de ] = "Bis Ende nächster Seite selektieren";
     Slotname [ en-US ] = "Select to End of Next Page";
 };
 SfxSlotInfo FN_END_OF_PAGE
 {
-    Slotname [ de ] = "Zum Seitenende";
     Slotname [ en-US ] = "To Page End";
 };
 SfxSlotInfo FN_END_OF_PAGE_SEL
 {
-    Slotname [ de ] = "Bis Seitenende selektieren";
     Slotname [ en-US ] = "Select to Page End";
 };
 SfxSlotInfo FN_END_OF_PARA
 {
-    Slotname [ de ] = "Zum Absatzende";
     Slotname [ en-US ] = "To Paragraph End";
 };
 SfxSlotInfo FN_END_OF_PARA_SEL
 {
-    Slotname [ de ] = "Bis Absatzende selektieren";
     Slotname [ en-US ] = "Select to Paragraph End";
 };
 SfxSlotInfo FN_END_OF_PREV_COLUMN
 {
-    Slotname [ de ] = "Zur vorherigen Spalte";
     Slotname [ en-US ] = "To Previous Column";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE
 {
-    Slotname [ de ] = "Zum Ende vorheriger Seite";
     Slotname [ en-US ] = "To End of Previous Page";
 };
 SfxSlotInfo FN_END_OF_PREV_PAGE_SEL
 {
-    Slotname [ de ] = "Bis Ende vorheriger Seite selektieren";
     Slotname [ en-US ] = "Select to End of Previous Page";
 };
 SfxSlotInfo FN_END_TABLE
 {
-    Slotname [ de ] = "Zum Tabellenende";
     Slotname [ en-US ] = "To Table End";
 };
 SfxSlotInfo FN_ENVELOP
 {
-    Slotname [ de ] = "Briefumschlag einfügen";
     Slotname [ en-US ] = "Insert Envelope";
 };
 SfxSlotInfo FN_ESCAPE
 {
-    Slotname [ de ] = "Abbrechen";
     Slotname [ en-US ] = "Cancel";
 };
 SfxSlotInfo FN_EXECUTE_MACROFIELD
 {
-    Slotname [ de ] = "Makrofeld ausführen";
     Slotname [ en-US ] = "Run Macro Field";
 };
 SfxSlotInfo FN_EXPAND_GLOSSARY
 {
-    Slotname [ de ] = "AutoText-Eintrag ausführen";
     Slotname [ en-US ] = "Run AutoText Entry";
 };
 SfxSlotInfo FN_FLIP_HORZ_GRAFIC
 {
-    Slotname [ de ] = "Vertikal spiegeln";
     Slotname [ en-US ] = "Flip Vertically";
 };
 SfxSlotInfo FN_FLIP_VERT_GRAFIC
 {
-    Slotname [ de ] = "Horizontal spiegeln";
     Slotname [ en-US ] = "Flip Horizontally";
 };
 SfxSlotInfo FN_FOOTNOTE_TO_ANCHOR
 {
-    Slotname [ de ] = "Zu Fußnote/Anker";
     Slotname [ en-US ] = "To Footnote Anchor";
 };
 SfxSlotInfo FN_FORMAT_BACKGROUND_DLG
 {
-    Slotname [ de ] = "Hintergrund";
     Slotname [ en-US ] = "Background";
 };
 SfxSlotInfo FN_FORMAT_BORDER_DLG
 {
-    Slotname [ de ] = "Umrandung";
     Slotname [ en-US ] = "Borders";
 };
 SfxSlotInfo FN_FORMAT_DROPCAPS
 {
-    Slotname [ de ] = "Initialien";
     Slotname [ en-US ] = "Drop Caps";
 };
 SfxSlotInfo FN_FORMAT_FOOTNOTE_DLG
 {
-    Slotname [ de ] = "Fußnoten";
     Slotname [ en-US ] = "Footnotes";
 };
 SfxSlotInfo FN_FORMAT_FRAME_DLG
 {
-    Slotname [ de ] = "Rahmen Eigenschaften";
     Slotname [ en-US ] = "Frame Properties";
 };
 SfxSlotInfo FN_FORMAT_GRAFIC_DLG
 {
-    Slotname [ de ] = "Grafik bearbeiten";
     Slotname [ en-US ] = "Edit Graphics";
 };
 SfxSlotInfo FN_FORMAT_PAGE_COLUMN_DLG
 {
-    Slotname [ de ] = "Seitenspalten";
     Slotname [ en-US ] = "Page Columns";
 };
 SfxSlotInfo FN_FORMAT_PAGE_DLG
 {
-    Slotname [ de ] = "Seiteneinstellungen";
     Slotname [ en-US ] = "Page Settings";
 };
 SfxSlotInfo FN_FORMAT_RESET
 {
-    Slotname [ de ] = "Zeichenattribute zurücksetzen";
     Slotname [ en-US ] = "Reset Font Attributes";
 };
 SfxSlotInfo FN_FORMAT_TABLE_DLG
 {
-    Slotname [ de ] = "Tabelle bearbeiten";
     Slotname [ en-US ] = "Edit Table";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_CENTER
 {
-    Slotname [ de ] = "Horizontal zentrieren";
     Slotname [ en-US ] = "Center Horizontal";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_LEFT
 {
-    Slotname [ de ] = "Links anordnen";
     Slotname [ en-US ] = "Align Left";
 };
 SfxSlotInfo FN_FRAME_ALIGN_HORZ_RIGHT
 {
-    Slotname [ de ] = "Rechts anordnen";
     Slotname [ en-US ] = "Align Right";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_BOTTOM
 {
-    Slotname [ de ] = "Unten anordnen";
     Slotname [ en-US ] = "Align Bottom";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CENTER
 {
-    Slotname [ de ] = "Vertikal mittig anordnen";
     Slotname [ en-US ] = "Align Vertical Center";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_BOTTOM
 {
-    Slotname [ de ] = "Am Zeichen unten anordnen";
     Slotname [ en-US ] = "Align to Bottom of Character";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_CENTER
 {
-    Slotname [ de ] = "Am Zeichen vertikal mittig anordnen";
     Slotname [ en-US ] = "Align to Vertical Center of Character";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_CHAR_TOP
 {
-    Slotname [ de ] = "Am Zeichen oben anordnen";
     Slotname [ en-US ] = "Align to Top of Character";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_BOTTOM
 {
-    Slotname [ de ] = "An Zeile unten anordnen";
     Slotname [ en-US ] = "Align to Bottom of Line";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_CENTER
 {
-    Slotname [ de ] = "An Zeile vertikal mittig anordnen";
     Slotname [ en-US ] = "Align to Vertical Center of Line";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_ROW_TOP
 {
-    Slotname [ de ] = "An Zeile oben anordnen";
     Slotname [ en-US ] = "Align to Top of Line";
 };
 SfxSlotInfo FN_FRAME_ALIGN_VERT_TOP
 {
-    Slotname [ de ] = "Oben anordnen";
     Slotname [ en-US ] = "Align Top";
 };
 SfxSlotInfo FN_FRAME_CHAIN
 {
-    Slotname [ de ] = "Verketten";
     Slotname [ en-US ] = "Link Frames";
 };
 SfxSlotInfo FN_FRAME_DOWN
 {
-    Slotname [ de ] = "Nach hinten";
     Slotname [ en-US ] = "Send Backward";
 };
 SfxSlotInfo FN_FRAME_MIRROR_ON_EVEN_PAGES
 {
-    Slotname [ de ] = "Auf geraden Seiten spiegeln";
     Slotname [ en-US ] = "Mirror Object on Even Pages";
 };
 SfxSlotInfo FN_FRAME_NOWRAP
 {
-    Slotname [ de ] = "Umlauf aus";
     Slotname [ en-US ] = "Wrap Off";
 };
 SfxSlotInfo FN_FRAME_TO_ANCHOR
 {
-    Slotname [ de ] = "Setze Cursor auf Anker";
     Slotname [ en-US ] = "Set Cursor To Anchor";
 };
 SfxSlotInfo FN_FRAME_UNCHAIN
 {
-    Slotname [ de ] = "Verkettung lösen";
     Slotname [ en-US ] = "Unlink Frames";
 };
 SfxSlotInfo FN_FRAME_UP
 {
-    Slotname [ de ] = "Nach vorn";
     Slotname [ en-US ] = "Bring Forward";
 };
 SfxSlotInfo FN_FRAME_WRAP
 {
-    Slotname [ de ] = "Umlauf ein";
     Slotname [ en-US ] = "Wrap On";
 };
 SfxSlotInfo FN_FRAME_WRAP_CONTOUR
 {
-    Slotname [ de ] = "Konturumlauf ein";
     Slotname [ en-US ] = "Wrap Contour On";
 };
 SfxSlotInfo FN_FRAME_WRAP_IDEAL
 {
-    Slotname [ de ] = "Umlauf dynamisch";
     Slotname [ en-US ] = "Wrap Optimal";
 };
 SfxSlotInfo FN_FRAME_WRAP_LEFT
 {
-    Slotname [ de ] = "Umlauf links";
     Slotname [ en-US ] = "Wrap Left";
 };
 SfxSlotInfo FN_FRAME_WRAP_RIGHT
 {
-    Slotname [ de ] = "Umlauf rechts";
     Slotname [ en-US ] = "Wrap Right";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU
 {
-    Slotname [ de ] = "Durchlauf";
     Slotname [ en-US ] = "Wrap Through";
 };
 SfxSlotInfo FN_FRAME_WRAPTHRU_TRANSP
 {
-    Slotname [ de ] = "Durchlauf transparent";
     Slotname [ en-US ] = "Wrap Transparent";
 };
 SfxSlotInfo FN_GLOSSARY_DLG
 {
-    Slotname [ de ] = "Autotext bearbeiten";
     Slotname [ en-US ] = "Edit AutoText";
 };
 SfxSlotInfo FN_GOTO_NEXT_INPUTFLD
 {
-    Slotname [ de ] = "Zum nächsten Eingabefeld";
     Slotname [ en-US ] = "To Next Input Field";
 };
 SfxSlotInfo FN_GOTO_NEXT_MARK
 {
-    Slotname [ de ] = "Zum nächsten Platzhalter";
     Slotname [ en-US ] = "To Next Placeholder";
 };
 SfxSlotInfo FN_GOTO_NEXT_OBJ
 {
-    Slotname [ de ] = "Zum nächsten Objekt";
     Slotname [ en-US ] = "To Next Object";
 };
 SfxSlotInfo FN_GOTO_NEXT_REGION
 {
-    Slotname [ de ] = "Zum nächsten Bereich";
     Slotname [ en-US ] = "To Next Section";
 };
 SfxSlotInfo FN_GOTO_PREV_INPUTFLD
 {
-    Slotname [ de ] = "Zum vorherigen Eingabefeld";
     Slotname [ en-US ] = "To Previous Input Field";
 };
 SfxSlotInfo FN_GOTO_PREV_MARK
 {
-    Slotname [ de ] = "Zum vorherigen Platzhalter";
     Slotname [ en-US ] = "To Previous Placeholder";
 };
 SfxSlotInfo FN_GOTO_PREV_OBJ
 {
-    Slotname [ de ] = "Zum vorherigen Objekt";
     Slotname [ en-US ] = "To Previous Object";
 };
 SfxSlotInfo FN_GOTO_PREV_REGION
 {
-    Slotname [ de ] = "Zum vorherigen Bereich";
     Slotname [ en-US ] = "To Previous Section";
 };
 SfxSlotInfo FN_GOTO_REFERENCE
 {
-    Slotname [ de ] = "Zur Referenz";
     Slotname [ en-US ] = "To Reference";
 };
 SfxSlotInfo FN_GRAPHIC_MIRROR_ON_EVEN_PAGES
 {
-    Slotname [ de ] = "Grafik auf geraden Seiten spiegeln";
     Slotname [ en-US ] = "Flip Graphics on Even Pages";
 };
 SfxSlotInfo FN_GROW_FONT_SIZE
 {
-    Slotname [ de ] = "Zeichen vergrößern";
     Slotname [ en-US ] = "Increase Font";
 };
 SfxSlotInfo FN_HSCROLLBAR
 {
-    Slotname [ de ] = "Horizontal rollen";
     Slotname [ en-US ] = "Scroll Horizontal";
 };
 SfxSlotInfo FN_HYPHENATE_OPT_DLG
 {
-    Slotname [ de ] = "Silbentrennung";
     Slotname [ en-US ] = "Hyphenation";
 };
 SfxSlotInfo FN_IDX_MARK_TO_IDX
 {
-    Slotname [ de ] = "Indexmarke zum Index";
     Slotname [ en-US ] = "Index Mark to Index";
 };
 SfxSlotInfo FN_INC_INDENT_OFFSET
 {
-    Slotname [ de ] = "Einzug um Betrag erhöhen";
     Slotname [ en-US ] = "Increment Indent Value";
 };
 SfxSlotInfo FN_INSERT_BOOKMARK
 {
-    Slotname [ de ] = "Textmarke einfügen";
     Slotname [ en-US ] = "Insert Bookmark";
 };
 SfxSlotInfo FN_INSERT_BREAK
 {
-    Slotname [ de ] = "Absatz einfügen";
     Slotname [ en-US ] = "Insert Paragraph";
 };
 SfxSlotInfo FN_INSERT_BREAK_DLG
 {
-    Slotname [ de ] = "Manuellen Umbruch einfügen";
     Slotname [ en-US ] = "Insert Manual Break";
 };
 SfxSlotInfo FN_INSERT_CAPTION
 {
-    Slotname [ de ] = "Beschriftung einfügen";
     Slotname [ en-US ] = "Insert Caption";
 };
 SfxSlotInfo FN_INSERT_COLUMN_BREAK
 {
-    Slotname [ de ] = "Spaltenwechsel einfügen";
     Slotname [ en-US ] = "Insert Column Break";
 };
 SfxSlotInfo FN_INSERT_CTRL
 {
-    Slotname [ de ] = "Einfügen";
     Slotname [ en-US ] = "Insert";
 };
 SfxSlotInfo FN_INSERT_ENDNOTE
 {
-    Slotname [ de ] = "Endnote direkt einfügen";
     Slotname [ en-US ] = "Insert Endnote Directly";
 };
 SfxSlotInfo FN_INSERT_FIELD
 {
-    Slotname [ de ] = "Feldbefehldialog";
     Slotname [ en-US ] = "Fields Dialog";
 };
 SfxSlotInfo FN_INSERT_FIELD_CTRL
 {
-    Slotname [ de ] = "Feldbefehle einfügen";
     Slotname [ en-US ] = "Insert Fields";
 };
 SfxSlotInfo FN_INSERT_FLD_AUTHOR
 {
-    Slotname [ de ] = "Autorenfeld einfügen";
     Slotname [ en-US ] = "Insert Author Field";
 };
 SfxSlotInfo FN_INSERT_FLD_DATE
 {
-    Slotname [ de ] = "Datum einfügen";
     Slotname [ en-US ] = "Insert Date";
 };
 SfxSlotInfo FN_INSERT_FLD_PGCOUNT
 {
-    Slotname [ de ] = "Seitenanzahl einfügen";
     Slotname [ en-US ] = "Insert Page Count";
 };
 SfxSlotInfo FN_INSERT_FLD_PGNUMBER
 {
-    Slotname [ de ] = "Seitennummer einfügen";
     Slotname [ en-US ] = "Insert Page Number";
 };
 SfxSlotInfo FN_INSERT_FLD_TIME
 {
-    Slotname [ de ] = "Uhrzeit einfügen";
     Slotname [ en-US ] = "Insert Time";
 };
 SfxSlotInfo FN_INSERT_FLD_TITLE
 {
-    Slotname [ de ] = "Dokumenttitel einfügen";
     Slotname [ en-US ] = "Insert Document Title";
 };
 SfxSlotInfo FN_INSERT_FLD_TOPIC
 {
-    Slotname [ de ] = "Thema einfügen";
     Slotname [ en-US ] = "Insert Subject";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE
 {
-    Slotname [ de ] = "Fußnote direkt einfügen";
     Slotname [ en-US ] = "Insert Footnote Directly";
 };
 SfxSlotInfo FN_INSERT_FOOTNOTE_DLG
 {
-    Slotname [ de ] = "Fußnote einfügen";
     Slotname [ en-US ] = "Insert Footnote";
 };
 SfxSlotInfo FN_INSERT_FRAME
 {
-    Slotname [ de ] = "Rahmen einfügen";
     Slotname [ en-US ] = "Insert Frame";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT_NOCOL
 {
-    Slotname [ de ] = "Einspaltigen Rahmen manuell einfügen";
     Slotname [ en-US ] = "Insert single-column frame manually";
 };
 SfxSlotInfo FN_INSERT_FRAME_INTERACT
 {
-    Slotname [ de ] = "Rahmen manuell einfügen";
     Slotname [ en-US ] = "Insert Frame Manually";
 };
 SfxSlotInfo FN_INSERT_HARD_SPACE
 {
-    Slotname [ de ] = "Geschütztes Leerzeichen einfügen";
     Slotname [ en-US ] = "Insert Non-breaking Space";
 };
 SfxSlotInfo FN_INSERT_HARDHYPHEN
 {
-    Slotname [ de ] = "Geschützen Trenner einfügen";
     Slotname [ en-US ] = "Insert Non-breaking Hyphen";
 };
 SfxSlotInfo FN_INSERT_HRULER
 {
-    Slotname [ de ] = "Horizontale Linie einfügen";
     Slotname [ en-US ] = "Insert Horizontal Ruler";
 };
 SfxSlotInfo FN_INSERT_HYPERLINK
 {
-    Slotname [ de ] = "Hyperlink einfügen";
     Slotname [ en-US ] = "Insert Hyperlink";
 };
 SfxSlotInfo FN_INSERT_IDX_ENTRY_DLG
 {
-    Slotname [ de ] = "Indexmarkierung einfügen";
     Slotname [ en-US ] = "Insert Index Marker";
 };
 SfxSlotInfo FN_INSERT_LINEBREAK
 {
-    Slotname [ de ] = "Manuellen Zeilenumbruch einfügen";
     Slotname [ en-US ] = "Insert Manual Row Break";
 };
 SfxSlotInfo FN_INSERT_OBJ_CTRL
 {
-    Slotname [ de ] = "Objekt einfügen";
     Slotname [ en-US ] = "Insert Object";
 };
 SfxSlotInfo FN_INSERT_OBJECT_DLG
 {
-    Slotname [ de ] = "Weitere Objekte einfügen";
     Slotname [ en-US ] = "Insert Other Objects";
 };
 SfxSlotInfo FN_INSERT_PAGEBREAK
 {
-    Slotname [ de ] = "Manuellen Seitenwechsel einfügen";
     Slotname [ en-US ] = "Insert Manual Page Break";
 };
 SfxSlotInfo FN_INSERT_PAGEFOOTER
 {
-    Slotname [ de ] = "Fußzeile einfügen";
     Slotname [ en-US ] = "Insert Footer";
 };
 SfxSlotInfo FN_INSERT_PAGEHEADER
 {
-    Slotname [ de ] = "Kopfzeile einfügen";
     Slotname [ en-US ] = "Insert Header";
 };
 SfxSlotInfo FN_INSERT_REF_FIELD
 {
-    Slotname [ de ] = "Querverweis einfügen";
     Slotname [ en-US ] = "Insert Field Reference";
 };
 SfxSlotInfo FN_INSERT_REGION
 {
-    Slotname [ de ] = "Bereich einfügen";
     Slotname [ en-US ] = "Insert Section";
 };
 SfxSlotInfo FN_INSERT_SMA
 {
-    Slotname [ de ] = "%PRODUCTNAME Math Objekt einfügen";
     Slotname [ en-US ] = "Insert %PRODUCTNAME Math object";
 };
 SfxSlotInfo FN_INSERT_SOFT_HYPHEN
 {
-    Slotname [ de ] = "Weichen Trenner einfügen";
     Slotname [ en-US ] = "Insert Optional Hyphen";
 };
 SfxSlotInfo FN_INSERT_SYMBOL
 {
-    Slotname [ de ] = "Sonderzeichen einfügen ";
     Slotname [ en-US ] = "Insert Special Character ";
 };
 SfxSlotInfo FN_INSERT_TABLE
 {
-    Slotname [ de ] = "Tabelle einfügen";
     Slotname [ en-US ] = "Insert Table";
 };
 SfxSlotInfo FN_JAVAEDIT
 {
-    Slotname [ de ] = "Script einfügen";
     Slotname [ en-US ] = "Insert Script";
 };
 SfxSlotInfo FN_LABEL
 {
-    Slotname [ de ] = "Etiketten einfügen";
     Slotname [ en-US ] = "Insert Labels";
 };
 SfxSlotInfo FN_BUSINESS_CARD
 {
-    Slotname [ de ] = "Visitenkarten einfügen";
     Slotname [ en-US ] = "Insert business cards";
 };
 SfxSlotInfo FN_LINE_DOWN
 {
-    Slotname [ de ] = "Zur Zeile unten";
     Slotname [ en-US ] = "To Line Below";
 };
 SfxSlotInfo FN_LINE_DOWN_SEL
 {
-    Slotname [ de ] = "Bis Zeile unten selektieren";
     Slotname [ en-US ] = "Select Down";
 };
 SfxSlotInfo FN_LINE_NUMBERING_DLG
 {
-    Slotname [ de ] = "Zeilennummerierung einstellen";
     Slotname [ en-US ] = "Set Line Numbering";
 };
 SfxSlotInfo FN_LINE_UP
 {
-    Slotname [ de ] = "Zur Zeile oben";
     Slotname [ en-US ] = "To Top Line";
 };
 SfxSlotInfo FN_LINE_UP_SEL
 {
-    Slotname [ de ] = "Bis Zeile oben selektieren";
     Slotname [ en-US ] = "Select to Top Line";
 };
 SfxSlotInfo FN_NAVIGATION_PI_GOTO_PAGE
 {
-    Slotname [ de ] = "Zur Seite";
     Slotname [ en-US ] = "To Page";
 };
 SfxSlotInfo FN_NEW_GLOBAL_DOC
 {
-    Slotname [ de ] = "Globaldokument erzeugen";
     Slotname [ en-US ] = "Create Master Document";
 };
 SfxSlotInfo FN_NEW_HTML_DOC
 {
-    Slotname [ de ] = "HTML-Dokument erzeugen";
     Slotname [ en-US ] = "Create HTML Document";
 };
 SfxSlotInfo FN_NEXT_BOOKMARK
 {
-    Slotname [ de ] = "Zur nächsten Textmarke";
     Slotname [ en-US ] = "To Next Bookmark";
 };
 SfxSlotInfo FN_NEXT_FOOTNOTE
 {
-    Slotname [ de ] = "Zur nächsten Fußnote";
     Slotname [ en-US ] = "To Next Footnote";
 };
 SfxSlotInfo FN_NEXT_PARA
 {
-    Slotname [ de ] = "Zum nächsten Absatz";
     Slotname [ en-US ] = "To Next Paragraph";
 };
 SfxSlotInfo FN_NEXT_SENT
 {
-    Slotname [ de ] = "Zum nächsten Satz";
     Slotname [ en-US ] = "To Next Sentence";
 };
 SfxSlotInfo FN_NEXT_SENT_SEL
 {
-    Slotname [ de ] = "Bis nächsten Satz selektieren";
     Slotname [ en-US ] = "Select to Next Sentence";
 };
 SfxSlotInfo FN_NEXT_TABLE
 {
-    Slotname [ de ] = "Zur nächsten Tabelle";
     Slotname [ en-US ] = "To Next Table";
 };
 SfxSlotInfo FN_NEXT_TBLFML
 {
-    Slotname [ de ] = "Zur nächsten Tabellenformel";
     Slotname [ en-US ] = "Go to next table formula";
 };
 SfxSlotInfo FN_NEXT_TBLFML_ERR
 {
-    Slotname [ de ] = "Zur nächsten fehlerhaften Tabellenformel";
     Slotname [ en-US ] = "Go to next faulty table formula";
 };
 SfxSlotInfo FN_NEXT_TOXMARK
 {
-    Slotname [ de ] = "Zur nächsten Indexmarkierung";
     Slotname [ en-US ] = "Go to Next Index Mark";
 };
 SfxSlotInfo FN_NEXT_WORD
 {
-    Slotname [ de ] = "Zum Wort rechts";
     Slotname [ en-US ] = "To Word Right";
 };
 SfxSlotInfo FN_NEXT_WORD_SEL
 {
-    Slotname [ de ] = "Bis Wort rechts selektieren";
     Slotname [ en-US ] = "Select to Word Right";
 };
 SfxSlotInfo FN_NUM_BULLET_DOWN
 {
-    Slotname [ de ] = "Eine Ebene runter";
     Slotname [ en-US ] = "Down One Level";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEDOWN
 {
-    Slotname [ de ] = "Nach unten schieben";
     Slotname [ en-US ] = "Move Down";
 };
 SfxSlotInfo FN_NUM_BULLET_MOVEUP
 {
-    Slotname [ de ] = "Nach oben schieben";
     Slotname [ en-US ] = "Move Up";
 };
 SfxSlotInfo FN_NUM_BULLET_NEXT
 {
-    Slotname [ de ] = "Zum nächsten Absatz gleicher Ebene";
     Slotname [ en-US ] = "To Next Paragraph in Level";
 };
 SfxSlotInfo FN_NUM_BULLET_NONUM
 {
-    Slotname [ de ] = "Eintrag ohne Nummer einfügen";
     Slotname [ en-US ] = "Insert Unnumbered Entry";
 };
 SfxSlotInfo FN_NUM_BULLET_OFF
 {
-    Slotname [ de ] = "Nummerierung aus";
     Slotname [ en-US ] = "Numbering Off";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_DOWN
 {
-    Slotname [ de ] = "Mit Unterpunkten runter";
     Slotname [ en-US ] = "Move Down with Subpoints";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEDOWN
 {
-    Slotname [ de ] = "Mit Unterpunkten nach unten schieben";
     Slotname [ en-US ] = "Move Down with Subpoints";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_MOVEUP
 {
-    Slotname [ de ] = "Mit Unterpunkten nach oben schieben";
     Slotname [ en-US ] = "Move Up with Subpoints";
 };
 SfxSlotInfo FN_NUM_BULLET_OUTLINE_UP
 {
-    Slotname [ de ] = "Mit Unterpunkten hoch";
     Slotname [ en-US ] = "Move Up with Subpoints";
 };
 SfxSlotInfo FN_NUM_BULLET_PREV
 {
-    Slotname [ de ] = "Zum vorherigen Absatz gleicher Ebene";
     Slotname [ en-US ] = "To Previous Paragraph in Level";
 };
 SfxSlotInfo FN_NUM_BULLET_UP
 {
-    Slotname [ de ] = "Eine Ebene hoch";
     Slotname [ en-US ] = "Up One Level";
 };
 SfxSlotInfo FN_NUM_FORMAT_TABLE_DLG
 {
-    Slotname [ de ] = "Zahlenformat bearbeiten";
     Slotname [ en-US ] = "Edit Number Format";
 };
 SfxSlotInfo FN_NUM_OR_NONUM
 {
-    Slotname [ de ] = "Nummerierung ein/aus";
     Slotname [ en-US ] = "Numbering On/Off";
 };
 SfxSlotInfo FN_NUMBER_BULLETS
 {
-    Slotname [ de ] = "Nummerierung bearbeiten";
     Slotname [ en-US ] = "Edit Numbering";
 };
 SfxSlotInfo FN_NUMBER_CURRENCY
 {
-    Slotname [ de ] = "Zahlenformat: Währung";
     Slotname [ en-US ] = "Number Format: Currency";
 };
 SfxSlotInfo FN_NUMBER_DATE
 {
-    Slotname [ de ] = "Zahlenformat: Datum";
     Slotname [ en-US ] = "Number Format : Date";
 };
 SfxSlotInfo FN_NUMBER_NEWSTART
 {
-    Slotname [ de ] = "Nummerierung neu beginnen";
     Slotname [ en-US ] = "Restart Numbering";
 };
 SfxSlotInfo FN_NUMBER_PERCENT
 {
-    Slotname [ de ] = "Zahlenformat: Prozent";
     Slotname [ en-US ] = "Number Format: Percent";
 };
 SfxSlotInfo FN_NUMBER_SCIENTIFIC
 {
-    Slotname [ de ] = "Zahlenformat: Exponentiell";
     Slotname [ en-US ] = "Number Format: Exponential";
 };
 SfxSlotInfo FN_NUMBER_STANDARD
 {
-    Slotname [ de ] = "Zahlenformat: Standard";
     Slotname [ en-US ] = "Number Format: Standard";
 };
 SfxSlotInfo FN_NUMBER_TIME
 {
-    Slotname [ de ] = "Zahlenformat: Zeit";
     Slotname [ en-US ] = "Number Format: Time";
 };
 SfxSlotInfo FN_NUMBER_TWODEC
 {
-    Slotname [ de ] = "Zahlenformat: Dezimal";
     Slotname [ en-US ] = "Number Format: Decimal";
 };
 SfxSlotInfo FN_NUMBERING_OUTLINE_DLG
 {
-    Slotname [ de ] = "Kapitelnummerierung";
     Slotname [ en-US ] = "Outline Numbering";
 };
 SfxSlotInfo FN_OPTIMIZE_TABLE
 {
-    Slotname [ de ] = "Optimieren";
     Slotname [ en-US ] = "Optimize";
 };
 SfxSlotInfo FN_OUTLINE_TO_CLIPBOARD
 {
-    Slotname [ de ] = "Gliederung zur Zwischenablage";
     Slotname [ en-US ] = "Outline to Clipboard";
 };
 SfxSlotInfo FN_OUTLINE_TO_IMPRESS
 {
-    Slotname [ de ] = "Gliederung an Präsentation";
     Slotname [ en-US ] = "Outline to Presentation";
 };
 SfxSlotInfo FN_PAGE_STYLE_SET_COLS
 {
-    Slotname [ de ] = "Seitenvorlage: Spalten";
     Slotname [ en-US ] = "Page Style: Columns";
 };
 SfxSlotInfo FN_PAGEDOWN
 {
-    Slotname [ de ] = "Nächste Seite";
     Slotname [ en-US ] = "Next Page";
 };
 SfxSlotInfo FN_PAGEDOWN_SEL
 {
-    Slotname [ de ] = "Bis nächste Seite selektieren";
     Slotname [ en-US ] = "Select to Next Page";
 };
 SfxSlotInfo FN_PAGEUP
 {
-    Slotname [ de ] = "Vorherige Seite";
     Slotname [ en-US ] = "Previous Page";
 };
 SfxSlotInfo FN_PAGEUP_SEL
 {
-    Slotname [ de ] = "Bis vorherige Seite selektieren";
     Slotname [ en-US ] = "Select to Previous Page";
 };
 SfxSlotInfo FN_PASTESPECIAL
 {
-    Slotname [ de ] = "Inhalte einfügen";
     Slotname [ en-US ] = "Paste Special";
 };
 SfxSlotInfo FN_POSTIT
 {
-    Slotname [ de ] = "Notiz einfügen";
     Slotname [ en-US ] = "Insert Note";
 };
 SfxSlotInfo FN_PREV_BOOKMARK
 {
-    Slotname [ de ] = "Zur vorherigen Textmarke";
     Slotname [ en-US ] = "To Previous Bookmark";
 };
 SfxSlotInfo FN_PREV_FOOTNOTE
 {
-    Slotname [ de ] = "Zur vorherigen Fußnote";
     Slotname [ en-US ] = "To Previous Footnote";
 };
 SfxSlotInfo FN_PREV_PARA
 {
-    Slotname [ de ] = "Zum vorherigen Absatz";
     Slotname [ en-US ] = "To Previous Paragraph";
 };
 SfxSlotInfo FN_PREV_SENT
 {
-    Slotname [ de ] = "Zum vorherigen Satz";
     Slotname [ en-US ] = "To Previous Sentence";
 };
 SfxSlotInfo FN_PREV_SENT_SEL
 {
-    Slotname [ de ] = "Bis zum vorherigen Satz selektieren";
     Slotname [ en-US ] = "Select to Previous Sentence";
 };
 SfxSlotInfo FN_PREV_TABLE
 {
-    Slotname [ de ] = "Zur vorherigen Tabelle";
     Slotname [ en-US ] = "To Previous Table";
 };
 SfxSlotInfo FN_PREV_TBLFML
 {
-    Slotname [ de ] = "Zur vorherigen Tabellenformel";
     Slotname [ en-US ] = "Go to previous table formula";
 };
 SfxSlotInfo FN_PREV_TBLFML_ERR
 {
-    Slotname [ de ] = "Zur vorherigen fehlerhaften Tabellenformel";
     Slotname [ en-US ] = "Go to previous faulty table formula";
 };
 SfxSlotInfo FN_PREV_TOXMARK
 {
-    Slotname [ de ] = "Zur vorherigen Indexmarkierung";
     Slotname [ en-US ] = "Go to Previous Index Mark";
 };
 SfxSlotInfo FN_PREV_WORD
 {
-    Slotname [ de ] = "Zum Wort links";
     Slotname [ en-US ] = "To Word Left";
 };
 SfxSlotInfo FN_PREV_WORD_SEL
 {
-    Slotname [ de ] = "Bis Wort links selektieren";
     Slotname [ en-US ] = "Select to Begin of Word";
 };
 SfxSlotInfo FN_PREVIEW_PRINT_OPTIONS
 {
-    Slotname [ de ] = "Druckoptionen Seitenansicht";
     Slotname [ en-US ] = "Print options page view";
 };
 SfxSlotInfo FN_PREVIEW_ZOOM
 {
-    Slotname [ de ] = "Maßstab Seitenansicht";
     Slotname [ en-US ] = "Preview Zoom";
 };
 SfxSlotInfo FN_PRINT_LAYOUT
 {
-    Slotname [ de ] = "Druck-Layout ein/aus";
     Slotname [ en-US ] = "Print Layout On/Off";
 };
 SfxSlotInfo FN_PRINT_PAGEPREVIEW
 {
-    Slotname [ de ] = "Seitenansicht drucken";
     Slotname [ en-US ] = "Print page view";
 };
 SfxSlotInfo FN_MAILMERGE_WIZARD
 {
-    Slotname [ de ] = "Seriendruck-Assistent";
     SlotName[ en-US ] = "Mail Merge Wizard";
 };
 SfxSlotInfo FN_QRY_MERGE
 {
-    Slotname [ de ] = "Seriendruck vorbereiten";
     Slotname [ en-US ] = "Prepare Mail Merge";
 };
 SfxSlotInfo FN_REDLINE_ACCEPT
 {
-    Slotname [ de ] = "Änderungen akzeptieren oder ablehnen";
     Slotname [ en-US ] = "Accept or Reject Changes";
 };
 SfxSlotInfo FN_REDLINE_COMMENT
 {
-    Slotname [ de ] = "Kommentar einfügen";
     Slotname [ en-US ] = "Insert Comment";
 };
 SfxSlotInfo FN_REDLINE_ON
 {
-    Slotname [ de ] = "Überarbeiten einschalten";
     Slotname [ en-US ] = "Switch on Review";
 };
 SfxSlotInfo FN_REDLINE_PROTECT
 {
-    Slotname [ de ] = "Änderungsaufzeichnung schützen";
     Slotname [ en-US ] = "Protect Record of Changes";
 };
 SfxSlotInfo FN_REDLINE_SHOW
 {
-    Slotname [ de ] = "Überarbeitung anzeigen";
     Slotname [ en-US ] = "Highlight Changes";
 };
 SfxSlotInfo FN_REFRESH_VIEW
 {
-    Slotname [ de ] = "Ansicht wiederherstellen";
     Slotname [ en-US ] = "Restore View";
 };
 SfxSlotInfo FN_REPAGINATE
 {
-    Slotname [ de ] = "Neuformatierung";
     Slotname [ en-US ] = "Repaginate";
 };
 SfxSlotInfo FN_REPEAT_SEARCH
 {
-    Slotname [ de ] = "Suche wiederholen";
     Slotname [ en-US ] = "Repeat Search";
 };
 SfxSlotInfo FN_RULER
 {
-    Slotname [ de ] = "Lineal ein/aus";
     Slotname [ en-US ] = "Ruler On/Off";
 };
 SfxSlotInfo FN_SELECT_PARA
 {
-    Slotname [ de ] = "Absatz selektieren";
     Slotname [ en-US ] = "Select Paragraph";
 };
 SfxSlotInfo FN_SELECT_WORD
 {
-    Slotname [ de ] = "Wort selektieren";
     Slotname [ en-US ] = "Select Word";
 };
 SfxSlotInfo FN_SET_ADD_MODE
 {
-    Slotname [ de ] = "Multiselektion ein";
     Slotname [ en-US ] = "MultiSelection On";
 };
 SfxSlotInfo FN_SET_EXT_MODE
 {
-    Slotname [ de ] = "Erweiterte Selektion ein";
     Slotname [ en-US ] = "Extended Selection On";
 };
 SfxSlotInfo FN_SET_PAGE_STYLE
 {
-    Slotname [ de ] = "Seitenvorlage zuweisen";
     Slotname [ en-US ] = "Apply Page Style";
 };
 SfxSlotInfo FN_SET_SUB_SCRIPT
 {
-    Slotname [ de ] = "Tiefgestellt";
     Slotname [ en-US ] = "Subscript";
 };
 SfxSlotInfo FN_SET_SUPER_SCRIPT
 {
-    Slotname [ de ] = "Hochgestellt";
     Slotname [ en-US ] = "Superscript";
 };
 SfxSlotInfo FN_SHADOWCURSOR
 {
-    Slotname [ de ] = "Direkt-Cursor ein/aus";
     Slotname [ en-US ] = "Direct Cursor On/Off";
 };
 SfxSlotInfo FN_SHIFT_BACKSPACE
 {
-    Slotname [ de ] = "Rückschritt";
     Slotname [ en-US ] = "Backspace";
 };
 SfxSlotInfo FN_SHOW_MULTIPLE_PAGES
 {
-    Slotname [ de ] = "Seitenansicht: mehrere Seiten";
     Slotname [ en-US ] = "Page Preview: Multiple Pages";
 };
 SfxSlotInfo FN_SHOW_TWO_PAGES
 {
-    Slotname [ de ] = "Seitenansicht: zwei Seiten";
     Slotname [ en-US ] = "Page Preview: Two Pages";
 };
 SfxSlotInfo FN_SHOW_BOOKVIEW
 {
-    SlotName [ de ] = "Buchansicht";
     SlotName[ en-US ] = "Book Preview";
 };
 SfxSlotInfo FN_SHRINK_FONT_SIZE
 {
-    Slotname [ de ] = "Zeichen verkleinern";
     Slotname [ en-US ] = "Reduce Font";
 };
 SfxSlotInfo FN_SORTING_DLG
 {
-    Slotname [ de ] = "Sortieren";
     Slotname [ en-US ] = "Sort";
 };
 SfxSlotInfo FN_START_DOC_DIRECT
 {
-    Slotname [ de ] = "Direkt zum Dokumentanfang";
     Slotname [ en-US ] = "Directly to Document Begin";
 };
 SfxSlotInfo FN_START_OF_COLUMN
 {
-    Slotname [ de ] = "Zum Spaltenanfang";
     Slotname [ en-US ] = "To Column Begin";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT
 {
-    Slotname [ de ] = "Zum Dokumentanfang";
     Slotname [ en-US ] = "To Document Begin";
 };
 SfxSlotInfo FN_START_OF_DOCUMENT_SEL
 {
-    Slotname [ de ] = "Bis Dokumentanfang selektieren";
     Slotname [ en-US ] = "Select to Document Begin";
 };
 SfxSlotInfo FN_START_OF_LINE
 {
-    Slotname [ de ] = "Zum Zeilenanfang";
     Slotname [ en-US ] = "To Line Begin";
 };
 SfxSlotInfo FN_START_OF_LINE_SEL
 {
-    Slotname [ de ] = "Bis Zeilenanfang selektieren";
     Slotname [ en-US ] = "Select to Begin of Line";
 };
 SfxSlotInfo FN_START_OF_NEXT_COLUMN
 {
-    Slotname [ de ] = "Zum Anfang nächste Spalte";
     Slotname [ en-US ] = "To Begin of Next Column";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE
 {
-    Slotname [ de ] = "Zum Anfang nächste Seite";
     Slotname [ en-US ] = "To Begin of Next Page";
 };
 SfxSlotInfo FN_START_OF_NEXT_PAGE_SEL
 {
-    Slotname [ de ] = "Bis Anfang nächste Seite selektieren";
     Slotname [ en-US ] = "Select to Begin of Next Page";
 };
 SfxSlotInfo FN_START_OF_PAGE
 {
-    Slotname [ de ] = "Zum Seitenanfang";
     Slotname [ en-US ] = "To Page Begin";
 };
 SfxSlotInfo FN_START_OF_PAGE_SEL
 {
-    Slotname [ de ] = "Bis Seitenanfang selektieren";
     Slotname [ en-US ] = "Select to Page Begin";
 };
 SfxSlotInfo FN_START_OF_PARA
 {
-    Slotname [ de ] = "Zum Absatzanfang";
     Slotname [ en-US ] = "To Paragraph Begin";
 };
 SfxSlotInfo FN_START_OF_PARA_SEL
 {
-    Slotname [ de ] = "Bis Absatzanfang selektieren";
     Slotname [ en-US ] = "Select to Paragraph Begin";
 };
 SfxSlotInfo FN_START_OF_PREV_COLUMN
 {
-    Slotname [ de ] = "Zum Anfang vorheriger Spalte";
     Slotname [ en-US ] = "To Begin of Previous Column";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE
 {
-    Slotname [ de ] = "Zum Anfang vorheriger Seite";
     Slotname [ en-US ] = "To Begin of Previous Page";
 };
 SfxSlotInfo FN_START_OF_PREV_PAGE_SEL
 {
-    Slotname [ de ] = "Bis Anfang vorheriger Seite selektieren";
     Slotname [ en-US ] = "Select to Begin of Previous Page";
 };
 SfxSlotInfo FN_START_TABLE
 {
-    Slotname [ de ] = "Zum Tabellenanfang";
     Slotname [ en-US ] = "To Table Begin";
 };
 SfxSlotInfo FN_STAT_HYPERLINKS
 {
-    Slotname [ de ] = "Hyperlinks aktiv";
     Slotname [ en-US ] = "Hyperlinks Active";
 };
 SfxSlotInfo FN_STAT_PAGE
 {
-    Slotname [ de ] = "Seitennummer";
     Slotname [ en-US ] = "Page Number";
 };
 SfxSlotInfo FN_STAT_SELMODE
 {
-    Slotname [ de ] = "Selektionsmodus";
     Slotname [ en-US ] = "Selection Mode";
 };
 SfxSlotInfo FN_STAT_TEMPLATE
 {
-    Slotname [ de ] = "Seitenvorlage";
     Slotname [ en-US ] = "Page Style";
 };
 SfxSlotInfo FN_TABLE_ADJUST_CELLS
 {
-    Slotname [ de ] = "Optimale Spaltenbreite";
     Slotname [ en-US ] = "Optimal Column Width";
 };
 SfxSlotInfo FN_TABLE_AUTOSUM
 {
-    Slotname [ de ] = "Summe";
     Slotname [ en-US ] = "Sum";
 };
 SfxSlotInfo FN_TABLE_BALANCE_CELLS
 {
-    Slotname [ de ] = "Spalten gleichmäßig verteilen";
     Slotname [ en-US ] = "Space Columns Equally";
 };
 SfxSlotInfo FN_TABLE_BALANCE_ROWS
 {
-    Slotname [ de ] = "Zeilen gleichmäßig verteilen";
     Slotname [ en-US ] = "Space Rows Equally ";
 };
 SfxSlotInfo FN_TABLE_DELETE_COL
 {
-    Slotname [ de ] = "Spalte löschen";
     Slotname [ en-US ] = "Delete Column";
 };
 SfxSlotInfo FN_TABLE_DELETE_ROW
 {
-    Slotname [ de ] = "Zeile löschen";
     Slotname [ en-US ] = "Delete Row";
 };
 SfxSlotInfo FN_TABLE_INSERT_COL
 {
-    Slotname [ de ] = "Spalte einfügen";
     Slotname [ en-US ] = "Insert Column";
 };
 SfxSlotInfo FN_TABLE_INSERT_ROW
 {
-    Slotname [ de ] = "Zeile einfügen";
     Slotname [ en-US ] = "Insert Row";
 };
 SfxSlotInfo FN_TABLE_MERGE_CELLS
 {
-    Slotname [ de ] = "Zellen verbinden";
     Slotname [ en-US ] = "Merge Cells";
 };
 SfxSlotInfo FN_TABLE_MERGE_TABLE
 {
-    Slotname [ de ] = "Tabelle zusammenfassen";
     Slotname [ en-US ] = "Merge Table";
 };
 SfxSlotInfo FN_FORMAT_APPLY_HEAD1
 {
-    Slotname [ de ] = "Vorlage anwenden Überschrift 1";
     Slotname [ en-US ] = "Apply Style Heading 1";
 };
 SfxSlotInfo FN_FORMAT_APPLY_HEAD2
 {
-    Slotname [ de ] = "Vorlage anwenden Überschrift 2";
     Slotname [ en-US ] = "Apply Style Heading 2";
 };
 SfxSlotInfo FN_FORMAT_APPLY_HEAD3
 {
-    Slotname [ de ] = "Vorlage anwenden Überschrift 3";
     Slotname [ en-US ] = "Apply Style Heading 3";
 };
 SfxSlotInfo FN_FORMAT_APPLY_DEFAULT
 {
-    Slotname [ de ] = "Vorlage anwenden Standard";
     Slotname [ en-US ] = "Apply Style Default";
 };
 SfxSlotInfo FN_FORMAT_APPLY_TEXTBODY
 {
-    Slotname [ de ] = "Vorlage anwenden Textkörper";
     Slotname [ en-US ] = "Apply Style Textbody";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX
 {
-    Slotname [ de ] = "Tabelle: fix";
     Slotname [ en-US ] = "Table: Fixed";
 };
 SfxSlotInfo FN_TABLE_MODE_FIX_PROP
 {
-    Slotname [ de ] = "Tabelle: fix, proportional";
     Slotname [ en-US ] = "Table: Fixed, Proportional";
 };
 SfxSlotInfo FN_TABLE_MODE_VARIABLE
 {
-    Slotname [ de ] = "Tabelle: variabel";
     Slotname [ en-US ] = "Table: Variable";
 };
 SfxSlotInfo FN_TABLE_OPTIMAL_HEIGHT
 {
-    Slotname [ de ] = "Optimale Zeilenhöhe";
     Slotname [ en-US ] = "Optimal Row Height";
 };
 SfxSlotInfo FN_TABLE_SELECT_ALL
 {
-    Slotname [ de ] = "Tabelle selektieren";
     Slotname [ en-US ] = "Select Table";
 };
 SfxSlotInfo FN_TABLE_SELECT_COL
 {
-    Slotname [ de ] = "Spalte selektieren";
     Slotname [ en-US ] = "Select Column";
 };
 SfxSlotInfo FN_TABLE_SELECT_ROW
 {
-    Slotname [ de ] = "Zeile selektieren";
     Slotname [ en-US ] = "Select Rows";
 };
 SfxSlotInfo FN_TABLE_SET_READ_ONLY_CELLS
 {
-    Slotname [ de ] = "Zelle schützen";
     Slotname [ en-US ] = "Protect Cells";
 };
 SfxSlotInfo FN_TABLE_SET_ROW_HEIGHT
 {
-    Slotname [ de ] = "Zeilenhöhe";
     Slotname [ en-US ] = "Row Height";
 };
 SfxSlotInfo FN_TABLE_SPLIT_CELLS
 {
-    Slotname [ de ] = "Zelle teilen";
     Slotname [ en-US ] = "Split Cells";
 };
 SfxSlotInfo FN_TABLE_SPLIT_TABLE
 {
-    Slotname [ de ] = "Tabelle auftrennen";
     Slotname [ en-US ] = "Split Table";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY
 {
-    Slotname [ de ] = "Tabellenschutz aufheben";
     Slotname [ en-US ] = "Unprotect sheet";
 };
 SfxSlotInfo FN_TABLE_UNSET_READ_ONLY_CELLS
 {
-    Slotname [ de ] = "Zellschutz aufheben";
     Slotname [ en-US ] = "Unprotect cells";
 };
 SfxSlotInfo FN_TABLE_VERT_BOTTOM
 {
-    Slotname [ de ] = "Unten";
     Slotname [ en-US ] = "Bottom";
 };
 SfxSlotInfo FN_TABLE_VERT_CENTER
 {
-    Slotname [ de ] = "Mittig (vertikal)";
     Slotname [ en-US ] = "Center ( vertical )";
 };
 SfxSlotInfo FN_TABLE_VERT_NONE
 {
-    Slotname [ de ] = "Oben";
     Slotname [ en-US ] = "Top";
 };
 SfxSlotInfo FN_THESAURUS_DLG
 {
-    Slotname [ de ] = "Thesaurus";
     Slotname [ en-US ] = "Thesaurus";
 };
 SfxSlotInfo FN_TO_FOOTER
 {
-    Slotname [ de ] = "Zur Fußzeile";
     Slotname [ en-US ] = "To Footer";
 };
 SfxSlotInfo FN_TO_HEADER
 {
-    Slotname [ de ] = "Zur Kopfzeile";
     Slotname [ en-US ] = "To Header";
 };
 SfxSlotInfo FN_TOOL_ANKER
 {
-    Slotname [ de ] = "Verankerung wechseln";
     Slotname [ en-US ] = "Change Anchor";
 };
 SfxSlotInfo FN_TOOL_ANKER_AT_CHAR
 {
-    Slotname [ de ] = "Am Zeichen verankern";
     Slotname [ en-US ] = "Anchor to Character";
 };
 SfxSlotInfo FN_TOOL_ANKER_CHAR
 {
-    Slotname [ de ] = "Als Zeichen verankern";
     Slotname [ en-US ] = "Anchor as Character";
 };
 SfxSlotInfo FN_TOOL_ANKER_FRAME
 {
-    Slotname [ de ] = "Am Rahmen verankern";
     Slotname [ en-US ] = "Anchor To Frame";
 };
 SfxSlotInfo FN_TOOL_ANKER_PAGE
 {
-    Slotname [ de ] = "An der Seite verankern";
     Slotname [ en-US ] = "Anchor To Page";
 };
 SfxSlotInfo FN_TOOL_ANKER_PARAGRAPH
 {
-    Slotname [ de ] = "Am Absatz verankern";
     Slotname [ en-US ] = "Anchor To Paragraph";
 };
 SfxSlotInfo FN_TOOL_GROUP
 {
-    Slotname [ de ] = "Gruppierung";
     Slotname [ en-US ] = "Group";
 };
 SfxSlotInfo FN_TOOL_HIERARCHIE
 {
-    Slotname [ de ] = "Lage wechseln";
     Slotname [ en-US ] = "Change Position";
 };
 SfxSlotInfo FN_TOOL_UNGROUP
 {
-    Slotname [ de ] = "Gruppierung aufheben";
     Slotname [ en-US ] = "Ungroup";
 };
 SfxSlotInfo FN_UNDERLINE_DOUBLE
 {
-    Slotname [ de ] = "Doppelt unterstrichen";
     Slotname [ en-US ] = "Double Underline ";
 };
 SfxSlotInfo FN_UPDATE_ALL
 {
-    Slotname [ de ] = "Alles Aktualisieren";
     Slotname [ en-US ] = "Update All";
 };
 SfxSlotInfo FN_UPDATE_ALL_LINKS
 {
-    Slotname [ de ] = "Verknüpfungen aktualisieren";
     Slotname [ en-US ] = "Update All Links";
 };
 SfxSlotInfo FN_UPDATE_CUR_TOX
 {
-    Slotname [ de ] = "Verzeichnis aktualisieren";
     Slotname [ en-US ] = "Update Index";
 };
 SfxSlotInfo FN_EDIT_CURRENT_TOX
 {
-    Slotname [ de ] = "Verzeichnis bearbeiten";
     Slotname [ en-US ] = "Edit index";
 };
 SfxSlotInfo FN_UPDATE_FIELDS
 {
-    Slotname [ de ] = "Felder aktualisieren";
     Slotname [ en-US ] = "Update Fields";
 };
 SfxSlotInfo FN_UPDATE_INPUTFIELDS
 {
-    Slotname [ de ] = "Eingabefelder aktualisieren";
     Slotname [ en-US ] = "Update Input Fields";
 };
 SfxSlotInfo FN_UPDATE_TOX
 {
-    Slotname [ de ] = "Verzeichnisse aktualisieren";
     Slotname [ en-US ] = "Update Indexes";
 };
 SfxSlotInfo FN_VIEW_BOUNDS
 {
-    Slotname [ de ] = "Textbegrenzungen";
     Slotname [ en-US ] = "Text Limits";
 };
 SfxSlotInfo FN_VIEW_FIELDNAME
 {
-    Slotname [ de ] = "Feldnamen ein/aus";
     Slotname [ en-US ] = "Field Names On/Off";
 };
 SfxSlotInfo FN_VIEW_FIELDS
 {
-    Slotname [ de ] = "Feldbefehle";
     Slotname [ en-US ] = "Fields";
 };
 SfxSlotInfo FN_VIEW_GRAPHIC
 {
-    Slotname [ de ] = "Grafik ein/aus";
     Slotname [ en-US ] = "Graphics On/Off";
 };
 SfxSlotInfo FN_VIEW_HIDDEN_PARA
 {
-    Slotname [ de ] = "Versteckte Absätze";
     Slotname [ en-US ] = "Hidden Paragraphs";
 };
 SfxSlotInfo FN_VIEW_MARKS
 {
-    Slotname [ de ] = "Marken";
     Slotname [ en-US ] = "Field Shadings";
 };
 SfxSlotInfo FN_VIEW_META_CHARS
 {
-    Slotname [ de ] = "Steuerzeichen  ein/aus";
     Slotname [ en-US ] = "Nonprinting Characters  On/Off";
 };
 SfxSlotInfo FN_VIEW_TABLEGRID
 {
-    Slotname [ de ] = "Tabellenbegrenzungen";
     Slotname [ en-US ] = "Table Limits";
 };
 SfxSlotInfo FN_VLINEAL
 {
-    Slotname [ de ] = "Vertikales Lineal";
     Slotname [ en-US ] = "Vertical Ruler";
 };
 SfxSlotInfo FN_VSCROLLBAR
 {
-    Slotname [ de ] = "Vertikale Bildlaufleiste";
     Slotname [ en-US ] = "Vertical Scroll Bar";
 };
 SfxSlotInfo FN_WRAP_ANCHOR_ONLY
 {
-    Slotname [ de ] = "Umlauf erster Absatz";
     Slotname [ en-US ] = "Wrap First Paragraph";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND
 {
-    Slotname [ de ] = "Zeichenhintergrund";
     Slotname [ en-US ] = "Highlighting";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
 {
-    Slotname [ de ] = "Zeichenhintergrund-Gießkanne";
     Slotname [ en-US ] = "Highlight Fill";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR_EXT
 {
-    Slotname [ de ] = "Zeichenfarbe-Gießkanne";
     Slotname [ en-US ] = "Font Color Fill";
 };
 SfxSlotInfo SID_ATTR_CHAR_COLOR2
 {
-    Slotname [ de ] = "Zeichenfarbe";
     Slotname [ en-US ] = "Font Color";
 };
 SfxSlotInfo SID_TEMPLATE_LOAD
 {
-    Slotname [ de ] = "Vorlagen laden";
     Slotname [ en-US ] = "Load Styles";
 };
 SfxSlotInfo FN_FORMAT_COLUMN
 {
-    Slotname [ de ] = "Spalten";
     Slotname [ en-US ] = "Columns";
 };
 SfxSlotInfo FN_INSERT_MULTI_TOX
 {
-    Slotname [ de ] = "Verzeichnis einfügen";
 
     Slotname [ en-US ] = "Insert Index";
 };
 SfxSlotInfo FN_INSERT_AUTH_ENTRY_DLG
 {
-    Slotname [ de ] = "Literaturverzeichniseintrag einfügen";
     Slotname [ en-US ] = "Insert Bibliography Entry";
 };
 
 SfxSlotInfo FN_EDIT_AUTH_ENTRY_DLG
 {
-    Slotname [ de ] = "Literaturverzeichniseintrag bearbeiten";
     Slotname [ en-US ] = "Edit Bibliography Entry";
 };
 
 SfxSlotInfo FN_REMOVE_CUR_TOX
 {
-    Slotname [ de ] = "Verzeichnis löschen";
     Slotname [ en-US ] = "Delete index";
 };
 SfxSlotInfo FN_EDIT_HYPERLINK
 {
-    Slotname [ de ] = "Hyperlink bearbeiten";
     Slotname [ en-US ] = "Edit hyperlink";
 };
 SfxSlotInfo FN_SET_MODOPT_TBLNUMFMT
 {
-    Slotname [ de ] = "Zahlenerkennung";
     Slotname [ en-US ] = "Number Recognition";
 };
 SfxSlotInfo FN_UPDATE_CHARTS
 {
-    Slotname [ de ] = "Diagramme aktualisieren";
     Slotname [ en-US ] = "Update Charts";
 };
 SfxSlotInfo FN_NAME_SHAPE
 {
-    Slotname [ de ] = "Name...";
     Slotname [ en-US ] = "Name...";
 };
 // #i68101#
 SfxSlotInfo FN_TITLE_DESCRIPTION_SHAPE
 {
-    Slotname [ de ] = "Beschreibung...";
     Slotname [ en-US ] = "Description...";
 };
 SfxSlotInfo FN_CLOSE_PAGEPREVIEW
 {
-    Slotname [ de ] = "Seitenansicht schließen";
     Slotname [ en-US ] = "Close Preview";
 };
 
 SfxSlotInfo FN_TO_FOOTNOTE_AREA
 {
-    Slotname [ de ] = "Fußnote/Endnote bearbeiten";
     Slotname [ en-US ] = "Edit Footnote/Endnote";
 };
 
 SfxSlotInfo FN_READONLY_SELECTION_MODE
 {
-    Slotname [ de ] = "Text auswählen";
     Slotname [ en-US ] = "Select Text";
 };
 
 SfxSlotInfo FN_TABLE_ROW_SPLIT
 {
-    Slotname [ de ] = "Am Seiten- und Spaltenende aufbrechen";
     Slotname [ en-US ] = "Break across page and columns";
 };
 SfxSlotInfo FN_WORDCOUNT_DIALOG
 {
-    SlotName [ de ] = "Wortanzahl";
     SlotName[ en-US ] = "Word Count";
 };
 SfxSlotInfo FN_TABLE_DELETE_TABLE
 {
-    SlotName [ de ] = "Tabelle löschen";
     SlotName [ en-US ] = "Delete table";
 };
 SfxSlotInfo FN_TABLE_SELECT_CELL
 {
-    SlotName [ de ] = "Zelle selektieren";
     SlotName [ en-US ] = "Select cell";
 };
 SfxSlotInfo FN_CONVERT_TEXT_TO_TABLE
 {
-    SlotName [ de ] = "Konvertiere Text zu Tabelle ";
     SlotName [ en-US ] = "Convert Text to Table";
 };
 
 SfxSlotInfo FN_CONVERT_TABLE_TO_TEXT
 {
-    SlotName [ de ] = "Konvertiere Tabelle in Text";
     SlotName [ en-US ] = "Convert Table to Text";
 };
 SfxSlotInfo FN_TABLE_SORT_DIALOG
 {
-    SlotName [ de ] = "Sortieren";
     SlotName [ en-US ] = "Sort";
 };
 SfxSlotInfo FN_TABLE_HEADLINE_REPEAT
 {
-    SlotName [ de ] = "Überschrift wiederholen";
     SlotName [ en-US ] = "Heading Rows Repeat";
 };
 SfxSlotInfo FN_XFORMS_DESIGN_MODE
 {
-    SlotName[ de ] = "Entwurfsmodus an/aus";
     SlotName[ en-US ] = "Design Mode On/Off";
 };
 SfxSlotInfo FN_XFORMS_INIT
 {
-    SlotName[ de ] = "XML Formular-Dokument";
     SlotName[ en-US ] = "XML Form Document";
 };
 SfxSlotInfo FN_NUM_CONTINUE
 {
-    SlotName[ de ] = "Vorherige Nummerierung fortsetzen";
     SlotName[ en-US ] = "Continue previous numbering";
 };
 
 SfxSlotInfo FN_INSERT_RLM
 {
-    SlotName[ de ] = "Markierung für rechts-nach-links-Schreibrichtung";
     SlotName[ en-US ] = "Right-to-left mark";
 };
 SfxSlotInfo FN_INSERT_LRM
 {
-    SlotName[ de ] = "Markierung für links-nach-rechts-Schreibrichtung";
     SlotName[ en-US ] = "Left-to-right mark";
 };
 SfxSlotInfo FN_INSERT_ZWSP
 {
-    SlotName[ de ] = "Verbindungselement mit Breite 0";
     SlotName[ en-US ] = "No-width no break";
 };
 SfxSlotInfo FN_INSERT_ZWNBSP
 {
-    SlotName[ de ] = "Optional Umbruch mit Breite 0";
     SlotName[ en-US ] = "No-width optional break";
 };
 
