@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:06:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:54:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,10 +37,6 @@
 #include <helpid.h>
 
 #define  _ST_NONE_LIST              \
-        StringList [de] =                \
-        {                           \
-            < "< leer >" ; > ;       \
-        };                          \
         StringList [en-US]=    \
         {                           \
             < "< none >" ; > ;        \
@@ -57,7 +53,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Adressblock einfügen";
         Text [ en-US ] = "Insert address block";
     };
 
@@ -65,7 +60,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
-        Text [ de ] = "1." ;
         Text[ en-US ] = "1.";
     };
     FixedText FI_ADDRESSLIST
@@ -73,19 +67,16 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 16 , 27 ) ;
         Size = MAP_APPFONT ( 135 , 25 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Wählen Sie, aus welcher Adressenliste die Adressdaten bezogen werden sollen. Die Daten werden für den Adressblock benötigt." ;
         Text[ en-US ] = "Select the address list containing the address data you want to use. This data is needed to create the address block.";
     };
     PushButton      PB_ADDRESSLIST
     {
         Pos = MAP_APPFONT ( 154 , 27 ) ;
         Size = MAP_APPFONT ( 100 , 14 ) ;
-        Text [ de ] = "Adressenliste auswählen..." ;
         Text[ en-US ] = "Select A~ddress List...";
     };
     String STR_CHANGEADDRESS
     {
-        Text [ de ] = "Andere Adressenliste auswählen..." ;
         Text[ en-US ] = "Select Different A~ddress List...";
     };
     FixedText   FI_CURRENTADDRESS
@@ -93,7 +84,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 154 , 44 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Aktuelle Adressenliste: %1" ;
         Text[ en-US ] = "Current address list: %1";
     };
     FixedLine FL_FIRST
@@ -105,14 +95,12 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 66 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
-        Text [ de ] = "2." ;
         Text[ en-US ] = "2.";
     };
     CheckBox        CB_ADDRESS
     {
         Pos = MAP_APPFONT ( 16 , 66 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Dieses Dokument soll einen Adressblock enthalten" ;
         Text[ en-US ] = "~This document shall contain an address block";
     };
     Window          WIN_SETTINGS
@@ -126,14 +114,12 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 194 , 110 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         Group = FALSE;
-        Text [ de ] = "Mehr..." ;
         Text[ en-US ] = "~More...";
     };
     CheckBox CB_HIDE_EMPTY_PARA
     {
         Pos = MAP_APPFONT ( 24 , 127 ) ;
         Size = MAP_APPFONT ( 230 , 10 ) ;
-        Text [ de ] = "Zeilen aus leeren Feldern unterdrücken" ;
         Text[ en-US ] = "~Suppress lines with just empty fields";
     };
     FixedLine FL_SECOND
@@ -145,7 +131,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 151 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
-        Text [ de ] = "3." ;
         Text[ en-US ] = "3.";
     };
     FixedText FI_MATCH_FIELDS
@@ -153,14 +138,12 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 16 , 151 ) ;
         Size = MAP_APPFONT ( 175 , 16 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Ordnen Sie den Feldern, die für den Serienbrief benutzt werden, Spaltentitel aus der Datenquelle zu." ;
         Text[ en-US ] = "Match the field name used in the mail merge to the column headers in your data source.";
     };
     PushButton      PB_ASSIGN
     {
         Pos = MAP_APPFONT ( 194 , 151 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Felder zuordnen..." ;
         Text[ en-US ] = "Match ~Fields...";
     };
     FixedLine FL_THIRD
@@ -172,14 +155,12 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 180 ) ;
         Size = MAP_APPFONT ( 10 , 8 ) ;
-        Text [ de ] = "4." ;
         Text[ en-US ] = "4.";
     };
     FixedText       FI_PREVIEW
     {
         Pos = MAP_APPFONT ( 16 , 180 ) ;
         Size = MAP_APPFONT ( 228 , 8 ) ;
-        Text [ de ] = "Überprüfen Sie, ob alle Adressdaten verfügbar sind." ;
         Text[ en-US ] = "Check if the address data matches correctly.";
     };
     Window          WIN_PREVIEW
@@ -199,7 +180,6 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 167 , 238 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_PREV;
-        QuickHelpText [ de ] = "Adressblock des vorigen Dokuments ansehen" ;
         QuickHelpText[ en-US ] = "Preview Previous Address Block";
     };
     ImageButton     IB_NEXTSET
@@ -207,12 +187,10 @@ TabPage DLG_MM_ADDRESSBLOCK_PAGE
         Pos = MAP_APPFONT ( 178 , 238 ) ;
         Size = MAP_APPFONT ( 10 , 10 ) ;
         SYMBOL = IMAGEBUTTON_NEXT ;
-        QuickHelpText [ de ] = "Adressblock des nächsten Dokuments ansehen" ;
         QuickHelpText[ en-US ] = "Preview Next Address Block";
     };
     String STR_DOCUMENT
     {
-        Text [ de ] = "Dokument: %1" ;
         Text[ en-US ] = "Document: %1";
     };
 };
@@ -228,14 +206,12 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     Size = MAP_APPFONT ( 260 , 219 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Adressblock wählen";
     Text [ en-US ] = "Select Address Block";
 
     FixedText       FT_SELECT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Bitte wählen Sie einen Adressblock" ;
         Text[ en-US ] = "~Select your preferred address block";
     };
     Window WIN_PREVIEW
@@ -249,14 +225,12 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     {
         Pos = MAP_APPFONT ( 204 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Neu..." ;
         Text[ en-US ] = "~New...";
     };
     PushButton      PB_CUSTOMIZE
     {
         Pos = MAP_APPFONT ( 204 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Bearbeiten..." ;
         Text[ en-US ] = "~Edit...";
     };
     PushButton      PB_DELETE
@@ -264,7 +238,6 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
         Pos = MAP_APPFONT ( 204 , 48 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Group = FALSE;
-        Text [ de ] = "Löschen" ;
         Text[ en-US ] = "~Delete";
     };
 
@@ -272,28 +245,24 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
     {
         Pos = MAP_APPFONT ( 6 , 120 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Adressblock Eigenschaften" ;
         Text[ en-US ] = "Address block settings";
     };
     RadioButton     RB_NEVER
     {
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Land/Region niemals in Adresse einfügen" ;
         Text[ en-US ] = "N~ever include the country/region";
     };
     RadioButton     RB_ALWAYS
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Immer Land/Region in Adresse einfügen" ;
         Text[ en-US ] = "~Always include the country/region";
     };
     RadioButton     RB_DEPENDENT
     {
         Pos = MAP_APPFONT ( 12 , 159 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Land/Region nur dann einfügen, wenn anders als:" ;
         Text[ en-US ] = "Only ~include the country/region if it is not:";
     };
     Edit ED_COUNTRY
@@ -331,7 +300,6 @@ ModalDialog DLG_MM_SELECTADDRESSBLOCK
   -----------------------------------------------------------------------*/
 
 #define WORKAROUND\
-    Text [ de ] = "Neuer Adressblock";\
     Text [ en-US ] = "New Address Block";
 
 
@@ -347,30 +315,25 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
 
     String ST_TITLE_EDIT
     {
-        Text [ de ] = "Adressblock bearbeiten";
         Text [ en-US ] = "Edit Address Block";
     };
 
     String ST_TITLE_MALE
     {
-        Text [ de ] = "Eigene Briefanrede (männliche Empfänger)";
         Text [ en-US ] = "Custom Salutation (Male Recipients)";
     };
     String ST_TITLE_FEMALE
     {
-        Text [ de ] = "Eigene Briefanrede (weibliche Empfängerinnen)";
         Text [ en-US ] = "Custom Salutation (Female Recipients)";
     };
     FixedText       FT_ADDRESSELEMENTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Adresselemente" ;
         Text[ en-US ] = "Address ~elements" ;
     };
     String  ST_SALUTATIONELEMENTS
     {
-        Text [ de ] = "Briefanrede-Elemente" ;
         Text[ en-US ] = "Salutation e~lements" ;
     };
     Control LB_ADDRESSELEMENTS
@@ -385,12 +348,10 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 80 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT;
-        QuickHelpText [ de ] = "In Adresse übernehmen" ;
         QuickHelpText[ en-US ] = "Add to address";
     };
     String ST_INSERTSALUTATIONFIELD
     {
-        Text [ de ] = "In Briefanrede übernehmen" ;
         Text[ en-US ] = "Add to salutation";
     };
     ImageButton     IB_REMOVEFIELD
@@ -398,24 +359,20 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 80 , 46 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_LEFT;
-        QuickHelpText [ de ] = "Aus Adresse entfernen" ;
         QuickHelpText[ en-US ] = "Remove from address";
     };
     String ST_REMOVESALUTATIONFIELD
     {
-        Text [ de ] = "Aus Briefanrede entfernen" ;
         Text[ en-US ] = "Remove from salutation";
     };
     FixedText       FT_DRAG
     {
         Pos = MAP_APPFONT ( 100 , 3 ) ;
         Size = MAP_APPFONT ( 210 , 8 ) ;
-        Text [ de ] = "1. Adresselemente hierher ziehen" ;
         Text[ en-US ] = "1. Drag address elements here" ;
     };
     String ST_DRAGSALUTATION
     {
-        Text [ de ] = "1. Ziehen Sie Briefanrede-Elemente in den Anredebereich" ;
         Text[ en-US ] = "1. ~Drag salutation elements into the box below" ;
     };
     MultiLineEdit ED_DRAG
@@ -429,7 +386,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 285 , 14 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_UP;
-        QuickHelpText [ de ] = "Nach oben" ;
         QuickHelpText[ en-US ] = "Move up";
     };
     ImageButton     IB_LEFT
@@ -437,7 +393,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 270 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_LEFT;
-        QuickHelpText [ de ] = "Nach links" ;
         QuickHelpText[ en-US ] = "Move left";
     };
     ImageButton     IB_RIGHT
@@ -445,7 +400,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 300 , 29 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_RIGHT;
-        QuickHelpText [ de ] = "Nach rechts" ;
         QuickHelpText[ en-US ] = "Move right";
     };
     ImageButton     IB_DOWN
@@ -453,7 +407,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 285 , 48 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         Symbol = IMAGEBUTTON_ARROW_DOWN;
-        QuickHelpText [ de ] = "Nach unten" ;
         QuickHelpText[ en-US ] = "Move down";
     };
     FixedText FT_FIELD
@@ -461,7 +414,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
         Pos = MAP_APPFONT ( 100 , 78 ) ;
         Size = MAP_APPFONT ( 160 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "2. Briefanrede-Element anpassen" ;
         Text[ en-US ] = "2. Customi~ze salutation";
     };
     ComboBox  CB_FIELD
@@ -476,7 +428,6 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     {
         Pos = MAP_APPFONT ( 106 , 105 ) ;
         Size = MAP_APPFONT ( 160 , 8 ) ;
-        Text [ de ] = "Vorschau" ;
         Text[ en-US ] = "Preview";
     };
     Window WIN_PREVIEW
@@ -507,17 +458,14 @@ ModalDialog DLG_MM_CUSTOMIZEADDRESSBLOCK
     };
     String ST_SALUTATION
     {
-        Text [ de ] = "Anrede" ;
         Text[ en-US ] = "Salutation";
     };
     String ST_PUNCTUATION
     {
-        Text [ de ] = "Satzzeichen" ;
         Text[ en-US ] = "Punctuation Mark";
     };
     String ST_TEXT
     {
-        Text [ de ] = "Text" ;
         Text[ en-US ] = "Text";
     };
     StringArray RA_SALUTATION_MALE
@@ -583,7 +531,6 @@ ModalDialog DLG_MM_ASSIGNFIELDS
     Size = MAP_APPFONT ( 260 , 245 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Felder zuordnen";
     Text [ en-US ] = "Match Fields";
 
     FixedText FI_MATCHING
@@ -591,12 +538,10 @@ ModalDialog DLG_MM_ASSIGNFIELDS
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 240 , 20 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Weisen Sie den Adresselementen Felder der Datenquelle zu." ;
         Text[ en-US ] = "Assign the fields from your data source to match the address elements." ;
     };
     String ST_SALUTATIONMATCHING
     {
-        Text [ de ] = "Weisen Sie den Briefanrede-Elementen Felder der Datenquelle zu." ;
         Text[ en-US ] = "Assign the fields from your data source to match the salutation elements." ;
     };
     Control CT_FIELDS
@@ -640,12 +585,10 @@ ModalDialog DLG_MM_ASSIGNFIELDS
     {
         Pos = MAP_APPFONT ( 6 , 152 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Adressblock Vorschau" ;
         Text[ en-US ] = "Address block preview";
     };
     String ST_SALUTATIONPREVIEW
     {
-        Text [ de ] = "Briefanrede Vorschau" ;
         Text[ en-US ] = "Salutation preview";
     };
     Window WIN_PREVIEW
@@ -676,27 +619,22 @@ ModalDialog DLG_MM_ASSIGNFIELDS
     };
     String ST_ADDRESSELEMENT
     {
-        Text [ de ] = "Adresselement";
         Text[ en-US ] = "Address elements" ;
     };
     String ST_SALUTATIONELEMENT
     {
-        Text [ de ] = "Briefanredeelement";
         Text[ en-US ] = "Salutation elements" ;
     };
     String ST_MATCHESTO
     {
-        Text [ de ] = "Zuordnung zu Feld:" ;
         Text[ en-US ] = "Matches to field:" ;
     };
     String ST_PREVIEW
     {
-        Text [ de ] = "Vorschau" ;
         Text[ en-US ] = "Preview" ;
     };
     String ST_NONE
     {
-        Text [ de ] = "< leer >";
         Text [en-US] = "< none >";
     };
 };
