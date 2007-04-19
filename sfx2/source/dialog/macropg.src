@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 18:21:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:11:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,16 +43,13 @@ TabPage RID_SFX_TP_MACROASSIGN
     SVLook = TRUE ;
     DialogControl = TRUE ;
     Size = MAP_APPFONT ( WIDTH_TP , HEIGHT_TP ) ;
-    Text [ de ] = "Makro zuweisen" ;
     Text [ en-US ] = "Assign Macro" ;
     String STR_EVENT
     {
-        Text [ de ] = "Ereignis" ;
         Text [ en-US ] = "Event" ;
     };
     String STR_ASSMACRO
     {
-        Text [ de ] = "Zugewiesenes Makro";
         Text [ en-US ] = "Assigned macro";
     };
     Control LB_EVENT
@@ -87,7 +84,6 @@ TabPage RID_SFX_TP_MACROASSIGN
         Pos = MAP_APPFONT ( COL2 , ROW7  ) ;
         Size = MAP_APPFONT ( WIDTH1 , RSC_CD_FIXEDTEXT_HEIGHT + HEIGHT_EXTRA7 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "~Vorhandene Makros in:\n" ;
         Text [ en-US ] = "~Existing macros in:\n" ;
     };
     Control LB_MACROS
@@ -103,7 +99,6 @@ TabPage RID_SFX_TP_MACROASSIGN
         Pos = MAP_APPFONT ( COL4 , ROW0  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
          // ### ACHTUNG: Neuer Text in Resource? Z~uweisen : Zuweisen
-        Text [ de ] = "Z~uweisen" ;
         Disable = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Assign" ;
@@ -112,7 +107,6 @@ TabPage RID_SFX_TP_MACROASSIGN
     {
         Pos = MAP_APPFONT ( COL4 , ROW2  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "~Aufheben" ;
         Disable = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Remove" ;
@@ -122,7 +116,6 @@ TabPage RID_SFX_TP_MACROASSIGN
         Pos = MAP_APPFONT ( COL4 , ROW4  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , 60 ) ;
         // en-US was missing
-        Text [ de ] = "~Scriptsprache" ;
         Text [ en-US ] = "~Scripting Language" ;
         TabStop = TRUE ;
         Disable = FALSE ;
@@ -130,7 +123,6 @@ TabPage RID_SFX_TP_MACROASSIGN
     };
     String STR_MACROS
     {
-        Text [ de ] = "Makros" ;
         Text [ en-US ] = "Macros" ;
     };
 };
