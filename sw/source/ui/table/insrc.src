@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrc.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:12:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:26:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog DLG_INS_ROW_COL
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 136 , 84 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Insert" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -69,20 +68,16 @@ ModalDialog DLG_INS_ROW_COL
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text [ de ] = "da~vor" ;
         Text [ en-US ] = "~Before" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton CB_POS_AFTER
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text [ de ] = "da~hinter" ;
         Text [ en-US ] = "A~fter" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_COUNT
     {
@@ -103,39 +98,29 @@ ModalDialog DLG_INS_ROW_COL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
-        Text [ de ] = "EinfÃ¼gen" ;
         Text [ en-US ] = "Insert" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_POS
     {
         Pos = MAP_APPFONT ( 6 , 38 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position";
     };
     FixedText FT_COUNT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "~Anzahl" ;
         Text [ en-US ] = "~Amount" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     String STR_ROW
     {
-        Text [ de ] = " Zeilen" ;
         Text [ en-US ] = " Rows" ;
-        Text [ x-comment ] = " ";
     };
     String STR_COL
     {
-        Text [ de ] = " Spalten" ;
         Text [ en-US ] = " Columns" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
