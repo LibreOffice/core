@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OfficeFilePicker.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:18:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:06:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,82 +37,66 @@
 
 String STR_SVT_FILEPICKER_AUTO_EXTENSION
 {
-    Text [ de ] = "Automatische Dateinamens~erweiterung" ;
     Text [ en-US ] = "~Automatic file name extension" ;
 };
 
 String STR_SVT_FILEPICKER_PASSWORD
 {
-    Text [ de ] = "Mit Kennwort speichern" ;
     Text [ en-US ] = "Save with password" ;
 };
 
 String STR_SVT_FILEPICKER_FILTER_OPTIONS
 {
-    Text [ de ] = "Filtereinstellungen ~bearbeiten" ;
     Text [ en-US ] = "Edit filter settings";
 };
 
 String STR_SVT_FILEPICKER_READONLY
 {
-    Text [ de ] = "N~ur lesen" ;
     Text [ en-US ] = "~Read-only" ;
 };
 
 String STR_SVT_FILEPICKER_INSERT_AS_LINK
 {
-    Text [ de ] = "~Verknüpfen" ;
     Text [ en-US ] = "~Link" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_FILEPICKER_SHOW_PREVIEW
 {
-    Text [ de ] = "V~orschau" ;
     Text [ en-US ] = "Pr~eview" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_FILEPICKER_PLAY
 {
-    Text [ de ] = "Ab~spielen" ;
     Text [ en-US ] = "~Play" ;
 };
 
 String STR_SVT_FILEPICKER_VERSION
 {
-    Text [ de ] = "~Version:" ;
     Text [ en-US ] = "~Version:";
 };
 
 String STR_SVT_FILEPICKER_TEMPLATES
 {
-    Text [ de ] = "Format~vorlagen:" ;
     Text [ en-US ] = "S~tyles:" ;
 };
 
 String STR_SVT_FILEPICKER_IMAGE_TEMPLATE
 {
-    Text [ de ] = "Stil:" ;
     Text [ en-US ] = "Style:";
 };
 
 String STR_SVT_FILEPICKER_SELECTION
 {
-    Text [ de ] = "S~elektion" ;
     Text [ en-US ] = "~Selection" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_SVT_FOLDERPICKER_DEFAULT_TITLE
 {
-    Text [ de ] = "Pfad auswählen" ;
     Text [ en-US ] = "Select Path" ;
 };
 
 String STR_SVT_FOLDERPICKER_DEFAULT_DESCRIPTION
 {
-    Text [ de ] = "Bitte wählen Sie einen Ordner." ;
     Text [ en-US ] = "Please select a folder.";
 };
 
