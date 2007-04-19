@@ -4,9 +4,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:18:25 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:06:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ ModalDialog DLG_QRY_JOIN
     SVLook = TRUE ;
     HelpId = HID_DLG_QRY_JOIN ;
     Size = MAP_APPFONT ( 265, 205 ) ;
-    Text [ de ] = "Verbundeigenschaften" ;
 
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -62,7 +61,6 @@ ModalDialog DLG_QRY_JOIN
         {
             Pos = MAP_APPFONT ( 6 , 3 ) ;
             Size = MAP_APPFONT ( 191 , 8 ) ;
-            Text [ de ] = "beteiligte Tabellen" ;
             Text [ en-US ] = "Tables involved";
         };
 
@@ -90,7 +88,6 @@ ModalDialog DLG_QRY_JOIN
         {
             Pos = MAP_APPFONT ( 6 , 29 ) ;
             Size = MAP_APPFONT ( 191 , 8 ) ;
-            Text [ de ] = "beteiligte Felder" ;
             Text [ en-US ] = "Fields involved";
         };
     };
@@ -99,9 +96,7 @@ ModalDialog DLG_QRY_JOIN
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 191 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options";
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_LISTBOXTITLE
@@ -109,7 +104,6 @@ ModalDialog DLG_QRY_JOIN
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 89 , 8 ) ;
 
-        Text [ de ] = "~Art" ;
         Text [ en-US ] = "~Type";
     };
 
@@ -119,22 +113,8 @@ ModalDialog DLG_QRY_JOIN
         Size            = MAP_APPFONT ( 90 , 60 ) ;
         HelpId          = HID_DLG_QRY_JOINTYPE ;
 
-        StringList [ de ] =
-        {
-            < "Innerer" ; Default; > ;
-            < "Linker" ; Default; > ;
-            < "Rechter" ; Default; > ;
-            < "Vollständiger"  ; Default; > ;
-        };
         DropDown        = TRUE;
         DDExtraWidth    = TRUE;
-    StringList [ x-comment ] =
-    {
-         < "; Innerer" ; Default; > ;
-        < "; Linker" ; Default; > ;
-        < "; Rechter" ; Default; > ;
-        < "; Vollst�ndiger"  ; Default; > ;
-    };
     StringList [ en-US ] =
     {
          < "Inner join" ; Default; > ;
@@ -174,34 +154,26 @@ ModalDialog DLG_QRY_JOIN
     };
 
     Text [ en-US ] = "Join Properties";
-    Text [ x-comment ] = " ";
 };
 
 String STR_JOIN_TYPE_HINT
 {
-    Text [ de ] = "Bitte beachten Sie, daß einige Datenbanken eventuell diese Art der Verknüpfung nicht unterstützen.";
     Text [ en-US ] = "Please note that some databases may not support this join type.";
 };
 
 String STR_QUERY_INNER_JOIN
 {
-    Text [ de ] = "Beinhaltet nur die Datensätze, bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
     Text [ en-US ] = "Includes only records for which the contents of the related fields of both tables are identical.";
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_LEFTRIGHT_JOIN
 {
-    Text [ de ] = "Beinhaltet ALLE Datensätze aus '%1' und nur die Datensätze aus '%2', bei denen die Inhalte der verknüpften Felder beider Tabellen gleich sind.";
     Text [ en-US ] = "Contains ALL records from table '%1' but only records from table '%2' where the values in the related fields are matching.";
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_FULL_JOIN
 {
-    Text [ de ] = "Beinhaltet ALLE Datensätze aus '%1' und aus '%2'.";
     Text [ en-US ] = "Contains ALL records from '%1' and from '%2'.";
-    Text [ x-comment ] = " ";
 };
 
 
