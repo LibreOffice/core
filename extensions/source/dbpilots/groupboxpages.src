@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupboxpages.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:04:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:44:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
 {
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text [ de ] = "Daten";
     Text [ en-US ] = "Data";
 
     FixedLine FL_DATA
@@ -55,7 +54,6 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 24 ) ;
         WordBreak = TRUE;
         Group = TRUE;
-        Text [ de ] = "Welche ~Bezeichnungen sollen die Optionsfelder erhalten?";
         Text [ en-US ] = "Which ~names do you want to give the option fields?";
     };
     Edit ET_RADIOLABELS
@@ -82,7 +80,6 @@ TabPage RID_PAGE_GROUPRADIOSELECTION
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6 , 52  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 6 - 7, 8 ) ;
         Group = TRUE;
-        Text [ de ] = "~Optionsfelder";
         Text [ en-US ] = "~Option fields";
     };
     ListBox LB_RADIOBUTTONS
@@ -100,7 +97,6 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
 {
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text [ de ] = "Standardfeldauswahl";
     Text [ en-US ] = "Default Field Selection";
 
     FixedLine FL_DEFAULTSELECTION
@@ -114,7 +110,6 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 24 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Soll ein Optionsfeld standardmäßig ausgewählt sein?";
         Text [ en-US ] = "Should one option field be selected as a default?";
     };
     RadioButton RB_DEFSELECTION_YES
@@ -123,7 +118,6 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 10 ) ;
         Group = TRUE;
         TabStop = TRUE;
-        Text [ de ] = "~Ja, und zwar folgendes:";
         Text [ en-US ] = "~Yes, the following:";
     };
     ListBox LB_DEFSELECTIONFIELD
@@ -142,7 +136,6 @@ TabPage RID_PAGE_DEFAULTFIELDSELECTION
         Pos = MAP_APPFONT ( 7 , 59  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 10 ) ;
         TabStop = FALSE;
-        Text [ de ] = "Nein, kein Feld soll ausgewählt sein.";
         Text [ en-US ] = "No, one particular field is not going to be selected.";
     };
 };
@@ -151,7 +144,6 @@ TabPage RID_PAGE_OPTIONVALUES
 {
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text [ de ] = "Feldwerte";
     Text [ en-US ] = "Field Values";
 
     FixedLine FL_OPTIONVALUES
@@ -164,7 +156,6 @@ TabPage RID_PAGE_OPTIONVALUES
         Pos = MAP_APPFONT ( 7 , 15  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 24 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Wenn Sie eine Option auswählen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
         Text [ en-US ] = "When you select an option, the option group is given a specific value.";
     };
     FixedText FT_OPTIONVALUES
@@ -173,7 +164,6 @@ TabPage RID_PAGE_OPTIONVALUES
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 16 ) ;
         WordBreak = TRUE;
         Group = TRUE;
-        Text [ de ] = "Welchen ~Wert möchten Sie jeder Option zuweisen?";
         Text [ en-US ] = "Which ~value do you want to assign to each option?";
     };
     Edit ET_OPTIONVALUE
@@ -188,7 +178,6 @@ TabPage RID_PAGE_OPTIONVALUES
     {
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14 , 8 ) ;
-        Text [ de ] = "~Optionsfelder";
         Text [ en-US ] = "~Option fields";
     };
     ListBox LB_RADIOBUTTONS
@@ -206,7 +195,6 @@ TabPage RID_PAGE_OPTIONS_FINAL
 {
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
-    Text [ de ] = "Optionsgruppe erstellen";
     Text [ en-US ] = "Create Option Group";
 
     FixedLine FL_NAMEIT
@@ -219,7 +207,6 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Pos = MAP_APPFONT ( 7 , 15  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Welche ~Beschriftung soll Ihre Optionsgruppe haben?";
         Text [ en-US ] = "Which ~caption is to be given to your option group?";
     };
     Edit ET_NAMEIT
@@ -235,14 +222,12 @@ TabPage RID_PAGE_OPTIONS_FINAL
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14, 16 ) ;
         WordBreak = TRUE;
         Center = TRUE;
-        Text [ de ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
         Text [ en-US ] = "These were all details needed to create the option group.";
     };
 };
 
 String RID_STR_GROUPWIZ_DBFIELD
 {
-    Text [ de ] = "Sie können den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn für eine spätere Aktion verwenden.";
     Text [ en-US ] = "You can either save the value of the option group in a database field or use it for a later action.";
 };
 
