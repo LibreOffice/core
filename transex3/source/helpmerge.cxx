@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helpmerge.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 08:18:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:19:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,10 +238,10 @@ bool HelpParser::CreateSDF(
                   sBuffer.append( GSI_SEQUENCE4 );      //"\t\t\t\t";
                 sBuffer.append( sOUTimeStamp );
                 ByteString sOut( sBuffer.makeStringAndClear().getStr() , RTL_TEXTENCODING_UTF8 );
-                if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj_in ) ) )
-                {
-                    if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
-                }
+                //if( !sCur.EqualsIgnoreCaseAscii("de") ||( sCur.EqualsIgnoreCaseAscii("de") && !Export::isMergingGermanAllowed( rPrj_in ) ) )
+                //{
+                if( data.getLength() > 0 ) aSDFStream.WriteLine( sOut );
+                //}
                 pXMLElement=NULL;
             }else fprintf(stdout,"\nDBG: NullPointer in HelpParser::CreateSDF , Language %s\n",sCur.GetBuffer() );
         }
