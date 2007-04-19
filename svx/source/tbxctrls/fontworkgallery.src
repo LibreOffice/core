@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontworkgallery.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2006-10-24 13:43:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:42:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,12 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
 
     Size = MAP_APPFONT( WIDTH, HEIGHT );
 
-    Text [ de ] = "Fontwork Gallery" ;
     Text [ en-US ] = "Fontwork Gallery" ;
 
     FixedLine FL_FAVORITES
     {
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( WIDTH - 6 , 8 ) ;
-        Text [ de ] = "Wählen Sie einen Fontwork Stil" ;
         Text [ en-US ] = "Select a Fontwork style:" ;
     };
     Control CTL_FAVORITES
@@ -98,7 +96,6 @@ ModalDialog RID_SVX_MDLG_FONTWORK_GALLERY
     };
     String STR_CLICK_TO_ADD_TEXT
     {
-        Text [ de ] = "Text durch Klicken bearbeiten" ;
         Text [ en-US ] = "Click to edit text" ;
     };
 };
@@ -113,32 +110,26 @@ FloatingWindow RID_SVXFLOAT_FONTWORK_ALIGNMENT
     Closeable = TRUE ;
     Zoomable = TRUE ;
 
-    Text [ de ] = "Fontwork Ausrichtung" ;
     Text [ en-US ] = "Fontwork Alignment" ;
 
     String STR_ALIGN_LEFT
     {
-        Text [ de ] = "~Linksbündig";
         Text [ en-US ] = "~Left Align";
     };
     String STR_ALIGN_CENTER
     {
-        Text [ de ] = "~Zentriert";
         Text [ en-US ] = "~Center";
     };
     String STR_ALIGN_RIGHT
     {
-        Text [ de ] = "~Rechtsbündig";
         Text [ en-US ] = "~Right Align";
     };
     String STR_ALIGN_WORD
     {
-        Text [ de ] = "~Wortausrichtung";
         Text [ en-US ] = "~Word Justify";
     };
     String STR_ALIGN_STRETCH
     {
-        Text [ de ] = "~Streckung ausrichten";
         Text [ en-US ] = "S~tretch Justify";
     };
 
@@ -254,42 +245,34 @@ FloatingWindow RID_SVXFLOAT_FONTWORK_CHARSPACING
     Closeable = TRUE ;
     Zoomable = TRUE ;
 
-    Text [ de ] = "Fontwork Zeichenabstand" ;
     Text [ en-US ] = "Fontwork Character Spacing" ;
 
     String STR_CHARS_SPACING_VERY_TIGHT
     {
-        Text [ de ] = "~Sehr eng";
         Text [ en-US ] = "~Very Tight";
     };
     String STR_CHARS_SPACING_TIGHT
     {
-        Text [ de ] = "~Eng";
         Text [ en-US ] = "~Tight";
     };
     String STR_CHARS_SPACING_NORMAL
     {
-        Text [ de ] = "~Normal";
         Text [ en-US ] = "~Normal";
     };
     String STR_CHARS_SPACING_LOOSE
     {
-        Text [ de ] = "~Weit";
         Text [ en-US ] = "~Loose";
     };
     String STR_CHARS_SPACING_VERY_LOOSE
     {
-        Text [ de ] = "Se~hr weit";
         Text [ en-US ] = "Very ~Loose";
     };
     String STR_CHARS_SPACING_CUSTOM
     {
-        Text [ de ] = "~Benutzerdefiniert...";
         Text [ en-US ] = "~Custom...";
     };
     String STR_CHARS_SPACING_KERN_PAIRS
     {
-        Text [ de ] = "~Zeichenpaarekerning";
         Text [ en-US ] = "~Kern Character Pairs";
     };
 };
@@ -302,7 +285,6 @@ ModalDialog RID_SVX_MDLG_FONTWORK_CHARSPACING
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    Text [ de ] = "Fontwork Zeichenabstand" ;
     Text [ en-US ] = "Fontwork Character Spacing" ;
 
     OKButton BTN_OK
@@ -328,7 +310,6 @@ ModalDialog RID_SVX_MDLG_FONTWORK_CHARSPACING
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Wert";
         Text[ en-US ] = "~Value";
     };
     MetricField MF_VALUE
