@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationCreateDialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:33:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ TabDialog DLG_CUSTOMANIMATION_CREATE
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    Text [ de ] = "Benutzerdefinierte Animation" ;
     Text [ en-US ] = "Custom Animation" ;
 
     TabControl 1
@@ -57,28 +56,24 @@ TabDialog DLG_CUSTOMANIMATION_CREATE
             PageItem
             {
                 Identifier = RID_TP_CUSTOMANIMATION_ENTRANCE ;
-                Text [ de ] = "Eingang" ;
                 Text [ en-US ] = "Entrance" ;
             };
 
             PageItem
             {
                 Identifier = RID_TP_CUSTOMANIMATION_EMPHASIS;
-                Text [ de ] = "Hervorgehoben";
                 Text [ en-US ] = "Emphasis";
             };
 
             PageItem
             {
                 Identifier = RID_TP_CUSTOMANIMATION_EXIT;
-                Text [ de ] = "Beenden";
                 Text [ en-US ] = "Exit";
             };
 
             PageItem
             {
                 Identifier = RID_TP_CUSTOMANIMATION_MOTIONPATH;
-                Text [ de ] = "Animationspfade";
                 Text [ en-US ] = "Motion Paths";
             };
         };
@@ -123,7 +118,6 @@ TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
         Pos = MAP_APPFONT ( 3 , 167  ) ;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Geschwindigkeit";
         Text [ en-US ] = "Speed";
     };
 
@@ -141,7 +135,6 @@ TabPage RID_TP_CUSTOMANIMATION_ENTRANCE
         Pos = MAP_APPFONT ( 3 , 181 ) ;
         Size = MAP_APPFONT ( 143 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Automatische Vorschau" ;
         Text [ en-US ] = "Automatic preview" ;
     };
 };
