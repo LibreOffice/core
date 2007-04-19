@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:25:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:11:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,9 +48,7 @@ TabPage TP_MANAGE_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -63,17 +61,13 @@ TabPage TP_MANAGE_STYLES
         Pos = MAP_APPFONT ( 164 , 8 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Hide = TRUE ;
-        Text [ de ] = "~Autom. aktualisieren" ;
         Text [ en-US ] = "~AutoUpdate" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NEXT
     {
         Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "~Folgevorlage" ;
         Text [ en-US ] = "Ne~xt Style" ;
-        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_NEXT
     {
@@ -89,9 +83,7 @@ TabPage TP_MANAGE_STYLES
         Size = MAP_APPFONT ( 61 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpft mit : ~Verkn³pft mit */
         /* ### ACHTUNG: Neuer Text in Resource? ~Verknüpft mit : ~Verkn³pft mit */
-        Text [ de ] = "~VerknÃ¼pft mit" ;
         Text [ en-US ] = "Linked with" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_BASE
     {
@@ -105,9 +97,7 @@ TabPage TP_MANAGE_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "~Bereich" ;
         Text [ en-US ] = "~Category" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_REGION
     {
@@ -134,9 +124,7 @@ TabPage TP_MANAGE_STYLES
     {
         Pos = MAP_APPFONT ( 6 , 77  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "EnthÃ¤lt" ;
         Text [ en-US ] = "Contains" ;
-        Text [ x-comment ] = " ";
     };
 };
  // ********************************************************************** EOF
