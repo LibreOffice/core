@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stgdir.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:09:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:24:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -313,8 +313,10 @@ INT32 StgDirEntry::GetSize()
 
 BOOL StgDirEntry::SetSize( INT32 nNewSize )
 {
-    if( !bDirect && !pTmpStrm && !Strm2Tmp() )
+    if ( !( nMode & STREAM_WRITE )
+      || !bDirect && !pTmpStrm && !Strm2Tmp() )
         return FALSE;
+
     if( nNewSize < nPos )
         nPos = nNewSize;
     if( pTmpStrm )
@@ -405,13 +407,18 @@ INT32 StgDirEntry::Seek( INT32 nNew )
     else
     {
         INT32 nSize = aEntry.GetSize();
+
         if( nNew < 0 )
             nNew = nSize;
-        // enlarge?
+
+        // try to enlarge, the readonly streams should not allow this
         if( nNew > nSize )
         {
-            if( !SetSize( nNew ) )
+            if ( !( nMode & STREAM_WRITE ) || !SetSize( nNew ) )
+            {
+                OSL_ENSURE( nMode & STREAM_WRITE, "Trying to resize readonly stream by seeking, could be a wrong offset!" );
                 return nPos;
+            }
             else
                 return Seek( nNew );
         }
@@ -441,7 +448,7 @@ INT32 StgDirEntry::Read( void* p, INT32 nLen )
 
 INT32 StgDirEntry::Write( const void* p, INT32 nLen )
 {
-    if( nLen <= 0 )
+    if( nLen <= 0 || !( nMode & STREAM_WRITE ) )
         return 0;
 
     // Was this stream committed internally and reopened in direct mode?
@@ -524,6 +531,8 @@ void StgDirEntry::Copy( BaseStorageStream& rDest )
 
 BOOL StgDirEntry::Commit()
 {
+    // OSL_ENSURE( nMode & STREAM_WRITE, "Trying to commit readonly stream!" );
+
     aSave = aEntry;
     BOOL bRes = TRUE;
     if( aEntry.GetType() == STG_STREAM )
