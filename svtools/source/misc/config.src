@@ -4,9 +4,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:14:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:17:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@
 
 String STR_WARNING_ITEM
 {
-    Text [ de ] = "Eintrag hat falsche Version!" ;
     Text [ en-US ] = "Incorrect Version!" ;
-    Text [ x-comment ] = " ";
 };
 
 
