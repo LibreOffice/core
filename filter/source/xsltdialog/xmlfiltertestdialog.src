@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:22:46 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:14:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,12 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     SVLook                  = TRUE ;
     Moveable                = TRUE ;
     Closeable               = TRUE ;
-    Text [ de ] = "XML-Filter testen: %s" ;
     Text [ en-US ]      = "Test XML Filter: %s" ;
 
     FixedLine FL_EXPORT
     {
         Pos                 = MAP_APPFONT( 4, FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET);
         Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
-        Text [ de ] = "Exportieren";
         Text [ en-US ]  = "Export";
     };
 
@@ -74,7 +72,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text [ de ] = "Export-XSLT";
         Text [ en-US ]  = "XSLT for export";
     };
 
@@ -89,7 +86,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text [ de ] = "Dokument transformieren";
         Text [ en-US ]  = "Transform document";
     };
 
@@ -99,7 +95,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         TabStop             = TRUE ;
         HelpId              = HID_XML_FILTER_TEST_EXPORT_BROWSE;
-        Text [ de ] = "~Auswählen...";
         Text [ en-US ]  = "~Browse...";
     };
 
@@ -109,7 +104,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_EXPORT_CURRENT;
         TabStop             = TRUE ;
-        Text [ de ] = "A~ktuelles Dokument";
         Text [ en-US ]  = "~Current Document";
     };
 
@@ -127,7 +121,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT( 4, FIRST_ROW_Y + 5 * ROW_HEIGHT + 5 * SPACING + FIXED_TEXT_OFFSET );
         Size                = MAP_APPFONT( DIALOG_WIDTH - 2*SPACING, 8 );
-        Text [ de ] = "Importieren";
         Text [ en-US ]  = "Import";
     };
 
@@ -135,7 +128,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 6 * ROW_HEIGHT + 6 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text [ de ] = "Import-XSLT";
         Text [ en-US ]  = "XSLT for import";
     };
 
@@ -150,7 +142,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 7 * ROW_HEIGHT + 7 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text [ de ] = "Import-Dokumentvorlage";
         Text [ en-US ]  = "Template for import";
     };
 
@@ -165,7 +156,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 8 * ROW_HEIGHT + 8 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 8 ) ;
-        Text [ de ] = "Datei transformieren";
         Text [ en-US ]  = "Transform file";
     };
 
@@ -174,7 +164,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Pos                 = MAP_APPFONT ( SECOND_ROW_X , FIRST_ROW_Y + 8 * ROW_HEIGHT + 8 * SPACING + 1 ) ;
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 10 ) ;
         HelpId              = HID_XML_FILTER_TEST_IMPORT_DISPLAY_SOURCE;
-        Text [ de ] = "Quelltext anzeigen";
         Text [ en-US ]  = "~Display source";
     };
 
@@ -184,7 +173,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_IMPORT_BROWSE;
         TabStop             = TRUE ;
-        Text [ de ] = "A~uswählen...";
         Text [ en-US ]  = "B~rowse...";
     };
 
@@ -194,7 +182,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( COLUMN_WIDTH , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_IMPORT_RECENT;
         TabStop             = TRUE ;
-        Text [ de ] = "~Letzte Datei";
         Text [ en-US ]  = "~Recent File";
     };
 
@@ -212,7 +199,6 @@ ModalDialog DLG_XML_FILTER_TEST_DIALOG
         Size                = MAP_APPFONT ( 50 , 14 ) ;
         HelpId              = HID_XML_FILTER_TEST_CLOSE;
         TabStop             = TRUE ;
-        Text [ de ] = "~Schließen";
         Text [ en-US ]  = "~Close";
     };
 
