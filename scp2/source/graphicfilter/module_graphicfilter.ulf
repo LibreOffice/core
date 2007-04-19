@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_graphicfilter.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:28:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:25:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,123 +34,93 @@
  ************************************************************************/
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT]
-de = "Grafikfilter"
 en-US = "Graphics Filters"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT]
-de = "Zusätzliche Filter, um fremde Grafikformate einzulesen."
 en-US = "Additional filters required to read alien graphic formats."
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_ADOBE]
-de = "Adobe Photoshop Importfilter"
 en-US = "Adobe Photoshop Import Filter"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_ADOBE]
-de = "Adobe Photoshop Importfilter"
 en-US = "Adobe Photoshop Import Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_TGA]
-de = "TGA Import"
 en-US = "TGA Import"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_TGA]
-de = "TGA TrueVision TARGA Importfilter"
 en-US = "TGA TrueVision TARGA Import Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_EPS]
-de = "EPS Im- und Exportfilter"
 en-US = "EPS Import/Export Filter"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_EPS]
-de = "Encapsulated Postscript Im- und Exportfilter"
 en-US = "Encapsulated Postscript Import/Export Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_XPM]
-de = "XPM-Exportfilter"
 en-US = "XPM Export Filter"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_XPM]
-de = "XPM-Export Filter"
 en-US = "XPM Export Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_PBMP]
-de = "Portable Bitmap Im- und Export"
 en-US = "Portable Bitmap Import/Export"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_PBMP]
-de = "Portable Bitmap Im- und Exportfilter"
 en-US = "Portable Bitmap Import/Export Filters"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_SUNRST]
-de = "SUN-Rasterfile Im- und Export"
 en-US = "SUN Rasterfile Import/Export"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_SUNRST]
-de = "SUN-Rasterfile Im- und Exportfilter"
 en-US = "SUN Rasterfile Import/Export Filters"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_ACAD]
-de = "AutoCAD Import"
 en-US = "AutoCAD Import"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_ACAD]
-de = "AutoCAD Importfilter"
 en-US = "AutoCAD Import Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_KODAC]
-de = "Kodak Photo-CD Import"
 en-US = "Kodak Photo-CD Import"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_KODAC]
-de = "Kodak Photo-CD Importfilter"
 en-US = "Kodak Photo-CD Import Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_MACPICT]
-de = "Mac-Pict Im- und Export"
 en-US = "Mac-Pict Import/Export"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_MACPICT]
-de = "Mac-Pict Im- und Exportfilter"
 en-US = "Mac-Pict Import/Export Filters"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_OS2META]
-de = "OS/2 Metafile Im- und Export"
 en-US = "OS/2 Metafile Import/Export"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_OS2META]
-de = "OS/2 Metafile Im- und Exportfilter"
 en-US = "OS/2 Metafile Import/Export Filters"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_PCX]
-de = "PCX Import"
 en-US = "PCX Import"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_PCX]
-de = "Z-Soft PCX Import"
 en-US = "Z-Soft PCX Import"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_TIFF]
-de = "TIFF Import/Export"
 en-US = "TIFF Import/Export"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_TIFF]
-de = "TIFF Im- und Exportfilter"
 en-US = "TIFF Import and Export Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_SVG]
-de = "SVG Export"
 en-US = "SVG Export"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_SVG]
-de = "SVG Exportfilter"
 en-US = "SVG Export Filter"
 
 [STR_NAME_MODULE_OPTIONAL_GRFFLT_FLASH]
-de = "Macromedia Flash (SWF)"
 en-US = "Macromedia Flash (SWF)"
 
 [STR_DESC_MODULE_OPTIONAL_GRFFLT_FLASH]
-de = "Macromedia Flash (SWF) Exportfilter"
 en-US = "Macromedia Flash (SWF) Export Filter"
 
 
