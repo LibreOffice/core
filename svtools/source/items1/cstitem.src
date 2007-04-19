@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cstitem.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:54:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:15:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,69 +36,47 @@
 #include "svtools.hrc"
 String STR_CSTAT_NEVER_UPD
 {
-    Text [ de ] = "Noch keine Aktualisierung erfolgt" ;
     Text [ en-US ] = "No update has occurred" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_IN_UPD
 {
-    Text [ de ] = "Aktualisierung läuft" ;
     Text [ en-US ] = "Updating in progress" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_UPD_NEWER
 {
-    Text [ de ] = "Änderungen festgestellt" ;
     Text [ en-US ] = "Changes discovered" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_UPD_NOT_NEWER
 {
-    Text [ de ] = "Keine Änderung festgestellt" ;
     Text [ en-US ] = "No changes discovered" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_UPD_CANCEL
 {
-    Text [ de ] = "Vom Benutzer abgebrochen" ;
     Text [ en-US ] = "Canceled by user" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_UPD_IMMEDIATELY
 {
-    Text [ de ] = "Aktualisierung erfolgt gleich" ;
     Text [ en-US ] = "Updating immediately" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_ERR_OFFLINE
 {
-    Text [ de ] = "Fehlgeschlagen, weil Offline" ;
     Text [ en-US ] = "failed, you have not been online" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_ERR_GENERAL
 {
-    Text [ de ] = "allgemeiner Fehler" ;
     Text [ en-US ] = "General error" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_ERR_NOTEXISTS
 {
-    Text [ de ] = "Server existiert nicht" ;
     Text [ en-US ] = "Server does not exist" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CSTAT_ERR_NOTREACHED
 {
-    Text [ de ] = "Server nicht erreichbar" ;
     Text [ en-US ] = "Server not available" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COLUM_DT_AUTO
 {
-    Text [ de ] = "automatisch" ;
     Text [ en-US ] = "automatic" ;
-    Text [ x-comment ] = " ";
 };
 
 
