@@ -4,9 +4,9 @@
  *
  *  $RCSfile: adtabdlg.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:25:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:59:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@ ModelessDialog DLG_JOIN_TABADD
     {
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 50, 8 );
-        Text [ de ] = "Tabellen";
         Text [ en-US ] = "Tables";
     };
 
@@ -64,7 +63,6 @@ ModelessDialog DLG_JOIN_TABADD
     {
         Pos = MAP_APPFONT( 62, 6 );
         Size = MAP_APPFONT( 50, 8 );
-        Text [ de ] = "Abfragen";
         Text [ en-US ] = "Queries";
     };
 
@@ -81,21 +79,17 @@ ModelessDialog DLG_JOIN_TABADD
     {
         Pos = MAP_APPFONT ( 123 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hinzu~fügen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CancelButton PB_CLOSE
     {
         Pos = MAP_APPFONT ( 123 , 22 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         HelpId = HID_JOINSH_ADDTAB_CLOSE;
-        Text [ de ] = "S~chließen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     HelpButton PB_HELP
     {
@@ -106,13 +100,11 @@ ModelessDialog DLG_JOIN_TABADD
 
     String STR_ADD_TABLES
     {
-        Text [ de ] = "Tabellen hinzufügen";
         Text [ en-US ] = "Add Tables";
     };
 
     String STR_ADD_TABLE_OR_QUERY
     {
-        Text [ de ] = "Tabelle oder Abfrage hinzufügen" ;
         Text [ en-US ] = "Add Table or Query" ;
     };
 };
