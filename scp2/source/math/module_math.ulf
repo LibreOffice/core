@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_math.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:35:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:29:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,27 +34,21 @@
  ************************************************************************/
 
 [STR_NAME_MODULE_PRG_MATH]
-de = "%PRODUCTNAME Math"
 en-US = "%PRODUCTNAME Math"
 
 [STR_DESC_MODULE_PRG_MATH]
-de = "Wissenschaftliche Formeln erstellen und bearbeiten mit %PRODUCTNAME Math."
 en-US = "Create and edit scientific formulas and equations by using %PRODUCTNAME Math."
 
 [STR_NAME_MODULE_PRG_MATH_BIN]
-de = "Programmodul"
 en-US = "Program Module"
 
 [STR_DESC_MODULE_PRG_MATH_BIN]
-de = "Die Anwendung %PRODUCTNAME Math"
 en-US = "The application %PRODUCTNAME Math"
 
 [STR_NAME_MODULE_PRG_MATH_HELP]
-de = "%PRODUCTNAME Math Hilfe"
 en-US = "%PRODUCTNAME Math Help"
 
 [STR_DESC_MODULE_PRG_MATH_HELP]
-de = "Die %PRODUCTNAME-Hilfe für %PRODUCTNAME Math."
 en-US = "Help about %PRODUCTNAME Math"
 
 
