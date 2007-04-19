@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfindex.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-31 12:13:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:00:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,6 @@ ModalDialog DLG_DBASE_INDEXES
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
-    Text [ de ] = "Indizes" ;
     Text [ en-US ] = "Indexes" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -130,7 +129,6 @@ ModalDialog DLG_DBASE_INDEXES
     {
         Pos = MAP_APPFONT ( 8 , 7 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Tabelle" ;
         Text [ en-US ] = "~Table";
     };
     ComboBox CB_TABLES
@@ -146,14 +144,12 @@ ModalDialog DLG_DBASE_INDEXES
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
         Size = MAP_APPFONT ( 196 , 8 ) ;
-        Text [ de ] = "Zuweisung" ;
         Text [ en-US ] = "Assignment" ;
     };
     FixedText FT_TABLEINDEXES
     {
         Pos = MAP_APPFONT ( 12 , 33 ) ;
         Size = MAP_APPFONT ( 83 , 8 ) ;
-        Text [ de ] = "T~abellenindizes" ;
         Text [ en-US ] = "T~able indexes";
     };
     ListBox LB_TABLEINDEXES
@@ -168,7 +164,6 @@ ModalDialog DLG_DBASE_INDEXES
     {
         Pos = MAP_APPFONT ( 120 , 33 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "~Freie Indizes" ;
         Text [ en-US ] = "~Free indexes";
     };
     ListBox LB_FREEINDEXES
