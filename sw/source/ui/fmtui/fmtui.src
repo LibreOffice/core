@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtui.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:05:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:11:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,7 @@
 
 String STR_FMT_STD
 {
-    Text [ de ] = "(keins)" ;
     Text [ en-US ] = "(none)" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TEMPLATE_WILDCARD
 {
@@ -64,9 +62,7 @@ String STR_TEMPLATE_WILDCARD
 String STR_OVERWRITE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie die Vorlage wirklich überschreiben? : Wollen Sie die Vorlage wirklich ³berschreiben? */
-    Text [ de ] = "Wollen Sie die Vorlage wirklich Ã¼berschreiben?" ;
     Text [ en-US ] = "\nAre you sure you want to delete this template?" ;
-    Text [ x-comment ] = " ";
 };
 
 
