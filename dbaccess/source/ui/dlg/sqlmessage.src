@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:27:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:04:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -86,21 +86,18 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 150 ) ;
-    Text [ de ] = "%PRODUCTNAME Base" ;
     Text [ en-US ] = "%PRODUCTNAME Base" ;
 
     FixedLine FL_DETAILS
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 228, 8 ) ;
-        Text [ de ] = "Details";
         Text [ en-US ] = "Details";
     };
     FixedText FT_ERRORLIST
     {
         Pos = MAP_APPFONT ( 12, 12 ) ;
         Size = MAP_APPFONT ( 85, 10 ) ;
-        Text [ de ] = "~Fehlerliste:";
         Text [ en-US ] = "Error ~list:";
         Group = TRUE;
     };
@@ -116,7 +113,6 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     {
         Pos = MAP_APPFONT ( 103, 12 ) ;
         Size = MAP_APPFONT ( 125, 10 ) ;
-        Text [ de ] = "~Beschreibung:";
         Text [ en-US ] = "~Description:";
         Group = TRUE;
     };
@@ -139,42 +135,35 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 
     String STR_EXCEPTION_STATUS
     {
-        Text [ de ] = "SQL-Status";
         Text [ en-US ] = "SQL Status";
     };
     String STR_EXCEPTION_ERRORCODE
     {
-        Text [ de ] = "Fehler-Code";
         Text [ en-US ] = "Error code";
     };
 };
 
 String STR_EXPLAN_STRINGCONVERSION_ERROR
 {
-    Text [ de ] = "Ein häufiger Grund für diesen Fehler ist eine ungeignete Zeichensatz-Einstellung für die Sprache Ihrer Datenbank. Überprüfen Sie diese Einstellung unter Bearbeiten - Datenbank - Eigenschaften.";
     Text [ en-US ] = "A frequent reason for this error is an inappropriate character set setting for the language of your database. Check the setting by choosing Edit - Database - Properties.";
 };
 
 String STR_EXCEPTION_ERROR
 {
-    Text [ de ] = "Fehler";
     Text [ en-US ] = "Error";
 };
 
 String STR_EXCEPTION_WARNING
 {
-    Text [ de ] = "Warnung";
     Text [ en-US ] = "Warning";
 };
 
 String STR_EXCEPTION_INFO
 {
-    Text [ de ] = "Information";
     Text [ en-US ] = "Information";
 };
 
 String STR_EXCEPTION_DETAILS
 {
-    Text [ de ] = "Details";
     Text [ en-US ] = "Details";
 };
