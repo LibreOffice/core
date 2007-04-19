@@ -1,6 +1,6 @@
  //--------------------------------------------------------------------------
  //
- // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.39 2005-09-23 14:12:11 hr Exp $
+ // $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/dbaccess/source/ui/dlg/RelationDlg.src,v 1.40 2007-04-19 14:58:24 ihi Exp $
  //
  // (c) Copyright 1997 by Star Division GmbH, Hamburg.
  //
@@ -8,7 +8,7 @@
  //  AWO
  //
  // Letzte Aenderung:
- //  $Author: hr $ $Date: 2005-09-23 14:12:11 $ $Revision: 1.39 $
+ //  $Author: ihi $ $Date: 2007-04-19 14:58:24 $ $Revision: 1.40 $
  //
  //--------------------------------------------------------------------------
 #ifndef DBAUI_RELATIONDIALOG_HRC
@@ -25,7 +25,6 @@ ModalDialog DLG_REL_PROPERTIES
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 186 , 205 ) ;
-    Text [ de ] = "Relationen" ;
     Text [ en-US ] = "Relations" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -42,7 +41,6 @@ ModalDialog DLG_REL_PROPERTIES
         {
             Pos = MAP_APPFONT ( 6 , 3 ) ;
             Size = MAP_APPFONT ( 174 , 8 ) ;
-            Text [ de ] = "beteiligte Tabellen" ;
             Text [ en-US ] = "Tables involved";
         };
 
@@ -70,7 +68,6 @@ ModalDialog DLG_REL_PROPERTIES
         {
             Pos = MAP_APPFONT ( 6 , 29 ) ;
             Size = MAP_APPFONT ( 174 , 8 ) ;
-            Text [ de ] = "beteiligte Felder" ;
             Text [ en-US ] = "Fields involved";
         };
     };
@@ -82,9 +79,7 @@ ModalDialog DLG_REL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "Update Optionen" ;
         Text [ en-US ] = "Update options" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_NO_CASC_UPD
     {
@@ -92,45 +87,35 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
         HelpId  = HID_DLG_REL_NO_CASC_UPD;
-        Text [ de ] = "~Keine Aktion" ;
         Text [ en-US ] = "~No action" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_UPD
     {
         Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_UPD ;
-        Text [ de ] = "K~ask. Update" ;
         Text [ en-US ] = "~Update cascade" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_UPD_NULL
     {
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_UPD_NULL ;
-        Text [ de ] = "~Null setzen" ;
         Text [ en-US ] = "~Set null" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_UPD_DEFAULT
     {
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_UPD_DEFAULT ;
-        Text [ de ] = "~Default setzen" ;
         Text [ en-US ] = "Set ~default" ;
-        Text [ x-comment ] = " ";
     };
 // zweite FixedLine
     FixedLine FL_CASC_DEL
     {
         Pos = MAP_APPFONT ( 96 , 114 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "Löschoptionen" ;
         Text [ en-US ] = "Delete options" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_NO_CASC_DEL
     {
@@ -138,36 +123,28 @@ ModalDialog DLG_REL_PROPERTIES
         Size = MAP_APPFONT ( 72 , 10 ) ;
         TabStop = TRUE ;
         HelpId  = HID_DLG_REL_NO_CASC_DEL ;
-        Text [ de ] = "K~eine Aktion" ;
         Text [ en-US ] = "~No action" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_DEL
     {
         Pos = MAP_APPFONT ( 102 , 139 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_DEL ;
-        Text [ de ] = "Ka~sk. Löschen" ;
         Text [ en-US ] = "Delete ~cascade" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_DEL_NULL
     {
         Pos = MAP_APPFONT ( 102 , 153 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_DEL_NULL ;
-        Text [ de ] = "Nu~ll setzen" ;
         Text [ en-US ] = "~Set null" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CASC_DEL_DEFAULT
     {
         Pos = MAP_APPFONT ( 102 , 167 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
         HelpId  = HID_DLG_REL_CASC_DEL_DEFAULT ;
-        Text [ de ] = "De~fault setzen" ;
         Text [ en-US ] = "Set ~default" ;
-        Text [ x-comment ] = " ";
     };
 
     OKButton PB_OK
@@ -190,6 +167,5 @@ ModalDialog DLG_REL_PROPERTIES
         TabStop = TRUE ;
     };
 
-    Text [ x-comment ] = " ";
 };
 
