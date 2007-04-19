@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:27:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:14:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,19 +56,6 @@ StringArray TEMPLATE_SHORT_NAMES_ARY
 
 StringArray TEMPLATE_LONG_NAMES_ARY
 {
-    ItemList [ de ] =
-    {
-        < "Meine Vorlagen" ; > ;
-        < "Gesch√§ftliche Korrespondenz" ; > ;
-        < "Sonstige gesch√§ftliche Dokumente" ; > ;
-        < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Vertr√§ge" ; > ;
-        < "Finanzen" ; > ;
-        < "Bildung" ; > ;
-        < "Pr√§sentationshintergr√ºnde" ; > ;
-        < "Pr√§sentationen" ; > ;
-        < "Diverses" ; > ;
-    };
     ItemList [ en-US ] =
     {
         < "My Templates" ; > ;
@@ -83,26 +70,11 @@ StringArray TEMPLATE_LONG_NAMES_ARY
         < "Miscellaneous" ; > ;
     };
 
-ItemList [ x-comment ] =
-    {
-            < "; Standard" ; > ;
-        < "; Gesch‰ftliche Korrespondenz" ; > ;
-        < "; Sonstige gesch‰ftliche Dokumente" ; > ;
-        < "; Private Korrespondenz und Dokumente" ; > ;
-        < "; Formulare und Vertr?ge" ; > ;
-        < "; Finanzen" ; > ;
-        < "; Bildung" ; > ;
-        < "; Pr‰sentationshintergr¸nde" ; > ;
-        < "; Pr‰sentationen" ; > ;
-        < "; Diverses" ; > ;
-    };
     };
 
 String RID_CNT_STR_WAITING
 {
-    Text [ de ] = "Die Vorlagen werden jetzt f√ºr die erstmalige Benutzung einmal initialisiert." ;
     Text [ en-US ] = "The templates are being initialized for first-time usage." ;
-    Text [ x-comment ] = " ";
 };
 
 
