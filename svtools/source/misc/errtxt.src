@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:21:46 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,85 +41,62 @@ Resource RID_ERRCTX
 {
     String ERRCTX_ERROR
     {
-        Text [ de ] = "Fehler" ;
         Text [ en-US ] = "Error" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_WARNING
     {
-        Text [ de ] = "Warnung" ;
         Text [ en-US ] = "Warning" ;
     };
     String ERRCTX_SFX_LOADTEMPLATE
     {
-        Text [ de ] = "$(ERR) beim Laden der Vorlage $(ARG1)" ;
         Text [ en-US ] = "$(ERR) loading the template $(ARG1)" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_SFX_SAVEDOC
     {
-        Text [ de ] = "$(ERR) beim Speichern des Dokumentes $(ARG1)" ;
         Text [ en-US ] = "$(ERR) saving the document $(ARG1)";
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_SFX_SAVEASDOC
     {
-        Text [ de ] = "$(ERR) beim Speichern des Dokumentes $(ARG1)";
         Text [ en-US ] = "$(ERR) saving the document $(ARG1)";
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_SFX_DOCINFO
     {
-        Text [ de ] = "$(ERR) beim Anzeigen der Docinfo des Dokumentes $(ARG1)" ;
         Text [ en-US ] = "$(ERR) displaying doc. information for document $(ARG1)" ;
     };
     String ERRCTX_SFX_DOCTEMPLATE
     {
-        Text [ de ] = "$(ERR) beim Schreiben des Dokumentes $(ARG1) als Vorlage" ;
         Text [ en-US ] = "$(ERR) writing document $(ARG1) as template" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_SFX_MOVEORCOPYCONTENTS
     {
-        Text [ de ] = "$(ERR) beim Kopieren oder Verschieben von Dokumentinhalten" ;
         Text [ en-US ] = "$(ERR) copying or moving document contents" ;
     };
     String ERRCTX_SFX_DOCMANAGER
     {
-        Text [ de ] = "$(ERR) beim Starten des Docmanagers" ;
         Text [ en-US ] = "$(ERR) starting the Document Manager" ;
     };
     String ERRCTX_SFX_OPENDOC
     {
-        Text [ de ] = "$(ERR) beim Laden des Dokumentes $(ARG1)" ;
         Text [ en-US ] = "$(ERR) loading document $(ARG1)" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_SFX_NEWDOCDIRECT
     {
-        Text [ de ] = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
         Text [ en-US ] = "$(ERR) creating a new document" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_SFX_NEWDOC
     {
-        Text [ de ] = "$(ERR) beim Anlegen eines neuen Dokumentes" ;
         Text [ en-US ] = "$(ERR) creating a new document" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCTX_SFX_CREATEOBJSH
     {
-        Text [ de ] = "$(ERR) beim Aufklappen einer Rubrik" ;
         Text [ en-US ] = "$(ERR) expanding entry" ;
     };
     String ERRCTX_SFX_LOADBASIC
     {
-        Text [ de ] = "$(ERR) beim Laden des BASIC des Dokuments $(ARG1)" ;
         Text [ en-US ] = "$(ERR) loading BASIC of document $(ARG1)" ;
     };
     String ERRCTX_SFX_SEARCHADDRESS
     {
-        Text [ de ] = "$(ERR) bei der Adressensuche" ;
         Text [ en-US ] = "$(ERR) searching for an address";
     };
 };
@@ -127,473 +104,367 @@ Resource RID_ERRHDL
 {
     String ERRCODE_CLASS_ABORT
     {
-        Text [ de ] = "Abbruch" ;
         Text [ en-US ] = "Abort" ;
     };
     String ERRCODE_CLASS_NOTEXISTS
     {
-        Text [ de ] = "Nichtexistentes Objekt" ;
         Text [ en-US ] = "Nonexistent object" ;
     };
     String ERRCODE_CLASS_ALREADYEXISTS
     {
-        Text [ de ] = "Objekt existiert bereits" ;
         Text [ en-US ] = "Object already exists" ;
     };
     String ERRCODE_CLASS_ACCESS
     {
-        Text [ de ] = "Kein Zugriff auf Objekt" ;
         Text [ en-US ] = "Object not accessible" ;
     };
     String ERRCODE_CLASS_PATH
     {
-        Text [ de ] = "Unzulässiger Pfad" ;
         Text [ en-US ] = "Inadmissible path" ;
     };
     String ERRCODE_CLASS_LOCKING
     {
-        Text [ de ] = "Lockingproblem" ;
         Text [ en-US ] = "Locking problem" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_CLASS_PARAMETER
     {
-        Text [ de ] = "Falscher Parameter" ;
         Text [ en-US ] = "Wrong parameter" ;
     };
     String ERRCODE_CLASS_SPACE
     {
-        Text [ de ] = "Resource erschöpft" ;
         Text [ en-US ] = "Resource exhausted" ;
     };
     String ERRCODE_CLASS_NOTSUPPORTED
     {
-        Text [ de ] = "Aktion nicht unterstützt" ;
         Text [ en-US ] = "Action not supported" ;
     };
     String ERRCODE_CLASS_READ
     {
-        Text [ de ] = "Leseproblem" ;
         Text [ en-US ] = "Read-Error" ;
     };
     String ERRCODE_CLASS_WRITE
     {
-        Text [ de ] = "Schreibproblem" ;
         Text [ en-US ] = "Write Error" ;
     };
     String ERRCODE_CLASS_UNKNOWN
     {
-        Text [ de ] = "Unbekannt" ;
         Text [ en-US ] = "unknown" ;
     };
     String ERRCODE_CLASS_VERSION
     {
-        Text [ de ] = "Versionskonflikt" ;
         Text [ en-US ] = "Version Incompatibility" ;
     };
     String ERRCODE_CLASS_GENERAL
     {
-        Text [ de ] = "Allgemeiner Fehler" ;
         Text [ en-US ] = "General Error" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_CLASS_FORMAT
     {
-        Text [ de ] = "Falsches Format" ;
         Text [ en-US ] = "Incorrect format" ;
     };
     String ERRCODE_CLASS_CREATE
     {
-        Text [ de ] = "Fehler beim Anlegen" ;
         Text [ en-US ] = "Error creating object" ;
     };
     String ERRCODE_CLASS_SBX
     {
-        Text [ de ] = "Unzulässiger Wert oder Datentyp" ;
         Text [ en-US ] = "Inadmissible value or data type" ;
     };
     String ERRCODE_CLASS_RUNTIME
     {
-        Text [ de ] = "BASIC-Laufzeitfehler" ;
         Text [ en-US ] = "BASIC runtime error" ;
     };
     String ERRCODE_CLASS_COMPILER
     {
-        Text [ de ] = "BASIC-Syntaxfehler" ;
         Text [ en-US ] = "BASIC syntax error" ;
     };
     String 1
     {
-        Text [ de ] = "Allgemeiner Fehler" ;
         Text [ en-US ] = "General Error" ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_IO_GENERAL
     {
-        Text [ de ] = "Allgemeiner Ein-/Ausgabefehler." ;
         Text [ en-US ] = "General input/output error." ;
     };
     String ERRCODE_IO_MISPLACEDCHAR
     {
-        Text [ de ] = "Der Name der Datei ist ungültig." ;
         Text [ en-US ] = "Invalid file name." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_IO_NOTEXISTS
     {
-        Text [ de ] = "Die Datei existiert nicht." ;
         Text [ en-US ] = "Nonexistent file." ;
     };
     String ERRCODE_IO_ALREADYEXISTS
     {
-        Text [ de ] = "Die Datei existiert bereits." ;
         Text [ en-US ] = "File already exists." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_IO_NOTADIRECTORY
     {
-        Text [ de ] = "Bei dem Objekt handelt es sich nicht um ein Verzeichnis." ;
         Text [ en-US ] = "The object is not a directory." ;
     };
     String ERRCODE_IO_NOTAFILE
     {
-        Text [ de ] = "Bei dem Objekt handelt es sich nicht um eine Datei." ;
         Text [ en-US ] = "The object is not a file." ;
     };
     String ERRCODE_IO_INVALIDDEVICE
     {
-        Text [ de ] = "Das angegebene Gerät ist ungültig." ;
         Text [ en-US ] = "The specified device is invalid." ;
     };
     String ERRCODE_IO_ACCESSDENIED
     {
-        Text [ de ] = "Aufgrund fehlender Rechte kann auf das Objekt\nnicht zugegriffen werden." ;
         Text [ en-US ] = "The object cannot be accessed\ndue to insufficient user rights." ;
     };
     String ERRCODE_IO_LOCKVIOLATION
     {
-        Text [ de ] = "Fehler beim gemeinsamen Zugriff auf das Objekt." ;
         Text [ en-US ] = "Sharing violation while accessing the object." ;
     };
     String ERRCODE_IO_OUTOFSPACE
     {
-        Text [ de ] = "Auf dem Gerät ist kein Platz mehr verfügbar." ;
         Text [ en-US ] = "No more space on device." ;
     };
     String ERRCODE_IO_ISWILDCARD
     {
-        Text [ de ] = "Die Operation kann nicht auf Dateien, welche\nWildcards enthalten, ausgeführt werden." ;
         Text [ en-US ] = "This operation cannot be run on\nfiles containing wildcards." ;
     };
     String ERRCODE_IO_NOTSUPPORTED
     {
-        Text [ de ] = "Die Operation wird auf dem vorliegenden Betriebssystem nicht unterstützt." ;
         Text [ en-US ] = "This operation is not supported on this operating system." ;
     };
     String ERRCODE_IO_TOOMANYOPENFILES
     {
-        Text [ de ] = "Es sind bereits zu viele Dateien geöffnet." ;
         Text [ en-US ] = "There are too many files open." ;
     };
     String ERRCODE_IO_CANTREAD
     {
-        Text [ de ] = "Von der Datei konnte nicht gelesen werden." ;
         Text [ en-US ] = "Data could not be read from the file." ;
     };
     String ERRCODE_IO_CANTWRITE
     {
-        Text [ de ] = "Die Datei konnte nicht geschrieben werden." ;
         Text [ en-US ] = "The file could not be written." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_IO_OUTOFMEMORY
     {
-        Text [ de ] = "Die Operation konnte wegen Speichermangels nicht ausgeführt werden." ;
         Text [ en-US ] = "The operation could not be run due to insufficient memory." ;
     };
     String ERRCODE_IO_CANTSEEK
     {
-        Text [ de ] = "Die Seekoperation konnte nicht ausgeführt werden." ;
         Text [ en-US ] = "The seek operation could not be run." ;
     };
     String ERRCODE_IO_CANTTELL
     {
-        Text [ de ] = "Die Telloperation konnte nicht ausgeführt werden." ;
         Text [ en-US ] = "The tell operation could not be run." ;
     };
     String ERRCODE_IO_WRONGVERSION
     {
-        Text [ de ] = "Die Datei liegt in einer falschen Version vor." ;
         Text [ en-US ] = "Incorrect file version." ;
     };
     String ERRCODE_IO_WRONGFORMAT
     {
-        Text [ de ] = "Die Datei liegt in einem falschen Format vor." ;
         Text [ en-US ] = "Incorrect file format." ;
     };
     String ERRCODE_IO_INVALIDCHAR
     {
-        Text [ de ] = "Der Dateiname enthält unzulässige Zeichen." ;
         Text [ en-US ] = "The file name contains invalid characters." ;
     };
     String ERRCODE_IO_UNKNOWN
     {
-        Text [ de ] = "Es trat ein unbekannter Ein-/Ausgabefehler auf." ;
         Text [ en-US ] = "An unknown I/O error has occurred." ;
     };
     String ERRCODE_IO_INVALIDACCESS
     {
-        Text [ de ] = "Es wurde versucht, in ungültiger Weise auf die Datei zuzugreifen." ;
         Text [ en-US ] = "An invalid attempt was made to access the file." ;
     };
     String ERRCODE_IO_CANTCREATE
     {
-        Text [ de ] = "Die Datei konnte nicht angelegt werden." ;
         Text [ en-US ] = "The file could not be created." ;
     };
     String ERRCODE_IO_INVALIDPARAMETER
     {
-        Text [ de ] = "Die Operation wurde mit einem ungültigen Parameter gestartet." ;
         Text [ en-US ] = "The operation was started under an invalid parameter." ;
     };
     String ERRCODE_IO_ABORT
     {
-        Text [ de ] = "Die Operation auf der Datei wurde abgebrochen." ;
         Text [ en-US ] = "The operation on the file was aborted." ;
     };
     String ERRCODE_IO_NOTEXISTSPATH
     {
-        Text [ de ] = "Der Pfad zu der Datei existiert nicht." ;
         Text [ en-US ] = "Path to the file does not exist." ;
     };
     String ERRCODE_IO_RECURSIVE
     {
-        Text [ de ] = "Ein Objekt kann nicht in sich selbst kopiert werden." ;
         Text [ en-US ] = "An object cannot be copied into itself." ;
     };
     String ERRCODE_SFX_NOSTDTEMPLATE
     {
-        Text [ de ] = "Die Standardvorlage konnte nicht geöffnet werden." ;
         Text [ en-US ] = "The default template could not be opened." ;
     };
     String ERRCODE_SFX_TEMPLATENOTFOUND
     {
-        Text [ de ] = "Die angegebene Vorlage wurde nicht gefunden." ;
         Text [ en-US ] = "The specified template could not be found." ;
     };
     String ERRCODE_SFX_NOTATEMPLATE
     {
-        Text [ de ] = "Die Datei kann nicht als Vorlage verwendet werden." ;
         Text [ en-US ] = "The file cannot be used as template." ;
     };
     String ERRCODE_SFX_CANTREADDOCINFO
     {
-        Text [ de ] = "Die Dokumentinformation konnte nicht aus der Datei\ngelesen werden, da das Dokumentinformationsformat\nunbekannt ist oder da keine Dokumentinformation vorhanden\nist." ;
         Text [ en-US ] = "Document information could not be read from the file because\nthe document information format is unknown or because document information does not\nexist." ;
     };
     String ERRCODE_SFX_ALREADYOPEN
     {
-        Text [ de ] = "Das Dokument ist bereits zur Bearbeitung geöffnet." ;
         Text [ en-US ] = "This document has already been opened for editing." ;
     };
     String ERRCODE_SFX_WRONGPASSWORD
     {
-        Text [ de ] = "Es wurde ein falsches Kennwort gesetzt." ;
         Text [ en-US ] = "The wrong password has been entered." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SFX_DOLOADFAILED
     {
-        Text [ de ] = "Fehler beim Lesen der Datei." ;
         Text [ en-US ] = "Error reading file." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SFX_DOCUMENTREADONLY
     {
-        Text [ de ] = "Das Dokument wurde zum Lesen geöffnet." ;
         Text [ en-US ] = "The document was opened as read-only." ;
     };
     String ERRCODE_SFX_OLEGENERAL
     {
-        Text [ de ] = "Allgemeiner OLE Fehler." ;
         Text [ en-US ] = "General OLE Error." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_INET_NAME_RESOLVE
     {
-        Text [ de ] = "Der Rechnername $(ARG1) konnte nicht aufgelöst werden." ;
         Text [ en-US ] = "The host name $(ARG1) could not be resolved." ;
     };
     String ERRCODE_INET_CONNECT
     {
-        Text [ de ] = "Die Internetverbindung zu $(ARG1) konnte nicht hergestellt werden." ;
         Text [ en-US ] = "Could not establish Internet connection to $(ARG1)." ;
     };
     String ERRCODE_INET_READ
     {
-        Text [ de ] = "Daten konnten nicht über das Internet gelesen werden.\nServerfehlermeldung: $(ARG1)." ;
         Text [ en-US ] = "Error reading data from the Internet\n.Server error message: $(ARG1)." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_INET_WRITE
     {
-        Text [ de ] = "Daten konnten nicht ins Internet übertragen werden.\nServerfehlermeldung: $(ARG1)." ;
         Text [ en-US ] = "Error transferring data to the Internet.\nServer error message: $(ARG1)." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_INET_GENERAL
     {
-        Text [ de ] = "Ein allgemeiner Fehler im Internetbereich trat auf." ;
         Text [ en-US ] = "General Internet error has occurred." ;
     };
     String ERRCODE_INET_OFFLINE
     {
-        Text [ de ] = "Die angeforderten Internetdaten liegen nicht im Cache und können nicht übertragen werden, da der Onlinemodus nicht aktiv ist." ;
         Text [ en-US ] = "The requested Internet data is not available in the cache and cannot be transmitted as the Online mode has not be activated." ;
     };
     String ERRCODE_SFXMSG_STYLEREPLACE
     {
-        Text [ de ] = "Soll der Style $(ARG1) ersetzt werden?" ;
         ExtraData = ERRCODE_MSG_ERROR | ERRCODE_BUTTON_OK_CANCEL ;
         Text [ en-US ] = "Should the $(ARG1) Style be replaced?" ;
-        Text [ x-comment ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00 - - - -";
     };
     String ERRCODE_SFX_NOFILTER
     {
-        Text [ de ] = "Ein Filter wurde nicht gefunden." ;
         Text [ en-US ] = "A filter has not been found." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SFX_CANTFINDORIGINAL
     {
-        Text [ de ] = "Das Original konnte nicht bestimmt werden." ;
         Text [ en-US ] = "The original could not be determined." ;
     };
     String ERRCODE_SFX_CANTCREATECONTENT
     {
-        Text [ de ] = "Der Inhalt konnte nicht erzeugt werden." ;
         Text [ en-US ] = "The contents could not be created." ;
     };
     String ERRCODE_SFX_CANTCREATELINK
     {
-        Text [ de ] = "Die Verknüpfung konnte nicht erzeugt werden." ;
         Text [ en-US ] = "The link could not be created." ;
     };
     String ERRCODE_SFX_WRONGBMKFORMAT
     {
-        Text [ de ] = "Das Format der Verknüpfung ist ungültig." ;
         Text [ en-US ] = "The link format is invalid." ;
     };
     String ERRCODE_SFX_WRONGICONFILE
     {
-        Text [ de ] = "Die Konfiguration der Symbolanzeige ist ungültig." ;
         Text [ en-US ] = "The configuration of the icon display is invalid." ;
     };
     String ERRCODE_SFX_CANTWRITEICONFILE
     {
-        Text [ de ] = "Die Konfiguration der Symbolanzeige kann nicht gespeichert werden." ;
         Text [ en-US ] = "The configuration of the icon display can not be saved." ;
     };
     String ERRCODE_SFX_CANTDELICONFILE
     {
-        Text [ de ] = "Die Konfiguration der Symbolanzeige konnte nicht gelöscht werden." ;
         Text [ en-US ] = "The configuration of the icon display could not be deleted." ;
     };
     String ERRCODE_SFX_CANTRENAMECONTENT
     {
-        Text [ de ] = "Der Inhalt konnte nicht umbenannt werden." ;
         Text [ en-US ] = "Contents cannot be renamed." ;
     };
     String ERRCODE_SFX_INVALIDBMKPATH
     {
-        Text [ de ] = "Der Bookmarkordner ist ungültig" ;
         Text [ en-US ] = "The bookmark folder is invalid." ;
     };
     String ERRCODE_SFX_CANTWRITEURLCFGFILE
     {
-        Text [ de ] = "Die Konfiguration der lokal zu speichernden URLs konnte nicht gespeichert werden." ;
         Text [ en-US ] = "The configuration of the URLs to be saved locally could not be saved." ;
     };
     String ERRCODE_SFX_WRONGURLCFGFORMAT
     {
-        Text [ de ] = "Das Format der Konfiguration der lokal zu speichernden URLs ist ungültig." ;
         Text [ en-US ] = "The configuration format of the URLs to be saved locally is invalid." ;
     };
     String ERRCODE_SFX_NODOCUMENT
     {
-        Text [ de ] = "Es existiert kein Dokument, auf das die Aktion angewendet werden kann." ;
         Text [ en-US ] = "This action cannot be applied to a document that does not exist." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SFX_INVALIDLINK
     {
-        Text [ de ] = "Die Verknüpfung verweist auf ein ungültiges Ziel." ;
         Text [ en-US ] = "The link refers to an invalid target." ;
     };
     String ERRCODE_SFX_INVALIDTRASHPATH
     {
-        Text [ de ] = "Der Pfad für den Papierkorb ist ungültig." ;
         Text [ en-US ] = "The Recycle Bin path is invalid." ;
     };
     String ERRCODE_SFX_NOTRESTORABLE
     {
-        Text [ de ] = "Der Eintrag konnte nicht wiederhergestellt werden." ;
         Text [ en-US ] = "The entry could not be restored." ;
     };
     String ERRCODE_IO_NAMETOOLONG
     {
-        Text [ de ] = "Der Dateiname ist für das Ziel-Dateisystem zu lang." ;
         Text [ en-US ] = "The file name is too long for the target file system." ;
     };
     String ERRCODE_SFX_CONSULTUSER
     {
-        Text [ de ] = "Die Angaben zum Ausführen der Funktion sind unvollständig." ;
         Text [ en-US ] = "The details for running the function are incomplete." ;
     };
     String ERRCODE_SFX_INVALIDSYNTAX
     {
-        Text [ de ] = "Die Syntax der Eingabe ist ungültig." ;
         Text [ en-US ] = "The input syntax is invalid." ;
     };
     String ERRCODE_SFX_CANTCREATEFOLDER
     {
-        Text [ de ] = "Die Syntax der Eingabe ist falsch." ;
         Text [ en-US ] = "The input syntax is invalid." ;
     };
     String ERRCODE_SFX_CANTRENAMEFOLDER
     {
-        Text [ de ] = "Die Syntax der Eingabe ist falsch." ;
         Text [ en-US ] = "The input syntax is invalid." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SFX_WRONG_CDF_FORMAT
     {
-        Text [ de ] = "Das Channeldokument hat kein gültiges Format." ;
         Text [ en-US ] = "The channel document has an invalid format." ;
     };
     String ERRCODE_SFX_EMPTY_SERVER
     {
-        Text [ de ] = "Der Server darf nicht leer sein." ;
         Text [ en-US ] = "The server must not be empty." ;
     };
     String ERRCODE_SFX_NO_ABOBOX
     {
-        Text [ de ] = "Sie benötigen einen Abonnements Ordner, wenn Sie einen Channel installieren wollen." ;
         Text [ en-US ] = "A subscription folder is required to install a Channel." ;
     };
     String ERRCODE_IO_NOTSTORABLEINBINARYFORMAT
     {
-        Text [ de ] = "Dieses Dokument enthält Attribute die nicht im gewählten Format gespeichert werden können.\nBitte speichern Sie das Dokument in einem %PRODUCTNAME %PRODUCTVERSION Dateiformat.";
         Text [ en-US ] = "This document contains attributes that cannot be saved in the selected format.\nPlease save the document in a %PRODUCTNAME %PRODUCTVERSION file format.";
     };
     String ERRCODE_SFX_TARGETFILECORRUPTED
     {
-        Text [ de ] = "Die Datei $(FILENAME) konnte nicht gespeichert werden. Bitte überprüfen Sie Ihre Systemeinstellungen. Eine automatisch erstellte Sicherungsdatei finden Sie unter dem Namen $(BACKUPNAME) im Ordner $(PATH).";
         Text [ en-US ] = "The file $(FILENAME) cannot be saved. Please check your system settings. You can find an automatically generated backup copy of this file in folder $(PATH) named $(BACKUPNAME).";
     };
     String ERRCODE_SFX_NOMOREDOCUMENTSALLOWED
     {
-        Text [ de ] = "Die maximale Anzahl von Dokumenten, die gleichzeitig geöffnet sein können, ist erreicht. Sie müssen ein oder mehrere Dokumente schließen, bevor Sie ein neues Dokument öffnen können.";
         Text [ en-US ] = "The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document.";
     };
     String ERRCODE_SFX_CANTCREATEBACKUP
@@ -624,32 +495,26 @@ Resource RID_ERRHDL
 #ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
     {
-        Text [ de ] = "Ungültige Datenlänge." ;
         Text [ en-US ] = "Invalid data length." ;
     };
     String ERRCODE_IO_CURRENTDIR
     {
-        Text [ de ] = "Funktion unmöglich: Pfad enthält aktuelles Verzeichnis." ;
         Text [ en-US ] = "Function not possible: path contains current directory." ;
     };
     String ERRCODE_IO_NOTSAMEDEVICE
     {
-        Text [ de ] = "Funktion unmöglich: Nicht dasselbe Gerät (Laufwerk)." ;
         Text [ en-US ] = "Function not possible: device (drive) not identical." ;
     };
     String ERRCODE_IO_DEVICENOTREADY
     {
-        Text [ de ] = "Gerät (Laufwerk) nicht bereit." ;
         Text [ en-US ] = "Device (drive) not ready." ;
     };
     String ERRCODE_IO_BADCRC
     {
-        Text [ de ] = "Falsche Prüfsumme." ;
         Text [ en-US ] = "Wrong check amount." ;
     };
     String ERRCODE_IO_WRITEPROTECTED
     {
-        Text [ de ] = "Funktion unmöglich: Schreibgeschützt." ;
         Text [ en-US ] = "Function not possible: write protected." ;
     };
 #endif
