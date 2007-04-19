@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:44:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:55:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog DLG_EXPORT_EPS
     Size = MAP_APPFONT ( 230, 161 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "EPS Export Optionen" ;
     Text [ en-US ] = "EPS Export Options";
     OKButton BTN_OK
     {
@@ -67,14 +66,12 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
-        Text [ de ] = "Vorschau";
         Text [ en-US ] = "Preview";
     };
     CheckBox CB_PREVIEW_TIFF
     {
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "~Vorschau Bild (Tiff)" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Image ~preview (TIFF)";
     };
@@ -82,7 +79,6 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 150, 10 ) ;
-        Text [ de ] = "~Interchange (EPSI)" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Interchange (EPSI)";
     };
@@ -90,14 +86,12 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 6, 41 ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
-        Text [ de ] = "Version";
         Text [ en-US ] = "Version";
     };
     RadioButton RB_LEVEL1
     {
         Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Level ~1" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Level ~1";
     };
@@ -105,7 +99,6 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 150, 10 ) ;
-        Text [ de ] = "Level ~2" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Level ~2";
     };
@@ -114,14 +107,12 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 6 , 79 ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
-        Text [ de ] = "Farb Format";
         Text [ en-US ] = "Color format";
     };
     RadioButton RB_COLOR
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 150, 10 ) ;
-        Text [ de ] = "~Farbe" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Color";
     };
@@ -129,7 +120,6 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 150, 10 ) ;
-        Text [ de ] = "~Graustufen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Grayscale";
     };
@@ -138,14 +128,12 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 6 , 117 ) ;
         Size = MAP_APPFONT ( 162 , 8 ) ;
-        Text [ de ] = "Kompression";
         Text [ en-US ] = "Compression";
     };
     RadioButton RB_COMPRESSION_LZW
     {
         Pos = MAP_APPFONT ( 12, 128 );
         Size = MAP_APPFONT ( 150, 10 ) ;
-        Text [ de ] = "LZW Kodierung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "LZW encoding";
     };
@@ -153,7 +141,6 @@ ModalDialog DLG_EXPORT_EPS
     {
         Pos = MAP_APPFONT ( 12, 141 ) ;
         Size = MAP_APPFONT ( 150, 10 ) ;
-        Text [ de ] = "Keine" ;
         TabStop = TRUE ;
         Text [ en-US ] = "None";
     };
