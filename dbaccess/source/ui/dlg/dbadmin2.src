@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin2.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-19 17:16:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:59:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,68 +60,56 @@
 
 String STR_ENTER_CONNECTION_PASSWORD
 {
-    Text [ de ] ="Die Verbindung zur Datenquelle \"$name$\" erfordert die Eingabe eines Passwortes.";
     Text [ en-US ] = "A password is needed to connect to the data source \"$name$\".";
 };
 
 String STR_QUERY_DROP_ALL
 {
-    Text [ de ] ="Wollen Sie die alle Selektierten löschen?";
     Text[ en-US ] = "Do you want to delete all selected items?";
 };
 
 String STR_ASK_FOR_DIRECTORY_CREATION
 {
-    Text [ de ] ="Das Verzeichnis\n\n$path$\n\nexistiert nicht. Soll es angelegt werden?";
     Text [ en-US ] = "The directory\n\n$path$\n\ndoes not exist. Should it be created?";
 };
 
 String STR_COULD_NOT_CREATE_DIRECTORY
 {
-    Text [ de ] ="Das Verzeichnis $name$ konnte nicht angelegt werden.";
     Text [ en-US ] = "The directory $name$ could not be created.";
 };
 
 String STR_ADDRESSBOOK_SYSTEM
 {
-    Text [ de ] ="Windows Adressbuch";
     Text[ en-US ] = "Windows address book";
 };
 String STR_ADDRESSBOOK_OUTLOOK
 {
-    Text [ de ] ="MS Outlook";
     Text[ en-US ] = "MS Outlook";
 };
 String STR_ADDRESSBOOK_MOZILLA
 {
-    Text [ de ] ="Mozilla Adressbuch";
     Text[ en-US ] = "Mozilla address book";
 };
 String STR_ADDRESSBOOK_THUNDERBIRD
 {
-    Text [ de ] ="Thunderbird Adressbuch";
     Text[ en-US ] = "Thunderbird address book";
 };
 String STR_ADDRESSBOOK_EVOLUTION
 {
-    Text [ de ] ="Evolution Adressbuch";
     Text[ en-US ] = "Evolution address book";
 };
 String STR_ADDRESSBOOK_LDAP
 {
-    Text [ de ] ="LDAP Adressbuch";
     Text[ en-US ] = "LDAP address book";
 };
 
 String STR_HINT_READONLY_CONNECTION
 {
-    Text [ de ] ="(Verbindung ist nur-lesend)";
     Text [ en-US ] = "(Connection is read-only)";
 };
 
 String STR_HINT_CONNECTION_NOT_CAPABLE
 {
-    Text [ de ] ="(nicht unterstützt von dieser Verbindung)";
     Text [ en-US ] = "(Not supported by this connection)";
 };
 
@@ -137,14 +125,12 @@ ModalDialog DLG_DOMAINPASSWORD
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
-    Text [ de ] ="Datenbank konvertieren";
     Text[ en-US ] = "Convert Database";
 
     FixedLine FT_PASSWORD
     {
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( WIN_X - 3 - 6 - 6 - 50 , 8 ) ;
-        Text [ de ] ="Bitte geben Sie das ~Kennwort für den Benutzer 'DOMAIN' ein" ;
         Text[ en-US ] = "Please enter the ~password for the user 'DOMAIN'.";
     };
 
@@ -184,14 +170,12 @@ TabPage PAGE_TABLESUBSCRIPTION
     Size = MAP_APPFONT ( PAGE_X_T, PAGE_Y_T) ;
     HelpId = HID_DSADMIN_TABLE_SUBSCRIPTION;
 
-    Text [ de ] ="Tabellen Filter" ;
     Text [ en-US ] = "Tables Filter" ;
 
     FixedLine FL_SEPARATOR1
     {
         Pos = MAP_APPFONT ( RELATED_CONTROLS , UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( PAGE_X_T - 2* RELATED_CONTROLS, FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] ="Tabellen und Tabellenfilter";
         Text [ en-US ] = "Tables and table filter";
     };
     Control CTL_TABLESUBSCRIPTION
@@ -209,7 +193,6 @@ TabPage PAGE_TABLESUBSCRIPTION
         Size    = MAP_APPFONT ( PAGE_X_T - 2*UNRELATED_CONTROLS , 16 ) ;
         HelpId = HID_DSADMIN_FILTER_EXPLANATION;
         WordBreak = TRUE;
-        Text [ de ] ="Markieren Sie diejenigen Tabellen, die für die Applikationen sichtbar sein sollen.";
         Text [ en-US ] = "Mark the tables that should be visible for the applications.";
     };
 };
