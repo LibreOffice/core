@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:02:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:54:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,63 +45,54 @@ TabPage DLG_MM_DOCSELECT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wählen Sie das Ausgangsdokument des Serienbriefes";
         Text [ en-US ] = "Select starting document for the mail merge";
     };
     FixedText   FT_HOWTO
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wählen Sie auf welchem Dokument der Serienbrief basieren soll";
         Text [ en-US ] = "Select the document upon which to base the mail merge document";
     };
     RadioButton RB_CURRENTDOC
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
-        Text [ de ] = "Aktuelles Dokument verwenden" ;
         Text[ en-US ] = "Use the current ~document";
     };
     RadioButton RB_NEWDOC
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
-        Text [ de ] = "Neues Dokument erstellen" ;
         Text[ en-US ] = "Create a ne~w document";
     };
     RadioButton RB_LOADDOC
     {
         Pos = MAP_APPFONT ( 12 ,  84) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
-        Text [ de ] = "Bestehendes Dokument verwenden";
         Text[ en-US ] = "Start from ~existing document";
     };
     PushButton  PB_LOADDOC
     {
         Pos = MAP_APPFONT ( 204 ,  80) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Durchsuchen..." ;
         Text[ en-US ] = "B~rowse...";
     };
     RadioButton RB_LOADTEMPLATE
     {
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
-        Text [ de ] = "Vorlage verwenden" ;
         Text[ en-US ] = "Start from a t~emplate";
     };
     PushButton  PB_BROWSETEMPLATE
     {
         Pos = MAP_APPFONT ( 204 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Durchsuchen..." ;
         Text[ en-US ] = "B~rowse...";
     };
     RadioButton RB_RECENTDOC
     {
         Pos = MAP_APPFONT ( 12 ,  120) ;
         Size = MAP_APPFONT ( 190 , 10 ) ;
-        Text [ de ] = "Zuletzt gespeicherte Ausgangsdokumente" ;
         Text[ en-US ] = "Start fro~m a recently saved starting document";
     };
     ListBox     LB_RECENTDOC
