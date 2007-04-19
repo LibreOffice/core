@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swpossizetabpage.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:49:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:21:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,14 +44,12 @@ TabPage RID_SVXPAGE_SWPOSSIZE
 {
     HelpId = HID_SVXPAGE_SWPOSSIZE;
     Hide = TRUE ;
-    Text [ de ] = "Position und Größe" ;
     Text[ en-US ] = "Position and Size" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 104 , 8 ) ;
-        Text [ de ] = "Größe" ;
         Text [ en-US ] = "Size" ;
     };
     FixedText FT_WIDTH
@@ -59,7 +57,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 43 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
     };
     MetricField MF_WIDTH
@@ -85,7 +82,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 43 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "H~eight" ;
     };
     MetricField MF_HEIGHT
@@ -111,7 +107,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 95 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Abgleich" ;
         Text [ en-US ] = "~Keep ratio" ;
     };
     FixedLine FL_SEPARATOR
@@ -124,35 +119,30 @@ TabPage RID_SVXPAGE_SWPOSSIZE
     {
         Pos = MAP_APPFONT ( 116 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Verankerung" ;
         Text [ en-US ] = "Anchor" ;
     };
     RadioButton RB_TOPAGE
     {
         Pos = MAP_APPFONT ( 122 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "An der ~Seite" ;
         Text [ en-US ] = "To ~page";
     };
     RadioButton RB_TOPARA
     {
         Pos = MAP_APPFONT ( 122 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Am ~Absatz" ;
         Text [ en-US ] = "To paragrap~h";
     };
     RadioButton RB_TOCHAR
     {
         Pos = MAP_APPFONT ( 122 , 42 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Am Ze~ichen" ;
         Text [ en-US ] = "To cha~racter";
     };
     RadioButton RB_ASCHAR
     {
         Pos = MAP_APPFONT ( 122 , 56 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Als Zei~chen" ;
         Text [ en-US ] = "~As character" ;
     };
     RadioButton RB_TOFRAME
@@ -160,7 +150,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Hide = TRUE;
         Pos = MAP_APPFONT ( 122 , 70 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Am ~Rahmen" ;
         Text [ en-US ] = "To ~frame";
     };
     Window WN_EXAMPLE
@@ -172,7 +161,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
     {
         Pos = MAP_APPFONT ( 6 , 86  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schützen" ;
         Text [ en-US ] = "Protect" ;
     };
     TriStateBox CB_POSITION
@@ -180,7 +168,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position" ;
     };
     TriStateBox CB_SIZE
@@ -188,14 +175,12 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 122 , 97 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Größe" ;
         Text [ en-US ] = "~Size" ;
     };
     FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 113 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
     };
     FixedText FT_HORI
@@ -203,7 +188,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Horizo~ntal" ;
         Text [ en-US ] = "Hori~zontal" ;
     };
     ListBox LB_HORI
@@ -218,7 +202,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 101 , 126 ) ;
         Size = MAP_APPFONT ( 20 , 8 ) ;
         Center = TRUE ;
-        Text [ de ] = "u~m" ;
         Text [ en-US ] = "b~y" ;
     };
     MetricField MF_HORIBY
@@ -243,7 +226,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 160 , 126 ) ;
         Size = MAP_APPFONT ( 21 , 8 ) ;
         Center = TRUE ;
-        Text [ de ] = "z~u" ;
         Text [ en-US ] = "~to" ;
     };
     ListBox LB_HORITO
@@ -258,7 +240,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Auf geraden Seiten spie~geln" ;
         Text [ en-US ] = "~Mirror on even pages" ;
     };
     FixedText FT_VERT
@@ -266,7 +247,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Vertikal" ;
         Text [ en-US ] = "~Vertical" ;
     };
     ListBox LB_VERT
@@ -281,7 +261,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 101 , 155 ) ;
         Size = MAP_APPFONT ( 20 , 8 ) ;
         Center = TRUE ;
-        Text [ de ] = "u~m" ;
         Text [ en-US ] = "by" ;
     };
     MetricField MF_VERTBY
@@ -306,7 +285,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 160 , 155 ) ;
         Size = MAP_APPFONT ( 21 , 8 ) ;
         Center = TRUE ;
-        Text [ de ] = "z~u" ;
         Text [ en-US ] = "t~o" ;
     };
     ListBox LB_VERTTO
@@ -321,7 +299,6 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 12 , 168 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Textfluss folgen" ;
         Text [ en-US ] = "Follow text flow" ;
     };
 };
