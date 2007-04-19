@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:10:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:47:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ FloatingWindow RID_BASICIDE_OBJCAT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 179 ) ;
-    Text [ de ] = "Objekte" ;
     Text [ en-US ] = "Objects" ;
     Closeable = TRUE ;
     Moveable = TRUE ;
@@ -80,7 +79,6 @@ FloatingWindow RID_BASICIDE_OBJCAT
             {
                 Identifier = TBITEM_SHOW ;
                 HelpId = HID_BASICIDE_OBJCAT_SHOW ;
-                Text [ de ]= "Zeigen" ;
                 Text [ en-US ] = "Show" ;
             };
         };
