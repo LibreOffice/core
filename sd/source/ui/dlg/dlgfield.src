@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 03:57:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:24:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,40 +39,32 @@ ModalDialog DLG_FIELD_MODIFY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 138 , 154 ) ;
-    Text [ de ] = "Feldbefehl bearbeiten" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     FixedLine GRP_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Feldtyp" ;
         Text [ en-US ] = "Field type" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_FIX
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 64 , 10 ) ;
-        Text [ de ] = "~fix" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Fixed" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_VAR
     {
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 64 , 10 ) ;
-        Text [ de ] = "~variabel" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Variable" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LANGUAGE
     {
         Pos = MAP_APPFONT ( 6 , 67 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Sprache" ;
         Text [ en-US ] = "~Language" ;
     };
 
@@ -96,9 +88,7 @@ ModalDialog DLG_FIELD_MODIFY
     {
         Pos = MAP_APPFONT ( 6 , 83 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "F~ormat" ;
         Text [ en-US ] = "F~ormat" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -120,7 +110,6 @@ ModalDialog DLG_FIELD_MODIFY
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Edit Field" ;
-    Text [ x-comment ] = " ";
 };
 
 
