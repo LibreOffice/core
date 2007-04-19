@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customizeaddresslistdialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:54:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:52:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,12 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
     Size = MAP_APPFONT ( 200 , 171 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Adressenliste anpassen";
     Text [ en-US ] = "Customize Address List";
 
     FixedText               FT_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Adresslistenelemente";
         Text [ en-US ] = "A~ddress list elements";
     };
     ListBox                 LB_FIELDS
@@ -68,21 +66,18 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
     {
         Pos = MAP_APPFONT ( 144 , 3 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hinzufügen...";
         Text [ en-US ] = "~Add...";
     };
     PushButton              PB_DELETE
     {
         Pos = MAP_APPFONT ( 144 , 20 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Löschen";
         Text [ en-US ] = "~Delete";
     };
     PushButton              PB_RENAME
     {
         Pos = MAP_APPFONT ( 144 , 37 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Umbenennen...";
         Text [ en-US ] = "~Rename...";
     };
     ImageButton              PB_UP
@@ -90,7 +85,6 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
         Pos = MAP_APPFONT ( 124 , 58 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_UP;
-        QuickHelpText [ de ] = "Nach oben" ;
         QuickHelpText[ en-US ] = "Move up";
     };
     ImageButton              PB_DOWN
@@ -98,7 +92,6 @@ ModalDialog DLG_MM_CUSTOMIZE_ADDRESS_LIST
         Pos = MAP_APPFONT ( 124 , 75 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         SYMBOL = IMAGEBUTTON_ARROW_DOWN;
-        QuickHelpText [ de ] = "Nach unten" ;
         QuickHelpText[ en-US ] = "Move down";
     };
     FixedLine               FL_SEPARATOR
@@ -134,14 +127,12 @@ ModalDialog DLG_MM_ADD_RENAME_ENTRY
     Size = MAP_APPFONT ( 188 , 60 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Element hinzufügen";
     Text [ en-US ] = "Add Element";
 
     FixedText  FT_FIELDNAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Elementname";
         Text [ en-US ] = "Element ~name";
     };
     Edit       ED_FIELDNAME
@@ -169,12 +160,10 @@ ModalDialog DLG_MM_ADD_RENAME_ENTRY
     };
     String ST_RENAME_TITLE
     {
-        Text [ de ] = "Element umbenennen";
         Text [ en-US ] = "Rename Element";
     };
     String ST_ADD_BUTTON
     {
-        Text [ de ] = "Add";
         Text [ en-US ] = "Add";
     };
 };
