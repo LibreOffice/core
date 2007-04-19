@@ -5,9 +5,9 @@
  *
  *  $RCSfile: ImpressWindowState.xcu,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:55:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:24:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">3D-Settings</value>
-                    <value xml:lang="de">3D-Einstellungen</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
@@ -73,7 +72,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Line and Filling</value>
-                    <value xml:lang="de">Linie und Füllung</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
@@ -88,7 +86,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">3D-Objects</value>
-                    <value xml:lang="de">3D-Objekte</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
@@ -103,7 +100,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Align</value>
-                    <value xml:lang="de">Ausrichten</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/arrowsbar" oor:op="replace">
@@ -115,7 +111,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Arrows</value>
-                    <value xml:lang="de">Pfeile</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>true</value>
@@ -130,7 +125,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Mode</value>
-                    <value xml:lang="de">Modus</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/commontaskbar" oor:op="replace">
@@ -151,7 +145,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Presentation</value>
-                    <value xml:lang="de">Präsentation</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
@@ -163,7 +156,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Connectors</value>
-                    <value xml:lang="de">Verbinder</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -181,7 +173,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Full Screen</value>
-                    <value xml:lang="de">Ganzer Bildschirm</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -202,7 +193,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Circles and Ovals</value>
-                    <value xml:lang="de">Kreise und Ovale</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -214,7 +204,6 @@
             <node oor:name="private:resource/toolbar/formtextobjectbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Text Box Formatting</value>
-                    <value xml:lang="de">Textfeld Formatierungs</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -232,7 +221,6 @@
             <node oor:name="private:resource/toolbar/formsfilterbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Filter</value>
-                    <value xml:lang="de">Formular-Filter</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -253,7 +241,6 @@
             <node oor:name="private:resource/toolbar/formsnavigationbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Navigation</value>
-                    <value xml:lang="de">Formular-Navigation</value>
                 </prop>
                 <prop oor:name="DockPos" oor:type="xs:string">
                     <value>0,1</value>
@@ -277,7 +264,6 @@
             <node oor:name="private:resource/toolbar/formcontrols" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Controls</value>
-                    <value xml:lang="de">Formular-Steuerelemente</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -289,7 +275,6 @@
             <node oor:name="private:resource/toolbar/moreformcontrols" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">More Controls</value>
-                    <value xml:lang="de">Weitere Steuerelemente</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -304,7 +289,6 @@
             <node oor:name="private:resource/toolbar/formdesign" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Form Design</value>
-                    <value xml:lang="de">Formular-Entwurf</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -319,7 +303,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Fontwork</value>
-                    <value xml:lang="de">Fontwork</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -337,7 +320,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Fontwork Shape</value>
-                    <value xml:lang="de">Fontwork-Form</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -358,7 +340,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Picture</value>
-                    <value xml:lang="de">Bild</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -373,7 +354,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Graphic Filter</value>
-                    <value xml:lang="de">Grafikfilter</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -394,7 +374,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Outline</value>
-                    <value xml:lang="de">Outline</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -415,7 +394,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Insert</value>
-                    <value xml:lang="de">Einfügen</value>
                 </prop>
             </node>
             <node oor:name="private:resource/toolbar/linesbar" oor:op="replace">
@@ -424,7 +402,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Lines</value>
-                    <value xml:lang="de">Linien</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -439,7 +416,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Basic Shapes</value>
-                    <value xml:lang="de">Standardformen</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -454,7 +430,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Symbol Shapes</value>
-                    <value xml:lang="de">Symbolformen</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -469,7 +444,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Block Arrows</value>
-                    <value xml:lang="de">Blockpfeile</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -484,7 +458,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Flowchart</value>
-                    <value xml:lang="de">Flussdiagram</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -499,7 +472,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Callouts</value>
-                    <value xml:lang="de">Legenden</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -514,7 +486,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Stars and Banners</value>
-                    <value xml:lang="de">Sterne und Banner</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -529,7 +500,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Options</value>
-                    <value xml:lang="de">Optionen</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -544,7 +514,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Rectangles</value>
-                    <value xml:lang="de">Rechtecke</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -559,7 +528,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Position</value>
-                    <value xml:lang="de">Reihenfolge</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -580,7 +548,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Slide Sorter</value>
-                    <value xml:lang="de">Foliensortiertisch</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -604,7 +571,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Slide View</value>
-                    <value xml:lang="de">Folienansicht</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -628,7 +594,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Standard</value>
-                    <value xml:lang="de">Standard</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -646,7 +611,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Text</value>
-                    <value xml:lang="de">Text</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -664,7 +628,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Text Formatting</value>
-                    <value xml:lang="de">Textformat</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
@@ -682,7 +645,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Drawing</value>
-                    <value xml:lang="de">Zeichnen</value>
                 </prop>
                 <prop oor:name="ContextSensitive" oor:type="xs:boolean">
                     <value>true</value>
@@ -694,7 +656,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Zoom</value>
-                    <value xml:lang="de">Zoom</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>false</value>
@@ -703,7 +664,6 @@
             <node oor:name="private:resource/toolbar/gluepointsobjectbar" oor:op="replace">
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Gluepoints</value>
-                    <value xml:lang="de">Klebepunkte</value>
                 </prop>
                 <prop oor:name="Docked" oor:type="xs:boolean">
                     <value>false</value>
@@ -721,7 +681,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Edit Points</value>
-                    <value xml:lang="de">Punkte bearbeiten</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -745,7 +704,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Standard (Viewing Mode)</value>
-                    <value xml:lang="de">Standard (Lesemodus)</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
@@ -769,7 +727,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Media Playback</value>
-                    <value xml:lang="de">Medienwiedergabe</value>
                 </prop>
                 <prop oor:name="Visible" oor:type="xs:boolean">
                     <value>true</value>
@@ -787,7 +744,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Color</value>
-                    <value xml:lang="de">Farbe</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>true</value>
@@ -814,7 +770,6 @@
                 </prop>
                 <prop oor:name="UIName" oor:type="xs:string">
                     <value xml:lang="en-US">Master View</value>
-                    <value xml:lang="de">Master-Ansicht</value>
                 </prop>
                 <prop oor:name="HideFromToolbarMenu" oor:type="xs:boolean">
                     <value>false</value>
