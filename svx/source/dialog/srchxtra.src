@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:48:49 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:20:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
 {
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Text [ de ] = "Text-Attribute" ;
     Text [ en-US ] = "Text Format" ;
     Moveable = TRUE ;
     TabControl 1
@@ -53,64 +52,50 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_POSITION ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_TWOLINES ;
-                Text [ de ] = "Asiatisches Layout" ;
                 Text [ en-US ] = "Asian Layout" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ de ] = "Einzüge und Abstände" ;
                 Text [ en-US ] = "Indents & Spacing" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
-                Text [ de ] = "Ausrichtung" ;
                 Text [ en-US ] = "Alignment" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_EXT_PARAGRAPH ;
-                Text [ de ] = "Textfluss" ;
                 Text [ en-US ] = "Text Flow" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PARA_ASIAN;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_BACKGROUND;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_SEARCHATTRIBUTE --------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHATTR
@@ -119,7 +104,6 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 194 , 128 ) ;
-    Text [ de ] = "Attribute" ;
     Text [ en-US ] = "Attributes" ;
     Moveable = TRUE ;
     Control LB_ATTR
@@ -135,9 +119,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "~Auswahl" ;
         Text [ en-US ] = "~Options" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_ATTR_OK
     {
@@ -155,7 +137,6 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Pos = MAP_APPFONT ( 136 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_SEARCHSIMILARITY -------------------------------------------
 ModalDialog RID_SVXDLG_SEARCHSIMILARITY
@@ -164,16 +145,13 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 178 , 76 ) ;
-    Text [ de ] = "Ähnlichkeitssuche" ;
     Text [ en-US ] = "Similarity Search" ;
     Moveable = TRUE ;
     FixedText FT_OTHER
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "~Zeichen tauschen" ;
         Text [ en-US ] = "~Exchange characters" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_OTHER
     {
@@ -194,9 +172,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Z~eichen hinzufügen" ;
         Text [ en-US ] = "~Add characters" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_LONGER
     {
@@ -217,9 +193,7 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Ze~ichen entfernen" ;
         Text [ en-US ] = "~Remove characters" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_SHORTER
     {
@@ -240,18 +214,14 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     {
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
-        Text [ de ] = "~Kombinieren" ;
         Text [ en-US ] = "~Combine" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SIMILARITY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Einstellungen" ;
         Text [ en-US ] = "Settings" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_ATTR_OK
     {
@@ -271,7 +241,6 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
