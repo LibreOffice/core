@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:24:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:19:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -218,6 +218,9 @@ public:
         if ( nVCLException )
         {
             bIn = TRUE;
+
+            ::vos::OGuard aLock(&Application::GetSolarMutex());
+
             // Timer nicht mehr anhalten, da ansonsten die UAE-Box
             // auch nicht mehr gepaintet wird
             ImplSVData* pSVData = ImplGetSVData();
