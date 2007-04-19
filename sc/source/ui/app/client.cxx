@@ -4,9 +4,9 @@
  *
  *  $RCSfile: client.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:57:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:23:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,10 +116,20 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
         return;
     }
 
-    BOOL bChange = FALSE;
+    Rectangle aOldRect = GetObjArea();
+    SdrOle2Obj*  pDrawObj = GetDrawObj();
+    if ( pDrawObj )
+    {
+        if ( pDrawObj->IsResizeProtect() )
+            aLogicRect.SetSize( aOldRect.GetSize() );
+
+        if ( pDrawObj->IsMoveProtect() )
+            aLogicRect.SetPos( aOldRect.TopLeft() );
+    }
+
     USHORT nTab = pViewSh->GetViewData()->GetTabNo();
     SdrPage* pPage = pModel->GetPage(static_cast<sal_uInt16>(static_cast<sal_Int16>(nTab)));
-    if (pPage)
+    if ( pPage && aLogicRect != aOldRect )
     {
         Point aPos;
         Size aSize = pPage->GetSize();
@@ -135,14 +145,12 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
             long nDiff = aLogicRect.Right() - aPageRect.Right();
             aLogicRect.Left() -= nDiff;
             aLogicRect.Right() -= nDiff;
-            bChange = TRUE;
         }
         if (aLogicRect.Bottom() > aPageRect.Bottom())
         {
             long nDiff = aLogicRect.Bottom() - aPageRect.Bottom();
             aLogicRect.Top() -= nDiff;
             aLogicRect.Bottom() -= nDiff;
-            bChange = TRUE;
         }
 
         if (aLogicRect.Left() < aPageRect.Left())
@@ -150,14 +158,12 @@ void __EXPORT ScClient::RequestNewObjectArea( Rectangle& aLogicRect )
             long nDiff = aLogicRect.Left() - aPageRect.Left();
             aLogicRect.Right() -= nDiff;
             aLogicRect.Left() -= nDiff;
-            bChange = TRUE;
         }
         if (aLogicRect.Top() < aPageRect.Top())
         {
             long nDiff = aLogicRect.Top() - aPageRect.Top();
             aLogicRect.Bottom() -= nDiff;
             aLogicRect.Top() -= nDiff;
-            bChange = TRUE;
         }
     }
 }
