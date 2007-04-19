@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:38:46 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:04:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,15 +50,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text [ de ] = "Mosaik" ;
     Text [ en-US ] = "Mosaic" ;
-    Text [ x-comment ] = " ";
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Parameter";
         Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
@@ -71,9 +68,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     {
         Pos = MAP_APPFONT ( 12, MA_Y0 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
-        Text [ x-comment ] = " ";
     };
 #define MA_Y1   MA_Y0 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_WIDTH
@@ -98,9 +93,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
     {
         Pos = MAP_APPFONT ( 12, MA_Y2 ) ;
         Size = MAP_APPFONT ( 77, 10 ) ;
-        Text [ de ] = "~Höhe" ;
         Text [ en-US ] = "H~eight" ;
-        Text [ x-comment ] = " ";
     };
 #define MA_Y3   MA_Y2 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERMOSAIC_MTR_HEIGHT
@@ -126,7 +119,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Pos = MAP_APPFONT ( 12, MA_Y4 ) ;
         Size = MAP_APPFONT ( 91, 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Kanten hervorheben" ;
         Text [ en-US ] = "E~nhance edges" ;
     };
     OKButton BTN_OK
@@ -162,15 +154,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text [ de ] = "Solarisation" ;
     Text [ en-US ] = "Solarization" ;
-    Text [ x-comment ] = " ";
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Parameter";
         Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
@@ -183,9 +172,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
     {
         Pos = MAP_APPFONT ( 12, MA_Y5 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text [ de ] = "~Schwellenwert" ;
         Text [ en-US ] = "Threshold ~value" ;
-        Text [ x-comment ] = " ";
     };
 #define MA_Y6   MA_Y5 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
     MetricField DLG_FILTERSOLARIZE_MTR_THRESHOLD
@@ -209,9 +196,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Pos = MAP_APPFONT ( 12, 46 ) ;
         Size = MAP_APPFONT ( 77, 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Invertieren" ;
         Text [ en-US ] = "~Invert" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -246,14 +231,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text [ de ] = "Alterung" ;
     Text [ en-US ] = "Aging" ;
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Parameter";
         Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
@@ -266,7 +249,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SEPIA
     {
         Pos = MAP_APPFONT ( 12 , MA_Y8 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text [ de ] = "Alterungsgrad" ;
         Text [ en-US ] = "Aging degree" ;
     };
 #define MA_Y9   MA_Y8 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
@@ -321,14 +303,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text [ de ] = "Poster" ;
     Text [ en-US ] = "Posterize" ;
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Parameter";
         Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
@@ -341,7 +321,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_POSTER
     {
         Pos = MAP_APPFONT ( 12 , MA_Y10 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text [ de ] = "Posterfarben" ;
         Text [ en-US ] = "Poster colors" ;
     };
 #define MA_Y11  MA_Y10 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
@@ -399,15 +378,12 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 250, 100 ) ;
 
-    Text [ de ] = "Relief" ;
     Text [ en-US ] = "Relief" ;
-    Text [ x-comment ] = " ";
 
     FixedLine FL_PARAMETER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 182, RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Parameter";
         Text [ en-US ] = "Parameters";
     };
     Control CTL_PREVIEW
@@ -420,7 +396,6 @@ ModalDialog RID_SVX_GRFFILTER_DLG_EMBOSS
     {
         Pos = MAP_APPFONT ( 12 , MA_Y12 ) ;
         Size = MAP_APPFONT ( 77 , 10 ) ;
-        Text [ de ] = "Lichtquelle" ;
         Text [ en-US ] = "Light source" ;
     };
 #define MA_Y13  MA_Y12 + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y
