@@ -4,9 +4,9 @@
  *
  *  $RCSfile: digitalsignaturesdialog.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:18:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:58:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text [ de ] = "Digitale Signaturen";
     Text [ en-US ] = "Digital Signatures";
 
     FixedText FT_HINT_DOC
@@ -53,7 +52,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text [ de ] = "Die Folgenden haben den Dokumentinhalt signiert:";
         Text [ en-US ] = "The following have signed the document content:";
     };
     FixedText FT_HINT_BASIC
@@ -61,7 +59,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text [ de ] = "Die Folgenden haben die Dokumentmakros signiert:";
         Text [ en-US ] = "The following have signed the document macro:";
     };
     FixedText FT_HINT_PACK
@@ -69,7 +66,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_0 );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text [ de ] = "Die Folgenden haben das Paket signiert:";
         Text [ en-US ] = "The following have signed this package:";
     };
     Control LB_SIGNATURES
@@ -82,22 +78,18 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     };
     String STR_HEADERBAR
     {
-        Text [ de ] = "\tSigniert durch\tDigitale Signatur ausgestellt durch\tDatum";
         Text [ en-US ] = "\tSigned by\tDigital ID issued by\tDate";
     };
     String STR_VALID_SIGNATURE
     {
-        Text [ de ] = "Gültige Signatur";
         Text [ en-US ] = "Valid signature";
     };
     String STR_NO_INFO_TO_VERIFY
     {
-        Text [ de ] = "Zertifikat konnte nicht verifiziert werden";
         Text [ en-US ] = "Certificate could not be validated";
     };
     String STR_INVALID_SIGNATURE
     {
-        Text [ de ] = "Die Signaturen in diesem Dokument sind ungültig";
         Text [ en-US ] = "The signatures in this document are invalid";
     };
     FixedImage IMG_STATE_VALID
@@ -115,7 +107,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text [ de ] = "Die Signaturen in diesem Dokument sind gültig.";
         Text [ en-US ] = "The signatures in this document are valid";
     };
     FixedImage IMG_STATE_BROKEN
@@ -133,7 +124,6 @@ ModalDialog RID_XMLSECDLG_DIGSIG
         Pos = MAP_APPFONT( DS_COL_0, DS_ROW_2A );
         Size = MAP_APPFONT( DS_COL_7-DS_COL_0, RSC_CD_FIXEDTEXT_HEIGHT );
         Hide = TRUE;
-        Text [ de ] = "Die Signaturen in diesem Dokument sind ungültig.";
         Text [ en-US ] = "The signatures in this document are invalid";
     };
     FixedImage IMG_STATE_NOTVALIDATED
@@ -156,21 +146,18 @@ ModalDialog RID_XMLSECDLG_DIGSIG
     {
         Pos = MAP_APPFONT( DS_COL_1, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_2-DS_COL_1, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Zertifikat anzeigen...";
         Text [ en-US ] = "View Certificate...";
     };
     PushButton BTN_ADDCERT
     {
         Pos = MAP_APPFONT( DS_COL_3, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_4-DS_COL_3, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Hinzufügen...";
         Text [ en-US ] = "Add...";
     };
     PushButton BTN_REMOVECERT
     {
         Pos = MAP_APPFONT( DS_COL_5, DS_ROW_3 );
         Size = MAP_APPFONT( DS_COL_6-DS_COL_5, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Entfernen";
         Text [ en-US ] = "Remove";
     };
     FixedLine FL_BOTTOM_SEP
