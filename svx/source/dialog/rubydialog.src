@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:46:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:18:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModelessDialog RID_SVXDLG_RUBY
     HelpId = HID_RUBY_DIALOG;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 227 , 195 ) ;
-    Text [ de ] = "Phonetische Leitzeichen" ;
     Text [ en-US ] = "Asian Phonetic Guide" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -53,21 +52,18 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 6, 6 ) ;
         Size = MAP_APPFONT ( 186 , 12 ) ;
-        Text [ de ] = "Automatische Erkennung" ;
         Text [ en-US ] = "Automatic detection";
     };
     FixedText FT_LEFT
     {
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "~Basistext";
         Text [ en-US ] = "Base text";
     };
     FixedText FT_RIGHT
     {
         Pos = MAP_APPFONT ( 109 , 17 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "~Ruby-Text";
         Text [ en-US ] = "Ruby text";
     };
     Edit ED_LEFT_1
@@ -130,7 +126,6 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 6 , 82 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Ausrichtung" ;
         Text [ en-US ] = "Alignment";
     };
     ListBox LB_ADJUST
@@ -139,22 +134,6 @@ ModelessDialog RID_SVXDLG_RUBY
         Size = MAP_APPFONT ( 35 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList [ de ] =
-        {
-            "Links" ;
-            "Zentriert" ;
-            "Rechts" ;
-            "0 1 0" ;
-            "1 2 1" ;
-        };
-    StringList [ x-comment ] =
-    {
-            "; Links" ;
-            "; Zentriert" ;
-            "; Rechts" ;
-            "; 0 1 0" ;
-            "; 1 2 1" ;
-    };
     StringList [ en-US ] =
     {
             "Left" ;
@@ -168,7 +147,6 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 43 , 82 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position";
     };
     ListBox LB_POSITION
@@ -177,16 +155,6 @@ ModelessDialog RID_SVXDLG_RUBY
         Size = MAP_APPFONT ( 35 , 60 ) ;
         DropDown = TRUE;
         Border = TRUE;
-        StringList [ de ] =
-        {
-            "Oben" ;
-            "Unten" ;
-        };
-    StringList [ x-comment ] =
-    {
-        "; Oben" ;
-        "; Unten" ;
-    };
     StringList [ en-US ] =
     {
         "Top" ;
@@ -197,7 +165,6 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 80 , 82 ) ;
         Size = MAP_APPFONT ( 89 , 8 ) ;
-        Text [ de ] = "~Zeichenvorlage für Ruby-Text" ;
         Text [ en-US ] = "Character Style for ruby text";
     };
     ListBox LB_CHAR_STYLE
@@ -212,14 +179,12 @@ ModelessDialog RID_SVXDLG_RUBY
     {
         Pos = MAP_APPFONT ( 171 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Vorlagen" ;
         Text [ en-US ] = "Styles";
     };
     FixedText FT_PREVIEW
     {
         Pos = MAP_APPFONT ( 6, 110 ) ;
         Size = MAP_APPFONT ( 195 , 8 ) ;
-        Text [ de ] = "Vorschau:" ;
         Text [ en-US ] = "Preview:";
     };
     Window WIN_PREVIEW
@@ -233,14 +198,12 @@ ModelessDialog RID_SVXDLG_RUBY
         DefButton = TRUE;
         Pos = MAP_APPFONT ( 65 , 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Übernehmen" ;
         Text [ en-US ] = "~Apply";
     };
     PushButton PB_CLOSE
     {
         Pos = MAP_APPFONT (  118, 175 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Sch~ließen" ;
         Text [ en-US ] = "~Close";
     };
     HelpButton PB_HELP
