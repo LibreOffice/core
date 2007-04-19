@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pggrid.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:10:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:21:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,28 +45,24 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Raster" ;
         Text [ en-US ] = "Grid" ;
     };
     RadioButton     RB_NOGRID
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
-        Text [ de ] = "Kein Raster" ;
         Text [ en-US ] = "No grid" ;
     };
     RadioButton     RB_LINESGRID
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
-        Text [ de ] = "Raster (nur Linien)" ;
         Text [ en-US ] = "Grid (lines only)" ;
     };
     RadioButton     RB_CHARSGRID
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 158 , 10 ) ;
-        Text [ de ] = "Raster (Linien und Zeichen)" ;
         Text [ en-US ] = "Grid (lines and characters)" ;
     };
     Window          WN_EXAMPLE
@@ -78,15 +74,12 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Rasterlayout" ;
         Text [ en-US ] = "Grid layout" ;
-        Text [ x-comment ] = "ZL: translation changed because of bug report from Jack";
     };
     FixedText       FT_LINESPERPAGE
     {
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 59 , 8 ) ;
-        Text [ de ] = "Zeilen pro Seite" ;
         Text [ en-US ] = "Lines per page" ;
     };
     NumericField    NF_LINESPERPAGE
@@ -109,7 +102,6 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 133 , 69 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Max. Basistextgröße" ;
         Text [ en-US ] = "Max. base text size" ;
     };
     MetricField     MF_TEXTSIZE
@@ -133,7 +125,6 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 59 , 8 ) ;
-        Text [ de ] = "Zeichen pro Zeile" ;
         Text [ en-US ] = "Characters per line" ;
     };
     NumericField    NF_CHARSPERLINE
@@ -156,7 +147,6 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 133 , 85 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Max. Ruby-Textgröße" ;
         Text [ en-US ] = "Max. Ruby text size" ;
     };
     MetricField     MF_RUBYSIZE
@@ -180,37 +170,30 @@ TabPage TP_TEXTGRID_PAGE
     {
         Pos = MAP_APPFONT ( 14 , 99 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Ruby-Text unter/links vom Basistext" ;
         Text [ en-US ] = "Ruby text below/left from base text" ;
     };
     FixedLine       FL_DISPLAY
     {
         Pos = MAP_APPFONT ( 6 , 115 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Rasterdarstellung" ;
         Text [ en-US ] = "Grid display" ;
     };
     CheckBox        CB_DISPLAY
     {
         Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 112 , 10 ) ;
-        Text [ de ] = "Raster anzeigen" ;
         Text [ en-US ] = "Display grid" ;
-        Text [ x-comment ] = "ZL: translation changed because of bug report from Jack";
     };
     CheckBox        CB_PRINT
     {
         Pos = MAP_APPFONT ( 18 , 141 ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
-        Text [ de ] = "Raster ausdrucken" ;
         Text [ en-US ] = "Print grid" ;
-        Text [ x-comment ] = "ZL: translation changed because of bug report from Jack";
     };
     FixedText       FT_COLOR
     {
         Pos = MAP_APPFONT ( 133 , 126 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text [ de ] = "Rasterfarbe" ;
         Text [ en-US ] = "Grid color" ;
     };
     ListBox         LB_COLOR
