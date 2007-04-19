@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:04:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:44:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,12 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-    Text [ de ] = "Tabellenauswahl";
     Text [ en-US ] = "Table Selection";
-    Text [ x-comment ] = "; ZL: Datenbank-Tabelle";
 
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 4 , 40  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
-        Text [ de ] = "Kontrollfeld";
         Text [ en-US ] = "Control";
     };
 
@@ -60,7 +57,6 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
         Size = MAP_APPFONT ( 120, WINDOW_SIZE_Y - 21 ) ;
         WordBreak = TRUE;
         Group = TRUE;
-        Text [ de ] = "Auf der rechten Seite sehen Sie alle Tabellen aus der Datenquelle des Formulars.\n\n\nWählen Sie bitte die Tabelle, deren Daten die Grundlage für den Listeninhalt bilden sollen:";
         Text [ en-US ] = "On the right side, you see all the tables from the data source of the form.\n\n\nChoose the table from which the data should be used as basis for the list content:";
     };
     ListBox LB_SELECTTABLE
@@ -80,9 +76,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-    Text [ de ] = "Feldauswahl";
     Text [ en-US ] = "Field Selection";
-    Text [ x-comment ] = " ";
 
     FixedLine FL_FRAME
     {
@@ -96,7 +90,6 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 3, 8 ) ;
         WordBreak = TRUE;
         Group = TRUE;
-        Text [ de ] = "~Vorhandene Felder";
         Text [ en-US ] = "Existing fields";
     };
     ListBox LB_SELECTFIELD
@@ -113,7 +106,6 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     {
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 15  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
-        Text [ de ] = "~Anzeigefeld";
         Text [ en-US ] = "Display field";
     };
     Edit ET_DISPLAYEDFIELD
@@ -132,13 +124,11 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_FIELD
     };
     String STR_FIELDINFO_COMBOBOX
     {
-        Text [ de ] = "Der Inhalt des ausgewählten Feldes wird in der Liste des Kombinationsfeldes angezeigt.";
         Text [ en-US ] = "The contents of the field selected will be shown in the combo box list.";
     };
 
     String STR_FIELDINFO_LISTBOX
     {
-        Text [ de ] = "Der Inhalt des ausgewählten Feldes wird in dem Listenfeld angezeigt, wenn die verknüpften Felder übereinstimmen";
         Text [ en-US ] = "The contents of the selected field will be shown in the list box if the linked fields are identical.";
     };
 };
@@ -148,7 +138,6 @@ TabPage RID_PAGE_LCW_FIELDLINK
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-    Text [ de ] = "Feldverknüpfung";
     Text [ en-US ] = "Field Link";
 
     FixedText FT_FIELDLINK_DESC
@@ -156,7 +145,6 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Pos = MAP_APPFONT ( 7 , 6  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 14 , 16 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Wählen Sie hier die Felder aus, deren Inhalt übereinstimmen muss, damit der Wert aus dem Anzeigefeld angezeigt wird.";
         Text [ en-US ] = "This is where you select fields with matching contents so that the value from the display field will be shown.";
     };
     FixedLine FL_FRAME
@@ -169,7 +157,6 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Pos = MAP_APPFONT ( 7 , 37  ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
         Group = TRUE;
-        Text [ de ] = "Feld aus der ~Wertetabelle";
         Text [ en-US ] = "Field from the ~Value Table";
     };
     ComboBox CMB_VALUELISTFIELD
@@ -187,7 +174,6 @@ TabPage RID_PAGE_LCW_FIELDLINK
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + 3 , 37 ) ;
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - 10, 8 ) ;
         Group = TRUE;
-        Text [ de ] = "Feld aus der ~Listentabelle";
         Text [ en-US ] = "Field from the ~List Table";
     };
     ComboBox CMB_TABLEFIELD
@@ -204,7 +190,6 @@ TabPage RID_PAGE_LCW_FIELDLINK
 
 String RID_STR_COMBOWIZ_DBFIELD
 {
-    Text [ de ] = "Sie können den Wert des Kombinationsfeldes entweder in einem Datenbankfeld speichern oder ihn nur zum Anzeigen verwenden.";
     Text [ en-US ] = "You can either save the value of the combo box in a database field or use it for display purposes.";
 };
 
