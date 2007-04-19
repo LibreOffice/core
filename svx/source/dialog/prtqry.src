@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prtqry.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:55:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:18:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,22 +38,18 @@
 
 String RID_SVXSTR_QRY_PRINT_TITLE
 {
-    Text [ de ] = "Drucken der Selektion" ;
     Text [ en-US ] = "Printing selection";
 };
 String RID_SVXSTR_QRY_PRINT_MSG
 {
-    Text [ de ] = "Wollen Sie die Selektion oder das gesamte Dokument drucken?" ;
     Text [ en-US ] = "Do you want to print the selection or the entire document?";
 };
 String RID_SVXSTR_QRY_PRINT_ALL
 {
-    Text [ de ] = "~Alles" ;
     Text [ en-US ] = "~All";
 };
 String RID_SVXSTR_QRY_PRINT_SELECTION
 {
-    Text [ de ] = "~Selektion" ;
     Text [ en-US ] = "~Selection";
 };
 
