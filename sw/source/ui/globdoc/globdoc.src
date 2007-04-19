@@ -4,9 +4,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 08:55:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:14:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 #include "globdoc.hrc"
 String STR_HUMAN_SWGLOBDOC_NAME
 {
-    Text [ de ] = "Globaldokument" ;
     Text [ en-US ] = "Master Document" ;
-    Text [ x-comment ] = " ";
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
@@ -50,7 +48,6 @@ String STR_WRITER_GLOBALDOC_FULLTYPE_50
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION Globaldokument" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Master Document";
 };
 
