@@ -1,60 +1,45 @@
 [OOO_ARPCOMMENTSTEMPLATE]
 en-US = "Comment in the Add-Remove-Programs Applet"
-de = "Kommententar in dem Hinzufügen-Entfernen-Programmapplet"
 
 [OOO_ARPCONTACTTEMPLATE]
 en-US = "Department for technical support"
-de = "Abteilung für die technische Unterstützung"
 
 [OOO_ARPHELPLINKTEMPLATE]
 en-US = "http://www.openoffice.org"
-de = "http://de.openoffice.org"
 
 [OOO_ARPHELPTELEPHONETEMPLATE]
 en-US = "x-xxx-xxx-xxx"
-de = "x-xxx-xxx-xxx"
 
 [OOO_ARPURLINFOABOUTTEMPLATE]
 en-US = "http://www.openoffice.org"
-de = "http://de.openoffice.org"
 
 [OOO_ARPURLUPDATEINFOTEMPLATE]
 en-US = "http://www.openoffice.org"
-de = "http://de.openoffice.org"
 
 [OOO_STR_NEW_DISPLAY_NAME]
 en-US = "~New"
-de = "~Neu"
 
 [OOO_STR_EDIT]
 en-US = "~Edit"
-de = "~Bearbeiten"
 
 [OOO_STR_MS_WORD_DOCUMENT]
 en-US = "Microsoft Word Document"
-de = "Microsoft Word Dokument"
 
 [OOO_STR_MS_WORD_TEMPLATE]
 en-US = "Microsoft Word Template"
-de = "Microsoft Word Vorlage"
 
 [OOO_STR_MS_EXCEL_WORKSHEET]
 en-US = "Microsoft Excel Worksheet"
-de = "Microsoft Excel Tabelle"
 
 [OOO_STR_MS_EXCEL_TEMPLATE]
 en-US = "Microsoft Excel Template"
-de = "Microsoft Excel Vorlage"
 
 [OOO_STR_MS_POWERPOINT_PRESENTATION]
 en-US = "Microsoft PowerPoint Presentation"
-de = "Microsoft PowerPoint Präsentation"
 
 [OOO_STR_MS_POWERPOINT_TEMPLATE]
 en-US = "Microsoft PowerPoint Template"
-de = "Microsoft PowerPoint Vorlage"
 
 [OOO_STR_MS_POWERPOINT_SHOW]
 en-US = "Microsoft PowerPoint Show"
-de = "Microsoft PowerPoint Slide Show"
 
