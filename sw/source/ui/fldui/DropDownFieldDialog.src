@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DropDownFieldDialog.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:02:25 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:07:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,14 +43,12 @@ ModalDialog DLG_FLD_DROPDOWN
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 194 , 119 ) ;
-    Text [ de ] = "Eintrag auswählen: " ;
     Text [ en-US ] = "Choose Item: " ;
     Moveable = TRUE ;
     FixedLine FL_ITEMS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 127 , 8 ) ;
-        Text [ de ] = "Bearbeiten" ;
         Text [ en-US ] = "Edit" ;
     };
     ListBox LB_LISTITEMS
@@ -81,7 +79,6 @@ ModalDialog DLG_FLD_DROPDOWN
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Weiter" ;
         Text [ en-US ] = "~Next" ;
     };
     HelpButton PB_HELP
@@ -95,11 +92,9 @@ ModalDialog DLG_FLD_DROPDOWN
         Pos = MAP_APPFONT ( 139 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Bearbeiten" ;
         Text [ en-US ] = "~Edit" ;
     };
 
-    Text [ x-comment ] = " ";
 };
 
 
