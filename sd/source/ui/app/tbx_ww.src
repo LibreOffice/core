@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbx_ww.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:29:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:22:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ FloatingWindow RID_ALIGNMENT
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
     ToolBox RID_ALIGNMENT_TBX
     {
@@ -80,7 +79,6 @@ FloatingWindow RID_ALIGNMENT
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_ZOOM
 {
@@ -89,7 +87,6 @@ FloatingWindow RID_ZOOM
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Zoomen" ;
     Text [ en-US ] = "Zoom" ;
     ToolBox RID_ZOOM_TBX
     {
@@ -154,7 +151,6 @@ FloatingWindow RID_ZOOM
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_CHOOSE_MODE
 {
@@ -163,7 +159,6 @@ FloatingWindow RID_CHOOSE_MODE
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Effekte" ;
     Text [ en-US ] = "Effects" ;
     ToolBox RID_CHOOSE_MODE_TBX
     {
@@ -233,7 +228,6 @@ FloatingWindow RID_CHOOSE_MODE
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_TEXT
 {
@@ -242,7 +236,6 @@ FloatingWindow RID_TEXT
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Text" ;
     ToolBox RID_TEXT_TBX
     {
         SVLook = TRUE ;
@@ -301,7 +294,6 @@ FloatingWindow RID_TEXT
         };
     };
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_RECTANGLES
 {
@@ -310,7 +302,6 @@ FloatingWindow RID_RECTANGLES
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Rechtecke" ;
     Text [ en-US ] = "Rectangles" ;
     ToolBox RID_RECTANGLES_TBX
     {
@@ -381,7 +372,6 @@ FloatingWindow RID_RECTANGLES
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_ELLIPSES
 {
@@ -390,7 +380,6 @@ FloatingWindow RID_ELLIPSES
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Ellipsen" ;
     Text [ en-US ] = "Ellipses" ;
     ToolBox RID_ELLIPSES_TBX
     {
@@ -489,7 +478,6 @@ FloatingWindow RID_ELLIPSES
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_LINES
 {
@@ -498,7 +486,6 @@ FloatingWindow RID_LINES
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Kurven" ;
     Text [ en-US ] = "Curves" ;
     ToolBox RID_LINES_TBX
     {
@@ -562,7 +549,6 @@ FloatingWindow RID_LINES
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_ARROWS
 {
@@ -571,7 +557,6 @@ FloatingWindow RID_ARROWS
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Linien" ;
     Text [ en-US ] = "Lines" ;
     ToolBox RID_ARROWS_TBX
     {
@@ -660,7 +645,6 @@ FloatingWindow RID_ARROWS
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_3D_OBJECTS
 {
@@ -669,7 +653,6 @@ FloatingWindow RID_3D_OBJECTS
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "3D-Objekte" ;
     Text [ en-US ] = "3D Objects" ;
     ToolBox RID_3D_OBJECTS_TBX
     {
@@ -733,7 +716,6 @@ FloatingWindow RID_3D_OBJECTS
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_CONNECTORS
 {
@@ -742,7 +724,6 @@ FloatingWindow RID_CONNECTORS
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Verbinder" ;
     Text [ en-US ] = "Connectors" ;
     ToolBox RID_CONNECTORS_TBX
     {
@@ -961,7 +942,6 @@ FloatingWindow RID_CONNECTORS
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_INSERT
 {
@@ -971,7 +951,6 @@ FloatingWindow RID_INSERT
     Hide = TRUE ;
     SVLook = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Einfügen : Einf³gen */
-    Text [ de ] = "EinfÃ¼gen" ;
     Text [ en-US ] = "Insert" ;
     ToolBox RID_INSERT_TBX
     {
@@ -1061,7 +1040,6 @@ FloatingWindow RID_INSERT
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 FloatingWindow RID_POSITION
 {
@@ -1070,7 +1048,6 @@ FloatingWindow RID_POSITION
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Anordnung" ;
     Text [ en-US ] = "Arrange" ;
     ToolBox RID_POSITION_TBX
     {
@@ -1122,7 +1099,6 @@ FloatingWindow RID_POSITION
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 
 
