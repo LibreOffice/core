@@ -8,15 +8,12 @@
             </prop>
             <node oor:name="Arguments">
                 <prop oor:name="SearchForUpdateText" oor:type="xs:string" oor:op="replace">
-                    <value xml:lang="de">Das Programm sucht nach einem neuen Versions Update basierend auf Informationen über Ihre installierte %PRODUCTNAME Version und aktuell verfügbare Updates.</value>
                     <value xml:lang="en-US">The program checks for a new version update based on information about your installed %PRODUCTNAME version and currently available updates.</value>
                 </prop>
                 <prop oor:name="UpdateFoundText" oor:type="xs:string" oor:op="replace">
-                    <value xml:lang="de">Ein neues Update ist verfügbar.\n Bei Klick auf OK werden Sie auf die Webseite weitergeleitet, auf der Sie den Download starten können.</value>
                     <value xml:lang="en-US">A new update is available.\n Click OK to open the web site, where you can start the download.</value>
                 </prop>
                 <prop oor:name="NoUpdateFoundText" oor:type="xs:string" oor:op="replace">
-                    <value xml:lang="de">Es ist kein neues Update verfügbar.\n %PRODUCTNAME ist auf dem neuesten Stand.</value>
                     <value xml:lang="en-US">No new update is available.\n %PRODUCTNAME is up to date.</value>
                 </prop>
                 <prop oor:name="AutoCheckEnabled" oor:type="xs:boolean" oor:op="replace">
