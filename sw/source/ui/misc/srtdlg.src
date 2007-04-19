@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srtdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:10:52 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:22:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ ModalDialog DLG_SORTING
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 268 , 193 ) ;
-    Text [ de ] = "Sortieren" ;
     Text [ en-US ] = "Sort" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -70,38 +69,30 @@ ModalDialog DLG_SORTING
     {
         Pos = MAP_APPFONT ( 68 , 12 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text [ de ] = "Spalte" ;
         Text [ en-US ] = "Column" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_KEYTYP
     {
         Pos = MAP_APPFONT ( 101, 12 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüsseltyp : Schl³sseltyp */
-        Text [ de ] = "SchlÃ¼sseltyp" ;
         Text [ en-US ] = "Key type" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_DIR
     {
         Pos = MAP_APPFONT ( 155 , 12 ) ;
         Size = MAP_APPFONT ( 49 , 10 ) ;
-        Text [ de ] = "Reihenfolge" ;
         Text [ en-US ] = "Order" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_KEY1
     {
         Pos = MAP_APPFONT ( 12 , 25 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~1 : Schl³ssel ~1 */
-        Text [ de ] = "SchlÃ¼ssel ~1" ;
         Text [ en-US ] = "Key ~1" ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_KEY1
     {
@@ -122,7 +113,6 @@ ModalDialog DLG_SORTING
     };
     String STR_NUMERIC
     {
-        Text [ de ] = "Numerisch";
         Text [ en-US ] = "Numeric";
     };
     ListBox DLB_KEY1
@@ -138,29 +128,23 @@ ModalDialog DLG_SORTING
     {
         Pos = MAP_APPFONT ( 155 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Aufsteigend" ;
         Text [ en-US ] = "~Ascending" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_DN
     {
         Pos = MAP_APPFONT ( 155 , 35 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "A~bsteigend" ;
         Text [ en-US ] = "~Descending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_KEY2
     {
         Pos = MAP_APPFONT ( 12 , 52 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~2 : Schl³ssel ~2 */
-        Text [ de ] = "SchlÃ¼ssel ~2" ;
         Text [ en-US ] = "Key ~2" ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_KEY2
     {
@@ -191,29 +175,23 @@ ModalDialog DLG_SORTING
     {
         Pos = MAP_APPFONT ( 155 , 50 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "A~ufsteigend" ;
         Text [ en-US ] = "Ascending" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_DN2
     {
         Pos = MAP_APPFONT ( 155 , 62 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Ab~steigend" ;
         Text [ en-US ] = "Descending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_KEY3
     {
         Pos = MAP_APPFONT ( 12 , 81 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schlüssel ~3 : Schl³ssel ~3 */
-        Text [ de ] = "SchlÃ¼ssel ~3" ;
         Text [ en-US ] = "Key ~3" ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_KEY3
     {
@@ -244,74 +222,58 @@ ModalDialog DLG_SORTING
     {
         Pos = MAP_APPFONT ( 155 , 79 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Aufstei~gend" ;
         Text [ en-US ] = "Ascending" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_DN3
     {
         Pos = MAP_APPFONT ( 155 , 91 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Absteigen~d" ;
         Text [ en-US ] = "Descending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT_2
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 200 , 8 ) ;
-        Text [ de ] = "Regel" ;
         Text [ en-US ] = "Sort criteria" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_COL
     {
         Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 38 , 10 ) ;
-        Text [ de ] = "S~palten" ;
         Text [ en-US ] = "Col~umns" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_ROW
     {
         Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 34 , 10 ) ;
-        Text [ de ] = "~Zeilen" ;
         Text [ en-US ] = "~Rows" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_DIR
     {
         Pos = MAP_APPFONT ( 6 , 108 ) ;
         Size = MAP_APPFONT ( 95 , 8 ) ;
-        Text [ de ] = "Richtung" ;
         Text [ en-US ] = "Direction" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_TAB
     {
         Pos = MAP_APPFONT ( 113 , 120 ) ;
         Size = MAP_APPFONT ( 44 , 9 ) ;
-        Text [ de ] = "~Tabulator" ;
         Text [ en-US ] = "~Tabs" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_TABCH
     {
         Pos = MAP_APPFONT ( 113 , 133 ) ;
         Size = MAP_APPFONT ( 38 , 10 ) ;
-        Text [ de ] = "Z~eichen" ;
         Text [ en-US ] = "~Character" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TABCH
     {
@@ -325,21 +287,15 @@ ModalDialog DLG_SORTING
     {
         Pos = MAP_APPFONT ( 107 , 108 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
-        Text [ de ] = "Trenner" ;
         Text [ en-US ] = "Separator" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ROW
     {
-        Text [ de ] = "Zeile" ;
         Text [ en-US ] = "Rows" ;
-        Text [ x-comment ] = " ";
     };
     String STR_COL
     {
-        Text [ de ] = "Spalte" ;
         Text [ en-US ] = "Column" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_DELIM
     {
@@ -352,7 +308,6 @@ ModalDialog DLG_SORTING
     {
         Pos = MAP_APPFONT ( 6 , 147 ) ;
         Size = MAP_APPFONT ( 95 , 8 ) ;
-        Text [ de ] = "Sprache" ;
         Text [ en-US ] = "Language";
     };
     ListBox LB_LANG
@@ -367,7 +322,6 @@ ModalDialog DLG_SORTING
     {
         Pos = MAP_APPFONT ( 107 , 147 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
-        Text [ de ] = "Einstellung" ;
         Text [ en-US ] = "Setting";
     };
     CheckBox CB_CASE
@@ -375,19 +329,15 @@ ModalDialog DLG_SORTING
         Pos = MAP_APPFONT ( 113 , 159 ) ;
         Size = MAP_APPFONT ( 147 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Exakter Vergleich" ;
         Text [ en-US ] = "Match case";
     };
 
-    Text [ x-comment ] = " ";
 };
 InfoBox MSG_SRTERR
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Selektion konnte nicht sortiert werden" ;
     Message [ en-US ] = "Cannot sort selection" ;
-    Message [ x-comment ] = " ";
 };
 
 
