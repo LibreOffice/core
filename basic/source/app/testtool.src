@@ -4,9 +4,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-29 15:57:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:51:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,37 +40,30 @@
 ///////////////////////////////
 String S_INVALID_KEYCODE
 {
-    Text [ de ] = "Ist kein gÃ¼ltiger KeyCode!";
     Text[ en-US ] = "Is an invalid KeyCode!";
 };
 String S_MANDATORY_FILE
 {
-    Text [ de ] = "\nwurde nicht gefunden.\nDiese Datei ist unentbehrlich.";
     Text[ en-US ] = "\ncould not be found.\nThis file is indispensable.";
 };
 String S_READING_LONGNAMES
 {
-    Text [ de ] = "Einlesen der Langnamen";
     Text[ en-US ] = "Reading long-names";
 };
 String S_READING_SLOT_IDS
 {
-    Text [ de ] = "Einlesen der Slot IDs";
     Text[ en-US ] = "Reading Slot IDs";
 };
 String S_READING_CONTROLS
 {
-    Text [ de ] = "Einlesen der Controls";
     Text[ en-US ] = "Reading Controls";
 };
 String S_READING_BASIC_MODULE
 {
-    Text [ de ] = "Einlesen BASIC Modul";
     Text[ en-US ] = "Reading BASIC module";
 };
 String S_STARTING_APPLICATION
 {
-    Text [ de ] = "Starten der Applikation";
     Text[ en-US ] = "Starting application";
 };
 
