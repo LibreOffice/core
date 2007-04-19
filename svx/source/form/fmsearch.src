@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmsearch.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2005-12-21 13:30:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:27:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,9 +42,7 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     OutputSize = TRUE;
     SVLook = TRUE;
     Size = MAP_APPFONT( 300, 253 );
-    Text [ de ] = "Datensatz-Suche";
     Text [ en-US ] = "Record Search";
-    Text [ x-comment ] = " ";
     Moveable = TRUE;
     HelpId = HID_FM_DLG_SEARCH;
 
@@ -52,7 +50,6 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 6, 8 );
         Size = MAP_APPFONT( 232, 8 );
-        Text [ de ] = "Suchen nach";
         Text [ en-US ] = "Search for";
     };
     RadioButton RB_SEARCHFORTEXT
@@ -60,22 +57,18 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 12, 23 );
         Size = MAP_APPFONT( 50, 10 );
         Group = TRUE;
-        Text [ de ] = "~Text";
         Text [ en-US ] = "~Text";
     };
     RadioButton RB_SEARCHFORNULL
     {
         Pos = MAP_APPFONT( 12, 36 );
         Size = MAP_APPFONT( 207, 10 );
-        Text [ de ] = "Feldinhalt ist ~NULL";
         Text [ en-US ] = "Field content is ~NULL";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SEARCHFORNOTNULL
     {
         Pos = MAP_APPFONT( 12, 49 );
         Size = MAP_APPFONT( 207, 10 );
-        Text [ de ] = "Feldinhalt ist ~ungleich NULL";
         Text [ en-US ] = "Field content is not NU~LL";
     };
     ComboBox CMB_SEARCHTEXT
@@ -92,15 +85,12 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 6, 65 );
         Size = MAP_APPFONT( 232, 8 );
-        Text [ de ] = "Bereich";
         Text [ en-US ] = "Where to search";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FORM
     {
         Pos = MAP_APPFONT( 12, 77 );
         Size = MAP_APPFONT( 87, 10 );
-        Text [ de ] = "~Formular";
         Text [ en-US ] = "Form";
     };
     ListBox LB_FORM
@@ -115,17 +105,14 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 24, 91 );
         Size = MAP_APPFONT( 75, 10 );
-        Text [ de ] = "~Alle Felder";
         TabStop = TRUE;
         HelpId = HID_SEARCH_ALLFIELDS;
         Text [ en-US ] = "All Fields";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SINGLEFIELD
     {
         Pos = MAP_APPFONT( 24, 106 );
         Size = MAP_APPFONT( 75, 10 );
-        Text [ de ] = "Ein~zelnes Feld";
         Text [ en-US ] = "Single field";
     };
     ListBox LB_FIELD
@@ -141,15 +128,12 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 6, 126 );
         Size = MAP_APPFONT( 288, 8 );
-        Text [ de ] = "Einstellungen";
         Text [ en-US ] = "Settings";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POSITION
     {
         Pos = MAP_APPFONT( 12, 138 );
         Size = MAP_APPFONT( 87, 8 );
-        Text [ de ] = "~Position";
         Text [ en-US ] = "Position";
     };
     ListBox LB_POSITION
@@ -165,90 +149,73 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 12, 158 );
         Size = MAP_APPFONT( 90, 10 );
-        Text [ de ] = "Feldfor~matierung benutzen" ;
         TabStop = TRUE;
         HelpId = HID_SEARCH_FORMATTER;
         Text [ en-US ] = "Apply field format";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_CASE
     {
         Pos = MAP_APPFONT( 12, 171 );
         Size = MAP_APPFONT( 90, 20 );
-        Text [ de ] = "E~xakte Suche";
         TabStop = TRUE;
         WordBreak = TRUE;
         HelpId = HID_SEARCH_CASE;
         Text [ en-US ] = "Match case";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_BACKWARD
     {
         Pos = MAP_APPFONT( 105, 158 );
         Size = MAP_APPFONT( 85, 10 );
-        Text [ de ] = "Rüc~kwärts suchen";
         TabStop = TRUE;
         HelpId = HID_SEARCH_BACKWARD;
         Text [ en-US ] = "Search backwards";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_STARTOVER
     {
         Pos = MAP_APPFONT( 105, 171 );
         Size = MAP_APPFONT( 85, 10 );
-        Text [ de ] = "~Vom Anfang";
         TabStop = TRUE;
         HelpId = HID_SEARCH_STARTOVER;
         Text [ en-US ] = "From Beginning";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_WILDCARD
     {
         Pos = MAP_APPFONT( 190, 158 );
         Size = MAP_APPFONT( 100, 10 );
-        Text [ de ] = "P~latzhalter-Ausdruck";
         TabStop = TRUE;
         HelpId = HID_SEARCH_WILDCARD;
         Text [ en-US ] = "Wildcard expression";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_REGULAR
     {
         Pos = MAP_APPFONT( 190, 171 );
         Size = MAP_APPFONT( 100, 10 );
-        Text [ de ] = "Re~gulärer Ausdruck";
         TabStop = TRUE;
         HelpId = HID_SEARCH_REGULAR;
         Text [ en-US ] = "Regular expression";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_APPROX
     {
         Pos = MAP_APPFONT( 190, 184 );
         Size = MAP_APPFONT( 84, 20 );
-        Text [ de ] = "~Ähnlichkeitssuche";
         TabStop = TRUE;
         WordBreak = TRUE;
         HelpId = HID_SEARCH_APPROX;
         Text [ en-US ] = "Similarity Search";
-        Text [ x-comment ] = " ";
     };
     PushButton PB_APPROXSETTINGS
     {
         Pos = MAP_APPFONT( 275, 182 );
         Size = MAP_APPFONT( 14, 14 );
-        Text [ de ] = "~..." ;
         TabStop = TRUE ;
         HelpId = HID_SEARCH_APPROXSETTINGS;
         Text [ en-US ] = "...";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_HALFFULLFORMS
     {
         Pos = MAP_APPFONT( 105, 209 );
         Size = MAP_APPFONT( 85, 10 );
         TabStop = TRUE ;
-        Text [ de ] = "Zeichenbreite berücksichtigen" ;
         Text [ en-US ] = "Match character width" ;
     };
     CheckBox CB_SOUNDSLIKECJK
@@ -256,7 +223,6 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 190, 209 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE ;
-        Text [ de ] = "Ähnl. Schreibweise (Jap.)" ;
         Text [ en-US ] = "Sounds like (Japanese)";
     };
     PushButton PB_SOUNDSLIKESETTINGS
@@ -264,24 +230,19 @@ ModalDialog RID_SVXDLG_SEARCHFORM
         Pos = MAP_APPFONT( 275, 207 );
         Size = MAP_APPFONT( 14, 14 );
         TabStop = TRUE ;
-        Text [ de ] = "..." ;
         Text [ en-US ] = "..." ;
     };
     FixedLine FL_STATE
     {
         Pos = MAP_APPFONT( 6, 222 );
         Size = MAP_APPFONT( 288, 8 );
-        Text [ de ] = "Status" ;
         Text [ en-US ] = "State";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_RECORDLABEL
     {
         Pos = MAP_APPFONT( 12, 232 );
         Size = MAP_APPFONT( 45, 10 );
-        Text [ de ] = "Datensatz :" ;
         Text [ en-US ] = "Record :";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_RECORD
     {
@@ -298,77 +259,59 @@ ModalDialog RID_SVXDLG_SEARCHFORM
     {
         Pos = MAP_APPFONT( 244, 6 );
         Size = MAP_APPFONT( 50, 14 );
-        Text [ de ] = "~Suchen";
         TabStop = TRUE;
         DefButton = TRUE;
         HelpId = HID_SEARCH_BTN_SEARCH;
         Text [ en-US ] = "Search";
-        Text [ x-comment ] = " ";
     };
     CancelButton 1
     {
         Pos = MAP_APPFONT( 244, 26 );
         Size = MAP_APPFONT( 50, 14 );
         HelpId = HID_SEARCH_BTN_CLOSE;
-        Text [ de ] = "S~chließen";
         TabStop = TRUE;
         Text [ en-US ] = "~Close";
-        Text [ x-comment ] = " ";
     };
     HelpButton 1
     {
         Pos = MAP_APPFONT( 244, 46 );
         Size = MAP_APPFONT( 50, 14 );
-        Text [ de ] = "~Hilfe";
         TabStop = TRUE;
         Text [ en-US ] = "~Help";
-        Text [ x-comment ] = " ";
     };
 };
 
 String RID_STR_RECORDSEARCH_METHODS
 {
-    Text [ de ] = "beliebig im Feld;am Feldanfang;am Feldende;ganzes Feld" ;
     Text [ en-US ] = "anywhere in the field;beginning of field;end of field;entire field";
-    Text [ x-comment ] = " ";
 };
 
 String RID_STR_RECORDSEARCH_BUTTONS
 {
     // Bem. : das 'Suchen' in diesem String muss genau das selbe sein wie die Beschriftung des PB_SEARCH-Buttons im Dialog
-    Text [ de ] = "~Vom Anfang;~Vom Ende;~Suchen;~Abbrechen" ;
     Text [ en-US ] = "From top;From bottom;Search;Cancel";
-    Text [ x-comment ] = " ";
 };
 
 ErrorBox RID_SVXERR_SEARCH_NORECORD
 {
     Buttons = WB_OK;
-    Message [ de ] = "Es wurden keine Datensätze, die zu Ihren Angaben passen, gefunden." ;
     Message [ en-US ] = "No records corresponding to your data found.";
-    Message [ x-comment ] = " ";
 };
 
 ErrorBox RID_SVXERR_SEARCH_GENERAL_ERROR
 {
     Buttons = WB_OK;
-    Message [ de ] = "Es trat ein nicht näher bekannter Fehler auf. Die Suche konnte nicht beendet werden." ;
     Message [ en-US ] = "An unknown error occurred. The search could not be finished.";
-    Message [ x-comment ] = " ";
 };
 
 String RID_STR_SEARCH_OVERFLOW
 {
-    Text [ de ] = "Überlauf, Suche wurde am Anfang fortgesetzt;Überlauf, Suche wurde am Ende fortgesetzt" ;
     Text [ en-US ] = "Overflow, search continued at the beginning;Overflow, search continued at the end";
-    Text [ x-comment ] = " ";
 };
 
 String RID_STR_SEARCH_COUNTING
 {
-    Text [ de ] = "zähle Datensätze" ;
     Text [ en-US ] = "counting records";
-    Text [ x-comment ] = " ";
 };
 
 
