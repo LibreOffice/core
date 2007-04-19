@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-26 15:17:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ DockingWindow RID_SVXDLG_FONTWORK
     Hide = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 89 , 193 ) ;
-    Text [ de ] = "Fontwork" ;
     Text [ en-US ] = "Fontwork" ;
     Moveable = TRUE ;
     Zoomable = TRUE ;
@@ -74,9 +73,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 AutoCheck = TRUE ;
                 Identifier = TBI_STYLE_OFF ;
                 HelpId = HID_FONTWORK_TBI_STYLE_OFF ;
-                Text [ de ] = "Aus" ;
                 Text [ en-US ] = "Off" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -88,9 +85,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_STYLE_ROTATE ;
                 HelpId = HID_FONTWORK_TBI_STYLE_ROTATE ;
-                Text [ de ] = "Drehen" ;
                 Text [ en-US ] = "Rotate" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -98,9 +93,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_STYLE_UPRIGHT ;
                 HelpId = HID_FONTWORK_TBI_STYLE_UPRIGHT ;
-                Text [ de ] = "Aufrecht" ;
                 Text [ en-US ] = "Upright" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -108,9 +101,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_STYLE_SLANTX ;
                 HelpId = HID_FONTWORK_TBI_STYLE_SLANTX ;
-                Text [ de ] = "Horizontal kippen" ;
                 Text [ en-US ] = "Slant Horizontal" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -118,9 +109,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_STYLE_SLANTY ;
                 HelpId = HID_FONTWORK_TBI_STYLE_SLANTY ;
-                Text [ de ] = "Vertikal kippen" ;
                 Text [ en-US ] = "Slant Vertical" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -136,9 +125,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Checkable = TRUE ;
                 Identifier = TBI_ADJUST_MIRROR ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_MIRROR ;
-                Text [ de ] = "Laufrichtung" ;
                 Text [ en-US ] = "Orientation" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -150,9 +137,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_LEFT ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_LEFT ;
-                Text [ de ] = "Linksbündig" ;
                 Text [ en-US ] = "Align Left" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -160,9 +145,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_CENTER ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_CENTER ;
-                Text [ de ] = "Zentriert" ;
                 Text [ en-US ] = "Center" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -170,9 +153,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_RIGHT ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_RIGHT ;
-                Text [ de ] = "Rechtsbündig" ;
                 Text [ en-US ] = "Align Right" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -180,9 +161,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_ADJUST_AUTOSIZE ;
                 HelpId = HID_FONTWORK_TBI_ADJUST_AUTOSIZE ;
-                Text [ de ] = "Auto-Textgröße" ;
                 Text [ en-US ] = "AutoSize Text" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -207,7 +186,6 @@ DockingWindow RID_SVXDLG_FONTWORK
         First = -5000000 ;
         Last = 5000000 ;
         SpinSize = 50 ;
-        QuickHelpText [ de ] = "Abstand" ;
         QuickHelpText [ en-US ] = "Distance" ;
 
     };
@@ -230,7 +208,6 @@ DockingWindow RID_SVXDLG_FONTWORK
         Unit = FUNIT_MM ;
         Last = 5000000 ;
         SpinSize = 50 ;
-        QuickHelpText [ de ] = "Einzug" ;
         QuickHelpText [ en-US ] = "Indent" ;
     };
     ToolBox TBX_SHADOW
@@ -245,9 +222,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Checkable = TRUE ;
                 Identifier = TBI_SHOWFORM ;
                 HelpId = HID_FONTWORK_TBI_SHOWFORM ;
-                Text [ de ] = "Kontur" ;
                 Text [ en-US ] = "Contour" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -255,9 +230,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 Checkable = TRUE ;
                 Identifier = TBI_OUTLINE ;
                 HelpId = HID_FONTWORK_TBI_OUTLINE ;
-                Text [ de ] = "Buchstabenumrandung" ;
                 Text [ en-US ] = "Text Contour" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -269,9 +242,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_SHADOW_OFF ;
                 HelpId = HID_FONTWORK_TBI_SHADOW_OFF ;
-                Text [ de ] = "Aus" ;
                 Text [ en-US ] = "No Shadow" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -279,9 +250,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_SHADOW_NORMAL ;
                 HelpId = HID_FONTWORK_TBI_SHADOW_NORMAL ;
-                Text [ de ] = "Senkrecht" ;
                 Text [ en-US ] = "Vertical" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -289,9 +258,7 @@ DockingWindow RID_SVXDLG_FONTWORK
                 RadioCheck = TRUE ;
                 Identifier = TBI_SHADOW_SLANT ;
                 HelpId = HID_FONTWORK_TBI_SHADOW_SLANT ;
-                Text [ de ] = "Kippen" ;
                 Text [ en-US ] = "Slant" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -313,14 +280,11 @@ DockingWindow RID_SVXDLG_FONTWORK
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_MM ;
-        CustomUnitText [ de ] = " Grad" ;
         CustomUnitText [ en-US ] = " degrees" ;
         First = -5000000 ;
         Last = 5000000 ;
         SpinSize = 50 ;
-        QuickHelpText [ de ] = "Abstand X" ;
         QuickHelpText [ en-US ] = "Distance X" ;
-        CustomUnitText [ x-comment ] = " ";
     };
     FixedImage FB_SHADOW_Y
     {
@@ -341,11 +305,8 @@ DockingWindow RID_SVXDLG_FONTWORK
         Unit = FUNIT_MM ;
         Last = 5000000 ;
         SpinSize = 50 ;
-        CustomUnitText [ de ] = " %" ;
-        QuickHelpText [ de ] = "Abstand Y" ;
         QuickHelpText [ en-US ] = "Distance Y" ;
         CustomUnitText [ en-US ] = "%" ;
-        CustomUnitText [ x-comment ] = " ";
     };
     ListBox CLB_SHADOW_COLOR
     {
@@ -353,12 +314,9 @@ DockingWindow RID_SVXDLG_FONTWORK
         Pos = MAP_APPFONT ( 6 , 174 ) ;
         Size = MAP_APPFONT ( 71 , 60 ) ;
         DropDown = TRUE ;
-        QuickHelpText [ de ] = "Schattenfarbe" ;
         QuickHelpText [ en-US ] = "Shadow Color" ;
-        Text [ x-comment ] = " ";
         Text = "-";
     };
-    Text [ x-comment ] = " ";
 
 #define FONTWORK_IDLIST \
         IdList =            \
@@ -504,81 +462,55 @@ Bitmap RID_SVXBMP_FONTWORK_FORM12_H
  // Strings ---------------------------------------------------------------
 String RID_SVXSTR_FONTWORK_FORM1
 {
-    Text [ de ] = "Oberer Halbkreis" ;
     Text [ en-US ] = "Upper Semicircle" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM2
 {
-    Text [ de ] = "Unterer Halbkreis" ;
     Text [ en-US ] = "Lower Semicircle" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM3
 {
-    Text [ de ] = "Linker Halbkreis" ;
     Text [ en-US ] = "Left Semicircle" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM4
 {
-    Text [ de ] = "Rechter Halbkreis" ;
     Text [ en-US ] = "Right Semicircle" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM5
 {
-    Text [ de ] = "Oberer Kreisbogen" ;
     Text [ en-US ] = "Upper Arc" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM6
 {
-    Text [ de ] = "Unterer Kreisbogen" ;
     Text [ en-US ] = "Lower Arc" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM7
 {
-    Text [ de ] = "Linker Kreisbogen" ;
     Text [ en-US ] = "Left Arc" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM8
 {
-    Text [ de ] = "Rechter Kreisbogen" ;
     Text [ en-US ] = "Right Arc" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM9
 {
-    Text [ de ] = "Offener Kreis" ;
     Text [ en-US ] = "Open Circle" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM10
 {
-    Text [ de ] = "Geschlossener Kreis" ;
     Text [ en-US ] = "Closed Circle" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM11
 {
-    Text [ de ] = "Geschlossener Kreis II" ;
     Text [ en-US ] = "Closed Circle II" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_FORM12
 {
-    Text [ de ] = "Offener Kreis senkrecht" ;
     Text [ en-US ] = "Open Circle Vertical" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FONTWORK_UNDOCREATE
 {
-    Text [ de ] = "Fontwork-Objekt erzeugen" ;
     Text [ en-US ] = "Create Fontwork object" ;
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
