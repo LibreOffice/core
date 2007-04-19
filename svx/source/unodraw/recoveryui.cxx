@@ -4,9 +4,9 @@
  *
  *  $RCSfile: recoveryui.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:11:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:18:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,6 +70,8 @@
 #ifndef _COMPHELPER_CONFIGURATIONHELPER_HXX_
 #include <comphelper/configurationhelper.hxx>
 #endif
+
+#include <vcl/svapp.hxx>
 
 //===============================================
 // const
@@ -137,6 +139,10 @@ css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL&
                                                    const css::uno::Sequence< css::beans::PropertyValue >& )
     throw(css::uno::RuntimeException)
 {
+    // Internaly we use VCL ... every call into vcl based code must
+    // be guarded by locking the global solar mutex.
+    ::vos::OGuard aSolarLock(&Application::GetSolarMutex());
+
     css::uno::Any aRet;
     RecoveryUI::EJob eJob = impl_classifyJob(aURL);
     // TODO think about outside arguments
