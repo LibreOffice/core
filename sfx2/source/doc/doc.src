@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:11:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:27:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,14 +149,6 @@ String STR_BACKUP_COPY
     Text [ de ] = " Kopie" ;
     Text [ en-US ] = "Copy" ;
     Text [ x-comment ] = " ";
-};
-WarningBox MSG_WARNING_BACKUP
-{
-    Message [ de ] = "Sicherungskopie konnte nicht angelegt werden." ;
-    Message [ en-US ] = "Could not create backup copy." ;
-    Buttons = WB_OK ;
-    DefButton = WB_DEF_OK ;
-    Message [ x-comment ] = " ";
 };
 InfoBox MSG_CANT_OPEN_TEMPLATE
 {
@@ -667,13 +659,6 @@ String STR_NEW_FILENAME_SAVE
 {
     Text [ de ] = "Wenn Sie das originale Dokument nicht überschreiben wollen, sollten Sie Ihre Arbeit unter einem neuen Dateinamen speichern." ;
     Text [ en-US ] = "If you do not want to overwrite the original document, you should save your work under a new filename." ;
-    Text [ x-comment ] = " ";
-};
-
-String STR_MACROS_DISABLED
-{
-    Text [ de ] = "Es wurde versucht, ein Makro auszuführen.\nMakros werden aus Sicherheitsgründen nicht unterstützt.";
-    Text [ en-US ] = "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled.";
     Text [ x-comment ] = " ";
 };
 
