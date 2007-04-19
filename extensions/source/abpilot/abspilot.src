@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abspilot.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:34:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:41:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 //........................................................................
 ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 {
-    Text [ de ] = "Adressdatenquellen-Assistent" ;
     Text [ en-US ] = "Address Book Data Source Wizard" ;
 
     HelpId = HID_ABSPILOT;
@@ -54,37 +53,31 @@ ModalDialog RID_DLG_ADDRESSBOOKSOURCEPILOT
 #if defined( ABP_USE_ROADMAP )
     String STR_SELECT_ABTYPE
     {
-        Text[ de ] = "Adreßbuchtyp";
         Text [ en-US ] = "Address book type";
     };
 
     String STR_INVOKE_ADMIN_DIALOG
     {
-        Text[ de ] = "Verbindungs-Einstellungen";
         Text [ en-US ] = "Connection Settings";
     };
 
     String STR_TABLE_SELECTION
     {
-        Text[ de ] = "Tabellenauswahl";
         Text [ en-US ] = "Table selection";
     };
 
     String STR_MANUAL_FIELD_MAPPING
     {
-        Text[ de ] = "Feldzuordnung";
         Text [ en-US ] = "Field Assignment";
     };
 
     String STR_FINAL_CONFIRM
     {
-        Text[ de ] = "Datenquellen Titel";
         Text [ en-US ] = "Data Source Title";
     };
 
     String STR_ROADMAP_TITLE
     {
-        Text [ de ]= "Adreßbuch Datenquelle";
         Text [ en-US ] = "Address Book Data Source";
     };
 #endif
@@ -97,7 +90,6 @@ TabPage RID_PAGE_SELECTABTYPE
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text [ de ] = "Willkommen zum Assistenten zur Einrichtung von Adressdatenquellen.";
     Text [ en-US ] = "Welcome to the Address Data Source Wizard.";
 #endif
 
@@ -107,7 +99,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "%PRODUCTNAME bietet Ihnen die Möglichkeit, auf bereits in Ihrem System vorhandene Adressdaten zuzugreifen. Dazu wird eine %PRODUCTNAME Datenquelle angelegt, unter der Ihre Adressbücher als Tabellen zugänglich sind.\n\nDieser Assistent unterstützt Sie bei der Einrichtung dieser Datenquelle.";
         Text [ en-US ] = "%PRODUCTNAME lets you access address data already present in your system. To do this, a %PRODUCTNAME data source will be created in which your address data is available in tabular form.\n\nThis wizard helps you create the data source.";
     };
 
@@ -116,7 +107,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 7, 56 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 14, 8 ) ;
 
-        Text [ de ] = "Bitte wählen Sie den Typ Ihres externen Adressbuches:";
         Text [ en-US ] = "Please select the type of your external address book:";
     };
 
@@ -126,7 +116,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
         Group = TRUE;
 
-        Text [ de ] = "Mozilla / Netscape";
         Text [ en-US ] = "Mozilla / Netscape";
     };
 // All position & size/height data below this is not used
@@ -135,7 +124,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 15, 79 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "Thunderbird";
         Text [ en-US ] = "Thunderbird";
     };
     RadioButton RB_EVOLUTION
@@ -143,7 +131,6 @@ TabPage RID_PAGE_SELECTABTYPE
          Pos        = MAP_APPFONT ( 15, 90 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "Evolution";
         Text [ en-US ] = "Evolution";
     };
     RadioButton RB_EVOLUTION_GROUPWISE
@@ -151,7 +138,6 @@ TabPage RID_PAGE_SELECTABTYPE
          Pos        = MAP_APPFONT ( 15, 90 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "Groupwise";
         Text [ en-US ] = "Groupwise";
     };
     RadioButton RB_EVOLUTION_LDAP
@@ -159,7 +145,6 @@ TabPage RID_PAGE_SELECTABTYPE
          Pos        = MAP_APPFONT ( 15, 90 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "Evolution LDAP";
         Text [ en-US ] = "Evolution LDAP";
     };
     RadioButton RB_KAB
@@ -167,7 +152,6 @@ TabPage RID_PAGE_SELECTABTYPE
          Pos        = MAP_APPFONT ( 15, 101 ) ;
          Size   = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "KDE Adressbuch";
         Text [ en-US ] = "KDE address book";
     };
     RadioButton RB_LDAP
@@ -175,7 +159,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 15, 112 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "LDAP Adress-Bestand";
         Text [ en-US ] = "LDAP address data";
     };
     RadioButton RB_OUTLOOK
@@ -183,7 +166,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 15, 123 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "Outlook Adressbuch";
         Text [ en-US ] = "Outlook address book";
     };
     RadioButton RB_OUTLOOKEXPRESS
@@ -191,7 +173,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 15,134 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "Windows System-Adressbuch";
         Text [ en-US ] = "Windows system address book";
     };
     RadioButton RB_OTHER
@@ -199,7 +180,6 @@ TabPage RID_PAGE_SELECTABTYPE
         Pos     = MAP_APPFONT ( 15, 145 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 30, 8 ) ;
 
-        Text [ de ] = "andere externe Datenquelle";
         Text [ en-US ] = "Other external data source";
     };
 };
@@ -211,7 +191,6 @@ TabPage RID_PAGE_ADMININVOKATION
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text [ de ] = "Zusätzliche Einstellungen";
     Text [ en-US ] = "Additional Settings";
 #endif
 
@@ -221,7 +200,6 @@ TabPage RID_PAGE_ADMININVOKATION
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 48 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Zur Einrichtung der neuen Datenquelle sind noch weiter gehende Angaben notwendig.\n\nDie folgende Schaltfläche öffnet einen weiteren Dialog, in dem Sie die fehlenden Einstellungen vornehmen können.";
         Text [ en-US ] = "To set up the new data source, additional information is required.\n\nClick the following button to open another dialog in which you then enter the necessary information.";
     };
 
@@ -230,7 +208,6 @@ TabPage RID_PAGE_ADMININVOKATION
         Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 60 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
-        Text [ de ] = "Einstellungen";
         Text [ en-US ] = "Settings";
     };
 
@@ -241,7 +218,6 @@ TabPage RID_PAGE_ADMININVOKATION
         WordBreak = TRUE;
         Hide = TRUE;
 
-        Text [ de ] = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden.\nBitte überprüfen Sie, bevor Sie fortfahren, die gemachten Einstellungen, oder wählen Sie (auf der vorigen Seite) einen anderen Typ für Ihre  Adress-Datenquelle.";
         Text [ en-US ] = "The connection to the data source could not be established.\nBefore you proceed, please check the settings made, or (on the previous page) choose another address data source type.";
     };
 };
@@ -253,7 +229,6 @@ TabPage RID_PAGE_TABLESELECTION_AB
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text [ de ] = "Tabelle auswählen";
     Text [ en-US ] = "Select Table";
 #endif
 
@@ -263,7 +238,6 @@ TabPage RID_PAGE_TABLESELECTION_AB
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 24 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Die von Ihnen gewählte externe Datenquelle enthält mehrere Adress-Bestände.\nBitte wählen Sie denjenigen aus, mit dem Sie hauptsächlich arbeiten wollen:";
         Text [ en-US ] = "The external data source you have chosen contains more than one address book.\nPlease select the one you mainly want to work with:";
     };
 
@@ -286,7 +260,6 @@ TabPage RID_PAGE_FIELDMAPPING
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text [ de ] = "Feldzuordnung";
     Text [ en-US ] = "Field Assignment";
 #endif
 
@@ -296,7 +269,6 @@ TabPage RID_PAGE_FIELDMAPPING
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 72 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Um die Adress-Daten in Ihren Vorlagen-Dokumenten benutzen zu können, muss %PRODUCTNAME wissen, welche Felder welche konkreten Daten enthalten.\n\nZum Beispiel könnten Sie die E-Mail-Adressen in einem Feld namens \"E-Mail\" oder \"Email\" oder \"EM\" - oder unter völlig anderem Namen - gespeichert haben.\n\nSobald Sie die unten befindliche Schaltfläche betätigen, wird ein weiterer Dialog geöffnet, in dem sie diese Einstellungen für Ihre Datenquelle vornehmen können.";
         Text [ en-US ] = "To incorporate the address data in your templates, %PRODUCTNAME has to know which fields contain which data.\n\nFor instance, you could have stored the e-mail addresses in a field named \"email\", or \"E-mail\" or \"EM\" - or something completely different.\n\nClick the button below to open another dialog where you can enter the settings for your data source.";
     };
 
@@ -305,7 +277,6 @@ TabPage RID_PAGE_FIELDMAPPING
         Pos     = MAP_APPFONT ( ( WINDOW_SIZE_X - BUTTON_SIZE_X ) / 2, 84 ) ;
         Size    = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y ) ;
 
-        Text [ de ] = "Feldzuordnung";
         Text [ en-US ] = "Field Assignment";
     };
 
@@ -324,7 +295,6 @@ TabPage RID_PAGE_FINAL
     Size    = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
 #if !defined( ABP_USE_ROADMAP )
-    Text [ de ] = "Datenquellen Titel";
     Text [ en-US ] = "Data Source Name";
 #endif
 
@@ -334,7 +304,6 @@ TabPage RID_PAGE_FINAL
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - 2 * BORDER_X, 40 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Das waren alle Angaben, die zur Integration Ihrer Adress-Daten in %PRODUCTNAME benötigt werden.\n\nGeben Sie jetzt noch den Namen an, unter dem die Datenquelle in %PRODUCTNAME registriert werden soll.";
         Text [ en-US ] = "That was all the information necessary to integrate your address data into %PRODUCTNAME.\n\nNow, just enter the name under which you want to register the data source in %PRODUCTNAME.";
     };
 
@@ -344,7 +313,6 @@ TabPage RID_PAGE_FINAL
         Size    = MAP_APPFONT ( 50, 8 ) ;
         Group = TRUE;
 
-        Text [ de ] = "Pfad";
         Text [ en-US ] = "Location";
     };
 
@@ -365,7 +333,6 @@ TabPage RID_PAGE_FINAL
         SVLook = TRUE;
         Group = FALSE;
 
-        Text [ de ] = "Durchsuchen...";
         Text [ en-US ] = "Browse...";
     };
 
@@ -376,7 +343,6 @@ TabPage RID_PAGE_FINAL
         SVLook = TRUE;
         Group = TRUE;
 
-        Text [ de ] = "Dieses Adressbuch allen Modulen von %PRODUCTNAME zur Verfügung stellen.";
         Text [ en-US ] = "Make this address book available to all modules in %PRODUCTNAME.";
     };
     FixedText FT_NAME_EXPL
@@ -384,7 +350,6 @@ TabPage RID_PAGE_FINAL
         Pos     = MAP_APPFONT ( BORDER_X + 10, 93 ) ;
         Size    = MAP_APPFONT ( WINDOW_SIZE_X - BORDER_X - BORDER_X - 10, 8 ) ;
 
-        Text [ de ] =  "Name des Adressbuches";
         Text [ en-US ] = "Address book name";
     };
 
@@ -404,7 +369,6 @@ TabPage RID_PAGE_FINAL
         Hide = TRUE;
         Group = FALSE;
 
-        Text [ de ] =   "Es existiert schon eine andere Datenquelle mit diesem Namen. Da Datenquellennamen global eindeutig sind, müssen sie einen anderen wählen.";
         Text [ en-US ] = "Another data source already has this name. As data sources have to have globally unique names, you need to choose another one.";
     };
 };
@@ -414,7 +378,6 @@ ErrorBox RID_ERR_NEEDTYPESELECTION
 {
     Buttons = WB_OK;
 
-    Message [ de ] = "Bitte wählen sie einen Adressbuch-Typ aus!";
     Message [ en-US ] = "Please select a type of address book.";
 };
 
@@ -424,46 +387,38 @@ QueryBox RID_QRY_NOTABLES
     Buttons = WB_YES_NO;
     DefButton = WB_DEF_NO;
 
-    Message [ de ] = "Die Datenquelle enthält keine Tabelle.\nWollen Sie sie trotzdem als Adress-Datenquelle einrichten?";
     Message [ en-US ] = "The data source does not contain any tables.\nDo you want to set it up as an address data source, anyway?";
 };
 
 //........................................................................
 String RID_STR_DEFAULT_NAME
 {
-    Text [ de ] = "Adressen";
     Text [ en-US ] = "Addresses";
 };
 
 String RID_STR_ADMINDIALOGTITLE
 {
-    Text [ de ] = "Adress Datenquelle anlegen";
     Text [ en-US ] = "Create Address Data Source";
 };
 
 String RID_STR_NOCONNECTION
 {
-    Text [ de ] = "Die Verbindung konnte nicht hergestellt werden.";
     Text [ en-US ] = "The connection could not be established.";
 };
 
 String RID_STR_PLEASECHECKSETTINGS
 {
-    Text [ de ] = "Bitte überprüfen Sie die Einstellungen für die Datenquelle.";
     Text [ en-US ] = "Please check the settings made for the data source.";
 };
 
 String RID_STR_FIELDDIALOGTITLE
 {
-    Text [ de ] = "Adress Daten - Feldzuordnung";
     Text [ en-US ] = "Address Data - Field Assignment";
 };
 
 String RID_STR_NOFIELDSASSIGNED
 {
-    Text [ de ] = "Im Augenblick sind keine Felder zugeordnet.\nWenn Sie im Augenblick keine Zuordnung treffen wollen, können Sie dies später jederzeit nachholen:\nMenü \"Datei - Dokumentvorlage - Adressbuch Quelle ...\"";
     Text [ en-US ] = "There are no fields assigned at this time.\nYou can either assign fields now or do so later by first choosing:\n\"File - Template - Address Book Source...\"";
-    Text [ x-comment ] = "The last line of this text refers to a menu entry. Please use the same translation as for this menu. Does it help if I tell you that it's in svx/inc/globalmn.hrc:ITEM_FILE_DOCTEMPLATE?";
 };
 
 //........................................................................
@@ -474,7 +429,6 @@ Bitmap BMP_HEADERIMAGE
 
 String RID_STR_ALREADYEXISTOVERWRITE
 {
-    Text [ de ] =  "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
