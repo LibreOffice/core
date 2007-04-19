@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:15:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:30:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,310 +41,210 @@
 String STR_DROP_OVER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Initialen über : Initialen ³ber */
-    Text [ de ] = "Initialen Ã¼ber" ;
     Text [ en-US ] = "Drop Caps over" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DROP_LINES
 {
-    Text [ de ] = "Zeilen" ;
     Text [ en-US ] = "rows" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NO_DROP_LINES
 {
-    Text [ de ] = "keine Initialen" ;
     Text [ en-US ] = "No Drop Caps" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NO_PAGEDESC
 {
-    Text [ de ] = "kein Seitenumbruch" ;
     Text [ en-US ] = "No page break" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NO_MIRROR
 {
-    Text [ de ] = "nicht Spiegeln" ;
     Text [ en-US ] = "Don't mirror" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VERT_MIRROR
 {
-    Text [ de ] = "vertikal Spiegeln" ;
     Text [ en-US ] = "Flip vertically" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HORI_MIRROR
 {
-    Text [ de ] = "horizontal Spiegeln" ;
     Text [ en-US ] = "Flip horizontal" ;
-    Text [ x-comment ] = " ";
 };
 String STR_BOTH_MIRROR
 {
-    Text [ de ] = "vert. und horizontal Spiegeln" ;
     Text [ en-US ] = "Horizontal and Vertical Flip" ;
-    Text [ x-comment ] = " ";
 };
 String STR_MIRROR_TOGGLE
 {
-    Text [ de ] = " + auf geraden Seiten horizontal Spiegeln" ;
     Text [ en-US ] = "+ mirror horizontal on even pages" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHARFMT
 {
-    Text [ de ] = "Zeichenvorlage" ;
     Text [ en-US ] = "Character Style" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NO_CHARFMT
 {
-    Text [ de ] = "keine Zeichenvorlage" ;
     Text [ en-US ] = "No Character Style" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FOOTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fußzeile : Fu˜zeile */
-    Text [ de ] = "FuÃŸzeile" ;
     Text [ en-US ] = "Footer" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NO_FOOTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? keine Fußzeile : keine Fu˜zeile */
-    Text [ de ] = "keine FuÃŸzeile" ;
     Text [ en-US ] = "No footer" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HEADER
 {
-    Text [ de ] = "Kopfzeile" ;
     Text [ en-US ] = "Header" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NO_HEADER
 {
-    Text [ de ] = "keine Kopfzeile" ;
     Text [ en-US ] = "No header" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_IDEAL
 {
-    Text [ de ] = "idealer Umlauf" ;
     Text [ en-US ] = "Optimal wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_NONE
 {
-    Text [ de ] = "kein Umlauf" ;
     Text [ en-US ] = "No wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_THROUGHT
 {
-    Text [ de ] = "Durchlauf" ;
     Text [ en-US ] = "Through" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_PARALLEL
 {
-    Text [ de ] = "paralleler Umlauf" ;
     Text [ en-US ] = "Parallel wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_COLUMN
 {
-    Text [ de ] = "spaltiger Umlauf" ;
     Text [ en-US ] = "Column Wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_LEFT
 {
-    Text [ de ] = "linker Umlauf" ;
     Text [ en-US ] = "Left wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_RIGHT
 {
-    Text [ de ] = "rechter Umlauf" ;
     Text [ en-US ] = "Right wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_INSIDE
 {
-    Text [ de ] = "Umlauf innen" ;
     Text [ en-US ] = "Inner wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_OUTSIDE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Umlauf außen : Umlauf au˜en */
-    Text [ de ] = "Umlauf auÃŸen" ;
     Text [ en-US ] = "Outer wrap" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SURROUND_ANCHORONLY
 {
-    Text [ de ] = "(nur Anker)" ;
     Text [ en-US ] = "(Anchor only)" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FRM_WIDTH
 {
-    Text [ de ] = "Breite:" ;
     Text [ en-US ] = "Width:" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FRM_FIXEDHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? feste Höhe: : feste H÷he: */
-    Text [ de ] = "feste HÃ¶he:" ;
     Text [ en-US ] = "Fixed height:" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FRM_MINHEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? min. Höhe: : min. H÷he: */
-    Text [ de ] = "min. HÃ¶he:" ;
     Text [ en-US ] = "Min. height:" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FLY_AT_CNTNT
 {
-    Text [ de ] = "absatzgebunden" ;
     Text [ en-US ] = "to paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FLY_IN_CNTNT
 {
-    Text [ de ] = "zeichengebunden" ;
     Text [ en-US ] = "to character" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FLY_PAGE
 {
-    Text [ de ] = "seitengebunden" ;
     Text [ en-US ] = "to page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POS_X
 {
-    Text [ de ] = "X-Koord.:" ;
     Text [ en-US ] = "X Coordinate:" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POS_Y
 {
-    Text [ de ] = "Y-Koord.:" ;
     Text [ en-US ] = "Y Coordinate:" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VERT_TOP
 {
-    Text [ de ] = "oben" ;
     Text [ en-US ] = "at top" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VERT_CENTER
 {
-    Text [ de ] = "vertikal zentriert" ;
     Text [ en-US ] = "Centered vertically" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VERT_BOTTOM
 {
-    Text [ de ] = "unten" ;
     Text [ en-US ] = "at bottom" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LINE_TOP
 {
-    Text [ de ] = "Zeile oben" ;
     Text [ en-US ] = "Top of line" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LINE_CENTER
 {
-    Text [ de ] = "vertikal zur Zeile zentriert" ;
     Text [ en-US ] = "Line centered" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LINE_BOTTOM
 {
-    Text [ de ] = "Zeile unten" ;
     Text [ en-US ] = "Bottom of line" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REGISTER_ON
 {
-    Text [ de ] = "Registerhaltigkeit" ;
     Text [ en-US ] = "Register-true" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REGISTER_OFF
 {
-    Text [ de ] = "keine Registerhaltigkeit" ;
     Text [ en-US ] = "Not register-true" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HORI_RIGHT
 {
-    Text [ de ] = "rechts" ;
     Text [ en-US ] = "at the right" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HORI_CENTER
 {
-    Text [ de ] = "horizontal zentriert" ;
     Text [ en-US ] = "Centered horizontally" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HORI_LEFT
 {
-    Text [ de ] = "links" ;
     Text [ en-US ] = "at the left" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HORI_INSIDE
 {
-    Text [ de ] = "innen" ;
     Text [ en-US ] = "inside" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HORI_OUTSIDE
 {
     /* ### ACHTUNG: Neuer Text in Resource? außen : au˜en */
-    Text [ de ] = "auÃŸen" ;
     Text [ en-US ] = "outside" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HORI_FULL
 {
-    Text [ de ] = "volle Breite" ;
     Text [ en-US ] = "Full width" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COLUMNS
 {
-    Text [ de ] = "Spalten" ;
     Text [ en-US ] = "Columns" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LINE_WIDTH
 {
-    Text [ de ] = "Trennlinienbreite:" ;
     Text [ en-US ] = "Separator Width:" ;
-    Text [ x-comment ] = " ";
 };
 String STR_MAX_FTN_HEIGHT
 {
     /* ### ACHTUNG: Neuer Text in Resource? max. Fußnotenbereich: : max. Fu˜notenbereich: */
-    Text [ de ] = "max. FuÃŸnotenbereich:" ;
     Text [ en-US ] = "Max. footnote area:" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EDIT_IN_READONLY
 {
@@ -354,181 +254,139 @@ String STR_EDIT_IN_READONLY
     /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
     /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im Schreibeschütztem Dokument */
     /* ### ACHTUNG: Neuer Text in Resource? editierbar im schreibgeschütztem Dokument : editierbar im schreibgesch³tztem Dokument */
-    Text [ de ] = "editierbar im schreibgeschÃ¼tztem Dokument" ;
     Text [ en-US ] = "Editable in read-only document" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LAYOUT_SPLIT
 {
-    Text [ de ] = "Trennen" ;
     Text [ en-US ] = "Split" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NUMRULE_ON
 {
-    Text [ de ] = "Nummerierung" ;
     Text [ en-US ] = "Numbering" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NUMRULE_OFF
 {
-    Text [ de ] = "keine Nummerierung" ;
     Text [ en-US ] = "no numbering" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONNECT1
 {
-    Text [ de ] = "Verbunden mit " ;
     Text [ en-US ] = "linked to " ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONNECT2
 {
-    Text [ de ] = " und " ;
     Text [ en-US ] = "and " ;
-    Text [ x-comment ] = " ";
 };
 String STR_LINECOUNT
 {
-    Text [ de ] = "Zeilen zÃ¤hlen" ;
     Text [ en-US ] = "Count lines" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DONTLINECOUNT
 {
-    Text [ de ] = "Zeilen nicht zÃ¤hlen" ;
     Text [ en-US ] = "don't count lines" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LINCOUNT_START
 {
-    Text [ de ] = "ZeilenzÃ¤hler starten mit: " ;
     Text [ en-US ] = "restart line count with: " ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_LUMINANCE
 {
-    Text [ de ] = "Helligkeit: ";
     Text [ en-US ] = "Brightness: ";
 };
 
 String STR_CHANNELR
 {
-    Text [ de ] = "Rotanteil: ";
     Text [ en-US ] = "Red: ";
 };
 
 String STR_CHANNELG
 {
-    Text [ de ] = "GrÃ¼nanteil: ";
     Text [ en-US ] = "Green: ";
 };
 
 String STR_CHANNELB
 {
-    Text [ de ] = "Blauanteil: ";
     Text [ en-US ] = "Blue: ";
 };
 
 String STR_CONTRAST
 {
-    Text [ de ] = "Kontrast: ";
     Text [ en-US ] = "Contrast: ";
 };
 
 String STR_GAMMA
 {
-    Text [ de ] = "Gamma: ";
     Text [ en-US ] = "Gamma: ";
 };
 
 String STR_TRANSPARENCY
 {
-    Text [ de ] = "Transparenz: ";
     Text [ en-US ] = "Transparency: ";
 };
 
 String STR_INVERT
 {
-    Text [ de ] = "Invertieren";
     Text [ en-US ] = "Invert";
 };
 String STR_INVERT_NOT
 {
-    Text [ de ] = "nicht invertieren";
     Text [ en-US ] = "do not invert";
 };
 
 String STR_DRAWMODE
 {
-    Text [ de ] = "Grafikmodus: ";
     Text [ en-US ] = "Graphics mode: ";
 };
 
 String STR_DRAWMODE_STD
 {
-    Text [ de ] = "Standard";
     Text [ en-US ] = "Standard";
 };
 String STR_DRAWMODE_GREY
 {
-    Text [ de ] = "Graustufen";
     Text [ en-US ] = "Grayscales";
 };
 String STR_DRAWMODE_BLACKWHITE
 {
-    Text [ de ] = "Schwarz/WeiÃŸ";
     Text [ en-US ] = "Black & White";
 };
 String STR_DRAWMODE_WATERMARK
 {
-    Text [ de ] = "Wasserzeichen";
     Text [ en-US ] = "Watermark";
 };
 String STR_ROTATION
 {
-    Text [ de ] = "Drehung";
     Text [ en-US ] = "Rotation";
 };
 
 String STR_GRID_NONE
 {
-    Text [ de ] = "Kein Raster";
     Text [ en-US ] = "No grid";
-    Text [ x-comment ] = "ZL: translation changed because of bug from Jack";
 };
 
 String STR_GRID_LINES_ONLY
 {
-    Text [ de ] = "Raster (nur Linien)";
     Text [ en-US ] = "Grid (lines only)";
-    Text [ x-comment ] = "ZL: translation changed because of bug from Jack";
 };
 
 String STR_GRID_LINES_CHARS
 {
-    Text [ de ] = "Raster (Linien und Zeichen)";
     Text [ en-US ] = "Grid (lines and characters)";
 };
 String STR_FOLLOW_TEXT_FLOW
 {
-    Text [ de ] = "Textfluss folgen";
     Text [ en-US ] = "Follow text flow";
 };
 String STR_DONT_FOLLOW_TEXT_FLOW
 {
-    Text [ de ]  = "Textfluss nicht folgen";
     Text [ en-US ] = "Do not follow text flow";
 };
 String STR_CONNECT_BORDER_ON
 {
-    Text [ de ] = "Umrandung verschmelzen";
     Text [ en-US ] = "Merge borders";
 };
 String STR_CONNECT_BORDER_OFF
 {
-    Text [ de ] = "Umrandung nicht verschmelzen";
     Text [ en-US ] = "Do not merge borders";
 };
 
