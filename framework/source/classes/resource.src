@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 07:10:22 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,37 +41,29 @@
 
 String STR_MENU_ADDONS
 {
-    Text [ de ] = "Add-Ons" ;
     Text [ en-US ] = "Add-Ons" ;
 };
 
 String STR_MENU_ADDONHELP
 {
-    Text [ de ] = "Add-~On-Hilfe" ;
     Text [ en-US ] = "Add-~On Help" ;
 };
 
 String STR_MENU_HEADFOOTALL
 {
-    Text [ de ] = "Alle" ;
     Text [ en-US ] = "All" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_UPDATEDOC
 {
-    Text [ de ] = "Aktuali~siere" ;
     Text [ en-US ] = "~Update" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_CLOSEDOC_ANDRETURN
 {
     /* ### ACHTUNG: Neuer Text in Resource? S~chlieen & zur�ck zu  : S~chlieen & zurck zu  */
     /* ### ACHTUNG: Neuer Text in Resource? S~chlie�en & zur�ck zu  : S~chlieen & zurck zu  */
-    Text [ de ] = "S~chlie�ßen & zurück zu " ;
     Text [ en-US ] = "~Close & Return to " ;
-    Text [ x-comment ] = " ";
 };
 
 Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
@@ -84,14 +76,12 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
             SubMenu = Menu
             {
             };
-            Text[ de ] = "Sichtbare ~Schaltflächen";
             Text[ en-US ] = "Visible ~Buttons";
         };
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_CUSTOMIZETOOLBAR;
             Command = ".uno:ConfigureToolboxVisible" ;
-            Text[ de ] = "~Symbolleiste anpassen..." ;
             Text[ en-US ] = "~Customize Toolbar...";
         };
         MenuItem
@@ -101,13 +91,11 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_DOCKTOOLBAR;
-            Text[ de ] = "Symbolleiste an~docken" ;
             Text[ en-US ] = "~Dock Toolbar" ;
         };
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_DOCKALLTOOLBAR;
-            Text[ de ] = "~Alle Symbolleisten andocken" ;
             Text[ en-US ] = "Dock ~All Toolbars" ;
         };
         MenuItem
@@ -117,13 +105,11 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_LOCKTOOLBARPOSITION;
-            Text[ de ] = "Symbolleisten~position sperren" ;
             Text[ en-US ] = "~Lock Toolbar Position" ;
         };
         MenuItem
         {
             Identifier = MENUITEM_TOOLBAR_CLOSE;
-            Text[ de ] = "Symbolleiste s~chließen" ;
             Text[ en-US ] = "Close ~Toolbar" ;
         };
     };
@@ -131,19 +117,16 @@ Menu POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION
 
 String STR_SAVECOPYDOC
 {
-    Text [de ] = "Kopie Speichern ~unter..." ;
     Text [ en-US ] = "Save Copy ~as..." ;
 };
 
 String STR_NODOCUMENT
 {
-    Text [ de ] = "Keine Dokumente";
     Text [ en-US ] = "No documents";
 };
 
 String STR_TOOLBAR_TITLE_ADDON
 {
-    Text [ de ] = "Add-On %num%";
     Text [ en-US ] = "Add-On %num%";
 };
 
@@ -196,7 +179,6 @@ ModalDialog DLG_LICENSE
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( LICENSE_DIALOG_WIDTH , LICENSE_DIALOG_HEIGTH ) ;
-    Text [ de ] = "Lizenzvertrag" ;
     Text [ en-US ] = "License Agreement";
 
     MultiLineEdit ML_LICENSE
@@ -212,7 +194,6 @@ ModalDialog DLG_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_1 , LICENSE_ROW_2 ) ;
         Size = MAP_APPFONT ( LICENSE_WIDTH , FT_HEIGHT ) ;
-        Text [ de ] = "Bitte führen Sie die folgenden Schritte aus, um mit der Installation fortzufahren:" ;
         Text [ en-US ] = "Please follow these steps to proceed with the installation:" ;
     };
 
@@ -235,7 +216,6 @@ ModalDialog DLG_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_2 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( COL2_WIDTH , FT_HEIGHT ) ;
-        Text [ de ] = "1." ;
         Text [ en-US ] = "1." ;
     };
 
@@ -244,7 +224,6 @@ ModalDialog DLG_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_3 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( COL3_WIDTH, 3*FT_HEIGHT ) ;
-        Text [ de ] = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die %PAGEDOWN Schaltfläche in diesem Dialog um den gesamten Text sichtbar zu machen." ;
         Text [ en-US ] = "View the complete License Agreement. Please use the scroll bar or the '%PAGEDOWN' button in this dialog to view the entire license text." ;
     };
 
@@ -253,7 +232,6 @@ ModalDialog DLG_LICENSE
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_4 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( PD_WIDTH , PB_HEIGHT ) ;
-        Text [ de ] = "Blättern" ;
         Text [ en-US ] = "Scroll Down" ;
     };
 
@@ -262,7 +240,6 @@ ModalDialog DLG_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_2 , LICENSE_ROW_4 ) ;
         Size = MAP_APPFONT ( COL2_WIDTH, FT_HEIGHT ) ;
-        Text [ de ] = "2." ;
         Text [ en-US ] = "2." ;
     };
 
@@ -271,19 +248,16 @@ ModalDialog DLG_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_3, LICENSE_ROW_4 ) ;
         Size = MAP_APPFONT ( COL3_WIDTH, FT_HEIGHT ) ;
-        Text [de ] = "Akzeptieren Sie den Lizenzvertrag." ;
         Text [ en-US ] = "Accept the License Agreement." ;
     };
 
     String LICENSE_ACCEPT
     {
-        Text [ de ] = "~Akzeptieren" ;
         Text [ en-US ] = "~Accept" ;
     };
 
     String LICENSE_NOTACCEPT
     {
-        Text [ de ] = "Ablehnen" ;
         Text [ en-US ] = "Decline" ;
     };
 
@@ -317,20 +291,15 @@ Image RID_IMAGE_STATUSBAR_LOGO
 
 String STR_FULL_DISC_RETRY_BUTTON
 {
-    Text [ de ] = "Wiederholen" ;
     Text [ en-US ] = "Retry" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_FULL_DISC_MSG
 {
-    Text [ de ] = "%PRODUCTNAME konnte wichtige interne Informationen nicht speichern, da im folgenden Pfad nicht genügend freier Speicherplatz zur Verfügung steht:\n%PATH\n\nSie können Ihre Arbeit mit %PRODUCTNAME erst fortsetzen, wenn sie genügend freien Speicherplatz zur Verfügung gestellt haben.\n\nBetätigen Sie die Schaltfläche 'Wiederholen', nachdem Sie mehr freien Speicher zur Verfügung gestellt haben, um das Speichern der Daten zu wiederholen.\n\n" ;
     Text [ en-US ] = "%PRODUCTNAME could not save important internal information due to insufficient free disk space at the following location:\n%PATH\n\nYou will not be able to continue working with %PRODUCTNAME without allocating more free disk space at that location.\n\nPress the 'Retry' button after you have allocated more free disk space to retry saving the data.\n\n" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_RESTORE_TOOLBARS
 {
-    Text [ de ] = "~Wiederherstellen" ;
     Text [ en-US ] = "~Reset" ;
 };
