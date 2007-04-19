@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationPane.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:26:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:15:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ Control DLG_CUSTOMANIMATIONPANE
     Border = FALSE;
 
     Size = MAP_APPFONT( 160, 300 );
-    Text [ de ] = "Benutzerdefinierte Animation";
     Text [ en-US ] = "Custom Animation";
 
     FixedLine FL_EFFECT
@@ -52,7 +51,6 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 260, 8 );
 
-        Text [ de ] = "Effekt";
         Text [ en-US ] = "Effect";
     };
 
@@ -63,7 +61,6 @@ Control DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "~Hinzufügen...";
         Text [ en-US ] = "~Add...";
     };
 
@@ -74,7 +71,6 @@ Control DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "~Ändern...";
         Text [ en-US ] = "~Change...";
     };
 
@@ -85,7 +81,6 @@ Control DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 50, 14 );
 
-        Text [ de ] = "~Entfernen";
         Text [ en-US ] = "~Remove";
     };
 
@@ -94,7 +89,6 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 260, 8 );
 
-        Text [ de ] = "Effekt ändern";
         Text [ en-US ] = "Modify effect";
     };
 
@@ -103,7 +97,6 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "~Starten";
         Text [ en-US ] = "~Start";
     };
 
@@ -115,12 +108,6 @@ Control DLG_CUSTOMANIMATIONPANE
         Border = TRUE ;
         DropDown = TRUE ;
 
-        StringList [ de ] =
-        {
-            < "Beim Klicken" ; > ;
-            < "Mit Vorheriger" ; > ;
-            < "Nach Vorheriger" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "On click" ; > ;
@@ -134,7 +121,6 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Eigenschaft";
         Text [ en-US ] = "Property";
     };
 
@@ -154,10 +140,8 @@ Control DLG_CUSTOMANIMATIONPANE
         TabStop = TRUE;
         Size = MAP_APPFONT( 16, 14 );
 
-        Text [ de ] = "~...";
         Text [ en-US ] = "~...";
 
-        QuickHelpText [ de ] = "Effektoptionen";
         QuickHelpText [en-US ] = "Effect Options";
     };
 
@@ -166,7 +150,6 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "~Geschwindigkeit";
         Text [ en-US ] = "Sp~eed";
     };
 
@@ -191,7 +174,6 @@ Control DLG_CUSTOMANIMATIONPANE
         OutputSize = TRUE;
         Size = MAP_APPFONT( 42, 8 );
 
-        Text [ de ] = "Reihenfolge ändern:";
         Text [ en-US ] = "Change order:";
     };
 
@@ -223,7 +205,6 @@ Control DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE;
 
-        Text [ de ] = "~Wiedergabe";
         Text [ en-US ] = "~Play";
     };
 
@@ -233,7 +214,6 @@ Control DLG_CUSTOMANIMATIONPANE
         Size = MAP_APPFONT ( 80 , 14 ) ;
         TabStop = TRUE;
 
-        Text [ de ] = "~Bildschirmpräsentation";
         Text [ en-US ] = "Slide Sho~w";
     };
 
@@ -247,7 +227,6 @@ Control DLG_CUSTOMANIMATIONPANE
         HelpId = HID_SD_CUSTOMANIMATIONPANE_CB_AUTOPREVIEW;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Automatische ~Vorschau" ;
         Text [ en-US ] = "Automatic pre~view" ;
     };
 };
