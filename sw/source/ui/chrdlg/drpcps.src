@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drpcps.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 06:37:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ TabDialog DLG_DROPCAPS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Initialen" ;
     Text [ en-US ] = "Drop Caps" ;
     Moveable = TRUE ;
     TabControl 1
@@ -54,14 +53,11 @@ TabDialog DLG_DROPCAPS
             PageItem
             {
                 Identifier = TP_DROPCAPS ;
-                Text [ de ] = "Initialen" ;
                 Text [ en-US ] = "Drop Caps" ;
                 PageResID = TP_DROPCAPS ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  // TabPage ******************************************************************
 TabPage TP_DROPCAPS
@@ -73,25 +69,19 @@ TabPage TP_DROPCAPS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "I~nitialen anzeigen" ;
         Text [ en-US ] = "Display drop caps" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_WORD
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "Ganzes ~Wort" ;
         Text [ en-US ] = "~Whole word" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_DROPCAPS
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Anzahl der Ze~ichen" ;
         Text [ en-US ] = "Number of ~characters:" ;
-        Text [ x-comment ] = " ";
     };
     NumericField FLD_DROPCAPS
     {
@@ -112,9 +102,7 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Zei~len" ;
         Text [ en-US ] = "~Lines" ;
-        Text [ x-comment ] = " ";
     };
     NumericField FLD_LINES
     {
@@ -135,9 +123,7 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 76 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "A~bstand zum Text" ;
         Text [ en-US ] = "Space to text" ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_DISTANCE
     {
@@ -160,9 +146,7 @@ TabPage TP_DROPCAPS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text [ de ] = "Einstellungen" ;
         Text [ en-US ] = "Settings" ;
-        Text [ x-comment ] = " ";
     };
     Control CNT_PICT
     {
@@ -175,9 +159,7 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text [ de ] = "Initialen~text" ;
         Text [ en-US ] = "~Text" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_TEXT
     {
@@ -193,9 +175,7 @@ TabPage TP_DROPCAPS
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text [ de ] = "Zeichen~vorlage" ;
         Text [ en-US ] = "Character St~yle" ;
-        Text [ x-comment ] = "; All ; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
     ListBox BOX_TEMPLATE
     {
@@ -209,9 +189,7 @@ TabPage TP_DROPCAPS
     {
         Pos = MAP_APPFONT ( 6 , 89 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Inhalt" ;
         Text [ en-US ] = "Contents" ;
-        Text [ x-comment ] = " ";
     };
 };
  // ********************************************************************** EOF
