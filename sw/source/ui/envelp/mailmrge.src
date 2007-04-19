@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:02:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:06:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include "helpid.h"
 
 #define _MAIL_MERGE_STRING_ \
-    Text [ de ] = "Seriendruck" ;\
     Text [ en-US ] = "Mail Merge" ; \
 
 ModalDialog DLG_MAILMERGE
@@ -60,28 +59,22 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Alle" ;
         Text [ en-US ] = "~All" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_MARKED
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Markierte ~Datensätze" ;
         Text [ en-US ] = "~Selected records" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_FROM
     {
         Pos = MAP_APPFONT ( 12 , 123 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text [ de ] = "~Von:" ;
         Text [ en-US ] = "~From:" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_FROM
     {
@@ -97,10 +90,8 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 75 , 123 ) ;
         Size = MAP_APPFONT ( 27 , 10 ) ;
-        Text [ de ] = "~Bis:" ;
         Text [ en-US ] = "~To:" ;
         Center = TRUE ;
-        Text [ x-comment ] = "; RB: ; RB: SW Datei - Serienbrief";
     };
     NumericField NF_TO
     {
@@ -116,45 +107,35 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 6 , 86 ) ;
         Size = MAP_APPFONT ( 126 , 8 ) ;
-        Text [ de ] = "Datensätze" ;
         Text [ en-US ] = "Records" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_PRINTER
     {
         Pos = MAP_APPFONT ( 144 , 97 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text [ de ] = "Dr~ucker" ;
         Check = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Printer" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_MAILING
     {
         Pos = MAP_APPFONT ( 200 , 97 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text [ de ] = "~Mailing" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Electronic" ;
-        Text [ x-comment ] = "; ENG:; ENG:the anglicism \"Mailing\" as used in German cannot be used in Eng. because the real meaning has nothing to do with e-mail.EM17.5.00";
     };
     RadioButton RB_FILE
     {
         Pos = MAP_APPFONT ( 256 , 97 ) ;
         Size = MAP_APPFONT ( 56 , 10 ) ;
-        Text [ de ] = "Datei" ;
         TabStop = TRUE ;
         Text [ en-US ] = "File" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PATH
     {
         Pos = MAP_APPFONT ( 144 , 124 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
-        Text [ de ] = "Pfad" ;
         Text [ en-US ] = "Path" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_PATH
     {
@@ -175,28 +156,22 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 144 , 142 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ de ] = "Dateiname generiert aus" ;
         Text [ en-US ] = "Generate file name from" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_COLUMN
     {
         Pos = MAP_APPFONT ( 150 , 155 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "Datenbankfeld" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Database field" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_FILENAME
     {
         Pos = MAP_APPFONT ( 150 , 170 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "Manueller Vorgabe" ;
         TabStop = TRUE ;
         Check = TRUE ;
         Text [ en-US ] = "Manual setting" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COLUMN
     {
@@ -217,10 +192,8 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 144 , 112 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ de ] = "~Einzelne Druckjobs erzeugen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Single print jobs" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ADDRESS
     {
@@ -228,9 +201,7 @@ ModalDialog DLG_MAILMERGE
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Adress~feld" ;
         Text [ en-US ] = "Address ~field" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ADDRESSFLD
     {
@@ -247,9 +218,7 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 144 , 125 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Be~treff" ;
         Text [ en-US ] = "~Subject" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SUBJECT
     {
@@ -264,9 +233,7 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 144 , 140 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Anhänge" ;
         Text [ en-US ] = "Attachments" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_ATTACH
     {
@@ -291,9 +258,7 @@ ModalDialog DLG_MAILMERGE
         Pos = MAP_APPFONT ( 144 , 157 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Disable = TRUE ;
-        Text [ de ] = "Mail-Format" ;
         Text [ en-US ] = "Mail Format" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_FORMAT_HTML
     {
@@ -301,30 +266,24 @@ ModalDialog DLG_MAILMERGE
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
         /* ### ACHTUNG: Neuer Text in Resource? HTM~L : HTML */
-        Text [ de ] = "HTM~L" ;
         TabStop = TRUE ;
         Text [ en-US ] = "HTM~L" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_FORMAT_RTF
     {
         Pos = MAP_APPFONT ( 220 , 169 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
-        Text [ de ] = "~RTF" ;
         TabStop = TRUE ;
         Text [ en-US ] = "RT~F" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_FORMAT_SW
     {
         Pos = MAP_APPFONT ( 220, 182 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         Disable = TRUE ;
-        Text [ de ] = "%PRODUCTNAME Writer" ;
         TabStop = TRUE ;
         Text [ en-US ] = "%PRODUCTNAME Writer" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SEPARATOR
     {
@@ -336,9 +295,7 @@ ModalDialog DLG_MAILMERGE
     {
         Pos = MAP_APPFONT ( 138 , 86 ) ;
         Size = MAP_APPFONT ( 174 , 8 ) ;
-        Text [ de ] = "Ausgabe" ;
         Text [ en-US ] = "Output" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -370,9 +327,7 @@ ModalDialog DLG_MERGE_CREATE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Erstellen" ;
         Text [ en-US ] = "Create" ;
-        Text [ x-comment ] = "; EM April 2003: this text is followed by the check boxes: \"From this ~document\", \"From a ~template\"";
     };
     RadioButton RB_THISDOC
     {
@@ -380,7 +335,6 @@ ModalDialog DLG_MERGE_CREATE
         Size = MAP_APPFONT ( 70 , 10 ) ;
         Check = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "aus diesem ~Dokument" ;
         Text [ en-US ] = "From this ~document" ;
     };
     RadioButton RB_TEMPLATE
@@ -388,9 +342,7 @@ ModalDialog DLG_MERGE_CREATE
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "aus einer ~Vorlage" ;
         Text [ en-US ] = "From a ~template" ;
-        Text [ x-comment ] = "; EM April 2003: German will be changed to \"aus einer ~Dokumentvorlage\"";
     };
     OKButton BT_OK
     {
@@ -417,13 +369,11 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
     Size = MAP_APPFONT ( 205 , 97 ) ;
     Moveable = TRUE ;
     HelpID = HID_MAIL_MERGE_INSERT_FIELDS;
-    Text [ de ] = "Datenquellen-Verbindung" ;
     Text [ en-US ] = "Data Source Connection" ;
     FixedLine FL_CONNECTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 140 , 8 ) ;
-        Text [ de ] = "Verbinden" ;
         Text [ en-US ] = "Connect" ;
     };
     RadioButton RB_USEEXISTING
@@ -432,7 +382,6 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Size = MAP_APPFONT ( 130 , 10 ) ;
         Check = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "~Mit vorhandener Datenquelle" ;
         Text [ en-US ] = "~Use existing" ;
     };
     RadioButton RB_CREATENEW
@@ -440,7 +389,6 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Mit ~anderer Datenquelle" ;
         Text [ en-US ] = "~Create new connection" ;
     };
     FixedText FT_INFO
@@ -448,7 +396,6 @@ ModalDialog DLG_MERGE_FIELD_CONNECTIONS
         Pos = MAP_APPFONT ( 6 , 41 ) ;
         Size = MAP_APPFONT ( 141 , 50 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Serienbriefe benötigen für eine Personalisierung Felder. Felder sind in diesem Falle Platzhalter für Daten, die aus einer Datenquelle stammen, z.B. aus einer Datenbank. Die Felder in dem Serienbrief müssen mit der Datenquelle verbunden sein. " ;
         Text [ en-US ] = "Fields are used to personalize form letters. The fields are placeholders for data from a data source, such as a database. The fields in the form letter must be connected to the data source." ;
     };
     OKButton BT_OK
