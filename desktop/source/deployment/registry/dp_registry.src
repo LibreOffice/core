@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_registry.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:25:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:42:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,36 +38,30 @@
 String RID_STR_REGISTERING_PACKAGE
 {
     Text [ en-US ] = "Enabling: ";
-    Text [ de ] = "Aktiviere: ";
 };
 
 String RID_STR_REVOKING_PACKAGE
 {
     Text [ en-US ] = "Disabling: ";
-    Text [ de ] = "Deaktiviere: ";
 };
 
 String RID_STR_CANNOT_DETECT_MEDIA_TYPE
 {
     Text [ en-US ] = "Cannot detect media-type: ";
-    Text [ de ] = "Media-Typ konnte nicht ermittelt werden: ";
 };
 
 String RID_STR_UNSUPPORTED_MEDIA_TYPE
 {
     Text [ en-US ] = "This media-type is not supported: ";
-    Text [ de ] = "Dieser Media-Typ wird nicht unterstützt: ";
 };
 
 String RID_STR_ERROR_WHILE_REGISTERING
 {
     Text [ en-US ] = "An error occurred while enabling: ";
-    Text [ de ] = "Fehler beim Aktivieren von: ";
 };
 
 String RID_STR_ERROR_WHILE_REVOKING
 {
     Text [ en-US ] = "An error occurred while disabling: ";
-    Text [ de ] = "Fehler beim Deaktivieren von: ";
 };
 
