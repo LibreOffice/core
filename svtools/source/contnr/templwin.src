@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:50:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:09:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ Control CTRL_FILEVIEW
 
 String STR_SVT_NEWDOC
 {
-    Text [ de ] = "Neues Dokument";
     Text [ en-US ] = "New Document";
 };
 
@@ -68,7 +67,6 @@ Image IMG_SVT_NEWDOC_HC
 
 String STR_SVT_MYDOCS
 {
-    Text [ de ] = "Eigene Dateien";
     Text [ en-US ] = "My Documents";
 };
 
@@ -86,7 +84,6 @@ Image IMG_SVT_MYDOCS_HC
 
 String STR_SVT_TEMPLATES
 {
-    Text [ de ] = "Vorlagen";
     Text [ en-US ] = "Templates";
 };
 
@@ -104,7 +101,6 @@ Image IMG_SVT_TEMPLATES_HC
 
 String STR_SVT_SAMPLES
 {
-    Text [ de ] = "Beispiele";
     Text [ en-US ] = "Samples";
 };
 
@@ -130,17 +126,13 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_BACK;
             HelpId = HID_TEMPLATEDLG_TB_BACK;
-            Text [ de ] = "Zurück" ;
             Text [ en-US ] = "Back" ;
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             Identifier = TI_DOCTEMPLATE_PREV;
             HelpId = HID_TEMPLATEDLG_TB_PREV;
-            Text [ de ] = "Ein Verzeichnis hoch" ;
             Text [ en-US ] = "Up One Level" ;
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
@@ -150,9 +142,7 @@ ToolBox TB_SVT_FILEVIEW
         {
             Identifier = TI_DOCTEMPLATE_PRINT;
             HelpId = HID_TEMPLATEDLG_TB_PRINT;
-            Text [ de ] = "Drucken" ;
             Text [ en-US ] = "Print" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -230,7 +220,6 @@ ToolBox TB_SVT_FRAMEWIN
             AutoCheck = TRUE;
             Identifier = TI_DOCTEMPLATE_DOCINFO;
             HelpId = HID_TEMPLATEDLG_TB_DOCINFO;
-            Text [ de ] = "Dokumenteigenschaften" ;
             Text [ en-US ] = "Document Properties" ;
         };
         ToolBoxItem
@@ -239,7 +228,6 @@ ToolBox TB_SVT_FRAMEWIN
             AutoCheck = TRUE;
             Identifier = TI_DOCTEMPLATE_PREVIEW;
             HelpId = HID_TEMPLATEDLG_TB_PREVIEW;
-            Text [ de ] = "Vorschau" ;
             Text [ en-US ] = "Preview" ;
         };
     };
@@ -292,7 +280,6 @@ ModalDialog DLG_DOCTEMPLATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT( 320, 234 );
-    Text [ de ] = "Vorlagen und Dokumente" ;
     Text [ en-US ] = "Templates and Documents" ;
     Moveable = TRUE ;
     FixedLine FL_DOCTEMPLATE
@@ -304,14 +291,12 @@ ModalDialog DLG_DOCTEMPLATE
     {
         Pos = MAP_APPFONT( 3, 214 );
         Size = MAP_APPFONT( 50, 14 );
-        Text [ de ] = "~Verwalten...";
         Text [ en-US ] = "Organi~ze...";
     };
     PushButton BTN_DOCTEMPLATE_EDIT
     {
         Pos = MAP_APPFONT( 56, 214 );
         Size = MAP_APPFONT( 50, 14 );
-        Text [ de ] = "~Bearbeiten";
         Text [ en-US ] = "~Edit";
     };
     OKButton BTN_DOCTEMPLATE_OPEN
@@ -319,7 +304,6 @@ ModalDialog DLG_DOCTEMPLATE
         Pos = MAP_APPFONT( 158, 214 );
         Size = MAP_APPFONT( 50, 14 );
         DefButton = TRUE;
-        Text [ de ] = "Ö~ffnen";
         Text [ en-US ] = "~Open";
     };
     CancelButton BTN_DOCTEMPLATE_CANCEL
@@ -336,21 +320,6 @@ ModalDialog DLG_DOCTEMPLATE
 
 StringArray STRARY_SVT_DOCINFO
 {
-    ItemList [ de ] =
-    {
-        < "Titel" ; DI_TITLE ; > ;
-        < "Von" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
-        < "Schlüsselwörter" ; DI_KEYWORDS ; > ;
-        < "Beschreibung" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "Änderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Geändert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "Gedruckt von" ; DI_PRINTBY ; > ;
-        < "Thema" ; DI_THEME ; > ;
-        < "Größe" ; DI_SIZE ; > ;
-    };
     ItemList [ en-US ] =
     {
         < "Title" ; DI_TITLE ; > ;
@@ -366,41 +335,22 @@ StringArray STRARY_SVT_DOCINFO
         < "Subject" ; DI_THEME ; > ;
         < "Size" ; DI_SIZE ; > ;
     };
-    ItemList [ x-comment ] =
-    {
-         < "Titel" ; DI_TITLE ; > ;
-        < "Von" ; DI_FROM ; > ;
-        < "Datum" ; DI_DATE ; > ;
-        < "Schl�sselw�rter" ; DI_KEYWORDS ; > ;
-        < "Beschreibung" ; DI_DESCRIPTION ; > ;
-        < "Inhaltstyp" ; DI_MIMETYPE ; > ;
-        < "�nderungdatum" ; DI_MODIFIEDDATE ; > ;
-        < "Ge�ndert von" ; DI_MODIFIEDBY ; > ;
-        < "Druckdatum" ; DI_PRINTDATE ; > ;
-        < "ZL : " ; DI_PRINTBY ; > ;
-        < "Thema" ; DI_THEME ; > ;
-        < "Gr��e" ; DI_SIZE ; > ;
-    };
     };
 
 String STR_SVT_NEWDOC_HELP
 {
-    Text [ de ] = "Von hier können Sie neue Dokumente erstellen.";
     Text [ en-US ] = "Click here to create new documents.";
 };
 String STR_SVT_MYDOCS_HELP
 {
-    Text [ de ] = "Enthält Ihre Briefe, Berichte und andere Dokumente";
     Text [ en-US ] = "Contains your letters, reports and other documents";
 };
 String STR_SVT_TEMPLATES_HELP
 {
-    Text [ de ] = "Enthält Vorlagen aus denen Sie neue Dokumente erstellen können";
     Text [ en-US ] = "Contains templates for creating new documents";
 };
 String STR_SVT_SAMPLES_HELP
 {
-    Text [ de ] = "Enthält Beispieldokumente für Briefe, Berichte und andere Dokumente";
     Text [ en-US ] = "Contains a selection of sample letters, reports and other documents";
 };
 
