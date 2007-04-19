@@ -4,9 +4,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:02:20 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,12 +62,10 @@
         TabStop = TRUE;
 
 #define RB_ARGBLOCK( y )                \
-    QuickHelpText [ de ] = "Verkleinern" ; \
     Pos = MAP_APPFONT ( 166 , y-1 ) ; \
     Size = MAP_APPFONT ( 13 , 15 ) ; \
     TabStop = FALSE ;   \
     QuickHelpText [ en-US ] = "Shrink"; \
-    QuickHelpText [ x-comment ] = " ";  \
 
  //---------------------------------------------------------------------------
 
@@ -85,7 +83,6 @@ TabPage RID_SCTAB_PARAMETER
         Pos = MAP_APPFONT (3 , 6 ) ;
         Size = MAP_APPFONT ( 198 , 20 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Unbekannte Funktion" ;
         Text [ en-US ] = "Function not known";
     };
 
