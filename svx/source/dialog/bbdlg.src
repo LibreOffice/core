@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bbdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:36:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:58:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabDialog RID_SVXDLG_BBDLG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 328 , 155 ) ;
-    Text [ de ] = "Umrandung / Hintergrund" ;
     Text [ en-US ] = "Border / Background" ;
     Moveable = TRUE ;
      // Closeable = TRUE; hat ja einen OKButton
@@ -56,20 +55,15 @@ TabDialog RID_SVXDLG_BBDLG
             PageItem
             {
                 Identifier = RID_SVXPAGE_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
