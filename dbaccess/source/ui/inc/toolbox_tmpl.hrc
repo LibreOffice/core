@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox_tmpl.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:53:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:04:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 
 #define MID_SBA_QRY_REFRESH \
     Identifier = ID_BROWSER_REFRESH ; \
-    Text [ de ] = "Aktualisieren" ; \
     Text [ en-US ] = "Refresh"; \
     Text [ x-comment ] = " ";   \
 
@@ -48,70 +47,60 @@
 #define MID_NEW_VIEW_DESIGN \
     Identifier = ID_NEW_VIEW_DESIGN;    \
     HelpId = HID_BROWSER_VIEW_CREATE_DESIGN ; \
-    Text [ de ] = "Neuer ~Ansichtsentwurf" ; \
     Text [ en-US ] = "New ~View Design" ; \
 
 
 #define MID_NEW_TABLE_DESIGN \
     Identifier = ID_NEW_TABLE_DESIGN;   \
     HelpId = HID_BROWSER_TABLE_CREATE_DESIGN ; \
-    Text [ de ] = "Neuer ~Tabellenentwurf" ; \
     Text [ en-US ] = "New ~Table Design" ;\
 
 
 #define MID_QUERY_WIZARD    \
     Identifier = ID_NEW_QUERY_WIZARD;   \
     HelpId = HID_BROWSER_QUERY_WIZARD ; \
-    Text[ de ] = "AutoPilot Abfrage..." ;\
     Text[ en-US ] = "Query AutoPilot...";   \
 
 
 #define MID_QUERY_NEW_DESIGN    \
     Identifier = ID_NEW_QUERY_DESIGN;   \
     HelpId = HID_BROWSER_QUERY_CREATE_DESIGN ; \
-    Text [ de ] = "Neue ~Abfrage (Design-Ansicht)" ; \
     Text [ en-US ] = "New ~Query (Design View)" ; \
 
 
 #define MID_QUERY_EDIT_DESIGN   \
     Identifier = ID_EDIT_QUERY_DESIGN;  \
     HelpId = HID_BROWSER_QUERY_EDIT ; \
-    Text [ de ] = "Abfrage b~earbeiten" ; \
     Text [ en-US ] = "~Edit Query" ; \
 
 
 #define MID_QUERY_NEW_SQL   \
     Identifier = ID_NEW_QUERY_SQL;  \
     HelpId = HID_BROWSER_QUERY_CREATE_TEXT ; \
-    Text [ de ] = "Neue Abfrage (~SQL-Ansicht)" ; \
     Text [ en-US ] = "New Query (~SQL View)" ; \
 
 
 #define MID_DBUI_QUERY_EDIT_JOINCONNECTION                                    \
     Identifier = ID_QUERY_EDIT_JOINCONNECTION;                                \
     HelpId = HID_QUERY_EDIT_JOINCONNECTION ;                                    \
-    Text [ de ] = "Beabeiten..." ;                                                    \
     Text [ en-US ] = "Edit..."; \
 
 
 #define MID_COLUMN_WIDTH\
     Identifier = ID_BROWSER_COLWIDTH ;\
     HelpID = HID_BROWSER_COLUMNWIDTH ;\
-    Text [ de ] = "Spalten~breite..." ;\
     Text [ en-US ] = "Column ~Width..." ;\
 
 
 #define MID_DOCUMENT_CREATE_REPWIZ\
     Identifier = ID_DOCUMENT_CREATE_REPWIZ ;\
     HelpID = HID_DOCUMENT_CREATE_REPWIZ ;\
-    Text [ de ] = "Berichts-Assistent..." ;\
     Text [ en-US ] = "Report Wizard...";    \
 
 
 #define MID_DOCUMENT_NEW_AUTOPILOT                              \
     Identifier = SID_DB_FORM_NEW_PILOT;                             \
     HelpID = SID_DB_FORM_NEW_PILOT ;\
-    Text [ de ] = "AutoPilot Formular...";                              \
     Text [ en-US ] = "Form AutoPilot...";   \
 
 
