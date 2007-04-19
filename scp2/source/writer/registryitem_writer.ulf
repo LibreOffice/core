@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_writer.ulf,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:36:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,40 +35,30 @@
 
 [STR_REG_VAL_NEW]
 en-US = "&New"
-de = "&Neu"
 
 [STR_REG_VAL_SO60_TEXT]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Text Document"
-de = "%PRODUCTNAME %SXWFORMATVERSION Text Dokument"
 
 [STR_REG_VAL_SO52_TEXT_OOO]
 en-US = "StarOffice 5.0 Text Document"
-de = "StarOffice 5.0 Text Dokument"
 
 [STR_REG_VAL_SO51_MASTERDOC_OOO]
 en-US = "StarOffice 5.0 Master Document"
-de = "StarOffice 5.0 Globaldokument"
 
 [STR_REG_VAL_SO60_MASTERDOC]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Master Document"
-de = "%PRODUCTNAME %SXWFORMATVERSION Globaldokument"
 
 [STR_REG_VAL_SO60_WRITER_TEMPLATE]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Text Document Template"
-de = "%PRODUCTNAME %SXWFORMATVERSION Textdokumentvorlage"
 
 [STR_REG_VAL_OO_WRITER]
 en-US = "OpenDocument Text"
-de = "OpenDocument Text"
 
 [STR_REG_VAL_OO_WRITER_TEMPLATE]
 en-US = "OpenDocument Text Template"
-de = "OpenDocument Textdokumentvorlage"
 
 [STR_REG_VAL_OO_MASTERDOC]
 en-US = "OpenDocument Master Document"
-de = "OpenDocument Globaldokument"
 
 [STR_REG_VAL_OO_WEBDOC]
 en-US = "HTML Document Template"
-de = "HTML-Dokumentvorlage"
