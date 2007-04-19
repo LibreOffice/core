@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wordcountdialog.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:59:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:59:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog DLG_WORDCOUNT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 170 , 108 ) ;
-    Text [ de ] = "Wortanzahl" ;
     Text [ en-US ] = "Word Count" ;
     Moveable = TRUE ;
 
@@ -49,14 +48,12 @@ ModalDialog DLG_WORDCOUNT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 158 , 8 ) ;
-        Text [ de ] = "Aktuelle Auswahl" ;
         Text [ en-US ] = "Current selection";
     };
     FixedText       FT_CURRENTWORD
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Wörter:" ;
         Text [ en-US ] = "Words:";
     };
     FixedText       FI_CURRENTWORD
@@ -69,7 +66,6 @@ ModalDialog DLG_WORDCOUNT
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Zeichen:" ;
         Text [ en-US ] = "Characters:";
     };
     FixedText       FI_CURRENTCHARACTER
@@ -82,14 +78,12 @@ ModalDialog DLG_WORDCOUNT
     {
         Pos = MAP_APPFONT (  6, 40 ) ;
         Size = MAP_APPFONT ( 158 , 8 ) ;
-        Text [ de ] = "Gesamtes Dokument" ;
         Text [ en-US ] = "Whole document";
     };
     FixedText       FT_DOCWORD
     {
         Pos = MAP_APPFONT (  12, 51 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Wörter:" ;
         Text [ en-US ] = "Words:";
     };
     FixedText       FI_DOCWORD
@@ -102,7 +96,6 @@ ModalDialog DLG_WORDCOUNT
     {
         Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Zeichen:" ;
         Text [ en-US ] = "Characters:";
     };
     FixedText       FI_DOCCHARACTER
