@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 15:10:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:05:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,9 @@
 #include "helpid.h"
 // ----- defined strings -----------------------------------------------------
 #define LABEL_STRING                                    \
-    Text [ de ] = "Etiketten" ;                                \
     Text [ en-US ] = "Labels" ;                    \
 
 #define BUSINESS_CARD_STRING \
-    Text [ de ] = "Visitenkarten" ;                         \
     Text [ en-US ] = "Business Cards";              \
 
  // DLG_LAB ------------------------------------------------------------------
@@ -69,33 +67,25 @@ TabDialog DLG_LAB
             {
                 Identifier = TP_PRIVATE_DATA;
                 PageResID = TP_PRIVATE_DATA;
-                Text [ de ] = "Privat" ;
                 Text [ en-US ] = "Private";
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BUSINESS_DATA;
                 PageResID = TP_BUSINESS_DATA;
-                Text [ de ] = "Geschäft" ;
                 Text [ en-US ] = "Business";
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_LAB_FMT ;
-                Text [ de ] = "Format" ;
                 PageResID = TP_LAB_FMT ;
                 Text [ en-US ] = "Format" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_LAB_PRT ;
-                Text [ de ] = "Zusätze" ;
                 PageResID = TP_LAB_PRT ;
                 Text [ en-US ] = "Options" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -109,9 +99,7 @@ TabDialog DLG_LAB
     };
     String ST_FIRSTPAGE_BC
     {
-        Text [ de ] = "Medium" ;
         Text [ en-US ] = "Medium";
-        Text [ x-comment ] = " ";
     };
 };
  // TP_LAB_LAB ---------------------------------------------------------------
@@ -126,18 +114,14 @@ TabPage TP_LAB_LAB
         Size = MAP_APPFONT ( 50 , 8 ) ;
         Group = TRUE ;
         Left = TRUE ;
-        Text [ de ] = "~Aufschrift" ;
         Text [ en-US ] = "Label text" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BOX_ADDR
     {
         Pos = MAP_APPFONT ( 67 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Adre~sse" ;
         Text [ en-US ] = "Address" ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit EDT_WRITING
     {
@@ -154,9 +138,7 @@ TabPage TP_LAB_LAB
     {
         Pos = MAP_APPFONT ( 149 , 16 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
-        Text [ de ] = "~Datenbank" ;
         Text [ en-US ] = "Database" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DATABASE
     {
@@ -170,9 +152,7 @@ TabPage TP_LAB_LAB
     {
         Pos = MAP_APPFONT ( 149 , 45 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
-        Text [ de ] = "Tabe~lle" ;
         Text [ en-US ] = "Table" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_TABLE
     {
@@ -193,9 +173,7 @@ TabPage TP_LAB_LAB
     {
         Pos = MAP_APPFONT ( 149 , 81 ) ;
         Size = MAP_APPFONT ( 99 , 8 ) ;
-        Text [ de ] = "Datenbank~feld" ;
         Text [ en-US ] = "Database field" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DBFIELD
     {
@@ -210,9 +188,7 @@ TabPage TP_LAB_LAB
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Group = TRUE ;
-        Text [ de ] = "Aufschrift" ;
         Text [ en-US ] = "Inscription" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_CONT
     {
@@ -220,26 +196,20 @@ TabPage TP_LAB_LAB
         Size = MAP_APPFONT ( 65 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ de ] = "~Endlos" ;
         Text [ en-US ] = "~Continuous" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_SHEET
     {
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 65 , 10 ) ;
-        Text [ de ] = "~Bogen" ;
         Text [ en-US ] = "~Sheet" ;
-        Text [ x-comment ] = " ";
     };
     FixedText TXT_MAKE
     {
         Pos = MAP_APPFONT ( 91 , 138 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "~Marke" ;
         Text [ en-US ] = "Brand" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox BOX_MAKE
     {
@@ -254,9 +224,7 @@ TabPage TP_LAB_LAB
         Pos = MAP_APPFONT ( 91 , 154 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Typ" ;
         Text [ en-US ] = "~Type" ;
-        Text [ x-comment ] = " ";
     };
     ListBox BOX_TYPE
     {
@@ -277,9 +245,7 @@ TabPage TP_LAB_LAB
         Pos = MAP_APPFONT ( 6 , 125 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Group = TRUE ;
-        Text [ de ] = "Format" ;
         Text [ en-US ] = "Format" ;
-        Text [ x-comment ] = " ";
     };
 };
 #define WIDTH  100
@@ -299,21 +265,16 @@ FloatingWindow DLG_SYNC_BTN
     {
         Pos = MAP_APPFONT ( 1 , 1 ) ;
         Size = MAP_APPFONT ( WIDTH - 1 , HEIGHT - 1 ) ;
-        Text [ de ] = "Etiketten synchronisieren" ;
         Text [ en-US ] = "Synchronize Labels" ;
-        Text [ x-comment ] = " ";
     };
 };
  // String *******************************************************************
 String STR_DOC_TITLE
 {
-    Text [ de ] = "Etiketten" ;
     Text [ en-US ] = "Labels" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CUSTOM
 {
-    Text [ de ] = "[Benutzer]" ;
     Text [ en-US ] = "[User]";
 };
 /********************************************************************/
@@ -334,9 +295,7 @@ TabPage TP_VISITING_CARDS
     {
         Pos = MAP_APPFONT ( 12 ,  153) ;
         Size = MAP_APPFONT ( 109 , 8 ) ;
-        Text [ de ] = "AutoText - ~Bereich" ;
         Text [ en-US ] = "AutoText - Section";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_AUTO_TEXT_GROUP
     {
@@ -350,9 +309,7 @@ TabPage TP_VISITING_CARDS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Inhalt" ;
         Text [ en-US ] = "Content";
-        Text [ x-comment ] = " ";
     };
     Window WIN_EXAMPLE
     {
@@ -373,17 +330,13 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Private Daten" ;
         Text [ en-US ] = "Private data";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 ,  16) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Vor-/Name/Kürzel" ;
         Text [ en-US ] = "First/Last ~name/Initials";
-        Text [ x-comment ] = " ";
     };
     Edit ED_FIRSTNAME
     {
@@ -407,7 +360,6 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  32) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Vor-/Name/Kürzel 2" ;
         Text [ en-US ] = "First/Last ~name/Initials 2";
     };
     Edit ED_FIRSTNAME_2
@@ -432,9 +384,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  48) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Straße" ;
         Text [ en-US ] = "S~treet";
-        Text [ x-comment ] = " ";
     };
     Edit ED_STREET
     {
@@ -446,9 +396,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  64) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "PLZ/Or~t" ;
         Text [ en-US ] = "Zip/Cit~y";
-        Text [ x-comment ] = " ";
     };
     Edit ED_ZIP
     {
@@ -466,9 +414,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  80) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Land/Bundesland" ;
         Text [ en-US ] = "Co~untry/State";
-        Text [ x-comment ] = " ";
     };
     Edit ED_COUNTRY
     {
@@ -486,9 +432,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  96) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Titel/Beruf" ;
         Text [ en-US ] = "Title/~Profession";
-        Text [ x-comment ] = " ";
     };
     Edit ED_TITLE
     {
@@ -506,7 +450,6 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  112) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Telefon/Mobil" ;
         Text [ en-US ] = "Phone/Mobile";
     };
     Edit ED_PHONE
@@ -525,9 +468,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  128) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Fa~x" ;
         Text [ en-US ] = "Fa~x";
-        Text [ x-comment ] = " ";
     };
     Edit ED_FAX
     {
@@ -539,9 +480,7 @@ TabPage TP_PRIVATE_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  144) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Homepage / E-Mail" ;
         Text [ en-US ] = "Homepage / e-mail";
-        Text [ x-comment ] = " ";
     };
     Edit ED_WWW
     {
@@ -565,17 +504,13 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Geschäftliche Daten" ;
         Text [ en-US ] = "Business data";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_COMP
     {
         Pos = MAP_APPFONT ( 12 ,  16) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Firma" ;
         Text [ en-US ] = "Company";
-        Text [ x-comment ] = " ";
     };
     Edit ED_COMP
     {
@@ -587,9 +522,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  32) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Firma ~2. Zeile" ;
         Text [ en-US ] = "Company 2nd line";
-        Text [ x-comment ] = " ";
     };
     Edit ED_COMP_EXT
     {
@@ -601,9 +534,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  48) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Sl~ogan" ;
         Text [ en-US ] = "Slogan";
-        Text [ x-comment ] = " ";
     };
     Edit ED_SLOGAN
     {
@@ -615,9 +546,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  64) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Straße" ;
         Text [ en-US ] = "Street";
-        Text [ x-comment ] = " ";
     };
     Edit ED_STREET
     {
@@ -629,9 +558,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  80) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "PLZ/Or~t" ;
         Text [ en-US ] = "ZIP/City";
-        Text [ x-comment ] = " ";
     };
     Edit ED_ZIP
     {
@@ -649,9 +576,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  96) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Land/Bundesland" ;
         Text [ en-US ] = "Country/State";
-        Text [ x-comment ] = " ";
     };
     Edit ED_COUNTRY
     {
@@ -669,9 +594,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  112) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position";
-        Text [ x-comment ] = " ";
     };
     Edit ED_POSITION
     {
@@ -683,7 +606,6 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  128) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Telefon/Mobil" ;
         Text [ en-US ] = "Phone/Mobile";
     };
     Edit ED_PHONE
@@ -702,7 +624,6 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  144) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Fax" ;
         Text [ en-US ] = "Fax";
     };
     Edit ED_FAX
@@ -715,9 +636,7 @@ TabPage TP_BUSINESS_DATA
     {
         Pos = MAP_APPFONT ( 12 ,  160) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Ho~mepage / E-Mail" ;
         Text [ en-US ] = "Ho~mepage / e-mail";
-        Text [ x-comment ] = " ";
     };
     Edit ED_WWW
     {
