@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgegif.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:30:28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:51:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog DLG_EXPORT_GIF
     Size = MAP_APPFONT ( 169 , 70 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "GIF Optionen" ;
     Text [ en-US ] = "GIF Options" ;
     OKButton BTN_OK
     {
@@ -66,37 +65,28 @@ ModalDialog DLG_EXPORT_GIF
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Modus" ;
         Text [ en-US ] = "Mode" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_INTERLACED
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Interlaced" ;
         Text [ en-US ] = "~Interlaced" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_DRAW
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Zeichenobjekte" ;
         Text [ en-US ] = "Drawing objects" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TRANSLUCENT
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 86 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Transparent speichern" ;
         Text [ en-US ] = "Save ~transparency" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
