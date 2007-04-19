@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ObjectProperties.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:45:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:00:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_LINE ; \
     PageResID = RID_SVXPAGE_LINE ; \
-    Text[ de ] = "Linie" ; \
     Text [ en-US ] = "Borders" ; \
 };
 
@@ -53,9 +52,7 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_AREA ; \
     PageResID = RID_SVXPAGE_AREA ; \
-    Text [ de ] = "Fläche" ; \
     Text [ en-US ] = "Area" ; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_TRANSPARENCE \
@@ -63,7 +60,6 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_TRANSPARENCE ; \
     PageResID = RID_SVXPAGE_TRANSPARENCE ; \
-    Text [ de ] = "Transparenz" ; \
     Text [ en-US ] = "Transparency"; \
 };
 
@@ -72,9 +68,7 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_CHAR_NAME ; \
     PageResID = RID_SVXPAGE_CHAR_NAME ; \
-    Text [ de ] = "Zeichen" ; \
     Text [ en-US ] = "Characters" ; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_FONTEFFECTS \
@@ -82,9 +76,7 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_CHAR_EFFECTS ; \
     PageResID = RID_SVXPAGE_CHAR_EFFECTS ; \
-    Text [ de ] = "Schrifteffekt" ; \
     Text [ en-US ] = "Font Effects" ; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_DATALABELS \
@@ -92,9 +84,7 @@ PageItem \
 { \
     Identifier = TP_DATA_DESCR ; \
     PageResID = TP_DATA_DESCR ; \
-    Text [ de ] = "Datenbeschriftung" ; \
     Text [ en-US ] = "Data Labels" ; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_STATISTIC \
@@ -102,7 +92,6 @@ PageItem \
 { \
     Identifier = TP_STAT ; \
     PageResID = TP_STAT ; \
-    Text[ de ] = "Statistik" ; \
     Text [ en-US ] = "Statistics" ; \
 };
 
@@ -111,9 +100,7 @@ PageItem \
 { \
     Identifier = TP_LAYOUT ; \
     PageResID = TP_LAYOUT ; \
-    Text [ de ] = "Layout" ; \
     Text [ en-US ] = "Layout"; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_OPTIONS \
@@ -121,9 +108,7 @@ PageItem \
 { \
     Identifier = TP_OPTIONS; \
     PageResID = TP_OPTIONS; \
-    Text [ de ] = "Optionen"; \
     Text [ en-US ] = "Options"; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_AXISLABEL \
@@ -131,9 +116,7 @@ PageItem \
 { \
     Identifier = TP_AXIS_LABEL ; \
     PageResID = TP_AXIS_LABEL ; \
-    Text [ de ] = "Beschriftung" ; \
     Text [ en-US ] = "Label" ; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_AXISSCALE \
@@ -141,9 +124,7 @@ PageItem \
 { \
     Identifier = TP_SCALE_Y ; \
     PageResID = TP_SCALE_Y ; \
-    Text [ de ] = "Skalierung" ; \
     Text [ en-US ] = "Scale" ; \
-    Text [ x-comment ] = " "; \
 };
 
 #define PAGE_NUMBERFORMAT \
@@ -151,9 +132,7 @@ PageItem \
 { \
     Identifier = RID_SVXPAGE_NUMBERFORMAT ; \
     PageResID = RID_SVXPAGE_NUMBERFORMAT ; \
-    Text [ de ] = "Zahlen" ; \
     Text [ en-US ] = "Numbers" ; \
-    Text [ x-comment ] = " "; \
 };
 
 //-----------------------------------------------------------------------------
@@ -185,9 +164,7 @@ PushButton 1 \
     Pos = MAP_APPFONT ( 169 , 151 ) ; \
     Size = MAP_APPFONT ( 50 , 14 ) ; \
     TabStop = TRUE ; \
-    Text [ de ] = "Zurück" ; \
     Text [ en-US ] = "Back" ; \
-    Text [ x-comment ] = " "; \
 };
 
 //-----------------------------------------------------------------------------
@@ -199,7 +176,6 @@ TabDialog TAB_TITLE
      // HelpID = SID_CHART_TITLE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Title" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -216,15 +192,12 @@ TabDialog TAB_TITLE
             PageItem
             {
                 Identifier = TP_ALIGNMENT ;
-                Text [ de ] = "Ausrichtung" ;
                 Text [ en-US ] = "Alignment" ;
                 PageResID = TP_ALIGNMENT ;
-                Text [ x-comment ] = " ";
             };
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -235,7 +208,6 @@ TabDialog TAB_LEGEND
      // HelpID = SID_LEGEND ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Legende" ;
     Text [ en-US ] = "Legend" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -252,15 +224,12 @@ TabDialog TAB_LEGEND
             PageItem
             {
                 Identifier = TP_LEGEND_POS ;
-                Text [ de ] = "Anordnung" ;
                 Text [ en-US ] = "Position" ;
                 PageResID = TP_LEGEND_POS ;
-                Text [ x-comment ] = " ";
             };
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -271,7 +240,6 @@ TabDialog TAB_DATA_ROW
      // HelpID = HID_SCH_DATA_ROW ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Datenreihe" ;
     Text [ en-US ] = "Data Series" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -292,7 +260,6 @@ TabDialog TAB_DATA_ROW
         };
     };
 //      BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -304,7 +271,6 @@ TabDialog TAB_DATA_LINE
      // HelpID = HID_SCH_DATA_LINE ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Datenreihe" ;
     Text [ en-US ] = "Data Series" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -322,7 +288,6 @@ TabDialog TAB_DATA_LINE
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 */
 //-----------------------------------------------------------------------------
@@ -334,7 +299,6 @@ TabDialog TAB_DATA_POINT
      // HelpID = HID_SCH_DATA_POINT ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Datenpunkt" ;
     Text [ en-US ] = "Data Point" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -354,7 +318,6 @@ TabDialog TAB_DATA_POINT
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -366,7 +329,6 @@ TabDialog TAB_LINE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Linien" ;
     Text [ en-US ] = "Lines" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -381,7 +343,6 @@ TabDialog TAB_LINE
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -391,7 +352,6 @@ TabDialog TAB_DIAGRAM_STOCK_LOSS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Negative Abweichung" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -406,7 +366,6 @@ TabDialog TAB_DIAGRAM_STOCK_LOSS
     };
 ////    BUTTONS
     Text [ en-US ] = "Negative deviation";
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -416,7 +375,6 @@ TabDialog TAB_DIAGRAM_STOCK_PLUS
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Positive Abweichung" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -431,7 +389,6 @@ TabDialog TAB_DIAGRAM_STOCK_PLUS
     };
 ////    BUTTONS
     Text [ en-US ] = "Positive deviation";
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -470,7 +427,6 @@ TabDialog TAB_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Achsen" ;
     Text [ en-US ] = "Axes" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -488,7 +444,6 @@ TabDialog TAB_AXIS
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -500,7 +455,6 @@ TabDialog TAB_X_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "X-Achse" ;
     Text [ en-US ] = "X Axis" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -520,7 +474,6 @@ TabDialog TAB_X_AXIS
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -532,7 +485,6 @@ TabDialog TAB_Y_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Y-Achse" ;
     Text [ en-US ] = "Y Axis" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -552,7 +504,6 @@ TabDialog TAB_Y_AXIS
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -564,7 +515,6 @@ TabDialog TAB_Z_AXIS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Z-Achse" ;
     Text [ en-US ] = "Z Axis" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -582,7 +532,6 @@ TabDialog TAB_Z_AXIS
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 */
 //-----------------------------------------------------------------------------
@@ -595,7 +544,6 @@ TabDialog TAB_GRID
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Gitter" ;
     Text [ en-US ] = "Grid" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -610,7 +558,6 @@ TabDialog TAB_GRID
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -621,7 +568,6 @@ TabDialog TAB_DIAGRAM_WALL
      // HelpID = SID_DIAGRAM_WALL ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Diagrammwand" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
     TabControl 1
@@ -638,7 +584,6 @@ TabDialog TAB_DIAGRAM_WALL
     };
 //      BUTTONS
     Text [ en-US ] = "Chart Wall";
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -649,7 +594,6 @@ TabDialog TAB_DIAGRAM_FLOOR
      // HelpID = SID_DIAGRAM_FLOOR ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Diagrammboden" ;
     Text [ en-US ] = "Chart Floor" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -665,7 +609,6 @@ TabDialog TAB_DIAGRAM_FLOOR
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
@@ -676,7 +619,6 @@ TabDialog TAB_DIAGRAM_AREA
      // HelpID = SID_DIAGRAM_AREA ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Diagrammfläche" ;
     Text [ en-US ] = "Chart Area" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -692,5 +634,4 @@ TabDialog TAB_DIAGRAM_AREA
         };
     };
 ////    BUTTONS
-    Text [ x-comment ] = " ";
 };
