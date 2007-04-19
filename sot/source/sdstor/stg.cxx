@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:08:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -629,12 +629,14 @@ BaseStorage* Storage::OpenStorage( const String& rName, StreamMode m, BOOL bDire
         pIo->SetError( SVSTREAM_FILE_NOT_FOUND );
         p = NULL;
     }
+
+    // Either direct or transacted mode is supported
+    if( p && pEntry->nRefCnt == 1 )
+        p->bDirect = bDirect;
+
     // Dont check direct conflict if opening readonly
     if( p && (m & STREAM_WRITE ))
     {
-        // Either direct or transacted mode is supported
-        if( pEntry->nRefCnt == 1 )
-            p->bDirect = bDirect;
         if( p->bDirect != bDirect )
             SetError( SVSTREAM_ACCESS_DENIED );
     }
