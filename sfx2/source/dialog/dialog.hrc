@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.hrc,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 22:20:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:26:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -172,6 +172,7 @@
 #define IMG_DOC                         ( RC_DIALOG_BEGIN + 118 )
 #define IMG_DOC_HC                      ( RC_DIALOG_BEGIN + 119 )
 #define STR_GROUP_STYLES                ( RC_DIALOG_BEGIN + 110 )
+#define STR_PDF_EXPORT_SEND       ( RC_DIALOG_BEGIN + 120 )
 
 #endif // #ifndef _SFX_DIALOG_HRC
 
