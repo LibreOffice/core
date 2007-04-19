@@ -4,9 +4,9 @@
  *
  *  $RCSfile: units.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 12:19:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:56:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,48 +40,6 @@
 
 StringArray SV_FUNIT_STRINGS
 {
-        ItemList [ de ] =
-        {
-                < "mm" ; FUNIT_MM ; > ;
-                < "cm" ; FUNIT_CM ; > ;
-                < "m" ; FUNIT_M ; > ;
-                < "km" ; FUNIT_KM ; > ;
-                < "twips" ; FUNIT_TWIP ; > ;
-                < "twip" ; FUNIT_TWIP ; > ;
-                < "pt" ; FUNIT_POINT ; > ;
-                < "pi" ; FUNIT_PICA ; > ;
-                < "\"" ; FUNIT_INCH ; > ;
-                < "in" ; FUNIT_INCH ; > ;
-                < "inch" ; FUNIT_INCH ; > ;
-                < "'" ; FUNIT_FOOT ; > ;
-                < "ft" ; FUNIT_FOOT ; > ;
-                < "foot" ; FUNIT_FOOT ; > ;
-                < "feet" ; FUNIT_FOOT ; > ;
-                < "miles" ; FUNIT_MILE ; > ;
-                < "mile" ; FUNIT_MILE ; > ;
-                < "%" ; FUNIT_PERCENT ; > ;
-        };
-ItemList [ x-comment ] =
-    {
-         < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_MM ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_CM ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_M ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_KM ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_TWIP ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_TWIP ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_POINT ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_PICA ; > ;
-        < "\"" ; FUNIT_INCH ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_INCH ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_INCH ; > ;
-        < "EM NOv 2002: this is the measurement sign for \\\\" ; FUNIT_FOOT ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_FOOT ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_FOOT ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_FOOT ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_MILE ; > ;
-        < "EM NOv 2002: DO NOT TRANSLATE! This file contains measurements like cm,km,feet,mile that typically must not be localized for european languages! Some east-european or asian languages, however, may need a localization. That is why these strings have been added to the Translation database. But the strings have been in StarOffice all along." ; FUNIT_MILE ; > ;
-        < "%" ; FUNIT_PERCENT ; > ;
-    };
     ItemList [ en-US ] =
     {
          < "mm" ; FUNIT_MM ; > ;
