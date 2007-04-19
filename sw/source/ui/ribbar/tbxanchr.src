@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxanchr.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:47:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:23:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,45 +44,35 @@ Menu MN_ANCHOR_POPUP
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_PAGE ;
-            Text [ de ] = "Seite" ;
             Text [ en-US ] = "Page" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_PARAGRAPH ;
-            Text [ de ] = "Absatz" ;
             Text [ en-US ] = "Paragraph" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_AT_CHAR ;
-            Text [ de ] = "Am Zeichen" ;
             Text [ en-US ] = "To Character" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_CHAR ;
-            Text [ de ] = "Als Zeichen" ;
             Text [ en-US ] = "As Character" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             _MenuItemFlags = MIB_RADIOCHECK ;
             RadioCheck = TRUE ;
             Identifier = FN_TOOL_ANKER_FRAME ;
-            Text [ de ] = "Rahmen" ;
             Text [ en-US ] = "Frame" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
