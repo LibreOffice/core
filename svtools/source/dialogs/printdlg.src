@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:52:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,23 +43,18 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     OutputSize = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 260 , 169 ) ;
-    Text [ de ] = "Drucken" ;
     Text [ en-US ] = "Print" ;
     FixedLine FL_PRINTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Drucker" ;
         Text [ en-US ] = "Printer" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_NAMES
     {
@@ -73,17 +68,13 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 188 , 12 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Eigenschaften..." ;
         Text [ en-US ] = "Propert~ies..." ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_STATUS
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Status" ;
         Text [ en-US ] = "Status" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_STATUS
     {
@@ -94,9 +85,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Typ" ;
         Text [ en-US ] = "Type" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_TYPE
     {
@@ -107,9 +96,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 51 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Ort" ;
         Text [ en-US ] = "Location" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_LOCATION
     {
@@ -120,9 +107,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Kommentar" ;
         Text [ en-US ] = "Comment" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_COMMENT
     {
@@ -133,7 +118,6 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "Fax Nummer";
         Text [ en-US ] = "Fax number";
     };
     Edit EDT_FAXNO
@@ -146,9 +130,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "Ausdruck ~in Datei" ;
         Text [ en-US ] = "Print to file" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_PRINTFILE
     {
@@ -165,33 +147,25 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 6 , 96 ) ;
         Size = MAP_APPFONT ( 117 , 8 ) ;
-        Text [ de ] = "Druckbereich" ;
         Text [ en-US ] = "Print range" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_ALL
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text [ de ] = "~Alles" ;
         Text [ en-US ] = "All" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_PAGES
     {
         Pos = MAP_APPFONT ( 12 , 117 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Seiten" ;
         Text [ en-US ] = "Pages" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_SELECTION
     {
         Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 105 , 10 ) ;
-        Text [ de ] = "A~uswahl" ;
         Text [ en-US ] = "Selection" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_PAGES
     {
@@ -214,17 +188,13 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 129 , 96 ) ;
         Size = MAP_APPFONT ( 125 , 8 ) ;
-        Text [ de ] = "Kopien" ;
         Text [ en-US ] = "Copies" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_COPIES
     {
         Pos = MAP_APPFONT ( 135 , 106 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ de ] = "E~xemplare" ;
         Text [ en-US ] = "Number of copies" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NUM_COPIES
     {
@@ -243,9 +213,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 201 , 123 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text [ de ] = "S~ortieren" ;
         Text [ en-US ] = "Co~llate" ;
-        Text [ x-comment ] = " ";
     };
     FixedImage IMG_COLLATE
     {
@@ -266,9 +234,7 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zus‰tze... : Zusıtze... */
         /* ### ACHTUNG: Neuer Text in Resource? Zus‰tze... : Zusıtze... */
-        Text [ de ] = "~Zus√§tze..." ;
         Text [ en-US ] = "~Options..." ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -288,10 +254,8 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     };
     String STR_ALLFILTER
     {
-        Text [ de ] = "<Alle>";
         Text [ en-US ] = "<All>";
     };
-    Text [ x-comment ] = " ";
 };
 
 Image RID_IMG_PRNDLG_COLLATE
