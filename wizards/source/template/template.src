@@ -4,9 +4,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:17:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:01:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,421 +48,319 @@
 // --------------------------------------------------------------------
 String SAMPLES
 {
-    Text [ de ] = "Damit die volle FunktionalitÃ¤t dieses Beispiels zur VerfÃ¼gung steht, muss ein neues Dokument auf Basis dieser Vorlage erstellt werden.";
     Text [ en-US ] = "In order to use the full functionality of this sample, create a document that is based on this template.";
 };
 
 String SAMPLES + 1
 {
-    Text [ de ] = "Hinweis";
     Text [ en-US ] = "Remarks";
 };
 
 // --------------------------------------------------------------------
 String STYLES
 {
-    Text [ de ] = "Themen-Auswahl";
     Text [ en-US ] = "Theme Selection";
-    Text [ x-comment ] = " ";
 };
 
 String STYLES + 1
 {
-    Text [ de ] = "Fehler beim Zwischenspeichern des aktuellen Dokumentes! Die folgende Aktion kann nicht rÃ¼ckgÃ¤ngig gemacht werden.";
     Text [ en-US ] = "Error while saving the document to the clipboard! The following action cannot be undone.";
 };
 
 String STYLES + 2
 {
-    Text [ de ] = "~Abbrechen";
     Text [ en-US ] = "~Cancel";
-    Text [ x-comment ] = " ";
 };
 
 String STYLES + 3
 {
-    Text [ de ] = "~OK";
     Text [ en-US ] = "~OK";
-    Text [ x-comment ] = " ";
 };
 
 // --------------------------------------------------------------------
 String AgendaDlgName
 {
-    Text [ de ] = "Protokollvorlage";
     Text [ en-US ] = "Minutes Template";
 };
 
 String AgendaDlgNoCancel
 {
-    Text [ de ] = "Es muss eine Option bestÃ¤tigt werden.";
     Text [ en-US ] = "An option must be confirmed.";
 };
 
 String AgendaDlgFrame
 {
-    Text [ de ] = "Protokolltyp";
     Text [ en-US ] = "Minutes Type";
 };
 
 String AgendaDlgButton1
 {
-    Text [ de ] = "Ergebnisprotokoll";
     Text [ en-US ] = "Results Minutes";
 };
 
 String AgendaDlgButton2
 {
-    Text [ de ] = "Verlaufsprotokoll";
     Text [ en-US ] = "Evaluation Minutes";
 };
 
 // --------------------------------------------------------------------
 String CorrespondenceNoTextmark
 {
-    Text [ de ] = "Die Textmarke 'Recipient' fehlt.";
     Text [ en-US ] = "The bookmark 'Recipient' is missing.";
 };
 
 String CorrespondenceNoTextmark+1
 {
-    Text [ de ] = "Serienbrieffelder kÃ¶nnen nicht eingefÃ¼gt werden.";
     Text [ en-US ] = "Form letter fields can not be included.";
 };
 
 String CorrespondenceMsgError
 {
-    Text [ de ] = "Es ist ein Fehler aufgetreten!";
     Text [ en-US ] = "An error has occurred.";
 };
 
 String CorrespondenceDialog
 {
-    Text [ de ] = "EmpfÃ¤nger";
     Text [ en-US ] = "Addressee";
 };
 
 String CorrespondenceDialog+1
 {
-    Text [ de ] = "Ein EmpfÃ¤nger";
     Text [ en-US ] = "One recipient";
-    Text [ x-comment ] = " ";
 };
 
 String CorrespondenceDialog+2
 {
-    Text [ de ] = "Mehrere EmpfÃ¤nger (Adressdatenbank)";
     Text [ en-US ] = "Several recipients (address database)";
 };
 
 String CorrespondenceDialog+3
 {
-    Text [ de ] = "Verwendung der Vorlage";
     Text [ en-US ] = "Use of This Template";
 };
 
 
 String CorrespondenceFields
 {
-    Text [ de ] = "Platzhalter anklicken und Ã¼berschreiben";
     Text [ en-US ] = "Click placeholder and overwrite";
-    Text [ x-comment ] = "; Platzhalter-Hinweistext";
 };
 
 String CorrespondenceFields+1
 {
-    Text [ de ] = "Firma";
     Text [ en-US ] = "Company";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+2
 {
-    Text [ de ] = "Abteilung";
     Text [ en-US ] = "Department";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+3
 {
-    Text [ de ] = "Vorname";
     Text [ en-US ] = "First Name";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+4
 {
-    Text [ de ] = "Nachname";
     Text [ en-US ] = "Last Name";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+5
 {
-    Text [ de ] = "StraÃŸe";
     Text [ en-US ] = "Street";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+6
 {
-    Text [ de ] = "Land";
     Text [ en-US ] = "Country";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+7
 {
-    Text [ de ] = "PLZ";
     Text [ en-US ] = "ZIP/Postal Code";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+8
 {
-    Text [ de ] = "Ort";
     Text [ en-US ] = "City";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+9
 {
-    Text [ de ] = "Titel";
     Text [ en-US ] = "Title";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+10
 {
-    Text [ de ] = "Position";
     Text [ en-US ] = "Position";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+11
 {
-    Text [ de ] = "Anrede";
     Text [ en-US ] = "Form of Address";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+12
 {
-    Text [ de ] = "KÃ¼rzel";
     Text [ en-US ] = "Initials";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+13
 {
-    Text [ de ] = "Briefanrede";
     Text [ en-US ] = "Salutation";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+14
 {
-    Text [ de ] = "Tel. privat";
     Text [ en-US ] = "Home Phone";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+15
 {
-    Text [ de ] = "Tel. gesch.";
     Text [ en-US ] = "Work Phone";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+16
 {
-    Text [ de ] = "Fax";
     Text [ en-US ] = "Fax";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+17
 {
-    Text [ de ] = "E-Mail";
     Text [ en-US ] = "E-Mail";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+18
 {
-    Text [ de ] = "URL";
     Text [ en-US ] = "URL";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+19
 {
-    Text [ de ] = "Notiz";
     Text [ en-US ] = "Notes";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+20
 {
-    Text [ de ] = "Alt. Feld 1";
     Text [ en-US ] = "Alt. Field 1";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+21
 {
-    Text [ de ] = "Alt. Feld 2";
     Text [ en-US ] = "Alt. Field 2";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+22
 {
-    Text [ de ] = "Alt. Feld 3";
     Text [ en-US ] = "Alt. Field 3";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+23
 {
-    Text [ de ] = "Alt. Feld 4";
     Text [ en-US ] = "Alt. Field 4";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+24
 {
-    Text [ de ] = "ID";
     Text [ en-US ] = "ID";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+25
 {
-    Text [ de ] = "Bundesland";
     Text [ en-US ] = "State";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+26
 {
-    Text [ de ] = "Tel. BÃ¼ro";
     Text [ en-US ] = "Office Phone";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+27
 {
-    Text [ de ] = "Pager";
     Text [ en-US ] = "Pager";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+28
 {
-    Text [ de ] = "Tel. Mobil";
     Text [ en-US ] = "Mobile Phone";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String CorrespondenceFields+29
 {
-    Text [ de ] = "Tel. Andere";
     Text [ en-US ] = "Other Phone";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+30
 {
-    Text [ de ] = "Kalender URL";
     Text [ en-US ] = "Calendar URL";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 String CorrespondenceFields+31
 {
-    Text [ de ] = "Einladen";
     Text [ en-US ] = "Invite";
-    Text [ x-comment ] = "; dies ist ein Platzhalter auf einem Brief";
 };
 
 
 String TextField
 {
-    Text [ de ] = "Benutzerdatenfeld ist nicht definiert!";
     Text [ en-US ] = "User data field is not defined!";
-    Text [ x-comment ] = "; Mitteilung in einer Messagebox";
 
 };
 
 String Newsletter
 {
-    Text [ de ] = "Allgemeines Layout";
     Text [ en-US ] = "General layout";
-    Text [ x-comment ] = "; Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
 };
 
 
 String Newsletter + 1
 {
-    Text [ de ] = "Standard Layout";
     Text [ en-US ] = "Default layout";
-    Text [ x-comment ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 2
 {
-    Text [ de ] = "Festschrift";
     Text [ en-US ] = "Commemorative publication layout";
-    Text [ x-comment ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 3
 {
-    Text [ de ] = "Prospekt Layout";
     Text [ en-US ] = "Brochure layout";
-    Text [ x-comment ] = "; Layout Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 10
 {
-    Text [ de ] = "Format";
     Text [ en-US ] = "Format";
-    Text [ x-comment ] = "; Überschrift für Optionsgruppe im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 11
 {
-    Text [ de ] = "Einseitig";
     Text [ en-US ] = "Single-sided";
-    Text [ x-comment ] = "; 'Format' Option im Initialdialog für die Zeitungsvorlage";
 };
 
 String Newsletter + 12
 {
-    Text [ de ] = "Doppelseitig";
     Text [ en-US ] = "Double-sided";
-    Text [ x-comment ] = "; 'Format' Option im Initialdialog für die Zeitungsvorlage";
 };
 
