@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-15 10:47:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:52:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,216 +37,174 @@
 
 String RID_STR_TRIED_OPEN_TABLE
 {
-    Text [ de ] = "Es wurde versucht, die Tabelle $name$ zu öffnen.";
     Text [ en-US ] = "Tried to open the table $name$.";
 };
 String RID_STR_CONNECTION_INVALID
 {
-    Text [ de ] = "Es konnte keine Verbindung erstellt werden.";
     Text [ en-US ] = "No connection could be established.";
 };
 
 String RID_STR_TABLE_IS_FILTERED
 {
-    Text [ de ] = "Die Tabelle $name$ existiert bereits. Sie ist nicht sichtbar, da sie ausgefiltert wurde.";
     Text [ en-US ] = "The table $name$ already exists. It is not visible because it has been filtered out.";
 };
 
 String RID_STR_NEED_CONFIG_WRITE_ACCESS
 {
-    Text [ de ] = "Sie haben keinen Schreibzugriff auf die Konfigurationsdaten des Objektes.";
     Text [ en-US ] = "You have no write access to the configuration data the object is based on.";
 };
 
 
 String RID_STR_COULDNOTCONNECT_UNSPECIFIED
 {
-    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Ein unbekannter Fehler trat auf. Wahrscheinlich ist der Treiber fehlerhaft.";
     Text [ en-US ] = "The connection to the external data source could not be established. An unknown error occurred. The driver is probably defective.";
 };
 
 String RID_STR_COULDNOTCONNECT_NODRIVER
 {
-    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Es wurde kein SDBC-Treiber für die angegebene URL gefunden.";
     Text [ en-US ] = "The connection to the external data source could not be established. No SDBC driver was found for the given URL.";
 };
 
 String RID_STR_COULDNOTLOAD_MANAGER
 {
-    Text [ de ] = "Die Verbindung zur externen Datenquelle konnte nicht hergestellt werden. Der SDBC-Treiber-Manager konnte nicht geladen werden.";
     Text [ en-US ] = "The connection to the external data source could not be established. The SDBC driver manager could not be loaded.";
 };
 
 String RID_STR_FORM
 {
-    Text[ de ] = "Formular";
     Text [ en-US ] = "Form";
 };
 
 String RID_STR_REPORT
 {
-    Text [ de ]= "Bericht";
     Text [ en-US ] = "Report";
 };
 
 String RID_STR_DATASOURCE_NOT_STORED
 {
-    Text [ de ]= "Die Datenquelle wurde nicht gespeichert. Bitte verwenden Sie die Schnittstelle XStorable, um die Datenquelle zu speichern.";
     Text [ en-US ] = "The data source was not saved. Please use the interface XStorable to save the data source.";
 };
 String RID_STR_ONLY_QUERY
 {
-    Text [ de ] = "Der gesetzte Befehl ist kein SELECT-Befehl.\nEs sind nur Abfragen erlaubt.";
     Text [ en-US ] = "The given command is not a SELECT statement.\nOnly queries are allowed.";
 };
 String RID_STR_NO_VALUE_CHANGED
 {
-    Text [ de ] = "Es wurden keine Werte verändert.";
     Text [ en-US ] = "No values were modified.";
 };
 String RID_STR_NO_XROWUPDATE
 {
-    Text [ de ] = "Es konnten keine Werte eingefügt werden. Die XRowUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
     Text [ en-US ] = "Values could not be inserted. The XRowUpdate interface is not supported by ResultSet.";
 };
 String RID_STR_NO_XRESULTSETUPDATE
 {
-    Text [ de ] = "Es konnten keine Werte eingefügt werden. Die XResultSetUpdate-Schnittstelle wird nicht vom ResultSet unterstützt.";
     Text [ en-US ] = "Values could not be inserted. The XResultSetUpdate interface is not supported by ResultSet.";
 };
 String RID_STR_NO_UPDATE_MISSING_CONDITION
 {
-    Text [ de ] = "Die Werte konnten nicht verändert, auf Grund einer fehlenden Bedingung.";
     Text [ en-US ] = "Values could not be modified, due to a missing condition statement.";
 };
 String RID_STR_NO_COLUMN_ADD
 {
-    Text [ de ] = "Das Hinzufügen von Spalten wird nicht unterstützt.";
     Text [ en-US ] = "The adding of columns is not supported.";
 };
 String RID_STR_NO_COLUMN_DROP
 {
-    Text [ de ] = "Das Löschen von Spalten wird nicht unterstützt.";
     Text [ en-US ] = "The dropping of columns is not supported.";
 };
 String RID_STR_NO_CONDITION_FOR_PK
 {
-    Text [ de ] = "Es konnte keine WHERE-Bedingung für den Primärschlüssel erstellt werden.";
     Text [ en-US ] = "The WHERE condition could not be created for the primary key.";
 };
 String RID_STR_COLUMN_UNKNOWN_PROP
 {
-    Text [ de ] = "Die Spalte unterstützt die Eigenschaft '%value' nicht.";
     Text [ en-US ] = "The column does not support the property '%value'.";
 };
 String RID_STR_COLUMN_NOT_SEARCHABLE
 {
-    Text [ de ] = "In dieser Spalte kann nicht gesucht werden.";
     Text [ en-US ] = "The column is not searchable!";
 };
 String RID_STR_NOT_SEQUENCE_INT8
 {
-    Text [ de ] = "Der Wert der Spalten ist nicht vom Type Sequence<sal_Int8>.";
     Text [ en-US ] = "The value of the columns is not of the type Sequence<sal_Int8>.";
 };
 String RID_STR_COLUMN_NOT_VALID
 {
-    Text [ de ] = "Die Spalte ist nicht gültig.";
     Text [ en-US ] = "The column is not valid.";
 };
 String RID_STR_COLUMN_MUST_VISIBLE
 {
-    Text [ de ] = "Die Spalte '%name' muß als Spalte sichtbar sein.";
     Text [ en-US ] = "The column '%name' must be visible as a column.";
 };
 String RID_STR_NO_XQUERIESSUPPLIER
 {
-    Text [ de ] = "Die Schnittstelle XQueriesSupplier ist nicht verfügbar.";
     Text [ en-US ] = "The interface XQueriesSupplier is not available.";
 };
 String RID_STR_NOT_SUPPORTED_BY_DRIVER
 {
-    Text [ de ] = "Der Treiber unterstützt diese Funktion nicht.";
     Text [ en-US ] = "The driver does not support this function.";
 };
 String RID_STR_NO_ABS_ZERO
 {
-    Text [ de ] = "Ein 'absolute(0)' Aufruf ist nicht erlaubt.";
     Text [ en-US ] = "An 'absolute(0)' call is not allowed.";
 };
 String RID_STR_NO_RELATIVE
 {
-    Text [ de ] = "Eine relative Positionierung ist in diesem Status nicht erlaubt.";
     Text [ en-US ] = "Relative positioning is not allowed in this state.";
 };
 String RID_STR_NO_REFESH_AFTERLAST
 {
-    Text [ de ] = "Eine Zeile kann nicht aktualisiert werden, wenn das ResultSet hinter der letzten Zeile steht.";
     Text [ en-US ] = "A row cannot be refreshed when the ResultSet is positioned after the last row.";
 };
 String RID_STR_NO_MOVETOINSERTROW_CALLED
 {
-    Text [ de ] = "Das Einfügen einer neuen Zeile ist nicht erlaubt, wenn das ResultSet sich nicht vorher auf die Einfügezeile bewegt.";
     Text [ en-US ] = "A new row cannot be inserted when the ResultSet is not first moved to the insert row.";
 };
 String RID_STR_NO_UPDATEROW
 {
-    Text [ de ] = "Eine Zeile kann in diesem Status nicht verändert werden.";
     Text [ en-US ] = "A row cannot be modified in this state";
 };
 String RID_STR_NO_DELETEROW
 {
-    Text [ de ] = "Eine Zeile kann in diesem Status nicht gelöscht werden.";
     Text [ en-US ] = "A row cannot be deleted in this state.";
 };
 String RID_STR_NO_TABLE_RENAME
 {
-    Text [ de ] = "Der Treiber unterstützt das Umbenennen einer Tabelle nicht.";
     Text [ en-US ] = "The driver does not support table renaming.";
 };
 String RID_STR_NO_ALTER_COLUMN_DEF
 {
-    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions.";
 };
 String RID_STR_COLUMN_ALTER_BY_NAME
 {
-    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Namens, nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the name.";
 };
 String RID_STR_COLUMN_ALTER_BY_INDEX
 {
-    Text [ de ] = "Der Treiber unterstützt das Verändern einer Spaltendefinition, anhand des Indexes, nicht.";
     Text [ en-US ] = "The driver does not support the modification of column descriptions by changing the index.";
 };
 String RID_STR_FILE_DOES_NOT_EXIST
 {
-    Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
     Text[ en-US ] = "The file \"$file$\" does not exist.";
 };
 
 String RID_STR_TABLE_DOES_NOT_EXIST
 {
-    Text [ de ] = "Es existiert keine Tabelle \"$table$\".";
     Text [ en-US ] = "There exists no table named \"$table$\".";
 };
 
 String RID_STR_CONFLICTING_NAMES
 {
-    Text [ de ] = "Die Datenbank enthält Tabellen, deren Namen mit den Namen von existierenden Abfragen kollidieren. Um alle Tabellen und Abfragen voll nutzen zu können, stellen Sie sicher, dass sie unterschiedliche Namen haben.";
     Text [ en-US ] = "There are tables in the database whose names conflict with the names of existing queries. To make full use of all queries and tables, make sure they have distinct names.";
 };
 
 String RID_STR_COMMAND_LEADING_TO_ERROR
 {
-    Text [ de ] = "Das SQL-Kommando, welches zu diesem Fehler führte, ist:\n\n$command$";
     Text [ en-US ] = "The SQL command leading to this error is:\n\n$command$";
 
-    Text [ x-comment ] = "$command$ is a placeholder, please preserve it.";
 };
 
 String RID_STR_STATEMENT_WITHOUT_RESULT_SET
 {
-    Text [ de ] = "Das SQL-Kommando beschreibt keine Ergebnismenge.";
-    Text [ de ] = "The SQL command does not describe a result set.";
 };
