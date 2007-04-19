@@ -4,9 +4,9 @@
  *
  *  $RCSfile: morphdlg.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:34:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:28:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@ ModalDialog DLG_MORPH
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 196 , 68 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Überblenden : šberblenden */
-    Text [ de ] = "Ãœberblenden" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -73,17 +72,13 @@ ModalDialog DLG_MORPH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 129 , 8 ) ;
-        Text [ de ] = "Einstellungen" ;
         Text [ en-US ] = "Settings" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_STEPS
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Schritte" ;
         Text [ en-US ] = "Increments" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTF_STEPS
     {
@@ -103,22 +98,17 @@ ModalDialog DLG_MORPH
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Attributierung überblenden : Attributierung ³berblenden */
-        Text [ de ] = "Attributierung Ã¼berblenden" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Cross-fade attributes" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_ORIENTATION
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 121 , 12 ) ;
-        Text [ de ] = "Gleiche Orientierung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Same orientation" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Cross-fading" ;
-    Text [ x-comment ] = " ";
 };
 
 
