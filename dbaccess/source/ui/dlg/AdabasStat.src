@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:11:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:56:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 6 , 3 ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12, 8 ) ;
-        Text [ de ] = "Datenbankdateien" ;
         Text [ en-US ] = "Database files";
     };
 
@@ -63,7 +62,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 12 , 14 ) ;
         Size                = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "S~YSDEVSPACE:" ;
         Text [ en-US ] = "S~YSDEVSPACE:";
     };
 
@@ -80,7 +78,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 12 , 32 ) ;
         Size                = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "~TRANSACTIONLOG:" ;
         Text [ en-US ] = "~TRANSACTIONLOG:";
     };
 
@@ -97,7 +94,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 12 , 49 ) ;
         Size                = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "DATAD~EVSPACE:" ;
         Text [ en-US ] = "DATAD~EVSPACE:";
     };
 
@@ -115,7 +111,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 6 , 99 ) ;
         Size                = MAP_APPFONT ( WINDOW_SIZE_X - 12 , 8 ) ;
-        Text [ de ] = "Datenbankgrößen" ;
         Text [ en-US ] = "Database sizes";
     };
 
@@ -123,7 +118,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 12 , 110 ) ;
         Size                = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "~Gesamtgröße (MB):" ;
         Text [ en-US ] = "S~ize (MB):";
     };
 
@@ -140,7 +134,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 12 , 127 ) ;
         Size                = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "~Freier Speicher (MB):" ;
         Text [ en-US ] = "~Free memory space (MB):";
     };
 
@@ -157,7 +150,6 @@ ModalDialog DLG_ADABASSTAT
     {
         Pos                 = MAP_APPFONT ( 12 , 144 ) ;
         Size                = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "S~peicherausnutzung (in %):" ;
         Text [ en-US ] = "~Memory utilization (in %):";
     };
 
@@ -178,49 +170,41 @@ ModalDialog DLG_ADABASSTAT
         DefButton           = TRUE ;
     };
 
-    Text [ de ] = "Datenbank Statistiken" ;
     Text [ en-US ] = "Database Statistics";
 };
 
 String STR_ADABAS_HELP_SYSDEVSPACE
 {
-    Text [ de ] = "Enthält die Systemtabellen" ;
     Text [ en-US ] = "Contains the system tables";
 };
 
 String STR_ADABAS_HELP_TRANSACT
 {
-    Text [ de ] = "Enthält Information über Transaktion" ;
     Text [ en-US ] = "Contains information about transaction";
 };
 
 String STR_ADABAS_HELP_DATADEVSPACES
 {
-    Text [ de ] = "Enthält alle Daten Dateien" ;
     Text [ en-US ] = "Contains all data files";
 };
 
 String STR_ADABAS_HELP_SIZE
 {
-    Text [ de ] = "Gesamt Größe der Datenbank Dateien" ;
     Text [ en-US ] = "Total size of the database files";
 };
 
 String STR_ADABAS_HELP_FREESIZE
 {
-    Text [ de ] = "Noch zur Verfügung stehender Speicher bevor eine neue Datadev Datei erzeugt wird." ;
     Text [ en-US ] = "Currently available space before a new datadev file is created.";
 };
 
 String STR_ADABAS_HELP_MEMORYUSING
 {
-    Text [ de ] = "Zur Zeit verbrauchter Speicherplatz" ;
     Text [ en-US ] = "Currently used memory";
 };
 
 String STR_ADABAS_ERROR_SYSTEMTABLES
 {
-    Text [ de ] = "Es können keine Informationen angezeigt werden, da keine Zugriffsberechtigung auf die benötigten Systemtabellen besteht!" ;
     Text [ en-US ] = "No information could be displayed because no access rights exist for the required system tables.";
 };
 
