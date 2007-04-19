@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridpages.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:04:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:44:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,14 +42,12 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WINDOW_SIZE_X , WINDOW_SIZE_Y ) ;
 
-    Text [ de ] = "Feldauswahl";
     Text [ en-US ] = "Field Selection";
 
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 4 , 40  ) ;
         Size = MAP_APPFONT ( WINDOW_SIZE_X - 8 , 8 ) ;
-        Text [ de ] = "Tabellenelement";
         Text [ en-US ] = "Table element";
     };
 
@@ -57,7 +55,6 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     {
         Pos = MAP_APPFONT ( 7, 52 );
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 8 );
-        Text [ de ] = "Vorhandene Felder";
         Text [ en-US ] = "Existing fields";
     };
     ListBox LB_EXISTING_FIELDS
@@ -98,7 +95,6 @@ TabPage RID_PAGE_GW_FIELDSELECTION
     {
         Pos = MAP_APPFONT ( WINDOW_HALF_SIZE_X + ITEM_BUTTON_SIZE_X / 2 + 6, 52 );
         Size = MAP_APPFONT ( WINDOW_HALF_SIZE_X - ITEM_BUTTON_SIZE_X / 2 - 13, 8 );
-        Text [ de ] = "Ausgewählte Felder";
         Text [ en-US ] = "Selected fields";
     };
     ListBox LB_SELECTED_FIELDS
@@ -115,16 +111,12 @@ TabPage RID_PAGE_GW_FIELDSELECTION
 
 String RID_STR_DATEPOSTFIX
 {
-    Text [ de ] = " (Datum)";
     Text [ en-US ] = " (Date)";
-    Text [ x-comment ] = "; Please preserve the leading space in this text! Thanks";
 };
 
 String RID_STR_TIMEPOSTFIX
 {
-    Text [ de ] = " (Zeit)";
     Text [ en-US ] = " (Time)";
-    Text [ x-comment ] = "; Please preserve the leading space in this text! Thanks";
 };
 
 
