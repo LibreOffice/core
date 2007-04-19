@@ -1,521 +1,391 @@
 [OOO_ERROR_1]
 en-US = "{{Fatal error: }}"
-de = "{{Fataler Fehler: }}"
 
 [OOO_ERROR_2]
 en-US = "Error [1]."
-de = "Fehler [1]."
 
 [OOO_ERROR_3]
 en-US = "Warning [1]."
-de = "Warnung [1]."
 
 [OOO_ERROR_4]
 en-US = "Info [1]."
-de = "Information [1]."
 
 [OOO_ERROR_5]
 en-US = "Internal Error [1]. [2]{, [3]}{, [4]}"
-de = "Interner Fehler [1]. [2]{, [3]}{, [4]}"
 
 [OOO_ERROR_6]
 en-US = "{{Disk full: }}"
-de = "{{Festplatte voll: }}"
 
 [OOO_ERROR_7]
 en-US = "Action [Time]: [1]. [2]"
-de = "Aktion [Zeit]: [1]. [2]"
 
 [OOO_ERROR_8]
 en-US = "[ProductName]"
-de = "[ProductName]"
 
 [OOO_ERROR_9]
 en-US = "{[2]}{, [3]}{, [4]}"
-de = "{[2]}{, [3]}{, [4]}"
 
 [OOO_ERROR_10]
 en-US = "Message type: [1], Argument: [2]"
-de = "Nachrichtenart: [1], Argument: [2]"
 
 [OOO_ERROR_11]
 en-US = "=== Logging started: [Date]  [Time] ==="
-de = "=== Erfassung gestartet: [Datum]  [Zeit] ==="
 
 [OOO_ERROR_12]
 en-US = "=== Logging stopped: [Date]  [Time] ==="
-de = "=== Erfassung gestoppt: [Datum]  [Zeit] ==="
 
 [OOO_ERROR_13]
 en-US = "Action start [Time]: [1]."
-de = "Aktion startet [Zeit]: [1]."
 
 [OOO_ERROR_14]
 en-US = "Action ended [Time]: [1]. Return value [2]."
-de = "Aktion endet [Zeit]: [1]. Rückgabewert [2]."
 
 [OOO_ERROR_15]
 en-US = "Time remaining: {[1] minutes }{[2] seconds}"
-de = "Verbleibende Zeit: {[1] Minuten }{[2] Sekunden}"
 
 [OOO_ERROR_16]
 en-US = "Out of memory. Shut down other applications before retrying."
-de = "Nicht genug Speicher. Schließen Sie andere Anwendungen, bevor Sie es erneut versuchen."
 
 [OOO_ERROR_17]
 en-US = "Installer is no longer responding."
-de = "Installationsprogramm reagiert nicht mehr."
 
 [OOO_ERROR_18]
 en-US = "Installer terminated prematurely."
-de = "Installationsprogramm vorzeitig beendet."
 
 [OOO_ERROR_19]
 en-US = "Please wait while Windows configures [ProductName]"
-de = "Bitte warten Sie während Windows [ProductName] konfiguriert"
 
 [OOO_ERROR_20]
 en-US = "Gathering required information..."
-de = "Sammle erforderliche Informationen..."
 
 [OOO_ERROR_21]
 en-US = "Removing older versions of this application"
-de = "Entferne ältere Versionen dieser Anwendung"
 
 [OOO_ERROR_22]
 en-US = "Preparing to remove older versions of this application"
-de = "Bereite das Entfernen älterer Versionen dieser Anwendung vor"
 
 [OOO_ERROR_23]
 en-US = "{[ProductName] }Setup completed successfully."
-de = "{[ProductName] }Setup erfolgreich beendet."
 
 [OOO_ERROR_24]
 en-US = "{[ProductName] }Setup failed."
-de = "{[ProductName] }Setup fehlgeschlagen."
 
 [OOO_ERROR_25]
 en-US = "Error reading from file: [2]. {{ System error [3].}}  Verify that the file exists and that you can access it."
-de = "Fehler beim Lesen der Datei: [2]. {{ Systemfehler [3].}}  Überprüfen Sie, dass die Datei existiert und dass Sie darauf Zugriff haben."
 
 [OOO_ERROR_26]
 en-US = "Cannot create the file [3].  A directory with this name already exists.  Cancel the installation and try installing to a different location."
-de = "Kann die Datei [3] nicht anlegen. Ein Verzeichnis mit diesem Namen existiert schon. Brechen Sie die Installation ab und versuchen Sie, in ein anderes Verzeichnis zu installieren."
 
 [OOO_ERROR_27]
 en-US = "Please insert the disk: [2]"
-de = "Bitte legen Sie die Diskette ein: [2]"
 
 [OOO_ERROR_28]
 en-US = "The installer has insufficient privileges to access this directory: [2].  The installation cannot continue.  Log on as an administrator or contact your system administrator."
-de = "Das Installationsprogramm hat unzureichende Rechte, um auf dieses Verzeichnis zuzugreifen: [2]. Die Installation kann nicht fortgesetzt werden. Melden Sie sich als ein Administrator an oder kontaktieren Sie Ihren Systemadministrator."
 
 [OOO_ERROR_29]
 en-US = "Error writing to file [2].  Verify that you have access to that directory."
-de = "Fehler beim Schreiben in die Datei [2]. Überprüfen Sie, dass Sie Zugriff auf dieses Verzeichnis haben."
 
 [OOO_ERROR_30]
 en-US = "Error reading from file [2].  Verify that the file exists and that you can access it."
-de = "Fehler beim Lesen der Datei [2]. Überprüfen Sie, dass die Datei existiert und dass Sie darauf zugreifen können."
 
 [OOO_ERROR_31]
 en-US = "Another application has exclusive access to the file [2].  Please shut down all other applications, then click Retry."
-de = "Eine andere Anwendung hat exklusiven Zugriff auf die Datei [2]. Bitte schließen Sie alle anderen Anwendungen, klicken Sie dann auf Wiederholen."
 
 [OOO_ERROR_32]
 en-US = "There is not enough disk space to install the file [2].  Free some disk space and click Retry, or click Cancel to exit."
-de = "Es ist nicht genug Festplattenplatz für die Installation der Datei [2] vorhanden. Schaffen Sie etwas Festplattenplatz und klicken Sie auf Wiederholen, oder klicken Sie auf Abbrechen, um zu beenden."
 
 [OOO_ERROR_33]
 en-US = "Source file not found: [2].  Verify that the file exists and that you can access it."
-de = "Quelldatei nicht gefunden: [2]. Überprüfen Sie, dass die Datei existiert und Sie darauf zugreifen können."
 
 [OOO_ERROR_34]
 en-US = "Error reading from file: [3]. {{ System error [2].}}  Verify that the file exists and that you can access it."
-de = "Fehler beim Lesen der Datei: [3]. {{ Systemfehler [2].}}  Überprüfen Sie, dass die Datei existiert und Sie darauf zugreifen können."
 
 [OOO_ERROR_35]
 en-US = "Error writing to file: [3]. {{ System error [2].}}  Verify that you have access to that directory."
-de = "Fehler beim Schreiben in die Datei: [3]. {{ Systemfehler [2].}}  Überprüfen Sie, dass Sie Zugriff auf das Verzeichnis haben."
 
 [OOO_ERROR_36]
 en-US = "Source file not found{{(cabinet)}}: [2].  Verify that the file exists and that you can access it."
-de = "Quelldatei nicht gefunden{{(cabinet)}}: [2].  Überprüfen Sie, dass die Datei existiert und darauf zugreifen können."
 
 [OOO_ERROR_37]
 en-US = "Cannot create the directory [2].  A file with this name already exists.  Please rename or remove the file and click Retry, or click Cancel to exit."
-de = "Kann das Verzeichnis [2] nicht anlegen.  Eine Datei mit diesem Namen existiert bereits.  Bitte benennen Sie die Datei um oder entfernen Sie die Datei und klicken Sie auf Wiederholen, oder klicken Sie auf Abbrechen, um zu beenden."
 
 [OOO_ERROR_38]
 en-US = "The volume [2] is currently unavailable.  Please select another."
-de = "Das Laufwerk [2] ist momentan nicht verfügbar.  Bitte wählen Sie ein anderes aus."
 
 [OOO_ERROR_39]
 en-US = "The specified path [2] is unavailable."
-de = "Der angegebene Pfad [2] ist nicht verfügbar."
 
 [OOO_ERROR_40]
 en-US = "Unable to write to the specified folder [2]."
-de = "Kann nicht in den angegebenen Ordner [2] schreiben."
 
 [OOO_ERROR_41]
 en-US = "A network error occurred while attempting to read from the file [2]"
-de = "Ein Netzwerkfehler ist während des Versuchs, die Datei [2] zu lesen, aufgetreten."
 
 [OOO_ERROR_42]
 en-US = "An error occurred while attempting to create the directory [2]"
-de = "Ein Fehler ist während des Versuchs, das Verzeichnis [2] anzulegen, aufgetreten"
 
 [OOO_ERROR_43]
 en-US = "A network error occurred while attempting to create the directory [2]"
-de = "Ein Netzwerkfehler ist während des Versuchs, das Verzeichnis [2] zu erzeugen, aufgetreten"
 
 [OOO_ERROR_44]
 en-US = "A network error occurred while attempting to open the source file cabinet [2]."
-de = "Ein Netzwerkfehler ist während des Versuchs, die ursprüngliche Kabinettdatei [2] zu öffnen, aufgetreten."
 
 [OOO_ERROR_45]
 en-US = "The specified path is too long [2]."
-de = "Der angegebene Pfad ist zu lang [2]."
 
 [OOO_ERROR_46]
 en-US = "The Installer has insufficient privileges to modify the file [2]."
-de = "Das Installationsprogramm hat keine ausreichende Rechte, um die Datei [2] zu ändern."
 
 [OOO_ERROR_47]
 en-US = "A portion of the path [2] exceeds the length allowed by the system."
-de = "Ein Teil des Pfades [2] überschreitet die durch das System erlaubte Länge."
 
 [OOO_ERROR_48]
 en-US = "The path [2] contains words that are not valid in folders."
-de = "Der Pfad [2] beinhaltet Wörter, die für Ordner nicht gültig sind."
 
 [OOO_ERROR_49]
 en-US = "The path [2] contains an invalid character."
-de = "Der Pfad [2] beinhaltet ein ungültiges Zeichen."
 
 [OOO_ERROR_50]
 en-US = "[2] is not a valid short file name."
-de = "[2] ist kein gültiger kurzer Dateiname."
 
 [OOO_ERROR_51]
 en-US = "Error getting file security: [3] GetLastError: [2]"
-de = "Fehler beim Lesen der Dateizugrifssrechte: [3] GetLastError [2]"
 
 [OOO_ERROR_52]
 en-US = "Invalid Drive: [2]"
-de = "Ungültiges Laufwerk: [2]"
 
 [OOO_ERROR_53]
 en-US = "Error applying patch to file [2].  It has probably been updated by other means, and can no longer be modified by this patch.  For more information contact your patch vendor.  {{System Error: [3]}}"
-de = "Fehler beim Anwenden des Patch auf die Datei [2].  Sie wurde vielleicht auf anderem Wege aktualisiert und kann nicht mehr durch diesen Patch geändert werden.  Für weitere Informationen kontaktieren Sie Ihren Patch-Lieferanten.  {{Systemfehler: [3]}}"
 
 [OOO_ERROR_54]
 en-US = "Could not create key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte den Schlüssel [2] nicht erzeugen. {{ Systemfehler [3].}}  Überprüfen Sie, dass Sie ausreichend Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_55]
 en-US = "Could not open key: [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte den Schlüssel nicht öffnen: [2]. {{ Systemfehler [3].}}  Überprüfen Sie, dass Sie ausreichend Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_56]
 en-US = "Could not delete value [2] from key [3]. {{ System error [4].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte den Wert [2] des Schlüssels [3] nicht löschen. {{ Systemfehler [4].}}  Überprüfen Sie, dass Sie ausreichenden Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_57]
 en-US = "Could not delete key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte den Schlüssel [2] nicht löschen. {{ Systemfehler [3].}}  Überprüfen Sie, dass Sie ausreichenden Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_58]
 en-US = "Could not read value [2] from key [3]. {{ System error [4].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte den Wert [2] des nicht Schlüssels [3] lesen. {{ Systemfehler [4].}}  Überprüfen Sie, dass Sie ausreichenden Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_59]
 en-US = "Could not write value [2] to key [3]. {{ System error [4].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte den Wert [2] des Schlüssels [3] nicht schreiben. {{ Systemfehler [4].}}  Überprüfen Sie, dass Sie ausreichenden Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_60]
 en-US = "Could not get value names for key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte die Wertenamen des Schlüssels [2] nicht erhalten. {{ Systemfehler [3].}}  Überprüfen Sie, dass Sie ausreichenden Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_61]
 en-US = "Could not get sub key names for key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte die Unterschlüsselnamen des Schlüssels [2] nicht erhalten. {{ Systemfehler [3].}}  Überprüfen Sie, dass Sie ausreichenden Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_62]
 en-US = "Could not read security information for key [2]. {{ System error [3].}}  Verify that you have sufficient access to that key, or contact your support personnel."
-de = "Konnte die Sicherheitsinformation des Schlüssels [2] nicht lesen. {{ Systemfehler [3].}}  Überprüfen Sie, dass Sie ausreichenden Zugriff auf diesen Schlüssel haben oder kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_63]
 en-US = "Could not increase the available registry space. [2] KB of free registry space is required for the installation of this application."
-de = "Konnte den verfügbaren Registrationsdatenbankplatz nicht erhöhen. [2] KB des freien Registrationsdatenbankplatzes sind für die Installation dieser Anwendung erforderlich."
 
 [OOO_ERROR_64]
 en-US = "Another installation is in progress. You must complete that installation before continuing this one."
-de = "Eine andere Installation wird durchgeführt. Sie müssen diese Installation abschließen, bevor Sie diese fortsetzen."
 
 [OOO_ERROR_65]
 en-US = "Error accessing secured data. Please make sure the Windows Installer is configured properly and try the installation again."
-de = "Fehler beim Zugriff auf geschützte Daten. Bitte vergewissern Sie sich, dass das Windows-Installationsprogramm richtig konfiguriert ist, und versuchen Sie die Installation noch einmal."
 
 [OOO_ERROR_66]
 en-US = "User [2] has previously initiated an installation for product [3].  That user will need to run that installation again before using that product.  Your current installation will now continue."
-de = "Benutzer [2] hat vorher eine Installation für das Produkt [3] initialisiert.  Dieser Benutzer wird diese Installation noch einmal laufen lassen müssen, bevor dieses Produkt benutzt werden kann.  Ihre gegenwärtige Installation wird jetzt fortgesetzt."
 
 [OOO_ERROR_67]
 en-US = "User [2] has previously initiated an installation for product [3].  That user will need to run that installation again before using that product."
-de = "Benutzer [2] hat vorher eine Installation für das Produkt [3] initialisiert.  Dieser Benutzer wird diese Installation noch einmal laufen lassen müssen, bevor dieses Produkt benutzt werden kann."
 
 [OOO_ERROR_68]
 en-US = "Out of disk space -- Volume: '[2]'; required space: [3] KB; available space: [4] KB.  Free some disk space and retry."
-de = "Kein Festplattenplatz mehr vorhanden -- Laufwerk: '[2]'; erforderlicher Platz: [3] KB; verfügbarer Platz: [4] KB.  Geben Sie einigen Festplattenplatz frei, und versuchen Sie es erneut."
 
 [OOO_ERROR_69]
 en-US = "Are you sure you want to cancel?"
-de = "Sind Sie sicher, dass Sie abbrechen wollen?"
 
 [OOO_ERROR_70]
 en-US = "The file [2][3] is being held in use{ by the following process: Name: [4], ID: [5], Window Title: [6]}.  Close that application and retry."
-de = "Die Datei [2][3] wird { durch den folgenden Prozess benutzt: Name: [4], ID: [5], Fenstertitel: [6]}.  Schließen Sie diese Anwendung und versuchen Sie es erneut."
 
 [OOO_ERROR_71]
 en-US = "The product [2] is already installed, preventing the installation of this product.  The two products are incompatible."
-de = "Das Produkt [2] ist schon installiert, und verhindert die Installation dieses Produktes.  Die zwei Produkte sind inkompatibel zueinander."
 
 [OOO_ERROR_72]
 en-US = "Out of disk space -- Volume: [2]; required space: [3] KB; available space: [4] KB.  If rollback is disabled, enough space is available. Click Cancel to quit, Retry to check available disk space again, or Ignore to continue without rollback."
-de = "Kein Festplattenplatz vorhanden -- Laufwerk: [2]; erforderlicher Platz: [3] KB; verfügbarer Platz: [4] KB.  Falls die Wiederherstellung abgeschaltet ist, ist genug Festplattenplatz verfügbar. Klicken Sie auf Abbrechen zum Beenden, Wiederholen zum wiederholten Überprüfen  des Festplattenplatzes, oder Ignorieren, um ohne Wiederherstellung fortzufahren."
 
 [OOO_ERROR_73]
 en-US = "Could not access network location [2]."
-de = "Konnte nicht auf das Netzwerkpfad [2] zugreifen."
 
 [OOO_ERROR_74]
 en-US = "The following applications should be closed before continuing the installation:"
-de = "Die folgenden Anwendungen sollten geschlossen werden, bevor Sie mit der Installation fortfahren:"
 
 [OOO_ERROR_75]
 en-US = "Could not find any previously installed compliant products on the machine for installing this product."
-de = "Konnte keine bereits installierten passenden Produkte auf dieser Maschine für die Installation dieses Produktes finden."
 
 [OOO_ERROR_76]
 en-US = "The key [2] is not valid.  Verify that you entered the correct key."
-de = "Der Schlüssel [2] ist nicht gültig.  Überprüfen Sie, dass Sie den richtigen Schlüssel eingegeben haben."
 
 [OOO_ERROR_77]
 en-US = "The installer must restart your system before configuration of [2] can continue.  Click Yes to restart now or No if you plan to restart later."
-de = "Das Installationsprogramm muss Ihr System neu starten, bevor die Konfiguration von [2] fortgesetzt werden kann.  Klicken Sie auf Ja, um jetzt neu zu starten, oder Nein, falls Sie später neu zu starten planen."
 
 [OOO_ERROR_78]
 en-US = "You must restart your system for the configuration changes made to [2] to take effect. Click Yes to restart now or No if you plan to restart later."
-de = "Sie müssen Ihr System für die Konfigurationsänderungen, die bei [2] gemacht wurden, neu starten, damit sie wirken. Klicken Sie auf Ja, um jetzt neu zu starten oder auf Nein, falls Sie planen später neu zu starten."
 
 [OOO_ERROR_79]
 en-US = "An installation for [2] is currently suspended.  You must undo the changes made by that installation to continue.  Do you want to undo those changes?"
-de = "Eine Installation für [2] ist gegenwärtig ausgesetzt.  Sie müssen die Änderungen, die durch diese Installation gemacht wurden, rückgängig machen, um fortzufahren.  Wollen Sie diese Änderungen rückgängig machen?"
 
 [OOO_ERROR_80]
 en-US = "A previous installation for this product is in progress.  You must undo the changes made by that installation to continue.  Do you want to undo those changes?"
-de = "Eine vorherige Installation dieses Produktes wird durchgeführt.  Sie müssen die Änderungen, die durch diese Installation gemacht wurden, rückgängig machen, um fortzufahren.  Wollen Sie diese Änderungen rückgängig machen?"
 
 [OOO_ERROR_81]
 en-US = "No valid source could be found for product [2].  The Windows Installer cannot continue."
-de = "Es konnte keine gültige Quelle für das Produkt [2] gefunden werden.  Das Windows-Installationsprogramm kann nicht fortgesetzt werden."
 
 [OOO_ERROR_82]
 en-US = "Installation operation completed successfully."
-de = "Die Installation wurde erfolgreich beendet."
 
 [OOO_ERROR_83]
 en-US = "Installation operation failed."
-de = "Die Installation ist fehlgeschlagen."
 
 [OOO_ERROR_84]
 en-US = "Product: [2] -- [3]"
-de = "Produkt: [2] -- [3]"
 
 [OOO_ERROR_85]
 en-US = "You may either restore your computer to its previous state or continue the installation later. Would you like to restore?"
-de = "Sie können entweder Ihren Computer auf seinen vorherigen Zustand zurücksetzen oder mit der Installation später fortfahren. Wollen Sie die Installation zurücksetzen?"
 
 [OOO_ERROR_86]
 en-US = "An error occurred while writing installation information to disk.  Check to make sure enough disk space is available, and click Retry, or Cancel to end the installation."
-de = "Ein Fehler ist während des Schreibens der Installationsinformationen auf die Festplatte aufgetreten.  Überprüfen Sie, ob genug Festplattenplatz verfügbar ist und klicken Sie auf Wiederholen, oder Abbrechen zum Beenden der Installation."
 
 [OOO_ERROR_87]
 en-US = "One or more of the files required to restore your computer to its previous state could not be found.  Restoration will not be possible."
-de = "Eine oder mehrere der erforderlichen Dateien, die für die Wiederherstellung Ihres Computers in seinen vorherigen Zustand erforderlich sind, konnten nicht gefunden werden.  Die Wiederherstellung wird nicht möglich sein."
 
 [OOO_ERROR_88]
 en-US = "[2] cannot install one of its required products. Contact your technical support group.  {{System Error: [3].}}"
-de = "[2] kann eines seiner erforderlichen Produkte nicht installieren. Kontaktieren Sie Ihren technischen Betreuer  {{Systemfehler: [3].}}"
 
 [OOO_ERROR_89]
 en-US = "The older version of [2] cannot be removed.  Contact your technical support group.  {{System Error [3].}}"
-de = "Die ältere Version von [2] kann nicht entfernt werden.  Kontaktieren Sie Ihren technischen Betreuer.  {{Systemfehler [3].}}"
 
 [OOO_ERROR_90]
 en-US = "The path [2] is not valid.  Please specify a valid path."
-de = "Der Pfad [2] ist nicht gültig.  Bitte geben Sie einen gültigen Pfad an."
 
 [OOO_ERROR_91]
 en-US = "Out of memory. Shut down other applications before retrying."
-de = "Nicht genug Speicher. Schließen Sie andere Anwendungen, bevor Sie es erneut versuchen."
 
 [OOO_ERROR_92]
 en-US = "There is no disk in drive [2]. Please insert one and click Retry, or click Cancel to go back to the previously selected volume."
-de = "Es ist keine Diskette in Laufwerk [2]. Bitte legen Sie eine ein, und klicken Sie auf Wiederholen, oder klicken Sie auf Abbrechen, oder gehen Sie zum vorher ausgewählten Laufwerk zurück."
 
 [OOO_ERROR_93]
 en-US = "There is no disk in drive [2]. Please insert one and click Retry, or click Cancel to return to the browse dialog and select a different volume."
-de = "Es ist keine Diskette in Laufwerk [2]. Bitte legen Sie eine, ein und klicken Sie auf Wiederholen, oder klicken Sie auf Abbrechen, um zum Durchsuchen-Dialog zurückzukehren und ein anderes Laufwerk auszuwählen."
 
 [OOO_ERROR_94]
 en-US = "The folder [2] does not exist.  Please enter a path to an existing folder."
-de = "Der Ordner [2] existiert nicht.  Bitte geben Sie einen Pfad zu einem existierenden Ordner an."
 
 [OOO_ERROR_95]
 en-US = "You have insufficient privileges to read this folder."
-de = "Sie haben unzureichende Rechte, um diesen Ordner zu lesen."
 
 [OOO_ERROR_96]
 en-US = "A valid destination folder for the installation could not be determined."
-de = "Ein gültiges Zielverzeichnis für die Installation konnte nicht gefunden werden."
 
 [OOO_ERROR_97]
 en-US = "Error attempting to read from the source installation database: [2]."
-de = "Fehler beim Versuch die Datenbank der Quellinstallation zu lesen: [2]."
 
 [OOO_ERROR_98]
 en-US = "Scheduling reboot operation: Renaming file [2] to [3]. Must reboot to complete operation."
-de = "Vorbereiten des Neustarts: Benenne Datei [2] nach [3] um. Der Rechner muss neu gestarten werden, um die Operation zu vollenden."
 
 [OOO_ERROR_99]
 en-US = "Scheduling reboot operation: Deleting file [2]. Must reboot to complete operation."
-de = "Vorbereiten des Neustarts: Lösche Datei [2]. Der Rechner muss neu gestartet werden, um die Operation zu vollenden."
 
 [OOO_ERROR_100]
 en-US = "Module [2] failed to register.  HRESULT [3].  Contact your support personnel."
-de = "Modul [2] konnte sich nicht registrieren.  HRESULT [3].  Kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_101]
 en-US = "Module [2] failed to unregister.  HRESULT [3].  Contact your support personnel."
-de = "Modul [2] konnte sich nicht aus der Registrationsdatenbank austragen.  HRESULT [3].  Kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_102]
 en-US = "Failed to cache package [2]. Error: [3]. Contact your support personnel."
-de = "Gescheitert, Paket [2] zwischenzuspeichern. Fehler: [3]. Kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_103]
 en-US = "Could not register font [2].  Verify that you have sufficient permissions to install fonts, and that the system supports this font."
-de = "Konnte die Schriftart [2] nicht registrieren. Prüfen Sie, ob Sie ausreichende Rechte haben, Schriftarten zu installieren, und ob das System diese Schriftart unterstützt."
 
 [OOO_ERROR_104]
 en-US = "Could not unregister font [2]. Verify that you have sufficient permissions to remove fonts."
-de = "Konnte die Schriftart [2] nicht aus der Registrationsdatenbank austragen. Überprüfen Sie, ob Sie ausreichend Rechte haben, um Schriftarten zu entfernen."
 
 [OOO_ERROR_105]
 en-US = "Could not create shortcut [2]. Verify that the destination folder exists and that you can access it."
-de = "Konnte die Verknüpfung [2] nicht erzeugen. Überprüfen Sie, ob das Zielverzeichnis existiert und ob Sie darauf zugreifen können."
 
 [OOO_ERROR_106]
 en-US = "Could not remove shortcut [2]. Verify that the shortcut file exists and that you can access it."
-de = "Konnte Verknüpfung [2] nicht entfernen. Überprüfen Sie, dass die Verknüpfung existiert und ob Sie darauf zugreifen können."
 
 [OOO_ERROR_107]
 en-US = "Could not register type library for file [2].  Contact your support personnel."
-de = "Konnte Typenbibliothek für die Datei [2] nicht registrieren.  Kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_108]
 en-US = "Could not unregister type library for file [2].  Contact your support personnel."
-de = "Konnte die Typenbibliothek für die Datei [2] nicht aus der Registrierungssdatenbank austragen. Kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_109]
 en-US = "Could not update the INI file [2][3].  Verify that the file exists and that you can access it."
-de = "Konnte die INI-Datei [2][3] nicht aktualisieren. Überprüfen Sie, dass die Datei existiert und ob Sie darauf zugreifen können."
 
 [OOO_ERROR_110]
 en-US = "Could not schedule file [2] to replace file [3] on reboot.  Verify that you have write permissions to file [3]."
-de = "Konnte die Datei [2] nicht zum Ersetzen von Datei [3] nach den Neustart vormerken. Überprüfen Sie, dass Sie Schreibrechte für Datei [3] haben."
 
 [OOO_ERROR_111]
 en-US = "Error removing ODBC driver manager, ODBC error [2]: [3]. Contact your support personnel."
-de = "Fehler während des Entfernens des ODBC-Treibermanagers, ODBC Fehler [2]: [3]. Kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_112]
 en-US = "Error installing ODBC driver manager, ODBC error [2]: [3]. Contact your support personnel."
-de = "Fehler beim Installieren des ODBC-Treibermanagers, ODBC Fehler [2]: [3]. Kontaktieren Sie Ihren Betreuer."
 
 [OOO_ERROR_113]
 en-US = "Error removing ODBC driver [4], ODBC error [2]: [3]. Verify that you have sufficient privileges to remove ODBC drivers."
-de = "Fehler beim Entfernen des ODBC-Treibers [4], ODBC Fehler [2]: [3]. Überprüfen Sie, dass Sie ausreichende Rechte haben, die ODBC-Treiber zu entfernen."
 
 [OOO_ERROR_114]
 en-US = "Error installing ODBC driver [4], ODBC error [2]: [3]. Verify that the file [4] exists and that you can access it."
-de = "Fehler beim Installieren des ODBC-Treibers [4], ODBC Fehler [2]: [3]. Überprüfen Sie, dass die Datei [4] existiert und das Sie darauf zugreifen können."
 
 [OOO_ERROR_115]
 en-US = "Error configuring ODBC data source [4], ODBC error [2]: [3]. Verify that the file [4] exists and that you can access it."
-de = "Fehler beim Konfigurieren der ODBC-Datenquelle [4], ODBC Fehler [2]: [3]. Überprüfen Sie, dass die Datei [4] existiert und das Sie darauf zugreifen können."
 
 [OOO_ERROR_116]
 en-US = "Service [2] ([3]) failed to start.  Verify that you have sufficient privileges to start system services."
-de = "Dienst [2] ([3]) konnte nicht starten. Überprüfen Sie, dass Sie ausreichende Rechte für das Starten von Systemdiensten haben."
 
 [OOO_ERROR_117]
 en-US = "Service [2] ([3]) could not be stopped.  Verify that you have sufficient privileges to stop system services."
-de = "Dienst [2] ([3]) konnte nicht gestoppt werden. Überprüfen Sie, dass Sie ausreichend Rechte zum Stoppen von Systemdiensten haben."
 
 [OOO_ERROR_118]
 en-US = "Service [2] ([3]) could not be deleted.  Verify that you have sufficient privileges to remove system services."
-de = "Dienst [2] ([3]) konnte nicht gelöscht werden. Überprüfen Sie, dass Sie ausreichend Rechte zum Entfernen von Systemdiensten haben."
 
 [OOO_ERROR_119]
 en-US = "Service [2] ([3]) could not be installed.  Verify that you have sufficient privileges to install system services."
-de = "Dienst [2] ([3]) konnte nicht installiert werden. Überprüfen Sie, dass Sie ausreichend Rechte zum Installieren von Systemdiensten haben."
 
 [OOO_ERROR_120]
 en-US = "Could not update environment variable [2].  Verify that you have sufficient privileges to modify environment variables."
-de = "Konnte die Umgebungsvariable [2] nicht aktualisieren. Überprüfen Sie, dass Sie ausreichend Rechte zum Ändern der Umgebungsvariablen haben."
 
 [OOO_ERROR_121]
 en-US = "You do not have sufficient privileges to complete this installation for all users of the machine.  Log on as an administrator and then retry this installation."
-de = "Sie haben nicht ausreichende Rechte, um diese Installation für alle Benutzer der Maschine fertig zu stellen. Melden Sie sich als Administrator, an und wiederholen Sie dann diese Installation."
 
 [OOO_ERROR_122]
 en-US = "Could not set file security for file [3]. Error: [2].  Verify that you have sufficient privileges to modify the security permissions for this file."
-de = "Konnte die Zugriffsrechte für die Datei [3] nicht setzen. Fehler: [2]. Überprüfen Sie, dass Sie ausreichend Rechte zum Ändern der Sicherheitserlaubnis für diese Datei haben."
 
 [OOO_ERROR_123]
 en-US = "Component Services (COM+ 1.0) are not installed on this computer.  This installation requires Component Services in order to complete successfully.  Component Services are available on Windows 2000."
-de = "Komponentendienste (COM+ 1.0) sind nicht auf diesem Computer installiert. Diese Installation benötigt Komponentendienste, um erfolgreich zu vollenden. Komponentendienste sind unter Windows 2000 verfügbar."
 
 [OOO_ERROR_124]
 en-US = "Error registering COM+ application.  Contact your support personnel for more information."
-de = "Fehler beim Registrieren der COM+-Anwendung. Kontaktieren Sie Ihren Betreuer für weitere Informationen."
 
 [OOO_ERROR_125]
 en-US = "Error unregistering COM+ application.  Contact your support personnel for more information."
-de = "Fehler beim Entfernen der COM+-Anwendung aus der Registrationsdatenbank. Kontaktieren Sie Ihren Betreuer für weitere Informationen."
 
 [OOO_ERROR_126]
 en-US = "The description for service '[2]' ([3]) could not be changed."
-de = "Die Beschreibung des Dienstes '[2]' ([3]) konnte nicht geändert werden."
 
 [OOO_ERROR_127]
 en-US = "The Windows Installer service cannot update the system file [2] because the file is protected by Windows.  You may need to update your operating system for this program to work correctly. {{Package version: [3], OS Protected version: [4]}}"
-de = "Der Windows-Installationsprogrammdienst kann die Systemdatei [2] nicht aktualisieren, da die Datei durch Windows geschützt ist. Sie müssen vielleicht Ihr Betriebssystem aktualisieren, damit dieses Programm korrekt arbeitet. {{Paketversion: [3], BS-geschützte Version: [4]}}"
 
 [OOO_ERROR_128]
 en-US = "The Windows Installer service cannot update the protected Windows file [2]. {{Package version: [3], OS Protected version: [4], SFP Error: [5]}}"
-de = "Der Windows-Installationsdienst kann die geschützte Windows-Datei [2] nicht aktualisieren. {{Paketversion: [3], BS-geschützte Version: [4], SFP-Fehler: [5]}}"
 
 [OOO_ERROR_129]
 en-US = "This setup requires Internet Information Server 4.0 or higher for configuring IIS Virtual Roots. Please make sure that you have IIS 4.0 or higher."
-de = "Dieses Setup benötigt den Internet Information Server 4.0 oder höher, um die virtuellen Verzeichnisse des IIS zu konfigurieren. Bitte stellen Sie sicher, dass Sie den IIS 4.0 oder höher installiert haben."
 
 [OOO_ERROR_130]
 en-US = "This setup requires Administrator privileges for configuring IIS Virtual Roots."
-de = "Dieses Setup benötigt zur Konfiguration der virtuellen Verzeichnisse des IIS Administratorrechte."
 
 
