@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldtdlg.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:03:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:09:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ TabDialog DLG_FLD_INSERT
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Feldbefehle" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     TabControl 1
@@ -52,67 +51,50 @@ TabDialog DLG_FLD_INSERT
             PageItem
             {
                 Identifier = TP_FLD_DOK ;
-                Text [ de ] = "Dokument" ;
                 PageResID = TP_FLD_DOK ;
                 Text [ en-US ] = "Document" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FLD_REF ;
-                Text [ de ] = "Referenzen" ;
                 PageResID = TP_FLD_REF ;
                 Text [ en-US ] = "References" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FLD_FUNC ;
-                Text [ de ] = "Funktionen" ;
                 PageResID = TP_FLD_FUNC ;
                 Text [ en-US ] = "Functions" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FLD_DOKINF ;
-                Text [ de ] = "Dokumentinfo" ;
                 PageResID = TP_FLD_DOKINF ;
                 Text [ en-US ] = "DocInformation" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FLD_VAR ;
-                Text [ de ] = "Variablen" ;
                 PageResID = TP_FLD_VAR ;
                 Text [ en-US ] = "Variables" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FLD_DB ;
-                Text [ de ] = "Datenbank" ;
                 PageResID = TP_FLD_DB ;
                 Text [ en-US ] = "Database" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
     String STR_FLD_INSERT
     {
-        Text [ de ] = "~Einfügen" ;
         Text [ en-US ] = "~Insert" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FLD_CLOSE
     {
-        Text [ de ] = "~Schließen" ;
         Text [ en-US ] = "~Close" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Fields" ;
-    Text [ x-comment ] = " ";
 };
 
 
