@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxform.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:03:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,14 +43,12 @@ ModalDialog RID_SVX_DLG_INPUTRECORDNO
     Size = MAP_APPFONT ( 130 , 45 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Datensatznummer" ;
     Text [ en-US ] = "Record Number";
 
     FixedText 1
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
-        Text [ de ] = "gehe zu Datensatz";
         Text [ en-US ] = "go to record";
     };
     NumericField 1
