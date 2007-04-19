@@ -4,9 +4,9 @@
  *
  *  $RCSfile: custsdlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:31:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:23:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,44 +44,35 @@ ModalDialog DLG_CUSTOMSHOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 175 + DIFF , 114 + DIFF_Y ) ;
-    Text [ de ] = "Individuelle Bildschirmpräsentationen" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     PushButton BTN_NEW
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Neu..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "~New..." ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_EDIT
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Bearbeiten..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Edit..." ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Delete" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_COPY
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 57 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Kopieren" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Cop~y" ;
-        Text [ x-comment ] = " ";
     };
     HelpButton BTN_HELP
     {
@@ -93,20 +84,16 @@ ModalDialog DLG_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "S~tarten" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Start" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 120 + DIFF , 94 + DIFF_Y ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Schließen" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text [ en-US ] = "~Close" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_CUSTOMSHOWS
     {
@@ -119,13 +106,10 @@ ModalDialog DLG_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 96 + DIFF_Y ) ;
         Size = MAP_APPFONT ( 112 + DIFF , 12 ) ;
-        Text [ de ] = "~Individuelle Bildschirmpräsentation benutzen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Use Custom Slide Show" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Custom Slide Shows" ;
-    Text [ x-comment ] = " ";
 };
 ModalDialog DLG_DEFINE_CUSTOMSHOW
 {
@@ -133,7 +117,6 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 248 , 117 ) ;
-    Text [ de ] = "Individuelle Bildschirmpräsentation definieren" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton BTN_OK
@@ -159,9 +142,7 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "Name" ;
         Text [ en-US ] = "Name" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_NAME
     {
@@ -204,19 +185,14 @@ ModalDialog DLG_DEFINE_CUSTOMSHOW
     {
         Pos = MAP_APPFONT ( 6 , 24 ) ;
         Size = MAP_APPFONT ( 83 , 10 ) ;
-        Text [ de ] = "Seiten der Präsentation" ;
         Text [ en-US ] = "Existing slides" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CUSTOM_PAGES
     {
         Pos = MAP_APPFONT ( 103 , 24 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "Individuelle Präsentation" ;
         Text [ en-US ] = "Selected slides" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Define Custom Slide Show" ;
-    Text [ x-comment ] = " ";
 };
 
