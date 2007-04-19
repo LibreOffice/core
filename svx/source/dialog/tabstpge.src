@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:50:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:22:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,16 +43,13 @@ TabPage RID_SVXPAGE_TABULATOR
 {
     HelpId = HID_TABULATOR ;
     Hide = TRUE ;
-    Text [ de ] = "Tabulatoren" ;
     Text [ en-US ] = "Tabs" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_TABPOS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position" ;
-        Text [ x-comment ] = " ";
     };
     MetricBox ED_TABPOS
     {
@@ -73,18 +70,14 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 60 , 3 ) ;
         Size = MAP_APPFONT ( 138 , 8 ) ;
-        Text [ de ] = "Typ" ;
         Text [ en-US ] = "Type" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_TABTYPE_LEFT
     {
         Pos = MAP_APPFONT ( 66 , 14 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
-        Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_TABLEFT
     {
@@ -95,9 +88,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 28 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
-        Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "Righ~t" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_TABRIGHT
     {
@@ -108,9 +99,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 42 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
-        Text [ de ] = "~Zentriert" ;
         Text [ en-US ] = "C~entered" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_TABCENTER
     {
@@ -121,9 +110,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 56 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
-        Text [ de ] = "~Dezimal" ;
         Text [ en-US ] = "Deci~mal" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_TABDECIMAL
     {
@@ -134,9 +121,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 75 , 70 ) ;
         Size = MAP_APPFONT ( 79 , 8 ) ;
-        Text [ de ] = "Z~eichen" ;
         Text [ en-US ] = "~Character" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TABTYPE_DECCHAR
     {
@@ -149,18 +134,14 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 60 , 86 ) ;
         Size = MAP_APPFONT ( 138 , 8 ) ;
-        Text [ de ] = "Füllzeichen" ;
         Text [ en-US ] = "Fill character" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_FILLCHAR_NO
     {
         Pos = MAP_APPFONT ( 66 , 97 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
-        Text [ de ] = "~Keine" ;
         Text [ en-US ] = "N~one" ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_FILLCHAR_POINTS
     {
@@ -184,9 +165,7 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 66 , 153 ) ;
         Size = MAP_APPFONT ( 89 , 10 ) ;
-        Text [ de ] = "Ze~ichen" ;
         Text [ en-US ] = "Character" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FILLCHAR_OTHER
     {
@@ -199,37 +178,28 @@ TabPage RID_SVXPAGE_TABULATOR
     {
         Pos = MAP_APPFONT ( 204 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Neu" ;
         Text [ en-US ] = "~New" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELALL
     {
         Pos = MAP_APPFONT ( 204 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Alle löschen" ;
         Text [ en-US ] = "Delete ~All" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DEL
     {
         Pos = MAP_APPFONT ( 204 , 40 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Lö~schen" ;
         Text [ en-US ] = "~Delete" ;
-        Text [ x-comment ] = " ";
     };
     String ST_LEFTTAB_ASIAN
     {
-        Text [ de ] = "~Links/Oben" ;
         Text [ en-US ] = "~Left/Top" ;
     };
     String ST_RIGHTTAB_ASIAN
     {
-        Text [ de ] = "~Rechts/Unten" ;
         Text [ en-US ] = "Righ~t/Bottom" ;
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
