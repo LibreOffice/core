@@ -4,9 +4,9 @@
  *
  *  $RCSfile: errtxt.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-27 09:03:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:21:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -596,6 +596,30 @@ Resource RID_ERRHDL
         Text [ de ] = "Die maximale Anzahl von Dokumenten, die gleichzeitig geöffnet sein können, ist erreicht. Sie müssen ein oder mehrere Dokumente schließen, bevor Sie ein neues Dokument öffnen können.";
         Text [ en-US ] = "The maximum number of documents that can be opened at the same time has been reached. You need to close one or more documents before you can open a new document.";
     };
+    String ERRCODE_SFX_CANTCREATEBACKUP
+    {
+        Text [ de ] = "Sicherungskopie konnte nicht angelegt werden." ;
+        Text [ en-US ] = "Could not create backup copy." ;
+        Text [ x-comment ] = "The message was moved from sfx2 project, the message name was MSG_WARNING_BACKUP";
+    };
+    String ERRCODE_SFX_MACROS_SUPPORT_DISABLED
+    {
+        Text [ de ] = "Es wurde versucht, ein Makro auszuführen.\nMakros werden aus Sicherheitsgründen nicht unterstützt.";
+        Text [ en-US ] = "An attempt was made to execute a macro.\nFor security reasons, macro support is disabled.";
+        Text [ x-comment ] = "The message was moved from sfx2 project, the message name was STR_MACROS_DISABLED.";
+    };
+    String ERRCODE_SFX_DOCUMENT_MACRO_DISABLED
+    {
+        Text [ de ] = "Dieses Dokument enthält Makros.\nDas Ausführen dieses Makros wird gemäß der aktuellen Makro-Sicherheitseinstellungen unterbunden. Deshalb könnten einige Funktionen nicht verfügbar sein." ;
+        Text [ en-US ] = "This document contains macros.\nExecution of this macros is disabled due to the current macro security setting. Therefore, some functionality may not be available." ;
+        Text [ x-comment ] = "The message was moved from sfx2 project, the message name was MSG_WARNING_MACRO_ISDISABLED.";
+    };
+    String ERRCODE_SFX_BROKENSIGNATURE
+    {
+        Text [ de ] = "Der digital signierte Dokumentinhalt und/oder die Makros stimmen nicht mit der aktuellen Dokumentsignatur überein.\n\nDieses deutet auf eine Dokumentmanipulation oder einen Übertragungsfehler hin.\nWir empfehlen Ihnen, dem aktuellen Dokumentinhalt nicht zu trauen.\n\nDas Ausführen von Makros ist für dieses Dokument deaktiviert.\n " ;
+        Text [ en-US ] = "The digitally signed document content and/or macros do not match the current document signature.\n\nThis could be the result of document manipulation or of structural document damage due to data transmission.\n\nWe recommend that you do not trust the content of the current document.\nExecution of macros is disabled for this document.\n " ;
+        Text [ x-comment ] = "The message was moved from sfx2 project, the message name was MSG_XMLSEC_WARNING_BROKENSIGNATURE.";
+    };
 
 #ifdef ERRCODE_IO_INVALIDLENGTH
     String ERRCODE_IO_INVALIDLENGTH
@@ -632,59 +656,4 @@ Resource RID_ERRHDL
 };
 
 // eof ------------------------------------------------------------------------
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
