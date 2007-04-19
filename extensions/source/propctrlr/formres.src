@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 11:59:20 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:46:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,571 +42,458 @@
 
 String RID_STR_EDITMASK
 {
-    Text [ de ] = "Eingabemaske" ;
     Text [ en-US ] = "Edit mask" ;
 };
 String RID_STR_LITERALMASK
 {
-    Text [ de ] = "Zeichenmaske" ;
     Text [ en-US ] = "Literal mask" ;
 };
 String RID_STR_READONLY
 {
-    Text [ de ] = "Nur lesen" ;
     Text [ en-US ] = "Read-only" ;
 };
 String RID_STR_ENABLED
 {
-    Text [ de ] = "Aktiviert" ;
     Text [ en-US ] = "Enabled" ;
 };
 String RID_STR_AUTOCOMPLETE
 {
-    Text [ de ] = "Automatisch füllen" ;
     Text [ en-US ] = "AutoFill" ;
 };
 String RID_STR_LINECOUNT
 {
-    Text [ de ] = "Anzahl der Zeilen" ;
     Text [ en-US ] = "Line count" ;
 };
 String RID_STR_MAXTEXTLEN
 {
-    Text [ de ] = "Max. Textlänge" ;
     Text [ en-US ] = "Max. text length" ;
 };
 String RID_STR_SPIN
 {
-    Text [ de ] = "Drehfeld" ;
     Text [ en-US ] = "Spin Button" ;
 };
 String RID_STR_STRICTFORMAT
 {
-    Text [ de ] = "Formatüberprüfung" ;
     Text [ en-US ] = "Strict format" ;
 };
 String RID_STR_SHOWTHOUSANDSEP
 {
-    Text [ de ] = "Tausender-Trennz." ;
     Text [ en-US ] = "Thousands separator" ;
 };
 String RID_STR_PRINTABLE
 {
-    Text [ de ] = "Drucken" ;
     Text [ en-US ] = "Print" ;
 };
 String RID_STR_TARGET_URL
 {
-    Text [ de ] = "URL" ;
     Text [ en-US ] = "URL" ;
 };
 String RID_STR_TARGET_FRAME
 {
-    Text [ de ] = "Frame" ;
     Text [ en-US ] = "Frame" ;
 };
 String RID_STR_HELPTEXT
 {
-    Text [ de ] = "Hilfetext" ;
     Text [ en-US ] = "Help text" ;
 };
 String RID_STR_HELPURL
 {
-    Text [ de ] = "Hilfe URL" ;
     Text [ en-US ] = "Help URL";
 };
 String RID_STR_TAG
 {
-    Text [ de ] = "Zusatzinformation" ;
     Text [ en-US ] = "Additional information" ;
 };
 String RID_STR_ECHO_CHAR
 {
-    Text [ de ] = "Zeichen für Passwörter" ;
     Text [ en-US ] = "Password character" ;
 };
 
 String RID_STR_TRISTATE
 {
-    Text [ de ] = "Dreifacher Status" ;
     Text [ en-US ] = "Tristate" ;
 };
 String RID_STR_EMPTY_IS_NULL
 {
-    Text [ de ] = "Leere Zeichenfolge ist NULL" ;
     Text [ en-US ] = "Empty string is NULL" ;
 };
 String RID_STR_DECIMAL_ACCURACY
 {
-    Text [ de ] = "Nachkommastellen" ;
     Text [ en-US ] = "Decimal accuracy" ;
 };
 String RID_STR_IMAGE_URL
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics" ;
 };
 String RID_STR_DEFAULT_SELECT_SEQ
 {
-    Text [ de ] = "Standardselektion" ;
     Text [ en-US ] = "Default selection" ;
 };
 String RID_STR_DEFAULT_BUTTON
 {
-    Text [ de ] = "Standardschaltfläche" ;
     Text [ en-US ] = "Default button" ;
 };
 String RID_STR_LABELCONTROL
 {
-    Text [ de ] = "Beschriftungsfeld";
     Text [ en-US ] = "Label Field";
 };
 String RID_STR_LABEL
 {
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Label" ;
 };
 String RID_STR_ALIGN
 {
-    Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
 };
 String RID_STR_VERTICAL_ALIGN
 {
-    Text [ de ] = "Ausrichtung (vert.)" ;
     Text [ en-US ] = "Vert. Alignment" ;
 };
 Resource RID_RSC_ENUM_VERTICAL_ALIGN
 {
     String 1
     {
-        Text [ de ] = "Oben";
         Text [ en-US ] = "Top";
     };
     String 2
     {
-        Text [ de ] = "Mitte";
         Text [ en-US ] = "Middle";
     };
     String 3
     {
-        Text [ de ] = "Unten";
         Text [ en-US ] = "Bottom";
     };
 };
 String RID_STR_IMAGEPOSITION
 {
-    Text [ de ] = "Grafik-Ausrichtung";
     Text [ en-US ] = "Graphics alignment";
 };
 String RID_STR_FONT
 {
-    Text [ de ] = "Schrift" ;
     Text [ en-US ] = "Font" ;
 };
 String RID_STR_BACKGROUNDCOLOR
 {
-    Text [ de ] = "Hintergrundfarbe" ;
     Text [ en-US ] = "Background color" ;
 };
 String RID_STR_BORDER
 {
-    Text [ de ] = "Rahmen" ;
     Text [ en-US ] = "Border" ;
 };
 String RID_STR_ICONSIZE
 {
-    Text [ de ] = "Symbolgröße" ;
     Text [ en-US ] = "Icon size" ;
 };
 String RID_STR_ICONSIZE_TYPE
 {
-    Text [ de ] = "Klein;Groß" ;
     Text [ en-US ] = "Small;Large" ;
 };
 String RID_STR_SHOW_POSITION
 {
-    Text [ de ] = "Positionierung";
     Text [ en-US ] = "Positioning";
 };
 String RID_STR_SHOW_NAVIGATION
 {
-    Text [ de ] = "Navigation";
     Text [ en-US ] = "Navigation";
 };
 String RID_STR_SHOW_RECORDACTIONS
 {
-    Text [ de ] = "Datensatzaktionen";
     Text [ en-US ] = "Acting on a record";
 };
 String RID_STR_SHOW_FILTERSORT
 {
-    Text [ de ] = "Filter / Sortierung";
     Text [ en-US ] = "Filtering / Sorting";
 };
 String RID_STR_HSCROLL
 {
-    Text [ de ] = "Horizontaler Scrollbar" ;
     Text [ en-US ] = "Horizontal scroll bar" ;
 };
 String RID_STR_VSCROLL
 {
-    Text [ de ] = "Vertikaler Scrollbar" ;
     Text [ en-US ] = "Vertical scroll bar" ;
 };
 String RID_STR_WORDBREAK
 {
-    Text [ de ] = "Wortumbruch" ;
     Text [ en-US ] = "Word break";
 };
 String RID_STR_MULTILINE
 {
-    Text [ de ] = "Mehrzeilig" ;
     Text [ en-US ] = "Multiline input" ;
 };
 String RID_STR_MULTISELECTION
 {
-    Text [ de ] = "Mehrfachselektion" ;
     Text [ en-US ] = "Multiselection" ;
 };
 String RID_STR_NAME
 {
-    Text [ de ] = "Name" ;
     Text [ en-US ] = "Name" ;
 };
 String RID_STR_TABINDEX
 {
-    Text [ de ] = "Aktivierungsreihenfolge" ;
     Text [ en-US ] = "Tab order" ;
 };
 String RID_STR_FILTER
 {
-    Text [ de ] = "Filter" ;
     Text [ en-US ] = "Filter" ;
 };
 String RID_STR_SORT_CRITERIA
 {
-    Text [ de ] = "Sortierung" ;
     Text [ en-US ] = "Sort" ;
 };
 String RID_STR_RECORDMARKER
 {
-    Text [ de ] = "Datensatzmarkierer" ;
     Text [ en-US ] = "Record marker";
 };
 String RID_STR_FILTERPROPOSAL
 {
-    Text [ de ] = "Filtervorschlag";
     Text [ en-US ] = "Filter proposal";
 };
 String RID_STR_NAVIGATION
 {
-    Text [ de ] = "Navigationsleiste" ;
     Text [ en-US ] = "Navigation bar" ;
 };
 String RID_STR_CYCLE
 {
-    Text [ de ] = "Zyklus" ;
     Text [ en-US ] = "Cycle" ;
 };
 String RID_STR_TABSTOP
 {
-    Text [ de ] = "Tabstop" ;
     Text [ en-US ] = "Tabstop" ;
 };
 String RID_STR_CONTROLSOURCE
 {
-    Text [ de ] = "Datenfeld" ;
     Text [ en-US ] = "Data field" ;
 };
 String RID_STR_DROPDOWN
 {
-    Text [ de ] = "Aufklappbar" ;
     Text [ en-US ] = "Dropdown" ;
 };
 String RID_STR_BOUNDCOLUMN
 {
-    Text [ de ] = "Gebundenes Feld" ;
     Text [ en-US ] = "Bound field" ;
 };
 String RID_STR_LISTSOURCE
 {
-    Text [ de ] = "Listeninhalt" ;
     Text [ en-US ] = "List content" ;
 };
 String RID_STR_LISTSOURCETYPE
 {
-    Text [ de ] = "Art des Listeninhalts" ;
     Text [ en-US ] = "Type of list contents" ;
 };
 String RID_STR_CURSORSOURCE
 {
-    Text [ de ] = "Inhalt" ;
     Text [ en-US ] = "Content" ;
 };
 String RID_STR_CURSORSOURCETYPE
 {
-    Text [ de ] = "Art des Inhaltes" ;
     Text [ en-US ] = "Content type";
 };
 String RID_STR_ALLOW_ADDITIONS
 {
-    Text [ de ] = "Daten hinzufügen" ;
     Text [ en-US ] = "Allow additions" ;
 };
 String RID_STR_ALLOW_DELETIONS
 {
-    Text [ de ] = "Daten löschen" ;
     Text [ en-US ] = "Allow deletions" ;
 };
 String RID_STR_ALLOW_EDITS
 {
-    Text [ de ] = "Daten ändern" ;
     Text [ en-US ] = "Allow modifications" ;
 };
 String RID_STR_DATAENTRY
 {
-    Text [ de ] = "Nur Daten hinzufügen" ;
     Text [ en-US ] = "Add data only" ;
 };
 String RID_STR_DATASOURCE
 {
-    Text [ de ] = "Datenquelle" ;
     Text [ en-US ] = "Data source";
 };
 String RID_STR_MASTERFIELDS
 {
-    Text [ de ] = "Verknüpfen von" ;
     Text [ en-US ] = "Link master fields" ;
 };
 String RID_STR_SLAVEFIELDS
 {
-    Text [ de ] = "Verknüpfen nach" ;
     Text [ en-US ] = "Link slave fields" ;
 };
 String RID_STR_VALUEMIN
 {
-    Text [ de ] = "Min. Wert" ;
     Text [ en-US ] = "Value min." ;
 };
 String RID_STR_VALUEMAX
 {
-    Text [ de ] = "Max. Wert" ;
     Text [ en-US ] = "Value max." ;
 };
 String RID_STR_VALUESTEP
 {
-    Text [ de ] = "Intervall" ;
     Text [ en-US ] = "Incr./decrement value" ;
 };
 String RID_STR_CURRENCYSYMBOL
 {
-    Text [ de ] = "Währungssymbol" ;
     Text [ en-US ] = "Currency symbol" ;
 };
 String RID_STR_DATEMIN
 {
-    Text [ de ] = "Min. Datum" ;
     Text [ en-US ] = "Date min." ;
 };
 String RID_STR_DATEMAX
 {
-    Text [ de ] = "Max. Datum" ;
     Text [ en-US ] = "Date max." ;
 };
 String RID_STR_DATEFORMAT
 {
-    Text [ de ] = "Datumsformat" ;
     Text [ en-US ] = "Date format" ;
 };
 String RID_STR_SELECTEDITEMS
 {
-    Text [ de ] = "Auswahl" ;
     Text [ en-US ] = "Selection" ;
 };
 String RID_STR_TIMEMIN
 {
-    Text [ de ] = "Min. Zeit" ;
     Text [ en-US ] = "Time min." ;
 };
 String RID_STR_TIMEMAX
 {
-    Text [ de ] = "Max. Zeit" ;
     Text [ en-US ] = "Time max." ;
 };
 String RID_STR_TIMEFORMAT
 {
-    Text [ de ] = "Zeitformat" ;
     Text [ en-US ] = "Time format" ;
 };
 String RID_STR_CURRSYM_POSITION
 {
-    Text [ de ] = "Symbol voranstellen" ;
     Text [ en-US ] = "Prefix symbol";
 };
 String RID_STR_VALUE
 {
-    Text [ de ] = "Wert" ;
     Text [ en-US ] = "Value" ;
 };
 String RID_STR_FORMATKEY
 {
-    Text [ de ] = "Formatierung" ;
     Text [ en-US ] = "Formatting" ;
 };
 String RID_STR_CLASSID
 {
-    Text [ de ] = "Klassenindex" ;
     Text [ en-US ] = "Class ID" ;
 };
 String RID_STR_HEIGHT
 {
-    Text [ de ] = "Höhe" ;
     Text [ en-US ] = "Height" ;
 };
 String RID_STR_WIDTH
 {
-    Text [ de ] = "Breite" ;
     Text [ en-US ] = "Width" ;
 };
 String RID_STR_LISTINDEX
 {
-    Text [ de ] = "ListIndex" ;
     Text [ en-US ] = "List index" ;
 };
 String RID_STR_ROWHEIGHT
 {
-    Text [ de ] = "Zeilenhöhe" ;
     Text [ en-US ] = "Row height" ;
 };
 String RID_STR_FILLCOLOR
 {
-    Text [ de ] = "Füllfarbe" ;
     Text [ en-US ] = "Fill color" ;
 };
 String RID_STR_LINECOLOR
 {
-    Text [ de ] = "Linienfarbe" ;
     Text [ en-US ] = "Line color" ;
 };
 String RID_STR_REFVALUE
 {
-    Text [ de ] = "Referenzwert (ein)" ;
     Text [ en-US ] = "Reference value (on)" ;
 };
 String RID_STR_UNCHECKEDREFVALUE
 {
-    Text [ de ] = "Referenzwert (aus)";
     Text [ en-US ] = "Reference value (off)";
 };
 String RID_STR_STRINGITEMLIST
 {
-    Text [ de ] = "Listen-Einträge" ;
     Text [ en-US ] = "List entries" ;
 };
 String RID_STR_BUTTONTYPE
 {
-    Text [ de ] = "Aktion" ;
     Text [ en-US ] = "Action";
 };
 String RID_STR_SUBMIT_ACTION
 {
-    Text [ de ] = "URL" ;
     Text [ en-US ] = "URL" ;
 };
 String RID_STR_SUBMIT_METHOD
 {
-    Text [ de ] = "Art des Submits" ;
     Text [ en-US ] = "Type of submission" ;
 };
 String RID_STR_DEFAULT_CHECKED
 {
-    Text [ de ] = "Standardstatus" ;
     Text [ en-US ] = "Default status" ;
 };
 String RID_STR_SUBMIT_ENCODING
 {
-    Text [ de ] = "Kodierung beim Submit" ;
     Text [ en-US ] = "Submission encoding" ;
 };
 String RID_STR_DEFAULTVALUE
 {
-    Text [ de ] = "Standardwert" ;
     Text [ en-US ] = "Default value" ;
 };
 String RID_STR_DEFAULTTEXT
 {
-    Text [ de ] = "Standardtext";
     Text [ en-US ] = "Default text";
 };
 String RID_STR_DEFAULTDATE
 {
-    Text [ de ] = "Standarddatum";
     Text [ en-US ] = "Default date";
 };
 String RID_STR_DEFAULTTIME
 {
-    Text [ de ] = "Standardzeit";
     Text [ en-US ] = "Default time";
 };
 String RID_STR_SUBMIT_TARGET
 {
-    Text [ de ] = "Frame" ;
     Text [ en-US ] = "Frame" ;
 };
 String RID_STR_BORDER_TYPE
 {
-    Text [ de ] = "Ohne Rahmen;3D-Look;Flach" ;
     Text [ en-US ] = "Without frame;3D look;Flat" ;
 };
 String RID_STR_LISTSOURCE_TYPE
 {
-    Text [ de ] = "Werteliste;Tabelle;Abfrage;Sql;Sql [Native];Tabellenfelder" ;
     Text [ en-US ] = "Valuelist;Table;Query;Sql;Sql [Native];Tablefields" ;
 };
 String RID_STR_ALIGNMENT
 {
-    Text [ de ] = "Links;Zentriert;Rechts" ;
     Text [ en-US ] = "Left;Center;Right" ;
 };
 String RID_STR_ENUM_BUTTONTYPE
 {
-    Text [ de ] = "Keine;Formular übertragen;Formular zurücksetzen;Dokument/Webseite öffnen;Erster Datensatz;Vorheriger Datensatz;Nächster Datensatz;Letzter Datensatz;Datensatz speichern;Rückgängig: Dateneingabe;Neuer Datensatz;Datensatz löschen;Formular aktualisieren";
     Text [ en-US ] = "None;Submit form;Reset form;Open document/web page;First record;Previous record;Next record;Last record;Save record;Undo data entry;New record;Delete record;Refresh form";
 };
 String RID_STR_ENUM_SUBMIT_METHOD
 {
-    Text [ de ] = "Get;Post" ;
     Text [ en-US ] = "Get;Post" ;
 };
 String RID_STR_ENUM_SUBMIT_ENCODING
 {
-    Text [ de ] = "URL;Multipart;Text" ;
     Text [ en-US ] = "URL;Multipart;Text" ;
 };
 String RID_STR_DATEFORMAT_LIST
 {
-    Text [ de ] = "Standard (kurz);Standard (kurz JJ);Standard (kurz JJJJ);Standard (lang);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)" ;
     Text [ en-US ] = "Standard (short);Standard (short YY);Standard (short YYYY);Standard (long);DD/MM/YY;MM/DD/YY;YY/MM/DD;DD/MM/YYYY;MM/DD/YYYY;YYYY/MM/DD;YY-MM-DD;YYYY-MM-DD" ;
 };
 String RID_STR_TIMEFORMAT_LIST
 {
-    Text [ de ] = "13:45;13:45:00;01:45 PM;01:45:00 PM" ;
     Text [ en-US ] = "13:45;13:45:00;01:45 PM;01:45:00 PM" ;
 };
 String RID_STR_ENUM_CHECKED
 {
-    Text [ de ] = "Nicht ausgewählt;Ausgewählt;Unbestimmt" ;
     Text [ en-US ] = "Not Selected;Selected;Not Defined" ;
 };
 String RID_STR_ENUM_CYCLE
 {
-    Text [ de ] = "Alle Datensätze;Aktueller Datensatz;Aktuelle Seite" ;
     Text [ en-US ] = "All records;Active record;Current page" ;
 };
 String RID_STR_ENUM_NAVIGATION
 {
-    Text [ de ] = "Nein;Ja;Übergeordnetes Formular" ;
     Text [ en-US ] = "No;Yes;Parent Form";
 };
 String RID_STR_ENUM_SUBMIT_TARGET
@@ -615,337 +502,271 @@ String RID_STR_ENUM_SUBMIT_TARGET
 };
 String RID_STR_EVT_APPROVEPARAMETER
 {
-    Text [ de ] = "Parameter füllen" ;
     Text [ en-US ] = "Fill parameters" ;
 };
 String RID_STR_EVT_ACTIONPERFORMED
 {
-    Text [ de ] = "Beim Auslösen" ;
     Text [ en-US ] = "When initiating" ;
 };
 String RID_STR_EVT_AFTERUPDATE
 {
-    Text [ de ] = "Nach dem Aktualisieren" ;
     Text [ en-US ] = "After updating" ;
 };
 String RID_STR_EVT_BEFOREUPDATE
 {
-    Text [ de ] = "Vor dem Aktualisieren" ;
     Text [ en-US ] = "Before updating" ;
 };
 String RID_STR_EVT_APPROVEROWCHANGE
 {
-    Text [ de ] = "Vor der Datensatzaktion" ;
     Text [ en-US ] = "Before record action" ;
 };
 String RID_STR_EVT_ROWCHANGE
 {
-    Text [ de ] = "Nach der Datensatzaktion" ;
     Text [ en-US ] = "After record action" ;
 };
 String RID_STR_EVT_CONFIRMDELETE
 {
-    Text [ de ] = "Löschen bestätigen" ;
     Text [ en-US ] = "Confirm deletion" ;
 };
 String RID_STR_EVT_ERROROCCURED
 {
-    Text [ de ] = "Fehler aufgetreten" ;
     Text [ en-US ] = "Error occurred" ;
 };
 String RID_STR_EVT_FOCUSGAINED
 {
-    Text [ de ] = "Bei Fokuserhalt" ;
     Text [ en-US ] = "When receiving focus" ;
 };
 String RID_STR_EVT_FOCUSLOST
 {
-    Text [ de ] = "Bei Fokusverlust" ;
     Text [ en-US ] = "When losing focus" ;
 };
 String RID_STR_EVT_ITEMSTATECHANGED
 {
-    Text [ de ] = "Status geändert" ;
     Text [ en-US ] = "Item status changed" ;
 };
 String RID_STR_EVT_KEYTYPED
 {
-    Text [ de ] = "Taste gedrückt" ;
     Text [ en-US ] = "Key pressed" ;
 };
 String RID_STR_EVT_KEYUP
 {
-    Text [ de ] = "Taste losgelassen" ;
     Text [ en-US ] = "Key released" ;
 };
 String RID_STR_EVT_LOADED
 {
-    Text [ de ] = "Beim Laden" ;
     Text [ en-US ] = "When loading" ;
 };
 String RID_STR_EVT_RELOADING
 {
-    Text [ de ] = "Vor dem erneuten Laden";
     Text [ en-US ] = "Before reloading" ;
 };
 String RID_STR_EVT_RELOADED
 {
-    Text [ de ] = "Beim erneuten Laden" ;
     Text [ en-US ] = "When reloading" ;
 };
 String RID_STR_EVT_MOUSEDRAGGED
 {
-    Text [ de ] = "Mausbewegung bei Tastendruck" ;
     Text [ en-US ] = "Mouse moved while key pressed" ;
 };
 String RID_STR_EVT_MOUSEENTERED
 {
-    Text [ de ] = "Maus innerhalb" ;
     Text [ en-US ] = "Mouse inside" ;
 };
 String RID_STR_EVT_MOUSEEXITED
 {
-    Text [ de ] = "Maus ausserhalb" ;
     Text [ en-US ] = "Mouse outside" ;
 };
 String RID_STR_EVT_MOUSEMOVED
 {
-    Text [ de ] = "Mausbewegung" ;
     Text [ en-US ] = "Mouse moved" ;
 };
 String RID_STR_EVT_MOUSEPRESSED
 {
-    Text [ de ] = "Maustaste gedrückt" ;
     Text [ en-US ] = "Mouse button pressed" ;
 };
 String RID_STR_EVT_MOUSERELEASED
 {
-    Text [ de ] = "Maustaste losgelassen" ;
     Text [ en-US ] = "Mouse button released" ;
 };
 String RID_STR_EVT_POSITIONING
 {
-    Text [ de ] = "Vor dem Datensatzwechsel" ;
     Text [ en-US ] = "Before record change" ;
 };
 String RID_STR_EVT_POSITIONED
 {
-    Text [ de ] = "Nach dem Datensatzwechsel" ;
     Text [ en-US ] = "After record change" ;
 };
 String RID_STR_EVT_RESETTED
 {
-    Text [ de ] = "Nach dem Zurücksetzen" ;
     Text [ en-US ] = "After resetting" ;
 };
 String RID_STR_EVT_APPROVERESETTED
 {
-    Text [ de ] = "Vor dem Zurücksetzen" ;
     Text [ en-US ] = "Prior to reset" ;
 };
 String RID_STR_EVT_APPROVEACTIONPERFORMED
 {
-    Text [ de ] = "Vor dem Auslösen" ;
     Text [ en-US ] = "Before commencing" ;
 };
 String RID_STR_EVT_SUBMITTED
 {
-    Text [ de ] = "Vor dem Submit" ;
     Text [ en-US ] = "Before submitting" ;
 };
 String RID_STR_EVT_TEXTCHANGED
 {
-    Text [ de ] = "Text modifiziert" ;
     Text [ en-US ] = "Text modified" ;
 };
 String RID_STR_EVT_UNLOADING
 {
-    Text [ de ] = "Vor dem Entladen";
     Text [ en-US ] = "Before unloading" ;
 };
 String RID_STR_EVT_UNLOADED
 {
-    Text [ de ] = "Beim Entladen" ;
     Text [ en-US ] = "When unloading" ;
 };
 String RID_STR_EVT_CHANGED
 {
-    Text [ de ] = "Modifiziert" ;
     Text [ en-US ] = "Changed" ;
 };
 String RID_STR_EVENTS
 {
-    Text [ de ] = "Ereignisse" ;
     Text [ en-US ] = "Events" ;
 };
 String RID_STR_ESCAPE_PROCESSING
 {
-    Text [ de ] = "SQL-Befehl analysieren";
     Text [ en-US ] = "Analyze SQL command";
 };
 String RID_STR_POSITIONX
 {
-    Text [ de ] = "PositionX" ;
     Text [ en-US ] = "PositionX";
 };
 String RID_STR_POSITIONY
 {
-    Text [ de ] = "PositionY" ;
     Text [ en-US ] = "PositionY";
 };
 String RID_STR_TITLE
 {
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Title";
 };
 String RID_STR_STEP
 {
-    Text [ de ] = "Seite (Step)" ;
     Text [ en-US ] = "Page (step)";
 };
 String RID_STR_PROGRESSVALUE
 {
-    Text [ de ] = "Fortschrittswert" ;
     Text [ en-US ] = "Progress value";
 };
 String RID_STR_PROGRESSVALUE_MIN
 {
-    Text [ de ] = "Min. Fortschrittswert" ;
     Text [ en-US ] = "Progress value min.";
 };
 String RID_STR_PROGRESSVALUE_MAX
 {
-    Text [ de ] = "Max. Fortschrittswert" ;
     Text [ en-US ] = "Progress value max.";
 };
 String RID_STR_SCROLLVALUE
 {
-    Text [ de ] = "Bildlaufwert" ;
     Text [ en-US ] = "Scroll value";
 };
 String RID_STR_SCROLLVALUE_MAX
 {
-    Text [ de ] = "Max. Bildlaufwert" ;
     Text [ en-US ] = "Scroll value max.";
 };
 String RID_STR_SCROLLVALUE_MIN
 {
-    Text [ de ] = "Min. Bildlaufwert" ;
     Text [ en-US ] = "Scroll value min.";
 };
 String RID_STR_DEFAULT_SCROLLVALUE
 {
-    Text [ de ] = "Standard Bildlaufwert" ;
     Text [ en-US ] = "Default scroll value";
 };
 String RID_STR_LINEINCREMENT
 {
-    Text [ de ] = "Kleine Änderung" ;
     Text [ en-US ] = "Small change";
 };
 String RID_STR_BLOCKINCREMENT
 {
-    Text [ de ] = "Große Änderung" ;
     Text [ en-US ] = "Large change";
 };
 String RID_STR_REPEAT_DELAY
 {
-    Text [ de ] = "Verzögerung" ;
     Text [ en-US ] = "Delay";
 };
 String RID_STR_REPEAT
 {
-    Text [ de ] = "Wiederholung" ;
     Text [ en-US ] = "Repeat";
 };
 String RID_STR_VISIBLESIZE
 {
-    Text [ de ] = "Sichtbare Größe" ;
     Text [ en-US ] = "Visible size";
 };
 String RID_STR_ORIENTATION
 {
-    Text [ de ] = "Orientierung" ;
     Text [ en-US ] = "Orientation";
 };
 String RID_STR_ENUM_ORIENTATION
 {
-    Text [ de ] = "Horizontal;Vertikal" ;
     Text [ en-US ] = "Horizontal;Vertical";
 };
 String RID_STR_EVT_ADJUSTMENTVALUECHANGED
 {
-    Text [ de ] = "Beim Justieren" ;
     Text [ en-US ] = "While adjusting";
 };
 String RID_STR_DATE
 {
-    Text [ de ] = "Datum" ;
     Text [ en-US ] = "Date";
 };
 String RID_STR_STATE
 {
-    Text [ de ] = "Status" ;
     Text [ en-US ] = "State";
 };
 String RID_STR_TIME
 {
-    Text [ de ] = "Zeit" ;
     Text [ en-US ] = "Time";
 };
 String RID_STR_SCALEIMAGE
 {
-    Text [ de ] = "Skalieren" ;
     Text [ en-US ] = "Scale";
 };
 String RID_STR_PUSHBUTTONTYPE
 {
-    Text [ de ] = "Art der Schaltfläche" ;
     Text [ en-US ] = "Button type";
 };
 String RID_STR_ENUM_PUSHBUTTONTYPE
 {
-    Text [ de ] = "Standard;OK;Abbrechen;Hilfe" ;
     Text [ en-US ] = "Default;OK;Cancel;Help";
 };
 String RID_STR_UNABLETOCONNECT
 {
-    Text [ de ] = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergestellt werden.";
     Text [ en-US ] = "The connection to the data source \"$name$\" could not be established.";
 };
 String RID_STR_TEXT
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text";
 };
 
 String RID_STR_BOUND_CELL
 {
-    Text [ de ] = "Verknüpfte Zelle";
     Text [ en-US ] = "Linked cell";
 };
 
 String RID_STR_LIST_CELL_RANGE
 {
-    Text [ de ] = "Quellzellenbereich";
     Text [ en-US ] = "Source cell range";
 };
 
 String RID_STR_CELL_EXCHANGE_TYPE
 {
-    Text [ de ] = "Inhalt der verknüpften Zelle";
     Text [ en-US ] = "Contents of the linked cell";
 };
 
 String RID_STR_ENUM_CELL_EXCHANGE_TYPE
 {
-    Text [ de ] = "Der ausgewählte Eintrag;Position des ausgewählten Eintrags";
     Text [ en-US ] = "The selected entry;Position of the selected entry";
 };
 
 String RID_STR_SHOW_SCROLLBARS
 {
-    Text [ de ] = "Bildlaufleisten";
     Text [ en-US ] = "Scrollbars";
 };
 
@@ -953,30 +774,25 @@ Resource RID_RSC_ENUM_TEXTTYPE
 {
     String 1
     {
-        Text [ de ] = "Einzeilig";
         Text [ en-US ] = "Single-line";
     };
     String 2
     {
-        Text [ de ] = "Mehrzeilig";
         Text [ en-US ] = "Multi-line";
     };
     String 3
     {
-        Text [ de ] = "Mehrzeilig mit Formatierungen";
         Text [ en-US ] = "Multi-line with formatting";
     };
 };
 
 String RID_STR_SYMBOLCOLOR
 {
-    Text [ de ] = "Symbolfarbe" ;
     Text [ en-US ] = "Symbol color" ;
 };
 
 String RID_STR_LINEEND_FORMAT
 {
-    Text [ de ] = "Textzeilen enden mit";
     Text [ en-US ] = "Text lines end with";
 };
 
@@ -984,12 +800,10 @@ Resource RID_RSC_ENUM_LINEEND_FORMAT
 {
     String 1
     {
-        Text [ de ] = "LF (Unix)";
         Text [ en-US ] = "LF (Unix)";
     };
     String 2
     {
-        Text [ de ] = "CR+LF (Windows)";
         Text [ en-US ] = "CR+LF (Windows)";
     };
 };
@@ -998,22 +812,18 @@ Resource RID_RSC_ENUM_SCROLLBARS
 {
     String 1
     {
-        Text [ de ] = "Keine";
         Text [ en-US ] = "None";
     };
     String 2
     {
-        Text [ de ] = "Horizontal";
         Text [ en-US ] = "Horizontal";
     };
     String 3
     {
-        Text [ de ] = "Vertikal";
         Text [ en-US ] = "Vertical";
     };
     String 4
     {
-        Text [ de ] = "Beide";
         Text [ en-US ] = "Both";
     };
 };
@@ -1022,41 +832,34 @@ Resource RID_RSC_ENUM_COMMAND_TYPE
 {
     String 1
     {
-        Text [ de ] = "Tabelle";
         Text [ en-US ] = "Table";
     };
     String 2
     {
-        Text [ de ] = "Abfrage";
         Text [ en-US ] = "Query";
     };
     String 3
     {
-        Text [ de ] = "SQL-Befehl";
         Text [ en-US ] = "SQL command";
     };
 };
 String RID_STR_TOGGLE
 {
-    Text [ de ]  = "Umschalten";
     Text [ en-US ] = "Toggle";
 };
 
 String RID_STR_FOCUSONCLICK
 {
-    Text [ de ]  = "Fokussieren bei Klick";
     Text [ en-US ] = "Take Focus on Click";
 };
 
 String RID_STR_HIDEINACTIVESELECTION
 {
-    Text [ de ]  = "Auswahl verstecken";
     Text [ en-US ] = "Hide selection";
 };
 
 String RID_STR_VISUALEFFECT
 {
-    Text [ de ]  = "Stil";
     Text [ en-US ] = "Style";
 };
 
@@ -1064,19 +867,16 @@ Resource RID_RSC_ENUM_VISUALEFFECT
 {
     String 1
     {
-        Text [ de ]  = "3D";
         Text [ en-US ] = "3D";
     };
     String 2
     {
-        Text [ de ]  = "Flach";
         Text [ en-US ] = "Flat";
     };
 };
 
 String RID_STR_BORDERCOLOR
 {
-    Text [ de ]  = "Umrandungsfarbe";
     Text [ en-US ] = "Border color";
 };
 
@@ -1084,145 +884,119 @@ Resource RID_RSC_ENUM_IMAGE_POSITION
 {
     String 1
     {
-        Text [ de ] = "Links oben";
         Text [ en-US ] = "Left top";
     };
     String 2
     {
-        Text [ de ] = "Links zentriert";
         Text [ en-US ] = "Left centered";
     };
     String 3
     {
-        Text [ de ] = "Links unten";
         Text [ en-US ] = "Left bottom";
     };
     String 4
     {
-        Text [ de ] = "Rechts oben";
         Text [ en-US ] = "Right top";
     };
     String 5
     {
-        Text [ de ] = "Rechts zentriert";
         Text [ en-US ] = "Right centered";
     };
     String 6
     {
-        Text [ de ] = "Rechts unten";
         Text [ en-US ] = "Right bottom";
     };
     String 7
     {
-        Text [ de ] = "Oben links";
         Text [ en-US ] = "Above left";
     };
     String 8
     {
-        Text [ de ] = "Oben zentriert";
         Text [ en-US ] = "Above centered";
     };
     String 9
     {
-        Text [ de ] = "Oben rechts";
         Text [ en-US ] = "Above right";
     };
     String 10
     {
-        Text [ de ] = "Unten links";
         Text [ en-US ] = "Below left";
     };
     String 11
     {
-        Text [ de ] = "Unten zentriert";
         Text [ en-US ] = "Below centered";
     };
     String 12
     {
-        Text [ de ] = "Unten rechts";
         Text [ en-US ] = "Below right";
     };
     String 13
     {
-        Text [ de ] = "Zentriert";
         Text [ en-US ] = "Centered";
     };
 };
 
 String RID_STR_AUTOLINEBREAK
 {
-    Text [ de ] = "Automatischer Zeilenumbruch";
     Text [ en-US ] = "Wrap text automatically";
 };
 
 String RID_STR_TEXTTYPE
 {
-    Text [ de ] = "Text-Typ";
     Text [ en-US ] = "Text type";
 };
 
 String RID_STR_SHOW_HIDE
 {
-    Text [ de ] = "Nicht anzeigen;Anzeigen" ;
     Text [ en-US ] = "Hide;Show" ;
 };
 String RID_STR_XML_DATA_MODEL
 {
-    Text [ de ] = "XML-Datenmodell";
     Text [ en-US ] = "XML data model";
 };
 
 String RID_STR_BIND_EXPRESSION
 {
-    Text [ de ] = "Bindungsausdruck";
     Text [ en-US ] = "Binding expression";
 };
 
 String RID_STR_XSD_REQUIRED
 {
-    Text [ de ] = "Erforderlich";
     Text [ en-US ] = "Required";
 };
 
 String RID_STR_LIST_BINDING
 {
-    Text [ de ] = "Listeneinträge aus";
     Text [ en-US ] = "List entry source";
 };
 
 String RID_STR_XSD_RELEVANT
 {
-    Text [ de ] = "Relevant";
     Text [ en-US ] = "Relevant";
 };
 
 String RID_STR_XSD_READONLY
 {
-    Text [ de ] = "Schreibgeschützt";
     Text [ en-US ] = "Read-only";
 };
 
 String RID_STR_XSD_CONSTRAINT
 {
-    Text [ de ] = "Bedingung";
     Text [ en-US ] = "Constraint";
 };
 
 String RID_STR_XSD_CALCULATION
 {
-    Text [ de ] = "Berechnung";
     Text [ en-US ] = "Calculation";
 };
 
 String RID_STR_XSD_DATA_TYPE
 {
-    Text [ de ] = "Datentyp";
     Text [ en-US ] = "Data type";
 };
 
 String RID_STR_XSD_WHITESPACES
 {
-    Text [ de ] = "Leerzeichen";
     Text [ en-US ] = "Whitespaces";
 };
 
@@ -1230,89 +1004,74 @@ Resource RID_RSC_ENUM_WHITESPACE_HANDLING
 {
     String 1
     {
-        Text [ de ] = "Erhalten";
         Text [ en-US ] = "Preserve";
     };
     String 2
     {
-        Text [ de ] = "Ersetzen";
         Text [ en-US ] = "Replace";
     };
     String 3
     {
-        Text [ de ] = "Zusammenfassen";
         Text [ en-US ] = "Collapse";
     };
 };
 
 String RID_STR_XSD_PATTERN
 {
-    Text [ de ] = "Muster";
     Text [ en-US ] = "Pattern";
 };
 
 String RID_STR_XSD_LENGTH
 {
-    Text [ de ] = "Länge";
     Text [ en-US ] = "Length";
 };
 
 String RID_STR_XSD_MIN_LENGTH
 {
-    Text [ de ] = "Länge (mindestens)";
     Text [ en-US ] = "Length (at least)";
 };
 
 String RID_STR_XSD_MAX_LENGTH
 {
-    Text [ de ] = "Länge (höchstens)";
     Text [ en-US ] = "Length (at most)";
 };
 
 String RID_STR_XSD_TOTAL_DIGITS
 {
-    Text [ de ] = "Ziffern (gesamt)";
     Text [ en-US ] = "Digits (total)";
 };
 
 String RID_STR_XSD_FRACTION_DIGITS
 {
-    Text [ de ] = "Nachkommastellen";
     Text [ en-US ] = "Digits (fraction)";
 };
 
 String RID_STR_XSD_MAX_INCLUSIVE
 {
-    Text [ de ] = "Maximum (einschl.)";
     Text [ en-US ] = "Max. (inclusive)";
 };
 
 String RID_STR_XSD_MAX_EXCLUSIVE
 {
-    Text [ de ] = "Maximum (ausschl.)";
     Text [ en-US ] = "Max. (exclusive)";
 };
 
 String RID_STR_XSD_MIN_INCLUSIVE
 {
-    Text [ de ] = "Minimum (einschl.)";
     Text [ en-US ] = "Min. (inclusive)";
 };
 
 String RID_STR_XSD_MIN_EXCLUSIVE
 {
-    Text [ de ] = "Minimum (ausschl.)";
     Text [ en-US ] = "Min. (exclusive)";
 };
 
 String RID_STR_SUBMISSION_ID
 {
-    Text [ de ] = "Submission";
     Text [ en-US ] = "Submission";
 };
 
 String RID_STR_BINDING_UI_NAME
 {
-    Text [ de ] = "Bindung" ;
     Text [ en-US ] = "Binding" ;
 };
