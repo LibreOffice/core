@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-04 09:07:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:13:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     HelpId                  = HID_XML_FILTER_TABPAGE_BASIC;
     Hide                    = TRUE;
     Size                    = MAP_APPFONT ( TAB_PAGE_WIDTH , TAB_PAGE_HEIGHT );
-    Text [ de ] = "Allgemein" ;
     Text [ en-US ]      = "General";
 
     // Filter Name ----------------------------------------------------
@@ -68,7 +67,6 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 0 * ROW_HEIGHT + 0 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text [ de ] = "Filtername";
         Text [ en-US ]  = "Filter name";
     };
 
@@ -86,7 +84,6 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 1 * ROW_HEIGHT + 1 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text [ de ] = "Anwendung";
         Text [ en-US ]  = "Application";
     };
 
@@ -107,7 +104,6 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , FIRST_ROW_Y + 2 * ROW_HEIGHT + 2 * SPACING ) ; // + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 16 ) ;
-        Text [ de ] = "Name des\nDateityps";
         Text [ en-US ]  = "Name of\nfile type";
     };
 
@@ -125,7 +121,6 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , 4 + FIRST_ROW_Y + 3 * ROW_HEIGHT + 3 * SPACING + FIXED_TEXT_OFFSET) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text [ de ] = "Dateiendung";
         Text [ en-US ]  = "File extension";
     };
 
@@ -143,7 +138,6 @@ TabPage RID_XML_FILTER_TABPAGE_BASIC
     {
         Pos                 = MAP_APPFONT ( FIRST_ROW_X , 4 + FIRST_ROW_Y + 4 * ROW_HEIGHT + 4 * SPACING + FIXED_TEXT_OFFSET ) ;
         Size                = MAP_APPFONT ( FIRST_ROW_WIDTH , 8 ) ;
-        Text [ de ] = "Kommentar";
         Text [ en-US ]  = "Comments";
     };
 
