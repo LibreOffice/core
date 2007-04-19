@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directory_ooo.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:36:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,35 +35,27 @@
 
 [STR_DIR_INFO]
 en-US = "Information"
-de = "Info"
 
 [STR_DIR_INTERNET]
 en-US = "Internet"
-de = "Internet"
 
 [STR_DIR_JAVA]
 en-US = "Java"
-de = "Java"
 
 [STR_DIR_FREIZEIT]
 en-US = "Fun&More"
-de = "Freizeit"
 
 [STR_DIR_STARONE]
 en-US = "%PRODUCTNAME API"
-de = "%PRODUCTNAME API"
 
 [STR_DIR_TOURISMUS]
 en-US = "Travel"
-de = "Tourismus"
 
 [STR_DIR_KAPITEL]
 en-US = "Chapters"
-de = "Kapitel"
 
 [STR_DIR_DATEIEN]
 en-US = "Files"
-de = "Dateien"
 
 
 
