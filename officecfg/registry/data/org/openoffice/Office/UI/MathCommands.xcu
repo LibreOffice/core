@@ -5,49 +5,41 @@
         <node oor:name="Commands">
             <node oor:name=".uno:ChangeFont" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Schriftarten...</value>
                     <value xml:lang="en-US">~Fonts...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeFontSize" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Schrift~größen...</value>
                     <value xml:lang="en-US">F~ont Size...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeDistance" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Abstände...</value>
                     <value xml:lang="en-US">~Spacing...</value>
                 </prop>
             </node>
             <node oor:name=".uno:ChangeAlignment" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Aus~richtung...</value>
                     <value xml:lang="en-US">A~lignment...</value>
                 </prop>
             </node>
             <node oor:name=".uno:RedrawAutomatic" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">A~nsicht automatisch aktualisieren</value>
                     <value xml:lang="en-US">~AutoUpdate Display</value>
                 </prop>
             </node>
             <node oor:name=".uno:Symbols" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Symbole</value>
                     <value xml:lang="en-US">Symbols</value>
                 </prop>
             </node>
             <node oor:name=".uno:Textmode" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Textmodus</value>
                     <value xml:lang="en-US">~Text Mode</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertFormula" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Formel importieren...</value>
                     <value xml:lang="en-US">~Import Formula...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -56,61 +48,51 @@
             </node>
             <node oor:name=".uno:FitInWindow" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">An Fenster anpassen</value>
                     <value xml:lang="en-US">Fit To Window</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertConfigName" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Text einfügen</value>
                     <value xml:lang="en-US">Insert Text</value>
                 </prop>
             </node>
             <node oor:name=".uno:InsertCommand" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Befehl einfügen</value>
                     <value xml:lang="en-US">Insert Command</value>
                 </prop>
             </node>
             <node oor:name=".uno:ModifyStatus" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Geändert-Status</value>
                     <value xml:lang="en-US">Modified</value>
                 </prop>
             </node>
             <node oor:name=".uno:TextStatus" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Text-Status</value>
                     <value xml:lang="en-US">Text Status</value>
                 </prop>
             </node>
             <node oor:name=".uno:NextError" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Nächster ~Fehler</value>
                     <value xml:lang="en-US">Ne~xt Error</value>
                 </prop>
             </node>
             <node oor:name=".uno:PrevError" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Vorheriger F~ehler</value>
                     <value xml:lang="en-US">Pr~evious Error</value>
                 </prop>
             </node>
             <node oor:name=".uno:NextMark" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Nächster Marker</value>
                     <value xml:lang="en-US">~Next Marker</value>
                 </prop>
             </node>
             <node oor:name=".uno:PrevMark" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Vorheriger Marker</value>
                     <value xml:lang="en-US">Previous ~Marker</value>
                 </prop>
             </node>
             <node oor:name=".uno:SymbolCatalogue" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Katalog...</value>
                     <value xml:lang="en-US">~Catalog...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -119,19 +101,16 @@
             </node>
             <node oor:name=".uno:Preferences" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Optionen</value>
                     <value xml:lang="en-US">Options</value>
                 </prop>
             </node>
             <node oor:name=".uno:View50" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">0,5</value>
                     <value xml:lang="en-US">0.5</value>
                 </prop>
             </node>
             <node oor:name=".uno:View100" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">1</value>
                     <value xml:lang="en-US">1</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -140,13 +119,11 @@
             </node>
             <node oor:name=".uno:View200" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">2</value>
                     <value xml:lang="en-US">2</value>
                 </prop>
             </node>
             <node oor:name=".uno:ZoomIn" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Vergrößern</value>
                     <value xml:lang="en-US">Z~oom In</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -155,7 +132,6 @@
             </node>
             <node oor:name=".uno:ZoomOut" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Ver~kleinern</value>
                     <value xml:lang="en-US">Zoo~m Out</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -164,7 +140,6 @@
             </node>
             <node oor:name=".uno:Draw" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Aktualisieren</value>
                     <value xml:lang="en-US">U~pdate</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -173,7 +148,6 @@
             </node>
             <node oor:name=".uno:Adjust" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Alles an~zeigen</value>
                     <value xml:lang="en-US">Sho~w All</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
@@ -182,13 +156,11 @@
             </node>
             <node oor:name=".uno:ToolBox" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Aus~wahl</value>
                     <value xml:lang="en-US">Selection</value>
                 </prop>
             </node>
             <node oor:name=".uno:FormelCursor" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Formel Cursor</value>
                     <value xml:lang="en-US">Formula Cursor</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
