@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:55:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:54:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,63 +40,51 @@ ModalDialog DLG_MAILMERGEWIZARD
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Serienbrief-Assistent" ;
     Text [ en-US ] = "Mail Merge Wizard" ;
     Moveable = TRUE ;
 
     String STR_ROADMAP_TITLE
     {
-        Text [ de ] = "Schritte";
         Text [ en-US ] = "Steps";
     };
     String ST_STARTING
     {
-        Text [ de ] = "Ausgangsdokument wählen";
         Text [ en-US ] = "Select starting document";
     };
     String ST_DOCUMETNTYPE
     {
-        Text [ de ] = "Dokumenttyp wählen";
         Text [ en-US ] = "Select document type";
     };
     String ST_ADDRESSBLOCK
     {
-        Text [ de ] = "Adressblock einfügen";
         Text [ en-US ] = "Insert address block";
     };
     String ST_ADDRESSLIST
     {
-        Text [ de ] = "Adressenliste wählen";
         Text [ en-US ] = "Select address list";
     };
     String ST_GREETINGSLINE
     {
-        Text [ de ] = "Briefanrede erstellen";
         Text [ en-US ] = "Create salutation";
     };
     String ST_LAYOUT
     {
-        Text [ de ] = "Layout anpassen";
         Text [ en-US ] = "Adjust layout";
     };
     String ST_PREPAREMERGE
     {
-        Text [ de ] = "Dokument vorbereiten";
         Text [ en-US ] = "Edit document";
     };
     String ST_MERGE
     {
-        Text [ de ] = "Dokument personalisieren";
         Text [ en-US ] = "Personalize document";
     };
     String ST_OUTPUT
     {
-        Text [ de ] = "Speichern, drucken, versenden";
         Text [ en-US ] = "Save, print or send";
     };
     String ST_FINISH
     {
-        Text [ de ] = "Fertig stellen";
         Text [ en-US ] = "~Finish";
     };
 
