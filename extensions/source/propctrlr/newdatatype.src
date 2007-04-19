@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newdatatype.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:00:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@ ModalDialog RID_DLG_NEW_DATA_TYPE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( DIALOG_WIDTH, DIALOG_HEIGHT ) ;
 
-    Text [ de ] = "Neuer Datentyp";
     Text [ en-US ] = "New Data Type";
 
     FixedText FT_LABEL
@@ -61,7 +60,6 @@ ModalDialog RID_DLG_NEW_DATA_TYPE
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( DIALOG_WIDTH - 2 * 6, 8 );
 
-        Text [ de ] = "Bitte geben Sie einen Namen für den neuen Datentyp an:";
         Text [ en-US ] = "Type a name for the new data type:";
     };
 

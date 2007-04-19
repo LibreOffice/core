@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pcrmiscres.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 12:01:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:48:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@
 
 String RID_STR_CONFIRM_DELETE_DATA_TYPE
 {
-    Text [ de ] = "Möchtenen Sie den Datentype '#type#' aus dem Modell löschen?\nBeachten Sie, dass alle Kontrollfelder betroffen sein werden, die mit diesem Datentyp verbunden sind.";
     Text [ en-US ] = "Do you want to delete the data type '#type#' from the model?\n"
              "Please note that this will affect all controls which are bound to this data type.";
 };
@@ -114,101 +113,81 @@ ImageList RID_IL_FORMEXPLORER_HC
 
 String RID_STR_PROPTITLE_PUSHBUTTON
 {
-    Text [ de ] = "Schaltfläche" ;
     Text [ en-US ] = "Button" ;
 };
 String RID_STR_PROPTITLE_RADIOBUTTON
 {
-    Text [ de ] = "Optionsfeld" ;
     Text [ en-US ] = "Option Button" ;
 };
 String RID_STR_PROPTITLE_CHECKBOX
 {
-    Text [ de ] = "Markierfeld" ;
     Text [ en-US ] = "Check Box" ;
 };
 String RID_STR_PROPTITLE_FIXEDTEXT
 {
-    Text [ de ] = "Beschriftungsfeld" ;
     Text [ en-US ] = "Label Field" ;
 };
 String RID_STR_PROPTITLE_GROUPBOX
 {
-    Text [ de ] = "Gruppierungsrahmen" ;
     Text [ en-US ] = "Group Box" ;
 };
 String RID_STR_PROPTITLE_EDIT
 {
-    Text [ de ] = "Textfeld" ;
     Text [ en-US ] = "Text Box" ;
 };
 String RID_STR_PROPTITLE_FORMATTED
 {
-    Text [ de ] = "Formatiertes Feld" ;
     Text [ en-US ] = "Formatted Field";
 };
 String RID_STR_PROPTITLE_LISTBOX
 {
-    Text [ de ] = "Listenfeld" ;
     Text [ en-US ] = "List Box" ;
 };
 String RID_STR_PROPTITLE_COMBOBOX
 {
-    Text [ de ] = "Kombinationsfeld" ;
     Text [ en-US ] = "Combo Box" ;
 };
 String RID_STR_PROPTITLE_IMAGEBUTTON
 {
-    Text [ de ] = "Grafische Schaltfläche" ;
     Text [ en-US ] = "Image Button" ;
 };
 String RID_STR_PROPTITLE_HIDDENCONTROL
 {
-    Text [ de ] = "verstecktes Kontrollfeld" ;
     Text [ en-US ] = "Hidden Control" ;
 };
 String RID_STR_PROPTITLE_UNKNOWNCONTROL
 {
-    Text [ de ] = "Kontrollfeld (unbekannter Typ)" ;
     Text [ en-US ] = "Control (unknown type)" ;
 };
 String RID_STR_PROPTITLE_IMAGECONTROL
 {
-    Text [ de ] = "Grafisches Kontrollfeld" ;
     Text [ en-US ] = "Image Control" ;
 };
 String RID_STR_PROPTITLE_FILECONTROL
 {
-    Text [ de ] = "Dateiauswahl" ;
     Text [ en-US ] = "File Selection" ;
 };
 String RID_STR_PROPTITLE_DATEFIELD
 {
-    Text [ de ] = "Datumsfeld" ;
     Text [ en-US ] = "Date Field" ;
 };
 String RID_STR_PROPTITLE_TIMEFIELD
 {
-    Text [ de ] = "Zeitfeld" ;
     Text [ en-US ] = "Time Field" ;
 };
 String RID_STR_PROPTITLE_NUMERICFIELD
 {
-    Text [ de ] = "Numerisches Feld" ;
     Text [ en-US ] = "Numeric Field" ;
 };
 String RID_STR_PROPTITLE_CURRENCYFIELD
 {
-    Text [ de ] = "Währungsfeld" ;
     Text [ en-US ] = "Currency Field" ;
 };
 String RID_STR_PROPTITLE_PATTERNFIELD
 {
-    Text [ de ] = "Maskiertes Feld" ;
     Text [ en-US ] = "Pattern Field" ;
 };
 String RID_STR_PROPTITLE_DBGRID
 {
-    Text [ de ] = "Tabellen-Kontrollfeld " ;
     Text [ en-US ] = "Table Control " ;
 };
