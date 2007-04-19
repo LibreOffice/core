@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:39:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:47:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@
         {\
             Identifier = FN_INSERT_CAPTION ;\
             HelpID = FN_INSERT_CAPTION ;\
-            Text [ de ] = "Bes~chriftung..." ;\
             Text [ en-US ] = "~Caption..." ;\
     };
 
@@ -55,28 +54,24 @@
     {\
         Identifier = FN_FORMAT_TABLE_DLG ; \
         HelpID = FN_FORMAT_TABLE_DLG ; \
-        Text [ de ] = "Tab~elle..." ; \
         Text [ en-US ] = "~Table..." ; \
     };\
     MenuItem\
     {\
         Identifier = FN_TABLE_MERGE_TABLE ; \
         HelpID = FN_TABLE_MERGE_TABLE ; \
-        Text [ de ] = "Tabellen verbinden" ; \
         Text [ en-US ] = "Merge Tables";\
     };\
     MenuItem\
     {\
         Identifier = FN_TABLE_SPLIT_TABLE ; \
         HelpID = FN_TABLE_SPLIT_TABLE ; \
-        Text [ de ] = "Tabelle auf~trennen" ; \
         Text [ en-US ] = "~Split Table" ; \
     };\
     MenuItem\
     {\
         Identifier = FN_NUM_FORMAT_TABLE_DLG ; \
         HelpID = FN_NUM_FORMAT_TABLE_DLG ; \
-        Text [ de ] = "Zahlenf~ormat..." ; \
         Text [ en-US ] = "N~umber Format..." ; \
     };\
     MenuItem\
@@ -85,7 +80,6 @@
         HelpID = MN_CELL ; \
         Command = ".uno:CellMenu" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Ze~lle : Zelle */\
-        Text [ de ] = "~Zelle" ; \
         Text [ en-US ] = "~Cell" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenzelle : Einstellungen f³r die Tabellenzelle */\
         SubMenu = Menu\
@@ -96,14 +90,12 @@
                 {\
                     Identifier = FN_TABLE_MERGE_CELLS ; \
                     HelpID = FN_TABLE_MERGE_CELLS ; \
-                    Text [ de ] = "~Verbinden" ; \
                     Text [ en-US ] = "~Merge" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_SPLIT_CELLS ; \
                     HelpID = FN_TABLE_SPLIT_CELLS ; \
-                    Text [ de ] = "~Teilen..." ; \
                     Text [ en-US ] = "~Split..." ; \
                 };\
                 SEPARATOR ; \
@@ -111,21 +103,18 @@
                 {\
                     Identifier = FN_TABLE_VERT_NONE ; \
                     HelpID = FN_TABLE_VERT_NONE ; \
-                    Text [ de ] = "~Oben" ; \
                     Text [ en-US ] = "~Top" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_VERT_CENTER ; \
                     HelpID = FN_TABLE_VERT_CENTER ; \
-                    Text [ de ] = "~Mitte" ; \
                     Text [ en-US ] = "C~enter" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_VERT_BOTTOM ; \
                     HelpID = FN_TABLE_VERT_BOTTOM ; \
-                    Text [ de ] = "~Unten" ; \
                     Text [ en-US ] = "~Bottom" ; \
                 };\
                 SEPARATOR ; \
@@ -134,14 +123,12 @@
                     Identifier = FN_TABLE_SET_READ_ONLY_CELLS ; \
                     HelpID = FN_TABLE_SET_READ_ONLY_CELLS ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Schützen : ~Sch³tzen */\
-                    Text [ de ] = "~SchÃ¼tzen" ; \
                     Text [ en-US ] = "~Protect" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
                     HelpID = FN_TABLE_UNSET_READ_ONLY_CELLS ; \
-                    Text [ de ] = "Schutz ~aufheben" ; \
                     Text [ en-US ] = "~Unprotect" ; \
                 };\
             };\
@@ -155,7 +142,6 @@
         HelpID = HID_MN_SUB_TBLROW ; \
         Command = ".uno:RowMenu" ;  \
         /* ### ACHTUNG: Neuer Text in Resource? Ze~ile : Zeile */\
-        Text [ de ] = "Ze~ile" ; \
         Text [ en-US ] = "~Row" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenzeile : Einstellungen f³r die Tabellenzeile */\
         SubMenu = Menu\
@@ -167,14 +153,12 @@
                     Identifier = FN_TABLE_SET_ROW_HEIGHT ; \
                     HelpID = FN_TABLE_SET_ROW_HEIGHT ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Höhe... : ~H÷he... */\
-                    Text [ de ] = "~HÃ¶he..." ; \
                     Text [ en-US ] = "~Height..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_ROW_SPLIT;\
                     HelpID = FN_TABLE_ROW_SPLIT ; \
-                    Text [ de ] = "Zeilenumb~ruch an Seiten- und Spaltenenden zulassen" ; \
                     Text [ en-US ] = "Allow Row to Break A~cross Pages and Columns" ; \
                 };\
                 MenuItem\
@@ -182,7 +166,6 @@
                     Identifier = FN_TABLE_OPTIMAL_HEIGHT ; \
                     HelpID = FN_TABLE_OPTIMAL_HEIGHT ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Optimale Höhe : ~Optimale H÷he */\
-                    Text [ de ] = "~Optimale HÃ¶he" ; \
                     Text [ en-US ] = "~Optimal Height" ; \
                 };\
                 MenuItem\
@@ -190,7 +173,6 @@
                     Identifier = FN_TABLE_BALANCE_ROWS ; \
                     HelpID = FN_TABLE_BALANCE_ROWS ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
-                    Text [ de ] = "GleichmÃ¤ÃŸig ~verteilen" ; \
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
@@ -200,7 +182,6 @@
                     HelpID = FN_TABLE_SELECT_ROW ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
-                    Text [ de ] = "Aus~wÃ¤hlen" ; \
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
@@ -208,7 +189,6 @@
                     Identifier = FN_TABLE_INSERT_ROW_DLG ; \
                     HelpID = FN_TABLE_INSERT_ROW_DLG ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
-                    Text [ de ] = "~EinfÃ¼gen..." ; \
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
@@ -216,7 +196,6 @@
                     Identifier = FN_TABLE_DELETE_ROW ; \
                     HelpID = FN_TABLE_DELETE_ROW ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-                    Text [ de ] = "~LÃ¶schen" ; \
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -227,7 +206,6 @@
         Identifier = MN_SUB_TBLCOL ; \
         HelpID = HID_MN_SUB_TBLCOL ; \
         Command = ".uno:ColumnMenu" ; \
-        Text [ de ] = "S~palte" ; \
         Text [ en-US ] = "Colu~mn" ; \
         /* ### ACHTUNG: Neuer Text in Resource? Einstellungen für die Tabellenspalte : Einstellungen f³r die Tabellenspalte */\
         SubMenu = Menu\
@@ -238,14 +216,12 @@
                 {\
                     Identifier = FN_TABLE_SET_COL_WIDTH ; \
                     HelpID = FN_TABLE_SET_COL_WIDTH ; \
-                    Text [ de ] = "~Breite..." ; \
                     Text [ en-US ] = "~Width..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TABLE_ADJUST_CELLS ; \
                     HelpID = FN_TABLE_ADJUST_CELLS ; \
-                    Text [ de ] = "~Optimale Breite " ; \
                     Text [ en-US ] = "~Optimal Width " ; \
                 };\
                 MenuItem\
@@ -253,7 +229,6 @@
                     Identifier = FN_TABLE_BALANCE_CELLS ; \
                     HelpID = FN_TABLE_BALANCE_CELLS ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Gleichmäßig ~verteilen : Gleichmõ˜ig ~verteilen */\
-                    Text [ de ] = "GleichmÃ¤ÃŸig ~verteilen" ; \
                     Text [ en-US ] = "Space ~Equally" ; \
                 };\
                 SEPARATOR ; \
@@ -263,7 +238,6 @@
                     HelpID = FN_TABLE_SELECT_COL ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Auswählen */\
                     /* ### ACHTUNG: Neuer Text in Resource? Ausw~ählen : Ausw~õhlen */\
-                    Text [ de ] = "Aus~wÃ¤hlen" ; \
                     Text [ en-US ] = "~Select" ; \
                 };\
                 MenuItem\
@@ -271,7 +245,6 @@
                     Identifier = FN_TABLE_INSERT_COL_DLG ; \
                     HelpID = FN_TABLE_INSERT_COL_DLG ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */\
-                    Text [ de ] = "~EinfÃ¼gen..." ; \
                     Text [ en-US ] = "~Insert..." ; \
                 };\
                 MenuItem\
@@ -279,7 +252,6 @@
                     Identifier = FN_TABLE_DELETE_COL ; \
                     HelpID = FN_TABLE_DELETE_COL ; \
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */\
-                    Text [ de ] = "~LÃ¶schen" ; \
                     Text [ en-US ] = "~Delete" ; \
                 };\
             };\
@@ -301,7 +273,6 @@
     {\
         Identifier = FN_DRAWTEXT_ATTR_DLG ; \
         HelpID = FN_DRAWTEXT_ATTR_DLG ; \
-        Text [ de ] = "~Text..." ; \
         Text [ en-US ] = "Te~xt..." ; \
     };
 
@@ -310,7 +281,6 @@
     {\
         Identifier = FN_NAME_SHAPE ; \
         HelpID = FN_NAME_SHAPE ; \
-        Text [ de ] = "Name..." ; \
         Text [ en-US ] = "Name..." ; \
     };
 
@@ -320,7 +290,6 @@
     {\
         Identifier = FN_TITLE_DESCRIPTION_SHAPE; \
         HelpID = FN_TITLE_DESCRIPTION_SHAPE; \
-        Text [ de ] = "Beschreibung..." ; \
         Text [ en-US ] = "Description..." ; \
     };
 
@@ -329,7 +298,6 @@
     {\
         Identifier = FN_FORMAT_FRAME_DLG ; \
         HelpID = FN_FORMAT_FRAME_DLG ; \
-        Text [ de ] = "Rah~men..." ; \
         Text [ en-US ] = "~Frame..." ; \
     };
 
@@ -385,14 +353,12 @@
     {\
         Identifier = FN_FRAME_UP ; \
         HelpID = FN_FRAME_UP ; \
-        Text [ de ] = "W~eiter nach vorn" ; \
         Text [ en-US ] = "Bring ~Forward" ; \
     };\
     MenuItem\
     {\
         Identifier = FN_FRAME_DOWN ; \
         HelpID = FN_FRAME_DOWN ; \
-        Text [ de ] = "Weiter ~nach hinten" ; \
         Text [ en-US ] = "Send Back~ward" ; \
     };
 
@@ -409,7 +375,6 @@
         Identifier = MN_SUB_ARRANGE ; \
         HelpID = HID_MN_SUB_ARRANGE ; \
         Command = ".uno:ArrangeMenu" ; \
-        Text [ de ] = "~Anordnung" ; \
         Text [ en-US ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -438,7 +403,6 @@
         Identifier = MN_SUB_ARRANGE ; \
         HelpID = HID_MN_SUB_ARRANGE ; \
         Command = ".uno:ArrangeMenu" ; \
-        Text [ de ] = "~Anordnung" ; \
         Text [ en-US ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -473,14 +437,12 @@
 
 String MN_TEXT_POPUPMENU
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
 };
 
 
 String MN_TAB_POPUPMENU
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
 };
 
@@ -512,14 +474,12 @@ Menu MN_TAB_POPUPMENU
         {
             Identifier = FN_VIEW_TABLEGRID ;
             HelpID = FN_VIEW_TABLEGRID ;
-            Text [ de ] = "Tabellenbegrenz~ungen" ;
             Text [ en-US ] = "Table Boundaries" ;
         };
         MenuItem
         {
             Identifier = FN_SET_MODOPT_TBLNUMFMT ;
             HelpID = FN_SET_MODOPT_TBLNUMFMT ;
-            Text [ de ] = "Zahlen~erkennung" ;
             Text [ en-US ] = "~Number Recognition";
         };
         SEPARATOR ;
@@ -532,7 +492,6 @@ Menu MN_TAB_POPUPMENU
     {\
         Identifier = FN_FRAME_WRAP_CONTOUR ; \
         HelpID = FN_FRAME_WRAP_CONTOUR ; \
-        Text [ de ] = "K~ontur" ; \
         Text [ en-US ] = "~Contour" ; \
     };
 
@@ -541,7 +500,6 @@ Menu MN_TAB_POPUPMENU
     {\
         Identifier = SID_CONTOUR_DLG ; \
         HelpID = SID_CONTOUR_DLG ; \
-        Text [ de ] = "Kontur ~bearbeiten..." ; \
         Text [ en-US ] = "~Edit Contour..." ; \
     };
 
@@ -554,7 +512,6 @@ Menu MN_TAB_POPUPMENU
         Identifier = MN_WRAP ; \
         HelpID = MN_WRAP ; \
         Command = ".uno:WrapMenu" ; \
-        Text [ de ] = "~Umlauf" ; \
         Text [ en-US ] = "~Wrap" ; \
         SubMenu = Menu\
         {\
@@ -565,7 +522,6 @@ Menu MN_TAB_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_NOWRAP ; \
                     HelpID = FN_FRAME_NOWRAP ; \
-                    Text [ de ] = "~Kein Umlauf" ; \
                     Text [ en-US ] = "~No Wrap" ; \
                 };\
                 MenuItem\
@@ -573,7 +529,6 @@ Menu MN_TAB_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP ; \
                     HelpID = FN_FRAME_WRAP ; \
-                    Text [ de ] = "~Seitenumlauf" ; \
                     Text [ en-US ] = "~Page Wrap" ; \
                 };\
                 MenuItem\
@@ -581,7 +536,6 @@ Menu MN_TAB_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP_IDEAL ; \
                     HelpID = FN_FRAME_WRAP_IDEAL ; \
-                    Text [ de ] = "~Dynamischer Seitenumlauf" ; \
                     Text [ en-US ] = "~Optimal Page Wrap" ; \
                 };\
                 MenuItem\
@@ -589,7 +543,6 @@ Menu MN_TAB_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU ; \
                     HelpID = FN_FRAME_WRAPTHRU ; \
-                    Text [ de ] = "D~urchlauf" ; \
                     Text [ en-US ] = "~Wrap Through" ; \
                 };\
                 MenuItem\
@@ -597,7 +550,6 @@ Menu MN_TAB_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU_TRANSP ; \
                     HelpID = FN_FRAME_WRAPTHRU_TRANSP ; \
-                    Text [ de ] = "Im ~Hintergrund" ; \
                     Text [ en-US ] = "In ~Background" ; \
                 };\
                 SEPARATOR ; \
@@ -607,7 +559,6 @@ Menu MN_TAB_POPUPMENU
                 {\
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
-                    Text [ de ] = "~Erster Absatz" ; \
                     Text [ en-US ] = "~First Paragraph" ; \
                     };\
             };\
@@ -619,7 +570,6 @@ Menu MN_TAB_POPUPMENU
 
 String MN_DRAW_POPUPMENU
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphic" ;
 };
 #define MN_WRAP_DRAW                                                                                                            \
@@ -637,7 +587,6 @@ String MN_DRAW_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_NOWRAP ; \
                     HelpID = FN_FRAME_NOWRAP ; \
-                    Text [ de ] = "~Kein Umlauf" ; \
                     Text [ en-US ] = "~No Wrap" ; \
                 };\
                 MenuItem\
@@ -645,7 +594,6 @@ String MN_DRAW_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP ; \
                     HelpID = FN_FRAME_WRAP ; \
-                    Text [ de ] = "~Seitenumlauf" ; \
                     Text [ en-US ] = "~Page Wrap" ; \
                 };\
                 MenuItem\
@@ -653,7 +601,6 @@ String MN_DRAW_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAP_IDEAL ; \
                     HelpID = FN_FRAME_WRAP_IDEAL ; \
-                    Text [ de ] = "~Dynamischer Seitenumlauf" ; \
                     Text [ en-US ] = "~Optimal Page Wrap" ; \
                 };\
                 MenuItem\
@@ -661,7 +608,6 @@ String MN_DRAW_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU ; \
                     HelpID = FN_FRAME_WRAPTHRU ; \
-                    Text [ de ] = "D~urchlauf" ; \
                     Text [ en-US ] = "~Wrap Through" ; \
                 };\
                 MenuItem\
@@ -669,7 +615,6 @@ String MN_DRAW_POPUPMENU
                     RadioCheck = TRUE ; \
                     Identifier = FN_FRAME_WRAPTHRU_TRANSP ; \
                     HelpID = FN_FRAME_WRAPTHRU_TRANSP ; \
-                    Text [ de ] = "Im ~Hintergrund" ; \
                     Text [ en-US ] = "In ~Background" ; \
                 };\
                 SEPARATOR ; \
@@ -678,7 +623,6 @@ String MN_DRAW_POPUPMENU
                 {\
                     Identifier = FN_WRAP_ANCHOR_ONLY ; \
                     HelpID = FN_WRAP_ANCHOR_ONLY ; \
-                    Text [ de ] = "~Erster Absatz" ; \
                     Text [ en-US ] = "~First Paragraph" ; \
                 };\
                 SEPARATOR ; \
@@ -686,12 +630,10 @@ String MN_DRAW_POPUPMENU
                 {\
                     Identifier = FN_DRAW_WRAP_DLG ; \
                     HelpID = FN_DRAW_WRAP_DLG ; \
-                    Text [ de ] = "~Bearbeiten..." ; \
                     Text [ en-US ] = "~Edit..." ; \
                 };\
             };\
         };\
-        Text [ de ] = "~Umlauf" ; \
         Text [ en-US ] = "~Wrap" ; \
     };
 
@@ -706,7 +648,6 @@ String MN_DRAW_POPUPMENU
     {\
         Identifier = FN_TOOL_ANKER_FRAME ; \
         HelpID = FN_TOOL_ANKER_FRAME ; \
-        Text [ de ] = "Am ~Rahmen" ; \
         Text [ en-US ] = "To ~Frame" ; \
     };
 
@@ -716,7 +657,6 @@ String MN_DRAW_POPUPMENU
         Identifier = FN_TOOL_ANKER ; \
         HelpID = FN_TOOL_ANKER ; \
         Command = ".uno:AnchorMenu" ; \
-        Text [ de ] = "~Verankerung" ; \
         Text [ en-US ] = "An~chor" ; \
         SubMenu = Menu\
         {\
@@ -726,28 +666,24 @@ String MN_DRAW_POPUPMENU
                 {\
                     Identifier = FN_TOOL_ANKER_PAGE ; \
                     HelpID = FN_TOOL_ANKER_PAGE ; \
-                    Text [ de ] = "An der ~Seite" ; \
                     Text [ en-US ] = "To P~age" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TOOL_ANKER_PARAGRAPH ; \
                     HelpID = FN_TOOL_ANKER_PARAGRAPH ; \
-                    Text [ de ] = "Am ~Absatz" ; \
                     Text [ en-US ] = "To ~Paragraph" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TOOL_ANKER_AT_CHAR ; \
                     HelpID = FN_TOOL_ANKER_AT_CHAR ; \
-                    Text [ de ] = "Am ~Zeichen" ; \
                     Text [ en-US ] = "To ~Character" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = FN_TOOL_ANKER_CHAR ; \
                     HelpID = FN_TOOL_ANKER_CHAR ; \
-                    Text [ de ] = "Als Z~eichen" ; \
                     Text [ en-US ] = "As C~haracter" ; \
                 };\
                 MN_AT_FRAME\
@@ -784,7 +720,6 @@ Menu MN_DRAW_POPUPMENU
 
 String MN_DRAWFORM_POPUPMENU
 {
-    Text [ de ] = "Kontrollfeld" ;
     Text [ en-US ] = "Control" ;
 };
 
@@ -816,7 +751,6 @@ Menu MN_DRAWFORM_POPUPMENU
 
 String MN_DRWTXT_POPUPMENU
 {
-    Text [ de ] = "Zeichenobjekt Text" ;
     Text [ en-US ] = "Draw Object text" ;
 };
 
@@ -837,7 +771,6 @@ Menu MN_DRWTXT_POPUPMENU
 
 String MN_GRF_POPUPMENU
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphic" ;
 };
 
@@ -847,7 +780,6 @@ String MN_GRF_POPUPMENU
         Identifier = MN_SUB_ALIGN ; \
         HelpID = HID_MN_SUB_ALIGN ; \
         Command = ".uno:ArrangeFrameMenu" ; \
-        Text [ de ] = "~Anordnung" ; \
         Text [ en-US ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -870,7 +802,6 @@ String MN_GRF_POPUPMENU
         Identifier = MN_FORMAT_FRM_HORZ ; \
         HelpID = MN_FORMAT_FRM_HORZ ; \
         Command = ".uno:AlignFrameMenu" ; \
-        Text [ de ] = "Aus~richtung" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -879,21 +810,18 @@ String MN_GRF_POPUPMENU
                 {\
                     Identifier = FN_FRAME_ALIGN_HORZ_LEFT ; \
                     HelpID = FN_FRAME_ALIGN_HORZ_LEFT ; \
-                    Text [ de ] = "~Links" ; \
                     Text [ en-US ] = "~Left" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_HORZ_CENTER ; \
                     HelpID = FN_FRAME_ALIGN_HORZ_CENTER ; \
-                    Text [ de ] = "~Zentriert" ; \
                     Text [ en-US ] = "~Centered" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_HORZ_RIGHT ; \
                     HelpID = FN_FRAME_ALIGN_HORZ_RIGHT ; \
-                    Text [ de ] = "~Rechts" ; \
                     Text [ en-US ] = "~Right" ; \
                     };\
                 SEPARATOR ; \
@@ -901,21 +829,18 @@ String MN_GRF_POPUPMENU
                 {\
                     Identifier = FN_FRAME_ALIGN_VERT_TOP ; \
                     HelpID = FN_FRAME_ALIGN_VERT_TOP ; \
-                    Text [ de ] = "Basis ~oben" ; \
                     Text [ en-US ] = "Base at ~Top" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_VERT_CENTER ; \
                     HelpID = FN_FRAME_ALIGN_VERT_CENTER ; \
-                    Text [ de ] = "Basis ~mitte" ; \
                     Text [ en-US ] = "Base in ~Middle" ; \
                     };\
                 MenuItem\
                 {\
                     Identifier = FN_FRAME_ALIGN_VERT_BOTTOM ; \
                     HelpID = FN_FRAME_ALIGN_VERT_BOTTOM ; \
-                    Text [ de ] = "Basis ~unten" ; \
                     Text [ en-US ] = "Base at ~Bottom" ; \
                     };\
             };\
@@ -935,7 +860,6 @@ Menu MN_GRF_POPUPMENU
         {
             Identifier = FN_FORMAT_GRAFIC_DLG ;
             HelpID = FN_FORMAT_GRAFIC_DLG ;
-            Text [ de ] = "~Bild..." ;
             Text [ en-US ] = "~Picture..." ;
         };
         MN_FRM_CAPTION_ITEM
@@ -948,7 +872,6 @@ Menu MN_GRF_POPUPMENU
 
 String MN_OLE_POPUPMENU
 {
-    Text [ de ] = "Objekt" ;
     Text [ en-US ] = "Object" ;
 };
 
@@ -964,7 +887,6 @@ Menu MN_OLE_POPUPMENU
         {
             Identifier = FN_FORMAT_FRAME_DLG ;
             HelpID = FN_FORMAT_FRAME_DLG ;
-            Text [ de ] = "Objekt..." ;
             Text [ en-US ] = "Object..." ;
         };
         MN_FRM_CAPTION_ITEM
@@ -979,7 +901,6 @@ Menu MN_OLE_POPUPMENU
 
 String MN_FRM_POPUPMENU
 {
-    Text [ de ] = "Rahmen" ;
     Text [ en-US ] = "Frame" ;
 };
 
@@ -997,7 +918,6 @@ Menu MN_FRM_POPUPMENU
 
 String MN_PPREVIEW_POPUPMENU
 {
-    Text [ de ] = "Zeichenobjekt Text" ;
     Text [ en-US ] = "Draw Object text" ;
 };
 
@@ -1009,7 +929,6 @@ Menu MN_PPREVIEW_POPUPMENU
         {
             Identifier = FN_PAGEUP ;
             HelpID = FN_PAGEUP ;
-            Text [ de ] = "Vorherige Seite" ;
             Text [ en-US ] = "Previous Page" ;
         };
         MenuItem
@@ -1017,7 +936,6 @@ Menu MN_PPREVIEW_POPUPMENU
             Identifier = FN_PAGEDOWN ;
             HelpID = FN_PAGEDOWN ;
             /* ### ACHTUNG: Neuer Text in Resource? Nächste Seite : Nõchste Seite */
-            Text [ de ] = "NÃ¤chste Seite" ;
             Text [ en-US ] = "Next Page" ;
         };
         MenuItem
@@ -1030,15 +948,12 @@ Menu MN_PPREVIEW_POPUPMENU
         {
             Identifier = FN_PRINT_PAGEPREVIEW ;
             HelpID = FN_PRINT_PAGEPREVIEW ;
-            Text [ de ] = "Drucken Seitenansicht" ;
             Text [ en-US ] = "Print" ;
-            Text [ x-comment ] = "; ßí; ßí?ÓÊÚÑ?Ãí?ØÈÇÚ?\\æÃíä ãÚÇíäÉ ÇáÕÝÍÉ ÞÈ?ØÈÇÚÊå?¿¿¿¿";
         };
         MenuItem
         {
             Identifier = FN_PREVIEW_PRINT_OPTIONS;
             HelpID = FN_PREVIEW_PRINT_OPTIONS;
-            Text [ de ] = "Druckoptionen" ;
             Text [ en-US ] = "Print Options";
         };
         SEPARATOR ;
@@ -1046,7 +961,6 @@ Menu MN_PPREVIEW_POPUPMENU
         {
             Identifier = SID_PRINTPREVIEW;
             HelpID =  SID_PRINTPREVIEW;
-            Text [ de ] = "Seitenansicht schlieÃŸen" ;
             Text [ en-US ] = "Close Preview" ;
         };
     };
@@ -1054,7 +968,6 @@ Menu MN_PPREVIEW_POPUPMENU
 
 String MN_MEDIA_POPUPMENU
 {
-    Text [ de ] = "Medienobjekt" ;
     Text [ en-US ] = "Media object" ;
 };
 
