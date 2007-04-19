@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:57:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:25:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ ModalDialog DLG_COL_WIDTH
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 149 , 60 ) ;
-    Text [ de ] = "Spaltenbreite" ;
     Text [ en-US ] = "Column Width" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -70,10 +69,8 @@ ModalDialog DLG_COL_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 22 , 8 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_WIDTH
     {
@@ -97,18 +94,14 @@ ModalDialog DLG_COL_WIDTH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 81 , 8 ) ;
-        Text [ de ] = "Breite" ;
         Text [ en-US ] = "Width" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_COL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 29 , 8 ) ;
-        Text [ de ] = "~Spalte" ;
         Text [ en-US ] = "~Column" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_COL
     {
@@ -122,7 +115,6 @@ ModalDialog DLG_COL_WIDTH
         Maximum = 99 ;
         Repeat = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
