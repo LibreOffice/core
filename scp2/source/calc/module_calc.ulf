@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_calc.ulf,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:22:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:23:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,34 +33,26 @@
  *
  ************************************************************************/
 [STR_NAME_MODULE_PRG_CALC]
-de = "%PRODUCTNAME Calc"
 en-US = "%PRODUCTNAME Calc"
 
 [STR_DESC_MODULE_PRG_CALC]
-de = "Berechnungen ausführen, Informationen analysieren und Listen in Tabellen verwalten mit %PRODUCTNAME Calc."
 en-US = "Perform calculation, analyze information and manage lists in spreadsheets by using %PRODUCTNAME Calc."
 
 [STR_NAME_MODULE_PRG_CALC_BIN]
-de = "Programmodul"
 en-US = "Program Module"
 
 [STR_DESC_MODULE_PRG_CALC_BIN]
-de = "Die Anwendung %PRODUCTNAME Calc"
 en-US = "The application %PRODUCTNAME Calc"
 
 [STR_NAME_MODULE_PRG_CALC_HELP]
-de = "%PRODUCTNAME Calc Hilfe"
 en-US = "%PRODUCTNAME Calc Help"
 
 [STR_DESC_MODULE_PRG_CALC_HELP]
-de = "Die %PRODUCTNAME-Hilfe für %PRODUCTNAME Calc."
 en-US = "Help about %PRODUCTNAME Calc"
 
 [STR_NAME_MODULE_OPTIONAL_ADDINS]
-de = "AddIn"
 en-US = "Add-in"
 
 [STR_DESC_MODULE_OPTIONAL_ADDINS]
-de = "Add-Ins sind zusätzliche Programme, welche neue Funktionen in %PRODUCTNAME Calc verfügbar machen."
 en-US = "Add-ins are additional programs that make new functions available in %PRODUCTNAME Calc."
 
