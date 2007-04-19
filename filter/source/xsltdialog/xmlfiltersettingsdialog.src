@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-09 15:06:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
     Closeable               = TRUE ;
     Sizeable                = FALSE;
     DialogControl           = TRUE ;
-    Text [ de ] = "XML-Filter Einstellungen" ;
     Text [ en-US ]      = "XML Filter Settings" ;
 
     Control CTRL_XML_FILTER_LIST
@@ -69,7 +68,6 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_NEW;
         TabStop             = TRUE ;
-        Text [ de ] = "~Neu...";
         Text [ en-US ]  = "~New...";
     };
 
@@ -79,7 +77,6 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_EDIT;
         TabStop             = TRUE ;
-        Text [ de ] = "~Bearbeiten...";
         Text [ en-US ]  = "~Edit...";
     };
 
@@ -89,7 +86,6 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_TEST;
         TabStop             = TRUE ;
-        Text [ de ] = "~XSLTs testen...";
         Text [ en-US ]  = "~Test XSLTs...";
     };
 
@@ -99,7 +95,6 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_DELETE;
         TabStop             = TRUE ;
-        Text [ de ] = "~Löschen...";
         Text [ en-US ]  = "~Delete...";
     };
 
@@ -109,7 +104,6 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_SAVE;
         TabStop             = TRUE ;
-        Text [ de ] = "~Als Paket sichern...";
         Text [ en-US ]  = "~Save as Package...";
     };
 
@@ -119,10 +113,8 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_OPEN;
         TabStop             = TRUE ;
-        Text [ de ] = "~Paket öffnen...";
         Text [ en-US ]  = "~Open Package...";
         TabStop             = TRUE ;
-        Text [ x-comment ] = "NK06.06.2003: It can be a shortage of writing space on push button for Japanese string with mnemonic.";
     };
 
     HelpButton BTN_XML_FILTER_HELP
@@ -137,7 +129,6 @@ WorkWindow DLG_XML_FILTER_SETTINGS_DIALOG
         Size                = MAP_APPFONT ( BUTTONS_WIDTH , BUTTONS_HEIGHT ) ;
         HelpId              = HID_XML_FILTER_CLOSE;
         TabStop             = TRUE ;
-        Text [ de ] = "~Schließen";
         Text [ en-US ]  = "~Close";
     };
 
