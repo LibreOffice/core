@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ChartType.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:44:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:59:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ ModalDialog DLG_DIAGRAM_TYPE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 246 ) ;
-    Text [ de ] = "Diagrammtyp" ;
     Text [ en-US ] = "Chart Type" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dialog hat Cancel und/oder OK-Button ! (KH)
@@ -78,35 +77,27 @@ ModalDialog DLG_DIAGRAM_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Diagrammkategorie" ;
         Text [ en-US ] = "Chart category" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_2D
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 88 , 12 ) ;
-        Text [ de ] = "~2D" ;
         Text [ en-US ] = "~2D" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_3D
     {
         Pos = MAP_APPFONT ( 12 , 30  ) ;
         Size = MAP_APPFONT ( 88 , 12 ) ;
-        Text [ de ] = "~3D" ;
         Text [ en-US ] = "~3D" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 48  ) ;
         Size = MAP_APPFONT ( 192 , 10 ) ;
-        Text [ de ] = "~Diagrammtyp" ;
         Text [ en-US ] = "Chart ~type" ;
-        Text [ x-comment ] = " ";
     };
     Control CTL_TYPE
     {
@@ -121,9 +112,7 @@ ModalDialog DLG_DIAGRAM_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 169  ) ;
         Size = MAP_APPFONT ( 192 , 10 ) ;
-        Text [ de ] = "~Variante:" ;
         Text [ en-US ] = "~Variants:" ;
-        Text [ x-comment ] = " ";
     };
     Control CTL_VARIANT
     {
@@ -137,9 +126,7 @@ ModalDialog DLG_DIAGRAM_TYPE
     {
         Pos = MAP_APPFONT ( 114 , 16  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Stützpunktordnung" ;
         Text [ en-US ] = "~Data points order" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_DEEP
     {
@@ -161,7 +148,6 @@ ModalDialog DLG_DIAGRAM_TYPE
     {
         Pos = MAP_APPFONT ( 114 , 16  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Anzahl an ~Linien" ;
         Text [ en-US ] = "~Number of lines";
     };
     MetricField MTR_FLD_NUM_OF_LINES
@@ -185,9 +171,7 @@ ModalDialog DLG_DIAGRAM_TYPE
     {
         Pos = MAP_APPFONT ( 114 , 31  ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Auflösung" ;
         Text [ en-US ] = "~Resolution" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_GRAN
     {
@@ -205,7 +189,6 @@ ModalDialog DLG_DIAGRAM_TYPE
         Last = 1000 ;
         SpinSize = 1 ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
