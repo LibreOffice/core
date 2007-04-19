@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:20:25 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:46:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog RID_MACROCHOOSER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 287 , 165 ) ;
-    Text[ de ] = "%PRODUCTNAME Basic Makros" ;
     Text [ en-US ] = "%PRODUCTNAME Basic Macros" ;
     Moveable = TRUE ;
      // Closeable = TRUE;
@@ -52,7 +51,6 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 122 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Vorhandene Makros ~in:" ;
         Text [ en-US ] = "Existing macros ~in:";
     };
     Control RID_CTRL_MACRO
@@ -76,7 +74,6 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Makroname" ;
         Text [ en-US ] = "~Macro name" ;
     };
     Edit RID_ED_MACRONAME
@@ -91,14 +88,12 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Makro a~us" ;
         Text [ en-US ] = "Macro ~from" ;
     };
     FixedText RID_TXT_SAVEMACRO
     {
         Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "M~akro speichern in" ;
         Text [ en-US ] = "Save m~acro in";
     };
 
@@ -106,7 +101,6 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 6 , 117 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Be~schreibung" ;
         Text [ en-US ] = "De~scription" ;
     };
     PushButton RID_PB_RUN
@@ -115,7 +109,6 @@ ModalDialog RID_MACROCHOOSER
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;
         /* ### ACHTUNG: Neuer Text in Resource? Aus~führen : Aus~f³hren */
-        Text [ de ] = "Aus~fÃ¼hren" ;
         Text [ en-US ] = "R~un" ;
         TabStop = TRUE ;
     };
@@ -124,7 +117,6 @@ ModalDialog RID_MACROCHOOSER
         Pos = MAP_APPFONT ( 231 , 23 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "SchlieÃŸen" ;
         Text [ en-US ] = "Close";
     };
 
@@ -132,7 +124,6 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 231 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Zuordnen..." ;
         Text [ en-US ] = "~Assign..." ;
         TabStop = TRUE ;
     };
@@ -140,7 +131,6 @@ ModalDialog RID_MACROCHOOSER
     {
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Pos = MAP_APPFONT ( 231 , 77 ) ;
-        Text [ de ] = "~Bearbeiten" ;
         Text [ en-US ] = "~Edit" ;
         TabStop = TRUE ;
     };
@@ -148,14 +138,12 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 231 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Neue ~Bibliothek" ;
         Text [ en-US ] = "New ~Library";
     };
     PushButton RID_PB_NEWMOD
     {
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Pos = MAP_APPFONT ( 231 , 77 ) ;
-        Text [ de ] = "Neues M~odul" ;
         Text [ en-US ] = "New M~odule";
     };
     PushButton RID_PB_DEL
@@ -163,7 +151,6 @@ ModalDialog RID_MACROCHOOSER
         Pos = MAP_APPFONT ( 231 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -171,7 +158,6 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 231 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Verwalten..." ;
         Text [ en-US ] = "~Organizer..." ;
     };
     HelpButton RID_PB_HELP
@@ -192,42 +178,35 @@ ModalDialog RID_MACROCHOOSER
 };
 String RID_STR_STDMACRONAME
 {
-    Text [ de ] = "Makro" ;
     Text [ en-US ] = "Macro" ;
 };
 String RID_STR_BTNDEL
 {
     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-    Text [ de ] = "~LÃ¶schen" ;
     Text [ en-US ] = "~Delete" ;
 };
 String RID_STR_BTNNEW
 {
-    Text [ de ] = "~Neu" ;
     Text [ en-US ] = "~New" ;
 };
 String RID_STR_CLOSE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-    Text [ de ] = "SchlieÃŸen" ;
     Text [ en-US ] = "Close" ;
 };
 String RID_STR_CHOOSE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Auswählen : Auswõhlen */
-    Text [ de ] = "AuswÃ¤hlen" ;
     Text [ en-US ] = "Choose" ;
 };
 String RID_STR_RUN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Ausführen : Ausf³hren */
-    Text [ de ] = "AusfÃ¼hren" ;
     Text [ en-US ] = "Run" ;
 };
 
 String RID_STR_RECORD
 {
-    Text [ de ] = "~Speichern" ;
     Text [ en-US ] = "~Save" ;
 };
 
