@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prltempl.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:36:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:29:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Präsentationslayout" ;
     Text [ en-US ] = "Presentation Layout" ;
     Moveable = TRUE ;
     TabControl 1
@@ -54,76 +53,60 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE ;
-                Text [ de ] = "Linie" ;
                 Text [ en-US ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
-                Text [ de ] = "Fläche" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_SHADOW ;
-                Text [ de ] = "Schatten" ;
                 PageResID = RID_SVXPAGE_SHADOW ;
                 Text [ en-US ] = "Shadow" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TRANSPARENCE ;
-                Text [ de ] = "Transparenz" ;
                 Text [ en-US ] = "Transparency";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = RID_SVXPAGE_CHAR_NAME;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ de ] = "Einzüge und Abstände" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
                 PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
-                Text [ de ] = "Ausrichtung" ;
                 Text [ en-US ] = "Alignment" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PARA_ASIAN ;
                 PageResID = RID_SVXPAGE_PARA_ASIAN ;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text[ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TABULATOR ;
                 PageResID = RID_SVXPAGE_TABULATOR ;
-                Text [ de ] = "Tabulator" ;
                 Text [ en-US ] = "Tabs" ;
             };
         };
@@ -145,10 +128,8 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_1
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE ;
-                Text [ de ] = "Linie" ;
                 Text [ en-US ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -169,10 +150,8 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_2
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
-                Text [ de ] = "Fläche" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -193,74 +172,57 @@ TabDialog TAB_PRES_LAYOUT_TEMPLATE_3
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ de ] = "Einzüge und Abstände" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BULLET ;
-                Text [ de ] = "Bullets" ;
                 Text [ en-US ] = "Bullets" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_SINGLE_NUM ;
-                Text [ de ] = "Nummerierungsart" ;
                 Text [ en-US ] = "Numbering type" ;
-                Text [ x-comment ] = "; MS Word";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BMP ;
-                Text [ de ] = "Grafiken" ;
                 Text [ en-US ] = "Graphics" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_OPTIONS ;
-                Text [ de ] = "Optionen" ;
                 Text [ en-US ] = "Customize" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
                 PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
-                Text [ de ] = "Ausrichtung" ;
                 Text [ en-US ] = "Alignment" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PARA_ASIAN ;
                 PageResID = RID_SVXPAGE_PARA_ASIAN ;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text[ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TABULATOR ;
                 PageResID = RID_SVXPAGE_TABULATOR ;
-                Text [ de ] = "Tabulator" ;
                 Text [ en-US ] = "Tabs" ;
             };
         };
