@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_Statistic.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:05:28 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:59:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,23 +37,18 @@
 //SchStatisticTabPage and SchDataStatisticsDlg
 String STR_INDICATE_NONE
 {
-    Text [ de ] = "Keine Indikatoren" ;
     Text [ en-US ] = "No Indicators" ;
 };
 String STR_INDICATE_BOTH
 {
-    Text [ de ] = "Indikatoren beidseitig" ;
     Text [ en-US ] = "Indicators Top and Bottom" ;
-    Text [ x-comment ] = "или: Верхний и нижний индикатор - -";
 };
 String STR_INDICATE_DOWN
 {
-    Text [ de ] = "Unterer Indikator" ;
     Text [ en-US ] = "Lower Indicator" ;
 };
 String STR_INDICATE_UP
 {
-    Text [ de ] = "Oberer Indikator" ;
     Text [ en-US ] = "Upper Indicator" ;
 };
 
@@ -62,26 +57,21 @@ String STR_INDICATE_UP
 
 String STR_REGRESSION_NONE
 {
-    Text [ de ] = "Keine Regression" ;
     Text [ en-US ] = "No Regression" ;
 };
 String STR_REGRESSION_LINEAR
 {
-    Text [ de ] = "Lineare Regression" ;
     Text [ en-US ] = "Linear regression" ;
 };
 String STR_REGRESSION_LOG
 {
-    Text [ de ] = "Logarithmische Regression" ;
     Text [ en-US ] = "Logarithm regression" ;
 };
 String STR_REGRESSION_EXP
 {
-    Text [ de ] = "Exponentielle Regression" ;
     Text [ en-US ] = "Exponential Regression" ;
 };
 String STR_REGRESSION_POWER
 {
-    Text [ de ] = "Potenzielle Regression" ;
     Text [ en-US ] = "Power regression" ;
 };
