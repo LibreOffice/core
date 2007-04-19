@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmoutputpage.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:04:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:56:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,42 +46,36 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Speichern, drucken oder versenden Sie die Serienbriefe" ;
         Text[ en-US ] = "Save, print or send the document";
     };
     FixedText FI_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wählen Sie eine der Optionen:" ;
         Text[ en-US ] = "Select one of the options below:";
     };
     RadioButton RB_SAVESTARTDOC
     {
         Pos = MAP_APPFONT ( 45 , 40 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
-        Text [ de ] = "Ausgangsdokument speichern" ;
         Text[ en-US ] = "~Save starting document";
     };
     RadioButton RB_SAVEMERGEDDOC
     {
         Pos = MAP_APPFONT ( 45 , 53 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
-        Text [ de ] = "S~erienbriefdokument speichern" ;
         Text[ en-US ] = "Save ~merged document" ;
     };
     RadioButton RB_PRINT
     {
         Pos = MAP_APPFONT ( 45 , 66 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
-        Text [ de ] = "Serienbriefdokument ~drucken" ;
         Text[ en-US ] = "~Print merged document";
     };
     RadioButton RB_SENDMAIL
     {
         Pos = MAP_APPFONT ( 45 , 79 ) ;
         Size = MAP_APPFONT ( 209 , 10 ) ;
-        Text [ de ] = "Serienbriefdokument als E-Mail ~versenden" ;
         Text[ en-US ] = "Send merged document as ~E-Mail";
     };
     FixedLine   FL_SEPARATOR
@@ -93,28 +87,24 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 55 , 108 ) ;
         Size = MAP_APPFONT ( 100 , 14 ) ;
-        Text [ de ] = "Ausgangsdokument ~speichern" ;
         Text[ en-US ] = "Save starting ~document";
     };
     RadioButton RB_SAVEASONE
     {
         Pos = MAP_APPFONT ( 45 , 109 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Als ein Dokument speichern" ;
         Text[ en-US ] = "S~ave as single document";
     };
     RadioButton RB_SAVEINDIVIDUAL
     {
         Pos = MAP_APPFONT (  45, 123 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Als einzelne Dokumente speichern" ;
         Text[ en-US ] = "Sa~ve as individual documents";
     };
     RadioButton RB_FROM
     {
         Pos = MAP_APPFONT ( 45 , 137 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "Von" ;
         Text[ en-US ] = "~From";
     };
     NumericField NF_FROM
@@ -134,7 +124,6 @@ TabPage DLG_MM_OUTPUT_PAGE
         Pos = MAP_APPFONT ( 101 , 138 ) ;
         Size = MAP_APPFONT ( 20 , 8 ) ;
         Right = TRUE;
-        Text [ de ] = "Bis" ;
         Text[ en-US ] = "~To";
     };
     NumericField NF_TO
@@ -153,14 +142,12 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 45 , 150 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
-        Text [ de ] = "Dokumente speichern" ;
         Text[ en-US ] = "Save Do~cuments";
     };
     FixedText   FT_PRINT
     {
         Pos = MAP_APPFONT ( 12 , 111 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Drucker" ;
         Text[ en-US ] = "~Printer";
     };
     ListBox     LB_PRINT
@@ -175,21 +162,18 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 198 , 108 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Eigenschaften..." ;
         Text[ en-US ] = "P~roperties...";
     };
     RadioButton RB_PRINTALL
     {
         Pos = MAP_APPFONT ( 45 , 126 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Alle Dokumente drucken" ;
         Text[ en-US ] = "Print ~all documents";
     };
     PushButton  PB_PRINTNOW
     {
         Pos = MAP_APPFONT ( 45 , 155 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
-        Text [ de ] = "Dokumente drucken" ;
         Text[ en-US ] = "Prin~t Documents";
     };
 
@@ -197,7 +181,6 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 111 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "An" ;
         Text[ en-US ] = "T~o";
     };
     ListBox          LB_MAILTO
@@ -211,14 +194,12 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 198 , 108 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Kopie an..." ;
         Text[ en-US ] = "~Copy to...";
     };
     FixedText        FT_SUBJECT
     {
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Betreff" ;
         Text[ en-US ] = "S~ubject";
     };
     Edit             ED_SUBJECT
@@ -231,7 +212,6 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 143 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Senden als" ;
         Text[ en-US ] = "Sen~d as";
     };
     ListBox          LB_SENDAS
@@ -261,14 +241,12 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 198 , 140 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Eigenschaften..." ;
         Text[ en-US ] = "Pr~operties...";
     };
     FixedText        FT_ATTACHMENT
     {
         Pos = MAP_APPFONT ( 45 , 157 ) ;
         Size = MAP_APPFONT ( 147 , 8 ) ;
-        Text [ de ] = "Name des Anhangs" ;
         Text[ en-US ] = "Name of the a~ttachment";
     };
     Edit ED_ATTACHMENT
@@ -281,59 +259,48 @@ TabPage DLG_MM_OUTPUT_PAGE
     {
         Pos = MAP_APPFONT ( 45 , 184 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
-        Text [ de ] = "Alle Dokumente versenden" ;
         Text[ en-US ] = "S~end all documents";
     };
     PushButton       PB_SENDDOCUMENTS
     {
         Pos = MAP_APPFONT ( 45 , 212 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
-        Text [ de ] = "Dokumente versenden" ;
         Text[ en-US ] = "Se~nd documents";
     };
     String      ST_SAVESTART
     {
-        Text [ de ] = "Ausgangsdokument speichern" ;
         Text[ en-US ] = "Save ~starting document";
     };
     String      ST_SAVEMERGED
     {
-        Text [ de ] = "Seriendruckdokument speichern Optionen" ;
         Text[ en-US ] = "Save merged document settings";
     };
     String      ST_PRINT
     {
-        Text [ de ] = "Druckoptionen" ;
         Text[ en-US ] = "Print settings";
     };
     String      ST_SENDMAIL
     {
-        Text [ de ] = "E-Mail Optionen" ;
         Text[ en-US ] = "E-Mail settings";
     };
     String ST_DEFAULTATTACHMENT
     {
-        Text [ de ] = "Unbenannt" ;
         Text[ en-US ] = "Untitled";
     };
     String ST_SUBJECTQUERY
     {
-        Text [ de ] = "Sie haben kein Betreff für diese Nachricht angegeben. Wenn Sie einen angeben wollen, dann geben Sie ihn jetzt ein." ;
         Text[ en-US ] = "You did not specify a subject for this message. If you would like to provide one, please type it now.";
     };
     String ST_NOSUBJECT
     {
-        Text [ de ] = "Kein Betreff" ;
         Text[ en-US ] = "No subject";
     };
     String ST_NOATTACHMENTNAME
     {
-        Text [ de ] = "Sie haben keinen neuen Namen für den Anhang angegeben. Wenn Sie einen festlegen wollen, dann geben Sie ihn jetzt ein." ;
         Text[ en-US ] = "You did not specify a new name for the attachment. If you would like to provide one, please type it now.";
     };
     String ST_CONFIGUREMAIL
     {
-        Text [ de ] = "Damit Serienbriefe per E-Mail versendet werden können, benötigt %PRODUCTNAME Informationen über das E-Mail-Konto, von dem aus Sie E-Mails versenden möchten.\n\nMöchten Sie jetzt die Konto-Informationen eingeben?" ;
         Text[ en-US ] = "In order to be able to send mail merge documents by e-mail, %PRODUCTNAME requires information about the e-mail account to be used.\n\n Do you want to enter e-mail account information now?";
     };
 };
@@ -346,21 +313,18 @@ ModalDialog DLG_MM_COPYTO
     Size = MAP_APPFONT ( 250 , 100 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Kopie an";
     Text [ en-US ] = "Copy To";
 
     FixedText FI_DESCRIPTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 238 , 8 ) ;
-        Text [ de ] = "Eine Kopie dieser Nachricht soll gesendet werden an:" ;
         Text[ en-US ] = "Send a copy of this mail to:";
     };
     FixedText FT_CC
     {
         Pos = MAP_APPFONT ( 6 , 17 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Cc" ;
         Text[ en-US ] = "~Cc";
     };
     Edit ED_CC
@@ -373,7 +337,6 @@ ModalDialog DLG_MM_COPYTO
     {
         Pos = MAP_APPFONT ( 6 , 33 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Bcc" ;
         Text[ en-US ] = "~Bcc";
     };
     Edit ED_BCC
@@ -387,7 +350,6 @@ ModalDialog DLG_MM_COPYTO
         Pos = MAP_APPFONT ( 6 , 47 ) ;
         Size = MAP_APPFONT ( 204 , 20 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Hinweis:\nE-Mail-Adressen mit Semikolon (;) trennen." ;
         Text[ en-US ] = "Note:\nSeparate e-mail addresses with a semicolon (;).";
     };
     FixedLine FL_SEPARATOR
@@ -432,14 +394,12 @@ ModalDialog DLG_MM_SAVEWARNING
         Pos = MAP_APPFONT ( 40 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 30 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Ein Dokument mit dem Namen '%1' existiert bereits. Bitte wählen Sie einen anderen Namen." ;
         Text[ en-US ] = "A document with the name '%1' already exists. Please save this document under a different name.";
     };
     FixedText   FT_FILENAME
     {
         Pos = MAP_APPFONT (  40, 39 ) ;
         Size = MAP_APPFONT (  154, 8 ) ;
-        Text [ de ] = "Neuer Dokumentname" ;
         Text[ en-US ] = "New document name";
     };
     Edit ED_FILENAME
