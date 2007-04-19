@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:49:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1802,11 +1802,12 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
 |*  Letzte Aenderung    MA 13. Aug. 93
 |*
 |*************************************************************************/
-void SwRootFrm::ChgSize( const Size& aNewSize )
+Size SwRootFrm::ChgSize( const Size& aNewSize )
 {
     Frm().SSize() = aNewSize;
     _InvalidatePrt();
     bFixSize = FALSE;
+    return Frm().SSize();
 }
 
 /*************************************************************************
