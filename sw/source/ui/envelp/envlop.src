@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envlop.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:01:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:04:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabDialog DLG_ENV
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Briefumschlag" ;
     Text [ en-US ] = "Envelope" ;
     Moveable = TRUE ;
     TabControl 1
@@ -53,41 +52,31 @@ TabDialog DLG_ENV
             PageItem
             {
                 Identifier = TP_ENV_ENV ;
-                Text [ de ] = "Umschlag" ;
                 Text [ en-US ] = "Envelope" ;
                 PageResID = TP_ENV_ENV ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_ENV_FMT ;
-                Text [ de ] = "Format" ;
                 PageResID = TP_ENV_FMT ;
                 Text [ en-US ] = "Format";
             };
             PageItem
             {
                 Identifier = TP_ENV_PRT ;
-                Text [ de ] = "Drucker" ;
                 Text [ en-US ] = "Printer" ;
                 PageResID = TP_ENV_PRT ;
-                Text [ x-comment ] = " ";
             };
         };
     };
     String ST_INSERT
     {
-        Text [ de ] = "~Einfügen" ;
         Text [ en-US ] = "~Insert" ;
-        Text [ x-comment ] = " ";
     };
     String ST_CHANGE
     {
-        Text [ de ] = "~Ändern" ;
         Text [ en-US ] = "~Modify" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // TP_ENV_ENV ---------------------------------------------------------------
 TabPage TP_ENV_ENV
@@ -99,11 +88,9 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "~Empfänger" ;
         Text [ en-US ] = "Addr~essee" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit EDT_ADDR
     {
@@ -120,9 +107,7 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 162 , 6 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "~Datenbank" ;
         Text [ en-US ] = "Database" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DATABASE
     {
@@ -136,9 +121,7 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 162 , 33 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "~Tabelle" ;
         Text [ en-US ] = "Table" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_TABLE
     {
@@ -159,9 +142,7 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 162 , 60 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Datenbank~feld" ;
         Text [ en-US ] = "~Database field" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DBFIELD
     {
@@ -175,10 +156,8 @@ TabPage TP_ENV_ENV
     {
         Pos = MAP_APPFONT ( 6 , 105 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "~Absender" ;
         Text [ en-US ] = "~Sender" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit EDT_SEND
     {
@@ -201,9 +180,7 @@ TabPage TP_ENV_ENV
  // Strings ******************************************************************
 String STR_DOC_TITLE
 {
-    Text [ de ] = "Briefumschlag" ;
     Text [ en-US ] = "Envelope" ;
-    Text [ x-comment ] = " ";
 };
 
 
