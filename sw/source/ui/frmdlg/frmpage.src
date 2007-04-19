@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:05:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:12:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ TabDialog DLG_FRM_STD
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Rahmen" ;
     Text [ en-US ] = "Frame" ;
     Moveable = TRUE ;
     TabControl 1
@@ -55,55 +54,47 @@ TabDialog DLG_FRM_STD
             {
                 Identifier = TP_FRM_STD ;
                 PageResID = TP_FRM_STD ;
-                Text [ de ] = "Typ" ;
                 Text [ en-US ] = "Type" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
-                Text [ de ] = "Zus√§tze" ;
                 Text [ en-US ] = "Options" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_WRAP ;
                 PageResID = TP_FRM_WRAP ;
-                Text [ de ] = "Umlauf" ;
                 Text [ en-US ] = "Wrap" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_URL ;
                 PageResID = TP_FRM_URL ;
-                Text [ de ] = "Hyperlink" ;
                 Text [ en-US ] = "Hyperlink" ;
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
                 PageResID = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
                 PageResID = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
             };
             PageItem
             {
                 Identifier = TP_COLUMN ;
                 PageResID = TP_COLUMN ;
-                Text [ de ] = "Spalten" ;
                 Text [ en-US ] = "Columns" ;
             };
             PageItem
             {
                 Identifier = TP_MACRO_ASSIGN ;
-                Text [ de ] = "Makro" ;
                 Text [ en-US ] = "Macro" ;
             };
         };
@@ -112,7 +103,6 @@ TabDialog DLG_FRM_STD
 TabDialog DLG_FRM_GRF
 {
     SVLook = TRUE ;
-    Text [ de ] = "Bild" ;
     Text [ en-US ] = "Picture" ;
     Moveable = TRUE ;
     TabControl 1
@@ -124,62 +114,53 @@ TabDialog DLG_FRM_GRF
             {
                 Identifier = TP_FRM_STD ;
                 PageResID = TP_FRM_STD ;
-                Text [ de ] = "Typ" ;
                 Text [ en-US ] = "Type" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
-                Text [ de ] = "Zus√§tze" ;
                 Text [ en-US ] = "Options" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_WRAP ;
                 PageResID = TP_FRM_WRAP ;
-                Text [ de ] = "Umlauf" ;
                 Text [ en-US ] = "Wrap" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_URL ;
                 PageResID = TP_FRM_URL ;
-                Text [ de ] = "Hyperlink" ;
                 Text [ en-US ] = "Hyperlink" ;
             };
             PageItem
             {
                 Identifier = TP_GRF_EXT ;
                 PageResID = TP_GRF_EXT ;
-                Text [ de ] = "Bild" ;
                 Text [ en-US ] = "Picture" ;
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_GRFCROP;
                 PageResID = RID_SVXPAGE_GRFCROP;
-                Text [ de ] = "Zuschneiden" ;
                 Text [ en-US ] = "Crop" ;
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
                 PageResID = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
                 PageResID = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
             };
             PageItem
             {
                 Identifier = TP_MACRO_ASSIGN ;
-                Text [ de ] = "Makro" ;
                 Text [ en-US ] = "Macro" ;
             };
         };
@@ -189,7 +170,6 @@ TabDialog DLG_FRM_OLE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Objekt" ;
     Text [ en-US ] = "Object" ;
     Moveable = TRUE ;
     TabControl 1
@@ -201,56 +181,48 @@ TabDialog DLG_FRM_OLE
             {
                 Identifier = TP_FRM_STD ;
                 PageResID = TP_FRM_STD ;
-                Text [ de ] = "Typ" ;
                 Text [ en-US ] = "Type" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
-                Text [ de ] = "Zus√§tze" ;
                 Text [ en-US ] = "Options" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_WRAP ;
                 PageResID = TP_FRM_WRAP ;
-                Text [ de ] = "Umlauf" ;
                 Text [ en-US ] = "Wrap" ;
             };
             PageItem
             {
                 Identifier = TP_FRM_URL ;
                 PageResID = TP_FRM_URL ;
-                Text [ de ] = "Hyperlink" ;
                 Text [ en-US ] = "Hyperlink" ;
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
                 PageResID = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
                 PageResID = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
             };
             /*
             PageItem  {
                 Identifier = TP_COLUMN ;
                 PageResID = TP_COLUMN;
-                Text [ de ] = "Spalten" ;
                 Text [ en-US ] = "Columns" ;
             };
 */
             PageItem
             {
                 Identifier = TP_MACRO_ASSIGN ;
-                Text [ de ] = "Makro" ;
                 Text [ en-US ] = "Macro" ;
             };
         };
@@ -268,7 +240,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_2 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
     };
     FixedText FT_WIDTH_AUTO
@@ -276,7 +247,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_2 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "Breite (mindestens)" ;
         Text [ en-US ] = "~Width (at least)" ;
     };
     MetricField ED_WIDTH
@@ -302,7 +272,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_3 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "R~elativ" ;
         Text [ en-US ] = "Relat~ive" ;
     };
     CheckBox CB_AUTOWIDTH
@@ -310,7 +279,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_4 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Automatisch" ;
         Text [ en-US ] = "Automatic";
     };
     FixedText FT_HEIGHT
@@ -318,7 +286,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "H~√∂he" ;
         Text [ en-US ] = "H~eight" ;
     };
     FixedText FT_HEIGHT_AUTO
@@ -326,7 +293,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_6 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_3-SWFRMPG_COL_1-1) , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "H√∂he (mindestens)" ;
         Text [ en-US ] = "H~eight (at least)" ;
     };
     MetricField ED_HEIGHT
@@ -351,7 +317,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_7 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Re~lativ" ;
         Text [ en-US ] = "Re~lative" ;
     };
     CheckBox CB_AUTOHEIGHT
@@ -359,16 +324,13 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_8 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_2) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Au~tom. Gr√∂√üe" ;
         Text [ en-US ] = "AutoSize";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_FIXEDRATIO
     {
         Pos = MAP_APPFONT ( SWFRMPG_COL_1 , SWFRMPG_ROW_9 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Abgleich" ;
         Text [ en-US ] = "~Keep ratio" ;
     };
     PushButton BT_REALSIZE
@@ -377,14 +339,12 @@ TabPage TP_FRM_STD
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Originalgr√∂√üe" ;
         Text [ en-US ] = "~Original Size" ;
     };
     FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( SWFRMPG_COL_0 , SWFRMPG_ROW_0 ) ;
         Size = MAP_APPFONT ( (SWFRMPG_COL_4-SWFRMPG_COL_0) , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Gr√∂√üe" ;
         Text [ en-US ] = "Size" ;
     };
     FixedLine FL_TYPE_SEP
@@ -397,43 +357,36 @@ TabPage TP_FRM_STD
     {
         Pos = MAP_APPFONT ( 122 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "An der ~Seite" ;
         Text [ en-US ] = "To ~page";
     };
     RadioButton RB_ANCHOR_PARA
     {
         Pos = MAP_APPFONT ( 122 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Am ~Absatz" ;
         Text [ en-US ] = "To paragrap~h";
     };
     RadioButton RB_ANCHOR_AT_CHAR
     {
         Pos = MAP_APPFONT ( 122 , 42 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Am Ze~ichen" ;
         Text [ en-US ] = "To cha~racter";
     };
     RadioButton RB_ANCHOR_AS_CHAR
     {
         Pos = MAP_APPFONT ( 122 , 56 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Als Zei~chen" ;
         Text [ en-US ] = "~As character" ;
-        Text [ x-comment ] = "; ËÎË: ÒËÏ‚ÓÎ; ËÎË ËÒÛÌÓÍ - ËÎÅE ÒËÅE¸J; ËÎÅEËÒÛ˚M";
     };
     RadioButton RB_ANCHOR_FRAME
     {
         Pos = MAP_APPFONT ( 122 , 70 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Am ~Rahmen" ;
         Text [ en-US ] = "To ~frame";
     };
     FixedLine FL_TYPE
     {
         Pos = MAP_APPFONT ( 116 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Verankerung" ;
         Text [ en-US ] = "Anchor" ;
     };
     Window WN_BSP
@@ -446,7 +399,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( 12 , SWFRMPG_ROW_12 ) ;
         Size = MAP_APPFONT ( 35 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "Horizo~ntal" ;
         Text [ en-US ] = "Hori~zontal" ;
     };
     ListBox DLB_HORIZONTAL
@@ -461,7 +413,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( 101 , SWFRMPG_ROW_12 ) ;
         Size = MAP_APPFONT ( 20 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Center = TRUE ;
-        Text [ de ] = "u~m" ;
         Text [ en-US ] = "b~y" ;
     };
     MetricField ED_AT_HORZ_POS
@@ -486,9 +437,7 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( 160 , SWFRMPG_ROW_12 ) ;
         Size = MAP_APPFONT ( 21 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
-        Text [ de ] = "z~u" ;
         Text [ en-US ] = "~to" ;
-        Text [ x-comment ] = "; \"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
     };
     ListBox LB_HORI_RELATION
     {
@@ -502,7 +451,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_13 ) ;
         Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Auf geraden Seiten spie~geln" ;
         Text [ en-US ] = "~Mirror on even pages" ;
     };
     FixedText FT_VERTICAL
@@ -510,7 +458,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( 12 , SWFRMPG_ROW_15 ) ;
         Size = MAP_APPFONT ( 35 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Left = TRUE ;
-        Text [ de ] = "~Vertikal" ;
         Text [ en-US ] = "~Vertical" ;
     };
     ListBox DLB_VERTICAL
@@ -525,7 +472,6 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( 101 , SWFRMPG_ROW_15 ) ;
         Size = MAP_APPFONT ( 20 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
-        Text [ de ] = "u~m" ;
         Text [ en-US ] = "by" ;
     };
     MetricField ED_AT_VERT_POS
@@ -550,9 +496,7 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( 160 , SWFRMPG_ROW_15 ) ;
         Size = MAP_APPFONT ( 21 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Center = TRUE ;
-        Text [ de ] = "z~u" ;
         Text [ en-US ] = "t~o" ;
-        Text [ x-comment ] = "; \"zu\" muss ich hier weglassen weils es als Suffix im letzten Satzelement (Listbox) schon vorkommt.";
     };
     ListBox LB_VERT_RELATION
     {
@@ -566,14 +510,12 @@ TabPage TP_FRM_STD
         Pos = MAP_APPFONT ( SWFRMPG_COL_2 , SWFRMPG_ROW_16 ) ;
         Size = MAP_APPFONT ( (260-SWFRMPG_COL_2-1) , RSC_CD_CHECKBOX_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Textfluss folgen" ;
         Text [ en-US ] = "Follow text flow" ;
     };
     FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , SWFRMPG_ROW_10 ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
     };
 };
@@ -592,33 +534,28 @@ TabPage TP_GRF_EXT
     {
         Pos = MAP_APPFONT ( 6 , 87 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Verkn√ºpfung" ;
         Text [ en-US ] = "Link" ;
     };
     FixedText FT_CONNECT
     {
         Pos = MAP_APPFONT ( 13 , 98 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "~Dateiname" ;
         Text [ en-US ] = "~File name" ;
     };
     Edit ED_CONNECT
     {
         Pos = MAP_APPFONT ( 13 , 109 ) ;
         Size = MAP_APPFONT ( 200 , 12 ) ;
-        Text [ de ] = "[Keiner]" ;
         Text [ en-US ] = "[None]" ;
         Readonly = TRUE ;
         Left = TRUE ;
         Border = TRUE ;
-        Text [ x-comment ] = "; ?";
     };
     PushButton PB_BROWSE
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 230 , 109 ) ;
         Size = MAP_APPFONT ( 12 , 12 ) ;
-        Text [ de ] = "~..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~..." ;
@@ -629,7 +566,6 @@ TabPage TP_GRF_EXT
         Size = MAP_APPFONT ( 48 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ de ] = "~vertikal" ;
         Text [ en-US ] = "~Vertically" ;
     };
     CheckBox CB_HOR
@@ -637,7 +573,6 @@ TabPage TP_GRF_EXT
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "hori~zontal" ;
         Text [ en-US ] = "Hori~zontally";
     };
     RadioButton RB_MIRROR_ALL_PAGES
@@ -645,7 +580,6 @@ TabPage TP_GRF_EXT
         Pos = MAP_APPFONT ( 18 , 42 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~auf allen Seiten" ;
         Text [ en-US ] = "On all pages" ;
     };
     RadioButton RB_MIRROR_LEFT_PAGES
@@ -653,7 +587,6 @@ TabPage TP_GRF_EXT
         Pos = MAP_APPFONT ( 18 , 56 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "auf ~linken Seiten" ;
         Text [ en-US ] = "On left pages" ;
     };
     RadioButton RB_MIRROR_RIGHT_PAGES
@@ -661,7 +594,6 @@ TabPage TP_GRF_EXT
         Pos = MAP_APPFONT ( 18 , 70 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "auf ~rechten Seiten" ;
         Text [ en-US ] = "On right pages" ;
     };
     Window WN_BMP
@@ -673,13 +605,11 @@ TabPage TP_GRF_EXT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Spiegeln" ;
         Text [ en-US ] = "Flip" ;
     };
 };
 String STR_EDIT_GRF
 {
-    Text [ de ] = "Verkn√ºpfen" ;
     Text [ en-US ] = "Link" ;
 };
 
@@ -694,7 +624,6 @@ TabPage TP_FRM_URL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "~URL" ;
         Text [ en-US ] = "~URL" ;
     };
     Edit ED_URL
@@ -709,7 +638,6 @@ TabPage TP_FRM_URL
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
     };
     Edit ED_NAME
@@ -724,7 +652,6 @@ TabPage TP_FRM_URL
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "~Frame" ;
         Text [ en-US ] = "Frame" ;
     };
     ComboBox CB_FRAME
@@ -740,35 +667,30 @@ TabPage TP_FRM_URL
         Pos = MAP_APPFONT ( 198 , 13 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Ausw√§hlen..." ;
         Text [ en-US ] = "~Browse..." ;
     };
     FixedLine FL_HYPERLINK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Link zu" ;
         Text [ en-US ] = "Link to";
     };
     CheckBox CB_SERVER
     {
         Pos = MAP_APPFONT ( 12 , 75 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "~Server-side Image Map" ;
         Text [ en-US ] = "~Server-side image map";
     };
     CheckBox CB_CLIENT
     {
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "~Client-side Image Map" ;
         Text [ en-US ] = "~Client-side image map";
     };
     FixedLine FL_IMAGE
     {
         Pos = MAP_APPFONT ( 6 , 64 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Image Map" ;
         Text [ en-US ] = "Image map" ;
     };
 };
@@ -783,7 +705,6 @@ TabPage TP_FRM_ADD
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
     };
     Edit ED_NAME
@@ -797,7 +718,6 @@ TabPage TP_FRM_ADD
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text [ de ] = "~Alternativtext" ;
         Text [ en-US ] = "~Alternative (Text only)" ;
     };
     Edit ED_ALT_NAME
@@ -811,7 +731,6 @@ TabPage TP_FRM_ADD
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text [ de ] = "~Vorg√§nger" ;
         Text [ en-US ] = "~Previous link" ;
     };
     ListBox LB_PREV
@@ -821,24 +740,15 @@ TabPage TP_FRM_ADD
         Size = MAP_APPFONT ( 157 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "<Keiner>" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "<None>" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-         < "; <Keiner>" ; > ;
-    };
     };
     FixedText FT_NEXT
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 75 , 8 ) ;
-        Text [ de ] = "Nach~folger" ;
         Text [ en-US ] = "~Next link" ;
     };
     ListBox LB_NEXT
@@ -848,24 +758,15 @@ TabPage TP_FRM_ADD
         Size = MAP_APPFONT ( 157 , 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "<Keiner>" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "<None>" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-         < "; <Keiner>" ; > ;
-    };
     };
     FixedLine FL_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Namen" ;
         Text [ en-US ] = "Names" ;
     };
     CheckBox CB_PROTECT_CONTENT
@@ -873,7 +774,6 @@ TabPage TP_FRM_ADD
         Pos = MAP_APPFONT ( 12 , 91 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Inhalt" ;
         Text [ en-US ] = "~Contents" ;
     };
     CheckBox CB_PROTECT_FRAME
@@ -881,7 +781,6 @@ TabPage TP_FRM_ADD
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "P~osition" ;
     };
     CheckBox CB_PROTECT_SIZE
@@ -889,14 +788,12 @@ TabPage TP_FRM_ADD
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Gr√∂√üe" ;
         Text [ en-US ] = "~Size" ;
     };
     FixedLine FL_PROTECT
     {
         Pos = MAP_APPFONT ( 6 , 80 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Sch√ºtzen" ;
         Text [ en-US ] = "Protect" ;
     };
     CheckBox CB_EDIT_IN_READONLY
@@ -904,7 +801,6 @@ TabPage TP_FRM_ADD
         Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Editierbar in schreibgesch√ºtztem Dokument" ;
         Text [ en-US ] = "~Editable in read-only document" ;
     };
     CheckBox CB_PRINT_FRAME
@@ -912,14 +808,12 @@ TabPage TP_FRM_ADD
         Pos = MAP_APPFONT ( 12 , 160 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Dru~cken" ;
         Text [ en-US ] = "Prin~t" ;
     };
     FixedLine FL_EXT
     {
         Pos = MAP_APPFONT ( 6 , 135 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
 
@@ -929,7 +823,6 @@ TabPage TP_FRM_ADD
         Size = MAP_APPFONT ( 65 , 8 ) ;
         Left = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Textfluss" ;
         Text [ en-US ] = "~Text direction";
     };
     ListBox LB_TEXTFLOW
@@ -939,27 +832,12 @@ TabPage TP_FRM_ADD
         Size = MAP_APPFONT ( 167 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
-        StringList [ de ] =
-        {
-            < "Links-nach-rechts (horizontal)" ; 0; > ;
-            < "Rechts-nach-links (horizontal)" ; 1; > ;
-            < "Rechts-nach-links (vertikal)" ; 2; > ;
-//          < "Links-nach-rechts (vertikal)" ; 3; > ;
-            < "Einstellungen des √ºbergeordneten Objektes verwenden" ; 4; > ;
-        };
     StringList [ en-US ] =
     {
          < "Left-to-right (horizontal)" ; 0; > ;
         < "Right-to-left (horizontal)" ; 1; > ;
         < "Right-to-left (vertical)" ; 2; > ;
         < "Use superordinate object settings" ; 4; > ;
-    };
-    StringList [ x-comment ] =
-    {
-         < "; Links-nach-rechts (horizontal)" ; 0; > ;
-        < "; Rechts-nach-links (horizontal)" ; 1; > ;
-        < "; Rechts-nach-links (vertikal)" ; 2; > ;
-        < "; Einstellung des ¸bergeordneten Objektes verwenden" ; 4; > ;
     };
     };
 };
