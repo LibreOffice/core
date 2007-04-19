@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:52:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,12 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Aktualisierung" ;
         Text [ en-US ] = "Update";
     };
     FixedText FT_LINK
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 115 , 8 ) ;
-        Text [ de ] = "Verknüpfungen beim Laden aktualisieren" ;
         Text [ en-US ] = "Update links when loading";
     };
     RadioButton RB_ALWAYS
@@ -66,66 +64,51 @@ TabPage TP_OPTLOAD_PAGE
         Pos = MAP_APPFONT ( 18 , 26 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Immer" ;
         Text [ en-US ] = "~Always";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_REQUEST
     {
         Pos = MAP_APPFONT ( 18 , 39 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "Auf Nach~frage" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~On request";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_NEVER
     {
         Pos = MAP_APPFONT ( 18 , 52 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "~Nie" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Never";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_FIELD
     {
         Pos = MAP_APPFONT ( 130 , 14 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Automatisch" ;
         Text [ en-US ] = "Automatically";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_AUTO_UPDATE_FIELDS
     {
         Pos = MAP_APPFONT ( 136 , 26) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "F~eldbefehle" ;
         Text [ en-US ] = "~Fields";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_AUTO_UPDATE_CHARTS
     {
         Pos = MAP_APPFONT ( 145 , 39) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "Dia~gramme" ;
         Text [ en-US ] = "~Charts";
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 66 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Einstellungen";
         Text [ en-US ] = "Settings";
     };
     FixedText FT_METRIC
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Maßeinheit";
         Text [ en-US ] = "Measurement unit";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_METRIC
     {
@@ -138,10 +121,8 @@ TabPage TP_OPTLOAD_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 95 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "Tabulatorenab~stand";
         Text [ en-US ] = "Tab stops";
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_TAB
     {
@@ -169,18 +150,14 @@ TabPage TP_OPTCAPTION_PAGE
     HelpID = HID_OPTCAPTION_PAGE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE ;
-    Text [ de ] = "Beschriftung" ;
     Text [ en-US ] = "Caption" ;
-    Text [ x-comment ] = " ";
 
     FixedText FT_OBJECTS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 106 , 20 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Automatische Beschriftung\nbeim Einfügen von:" ;
         Text [ en-US ] = "Add captions automatically\nwhen inserting:" ;
-        Text [ x-comment ] = " ";
     };
     Control CLB_OBJECTS
     {
@@ -191,45 +168,33 @@ TabPage TP_OPTCAPTION_PAGE
     };
     String STR_TABLE
     {
-        Text [ de ] = "%PRODUCTNAME Writer Tabelle" ;
         Text [ en-US ] = "%PRODUCTNAME Writer Table";
-        Text [ x-comment ] = " ";
     };
     String STR_FRAME
     {
-        Text [ de ] = "%PRODUCTNAME Writer Rahmen" ;
         Text [ en-US ] = "%PRODUCTNAME Writer Frame";
-        Text [ x-comment ] = " ";
     };
     String STR_GRAPHIC
     {
-        Text [ de ] = "%PRODUCTNAME Writer Bild" ;
         Text [ en-US ] = "%PRODUCTNAME Writer Picture";
-        Text [ x-comment ] = " ";
     };
     String STR_OLE
     {
-        Text [ de ] = "Andere OLE-Objekte" ;
         Text [ en-US ] = "Other OLE Objects";
-        Text [ x-comment ] = " ";
     };
 
     FixedLine FL_SETTINGS_2
     {
         Pos = MAP_APPFONT ( 118 , 3 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-        Text [ de ] = "Beschriftung" ;
         Text [ en-US ] = "Caption" ;
-        Text [ x-comment ] = " ";
     };
     FixedText TXT_CATEGORY
     {
         Pos = MAP_APPFONT ( 125 , 16 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "~Kategorie" ;
         Text [ en-US ] = "Category" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ComboBox BOX_CATEGORY
     {
@@ -243,10 +208,8 @@ TabPage TP_OPTCAPTION_PAGE
     {
         Pos = MAP_APPFONT ( 125 , 31 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "~Nummerierung" ;
         Text [ en-US ] = "~Numbering" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox BOX_FORMAT
     {
@@ -260,10 +223,8 @@ TabPage TP_OPTCAPTION_PAGE
     {
         Pos = MAP_APPFONT ( 125 , 45 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "~Separator" ;
         Text [ en-US ] = "Separator" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_TEXT
     {
@@ -278,9 +239,7 @@ TabPage TP_OPTCAPTION_PAGE
         Pos = MAP_APPFONT ( 125 , 60 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position" ;
-        Text [ x-comment ] = " ";
     };
     ListBox BOX_POS
     {
@@ -295,17 +254,13 @@ TabPage TP_OPTCAPTION_PAGE
     {
         Pos = MAP_APPFONT ( 118 , 74 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-        Text [ de ] = "Kapitelweise Nummerierung der Beschriftung" ;
         Text [ en-US ] = "Numbering captions by chapter" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LEVEL
     {
         Pos = MAP_APPFONT ( 125 , 87 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "E~bene" ;
         Text [ en-US ] = "Level" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LEVEL
     {
@@ -314,26 +269,16 @@ TabPage TP_OPTCAPTION_PAGE
         Size = MAP_APPFONT ( 59 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Keine" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "None" ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-                < "; Keine" ; > ;
         };
     };
     FixedText FT_SEPARATOR
     {
         Pos = MAP_APPFONT ( 125 , 102 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "~Trenner" ;
         Text [ en-US ] = "Separator" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SEPARATOR
     {
@@ -347,17 +292,13 @@ TabPage TP_OPTCAPTION_PAGE
     {
         Pos = MAP_APPFONT ( 118 , 115 ) ;
         Size = MAP_APPFONT ( 136 , 8 ) ;
-        Text [ de ] = "Kategorie- und Rahmenformat" ;
         Text [ en-US ] = "Category and frame format" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CHARSTYLE
     {
         Pos = MAP_APPFONT ( 125 , 128 ) ;
         Size = MAP_APPFONT ( 59 , 10 ) ;
-        Text [ de ] = "Zeichenvorlage" ;
         Text [ en-US ] = "Character style" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_CHARSTYLE
     {
@@ -366,26 +307,16 @@ TabPage TP_OPTCAPTION_PAGE
         Size = MAP_APPFONT ( 59 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Keine" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "None" ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-            < "; Keine" ; > ;
         };
     };
     CheckBox CB_APPLYBORDER
     {
         Pos = MAP_APPFONT ( 125 , 143 ) ;
         Size = MAP_APPFONT ( 124 , 10 ) ;
-        Text [ de ] = "~Rahmen und Schatten anwenden" ;
         Text [ en-US ] = "Apply border and shadow" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
@@ -396,49 +327,28 @@ TabPage TP_OPTCAPTION_PAGE
 
     String STR_BEGINNING
     {
-        Text [ de ] = "Am Anfang" ;
         Text [ en-US ] = "At the beginning" ;
-        Text [ x-comment ] = " ";
     };
     String STR_END
     {
-        Text [ de ] = "Am Ende" ;
         Text [ en-US ] = "At the end" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ABOVE
     {
-        Text [ de ] = "Oberhalb" ;
         Text [ en-US ] = "Above" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CP_BELOW
     {
-        Text [ de ] = "Unterhalb" ;
         Text [ en-US ] = "Below" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CATEGORY_NONE
     {
-        Text [ de ] = "<keine>" ;
         Text [ en-US ] = "<None>" ;
     };
 };
 
 StringArray STR_ARR_METRIC
 {
-    ItemList [ de ] =
-    {
-        < "Millimeter" ; FUNIT_MM ; > ;
-        < "Zentimeter" ; FUNIT_CM ; > ;
-        < "Meter" ; FUNIT_M ; > ;
-        < "Kilometer" ; FUNIT_KM ; > ;
-        < "Zoll" ; FUNIT_INCH ; > ;
-        < "Fuß" ; FUNIT_FOOT ; > ;
-        < "Meilen" ; FUNIT_MILE ; > ;
-        < "Pica" ; FUNIT_PICA ; > ;
-        < "Point" ; FUNIT_POINT ; > ;
-    };
     ItemList [ en-US ] =
     {
         < "Millimeter" ; FUNIT_MM ; > ;
@@ -450,18 +360,6 @@ StringArray STR_ARR_METRIC
         < "Miles" ; FUNIT_MILE ; > ;
         < "Pica" ; FUNIT_PICA ; > ;
         < "Point" ; FUNIT_POINT ; > ;
-    };
-    ItemList [ x-comment ] =
-    {
-        < " " ; FUNIT_MM ; > ;
-        < " " ; FUNIT_CM ; > ;
-        < " " ; FUNIT_M ; > ;
-        < " " ; FUNIT_KM ; > ;
-        < " " ; FUNIT_INCH ; > ;
-        < " " ; FUNIT_FOOT ; > ;
-        < " " ; FUNIT_MILE ; > ;
-        < " " ; FUNIT_PICA ; > ;
-        < " " ; FUNIT_POINT ; > ;
     };
 };
 
