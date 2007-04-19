@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodel.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 13:28:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:26:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,6 +174,9 @@ DECLARE_LIST( AddressList_Impl, AddressItemPtr_Impl )
 
 // class SfxMailModel -----------------------------------------------
 
+static const char       PDF_DOCUMENT_TYPE[]   = "pdf_Portable_Document_Format";
+static const sal_uInt32 PDF_DOCUMENT_TYPE_LEN = 28;
+
 void SfxMailModel::ClearList( AddressList_Impl* pList )
 {
     if ( pList )
@@ -228,6 +231,7 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
     uno::Reference< lang::XMultiServiceFactory > xSMGR,
     uno::Reference< frame::XModel > xModel,
     const rtl::OUString& rFilterName,
+    const rtl::OUString& rType,
     bool bModified,
     sal_Int32& rNumArgs,
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs )
@@ -266,7 +270,28 @@ SfxMailModel::SaveResult SfxMailModel::ShowFilterOptionsDialog(
 
                         if( xFilterDialog.is() && xFilterProperties.is() )
                         {
+                            uno::Sequence< beans::PropertyValue > aPropsForDialog(1);
                             uno::Reference< document::XExporter > xExporter( xFilterDialog, uno::UNO_QUERY );
+
+                            if ( rType.equalsAsciiL( PDF_DOCUMENT_TYPE, PDF_DOCUMENT_TYPE_LEN ))
+                            {
+                                //add an internal property, used to tell the dialog we want to set a different
+                                //string for the ok button
+                                //used in filter/source/pdf/impdialog.cxx
+                                String aOkSendText( SfxResId( STR_PDF_EXPORT_SEND ));
+
+                                uno::Sequence< beans::PropertyValue > aFilterDataValue(1);
+                                aFilterDataValue[0].Name = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "_OkButtonString" ));
+                                aFilterDataValue[0].Value = css::uno::makeAny( ::rtl::OUString( aOkSendText ));
+
+                                //add to the filterdata property, the only one the PDF export filter dialog will care for
+                                aPropsForDialog[0].Name =  ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "FilterData" ));
+                                aPropsForDialog[0].Value = css::uno::makeAny( aFilterDataValue );
+
+                                //when executing the dialog will merge the persistent FilterData properties
+                                xFilterProperties->setPropertyValues( aPropsForDialog );
+                            }
+
                             if( xExporter.is() )
                                 xExporter->setSourceDocument(
                                     uno::Reference< lang::XComponent >( xModel, uno::UNO_QUERY ) );
@@ -343,7 +368,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
     rtl::OUString& rFileNamePath )
 {
     SaveResult  eRet( SAVE_ERROR );
-    bool        bSendAsPDF = (rType.compareTo(rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "pdf_Portable_Document_Format" ))) == 0);
+    bool        bSendAsPDF = (rType.equalsAsciiL( PDF_DOCUMENT_TYPE, PDF_DOCUMENT_TYPE_LEN ));
 
     css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR  = ::comphelper::getProcessServiceFactory();
     if (!xSMGR.is())
@@ -628,7 +653,7 @@ SfxMailModel::SaveResult SfxMailModel::SaveDocumentAsFormat(
                     if( bSendAsPDF )
                     {
                         SaveResult eShowPDFFilterDialog = ShowFilterOptionsDialog(
-                                                            xSMGR, xModel, aFilterName, bModified, nNumArgs, aArgs );
+                                                            xSMGR, xModel, aFilterName, rType, bModified, nNumArgs, aArgs );
 
                         // don't continue on dialog cancel or error
                         if ( eShowPDFFilterDialog != SAVE_SUCCESSFULL )
