@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sanedlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:06:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:49:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog RID_SANE_DIALOG
     Size = MAP_APPFONT ( THIRD_COLUMN + 60 , 268 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Scanner" ;
     OKButton RID_SCAN_OK
     {
         Pos = MAP_APPFONT ( THIRD_COLUMN , 6 ) ;
@@ -57,36 +56,30 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( THIRD_COLUMN , 44 ) ;
         Size = MAP_APPFONT ( 55 , 22 ) ;
-        Text [ de ] = "Geräte-\n~information" ;
         Text [ en-US ] = "About\n Dev~ice" ;
     };
     PushButton RID_PREVIEW_BTN
     {
         Pos = MAP_APPFONT ( THIRD_COLUMN , 71 ) ;
         Size = MAP_APPFONT ( 55 , 22 ) ;
-        Text [ de ] = "~Vorschau\nerstellen" ;
         Text [ en-US ] = "Create\nPreview" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine RID_PREVIEW_BOX
     {
         Pos = MAP_APPFONT ( PREVIEW_UPPER_LEFT - 5 , PREVIEW_UPPER_TOP - 8 ) ;
         Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 8 ) ;
-        Text [ de ] = "Vorschau" ;
         Text [ en-US ] = "Preview" ;
     };
     FixedLine RID_SCANAREA_BOX
     {
         Pos = MAP_APPFONT ( SCAN_AREA_LEFT - 5 , SCAN_AREA_TOP - 12 ) ;
         Size = MAP_APPFONT ( PREVIEW_WIDTH + 10 , 8 ) ;
-        Text [ de ] = "Scanbereich" ;
         Text [ en-US ] = "Scan area" ;
     };
     FixedText RID_SCAN_LEFT_TXT
     {
         Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Links:" ;
         Text [ en-US ] = "Left:" ;
     };
     MetricField RID_SCAN_LEFT_BOX
@@ -101,9 +94,7 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 17 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Oben:" ;
         Text [ en-US ] = "Top:" ;
-        Text [ x-comment ] = " ";
     };
     MetricField RID_SCAN_TOP_BOX
     {
@@ -117,9 +108,7 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 34 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Rechts:" ;
         Text [ en-US ] = "Right:" ;
-        Text [ x-comment ] = " ";
     };
     MetricField RID_SCAN_RIGHT_BOX
     {
@@ -133,7 +122,6 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SCAN_AREA_LEFT , SCAN_AREA_TOP + 51 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Unten:" ;
         Text [ en-US ] = "Bottom:" ;
     };
     MetricField RID_SCAN_BOTTOM_BOX
@@ -148,7 +136,6 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 8 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Verwendetes ~Gerät:" ;
         Text [ en-US ] = "Device used:" ;
     };
     ListBox RID_DEVICE_BOX
@@ -163,7 +150,6 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 25 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Auflösung [~DPI]" ;
         Text [ en-US ] = "Resolution [~DPI]" ;
     };
     NumericBox RID_SCAN_RESOLUTION_BOX
@@ -176,7 +162,6 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 40 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Er~weiterte Optionen anzeigen" ;
         Text [ en-US ] = "Show advanced options" ;
     };
     CheckBox RID_SCAN_ADVANCED_BOX
@@ -189,9 +174,7 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 54 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Optionen:" ;
         Text [ en-US ] = "Options:" ;
-        Text [ x-comment ] = " ";
     };
     Control RID_SCAN_OPTION_BOX
     {
@@ -246,7 +229,6 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 253 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Vektorelement" ;
         Text [ en-US ] = "Vector element" ;
     };
     NumericField RID_SCAN_NUMERIC_VECTOR_BOX
@@ -261,7 +243,6 @@ ModalDialog RID_SANE_DIALOG
     {
         Pos = MAP_APPFONT ( SECOND_COLUMN , 234 ) ;
         Size = MAP_APPFONT ( 130 , 14 ) ;
-        Text [ de ] = "Setzen" ;
         Text [ en-US ] = "Set" ;
     };
     Bitmap RID_SCAN_BITMAP_PLUS
@@ -276,22 +257,18 @@ ModalDialog RID_SANE_DIALOG
 };
 String RID_SANE_DEVICEINFO_TXT
 {
-    Text [ de ] = "Gerät: %s\nHersteller: %s\nModell: %s\nTyp: %s" ;
     Text [ en-US ] = "Device: %s\nVendor: %s\nModel: %s\nType: %s" ;
 };
 String RID_SANE_SCANERROR_TXT
 {
-    Text [ de ] = "Während des Scans ist ein Fehler aufgetreten." ;
     Text [ en-US ] = "An error occurred while scanning." ;
 };
 String RID_SANE_NORESOLUTIONOPTION_TXT
 {
-    Text [ de ] = "Das Gerät ist nicht auf die Erzeugung einer Vorschau eingerichtet. Statt dessen wird als Vorschau ein normaler Scan verwendet. Dieser kann deutlich länger dauern." ;
     Text [ en-US ] = "The device does not offer a preview option. Therefore, a normal scan will be used as a preview instead. This may take a considerable amount of time." ;
 };
 String RID_SANE_NOSANELIB_TXT
 {
-    Text [ de ] = "Das SANE Interface konnte nicht initialisiert werden. Es kann kein Scanvorgang stattfinden." ;
     Text [ en-US ] = "The SANE interface could not be initialized. Scanning is not possible." ;
 };
 
