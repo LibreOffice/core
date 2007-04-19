@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:04:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:58:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,45 +36,36 @@
 
 String STR_TITLE_GRID
 {
-    Text[ de ] = "Gitter" ;
     Text [ en-US ] = "Grid" ;
 };
 
 /*
 String RID_BUILDVERSION
 {
-    Text [ de ] = UPDVER ;
     Text [ en-US ] = UPDVER ;
 };
 String STR_NULL
 {
-    Text [ de ] = "Kein" ;
     Text [ en-US ] = "None" ;
 };
 String STR_BASIC_IDE
 {
-    Text [ de ] = "Basic-IDE" ;
     Text [ en-US ] = "Basic IDE" ;
 };
 String STR_INVISIBLE
 {
-    Text [ de ] = "Unsichtbar" ;
     Text [ en-US ] = "Invisible" ;
 };
 String STR_SOLID
 {
-    Text [ de ] = "Durchgängig" ;
     Text [ en-US ] = "Continuous" ;
-    Text [ x-comment ] = "nk 07.08.99 : Hat es mit Linienstil zu tun? Bitte mich informieren! Danke - - - -";
 };
 String STR_AREA
 {
-    Text [ de ] = "Fläche" ;
     Text [ en-US ] = "Area" ;
 };
 String STR_LINE
 {
-    Text [ de ] = "Linie" ;
     Text [ en-US ] = "Line" ;
 };
 
@@ -82,7 +73,6 @@ String STR_LINE
 
 String STR_NORMAL_LINES
 {
-    Text [ de ] = "Normal mit Linien" ;
     Text [ en-US ] = "Normal with lines" ;
 };
 
@@ -92,114 +82,92 @@ String STR_NORMAL_LINES
 
 String STR_2D
 {
-    Text [ de ] = "2D-" ;
     Text [ en-US ] = "2D " ;
 };
 String STR_3D
 {
-    Text [ de ] = "3D-" ;
     Text [ en-US ] = "3D " ;
 };
 String STR_DIAGRAM_AREA
 {
-    Text [ de ] = "Diagrammfläche" ;
     Text [ en-US ] = "Chart Area" ;
 };
 String STR_DIAGRAM
 {
-    Text [ de ] = "Diagramm" ;
     Text [ en-US ] = "Chart" ;
 };
 String STR_DIAGRAM_WALL
 {
-    Text [ de ] = "Diagrammwand" ;
     Text [ en-US ] = "Chart Wall" ;
 };
 String STR_DIAGRAM_FLOOR
 {
-    Text [ de ] = "Diagrammboden" ;
     Text [ en-US ] = "Chart Floor" ;
 };
 String STR_DIAGRAM_X_AXIS
 {
-    Text [ de ] = "X-Achse" ;
     Text [ en-US ] = "X axis" ;
 };
 String STR_DIAGRAM_Y_AXIS
 {
-    Text [ de ] = "Y-Achse" ;
     Text [ en-US ] = "Y axis" ;
 };
 String STR_DIAGRAM_Z_AXIS
 {
-    Text [ de ] = "Z-Achse" ;
     Text [ en-US ] = "Z axis" ;
 };
 String STR_DIAGRAM_X_GRID_MAIN
 {
-    Text [ de ] = "X-Hauptgitter" ;
     Text [ en-US ] = "X axis main grid" ;
 };
 String STR_DIAGRAM_Y_GRID_MAIN
 {
-    Text [ de ] = "Y-Hauptgitter" ;
     Text [ en-US ] = "Y main grid" ;
 };
 String STR_DIAGRAM_Z_GRID_MAIN
 {
-    Text [ de ] = "Z-Hauptgitter" ;
     Text [ en-US ] = "Z main grid" ;
 };
 String STR_DIAGRAM_X_GRID_HELP
 {
-    Text [ de ] = "X-Hilfsgitter" ;
     Text [ en-US ] = "Minor X Grid" ;
 };
 String STR_DIAGRAM_Y_GRID_HELP
 {
-    Text [ de ] = "Y-Hilfsgitter" ;
     Text [ en-US ] = "Y minor grid" ;
 };
 String STR_DIAGRAM_Z_GRID_HELP
 {
-    Text [ de ] = "Z-Hilfsgitter" ;
     Text [ en-US ] = "Z minor grid" ;
 };
 String STR_DIAGRAM_ROW
 {
     // $(ROW) can be a number or the caption of the row in quotes
 
-    Text [ de ] = "Datenreihe $(ROW)" ;
     Text [ en-US ] = "Data Series $(ROW)" ;
 };
 String STR_DIAGRAM_DESCRGROUP
 {
-    Text [ de ] = "Datenbeschriftungen" ;
     Text [ en-US ] = "Data Labels" ;
 };
 String STR_DIAGRAM_DESCR_ROW
 {
-    Text [ de ] = "Datenzeilen-Beschriftung" ;
     Text [ en-US ] = "Data rows label" ;
 };
 String STR_DIAGRAM_DESCR_COL
 {
-    Text [ de ] = "Datenspalten-Beschriftung" ;
     Text [ en-US ] = "Data columns label" ;
 };
 String STR_LEGEND
 {
-    Text [ de ] = "Legende" ;
     Text [ en-US ] = "Legend" ;
 };
 String STR_LEGEND_SYMBOL_ROW
 {
-    Text [ de ] = "Datenreihen-Symbol" ;
     Text [ en-US ] = "Data series symbol" ;
 };
 String STR_LEGEND_SYMBOL_COL
 {
-    Text [ de ] = "Datenspalten-Symbol" ;
     Text [ en-US ] = "Data column symbol" ;
 };
 
@@ -207,244 +175,196 @@ String STR_MARKED
 {
     // $(OBJ) is any chart object, like 'x axis', 'data point', 'grid', etc.
     // this string is for the status bar.
-    Text [ de ] = "$(OBJ) markiert" ;
     Text [ en-US ] = "$(OBJ) selected" ;
 };
 
 String STR_UNDO_DRAGDROP
 {
-    Text [ de ] = "Drag&Drop" ;
     Text [ en-US ] = "Drag and Drop" ;
 };
 String STR_UNDO_DIAGRAM_LINE
 {
-    Text [ de ] = "Linenart" ;
     Text [ en-US ] = "Line Type" ;
 };
 String STR_UNDO_CUT
 {
-    Text [ de ] = "Ausschneiden" ;
     Text [ en-US ] = "Cut" ;
 };
 String STR_UNDO_DELETE
 {
-    Text [ de ] = "Löschen" ;
     Text [ en-US ] = "Delete" ;
 };
 String STR_UNDO_DIAGRAM_DATA
 {
-    Text [ de ] = "Diagrammdaten bearbeiten" ;
     Text [ en-US ] = "Edit chart data" ;
 };
 String STR_UNDO_EDIT_TITLE
 {
-    Text [ de ] = "Titel editieren" ;
     Text [ en-US ] = "Edit title" ;
 };
 String STR_UNDO_STATISTICS
 {
-    Text [ de ] = "Statistik" ;
     Text [ en-US ] = "Statistics" ;
 };
 String STR_UNDO_INSERT_TITLE
 {
-    Text [ de ] = "Titel einfügen" ;
     Text [ en-US ] = "Insert title" ;
 };
 String STR_UNDO_INSERT_LEGEND
 {
-    Text [ de ] = "Legende einfügen" ;
     Text [ en-US ] = "Insert legend" ;
 };
 String STR_UNDO_INSERT_DESCR
 {
-    Text [ de ] = "Datenbeschriftung einfügen" ;
     Text [ en-US ] = "Insert data label" ;
 };
 String STR_UNDO_INSERT_AXIS
 {
-    Text [ de ] = "Achsen einfügen" ;
     Text [ en-US ] = "Insert axes" ;
 };
 String STR_UNDO_INSERT_GRID
 {
-    Text [ de ] = "Gitter einfügen" ;
     Text [ en-US ] = "Insert grids" ;
 };
 String STR_UNDO_DATA_ROW
 {
-    Text [ de ] = "Datenreihe bearbeiten" ;
     Text [ en-US ] = "Edit data series" ;
 };
 String STR_UNDO_DATA_POINT
 {
-    Text [ de ] = "Datenpunkt bearbeiten" ;
     Text [ en-US ] = "Edit data point" ;
 };
 String STR_UNDO_TITLE
 {
-    Text [ de ] = "Titel bearbeiten" ;
     Text [ en-US ] = "Edit title" ;
 };
 String STR_UNDO_LEGEND
 {
-    Text [ de ] = "Legende bearbeiten" ;
     Text [ en-US ] = "Edit legend" ;
 };
 String STR_UNDO_DIAGRAM_AXIS
 {
-    Text [ de ] = "Achse bearbeiten" ;
     Text [ en-US ] = "Edit axis" ;
 };
 String STR_UNDO_DIAGRAM_GRID
 {
-    Text [ de ] = "Gitter bearbeiten" ;
     Text [ en-US ] = "Edit grid" ;
 };
 String STR_UNDO_DIAGRAM_WALL
 {
-    Text [ de ] = "Diagrammwand bearbeiten" ;
     Text [ en-US ] = "Edit chart wall" ;
 };
 String STR_UNDO_DIAGRAM_FLOOR
 {
-    Text [ de ] = "Diagrammboden bearbeiten" ;
     Text [ en-US ] = "Edit chart floor" ;
 };
 String STR_UNDO_DIAGRAM_AREA
 {
-    Text [ de ] = "Diagrammfläche bearbeiten" ;
     Text [ en-US ] = "Edit chart area" ;
 };
 String STR_UNDO_DIAGRAM_TYPE
 {
-    Text [ de ] = "Diagrammtyp bearbeiten" ;
     Text [ en-US ] = "Edit chart type" ;
 };
 String STR_UNDO_AUTOFORMAT
 {
-    Text [ de ] = "AutoFormat" ;
     Text [ en-US ] = "AutoFormat" ;
 };
 String STR_UNDO_3D_VIEW
 {
-    Text [ de ] = "3D-Ansicht bearbeiten" ;
     Text [ en-US ] = "Edit 3D view" ;
 };
 String STR_UNDO_LIGHTING
 {
-    Text [ de ] = "3D-Beleuchtung einstellen" ;
     Text [ en-US ] = "Set 3D illumination" ;
 };
 String STR_UNDO_TOGGLE_TITLE
 {
-    Text [ de ] = "Titel ein/aus" ;
     Text [ en-US ] = "Title on/off" ;
 };
 String STR_UNDO_TOGGLE_LEGEND
 {
-    Text [ de ] = "Legende ein/aus" ;
     Text [ en-US ] = "Legend on/off" ;
 };
 String STR_UNDO_TOGGLE_AXIS_TITLE
 {
-    Text [ de ] = "Achsentitel ein/aus" ;
     Text [ en-US ] = "Axis titles on/off" ;
 };
 String STR_UNDO_TOGGLE_AXIS_DESCR
 {
-    Text [ de ] = "Achsenbeschriftung ein/aus" ;
     Text [ en-US ] = "Axis labels on/off" ;
 };
 String STR_UNDO_TOGGLE_GRID_HORZ
 {
-    Text [ de ] = "Gitter horizontal ein/aus" ;
     Text [ en-US ] = "Horizontal grid on/off" ;
 };
 String STR_UNDO_TOGGLE_GRID_VERT
 {
-    Text [ de ] = "Gitter vertikal ein/aus" ;
     Text [ en-US ] = "Vertical grid on/off" ;
 };
 String STR_UNDO_DATA_IN_ROWS
 {
-    Text [ de ] = "Daten in Zeilen" ;
     Text [ en-US ] = "Data in Rows" ;
 };
 String STR_UNDO_DATA_IN_COLUMNS
 {
-    Text [ de ] = "Daten in Spalten" ;
     Text [ en-US ] = "Data in Columns" ;
 };
 String STR_DEFAULTVIEW
 {
-    Text [ de ] = "Default" ;
     Text [ en-US ] = "Default" ;
 };
 
 
 String STR_OPEN_DOCUMENT
 {
-    Text [ de ] = "Dokument laden" ;
     Text [ en-US ] = "Load document" ;
 };
 String STR_SAVE_DOCUMENT
 {
     Text [ en-US ] = "Save document";
-    Text [ de ] = "Dokument speichern" ;
     Text [ en-US ] = "Save document" ;
-    Text [ de ] = "Dokument speichern" ;
 };
 String STR_ACTION_NOTPOSSIBLE
 {
-    Text [ de ] = "Die Funktion kann mit den selektierten \nObjekten nicht ausgeführt werden." ;
     Text [ en-US ] = "This function cannot be completed with the selected objects." ;
 };
 String STR_GRAPHIC
 {
-    Text [ de ] = "Chart" ;
     Text [ en-US ] = "Chart" ;
 };
 String STR_CHART_DOCUMENT
 {
-    Text [ de ] = "Diagramm" ;
     Text [ en-US ] = "Chart" ;
 };
 String STR_CHART_DOCUMENT_FULLTYPE_60
 {
-    Text[ de ] = "%PRODUCTNAME %PRODUCTVERSION Diagramm" ;
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION Chart" ;
 };
 String STR_CHART_DOCUMENT_FULLTYPE_50
 {
-    Text [ de ] = "%PRODUCTNAME 5.0 Diagramm" ;
     Text [ en-US ] = "%PRODUCTNAME 5.0 Chart" ;
 };
 String STR_CHART_DOCUMENT_FULLTYPE_40
 {
-    Text [ de ] = "%PRODUCTNAME 4.0 Diagramm" ;
     Text [ en-US ] = "%PRODUCTNAME 4.0 Chart" ;
 };
 String STR_CHART_DOCUMENT_FULLTYPE_31
 {
-    Text [ de ] = "%PRODUCTNAME 3.0 Diagramm" ;
     Text [ en-US ] = "%PRODUCTNAME 3.0 Chart" ;
 };
 String STR_BAD_PASSWORD_OR_FILE_CORRUPTED
 {
-    Text [ de ] = "Das Kennwort ist falsch oder die Datei beschädigt." ;
     Text [ en-US ] = "The password is incorrect or the file is damaged." ;
 };
 String RID_PLUGINTOOLBOX
 {
-    Text [ de ] = "PlugInleiste" ;
     Text [ en-US ] = "Plug-in Bar" ;
 };
 
 
 String STR_SURFACE
 {
-    Text [ de ] = "Oberflächen" ;
     Text [ en-US ] = "Surfaces" ;
 };
 
@@ -452,52 +372,42 @@ String STR_SURFACE
 String STR_STATISTICS_IN_LEGEND
 {
     // comment
-    Text [ x-comment ] = "BM: This determines how a statistics string (STR_REGRESSION_...) appears in the legend, e.g. in german \"Lineare Regression, Spalte 3\" will appear for \"$(STATTYP), $(ROWNAME)\"";
     // comment
-    Text [ de ] = "$(STATTYP), $(ROWNAME)";
     Text [ en-US ] = "$(STATTYP), $(ROWNAME) " ;
 };
 
 String STR_UNDO_SCALE
 {
-    Text [ de ] = "Texte skalieren" ;
     Text [ en-US ] = "Scale Text" ;
 };
 String STR_QUERY_SORT
 {
-    Text [ de ] = "Die Werte für die X-Achse müssen sortiert vorliegen\nMit Sortierung fortfahren ?" ;
     Text [ en-US ] = "X axis values must be sorted.\nSort them now?" ;
 };
 String STR_UNDO_REMOVEPOINTATTRS
 {
-    Text [ de ] = "Datenpunkt-Attribute entfernen" ;
     Text [ en-US ] = "Remove data point attributes" ;
 };
 String STR_APPNAME
 {
-    Text [ de ] = "StarChart" ;
     Text [ en-US ] = "%PRODUCTNAME Chart" ;
 };
 
 String STR_UNDO_MOREBACK
 {
-    Text [ de ] = "Datenreihe verschieben" ;
     Text [ en-US ] = "Move data series";
 };
 String STR_UNDO_MOREFRONT
 {
-    Text [ de ] = "Datenreihe verschieben" ;
     Text [ en-US ] = "Move data series";
 };
 
 String STR_UNDO_DIAGRAM_STOCK_LOSS
 {
-    Text [ de ] = "Negative Abweichung bearbeiten" ;
     Text [ en-US ] = "Edit negative deviation";
 };
 String STR_UNDO_DIAGRAM_STOCK_PLUS
 {
-    Text [ de ] = "positive Abweichung bearbeiten" ;
     Text [ en-US ] = "Edit positive deviation";
 };
 //-----------------------------------
@@ -505,7 +415,6 @@ String STR_UNDO_DIAGRAM_STOCK_PLUS
 
 String STR_UNDO_INSERT_SPECCHAR
 {
-    Text [ de ] = "Sonderzeichen einfügen" ;
     Text [ en-US ] = "Insert special character" ;
 };
 
@@ -515,13 +424,11 @@ String STR_STATUS_DATAPOINT_MARKED
 {
     // this string is displayed in the status bar whenever a data point is selected
 
-    Text [ de ] = "Datenpunkt $(PT_NUM) in Reihe $(ROW_NUM) markiert, Wert: $(VALUE)";
     Text [ en-US ] = "Data Point $(PT_NUM) in row $(ROW_NUM) selected, value: $(VALUE)";
 };
 
 String STR_QUICKHELP_DATAPOINT
 {
-    Text [ de ] = "Datenpunkt $(PT_NUM), Reihe $(ROW_NUM), Wert: $(VALUE)";
     Text [ en-US ] = "Data Point $(PT_NUM), row $(ROW_NUM), value: $(VALUE)";
 };
 
@@ -530,7 +437,6 @@ String STR_BALLOONHELP_DATAPOINT
     // $(NEWLINE) begins a new line, $(PT_STR) and $(ROW_STR) are the
     // row/column captions
 
-    Text [ de ] = "Datenpunkt $(PT_STR)$(NEWLINE)Reihe $(ROW_STR)$(NEWLINE)Wert: $(VALUE)";
     Text [ en-US ] = "Data Point $(PT_STR)$(NEWLINE)row $(ROW_STR)$(NEWLINE)value: $(VALUE)";
 };
 
@@ -538,69 +444,55 @@ String STR_BALLOONHELP_DATAPOINT
 
 String STR_AVERAGEVALUE
 {
-    Text [ de ] = "Mittelwertlinie";
     Text [ en-US ] = "average value line";
 };
 
 String STR_DIAGRAM_ERROR
 {
-    Text [ de ] = "Fehlerindikator";
     Text [ en-US ] = "error indicator";
 };
 
 String STR_DIAGRAM_REGRESSION
 {
-    Text [ de ] = "Regressionskurve";
     Text [ en-US ] = "regression curve";
 };
 
 String STR_CFG_DEFAULT_COLORS
 {
-    Text [ de ] = "Grundfarben";
     Text [ en-US ] = "Default colors";
 };
 
 String STR_PIE_SEGMENT_EXPLODED
 {   // shown in status bar. Parameter $(PERCENT) becomes a floating point number
-    Text [ de ] = "Tortenstück $(PERCENT) Prozent explodiert";
     Text [ en-US ] = "Pie exploded by $(PERCENT) percent";
 };
 
 String STR_DIAGRAM_DATA_SAFETY_QUERY
 {
-    Text [ de ] = "Die Daten wurden geändert.\Sollen die Änderungen übernommen werden?" ;
     Text [ en-US ] = "Data has been changed.\n Do you want to apply the changes?" ;
 };
 
 String STR_UNDO_TRANSFORM
 {
-    Text [ de ] = "%O transformieren" ;
     Text [ en-US ] = "Transform %O" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_UNDO_MOVE
 //== svx STR_EditMove
 {
-    Text [ de ] = "%O verschieben" ;
     Text [ en-US ] = "Move %O" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_UNDO_RESIZE
 //== svx STR_EditResize
 {
-    Text [ de ] = "Größe von %O ändern" ;
     Text [ en-US ] = "Resize %O" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_UNDO_ROTATE
 //== svx STR_EditRotate
 {
-    Text [ de ] = "%O drehen" ;
     Text [ en-US ] = "Rotate %O" ;
-    Text [ x-comment ] = " ";
 };
 */
 //-----------------------------------
