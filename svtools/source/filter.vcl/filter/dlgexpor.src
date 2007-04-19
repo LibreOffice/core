@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgexpor.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:53:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:14:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,9 +47,7 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Farbauflösung" ;
         Text [ en-US ] = "Color resolution" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COLORS
     {
@@ -58,17 +56,6 @@ ModalDialog DLG_EXPORT_PIX
         TabStop = TRUE ;
         DropDown = TRUE ;
         AutoHScroll = TRUE ;
-        StringList [ de ] =
-        {
-            < "Original" ; Default ; > ;
-            < "1Bit - Schwellenwert" ; Default ; > ;
-            < "1Bit - Gedithert" ; Default ; > ;
-            < "4Bit - Graustufenpalette" ; Default ; > ;
-            < "4Bit - Farbpalette" ; Default ; > ;
-            < "8Bit - Graustufenpalette" ; Default ; > ;
-            < "8Bit - Farbpalette" ; Default ; > ;
-            < "24Bit - Echtfarben" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Original" ; Default ; > ;
@@ -80,52 +67,33 @@ ModalDialog DLG_EXPORT_PIX
             < "8 Bit - Color Palette" ; Default ; > ;
             < "24 Bit - True Colors" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     CheckBox CBX_RLE
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 98 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "RLE-Kodierung" ;
         Text [ en-US ] = "RLE coding" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_MODE_PIX
     {
         Pos = MAP_APPFONT ( 6 , 48 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Modus" ;
         Text [ en-US ] = "Mode" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_ORIGINAL_PIX
     {
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
-        Text [ de ] = "~Original" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Original" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_RES_PIX
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
-        Text [ de ] = "~Auflösung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Resolution" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox CBB_RES_PIX
     {
@@ -145,10 +113,8 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 12 , 87 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
-        Text [ de ] = "~Größe" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Size" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTF_SIZEX_PIX
     {
@@ -171,9 +137,7 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 18 , 102 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
-        Text [ de ] = "Breite" ;
         Text [ en-US ] = "Width" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTF_SIZEY_PIX
     {
@@ -196,9 +160,7 @@ ModalDialog DLG_EXPORT_PIX
     {
         Pos = MAP_APPFONT ( 18 , 118 ) ;
         Size = MAP_APPFONT ( 41 , 10 ) ;
-        Text [ de ] = "Höhe" ;
         Text [ en-US ] = "Height" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK_PIX
     {
@@ -232,43 +194,33 @@ ModalDialog DLG_EXPORT_VEC
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Modus" ;
         Text [ en-US ] = "Mode" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_ORIGINAL_VEC
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
-        Text [ de ] = "~Original" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Original" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SIZE_VEC
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 98 , 10 ) ;
-        Text [ de ] = "~Größe" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Size" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_SIZE_VEC
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "Größe" ;
         Text [ en-US ] = "Size" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SIZEX_VEC
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Breite" ;
         Text [ en-US ] = "Width" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTF_SIZEX_VEC
     {
@@ -291,9 +243,7 @@ ModalDialog DLG_EXPORT_VEC
     {
         Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Höhe" ;
         Text [ en-US ] = "Height" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTF_SIZEY_VEC
     {
