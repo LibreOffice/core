@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-04 16:23:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:46:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabDialog RID_TD_ORGANIZE
     SVLook = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Makros verwalten : Verwalten */
     /* ### ACHTUNG: Neuer Text in Resource? Makros verwalten : Verwalten */
-    Text[ de ] = "%PRODUCTNAME Basic Makros verwalten" ;
     Text[ en-US ] = "%PRODUCTNAME Basic Macro Organizer";
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -56,19 +55,16 @@ TabDialog RID_TD_ORGANIZE
             PageItem
             {
                 Identifier = RID_TP_MOD ;
-                Text [ de ] = "Module" ;
                 Text [ en-US ] = "Modules" ;
             };
             PageItem
             {
                 Identifier = RID_TP_DLG ;
-                Text [ de ] = "Dialoge" ;
                 Text [ en-US ] = "Dialogs" ;
             };
             PageItem
             {
                 Identifier = RID_TP_LIB ;
-                Text [ de ] = "Bibliotheken" ;
                 Text [ en-US ] = "Libraries" ;
             };
         };
@@ -84,7 +80,6 @@ TabPage RID_TP_MODULS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text[ de ] = "M~odul" ;
         Text [ en-US ] = "M~odule" ;
     };
     Control RID_TRLBOX
@@ -97,7 +92,6 @@ TabPage RID_TP_MODULS
     };
     PushButton RID_PB_EDIT
     {
-        Text [ de ] = "~Bearbeiten";
         Text [ en-US ] = "~Edit";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -106,7 +100,6 @@ TabPage RID_TP_MODULS
     };
     CancelButton RID_PB_CLOSE
     {
-        Text [ de ] = "SchlieÃŸen";
         Text [ en-US ] = "Close";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -116,7 +109,6 @@ TabPage RID_TP_MODULS
     {
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Neu..." ;
         Text [ en-US ] = "~New..." ;
         TabStop = TRUE ;
     };
@@ -124,7 +116,6 @@ TabPage RID_TP_MODULS
     {
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Neu..." ;
         Text [ en-US ] = "~New..." ;
         TabStop = TRUE ;
     };
@@ -133,7 +124,6 @@ TabPage RID_TP_MODULS
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -147,7 +137,6 @@ TabPage RID_TP_DLGS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "Dialog" ;
         Text [ en-US ] = "Dialog" ;
     };
     Control RID_TRLBOX
@@ -160,7 +149,6 @@ TabPage RID_TP_DLGS
     };
     PushButton RID_PB_EDIT
     {
-        Text [ de ] = "~Bearbeiten";
         Text [ en-US ] = "~Edit";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -169,7 +157,6 @@ TabPage RID_TP_DLGS
     };
     CancelButton RID_PB_CLOSE
     {
-        Text [ de ] = "SchlieÃŸen";
         Text[ en-US ] = "Close";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -179,7 +166,6 @@ TabPage RID_TP_DLGS
     {
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Neu..." ;
         Text [ en-US ] = "~New..." ;
         TabStop = TRUE ;
     };
@@ -187,7 +173,6 @@ TabPage RID_TP_DLGS
     {
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Neu..." ;
         Text [ en-US ] = "~New..." ;
         TabStop = TRUE ;
     };
@@ -196,7 +181,6 @@ TabPage RID_TP_DLGS
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -211,7 +195,6 @@ TabPage RID_TP_LIBS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Ort" ;
         Text [ en-US ] = "L~ocation";
     };
     ListBox RID_LB_BASICS
@@ -226,7 +209,6 @@ TabPage RID_TP_LIBS
     {
         Pos = MAP_APPFONT ( 6 , 36 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "Bibliothe~k" ;
         Text [ en-US ] = "~Library" ;
     };
     Control RID_TRLBOX
@@ -240,7 +222,6 @@ TabPage RID_TP_LIBS
 
     PushButton RID_PB_EDIT
     {
-        Text [ de ] = "~Bearbeiten";
         Text [ en-US ] = "~Edit";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -249,7 +230,6 @@ TabPage RID_TP_LIBS
     };
     CancelButton RID_PB_CLOSE
     {
-        Text [ de ] = "SchlieÃŸen";
         Text [ en-US ] = "Close";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
@@ -260,7 +240,6 @@ TabPage RID_TP_LIBS
     {
         Pos = MAP_APPFONT ( 144 , 43 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "K~ennwort..." ;
         Text [ en-US ] = "~Password..." ;
         TabStop = TRUE ;
     };
@@ -269,7 +248,6 @@ TabPage RID_TP_LIBS
     {
         Pos = MAP_APPFONT ( 144 , 69 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Neu..." ;
         Text [ en-US ] = "~New..." ;
         TabStop = TRUE ;
     };
@@ -278,14 +256,12 @@ TabPage RID_TP_LIBS
         Pos = MAP_APPFONT ( 144 , 86 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hin~zufügen... : Hin~zuf³gen... */
-        Text [ de ] = "~Importieren..." ;
         Text [ en-US ] = "~Import..." ;
     };
     PushButton RID_PB_EXPORT
     {
         Pos = MAP_APPFONT ( 144 , 103 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "E~xport..." ;
         Text [ en-US ] = "E~xport..." ;
         TabStop = TRUE ;
     };
@@ -294,7 +270,6 @@ TabPage RID_TP_LIBS
         Pos = MAP_APPFONT ( 144 , 120 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
     };
@@ -337,7 +312,6 @@ ModalDialog RID_DLG_LIBS
     {
         Pos = MAP_APPFONT ( 6 , 89 ) ;
         Size = MAP_APPFONT ( 156 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
     };
     CheckBox RID_CB_REF
@@ -345,14 +319,12 @@ ModalDialog RID_DLG_LIBS
         Pos = MAP_APPFONT ( 12 , 100 ) ;
         Size = MAP_APPFONT ( 146 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Als Referenz einfÃ¼gen (nur lesen)" ;
         Text [ en-US ] = "Insert as reference (read-only)" ;
     };
     CheckBox RID_CB_REPL
     {
         Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 146 , 10 ) ;
-        Text [ de ] = "Existierende Bibliotheken ersetzen" ;
         Text [ en-US ] = "Replace existing libraries" ;
     };
 };
@@ -380,7 +352,6 @@ ModalDialog RID_DLG_NEWLIB
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Name:" ;
         Text [ en-US ] = "~Name:" ;
     };
     Edit RID_ED_LIBNAME
@@ -399,7 +370,6 @@ ModalDialog RID_DLG_EXPORT
     Size = MAP_APPFONT ( 115 , 55 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Basic Bibliothek exportieren";
     Text [ en-US ] = "Export Basic library";
     OKButton RID_PB_OK
     {
@@ -420,7 +390,6 @@ ModalDialog RID_DLG_EXPORT
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 103, 10 );
         Group = TRUE;
-        Text [ de ] = "Als ~Extension exportieren";
         Text [ en-US ] = "Export as ~extension";
         TabStop = TRUE ;
     };
@@ -429,26 +398,22 @@ ModalDialog RID_DLG_EXPORT
         Pos = MAP_APPFONT( 6, 19 );
         Size = MAP_APPFONT( 103, 10 );
         //Group = TRUE;
-        Text [ de ] = "Als ~BASIC Bibliothek exportieren";
         Text [ en-US ] = "Export as BASIC library";
     };
 };
 
 String RID_STR_EXPORTPACKAGE
 {
-    Text [ de ] = "Bibliothek als Extension exportieren";
     Text [ en-US ] = "Export library as extension";
 };
 
 String RID_STR_EXPORTBASIC
 {
-    Text [ de ] = "Als BASIC Bibliothek exportieren";
     Text [ en-US ] = "Export as BASIC library";
 };
 
 String RID_STR_PACKAGE_BUNDLE
 {
     Text [ en-US ] = "Extension";
-    Text [ de ] = "Extension";
 };
 
