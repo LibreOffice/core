@@ -4,9 +4,9 @@
  *
  *  $RCSfile: test.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:50:49 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:22:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,24 +42,19 @@ TabPage RID_SVXPAGE_POSITION
 {
     HelpId = HID_TRANS_POSITION ;
     Hide = TRUE ;
-    Text [ de ] = "Position" ;
     Text [ en-US ] = "Position" ;
     Size = MAP_APPFONT ( 189 , 97 ) ;
     FixedText FT_POS_X
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
-        Text [ de ] = "Position ~X" ;
         Text [ en-US ] = "Position ~X";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POS_Y
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
-        Text [ de ] = "Position ~Y" ;
         Text [ en-US ] = "Position ~Y";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -95,9 +90,7 @@ TabPage RID_SVXPAGE_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 105 , 42 ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
-        Text [ x-comment ] = " ";
     };
     Control CTL_RECT
     {
@@ -106,27 +99,21 @@ TabPage RID_SVXPAGE_POSITION
         Pos = MAP_APPFONT ( 120 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 39 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Basispunkt" ;
         QuickHelpText [ en-US ] = "Base point" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     GroupBox GB_ANCHOR
     {
         Pos = MAP_APPFONT ( 6 , 50 ) ;
         Size = MAP_APPFONT ( 105 , 41 ) ;
-        Text [ de ] = "Verankerung" ;
         Hide = TRUE ;
         Text [ en-US ] = "Anchoring" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ANCHOR
     {
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
-        Text [ de ] = "~Anker" ;
         Hide = TRUE ;
         Text [ en-US ] = "~Anchor" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ANCHOR
     {
@@ -134,14 +121,6 @@ TabPage RID_SVXPAGE_POSITION
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Am Absatz" ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 2 : Als Zeichen*/
-            < "Als Zeichen" ; > ;
-            < "An der Seite" ; > ;
-            < "Am Rahmen" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "To Paragraph" ; > ;
@@ -149,13 +128,6 @@ TabPage RID_SVXPAGE_POSITION
             < "To Page" ; > ;
             < "To Frame" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     FixedText FT_ORIENT
     {
@@ -170,19 +142,6 @@ TabPage RID_SVXPAGE_POSITION
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Von oben" ; > ;
-            < "Oben" ; > ;
-            < "Zentriert" ; > ;
-            < "Unten" ; > ;
-            < "Zeichen oben" ; > ;
-            < "Zeichen zentriert" ; > ;
-            < "Zeichen unten" ; > ;
-            < "Zeile oben" ; > ;
-            < "Zeile zentriert" ; > ;
-            < "Zeile unten" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "From Top" ; > ;
@@ -196,19 +155,6 @@ TabPage RID_SVXPAGE_POSITION
             < "Center of line" ; > ;
             < "Bottom of line" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     TriStateBox TSB_PROTECT
     {
@@ -216,12 +162,9 @@ TabPage RID_SVXPAGE_POSITION
         Size = MAP_APPFONT ( 60 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
-        Text [ de ] = "Sch~√ºtzen" ;
         Text [ en-US ] = "Pr~otect" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_SIZE ---------------------------------------------------------
 TabPage RID_SVXPAGE_SIZE
@@ -230,16 +173,13 @@ TabPage RID_SVXPAGE_SIZE
     Hide = TRUE ;
     /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
     /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
-    Text [ de ] = "Gr√∂√üe" ;
     Text [ en-US ] = "Size" ;
     Size = MAP_APPFONT ( 189 , 97 ) ;
     FixedText FT_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 23 , 10 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "Wi~dth" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_HEIGHT
     {
@@ -247,9 +187,7 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 23 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? H~îhe : H~ˆhe */
         /* ### ACHTUNG: Neuer Text in Resource? H~îhe : H~ˆhe */
-        Text [ de ] = "H~√∂he" ;
         Text [ en-US ] = "H~eight" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_WIDTH
     {
@@ -288,18 +226,14 @@ TabPage RID_SVXPAGE_SIZE
         Pos = MAP_APPFONT ( 120 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 39 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Basispunkt" ;
         QuickHelpText [ en-US ] = "Base point" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     CheckBox CBX_SCALE
     {
         Pos = MAP_APPFONT ( 6 , 54 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Abgleich" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Keep ratio" ;
-        Text [ x-comment ] = " ";
     };
     GroupBox GRP_SIZE
     {
@@ -307,9 +241,7 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 105 , 42 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
         /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
-        Text [ de ] = "Gr√∂√üe" ;
         Text [ en-US ] = "Size" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_PROTECT
     {
@@ -317,19 +249,15 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 60 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
         /* ### ACHTUNG: Neuer Text in Resource? Sch~Åtzen : Sch~¸tzen */
-        Text [ de ] = "Sch~√ºtzen" ;
         Text [ en-US ] = "Pr~otect" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
         Pos = MAP_APPFONT ( 6 , 66 ) ;
         Size = MAP_APPFONT ( 95 , 12 ) ;
-        Text [ de ] = "Br~eite an Text anpassen" ;
         Text [ en-US ] = "~Fit width to text" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
@@ -337,36 +265,28 @@ TabPage RID_SVXPAGE_SIZE
         Size = MAP_APPFONT ( 95 , 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hîh~e an Text anpassen : Hˆh~e an Text anpassen */
         /* ### ACHTUNG: Neuer Text in Resource? Hîh~e an Text anpassen : Hˆh~e an Text anpassen */
-        Text [ de ] = "H√∂h~e an Text anpassen" ;
         Text [ en-US ] = "Fit ~height to text" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_ANGLE --------------------------------------------------------
 TabPage RID_SVXPAGE_ANGLE
 {
     HelpId = HID_TRANS_ANGLE ;
     Hide = TRUE ;
-    Text [ de ] = "Winkel" ;
     Text [ en-US ] = "Angle" ;
     Size = MAP_APPFONT ( 189 , 97 ) ;
     FixedText FT_POS_X
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
-        Text [ de ] = "Position ~X" ;
         Text [ en-US ] = "Position ~X" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POS_Y
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
-        Text [ de ] = "Position ~Y" ;
         Text [ en-US ] = "Position ~Y" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -402,9 +322,7 @@ TabPage RID_SVXPAGE_ANGLE
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 26 , 10 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "~Angle" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -419,10 +337,8 @@ TabPage RID_SVXPAGE_ANGLE
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         CustomUnitText [ en-US ] = " degrees" ;
         SpinSize = 500 ;
-        CustomUnitText [ x-comment ] = " ";
     };
     Control CTL_RECT
     {
@@ -431,9 +347,7 @@ TabPage RID_SVXPAGE_ANGLE
         Pos = MAP_APPFONT ( 120 , 6 ) ;
         Size = MAP_APPFONT ( 60 , 39 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Rotationspunkt" ;
         QuickHelpText [ en-US ] = "Rotation point" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     Control CTL_ANGLE
     {
@@ -447,19 +361,14 @@ TabPage RID_SVXPAGE_ANGLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 105 , 42 ) ;
-        Text [ de ] = "Drehpunkt" ;
         Text [ en-US ] = "Pivot point" ;
-        Text [ x-comment ] = " ";
     };
     GroupBox GRP_ANGLE
     {
         Pos = MAP_APPFONT ( 6 , 50 ) ;
         Size = MAP_APPFONT ( 105 , 41 ) ;
-        Text [ de ] = "Drehwinkel" ;
         Text [ en-US ] = "Rotation angle" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_SLANT -----------------------------------------------------
 TabPage RID_SVXPAGE_SLANT
@@ -469,15 +378,12 @@ TabPage RID_SVXPAGE_SLANT
     Size = MAP_APPFONT ( 189 , 97 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
     /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
-    Text [ de ] = "Schr√§gstellen / Eckenradius" ;
     Text [ en-US ] = "Slant / Corner Radius" ;
     FixedText FT_RADIUS
     {
         Pos = MAP_APPFONT ( 12 , 23 ) ;
         Size = MAP_APPFONT ( 33 , 10 ) ;
-        Text [ de ] = "~Radius" ;
         Text [ en-US ] = "~Radius" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_RADIUS
     {
@@ -498,9 +404,7 @@ TabPage RID_SVXPAGE_SLANT
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "~Angle" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -517,10 +421,8 @@ TabPage RID_SVXPAGE_SLANT
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         SpinSize = 500 ;
         CustomUnitText [ en-US ] = " degrees" ;
-        CustomUnitText [ x-comment ] = " ";
     };
     /*
     Control CTL_ANGLE
@@ -535,9 +437,7 @@ TabPage RID_SVXPAGE_SLANT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 105 , 42 ) ;
-        Text [ de ] = "Eckenradius" ;
         Text [ en-US ] = "Corner radius" ;
-        Text [ x-comment ] = " ";
     };
     GroupBox GRP_SLANT
     {
@@ -545,9 +445,7 @@ TabPage RID_SVXPAGE_SLANT
         Size = MAP_APPFONT ( 105 , 41 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen : Schr‰gstellen */
         /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen : Schr‰gstellen */
-        Text [ de ] = "Schr√§gstellen" ;
         Text [ en-US ] = "Slant" ;
-        Text [ x-comment ] = " ";
     };
     /*
     TriStateBox TSB_VERTICAL
@@ -558,7 +456,6 @@ TabPage RID_SVXPAGE_SLANT
         TabStop = TRUE;
     };
 */
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 TabDialog RID_SVXDLG_TRANSFORM
@@ -569,7 +466,6 @@ TabDialog RID_SVXDLG_TRANSFORM
     Size = MAP_APPFONT ( 237 , 161 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Position und Grî·e : Position und Grˆﬂe */
     /* ### ACHTUNG: Neuer Text in Resource? Position und Grî·e : Position und Grˆﬂe */
-    Text [ de ] = "Position und Gr√∂√üe" ;
     Text [ en-US ] = "Position and Size" ;
     Moveable = TRUE ;
     TabControl TAB_CONTROL
@@ -582,42 +478,33 @@ TabDialog RID_SVXDLG_TRANSFORM
             PageItem
             {
                 Identifier = RID_SVXPAGE_POSITION ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position" ;
                 PageResID = RID_SVXPAGE_POSITION ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_SIZE ;
                 /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
                 /* ### ACHTUNG: Neuer Text in Resource? Grî·e : Grˆﬂe */
-                Text [ de ] = "Gr√∂√üe" ;
                 Text [ en-US ] = "Size" ;
                 PageResID = RID_SVXPAGE_SIZE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_ANGLE ;
-                Text [ de ] = "Drehung" ;
                 Text [ en-US ] = "Rotation" ;
                 PageResID = RID_SVXPAGE_ANGLE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_SLANT ;
                 /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
                 /* ### ACHTUNG: Neuer Text in Resource? SchrÑgstellen / Eckenradius : Schr‰gstellen / Eckenradius */
-                Text [ de ] = "Schr√§gstellen / Eckenradius" ;
                 PageResID = RID_SVXPAGE_SLANT ;
                 Text [ en-US ] = "Slant / Corner Radius" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
