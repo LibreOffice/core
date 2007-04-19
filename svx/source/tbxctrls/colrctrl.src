@@ -4,9 +4,9 @@
  *
  *  $RCSfile: colrctrl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 00:46:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ DockingWindow RID_SVXCTRL_COLOR
     Dockable = TRUE ;
     EnableResizing = TRUE ;
     Size = MAP_APPFONT ( 150 , 22 ) ;
-    Text [ de ] = "Farben" ;
     Text [ en-US ] = "Colors" ;
     Control 1
     {
@@ -61,7 +60,6 @@ DockingWindow RID_SVXCTRL_COLOR
         Size = MAP_APPFONT ( 146 , 18 ) ;
         Border = FALSE ;
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
