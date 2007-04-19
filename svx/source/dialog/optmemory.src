@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:37:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,14 +49,12 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW0 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Rückgängig" ;
         Text [ en-US ] = "Undo" ;
     };
     FixedText FT_UNDO
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW1 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "A~nzahl der Schritte" ;
         Text [ en-US ] = "Number of steps";
     };
     NumericField ED_UNDO
@@ -80,14 +78,12 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW2 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Grafik-Cache" ;
         Text [ en-US ] = "Graphics cache";
     };
     FixedText FT_GRAPHICCACHE
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW3 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Verwenden für %PRODUCTNAME" ;
         Text [ en-US ] = "Use for %PRODUCTNAME";
     };
     NumericField NF_GRAPHICCACHE
@@ -105,14 +101,12 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL5, OFFS_TEXTBOX_FIXEDTEXT( ROW3 ) );
         Size = MAP_APPFONT( WIDTH3, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "MB" ;
         Text [ en-US ] = "MB";
     };
     FixedText FT_GRAPHICOBJECTCACHE
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW4 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Speicher pro Objekt" ;
         Text [ en-US ] = "Memory per object" ;
     };
     NumericField NF_GRAPHICOBJECTCACHE
@@ -131,14 +125,12 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL5, OFFS_TEXTBOX_FIXEDTEXT( ROW4 ) );
         Size = MAP_APPFONT( WIDTH3, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "MB" ;
         Text [ en-US ] = "MB";
     };
     FixedText FT_GRAPHICOBJECTTIME
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW5 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Aus Speicher entfernen nach" ;
         Text [ en-US ] = "Remove from memory after";
     };
     TimeField TF_GRAPHICOBJECTTIME
@@ -179,21 +171,18 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL5, OFFS_TEXTBOX_FIXEDTEXT( ROW5 ) );
         Size = MAP_APPFONT( WIDTH3, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "hh:mm" ;
         Text [ en-US ] = "hh:mm";
     };
     FixedLine GB_OLECACHE
     {
         Pos = MAP_APPFONT( COL0, ROW6 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "Cache für eingefügte Objekte" ;
         Text [ en-US ] = "Cache for inserted objects";
     };
     FixedText FT_OLECACHE
     {
         Pos = MAP_APPFONT( COL1, OFFS_TEXTBOX_FIXEDTEXT( ROW7 ) );
         Size = MAP_APPFONT( WIDTH1, RSC_CD_FIXEDTEXT_HEIGHT );
-        Text [ de ] = "Anzahl der Objekte" ;
         Text [ en-US ] = "Number of objects";
     };
     NumericField NF_OLECACHE
@@ -210,29 +199,17 @@ TabPage OFA_TP_MEMORY
     {
         Pos = MAP_APPFONT( COL0, ROW8 );
         Size = MAP_APPFONT( WHOLE_WIDTH, RSC_CD_FIXEDLINE_HEIGHT );
-        Text [ de ] = "%PRODUCTNAME Schnellstart" ;
         Text [ en-US ] = "%PRODUCTNAME Quickstarter";
     };
     CheckBox CB_QUICKLAUNCH
     {
         Pos = MAP_APPFONT( COL1, ROW9 );
         Size = MAP_APPFONT( WHOLE_WIDTH - COL1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "%PRODUCTNAME beim ~Systemstart laden" ;
         Text [ en-US ] = "Load %PRODUCTNAME during system start-up";
     };
     String STR_QUICKLAUNCH_UNX
     {
     Text[ en-US ] = "Enable systray quickstarter";
-    Text[ de ] = "Schnellstart des Systemabschnitts der Kontrollleiste aktivieren";
-    Text[ cs ] = "Umožnit rychlé spouštění z panelu";
-    Text[ es ] = "Habilitar Quickstarter en bandeja del sistema";
-    Text[ fr ] = "Activer systray quickstarter";
-    Text[ it ] = "Abilita quickstarter systray";
-    Text[ ja ] = "Systray quickstarterの有効化";
-    Text[ pt-BR ] = "Habilitar quickstarter de systray";
-    Text[ zh-CN ] = "启用系统盘快速启动程序";
-    Text[ zh-TW ] = "啟用 systray quickstarter";
-    Text [ x-comment ] = " ";
     };
 };
 
