@@ -4,9 +4,9 @@
  *
  *  $RCSfile: res_DataLabel_tmpl.hrc,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:12:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:02:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ CheckBox CB_VALUE \
     Pos = MAP_APPFONT ( xpos , ypos  ) ; \
     Size = MAP_APPFONT ( 120 , 10 ) ; \
     TabStop = TRUE ; \
-    Text [ de ] = "~Wert anzeigen" ; \
     Text [ en-US ] = "Show ~value" ; \
     Text [ x-comment ] = " "; \
 };   \
@@ -50,7 +49,6 @@ RadioButton RB_NUMBER \
     Pos = MAP_APPFONT ( xpos+9 , ypos+14  ) ; \
     Size = MAP_APPFONT ( 110 , 10 ) ; \
     TabStop = TRUE ; \
-    Text [ de ] = "als ~Zahl" ; \
     Text [ en-US ] = "as ~number"; \
     Text [ x-comment ] = " "; \
 }; \
@@ -59,7 +57,6 @@ RadioButton RB_PERCENT \
     Pos = MAP_APPFONT ( xpos+9 , ypos+28  ) ; \
     Size = MAP_APPFONT ( 110 , 10 ) ; \
     TabStop = TRUE ; \
-    Text [ de ] = "in ~Prozent" ; \
     Text [ en-US ] = "as ~percentage"; \
 }; \
 CheckBox CB_TEXT \
@@ -67,7 +64,6 @@ CheckBox CB_TEXT \
     Pos  = MAP_APPFONT ( xpos , ypos+42  ); \
     Size = MAP_APPFONT ( 120 , 10 ); \
     TabStop = TRUE; \
-    Text [ de ] = "~Beschriftungstext anzeigen"; \
     Text [ en-US ] = "Sho~w label text"; \
     Text [ x-comment ] = " "; \
 }; \
@@ -76,7 +72,6 @@ CheckBox CB_SYMBOL \
     Pos  = MAP_APPFONT ( xpos , ypos+56  ) ; \
     Size = MAP_APPFONT ( 182 , 10 ) ; \
     TabStop = TRUE ; \
-    Text [ de ] = "~Legendensymbol neben Beschriftung anzeigen" ; \
     Text [ en-US ] = "~Show legend icon with label" ; \
 };
 
