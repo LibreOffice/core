@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rtsetup.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 16:43:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ TabDialog RID_RTS_RTSDIALOG
     Moveable = TRUE;
     Closeable = TRUE;
     SVLook = TRUE;
-    Text [ de ] = "Eigenschaften von %s" ;
 
     TabControl RID_RTS_RTSDIALOG_TABCONTROL
     {
@@ -50,43 +49,36 @@ TabDialog RID_RTS_RTSDIALOG
             PageItem
             {
                 Identifier = RID_RTS_COMMANDPAGE;
-                Text [ de ] = "Kommando";
                 Text [ en-US ] = "Command";
             };
             PageItem
             {
                 Identifier = RID_RTS_PAPERPAGE;
-                Text [ de ] = "Papier";
                 Text [ en-US ] = "Paper";
             };
             PageItem
             {
                 Identifier = RID_RTS_DEVICEPAGE;
-                Text [ de ] = "Gerät";
                 Text [ en-US ] = "Device";
             };
             PageItem
             {
                 Identifier = RID_RTS_FONTSUBSTPAGE;
-                Text [ de ] = "Schriftersetzung";
                 Text [ en-US ] = "Font Replacement";
             };
             PageItem
             {
                 Identifier = RID_RTS_OTHERPAGE;
-                Text [ de ] = "Weitere Einstellungen";
                 Text [ en-US ] = "Other Settings";
             };
         };
     };
     String RID_RTS_RTSDIALOG_FROMDRIVER_TXT
     {
-        Text [ de ] = "laut Treiber";
         Text [ en-US ] = "from driver";
     };
     String RID_RTS_RTSDIALOG_INVALID_TXT
     {
-        Text [ de ] = "<ignorieren>";
         Text [ en-US ] = "<ignore>";
     };
     Text [ en-US ] = "Properties of %s";
@@ -100,7 +92,6 @@ TabPage RID_RTS_PAPERPAGE
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ de ] = "~Papierformat";
         Text [ en-US ] = "~Paper size";
     };
     ListBox RID_RTS_PAPER_PAPER_BOX
@@ -114,7 +105,6 @@ TabPage RID_RTS_PAPERPAGE
     {
         Pos = MAP_APPFONT( 5, 20 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ de ] = "~Orientierung";
         Text [ en-US ] = "~Orientation";
     };
     ListBox RID_RTS_PAPER_ORIENTATION_BOX
@@ -128,7 +118,6 @@ TabPage RID_RTS_PAPERPAGE
     {
         Pos = MAP_APPFONT( 5, 35 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ de ] = "~Duplex";
         Text [ en-US ] = "~Duplex";
     };
     ListBox RID_RTS_PAPER_DUPLEX_BOX
@@ -142,7 +131,6 @@ TabPage RID_RTS_PAPERPAGE
     {
         Pos = MAP_APPFONT( 5, 50 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ de ] = "Pap~ierschacht";
         Text [ en-US ] = "Paper tray";
     };
     ListBox RID_RTS_PAPER_SLOT_BOX
@@ -161,12 +149,10 @@ TabPage RID_RTS_DEVICEPAGE
 
     String RID_RTS_DEVICE_COLOR_TXT
     {
-        Text [ de ] = "Farbe";
         Text [ en-US ] = "Color";
     };
     String RID_RTS_DEVICE_GRAY_TXT
     {
-        Text [ de ] = "Graustufen";
         Text [ en-US ] = "Grayscale";
     };
 
@@ -174,7 +160,6 @@ TabPage RID_RTS_DEVICEPAGE
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 85, 8 );
-        Text [ de ] = "~Option";
         Text [ en-US ] = "~Option";
     };
     ListBox RID_RTS_DEVICE_PPDKEY_BOX
@@ -187,7 +172,6 @@ TabPage RID_RTS_DEVICEPAGE
     {
         Pos = MAP_APPFONT( 120, 5 );
         Size = MAP_APPFONT( 105, 8 );
-        Text [ de ] = "Aktueller ~Wert";
         Text [ en-US ] = "Current ~value";
     };
     ListBox RID_RTS_DEVICE_PPDVALUE_BOX
@@ -201,7 +185,6 @@ TabPage RID_RTS_DEVICEPAGE
     {
         Pos = MAP_APPFONT( 5, 130 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ de ] = "PostScript ~Level";
         Text [ en-US ] = "PostScript ~Level";
     };
     ListBox RID_RTS_DEVICE_LEVEL_BOX
@@ -214,7 +197,6 @@ TabPage RID_RTS_DEVICEPAGE
     {
         Pos = MAP_APPFONT( 5, 145 );
         Size = MAP_APPFONT( 100, 8 );
-        Text [ de ] = "~Farbe";
         Text [ en-US ] = "~Color";
     };
     ListBox RID_RTS_DEVICE_SPACE_BOX
@@ -227,7 +209,6 @@ TabPage RID_RTS_DEVICEPAGE
     {
         Pos = MAP_APPFONT( 5, 160 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ de ] = "Farb~tiefe";
         Text [ en-US ] = "Color ~depth";
     };
     ListBox RID_RTS_DEVICE_DEPTH_BOX
@@ -252,7 +233,6 @@ TabPage RID_RTS_FONTSUBSTPAGE
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 180, 10 );
-        Text [ de ] = "~Schriftersetzung einschalten";
         Text [ en-US ] = "~Enable font replacement";
     };
 
@@ -260,7 +240,6 @@ TabPage RID_RTS_FONTSUBSTPAGE
     {
         Pos = MAP_APPFONT( 5,20 );
         Size = MAP_APPFONT( 180, 8 );
-        Text [ de ] = "Ersetzte S~chriften";
         Text [ en-US ] = "Replaced ~fonts";
     };
     MultiListBox RID_RTS_FS_SUBST_BOX
@@ -276,21 +255,18 @@ TabPage RID_RTS_FONTSUBSTPAGE
     {
         Pos = MAP_APPFONT( 5, 125 );
         Size = MAP_APPFONT( 107, 12 );
-        Text [ de ] = "~Hinzufügen";
         Text [ en-US ] = "~Add";
     };
     PushButton RID_RTS_FS_REMOVE_BTN
     {
         Pos = MAP_APPFONT( 117, 125 );
         Size = MAP_APPFONT( 107, 12 );
-        Text [ de ] = "~Entfernen";
         Text [ en-US ] = "~Remove";
     };
     FixedText RID_RTS_FS_FROM_TXT
     {
         Pos = MAP_APPFONT( 5, 145 );
         Size = MAP_APPFONT( 107, 8 );
-        Text [ de ] = "E~rsetze Schriftart";
         Text [ en-US ] = "Repla~ce font";
     };
     ComboBox RID_RTS_FS_FROM_BOX
@@ -305,7 +281,6 @@ TabPage RID_RTS_FONTSUBSTPAGE
     {
         Pos = MAP_APPFONT( 117, 145 );
         Size = MAP_APPFONT( 107, 8 );
-        Text [ de ] = "durch ~Druckerschriftart";
         Text [ en-US ] = "by ~printer font";
     };
     ListBox RID_RTS_FS_TO_BOX
@@ -334,22 +309,18 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 220 , 8 ) ;
-        Text [ de ] = "Kommando auswählen" ;
         Text [ en-US ] = "Select command";
     };
     String RID_RTS_CMD_STR_CONFIGURE_PRINTER
     {
-        Text [ de ] = "Drucker";
         Text [ en-US ] = "Printer";
     };
     String RID_RTS_CMD_STR_CONFIGURE_FAX
     {
-        Text [ de ] = "Fax";
         Text [ en-US ] = "Fax";
     };
     String RID_RTS_CMD_STR_CONFIGURE_PDF
     {
-        Text [ de ] = "PDF-Konverter";
         Text [ en-US ] = "PDF converter";
     };
 
@@ -364,7 +335,6 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Pos = MAP_APPFONT( 11, 56 );
         Size = MAP_APPFONT( 85, 10 );
-        Text [ de ] = "~Konfigurieren als";
         Text [ en-US ] = "~Configure as";
     };
 
@@ -372,14 +342,12 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Pos = MAP_APPFONT( 11, 146 );
         Size = MAP_APPFONT( 130, 8 );
-        Text [ de ] = "~Faxnummer wird aus der Ausgabe entfernt";
         Text [ en-US ] = "~Fax number will be removed from output";
     };
     FixedText RID_RTS_CMD_TXT_PDFDIR
     {
         Pos = MAP_APPFONT( 11, 146 );
         Size = MAP_APPFONT( 130, 8 );
-        Text [ de ] = "PDF Zielverzeichnis :";
         Text [ en-US ] = "PDF target directory :";
     };
     Edit RID_RTS_CMD_EDT_PDFDIR
@@ -403,43 +371,36 @@ TabPage RID_RTS_COMMANDPAGE
     {
         Pos = MAP_APPFONT ( 11 , 26 ) ;
         Size = MAP_APPFONT ( 210 , 8 ) ;
-        Text [ de ] = "Kommando: " ;
         Text [ en-US ] = "Command: ";
     };
     FixedLine RID_RTS_CMD_FL_DEFAULT
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 220 , 8 ) ;
-        Text [ de ] = "Drucker" ;
         Text [ en-US ] = "Printer";
     };
     PushButton RID_RTS_CMD_BTN_HELP
     {
         Pos = MAP_APPFONT( 170, 55 );
         Size = MAP_APPFONT( 50, 12 );
-        Text [ de ] = "~Hilfe";
         Text [ en-US ] = "~Help";
     };
     PushButton RID_RTS_CMD_BTN_REMOVE
     {
         Pos = MAP_APPFONT( 170, 72 );
         Size = MAP_APPFONT( 50, 12 );
-        Text [ de ] = "~Entfernen";
         Text [ en-US ] = "~Remove";
     };
     String RID_RTS_CMD_STR_PDFHELP
     {
-        Text [ de ] = "Die Kommandozeile bei PDF-Konvertern wird wie folgt verarbeitet: bei jedem gedruckten Dokument wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(OUTFILE)\" durch die zu erzeugende PDF Datei ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
         Text [ en-US ] = "The command line for PDF converters is executed as follows: for each document printed, \"(TMP)\" in the command line is replaced by a temporary file and \"(OUTFILE)\" in the command line is replaced by the target PDF file name. If \"(TMP)\" is in the command line, the PostScript code will be supplied via a file, otherwise via standard input (i.e. as a pipe).";
     };
     String RID_RTS_CMD_STR_PRINTERHELP
     {
-        Text [ de ] = "Die Kommandozeile bei Druckern wird wie folgt verarbeitet: der erzeugte PostScript-code wird der Kommandozeile als Standardeingabe (d.h. als Pipe) übergeben.";
         Text [ en-US ] = "The command line for printer devices is executed as follows: the generated PostScript code is supplied as standard input (i.e. as a pipe) to the command line.";
     };
     String RID_RTS_CMD_STR_FAXHELP
     {
-        Text [ de ] = "Die Kommandozeile bei Faxgeräten wird wie folgt verarbeitet: bei jedem gesendeten Fax wird in der Kommandozeile jeweils \"(TMP)\" durch eine temporäre Datei und \"(PHONE)\" durch die Faxnummer ersetzt. Wenn \"(TMP)\" in der Kommandozeile vorkommt wird der PostScript-code in einer Datei übergeben, andernfalls über die Standardeingabe (d.h. als Pipe)." ;
         Text [ en-US ] = "The command line for fax devices is executed as follows: for each fax sent, \"(TMP)\" in the command line is replaced by a temporary file and \"(PHONE)\" in the command line is replaced by the fax number. If \"(TMP)\" appears in the command line, the PostScript code will be supplied via a file, otherwise it is passed as standard input (i.e. as a pipe).";
     };
 };
@@ -453,7 +414,6 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 85, 8 );
-        Text [ de ] = "~Linker Rand" ;
         Text [ en-US ] = "~Left margin";
     };
     MetricField RID_RTS_OTHER_LEFTMARGIN_BOX
@@ -470,7 +430,6 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 20 );
         Size = MAP_APPFONT( 85, 8 );
-        Text [ de ] = "~Oberer Rand" ;
         Text [ en-US ] = "~Top margin";
     };
     MetricField RID_RTS_OTHER_TOPMARGIN_BOX
@@ -487,7 +446,6 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 35 );
         Size = MAP_APPFONT( 85, 8 );
-        Text [ de ] = "~Rechter Rand" ;
         Text [ en-US ] = "~Right margin";
     };
     MetricField RID_RTS_OTHER_RIGHTMARGIN_BOX
@@ -504,7 +462,6 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 50 );
         Size = MAP_APPFONT( 85, 8 );
-        Text [ de ] = "~Unterer Rand" ;
         Text [ en-US ] = "~Bottom margin";
     };
     MetricField RID_RTS_OTHER_BOTTOMMARGIN_BOX
@@ -521,7 +478,6 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 5, 65 );
         Size = MAP_APPFONT( 85, 8 );
-        Text [ de ] = "~Kommentar" ;
         Text [ en-US ] = "~Comment";
     };
     Edit RID_RTS_OTHER_COMMENT_EDT
@@ -534,20 +490,17 @@ TabPage RID_RTS_OTHERPAGE
     {
         Pos = MAP_APPFONT( 175, 5 );
         Size = MAP_APPFONT( 50, 12 );
-        Text [ de ] = "~Standard";
         Text [ en-US ] = "~Default";
     };
 };
 
 String RID_TXT_QUERYFAXNUMBER
 {
-    Text [ de ] = "Bitte geben Sie die Faxnummer ein.";
     Text [ en-US ] = "Please enter the fax number.";
 };
 
 ModalDialog RID_RTS_PWDIALOG
 {
-    Text [ de ] = "Authentifizierungsanfrage";
     Text [ en-US ] = "Authentication request";
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -560,14 +513,12 @@ ModalDialog RID_RTS_PWDIALOG
         Pos = MAP_APPFONT( 5, 5 );
         Size = MAP_APPFONT( 140, 20 );
         WordBreak = TRUE;
-        Text [ de ] = "Bitte geben Sie die Authentifizierungsdaten für den Server %s ein";
         Text [ en-US ] = "Please enter your authentication data for server %s";
     };
     FixedText RID_RTS_PWDIALOG_USER_TXT
     {
         Pos = MAP_APPFONT( 5, 30 );
         Size = MAP_APPFONT( 60, 10 );
-        Text [ de ] = "~Benutzer";
         Text [ en-US ] = "~User";
     };
     Edit RID_RTS_PWDIALOG_USER_EDT
@@ -580,7 +531,6 @@ ModalDialog RID_RTS_PWDIALOG
     {
         Pos = MAP_APPFONT( 5, 45 );
         Size = MAP_APPFONT( 60, 10 );
-        Text [ de ] = "~Passwort";
         Text [ en-US ] = "~Password";
     };
     Edit RID_RTS_PWDIALOG_PASS_EDT
