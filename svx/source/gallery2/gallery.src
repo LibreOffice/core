@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gallery.src,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:54:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:29:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ DockingWindow RID_SVXDLG_GALLERYBROWSER
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 211, 100 ) ;
-    Text [ de ] = "Gallery";
     Text [ en-US ] = "Gallery";
     Sizeable = TRUE;
     Moveable = TRUE ;
@@ -87,9 +86,7 @@ TabDialog RID_SVXTABDLG_GALLERY
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Eigenschaften von " ;
     Text [ en-US ] = "Properties of " ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     TabControl 1
     {
@@ -99,9 +96,7 @@ TabDialog RID_SVXTABDLG_GALLERY
             PageItem
             {
                 Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
-                Text [ de ] = "Allgemein" ;
                 Text [ en-US ] = "General" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -113,9 +108,7 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Eigenschaften von " ;
     Text [ en-US ] = "Properties of " ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     TabControl 1
     {
@@ -125,16 +118,12 @@ TabDialog RID_SVXTABDLG_GALLERYTHEME
             PageItem
             {
                 Identifier = RID_SVXTABPAGE_GALLERY_GENERAL ;
-                Text [ de ] = "Allgemein" ;
                 Text [ en-US ] = "General" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXTABPAGE_GALLERYTHEME_FILES ;
-                Text [ de ] = "Dateien" ;
                 Text [ en-US ] = "Files" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -168,10 +157,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "Typ:" ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Type:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_MS_SHOW_TYPE
     {
@@ -182,10 +169,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , 57 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "Ort:" ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Location:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_MS_SHOW_PATH
     {
@@ -196,10 +181,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , 71 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "Inhalt:" ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Contents:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_MS_SHOW_CONTENT
     {
@@ -215,10 +198,8 @@ TabPage RID_SVXTABPAGE_GALLERY_GENERAL
     {
         Pos = MAP_APPFONT ( 6 , 98 ) ;
         Size = MAP_APPFONT ( 51 , 10 ) ;
-        Text [ de ] = "Geändert am:" ;
         LeftLabel = TRUE ;
         Text [ en-US ] = "Modified:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_MS_SHOW_CHANGEDATE
     {
@@ -239,9 +220,7 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Dateityp" ;
         Text [ en-US ] = "~File type" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox CBB_FILETYPE
     {
@@ -264,36 +243,28 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     {
         Pos = MAP_APPFONT ( 184 , 6  ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
-        Text [ de ] = "Dateien su~chen..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Find Files..." ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_TAKE
     {
         Pos = MAP_APPFONT ( 184 , 24  ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
-        Text [ de ] = "~Hinzufügen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Add" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_TAKEALL
     {
         Pos = MAP_APPFONT ( 184 , 42 ) ;
         Size = MAP_APPFONT ( 70 , 14 ) ;
-        Text [ de ] = "~Alle hinzufügen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "A~dd All" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_PREVIEW
     {
         Pos = MAP_APPFONT ( 184 , 76  ) ;
         Size = MAP_APPFONT ( 70 , 12 ) ;
-        Text [ de ] = "V~orschau" ;
         Text [ en-US ] = "Pr~eview" ;
-        Text [ x-comment ] = " ";
     };
     Window WND_BRSPRV
     {
@@ -306,19 +277,15 @@ TabPage RID_SVXTABPAGE_GALLERYTHEME_FILES
     {
         Pos = MAP_APPFONT ( 220 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Maddin1" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Maddin1" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_MADDIN2
     {
         Pos = MAP_APPFONT ( 220 , 80 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Maddin2" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Maddin2" ;
-        Text [ x-comment ] = " ";
     };
 };
 
@@ -331,7 +298,6 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     Border = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 63 ) ;
-    Text [ de ] = "Titel eingeben" ;
     Text [ en-US ] = "Enter Title" ;
     Moveable = TRUE ;
 
@@ -359,7 +325,6 @@ ModalDialog RID_SVXDLG_GALLERY_TITLE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Titel" ;
         Text [ en-US ] = "Title" ;
     };
     Edit EDT_TITLE
@@ -380,17 +345,13 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     Border = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 124 , 86 ) ;
-    Text [ de ] = "Suchen" ;
     Text [ en-US ] = "Find" ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedLine FL_SEARCH_DIR
     {
         Pos = MAP_APPFONT ( 6 , 33 ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ de ] = "Verzeichnis" ;
         Text [ en-US ] = "Directory" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SEARCH_DIR
     {
@@ -407,9 +368,7 @@ ModalDialog RID_SVXDLG_GALLERY_SEARCH_PROGRESS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ de ] = "Dateityp" ;
         Text [ en-US ] = "File type" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SEARCH_TYPE
     {
@@ -427,17 +386,13 @@ ModalDialog RID_SVXDLG_GALLERY_TAKE_PROGRESS
     Border = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 124 , 56 ) ;
-    Text [ de ] = "Übernehmen" ;
     Text [ en-US ] = "Apply" ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedLine FL_TAKE_PROGRESS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ de ] = "Datei" ;
         Text [ en-US ] = "File" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TAKE_FILE
     {
@@ -461,17 +416,13 @@ ModalDialog RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS
     Border = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 124 , 56 ) ;
-    Text [ de ] = "Aktualisieren" ;
     Text [ en-US ] = "Update" ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedLine FL_ACTUALIZE_PROGRESS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ de ] = "Datei" ;
         Text [ en-US ] = "File" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ACTUALIZE_FILE
     {
@@ -492,9 +443,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     Border = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 180 , 63 ) ;
-    Text [ de ] = "Themen-ID" ;
     Text [ en-US ] = "Theme ID" ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     OkButton BTN_OK
     {
@@ -513,9 +462,7 @@ ModalDialog RID_SVXDLG_GALLERY_THEMEID
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ de ] = "ID" ;
         Text [ en-US ] = "ID";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_RESNAME
     {
@@ -535,44 +482,31 @@ CheckBox RID_SVXDLG_GALLERY_CBX
 {
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 120 , 12 ) ;
-    Text [ de ] = "~Unterverzeichnisse";
     TabStop = TRUE ;
     Text [ en-US ] = "S~ubdirectories" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_ACTUALIZE_PROGRESS
 {
-    Text [ de ] = "Aktualisieren" ;
     Text [ en-US ] = "Update";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_FOPENERROR
 {
-    Text [ de ] = "Diese Datei kann nicht geöffnet werden" ;
     Text [ en-US ] = "This file cannot be opened" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_NOFILES
 {
-    Text [ de ] = "<Keine Dateien>" ;
     Text [ en-US ] = "<No Files>" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_NOTHEME
 {
-    Text [ de ] = "Der Themenname ist ungültig!" ;
     Text [ en-US ] = "Invalid Theme Name!" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_DELETEOBJ
 {
-    Text [ de ] = "Möchten Sie dieses Objekt\nwirklich löschen?" ;
     Text [ en-US ] = "Do you really want to\ndelete this object?" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_DELETETHEME
 {
-    Text [ de ] = "Möchten Sie dieses Thema\nwirklich löschen?" ;
     Text [ en-US ] = "Do you really want to\ndelete this theme?" ;
 };
 String RID_SVXSTR_EXTFORMAT1_SYS
@@ -581,9 +515,7 @@ String RID_SVXSTR_EXTFORMAT1_SYS
 };
 String RID_SVXSTR_EXTFORMAT1_UI
 {
-    Text [ de ] = "Wave - Klangdatei" ;
     Text [ en-US ] = "Wave - Sound File" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_EXTFORMAT2_SYS
 {
@@ -591,9 +523,7 @@ String RID_SVXSTR_EXTFORMAT2_SYS
 };
 String RID_SVXSTR_EXTFORMAT2_UI
 {
-    Text [ de ] = "Audio Interchange File Format" ;
     Text [ en-US ] = "Audio Interchange File Format" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_EXTFORMAT3_SYS
 {
@@ -601,136 +531,94 @@ String RID_SVXSTR_EXTFORMAT3_SYS
 };
 String RID_SVXSTR_EXTFORMAT3_UI
 {
-    Text [ de ] = "AU - Klangdatei" ;
     Text [ en-US ] = "AU - Sound File" ;
 };
 String RID_SVXSTR_GALLERY_FILTER
 {
-    Text [ de ] = "Grafikfilter" ;
     Text [ en-US ] = "Graphics filter" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_LENGTH
 {
-    Text [ de ] = "Länge:" ;
     Text [ en-US ] = "Length:" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_SIZE
 {
-    Text [ de ] = "Größe:" ;
     Text [ en-US ] = "Size:" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_DELETEDD
 {
-    Text [ de ] = "Möchten Sie die verknüpfte Datei löschen?" ;
     Text [ en-US ] = "Do you want to delete the linked file?" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_SEARCH
 {
-    Text [ de ] = "Möchten Sie die Dateiliste aktualisieren?" ;
     Text [ en-US ] = "Do you want to update the file list?" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_SGIERROR
 {
-    Text [ de ] = "Diese Datei kann nicht geöffnet werden.\nMöchten Sie einen anderen Suchpfad angeben? " ;
     Text [ en-US ] = "This file cannot be opened.\nDo you want to enter a different search path? " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_NEWTHEME
 {
-    Text [ de ] = "Neues Thema" ;
     Text [ en-US ] = "New Theme" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_BROWSER
 {
-    Text [ de ] = "~Verwaltung..." ;
     Text [ en-US ] = "~Organizer..." ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_THEMEERR
 {
-    Text [ de ] = "Dieser Themenname existiert bereits.\nBitte wählen Sie einen anderen Namen." ;
     Text [ en-US ] = "This theme name already exists.\nPlease choose a different one." ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERYPROPS_THEME
 {
-    Text [ de ] = "Thema;Themen" ;
     Text [ en-US ] = "Theme;Themes" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERYPROPS_OBJECT
 {
-    Text [ de ] = "Objekt;Objekte" ;
     Text [ en-US ] = "Object;Objects" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERYPROPS_GALTHEME
 {
-    Text [ de ] = "Gallery-Thema" ;
     Text [ en-US ] = "Gallery Theme" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_IMPORTTHEME
 {
-    Text [ de ] = "~Importieren..." ;
     Text [ en-US ] = "I~mport..." ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_CREATETHEME
 {
-    Text [ de ] = "Neues Thema..." ;
     Text [ en-US ] = "New Theme..." ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_READONLY
 {
-    Text [ de ] = " (schreibgeschützt)" ;
     Text [ en-US ] = " (read-only)" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_ALLFILES
 {
-    Text [ de ] = "<Alle Dateien>" ;
     Text [ en-US ] = "<All Files>" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_DIALOGID
 {
-    Text [ de ] = "ID vergeben" ;
     Text [ en-US ] = "Assign ID" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_ID_EXISTS
 {
-    Text [ de ] = "Diese ID existiert bereits..." ;
     Text [ en-US ] = "This ID already exists..." ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_TITLE
 {
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Title" ;
 };
 String RID_SVXSTR_GALLERY_PATH
 {
-    Text [ de ] = "Pfad" ;
     Text [ en-US ] = "Path" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_GALLERY_ICONVIEW
 {
-    Text [ de ] = "Symbolansicht" ;
     Text [ en-US ] = "Icon View";
 };
 String RID_SVXSTR_GALLERY_LISTVIEW
 {
-    Text [ de ] = "Detailansicht" ;
     Text [ en-US ] = "Detailed View";
 };
 
@@ -856,9 +744,7 @@ Menu RID_SVXMN_GALLERY1
         {
             Identifier = MN_ACTUALIZE;
             HelpId = HID_GALLERY_ACTUALIZE;
-            Text [ de ] = "~Aktualisieren" ;
             Text [ en-US ] = "Update";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -868,17 +754,13 @@ Menu RID_SVXMN_GALLERY1
         {
             Identifier = MN_DELETE ;
             HelpId = HID_GALLERY_MN_DELETE ;
-            Text [ de ] = "~Löschen" ;
             Text [ en-US ] = "~Delete" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_RENAME;
             HelpId = HID_GALLERY_RENAME;
-            Text [ de ] = "~Umbenennen" ;
             Text [ en-US ] = "~Rename" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -887,9 +769,7 @@ Menu RID_SVXMN_GALLERY1
         MenuItem
         {
             Identifier = MN_ASSIGN_ID;
-            Text [ de ] = "~ID vergeben" ;
             Text [ en-US ] = "Assign ~ID" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -899,9 +779,7 @@ Menu RID_SVXMN_GALLERY1
         {
             Identifier = MN_PROPERTIES;
             HelpId = HID_GALLERY_PROPERTIES;
-            Text [ de ] = "~Eigenschaften..." ;
             Text [ en-US ] = "Propert~ies..." ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -916,9 +794,7 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_ADDMENU ;
             HelpId = HID_GALLERY_MN_ADDMENU ;
-            Text [ de ] = "~Hinzufügen" ;
             Text [ en-US ] = "~Insert" ;
-            Text [ x-comment ] = " ";
             SubMenu = Menu
             {
                 ItemList =
@@ -927,17 +803,13 @@ Menu RID_SVXMN_GALLERY2
                     {
                         Identifier = MN_ADD ;
                         HelpId = HID_GALLERY_MN_ADD ;
-                        Text [ de ] = "~Kopie" ;
                         Text [ en-US ] = "~Copy" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_ADD_LINK ;
                         HelpId = HID_GALLERY_MN_ADD_LINK ;
-                        Text [ de ] = "~Verknüpfung" ;
                         Text [ en-US ] = "Link" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
@@ -947,9 +819,7 @@ Menu RID_SVXMN_GALLERY2
                     {
                         Identifier = MN_BACKGROUND ;
                         HelpId = HID_GALLERY_MN_BACKGROUND ;
-                        Text [ de ] = "~Hintergrund" ;
                         Text [ en-US ] = "Bac~kground" ;
-                        Text [ x-comment ] = " ";
                     };
                 };
             };
@@ -962,9 +832,7 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_PREVIEW ;
             HelpId = HID_GALLERY_MN_PREVIEW ;
-            Text [ de ] = "~Vorschau" ;
             Text [ en-US ] = "~Preview" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -974,7 +842,6 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_TITLE ;
             HelpId = HID_GALLERY_TITLE;
-            Text [ de ] = "~Titel" ;
             Text [ en-US ] = "~Title" ;
         };
         MenuItem
@@ -985,9 +852,7 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_DELETE ;
             HelpId = HID_GALLERY_MN_DELETE ;
-            Text [ de ] = "~Löschen" ;
             Text [ en-US ] = "~Delete" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -997,14 +862,12 @@ Menu RID_SVXMN_GALLERY2
         {
             Identifier = MN_COPYCLIPBOARD;
             HelpId = HID_GALLERY_MN_COPYCLIPBOARD;
-            Text [ de ] = "~Kopieren" ;
             Text [ en-US ] = "~Copy" ;
         };
         MenuItem
         {
             Identifier = MN_PASTECLIPBOARD;
             HelpId = HID_GALLERY_MN_PASTECLIPBOARD;
-            Text [ de ] = "~Einfügen" ;
             Text [ en-US ] = "~Insert" ;
         };
     };
