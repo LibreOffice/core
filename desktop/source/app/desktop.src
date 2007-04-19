@@ -4,9 +4,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: hr $ $Date: 2006-05-09 11:32:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:38:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,148 +38,121 @@
 
 String STR_RECOVER_QUERY
 {
-    Text [ de ] = "Soll die Datei \"$1\" wiederhergestellt werden?" ;
     Text [ en-US ] = "Should the file \"$1\" be restored?" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_RECOVER_TITLE
 {
-    Text [ de ] = "Datei-Wiederherstellung" ;
     Text [ en-US ] = "File Recovery" ;
-    Text [ x-comment ] = " ";
 };
 
 WarningBox STR_RECOVER_PREPARED
 {
-    Message [ de ] = "Es ist ein nicht behebbarer Fehler aufgetreten.\n\nAlle modifizierten Dateien wurden jedoch\ngesichert und können voraussichtlich beim nächsten\nProgrammstart wiederhergestellt werden." ;
     Message [ en-US ] = "An unrecoverable error has occurred.\n\nAll modified files have been saved and can\nprobably be recovered at program restart." ;
-    Message [ x-comment ] = " ";
 };
 
 String STR_BOOTSTRAP_ERR_CANNOT_START
 {
-    Text [ de ] = "Die Anwendung kann nicht gestartet werden. " ;
     Text [ en-US ] = "The application cannot be started. ";
 };
 
 String STR_BOOTSTRAP_ERR_DIR_MISSING
 {
-    Text [ de ] = "Der Konfigurationspfad \"$1\" wurde nicht gefunden." ;
     Text [ en-US ] = "The configuration directory \"$1\" could not be found.";
 };
 
 String STR_BOOTSTRAP_ERR_PATH_INVALID
 {
-    Text [ de ] = "Der Installationspfad ist ungültig." ;
     Text [ en-US ] = "The installation path is invalid.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATH
 {
-    Text [ de ] = "Der Installationspfad konnte nicht bestimmt werden." ;
     Text [ en-US ] = "The installation path is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_INTERNAL
 {
-    Text [ de ] = "Ein interner Fehler ist aufgetreten." ;
     Text [ en-US ] = "An internal error occurred.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_CORRUPT
 {
-    Text [ de ] = "Die Konfigurationsdatei \"$1\" ist beschädigt." ;
     Text [ en-US ] = "The configuration file \"$1\" is corrupt.";
 };
 
 String STR_BOOTSTRAP_ERR_FILE_MISSING
 {
-    Text [ de ] = "Die Konfigurationsdatei \"$1\" wurde nicht gefunden." ;
     Text [ en-US ] = "The configuration file \"$1\" was not found.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SUPPORT
 {
-    Text [ de ] = "Die Konfigurationsdatei \"$1\" unterstützt nicht diese Version." ;
     Text [ en-US ] = "The configuration file \"$1\" does not support the current version.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_SERVICE
 {
-    Text [ de ] = "Der Komponenten-Manager ist nicht verfügbar." ;
     Text [ en-US ] = "The component manager is not available.";
 };
 
 String STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
 {
-    Text [ de ] = "Der Konfigurations-Manager kann nicht erzeugt werden." ;
     Text [ en-US ] = "The configuration service is not available.";
 };
 
 String STR_ASK_START_SETUP_REPAIR
 {
-    Text [ de ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu reparieren?" ;
     Text [ en-US ] = "Do you want to start the setup application to repair your installation?";
 };
 
 String STR_ASK_START_SETUP
 {
-    Text [ de ] = "Soll die Setup-Applikation gestartet werden, um Ihre Installation zu überprüfen?" ;
     Text [ en-US ] = "Do you want to start the setup application to check your installation?";
 };
 
 String STR_SETUP_ERR_CANNOT_START
 {
-    Text [ de ] = "Die Setup-Applikation konnte nicht automatisch gestartet werden! Bitte starten Sie diese manuell." ;
     Text [ en-US ] = "The Setup could not be started automatically. Please start it manually.";
 };
 
 String STR_ASK_START_SETUP_MANUALLY
 {
-    Text [ de ] = "Um Ihre Installation zu reparieren starten Sie die Setup-Applikation von CD aus, oder aus dem Verzeichnis in dem sich die Installationspakete befinden." ;
     Text [ en-US ] = "Start the setup application to repair the installation from the CD or the folder containing the installation packages.";
 };
 
 String STR_CONFIG_ERR_SETTINGS_INCOMPLETE
 {
-    Text [ de ] = "Die Starteinstellungen für den Zugriff auf die zentrale Konfiguration sind unvollständig. " ;
     Text [ en-US ] = "The startup settings for accessing the central configuration are incomplete. ";
 };
 
 String STR_CONFIG_ERR_CANNOT_CONNECT
 {
-    Text [ de ] = "Eine Verbindung zur zentralen Konfiguration kann nicht hergestellt werden. " ;
     Text [ en-US ] = "A connection to the central configuration could not be established. ";
 };
 
 String STR_CONFIG_ERR_RIGHTS_MISSING
 {
-    Text [ de ] = "Aufgrund fehlender Zugriffsrechte können Sie nicht auf die zentrale Konfiguration zugreifen. " ;
     Text [ en-US ] = "You cannot access the central configuration because of missing access rights. ";
 };
 
 String STR_CONFIG_ERR_ACCESS_GENERAL
 {
-    Text [ de ] = "Ein genereller Fehler ist beim Zugriff auf die zentrale Konfiguration aufgetreten. " ;
     Text [ en-US ] = "A general error occurred while accessing your central configuration. ";
 };
 
 String STR_CONFIG_ERR_NO_WRITE_ACCESS
 {
-    Text [ de ] = "Ihre geänderten persönlichen Einstellungen können aufgrund fehlender Zugriffsrechte nicht zentral gespeichert werden. " ;
     Text [ en-US ] = "The changes to your personal settings cannot be stored centrally because of missing access rights. ";
 };
 
 String STR_BOOTSTRAP_ERR_CFG_DATAACCESS
 {
-    Text [ de ] = "%PRODUCTNAME kann nicht gestartet werden, da beim Zugriff auf die %PRODUCTNAME Konfigurationsdaten ein Fehler aufgetreten ist.\n\nBitte wenden Sie sich an Ihren Systemadministrator." ;
     Text [ en-US ] = "%PRODUCTNAME cannot be started due to an error in accessing the %PRODUCTNAME configuration data.\n\nPlease contact your system administrator." ;
 };
 
 String STR_INTERNAL_ERRMSG
 {
-    Text [ de ] = "Folgender interner Fehler ist aufgetreten: " ;
     Text [ en-US ] = "The following internal error has occurred: " ;
 };
 
@@ -187,13 +160,11 @@ QueryBox QBX_USERDATALOCKED
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Eine andere Instanz von %PRODUCTNAME greift auf Ihre persönlichen Einstellungen zu oder hat diese nicht wieder freigegeben.\nDer gleichzeitige Zugriff kann zu Inkonsistenzen in Ihren persönlichen Einstellungen führen. Bevor Sie Fortfahren sollten Sie sicher stellen, dass %PRODUCTNAME auf dem Host '$h' vom Benutzer '$u' beendet wird.\n\nMöchten Sie wirklich fortfahren?";
     Message [ en-US ] = "Either another instance of %PRODUCTNAME is accessing your personal settings or your personal settings are locked.\nSimultaneous access can lead to inconsistencies in your personal settings. Before continuing, you should make sure user '$u' closes %PRODUCTNAME on host '$h'.\n\nDo you really want to continue?";
 };
 
 String STR_TITLE_USERDATALOCKED
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
@@ -249,7 +220,6 @@ ErrorBox EBX_ERR_PRINTDISABLED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ de ] = "Das Drucken ist deaktiviert. Es können keine Dokumente gedruckt werden.";
     Message [ en-US ] = "Printing is disabled. No documents can be printed.";
 };
 
@@ -257,30 +227,25 @@ InfoBox INFOBOX_EXPIRED
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ de ] = "Diese Evaluationsversion ist abgelaufen. Informationen rund um %PRODUCTNAME\nerhalten Sie unter www.sun.com/%PRODUCTNAME.";
     Message [ en-US ] = "This Evaluation Version has expired. To find out more about %PRODUCTNAME,\nvisit www.sun.com/%PRODUCTNAME.";
 };
 
 String STR_TITLE_EXPIRED
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION";
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION";
 };
 
 String STR_BOOTSTRAP_ERR_NO_PATHSET_SERVICE
 {
-    Text [ de ] = "Der Pfad-Manager ist nicht verfügbar.\n";
     Text [ en-US ] = "The path manager is not available.\n";
 };
 
 String STR_BOOSTRAP_ERR_NOTENOUGHDISKSPACE
 {
     Text [ en-US ] = "%PRODUCTNAME user installation could not be completed due to insufficient free disk space. Please free more disc space at the following location and restart %PRODUCTNAME:\n\n";
-    Text [ de ] = "Die %PRODUCTNAME Benutzerinstallation konnte nicht abgeschlossen werden, da nicht genügend freier Speicherplatz zur Verfügung steht. Bitte stellen Sie mehr freien Speicher im folgenden Pfad zur Verfügung und starten Sie %PRODUCTNAME neu:\n\n";
 };
 
 String STR_BOOSTRAP_ERR_NOACCESSRIGHTS
 {
     Text [ en-US ] = "%PRODUCTNAME user installation could not be processed due to missing access rights. Please make sure that you have sufficient access rights for the following location and restart %PRODUCTNAME:\n\n";
-    Text [ de ] = "Die %PRODUCTNAME Benutzerinstallation konnte aufgrund fehlender Zugriffsrechte nicht durchgeführt werden. Bitte stellen Sie sicher, dass sie Zugriffsrechte für den folgenden Pfad besitzen und starten Sie %PRODUCTNAME neu:\n\n";
 };
