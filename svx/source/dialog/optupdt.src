@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optupdt.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:51:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:17:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,70 +46,59 @@ TabPage RID_SVXPAGE_ONLINEUPDATE
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "OnlineUpdate" ;
     Text [ en-US ] = "OnlineUpdate" ;
-    Text [ x-comment ] = " ";
     FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Online Update Optionen" ;
         Text [ en-US ] = "Online Update Options" ;
     };
     CheckBox CB_AUTOCHECK
     {
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 210, 10 ) ;
-        Text [ de ] = "~Automatisch nach Updates suchen" ;
         Text [ en-US ] = "~Check for updates automatically" ;
     };
     RadioButton RB_EVERYDAY
     {
         Pos = MAP_APPFONT ( 18, 27 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
-        Text [ de ] = "Jeden ~Tag" ;
         Text [ en-US ] = "Every Da~y" ;
     };
     RadioButton RB_EVERYWEEK
     {
         Pos = MAP_APPFONT ( 18, 40 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
-        Text [ de ] = "Jede ~Woche" ;
         Text [ en-US ] = "Every ~Week" ;
     };
     RadioButton RB_EVERYMONTH
     {
         Pos = MAP_APPFONT ( 18, 53 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
-        Text [ de ] = "Jeden ~Monat" ;
         Text [ en-US ] = "Every ~Month" ;
     };
     FixedText FT_LASTCHECKED
     {
         Pos = MAP_APPFONT ( 12, 69 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
-        Text [ de ] = "Zuletzt gesucht: %DATE%, %TIME%" ;
         Text [ en-US ] = "Last checked: %DATE%, %TIME%" ;
     };
     PushButton PB_CHECKNOW
     {
         Pos = MAP_APPFONT ( 12, 82 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
-        Text [ de ] = "Jetzt ~suchen" ;
         Text [ en-US ] = "Check ~now" ;
     };
     CheckBox CB_AUTODOWNLOAD
     {
         Pos = MAP_APPFONT ( 12, 130 ) ;
         Size = MAP_APPFONT ( 160, 10 ) ;
-        Text [ de ] = "Updates automatisch ~herunterladen" ;
         Text [ en-US ] = "~Download updates automatically" ;
     };
     FixedText FT_DESTPATHLABEL
     {
         Pos = MAP_APPFONT ( 22, 143 ) ;
         Size = MAP_APPFONT ( 150, 8 ) ;
-        Text [ de ] = "Herunterladen nach:" ;
         Text [ en-US ] = "Download destination:" ;
     };
     FixedText FT_DESTPATH
@@ -121,12 +110,10 @@ TabPage RID_SVXPAGE_ONLINEUPDATE
     {
         Pos = MAP_APPFONT ( 162, 151 ) ;
         Size = MAP_APPFONT ( 50, 14 ) ;
-        Text [ de ] = "Ä~ndern..." ;
         Text [ en-US ] = "Ch~ange..." ;
     };
     String STR_NEVERCHECKED
     {
-        Text [ de ] = "Zuletzt gesucht: Bisher noch nicht" ;
         Text [ en-US ] = "Last checked: Not yet" ;
     };
 };
