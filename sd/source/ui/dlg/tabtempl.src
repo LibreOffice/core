@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabtempl.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:37:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:30:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ TabDialog TAB_TEMPLATE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Grafikobjektvorlage" ;
     Text [ en-US ] = "Graphics Styles" ;
     Moveable = TRUE ;
      // Closeable = TRUE; // Dieser Dialog hat OK und/oder Cancel Button ! (KH)
@@ -54,95 +53,73 @@ TabDialog TAB_TEMPLATE
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE ;
-                Text [ de ] = "Linie" ;
                 Text [ en-US ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_AREA ;
                 /* ### ACHTUNG: Neuer Text in Resource? Fl‰che : Flıche */
-                Text [ de ] = "Fl√§che" ;
                 Text [ en-US ] = "Area" ;
                 PageResID = RID_SVXPAGE_AREA ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_SHADOW ;
-                Text [ de ] = "Schatten" ;
                 PageResID = RID_SVXPAGE_SHADOW ;
                 Text [ en-US ] = "Shadowing" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TRANSPARENCE ;
-                Text [ de ] = "Transparenz" ;
                 Text [ en-US ] = "Transparency";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_NAME;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = RID_SVXPAGE_CHAR_NAME ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effect" ;
                 PageResID = RID_SVXPAGE_CHAR_EFFECTS ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einz¸ge und Abst‰nde : Einz≥ge und Abstınde */
-                Text [ de ] = "Einz√ºge und Abst√§nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TEXTATTR ;
-                Text [ de ] = "Text" ;
                 PageResID = RID_SVXPAGE_TEXTATTR ;
                 Text [ en-US ] = "Text" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TEXTANIMATION ;
-                Text [ de ] = "Lauftext" ;
                 PageResID = RID_SVXPAGE_TEXTANIMATION ;
                 Text [ en-US ] = "Text Animation" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_MEASURE ;
                 /* ### ACHTUNG: Neuer Text in Resource? Bemaﬂung : Bemaòung */
-                Text [ de ] = "Bema√üung" ;
                 Text [ en-US ] = "Dimensioning" ;
                 PageResID = RID_SVXPAGE_MEASURE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_CONNECTION ;
-                Text [ de ] = "Verbinder" ;
                 Text [ en-US ] = "Connector" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
-                Text [ de ] = "Ausrichtung" ;
                 PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
                 Text [ en-US ] = "Alignment" ;
             };
@@ -150,16 +127,13 @@ TabDialog TAB_TEMPLATE
             {
                 Identifier = RID_SVXPAGE_PARA_ASIAN ;
                 PageResID = RID_SVXPAGE_PARA_ASIAN ;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text[ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_TABULATOR ;
-                Text [ de ] = "Tabulator" ;
                 Text [ en-US ] = "Tabs" ;
                 PageResID = RID_SVXPAGE_TABULATOR ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -186,12 +160,9 @@ TabDialog TAB_TEMPLATE
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zur¸ck : Zur≥ck */
-        Text [ de ] = "Zur√ºck" ;
         Text [ en-US ] = "Back" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
