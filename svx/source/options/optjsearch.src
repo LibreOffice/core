@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:59:52 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:36:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,168 +45,130 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Suchoptionen für Japanisch" ;
     FixedLine FL_TREAT_AS_EQUAL
     {
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 248, 8 );
-        Text [ de ] = "Gleichwertig behandeln";
         Text [ en-US ] = "Treat as equal";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: Group box title. Use only one verb for the whole group box. Instead of saying \"Treat as equal - match...\" (dh gleichwertig behandeln und gleichstellen), just use \"treat as equal\" as title above all and no verb at check boxes (ie diff than English MS Word)";
     };
     CheckBox CB_MATCH_CASE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Groß-/Kleinschreibung" ;
         Text [ en-US ] = "~uppercase/lowercase";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_FULL_HALF_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Normale/halbbreite Formen" ;
         Text [ en-US ] = "~full-width/half-width forms";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_HIRAGANA_KATAKANA
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Hiragana/Katakana" ;
         Text [ en-US ] = "~hiragana/katakana";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_CONTRACTIONS
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Kontraktionen (yo-on, sokuon)" ;
         Text [ en-US ] = "~contractions (yo-on, sokuon)";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_MINUS_DASH_CHOON
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Minus/Bindestrich/cho-on" ;
         Text [ en-US ] = "~minus/dash/cho-on";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_REPEAT_CHAR_MARKS
     {
         Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Wiederholungszeichen" ;
         Text [ en-US ] = "'re~peat character' marks";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_VARIANT_FORM_KANJI
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "K~anji Variante (itaiji)" ;
         Text [ en-US ] = "~variant-form kanji (itaiji)";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_OLD_KANA_FORMS
     {
         Pos = MAP_APPFONT ( 12 , 112) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "A~lte Kana-Formen" ;
         Text [ en-US ] = "~old Kana forms";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_DIZI_DUZU
     {
         Pos = MAP_APPFONT ( 136 , 14 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Di/zi, du/zu" ;
         Text [ en-US ] = "~di/zi, du/zu";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_BAVA_HAFA
     {
         Pos = MAP_APPFONT ( 136 , 28 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Ba/va, ha/fa" ;
         Text [ en-US ] = "~ba/va, ha/fa";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_TSITHICHI_DHIZI
     {
         Pos = MAP_APPFONT ( 136 , 42 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Tsi/thi/chi, dhi/zi" ;
         Text [ en-US ] = "~tsi/thi/chi, dhi/zi";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_HYUFYU_BYUVYU
     {
         Pos = MAP_APPFONT ( 136 , 56 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "H~yu/fyu, byu/vyu" ;
         Text [ en-US ] = "h~yu/fyu, byu/vyu";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_SESHE_ZEJE
     {
         Pos = MAP_APPFONT ( 136 , 70 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "~Se/she, ze/je" ;
         Text [ en-US ] = "~se/she, ze/je";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_IAIYA
     {
         Pos = MAP_APPFONT ( 136 , 84 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Ia/iya (~piano/piyano)" ;
         Text [ en-US ] = "~ia/iya (piano/piyano)";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_KIKU
     {
         Pos = MAP_APPFONT ( 136 , 98 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Ki/k~u (tekisuto/tekusuto)" ;
         Text [ en-US ] = "~ki/ku (tekisuto/tekusuto)";
-        Text [ x-comment ] = "; EM23; EM23.3.01ENGLISH: only in this dialog does Eng not follow the usual check box style of first letter uppercase and all others lowercase; for clarity and consistency.";
     };
     CheckBox CB_MATCH_PROLONGED_SOUNDMARK
     {
         Pos = MAP_APPFONT ( 136 , 112 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Verl~ängerte Vokale (ka-/kaa)" ;
         Text [ en-US ] = "Prolon~ged vowels (ka-/kaa)";
     };
     FixedLine FL_IGNORE
     {
         Pos = MAP_APPFONT( 6, 128 );
         Size = MAP_APPFONT( 248, 8 );
-        Text [ de ] = "Ignorieren";
         Text [ en-US ] = "Ignore";
     };
     CheckBox CB_IGNORE_PUNCTUATION
     {
         Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Int~erpunktionszeichen" ;
         Text [ en-US ] = "Pu~nctuation characters";
     };
     CheckBox CB_IGNORE_WHITESPACES
     {
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Leerraumzei~chen" ;
         Text [ en-US ] = "~Whitespace characters";
     };
     CheckBox CB_IGNORE_MIDDLE_DOT
     {
         Pos = MAP_APPFONT ( 136 , 139 ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Mittige~r Punkt" ;
         Text [ en-US ] = "Midd~le dots";
     };
     Text [ en-US ] = "Searching in Japanese";
