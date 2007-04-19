@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:27:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:13:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,7 +38,6 @@ ModalDialog DLG_VERSIONS
 {
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 340 , 184 ) ;
-    Text [ de ] = "Versionen in" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
 //! Closeable = TRUE ;
@@ -46,59 +45,45 @@ ModalDialog DLG_VERSIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 272 , 8 ) ;
-        Text [ de ] = "Neue Versionen" ;
         Text [ en-US ] = "New versions" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_SAVE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 14 ) ;
-        Text [ de ] = "~Neue Version speichern" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Save ~New Version" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SAVEONCLOSE
     {
         Pos = MAP_APPFONT ( 108 , 16 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
-        Text [ de ] = "~Beim Schließen immer Version speichern" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Always save a version on closing" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GB_OLDVERSIONS
     {
         Pos = MAP_APPFONT ( 6 , 34 ) ;
         Size = MAP_APPFONT ( 272 , 8 ) ;
-        Text [ de ] = "Vorhandene Versionen" ;
         Text [ en-US ] = "Existing versions" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_DATETIME
     {
         Pos = MAP_APPFONT ( 15 , 45 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Datum und Uhrzeit" ;
         Text [ en-US ] = "Date and time" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SAVEDBY
     {
         Pos = MAP_APPFONT ( 76 , 45 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "gespeichert von" ;
         Text [ en-US ] = "Saved by" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_COMMENTS
     {
         Pos = MAP_APPFONT ( 138 , 45 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Kommentar" ;
         Text [ en-US ] = "Comments" ;
-        Text [ x-comment ] = " ";
     };
     Control TLB_VERSIONS
     {
@@ -111,47 +96,37 @@ ModalDialog DLG_VERSIONS
     {
         Pos = MAP_APPFONT ( 284 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schließen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Close" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_OPEN
     {
         Pos = MAP_APPFONT ( 284 , 26 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Öffnen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Open" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_VIEW
     {
         Pos = MAP_APPFONT ( 284 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Anzeigen..." ;
         TabStop = TRUE ;
         DefButton = TRUE ;
         Text [ en-US ] = "~Show..." ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_DELETE
     {
         Pos = MAP_APPFONT ( 284 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Delete" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_COMPARE
     {
         Pos = MAP_APPFONT ( 284 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Vergleichen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Compare" ;
-        Text [ x-comment ] = " ";
     };
     HelpButton PB_HELP
     {
@@ -160,30 +135,24 @@ ModalDialog DLG_VERSIONS
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Versions of" ;
-    Text [ x-comment ] = "; LS 16.07.99: Erkl?ung laut Help Agent: In der Titelleiste des Dialogs sehen Sie hinter \"Versionen in\" den Dateinamen ohne Pfad oder (wenn gesetzt) den Titel des Dokuments. (z.B. \"Versionen in brief.sdw\". (Warum nicht eher Versionen VON?)";
 };
 ModalDialog DLG_COMMENTS
 {
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 180 , 118 ) ;
-    Text [ de ] = "Versionskommentar eingeben" ;
     SvLook = TRUE ;
     Moveable = TRUE ;
     FixedText FT_DATETIME
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
-        Text [ de ] = "Datum und Uhrzeit : " ;
         Text [ en-US ] = "Date and time : " ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SAVEDBY
     {
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 168 , 10 ) ;
-        Text [ de ] = "gespeichert von " ;
         Text [ en-US ] = "Saved by " ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit ME_VERSIONS
     {
@@ -209,10 +178,8 @@ ModalDialog DLG_COMMENTS
     {
         Pos = MAP_APPFONT ( 68 , 98 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Schließen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Close" ;
-        Text [ x-comment ] = " ";
     };
     HelpButton PB_HELP
     {
@@ -221,13 +188,10 @@ ModalDialog DLG_COMMENTS
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Insert Version Comment" ;
-    Text [ x-comment ] = " ";
 };
 String DLG_COMMENTS
 {
-    Text [ de ] = "Versionskommentar" ;
     Text [ en-US ] = "Version comment" ;
-    Text [ x-comment ] = " ";
 };
 
 
