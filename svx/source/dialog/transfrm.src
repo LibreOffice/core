@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transfrm.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:51:58 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
 {
     HelpId = HID_TRANS_POSITION_SIZE ;
     Hide = TRUE ;
-    Text [ de ] = "Position und Größe" ;
     Text [ en-US ] = "Position and Size" ;
     Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
 
@@ -54,25 +53,19 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POS_X
     {
         Pos = MAP_APPFONT ( 12 , 16 + 8  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Position ~X" ;
         Text [ en-US ] = "Position ~X" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POS_Y
     {
         Pos = MAP_APPFONT ( 12 , 32 + 8  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Position ~Y" ;
         Text [ en-US ] = "Position ~Y" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -108,7 +101,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 178 , 2 + 8  ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Basispunkt" ;
         Text [ en-US ] = "Base point";
     };
     Control CTL_POSRECT
@@ -118,10 +110,7 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Pos = MAP_APPFONT ( 178 , 12 + 8  ) ;
         Size = MAP_APPFONT ( 48 , 34 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Basispunkt" ;
         QuickHelpText [ en-US ] = "Base point" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
 
     // size
@@ -130,25 +119,19 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 56  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Größe" ;
         Text [ en-US ] = "Size" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_WIDTH
     {
         Pos = MAP_APPFONT ( 12 , 16 + 61 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "Wi~dth" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 32 + 61  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Höhe" ;
         Text [ en-US ] = "H~eight" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_WIDTH
     {
@@ -184,7 +167,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 178 , 2 + 61  ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Basispunkt" ;
         Text [ en-US ] = "Base point";
     };
     Control CTL_SIZERECT
@@ -194,19 +176,14 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Pos = MAP_APPFONT ( 178 , 12 + 61 ) ;
         Size = MAP_APPFONT ( 48 , 34 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Basispunkt" ;
         QuickHelpText [ en-US ] = "Base point" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     CheckBox CBX_SCALE
     {
         Pos = MAP_APPFONT ( 12 , 47 + 61 ) ;
         Size = MAP_APPFONT ( 162 , 10 ) ;
-        Text [ de ] = "~Abgleich" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Keep ratio" ;
-        Text [ x-comment ] = " ";
     };
 
     // Protect
@@ -215,7 +192,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 120  ) ;
         Size = MAP_APPFONT ( 119 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Schützen" ;
         Text [ en-US ] = "Protect" ;
     };
 
@@ -223,7 +199,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 10 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position" ;
         TabStop = TRUE ;
     };
@@ -232,7 +207,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 12 , 24 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "~Größe" ;
         Text [ en-US ] = "~Size" ;
         TabStop = TRUE ;
     };
@@ -243,27 +217,21 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 6 + 123 + 6 , 120 ) ;
         Size = MAP_APPFONT ( 119 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Anpassen" ;
         Text [ en-US ] = "Adapt" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
         Pos = MAP_APPFONT ( 12 + 121 + 8, 10 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "Br~eite an Text anpassen" ;
         Text [ en-US ] = "~Fit width to text" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 + 121 + 8, 24 + 120 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "Höhe a~n Text anpassen" ;
         Text [ en-US ] = "Fit ~height to text" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
 
     FixedLine FL_DIVIDER
@@ -279,19 +247,15 @@ TabPage RID_SVXPAGE_POSITION_SIZE
     {
         Pos = MAP_APPFONT ( 6 + 123 + 6 , 120 ) ;
         Size = MAP_APPFONT ( 119 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Verankerung" ;
         Hide = TRUE ;
         Text [ en-US ] = "Anchor" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ANCHOR
     {
         Pos = MAP_APPFONT ( 12 + 121 + 8, 10 + 120 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
-        Text [ de ] = "~Anker" ;
         Hide = TRUE ;
         Text [ en-US ] = "~Anchor" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ANCHOR
     {
@@ -299,13 +263,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Am Absatz" ; > ;
-            < "Als Zeichen" ; > ;
-            < "An der Seite" ; > ;
-            < "Am Rahmen" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "To paragraph" ; > ;
@@ -313,19 +270,11 @@ TabPage RID_SVXPAGE_POSITION_SIZE
             < "To page" ; > ;
             < "To frame" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     FixedText FT_ORIENT
     {
         Pos = MAP_APPFONT ( 12 + 121 + 8, 24 + 120 ) ;
         Size = MAP_APPFONT ( 37 , 10 ) ;
-        Text [ de ] = "~Position" ;
         Hide = TRUE ;
         Text [ en-US ] = "P~osition";
     };
@@ -335,19 +284,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
         Size = MAP_APPFONT ( 54 , 60 ) ;
         Hide = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Von oben" ; > ;
-            < "Oben" ; > ;
-            < "Zentriert" ; > ;
-            < "Unten" ; > ;
-            < "Zeichen oben" ; > ;
-            < "Zeichen zentriert" ; > ;
-            < "Zeichen unten" ; > ;
-            < "Zeile oben" ; > ;
-            < "Zeile zentriert" ; > ;
-            < "Zeile unten" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "From top" ; > ;
@@ -361,19 +297,6 @@ TabPage RID_SVXPAGE_POSITION_SIZE
             < "Center of line" ; > ;
             < "Bottom of line" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
 };
 
@@ -382,32 +305,25 @@ TabPage RID_SVXPAGE_ANGLE
 {
     HelpId = HID_TRANS_ANGLE ;
     Hide = TRUE ;
-    Text [ de ] = "Winkel" ;
     Text [ en-US ] = "Angle" ;
     Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
     FixedLine FL_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Drehpunkt" ;
         Text [ en-US ] = "Pivot point" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POS_X
     {
         Pos = MAP_APPFONT ( 12 , 16 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Position ~X" ;
         Text [ en-US ] = "Position ~X" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_POS_Y
     {
         Pos = MAP_APPFONT ( 12 , 32 + 11  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Position ~Y" ;
         Text [ en-US ] = "Position ~Y" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_POS_X
     {
@@ -443,7 +359,6 @@ TabPage RID_SVXPAGE_ANGLE
     {
         Pos = MAP_APPFONT ( 178 , 14  ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Vorgaben" ;
         Text [ en-US ] = "Default settings";
     };
     Control CTL_RECT
@@ -453,26 +368,19 @@ TabPage RID_SVXPAGE_ANGLE
         Pos = MAP_APPFONT ( 178 , 14 + 11 ) ;
         Size = MAP_APPFONT ( 70 , 48 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Rotationspunkt" ;
         QuickHelpText [ en-US ] = "Rotation point" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedLine FL_ANGLE
     {
         Pos = MAP_APPFONT ( 6 , 71 + 11 ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Drehwinkel" ;
         Text [ en-US ] = "Rotation angle" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ANGLE
     {
         Pos = MAP_APPFONT ( 12 , 84 + 22  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "~Angle" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -487,16 +395,13 @@ TabPage RID_SVXPAGE_ANGLE
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         CustomUnitText [ en-US ] = " degrees" ;
         SpinSize = 500 ;
-        CustomUnitText [ x-comment ] = " ";
     };
     FixedText FT_ANGLEPRESETS
     {
         Pos = MAP_APPFONT ( 178 , 82 + 11  ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Vorgaben" ;
         Text [ en-US ] = "Default settings";
     };
     Control CTL_ANGLE
@@ -506,10 +411,8 @@ TabPage RID_SVXPAGE_ANGLE
         Pos = MAP_APPFONT ( 178 , 82 + 22  ) ;
         Size = MAP_APPFONT ( 70 , 48 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Drehwinkel" ;
         QuickHelpText [ en-US ] = "Rotation Angle";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_SLANT -----------------------------------------------------
 TabPage RID_SVXPAGE_SLANT
@@ -517,23 +420,18 @@ TabPage RID_SVXPAGE_SLANT
     HelpId = HID_TRANS_SLANT ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , MA_TABPAGE_HEIGHT ) ;
-    Text [ de ] = "Schräg stellen / Eckenradius" ;
     Text [ en-US ] = "Slant & Corner Radius" ;
     FixedLine FL_RADIUS
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Eckenradius" ;
         Text [ en-US ] = "Corner radius" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_RADIUS
     {
         Pos = MAP_APPFONT ( 12 , 16  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Radius" ;
         Text [ en-US ] = "~Radius" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_RADIUS
     {
@@ -554,17 +452,13 @@ TabPage RID_SVXPAGE_SLANT
     {
         Pos = MAP_APPFONT ( 6 , 35  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Schräg stellen" ;
         Text [ en-US ] = "Slant" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ANGLE
     {
         Pos = MAP_APPFONT ( 12 , 48  ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "~Winkel" ;
         Text [ en-US ] = "~Angle" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -581,17 +475,13 @@ TabPage RID_SVXPAGE_SLANT
         StrictFormat = TRUE ;
         DecimalDigits = 2 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = " Grad" ;
         SpinSize = 500 ;
         CustomUnitText [ en-US ] = " degrees" ;
-        CustomUnitText [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_TRANSFORM -----------------------------------------------------
 
 #define _POS_SIZE_TEXT \
-    Text [ de ] = "Position und Größe" ;                       \
     Text [ en-US ] = "Position and Size" ;          \
 
 
@@ -600,7 +490,6 @@ TabDialog RID_SVXDLG_TRANSFORM\
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 289 , MA_TABPAGE_HEIGHT + 41 ) ;
-    Text [ de ] = "Position und Größe" ;\
     Text [ en-US ] = "Position and Size" ;\
     Moveable = TRUE ;
     TabControl TAB_CONTROL\
@@ -625,22 +514,17 @@ TabDialog RID_SVXDLG_TRANSFORM\
             PageItem
             {
                 Identifier = RID_SVXPAGE_ANGLE ;
-                Text [ de ] = "Drehung" ;
                 Text [ en-US ] = "Rotation" ;
                 PageResID = RID_SVXPAGE_ANGLE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_SLANT ;
-                Text [ de ] = "Schräg stellen / Eckenradius" ;
                 PageResID = RID_SVXPAGE_SLANT ;
                 Text [ en-US ] = "Slant & Corner Radius" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
