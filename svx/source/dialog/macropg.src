@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macropg.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 10:56:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:14:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,16 +48,13 @@ TabPage RID_SVXPAGE_MACROASSIGN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( WIDTH_TP , HEIGHT_TP ) ;
-    Text [ de ] = "Aktion zuweisen" ;
     Text [ en-US ] = "Assign action" ;
     String STR_EVENT
     {
-        Text [ de ] = "Ereignis" ;
         Text [ en-US ] = "Event" ;
     };
     String STR_ASSMACRO
     {
-        Text [ de ] = "Zugewiesene Aktion" ;
         Text [ en-US ] = "Assigned Action" ;
     };
     Control LB_EVENT
@@ -72,14 +69,12 @@ TabPage RID_SVXPAGE_MACROASSIGN
     {
         Pos = MAP_APPFONT ( COL4 , ROW0 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Zuweisen:" ;
         Text [ en-US ] = "Assign:" ;
     };
     PushButton PB_ASSIGN
     {
         Pos = MAP_APPFONT ( COL4 , ROW0A  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "M~akro..." ;
         Text [ en-US ] = "M~acro..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
@@ -88,7 +83,6 @@ TabPage RID_SVXPAGE_MACROASSIGN
     {
         Pos = MAP_APPFONT ( COL4 , ROW2  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "Kom~ponente..." ;
         Disable = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "Com~ponent..." ;
@@ -97,7 +91,6 @@ TabPage RID_SVXPAGE_MACROASSIGN
     {
         Pos = MAP_APPFONT ( COL4 , ROW5_REMOVE  ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
-        Text [ de ] = "~Entfernen" ;
         Text [ en-US ] = "~Remove" ;
         Disable = TRUE ;
         TabStop = TRUE ;
@@ -131,7 +124,6 @@ ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
     Size = MAP_APPFONT ( COMP_WIDTH , COMP_HEIGHT ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Komponente zuweisen";
     Text [ en-US ] = "Assign Component";
     OKButton RID_PB_OK
     {
@@ -155,7 +147,6 @@ ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
     {
         Pos = MAP_APPFONT ( COMP_COL0 , ROW0 ) ;
         Size = MAP_APPFONT ( COMP_EDIT_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Name der Komponenten-Methode" ;
         Text [ en-US ] = "Component method name" ;
     };
     Edit EDIT_METHOD
@@ -171,259 +162,210 @@ ModalDialog RID_SVXDLG_ASSIGNCOMPONENT
 //DF
 String RID_SVXSTR_EVENT_STARTAPP
 {
-    Text [ de ] = "Programmstart" ;
     Text [ en-US ] = "Start Application" ;
 };
 
 String RID_SVXSTR_EVENT_CLOSEAPP
 {
-    Text [ de ] = "Programmende" ;
     Text [ en-US ] = "Close Application" ;
 };
 
 String RID_SVXSTR_EVENT_CREATEDOC
 {
-    Text [ de ] = "Dokument erzeugen" ;
     Text [ en-US ] = "Create Document" ;
 };
 
 String RID_SVXSTR_EVENT_CLOSEDOC
 {
-    Text [ de ] = "Dokument wird geschlossen" ;
     Text [ en-US ] = "Document is closing" ;
 };
 
 String RID_SVXSTR_EVENT_PREPARECLOSEDOC
 {
-    Text [ de ] = "Dokument schließen" ;
     Text [ en-US ] = "Close Document" ;
 };
 
 String RID_SVXSTR_EVENT_OPENDOC
 {
-    Text [ de ] = "Dokument öffnen" ;
     Text [ en-US ] = "Open Document" ;
 };
 
 String RID_SVXSTR_EVENT_SAVEDOC
 {
-    Text [ de ] = "Dokument sichern" ;
     Text [ en-US ] = "Save Document" ;
 };
 
 String RID_SVXSTR_EVENT_SAVEASDOC
 {
-    Text [ de ] = "Dokument sichern als" ;
     Text [ en-US ] = "Save Document As" ;
 };
 
 String RID_SVXSTR_EVENT_SAVEDOCDONE
 {
-    Text [ de ] = "Dokument wurde gesichert" ;
     Text [ en-US ] = "Document has been saved" ;
 };
 
 String RID_SVXSTR_EVENT_SAVEASDOCDONE
 {
-    Text [ de ] = "Dokument wurde gesichert als" ;
     Text [ en-US ] = "Document has been saved as" ;
 };
 
 String RID_SVXSTR_EVENT_ACTIVATEDOC
 {
-    Text [ de ] = "Dokument aktivieren" ;
     Text [ en-US ] = "Activate Document" ;
 };
 
 String RID_SVXSTR_EVENT_DEACTIVATEDOC
 {
-    Text [ de ] = "Dokument deaktivieren" ;
     Text [ en-US ] = "Deactivate Document" ;
 };
 
 String RID_SVXSTR_EVENT_PRINTDOC
 {
-    Text [ de ] = "Dokument drucken" ;
     Text [ en-US ] = "Print Document" ;
 };
 
 String RID_SVXSTR_EVENT_MODIFYCHANGED
 {
-    Text [ de ] = "'Geändert'-Status wurde geändert" ;
     Text [ en-US ] = "'Modified' status was changed" ;
 };
 String RID_SVXSTR_EVENT_MAILMERGE
 {
-    TEXT [ de ] = "Serienbriefe drucken" ;
     Text [ en-US ] = "Print form letters" ;
 };
 String RID_SVXSTR_EVENT_PAGECOUNTCHANGE
 {
-    TEXT [ de ] = "Änderung der Seitenanzahl" ;
     Text [ en-US ] = "Changing the page count" ;
 };
 String RID_SVXSTR_EVENT_APPROVEPARAMETER
 {
-    Text [ de ] = "Parameter füllen" ;
     Text [ en-US ] = "Fill parameters" ;
 };
 String RID_SVXSTR_EVENT_ACTIONPERFORMED
 {
-    Text [ de ] = "Beim Auslösen" ;
     Text [ en-US ] = "When initiating" ;
 };
 String RID_SVXSTR_EVENT_AFTERUPDATE
 {
-    Text [ de ] = "Nach dem Aktualisieren" ;
     Text [ en-US ] = "After updating" ;
 };
 String RID_SVXSTR_EVENT_BEFOREUPDATE
 {
-    Text [ de ] = "Vor dem Aktualisieren" ;
     Text [ en-US ] = "Before updating" ;
 };
 String RID_SVXSTR_EVENT_APPROVEROWCHANGE
 {
-    Text [ de ] = "Vor der Datensatzaktion" ;
     Text [ en-US ] = "Before record action" ;
 };
 String RID_SVXSTR_EVENT_ROWCHANGE
 {
-    Text [ de ] = "Nach der Datensatzaktion" ;
     Text [ en-US ] = "After record action" ;
 };
 String RID_SVXSTR_EVENT_CONFIRMDELETE
 {
-    Text [ de ] = "Löschen bestätigen" ;
     Text [ en-US ] = "Confirm deletion" ;
 };
 String RID_SVXSTR_EVENT_ERROROCCURED
 {
-    Text [ de ] = "Fehler aufgetreten" ;
     Text [ en-US ] = "Error occurred" ;
 };
 String RID_SVXSTR_EVENT_ADJUSTMENTVALUECHANGED
 {
-    Text [ de ] = "Beim Justieren";
     Text [ en-US ] = "While adjusting";
 };
 String RID_SVXSTR_EVENT_FOCUSGAINED
 {
-    Text [ de ] = "Bei Fokuserhalt" ;
     Text [ en-US ] = "When receiving focus" ;
 };
 String RID_SVXSTR_EVENT_FOCUSLOST
 {
-    Text [ de ] = "Bei Fokusverlust" ;
     Text [ en-US ] = "When losing focus" ;
 };
 String RID_SVXSTR_EVENT_ITEMSTATECHANGED
 {
-    Text [ de ] = "Status geändert" ;
     Text [ en-US ] = "Item status changed" ;
 };
 String RID_SVXSTR_EVENT_KEYTYPED
 {
-    Text [ de ] = "Taste gedrückt" ;
     Text [ en-US ] = "Key pressed" ;
 };
 String RID_SVXSTR_EVENT_KEYUP
 {
-    Text [ de ] = "Taste losgelassen" ;
     Text [ en-US ] = "Key released" ;
 };
 String RID_SVXSTR_EVENT_LOADED
 {
-    Text [ de ] = "Beim Laden" ;
     Text [ en-US ] = "When loading" ;
 };
 String RID_SVXSTR_EVENT_RELOADING
 {
-    Text [ de ] = "Vor dem erneuten Laden";
     Text [ en-US ] = "Before reloading" ;
 };
 String RID_SVXSTR_EVENT_RELOADED
 {
-    Text [ de ] = "Beim erneuten Laden" ;
     Text [ en-US ] = "When reloading" ;
 };
 String RID_SVXSTR_EVENT_MOUSEDRAGGED
 {
-    Text [ de ] = "Mausbewegung bei Tastendruck" ;
     Text [ en-US ] = "Mouse moved while key pressed" ;
 };
 String RID_SVXSTR_EVENT_MOUSEENTERED
 {
-    Text [ de ] = "Maus innerhalb" ;
     Text [ en-US ] = "Mouse inside" ;
 };
 String RID_SVXSTR_EVENT_MOUSEEXITED
 {
-    Text [ de ] = "Maus ausserhalb" ;
     Text [ en-US ] = "Mouse outside" ;
 };
 String RID_SVXSTR_EVENT_MOUSEMOVED
 {
-    Text [ de ] = "Mausbewegung" ;
     Text [ en-US ] = "Mouse moved" ;
 };
 String RID_SVXSTR_EVENT_MOUSEPRESSED
 {
-    Text [ de ] = "Maustaste gedrückt" ;
     Text [ en-US ] = "Mouse button pressed" ;
 };
 String RID_SVXSTR_EVENT_MOUSERELEASED
 {
-    Text [ de ] = "Maustaste losgelassen" ;
     Text [ en-US ] = "Mouse button released" ;
 };
 String RID_SVXSTR_EVENT_POSITIONING
 {
-    Text [ de ] = "Vor dem Datensatzwechsel" ;
     Text [ en-US ] = "Before record change" ;
 };
 String RID_SVXSTR_EVENT_POSITIONED
 {
-    Text [ de ] = "Nach dem Datensatzwechsel" ;
     Text [ en-US ] = "After record change" ;
 };
 String RID_SVXSTR_EVENT_RESETTED
 {
-    Text [ de ] = "Nach dem Zurücksetzen" ;
     Text [ en-US ] = "After resetting" ;
 };
 String RID_SVXSTR_EVENT_APPROVERESETTED
 {
-    Text [ de ] = "Vor dem Zurücksetzen" ;
     Text [ en-US ] = "Prior to reset" ;
 };
 String RID_SVXSTR_EVENT_APPROVEACTIONPERFORMED
 {
-    Text [ de ] = "Vor dem Auslösen" ;
     Text [ en-US ] = "Before commencing" ;
 };
 String RID_SVXSTR_EVENT_SUBMITTED
 {
-    Text [ de ] = "Vor dem Submit" ;
     Text [ en-US ] = "Before submitting" ;
 };
 String RID_SVXSTR_EVENT_TEXTCHANGED
 {
-    Text [ de ] = "Text modifiziert" ;
     Text [ en-US ] = "Text modified" ;
 };
 String RID_SVXSTR_EVENT_UNLOADING
 {
-    Text [ de ] = "Vor dem Entladen";
     Text [ en-US ] = "Before unloading" ;
 };
 String RID_SVXSTR_EVENT_UNLOADED
 {
-    Text [ de ] = "Beim Entladen" ;
     Text [ en-US ] = "When unloading" ;
 };
 String RID_SVXSTR_EVENT_CHANGED
 {
-    Text [ de ] = "Modifiziert" ;
     Text [ en-US ] = "Changed" ;
 };
