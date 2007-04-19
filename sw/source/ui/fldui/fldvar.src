@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:04:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:09:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,12 @@ TabPage TP_FLD_VAR
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Variablen" ;
     FixedText FT_VARTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Feldtyp" ;
         Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_VARTYPE
     {
@@ -66,10 +63,8 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Auswahl" ;
         Left = TRUE ;
         Text [ en-US ] = "S~election" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_VARSELECTION
     {
@@ -83,10 +78,8 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
         Text [ en-US ] = "Format" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_VARFORMAT
     {
@@ -108,28 +101,22 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 170 , 141 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ de ] = "~Unsichtbar" ;
         Text [ en-US ] = "Invisi~ble" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_VARCHAPTERHEADER
     {
         Pos = MAP_APPFONT ( 170 , 112 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "Kapitelweise Nummerierung" ;
         Text [ en-US ] = "Numbering by chapter" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
         Pos = MAP_APPFONT ( 175 , 125 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "E~bene" ;
         Text [ en-US ] = "~Level" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -139,27 +126,17 @@ TabPage TP_FLD_VAR
         Size = MAP_APPFONT ( 46 , 76 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Keine" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "None" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-             < " " ; > ;
-    };
     };
     FixedText FT_VARSEPARATOR
     {
         Pos = MAP_APPFONT ( 175 , 140 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
         Hide = TRUE ;
-        Text [ de ] = "~Trenner" ;
         Text [ en-US ] = "~Separator" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_VARSEPARATOR
     {
@@ -174,10 +151,8 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 6 , 155 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "Na~me" ;
         Left = TRUE ;
         Text [ en-US ] = "Na~me" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_VARNAME
     {
@@ -191,10 +166,8 @@ TabPage TP_FLD_VAR
     {
         Pos = MAP_APPFONT ( 88 , 155 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Wert" ;
         Text [ en-US ] = "~Value" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_VARVALUE
     {
@@ -220,9 +193,7 @@ TabPage TP_FLD_VAR
                     ImageBitmap = Bitmap{ File = "sc20558.bmp" ;};
                     MaskColor = IMAGE_MASK_COLOR ;
                 };
-                Text [ de ] = "Übernehmen" ;
                 Text [ en-US ] = "Apply" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -233,14 +204,11 @@ TabPage TP_FLD_VAR
                     ImageBitmap = Bitmap{ File = "sc20557.bmp" ;};
                     MaskColor = IMAGE_MASK_COLOR ;
                 };
-                Text [ de ] = "Löschen" ;
                 Text [ en-US ] = "Delete" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
     Text [ en-US ] = "Variables" ;
-    Text [ x-comment ] = " ";
 };
 
 
