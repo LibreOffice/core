@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masterlayoutdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:33:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:28:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Pos = MAP_APPFONT( 3, 3 );
         Size = MAP_APPFONT( 83, 10 );
 
-        Text [ de ] = "Platzhalter";
         Text [ en-US ] = "Placeholders";
     };
 
@@ -59,7 +58,6 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text [ de ] = "Kopfzeile";
         Text [ en-US ] = "Header";
     };
 
@@ -69,7 +67,6 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text [ de ] = "Datum/Uhrzeit";
         Text [ en-US ] = "Date/time";
     };
 
@@ -79,7 +76,6 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text [ de ] = "Fußzeile";
         Text [ en-US ] = "Footer";
     };
 
@@ -89,7 +85,6 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
         Size = MAP_APPFONT( 134 , 10 );
         TabStop = TRUE;
 
-        Text [ de ] = "Seitenzahl";
         Text [ en-US ] = "Page number";
     };
 
@@ -109,13 +104,11 @@ ModalDialog RID_SD_DLG_MASTER_LAYOUT
 
     String STR_SLIDE_NUMBER
     {
-        Text [ de ] = "Foliennummer";
         Text [ en-US ] = "Slide number";
     };
 
     String STR_MASTER_LAYOUT_TITLE
     {
-        Text [ de ] = "Masterelemente";
         Text [ en-US ] = "Master Elements";
     };
 };
