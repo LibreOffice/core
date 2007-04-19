@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddinf.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:36:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:08:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,12 @@ TabPage TP_FLD_DOKINF
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Dokumentinfo" ;
     FixedText FT_DOKINFTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Feldtyp" ;
         Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Control TLB_DOKINFTYPE
     {
@@ -63,10 +60,8 @@ TabPage TP_FLD_DOKINF
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Auswahl" ;
         Text [ en-US ] = "S~elect" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKINFSELECTION
     {
@@ -74,13 +69,6 @@ TabPage TP_FLD_DOKINF
         Pos = MAP_APPFONT ( 88 , 16 ) ;
         Size = MAP_APPFONT ( 76 , 163 ) ;
         TabStop = TRUE ;
-        StringList [ de ] =
-        {
-            < "Autor" ; > ;
-            < "Uhrzeit" ; > ;
-            < "Datum" ; > ;
-            < "Datum Zeit Autor" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Author" ; > ;
@@ -88,22 +76,13 @@ TabPage TP_FLD_DOKINF
             < "Date" ; > ;
             < "Date Time Author" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     FixedText FT_DOKINFFORMAT
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
         Text [ en-US ] = "F~ormat" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_DOKINFFORMAT
     {
@@ -117,10 +96,8 @@ TabPage TP_FLD_DOKINF
     {
         Pos = MAP_APPFONT ( 170 , 170 ) ;
         Size = MAP_APPFONT ( 72 , 10 ) ;
-        Text [ de ] = "~Inhalt fixieren" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Fixed content" ;
-        Text [ x-comment ] = " ";
     };
     Bitmap BMP_DOKINFROOT_OPENED
     {
@@ -132,12 +109,9 @@ TabPage TP_FLD_DOKINF
     };
     String STR_DOKINF_INFO
     {
-        Text [ de ] = "Info" ;
         Text [ en-US ] = "Info" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "DocInformation" ;
-    Text [ x-comment ] = " ";
 };
 
 
