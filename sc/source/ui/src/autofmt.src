@@ -4,9 +4,9 @@
  *
  *  $RCSfile: autofmt.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:04:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:35:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     Size = MAP_APPFONT ( 312 , 121 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
     /* ### ACHTUNG: Neuer Text in Resource? AutoFormat : Autoformat */
-    Text [ de ] = "AutoFormat" ;
     Text [ en-US ] = "AutoFormat" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -58,9 +57,7 @@ ModalDialog RID_SCDLG_AUTOFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 244 , 8 ) ;
-        Text [ de ] = "~Format" ;
         Text [ en-US ] = "F~ormat" ;
-        Text [ x-comment ] = " ";
     };
     Window WND_PREVIEW
     {
@@ -74,69 +71,55 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Pos = MAP_APPFONT ( 172 , 146 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Breite/Höhe anpassen : ~Breite/H÷he anpassen */
-        Text [ de ] = "Breite/HÃ¶he an~passen" ;
         Text [ en-US ] = "A~utoFit width and height" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_BORDER
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 146 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "~Umrandung" ;
         Text [ en-US ] = "~Borders" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_FONT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 93 , 132 ) ;
         Size = MAP_APPFONT ( 73 , 10 ) ;
-        Text [ de ] = "~Schriftart" ;
         Text [ en-US ] = "F~ont" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_PATTERN
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 93 , 146 ) ;
         Size = MAP_APPFONT ( 73 , 10 ) ;
-        Text [ de ] = "~Muster" ;
         Text [ en-US ] = "~Pattern" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_ALIGNMENT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 172 , 132 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "~Ausrichtung" ;
         Text [ en-US ] = "Alignmen~t" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_NUMFORMAT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 132 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "Zahlenf~ormat" ;
         Text [ en-US ] = "~Number format" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_FORMATTING
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 121 ) ;
         Size = MAP_APPFONT ( 244 , 8 ) ;
-        Text [ de ] = "Formatierung" ;
         Text [ en-US ] = "Formatting" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -164,20 +147,16 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Pos = MAP_APPFONT ( 256 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Einfügen... : ~Einf³gen... */
-        Text [ de ] = "Hi~nzufÃ¼gen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 256 , 81 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_RENAME
@@ -185,10 +164,8 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         Pos = MAP_APPFONT ( 256 , 123 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         HelpId=HID_SC_RENAME_AUTOFMT;
-        Text [ de ] = "Um~benennen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Rename" ;
-        Text [ x-comment ] = " ";
     };
 
     HelpButton BTN_HELP
@@ -202,90 +179,63 @@ ModalDialog RID_SCDLG_AUTOFORMAT
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : Autoformat hinzufügen */
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat hinzufügen : AutoFormat hinzuf³gen */
-        Text [ de ] = "AutoFormat hinzufÃ¼gen" ;
         Text [ en-US ] = "Add AutoFormat" ;
-        Text [ x-comment ] = " ";
     };
 
     String STR_RENAME_TITLE
     {
-        Text [ de ] = "Autoformat umbenennen" ;
         Text [ en-US ] = "Rename AutoFormat" ;
-        Text [ x-comment ] = " ";
     };
 
     String STR_ADD_LABEL
     {
-        Text [ de ] = "Name" ;
         Text [ en-US ] = "Name" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DEL_TITLE
     {
         /* ### ACHTUNG: Neuer Text in Resource? AutoFormat löschen : AutoFormat l÷schen */
-        Text [ de ] = "AutoFormat lÃ¶schen" ;
         Text [ en-US ] = "Delete AutoFormat" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DEL_MSG
     {
         /* ### ACHTUNG: Neuer Text in Resource? Wollen Sie das AutoFormat # wirklich löschen? : Wollen Sie das AutoFormat # wirklich l÷schen? */
-        Text [ de ] = "Wollen Sie das AutoFormat # wirklich lÃ¶schen?" ;
         Text [ en-US ] = "Do you really want to delete the # AutoFomat?" ;
-        Text [ x-comment ] = " ";
     };
     String STR_BTN_CLOSE
     {
         /* ### ACHTUNG: Neuer Text in Resource? Schlie~ßen : Schlie~˜en */
-        Text [ de ] = "Schlie~ÃŸen" ;
         Text [ en-US ] = "~Close" ;
-        Text [ x-comment ] = " ";
     };
     String STR_JAN
     {
-        Text [ de ] = "Jan" ;
         Text [ en-US ] = "Jan" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FEB
     {
-        Text [ de ] = "Feb" ;
         Text [ en-US ] = "Feb" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MAR
     {
         /* ### ACHTUNG: Neuer Text in Resource? Mär : Mõr */
-        Text [ de ] = "MÃ¤r" ;
         Text [ en-US ] = "Mar" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NORTH
     {
-        Text [ de ] = "Nord" ;
         Text [ en-US ] = "North" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MID
     {
-        Text [ de ] = "Mitte" ;
         Text [ en-US ] = "Mid" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SOUTH
     {
         /* ### ACHTUNG: Neuer Text in Resource? Süd : S³d */
-        Text [ de ] = "SÃ¼d" ;
         Text [ en-US ] = "South" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SUM
     {
-        Text [ de ] = "Summe" ;
         Text [ en-US ] = "Total" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
