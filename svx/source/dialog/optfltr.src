@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:42:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:15:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Microsoft Word 97/2000" ;
         Text [ en-US ] = "Microsoft Word 97/2000";
     };
     CheckBox CB_WBAS_CODE
@@ -58,7 +57,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Basic Code zum Bearbeiten laden" ;
         Text [ en-US ] = "Load Basic ~code to edit";
     };
     CheckBox CB_WBAS_STG
@@ -66,7 +64,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Original Basic Code wieder speichern" ;
         Text [ en-US ] = "Save ~original Basic code again";
     };
 
@@ -74,7 +71,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     {
         Pos = MAP_APPFONT ( 6 , 44 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Microsoft Excel 97/2000" ;
         Text [ en-US ] = "Microsoft Excel 97/2000";
     };
     CheckBox CB_EBAS_CODE
@@ -82,7 +78,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "B~asic Code zum Bearbeiten laden" ;
         Text [ en-US ] = "Lo~ad Basic code to edit";
     };
     CheckBox CB_EBAS_STG
@@ -90,7 +85,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Or~iginal Basic Code wieder speichern" ;
         Text [ en-US ] = "Sa~ve original Basic code again";
     };
 
@@ -98,7 +92,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Microsoft PowerPoint 97/2000" ;
         Text [ en-US ] = "Microsoft PowerPoint 97/2000";
     };
     CheckBox CB_PBAS_CODE
@@ -106,7 +99,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ba~sic Code zum Bearbeiten laden" ;
         Text [ en-US ] = "Load Ba~sic code to edit";
     };
     CheckBox CB_PBAS_STG
@@ -114,7 +106,6 @@ TabPage RID_OFAPAGE_MSFILTEROPT
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ori~ginal Basic Code wieder speichern" ;
         Text [ en-US ] = "Sav~e original Basic code again";
     };
 };
@@ -137,48 +128,38 @@ TabPage RID_OFAPAGE_MSFILTEROPT2
     };
     String ST_HEADER1
     {
-        Text [ de ] = "[L]" ;
         Text [ en-US ] = "[L]";
-        Text [ x-comment ] = "; RB: ; RB: L=Laden";
     };
     String ST_HEADER2
     {
-        Text [ de ] = "[S]" ;
         Text [ en-US ] = "[S]";
-        Text [ x-comment ] = "; RB: ; RB: S=Speichern";
     };
     FixedText FT_HEADER1_EXPLANATION
     {
         Pos = MAP_APPFONT ( 6 , 160 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "[L]: Objekt laden und konvertieren" ;
         Text [ en-US ] = "[L]: Load and convert the object";
     };
     FixedText FT_HEADER2_EXPLANATION
     {
         Pos = MAP_APPFONT ( 6 , 171 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "[S]: Objekt konvertieren und speichern" ;
         Text [ en-US ] = "[S]: Convert and save the object";
     };
     String ST_CHG_MATH
     {
-        Text [ de ] = "MathType nach %PRODUCTNAME Math / %PRODUCTNAME Math nach MathType" ;
         Text [ en-US ] = "MathType to %PRODUCTNAME Math / %PRODUCTNAME Math to MathType";
     };
     String ST_CHG_WRITER
     {
-        Text [ de ] = "WinWord nach %PRODUCTNAME Writer / %PRODUCTNAME Writer nach WinWord" ;
         Text [ en-US ] = "WinWord to %PRODUCTNAME Writer / %PRODUCTNAME Writer to WinWord";
     };
     String ST_CHG_CALC
     {
-        Text [ de ] = "Excel nach %PRODUCTNAME Calc / %PRODUCTNAME Calc nach Excel" ;
         Text [ en-US ] = "Excel to %PRODUCTNAME Calc / %PRODUCTNAME Calc to Excel";
     };
     String ST_CHG_IMPRESS
     {
-        Text [ de ] = "PowerPoint nach %PRODUCTNAME Impress / %PRODUCTNAME Impress nach PowerPoint" ;
         Text [ en-US ] = "PowerPoint to %PRODUCTNAME Impress / %PRODUCTNAME Impress to PowerPoint";
     };
     Bitmap CHKBUT_UNCHECKED
