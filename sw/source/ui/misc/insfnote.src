@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insfnote.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:08:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:18:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog DLG_INS_FOOTNOTE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 160 , 100 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnote einf¸gen : Fuònote einf≥gen */
-    Text [ de ] = "Fu√ünote einf√ºgen" ;
     Text [ en-US ] = "Insert Footnote" ;
     Moveable = TRUE ;
     Edit ED_NUMBER_CHAR
@@ -98,28 +97,22 @@ ModalDialog DLG_INS_FOOTNOTE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "~Automatic" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_NUMBER_CHAR
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 54 , 10 ) ;
-        Text [ de ] = "~Zeichen" ;
         Text [ en-US ] = "~Character" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_NUMBER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Nummerierung" ;
         Text [ en-US ] = "Numbering" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BT_NUMBER_CHAR
     {
@@ -131,30 +124,23 @@ ModalDialog DLG_INS_FOOTNOTE
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "~Fu√ünote" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
         Text [ en-US ] = "~Footnote" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_TYPE_ENDNOTE
     {
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 79 , 10 ) ;
-        Text [ de ] = "~Endnote" ;
         Text [ en-US ] = "~Endnote" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_TYPE
     {
         Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Art" ;
         Text [ en-US ] = "Type" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
