@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optinet2.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:22:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,11 +148,11 @@ private:
     uno::Reference< uno::XInterface > m_xConfigurationUpdateAccess;
 
 #ifdef _SVX_OPTINET2_CXX
-    void            EnableControls_Impl(BOOL bEnable);
-
-        void ReadConfigData_Impl();
-        void ReadConfigDefaults_Impl();
-        void RestoreConfigDefaults_Impl();
+    void ArrangeControls_Impl();
+    void EnableControls_Impl(BOOL bEnable);
+    void ReadConfigData_Impl();
+    void ReadConfigDefaults_Impl();
+    void RestoreConfigDefaults_Impl();
 
     DECL_LINK( ProxyHdl_Impl, ListBox * );
     DECL_LINK( LoseFocusHdl_Impl, Edit * );
@@ -166,7 +166,6 @@ public:
     virtual BOOL        FillItemSet( SfxItemSet& rSet );
     virtual void        Reset( const SfxItemSet& rSet );
 };
-
 
 // class SvxSearchTabPage ------------------------------------------------
 class SvxSearchConfig;
