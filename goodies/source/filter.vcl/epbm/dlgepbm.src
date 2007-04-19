@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepbm.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:13:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:52:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog DLG_EXPORT_EPBM
     Size = MAP_APPFONT ( 133 , 63 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "PBM Optionen" ;
     Text [ en-US ] = "PBM Options" ;
     OKButton BTN_OK
     {
@@ -66,29 +65,22 @@ ModalDialog DLG_EXPORT_EPBM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Datei Format" ;
         Text [ en-US ] = "File format";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_RAW
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Binär" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Binary";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_ASCII
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Text" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Text";
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
