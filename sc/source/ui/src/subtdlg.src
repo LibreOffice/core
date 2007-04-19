@@ -4,9 +4,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:10:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:48:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,55 +45,44 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Gruppen" ;
         Text [ en-US ] = "Groups";
     };
     CheckBox BTN_PAGEBREAK
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "Neue Seite bei Gru~ppenwechsel" ;
         Text [ en-US ] = "~Page break between groups" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_CASE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Groß-/Kleinschreibung beachten : ~Gro˜-/Kleinschreibung beachten */
-        Text [ de ] = "~GroÃŸ-/Kleinschreibung beachten" ;
         Text [ en-US ] = "~Case sensitive" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_SORT
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "Bereich vorher nach Gruppen ~sortieren" ;
         Text [ en-US ] = "Pre-~sort area according to groups" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_FORMATS
     {
         Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Formate einschließen : ~Formate einschlie˜en */
-        Text [ de ] = "~Formate einschlieÃŸen" ;
         Text [ en-US ] = "I~nclude formats" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_USERDEF
     {
         Pos = MAP_APPFONT ( 12 , 115 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "~Benutzerdefinierte Sortierreihenfolge" ;
         Text [ en-US ] = "C~ustom sort order" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_USERDEF
     {
@@ -107,27 +96,21 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 69 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "A~ufsteigend" ;
         Text [ en-US ] = "~Ascending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_DESCENDING
     {
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 239 , 10 ) ;
-        Text [ de ] = "Abs~teigend" ;
         Text [ en-US ] = "D~escending" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SORT
     {
         Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Sortieren" ;
         Text [ en-US ] = "Sort" ;
-        Text [ x-comment ] = " ";
     };
 };
 
@@ -144,9 +127,7 @@ TabPage RID_SUBTBASE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "~Gruppieren nach" ;
         Text [ en-US ] = "~Group by" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_GROUP
     {
@@ -162,9 +143,7 @@ TabPage RID_SUBTBASE
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Teilergebnisse berechnen für : ~Teilergebnisse berechnen f³r */
-        Text [ de ] = "~Teilergebnisse berechnen fÃ¼r" ;
         Text [ en-US ] = "~Calculate subtotals for" ;
-        Text [ x-comment ] = " ";
     };
     Control WND_COLUMNS
     {
@@ -178,9 +157,7 @@ TabPage RID_SUBTBASE
     {
         Pos = MAP_APPFONT ( 133 , 32 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "~Berechnungsvorschrift" ;
         Text [ en-US ] = "Use ~function" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_FUNCTIONS
     {
@@ -189,21 +166,6 @@ TabPage RID_SUBTBASE
         Pos = MAP_APPFONT ( 133 , 43 ) ;
         Size = MAP_APPFONT ( 121 , 136 ) ;
         TabStop = TRUE ;
-        StringList [ de ] =
-        {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 7 : Anzahl (nur Zahlen)*/
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Sum" ; Default ; > ;
@@ -218,20 +180,6 @@ TabPage RID_SUBTBASE
             < "Var (Sample)" ; Default ; > ;
             < "VarP (Population)" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
 };
 
@@ -255,7 +203,6 @@ TabDialog RID_SCDLG_SUBTOTALS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 294 , 176 ) ;
-    Text [ de ] = "Teilergebnisse" ;
     Text [ en-US ] = "Subtotals" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -270,30 +217,22 @@ TabDialog RID_SCDLG_SUBTOTALS
             PageItem
             {
                 Identifier = PAGE_GROUP1 ;
-                Text [ de ] = "1. Gruppe" ;
                 Text [ en-US ] = "1st Group" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = PAGE_GROUP2 ;
-                Text [ de ] = "2. Gruppe" ;
                 Text [ en-US ] = "2nd Group" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = PAGE_GROUP3 ;
-                Text [ de ] = "3. Gruppe" ;
                 Text [ en-US ] = "3rd Group" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = PAGE_OPTIONS ;
-                Text [ de ] = "Optionen" ;
                 Text [ en-US ] = "Options" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -302,12 +241,9 @@ TabDialog RID_SCDLG_SUBTOTALS
         Pos = MAP_APPFONT ( 143 , 160 ) ;
         Size = MAP_APPFONT ( 40 , 12 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
