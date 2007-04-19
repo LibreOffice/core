@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commands.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:25:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,7 +245,6 @@ Menu RID_COMMANDMENU
         {
             Identifier = RID_UNBINOPS_MENU ;
             HelpId = HID_SMA_UNBINOPS_TBX ;
-            Text [ de ] = "~Unäre/Binäre Operatoren" ;
             Text [ en-US ] = "~Unary/Binary Operators" ;
             SubMenu = Menu
             {
@@ -373,13 +372,11 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_RELATIONS_MENU ;
             HelpId = HID_SMA_RELATIONS_TBX ;
-            Text [ de ] = "~Relationen" ;
             Text [ en-US ] = "~Relations" ;
             SubMenu = Menu
             {
@@ -521,13 +518,11 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_SETOPERATIONS_MENU ;
             HelpId = HID_SMA_SETOPERATIONS_TBX ;
-            Text [ de ] = "~Mengenoperationen" ;
             Text [ en-US ] = "~Set Operations" ;
             SubMenu = Menu
             {
@@ -675,13 +670,11 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_FUNCTIONS_MENU ;
             HelpId = HID_SMA_FUNCTIONS_TBX ;
-            Text [ de ] = "~Funktionen" ;
             Text [ en-US ] = "~Functions" ;
             SubMenu = Menu
             {
@@ -801,7 +794,6 @@ Menu RID_COMMANDMENU
                     {
                         Identifier = RID_FUNCTIONSOTHER1_MENU;
                         HelpId = HID_SMA_FUNCTIONSOTHER1_MENU;
-                        Text [ de ] = "andere";
                         Text [ en-US ] = "More";
                         SubMenu = Menu
                         {
@@ -857,17 +849,14 @@ Menu RID_COMMANDMENU
                                 };
                             };
                         };
-                        Text [ x-comment ] = " ";
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_OPERATORS_MENU ;
             HelpId = HID_SMA_OPERATORS_TBX ;
-            Text [ de ] = "~Operatoren" ;
             Text [ en-US ] = "O~perators" ;
             SubMenu = Menu
             {
@@ -957,13 +946,11 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_ATTRIBUTES_MENU ;
             HelpId = HID_SMA_ATTRIBUTES_TBX ;
-            Text [ de ] = "~Attribute" ;
             Text [ en-US ] = "~Attributes" ;
             SubMenu = Menu
             {
@@ -1117,13 +1104,11 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_BRACKETS_MENU ;
             HelpId = HID_SMA_BRACKETS_TBX ;
-            Text [ de ] = "~Klammern" ;
             Text [ en-US ] = "~Brackets" ;
             SubMenu = Menu
             {
@@ -1281,13 +1266,11 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_FORMAT_MENU ;
             HelpId = HID_SMA_FORMAT_TBX ;
-            Text [ de ] = "Formatieru~ngen" ;
             Text [ en-US ] = "For~mats" ;
             SubMenu = Menu
             {
@@ -1337,25 +1320,19 @@ Menu RID_COMMANDMENU
                     {
                         Identifier = RID_NEWLINE;
                         HelpId = HID_SMA_NEWLINE;
-                        Text [ de ] = "neue Zeile";
                         Text [ en-US ] = "New Line";
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = RID_SBLANK;
                         HelpId = HID_SMA_SBLANK;
-                        Text [ de ] = "kleiner Zwischenraum";
                         Text [ en-US ] = "Small Gap";
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = RID_BLANK;
                         HelpId = HID_SMA_BLANK;
-                        Text [ de ] = "Zwischenraum";
                         Text [ en-US ] = "Gap";
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
@@ -1399,13 +1376,11 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = RID_MISC_MENU ;
             HelpId = HID_SMA_MISC_MENU ;
-            Text [ de ] = "~Sonstiges" ;
             Text [ en-US ] = "~Others" ;
             SubMenu = Menu
             {
@@ -1535,7 +1510,6 @@ Menu RID_COMMANDMENU
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
     };
 };
