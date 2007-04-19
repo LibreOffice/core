@@ -12,7 +12,7 @@
     </prop>
      <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Copy</value>
-     <value xml:lang="de">Kopieren</value>
+
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>false</value>
@@ -39,7 +39,7 @@
     </prop>
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Table Data</value>
-     <value xml:lang="de">Tabellenansicht</value>
+
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
@@ -69,7 +69,7 @@
     </prop>
     <prop oor:name="UIName" oor:type="xs:string">
      <value xml:lang="en-US">Table Data View</value>
-     <value xml:lang="de">Tabellendatenansicht</value>
+
     </prop>
     <prop oor:name="Visible" oor:type="xs:boolean">
      <value>true</value>
