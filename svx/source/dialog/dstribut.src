@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dstribut.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:03:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:03:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,14 +45,12 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     HelpId = HID_PAGE_DISTRIBUTE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 81 ) ;
-    Text [ de ] = "Verteilung" ;
     Text [ en-US ] = "Distribution" ;
 
     FixedLine FL_HORIZONTAL
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Horizontal" ;
         Text [ en-US ] = "Horizontal" ;
     };
 
@@ -60,7 +58,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 48 , 10 ) ;
-        Text [ de ] = "~Keine" ;
         Text [ en-US ] = "~None" ;
     };
 
@@ -68,7 +65,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 56 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
     };
 
@@ -76,7 +72,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 105 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Mitte" ;
         Text [ en-US ] = "~Center" ;
     };
 
@@ -84,7 +79,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 154 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Abstand" ;
         Text [ en-US ] = "~Spacing" ;
     };
 
@@ -92,7 +86,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 203 , 26  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "~Right" ;
     };
 
@@ -140,7 +133,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 6 , 42  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Vertikal" ;
         Text [ en-US ] = "Vertical" ;
     };
 
@@ -148,7 +140,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 46 , 10 ) ;
-        Text [ de ] = "K~eine" ;
         Text [ en-US ] = "N~one" ;
     };
 
@@ -156,7 +147,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 56 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Oben" ;
         Text [ en-US ] = "~Top" ;
     };
 
@@ -164,7 +154,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 105 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "M~itte" ;
         Text [ en-US ] = "C~enter" ;
     };
 
@@ -172,7 +161,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 154 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "A~bstand" ;
         Text [ en-US ] = "S~pacing" ;
     };
 
@@ -180,7 +168,6 @@ TabPage RID_SVXPAGE_DISTRIBUTE
     {
         Pos = MAP_APPFONT ( 203 , 65  ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Unten" ;
         Text [ en-US ] = "~Bottom" ;
     };
 
