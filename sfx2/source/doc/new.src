@@ -4,9 +4,9 @@
  *
  *  $RCSfile: new.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:28:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:16:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModalDialog DLG_NEW_FILE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 336 , 96 ) ;
-    Text [ de ] = "Neu" ;
     Text [ en-US ] = "New" ;
     Moveable = TRUE ;
     OKButton BT_OK
@@ -75,19 +74,15 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
-        Text [ de ] = "~Bereiche" ;
         Text [ en-US ] = "~Categories" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TEMPLATE
     {
         Pos = MAP_APPFONT ( 139 , 6 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
-        Text [ de ] = "~Vorlagen" ;
         Text [ en-US ] = "T~emplates" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_TEMPLATE
     {
@@ -100,11 +95,9 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 274 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Zusätze" ;
         Text [ en-US ] = "~More" ;
         Delta = 148 ;
         MapUnit = MAP_APPFONT ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
@@ -118,26 +111,21 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 6 , 96 ) ;
         Size = MAP_APPFONT ( 97 , 10 ) ;
-        Text [ de ] = "Vor~schau" ;
         Text [ en-US ] = "Pre~view" ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GB_DOCINFO
     {
         Pos = MAP_APPFONT ( 139 , 97 ) ;
         Size = MAP_APPFONT ( 186 , 8 ) ;
-        Text [ de ] = "Beschreibung" ;
         Hide = TRUE ;
         Text [ en-US ] = "Description" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_TEXT_STYLE
     {
         Pos = MAP_APPFONT ( 6 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Te~xt" ;
         Text [ en-US ] = "Te~xt" ;
     };
     CheckBox CB_FRAME_STYLE
@@ -145,7 +133,6 @@ ModalDialog DLG_NEW_FILE
         Pos = MAP_APPFONT ( 60 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "~Rahmen" ;
         Text [ en-US ] = "~Frame" ;
     };
     CheckBox CB_PAGE_STYLE
@@ -153,7 +140,6 @@ ModalDialog DLG_NEW_FILE
         Pos = MAP_APPFONT ( 114 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "~Seiten" ;
         Text [ en-US ] = "~Pages" ;
     };
     CheckBox CB_NUM_STYLE
@@ -161,7 +147,6 @@ ModalDialog DLG_NEW_FILE
         Pos = MAP_APPFONT ( 168 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "N~ummerierung" ;
         Text [ en-US ] = "N~umbering" ;
     };
     CheckBox CB_MERGE_STYLE
@@ -169,7 +154,6 @@ ModalDialog DLG_NEW_FILE
         Pos = MAP_APPFONT ( 222 , 94 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Üb~erschreiben" ;
         Text [ en-US ] = "~Overwrite" ;
     };
     PushButton PB_LOAD_FILE
@@ -177,22 +161,18 @@ ModalDialog DLG_NEW_FILE
         Pos = MAP_APPFONT ( 274 , 92 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         Hide = TRUE;
-        Text [ de ] = "Aus Datei..." ;
         Text [ en-US ] = "From File...";
     };
     String STR_LOAD_TEMPLATE
     {
-        Text [ de ] = "Vorlagen laden" ;
         Text [ en-US ] = "Load Styles" ;
     };
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 145 , 108 ) ;
         Size = MAP_APPFONT ( 175 , 10 ) ;
-        Text [ de ] = "~Titel" ;
         Text [ en-US ] = "~Title" ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TITLE
     {
@@ -206,10 +186,8 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 145 , 135 ) ;
         Size = MAP_APPFONT ( 175 , 10 ) ;
-        Text [ de ] = "The~ma" ;
         Text [ en-US ] = "Subject" ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_THEMA
     {
@@ -223,10 +201,8 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 145 , 162 ) ;
         Size = MAP_APPFONT ( 175 , 10 ) ;
-        Text [ de ] = "S~chlüsselworte" ;
         Text [ en-US ] = "~Key words" ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_KEYWORDS
     {
@@ -240,10 +216,8 @@ ModalDialog DLG_NEW_FILE
     {
         Pos = MAP_APPFONT ( 145 , 189 ) ;
         Size = MAP_APPFONT ( 175 , 10 ) ;
-        Text [ de ] = "B~eschreibung" ;
         Text [ en-US ] = "~Description" ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit ED_DESC
     {
@@ -259,7 +233,6 @@ ModalDialog DLG_NEW_FILE
     103;
     44;
     };
-    Text [ x-comment ] = " ";
 };
 
 
