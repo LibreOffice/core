@@ -4,9 +4,9 @@
  *
  *  $RCSfile: managelang.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:52:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:48:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,13 +44,11 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
     Size = MAP_APPFONT ( MANAGE_DLG_WIDTH , MANAGE_DLG_HEIGHT ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Verwalten der Sprachen der Benutzerschnittstelle [$1]" ;
     Text [ en-US ] = "Manage User Interface Languages [$1]" ;
     FixedText FT_LANGUAGE
     {
         Pos = MAP_APPFONT ( MANAGE_COL1 , MANAGE_ROW1 ) ;
         Size = MAP_APPFONT ( MANAGE_LB_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Verfügbare Sprachen" ;
         Text [ en-US ] = "Present Languages" ;
     };
     ListBox LB_LANGUAGE
@@ -65,7 +63,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
         Pos = MAP_APPFONT ( MANAGE_COL3 , MANAGE_ROW2 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Hinzufügen..." ;
         Text [ en-US ] = "Add..." ;
     };
     PushButton PB_DEL_LANG
@@ -73,7 +70,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
         Pos = MAP_APPFONT ( MANAGE_COL3 , MANAGE_ROW3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Löschen" ;
         Text [ en-US ] = "Delete" ;
     };
     PushButton PB_MAKE_DEFAULT
@@ -81,7 +77,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
         Pos = MAP_APPFONT ( MANAGE_COL3 , MANAGE_ROW4 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Standard" ;
         Text [ en-US ] = "Default" ;
     };
     FixedText FT_INFO
@@ -89,7 +84,6 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
         Pos = MAP_APPFONT ( MANAGE_COL1 , MANAGE_ROW5 ) ;
         Size = MAP_APPFONT ( MANAGE_DLG_WIDTH - 2*RSC_SP_FLGR_INNERBORDER_LEFT, INFO_LINES_COUNT*RSC_CD_FIXEDTEXT_HEIGHT ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Die Standardsprache wird angezeigt, wenn für die Sprache der Benutzerschnittstelle keine spezielle Lokalisierung vorhanden ist. Weiterhin werden alle Texte der Standardsprache in neu angelegte Sprachressourcen kopiert." ;
         Text [ en-US ] = "The default language is used if no localization for a user interface locale is present. Furthermore all strings from the default language are copied to resources of newly added languages." ;
     };
     FixedLine FL_BUTTONS
@@ -109,31 +103,25 @@ ModalDialog RID_DLG_MANAGE_LANGUAGE
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ de ] = "~Schließen" ;
         Text [ en-US ] = "~Close" ;
     };
     String STR_DEF_LANG
     {
-        Text [ de ] = "[Standardsprache]" ;
         Text [ en-US ] = "[Default Language]" ;
     };
     String STR_DELETE
     {
-        Text [ de ] = "~Löschen" ;
         Text [ en-US ] = "~Delete" ;
     };
     String STR_CREATE_LANG
     {
-        Text [ de ] = "<'Hinzufügen' Schaltfläche klicken, um Sprachressourcen anzulegen>" ;
         Text [ en-US ] = "<Press 'Add' to create language resources>" ;
     };
 };
 
 QueryBox RID_QRYBOX_LANGUAGE
 {
-    Title [ de ] = "Sprachressourcen löschen" ;
     Title [ en-US ] = "Delete Language Resources" ;
-    Message [ de ] = "Sie sind im Begriff die Ressourcen der selektierten Sprache(n) zu löschen. Alle Texte der Benutzerschnittstelle in dieser Sprache(n) werden dabei gelöscht.\n\nMöchten Sie die Ressourcen der selektierten Sprache(n) löschen?";
     Message [ en-US ] = "You are about to delete the resources for the selected language(s). All user interface strings for this language(s) will be deleted.\n\nDo you want to delete the resources of the selected language(s)?";
     BUTTONS = WB_OK_CANCEL ;
     DEFBUTTON = WB_DEF_CANCEL ;
@@ -146,13 +134,11 @@ ModalDialog RID_DLG_SETDEF_LANGUAGE
     Size = MAP_APPFONT ( SETDEF_DLG_WIDTH , SETDEF_DLG_HEIGHT ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Standardsprache für Benutzerschnittstelle festlegen" ;
     Text [ en-US ] = "Set Default User Interface Language" ;
     FixedText FT_DEF_LANGUAGE
     {
         Pos = MAP_APPFONT ( SETDEF_COL1 , SETDEF_ROW1 ) ;
         Size = MAP_APPFONT ( SETDEF_LB_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Standardsprache" ;
         Text [ en-US ] = "Default language" ;
     };
     ListBox LB_DEF_LANGUAGE
@@ -173,7 +159,6 @@ ModalDialog RID_DLG_SETDEF_LANGUAGE
         Pos = MAP_APPFONT ( SETDEF_COL1 , SETDEF_ROW3 ) ;
         Size = MAP_APPFONT ( SETDEF_LB_WIDTH, INFO_LINES_COUNT*RSC_CD_FIXEDTEXT_HEIGHT ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Selektieren Sie eine Sprache, um die Standardsprache für die Benutzerschnittstelle festzulegen. Die aktuellen Texte der Benutzerschnittstelle werden dann dieser neu angelegten Sprachressource zugewiesen." ;
         Text [ en-US ] = "Select a language to define the default user interface language. All currently present strings will be assigned to the resources created for the selected language." ;
     };
     FixedLine FL_DEF_BUTTONS
@@ -202,17 +187,14 @@ ModalDialog RID_DLG_SETDEF_LANGUAGE
     };
     String STR_ADDLANG_TITLE
     {
-        Text [ de ] = "Sprachen zur Benutzerschnittstelle hinzufügen" ;
         Text [ en-US ] = "Add User Interface Languages" ;
     };
     String STR_ADDLANG_LABEL
     {
-        Text [ de ] = "Verfügbare Sprachen" ;
         Text [ en-US ] = "Available Languages" ;
     };
     String STR_ADDLANG_INFO
     {
-        Text [ de ] = "Wählen Sie die Sprachen, die hinzugefügt werden sollen. Es werden dann Ressourcen für diese Sprachen in der Bibliothek angelegt. Die Texte der aktuellen Standardsprache werden dabei in die neu angelegten Sprachressourcen kopiert." ;
         Text [ en-US ] = "Select languages to be added. Resources for these languages will be created in the library. Strings of the current default user interface language will be copied to these new resources by default." ;
     };
 };
