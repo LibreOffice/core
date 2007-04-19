@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:03:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:43:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,6 @@ TabPage RID_TP_GENERAL
 {
     SVLook = TRUE ;
     Size = MAP_APPFONT( PAGE_WIDTH, 209 );
-    Text [ de ] = "Allgemein";
     HelpId = HID_BIB_CONTROL_PAGE;
 
     FixedText FT_IDENTIFIER
@@ -260,143 +259,97 @@ TabPage RID_TP_GENERAL
     };
     String ST_ERROR_PREFIX
     {
-        Text [ de ] = "Die folgenden Spaltennamen konnten nicht zugeordnet werden:\n" ;
         Text [ en-US ] = "The following column names could not be assigned:\n";
     };
     String ST_TYPE_ARTICLE
     {
-        Text [ de ] = "Artikel" ;
         Text [ en-US ] = "Article";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_BOOK
     {
-        Text [ de ] = "Buch" ;
         Text [ en-US ] = "Book";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_BOOKLET
     {
-        Text [ de ] = "BroschÃ¼re" ;
         Text [ en-US ] = "Brochures";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_CONFERENCE
     {
-        Text [ de ] = "Konferenzbericht" ;
         Text [ en-US ] = "Conference proceedings";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_INBOOK
     {
-        Text [ de ] = "Buchauszug" ;
         Text [ en-US ] = "Book excerpt";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_INCOLLECTION
     {
-        Text [ de ] = "Buchauszug mit Titel" ;
         Text [ en-US ] = "Book excerpt with title";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_INPROCEEDINGS
     {
-        Text [ de ] = "Tagungsbericht" ;
         Text [ en-US ] = "Conference proceedings";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_JOURNAL
     {
-        Text [ de ] = "Zeitschrift" ;
         Text [ en-US ] = "Journal";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_MANUAL
     {
-        Text [ de ] = "Techn. Dokumentation" ;
         Text [ en-US ] = "Techn. documentation";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_MASTERSTHESIS
     {
-        Text [ de ] = "Diplomarbeit" ;
         Text [ en-US ] = "Thesis";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_MISC
     {
-        Text [ de ] = "Verschiedenes" ;
         Text [ en-US ] = "Miscellaneous";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_PHDTHESIS
     {
-        Text [ de ] = "Dissertation" ;
         Text [ en-US ] = "Dissertation";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_PROCEEDINGS
     {
-        Text [ de ] = "Tagungsbericht" ;
         Text [ en-US ] = "Conference proceedings";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_TECHREPORT
     {
-        Text [ de ] = "Forschungsbericht" ;
         Text [ en-US ] = "Research report";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_UNPUBLISHED
     {
-        Text [ de ] = "UnverÃ¶ffentlicht" ;
         Text [ en-US ] = "Unpublished";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_EMAIL
     {
-        Text [ de ] = "e-Mail" ;
         Text [ en-US ] = "e-mail";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_WWW
     {
-        Text [ de ] = "WWW-Dokument" ;
         Text [ en-US ] = "WWW document";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_CUSTOM1
     {
-        Text [ de ] = "Benutzertyp1" ;
         Text [ en-US ] = "User-defined1";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_CUSTOM2
     {
-        Text [ de ] = "Benutzertyp2" ;
         Text [ en-US ] = "User-defined2";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_CUSTOM3
     {
-        Text [ de ] = "Benutzertyp3" ;
         Text [ en-US ] = "User-defined3";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_CUSTOM4
     {
-        Text [ de ] = "Benutzertyp4" ;
         Text [ en-US ] = "User-defined4";
-        Text [ x-comment ] = " ";
     };
     String ST_TYPE_CUSTOM5
     {
-        Text [ de ] = "Benutzertyp5" ;
         Text [ en-US ] = "User-defined5";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "General";
-    Text [ x-comment ] = " ";
 };
 Menu RID_POPUP_ME_VIEW
 {
@@ -404,213 +357,146 @@ Menu RID_POPUP_ME_VIEW
     {
         MenuItem
         {
-            Text [ de ] = "Abschnitt einfügen..." ;
             Identifier = PU_INSERT;
             Text [ en-US ] = "Insert Section...";
-            Text [ x-comment ] = " ";
-            Text[ de ] = "Abschnitt einfÃ¼gen...";
         };
         MenuItem
         {
-            Text [ de ] = "Abschnitt löschen..." ;
             Identifier = PU_REMOVE;
             Text [ en-US ] = "Delete Section...";
-            Text [ x-comment ] = " ";
-            Text[ de ] = "Abschnitt lÃ¶schen...";
         };
         MenuItem
         {
-            Text [ de ] = "Namen ändern..." ;
             Identifier = PU_CHG_NAME;
             Text [ en-US ] = "Modify Name...";
-            Text [ x-comment ] = " ";
-            Text[ de ] = "Namen Ã¤ndern...";
         };
     };
 };
 
 String ST_IDENTIFIER
 {
-    Text [ de ] = "~Kurzbezeichnung";
     Text [ en-US ] = "~Short name";
-    Text [ x-comment ] = " ";
 };
 String ST_AUTHTYPE
 {
-    Text [ de ] = "~Art";
     Text [ en-US ] = "~Type";
-    Text [ x-comment ] = " ";
 };
 String ST_YEAR
 {
-    Text [ de ] = "~Jahr";
     Text [ en-US ] = "~Year";
-    Text [ x-comment ] = " ";
 };
 String ST_AUTHOR
 {
-    Text [ de ] = "A~utor(en)" ;
     Text [ en-US ] = "Author(s)";
 };
 String ST_TITLE
 {
-    Text [ de ] = "Tite~l";
     Text [ en-US ] = "Tit~le";
-    Text [ x-comment ] = " ";
 };
 String ST_PUBLISHER
 {
-    Text [ de ] = "~Verlag";
     Text [ en-US ] = "~Publisher";
-    Text [ x-comment ] = " ";
 };
 String ST_ADDRESS
 {
-    Text [ de ] = "A~dresse";
     Text [ en-US ] = "A~ddress";
-    Text [ x-comment ] = " ";
 };
 String ST_ISBN
 {
-    Text [ de ] = "~ISBN";
     Text [ en-US ] = "~ISBN";
-    Text [ x-comment ] = " ";
 };
 String ST_CHAPTER
 {
-    Text [ de ] = "~Kapitel";
     Text [ en-US ] = "~Chapter";
-    Text [ x-comment ] = " ";
 };
 String ST_PAGE
 {
-    Text [ de ] = "Seite~(n)";
     Text [ en-US ] = "Pa~ge(s)";
-    Text [ x-comment ] = " ";
 };
 String ST_EDITOR
 {
-    Text [ de ] = "~Herausgeber";
     Text [ en-US ] = "Editor";
-    Text [ x-comment ] = " ";
 };
 String ST_EDITION
 {
-    Text [ de ] = "Aus~gabe";
     Text [ en-US ] = "Ed~ition";
-    Text [ x-comment ] = " ";
 };
 String ST_BOOKTITLE
 {
-    Text [ de ] = "Bu~chtitel";
     Text [ en-US ] = "~Book title";
-    Text [ x-comment ] = " ";
 };
 String ST_VOLUME
 {
-    Text [ de ] = "Band" ;
     Text [ en-US ] = "Volume";
 };
 String ST_HOWPUBLISHED
 {
-    Text [ de ] = "Au~sgabeart";
     Text [ en-US ] = "Publication t~ype";
-    Text [ x-comment ] = " ";
 };
 String ST_ORGANIZATION
 {
-    Text [ de ] = "~Organisation";
     Text [ en-US ] = "Organi~zation";
-    Text [ x-comment ] = " ";
 };
 String ST_INSTITUTION
 {
-    Text [ de ] = "~Institution";
     Text [ en-US ] = "Instit~ution";
-    Text [ x-comment ] = " ";
 };
 String ST_SCHOOL
 {
-    Text [ de ] = "Hochschule/Universit~Ã¤t" ;
     Text [ en-US ] = "University";
 };
 String ST_REPORT
 {
-    Text [ de ] = "Art des Berichts" ;
     Text [ en-US ] = "Type of re~port";
 };
 String ST_MONTH
 {
-    Text [ de ] = "~Monat";
     Text [ en-US ] = "~Month";
-    Text [ x-comment ] = " ";
 };
 String ST_JOURNAL
 {
-    Text [ de ] = "Zeitschri~ft";
     Text [ en-US ] = "~Journal";
-    Text [ x-comment ] = " ";
 };
 
 String ST_NUMBER
 {
-    Text [ de ] = "Numm~er";
     Text [ en-US ] = "Numb~er";
-    Text [ x-comment ] = "; \"Sayý\" burada istisna (dergi için)";
 };
 String ST_SERIES
 {
-    Text [ de ] = "Ser~ie";
     Text [ en-US ] = "Se~ries";
-    Text [ x-comment ] = " ";
 };
 String ST_ANNOTE
 {
-    Text [ de ] = "A~nmerkung";
     Text [ en-US ] = "Ann~otation";
-    Text [ x-comment ] = " ";
 };
 String ST_NOTE
 {
-    Text [ de ] = "Noti~z";
     Text [ en-US ] = "~Note";
-    Text [ x-comment ] = " ";
 };
 String ST_URL
 {
-    Text [ de ] = "URL";
     Text [ en-US ] = "URL";
-    Text [ x-comment ] = " ";
 };
 String ST_CUSTOM1
 {
-    Text [ de ] = "Benutzerfeld ~1";
     Text [ en-US ] = "User-defined field ~1";
-    Text [ x-comment ] = " ";
 };
 String ST_CUSTOM2
 {
-    Text [ de ] = "Benutzerfeld ~2";
     Text [ en-US ] = "User-defined field ~2";
-    Text [ x-comment ] = " ";
 };
 String ST_CUSTOM3
 {
-    Text [ de ] = "Benutzerfeld ~3";
     Text [ en-US ] = "User-defined field ~3";
-    Text [ x-comment ] = " ";
 };
 String ST_CUSTOM4
 {
-    Text [ de ] = "Benutzerfeld ~4";
     Text [ en-US ] = "User-defined field ~4";
-    Text [ x-comment ] = " ";
 };
 String ST_CUSTOM5
 {
-    Text [ de ] = "Benutzerfeld ~5";
     Text [ en-US ] = "User-defined field ~5";
-    Text [ x-comment ] = " ";
 };
 
 
