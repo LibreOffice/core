@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_draw.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:26:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:24:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,25 +35,19 @@
 
 [STR_REG_VAL_NEW]
 en-US = "&New"
-de = "&Neu"
 
 [STR_REG_VAL_SO51_DRAWING_OOO]
 en-US = "StarOffice 5.0 Drawing"
-de = "StarOffice 5.0 Zeichnung"
 
 [STR_REG_VAL_SO60_DRAWING]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Drawing"
-de = "%PRODUCTNAME %SXWFORMATVERSION Zeichnung"
 
 [STR_REG_VAL_SO60_DRAW_TEMPLATE]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Drawing Template"
-de = "%PRODUCTNAME %SXWFORMATVERSION Zeichnungsvorlage"
 
 [STR_REG_VAL_OO_DRAW]
 en-US = "OpenDocument Drawing"
-de = "OpenDocument Zeichnung"
 
 [STR_REG_VAL_OO_DRAW_TEMPLATE]
 en-US = "OpenDocument Drawing Template"
-de = "OpenDocument Zeichnungsdokumentvorlage"
 
