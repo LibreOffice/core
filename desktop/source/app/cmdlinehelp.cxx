@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdlinehelp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:35:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:30:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -121,7 +121,7 @@ namespace desktop
         "-accept=<accept-string>\n"\
         "      Specify an UNO connect-string to create an UNO acceptor through which\n"\
         "      other programs can connect to access the API\n"\
-        "-unaccept=<accept-sring>\n"\
+        "-unaccept=<accept-string>\n"\
         "      Close an acceptor that was created with -accept=<accept-string>\n"\
         "      Use -unnaccept=all to close all open acceptors\n"\
         "Remaining arguments will be treated as filenames or URLs of documents to open.\n";
