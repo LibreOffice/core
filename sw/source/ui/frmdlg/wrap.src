@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrap.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:06:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:13:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Vorgaben";
         Text [ en-US ] = "Settings";
     };
     ImageRadioButton RB_NO_WRAP
@@ -56,10 +55,8 @@ TabPage TP_FRM_WRAP
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "~Kein" ;
         Text [ en-US ] = "~None" ;
         TopImage = True ;
-        Text [ x-comment ] = "; ÕÂÚ";
     };
     ImageRadioButton RB_WRAP_LEFT
     {
@@ -67,7 +64,6 @@ TabPage TP_FRM_WRAP
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
         TopImage = True ;
-        Text [ de ] = "Vor" ;
         Text [ en-US ] = "Before" ;
     };
     ImageRadioButton RB_WRAP_RIGHT
@@ -76,7 +72,6 @@ TabPage TP_FRM_WRAP
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
         TopImage = True ;
-        Text [ de ] = "Hinter" ;
         Text [ en-US ] = "After" ;
     };
     ImageRadioButton RB_WRAP_PARALLEL
@@ -84,7 +79,6 @@ TabPage TP_FRM_WRAP
         Pos = MAP_APPFONT ( 177 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "~Parallel" ;
         Text [ en-US ] = "~Parallel" ;
         TopImage = True ;
     };
@@ -93,7 +87,6 @@ TabPage TP_FRM_WRAP
         Pos = MAP_APPFONT ( 6 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "~Durchlauf" ;
         Text [ en-US ] = "Thro~ugh" ;
         TopImage = True ;
     };
@@ -102,7 +95,6 @@ TabPage TP_FRM_WRAP
         Pos = MAP_APPFONT ( 65 , 57 ) ;
         Size = MAP_APPFONT ( 40 , 37 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "D~ynamisch" ;
         TopImage = True ;
         Text [ en-US ] = "~Optimal" ;
     };
@@ -111,21 +103,18 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 139 , 111 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "Er~ster Absatz" ;
         Text [ en-US ] = "~First paragraph" ;
     };
     CheckBox CB_TRANSPARENT
     {
         Pos = MAP_APPFONT ( 139 , 125 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "Im Hin~tergrund" ;
         Text [ en-US ] = "In bac~kground" ;
     };
     CheckBox CB_OUTLINE
     {
         Pos = MAP_APPFONT ( 139 , 139 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "Kont~ur" ;
         Hide = TRUE ;
         Text [ en-US ] = "~Contour" ;
     };
@@ -133,7 +122,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 139 , 153 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "~Nur au√üen" ;
         Hide = TRUE ;
         Text [ en-US ] = "Outside only" ;
     };
@@ -141,7 +129,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 133 , 100 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
     };
     FixedLine FL_OPTION_SEP
@@ -154,7 +141,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "L~inks" ;
         Text [ en-US ] = "L~eft" ;
         Left = TRUE ;
     };
@@ -177,7 +163,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 129 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Re~chts" ;
         Text [ en-US ] = "~Right" ;
         Left = TRUE ;
     };
@@ -200,7 +185,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Oben" ;
         Text [ en-US ] = "~Top" ;
         Left = TRUE ;
     };
@@ -223,7 +207,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 12 , 161 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Unt~en" ;
         Text [ en-US ] = "~Bottom" ;
         Left = TRUE ;
     };
@@ -246,7 +229,6 @@ TabPage TP_FRM_WRAP
     {
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 121 , 8 ) ;
-        Text [ de ] = "Abst√§nde" ;
         Text [ en-US ] = "Spacing" ;
     };
 #define WRAP_IDLIST \
