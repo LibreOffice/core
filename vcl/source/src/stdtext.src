@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdtext.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:41:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:56:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,86 +41,71 @@
 
 String SV_STDTEXT_SERVICENOTAVAILABLE
 {
-    Text [ de ] = "Eine Komponente (%s) konnte nicht geladen werden.\nBitte starten Sie das Setup und führen Sie eine Reparatur durch.";
     Text [ en-US ] = "The component (%s) could not be loaded.\nPlease start setup with the repair option.";
-    Text [ x-comment ] = " ";
 };
 
 String SV_STDTEXT_DONTHINTAGAIN
 {
-    Text [ de ] = "Diesen Hinweis nicht mehr anzeigen.";
     Text [ en-US ] = "Do not show this information again.";
 };
 
 String SV_STDTEXT_DONTASKAGAIN
 {
-    Text [ de ] = "Diese Frage nicht mehr anzeigen.";
     Text [ en-US ] = "Do not show this question again.";
 };
 
 String SV_STDTEXT_DONTWARNAGAIN
 {
-    Text [ de ] = "Diese Warnung nicht mehr anzeigen.";
     Text [ en-US ] = "Do not show warning again.";
 };
 
 String SV_ACCESSERROR_WRONG_VERSION
 {
-    Text [ de ] = "Falsche Java Access Bridge";
     Text [ en-US ] = "Wrong Version";
 };
 
 String SV_ACCESSERROR_BRIDGE_MSG
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION benötigt eine Java Access Bridge 1.0.3 oder höhere Version, um Zugänglichkeit zu unterstützen.";
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires a Java Access Bridge 1.0.3 or later version to support accessibility.";
 };
 
 String SV_ACCESSERROR_OK_CANCEL_MSG
 {
-    Text [ de ] = "Klicken Sie '%OK', um %PRODUCTNAME %PRODUCTVERSION ohne Unterstützung der Zugänglichkeit zu starten, oder klicken Sie '%CANCEL' um %PRODUCTNAME %PRODUCTVERSION zu beenden.";
     Text [ en-US ] = "Click '%OK' to start %PRODUCTNAME %PRODUCTVERSION without accessibility support, or click '%CANCEL' to exit %PRODUCTNAME %PRODUCTVERSION.";
 };
 
 String SV_ACCESSERROR_MISSING_BRIDGE
 {
-    Text [ de ] = "Keine Java Access Bridge";
     Text [ en-US ] = "No Java Access Bridge";
 };
 
 String SV_ACCESSERROR_FAULTY_JAVA
 {
-    Text [ de ] = "Fehlerhafte Java Installation";
     Text [ en-US ] = "Faulty Java Installation";
 };
 
 String SV_ACCESSERROR_JAVA_MSG
 {
-    Text [ de ] = "%PRODUCTNAME %PRODUCTVERSION benötigt Java 1.4.0_02 oder höhere Version, um Zugänglichkeit zu unterstützen.";
     Text [ en-US ] = "%PRODUCTNAME %PRODUCTVERSION requires Java 1.4.0_02 or later version to support accessibility.";
 };
 
 String SV_ACCESSERROR_MISSING_JAVA
 {
-    Text [ de ] = "Fehlende Java Installation";
     Text [ en-US ] = "No Java Installation";
 };
 
 String SV_ACCESSERROR_JAVA_NOT_CONFIGURED
 {
-    Text [ de ] = "Fehlende Java-Konfiguration";
     Text [ en-US ] = "Missing Java Configuration";
 };
 
 String SV_ACCESSERROR_JAVA_DISABLED
 {
-    Text [ de ] = "Java deaktiviert";
     Text [ en-US ] = "Java Disabled";
 };
 
 String SV_ACCESSERROR_TURNAROUND_MSG
 {
-    Text [ de ] = "Die Java Access Bridge konnte nicht gestartet werden.";
     Text [ en-US ] = "The Java Access Bridge could not be started.";
 };
 
