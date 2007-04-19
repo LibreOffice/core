@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:18:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:06:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModalDialog RID_SVXDLG_HYPHENATE
     Size = MAP_APPFONT ( 188 , 100 ) ;
     OutputSize = TRUE ;
     SvLook = TRUE ;
-    Text [ de ] = "Silbentrennung" ;
     Text [ en-US ] = "Hyphenation" ;
     Moveable = TRUE ;
     Edit ED_WORD
@@ -74,37 +73,29 @@ ModalDialog RID_SVXDLG_HYPHENATE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "W~ort" ;
         Text [ en-US ] = "~Word" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_HYPH_CONTINUE
     {
         Pos = MAP_APPFONT ( 132 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Weiter" ;
         Text [ en-US ] = "~Next" ;
         TABSTOP = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_HYPH_DELETE
     {
         Pos = MAP_APPFONT ( 132 , 60 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Entfernen" ;
         Text [ en-US ] = "~Remove" ;
         TABSTOP = TRUE ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_HYPH_CUT
     {
         Pos = MAP_APPFONT ( 132 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Trennen" ;
         Text [ en-US ] = "~Hyphenate" ;
         TABSTOP = TRUE ;
         DEFBUTTON = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CancelButton BTN_HYPH_CANCEL
     {
@@ -118,7 +109,6 @@ ModalDialog RID_SVXDLG_HYPHENATE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TABSTOP = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
  // ******************************************************************* EOF
 
