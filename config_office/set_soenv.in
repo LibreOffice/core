@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.139 $
-# Date:        $Date: 2007-04-16 14:18:59 $
+# Version:     $Revision: 1.140 $
+# Date:        $Date: 2007-04-19 20:42:58 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1181,10 +1181,15 @@ elsif ($platform =~ m/cygwin/)
       $PATH           .= $ps.$CYGWIN_PATH;
    }
    $PATH              .= $ps_STLPORT_LIB;
-   # zip.exe / unzip.exe path for Windows users.
+   # nsis path for Windows users.
    my $nsis_path = PosixFormat('@NSIS_PATH@');
-   if ( ! $PATH =~ /(?:[:]|\A)(?:$nsis_path)(?:[:]|\Z)/ ) {
+   if ( $PATH !~ /(?:[:]|\A)(?:$nsis_path)(?:[:]|\Z)/ ) {
        $PATH          .= $ps.$nsis_path;
+   }
+   # path to sn.exe (signing) for Windows users.
+   my $sn_path = PosixFormat('@FRAME_HOME@/bin');
+   if ( $PATH !~ /(?:[:]|\A)(?:$sn_path)(?:[:]|\Z)/ ) {
+       $PATH          .= $ps.$sn_path;
    }
 
 
