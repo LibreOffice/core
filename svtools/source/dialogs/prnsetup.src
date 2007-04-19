@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prnsetup.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:52:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,165 +37,111 @@
 
 String STR_SVT_PRNDLG_READY
 {
-    Text [ de ] = "Bereit" ;
     Text [ en-US ] = "Ready" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PAUSED
 {
-    Text [ de ] = "Angehalten" ;
     Text [ en-US ] = "Paused" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PENDING
 {
-    Text [ de ] = "Löschen anstehend" ;
     Text [ en-US ] = "Pending deletion" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_BUSY
 {
-    Text [ de ] = "Ausgelastet" ;
     Text [ en-US ] = "Busy" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_INITIALIZING
 {
-    Text [ de ] = "Initialisieren" ;
     Text [ en-US ] = "Initializing" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_WAITING
 {
-    Text [ de ] = "Wartend" ;
     Text [ en-US ] = "Waiting" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_WARMING_UP
 {
-    Text [ de ] = "Anlaufen" ;
     Text [ en-US ] = "Warming up" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PROCESSING
 {
-    Text [ de ] = "Verarbeiten" ;
     Text [ en-US ] = "Processing" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PRINTING
 {
-    Text [ de ] = "Drucken" ;
     Text [ en-US ] = "Printing" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_OFFLINE
 {
-    Text [ de ] = "Offline" ;
     Text [ en-US ] = "Offline" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_ERROR
 {
-    Text [ de ] = "Fehler" ;
     Text [ en-US ] = "Error" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_SERVER_UNKNOWN
 {
-    Text [ de ] = "Unbekannter Server" ;
     Text [ en-US ] = "Unknown Server" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PAPER_JAM
 {
-    Text [ de ] = "Papierstau" ;
     Text [ en-US ] = "Paper jam" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PAPER_OUT
 {
-    Text [ de ] = "Papiermangel" ;
     Text [ en-US ] = "Not enough paper" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_MANUAL_FEED
 {
-    Text [ de ] = "Manuelle Papierzufuhr" ;
     Text [ en-US ] = "Manual feed" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PAPER_PROBLEM
 {
-    Text [ de ] = "Papierproblem" ;
     Text [ en-US ] = "Paper problem" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_IO_ACTIVE
 {
-    Text [ de ] = "E/A aktiv" ;
     Text [ en-US ] = "I/O active" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_OUTPUT_BIN_FULL
 {
-    Text [ de ] = "Ausgabefach ist voll" ;
     Text [ en-US ] = "Output bin full" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_TONER_LOW
 {
-    Text [ de ] = "Niedriger Tonerstand" ;
     Text [ en-US ] = "Toner low" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_NO_TONER
 {
-    Text [ de ] = "Kein Toner" ;
     Text [ en-US ] = "No toner" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_PAGE_PUNT
 {
-    Text [ de ] = "Seitenverwurf" ;
     Text [ en-US ] = "Delete Page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_USER_INTERVENTION
 {
-    Text [ de ] = "Benutzerzugriff notwendig" ;
     Text [ en-US ] = "User intervention necessary" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_OUT_OF_MEMORY
 {
-    Text [ de ] = "Nicht genügend Speicher" ;
     Text [ en-US ] = "Insufficient memory" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_DOOR_OPEN
 {
-    Text [ de ] = "Abdeckung offen" ;
     Text [ en-US ] = "Cover open" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_POWER_SAVE
 {
-    Text [ de ] = "Energiesparmodus" ;
     Text [ en-US ] = "Power save mode" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_DEFPRINTER
 {
-    Text [ de ] = "Standarddrucker" ;
     Text [ en-US ] = "Default printer" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_PRNDLG_JOBCOUNT
 {
-    Text [ de ] = "%d Dokumente" ;
     Text [ en-US ] = "%d documents" ;
-    Text [ x-comment ] = " ";
 };
 
 ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
@@ -204,23 +150,18 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     SVLook = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 260 , 104 ) ;
-    Text [ de ] = "Drucker einrichten" ;
     Text [ en-US ] = "Printer Setup" ;
     FixedLine FL_PRINTER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Drucker" ;
         Text [ en-US ] = "Printer" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_NAMES
     {
@@ -234,17 +175,13 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     {
         Pos = MAP_APPFONT ( 188 , 12 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Eigenschaften..." ;
         Text [ en-US ] = "Propert~ies..." ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_STATUS
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Status" ;
         Text [ en-US ] = "Status" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_STATUS
     {
@@ -255,9 +192,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     {
         Pos = MAP_APPFONT ( 12 , 40 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Typ" ;
         Text [ en-US ] = "Type" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_TYPE
     {
@@ -268,9 +203,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     {
         Pos = MAP_APPFONT ( 12 , 51 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Ort" ;
         Text [ en-US ] = "Location" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_LOCATION
     {
@@ -281,9 +214,7 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
     {
         Pos = MAP_APPFONT ( 12 , 62 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Kommentar" ;
         Text [ en-US ] = "Comment" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_COMMENT
     {
@@ -311,7 +242,6 @@ ModalDialog DLG_SVT_PRNDLG_PRNSETUPDLG
         Pos = MAP_APPFONT ( 204 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
