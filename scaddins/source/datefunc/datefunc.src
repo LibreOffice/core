@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datefunc.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:08:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:54:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,44 +43,30 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              DiffWeeks
         {
-            Text [ de ] = "Berechnet die Anzahl der Wochen in einem bestimmten Zeitraum.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Calculates the number of weeks in a specific period";
         };
         String 2 // name of parameter 1         DiffWeeks
         {
-            Text [ de ] = "Ausgangsdatum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Start date";
         };
         String 3 // description of parameter 1  DiffWeeks
         {
-            Text [ de ] = "Erster Tag des Zeitraums.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "First day of the period";
         };
         String 4 // name of parameter 2         DiffWeeks
         {
-            Text [ de ] = "Enddatum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "End date";
         };
         String 5 // description of parameter 2  DiffWeeks
         {
-            Text [ de ] = "Letzter Tag des Zeitraums.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Last day of the period";
         };
         String 6 // name of parameter 3         DiffWeeks
         {
-            Text [ de ] = "Art";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Type";
         };
         String 7 // description of parameter 3  DiffWeeks
         {
-            Text [ de ] = "Art der Berechnung: Art=0 für Wochenanzahl im Intervall, Art=1 für Kalenderwochen.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar weeks.";
         };
     };
@@ -89,44 +75,30 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              DiffMonths
         {
-            Text [ de ] = "Berechnet die Anzahl der Monate in einem bestimmten Zeitraum.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Determines the number of months in a specific period.";
         };
         String 2 // name of parameter 1         DiffMonths
         {
-            Text [ de ] = "Ausgangsdatum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Start date";
         };
         String 3 // description of parameter 1  DiffMonths
         {
-            Text [ de ] = "Erster Tag des Zeitraums.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "First day of the period.";
         };
         String 4 // name of parameter 2         DiffMonths
         {
-            Text [ de ] = "Enddatum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "End date";
         };
         String 5 // description of parameter 2  DiffMonths
         {
-            Text [ de ] = "Letzter Tag des Zeitraums.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Last day of the period.";
         };
         String 6 // name of parameter 3         DiffMonths
         {
-            Text [ de ] = "Art";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Type";
         };
         String 7 // description of parameter 3  DiffMonths
         {
-            Text [ de ] = "Art der Berechnung: Art=0 für Monatsanzahl im Intervall, Art=1 für Kalendermonate.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Type=1 means calendar months.";
         };
     };
@@ -135,44 +107,30 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              DiffYears
         {
-            Text [ de ] = "Berechnet die Anzahl der Jahre in einem bestimmten Zeitraum.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Calculates the number of years in a specific period.";
         };
         String 2 // name of parameter 1         DiffYears
         {
-            Text [ de ] = "Ausgangsdatum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Start date";
         };
         String 3 // description of parameter 1  DiffYears
         {
-            Text [ de ] = "Erster Tag des Zeitraums.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "First day of the period";
         };
         String 4 // name of parameter 2         DiffYears
         {
-            Text [ de ] = "Enddatum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "End date";
         };
         String 5 // description of parameter 2  DiffYears
         {
-            Text [ de ] = "Letzter Tag des Zeitraums.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Last day of the period";
         };
         String 6 // name of parameter 3         DiffYears
         {
-            Text [ de ] = "Art";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Type";
         };
         String 7 // description of parameter 3  DiffYears
         {
-            Text [ de ] = "Art der Berechnung: Art=0 für Jahresanzahl im Intervall, Art=1 für Kalenderjahre.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Type of calculation: Type=0 means the time interval, Typee=1 means calendar years.";
         };
     };
@@ -181,20 +139,14 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              IsLeapYear
         {
-            Text [ de ] = "Gibt 1 (WAHR) zurück, wenn das angegebene Datum in einem Schaltjahr liegt, sonst 0 (FALSCH).";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns 1 (TRUE) if the date is a day of a leap year, otherwise 0 (FALSE).";
         };
         String 2 // name of parameter 1         IsLeapYear
         {
-            Text [ de ] = "Datum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Date";
         };
         String 3 // description of parameter 1  IsLeapYear
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Jahr.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired year";
         };
     };
@@ -203,20 +155,14 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              DaysInMonth
         {
-            Text [ de ] = "Gibt die Anzahl der Tage des Monats zurück, in dem das angegebene Datum liegt.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of days of the month in which the date entered occurs";
         };
         String 2 // name of parameter 1         DaysInMonth
         {
-            Text [ de ] = "Datum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Date";
         };
         String 3 // description of parameter 1  DaysInMonth
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Monat.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired month";
         };
     };
@@ -225,20 +171,14 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              DaysInYear
         {
-            Text [ de ] = "Gibt die Anzahl der Tage des Jahres zurück, in dem das angegebene Datum liegt.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of days of the year in which the date entered occurs.";
         };
         String 2 // name of parameter 1         DaysInYear
         {
-            Text [ de ] = "Datum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Date";
         };
         String 3 // description of parameter 1  DaysInYear
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Jahr.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired year";
         };
     };
@@ -247,20 +187,14 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              WeeksInYear
         {
-            Text [ de ] = "Gibt die Anzahl der Wochen des Jahres zurück, in dem das angegebene Datum liegt.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Returns the number of weeks of the year in which the date entered occurs";
         };
         String 2 // name of parameter 1         WeeksInYear
         {
-            Text [ de ] = "Datum";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Date";
         };
         String 3 // description of parameter 1  WeeksInYear
         {
-            Text [ de ] = "Ein beliebiger Tag im gewünschten Jahr.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Any day in the desired year";
         };
     };
@@ -269,20 +203,14 @@ Resource RID_DATE_FUNCTION_DESCRIPTIONS
     {
         String 1    // description              Rot13
         {
-            Text [ de ] = "Verschlüsselt oder entschlüsselt einen Text mit Hilfe des ROT13-Algorithmus.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Encrypts or decrypts a text using the ROT13 algorithm";
         };
         String 2 // name of parameter 1         Rot13
         {
-            Text [ de ] = "Text";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Text";
         };
         String 3 // description of parameter 1  Rot13
         {
-            Text [ de ] = "Zu verschlüsselnder oder verschlüsselter Text.";
-            Text [ x-comment ] = " ";
             Text [ en-US ] = "Text to be encrypted or text already encrypted";
         };
     };
@@ -293,50 +221,34 @@ Resource RID_DATE_FUNCTION_NAMES
 {
     String DATE_FUNCNAME_DiffWeeks
     {
-        Text [ de ] = "WOCHEN";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "WEEKS";
     };
     String DATE_FUNCNAME_DiffMonths
     {
-        Text [ de ] = "MONATE";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "MONTHS";
     };
     String DATE_FUNCNAME_DiffYears
     {
-        Text [ de ] = "JAHRE";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "YEARS";
     };
     String DATE_FUNCNAME_IsLeapYear
     {
-        Text [ de ] = "ISTSCHALTJAHR";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "ISLEAPYEAR";
     };
     String DATE_FUNCNAME_DaysInMonth
     {
-        Text [ de ] = "TAGEIMMONAT";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "DAYSINMONTH";
     };
     String DATE_FUNCNAME_DaysInYear
     {
-        Text [ de ] = "TAGEIMJAHR";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "DAYSINYEAR";
     };
     String DATE_FUNCNAME_WeeksInYear
     {
-        Text [ de ] = "WOCHENIMJAHR";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "WEEKSINYEAR";
     };
     String DATE_FUNCNAME_Rot13
     {
-        Text [ de ] = "ROT13";
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "ROT13";
     };
 };
