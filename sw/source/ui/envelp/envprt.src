@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:27:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:05:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Umschlageinzug" ;
         Text [ en-US ] = "Envelope orientation";
     };
     ToolBox BOX_ALIGN
@@ -91,30 +90,24 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 18 , 42 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
-        Text [ de ] = "Von ~oben bedrucken" ;
         Text [ en-US ] = "~Print from top" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_BOTTOM
     {
         Pos = MAP_APPFONT ( 18 , 56 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
-        Text [ de ] = "Von ~unten bedrucken" ;
         Text [ en-US ] = "Print from ~bottom" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText TXT_RIGHT
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 72 , 8 ) ;
-        Text [ de ] = "Nach ~rechts" ;
         Text [ en-US ] = "~Shift right" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_RIGHT
     {
@@ -137,10 +130,8 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 72 , 8 ) ;
-        Text [ de ] = "~Nach unten" ;
         Text [ en-US ] = "Shift ~down" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_DOWN
     {
@@ -163,26 +154,21 @@ TabPage TP_ENV_PRT
     {
         Pos = MAP_APPFONT ( 3 , 103 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Aktueller Drucker" ;
         Text [ en-US ] = "Current printer";
     };
     FixedText TXT_PRINTER
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
         Size = MAP_APPFONT ( 179 , 8 ) ;
-        Text [ de ] = "- Kein Drucker installiert -" ;
         Text [ en-US ] = "- No printer installed -" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_PRTSETUP
     {
         Pos = MAP_APPFONT ( 198 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Einrichten..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "Setup..." ;
-        Text [ x-comment ] = " ";
     };
 };
  // Bitmaps ******************************************************************
