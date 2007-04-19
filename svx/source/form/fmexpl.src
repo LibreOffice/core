@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:55:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:27:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ Menu RID_FMEXPLORER_POPUPMENU
         {
             Identifier = SID_FM_NEW ;
             HelpID = SID_FM_NEW ;
-            Text [ de ] = "~Neu" ;
             Text [ en-US ] = "~New" ;
             SubMenu = Menu
             {
@@ -55,29 +54,22 @@ Menu RID_FMEXPLORER_POPUPMENU
                     {
                         Identifier = SID_FM_NEW_FORM ;
                         HelpID = SID_FM_NEW_FORM ;
-                        Text [ de ] = "~Formular" ;
                         Text [ en-US ] = "Form" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_NEW_HIDDEN ;
                         HelpID = SID_FM_NEW_HIDDEN ;
-                        Text [ de ] = "~verstecktes Control" ;
                         Text [ en-US ] = "Hidden Control" ;
-                        Text [ x-comment ] = " ";
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
-            Text [ de ] = "Ersetzen durch";
             Identifier = SID_FM_CHANGECONTROLTYPE ;
             HelpID = SID_FM_CHANGECONTROLTYPE ;
             Text [ en-US ] = "Replace with";
-            Text[ de ] = "Ersetzen durch";
         };
         MenuItem { ITEM_EDIT_CUT };
         MenuItem { ITEM_EDIT_COPY };
@@ -86,47 +78,36 @@ Menu RID_FMEXPLORER_POPUPMENU
         {
             Identifier = SID_FM_DELETE ;
             HelpID = SID_FM_DELETE ;
-            Text [ de ] = "~Löschen" ;
             Text [ en-US ] = "~Delete" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_TAB_DIALOG ;
             HelpID = SID_FM_TAB_DIALOG ;
-            Text [ de ] = "~Aktivierungsreihenfolge ..." ;
             Text [ en-US ] = "Tab Order..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_RENAME_OBJECT ;
             HelpID = SID_FM_RENAME_OBJECT ;
-            Text [ de ] = "~Umbenennen" ;
             Text [ en-US ] = "~Rename" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_SHOW_PROPERTY_BROWSER ;
             HelpID = SID_FM_SHOW_PROPERTY_BROWSER ;
-            Text [ de ] = "~Eigenschaften" ;
             Text [ en-US ] = "Propert~ies" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_OPEN_READONLY ;
             HelpID = SID_FM_OPEN_READONLY ;
-            Text [ de ] = "Im Ent~wurfsmodus öffnen" ;
             Text [ en-US ] = "Open in Design Mode" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_AUTOCONTROLFOCUS ;
             HelpID = SID_FM_AUTOCONTROLFOCUS ;
-            Text [ de ] = "Automatischer Kontrollelement-Fokus";
             Text [ en-US ] = "Automatic Control Focus";
         };
     };
@@ -141,16 +122,13 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_EDIT ;
             HelpID = SID_FM_CONVERTTO_EDIT ;
             Command = ".uno:ConvertToEdit" ;
-            Text [ de ] = "~Textfeld" ;
             Text [ en-US ] = "~Text Box";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_BUTTON ;
             HelpID = SID_FM_CONVERTTO_BUTTON ;
             Command = ".uno:ConvertToButton" ;
-            Text [ de ] = "~Schältfläche" ;
             Text [ en-US ] = "~Button";
         };
         MenuItem
@@ -158,16 +136,13 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_FIXEDTEXT ;
             HelpID = SID_FM_CONVERTTO_FIXEDTEXT ;
             Command = ".uno:ConvertToFixed" ;
-            Text [ de ] = "~Beschriftungsfeld" ;
             Text [ en-US ] = "La~bel field";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_GROUPBOX ;
             HelpID = SID_FM_CONVERTTO_GROUPBOX ;
             Command = ".uno:ConvertToGroup" ;
-            Text [ de ] = "~Gruppierungsrahmen" ;
             Text [ en-US ] = "G~roup Box";
         };
         MenuItem
@@ -175,16 +150,13 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_LISTBOX ;
             HelpID = SID_FM_CONVERTTO_LISTBOX ;
             Command = ".uno:ConvertToList" ;
-            Text [ de ] = "~Listenfeld" ;
             Text [ en-US ] = "L~ist Box";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_CHECKBOX ;
             HelpID = SID_FM_CONVERTTO_CHECKBOX ;
             Command = ".uno:ConvertToCheckBox" ;
-            Text [ de ] = "~Markierfeld" ;
             Text [ en-US ] = "~Check Box";
         };
         MenuItem
@@ -192,16 +164,13 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_RADIOBUTTON ;
             HelpID = SID_FM_CONVERTTO_RADIOBUTTON ;
             Command = ".uno:ConvertToRadio" ;
-            Text [ de ] = "~Optionsfeld" ;
             Text [ en-US ] = "~Radio Button";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_COMBOBOX ;
             HelpID = SID_FM_CONVERTTO_COMBOBOX ;
             Command = ".uno:ConvertToCombo" ;
-            Text [ de ] = "~Kombinationsfeld" ;
             Text [ en-US ] = "Combo Bo~x";
         };
         MenuItem
@@ -209,7 +178,6 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_IMAGEBUTTON ;
             HelpID = SID_FM_CONVERTTO_IMAGEBUTTON ;
             Command = ".uno:ConvertToImageBtn" ;
-            Text [ de ] = "~Grafische Schaltfläche" ;
             Text [ en-US ] = "I~mage Button";
         };
         MenuItem
@@ -217,43 +185,34 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_FILECONTROL ;
             HelpID = SID_FM_CONVERTTO_FILECONTROL ;
             Command = ".uno:ConvertToFileControl" ;
-            Text [ de ] = "~Dateiauswahl" ;
             Text [ en-US ] = "~File Selection";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_DATE ;
             HelpID = SID_FM_CONVERTTO_DATE ;
             Command = ".uno:ConvertToDate" ;
-            Text [ de ] = "D~atumsfeld" ;
             Text [ en-US ] = "~Date Field";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_TIME ;
             HelpID = SID_FM_CONVERTTO_TIME ;
             Command = ".uno:ConvertToTime" ;
-            Text [ de ] = "~Zeitfeld" ;
             Text [ en-US ] = "Tim~e Field";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_NUMERIC ;
             HelpID = SID_FM_CONVERTTO_NUMERIC ;
             Command = ".uno:ConvertToNumeric" ;
-            Text [ de ] = "~Numerisches Feld" ;
             Text [ en-US ] = "~Numerical Field";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_CURRENCY ;
             HelpID = SID_FM_CONVERTTO_CURRENCY ;
             Command = ".uno:ConvertToCurrency" ;
-            Text [ de ] = "~Währungsfeld" ;
             Text [ en-US ] = "C~urrency Field";
         };
         MenuItem
@@ -261,7 +220,6 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_PATTERN ;
             HelpID = SID_FM_CONVERTTO_PATTERN ;
             Command = ".uno:ConvertToPattern" ;
-            Text [ de ] = "Mask~iertes Feld" ;
             Text [ en-US ] = "~Pattern Field";
         };
         MenuItem
@@ -269,7 +227,6 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_IMAGECONTROL ;
             HelpID = SID_FM_CONVERTTO_IMAGECONTROL ;
             Command = ".uno:ConvertToImageControl" ;
-            Text [ de ] = "G~rafisches Kontrollfeld" ;
             Text [ en-US ] = "Ima~ge Control";
         };
         MenuItem
@@ -277,16 +234,13 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_FORMATTED ;
             HelpID = SID_FM_CONVERTTO_FORMATTED ;
             Command = ".uno:ConvertToFormatted" ;
-            Text [ de ] = "~Formatiertes Feld" ;
             Text [ en-US ] = "Fo~rmatted Field";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = SID_FM_CONVERTTO_SCROLLBAR ;
             HelpID = SID_FM_CONVERTTO_SCROLLBAR ;
             Command = ".uno:ConvertToScrollBar" ;
-            Text [ de ] = "Bildlaufleiste" ;
             Text [ en-US ] = "Scroll bar";
         };
         MenuItem
@@ -294,7 +248,6 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_SPINBUTTON;
             HelpID = SID_FM_CONVERTTO_SPINBUTTON;
             Command = ".uno:ConvertToSpinButton" ;
-            Text [ de ] = "Drehfeld" ;
             Text [ en-US ] = "Spin Button";
         };
         MenuItem
@@ -302,7 +255,6 @@ Menu RID_FMSHELL_CONVERSIONMENU
             Identifier = SID_FM_CONVERTTO_NAVIGATIONBAR;
             HelpID = SID_FM_CONVERTTO_NAVIGATIONBAR;
             Command = ".uno:ConvertToNavigationBar" ;
-            Text [ de ]= "Navigationsleiste" ;
             Text [ en-US ] = "Navigation Bar" ;
         };
     };
@@ -363,16 +315,13 @@ ModalDialog RID_SVXDLG_SETFORM
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 200 ) ;
-    Text [ de ] = "Formularauswahl" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     GroupBox GB_PATH
     {
         Pos = MAP_APPFONT ( 6 , 149 ) ;
         Size = MAP_APPFONT ( 188 , 25 ) ;
-        Text [ de ] = "Pfad" ;
         Text [ en-US ] = "Path" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PATH
     {
@@ -398,18 +347,15 @@ ModalDialog RID_SVXDLG_SETFORM
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Select form" ;
-    Text [ x-comment ] = " ";
 };
 DockingWindow RID_SVX_FMEXPLORER
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 200 ) ;
-    Text [ de ] = "Formular Navigator" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     Text [ en-US ] = "Form Navigator" ;
-    Text [ x-comment ] = " ";
 };
 
 
