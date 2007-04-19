@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:50:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -553,12 +553,12 @@ void SwFrm::InvalidatePage( const SwPageFrm *pPage ) const
 |*  Letzte Aenderung    MA 18. Nov. 98
 |*
 |*************************************************************************/
-void SwFrm::ChgSize( const Size& aNewSize )
+Size SwFrm::ChgSize( const Size& aNewSize )
 {
     bFixSize = TRUE;
     const Size aOldSize( Frm().SSize() );
     if ( aNewSize == aOldSize )
-        return;
+        return aOldSize;
 
     if ( GetUpper() )
     {
@@ -622,6 +622,8 @@ void SwFrm::ChgSize( const Size& aNewSize )
         _InvalidateSize();
         InvalidatePage( pPage );
     }
+
+    return aFrm.SSize();
 }
 
 /*************************************************************************
