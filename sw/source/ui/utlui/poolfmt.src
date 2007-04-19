@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:16:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,1109 +40,765 @@
 String STR_POOLCHR_FOOTNOTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnotenzeichen : Fuònotenzeichen */
-    Text [ de ] = "Fu√ünotenzeichen" ;
     Text [ en-US ] = "Footnote Characters" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_PAGENO
 {
-    Text [ de ] = "Seitenzahl" ;
     Text [ en-US ] = "Page Number" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_LABEL
 {
-    Text [ de ] = "Beschriftungszeichen" ;
     Text [ en-US ] = "Caption Characters" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_DROPCAPS
 {
-    Text [ de ] = "Initialenzeichen" ;
     Text [ en-US ] = "Drop Caps" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_NUM_LEVEL
 {
-    Text [ de ] = "Nummerierungszeichen" ;
     Text [ en-US ] = "Numbering Symbols" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_BUL_LEVEL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlungszeichen : Aufzıhlungszeichen */
-    Text [ de ] = "Aufz√§hlungszeichen" ;
     Text [ en-US ] = "Bullets" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_INET_NORMAL
 {
-    Text [ de ] = "Internet Link" ;
     Text [ en-US ] = "Internet Link" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_INET_VISIT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Besuchter Internet Link : besuchter Internet Link */
     /* ### ACHTUNG: Neuer Text in Resource? Besuchter Internet Link : besuchter Internet Link */
-    Text [ de ] = "Besuchter Internet Link" ;
     Text [ en-US ] = "Visited Internet Link" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_JUMPEDIT
 {
-    Text [ de ] = "Platzhalter" ;
     Text [ en-US ] = "Placeholder" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_TOXJUMP
 {
-    Text [ de ] = "Verzeichnissprung" ;
     Text [ en-US ] = "Index Link" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_ENDNOTE
 {
-    Text [ de ] = "Endnotenzeichen" ;
     Text [ en-US ] = "Endnote Characters" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_LINENUM
 {
-    Text [ de ] = "Zeilennummerierung" ;
     Text [ en-US ] = "Line numbering" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_IDX_MAIN_ENTRY
 {
-    Text [ de ] = "Stichwortverzeichnis Haupteintrag" ;
     Text [ en-US ] = "Main index entry";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_FOOTNOTE_ANCHOR
 {
-    Text [ de ] = "Fu√ünotenanker" ;
     Text [ en-US ] = "Footnote anchor";
 };
 String STR_POOLCHR_ENDNOTE_ANCHOR
 {
-    Text [ de ] = "Endnotenanker" ;
     Text [ en-US ] = "Endnote anchor";
 };
 
  // Zeichenvorlagen fuer HTML
 String STR_POOLCHR_HTML_EMPHASIS
 {
-    Text [ de ] = "Betont" ;
     Text [ en-US ] = "Emphasis" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_CITIATION
 {
-    Text [ de ] = "Zitat" ;
     Text [ en-US ] = "Quotation" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_STRONG
 {
-    Text [ de ] = "Stark betont" ;
     Text [ en-US ] = "Strong Emphasis" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_CODE
 {
-    Text [ de ] = "Quelltext" ;
     Text [ en-US ] = "Source Text" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_SAMPLE
 {
-    Text [ de ] = "Beispiel" ;
     Text [ en-US ] = "Example" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_KEYBOARD
 {
-    Text [ de ] = "Benutzereingabe" ;
     Text [ en-US ] = "User Entry" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_VARIABLE
 {
-    Text [ de ] = "Variable" ;
     Text [ en-US ] = "Variable" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_DEFINSTANCE
 {
-    Text [ de ] = "Definition" ;
     Text [ en-US ] = "Definition" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCHR_HTML_TELETYPE
 {
-    Text [ de ] = "Nicht-proportionaler Text" ;
     Text [ en-US ] = "Teletype" ;
-    Text [ x-comment ] = " ";
 };
 
 // Rahmenvorlagen
 String STR_POOLFRM_FRAME
 {
-    Text [ de ] = "Rahmen" ;
     Text [ en-US ] = "Frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLFRM_GRAPHIC
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLFRM_OLE
 {
-    Text [ de ] = "OLE" ;
     Text [ en-US ] = "OLE" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLFRM_FORMEL
 {
-    Text [ de ] = "Formel" ;
     Text [ en-US ] = "Formula" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLFRM_MARGINAL
 {
-    Text [ de ] = "Marginalie" ;
     Text [ en-US ] = "Marginalia" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLFRM_WATERSIGN
 {
-    Text [ de ] = "Wasserzeichen" ;
     Text [ en-US ] = "Watermark" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLFRM_LABEL
 {
-    Text [ de ] = "Etiketten" ;
     Text [ en-US ] = "Labels" ;
-    Text [ x-comment ] = " ";
 };
  // -----------------
  // Vorlagen-Namen
  // -----------------
 String STR_POOLCOLL_STANDARD
 {
-    Text [ de ] = "Standard" ;
     Text [ en-US ] = "Default" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TEXT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkˆrper : Textk˜rper */
-    Text [ de ] = "Textk√∂rper" ;
     Text [ en-US ] = "Text body" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TEXT_IDENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkˆrper Einzug : Textk˜rper Einzug */
-    Text [ de ] = "Textk√∂rper Einzug" ;
     Text [ en-US ] = "First line indent" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TEXT_NEGIDENT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkˆrper Einzug negativ : Textk˜rper Einzug negativ */
-    Text [ de ] = "Textk√∂rper Einzug negativ" ;
     Text [ en-US ] = "Hanging indent" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TEXT_MOVE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Textkˆrper Einr¸ckung : Textk˜rper Einr≥ckung */
-    Text [ de ] = "Textk√∂rper Einr√ºckung" ;
     Text [ en-US ] = "Text body indent" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_GREETING
 {
     /* ### ACHTUNG: Neuer Text in Resource? Gruﬂformel : Gruòformel */
-    Text [ de ] = "Gru√üformel" ;
     Text [ en-US ] = "Complimentary close" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_SIGNATURE
 {
-    Text [ de ] = "Unterschrift" ;
     Text [ en-US ] = "Signature" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE_BASE
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift : öberschrift */
-    Text [ de ] = "√úberschrift" ;
     Text [ en-US ] = "Heading" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUMBUL_BASE
 {
-    Text [ de ] = "Liste" ;
     Text [ en-US ] = "List" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_REGISTER_BASE
 {
-    Text [ de ] = "Verzeichnis" ;
     Text [ en-US ] = "Index" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_CONFRONTATION
 {
     /* ### ACHTUNG: Neuer Text in Resource? Gegen¸berstellung : Gegen≥berstellung */
-    Text [ de ] = "Gegen√ºberstellung" ;
     Text [ en-US ] = "List Indent" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_MARGINAL
 {
-    Text [ de ] = "Marginalie" ;
     Text [ en-US ] = "Marginalia" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE1
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 1 : öberschrift 1 */
-    Text [ de ] = "√úberschrift 1" ;
     Text [ en-US ] = "Heading 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE2
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 2 : öberschrift 2 */
-    Text [ de ] = "√úberschrift 2" ;
     Text [ en-US ] = "Heading 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE3
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 3 : öberschrift 3 */
-    Text [ de ] = "√úberschrift 3" ;
     Text [ en-US ] = "Heading 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE4
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 4 : öberschrift 4 */
-    Text [ de ] = "√úberschrift 4" ;
     Text [ en-US ] = "Heading 4" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE5
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 5 : öberschrift 5 */
-    Text [ de ] = "√úberschrift 5" ;
     Text [ en-US ] = "Heading 5" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE6
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 5 : öberschrift 5 */
-    Text [ de ] = "√úberschrift 6" ;
     Text [ en-US ] = "Heading 6" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE7
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 7 : öberschrift 7 */
-    Text [ de ] = "√úberschrift 7" ;
     Text [ en-US ] = "Heading 7" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE8
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 8 : öberschrift 8 */
-    Text [ de ] = "√úberschrift 8" ;
     Text [ en-US ] = "Heading 8" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE9
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 9 : öberschrift 9 */
-    Text [ de ] = "√úberschrift 9" ;
     Text [ en-US ] = "Heading 9" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADLINE10
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift 10 : öberschrift 10 */
-    Text [ de ] = "√úberschrift 10" ;
     Text [ en-US ] = "Heading 10" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL1S
 {
-    Text [ de ] = "Nummerierung 1 Anfang" ;
     Text [ en-US ] = "Numbering 1 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL1
 {
-    Text [ de ] = "Nummerierung 1" ;
     Text [ en-US ] = "Numbering 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL1E
 {
-    Text [ de ] = "Nummerierung 1 Ende" ;
     Text [ en-US ] = "Numbering 1 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_NONUM1
 {
-    Text [ de ] = "Nummerierung 1 Fortsetzung" ;
     Text [ en-US ] = "Numbering 1 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL2S
 {
-    Text [ de ] = "Nummerierung 2 Anfang" ;
     Text [ en-US ] = "Numbering 2 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL2
 {
-    Text [ de ] = "Nummerierung 2" ;
     Text [ en-US ] = "Numbering 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL2E
 {
-    Text [ de ] = "Nummerierung 2 Ende" ;
     Text [ en-US ] = "Numbering 2 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_NONUM2
 {
-    Text [ de ] = "Nummerierung 2 Fortsetzung" ;
     Text [ en-US ] = "Numbering 2 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL3S
 {
-    Text [ de ] = "Nummerierung 3 Anfang" ;
     Text [ en-US ] = "Numbering 3 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL3
 {
-    Text [ de ] = "Nummerierung 3" ;
     Text [ en-US ] = "Numbering 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL3E
 {
-    Text [ de ] = "Nummerierung 3 Ende" ;
     Text [ en-US ] = "Numbering 3 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_NONUM3
 {
-    Text [ de ] = "Nummerierung 3 Fortsetzung" ;
     Text [ en-US ] = "Numbering 3 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL4S
 {
-    Text [ de ] = "Nummerierung 4 Anfang" ;
     Text [ en-US ] = "Numbering 4 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL4
 {
-    Text [ de ] = "Nummerierung 4" ;
     Text [ en-US ] = "Numbering 4" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL4E
 {
-    Text [ de ] = "Nummerierung 4 Ende" ;
     Text [ en-US ] = "Numbering 4 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_NONUM4
 {
-    Text [ de ] = "Nummerierung 4 Fortsetzung" ;
     Text [ en-US ] = "Numbering 4 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL5S
 {
-    Text [ de ] = "Nummerierung 5 Anfang" ;
     Text [ en-US ] = "Numbering 5 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL5
 {
-    Text [ de ] = "Nummerierung 5" ;
     Text [ en-US ] = "Numbering 5" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_LEVEL5E
 {
-    Text [ de ] = "Nummerierung 5 Ende" ;
     Text [ en-US ] = "Numbering 5 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_NUM_NONUM5
 {
-    Text [ de ] = "Nummerierung 5 Fortsetzung" ;
     Text [ en-US ] = "Numbering 5 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL1S
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 Anfang : Aufzıhlung 1 Anfang */
-    Text [ de ] = "Aufz√§hlung 1 Anfang" ;
     Text [ en-US ] = "List 1 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL1
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 : Aufzıhlung 1 */
-    Text [ de ] = "Aufz√§hlung 1" ;
     Text [ en-US ] = "List 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL1E
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 Ende : Aufzıhlung 1 Ende */
-    Text [ de ] = "Aufz√§hlung 1 Ende" ;
     Text [ en-US ] = "List 1 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_NONUM1
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 Fortsetzung : Aufzıhlung 1 Fortsetzung */
-    Text [ de ] = "Aufz√§hlung 1 Fortsetzung" ;
     Text [ en-US ] = "List 1 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL2S
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 2 Anfang : Aufzıhlung 2 Anfang */
-    Text [ de ] = "Aufz√§hlung 2 Anfang" ;
     Text [ en-US ] = "List 2 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL2
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 2 : Aufzıhlung 2 */
-    Text [ de ] = "Aufz√§hlung 2" ;
     Text [ en-US ] = "List 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL2E
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 2 Ende : Aufzıhlung 2 Ende */
-    Text [ de ] = "Aufz√§hlung 2 Ende" ;
     Text [ en-US ] = "List 2 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_NONUM2
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 2 Fortsetzung : Aufzıhlung 2 Fortsetzung */
-    Text [ de ] = "Aufz√§hlung 2 Fortsetzung" ;
     Text [ en-US ] = "List 2 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL3S
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 3 Anfang : Aufzıhlung 3 Anfang */
-    Text [ de ] = "Aufz√§hlung 3 Anfang" ;
     Text [ en-US ] = "List 3 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL3
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 3 : Aufzıhlung 3 */
-    Text [ de ] = "Aufz√§hlung 3" ;
     Text [ en-US ] = "List 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL3E
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 3 Ende : Aufzıhlung 3 Ende */
-    Text [ de ] = "Aufz√§hlung 3 Ende" ;
     Text [ en-US ] = "List 3 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_NONUM3
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 3 Fortsetzung : Aufzıhlung 3 Fortsetzung */
-    Text [ de ] = "Aufz√§hlung 3 Fortsetzung" ;
     Text [ en-US ] = "List 3 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL4S
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 4 Anfang : Aufzıhlung 4 Anfang */
-    Text [ de ] = "Aufz√§hlung 4 Anfang" ;
     Text [ en-US ] = "List 4 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL4
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 4 : Aufzıhlung 4 */
-    Text [ de ] = "Aufz√§hlung 4" ;
     Text [ en-US ] = "List 4" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL4E
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 4 Ende : Aufzıhlung 4 Ende */
-    Text [ de ] = "Aufz√§hlung 4 Ende" ;
     Text [ en-US ] = "List 4 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_NONUM4
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 4 Fortsetzung : Aufzıhlung 4 Fortsetzung */
-    Text [ de ] = "Aufz√§hlung 4 Fortsetzung" ;
     Text [ en-US ] = "List 4 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL5S
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 5 Anfang : Aufzıhlung 5 Anfang */
-    Text [ de ] = "Aufz√§hlung 5 Anfang" ;
     Text [ en-US ] = "List 5 Start" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL5
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 5 : Aufzıhlung 5 */
-    Text [ de ] = "Aufz√§hlung 5" ;
     Text [ en-US ] = "List 5" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_LEVEL5E
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 5 Ende : Aufzıhlung 5 Ende */
-    Text [ de ] = "Aufz√§hlung 5 Ende" ;
     Text [ en-US ] = "List 5 End" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_BUL_NONUM5
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 5 Fortsetzung : Aufzıhlung 5 Fortsetzung */
-    Text [ de ] = "Aufz√§hlung 5 Fortsetzung" ;
     Text [ en-US ] = "List 5 Cont." ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADER
 {
-    Text [ de ] = "Kopfzeile" ;
     Text [ en-US ] = "Header" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADERL
 {
-    Text [ de ] = "Kopfzeile links" ;
     Text [ en-US ] = "Header left" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HEADERR
 {
-    Text [ de ] = "Kopfzeile rechts" ;
     Text [ en-US ] = "Header right" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_FOOTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂzeile : Fuòzeile */
-    Text [ de ] = "Fu√üzeile" ;
     Text [ en-US ] = "Footer" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_FOOTERL
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂzeile links : Fuòzeile links */
-    Text [ de ] = "Fu√üzeile links" ;
     Text [ en-US ] = "Footer left" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_FOOTERR
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂzeile rechts : Fuòzeile rechts */
-    Text [ de ] = "Fu√üzeile rechts" ;
     Text [ en-US ] = "Footer right" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TABLE
 {
-    Text [ de ] = "Tabellen Inhalt" ;
     Text [ en-US ] = "Table Contents" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TABLE_HDLN
 {
     /* ### ACHTUNG: Neuer Text in Resource? Tabellen ‹berschrift : Tabellen öberschrift */
-    Text [ de ] = "Tabellen √úberschrift" ;
     Text [ en-US ] = "Table Heading" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_FRAME
 {
-    Text [ de ] = "Rahmeninhalt" ;
     Text [ en-US ] = "Frame contents" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_FOOTNOTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnote : Fuònote */
-    Text [ de ] = "Fu√ünote" ;
     Text [ en-US ] = "Footnote" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_ENDNOTE
 {
-    Text [ de ] = "Endnote" ;
     Text [ en-US ] = "Endnote" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_LABEL
 {
-    Text [ de ] = "Beschriftung" ;
     Text [ en-US ] = "Caption" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_LABEL_ABB
 {
-    Text [ de ] = "Abbildung" ;
     Text [ en-US ] = "Illustration" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_LABEL_TABLE
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_LABEL_FRAME
 {
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_LABEL_DRAWING
 {
-    Text [ de ] = "Zeichnung" ;
     Text [ en-US ] = "Drawing";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_JAKETADRESS
 {
     /* ### ACHTUNG: Neuer Text in Resource? Empf‰nger : Empfınger */
-    Text [ de ] = "Empf√§nger" ;
     Text [ en-US ] = "Addressee" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_SENDADRESS
 {
-    Text [ de ] = "Absender" ;
     Text [ en-US ] = "Sender" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_IDXH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Stichwortverzeichnis ‹berschrift : Stichwortverzeichnis öberschrift */
-    Text [ de ] = "Stichwortverzeichnis √úberschrift" ;
     Text [ en-US ] = "Index Heading" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_IDX1
 {
-    Text [ de ] = "Stichwortverzeichnis 1" ;
     Text [ en-US ] = "Index 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_IDX2
 {
-    Text [ de ] = "Stichwortverzeichnis 2" ;
     Text [ en-US ] = "Index 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_IDX3
 {
-    Text [ de ] = "Stichwortverzeichnis 3" ;
     Text [ en-US ] = "Index 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_IDXBREAK
 {
-    Text [ de ] = "Stichwortverzeichnis Trenner" ;
     Text [ en-US ] = "Index Separator" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNTH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Inhaltsverzeichnis ‹berschrift : Inhaltsverzeichnis öberschrift */
-    Text [ de ] = "Inhaltsverzeichnis √úberschrift" ;
     Text [ en-US ] = "Contents Heading" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT1
 {
-    Text [ de ] = "Inhaltsverzeichnis 1" ;
     Text [ en-US ] = "Contents 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT2
 {
-    Text [ de ] = "Inhaltsverzeichnis 2" ;
     Text [ en-US ] = "Contents 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT3
 {
-    Text [ de ] = "Inhaltsverzeichnis 3" ;
     Text [ en-US ] = "Contents 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT4
 {
-    Text [ de ] = "Inhaltsverzeichnis 4" ;
     Text [ en-US ] = "Contents 4" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT5
 {
-    Text [ de ] = "Inhaltsverzeichnis 5" ;
     Text [ en-US ] = "Contents 5" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT6
 {
-    Text [ de ] = "Inhaltsverzeichnis 6" ;
     Text [ en-US ] = "Contents 6" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT7
 {
-    Text [ de ] = "Inhaltsverzeichnis 7" ;
     Text [ en-US ] = "Contents 7" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT8
 {
-    Text [ de ] = "Inhaltsverzeichnis 8" ;
     Text [ en-US ] = "Contents 8" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT9
 {
-    Text [ de ] = "Inhaltsverzeichnis 9" ;
     Text [ en-US ] = "Contents 9" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_CNTNT10
 {
-    Text [ de ] = "Inhaltsverzeichnis 10" ;
     Text [ en-US ] = "Contents 10" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USERH
 {
     /* ### ACHTUNG: Neuer Text in Resource? Benutzerverzeichnis ‹berschrift : Benutzerverzeichnis öberschrift */
-    Text [ de ] = "Benutzerverzeichnis √úberschrift" ;
     Text [ en-US ] = "User Index Heading" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER1
 {
-    Text [ de ] = "Benutzerverzeichnis 1" ;
     Text [ en-US ] = "User Index 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER2
 {
-    Text [ de ] = "Benutzerverzeichnis 2" ;
     Text [ en-US ] = "User Index 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER3
 {
-    Text [ de ] = "Benutzerverzeichnis 3" ;
     Text [ en-US ] = "User Index 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER4
 {
-    Text [ de ] = "Benutzerverzeichnis 4" ;
     Text [ en-US ] = "User Index 4" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER5
 {
-    Text [ de ] = "Benutzerverzeichnis 5" ;
     Text [ en-US ] = "User Index 5" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER6
 {
-    Text [ de ] = "Benutzerverzeichnis 6" ;
     Text [ en-US ] = "User Index 6" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER7
 {
-    Text [ de ] = "Benutzerverzeichnis 7" ;
     Text [ en-US ] = "User Index 7" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER8
 {
-    Text [ de ] = "Benutzerverzeichnis 8" ;
     Text [ en-US ] = "User Index 8" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER9
 {
-    Text [ de ] = "Benutzerverzeichnis 9" ;
     Text [ en-US ] = "User Index 9" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_USER10
 {
-    Text [ de ] = "Benutzerverzeichnis 10" ;
     Text [ en-US ] = "User Index 10" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_ILLUSH
 {
-    Text [ de ] = "Abbildungsverzeichnis √úberschrift" ;
     Text [ en-US ] = "Illustration Index Heading";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_ILLUS1
 {
-    Text [ de ] = "Abbildungsverzeichnis 1" ;
     Text [ en-US ] = "Illustration Index 1";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_OBJECTH
 {
-    Text [ de ] = "Objektverzeichnis √úberschrift";
     Text [ en-US ] = "Object index heading";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_OBJECT1
 {
-    Text [ de ] = "Objektverzeichnis 1" ;
     Text [ en-US ] = "Object index 1";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_TABLESH
 {
-    Text [ de ] = "Tabellenverzeichnis √úberschrift" ;
     Text [ en-US ] = "Table index heading";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_TABLES1
 {
-    Text [ de ] = "Tabellenverzeichnis 1" ;
     Text [ en-US ] = "Table index 1";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_AUTHORITIESH
 {
-    Text [ de ] = "Literaturverzeichnis √úberschrift" ;
     Text [ en-US ] = "Bibliography Heading";
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_TOX_AUTHORITIES1
 {
-    Text [ de ] = "Literaturverzeichnis 1" ;
     Text [ en-US ] = "Bibliography 1";
-    Text [ x-comment ] = " ";
 };
 
 String STR_POOLCOLL_DOC_TITEL
 {
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Title" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_DOC_SUBTITEL
 {
-    Text [ de ] = "Untertitel" ;
     Text [ en-US ] = "Subtitle" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HTML_BLOCKQUOTE
 {
-    Text [ de ] = "Zitat" ;
     Text [ en-US ] = "Quotations" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HTML_PRE
 {
-    Text [ de ] = "Vorformatierter Text" ;
     Text [ en-US ] = "Preformatted Text" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HTML_HR
 {
-    Text [ de ] = "Horizontale Linie" ;
     Text [ en-US ] = "Horizontal Line" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HTML_DD
 {
-    Text [ de ] = "Listeninhalt" ;
     Text [ en-US ] = "List Contents" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLCOLL_HTML_DT
 {
-    Text [ de ] = "Listenkopf" ;
     Text [ en-US ] = "List Heading" ;
-    Text [ x-comment ] = " ";
 };
 //page style names
 String STR_POOLPAGE_STANDARD
 {
-    Text [ de ] = "Standard" ;
     Text [ en-US ] = "Default" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_FIRST
 {
-    Text [ de ] = "Erste Seite" ;
     Text [ en-US ] = "First Page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_LEFT
 {
-    Text [ de ] = "Linke Seite" ;
     Text [ en-US ] = "Left Page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_RIGHT
 {
-    Text [ de ] = "Rechte Seite" ;
     Text [ en-US ] = "Right Page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_JAKET
 {
-    Text [ de ] = "Umschlag" ;
     Text [ en-US ] = "Envelope" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_REGISTER
 {
-    Text [ de ] = "Verzeichnis" ;
     Text [ en-US ] = "Index" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_HTML
 {
-    Text [ de ] = "HTML" ;
     Text [ en-US ] = "HTML" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_FOOTNOTE
 {
-    Text [ de ] = "Fu√ünote" ;
     Text [ en-US ] = "Footnote" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLPAGE_ENDNOTE
 {
-    Text [ de ] = "Endnote" ;
     Text [ en-US ] = "Endnote" ;
-    Text [ x-comment ] = " ";
 };
 /*
  Numerierungs Regeln
 */
 String STR_POOLNUMRULE_NUM1
 {
-    Text [ de ] = "Nummerierung 1" ;
     Text [ en-US ] = "Numbering 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_NUM2
 {
-    Text [ de ] = "Nummerierung 2" ;
     Text [ en-US ] = "Numbering 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_NUM3
 {
-    Text [ de ] = "Nummerierung 3" ;
     Text [ en-US ] = "Numbering 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_NUM4
 {
-    Text [ de ] = "Nummerierung 4" ;
     Text [ en-US ] = "Numbering 4" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_NUM5
 {
-    Text [ de ] = "Nummerierung 5" ;
     Text [ en-US ] = "Numbering 5" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_BUL1
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 : Aufzıhlung 1 */
-    Text [ de ] = "Aufz√§hlung 1" ;
     Text [ en-US ] = "List 1" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_BUL2
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 : Aufzıhlung 1 */
-    Text [ de ] = "Aufz√§hlung 2" ;
     Text [ en-US ] = "List 2" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_BUL3
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 : Aufzıhlung 1 */
-    Text [ de ] = "Aufz√§hlung 3" ;
     Text [ en-US ] = "List 3" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_BUL4
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 1 : Aufzıhlung 4 */
-    Text [ de ] = "Aufz√§hlung 4" ;
     Text [ en-US ] = "List 4" ;
-    Text [ x-comment ] = " ";
 };
 String STR_POOLNUMRULE_BUL5
 {
     /* ### ACHTUNG: Neuer Text in Resource? Aufz‰hlung 5 : Aufzıhlung 5 */
-    Text [ de ] = "Aufz√§hlung 5" ;
     Text [ en-US ] = "List 5" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_POOLCHR_RUBYTEXT
 {
-    Text [ de ] = "Rubys" ;
     Text [ en-US ] = "Rubies";
 };
 
 String STR_POOLCHR_VERT_NUM
 {
-    Text [ de ] = "Vertikale Nummerierungszeichen" ;
     Text [ en-US ] = "Vertical Numbering Symbols";
 };
