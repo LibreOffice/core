@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:13:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:19:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -249,6 +249,15 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
 
 //change test on the Ok button: get the relevant string from resources, update it on the button
     GetOKButton().SetText( OUString( String( ResId( STR_PDF_EXPORT, &rResMgr ) ) ) );
+
+//get the string property value (from sfx2/source/dialog/mailmodel.cxx) to overwrite the text for the Ok button
+    ::rtl::OUString sOkButtonText = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "_OkButtonString" ) ), OUString() );
+
+//change test on the Ok button: get the relevant string from resources, update it on the button
+//according to the exported pdf file destination: send as e-mail or write to file?
+    GetOKButton().SetText( ( sOkButtonText.getLength() > 0 ) ?
+                            sOkButtonText : OUString( String( ResId( STR_PDF_EXPORT, &rResMgr ) ) ));
+
 //remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
 /////////////////
