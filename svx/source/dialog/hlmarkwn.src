@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:40:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:06:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 109 , 185 ) ;
-    Text [ de ] = "Sprungziel im Dokument" ;
     Text [ en-US ] = "Target in Document" ;
     PushButton BT_APPLY
     {
@@ -57,18 +56,14 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ de ] = "Übernehmen";
         Text [ en-US ] = "Apply" ;
-        Text [ x-comment ] = " ";
     };
     PushButton BT_CLOSE
     {
         HelpId = HID_HYPERLINK_MARKWND_CLOSE;
         Pos = MAP_APPFONT ( 56 , 168 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schließen";
         Text [ en-US ] = "Close" ;
-        Text [ x-comment ] = " ";
     };
     Control TLB_MARK
     {
@@ -82,13 +77,11 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_NOENTRIES
 {
-    Text [ de ] = "Keine Sprungziele im Dokument vorhanden.";
     Text [ en-US ] = "Targets do not exist in the document." ;
 };
 
 String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
 {
-    Text [ de ] = "Das Dokument konnte nicht geöffnet werden.";
     Text [ en-US ] = "Couldn't open the document." ;
 };
 
