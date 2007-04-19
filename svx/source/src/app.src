@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2006-05-02 15:35:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:38:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@
 ErrorBox RID_ERRBOX_MODULENOTINSTALLED
 {
     Buttons = WB_OK ;
-    Message [ de ] = "Die Aktion konnte nicht ausgeführt werden. Das dafür benötigte %PRODUCTNAME Modul ist momentan nicht installiert." ;
     Message [ en-US ] = "The action could not be executed. The %PRODUCTNAME program module needed for this action is currently not installed.";
 };
 
@@ -135,12 +134,10 @@ String RID_DESKTOP
 
 String STR_SD_STAROFFICE_XML_DRAW
 {
-    Text [ de ] = "%PRODUCTNAME XML (Draw)" ;
     Text [ en-US ] = "%PRODUCTNAME XML (Draw)";
 };
 
 String STR_SD_STAROFFICE_XML_IMPRESS
 {
-    Text [ de ] = "%PRODUCTNAME XML (Impress)" ;
     Text [ en-US ] = "%PRODUCTNAME XML (Impress)";
 };
