@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splittbl.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:13:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog DLG_SPLIT_TABLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 207 , 76 ) ;
-    Text [ de ] = "Tabelle auftrennen" ;
     Moveable = TRUE ;
     OKButton PB_OK
     {
@@ -68,46 +67,35 @@ ModalDialog DLG_SPLIT_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 139 , 8 ) ;
-        Text [ de ] = "Modus" ;
         Text [ en-US ] = "Mode" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_CNTNT
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Überschrift kopieren" ;
         Check = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Copy heading" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_BOX_PARA
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Eigene Überschrift, mit Vorlage" ;
         Text [ en-US ] = "C~ustom heading (apply Style)" ;
-        Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
     RadioButton RB_BOX_NOPARA
     {
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "E~igene Überschrift" ;
         Text [ en-US ] = "Cu~stom heading" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_BORDER
     {
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "~Keine Überschrift" ;
         Text [ en-US ] = "~No heading" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Split Table" ;
-    Text [ x-comment ] = " ";
 };
 
 
