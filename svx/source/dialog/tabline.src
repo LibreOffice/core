@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:50:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:21:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,23 +47,18 @@ TabPage RID_SVXPAGE_LINE
     Size = MAP_APPFONT ( 260 , 185 );
     HelpId = HID_LINE_LINE ;
     Hide = TRUE ;
-    Text [ de ] = "Linie" ;
     Text [ en-US ] = "Lines" ;
     FixedLine FL_LINE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 112 , 8 ) ;
-        Text [ de ] = "Linieneigenschaften" ;
         Text [ en-US ] = "Line properties" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LINE_STYLE
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Stil" ;
         Text [ en-US ] = "~Style" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LINE_STYLE
     {
@@ -78,9 +73,7 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 12 , 41  ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Farbe" ;
         Text [ en-US ] = "Colo~r" ;
-        Text [ x-comment ] = "; DD(09.05.2001): ~Color";
     };
     ListBox LB_COLOR
     {
@@ -95,9 +88,7 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 12 , 68  ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_LINE_WIDTH
     {
@@ -120,9 +111,7 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 12 , 95  ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "~Transparenz" ;
         Text [ en-US ] = "~Transparency" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_LINE_TRANSPARENT
     {
@@ -149,17 +138,13 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 124 , 3  ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Linienenden" ;
         Text [ en-US ] = "Arrow styles" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LINE_ENDS_STYLE
     {
         Pos = MAP_APPFONT ( 130 , 14  ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "St~il" ;
         Text [ en-US ] = "St~yle" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_START_STYLE
     {
@@ -183,9 +168,7 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 130 , 41  ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "B~reite" ;
         Text [ en-US ] = "Wi~dth" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_START_WIDTH
     {
@@ -225,19 +208,15 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 130 , 68  ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "~zentriert" ;
         Text [ en-US ] = "Ce~nter" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_CENTER_END
     {
         Pos = MAP_APPFONT ( 191 , 68  ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "z~entriert" ;
         Text [ en-US ] = "C~enter" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_SYNCHRONIZE
     {
@@ -245,10 +224,8 @@ TabPage RID_SVXPAGE_LINE
         // Pos = MAP_APPFONT ( 130 , 107  ) ;
         Pos = MAP_APPFONT ( 130 , 68 + (16 - 4) ) ;
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "En~den synchronisieren" ;
         Text [ en-US ] = "Synchroni~ze ends" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
 
     //////////////////////////////////////////////////////////////////////////////
@@ -258,17 +235,13 @@ TabPage RID_SVXPAGE_LINE
     {
         Pos = MAP_APPFONT ( 124 , 3 + (16 * 6) - 4 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ]= "Eckenstil" ;
         Text [ en-US ] = "Corner style" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_EDGE_STYLE
     {
         Pos = MAP_APPFONT ( 130 , 14 + (16 * 6) - 4 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
-        Text [ de ] = "Sti~l" ;
         Text [ en-US ] = "Sty~le" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_EDGE_STYLE
     {
@@ -277,26 +250,12 @@ TabPage RID_SVXPAGE_LINE
         Size = MAP_APPFONT ( 57 , 99 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ]=
-        {
-            < "Abgerundet" ; Default ; > ;
-            < "- kein -" ; > ;
-            < "Gehrung" ; > ;
-            < "Abgeschrägt" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Rounded" ; Default ; > ;
             < "- none -" ; > ;
             < "Mitered" ; > ;
             < "Beveled" ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-            < " " ; Default ; > ;
-            < " " ; > ;
-            < " " ; > ;
-            < " " ; > ;
         };
     };
 
@@ -316,9 +275,7 @@ TabPage RID_SVXPAGE_LINE
 
         Pos = MAP_APPFONT ( 124 , 3  ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Symbol" ;
         Text [ en-US ] = "Icon";
-        Text [ x-comment ] = " ";
     };
 
     MenuButton MB_SYMBOL_BITMAP
@@ -327,7 +284,6 @@ TabPage RID_SVXPAGE_LINE
         Pos = MAP_APPFONT ( 130 , 14  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Aus~wahl..." ;
         ButtonMenu = Menu
         {
             ItemList =
@@ -335,51 +291,38 @@ TabPage RID_SVXPAGE_LINE
                 MenuItem
                 {
                     Identifier = MN_SYMBOLS_NONE;
-                    Text [ de ] = "Kein Symbol" ;
                     Text [ en-US ] = "No Symbol";
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = MN_SYMBOLS_AUTO;
-                    Text [ de ] = "Automatisch" ;
                     Text [ en-US ] = "Automatic";
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = MN_GRAPHIC_DLG ;
-                    Text [ de ] = "Aus Datei..." ;
                     Text [ en-US ] = "From file..." ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = MN_GALLERY ;
-                    Text [ de ] = "Gallery" ;
                     Text [ en-US ] = "Gallery";
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = MN_SYMBOLS;
-                    Text [ de ] = "Symbole" ;
                     Text [ en-US ] = "Symbols";
-                    Text [ x-comment ] = " ";
                 };
             };
         };
         Text [ en-US ] = "Select..." ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SYMBOL_WIDTH
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 130 , 32  ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "B~reite" ;
         Text [ en-US ] = "Width" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_SYMBOL_WIDTH
     {
@@ -405,9 +348,7 @@ TabPage RID_SVXPAGE_LINE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 130 , 48  ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~Höhe" ;
         Text [ en-US ] = "Height" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_SYMBOL_HEIGHT
     {
@@ -433,11 +374,8 @@ TabPage RID_SVXPAGE_LINE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 130 , 62  );
         Size = MAP_APPFONT ( 118 , 10 ) ;
-        Text [ de ] = "Abg~leich" ;
         Text [ en-US ] = "Keep ratio" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 // Defining LineStyles --------------------
@@ -447,24 +385,19 @@ TabPage RID_SVXPAGE_LINE_DEF
     Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_LINE_DEF ;
     Hide = TRUE ;
-    Text [ de ] = "Linienstile definieren" ;
     Text [ en-US ] = "Define line styles" ;
 
     FixedLine FL_DEFINITION
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 34  ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Typ" ;
         Text [ en-US ] = "~Type" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_TYPE_1
     {
@@ -473,20 +406,10 @@ TabPage RID_SVXPAGE_LINE_DEF
         Size = MAP_APPFONT ( 43 , 49 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Punkt" ; Default ; > ;
-            < "Strich" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Dot" ; Default ; > ;
             < "Dash" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-                < " " ; Default ; > ;
-            < " " ; Default ; > ;
         };
     };
     ListBox LB_TYPE_2
@@ -496,29 +419,17 @@ TabPage RID_SVXPAGE_LINE_DEF
         Size = MAP_APPFONT ( 43 , 49 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Punkt" ; Default ; > ;
-            < "Strich" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Dot" ; Default ; > ;
             < "Dash" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-                < " " ; Default ; > ;
-            < " " ; Default ; > ;
         };
     };
     FixedText FT_NUMBER
     {
         Pos = MAP_APPFONT ( 12 , 50  ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Anzahl" ;
         Text [ en-US ] = "~Number" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_1
     {
@@ -552,9 +463,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 12 , 66  ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "Län~ge" ;
         Text [ en-US ] = "~Length" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_LENGTH_1
     {
@@ -600,9 +509,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 12 , 81  ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "A~bstand" ;
         Text [ en-US ] = "~Spacing" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_DISTANCE
     {
@@ -626,10 +533,8 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 12 , 95  ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
-        Text [ de ] = "A~n Linienbreite anpassen" ;
         Text [ en-US ] = "~Fit to line width" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
 
     // ----------------------------------------
@@ -638,9 +543,7 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 12 , 16  ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "Linien~stil" ;
         Text [ en-US ] = "Line style" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LINESTYLES
     {
@@ -655,35 +558,28 @@ TabPage RID_SVXPAGE_LINE_DEF
     {
         Pos = MAP_APPFONT ( 198 , 14  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_MODIFY
     {
         Pos = MAP_APPFONT ( 198 , 34  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT ( 198 , 54  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 198 , 74  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Linienstiltabelle laden" ;
         QuickHelpText [ en-US ] = "Load Line Styles" ;
         ButtonImage = Image
         {
@@ -693,15 +589,12 @@ TabPage RID_SVXPAGE_LINE_DEF
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_SAVE
     {
         Pos = MAP_APPFONT ( 198 , 96  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Linienstiltabelle sichern" ;
         QuickHelpText [ en-US ] = "Save Line Styles" ;
         ButtonImage = Image
         {
@@ -711,8 +604,6 @@ TabPage RID_SVXPAGE_LINE_DEF
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     Control CTL_PREVIEW
     {
@@ -721,7 +612,6 @@ TabPage RID_SVXPAGE_LINE_DEF
         Size = MAP_APPFONT ( 248 , 40 ) ;
     };
 
-    Text [ x-comment ] = " ";
 };
 
 // Defining LineEnds --------------------
@@ -731,34 +621,27 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     Size = MAP_APPFONT ( 260 , 185 ) ;
     HelpId = HID_LINE_ENDDEF ;
     Hide = TRUE ;
-    Text [ de ] = "Linienenden definieren" ;
     Text [ en-US ] = "Arrowheads" ;
 
     FixedLine FL_TIP
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Linienenden verwalten" ;
         Text [ en-US ] = "Organize arrow styles" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_TIP
     {
         Pos = MAP_APPFONT ( 6 , 123  ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Neue Linienenden erhalten Sie durch Hinzufügen eines selektierten Objektes." ;
         Text [ en-US ] = "Add a selected object to create new arrow styles." ;
         WordBreak = TRUE ;
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_LINE_END_STYLE
     {
         Pos = MAP_APPFONT ( 12 , 32  ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "Linien~endenstil" ;
         Text [ en-US ] = "Arrow style" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_NAME
     {
@@ -771,9 +654,7 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     {
         Pos = MAP_APPFONT ( 12 , 16  ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "~Titel" ;
         Text [ en-US ] = "~Title" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LINEENDS
     {
@@ -788,35 +669,28 @@ TabPage RID_SVXPAGE_LINEEND_DEF
     {
         Pos = MAP_APPFONT ( 198 , 14  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "H~inzufügen..." ;
         Text [ en-US ] = "~Add..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_MODIFY
     {
         Pos = MAP_APPFONT ( 198 , 34  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ändern..." ;
         Text [ en-US ] = "~Modify..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT ( 198 , 54  ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen..." ;
         Text [ en-US ] = "~Delete..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ImageButton BTN_LOAD
     {
         Pos = MAP_APPFONT ( 198 , 74  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Linienendentabelle laden" ;
         QuickHelpText [ en-US ] = "Load Arrow Styles" ;
         ButtonImage = Image
         {
@@ -826,15 +700,12 @@ TabPage RID_SVXPAGE_LINEEND_DEF
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton BTN_SAVE
     {
         Pos = MAP_APPFONT ( 198 , 96  ) ;
         Size = MAP_APPFONT ( 16 , 16 ) ;
         TabStop = TRUE ;
-        QuickHelpText [ de ] = "Linienendentabelle sichern" ;
         QuickHelpText [ en-US ] = "Save Arrow Styles" ;
         ButtonImage = Image
         {
@@ -844,8 +715,6 @@ TabPage RID_SVXPAGE_LINEEND_DEF
             };
             MASKCOLOR
         };
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
 
     Control CTL_PREVIEW
@@ -855,7 +724,6 @@ TabPage RID_SVXPAGE_LINEEND_DEF
         Size = MAP_APPFONT ( 248 , 40 ) ;
     };
 
-    Text [ x-comment ] = " ";
 };
  // RID_SVXDLG_LINE ----------------------------------------------------------
 TabDialog RID_SVXDLG_LINE
@@ -863,7 +731,6 @@ TabDialog RID_SVXDLG_LINE
     OutputSize = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Linie" ;
     Text [ en-US ] = "Line" ;
     Moveable = TRUE ;
     TabControl TAB_CONTROL
@@ -876,30 +743,23 @@ TabDialog RID_SVXDLG_LINE
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE ;
-                Text [ de ] = "Linie" ;
                 Text [ en-US ] = "Line" ;
                 PageResID = RID_SVXPAGE_LINE ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINE_DEF ;
-                Text [ de ] = "Linienstile" ;
                 Text [ en-US ] = "Line Styles" ;
                 PageResID = RID_SVXPAGE_LINE_DEF ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_LINEEND_DEF ;
-                Text [ de ] = "Linienenden" ;
                 Text [ en-US ] = "Arrow Styles" ;
                 PageResID = RID_SVXPAGE_LINEEND_DEF ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 
 
