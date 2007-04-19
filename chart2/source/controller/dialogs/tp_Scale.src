@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:46:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,17 +46,13 @@ TabPage TP_SCALE_Y
     {
         Pos = MAP_APPFONT ( 5 , 4  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Achsenskalierung" ;
         Text [ en-US ] = "Scale axes" ;
-        Text [ x-comment ] = " ";
     };
         FixedText TXT_MIN
         {
             Pos = MAP_APPFONT ( 11 , 16  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text [ de ] = "~Minimum:" ;
             Text [ en-US ] = "~Minimum:" ;
-        Text [ x-comment ] = " ";
     };
         SpinField EDT_MIN
         {
@@ -70,19 +66,15 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 159 , 15  ) ;
             Size = MAP_APPFONT ( 88 , 10 ) ;
-            Text [ de ] = "~Automatisch" ;
             TabStop = TRUE ;
             Text [ en-US ] = "Automatic" ;
-        Text [ x-comment ] = " ";
     };
 
         FixedText TXT_MAX
         {
             Pos = MAP_APPFONT ( 11 , 32  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text [ de ] = "Ma~ximum:" ;
             Text [ en-US ] = "Ma~ximum:" ;
-        Text [ x-comment ] = " ";
     };
         SpinField EDT_MAX
         {
@@ -96,17 +88,14 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 159 , 31  ) ;
             Size = MAP_APPFONT ( 88 , 10 ) ;
-            Text [ de ] = "A~utomatisch" ;
             TabStop = TRUE ;
             Text [ en-US ] = "Automatic" ;
-        Text [ x-comment ] = " ";
     };
 
         FixedText TXT_STEP_MAIN
         {
             Pos = MAP_APPFONT ( 11 , 48  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text[ de ] = "Hau~ptintervall:" ;
             Text [ en-US ] = "Major ~interval:" ;
     };
         SpinField EDT_STEP_MAIN
@@ -120,17 +109,14 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 159 , 47  ) ;
             Size = MAP_APPFONT ( 88 , 10 ) ;
-            Text [ de ] = "Au~tomatisch" ;
             TabStop = TRUE ;
             Text [ en-US ] = "Automatic" ;
-        Text [ x-comment ] = " ";
     };
 
         FixedText TXT_STEP_HELP
         {
             Pos = MAP_APPFONT ( 11 , 64  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text[ de] = "Teilinte~rvall:" ;
             Text [ en-US ] = "Mi~nor interval:" ;
     };
 //      SpinField EDT_STEP_HELP
@@ -161,19 +147,15 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 159 , 63  ) ;
             Size = MAP_APPFONT ( 88 , 10 ) ;
-            Text [ de ] = "Aut~omatisch" ;
             TabStop = TRUE ;
             Text [ en-US ] = "Automatic" ;
-        Text [ x-comment ] = " ";
     };
 
         FixedText TXT_ORIGIN
         {
             Pos = MAP_APPFONT ( 11 , 80  ) ;
             Size = MAP_APPFONT ( 88 , 8 ) ;
-            Text [ de ] = "A~chse bei:" ;
             Text [ en-US ] = "~Axis at:" ;
-        Text [ x-comment ] = " ";
     };
         SpinField EDT_ORIGIN
         {
@@ -187,27 +169,22 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 159 , 79  ) ;
             Size = MAP_APPFONT ( 88 , 10 ) ;
-            Text [ de ] = "Automati~sch" ;
             TabStop = TRUE ;
             Text [ en-US ] = "Automatic" ;
-        Text [ x-comment ] = " ";
     };
 
         CheckBox CBX_LOGARITHM
         {
             Pos = MAP_APPFONT ( 11 , 97  ) ;
             Size = MAP_APPFONT ( 236 , 10 ) ;
-            Text [ de ] = "~Logarithmische Skalierung" ;
             Text [ en-US ] = "Logarithmic ~scale" ;
             TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
 
     FixedLine FL_TICKS
     {
         Pos = MAP_APPFONT ( 6 , 116  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text[ de ] = "Marken für Hauptintervalle" ;
         Text[ en-US ] = "Major interval marks";
     };
 
@@ -215,24 +192,19 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 127  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ de ] = "~innen";
             Text [ en-US ] = "inn~er";
-        Text [ x-comment ] = " ";
     };
         CheckBox CBX_TICKS_OUTER
         {
             Pos = MAP_APPFONT ( 93 , 127  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ de ] = "au~ßen";
             Text [ en-US ] = "~outer";
-        Text [ x-comment ] = " ";
     };
 
     FixedLine FL_HELPTICKS
     {
         Pos = MAP_APPFONT ( 6 , 149  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text[ de ] = "Marken für Teilintervalle" ;
         Text[ en-US ] = "Minor interval marks";
     };
 
@@ -240,17 +212,13 @@ TabPage TP_SCALE_Y
         {
             Pos = MAP_APPFONT ( 11 , 160  );
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ de ] = "inn~en";
             Text [ en-US ] = "i~nner";
-        Text [ x-comment ] = " ";
     };
         CheckBox CBX_HELPTICKS_OUTER
         {
             Pos = MAP_APPFONT ( 93 , 160  ) ;
             Size = MAP_APPFONT ( 78 , 10 ) ;
-            Text [ de ] = "auße~n";
             Text [ en-US ] = "o~uter";
-        Text [ x-comment ] = " ";
     };
 };
 
