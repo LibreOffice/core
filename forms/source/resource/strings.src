@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 16:55:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:44:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,159 +39,131 @@
 
 String RID_BASELISTBOX_ERROR_FILLLIST
 {
-    Text [ de ] = "Der Inhalt eines Kombinations- oder Listenfeldes konnte nicht ermittelt werden.";
     Text [ en-US ] = "The contents of a combo box or list field could not be determined.";
 };
 
 String RID_STR_IMPORT_GRAPHIC
 {
-    Text [ de ] = "Grafik einfügen" ;
     Text [ en-US ] = "Insert graphics" ;
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_NAME
 {
-    Text [ de ] = "ersetzt";
     Text [ en-US ] = "substituted";
 };
 
 String RID_STR_CONTROL_SUBSTITUTED_EPXPLAIN
 {
-    Text [ de ] = "Beim Laden dieses Controls trat ein Fehler auf. Es wurde daher durch einen Platzhalter ersetzt.";
     Text [ en-US ] = "An error occurred while this control was being loaded. It was therefore replaced with a placeholder.";
 };
 
 String RID_STR_READERROR
 {
-    Text [ de ] = "Fehler beim Lesen von Daten aus der Datenbank" ;
     Text [ en-US ] = "Error reading data from database" ;
 };
 
 String RID_STR_CONNECTERROR
 {
-    Text [ de ] = "Verbindungsaufbau gescheitert" ;
     Text [ en-US ] = "Connection failed" ;
 };
 
 String RID_ERR_LOADING_FORM
 {
-    Text [ de ] = "Die Dateninhalte konnten nicht geladen werden.";
     Text [ en-US ] = "The data content could not be loaded.";
 };
 
 String RID_ERR_REFRESHING_FORM
 {
-    Text [ de ] = "Die Dateninhalte konnten nicht aktualisiert werden.";
     Text [ en-US ] = "The data content could not be updated";
-    Text [ x-comment ] = "; The meaning here is 'refresh', not 'update'.";
 };
 
 String RID_STR_ERR_INSERTRECORD
 {
-    Text [ de ] = "Fehler beim Einfügen des neuen Datensatzs";
     Text [ en-US ] = "Error inserting the new record";
 };
 
 String RID_STR_ERR_UPDATERECORD
 {
-    Text [ de ] = "Fehler beim Schreiben des aktuellen Datensatzes";
     Text [ en-US ] = "Error updating the current record";
 };
 
 String RID_STR_ERR_DELETERECORD
 {
-    Text [ de ] = "Fehler beim Löschen des aktuellen Datensatzes";
     Text [ en-US ] = "Error deleting the current record";
 };
 
 String RID_STR_ERR_DELETERECORDS
 {
-    Text [ de ] = "Fehler beim Löschen der angegebenen Datensätze";
     Text [ en-US ] = "Error deleting the specified records";
 };
 
 String RID_STR_NEED_NON_NULL_OBJECT
 {
-    Text [ de ] = "Das Objekt darf nicht NULL sein.";
     Text [ en-US ] = "The object cannot be NULL.";
 };
 
 String RID_STR_OPEN_GRAPHICS
 {
-    Text [ de ] = "Grafik einfügen aus...";
     Text [ en-US ] = "Insert graphics from...";
 };
 
 String RID_STR_CLEAR_GRAPHICS
 {
-    Text [ de ] = "Grafik entfernen";
     Text [ en-US ] = "Remove graphics";
 };
 
 
 String RID_STR_INVALIDSTREAM
 {
-    Text [ de ] = "Die übergebene Stream-Komponente ist ungültig.";
     Text [ en-US ] = "The given stream is invalid.";
 };
 
 String RID_STR_SYNTAXERROR
 {
-    Text [ de ] = "Fehler bei der Analyse des Anfrageausdrucks" ;
     Text [ en-US ] = "Syntax error in query expression" ;
 };
 
 String RID_STR_INCOMPATIBLE_TYPES
 {
-    Text [ de ] = "Die von dem Binding unterstützten Typen können nicht zum Datenaustausch mit diesem Kontrollfeld benutzt werden.";
     Text [ en-US ] = "The value types supported by the binding cannot be used for exchanging data with this control.";
 };
 
 String RID_STR_LABEL_RECORD
 {
-    Text [ de ] = "Datensatz";
     Text [ en-US ] = "Record";
 };
 
 String RID_STR_INVALID_VALIDATOR
 {
-    Text [ de ] = "Das Kontrollfeld hat eine Bindung an einen externen Wert, welche gleichzeitig als Validator fungiert. Diese Bindung muß gelöst werden, bevor ein neuer Validator eingesetzt werden kann.";
     Text [ en-US ] = "The control is connected to an external value binding, which at the same time acts as validator. You need to revoke the value binding, before you can set a new validator.";
 };
 
 String RID_STR_LABEL_OF
 {
-    Text [ de ] = "von";
     Text [ en-US ] = "of";
 };
 
 String RID_STR_QUERY_SAVE_MODIFIED_ROW
 {
-    Text [ de ] = "Der Inhalt des aktuellen Formulars wurde geändert.\nSollen die Änderungen gespeichert werden?";
     Text [ en-US ] = "The content of the current form has been modified.\nDo you want to save your changes?";
 };
 String RID_STR_COULD_NOT_SET_ORDER
 {
-    Text [ de ] = "Fehler beim Setzen der Sortier-Kriterien";
     Text [ en-US ] = "Error setting the sort criteria";
 };
 String RID_STR_COULD_NOT_SET_FILTER
 {
-    Text [ de ] = "Fehler beim Setzen der Filter-Kriterien";
     Text [ en-US ] = "Error setting the filter criteria";
 };
 String RID_STR_FEATURE_REQUIRES_PARAMETERS
 {
-    Text [ de ] = "Zum Ausführen dieser Funktion werden Parameter benötigt.";
     Text [ en-US ] = "To execute this function, parameters are needed.";
 };
 String RID_STR_FEATURE_NOT_EXECUTABLE
 {
-    Text [ de ] = "Diese Funktion kann nicht ausgeführt werden, sondern dient nur der Statusabfrage.";
     Text [ en-US ] = "This function cannot be executed, but is only for status queries.";
 };
 String RID_STR_FEATURE_UNKNOWN
 {
-    Text [ de ] = "Unbekannte Funktion.";
     Text [ en-US ] = "Unknown function.";
 };
