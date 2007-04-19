@@ -4,9 +4,9 @@
  *
  *  $RCSfile: multmrk.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:24:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:16:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,25 +43,20 @@ ModalDialog DLG_MULTMRK
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 95 ) ;
-    Text [ de ] = "Verzeichnismarkierungen" ;
     Text [ en-US ] = "Index Markings" ;
     Moveable = TRUE ;
     FixedLine FL_TOX
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 153 , 8 ) ;
-        Text [ de ] = "Auswahl" ;
         Text [ en-US ] = "Selection" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ENTRY
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "Verzeichnis" ;
         Text [ en-US ] = "Index" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TEXT
     {
@@ -73,10 +68,8 @@ ModalDialog DLG_MULTMRK
     {
         Pos = MAP_APPFONT ( 12 , 26 ) ;
         Size = MAP_APPFONT ( 41 , 8 ) ;
-        Text [ de ] = "Eintrag" ;
         Text [ en-US ] = "Entry" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_TOX
     {
@@ -99,7 +92,6 @@ ModalDialog DLG_MULTMRK
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
