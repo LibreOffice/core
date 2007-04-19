@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:00:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,20 +37,6 @@
 
 StringArray SCSTR_DPFUNCLISTBOX
 {
-    ItemList [ de ] =
-    {
-        < "Summe" ; Default ; > ;
-        < "Anzahl" ; Default ; > ;
-        < "Mittelwert" ; Default ; > ;
-        < "Max" ; Default ; > ;
-        < "Min" ; Default ; > ;
-        < "Produkt" ; Default ; > ;
-        < "Anzahl (nur Zahlen)" ; Default ; > ;
-        < "StAbw (Stichprobe)" ; Default ; > ;
-        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-        < "Varianz (Stichprobe)" ; Default ; > ;
-        < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-    };
     ItemList [ en-US ] =
     {
         < "Sum" ; Default ; > ;
@@ -82,7 +68,6 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "~Funktion" ;
         Text [ en-US ] = "~Function" ;
     };
     MultiListBox LB_FUNC
@@ -98,7 +83,6 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT ( 6 , 85 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text [ de ] = "Name:" ;
         Text [ en-US ] = "Name:" ;
     };
     FixedText FT_NAME
@@ -110,14 +94,12 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT( 6, 99 );
         Size = MAP_APPFONT( 152, 8 );
-        Text [ de ] = "Angezeigter Wert";
         Text [ en-US ] = "Displayed value";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT( 12, 112 );
         Size = MAP_APPFONT( 60, 8 );
-        Text [ de ] = "~Typ";
         Text [ en-US ] = "~Type";
     };
     ListBox LB_TYPE
@@ -127,18 +109,6 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "Standard"; Default; >;
-            < "Differenz von"; Default; >;
-            < "% von"; Default; >;
-            < "% Differenz von"; Default; >;
-            < "Ergebnis in"; Default; >;
-            < "% der Zeile"; Default; >;
-            < "% der Spalte"; Default; >;
-            < "% des Ergebnisses"; Default; >;
-            < "Index"; Default; >;
-        };
         StringList [ en-US ] =
         {
             < "Normal"; Default; >;
@@ -156,7 +126,6 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT( 12, 128 );
         Size = MAP_APPFONT( 60, 8 );
-        Text [ de ] = "~Basisfeld";
         Text [ en-US ] = "~Base field";
     };
     ListBox LB_BASEFIELD
@@ -171,7 +140,6 @@ ModalDialog RID_SCDLG_DPDATAFIELD
     {
         Pos = MAP_APPFONT( 12, 144 );
         Size = MAP_APPFONT( 60, 8 );
-        Text [ de ] = "Ba~siselement";
         Text [ en-US ] = "Ba~se item";
     };
     ListBox LB_BASEITEM
@@ -181,11 +149,6 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "- vorhergehendes Element -"; Default; >;
-            < "- nächstes Element -"; Default; >;
-        };
         StringList [ en-US ] =
         {
             < "- previous item -"; Default; >;
@@ -219,7 +182,6 @@ ModalDialog RID_SCDLG_DPDATAFIELD
         MapUnit = MAP_APPFONT ;
         Delta = 61 ;
     };
-    Text [ de ] = "Datenfeld" ;
     Text [ en-US ] = "Data Field" ;
 };
 
@@ -231,7 +193,6 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     HelpId = HID_SC_PIVOTSUBT ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 220 , 155 ) ;
-    Text [ de ] = "Datenfeld" ;
     Text [ en-US ] = "Data Field" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -240,16 +201,13 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text [ de ] = "~Keine" ;
         Text [ en-US ] = "~None" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_AUTO
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "~Automatic" ;
         TabStop = TRUE ;
     };
@@ -257,7 +215,6 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text [ de ] = "~Benutzerdefiniert" ;
         Text [ en-US ] = "~User-defined" ;
         TabStop = TRUE ;
     };
@@ -274,14 +231,12 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Teilergebnisse" ;
         Text [ en-US ] = "Subtotals" ;
     };
     CheckBox CB_SHOWALL
     {
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 140 , 10 ) ;
-        Text [ de ] = "~Elemente ohne Daten anzeigen" ;
         Text [ en-US ] = "Show it~ems without data";
         TabStop = TRUE ;
     };
@@ -289,9 +244,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     {
         Pos = MAP_APPFONT ( 6 , 141 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text [ de ] = "Name:" ;
         Text [ en-US ] = "Name:" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
@@ -322,7 +275,6 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Pos = MAP_APPFONT ( 164 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Optionen...";
         Text [ en-US ] = "~Options...";
     };
 };
@@ -342,7 +294,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 198, 8 );
-        Text [ de ] = "~Sortieren nach";
         Text [ en-US ] = "Sort ~by";
     };
     ListBox LB_SORT_BY
@@ -358,7 +309,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Pos = MAP_APPFONT( 114, 14 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
-        Text [ de ] = "~Aufsteigend";
         Text [ en-US ] = "~Ascending";
     };
     RadioButton RB_SORT_DESC
@@ -366,7 +316,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Pos = MAP_APPFONT( 114, 28 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
-        Text [ de ] = "A~bsteigend";
         Text [ en-US ] = "~Descending";
     };
     RadioButton RB_SORT_MAN
@@ -374,21 +323,18 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Pos = MAP_APPFONT( 114, 42 );
         Size = MAP_APPFONT( 84, 10 );
         TabStop = TRUE;
-        Text [ de ] = "~Manuell";
         Text [ en-US ] = "~Manual";
     };
     FixedLine FL_LAYOUT
     {
         Pos = MAP_APPFONT( 6, 56 );
         Size = MAP_APPFONT( 198, 8 );
-        Text [ de ] = "Anzeigeoptionen";
         Text [ en-US ] = "Display options";
     };
     FixedText FT_LAYOUT
     {
         Pos = MAP_APPFONT( 12, 69 );
         Size = MAP_APPFONT( 70, 8 );
-        Text [ de ] = "~Layout";
         Text [ en-US ] = "~Layout";
     };
     ListBox LB_LAYOUT
@@ -398,12 +344,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "Tabellarisches Layout"; Default; >;
-            < "Gliederungsansicht mit Teilergebnissen oben"; Default; >;
-            < "Gliederungsansicht mit Teilergebnissen unten"; Default; >;
-        };
         StringList [ en-US ] =
         {
             < "Tabular layout"; Default; >;
@@ -416,14 +356,12 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Pos = MAP_APPFONT( 12, 85 );
         Size = MAP_APPFONT( 186, 10 );
         TabStop = TRUE;
-        Text [ de ] = "L~eerzeile nach jedem Element";
         Text [ en-US ] = "~Empty line after each item";
     };
     FixedLine FL_AUTOSHOW
     {
         Pos = MAP_APPFONT( 6, 99 );
         Size = MAP_APPFONT( 198, 8 );
-        Text [ de ] = "Automatisch anzeigen";
         Text [ en-US ] = "Show automatically";
     };
     CheckBox CB_SHOW
@@ -431,7 +369,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Pos = MAP_APPFONT( 12, 112 );
         Size = MAP_APPFONT( 70, 10 );
         TabStop = TRUE;
-        Text [ de ] = "An~zeigen";
         Text[ en-US ] = "~Show";
     };
     NumericField NF_SHOW
@@ -451,14 +388,12 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 118, 112 );
         Size = MAP_APPFONT( 80, 8 );
-        Text [ de ] = "Elemente";
         Text [ en-US ] = "items";
     };
     FixedText FT_SHOW_FROM
     {
         Pos = MAP_APPFONT( 22, 128 );
         Size = MAP_APPFONT( 60, 8 );
-        Text [ de ] = "~Von";
         Text [ en-US ] = "~From";
     };
     ListBox LB_SHOW_FROM
@@ -468,11 +403,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         TabStop = TRUE;
         Border = TRUE;
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "Oben"; Default; >;
-            < "Unten"; Default; >;
-        };
         StringList [ en-US ] =
         {
             < "Top"; Default; >;
@@ -483,7 +413,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 22, 144 );
         Size = MAP_APPFONT( 60, 8 );
-        Text [ de ] = "~Feld verwenden";
         Text [ en-US ] = "~Using field";
     };
     ListBox LB_SHOW_USING
@@ -498,7 +427,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 6, 160 );
         Size = MAP_APPFONT( 198, 8 );
-        Text [ de ] = "Vers~teckte Elemente";
         Text [ en-US ] = "Hide i~tems";
     };
     Control CT_HIDE
@@ -512,7 +440,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
     {
         Pos = MAP_APPFONT( 6, 224 );
         Size = MAP_APPFONT( 76, 8 );
-        Text [ de ] = "H~ierarchie";
         Text [ en-US ] = "Hierarch~y";
     };
     ListBox LB_HIERARCHY
@@ -542,7 +469,6 @@ ModalDialog RID_SCDLG_DPSUBTOTAL_OPT
         Size = MAP_APPFONT( 50, 14 );
         TabStop = TRUE;
     };
-    Text [ de ] = "Datenfeld-Optionen";
     Text [ en-US ] = "Data Field Options";
 };
 
@@ -561,7 +487,6 @@ ModalDialog RID_SCDLG_DPSHOWDETAIL
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 132, 24 );
         WordBreak = TRUE;
-        Text [ de ]  = "~Wählen Sie das Feld, dessen Detail Sie hinzufügen möchten";
         Text [ en-US ] = "~Choose the field containing the detail you want to show";
     };
     ListBox LB_DIMS
@@ -591,7 +516,6 @@ ModalDialog RID_SCDLG_DPSHOWDETAIL
         Size = MAP_APPFONT( 50, 14 );
         TabStop = TRUE;
     };
-    Text [ de ] = "Detail einblenden";
     Text [ en-US ] = "Show Detail";
 };
 
