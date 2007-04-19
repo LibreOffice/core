@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outline.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:09:48 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:21:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ ModalDialog DLG_NUM_NAMES
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 164 , 82 ) ;
-    Text [ de ] = "Speichern als";
     Text [ en-US ] = "Save As";
     Moveable = TRUE ;
     OKButton BT_OK
@@ -70,9 +69,7 @@ ModalDialog DLG_NUM_NAMES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 96 , 8 ) ;
-        Text [ de ] = "Form" ;
         Text [ en-US ] = "Format" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_FORM
     {
@@ -81,18 +78,6 @@ ModalDialog DLG_NUM_NAMES
         Size = MAP_APPFONT ( 84 , 42 ) ;
         TabStop = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Unbenannt 1" ; > ;
-            < "Unbenannt 2" ; > ;
-            < "Unbenannt 3" ; > ;
-            < "Unbenannt 4" ; > ;
-            < "Unbenannt 5" ; > ;
-            < "Unbenannt 6" ; > ;
-            < "Unbenannt 7" ; > ;
-            < "Unbenannt 8" ; > ;
-            < "Unbenannt 9" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Untitled 1" ; > ;
@@ -105,18 +90,6 @@ ModalDialog DLG_NUM_NAMES
             < "Untitled 8" ; > ;
             < "Untitled 9" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     Edit ED_FORM
     {
@@ -126,7 +99,6 @@ ModalDialog DLG_NUM_NAMES
         TabStop = TRUE ;
         Left = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -137,7 +109,6 @@ TabDialog DLG_TAB_OUTLINE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Kapitelnummerierung" ;
     Text [ en-US ] = "Outline Numbering" ;
     Moveable = TRUE ;
     TabControl 1
@@ -148,24 +119,18 @@ TabDialog DLG_TAB_OUTLINE
             PageItem
             {
                 Identifier = TP_OUTLINE_NUM ;
-                Text [ de ] = "Nummerierung" ;
                 Text [ en-US ] = "Numbering" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_NUM_POSITION ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
     String ST_FORM
     {
-        Text [ de ] = "~Form" ;
         Text [ en-US ] = "~Format" ;
-        Text [ x-comment ] = " ";
     };
     Menu MN_FORM
     {
@@ -174,74 +139,56 @@ TabDialog DLG_TAB_OUTLINE
             MenuItem
             {
                 Identifier = MN_FORM1 ;
-                Text [ de ] = "Unbenannt 1" ;
                 Text [ en-US ] = "Untitled 1" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM2 ;
-                Text [ de ] = "Unbenannt 2" ;
                 Text [ en-US ] = "Untitled 2" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM3 ;
-                Text [ de ] = "Unbenannt 3" ;
                 Text [ en-US ] = "Untitled 3" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM4 ;
-                Text [ de ] = "Unbenannt 4" ;
                 Text [ en-US ] = "Untitled 4" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM5 ;
-                Text [ de ] = "Unbenannt 5" ;
                 Text [ en-US ] = "Untitled 5" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM6 ;
-                Text [ de ] = "Unbenannt 6" ;
                 Text [ en-US ] = "Untitled 6" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM7 ;
-                Text [ de ] = "Unbenannt 7" ;
                 Text [ en-US ] = "Untitled 7" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM8 ;
-                Text [ de ] = "Unbenannt 8" ;
                 Text [ en-US ] = "Untitled 8" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
                 Identifier = MN_FORM9 ;
-                Text [ de ] = "Unbenannt 9" ;
                 Text [ en-US ] = "Untitled 9" ;
                 HelpID = HID_NUM_OUTL_NAMED_NUMS ;
-                Text [ x-comment ] = " ";
             };
             MenuItem
             {
@@ -250,14 +197,11 @@ TabDialog DLG_TAB_OUTLINE
             MenuItem
             {
                 Identifier = MN_SAVE ;
-                Text [ de ] = "Speichern ~als...";
                 Text [ en-US ] = "Save ~As...";
                 HelpID = HID_NUM_OUTL_NUM_SAVEAS ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 /**************************************************************************/
 /*                                                                        */
@@ -282,19 +226,15 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 32 , 8 ) ;
-        Text [ de ] = "Ebene" ;
         Text [ en-US ] = "Level" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_COLL
     {
         Pos = MAP_APPFONT ( 50 , 14 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "~Absatzvorlage" ;
         Text [ en-US ] = "~Paragraph Style" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text [ x-comment ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
     ListBox LB_COLL
     {
@@ -311,10 +251,8 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 50 , 43 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Nummer" ;
         Text [ en-US ] = "~Number" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_NUMBER
     {
@@ -329,9 +267,7 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 50 , 59 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "Zeichenv~orlage" ;
         Text [ en-US ] = "~Character Style" ;
-        Text [ x-comment ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
     };
     ListBox LB_CHARFMT
     {
@@ -344,9 +280,7 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 50 , 75 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Vollständig" ;
         Text [ en-US ] = "Sho~w sublevels" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_ALL_LEVEL
     {
@@ -367,19 +301,15 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 50 , 89 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "Trennzeichen" ;
         Text [ en-US ] = "Separator" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PREFIX
     {
         Pos = MAP_APPFONT ( 56 , 102 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
-        Text [ de ] = "~davor" ;
         Text [ en-US ] = "~Before" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_PREFIX
     {
@@ -394,10 +324,8 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 56 , 117 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
-        Text [ de ] = "dah~inter" ;
         Text [ en-US ] = "~After" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SUFFIX
     {
@@ -412,10 +340,8 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 50 , 133 ) ;
         Size = MAP_APPFONT ( 52 , 8 ) ;
-        Text [ de ] = "~Beginn bei" ;
         Text [ en-US ] = "~Start at" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_START
     {
@@ -436,10 +362,8 @@ TabPage TP_OUTLINE_NUM
     {
         Pos = MAP_APPFONT ( 44 , 3 ) ;
         Size = MAP_APPFONT ( 210 , 8 ) ;
-        Text [ de ] = "Nummerierung" ;
         Text [ en-US ] = "Numbering" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
@@ -448,9 +372,7 @@ TabPage TP_OUTLINE_NUM
     };
     String ST_NO_COLL
     {
-        Text [ de ] = "(keine)" ;
         Text [ en-US ] = "(none)" ;
-        Text [ x-comment ] = " ";
     };
 };
 
