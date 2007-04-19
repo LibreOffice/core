@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdclient.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:13:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:11:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,8 +122,30 @@ Client::~Client()
 void Client::RequestNewObjectArea( Rectangle& aObjRect )
 {
     ::sd::View* pView = mpViewShell->GetView();
+
+    sal_Bool bSizeProtect = sal_False;
+    sal_Bool bPosProtect = sal_False;
+
+    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
+    if (rMarkList.GetMarkCount() == 1)
+    {
+        SdrMark* pMark = rMarkList.GetMark(0);
+        SdrObject* pObj = pMark->GetMarkedSdrObj();
+
+        // no need to check for changes, this method is called only if the area really changed
+        bSizeProtect = pObj->IsResizeProtect();
+        bPosProtect = pObj->IsMoveProtect();
+    }
+
+    Rectangle aOldRect = GetObjArea();
+    if ( bPosProtect )
+        aObjRect.SetPos( aOldRect.TopLeft() );
+
+    if ( bSizeProtect )
+        aObjRect.SetSize( aOldRect.GetSize() );
+
     Rectangle aWorkArea( pView->GetWorkArea() );
-    if (!aWorkArea.IsInside(aObjRect))
+    if ( !aWorkArea.IsInside(aObjRect) && !bPosProtect && aObjRect != aOldRect )
     {
         // correct position
         Point aPos = aObjRect.TopLeft();
