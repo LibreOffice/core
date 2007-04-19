@@ -4,9 +4,9 @@
  *
  *  $RCSfile: folderitem_calc.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:20:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:22:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 [STR_FI_NAME_TABELLENDOKUMENT]
 en-US = "Spreadsheet"
-de = "Tabellendokument"
 
 [STR_FI_TOOLTIP_CALC]
-de = "Berechnungen ausführen, Informationen analysieren und Listen in Tabellen verwalten - Calc macht's möglich."
 en-US = "Perform calculation, analyze information and manage lists in spreadsheets by using Calc."
