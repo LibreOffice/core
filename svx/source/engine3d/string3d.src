@@ -4,9 +4,9 @@
  *
  *  $RCSfile: string3d.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:53:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:25:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,75 +39,53 @@
  // Strings fuer die Draw-Dialoge --------------------------------------------
 String RID_SVX_3D_CREATE_LATHE
 {
-    Text [ de ] = "Erstelle 3D-Rotationsobjekt" ;
     Text [ en-US ] = "Create 3D rotation object" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_EXCHANGE_PASTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
     /* ### ACHTUNG: Neuer Text in Resource? Objekt(e) einfügen : Objekt(e) einf³gen */
-    Text [ de ] = "Objekt(e) einfÃ¼gen" ;
     Text [ en-US ] = "Insert object(s)" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_SEGMENTS
 {
-    Text [ de ] = "Anzahl Segmente" ;
     Text [ en-US ] = "Number of segments" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_DEEPTH
 {
-    Text [ de ] = "Objekttiefe" ;
     Text [ en-US ] = "Object depth" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_FOCAL
 {
-    Text [ de ] = "Kamerabrennweite" ;
     Text [ en-US ] = "Focal length" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_CAMPOS
 {
-    Text [ de ] = "Kameraposition" ;
     Text [ en-US ] = "Camera position" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_ROTATE
 {
-    Text [ de ] = "3D-Objekt rotieren" ;
     Text [ en-US ] = "Rotate 3D object" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_EXTRUDE
 {
-    Text [ de ] = "Extrusionsobjekt erstellen" ;
     Text [ en-US ] = "Create extrusion object" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_LATHE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper erstellen : Rotationsk÷rper erstellen */
-    Text [ de ] = "RotationskÃ¶rper erstellen" ;
     Text [ en-US ] = "Create rotation object" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_BREAK_LATHE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper aufbrechen : Rotationsk÷rper aufbrechen */
     /* ### ACHTUNG: Neuer Text in Resource? Rotationskörper aufbrechen : Rotationsk÷rper aufbrechen */
-    Text [ de ] = "3D-Objekt aufbrechen" ;
     Text [ en-US ] = "Split 3D object" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVX_3D_UNDO_ATTRIBUTES
 {
-    Text [ de ] = "3D-Attribute" ;
     Text [ en-US ] = "3D Attributes" ;
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
