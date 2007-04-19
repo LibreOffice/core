@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:07:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabDialog DLG_DOC_FOOTNOTE
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Fußnoteneinstellung" ;
     Text [ en-US ] = "Footnote Settings" ;
     Moveable = TRUE ;
     TabControl 1
@@ -54,21 +53,16 @@ TabDialog DLG_DOC_FOOTNOTE
             {
                 Identifier = TP_FOOTNOTEOPTION ;
                 PageResID = TP_FOOTNOTEOPTION ;
-                Text [ de ] = "Fußnoten" ;
                 Text [ en-US ] = "Footnotes" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_ENDNOTEOPTION ;
                 PageResID = TP_ENDNOTEOPTION ;
-                Text [ de ] = "Endnoten" ;
                 Text [ en-US ] = "Endnotes" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 TabPage TP_FOOTNOTEOPTION
 {
@@ -81,16 +75,13 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Automatische Nummerierung" ;
         Text [ en-US ] = "AutoNumbering" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NUMTYPE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "Nu~mmerierung" ;
         Text [ en-US ] = "Num~bering";
     };
     ListBox LB_NUMVIEW
@@ -106,10 +97,8 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 130 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Be~ginn bei" ;
         Left = TRUE ;
         Text [ en-US ] = "~Start at" ;
-        Text [ x-comment ] = " ";
     };
     NumericField FLD_OFFSET
     {
@@ -127,7 +116,6 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "~Zählung" ;
         Text [ en-US ] = "~Counting";
     };
     ListBox LB_NUMCOUNT
@@ -139,33 +127,19 @@ TabPage TP_FOOTNOTEOPTION
         Group = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Pro Seite" ; > ;
-            < "Pro Kapitel" ; > ;
-            < "Pro Dokument" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Per page" ; > ;
             < "Per chapter" ; > ;
             < "Per document" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     FixedText FT_PREFIX
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "~Davor" ;
         Text [ en-US ] = "~Before" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_PREFIX
     {
@@ -180,10 +154,8 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 130 , 46 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "Dahin~ter" ;
         Text [ en-US ] = "~After" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SUFFIX
     {
@@ -198,44 +170,34 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 36 , 8 ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_POS_PAGE
     {
         Pos = MAP_APPFONT ( 65 , 62 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Seiten~ende" ;
         Text [ en-US ] = "~End of page" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_POS_CHAPTER
     {
         Pos = MAP_APPFONT ( 65 , 75 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
-        Text [ de ] = "Do~kumentende" ;
         Text [ en-US ] = "En~d of document" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_TEMPL
     {
         Pos = MAP_APPFONT ( 6 , 89 ) ;
         Size = MAP_APPFONT ( 103 , 8 ) ;
-        Text [ de ] = "Vorlagen" ;
         Text [ en-US ] = "Styles" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PARA_TEMPL
     {
         Pos = MAP_APPFONT ( 12 , 102 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Absatz" ;
         Text [ en-US ] = "Pa~ragraph" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -251,10 +213,8 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Seite" ;
         Text [ en-US ] = "~Page" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -268,19 +228,15 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 113 , 89 ) ;
         Size = MAP_APPFONT ( 141 , 8 ) ;
-        Text [ de ] = "Zeichenvorlagen" ;
 
         Text [ en-US ] = "Character Styles";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ANCHR_CHARFMT
     {
         Pos = MAP_APPFONT ( 117 , 102 ) ;
         Size = MAP_APPFONT ( 67 , 8 ) ;
-        Text [ de ] = "Te~xtbereich" ;
         Left = TRUE ;
         Text [ en-US ] = "Te~xt area" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ANCHR_CHARFMT
     {
@@ -295,10 +251,8 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 117 , 118 ) ;
         Size = MAP_APPFONT ( 67 , 8 ) ;
-        Text [ de ] = "~Fußnotenbereich" ;
         Left = TRUE ;
         Text [ en-US ] = "~Footnote area" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_TEXT_CHARFMT
     {
@@ -313,18 +267,14 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 6 , 134 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Hinweistext mehrseitige Fußnoten" ;
         Text [ en-US ] = "Continuation notice" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CONT
     {
         Pos = MAP_APPFONT ( 12 , 148 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "Am Fußn~otenende" ;
         Text [ en-US ] = "End ~of footnote" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_CONT
     {
@@ -339,10 +289,8 @@ TabPage TP_FOOTNOTEOPTION
     {
         Pos = MAP_APPFONT ( 12 , 163 ) ;
         Size = MAP_APPFONT ( 73 , 8 ) ;
-        Text [ de ] = "A~uf Folgeseite" ;
         Text [ en-US ] = "Star~t of next page" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_CONT_FROM
     {
@@ -365,16 +313,13 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 6 , 2 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Automatische Nummerierung" ;
         Text [ en-US ] = "AutoNumbering" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NUMTYPE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
-        Text [ de ] = "Nu~mmerierung" ;
         Text [ en-US ] = "~Numbering";
     };
     ListBox LB_NUMVIEW
@@ -401,10 +346,8 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 130 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Be~ginn bei" ;
         Left = TRUE ;
         Text [ en-US ] = "~Start at" ;
-        Text [ x-comment ] = " ";
     };
     NumericField FLD_OFFSET
     {
@@ -436,10 +379,8 @@ TabPage TP_ENDNOTEOPTION
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
 
-        Text [ de ] = "~Davor" ;
         Text [ en-US ] = "~Before" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_PREFIX
     {
@@ -454,10 +395,8 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 130 , 32 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "Dahin~ter" ;
         Text [ en-US ] = "~After" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SUFFIX
     {
@@ -478,36 +417,28 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Seiten~ende" ;
         Text [ en-US ] = "End ~of page" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_POS_CHAPTER
     {
         Pos = MAP_APPFONT ( 12 , 118 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Dokumentende" ;
         Text [ en-US ] = "End of ~document" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_TEMPL
     {
         Pos = MAP_APPFONT ( 6 , 46 ) ;
         Size = MAP_APPFONT ( 115 , 8 ) ;
-        Text [ de ] = "Vorlagen" ;
         Text [ en-US ] = "Styles" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PARA_TEMPL
     {
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
-        Text [ de ] = "~Absatz" ;
         Text [ en-US ] = "Pa~ragraph" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_PARA_TEMPL
     {
@@ -523,10 +454,8 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
-        Text [ de ] = "~Seite" ;
         Text [ en-US ] = "~Page" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_PAGE_TEMPL
     {
@@ -540,15 +469,12 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 125 , 46 ) ;
         Size = MAP_APPFONT ( 129 , 8 ) ;
-        Text [ de ] = "Zeichenvorlagen" ;
         Text [ en-US ] = "Character Styles";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ANCHR_CHARFMT
     {
         Pos = MAP_APPFONT ( 129 , 58 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text [ de ] = "Te~xtbereich" ;
         Left = TRUE ;
         Text [ en-US ] = "Te~xt area" ;
     };
@@ -565,7 +491,6 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 129 , 74 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text [ de ] = "E~ndnotenbereich" ;
         Left = TRUE ;
         Text [ en-US ] = "~Endnote area" ;
     };
@@ -583,18 +508,14 @@ TabPage TP_ENDNOTEOPTION
         Pos = MAP_APPFONT ( 80 , 91 ) ;
         Size = MAP_APPFONT ( 174 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinweistext mehrseitige Fu�noten : Hinweistext mehrseitige Fu�noten */
-        Text [ de ] = "Hinweistext mehrseitige Fußnoten" ;
         Text [ en-US ] = "Continuation notice" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CONT
     {
         Pos = MAP_APPFONT ( 86 , 103 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
-        Text [ de ] = "~Folgeseite" ;
         Text [ en-US ] = "~Following page" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_CONT
     {
@@ -609,10 +530,8 @@ TabPage TP_ENDNOTEOPTION
     {
         Pos = MAP_APPFONT ( 86 , 118 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
-        Text [ de ] = "~Beginn" ;
         Text [ en-US ] = "~Start" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_CONT_FROM
     {
