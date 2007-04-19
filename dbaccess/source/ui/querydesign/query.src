@@ -4,9 +4,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.96 $
+ *  $Revision: 1.97 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-10 15:44:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:06:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,119 +134,84 @@ ImageList IMG_JOINS_H
 
 String STR_QUERY_UNDO_TABWINSHOW
 {
-    Text [ de ] = "Tabellenfenster hinzufügen" ;
     Text [ en-US ] = "Add Table Window" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_MOVETABWIN
 {
-    Text [ de ] = "Tabellenfenster verschieben" ;
     Text [ en-US ] = "Move table window" ;
-    Text [ x-comment ] = " ";
 };
 String STR_QUERY_UNDO_INSERTCONNECTION
 {
-    Text [ de ] = "Verknüpfung einfügen" ;
     Text [ en-US ] = "Insert Join" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_REMOVECONNECTION
 {
-    Text [ de ] = "Verknüpfung löschen" ;
     Text [ en-US ] = "Delete Join" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_SIZETABWIN
 {
-    Text [ de ] = "Tabellenfenster - Größe aendern" ;
     Text [ en-US ] = "Resize table window" ;
-    Text [ x-comment ] = " ";
 };
 String STR_QUERY_UNDO_TABFIELDDELETE
 {
-    Text [ de ] = "Spalte löschen" ;
     Text [ en-US ] = "Delete Column" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_TABFIELDMOVED
 {
-    Text [ de ] = "Spalte verschieben" ;
     Text [ en-US ] = "Move column";
 };
 
 String STR_QUERY_UNDO_TABFIELDCREATE
 {
-    Text [ de ] = "Spalte hinzufügen" ;
     Text [ en-US ] = "Add Column" ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_TABLE_DOESNT_EXIST
 {
-    Text [ de ] = "Der Ausdruck ist ungültig, da keine Tabelle '$name$' existiert .";
     Text [ en-US ] = "Invalid expression, table '$name$' does not exist.";
-    Text [ x-comment ] = " ";
 };
 
 String RID_STR_FIELD_DOESNT_EXIST
 {
-    Text [ de ] = "Der Ausdruck ist ungültig, da der Feldname '$name$' nicht zugeordnet werden kann.";
     Text [ en-US ] = "Invalid expression, field name '$name$' does not exist.";
-    Text [ x-comment ] = " ";
 };
 String RID_STR_TOMUCHTABLES
 {
-    Text [ de ] = "Die Abfrage enthält #num# Tabellen. Der aktuelle Datenbanktyp kann aber maximal #maxnum# Tabelle(n) pro Statement verarbeiten.";
     Text [ en-US ] = "The query covers #num# tables. The selected database type, however, can only process a maximum of #maxnum# table(s) per statement.";
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_TABWINDELETE
 {
-    Text [ de ] = "Tabellenfenster löschen" ;
     Text [ en-US ] = "Delete Table Window" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_UNDO_MODIFY_CELL
 {
-    Text [ de ] = "Spaltenbeschreibung ändern" ;
     Text [ en-US ] = "Edit Column Description";
-    Text [ x-comment ] = " ";
 };
 String STR_QUERY_UNDO_SIZE_COLUMN
 {
-    Text [ de ] = "Spaltenbreite ändern" ;
     Text [ en-US ] = "Adjust column width";
-    Text [ x-comment ] = " ";
 };
 String STR_QUERY_SORTTEXT
 {
-    Text [ de ] = "(nicht sortiert);aufsteigend;absteigend" ;
     Text [ en-US ] = "(not sorted);ascending;descending" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_FUNCTIONS
 {
-    Text [ de ] = "(keine Funktion);Gruppierung";
     Text [ en-US ] = "(no function);Group";
-    Text [ x-comment ] = " ";
 };
 String STR_QUERY_NOTABLE
 {
-    Text [ de ] = "(keine Tabelle)";
     Text [ en-US ] = "(no table)";
-    Text [ x-comment ] = "; nk26.10.99: was bedeutet  das?";
 };
 String STR_QRY_ORDERBY_UNRELATED
 {
-    Text [ de ] = "Die Datenbank unterstützt die Sortierung nur für sichtbare Felder.";
     Text [ en-US ] = "The database only supports sorting for visible fields.";
-    Text [ x-comment ] = " ";
 };
 Menu RID_QUERYFUNCTION_POPUPMENU
 {
@@ -256,9 +221,7 @@ Menu RID_QUERYFUNCTION_POPUPMENU
         {
             Identifier = ID_QUERY_FUNCTION ;
             HelpID = HID_QUERY_FUNCTION;
-            Text [ de ] = "Funktionen" ;
             Text [ en-US ] = "Functions";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -268,17 +231,13 @@ Menu RID_QUERYFUNCTION_POPUPMENU
         {
             Identifier = ID_QUERY_TABLENAME ;
             HelpID = HID_QUERY_TABLENAME ;
-            Text [ de ] = "Tabellenname" ;
             Text [ en-US ] = "Table Name";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_QUERY_ALIASNAME ;
             HelpID = HID_QUERY_ALIASNAME ;
-            Text [ de ] = "Aliasname" ;
             Text [ en-US ] = "Alias";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -288,106 +247,76 @@ Menu RID_QUERYFUNCTION_POPUPMENU
         {
             Identifier = ID_QUERY_DISTINCT ;
             HelpID = HID_QUERY_DISTINCT ;
-            Text [ de ] = "Eindeutige Werte" ;
             Text [ en-US ] = "Distinct Values";
-            Text [ x-comment ] = " ";
         };
     };
 };
 String STR_QUERY_HANDLETEXT
 {
-    Text [ de ] = "Feld;Alias;Tabelle;Sortierung;Sichtbar;Funktion;Kriterium;oder;oder" ;
     Text [ en-US ] = "Field;Alias;Table;Sort;Visible;Function;Criterion;Or;Or";
-    Text [ x-comment ] = " ";
 };
 
 String STR_QRY_TOO_MANY_COLUMNS
 {
-    Text [ de ] = "Es sind zu viele Spalten vorhanden." ;
     Text [ en-US ] = "There are too many columns.";
-    Text [ x-comment ] = " ";
 };
 
 ErrorBox ERR_QRY_CRITERIA_ON_ASTERISK
 {
-    Message [ de ] = "Eine Bedingung für Feld [*] ist nicht möglich" ;
     Message [ en-US ] = "A condition cannot be applied to field [*]" ;
 };
 String STR_QRY_TOO_LONG_STATEMENT
 {
-    Text [ de ] = "Der erzeugte SQL Ausdruck ist zu lang." ;
     Text [ en-US ] = "The SQL statement created is too long.";
-    Text [ x-comment ] = " ";
 };
 String STR_QRY_TOOCOMPLEX
 {
-    Text [ de ] = "Anfrage ist zu komplex" ;
     Text [ en-US ] = "Query is too complex" ;
-    Text [ x-comment ] = " ";
 };
 String STR_QRY_NOSELECT
 {
-    Text [ de ] = "Es fehlt eine Selektion." ;
     Text [ en-US ] = "Nothing has been selected." ;
-    Text [ x-comment ] = " ";
 };
 String STR_QRY_TOOMANYCOND
 {
-    Text [ de ] = "Zu viele Suchkriterien" ;
     Text [ en-US ] = "Too many search criteria" ;
-    Text [ x-comment ] = " ";
 };
 String STR_QRY_SYNTAX
 {
-    Text [ de ] = "Fehler in der SQL Syntax" ;
     Text [ en-US ] = "SQL syntax error" ;
-    Text [ x-comment ] = " ";
 };
 ErrorBox ERR_QRY_ORDERBY_ON_ASTERISK
 {
-    Message [ de ] = "Nach [*] kann nicht sortiert werden.";
     Message [ en-US ] = "[*] cannot be used as a sort criterion.";
-    Message [ x-comment ] = " ";
 };
 String STR_QUERY_TRUE
 {
-    Text [ de ] = "WAHR" ;
     Text [ en-US ] = "TRUE" ;
 };
 String STR_QUERY_FALSE
 {
-    Text [ de ] = "FALSCH" ;
     Text [ en-US ] = "FALSE" ;
 };
 String STR_QRY_TOO_MANY_TABLES
 {
-    Text [ de ] = "Es sind zu viele Tabellen vorhanden." ;
     Text [ en-US ] = "There are too many tables.";
-    Text [ x-comment ] = " ";
 };
 
 String STR_QRY_NATIVE
 {
-    Text [ de ] = "Bei Anfrage im SQL-Dialekt der Datenbank wird das Statement nicht übernommen" ;
     Text [ en-US ] = "The statement will not be applied when querying in the SQL dialect of the database." ;
-    Text [ x-comment ] = " ";
 };
 ErrorBox ERR_QRY_AMB_FIELD
 {
-    Message [ de ] = "Feldname nicht gefunden oder eindeutig" ;
     Message [ en-US ] = "Field name not found or not unique" ;
-    Message [ x-comment ] = " ";
 };
 String STR_QRY_ILLEGAL_JOIN
 {
-    Text [ de ] = "Verknüpfung konnte nicht ausgeführt werden" ;
     Text [ en-US ] = "Join could not be processed" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_QUERY_SAVEMODIFIED
 {
-    Text [ de ] = "$object$ wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Text [ en-US ] = "$object$ has been changed.\nDo you want to save the changes?" ;
 };
 
@@ -395,54 +324,43 @@ Resource RSC_QUERY_OBJECT_TYPE
 {
     String 1
     {
-        Text [ x-comment ] = "This string is to be used as part of the QUERY_SAVEMODIFIED string - both together have to form a grammaticaly correct sentence.";
 
-        Text [ de ] = "Die Abfrage";
         Text [ en-US ] = "The query";
     };
     String 2
     {
-        Text [ x-comment ] = "This string is to be used as part of the QUERY_SAVEMODIFIED string - both together have to form a grammaticaly correct sentence.";
 
-        Text [ de ] = "Die Tabellensicht";
         Text [ en-US ] = "The table view";
     };
     String 3
     {
-        Text [ x-comment ] = "This string is to be used as part of the QUERY_SAVEMODIFIED string - both together have to form a grammaticaly correct sentence.";
 
-        Text [ de ] = "Der SQL-Befehl";
         Text [ en-US ] = "The SQL statement";
     };
 };
 
 String STR_SVT_SQL_SYNTAX_ERROR
 {
-    Text [ de ] = "Syntaxfehler im SQL-Ausdruck" ;
     Text [ en-US ] = "Syntax error in SQL statement" ;
 };
 
 String STR_QUERYDESIGN_NO_VIEW_SUPPORT
 {
-    Text [ de ] = "Diese Datenbank unterstützt keine Tabellenansichten.";
     Text [ en-US ] = "This database does not support table views.";
 };
 
 String STR_QUERYDESIGN_NO_VIEW_ASK
 {
-    Text [ de ] = "Möchten Sie statt dessen eine Abfrage erzeugen?";
     Text [ en-US ] = "Do you want to create a query instead?";
 };
 
 ErrorBox ERR_QRY_NOSTATEMENT
 {
-    Message [ de ] = "Es konnte keine Abfrage erstellt werden." ;
     Message [ en-US ] = "No query could be created.";
 };
 
 ErrorBox ERR_QRY_NOCRITERIA
 {
-    Message [ de ] = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewählt wurden." ;
     Message [ en-US ] = "No query could be created because no fields were selected.";
 };
 
@@ -452,60 +370,50 @@ ErrorBox ERR_QRY_NOCRITERIA
 
 String STR_DATASOURCE_DELETED
 {
-    Text [ de ] = "Die zugehörige Datenquelle wurde gelöscht. Es können keine dies bezüglichen Daten gespeichert werden.";
     Text [ en-US ] = "The corresponding data source has been deleted. Therefore, data relevant to that data source cannot be saved.";
 };
 
 String STR_QRY_COLUMN_NOT_FOUND
 {
-    Text [ de ] = "Die Spalte '$name$' ist unbekannt.";
     Text [ en-US ] = "The column '$name$' is unknown.";
 };
 
 String STR_QRY_JOIN_COLUMN_COMPARE
 {
-    Text [ de ] = "Spalten dürfen nur mit '=' verglichen werden.";
     Text [ en-US ] = "Columns can only be compared using '='.";
 };
 
 String STR_QRY_LIKE_LEFT_NO_COLUMN
 {
-    Text [ de ] = "Vor dem 'WIE' muss ein Spaltenname stehen.";
     Text [ en-US ] = "You must use a column name before 'LIKE'.";
 };
 
 String STR_QRY_CHECK_CASESENSITIVE
 {
-    Text [ de ] = "Die Spalte konnte nicht gefunden werden. Bitte beachten Sie, dass die Datenbank Gross- und Kleinschreibung unterscheidet.";
     Text [ en-US ] = "The column could not be found. Please note that the database is case-sensitive.";
 };
 
 String STR_QUERYDESIGN
 {
-    Text [ de ] = " - %PRODUCTNAME Base: Abfrageentwurf";
     Text [ en-US ] = " - %PRODUCTNAME Base: Query Design";
 };
 
 String STR_VIEWDESIGN
 {
-    Text [ de ] = " - %PRODUCTNAME Base: Ansichtsentwurf";
     Text [ en-US ] = " - %PRODUCTNAME Base: View Design";
 };
 
 String STR_ERROR_PARSING_STATEMENT
 {
-    Text [ de ] = "Der der Abfrage zu Grunde liegende SQL-Befehl konnte nicht analysiert werden.";
     Text [ en-US ] = "The SQL command which constitutes the query could not be parsed.";
 };
 
 String STR_INFO_OPENING_IN_SQL_VIEW
 {
-    Text [ de ] = "Die Abfrage wird in der SQL-Ansicht geöffnet.";
     Text [ en-US ] = "The query will be opened in SQL view.";
 };
 
 String STR_STATEMENT_WITHOUT_RESULT_SET
 {
-    Text [ de ] = "Die Abfrage erzeugt keine Ergebnismenge, und kann deswegen nicht Teil einer anderen Abfrage sein.";
     Text [ en-US ] = "The query does not create a result set, and thus cannot be part of another query.";
 };
