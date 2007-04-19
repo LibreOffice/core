@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tmpdlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:05:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:11:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ TabDialog DLG_TEMPLATE_1
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Zeichenvorlage" ;
     Text [ en-US ] = "Character Style" ;
     Moveable = TRUE ;
     TabControl 1
@@ -54,50 +53,40 @@ TabDialog DLG_TEMPLATE_1
             PageItem
             {
                 Identifier = TP_CHAR_STD ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = TP_CHAR_STD ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CHAR_EXT ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects" ;
                 PageResID = TP_CHAR_EXT ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CHAR_POS ;
                 PageResID = TP_CHAR_POS ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position";
             };
             PageItem
             {
                 Identifier = TP_CHAR_TWOLN ;
                 PageResID = TP_CHAR_TWOLN;
-                Text [ de ] = "Asiatisches Layout" ;
                 Text [ en-US ] = "Asian Layout";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 TabDialog DLG_TEMPLATE_2
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Absatzvorlage" ;
     Text [ en-US ] = "Paragraph Style" ;
     Moveable = TRUE ;
     TabControl 1
@@ -109,120 +98,93 @@ TabDialog DLG_TEMPLATE_2
             {
                 Identifier = TP_PARA_STD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einz¸ge und Abst‰nde : Einz≥ge und Abstınde */
-                Text [ de ] = "Einz√ºge und Abst√§nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PARA_ALIGN ;
-                Text [ de ] = "Ausrichtung" ;
                 PageResID = TP_PARA_ALIGN ;
                 Text [ en-US ] = "Alignment" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PARA_EXT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Textfluﬂ : Textfluò */
-                Text [ de ] = "Textfluss" ;
                 Text [ en-US ] = "Text Flow" ;
                 PageResID = TP_PARA_EXT ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PARA_ASIAN;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = TP_CHAR_STD ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
                 PageResID = TP_CHAR_STD ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CHAR_EXT ;
-                Text [ de ] = "Schrifteffekte" ;
                 Text [ en-US ] = "Font Effects" ;
                 PageResID = TP_CHAR_EXT ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CHAR_POS ;
                 PageResID = TP_CHAR_POS ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position";
             };
             PageItem
             {
                 Identifier = TP_CHAR_TWOLN ;
                 PageResID = TP_CHAR_TWOLN;
-                Text [ de ] = "Asiatisches Layout" ;
                 Text [ en-US ] = "Asian Layout";
             };
             PageItem
             {
                 Identifier = TP_NUMPARA ;
-                Text [ de ] = "Nummerierung" ;
                 Text [ en-US ] = "Numbering" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_TABULATOR ;
-                Text [ de ] = "Tabulatoren" ;
                 Text [ en-US ] = "Tabs" ;
                 PageResID = TP_TABULATOR ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_DROPCAPS ;
-                Text [ de ] = "Initialen" ;
                 Text [ en-US ] = "Drop Caps" ;
                 PageResID = TP_DROPCAPS ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
-                Text[ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
                 PageResID = TP_BORDER ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_CONDCOLL ;
                 PageResID = TP_CONDCOLL ;
-                Text [ de ] = "Bedingung" ;
                 Text [ en-US ] = "Condition" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 TabDialog DLG_TEMPLATE_4
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Seitenvorlage" ;
      // Text[norwegian_wrong] = "Sidetyper";
      // Text[italian_wrong] = "Stili pagina";
      // Text[portuguese_brazilian_wrong] = "Estilos da P·gina ";
@@ -243,106 +205,82 @@ TabDialog DLG_TEMPLATE_4
             /*            PageItem
             {
                 Identifier = TP_PAGE_STD ;
-                Text [ de ] = "Seite" ;
                 Text [ en-US ] = "Page" ;
                 PageResID = TP_PAGE_STD ;
             };*/
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
             /*            PageItem
             {
                 Identifier = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
                 PageResID = TP_BORDER ;
             };
             PageItem
             {
                 Identifier = TP_HEADER_PAGE ;
-                Text [ de ] = "Kopfzeile" ;
                 Text [ en-US ] = "Header" ;
                 PageResID = TP_HEADER_PAGE ;
             };
             PageItem
             {
                 Identifier = TP_FOOTER_PAGE ;
-                Text [ de ] = "Fuﬂzeile" ;
                 Text [ en-US ] = "Footer" ;
                 PageResID = TP_FOOTER_PAGE ;
             };
             PageItem
             {
                 Identifier = TP_COLUMN ;
-                Text [ de ] = "Spalten" ;
                 Text [ en-US ] = "Columns" ;
                 PageResID = TP_COLUMN ;
             };
             PageItem
             {
                 Identifier = TP_FOOTNOTE_PAGE ;
-                Text [ de ] = "Fuﬂnote" ;
                 Text [ en-US ] = "Footnote" ;
                 PageResID = TP_FOOTNOTE_PAGE ;
             };*/
         };
     };
-    Text [ x-comment ] = " ";
 };
 String STR_PAGE_STD
 {
-    Text [ de ]= "Seite" ;
     Text [ en-US ] = "Page" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGE_BORDER
 {
-    Text [ de ]= "Umrandung" ;
     Text [ en-US ] = "Borders" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGE_HEADER
 {
-    Text [ de ]= "Kopfzeile" ;
     Text [ en-US ] = "Header" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGE_FOOTER
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂzeile : Fuòzeile */
-    Text [ de ]= "Fu√üzeile" ;
     Text [ en-US ] = "Footer" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGE_TEXTGRID
 {
-    Text [ de ] = "Textraster" ;
     Text [ en-US ] = "Text Grid";
-    Text [ x-comment ] = "ZL: translation changed because of bug from Jack";
 };
 String STR_PAGE_COLUMN
 {
-    Text [ de ]= "Spalten" ;
     Text [ en-US ] = "Columns" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PAGE_FOOTNOTE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Fuﬂnote : Fuònote */
-    Text [ de ]= "Fu√ünote" ;
     Text [ en-US ] = "Footnote" ;
-    Text [ x-comment ] = " ";
 };
 TabDialog DLG_TEMPLATE_3
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Rahmenvorlage" ;
      // Text[norwegian_wrong] = "Rammemaler";
      // Text[italian_wrong] = "Stili cornice";
      // Text[portuguese_brazilian_wrong] = "Estilos de Moldura";
@@ -363,68 +301,52 @@ TabDialog DLG_TEMPLATE_3
             PageItem
             {
                 Identifier = TP_FRM_STD ;
-                Text [ de ] = "Typ" ;
                 Text [ en-US ] = "Type" ;
                 PageResID = TP_FRM_STD ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FRM_ADD ;
                 PageResID = TP_FRM_ADD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Zus‰tze : Zusıtze */
-                Text [ de ] = "Zus√§tze" ;
                 Text [ en-US ] = "Options" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FRM_WRAP ;
-                Text [ de ] = "Umlauf" ;
                 Text [ en-US ] = "Wrap" ;
                 PageResID = TP_FRM_WRAP ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
                 PageResID = TP_BORDER ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_COLUMN ;
-                Text [ de ]= "Spalten" ;
                 Text [ en-US ] = "Columns" ;
                 PageResID = TP_COLUMN ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_MACRO_ASSIGN ;
-                Text [ de ] = "Makro" ;
                 Text [ en-US ] = "Macro" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 TabDialog DLG_TEMPLATE_5
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Nummerierungsvorlage" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -433,47 +355,34 @@ TabDialog DLG_TEMPLATE_5
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BULLET ;
-                Text [ de ] = "Bullets" ;
                 Text [ en-US ] = "Bullets" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_SINGLE_NUM;
-                Text [ de ] = "Nummerierungsart" ;
                 Text [ en-US ] = "Numbering Style" ;
-                Text [ x-comment ] = "; MS W; MS Word, KeyID23136";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_NUM ;
-                Text [ de ] = "Gliederung" ;
                 Text [ en-US ] = "Outline" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BMP;
-                Text [ de ] = "Grafiken" ;
                 Text [ en-US ] = "Graphics" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_POSITION ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_OPTIONS;
-                Text [ de ] = "Optionen" ;
                 Text [ en-US ] = "Options" ;
-                Text [ x-comment ] = "; KW:T; KW:Tilde entfernen falls noch vorhanden";
             };
         };
     };
     Text [ en-US ] = "Numbering Style" ;
-    Text [ x-comment ] = " ";
 };
