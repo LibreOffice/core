@@ -4,9 +4,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: rt $ $Date: 2006-02-06 11:01:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:59:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -130,56 +130,46 @@
 // --------------------------------------------------------------------
 String sHelpButton
 {
-    Text [ de ] = "~Hilfe";
     Text [ en-US ] = "~Help";
 };
 
 String sCancelButton
 {
-    Text [ de ] = "~Abbrechen";
     Text [ en-US ] = "~Cancel";
 };
 
 String sBackButton
 {
-    Text [ de ] = "<< ~Zurück";
     Text [ en-US ] = "<< ~Back";
 };
 
 String sNextButton
 {
-    Text [ de ] = "~Weiter >>";
     Text [ en-US ] = "Ne~xt >>";
 };
 
 String sBeginButton
 {
-    Text [ de ] = "~Konvertieren";
     Text [ en-US ] = "~Convert";
 };
 
 String sCloseButton
 {
-    Text [ de ] = "~Schließen";
     Text [ en-US ] = "~Close";
 };
 
 String sWelcometextLabel1
 {
-    Text [ de ] = "Dieser Assistent wandelt Dokumente des %PRODUCTNAME - Formates und Microsoft Office - Dokumente in das neue OpenDocument Format um.";
     Text [ en-US ] = "This wizard converts documents in %PRODUCTNAME format and Microsoft Office documents to the new OpenDocument format.";
 };
 
 String sWelcometextLabel2
 {
-    Text [ de ] = "Bitte beachten Sie, dass beim Konvertieren der Microsoft - Dokumente angehängte VBA-Makros ihre Funktionalität verlieren";
     Text [ en-US ] = "Please note that when converting Microsoft documents any attached VBA macros lose their functionality.";
-    Text [ x-comment ] = "; VBA = Visual Basics for Applications TSM 01.12.00";
 };
 
 String sWelcometextLabel3
 {
-    Text [ de ] = "Wählen Sie die umzuwandelnden Dokumenttypen aus:";
     Text [ en-US ] = "Select the document type for conversion:";
 };
 
@@ -187,44 +177,37 @@ String sWelcometextLabel3
 
 String sMSTemplateCheckbox_1_
 {
-    Text [ de ] = "Word-Vorlagen";
     Text [ en-US ] = "Word templates";
 };
 
 String sMSTemplateCheckbox_2_
 {
-    Text [ de ] = "Excel-Vorlagen";
     Text [ en-US ] = "Excel templates";
 };
 
 String sMSTemplateCheckbox_3_
 {
-    Text [ de ] = "PowerPoint-Vorlagen";
     Text [ en-US ] = "PowerPoint templates";
 };
 
 String sMSDocumentCheckbox_1_
 {
-    Text [ de ] = "Word-Dokumente";
     Text [ en-US ] = "Word documents";
 };
 
 String sMSDocumentCheckbox_2_
 {
-    Text [ de ] = "Excel-Dokumente";
     Text [ en-US ] = "Excel documents";
 };
 
 String sMSDocumentCheckbox_3_
 {
-    Text [ de ] = "PowerPoint-Dokumente";
     Text [ en-US ] = "PowerPoint documents";
 };
 
 
 String sSearchInSubDir
 {
-    Text [ de ] = "inkl. Unterverzeichnisse";
     Text [ en-US ] = "Including subdirectories";
 };
 
@@ -232,7 +215,6 @@ String sSearchInSubDir
 
 String sMSContainerName
 {
-    Text [ de ] = "Microsoft Office";
     Text [ en-US ] = "Microsoft Office";
 };
 
@@ -240,116 +222,97 @@ String sMSContainerName
 
 String sSummaryHeader
 {
-    Text [ de ] = "Zusammenfassung:";
     Text [ en-US ] = "Summary:";
 };
 
 String sTextImportLabel
 {
-    Text [ de ] = "Importieren von:";
     Text [ en-US ] = "Import from:";
 };
 
 
 String sTextExportLabel
 {
-    Text [ de ] = "Speichern in:";
     Text [ en-US ] = "Save to:";
 };
 
 
 String sGroupnameDefault
 {
-    Text [ de ] = "Importierte_Vorlagen";
     Text [ en-US ] = "Imported_Templates";
-    Text [ x-comment ] = "; Bezeichnet einen Verzeichnis, dass zur Laufzeit angelegt wird";
 };
 
 
 String sProgressDesc1
 {
-    Text [ de ] = "Fortschritt: ";
     Text [ en-US ] = "Progress: ";
 };
 
 String sProgressOneDoc
 {
-    Text [ de ] = " Dokument";
     Text [ en-US ] = "Document";
 };
 
 String sProgressMoreDocs
 {
-    Text [ de ] = "Dokumente";
     Text [ en-US ] = "Documents";
 };
 
 
 String sProgressMoreTemplates
 {
-    Text [ de ] = "Vorlagen";
     Text [ en-US ] = "Templates";
 };
 
 
 String sNoDirCreation
 {
-    Text [ de ] = "Das Verzeichnis '%1' kann nicht angelegt werden: ";
     Text [ en-US ] = "The '%1' directory cannot be created: ";
 };
 
 
 String sMsgDirNotThere
 {
-    Text [ de ] = "Das Verzeichnis '%1' ist nicht vorhanden!";
     Text [ en-US ] = "The '%1' directory does not exist.";
 };
 
 
 String sQueryfornewCreation
 {
-    Text [ de ] = "Soll es erstellt werden?";
     Text [ en-US ] = "Do you want to create it now?";
-    Text [ x-comment ] = "; Das 'es' bezieht sich auf ein bestimmtes Verzeichnis";
 };
 
 
 String sFileExists
 {
-    Text [ de ] = "Die Datei '<1>' existiert bereits.<CR>Möchten Sie sie überschreiben?";
     Text [ en-US ] = "The '<1>' file already exists.<CR>Do you want to overwrite it?";
 };
 
 String sMorePathsError3
 {
-    Text [ de ] = "Verzeichnisse nicht vorhanden";
     Text [ en-US ] = "Directories do not exist";
 };
 
 
 String sOverwriteallFiles
 {
-    Text [ de ] = "Möchten Sie, dass Dokumente ohne Abfrage überschrieben werden?";
     Text [ en-US ] = "Do you want to overwrite documents without being asked?";
 };
 
 
 String sreeditMacro
 {
-    Text [ de ] = "Dokumentenmakro muss überarbeitet werden";
     Text [ en-US ] = "Document macro has to be revised.";
 };
 
 String scouldNotsaveDocument
 {
-    Text [ de ] = "Dokument '<1>' konnte nicht gespeichert werden";
     Text [ en-US ] = "Document '<1>' could not be saved.";
 };
 
 
 String scouldNotopenDocument
 {
-    Text [ de ] = "Dokument '<1>' konnte nicht geöffnet werden";
     Text [ en-US ] = "Document '<1>' could not be opened.";
 };
 
@@ -357,168 +320,140 @@ String scouldNotopenDocument
 
 String sConvertError1
 {
-    Text [ de ] = "Möchten Sie das Konvertieren an dieser Stelle wirklich abbrechen ?";
     Text [ en-US ] = "Do you really want to terminate conversion at this point?";
 };
 
 String sConvertError2
 {
-    Text [ de ] = "Assistent abbrechen";
     Text [ en-US ] = "Cancel Wizard";
 };
 
 String sRTErrorDesc
 {
-    Text [ de ] = "Es ist ein unerwarteter Fehler im Assistenten aufgetreten.";
     Text [ en-US ] = "An unexpected error has occurred in the wizard.";
 };
 
 String sRTErrorHeader
 {
-    Text [ de ] = "Fehler";
     Text [ en-US ] = "Error";
 };
 
 
 String sPathDialogMessage
 {
-    Text [ de ] = "Wählen Sie ein Verzeichnis aus";
     Text [ en-US ] = "Select a directory";
 };
 
 String sDialogTitle
 {
-    Text [ de ] = "Dokumenten-Konverter";
     Text [ en-US ] = "Document Converter";
 };
 
 String sProgressPage1
 {
-    Text [ de ] = "Arbeitsfortschritt";
     Text [ en-US ] = "Progress";
 };
 
 String sProgressPage2
 {
-    Text [ de ] = "Erfassen der relevanten Dokumente:";
     Text [ en-US ] = "Retrieving the relevant documents:";
 };
 
 String sProgressPage3
 {
-    Text [ de ] = "Konvertieren der Dokumente";
     Text [ en-US ] = "Converting the documents";
 };
 
 
 String sProgressFound
 {
-    Text [ de ] = "Gefunden:";
     Text [ en-US ] = "Found:";
 };
 
 
 String sProgressPage5
 {
-    Text [ de ] = "%1 gefunden";
     Text [ en-US ] = "%1 found";
-    Text [ x-comment ] = "; RB (15.06.01): %1 bezieht sich auf die Anzahl der gefundenen Dokumente bzw. Vorlagen.";
 };
 
 String sReady
 {
-    Text [ de ] = "Fertig";
     Text [ en-US ] = "Finished";
 };
 
 
 String sXMLTemplateCheckbox_1_
 {
-    Text [ de ] = "Textvorlagen";
     Text [ en-US ] = "Text templates";
 };
 
 String sXMLTemplateCheckbox_2_
 {
-    Text [ de ] = "Tabellenvorlagen";
     Text [ en-US ] = "Spreadsheet templates";
 };
 
 String sXMLTemplateCheckbox_3_
 {
-    Text [ de ] = "Zeichnungs/Präsentationsvorlagen";
     Text [ en-US ] = "Drawing/presentation templates";
 };
 
 String sXMLTemplateCheckbox_4_
 {
-    Text [ de ] = "Globaldokumente";
     Text [ en-US ] = "Master documents";
 };
 
 
 String sXMLDocumentCheckbox_1_
 {
-    Text [ de ] = "Textdokumente";
     Text [ en-US ] = "Text documents";
 };
 
 String sXMLDocumentCheckbox_2_
 {
-    Text [ de ] = "Tabellendokumente";
     Text [ en-US ] = "Spreadsheets";
 };
 
 String sXMLDocumentCheckbox_3_
 {
-    Text [ de ] = "Zeichnungs/Präsentationsdokumente";
     Text [ en-US ] = "Drawing/presentation documents";
 };
 
 
 String sXMLDocumentCheckbox_4_
 {
-    Text [ de ] = "Globaldokumente/Formeln";
     Text [ en-US ] = "Master documents/formulas";
 };
 
 String sXMLHelperApplications_1
 {
-    Text [ de ] = "Globaldokumente";
     Text [ en-US ] = "Master documents";
-    Text [ x-comment ] = "; EM(1.2.01) kommt mitten im Satz vor, deshalb kleingeschr auf Eng. Zust�ndig ist BC/Extras.";
 };
 
 String sXMLHelperApplications_2
 {
-    Text [ de ] = "Formeln";
     Text [ en-US ] = "Formulas";
 };
 
 
 String sSourceDocuments
 {
-    Text [ de ] = "Quelldokumente";
     Text [ en-US ] = "Source documents";
 };
 
 
 String sTargetDocuments
 {
-    Text [ de ] = "Zieldokumente";
     Text [ en-US ] = "Target documents";
 };
 
 String sCreateLogfile
 {
-    Text [ de ] = "Logdatei erstellen";
     Text [ en-US ] = "Create log file";
 };
 
 
 String sLogfileSummary
 {
-    Text [ de ] = "<COUNT> Dokumente konvertiert";
     Text [ en-US ] = "<COUNT> documents converted";
 };
 
@@ -526,124 +461,106 @@ String sLogfileSummary
 
 String sLogfileHelpText
 {
-    Text [ de ] = "In Ihrem Arbeitsverzeichnis wird eine Logdatei angelegt";
     Text [ en-US ] = "A log file will be created in your work directory";
 };
 
 
 String sshowLogfile
 {
-    Text [ de ] = "Logdatei anzeigen";
     Text [ en-US ] = "Show log file";
 };
 
 
 String sSumInclusiveSubDir
 {
-    Text [ de ] = "Es werden alle Unterverzeichnisse berücksichtigt";
     Text [ en-US ] = "All subdirectories will be taken into account";
 };
 
 String sSumSaveDokumente
 {
-    Text [ de ] = "Exportiert werden sie in das folgende Verzeichnis:";
     Text [ en-US ] = "These will be exported to the following directory:";
 };
 
 
 String sSumSOTextDocuments
 {
-    Text [ de ] = "Alle %PRODUCTNAME Textdokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME text documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOTableDocuments
 {
-    Text [ de ] = "Alle %PRODUCTNAME Tabellendokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME spreadsheets contained in the following directory will be imported:";
 };
 
 
 String sSumSODrawDocuments
 {
-    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsdokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME drawing and presentation documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOMathDocuments
 {
-    Text [ de ] = "Alle %PRODUCTNAME Formeldokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME formula documents contained in the following directory will be imported:";
 };
 
 
 String sSumSOTextTemplates
 {
-    Text [ de ] = "Alle %PRODUCTNAME Textvorlagen aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME text templates contained in the following directory will be imported:";
 };
 
 
 String sSumSOTableTemplates
 {
-    Text [ de ] = "Alle %PRODUCTNAME Tabellenvorlagen aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME table templates contained in the following directory will be imported:";
 };
 
 
 String sSumSODrawTemplates
 {
-    Text [ de ] = "Alle %PRODUCTNAME Zeichnungs- und Präsentationsvorlagen aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME drawing and presentation templates contained in the following directory will be imported:";
 };
 
 String sSumSOGlobalDocuments
 {
-    Text [ de ] = "Alle %PRODUCTNAME Globaldokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All %PRODUCTNAME master documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSTextDocuments
 {
-    Text [ de ] = "Alle Word-Dokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All Word documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSTableDocuments
 {
-    Text [ de ] = "Alle Excel-Dokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All Excel documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSDrawDocuments
 {
-    Text [ de ] = "Alle PowerPoint-Dokumente aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All PowerPoint documents contained in the following directory will be imported:";
 };
 
 
 String sSumMSTextTemplates
 {
-    Text [ de ] = "Alle Word-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All Word templates contained in the following directory will be imported:";
 };
 
 
 String sSumMSTableTemplates
 {
-    Text [ de ] = "Alle Excel-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All Excel templates contained in the following directory will be imported:";
 };
 
 
 String sSumMSDrawTemplates
 {
-    Text [ de ] = "Alle PowerPoint-Vorlagen aus dem folgenden Verzeichnis werden importiert:";
     Text [ en-US ] = "All PowerPoint templates contained in the following directory will be imported:";
 };
 
