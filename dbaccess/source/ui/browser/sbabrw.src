@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbabrw.src,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:02:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:54:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,78 +52,63 @@ QueryBox QUERY_BRW_SAVEMODIFIED
     Buttons = WB_YES_NO_CANCEL ;
     DefButton = WB_DEF_YES ;
     /* ### ACHTUNG: Neuer Text in Resource? Soll der ge�nderte Datensatz gespeichert werden? : Soll der ge�nderte Datensatz gespeichert werden? */
-    Message [ de ] = "Der aktuelle Datensatz wurde geändert.\nSollen die Änderungen gespeichert werden?" ;
     Message [ en-US ] = "The current record has been changed.\nDo you want to save the changes?" ;
-    Message [ x-comment ] = " ";
 };
 
 QueryBox QUERY_BRW_DELETE_ROWS
 {
     Buttons = WB_YES_NO ;
     /* ### ACHTUNG: Neuer Text in Resource? Sollen die selektierten Daten gel�scht werden? : Sollen die selektierten Daten gel�scht werden? */
-    Message [ de ] = "Sollen die selektierten Daten gelöscht werden?" ;
     Message [ en-US ] = "Do you want to delete the selected data?" ;
-    Message [ x-comment ] = " ";
 };
 
 String RID_STR_DATABROWSER_FILTERED
 {
-    Text [ de ] = "(gefiltert)" ;
     Text [ en-US ] = "(filtered)" ;
-    Text [ x-comment ] = " ";
 };
 
 String SBA_BROWSER_SETTING_ORDER
 {
-    Text [ de ] = "Fehler beim Setzen der Sortier-Kriterien";
     Text [ en-US ] = "Error setting the sort criteria";
 };
 String SBA_BROWSER_SETTING_FILTER
 {
-    Text [ de ] = "Fehler beim Setzen der Filter-Kriterien";
     Text [ en-US ] = "Error setting the filter criteria";
 };
 
 String RID_STR_CONNECTION_LOST
 {
-    Text [ de ] = "Vebindung verloren";
     Text [ en-US ] = "Connection lost";
 };
 
 String RID_STR_QUERIES_CONTAINER
 {
-    Text [ de ] = "Abfragen";
     Text [ en-US ] = "Queries";
 };
 
 String RID_STR_TABLES_CONTAINER
 {
-    Text [ de ] = "Tabellen";
     Text [ en-US ] = "Tables";
 };
 
 #define MID_EDIT_DATABASE   \
     Identifier = ID_TREE_EDIT_DATABASE ;    \
     HelpId = HID_BROWSER_EDIT_DATABASE; \
-    Text [ de ] = "~Datenbankdatei bearbeiten ..." ;    \
     Text [ en-US ] = "Edit ~Database File..." ;\
 
 #define MID_ADMINISTRATE    \
     Identifier = ID_TREE_ADMINISTRATE ; \
     HelpId = HID_BROWSER_ADMINISTRATE;  \
-    Text [ de ] = "Registrierte Datenbanken ..." ;  \
     Text [ en-US ] = "Registered databases ..." ;\
 
 #define MID_CLOSECONN   \
     Identifier = ID_TREE_CLOSE_CONN ;   \
     HelpId = HID_BROWSER_CLOSECONN ;    \
-    Text [ de ] = "Verbindung s~chließen" ;    \
     Text [ en-US ] = "Disco~nnect" ;    \
 
 #define MID_REFRESHCONN \
     Identifier = ID_TREE_REBUILD_CONN ; \
     HelpId = HID_BROWSER_REFRESHCONN ;  \
-    Text [ de ] = "Verbindung e~rneuern" ;  \
     Text [ en-US ] = "~Refresh Connection" ;    \
 
 Menu MENU_BROWSER_DEFAULTCONTEXT
@@ -160,75 +145,63 @@ Menu MENU_BROWSER_DEFAULTCONTEXT
 
 String STR_TITLE_CONFIRM_DELETION
 {
-    Text [ de ] = "Löschen bestätigen" ;
     Text [ en-US ] = "Confirm Deletion" ;
 };
 
 String STR_QUERY_DELETE_TABLE
 {
-    Text [ de ] = "Soll die Tabelle '%1' gelöscht werden?" ;
     Text [ en-US ] = "Do you want to delete the table '%1'?" ;
 };
 
 QueryBox QUERY_BRW_DELETE_QUERY_CONFIRM
 {
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Die Abfrage existiert bereits. Soll sie gelöscht werden?" ;
     Message [ en-US ] = "The query already exists. Do you want to delete it?" ;
     };
 
 QueryBox QUERY_CONNECTION_LOST
 {
     Buttons = WB_YES_NO ;
-    Message [ de ] = "Die Verbindung zur Datenbank wurde gelöscht! Soll Sie wieder aufgebaut werden?" ;
     Message [ en-US ] = "The connection to the database has been lost. Do you want to reconnect?" ;
     };
 
 String STR_OPENTABLES_WARNINGS
 {
-    Text [ de ] = "Warnungen aufgetreten.";
     Text [ en-US ] = "Warnings encountered";
 };
 
 String STR_OPENTABLES_WARNINGS_DETAILS
 {
-    Text [ de ] = "Beim Ermitteln der Tabellen wurden von der Datenbankverbindung Warnungen gemeldet.";
     Text [ en-US ] = "While retrieving the tables, warnings were reported by the database connection.";
 };
 
 String STR_CONNECTING_DATASOURCE
 {
-    Text [ de ] = "Verbindungsaufbau zu \"$name$\" ...";
     Text [ en-US ] = "Connecting to \"$name$\" ...";
     };
 
 String STR_LOADING_QUERY
 {
-    Text [ de ] = "lade Abfrage $name$ ...";
     Text [ en-US ] = "Loading query $name$ ...";
     };
 
 String STR_LOADING_TABLE
 {
-    Text [ de ] = "lade Tabelle $name$ ...";
     Text [ en-US ] = "Loading table $name$ ...";
     };
 
 String STR_DSBROWSER_TITLE
 {
-    Text [ de ] = "Datenquellen Ansicht" ;
     Text [ en-US ] = "Data sources view" ;
     };
 
 String STR_NO_TABLE_FORMAT_INSIDE
 {
-    Text [ de ] = "Es konnte kein Tabellenformat gefunden werden." ;
     Text [ en-US ] = "No table format could be found." ;
     };
 
 String STR_COULDNOTCONNECT_DATASOURCE
 {
-    Text [ de ] = "Die Verbindung zur Datenquelle \"$name$\" konnte nicht hergestellt werden.";
     Text [ en-US ] = "The connection to the data source \"$name$\" could not be established.";
 };
 
@@ -247,7 +220,6 @@ Menu RID_MENU_REFRESH_DATA
             Identifier = ID_BROWSER_REFRESH_REBUILD;
             Command = ".uno:DBRebuildData";
             HelpId = HID_BROWSER_REFRESH_REBUILDVIEW;
-            Text [ de ] = "Neu aufbauen";
             Text [ en-US ] = "Rebuild";
         };
     };
