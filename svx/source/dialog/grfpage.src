@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfpage.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:39:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:05:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,14 +55,12 @@ TabPage RID_SVXPAGE_GRFCROP
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Zuschneiden" ;
         Text [ en-US ] = "Crop" ;
     };
     FixedText FT_LEFT
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
     };
     MetricField MF_LEFT
@@ -88,7 +86,6 @@ TabPage RID_SVXPAGE_GRFCROP
         Pos = MAP_APPFONT ( 12 , 60 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "~Right" ;
     };
     MetricField MF_RIGHT
@@ -112,7 +109,6 @@ TabPage RID_SVXPAGE_GRFCROP
     {
         Pos = MAP_APPFONT ( 94 , 44 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text [ de ] = "~Oben" ;
         Text [ en-US ] = "~Top" ;
     };
     MetricField MF_TOP
@@ -138,7 +134,6 @@ TabPage RID_SVXPAGE_GRFCROP
         Pos = MAP_APPFONT ( 94 , 60 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Unten" ;
         Text [ en-US ] = "~Bottom" ;
     };
     MetricField MF_BOTTOM
@@ -162,7 +157,6 @@ TabPage RID_SVXPAGE_GRFCROP
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text [ de ] = "Bildgröße beibehal~ten" ;
         Text [ en-US ] = "Keep image si~ze" ;
     };
     RadioButton RB_ZOOMCONST
@@ -170,7 +164,6 @@ TabPage RID_SVXPAGE_GRFCROP
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Check = TRUE ;
-        Text [ de ] = "~Skalierung beibehalten" ;
         Text [ en-US ] = "Keep ~scale" ;
     };
     Window WN_BSP
@@ -183,7 +176,6 @@ TabPage RID_SVXPAGE_GRFCROP
     {
         Pos = MAP_APPFONT ( 6, 76 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Skalierung" ;
         Text [ en-US ] = "Scale" ;
     };
     FixedText FT_WIDTHZOOM
@@ -191,7 +183,6 @@ TabPage RID_SVXPAGE_GRFCROP
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text [ de ] = "Bre~ite" ;
         Text [ en-US ] = "~Width" ;
     };
     MetricField MF_WIDTHZOOM
@@ -218,7 +209,6 @@ TabPage RID_SVXPAGE_GRFCROP
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "H~eight" ;
         Left = TRUE ;
     };
@@ -245,7 +235,6 @@ TabPage RID_SVXPAGE_GRFCROP
     {
         Pos = MAP_APPFONT ( 6 , 121 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Bildgröße" ;
         Text [ en-US ] = "Image size" ;
     };
     FixedText FT_WIDTH
@@ -253,7 +242,6 @@ TabPage RID_SVXPAGE_GRFCROP
         Pos = MAP_APPFONT ( 12 , 134 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
     };
     MetricField MF_WIDTH
@@ -279,7 +267,6 @@ TabPage RID_SVXPAGE_GRFCROP
         Pos = MAP_APPFONT ( 12 , 150 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Höh~e" ;
         Text [ en-US ] = "H~eight" ;
     };
     MetricField MF_HEIGHT
@@ -309,7 +296,6 @@ TabPage RID_SVXPAGE_GRFCROP
         Pos = MAP_APPFONT ( 176 , 143 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ori~ginalgröße" ;
         Text [ en-US ] = "~Original Size" ;
     };
 };
