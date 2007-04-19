@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:52:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ ModalDialog DLG_LOGIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 265 , 158 ) ;
-    Text [ de ] = "Benutzername und Kennwort erforderlich" ;
     FixedText INFO_LOGIN_ERROR
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
@@ -60,7 +59,6 @@ ModalDialog DLG_LOGIN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 197 , 8 ) ;
-        Text [ de ] = "Meldung vom Server" ;
         Text [ en-US ] = "Message from server" ;
     };
     FixedText INFO_LOGIN_REQUEST
@@ -68,14 +66,12 @@ ModalDialog DLG_LOGIN
         Pos = MAP_APPFONT ( 12 , 55 ) ;
         Size = MAP_APPFONT ( 185 , 18 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Bitte geben Sie hier Benutzernamen und Kennwort für %1 ein." ;
         Text [ en-US ] = "Please enter user name and password for %1." ;
     };
     FixedText FT_LOGIN_PATH
     {
         Pos = MAP_APPFONT ( 12 , 77 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "~Pfad" ;
         Text [ en-US ] = "~Path" ;
     };
     Edit ED_LOGIN_PATH
@@ -100,7 +96,6 @@ ModalDialog DLG_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 92 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "~Benutzername" ;
         Text [ en-US ] = "~User name" ;
     };
     Edit ED_LOGIN_USERNAME
@@ -119,7 +114,6 @@ ModalDialog DLG_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 107 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "P~asswort" ;
         Text [ en-US ] = "Pass~word" ;
     };
     Edit ED_LOGIN_PASSWORD
@@ -133,7 +127,6 @@ ModalDialog DLG_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 57 , 10 ) ;
-        Text [ de ] = "A~ccount" ;
         Text [ en-US ] = "A~ccount";
     };
     Edit ED_LOGIN_ACCOUNT
@@ -147,14 +140,12 @@ ModalDialog DLG_LOGIN
     {
         Pos = MAP_APPFONT ( 12 , 136 ) ;
         Size = MAP_APPFONT ( 185 , 10 ) ;
-        Text [ de ] = "Kennwort ~speichern" ;
         Text [ en-US ] = "~Save password" ;
     };
     FixedLine GB_LOGIN_LOGIN
     {
         Pos = MAP_APPFONT ( 7 , 44 ) ;
         Size = MAP_APPFONT ( 197 , 8 ) ;
-        Text [ de ] = "Anmelden" ;
         Text [ en-US ] = "Log in" ;
     };
     OKButton BTN_LOGIN_OK
@@ -175,7 +166,6 @@ ModalDialog DLG_LOGIN
     };
     String STR_LOGIN_AT
     {
-        Text [ de ] = "auf " ;
         Text [ en-US ] = "to " ;
     };
     Text [ en-US ] = "User Name and Password Required" ;
