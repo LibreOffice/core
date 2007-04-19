@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_direction_tmpl.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:04:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:45:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,12 @@ RadioButton RB_TO_SIMPLIFIED \
 { \
     Pos = MAP_APPFONT( D_XPOS, D_YPOS ); \
     Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
-    Text [ de ] = "Traditionelles in vereinfachtes Chinesisch"; \
     Text [ en-US ] = "~Traditional Chinese to simplified Chinese"; \
 }; \
 RadioButton RB_TO_TRADITIONAL \
 { \
     Pos = MAP_APPFONT( D_XPOS, D_YPOS + RSC_CD_RADIOBUTTON_HEIGHT+RSC_SP_CTRL_GROUP_Y ); \
     Size = MAP_APPFONT ( D_FULLWIDTH, RSC_CD_RADIOBUTTON_HEIGHT ) ; \
-    Text [ de ] = "Vereinfachtes in traditionelles Chinesisch"; \
     Text [ en-US ] = "~Simplified Chinese to traditional Chinese"; \
 };
 
