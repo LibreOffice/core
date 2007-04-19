@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:17:59 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:50:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,92 +39,64 @@
  // Value-Strings ------------------------------------------------------------
 String RID_SVXITEMS_TRUE
 {
-    Text [ de ] = "Wahr" ;
     Text [ en-US ] = "True" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_FALSE
 {
-    Text [ de ] = "Falsch" ;
     Text [ en-US ] = "False" ;
-    Text [ x-comment ] = " ";
 };
  // Extras -------------------------------------------------------------------
 String RID_SVXITEMS_EXTRAS_CHARCOLOR
 {
-    Text [ de ] = "Zeichenfarbe" ;
     Text [ en-US ] = "Font color" ;
-    Text [ x-comment ] = " ";
 };
  // SvxSearchItem ------------------------------------------------------------
  // Kommando
 String RID_SVXITEMS_SEARCHCMD_FIND
 {
-    Text [ de ] = "Suchen" ;
     Text [ en-US ] = "Search" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SEARCHCMD_FIND_ALL
 {
-    Text [ de ] = "Alle suchen" ;
     Text [ en-US ] = "Find All" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SEARCHCMD_REPLACE
 {
-    Text [ de ] = "Ersetzen" ;
     Text [ en-US ] = "Replace" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SEARCHCMD_REPLACE_ALL
 {
-    Text [ de ] = "Alle ersetzen" ;
     Text [ en-US ] = "Replace all" ;
-    Text [ x-comment ] = " ";
 };
  // Vorlagen
 String RID_SVXITEMS_SEARCHSTYL_CHAR
 {
-    Text [ de ] = "Zeichenvorlage" ;
     Text [ en-US ] = "Character Style" ;
-    Text [ x-comment ] = "; All \"Vorlage\"/Styles are always written with capital S. 10.5.00EM";
 };
 String RID_SVXITEMS_SEARCHSTYL_PARA
 {
-    Text [ de ] = "Absatzvorlage" ;
     Text [ en-US ] = "Paragraph Style" ;
-    Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
 String RID_SVXITEMS_SEARCHSTYL_FRAME
 {
-    Text [ de ] = "Rahmenvorlage" ;
     Text [ en-US ] = "Frame Style" ;
-    Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
 String RID_SVXITEMS_SEARCHSTYL_PAGE
 {
-    Text [ de ] = "Seitenvorlage" ;
     Text [ en-US ] = "Page Style" ;
-    Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
  // Zellen-Typ
 String RID_SVXITEMS_SEARCHIN_FORMULA
 {
-    Text [ de ] = "Formel" ;
     Text [ en-US ] = "Formula" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SEARCHIN_VALUE
 {
-    Text [ de ] = "Wert" ;
     Text [ en-US ] = "Value" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SEARCHIN_NOTE
 {
-    Text [ de ] = "Notiz" ;
     Text [ en-US ] = "Note" ;
-    Text [ x-comment ] = " ";
 };
  // Applikation
 String RID_SVXITEMS_SEARCHAPP_WRITER
@@ -146,125 +118,85 @@ String RID_SVXITEMS_SEARCHAPP_BASE
  // enum SvxBreak ------------------------------------------------------------
 String RID_SVXITEMS_BREAK_NONE
 {
-    Text [ de ] = "Kein Umbruch" ;
     Text [ en-US ] = "No break" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BREAK_COLUMN_BEFORE
 {
-    Text [ de ] = "Umbruch vor neuer Spalte" ;
     Text [ en-US ] = "Break before new column" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BREAK_COLUMN_AFTER
 {
-    Text [ de ] = "Umbruch nach neuer Spalte" ;
     Text [ en-US ] = "Break after new column" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BREAK_COLUMN_BOTH
 {
-    Text [ de ] = "Umbruch vor und nach neuer Spalte" ;
     Text [ en-US ] = "Break before and after new column" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BREAK_PAGE_BEFORE
 {
-    Text [ de ] = "Umbruch vor neuer Seite" ;
     Text [ en-US ] = "Break before new page" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BREAK_PAGE_AFTER
 {
-    Text [ de ] = "Umbruch nach neuer Seite" ;
     Text [ en-US ] = "Break after new page" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BREAK_PAGE_BOTH
 {
-    Text [ de ] = "Umbruch vor und nach neuer Seite" ;
     Text [ en-US ] = "Break before and after new page" ;
-    Text [ x-comment ] = " ";
 };
  // enum SvxShadowLocation ---------------------------------------------------
 String RID_SVXITEMS_SHADOW_NONE
 {
-    Text [ de ] = "Kein Schatten" ;
     Text [ en-US ] = "No Shadow" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SHADOW_TOPLEFT
 {
-    Text [ de ] = "Schatten oben links" ;
     Text [ en-US ] = "Shadow top left" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SHADOW_TOPRIGHT
 {
-    Text [ de ] = "Schatten oben rechts" ;
     Text [ en-US ] = "Shadow top right" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SHADOW_BOTTOMLEFT
 {
-    Text [ de ] = "Schatten unten links" ;
     Text [ en-US ] = "Shadow bottom left" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SHADOW_BOTTOMRIGHT
 {
-    Text [ de ] = "Schatten unten rechts" ;
     Text [ en-US ] = "Shadow bottom right" ;
-    Text [ x-comment ] = " ";
 };
  // enum BrushStyle ----------------------------------------------------------
 String RID_SVXITEMS_BRUSHSTYLE_NULL
 {
-    Text [ de ] = "Keine" ;
     Text [ en-US ] = "None" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_SOLID
 {
-    Text [ de ] = "Voll" ;
     Text [ en-US ] = "Solid" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_HORZ
 {
-    Text [ de ] = "Horizontal" ;
     Text [ en-US ] = "Horizontal" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_VERT
 {
-    Text [ de ] = "Vertikal" ;
     Text [ en-US ] = "Vertical" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_CROSS
 {
-    Text [ de ] = "Karo" ;
     Text [ en-US ] = "Grid" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_DIAGCROSS
 {
-    Text [ de ] = "Karo diagonal" ;
     Text [ en-US ] = "Diamond" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_UPDIAG
 {
-    Text [ de ] = "Diagonal hoch" ;
     Text [ en-US ] = "Diagonal up" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_DOWNDIAG
 {
-    Text [ de ] = "Diagonal runter" ;
     Text [ en-US ] = "Diagonal down" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BRUSHSTYLE_25
 {
@@ -280,112 +212,76 @@ String RID_SVXITEMS_BRUSHSTYLE_75
 };
 String RID_SVXITEMS_BRUSHSTYLE_BITMAP
 {
-    Text [ de ] = "Bild" ;
     Text [ en-US ] = "Image" ;
-    Text [ x-comment ] = " ";
 };
  // enum ColorName -----------------------------------------------------------
 String RID_SVXITEMS_COLOR
 {
-    Text [ de ] = "Farbe " ;
     Text [ en-US ] = "Color " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_BLACK
 {
-    Text [ de ] = "Schwarz" ;
     Text [ en-US ] = "Black" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_BLUE
 {
-    Text [ de ] = "Blau" ;
     Text [ en-US ] = "Blue" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_GREEN
 {
-    Text [ de ] = "Grün" ;
     Text [ en-US ] = "Green" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_CYAN
 {
-    Text [ de ] = "Cyan" ;
     Text [ en-US ] = "Cyan" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_RED
 {
-    Text [ de ] = "Rot" ;
     Text [ en-US ] = "Red" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_MAGENTA
 {
-    Text [ de ] = "Magenta" ;
     Text [ en-US ] = "Magenta" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_BROWN
 {
-    Text [ de ] = "Braun" ;
     Text [ en-US ] = "Brown" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_GRAY
 {
-    Text [ de ] = "Grau" ;
     Text [ en-US ] = "Gray" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_LIGHTGRAY
 {
-    Text [ de ] = "Hellgrau" ;
     Text [ en-US ] = "Light Gray" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_LIGHTBLUE
 {
-    Text [ de ] = "Hellblau" ;
     Text [ en-US ] = "Light Blue" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_LIGHTGREEN
 {
-    Text [ de ] = "Hellgrün" ;
     Text [ en-US ] = "Light Green" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_LIGHTCYAN
 {
-    Text [ de ] = "Hellcyan" ;
     Text [ en-US ] = "Light Cyan" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_LIGHTRED
 {
-    Text [ de ] = "Hellrot" ;
     Text [ en-US ] = "Light Red" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_LIGHTMAGENTA
 {
-    Text [ de ] = "Hellmagenta" ;
     Text [ en-US ] = "Light Magenta" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_YELLOW
 {
-    Text [ de ] = "Gelb" ;
     Text [ en-US ] = "Yellow" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_WHITE
 {
-    Text [ de ] = "Weiß" ;
     Text [ en-US ] = "White" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_COLOR_MENUBAR
 {
@@ -450,21 +346,15 @@ String RID_SVXITEMS_COLOR_FIELDTEXT
  // enum FontItalic -------------------------------------------------------
 String RID_SVXITEMS_ITALIC_NONE
 {
-    Text [ de ] = "Nicht kursiv" ;
     Text [ en-US ] = "Not Italic" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ITALIC_OBLIQUE
 {
-    Text [ de ] = "Schräger kursiv" ;
     Text [ en-US ] = "Oblique italic" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ITALIC_NORMAL
 {
-    Text [ de ] = "Kursiv" ;
     Text [ en-US ] = "Italic" ;
-    Text [ x-comment ] = " ";
 };
  // enum FontWeight -------------------------------------------------------
 String RID_SVXITEMS_WEIGHT_DONTKNOW
@@ -473,364 +363,246 @@ String RID_SVXITEMS_WEIGHT_DONTKNOW
 };
 String RID_SVXITEMS_WEIGHT_THIN
 {
-    Text [ de ] = "dünn" ;
     Text [ en-US ] = "thin" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_ULTRALIGHT
 {
-    Text [ de ] = "ultra dünn" ;
     Text [ en-US ] = "ultra thin" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_LIGHT
 {
-    Text [ de ] = "leicht" ;
     Text [ en-US ] = "light" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_SEMILIGHT
 {
-    Text [ de ] = "halb leicht" ;
     Text [ en-US ] = "semi light" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_NORMAL
 {
-    Text [ de ] = "normal" ;
     Text [ en-US ] = "normal" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_MEDIUM
 {
-    Text [ de ] = "mittel" ;
     Text [ en-US ] = "medium" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_SEMIBOLD
 {
-    Text [ de ] = "halb fett" ;
     Text [ en-US ] = "semi bold" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_BOLD
 {
-    Text [ de ] = "fett" ;
     Text [ en-US ] = "bold" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_ULTRABOLD
 {
-    Text [ de ] = "ultra fett" ;
     Text [ en-US ] = "ultra bold" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WEIGHT_BLACK
 {
-    Text [ de ] = "schwarz" ;
     Text [ en-US ] = "black" ;
-    Text [ x-comment ] = " ";
 };
  // enum FontUnderline ----------------------------------------------------
 String RID_SVXITEMS_UL_NONE
 {
-    Text [ de ] = "Nicht unterstrichen" ;
     Text [ en-US ] = "No underline" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_SINGLE
 {
-    Text [ de ] = "Einfach unterstrichen" ;
     Text [ en-US ] = "Single underline" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_DOUBLE
 {
-    Text [ de ] = "Doppelt unterstrichen" ;
     Text [ en-US ] = "Double underlne" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_DOTTED
 {
-    Text [ de ] = "Gepunktet unterstrichen" ;
     Text [ en-US ] = "Dotted underline" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_DONTKNOW
 {
-    Text [ de ] = "Unterstrichen" ;
     Text [ en-US ] = "Underline";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_DASH
 {
-    Text [ de ] = "Unterstrichen (Strich)" ;
     Text [ en-US ] = "Underline (dashes)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_LONGDASH
 {
-    Text [ de ] = "Unterstrichen (Strich lang)" ;
     Text [ en-US ] = "Underline (long dashes)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_DASHDOT
 {
-    Text [ de ] = "Unterstrichen (Punkt Strich)" ;
     Text [ en-US ] = "Underline (dot dash)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_DASHDOTDOT
 {
-    Text [ de ] = "Unterstrichen (Punkt Punkt Strich)" ;
     Text [ en-US ] = "Underline (dot dot dash)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_SMALLWAVE
 {
-    Text [ de ] = "Unterstrichen (Welle klein)" ;
     Text [ en-US ] = "Underline (small wave)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_WAVE
 {
-    Text [ de ] = "Unterstrichen (Welle)" ;
     Text [ en-US ] = "Underline (Wave)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_DOUBLEWAVE
 {
-    Text [ de ] = "Unterstrichen (Welle doppelt)" ;
     Text [ en-US ] = "Underline (Double wave)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_BOLD
 {
-    Text [ de ] = "Fett unterstrichen" ;
     Text [ en-US ] = "Underlined (Bold)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_BOLDDOTTED
 {
-    Text [ de ] = "Fett gepunktet unterstrichen" ;
     Text [ en-US ] = "Dotted underline (Bold)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_BOLDDASH
 {
-    Text [ de ] = "Unterstrichen (Strich fett)" ;
     Text [ en-US ] = "Underline (Dash bold)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_BOLDLONGDASH
 {
-    Text [ de ] = "Unterstrichen (Strich fett lang)" ;
     Text [ en-US ] = "Underline (long dash, bold)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_BOLDDASHDOT
 {
-    Text [ de ] = "Unterstrichen (Punkt Strich fett)" ;
     Text [ en-US ] = "Underline (dot dash, bold)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_BOLDDASHDOTDOT
 {
-    Text [ de ] = "Unterstrichen (Punkt Punkt Strich fett)" ;
     Text [ en-US ] = "Underline (dot dot dash, bold)";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_UL_BOLDWAVE
 {
-    Text [ de ] = "Unterstrichen (Welle fett)" ;
     Text [ en-US ] = "Underline (wave, bold)";
-    Text [ x-comment ] = " ";
 };
  // enum FontStrikeout ----------------------------------------------------
 String RID_SVXITEMS_STRIKEOUT_NONE
 {
-    Text [ de ] = "Nicht durchgestrichen" ;
     Text [ en-US ] = "No strikethrough" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_STRIKEOUT_SINGLE
 {
-    Text [ de ] = "Einfach durchgestrichen" ;
     Text [ en-US ] = "Single strikethrough" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_STRIKEOUT_DOUBLE
 {
-    Text [ de ] = "Doppelt durchgestrichen" ;
     Text [ en-US ] = "Double strikethrough" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_STRIKEOUT_BOLD
 {
-    Text [ de ] = "Fett durchgestrichen" ;
     Text [ en-US ] = "Bold strikethrough";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_STRIKEOUT_SLASH
 {
-    Text [ de ] = "Durchgestrichen mit /" ;
     Text [ en-US ] = "Strike through with slash";
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_STRIKEOUT_X
 {
-    Text [ de ] = "Durchgestrichen mit X" ;
     Text [ en-US ] = "Strike through with Xes";
-    Text [ x-comment ] = " ";
 };
  // enum CASEMAP ----------------------------------------------------------
 String RID_SVXITEMS_CASEMAP_NONE
 {
-    Text [ de ] = "Keine" ;
     Text [ en-US ] = "None" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_CASEMAP_VERSALIEN
 {
-    Text [ de ] = "Versalien" ;
     Text [ en-US ] = "Caps" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_CASEMAP_GEMEINE
 {
-    Text [ de ] = "Gemeine" ;
     Text [ en-US ] = "Lowercase" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_CASEMAP_TITEL
 {
-    Text [ de ] = "Titelschrift" ;
     Text [ en-US ] = "Title" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_CASEMAP_KAPITAELCHEN
 {
-    Text [ de ] = "Kapitälchen" ;
     Text [ en-US ] = "Small caps" ;
-    Text [ x-comment ] = " ";
 };
  // enum ESCAPEMENT -------------------------------------------------------
 String RID_SVXITEMS_ESCAPEMENT_OFF
 {
-    Text [ de ] = "Normalstellung" ;
     Text [ en-US ] = "Normal position" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ESCAPEMENT_SUPER
 {
-    Text [ de ] = "Hochgestellt " ;
     Text [ en-US ] = "Superscript " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ESCAPEMENT_SUB
 {
-    Text [ de ] = "Tiefgestellt " ;
     Text [ en-US ] = "Subscript " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ESCAPEMENT_AUTO
 {
-    Text [ de ] = "automatisch" ;
     Text [ en-US ] = "automatic" ;
-    Text [ x-comment ] = " ";
 };
  // enum SvxAdjust -----------------------------------------------------------
 String RID_SVXITEMS_ADJUST_LEFT
 {
-    Text [ de ] = "Ausrichtung nach links" ;
     Text [ en-US ] = "Align left" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ADJUST_RIGHT
 {
-    Text [ de ] = "Ausrichtung nach rechts" ;
     Text [ en-US ] = "Align right" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ADJUST_BLOCK
 {
-    Text [ de ] = "Blockausrichtung" ;
     Text [ en-US ] = "Justify" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ADJUST_CENTER
 {
-    Text [ de ] = "Zentriert" ;
     Text [ en-US ] = "Centered" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ADJUST_BLOCKLINE
 {
-    Text [ de ] = "Blockausrichtung" ;
     Text [ en-US ] = "Justify" ;
-    Text [ x-comment ] = " ";
 };
  // enum SvxTabAdjust --------------------------------------------------------
 String RID_SVXITEMS_TAB_DECIMAL_CHAR
 {
-    Text [ de ] = "Dezimalzeichen:" ;
     Text [ en-US ] = "Decimal Symbol:" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TAB_FILL_CHAR
 {
-    Text [ de ] = "Füllzeichen:" ;
     Text [ en-US ] = "Fill character:" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TAB_ADJUST_LEFT
 {
-    Text [ de ] = "Links" ;
     Text [ en-US ] = "Left" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TAB_ADJUST_RIGHT
 {
-    Text [ de ] = "Rechts" ;
     Text [ en-US ] = "Right" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TAB_ADJUST_DECIMAL
 {
-    Text [ de ] = "Dezimal" ;
     Text [ en-US ] = "Decimal" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TAB_ADJUST_CENTER
 {
-    Text [ de ] = "Zentriert" ;
     Text [ en-US ] = "Centered" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TAB_ADJUST_DEFAULT
 {
-    Text [ de ] = "Default" ;
     Text [ en-US ] = "Default" ;
-    Text [ x-comment ] = " ";
 };
  // Typ-Namen der SlotIds ----------------------------------------------------
 String RID_ATTR_ZOOM
 {
-    Text [ de ] = "Maßstab" ;
     Text [ en-US ] = "Scale" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_BRUSH
 {
-    Text [ de ] = "Pinsel" ;
     Text [ en-US ] = "Brush" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_TABSTOP
 {
-    Text [ de ] = "Tabulatoren" ;
     Text [ en-US ] = "Tab stops" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_TABSTOP_DEFAULTS
 {
@@ -846,99 +618,67 @@ String RID_ATTR_TABSTOP_OFFSET
 };
 String RID_ATTR_CHAR
 {
-    Text [ de ] = "Zeichen" ;
     Text [ en-US ] = "Character" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_FONT
 {
-    Text [ de ] = "Schrift" ;
     Text [ en-US ] = "Font" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_POSTURE
 {
-    Text [ de ] = "Schriftstellung" ;
     Text [ en-US ] = "Font posture" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_WEIGHT
 {
-    Text [ de ] = "Schriftstärke" ;
     Text [ en-US ] = "Font weight" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_SHADOWED
 {
-    Text [ de ] = "Schattiert" ;
     Text [ en-US ] = "Shadowed" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_WORDLINEMODE
 {
-    Text [ de ] = "Wortweise" ;
     Text [ en-US ] = "Individual words" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_CONTOUR
 {
-    Text [ de ] = "Kontur" ;
     Text [ en-US ] = "Outline" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_STRIKEOUT
 {
-    Text [ de ] = "Durchgestrichen" ;
     Text [ en-US ] = "Strikethrough" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_UNDERLINE
 {
-    Text [ de ] = "Unterstrichen" ;
     Text [ en-US ] = "Underline" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_FONTHEIGHT
 {
-    Text [ de ] = "Schriftgrad" ;
     Text [ en-US ] = "Font size" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_PROPSIZE
 {
-    Text [ de ] = "Rel. Schriftgröße" ;
     Text [ en-US ] = "Rel. Font Size" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_COLOR
 {
-    Text [ de ] = "Schriftfarbe" ;
     Text [ en-US ] = "Font color" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_KERNING
 {
-    Text [ de ] = "Kerning" ;
     Text [ en-US ] = "Kerning" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_CASEMAP
 {
-    Text [ de ] = "Auszeichnung" ;
     Text [ en-US ] = "Effects" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_LANGUAGE
 {
-    Text [ de ] = "Sprache" ;
     Text [ en-US ] = "Language" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_ESCAPEMENT
 {
-    Text [ de ] = "Position" ;
     Text [ en-US ] = "Position" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_FONTLIST
 {
@@ -946,13 +686,10 @@ String RID_ATTR_CHAR_FONTLIST
 };
 String RID_ATTR_CHAR_BLINK
 {
-    Text [ de ] = "Blinkend" ;
     Text [ en-US ] = "Blinking" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_CHAR_CHARSETCOLOR
 {
-    Text [ de ] = "Zeichensatzfarbe" ;
     Text [ en-US ] = "Character set color";
 };
 String RID_ATTR_BORDER_INNER
@@ -969,15 +706,11 @@ String RID_ATTR_BORDER_SHADOW
 };
 String RID_ATTR_PARA
 {
-    Text [ de ] = "Absatz" ;
     Text [ en-US ] = "Paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_ADJUST
 {
-    Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_ADJUST_LEFT
 {
@@ -1001,9 +734,7 @@ String RID_ATTR_PARA_ADJUST_BLOCKLINE
 };
 String RID_ATTR_PARA_LINESPACE
 {
-    Text [ de ] = "Zeilenabstand" ;
     Text [ en-US ] = "Line spacing" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_LINESPACE_10
 {
@@ -1019,44 +750,31 @@ String RID_ATTR_PARA_LINESPACE_20
 };
 String RID_ATTR_PARA_PAGEBREAK
 {
-    Text [ de ] = "Seitenumbruch" ;
     Text [ en-US ] = "Page Break" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_HYPHENZONE
 {
-    Text [ de ] = "Silbentrennung" ;
     Text [ en-US ] = "Hyphenation" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_SPLIT
 {
-    Text[ de ] = "Absatz nicht trennen" ;
     Text [ en-US ] = "Do not split paragraph" ;
 };
 String RID_ATTR_PARA_WIDOWS
 {
-    Text [ de ] = "Schusterjungen" ;
     Text [ en-US ] = "Orphans" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_ORPHANS
 {
-    Text [ de ] = "Hurenkinder" ;
     Text [ en-US ] = "Widows" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_ULSPACE
 {
-    Text [ de ] = "Abstand" ;
     Text [ en-US ] = "Spacing" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_LRSPACE
 {
-    Text [ de ] = "Einzug" ;
     Text [ en-US ] = "Indent" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_POSTIT_AUTHOR
 {
@@ -1076,21 +794,15 @@ String RID_ATTR_SEARCH
 };
 String RID_ATTR_LRSPACE
 {
-    Text [ de ] = "Einzug" ;
     Text [ en-US ] = "Indent" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_ULSPACE
 {
-    Text [ de ] = "Abstand" ;
     Text [ en-US ] = "Spacing" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PAGE
 {
-    Text [ de ] = "Seite" ;
     Text [ en-US ] = "Page" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PAGE_SIZE
 {
@@ -1150,221 +862,163 @@ String RID_ATTR_CHAR_MAPTYPE
 };
 String RID_ATTR_PARA_MODEL
 {
-    Text [ de ] = "Seitenvorlage" ;
     Text [ en-US ] = "Page Style" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_PARA_KEEP
 {
-    Text [ de ] = "Absätze zusammenhalten" ;
     Text [ en-US ] = "Keep with next paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String RID_ATTR_FLASH
 {
-    Text [ de ] = "Blinkend" ;
     Text [ en-US ] = "Blinking" ;
 };
 String RID_ATTR_PARA_REGISTER
 {
-    Text [ de ] = "Registerhaltigkeit" ;
     Text [ en-US ] = "Register-true" ;
 };
 String RID_ATTR_BRUSH_CHAR
 {
-    Text [ de ] = "Zeichenhintergrund" ;
     Text [ en-US ] = "Character background";
 };
 String RID_ATTR_CHAR_CJK_FONT
 {
-    Text [ de ] = "Asiatische Schrift" ;
     Text [ en-US ] = "Asian font" ;
 };
 String RID_ATTR_CHAR_CJK_FONTHEIGHT
 {
-    Text [ de ] = "Schriftgrad asiatische Schrift" ;
     Text [ en-US ] = "Size of Asian font" ;
 };
 String RID_ATTR_CHAR_CJK_LANGUAGE
 {
-    Text [ de ] = "Sprache asiatische Schrift" ;
     Text [ en-US ] = "Language of Asian fonts" ;
 };
 String RID_ATTR_CHAR_CJK_POSTURE
 {
-    Text [ de ] = "Schriftstellung asiatische Schrift" ;
     Text [ en-US ] = "Posture of Asian fonts" ;
 };
 String RID_ATTR_CHAR_CJK_WEIGHT
 {
-    Text [ de ] = "Schriftstärke asiatische Schrift" ;
     Text [ en-US ] = "Weight of Asian fonts" ;
 };
 String RID_ATTR_CHAR_CTL_FONT
 {
-    Text [ de ] = "CTL" ;
     Text [ en-US ] = "CTL" ;
 };
 String RID_ATTR_CHAR_CTL_FONTHEIGHT
 {
-    Text [ de ] = "Schriftgrad komplexe Skripte" ;
     Text [ en-US ] = "Size of complex scripts" ;
 };
 String RID_ATTR_CHAR_CTL_LANGUAGE
 {
-    Text [ de ] = "Sprache komplexe Skripte" ;
     Text [ en-US ] = "Language of complex scripts" ;
 };
 String RID_ATTR_CHAR_CTL_POSTURE
 {
-    Text [ de ] = "Schriftstellung komplexe Skripte" ;
     Text [ en-US ] = "Posture of complex scripts" ;
 };
 String RID_ATTR_CHAR_CTL_WEIGHT
 {
-    Text [ de ] = "Schriftstärke komplexe Skripte" ;
     Text [ en-US ] = "Weight of complex scripts" ;
 };
 String RID_ATTR_CHAR_TWO_LINES
 {
-    Text [ de ] = "Doppelzeilig";
     Text [ en-US ] = "Double-lined" ;
 };
 String RID_ATTR_CHAR_EMPHASISMARK
 {
-    Text [ de ] = "Betonungszeichen";
     Text [ en-US ] = "Emphasis mark" ;
 };
 String RID_ATTR_PARA_SCRIPTSPACE
 {
-    Text [ de ] = "Text Abstand" ;
     Text [ en-US ] = "Text spacing";
 };
 String RID_ATTR_PARA_HANGPUNCTUATION
 {
-    Text [ de ] = "Hängende Interpunktion" ;
     Text [ en-US ] = "Hanging punctuation";
 };
 String RID_ATTR_PARA_FORBIDDEN_RULES
 {
-    Text [ de ] = "Verbotene Zeichen" ;
     Text [ en-US ] = "Forbidden characters";
 };
 String RID_ATTR_CHAR_ROTATED
 {
-    Text [ de ] = "Rotation";
     Text [ en-US ] = "Rotation" ;
 };
 String RID_ATTR_CHAR_SCALEWIDTH
 {
-    Text [ de ] = "Skalierung";
     Text [ en-US ] = "Scale" ;
 };
 String RID_ATTR_CHAR_RELIEF
 {
-    Text [ de ] = "Relief" ;
     Text [ en-US ] = "Relief";
 };
 String RID_PARA_VERTALIGN
 {
-    Text [ de ] = "Vertikale Textausrichtung" ;
     Text [ en-US ] = "Vertical text alignment";
 };
 String RID_SINGLE_LINE0
 {
-    Text [ de ] = "Einfach, Haarlinie" ;
     Text [ en-US ] = "Single, fine lines" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SINGLE_LINE1
 {
-    Text [ de ] = "Einfach, dünn" ;
     Text [ en-US ] = "Single, thin" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SINGLE_LINE2
 {
-    Text [ de ] = "Einfach, dick" ;
     Text [ en-US ] = "Single, thick" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SINGLE_LINE3
 {
-    Text [ de ] = "Einfach, sehr dick" ;
     Text [ en-US ] = "Single, very thick" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SINGLE_LINE4
 {
-    Text [ de ] = "Einfach, fett" ;
     Text [ en-US ] = "Single, bold" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE0
 {
-    Text [ de ] = "Doppelt, Haarlinie, Abstand: klein" ;
     Text [ en-US ] = "Double, fine lines, spacing: small" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE1
 {
-    Text [ de ] = "Doppelt, Haarlinie, Abstand: groß" ;
     Text [ en-US ] = "Double, fine line, spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE2
 {
-    Text [ de ] = "Doppelt, dünn, Abstand: klein" ;
     Text [ en-US ] = "Double, thin, spacing: small" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE3
 {
-    Text [ de ] = "Doppelt, dick, Abstand: groß" ;
     Text [ en-US ] = "Double, thick, spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE4
 {
-    Text [ de ] = "Doppelt, Innen: Haarlinie, Außen: dünn, Abstand: groß" ;
     Text [ en-US ] = "Double, inside: fine lines, outside: thin, spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE5
 {
-    Text [ de ] = "Doppelt, Innen: Haarlinie, Außen: dick, Abstand: groß" ;
     Text [ en-US ] = "Double, inside: fine lines, outside: thick, spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE6
 {
-    Text [ de ] = "Doppelt, Innen: Haarlinie, Außen: sehr dick, Abstand: groß" ;
     Text [ en-US ] = "Double, inside: fine lines, outside: very thick, spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE7
 {
-    Text [ de ] = "Doppelt, Innen: dünn, Außen: dick, Abstand: groß" ;
     Text [ en-US ] = "Double, inside: thin, outside: thick, spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE8
 {
-    Text [ de ] = "Doppelt, Innen: dick, Außen: dünn, Abstand: klein" ;
     Text [ en-US ] = "Double, inside: thick, outside: thin, spacing: small" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE9
 {
-    Text [ de ] = "Doppelt, Innen: dick, Außen: sehr dick, Abstand: groß" ;
     Text [ en-US ] = "Double, inside: thick, outside: very thick, spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_DOUBLE_LINE10
 {
-    Text [ de ] = "Doppelt, Innen: sehr dick, Außen: dick, Abstand: groß" ;
     Text [ en-US ] = "Double, inside: very thick, outside: thick, Spacing: large" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_METRIC_MM
 {
@@ -1392,148 +1046,100 @@ String RID_SVXITEMS_METRIC_PIXEL
 };
 String RID_SVXITEMS_HORJUST_STANDARD
 {
-    Text [ de ] = "Horizontale Ausrichtung Standard" ;
     Text [ en-US ] = "Horizontal alignment default" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HORJUST_LEFT
 {
-    Text [ de ] = "Ausrichtung nach links" ;
     Text [ en-US ] = "Align left" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HORJUST_CENTER
 {
-    Text [ de ] = "Horizontal zentriert" ;
     Text [ en-US ] = "Centered horizontally" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HORJUST_RIGHT
 {
-    Text [ de ] = "Ausrichtung nach rechts" ;
     Text [ en-US ] = "Align right" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HORJUST_BLOCK
 {
-    Text [ de ] = "Blockausrichtung" ;
     Text [ en-US ] = "Justify" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HORJUST_REPEAT
 {
-    Text [ de ] = "Ausrichtung wiederholen" ;
     Text [ en-US ] = "Repeat alignment" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_VERJUST_STANDARD
 {
-    Text [ de ] = "Vertikale Ausrichtung Standard" ;
     Text [ en-US ] = "Vertical alignment default" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_VERJUST_TOP
 {
-    Text [ de ] = "Ausrichtung nach oben" ;
     Text [ en-US ] = "Align to top" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_VERJUST_CENTER
 {
-    Text [ de ] = "Vertikal zentriert" ;
     Text [ en-US ] = "Centered vertically" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_VERJUST_BOTTOM
 {
-    Text [ de ] = "Ausrichtung nach unten" ;
     Text [ en-US ] = "Align to bottom" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ORI_STANDARD
 {
-    Text [ de ] = "Schreibrichtung Standard" ;
     Text [ en-US ] = "Default orientation" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ORI_TOPBOTTOM
 {
-    Text [ de ] = "Von oben nach unten" ;
     Text [ en-US ] = "From top to bottom" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ORI_BOTTOMTOP
 {
-    Text [ de ] = "Von unten nach oben" ;
     Text [ en-US ] = "Bottom to Top" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ORI_STACKED
 {
-    Text [ de ] = "Übereinander" ;
     Text [ en-US ] = "Stacked" ;
-    Text [ x-comment ] = " ";
 };
  // GetValueText von BoolItems
 String RID_SVXITEMS_SHADOWED_TRUE
 {
-    Text [ de ] = "Schattiert" ;
     Text [ en-US ] = "Shadowed" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SHADOWED_FALSE
 {
-    Text [ de ] = "Nicht Schattiert" ;
     Text [ en-US ] = "Not Shadowed" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BLINK_TRUE
 {
-    Text [ de ] = "Blinkend" ;
     Text [ en-US ] = "Blinking" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BLINK_FALSE
 {
-    Text [ de ] = "Nicht Blinkend" ;
     Text [ en-US ] = "Not Blinking" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_AUTOKERN_TRUE
 {
-    Text [ de ] = "Paarweises Kerning" ;
     Text [ en-US ] = "Pair Kerning" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_AUTOKERN_FALSE
 {
-    Text [ de ] = "Kein Paarweises Kerning" ;
     Text [ en-US ] = "No pair kerning" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WORDLINE_TRUE
 {
-    Text [ de ] = "Wortweise" ;
     Text [ en-US ] = "Individual words" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_WORDLINE_FALSE
 {
-    Text [ de ] = "Nicht Wortweise" ;
     Text [ en-US ] = "Not Words Only" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_CONTOUR_TRUE
 {
-    Text [ de ] = "Konturschrift" ;
     Text [ en-US ] = "Outline" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_CONTOUR_FALSE
 {
-    Text [ de ] = "Keine Konturschrift" ;
     Text [ en-US ] = "No Outline" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_NOLINEBREAK_TRUE
 {
@@ -1553,651 +1159,466 @@ String RID_SVXITEMS_NOHYPHEN_FALSE
 };
 String RID_SVXITEMS_PRINT_TRUE
 {
-    Text [ de ] = "Drucken" ;
     Text [ en-US ] = "Print" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PRINT_FALSE
 {
-    Text [ de ] = "Nicht Drucken" ;
     Text [ en-US ] = "Don't print" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_OPAQUE_TRUE
 {
-    Text [ de ] = "Undurchsichtig" ;
     Text [ en-US ] = "Opaque" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_OPAQUE_FALSE
 {
-    Text [ de ] = "Nicht Undurchsichtig" ;
     Text [ en-US ] = "Not Opaque" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_FMTKEEP_TRUE
 {
-    Text [ de ] = "Absätze zusammenhalten" ;
     Text [ en-US ] = "Keep with next paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_FMTKEEP_FALSE
 {
-    Text [ de ] = "Absätze nicht zusammenhalten" ;
     Text [ en-US ] = "Don't Keep Paragraphs Together" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_FMTSPLIT_TRUE
 {
-    Text [ de ] = "Absatz trennen" ;
     Text [ en-US ] = "Split paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_FMTSPLIT_FALSE
 {
-    Text [ de ] = "Absatz nicht trennen" ;
     Text [ en-US ] = "Don't split paragraph" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_CONTENT_TRUE
 {
-    Text [ de ] = "Inhalt geschützt" ;
     Text [ en-US ] = "Contents protected" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_CONTENT_FALSE
 {
-    Text [ de ] = "Inhalt nicht geschützt" ;
     Text [ en-US ] = "Contents not protected" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_SIZE_TRUE
 {
-    Text [ de ] = "Größe geschützt" ;
     Text [ en-US ] = "Size protected" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_SIZE_FALSE
 {
-    Text [ de ] = "Größe nicht geschützt" ;
     Text [ en-US ] = "Size not protected" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_POS_TRUE
 {
-    Text [ de ] = "Position geschützt" ;
     Text [ en-US ] = "Position protected" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PROT_POS_FALSE
 {
-    Text [ de ] = "Position nicht geschützt" ;
     Text [ en-US ] = "Position not protected" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TRANSPARENT_TRUE
 {
-    Text [ de ] = "Transparent" ;
     Text [ en-US ] = "Transparent" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TRANSPARENT_FALSE
 {
-    Text [ de ] = "Nicht Transparent" ;
     Text [ en-US ] = "Not Transparent" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BOXINF_TABLE_TRUE
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BOXINF_TABLE_FALSE
 {
-    Text [ de ] = "Nicht Tabelle" ;
     Text [ en-US ] = "Not Table" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BOXINF_DIST_TRUE
 {
-    Text [ de ] = "Abstand freigeschaltet" ;
     Text [ en-US ] = "Spacing enabled" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BOXINF_DIST_FALSE
 {
-    Text [ de ] = "Abstand nicht freigeschaltet" ;
     Text [ en-US ] = "Spacing disabled" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BOXINF_MDIST_TRUE
 {
-    Text [ de ] = "Abstand nicht unterschreiten" ;
     Text [ en-US ] = "Keep spacing interval" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BOXINF_MDIST_FALSE
 {
-    Text [ de ] = "Abstand unterschreiten erlaubt" ;
     Text [ en-US ] = "Allowed to fall short of spacing interval" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HYPHEN_TRUE
 {
-    Text [ de ] = "Silbentrennung" ;
     Text [ en-US ] = "Hyphenation" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HYPHEN_FALSE
 {
-    Text [ de ] = "Keine Silbentrennung" ;
     Text [ en-US ] = "No hyphenation" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_END_TRUE
 {
-    Text [ de ] = "Seitenende" ;
     Text [ en-US ] = "Page End" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_END_FALSE
 {
-    Text [ de ] = "Kein Seitenende" ;
     Text [ en-US ] = "No Page End" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_MARGIN_LEFT
 {
-    Text [ de ] = "Linker Rand: " ;
     Text [ en-US ] = "Left margin: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_MARGIN_TOP
 {
-    Text [ de ] = "Oberer Rand: " ;
     Text [ en-US ] = "Top margin: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_MARGIN_RIGHT
 {
-    Text [ de ] = "Rechter Rand: " ;
     Text [ en-US ] = "Right margin: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_MARGIN_BOTTOM
 {
-    Text [ de ] = "Unterer Rand: " ;
     Text [ en-US ] = "Bottom margin: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SIZE_WIDTH
 {
-    Text [ de ] = "Breite: " ;
     Text [ en-US ] = "Width: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SIZE_HEIGHT
 {
-    Text [ de ] = "Höhe: " ;
     Text [ en-US ] = "Height: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_LRSPACE_LEFT
 {
-    Text [ de ] = "Einzug links " ;
     Text [ en-US ] = "Indent left " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_LRSPACE_FLINE
 {
-    Text [ de ] = "Erste Zeile " ;
     Text [ en-US ] = "First Line " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_LRSPACE_RIGHT
 {
-    Text [ de ] = "Einzug rechts " ;
     Text [ en-US ] = "Indent right " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_SHADOW_COMPLETE
 {
-    Text [ de ] = "Schatten: " ;
     Text [ en-US ] = "Shadow: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BORDER_COMPLETE
 {
-    Text [ de ] = "Umrandung " ;
     Text [ en-US ] = "Borders " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BORDER_NONE
 {
-    Text [ de ] = "Keine Umrandung";
     Text [ en-US ] = "No border";
 };
 String RID_SVXITEMS_BORDER_TOP
 {
-    Text [ de ] = "oben " ;
     Text [ en-US ] = "top " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BORDER_BOTTOM
 {
-    Text [ de ] = "unten " ;
     Text [ en-US ] = "bottom " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BORDER_LEFT
 {
-    Text [ de ] = "links " ;
     Text [ en-US ] = "left " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BORDER_RIGHT
 {
-    Text [ de ] = "rechts " ;
     Text [ en-US ] = "right " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BORDER_DISTANCE
 {
-    Text [ de ] = "Abstand " ;
     Text [ en-US ] = "Spacing " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ULSPACE_UPPER
 {
-    Text [ de ] = "Von oben " ;
     Text [ en-US ] = "From top " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ULSPACE_LOWER
 {
-    Text [ de ] = "Von unten " ;
     Text [ en-US ] = "From bottom " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_COMPLETE
 {
-    Text [ de ] = "Seitenbeschreibung: " ;
     Text [ en-US ] = "Page Description: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_NUM_CHR_UPPER
 {
-    Text [ de ] = "Großbuchstaben" ;
     Text [ en-US ] = "Capitals" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_NUM_CHR_LOWER
 {
-    Text [ de ] = "Kleinbuchstaben" ;
     Text [ en-US ] = "Lowercase" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_UPPER
 {
-    Text [ de ] = "Römisch groß" ;
     Text [ en-US ] = "Uppercase Roman" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_NUM_ROM_LOWER
 {
-    Text [ de ] = "Römisch klein" ;
     Text [ en-US ] = "Lowercase Roman" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_NUM_ARABIC
 {
-    Text [ de ] = "Arabisch" ;
     Text [ en-US ] = "Arabic" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_NUM_NONE
 {
-    Text [ de ] = "Ohne" ;
     Text [ en-US ] = "None" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_LAND_TRUE
 {
-    Text [ de ] = "Quer" ;
     Text [ en-US ] = "Landscape" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_LAND_FALSE
 {
-    Text [ de ] = "Hoch" ;
     Text [ en-US ] = "Portrait" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_USAGE_LEFT
 {
-    Text [ de ] = "Links" ;
     Text [ en-US ] = "Left" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_USAGE_RIGHT
 {
-    Text [ de ] = "Rechts" ;
     Text [ en-US ] = "Right" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_USAGE_ALL
 {
-    Text [ de ] = "Alle" ;
     Text [ en-US ] = "All" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGE_USAGE_MIRROR
 {
-    Text [ de ] = "Gespiegelt" ;
     Text [ en-US ] = "Mirrored" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_LINES
 {
-    Text [ de ] = "%1 Zeilen" ;
     Text [ en-US ] = "%1 Lines" ;
     Text [ x-comment ] = "pb: %1 == will be replaced by the number of lines";
 };
 String RID_SVXITEMS_WIDOWS_COMPLETE
 {
-    Text [ de ] = "Hurenkinderregelung" ;
     Text [ en-US ] = "Widow control" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_ORPHANS_COMPLETE
 {
-    Text [ de ] = "Schusterjungenregelung" ;
     Text [ en-US ] = "Orphan control" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HYPHEN_MINLEAD
 {
-    Text [ de ] = " Zeichen am Zeilenende" ;
     Text [ en-US ] = "Characters at end of line" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HYPHEN_MINTRAIL
 {
-    Text [ de ] = " Zeichen am Zeilenanfang" ;
     Text [ en-US ] = "Characters at beginning of line" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_HYPHEN_MAX
 {
-    Text [ de ] = " Trennstellen" ;
     Text [ en-US ] = "Hyphens" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PAGEMODEL_COMPLETE
 {
-    Text [ de ] = "Seitenvorlage: " ;
     Text [ en-US ] = "Page Style: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_KERNING_COMPLETE
 {
-    Text [ de ] = "Kerning " ;
     Text [ en-US ] = "Kerning " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_KERNING_EXPANDED
 {
-    Text [ de ] = "gesperrt " ;
     Text [ en-US ] = "locked " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_KERNING_CONDENSED
 {
-    Text [ de ] = "schmal " ;
     Text [ en-US ] = "Condensed " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_AUTHOR_COMPLETE
 {
-    Text [ de ] = "Autor: " ;
     Text [ en-US ] = "Author: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_DATE_COMPLETE
 {
-    Text [ de ] = "Datum: " ;
     Text [ en-US ] = "Date: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_TEXT_COMPLETE
 {
-    Text [ de ] = "Text: " ;
     Text [ en-US ] = "Text: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_BACKGROUND_COLOR
 {
-    Text [ de ] = "Hintergrundfarbe: " ;
     Text [ en-US ] = "Background color: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_PATTERN_COLOR
 {
-    Text [ de ] = "Musterfarbe: " ;
     Text [ en-US ] = "Pattern color: " ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXITEMS_GRAPHIC
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphic" ;
-    Text [ x-comment ] = " ";
 };
 
 String RID_SVXITEMS_BRUSH_CHAR
 {
-    Text [ de ] = "Zeichenhintergrund" ;
     Text [ en-US ] = "Character background";
-    Text [ x-comment ] = " ";
 };
 
 
 String RID_SVXITEMS_EMPHASIS_NONE_STYLE
 {
-    Text [ de ] = "keine";
     Text [ en-US ] = "none";
 };
 String RID_SVXITEMS_EMPHASIS_DOT_STYLE
 {
-    Text [ de ] = "Punkte ";
     Text [ en-US ] = "Dots ";
 };
 String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
 {
-    Text [ de ] = "Kreis ";
     Text [ en-US ] = "Circle ";
 };
 String RID_SVXITEMS_EMPHASIS_DISC_STYLE
 {
 // ??? disc == filled ring
-    Text [ de ] = "gefüllter Kreis ";
     Text [ en-US ] = "Filled circle ";
 };
 String RID_SVXITEMS_EMPHASIS_ACCENT_STYLE
 {
-    Text [ de ] = "Akzent ";
     Text [ en-US ] = "Accent ";
 };
 
 String RID_SVXITEMS_EMPHASIS_ABOVE_POS
 {
-    Text [ de ] = "Darüber";
     Text [ en-US ] = "Above";
 };
 String RID_SVXITEMS_EMPHASIS_BELOW_POS
 {
-    Text [ de ] = "Darunter";
     Text [ en-US ] = "Below";
 };
 
 String RID_SVXITEMS_TWOLINES_OFF
 {
-    Text [ de ] = "Doppelzeilig aus";
     Text [ en-US ] = "Double-lined off";
 };
 String RID_SVXITEMS_TWOLINES
 {
-    Text [ de ] = "Doppelzeilig";
     Text [ en-US ] = "Double-lined";
 };
 
 String RID_SVXITEMS_SCRPTSPC_OFF
 {
-    Text [ de ] = "Kein automatischer Zeichenabstand";
     Text [ en-US ] = "No automatic character spacing";
 };
 String RID_SVXITEMS_SCRPTSPC_ON
 {
-    Text [ de ] = "Kein automatischer Zeichenabstand";
     Text [ en-US ] = "No automatic character spacing";
 };
 
 String RID_SVXITEMS_HNGPNCT_OFF
 {
-    Text [ de ] = "Keine hängende Interpunktion am Zeilenende";
     Text [ en-US ] = "No hanging punctuation at line end";
 };
 String RID_SVXITEMS_HNGPNCT_ON
 {
-    Text [ de ] = "Hängende Interpunktion am Zeilenende";
     Text [ en-US ] = "Hanging punctuation at line end";
 };
 String RID_SVXITEMS_FORBIDDEN_RULE_OFF
 {
-    Text [ de ] = "Verbotene Zeichen an Zeilenanfang und -ende berücksichtigen";
     Text [ en-US ] = "Apply list of forbidden characters to beginning and end of lines";
 };
 
 String RID_SVXITEMS_FORBIDDEN_RULE_ON
 {
-    Text [ de ] = "Verbotene Zeichen an Zeilenanfang und -ende nicht berücksichtigen";
     Text [ en-US ] = "Don't apply list of forbidden characters to beginning and end of lines";
 };
 
 
 String RID_SVXITEMS_CHARROTATE_OFF
 {
-    Text [ de ] = "keine gedrehten Zeichen";
     Text [ en-US ] = "No rotated characters";
 };
 String RID_SVXITEMS_CHARROTATE
 {
-    Text [ de ] = "Zeichen um $(ARG1)° gedreht";
     Text [ en-US ] = "Character rotated by $(ARG1)°";
 };
 String RID_SVXITEMS_CHARROTATE_FITLINE
 {
-    Text [ de ] = " an Zeile anpassen";
     Text [ en-US ] = "Fit to line";
 };
 String RID_SVXITEMS_CHARSCALE
 {
-    Text [ de ] = "Zeichenskalierung $(ARG1)%";
     Text [ en-US ] = "Characters scaled $(ARG1)%";
 };
 String RID_SVXITEMS_CHARSCALE_OFF
 {
-    Text [ de ] = "keine Zeichenskalierung";
     Text [ en-US ] = "No scaled characters";
 };
 
 String RID_SVXITEMS_RELIEF_NONE
 {
-    Text [ de ] = "Kein Relief" ;
     Text [ en-US ] = "No relief";
 };
 String RID_SVXITEMS_RELIEF_EMBOSSED
 {
-    Text [ de ] = "Relief";
     Text [ en-US ] = "Relief";
 };
 String RID_SVXITEMS_RELIEF_ENGRAVED
 {
-    Text [ de ] = "Gravur";
     Text [ en-US ] = "Engraved";
 };
 String RID_SVXITEMS_PARAVERTALIGN_AUTO
 {
-    Text [ de ] = "Textausrichtung automatisch";
     Text [ en-US ] = "Automatic text alignment";
 };
 String RID_SVXITEMS_PARAVERTALIGN_BASELINE
 {
-    Text [ de ] = "Textausrichtung Grundlinie";
     Text [ en-US ] = "Text aligned to base line";
 };
 String RID_SVXITEMS_PARAVERTALIGN_TOP
 {
-    Text [ de ] = "Textausrichtung oben";
     Text [ en-US ] = "Text aligned top";
 };
 String RID_SVXITEMS_PARAVERTALIGN_CENTER
 {
-    Text [ de ] = "Textausrichtung zentriert";
     Text [ en-US ] = "Text aligned middle";
 };
 String RID_SVXITEMS_PARAVERTALIGN_BOTTOM
 {
-    Text [ de ] = "Textausrichtung unten";
     Text [ en-US ] = "Text aligned bottom";
 };
 
 String RID_SVXITEMS_FRMDIR_HORI_LEFT_TOP
 {
-    Text [ de ] = "Textfluss Links-nach-rechts (horizontal)";
     Text [ en-US ] = "Text direction left-to-right (horizontal)";
 };
 String RID_SVXITEMS_FRMDIR_HORI_RIGHT_TOP
 {
-    Text [ de ] = "Textfluss Rechts-nach-links (horizontal)";
     Text [ en-US ] = "Text direction right-to-left (horizontal)";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_RIGHT
 {
-    Text [ de ] = "Textfluss Rechts-nach-links (vertikal)";
     Text [ en-US ] = "Text direction right-to-left (vertical)";
 };
 String RID_SVXITEMS_FRMDIR_VERT_TOP_LEFT
 {
-    Text [ de ] = "Textfluss Links-nach-rechts (vertikal)";
     Text [ en-US ] = "Text direction left-to-right (vertical)";
 };
 String RID_SVXITEMS_FRMDIR_ENVIRONMENT
 {
-    Text [ de ] = "Textfluss-Einstellung des übergeordneten Objektes verwenden";
     Text [ en-US ] = "Use superordinate object text direction setting";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_ON
 {
-    Text[ de ] = "Absatz wird am Textraster gefangen (wenn aktiviert)";
     Text[ en-US ] = "Paragraph snaps to text grid (if active)";
 };
 
 String RID_SVXITEMS_PARASNAPTOGRID_OFF
 {
-    Text[  de ] = "Absatz wird nicht am Textraster gefangen";
     Text[ en-US ] = "Paragraph does not snap to text grid";
 };
 String RID_SVXITEMS_CHARHIDDEN_FALSE
 {
-    Text [ de ] = "Nicht ausgeblendet";
     Text [ en-US ] = "Not hidden";
 };
 String RID_SVXITEMS_CHARHIDDEN_TRUE
 {
-    Text [ de ] = "Ausgeblendet";
     Text [ en-US ] = "Hidden";
 };
  // ********************************************************************** EOF
