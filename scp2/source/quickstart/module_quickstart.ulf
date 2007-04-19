@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_quickstart.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:45:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:34:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,12 +34,10 @@
  ************************************************************************/
 
 [STR_NAME_MODULE_OPTIONAL_QUICKSTART]
-de = "Schnellstarter"
 en-US = "Quickstarter"
 
 [STR_DESC_MODULE_OPTIONAL_QUICKSTART]
 en-US = "Loads basic components on system start to accelerate start up time of %PRODUCTNAME %PRODUCTVERSION."
-de = "Lädt wichtige Komponenten beim Systemstart um die Ladezeit von %PRODUCTNAME %PRODUCTVERSION zu beschleunigen."
 
 
 
