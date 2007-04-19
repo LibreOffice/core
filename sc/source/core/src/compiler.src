@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:21:21 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:23:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,15 +39,11 @@ Resource RID_SC_FUNCTION_NAMES
 {
     String SC_OPCODE_IF
     {
-        Text [ de ] = "WENN" ;
         Text [ en-US ] = "IF" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CHOSE
     {
-        Text [ de ] = "WAHL" ;
         Text [ en-US ] = "CHOOSE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_OPEN { Text = "(" ; };
     String SC_OPCODE_CLOSE { Text = ")" ; };
@@ -67,1613 +63,1093 @@ Resource RID_SC_FUNCTION_NAMES
     String SC_OPCODE_GREATER_EQUAL { Text = ">=" ; };
     String SC_OPCODE_AND
     {
-        Text [ de ] = "UND" ;
         Text [ en-US ] = "AND" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_OR
     {
-        Text [ de ] = "ODER" ;
         Text [ en-US ] = "OR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_INTERSECT { Text = "!" ; };
     String SC_OPCODE_UNION { Text = ";" ; };
     String SC_OPCODE_RANGE { Text = ":" ; };
     String SC_OPCODE_NOT
     {
-        Text [ de ] = "NICHT" ;
         Text [ en-US ] = "NOT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_NEG
     {
-        Text [ de ] = "NEG";
         Text [ en-US ] = "NEG";
     };
     String SC_OPCODE_NEG_SUB { Text = "-" ; };
     String SC_OPCODE_PI
     {
-        Text [ de ]= "PI" ;
          // ???
         Text [ en-US ] = "PI" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RANDOM
     {
-        Text [ de ] = "ZUFALLSZAHL" ;
         Text [ en-US ] = "RAND" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TRUE
     {
-        Text [ de ] = "WAHR" ;
         Text [ en-US ] = "TRUE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FALSE
     {
-        Text [ de ] = "FALSCH" ;
         Text [ en-US ] = "FALSE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_ACT_DATE
     {
-        Text [ de ] = "HEUTE" ;
         Text [ en-US ] = "TODAY" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_ACT_TIME
     {
-        Text [ de ] = "JETZT" ;
         Text [ en-US ] = "NOW" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_NO_VALUE
     {
-        Text [ de ] = "NV" ;
         Text [ en-US ] = "NA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CURRENT
     {
-        Text [ de ] = "AKTUELL" ;
         Text [ en-US ] = "CURRENT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DEG
     {
-        Text [ de ] = "DEG" ;
         Text [ en-US ] = "DEGREES" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RAD
     {
-        Text [ de ] = "RAD" ;
         Text [ en-US ] = "RADIANS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SIN
     {
-        Text [ de ]= "SIN" ;
         Text [ en-US ] = "SIN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COS
     {
-        Text [ de ]= "COS";
         Text [ en-US ] = "COS";
     };
     String SC_OPCODE_TAN
     {
-        Text [ de ]= "TAN";
         Text [ en-US ] = "TAN";
     };
     String SC_OPCODE_COT
     {
-        Text [ de ]= "COT";
         Text [ en-US ] = "COT";
     };
     String SC_OPCODE_ARC_SIN
     {
-        Text [ de ] = "ARCSIN" ;
         Text [ en-US ] = "ASIN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARC_COS
     {
-        Text [ de ] = "ARCCOS" ;
         Text [ en-US ] = "ACOS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARC_TAN
     {
-        Text [ de ] = "ARCTAN" ;
         Text [ en-US ] = "ATAN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARC_COT
     {
-        Text [ de ] = "ARCCOT" ;
         Text [ en-US ] = "ACOT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SIN_HYP
     {
-        Text [ de ] = "SINHYP" ;
         Text [ en-US ] = "SINH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COS_HYP
     {
-        Text [ de ] = "COSHYP" ;
         Text [ en-US ] = "COSH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TAN_HYP
     {
-        Text [ de ] = "TANHYP" ;
         Text [ en-US ] = "TANH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COT_HYP
     {
-        Text [ de ] = "COTHYP" ;
         Text [ en-US ] = "COTH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARC_SIN_HYP
     {
-        Text [ de ] = "ARCSINHYP" ;
         Text [ en-US ] = "ASINH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARC_COS_HYP
     {
-        Text [ de ] = "ARCCOSHYP" ;
         Text [ en-US ] = "ACOSH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARC_TAN_HYP
     {
-        Text [ de ] = "ARCTANHYP" ;
         Text [ en-US ] = "ATANH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARC_COT_HYP
     {
-        Text [ de ] = "ARCCOTHYP" ;
         Text [ en-US ] = "ACOTH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_EXP
     {
-        Text [ de ]= "EXP";
         Text [ en-US ] = "EXP";
     };
     String SC_OPCODE_LN
     {
-        Text [ de ]= "LN";
         Text [ en-US ] = "LN";
     };
     String SC_OPCODE_SQRT
     {
-        Text [ de ] = "WURZEL" ;
         Text [ en-US ] = "SQRT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FACT
     {
-        Text [ de ] = "FAKULTÄT" ;
         Text [ en-US ] = "FACT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_YEAR
     {
-        Text [ de ] = "JAHR" ;
         Text [ en-US ] = "YEAR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_MONTH
     {
-        Text [ de ] = "MONAT" ;
         Text [ en-US ] = "MONTH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_DAY
     {
-        Text [ de ] = "TAG" ;
         Text [ en-US ] = "DAY" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_HOUR
     {
-        Text [ de ] = "STUNDE" ;
         Text [ en-US ] = "HOUR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_MIN
     {
-        Text [ de ]= "MINUTE" ;
         Text [ en-US ] = "MINUTE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_SEC
     {
-        Text [ de ] = "SEKUNDE" ;
         Text [ en-US ] = "SECOND" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PLUS_MINUS
     {
-        Text [ de ] = "VORZEICHEN" ;
         Text [ en-US ] = "SIGN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ABS
     {
-        Text [ de ]= "ABS" ;
         Text [ en-US ] = "ABS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_INT
     {
-        Text [ de ] = "GANZZAHL" ;
         Text [ en-US ] = "INT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PHI
     {
-        Text [ de ]= "PHI";
         Text [ en-US ] = "PHI";
     };
     String SC_OPCODE_GAUSS
     {
-        Text [ de ]= "GAUSS";
         Text [ en-US ] = "GAUSS";
     };
     String SC_OPCODE_IS_EMPTY
     {
-        Text [ de ] = "ISTLEER" ;
         Text [ en-US ] = "ISBLANK" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_STRING
     {
-        Text [ de ] = "ISTTEXT" ;
         Text [ en-US ] = "ISTEXT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_NON_STRING
     {
-        Text [ de ] = "ISTKTEXT" ;
         Text [ en-US ] = "ISNONTEXT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_LOGICAL
     {
-        Text [ de ] = "ISTLOG" ;
         Text [ en-US ] = "ISLOGICAL" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TYPE
     {
-        Text [ de ] = "TYP" ;
         Text [ en-US ] = "TYPE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CELL
     {
-        Text [ de ] = "ZELLE" ;
         Text [ en-US ] = "CELL";
     };
     String SC_OPCODE_IS_REF
     {
-        Text [ de ] = "ISTBEZUG" ;
         Text [ en-US ] = "ISREF" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_VALUE
     {
-        Text [ de ] = "ISTZAHL" ;
         Text [ en-US ] = "ISNUMBER" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_FORMULA
     {
-        Text [ de ] = "ISTFORMEL" ;
         Text [ en-US ] = "ISFORMULA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_NV
     {
-        Text [ de ] = "ISTNV" ;
         Text [ en-US ] = "ISNA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_ERR
     {
-        Text [ de ] = "ISTFEHL" ;
         Text [ en-US ] = "ISERR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_ERROR
     {
-        Text [ de ] = "ISTFEHLER" ;
         Text [ en-US ] = "ISERROR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_EVEN
     {
-        Text [ de ] = "ISTGERADE" ;
         Text [ en-US ] = "ISEVEN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IS_ODD
     {
-        Text [ de ] = "ISTUNGERADE" ;
         Text [ en-US ] = "ISODD" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_N
     {
-        Text [ de ]= "N" ;
         Text [ en-US ] = "N" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_DATE_VALUE
     {
-        Text [ de ] = "DATWERT" ;
         Text [ en-US ] = "DATEVALUE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_TIME_VALUE
     {
-        Text [ de ] = "ZEITWERT" ;
         Text [ en-US ] = "TIMEVALUE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CODE
     {
-        Text [ de ]= "CODE" ;
         Text [ en-US ] = "CODE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TRIM
     {
-        Text [ de ] = "GLÄTTEN" ;
         Text [ en-US ] = "TRIM" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_UPPER
     {
-        Text [ de ] = "GROSS" ;
         Text [ en-US ] = "UPPER" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PROPPER
     {
-        Text [ de ] = "GROSS2" ;
         Text [ en-US ] = "PROPER" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LOWER
     {
-        Text [ de ] = "KLEIN" ;
         Text [ en-US ] = "LOWER" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LEN
     {
-        Text [ de ] = "LÄNGE" ;
         Text [ en-US ] = "LEN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_T
     {
-        Text [ de ]= "T";
         Text [ en-US ] = "T";
     };
     String SC_OPCODE_VALUE
     {
-        Text [ de ] = "WERT" ;
         Text [ en-US ] = "VALUE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CLEAN
     {
-        Text [ de ] = "SÄUBERN" ;
         Text [ en-US ] = "CLEAN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CHAR
     {
-        Text [ de ] = "ZEICHEN" ;
         Text [ en-US ] = "CHAR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LOG10
     {
-        Text [ de ]= "LOG10";
         Text [ en-US ] = "LOG10";
     };
     String SC_OPCODE_EVEN
     {
-        Text [ de ] = "GERADE" ;
         Text [ en-US ] = "EVEN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ODD
     {
-        Text [ de ] = "UNGERADE" ;
         Text [ en-US ] = "ODD" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_STD_NORM_DIST
     {
-        Text [ de ] = "STANDNORMVERT" ;
         Text [ en-US ] = "NORMSDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FISHER
     {
-        Text [ de ]= "FISHER";
         Text [ en-US ] = "FISHER";
     };
     String SC_OPCODE_FISHER_INV
     {
-        Text [ de ]= "FISHERINV" ;
         Text [ en-US ] = "FISHERINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_S_NORM_INV
     {
-        Text [ de ] = "STANDNORMINV" ;
         Text [ en-US ] = "NORMSINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GAMMA_LN
     {
-        Text [ de ]= "GAMMALN" ;
         Text [ en-US ] = "GAMMALN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ERROR_TYPE
     {
-        Text [ de ] = "FEHLERTYP" ;
         Text [ en-US ] = "ERRORTYPE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ERR_CELL { Text = "ZellError" ; };  // ?? Text klein, dt. & engl. gemischt ??
     String SC_OPCODE_FORMULA
     {
-        Text [ de ] = "FORMEL";
         Text [ en-US ] = "FORMULA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ARABIC
     {
-        Text [ de ] = "ARABISCH" ;
         Text [ en-US ] = "ARABIC";
     };
     String SC_OPCODE_ARC_TAN_2
     {
-        Text [ de ] = "ARCTAN2" ;
         Text [ en-US ] = "ATAN2" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CEIL
     {
-        Text [ de ] = "OBERGRENZE" ;
         Text [ en-US ] = "CEILING" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FLOOR
     {
-        Text [ de ] = "UNTERGRENZE" ;
         Text [ en-US ] = "FLOOR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ROUND
     {
-        Text [ de ] = "RUNDEN" ;
         Text [ en-US ] = "ROUND" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ROUND_UP
     {
-        Text [ de ] = "AUFRUNDEN" ;
         Text [ en-US ] = "ROUNDUP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ROUND_DOWN
     {
-        Text [ de ] = "ABRUNDEN" ;
         Text [ en-US ] = "ROUNDDOWN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TRUNC
     {
-        Text [ de ] = "KÜRZEN" ;
         Text [ en-US ] = "TRUNC" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LOG
     {
-        Text [ de ] = "LOG";
         Text [ en-US ] = "LOG";
     };
     String SC_OPCODE_POWER
     {
-        Text [ de ] = "POTENZ" ;
         Text [ en-US ] = "POWER" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GGT
     {
-        Text [ de ] = "GGT" ;
         Text [ en-US ] = "GCD" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KGV
     {
-        Text [ de ] = "KGV" ;
         Text [ en-US ] = "LCM" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MOD
     {
-        Text [ de ] = "REST" ;
         Text [ en-US ] = "MOD" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUM_PRODUCT
     {
-        Text [ de ] = "SUMMENPRODUKT" ;
         Text [ en-US ] = "SUMPRODUCT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUM_SQ
     {
-        Text [ de ] = "QUADRATESUMME" ;
         Text [ en-US ] = "SUMSQ" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUM_X2MY2
     {
-        Text [ de ] = "SUMMEX2MY2" ;
         Text [ en-US ] = "SUMX2MY2" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUM_X2DY2
     {
-        Text [ de ] = "SUMMEX2PY2" ;
         Text [ en-US ] = "SUMX2PY2" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUM_XMY2
     {
-        Text [ de ] = "SUMMEXMY2" ;
         Text [ en-US ] = "SUMXMY2" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_DATE
     {
-        Text [ de ] = "DATUM" ;
         Text [ en-US ] = "DATE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_TIME
     {
-        Text [ de ] = "ZEIT" ;
         Text [ en-US ] = "TIME" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_DIFF_DATE
     {
-        Text [ de ] = "TAGE" ;
         Text [ en-US ] = "DAYS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_DIFF_DATE_360
     {
-        Text [ de ] = "TAGE360" ;
         Text [ en-US ] = "DAYS360" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MIN
     {
-        Text [ de ] = "MIN" ;
         Text [ en-US ] = "MIN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MIN_A
     {
-        Text [ de ]= "MINA" ;
         Text [ en-US ] = "MINA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MAX
     {
-        Text [ de ]= "MAX" ;
         Text [ en-US ] = "MAX" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MAX_A
     {
-        Text [ de ]= "MAXA" ;
         Text [ en-US ] = "MAXA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUM
     {
-        Text [ de ] = "SUMME" ;
         Text [ en-US ] = "SUM" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PRODUCT
     {
-        Text [ de ] = "PRODUKT" ;
         Text [ en-US ] = "PRODUCT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_AVERAGE
     {
-        Text [ de ] = "MITTELWERT" ;
         Text [ en-US ] = "AVERAGE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_AVERAGE_A
     {
-        Text [ de ] = "MITTELWERTA" ;
         Text [ en-US ] = "AVERAGEA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COUNT
     {
-        Text [ de ] = "ANZAHL" ;
         Text [ en-US ] = "COUNT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COUNT_2
     {
-        Text [ de ] = "ANZAHL2" ;
         Text [ en-US ] = "COUNTA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_NBW
     {
-        Text [ de ] = "NBW" ;
         Text [ en-US ] = "NPV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_IKV
     {
-        Text [ de ] = "IKV" ;
         Text [ en-US ] = "IRR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MIRR
     {
-        Text [ de ] = "QIKV" ;
         Text [ en-US ] = "MIRR";
     };
     String SC_OPCODE_ISPMT
     {
-        Text [ de ]= "ISPMT" ;
         Text [ en-US ] = "ISPMT";
     };
     String SC_OPCODE_VAR
     {
-        Text [ de ] = "VARIANZ" ;
         Text [ en-US ] = "VAR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_VAR_A
     {
-        Text [ de ] = "VARIANZA" ;
         Text [ en-US ] = "VARA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_VAR_P
     {
-        Text [ de ] = "VARIANZEN" ;
         Text [ en-US ] = "VARP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_VAR_P_A
     {
-        Text [ de ] = "VARIANZENA" ;
         Text [ en-US ] = "VARPA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ST_DEV
     {
-        Text [ de ] = "STABW" ;
         Text [ en-US ] = "STDEV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ST_DEV_A
     {
-        Text [ de ] = "STABWA" ;
         Text [ en-US ] = "STDEVA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ST_DEV_P
     {
-        Text [ de ] = "STABWN" ;
         Text [ en-US ] = "STDEVP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ST_DEV_P_A
     {
-        Text [ de ] = "STABWNA" ;
         Text [ en-US ] = "STDEVPA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_B
     {
-        Text [ de ]= "B";
         Text [ en-US ] = "B";
     };
     String SC_OPCODE_NORM_DIST
     {
-        Text [ de ] = "NORMVERT" ;
         Text [ en-US ] = "NORMDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_EXP_DIST
     {
-        Text [ de ] = "EXPONVERT" ;
         Text [ en-US ] = "EXPONDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_BINOM_DIST
     {
-        Text [ de ] = "BINOMVERT" ;
         Text [ en-US ] = "BINOMDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_POISSON_DIST
     {
-        Text [ de ]= "POISSON" ;
         Text [ en-US ] = "POISSON" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KOMBIN
     {
-        Text [ de ] = "KOMBINATIONEN" ;
         Text [ en-US ] = "COMBIN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KOMBIN_2
     {
-        Text [ de ] = "KOMBINATIONEN2" ;
         Text [ en-US ] = "COMBINA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_VARIATIONEN
     {
-        Text [ de ] = "VARIATIONEN" ;
         Text [ en-US ] = "PERMUT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_VARIATIONEN_2
     {
-        Text [ de ] = "VARIATIONEN2" ;
         Text [ en-US ] = "PERMUTATIONA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_BW
     {
-        Text [ de ] = "BW" ;
         Text [ en-US ] = "PV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DIA
     {
-        Text [ de ] = "DIA" ;
         Text [ en-US ] = "SYD" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GDA
     {
-        Text [ de ] = "GDA" ;
         Text [ en-US ] = "DDB" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GDA_2
     {
-        Text [ de ] = "GDA2" ;
         Text [ en-US ] = "DB" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_VBD
     {
-        Text [ de ]= "VDB" ;
         Text [ en-US ] = "VDB" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LAUFZ
     {
-        Text [ de ] = "LAUFZEIT" ;
         Text [ en-US ] = "DURATION" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LIA
     {
-        Text [ de ] = "LIA" ;
         Text [ en-US ] = "SLN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RMZ
     {
-        Text [ de ] = "RMZ" ;
         Text [ en-US ] = "PMT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COLUMNS
     {
-        Text [ de ] = "SPALTEN" ;
         Text [ en-US ] = "COLUMNS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ROWS
     {
-        Text [ de ] = "ZEILEN" ;
         Text [ en-US ] = "ROWS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TABLES
     {
-        Text [ de ] = "TABELLEN" ;
         Text [ en-US ] = "SHEETS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COLUMN
     {
-        Text [ de ] = "SPALTE" ;
         Text [ en-US ] = "COLUMN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ROW
     {
-        Text [ de ] = "ZEILE" ;
         Text [ en-US ] = "ROW" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TABLE
     {
-        Text [ de ] = "TABELLE" ;
         Text [ en-US ] = "SHEET" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ZGZ
     {
-        Text [ de ]= "ZGZ" ;
         Text [ en-US ] = "RRI" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ZW
     {
-        Text [ de ] = "ZW" ;
         Text [ en-US ] = "FV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ZZR
     {
-        Text [ de ] = "ZZR" ;
         Text [ en-US ] = "NPER" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ZINS
     {
-        Text [ de ] = "ZINS" ;
         Text [ en-US ] = "RATE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ZINS_Z
     {
-        Text [ de ] = "ZINSZ" ;
         Text [ en-US ] = "IPMT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KAPZ
     {
-        Text [ de ] = "KAPZ" ;
         Text [ en-US ] = "PPMT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KUM_ZINS_Z
     {
-        Text [ de ] = "KUMZINSZ" ;
         Text [ en-US ] = "CUMIPMT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KUM_KAP_Z
     {
-        Text [ de ] = "KUMKAPITAL" ;
         Text [ en-US ] = "CUMPRINC" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_EFFEKTIV
     {
-        Text [ de ] = "EFFEKTIV" ;
         Text [ en-US ] = "EFFECTIVE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_NOMINAL
     {
-        Text [ de ] = "NOMINAL" ;
         Text [ en-US ] = "NOMINAL" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUB_TOTAL
     {
-        Text [ de ] = "TEILERGEBNIS" ;
         Text [ en-US ] = "SUBTOTAL" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_SUM
     {
-        Text [ de ] = "DBSUMME" ;
         Text [ en-US ] = "DSUM" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_COUNT
     {
-        Text [ de ] = "DBANZAHL" ;
         Text [ en-US ] = "DCOUNT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_COUNT_2
     {
-        Text [ de ] = "DBANZAHL2" ;
         Text [ en-US ] = "DCOUNTA" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_AVERAGE
     {
-        Text [ de ] = "DBMITTELWERT" ;
         Text [ en-US ] = "DAVERAGE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_GET
     {
-        Text [ de ] = "DBAUSZUG" ;
         Text [ en-US ] = "DGET" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_MAX
     {
-        Text [ de ] = "DBMAX" ;
         Text [ en-US ] = "DMAX" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_MIN
     {
-        Text [ de ] = "DBMIN" ;
         Text [ en-US ] = "DMIN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_PRODUCT
     {
-        Text [ de ] = "DBPRODUKT" ;
         Text [ en-US ] = "DPRODUCT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_STD_DEV
     {
-        Text [ de ] = "DBSTDABW" ;
         Text [ en-US ] = "DSTDEV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_STD_DEV_P
     {
-        Text [ de ] = "DBSTDABWN" ;
         Text [ en-US ] = "DSTDEVP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_VAR
     {
-        Text [ de ] = "DBVARIANZ" ;
         Text [ en-US ] = "DVAR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DB_VAR_P
     {
-        Text [ de ] = "DBVARIANZEN" ;
         Text [ en-US ] = "DVARP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_INDIRECT
     {
-        Text [ de ] = "INDIREKT" ;
         Text [ en-US ] = "INDIRECT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ADDRESS
     {
-        Text [ de ] = "ADRESSE" ;
         Text [ en-US ] = "ADDRESS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MATCH
     {
-        Text [ de ] = "VERGLEICH" ;
         Text [ en-US ] = "MATCH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COUNT_EMPTY_CELLS
     {
-        Text [ de ] = "ANZAHLLEEREZELLEN" ;
         Text [ en-US ] = "COUNTBLANK" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COUNT_IF
     {
-        Text [ de ] = "ZÄHLENWENN" ;
         Text [ en-US ] = "COUNTIF" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUM_IF
     {
-        Text [ de ] = "SUMMEWENN" ;
         Text [ en-US ] = "SUMIF" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LOOKUP
     {
-        Text [ de ] = "VERWEIS" ;
         Text [ en-US ] = "LOOKUP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_V_LOOKUP
     {
-        Text [ de ] = "SVERWEIS" ;
         Text [ en-US ] = "VLOOKUP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_H_LOOKUP
     {
-        Text [ de ] = "WVERWEIS" ;
         Text [ en-US ] = "HLOOKUP" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MULTI_AREA
     {
-        Text [ de ] = "MULTIBEREICH" ;
         Text [ en-US ] = "MULTIRANGE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_OFFSET
     {
-        Text [ de ] = "VERSCHIEBUNG" ;
         Text [ en-US ] = "OFFSET" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_INDEX
     {
-        Text [ de ]= "INDEX" ;
          // ?? erstes Zeichen = I ??
         Text [ en-US ] = "INDEX" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_AREAS
     {
-        Text [ de ] = "BEREICHE" ;
         Text [ en-US ] = "AREAS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CURRENCY
     {
-        Text [ de ] = "DM" ;
         Text [ en-US ] = "DOLLAR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_REPLACE
     {
-        Text [ de ] = "ERSETZEN" ;
         Text [ en-US ] = "REPLACE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FIXED
     {
-        Text [ de ] = "FEST" ;
         Text [ en-US ] = "FIXED" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FIND
     {
-        Text [ de ] = "FINDEN" ;
         Text [ en-US ] = "FIND" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_EXACT
     {
-        Text [ de ] = "IDENTISCH" ;
         Text [ en-US ] = "EXACT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LEFT
     {
-        Text [ de ] = "LINKS" ;
         Text [ en-US ] = "LEFT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RIGHT
     {
-        Text [ de ] = "RECHTS" ;
         Text [ en-US ] = "RIGHT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SEARCH
     {
-        Text [ de ] = "SUCHEN" ;
         Text [ en-US ] = "SEARCH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MID
     {
-        Text [ de ] = "TEIL" ;
         Text [ en-US ] = "MID" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TEXT
     {
-        Text [ de ]= "TEXT" ;
         Text [ en-US ] = "TEXT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SUBSTITUTE
     {
-        Text [ de ] = "WECHSELN" ;
         Text [ en-US ] = "SUBSTITUTE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_REPT
     {
-        Text [ de ] = "WIEDERHOLEN" ;
         Text [ en-US ] = "REPT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CONCAT
     {
-        Text [ de ] = "VERKETTEN" ;
         Text [ en-US ] = "CONCATENATE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MAT_VALUE
     {
-        Text [ de ] = "MWERT" ;
         Text [ en-US ] = "MVALUE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MAT_DET
     {
-        Text [ de ] = "MDET" ;
         Text [ en-US ] = "MDETERM" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MAT_INV
     {
-        Text [ de ] = "MINV" ;
         Text [ en-US ] = "MINVERSE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MAT_MULT
     {
-        Text [ de ]= "MMULT" ;
         Text [ en-US ] = "MMULT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MAT_TRANS
     {
-        Text [ de ] = "MTRANS" ;
         Text [ en-US ] = "TRANSPOSE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MATRIX_UNIT
     {
-        Text [ de ] = "EINHEITSMATRIX" ;
         Text [ en-US ] = "MUNIT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_BACK_SOLVER
     {
-        Text [ de ] = "ZIELWERTSUCHE" ;
         Text [ en-US ] = "GOALSEEK" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_HYP_GEOM_DIST
     {
-        Text [ de ] = "HYPGEOMVERT" ;
         Text [ en-US ] = "HYPGEOMDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LOG_NORM_DIST
     {
-        Text [ de ] = "LOGNORMVERT" ;
         Text [ en-US ] = "LOGNORMDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_T_DIST
     {
-        Text [ de ] = "TVERT" ;
         Text [ en-US ] = "TDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_F_DIST
     {
-        Text [ de ] = "FVERT" ;
         Text [ en-US ] = "FDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CHI_DIST
     {
-        Text [ de ] = "CHIVERT" ;
         Text [ en-US ] = "CHIDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_WEIBULL
     {
-        Text [ de ]= "WEIBULL" ;
         Text [ en-US ] = "WEIBULL" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_NEG_BINOM_VERT
     {
-        Text [ de ] = "NEGBINOMVERT" ;
         Text [ en-US ] = "NEGBINOMDIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KRIT_BINOM
     {
-        Text [ de ] = "KRITBINOM" ;
         Text [ en-US ] = "CRITBINOM" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_KURT
     {
-        Text [ de ]= "KURT" ;
         Text [ en-US ] = "KURT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_HAR_MEAN
     {
-        Text [ de ] = "HARMITTEL" ;
         Text [ en-US ] = "HARMEAN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GEO_MEAN
     {
-        Text [ de ] = "GEOMITTEL" ;
         Text [ en-US ] = "GEOMEAN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_STANDARD
     {
-        Text [ de ] = "STANDARDISIERUNG" ;
         Text [ en-US ] = "STANDARDIZE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_AVE_DEV
     {
-        Text [ de ] = "MITTELABW" ;
         Text [ en-US ] = "AVEDEV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SCHIEFE
     {
-        Text [ de ] = "SCHIEFE" ;
         Text [ en-US ] = "SKEW" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DEV_SQ
     {
-        Text [ de ] = "SUMQUADABW" ;
         Text [ en-US ] = "DEVSQ" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MEDIAN
     {
-        Text [ de ]= "MEDIAN" ;
         Text [ en-US ] = "MEDIAN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_MODAL_VALUE
     {
-        Text [ de ] = "MODALWERT" ;
         Text [ en-US ] = "MODE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_Z_TEST
     {
-        Text [ de ] = "GTEST" ;
         Text [ en-US ] = "ZTEST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_T_TEST
     {
-        Text [ de ]= "TTEST" ;
         Text [ en-US ] = "TTEST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RANK
     {
-        Text [ de ] = "RANG" ;
         Text [ en-US ] = "RANK" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PERCENTILE
     {
-        Text [ de ] = "QUANTIL" ;
         Text [ en-US ] = "PERCENTILE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PERCENT_RANK
     {
-        Text [ de ] = "QUANTILSRANG" ;
         Text [ en-US ] = "PERCENTRANK" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LARGE
     {
-        Text [ de ] = "KGRÖSSTE" ;
         Text [ en-US ] = "LARGE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SMALL
     {
-        Text [ de ] = "KKLEINSTE" ;
         Text [ en-US ] = "SMALL" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FREQUENCY
     {
-        Text [ de ] = "HÄUFIGKEIT" ;
         Text [ en-US ] = "FREQUENCY" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_QUARTILE
     {
-        Text [ de ]= "QUARTILE" ;
         Text [ en-US ] = "QUARTILE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_NORM_INV
     {
-        Text [ de ]= "NORMINV" ;
         Text [ en-US ] = "NORMINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CONFIDENCE
     {
-        Text [ de ] = "KONFIDENZ" ;
         Text [ en-US ] = "CONFIDENCE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_F_TEST
     {
-        Text [ de ]= "FTEST" ;
         Text [ en-US ] = "FTEST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TRIM_MEAN
     {
-        Text [ de ] = "GESTUTZTMITTEL" ;
         Text [ en-US ] = "TRIMMEAN" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PROB
     {
-        Text [ de ] = "WAHRSCHBEREICH" ;
         Text [ en-US ] = "PROB" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CORREL
     {
-        Text [ de ] = "KORREL" ;
         Text [ en-US ] = "CORREL" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_COVAR
     {
-        Text [ de ] = "KOVAR" ;
         Text [ en-US ] = "COVAR" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_PEARSON
     {
-        Text [ de ]= "PEARSON" ;
         Text [ en-US ] = "PEARSON" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RSQ
     {
-        Text [ de ] = "BESTIMMTHEITSMASS" ;
         Text [ en-US ] = "RSQ" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_STEYX
     {
-        Text [ de ] = "STFEHLERYX" ;
         Text [ en-US ] = "STEYX" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_SLOPE
     {
-        Text [ de ] = "STEIGUNG" ;
         Text [ en-US ] = "SLOPE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_INTERCEPT
     {
-        Text [ de ] = "ACHSENABSCHNITT" ;
         Text [ en-US ] = "INTERCEPT" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TREND
     {
-        Text [ de ]= "TREND" ;
         Text [ en-US ] = "TREND" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GROWTH
     {
-        Text [ de ] = "VARIATION" ;
         Text [ en-US ] = "GROWTH" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RGP
     {
-        Text [ de ] = "RGP" ;
         Text [ en-US ] = "LINEST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_RKP
     {
-        Text [ de ] = "RKP" ;
         Text [ en-US ] = "LOGEST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_FORECAST
     {
-        Text [ de ] = "SCHÄTZER" ;
         Text [ en-US ] = "FORECAST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CHI_INV
     {
-        Text [ de ]= "CHIINV" ;
         Text [ en-US ] = "CHIINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GAMMA_DIST
     {
-        Text [ de ] = "GAMMAVERT" ;
         Text [ en-US ] = "GAMMADIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GAMMA_INV
     {
-        Text [ de ]= "GAMMAINV" ;
         Text [ en-US ] = "GAMMAINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_T_INV
     {
-        Text [ de ]= "TINV" ;
         Text [ en-US ] = "TINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_F_INV
     {
-        Text [ de ]= "FINV" ;
         Text [ en-US ] = "FINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CHI_TEST
     {
-        Text [ de ]= "CHITEST" ;
         Text [ en-US ] = "CHITEST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_LOG_INV
     {
-        Text [ de ]= "LOGINV" ;
         Text [ en-US ] = "LOGINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_TABLE_OP
     {
-        Text [ de ] = "MEHRFACHOPERATION" ;
         Text [ en-US ] = "MULTIPLE.OPERATIONS" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_BETA_DIST
     {
-        Text [ de ] = "BETAVERT" ;
         Text [ en-US ] = "BETADIST" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_BETA_INV
     {
-        Text [ de ]= "BETAINV" ;
         Text [ en-US ] = "BETAINV" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_WEEK
     {
-        Text [ de ] = "KALENDERWOCHE" ;
         Text [ en-US ] = "WEEKNUM" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_EASTERSUNDAY
     {
-        Text [ de ] = "OSTERSONNTAG" ;
         Text [ en-US ] = "EASTERSUNDAY" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_GET_DAY_OF_WEEK
     {
-        Text [ de ] = "WOCHENTAG" ;
         Text [ en-US ] = "WEEKDAY" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_NO_NAME
     {
-        Text [ de ]= "#NAME!" ;
         Text [ en-US ] = "#NAME!" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_STYLE
     {
-        Text [ de ] = "VORLAGE" ;
         Text [ en-US ] = "STYLE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DDE
     {
-        Text [ de ]= "DDE";
         Text [ en-US ] = "DDE";
     };
     String SC_OPCODE_BASE
     {
-        Text [ de ] = "BASIS" ;
         Text [ en-US ] = "BASE" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_DECIMAL
     {
-        Text [ de ] = "DEZIMAL" ;
         Text [ en-US ] = "DECIMAL" ;
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_CONVERT
     {
-        Text [ de ] = "UMRECHNEN" ;
         Text [ en-US ] = "CONVERT";
-        Text [ x-comment ] = " ";
     };
     String SC_OPCODE_ROMAN
     {
-        Text [ de ] = "RÖMISCH";
         Text [ en-US ] = "ROMAN";
     };
     String SC_OPCODE_HYPERLINK
     {
-        Text [ de ] = "HYPERLINK";
         Text[ en-US ] = "HYPERLINK";
     };
     String SC_OPCODE_INFO
     {
-        Text [ de ] = "INFO";
         Text [ en-US ] = "INFO";
     };
     String SC_OPCODE_BAHTTEXT
     {
-        Text [ de ] = "BAHTTEXT";
         Text [ en-US ] = "BAHTTEXT";
     };
 };
