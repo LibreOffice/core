@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grafctrl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:03:08 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:42:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ FloatingWindow RID_SVXTBX_GRFFILTER
     Closeable = TRUE ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Filter" ;
     Text [ en-US ] = "Filters" ;
     ToolBox TBX_GRFFILTER
     {
@@ -120,7 +119,6 @@ FloatingWindow RID_SVXTBX_GRFFILTER
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 
 // -----------
@@ -129,47 +127,38 @@ FloatingWindow RID_SVXTBX_GRFFILTER
 
 String RID_SVXSTR_UNDO_GRAFMODE
 {
-    Text [ de ] = "Grafikmodus";
     Text [ en-US ] = "Graphics Mode";
 };
 String RID_SVXSTR_UNDO_GRAFRED
 {
-    Text [ de ] = "Rotanteil";
     Text [ en-US ] = "Red";
 };
 String RID_SVXSTR_UNDO_GRAFGREEN
 {
-    Text [ de ] = "Grünanteil";
     Text [ en-US ] = "Green";
 };
 String RID_SVXSTR_UNDO_GRAFBLUE
 {
-    Text [ de ] = "Blauanteil";
     Text [ en-US ] = "Blue";
 };
 String RID_SVXSTR_UNDO_GRAFLUMINANCE
 {
-    Text [ de ] = "Helligkeit";
     Text [ en-US ] = "Brightness";
 };
 String RID_SVXSTR_UNDO_GRAFCONTRAST
 {
-    Text [ de ] = "Kontrast";
     Text [ en-US ] = "Contrast";
 };
 String RID_SVXSTR_UNDO_GRAFGAMMA
 {
-    Text [ de ] = "Gamma";
     Text [ en-US ] = "Gamma";
 };
 String RID_SVXSTR_UNDO_GRAFTRANSPARENCY
 {
-    Text [ de ] = "Transparenz";
     Text [ en-US ] = "Transparency";
 };
 String RID_SVXSTR_GRAFCROP
 {
-    Text [ de ] = "Zuschneiden";
     Text [ en-US ] = "Crop";
 };
 
