@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectdbtabledialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:58:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:56:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
     Size = MAP_APPFONT ( 250 , 135 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Tabelle auswählen";
     Text [ en-US ] = "Select Table";
 
     FixedText       FI_SELECT
@@ -53,7 +52,6 @@ ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 238 , 24 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Die von Ihnen gewählte Datei beinhaltet mehrere Tabellen. Bitte wählen Sie die Tabelle mit der Adressenliste, die Sie verwenden möchten.";
         Text [ en-US ] = "The file you have selected contains more than one table. Please select the table containing the address list you want to use.";
     };
     Control LB_TABLE
@@ -66,7 +64,6 @@ ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
     {
         Pos = MAP_APPFONT ( 6 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Vorschau";
         Text [ en-US ] = "~Preview";
     };
     FixedLine FL_SEPARATOR
@@ -91,22 +88,18 @@ ModalDialog DLG_MM_SELECTDBTABLEDDIALOG
     };
     String ST_NAME
     {
-        Text [ de ] = "Name";
         Text [ en-US ] = "Name";
     };
     String ST_TYPE
     {
-        Text [ de ] = "Typ";
         Text [ en-US ] = "Type";
     };
     String ST_TABLE
     {
-        Text [ de ] = "Tabelle";
         Text [ en-US ] = "Table";
     };
     String ST_QUERY
     {
-        Text [ de ] = "Abfrage";
         Text [ en-US ] = "Query";
     };
 
