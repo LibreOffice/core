@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:32:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,133 +72,111 @@
 
 String RID_COMMON_START + 0
 {
-    Text [ de ] = "Das Verzeichnis '%1' konnte nicht erstellt werden.<BR>Möglicherweise ist nicht genügend Speicher auf Ihrer Festplatte vorhanden.";
     Text [ en-US ] = "The directory '%1' could not be created.<BR>There may not be enough space left on your hard disk.";
 };
 
 String RID_COMMON_START + 1
 {
-    Text [ de ] = "Das Textdokument konnte nicht erzeugt werden.<BR>Überprüfen Sie bitte, ob das Modul 'PRODUCTNAME Writer' installiert ist.";
     Text [ en-US] = "The text document could not be created.<BR>Please check if the module 'PRODUCTNAME Writer' is installed.";
 };
 
 String RID_COMMON_START + 2
 {
-    Text [ de ] = "Das Tabellendokument konnte nicht erzeugt werden.<BR>Überprüfen Sie bitte, ob das Modul 'PRODUCTNAME Calc' installiert ist.";
     Text [ en-US] = "The spreadsheet could not be created.<BR>Please check if the module 'PRODUCTNAME Calc' is installed.";
 };
 
 String RID_COMMON_START + 3
 {
-    Text [ de ] = "Die Präsentation konnte nicht erzeugt werden.<BR>Überprüfen Sie bitte, ob das Modul 'PRODUCTNAME Impress' installiert ist.";
     Text [ en-US] = "The presentation could not be created.<BR>Please check if the module 'PRODUCTNAME Impress' is installed.";
 };
 
 String RID_COMMON_START + 4
 {
-    Text [ de ] = "Die Zeichnung konnte nicht erzeugt werden.<BR>Überprüfen Sie bitte, ob das Modul 'PRODUCTNAME Draw' installiert ist.";
     Text [ en-US] = "The drawing could not be created.<BR>Please check if the module 'PRODUCTNAME Draw' is installed.";
 };
 
 String RID_COMMON_START + 5
 {
-    Text [ de ] = "Die Formel konnte nicht erzeugt werden.<BR>Überprüfen Sie bitte, ob das Modul 'PRODUCTNAME Math' installiert ist.";
     Text [ en-US] = "The formula could not be created.<BR>Please check if the module 'PRODUCTNAME Math' is installed.";
 };
 
 String RID_COMMON_START + 6
 {
-    Text [ de ] = "Die benötigten Dateien konnten nicht gefunden werden.<BR>Bitte starten Sie das %PRODUCTNAME-Installationsprogramm und wählen Sie die Option 'Reparatur' aus.";
     Text [ en-US] = "The files required could not be found.<BR>Please start the %PRODUCTNAME Setup and choose 'Repair'.";
 };
 
 String RID_COMMON_START + 7
 {
-    Text [ de ] = "Die Datei '<PATH>' existiert bereits.<BR><BR>Möchten Sie die bestehende Datei überschreiben?";
     Text [ en-US] = "The file '<PATH>' already exists.<BR><BR>Would you like to overwrite the existing file?";
 };
 
 String RID_COMMON_START + 8
 {
-    Text [ de ] = "Ja";
     Text [ en-US] = "Yes";
 };
 
 String RID_COMMON_START + 9
 {
-    Text [ de ] = "Ja alle";
     Text [ en-US] = "Yes to All";
 };
 
 String RID_COMMON_START + 10
 {
-    Text [ de ] = "Nein";
     Text [ en-US] = "No";
 };
 
 String RID_COMMON_START + 11
 {
-    Text [ de ] = "Abbrechen";
     Text [ en-US] = "Cancel";
 };
 
 String RID_COMMON_START + 12
 {
-    Text [ de ] = "~Fertig stellen";
     Text [ en-US] = "~Finish";
 };
 
 String RID_COMMON_START + 13
 {
-    Text [ de ] = "< ~Zurück";
     Text [ en-US] = "< ~Back";
 };
 
 String RID_COMMON_START + 14
 {
-    Text [ de ] = "~Weiter >";
     Text [ en-US] = "~Next >";
 };
 
 String RID_COMMON_START + 15
 {
-    Text [ de ] = "~Hilfe";
     Text [ en-US ] = "~Help";
 };
 
 String RID_COMMON_START + 16
 {
-    Text [ de ] = "Schritte";
     Text [ en-US] = "Steps";
 };
 
 String RID_COMMON_START + 17
 {
-    Text [ de ] = "Schließen";
     Text [ en-US] = "Close";
 };
 
 String RID_COMMON_START + 18
 {
-    Text [ de ] = "OK";
     Text [ en-US] = "OK";
 };
 
 String RID_COMMON_START + 19
 {
-    Text [ de ] = "Die Datei existiert bereits. Möchten Sie sie Überschreiben?";
     Text [ en-US] = "The file already exists. Do you want to overwrite it?";
 };
 
 String RID_COMMON_START + 20
 {
-    Text [ de ] = "Vorlage am <current_date> mit dem <wizard_name> erstellt.";
     Text [ en-US] = "Template created via <wizard_name> on <current_date>.";
 };
 
 String RID_COMMON_START + 21
 {
-    Text [ de ] = "Der Assistent kann nicht ausgeführt werden, da wichtige Dateien nicht gefunden werden konnten.\nUnter 'Extras - Optionen - %PRODUCTNAME - Pfade' können Sie die Standardeinstellungen der Pfade durch Klicken der Schaltfläche 'Standard' wieder herstellen.\nRufen Sie danach den Assistenten erneut auf.";
     Text [ en-US] = "The wizard could not be run, because important files were not found.\nUnder 'Tools - Options - %PRODUCTNAME - Paths' click the 'Default' button to reset the paths to the original default settings.\nThen run the wizard again.";
 };
 
@@ -208,147 +186,123 @@ String RID_COMMON_START + 21
 
 String RID_DB_COMMON_START + 0
 {
-    Text [ de ] = "~Fertig stellen";
     Text [ en-US] = "C~reate";
 };
 String RID_DB_COMMON_START + 1
 {
-    Text [ de ] = "Abbrechen";
     Text [ en-US] = "~Cancel";
 };
 
 String RID_DB_COMMON_START + 2
 {
-    Text [ de ] = "<< ~Zurück";
     Text [ en-US] = "<< ~Back";
 };
 
 String RID_DB_COMMON_START + 3
 {
-    Text [ de ] = "~Weiter >>";
     Text [ en-US] = "~Next >>";
 };
 String RID_DB_COMMON_START + 4
 {
-    Text [ de ] = "~Datenbank";
     Text [ en-US] = "~Database";
 };
 String RID_DB_COMMON_START + 5
 {
-    Text [ de ] = "~Tabellenname";
     Text [ en-US] = "~Table name";
 };
 
 String RID_DB_COMMON_START + 6
 {
-    Text [ de ] = "Während der Ausführung des Assistenten ist ein Fehler aufgetreten. Der Assistent wird beendet.";
     Text [ en-US] = "An error occurred while running the wizard. The wizard will be terminated.";
 };
 
 
 String RID_DB_COMMON_START + 14
 {
-    Text [ de ] = "Es konnte keine Verbindung zur Datenbank hergestellt werden!";
     Text [ en-US ] = "No connection to the database could be established.";
 };
 
 String RID_DB_COMMON_START + 20
 {
-    Text [ de ] = "~Hilfe";
     Text [ en-US ] = "~Help";
 };
 
 String RID_DB_COMMON_START + 21
 {
-    Text [ de ] = "~Stopp";
     Text [ en-US ] = "~Stop";
 };
 
 
 String RID_DB_COMMON_START + 30
 {
-    Text [ de ] = "Das Dokument konnte nicht gespeichert werden.";
     Text[ en-US ] = "The document could not be saved.";
 };
 
 
 String RID_DB_COMMON_START + 33
 {
-    Text [ de ] = "Der Assistent wird beendet!";
     Text[ en-US ] = "Exiting the wizard";
 };
 
 String RID_DB_COMMON_START + 34
 {
-    Text [ de ] = "Verbindung zur Datenquelle wird hergestellt...";
     Text[ en-US ] = "Connecting to data source...";
 };
 
 String RID_DB_COMMON_START + 35
 {
-    Text [ de ] = "Die Verbindung zur Datenquelle konnte nicht hergestellt werden!";
     Text[ en-US ] = "The connection to the data source could not be established.";
 };
 
 
 String RID_DB_COMMON_START + 36
 {
-    Text [ de ] = "Der eingegebene Dateipfad is ungültig!";
     Text[ en-US ] = "The file path entered is not valid.";
 };
 
 
 String RID_DB_COMMON_START + 37
 {
-    Text [ de ] = "Bitte wählen Sie eine Datenquelle";
     Text[ en-US ] = "Please select a data source";
 };
 
 String RID_DB_COMMON_START + 38
 {
-    Text [ de ] = "Bitte wählen Sie eine Tabelle oder Abfrage";
     Text[ en-US ] = "Please select a table or query";
 };
 
 String RID_DB_COMMON_START + 39
 {
-    Text [ de ] = "Füge Feld hinzu";
     Text[ en-US ] = "Add field";
 };
 
 String RID_DB_COMMON_START + 40
 {
-    Text [ de ] = "Entferne Feld";
     Text[ en-US ] = "Remove field";
 };
 
 String RID_DB_COMMON_START + 41
 {
-    Text [ de ] = "Füge alle Felder hinzu";
     Text[ en-US ] = "Add all fields";
 };
 
 String RID_DB_COMMON_START + 42
 {
-    Text [ de ] = "Entferne alle Felder";
     Text[ en-US ] = "Remove all fields";
 };
 
 String RID_DB_COMMON_START + 43
 {
-    Text [ de ] = "Feld nach oben bewegen";
     Text[ en-US ] = "Move field up";
 };
 
 String RID_DB_COMMON_START + 44
 {
-    Text [ de ] = "Feld nach unten bewegen";
     Text[ en-US ] = "Move field down";
 };
 
 String RID_DB_COMMON_START + 45
 {
-    Text [ de ] = "Die Felder von '%NAME' konnten nicht ermittelt werden.";
      Text [ en-US] = "The field names from '%NAME' could not be retrieved.";
 };
 
@@ -360,128 +314,107 @@ String RID_DB_COMMON_START + 45
 
 String RID_DB_FORM_WIZARD_START + 0
 {
-    Text [ de ] = "Formular Assistent";
     Text [ en-US ] = "Form Wizard";
 };
 
 String RID_DB_FORM_WIZARD_START + 1
 {
-    Text [ de ] = "Felder im Fo~rmular";
     Text [ en-US ] = "Fields in ~the form";
 };
 
 String RID_DB_FORM_WIZARD_START + 2
 {
-    Text [ de ] = "Binärfelder werden mit aufgeführt und können aus der linken Liste selektiert werden.\nWenn möglich, werden sie als Bilder interpretiert.";
     Text [ en-US ] = "Binary fields are always listed and selectable from the left list.\nIf possible, they are interpreted as images.";
 };
 
 String RID_DB_FORM_WIZARD_START + 3
 {
-    Text [ de ] = "Ein Subformular ist ein Formular, das in ein anderes Formular eingefügt wird.\nSubformulare sind besonders geeignet, um Daten von Tabellen oder Abfragen in eine one-to-many Beziehung zu setzen.";
     Text [ en-US ] = "A subform is a form that is inserted in another form.\nUse subforms to show data from tables or queries with a one-to-many relationship.";
 };
 
 String RID_DB_FORM_WIZARD_START + 4
 {
-    Text [ de ] = "Subformular ~hinzufügen";
     Text [ en-US ] = "~Add Subform";
 };
 
 String RID_DB_FORM_WIZARD_START + 5
 {
-    Text [ de ] = "Sub~formular basiert auf bestehender Beziehung";
     Text [ en-US ] = "~Subform based on existing relation";
 };
 
 String RID_DB_FORM_WIZARD_START + 6
 {
-    Text [ de ] = "~Tabellen und Abfragen";
     Text [ en-US ] = "Tables or queries";
 };
 
 String RID_DB_FORM_WIZARD_START + 7
 {
-    Text [ de ] = "~Beziehungen werden manuell ausgewählt";
     Text [ en-US ] = "Subform based on ~manual selection of fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 8
 {
-    Text [ de ] = "~Welche Beziehung möchten Sie hinzufügen?";
     Text [ en-US ] = "~Which relation do you want to add?";
 };
 
 String RID_DB_FORM_WIZARD_START + 9
 {
-    Text [ de ] = "Felder ~des Subformulars";
     Text [ en-US ] = "Fields in the ~subform";
 };
 
 String RID_DB_FORM_WIZARD_START + 12
 {
-    Text [ de ] = "~Verfügbare Felder";
     Text [ en-US ] = "~Available fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 13
 {
-    Text [ de ] = "~Felder im Formular";
     Text [ en-US ] = "Fields in form";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 19
 {
-    Text [ de ] = "Die Verknüpfung '<FIELDNAME1>' und '<FIELDNAME2>' wurde zweimal ausgewählt.\nVerknüpfungen können aber nur einmal benutzt werden.";
     Text [ en-US ] = "The join '<FIELDNAME1>' and '<FIELDNAME2>' has been selected twice.\nBut joins may only be used once.";
 };
 
 String RID_DB_FORM_WIZARD_START + 20
 {
-    Text [ de ] = "Erstes untergeordnetes Feld";
     Text [ en-US ] = "~First joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 21
 {
-    Text [ de ] = "Zweites untergeordnetes Feld";
     Text [ en-US ] = "~Second joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 22
 {
-    Text [ de ] = "Drittes untergeordnetes Feld";
     Text [ en-US ] = "~Third joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 23
 {
-    Text [ de ] = "Viertes untergeordnetes Feld";
     Text [ en-US ] = "~Fourth joined subform field";
 };
 
 String RID_DB_FORM_WIZARD_START + 24
 {
-    Text [ de ] = "Erstes übergeordnetes Feld";
     Text [ en-US ] = "F~irst joined main form field";
 };
 
 String RID_DB_FORM_WIZARD_START + 25
 {
-    Text [ de ] = "Zweites übergeordnetes Feld";
     Text [ en-US ] = "S~econd joined main form field";
 };
 
 String RID_DB_FORM_WIZARD_START + 26
 {
-    Text [ de ] = "Drittes übergeordnetes Feld";
     Text [ en-US ] = "T~hird joined main form field";
 };
 
 String RID_DB_FORM_WIZARD_START + 27
 {
-    Text [ de ] = "Viertes übergeordnetes Feld";
     Text [ en-US ] = "F~ourth joined main form field";
 };
 
@@ -489,130 +422,109 @@ String RID_DB_FORM_WIZARD_START + 27
 
 String RID_DB_FORM_WIZARD_START + 28
 {
-    Text [ de ] = "Feldumrandung";
     Text [ en-US ] = "Field border";
 };
 
 String RID_DB_FORM_WIZARD_START + 29
 {
-    Text [ de ] = "Ohne Umrandung";
     Text [ en-US ] = "No border";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 30
 {
-    Text [ de ] = "3-D Look";
     Text [ en-US ] = "3D look";
 };
 
 String RID_DB_FORM_WIZARD_START + 31
 {
-    Text [ de ] = "Flach";
     Text [ en-US ] = "Flat";
 };
 
 String RID_DB_FORM_WIZARD_START + 32
 {
-    Text [ de ] = "Ausrich~tung der Beschriftungsfelder";
     Text [ en-US ] = "Label placement";
 };
 
 String RID_DB_FORM_WIZARD_START + 33
 {
-    Text [ de ] = "Linksbündig";
     Text [ en-US ] = "Align left";
 };
 
 String RID_DB_FORM_WIZARD_START + 34
 {
-    Text [ de ] = "Rechtsbündig";
     Text [ en-US ] = "Align right";
 };
 
 String RID_DB_FORM_WIZARD_START + 35
 {
-    Text [ de ] = "Anordnung der DB-Felder";
     Text [ en-US ] = "Arrangement of DB fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 36
 {
-    Text [ de ] = "In Spalten-Beschriftungen links";
     Text [ en-US ] = "Columnar - Labels Left";
 };
 
 String RID_DB_FORM_WIZARD_START + 37
 {
-    Text [ de ] = "In Spalten - Beschriftungen oben";
     Text [ en-US ] = "Columnar - Labels on Top";
 };
 
 String RID_DB_FORM_WIZARD_START + 38
 {
-    Text [ de ] = "In Blöcken - Beschriftungen links";
     Text [ en-US ] = "In Blocks - Labels Left";
 };
 
 String RID_DB_FORM_WIZARD_START + 39
 {
-    Text [ de ] = "In Blöcken - Beschriftungen oben";
     Text [ en-US ] = "In Blocks - Labels Above";
 };
 
 String RID_DB_FORM_WIZARD_START + 40
 {
-    Text [ de ] = "Als Datenblatt";
     Text [ en-US ] = "As Data Sheet";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 41
 {
-    Text [ de ] = "Anordnung der Datenbankfelder des übergeordneten Formulars";
     Text [ en-US ] = "Arrangement of the main form";
 };
 
 String RID_DB_FORM_WIZARD_START + 42
 {
-    Text [ de ] = "Anordnung der Datenbankfelder des Subformulars";
     Text [ en-US ] = "Arrangement of the subform";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 44
 {
-    Text [ de ] = "Das Formular wird nur zur Eingaben neuer Daten verwendet.";
     Text [ en-US ] = "The form is to be ~used for entering new data only.";
 };
 
 String RID_DB_FORM_WIZARD_START + 45
 {
-    Text [ de ] = "Existierende Daten werden nicht dargestellt.";
     Text [ en-US ] = "Existing data will not be displayed ";
 };
 
 String RID_DB_FORM_WIZARD_START + 46
 {
-    Text [ de ] = "Das Formular zeigt existierende Daten an.";
     Text [ en-US ] = "T~he form is to display all data";
 };
 
 String RID_DB_FORM_WIZARD_START + 47
 {
-    Text [ de ] = "Existierende Daten dürfen nicht verändert werden.";
     Text [ en-US ] = "Do not allow ~modification of existing data";
 };
 
 String RID_DB_FORM_WIZARD_START + 48
 {
-    Text [ de ] = "Existierende Daten dürfen nicht gelöscht werden.";
     Text [ en-US ] = "Do not allow ~deletion of existing data";
 };
 
 String RID_DB_FORM_WIZARD_START + 49
 {
-    Text [ de ] = "Neue Daten dürfen nicht hinzugefügt werden.";
     Text [ en-US ] = "Do not allow ~addition of new data";
 };
 
@@ -620,7 +532,6 @@ String RID_DB_FORM_WIZARD_START + 49
 
 String RID_DB_FORM_WIZARD_START + 50
 {
-    Text [ de ] = "Formularname";
     Text [ en-US ] = "Name of ~the form";
 };
 
@@ -628,27 +539,23 @@ String RID_DB_FORM_WIZARD_START + 50
 
 String RID_DB_FORM_WIZARD_START + 51
 {
-    Text [ de ] = "Wie möchten Sie fortfahren?";
     Text [ en-US ] = "How do you want to proceed after creating the form?";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 52
 {
-    Text [ de ] = "Mit dem Formular arbeiten";
     Text [ en-US ] = "~Work with the form";
 };
 
 String RID_DB_FORM_WIZARD_START + 53
 {
-    Text [ de ] = "Das Formular weiter verändern";
     Text [ en-US ] = "~Modify the form";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 55
 {
-    Text [ de ] = "~Seitenvorlagen";
     Text [ en-US ] = "~Page Styles";
 };
 
@@ -656,119 +563,100 @@ String RID_DB_FORM_WIZARD_START + 55
 
 String RID_DB_FORM_WIZARD_START + 80
 {
-    Text [ de ] = "Feldauswahl";
     Text [ en-US ] = "Field selection";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 81
 {
-    Text [ de ] = "Subformular";
     Text [ en-US ] = "Set up a subform";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 82
 {
-    Text [ de ] = "Subformularfelder";
     Text [ en-US ] = "Add subform fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 83
 {
-    Text [ de ] = "Verknüpfte Felder";
     Text [ en-US ] = "Get joined fields";
 };
 
 String RID_DB_FORM_WIZARD_START + 84
 {
-    Text [ de ] = "Anordnung der Kontrollfelder";
     Text [ en-US ] = "Arrange controls";
 };
 
 String RID_DB_FORM_WIZARD_START + 85
 {
-    Text [ de ] = "Dateneingabe";
     Text [ en-US ] = "Set data entry";
 };
 
 String RID_DB_FORM_WIZARD_START + 86
 {
-    Text [ de ] = "Stile";
     Text [ en-US ] = "Apply styles";
 };
 
 String RID_DB_FORM_WIZARD_START + 87
 {
-    Text [ de ] = "Formularname";
     Text [ en-US ] = "Set name";
 };
 
 String RID_DB_FORM_WIZARD_START + 88
 {
-    Text [ de ] = " (Datum)";
     Text [ en-US ] = "(Date)";
 };
 
 String RID_DB_FORM_WIZARD_START + 89
 {
-    Text [ de ] = " (Zeit)";
     Text [ en-US ] = "(Time)";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 90
 {
-    Text [ de ] = "Wählen Sie die Felder Ihres Formulars";
     Text [ en-US ] = "Select the fields of your form";
 };
 
 
 String RID_DB_FORM_WIZARD_START + 91
 {
-    Text [ de ] = "Entscheiden Sie, ob Sie ein Subformular hinzufügen möchten";
     Text [ en-US ] = "Decide if you want to set up a subform";
 };
 
 String RID_DB_FORM_WIZARD_START + 92
 {
-    Text [ de ] = "Wählen Sie die Felder Ihres Subformulars";
     Text [ en-US ] = "Select the fields of your subform";
 };
 
 String RID_DB_FORM_WIZARD_START + 93
 {
-    Text [ de ] = "Wählen Sie die Verknüpfungen Ihrer Formulare";
     Text [ en-US ] = "Select the joins between your forms";
 };
 
 String RID_DB_FORM_WIZARD_START + 94
 {
-    Text [ de ] = "Ordnen Sie die Kontrollfelder auf dem Formular an";
     Text [ en-US ] = "Arrange the controls on your form";
 };
 
 String RID_DB_FORM_WIZARD_START + 95
 {
-    Text [ de ] = "Wählen Sie die Art der Dateneingabe";
     Text [ en-US ] = "Select the data entry mode";
 };
 
 String RID_DB_FORM_WIZARD_START + 96
 {
-    Text [ de ] = "Wählen Sie den Stil Ihres Formulars";
     Text [ en-US ] = "Apply the style of your form";
 };
 
 String RID_DB_FORM_WIZARD_START + 97
 {
-    Text [ de ] = "Setzen Sie den Namen des Formulars";
     Text [ en-US ] = "Set the name of the form";
 };
 
 String RID_DB_FORM_WIZARD_START + 98
 {
-    Text [ de ] = "Ein Formular mit dem Namen '%FORMNAME' existiert bereits.\nBitte wählen Sie einen neuen Namen.";
     Text [ en-US ] = "A form with the name '%FORMNAME' already exists.\nChoose another name.";
 };
 
@@ -777,492 +665,416 @@ String RID_DB_FORM_WIZARD_START + 98
 
 String RID_DB_QUERY_WIZARD_START + 0
 {
-    Text [ de ] = "Abfrage Assistent";
     Text [ en-US ] = "Query Wizard";
 };
 
 String RID_DB_QUERY_WIZARD_START + 1
 {
-    Text [ de ] = "Abfrage";
     Text [ en-US] = "Query";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 2
 {
-    Text [ de ] = "Abfrage-Assistent";
     Text [ en-US] = "Query Wizard";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 3
 {
-    Text [ de ] = "~Tabellen";
     Text [ en-US] = "~Tables";
 };
 
 String RID_DB_QUERY_WIZARD_START + 4
 {
-    Text [ de ] = "~Verfügbare Felder";
     Text [ en-US] = "A~vailable fields";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 5
 {
-    Text [ de ] = "Name ~der Abfrage";
     Text [ en-US] = "Name ~of the query";
 };
 
 String RID_DB_QUERY_WIZARD_START + 6
 {
-    Text [ de ] = "~Abfrage anzeigen";
     Text [ en-US] = "Display ~Query";
 };
 
 String RID_DB_QUERY_WIZARD_START + 7
 {
-    Text [ de ] = "A~bfrage verändern";
     Text [ en-US] = "~Modify Query";
 };
 
 String RID_DB_QUERY_WIZARD_START + 8
 {
-    Text [ de ] = "~Wie möchten Sie nach dem Erzeugen der Abfrage fortfahren?";
     Text [ en-US] = "~How do you want to proceed after creating the query?";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 9
 {
-    Text [ de ] = "Entspricht ~allen folgenden Bedingungen";
     Text [ en-US] = "Match ~all of the following";
 };
 
 String RID_DB_QUERY_WIZARD_START + 10
 {
-    Text [ de ] = "~Entspricht einigen der folgenden Bedingungen";
     Text [ en-US] = "~Match any of the following";
 };
 
 String RID_DB_QUERY_WIZARD_START + 11
 {
-    Text [ de ] = "~Detaillierte Abfrage (zeigt alle Datensätze der Abfrage)";
     Text [ en-US] = "~Detailed query (Shows all records of the query.)";
 };
 
 String RID_DB_QUERY_WIZARD_START + 12
 {
-    Text [ de ] = "~Zusammenfassende Abfrage (zeigt nur Ergebnisse von Aggregatfunktionen)";
     Text [ en-US] = "~Summary query (Shows only results of aggregate functions.)";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 16
 {
-    Text [ de ] = "Aggregatfunktionen";
     Text [ en-US] = "Aggregate functions";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 17
 {
-    Text [ de ] = "Felder";
     Text [ en-US] = "Fields";
 };
 
 String RID_DB_QUERY_WIZARD_START + 18
 {
-    Text [ de ] = "~Gruppieren nach";
     Text [ en-US] = "~Group by";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 19
 {
-    Text [ de ] = "Feld";
     Text [ en-US] = "Field";
 };
 
 String RID_DB_QUERY_WIZARD_START + 20
 {
-    Text [ de ] = "Aliasname";
     Text [ en-US] = "Alias";
 };
 
 String RID_DB_QUERY_WIZARD_START + 21
 {
-    Text [ de ] = "Tabelle: ";
     Text [ en-US] = "Table: ";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 22
 {
-    Text [ de ] = "Abfrage: ";
     Text [ en-US] = "Query: ";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 24
 {
-    Text [ de ] = "Bedingung";
     Text [ en-US] = "Condition";
 };
 
 String RID_DB_QUERY_WIZARD_START + 25
 {
-    Text [ de ] = "Wert";
     Text [ en-US] = "Value";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 26
 {
-    Text [ de ] = "ist gleich";
     Text [ en-US] = "is equal to";
 };
 
 String RID_DB_QUERY_WIZARD_START + 27
 {
-    Text [ de ] = "ist ungleich";
     Text [ en-US] = "is not equal to";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 28
 {
-    Text [ de ] = "ist kleiner als";
     Text [ en-US] = "is smaller than";
 };
 
 String RID_DB_QUERY_WIZARD_START + 29
 {
-    Text [ de ] = "ist größer als";
     Text [ en-US] = "is greater than";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 30
 {
-    Text [ de ] = "ist kleiner oder gleich";
     Text [ en-US] = "is equal or less than ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 31
 {
-    Text [ de ] = "ist größer oder gleich";
     Text [ en-US] = "is equal or greater than";
 };
 
 String RID_DB_QUERY_WIZARD_START + 32
 {
-    Text [ de ] = "ähnlich";
     Text [ en-US] = "like";
 };
 
 String RID_DB_QUERY_WIZARD_START + 33
 {
-    Text [ de ] = "und";
     Text [ en-US] = "and";
 };
 
 String RID_DB_QUERY_WIZARD_START + 34
 {
-    Text [ de ] = "oder";
     Text [ en-US] = "or";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 40
 {
-    Text [ de ] = "Nehme die Summe aus";
     Text [ en-US] = "get the sum of";
 };
 
 String RID_DB_QUERY_WIZARD_START + 41
 {
-    Text [ de ] = "Nehme den Durchschnitt von";
     Text [ en-US] = "get the average of";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 42
 {
-    Text [ de ] = "Nehme das Minimum von";
     Text [ en-US] = "get the minimum of";
 };
 
 String RID_DB_QUERY_WIZARD_START + 43
 {
-    Text [ de ] = "Nehme das Maximum von";
     Text [ en-US] = "get the maximum of";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 44
 {
-    Text [ de ] = "Nehme die Summe aus <FIELD>";
     Text [ en-US] = "get the sum of <FIELD>";
 };
 
 String RID_DB_QUERY_WIZARD_START + 45
 {
-    Text [ de ] = "Nehme den Durchschnitt von <FIELD>";
     Text [ en-US] = "get the average of <FIELD>";
 };
 
 String RID_DB_QUERY_WIZARD_START + 46
 {
-    Text [ de ] = "Nehme das Minimum von <FIELD>";
     Text [ en-US] = "get the minimum of <FIELD>";
 };
 
 String RID_DB_QUERY_WIZARD_START + 47
 {
-    Text [ de ] = "Nehme das Maximum von <FIELD>";
     Text [ en-US] = "get the maximum of <FIELD>";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 48
 {
-    Text [ de ] = "(none)";
     Text [ en-US] = "(none)";
 };
 
 String RID_DB_QUERY_WIZARD_START + 50
 {
-    Text [ de ] = "Felder in ~der Abfrage: ";
     Text [ en-US] = "Fie~lds in the Query: ";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 51
 {
-    Text [ de ] = "Sortierreihenfolge: ";
     Text [ en-US] = "Sorting order: ";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 52
 {
-    Text [ de ] = "Es wurde keine Sortierreihenfolge festgelegt.";
     Text [ en-US] = "No sorting fields were assigned.";
    };
 
 
 String RID_DB_QUERY_WIZARD_START + 53
 {
-    Text [ de ] = "Suchbedingungen: ";
     Text [ en-US] = "Search conditions: ";
   };
 
 String RID_DB_QUERY_WIZARD_START + 54
 {
-    Text [ de ] = "Es wurden keine Bedingungen festgelegt.";
     Text [ en-US] = "No conditions were assigned.";
   };
 
 
 String RID_DB_QUERY_WIZARD_START + 55
 {
-    Text [ de ] = "Aggregatfunktionen: ";
     Text [ en-US] = "Aggregate functions: ";
  };
 
 
 String RID_DB_QUERY_WIZARD_START + 56
 {
-    Text [ de ] = "Es wurden keine Aggregatfunktionen festgelegt.";
     Text [ en-US] = "No aggregate functions were assigned.";
  };
 
 
 String RID_DB_QUERY_WIZARD_START + 57
 {
-    Text [ de ] = "Gruppiert nach: ";
     Text [ en-US] = "Grouped by: ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 58
 {
-    Text [ de ] = "Es wurden keine Gruppierungen festgelegt.";
     Text [ en-US] = "No Groups were assigned.";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 59
 {
-    Text [ de ] = "Gruppierungsbedingungen: ";
     Text [ en-US ] = "Grouping conditions: ";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 60
 {
-    Text [ de ] = "Es wurden keine Gruppierungsbedingungen festgelegt.";
     Text [ en-US] = "No grouping conditions were assigned.";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 70
 {
-    Text [ de ] = "Wählen Sie die Felder (Spalten) für Ihre Abfrage aus";
     Text [ en-US] = "Select the fields (columns) for your query";
 };
 
 String RID_DB_QUERY_WIZARD_START + 71
 {
-    Text [ de ] = "Legen Sie die Sortiereihenfolge fest";
     Text [ en-US] = "Select the sorting order";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 72
 {
-    Text [ de ] = "Wählen Sie die Suchbedingungen";
     Text [ en-US] = "Select the search conditions";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 73
 {
-    Text [ de ] = "Wählen Sie die Art der Abfrage";
     Text [ en-US] = "Select the type of query";
 };
 
 String RID_DB_QUERY_WIZARD_START + 74
 {
-    Text [ de ] = "Wählen Sie die Gruppierungen";
     Text [ en-US] = "Select the groups";
 };
 
 String RID_DB_QUERY_WIZARD_START + 75
 {
-    Text [ de ] = "Wählen Sie die Bedingungen der Gruppierung";
     Text [ en-US] = "Select the grouping conditions";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 76
 {
-    Text [ de ] = "Vergeben Sie Aliasnamen falls erwünscht";
     Text [ en-US] = "Assign aliases if desired";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 77
 {
-    Text [ de ] = "Überprüfen Sie die Übersicht und entscheiden Sie wie Sie fortfahren möchten";
     Text [ en-US] = "Check the overview and decide how to proceed";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 80
 {
-    Text [ de ] = "Felderauswahl";
     Text [ en-US] = "Field selection";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 81
 {
-    Text [ de ] = "Sortierreihenfolge";
     Text [ en-US] = "Sorting order";
 };
 
 String RID_DB_QUERY_WIZARD_START + 82
 {
-    Text [ de ] = "Suchbedingungen";
     Text [ en-US] = "Search conditions";
 };
 
 String RID_DB_QUERY_WIZARD_START + 83
 {
-    Text [ de ] = "Detail oder Zusammenfassung";
     Text [ en-US] = "Detail or summary";
 };
 
 String RID_DB_QUERY_WIZARD_START + 84
 {
-    Text [ de ] = "Gruppierung";
     Text [ en-US] = "Grouping";
 };
 
 String RID_DB_QUERY_WIZARD_START + 85
 {
-    Text [ de ] = "Bedingungen der Gruppierung";
     Text [ en-US] = "Grouping conditions";
 };
 
 String RID_DB_QUERY_WIZARD_START + 86
 {
-    Text [ de ] = "Aliasnamen";
     Text [ en-US] = "Aliases";
 };
 
 String RID_DB_QUERY_WIZARD_START + 87
 {
-    Text [ de ] = "Überblick";
     Text [ en-US] = "Overview";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 88
 {
-    Text [ de ] = "Sie müssen ein Feld, dem keine Aggregatfunktion zugewiesen ist, als Gruppierung verwenden.";
     Text [ en-US] = "A field that has not been assigned an aggregate function must be used in a group.";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 89
 {
-    Text [ de ] = "Die Bedingung '<FIELDNAME> <LOGICOPERATOR> <VALUE>' wurde zweimal ausgewählt. Jede Bedingung kann nur einmal ausgewählt werden.";
     Text [ en-US] = "The condition '<FIELDNAME> <LOGICOPERATOR> <VALUE>' was chosen twice. Each condition can only be chosen once";
 };
 
 String RID_DB_QUERY_WIZARD_START + 90
 {
-    Text [ de ] = "Die Aggregatfunktion '<FUNCTION>' wurde dem Feldnamen '<NUMERICEFIELD>' zweimal zugeordnet.";
     Text [ en-US] = "The aggregate function <FUNCTION> has been assigned twice to the fieldname '<NUMERICFIELD>'.";
 };
 
 String RID_DB_QUERY_WIZARD_START + 91
 {
-    Text [ de ] = ", ";
     Text [ en-US] = ", ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 92
 {
-    Text [ de ] = "<FIELDTITLE> (<FIELDNAME>)";
     Text [ en-US] = "<FIELDTITLE> (<FIELDNAME>)";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 93
 {
-    Text [ de ] = "<FIELDNAME> (<SORTMODE>)";
     Text [ en-US] = "<FIELDNAME> (<SORTMODE>)";
 };
 
 String RID_DB_QUERY_WIZARD_START + 94
 {
-    Text [ de ] = "<FIELDNAME> <LOGICOPERATOR> <VALUE>";
     Text [ en-US] = "<FIELDNAME> <LOGICOPERATOR> <VALUE>";
 };
 
 String RID_DB_QUERY_WIZARD_START + 95
 {
-    Text [ de ] = "<CALCULATEDFUNCTION> <FIELDNAME>";
     Text [ en-US] = "<CALCULATEDFUNCTION> <FIELDNAME>";
 };
 
 
 String RID_DB_QUERY_WIZARD_START + 96
 {
-    Text [ de ] = "<FIELDNAME> <LOGICOPERATOR> <VALUE>";
     Text [ en-US] = "<FIELDNAME> <LOGICOPERATOR> <VALUE>";
 };
 
@@ -1273,39 +1085,33 @@ String RID_DB_QUERY_WIZARD_START + 96
 
 String RID_DB_REPORT_WIZARD_START + 0
 {
-    Text [ de ] = "Berichts-Assistent";
     Text [ en-US ] = "Report Wizard";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 3
 {
-    Text [ de ] = "~Tabelle";
     Text [ en-US ] = "~Table";
 };
 
 String RID_DB_REPORT_WIZARD_START + 4
 {
-    Text [ de ] = "~Spalten";
     Text [ en-US ] = "Colu~mns";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 7
 {
-    Text [ de ] = "Bericht_";
     Text [ en-US ] = "Report_";
 };
 
 String RID_DB_REPORT_WIZARD_START + 8
 {
-    Text [ de ] = "-undefiniert-";
     Text [ en-US ] = "- undefined -";
 };
 
 String RID_DB_REPORT_WIZARD_START + 9
 {
-    Text [ de ] = "~Felder im Bericht";
     Text [ en-US ] = "~Fields in report";
 };
 
@@ -1313,78 +1119,66 @@ String RID_DB_REPORT_WIZARD_START + 9
 
 String RID_DB_REPORT_WIZARD_START + 11
 {
-    Text [ de ] = "Gruppierungen";
     Text [ en-US ] = "Grouping";
 };
 
 String RID_DB_REPORT_WIZARD_START + 12
 {
-    Text [ de ] = "Sortieroptionen";
     Text [ en-US ] = "Sort options";
 };
 
 String RID_DB_REPORT_WIZARD_START + 13
 {
-    Text [ de ] = "Auswahl des Layouts";
     Text [ en-US ] = "Choose layout";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 14
 {
-    Text [ de ] = "Bericht erstellen";
     Text [ en-US ] = "Create report";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 15
 {
-    Text [ de ] = "Layout der Daten";
     Text [ en-US ] = "Layout of data";
 };
 
 String RID_DB_REPORT_WIZARD_START + 16
 {
-    Text [ de ] = "Layout der Kopf- und Fußzeilen";
     Text [ en-US ] = "Layout of headers and footers";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 19
 {
-    Text [ de ] = "Felder";
     Text [ en-US ] = "Fields";
 };
 
 String RID_DB_REPORT_WIZARD_START + 20
 {
-    Text [ de ] = "~Sortieren nach";
     Text [ en-US ] = "~Sort by";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 21
 {
-    Text [ de ] = "~Anschließend nach";
     Text [ en-US ] = "T~hen by";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 22
 {
-    Text [ de ] = "~Ausrichtung";
     Text [ en-US ] = "Orientation";
 };
 
 String RID_DB_REPORT_WIZARD_START + 23
 {
-    Text [ de ] = "H~ochformat";
     Text [ en-US ] = "Portrait";
 };
 
 String RID_DB_REPORT_WIZARD_START + 24
 {
-    Text [ de ] = "~Querformat";
     Text [ en-US ] = "Landscape";
 };
 
@@ -1392,100 +1186,85 @@ String RID_DB_REPORT_WIZARD_START + 24
 
 String RID_DB_REPORT_WIZARD_START + 28
 {
-    Text [ de ] = "Welche Felder sollen in Ihrem Bericht erscheinen?";
     Text [ en-US ] = "Which fields do you want to have in your report?";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 29
 {
-    Text [ de ] = "Möchten Sie Gruppierungen hinzufügen?";
     Text [ en-US ] = "Do you want to add grouping levels?";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 30
 {
-    Text [ de ] = "Nach welchen Feldern wollen Sie die Daten sortieren?";
     Text [ en-US ] = "According to which fields do you want to sort the data?";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 31
 {
-    Text [ de ] = "Wie soll Ihr Bericht aussehen?";
     Text [ en-US ] = "How do you want your report to look?";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 32
 {
-    Text [ de ] = "Bitte entscheiden Sie, wie Sie fortfahren möchten?";
     Text [ en-US ] = "Decide how you want to proceed";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 33
 {
-    Text [ de ] = "~Name des Berichts";
     Text [ en-US ] = "Title of report";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 34
 {
-    Text [ de ] = "Bericht an~zeigen";
     Text [ en-US ] = "Display report";
 };
 
 String RID_DB_REPORT_WIZARD_START + 35
 {
-    Text [ de ] = "Bericht ab~legen";
     Text [ en-US ] = "Create report";
 };
 
 String RID_DB_REPORT_WIZARD_START + 36
 {
-    Text [ de ] = "A~ufsteigend";
     Text [ en-US ] = "Ascending";
 };
 
 String RID_DB_REPORT_WIZARD_START + 37
 {
-    Text [ de ] = "Abs~teigend";
     Text [ en-US ] = "Descending";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 40
 {
-    Text [ de ] = "~Dynamischer Bericht";
     Text [ en-US ] = "~Dynamic report";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 41
 {
-    Text [ de ] = "Jetzt Bericht erstellen";
     Text [ en-US ] = "~Create report now";
 };
 
 String RID_DB_REPORT_WIZARD_START + 42
 {
-    Text [ de ] = "Layout des Berichts bearbeiten";
     Text [ en-US ] = "~Modify report layout";
 };
 
 String RID_DB_REPORT_WIZARD_START + 43
 {
-    Text [ de ] = "Statischer Bericht";
     Text [ en-US ] = "Static report";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 44
 {
-    Text [ de ] = "Speichern unter";
     Text [ en-US ] = "Save as";
 };
 
@@ -1493,180 +1272,152 @@ String RID_DB_REPORT_WIZARD_START + 44
 
 String RID_DB_REPORT_WIZARD_START + 50
 {
-    Text [ de ] = "Gruppierungen";
     Text [ en-US ] = "Groupings";
 };
 
 String RID_DB_REPORT_WIZARD_START + 51
 {
-    Text [ de ] = "Ans~chließend nach";
     Text [ en-US ] = "Then b~y";
 };
 
 String RID_DB_REPORT_WIZARD_START + 52
 {
-    Text [ de ] = "Ansch~ließend nach";
     Text [ en-US ] = "~Then by";
 };
 
 String RID_DB_REPORT_WIZARD_START + 53
 {
-    Text [ de ] = "Au~fsteigend";
     Text [ en-US ] = "Asc~ending";
 };
 
 String RID_DB_REPORT_WIZARD_START + 54
 {
-    Text [ de ] = "Aufstei~gend";
     Text [ en-US ] = "Ascend~ing";
 };
 
 String RID_DB_REPORT_WIZARD_START + 55
 {
-    Text [ de ] = "Aufst~eigend";
     Text [ en-US ] = "Ascendin~g";
 };
 
 String RID_DB_REPORT_WIZARD_START + 56
 {
-    Text [ de ] = "Abste~igend";
     Text [ en-US ] = "De~scending";
 };
 
 String RID_DB_REPORT_WIZARD_START + 57
 {
-    Text [ de ] = "Absteige~nd";
     Text [ en-US ] = "Des~cending";
 };
 
 String RID_DB_REPORT_WIZARD_START + 58
 {
-    Text [ de ] = "Absteigen~d";
     Text [ en-US ] = "De~scending";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 60
 {
-    Text [ de ] = "Binärfelder können nicht im Bericht angezeigt werden.";
     Text [ en-US ] = "Binary fields cannot be displayed in the report.";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 61
 {
-    Text [ de ] = "Die Tabelle '<TABLENAME>' ist nicht vorhanden.";
     Text [ en-US ] = "The table '<TABLENAME>' does not exist.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 62
 {
-    Text [ de ] = "Bericht wird erstellt...";
     Text [ en-US ] = "Creating Report...";
 };
 
 String RID_DB_REPORT_WIZARD_START + 63
 {
-    Text [ de ] = "Anzahl der eingefügten Datensätze: <COUNT>";
     Text [ en-US ] = "Number of records inserted: <COUNT>";
 };
 
 String RID_DB_REPORT_WIZARD_START + 64
 {
-    Text [ de ] = "Das Formular '<REPORTFORM>' existiert nicht.";
     Text [ en-US ] = "The form '<REPORTFORM>' does not exist.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 65
 {
-    Text [ de ] = "Die Abfrage mit dem Ausdruck <BR>'<STATEMENT>' <BR> konnte nicht ausgeführt werden. <BR> Überprüfen Sie Ihre Datenquelle.";
     Text [ en-US ] = "The query with the statement <BR>'<STATEMENT>' <BR> could not be run. <BR> Check your data source.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 66
 {
-    Text [ de ] = "Folgendes versteckte Kontrollelement im Formular '<REPORTFORM>' konnte nicht ausgelesen werden: '<CONTROLNAME>'.";
     Text [ en-US ] = "The following hidden control in the form '<REPORTFORM>' could not be read: '<CONTROLNAME>'.";
 };
 
 String RID_DB_REPORT_WIZARD_START + 67
 {
-    Text [ de ] = "Daten werden importiert...";
     Text [ en-US ] = "Importing data...";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 68
 {
-    Text [ de ] = "Felder beschriften";
     Text [ en-US ] = "Labeling fields";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 69
 {
-    Text [ de ] = "Wie möchten Sie die Felder beschriften?";
     Text [ en-US ] = "How do you want to label the fields?";
 };
 
 String RID_DB_REPORT_WIZARD_START + 70
 {
-    Text [ de ] = "Beschriftung";
     Text [ en-US ] = "Label";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 71
 {
-    Text [ de ] = "Feld";
     Text [ en-US ] = "Field";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 72
 {
-    Text [ de ] = "Es ist ein Fehler im Assistenten aufgetreten.<BR>Möglicherweise ist die Vorlage '%PATH' fehlerhaft.<BR>Entweder die benötigten Bereiche bzw. Tabellen sind nicht vorhanden oder sie existiern unter einem falschen Namen.<BR>Bitte schauen Sie in der Hilfe nach genaueren Hinweisen.<BR>Bitte wählen Sie eine andere Dokumentvorlage aus.";
     Text [ en-US ] = "An error occurred in the wizard.<BR>The template '%PATH' could be erroneous.<BR>Either the required sections or tables do not exist or exist under the wrong name.<BR>See the Help for more detailed information.<BR>Please select another template.";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 73
 {
-    Text [ de ] = "Es ist ein ungültiges Benutzerfeld in einer Tabelle vorhanden!";
     Text [ en-US ] = "There is an invalid user field in a table.";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 74
 {
-    Text [ de ] = "Das Sortierkriterium '<FIELDNAME>' wurde zweimal ausgewählt. Jedes Sortierkriterium kann nur einmal gewählt werden.";
     Text [ en-US ] = "The sort criterium '<FIELDNAME>' was chosen twice. Each criterium can only be chosen once.";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 75
 {
-    Text [ de ] = "Hinweis: Blindtext wird bei der Fertigstellung des Berichtes durch Datenbankinhalte ersetzt.";
     Text [ en-US ] = "Note: The dummy text will be replaced by data from the database when the report is created.";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 76
 {
-    Text [ de ] = "Es existiert bereits ein Bericht '%REPORTNAME' in der Datenbank. Bitte wählen Sie einen anderen Namen.";
     Text [ en-US ] = "A report '%REPORTNAME' already exists in the database. Please assign another name.";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 78
 {
-    Text [ de ] = "Wie möchten Sie nach Erstellung des Berichts fortfahren?";
     Text [ en-US ] = "How do you want to proceed after creating the report?";
 };
 
 String RID_DB_REPORT_WIZARD_START + 79
 {
-    Text [ de ] = "Welche Art von Bericht möchten Sie erstellen?";
     Text [ en-US ] = "What kind of report do you want to create?";
 };
 
@@ -1675,297 +1426,250 @@ String RID_DB_REPORT_WIZARD_START + 79
 
 String RID_DB_TABLE_WIZARD_START + 1
 {
-    Text [ de ] = "Tabellen-Assistent";
     Text [ en-US] = "Table Wizard";
 };
 
 String RID_DB_TABLE_WIZARD_START + 2
 {
-    Text [ de ] = "Felder wählen";
     Text [ en-US] = "Select fields";
 };
 
 String RID_DB_TABLE_WIZARD_START + 3
 {
-    Text [ de ] = "Felddatentyp festlegen";
     Text [ en-US] = "Set types and formats";
 };
 
 String RID_DB_TABLE_WIZARD_START + 4
 {
-    Text [ de ] = "Primärschlüssel festlegen";
     Text [ en-US] = "Set primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 5
 {
-    Text [ de ] = "Tabelle erstellen";
     Text [ en-US] = "Create table";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 8
 {
-    Text [ de ] = "Wählen Sie die Felder für Ihre Tabelle aus";
     Text [ en-US] = "Select fields for your table";
 };
 
 String RID_DB_TABLE_WIZARD_START + 9
 {
-    Text [ de ] = "Setzen Sie die Formate Ihrer Felder";
     Text [ en-US] = "Set field types and formats";
 };
 
 String RID_DB_TABLE_WIZARD_START + 10
 {
-    Text [ de ] = "Primärschlüssel setzen";
     Text [ en-US] = "Set primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 11
 {
-    Text [ de ] = "Tabelle erstellen";
     Text [ en-US] = "Create table";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 14
 {
-    Text [ de ] = "Dieser Assistent hilft Ihnen, eine Datenbanktabelle zu erstellen. Nachdem Sie eine Tabellenkategorie ausgewählt haben, wählen Sie die Beispieltabelle und Beispielfelder aus, die Sie in Ihre neue Tabelle einbeziehen möchten. Ihre Tabelle kann Felder aus mehr als einer Tabelle enthalten.";
     Text [ en-US] = "This wizard helps you to create a table for your database. After selecting a table category and a sample table, choose the fields you want to include in your table. You can include fields from more than one sample table.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 15
 {
-    Text [ de ] = "~Kategorie";
     Text [ en-US] = "Ca~tegory";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 16
 {
-    Text [ de ] = "~Geschäftlich";
     Text [ en-US] = "B~usiness";
 };
 
 String RID_DB_TABLE_WIZARD_START + 17
 {
-    Text [ de ] = "~Privat";
     Text [ en-US] = "P~ersonal";
 };
 
 String RID_DB_TABLE_WIZARD_START + 18
 {
-    Text [ de ] = "~Beispieltabellen";
     Text [ en-US] = "~Sample tables";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 19
 {
-    Text [ de ] = "~Vorhandene Felder";
     Text [ en-US] = "A~vailable fields";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 20
 {
-    Text [ de ] = "Feldinformationen";
     Text [ en-US] = "Field information";
 };
 
 String RID_DB_TABLE_WIZARD_START + 21
 {
-    Text [ de ] = "+";
     Text [ en-US] = "+";
 };
 
 String RID_DB_TABLE_WIZARD_START + 22
 {
-    Text [ de ] = "-";
     Text [ en-US] = "-";
 };
 
 String RID_DB_TABLE_WIZARD_START + 23
 {
-    Text [ de ] = "Feldname";
     Text [ en-US] = "Field name";
 };
 
 String RID_DB_TABLE_WIZARD_START + 24
 {
-    Text [ de ] = "Feldtyp";
     Text [ en-US] = "Field type";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 25
 {
-    Text [ de ] = "~Gewählte Felder";
     Text [ en-US] = "~Selected fields";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 26
 {
-    Text [ de ] = "Jeder Datensatz wird eindeutig durch einen Primärschlüssel identifiziert. Primärschlüssel vereinfachen das Verbinden von Informationen aus verschiedenen Tabellen. Es wird daher empfohlen, für jede Tabelle einen Primärschlüssel anzulegen. Ohne einen Primärschlüssel ist keine Eingabe in diese Tabelle möglich.";
     Text [ en-US] = "A primary key uniquely identifies each record in a database table. Primary keys ease the linking of information in separate tables, and it is recommended that you have a primary key in every table. Without a primary key, it will not be possible to enter data into this table.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 27
 {
-    Text [ de ] = "Primärschlüssel erstellen";
     Text [ en-US] = "~Create a primary key";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 28
 {
-    Text [ de ] = "Primärschlüssel ~wird automatisch hinzugefügt";
     Text [ en-US] = "~Automatically add a primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 29
 {
-    Text [ de ] = "~Ein bestehendes Feld wird als Primärschlüssel verwendet";
     Text [ en-US] = "~Use an existing field as a primary key";
 };
 
 String RID_DB_TABLE_WIZARD_START + 30
 {
-    Text [ de ] = "Definition eines P~rimärschlüssels durch mehrere Felder";
     Text [ en-US] = "Define p~rimary key as a combination of several fields ";
 };
 
 String RID_DB_TABLE_WIZARD_START + 31
 {
-    Text [ de ] = "Fe~ldname";
     Text [ en-US] = "F~ieldname";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 32
 {
-    Text [ de ] = "~Primärschlüsselfelder";
     Text [ en-US] = "~Primary key fields";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 33
 {
-    Text [ de ] = "Au~towert";
     Text [ en-US] = "Auto ~value";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 34
 {
-    Text [ de ] = "Wie möchten Sie Ihre Tabelle benennen?";
     Text [ en-US] = "What do you want to name your table?";
 };
 
 String RID_DB_TABLE_WIZARD_START + 35
 {
-    Text [ de ] = "Herzlichen Glückwunsch! Sie haben alle Informationen zum Erstellen Ihrer Tabelle eingegeben.";
     Text [ en-US] = "Congratulations. You have entered all the information needed to create your table.";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 36
 {
-    Text [ de ] = "~Wie möchten Sie weiter vorgehen?";
     Text [ en-US] = "What do you want to do next?";
 };
 
 String RID_DB_TABLE_WIZARD_START + 37
 {
-    Text [ de ] = "Das Tabellendesign bearbeiten";
     Text [ en-US] = "Modify the table design";
 };
 
 String RID_DB_TABLE_WIZARD_START + 38
 {
-    Text [ de ] = "~Daten sofort eingeben";
     Text [ en-US] = "Insert data immediately";
 };
 
 String RID_DB_TABLE_WIZARD_START + 39
 {
-    Text [ de ] = "Ein Formular auf ~Basis dieser Tabelle erstellen";
     Text [ en-US] = "C~reate a form based on this table";
 };
 
 String RID_DB_TABLE_WIZARD_START + 40
 {
-    Text [ de ] = "Die erzeugte Tabelle konnte nicht geöffnet werden.";
     Text [ en-US] = "The table you have created could not be opened.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 41
 {
-  Text [ de ] = "Der Tabellenname '%TABLENAME' enthält ein Sonderzeichen ('%SPECIALCHAR'), das möglicherweise nicht von der Datenbank unterstützt wird.";
   Text [ en-US] = "The table name '%TABLENAME' contains a character ('%SPECIALCHAR') that might not be supported by the database.";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 42
 {
-  Text [ de ] = "Der Feldname '%FIELDNAME' enthält ein Sonderzeichen ('%SPECIALCHAR'), das möglicherweise nicht von der Datenbank unterstützt wird.";
   Text [ en-US] = "The field name '%FIELDNAME' contains a special character ('%SPECIALCHAR') that might not be supported by the database.";
 };
 
 
 String RID_DB_TABLE_WIZARD_START + 43
 {
-    Text [ de ] = "Feld";
     Text [ en-US] = "Field";
 };
 
 String RID_DB_TABLE_WIZARD_START + 44
 {
-    Text [ de ] = "MeineTabelle";
     Text [ en-US] = "MyTable";
 };
 
 String RID_DB_TABLE_WIZARD_START + 45
 {
-    Text [ de ] = "Ein Feld hinzufügen";
     Text [ en-US] = "Add a Field";
 };
 
 String RID_DB_TABLE_WIZARD_START + 46
 {
-    Text [ de ] = "Das gewählte Feld entfernen";
     Text [ en-US] = "Remove the selected Field";
 };
 
 String RID_DB_TABLE_WIZARD_START + 47
 {
-    Text [ de ] = "Das Feld kann nicht eingefügt werden, da die maximal mögliche Feldanzahl der Datenbanktabelle von %COUNT damit überschritten würde.";
      Text [ en-US] = "The field cannot be inserted because this would exceed the maximum number of %COUNT possible fields in the database table";
 };
 
 String RID_DB_TABLE_WIZARD_START + 48
 {
-    Text [ de ] = "Der Name '%TABLENAME' existiert bereits.\nBitte geben Sie einen neuen Namen an!";
      Text [ en-US] = "The name '%TABLENAME' already exists.\nPlease enter another name.";
 };
 
 String RID_DB_TABLE_WIZARD_START + 49
 {
-    Text [ de ] = "Katalog der Tabelle";
      Text [ en-US] = "Catalog of the table";
 };
 
 String RID_DB_TABLE_WIZARD_START + 50
 {
-    Text [ de ] = "Schema der Tabelle";
      Text [ en-US] = "Schema of the table";
 };
 
 String RID_DB_TABLE_WIZARD_START + 51
 {
-    Text [ de ] = "Das Feld '%FIELDNAME' existiert bereits.";
      Text [ en-US] = "The field '%FIELDNAME' already exists.";
 };
 
@@ -1980,387 +1684,323 @@ String RID_DB_TABLE_WIZARD_START + 51
 
 String RID_LETTERWIZARDDIALOG_START + 1
 {
-    Text [ de ] = "Brief-Assistent";
     Text [ en-US] = "Letter Wizard";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 2
 {
-    Text [ de ] = "Label9";
     Text [ en-US] = "Label9";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 3
 {
-    Text [ de ] = "Geschäftsbrief";
     Text [ en-US] = "~Business letter";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 4
 {
-    Text [ de ] = "Förmlicher Privatbrief";
     Text [ en-US] = "~Formal personal letter";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 5
 {
-    Text [ de ] = "Privater Brief";
     Text [ en-US] = "~Personal letter";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 6
 {
-    Text [ de ] = "Geschäftliches Briefpapier verwenden";
     Text [ en-US] = "~Use letterhead paper with pre-printed elements";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 7
 {
-    Text [ de ] = "Logo";
     Text [ en-US] = "~Logo";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 8
 {
-    Text [ de ] = "Eigene Adresse";
     Text [ en-US] = "Return address";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 9
 {
-    Text [ de ] = "Fußzeile ";
     Text [ en-US] = "~Include footer";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 10
 {
-    Text [ de ] = "Absenderadresse im Kuvertfenster";
     Text [ en-US] = "~Return address in envelope window";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 11
 {
-    Text [ de ] = "Logo";
     Text [ en-US] = "~Logo";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 12
 {
-    Text [ de ] = "Absenderadresse im Kuvertfenster";
     Text [ en-US] = "~Return address in envelope window";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 13
 {
-    Text [ de ] = "Briefzeichen";
     Text [ en-US] = "Letter Signs";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 14
 {
-    Text [ de ] = "Betreffzeile";
     Text [ en-US] = "S~ubject line";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 15
 {
-    Text [ de ] = "Briefanrede";
     Text [ en-US] = "Salu~tation";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 16
 {
-    Text [ de ] = "Falzmarken";
     Text [ en-US] = "Fold ~marks";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 17
 {
-    Text [ de ] = "Grußformel";
     Text [ en-US] = "~Complimentary close";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 18
 {
-    Text [ de ] = "Fußzeile";
     Text [ en-US] = "~Footer";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 19
 {
-    Text [ de ] = "Für Versendeadresse Benutzerdaten verwenden";
     Text [ en-US] = "~Use user data for return address";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 20
 {
-    Text [ de ] = "Neue Absenderadresse:";
     Text [ en-US] = "~New sender address:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 21
 {
-    Text [ de ] = "Für Empfängeradresse Platzhalter verwenden";
     Text [ en-US] = "Use placeholders for ~recipient's address";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 22
 {
-    Text [ de ] = "Die Adressdatenbank für Serienbrief verwenden";
     Text [ en-US] = "Use address database for ~mail merge";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 23
 {
-    Text [ de ] = "Nur auf der zweiten und folgenden Seiten einfügen";
     Text [ en-US] = "Include ~only on second and following pages";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 24
 {
-    Text [ de ] = "Seitenzahl einfügen";
     Text [ en-US] = "~Include page number";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 25
 {
-    Text [ de ] = "Briefvorlage";
     Text [ en-US] = "Letter Template";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 26
 {
-    Text [ de ] = "Einen Brief aus dieser Dokumentvorlage erstellen";
     Text [ en-US] = "Create a ~letter from this template";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 27
 {
-    Text [ de ] = "Manuell Veränderungen an der Dokumentvorlage vornehmen";
     Text [ en-US] = "Make ~manual changes to this letter template";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 28
 {
-    Text [ de ] = "Seitendesign";
     Text [ en-US] = "Page design";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 29
 {
-    Text [ de ] = "Seitendesign";
     Text [ en-US] = "Page design";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 30
 {
-    Text [ de ] = "Seitendesign";
     Text [ en-US] = "Page design";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 31
 {
-    Text [ de ] = "Dieser Assistent hilft Ihnen, eine Dokumentvorlage für Briefe zu erstellen. Sie können die Dokumentvorlage als Basis verwenden, um dann so häufig wie erwünscht, Briefe zu erstellen.";
     Text [ en-US] = "This wizard helps you to create a letter template. You can then use the template as the basis for writing letters as often as desired.";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 32
 {
-    Text [ de ] = "Höhe:";
     Text [ en-US] = "~Height:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 33
 {
-    Text [ de ] = "Breite:";
     Text [ en-US] = "~Width:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 34
 {
-    Text [ de ] = "Abstand zum linken Rand:";
     Text [ en-US] = "S~pacing to left margin:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 35
 {
-    Text [ de ] = "Abstand zum oberen Rand:";
     Text [ en-US] = "Spacing ~to top margin:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 36
 {
-    Text [ de ] = "Höhe:";
     Text [ en-US] = "Height:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 37
 {
-    Text [ de ] = "Breite:";
     Text [ en-US] = "Width:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 38
 {
-    Text [ de ] = "Abstand zum linken Rand:";
     Text [ en-US] = "S~pacing to left margin:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 39
 {
-    Text [ de ] = "Abstand zum oberen Rand:";
     Text [ en-US] = "Spacing ~to top margin:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 40
 {
-    Text [ de ] = "Höhe:";
     Text [ en-US] = "Height:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 41
 {
-    Text [ de ] = "Typisches Briefformat für dieses Land verwenden:";
     Text [ en-US] = "Use a typical letter format for this country:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 42
 {
-    Text [ de ] = "Absenderadresse";
     Text [ en-US] = "Sender's address";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 43
 {
-    Text [ de ] = "Name:";
     Text [ en-US] = "Name:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 44
 {
-    Text [ de ] = "Straße:";
     Text [ en-US] = "Street:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 45
 {
-    Text [ de ] = "PLZ/Bundesland/Stadt:";
     Text [ en-US] = "ZIP code/State/City:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 46
 {
-    Text [ de ] = "Empfängeradresse";
     Text [ en-US] = "Recipient's address";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 47
 {
-    Text [ de ] = "Fußzeile";
     Text [ en-US] = "Footer";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 48
 {
-    Text [ de ] = "Dieser Assistent erstellt eine Dokumentvorlage, die Sie vielfach verwenden können, um Briefe mit demselben Aussehen zu erstellen.";
     Text [ en-US] = "This wizard creates a letter template which enables you to create multiple letters with the same layout and settings.";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 49
 {
-    Text [ de ] = "Um einen weiteren Brief mit dieser Dokumentvorlage zu erstellen, gehen Sie zur Dokumentvorlage und doppelklicken darauf.";
     Text [ en-US] = "To create another new letter out of the template just navigate to the template location and double-click it.";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 50
 {
-    Text [ de ] = "Name der Dokumentvorlage:";
     Text [ en-US] = "Template name:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 51
 {
-    Text [ de ] = "Speicherort und Dateiname:";
     Text [ en-US] = "Location and file name:";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 52
 {
-    Text [ de ] = "Wie möchten Sie fortfahren?";
     Text [ en-US] = "How do you want to proceed?";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 53
 {
-    Text [ de ] = "Bitte wählen Sie den Typ und das Seitendesign des Briefs";
     Text [ en-US] = "Please choose the type of letter and page design";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 54
 {
-    Text [ de ] = "Wählen Sie die Elemente, die gedruckt werden sollen";
     Text [ en-US] = "Select the items to be printed";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 55
 {
-    Text [ de ] = "Bitte legen Sie fest, welche Elemente bereits auf Ihrem Briefpapier sind";
     Text [ en-US] = "Specify items already on your letterhead paper";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 56
 {
-    Text [ de ] = "Legen Sie Absender- und Empfängerdaten fest";
     Text [ en-US] = "Specify the sender and recipient information";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 57
 {
-    Text [ de ] = "Füllen Sie die Infos ein, die in der Fußzeile zu sehen sein sollen";
     Text [ en-US] = "Fill in the information you would like in the footer";
 };
 
 String RID_LETTERWIZARDDIALOG_START + 58
 {
-    Text [ de ] = "Bitte legen Sie letzte Einstellungen fest";
     Text [ en-US] = "Please specify last settings";
 };
 
 //====================== Letter Wizard Greeting Start
 String RID_LETTERWIZARDSALUTATION_START + 1
 {
-    Text [ de ] = "Sehr geehrte Damen und Herren";
     Text [ en-US] = "To Whom it May Concern";
 };
 
 String RID_LETTERWIZARDSALUTATION_START + 2
 {
-    Text [ de ] = "Meine lieben Damen und Herren";
     Text [ en-US] = "Dear Sir or Madam";
 };
 
 String RID_LETTERWIZARDSALUTATION_START + 3
 {
-    Text [ de ] = "Hallo";
     Text [ en-US] = "Hello";
 };
 
 //====================== Letter Wizard Greeting Start
 String RID_LETTERWIZARDGREETING_START + 1
 {
-    Text [ de ] = "Gruß";
     Text [ en-US] = "Sincerely";
 };
 
 String RID_LETTERWIZARDGREETING_START + 2
 {
-    Text [ de ] = "Mit freundlichen Grüßen";
     Text [ en-US] = "Best regards";
 };
 
 String RID_LETTERWIZARDGREETING_START + 3
 {
-    Text [ de ] = "Tschüß";
     Text [ en-US] = "Cheers";
 };
 
@@ -2368,37 +2008,31 @@ String RID_LETTERWIZARDGREETING_START + 3
 //====================== Letter Wizard Roadmap Start
 String RID_LETTERWIZARDROADMAP_START + 1
 {
-    Text [ de ] = "Seitendesign";
     Text [ en-US] = "Page design";
 };
 
 String RID_LETTERWIZARDROADMAP_START + 2
 {
-    Text [ de ] = "Briefpapier-Layout";
     Text [ en-US] = "Letterhead layout";
 };
 
 String RID_LETTERWIZARDROADMAP_START + 3
 {
-    Text [ de ] = "Gedruckte Elemente";
     Text [ en-US] = "Printed items";
 };
 
 String RID_LETTERWIZARDROADMAP_START + 4
 {
-    Text [ de ] = "Empfänger und Absender";
     Text [ en-US] = "Recipient and sender";
 };
 
 String RID_LETTERWIZARDROADMAP_START + 5
 {
-    Text [ de ] = "Fußzeile";
     Text [ en-US] = "Footer";
 };
 
 String RID_LETTERWIZARDROADMAP_START + 6
 {
-    Text [ de ] = "Name und Speicherort";
     Text [ en-US] = "Name and location";
 };
 
@@ -2412,285 +2046,238 @@ String RID_LETTERWIZARDROADMAP_START + 6
 
 String RID_FAXWIZARDDIALOG_START + 1
 {
-    Text [ de ] = "Fax-Assistent";
     Text [ en-US] = "Fax Wizard";
 };
 
 String RID_FAXWIZARDDIALOG_START + 2
 {
-    Text [ de ] = "Label9";
     Text [ en-US] = "Label9";
 };
 
 String RID_FAXWIZARDDIALOG_START + 3
 {
-    Text [ de ] = "Geschäftsfax";
     Text [ en-US] = "~Business Fax";
 };
 
 String RID_FAXWIZARDDIALOG_START + 4
 {
-    Text [ de ] = "Privates Fax";
     Text [ en-US] = "~Personal Fax";
 };
 
 String RID_FAXWIZARDDIALOG_START + 5
 {
-    Text [ de ] = "Logo";
     Text [ en-US] = "~Logo";
 };
 
 String RID_FAXWIZARDDIALOG_START + 6
 {
-    Text [ de ] = "Betreffzeile";
     Text [ en-US] = "S~ubject line";
 };
 
 String RID_FAXWIZARDDIALOG_START + 7
 {
-    Text [ de ] = "Briefanrede";
     Text [ en-US] = "S~alutation";
 };
 
 String RID_FAXWIZARDDIALOG_START + 8
 {
-    Text [ de ] = "Grußformel";
     Text [ en-US] = "~Complimentary close";
 };
 
 String RID_FAXWIZARDDIALOG_START + 9
 {
-    Text [ de ] = "Fußzeile";
     Text [ en-US] = "~Footer";
 };
 
 String RID_FAXWIZARDDIALOG_START + 10
 {
-    Text [ de ] = "Für Absenderadresse Benutzerdaten verwenden";
     Text [ en-US] = "~Use user data for return address";
 };
 
 String RID_FAXWIZARDDIALOG_START + 11
 {
-    Text [ de ] = "Neue Absenderadresse";
     Text [ en-US] = "~New return address";
 };
 
 String RID_FAXWIZARDDIALOG_START + 12
 {
-    Text [ de ] = "Meine Faxvorlage";
     Text [ en-US] = "My Fax Template";
 };
 
 String RID_FAXWIZARDDIALOG_START + 13
 {
-    Text [ de ] = "Ein Fax aus dieser Dokumentvorlage erstellen";
     Text [ en-US] = "Create a ~fax from this template";
 };
 
 String RID_FAXWIZARDDIALOG_START + 14
 {
-    Text [ de ] = "Manuell Veränderungen an der Dokumentvorlage vornehmen";
     Text [ en-US] = "Make ~manual changes to this fax template";
 };
 
 String RID_FAXWIZARDDIALOG_START + 15
 {
-    Text [ de ] = "Seitendesign";
     Text [ en-US] = "Page design";
 };
 
 String RID_FAXWIZARDDIALOG_START + 16
 {
-    Text [ de ] = "Seitendesign";
     Text [ en-US] = "Page design";
 };
 
 String RID_FAXWIZARDDIALOG_START + 17
 {
-    Text [ de ] = "Dieser Assistent hilft Ihnen, eine Dokumentvorlage für Faxe zu erstellen. Sie können die Dokumentvorlage als Basis verwenden, um dann so häufig wie erwünscht, Faxe zu erstellen.";
     Text [ en-US] = "This wizard helps you to create a fax template. The template can then be used to create a fax whenever needed.";
 };
 
 String RID_FAXWIZARDDIALOG_START + 18
 {
-    Text [ de ] = "Absenderadresse";
     Text [ en-US] = "Return address";
 };
 
 String RID_FAXWIZARDDIALOG_START + 19
 {
-    Text [ de ] = "Name:";
     Text [ en-US] = "Name:";
 };
 
 String RID_FAXWIZARDDIALOG_START + 20
 {
-    Text [ de ] = "Straße:";
     Text [ en-US] = "Street:";
 };
 
 String RID_FAXWIZARDDIALOG_START + 21
 {
-    Text [ de ] = "PLZ/Bundesland/Stadt:";
     Text [ en-US] = "ZIP code/State/City:";
 };
 
 String RID_FAXWIZARDDIALOG_START + 22
 {
-    Text [ de ] = "Fußzeile";
     Text [ en-US] = "Footer";
 };
 
 String RID_FAXWIZARDDIALOG_START + 23
 {
-    Text [ de ] = "Dieser Assistent erstellt eine Dokumentvorlage, die Sie vielfach verwenden können, um Faxe mit demselben Aussehen zu erstellen.";
     Text [ en-US] = "This wizard creates a fax template which enables you to create multiple faxes with the same layout and settings.";
 };
 
 String RID_FAXWIZARDDIALOG_START + 24
 {
-    Text [ de ] = "Um ein weiteres Fax mit dieser Dokumentvorlage zu erstellen, gehen Sie zum Speicherort der Dokumentvorlage und doppelklicken Sie auf die Datei.";
     Text [ en-US] = "To create another new fax out of the template, go to the location where you saved the template and double-click the file.";
 };
 
 String RID_FAXWIZARDDIALOG_START + 25
 {
-    Text [ de ] = "Name der Dokumentvorlage:";
     Text [ en-US] = "Template Name:";
 };
 
 String RID_FAXWIZARDDIALOG_START + 26
 {
-    Text [ de ] = "Speicherort und Dateiname:";
     Text [ en-US] = "Location and file name:";
 };
 
 String RID_FAXWIZARDDIALOG_START + 27
 {
-    Text [ de ] = "Wie möchten Sie fortfahren?";
     Text [ en-US] = "What do you want to do next?";
 };
 
 String RID_FAXWIZARDDIALOG_START + 28
 {
-    Text [ de ] = "Bitte wählen Sie den Typ und das Seitendesign des Faxes";
     Text [ en-US] = "Choose the type of fax and a page design";
 };
 
 String RID_FAXWIZARDDIALOG_START + 29
 {
-    Text [ de ] = "Wählen Sie die Bestandteile der Fax-Dokumentvorlage";
     Text [ en-US] = "Select items to include in the fax template";
 };
 
 String RID_FAXWIZARDDIALOG_START + 30
 {
-    Text [ de ] = "Legen Sie Absender- und Empfängerdaten fest";
     Text [ en-US] = "Specify sender and recipient information";
 };
 
 String RID_FAXWIZARDDIALOG_START + 31
 {
-    Text [ de ] = "Geben Sie den Text für die Fußzeile ein";
     Text [ en-US] = "Enter text for the footer";
 };
 
 String RID_FAXWIZARDDIALOG_START + 32
 {
-    Text [ de ] = "Bitte geben Sie der Dokumentvorlage einen Namen und speichern Sie sie ab";
     Text [ en-US] = "Choose a name and save the template";
 };
 
 String RID_FAXWIZARDDIALOG_START + 33
 {
-    Text [ de ] = "Nur auf der zweiten und folgenden Seiten einfügen";
     Text [ en-US] = "Include ~only on second and following pages";
 };
 
 String RID_FAXWIZARDDIALOG_START + 34
 {
-    Text [ de ] = "Seitenzahl einfügen";
     Text [ en-US] = "~Include page number";
 };
 
 String RID_FAXWIZARDDIALOG_START + 35
 {
-    Text [ de ] = "Datum";
     Text [ en-US] = "~Date";
 };
 
 String RID_FAXWIZARDDIALOG_START + 36
 {
-    Text [ de ] = "~Kommunikationsart";
     Text [ en-US] = "~Type of message";
 };
 
 String RID_FAXWIZARDDIALOG_START + 37
 {
-    Text [ de ] = "Faxnummer:";
     Text [ en-US] = "Fax Number:";
 };
 
 String RID_FAXWIZARDDIALOG_START + 38
 {
-    Text [ de ] = "Für Empfängeradresse Platzhalter verwenden";
     Text [ en-US] = "Use placeholders for ~recipient's address";
 };
 
 String RID_FAXWIZARDDIALOG_START + 39
 {
-    Text [ de ] = "Die Adressdatenbank für Serienbrief verwenden";
     Text [ en-US] = "Use address database for ~mail merge";
 };
 
 String RID_FAXWIZARDDIALOG_START + 40
 {
-    Text [ de ] = "Neue Absenderadresse";
     Text [ en-US] = "~New return address";
 };
 
 //====================== Fax Wizard Communication Start
 String RID_FAXWIZARDCOMMUNICATION_START + 1
 {
-    Text [ de ] = "Wichtige Information!";
     Text [ en-US] = "Important Information!";
 };
 
 String RID_FAXWIZARDCOMMUNICATION_START + 2
 {
-    Text [ de ] = "Zur Kenntnis";
     Text [ en-US] = "For your information";
 };
 
 String RID_FAXWIZARDCOMMUNICATION_START + 3
 {
-    Text [ de ] = "Neuigkeiten!";
     Text [ en-US] = "News!";
 };
 
 //====================== Fax Wizard Salutation Start
 String RID_FAXWIZARDSALUTATION_START + 1
 {
-    Text [ de ] = "Sehr geehrte Damen und Herren,";
     Text [ en-US] = "To whom it may concern,";
 };
 
 String RID_FAXWIZARDSALUTATION_START + 2
 {
-    Text [ de ] = "Liebe Kollegen,";
     Text [ en-US] = "Dear Sir or Madam,";
 };
 
 String RID_FAXWIZARDSALUTATION_START + 3
 {
-    Text [ de ] = "Hallo,";
     Text [ en-US] = "Hello,";
 };
 
 String RID_FAXWIZARDSALUTATION_START + 4
 {
-    Text [ de ] = "Guten Tag,";
     Text [ en-US] = "Hi,";
 };
 
@@ -2698,25 +2285,21 @@ String RID_FAXWIZARDSALUTATION_START + 4
 //====================== Fax Wizard Greeting Start
 String RID_FAXWIZARDGREETING_START + 1
 {
-    Text [ de ] = "Viele Grüße";
     Text [ en-US] = "Sincerely";
 };
 
 String RID_FAXWIZARDGREETING_START + 2
 {
-    Text [ de ] = "Mit freundlichen Grüßen";
     Text [ en-US] = "Yours faithfully";
 };
 
 String RID_FAXWIZARDGREETING_START + 3
 {
-    Text [ de ] = "Alles Gute";
     Text [ en-US] = "Regards";
 };
 
 String RID_FAXWIZARDGREETING_START + 4
 {
-    Text [ de ] = "Liebe Grüße";
     Text [ en-US] = "Love";
 };
 
@@ -2724,31 +2307,26 @@ String RID_FAXWIZARDGREETING_START + 4
 //====================== Fax Wizard Roadmap Start
 String RID_FAXWIZARDROADMAP_START + 1
 {
-    Text [ de ] = "Seitendesign";
     Text [ en-US] = "Page design";
 };
 
 String RID_FAXWIZARDROADMAP_START + 2
 {
-    Text [ de ] = "Bestandteile";
     Text [ en-US] = "Items to include";
 };
 
 String RID_FAXWIZARDROADMAP_START + 3
 {
-    Text [ de ] = "Absender und Empfänger";
     Text [ en-US] = "Sender and Recipient";
 };
 
 String RID_FAXWIZARDROADMAP_START + 4
 {
-    Text [ de ] = "Fußzeile";
     Text [ en-US] = "Footer";
 };
 
 String RID_FAXWIZARDROADMAP_START + 5
 {
-    Text [ de ] = "Name und Speicherort";
     Text [ en-US] = "Name and location";
 };
 
@@ -2765,778 +2343,649 @@ String RID_FAXWIZARDROADMAP_START + 5
 String RID_WEBWIZARDDIALOG_START +1
 {
     Text [ en-US  ] = "Web Wizard";
-    Text [ de ] = "Web-Assistent";
 };
 
 String RID_WEBWIZARDDIALOG_START +2
 {
     Text [ en-US  ] = "This Web Wizard is to aid you in publishing documents on the Internet.\n\nIt will convert the documents so that they can be viewed by a web browser. In addition, it will generate a Table of Contents page with links for easy access to the documents. The Web Wizard will also allow you to customize the design and layout of your web site.\n\nYou will be able to keep the documents you have published on the web up-to-date and add or remove documents at any time.";
-    Text [ de ] = "Der Web-Assistent hilft Ihnen Dokumente im Internet zu publizieren. \n\nIhre Dokumente werden so konvertiert, dass sie in einem Internet-Browser angezeigt werden können. Weiterhin wird ein Inhaltsverzeichnis erstellt, das Verknüpfungen auf Ihre einzelnen Dokumente enthält und einen einfachen Zugriff auf diese ermöglicht.\n\nDer Web-Assistent gibt Ihnen weiterhin die Möglichkeit, das Layout und Design der Webseite zu ändern.\n\nSie werden jederzeit in der Lage sein, die Dokumente, die Sie im Internet veröffentlicht haben, zu pflegen und auf Stand zu halten sowie Dokumente hinzuzufügen oder zu entfernen.";
 };
 
 String RID_WEBWIZARDDIALOG_START +4
 {
     Text [ en-US  ] = "~Delete";
-    Text [ de ] = "~Löschen";
 };
 
 String RID_WEBWIZARDDIALOG_START +5
 {
     Text [ en-US  ] = "Introduction";
-    Text [ de ] = "Einleitung";
 };
 
 String RID_WEBWIZARDDIALOG_START +6
 {
     Text [ en-US  ] = "Select the documents you want to publish";
-    Text [ de ] = "Wählen Sie die Dokumente aus, die Sie veröffentlichen wollen";
 };
 
 String RID_WEBWIZARDDIALOG_START +8
 {
     Text [ en-US  ] = "Document information ";
-    Text [ de ] = "Dokumentinformation";
 };
 
 String RID_WEBWIZARDDIALOG_START +9
 {
     Text [ en-US  ] = "~Title:";
-    Text [ de ] = "~Titel:";
 };
 
 String RID_WEBWIZARDDIALOG_START +10
 {
     Text [ en-US  ] = "~Summary: ";
-    Text [ de ] = "~Zusammenfassung: ";
 };
 
 String RID_WEBWIZARDDIALOG_START +11
 {
     Text [ en-US  ] = "Au~thor:";
-    Text [ de ] = "Au~tor:";
 };
 
 String RID_WEBWIZARDDIALOG_START +12
 {
     Text [ en-US  ] = "~Export to file format:";
-    Text [ de ] = "~Exportieren im Dateiformat:";
 };
 
 String RID_WEBWIZARDDIALOG_START +13
 {
     Text [ en-US  ] = "Enter general information for your web site";
-    Text [ de ] = "Geben Sie allgemeine Informationen über Ihre Webseite ein";
 };
 
 String RID_WEBWIZARDDIALOG_START +14
 {
     Text [ en-US  ] = "Title:";
-    Text [ de ] = "~Titel:";
 };
 
 String RID_WEBWIZARDDIALOG_START +16
 {
     Text [ en-US  ] = "Description:";
-    Text [ de ] = "~Beschreibung:";
 };
 
 String RID_WEBWIZARDDIALOG_START +18
 {
     Text [ en-US  ] = "Created:";
-    Text [ de ] = "Erstellt am:";
 };
 
 String RID_WEBWIZARDDIALOG_START +20
 {
     Text [ en-US  ] = "E-mail:";
-    Text [ de ] = "~E-Mail:";
 };
 
 String RID_WEBWIZARDDIALOG_START +21
 {
     Text [ en-US  ] = "Copyright notice:";
-    Text [ de ] = "Co~pyright-Hinweis:";
 };
 
 String RID_WEBWIZARDDIALOG_START +22
 {
     Text [ en-US  ] = "Modified:";
-    Text [ de ] = "Geändert am:";
 };
 
 
 String RID_WEBWIZARDDIALOG_START +24
 {
     Text [ en-US  ] = "~Preview";
-    Text [ de ] = "~Vorschau";
 };
 
 String RID_WEBWIZARDDIALOG_START +25
 {
     Text [ en-US  ] = "Where do you want to publish your web site?";
-    Text [ de ] = "Wo wollen Sie ihre Webseite veröffentlichen?";
 };
 
 String RID_WEBWIZARDDIALOG_START +26
 {
     Text [ en-US  ] = "Publish the new web site:";
-    Text [ de ] = "Neue Webseite veröffentlichen:";
 };
 
 String RID_WEBWIZARDDIALOG_START +27
 {
     Text [ en-US  ] = "To a ~local folder";
-    Text [ de ] = "In einen ~lokalen Ordner";
 };
 
 String RID_WEBWIZARDDIALOG_START +28
 {
     Text [ en-US  ] = "...";
-    Text [ de ] = "...";
 };
 
 String RID_WEBWIZARDDIALOG_START +29
 {
     Text [ en-US  ] = "To a ~web server via FTP";
-    Text [ de ] = "Auf einen ~Webserver per FTP";
 };
 
 String RID_WEBWIZARDDIALOG_START +31
 {
     Text [ en-US  ] = "~Configure...";
-    Text [ de ] = "~Einstellen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +32
 {
     Text [ en-US  ] = "To a ZIP ~archive";
-    Text [ de ] = "In ein ~ZIP-Archiv";
 };
 
 String RID_WEBWIZARDDIALOG_START +33
 {
     Text [ en-US  ] = "...";
-    Text [ de ] = "...";
 };
 
 String RID_WEBWIZARDDIALOG_START +34
 {
     Text [ en-US  ] = "~Save settings (recommended)";
-    Text [ de ] = "~Einstellungen speichern (empfohlen)";
 };
 
 String RID_WEBWIZARDDIALOG_START +35
 {
     Text [ en-US  ] = "Save ~as:";
-    Text [ de ] = "Speichern ~als:";
 };
 
 String RID_WEBWIZARDDIALOG_START +36
 {
     Text [ en-US  ] = "~Choose settings for the Web Wizard";
-    Text [ de ] = "Wählen Sie die ~Einstellungen für den Web-Assistenten aus";
 };
 
 String RID_WEBWIZARDDIALOG_START +37
 {
     Text [ en-US  ] = "Web site content ";
-    Text [ de ] = "Webseite-Inhalt";
 };
 
 String RID_WEBWIZARDDIALOG_START +38
 {
     Text [ en-US  ] = "~Add...";
-    Text [ de ] = "~Hinzufügen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +39
 {
     Text [ en-US  ] = "Remo~ve";
-    Text [ de ] = "Entfer~nen";
 };
 
 String RID_WEBWIZARDDIALOG_START +40
 {
     Text [ en-US  ] = "Choose a layout for the table of contents of your web site";
-    Text [ de ] = "Wählen Sie ein Layout für das Inhaltsverzeichnis Ihrer Webseite";
 };
 
 String RID_WEBWIZARDDIALOG_START +41
 {
     Text [ en-US  ] = "Select a style for the table of contents page";
-    Text [ de ] = "Wählen Sie eine Formatvorlage für die Seite mit dem Inhaltsverzeichnis";
 };
 
 String RID_WEBWIZARDDIALOG_START +42
 {
     Text [ en-US  ] = "~Style:";
-    Text [ de ] = "~Formatvorlage:";
 };
 
 String RID_WEBWIZARDDIALOG_START +48
 {
     Text [ en-US  ] = "~Layouts: ";
-    Text [ de ] = "~Layouts: ";
 };
 
 String RID_WEBWIZARDDIALOG_START +50
 {
     Text [ en-US  ] = "~Description";
-    Text [ de ] = "~Beschreibung";
 };
 
 String RID_WEBWIZARDDIALOG_START +51
 {
     Text [ en-US  ] = "~Author";
-    Text [ de ] = "~Autor";
 };
 
 String RID_WEBWIZARDDIALOG_START +52
 {
     Text [ en-US  ] = "Cr~eation date";
-    Text [ de ] = "~Erstellungsdatum";
 };
 
 String RID_WEBWIZARDDIALOG_START +53
 {
     Text [ en-US  ] = "~Last change date";
-    Text [ de ] = "Datum der letzten ~Änderung";
 };
 
 String RID_WEBWIZARDDIALOG_START +54
 {
     Text [ en-US  ] = "~File name";
-    Text [ de ] = "~Dateiname";
 };
 
 String RID_WEBWIZARDDIALOG_START +55
 {
     Text [ en-US  ] = "File forma~t";
-    Text [ de ] = "Datei~format";
 };
 
 String RID_WEBWIZARDDIALOG_START +56
 {
     Text [ en-US  ] = "File format ~icon";
-    Text [ de ] = "Dateiformatsymbol";
 };
 
 String RID_WEBWIZARDDIALOG_START +57
 {
     Text [ en-US  ] = "Number ~of pages";
-    Text [ de ] = "Seitenanzahl";
 };
 
 String RID_WEBWIZARDDIALOG_START +58
 {
     Text [ en-US  ] = "~Size in KB";
-    Text [ de ] = "~Größe in KB";
 };
 
 String RID_WEBWIZARDDIALOG_START +59
 {
     Text [ en-US  ] = "Click 'Preview' to see a preview in your browser:";
-    Text [ de ] = "Klicken Sie auf 'Vorschau', um eine Vorschau in Ihrem Browser zu sehen:";
 };
 
 String RID_WEBWIZARDDIALOG_START +60
 {
     Text [ en-US  ] = "Customize the selected layout";
-    Text [ de ] = "Anpassen des selektierten Layouts";
 };
 
 String RID_WEBWIZARDDIALOG_START +61
 {
     Text [ en-US  ] = "Include the following information for each document in the table of contents:";
-    Text [ de ] = "Folgende Elemente in dem Inhaltsverzeichnis eines Dokumentes anzeigen:";
 };
 
 String RID_WEBWIZARDDIALOG_START +62
 {
     Text [ en-US  ] = "Optimize the layout for screen resolution:";
-    Text [ de ] = "Layout für Bildschirmauflösung optimieren:";
 };
 
 String RID_WEBWIZARDDIALOG_START +64
 {
     Text [ en-US  ] = "~640x480";
-    Text [ de ] = "~640x480";
 };
 
 String RID_WEBWIZARDDIALOG_START +65
 {
     Text [ en-US  ] = "~800x600";
-    Text [ de ] = "~800x600";
 };
 
 String RID_WEBWIZARDDIALOG_START +66
 {
     Text [ en-US  ] = "~1024x768";
-    Text [ de ] = "~1024x768";
 };
 
 String RID_WEBWIZARDDIALOG_START +70
 {
     Text [ en-US  ] = "Generating Your Web Site";
-    Text [ de ] = "Ihre Webseite wird erzeugt";
 };
 
 String RID_WEBWIZARDDIALOG_START +71
 {
     Text [ en-US  ] = "%START - %END/%TOTAL";
-    Text [ de ] = "%START - %END/%TOTAL";
 };
 
 String RID_WEBWIZARDDIALOG_START +72
 {
     Text [ en-US  ] = "myWebsite";
-    Text [ de ] = "meineWebseite";
 };
 
 String RID_WEBWIZARDDIALOG_START +73
 {
     Text [ en-US  ] = "FTP target '%FILENAME' is a file.";
-    Text [ de ] = "Das FTP Ziel '%FILENAME' ist eine Datei.";
 };
 
 
 String RID_WEBWIZARDDIALOG_START +74
 {
     Text [ en-US  ] = "The local target '%FILENAME' is a file.";
-    Text [ de ] = "Das lokale Ziel '%FILENAME' ist eine Datei.";
 };
 
 String RID_WEBWIZARDDIALOG_START +75
 {
     Text [ en-US  ] = "The ZIP target '%FILENAME' already exists. Do you want to overwrite the existing target? ";
-    Text [ de ] = "Das ZIP-Ziel '%FILENAME' existiert bereits. Möchten Sie es Überschreiben?";
 };
 
 String RID_WEBWIZARDDIALOG_START +76
 {
     Text [ en-US  ] = "The FTP target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?";
-    Text [ de ] = "Das FTP-Zielverzeichnis '%FILENAME' ist nicht leer. Einige Dateien können überschrieben werden. Möchten Sie fortfahren?";
 };
 
 String RID_WEBWIZARDDIALOG_START +77
 {
     Text [ en-US  ] = "The local target directory '%FILENAME' is not empty. Some files might be overwritten. Do you want to continue?";
-    Text [ de ] = "Das lokale Verzeichnis '%FILENAME' ist nicht leer. Einige Dateien können überschrieben werden. Möchten Sie fortfahren?";
 };
 
 String RID_WEBWIZARDDIALOG_START +78
 {
     Text [ en-US  ] = "Settings already exist under the given name. Do you want to overwrite the existing settings? ";
-    Text [ de ] = "Einstellungen mit diesem Namen existieren bereits. Möchten Sie diese Überschreiben?";
 };
 
 String RID_WEBWIZARDDIALOG_START +79
 {
     Text [ en-US  ] = "Exporting documents...";
-    Text [ de ] = "Dokumente werden exportiert...";
 };
 
 String RID_WEBWIZARDDIALOG_START +80
 {
     Text [ en-US  ] = "Preparing export...";
-    Text [ de ] = "Export word vorbereitet...";
 };
 
 String RID_WEBWIZARDDIALOG_START +81
 {
     Text [ en-US  ] = "Copying layout files...";
-    Text [ de ] = "Layout Dateien werden kopiert...";
 };
 
 String RID_WEBWIZARDDIALOG_START +82
 {
     Text [ en-US  ] = "Preparing table of contents generation...";
-    Text [ de ] = "Inhaltsverzeichnis-Erzeugung wird vorbereitet...";
 };
 
 String RID_WEBWIZARDDIALOG_START +83
 {
     Text [ en-US  ] = "Generating table of contents...";
-    Text [ de ] = "Das Inhaltsverzeichnis wird generiert...";
 };
 
 String RID_WEBWIZARDDIALOG_START +84
 {
     Text [ en-US  ] = "Initializing...";
-    Text [ de ] = "Initialisieren...";
 };
 
 String RID_WEBWIZARDDIALOG_START +86
 {
     Text [ en-US  ] = "Preparing to publish...";
-    Text [ de ] = "Veröffentlichung vorbereiten...";
 };
 
 String RID_WEBWIZARDDIALOG_START +87
 {
     Text [ en-US  ] = "Publishing to local directory...";
-    Text [ de ] = "In lokales Verzeichnis veröffentlichen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +88
 {
     Text [ en-US  ] = "Publishing to FTP destination...";
-    Text [ de ] = "Veröffentlichen per FTP...";
 };
 
 String RID_WEBWIZARDDIALOG_START +89
 {
     Text [ en-US  ] = "Publishing to a ZIP archive...";
-    Text [ de ] = "In ein ZIP-Archiv veröffentlichen...";
 };
 
 String RID_WEBWIZARDDIALOG_START + 90
 {
     Text [ en-US  ] = "Finishing...";
-    Text [ de ] = "Fertig stellen...";
 };
 
 String RID_WEBWIZARDDIALOG_START + 94
 {
     Text [ en-US  ] = "Graphic files";
-    Text [ de ] = "Grafikdateien";
 };
 
 String RID_WEBWIZARDDIALOG_START + 95
 {
     Text [ en-US  ] = "All files";
-    Text [ de ] = "Alle Dateien";
 };
 
 String RID_WEBWIZARDDIALOG_START + 96
 {
     Text [ en-US  ] = "~ZIP archive files";
-    Text [ de ] = "~ZIP-Archiv Dateien";
 };
 
 String RID_WEBWIZARDDIALOG_START + 98
 {
     Text [ en-US  ] = "Background images";
-    Text [ de ] = "Hintergrundbilder";
 };
 
 String RID_WEBWIZARDDIALOG_START + 99
 {
     Text [ en-US  ] = "Choose a background image: ";
-    Text [ de ] = "Wählen Sie ein Hintergrundbild:";
 };
 
 String RID_WEBWIZARDDIALOG_START + 100
 {
     Text [ en-US  ] = "Icon sets";
-    Text [ de ] = "Symbolsätze";
 };
 
 String RID_WEBWIZARDDIALOG_START + 101
 {
     Text [ en-US  ] = "Choose an icon set:";
-    Text [ de ] = "Wählen Sie einen Symbolsatz:";
 };
 
 String RID_WEBWIZARDDIALOG_START +102
 {
     Text [ en-US  ] = "Other...";
-    Text [ de ] = "~Andere...";
 };
 
 String RID_WEBWIZARDDIALOG_START +103
 {
     Text [ en-US  ] = "None";
-    Text [ de ] = "~Keine";
 };
 
 String RID_WEBWIZARDDIALOG_START +104
 {
     Text [ en-US  ] = "Your web site was created successfully into: %FILENAME";
-    Text [ de ] = "Ihre Webseite wurde erfolgreich erstellt in: %FILENAME";
 };
 
 String RID_WEBWIZARDDIALOG_START +105
 {
     Text [ en-US  ] = "One or more errors occurred when generating the web site.";
-    Text [ de ] = "Einer oder mehrere Fehler traten beim Generieren der Webseite auf. ";
 };
 
 String RID_WEBWIZARDDIALOG_START +106
 {
     Text [ en-US  ] = "An error occurred while generating the table of contents page(s). ";
-    Text [ de ] = "Ein Fehler ist beim Erzeugen des Inhaltsverzeichnises aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +107
 {
     Text [ en-US  ] = "An error occurred while copying the layout files. ";
-    Text [ de ] = "Ein Fehler ist beim Kopieren der Layoutdateien aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +108
 {
     Text [ en-US  ] = "An error occurred while gathering document information for '%FILENAME'. ";
-    Text [ de ] = "Ein Fehler ist beim Zusammenstellen der Dokumentinfo für '%FILENAME' aufgetreten. ";
 };
 
 String RID_WEBWIZARDDIALOG_START +109
 {
     Text [ en-US  ] = "An error occurred while exporting the document '%FILENAME'.";
-    Text [ de ] = "Ein Fehler ist beim Exportieren des Dokumentes '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +110
 {
     Text [ en-US  ] = "An error occurred while creating a directory for exporting '%FILENAME'.";
-    Text [ de ] = "Ein Fehler ist beim Erzeugen des Exportverzeichnisses '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +111
 {
     Text [ en-US  ] = "A security error acoccurred while exporting the document '%FILENAME'.";
-    Text [ de ] = "Eine Sicherheitsverletzung ist beim Exportieren des Dokuments '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +112
 {
     Text [ en-US  ] = "An input/output error occurred while exporting the document '%FILENAME'.";
-    Text [ de ] = "Ein/Ausgabe-Fehler ist beim Exportieren des Dokuments '%FILENAME' aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +113
 {
     Text [ en-US  ] = "An error occurred while copying media files to the temporary directory.";
-    Text [ de ] = "Ein Fehler ist beim Kopieren der Dateien ins temporäre Verzeichnis aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +114
 {
     Text [ en-US  ] = "The web site could not be copied to the following destination: %URL";
-    Text [ de ] = "Ein Fehler ist beim Kopieren der Webseite an folgende Stelle aufgetreten: %URL";
 };
 
 String RID_WEBWIZARDDIALOG_START +115
 {
     Text [ en-US  ] = "An unexpected error occurred: %ERROR";
-    Text [ de ] = "Ein unerwarteter Fehler ist aufgetreten: %ERROR";
 };
 
 String RID_WEBWIZARDDIALOG_START +116
 {
     Text [ en-US  ] = "An unexpected error occurred while validating the file: '%FILENAME'";
-    Text [ de ] = "Ein unerwarteter Fehler ist beim Überprüfen folgender Datei aufgetreten: '%FILENAME'";
 };
 
 String RID_WEBWIZARDDIALOG_START +117
 {
     Text [ en-US  ] = "%FILENAME' is a folder.";
-    Text [ de ] = "%FILENAME' ist ein Ordner.";
 };
 
 String RID_WEBWIZARDDIALOG_START +118
 {
     Text [ en-US  ] = "Loading Web Wizard Settings...";
-    Text [ de ] = "Einstellungen des Web-Assistenten werden geladen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +119
 {
     Text [ en-US  ] = "An unexpected error occurred.";
-    Text [ de ] = "Ein unerwarteter Fehler ist aufgetreten.";
 };
 
 String RID_WEBWIZARDDIALOG_START +120
 {
     Text [ en-US  ] = "Validating documents...";
-    Text [ de ] = "Dokumente überprüfen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +121
 {
     Text [ en-US  ] = "My Archive";
-    Text [ de ] = "Mein Archive";
 };
 
 String RID_WEBWIZARDDIALOG_START +122
 {
     Text [ en-US  ] = "Introduction ";
-    Text [ de ] = "Einleitung";
 };
 
 String RID_WEBWIZARDDIALOG_START +123
 {
     Text [ en-US  ] = "Documents ";
-    Text [ de ] = "Dokumente";
 };
 
 String RID_WEBWIZARDDIALOG_START +124
 {
     Text [ en-US  ] = "Main layout";
-    Text [ de ] = "Hauptlayout";
 };
 
 String RID_WEBWIZARDDIALOG_START +125
 {
     Text [ en-US  ] = "Layout details";
-    Text [ de ] = "Layoutdetails";
 };
 
 String RID_WEBWIZARDDIALOG_START +126
 {
     Text [ en-US  ] = "Style";
-    Text [ de ] = "Formatvorlage";
 };
 
 String RID_WEBWIZARDDIALOG_START +127
 {
     Text [ en-US  ] = "Web site information";
-    Text [ de ] = "Informationen zur Webseite";
 };
 
 String RID_WEBWIZARDDIALOG_START +128
 {
     Text [ en-US  ] = "Preview";
-    Text [ de ] = "Vorschau";
 };
 
 String RID_WEBWIZARDDIALOG_START +130
 {
     Text [ en-US  ] = "The selected settings will be deleted.\n\nDo you really want to delete these settings? ";
-    Text [ de ] = "Die ausgewählten Einstellungen werden gelöscht.\n\nMöchten Sie diese Einstellungen wirklich löschen?";
 };
 
 String RID_WEBWIZARDDIALOG_START +131
 {
     Text [ en-US  ] = "%NUMBER pages";
-    Text [ de ] = "%NUMBER Seiten";
 };
 
 String RID_WEBWIZARDDIALOG_START +132
 {
     Text [ en-US  ] = "%NUMBER slides";
-    Text [ de ] = "%NUMBER Folien";
 };
 
 String RID_WEBWIZARDDIALOG_START +133
 {
     Text [ en-US  ] = "Created: %DATE";
-    Text [ de ] = "Erstellt am: %DATE";
 };
 
 String RID_WEBWIZARDDIALOG_START +134
 {
     Text [ en-US  ] = "Last modified: %DATE";
-    Text [ de ] = "Letzte Änderung: %DATE";
 };
 
 String RID_WEBWIZARDDIALOG_START +135
 {
     Text [ en-US  ] = "Web Wizard Settings";
-    Text [ de ] = "Web-Assistent Einstellungen";
 };
 
 String RID_WEBWIZARDDIALOG_START +136
 {
     Text [ en-US  ] = "Background image:";
-    Text [ de ] = "Hintergrundgrafik:";
 };
 
 String RID_WEBWIZARDDIALOG_START +137
 {
     Text [ en-US  ] = "Icon set:";
-    Text [ de ] = "Symbolsatz:";
 };
 
 String RID_WEBWIZARDDIALOG_START +138
 {
     Text [ en-US  ] = "The icon set is used for presentations in HTML format.";
-    Text [ de ] = "Der Symbolsatz wird für Präsentationen im HTML-Format verwendet.";
 };
 
 String RID_WEBWIZARDDIALOG_START +139
 {
     Text [ en-US  ] = "HTML Metadata";
-    Text [ de ] = "HTML-Metadaten";
 };
 
 String RID_WEBWIZARDDIALOG_START +140
 {
     Text [ en-US  ] = "Choose...";
-    Text [ de ] = "Auswählen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +141
 {
     Text [ en-US  ] = "Choose...";
-    Text [ de ] = "Auswählen...";
 };
 
 String RID_WEBWIZARDDIALOG_START +142
 {
     Text [ en-US  ] = "<default>";
-    Text [ de ] = "<standard>";
 };
 
 String RID_WEBWIZARDDIALOG_START +143
 {
     Text [ en-US  ] = "Publishing via FTP Proxy is not supported.";
-    Text [ de ] = "Veröffentlichung über einen FTP-Proxy wird nicht unterstützt.";
 };
 
 String RID_WEBWIZARDDIALOG_START +144
 {
     Text [ en-US  ] = "<no background image>";
-    Text [ de ] = "<keine Hintergrundgrafik>";
 };
 
 String RID_WEBWIZARDDIALOG_START +145
 {
     Text [ en-US  ] = "<no icon set>";
-    Text [ de ] = "<kein Symbolsatz>";
 };
 
 String RID_WEBWIZARDDIALOG_START +146
 {
     Text [ en-US  ] = "The FTP directory '%FILENAME' could not be created.";
-    Text [ de ] = "Das FTP-Verzeichnis '%FILENAME' konnte nicht erstellt werden.";
 };
 
 String RID_WEBWIZARDDIALOG_START +147
 {
     Text [ en-US  ] = "The FTP directory '%FILENAME' does not exist. \nCreate the directory now?";
-    Text [ de ] = "Das FTP-Verzeichnis '%FILENAME' existiert nicht. \nSoll das Verzeichnis erstellt werden?";
 };
 
 String RID_WEBWIZARDDIALOG_START +148
 {
     Text [ en-US  ] = "The Zip file '%FILENAME' cannot be created: a directory of the same name already exists.";
-    Text [ de ] = "Die Zip-Datei '%FILENAME' kann nicht erstellt werden: Ein Verzeichnis mit dem gleichen Namen existiert bereits.";
 };
 
 String RID_WEBWIZARDDIALOG_START +149
 {
     Text [ en-US  ] = "The local directory '%FILENAME' cannot be created. \nPlease check your write-access.";
-    Text [ de ] = "Das lokale verzeichnis '%FILENAME' kann nicht erstellt werden.\nÜberprüffen Sie bitte Ihre Schreibrechte.";
 };
 
 String RID_WEBWIZARDDIALOG_START +150
 {
     Text [ en-US  ] = "The local directory '%FILENAME' does not exist. \nCreate the directory now?";
-    Text [ de ] = "Das lokale Verzeichnis '%FILENAME' existiert nicht. Soll das Verzeichnis erstellt werden?";
 };
 
 String RID_WEBWIZARDDIALOG_START +151
 {
     Text [ en-US  ] = "Size: %NUMBERKB";
-    Text [ de ] = "Größe: %NUMBERKB";
 };
 
 
 String RID_WEBWIZARDDIALOG_START +152
 {
     Text [ en-US  ] = "File not found. Would you like to specify a new file location?";
-    Text [ de ] = "Die Datei wurde nicht gefunden. Möchten Sie einen neuen Speicherort definieren?";
 };
 
 
@@ -3551,115 +3000,96 @@ String RID_WEBWIZARDDIALOG_START +152
 String RID_WEBWIZARDDIALOG_FTP +0
 {
     Text [ en-US  ] = "FTP Connection";
-    Text [ de ] = "FTP-Verbindung";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +1
 {
     Text [ en-US  ] = "~User name:";
-    Text [ de ] = "~Benutzername:";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +2
 {
     Text [ en-US  ] = "~Password:";
-    Text [ de ] = "~Kennwort:";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +3
 {
     Text [ en-US  ] = "Connect";
-    Text [ de ] = "Verbinden";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +4
 {
     Text [ en-US  ] = "1. Enter FTP connection information.";
-    Text [ de ] = "1. Geben Sie FTP-Verbindungsinformation ein.";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +5
 {
     Text [ en-US  ] = "~Server name or IP address:";
-    Text [ de ] = "~Servername oder IP Adresse:";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +6
 {
     Text [ en-US  ] = "2. Connect to the server.";
-    Text [ de ] = "2. Stellen Sie eine Verbindung zum Server her.";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +7
 {
     Text [ en-US  ] = "3. ~Choose a remote directory (optional).";
-    Text [ de ] = "3. ~Wählen Sie ein Verzeichnis auf dem Server aus (optional).";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +8
 {
     Text [ en-US  ] = "...";
-    Text [ de ] = "...";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +9
 {
     Text [ en-US  ] = "Connection status is unknown";
-    Text [ de ] = "Verbindungsstatus ist unbekannt";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +10
 {
     Text [ en-US  ] = "Connection was established successfully";
-    Text [ de ] = "Verbindung wurde erfolgreich hergestellt";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +11
 {
     Text [ en-US  ] = "Username or password is wrong";
-    Text [ de ] = "Benutzername oder Kennwort ist falsch";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +12
 {
     Text [ en-US  ] = "Could not resolve server name";
-    Text [ de ] = "Servername kann nicht aufgelöst werden";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +13
 {
     Text [ en-US  ] = "You do not have sufficient user rights";
-    Text [ de ] = "Sie haben keine ausreichende Zugangsrechte.";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +14
 {
     Text [ en-US  ] = "Cannot connect to server";
-    Text [ de ] = "Server nicht erreichbar";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +15
 {
     Text [ en-US  ] = "Unexpected error";
-    Text [ de ] = "Unerwarteter Fehler";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +16
 {
     Text [ en-US  ] = "FTP publishing directory";
-    Text [ de ] = "FTP-Veröffentlichungsverzeichnis";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +17
 {
     Text [ en-US  ] = "This is not an FTP folder";
-    Text [ de ] = "Dies ist kein FTP-Ordner";
 };
 
 String RID_WEBWIZARDDIALOG_FTP +18
 {
     Text [ en-US  ] = "Connecting...";
-    Text [ de ] = "Die Verbindung wird hergestellt...";
 };
 
 
@@ -3672,414 +3102,345 @@ String RID_WEBWIZARDDIALOG_FTP +18
 String RID_AGENDAWIZARDDIALOG_START +1
 {
     Text [en-US ] = "Agenda Wizard";
-    Text [ de ] = "Tagesordnungsassistent";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +2
 {
     Text [en-US ] = "Make ~manual changes to this agenda template";
-    Text [ de ] = "Eigene Veränderungen an der Dokumentvorlage vornehmen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +3
 {
     Text [en-US ] = "Template name:";
-    Text [ de ] = "Name der Dokumentvorlage:";
 };
 
 String RID_AGENDAWIZARDDIALOG_START + 4
 {
     Text [en-US ] = "Location and file name:";
-    Text [ de ] = "Ordner und Dateiname:";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +5
 {
     Text [en-US ] = "What do you want to do next?";
-    Text [ de ] = "Was möchten Sie als Nächstes tun?";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +6
 {
     Text [en-US ] = "Please choose the page design for the agenda";
-    Text [ de ] = "Bitte wählen Sie das Seitendesign der Tagesordnung";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +7
 {
     Text [en-US ] = "Please select the headings you wish to include in your agenda template";
-    Text [ de ] = "Bitte wählen Sie die Überschriften aus, die die Tagesordnung beinhalten soll";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +8
 {
     Text [en-US ] = "Please enter general information for the event";
-    Text [ de ] = "Bitte tragen Sie allgemeine Informationen über das Ereignis ein";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +9
 {
     Text [en-US ] = "Please specify items for the agenda";
-    Text [ de ] = "Bitte tragen Sie die Tagesordnungspunkte ein";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +10
 {
     Text [en-US ] = "Please select the names you wish to include in your agenda template";
-    Text [ de ] = "Bitte wählen Sie die Namen aus, die die Tagesordnung beinhalten soll";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +11
 {
     Text [en-US ] = "Choose a name and save the template";
-    Text [ de ] = "Bitte vergeben Sie einen Namen für die Dokumentvorlage und speichern Sie sie ab";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +12
 {
     Text [en-US ] = "Include form for recording minutes";
-    Text [ de ] = "Formular für Protokollbericht einfügen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +13
 {
     Text [en-US ] = "This wizard helps you to create an agenda template. The template can then be used to create an agenda whenever needed.";
-    Text [ de ] = "Dieser Assistent hilft Ihnen eine Dokumentvorlage für Tagesordnungen zu erstellen. Diese Vorlage kann als Basis für Tagesordnungen, wann immer benötigt, benutzt werden.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +14
 {
     Text [en-US ] = "Time:";
-    Text [ de ] = "Uhrzeit:";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +15
 {
     Text [en-US ] = "Name:";
-    Text [ de ] = "Name:";
 };
 
 String RID_AGENDAWIZARDDIALOG_START + 16
 {
     Text [en-US ] = "Location:";
-    Text [ de ] = "Ort:";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +17
 {
     Text [en-US ] = "Placeholders will be used in empty fields. You can replace placeholders with text later.";
-    Text [ de ] = "Für leere Felder werden Platzhalter verwendet. Sie können sie später durch Text ersetzen.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +18
 {
     Text [en-US ] = "...";
-    Text [ de ] = "...";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +19
 {
     Text [en-US ] = "Create an ~agenda from this template";
-    Text [ de ] = "Eine Tagesordnung aus dieser Dokumentvorlage erstellen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +20
 {
     Text [en-US ] = "To create a new agenda out of the template, go to the location where you saved the template and double-click the file.";
-    Text [ de ] = "Um eine neue Tagesordnung mit dieser Dokumentvorlage zu erstellen, wechseln Sie in den Ordner, in dem sich die Dokumentvorlage befindet und doppelklicken Sie auf die Datei.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +21
 {
     Text [en-US ] = "Agenda item";
-    Text [ de ] = "Tagesordnungspunkt";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +22
 {
     Text [en-US ] = "Responsible";
-    Text [ de ] = "Verantwortlich";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +23
 {
     Text [en-US ] = "Duration";
-    Text [ de ] = "Dauer";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +24
 {
     Text [en-US ] = "Meeting called by";
-    Text [ de ] = "Einberufen von ";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +25
 {
     Text [en-US ] = "Chairperson";
-    Text [ de ] = "Vorsitz";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +26
 {
     Text [en-US ] = "Minute keeper";
-    Text [ de ] = "Protokollführer";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +27
 {
     Text [en-US ] = "Moderator";
-    Text [ de ] = "Moderator";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +28
 {
     Text [en-US ] = "Attendees";
-    Text [ de ] = "Teilnehmer";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +29
 {
     Text [en-US ] = "Observers";
-    Text [ de ] = "Beobachter";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +30
 {
     Text [en-US ] = "Facility personnel";
-    Text [ de ] = "Fachpersonal";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +31
 {
     Text [en-US ] = "The agenda template will include placeholders for the names of the selected people. When creating an agenda from the template, you can replace these placeholder with the appropriate names.";
-    Text [ de ] = "Die Vorlage wird Platzhalter für alle ausgewählten Namen beinhalten. Beim Erstellen einer Tagesordnung von der Vorlage, können sie die Platzhalter durch entsprechende Namen ersetzen ";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +32
 {
     Text [en-US ] = "Type of meeting";
-    Text [ de ] = "Art der Besprechung";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +33
 {
     Text [en-US ] = "Please read";
-    Text [ de ] = "Bitte lesen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +34
 {
     Text [en-US ] = "Please bring";
-    Text [ de ] = "Bitte mitbringen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +35
 {
     Text [en-US ] = "Notes";
-    Text [ de ] = "Notizen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +36
 {
     Text [en-US ] = "The agenda template will include placeholders for the selected items.";
-    Text [ de ] = "Die Vorlage wird Platzhalter für alle ausgewählten Punkte erstellen.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +38
 {
     Text [en-US ] = "Date:";
-    Text [ de ] = "Datum:";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +39
 {
     Text [en-US ] = "This wizard creates an agenda template which enables you to create multiple agendas with the same layout and settings.";
-    Text [ de ] = "Dieser Assistent erstellt eine Dokumentvorlage. Sie können Sie verwenden, um mehrere Tagesordnungen mit demselben Layout zu erstellen.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +40
 {
     Text [en-US ] = "Page design:";
-    Text [ de ] = "Seitendesign:";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +41
 {
     Text [en-US ] = "myAgendaTemplate.stw";
-    Text [ de ] = "meineTagesordnungsVorlage.stw";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +42
 {
     Text [en-US ] = "My Agenda Template";
-    Text [ de ] = "Meine Tagesordnungsvorlage";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +43
 {
     Text [en-US ] = "An unexpected error occurred while saving the agenda template.";
-    Text [ de ] = "Es ist ein unerwarteter Fehler beim Speichern aufgetreten.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +44
 {
     Text [en-US ] = "Name";
-    Text [ de ] = "Name";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +45
 {
     Text [en-US ] = "Date";
-    Text [ de ] = "Datum";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +46
 {
     Text [en-US ] = "Time";
-    Text [ de ] = "Uhrzeit";
 };
 
 String RID_AGENDAWIZARDDIALOG_START + 47
 {
     Text [en-US ] = "Location";
-    Text [ de ] = "Ort";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +48
 {
     Text [en-US ] = "Click to replace this text";
-    Text [ de ] = "Anklicken, um Text zu ersetzen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +50
 {
     Text [en-US ] = "Page design";
-    Text [ de ] = "Seitendesign";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +51
 {
     Text [en-US ] = "General information";
-    Text [ de ] = "Allgemeine Informationen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +52
 {
     Text [en-US ] = "Headings to include";
-    Text [ de ] = "Bestandteile";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +53
 {
     Text [en-US ] = "Names";
-    Text [ de ] = "Namen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +54
 {
     Text [en-US ] = "Agenda items";
-    Text [ de ] = "Tagesordnungspunkte";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +55
 {
     Text [en-US ] = "Name and location";
-    Text [ de ] = "Name und Ordnert";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +56
 {
     Text [en-US ] = "An unexpected error occurred while opening the agenda template.";
-    Text [ de ] = "Es ist ein unerwarteter Fehler beim Öffnen der Tagesordnungsvorlage aufgetreten.";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +57
 {
     Text [en-US ] = "Type of meeting";
-    Text [ de ] = "Art der Besprechung";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +58
 {
     Text [en-US ] = "Please bring";
-    Text [ de ] = "Bitte mitbringen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +59
 {
     Text [en-US ] = "Please read";
-    Text [ de ] = "Bitte lesen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +60
 {
     Text [en-US ] = "Notes";
-    Text [ de ] = "Notizen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +61
 {
     Text [en-US ] = "Meeting called by";
-    Text [ de ] = "Einberufen von";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +62
 {
     Text [en-US ] = "Chairperson";
-    Text [ de ] = "Vorsitz";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +63
 {
     Text [en-US ] = "Attendees";
-    Text [ de ] = "Teilnehmer";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +64
 {
     Text [en-US ] = "Minute keeper";
-    Text [ de ] = "Protokollführer";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +65
 {
     Text [en-US ] = "Moderator";
-    Text [ de ] = "Moderator";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +66
 {
     Text [en-US ] = "Observers";
-    Text [ de ] = "Beobachter";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +67
 {
     Text [en-US ] = "Facility personnel";
-    Text [ de ] = "Fachpersonal";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +68
 {
     Text [en-US ] = "Insert";
-    Text [ de ] = "Hinzufügen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +69
 {
     Text [en-US ] = "Remove";
-    Text [ de ] = "Entfernen";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +70
 {
     Text [en-US ] = "Move up";
-    Text [ de ] = "Nach oben";
 };
 
 String RID_AGENDAWIZARDDIALOG_START +71
 {
     Text [en-US ] = "Move down";
-    Text [ de ] = "Nach unten";
 };
 
