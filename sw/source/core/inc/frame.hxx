@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:44:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:13:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -740,7 +740,7 @@ public:
     SwRect &Frm() { return aFrm; }
     SwRect &Prt() { return aPrt; }
 
-    virtual void ChgSize( const Size& aNewSize );
+    virtual Size ChgSize( const Size& aNewSize );
 
     virtual void Cut() = 0;
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 ) = 0;
