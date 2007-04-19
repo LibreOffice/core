@@ -4,9 +4,9 @@
  *
  *  $RCSfile: vectdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:38:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ ModalDialog DLG_VECTORIZE
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    Text [ de ] = "In Polygon umwandeln" ;
     Text [ en-US ] = "Convert to Polygon" ;
 
     OKButton BTN_OK
@@ -82,27 +81,21 @@ ModalDialog DLG_VECTORIZE
         Pos = MAP_APPFONT ( 144 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Vorschau" ;
         Text [ en-US ] = "Preview" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedLine GRP_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Einstellungen" ;
         Text [ en-US ] = "Settings" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_LAYERS
     {
         Pos = MAP_APPFONT ( 12 , 14 );
         Size = MAP_APPFONT ( 79 , 12 );
-        Text [ de ] = "~Farbanzahl:";
         Text [ en-US ] = "Number of colors:";
-        Text [ x-comment ] = " ";
     };
 
     NumericField NM_LAYERS
@@ -125,9 +118,7 @@ ModalDialog DLG_VECTORIZE
     {
         Pos = MAP_APPFONT ( 12 , 29 );
         Size = MAP_APPFONT ( 79 , 12 );
-        Text [ de ] = "~Punkt-Reduktion:";
         Text [ en-US ] = "Point reduction:";
-        Text [ x-comment ] = " ";
     };
 
     MetricField MT_REDUCE
@@ -153,18 +144,14 @@ ModalDialog DLG_VECTORIZE
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 79 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Löcher füllen";
         Text [ en-US ] = "~Fill holes:";
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_FILLHOLES
     {
         Pos = MAP_APPFONT ( 12 , 59 );
         Size = MAP_APPFONT ( 79 , 12 );
-        Text [ de ] = "~Kachelgröße:";
         Text [ en-US ] = "Tile size:";
-        Text [ x-comment ] = " ";
     };
 
     MetricField MT_FILLHOLES
@@ -189,9 +176,7 @@ ModalDialog DLG_VECTORIZE
     {
         Pos = MAP_APPFONT ( 6 , 87 );
         Size = MAP_APPFONT ( 92 , 12 );
-        Text [ de ] = "Originalbild:";
         Text [ en-US ] = "Source picture:";
-        Text [ x-comment ] = " ";
     };
 
     Control CTL_BMP
@@ -205,9 +190,7 @@ ModalDialog DLG_VECTORIZE
     {
         Pos = MAP_APPFONT ( 101 , 87 );
         Size = MAP_APPFONT ( 92 , 12 );
-        Text [ de ] = "Vektorisiertes Bild:";
         Text [ en-US ] = "Vectorized image:";
-        Text [ x-comment ] = " ";
     };
 
     Control CTL_WMF
@@ -221,9 +204,7 @@ ModalDialog DLG_VECTORIZE
     {
         Pos = MAP_APPFONT ( 6, 204 );
         Size = MAP_APPFONT( 188, 8 );
-        Text [ de ] = "Fortschritt";
         Text [ en-US ] = "Progress";
-        Text [ x-comment ] = " ";
     };
 
     Window WND_PRGS
@@ -233,7 +214,6 @@ ModalDialog DLG_VECTORIZE
         Pos = MAP_APPFONT ( 6, 215 ) ;
         Size = MAP_APPFONT ( 188, 10 ) ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
