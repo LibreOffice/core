@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inpdlg.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:44:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:10:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,14 +43,12 @@ ModalDialog DLG_FLD_INPUT
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 194 , 119 ) ;
-    Text [ de ] = "Eingabefeld" ;
     Text [ en-US ] = "Input Field" ;
     Moveable = TRUE ;
     /*    FixedText FT_LABEL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 115 , 8 ) ;
-        Text [ de ] = "Eingabe" ;
         Text [ en-US ] = "Input" ;
         Left = TRUE ;
     };*/
@@ -61,10 +59,8 @@ ModalDialog DLG_FLD_INPUT
         Size = MAP_APPFONT ( 115 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
-        Text [ de ] = "Eingabe" ;
         Text [ en-US ] = "Input" ;
         Readonly = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit ED_EDIT
     {
@@ -78,9 +74,7 @@ ModalDialog DLG_FLD_INPUT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 127 , 8 ) ;
-        Text [ de ] = "Bearbeiten" ;
         Text [ en-US ] = "Edit" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BT_OK
     {
@@ -101,9 +95,7 @@ ModalDialog DLG_FLD_INPUT
         Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Weiter" ;
         Text [ en-US ] = "~Next" ;
-        Text [ x-comment ] = " ";
     };
     HelpButton PB_HELP
     {
@@ -111,7 +103,6 @@ ModalDialog DLG_FLD_INPUT
         Size = MAP_APPFONT ( 50 , 15 ) ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
