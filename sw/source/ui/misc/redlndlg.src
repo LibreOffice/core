@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:10:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:22:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -61,19 +61,15 @@ ModelessDialog DLG_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_ACCEPT ;
     /* ### ACHTUNG: Neuer Text in Resource? �nderungen akzeptieren oder verwerfen : Redlining */
-    Text [ de ] = "Änderungen akzeptieren oder verwerfen" ;
     Text [ en-US ] = "Accept or Reject Changes" ;
     REDLNDLG
-    Text [ x-comment ] = " ";
 };
 
 ModalDialog DLG_MOD_REDLINE_ACCEPT
 {
     HelpID = HID_REDLINE_AUTOFMT_ACCEPT ;
-    Text [ de ] = "AutoFormat: Änderungen akzeptieren oder verwerfen" ;
     REDLNDLG
     Text [ en-US ] = "Accept or Reject AutoFormat Changes";
-    Text [ x-comment ] = " ";
 };
 
 Menu MN_REDLINE_POPUP
@@ -84,14 +80,11 @@ Menu MN_REDLINE_POPUP
         {
             Identifier = MN_EDIT_COMMENT ;
             HelpID = HID_EDIT_COMMENT ;
-            Text [ de ] = "Kommentar bearbeiten..." ;
             Text [ en-US ] = "Edit Comment..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_SUB_SORT ;
-            Text [ de ] = "Sortiere" ;
             RadioCheck = TRUE ;
             SubMenu = Menu
             {
@@ -101,51 +94,40 @@ Menu MN_REDLINE_POPUP
                     {
                         Identifier = MN_SORT_ACTION ;
                         HelpID = HID_SORT_ACTION ;
-                        Text [ de ] = "Aktion" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Action" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_AUTHOR ;
                         HelpID = HID_SORT_AUTHOR ;
-                        Text [ de ] = "Autor" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Author" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_DATE ;
                         HelpID = HID_SORT_DATE ;
-                        Text [ de ] = "Datum" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Date" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_COMMENT ;
                         HelpID = HID_SORT_COMMENT ;
-                        Text [ de ] = "Beschreibung" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Comment" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_SORT_POSITION ;
                         HelpID = HID_SW_SORT_POSITION ;
-                        Text [ de ] = "Dokumentposition" ;
                         RadioCheck = TRUE ;
                         Text [ en-US ] = "Document position" ;
-                        Text [ x-comment ] = " ";
                     };
                 };
             };
             Text [ en-US ] = "Sort By" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
