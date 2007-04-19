@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updateinstalldialog.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:25:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:39:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@ ModalDialog RID_DLG_UPDATEINSTALL {
          RSC_SP_FLGR_SPACE_Y + RSC_CD_FIXEDLINE_HEIGHT +
          RSC_SP_FLGR_SPACE_Y + RSC_CD_PUSHBUTTON_HEIGHT +
          RSC_SP_DLG_INNERBORDER_BOTTOM));
-    Text[de] = "Herunterladen und Installieren";
     Text[en-US] = "Download and Installation";
     Moveable = TRUE;
     Closeable = TRUE;
@@ -63,7 +62,6 @@ ModalDialog RID_DLG_UPDATEINSTALL {
         Pos = MAP_APPFONT(
             RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP);
         Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT);
-        Text[de] = "Herunterladen der Extensions...";
         Text[en-US] = "Downloading extensions...";
         NoLabel = TRUE;
     };
@@ -84,7 +82,6 @@ ModalDialog RID_DLG_UPDATEINSTALL {
             RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT  +
               RSC_SP_CTRL_DESC_Y + RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_DESC_Y);
         Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT);
-        Text[de] = "";
         Text[en-US] = "";
         NoLabel = TRUE;
     };
@@ -97,7 +94,6 @@ ModalDialog RID_DLG_UPDATEINSTALL {
             RSC_SP_CTRL_DESC_Y + RSC_CD_FIXEDTEXT_HEIGHT +
             RSC_SP_CTRL_Y);
         Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT);
-        Text[de] = "Ergebnis";
         Text[en-US] = "Result";
     };
 
@@ -145,7 +141,6 @@ ModalDialog RID_DLG_UPDATEINSTALL {
 
 
         Size = MAP_APPFONT(RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
-        Text[de] = "OK";
         Text[en-US] = "OK";
     };
 
@@ -161,7 +156,6 @@ ModalDialog RID_DLG_UPDATEINSTALL {
             RSC_SP_FLGR_SPACE_Y);
 
         Size = MAP_APPFONT(LOCAL_BUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
-        Text[de] = "~Update abbrechen";
         Text[en-US] = "~Abort Update";
         DefButton = TRUE;
     };
@@ -181,43 +175,35 @@ ModalDialog RID_DLG_UPDATEINSTALL {
 
 
     String RID_DLG_UPDATE_INSTALL_INSTALLING {
-        Text[de] = "Installieren der Extensions...";
         Text[en-US] = "Installing extensions...";
     };
 
     String RID_DLG_UPDATE_INSTALL_FINISHED {
-        Text[de] = "Installation beendet";
         Text[en-US] = "Installation finished";
     };
 
     String RID_DLG_UPDATE_INSTALL_NO_ERRORS {
-        Text[de] = "Es sind keine Fehler aufgetreten.";
         Text[en-US] = "No errors.";
     };
 
     String RID_DLG_UPDATE_INSTALL_ERROR_DOWNLOAD {
-        Text[de] = "Ein Fehler ist während des Herunterladens der Extension %NAME aufgetreten. ";
         Text[en-US] = "Error while downloading extension %NAME. ";
     };
 
     String RID_DLG_UPDATE_INSTALL_THIS_ERROR_OCCURRED {
-        Text[de] = "Die Fehlermeldung ist: ";
         Text[en-US] = "The error message is: ";
     };
 
 
     String RID_DLG_UPDATE_INSTALL_ERROR_INSTALLATION {
-        Text[de] = "Ein Fehler ist während der Installation der Extension %NAME aufgetreten. ";
         Text[en-US] = "Error while installing extension %NAME. ";
     };
 
     String RID_DLG_UPDATE_INSTALL_ERROR_LIC_DECLINED {
-        Text[de] = "Die Lizensvereinbarung für Extension %NAME wurde abgelehnt. ";
         Text[en-US] = "The license agreement for extension %NAME was refused. ";
     };
 
     String RID_DLG_UPDATE_INSTALL_EXTENSION_NOINSTALL{
-        Text[de] = "Die Extension wird nicht installiert.";
         Text[en-US] = "The extension will not be installed.";
     };
 
