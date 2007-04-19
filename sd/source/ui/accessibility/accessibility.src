@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:24:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:13:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,73 +41,61 @@
 
 String SID_SD_A11Y_D_DRAWVIEW_N
 {
-    Text [ de ] = "Zeichnungsansicht" ;
     Text [ en-US ] = "Drawing View";
 };
 
 String SID_SD_A11Y_D_DRAWVIEW_D
 {
-    Text [ de ] = "Hier können Sie Zeichnungen erzeugen und bearbeiten." ;
     Text [ en-US ] = "This is where you create and edit drawings.";
 };
 
 String SID_SD_A11Y_I_DRAWVIEW_N
 {
-    Text [ de ] = "Zeichnungsansicht" ;
     Text [ en-US ] = "Drawing View";
 };
 
 String SID_SD_A11Y_I_DRAWVIEW_D
 {
-    Text [ de ] = "Hier können Sie Seiten erzeugen und bearbeiten." ;
     Text [ en-US ] = "This is where you create and edit slides.";
 };
 
 String SID_SD_A11Y_I_OUTLINEVIEW_N
 {
-    Text [ de ] = "Gliederungsansicht" ;
     Text [ en-US ] = "Outline View";
 };
 
 String SID_SD_A11Y_I_OUTLINEVIEW_D
 {
-    Text [ de ] = "Hier können Sie Text in der Gliederungsansicht eingeben und bearbeiten." ;
     Text [ en-US ] = "This is where you enter or edit text in list form.";
 };
 
 String SID_SD_A11Y_I_SLIDEVIEW_N
 {
-    Text [ de ] = "Folienansicht" ;
     Text [ en-US ] = "Slides View";
 };
 
 String SID_SD_A11Y_I_SLIDEVIEW_D
 {
-    Text [ de ] = "Hier können Sie Seiten sortieren." ;
     Text [ en-US ] = "This is where you sort slides.";
 };
 
 String SID_SD_A11Y_I_NOTESVIEW_N
 {
-    Text [ de ] = "Notizansicht" ;
     Text [ en-US ] = "Notes View";
 };
 
 String SID_SD_A11Y_I_NOTESVIEW_D
 {
-    Text [ de ] = "Hier können Sie Notizen eingeben und bearbeiten." ;
     Text [ en-US ] = "This is where you enter and view notes.";
 };
 
 String SID_SD_A11Y_I_HANDOUTVIEW_N
 {
-    Text [ de ] = "Handzettelansicht" ;
     Text [ en-US ] = "Handout View";
 };
 
 String SID_SD_A11Y_I_HANDOUTVIEW_D
 {
-    Text [ de ] = "Hier können Sie das Layout der Handzettel bearbeiten." ;
     Text [ en-US ] = "This is where you decide on the layout for handouts.";
 };
 
