@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:57:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:29:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,6 +215,8 @@
 #include <comphelper/storagehelper.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <svtools/transfer.hxx>
+#include <svtools/ehdl.hxx>
+#include <svtools/sfxecode.hxx>
 #include <rtl/logfile.hxx>
 #include <framework/configimporter.hxx>
 #include <comphelper/enumhelper.hxx>
@@ -279,7 +281,6 @@
 #include "sfx.hrc"
 #endif
 
-#include <framework/interaction.hxx>
 
 #include "app.hxx"
 #include "topfrm.hxx"
@@ -2612,29 +2613,10 @@ void SAL_CALL SfxBaseModel::load(   const SEQUENCE< PROPERTYVALUE >& seqArgument
             if ( nError != ERRCODE_IO_BROKENPACKAGE && !bSilent )
             {
                 // broken package was handled already
-                if ( xHandler.is() )
+                if ( SfxObjectShell::UseInteractionToHandleError( xHandler, nError ) && !bWarning )
                 {
-                    ::com::sun::star::uno::Any aInteraction;
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(2);
-                    ::framework::ContinuationAbort* pAbort = new ::framework::ContinuationAbort();
-                    ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
-                    lContinuations[0] = ::com::sun::star::uno::Reference<
-                            ::com::sun::star::task::XInteractionContinuation >(static_cast<
-                            ::com::sun::star::task::XInteractionContinuation* >(pAbort),
-                            UNOQUERY);
-                    lContinuations[1] = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation >(static_cast< ::com::sun::star::task::XInteractionContinuation* >(pApprove), UNOQUERY);
-
-                    ::com::sun::star::task::ErrorCodeRequest aErrorCode;
-                    aErrorCode.ErrCode = nError;
-                    aInteraction <<= aErrorCode;
-
-                    ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
-                    ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionRequest > xRequest(static_cast< ::com::sun::star::task::XInteractionRequest* >(pRequest), UNOQUERY);
-
-                    xHandler->handle(xRequest);
-                    if ( pAbort->isSelected() && !bWarning )
-                        // abort loading (except for warnings)
-                        nError = ERRCODE_IO_ABORT;
+                    // abort loading (except for warnings)
+                       nError = ERRCODE_IO_ABORT;
                 }
             }
 
@@ -3461,6 +3443,9 @@ void SfxBaseModel::impl_store(  const   OUSTRING&                   sURL        
                 // must be a warning - use Interactionhandler if possible or abandone
                 if ( xHandler.is() )
                 {
+                    // TODO/LATER: a general way to set the error context should be available
+                    SfxErrorContext aEc( ERRCTX_SFX_SAVEASDOC, m_pData->m_pObjectShell->GetTitle() );
+
                     ::com::sun::star::uno::Any aInteraction;
                     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionContinuation > > lContinuations(1);
                     ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
