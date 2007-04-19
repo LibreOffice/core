@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alienwarn.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:23:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:08:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,12 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, INFO_TEXT_LINES*RSC_CD_FIXEDTEXT_HEIGHT );
         NoLabel = TRUE;
         Wordbreak = TRUE;
-        Text [ de ] = "Dieses Dokument beinhaltet unter Umständen Formatierungen oder Inhalte, die im %FORMATNAME Format nicht gespeichert werden können. Möchten Sie das Dokument trotzdem in diesem Format speichern?\n\n- Klicken Sie auf 'Ja', um im %FORMATNAME Format zu speichern.\n- Klicken Sie auf 'Nein', um im OpenDocument Standarddateiformat zu speichern und dabei Formatierungen und Inhalte sicher zu speichern.";
         Text [ en-US ] = "This document may contain formatting or content that cannot be saved in the %FORMATNAME file format. Do you want to save the document in this format anyway?\n\n- Click 'Yes' to save in %FORMATNAME file format.\n- Click 'No' to use the latest OpenDocument file format and be sure all formatting and content is saved correctly.";
     };
     OKButton PB_YES
     {
         Pos = MAP_APPFONT( AW_COL_2, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "~Ja";
         Text [ en-US ] = "~Yes";
     };
     CancelButton PB_NO
@@ -74,7 +72,6 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Pos = MAP_APPFONT( AW_COL_3, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         DefButton = TRUE ;
-        Text [ de ] = "~Nein";
         Text [ en-US ] = "~No";
     };
     HelpButton PB_MOREINFO
@@ -82,7 +79,6 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Pos = MAP_APPFONT( AW_COL_4, AW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
         DefButton = TRUE ;
-        Text [ de ] = "~Weitere Informationen...";
         Text [ en-US ] = "~More Information...";
     };
     FixedLine FL_OPTION
@@ -95,7 +91,6 @@ ModalDialog RID_DLG_ALIEN_WARNING
         Pos = MAP_APPFONT( AW_COL_2, AW_ROW_4 );
         Size = MAP_APPFONT( DIALOG_WIDTH-AW_COL_2-RSC_SP_DLG_INNERBORDER_RIGHT, RSC_CD_CHECKBOX_HEIGHT );
         WordBreak = TRUE ;
-        Text [ de ] = "Diese Warnung in Zukunft nicht mehr anzeigen";
         Text [ en-US ] = "Do not show this warning again";
     };
 };
