@@ -4,9 +4,9 @@
  *
  *  $RCSfile: consdlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:59:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:25:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 154 ) ;
-    Text [ de ] = "Konsolidieren" ;
     Text [ en-US ] = "Consolidate" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -51,20 +50,6 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Size = MAP_APPFONT ( 212 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN (Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "Varianzen (Grundgesamtheit)" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Sum" ; Default ; > ;
@@ -79,20 +64,6 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
             < "Var (sample)" ; Default ; > ;
             < "VarP (population)" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     Edit ED_DATA_AREA
     {
@@ -110,23 +81,17 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     };
     ImageButton RB_DATA_AREA
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 206 , 105 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton RB_DEST_AREA
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 206 , 134 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ListBox LB_DATA_AREA
     {
@@ -156,56 +121,45 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text [ de ] = "Be~rechnungsvorschrift" ;
         Text [ en-US ] = "~Function" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CONSAREAS
     {
         Pos = MAP_APPFONT ( 6 , 35 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text [ de ] = "~Konsolidierungsbereiche" ;
         Text [ en-US ] = "~Consolidation ranges" ;
     };
     FixedText FT_DATA_AREA
     {
         Pos = MAP_APPFONT ( 6 , 95 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text [ de ] = "Quelldaten~bereich" ;
         Text [ en-US ] = "~Source data range" ;
     };
     FixedText FT_DEST_AREA
     {
         Pos = MAP_APPFONT ( 6 , 124 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text [ de ] = "Er~gebnis ausgeben ab" ;
         Text [ en-US ] = "Copy results ~to" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_BYROW
     {
         Pos = MAP_APPFONT ( 12 , 165 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text [ de ] = "Ze~ilenbeschriftungen" ;
         Text [ en-US ] = "~Row labels" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_BYCOL
     {
         Pos = MAP_APPFONT ( 12 , 179 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "S~paltenbeschriftungen" ;
         Text [ en-US ] = "C~olumn labels" ;
     };
     FixedLine FL_CONSBY
     {
         Pos = MAP_APPFONT ( 6 , 154 ) ;
         Size = MAP_APPFONT ( 103 , 8 ) ;
-        Text [ de ] = "Konsolidieren nach" ;
         Text [ en-US ] = "Consolidate by" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SEP
     {
@@ -217,18 +171,14 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 115 , 154 ) ;
         Size = MAP_APPFONT ( 103 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_REFS
     {
         Pos = MAP_APPFONT ( 121 , 165 ) ;
         Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text [ de ] = "Mit Quelldaten ~verbinden" ;
         Text [ en-US ] = "~Link to source data" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -261,20 +211,15 @@ ModelessDialog RID_SCDLG_CONSOLIDATE
     {
         Pos = MAP_APPFONT ( 224 , 114 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 224 , 96 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hinzu~fügen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
