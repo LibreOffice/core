@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_gnome.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:28:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:24:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,9 +35,7 @@
 
 [STR_NAME_MODULE_OPTIONAL_GNOME]
 en-US = "GNOME Integration"
-de = "GNOME-Integration"
 
 [STR_DESC_MODULE_OPTIONAL_GNOME]
 en-US = "System integration of %PRODUCTNAME %PRODUCTVERSION into Gnome Desktop Environment."
-de = "Systemintegration von %PRODUCTNAME %PRODUCTVERSION in das Gnome Desktop Environment."
 
