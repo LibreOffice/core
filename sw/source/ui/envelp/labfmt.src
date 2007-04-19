@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:01:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:05:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,11 +63,9 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Horiz. Abstand" ;
         Text [ en-US ] = "Hori~zontal pitch" ;
         Group = TRUE ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_HDIST
     {
@@ -86,10 +84,8 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 35 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Vert. Abstand" ;
         Text [ en-US ] = "~Vertical pitch" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_VDIST
     {
@@ -108,10 +104,8 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 51 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_WIDTH
     {
@@ -130,10 +124,8 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 67 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "H~öhe" ;
         Text [ en-US ] = "~Height" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_HEIGHT
     {
@@ -152,10 +144,8 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 83 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Rand ~links" ;
         Text [ en-US ] = "~Left margin" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_LEFT
     {
@@ -176,10 +166,8 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 99 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Rand ~oben" ;
         Text [ en-US ] = "~Top margin" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_UPPER
     {
@@ -200,10 +188,8 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 115 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Spalten" ;
         Text [ en-US ] = "~Columns" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField FLD_COLUMNS
     {
@@ -221,10 +207,8 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 6 , 131 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Zeilen" ;
         Text [ en-US ] = "R~ows" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField FLD_ROWS
     {
@@ -242,58 +226,41 @@ TabPage TP_LAB_FMT
     {
         Pos = MAP_APPFONT ( 50 , 148 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Speichern..." ;
         Text [ en-US ] = "~Save...";
     };
 };
  // String *******************************************************************
 String STR_HDIST
 {
-    Text [ de ] = "H. Abstand" ;
     Text [ en-US ] = "H. Pitch" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VDIST
 {
-    Text [ de ] = "V. Abstand" ;
     Text [ en-US ] = "V. Pitch" ;
-    Text [ x-comment ] = " ";
 };
 String STR_WIDTH
 {
-    Text [ de ] = "Breite" ;
     Text [ en-US ] = "Width" ;
-    Text [ x-comment ] = " ";
 };
 String STR_HEIGHT
 {
-    Text [ de ] = "Höhe" ;
     Text [ en-US ] = "Height" ;
-    Text [ x-comment ] = " ";
 };
 String STR_LEFT
 {
-    Text [ de ] = "Rand links" ;
     Text [ en-US ] = "Left margin" ;
-    Text [ x-comment ] = " ";
 };
 String STR_UPPER
 {
-    Text [ de ] = "Rand oben" ;
     Text [ en-US ] = "Top margin" ;
-    Text [ x-comment ] = " ";
 };
 String STR_COLS
 {
-    Text [ de ] = "Spalten" ;
     Text [ en-US ] = "Columns" ;
-    Text [ x-comment ] = " ";
 };
 String STR_ROWS
 {
-    Text [ de ] = "Zeilen" ;
     Text [ en-US ] = "Rows" ;
-    Text [ x-comment ] = " ";
 };
 ModalDialog DLG_SAVE_LABEL
 {
@@ -301,16 +268,13 @@ ModalDialog DLG_SAVE_LABEL
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 230 , 60 ) ;
-    Text [ de ] = "Etikettenformat speichern" ;
     Moveable = TRUE ;
     FixedText FT_MAKE
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Marke" ;
         Text [ en-US ] = "Brand" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ComboBox CB_MAKE
     {
@@ -323,10 +287,8 @@ ModalDialog DLG_SAVE_LABEL
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Typ" ;
         Text [ en-US ] = "T~ype" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_TYPE
     {
@@ -338,7 +300,6 @@ ModalDialog DLG_SAVE_LABEL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 165 , 8 ) ;
-        Text [ de ] = "Optionen";
         Text [ en-US ] = "Options";
     };
     OKButton PB_OK
@@ -367,7 +328,6 @@ ModalDialog DLG_SAVE_LABEL
     {
         Buttons = WB_YES_NO ;
         DefButton = WB_DEF_CANCEL ;
-        Message [ de ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?" ;
         Message [ en-US ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
     };
     Text [ en-US ] = "Save Label Format";
