@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgolbul.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:31:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:24:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ TabDialog TAB_OUTLINEBULLET
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Nummerierung und Aufzählungszeichen" ;
     Text [ en-US ] = "Bullets and Numbering" ;
     Moveable = TRUE ;
     TabControl 1
@@ -51,37 +50,27 @@ TabDialog TAB_OUTLINEBULLET
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BULLET ;
-                Text [ de ] = "Bullets" ;
                 Text [ en-US ] = "Bullets" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_SINGLE_NUM ;
-                Text [ de ] = "Nummerierungsart" ;
                 Text [ en-US ] = "Numbering type" ;
-                Text [ x-comment ] = "; MS Word, KeyID23276";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BMP ;
-                Text [ de ] = "Grafiken" ;
                 Text [ en-US ] = "Graphics" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_POSITION ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_OPTIONS ;
-                Text [ de ] = "Optionen" ;
                 Text [ en-US ] = "Customize" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
