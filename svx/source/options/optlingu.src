@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:08:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:37:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,11 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     SVLook = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 299 , 175/*135*/ ) ;
-    Text [ de ] = "Module bearbeiten" ;
 
     OKButton PB_OK
     {
         Pos = MAP_APPFONT ( 246 , 6 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schließen" ;
         Text [ en-US ] = "Close";
     };
     HelpButton PB_HELP
@@ -67,7 +65,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 237 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options";
     };
     FixedText FT_EDIT_MODULES_LANGUAGE
@@ -75,7 +72,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
-        Text [ de ] = "~Sprache" ;
         Text [ en-US ] = "Language";
     };
     ListBox LB_EDIT_MODULES_LANGUAGE
@@ -98,7 +94,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Pos = MAP_APPFONT ( 187 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Prio +" ;
         Text [ en-US ] = "Move Up";
     };
     PushButton PB_EDIT_MODULES_PRIO_DOWN
@@ -106,7 +101,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Pos = MAP_APPFONT ( 187 , 49 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Prio -" ;
         Text [ en-US ] = "Move Down";
     };
     PushButton PB_EDIT_MODULES_PRIO_BACK
@@ -114,7 +108,6 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Pos = MAP_APPFONT ( 187 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Zurück" ;
         Text [ en-US ] = "~Back";
     };
 
@@ -128,17 +121,14 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
     };
     String ST_SPELL
     {
-        Text [ de ] = "Rechtschreibung";
         Text [ en-US ] = "Spelling";
     };
     String ST_HYPH
     {
-        Text [ de ] = "Silbentrennung" ;
         Text [ en-US ] = "Hyphenation";
     };
     String ST_THES
     {
-        Text [ de ] = "Thesaurus" ;
         Text [ en-US ] = "Thesaurus";
     };
     Text [ en-US ] = "Edit Modules";
@@ -152,7 +142,6 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     SVLook = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 155 , 43 ) ;
-    Text [ de ] = "Silbentrennung" ;
     Text [ en-US ] = "Hyphenation";
         FixedLine FL_NUMVAL_PREBREAK
     {
@@ -187,17 +176,14 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
     };
     String STR_NUM_PRE_BREAK_DLG
     {
-        Text [ de ] = "Zeichen vor Umbruch" ;
         Text [ en-US ] = "Characters before break";
     };
     String STR_NUM_POST_BREAK_DLG
     {
-        Text [ de ] = "Zeichen nach Umbruch" ;
         Text [ en-US ] = "Characters after break";
     };
     String STR_NUM_MIN_WORDLEN_DLG
     {
-        Text [ de ] = "Minimale Wortlänge" ;
         Text [ en-US ] = "Minimal word length";
     };
 };
@@ -214,7 +200,6 @@ TabPage RID_SFXPAGE_LINGU
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Linguistik" ;
         Text [ en-US ] = "Writing aids";
     };
     FixedText FT_LINGU_MODULES
@@ -222,7 +207,6 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text [ de ] = "~Verfügbare Sprachmodule" ;
         Text [ en-US ] = "Available language modules";
     };
     Control CLB_LINGU_MODULES
@@ -237,7 +221,6 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 25 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Bearbeiten..." ;
         Text [ en-US ] = "~Edit...";
     };
     FixedText FT_LINGU_DICS
@@ -245,7 +228,6 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text [ de ] = "Ben~utzerwörterbücher" ;
         Text [ en-US ] = "User-defined dictionaries";
     };
     Control CLB_LINGU_DICS
@@ -260,7 +242,6 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Neu..." ;
         Text [ en-US ] = "~New...";
     };
     PushButton PB_LINGU_DICS_EDIT_DIC
@@ -268,7 +249,6 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 87 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "B~earbeiten..." ;
         Text [ en-US ] = "Ed~it...";
     };
     PushButton PB_LINGU_DICS_DEL_DIC
@@ -276,7 +256,6 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Löschen" ;
         Text [ en-US ] = "~Delete";
     };
     FixedText FT_LINGU_OPTIONS
@@ -284,7 +263,6 @@ TabPage RID_SFXPAGE_LINGU
         Left = TRUE ;
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 175 , 8 ) ;
-        Text [ de ] = "~Optionen" ;
         Text [ en-US ] = "~Options";
     };
     Control CLB_LINGU_OPTIONS
@@ -299,73 +277,59 @@ TabPage RID_SFXPAGE_LINGU
         Pos = MAP_APPFONT ( 198 , 133 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Be~arbeiten..." ;
         Text [ en-US ] = "Edi~t...";
     };
 
     String STR_CAPITAL_WORDS
     {
-        Text [ de ] = "Großgeschriebene Wörter prüfen" ;
         Text [ en-US ] = "Check uppercase words";
     };
     String STR_WORDS_WITH_DIGITS
     {
-        Text [ de ] = "Wörter mit Ziffern prüfen" ;
         Text [ en-US ] = "Check words with numbers ";
     };
     String STR_CAPITALIZATION
     {
-        Text [ de ] = "Groß-/Kleinschreibung prüfen" ;
         Text [ en-US ] = "Check capitalization";
     };
     String STR_SPELL_SPECIAL
     {
-        Text [ de ] = "Sonderbereiche prüfen" ;
         Text [ en-US ] = "Check special regions";
     };
     String STR_ALL_LANGUAGES
     {
-        Text [ de ] = "In allen Sprachen prüfen" ;
         Text [ en-US ] = "Check in all languages";
     };
     String STR_SPELL_AUTO
     {
-        Text [ de ] = "Rechtschreibung während der Eingabe überprüfen" ;
         Text [ en-US ] = "Check spelling as you type";
     };
     String STR_HIDE_MARKINGS
     {
-        Text [ de ] = "Kennung ausblenden" ;
         Text [ en-US ] = "Do not mark errors";
     };
     String STR_OLD_GERMAN
     {
-        Text [ de ] = "Alte deutsche Rechtschreibung" ;
         Text [ en-US ] = "German spelling - old";
     };
     String STR_NUM_MIN_WORDLEN
     {
-        Text [ de ] = "Minimale Wortlänge für Silbentrennung: " ;
         Text [ en-US ] = "Minimal number of characters for hyphenation: ";
     };
     String STR_NUM_PRE_BREAK
     {
-        Text [ de ] = "Zeichen vor dem Zeilenumbruch: " ;
         Text [ en-US ] = "Characters before line break: ";
     };
     String STR_NUM_POST_BREAK
     {
-        Text [ de ] = "Zeichen nach dem Zeilenumbruch: " ;
         Text [ en-US ] = "Characters after line break: ";
     };
     String STR_HYPH_AUTO
     {
-        Text [ de ] = "Trennen ohne Nachfrage" ;
         Text [ en-US ] = "Hyphenate without inquiry";
     };
     String STR_HYPH_SPECIAL
     {
-        Text [ de ] = "Sonderbereiche trennen" ;
         Text [ en-US ] = "Hyphenate special regions";
     };
 
@@ -385,7 +349,6 @@ QueryBox RID_SFXQB_DELDICT
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Möchten Sie das Wörterbuch löschen?" ;
     Message [ en-US ] = "Do you want to delete the dictionary?" ;
 };
  // RID_SFXQB_DEL_IGNORELIST ----------------------------------------------
@@ -393,7 +356,6 @@ QueryBox RID_SFXQB_DEL_IGNORELIST
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Möchten Sie die Ignorieren-Liste löschen?" ;
     Message [ en-US ] = "Do you want to delete the ignore list?" ;
 };
  // ******************************************************************* EOF
