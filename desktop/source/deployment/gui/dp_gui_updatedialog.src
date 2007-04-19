@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_updatedialog.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:53:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ ModalDialog RID_DLG_UPDATE {
          RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y +
          RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y +
          RSC_CD_PUSHBUTTON_HEIGHT + RSC_SP_DLG_INNERBORDER_BOTTOM));
-    Text[de] = "Extension Update";
     Text[en-US] = "Extension Update";
     Moveable = TRUE;
     Closeable = TRUE;
@@ -64,7 +63,6 @@ ModalDialog RID_DLG_UPDATE {
             (LOCAL_WIDTH - LOCAL_WIDTH * 2 / 3 - RSC_SP_CTRL_DESC_X -
              RSC_CD_FIXEDTEXT_HEIGHT),
             RSC_CD_FIXEDTEXT_HEIGHT);
-        Text[de] = "Suche läuft...";
         Text[en-US] = "Checking...";
         Right = TRUE;
         NoLabel = TRUE;
@@ -81,7 +79,6 @@ ModalDialog RID_DLG_UPDATE {
             RSC_SP_DLG_INNERBORDER_LEFT, RSC_SP_DLG_INNERBORDER_TOP);
         Size = MAP_APPFONT(
             LOCAL_WIDTH * 2 / 3 - RSC_SP_CTRL_GROUP_X, RSC_CD_FIXEDTEXT_HEIGHT);
-        Text[de] = "~Verfügbare Extension-Updates";
         Text[en-US] = "~Available extension updates";
     };
     Control RID_DLG_UPDATE_UPDATES {
@@ -101,7 +98,6 @@ ModalDialog RID_DLG_UPDATE {
             (RSC_SP_DLG_INNERBORDER_TOP + RSC_CD_FIXEDTEXT_HEIGHT +
              RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y));
         Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_CHECKBOX_HEIGHT);
-        Text[de] = "~Zeige alle Updates";
         Text[en-US] = "~Show all updates";
     };
     FixedText RID_DLG_UPDATE_DESCRIPTION {
@@ -112,7 +108,6 @@ ModalDialog RID_DLG_UPDATE {
              RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_CTRL_GROUP_Y +
              RSC_CD_CHECKBOX_HEIGHT + RSC_SP_CTRL_Y));
         Size = MAP_APPFONT(LOCAL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT);
-        Text[de] = "~Beschreibung";
         Text[en-US] = "D~escription";
     };
     MultiLineEdit RID_DLG_UPDATE_DESCRIPTIONS {
@@ -158,7 +153,6 @@ ModalDialog RID_DLG_UPDATE {
              RSC_SP_CTRL_DESC_Y + LOCAL_LIST_HEIGHT + RSC_SP_FLGR_SPACE_Y +
              RSC_CD_FIXEDLINE_HEIGHT + RSC_SP_FLGR_SPACE_Y));
         Size = MAP_APPFONT(LOCAL_BUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT);
-        Text[de] = "Herunter~laden und Installieren";
         Text[en-US] = "~Download and Install";
         DefButton = TRUE;
     };
@@ -184,43 +178,33 @@ ModalDialog RID_DLG_UPDATE {
         };
     };
     String RID_DLG_UPDATE_ERROR {
-        Text[de] = "Fehler";
         Text[en-US] = "Error";
     };
     String RID_DLG_UPDATE_NONE {
-        Text[de] = "Es sind keine neuen Updates verfügbar.";
         Text[en-US] = "No new updates are available.";
     };
     String RID_DLG_UPDATE_NOINSTALLABLE {
-        Text[de] = "Es sind keine installierbaren Updates verfügbar. Um alle Updates angezeigt zu bekommen, wählen Sie 'Zeige alle Updates'.";
         Text[en-US] = "No installable updates are available. To see all updates, mark the check box 'Show all updates'.";
     };
     String RID_DLG_UPDATE_FAILURE {
-        Text[de] = "Es ist ein Fehler aufgetreten:";
         Text[en-US] = "An error occurred:";
     };
     String RID_DLG_UPDATE_UNKNOWNERROR {
-        Text[de] = "Unbekannter Fehler.";
         Text[en-US] = "Unknown error.";
     };
     String RID_DLG_UPDATE_NODESCRIPTION {
-        Text[de] = "Es ist keine Beschreibung für diese Extension verfügbar.";
         Text[en-US] = "No descriptions available for this extension.";
     };
     String RID_DLG_UPDATE_NOINSTALL {
-        Text[de] = "Die Extension kann nicht installiert werden wegen:";
         Text[en-US] = "The extension cannot be installed because:";
     };
     String RID_DLG_UPDATE_NODEPENDENCY {
-        Text[de] = "Inkompatibilität:";
         Text[en-US] = "Incompatibility:";
     };
     String RID_DLG_UPDATE_NOPERMISSION {
-        Text[de] = "Keine Schreibrechte (Shared Extension).";
         Text[en-US] = "No write permission (shared extension).";
     };
     String RID_DLG_UPDATE_NOUPDATE {
-        Text[de] = "Das Update muss manuell von der Webseite %URL heruntergeladen werden. Anschließend können Sie es im Extension Manager hinzufügen.";
         Text[en-US] = "The update must be downloaded from the website %URL. Then you can add the extension in the Extension Manager.";
     };
 };
