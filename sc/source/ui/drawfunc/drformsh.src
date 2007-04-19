@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:34:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:29:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,7 +56,6 @@
     {\
         Identifier = SID_RENAME_OBJECT ; \
         HelpId = SID_RENAME_OBJECT ; \
-        Text [ de ] = "Name..." ; \
         Text [ en-US ] = "Name...";\
     };
 
@@ -66,7 +65,6 @@
     {\
         Identifier = SID_TITLE_DESCRIPTION_OBJECT; \
         HelpId = SID_TITLE_DESCRIPTION_OBJECT; \
-        Text [ de ] = "Beschreibung..." ; \
         Text [ en-US ] = "Description...";\
     };
 
@@ -75,7 +73,6 @@
     {\
         Identifier = SUBMENU_OBJARRANGE ; \
         HelpID = HID_SCMENU_OBJARRANGE ; \
-        Text [ de ] = "~Anordnung" ; \
         Text [ en-US ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -90,7 +87,6 @@
                     Identifier = SID_FRAME_UP ; \
                     HelpId = SID_FRAME_UP ; \
                     /* ### ACHTUNG: Neuer Text in Resource? W~eiter nach vorn : Weiter nach vorn */\
-                    Text [ de ] = "W~eiter nach vorn" ; \
                     Text [ en-US ] = "Bring ~Forward" ; \
                 };\
                 MenuItem\
@@ -98,7 +94,6 @@
                     Identifier = SID_FRAME_DOWN ; \
                     HelpId = SID_FRAME_DOWN ; \
                     /* ### ACHTUNG: Neuer Text in Resource? Weiter ~nach hinten : Weiter nach hinten */\
-                    Text [ de ] = "Weiter ~nach hinten" ; \
                     Text [ en-US ] = "Send Back~ward" ; \
                 };\
                 MenuItem\
@@ -123,7 +118,6 @@
     {\
         Identifier = SUBMENU_ANCHOR ; \
         HelpID = HID_SCMENU_ANCHOR ; \
-        Text [ de ] = "~Verankerung" ; \
         Text [ en-US ] = "An~chor" ; \
         SubMenu = Menu\
         {\
@@ -133,14 +127,12 @@
                 {\
                     Identifier = SID_ANCHOR_PAGE ; \
                     HelpId = SID_ANCHOR_PAGE ; \
-                    Text [ de ] = "An der ~Seite" ; \
                     Text [ en-US ] = "To P~age" ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_ANCHOR_CELL ; \
                     HelpId = SID_ANCHOR_CELL ; \
-                    Text [ de ] = "An der ~Zelle" ; \
                     Text [ en-US ] = "To ~Cell" ; \
                 };\
             };\
@@ -152,7 +144,6 @@
     {\
         Identifier = SID_OBJECT_ALIGN ; \
         HelpId = SID_OBJECT_ALIGN ; \
-        Text [ de ] = "Aus~richtung" ; \
         Text [ en-US ] = "A~lignment" ; \
         SubMenu = Menu\
         {\
@@ -196,7 +187,6 @@
 String RID_POPUP_DRAWFORM
 {
     /* ### ACHTUNG: Neuer Text in Resource? Popup-Menü für Zeichenobjekte : Popup-Men³ f³r Zeichenobjekte */
-    Text [ de ] = "Popup-MenÃ¼ fÃ¼r Formularobjekte" ;
     Text [ en-US ] = "Popup menu for form objects";
 };
  //
