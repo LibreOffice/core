@@ -4,9 +4,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:33:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,7 +44,6 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Size = MAP_APPFONT ( 200 , 128 ) ;
     /* ### ACHTUNG: Neuer Text in Resource? Seiten/Objekte einf¸gen : Seiten/Objekte einf≥gen */
     Moveable = TRUE ;
-    Text [ de ] = "Seiten/Objekte einf√ºgen" ;
     Text [ en-US ] = "Insert Slides/Objects" ;
     OKButton BTN_OK
     {
@@ -75,22 +74,18 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     };
     CheckBox CBX_LINK
     {
-        Text [ de ] = "~Verkn√ºpfung" ;
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Link" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_CHECK_MASTERS
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 140 , 12 ) ;
-        Text [ de ] = "~Nicht verwendete Hintergrundseiten l√∂schen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Delete unused backg~rounds";
     };
-    Text [ x-comment ] = " ";
 };
 
 
