@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_ooo.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:40:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:32:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -34,27 +34,21 @@
  ************************************************************************/
  
 [STR_NAME_MODULE_ROOT_OSL]
-de = "%PRODUCTNAME %PRODUCTVERSION"
 en-US = "%PRODUCTNAME %PRODUCTVERSION"
 
 [STR_DESC_MODULE_ROOT_OSL]
-de = "%PRODUCTNAME %PRODUCTVERSION"
 en-US = "%PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_PRG]
-de = "%PRODUCTNAME Programmmodule"
 en-US = "%PRODUCTNAME Program Modules"
 
 [STR_DESC_MODULE_PRG]
-de = "Liste aller installierbaren %PRODUCTNAME Module."
 en-US = "List of all installable %PRODUCTNAME modules."
 
 [STR_NAME_MODULE_OPTIONAL]
-de = "Optionale Komponenten"
 en-US = "Optional Components"
 
 [STR_DESC_MODULE_OPTIONAL]
-de = "Gemeinsame Komponenten und Zusatzprogramme, die von allen %PRODUCTNAME-Programmen verwendet werden."
 en-US = "Common components and additional programs shared by all %PRODUCTNAME programs."
 
 
