@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-22 12:10:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:26:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,12 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Size = MAP_APPFONT ( 256 , 66 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
-    Text [ de ] = "Datei Importieren" ;
     Text [ en-US ] = "Import File" ;
     FixedText FT_FIELDSEP
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text [ de ] = "~Feldtrenner" ;
         Text [ en-US ] = "~Field delimiter" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox ED_FIELDSEP
     {
@@ -64,9 +61,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text [ de ] = "~Texttrenner" ;
         Text [ en-US ] = "~Text delimiter" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox ED_TEXTSEP
     {
@@ -78,9 +73,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text [ de ] = "~Zeichensatz" ;
         Text [ en-US ] = "~Character set" ;
-        Text [ x-comment ] = " ";
     };
     ListBox DDLB_FONT
     {
@@ -102,16 +95,13 @@ ModalDialog RID_SCDLG_IMPORTOPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 188 , 8 ) ;
-        Text [ de ] = "Feldoptionen" ;
         Text [ en-US ] = "Field options" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_FIXEDWIDTH
     {
         Pos = MAP_APPFONT( 12, 80 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
-        Text [ de ] = "Feste Spalten~breite";
         Text [ en-US ] = "Fixed column ~width";
     };
     CheckBox CB_SAVESHOWN
@@ -120,7 +110,6 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Size = MAP_APPFONT( 172, 10 );
         TabStop = TRUE;
         Hide = TRUE;
-        Text [ de ] = "Zellinhalt wie ~angezeigt";
         Text [ en-US ] = "Save cell content as ~shown";
     };
     OKButton BTN_OK
@@ -139,7 +128,6 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Pos = MAP_APPFONT ( 202 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
