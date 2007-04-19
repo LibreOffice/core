@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bib.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:03:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:42:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,24 +36,19 @@
 
 String RID_BIB_STR_FIELDSELECTION
 {
-    Text [ de ] = "Feldauswahl:" ;
     Text [ en-US ] = "Field selection:";
-    Text [ x-comment ] = " ";
 };
 
 String RID_BIB_STR_TABWIN_PREFIX
 {
-    Text [ de ] = "Tabelle;Abfrage;Sql;Sql [Native]" ;
     Text [ en-US ] = "Table;Query;Sql;Sql [Native]";
 };
 String RID_BIB_STR_FRAME_TITLE
 {
-    Text [ de ] = "Literaturdatenbank" ;
     Text [ en-US ] = "Bibliography Database";
 };
 String RID_MAP_QUESTION
 {
-    Text [ de ] = "Möchten Sie die Spaltenzuordnung bearbeiten?" ;
     Text [ en-US ] = "Do you want to edit the column arrangement?";
 };
 
