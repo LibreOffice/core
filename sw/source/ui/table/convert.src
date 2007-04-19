@@ -4,9 +4,9 @@
  *
  *  $RCSfile: convert.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:12:18 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:25:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ ModalDialog DLG_CONV_TEXT_TABLE
     HelpID = FN_CONVERT_TEXT_TABLE ;
     OUTPUTSIZE = TRUE ;
     Size = MAP_APPFONT ( 203 , 152 ) ;
-    Text [ de ] = "Tabelle in Text umwandeln" ;
     Text [ en-US ] = "Convert Table to Text" ;
     MOVEABLE = TRUE ;
     SVLOOK = TRUE ;
@@ -50,38 +49,30 @@ ModalDialog DLG_CONV_TEXT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Tabulator" ;
         Text [ en-US ] = "~Tabs" ;
         TABSTOP = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton CB_SEMI
     {
         Pos = MAP_APPFONT ( 75 , 17 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Semikolon" ;
         Text [ en-US ] = "~Semicolons" ;
         TABSTOP = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton CB_PARA
     {
         Pos = MAP_APPFONT ( 12 , 33 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Absatz" ;
         Text [ en-US ] = "~Paragraph" ;
         TABSTOP = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_OTHER
     {
         Pos = MAP_APPFONT ( 75 , 33 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "An~dere: " ;
         Text [ en-US ] = "~Other: " ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_OTHER
     {
@@ -96,44 +87,35 @@ ModalDialog DLG_CONV_TEXT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
         Size = MAP_APPFONT ( 128 , 10 ) ;
-        Text [ de ] = "Gleiche ~Breite aller Spalten" ;
         Check = TRUE;
         Hide = TRUE ;
         Text [ en-US ] = "Equal width for all columns" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_DELIM
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 135 , 8 ) ;
-        Text [ de ] = "Trennzeichen im Text" ;
         Text [ en-US ] = "Separate text at" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
-        Text [ de ] = "Übe~rschrift" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Heading";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_REPEAT_HEADER
     {
         Pos = MAP_APPFONT ( 22 , 97 ) ;
         Size = MAP_APPFONT ( 113 , 10 ) ;
-        Text [ de ] = "Überschrift ~wiederholen" ;
         Text [ en-US ] = "Repeat heading";
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_REPEAT_HEADER
     {
         Pos = MAP_APPFONT ( 125 , 113 ) ;
         Size = MAP_APPFONT ( 66 , 10 ) ;
-        Text [ de ] = "Die ~ersten%POSITION_OF_CONTROLZeilen" ;
         Text [ en-US ] = "The first%POSITION_OF_CONTROLrows" ;
     };
     NumericField NF_REPEAT_HEADER
@@ -158,33 +140,25 @@ ModalDialog DLG_CONV_TEXT_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 126 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
-        Text [ de ] = "Tabelle ~nicht trennen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Don't split table";
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_BORDER
     {
         Pos = MAP_APPFONT ( 12 , 139 ) ;
         Size = MAP_APPFONT ( 123 , 10 ) ;
-        Text [ de ] = "~Umrandung" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Border";
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 71 ) ;
         Size = MAP_APPFONT ( 135 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options";
-        Text [ x-comment ] = " ";
     };
     String STR_CONVERT_TEXT_TABLE
     {
-        Text [ de ] = "Text in Tabelle umwandeln" ;
         Text [ en-US ] = "Convert Text to Table" ;
-        Text [ x-comment ] = " ";
     };
     OkButton BT_OK
     {
@@ -211,11 +185,8 @@ ModalDialog DLG_CONV_TEXT_TABLE
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Auto~format..." ;
         Text [ en-US ] = "Auto~Format..." ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
