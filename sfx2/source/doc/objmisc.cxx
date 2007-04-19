@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 17:03:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:28:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/ucb/XContent.hpp>
+#include <com/sun/star/task/ErrorCodeRequest.hpp>
 #include <svtools/securityoptions.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -151,6 +152,7 @@ using namespace ::com::sun::star::script;
 #include <svtools/inettype.hxx>
 #include <osl/file.hxx>
 #include <vcl/svapp.hxx>
+#include <framework/interaction.hxx>
 
 #include "app.hxx"
 #include "appdata.hxx"
@@ -1086,10 +1088,9 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
         {
             AdjustMacroMode( String() ); // if macros are disabled the message will be shown here
             if ( SvtSecurityOptions().GetMacroSecurityLevel() > 2
-                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode )
+                && MacroExecMode::NEVER_EXECUTE == pImp->nMacroMode && pMedium )
             {
-                WarningBox aBox( GetDialogParent(), SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
-                aBox.Execute();
+                  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_DOCUMENT_MACRO_DISABLED );
             }
         }
         else if ( !pImp->bMacroDisabled )
@@ -1108,10 +1109,11 @@ void SfxObjectShell::CheckMacrosOnLoading_Impl()
     if ( !pImp->bSignatureErrorIsShown
     && GetDocumentSignatureState() == SIGNATURESTATE_SIGNATURES_BROKEN )
     {
-        WarningBox aBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-        aBox.Execute();
+        if ( pMedium
+          && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE ) )
+            pImp->bSignatureErrorIsShown = sal_True;
+
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-        pImp->bSignatureErrorIsShown = sal_True;
     }
 }
 
@@ -1873,10 +1875,11 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
     {
         // if the signature is broken, show here the warning before
         // the macro warning
-        WarningBox aBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-        aBox.Execute();
+        if ( pMedium
+          && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE ) )
+            pImp->bSignatureErrorIsShown = sal_True;
+
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
-        pImp->bSignatureErrorIsShown = sal_True;
     }
     // <--
 
@@ -1886,11 +1889,9 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
         pImp->bMacroDisabled = sal_True;
         pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
 
-        if ( !pImp->bMacroDisabledMessageIsShown )
+        if ( !pImp->bMacroDisabledMessageIsShown && pMedium
+          && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_MACROS_SUPPORT_DISABLED ) )
         {
-            String aMessage( SfxResId( STR_MACROS_DISABLED ) );
-            WarningBox aBox( GetDialogParent(), WB_OK, aMessage );
-            aBox.Execute();
             pImp->bMacroDisabledMessageIsShown = sal_True;
         }
 
@@ -1986,8 +1987,10 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
             {
                 if ( pImp->nMacroMode != MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN )
                 {
-                    WarningBox aBox( GetDialogParent(), SfxResId( RID_XMLSEC_WARNING_BROKENSIGNATURE ) );
-                    aBox.Execute();
+                    if ( pMedium
+                      && UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_BROKENSIGNATURE ) )
+                        pImp->bSignatureErrorIsShown = sal_True;
+
                     pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
                     return;
                 }
@@ -2041,10 +2044,9 @@ void SfxObjectShell::AdjustMacroMode( const String& /*rScriptType*/ )
         if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_NO_WARN
           || pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
         {
-            if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN )
+            if ( pImp->nMacroMode == MacroExecMode::FROM_LIST_AND_SIGNED_WARN && pMedium )
             {
-                WarningBox aBox( GetDialogParent(), SfxResId( MSG_WARNING_MACRO_ISDISABLED ) );
-                aBox.Execute();
+                  UseInteractionToHandleError( pMedium->GetInteractionHandler(), ERRCODE_SFX_DOCUMENT_MACRO_DISABLED );
             }
                pImp->nMacroMode = MacroExecMode::NEVER_EXECUTE;
             return;
@@ -2281,6 +2283,45 @@ BOOL SfxObjectShell::StorageHasMacros( const uno::Reference< embed::XStorage >& 
 
     return bHasMacros;
 }
+
+sal_Bool SfxObjectShell::UseInteractionToHandleError(
+                    const uno::Reference< task::XInteractionHandler >& xHandler,
+                    sal_uInt32 nError )
+{
+    sal_Bool bResult = sal_False;
+
+    if ( xHandler.is() )
+    {
+        try
+        {
+            uno::Any aInteraction;
+            uno::Sequence< uno::Reference< task::XInteractionContinuation > > lContinuations(2);
+            ::framework::ContinuationAbort* pAbort = new ::framework::ContinuationAbort();
+            ::framework::ContinuationApprove* pApprove = new ::framework::ContinuationApprove();
+            lContinuations[0] = uno::Reference< task::XInteractionContinuation >(
+                                 static_cast< task::XInteractionContinuation* >( pAbort ), uno::UNO_QUERY );
+            lContinuations[1] = uno::Reference< task::XInteractionContinuation >(
+                                 static_cast< task::XInteractionContinuation* >( pApprove ), uno::UNO_QUERY );
+
+            task::ErrorCodeRequest aErrorCode;
+            aErrorCode.ErrCode = nError;
+            aInteraction <<= aErrorCode;
+
+            ::framework::InteractionRequest* pRequest = new ::framework::InteractionRequest(aInteraction,lContinuations);
+            uno::Reference< task::XInteractionRequest > xRequest(
+                             static_cast< task::XInteractionRequest* >( pRequest ),
+                             uno::UNO_QUERY);
+
+            xHandler->handle(xRequest);
+            bResult = pAbort->isSelected();
+        }
+        catch( uno::Exception& )
+        {}
+    }
+
+    return bResult;
+}
+
 
 
 
