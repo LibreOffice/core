@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:36:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:29:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@ ModalDialog DLG_PRINT_WARNINGS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 212 , 87 ) ;
-    Text [ de ] = "Warnung Druckoptionen" ;
     Moveable = TRUE ;
     OKButton BTN_OK
     {
@@ -64,49 +63,38 @@ ModalDialog DLG_PRINT_WARNINGS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 144 , 8 ) ;
-        Text [ de ] = "Druckoptionen" ;
         Text [ en-US ] = "Print options" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_SCALE
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 129 , 12 ) ;
-        Text [ de ] = "~Seite an Druckbereich anpassen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Fit page to print range" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_POSTER
     {
         Pos = MAP_APPFONT ( 12 , 54 ) ;
         Size = MAP_APPFONT ( 130 , 12 ) ;
-        Text [ de ] = "Auf ~mehrere Seiten drucken" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Print on multiple pages" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_CUT
     {
         Pos = MAP_APPFONT ( 12 , 66 ) ;
         Size = MAP_APPFONT ( 127 , 12 ) ;
-        Text [ de ] = "~Abschneiden" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Trim" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_INFO
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 134 , 25 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Die Seiteneinstellungen stimmen nicht mit dem Druckbereich überein.\nSie können folgende Optionen wählen : Die Seiteneinstellungen stimmen nicht mit dem Druckbereich ³berein.\nSie k÷nnen folgende Optionen wõhlen */
-        Text [ de ] = "Die Seiteneinstellungen stimmen nicht mit dem Druckbereich Ã¼berein.\nSie kÃ¶nnen folgende Optionen wÃ¤hlen" ;
         Text [ en-US ] = "The page settings do not match the print range.\nChoose one of the following options" ;
         WordBreak = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Warning Print Options" ;
-    Text [ x-comment ] = " ";
 };
 
 
