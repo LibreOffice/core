@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 16:04:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:43:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,33 +69,23 @@ ImageList RID_SVXIL_FRAME_HC
 };
 String RID_SVXSTR_TRANSPARENT
 {
-    Text [ de ] = "Keine Füllung" ;
     Text [ en-US ] = "No Fill" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FILLPATTERN
 {
-    Text [ de ] = "Muster" ;
     Text [ en-US ] = "Pattern" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FRAME
 {
-    Text [ de ] = "Umrandung" ;
     Text [ en-US ] = "Borders" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FRAME_STYLE
 {
-    Text [ de ] = "Umrandungsstil" ;
     Text [ en-US ] = "Border Style" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_FRAME_COLOR
 {
-    Text [ de ] = "Umrandungsfarbe" ;
     Text [ en-US ] = "Border Color" ;
-    Text [ x-comment ] = " ";
 };
 ComboBox RID_SVXTBX_STYLE
 {
@@ -110,23 +100,18 @@ ComboBox RID_SVXTBX_STYLE
 };
 String RID_SVXSTR_EXTRAS_CHARBACKGROUND
 {
-    Text [ de ] = "Zeichenhintergrund" ;
     Text [ en-US ] = "Highlighting" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_BACKGROUND
 {
-    Text [ de ] = "Hintergrund" ;
     Text [ en-US ] = "Background";
 };
 String RID_SVXSTR_AUTOMATIC
 {
-    Text [ de ] = "Automatisch";
     Text [ en-US ] = "Automatic";
 };
 String RID_SVXSTR_PAGES
 {
-    Text [ de ] = "Seiten";
     Text [ en-US ] = "Pages";
 };
 Image RID_SVXIMG_GRAF_RED
@@ -201,12 +186,10 @@ Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 };
 String RID_SVXSTR_CLEARFORM
 {
-    Text [ de ] = "Formatierung löschen";
     Text [ en-US ] = "Clear formatting";
 };
 String RID_SVXSTR_MORE
 {
-    Text [ de ] = "Weitere...";
     Text [ en-US ] = "More...";
 };
 
