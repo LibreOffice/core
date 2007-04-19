@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_PointGeometry.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:46:30 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:03:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,9 +45,7 @@ TabPage TP_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Balken/Säulen Form" ;
         Text [ en-US ] = "Bar/column shape";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LY_SHAPE
     {
@@ -60,21 +58,6 @@ TabPage TP_LAYOUT
         DropDown=FALSE;
         DDExtraWidth = TRUE ;
 
-        StringList [ de ] =
-        {
-          "Quader";
-          "Zylinder";
-          "Kegel";
-          "Pyramiden";
-         // "Turm von Hanoi";
-        };
-    StringList [ x-comment ] =
-    {
-             "Quader" ;
-         "Zylinder" ;
-         "Kegel" ;
-         "Pyramiden" ;
-    };
     StringList [ en-US ] =
     {
              "Rectangular parallelepiped" ;
