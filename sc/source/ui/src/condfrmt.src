@@ -4,9 +4,9 @@
  *
  *  $RCSfile: condfrmt.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:05:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:36:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 316 , 161 ) ;
-    Text [ de ] = "Bedingte Formatierung" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     HelpId = HID_SCDLG_CONDFORMAT ;
@@ -48,10 +47,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "Bedingung ~1" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Condition ~1" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COND1_1
     {
@@ -60,20 +57,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Zellwert ist" ; Default ; > ;
-            < "Formel ist" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Cell value is" ; Default ; > ;
             < "Formula is" ; Default ; > ;
-        };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
         };
     };
     ListBox LB_COND1_2
@@ -83,19 +70,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "gleich" ; Default ; > ;
-            < "kleiner als" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : größer als*/
-            < "grÃ¶ÃŸer als" ; Default ; > ;
-            < "kleiner oder gleich" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : größer oder gleich*/
-            < "grÃ¶ÃŸer oder gleich" ; Default ; > ;
-            < "ungleich" ; Default ; > ;
-            < "zwischen" ; Default ; > ;
-            < "nicht zwischen" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "equal to" ; Default ; > ;
@@ -107,17 +81,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     Edit EDT_COND1_1
     {
@@ -128,22 +91,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND1_1
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 167 , 18 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND1_AND
     {
         Pos = MAP_APPFONT ( 181 , 21 ) ;
         Size = MAP_APPFONT ( 16 , 8 ) ;
         Center = TRUE ;
-        Text [ de ] = "und" ;
         Text [ en-US ] = "and" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_COND1_2
     {
@@ -154,22 +112,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND1_2
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 242 , 18 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND1_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 37 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         Right = TRUE ;
-        Text [ de ] = "~Zellvorlage" ;
         Text [ en-US ] = "~Cell Style" ;
-        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_COND1_TEMPLATE
     {
@@ -189,10 +142,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "Bedingung ~2" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Condition ~2" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COND2_1
     {
@@ -201,20 +152,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Zellwert ist" ; Default ; > ;
-            < "Formel ist" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Cell value is" ; Default ; > ;
             < "Formula is" ; Default ; > ;
-        };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
         };
     };
     ListBox LB_COND2_2
@@ -224,19 +165,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "gleich" ; Default ; > ;
-            < "kleiner als" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : größer als*/
-            < "grÃ¶ÃŸer als" ; Default ; > ;
-            < "kleiner oder gleich" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : größer oder gleich*/
-            < "grÃ¶ÃŸer oder gleich" ; Default ; > ;
-            < "ungleich" ; Default ; > ;
-            < "zwischen" ; Default ; > ;
-            < "nicht zwischen" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "equal to" ; Default ; > ;
@@ -248,17 +176,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     Edit EDT_COND2_1
     {
@@ -269,22 +186,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND2_1
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 167 , 72 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND2_AND
     {
         Pos = MAP_APPFONT ( 181 , 75 ) ;
         Size = MAP_APPFONT ( 16 , 8 ) ;
         Center = TRUE ;
-        Text [ de ] = "und" ;
         Text [ en-US ] = "and" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_COND2_2
     {
@@ -295,22 +207,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND2_2
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 242 , 72 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND2_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 91 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         Right = TRUE ;
-        Text [ de ] = "Z~ellvorlage" ;
         Text [ en-US ] = "C~ell Style" ;
-        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_COND2_TEMPLATE
     {
@@ -330,10 +237,8 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 114 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "Bedingung ~3" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Condition ~3" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_COND3_1
     {
@@ -342,20 +247,10 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 48 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Zellwert ist" ; Default ; > ;
-            < "Formel ist" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Cell value is" ; Default ; > ;
             < "Formula is" ; Default ; > ;
-        };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
         };
     };
     ListBox LB_COND3_2
@@ -365,19 +260,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         Size = MAP_APPFONT ( 62 , 88 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "gleich" ; Default ; > ;
-            < "kleiner als" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : größer als*/
-            < "grÃ¶ÃŸer als" ; Default ; > ;
-            < "kleiner oder gleich" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : größer oder gleich*/
-            < "grÃ¶ÃŸer oder gleich" ; Default ; > ;
-            < "ungleich" ; Default ; > ;
-            < "zwischen" ; Default ; > ;
-            < "nicht zwischen" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "equal to" ; Default ; > ;
@@ -389,17 +271,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
             < "between" ; Default ; > ;
             < "not between" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     Edit EDT_COND3_1
     {
@@ -410,22 +281,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND3_1
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 167 , 126 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND3_AND
     {
         Pos = MAP_APPFONT ( 181 , 129 ) ;
         Size = MAP_APPFONT ( 16 , 8 ) ;
         Center = TRUE ;
-        Text [ de ] = "und" ;
         Text [ en-US ] = "and" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_COND3_2
     {
@@ -436,22 +302,17 @@ ModelessDialog RID_SCDLG_CONDFORMAT
     };
     ImageButton RB_COND3_2
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 242 , 126 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COND3_TEMPLATE
     {
         Pos = MAP_APPFONT ( 6 , 145 ) ;
         Size = MAP_APPFONT ( 46 , 8 ) ;
         Right = TRUE ;
-        Text [ de ] = "Ze~llvorlage" ;
         Text [ en-US ] = "Ce~ll Style" ;
-        Text [ x-comment ] = "; \"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
     };
     ListBox LB_COND3_TEMPLATE
     {
@@ -482,7 +343,6 @@ ModelessDialog RID_SCDLG_CONDFORMAT
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Conditional Formatting" ;
-    Text [ x-comment ] = " ";
 };
 
 
