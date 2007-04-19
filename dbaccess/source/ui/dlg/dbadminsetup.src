@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadminsetup.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:50:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:00:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ ModalDialog DLG_DATABASE_WIZARD
     Closeable = TRUE ;
     HelpId = HID_DLG_DATABASE_WIZARD;
     Hide = TRUE;
-    Text[ de ] = "Datenbank-Assistent" ;
     Text[ en-US ]  = "Database Wizard" ;
 
     TabControl 1
@@ -70,102 +69,85 @@ ModalDialog DLG_DATABASE_WIZARD
 
     String STR_DBWIZARDTITLE
     {
-        Text[ de ] = "Datenbank-Assistent" ;
         Text[ en-US ]  = "Database Wizard" ;
     };
 
     String STR_ROADMAPHEADER
     {
-        Text [ de ] = "Schritte" ;
         Text[ en-US ]  = "Steps" ;
     };
 
 
     String STR_PAGETITLE_INTROPAGE
     {
-        Text [ de ] = "Datenbank auswählen" ;
         Text[ en-US ]  = "Select database" ;
     };
 
     String STR_PAGETITLE_DBASE
     {
-        Text [ de ] = "Verbindung zu dBASE-Dateien einrichten " ;
         Text[ en-US ]  = "Set up dBASE connection" ;
-        Text [ x-comment ] = "'dBASE' is a product name and not to be changed or translated. ";
 
     };
 
 
     String STR_PAGETITLE_TEXT
     {
-        Text [ de ] = "Verbindung zu Textdateien einrichten" ;
         Text[ en-US ]  = "Set up a connection to text files" ;
     };
 
 
     String STR_PAGETITLE_MSACCESS
     {
-        Text [ de ] = "Microsoft Access Verbindung einrichten" ;
         Text[ en-US ]  = "Set up Microsoft Access connection" ;
     };
 
     String STR_PAGETITLE_LDAP
     {
-        Text [ de ] = "LDAP-Verbindung einrichten " ;
         Text[ en-US ]  = "Set up LDAP connection" ;
     };
 
     String STR_PAGETITLE_ADABAS
     {
-        Text [ de ] = "Adabas D Verbindung einrichten" ;
         Text[ en-US ]  = "Set up Adabas D connection" ;
     };
 
     String STR_PAGETITLE_ADO
     {
-        Text [ de ] = "ADO-Verbindung einrichten" ;
         Text[ en-US ]  = "Set up ADO connection" ;
     };
 
     String STR_PAGETITLE_JDBC
     {
-        Text [ de ] = "JDBC-Verbindung einrichten" ;
         Text[ en-US ]  = "Set up JDBC connection" ;
     };
 
     String STR_PAGETITLE_ORACLE
     {
-        Text [ de ] = "Oracle Datenbankverbindung  einrichten" ;
         Text[ en-US ] = "Set up Oracle database connection" ;
     };
 
     String STR_PAGETITLE_MYSQL
     {
-        Text [ de ] = "MySQL Verbindung einrichten" ;
         Text[ en-US ] = "Set up MySQL connection" ;
     };
 
     String STR_PAGETITLE_ODBC
     {
-        Text [ de ] = "ODBC-Verbindung einrichten" ;
         Text[ en-US ] = "Set up ODBC connection" ;
     };
 
     String STR_PAGETITLE_SPREADSHEET
     {
-        Text [ de ] = "Verbindung zu Tabellendokumenten einrichten" ;
         Text[ en-US ] = "Set up Spreadsheet connection" ;
     };
 
     String STR_PAGETITLE_AUTHENTIFICATION
     {
-        Text [ de ] = "Benutzer-Authentifizierung einrichten" ;
         Text[ en-US ] = "Set up user authentication" ;
     };
 
     String STR_PAGETITLE_FINAL
     {
-        Text [ de ] = "Fertig stellen und fortfahren" ;
         Text[ en-US ] = "Save and proceed" ;
     };
 };
@@ -173,7 +155,6 @@ ModalDialog DLG_DATABASE_WIZARD
 
 String STR_DATABASEDEFAULTNAME
 {
-    Text [ de ] = "Neue Datenbank" ;
     Text[ en-US ]  = "New Database" ;
 };
 
@@ -189,7 +170,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
     {
         Pos = MAP_APPFONT ( START_X , 8 ) ;
         Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Verbindung zu einer MySQL Datenbank einrichten" ;
         Text[ en-US ] = "Set up a connection to a MySQL database";
         WordBreak = TRUE;
     };
@@ -199,7 +179,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
     {
         Pos = MAP_APPFONT (START_X , 27 )  ;
         Size = MAP_APPFONT ( 213 , 48 ) ;
-        Text[ de ] = "Bitte wählen Sie, ob die Verbindung auf die MySQL Datenbank per ODBC oder per JDBC hergestellt werden soll.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ]   = "You can connect to a MySQL database using either ODBC or JDBC.\nPlease contact your system administrator if you are unsure about the following settings.";
         WordBreak = TRUE ;
     };
@@ -208,7 +187,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
     {
         Pos = MAP_APPFONT (START_X , 79 )  ;
         Size = MAP_APPFONT ( 209 , 8 ) ;
-        Text[ de ] = "Wie möchten Sie sich mit Ihrer Datenbank verbinden?";
         Text[ en-US ] = "How do you want to connect to your MySQL database?" ;
     };
 
@@ -217,7 +195,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
         HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAODBC ;
         Pos = MAP_APPFONT (START_X + 6 , 91 )  ;
         Size = MAP_APPFONT ( 205 , 9 ) ;
-        Text[ de ] = "Verbindung über ODBC (Open Database Connectivity)";
         Text[ en-US ] = "Connect using ODBC (Open Database Connectivity)" ;
     };
 
@@ -226,7 +203,6 @@ TabPage PAGE_DBWIZARD_MYSQL_INTRO
         HelpId = HID_PAGE_DBWIZARD_MYSQL_RB_CONNECTVIAJDBC ;
         Pos = MAP_APPFONT (START_X + 6, 103 )  ;
         Size = MAP_APPFONT ( 208 , 8 ) ;
-        Text[ de ] = "Verbindung über JDBC (Java Database Connectivity)";
         Text[ en-US ] = "Connect using JDBC (Java Database Connectivity)" ;
     };
 
@@ -245,7 +221,6 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
     {
         Pos = MAP_APPFONT ( START_X , 8 ) ;
         Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Benutzer-Authentifizierung eingeben" ;
         Text[ en-US ] = "Set up the user authentication";
         WordBreak = TRUE;
     };
@@ -255,7 +230,6 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
     {
         Pos = MAP_APPFONT (START_X , 27 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 3*FIXEDTEXT_HEIGHT ) ;
-        Text[ de ] = "Geben Sie bitte jetzt einen Benutzernamen ein, falls die Datenbank zur Verbindungsherstellung einen bestimmten Benutzer erwartet.";\
         Text[ en-US ] = "Some databases require you to enter a user name." ;\
         WordBreak = TRUE ;
     };
@@ -264,7 +238,6 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
     {
         Pos = MAP_APPFONT (START_X , 62 ) ;
         Size = MAP_APPFONT ( AUTHENTEDIT_X - START_X  , FIXEDTEXT_HEIGHT ) ;
-        Text[ de ] = "~Benutzername";
         Text[ en-US ] = "~User name" ;
     };
 
@@ -281,7 +254,6 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
         HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_CB_GENERALPASSWORDREQUIRED ;
         Pos = MAP_APPFONT (AUTHENTEDIT_X , 76 );
         Size = MAP_APPFONT ( 93 , CHECKBOX_HEIGHT );
-        Text[ de ] = "Kennwort erforderlich";
         Text[ en-US ] = "Password re~quired" ;
     };
 
@@ -290,7 +262,6 @@ TabPage PAGE_DBWIZARD_AUTHENTIFICATION
         HelpId = HID_PAGE_DBWIZARD_AUTHENTIFICATION_PB_TESTCONNECTION ;
         Pos = MAP_APPFONT (WIZARD_PAGE_X - BUTTON_WIDTH - UNRELATED_CONTROLS , WIZARD_PAGE_Y - 18 ) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text[ de ] = "~Verbindungstest";
         Text[ en-US ] = "~Test Connection" ;
     };
 
@@ -309,7 +280,6 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT ( START_X , 8 ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 2* FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Bitte entscheiden Sie, wie Sie fortfahren möchten" ;
         Text[ en-US ] = "Decide how to proceed after saving the database";
         WordBreak = TRUE;
     };
@@ -318,7 +288,6 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT (START_X , 27 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6, 2*FIXEDTEXT_HEIGHT ) ;
-        Text[ de ] = "Soll der Assistent die Datenbank in %PRODUCTNAME anmelden?";
         Text[ en-US ] = "Do you want the wizard to register the database in %PRODUCTNAME?" ;
         WordBreak = TRUE ;
     };
@@ -330,7 +299,6 @@ TabPage PAGE_DBWIZARD_FINAL
         Pos = MAP_APPFONT (START_X + 6 , 45 )  ;
         Size = MAP_APPFONT ( 205 , 9 ) ;
         Group = TRUE;
-        Text[ de ] = "~Ja, die Datenbank soll angemeldet werden";
         Text[ en-US ] = "~Yes, register the database for me" ;
     };
 
@@ -340,7 +308,6 @@ TabPage PAGE_DBWIZARD_FINAL
         HelpId = HID_PAGE_DBWIZARD_FINAL_RB_DONTREGISTERDATASOURCE ;
         Pos = MAP_APPFONT (START_X + 6, 57 )  ;
         Size = MAP_APPFONT ( 208 , 8 ) ;
-        Text[ de ] = "Nein, die Datenbank soll nicht angemeldet werden";
         Text[ en-US ] = "N~o, do not register the database" ;
     };
 
@@ -348,7 +315,6 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT (START_X , 100 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 8 ) ;
-        Text[ de ] = "Wie möchten Sie fortfahren, nachdem die Datenbank gespeichert wurde?";
         Text[ en-US ] = "~After the database file has been saved, what do you want to do?" ;
     };
 
@@ -357,7 +323,6 @@ TabPage PAGE_DBWIZARD_FINAL
         HelpId = HID_PAGE_DBWIZARD_FINAL_CB_OPENAFTERWARDS ;
         Pos = MAP_APPFONT (START_X + 6, 118 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X , 8 ) ;
-        Text[ de ] = "Die Datenbank zum  ~Bearbeiten öffnen";
         Text[ en-US ] = "Open the database for editing" ;
     };
 
@@ -366,7 +331,6 @@ TabPage PAGE_DBWIZARD_FINAL
         HelpId = HID_PAGE_DBWIZARD_FINAL_CB_STARTTABLEWIZARD ;
         Pos = MAP_APPFONT (START_X + 6, 130 )  ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 12 , 8 ) ;
-        Text[ de ] = "Eine ~Tabelle mit Hilfe des Tabellen-Assistenten erstellen";
         Text[ en-US ] = "Create tables using the table wizard" ;
     };
 
@@ -375,7 +339,6 @@ TabPage PAGE_DBWIZARD_FINAL
     {
         Pos = MAP_APPFONT ( START_X , 173 ) ;
         Size = MAP_APPFONT ( WIZARD_PAGE_X - START_X - 6 , 2* FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Klicken Sie auf '~Fertig stellen', um die Datenbank zu speichern." ;
         Text[ en-US ]  = "Click 'Finish' to save the database.";
         WordBreak = TRUE;
     };
@@ -396,23 +359,19 @@ TabPage PAGE_DBWIZARD_MYSQL_JDBC
 
     String STR_MYSQLJDBC_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu einer MySQL-Datenbank per JDBC einrichten";
         Text[ en-US ] = "Set up connection to a MySQL database using JDBC" ;
     };
 
     String STR_MYSQLJDBC_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie die benötigten Information ein, um eine Verbindung per JDBC zu einer MySQL-Datenbank herzustellen.Bitte beachten Sie, dass  eine JDBC-Treiberklasse auf ihrem System installiert und %PRODUCTNAME bekannt sein muss.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Please enter the required information to connect to a MySQL database using JDBC. Note that a JDBC driver class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings.";
     };
 
     String STR_MYSQL_DRIVERCLASSTEXT{
-        Text [ de ] =  "MySQL JDBC ~Treiberklasse:" ;
         Text [  en-US  ] = "MySQL JDBC d~river class:";
     };
 
 
     String STR_MYSQL_DEFAULT{
-        Text[ de ] = "Default: 3306";
         Text[ en-US ] = "Default: 3306";
     };
 
@@ -430,14 +389,12 @@ TabPage PAGE_DBWIZARD_DBASE
 
     String STR_DBASE_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu dBASE-Dateien einrichten";
         Text[ en-US ] = "Set up a connection to dBASE files" ;
     };
 
 
     String STR_DBASE_HELPTEXT
     {
-        Text[ de ] = "Bitte wählen Sie den Ordner, in dem sich die dBASE- Dateien befinden.";
         Text[ en-US ]  = "Select the folder where the dBASE files are stored." ;
     };
 
@@ -450,20 +407,17 @@ TabPage PAGE_DBWIZARD_TEXT
 
     String STR_TEXT_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu Text-Dateien einrichten";
         Text[ en-US ]   = "Set up a connection to text files" ;
     };
 
 
     String STR_TEXT_HELPTEXT
     {
-        Text[ de ] = "Bitte wählen Sie den Ordner, in dem sich die im CSV-Format (Comma Separated Value) gespeicherten Dateien befinden. %PRODUCTNAME Base greift auf die Daten nur lesend zu.";
         Text[ en-US ]   = "Select the folder where the CSV (Comma Separated Values) text files are stored. %PRODUCTNAME Base will open these files in read-only mode." ;
     };
 
 
     String STR_TEXT_PATH_OR_FILE{
-        Text [ de ] = "Pfad zu den Textdateien" ;
         Text[ en-US ]  = "Path to text files";
     };
 
@@ -483,14 +437,12 @@ TabPage PAGE_DBWIZARD_MSACCESS
 
     String STR_MSACCESS_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu einer Microsoft Access Datenbank einrichten";
         Text[ en-US ] = "Set up a connection to a Microsoft Access database" ;
     };
 
 
     String STR_MSACCESS_HELPTEXT
     {
-        Text[ de ] = "Bitte wählen Sie die Microsoft Access Datei auf die Sie zugreifen möchten.";
         Text[ en-US ] = "Please select the Microsoft Access file you want to access.";
     };
 
@@ -510,7 +462,6 @@ TabPage PAGE_DBWIZARD_LDAP
     {
         Pos = MAP_APPFONT ( START_X , 8 ) ;
         Size = MAP_APPFONT ( (WIZARD_PAGE_X - START_X) - 12 , 2 * FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Verbindung zu einem LDAP-Verzeichnis einrichten" ;
         Text[ en-US ] = "Set up a connection to an LDAP directory";
         WordBreak = TRUE;
     };
@@ -520,7 +471,6 @@ TabPage PAGE_DBWIZARD_LDAP
     {
         Pos = MAP_APPFONT (START_X , 27 )  ;
         Size = MAP_APPFONT (WIZARD_PAGE_X - START_X - 6, 5 * FIXEDTEXT_HEIGHT ) ;
-        Text[ de ] = "Bitte geben Sie die benötigten Information ein, um eine Verbindung zu einem LDAP-Verzeichnis herzustellen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Please enter the required information to connect to an LDAP directory.\nPlease contact your system administrator if you are unsure about the following settings." ;
         WordBreak = TRUE ;
     };
@@ -529,7 +479,6 @@ TabPage PAGE_DBWIZARD_LDAP
     AUTO_PORTCONTROLGROUP(  INIT_Y + 7 * FIXEDTEXT_HEIGHT +     UNRELATED_CONTROLS + 2 * EDIT_HEIGHT + 2 * RELATED_CONTROLS,    HID_PAGE_DBWIZARD_LDAP_ET_PORTNUMBER)
 
     String STR_LDAP_DEFAULT{
-        Text[ de ] = "Standard: 389";
         Text[ en-US ] = "Default: 389" ;
     };
 
@@ -539,7 +488,6 @@ TabPage PAGE_DBWIZARD_LDAP
         HelpId = HID_PAGE_DBWIZARD_LDAP_CB_USESSL ;
         Pos = MAP_APPFONT (START_X , INIT_Y + 7 * FIXEDTEXT_HEIGHT +        UNRELATED_CONTROLS + 3 * EDIT_HEIGHT + 4 * RELATED_CONTROLS )  ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text[ de ] = "Sichere ~Verbindung verwenden (SSL)";
         Text[ en-US ] = "Use ~secure connection (SSL)" ;
     };
 
@@ -555,13 +503,11 @@ TabPage PAGE_DBWIZARD_ADABAS
 
     String STR_ADABAS_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu einer Adabas D Datenbank einrichten ";
         Text[ en-US ]   = "Set up a connection to an Adabas D database" ;
     };
 
 
     String STR_ADABAS_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie den Namen der Adabas D Datenbank ein, zu der eine Verbindung erstellt werden soll. Klicken Sie 'Durchsuchen' um eine %PRODUCTNAME bekannte Adabas D Datenbanken auszuwählen.";
         Text[ en-US ] = "Enter the name of the Adabas D database you want to connect to.\nClick 'Browse...' to select an Adabas D database that is already registered in %PRODUCTNAME." ;
     };
 
@@ -578,12 +524,10 @@ TabPage PAGE_DBWIZARD_ADO
 
     String STR_ADO_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu einer ADO-Datenquelle einrichten";
         Text[ en-US ] = "Set up a connection to an ADO database" ;
     };
 
     String STR_ADO_HELPTEXT{
-        Text[ de ] = "Geben Sie bitte den URL ein, um eine Verbindung zu einer ADO-Datenquelle zu erstellen.\nKlicken Sie 'Durchsuchen', um Hersteller-spezifische Einstellungen vorzunehmen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Please enter the URL of the ADO data source you want to connect to.\nClick 'Browse' to configure provider-specific settings.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
@@ -601,12 +545,10 @@ TabPage PAGE_DBWIZARD_ODBC
 
     String STR_ODBC_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu einer ODBC-Datenquelle einrichten";
         Text[ en-US ] = "Set up a connection to an ODBC database" ;
     };
 
     String STR_ODBC_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie den Namen der ODBC-Datenquelle ein, um eine Verbindung herzustellen.\nKlicken Sie auf 'Durchsuchen' um eine %PRODUCTNAME bekannte ODBC-Datenquelle auszuwählen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Enter the name of the ODBC database you want to connect to.\nClick 'Browse...' to select an ODBC database that is already registered in %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
@@ -634,12 +576,10 @@ TabPage PAGE_DBWIZARD_JDBC
 
     String STR_JDBC_HEADERTEXT
     {
-        Text[ de ] = "Datenbankverbindung per JDBC einrichten";
         Text[ en-US ] = "Set up a connection to a JDBC database" ;
     };
 
     String STR_JDBC_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie die benötigten Information ein, um per JDBC eine Verbindung zu einer Datenquelle herzustellen.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Please enter the required information to connect to a JDBC database.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
@@ -658,25 +598,21 @@ TabPage PAGE_DBWIZARD_ORACLE
 
     String STR_ORACLE_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu einer Oracle-Datenbank einrichten";
         Text[ en-US ] = "Set up a connection to an Oracle database";
     };
 
     String STR_ORACLE_DEFAULT
     {
-        Text[ de ] = "Standard: 1521";
         Text[ en-US ] = "Default: 1521" ;
     };
 
 
     String STR_ORACLE_DRIVERCLASSTEXT{
-        Text [ de ] = "Oracle JDBC ~Treiberklasse" ;
         Text [ en-US ] = "Oracle JDBC ~driver class";
     };
 
 
     String STR_ORACLE_HELPTEXT{
-        Text[ de ] = "Bitte geben Sie die benötigten Information ein, um per JDBC eine Verbindung zu einer Oracle-Datenbank herzustellen. Bitte beachten Sie, dass  eine JDBC-Treiberklasse auf ihrem System installiert und %PRODUCTNAME bekannt sein muss.\nFragen Sie Ihren Systemadministrator, wenn Sie sich bei den folgenden Einstellungen unsicher sind.";
         Text[ en-US ] = "Please enter the required information to connect to an Oracle database.Note that a JDBC Driver Class must be installed on your system and registered with %PRODUCTNAME.\nPlease contact your system administrator if you are unsure about the following settings." ;
     };
 
@@ -693,13 +629,11 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
 
     String STR_SPREADSHEET_HEADERTEXT
     {
-        Text[ de ] = "Verbindung zu Tabellendokumenten  einrichten";
         Text[ en-US ] = "Set up a connection to spreadsheets";
     };
 
 
     String STR_SPREADSHEET_HELPTEXT{
-        Text[ de ] = "Klicken Sie auf 'Durchsuchen' um auf Daten aus %PRODUCTNAME Tabellen-Dokumente oder Microsoft Excel Arbeitsmappen zu zugreifen.\n%PRODUCTNAME greift auf die Daten der Tabellendokumente nur lesend zu.";
         Text[ en-US ] = "Click 'Browse...' to select a %PRODUCTNAME spreadsheet or Microsoft Excel workbook.\n%PRODUCTNAME will open this file in read-only mode." ;
     };
 
@@ -707,7 +641,6 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
     AUTO_HELP_BROWSECONTROLGROUP(3, HID_PAGE_DBWIZARD_SPREADSHEET_ET_SPREADSHEETPATH )
 
     String STR_SPREADSHEETPATH{
-        Text[ de ] = "Speicherort und Dateiname";
         Text[ en-US ] = "~Location and file name" ;
     };
 
@@ -717,7 +650,6 @@ TabPage PAGE_DBWIZARD_SPREADSHEET
         HelpId = HID_PAGE_DBWIZARD_SPREADSHEET_CB_SPREADSHEETPASSWORDREQUIRED ;
         Pos = MAP_APPFONT (START_X + UNRELATED_CONTROLS , 83 )  ;
         Size = MAP_APPFONT ( 93 , 11 ) ;
-        Text[ de ] = "Kennwort erforderlich";
         Text[ en-US ] = "~Password required" ;
     };
 };
