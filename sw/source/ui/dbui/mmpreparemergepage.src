@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:04:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:56:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Kontrollieren Sie das Dokument und ändern sie es falls notwendig" ;
         Text[ en-US ] = "Preview and edit the document";
     };
 
@@ -55,14 +54,12 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 26 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie sehen jetzt eine Vorschau auf ein Serienbriefdokument. Um eine Vorschau auf weitere Dokumente zu sehen, klicken Sie auf die Pfeile." ;
         Text[ en-US ] = "The preview of a merged document is visible now. To see the preview of another document click one of the arrows.";
     };
     FixedText   FT_RECIPIENT
     {
         Pos = MAP_APPFONT ( 12 , 58 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Empfänger" ;
         Text[ en-US ] = "~Recipient";
     };
 
@@ -71,7 +68,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 75 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "|<" ;
-        QuickHelpText [de] = "Erster";
         QuickHelpText [en-US] = "First";
     };
     PushButton  PB_PREV
@@ -79,7 +75,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 98 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = "<" ;
-        QuickHelpText [de] = "Voriger";
         QuickHelpText [en-US] = "Previous";
     };
     NumericField ED_RECORD
@@ -99,7 +94,6 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 144 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">" ;
-        QuickHelpText [de] = "Nächster";
         QuickHelpText [en-US] = "Next";
     };
     PushButton  PB_LAST
@@ -107,21 +101,18 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 167 , 55 ) ;
         Size = MAP_APPFONT ( 20 , 14 ) ;
         Text = ">|" ;
-        QuickHelpText [de] = "Letzter";
         QuickHelpText [en-US] = "Last";
     };
     CheckBox CB_EXCLUDE
     {
         Pos = MAP_APPFONT ( 75, 77 ) ;
         Size = MAP_APPFONT ( 179 , 10 ) ;
-        Text [ de ] = "Diesen Empfänger ausschließen" ;
         Text[ en-US ] = "E~xclude this recipient";
     };
     FixedLine   FL_NOTEHEADER
     {
         Pos = MAP_APPFONT ( 6 , 100 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Dokument bearbeiten" ;
         Text[ en-US ] = "Edit Document";
     };
     FixedText   FI_EDIT
@@ -129,14 +120,12 @@ TabPage DLG_MM_PREPAREMERGE_PAGE
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 242 , 60 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie können jetzt das Dokument erstellen oder bearbeiten. Die Veränderungen wirken sich auf alle Serienbriefdokumente aus.\n\nEin Klick auf die Schaltfläche 'Dokument bearbeiten...' schließt vorübergehend den Assistenten. Durch Klicken der 'Zurück zum Seriendruck-Assistenten'-Schaltfläche - sichtbar in einem kleinen Fenster - gelangen Sie zurück zum Assistenten." ;
         Text[ en-US ] = "Write or edit your document now if you have not already done so. The changes will effect all merged documents.\n\nClicking 'Edit Document...' will temporarily reduce the wizard to a small window so you can edit the mail merge document. After editing the document, return to the wizard by clicking 'Return to Mail Merge Wizard' in the small window." ;
     };
     PushButton  PB_EDIT
     {
         Pos = MAP_APPFONT ( 90 , 185 ) ;
         Size = MAP_APPFONT ( 80 , 14 ) ;
-        Text [ de ] = "Dokument bearbeiten..." ;
         Text[ en-US ] = "~Edit Document...";
     };
 };
