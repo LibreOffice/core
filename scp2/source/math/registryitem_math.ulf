@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registryitem_math.ulf,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:36:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:29:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,15 +35,12 @@
 
 [STR_REG_VAL_NEW]
 en-US = "&New"
-de = "&Neu"
 
 [STR_REG_VAL_SO60_FORMULA]
 en-US = "%PRODUCTNAME %SXWFORMATVERSION Formula"
-de = "%PRODUCTNAME %SXWFORMATVERSION Formel"
 
 [STR_REG_VAL_SO51_FORMULA_OOO]
 en-US = "StarOffice 5.0 Formula"
-de = "StarOffice 5.0 Formel"
 
 [STR_REG_VAL_OO_FORMULA]
 en-US = "OpenDocument Formula"
