@@ -5,9 +5,9 @@
  *
  *  $RCSfile: FormWizard.xcu,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-12-28 17:07:22 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:15:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Beige</value>
-                    <value xml:lang="de">Beige</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>beige.css</value>
@@ -55,7 +55,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Bright Blue</value>
-                    <value xml:lang="de">Hellblau</value>
+
 
                 </prop>
                 <prop oor:name="CssHref">
@@ -68,7 +68,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Light Gray</value>
-                    <value xml:lang="de">Hellgrau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>grey.css</value>
@@ -80,7 +80,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Dark</value>
-                    <value xml:lang="de">Dunkel</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>dark.css</value>
@@ -92,7 +92,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Orange</value>
-                    <value xml:lang="de">Orange</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>orange.css</value>
@@ -104,7 +104,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Ice Blue</value>
-                    <value xml:lang="de">Eisblau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>ibg.css</value>
@@ -116,7 +116,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Grey</value>
-                    <value xml:lang="de">Grau</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>ice.css</value>
@@ -128,7 +128,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Water</value>
-                    <value xml:lang="de">Wasser</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>water.css</value>
@@ -140,7 +140,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Red</value>
-                    <value xml:lang="de">Rot</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>red.css</value>
@@ -152,7 +152,7 @@
                 </prop>
                 <prop oor:name="Name">
                     <value xml:lang="en-US">Violet</value>
-                    <value xml:lang="de">Lila</value>
+
                 </prop>
                 <prop oor:name="CssHref">
                     <value>violet.css</value>
