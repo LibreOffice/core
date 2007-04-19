@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paraitem.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 16:19:49 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:17:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -644,22 +644,32 @@ SfxItemPresentation SvxWidowsItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
+        {
             rText.Erase();
-            return SFX_ITEM_PRESENTATION_NONE;
+            break;
+        }
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText = String::CreateFromInt32( GetValue() );
-            rText += SVX_RESSTR(RID_SVXITEMS_LINES);
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+        {
+            rText = SVX_RESSTR(RID_SVXITEMS_LINES);
+            break;
+        }
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText += SVX_RESSTR(RID_SVXITEMS_WIDOWS_COMPLETE);
-            rText += String::CreateFromInt32( GetValue() );
+        {
+            rText = SVX_RESSTR(RID_SVXITEMS_WIDOWS_COMPLETE);
+            rText += ' ';
             rText += SVX_RESSTR(RID_SVXITEMS_LINES);
-            return SFX_ITEM_PRESENTATION_COMPLETE;
-        default: ;//prevent warning
+        }
+
+        default:
+        {
+            DBG_ERRORFILE( "SvxWidowsItem::GetPresentation(): unknown SfxItemPresentation" );
+        }
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+
+    rText.SearchAndReplace( String::CreateFromAscii( "%1" ), String::CreateFromInt32( GetValue() ) );
+    return ePres;
 }
 
 // class SvxOrphansItem --------------------------------------------------
@@ -706,22 +716,32 @@ SfxItemPresentation SvxOrphansItem::GetPresentation
     switch ( ePres )
     {
         case SFX_ITEM_PRESENTATION_NONE:
+        {
             rText.Erase();
-            return SFX_ITEM_PRESENTATION_NONE;
+            break;
+        }
 
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText = String::CreateFromInt32( GetValue() );
-            rText += SVX_RESSTR(RID_SVXITEMS_LINES);
-            return SFX_ITEM_PRESENTATION_NAMELESS;
+        {
+            rText = SVX_RESSTR(RID_SVXITEMS_LINES);
+            break;
+        }
 
         case SFX_ITEM_PRESENTATION_COMPLETE:
-            rText += SVX_RESSTR(RID_SVXITEMS_ORPHANS_COMPLETE);
-            rText += String::CreateFromInt32( GetValue() );
+        {
+            rText = SVX_RESSTR(RID_SVXITEMS_ORPHANS_COMPLETE);
+            rText += ' ';
             rText += SVX_RESSTR(RID_SVXITEMS_LINES);
-            return SFX_ITEM_PRESENTATION_COMPLETE;
-        default: ;//prevent warning
+        }
+
+        default:
+        {
+            DBG_ERRORFILE( "SvxOrphansItem::GetPresentation(): unknown SfxItemPresentation" );
+        }
     }
-    return SFX_ITEM_PRESENTATION_NONE;
+
+    rText.SearchAndReplace( String::CreateFromAscii( "%1" ), String::CreateFromInt32( GetValue() ) );
+    return ePres;
 }
 
 // class SvxHyphenZoneItem -----------------------------------------------
