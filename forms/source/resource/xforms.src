@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xforms.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:18:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:44:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,198 +40,165 @@
 
 String RID_STR_XFORMS_NO_BINDING_EXPRESSION
 {
-    Text [ de ] = "Bitte geben Sie einen Bindungsausdruck ein.";
     Text [ en-US ] = "Please enter a binding expression.";
 };
 
 String RID_STR_XFORMS_INVALID_BINDING_EXPRESSION
 {
-    Text [ de ] = "Ungültiger Bindungsausdruck.";
     Text [ en-US ] = "This is an invalid binding expression.";
 };
 
 String RID_STR_XFORMS_INVALID_VALUE
 {
-    Text [ de ] = "Wert ist ungültig.";
     Text [ en-US ] = "Value is invalid.";
 };
 
 String RID_STR_XFORMS_REQUIRED
 {
-    Text [ de ] = "Wert muss eingegeben werden.";
     Text [ en-US ] = "A value is required.";
 };
 
 String RID_STR_XFORMS_INVALID_CONSTRAINT
 {
-    Text [ de ] = "Bedingung '$1' wird nicht eingehalten.";
     Text [ en-US ] = "The constraint '$1' not validated.";
 };
 
 String RID_STR_XFORMS_VALUE_IS_NOT_A
 {
-    Text [ de ] = "Wert ist nicht vom Typ '$2'.";
     Text [ en-US ] = "The value is not of the type '$2'.";
 };
 
 String RID_STR_XFORMS_VALUE_MAX_INCL
 {
-    Text [ de ] = "Wert muss kleiner als oder gleich $2 sein.";
     Text [ en-US ] = "The value must be smaller than or equal to $2.";
 };
 
 String RID_STR_XFORMS_VALUE_MAX_EXCL
 {
-    Text [ de ] = "Wert muss kleiner als $2 sein.";
     Text [ en-US ] = "The value must be smaller than $2.";
 };
 
 String RID_STR_XFORMS_VALUE_MIN_INCL
 {
-    Text [ de ] = "Wert muss größer als oder gleich $2 sein.";
     Text [ en-US ] = "The value must be greater than or equal to $2.";
 };
 
 String RID_STR_XFORMS_VALUE_MIN_EXCL
 {
-    Text [ de ] = "Wert muss größer als $2 sein.";
     Text [ en-US ] = "The value must be greater than $2.";
 };
 
 String RID_STR_XFORMS_VALUE_PATTERN
 {
-    Text [ de ] = "Wert paßt nicht auf dem Muster '$2'.";
     Text [ en-US ] = "The value does not match the pattern '$2'.";
 };
 
 String RID_STR_XFORMS_VALUE_TOTAL_DIGITS
 {
-    Text [ de ] = "Höchstens $2 Ziffern erlaubt.";
     Text [ en-US ] = "$2 digits allowed at most.";
 };
 
 String RID_STR_XFORMS_VALUE_FRACTION_DIGITS
 {
-    Text [ de ] = "Höchstens $2 Nachkommastellen erlaubt.";
     Text [ en-US ] = "$2 fraction digits allowed at most.";
 };
 
 String RID_STR_XFORMS_VALUE_LENGTH
 {
-    Text [ de ] = "Zeichenkette muss $2 Zeichen lang sein.";
     Text [ en-US ] = "The string must be $2 characters long.";
 };
 
 String RID_STR_XFORMS_VALUE_MIN_LENGTH
 {
-    Text [ de ] = "Zeichenkette muss mindestens $2 Zeichen lang sein.";
     Text [ en-US ] = "The string must be at least $2 characters long.";
 };
 
 String RID_STR_XFORMS_VALUE_MAX_LENGTH
 {
-    Text [ de ] = "Zeichenkette darf höchstens $2 Zeichen lang sein.";
     Text [ en-US ] = "The string can only be $2 characters long at most.";
 };
 
 String RID_STR_DATATYPE_STRING
 {
-    Text [ de ] = "Text (String)";
     Text [ en-US ] = "String";
 };
 
 String RID_STR_DATATYPE_URL
 {
-    Text [ de ] = "Hyperlink";
     Text [ en-US ] = "Hyperlink";
 };
 
 String RID_STR_DATATYPE_BOOLEAN
 {
-    Text [ de ] = "Wahr/Falsch (Boolean)";
     Text [ en-US ] = "True/False (Boolean)";
 };
 
 String RID_STR_DATATYPE_DECIMAL
 {
-    Text [ de ] = "Dezimal";
     Text [ en-US ] = "Decimal";
 };
 
 String RID_STR_DATATYPE_FLOAT
 {
-    Text [ de ] = "Fließkomma";
     Text [ en-US ] = "Floating point";
 };
 
 String RID_STR_DATATYPE_DOUBLE
 {
-    Text [ de ] = "Fließkomma (doppelt genau)";
     Text [ en-US ] = "Double";
 };
 
 String RID_STR_DATATYPE_DATE
 {
-    Text [ de ] = "Datum";
     Text [ en-US ] = "Date";
 };
 
 String RID_STR_DATATYPE_TIME
 {
-    Text [ de ] = "Zeit";
     Text [ en-US ] = "Time";
 };
 
 String RID_STR_DATATYPE_DATETIME
 {
-    Text [ de ] = "Datum und Zeit";
     Text [ en-US ] = "Date and Time";
 };
 
 String RID_STR_DATATYPE_YEARMONTH
 {
-    Text [ de ] = "Monat und Jahr";
     Text [ en-US ] = "Month and year";
 };
 
 String RID_STR_DATATYPE_YEAR
 {
-    Text [ de ] = "Jahr";
     Text [ en-US ] = "Year";
 };
 
 String RID_STR_DATATYPE_MONTHDAY
 {
-    Text [ de ] = "Monat und Tag";
     Text [ en-US ] = "Month and day";
 };
 
 String RID_STR_DATATYPE_MONTH
 {
-    Text [ de ] = "Monat";
     Text [ en-US ] = "Month";
 };
 
 String RID_STR_DATATYPE_DAY
 {
-    Text [ de ] = "Tag";
     Text [ en-US ] = "Day";
 };
 
 String RID_STR_XFORMS_CANT_EVALUATE
 {
-    Text [ de ] = "Fehler bei der Auswertung";
     Text [ en-US ] = "Error during evaluation";
 };
 
 String RID_STR_XFORMS_PATTERN_DOESNT_MATCH
 {
-    Text [ de ] = "Die Zeichenkette '$1' entspricht nicht dem geforderten regulären Ausdruck '$2'.";
     Text [ en-US ] = "The string '$1' does not match the required regular expression '$2'.";
 };
 
 String RID_STR_XFORMS_BINDING_UI_NAME
 {
-    Text [ de ] = "Bindung" ;
     Text [ en-US ] = "Binding" ;
 };
