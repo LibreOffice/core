@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:15:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:03:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,15 +51,12 @@ ModalDialog DLG_PARAMETERS
     Moveable = TRUE ;
     Closeable = TRUE ;
 
-    Text [ de ] = "Parameter-Eingabe" ;
 
     FixedLine FL_PARAMS
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
         Size = MAP_APPFONT ( 3 + LIST_WIDTH + 3 , 8 ) ;
-        Text [ de ] = "~Parameter";
         Text [ en-US ] = "~Parameters";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ALLPARAMS
     {
@@ -72,9 +69,7 @@ ModalDialog DLG_PARAMETERS
     {
         Pos = MAP_APPFONT ( 7 , 12 + LIST_HEIGHT + 4 ) ;
         Size = MAP_APPFONT ( LIST_WIDTH , 8 ) ;
-        Text [ de ] = "~Wert";
         Text [ en-US ] = "~Value";
-        Text [ x-comment ] = " ";
     };
     Edit ET_PARAM
     {
@@ -87,7 +82,6 @@ ModalDialog DLG_PARAMETERS
     {
         Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 12 + LIST_HEIGHT + 4 + 8 + 3 + ( 12 - BUTTON_HEIGHT ) / 2) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text [ de ] = "~nächster";
         TabStop = TRUE ;
         Text [ en-US ] = "~Next";
     };
@@ -108,7 +102,6 @@ ModalDialog DLG_PARAMETERS
 
     String STR_COULD_NOT_CONVERT_PARAM
     {
-        Text [ de ] = "Die Eingabe konnte nicht in einen gültigen Wert für die Spalte \"$name$\" umgewandelt werden";
         Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\"column";
     };
 };
