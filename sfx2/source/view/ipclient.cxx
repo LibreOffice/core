@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ipclient.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:09:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:29:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,6 +127,26 @@
 using namespace com::sun::star;
 
 //====================================================================
+// SfxEmbedResizeGuard
+class SfxBooleanFlagGuard
+{
+    sal_Bool& m_rFlag;
+    sal_Bool m_bLifeValue;
+public:
+    SfxBooleanFlagGuard( sal_Bool& bFlag, sal_Bool bLifeValue )
+    : m_rFlag( bFlag )
+    , m_bLifeValue( bLifeValue )
+    {
+        m_rFlag = m_bLifeValue;
+    }
+
+    ~SfxBooleanFlagGuard()
+    {
+        m_rFlag = !m_bLifeValue;
+    }
+};
+
+//====================================================================
 // SfxInPlaceClient_Impl
 
 //--------------------------------------------------------------------
@@ -146,9 +166,19 @@ public:
     Rectangle                       m_aLastObjAreaPixel;    // area of object in coordinate system of the container (without scaling)
     sal_Bool                        m_bStoreObject;
     sal_Bool                        m_bUIActive;            // set and cleared when notification for UI (de)activation is sent
+    sal_Bool                        m_bResizeNoScale;
 
     uno::Reference < embed::XEmbeddedObject > m_xObject;
     uno::Reference < embed::XEmbeddedClient > m_xClient;
+
+
+    SfxInPlaceClient_Impl()
+    : m_pClient( NULL )
+    , m_nAspect( 0 )
+    , m_bStoreObject( sal_True )
+    , m_bUIActive( sal_False )
+    , m_bResizeNoScale( sal_False )
+    {}
 
     void SizeHasChanged();
     DECL_LINK           (TimerHdl, Timer*);
@@ -548,33 +578,31 @@ void SAL_CALL SfxInPlaceClient_Impl::changedPlacement( const awt::Rectangle& aPo
     // new scaled object area
     Rectangle aNewLogicRect = m_pClient->GetEditWin()->PixelToLogic( aNewPixelRect );
 
-    // allow container to apply restrictions on the requested new area
+    // all the size changes in this method should happen without scaling
+    // SfxBooleanFlagGuard aGuard( m_bResizeNoScale, sal_True );
+
+    // allow container to apply restrictions on the requested new area;
+    // the container might change the object view during size calculation;
+    // currently only writer does it
     m_pClient->RequestNewObjectArea( aNewLogicRect);
 
-    // new size of the object area without scaling
-    Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,
-                      Fraction( aNewLogicRect.GetHeight() ) / m_aScaleHeight );
-
-    if ( aNewLogicRect.GetSize() != m_pClient->GetScaledObjArea().GetSize() )
+    if ( aNewLogicRect != m_pClient->GetScaledObjArea() )
     {
-        // size has changed, so first change visual area of the object before we resize its view
-        // without this the object always would be scaled - now it has the choice
-        MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( m_xObject->getMapUnit( m_nAspect ) ) );
-        MapMode aClientMap( m_pClient->GetEditWin()->GetMapMode().GetMapUnit() );
+        // the calculation of the object area has not changed the object size
+        // it should be done here then
+        SfxBooleanFlagGuard aGuard( m_bResizeNoScale, sal_True );
 
-        // convert to logical coordinates of the embedded object
-        Size aNewSize = m_pClient->GetEditWin()->LogicToLogic( aNewObjSize, &aClientMap, &aObjectMap );
-        m_xObject->setVisualAreaSize( m_nAspect, awt::Size( aNewSize.Width(), aNewSize.Height() ) );
+        // new size of the object area without scaling
+        Size aNewObjSize( Fraction( aNewLogicRect.GetWidth() ) / m_aScaleWidth,
+                          Fraction( aNewLogicRect.GetHeight() ) / m_aScaleHeight );
+
+        // now remove scaling from new placement and keep this a the new object area
+        aNewLogicRect.SetSize( aNewObjSize );
+        m_aObjArea = aNewLogicRect;
+
+        // let the window size be recalculated
+        SizeHasChanged();
     }
-
-    // resize object view
-    aNewPixelRect = m_pClient->GetEditWin()->LogicToPixel( aNewLogicRect );
-    awt::Rectangle aR = AWTRectangle( aNewPixelRect );
-    xInplace->setObjectRectangles( aR, aR );
-
-    // now remove scaling from new placement and keep this a the new object area
-    aNewLogicRect.SetSize( aNewObjSize );
-    m_aObjArea = aNewLogicRect;
 
     // notify container view about changes
     m_pClient->ObjectAreaChanged();
@@ -631,16 +659,19 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
             if ( !xInplace.is() )
                 throw uno::RuntimeException();
 
-            // convert new size to pixels
-            Rectangle aRealObjArea( m_aObjArea );
-            aRealObjArea.SetSize( Size( Fraction( aRealObjArea.GetWidth() ) * m_aScaleWidth,
-                                        Fraction( aRealObjArea.GetHeight() ) * m_aScaleHeight ) );
-            aRealObjArea = m_pClient->GetEditWin()->LogicToPixel( aRealObjArea );
+            if ( m_bResizeNoScale )
+            {
+                // the resizing should be done without scaling
+                // set the correct size to the object to avoid the scaling
+                MapMode aObjectMap( VCLUnoHelper::UnoEmbed2VCLMapUnit( m_xObject->getMapUnit( m_nAspect ) ) );
+                MapMode aClientMap( m_pClient->GetEditWin()->GetMapMode().GetMapUnit() );
 
-            // notify object about the new size so that the view size will be changed also
-            awt::Rectangle aAwtRect = AWTRectangle( aRealObjArea );
+                // convert to logical coordinates of the embedded object
+                Size aNewSize = m_pClient->GetEditWin()->LogicToLogic( m_aObjArea.GetSize(), &aClientMap, &aObjectMap );
+                m_xObject->setVisualAreaSize( m_nAspect, awt::Size( aNewSize.Width(), aNewSize.Height() ) );
+            }
 
-            xInplace->setObjectRectangles( aAwtRect, aAwtRect );
+            xInplace->setObjectRectangles( getPlacement(), getClipRectangle() );
         }
     }
     catch( uno::Exception& )
@@ -674,8 +705,6 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, Window *pDraw, sal
     pViewShell->NewIPClient_Impl(this);
     m_pImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
     m_pImp->m_aTimer.SetTimeoutHdl( LINK( m_pImp, SfxInPlaceClient_Impl, TimerHdl ) );
-    m_pImp->m_bStoreObject = sal_True;
-    m_pImp->m_bUIActive = FALSE;
 }
 
 //--------------------------------------------------------------------
@@ -1051,7 +1080,7 @@ void SfxInPlaceClient::VisAreaChanged()
     uno::Reference < embed::XInplaceObject > xObj( m_pImp->m_xObject, uno::UNO_QUERY );
     uno::Reference < embed::XInplaceClient > xClient( m_pImp->m_xClient, uno::UNO_QUERY );
     if ( xObj.is() && xClient.is() )
-        xObj->setObjectRectangles( xClient->getPlacement(), xClient->getClipRectangle() );
+        m_pImp->SizeHasChanged();
 }
 
 void SfxInPlaceClient::ObjectAreaChanged()
