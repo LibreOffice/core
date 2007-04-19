@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crnrdlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:05:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:36:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 256 , 181 ) ;
-    Text [ de ] = "Beschriftungsbereich festlegen" ;
     HelpId = HID_COLROWNAMERANGES ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
@@ -47,9 +46,7 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 188 , 8 ) ;
-        Text [ de ] = "Bereich" ;
         Text [ en-US ] = "Range" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_RANGE
     {
@@ -68,19 +65,16 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     ImageButton RB_AREA
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 179 , 104 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     RadioButton BTN_COLHEAD
     {
         Pos = MAP_APPFONT ( 20 , 121 ) ;
         Size = MAP_APPFONT ( 171 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "enthält ~Spaltenbeschriftungen" ;
         Text [ en-US ] = "Contains ~column labels" ;
     };
     RadioButton BTN_ROWHEAD
@@ -88,16 +82,13 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         Pos = MAP_APPFONT ( 20 , 135 ) ;
         Size = MAP_APPFONT ( 171 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "enthält ~Zeilenbeschriftungen" ;
         Text [ en-US ] = "Contains ~row labels" ;
     };
     FixedText FT_DATA_LABEL
     {
         Pos = MAP_APPFONT ( 12 , 151 ) ;
         Size = MAP_APPFONT ( 179 , 8 ) ;
-        Text [ de ] = "für ~Datenbereich" ;
         Text [ en-US ] = "For ~data range" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_DATA
     {
@@ -108,12 +99,10 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     };
     ImageButton RB_DATA
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 179 , 161 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -131,20 +120,16 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
     {
         Pos = MAP_APPFONT ( 200 , 104 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hinzu~fügen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 200 , 122 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Löschen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     HelpButton BTN_HELP
     {
@@ -153,7 +138,6 @@ ModelessDialog RID_SCDLG_COLROWNAMERANGES
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Define Label Range" ;
-    Text [ x-comment ] = " ";
 };
 
 
