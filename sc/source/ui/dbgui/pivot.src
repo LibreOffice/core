@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:59:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:27:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     SVLook = TRUE ;
     Moveable = TRUE ;
     Closeable = FALSE ;
-    Text [ de ] = "Datenpilot" ;
     Text [ en-US ] = "DataPilot" ;
-    Text [ x-comment ] = " ";
 
     FixedText FT_PAGE
     {
         Pos = MAP_APPFONT ( 194 , 168 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text[ de ] = "Seitenfelder" ;
         Text[ en-US ] = "Page Fields" ;
     };
     Control WND_PAGE
@@ -65,7 +62,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     {
         Pos = MAP_APPFONT ( 231 , 168 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text [ de ] = "Spaltenfelder" ;
         Text [ en-US ] = "Column Fields" ;
     };
     Control WND_COL
@@ -78,7 +74,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     {
         Pos = MAP_APPFONT ( 194 , 176 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text [ de ] = "Zeilen-\nfelder" ;
         Text [ en-US ] = "Row\nFields" ;
     };
     Control WND_ROW
@@ -91,7 +86,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     {
         Pos = MAP_APPFONT ( 231, 176 ) ;
         Size = MAP_APPFONT ( 37 , 8 ) ;
-        Text [ de ] = "Datenfelder" ;
         Text [ en-US ] = "Data Fields" ;
     };
     Control WND_DATA
@@ -108,8 +102,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     };
     String STR_SELECT
     {
-        Text [ de ] = "Auswahlbereich";
-        Text [ x-comment ] = "; EM Oct 2002: (not \"range\") In the datapilot dialog, object description of control that lists the fields that you can drag to one of the other three areas/controls.";
         Text [ en-US ] = "Selection area";
     };
     ScrollBar WND_HSCROLL
@@ -124,15 +116,12 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Pos = MAP_APPFONT ( 6 , 168 ) ;
         Size = MAP_APPFONT ( 182 , 16 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Ziehen Sie die Felder auf der rechten Seite mit der Maus in die gewünschten Bereiche." ;
         Text [ en-US ] = "Drag the fields from the right into the desired position." ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 268 , 8 ) ;
-        Text [ de ] = "Layout" ;
         Text [ en-US ] = "Layout";
     };
     OKButton BTN_OK
@@ -159,7 +148,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Pos = MAP_APPFONT ( 280 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Entfernen" ;
         Text [ en-US ] = "Remove";
     };
     PushButton BTN_OPTIONS
@@ -167,7 +155,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Pos = MAP_APPFONT ( 280 , 80 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Optionen..." ;
         Text [ en-US ] = "Options...";
     };
     MoreButton BTN_MORE
@@ -193,19 +180,15 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 190 ) ;
         Size = MAP_APPFONT ( 268 , 8 ) ;
-        Text [ de ] = "Ergebnis" ;
         Text [ en-US ] = "Result" ;
         Hide = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_OUTAREA
     {
         Pos = MAP_APPFONT ( 12 , 203 ) ;
         Size = MAP_APPFONT ( 59 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "~Ausgabe ab" ;
         Text [ en-US ] = "Results to" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_OUTAREA
     {
@@ -230,9 +213,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        QuickHelpText [ de ] = "Verkleinern" ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     CheckBox BTN_IGNEMPTYROWS
     {
@@ -240,9 +221,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Leerzeilen ~ignorieren" ;
         Text [ en-US ] = "Ignore ~empty rows" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_DETECTCAT
     {
@@ -250,9 +229,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Kategorieerkennung" ;
         Text [ en-US ] = "~Identify categories" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_TOTALCOL
     {
@@ -260,7 +237,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Gesamtergebnis-Spalten" ;
         Text [ en-US ] = "Total columns" ;
     };
     CheckBox BTN_TOTALROW
@@ -269,9 +245,7 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Gesamtergebnis-Zeilen" ;
         Text [ en-US ] = "~Total rows" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_FILTER
     {
@@ -279,7 +253,6 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Fil~ter hinzufügen" ;
         Text [ en-US ] = "~Add filter" ;
     };
     CheckBox BTN_DRILLDOWN
@@ -288,74 +261,51 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
         Size = MAP_APPFONT ( 124 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "Drilldo~wn zu Details zulassen" ;
         Text [ en-US ] = "Ena~ble drill to details" ;
     };
     String PIVOTSTR_SUM
     {
-        Text [ de ] = "Summe - " ;
         Text [ en-US ] = "Sum - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_COUNT
     {
-        Text [ de ] = "Anzahl - " ;
         Text [ en-US ] = "Count - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_AVG
     {
-        Text [ de ] = "Mittelwert - " ;
         Text [ en-US ] = "Mean - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_MAX
     {
-        Text [ de ] = "Max - " ;
         Text [ en-US ] = "Max - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_MIN
     {
-        Text [ de ] = "Min - " ;
         Text [ en-US ] = "Min - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_PROD
     {
-        Text [ de ] = "Produkt - " ;
         Text [ en-US ] = "Product - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_COUNT2
     {
-        Text [ de ] = "Anzahl - " ;
         Text [ en-US ] = "Count - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_DEV
     {
-        Text [ de ] = "StAbw - " ;
         Text [ en-US ] = "StDev - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_DEV2
     {
-        Text [ de ] = "StAbwN - " ;
         Text [ en-US ] = "StDevP - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_VAR
     {
-        Text [ de ] = "Varianz - " ;
         Text [ en-US ] = "Var - " ;
-        Text [ x-comment ] = " ";
     };
     String PIVOTSTR_VAR2
     {
-        Text [ de ] = "Varianzen - " ;
         Text [ en-US ] = "VarP - " ;
-        Text [ x-comment ] = " ";
     };
 };
 
