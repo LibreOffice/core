@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabopdlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:35:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModelessDialog RID_SCDLG_TABOP
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 240 , 64 ) ;
-    Text [ de ] = "Mehrfachoperationen" ;
     Text [ en-US ] = "Multiple operations" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -49,9 +48,7 @@ ModelessDialog RID_SCDLG_TABOP
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 68 , 8 ) ;
-        Text [ de ] = "~Formeln" ;
         Text [ en-US ] = "~Formulas" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FORMULARANGE
     {
@@ -61,21 +58,16 @@ ModelessDialog RID_SCDLG_TABOP
     };
     ImageButton RB_FORMULARANGE
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 163 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_ROWCELL
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "~Zeile" ;
         Text [ en-US ] = "~Row input cell" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_ROWCELL
     {
@@ -85,21 +77,16 @@ ModelessDialog RID_SCDLG_TABOP
     };
     ImageButton RB_ROWCELL
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 163 , 29 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_COLCELL
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "~Spalte" ;
         Text [ en-US ] = "~Column input cell" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_COLCELL
     {
@@ -109,21 +96,16 @@ ModelessDialog RID_SCDLG_TABOP
     };
     ImageButton RB_COLCELL
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 163 , 45 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedLine FL_VARIABLES
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 172 , 8 ) ;
-        Text [ de ] = "Vorgaben" ;
         Text [ en-US ] = "Default settings" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -143,39 +125,26 @@ ModelessDialog RID_SCDLG_TABOP
     };
     String STR_NOFORMULA
     {
-        Text [ de ] = "Keine Formel eingetragen!" ;
         Text [ en-US ] = "No formula specified." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOCOLROW
     {
-        Text [ de ] = "Weder Zeile noch Spalte eingetragen!" ;
         Text [ en-US ] = "Neither row or column specified." ;
-        Text [ x-comment ] = " ";
     };
     String STR_WRONGFORMULA
     {
-        Text [ de ] = "Undefinierter Name oder Bereich!" ;
         Text [ en-US ] = "Undefined name or range." ;
-        Text [ x-comment ] = " ";
     };
     String STR_WRONGROWCOL
     {
-        Text [ de ] = "Undefinierter Name oder falsche Zellreferenz!" ;
         Text [ en-US ] = "Undefined name or wrong cell reference." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOCOLFORMULA
     {
-        Text [ de ] = "Formeln bilden keine Spalte!" ;
         Text [ en-US ] = "Formulas don't form a column." ;
-        Text [ x-comment ] = " ";
     };
     String STR_NOROWFORMULA
     {
-        Text [ de ] = "Formeln bilden keine Zeile!" ;
         Text [ en-US ] = "Formulas don't form a row." ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
