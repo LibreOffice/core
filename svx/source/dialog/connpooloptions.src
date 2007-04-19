@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:05:44 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:01:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,23 +53,18 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     {
         Pos = MAP_APPFONT( 4, 3 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 8, 8 );
-        Text [ de ] = "Aufbewahrung von Verbindungen";
         Text [ en-US ] = "Connection pool";
-        Text [ x-comment ] = "; Please don't translate the german phrase! It is an unfortunate translation of the english technical term.";
     };
     CheckBox CB_POOL_CONNS
     {
         Pos = MAP_APPFONT( 7, 15 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 14, 10 );
-        Text [ de ] = "Verbindungen aufbewahren";
         Text [ en-US ] = "Connection pooling enabled";
-        Text [ x-comment ] = "; jc 01.08.01: der Eintrag befindet sich in Extras/Optionen/Datenquellen/Verbindungen";
     };
     FixedText FT_DRIVERS
     {
         Pos = MAP_APPFONT( 17, 28 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 14 - 8, 8 );
-        Text [ de ] = "In %PRODUCTNAME bekannte Treiber";
         Text [ en-US ] = "Drivers known in %PRODUCTNAME";
     };
     Control CTRL_DRIVER_LIST
@@ -84,7 +79,6 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     {
         Pos = MAP_APPFONT( 17, 39 + LIST_SIZE_Y + 4 );
         Size = MAP_APPFONT( 70, 8 );
-        Text [ de ] = "aktueller Treiber:";
         Text [ en-US ] = "Current driver:";
     };
     FixedText FT_DRIVER
@@ -96,14 +90,12 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
     {
         Pos = MAP_APPFONT( 17, 39 + LIST_SIZE_Y + 4 + 8 + 3 );
         Size = MAP_APPFONT( PAGE_SIZE_X - 23, 10 );
-        Text [ de ] = "Verbindungen dieses Treibers aufbewahren";
         Text [ en-US ] = "Enable pooling for this driver";
     };
     FixedText FT_TIMEOUT
     {
         Pos = MAP_APPFONT( 27, 39 + LIST_SIZE_Y + 4 + 8 + 3 + 10 + 3 + 2 );
         Size = MAP_APPFONT( 100, 8 );
-        Text [ de ] = "Verfallszeit (Sekunden)";
         Text [ en-US ] = "Timeout (seconds)";
     };
     NumericField NF_TIMEOUT
@@ -124,27 +116,22 @@ TabPage RID_OFAPAGE_CONNPOOLOPTIONS
 
     String STR_DRIVER_NAME
     {
-        Text [ de ] = "Treibername";
         Text [ en-US ] = "Driver name";
     };
     String STR_POOLED_FLAG
     {
-        Text [ de ] = "aufbewahren";
         Text [ en-US ] = "Pool";
     };
     String STR_POOL_TIMEOUT
     {
-        Text [ de ] = "Verfallszeit";
         Text [ en-US ] = "Timeout";
     };
     String STR_YES
     {
-        Text [ de ] = "ja";
         Text [ en-US ] = "Yes";
     };
     String STR_NO
     {
-        Text [ de ] = "nein";
         Text [ en-US ] = "No";
     };
 };
