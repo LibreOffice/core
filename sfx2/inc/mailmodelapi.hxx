@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmodelapi.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:53:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:25:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -110,6 +110,7 @@ private:
     SaveResult          ShowFilterOptionsDialog( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMGR,
                                                  const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > xModel,
                                                  const ::rtl::OUString& rFilterName,
+                                                 const ::rtl::OUString& rType,
                                                  bool bModified,
                                                  sal_Int32& rNumArgs,
                                                  ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& rArgs );
