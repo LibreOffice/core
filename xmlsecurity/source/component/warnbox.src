@@ -4,9 +4,9 @@
  *
  *  $RCSfile: warnbox.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:10:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:57:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,7 +39,6 @@ WarningBox RID_XMLSECWB_NO_MOZILLA_PROFILE
 {
     Buttons = WB_OK ;
     DefButton = WB_DEF_OK ;
-    Message [ de ] = "Die digitale Signaturen Funktion kann nicht benutzt werden, da kein Mozilla Benutzerprofil gefunden wurde. Bitte überprüfen Sie die Mozilla Installation." ;
     Message [ en-US ] = "Digital signatures functionality could not be used, because no Mozilla user profile was found. Please check the Mozilla installation." ;
 };
 
