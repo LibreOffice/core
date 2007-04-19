@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedlg.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:04:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ ModelessDialog RID_SCDLG_AREAS
      //Closeable = TRUE;    // Dieser Dialog hat einen Cancel-Button !
     Hide = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Druckbereiche bearbeiten" ;
     Text [ en-US ] = "Edit Print Ranges" ;
     OKButton BTN_OK
     {
@@ -64,7 +63,6 @@ ModelessDialog RID_SCDLG_AREAS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "~Druckbereich" ;
         Text [ en-US ] = "Print range" ;
     };
     ListBox LB_PRINTAREA
@@ -73,13 +71,6 @@ ModelessDialog RID_SCDLG_AREAS
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "- keiner -" ; Default ; > ;
-            < "- ganze Tabelle -" ; Default ; > ;
-            < "- benutzerdefiniert -" ; Default ; > ;
-            < "- Selektion -" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "- none -" ; Default ; > ;
@@ -87,12 +78,6 @@ ModelessDialog RID_SCDLG_AREAS
             < "- user defined -" ; Default ; > ;
             < "- selection -" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < "; - keiner -" ; Default ; > ;
-        < "; - benutzerdefiniert -" ; Default ; > ;
-        < "; - Selektion -" ; Default ; > ;
-    };
     };
     Edit ED_PRINTAREA
     {
@@ -102,7 +87,6 @@ ModelessDialog RID_SCDLG_AREAS
     };
     ImageButton RB_PRINTAREA
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 239 , 13 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -112,7 +96,6 @@ ModelessDialog RID_SCDLG_AREAS
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wiederholungs~zeile" ;
         Text [ en-US ] = "Rows to repeat" ;
     };
     ListBox LB_REPEATROW
@@ -121,21 +104,11 @@ ModelessDialog RID_SCDLG_AREAS
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "- keine -" ; Default ; > ;
-            < "- benutzerdefiniert -" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "- none -" ; Default ; > ;
             < "- user defined -" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < "; - keine -" ; Default ; > ;
-        < "; - benutzerdefiniert -" ; Default ; > ;
-    };
     };
     Edit ED_REPEATROW
     {
@@ -145,7 +118,6 @@ ModelessDialog RID_SCDLG_AREAS
     };
     ImageButton RB_REPEATROW
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 239 , 42 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -155,7 +127,6 @@ ModelessDialog RID_SCDLG_AREAS
     {
         Pos = MAP_APPFONT ( 6 , 61 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Wiederholungs~spalte" ;
         Text [ en-US ] = "Columns to repeat" ;
     };
     ListBox LB_REPEATCOL
@@ -164,21 +135,11 @@ ModelessDialog RID_SCDLG_AREAS
         Pos = MAP_APPFONT ( 12 , 72 ) ;
         Size = MAP_APPFONT ( 90 , 60 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "- keine -" ; Default ; > ;
-            < "- benutzerdefiniert -" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "- none -" ; Default ; > ;
             < "- user defined -" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < "; - keine -" ; Default ; > ;
-        < "; - benutzerdefiniert -" ; Default ; > ;
-    };
     };
     Edit ED_REPEATCOL
     {
@@ -188,7 +149,6 @@ ModelessDialog RID_SCDLG_AREAS
     };
     ImageButton RB_REPEATCOL
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 239 , 71 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
@@ -206,7 +166,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ de ] = "Zeilen- & Spalten~k√∂pfe" ;
         Text [ en-US ] = "~Column and row headers" ;
         TabStop = TRUE ;
     };
@@ -214,7 +173,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 87 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ de ] = "Tabellen~gitter" ;
         Text [ en-US ] = "~Grid" ;
         TabStop = TRUE ;
     };
@@ -222,7 +180,6 @@ TabPage RID_SCPAGE_TABLE
     {
             Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ de ] = "~Notizen" ;
         Text [ en-US ] = "~Notes" ;
         TabStop = TRUE ;
     };
@@ -230,7 +187,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 115 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ de ] = "~Objekte/Grafiken" ;
         Text [ en-US ] = "~Objects/graphics" ;
         TabStop = TRUE ;
     };
@@ -238,7 +194,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 160 , 73 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
-        Text [ de ] = "~Diagramme" ;
         Text [ en-US ] = "Ch~arts" ;
         TabStop = TRUE ;
     };
@@ -246,7 +201,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 160 , 87 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
-        Text [ de ] = "Z~eichenobjekte" ;
         Text [ en-US ] = "~Drawing objects" ;
         TabStop = TRUE ;
     };
@@ -254,7 +208,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 160 , 101 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
-        Text [ de ] = "~Formeln" ;
         Text [ en-US ] = "~Formulas" ;
         TabStop = TRUE ;
     };
@@ -262,7 +215,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 160 , 115 ) ;
         Size = MAP_APPFONT ( 91 , 10 ) ;
-        Text [ de ] = "Null~werte" ;
         Text [ en-US ] = "Zero ~values" ;
         TabStop = TRUE ;
     };
@@ -270,14 +222,12 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 62 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Drucken" ;
         Text [ en-US ] = "Print" ;
     };
     RadioButton BTN_TOPDOWN
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ de ] = "Von o~ben nach unten, dann nach rechts" ;
         Text [ en-US ] = "~Top to bottom, then right" ;
         TabStop = TRUE ;
     };
@@ -285,10 +235,8 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 142 , 10 ) ;
-        Text [ de ] = "Von ~links nach rechts, dann nach unten" ;
         Text [ en-US ] = "~Left to right, then down" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = "; ÃﬁÍÔÚ; - - - -";
     };
     FixedImage BMP_PAGEDIR
     {
@@ -319,7 +267,6 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "Erste ~Seitenzahl" ;
         Text [ en-US ] = "First ~page number" ;
         TabStop = TRUE ;
     };
@@ -339,14 +286,12 @@ TabPage RID_SCPAGE_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Seitenreihenfolge" ;
         Text [ en-US ] = "Page order" ;
     };
     FixedText FT_SCALEMODE
     {
         Pos = MAP_APPFONT( 12, 144 );
         Size = MAP_APPFONT( 124, 8 );
-        Text [ de ] = "Skalierungs~modus";
         Text [ en-US ] = "Scaling ~mode";
     };
     ListBox LB_SCALEMODE
@@ -355,12 +300,6 @@ TabPage RID_SCPAGE_TABLE
         Pos = MAP_APPFONT( 12, 155 );
         Size = MAP_APPFONT( 124, 60 );
         DropDown = TRUE;
-        StringList [ de ] =
-        {
-            < "Ausdruck verkleinern/vergr√∂√üern"; SC_TPTABLE_SCALE_PERCENT; >;
-            < "Druckbereich(e) auf Breite/H√∂he anpassen"; SC_TPTABLE_SCALE_TO; >;
-            < "Druckbereich(e) auf Seitenzahl anpassen"; SC_TPTABLE_SCALE_TO_PAGES; >;
-        };
         StringList [ en-US ] =
         {
             < "Reduce/enlarge printout"; SC_TPTABLE_SCALE_PERCENT; >;
@@ -428,7 +367,6 @@ TabPage RID_SCPAGE_TABLE
         Pos = MAP_APPFONT( 148, 157 );
         Size = MAP_APPFONT( 68 , 8 );
         Hide = TRUE;
-        Text [ de ] = "Sk~alierungsfaktor";
         Text [ en-US ] = "~Scaling factor";
     };
     FixedText FT_SCALEPAGEWIDTH
@@ -436,7 +374,6 @@ TabPage RID_SCPAGE_TABLE
         Pos = MAP_APPFONT( 148, 146 );
         Size = MAP_APPFONT( 68 , 8 );
         Hide = TRUE;
-        Text [ de ] = "Br~eite in Seiten";
         Text [ en-US ] = "~Width in pages";
     };
     FixedText FT_SCALEPAGEHEIGHT
@@ -444,7 +381,6 @@ TabPage RID_SCPAGE_TABLE
         Pos = MAP_APPFONT( 148, 162 );
         Size = MAP_APPFONT( 68 , 8 );
         Hide = TRUE;
-        Text [ de ] = "H~√∂he in Seiten";
         Text [ en-US ] = "H~eight in pages";
     };
     FixedText FT_SCALEPAGENUM
@@ -452,14 +388,12 @@ TabPage RID_SCPAGE_TABLE
         Pos = MAP_APPFONT( 148, 157 );
         Size = MAP_APPFONT( 68, 8 );
         Hide = TRUE;
-        Text [ de ] = "Seiten~anzahl";
         Text [ en-US ] = "N~umber of pages";
     };
     FixedLine FL_SCALE
     {
         Pos = MAP_APPFONT ( 6 , 131 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Skalieren" ;
         Text [ en-US ] = "Scale" ;
     };
 };
