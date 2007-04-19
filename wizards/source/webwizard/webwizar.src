@@ -4,9 +4,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:07:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:01:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,14 +38,12 @@
 
 String WEBDIALOG
 {
-    Text [ de ] = "~Hilfe";
     Text [ en-US ] = "~Help";
 };
 
 
 String WEBDIALOG + 1
 {
-    Text [ de ] = "AutoPilot Web-Seite";
     Text [ en-US ] = "AutoPilot Web Page";
 };
 
@@ -54,35 +52,28 @@ String WEBDIALOG + 1
 
 String WEBDIALOG + 2
 {
-    Text [ de ] = "A~bbrechen";
     Text [ en-US ] = "~Cancel";
-    Text [ x-comment ] = " ";
 };
 
 String WEBDIALOG + 3
 {
-    Text [ de ] = "~Fertig stellen";
     Text [ en-US ] = "C~reate";
 };
 
 
 String WEBDIALOG + 4
 {
-    Text [ de ] = "Welche Vorlage soll verwendet werden ?";
     Text [ en-US ] = "Which template should be used?";
 };
 
 String WEBDIALOG + 5
 {
-    Text [ de ] = "Welcher Stil soll verwendet werden ?";
     Text [ en-US ] = "Which layout should be used?";
-    Text [ x-comment ] = "; The German should read \"Stilart\" and has nothing to do with \"Vorlage\". ENG: don't use style here.(EM16.5.00)";
 };
 
 
 String WEBDIALOG + 6
 {
-    Text [ de ] = "Hintergrundbild";
     Text [ en-US ] = "Background Image";
 };
 
@@ -90,73 +81,59 @@ String WEBDIALOG + 6
 
 String WEBDIALOG + 7
 {
-    Text [ de ] = "~Gekachelt";
     Text [ en-US ] = "~Tiled";
 };
 
 
 String WEBDIALOG + 8
 {
-    Text [ de ] = "~Skaliert";
     Text [ en-US ] = "~Scaled";
 };
 
 
 String WEBDIALOG + 9
 {
-    Text [ de ] = "Dokument bearbeiten";
     Text [ en-US ] = "Edit document";
 };
 
 String WEBDIALOG + 10
 {
-    Text [ de ] = "Vorlage erzeugen";
     Text [ en-US ] = "Create template";
-    Text [ x-comment ] = " ";
 };
 
 
 String WEBERROR + 1
 {
-    Text [ de ] = "Es wurde keine Vorlage für den Seitenaufbau gefunden.";
     Text [ en-US ] = "A template for the page setup could not be found.";
 };
 
 String WEBERROR + 2
 {
-    Text [ de ] = "Es wurde keine Vorlage für den Seitenstil gefunden.";
     Text [ en-US ] = "A Style for the Page Style could not be found.";
-    Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM \"Seitenstil\" in Dt should be \"Seitenvorlage\"!! I asked TV. Maybe the Dt sentence will be changed.16.5.00EM";
 };
 
 String WEBERROR + 3
 {
-    Text [ de ] = "Bei der Auswertung der Vorlagen ist ein Fehler aufgetreten.";
     Text [ en-US ] = "An error occurred as the templates were being interpreted.";
 };
 
 String WEBERROR + 4
 {
-    Text [ de ] = "Bei der Aktualisierung der Vorlage ist ein Fehler aufgetreten.";
     Text [ en-US ] = "An error occurred as the template was being refreshed.";
 };
 
 String WEBERROR + 5
 {
-    Text [ de ] = "Bei der Zuweisung der Formatvorlagen ist ein Fehler aufgetreten.";
     Text [ en-US ] = "An error occurred while applying the Styles.";
-    Text [ x-comment ] = "; - All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM p.s.Formatvorlagen sind Styles.";
 };
 
 String WEBERROR + 6
 {
-    Text [ de ] = "Bei der Auswertung der Dokumente ist ein Fehler aufgetreten.";
     Text [ en-US ] = "An error occurred while evaluating the documents.";
 };
 
 String WEBERROR + 7
 {
-    Text [ de ] = "Bei der Ausführung des AutoPiloten ist ein Fehler aufgetreten.";
     Text [ en-US ] = "An error occurred while running the AutoPilot.";
 };
 
