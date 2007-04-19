@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Strings_ChartTypes.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:44:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:58:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,40 +36,32 @@
 
 String STR_LINES
 {
-    Text [ de ] = "Linien" ;
     Text [ en-US ] = "Lines" ;
 };
 String STR_COLUMNS
 {
-    Text [ de ] = "SÃ¤ulen" ;
     Text [ en-US ] = "Columns" ;
 };
 String STR_BARS
 {
-    Text [ de ] = "Balken" ;
     Text [ en-US ] = "Bars" ;
-    Text [ x-comment ] = "èëè: Ïîëîñû - -";
 };
 String STR_AREAS
 {
-    Text [ de ] = "FlÃ¤chen" ;
     Text [ en-US ] = "Areas" ;
 };
 String STR_CIRCLES
 {
-    Text [ de ] = "Kreise" ;
     Text [ en-US ] = "Pies" ;
 };
 
 String STR_DONUT1
 {
-    Text [ de ] = "Ringe" ;
     Text [ en-US ] = "Rings" ;
 };
 /*
 String STR_DONUT2
 {
-    Text [ de ] = "Ringe" ;
     Text [ en-US ] = "Rings" ;
 };
 */
@@ -78,32 +70,26 @@ String STR_DONUT2
 
 String STR_NORMAL
 {
-    Text [ de ] = "Normal" ;
     Text [ en-US ] = "Normal" ;
 };
 String STR_STACKED
 {
-    Text [ de ] = "Gestapelt" ;
     Text [ en-US ] = "Stacked" ;
 };
 String STR_PERCENT
 {
-    Text [ de ] = "Prozent" ;
     Text [ en-US ] = "Percent" ;
 };
 
 String STR_DEEP
 {
-    Text [ de ] = "Tief" ;
     Text [ en-US ] = "Deep" ;
 };
 
 String STR_OFS
 {
     // comment
-    Text [ x-comment ] = "BM: Parameter $(N) is replaced by 1 or 2 for different offset types";
     // comment
-    Text [ de ] = "Offset $(N)" ;
     Text [ en-US ] = "Offset $(N)" ;
 };
 
@@ -111,241 +97,196 @@ String STR_OFS
 /*
 String STR_LINESYMB
 {
-    Text [ de ] = "Linien mit Symbolen" ;
     Text [ en-US ] = "Lines with Symbols" ;
 };
 */
 String STR_XY
 {
-    Text [ de ] = "XY-Diagramm" ;
     Text [ en-US ] = "XY Chart" ;
 };
 /*
 String STR_XYZ
 {
-    Text [ de ] = "XYZ-Diagramm" ;
     Text [ en-US ] = "XYZ Chart" ;
 };
 */
 String STR_ONLY_SYMBOLS
 {
-    Text [ de ] = "Nur Symbole" ;
     Text [ en-US ] = "Symbols Only" ;
 };
 String STR_ONLY_LINES
 {
-    Text [ de ] = "Nur Linien" ;
     Text [ en-US ] = "Lines Only" ;
 };
 String STR_LINE_SYMBOLS
 {
-    Text [ de ] = "Linien mit Symbolen" ;
     Text [ en-US ] = "Lines with Symbols" ;
 };
 
 String STR_LINE_COLUMN
 {
-    Text [ de ] = "Verbunddiagramm: Linie und SÃ¤ulen" ;
     Text [ en-US ] = "Combination Chart: Lines and Columns" ;
 };
 String STR_LINE_STACKEDCOLUMN
 {
-    Text [ de ] = "Verbunddiagramm: Linie und gestapelte SÃ¤ulen" ;
     Text [ en-US ] = "Combination Chart: Lines and stacked columns" ;
 };
 String STR_NET
 {
-    Text [ de ] = "Netz" ;
     Text [ en-US ] = "Net" ;
 };
 String STR_SYMBOL
 {
-    Text [ de ] = "Symbole" ;
     Text [ en-US ] = "Symbols" ;
 };
 
 String STR_SYMBOL_STACK
 {
-    Text [ de ] = "Gestapelt mit Symbolen" ;
     Text [ en-US ] = "Stacked with symbols" ;
 };
 String STR_SYMBOL_PERCENT
 {
-    Text [ de ] = "Prozentual mit Symbolen" ;
     Text [ en-US ] = "Percent with symbols" ;
 };
 
 String STR_SPLINE_CUBIC
 {
-    Text [ de ] = "Kubischer Spline" ;
     Text [ en-US ] = "Cubic Spline" ;
 };
 String STR_SPLINE_CUBIC_SYMBOL
 {
-    Text [ de ] = "Kubischer Spline mit Symbolen" ;
     Text [ en-US ] = "Cubic Spline with Symbols" ;
 };
 String STR_SPLINE_B
 {
-    Text [ de ] = "B-Spline" ;
     Text [ en-US ] = "B-Spline" ;
 };
 String STR_SPLINE_B_SYMBOL
 {
-    Text [ de ] = "B-Spline mit Symbolen" ;
     Text [ en-US ] = "B-Spline with Symbols" ;
 };
 
 String STR_STOCK
 {
-    Text [ de ] = "Kursdiagramm" ;
     Text [ en-US ] = "Stock Chart";
 };
 String STR_STOCK_1
 {
-    Text [ de ] = "Kursdiagramm 1" ;
     Text [ en-US ] = "Stock Chart 1";
 };
 String STR_STOCK_2
 {
-    Text [ de ] = "Kursdiagramm 2" ;
     Text [ en-US ] = "Stock Chart 2";
 };
 String STR_STOCK_3
 {
-    Text [ de ] = "Kursdiagramm 3" ;
     Text [ en-US ] = "Stock Chart 3";
 };
 String STR_STOCK_4
 {
-    Text [ de ] = "Kursdiagramm 4" ;
     Text [ en-US ] = "Stock Chart 4";
 };
 
 //-----------------------------------
 String STR_SAEULE_3D_1
 {
-    Text [ de ] = "Runde SÃ¤ulen" ;
     Text [ en-US ] = "Cylinder";
 };
 String STR_SAEULE_3D_2
 {
-    Text [ de ] = "Runde, gestapelte SÃ¤ulen" ;
     Text [ en-US ] = "Cylinder, stacked";
 };
 String STR_SAEULE_3D_3
 {
-    Text [ de ] = "Runde SÃ¤ulen, Prozent";
     Text [ en-US ] = "Cylinder, percent";
 };
 String STR_SAEULE_3D_4
 {
-    Text [ de ] = "Runde SÃ¤ulen, Tief" ;
     Text [ en-US ] = "Cylinder, deep";
 };
 //-----------------------------------
 String STR_ROEHRE_3D_1
 {
-    Text [ de ] = "RÃ¶hren" ;
     Text [ en-US ] = "Tubes";
 };
 String STR_ROEHRE_3D_2
 {
-    Text [ de ] = "Gestapelte RÃ¶hren" ;
     Text [ en-US ] = "Tubes, stacked";
 };
 String STR_ROEHRE_3D_3
 {
-    Text [ de ] = "RÃ¶hren, Prozent";
     Text [ en-US ] = "Tubes, percent";
 };
 String STR_ROEHRE_3D_4
 {
-    Text [ de ] = "RÃ¶hren, Tief" ;
     Text [ en-US ] = "Tubes, deep";
 };
 String STR_PYRAMID_3D_1
 {
-    Text [ de ] = "Pyramiden" ;
     Text [ en-US ] = "Pyramids";
 };
 String STR_PYRAMID_3D_2
 {
-    Text [ de ] = "Gestapelte Pyramiden" ;
     Text [ en-US ] = "Pyramids, stacked";
 };
 String STR_PYRAMID_3D_3
 {
-    Text [ de ] = "Pyramiden, Prozent";
     Text [ en-US ] = "Pyramids percent";
 };
 String STR_PYRAMID_3D_4
 {
-    Text [ de ] = "Pyramiden, Tief" ;
     Text [ en-US ] = "Pyramids, deep";
 };
 //-----------------------------------
 String STR_PYRAMIDQ_3D_1
 {
-    Text [ de ] = "Horizontale Pyramiden" ;
     Text [ en-US ] = "Horizontal pyramids";
 };
 String STR_PYRAMIDQ_3D_2
 {
-    Text [ de ] = "Horizontale ,gestapelte Pyramiden" ;
     Text [ en-US ] = "Horizontal pyramids, stacked";
 };
 String STR_PYRAMIDQ_3D_3
 {
-    Text [ de ] = "Horizontale Pyramiden, Prozent";
     Text [ en-US ] = "Horizontal pyramids, percent";
 };
 String STR_PYRAMIDQ_3D_4
 {
-    Text [ de ] = "Horizontale Pyramiden, Tief" ;
     Text [ en-US ] = "Horizontal pyramids, deep";
 };
 //-----------------------------------
 
 String STR_KEGEL_3D_1
 {
-    Text [ de ] = "Kegel" ;
     Text [ en-US ] = "Cones";
 };
 String STR_KEGEL_3D_2
 {
-    Text [ de ] = "Gestapelte Kegel" ;
     Text [ en-US ] = "Cones, stacked";
 };
 String STR_KEGEL_3D_3
 {
-    Text [ de ] = "Kegel, Prozent";
     Text [ en-US ] = "Cones, percent";
 };
 String STR_KEGEL_3D_4
 {
-    Text [ de ] = "Kegel, Tief" ;
     Text [ en-US ] = "Cones, deep";
 };
 //-----------------------------------
 String STR_KEGELQ_3D_1
 {
-    Text [ de ] = "Horizontale Kegel" ;
     Text [ en-US ] = "Horizontal cones";
 };
 String STR_KEGELQ_3D_2
 {
-    Text [ de ] = "Horizontale ,gestapelte Kegel" ;
     Text [ en-US ] = "Horizontal, stacked cones";
 };
 String STR_KEGELQ_3D_3
 {
-    Text [ de ] = "Horizontale Kegel, Prozent";
     Text [ en-US ] = "Horizintal cones, percent";
 };
 String STR_KEGELQ_3D_4
 {
-    Text [ de ] = "Horizontale Kegel, Tief" ;
     Text [ en-US ] = "Horizontal cones, deep";
 };
 //-----------------------------------
