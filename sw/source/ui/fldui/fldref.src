@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:03:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:08:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,15 +42,12 @@ TabPage TP_FLD_REF
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Referenzen" ;
     FixedText FT_REFTYPE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Feldtyp" ;
         Text [ en-US ] = "~Type" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_REFTYPE
     {
@@ -64,10 +61,8 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 88 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "~Auswahl" ;
         Text [ en-US ] = "S~election" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_REFSELECTION
     {
@@ -81,10 +76,8 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 170 , 3 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "F~ormat" ;
         Left = TRUE ;
         Text [ en-US ] = "F~ormat" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_REFFORMAT
     {
@@ -99,10 +92,8 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 170 , 128 ) ;
         Size = MAP_APPFONT ( 84 , 10 ) ;
-        Text [ de ] = "Na~me" ;
         Left = TRUE ;
         Text [ en-US ] = "Na~me" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_REFNAME
     {
@@ -116,11 +107,9 @@ TabPage TP_FLD_REF
     {
         Pos = MAP_APPFONT ( 170 , 156 ) ;
         Size = MAP_APPFONT ( 84 , 8 ) ;
-        Text [ de ] = "~Wert" ;
         Text [ en-US ] = "~Value" ;
         Disable = TRUE ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_REFVALUE
     {
@@ -133,22 +122,15 @@ TabPage TP_FLD_REF
     };
     String STR_REFBOOKMARK
     {
-        Text [ de ] = "Textmarken" ;
         Text [ en-US ] = "Bookmarks" ;
-        Text [ x-comment ] = " ";
     };
     String STR_REFFOOTNOTE
     {
-        Text [ de ] = "Fußnoten" ;
         Text [ en-US ] = "Footnotes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_REFENDNOTE
     {
-        Text [ de ] = "Endnoten" ;
         Text [ en-US ] = "Endnotes" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "References" ;
-    Text [ x-comment ] = " ";
 };
