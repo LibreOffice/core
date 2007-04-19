@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CollectionView.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:11:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:57:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -62,7 +62,6 @@ ModalDialog DLG_COLLECTION_VIEW
     HelpId = HID_EXPLORERDLG_COLLECTION ;
 
     Size = MAP_APPFONT ( WIN_X , WIN_Y ) ;
-    Text [ de ] = "Speichern" ;
     Text [ en-US ] = "Save" ;
 
     FixedText FT_EXPLORERFILE_CURRENTPATH
@@ -76,7 +75,6 @@ ModalDialog DLG_COLLECTION_VIEW
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS -  RELATED_CONTROLS - 2*IMG_SIZE, UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( IMG_SIZE , IMG_SIZE ) ;
-        QuickHelpText [ de ] = "Neuen Ordner erstellen" ;
         QuickHelpText [ en-US ] = "Create New Directory" ;
     };
     ImageButton BTN_EXPLORERFILE_UP
@@ -84,7 +82,6 @@ ModalDialog DLG_COLLECTION_VIEW
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( WIN_X - UNRELATED_CONTROLS - IMG_SIZE, UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( IMG_SIZE , IMG_SIZE ) ;
-        QuickHelpText [ de ] = "Aufwärts" ;
         QuickHelpText [ en-US ] = "Up One Level" ;
     };
 
@@ -100,7 +97,6 @@ ModalDialog DLG_COLLECTION_VIEW
     {
         Pos = MAP_APPFONT ( UNRELATED_CONTROLS , WIN_Y - 3*UNRELATED_CONTROLS - BUTTON_HEIGHT - FIXEDLINE_HEIGHT - EDIT_HEIGHT ) ;
         Size = MAP_APPFONT ( 50 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Datei~name:" ;
         Text [ en-US ] = "File ~name:" ;
     };
     Edit ED_EXPLORERFILE_FILENAME
@@ -123,7 +119,6 @@ ModalDialog DLG_COLLECTION_VIEW
         Size = MAP_APPFONT ( 50 , BUTTON_HEIGHT ) ;
         DefButton = TRUE ;
         TabStop = TRUE ;
-        Text [ de ] = "Speichern" ;
         Text [ en-US ] = "Save" ;
     };
 
@@ -144,14 +139,12 @@ ModalDialog DLG_COLLECTION_VIEW
 
     String STR_PATHNAME
     {
-        Text [ de ] = "~Pfad:" ;
         Text [ en-US ] = "~Path:" ;
     };
 };
 
 String STR_NEW_FOLDER
 {
-    Text [ de ] = "Ordner" ;
     Text [ en-US ] = "Folder" ;
 };
 Image IMG_NAVIGATION_BTN_UP_SC
@@ -177,7 +170,6 @@ Image IMG_NAVIGATION_CREATEFOLDER_SCH
 
 String STR_ALREADYEXISTOVERWRITE
 {
-    Text [ de ] = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
