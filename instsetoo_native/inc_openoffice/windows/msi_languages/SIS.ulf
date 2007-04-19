@@ -1,24 +1,18 @@
 [OOO_SIS_TITLE]
 en-US = "Installation database"
-de = "Installationsdatenbank"
 
 [OOO_SIS_AUTHOR]
 en-US = "Author"
-de = "Autor"
 
 [OOO_SIS_SUBJECT]
 en-US = "Subject"
-de = "Betreff"
 
 [OOO_SIS_COMMENT]
 en-US = "Comment"
-de = "Kommentar"
 
 [OOO_SIS_KEYWORDS]
 en-US = "Install,MSI"
-de = "Installieren,MSI"
 
 [OOO_SIS_APPNAME]
 en-US = "Windows Installer"
-de = "Windows-Installationsprogramm"
 
