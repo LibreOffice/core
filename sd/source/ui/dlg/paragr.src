@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:35:21 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:28:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@ TabDialog TAB_PARAGRAPH
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Absatz" ;
     Text [ en-US ] = "Paragraph" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -55,30 +54,24 @@ TabDialog TAB_PARAGRAPH
             {
                 Identifier = RID_SVXPAGE_STD_PARAGRAPH ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
-                Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = RID_SVXPAGE_STD_PARAGRAPH ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_ALIGN_PARAGRAPH ;
-                Text [ de ] = "Ausrichtung" ;
                 PageResID = RID_SVXPAGE_ALIGN_PARAGRAPH ;
                 Text [ en-US ] = "Alignment" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PARA_ASIAN ;
                 PageResID = RID_SVXPAGE_PARA_ASIAN ;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text [ en-US ] = "Asian Typography";
             };
             /*
             PageItem  {
                     Identifier = RID_SVXPAGE_EXT_PARAGRAPH;
-                    Text [ de ] = "Absatz (Zusätze)";
                     Text [ en-US ] = "Paragraph (Extensions)";
                     PageResID = RID_SVXPAGE_EXT_PARAGRAPH;
                 };
@@ -86,10 +79,8 @@ TabDialog TAB_PARAGRAPH
             PageItem
             {
                 Identifier = RID_SVXPAGE_TABULATOR ;
-                Text [ de ] = "Tabulator" ;
                 Text [ en-US ] = "Tabs" ;
                 PageResID = RID_SVXPAGE_TABULATOR ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -116,12 +107,9 @@ TabDialog TAB_PARAGRAPH
         Pos = MAP_APPFONT ( 169 , 151 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Zurück : Zur³ck */
-        Text [ de ] = "ZurÃ¼ck" ;
         Text [ en-US ] = "Return" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
