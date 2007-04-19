@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-07-19 16:17:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:37:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,25 +49,20 @@ TabPage RID_SFXPAGE_PATH
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Pfade" ;
     Text [ en-US ] = "Paths" ;
     FixedText FT_TYPE
     {
         Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Typ" ;
         Text [ en-US ] = "Type" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PATH
     {
         Hide = TRUE;
         Pos = MAP_APPFONT ( 110 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] = "Pfad" ;
         Text [ en-US ] = "Path" ;
-        Text [ x-comment ] = " ";
     };
     Control LB_PATH
     {
@@ -80,25 +75,19 @@ TabPage RID_SFXPAGE_PATH
     {
         Pos = MAP_APPFONT ( 183 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ de ] = "~Bearbeiten..." ;
         Text [ en-US ] = "~Edit..." ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_STANDARD
     {
         Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ de ] = "~Standard" ;
         Text [ en-US ] = "~Default" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GB_STD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Von %PRODUCTNAME verwendete Pfade" ;
         Text [ en-US ] = "Paths used by %PRODUCTNAME" ;
-        Text [ x-comment ] = " ";
     };
     Image IMG_LOCK
     {
@@ -112,7 +101,6 @@ TabPage RID_SFXPAGE_PATH
     };
     String STR_MULTIPATHDLG
     {
-        Text [ de ] = "Pfade Bearbeiten: %1" ;
         Text [ en-US ] = "Edit Paths: %1" ;
     };
 };
@@ -120,29 +108,23 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Die Verzeichnisse für die Konfiguration und des Nachrichtenspeichers\nmüssen verschieden sein.\nBitte wählen Sie einen neuen Pfad aus." ;
     Message [ en-US ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
-    Message [ x-comment ] = " ";
 };
  // ******************************************************************* EOF
 String RID_SVXSTR_KEY_CONFIG_DIR
 {
-    Text [ de ] = "Konfiguration" ;
     Text [ en-US ] = "Configuration" ;
 };
 String RID_SVXSTR_KEY_WORK_PATH
 {
-    Text [ de ] = "Arbeitsverzeichnis" ;
     Text [ en-US ] = "My Documents" ;
 };
 String RID_SVXSTR_KEY_GRAPHICS_PATH
 {
-    Text [ de ] = "Grafiken" ;
     Text [ en-US ] = "Graphics" ;
 };
 String RID_SVXSTR_KEY_BITMAP_PATH
 {
-    Text [de ] = "Symbole" ;
     Text [ en-US ] = "Icons" ;
 };
 String RID_SVXSTR_KEY_BASIC_PATH
@@ -152,93 +134,75 @@ String RID_SVXSTR_KEY_BASIC_PATH
 
 String RID_SVXSTR_KEY_PALETTE_PATH
 {
-    Text [ de ] = "Paletten" ;
     Text [ en-US ] = "Palettes" ;
 };
 String RID_SVXSTR_KEY_BACKUP_PATH
 {
-    Text [ de ] = "Sicherungskopien" ;
     Text [ en-US ] = "Backups" ;
 };
 String RID_SVXSTR_KEY_MODULES_PATH
 {
-    Text [ de ] = "Module" ;
     Text [ en-US ] = "Modules" ;
 };
 String RID_SVXSTR_KEY_TEMPLATE_PATH
 {
-    Text [ de ] = "Dokumentvorlagen" ;
     Text [ en-US ] = "Templates" ;
 };
 String RID_SVXSTR_KEY_GLOSSARY_PATH
 {
-    Text [ de ] = "AutoText" ;
     Text [ en-US ] = "AutoText";
 };
 String RID_SVXSTR_KEY_DICTIONARY_PATH
 {
-    Text [ de ] = "Wörterbücher" ;
     Text [ en-US ] = "Dictionaries" ;
 };
 String RID_SVXSTR_KEY_HELP_DIR
 {
-    Text [ de ] = "Hilfedateien" ;
     Text [ en-US ] = "Help" ;
 };
 String RID_SVXSTR_KEY_GALLERY_DIR
 {
-    Text [ de ] = "Gallery" ;
     Text [ en-US ] = "Gallery" ;
 };
 
 String RID_SVXSTR_KEY_STORAGE_DIR
 {
-    Text [ de ] = "Nachrichtenspeicher" ;
     Text [ en-US ] = "Message Storage" ;
 };
 String RID_SVXSTR_KEY_TEMP_PATH
 {
-    Text [ de ] = "Temporäre Dateien" ;
     Text [ en-US ] = "Temporary files";
 };
 String RID_SVXSTR_KEY_PLUGINS_PATH
 {
-    Text [ de ] = "Plugins-Verzeichnis" ;
     Text [ en-US ] = "Plug-ins";
 };
 String RID_SVXSTR_KEY_FAVORITES_DIR
 {
-    Text [ de ] = "Ordner-Bookmarks" ;
     Text [ en-US ] = "Folder Bookmarks";
 };
 String RID_SVXSTR_KEY_FILTER_PATH
 {
-    Text [ de ] = "Filter" ;
     Text [ en-US ] = "Filters";
 };
 String RID_SVXSTR_KEY_ADDINS_PATH
 {
-    Text [ de ] = "AddIns" ;
     Text [ en-US ] = "Add-ins";
 };
 String RID_SVXSTR_KEY_USERCONFIG_PATH
 {
-    Text [ de ] = "Benutzer Konfiguration" ;
     Text [ en-US ] = "User Configuration";
 };
 String RID_SVXSTR_KEY_USERDICTIONARY_DIR
 {
-    Text [ de ] = "Benutzerwörterbücher" ;
     Text [ en-US ] = "User-defined dictionaries";
 };
 String RID_SVXSTR_KEY_AUTOCORRECT_DIR
 {
-    Text [ de ] = "AutoKorrektur" ;
     Text [ en-US ] = "AutoCorrect";
 };
 String RID_SVXSTR_KEY_LINGUISTIC_DIR
 {
-    Text [ de ] = "Linguistik" ;
     Text [ en-US ] = "Writing aids";
 };
 
