@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:43:34 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:15:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,16 +43,13 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
 {
     HelpId = HID_NUMBERFORMAT ;
     Hide = TRUE ;
-    Text [ de ] = "Zahlenformat" ;
     Text [ en-US ] = "Number Format" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_CATEGORY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "~Kategorie" ;
         Text [ en-US ] = "~Category" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_CATEGORY
     {
@@ -60,21 +57,6 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 6 , 14 ) ;
         Size = MAP_APPFONT ( 70 , 71 ) ;
         AutoHScroll = TRUE ;
-        StringList [ de ] =
-        {
-            < "Alle" ; Default ; > ;
-            < "Benutzerdefiniert" ; Default ; > ;
-            < "Zahl" ; Default ; > ;
-            < "Prozent" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : Währung*/
-            < "WÃ¤hrung" ; Default ; > ;
-            < "Datum" ; Default ; > ;
-            < "Zeit" ; Default ; > ;
-            < "Wissenschaft" ; Default ; > ;
-            < "Bruch" ; Default ; > ;
-            < "Wahrheitswert" ; Default ; > ;
-            < "Text" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "All" ; Default ; > ;
@@ -89,28 +71,12 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
             < "Boolean Value" ; Default ; > ;
             < "Text" ; Default ; > ;
         };
-        StringList [ x-comment ] =
-        {
-                < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-        };
     };
     FixedText FT_EDFORMAT
     {
         Pos = MAP_APPFONT ( 6 , 136 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Format-~Code" ;
         Text [ en-US ] = "~Format code" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_FORMAT
     {
@@ -136,9 +102,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Pos = MAP_APPFONT ( 82 , 3 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "~Format" ;
         Text [ en-US ] = "F~ormat" ;
-        Text [ x-comment ] = " ";
     };
 
     ListBox LB_CURRENCY
@@ -148,14 +112,6 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Size = MAP_APPFONT ( 90 , 71 ) ;
         DropDown = TRUE ;
         TabStop = TRUE ;
-        StringList [ de ] =
-        {
-            < "Automatisch" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-                < " " ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
                 < "Automatically" ; Default ; > ;
@@ -175,9 +131,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 69 , 8 ) ;
-        Text [ de ] = "N~achkommastellen" ;
         Text [ en-US ] = "~Decimal places" ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_DECIMALS
     {
@@ -197,9 +151,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 12 , 120 ) ;
         Size = MAP_APPFONT ( 69 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Führende ~Nullen : F³hrende ~Nullen */
-        Text [ de ] = "FÃ¼hrende ~Nullen" ;
         Text [ en-US ] = "Leading ~zeroes" ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_LEADZEROES
     {
@@ -218,33 +170,25 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Pos = MAP_APPFONT ( 133 , 104 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Negativ in ~Rot" ;
         Text [ en-US ] = "~Negative numbers red" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_THOUSAND
     {
         Pos = MAP_APPFONT ( 133 , 120 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Tausenderpunkt" ;
         Text [ en-US ] = "~Thousands separator" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 91 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LANGUAGE
     {
         Pos = MAP_APPFONT ( 178 , 3 ) ;
         Size = MAP_APPFONT ( 76 , 8 ) ;
-        Text [ de ] = "S~prache" ;
         Text [ en-US ] = "~Language" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LANGUAGE
     {
@@ -258,7 +202,6 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Pos = MAP_APPFONT ( 178 , 42 ) ;
         Size = MAP_APPFONT ( 76 , 10 ) ;
-        Text [ de ] = "Q~uellenformat" ;
         Text [ en-US ] = "So~urce format" ;
     };
     Window WND_NUMBER_PREVIEW
@@ -274,11 +217,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 208 , 146 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_ADD ;
-        QuickHelpText [ de ] = "HinzufÃ¼gen" ;
         QuickHelpText [ en-US ] = "Add" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton IB_REMOVE
     {
@@ -286,11 +225,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 240 , 146 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_REMOVE ;
-        QuickHelpText [ de ] = "Entfernen" ;
         QuickHelpText [ en-US ] = "Remove" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageButton IB_INFO
     {
@@ -298,11 +233,7 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
         Pos = MAP_APPFONT ( 224 , 146 ) ;
         Size = MAP_APPFONT ( 14 , 14 ) ;
         HelpId = HID_NUMBERFORMAT_TBI_INFO ;
-        QuickHelpText [ de ] = "Kommentar Ã¤ndern" ;
         QuickHelpText [ en-US ] = "Edit Comment" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ImageList IL_ICON
     {
@@ -331,17 +262,13 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
 
     String STR_EUROPE
     {
-        Text [ de ] = "Europa" ;
         Text [ en-US ] = "Europe";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTO_ENTRY
     {
-        Text [ de ] = "Automatisch";
         Text [ en-US ] = "Automatic";
     };
 
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
