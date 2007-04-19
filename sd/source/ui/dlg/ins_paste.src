@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ins_paste.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:33:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:26:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog DLG_INSERT_PASTE
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 148 , 90 ) ;
     Moveable = TRUE ;
-    Text [ de ] = "Dias einfügen" ;
     OKButton BTN_OK
     {
         Pos = MAP_APPFONT ( 92 , 6 ) ;
@@ -66,27 +65,22 @@ ModalDialog DLG_INSERT_PASTE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position";
     };
     RadioButton RB_BEFORE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80, 10 ) ;
-        Text [ de ] = "da~vor" ;
         Text [ en-US ] = "~Before" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_AFTER
     {
         Pos = MAP_APPFONT ( 12, 27 ) ;
         Size = MAP_APPFONT ( 80, 10 ) ;
-        Text [ de ] = "da~hinter" ;
         Text [ en-US ] = "A~fter" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Insert Slides";
 };
