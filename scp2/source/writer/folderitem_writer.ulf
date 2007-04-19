@@ -4,9 +4,9 @@
  *
  *  $RCSfile: folderitem_writer.ulf,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:49:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:35:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,12 +35,9 @@
 
 [STR_FI_NAME_HTMLDOKUMENT]
 en-US = "HTML Document"
-de = "HTML-Dokument"
 
 [STR_FI_NAME_TEXTDOKUMENT]
 en-US = "Text Document"
-de = "Textdokument"
 
 [STR_FI_TOOLTIP_WRITER]
-de = "Erstellen und bearbeiten von Text und Grafiken in Briefen, Reports, Dokumenten und Web-Seiten - Writer macht's möglich."
 en-US = "Create and edit text and graphics in letters, reports, documents and Web pages by using Writer."
