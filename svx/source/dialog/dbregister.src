@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbregister.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:36:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:02:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ TabPage RID_SFXPAGE_DBREGISTER
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] =  "Registrierte Datenbanken" ;
     Text [ en-US ] = "Registered databases" ;
 
     FixedText FT_TYPE
@@ -59,7 +58,6 @@ TabPage RID_SFXPAGE_DBREGISTER
         Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] =  "Registrierter Name" ;
         Text [ en-US ] = "Registered name" ;
     };
     FixedText FT_PATH
@@ -67,7 +65,6 @@ TabPage RID_SFXPAGE_DBREGISTER
         Hide = TRUE;
         Pos = MAP_APPFONT ( 110 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 10 ) ;
-        Text [ de ] =  "Datenbankdatei" ;
         Text [ en-US ] = "Database file" ;
     };
     Control LB_PATH
@@ -81,28 +78,24 @@ TabPage RID_SFXPAGE_DBREGISTER
     {
         Pos = MAP_APPFONT ( 47 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ de ] =  "~Neu..." ;
         Text [ en-US ] = "~New..." ;
     };
     PushButton BTN_EDIT
     {
         Pos = MAP_APPFONT ( 183 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ de ] =  "~Bearbeiten..." ;
         Text [ en-US ] = "~Edit..." ;
     };
     PushButton BTN_DELETE
     {
         Pos = MAP_APPFONT ( 115 , 165 ) ;
         Size = MAP_APPFONT ( 65 , 14 ) ;
-        Text [ de ] =  "~Löschen" ;
         Text [ en-US ] = "~Delete" ;
     };
     FixedLine GB_STD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] =  "Registrierte Datenbanken" ;
         Text [ en-US ] = "Registered databases" ;
     };
 };
