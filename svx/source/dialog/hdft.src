@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:39:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:05:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,14 +39,10 @@
  // pragma ----------------------------------------------------------------
 
 #define  _TEXT_FT_LMARGIN \
-        Text [ de ] = "~Linker Rand" ;                                             \
         Text [ en-US ] = "~Left margin" ;                              \
-        Text [ x-comment ] = " ";                                       \
 
 #define _TEXT_FT_RMARGIN \
-        Text [ de ] = "~Rechter Rand" ;                                            \
         Text [ en-US ] = "R~ight margin" ;                             \
-        Text [ x-comment ] = " ";                                       \
 
 
  // RID_SVXPAGE_HEADER ----------------------------------------------------
@@ -54,24 +50,19 @@ TabPage RID_SVXPAGE_HEADER
 {
     HelpId = HID_FORMAT_HEADER ;
     Hide = TRUE ;
-    Text [ de ] = "Kopfzeile" ;
     Text [ en-US ] = "Header" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text [ de ] = "~Kopfzeile einschalten" ;
         Text [ en-US ] = "Hea~der on" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SHARED
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text [ de ] = "~Inhalt links/rechts gleich" ;
         Text [ en-US ] = "Same ~content left/right" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LMARGIN
     {
@@ -122,9 +113,7 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ de ] = "A~bstand" ;
         Text [ en-US ] = "~Spacing" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_DIST
     {
@@ -146,16 +135,13 @@ TabPage RID_SVXPAGE_HEADER
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "D~ynamischen Abstand verwenden" ;
         Text [ en-US ] = "Use d~ynamic spacing" ;
     };
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ de ] = "Höh~e" ;
         Text [ en-US ] = "~Height" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_HEIGHT
     {
@@ -178,17 +164,13 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text [ de ] = "Höhe ~dynamisch anpassen" ;
         Text [ en-US ] = "~AutoFit height" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Kopfzeile" ;
         Text [ en-US ] = "Header" ;
-        Text [ x-comment ] = " ";
     };
     Window WN_BSP
     {
@@ -199,35 +181,27 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Zus~ätze..." ;
         Text [ en-US ] = "~More..." ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_FOOTER ----------------------------------------------------
 TabPage RID_SVXPAGE_FOOTER
 {
     HelpId = HID_FORMAT_FOOTER ;
     Hide = TRUE ;
-    Text [ de ] = "Fußzeile" ;
     Text [ en-US ] = "Footer" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     CheckBox CB_TURNON
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text [ de ] = "~Fußzeile einschalten" ;
         Text [ en-US ] = "~Footer on" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SHARED
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text [ de ] = "~Inhalt links/rechts gleich" ;
         Text [ en-US ] = "Same ~content left/right" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LMARGIN
     {
@@ -277,9 +251,7 @@ TabPage RID_SVXPAGE_FOOTER
     {
         Pos = MAP_APPFONT ( 12 , 82 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ de ] = "A~bstand" ;
         Text [ en-US ] = "~Spacing" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_DIST
     {
@@ -301,17 +273,14 @@ TabPage RID_SVXPAGE_FOOTER
         Pos = MAP_APPFONT ( 12 , 96 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "D~ynamischen Abstand verwenden" ;
         Text [ en-US ] = "Use d~ynamic spacing" ;
     };
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 98 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        Text [ de ] = "Höh~e" ;
         Disable = TRUE ;
         Text [ en-US ] = "~Height" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_HEIGHT
     {
@@ -334,18 +303,14 @@ TabPage RID_SVXPAGE_FOOTER
     {
         Pos = MAP_APPFONT ( 12 , 112 ) ;
         Size = MAP_APPFONT ( 152 , 10 ) ;
-        Text [ de ] = "Höhe ~dynamisch anpassen" ;
         Text [ en-US ] = "~AutoFit height" ;
-        Text [ x-comment ] = " ";
     };
 
     FixedLine FL_FRAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Fußzeile" ;
         Text [ en-US ] = "Footer" ;
-        Text [ x-comment ] = " ";
     };
     Window WN_BSP
     {
@@ -356,19 +321,14 @@ TabPage RID_SVXPAGE_FOOTER
     {
         Pos = MAP_APPFONT ( 12 , 130 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Zus~ätze..." ;
         Text [ en-US ] = "~More..." ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 QueryBox RID_SVXQBX_DELETE_HEADFOOT
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Das Ausschalten der Kopf- oder Fußzeilen löscht vorhandenen Inhalt.\nMöchten Sie den Inhalt löschen?" ;
     Message [ en-US ] = "Removing headers or footers deletes the contents.\nDo you want to delete this text?" ;
-    Message [ x-comment ] = " ";
 };
 
  // ********************************************************************** EOF
