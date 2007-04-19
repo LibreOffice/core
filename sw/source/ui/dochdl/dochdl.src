@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dochdl.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:59:47 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:59:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,69 +40,51 @@
 
 String STR_NOGLOS1
 {
-    Text [ de ] = "AutoText zum Kürzel '" ;
     Text [ en-US ] = "AutoText for Shortcut '" ;
-    Text [ x-comment ] = " ";
 };
 String STR_NOGLOS2
 {
-    Text [ de ] = "' nicht gefunden." ;
     Text [ en-US ] = "' not found." ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_NO_TABLE
 {
-    Text [ de ] = "Eine Tabelle kann nicht in eine andere Tabelle eingefügt werden. Sie können die Daten jedoch einfügen, wenn sich der Cursor nicht in einer Tabelle befindet." ;
     Text [ en-US ] = "A table cannot be inserted into another table. However, you can paste the data into the document when the cursor is not in a table.";
-    Text [ x-comment ] = " ";
 };
 
 
 InfoBox MSG_ERR_INSERT_GLOS
 {
-    Message [ de ] = "AutoText konnte nicht angelegt werden." ;
     Message [ en-US ] = "AutoText could not be created." ;
-    Message [ x-comment ] = " ";
 };
 
 InfoBox MSG_CLPBRD_FORMAT_ERROR
 {
-    Message [ de ] = "Gewünschtes Zwischenablagen-Format steht nicht zur Verfügung." ;
     Message [ en-US ] = "Requested clipboard format is not available." ;
-    Message [ x-comment ] = " ";
 };
 
 QueryBox MSG_UPDATE_NEW_GLOS_FMT
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Der Bereich liegt in einem alten Format vor.\nEr muss konvertiert werden, um Änderungen\nspeichern zu können.\nSoll er konvertiert werden?" ;
     Message [ en-US ] = "The section format is outdated.\nIt needs to be converted so that changes\ncan be saved.\nShould it be converted now?" ;
-    Message [ x-comment ] = " ";
 };
 
 String STR_PRIVATETEXT
 {
-    Text [ de ] = "%PRODUCTNAME Writer" ;
     Text [ en-US ] = "%PRODUCTNAME Writer" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PRIVATEGRAPHIC
 {
-    Text [ de ] = "Grafik [%PRODUCTNAME Writer]" ;
     Text [ en-US ] = "Graphics [%PRODUCTNAME Writer]" ;
 };
 String STR_PRIVATEOLE
 {
-    Text [ de ] = "Objekt [%PRODUCTNAME Writer]" ;
     Text [ en-US ] = "Object [%PRODUCTNAME Writer]" ;
 };
 String STR_DDEFORMAT
 {
-    Text [ de ] = "DDE Verknüpfung" ;
     Text [ en-US ] = "DDE link" ;
-    Text [ x-comment ] = " ";
 };
 Bitmap BMP_SW_TEAM_MUGSHOT
 {
@@ -111,7 +93,6 @@ Bitmap BMP_SW_TEAM_MUGSHOT
 
 String STR_SW_TEAM_NAMES
 {
-    Text [ x-comment ] = "pb: don't use special characters (like german umlauts) here";
     Text = "Back row: Aidan Butler, Hans-Peter Burow, Caolan McNamara, Michael Brauer, Martin Maher, Gunnar Timm\nFront row: Thomas Lange, Oliver-Rainer Duesterhoeft, Henning Brinkmann, Andreas Martens, Oliver Specht, Frank Meies, Daniel Vogelheim";
 };
 
