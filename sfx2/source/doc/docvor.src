@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:28:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:15:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,7 +49,6 @@ ModalDialog DLG_ORGANIZE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 271 , 162 ) ;
-    Text [ de ] = "Dokumentvorlagen verwalten" ;
     Text [ en-US ] = "Template Management" ;
     Moveable = TRUE ;
     HelpButton BTN_HELP
@@ -64,26 +63,21 @@ ModalDialog DLG_ORGANIZE
         Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
-        Text [ de ] = "SchlieÃŸen" ;
         Text [ en-US ] = "Close" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_FILES
     {
         Pos = MAP_APPFONT ( 205 , 143 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Datei..." ;
         Text [ en-US ] = "~File..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_ADDRESSTEMPLATE
     {
         Pos = MAP_APPFONT ( 205 , 124 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Adressbuch..." ;
         Text [ en-US ] = "~Address Book..." ;
     };
     ListBox LB_LEFT_TYP
@@ -94,21 +88,11 @@ ModalDialog DLG_ORGANIZE
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Templates" ; Default ; > ;
             < "Documents" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     ListBox LB_RIGHT_TYP
     {
@@ -118,21 +102,11 @@ ModalDialog DLG_ORGANIZE
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 1 ;
-        StringList [ de ] =
-        {
-            < "Dokumentvorlagen" ; Default ; > ;
-            < "Dokumente" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Templates" ; Default ; > ;
             < "Documents" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     Control LB_LEFT
     {
@@ -178,7 +152,6 @@ ModalDialog DLG_ORGANIZE
     {
         Pos = MAP_APPFONT ( 205 , 23 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Befehle" ;
         Text [ en-US ] = "Commands" ;
         TabStop = TRUE ;
         ButtonMenu = Menu
@@ -189,13 +162,11 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_NEW ;
                     HelpId = HID_ORGANIZE_NEW ;
-                    Text [ de ] = "~Neu" ;
                     Text [ en-US ] = "~New" ;
                     AccelKey = KeyCode
                     {
                         Code = KEY_INSERT ;
                     };
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -203,21 +174,17 @@ ModalDialog DLG_ORGANIZE
                     HelpId = HID_ORGANIZE_DELETE ;
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
                     /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-                    Text [ de ] = "~LÃ¶schen" ;
                     Text [ en-US ] = "~Delete" ;
                     AccelKey = KeyCode
                     {
                         Code = KEY_DELETE ;
                     };
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = ID_EDIT ;
                     HelpId = HID_ORGANIZE_EDIT ;
-                    Text [ de ] = "~Bearbeiten" ;
                     Text [ en-US ] = "~Edit" ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -227,17 +194,13 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_COPY_FROM ;
                     HelpId = HID_ORGANIZE_COPY_FROM ;
-                    Text [ de ] = "Vorlage ~importieren..." ;
                     Text [ en-US ] = "Import Template..." ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = ID_COPY_TO ;
                     HelpId = HID_ORGANIZE_COPY_TO ;
-                    Text [ de ] = "Vorlage ~exportieren..." ;
                     Text [ en-US ] = "Export Template..." ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -247,17 +210,13 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_PRINT ;
                     HelpId = HID_ORGANIZE_PRINT ;
-                    Text [ de ] = "~Drucken" ;
                     Text [ en-US ] = "~Print" ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
                     Identifier = ID_PRINTER_SETUP ;
                     HelpId = HID_ORGANIZE_PRINTER_SETUP ;
-                    Text [ de ] = "Druckereinstellun~gen..." ;
                     Text [ en-US ] = "Printer Settings..." ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -267,9 +226,7 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_RESCAN ;
                     HelpId = HID_ORGANIZE_RESCAN ;
-                    Text [ de ] = "~Aktualisieren" ;
                     Text [ en-US ] = "Update" ;
-                    Text [ x-comment ] = " ";
                 };
                 MenuItem
                 {
@@ -279,19 +236,16 @@ ModalDialog DLG_ORGANIZE
                 {
                     Identifier = ID_DEFAULT_TEMPLATE ;
                     HelpId = HID_ORGANIZE_STDTEMPLATE_ADD ;
-                    Text [ de ] = "Als S~tandardvorlage setzen" ;
                     Text [ en-US ] = "Set As Default Template" ;
                 };
                 MenuItem
                 {
                     Identifier = ID_RESET_DEFAULT_TEMPLATE ;
                     HelpId = HID_ORGANIZE_STDTEMPLATE_DEL ;
-                    Text [ de ] = "~Standardvorlage zurÃ¼cksetzen" ;
                     Text [ en-US ] = "Reset Default Template" ;
                 };
             };
         };
-        Text [ x-comment ] = " ";
     };
     Image IMG_OPENED_FOLDER
     {
@@ -337,7 +291,6 @@ ModalDialog DLG_ORGANIZE
     {
         Pos = MAP_APPFONT ( 3 , 161 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "Standardvorlage:" ;
         Text [ en-US ] = "Default template:" ;
     };
     FixedText FT_DEFAULT_TEMPLATE
@@ -345,7 +298,6 @@ ModalDialog DLG_ORGANIZE
         Pos = MAP_APPFONT ( 66 , 161 ) ;
         Size = MAP_APPFONT ( 131 , 10 ) ;
     };*/
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
