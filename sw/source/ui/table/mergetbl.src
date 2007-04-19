@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 11:01:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ ModalDialog DLG_MERGE_TABLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 207 , 57 ) ;
-    Text [ de ] = "Tabellen verbinden" ;
     Moveable = TRUE ;
     OKButton PB_OK
     {
@@ -68,30 +67,23 @@ ModalDialog DLG_MERGE_TABLE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 139 , 8 ) ;
-        Text [ de ] = "Modus" ;
         Text [ en-US ] = "Mode" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_MERGE_PREV
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "mit der ~vorherigen Tabelle verbinden" ;
         Check = TRUE ;
         TabStop = TRUE ;
         Text [ en-US ] = "Join with ~previous table";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_MERGE_NEXT
     {
         Pos = MAP_APPFONT ( 12 , 30 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "mit der ~nachfolgenden Tabelle verbinden" ;
         Text [ en-US ] = "Join with ~next table";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Merge Tables";
-    Text [ x-comment ] = " ";
 };
 
 
