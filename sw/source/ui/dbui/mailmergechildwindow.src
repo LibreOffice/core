@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:06:22 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:54:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@
 #define HEIGHT 16
 
 #define WORKAROUND \
-    Text [ de ] = "Zurück zum Serienbrief-Assistenten" ; \
     Text [ en-US ] = "Return to Mail Merge Wizard" ; \
 
 
@@ -56,7 +55,6 @@ FloatingWindow DLG_MAILMERGECHILD\
     Zoomable = TRUE ;
     HelpID = HID_MAILMERGECHILD ;
     Hide = TRUE ;
-    Text [ de ] = "Serienbrief-Assistent";\
     Text [ en-US ] = "Mail Merge Wizard";\
     ToolBox TB_BACK\
     {
@@ -106,40 +104,34 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     Moveable = TRUE ;
     Closeable = TRUE;
 
-    Text [ de ] = "E-Mails versenden";
     Text [ en-US ] = "Sending E-mail messages";
 
     FixedLine  FL_STATUS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 238 , 8 ) ;
-        Text [ de ] = "Verbindungsstatus" ;
         Text[ en-US ] = "Connection status";
     };
     FixedText  FT_STATUS1
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 226 , 8 ) ;
-        Text [ de ] = "Die Verbindung zum Postausgangsserver ist aufgebaut." ;
         Text[ en-US ] = "The connection to the outgoing mail server has been established";
     };
     String ST_SEND
     {
-        Text [ de ] = "E-Mails werden versendet..." ;
         Text[ en-US ] = "Sending e-mails...";
     };
     FixedLine  FL_TRANSFERSTATUS
     {
         Pos = MAP_APPFONT ( 6 , 28 ) ;
         Size = MAP_APPFONT ( 238 , 8 ) ;
-        Text [ de ] = "Übertragungsstatus" ;
         Text[ en-US ] = "Transfer status";
     };
     FixedText  FT_TRANSFERSTATUS
     {
         Pos = MAP_APPFONT ( 12, 39 ) ;
         Size = MAP_APPFONT ( 110 , 8 ) ;
-        Text [ de ] = "%1 von %2 E-Mails wurden gesendet" ;
         Text[ en-US ] = "%1 of %2 e-mails sent";
     };
     FixedText  FI_PAUSED
@@ -147,7 +139,6 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
         Pos = MAP_APPFONT ( 125, 39 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Senden gestoppt" ;
         Text[ en-US ] = "Sending paused";
     };
     Window    PB_PROGRESS
@@ -160,19 +151,16 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     {
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 226 , 8 ) ;
-        Text [ de ] = "Nicht versendete E-Mails: %1" ;
         Text[ en-US ] = "E-mails not sent: %1";
     };
     PushButton PB_DETAILS
     {
         Pos = MAP_APPFONT ( 188 , 81 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Mehr >>" ;
         Text[ en-US ] = "More >>";
     };
     String  ST_LESS
     {
-        Text [ de ] = "<< Weniger" ;
         Text[ en-US ] = "<< Less";
     };
 
@@ -191,19 +179,16 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     {
         Pos = MAP_APPFONT ( 141 , 201 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Stopp" ;
         Text[ en-US ] = "~Stop";
     };
     PushButton PB_CLOSE
     {
         Pos = MAP_APPFONT ( 194 , 201 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schließen" ;
         Text[ en-US ] = "C~lose";
     };
     String     ST_CONTINUE
     {
-        Text [ de ] = "Fortsetzen" ;
         Text[ en-US ] = "~Continue";
     };
     #define IMGLIST_IDS\
@@ -229,32 +214,26 @@ ModelessDialog /*ModalDialog*/ DLG_MM_SENDMAILS
     };
     String ST_TASK
     {
-        Text [ de ] = "Aktion" ;
         Text[ en-US ] = "Task";
     };
     String ST_STATUS
     {
-        Text [ de ] = "Status" ;
         Text[ en-US ] = "Status";
     };
     String ST_SENDINGTO
     {
-        Text [ de ] = "Senden an: %1" ;
         Text[ en-US ] = "Sending to: %1";
     };
     String ST_COMPLETED
     {
-        Text [ de ] = "Erfolgreich versendet" ;
         Text[ en-US ] = "Successfully sent";
     };
     String ST_FAILED
     {
-        Text [ de ] = "Fehlgeschlagen (ungültige Adresse)" ;
         Text[ en-US ] = "Sending failed (invalid address)";
     };
     String ST_TERMINATEQUERY
     {
-        Text [ de ] = "In Ihrem %PRODUCTNAME Postausgang sind noch Nachrichten zu versenden.\nMöchten Sie das Programm trotzdem beenden?" ;
         Text[ en-US ] = "There are still e-mail messages in your %PRODUCTNAME Outbox.\nWould you like to exit anyway?";
     };
 };
@@ -267,7 +246,6 @@ ModalDialog DLG_MM_SENDWARNING
     Size = MAP_APPFONT ( 240 , 137 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "E-Mails konnten nicht versandt werden";
     Text[en-US] = "E-Mails could not be sent";
     FixedImage IM_WARNING
     {
@@ -279,14 +257,12 @@ ModalDialog DLG_MM_SENDWARNING
         Pos = MAP_APPFONT ( 40 , 6 ) ;
         Size = MAP_APPFONT ( 170 , 30 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Folgender Fehler ist aufgetreten:" ;
         Text[ en-US ] = "The following error occured:";
     };
     FixedText   FT_DETAILS
     {
         Pos = MAP_APPFONT (  40, 39 ) ;
         Size = MAP_APPFONT (  174, 8 ) ;
-        Text [ de ] = "Details" ;
         Text[ en-US ] = "Detailed information";
     };
     MultiLineEdit ED_DETAILS
