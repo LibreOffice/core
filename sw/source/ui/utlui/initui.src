@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:15:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:30:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,152 +45,104 @@ Resource RID_SW_SHELLRES
 {
     String STR_POSTIT_PAGE
     {
-        Text [ de ] = "Seite" ;
         Text [ en-US ] = "Page" ;
-        Text [ x-comment ] = " ";
     };
     String STR_POSTIT_LINE
     {
-        Text [ de ] = "Zeile" ;
         Text [ en-US ] = "Line" ;
-        Text [ x-comment ] = " ";
     };
     String STR_POSTIT_AUTHOR
     {
-        Text [ de ] = "Autor" ;
         Text [ en-US ] = "Author" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_SYNTAX
     {
         Text [ en-US ] = "** Syntax Error **" ;
-        Text [ de ] = "** Syntax Fehler **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_ZERODIV
     {
         Text [ en-US ] = "** Division by zero **" ;
-        Text [ de ] = "** Division durch Null **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_BRACK
     {
         Text [ en-US ] = "** Wrong use of brackets **" ;
-        Text [ de ] = "** Fehlerhafte Klammerung **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_POW
     {
         Text [ en-US ] = "** Square function overflow **" ;
         /* ### ACHTUNG: Neuer Text in Resource? ** Überlauf in Quadratfunktion ** : ** šberlauf in Quadratfunktion ** */
-        Text [ de ] = "** Ãœberlauf in Quadratfunktion **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_VARNFND
     {
         Text [ en-US ] = "** Variable not found **" ;
-        Text [ de ] = "** Variable wurde nicht gefunden **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_OVERFLOW
     {
         Text [ en-US ] = "** Overflow **" ;
         /* ### ACHTUNG: Neuer Text in Resource? ** Überlauf ** : ** šberlauf ** */
-        Text [ de ] = "** Ãœberlauf **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_WRONGTIME
     {
         Text [ en-US ] = "** Wrong time format **" ;
-        Text [ de ] = "** Falsches Zeitformat **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_DEFAULT
     {
         Text [ en-US ] = "** Error **" ;
-        Text [ de ] = "** Fehler **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_CALC_ERROR
     {
-        Text [ de ] = "** Fehlerhafter Ausdruck **" ;
         Text [ en-US ] = "** Expression is faulty **" ;
-        Text [ x-comment ] = " ";
     };
     String STR_GETREFFLD_UP
     {
-        Text [ de ] = "oben" ;
         Text [ en-US ] = "above" ;
-        Text [ x-comment ] = " ";
     };
     String STR_GETREFFLD_DOWN
     {
-        Text [ de ] = "unten" ;
         Text [ en-US ] = "below" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ALLPAGE_HEADFOOT
     {
-        Text [ de ] = "Alle" ;
         Text [ en-US ] = "All" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TEMPLATE_NONE
     {
-        Text [ de ] = "keine" ;
         Text [ en-US ] = "None" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FIELD_FIXED
     {
-        Text [ de ] = "(fix)" ;
         Text [ en-US ] = "(fixed)" ;
-        Text [ x-comment ] = " ";
     };
     String STR_TOI
     {
-        Text [ de ] = "Stichwortverzeichnis" ;
         Text [ en-US ] = "Alphabetical Index" ;
-        Text [ x-comment ] = " ";
     };
 
     String STR_TOU
     {
-        Text [ de ] = "Benutzerdefiniert" ;
         Text [ en-US ] = "User-Defined" ;
-        Text [ x-comment ] = " ";
     };
 
     String STR_TOC
     {
-        Text [ de ] = "Inhaltsverzeichnis" ;
         Text [ en-US ] = "Table of Contents" ;
-        Text [ x-comment ] = " ";
     };
 
     String STR_TOX_AUTH
     {
-        Text [ de ] = "Literaturverzeichnis" ;
         Text [ en-US ] = "Bibliography";
-        Text [ x-comment ] = " ";
     };
     String STR_TOX_TBL
     {
-        Text [ de ] = "Tabellenverzeichnis" ;
         Text [ en-US ] = "Index of Tables";
-        Text [ x-comment ] = " ";
     };
     String STR_TOX_OBJ
     {
-        Text [ de ] = "Objektverzeichnis" ;
         Text [ en-US ] = "Table of Objects";
-        Text [ x-comment ] = " ";
     };
     String STR_TOX_ILL
     {
-        Text [ de ] = "Abbildungsverzeichnis" ;
         Text [ en-US ] = "Illustration Index";
-        Text [ x-comment ] = " ";
     };
 
 
@@ -198,77 +150,55 @@ Resource RID_SW_SHELLRES
      //
     String FLD_DOCINFO_TITEL
     {
-        Text [ de ] = "Titel" ;
         Text [ en-US ] = "Title" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_THEMA
     {
-        Text [ de ] = "Thema" ;
         Text [ en-US ] = "Subject" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_KEYS
     {
         /* ### ACHTUNG: Neuer Text in Resource? Schlüsselwörter : Schl³sselw÷rter */
-        Text [ de ] = "SchlÃ¼sselwÃ¶rter" ;
         Text [ en-US ] = "Keywords" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_COMMENT
     {
-        Text [ de ] = "Kommentar" ;
         Text [ en-US ] = "Comments" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_INFO1
     {
-        Text [ de ] = "Info 0" ;
         Text [ en-US ] = "Info 0" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_INFO2
     {
-        Text [ de ] = "Info 1" ;
         Text [ en-US ] = "Info 1" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_INFO3
     {
-        Text [ de ] = "Info 2" ;
         Text [ en-US ] = "Info 2" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_INFO4
     {
-        Text [ de ] = "Info 3" ;
         Text [ en-US ] = "Info 3" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_CREATE
     {
-        Text [ de ] = "Erstellt am" ;
         Text [ en-US ] = "Created" ;
     };
     String FLD_DOCINFO_CHANGE
     {
-        Text [ de ] = "GeÃ¤ndert am" ;
         Text [ en-US ] = "Modified" ;
     };
     String FLD_DOCINFO_PRINT
     {
-        Text [ de ] = "Letzter Druck" ;
         Text [ en-US ] = "Last printed" ;
-        Text [ x-comment ] = " ";
     };
     String FLD_DOCINFO_DOCNO
     {
-        Text [ de ] = "Version" ;
         Text [ en-US ] = "Revision number" ;
     };
     String FLD_DOCINFO_EDIT
     {
-        Text [ de ] = "Gesamtbearbeitungszeit" ;
         Text [ en-US ] = "Total editing time" ;
     };
     BITMAP BMP_FRAME_ANCHOR { FILE = "anchor.bmp" ; };
@@ -276,330 +206,230 @@ Resource RID_SW_SHELLRES
 
     String STR_PAGEDESC_NAME
     {
-        Text [ de ] = "Konvert $(ARG1)" ;
         Text [ en-US ] = "Convert $(ARG1)";
-        Text [ x-comment ] = "; DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet.";
     };
     String STR_PAGEDESC_FIRSTNAME
     {
-        Text [ de ] = "Erste Konvert $(ARG1)" ;
         Text [ en-US ] = "First convert $(ARG1)";
-        Text [ x-comment ] = "; DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
     };
     String STR_PAGEDESC_FOLLOWNAME
     {
-        Text [ de ] = "Konvert Folge $(ARG1)" ;
         Text [ en-US ] = "Next convert $(ARG1)";
-        Text [ x-comment ] = "; DD (; DD (05.04.2001):Dieser String ist Teil eines Dialoges der erscheint wenn man ein Word- oder RTF- Dokument importiert welches verschiedene Layouts beinhaltet. Mit $(ARG1) ist die Seitenzahl oder eine Folge von Seiten (z.B. 1-12) gemeint.";
     };
 };
 
 String STR_AUTH_TYPE_ARTICLE
 {
-    Text [ de ] = "Artikel" ;
     Text [ en-US ] = "Article";
 };
 String STR_AUTH_TYPE_BOOK
 {
-    Text [ de ] = "Buch" ;
     Text [ en-US ] = "Book";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_BOOKLET
 {
-    Text [ de ] = "BroschÃ¼re" ;
     Text [ en-US ] = "Brochures";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_CONFERENCE
 {
-    Text [ de ] = "Konferenzbericht" ;
     Text [ en-US ] = "Conference proceedings";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_INBOOK
 {
-    Text [ de ] = "Buchauszug" ;
     Text [ en-US ] = "Book excerpt";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_INCOLLECTION
 {
-    Text [ de ] = "Buchauszug mit Titel" ;
     Text [ en-US ] = "Book excerpt with title";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_INPROCEEDINGS
 {
-    Text [ de ] = "Tagungsbericht" ;
     Text [ en-US ] = "Conference proceedings";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_JOURNAL
 {
-    Text [ de ] = "Zeitschrift" ;
     Text [ en-US ] = "Journal";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_MANUAL
 {
-    Text [ de ] = "Techn. Dokumentation" ;
     Text [ en-US ] = "Techn. documentation";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_MASTERSTHESIS
 {
-    Text [ de ] = "Diplomarbeit" ;
     Text [ en-US ] = "Thesis";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_MISC
 {
-    Text [ de ] = "Verschiedenes" ;
     Text [ en-US ] = "Miscellaneous";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_PHDTHESIS
 {
-    Text [ de ] = "Dissertation" ;
     Text [ en-US ] = "Dissertation";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_PROCEEDINGS
 {
-    Text [ de ] = "Tagungsbericht" ;
     Text [ en-US ] = "Conference proceedings";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_TECHREPORT
 {
-    Text [ de ] = "Forschungsbericht" ;
     Text [ en-US ] = "Research report";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_UNPUBLISHED
 {
-    Text [ de ] = "UnverÃ¶ffentlicht" ;
     Text [ en-US ] = "Unpublished";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_EMAIL
 {
-    Text [ de ] = "e-Mail" ;
     Text [ en-US ] = "e-mail";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_WWW
 {
-    Text [ de ] = "WWW-Dokument" ;
     Text [ en-US ] = "WWW document";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_CUSTOM1
 {
-    Text [ de ] = "Benutzertyp1" ;
     Text [ en-US ] = "User-defined1";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_CUSTOM2
 {
-    Text [ de ] = "Benutzertyp2" ;
     Text [ en-US ] = "User-defined2";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_CUSTOM3
 {
-    Text [ de ] = "Benutzertyp3" ;
     Text [ en-US ] = "User-defined3";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_CUSTOM4
 {
-    Text [ de ] = "Benutzertyp4" ;
     Text [ en-US ] = "User-defined4";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_TYPE_CUSTOM5
 {
-    Text [ de ] = "Benutzertyp5" ;
     Text [ en-US ] = "User-defined5";
-    Text [ x-comment ] = " ";
 };
 
 String STR_AUTH_FIELD_IDENTIFIER
 {
-    Text [ de ] = "Kurzbezeichnung" ;
     Text [ en-US ] = "Short name";
 };
 String STR_AUTH_FIELD_AUTHORITY_TYPE
 {
-    Text [ de ] = "Typ" ;
     Text [ en-US ] = "Type";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_ADDRESS
 {
-    Text [ de ] = "Adresse";
     Text [ en-US ] = "Address";
 };
 String STR_AUTH_FIELD_ANNOTE
 {
-    Text [ de ] = "Anmerkung" ;
     Text [ en-US ] = "Annotation";
 };
 String STR_AUTH_FIELD_AUTHOR
 {
-    Text [ de ] = "Autor(en)" ;
     Text [ en-US ] = "Author(s)";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_BOOKTITLE
 {
-    Text [ de ] = "Buchtitel" ;
     Text [ en-US ] = "Book title";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_CHAPTER
 {
-    Text [ de ] = "Kapitel" ;
     Text [ en-US ] = "Chapter";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_EDITION
 {
-    Text [ de ] = "Ausgabe" ;
     Text [ en-US ] = "Edition";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_EDITOR
 {
-    Text [ de ] = "Herausgeber" ;
     Text [ en-US ] = "Editor";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_HOWPUBLISHED
 {
-    Text [ de ] = "Ausgabeart" ;
     Text [ en-US ] = "Publication type";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_INSTITUTION
 {
-    Text [ de ] = "Institution" ;
     Text [ en-US ] = "Institution";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_JOURNAL
 {
-    Text [ de ] = "Zeitschrift" ;
     Text [ en-US ] = "Journal";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_MONTH
 {
-    Text [ de ] = "Monat" ;
     Text [ en-US ] = "Month";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_NOTE
 {
-    Text [ de ] = "Notiz" ;
     Text [ en-US ] = "Note";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_NUMBER
 {
-    Text [ de ] = "Nummer" ;
     Text [ en-US ] = "Number";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_ORGANIZATIONS
 {
-    Text [ de ] = "Organisation" ;
     Text [ en-US ] = "Organization";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_PAGES
 {
-    Text [ de ] = "Seite(n)" ;
     Text [ en-US ] = "Page(s)";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_PUBLISHER
 {
-    Text [ de ] = "Verlag" ;
     Text [ en-US ] = "Publisher";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_SCHOOL
 {
-    Text [ de ] = "Hochschule/UniversitÃ¤t" ;
     Text [ en-US ] = "University";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_SERIES
 {
-    Text [ de ] = "Serie";
     Text [ en-US ] = "Series";
 };
 String STR_AUTH_FIELD_TITLE
 {
-    Text [ de ] = "Titel" ;
     Text [ en-US ] = "Title";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_TYPE
 {
-    Text [ de ] = "Art des Berichts" ;
     Text [ en-US ] = "Type of report";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_VOLUME
 {
-    Text [ de ] = "Band" ;
     Text [ en-US ] = "Volume";
 };
 String STR_AUTH_FIELD_YEAR
 {
-    Text [ de ] = "Jahr" ;
     Text [ en-US ] = "Year";
 };
 String STR_AUTH_FIELD_URL
 {
-    Text [ de ] = "URL" ;
     Text [ en-US ] = "URL";
-    Text [ x-comment ] = " ";
 };
 String STR_AUTH_FIELD_CUSTOM1
 {
-    Text [ de ] = "Benutzerfeld1" ;
     Text [ en-US ] = "User-defined1";
 };
 String STR_AUTH_FIELD_CUSTOM2
 {
-    Text [ de ] = "Benutzerfeld2" ;
     Text [ en-US ] = "User-defined2";
 };
 String STR_AUTH_FIELD_CUSTOM3
 {
-    Text [ de ] = "Benutzerfeld3" ;
     Text [ en-US ] = "User-defined3";
 };
 String STR_AUTH_FIELD_CUSTOM4
 {
-    Text [ de ] = "Benutzerfeld4" ;
     Text [ en-US ] = "User-defined4";
 };
 String STR_AUTH_FIELD_CUSTOM5
 {
-    Text [ de ] = "Benutzerfeld5" ;
     Text [ en-US ] = "User-defined5";
 };
 String STR_AUTH_FIELD_ISBN
 {
-    Text [ de ] = "ISBN" ;
     Text [ en-US ] = "ISBN";
-    Text [ x-comment ] = " ";
 };
 
 
