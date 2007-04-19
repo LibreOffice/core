@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tautofmt.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:14:21 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:28:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,14 +41,12 @@ ModalDialog DLG_AUTOFMT_TABLE
     SVLook = TRUE ;
     HelpID = HID_AUTOFMT_TABLE ;
     Size = MAP_APPFONT ( 312 , 120 ) ;
-    Text [ de ] = "Autoformat" ;
     Text [ en-US ] = "AutoFormat" ;
     Moveable = TRUE ;
     FixedLine FL_FORMAT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 243 , 8 ) ;
-        Text [ de ] = "Format" ;
         Text [ en-US ] = "Format" ;
     };
     ListBox LB_FORMAT
@@ -69,59 +67,47 @@ ModalDialog DLG_AUTOFMT_TABLE
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Zahlenf~ormat" ;
         Text [ en-US ] = "~Number format" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_BORDER
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 12 , 147 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Umrandung" ;
         Text [ en-US ] = "~Borders" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_FONT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 85 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Schriftar~t" ;
         Text [ en-US ] = "F~ont" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_PATTERN
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 85 , 147 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Muster" ;
         Text [ en-US ] = "~Pattern" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_ALIGNMENT
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 150 , 131 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "~Ausrichtung" ;
         Text [ en-US ] = "Alignmen~t" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_FORMATS
     {
         Hide = TRUE ;
         Pos = MAP_APPFONT ( 6 , 120 ) ;
         Size = MAP_APPFONT ( 243 , 8 ) ;
-        Text [ de ] = "Formatierung" ;
         Text [ en-US ] = "Formatting" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_OK
     {
@@ -140,39 +126,31 @@ ModalDialog DLG_AUTOFMT_TABLE
     {
         Pos = MAP_APPFONT ( 255 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~ZusÃ¤tze" ;
         Text [ en-US ] = "~More" ;
         TabStop = TRUE ;
         MapUnit = MAP_APPFONT ;
         Delta = 48 ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_ADD
     {
         Pos = MAP_APPFONT ( 255 , 64 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Hi~nzufÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 255 , 81 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_RENAME
     {
         Pos = MAP_APPFONT ( 255 , 123 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Um~benennen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Rename" ;
-        Text [ x-comment ] = " ";
     };
     HelpButton BTN_HELP
     {
@@ -182,91 +160,62 @@ ModalDialog DLG_AUTOFMT_TABLE
     };
     String STR_ADD_TITLE
     {
-        Text [ de ] = "Autoformat hinzufÃ¼gen" ;
         Text [ en-US ] = "Add AutoFormat" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ADD_LABEL
     {
-        Text [ de ] = "Name" ;
         Text [ en-US ] = "Name" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DEL_TITLE
     {
-        Text [ de ] = "Autoformat lÃ¶schen" ;
         Text [ en-US ] = "Delete AutoFormat" ;
-        Text [ x-comment ] = " ";
     };
     String STR_DEL_MSG
     {
-        Text [ de ] = "Folgendes Autoformat wird gelÃ¶scht:" ;
         Text [ en-US ] = "The following AutoFormat entry will be deleted:" ;
-        Text [ x-comment ] = " ";
     };
     String STR_RENAME_TITLE
     {
-        Text [ de ] = "Autoformat umbenennen" ;
         Text [ en-US ] = "Rename AutoFormat" ;
-        Text [ x-comment ] = " ";
     };
     String STR_BTN_CLOSE
     {
-        Text [ de ] = "~SchlieÃŸen" ;
         Text [ en-US ] = "~Close" ;
-        Text [ x-comment ] = " ";
     };
     String STR_JAN
     {
-        Text [ de ] = "Jan" ;
         Text [ en-US ] = "Jan" ;
-        Text [ x-comment ] = " ";
     };
     String STR_FEB
     {
-        Text [ de ] = "Feb" ;
         Text [ en-US ] = "Feb" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MAR
     {
-        Text [ de ] = "MÃ¤r" ;
         Text [ en-US ] = "Mar" ;
-        Text [ x-comment ] = " ";
     };
     String STR_NORTH
     {
-        Text [ de ] = "Nord" ;
         Text [ en-US ] = "North" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MID
     {
-        Text [ de ] = "Mitte" ;
         Text [ en-US ] = "Mid" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SOUTH
     {
-        Text [ de ] = "SÃ¼d" ;
         Text [ en-US ] = "South" ;
-        Text [ x-comment ] = " ";
     };
     String STR_SUM
     {
-        Text [ de ] = "Summe" ;
         Text [ en-US ] = "Sum" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALID_AFNAME
     {
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. : Sie haben einen ungültigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. */
         /* ### ACHTUNG: Neuer Text in Resource? Sie haben einen ungültigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. : Sie haben einen ungültigen Namen angegeben.\nDas Autoformat konnte nicht angelegt werden.\nWählen Sie einen anderen Namen. */
-        Text [ de ] = "Sie haben einen ungÃ¼ltigen Namen angegeben.\nDas AutoFormat konnte nicht angelegt werden.\nWÃ¤hlen Sie einen anderen Namen." ;
         Text [ en-US ] = "You have entered an invalid name.\nThe desired AutoFormat could not be created. \nTry again using a different name." ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 ModalDialog DLG_SWDLG_STRINPUT
 {
