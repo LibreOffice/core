@@ -4,9 +4,9 @@
  *
  *  $RCSfile: so3res.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-15 12:48:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,223 +41,154 @@ Resource RID_SO_ERROR_HANDLER
 {
     String ERRCODE_SO_GENERALERROR&S_MAX
     {
-        Text [ de ] = "Allgemeiner OLE Fehler." ;
         Text [ en-US ] = "General OLE error." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_CANT_BINDTOSOURCE&S_MAX
     {
          // ### ACHTUNG: Neuer Text in Resource? Die Verbindung zum Objekt kann nicht hergestellt werden : Die Verbindung zum Objekt kann nicht hergestellt werden.
-        Text [ de ] = "Die Verbindung zum Objekt kann nicht hergestellt werden." ;
         Text [ en-US ] = "The connection to the object cannot be established." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOCACHE_UPDATED&S_MAX
     {
-        Text [ de ] = "Die Daten im Cache wurden nicht aktualisiert." ;
         Text [ en-US ] = "No cache files were updated." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_SOMECACHES_NOTUPDATED&S_MAX
     {
-        Text [ de ] = "Einige Daten im Cache wurden nicht aktualisiert." ;
         Text [ en-US ] = "Some cache files were not updated." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_UNAVAILABLE&S_MAX
     {
-        Text [ de ] = "Der Status des Objektes kann nicht in vertretbarer Zeit ermittelt werden." ;
         Text [ en-US ] = "Status of object cannot be determined in a timely manner." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_E_CLASSDIFF&S_MAX
     {
-        Text [ de ] = "Die Quelle der OLE-Verbindung wurde konvertiert." ;
         Text [ en-US ] = "Source of the OLE link has been converted." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_OBJECT&S_MAX
     {
-        Text [ de ] = "Das Objekt konnte nicht gefunden werden." ;
         Text [ en-US ] = "The object could not be found." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_EXCEEDED_DEADLINE&S_MAX
     {
-        Text [ de ] = "Die Operation konnte im vorgegebenen Zeitraum nicht abgeschlossen werden." ;
         Text [ en-US ] = "The process could not be completed within the specified time period." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CONNECT_MANUALLY&S_MAX
     {
-        Text [ de ] = "OLE konnte sich nicht mit einem Gerät im Netzwerk (Server) verbinden." ;
         Text [ en-US ] = "OLE could not connect to a network device (server)." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_INTERMEDIATE_INTERFACE_NOT_SUPPORTED&S_MAX
     {
-        Text [ de ] = "Das gefundene Objekt unterstützt nicht die gewünschten Funktionen." ;
         Text [ en-US ] = "The object found does not support the interface required for the desired operation." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NO_INTERFACE&S_MAX
     {
-        Text [ de ] = "Die Schnittstelle wird nicht unterstützt." ;
         Text [ en-US ] = "Interface not supported." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_OUT_OF_MEMORY&S_MAX
     {
-        Text [ de ] = "Zu wenig Speicher." ;
         Text [ en-US ] = "Insufficient memory." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_SYNTAX&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname konnte nicht verarbeitet werden." ;
         Text [ en-US ] = "The connection name could not be processed." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_REDUCED_TO_SELF&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname konnte nicht weiter reduziert werden." ;
         Text [ en-US ] = "The connection name could not be reduced further." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_INVERSE&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname hat keine umgekehrte Darstellung." ;
         Text [ en-US ] = "The connection name has no inverse." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_PREFIX&S_MAX
     {
-        Text [ de ] = "Es existiert kein gemeinsamer Prefix." ;
         Text [ en-US ] = "No common prefix exists." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_HIM&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname ist im anderen enthalten." ;
         Text [ en-US ] = "The connection name is contained in the other one." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_US&S_MAX
     {
-        Text [ de ] = "Die Verbindungsnamen sind gleich." ;
         Text [ en-US ] = "The connection names (the receiver and the other moniker) are identical." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_ME&S_MAX
     {
-        Text [ de ] = "Der Verbindungsname ist im anderen enthalten." ;
         Text [ en-US ] = "The connection name is contained in the other one." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NOT_BINDABLE&S_MAX
     {
          // ### ACHTUNG: Neuer Text in Resource? Der Verbindungsname kann nicht verbunden werden Es handelt sich um einen relativen Namen : Der Verbindungsname kann nicht verbunden werden. Es handelt sich um einen relativen Namen
-        Text [ de ] = "Der Verbindungsname kann nicht verbunden werden Es handelt sich um einen relativen Namen." ;
         Text [ en-US ] = "The connection name cannot be connected. This is a relative name." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOT_IMPLEMENTED&S_MAX
     {
-        Text [ de ] = "Die Funktion ist nicht implementiert." ;
         Text [ en-US ] = "Operation not implemented." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NO_STORAGE&S_MAX
     {
-        Text [ de ] = "Kein Storage." ;
         Text [ en-US ] = "No storage." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_FALSE&S_MAX
     {
-        Text [ de ] = "Falsch." ;
         Text [ en-US ] = "False." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_NEED_GENERIC&S_MAX
     {
-        Text [ de ] = "Moniker können nur generisch zusammengesetzt werden." ;
         Text [ en-US ] = "Monikers must be composed generically." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_PENDING&S_MAX
     {
-        Text [ de ] = "Die Daten sind zur Zeit nicht verfügbar." ;
         Text [ en-US ] = "Data not available at this time." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOT_INPLACEACTIVE & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Objekt wurde nicht InPlace aktiviert : Objetkt wurde nicht InPlace aktiviert */
-        Text [ de ] = "Objekt wurde nicht InPlace aktiviert." ;
         Text [ en-US ] = "Object could not be activated InPlace." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_LINDEX & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ung�ltiger Index : Ung�ltiger Index */
-        Text [ de ] = "Ungültiger Index." ;
         Text [ en-US ] = "Invalid index." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_CANNOT_DOVERB_NOW & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt kann die Aktion im momentanen Zustand nicht ausf�hren : Das Objekt kann die Aktion im momentanen Zustand nicht ausf�hren */
-        Text [ de ] = "Das Objekt kann die Aktion im momentanen Zustand nicht ausführen." ;
         Text [ en-US ] = "The action cannot be executed in the object's current state." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_OLEOBJ_INVALIDHWND & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Bei der Aktivierung wurde ein ung�ltiges Fenster ist �bergeben : Bei der Aktivierung wurde ein ung�ltiges Fenster ist �bergeben */
-        Text [ de ] = "Bei der Aktivierung wurde ein ungültiges Fenster übergeben." ;
         Text [ en-US ] = "An invalid window was passed when activated." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOVERBS & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterst�tzt keine Aktionen : Das Objekt unterst�tzt keine Aktionen */
-        Text [ de ] = "Das Objekt unterstützt keine Aktionen." ;
         Text [ en-US ] = "The object does not support any actions." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_INVALIDVERB & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Die Aktion ist nicht definiert. Es wird die Default Aktion ausgel�st : Die Aktion ist nicht definiert. Es wird die Default Aktion ausgel�st */
-        Text [ de ] = "Die Aktion ist nicht definiert. Es wird die Default Aktion ausgelöst." ;
         Text [ en-US ] = "The action is not defined. The default action will be executed." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CONNECT & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Eine Verkn�pfung auf das Netzwerk konnte nicht wieder hergestellt werden : Eine Verkn�pfung auf das Netzwerk, die nicht wieder hergestellt werden konnte */
-        Text [ de ] = "Eine Verknüpfung auf das Netzwerk konnte nicht wieder hergestellt werden." ;
         Text [ en-US ] = "A link to the network could not be re-established." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_NOTIMPL & S_MAX
     {
         /* ### ACHTUNG: Neuer Text in Resource? Das Objekt unterst�tzt diese Aktion nicht : Das Objekt unterst�tzt diese Aktion nicht */
-        Text [ de ] = "Das Objekt unterstützt diese Aktion nicht." ;
         Text [ en-US ] = "Object does not support this action." ;
-        Text [ x-comment ] = " ";
     };
     String ERRCODE_SO_MK_CANTOPENFILE & S_MAX
     {
-        Text [ de ] = "Die angegebene Datei konnte nicht geöffnet werden." ;
         Text [ en-US ] = "The specified file could not be opened." ;
-        Text [ x-comment ] = " ";
     };
     /*
     String  & S_MAX
     {
         Text          = "";
-        Text[ENGLISH] = "";
     };
 */
 };
@@ -265,136 +196,92 @@ Resource RID_SO_ERRCTX
 {
     String ERRCTX_SO_DOVERB
     {
-        Text [ de ] = "$(ERR) beim Aktivieren des Objektes" ;
         Text [ en-US ] = "$(ERR) activating object" ;
-        Text [ x-comment ] = " ";
     };
 };
 String STR_INS_OBJECT
 {
-    Text [ de ] = "Fügt ein neues %1-Objekt in Ihr Dokument ein." ;
     Text [ en-US ] = "Inserts a new %1-Object into your document." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INS_OBJECT_ICON
 {
-    Text [ de ] = "Fügt ein neues %1-Objekt als Symbol in Ihr Dokument ein." ;
     Text [ en-US ] = "Inserts a new %1-Object into your document as a symbol." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INS_FILE
 {
-    Text [ de ] = "Fügt den Inhalt der Datei in Ihr Dokument ein, so dass eine spätere Bearbeitung in der Ursprungsanwendung erfolgt." ;
     Text [ en-US ] = "Inserts the contents of the file into your document to enable later editing in the original application." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INS_PLUGIN
 {
-    Text [ de ] = "Fügt ein PlugIn-Objekt in Ihr Dokument ein. In dem Objekt steht ein Verweis auf die Daten eines PlugIn. Wird das Objekt aktiviert, wird das PlugIn gestartet." ;
     Text [ en-US ] = "Inserts a plug-in object into your document with a reference to the plug-in data. When the object is activated, the plug-in is automatically executed." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INS_APPLET
 {
-    Text [ de ] = "Fügt ein Applet-Objekt in Ihr Dokument ein. In dem Objekt steht ein Verweis auf die Daten eines Applet. Wird das Objekt aktiviert, wird das Applet gestartet." ;
     Text [ en-US ] = "Inserts an applet object into your document. When the object is activated, the applet is automatically executed." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INS_FILE_ICON
 {
-    Text [ de ] = "Fügt ein Symbol, das den Inhalt der Datei repräsentiert, in Ihr Dokument ein." ;
     Text [ en-US ] = "Inserts the contents of the file as an icon into your document." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INS_FILE_LINK
 {
-    Text [ de ] = "Fügt den Inhalt der Datei in Ihr Dokument ein und stellt eine Verknüpfung zur Quelldatei her. Änderungen in der Quelldatei erscheinen auch in Ihrem Dokument." ;
     Text [ en-US ] = "Inserts the contents of the file into your document and creates a link to the source file. Changes made to the source file will be reflected in your document." ;
-    Text [ x-comment ] = " ";
 };
 String STR_INS_FILE_ICON_LINK
 {
-    Text [ de ] = "Fügt ein Symbol, das den Inhalt der Datei repräsentiert, in Ihr Dokument ein. Änderungen in der Quelldatei erscheinen auch in Ihrem Dokument." ;
     Text [ en-US ] = "Inserts an icon into your document representing the file. Changes made to the source file will be reflected in your document." ;
-    Text [ x-comment ] = " ";
 };
 String STR_PASTE
 {
-    Text [ de ] = "Fügt den Inhalt der Zwischenablage als %1 in Ihr Dokument ein." ;
     Text [ en-US ] = "Pastes the contents of the clipboard as %1 in your document." ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONVERT_TO
 {
-    Text [ de ] = "Ändert das markierte %1-Objekt entgültig in den Objekttyp %2." ;
     Text [ en-US ] = "Converts the selected %1object to the object type %2." ;
-    Text [ x-comment ] = " ";
 };
 String STR_ACTIVATE_AS
 {
-    Text [ de ] = "Jedes %1 wird als Objekttyp %2 aktiviert, aber nicht konvertiert." ;
     Text [ en-US ] = "All objects of type %1 are activated as %2, but not converted" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VERB_OPEN
 {
-    Text [ de ] = "~Öffnen" ;
     Text [ en-US ] = "~Open" ;
-    Text [ x-comment ] = " ";
 };
 String STR_VERB_PROPS
 {
-    Text [ de ] = "~Eigenschaften" ;
     Text [ en-US ] = "~Properties" ;
-    Text [ x-comment ] = " ";
 };
 String STR_PLUGIN_CANT_SHOW
 {
-    Text [ de ] = "PlugIn % nicht darstellbar." ;
     Text [ en-US ] = "Plug-in % cannot be displayed." ;
-    Text [ x-comment ] = " ";
 };
 String STR_ERROR_DDE
 {
-    Text [ de ] = "DDE Verknüpfung zu % für % Bereich % kann nicht erzeugt werden." ;
     Text [ en-US ] = "DDE link to % for % area % are not available." ;
-    Text [ x-comment ] = " ";
 };
 String STR_ERROR_OBJNOCREATE
 {
-    Text [ de ] = "Objekt % kann nicht eingefügt werden." ;
     Text [ en-US ] = "Object % could not be inserted." ;
-    Text [ x-comment ] = "% wird durch Objektnamen ersetzt" ;
 };
 String STR_ERROR_OBJNOCREATE_FROM_FILE
 {
-    Text [ de ] = "Objekt aus Datei % kann nicht eingefügt werden." ;
     Text [ en-US ] = "Object from file % could not be inserted." ;
-    Text [ x-comment ] = "% wird durch Dateinamen ersetzt" ;
 };
 String STR_ERROR_OBJNOCREATE_PLUGIN
 {
-    Text [ de ] = "PlugIn aus Dokument % kann nicht eingefügt werden." ;
     Text [ en-US ] = "Plug-in from document % could not be inserted." ;
-    Text [ x-comment ] = "% wird durch URL-Namen ersetzt" ;
 };
 String STR_QUERYUPDATELINKS
 {
-    Text [ de ] = "Sollen alle Verknüpfungen aktualisiert werden?" ;
     Text [ en-US ] = "Update all links?" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FURTHER_OBJECT
 {
-    Text [ de ] = "Weitere Objekte" ;
     Text [ en-US ] = "Further objects" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EDIT_APPLET
 {
-    Text [ de ] = "Applet bearbeiten" ;
     Text [ en-US ] = "Edit Applet" ;
-    Text [ x-comment ] = " ";
 };
 
 Bitmap BMP_PLUGIN
@@ -416,7 +303,6 @@ Menu MB_PLUGIN
 MenuItem MI_PLUGIN
 {
     Identifier = MI_PLUGIN ;
-    Text [ de ] = "~PlugIn" ;
     SubMenu = Menu
     {
         ItemList =
@@ -424,18 +310,14 @@ MenuItem MI_PLUGIN
             MenuItem
             {
                 Identifier = MI_PLUGIN_DEACTIVATE ;
-                Text [ de ] = "~Deaktivieren" ;
                 Text [ en-US ] = "Deactivate" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
 };
 String STR_UNKNOWN_SOURCE
 {
-    Text [ de ] = "Unbekannte Quelle" ;
     Text [ en-US ] = "Unknown source" ;
-    Text [ x-comment ] = " ";
 };
 
 
