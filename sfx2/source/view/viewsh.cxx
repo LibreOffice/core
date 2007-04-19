@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:29:56 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:30:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -525,10 +525,10 @@ void SfxViewShell::UIDeactivated( SfxInPlaceClient* /*pClient*/ )
             pFrame->GetDispatcher()->Update_Impl( TRUE );
     pFrame->GetBindings().HidePopups(FALSE);
 
-    uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
-    uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
-    if ( xParentFrame.is() )
-        xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
+    // uno::Reference < frame::XFrame > xOwnFrame( pFrame->GetFrame()->GetFrameInterface() );
+    // uno::Reference < frame::XFramesSupplier > xParentFrame( xOwnFrame->getCreator(), uno::UNO_QUERY );
+    // if ( xParentFrame.is() )
+    //     xParentFrame->setActiveFrame( uno::Reference < frame::XFrame >() );
 }
 
 //--------------------------------------------------------------------
