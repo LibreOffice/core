@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paradlg.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:51:39 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:49:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabDialog DLG_PARA
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Absatz" ;
     Text [ en-US ] = "Paragraph" ;
     Moveable = TRUE ;
     TabControl 1
@@ -54,82 +53,63 @@ TabDialog DLG_PARA
             {
                 Identifier = TP_PARA_STD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
-                Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PARA_ALIGN ;
-                Text [ de ] = "Ausrichtung" ;
                 PageResID = TP_PARA_ALIGN ;
                 Text [ en-US ] = "Alignment" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PARA_EXT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Textfluß : Textflu˜ */
-                Text [ de ] = "Textfluss" ;
                 Text [ en-US ] = "Text Flow" ;
                 PageResID = TP_PARA_EXT ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PARA_ASIAN;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = TP_NUMPARA ;
-                Text [ de ] = "Nummerierung" ;
                 Text [ en-US ] = "Numbering" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_TABULATOR ;
-                Text [ de ] = "Tabulator" ;
                 Text [ en-US ] = "Tabs" ;
                 PageResID = TP_TABULATOR ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_DROPCAPS ;
-                Text [ de ] = "Initialen" ;
                 Text [ en-US ] = "Drop Caps" ;
                 PageResID = TP_DROPCAPS ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
                 PageResID = TP_BORDER ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
                 PageResID = TP_BACKGROUND ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 TabDialog DLG_DRAWPARA
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Absatz" ;
     Text [ en-US ] = "Paragraph" ;
     Moveable = TRUE ;
     TabControl 1
@@ -141,38 +121,30 @@ TabDialog DLG_DRAWPARA
             {
                 Identifier = TP_PARA_STD ;
                 /* ### ACHTUNG: Neuer Text in Resource? Einzüge und Abstände : Einz³ge und Abstõnde */
-                Text [ de ] = "EinzÃ¼ge und AbstÃ¤nde" ;
                 Text [ en-US ] = "Indents & Spacing" ;
                 PageResID = TP_PARA_STD ;
-                Text [ x-comment ] = " ";
             };
 #if SUPD>352
             PageItem
             {
                 Identifier = TP_PARA_ALIGN ;
-                Text [ de ] = "Ausrichtung" ;
                 PageResID = TP_PARA_ALIGN ;
                 Text [ en-US ] = "Alignment" ;
-                Text [ x-comment ] = " ";
             };
 #endif
             PageItem
             {
                 Identifier = TP_PARA_ASIAN;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = TP_TABULATOR ;
-                Text [ de ] = "Tabulator" ;
                 Text [ en-US ] = "Tabs" ;
                 PageResID = TP_TABULATOR ;
-                Text [ x-comment ] = " ";
             };
         };
     };
-    Text [ x-comment ] = " ";
 };
 
 
