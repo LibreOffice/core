@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbumiscres.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-28 15:08:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:05:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -133,108 +133,87 @@ Resource RSC_DATASOURCE_TYPE_UINAMES
 {
     String STR_MYSQL_ODBC
     {
-        Text [ de ] = "MySQL (ODBC)";
         Text[ en-US ] = "MySQL (ODBC)";
     };
     String STR_MYSQL_JDBC
     {
-        Text [ de ] = "MySQL (JDBC)";
         Text[ en-US ] = "MySQL (JDBC)";
     };
     String STR_ADABAS
     {
-        Text [ de ] = "Adabas D";
         Text[ en-US ] = "Adabas D";
     };
     String STR_ORACLE_JDBC
     {
-        Text [ de ] = "Oracle JDBC";
         Text[ en-US ] = "Oracle JDBC";
     };
 
     String STR_JDBC
     {
-        Text [ de ] = "JDBC";
         Text[ en-US ] = "JDBC";
     };
     String STR_ODBC
     {
-        Text [ de ] = "ODBC";
         Text[ en-US ] = "ODBC";
     };
     String STR_DBASE
     {
-        Text [ de ] = "dBASE";
         Text[ en-US ] = "dBASE";
     };
     String STR_ADO
     {
-        Text [ de ] = "ADO";
         Text[ en-US ] = "ADO";
     };
     String STR_MSACCESS
     {
-        Text [ de ] = "Microsoft Access";
         Text[ en-US ] = "Microsoft Access";
     };
     String STR_FLAT
     {
-        Text [ de ] = "Text";
         Text[ en-US ] = "Text";
     };
     String STR_CALC
     {
-        Text [ de ] = "Tabellendokument";
         Text[ en-US ] = "Spreadsheet";
     };
     String STR_MOZILLA
     {
-        Text [ de ] = "Mozilla Adressbuch";
         Text[ en-US ] = "Mozilla Address Book";
     };
     String STR_LDAP
     {
-        Text [ de ] = "LDAP Adressbuch";
         Text[ en-US ] = "LDAP Address Book";
     };
     String STR_OUTLOOK
     {
-        Text [ de ] = "Microsoft Outlook Adressbuch";
         Text[ en-US ] = "Microsoft Outlook Address Book";
     };
     String STR_OUTLOOKEXP
     {
-        Text [ de ] = "Microsoft Windows Adressbuch";
         Text[ en-US ] = "Microsoft Windows Address Book";
     };
     String STR_EVOLUTION
     {
-        Text [ de ] = "Evolution Local Adressbuch";
         Text[ en-US ] = "Evolution Local";
     };
     String STR_EVOLUTION_GROUPWISE
     {
-        Text [ de ] = "Groupwise Adressbuch";
         Text[ en-US ] = "Groupwise";
     };
     String STR_EVOLUTION_LDAP
     {
-        Text [ de ] = "Evolution LDAP Adressbuch";
         Text[ en-US ] = "Evolution LDAP";
     };
     String STR_KAB
     {
-        Text [ de ] = "KDE Adressbuch";
         Text[ en-US ] = "KDE Address Book";
     };
     String STR_EMBEDDED
     {
-        Text [ de ] = "Interne Datenbank";
         Text[ en-US ] = "Embedded database";
      };
      String STR_THUNDERBIRD
      {
-         Text [ de ] = "Thunderbird Adressbuch";
          Text[ en-US ] = "Thunderbird Address Book";
     };
 };
@@ -243,76 +222,62 @@ Resource RSC_CHARSETS
 {
 String 1
 {
-    Text [ de ] = "System";
     Text [ en-US ] = "System";
     };
 };
 
 String STR_ERROR_DURING_CREATION
 {
-    Text [ de ] = "Fehler beim Erzeugen";
     Text [ en-US ] = "Error during creation";
 };
 
 String STR_UNEXPECTED_ERROR
 {
-Text [ de ] = "Ein unerwarteter Fehler ist aufgetreten. Die operation kann nicht ausgeführt werden.";
 Text [ en-US ] = "An unexpected error occurred. The operation could not be performed.";
 };
 
 String STR_COULDNOTOPEN_LINKEDDOC
 {
-Text [ de ] = "Das Dokument\n\n$file$\n\nkonnte nicht geöffnet werden.";
 Text [ en-US ] = "The document\n\n$file$\n\ncould not be opened.";
 };
 
 String STR_MISSING_TABLES_XDROP
 {
-Text [ de ] = "Die Tabelle kann nicht gelöscht werden, da die Datenbankverbindung diese nicht unterstützt.";
 Text [ en-US ] = "The table cannot be deleted because the database connection does not support this.";
 };
 
 String STR_BUTTON_TEXT_ALL
 {
-Text [ de ] = "~Alle";
 Text [ en-US ] = "~All";
 
 };
 
 String STR_UNDO_COLON
 {
-Text [ de ] = "Rückgängig:" ;
 Text [ en-US ] = "Undo:";
 };
 
 String STR_REDO_COLON
 {
-Text [ de ] = "Wiederherstellen:" ;
 Text [ en-US ] = "Redo:";
 };
 
 String STR_UNKNOWN_TYPE_FOUND
 {
-    Text [ de ] = "Für die Spalte '#1' konnte kein passender Spaltentyp gefunden werden." ;
     Text [ en-US ] = "No corresponding column type could be found for column '#1'." ;
 };
 
 String STR_FILE_DOES_NOT_EXIST
 {
-    Text [ de ] ="Die Datei \"$file$\" existiert nicht.";
     Text[ en-US ] = "The file \"$file$\" does not exist.";
 };
 
 String STR_WARNINGS_DURING_CONNECT
 {
-    Text [ de ] = "Beim Verbindungsaufbau sind Warnungen aufgetreten. Drücken Sie \"$buttontext$\", um sie anzuzeigen.";
     Text [ en-US ] = "Warnings were encountered while connecting to the data source. Press \"$buttontext$\" to view them.";
-    Text [ x-comment ] = "$buttontext$ will, at runtime, be replaced with the localized equivalent of 'More', "
-                         "as it is to be found in dialogs on buttons which reveal more information.";
 };
 
 String STR_NAMED_OBJECT_ALREADY_EXISTS
 {
-    Text [ de ] = "Der Name '$#$' existiert bereits.\nBitte geben Sie einen neuen Namen an." ;
     Text [ en-US ] = "The name '$#$' already exists.\nPlease enter another name." ;
 };
