@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-03 14:52:05 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:13:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,14 +51,11 @@ ModelessDialog RID_DLG_SEARCH
     Closeable = TRUE;
     Hide = TRUE;
     Size = MAP_APPFONT( 218, 84 );
-    Text[ x-comment ] = "em: The preposition 'in' used by Mozilla is incorrect because the conceptual model of a 'page' is a flat surface (not a container of HTML code, which must be where the 'in' originated)";
-    Text [ de ]= "Auf dieser Seite suchen";
     Text [ en-US ] = "Find on this Page";
     FixedText FT_SEARCH
     {
         Pos = MAP_APPFONT( 6, 3 );
         Size = MAP_APPFONT( 150, 8 );
-        Text [ de ] = "S~uchen nach";
         Text [ en-US ] = "~Search for";
     };
     ComboBox ED_SEARCH
@@ -73,7 +70,6 @@ ModelessDialog RID_DLG_SEARCH
     {
         Pos = MAP_APPFONT( 6, 29 );
         Size = MAP_APPFONT( 150, 10 );
-        Text [ de ]= "Nur ganze ~Wörter" ;
         Text [ en-US ] = "~Whole words only" ;
         TabStop = TRUE;
     };
@@ -81,8 +77,6 @@ ModelessDialog RID_DLG_SEARCH
     {
         Pos = MAP_APPFONT( 6, 42 );
         Size = MAP_APPFONT( 150, 10 );
-        Text[ x-comment ] = "";
-        Text [ de ]= "E~xakte Suche" ;
         Text[ en-US ] = "~Match case";
         TabStop = TRUE;
     };
@@ -90,7 +84,6 @@ ModelessDialog RID_DLG_SEARCH
     {
         Pos = MAP_APPFONT( 6, 55 );
         Size = MAP_APPFONT( 150, 10 );
-        Text [ de ]= "Suche am ~Dokumentanfang fortsetzen" ;
         Text [ en-US ] = "Wrap ~around" ;
         TabStop = TRUE;
     };
@@ -98,8 +91,6 @@ ModelessDialog RID_DLG_SEARCH
     {
         Pos = MAP_APPFONT( 6, 68 );
         Size = MAP_APPFONT( 150, 10 );
-        Text[ x-comment ] = "";
-        Text [ de ]= "~Rückwärts" ;
         Text [ en-US ] = "~Backwards" ;
         TabStop = TRUE;
     };
@@ -107,7 +98,6 @@ ModelessDialog RID_DLG_SEARCH
     {
         Pos = MAP_APPFONT( 162, 6 );
         Size = MAP_APPFONT( 50, 14 );
-        Text [ de ] = "~Suchen" ;
         Text [ en-US ] = "~Find" ;
         TabStop = TRUE;
         DefButton = TRUE ;
@@ -116,15 +106,12 @@ ModelessDialog RID_DLG_SEARCH
     {
         Pos = MAP_APPFONT( 162, 23 );
         Size = MAP_APPFONT( 50, 14 );
-        Text[ x-comment ] = "";
-        Text [ de ]= "S~chließen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE;
     };
 
     String STR_TOGGLE
     {
-        Text [ de ]= "Suche am ~Dokumentende fortsetzen" ;
         Text [ en-US ] = "Wrap ~around" ;
     };
 };
