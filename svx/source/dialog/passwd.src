@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:46:25 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:17:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,15 +45,12 @@ ModalDialog RID_SVXDLG_PASSWORD
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 210 , 77 ) ;
-    Text [ de ] = "Kennwort ändern" ;
     Moveable = TRUE ;
     FixedText FT_OLD_PASSWD
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~Kennwort" ;
         Text [ en-US ] = "~Password" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_OLD_PASSWD
     {
@@ -66,17 +63,13 @@ ModalDialog RID_SVXDLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 142 , 8 ) ;
-        Text [ de ] = "Altes Kennwort" ;
         Text [ en-US ] = "Old password" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NEW_PASSWD
     {
         Pos = MAP_APPFONT ( 12 , 45 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "K~ennwort" ;
         Text [ en-US ] = "Pa~ssword" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_NEW_PASSWD
     {
@@ -89,7 +82,6 @@ ModalDialog RID_SVXDLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 57 , 8 ) ;
-        Text [ de ] = "~Bestätigen" ;
         Text [ en-US ] = "Confi~rm";
     };
     Edit ED_REPEAT_PASSWD
@@ -103,9 +95,7 @@ ModalDialog RID_SVXDLG_PASSWORD
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 142 , 8 ) ;
-        Text [ de ] = "Neues Kennwort" ;
         Text [ en-US ] = "New password" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_PASSWD_OK
     {
@@ -126,18 +116,13 @@ ModalDialog RID_SVXDLG_PASSWORD
     };
     String STR_ERR_OLD_PASSWD
     {
-        Text [ de ] = "Ungültiges Kennwort" ;
         Text [ en-US ] = "Invalid password" ;
-        Text [ x-comment ] = " ";
     };
     String STR_ERR_REPEAT_PASSWD
     {
-        Text [ de ] = "Kennwörter stimmen nicht überein" ;
         Text [ en-US ] = "Passwords do not match" ;
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Change Password" ;
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
