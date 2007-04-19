@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-26 10:35:57 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:14:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,22 +39,16 @@
 
 String STR_WIZDLG_FINISH
 {
-    Text [ de ] = "~Fertig stellen" ;
     Text [ en-US ] = "~Finish" ;
-    Text [ x-comment ] = "; This is the 'finish' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
 };
 
 String STR_WIZDLG_NEXT
 {
-    Text [ de ] = "~Weiter >>" ;
     Text [ en-US ] = "~Next >>";
-    Text [ x-comment ] = "; This is the 'next' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
 };
 
 String STR_WIZDLG_PREVIOUS
 {
-    Text [ de ] = "<< ~Zurück" ;
     Text [ en-US ] = "<< Bac~k";
-    Text [ x-comment ] = "; This is the 'previous' button of an AutoPilot. Please use the appropriate text for your language. Thanks :)";
 };
 
