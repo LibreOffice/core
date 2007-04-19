@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menuids2_tmpl.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-01 09:20:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:19:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@
     {\
         Identifier = SID_NEWDOCDIRECT ; \
         HelpID = SID_NEWDOCDIRECT ; \
-        Text [ de ] = "~Neu" ; \
         Text [ en-US ] = "~New" ; \
     };
 
@@ -79,7 +78,6 @@
     {\
         Identifier = SID_EXPORTDOC ; \
         HelpID = SID_EXPORTDOC ; \
-        Text [ de ] = "E~xportieren..." ; \
         Text [ en-US ] = "~Export..." ; \
     };
 
@@ -88,7 +86,6 @@
     {\
         Identifier = SID_EXPORTDOCASPDF ; \
         HelpID = SID_EXPORTDOCASPDF ; \
-        Text [ de ] = "Exportieren als PDF..." ; \
         Text [ en-US ] = "Export as PDF..." ; \
     };
 
@@ -98,7 +95,6 @@
         Identifier = MN_SUB_SEND ; \
         HelpID = MN_SUB_SEND ; \
         Command = ".uno:SendMenu" ; \
-        Text [ de ] = "S~enden" ; \
         Text [ en-US ] = "Sen~d" ; \
         SubMenu = Menu\
         {\
@@ -115,7 +111,6 @@
     {\
         Identifier = SID_PAGESETUP ; \
         HelpID = SID_PAGESETUP ; \
-        Text [ de ] = "~Seite..." ; \
         Text [ en-US ] = "~Page..." ; \
     };
  //
@@ -125,7 +120,6 @@
     Identifier = 20 ; \
     HelpID = 20 ; \
     Command = ".uno:EditMenu"; \
-    Text [ de ] = "~Bearbeiten" ; \
     Text [ en-US ] = "~Edit" ; \
 
 #define MN_PASTE2 \
@@ -133,7 +127,6 @@
     {\
         Identifier = SID_PASTE2 ; \
         HelpID = SID_PASTE2 ; \
-        Text [ de ] = "In~halte einfügen..." ; \
         Text [ en-US ] = "Paste ~Special..." ; \
         };
 
@@ -142,7 +135,6 @@
     {\
         Identifier = SID_COPYOBJECTS ; \
         HelpID = SID_COPYOBJECTS ; \
-        Text [ de ] = "D~uplizieren..." ; \
         Text [ en-US ] = "Duplicat~e..." ; \
     };
 
@@ -151,7 +143,6 @@
     {\
         Identifier = SID_POLYGON_MORPHING ; \
         HelpID = SID_POLYGON_MORPHING ; \
-        Text [ de ] = "~Überblenden..." ; \
         Text [ en-US ] = "Cross-fading..." ; \
     };
 
@@ -160,7 +151,6 @@
     {\
         Identifier = SID_MODIFY_FIELD ; \
         HelpID = SID_MODIFY_FIELD ; \
-        Text [ de ] = "~Feldbefehl..." ; \
         Text [ en-US ] = "F~ields..." ; \
     };
 
@@ -169,7 +159,6 @@
     {\
         Identifier = SID_DELETE_LAYER ; \
         HelpID = SID_DELETE_LAYER ; \
-        Text [ de ] = "~Ebene löschen" ; \
         Text [ en-US ] = "Delete ~Layer..." ; \
     };
 
@@ -178,7 +167,6 @@
     {\
         Identifier = SID_MANAGE_LINKS ; \
         HelpID = SID_MANAGE_LINKS ; \
-        Text [ de ] = "~Verknüpfungen..." ; \
         Text [ en-US ] = "Lin~ks..." ; \
     };
  //
@@ -188,7 +176,6 @@
     Identifier = 23 ; \
     HelpID = 23 ; \
     Command = ".uno:ViewMenu" ; \
-    Text [ de ] = "~Ansicht" ; \
     Text [ en-US ] = "~View" ; \
 
 #define MN_TOGGLETOOLBAR \
@@ -196,7 +183,6 @@
     {\
         Identifier = SID_TOGGLETOOLBAR ; \
         HelpID = SID_TOGGLETOOLBAR ; \
-        Text [ de ] = "~Werkzeugleiste" ; \
         Text [ en-US ] = "Main ~Toolbar" ; \
         };
 
@@ -205,7 +191,6 @@
     {\
         Identifier = SID_TOGGLEOPTIONBAR ; \
         HelpID = SID_TOGGLEOPTIONBAR ; \
-        Text [ de ] = "O~ptionsleiste" ; \
         Text [ en-US ] = "Optio~n Bar" ; \
     };
 
@@ -214,7 +199,6 @@
     {\
         Identifier = SID_TOGGLECOMMONTASKBAR ; \
         HelpID = SID_TOGGLECOMMONTASKBAR ; \
-        Text [ de ] = "Prä~sentation" ; \
         Text [ en-US ] = "~Presentation" ; \
     };
 
@@ -223,7 +207,6 @@
     {\
         Identifier = SID_CUSTOMIZETOOLBOX ; \
         HelpID = SID_CUSTOMIZETOOLBOX ; \
-        Text [ de ] = "~Bearbeiten..." ; \
         Text [ en-US ] = "Customi~ze..." ; \
     };
 
@@ -233,7 +216,6 @@
         Identifier = SID_RULER ; \
         HelpID = SID_RULER ; \
         Command = ".uno:ShowRuler" ; \
-        Text [ de ] = "~Lineale" ; \
         Text [ en-US ] = "~Rulers" ; \
     };
 
@@ -244,7 +226,6 @@
         Identifier = SID_NOTESMODE ; \
         HelpID = SID_NOTESMODE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Notizansicht" ; \
         Text [ en-US ] = "~Notes View" ; \
     };
 
@@ -255,7 +236,6 @@
         Identifier = SID_HANDOUTMODE ; \
         HelpID = SID_HANDOUTMODE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Handzettelansicht" ; \
         Text [ en-US ] = "~Handout View" ; \
     };
 
@@ -264,7 +244,6 @@
     {\
         Identifier = SID_PREVIEW_WIN ; \
         HelpID = SID_PREVIEW_WIN ; \
-        Text [ de ] = "~Vorschau" ; \
         Text [ en-US ] = "~Preview" ; \
     };
 
@@ -274,7 +253,6 @@
         Identifier = SID_PAGEMODE ; \
         HelpID = SID_PAGEMODE ; \
         Check = TRUE ; \
-        Text [ de ] = "Se~ite" ; \
         Text [ en-US ] = "S~lide" ; \
     };
 
@@ -284,7 +262,6 @@
         Identifier = SID_SLIDE_MASTERPAGE ; \
         HelpID = SID_SLIDE_MASTERPAGE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Folienmaster" ; \
         Text [ en-US ] = "~Slide Master" ; \
     };
 
@@ -294,7 +271,6 @@
         Identifier = SID_TITLE_MASTERPAGE ; \
         HelpID = SID_TITLE_MASTERPAGE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Titel" ; \
         Text [ en-US ] = "~Title" ; \
     };
 
@@ -304,7 +280,6 @@
         Identifier = SID_NOTES_MASTERPAGE ; \
         HelpID = SID_NOTES_MASTERPAGE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Notizen" ; \
         Text [ en-US ] = "~Notes" ; \
     };
 
@@ -314,7 +289,6 @@
         Identifier = SID_HANDOUT_MASTERPAGE ; \
         HelpID = SID_HANDOUT_MASTERPAGE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Handzettel" ; \
         Text [ en-US ] = "~Handout" ; \
     };
 
@@ -324,7 +298,6 @@
         Identifier = SID_LAYERMODE ; \
         HelpID = SID_LAYERMODE ; \
         Check = TRUE ; \
-        Text [ de ] = "~Ebene" ; \
         Text [ en-US ] = "La~yer" ; \
     };
 
@@ -334,7 +307,6 @@
         Identifier = SID_HEADER_AND_FOOTER ; \
         HelpID = SID_HEADER_AND_FOOTER ; \
         Text = "Kopf- und Fu�zeile.."; \
-        Text [ english_us ] = "~Header and Footer..." ; \
     };
 
 #define MN_INSERT_PAGE_NUMBER \
@@ -343,7 +315,6 @@
         Identifier = SID_INSERT_PAGE_NUMBER ; \
         HelpID = SID_INSERT_PAGE_NUMBER ; \
         Text = "Seitenzahl..." ; \
-        Text [ english_us ] = "Page N~umber..." ; \
     };
 
 #define MN_INSERT_DATE_AND_TIME \
@@ -352,7 +323,6 @@
         Identifier = SID_INSERT_DATE_TIME ; \
         HelpID = SID_INSERT_DATE_TIME ; \
         Text = "Datum und Uhrzeit..." ; \
-        Text [ english_us ] = "Date and ~Time..." ; \
     };
 
 #define MN_MASTER_LAYOUTS \
@@ -361,7 +331,6 @@
         Identifier = MN_SUB_MASTER_LAYOUTS ; \
         HelpId = MN_SUB_MASTER_LAYOUTS; \
         Text = "Masterlayouts";\
-        Text [english_us ] = "Master Lay~outs";\
         SubMenu = Menu\
         {\
             ItemList = \
@@ -371,21 +340,18 @@
                     Identifier = SID_MASTER_LAYOUTS_SLIDE ; \
                     HelpID = SID_MASTER_LAYOUTS_SLIDE ; \
                     Text = "Masterlayout..." ; \
-                    Text [ english_us ] = "Master Layout..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_MASTER_LAYOUTS_NOTES ; \
                     HelpID = SID_MASTER_LAYOUTS_NOTES ; \
                     Text = "Notizenmasterlayout..." ; \
-                    Text [ english_us ] = "Notes Master Layout..." ; \
                 };\
                 MenuItem\
                 {\
                     Identifier = SID_MASTER_LAYOUTS_HANDOUTS ; \
                     HelpID = SID_MASTER_LAYOUTS_HANDOUTS ; \
                     Text = "Handzettelmasterlayout..." ; \
-                    Text [ english_us ] = "Handout Master Layout..." ; \
                 };\
             };\
         };\
@@ -398,7 +364,6 @@
         Identifier = MN_SUB_VIEW ; \
         HelpID = MN_SUB_VIEW ; \
         Command = ".uno:WorkspaceMenu" ; \
-        Text [ de ] = "~Arbeitsbereich" ; \
         Text [ en-US ] = "Wor~kspace" ; \
         SubMenu = Menu\
         {\
@@ -419,7 +384,6 @@
         Identifier = MN_SUB_MASTERPAGE ; \
         HelpID = MN_SUB_MASTERPAGE ; \
         Command = ".uno:MasterPageMenu" ; \
-        Text [ de ] = "~Master" ; \
         Text [ en-US ] = "~Master" ; \
         SubMenu = Menu\
         {\
@@ -439,7 +403,6 @@
     Identifier = 21 ; \
     HelpID = 21 ; \
     Command = ".uno:InsertMenu" ; \
-    Text [ de ] = "~Einfügen" ; \
     Text [ en-US ] = "~Insert" ; \
 
 #define MN_INSERTPAGE \
@@ -447,7 +410,6 @@
     {\
         Identifier = SID_INSERTPAGE ; \
         HelpID = SID_INSERTPAGE ; \
-        Text [ de ] = "S~eite..." ; \
         Text [ en-US ] = "Slid~e..." ; \
         };
 
@@ -456,7 +418,6 @@
     {\
         Identifier = SID_INSERTPAGE ; \
         HelpID = SID_INSERTPAGE ; \
-        Text [ de ] = "S~eite" ; \
         Text [ en-US ] = "Slid~e" ; \
     };
 
@@ -465,7 +426,6 @@
     {\
         Identifier = SID_DUPLICATE_PAGE ; \
         HelpID = SID_DUPLICATE_PAGE ; \
-        Text [ de ] = "Seite d~uplizieren" ; \
         Text [ en-US ] = "D~uplicate Slide" ; \
     };
 
@@ -474,7 +434,6 @@
     {\
         Identifier = SID_EXPAND_PAGE ; \
         HelpID = SID_EXPAND_PAGE ; \
-        Text [ de ] = "Seiten ~aus Gliederung" ; \
         Text [ en-US ] = "E~xpand Slide" ; \
     };
 
@@ -483,7 +442,6 @@
     {\
         Identifier = SID_SUMMARY_PAGE ; \
         HelpID = SID_SUMMARY_PAGE ; \
-        Text [ de ] = "~Übersichtsseite" ; \
         Text [ en-US ] = "Su~mmary Slide" ; \
     };
 
@@ -492,7 +450,6 @@
     {\
         Identifier = SID_INSERTLAYER ; \
         HelpID = SID_INSERTLAYER ; \
-        Text [ de ] = "E~bene..." ; \
         Text [ en-US ] = "~Layer..." ; \
     };
 
@@ -501,7 +458,6 @@
     {\
         Identifier = SID_INSERT_FLD_DATE_FIX ; \
         HelpID = SID_INSERT_FLD_DATE_FIX ; \
-        Text [ de ] = "~Datum (fix)" ; \
         Text [ en-US ] = "~Date (fixed)" ; \
     };
 
@@ -510,7 +466,6 @@
     {\
         Identifier = SID_INSERT_FLD_DATE_VAR ; \
         HelpID = SID_INSERT_FLD_DATE_VAR ; \
-        Text [ de ] = "D~atum (variabel)" ; \
         Text [ en-US ] = "Dat~e (variable)" ; \
     };
 
@@ -519,7 +474,6 @@
     {\
         Identifier = SID_INSERT_FLD_TIME_FIX ; \
         HelpID = SID_INSERT_FLD_TIME_FIX ; \
-        Text [ de ] = "~Uhrzeit (fix)" ; \
         Text [ en-US ] = "~Time (fixed)" ; \
     };
 
@@ -528,7 +482,6 @@
     {\
         Identifier = SID_INSERT_FLD_TIME_VAR ; \
         HelpID = SID_INSERT_FLD_TIME_VAR ; \
-        Text [ de ] = "U~hrzeit (variabel)" ; \
         Text [ en-US ] = "T~ime (variable)" ; \
     };
 
@@ -537,7 +490,6 @@
     {\
         Identifier = SID_INSERT_FLD_PAGE ; \
         HelpID = SID_INSERT_FLD_PAGE ; \
-        Text [ de ] = "~Seitennummer" ; \
         Text [ en-US ] = "~Page Number" ; \
     };
 
@@ -546,7 +498,6 @@
     {\
         Identifier = SID_INSERT_FLD_FILE ; \
         HelpID = SID_INSERT_FLD_FILE ; \
-        Text [ de ] = "Datei~name" ; \
         Text [ en-US ] = "~File Name" ; \
     };
 
@@ -555,7 +506,6 @@
     {\
         Identifier = SID_INSERT_FLD_AUTHOR ; \
         HelpID = SID_INSERT_FLD_AUTHOR ; \
-        Text [ de ] = "Aut~or" ; \
         Text [ en-US ] = "~Author" ; \
     };
 
@@ -564,7 +514,6 @@
     {\
         Identifier = SID_TWAIN_SELECT ; \
         HelpID = SID_TWAIN_SELECT ; \
-        Text [ de ] = "~Quelle auswählen..." ; \
         Text [ en-US ] = "~Select Source..." ; \
     };
 
@@ -573,7 +522,6 @@
     {\
         Identifier = SID_TWAIN_TRANSFER ; \
         HelpID = SID_TWAIN_TRANSFER ; \
-        Text [ de ] = "~Anfordern..." ; \
         Text [ en-US ] = "~Request..." ; \
     };
 
@@ -582,7 +530,6 @@
     {\
         Identifier = SID_ATTR_TABLE ; \
         HelpID = SID_ATTR_TABLE ; \
-        Text [ de ] = "~Tabelle" ; \
         Text [ en-US ] = "Sp~readsheet" ; \
     };
 
@@ -590,7 +537,6 @@
     MenuItem\
     {\
         ITEM_INSERT_INSERT_GRAPHIC\
-        Text [ de ] = "Aus ~Datei..." ; \
         Text [ en-US ] = "From ~File..." ; \
     };
 
@@ -600,7 +546,6 @@
     {\
         Identifier = SID_INSERT_IMAGE ; \
         HelpID = SID_INSERT_IMAGE ; \
-        Text [ de ] = "Aus ~Bildbearbeitung..." ; \
         Text [ en-US ] = "From ~Image Editor..." ; \
     };
 #endif
@@ -610,7 +555,6 @@
     {\
         Identifier = SID_INSERT_DIAGRAM ; \
         HelpID = SID_INSERT_DIAGRAM ; \
-        Text [ de ] = "D~iagramm" ; \
         Text [ en-US ] = "Chart" ; \
     };
 
@@ -619,7 +563,6 @@
     {\
         Identifier = SID_INSERT_FLOATINGFRAME ; \
         HelpID = SID_INSERT_FLOATINGFRAME ; \
-        Text [ de ] = "Fra~me..." ; \
         Text [ en-US ] = "Float~ing Frame..." ; \
     };
 
@@ -628,7 +571,6 @@
     {\
         Identifier = SID_INSERTFILE ; \
         HelpID = SID_INSERTFILE ; \
-        Text [ de ] = "~Datei..." ; \
         Text [ en-US ] = "~File..." ; \
     };
 
@@ -638,7 +580,6 @@
         Identifier = MN_SUB_FIELD ; \
         HelpID = MN_SUB_FIELD ; \
         Command = ".uno:FieldMenu" ; \
-        Text [ de ] = "~Feldbefehl" ; \
         Text [ en-US ] = "Fiel~ds" ; \
         SubMenu = Menu\
         {\
@@ -666,7 +607,6 @@
         Identifier = MN_SUB_GRAPHIC ; \
         HelpID = MN_SUB_GRAPHIC ; \
         Command = ".uno:GraphicMenu" ; \
-        Text [ de ] = "~Grafik" ; \
         Text [ en-US ] = "~Graphics" ; \
         SubMenu = Menu\
         {\
@@ -693,7 +633,6 @@
     Identifier = 22 ; \
     HelpID = 22 ; \
     Command = ".uno:FormatMenu" ; \
-    Text [ de ] = "~Format" ; \
     Text [ en-US ] = "F~ormat" ; \
 
 #define MN_TEXTATTR_DLG \
@@ -701,7 +640,6 @@
     {\
         Identifier = SID_TEXTATTR_DLG ; \
         HelpID = SID_TEXTATTR_DLG ; \
-        Text [ de ] = "~Text..." ; \
         Text [ en-US ] = "Te~xt..." ; \
     };
 
@@ -710,7 +648,6 @@
     {\
         Identifier = SID_MEASURE_DLG ; \
         HelpID = SID_MEASURE_DLG ; \
-        Text [ de ] = "Bema~ßung..." ; \
         Text [ en-US ] = "Dimen~sions..." ; \
     };
 
@@ -719,7 +656,6 @@
     {\
         Identifier = SID_CONNECTION_DLG ; \
         HelpID = SID_CONNECTION_DLG ; \
-        Text [ de ] = "Verb~inder..." ; \
         Text [ en-US ] = "~Connector..." ; \
     };
 
@@ -728,7 +664,6 @@
     {\
         Identifier = SID_MODIFYLAYER ; \
         HelpID = SID_MODIFYLAYER ; \
-        Text [ de ] = "~Ebene..." ; \
         Text [ en-US ] = "~Layer..." ; \
     };
 
@@ -738,7 +673,6 @@
     {\
         Identifier = SID_MODIFYPAGE ; \
         HelpID = SID_MODIFYPAGE ; \
-        Text [ de ] = "S~eitenlayout ändern..." ; \
         Text [ en-US ] = "Modify ~Layout..." ; \
     };
 
@@ -748,7 +682,6 @@
         Identifier = MN_SUB_TEMPLATES ; \
         HelpID = MN_SUB_TEMPLATES ; \
         Command = ".uno:TemplatesMenu" ; \
-        Text [ de ] = "~Vorlagen" ; \
         Text [ en-US ] = "Styl~es" ; \
         SubMenu = Menu\
         {\
@@ -767,7 +700,6 @@
     Identifier = ITEM_TOOLS_ID ; \
     HelpID = 25 ; \
     Command = ".uno:ToolsMenu" ; \
-    Text [ de ] = "E~xtras" ; \
     Text [ en-US ] = "~Tools" ; \
 
  //
@@ -778,7 +710,6 @@
     Identifier = 26 ; \
     HelpID = 26 ; \
     Command = ".uno:SlideShowMenu" ; \
-    Text [ de ] = "Bildschirm~präsentation" ; \
     Text [ en-US ] = "~Slide Show" ; \
 
 #define MN_SPELLING \
@@ -786,7 +717,6 @@
     {\
         Identifier = SID_SPELL_DIALOG ; \
         HelpID = SID_SPELL_DIALOG ; \
-        Text [ de ] = "~Prüfen..." ; \
         Text [ en-US ] = "~Check..." ; \
     };
 
@@ -795,7 +725,6 @@
     {\
         Identifier = SID_AUTOSPELL_CHECK ; \
         HelpID = SID_AUTOSPELL_CHECK ; \
-        Text [ de ] = "~Automatisch prüfen" ; \
         Text [ en-US ] = "~AutoSpellcheck" ; \
     };
 
@@ -804,7 +733,6 @@
     {\
         Identifier = SID_THESAURUS ; \
         HelpID = SID_THESAURUS ; \
-        Text [ de ] = "T~hesaurus..." ; \
         Text [ en-US ] = "~Thesaurus..." ; \
     };
 
@@ -813,7 +741,6 @@
     {\
         Identifier = SID_HYPHENATION ; \
         HelpID = SID_HYPHENATION ; \
-        Text [ de ] = "Silben~trennung" ; \
         Text [ en-US ] = "~Hyphenation" ; \
     };
 
@@ -822,7 +749,6 @@
     {\
         Identifier = SID_AUTO_CORRECT_DLG ; \
         HelpID = SID_AUTO_CORRECT_DLG ; \
-        Text [ de ] = "~AutoKorrektur..." ; \
         Text [ en-US ] = "~AutoCorrect..." ; \
     };
 
@@ -832,7 +758,6 @@
     {\
         Identifier = SID_PRESENTATION_DLG ; \
         HelpID = SID_PRESENTATION_DLG ; \
-        Text [ de ] = "Bildschirm~präsentationseinstellungen..." ; \
         Text [ en-US ] = "~Slide Show Settings..." ; \
     };
 
@@ -842,7 +767,6 @@
     {\
         Identifier = SID_CUSTOMSHOW_DLG ; \
         HelpID = SID_CUSTOMSHOW_DLG ; \
-        Text [ de ] = "I~ndividuelle Bildschirmpräsentation..." ; \
         Text [ en-US ] = "~Custom Slide Show..." ; \
     };
 
@@ -851,7 +775,6 @@
     {\
         Identifier = SID_ANIMATION_OBJECTS ; \
         HelpID = SID_ANIMATION_OBJECTS ; \
-        Text [ de ] = "~Animation" ; \
         Text [ en-US ] = "~Animation" ; \
     };
 
@@ -860,7 +783,6 @@
     {\
         Identifier = SID_ANIMATION_EFFECTS ; \
         HelpID = SID_ANIMATION_EFFECTS ; \
-        Text [ de ] = "~Interaktion..." ; \
         Text [ en-US ] = "~Interaction..." ; \
     };
 
@@ -870,7 +792,6 @@
         Identifier = MN_SUB_SPELLING ; \
         HelpID = MN_SUB_SPELLING ; \
         Command = ".uno:SpellingMenu" ; \
-        Text [ de ] = "~Rechtschreibprüfung" ; \
         Text [ en-US ] = "~Spellcheck" ; \
         SubMenu = Menu\
         {\
@@ -888,7 +809,6 @@
     Identifier = 24 ; \
     HelpID = 24 ; \
     Command = ".uno:ModifyMenu" ; \
-    Text [ de ] = "Ä~ndern" ; \
     Text [ en-US ] = "~Modify" ; \
 
 #define MN_MOREFRONT \
@@ -896,7 +816,6 @@
     {\
         Identifier = SID_MOREFRONT ; \
         HelpID = SID_MOREFRONT ; \
-        Text [ de ] = "W~eiter nach vorn" ; \
         Text [ en-US ] = "Bring ~Forward" ; \
         };
 
@@ -905,7 +824,6 @@
     {\
         Identifier = SID_MOREBACK ; \
         HelpID = SID_MOREBACK ; \
-        Text [ de ] = "Weiter ~nach hinten" ; \
         Text [ en-US ] = "Send Back~ward" ; \
     };
 
@@ -914,7 +832,6 @@
     {\
         Identifier = SID_BEFORE_OBJ ; \
         HelpID = SID_BEFORE_OBJ ; \
-        Text [ de ] = "V~or das Objekt" ; \
         Text [ en-US ] = "In Front of ~Object" ; \
     };
 
@@ -923,7 +840,6 @@
     {\
         Identifier = SID_BEHIND_OBJ ; \
         HelpID = SID_BEHIND_OBJ ; \
-        Text [ de ] = "H~inter das Objekt" ; \
         Text [ en-US ] = "Be~hind Object" ; \
     };
 
@@ -932,7 +848,6 @@
     {\
         Identifier = SID_REVERSE_ORDER ; \
         HelpID = SID_REVERSE_ORDER ; \
-        Text [ de ] = "Ver~tauschen" ; \
         Text [ en-US ] = "~Reverse" ; \
     };
 
@@ -941,7 +856,6 @@
     {\
         Identifier = SID_BMPMASK ; \
         HelpID = SID_BMPMASK ; \
-        Text [ de ] = "~Pipette" ; \
         Text [ en-US ] = "~Eyedropper" ; \
     };
 
@@ -950,7 +864,6 @@
     {\
         Identifier = SID_GALLERY; \
         HelpID = SID_GALLERY; \
-        Text [ de ] = "~Gallery" ; \
         Text [ en-US ] = "~Gallery" ; \
     };
 
@@ -960,7 +873,6 @@
         Identifier = SID_OUTPUT_QUALITY_COLOR ; \
         HelpID = SID_OUTPUT_QUALITY_COLOR ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Farbe" ; \
         Text [ en-US ] = "~Color" ; \
     };
 
@@ -970,7 +882,6 @@
         Identifier = SID_OUTPUT_QUALITY_GRAYSCALE ; \
         HelpID = SID_OUTPUT_QUALITY_GRAYSCALE ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Graustufen" ; \
         Text [ en-US ] = "~Grayscale" ; \
     };
 
@@ -980,7 +891,6 @@
         Identifier = SID_OUTPUT_QUALITY_BLACKWHITE ; \
         HelpID = SID_OUTPUT_QUALITY_BLACKWHITE ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Schwarzweiß" ; \
         Text [ en-US ] = "~Black and White" ; \
     };
 
@@ -990,7 +900,6 @@
         Identifier = SID_OUTPUT_QUALITY_CONTRAST ; \
         HelpID = SID_OUTPUT_QUALITY_CONTRAST ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Kontrast" ; \
         Text [ en-US ] = "~High Contrast";\
     };
 
@@ -1000,7 +909,6 @@
         Identifier = SID_PREVIEW_QUALITY_COLOR ; \
         HelpID = SID_PREVIEW_QUALITY_COLOR ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Farbe" ; \
         Text [ en-US ] = "~Color" ; \
     };
 
@@ -1010,7 +918,6 @@
         Identifier = SID_PREVIEW_QUALITY_GRAYSCALE ; \
         HelpID = SID_PREVIEW_QUALITY_GRAYSCALE ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Graustufen" ; \
         Text [ en-US ] = "~Grayscale" ; \
     };
 
@@ -1020,7 +927,6 @@
         Identifier = SID_PREVIEW_QUALITY_BLACKWHITE ; \
         HelpID = SID_PREVIEW_QUALITY_BLACKWHITE ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Schwarzweiß" ; \
         Text [ en-US ] = "~Black and White" ; \
     };
 
@@ -1030,7 +936,6 @@
         Identifier = SID_PREVIEW_QUALITY_CONTRAST ; \
         HelpID = SID_PREVIEW_QUALITY_CONTRAST ; \
         RadioCheck = TRUE ; \
-        Text [ de ] = "~Kontrast" ; \
         Text [ en-US ] = "~High Contrast";\
     };
 
@@ -1040,7 +945,6 @@
         Identifier = MN_SUB_POSITION ; \
         HelpID = MN_SUB_POSITION ; \
         Command = ".uno:ArrangeMenu" ; \
-        Text [ de ] = "~Anordnung" ; \
         Text [ en-US ] = "~Arrange" ; \
         SubMenu = Menu\
         {\
@@ -1084,7 +988,6 @@
         Identifier = MN_SUB_OUTPUT_QUALITY ; \
         HelpID = MN_SUB_OUTPUT_QUALITY ; \
         Command = ".uno:DisplayQualityMenu" ; \
-        Text [ de ] = "An~zeigequalität" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -1104,7 +1007,6 @@
         Identifier = MN_SUB_PREVIEW_OUTPUT_QUALITY ; \
         HelpID = MN_SUB_PREVIEW_OUTPUT_QUALITY ; \
         Command = ".uno:PreviewDisplayQualityMenu" ; \
-        Text [ de ] = "V~orschau Anzeigequalität" ; \
         SubMenu = Menu\
         {\
             ItemList = \
@@ -1124,7 +1026,6 @@
         Identifier = SID_MULTI_PANE_GUI ; \
         HelpID = SID_MULTI_PANE_GUI ; \
         Text = "Multi Pane GUI" ; \
-        Text [ ENGLISH ] = "Multi Pane GUI" ; \
         SubMenu = Menu \
         {\
             ItemList =\
@@ -1135,7 +1036,6 @@
                     HelpID = SID_TOOLPANEL ; \
                     Check = TRUE ; \
                     Text = "Tool Panel" ; \
-                    Text [ ENGLISH ] = "Tool Panel" ; \
                 };\
                 MenuItem\
                 {\
@@ -1143,7 +1043,6 @@
                     HelpID = SID_SLIDE_BROWSER ; \
                     Check = TRUE ; \
                     Text = "Slide Browser" ; \
-                    Text [ ENGLISH ] = "Slide Browser" ; \
                 };\
                 MenuItem\
                 {\
@@ -1151,7 +1050,6 @@
                     HelpID = SID_NOTES_WINDOW ; \
                     Check = TRUE ; \
                     Text = "Notes Window" ; \
-                    Text [ ENGLISH ] = "Notes Window" ; \
                 };\
             };\
         };\
