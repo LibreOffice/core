@@ -4,9 +4,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:07:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:15:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,7 +40,6 @@
 #include "cmdid.h"
 
 #define     IDX_PHONETIC_LISTBOX_DESCRIPTION \
-Text [ de ] = "Phonetische Lesart"; \
 Text [ en-US ] = "Phonetic reading";    \
 
 #define IDX_DIALOG_WINDOW \
@@ -54,17 +53,13 @@ Text [ en-US ] = "Phonetic reading";    \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
             TabStop = TRUE ;                                        \
             DefButton = TRUE ;                                      \
-            Text [ de ] = "Einfügen";                                      \
             Text [ en-US ] = "Insert";\
-            Text [ x-comment ] = " ";\
         };                                                          \
         CancelButton BT_CANCEL                                      \
         {                                                           \
             Pos = MAP_APPFONT ( COL_BUTTONS , 23 ) ;                        \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
-            Text [ de ] = "Schließen";                                     \
             Text [ en-US ] = "Close";\
-            Text [ x-comment ] = " ";\
         };                                                          \
         HelpButton BT_HELP                                          \
         {                                                           \
@@ -75,10 +70,8 @@ Text [ en-US ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( COL_BUTTONS , 63 ) ;                        \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
-            Text [ de ] = "L~öschen" ;                                     \
             Text [ en-US ] = "~Delete" ;                       \
             TabStop = TRUE ;                                        \
-            Text [ x-comment ] = " ";\
         };                                                          \
         ListBox DCB_INDEX                                           \
         {                                                           \
@@ -91,7 +84,6 @@ Text [ en-US ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_NEWIMAGE_XPOS , 13 ) ;                        \
             Size = MAP_APPFONT ( IDX_NEWIMAGE_WIDTH , 15 ) ;                        \
-            QuickHelpText [ de ] = "Neues benutzerdefiniertes Verzeichnis";            \
             QuickHelpText [ en-US ] = "New User-defined Index";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
@@ -130,18 +122,14 @@ Text [ en-US ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( 6 , 3 ) ;                           \
             Size = MAP_APPFONT ( COL_BUTTONS-5-6 , RSC_CD_FIXEDLINE_HEIGHT ) ;                      \
-            Text [ de ] = "Markierung" ;                                   \
             Text [ en-US ] = "Selection" ;                    \
-            Text [ x-comment ] = " ";\
         };                                                          \
         FixedText LBL_INDEX                                         \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_COL1 , 16 ) ;                         \
             Size = MAP_APPFONT ( 40 , 10 ) ;                        \
-            Text [ de ] = "~Verzeichnis" ;                                 \
             Text [ en-US ] = "~Index" ;                        \
             Left = TRUE ;                                           \
-            Text [ x-comment ] = " ";\
         };                                                          \
         Edit SL_ENTRY                                               \
         {                                                           \
@@ -155,20 +143,16 @@ Text [ en-US ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_2_TEXT ) ;                         \
             Size = MAP_APPFONT ( 27 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text [ de ] = "~Eintrag" ;                                     \
             Text [ en-US ] = "~Entry" ;                        \
             Left = TRUE ;                                           \
-            Text [ x-comment ] = " ";\
         };                                                          \
         FixedText LBL_KEY                                           \
         {                                                           \
             Disable = TRUE ;                                        \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_3_TEXT ) ;                         \
             Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text [ de ] = "~1. Schlüssel" ;                                \
             Text [ en-US ] = "~1st key" ;                      \
             Left = TRUE ;                                           \
-            Text [ x-comment ] = " ";\
         };                                                          \
         ComboBox DCB_KEY                                            \
         {                                                           \
@@ -183,10 +167,8 @@ Text [ en-US ] = "Phonetic reading";    \
             Disable = TRUE ;                                        \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_4_TEXT ) ;                         \
             Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text [ de ] = "~2. Schlüssel" ;                                \
             Text [ en-US ] = "~2nd key" ;                      \
             Left = TRUE ;                                           \
-            Text [ x-comment ] = " ";\
         };                                                          \
         ComboBox DCB_KEY2                                           \
         {                                                           \
@@ -248,10 +230,8 @@ Text [ en-US ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_COL1 , 76 ) ;                         \
             Size = MAP_APPFONT ( 41 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text [ de ] = "St~ufe" ;                                       \
             Text [ en-US ] = "~Level" ;                        \
             Left = TRUE ;                                           \
-            Text [ x-comment ] = " ";\
         };                                                          \
         NumericField SL_LEVEL                                       \
         {                                                           \
@@ -272,24 +252,19 @@ Text [ en-US ] = "Phonetic reading";    \
         {                                                                       \
             Pos = MAP_APPFONT ( IDX_COL1 , 76 ) ;                                     \
             Size = MAP_APPFONT ( 100 , 8 ) ;                                    \
-            Text [ de ] = "Ha~upteintrag" ;                                            \
             Text [ en-US ] = "~Main entry";\
-            Text [ x-comment ] = " ";\
         };                                                                      \
         CheckBox CB_APPLY_TO_ALL                                                \
         {                                                                       \
             Pos = MAP_APPFONT ( IDX_COL1 , 90 ) ;                                     \
             Size = MAP_APPFONT ( 140 , 12 ) ;                                   \
-            Text [ de ] = "~Auf alle gleichen Texte anwenden." ;                       \
             Hide = TRUE;                                                        \
             Text [ en-US ] = "~Apply to all similar texts.";                \
-            Text [ x-comment ] = " ";\
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
             Pos = MAP_APPFONT ( 21 , 104 ) ;                                     \
             Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
-            Text [ de ] = "E~xakte Suche" ;                       \
             Hide = TRUE;\
             Text [ en-US ] = "Ma~tch case";\
         };                                                                      \
@@ -297,7 +272,6 @@ Text [ en-US ] = "Phonetic reading";    \
         {                                                                       \
             Pos = MAP_APPFONT ( 21 , 118 ) ;                                     \
             Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
-            Text [ de ] = "Nur ganze ~Wörter" ;                       \
             Hide = TRUE;\
             Text [ en-US ] = "~Whole words only";\
         };                                                                      \
@@ -393,7 +367,6 @@ ModalDialog DLG_NEW_USER_IDX
     HelpID = HID_DLG_NEW_USER_IDX;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 194 , 60 ) ;
-    Text [ de ] = "Neues benutzerdefiniertes  Verzeichnis anlegen" ;
     OKButton PB_OK
     {
         Pos = MAP_APPFONT ( 141 , 6 ) ;
@@ -415,19 +388,15 @@ ModalDialog DLG_NEW_USER_IDX
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text [ de ] = "Neues Benutzerverzeichnis" ;
 
         Text [ en-US ] = "New user index";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Name" ;
 
         Text [ en-US ] = "~Name";
-        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -438,21 +407,16 @@ ModalDialog DLG_NEW_USER_IDX
         Left = TRUE ;
     };
     Text [ en-US ] = "Create New User-defined Index";
-    Text [ x-comment ] = " ";
 };
 
 String STR_IDXMRK_EDIT
 {
-    Text [ de ] = "Verzeichniseintrag bearbeiten" ;
     Text [ en-US ] = "Edit Index Entry" ;
-    Text [ x-comment ] = " ";
 };
 String STR_IDXMRK_INSERT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Verzeichniseintrag einf�gen : Verzeichniseintrag einf�gen */
-    Text [ de ] = "Verzeichniseintrag einfügen" ;
     Text [ en-US ] = "Insert Index Entry" ;
-    Text [ x-comment ] = " ";
 };
 
 #define     AUTH_DIALOG_WINDOW  \
@@ -464,23 +428,19 @@ String STR_IDXMRK_INSERT
         {                                                           \
             Pos = MAP_APPFONT ( 12 , 14 ) ;                         \
             Size = MAP_APPFONT ( 147 , 12 ) ;                       \
-            Text [ de ] = "Aus Literatur~datenbank" ;                      \
             Text [ en-US ] = "From bibliography ~database";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
         {                                                           \
             Pos = MAP_APPFONT ( 12,  29 ) ;                         \
             Size = MAP_APPFONT ( 147 , 12 ) ;                       \
-            Text [ de ] = "~Aus Dokumentinhalt" ;                          \
             Text [ en-US ] = "~From document content";\
         };                                                          \
         FixedText FT_AUTHOR                             \
         {                                               \
             Pos = MAP_APPFONT ( 12 , 14 + RADIO_BUTTON_HEIGHT) ; \
             Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text [ de ] = "Autor" ;                            \
             Text [ en-US ] = "Author";\
-            Text [ x-comment ] = " ";\
         };                                              \
         FixedText   FI_AUTHOR                           \
         {                                               \
@@ -492,9 +452,7 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 12 , 37 + RADIO_BUTTON_HEIGHT) ; \
             Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text [ de ] = "Titel" ;                            \
             Text [ en-US ] = "Title";\
-            Text [ x-comment ] = " ";\
         };                                              \
         FixedText   FI_TITLE                            \
         {                                               \
@@ -506,9 +464,7 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 12 , 62 + RADIO_BUTTON_HEIGHT) ; \
             Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text [ de ] = "~Kurzbezeichnung" ;                 \
             Text [ en-US ] = "Short ~name";\
-            Text [ x-comment ] = " ";\
         };                                              \
         Edit ED_ENTRY                                   \
         {                                               \
@@ -530,9 +486,7 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 6 , 3 ) ;               \
             Size = MAP_APPFONT ( 146 , 8 ) ; \
-            Text [ de ] = "Eintrag" ;                          \
             Text [ en-US ] = "Entry";\
-            Text [ x-comment ] = " ";\
         };                                              \
         OKButton PB_OK                                  \
         {                                               \
@@ -540,17 +494,13 @@ String STR_IDXMRK_INSERT
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
             TabStop = TRUE ;                            \
             DefButton = TRUE ;                          \
-            Text [ de ] = "Einfügen";                          \
             Text [ en-US ] = "Insert";\
-            Text [ x-comment ] = " ";\
         };                                              \
         CancelButton PB_CANCEL                          \
         {                                               \
             Pos = MAP_APPFONT ( 162 , 23 ) ;            \
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text [ de ] = "Schließen";                         \
             Text [ en-US ] = "Close";\
-            Text [ x-comment ] = " ";\
         };                                              \
         HelpButton PB_HELP                              \
         {                                               \
@@ -561,22 +511,17 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 162 , 60 ) ;            \
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text [ de ] = "Ne~u";                  \
             Text [ en-US ] = "~New";\
-            Text [ x-comment ] = " ";\
         };                                              \
         PushButton PB_EDITENTRY                       \
         {                                               \
             Pos = MAP_APPFONT ( 162 , 77 ) ;            \
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text [ de ] = "~Bearbeiten";                  \
             Text [ en-US ] = "Edit";\
         };                                              \
         String ST_CHANGE                                \
         {                                               \
-            Text [ de ] = "Ändern";                            \
             Text [ en-US ] = "Modify";\
-            Text [ x-comment ] = " ";\
         };                                              \
     };
 
@@ -612,7 +557,6 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 365 , 203 ) ;
-    Text [ de ] = "Literatureintrag definieren" ;
     Moveable = TRUE ;
     OKButton PB_OK
     {
@@ -635,31 +579,24 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 300 , 8 ) ;
-        Text [ de ] = "Eintragsdaten" ;
         Text [ en-US ] = "Entry data";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Define Bibliography Entry";
 };
 String STR_AUTHMRK_EDIT
 {
-    Text [ de ] = "Literaturverzeichniseintrag bearbeiten" ;
 
     Text [ en-US ] = "Edit Bibliography Entry";
-    Text [ x-comment ] = "; EM28; EM28.9.01: MODALDIALOG title";
 };
 String STR_AUTHMRK_INSERT
 {
-    Text [ de ] = "Literaturverzeichniseintrag einfügen" ;
 
     Text [ en-US ] = "Insert Bibliography Entry";
-    Text [ x-comment ] = "; EM28; EM28.9.01: MODALDIALOG title";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    Message [ de ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?" ;
     Message [ en-US ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
 };
 
