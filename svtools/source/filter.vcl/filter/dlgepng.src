@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepng.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:36:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:14:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog DLG_EXPORT_EPNG
     Size = MAP_APPFONT ( 169 , 64 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "PNG Optionen" ;
     Text [ en-US ] = "PNG Options" ;
     OKButton BTN_OK
     {
@@ -66,14 +65,12 @@ ModalDialog DLG_EXPORT_EPNG
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 100 , 8 ) ;
-        Text [ de ] = "Modus" ;
         Text[ en-US ] = "Mode";
     };
     FixedText FI_COMPRESSION
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "~Kompression 0..9";
         Text[ en-US ] = "~Compression 0..9";
     };
     NumericField NUM_COMPRESSION
@@ -95,7 +92,6 @@ ModalDialog DLG_EXPORT_EPNG
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 80 , 12 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Interlaced" ;
         Text [ en-US ] = "~Interlaced" ;
     };
 };
