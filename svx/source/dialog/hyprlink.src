@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprlink.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:40:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:06:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ ToolBox RID_SVXDLG_HYPERLINK
     Scroll = TRUE ;
     HelpID = HID_OFA_HYPERLINK_DLG ;
 
-    Text [ de ] = "Hyperlink einfügen" ;
     Text [ en-US ] = "Insert Hyperlink" ;
 
     ComboBox CB_NAME
@@ -71,19 +70,14 @@ ToolBox RID_SVXDLG_HYPERLINK
         AutoSize = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        QuickHelpText [ de ] = "Name des URL" ;
         QuickHelpText [ en-US ] = "URL Name" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     FixedText FT_URL
     {
         HelpID = HID_OFA_HYPERLINK_URL_TXT ;
         Pos = MAP_APPFONT ( 105 , 5 ) ;
         Size = MAP_APPFONT ( 16 , 10 ) ;
-        Text [ de ] = "URL:" ;
         Text [ en-US ] = "URL:" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox CB_URL
     {
@@ -95,10 +89,7 @@ ToolBox RID_SVXDLG_HYPERLINK
         AutoSize = TRUE ;
         AutoHScroll = TRUE ;
         DDExtraWidth = TRUE ;
-        QuickHelpText [ de ] = "Sammelbox für Internet-URLs" ;
         QuickHelpText [ en-US ] = "Internet URLs" ;
-        QuickHelpText [ x-comment ] = " ";
-        QuickHelpText [ x-comment ] = " ";
     };
     ItemList =
     {
@@ -107,9 +98,7 @@ ToolBox RID_SVXDLG_HYPERLINK
             HelpID = HID_OFA_HYPERLINK_TARGET ;
             Identifier = BTN_TARGET ;
             DropDown = TRUE ;
-            Text [ de ] = "Frame" ;
             Text [ en-US ] = "Target Frame" ;
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
@@ -121,9 +110,7 @@ ToolBox RID_SVXDLG_HYPERLINK
             Identifier = BTN_LINK ;
             Disable = TRUE ;
             DropDown = TRUE ;
-            Text [ de ] = "Link" ;
             Text [ en-US ] = "Hyperlink" ;
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
@@ -131,9 +118,7 @@ ToolBox RID_SVXDLG_HYPERLINK
             Identifier = BTN_INSERT_BOOKMARK ;
             Disable = TRUE ;
             Hide = TRUE;
-            Text [ de ] = "Verknüpfung" ;
             Text [ en-US ] = "Link" ;
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
@@ -141,30 +126,21 @@ ToolBox RID_SVXDLG_HYPERLINK
             Identifier = BTN_INET_SEARCH ;
             Disable = TRUE ;
             DropDown = TRUE ;
-            Text [ de ] = "Suchen" ;
             Text [ en-US ] = "Find" ;
-            Text [ x-comment ] = " ";
         };
     };
     String STR_ADDRESS
     {
-        Text [ de ] = "Adressbuch" ;
         Text [ en-US ] = "Address Book" ;
-        Text [ x-comment ] = " ";
     };
     String STR_EXPLORER
     {
-        Text [ de ] = "Bookmark-Ordner" ;
         Text [ en-US ] = "Bookmark folder" ;
-        Text [ x-comment ] = " ";
     };
     String STR_BOOKMARK_SEARCH
     {
-        Text [ de ] = "Suche in Bookmarks" ;
         Text [ en-US ] = "Search in bookmarks";
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // PopupMenu -------------------------------------------------------------
 Menu RID_SVXMN_HYPERLINK
@@ -174,16 +150,12 @@ Menu RID_SVXMN_HYPERLINK
         MenuItem
         {
             Identifier = MN_FIELD ;
-            Text [ de ] = "Als ~Text" ;
             Text [ en-US ] = "As Text" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_BUTTON ;
-            Text [ de ] = "Als ~Button" ;
             Text [ en-US ] = "As Button" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -191,7 +163,6 @@ QueryBox RID_SVXQB_DONTEXIST
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_YES ;
-    Message [ de ] = "Der URL existiert nicht.\nSoll er trotzdem eingefügt werden?" ;
     Message [ en-US ] = "This URL does not exist.\nInsert anyway?" ;
 };
 
