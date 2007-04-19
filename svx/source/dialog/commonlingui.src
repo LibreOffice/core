@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonlingui.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:35:45 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:00:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,9 +46,7 @@ Window RID_SVX_WND_COMMON_LINGU
     {
         Pos = MAP_APPFONT( 6,  9 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Original" ;
         Text [ en-US ] = "Origi~nal";
-        Text [ x-comment ] = " ";
     };
     Control FT_AKTWORD
     {
@@ -63,9 +61,7 @@ Window RID_SVX_WND_COMMON_LINGU
     {
         Pos = MAP_APPFONT(  6, 25 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Wort" ;
         Text [ en-US ] = "~Word" ;
-        Text [ x-comment ] = " ";
     };
 
     Edit ED_NEWWORD
@@ -79,46 +75,36 @@ Window RID_SVX_WND_COMMON_LINGU
     {
         Pos = MAP_APPFONT( 6, 48 );
         Size = MAP_APPFONT( 42, 10 );
-        Text [ de ] = "~Vorschläge" ;
         Text [ en-US ] = "~Suggestions" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_IGNORE
     {
         Pos = MAP_APPFONT( 209, 6 );
         Size = MAP_APPFONT( 55, 14 );
-        Text [ de ] = "~Ignorieren" ;
         Text [ en-US ] = "~Ignore" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_IGNOREALL
     {
         Pos = MAP_APPFONT( 209, 22 );
         Size = MAP_APPFONT( 55, 14 );
-        Text [ de ] = "Immer i~gnorieren" ;
         Text [ en-US ] = "Always I~gnore" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_CHANGE
     {
         Pos = MAP_APPFONT( 209, 40 );
         Size = MAP_APPFONT( 55, 14 );
-        Text [ de ] = "~Ersetzen" ;
         Text [ en-US ] = "~Replace" ;
         DefButton = TRUE ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_CHANGEALL
     {
         Pos = MAP_APPFONT( 209, 56 );
         Size = MAP_APPFONT( 55, 14 );
-        Text [ de ] = "I~mmer ersetzen" ;
         Text [ en-US ] = "Always R~eplace" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_OPTIONS
@@ -126,7 +112,6 @@ Window RID_SVX_WND_COMMON_LINGU
         Pos = MAP_APPFONT( 209, 129 );
         Size = MAP_APPFONT( 55, 14 );
         Hide = TRUE ;
-        Text [ de ] = "Optionen..." ;
         Text [ en-US ] = "Options..." ;
     };
 
@@ -154,9 +139,7 @@ Window RID_SVX_WND_COMMON_LINGU
         Pos = MAP_APPFONT ( 209 , 153 ) ;
         Size = MAP_APPFONT ( 55 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "S~chließen" ;
         Text [ en-US ] = "~Close" ;
-        Text [ x-comment ] = " ";
     };
 };
 
