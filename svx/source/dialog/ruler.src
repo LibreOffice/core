@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ruler.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:47:20 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:19:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,41 +43,31 @@ Menu RID_SVXMN_RULER
         {
             Identifier = ID_MM ;
             Checkable = TRUE ;
-            Text [ de ] = "Millimeter" ;
             Text [ en-US ] = "Millimeter" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_CM ;
             Checkable = TRUE ;
-            Text [ de ] = "Zentimeter" ;
             Text [ en-US ] = "Centimeter" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_M ;
             Checkable = TRUE ;
-            Text [ de ] = "Meter" ;
             Text [ en-US ] = "Meter" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_KM ;
             Checkable = TRUE ;
-            Text [ de ] = "Kilometer" ;
             Text [ en-US ] = "Kilometer" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_INCH ;
             Checkable = TRUE ;
-            Text [ de ] = "Zoll" ;
             Text [ en-US ] = "Inch" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -85,58 +75,43 @@ Menu RID_SVXMN_RULER
             Checkable = TRUE ;
             /* ### ACHTUNG: Neuer Text in Resource? Fuﬂ : Fuò */
             /* ### ACHTUNG: Neuer Text in Resource? Fuﬂ : Fuò */
-            Text [ de ] = "Fu√ü" ;
             Text [ en-US ] = "Foot" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_MILE ;
             Checkable = TRUE ;
-            Text [ de ] = "Meilen" ;
             Text [ en-US ] = "Miles" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_POINT ;
             Checkable = TRUE ;
-            Text [ de ] = "Punkt" ;
             Text [ en-US ] = "Point" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_PICA ;
             Checkable = TRUE ;
-            Text [ de ] = "Pica" ;
             Text [ en-US ] = "Pica" ;
         };
     };
 };
 String RID_SVXSTR_RULER_TAB_LEFT
 {
-    Text [ de ] = "Links" ;
     Text [ en-US ] = "Left" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_RULER_TAB_RIGHT
 {
-    Text [ de ] = "Rechts" ;
     Text [ en-US ] = "Right" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_RULER_TAB_DECIMAL
 {
-    Text [ de ] = "Dezimal" ;
     Text [ en-US ] = "Decimal" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_RULER_TAB_CENTER
 {
-    Text [ de ] = "Zentriert" ;
     Text [ en-US ] = "Center" ;
-    Text [ x-comment ] = " ";
 };
 
 
