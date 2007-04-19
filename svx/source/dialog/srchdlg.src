@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srchdlg.src,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:08:22 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:20:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,21 +44,15 @@
 
 String RID_SVXSTR_SEARCH_STYLES
 {
-    Text [ de ] = "einschließlich ~Vorlagen" ;
     Text [ en-US ] = "Including Styles" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_SEARCH
 {
-    Text [ de ] = " (Suchen)" ;
     Text [ en-US ] = "(Search)" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_REPLACE
 {
-    Text [ de ] = " (Ersetzen)" ;
     Text [ en-US ] = "(Replace)" ;
-    Text [ x-comment ] = " ";
 };
 
  // RID_SVXDLG_SEARCH -----------------------------------------------------
@@ -70,14 +64,12 @@ ModelessDialog RID_SVXDLG_SEARCH
     Hide = TRUE ;
     SvLook = TRUE ;
     Size = MAP_APPFONT ( 200 , 155 ) ;
-    Text [ de ] = "Suchen & Ersetzen" ;
     Text [ en-US ] = "Find & Replace" ;
     Moveable = TRUE ;
     FixedText FT_SEARCH
     {
         Pos = MAP_APPFONT ( 6 , 7 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "S~uchen nach" ;
         Text [ en-US ] = "~Search for" ;
     };
     ComboBox ED_SEARCH
@@ -115,7 +107,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 6 , 54 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Ersetzen ~durch" ;
         Text [ en-US ] = "Re~place with" ;
     };
     ComboBox ED_REPLACE
@@ -153,7 +144,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 9 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Suchen" ;
         Text [ en-US ] = "~Find" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
@@ -162,7 +152,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 26 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Suche ~alle" ;
         Text [ en-US ] = "Find ~All" ;
         TabStop = TRUE ;
     };
@@ -175,7 +164,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Ersetzen" ;
         Text [ en-US ] = "~Replace" ;
         TabStop = TRUE ;
     };
@@ -183,7 +171,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 73 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "E~rsetze alle" ;
         Text [ en-US ] = "Replace A~ll" ;
         TabStop = TRUE ;
     };
@@ -212,14 +199,12 @@ ModelessDialog RID_SVXDLG_SEARCH
         Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Gro~ß-/Kleinschreibung" ;
         Text [ en-US ] = "Ma~tch case";
     };
     CheckBox CB_WHOLE_WORDS
     {
         Pos = MAP_APPFONT ( 12 , 114 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "Nur ganze W~örter" ;
         Text [ en-US ] = "Whole wor~ds only" ;
         TabStop = TRUE ;
     };
@@ -247,7 +232,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 135 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "S~chließen" ;
         Text [ en-US ] = "~Close" ;
         TabStop = TRUE ;
     };
@@ -261,7 +245,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 163 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "~Nur in Selektion" ;
         Text [ en-US ] = "Current selection ~only" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -270,7 +253,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 176 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "Rüc~kwärts" ;
         Text [ en-US ] = "Bac~kwards" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -279,7 +261,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 189 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "Re~gulärer Ausdruck" ;
         Text [ en-US ] = "Regular e~xpressions" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -288,7 +269,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 204 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
-        Text [ de ] = "~Ähnlichkeitssuche" ;
         Text [ en-US ] = "S~imilarity search" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -305,7 +285,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 219 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "Suche nach ~Vorlagen" ;
         Text [ en-US ] = "Search for St~yles" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -315,7 +294,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         Pos = MAP_APPFONT ( 12 , 232 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Zeichenbreite berücksichtigen" ;
         Text [ en-US ] = "Match character width";
         Hide = TRUE ;
     };
@@ -324,7 +302,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         Pos = MAP_APPFONT ( 12 , 247 ) ;
         Size = MAP_APPFONT ( 109 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ähnliche Schreibweise (Japanisch)" ;
         Text [ en-US ] = "Sounds like (Japanese)";
         Hide = TRUE ;
     };
@@ -340,17 +317,14 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 163 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Attri~bute..." ;
         Text [ en-US ] = "Attri~butes..." ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
         Hide = TRUE ;
     };
     PushButton BTN_FORMAT
     {
         Pos = MAP_APPFONT ( 144 , 180 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Format..." ;
         Text [ en-US ] = "For~mat..." ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -359,7 +333,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 144 , 197 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Kein For~mat" ;
         Text [ en-US ] = "~No Format" ;
         TabStop = TRUE ;
         Hide = TRUE ;
@@ -374,7 +347,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 272 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "S~uchen in" ;
         Text [ en-US ] = "~Search in" ;
         Hide = TRUE ;
     };
@@ -386,12 +358,6 @@ ModelessDialog RID_SVXDLG_SEARCH
         TabStop = TRUE ;
         DropDown = TRUE ;
         Hide = TRUE ;
-        StringList [ de ] =
-        {
-            < "Formeln" ; Default ; > ;
-            < "Werten" ; Default ; > ;
-            < "Notizen" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Formulas" ; Default ; > ;
@@ -403,7 +369,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 287 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "S~uchrichtung" ;
         Text [ en-US ] = "~Search direction" ;
         Hide = TRUE ;
     };
@@ -411,7 +376,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 75 , 287 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ de ] = "Zeilenwe~ise" ;
         Text [ en-US ] = "Ro~ws" ;
         Hide = TRUE ;
     };
@@ -419,7 +383,6 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 75 , 300 ) ;
         Size = MAP_APPFONT ( 63 , 10 ) ;
-        Text [ de ] = "S~paltenweise" ;
         Text [ en-US ] = "Col~umns" ;
         Hide = TRUE ;
     };
@@ -427,24 +390,20 @@ ModelessDialog RID_SVXDLG_SEARCH
     {
         Pos = MAP_APPFONT ( 12 , 313 ) ;
         Size = MAP_APPFONT ( 126 , 10 ) ;
-        Text [ de ] = "~In allen Tabellen suchen" ;
         Text [ en-US ] = "Search in all sheets" ;
         Hide = TRUE ;
     };
 
     String STR_WORDCALC
     {
-        Text [ de ] = "Nur ganze Ze~llen" ;
         Text [ en-US ] = "~Entire cells" ;
     };
     String STR_MORE_BTN
     {
-        Text [ de ] = "Mehr ~Optionen" ;
         Text [ en-US ] = "More ~Options" ;
     };
     String STR_LESS_BTN
     {
-        Text [ de ] = "Weniger ~Optionen" ;
         Text [ en-US ] = "Less ~Options" ;
     };
 };
