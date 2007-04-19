@@ -4,9 +4,9 @@
  *
  *  $RCSfile: extrusioncontrols.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:02:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:42:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
     Closeable = TRUE ;
     Zoomable = TRUE ;
 
-    Text [ de ] = "Extrusionsrichtung" ;
     Text [ en-US ] = "Extrusion Direction" ;
 
     Image IMG_DIRECTION + DIRECTION_NW
@@ -164,58 +163,47 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DIRECTION
 
     String STR_PERSPECTIVE
     {
-        Text [ de ] = "~Perspektive" ;
         Text [ en-US ] = "~Perspective" ;
     };
 
     String STR_PARALLEL
     {
-        Text [ de ] = "P~arallel" ;
         Text [ en-US ] = "P~arallel" ;
     };
     String STR_DIRECTION + DIRECTION_NW
     {
-        Text [ de ] = "Extrusion nach Nordwesten";
         Text [ en-US ] = "Extrusion North-West";
     };
     String STR_DIRECTION + DIRECTION_N
     {
-        Text [ de ] = "Extrusion nach Norden";
         Text [ en-US ] = "Extrusion North";
     };
     String STR_DIRECTION + DIRECTION_NE
     {
-        Text [ de ] = "Extrusion nach Nordosten";
         Text [ en-US ] = "Extrusion North-East";
     };
     String STR_DIRECTION + DIRECTION_W
     {
-        Text [ de ] = "Extrusion nach Westen";
         Text [ en-US ] = "Extrusion West";
     };
     String STR_DIRECTION + DIRECTION_NONE
     {
-        Text [ de ] = "Extrusion nach hinten";
         Text [ en-US ] = "Extrusion Backwards";
     };
     String STR_DIRECTION + DIRECTION_E
     {
-        Text [ de ] = "Extrusion nach Osten";
         Text [ en-US ] = "Extrusion East";
     };
     String STR_DIRECTION + DIRECTION_SW
     {
-        Text [ de ] = "Extrusion nach Südwesten";
         Text [ en-US ] = "Extrusion South-West";
     };
     String STR_DIRECTION + DIRECTION_S
     {
-        Text [ de ] = "Extrusion nach Süden";
         Text [ en-US ] = "Extrusion South";
     };
     String STR_DIRECTION + DIRECTION_SE
     {
-        Text [ de ] = "Extrusion nach Südosten";
         Text [ en-US ] = "Extrusion South-East";
     };
 };
@@ -230,18 +218,15 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_DEPTH
     Closeable = TRUE ;
     Zoomable = TRUE ;
 
-    Text [ de ] = "Extrusionstiefe" ;
     Text [ en-US ] = "Extrusion Depth" ;
 
     String STR_CUSTOM
     {
-        Text [ de ] = "~Benutzerdefiniert...";
         Text [ en-US ] = "~Custom...";
     };
 
     String STR_INFINITY
     {
-        Text [ de ] = "~Unendlich";
         Text [ en-US ] = "~Infinity";
     };
 
@@ -322,7 +307,6 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
     Closeable = TRUE ;
     Zoomable = TRUE ;
 
-    Text [ de ] = "Extrusionsbeleuchtung" ;
     Text [ en-US ] = "Extrusion Lighting" ;
 
     Image IMG_LIGHT_OFF + FROM_TOP_LEFT
@@ -615,19 +599,16 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_LIGHTING
 
     String STR_BRIGHT
     {
-        Text [ de ] = "~Hell";
         Text [ en-US ] = "~Bright";
     };
 
     String STR_NORMAL
     {
-        Text [ de ] = "~Normal";
         Text [ en-US ] = "~Normal";
     };
 
     String STR_DIM
     {
-        Text [ de ] = "~Abgeblendet";
         Text [ en-US ] = "~Dim";
     };
 };
@@ -642,30 +623,25 @@ FloatingWindow RID_SVXFLOAT_EXTRUSION_SURFACE
     Closeable = TRUE ;
     Zoomable = TRUE ;
 
-    Text [ de ] = "Extrusionsoberfläche" ;
     Text [ en-US ] = "Extrusion Surface" ;
 
     String STR_WIREFRAME
     {
-        Text [ de ] = "~Drahtrahmen";
         Text [ en-US ] = "~Wire Frame";
     };
 
     String STR_MATTE
     {
-        Text [ de ] = "~Matte";
         Text [ en-US ] = "~Matt";
     };
 
     String STR_PLASTIC
     {
-        Text [ de ] = "~Plastik";
         Text [ en-US ] = "~Plastic";
     };
 
     String STR_METAL
     {
-        Text [ de ] = "Me~tall";
         Text [ en-US ] = "Me~tal";
     };
 
@@ -724,14 +700,12 @@ ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
 
     Size = MAP_APPFONT( WIDTH, HEIGHT );
 
-    Text [ de ] = "Extrusionstiefe" ;
     Text [ en-US ] = "Extrusion Depth" ;
 
     FixedText FL_DEPTH
     {
         Pos = MAP_APPFONT ( 3 , 3 ) ;
         Size = MAP_APPFONT ( WIDTH - 50 - 12 , 8 ) ;
-        Text [ de ] = "~Wert" ;
         Text [ en-US ] = "~Value" ;
     };
     MetricField MTR_DEPTH
@@ -773,67 +747,56 @@ ModalDialog RID_SVX_MDLG_EXTRUSION_DEPTH
 
 String RID_SVXSTR_EXTRUSION_COLOR
 {
-    Text [ de ] = "Extrusion Color";
     Text [ en-US ] = "Extrusion Color";
 };
 
 String RID_SVXSTR_DEPTH_0
 {
-    Text [ de ] = "~0 cm";
     Text [ en-US ] = "~0 cm";
 };
 
 String RID_SVXSTR_DEPTH_1
 {
-    Text [ de ] = "~1 cm";
     Text [ en-US ] = "~1 cm";
 };
 
 String RID_SVXSTR_DEPTH_2
 {
-    Text [ de ] = "~2.5 cm";
     Text [ en-US ] = "~2.5 cm";
 };
 
 String RID_SVXSTR_DEPTH_3
 {
-    Text [ de ] = "~5 cm";
     Text [ en-US ] = "~5 cm";
 };
 
 String RID_SVXSTR_DEPTH_4
 {
-    Text [ de ] = "10 ~cm";
     Text [ en-US ] = "10 ~cm";
 };
 
 String RID_SVXSTR_DEPTH_0_INCH
 {
-    Text [ de ] = "~0 inch";
     Text [ en-US ] = "0 inch";
 };
 
 String RID_SVXSTR_DEPTH_1_INCH
 {
-    Text [ de ] = "0.~5 inch";
     Text [ en-US ] = "0.~5 inch";
 };
 
 String RID_SVXSTR_DEPTH_2_INCH
 {
-    Text [ de ] = "~1 inch";
     Text [ en-US ] = "~1 inch";
 };
 
 String RID_SVXSTR_DEPTH_3_INCH
 {
-    Text [ de ] = "~2 inch";
     Text [ en-US ] = "~2 inch";
 };
 
 String RID_SVXSTR_DEPTH_4_INCH
 {
-    Text [ de ] = "~4 inch";
     Text [ en-US ] = "~4 inch";
 };
 
