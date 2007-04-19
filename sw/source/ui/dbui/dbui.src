@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbui.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: kz $ $Date: 2006-01-06 13:00:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:53:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ ModalDialog DLG_DBSELECTION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 132 ) ;
-    Text [ de ] = "Datenbankauswahl" ;
     Moveable = TRUE ;
     Control TLB_DBLIST
     {
@@ -70,7 +69,6 @@ ModalDialog DLG_DBSELECTION
         TabStop = TRUE ;
     };
     Text [ en-US ] = "Database Selection" ;
-    Text [ x-comment ] = " ";
 };
  // DLG_PRINTMONITOR ------------------------------------------------------
 ModelessDialog DLG_PRINTMONITOR
@@ -84,7 +82,6 @@ ModelessDialog DLG_PRINTMONITOR
     _HEIGHT = 72 ;
     MOVEABLE = TRUE ;
     APP = FALSE ;
-    Text [ de ] = "Speichern-Monitor" ;
     FixedText FT_DOCNAME
     {
         HIDE = FALSE ;
@@ -108,12 +105,10 @@ ModelessDialog DLG_PRINTMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 100 ;
         _HEIGHT = 8 ;
-        Text [ de ] = "wird ausgegeben als" ;
         LEFT = FALSE ;
         CENTER = TRUE ;
         RIGHT = FALSE ;
         Text [ en-US ] = "is being printed on" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SENDING
     {
@@ -124,12 +119,10 @@ ModelessDialog DLG_PRINTMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 100 ;
         _HEIGHT = 8 ;
-        Text [ de ] = "wird versandt an" ;
         LEFT = FALSE ;
         CENTER = TRUE ;
         RIGHT = FALSE ;
         Text [ en-US ] = "is being sent to";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PRINTER
     {
@@ -172,40 +165,18 @@ ModelessDialog DLG_PRINTMONITOR
     };
     String STR_EMAILMON
     {
-        Text [ de ] = "Versenden-Monitor" ;
         Text [ en-US ] = "Send-Monitor";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Print monitor" ;
-    Text [ x-comment ] = " ";
 };
 
 String STR_DB_EMAIL
 {
-    Text [ de ] = "E-Mail" ;
     Text [ en-US ] = "E-mail" ;
-    Text [ x-comment ] = " ";
 };
 
 StringArray SA_ADDRESS_HEADER
 {
-    ItemList [de] =
-    {
-        < "Anrede" ;               MM_PART_TITLE           ;> ;
-        < "Vorname" ;              MM_PART_FIRSTNAME       ;> ;
-        < "Name" ;                 MM_PART_LASTNAME        ;> ;
-        < "Firmenname" ;           MM_PART_COMPANY         ;> ;
-        < "Addresszeile 1" ;       MM_PART_ADDRESS_1       ;> ;
-        < "Addresszeile 2" ;       MM_PART_ADDRESS_2       ;> ;
-        < "Stadt" ;                MM_PART_CITY            ;> ;
-        < "Bundesland" ;           MM_PART_REGION          ;> ;
-        < "Postleitzahl" ;         MM_PART_ZIP             ;> ;
-        < "Land" ;                 MM_PART_COUNTRY         ;> ;
-        < "Telefon privat" ;       MM_PART_PHONE_PRIVATE   ;> ;
-        < "Telefon geschäftlich" ; MM_PART_PHONE_BUSINESS  ;> ;
-        < "E-Mail Addresse" ;      MM_PART_E_MAIL          ;> ;
-        < "Geschlecht";            MM_PART_GENDER          ;> ;
-    };
     ItemList [en-US]=
     {
         < "Title" ;                 MM_PART_TITLE           ;> ;
@@ -226,47 +197,38 @@ StringArray SA_ADDRESS_HEADER
 };
 String STR_NOTASSIGNED
 {
-    Text [ de ] = " noch nicht zugewiesen " ;
     Text[ en-US ] = " not yet matched ";
 };
 String STR_FILTER_ALL
 {
-    Text [ de ] = "Alle Dateien (*.*)" ;
     Text [ en-US ] = "All files (*.*)" ;
 };
 String STR_FILTER_ALL_DATA
 {
-    Text [ de ] = "Adressen (*.*)" ;
     Text [ en-US ] = "Address lists(*.*)" ;
 };
 String STR_FILTER_SXB
 {
-    Text [ de ] = "%PRODUCTNAME Base (*.odb)" ;
     Text [ en-US ] = "%PRODUCTNAME Base (*.odb)" ;
 };
 String STR_FILTER_SXC
 {
-    Text [ de ] = "%PRODUCTNAME Calc (*.ods;*.sxc)" ;
     Text [ en-US ] = "%PRODUCTNAME Calc (*.ods;*.sxc)" ;
 };
 String STR_FILTER_DBF
 {
-    Text [ de ] = "dBase (*.dbf)" ;
     Text [ en-US ] = "dBase (*.dbf)" ;
 };
 String STR_FILTER_XLS
 {
-    Text [ de ] = "Microsoft Excel (*.xls)" ;
     Text [ en-US ] = "Microsoft Excel (*.xls)" ;
 };
 String STR_FILTER_TXT
 {
-    Text [ de ] = "Text (*.txt)" ;
     Text [ en-US ] = "Plain text (*.txt)" ;
 };
 String STR_FILTER_CSV
 {
-    Text [ de ] = "Text kommasepariert (*.csv)" ;
     Text [ en-US ] = "Text Comma Separated (*.csv)" ;
 };
 
@@ -283,7 +245,6 @@ ModelessDialog DLG_MM_CREATIONMONITOR
     MOVEABLE = TRUE ;
     APP = FALSE ;
 
-    Text [ de ] = "Serienbrief" ;
     Text [ en-US ] = "Mail Merge" ;
 
     FixedText FT_STATUS
@@ -295,7 +256,6 @@ ModelessDialog DLG_MM_CREATIONMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 35 ;
         _HEIGHT = 8 ;
-        Text [ de ] = "Status:" ;
         Text [ en-US ] = "Status:" ;
         LEFT = FALSE ;
         CENTER = FALSE ;
@@ -310,7 +270,6 @@ ModelessDialog DLG_MM_CREATIONMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 35 ;
         _HEIGHT = 8 ;
-        Text [ de ] = "Fortschritt:" ;
         Text [ en-US ] = "Progress:" ;
         LEFT = FALSE ;
         CENTER = FALSE ;
@@ -325,7 +284,6 @@ ModelessDialog DLG_MM_CREATIONMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 91 ;
         _HEIGHT = 8 ;
-        Text [ de ] = "Die Dokumente werden erstellt..." ;
         Text [ en-US ] = "Creating documents...";
         LEFT = TRUE ;
         CENTER = FALSE ;
@@ -340,9 +298,7 @@ ModelessDialog DLG_MM_CREATIONMONITOR
         _WHMAPMODE = MAP_APPFONT ;
         _WIDTH = 91 ;
         _HEIGHT = 8 ;
-        Text [ de ] = "%X von %Y" ;
         Text [ en-US ] = "%X of %Y";
-        Text [ x-comment ] = "%X and %Y are variables, please do not translate them";
         LEFT = TRUE ;
         CENTER = FALSE ;
         RIGHT = FALSE ;
