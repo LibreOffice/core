@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:37:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:31:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,9 +36,7 @@
 #include "helpids.h"
 
 #define SCALE_TEXT \
-        Text [ de ] = "Maßstab" ;                              \
         Text [ en-US ] = "Scale" ;                 \
-        Text [ x-comment ] = " ";   \
 
  // Contents (Inhalte)
 TabPage TP_OPTIONS_CONTENTS
@@ -46,97 +44,75 @@ TabPage TP_OPTIONS_CONTENTS
     HelpID = HID_SD_OPTIONS_CONTENTS ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    Text [ de ] = "Inhalte" ;
     Text [ en-US ] = "Contents" ;
     FixedLine GRP_VIEW_SUBSTITUTE
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Ersatzdarstellung" ;
         Text [ en-US ] = "Alternative display" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_EXTERN_GRAPHIC
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Fremdgrafiken andeuten" ;
         Text [ en-US ] = "~Image placeholders" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_OUTLINEMODE
     {
         Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Umrissmodus" ;
         Text [ en-US ] = "C~ontour mode" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_NOTEXT
     {
         Pos = MAP_APPFONT ( 12 , 42  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Text andeuten" ;
         Text [ en-US ] = "~Text placeholders" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_HAIRLINEMODE
     {
         Pos = MAP_APPFONT ( 12 , 56  ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Nur Haarlinien anzeigen" ;
         Text [ en-US ] = "~Line contour only" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_DISPLAY
     {
         Pos = MAP_APPFONT ( 6 , 72  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Anzeigen" ;
         Text [ en-US ] = "Display" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_RULER
     {
         Pos = MAP_APPFONT ( 12 , 83  ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Lineale sichtbar" ;
         Text [ en-US ] = "~Rulers visible" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_HELPLINES
     {
         Pos = MAP_APPFONT ( 12 , 97  ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Hilfslinien beim ~Verschieben" ;
         Text [ en-US ] = "~Guides when moving" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_HANDLES_BEZIER
     {
         Pos = MAP_APPFONT ( 12 , 111  ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Alle Steuerpunkte im Bezier-Editor" ;
         Text [ en-US ] = "~All control points in Bézier editor" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_MOVE_OUTLINE
     {
         Pos = MAP_APPFONT ( 12 , 125  ) ;
         Size = MAP_APPFONT ( 134 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "U~mriss jedes einzelnen Objektes" ;
         Text [ en-US ] = "~Contour of each individual object" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // MISC (Sonstiges)
 TabPage TP_OPTIONS_MISC
@@ -144,55 +120,44 @@ TabPage TP_OPTIONS_MISC
     HelpID = HID_SD_OPTIONS_MISC ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Hide = TRUE;
-    Text [ de ] = "Sonstiges" ;
     Text [ en-US ] = "Other" ;
     FixedLine GRP_TEXT
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Textobjekte" ;
         Text [ en-US ] = "Text objects" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_QUICKEDIT
     {
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Schnellbearbeitung zulassen" ;
         Text [ en-US ] = "Allow quick editing" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_PICKTHROUGH
     {
         Pos = MAP_APPFONT ( 12 , 27  ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Nur Textbereich selektierbar" ;
         Text [ en-US ] = "Only text area selectable" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_PROGRAMSTART
     {
         Pos = MAP_APPFONT ( 6 , 42  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Neues Dokument" ;
         Text [ en-US ] = "New document" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_START_WITH_TEMPLATE
     {
         Pos = MAP_APPFONT ( 12 , 53  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Mit ~Assistent starten" ;
         Text [ en-US ] = "Start with ~wizard" ;
     };
     FixedLine GRP_SETTINGS
     {
         Pos = MAP_APPFONT ( 6 , 69  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Einstellungen" ;
         Text [ en-US ] = "Settings";
     };
     CheckBox CBX_MASTERPAGE_CACHE
@@ -200,27 +165,21 @@ TabPage TP_OPTIONS_MISC
         Pos = MAP_APPFONT ( 12 , 80  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Cache für Hintergrund benutzen" ;
         Text [ en-US ] = "Use background cache" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_COPY
     {
         Pos = MAP_APPFONT ( 12 , 93  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Kopie beim Verschieben" ;
         Text [ en-US ] = "Copy when moving" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_MARKED_HIT_MOVES_ALWAYS
     {
         Pos = MAP_APPFONT ( 12 , 106  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Objekte immer verschiebbar" ;
         Text [ en-US ] = "Objects always moveable" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_CROOK_NO_CONTORTION
     {
@@ -228,17 +187,13 @@ TabPage TP_OPTIONS_MISC
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
         Hide = TRUE;
-        Text [ de ] = "S~etzen auf Kreis: nicht verzerren" ;
         Text [ en-US ] = "Do not distort objects in curve" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_METRIC
     {
         Pos = MAP_APPFONT ( 12 , 119 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Maßeinheit" ;
         Text [ en-US ] = "Unit of ~measurement" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_METRIC
     {
@@ -252,9 +207,7 @@ TabPage TP_OPTIONS_MISC
         Pos = MAP_APPFONT ( 130 , 119  ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Right = TRUE;
-        Text [ de ] = "~Tabulatorabstand" ;
         Text [ en-US ] = "Ta~b stops" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_TABSTOP
     {
@@ -277,24 +230,19 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 6 , 134  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Starten der Präsentation" ;
         Text [ en-US ] = "Start presentation" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_START_WITH_ACTUAL_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 145  ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Immer mit aktueller Seite" ;
         Text [ en-US ] = "Always with current page" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FT_COMPATIBILITY
     {
         Pos = MAP_APPFONT ( 6 , 160 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Kompatibilität" ;
         Text [ en-US ] = "Compatibility" ;
     };
     CheckBox CB_USE_PRINTER_METRICS
@@ -304,14 +252,12 @@ TabPage TP_OPTIONS_MISC
         // translation to work on.
         Pos = MAP_APPFONT ( 12 , 184 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
-        Text [ de ] = "Druckermaße für Dokumentformatierung verwenden";
         Text [ en-US ] = "Us~e printer metrics for document formatting";
     };
     CheckBox CB_MERGE_PARA_DIST
     {
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
-        Text [ de ] = "Alle Absatz- und Tabellenabstände addieren (aktuelles ~Dokument)";
         Text [ en-US ] = "Add ~spacing between paragraphs and tables (in current document)";
     };
     FixedLine GRP_SCALE
@@ -326,7 +272,6 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 155 , 133 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Original" ;
         Text [ en-US ] = "Original";
     };
     FixedText FT_EQUIVALENT
@@ -334,7 +279,6 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 206 , 133 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
-        Text [ de ] = "Entspricht" ;
         Text [ en-US ] = "Equivalent to";
     };
     FixedText FT_SCALE
@@ -342,7 +286,6 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 12 , 149 ) ;
         Size = MAP_APPFONT ( 56 , 8 ) ;
-        Text [ de ] = "Zeichn~ungsmaßstab" ;
         Text [ en-US ] = "~Drawing scale";
     };
     ComboBox CB_SCALE
@@ -358,9 +301,7 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 105 , 149 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
-        Text [ de ] = "Seiten~breite" ;
         Text [ en-US ] = "Page ~width" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_INFO_1
     {
@@ -391,9 +332,7 @@ TabPage TP_OPTIONS_MISC
         Hide = TRUE;
         Pos = MAP_APPFONT ( 105 , 165 ) ;
         Size = MAP_APPFONT ( 49 , 8 ) ;
-        Text [ de ] = "Se~itenhöhe" ;
         Text [ en-US ] = "Page ~height" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FI_INFO_2
     {
@@ -420,7 +359,6 @@ TabPage TP_OPTIONS_MISC
         Last = 999999999 ;
     };
 
-    Text [ x-comment ] = " ";
 };
 
 
