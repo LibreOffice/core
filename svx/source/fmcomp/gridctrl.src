@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridctrl.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:53:55 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:26:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,21 +45,18 @@ Menu RID_SVXMNU_ROWS
         {
             Identifier = SID_FM_DELETEROWS ;
             HelpID = SID_FM_DELETEROWS ;
-            Text [ de ] = "Zeilen lÃ¶schen" ;
             Text [ en-US ] = "Delete Rows" ;
         };
         MenuItem
         {
             Identifier = SID_FM_RECORD_SAVE ;
             HelpID = SID_FM_RECORD_SAVE ;
-            Text [ de ] = "Datensatz speichern" ;
             Text [ en-US ] = "Save Record" ;
         };
         MenuItem
         {
             Identifier = SID_FM_RECORD_UNDO ;
             HelpID = SID_FM_RECORD_UNDO ;
-            Text [ de ] = "RÃ¼ckgÃ¤ngig: Dateneingabe" ;
             Text [ en-US ] = "Undo: Data entry" ;
         };
     };
@@ -72,7 +69,6 @@ Menu RID_SVXMNU_COLS
         {
             Identifier = SID_FM_INSERTCOL ;
             HelpID = SID_FM_INSERTCOL ;
-            Text [ de ] = "~Spalte einfÃ¼gen" ;
             Text [ en-US ] = "Insert ~Column" ;
             SubMenu = Menu
             {
@@ -82,70 +78,60 @@ Menu RID_SVXMNU_COLS
                     {
                         Identifier = SID_FM_EDIT ;
                         HelpID = SID_FM_EDIT ;
-                        Text [ de ] = "Textfeld" ;
                         Text [ en-US ] = "Text Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_CHECKBOX ;
                         HelpID = SID_FM_CHECKBOX ;
-                        Text [ de ] = "Markierfeld" ;
                         Text [ en-US ] = "Check Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_COMBOBOX ;
                         HelpID = SID_FM_COMBOBOX ;
-                        Text [ de ] = "Kombinationsfeld" ;
                         Text [ en-US ] = "Combo Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_LISTBOX ;
                         HelpID = SID_FM_LISTBOX ;
-                        Text [ de ] = "Listenfeld" ;
                         Text [ en-US ] = "List Box" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_DATEFIELD ;
                         HelpID = SID_FM_DATEFIELD ;
-                        Text [ de ] = "Datumsfeld" ;
                         Text [ en-US ] = "Date Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_TIMEFIELD ;
                         HelpID = SID_FM_TIMEFIELD ;
-                        Text [ de ] = "Zeitfeld" ;
                         Text [ en-US ] = "Time Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_NUMERICFIELD ;
                         HelpID = SID_FM_NUMERICFIELD ;
-                        Text [ de ] = "Numerisches Feld" ;
                         Text [ en-US ] = "Numeric Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_CURRENCYFIELD ;
                         HelpID = SID_FM_CURRENCYFIELD ;
-                        Text [ de ] = "WÃ¤hrungsfeld" ;
                         Text [ en-US ] = "Currency Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_PATTERNFIELD ;
                         HelpID = SID_FM_PATTERNFIELD ;
-                        Text [ de ] = "Maskiertes Feld" ;
                         Text [ en-US ] = "Pattern Field" ;
                     };
                     MenuItem
                     {
                         Identifier = SID_FM_FORMATTEDFIELD ;
                         HelpID = SID_FM_FORMATTEDFIELD ;
-                        Text [ de ] = "Formatiertes Feld" ;
                         Text [ en-US ] = "Formatted Field" ;
                     };
                     MenuItem
@@ -153,7 +139,6 @@ Menu RID_SVXMNU_COLS
                         // this is a dummy which is never used herein but for copy to newly built menus
                         Identifier = SID_FM_TWOFIELDS_DATE_N_TIME;
                         HelpId = HID_CONTROLS_DATE_N_TIME;
-                        Text [ de ] = "Datums- und Zeit-Feld" ;
                         Text [ en-US ] = "Date and Time Field" ;
                         Disable = True;
                     };
@@ -164,28 +149,24 @@ Menu RID_SVXMNU_COLS
         {
             Identifier = SID_FM_CHANGECOL ;
             HelpID = SID_FM_CHANGECOL ;
-            Text [ de ] = "~Ersetzen durch" ;
             Text [ en-US ] = "~Replace with" ;
         };
         MenuItem
         {
             Identifier = SID_FM_DELETECOL ;
             HelpID = SID_FM_DELETECOL ;
-            Text [ de ] = "Spalte ~lÃ¶schen" ;
             Text [ en-US ] = "Delete Column" ;
         };
         MenuItem
         {
             Identifier = SID_FM_HIDECOL ;
             HelpID = SID_FM_HIDECOL ;
-            Text [ de ] = "Spalte ~ausblenden" ;
             Text [ en-US ] = "~Hide Columns";
         };
         MenuItem
         {
             Identifier = SID_FM_SHOWCOLS ;
             HelpID = SID_FM_SHOWCOLS ;
-            Text [ de ] = "Spalten ~einblenden" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -194,9 +175,7 @@ Menu RID_SVXMNU_COLS
                     {
                         Identifier = SID_FM_SHOWCOLS_MORE ;
                         HelpID = SID_FM_SHOWCOLS_MORE ;
-                        Text [ de ] = "~Mehr..." ;
                         Text [ en-US ] = "~More...";
-                        Text [ x-comment ] = "; (ÄÄ): Þ Ðåñéóóüôåñá Þ åðéðñüóèåôá; - - - -";
                     };
                     MenuItem
                     {
@@ -206,7 +185,6 @@ Menu RID_SVXMNU_COLS
                     {
                         Identifier = SID_FM_SHOWALLCOLS ;
                         HelpID = SID_FM_SHOWALLCOLS ;
-                        Text [ de ] = "~Alle" ;
                         Text [ en-US ] = "~All";
                     };
                 };
@@ -217,7 +195,6 @@ Menu RID_SVXMNU_COLS
         {
             Identifier = SID_FM_SHOW_PROPERTY_BROWSER ;
             HelpID = SID_FM_SHOW_PROPERTY_BROWSER ;
-            Text [ de ] = "~Spalte..." ;
             Text [ en-US ] = "Column..." ;
         };
     };
