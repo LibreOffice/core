@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optgrid.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:59:22 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:36:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,51 +49,39 @@ TabPage RID_SVXPAGE_GRID
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Raster" ;
         Text [ en-US ] = "Grid" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_USE_GRIDSNAP
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 204 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Fangraster benutzen" ;
         Text [ en-US ] = "Sn~ap to grid" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_GRID_VISIBLE
     {
         Pos = MAP_APPFONT ( 12 , 27 ) ;
         Size = MAP_APPFONT ( 204 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ras~ter sichtbar" ;
         Text [ en-US ] = "V~isible grid" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_RESOLUTION
     {
         Pos = MAP_APPFONT ( 6 , 45 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Auflösung" ;
         Text [ en-US ] = "Resolution" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_DRAW_X
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "H~orizontal" ;
         Text [ en-US ] = "H~orizontal";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_DRAW_Y
     {
         Pos = MAP_APPFONT ( 12 , 71 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Vertikal" ;
         Text [ en-US ] = "~Vertical";
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_DRAW_X
     {
@@ -133,25 +121,19 @@ TabPage RID_SVXPAGE_GRID
     {
         Pos = MAP_APPFONT ( 130 , 45 ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
-        Text [ de ] = "Unterteilung" ;
         Text [ en-US ] = "Subdivision" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_DIVISION_X
     {
         Pos = MAP_APPFONT ( 136 , 56 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Ho~rizontal" ;
         Text [ en-US ] = "Horizont~al";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_DIVISION_Y
     {
         Pos = MAP_APPFONT ( 136 , 71 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "V~ertikal" ;
         Text [ en-US ] = "V~ertical";
-        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_DIVISION_X
     {
@@ -170,9 +152,7 @@ TabPage RID_SVXPAGE_GRID
     {
         Pos = MAP_APPFONT ( 223 , 56 ) ;
         Size = MAP_APPFONT ( 29 , 8 ) ;
-        Text [ de ] = "Punkte" ;
         Text [ en-US ] = "point(s)" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NUM_FLD_DIVISION_Y
     {
@@ -198,18 +178,14 @@ TabPage RID_SVXPAGE_GRID
         Pos = MAP_APPFONT ( 12 , 84 ) ;
         Size = MAP_APPFONT ( 127 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Achsen ~synchronisieren" ;
         Text [ en-US ] = "Synchronize a~xes" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine GRP_SNAP
     {
         Pos = MAP_APPFONT ( 6 , 100  ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Fangen" ;
         Text [ en-US ] = "Snap" ;
-        Text [ x-comment ] = " ";
     };
 
     CheckBox CBX_SNAP_HELPLINES
@@ -218,9 +194,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "An Fan~glinien" ;
         Text [ en-US ] = "To snap lines" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_SNAP_BORDER
     {
@@ -228,9 +202,7 @@ TabPage RID_SVXPAGE_GRID
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 125  ) ;
         Size = MAP_APPFONT ( 106 , 10 ) ;
-        Text [ de ] = "An den Se~itenrändern" ;
         Text [ en-US ] = "To the ~page margins" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_SNAP_FRAME
     {
@@ -238,9 +210,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "Am Obje~ktrahmen" ;
         Text [ en-US ] = "To object ~frame" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_SNAP_POINTS
     {
@@ -248,18 +218,14 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 106 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "~An Objektpunkten" ;
         Text [ en-US ] = "To obje~ct points" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_SNAP_AREA
     {
         Pos = MAP_APPFONT ( 12 , 169  ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Fang~bereich" ;
         Text [ en-US ] = "~Snap range" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_SNAP_AREA
     {
@@ -276,9 +242,7 @@ TabPage RID_SVXPAGE_GRID
         Unit = FUNIT_CUSTOM ;
         First = 1 ;
         Last = 999 ;
-        CustomUnitText [ de ] = " Pixel" ;
         CustomUnitText [ en-US ] = " Pixels" ;
-        CustomUnitText [ x-comment ] = " ";
     };
     FixedLine FL_SEPARATOR
     {
@@ -292,9 +256,7 @@ TabPage RID_SVXPAGE_GRID
         Pos = MAP_APPFONT ( 130 , 100  ) ;
         Size = MAP_APPFONT ( 124 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Einrasten" ;
         Text [ en-US ] = "Snap position" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_ORTHO
     {
@@ -302,9 +264,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "Beim ~Erzeugen und Bewegen" ;
         Text [ en-US ] = "~When creating or moving objects" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_BIGORTHO
     {
@@ -312,9 +272,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 112 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "~Längere Kantenlänge" ;
         Text [ en-US ] = "~Extend edges" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_ROTATE
     {
@@ -323,9 +281,7 @@ TabPage RID_SVXPAGE_GRID
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Hide = TRUE;
         TabStop = TRUE ;
-        Text [ de ] = "Beim ~Drehen" ;
         Text [ en-US ] = "When ro~tating" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_ANGLE
     {
@@ -343,18 +299,14 @@ TabPage RID_SVXPAGE_GRID
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
         SpinSize = 500 ;
-        CustomUnitText [ de ] = " Grad" ;
         CustomUnitText [ en-US ] = " degrees" ;
-        CustomUnitText [ x-comment ] = " ";
     };
     FixedText FT_BEZ_ANGLE
     {
         Pos = MAP_APPFONT ( 136 , 156  ) ;
         Size = MAP_APPFONT ( 55 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "~Punktreduktion" ;
         Text [ en-US ] = "Point reducti~on" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_BEZ_ANGLE
     {
@@ -371,9 +323,7 @@ TabPage RID_SVXPAGE_GRID
         StrictFormat = TRUE ;
         Unit = FUNIT_CUSTOM ;
         SpinSize = 500 ;
-        CustomUnitText [ de ] = " Grad" ;
         CustomUnitText [ en-US ] = " degrees" ;
-        CustomUnitText [ x-comment ] = " ";
     };
 };
 
