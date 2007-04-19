@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpstat.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:51:32 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:29:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,10 +43,8 @@ TabPage RID_SCPAGE_STAT
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Tabellen:" ;
         Text [ en-US ] = "Number of sheets:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TABLES
     {
@@ -58,10 +56,8 @@ TabPage RID_SCPAGE_STAT
     {
         Pos = MAP_APPFONT ( 12 , 29 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Zellen:" ;
         Text [ en-US ] = "Number of cells:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CELLS
     {
@@ -73,10 +69,8 @@ TabPage RID_SCPAGE_STAT
     {
         Pos = MAP_APPFONT ( 12 , 41 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Anzahl Seiten:" ;
         Text [ en-US ] = "Number of pages:" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_PAGES
     {
@@ -88,9 +82,7 @@ TabPage RID_SCPAGE_STAT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Dokument: " ;
         Text [ en-US ] = "Document: " ;
-        Text [ x-comment ] = " ";
     };
 };
 
