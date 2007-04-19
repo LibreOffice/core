@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_dictionarydialog.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:04:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:45:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,7 +80,6 @@ ModalDialog DLG_CHINESEDICTIONARY
     Moveable = TRUE ;
     SVLook = TRUE;
 
-    Text [ de ] = "Benutzerwörterbuch bearbeiten";
     Text [ en-US ] = "Edit Dictionary";
 
     DIRECTION_RADIOBUTTONS( COL_1, ROW_1, FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT )
@@ -90,7 +89,6 @@ ModalDialog DLG_CHINESEDICTIONARY
         Pos = MAP_APPFONT ( COL_1, ROW_3 ) ;
         Size = MAP_APPFONT ( FULL_WIDTH - COL_1 - RSC_SP_DLG_INNERBORDER_RIGHT , RSC_CD_CHECKBOX_HEIGHT ) ;
 
-        Text [ de ] = "Beidseitige Entsprechung" ;
         Text [ en-US ] = "Reverse mapping";
     };
 
@@ -98,7 +96,6 @@ ModalDialog DLG_CHINESEDICTIONARY
     {
         Pos = MAP_APPFONT ( COL_1 , ROW_4 ) ;
         Size = MAP_APPFONT ( COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Begriff";
         Text [ en-US ] = "Term";
     };
     Edit ED_TERM
@@ -113,7 +110,6 @@ ModalDialog DLG_CHINESEDICTIONARY
     {
         Pos = MAP_APPFONT ( COL_2 , ROW_4 ) ;
         Size = MAP_APPFONT ( COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Entsprechung";
         Text [ en-US ] = "Mapping";
     };
     Edit ED_MAPPING
@@ -127,7 +123,6 @@ ModalDialog DLG_CHINESEDICTIONARY
     {
         Pos = MAP_APPFONT ( COL_3 , ROW_4 ) ;
         Size = MAP_APPFONT ( REST_COL_WIDTH, RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Eigenschaft";
         Text [ en-US ] = "Property";
     };
     ListBox LB_PROPERTY
@@ -137,42 +132,6 @@ ModalDialog DLG_CHINESEDICTIONARY
         Size = MAP_APPFONT ( REST_COL_WIDTH , RSC_CD_TEXTBOX_HEIGHT ) ;
         DropDown = TRUE ;
 
-        StringList [ x-comment ] =
-        {
-            < "Note for non-chinese translation: don't translate, just use the english term" ; Default ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-            < "Note for non-chinese translation: don't translate, just use the english term" ; > ;
-        };
-        StringList [ de ] =
-        {
-            < "Other" ; Default ; > ;
-            < "Foreign" ; > ;
-            < "First name" ; > ;
-            < "Last name" ; > ;
-            < "Title" ; > ;
-            < "Status" ; > ;
-            < "Place name" ; > ;
-            < "Business" ; > ;
-            < "Adjective" ; > ;
-            < "Idiom" ; > ;
-            < "Abbreviation" ; > ;
-            < "Numerical" ; > ;
-            < "Noun" ; > ;
-            < "Verb" ; > ;
-            < "Brand name" ; > ;
-        };
         stringlist [ en-US ] =
         {
             < "Other" ; Default ; > ;
@@ -205,7 +164,6 @@ ModalDialog DLG_CHINESEDICTIONARY
         Pos = MAP_APPFONT( COL_4, ROW_5 );
         Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
 
-        Text [ de ] = "Hinzufügen";
         Text [ en-US ] = "~Add";
     };
     PushButton PB_MODIFY
@@ -213,7 +171,6 @@ ModalDialog DLG_CHINESEDICTIONARY
         Pos = MAP_APPFONT( COL_4, ROW_5a );
         Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
 
-        Text [ de ] = "Ändern";
         Text [ en-US ] = "~Modify";
     };
     PushButton PB_DELETE
@@ -221,7 +178,6 @@ ModalDialog DLG_CHINESEDICTIONARY
         Pos = MAP_APPFONT( COL_4, ROW_5b );
         Size = MAP_APPFONT( BUTTONCOL_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT );
 
-        Text [ de ] = "~Entfernen";
         Text [ en-US ] = "~Delete";
     };
 
