@@ -4,9 +4,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:00:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:28:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ TabDialog TAB_DLG_VALIDATION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    Text [ de ] = "Gültigkeit" ;
     Moveable = TRUE ;
     TabControl 1
     {
@@ -53,21 +52,18 @@ TabDialog TAB_DLG_VALIDATION
             {
                 Identifier = TP_VALIDATION_VALUES ;
                 PageResID = TP_VALIDATION_VALUES ;
-                Text [ de ] = "Kriterien" ;
                 Text [ en-US ] = "Criteria";
             };
             PageItem
             {
                 Identifier = TP_VALIDATION_INPUTHELP ;
                 PageResID = TP_VALIDATION_INPUTHELP ;
-                Text [ de ] = "Eingabehilfe" ;
                 Text [ en-US ] = "Input Help" ;
             };
             PageItem
             {
                 Identifier = TP_VALIDATION_ERROR ;
                 PageResID = TP_VALIDATION_ERROR ;
-                Text [ de ] = "Fehlermeldung" ;
                 Text [ en-US ] = "Error Alert" ;
             };
         };
@@ -80,13 +76,11 @@ TabPage TP_VALIDATION_VALUES
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Werte" ;
     Text [ en-US ] = "Values" ;
     FixedText FT_ALLOW
     {
         Pos = MAP_APPFONT ( 6 , 16 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Z~ulassen" ;
         Text [ en-US ] = "~Allow" ;
     };
     ListBox LB_ALLOW
@@ -96,17 +90,6 @@ TabPage TP_VALIDATION_VALUES
         Size = MAP_APPFONT ( 90 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Jeden Wert" ; SC_VALIDDLG_ALLOW_ANY ; > ;
-            < "Ganze Zahl" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
-            < "Dezimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
-            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
-            < "Zeit" ; SC_VALIDDLG_ALLOW_TIME ; > ;
-            < "Zellbereich" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
-            < "Liste" ; SC_VALIDDLG_ALLOW_LIST ; > ;
-            < "Textlänge" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
-        };
         StringList [ en-US ] =
         {
             < "All values" ; SC_VALIDDLG_ALLOW_ANY ; > ;
@@ -123,7 +106,6 @@ TabPage TP_VALIDATION_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "~Daten" ;
         Text [ en-US ] = "~Data" ;
     };
     ListBox LB_VALUE
@@ -134,17 +116,6 @@ TabPage TP_VALIDATION_VALUES
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScConditionMode
-        StringList [ de ] =
-        {
-            < "gleich" ; SC_VALIDDLG_DATA_EQUAL ; > ;
-            < "kleiner als" ; SC_VALIDDLG_DATA_LESS ; > ;
-            < "größer als" ; SC_VALIDDLG_DATA_GREATER ; > ;
-            < "kleiner oder gleich" ; SC_VALIDDLG_DATA_EQLESS ; > ;
-            < "größer oder gleich" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
-            < "ungleich" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
-            < "zwischen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
-            < "nicht zwischen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
-        };
         StringList [ en-US ] =
         {
             < "equal" ; SC_VALIDDLG_DATA_EQUAL ; > ;
@@ -161,7 +132,6 @@ TabPage TP_VALIDATION_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 76 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "~Minimum" ;
         Text [ en-US ] = "~Minimum" ;
     };
     Edit EDT_MIN
@@ -183,7 +153,6 @@ TabPage TP_VALIDATION_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Ma~ximum" ;
         Text [ en-US ] = "Ma~ximum" ;
     };
     Edit EDT_MAX
@@ -198,7 +167,6 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 80 , 30 ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Leerzellen zulassen" ;
         Text [ en-US ] = "Allow ~blank cells" ;
     };
     CheckBox CB_SHOWLIST
@@ -206,7 +174,6 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 80 , 44 ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Auswahlliste anzeigen" ;
         Text [ en-US ] = "Show selection ~list" ;
     };
     CheckBox CB_SORTLIST
@@ -214,7 +181,6 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 90 , 58 ) ;
         Size = MAP_APPFONT ( 164 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ein~träge aufsteigend sortieren" ;
         Text [ en-US ] = "Sor~t entries ascending" ;
     };
     FixedText FT_SOURCEHINT
@@ -222,7 +188,6 @@ TabPage TP_VALIDATION_VALUES
         Pos = MAP_APPFONT ( 80 , 90 ) ;
         Size = MAP_APPFONT ( 174 , 64 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Als Quelle ist nur eine zusammenhängende Auswahl in einer Spalte oder einer Zeile erlaubt. Bei anderer Auswahl wird nur die erste Spalte des ersten, ausgewählten Bereichs zur Auswertung herangezogen." ;
         Text [ en-US ] = "A valid source can only consist of a contiguous selection in a single row or single column. If several selections are made, only the first column of the first selected range will be used for validation." ;
     };
 };
@@ -237,7 +202,6 @@ TabPage TP_VALIDATION_INPUTHELP
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "E~ingabehilfen bei Selektion einer Zelle anbieten" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Show input help when cell is selected" ;
     };
@@ -245,21 +209,18 @@ TabPage TP_VALIDATION_INPUTHELP
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Inhalt" ;
         Text [ en-US ] = "Contents" ;
     };
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 12 , 35 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "~Titel" ;
         Text [ en-US ] = "~Title" ;
     };
     FixedText FT_INPUTHELP
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "~Eingabehilfe" ;
         Text [ en-US ] = "~Input help" ;
     };
     Edit EDT_TITLE
@@ -285,19 +246,16 @@ TabPage TP_VALIDATION_ERROR
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Fehlermeldung" ;
     FixedLine FL_CONTENT
     {
         Pos = MAP_APPFONT ( 6 , 22 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Inhalt" ;
         Text [ en-US ] = "Contents" ;
     };
     TriStateBox TSB_SHOW
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        Text [ de ] = "Fehler~meldung bei Eingabe ungültiger Werte anzeigen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Show error ~message when invalid values are entered" ;
     };
@@ -321,21 +279,18 @@ TabPage TP_VALIDATION_ERROR
     {
         Pos = MAP_APPFONT ( 12 , 71 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "~Fehlermeldung" ;
         Text [ en-US ] = "~Error message" ;
     };
     FixedText FT_TITLE
     {
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "~Titel" ;
         Text [ en-US ] = "~Title" ;
     };
     FixedText FT_ACTION
     {
         Pos = MAP_APPFONT ( 12 , 35 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "~Aktion" ;
         Text [ en-US ] = "~Action" ;
     };
     ListBox LB_ACTION
@@ -346,13 +301,6 @@ TabPage TP_VALIDATION_ERROR
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScValidErrorStyle
-        StringList [ de ] =
-        {
-            < "Stopp" ; Default ; > ;
-            < "Warnung" ; Default ; > ;
-            < "Information" ; Default ; > ;
-            < "Makro" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Stop" ; Default ; > ;
@@ -360,19 +308,11 @@ TabPage TP_VALIDATION_ERROR
             < "Information" ; Default ; > ;
             < "Macro" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < "; Stopp" ; Default ; > ;
-        < "; Warnung" ; Default ; > ;
-        < "; Information" ; Default ; > ;
-        < "; Makro" ; Default ; > ;
-    };
     };
     PushButton BTN_SEARCH
     {
         Pos = MAP_APPFONT ( 191 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "~Durchsuchen..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Browse..." ;
     };
