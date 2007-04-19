@@ -4,9 +4,9 @@
  *
  *  $RCSfile: preload.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-10-24 18:33:01 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:45:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,13 +49,11 @@ ModalDialog RID_DLG_OEMWIZARD
     PushButton PB_PREV
     {
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "<< Zurück" ;
         Text [ en-US ] = "<< Back" ;
     };
     PushButton PB_NEXT
     {
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Weiter >>" ;
         Text [ en-US ] = "Next >>" ;
     };
     CancelButton PB_CANCEL
@@ -64,23 +62,19 @@ ModalDialog RID_DLG_OEMWIZARD
     };
     String ST_ACCEPT
     {
-        Text [ de ] = "Akzeptieren";
         Text [ en-US ] = "Accept";
     };
     String ST_FINISH
     {
-        Text [ de ] = "Fertig stellen";
         Text [ en-US ] = "Finish";
     };
     String ST_LICENSE_AGREEMENT
     {
-        Text [ de ] = " - Software-Lizenzvereinbarung";
         Text [ en-US ] = " - Software License Agreement";
     };
 
     String ST_INSERT_USER_DATA
     {
-        Text [ de ] = " - Benutzerdaten";
         Text [ en-US ] = "- User Data";
     };
 };
@@ -91,24 +85,12 @@ TabPage RID_TP_WELCOME
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Willkommen" ;
     Text [ en-US ] = "Welcome";
     FixedText FT_INFO
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 174 ) ;
         WordBreak = TRUE ;
-        Text [ x-comment ] = "; LHO:; EM 30 AUG 2002: DO NOT DELETE YOUR TRANSLATION!!! THE GERMAN TEXT IS MISSING BUT WILL RETURN!! ENGLISH IS CORRECT!LHO: Please eliminate any notion about the training in all languages except German, English, French and Japanese";
-        Text [ de ] = "Herzlich willkommen zu %PRODUCTNAME %PRODUCTVERSION OEM\n\n"
-        "Um %PRODUCTNAME %PRODUCTVERSION OEM starten zu können, geben Sie bitte auf der dem Lizenztext folgenden "
-        "Dialogseite Ihre Benutzerdaten ein. In der Readme-Datei im %PRODUCTNAME-Produktverzeichnis finden Sie "
-        "wichtige Hinweise zum Programm. Bitte lesen Sie diese Hinweise aufmerksam durch. "
-        "Des weiteren finden Sie ausführliche Informationen auf der Internetseite von Sun unter\n\n"
-        "http://www.sun.com/staroffice.\n\nSupport und Schulung:\n\n"
-        "Nutzen Sie die Möglichkeit des kostenlosen Software-Supports für 60 Tage ab Kaufdatum. "
-        "Besuchen Sie folgende Webseite für weitere Details.\n\nhttp://www.sun.com/star/service\n\n"
-        "Wir wünschen Ihnen viel Spaß und Erfolg mit Ihrem neuen %PRODUCTNAME.\nIhr %PRODUCTNAME Team.";
-
         Text [ en-US ] = "Welcome to %PRODUCTNAME %PRODUCTVERSION OEM\n\nTo start the %PRODUCTNAME %PRODUCTVERSION OEM, "
         "please enter your personal data in the dialog following the license text. Important information is contained "
         "in the readme files which are located in the %PRODUCTNAME product directory. Please read these files carefully. "
@@ -162,7 +144,6 @@ TabPage RID_TP_LICENSE
     SVLook = TRUE ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( LICENSE_DIALOG_WIDTH , LICENSE_DIALOG_HEIGTH ) ;
-    Text [ de ] = "Lizenzvertrag" ;
     Text [ en-US ] = "License Agreement";
 
     MultiLineEdit ML_LICENSE
@@ -178,7 +159,6 @@ TabPage RID_TP_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_1 , LICENSE_ROW_2 ) ;
         Size = MAP_APPFONT ( LICENSE_WIDTH , FT_HEIGHT ) ;
-        Text[ de ] = "Bitte führen Sie die folgenden Schritte aus, um mit der Installation fortzufahren:" ;
         Text [ en-US ] = "Please follow these steps to proceed with the installation:" ;
     };
 
@@ -202,7 +182,6 @@ TabPage RID_TP_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_2 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( COL2_WIDTH , FT_HEIGHT ) ;
-        Text [ de ] = "1." ;
         Text [ en-US ] = "1." ;
     };
 
@@ -211,7 +190,6 @@ TabPage RID_TP_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_3 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( COL3_WIDTH, 3*FT_HEIGHT ) ;
-        Text[ de ] = "Lesen Sie den gesamten Lizenzvertrag. Verwenden Sie die Bildlaufleiste oder die %PAGEDOWN Schaltfläche in diesem Dialog um den gesamten Text sichtbar zu machen." ;
         Text [ en-US ] = "View the complete License Agreement. Please use the scroll bar or the '%PAGEDOWN' button in this dialog to view the entire license text." ;
     };
 
@@ -220,7 +198,6 @@ TabPage RID_TP_LICENSE
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_4 , LICENSE_ROW_3 ) ;
         Size = MAP_APPFONT ( PD_WIDTH , PB_HEIGHT ) ;
-        Text [ de ] = "Bild ab" ;
         Text [ en-US ] = "Page Down" ;
     };
 
@@ -229,7 +206,6 @@ TabPage RID_TP_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_2 , LICENSE_ROW_4 ) ;
         Size = MAP_APPFONT ( COL2_WIDTH, FT_HEIGHT ) ;
-        Text [ de ] = "2." ;
         Text [ en-US ] = "2." ;
     };
 
@@ -238,7 +214,6 @@ TabPage RID_TP_LICENSE
         WordBreak = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_3, LICENSE_ROW_4 ) ;
         Size = MAP_APPFONT ( COL3_WIDTH, FT_HEIGHT ) ;
-        Text [ de ] = "Akzeptieren Sie den Lizenzvertrag." ;
         Text [ en-US ] = "Accept the License Agreement." ;
     };
 
@@ -247,20 +222,16 @@ TabPage RID_TP_LICENSE
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( LICENSE_COL_3, LICENSE_ROW_5 ) ;
         Size = MAP_APPFONT ( COL3_WIDTH, FT_HEIGHT ) ;
-        Text [ de ] = "Ich akzeptiere die Bedingungen des Vertrags." ;
         Text [ en-US ] = "I accept the terms of the Agreement." ;
     };
 
     String LICENCE_ACCEPT
     {
-        Text [ de ] = "~Akzeptieren" ;
         Text [ en-US ] = "~Accept" ;
-        Text [ x-comment ] = " ";
     };
 
     String LICENCE_NOTACCEPT
     {
-        Text [ de ] = "Ablehnen" ;
         Text [ en-US ] = "Decline" ;
     };
 
