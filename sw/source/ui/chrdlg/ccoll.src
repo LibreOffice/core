@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ccoll.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:50:38 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:47:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,36 +49,29 @@ TabPage TP_CONDCOLL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options";
     };
     CheckBox CB_CONDITION
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Als bedingte Vorlage" ;
         TabStop = TRUE ;
         Disable = TRUE ;
         Text [ en-US ] = "~Conditional Style" ;
-        Text [ x-comment ] = "; \"Vor; \"Vorlagen\" Styles are capitalized. EM15.5.00";
     };
     FixedText FT_CONTEXT
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Kontext" ;
         Disable = TRUE ;
         Text [ en-US ] = "Conte~xt" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_USED
     {
         Pos = MAP_APPFONT ( 100 , 28 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Verwendete Vorlage" ;
         Disable = TRUE ;
         Text [ en-US ] = "Applied Styles" ;
-        Text [ x-comment ] = " ";
     };
     Control TB_CONDCOLLS
     {
@@ -94,10 +87,8 @@ TabPage TP_CONDCOLL
     {
         Pos = MAP_APPFONT ( 190 , 28 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
-        Text [ de ] = "A~bsatzvorlagen" ;
         Disable = TRUE ;
         Text [ en-US ] = "~Paragraph Styles" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_STYLE
     {
@@ -123,56 +114,20 @@ TabPage TP_CONDCOLL
     {
         Pos = MAP_APPFONT ( 129 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ de ] = "~Entfernen" ;
         TabStop = TRUE ;
         Disable = TRUE ;
         Text [ en-US ] = "Re~move" ;
-        Text [ x-comment ] = " ";
     };
     PushButton PB_ASSIGN
     {
         Pos = MAP_APPFONT ( 185 , 165 ) ;
         Size = MAP_APPFONT ( 50 , 12 ) ;
-        Text [ de ] = "~Zuweisen" ;
         TabStop = TRUE ;
         Disable = TRUE ;
         Text [ en-US ] = "~Apply" ;
-        Text [ x-comment ] = " ";
     };
     StringArray STR_REGIONS
     {
-        ItemList [ de ] =
-        {
-            < "Tabellen Kopfzeile" ; > ;
-            < "Tabelle" ; > ;
-            < "Rahmen" ; > ;
-            < "Bereich" ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : Fuﬂnote*/
-            < "Fu√ünote" ; > ;
-            < "Endnote" ; > ;
-            < "Kopfzeile" ; > ;
-            < "Fusszeile" ; > ;
-            < " 1. Ebene Gliederung" ; > ;
-            < " 2. Ebene Gliederung" ; > ;
-            < " 3. Ebene Gliederung" ; > ;
-            < " 4. Ebene Gliederung" ; > ;
-            < " 5. Ebene Gliederung" ; > ;
-            < " 6. Ebene Gliederung" ; > ;
-            < " 7. Ebene Gliederung" ; > ;
-            < " 8. Ebene Gliederung" ; > ;
-            < " 9. Ebene Gliederung" ; > ;
-            < "10. Ebene Gliederung" ; > ;
-            < " 1. Ebene Nummerierung" ; > ;
-            < " 2. Ebene Nummerierung" ; > ;
-            < " 3. Ebene Nummerierung" ; > ;
-            < " 4. Ebene Nummerierung" ; > ;
-            < " 5. Ebene Nummerierung" ; > ;
-            < " 6. Ebene Nummerierung" ; > ;
-            < " 7. Ebene Nummerierung" ; > ;
-            < " 8. Ebene Nummerierung" ; > ;
-            < " 9. Ebene Nummerierung" ; > ;
-            < "10. Ebene Nummerierung" ; > ;
-        };
         ItemList [ en-US ] =
         {
             < "Table Header" ; > ;
@@ -204,43 +159,10 @@ TabPage TP_CONDCOLL
             < " 9th Numbering Level" ; > ;
             < "10th Numbering Level" ; > ;
         };
-    ItemList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     String STR_NOTEMPL
     {
-        Text [ de ] = "<keine>" ;
         Text [ en-US ] = "<none>" ;
-        Text [ x-comment ] = " ";
     };
 };
  // ********************************************************************** EOF
