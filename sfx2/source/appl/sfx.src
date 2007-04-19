@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfx.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:20:37 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:06:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,31 +37,26 @@
 
 String STR_NONAME
 {
-    Text [ de ] = "Unbenannt" ;
     Text [ en-US ] = "Untitled" ;
 };
 
 String STR_NONE
 {
-    Text [ de ] = "- Keine -" ;
     Text [ en-US ] = "- None -" ;
 };
 
 String STR_CLOSE
 {
-    Text [ de ] = "Schließen" ;
     Text [ en-US ] = "Close" ;
 };
 
 String STR_STYLE_FILTER_AUTO
 {
-    Text [ de ] = "Automatisch" ;
     Text [ en-US ] = "Automatic" ;
 };
 
 String STR_STYLE_FILTER_USED
 {
-    Text [ de ] = "Verwendete Vorlagen" ;
     Text [ en-US ] = "Applied Styles" ;
 };
 
@@ -69,30 +64,25 @@ String STR_STYLE_FILTER_USED
 
 String STR_STYLE_FILTER_USERDEF
 {
-    Text [ de ] = "Benutzervorlagen" ;
     Text [ en-US ] = "Custom Styles" ;
 };
 
 String STR_STYLE_FILTER_ALL
 {
-    Text [ de ] = "Alle Vorlagen" ;
     Text [ en-US ] = "All Styles" ;
 };
 
 String STR_STANDARD
 {
-    Text [ de ] = "Standard" ;
     Text [ en-US ] = "Standard" ;
 };
 String STR_STANDARD_SHORTCUT
 {
-    Text [ de ] = "~Standard" ;
     Text [ en-US ] = "Standard" ;
 };
 
 String STR_SFX_FILTERNAME_ALL
 {
-    Text [ de ] = "Alle Dateien (*.*)" ;
     Text [ en-US ] = "All files (*.*)" ;
 };
 
@@ -103,64 +93,54 @@ String STR_HUMAN_APPNAME
 
 String STR_BYTES
 {
-    Text [ de ] = "Bytes" ;
     Text [ en-US ] = "Bytes" ;
 };
 
 String STR_KB
 {
-    Text [ de ] = "KB" ;
     Text [ en-US ] = "KB" ;
 };
 
 String STR_MB
 {
-    Text [ de ] = "MB" ;
     Text [ en-US ] = "MB" ;
 };
 
 
 String STR_GB
 {
-    Text [ de ] = "GB" ;
     Text [ en-US ] = "GB" ;
 };
 
 String STR_UNDO
 {
-    Text [ de ] = "Rückgängig: " ;
     Text [ en-US ] = "Undo: " ;
 };
 
 String STR_REDO
 {
-    Text [ de ] = "Wiederherstellen: " ;
     Text [ en-US ] = "Re~do: " ;
 };
 
 String STR_REPEAT
 {
-    Text [ de ] = "Letzter ~Befehl: " ;
     Text [ en-US ] = "~Repeat: " ;
 };
 
 String RID_STR_NEW_TASK
 {
-    Text [ de ] = "Neue Task";
     Text [ en-US ] = "New task";
 };
 QueryBox MSG_QUERY_LASTVERSION
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Alle Änderungen aufheben?" ;
     Message [ en-US ] = "Cancel all changes?" ;
 };
 
 // i66948 used in project scripting
 String STR_ERRUNOEVENTBINDUNG
 {
-    Text [ de ] = "Eine passende Komponenten-Methode %1\nkonnte nicht gefunden werden.\n\nÜberprüfen Sie die Schreibweise des Methodennamens.";
     Text [ en-US ] = "An appropriate component method %1\ncould not be found.\n\nCheck spelling of method name.";
 };
 
