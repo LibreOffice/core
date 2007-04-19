@@ -4,9 +4,9 @@
  *
  *  $RCSfile: taborder.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:34:13 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:48:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,7 +48,6 @@ ModalDialog RID_DLG_TABORDER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 168 , 158 ) ;
-    Text [ de ] = "Aktivierungsreihenfolge" ;
     Text [ en-US ] = "Tab Order" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -57,7 +56,6 @@ ModalDialog RID_DLG_TABORDER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
-        Text [ de ] = "Kontrollelemente" ;
         Text [ en-US ] = "Controls" ;
     };
 
@@ -74,7 +72,6 @@ ModalDialog RID_DLG_TABORDER
     {
         Pos = MAP_APPFONT ( 102 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Index kleiner" ;
         Text [ en-US ] = "Move Up" ;
     };
 
@@ -82,7 +79,6 @@ ModalDialog RID_DLG_TABORDER
     {
         Pos = MAP_APPFONT ( 102 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Index größer" ;
         Text [ en-US ] = "Move Down" ;
     };
 
@@ -90,7 +86,6 @@ ModalDialog RID_DLG_TABORDER
     {
         Pos = MAP_APPFONT ( 102 , 50 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Auto Sortierung" ;
         Text [ en-US ] = "Automatic Sort" ;
     };
     OKButton PB_OK
