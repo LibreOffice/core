@@ -4,9 +4,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:07:54 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:45:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModelessDialog RID_SCDLG_NAMES
     Hide = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 222 , 142 ) ;
-    Text [ de ] = "Namen festlegen" ;
     Text [ en-US ] = "Define Names" ;
     Moveable = TRUE ;
      // Closeable = TRUE;   // Dieser Dialog hat einen Cancel-Button !
@@ -68,29 +67,23 @@ ModelessDialog RID_SCDLG_NAMES
         Pos = MAP_APPFONT ( 166 , 74 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
-        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
         TabStop = TRUE ;
         DefButton = TRUE ;
-        Text [ x-comment ] = " ";
     };
     PushButton BTN_REMOVE
     {
         Pos = MAP_APPFONT ( 166 , 92 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-        Text [ de ] = "~LÃ¶schen" ;
         Text [ en-US ] = "~Delete" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text [ de ] = "Name" ;
         Text [ en-US ] = "Name" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox ED_NAME
     {
@@ -104,9 +97,7 @@ ModelessDialog RID_SCDLG_NAMES
     {
         Pos = MAP_APPFONT ( 6 , 112 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text [ de ] = "Zugeordnet zu" ;
         Text [ en-US ] = "Assigned to" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_ASSIGN
     {
@@ -117,12 +108,10 @@ ModelessDialog RID_SCDLG_NAMES
     };
     ImageButton RB_ASSIGN
     {
-        QuickHelpText [ de ] = "Verkleinern" ;
         Pos = MAP_APPFONT ( 145 , 122 ) ;
         Size = MAP_APPFONT ( 13 , 15 ) ;
         TabStop = FALSE ;
         QuickHelpText [ en-US ] = "Shrink" ;
-        QuickHelpText [ x-comment ] = " ";
     };
     MoreButton BTN_MORE
     {
@@ -136,66 +125,49 @@ ModelessDialog RID_SCDLG_NAMES
     {
         Pos = MAP_APPFONT ( 6 , 142 ) ;
         Size = MAP_APPFONT ( 154 , 8 ) ;
-        Text [ de ] = "Bereichsart" ;
         Text [ en-US ] = "Area type" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_PRINTAREA
     {
         Pos = MAP_APPFONT ( 12 , 153 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Druc~kbereich" ;
         Text [ en-US ] = "~Print range" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = "; RB: zu finden in: Format - Druckbereich - Bearbeiten... - -";
     };
     CheckBox BTN_CRITERIA
     {
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 60 , 10 ) ;
-        Text [ de ] = "Fil~ter" ;
         Text [ en-US ] = "~Filter" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_ROWHEADER
     {
         Pos = MAP_APPFONT ( 75 , 167 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
-        Text [ de ] = "W~iederholungszeile" ;
         Text [ en-US ] = "Repeat ~row" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     CheckBox BTN_COLHEADER
     {
         Pos = MAP_APPFONT ( 75 , 153 ) ;
         Size = MAP_APPFONT ( 82 , 10 ) ;
-        Text [ de ] = "~Wiederholungsspalte" ;
         Text [ en-US ] = "Repeat ~column" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     String STR_ADD
     {
         /* ### ACHTUNG: Neuer Text in Resource? Hinzu~fügen : Hinzu~f³gen */
-        Text [ de ] = "Hinzu~fÃ¼gen" ;
         Text [ en-US ] = "~Add" ;
-        Text [ x-comment ] = " ";
     };
     String STR_MODIFY
     {
         /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~Žndern */
-        Text [ de ] = "~Ã„ndern" ;
         Text [ en-US ] = "Mod~ify" ;
-        Text [ x-comment ] = " ";
     };
     String STR_INVALIDSYMBOL
     {
         /* ### ACHTUNG: Neuer Text in Resource? Ungültiger Ausdruck : Ung³ltiger Ausdruck */
-        Text [ de ] = "UngÃ¼ltiger Ausdruck" ;
         Text [ en-US ] = "Invalid expression" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
