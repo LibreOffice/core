@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:08:52 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:23:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,6 +99,7 @@
 #include "svtools/svtools.hrc"
 #include "svtools/loginerr.hxx"
 #include "svtools/httpcook.hxx"
+#include "svtools/sfxecode.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "comphelper/sequenceashashmap.hxx"
 #include "unotools/configmgr.hxx"
@@ -2264,11 +2265,40 @@ UUIInteractionHelper::handleGenericErrorRequest(
     }
 
     // Note: It's important to convert the transported long to the
-        // required  unsigned long value. Otherwhise using as flag field
+    // required  unsigned long value. Otherwhise using as flag field
     // can fail ...
     ErrCode  nError   = (ErrCode)nErrorCode;
     sal_Bool bWarning = !ERRCODE_TOERROR(nError);
-    ErrorHandler::HandleError(nErrorCode);
+
+    if ( (ErrCode)nErrorCode == ERRCODE_SFX_BROKENSIGNATURE )
+    {
+        // the broken signature warning needs a special title
+        String aErrorString;
+        ErrorHandler::GetErrorString( nErrorCode, aErrorString );
+
+
+        std::auto_ptr< ResMgr >
+            xManager( ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME( uui ) ) );
+        ::rtl::OUString aTitle;
+
+        try
+        {
+            star::uno::Any aProductNameAny =
+                ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty(
+                    ::utl::ConfigManager::PRODUCTNAME );
+            aProductNameAny >>= aTitle;
+        } catch( star::uno::Exception& )
+        {}
+
+        ::rtl::OUString aErrTitle = String( ResId( STR_WARNING_BROKENSIGNATURE_TITLE, xManager.get() ) );
+        if ( aTitle.getLength() && aErrTitle.getLength() )
+            aTitle += ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( " - " ) );
+         aTitle += aErrTitle;
+
+        executeMessageBox( aTitle, aErrorString, WB_OK );
+    }
+    else
+        ErrorHandler::HandleError(nErrorCode);
 
     if (xApprove.is() && bWarning)
         xApprove->select();
