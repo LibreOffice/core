@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2005-11-15 21:55:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:20:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ ModalDialog DLG_REGISTRATION_REQUEST
     Closeable = TRUE;
     OutputSize = TRUE ;
     Size = MAP_APPFONT ( 192 , 134 ) ;
-    Text [ de ] = "%PRODUCTNAME Registrierung";
     Text [ en-US ] = "%PRODUCTNAME Registration";
 
     FixedImage FI_LOGO
@@ -71,22 +70,18 @@ ModalDialog DLG_REGISTRATION_REQUEST
         Pos = MAP_APPFONT ( 33, 6 ) ;
         Size = MAP_APPFONT ( 153 , 32 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie haben jetzt die Möglichkeit, sich als %PRODUCTNAME Anwender registrieren zu lassen." ;
         Text [ en-US ] = "You now have the opportunity to register as a %PRODUCTNAME user." ;
     };
 
     String STR_COMPLETE_INTRO
     {
-        Text [ de ] = " Die Registrierung ist freiwillig und für Sie unverbindlich." ;
         Text [ en-US ] = " Registration is voluntary and is without obligation." ;
-        Text [ x-comment ] = "This text will be appended to the text from FT_INTRO. In most languages the author knows :), this implies that you should start this text here with a space character. Thanks.";
     };
 
     RadioButton RB_NOW
     {
         Pos = MAP_APPFONT ( 33 , 41 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
-        Text [ de ] = "Jetzt registrieren" ;
         Text [ en-US ] = "Register now" ;
     };
 
@@ -94,14 +89,12 @@ ModalDialog DLG_REGISTRATION_REQUEST
     {
         Pos = MAP_APPFONT ( 33 , 54 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
-        Text [ de ] = "Später registrieren" ;
         Text [ en-US ] = "Remind me to register later" ;
     };
     RadioButton RB_NEVER
     {
         Pos = MAP_APPFONT ( 33 , 67 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
-        Text [ de ] = "Nie registrieren" ;
         Text [ en-US ] = "Never register" ;
     };
     RadioButton RB_DONE
@@ -110,7 +103,6 @@ ModalDialog DLG_REGISTRATION_REQUEST
         Size = MAP_APPFONT ( 153 , 20 ) ;
         WordBreak = TRUE;
 
-        Text [ de ] = "Registrierung für %PRODUCTNAME %PRODUCTVERSION bereits durchgeführt" ;
         Text [ en-US ] = "Already registered as %PRODUCTNAME %PRODUCTVERSION user." ;
     };
 
@@ -139,7 +131,6 @@ ErrorBox ERRBOX_REG_NOSYSBROWSER
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
 
-    Message [ de ] = "Fehler beim Starten des Webbrowsers.\nBitte überprüfen Sie die Einstellungen von %PRODUCTNAME und die des Webbrowsers." ;
     Message [ en-US ] = "An error occurred in starting the web browser.\nPlease check the %PRODUCTNAME and web browser settings.";
 };
 
