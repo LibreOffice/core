@@ -4,9 +4,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:14:40 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:55:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,9 +38,7 @@
 
 String KEY_VERSION_CHECK
 {
-    Text [ de ] =   "Achtung: Es konnten nicht alle importierte EPS-Grafiken in Level1 abgespeichert werden,\nda einige in einem höherem Level vorliegen !";
     Text [ en-US ] = "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!";
-    Text [ x-comment ] = " ";
 };
 
 
