@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbinteraction.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 16:51:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -39,13 +39,11 @@
 
 String STR_REMEMBERPASSWORD_SESSION
 {
-    Text [ de ] = "Kennwort bis Applikationsende ~merken";
     Text [ en-US ] = "~Remember password till end of session";
 };
 
 String STR_REMEMBERPASSWORD_PERSISTENT
 {
-    Text [ de ] = "Kennwort dauerhaft ~speichern";
     Text [ en-US ] = "~Remember password";
 };
 
