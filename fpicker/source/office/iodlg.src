@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-07-26 09:05:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:06:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,14 +89,12 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 59 , 6 ) ;
-        QuickHelpText [ de ] = "Neues Verzeichnis anlegen" ;
         QuickHelpText [ en-US ] = "Create New Directory" ;
     };
     ImageButton BTN_EXPLORERFILE_LISTVIEW
     {
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 109 , 6 ) ;
-        QuickHelpText [ de ] = "Liste";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap
@@ -111,7 +109,6 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 109 , 6 ) ;
-        QuickHelpText [ de ] = "Details";
         ButtonImage = Image
         {
             ImageBitmap = Bitmap
@@ -126,7 +123,6 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 109 , 6 ) ;
-        QuickHelpText [ de ] = "Ein Verzeichnis hoch" ;
         QuickHelpText [ en-US ] = "Up One Level" ;
     };
 
@@ -134,7 +130,6 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 59 , 6 ) ;
-        QuickHelpText [ de ] = "Zum Standard-Verzeichnis" ;
         QuickHelpText [ en-US ] = "Default Directory" ;
     };
     Control CTL_EXPLORERFILE_FILELIST
@@ -148,7 +143,6 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         Pos = MAP_APPFONT ( 6 , 118 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Datei~name:" ;
         Text [ en-US ] = "File ~name:" ;
     };
     Edit ED_EXPLORERFILE_FILENAME
@@ -176,7 +170,6 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         Pos = MAP_APPFONT ( 6 , 148 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "Datei~typ:" ;
         Text [ en-US ] = "File ~type:" ;
     };
     ListBox LB_EXPLORERFILE_FILETYPE
@@ -191,25 +184,21 @@ ModalDialog DLG_SVT_EXPLORERFILE
     CheckBox CB_EXPLORERFILE_READONLY
     {
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "N~ur lesen" ;
         Text [ en-US ] = "~Read-only" ;
     };
     CheckBox CB_EXPLORERFILE_PASSWORD
     {
         Size = MAP_APPFONT ( 100, 10 ) ;
-        Text [ de ] = "Mit Kennwort speichern" ;
         Text [ en-US ] = "Save with password" ;
     };
     CheckBox CB_AUTO_EXTENSION
     {
         Size = MAP_APPFONT ( 160 , 10 ) ;
-        Text [ de ] = "automatische Dateinamens~erweiterung" ;
         Text [ en-US ] = "~Automatic file name extension" ;
     };
     CheckBox CB_OPTIONS
     {
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "Filtereinstellungen ~bearbeiten" ;
         Text [ en-US ] = "Edit ~filter settings";
     };
     PushButton BTN_EXPLORERFILE_OPEN
@@ -217,7 +206,6 @@ ModalDialog DLG_SVT_EXPLORERFILE
         Pos = MAP_APPFONT ( 224 , 117 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE ;
-        Text [ de ] = "Ö~ffnen" ;
         Text [ en-US ] = "~Open" ;
     };
     CancelButton BTN_EXPLORERFILE_CANCEL
@@ -232,37 +220,30 @@ ModalDialog DLG_SVT_EXPLORERFILE
     };
     String STR_EXPLORERFILE_OPEN
     {
-        Text [ de ] = "Öffnen" ;
         Text [ en-US ] = "Open" ;
     };
     String STR_EXPLORERFILE_SAVE
     {
-        Text [ de ] = "Speichern unter" ;
         Text [ en-US ] = "Save as" ;
     };
     String STR_EXPLORERFILE_BUTTONSAVE
     {
-        Text [ de ] = "~Speichern" ;
         Text [ en-US ] = "~Save" ;
     };
     String STR_PATHNAME
     {
-        Text [ de ] = "~Pfad:" ;
         Text [ en-US ] = "~Path:" ;
     };
     String STR_PATHSELECT
     {
-        Text [ de ] = "Pfad auswählen" ;
         Text [ en-US ] = "Select path" ;
     };
     String STR_BUTTONSELECT
     {
-        Text [ de ] = "Au~swählen" ;
         Text [ en-US ] = "~Select";
     };
     String STR_ACTUALVERSION
     {
-        Text [ de ] = "Aktuelle Version" ;
         Text [ en-US ] = "Current version";
     };
 };
@@ -280,9 +261,7 @@ ModalDialog DLG_SVT_QUERYFOLDERNAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 138 , 10 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "Na~me" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_SVT_QUERYFOLDERNAME_DLG_NAME
     {
@@ -296,9 +275,7 @@ ModalDialog DLG_SVT_QUERYFOLDERNAME
         Group = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Neuen Ordner anlegen" ;
         Text [ en-US ] = "Create new folder" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BT_SVT_QUERYFOLDERNAME_DLG_OK
     {
@@ -317,37 +294,31 @@ ModalDialog DLG_SVT_QUERYFOLDERNAME
 
 String RID_FILEOPEN_INVALIDFOLDER
 {
-    Text [ de ] = "$name$ existiert nicht.";
     Text [ en-US ] = "$name$ does not exist.";
 };
 
 String RID_FILEOPEN_NOTEXISTENTFILE
 {
-    Text [ de ] = "Die Datei $name$ existiert nicht.\nBitte überprüfen Sie, ob Sie den korrekten Namen angegeben haben.";
     Text [ en-US ] = "The file $name$ does not exist.\nMake sure you have entered the correct file name.";
 };
 
 String STR_FILTERNAME_ALL
 {
-    Text [ de ] = "Alle Dateien (*.*)" ;
     Text [ en-US ] = "All files (*.*)" ;
 };
 
 String STR_SVT_ALREADYEXISTOVERWRITE
 {
-    Text [ de ] = "Die Datei existiert bereits. Soll sie überschrieben werden?" ;
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
 String STR_SVT_NEW_FOLDER
 {
-    Text [ de ] = "Ordner" ;
     Text [ en-US ] = "Folder" ;
 };
 
 String STR_SVT_NOREMOVABLEDEVICE
 {
-    Text [ de ] = "Kein Wechselspeichergerät gefunden.\nÜberprüfen Sie, ob es korrekt angeschlossen ist und versuchen Sie es dann erneut." ;
     Text [ en-US ] = "No removable storage device detected.\nMake sure it is plugged in properly and try again." ;
 };
 
