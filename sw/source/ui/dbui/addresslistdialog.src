@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:06:10 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:51:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModalDialog DLG_MM_ADDRESSLISTDIALOG
     Size = MAP_APPFONT ( 260 , 182 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Empfängerliste auswählen";
     Text [ en-US ] = "Select Address List";
 
     FixedText       FI_DESCRIPTION
@@ -53,14 +52,12 @@ ModalDialog DLG_MM_ADDRESSLISTDIALOG
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 24 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Wählen Sie eine Adressenliste. Klicken Sie '%1', um weitere Adressenlisten zu verwenden. Liegt noch keine Adressenliste vor, klicken Sie auf '%2'.";
         Text [ en-US ] = "Select an address list. Click '%1' to select recipients from a different list. If you do not have an address list you can create one by clicking '%2'.";
     };
     FixedText       FT_LIST
     {
         Pos = MAP_APPFONT ( 6 , 30 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Zurzeit werden Ihre Empfänger gewählt aus:";
         Text [ en-US ] = "Your recipients are currently selected from:";
     };
     Control         LB_LIST
@@ -74,35 +71,30 @@ ModalDialog DLG_MM_ADDRESSLISTDIALOG
     {
         Pos = MAP_APPFONT ( 194 , 43 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Hinzufügen...";
         Text [ en-US ] = "~Add...";
     };
     PushButton PB_CREATELIST
     {
         Pos = MAP_APPFONT ( 194 , 60 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Erstellen...";
         Text [ en-US ] = "~Create...";
     };
     PushButton      PB_FILTER
     {
         Pos = MAP_APPFONT ( 194 , 77 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Filtern...";
         Text [ en-US ] = "~Filter...";
     };
     PushButton PB_EDIT
     {
         Pos = MAP_APPFONT ( 194 , 94 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Bearbeiten...";
         Text [ en-US ] = "~Edit...";
     };
     PushButton PB_TABLE
     {
         Pos = MAP_APPFONT ( 194 , 111 ) ;
         Size = MAP_APPFONT ( 60 , 14 ) ;
-        Text [ de ] = "Andere Tabelle...";
         Text [ en-US ] = "Change ~Table...";
     };
     FixedLine FL_SEPARATOR
@@ -128,17 +120,14 @@ ModalDialog DLG_MM_ADDRESSLISTDIALOG
     };
     String  ST_NAME
     {
-        Text [ de ] = "Name";
         Text [ en-US ] = "Name";
     };
     String  ST_TABLE
     {
-        Text [ de ] = "Tabelle";
         Text [ en-US ] = "Table";
     };
     String ST_CONNECTING
     {
-        Text [ de ] = "Mit Datenquelle verbinden...";
         Text [ en-US ] = "Connecting to data source...";
     };
 };
