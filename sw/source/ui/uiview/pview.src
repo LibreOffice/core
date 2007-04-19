@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:14:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:29:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,24 +44,19 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     SVLook = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 312 , 131 ) ;
-    Text [ de ] = "Druckoptionen" ;
     FixedLine FL_ROWCOL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Aufteilung" ;
 
         Text [ en-US ] = "Distribution";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ROWS
     {
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "~Zeilen" ;
         Left = TRUE ;
         Text [ en-US ] = "Ro~ws";
-        Text [ x-comment ] = " ";
     };
     NumericField NF_ROWS
     {
@@ -82,10 +77,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 84 , 15 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "~Spalten" ;
         Left = TRUE ;
         Text [ en-US ] = "~Columns";
-        Text [ x-comment ] = " ";
     };
     NumericField NF_COLS
     {
@@ -106,19 +99,15 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Ränder" ;
 
         Text [ en-US ] = "Margins";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LMARGIN
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "~Links" ;
         Left = TRUE ;
         Text [ en-US ] = "L~eft";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_LMARGIN
     {
@@ -140,10 +129,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 84 , 44 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "~Rechts" ;
         Left = TRUE ;
         Text [ en-US ] = "~Right";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_RMARGIN
     {
@@ -165,10 +152,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "~Oben" ;
         Left = TRUE ;
         Text [ en-US ] = "~Top";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_TMARGIN
     {
@@ -190,10 +175,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 84 , 59 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "~Unten" ;
         Left = TRUE ;
         Text [ en-US ] = "~Bottom";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_BMARGIN
     {
@@ -215,19 +198,15 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 76 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Abstand" ;
 
         Text [ en-US ] = "Spacing";
-        Text [ x-comment ] = " ";
     };
     FixedText FT_HMARGIN
     {
         Pos = MAP_APPFONT ( 12 , 88 ) ;
         Size = MAP_APPFONT ( 30 , 10 ) ;
-        Text [ de ] = "H~orizontal" ;
         Left = TRUE ;
         Text [ en-US ] = "Hori~zontal";
-        Text [ x-comment ] = " ";
     };
 
     MetricField MF_HMARGIN
@@ -250,10 +229,8 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 84 , 88 ) ;
         Size = MAP_APPFONT ( 32 , 10 ) ;
-        Text [ de ] = "~Vertikal" ;
         Left = TRUE ;
         Text [ en-US ] = "~Vertically";
-        Text [ x-comment ] = " ";
     };
 
     MetricField MF_VMARGIN
@@ -276,27 +253,21 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Format" ;
         Text [ en-US ] = "Format";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_LANDSCAPE
     {
         Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
-        Text [ de ] = "~Querformat" ;
         TabStop = TRUE ;
         Group = TRUE ;
         Text [ en-US ] = "~Landscape";
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_PORTRAIT
     {
         Pos = MAP_APPFONT ( 84 , 113 ) ;
         Size = MAP_APPFONT ( 60 , 12 ) ;
-        Text [ de ] = "Ho~chformat" ;
         Text [ en-US ] = "P~ortrait";
-        Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
@@ -328,12 +299,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Pos = MAP_APPFONT ( 258 , 66 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Standar~d" ;
         Text [ en-US ] = "~Default";
-        Text [ x-comment ] = " ";
     };
     Text [ en-US ] = "Print Options";
-    Text [ x-comment ] = " ";
 };
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
@@ -341,26 +309,21 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 141 , 69 ) ;
-    Text [ de ] = "Mehrere Seiten" ;
     Text [ en-US ] = "Multiple Pages" ;
     Moveable = TRUE ;
     FixedText FT_COL
     {
         Pos = MAP_APPFONT ( 12 , 34 ) ;
         Size = MAP_APPFONT ( 27 , 10 ) ;
-        Text [ de ] = "~Spalten" ;
         Text [ en-US ] = "~Columns" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_ROW
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 27 , 10 ) ;
-        Text [ de ] = "~Zeilen" ;
         Text [ en-US ] = "~Rows" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_COL
     {
@@ -411,13 +374,10 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 String RID_PVIEW_TOOLBOX
 {
-    Text [ de ] = "Seitenansicht" ;
     Text [ en-US ] = "Page Preview" ;
-    Text [ x-comment ] = " ";
 };
 ToolBox RID_PVIEW_TOOLBOX
 {
