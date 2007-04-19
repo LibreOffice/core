@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:10:03 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:21:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,19 +45,15 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Höhe maximal wie ~Seite" ;
         Text [ en-US ] = "~Not larger than page area" ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_MAXHEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Ma~x. Höhe der Fußnote" ;
         Text [ en-US ] = "Maximum footnote ~height" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_MAXHEIGHT
     {
@@ -82,10 +78,8 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 44 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "~Abstand zum Textkörper" ;
         Text [ en-US ] = "Space to text" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_DIST
     {
@@ -108,18 +102,14 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Fußnotenbereich" ;
         Text [ en-US ] = "Footnote area" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LINEPOS
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "~Position" ;
         Left = TRUE ;
         Text [ en-US ] = "~Position" ;
-        Text [ x-comment ] = " ";
     };
     ListBox DLB_LINEPOS
     {
@@ -129,34 +119,20 @@ TabPage TP_FOOTNOTE_PAGE
         Group = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
-        StringList [ de ] =
-        {
-            < "Links" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Rechts" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Left" ; Default ; > ;
             < "Centered" ; Default ; > ;
             < "Right" ; Default ; > ;
         };
-        StringList [ x-comment ] =
-        {
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-        };
     };
     FixedText FT_LINETYPE
     {
         Pos = MAP_APPFONT ( 12 , 89 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Stär~ke" ;
         Group = TRUE ;
         Left = TRUE ;
         Text [ en-US ] = "~Weight" ;
-        Text [ x-comment ] = " ";
     };
     ListBox DLB_LINETYPE
     {
@@ -172,10 +148,8 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 105 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Län~ge" ;
         Left = TRUE ;
         Text [ en-US ] = "~Length" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_LINEWIDTH
     {
@@ -197,10 +171,8 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 12 , 121 ) ;
         Size = MAP_APPFONT ( 132 , 8 ) ;
-        Text [ de ] = "Abstan~d zum Fußnoteninhalt" ;
         Text [ en-US ] = "~Spacing to footnote contents" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_LINEDIST
     {
@@ -223,8 +195,6 @@ TabPage TP_FOOTNOTE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 60 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Trennlinie" ;
         Text [ en-US ] = "Separator line" ;
-        Text [ x-comment ] = " ";
     };
 };
