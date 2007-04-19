@@ -4,9 +4,9 @@
  *
  *  $RCSfile: lboxctrl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 09:50:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:42:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,24 +65,20 @@ FloatingWindow RID_SVXTBX_UNDO_REDO_CTRL
 
 String RID_SVXSTR_NUM_UNDO_ACTIONS
 {
-    Text[ de ] = "Aktionen rückgängig machen: $(ARG1)" ;
     Text[ en-US ] = "Actions to undo: $(ARG1)";
 };
 
 String RID_SVXSTR_NUM_UNDO_ACTION
 {
-    Text[ de ] = "Aktionen rückgängig machen: $(ARG1)" ;
     Text[ en-US ] = "Actions to undo: $(ARG1)" ;
 };
 
 String RID_SVXSTR_NUM_REDO_ACTIONS
 {
-    Text[  de ] = "Aktionen wiederherstellen: $(ARG1)" ;
     Text[ en-US ] = "Actions to redo: $(ARG1)";
 };
 
 String RID_SVXSTR_NUM_REDO_ACTION
 {
-    Text[ de ] = "Aktionen wiederherstellen: $(ARG1)" ;
     Text[ en-US ] = "Actions to redo: $(ARG1)";
 };
