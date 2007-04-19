@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:09:29 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:20:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,9 +57,7 @@ TabPage TP_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "Ebene" ;
         Text [ en-US ] = "Level" ;
-        Text [ x-comment ] = " ";
     };
     MultiListBox LB_LEVEL
     {
@@ -74,18 +72,14 @@ TabPage TP_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 47 , 3 ) ;
         Size = MAP_APPFONT ( 207 , 8 ) ;
-        Text [ de ] = "Position und Abstand" ;
         Group = TRUE ;
         Text [ en-US ] = "Position and spacing" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_BORDERDIST
     {
         Pos = MAP_APPFONT ( 53 , 16 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Ein~rückung";
         Text [ en-US ] = "Indent" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_BORDERDIST
     {
@@ -109,17 +103,13 @@ TabPage TP_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 188 , 29 ) ;
         Size = MAP_APPFONT ( 53 , 10 ) ;
-        Text [ de ] = "Relati~v" ;
         Text [ en-US ] = "Relati~ve" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_INDENT
     {
         Pos = MAP_APPFONT ( 53 , 44 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Abstand zum Te~xt" ;
         Text [ en-US ] = "Space to te~xt" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_INDENT
     {
@@ -143,9 +133,7 @@ TabPage TP_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 53 , 60 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "~Mindestabstand Nummer <-> Text" ;
         Text [ en-US ] = "~Minimum space numbering <-> text" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MF_NUMDIST
     {
@@ -169,9 +157,7 @@ TabPage TP_NUM_POSITION
     {
         Pos = MAP_APPFONT ( 53 , 76 ) ;
         Size = MAP_APPFONT ( 132 , 10 ) ;
-        Text [ de ] = "Ausri~chtung der Nummerierung" ;
         Text [ en-US ] = "Numbering ~alignment" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_ALIGN
     {
@@ -179,32 +165,18 @@ TabPage TP_NUM_POSITION
         Size = MAP_APPFONT ( 64 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Links" ; > ;
-            < "Zentriert" ; > ;
-            < "Rechts" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Left" ; > ;
             < "Centered" ; > ;
             < "Right" ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; > ;
-        < " " ; > ;
-        < " " ; > ;
-    };
     };
     PushButton PB_STANDARD
     {
         Pos = MAP_APPFONT ( 53 , 90 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Standard" ;
         Text [ en-US ] = "~Default" ;
-        Text [ x-comment ] = " ";
     };
     Window WIN_PREVIEW
     {
@@ -222,7 +194,6 @@ TabDialog DLG_SVXTEST_NUM_BULLET
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Text [ de ] = "Nummerierung und Aufzählungszeichen" ;
     Text [ en-US ] = "Bullets and Numbering";
     Moveable = TRUE ;
     TabControl 1
@@ -233,53 +204,39 @@ TabDialog DLG_SVXTEST_NUM_BULLET
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BULLET ;
-                Text [ de ] = "Bullets" ;
                 Text [ en-US ] = "Bullets" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_SINGLE_NUM ;
-                Text [ de ] = "Nummerierungsart" ;
                 Text [ en-US ] = "Numbering type" ;
-                Text [ x-comment ] = "; Avoid use of \"style\" whenever possible if it could be confused with Styles. EM15.5.00";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_NUM ;
-                Text [ de ] = "Gliederung" ;
                 Text [ en-US ] = "Outline" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_PICK_BMP ;
-                Text [ de ] = "Grafiken" ;
                 Text [ en-US ] = "Graphics" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_POSITION ;
-                Text [ de ] = "Position" ;
                 Text [ en-US ] = "Position" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = RID_SVXPAGE_NUM_OPTIONS ;
                 /* ### ACHTUNG: Neuer Text in Resource? Optionen : ~Optionen */
-                Text [ de ] = "Optionen" ;
                 Text [ en-US ] = "Options" ;
-                Text [ x-comment ] = "; KW had called this \"Customize\" which leads to unnecessary confusion in translation. EM";
             };
         };
     };
     String ST_RESET
     {
-        Text [ de ] = "~Entfernen" ;
         Text [ en-US ] = "~Remove" ;
-        Text [ x-comment ] = " ";
     };
 };
 
