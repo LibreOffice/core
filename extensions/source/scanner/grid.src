@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grid.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:36:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:49:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,6 @@ ModalDialog GRID_DIALOG
     {
         Pos = MAP_APPFONT( 245, 65 );
         Size = MAP_APPFONT( 50, 15 );
-        Text [ de ] = "Setzen";
         Text [ en-US ] = "Set";
     };
     Bitmap GRID_DIALOG_HANDLE_BMP
@@ -74,22 +73,18 @@ ModalDialog GRID_DIALOG
     };
     String RESET_TYPE_LINEAR_ASCENDING
     {
-        Text [ de ] = "Linear steigend";
         Text [ en-US ] = "Linear ascending";
     };
     String RESET_TYPE_LINEAR_DESCENDING
     {
-        Text [ de ] = "Linear fallend";
         Text [ en-US ] = "Linear descending";
     };
     String RESET_TYPE_RESET
     {
-        Text [ de ] = "Originalwerte";
         Text [ en-US ] = "Original values";
     };
     String RESET_TYPE_EXPONENTIAL
     {
-        Text [ de ] = "Exponentiell wachsend";
         Text [ en-US ] = "Exponential increasing";
     };
 };
