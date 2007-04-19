@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:15:22 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:02:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,7 +58,6 @@ ModalDialog DLG_INDEXDESIGN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( DIALOG_SIZE_X , DIALOG_SIZE_Y ) ;
-    Text [ de ] = "Indizes" ;
     Text [ en-US ] = "Indexes" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -80,7 +79,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_NEW;
                 HelpId = HID_DLGIDX_NEWINDEX;
                 Command = ".index:createNew";
-                Text [ de ] = "Neuer Index" ;
                 Text [ en-US ] = "New Index" ;
             };
             ToolBoxItem
@@ -88,7 +86,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_DROP;
                 HelpId = HID_DLGIDX_DROPINDEX;
                 Command = ".index:dropCurrent";
-                Text [ de ] = "Aktuellen Index löschen" ;
                 Text [ en-US ] = "Delete Current Index" ;
             };
             ToolBoxItem
@@ -96,7 +93,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_RENAME;
                 HelpId = HID_DLGIDX_RENAMEINDEX;
                 Command = ".index:renameCurrent";
-                Text [ de ] = "Aktuellen Index umbenennen" ;
                 Text [ en-US ] = "Rename Current Index" ;
             };
             ToolBoxItem
@@ -104,7 +100,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_SAVE;
                 HelpId = HID_DLGIDX_SAVEINDEX;
                 Command = ".index:saveCurrent";
-                Text [ de ] = "Aktuellen Index speichern" ;
                 Text [ en-US ] = "Save Current Index" ;
             };
             ToolBoxItem
@@ -112,7 +107,6 @@ ModalDialog DLG_INDEXDESIGN
                 Identifier = ID_INDEX_RESET;
                 HelpId = HID_DLGIDX_RESETINDEX;
                 Command = ".index:resetCurrent";
-                Text [ de ] = "Aktuellen Index zurücksetzen" ;
                 Text [ en-US ] = "Reset Current Index" ;
             };
         };
@@ -131,14 +125,12 @@ ModalDialog DLG_INDEXDESIGN
     {
         Pos = MAP_APPFONT ( LIST_WIDTH + 16 - 3, 9 ) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
-        Text [ de ] = "Index-Details";
         Text [ en-US ] = "Index details";
     };
     FixedText FT_DESC_LABEL
     {
         Pos = MAP_APPFONT ( LIST_WIDTH + 16, 23 ) ;
         Size = MAP_APPFONT ( 50, 8 ) ;
-        Text [ de ] = "Indexbezeichner:";
         Text [ en-US ] = "Index identifier:";
     };
     FixedText FT_DESCRIPTION
@@ -151,7 +143,6 @@ ModalDialog DLG_INDEXDESIGN
         Pos = MAP_APPFONT ( LIST_WIDTH + 16, 34 ) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
         SVLook = TRUE;
-        Text [ de ] = "~Eindeutig";
         Text [ en-US ] = "~Unique";
     };
     FixedText FT_FIELDS
@@ -159,7 +150,6 @@ ModalDialog DLG_INDEXDESIGN
         Pos = MAP_APPFONT ( LIST_WIDTH + 16, 48 ) ;
         Size = MAP_APPFONT ( DIALOG_SIZE_X - LIST_WIDTH - 22, 8 ) ;
         SVLook = TRUE;
-        Text [ de ] = "Felder";
         Text [ en-US ] = "Fields";
     };
     Control CTR_FIELDS
@@ -176,7 +166,6 @@ ModalDialog DLG_INDEXDESIGN
         Size = MAP_APPFONT ( BUTTON_SIZE_X, BUTTON_SIZE_Y );
         SVLook = TRUE;
         DefButton = TRUE;
-        Text [ de ] = "S~chließen";
         Text [ en-US ] = "~Close";
     };
     HelpButton HB_HELP
@@ -188,35 +177,28 @@ ModalDialog DLG_INDEXDESIGN
 
 String STR_TAB_INDEX_SORTORDER
 {
-    Text [ de ] = "Sortierreihenfolge" ;
     Text [ en-US ] = "Sort order" ;
 };
 String STR_TAB_INDEX_FIELD
 {
-    Text [ de ] = "Indexfeld" ;
     Text [ en-US ] = "Index field" ;
 };
 String STR_ORDER_ASCENDING
 {
-    Text [ de ] = "Aufsteigend" ;
     Text [ en-US ] = "Ascending" ;
 };
 String STR_ORDER_DESCENDING
 {
-    Text [ de ] = "Absteigend" ;
     Text [ en-US ] = "Descending" ;
 };
 
 String STR_CONFIRM_DROP_INDEX
 {
-    Text [ de ] = "Wollen Sie den Index '$name$' wirklich löschen?";
     Text [ en-US ] = "Do you really want to delete the index '$name$'?";
 };
 
 String STR_LOGICAL_INDEX_NAME
 {
-    Text [ de ] = "index";
-    Text [ x-comment ] = "; This is a logical name only. It should be the word for 'Index' (in a database sense), but written in lower case (if appliable to your language :).";
     Text [ en-US ] = "index";
 };
 
@@ -233,10 +215,8 @@ Image IMG_PKEYICON_SCH
 
 ErrorBox ERR_NEED_INDEX_FIELDS
 {
-    Title [ de ] = "Index speichern";
     Title [ en-US ] = "Save Index";
 
-    Message [ de ] = "Der Index muss mindestens ein Feld enthalten.";
     Message [ en-US ] = "The index must contain at least one field.";
 
     Buttons = WB_OK;
@@ -244,10 +224,8 @@ ErrorBox ERR_NEED_INDEX_FIELDS
 
 QueryBox QUERY_SAVE_CURRENT_INDEX
 {
-    Title [ de ] = "Index-Entwurf verlassen";
     Title [ en-US ] = "Exit Index Design";
 
-    Message [ de ] = "Wollen Sie die Änderungen am aktuellen Index noch speichern?";
     Message [ en-US ] = "Do you want to save the changes made to the current index?";
 
     Buttons = WB_YES_NO_CANCEL;
@@ -256,13 +234,11 @@ QueryBox QUERY_SAVE_CURRENT_INDEX
 
 String STR_INDEX_NAME_ALREADY_USED
 {
-    Text [ de ] = "Es gibt schon einen anderen Index namens \"$name$\".";
     Text [ en-US ] = "There is already another index named \"$name$\".";
 };
 
 String STR_INDEXDESIGN_DOUBLE_COLUMN_NAME
 {
-    Text [ de ] = "In einer Index-Definition darf jede Tabellen-Spalte höchstens einmal vorkommen, Sie jedoch haben die Spalte \"$name$\"zweimal benutzt.";
     Text [ en-US ] = "In an index definition, no table column may occur more than once. However, you have entered column \"$name$\" twice.";
 };
 
