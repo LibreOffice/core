@@ -4,9 +4,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:30:43 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:25:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,22 +40,18 @@ ModalDialog RID_SCDLG_ASCII
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 320 , 247 ) ;
-    Text [ de ] = "Textimport" ;
     Text [ en-US ] = "Text Import" ;
     Moveable = TRUE ;
     FixedLine FL_WIDTH
     {
         Pos = MAP_APPFONT ( 6 , 132 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Felder" ;
         Text [ en-US ] = "Fields" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TYPE
     {
         Pos = MAP_APPFONT ( 12 , 145 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Spaltent~yp" ;
         Text [ en-US ] = "Column t~ype";
     };
     ListBox LB_TYPE1
@@ -69,36 +65,28 @@ ModalDialog RID_SCDLG_ASCII
     {
         Pos = MAP_APPFONT ( 6 , 48 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Trennoptionen" ;
         Text [ en-US ] = "Separator options" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_FIXED
     {
         Pos = MAP_APPFONT ( 12 , 59 ) ;
         Size = MAP_APPFONT ( 243 , 10 ) ;
-        Text [ de ] = "~Feste Breite" ;
         Text [ en-US ] = "~Fixed width" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RB_SEPARATED
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 243 , 10 ) ;
-        Text [ de ] = "~Getrennt" ;
         Text [ en-US ] = "~Separated by" ;
         TabStop = TRUE ;
         Check = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_CHARSET
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Z~eichensatz" ;
         Text [ en-US ] = "Ch~aracter set" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_CHARSET
     {
@@ -112,17 +100,13 @@ ModalDialog RID_SCDLG_ASCII
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 252 , 8 ) ;
-        Text [ de ] = "Import" ;
         Text [ en-US ] = "Import" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TEXTSEP
     {
         Pos = MAP_APPFONT ( 156 , 114 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Te~xttrenner" ;
         Text [ en-US ] = "Te~xt delimiter" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox CB_TEXTSEP
     {
@@ -154,46 +138,36 @@ ModalDialog RID_SCDLG_ASCII
     {
         Pos = MAP_APPFONT ( 20 , 86 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text [ de ] = "~Tabulator" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Tab" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CKB_SEMICOLON
     {
         Pos = MAP_APPFONT ( 20 , 99 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text [ de ] = "~Semikolon" ;
         TabStop = TRUE ;
         Text [ en-US ] = "S~emicolon" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CKB_COMMA
     {
         Pos = MAP_APPFONT ( 92 , 86 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text [ de ] = "~Komma" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Comma" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CKB_SPACE
     {
         Pos = MAP_APPFONT ( 92 , 99 ) ;
         Size = MAP_APPFONT ( 68 , 10 ) ;
-        Text [ de ] = "~Leerzeichen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "S~pace" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CKB_OTHER
     {
         Pos = MAP_APPFONT ( 164 , 86 ) ;
         Size = MAP_APPFONT ( 50 , 10 ) ;
-        Text [ de ] = "~Andere" ;
         TabStop = TRUE ;
         Text [ en-US ] = "~Other" ;
-        Text [ x-comment ] = " ";
     };
     Edit ED_OTHER
     {
@@ -207,9 +181,7 @@ ModalDialog RID_SCDLG_ASCII
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Ab ~Zeile" ;
         Text [ en-US ] = "From ro~w" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_AT_ROW
     {
@@ -234,12 +206,9 @@ ModalDialog RID_SCDLG_ASCII
     {
         Pos = MAP_APPFONT ( 20 , 114 ) ;
         Size = MAP_APPFONT ( 130 , 10 ) ;
-        Text [ de ] = "Fel~dtrenner zusammenfassen" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Merge ~delimiters" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 
 
