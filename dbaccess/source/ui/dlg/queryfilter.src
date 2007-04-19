@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryfilter.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 14:16:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:03:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,11 +40,6 @@
 
 /*
 #define STRLST_AND_OR \
-    StringList [ de ] = \
-    {\
-        < "UND" ; Default ; > ; \
-        < "ODER" ; Default ; > ; \
-    };\
     StringList [ en-US ] = \
     {\
         < "AND" ; Default ; > ; \
@@ -59,7 +54,6 @@ ModalDialog DLG_FILTERCRIT
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 303 , 76 ) ;
     /* These strings are equal to the toolbox bubble helptext from MID_SBA_QRY_FILTERCRIT in toolbox.hrc */
-    Text [ de ] ="Standardfilter" ;
     Text [ en-US ] ="Standard Filter";
 
     Moveable = TRUE ;
@@ -99,11 +93,6 @@ ModalDialog DLG_FILTERCRIT
         DropDown = TRUE ;
         CurPos = 0 ;
 //      STRLST_AND_OR
-        StringList [ de ] =
-        {
-            < "UND" ; Default ; > ;
-            < "ODER" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -144,11 +133,6 @@ ModalDialog DLG_FILTERCRIT
         DropDown = TRUE ;
         CurPos = 0 ;
 //      STRLST_AND_OR
-        StringList [ de ] =
-        {
-            < "UND" ; Default ; > ;
-            < "ODER" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "AND" ; Default ; > ;
@@ -184,46 +168,36 @@ ModalDialog DLG_FILTERCRIT
     {
         Pos = MAP_APPFONT ( 60 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Feldname" ;
         Center = TRUE ;
         Text [ en-US ] = "Field name" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_WHERECOMP
     {
         Pos = MAP_APPFONT ( 124 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Bedingung" ;
         Center = TRUE ;
         Text [ en-US ] = "Condition" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_WHEREVALUE
     {
         Pos = MAP_APPFONT ( 177 , 14 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Wert" ;
         Center = TRUE ;
         Text [ en-US ] = "Value" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_WHEREOPER
     {
         Pos = MAP_APPFONT ( 15 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Verknüpfung : Verkn³pfung */
-        Text [ de ] = "VerknÃ¼pfung" ;
         Center = TRUE ;
         Text [ en-US ] = "Operator" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_FIELDS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 236 , 8 ) ;
-        Text [ de ] = "Kriterien" ;
         Text [ en-US ] = "Criteria" ;
-        Text [ x-comment ] = " ";
     };
     OKButton BT_OK
     {
@@ -246,15 +220,11 @@ ModalDialog DLG_FILTERCRIT
     };
     String STR_NOENTRY
     {
-        Text [ de ] = "- keiner -" ;
         Text [ en-US ] = "- none -" ;
-        Text [ x-comment ] = " ";
     };
     String STR_COMPARE_OPERATORS
     {
-        Text [ de ] = "=;<>;<;<=;>;>=;wie;nicht wie;leer;nicht leer";
         Text [ en-US ] = "=;<>;<;<=;>;>=;like;not like;null;not null";
-        Text [ x-comment ] = " ";
     };
 };
 
