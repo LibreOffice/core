@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 23:50:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:34:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,68 +45,58 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Size = MAP_APPFONT ( 260 , 185 ) ;
     SVLook = TRUE ;
     Hide = TRUE ;
-    Text [ de ] = "Proxy" ;
     FixedLine GB_KERNING
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Unterschneidung" ;
         Text [ en-US ] = "Kerning";
     };
     RadioButton RB_CHAR_KERNING
     {
         Pos = MAP_APPFONT ( 12, 14 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "~Nur westliche Zeichen" ;
         Text [ en-US ] = "~Western characters only";
     };
     RadioButton RB_CHAR_PUNCT
     {
         Pos = MAP_APPFONT ( 12, 27 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "~Westliche Zeichen und asiatische Interpunktion" ;
         Text [ en-US ] = "Western ~text and Asian punctuation";
     };
     FixedLine GB_CHAR_DIST
     {
         Pos = MAP_APPFONT ( 6, 43 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Zeichenabstand" ;
         Text [ en-US ] = "Character spacing";
     };
     RadioButton RB_NO_COMP
     {
         Pos = MAP_APPFONT ( 12, 54 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "~Keine Kompression" ;
         Text [ en-US ] = "~No compression";
     };
     RadioButton RB_PUNCT_COMP
     {
         Pos = MAP_APPFONT ( 12, 67) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "Nur ~Interpunktion komprimieren" ;
         Text [ en-US ] = "~Compress punctuation only";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
         Pos = MAP_APPFONT ( 12, 80 ) ;
         Size = MAP_APPFONT ( 200 , 10 ) ;
-        Text [ de ] = "Interpunktion und ~japanische Kana komprimieren" ;
         Text [ en-US ] = "Compress ~punctuation and Japanese Kana";
     };
     FixedLine GB_START_END
     {
         Pos = MAP_APPFONT ( 6, 96 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Anfangs- und Endzeichen" ;
         Text [ en-US ] = "First and last characters";
     };
     FixedText FT_LANGUAGE
     {
         Pos = MAP_APPFONT ( 12 , 109 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "~Sprache" ;
         Text [ en-US ] = "~Language";
     };
     ListBox LB_LANGUAGE
@@ -120,16 +110,13 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     {
         Pos = MAP_APPFONT ( 180, 109 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "S~tandard" ;
         Text [ en-US ] = "~Default";
     };
     FixedText FT_START
     {
         Pos = MAP_APPFONT ( 12 , 125 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Kein Zeilen~beginn:" ;
         Text [ en-US ] = "Not at start of line:";
-        Text [ x-comment ] = "; EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
     };
     Edit ED_START
     {
@@ -141,9 +128,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 141 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Kein Zeil~enende:" ;
         Text [ en-US ] = "Not at end of line:";
-        Text [ x-comment ] = "; EM22.3.01: Dt soll eigtl \"nicht am Z...\" heissen.";
     };
     Edit ED_END
     {
@@ -155,7 +140,6 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     {
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 242 , 8 ) ;
-        Text [ de ] = "Ohne benutzerdefinierte Zeilenwechselzeichen" ;
         Text [ en-US ] = "Without user-defined line break symbols";
     };
     Text [ en-US ] = "Proxy";
