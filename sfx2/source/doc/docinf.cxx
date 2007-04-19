@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:11:50 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:28:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1633,14 +1633,6 @@ void FileHeader::Save( SvStream& rStream ) const
 
 //-------------------------------------------------------------------------
 
-void SfxDocUserKey::AdjustTitle_Impl()
-{
-    if ( aTitle.Len() > SFXDOCUSERKEY_LENMAX )
-        aTitle.Erase( SFXDOCUSERKEY_LENMAX );
-}
-
-//-------------------------------------------------------------------------
-
 BOOL SfxDocUserKey::Load(SvStream &rStream)
 {
     rStream.ReadByteString( aTitle );
@@ -1677,14 +1669,12 @@ BOOL SfxDocUserKey::Save(SvStream &rStream) const
 SfxDocUserKey::SfxDocUserKey( const String& rTitle, const String& rWord ) :
         aTitle( rTitle ), aWord( rWord )
 {
-    //!AdjustTitle_Impl();
 }
 //------------------------------------------------------------------------
 const SfxDocUserKey& SfxDocUserKey::operator=(const SfxDocUserKey &rCopy)
 {
     aTitle = rCopy.aTitle;
     aWord = rCopy.aWord;
-    //!AdjustTitle_Impl();
     return *this;
 }
 // SfxDocumentInfo -------------------------------------------------------
@@ -1996,15 +1986,15 @@ sal_uInt32 SfxDocumentInfo::LoadPropertySet( SotStorage* pStorage )
         String aStrValue;
         DateTime aDateTime;
 
-        if( xGlobSect->GetStringValue( aStrValue, PROPID_TITLE, SFXDOCINFO_TITLELENMAX ) )
+        if( xGlobSect->GetStringValue( aStrValue, PROPID_TITLE ) )
             SetTitle( aStrValue );
-        if( xGlobSect->GetStringValue( aStrValue, PROPID_SUBJECT, SFXDOCINFO_THEMELENMAX ) )
+        if( xGlobSect->GetStringValue( aStrValue, PROPID_SUBJECT ) )
             SetTheme( aStrValue );
-        if( xGlobSect->GetStringValue( aStrValue, PROPID_KEYWORDS, SFXDOCINFO_KEYWORDLENMAX ) )
+        if( xGlobSect->GetStringValue( aStrValue, PROPID_KEYWORDS ) )
             SetKeywords( aStrValue );
         if( xGlobSect->GetStringValue( aStrValue, PROPID_TEMPLATE ) )
             SetTemplateName( aStrValue );
-        if( xGlobSect->GetStringValue( aStrValue, PROPID_COMMENTS, SFXDOCINFO_COMMENTLENMAX ) )
+        if( xGlobSect->GetStringValue( aStrValue, PROPID_COMMENTS ) )
             SetComment( aStrValue );
 
         TimeStamp aCreatedStamp( TIMESTAMP_INVALID_DATETIME );
@@ -2410,17 +2400,6 @@ void SfxDocumentInfo::Free()
 
 //-------------------------------------------------------------------------
 
-String SfxDocumentInfo::AdjustTextLen_Impl( const String& rText, USHORT /*nMax*/ )
-{
-    String aRet = rText;
-/*! pb: dont cut any longer because the new file format has no length limit
-    if ( aRet.Len() > nMax )
-        aRet.Erase( nMax ); */
-    return aRet;
-}
-
-//-------------------------------------------------------------------------
-
 SfxDocumentInfo::SfxDocumentInfo() :
     eFileCharSet(gsl_getSystemTextEncoding()),
     bPasswd(FALSE),
@@ -2577,25 +2556,25 @@ void SfxDocumentInfo::SetUseUserData( BOOL bNew )
 
 void SfxDocumentInfo::SetTitle( const String& rVal )
 {
-    aTitle = AdjustTextLen_Impl( rVal, SFXDOCINFO_TITLELENMAX );
+    aTitle = rVal;
 }
 //------------------------------------------------------------------------
 
 void SfxDocumentInfo::SetTheme( const String& rVal )
 {
-    aTheme = AdjustTextLen_Impl( rVal, SFXDOCINFO_THEMELENMAX );
+    aTheme = rVal;
 }
 //------------------------------------------------------------------------
 
 void SfxDocumentInfo::SetComment( const String& rVal )
 {
-    aComment = AdjustTextLen_Impl( rVal, SFXDOCINFO_COMMENTLENMAX );
+    aComment = rVal;
 }
 //------------------------------------------------------------------------
 
 void SfxDocumentInfo::SetKeywords( const String& rVal )
 {
-    aKeywords = AdjustTextLen_Impl( rVal, SFXDOCINFO_KEYWORDLENMAX );
+    aKeywords = rVal;
 }
 //------------------------------------------------------------------------
 
