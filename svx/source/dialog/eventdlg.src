@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-14 07:17:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:03:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,12 +48,10 @@ TabPage RID_SVXPAGE_EVENTS
     Size = MAP_APPFONT ( 272 , 258 ) ;
     String STR_EVENT
     {
-        Text [ de ] = "Ereignis" ;
         Text [ en-US ] = "Event" ;
     };
     String STR_ASSMACRO
     {
-        Text [ de ] = "Zugewiesene Aktion" ;
         Text [ en-US ] = "Assigned Action" ;
     };
     Control LB_EVENT
@@ -69,7 +67,6 @@ TabPage RID_SVXPAGE_EVENTS
         Pos = MAP_APPFONT ( 6 , 240 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Group = TRUE ;
-        Text [ de ] = "Speichern in" ;
         Text [ en-US ] = "Save In" ;
     };
     ListBox LB_SAVEIN
@@ -83,7 +80,6 @@ TabPage RID_SVXPAGE_EVENTS
     {
         Pos = MAP_APPFONT ( 217, ROW0 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] = "Zuweisen:" ;
         Text [ en-US ] = "Assign:" ;
     };
     PushButton PB_ASSIGN
@@ -91,7 +87,6 @@ TabPage RID_SVXPAGE_EVENTS
         Pos = MAP_APPFONT ( 217 , ROW0A ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text [ de ] = "M~akro..." ;
         Text [ en-US ] = "M~acro..." ;
     };
     PushButton PB_DELETE
@@ -99,7 +94,6 @@ TabPage RID_SVXPAGE_EVENTS
         Pos = MAP_APPFONT ( 217 , ROW0A+RSC_CD_PUSHBUTTON_HEIGHT+12 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
-        Text [ de ] = "~Entfernen" ;
         Text [ en-US ] = "~Remove" ;
     };
     Image IMG_MACRO
