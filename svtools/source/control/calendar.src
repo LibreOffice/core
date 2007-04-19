@@ -4,9 +4,9 @@
  *
  *  $RCSfile: calendar.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:59:31 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:09:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,27 +36,19 @@
 #include "svtools.hrc"
 String STR_SVT_CALENDAR_DAY
 {
-    Text [ de ] = "Tag" ;
     Text [ en-US ] = "Day" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_CALENDAR_WEEK
 {
-    Text [ de ] = "Woche" ;
     Text [ en-US ] = "Week" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_CALENDAR_TODAY
 {
-    Text [ de ] = "Heute" ;
     Text [ en-US ] = "Today" ;
-    Text [ x-comment ] = " ";
 };
 String STR_SVT_CALENDAR_NONE
 {
-    Text [ de ] = "Keines" ;
     Text [ en-US ] = "None" ;
-    Text [ x-comment ] = " ";
 };
 
 
