@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moptions.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 20:09:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:47:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -41,7 +41,6 @@ ModalDialog RID_MACROOPTIONS
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 224 , 121 ) ;
-    Text [ de ] = "Beschreibung" ;
     Text [ en-US ] = "Description" ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -75,9 +74,7 @@ ModalDialog RID_MACROOPTIONS
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
-        Text [ de ] = "Beschreibung" ;
         Text [ en-US ] = "Description" ;
-        Text [ x-comment ] = " ";
     };
     MultiLineEdit RID_ME_DESCR
     {
@@ -93,18 +90,14 @@ ModalDialog RID_MACROOPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 73 ) ;
         Size = MAP_APPFONT ( 212 , 8 ) ;
-        Text [ de ] = "Hilfe-Informationen" ;
         Text [ en-US ] = "Help information" ;
-        Text [ x-comment ] = " ";
     };
     FixedText RID_FT_HELPID
     {
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 9 , 83 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "Hilfe-Identifikation" ;
         Text [ en-US ] = "Help ID" ;
-        Text [ x-comment ] = " ";
     };
     NumericField RID_NF_HELPID
     {
@@ -121,9 +114,7 @@ ModalDialog RID_MACROOPTIONS
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 9 , 99 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
-        Text [ de ] = "Hilfe-Dateiname" ;
         Text [ en-US ] = "Help file name" ;
-        Text [ x-comment ] = " ";
     };
     Edit RID_ED_HELPNAME
     {
@@ -132,7 +123,6 @@ ModalDialog RID_MACROOPTIONS
         Size = MAP_APPFONT ( 120 , 12 ) ;
         TabStop = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 
 
