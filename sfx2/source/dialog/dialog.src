@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:26:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:08:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,130 +65,93 @@ ImageList LOGO_IMAGELIST
 };
 String STR_RESET
 {
-    Text [ de ] = "~Zurück" ;
     Text [ en-US ] = "~Reset" ;
-    Text [ x-comment ] = " ";
 };
 String STR_APPLY
 {
-    Text [ de ] = "Anwenden";
     Text [ en-US ] = "Apply";
 };
 String STR_INTERNET
 {
-    Text [ de ] = " (Internet)" ;
     Text [ en-US ] = "(Internet)" ;
-    Text [ x-comment ] = " ";
 };
 String STR_BASEFMT
 {
-    Text [ de ] = "~Basisformat" ;
     Text [ en-US ] = "Base format" ;
-    Text [ x-comment ] = " ";
 };
 CheckBox CB_USE_PASSWD
 {
     HelpId = HID_FILEDLG_USE_PASSWD ;
-    Text [ de ] = "~Passwort" ;
     Text [ en-US ] = "~Password" ;
-    Text [ x-comment ] = " ";
 };
 CheckBox CB_READ_ONLY
 {
     HelpId = HID_FILEDLG_READ_ONLY ;
-    Text [ de ] = "Nu~r lesen" ;
     Text [ en-US ] = "~Read-only" ;
-    Text [ x-comment ] = " ";
 };
 PushButton CB_FILE
 {
     HelpId = HID_FILEDLG_FILE ;
-    Text [ de ] = "~Dateisystem" ;
     Text [ en-US ] = "~File System" ;
-    Text [ x-comment ] = " ";
 };
 PushButton CB_URL
 {
     HelpId = HID_FILEDLG_URL ;
-    Text [ de ] = "~Internet" ;
     Text [ en-US ] = "Int~ernet" ;
-    Text [ x-comment ] = " ";
 };
 PushButton BTN_MANAGER
 {
     HelpId = HID_FILEDLG_MANAGER ;
-    Text [ de ] = "~Manager..." ;
     Text [ en-US ] = "~Manager..." ;
-    Text [ x-comment ] = " ";
 };
 PushButton BTN_STANDARD
 {
     HelpId = HID_FILEDLG_STANDARD ;
-    Text [ de ] = "Stan~dard" ;
     Text [ en-US ] = "~Home" ;
-    Text [ x-comment ] = " ";
 };
 String STR_FILEDLG_INSERT
 {
-    Text [ de ] = "Datei einfügen" ;
     Text [ en-US ] = "Insert File" ;
-    Text [ x-comment ] = " ";
 };
 String STR_TABPAGE_MANAGESTYLES
 {
-    Text [ de ] = "Verwalten" ;
     Text [ en-US ] = "Organizer" ;
-    Text [ x-comment ] = " ";
 };
 InfoBox MSG_TABPAGE_INVALIDNAME
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Der Name wird bereits für eine Vorlage verwendet." ;
     Message [ en-US ] = "This name is already in use." ;
-    Message [ x-comment ] = " ";
 };
 InfoBox MSG_TABPAGE_INVALIDSTYLE
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Diese Vorlage existiert nicht." ;
     Message [ en-US ] = "This Style does not exist." ;
-    Message [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
 InfoBox MSG_TABPAGE_INVALIDPARENT
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Diese Vorlage kann nicht als Basisvorlage verwendet werden,\nda eine Rekursion entstehen würde." ;
     Message [ en-US ] = "This Style cannot be used as a base Style,\nbecause it would result in a recursive reference." ;
-    Message [ x-comment ] = " ";
 };
 InfoBox MSG_POOL_STYLE_NAME
 {
-    Message [ de ] = "Der Name ist bereits Name einer Standardvorlage.\nBitte einen anderen Namen vergeben." ;
     Message [ en-US ] = "Name already exists as a default Style.\nPlease choose another name." ;
-    Message [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
 QueryBox MSG_OVERWRITE_STYLE
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Vorlage existiert bereits. Überschreiben?" ;
     Message [ en-US ] = "Style already exists. Overwrite?" ;
-    Message [ x-comment ] = " ";
 };
 String STR_DELETE_STYLE
 {
-    Text [ de ] = "Wollen Sie die Vorlage $1 wirklich löschen?" ;
     Text [ en-US ] = "Do you really want to delete Style $1?" ;
-    Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
 String STR_DELETE_STYLE_USED
 {
-    Text [ de ] = "Sie löschen eine benutzte Vorlage!\n" ;
     Text [ en-US ] = "You are deleting an applied Style!\n" ;
-    Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
 };
 Image BMP_COLLAPSED
 {
@@ -227,38 +190,29 @@ Menu MN_CONTEXT_TEMPLDLG
         MenuItem
         {
             Identifier = ID_NEW ;
-            Text [ de ] = "Neu..." ;
             Text [ en-US ] = "New..." ;
             HelpId = HID_STYLIST_NEW ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_EDIT ;
-            Text [ de ] = "Ändern..." ;
             Text [ en-US ] = "Modify..." ;
             HelpId = HID_STYLIST_EDIT ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ID_DELETE ;
-            Text [ de ] = "Löschen..." ;
             Text [ en-US ] = "Delete..." ;
             HelpId = HID_STYLIST_DELETE ;
-            Text [ x-comment ] = " ";
         };
     };
 };
 String STR_BASICMACROS
 {
-    Text [ de ] = "BASIC-Makros" ;
     Text [ en-US ] = "BASIC Macros" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DLG_MACROS
 {
-  Text [ de ] = "%PRODUCTNAME Makros" ;
   Text [ en-US ] = "%PRODUCTNAME Macros" ;
 };
 
@@ -266,9 +220,7 @@ InfoBox MSG_LAYOUT_NOT_LOADING
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Dokument wird ohne Layout geladen." ;
     Message [ en-US ] = "Loading document without layout." ;
-    Message [ x-comment ] = " ";
 };
 Accelerator ACC_LAYOUT_NOT_LOADING
 {
@@ -288,23 +240,18 @@ Accelerator ACC_LAYOUT_NOT_LOADING
  //------------------------------------------------------------------------
 ErrorBox MSG_ERR_CANT_EDIT_OLD_FORMAT
 {
-    Message [ de ] = "Die Dokument-Info von Dokumenten in diesem\nDateiformat kann nicht bearbeitet werden." ;
     Message [ en-US ] = "Cannot edit document info for documents\n in this file format." ;
-    Message [ x-comment ] = " ";
 };
  //------------------------------------------------------------------------
 ErrorBox MSG_ERR_CANT_EDIT_OPEN_DOCS
 {
-    Message [ de ] = "Die Dokument-Info von in Bearbeitung befindlichen\nDokumenten kann nicht vom Dokumentmanager bearbeitet werden." ;
     Message [ en-US ] = "Document info of documents\n being currently edited cannot be modified from within the document manager." ;
-    Message [ x-comment ] = " ";
 };
 ModalDialog RID_URLOPEN
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 204 , 44 ) ;
-    Text [ de ] = "URL eingeben" ;
     Moveable = TRUE ;
     Text [ en-US ] = "Enter URL" ;
     Moveable = TRUE ;
@@ -329,7 +276,6 @@ ModalDialog RID_URLOPEN
         TabStop = TRUE ;
         Left = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
 Menu RID_AUTOHIDE
 {
@@ -339,23 +285,17 @@ Menu RID_AUTOHIDE
         {
             Identifier = SID_AUTOHIDE ;
             HelpID = SID_AUTOHIDE ;
-            Text [ de ] = "Verstecken" ;
             Text [ en-US ] = "Hide" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
 String RID_AUTOHIDE
 {
-    Text [ de ] = "Nicht verstecken" ;
     Text [ en-US ] = "Don't Hide" ;
-    Text [ x-comment ] = " ";
 };
 String SID_NAVIGATOR
 {
-    Text [ de ] = "Navigator" ;
     Text [ en-US ] = "Navigator";
-    Text [ x-comment ] = " ";
 };
 String STR_BASICNAME
 {
@@ -366,16 +306,12 @@ ErrorBox MSG_ERROR_WRONG_CONFIRM
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Fehlerhafte Bestätigung des Passwortes" ;
     Message [ en-US ] = "Faulty password confirmation";
-    Message [ x-comment ] = " ";
 };
 
 String STR_GROUP_STYLES
 {
-    Text [ de ] = "Formatvorlagen" ;
     Text [ en-US ] = "Styles" ;
-    Text [ x-comment ] = "name group of styles, which are shown inside navigator";
 };
 
 String STR_PDF_EXPORT_SEND
