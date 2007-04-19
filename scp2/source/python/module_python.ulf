@@ -4,9 +4,9 @@
  *
  *  $RCSfile: module_python.ulf,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-01-10 15:34:26 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:33:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,8 +35,6 @@
 
 [STR_NAME_MODULE_OPTIONAL_PYTHON]
 en-US = "Python-UNO Bridge"
-de = "Python-UNO Sprachanbindung"
 
 [STR_DESC_MODULE_OPTIONAL_PYTHON]
 en-US = "Adds the ability to automate %PRODUCTNAME with the python scripting language. See http://udk.openoffice.org/python/python-bridge.html for a complete documentation."
-de = "Ermöglicht es, %PRODUCTNAME mit der Skriptsprache Python zu automatisieren. Die komplette Dokumentation finden Sie auf http://udk.openoffice.org/python/python-bridge.html."
