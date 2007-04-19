@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:34:12 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,21 +46,17 @@ TabPage RID_SVXPAGE_BORDER
     Size = MAP_APPFONT ( 260 , 185 ) ;
     Helpid = HID_BORDER ;
     Hide = TRUE ;
-    Text [ de ] = "Umrandung" ;
     Text [ en-US ] = "Borders" ;
     FixedLine FL_BORDER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text [ de ] = "Linienanordnung" ;
         Text [ en-US ] = "Line arrangement" ;
-        Text [ x-comment ] = "EM6A; EM6April01: Found in Text doc under Format - Page - Borders tab.";
     };
     FixedText FT_DEFAULT
     {
         Pos = MAP_APPFONT ( 12, 14) ;
         Size = MAP_APPFONT ( 64, 8) ;
-        Text [ de ] = "~Standard" ;
         Text [ en-US ] = "~Default";
     };
     Control WIN_PRESETS
@@ -75,7 +71,6 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT (12 , 41) ;
         Size = MAP_APPFONT ( 64, 8) ;
-        Text [ de ] = "~Benutzerdefiniert" ;
         Text [ en-US ] = "~User-defined";
     };
     Control WIN_FRAMESEL
@@ -96,15 +91,12 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 82 , 3 ) ;
         Size = MAP_APPFONT ( 83 , 8 ) ;
-        Text [ de ] = "Linie" ;
         Text [ en-US ] = "Line" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_STYLE
     {
         Pos = MAP_APPFONT ( 88, 14) ;
         Size = MAP_APPFONT ( 77, 8) ;
-        Text [ de ] = "S~til" ;
         Text [ en-US ] = "St~yle";
     };
     ListBox LB_LINESTYLE
@@ -117,7 +109,6 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 88, 95 ) ;
         Size = MAP_APPFONT ( 77, 8 ) ;
-        Text [ de ] = "~Farbe" ;
         Text [ en-US ] = "~Color";
     };
     ListBox LB_LINECOLOR
@@ -138,9 +129,7 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 177 , 16 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_LEFT
     {
@@ -161,9 +150,7 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 177 , 32 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text [ de ] = "R~echts" ;
         Text [ en-US ] = "Right";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_RIGHT
     {
@@ -184,9 +171,7 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 177 , 48 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text [ de ] = "~Oben" ;
         Text [ en-US ] = "~Top";
-        Text [ x-comment ] = " ";
     };
     MetricField MF_TOP
     {
@@ -207,7 +192,6 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 177 , 64 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text [ de ] = "~Unten" ;
         Text [ en-US ] = "~Bottom";
     };
     MetricField MF_BOTTOM
@@ -229,26 +213,20 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 177 , 78 ) ;
         Size = MAP_APPFONT ( 74 , 10 ) ;
-        Text [ de ] = "S~ynchronisieren" ;
         Text [ en-US ] = "Synchronize";
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_DISTANCE
     {
         Pos = MAP_APPFONT ( 171 , 3 ) ;
         Size = MAP_APPFONT ( 83 , 8 ) ;
-        Text [ de ] = "Abstand zum Inhalt" ;
         Text [ en-US ] = "Spacing to contents";
-        Text [ x-comment ] = " ";
     };
 
     FixedText FT_SHADOWPOS
     {
         Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 74 , 8 ) ;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "~Position" ;
-        Text [ x-comment ] = " ";
     };
     Control WIN_SHADOWS
     {
@@ -262,7 +240,6 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 88 , 133 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "~Distanz" ;
         Text [ en-US ] = "Distan~ce";
     };
     MetricField ED_SHADOWSIZE
@@ -284,9 +261,7 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 177 , 133 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "Far~be" ;
         Text [ en-US ] = "C~olor" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_SHADOWCOLOR
     {
@@ -300,16 +275,13 @@ TabPage RID_SVXPAGE_BORDER
     {
         Pos = MAP_APPFONT ( 6 , 123 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schatten" ;
         Text [ en-US ] = "Shadow style" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_PROPERTIES
     {
         Pos = MAP_APPFONT ( 6 , 162 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties" ;
     };
     CheckBox  CB_MERGEWITHNEXT
@@ -317,7 +289,6 @@ TabPage RID_SVXPAGE_BORDER
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Mit dem nächsten Absatz verschmelzen" ;
         Text [ en-US ] = "~Merge with next paragraph" ;
     };
     CheckBox  CB_MERGEADJACENTBORDERS
@@ -325,7 +296,6 @@ TabPage RID_SVXPAGE_BORDER
         Pos = MAP_APPFONT ( 12 , 173 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
         Hide = TRUE;
-        Text [ de ] = "Be~nachbarte Linienstile zusammenführen" ;
         Text [ en-US ] = "~Merge adjacent line styles" ;
     };
 
@@ -396,87 +366,70 @@ TabPage RID_SVXPAGE_BORDER
 
 String RID_SVXSTR_TABLE_PRESET_NONE
 {
-    Text [ de ] = "Keine Umrandung zeichnen" ;
     Text [ en-US ] = "Set No Borders" ;
 };
 String RID_SVXSTR_TABLE_PRESET_ONLYOUTER
 {
-    Text [ de ] = "Nur äußere Umrandung zeichnen" ;
     Text [ en-US ] = "Set Outer Border Only" ;
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERHORI
 {
-    Text [ de ] = "Äußere Umrandung und horizontale Linien zeichnen" ;
     Text [ en-US ] = "Set Outer Border and Horizontal Lines" ;
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERALL
 {
-    Text [ de ] = "Äußere Umrandung und alle inneren Linien zeichnen" ;
     Text [ en-US ] = "Set Outer Border and All Inner Lines" ;
 };
 String RID_SVXSTR_TABLE_PRESET_OUTERINNER
 {
-    Text [ de ] = "Äußere Umrandung zeichnen, ohne innere Linien zu verändern" ;
     Text [ en-US ] = "Set Outer Border Without Changing Inner Lines" ;
 };
 String RID_SVXSTR_PARA_PRESET_DIAGONAL
 {
-    Text [ de ] = "Nur diagonale Linien zeichnen" ;
     Text [ en-US ] = "Set Diagonal Lines Only" ;
 };
 String RID_SVXSTR_PARA_PRESET_ALL
 {
-    Text [ de ] = "Komplette Umrandung zeichnen" ;
     Text [ en-US ] = "Set All Four Borders" ;
 };
 String RID_SVXSTR_PARA_PRESET_LEFTRIGHT
 {
-    Text [ de ] = "Nur linken und rechten Rand zeichnen" ;
     Text [ en-US ] = "Set Left and Right Borders Only" ;
 };
 String RID_SVXSTR_PARA_PRESET_TOPBOTTOM
 {
-    Text [ de ] = "Nur oberen und unteren Rand zeichnen" ;
     Text [ en-US ] = "Set Top and Bottom Borders Only" ;
 };
 String RID_SVXSTR_PARA_PRESET_ONLYLEFT
 {
-    Text [ de ] = "Nur linken Rand zeichnen" ;
     Text [ en-US ] = "Set Left Border Only" ;
 };
 String RID_SVXSTR_HOR_PRESET_ONLYHOR
 {
-    Text [ de ] = "Oberen und unteren Rand und alle inneren Linien zeichnen";
     Text [ en-US ] = "Set Top and Bottom Borders, and All Inner Lines";
 };
 String RID_SVXSTR_VER_PRESET_ONLYVER
 {
-    Text [ de ] = "Linken und rechten Rand und alle inneren Linien zeichnen";
     Text [ en-US ] = "Set Left and Right Borders, and All Inner Lines";
 };
 String RID_SVXSTR_SHADOW_STYLE_NONE
 {
-    Text [ de ] = "Kein Schatten" ;
     Text [ en-US ] = "No Shadow" ;
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMRIGHT
 {
-    Text [ de ] = "Schatten nach rechts unten werfen" ;
     Text [ en-US ] = "Cast Shadow to Bottom Right" ;
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPRIGHT
 {
-    Text [ de ] = "Schatten nach rechts oben werfen" ;
     Text [ en-US ] = "Cast Shadow to Top Right" ;
 };
 String RID_SVXSTR_SHADOW_STYLE_BOTTOMLEFT
 {
-    Text [ de ] = "Schatten nach links unten werfen" ;
     Text [ en-US ] = "Cast Shadow to Bottom Left" ;
 };
 String RID_SVXSTR_SHADOW_STYLE_TOPLEFT
 {
-    Text [ de ] = "Schatten nach links oben werfen" ;
     Text [ en-US ] = "Cast Shadow to Top Left" ;
 };
 
