@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:05:27 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:12:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,15 +44,12 @@ TabPage TP_COLUMN
     HelpID = HID_COLUMN ;
     Hide = TRUE;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Spalten" ;
     Text [ en-US ] = "Columns" ;
     FixedText FT_NUMBER
     {
         Pos = MAP_APPFONT ( 12 , 19 ) ;
         Size = MAP_APPFONT ( 28 , 8 ) ;
-        Text [ de ] = "~Spalten" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Columns";
     };
     NumericField ED_NUMBER
@@ -81,7 +78,6 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 7 , 46 ) ;
         Size = MAP_APPFONT ( 163 , 10 ) ;
-        Text [ de ] = "~Inhalt über alle Spalten gleichmäßig verteilen" ;
         Hide = TRUE;
         Text [ en-US ] = "Evenly distribute contents ~to all columns";
     };
@@ -89,15 +85,12 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 164 , 8 ) ;
-        Text [ de ] = "Vorgaben" ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Settings";
     };
     FixedText FT_COLUMN
     {
         Pos = MAP_APPFONT ( 12 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Spalte" ;
         Left = TRUE ;
         Text [ en-US ] = "Column";
     };
@@ -147,10 +140,8 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 12 , 85 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Breite" ;
         Left = TRUE ;
         Text [ en-US ] = "Width" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_1
     {
@@ -210,10 +201,8 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 12 , 101 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "Abstand" ;
         Left = TRUE ;
         Text [ en-US ] = "Spacing" ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_DIST1
     {
@@ -255,17 +244,13 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 87 , 115 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "A~utomatische Breite" ;
         Text [ en-US ] = "Auto~Width" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_LAYOUT
     {
         Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Breite und Abstand" ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "Width and spacing";
     };
 
@@ -273,10 +258,8 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 12 , 140 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "A~rt" ;
         Text [ en-US ] = "~Line" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_STYLE
     {
@@ -284,27 +267,17 @@ TabPage TP_COLUMN
         Size = MAP_APPFONT ( 60 , 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Keine" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "None" ; Default ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-             < " " ; Default ; > ;
         };
     };
     FixedText FT_HEIGHT
     {
         Pos = MAP_APPFONT ( 12 , 156 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "Höh~e" ;
         Text [ en-US ] = "H~eight" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_HEIGHT
     {
@@ -327,10 +300,8 @@ TabPage TP_COLUMN
     {
         Pos = MAP_APPFONT ( 12 , 172 ) ;
         Size = MAP_APPFONT ( 35 , 8 ) ;
-        Text [ de ] = "~Position" ;
         Left = TRUE ;
         Text [ en-US ] = "~Position" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_POSITION
     {
@@ -338,32 +309,18 @@ TabPage TP_COLUMN
         Size = MAP_APPFONT ( 60 , 40 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Oben" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Unten" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Top" ; Default ; > ;
             < "Centered" ; Default ; > ;
             < "Bottom" ; Default ; > ;
         };
-        StringList [ x-comment ] =
-        {
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-            < " " ; Default ; > ;
-        };
     };
     FixedLine FL_LINETYPE
     {
         Pos = MAP_APPFONT ( 6 , 127 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Trennlinie" ;
         Text [ en-US ] = "Separator line" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine  FL_VERT
     {
@@ -377,7 +334,6 @@ TabPage TP_COLUMN
         Pos = MAP_APPFONT ( 121 , 127 ) ;
         Size = MAP_APPFONT ( 133 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText   FT_TEXTDIRECTION
@@ -385,7 +341,6 @@ TabPage TP_COLUMN
         Pos = MAP_APPFONT ( 127 , 138 ) ;
         Size = MAP_APPFONT ( 127 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "~Textfluss" ;
         Text [ en-US ] = "Text ~direction";
     };
     ListBox     LB_TEXTDIRECTION
@@ -395,26 +350,13 @@ TabPage TP_COLUMN
         Size = MAP_APPFONT ( 127 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
-        StringList [ de ] =
-        {
-            < "Links-nach-rechts" ; 0; > ;
-            < "Rechts-nach-links" ; 1; > ;
-            < "Einstellungen des übergeordneten Objektes verwenden" ; 4; > ;
-        };
     StringList [ en-US ] =
     {
          < "Left-to-right" ; 0; > ;
         < "Right-to-left" ; 1; > ;
         < "Use superordinate object settings" ; 4; > ;
     };
-    StringList [ x-comment ] =
-    {
-         < "; Link; Links nach rechts" ; 0; > ;
-        < "; Rech; Rechts nach links" ; 1; > ;
-        < "; Eins; Einstellungen des �bergeordneten Objektes verwenden" ; 4; > ;
     };
-    };
-    Text [ x-comment ] = " ";
 };
 
 ModalDialog DLG_COLUMN
@@ -423,7 +365,6 @@ ModalDialog DLG_COLUMN
     Hide = TRUE;
     Moveable = TRUE;
     Size = MAP_APPFONT ( 316 , 135 ) ;
-    Text [ de ] = "Spalten" ;
     OKButton PB_OK
     {
         DefButton = TRUE ;
@@ -447,10 +388,8 @@ ModalDialog DLG_COLUMN
     {
         Pos = MAP_APPFONT ( 260 , 63 ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Anwenden auf" ;
         Left = TRUE ;
         Text [ en-US ] = "~Apply to";
-        Text [ x-comment ] = " ";
     };
     ListBox LB_APPLY_TO
     {
@@ -458,22 +397,6 @@ ModalDialog DLG_COLUMN
         Size = MAP_APPFONT ( 50 , 66 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Selektion" ;             LISTBOX_SELECTION; > ;
-            < "Aktuellen Bereich" ;     LISTBOX_SECTION     ; > ;
-            < "Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
-            < "Rahmen" ;                LISTBOX_FRAME       ; > ;
-            < "Seitenvorlage: " ;       LISTBOX_PAGE        ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-            < "; Sele; Selektion" ;             LISTBOX_SELECTION; > ;
-            < " " ;     LISTBOX_SECTION     ; > ;
-            < "; Sele; Selektierte Bereiche" ;  LISTBOX_SECTIONS    ; > ;
-            < "; Rahm; Rahmen" ;                LISTBOX_FRAME       ; > ;
-            < "; Seit; Seitenvorlage:" ;        LISTBOX_PAGE        ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Selection" ;             LISTBOX_SELECTION; > ;
@@ -484,7 +407,6 @@ ModalDialog DLG_COLUMN
         };
     };
     Text [ en-US ] = "Columns";
-    Text [ x-comment ] = " ";
 };
 
 
