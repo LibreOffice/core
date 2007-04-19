@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stbctrls.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-11 09:13:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:39:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,60 +42,46 @@
 String RID_SVXSTR_INSERT_TEXT
 {
      // 'Einf"ugen' bzw. 'Insert' abgek"urzt auf h"ochstens 5 Zeichen
-    Text [ de ] = "EINFG" ;
     Text [ en-US ] = "INSRT" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_OVERWRITE_TEXT
 {
      // '"Uberschreiben' bzw. 'Overwrite' abgek"urzt auf h"ochstens 5 Zeichen
-    Text [ de ] = "ÜBER" ;
     Text [ en-US ] = "OVER" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_SELMODE_STD
 {
      // 'Standard' abgek"urzt auf h"ochstens 3 Zeichen
-    Text [ de ] = "STD" ;
     Text [ en-US ] = "STD" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_SELMODE_ER
 {
      // 'Erweitert' bzw. 'Extended' abgek"urzt auf h"ochstens 3 Zeichen
-    Text [ de ] = "ER" ;
     Text [ en-US ] = "EXT" ;
-    Text [ x-comment ] = " ";
 };
 String RID_SVXSTR_SELMODE_ERG
 {
      // 'Erg"anzend' bzw. 'Added' abgek"urzt auf h"ochstens 3 Zeichen
-    Text [ de ] = "ERG" ;
     Text [ en-US ] = "ADD" ;
-    Text [ x-comment ] = " ";
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK
 {
-    Text [ de ] = "Digitale Signatur: Die Dokumentsignatur ist OK.";
     Text [ en-US ] = "Digital Signature: The document signature is OK.";
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK_NO_VERIFY
 {
-    Text [ de ] = "Digitale Signatur: Die Dokumentsignatur ist OK, aber die Zertifikate konnten nicht verifiziert werden.";
     Text [ en-US ] = "Digital Signature: The document signature is OK, but the certificates could not be validated.";
 };
 
 String RID_SVXSTR_XMLSEC_SIG_NOT_OK
 {
-    Text [ de ] = "Digitale Signatur: Die Dokumentsignatur stimmt nicht mit dem Dokumentinhalt überein. Wir empfehlen Ihnen dringend, diesem Dokument nicht zu trauen.";
     Text [ en-US ] = "Digital Signature: The document signature does not match the document content. We strongly recommend you to do not trust this document.";
 };
 
 String RID_SVXSTR_XMLSEC_NO_SIG
 {
-    Text [ de ] = "Digital Signatur: Das Dokument ist nicht signiert.";
     Text [ en-US ] = "Digital Signature: The document is not signed.";
 };
 
@@ -138,25 +124,19 @@ Menu RID_SVXMNU_ZOOM
         {
             Identifier = ZOOM_OPTIMAL ;
             HelpId = HID_MNU_ZOOM_OPTIMAL ;
-            Text [ de ] = "Optimal" ;
             Text [ en-US ] = "Optimal" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ZOOM_PAGE_WIDTH ;
             HelpId = HID_MNU_ZOOM_PAGE_WIDTH ;
-            Text [ de ] = "Seitenbreite" ;
             Text [ en-US ] = "Page Width" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = ZOOM_WHOLE_PAGE ;
             HelpId = HID_MNU_ZOOM_WHOLE_PAGE ;
-            Text [ de ] = "Ganze Seite" ;
             Text [ en-US ] = "Entire Page" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -169,57 +149,43 @@ Menu RID_SVXMNU_PSZ_FUNC
         {
             Identifier = PSZ_FUNC_AVG ;
             HelpId = HID_MNU_FUNC_AVG ;
-            Text [ de ] = "Mittelwert" ;
             Text [ en-US ] = "Average" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = PSZ_FUNC_COUNT2 ;
             HelpId = HID_MNU_FUNC_COUNT2 ;
-            Text [ de ] = "Anzahl2" ;
             Text [ en-US ] = "CountA" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = PSZ_FUNC_COUNT ;
             HelpId = HID_MNU_FUNC_COUNT ;
-            Text [ de ] = "Anzahl" ;
             Text [ en-US ] = "Count" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = PSZ_FUNC_MAX ;
             HelpId = HID_MNU_FUNC_MAX ;
-            Text [ de ] = "Maximum" ;
             Text [ en-US ] = "Maximum" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = PSZ_FUNC_MIN ;
             HelpId = HID_MNU_FUNC_MIN ;
-            Text [ de ] = "Minimum" ;
             Text [ en-US ] = "Minimum" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = PSZ_FUNC_SUM ;
             HelpId = HID_MNU_FUNC_SUM ;
-            Text [ de ] = "Summe" ;
             Text [ en-US ] = "Sum" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = PSZ_FUNC_NONE ;
             HelpId = HID_MNU_FUNC_NONE ;
-            Text [ de ] = "Keine" ;
             Text [ en-US ] = "None" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -231,9 +197,7 @@ Menu RID_SVXMNU_XMLSECSTATBAR
         {
             Identifier = XMLSEC_CALL ;
             HelpId = HID_XMLSEC_CALL ;
-            Text [ de ] = "Digitale Signaturen..." ;
             Text [ en-US ] = "Digital Signatures..." ;
-            Text [ x-comment ] = " ";
         };
     };
 };
