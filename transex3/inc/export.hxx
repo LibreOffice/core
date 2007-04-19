@@ -4,9 +4,9 @@
  *
  *  $RCSfile: export.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:51:06 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 15:17:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ typedef std::hash_map<ByteString , PFormEntrys* , hashByteString,equalByteString
 typedef std::hash_map<ByteString , MergeData* , hashByteString,equalByteString>
                                 MergeDataHashMap;
 
-#define GERMAN_LIST_LINE_INDEX ByteString("de")
+#define SOURCE_LANGUAGE ByteString("en-US")
 #define LIST_REFID  "LIST_REFID"
 
 typedef ByteStringHashMap ExportListEntry;
@@ -116,12 +116,12 @@ DECLARE_LIST( ExportListBase, ExportListEntry * )
 class ExportList : public ExportListBase
 {
 private:
-    ULONG nGermanEntryCount;
+    ULONG nSourceLanguageListEntryCount;
 
 public:
-    ExportList() : ExportListBase() { nGermanEntryCount = 0; }
-    ULONG GetGermanEntryCount() { return nGermanEntryCount; }
-    void NewGermanEntry() { nGermanEntryCount++; }
+    ExportList() : ExportListBase() { nSourceLanguageListEntryCount = 0; }
+    ULONG GetSourceLanguageListEntryCount() { return nSourceLanguageListEntryCount; }
+    void NewSourceLanguageListEntry() { nSourceLanguageListEntryCount++; }
 };
 
 #define REFID_NONE 0xFFFF
@@ -351,8 +351,9 @@ public:
     static const char* GetEnv( const char *pVar );
     static int getCurrentDirectory( rtl::OUString& base_fqurl , rtl::OUString& base );
 
+    static bool isSourceLanguage( const ByteString &sLanguage );
     static bool isAllowed( const ByteString &sLanguage );
-    static bool isMergingGermanAllowed( const ByteString& rPrj );
+    //static bool isMergingGermanAllowed( const ByteString& rPrj );
 
     static bool LanguageAllowed( const ByteString &nLanguage );
     static void Languages( std::vector<ByteString>::const_iterator& begin , std::vector<ByteString>::const_iterator& end );
