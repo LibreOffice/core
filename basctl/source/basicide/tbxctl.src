@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:21:02 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:47:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,15 +43,11 @@ FloatingWindow RID_TBXCONTROLS
     Hide = TRUE ;
     SVLook = TRUE ;
     HelpId = HID_BASICIDE_CONTROLS ;
-    Text [ de ] = "Kontrollfelder" ;
     Text [ en-US ] = "Controls" ;
     String RID_TOOLBOX
     {
-        Text [ de ] = "Kontrollfelder" ;
         Text [ en-US ] = "Controls" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 ToolBox RID_TOOLBOX
 {
@@ -65,67 +61,54 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_PUSHBUTTON ;
             Identifier = SID_INSERT_PUSHBUTTON ;
             RadioCheck = TRUE ;
-            Text [ de ] = "SchaltflÃ¤che" ;
             Text [ en-US ] = "Button" ;
             /* ### ACHTUNG: Neuer Text in Resource? CommandButton einfügen : CommandButton einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_CHECKBOX ;
             Identifier = SID_INSERT_CHECKBOX ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Markierfeld" ;
             Text [ en-US ] = "Check Box" ;
             /* ### ACHTUNG: Neuer Text in Resource? CheckBox einfügen : CheckBox einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_FIXEDTEXT ;
             Identifier = SID_INSERT_FIXEDTEXT ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Beschriftungsfeld" ;
             Text [ en-US ] = "Label field" ;
             /* ### ACHTUNG: Neuer Text in Resource? Label einfügen : Label einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_LISTBOX ;
             Identifier = SID_INSERT_LISTBOX ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Listenfeld" ;
             Text [ en-US ] = "List Box" ;
             /* ### ACHTUNG: Neuer Text in Resource? ListBox einfügen : ListBox einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_HSCROLLBAR ;
             Identifier = SID_INSERT_HSCROLLBAR ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Horizontale Bildlaufleiste" ;
             Text [ en-US ] = "Horizontal Scroll Bar" ;
             /* ### ACHTUNG: Neuer Text in Resource? Horizontale ScrollBar einfügen : Horizontale ScrollBar einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_GROUPBOX ;
             Identifier = SID_INSERT_GROUPBOX ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Gruppierungsrahmen" ;
             Text [ en-US ] = "Group Box" ;
             /* ### ACHTUNG: Neuer Text in Resource? GroupBox einfügen : GroupBox einf³gen */
-            Text [ x-comment ] = "; ; German should be \"Rahmen\"";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_HFIXEDLINE ;
             Identifier = SID_INSERT_HFIXEDLINE ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Horizontale Linie" ;
             Text [ en-US ] = "Horizontal Line" ;
         };
         ToolBoxItem
@@ -133,7 +116,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_DATEFIELD ;
             Identifier = SID_INSERT_DATEFIELD ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Datumsfeld" ;
             Text [ en-US ] = "Date Field";
         };
         ToolBoxItem
@@ -141,7 +123,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_NUMERICFIELD ;
             Identifier = SID_INSERT_NUMERICFIELD ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Numerisches Feld" ;
             Text [ en-US ] = "Numeric Field";
         };
         ToolBoxItem
@@ -149,7 +130,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_FORMATTEDFIELD ;
             Identifier = SID_INSERT_FORMATTEDFIELD ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Formatiertes Feld" ;
             Text [ en-US ] = "Formatted Field";
         };
         ToolBoxItem
@@ -157,7 +137,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_FILECONTROL ;
             Identifier = SID_INSERT_FILECONTROL ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Dateiauswahl" ;
             Text [ en-US ] = "File Selection";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
@@ -165,9 +144,7 @@ ToolBox RID_TOOLBOX
         {
             HelpId = SID_SHOW_PROPERTYBROWSER ;
             Identifier = SID_SHOW_PROPERTYBROWSER ;
-            Text [ de ] = "Eigenschaften" ;
             Text [ en-US ] = "Properties" ;
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem { Type = TOOLBOXITEM_BREAK ; };
         ToolBoxItem
@@ -175,7 +152,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_IMAGECONTROL ;
             Identifier = SID_INSERT_IMAGECONTROL ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Grafisches Kontrollfeld" ;
             Text [ en-US ] = "Image Control" ;
         };
         ToolBoxItem
@@ -183,47 +159,38 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_RADIOBUTTON ;
             Identifier = SID_INSERT_RADIOBUTTON ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Optionsfeld" ;
             Text [ en-US ] = "Option Button" ;
             /* ### ACHTUNG: Neuer Text in Resource? RadioButton einfügen : RadioButton einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_EDIT ;
             Identifier = SID_INSERT_EDIT ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Textfeld" ;
             Text [ en-US ] = "Text Box" ;
             /* ### ACHTUNG: Neuer Text in Resource? Edit einfügen : Edit einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_COMBOBOX ;
             Identifier = SID_INSERT_COMBOBOX ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Kombinationsfeld" ;
             Text [ en-US ] = "Combo Box" ;
             /* ### ACHTUNG: Neuer Text in Resource? ComboBox einfügen : ComboBox einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_VSCROLLBAR ;
             Identifier = SID_INSERT_VSCROLLBAR ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Vertikale Bildlaufleiste" ;
             Text [ en-US ] = "Vertical Scroll Bar" ;
             /* ### ACHTUNG: Neuer Text in Resource? Vertikale ScrollBar einfügen : Vertikale ScrollBar einf³gen */
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             HelpId = SID_INSERT_PROGRESSBAR ;
             Identifier = SID_INSERT_PROGRESSBAR ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Fortschrittsbalken" ;
             Text [ en-US ] = "Progress Bar" ;
         };
         ToolBoxItem
@@ -231,7 +198,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_VFIXEDLINE ;
             Identifier = SID_INSERT_VFIXEDLINE ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Vertikale Linie" ;
             Text [ en-US ] = "Vertical Line" ;
         };
         ToolBoxItem
@@ -239,7 +205,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_TIMEFIELD ;
             Identifier = SID_INSERT_TIMEFIELD ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Zeitfeld" ;
             Text [ en-US ] = "Time Field";
         };
         ToolBoxItem
@@ -247,7 +212,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_CURRENCYFIELD ;
             Identifier = SID_INSERT_CURRENCYFIELD ;
             RadioCheck = TRUE ;
-            Text [ de ] = "WÃ¤hrungsfeld" ;
             Text [ en-US ] = "Currency Field";
         };
         ToolBoxItem
@@ -255,7 +219,6 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_PATTERNFIELD ;
             Identifier = SID_INSERT_PATTERNFIELD ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Maskiertes Feld" ;
             Text [ en-US ] = "Pattern Field";
         };
         ToolBoxItem
@@ -263,18 +226,14 @@ ToolBox RID_TOOLBOX
             HelpId = SID_INSERT_SELECT ;
             Identifier = SID_INSERT_SELECT ;
             RadioCheck = TRUE ;
-            Text [ de ] = "Auswahl" ;
             Text [ en-US ] = "Select" ;
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
         {
             HelpId = SID_DIALOG_TESTMODE ;
             Identifier = SID_DIALOG_TESTMODE ;
-            Text [ de ] = "Testmodus aktivieren" ;
             Text [ en-US ] = "Activate Test Mode" ;
-            Text [ x-comment ] = " ";
         };
     };
 };
