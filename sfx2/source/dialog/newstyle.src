@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newstyle.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:25:42 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 17:11:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,17 +43,13 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 177 , 112 ) ;
-    Text [ de ] = "Vorlage erzeugen" ;
     Text [ en-US ] = "Create Style" ;
-    Text [ x-comment ] = " ";
     Moveable = TRUE ;
     FixedLine FL_COL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 109 , 8 ) ;
-        Text [ de ] = "Vorlagenname" ;
         Text [ en-US ] = "Style name" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox LB_COL
     {
@@ -79,9 +75,7 @@ ModalDialog DLG_NEW_STYLE_BY_EXAMPLE
     {
         Buttons = WB_YES_NO ;
         DefButton = WB_DEF_NO ;
-        Message [ de ] = "Vorlage existiert bereits. Überschreiben?" ;
         Message [ en-US ] = "Style already exists. Overwrite?" ;
-        Message [ x-comment ] = " ";
     };
 };
 
