@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paragrph.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:46:09 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:17:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,7 +42,6 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
 {
     HelpId = HID_FORMAT_PARAGRAPH_STD ;
     Hide = TRUE ;
-    Text [ de ] = "Einzüge und Abstände" ;
     Text [ en-US ] = "Indents and Spacing" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedText FT_LEFTINDENT
@@ -50,7 +49,6 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Vor Text" ;
         Text [ en-US ] = "Before text" ;
     };
     MetricField ED_LEFTINDENT
@@ -73,7 +71,6 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "H~inter Text" ;
         Text [ en-US ] = "After text" ;
     };
     MetricField ED_RIGHTINDENT
@@ -95,10 +92,8 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Erste Ze~ile" ;
         Text [ en-US ] = "~First line" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_FLINEINDENT
     {
@@ -122,24 +117,19 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 61 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
         Hide = TRUE ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "~Automatic" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_INDENT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Einzug" ;
         Text [ en-US ] = "Indent" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TOPDIST
     {
         Pos = MAP_APPFONT ( 12 , 90 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Über Absatz" ;
         Text [ en-US ] = "Ab~ove paragraph" ;
     };
     MetricField ED_TOPDIST
@@ -162,7 +152,6 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 104 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Unter Absatz" ;
         Text [ en-US ] = "Below paragraph" ;
     };
     MetricField ED_BOTTOMDIST
@@ -184,26 +173,13 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 6 , 77 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Abstand" ;
         Text [ en-US ] = "Spacing" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LINEDIST
     {
         Pos = MAP_APPFONT ( 12 , 133 ) ;
         Size = MAP_APPFONT ( 55 , 72 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Einzeilig" ; Default ; > ;
-            < "1,5zeilig" ; Default ; > ;
-            < "Zweizeilig" ; Default ; > ;
-            < "Proportional" ; Default ; > ;
-            < "Mindestens" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 6 : Durchschu�*/
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 6 : Durchschu�*/
-            < "Durchschuss" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Single" ; Default ; > ;
@@ -213,31 +189,18 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
             < "At least" ; Default ; > ;
             < "Leading" ; Default ; > ;
         };
-    StringList [ x-comment ] =
-    {
-            < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-        < " " ; Default ; > ;
-    };
     };
     String ST_LINEDIST_ABS
     {
-        Text [ de ] = "Fest" ;
         Text [ en-US ] = "Fixed" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LINEDIST
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 70 , 135 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
-        Text [ de ] = "vo~n" ;
         Text [ en-US ] = "of" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField ED_LINEDISTPERCENT
     {
@@ -279,9 +242,7 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Zeilenabstand" ;
         Text [ en-US ] = "Line spacing" ;
-        Text [ x-comment ] = " ";
     };
     Window WN_EXAMPLE
     {
@@ -293,45 +254,36 @@ TabPage RID_SVXPAGE_STD_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12 , 162 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "Berü~cksichtigen" ;
         Hide = TRUE ;
         Text [ en-US ] = "A~ctivate" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_REGISTER
     {
         Pos = MAP_APPFONT ( 6 , 151 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Registerhaltigkeit" ;
         Hide = TRUE ;
         Text [ en-US ] = "Register-true" ;
-        Text [ x-comment ] = " ";
     };
 
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_ALIGN_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
 {
     HelpId = HID_FORMAT_PARAGRAPH_ALIGN ;
     Hide = TRUE ;
-    Text [ de ] = "Ausrichtung" ;
     Text [ en-US ] = "Alignment" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_ALIGN
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Optionen" ;
         Text [ en-US ] = "Options" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_LEFTALIGN
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
-        Text [ de ] = "Lin~ks" ;
         Text [ en-US ] = "~Left" ;
         Group = TRUE ;
     };
@@ -339,43 +291,34 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
-        Text [ de ] = "Rech~ts" ;
         Text [ en-US ] = "Righ~t" ;
     };
     RadioButton BTN_CENTERALIGN
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
-        Text [ de ] = "Z~entriert" ;
         Text [ en-US ] = "~Center" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton BTN_JUSTIFYALIGN
     {
         Pos = MAP_APPFONT ( 12 , 56 ) ;
         Size = MAP_APPFONT ( 161 , 10 ) ;
-        Text [ de ] = "~Blocksatz" ;
         Text [ en-US ] = "Justified" ;
-        Text [ x-comment ] = " ";
     };
     String ST_LEFTALIGN_ASIAN
     {
-        Text [ de ] = "Lin~ks/Oben" ;
         Text [ en-US ] = "~Left/Top" ;
     };
     String ST_RIGHTALIGN_ASIAN
     {
-        Text [ de ] = "Rech~ts/Unten" ;
         Text [ en-US ] = "Righ~t/Bottom" ;
     };
     FixedText FT_LASTLINE
     {
         Pos = MAP_APPFONT ( 20 , 72 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "~Letzte Zeile" ;
         Hide = TRUE ;
         Text [ en-US ] = "~Last line" ;
-        Text [ x-comment ] = " ";
     };
     ListBox LB_LASTLINE
     {
@@ -383,13 +326,6 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Size = MAP_APPFONT ( 70 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
-        StringList [ de ] =
-        {
-            < "Standard" ; Default ; > ;
-            < "Links" ; Default ; > ;
-            < "Zentriert" ; Default ; > ;
-            < "Blocksatz" ; Default ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Default" ; Default ; > ;
@@ -403,16 +339,13 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Pos = MAP_APPFONT ( 20 , 86 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         Hide = TRUE ;
-        Text [ de ] = "Einzelnes ~Wort austreiben" ;
         Text [ en-US ] = "~Expand single word" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CB_SNAP
     {
         Pos = MAP_APPFONT ( 20 , 100 ) ;
         Size = MAP_APPFONT ( 153 , 10 ) ;
         Hide = TRUE ;
-        Text [ de ] = "Am Textraster fangen (wenn aktiviert)" ;
         Text [ en-US ] = "Snap to text grid (if active)";
     };
     Window WN_EXAMPLE
@@ -425,7 +358,6 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 6 , 122 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Text-an-Text" ;
         Hide = TRUE;
         Text [ en-US ] = "Text-to-text";
     };
@@ -434,7 +366,6 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 135 ) ;
         Size = MAP_APPFONT ( 90 , 8 ) ;
         Hide = TRUE;
-        Text [ de ] = "~Ausrichtung" ;
         Text [ en-US ] = "~Alignment";
     };
     ListBox LB_VERTALIGN
@@ -443,22 +374,6 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Size = MAP_APPFONT ( 70 , 50 ) ;
         DropDown = TRUE ;
         Hide = TRUE ;
-        StringList [ de ] =
-        {
-            < "Automatisch" ; > ;
-            < "Grundlinie" ; > ;
-            < "Oben" ; > ;
-            < "Zentriert" ; > ;
-            < "Unten" ; > ;
-        };
-        StringList [ x-comment ] =
-        {
-            < "; Automatisch" ; > ;
-            < "; Grundlinie" ; > ;
-            < "; Oben" ; > ;
-            < "; Zentriert" ; > ;
-            < "; Unten" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Automatic" ; > ;
@@ -473,7 +388,6 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Pos = MAP_APPFONT ( 6 , 154 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "Eigenschaften" ;
         Text [ en-US ] = "Properties";
     };
     FixedText   FT_TEXTDIRECTION
@@ -481,7 +395,6 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         Pos = MAP_APPFONT ( 12 , 167 ) ;
         Size = MAP_APPFONT ( 60 , 8 ) ;
         Hide = TRUE ;
-        Text [ de ] = "~Textfluss" ;
         Text [ en-US ] = "Text ~direction";
     };
     ListBox LB_TEXTDIRECTION
@@ -492,23 +405,19 @@ TabPage RID_SVXPAGE_ALIGN_PARAGRAPH
         DropDown = TRUE ;
         Hide = TRUE ;
     };
-    Text [ x-comment ] = " ";
 };
  // RID_SVXPAGE_EXT_PARAGRAPH ---------------------------------------------
 TabPage RID_SVXPAGE_EXT_PARAGRAPH
 {
     HelpId = HID_FORMAT_PARAGRAPH_EXT ;
     Hide = TRUE ;
-    Text [ de ] = "Textfluss" ;
     Text [ en-US ] = "Text Flow" ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
     TriStateBox BTN_HYPHEN
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Auto~matisch" ;
         Text [ en-US ] = "A~utomatically" ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_HYPHENBEFORE
     {
@@ -531,7 +440,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 48 , 29 ) ;
         Size = MAP_APPFONT ( 200 , 8 ) ;
-        Text [ de ] = "Zeichen am Zeilen~ende" ;
         Text [ en-US ] = "C~haracters at line end" ;
         Left = TRUE ;
     };
@@ -556,7 +464,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 48 , 43 ) ;
         Size = MAP_APPFONT ( 200 , 8 ) ;
-        Text [ de ] = "Zeichen am Zeilen~anfang" ;
         Text [ en-US ] = "Cha~racters at line begin" ;
         Left = TRUE ;
     };
@@ -565,7 +472,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Pos = MAP_APPFONT ( 48 , 57 ) ;
         Size = MAP_APPFONT ( 200 , 8 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Ma~ximal aufeinander folgende Trennstellen" ;
         Text [ en-US ] = "~Maximum number of consecutive hyphens" ;
     };
     NumericField ED_MAXHYPH
@@ -584,24 +490,19 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Silbentrennung" ;
         Text [ en-US ] = "Hyphenation" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_OPTIONS
     {   // is moved one section deeper to not raise unnecessary translations
         Pos = MAP_APPFONT ( 6 , 116 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Zusätze" ;
         Text [ en-US ] = "Options" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_BREAKS
     {
         Pos = MAP_APPFONT ( 6 , 73 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Umbrüche" ;
         Text [ en-US ] = "Breaks" ;
         Group = TRUE ;
     };
@@ -610,7 +511,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
          //         Disable = TRUE;
         Pos = MAP_APPFONT ( 12 , 86 ) ;
         Size = MAP_APPFONT ( 61 , 10 ) ;
-        Text [ de ] = "Einfügen" ;
         Text [ en-US ] = "Insert" ;
         Group = TRUE ;
     };
@@ -618,7 +518,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 75 , 86 ) ;
         Size = MAP_APPFONT ( 21 , 10 ) ;
-        Text [ de ] = "T~yp" ;
         Text [ en-US ] = "~Type";
     };
     ListBox LB_BREAKTYPE
@@ -627,16 +526,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Pos = MAP_APPFONT ( 98 , 84 ) ;
         Size = MAP_APPFONT ( 61 , 50 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Seite" ; 0; > ;
-            < "Spalte" ; 1; > ;
-        };
-    StringList [ x-comment ] =
-    {
-         < "; Seite" ; 0; > ;
-        < "; Spalte" ; 1; > ;
-    };
     StringList [ en-US ] =
     {
          < "Page" ; 0; > ;
@@ -648,7 +537,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Pos = MAP_APPFONT ( 163 , 86 ) ;
         Size = MAP_APPFONT ( 45 , 10 ) ;
         Right = TRUE;
-        Text [ de ] = "~Position" ;
         Text [ en-US ] = "Position";
     };
     ListBox LB_BREAKPOSITION
@@ -657,16 +545,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Pos = MAP_APPFONT ( 211 , 84 ) ;
         Size = MAP_APPFONT ( 40 , 50 ) ;
         DropDown = TRUE ;
-        StringList [ de ] =
-        {
-            < "Davor" ; 0; > ;
-            < "Danach" ; 1; > ;
-        };
-    StringList [ x-comment ] =
-    {
-         < "; Davor" ; 0; > ;
-        < "; Danach" ; 1; > ;
-    };
     StringList [ en-US ] =
     {
          < "Before" ; 0; > ;
@@ -678,10 +556,8 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
          //         Disable = TRUE;
         Pos = MAP_APPFONT (21 , 100 ) ;
         Size = MAP_APPFONT ( 75 , 10 ) ;
-        Text [ de ] = "mit Seitenvor~lage" ;
         Text [ en-US ] = "With Page St~yle" ;
         Group = TRUE ;
-        Text [ x-comment ] = "; All \"Vorlagen\" /Styles are written with a capital S.10.5.00EM";
     };
     ListBox LB_PAGECOLL
     {
@@ -696,9 +572,7 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Pos = MAP_APPFONT ( 163 , 100 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
         Right = TRUE ;
-        Text [ de ] = "Se~itennummer" ;
         Text [ en-US ] = "Page ~number" ;
-        Text [ x-comment ] = " ";
     };
     NumericField ED_PAGENUM
     {
@@ -718,7 +592,6 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12 , 127 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Absatz ni~cht trennen" ;
         Text [ en-US ] = "~Do not split paragraph" ;
         Group = TRUE ;
     };
@@ -726,18 +599,14 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
     {
         Pos = MAP_APPFONT ( 12, 141 ) ;
         Size = MAP_APPFONT ( 236 , 10 ) ;
-        Text [ de ] = "Absä~tze zusammenhalten" ;
         Text [ en-US ] = "~Keep with next paragraph" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox BTN_ORPHANS
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 12 , 155 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "Schuster~jungenregelung" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "~Orphan control";
     };
     NumericField ED_ORPHANS
@@ -761,19 +630,15 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 161 , 155 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
-        Text [ de ] = "Zeilen" ;
         Text [ en-US ] = "Lines" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox BTN_WIDOWS
     {
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 12 , 169 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "Hu~renkinderregelung" ;
         Group = TRUE ;
-        Text [ x-comment ] = " ";
         Text [ en-US ] = "~Widow control";
     };
     NumericField ED_WIDOWS
@@ -797,12 +662,9 @@ TabPage RID_SVXPAGE_EXT_PARAGRAPH
         Disable = TRUE ;
         Pos = MAP_APPFONT ( 161 , 169 ) ;
         Size = MAP_APPFONT ( 86 , 8 ) ;
-        Text [ de ] = "Zeilen" ;
         Text [ en-US ] = "Lines" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
 /*-- 29.11.00 11:36:24---------------------------------------------------
   Asian typography
@@ -811,63 +673,54 @@ TabPage RID_SVXPAGE_PARA_ASIAN
 {
     HelpId = HID_SVXPAGE_PARA_ASIAN ;
     Hide = TRUE ;
-    Text [ de ] = "Asiatische Typographie" ;
     Text [ en-US ] = "Asian Typography";
     Size = MAP_APPFONT ( 260 , 185 ) ;
     FixedLine FL_AS_OPTIONS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Zeilenwechsel" ;
         Text [ en-US ] = "Line change";
     };
     TriStateBox CB_AS_FORBIDDEN
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Liste der verbotenen Zeichen an Zeilenanfang und -ende berücksichtigen" ;
         Text [ en-US ] = "Apply list of forbidden characters to the beginning and end of lines";
     };
     TriStateBox CB_AS_ALLOW_WORD_BREAK
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Textumbruch innerhalb von Wötern im lateinischen Text zulassen" ;
         Text [ en-US ] = "Allow ~breaks in words in Latin text";
     };
     TriStateBox CB_AS_HANG_PUNC
     {
         Pos = MAP_APPFONT ( 12 , 42 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Hängende ~Interpunktion zulassen" ;
         Text [ en-US ] = "Allow hanging punctuation";
     };
     FixedLine FL_AS_CHAR_DIST
     {
         Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Zeichenabstand" ;
         Text [ en-US ] = "Character spacing";
     };
     TriStateBox CB_AS_PUNCTUATION
     {
         Pos = MAP_APPFONT ( 12, 69 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "I~nterpunktion am Zeilenbeginn zum Komprimieren zulassen" ;
         Text [ en-US ] = "Allow punctuation at line start";
     };
     TriStateBox CB_AS_SCRIPT_SPACE
     {
         Pos = MAP_APPFONT ( 12 , 83 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "~Abstand zwischen asiatischem, lateinischem und komplexem Text anwenden" ;
         Text [ en-US ] = "Apply spacing between Asian, Latin and Complex text";
     };
     TriStateBox CB_AS_ADJUST_NUMBERS
     {
         Pos = MAP_APPFONT ( 12 , 97 ) ;
         Size = MAP_APPFONT ( 242 , 10 ) ;
-        Text [ de ] = "Abstan~d zwischen asiatischem Text und Zahlen automatisch anpassen" ;
         Text [ en-US ] = "Automatically adjust space between Asian text and numbers";
     };
 };
