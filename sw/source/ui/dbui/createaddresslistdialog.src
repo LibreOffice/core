@@ -4,9 +4,9 @@
  *
  *  $RCSfile: createaddresslistdialog.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:54:11 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,14 +48,12 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
     Size = MAP_APPFONT ( 318 , 231 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Neue Adressenliste";
     Text [ en-US ] = "New Address List";
 
     FixedText               FI_ADDRESSINFORMATION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 150 , 8 ) ;
-        Text [ de ] = "Addressdaten";
         Text [ en-US ] = "Address Information";
     };
     Control  CT_ADDRESS
@@ -82,35 +80,30 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
     {
         Pos = MAP_APPFONT ( 262 , 14 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Neu";
         Text [ en-US ] = "~New";
     };
     PushButton              PB_DELETE
     {
         Pos = MAP_APPFONT ( 262 , 32 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Löschen";
         Text [ en-US ] = "~Delete";
     };
     PushButton              PB_FIND
     {
         Pos = MAP_APPFONT ( 262 , 50 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Suchen...";
         Text [ en-US ] = "~Find...";
     };
     PushButton              PB_CUSTOMIZE
     {
         Pos = MAP_APPFONT ( 262 , 68 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Anpassen...";
         Text [ en-US ] = "C~ustomize...";
     };
     FixedText               FI_VIEWENTRIES
     {
         Pos = MAP_APPFONT ( 6 , 183 ) ;
         Size = MAP_APPFONT ( 92 , 8 ) ;
-        Text [ de ] = "Eintragsnummer anzeigen";
         Text [ en-US ] = "Sho~w entry number";
     };
     PushButton              PB_START
@@ -175,7 +168,6 @@ ModalDialog DLG_MM_CREATEADDRESSLIST
 
     String ST_FILTERNAME
     {
-        Text [ de ] = "%PRODUCTNAME Adressenliste (.csv)";
         Text [ en-US ] = "%PRODUCTNAME Adress List (.csv)";
     };
 };
@@ -191,14 +183,12 @@ ModelessDialog DLG_MM_FIND_ENTRY
     Size = MAP_APPFONT ( 188 , 63 ) ;
     Moveable = TRUE ;
 
-    Text [ de ] = "Eintrag suchen";
     Text [ en-US ] = "Find Entry";
 
     FixedText FT_FIND
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
-        Text [ de ] = "Suchen";
         Text [ en-US ] = "F~ind";
     };
     Edit      ED_FIND
@@ -211,7 +201,6 @@ ModelessDialog DLG_MM_FIND_ENTRY
     {
         Pos = MAP_APPFONT ( 6 , 32 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "Nur suchen in";
         Text [ en-US ] = "Find ~only in";
     };
     ListBox   LB_FINDONLY
@@ -226,14 +215,12 @@ ModelessDialog DLG_MM_FIND_ENTRY
         Pos = MAP_APPFONT ( 132 , 3 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         DefButton = TRUE;
-        Text [ de ] = "Suchen";
         Text [ en-US ] = "~Find";
     };
     CancelButton            PB_CANCEL
     {
         Pos = MAP_APPFONT ( 132 , 20 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Schließen";
         Text [ en-US ] = "~Close";
     };
     HelpButton              PB_HELP
