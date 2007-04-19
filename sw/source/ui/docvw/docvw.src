@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2005-11-04 16:01:53 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,96 +45,74 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_OPENURL ;
             HelpID = SID_OPENDOC ;
-            Text [ de ] = "~Öffnen" ;
             Text [ en-US ] = "~Open" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_OPENURLNEW ;
             HelpID = SID_OPENDOC ;
-            Text [ de ] = "Öffnen in neuem ~Fenster" ;
             Text [ en-US ] = "Open in New Window" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_EDITDOC ;
             HelpID = SID_EDITDOC ;
-            Text [ de ] = "~Bearbeiten" ;
             Text [ en-US ] = "~Edit" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_SELECTION_MODE ;
             HelpID = FN_READONLY_SELECTION_MODE ;
-            Text [ de ] = "Text auswählen" ;
             Text [ en-US ] = "Select Text";
         };
         MenuItem
         {
             Identifier = MN_READONLY_RELOAD;
             HelpID = SID_RELOAD;
-            Text [ de ] = "~Neu laden" ;
             Text [ en-US ] = "Re~load";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_RELOAD_FRAME;
             HelpID = SID_RELOAD;
-            Text [ de ] = "~Frame neu laden" ;
             Text [ en-US ] = "Reload Frame";
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_SOURCEVIEW ;
             HelpID = HID_SOURCEVIEW ;
-            Text [ de ] = "HTM~L - Quelltext" ;
             Text [ en-US ] = "HT~ML Source" ;
-            Text [ x-comment ] = " ";
         };
         SEPARATOR
         MenuItem
         {
             Identifier = MN_READONLY_BROWSE_STOP ;
             HelpID = SID_BROWSE_STOP ;
-            Text [ de ] = "~Stopp" ;
             Text [ en-US ] = "~Stop" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_BROWSE_BACKWARD ;
             HelpID = SID_BROWSE_BACKWARD ;
-            Text [ de ] = "~Rückwärts" ;
             Text [ en-US ] = "Backwards" ;
-            Text [ x-comment ] = "; ��S������� ;";
         };
         MenuItem
         {
             Identifier = MN_READONLY_BROWSE_FORWARD ;
             HelpID = SID_BROWSE_FORWARD ;
-            Text [ de ] = "~Vorwärts" ;
             Text [ en-US ] = "~Forward" ;
-            Text [ x-comment ] = " ";
         };
         SEPARATOR
         MenuItem
         {
             Identifier = MN_READONLY_SAVEGRAPHIC ;
             HelpID = HID_MN_READONLY_SAVEGRAPHIC ;
-            Text [ de ] = "~Grafik speichern..." ;
             Text [ en-US ] = "Save Graphics..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_GRAPHICTOGALLERY ;
             HelpID = HID_MN_READONLY_GRAPHICTOGALLERY ;
-            Text [ de ] = "Grafik hinzuf~ügen" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -143,37 +121,29 @@ Menu MN_READONLY_POPUP
                     {
                         Identifier = MN_READONLY_TOGALLERYLINK ;
                         HelpID = HID_MN_READONLY_TOGALLERYLINK ;
-                        Text [ de ] = "Als Link" ;
                         Text [ en-US ] = "As Link" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_READONLY_TOGALLERYCOPY ;
                         HelpID = HID_MN_READONLY_TOGALLERYCOPY ;
-                        Text [ de ] = "Kopieren" ;
                         Text [ en-US ] = "Copy" ;
-                        Text [ x-comment ] = " ";
                     };
                     SEPARATOR
                 };
             };
             Text [ en-US ] = "Add Graphics" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_SAVEBACKGROUND ;
             HelpID = HID_MN_READONLY_SAVEBACKGROUND ;
-            Text [ de ] = "H~intergrund speichern..." ;
             Text [ en-US ] = "Save Background..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_BACKGROUNDTOGALLERY ;
             HelpID = HID_MN_READONLY_BACKGROUNDTOGALLERY ;
-            Text [ de ] = "H~intergrund hinzufügen" ;
             SubMenu = Menu
             {
                 ItemList =
@@ -182,32 +152,25 @@ Menu MN_READONLY_POPUP
                     {
                         Identifier = MN_READONLY_TOGALLERYLINK ;
                         HelpID = HID_MN_READONLY_TOGALLERYLINK ;
-                        Text [ de ] = "Als Link" ;
                         Text [ en-US ] = "As Link" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_READONLY_TOGALLERYCOPY ;
                         HelpID = HID_MN_READONLY_TOGALLERYCOPY ;
-                        Text [ de ] = "Kopieren" ;
                         Text [ en-US ] = "Copy" ;
-                        Text [ x-comment ] = " ";
                     };
                     SEPARATOR
                 };
             };
             Text [ en-US ] = "Add Background" ;
-            Text [ x-comment ] = " ";
         };
         SEPARATOR
         MenuItem
         {
             Identifier = MN_READONLY_COPYLINK ;
             HelpID = HID_MN_READONLY_COPYLINK ;
-            Text [ de ] = "~Link kopieren" ;
             Text [ en-US ] = "Copy ~Link" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -216,41 +179,32 @@ Menu MN_READONLY_POPUP
             /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
             /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
             /* ### ACHTUNG: Neuer Text in Resource? Grafik ~kopieren : ~Grafik kopieren */
-            Text [ de ] = "Grafik ~kopieren" ;
             Text [ en-US ] = "Copy ~Graphics" ;
-            Text [ x-comment ] = " ";
         };
         SEPARATOR
         MenuItem
         {
             Identifier = MN_READONLY_LOADGRAPHIC ;
             HelpID = HID_MN_READONLY_LOADGRAPHIC ;
-            Text [ de ] = "G~rafiken laden" ;
             Text [ en-US ] = "Load Graphics" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_GRAPHICOFF ;
             HelpID = HID_MN_READONLY_GRAPHICOFF ;
-            Text [ de ] = "Grafiken ~ausschalten" ;
             Text [ en-US ] = "Graphics Off" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_READONLY_PLUGINOFF ;
             HelpID = HID_MN_READONLY_PLUGINOFF ;
-            Text [ de ] = "~PlugIns ausschalten" ;
             Text [ en-US ] = "Plug-ins Off" ;
-            Text [ x-comment ] = " ";
         };
         SEPARATOR
         MenuItem
         {
             Identifier = SID_WIN_FULLSCREEN;
             HelpID =  SID_WIN_FULLSCREEN;
-            Text [ de ] = "Vollbildschirm-Modus verlassen" ;
             Text [ en-US ] = "Leave Full-Screen Mode" ;
         };
         SEPARATOR
@@ -258,132 +212,94 @@ Menu MN_READONLY_POPUP
         {
             Identifier = MN_READONLY_COPY ;
             HelpID = SID_COPY;
-            Text [ de ] = "~Kopieren" ;
             Text [ en-US ] = "~Copy" ;
         };
     };
 };
 String STR_EXPORT_GRAFIK_TITLE
 {
-    Text [ de ] = "Grafik-Export" ;
     Text [ en-US ] = "Graphics Export" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAIN_OK
 {
-    Text [ de ] = "Betätigen Sie die linke Maustaste um die Rahmen zu verketten." ;
     Text [ en-US ] = "Click the left mouse button to link the frames." ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAIN_NOT_EMPTY
 {
-    Text [ de ] = "Der Zielrahmen ist nicht leer." ;
     Text [ en-US ] = "Target frame not empty." ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAIN_IS_IN_CHAIN
 {
-    Text [ de ] = "Der Zielrahmen ist bereits verkettet." ;
     Text [ en-US ] = "Target frame is already linked." ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAIN_WRONG_AREA
 {
-    Text [ de ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung möglich ist." ;
     Text [ en-US ] = "The target frame for the link is in an invalid area." ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAIN_NOT_FOUND
 {
-    Text [ de ] = "An der aktuellen Position kann kein Zielrahmen gefunden werden." ;
     Text [ en-US ] = "Target frame not found at current position." ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAIN_SOURCE_CHAINED
 {
-    Text [ de ] = "Der Quellrahmen ist bereits Quelle einer Verkettung." ;
     Text [ en-US ] = "The source frame is already the source of a link." ;
-    Text [ x-comment ] = " ";
 };
 String STR_CHAIN_SELF
 {
-    Text [ de ] = "Eine geschlossene Kette ist nicht möglich." ;
     Text [ en-US ] = "A closed link is not possible." ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_INSERT
 {
-    Text [ de ] = "Eingefügt" ;
     Text [ en-US ] = "Inserted" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_DELETE
 {
-    Text [ de ] = "Gelöscht" ;
     Text [ en-US ] = "Deleted" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_FORMAT
 {
-    Text [ de ] = "Attributiert" ;
     Text [ en-US ] = "Formatted" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_TABLE
 {
-    Text [ de ] = "Tabelle verändert" ;
     Text [ en-US ] = "Table changed" ;
-    Text [ x-comment ] = " ";
 };
 String STR_REDLINE_FMTCOLL
 {
-    Text [ de ] = "Absatzvorlage gesetzt" ;
     Text [ en-US ] = "Applied Paragraph Styles";
-    Text [ x-comment ] = " ";
 };
 String STR_ENDNOTE
 {
-    Text [ de ] = "Endnote: " ;
     Text [ en-US ] = "Endnote: " ;
-    Text [ x-comment ] = " ";
 };
 String STR_FTNNOTE
 {
-    Text [ de ] = "Fußnote: " ;
     Text [ en-US ] = "Footnote: " ;
-    Text [ x-comment ] = " ";
 };
 
 InfoBox MSG_READONLY_CONTENT
 {
-    Message [ de ] = "Die Schreibmarke oder Selektion befindet sich an einer geschützten Position.\nEine Änderung kann deshalb nicht akzeptiert werden.";
     Message [ en-US ] = "Readonly content cannot be changed.\nNo modifications will be accepted";
-    Message [ x-comment ] = " ";
 };
 
 String STR_TABLE_COL_ADJUST
 {
-    Text [ de ] = "Tabellenspalte ändern" ;
     Text [ en-US ] = "Adjust table column" ;
 };
 String STR_TABLE_ROW_ADJUST
 {
-    Text [ de ] = "Tabellenzeile ändern" ;
     Text [ en-US ] = "Adjust table row" ;
 };
 String STR_TABLE_SELECT_ALL
 {
-    Text [ de ] = "Ganze Tabelle auswählen" ;
     Text [ en-US ] = "Select whole table" ;
 };
 String STR_TABLE_SELECT_ROW
 {
-    Text [ de ] = "Tabellenzeile auswählen" ;
     Text [ en-US ] = "Select table row" ;
 };
 String STR_TABLE_SELECT_COL
 {
-    Text [ de ] = "Tabellenspalte auswählen" ;
     Text [ en-US ] = "Select table column" ;
 };
 
