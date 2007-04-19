@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConnectionPage.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 14:45:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:58:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,6 @@ TabPage PAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 4 , UNRELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] ="Allgemein";
         Text[ en-US ] = "General";
     };
 
@@ -81,7 +80,6 @@ TabPage PAGE_CONNECTION
         Hide = TRUE;
         Pos = MAP_APPFONT ( 6 , UNRELATED_CONTROLS + FIXEDTEXT_HEIGHT + RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( PAGE_X - 12 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] ="~Rechnername" ;
         Text[ en-US ] = "~Host name";
     };
 
@@ -90,7 +88,6 @@ TabPage PAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 4 , 3*FIXEDTEXT_HEIGHT + 3*UNRELATED_CONTROLS + RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] ="Benutzer Authentifizierung";
         Text[ en-US ] = "User authentication";
     };
 
@@ -98,7 +95,6 @@ TabPage PAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 6 , 3*UNRELATED_CONTROLS + 4*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] ="~Benutzername" ;
         Text [ en-US ] = "~User name" ;
     };
     Edit ET_USERNAME
@@ -112,7 +108,6 @@ TabPage PAGE_CONNECTION
     {
         Pos = MAP_APPFONT ( 90 , 4*UNRELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS ) ;
         Size = MAP_APPFONT ( 105 , CHECKBOX_HEIGHT ) ;
-        Text [ de ] ="Kennwort erforderlich";
         Text [ en-US ] = "Password required";
     };
 
@@ -121,7 +116,6 @@ TabPage PAGE_CONNECTION
         Pos = MAP_APPFONT ( 4 , 5*UNRELATED_CONTROLS + 5*FIXEDTEXT_HEIGHT + 2*RELATED_CONTROLS + CHECKBOX_HEIGHT) ;
 
         Size = MAP_APPFONT ( PAGE_X - 8 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] ="JDBC-Eigenschaften";
         Text[ en-US ] = "JDBC properties";
     };
 
@@ -130,7 +124,6 @@ TabPage PAGE_CONNECTION
         Pos = MAP_APPFONT ( 6 , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT) ;
 
         Size = MAP_APPFONT ( 90 - 12 , FIXEDTEXT_HEIGHT ) ;
-        Text [ de ] ="~JDBC-Treiberklasse" ;
         Text [ en-US ] = "~JDBC driver class" ;
     };
     Edit ET_JDBCDRIVERCLASS
@@ -147,7 +140,6 @@ TabPage PAGE_CONNECTION
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( PAGE_X  - BUTTON_WIDTH - UNRELATED_CONTROLS , 5*UNRELATED_CONTROLS + 6*FIXEDTEXT_HEIGHT + 3*RELATED_CONTROLS + CHECKBOX_HEIGHT -2 ) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text [ de ] ="Klasse testen" ;
         Text [ en-US ] = "Test Class" ;
     };
 
@@ -156,7 +148,6 @@ TabPage PAGE_CONNECTION
         Pos = MAP_APPFONT ( PAGE_X  - 75 - UNRELATED_CONTROLS, PAGE_Y - BUTTON_HEIGHT - UNRELATED_CONTROLS) ;
         Size = MAP_APPFONT ( 75 , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] ="Verbindung testen" ;
         Text [ en-US ] = "Test Connection";
     };
 
@@ -164,49 +155,41 @@ TabPage PAGE_CONNECTION
 
 String STR_NO_ADABASE_DATASOURCES
 {
-    Text [ de ] ="Auf Ihrem System wurden keine Adabas D Datenquellen gefunden.";
     Text [ en-US ] = "No Adabas D data sources were found on your system.";
 };
 
 String STR_CONNECTION_TEST
 {
-    Text [ de ] ="Verbindungstest" ;
     Text [ en-US ] = "Connection Test";
 };
 
 String STR_CONNECTION_SUCCESS
 {
-    Text [ de ] ="Die Verbindung wurde erfolgreich hergestellt." ;
     Text [ en-US ] = "The connection was established successfully.";
 };
 
 String STR_CONNECTION_NO_SUCCESS
 {
-    Text [ de ] ="Die Verbindung konnte nicht erfolgreich hergestellt werden." ;
     Text [ en-US ] = "The connection could not be established successfully.";
 };
 
 String STR_JDBCDRIVER_TEST
 {
-    Text [ de ] ="Test des JDBC-Treibers" ;
     Text [ en-US ] = "JDBC Driver Test";
 };
 
 String STR_JDBCDRIVER_SUCCESS
 {
-    Text [ de ] ="Der JDBC-Treiber wurde erfolgreich geladen." ;
     Text [ en-US ] = "The JDBC driver was loaded successfully.";
 };
 
 String STR_JDBCDRIVER_NO_SUCCESS
 {
-    Text [ de ] ="Der JDBC-Treiber konnte nicht geladen werden." ;
     Text [ en-US ] = "The JDBC driver could not be loaded.";
 };
 
 String STR_MSACCESS_FILTERNAME
 {
-    Text [ de ] ="MS Access Datei" ;
     Text [ en-US ] = "MS Access file";
 };
 
