@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ihi $ $Date: 2006-08-04 09:49:23 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,6 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     SVLook = TRUE ;
 
     Size = MAP_APPFONT ( COL_12 , ROW_5 ) ;
-    Text [ de ] = "Optionen";
     Text [ en-US ] = "Options";
 
     OKButton PB_OK
@@ -74,9 +73,7 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
         Pos = MAP_APPFONT ( COL_10, ROW_3 ) ;
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Zur√ºck" ;
         Text [ en-US ] = "~Back" ;
-        Text [ x-comment ] = " ";
     };
     //TreeListBox
     Control TLB_PAGES
@@ -120,42 +117,10 @@ ModalDialog RID_OFADLG_OPTIONS_TREE
     };
     String ST_LOAD_ERROR
     {
-        Text [ de ] = "Das ausgew√§hlte Modul konnte nicht geladen werden.";
         Text [ en-US ] = "The selected module could not be loaded.";
-        Text [ x-comment ] = " ";
     };
     StringArray STR_HELPTEXTS
     {
-        ItemList [ de ] =
-        {
-            < "Hier nehmen Sie allgemeine Einstellungen f√ºr Ihre Arbeit mit %PRODUCTNAME vor. Sie k√∂nnen Ihre Benutzerdaten hinterlegen, allgemeine Speichervorgaben festlegen und Pfade zu wichtigen Verzeichnissen einstellen. Diese Einstellungen werden automatisch gespeichert, so dass sie bei der n√§chsten Sitzung wieder gelten."; SID_GENERAL_OPTIONS; > ;
-            < "Hier nehmen Sie Sprach- und Linguistikeinstellungen f√ºr Ihre Arbeit mit %PRODUCTNAME vor."; SID_LANGUAGE_OPTIONS; > ;
-            < "Hier konfigurieren Sie %PRODUCTNAME f√ºr das Internet. Sie k√∂nnen Suchmaschinen festlegen oder Ihre Proxy-Einstellungen speichern." ; SID_INET_DLG; > ;
-            < "Hier k√∂nnen Sie verschiedene Einstellungen f√ºr Textdokumente vornehmen, die global in Ihrem %PRODUCTNAME festlegen, wie Textdokumente behandelt werden. Die Einstellungen gelten f√ºr alle %PRODUCTNAME Writer-Dokumente, die Sie neu erstellen. Einige Einstellungen k√∂nnen Sie auch f√ºr das aktuelle Textdokument festlegen, wenn Sie es anschlie√üend speichern." ; SID_SW_EDITOPTIONS; > ;
-            < "Hier treffen Sie grundlegende Einstellungen f√ºr %PRODUCTNAME-Dokumente im Format HTML. Sie w√§hlen unter anderem, welche Inhalte am Bildschirm oder auf dem Drucker zu sehen sein sollen, ob die Seiten am Bildschirm weich scrollen, in welchen Farben Sie die Schl√ºsselw√∂rter in den Quelltexten sehen wollen und mehr." ; SID_SW_ONLINEOPTIONS; > ;
-            < "Hier k√∂nnen Sie verschiedene globale Einstellungen f√ºr Tabellendokumente vornehmen. Sie legen unter anderem fest, welche Inhalte zu sehen sein sollen und in welche Richtung der Cursor nach einer Zell-Eingabe weitergeht. Sie definieren Sortierlisten, bestimmen die generelle Anzahl der Nachkommastellen f√ºr die Ansicht und mehr." ; SID_SC_EDITOPTIONS; > ;
-            < "Legen Sie hier die Einstellungen fest, die f√ºr alle neu gespeicherten Pr√§sentationsdokumente gelten sollen. Unter anderem bestimmen Sie, welche Inhalte Sie auf den Seiten sehen wollen, welche Ma√üeinheit allgemein gilt, ob und wie am Raster ausgerichtet wird und ob Sie z. B. immer auch Notizen und Handzettel drucken wollen." ; SID_SD_EDITOPTIONS; > ;
-            < "Hier k√∂nnen Sie verschiedene globale Einstellungen f√ºr Zeichnungsdokumente vornehmen. Unter anderem legen Sie fest, welche Inhalte Sie auf den Seiten sehen wollen, welcher Ma√üstab allgemein gilt, ob und wie am Raster ausgerichtet wird und welche Inhalte standardm√§√üig gedruckt werden." ; SID_SD_GRAPHIC_OPTIONS; > ;
-            < "Hier w√§hlen Sie Druckformat und Druckoptionen f√ºr alle neu gespeicherten Formeldokumente. Diese Optionen gelten f√ºr den Fall, dass Sie eine Formel direkt aus %PRODUCTNAME Math drucken m√∂chten." ; SID_SM_EDITOPTIONS; > ;
-            < "Hier legen Sie allgemeine Voreinstellungen f√ºr Ihre %PRODUCTNAME Chart-Diagramme fest. Bestimmen Sie hier die Grundfarben f√ºr alle neu angelegten Diagramme." ; SID_SCH_EDITOPTIONS; > ;
-            < "Treffen Sie hier allgemeine Festlegungen f√ºr den Zugriff auf externe Datenquellen."; SID_SB_STARBASEOPTIONS; >;
-            < "Hier bestimmen Sie allgemeine Einstellungen f√ºr das √ñffnen und Speichern von Dokumenten in Fremdformaten. Sie k√∂nnen das Verhalten von Makros oder OLE-Objekten in Microsoft Office-Dokumenten steuern oder Einstellungen f√ºr HTML-Dokumente festlegen." ; SID_FILTER_DLG; > ;
-        };
-        ItemList [ x-comment ] =
-        {
-            < "; Hier nehmen Sie allgemeine Einstellungen f¸r Ihre Arbeit mit %PRODUCTNAME vor. Sie kˆnnen Ihre Benutzerdaten hinterlegen, allgemeine Speichervorgaben festlegen und Pfade zu wichtigen Verzeichnissen einstellen. Diese Einstellungen werden automatisch ge"; SID_GENERAL_OPTIONS; > ;
-            < "; Hier nehmen Sie Sprach- und Linguistikeinstellungen f¸r Ihre Arbeit mit %PRODUCTNAME vor."; SID_LANGUAGE_OPTIONS; > ;
-            < "; Hier konfigurieren Sie %PRODUCTNAME f¸r das Internet. Sie kˆnnen Suchmaschinen festlegen oder Ihre Proxy-Einstellungen speichern." ; SID_INET_DLG; > ;
-            < "; Hier kˆnnen Sie verschiedene Einstellungen f¸r Textdokumente vornehmen, die global in Ihrem %PRODUCTNAME festlegen, wie Textdokumente behandelt werden. Die Einstellungen gelten f¸r alle %PRODUCTNAME Writer-Dokumente, die Sie neu erstellen. Einige Ein" ; SID_SW_EDITOPTIONS; > ;
-            < "; Hier treffen Sie grundlegende Einstellungen f¸r %PRODUCTNAME-Dokumente im Format HTML. Sie w‰hlen unter anderem, welche Inhalte am Bildschirm oder auf dem Drucker zu sehen sein sollen, ob die Seiten am Bildschirm weich scrollen, in welchen Farben Sie " ; SID_SW_ONLINEOPTIONS; > ;
-            < "; Hier kˆnnen Sie verschiedene globale Einstellungen f¸r Tabellendokumente vornehmen. Sie legen unter anderem fest, welche Inhalte zu sehen sein sollen und in welche Richtung der Cursor nach einer Zell-Eingabe weitergeht. Sie definieren Sortierlisten, b" ; SID_SC_EDITOPTIONS; > ;
-            < "; Legen Sie hier die Einstellungen fest, die f¸r alle neu gespeicherten Pr‰sentationsdokumente gelten sollen. Unter anderem bestimmen Sie, welche Inhalte Sie auf den Seiten sehen wollen, welche Maﬂeinheit allgemein gilt, ob und wie am Raster ausgericht" ; SID_SD_EDITOPTIONS; > ;
-            < "; Hier kˆnnen Sie verschiedene globale Einstellungen f¸r Zeichnungsdokumente vornehmen. Unter anderem legen Sie fest, welche Inhalte Sie auf den Seiten sehen wollen, welcher Maﬂstab allgemein gilt, ob und wie am Raster ausgerichtet wird und welche Inha" ; SID_SD_GRAPHIC_OPTIONS; > ;
-            < "; Hier w‰hlen Sie Druckformat und Druckoptionen f¸r alle neu gespeicherten Formeldokumente. Diese Optionen gelten f¸r den Fall, dass Sie eine Formel direkt aus %PRODUCTNAME Math drucken mˆchten." ; SID_SM_EDITOPTIONS; > ;
-            < "; Hier legen Sie allgemeine Voreinstellungen f¸r Ihre %PRODUCTNAME Chart-Diagramme fest. Bestimmen Sie hier die Grundfarben f¸r alle neu angelegten Diagramme." ; SID_SCH_EDITOPTIONS; > ;
-            < "; Treffen Sie hier allgemeine Festlegungen f¸r den Zugriff auf externen Datenquellen"; SID_SB_STARBASEOPTIONS; >;
-            < "; Hier bestimmen Sie allgemeine Einstellungen f¸r das ÷ffnen und Speichern von Dokumenten in Fremdformaten. Sie kˆnnen das Verhalten von Makros oder OLE-Objekten in Microsoft Office Dokumenten steuern oder Einstellungen f¸r HTML-Dokumente festlegen." ; SID_FILTER_DLG; > ;
-        };
         ItemList [ en-US ] =
         {
             < "This dialog is used to define general settings when working with %PRODUCTNAME. Enter your personal data, the defaults to be used when saving documents, and paths to important files. These settings will be saved automatically and used in later sessions as well."; SID_GENERAL_OPTIONS; > ;
@@ -186,42 +151,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
 {
     StringArray SID_GENERAL_OPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME" ; 0; > ;
-            < "Benutzerdaten" ;  RID_SFXPAGE_GENERAL; > ;
-            < "Allgemein" ;  OFA_TP_MISC; > ;
-            < "Arbeitsspeicher" ; OFA_TP_MEMORY; > ;
-            < "Ansicht" ; OFA_TP_VIEW ; > ;
-            < "Drucken" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Pfade" ;  RID_SFXPAGE_PATH; > ;
-            < "Farben" ;  RID_SVXPAGE_COLOR; > ;
-            < "Schriftarten" ; RID_SVX_FONT_SUBSTITUTION ; > ;
-            < "Sicherheit" ; RID_SVXPAGE_INET_SECURITY ; > ;
-            < "Darstellung" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
-            < "Zug√§nglichkeit" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
-            < "Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
-            < "Netzwerkidentit√§t" ; RID_SVXPAGE_SSO ; > ;
-            < "Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
-        };
-        ItemList [ x-comment ] =
-        {
-            < "; %PRODUCTNAME" ; 0; > ;
-            < "; Benutzerdaten" ;  RID_SFXPAGE_GENERAL; > ;
-            < "; Allgemein" ;  OFA_TP_MISC; > ;
-            < "; Arbeitsspeicher" ; OFA_TP_MEMORY; > ;
-            < "; Ansicht" ; OFA_TP_VIEW ; > ;
-            < "; Drucken" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "; Pfade" ;  RID_SFXPAGE_PATH; > ;
-            < "; Farben" ;  RID_SVXPAGE_COLOR; > ;
-            < "; Schriftersetzung" ; RID_SVX_FONT_SUBSTITUTION ; > ;
-            < "; Sicherheit" ; RID_SVXPAGE_INET_SECURITY ; > ;
-            < "; Appearance" ;        RID_SVXPAGE_COLORCONFIG        ; > ;
-            < "; Accessibility" ; RID_SVXPAGE_ACCESSIBILITYCONFIG ; > ;
-            < "; Java" ; RID_SVXPAGE_OPTIONS_JAVA ; > ;
-            < "; EM Sept 2002: This string is not used. But if it were used it would refer to a type of \\\\\\\\\\\\\\\\!; ; EM Sept 2002: This string is not used. But if it were used it would refer to a type of \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" ; RID_SVXPAGE_SSO ; > ;
-            < "; Online Update" ; RID_SVXPAGE_ONLINEUPDATE ; > ;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME" ; 0; > ;
@@ -243,24 +172,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_LANGUAGE_OPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "Spracheinstellungen" ; 0; > ;
-            < "Sprachen"; OFA_TP_LANGUAGES; >;
-            < "Linguistik" ; RID_SFXPAGE_LINGU; > ;
-            < "Suchoptionen f√ºr Japanisch" ;  RID_SVXPAGE_JSEARCH_OPTIONS; >;
-            < "Asiatisches Layout" ;  RID_SVXPAGE_ASIAN_LAYOUT; >;
-            < "Complex Text Layout" ;  RID_SVXPAGE_OPTIONS_CTL; >;
-        };
-        ItemList [ x-comment ] =
-        {
-            < "; Spracheinstellungen" ; 0; > ;
-            < "; Sprachen"; OFA_TP_LANGUAGES; > ;
-            < "; Linguistik" ; RID_SFXPAGE_LINGU; > ;
-            < "; Suchoptionen f¸r Japanisch" ;  RID_SVXPAGE_JSEARCH_OPTIONS; > ;
-            < "; Asiatisches Layout" ;  RID_SVXPAGE_ASIAN_LAYOUT; > ;
-            < "; Complex Text Layout" ;  RID_SVXPAGE_OPTIONS_CTL; >;
-        };
         ItemList [ en-US ] =
         {
             < "Language Settings" ; 0; > ;
@@ -274,22 +185,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     StringArray SID_INET_DLG
     {
         //modified by jmeng begin
-        ItemList [ de ] =
-        {
-            < "Internet" ; 0; > ;
-            < "Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
-            < "Suche" ;  RID_SVXPAGE_INET_SEARCH; > ;
-            < "E-Mail" ;  RID_SVXPAGE_INET_MAIL; > ;
-            < "Mozilla Plug-in" ;  RID_SVXPAGE_INET_MOZPLUGIN; > ;
-        };
-        ItemList [ x-comment ] =
-        {
-            < "; Internet" ; 0; > ;
-            < "; Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
-            < "; Suche" ;  RID_SVXPAGE_INET_SEARCH; > ;
-            < "; E-Mail" ;  RID_SVXPAGE_INET_MAIL; > ;
-            < ";Mozilla Plug-in" ;  RID_SVXPAGE_INET_MOZPLUGIN; > ;
-        };
         ItemList [ en-US ] =
         {
             < "Internet" ; 0; > ;
@@ -302,23 +197,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SW_EDITOPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME Writer" ; 0; > ;
-            < "Allgemein" ;     RID_SW_TP_OPTLOAD_PAGE   ; > ;
-            < "Ansicht" ;       RID_SW_TP_CONTENT_OPT   ;> ;
-            < "Formatierungshilfen" ;        RID_SW_TP_OPTSHDWCRSR    ; > ;
-            < "Raster" ;        RID_SVXPAGE_GRID        ; > ;
-            < "Grundschriften (westlich)" ;RID_SW_TP_STD_FONT       ; > ;
-            < "Grundschriften (asiatisch)" ;RID_SW_TP_STD_FONT_CJK       ; > ;
-            < "Grundschriften (CTL)" ;      RID_SW_TP_STD_FONT_CTL       ; > ;
-            < "Drucken" ;       RID_SW_TP_OPTPRINT_PAGE  ; > ;
-            < "Tabelle" ;       RID_SW_TP_OPTTABLE_PAGE  ; > ;
-            < "√Ñnderungen" ;    RID_SW_TP_REDLINE_OPT    ; > ;
-            < "Kompatibilit√§t" ; RID_SW_TP_OPTCOMPATIBILITY_PAGE    ; > ;
-            < "AutoBeschriftung" ; RID_SW_TP_OPTCAPTION_PAGE ; > ;
-            < "Serienbrief-E-Mail" ; RID_SW_TP_MAILCONFIG ; >;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Writer" ; 0; > ;
@@ -339,16 +217,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SW_ONLINEOPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME Writer/Web" ; 0; > ;
-            < "Ansicht" ;       RID_SW_TP_HTML_CONTENT_OPT      ;> ;
-            < "Formatierungshilfen" ;        RID_SW_TP_HTML_OPTSHDWCRSR    ; > ;
-            < "Raster" ;        RID_SW_TP_HTML_OPTGRID_PAGE ; > ;
-            < "Drucken" ;       RID_SW_TP_HTML_OPTPRINT_PAGE  ; > ;
-            < "Tabelle" ;       RID_SW_TP_HTML_OPTTABLE_PAGE  ; > ;
-            < "Hintergrund" ;   RID_SW_TP_BACKGROUND  ; > ;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Writer/Web" ; 0; > ;
@@ -362,16 +230,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SM_EDITOPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME Math" ; 0; > ;
-            < "Einstellungen" ; SID_SM_TP_PRINTOPTIONS;> ;
-        };
-        ItemList [ x-comment ] =
-        {
-            < "; Formel" ; 0; > ;
-            < "; Drucken" ; SID_SM_TP_PRINTOPTIONS;> ;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Math" ; 0; > ;
@@ -380,18 +238,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SC_EDITOPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME Calc" ; 0; > ;
-            < "Allgemein" ;         SID_SC_TP_LAYOUT            ;> ;
-            < "Ansicht" ;           SID_SC_TP_CONTENT           ;> ;
-            < "International" ;     RID_OFA_TP_INTERNATIONAL    ;> ;
-            < "Berechnen" ;         SID_SC_TP_CALC              ;> ;
-            < "Sortierlisten" ;     SID_SC_TP_USERLISTS         ;> ;
-            < "√Ñnderungen" ;       SID_SC_TP_CHANGES           ;> ;
-            < "Raster" ;            SID_SC_TP_GRID              ;> ;
-            < "Drucken" ;           RID_SC_TP_PRINT             ;> ;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Calc" ; 0; > ;
@@ -407,14 +253,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SD_EDITOPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME Impress" ; 0; > ;
-            < "Allgemein";          SID_SI_TP_MISC                  ; > ;
-            < "Ansicht" ;           SID_SI_TP_CONTENTS              ; > ;
-            < "Raster" ;            SID_SI_TP_SNAP                  ; > ;
-            < "Drucken" ;           SID_SI_TP_PRINT                 ; > ;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Impress" ; 0; > ;
@@ -426,14 +264,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SD_GRAPHIC_OPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME Draw" ; 0; > ;
-            < "Allgemein" ;         SID_SD_TP_MISC              ; > ;
-            < "Ansicht" ;           SID_SD_TP_CONTENTS          ; > ;
-            < "Raster" ;            SID_SD_TP_SNAP              ; > ;
-            < "Drucken" ;           SID_SD_TP_PRINT             ; > ;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Draw" ; 0; > ;
@@ -445,40 +275,14 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SCH_EDITOPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "Diagramme" ; 0; > ;
-            < "Grundfarben" ;       SID_SCH_TP_DEFCOLORS ; > ;
-        };
         ItemList [ en-US ] =
         {
             < "Charts" ; 0; > ;
             < "Default Colors" ;        SID_SCH_TP_DEFCOLORS ; > ;
         };
-        ItemList [ x-comment ] =
-        {
-                < "; Diagramm" ; 0; > ;
-            < "; Grundfarben" ;         SID_SCH_TP_DEFCOLORS ; > ;
-        };
     };
     StringArray SID_FILTER_DLG
     {
-        ItemList [ de ] =
-        {
-            < "Laden/Speichern" ; 0; > ;
-            < "Allgemein" ;  RID_SFXPAGE_SAVE; > ;
-            < "VBA-Eigenschaften" ;  SID_OPTFILTER_MSOFFICE; > ;
-            < "Microsoft Office" ;  RID_OFAPAGE_MSFILTEROPT2; > ;
-            < "HTML-Kompatibilit√§t" ; RID_OFAPAGE_HTMLOPT ; > ;
-        };
-        ItemList [ x-comment ] =
-        {
-                < "; Laden/Speichern" ; 0; > ;
-            < "; Allgemein" ;  RID_SFXPAGE_SAVE; > ;
-            < "; VBA Eigenschaften" ;  SID_OPTFILTER_MSOFFICE; > ;
-            < "; Microsoft Office" ;  RID_OFAPAGE_MSFILTEROPT2; > ;
-            < "; HTML Kompatibilit‰t" ; RID_OFAPAGE_HTMLOPT ; > ;
-        };
         ItemList [ en-US ] =
         {
                 < "Load/Save" ; 0; > ;
@@ -490,12 +294,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
     };
     StringArray SID_SB_STARBASEOPTIONS
     {
-        ItemList [ de ] =
-        {
-            < "%PRODUCTNAME Base" ; 0; > ;
-            < "Verbindungen" ; SID_SB_CONNECTIONPOOLING; > ;
-            < "Datenbanken" ; SID_SB_DBREGISTEROPTIONS; > ;
-        };
         ItemList [ en-US ] =
         {
             < "%PRODUCTNAME Base" ; 0; > ;
@@ -506,15 +304,11 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
 };
 String RID_RIDER_SLL_SITE
 {
-    Text [ de ] = "Site Zertifikate" ;
     Text [ en-US ] = "Site certificates" ;
-    Text [ x-comment ] = " ";
 };
 String RID_RIDER_SLL_PERSONAL
 {
-    Text [ de ] = "Pers√∂nliche Zertifikate" ;
     Text [ en-US ] = "Personal certificates" ;
-    Text [ x-comment ] = " ";
 };
 
 // RID_OFADLG_OPTIONS_TREE_WARNING ---------------------------------------
@@ -535,17 +329,13 @@ ModalDialog RID_OFADLG_OPTIONS_TREE_HINT
         Pos = MAP_APPFONT( 39, 6 );
         Size = MAP_APPFONT( 195, 60 );
         WordBreak = TRUE;
-        Text [ de ] = "Bitte beachten Sie, dass eine oder alle der angezeigten Einstellungen sich auf den internen Browser von %PRODUCTNAME (den %PRODUCTNAME Writer/Web) beziehen. Sie haben unter \"Extras - Optionen - Browser - Externer Browser\" die Verwendung eines anderen Browsers aktiviert. Damit die angezeigten Einstellungen auch f√ºr den anderen Browser benutzt werden, m√ºssen Sie diese in den Einstellungen des externen Browsers vornehmen.";
         Text [ en-US ] = "Please note: the settings displayed refer to the internal browser of %PRODUCTNAME (%PRODUCTNAME Writer/Web). In \"Tools - Options - Browser - External Browser\" the use of a different browser has been activated. In order to be able to use the same settings in other browsers you need to define these in the external browser settings.";
-        Text [ x-comment ] = "; ƒƒ: ÃﬁÍÔ?";
     };
     CheckBox CB_DISABLE
     {
         Pos = MAP_APPFONT( 39, 69 );
         Size = MAP_APPFONT( 195, 12 );
-        Text [ de ] = "~Diesen Hinweis nicht mehr anzeigen";
         Text [ en-US ] = "~Do not show information again";
-        Text [ x-comment ] = " ";
     };
     OKButton BTN_HINT
     {
