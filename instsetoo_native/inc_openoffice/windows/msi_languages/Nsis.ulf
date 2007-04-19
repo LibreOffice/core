@@ -1,55 +1,41 @@
 [SetupCaption]
 en-US = "%PRODUCTNAME %PRODUCTVERSION Installation Preparation"
-de = "%PRODUCTNAME %PRODUCTVERSION Installationsvorbereitung"
 
 [MUI_TEXT_WELCOME_INFO_TITLE]
 en-US = "Thank you for downloading %PRODUCTNAME %PRODUCTVERSION."
-de = "Vielen Dank, dass Sie sich für %PRODUCTNAME %PRODUCTVERSION entschieden haben."
 
 [MUI_TEXT_WELCOME_INFO_TEXT]
 en-US = "The installation files must be unpacked and copied to your hard disk in preparation for the installation. After that, the %PRODUCTNAME installation will start automatically.\r\n\r\nClick \'Next\' to continue."
-de = "Um die Installation vorzubereiten, müssen die Installationsdateien entpackt und auf Ihre Festplatte kopiert werden. Die %PRODUCTNAME Installation startet danach automatisch.\r\n\r\nKlicken Sie auf \'Weiter\', um fortzufahren."
 
 [MUI_TEXT_DIRECTORY_TITLE]
 en-US = "Select Folder"
-de = "Ordner auswählen"
 
 [MUI_TEXT_DIRECTORY_SUBTITLE]
 en-US = "Select the folder in which to save the unpacked files."
-de = "Wählen Sie den Ordner, in den die Dateien entpackt werden sollen."
 
 [InstallBtn]
 en-US = "&Unpack"
-de = "&Entpacken"
 
 [DirText]
 en-US = "The %PRODUCTNAME %PRODUCTVERSION installation files will be unpacked and saved in the folder shown below. If you would like to save %PRODUCTNAME to a different folder, click \'Browse\' to select another folder."
-de = "Die %PRODUCTNAME %PRODUCTVERSION Installationsdateien werden in den unten angegebenen Ordner entpackt. Wenn %PRODUCTNAME in einen anderen Ordner entpackt werden soll, klicken Sie auf \'Durchsuchen\' und wählen Sie einen anderen Ordner aus."
 
 [DirSubText]
 en-US = "Destination Folder"
-de = "Zielordner"
 
 [SpaceRequired]
 en-US = "Space required: "
-de = "Benötigter Speicherplatz: "
 
 [SpaceAvailable]
 en-US = "Space available: "
-de = "Verfügbarer Speicherplatz: "
 
 [MUI_TEXT_INSTALLING_TITLE]
 en-US = "Unpacking"
-de = "Entpacken"
 
 [MUI_TEXT_INSTALLING_SUBTITLE]
 en-US = "Please wait while the installation files are being unpacked."
-de = "Bitte warten Sie, während die Installationsdateien entpackt werden."
 
 [Extract]
 en-US = "Extract: "
-de = "Dekomprimiere: "
 
 [MUI_TEXT_ABORTWARNING]
 en-US = "Are you sure you want to quit the %PRODUCTNAME %PRODUCTVERSION Installation Preparation"
-de = "Sind Sie sicher, dass Sie die Installationsvorbereitung von %PRODUCTNAME %PRODUCTVERSION abbrechen möchten?"
