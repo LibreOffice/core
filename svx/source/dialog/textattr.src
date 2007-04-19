@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textattr.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:51:22 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:22:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,58 +45,46 @@ TabPage RID_SVXPAGE_TEXTATTR
     HelpId = HID_PAGE_TEXTATTR ;
     Hide = TRUE ;
     Size = MAP_APPFONT ( 260 , 185 ) ;
-    Text [ de ] = "Text" ;
     Text [ en-US ] = "Text" ;
     FixedLine FL_TEXT
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Text" ;
         Text [ en-US ] = "Text" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_AUTOGROW_WIDTH
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14  ) ;
         Size = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "~Breite an Text anpassen" ;
         Text [ en-US ] = "Fit wi~dth to text" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_AUTOGROW_HEIGHT
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 28  ) ;
         Size = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "~Höhe an Text anpassen" ;
         Text [ en-US ] = "Fit h~eight to text" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_FIT_TO_SIZE
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 42  ) ;
         Size = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "Am Rahmen ~anpassen" ;
         Text [ en-US ] = "~Fit to frame" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_CONTOUR
     {
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 12 , 56  ) ;
         Size = MAP_APPFONT ( 102 , 10 ) ;
-        Text [ de ] = "~Konturfluss" ;
         Text [ en-US ] = "~Adjust to contour" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox TSB_WORDWRAP_TEXT
     {
         TabStop = TRUE;
         Pos = MAP_APPFONT( 132, 14  ) ;
         Size = MAP_APPFONT( 127 , 10 ) ;
-        Text [ de ] = "~Text in Form umbrechen";
         Text [ en-US ] = "~Word wrap text in shape";
     };
     TriStateBox TSB_AUTOGROW_SIZE
@@ -104,48 +92,37 @@ TabPage RID_SVXPAGE_TEXTATTR
         TabStop = TRUE;
         Pos = MAP_APPFONT( 132, 28  );
         Size = MAP_APPFONT( 127 , 10 );
-        Text [ de ] = "~Größe der Form dem Text anpassen";
         Text [ en-US ] = "~Resize shape to fit text";
     };
     FixedLine FL_DISTANCE
     {
         Pos = MAP_APPFONT ( 6 , 72 ) ;
         Size = MAP_APPFONT ( 114 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Abstand vom Rahmen" ;
         Text [ en-US ] = "Spacing to borders" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_LEFT
     {
         Pos = MAP_APPFONT ( 12 , 85  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Links" ;
         Text [ en-US ] = "~Left" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_RIGHT
     {
         Pos = MAP_APPFONT ( 12 , 101  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Rechts" ;
         Text [ en-US ] = "~Right" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TOP
     {
         Pos = MAP_APPFONT ( 12 , 117  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Oben" ;
         Text [ en-US ] = "~Top" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_BOTTOM
     {
         Pos = MAP_APPFONT ( 12 , 133  ) ;
         Size = MAP_APPFONT ( 50 , 8 ) ;
-        Text [ de ] = "~Unten" ;
         Text [ en-US ] = "~Bottom" ;
-        Text [ x-comment ] = " ";
     };
     MetricField MTR_FLD_LEFT
     {
@@ -221,9 +198,7 @@ TabPage RID_SVXPAGE_TEXTATTR
     {
         Pos = MAP_APPFONT ( 126 , 72 ) ;
         Size = MAP_APPFONT ( 128 , RSC_CD_FIXEDLINE_HEIGHT ) ;
-        Text [ de ] = "Textverankerung" ;
         Text [ en-US ] = "Text anchor" ;
-        Text [ x-comment ] = " ";
     };
     Control CTL_POSITION
     {
@@ -238,11 +213,8 @@ TabPage RID_SVXPAGE_TEXTATTR
         TabStop = TRUE ;
         Pos = MAP_APPFONT ( 132 , 139  ) ;
         Size = MAP_APPFONT ( 116 , 10 ) ;
-        Text [ de ] = "~Ganze Breite" ;
         Text [ en-US ] = "Full ~width" ;
-        Text [ x-comment ] = " ";
     };
-    Text [ x-comment ] = " ";
 };
  // ********************************************************************** EOF
 
