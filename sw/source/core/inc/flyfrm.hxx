@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:44:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:13:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -169,7 +169,7 @@ public:
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
     virtual void Paint( const SwRect& ) const;
-    virtual void ChgSize( const Size& aNewSize );
+    virtual Size ChgSize( const Size& aNewSize );
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               SwCrsrMoveState* = 0 ) const;
 
