@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:36:51 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:59:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ DockingWindow RID_SVXDLG_BMPMASK
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 163 , 126 ) ;
-    Text [ de ] = "Pipette" ;
     Sizeable = FALSE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -62,33 +61,25 @@ DockingWindow RID_SVXDLG_BMPMASK
     {
         Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 151 , 8 ) ;
-        Text [ de ] = "Farben" ;
         Text [ en-US ] = "Colors" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_1
     {
         Pos = MAP_APPFONT ( 12 , 37 ) ;
         Size = MAP_APPFONT ( 44 , 8 ) ;
-        Text [ de ] = "Quellfarbe" ;
         Text [ en-US ] = "Source color" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_2
     {
         Pos = MAP_APPFONT ( 58 , 37 ) ;
         Size = MAP_APPFONT ( 34 , 8 ) ;
-        Text [ de ] = "Toleranz" ;
         Text [ en-US ] = "Tolerance" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_3
     {
         Pos = MAP_APPFONT ( 93 , 37 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "Ersetzen durch..." ;
         Text [ en-US ] = "Replace with..." ;
-        Text [ x-comment ] = " ";
     };
 
     // line 1
@@ -255,19 +246,15 @@ DockingWindow RID_SVXDLG_BMPMASK
     {
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 71 , 10 ) ;
-        Text [ de ] = "~Transparenz" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Tr~ansparency" ;
-        Text [ x-comment ] = " ";
     };
 
     PushButton BTN_EXEC
     {
         Pos = MAP_APPFONT ( 93 , 6 ) ;
         Size = MAP_APPFONT ( 64 , 14 ) ;
-        Text [ de ] = "~Ersetzen" ;
         Text [ en-US ] = "~Replace" ;
-        Text [ x-comment ] = " ";
     };
 
     ListBox LB_TRANS
@@ -290,14 +277,12 @@ DockingWindow RID_SVXDLG_BMPMASK
                 AutoCheck = TRUE ;
                 Identifier = TBI_PIPETTE ;
                 HelpId = HID_BMPMASK_TBI_PIPETTE ;
-                Text [ de ] = "Pipette" ;
                 ItemImage = Image
                 {
                     ImageBitmap = Bitmap { File = "sc10350.bmp" ; };
                     MASKCOLOR
                 };
                 Text [ en-US ] = "Eyedropper" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -309,7 +294,6 @@ DockingWindow RID_SVXDLG_BMPMASK
         Size = MAP_APPFONT ( 43 , 14 ) ;
     };
     Text [ en-US ] = "Eyedropper" ;
-    Text [ x-comment ] = " ";
 
     Image IMG_PIPETTE
     {
@@ -326,7 +310,6 @@ DockingWindow RID_SVXDLG_BMPMASK
 
 String RID_SVXDLG_BMPMASK_STR_TRANSP
 {
-    Text [ de ] = "Transparent";
     Text [ en-US ] = "Transparent";
 };
 
@@ -334,7 +317,6 @@ String RID_SVXDLG_BMPMASK_STR_SOURCECOLOR
 {
     // This string is used by the eyedropper dialog to denote a color in an image
     // that will be replaced by another color.
-    Text [ de ] = "Quellfarbe";
     Text [ en-US ] = "Source Color";
 };
 
