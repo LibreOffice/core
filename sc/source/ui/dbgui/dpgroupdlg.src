@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dpgroupdlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 20:35:19 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:25:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 152, 8 ) ;
-        Text [ de ] = "Anfang" ;
         Text [ en-US ] = "Start" ;
     };
     RadioButton RB_AUTOSTART
@@ -58,7 +57,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "~Automatically" ;
     };
     RadioButton RB_MANSTART
@@ -66,7 +64,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Manuell bei" ;
         Text [ en-US ] = "~Manually at" ;
     };
     Edit ED_START
@@ -80,7 +77,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     {
         Pos = MAP_APPFONT ( 6 , 42 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Ende" ;
         Text [ en-US ] = "End" ;
     };
     RadioButton RB_AUTOEND
@@ -88,7 +84,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "A~utomatisch" ;
         Text [ en-US ] = "A~utomatically" ;
     };
     RadioButton RB_MANEND
@@ -96,7 +91,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ma~nuell bei" ;
         Text [ en-US ] = "Ma~nually at" ;
     };
     Edit ED_END
@@ -110,7 +104,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
     {
         Pos = MAP_APPFONT ( 6 , 81 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "~Gruppieren nach" ;
         Text [ en-US ] = "~Group by" ;
     };
     Edit ED_BY
@@ -139,7 +132,6 @@ ModalDialog RID_SCDLG_DPNUMGROUP
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
-    Text [ de ] = "Gruppierung" ;
     Text [ en-US ] = "Grouping" ;
 } ;
 
@@ -158,7 +150,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     {
         Pos = MAP_APPFONT ( 6, 3 ) ;
         Size = MAP_APPFONT ( 152, 8 ) ;
-        Text [ de ] = "Anfang" ;
         Text [ en-US ] = "Start" ;
     };
     RadioButton RB_AUTOSTART
@@ -166,7 +157,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "~Automatically" ;
     };
     RadioButton RB_MANSTART
@@ -174,7 +164,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Manuell bei" ;
         Text [ en-US ] = "~Manually at" ;
     };
     DateField ED_START
@@ -188,7 +177,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     {
         Pos = MAP_APPFONT ( 6 , 42 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Ende" ;
         Text [ en-US ] = "End" ;
     };
     RadioButton RB_AUTOEND
@@ -196,7 +184,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
         Pos = MAP_APPFONT ( 12 , 53 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "A~utomatisch" ;
         Text [ en-US ] = "A~utomatically" ;
     };
     RadioButton RB_MANEND
@@ -204,7 +191,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Ma~nuell bei" ;
         Text [ en-US ] = "Ma~nually at" ;
     };
     DateField ED_END
@@ -218,7 +204,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     {
         Pos = MAP_APPFONT ( 6 , 81 ) ;
         Size = MAP_APPFONT ( 152 , 8 ) ;
-        Text [ de ] = "Gruppieren nach" ;
         Text [ en-US ] = "Group by" ;
     };
     RadioButton RB_NUMDAYS
@@ -226,7 +211,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
         Pos = MAP_APPFONT ( 12 , 94 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Anzahl von ~Tagen" ;
         Text [ en-US ] = "Number of ~days" ;
     };
     RadioButton RB_UNITS
@@ -234,7 +218,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
         Pos = MAP_APPFONT ( 12 , 110 ) ;
         Size = MAP_APPFONT ( 80 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Intervallen" ;
         Text [ en-US ] = "~Intervals" ;
     };
     NumericField ED_NUMDAYS
@@ -277,16 +260,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
     };
     StringArray STR_UNITS
     {
-        ItemList [ de ] =
-        {
-            < "Sekunden" ; Default ; > ;
-            < "Minuten" ; Default ; > ;
-            < "Stunden" ; Default ; > ;
-            < "Tage" ; Default ; > ;
-            < "Monate" ; Default ; > ;
-            < "Quartale" ; Default ; > ;
-            < "Jahre" ; Default ; > ;
-        };
         ItemList [ en-US ] =
         {
             < "Seconds" ; Default ; > ;
@@ -298,7 +271,6 @@ ModalDialog RID_SCDLG_DPDATEGROUP
             < "Years" ; Default ; > ;
         } ;
     } ;
-    Text [ de ] = "Gruppierung" ;
     Text [ en-US ] = "Grouping" ;
 } ;
 
