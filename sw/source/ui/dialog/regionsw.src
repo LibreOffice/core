@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:59:14 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:58:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,65 +43,49 @@
 
 *************************************************************************/
 #define FT_SUBREG_TEXT \
-    Text [ de ] = "Berei~ch" ; \
     Text [ en-US ] = "~Section" ; \
-    Text [ x-comment ] = "ËÎ; ËÎË: –‡Á‰ÂÎ - -";\
 
 #define CB_HIDE_TEXT \
-    Text [ de ] = "Aus~blenden" ; \
     Text [ en-US ] = "H~ide" ;\
 
 #define FL_HIDE_TEXT \
-    Text [ de ] = "Ausblenden" ; \
     Text [ en-US ] = "Hide" ;\
 
 #define CB_CONDITION_TEXT  \
-    Text [ de ] = "Mi~t Bedingung" ; \
     Text [ en-US ] = "~With Condition" ;\
 
 #define FL_PROPERTIES_TEXT \
-    Text [ de ] = "Eigenschaften" ; \
     Text [ en-US ] = "Properties" ;\
 
 #define CB_EDIT_IN_READONLY_TEXT \
-    Text [ de ] = "E~ditierbar in schreibgesch√ºtztem Dokument" ; \
     Text [ en-US ] = "E~ditable in read-only document" ;\
 
 #define FL_FILE_TEXT \
-    Text [ de ] = "Verkn√ºpfung" ; \
     Text [ en-US ] = "Link" ;\
 
 #define CB_FILE_TEXT\
-        Text [ de ] = "~Verkn√ºpfen" ; \
     Text [ en-US ] = "~Link";\
 
 #define CB_DDE_TEXT \
-    Text [ de ] = "~DDE" ; \
     Text [ en-US ] = "DD~E" ;\
 
 #define FT_DDE_TEXT \
-    Text [ de ] = "DDE~-Befehl" ; \
     Text [ en-US ] = "DDE ~command" ;\
 
 #define FT_FILE_TEXT \
-    Text [ de ] = "Dateina~me" ; \
     Text [ en-US ] = "~File name" ;\
 
 
 #define GB_HIDE_TEXT \
-    Text [ de ] = "Verstecken" ; \
     Text [ en-US ] = "Hide";\
 
 #define GB_OPTIONS_TEXT \
-    Text [ de ] = "Optionen" ; \
     Text [ en-US ] = "Options" ;\
 
 #define FL_PROTECT_TEXT \
-        Text [ de ] = "Schreibschutz" ;\
     Text [ en-US ] = "Write protection";\
 
 #define CB_PASSWD_TEXT\
-        Text [ de ] = "Mit Kenn~wort" ;\
     Text [ en-US ] = "Wit~h password";\
 
 /*************************************************************************
@@ -115,7 +99,6 @@ ModalDialog MD_EDIT_REGION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 316 , 185 ) ;
-    Text [ de ] = "Bereiche bearbeiten" ;
     Text [ en-US ] = "Edit Sections" ;
     Moveable = TRUE ;
     FixedLine FL_NAME
@@ -123,9 +106,7 @@ ModalDialog MD_EDIT_REGION
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 80 , 8 ) ;
-        Text [ de ] = "Bereich" ;
         Text [ en-US ] = "Section" ;
-        Text [ x-comment ] = "ËÎ; ËÎ? Œ·Î‡ÒÚ?- -";
     };
     Edit ED_RANAME
     {
@@ -223,7 +204,6 @@ ModalDialog MD_EDIT_REGION
         TabStop = TRUE ;
         Disable = TRUE ;
         TriStateDisable = FALSE ;
-        Text [ de ] = "~Gesch√ºtzt" ;
         Text [ en-US ] = "~Protected" ;
     };
     CheckBox CB_PASSWD
@@ -307,7 +287,6 @@ ModalDialog MD_EDIT_REGION
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Hide = TRUE ;
-        Text [ de ] = "~Optionen..." ;
         Text [ en-US ] = "~Options...";
     };
     PushButton CB_DISMISS
@@ -316,7 +295,6 @@ ModalDialog MD_EDIT_REGION
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
-        Text [ de ] = "A~ufheben" ;
         Text [ en-US ] = "Remove" ;
     };
     HelpButton PB_HELP
@@ -351,40 +329,34 @@ ModalDialog MD_EDIT_REGION
 };
 String STR_REG_DUPLICATE
 {
-    Text [ de ] = "Bereichsname ge√§ndert:" ;
     Text [ en-US ] = "Section name changed:" ;
 };
 String STR_INFO_DUPLICATE
 {
-    Text [ de ] = "Doppelter Bereichsname" ;
     Text [ en-US ] = "Duplicate section name" ;
 };
 QueryBox QB_CONNECT
 {
     Buttons = WB_YES_NO ;
     DefButton = WB_DEF_NO ;
-    Message [ de ] = "Eine Dateiverbindung l√∂scht den aktuellen Inhalt des Bereichs. Trotzdem verbinden ?" ;
     Message [ en-US ] = "A file connection will delete the contents of the current section. Connect anyway?" ;
 };
 InfoBox REG_WRONG_PASSWORD
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Es wurde ein falsches Kennwort eingegeben." ;
     Message [ en-US ] = "The password entered is invalid." ;
 };
 InfoBox REG_WRONG_PASSWD_REPEAT
 {
     BUTTONS = WB_OK ;
     DEFBUTTON = WB_DEF_OK ;
-    Message [ de ] = "Das Kennwort wurde nicht gesetzt." ;
     Message [ en-US ] = "The password has not been set." ;
 };
 
 TabDialog DLG_INSERT_SECTION
 {
     HelpId = HID_INSERT_SECTION_DLG;
-    Text [ de ] = "Bereich einf√ºgen" ;
     Text [ en-US ] = "Insert Section" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
@@ -398,42 +370,36 @@ TabDialog DLG_INSERT_SECTION
             {
                 Identifier = TP_INSERT_SECTION;
                 PageResID = TP_INSERT_SECTION;
-                Text [ de ] = "Bereich" ;
                 Text [ en-US ] = "Section";
             };
             PageItem
             {
                 Identifier = TP_COLUMN ;
                 PageResID = TP_COLUMN ;
-                Text [ de ] = "Spalten" ;
                 Text [ en-US ] = "Columns" ;
             };
             PageItem
             {
                 Identifier = TP_SECTION_INDENTS;
                 PageResID = TP_SECTION_INDENTS;
-                Text [ de ] = "Einz√ºge" ;
                 Text [ en-US ] = "Indents" ;
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
                 PageResID = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
             };
             PageItem
             {
                 Identifier = TP_SECTION_FTNENDNOTES ;
                 PageResID = TP_SECTION_FTNENDNOTES ;
-                Text [ de ] = "Fu√ü-/Endnoten" ;
                 Text [ en-US ] = "Footnotes/Endnotes";
             };
         };
     };
     String ST_INSERT
     {
-        Text [ de ] = "Einf√ºgen" ;
         Text [ en-US ] = "Insert" ;
     };
 };
@@ -450,7 +416,6 @@ TabPage TP_INSERT_SECTION
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 78 , 8 ) ;
-        Text [ de ] = "Neuer Bereich" ;
         Text [ en-US ] = "New section" ;
     };
     ComboBox ED_RNAME
@@ -540,8 +505,6 @@ TabPage TP_INSERT_SECTION
         Pos = MAP_APPFONT ( 96 , 87 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Sch√ºtzen" ;
-        Text [ x-comment ] = "(ƒ?; (ƒƒ) –ÒÔÛÙ·ÙÂıÅE˚N; - - - -";
         Text [ en-US ] = "~Protect";
     };
     CheckBox CB_PASSWD
@@ -606,7 +569,6 @@ TabPage TP_INSERT_SECTION
 TabDialog DLG_SECTION_PROPERTIES
 {
     HelpId = HID_SECTION_PROPERTIES_DLG;
-    Text [ de ] = "Optionen" ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Moveable = TRUE ;
@@ -619,28 +581,24 @@ TabDialog DLG_SECTION_PROPERTIES
             {
                 Identifier = TP_COLUMN ;
                 PageResID = TP_COLUMN ;
-                Text [ de ] = "Spalten" ;
                 Text [ en-US ] = "Columns" ;
             };
             PageItem
             {
                 Identifier = TP_SECTION_INDENTS;
                 PageResID = TP_SECTION_INDENTS;
-                Text [ de ] = "Einz√ºge" ;
                 Text [ en-US ] = "Indents" ;
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
                 PageResID = TP_BACKGROUND ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
             };
             PageItem
             {
                 Identifier = TP_SECTION_FTNENDNOTES ;
                 PageResID = TP_SECTION_FTNENDNOTES ;
-                Text [ de ] = "Fu√ü-/Endnoten" ;
                 Text [ en-US ] = "Footnotes/Endnotes";
             };
         };
@@ -661,7 +619,6 @@ TabPage TP_SECTION_FTNENDNOTES
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Fu√ünoten" ;
         Text [ en-US ] = "Footnotes";
     };
     CheckBox CB_FTN_AT_TXTEND
@@ -669,7 +626,6 @@ TabPage TP_SECTION_FTNENDNOTES
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "am ~Textende sammeln" ;
         Text [ en-US ] = "Collec~t at end of text";
 
     };
@@ -678,14 +634,12 @@ TabPage TP_SECTION_FTNENDNOTES
         Pos = MAP_APPFONT ( 18 , 29 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~Nummer neu starten" ;
         Text [ en-US ] = "~Restart numbering";
     };
     FixedText FT_FTN_OFFSET
     {
         Pos = MAP_APPFONT ( 24 , 46 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "~Beginn bei" ;
         Left = TRUE ;
         Text [ en-US ] = "~Start at" ;
     };
@@ -706,14 +660,12 @@ TabPage TP_SECTION_FTNENDNOTES
         Pos = MAP_APPFONT ( 24 , 61 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "eigenes ~Format" ;
         Text [ en-US ] = "Custom ~format";
     };
     FixedText FT_FTN_PREFIX
     {
         Pos = MAP_APPFONT ( 30 , 76 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
-        Text [ de ] = "~Davor" ;
         Text [ en-US ] = "Be~fore" ;
         Left = TRUE ;
     };
@@ -739,7 +691,6 @@ TabPage TP_SECTION_FTNENDNOTES
     {
         Pos = MAP_APPFONT ( 191 , 76 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text [ de ] = "Dah~inter" ;
         Text [ en-US ] = "Aft~er" ;
         Right = TRUE ;
     };
@@ -759,7 +710,6 @@ TabPage TP_SECTION_FTNENDNOTES
         OutputSize = TRUE ;
         Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Endnoten" ;
         Text [ en-US ] = "Endnotes";
     };
     CheckBox CB_END_AT_TXTEND
@@ -767,7 +717,6 @@ TabPage TP_SECTION_FTNENDNOTES
         Pos = MAP_APPFONT ( 12 , 103 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~am Bereichsende sammeln" ;
         Text [ en-US ] = "C~ollect at end of section";
     };
     CheckBox CB_END_NUM
@@ -775,14 +724,12 @@ TabPage TP_SECTION_FTNENDNOTES
         Pos = MAP_APPFONT ( 16 , 118 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Nummer neu ~starten" ;
         Text [ en-US ] = "~Restart numbering";
     };
     FixedText FT_END_OFFSET
     {
         Pos = MAP_APPFONT ( 24 , 135 ) ;
         Size = MAP_APPFONT ( 64 , 8 ) ;
-        Text [ de ] = "Be~ginn bei" ;
         Left = TRUE ;
         Text [ en-US ] = "~Start at" ;
     };
@@ -803,7 +750,6 @@ TabPage TP_SECTION_FTNENDNOTES
         Pos = MAP_APPFONT ( 24 , 150 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "~eigenes Format" ;
         Text [ en-US ] = "Custom format";
     };
 
@@ -811,7 +757,6 @@ TabPage TP_SECTION_FTNENDNOTES
     {
         Pos = MAP_APPFONT ( 30 , 165 ) ;
         Size = MAP_APPFONT ( 58 , 8 ) ;
-        Text [ de ] = "Da~vor" ;
         Text [ en-US ] = "Be~fore" ;
         Left = TRUE ;
     };
@@ -838,7 +783,6 @@ TabPage TP_SECTION_FTNENDNOTES
     {
         Pos = MAP_APPFONT ( 191 , 165 ) ;
         Size = MAP_APPFONT ( 25 , 8 ) ;
-        Text [ de ] = "Dahinte~r" ;
         Text [ en-US ] = "Aft~er" ;
         Right = TRUE ;
     };
@@ -864,7 +808,6 @@ TabPage TP_SECTION_INDENTS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 173 , 8 ) ;
-        Text [ de ] = "Einzug" ;
         Text [ en-US ] = "Indent" ;
     };
     FixedText FT_BEFORE
@@ -872,7 +815,6 @@ TabPage TP_SECTION_INDENTS
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Vor Bereich" ;
         Text [ en-US ] = "~Before section" ;
     };
     MetricField MF_BEFORE
@@ -896,7 +838,6 @@ TabPage TP_SECTION_INDENTS
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 120 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "H~inter Bereich" ;
         Text [ en-US ] = "~After section" ;
     };
     MetricField MF_AFTER
