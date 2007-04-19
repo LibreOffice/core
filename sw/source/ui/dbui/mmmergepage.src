@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmmergepage.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-07-13 15:56:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,7 +46,6 @@ TabPage DLG_MM_MERGE_PAGE
     {
         Pos = MAP_APPFONT ( 6 , 8 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Personalisieren Sie die Serienbrief-Dokumente";
         Text [ en-US ] = "Personalize the mail merge documents";
     };
     FixedText  FI_EDIT
@@ -54,28 +53,24 @@ TabPage DLG_MM_MERGE_PAGE
         Pos = MAP_APPFONT ( 6 , 27 ) ;
         Size = MAP_APPFONT ( 248 , 38 ) ;
         WordBreak = TRUE;
-        Text [ de ] = "Sie können jetzt die Dokumente personalisieren. Ein Klick auf die Schaltfläche '%1' schließt vorübergehend den Assistenten. Durch Klicken der 'Zurück zum Seriendruck-Assistenten' Schaltfläche - sichtbar in einem kleinen Fenster - gelangen Sie zurück zum Assistenten.";
         Text [ en-US ] = "You can personalize particular documents. Clicking '%1' will temporarily reduce the wizard to a small window so you can edit your document. After editing the document, return to the wizard by clicking 'Return to Mail Merge Wizard' in the small window.";
     };
     PushButton PB_EDIT
     {
         Pos = MAP_APPFONT ( 70 , 67 ) ;
         Size = MAP_APPFONT ( 120 , 14 ) ;
-        Text [ de ] = "Individuelles Dokument bearbeiten...";
         Text [ en-US ] = "~Edit individual document...";
     };
     FixedLine  FL_FIND
     {
         Pos = MAP_APPFONT ( 6 , 102 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Suche";
         Text [ en-US ] = "~Find";
     };
     FixedText  FT_FIND
     {
         Pos = MAP_APPFONT ( 16 ,116 ) ;
         Size = MAP_APPFONT ( 45 , 8 ) ;
-        Text [ de ] = "Suchen ~nach:";
         Text [ en-US ] = "~Search for:";
     };
     Edit       ED_FIND
@@ -88,28 +83,24 @@ TabPage DLG_MM_MERGE_PAGE
     {
         Pos = MAP_APPFONT ( 198 ,113 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Suchen...";
         Text [ en-US ] = "~Find...";
     };
     CheckBox   CB_WHOLEWORDS
     {
         Pos = MAP_APPFONT ( 55 , 131 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
-        Text [ de ] = "Nur ganzes ~Wort suchen";
         Text [ en-US ] = "Whole wor~ds only";
     };
     CheckBox   CB_BACKWARDS
     {
         Pos = MAP_APPFONT ( 55 , 144 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
-        Text [ de ] = "Nach ~oben";
         Text [ en-US ] = "Back~wards";
     };
     CheckBox   CB_MATCHCASE
     {
         Pos = MAP_APPFONT ( 55 , 157 ) ;
         Size = MAP_APPFONT ( 180 , 10 ) ;
-        Text [ de ] = "~Groß-/Kleinschreibung";
         Text [ en-US ] = "Ma~tch case";
     };
 };
