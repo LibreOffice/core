@@ -4,9 +4,9 @@
  *
  *  $RCSfile: warnings.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 17:14:16 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:59:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModalDialog RID_XMLSECTP_MACROWARN
     Moveable = TRUE;
     SVLook = TRUE;
 
-    Text [ de ] = "Sicherheitswarnung";
     Text [ en-US ] = "Security Warning";
 
     FixedText FI_DOCNAME
@@ -53,7 +52,6 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_0 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, 3*RSC_CD_FIXEDTEXT_HEIGHT );
         Wordbreak = TRUE;
-        Text [ de ] = "";
         Text [ en-US ] = "";
     };
     FixedText FI_DESCR1A
@@ -61,7 +59,6 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_1 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
         Wordbreak = TRUE;
-        Text [ de ] = "";
         Text [ en-US ] = "The document contains document macros signed by:";
     };
     FixedText FI_DESCR1B
@@ -69,7 +66,6 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_1 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
         Wordbreak = TRUE;
-        Text [ de ] = "";
         Text [ en-US ] = "The document contains document macros.";
     };
     FixedText FI_SIGNS
@@ -77,14 +73,12 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_2 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_2, MW_ROW_3-MW_ROW_2 );
         Wordbreak = TRUE;
-        Text [ de ] = "";
         Text [ en-US ] = "";
     };
     PushButton PB_VIEWSIGNS
     {
         Pos = MAP_APPFONT( MW_COL_3, MW_ROW_2 );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "Signatur anzeigen...";
         Text [ en-US ] = "View Signatures...";
     };
     FixedText FI_DESCR2
@@ -92,14 +86,12 @@ ModalDialog RID_XMLSECTP_MACROWARN
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_3 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_FIXEDTEXT_HEIGHT );
         Wordbreak = TRUE;
-        Text [ de ] = "";
         Text [ en-US ] = "Macros may contain viruses. Disabling macros for a document is always save. If you disable macros you may lose functionality provided by the document macros.";
     };
     CheckBox CB_ALWAYSTRUST
     {
         Pos = MAP_APPFONT( MW_COL_1, MW_ROW_4 );
         Size = MAP_APPFONT( MW_COL_4-MW_COL_1, RSC_CD_CHECKBOX_HEIGHT );
-        Text [ de ] = "";
         Text [ en-US ] = "Always trust macros from this source";
     };
     FixedLine FL_BOTTOM_SEP
@@ -111,14 +103,12 @@ ModalDialog RID_XMLSECTP_MACROWARN
     {
         Pos = MAP_APPFONT( DLGS_BOTTOM_OK_X( MW_WIDTH ), DLGS_BOTTOM_BTN_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "";
         Text [ en-US ] = "Enable Macros";
     };
     CancelButton PB_DISABLE
     {
         Pos = MAP_APPFONT( DLGS_BOTTOM_CANCEL_X( MW_WIDTH ), DLGS_BOTTOM_BTN_Y( MW_HEIGHT ) );
         Size = MAP_APPFONT( RSC_CD_PUSHBUTTON_WIDTH, RSC_CD_PUSHBUTTON_HEIGHT );
-        Text [ de ] = "";
         Text [ en-US ] = "Disable Macros";
     };
     HelpButton BTN_HELP
