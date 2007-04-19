@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:01:00 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,16 +47,13 @@ TabPage TP_ENV_FMT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Empfänger" ;
         Text [ en-US ] = "Addressee" ;
-        Text [ x-comment ] = " ";
     };
     FixedText TXT_ADDR_POS
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position";
     };
     FixedText TXT_ADDR_LEFT
@@ -64,9 +61,7 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 18 , 27 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "v~on links" ;
         Text [ en-US ] = "from left" ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_ADDR_LEFT
     {
@@ -90,9 +85,7 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 18 , 43 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~von oben" ;
         Text [ en-US ] = "from top" ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_ADDR_TOP
     {
@@ -116,7 +109,6 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 149 , 27 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Format" ;
         Text [ en-US ] = "Format";
     };
     MenuButton BTN_ADDR_EDIT
@@ -124,24 +116,19 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 194 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Bearb." ;
         Text [ en-US ] = "Edit" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SENDER
     {
         Pos = MAP_APPFONT ( 6 , 56 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Absender" ;
         Text [ en-US ] = "Sender" ;
-        Text [ x-comment ] = " ";
     };
     FixedText TXT_SEND_POS
     {
         Pos = MAP_APPFONT ( 12 , 67 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Position" ;
         Text [ en-US ] = "Position";
     };
     FixedText TXT_SEND_LEFT
@@ -149,9 +136,7 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 18 , 80 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "von ~links" ;
         Text [ en-US ] = "from left" ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_SEND_LEFT
     {
@@ -175,9 +160,7 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 18 , 96 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "vo~n oben" ;
         Text [ en-US ] = "from top" ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_SEND_TOP
     {
@@ -201,34 +184,27 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 149 , 80 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "Format" ;
         Text [ en-US ] = "Format";
     };
     MenuButton BTN_SEND_EDIT
     {
         Pos = MAP_APPFONT ( 194 , 77 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "Bearb." ;
         Text [ en-US ] = "Edit" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_SIZE
     {
         Pos = MAP_APPFONT ( 6 , 109 ) ;
         Size = MAP_APPFONT ( 148 , 8 ) ;
-        Text [ de ] = "Größe" ;
         Text [ en-US ] = "Size" ;
-        Text [ x-comment ] = " ";
     };
     FixedText TXT_SIZE_FORMAT
     {
         Pos = MAP_APPFONT ( 12 , 122 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Format" ;
         Text [ en-US ] = "F~ormat" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     ListBox BOX_SIZE_FORMAT
     {
@@ -242,10 +218,8 @@ TabPage TP_ENV_FMT
     {
         Pos = MAP_APPFONT ( 12 , 138 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text [ de ] = "~Breite" ;
         Text [ en-US ] = "~Width" ;
         Left = TRUE ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_SIZE_WIDTH
     {
@@ -269,9 +243,7 @@ TabPage TP_ENV_FMT
         Pos = MAP_APPFONT ( 12 , 154 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
         Left = TRUE ;
-        Text [ de ] = "~Höhe" ;
         Text [ en-US ] = "~Height" ;
-        Text [ x-comment ] = " ";
     };
     MetricField FLD_SIZE_HEIGHT
     {
@@ -305,16 +277,12 @@ Menu MNU_EDIT
         MenuItem
         {
             IDENTIFIER = MID_CHAR ;
-            Text [ de ] = "~Zeichen..." ;
             Text [ en-US ] = "C~haracter..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             IDENTIFIER = MID_PARA ;
-            Text [ de ] = "~Absatz..." ;
             Text [ en-US ] = "P~aragraph..." ;
-            Text [ x-comment ] = " ";
         };
     };
 };
