@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.188 $
+ *  $Revision: 1.189 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:11:24 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 09:27:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -227,7 +227,7 @@ using namespace ::com::sun::star::io;
 #include "docfilt.hxx"      // SfxFilter
 #include "objsh.hxx"        // CheckOpenMode
 #include "docfac.hxx"       // GetFilterContainer
-#include "doc.hrc"          // MSG_WARNING_BACKUP, MSG_OPEN_READONLY
+#include "doc.hrc"
 #include "openflag.hxx"     // SFX_STREAM_READONLY etc.
 #include "sfxresid.hxx"
 #include "appuno.hxx"
@@ -931,11 +931,7 @@ void SfxMedium::StorageBackup_Impl()
     {
         DoInternalBackup_Impl( aOriginalContent );
         if( !pImp->m_aBackupURL.getLength() )
-        {
-            // TODO/LATER: move the message to the interaction handler
-               WarningBox( NULL, SfxResId( MSG_WARNING_BACKUP ) ).Execute();
-            SetError( ERRCODE_ABORT );
-        }
+            SetError( ERRCODE_SFX_CANTCREATEBACKUP );
     }
 }
 
@@ -1625,8 +1621,7 @@ sal_Bool SfxMedium::TransactedTransferForFS_Impl( const INetURLObject& aSource,
                     }
                     else
                     {
-                        WarningBox( NULL, SfxResId( MSG_WARNING_BACKUP ) ).Execute();
-                        eError = ERRCODE_ABORT;
+                        eError = ERRCODE_SFX_CANTCREATEBACKUP;
                     }
                 }
                 else
@@ -2154,8 +2149,7 @@ void SfxMedium::DoBackup_Impl()
 
     if ( !bSuccess )
     {
-        eError = ERRCODE_ABORT;
-        WarningBox( NULL, SfxResId( MSG_WARNING_BACKUP ) ).Execute();
+        eError = ERRCODE_SFX_CANTCREATEBACKUP;
     }
 }
 
