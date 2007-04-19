@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapdlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 15:16:15 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 14:07:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,7 +45,6 @@ ModelessDialog RID_SVXDLG_IMAP
     SVLook = TRUE ;
     Pos = MAP_APPFONT ( 0 , 0 ) ;
     Size = MAP_APPFONT ( 270 , 213 ) ;
-    Text [ de ] = "ImageMap-Editor" ;
     Sizeable = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
@@ -61,26 +60,20 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_APPLY ;
                 HelpId = HID_IMAPDLG_APPLY ;
-                Text [ de ] = "Zuweisen" ;
                 Text [ en-US ] = "Apply" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_OPEN ;
                 HelpId = HID_IMAPDLG_OPEN ;
-                Text [ de ] = "Ã–ffnen..." ;
                 Text [ en-US ] = "Open..." ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_SAVEAS ;
                 HelpId = HID_IMAPDLG_SAVEAS ;
 
-                Text [ de ] = "Speichern...";
                 Text [ en-US ] = "Save..." ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -90,51 +83,41 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_SELECT ;
                 HelpId = HID_IMAPDLG_SELECT ;
-                Text [ de ] = "Auswahl" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Select" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_RECT ;
                 HelpId = HID_IMAPDLG_RECT ;
-                Text [ de ] = "Rechteck" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Rectangle" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_CIRCLE ;
                 HelpId = HID_IMAPDLG_CIRCLE ;
-                Text [ de ] = "Ellipse" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Ellipse" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_POLY ;
                 HelpId = HID_IMAPDLG_POLY ;
-                Text [ de ] = "Polygon" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
                 Text [ en-US ] = "Polygon" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_FREEPOLY ;
                 HelpId = HID_IMAPDLG_FREEPOLY ;
-                Text [ de ] = "Freihandpolygon" ;
                 Text [ en-US ] = "Freeform Polygon" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -144,20 +127,16 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_POLYEDIT ;
                 HelpId = HID_IMAPDLG_POLYEDIT ;
-                Text [ de ] = "Punkte bearbeiten" ;
                 Text [ en-US ] = "Edit Points" ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_POLYMOVE ;
                 HelpId = HID_IMAPDLG_POLYMOVE ;
-                Text [ de ] = "Punkte verschieben" ;
                 Text [ en-US ] = "Move Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -165,11 +144,9 @@ ModelessDialog RID_SVXDLG_IMAP
                 HelpId = HID_IMAPDLG_POLYINSERT ;
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte einfügen : Punkte einf³gen */
-                Text [ de ] = "Punkte einfÃ¼gen" ;
                 Text [ en-US ] = "Insert Points" ;
                 RadioCheck = TRUE ;
                 AutoCheck = TRUE ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -177,9 +154,7 @@ ModelessDialog RID_SVXDLG_IMAP
                 HelpId = HID_IMAPDLG_POLYDELETE ;
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
                 /* ### ACHTUNG: Neuer Text in Resource? Punkte löschen : Punkte l÷schen */
-                Text [ de ] = "Punkte lÃ¶schen" ;
                 Text [ en-US ] = "Delete Points" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -189,17 +164,13 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_UNDO ;
                 HelpId = HID_IMAPDLG_UNDO ;
-                Text [ de ] = "RÃ¼ckgÃ¤ngig " ;
                 Text [ en-US ] = "Undo " ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_REDO ;
                 HelpId = HID_IMAPDLG_REDO ;
-                Text [ de ] = "Wiederherstellen " ;
                 Text [ en-US ] = "Redo" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
@@ -209,25 +180,19 @@ ModelessDialog RID_SVXDLG_IMAP
             {
                 Identifier = TBI_ACTIVE ;
                 HelpId = HID_IMAPDLG_ACTIVE ;
-                Text [ de ] = "Aktiv" ;
                 Text [ en-US ] = "Active" ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_MACRO ;
                 HelpId = HID_IMAPDLG_MACRO ;
-                Text [ de ] = "Makro..." ;
                 Text [ en-US ] = "Macro..." ;
-                Text [ x-comment ] = " ";
             };
             ToolBoxItem
             {
                 Identifier = TBI_PROPERTY ;
                 HelpId = HID_IMAPDLG_PROPERTY ;
-                Text [ de ] = "Eigenschaften..." ;
                 Text [ en-US ] = "Properties..." ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -236,9 +201,7 @@ ModelessDialog RID_SVXDLG_IMAP
     {
         Pos = MAP_APPFONT ( 6 , 25 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
-        Text [ de ] = "Adresse:" ;
         Text [ en-US ] = "Address:" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox CBB_URL
     {
@@ -253,9 +216,7 @@ ModelessDialog RID_SVXDLG_IMAP
     {
         Pos = MAP_APPFONT ( 6 , 43 ) ;
         Size = MAP_APPFONT ( 30 , 12 ) ;
-        Text [ de ] = "Text:" ;
         Text [ en-US ] = "Text:" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_TEXT
     {
@@ -267,13 +228,11 @@ ModelessDialog RID_SVXDLG_IMAP
         Left = TRUE ;
     };
     Text [ en-US ] = "ImageMap Editor" ;
-    Text [ x-comment ] = " ";
 
     FixedText RID_SVXCTL_FT_TARGET
     {
         Pos = MAP_APPFONT ( 188 , 43 ) ;
         Size = MAP_APPFONT ( 22 , 12 ) ;
-        Text[ de ] = "Frame:";
         Text [ en-US ] = "Frame:" ;
     };
      // nur temporaer
@@ -341,23 +300,17 @@ Menu RID_SVXMN_IMAP
         MenuItem
         {
             Identifier = MN_URL ;
-            Text [ de ] = "~Beschreibung..." ;
             Text [ en-US ] = "Description..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_MACRO ;
-            Text [ de ] = "Ma~kro..." ;
             Text [ en-US ] = "~Macro..." ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_ACTIVATE ;
-            Text [ de ] = "~Aktiv" ;
             Text [ en-US ] = "Active" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -366,7 +319,6 @@ Menu RID_SVXMN_IMAP
         MenuItem
         {
             Identifier = MN_POSITION ;
-            Text [ de ] = "A~nordnung" ;
             Text [ en-US ] = "Arrange" ;
             SubMenu = Menu
             {
@@ -375,34 +327,25 @@ Menu RID_SVXMN_IMAP
                     MenuItem
                     {
                         Identifier = MN_FRAME_TO_TOP ;
-                        Text [ de ] = "Ganz nach ~vorn" ;
                         Text [ en-US ] = "Bring to Front" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_MOREFRONT ;
-                        Text [ de ] = "W~eiter nach vorn" ;
                         Text [ en-US ] = "Bring ~Forward" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_MOREBACK ;
-                        Text [ de ] = "Weiter ~nach hinten" ;
                         Text [ en-US ] = "Send Back~ward" ;
-                        Text [ x-comment ] = " ";
                     };
                     MenuItem
                     {
                         Identifier = MN_FRAME_TO_BOTTOM ;
-                        Text [ de ] = "Ganz nach ~hinten" ;
                         Text [ en-US ] = "~Send to Back" ;
-                        Text [ x-comment ] = " ";
                     };
                 };
             };
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
@@ -413,19 +356,15 @@ Menu RID_SVXMN_IMAP
             Identifier = MN_MARK_ALL ;
             /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
             /* ### ACHTUNG: Neuer Text in Resource? Alles ausw~ählen : Alles ausw~õhlen */
-            Text [ de ] = "Alles ausw~Ã¤hlen" ;
             Text [ en-US ] = "Select ~All" ;
-            Text [ x-comment ] = " ";
         };
         MenuItem
         {
             Identifier = MN_DELETE1 ;
             /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
             /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
-            Text [ de ] = "~LÃ¶schen" ;
             Text [ en-US ] = "~Delete" ;
             /* ### ACHTUNG: Neuer Text in Resource? Die Selektion löschen : Die Selektion l÷schen */
-            Text [ x-comment ] = " ";
         };
     };
 };
@@ -437,15 +376,12 @@ ModalDialog RID_SVXDLG_IMAPURL
     Closeable = TRUE ;
     Moveable = TRUE ;
     Size = MAP_APPFONT ( 214 , 80 ) ;
-    Text [ de ] = "Beschreibung" ;
     Text [ en-US ] = "Description" ;
     FixedText FT_URLDESCRIPTION
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "~Alternativtext" ;
         Text [ en-US ] = "Alternative ~text" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_URLDESCRIPTION
     {
@@ -459,9 +395,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "~URL" ;
         Text [ en-US ] = "~URL" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_URL
     {
@@ -488,17 +422,13 @@ ModalDialog RID_SVXDLG_IMAPURL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 146 , 8 ) ;
-        Text [ de ] = "Hyperlink" ;
         Text [ en-US ] = "Hyperlink" ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_TARGET
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "~Frame" ;
         Text [ en-US ] = "F~rame" ;
-        Text [ x-comment ] = " ";
     };
     ComboBox CBB_TARGETS
     {
@@ -514,9 +444,7 @@ ModalDialog RID_SVXDLG_IMAPURL
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
-        Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
-        Text [ x-comment ] = " ";
     };
     Edit EDT_NAME
     {
@@ -526,24 +454,19 @@ ModalDialog RID_SVXDLG_IMAPURL
         Pos = MAP_APPFONT ( 62 , 62 ) ;
         Size = MAP_APPFONT ( 84 , 12 ) ;
     };
-    Text [ x-comment ] = " ";
 };
 /******************************************************************************/
 String STR_IMAPDLG_SAVE
 {
-    Text [ de ] = "Die ImageMap wurde geÃ¤ndert.\nSollen die Ã„nderungen gespeichert werden?";
     Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?";
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen gespeichert werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen gespeichert werden? */
-    Text [ x-comment ] = " ";
 };
 String STR_IMAPDLG_MODIFY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen ³bernommen werden? */
     /* ### ACHTUNG: Neuer Text in Resource? Die ImageMap wurde geändert.\nSollen die Änderungen übernommen werden? : Die ImageMap wurde geõndert.\nSollen die Žnderungen ³bernommen werden? */
-    Text [ de ] = "Die ImageMap wurde geÃ¤ndert.\nSollen die Ã„nderungen Ã¼bernommen werden?" ;
     Text [ en-US ] = "The ImageMap has been modified.\nDo you want to save the changes?" ;
-    Text [ x-comment ] = " ";
 };
 /******************************************************************************/
 
