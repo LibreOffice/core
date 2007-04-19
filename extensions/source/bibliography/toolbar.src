@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbar.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2006-04-27 09:51:49 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:43:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,9 +55,7 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_FT_SOURCE;
             //HelpID = SID_SBA_BRW_INSERT ;
-            Text [ de ] = "Tabelle" ;
             Text [ en-US ] = "Table";
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
@@ -74,7 +72,6 @@ ToolBox RID_BIB_TOOLBAR
         {
             Identifier = TBC_FT_QUERY;
             //HelpID = SID_SBA_BRW_INSERT ;
-            Text [ de ] = "Suchbegriff" ;
             Text [ en-US ] = "Search Key";
         };
         ToolBoxItem
@@ -94,10 +91,8 @@ ToolBox RID_BIB_TOOLBAR
             HelpID = HID_BIB_TBX_AUTOFILTER;
 //            ItemBitmap = Bitmap { File = "sc10716.bmp" ; };
             DropDown = TRUE ;
-            Text [ de ] = "AutoFilter" ;
             Command = ".uno:Bib/autoFilter" ;
             Text [ en-US ] = "AutoFilter";
-            Text [ x-comment ] = " ";
         };
 
         ToolBoxItem
@@ -108,7 +103,6 @@ ToolBox RID_BIB_TOOLBAR
 //            Text [ de ] = "Standard Filter" ;
             Command = ".uno:Bib/standardFilter" ;
             Text [ en-US ] = "Standard Filter";
-            Text [ x-comment ] = " ";
         };
 
         ToolBoxItem
@@ -116,31 +110,25 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_REMOVEFILTER ;
             HelpID = SID_FM_REMOVE_FILTER_SORT ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
-            Text [ de ] = "Filter entfernen" ;
             Command = ".uno:Bib/removeFilter" ;
             Text [ en-US ] = "Remove Filter";
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             Identifier = TBC_BT_COL_ASSIGN ;
             HelpId = HID_BIB_MAPPINGDLG;
-            Text [ de ] = "Spaltenzuordnung" ;
 //          Command = ".uno:Bib/Mapping" ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Text [ en-US ] = "Column Arrangement";
-            Text [ x-comment ] = " ";
         };
         ToolBoxItem
         {
             Identifier = TBC_BT_CHANGESOURCE ;
             HelpId = HID_BIB_CHANGESOURCE;
             Command = ".uno:Bib/sdbsource" ;
-            Text [ de ] = "Datenquelle" ;
 //            ItemBitmap = Bitmap { File = "sc10711.bmp" ; };
             Checkable=TRUE;
             Text [ en-US ] = "Data Source";
-            Text [ x-comment ] = " ";
         };
 /*
         ToolBoxItem
@@ -154,7 +142,6 @@ ToolBox RID_BIB_TOOLBAR
             //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/newEntry" ;
             ItemBitmap = Bitmap { File = "newcard.bmp" ; };
-            Text [ de ]= "Neue Adresse" ;
             Text [ en-US ] = "New Address";
         };
 
@@ -164,7 +151,6 @@ ToolBox RID_BIB_TOOLBAR
             //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/changeEntry" ;
             ItemBitmap = Bitmap { File = "modcard.bmp" ; };
-            Text [ de ]= "Adresse bearbeiten" ;
             Text [ en-US ] = "Edit Address";
         };
 
@@ -174,7 +160,6 @@ ToolBox RID_BIB_TOOLBAR
             //HelpID = SID_FM_REMOVE_FILTER_SORT ;
             Command = ".uno:Bib/removeEntry" ;
             ItemBitmap = Bitmap { File = "remcard.bmp" ; };
-            Text [ de ] = "Adresse löschen" ;
             Text [ en-US ] = "Remove Address";
         };
 
@@ -188,7 +173,6 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_INSERT ;
             HelpID = SID_SBA_BRW_INSERT ;
             ItemBitmap = Bitmap { File = "sc12202.bmp" ; };
-            Text [ de ] = "Daten in Text" ;
             Text [ en-US ] = "Data into Text";
         };
         ToolBoxItem
@@ -209,7 +193,6 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_MAIL ;
             //HelpID = HID_ADDRPI_AUTOMAIL ;
             ItemBitmap = Bitmap { File = "sc06305.bmp" ; };
-            Text [ de ] = "AutoMail" ;
             Text [ en-US ] = "AutoMail";
         };
         ToolBoxItem
@@ -217,7 +200,6 @@ ToolBox RID_BIB_TOOLBAR
             Identifier = TBC_BT_URL ;
             //HelpID = HID_ADDRPI_AUTOBROWSE ;
             ItemBitmap = Bitmap { File = "sc06304.bmp" ; };
-            Text [ de ] = "AutoBrowse" ;
             Text [ en-US ] = "AutoBrowse";
         };*/
     };
