@@ -4,9 +4,9 @@
  *
  *  $RCSfile: utlui.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 13:17:07 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:41:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,132 +43,91 @@ Resource RID_SHELLRES_AUTOFMTSTRS
 {
     String STR_AUTOFMTREDL_DEL_EMPTY_PARA+1
     {
-        Text [ de ] = "Leere Abs√§tze entfernen" ;
         Text [ en-US ] = "Remove empty paragraphs" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_USE_REPLACE+1
     {
-        Text [ de ] = "Ersetzungstabelle anwenden" ;
         Text [ en-US ] = "Use replacement table" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_CPTL_STT_WORD+1
     {
         /* ### ACHTUNG: Neuer Text in Resource? ZWei Groﬂbuchstaben am WOrtanfang korrigieren : ZWei Groòbuchstaben am WOrtanfang korrigieren */
-        Text [ de ] = "ZWei Gro√übuchstaben am WOrtanfang korrigieren" ;
         Text [ en-US ] = "Correct TWo INitial CApitals" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_CPTL_STT_SENT+1
     {
         /* ### ACHTUNG: Neuer Text in Resource? Jeden Satz mit einem Groﬂbuchstaben beginnen : Jeden Satz mit einem Groòbuchstaben beginnen */
-        Text [ de ] = "Jeden Satz mit einem Gro√übuchstaben beginnen" ;
         Text [ en-US ] = "Capitalize first letter of sentences" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_TYPO+1
     {
-        Text [ de ] = "\"Gerade\" Anf√ºhrungszeichen durch %1typografische%2 ersetzen" ;
         Text [ en-US ] = "Replace \"standard\" quotes with %1custom%2 quotes" ;
     };
     String STR_AUTOFMTREDL_USER_STYLE+1
     {
-        Text [ de ] = "Benutzervorlagen ersetzen" ;
         Text [ en-US ] = "Replace Custom Styles" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_BULLET+1
     {
-        Text [ de ] = "Bulletzeichen ersetzt" ;
         Text [ en-US ] = "Bullets replaced";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_UNDER+1
     {
-        Text [ de ] = "Automatisch _unterstrichen_" ;
         Text [ en-US ] = "Automatic _underline_";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_BOLD+1
     {
-        Text [ de ] = "Automatisch *fett*" ;
         Text [ en-US ] = "Automatic *bold*";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_FRACTION+1
     {
-        Text [ de ] = "1/2 ... durch ¬Ω ... ersetzen" ;
         Text [ en-US ] = "Replace 1/2 ... with ¬Ω ..." ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_DETECT_URL+1
     {
-        Text [ de ] = "URL erkennen" ;
         Text [ en-US ] = "URL recognition" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_DASH+1
     {
-        Text [ de ] = "Gedankenstriche ersetzen" ;
         Text [ en-US ] = "Replace dashes" ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_ORDINAL+1
     {
-        Text [ de ] = "1st ... durch 1^st ... ersetzen" ;
         Text [ en-US ] = "Replace 1st... with 1^st..." ;
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_RIGHT_MARGIN+1
     {
-        Text [ de ] = "Zusammenfassen von einzeiligen Abs√§tzen" ;
         Text [ en-US ] = "Combine single line paragraphs";
-        Text [ x-comment ] = " ";
     };
 
     String STR_AUTOFMTREDL_SET_TMPL_TEXT +1
     {
-        Text [ de ] = "Setze Vorlage \"Textk√∂rper\"" ;
         Text [ en-US ] = "Set \"Text body\" Style";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_INDENT  +1
     {
-        Text [ de ] = "Setze Vorlage \"Textk√∂rper Einzug\"" ;
         Text [ en-US ] = "Set \"Text body indent\" Style";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_NEG_INDENT  +1
     {
-        Text [ de ] = "Setze Vorlage \"Textk√∂rper Einzug negativ\"" ;
         Text [ en-US ] = "Set \"Hanging indent\" Style";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_TEXT_INDENT +1
     {
-        Text [ de ] = "Setze Vorlage \"Textk√∂rper Einr√ºckung\"" ;
         Text [ en-US ] = "Set \"Text body indent\" Style";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_TMPL_HEADLINE +1
     {
-        Text [ de ] = "Setze Vorlage \"√úberschrift $(ARG1)\"" ;
         Text [ en-US ] = "Set \"Heading $(ARG1)\" Style";
-        Text [ x-comment ] = " ";
     };
     String STR_AUTOFMTREDL_SET_NUMBULET +1
     {
-        Text [ de ] = "Setze Vorlage \"Aufz√§hlung\" oder \"Nummerierung\"" ;
         Text [ en-US ] = "Set \"Bullet\" or \"Numbering\" Style";
-        Text [ x-comment ] = " ";
     };
 
     String STR_AUTOFMTREDL_DEL_MORELINES +1
     {
-        Text [ de ] = "Zusammenfassen von Abs√§tzen" ;
         Text [ en-US ] = "Combine paragraphs";
-        Text [ x-comment ] = " ";
     };
 
 };
@@ -178,263 +137,182 @@ Resource RID_SHELLRES_AUTOFMTSTRS
  ---------------------------------------------------------------------*/
 String STR_EVENT_OBJECT_SELECT
 {
-    Text [ de ] = "Objekt anklicken" ;
     Text [ en-US ] = "Click object" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_START_INS_GLOSSARY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Vor AutoText einf¸gen : Vor AutoText einf≥gen */
-    Text [ de ] = "Vor Einf√ºgen des AutoTextes" ;
     Text [ en-US ] = "Before inserting AutoText";
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_END_INS_GLOSSARY
 {
     /* ### ACHTUNG: Neuer Text in Resource? Nach AutoText einf¸gen : Nach AutoText einf≥gen */
-    Text [ de ] = "Nach Einf√ºgen des AutoTextes" ;
     Text [ en-US ] = "After inserting AutoText";
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_MOUSEOVER_OBJECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Maus ¸ber Objekt : Maus ≥ber Objekt */
-    Text [ de ] = "Maus √ºber Objekt" ;
     Text [ en-US ] = "Mouse over object" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_MOUSECLICK_OBJECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Hyperlink auslˆsen : Hyperlink ausl˜sen */
-    Text [ de ] = "Hyperlink ausl√∂sen" ;
     Text [ en-US ] = "Trigger hyperlink" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_MOUSEOUT_OBJECT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Maus verl‰ﬂt Objekt : Maus verlıòt Objekt */
-    Text [ de ] = "Maus verl√§sst Objekt" ;
     Text [ en-US ] = "Mouse leaves object" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_IMAGE_LOAD
 {
-    Text [ de ] = "Grafik laden erfolgreich" ;
     Text [ en-US ] = "Graphics load successful" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_IMAGE_ABORT
 {
-    Text [ de ] = "Grafik laden abgebrochen" ;
     Text [ en-US ] = "Graphics load terminated" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_IMAGE_ERROR
 {
-    Text [ de ] = "Grafik laden fehlerhaft" ;
     Text [ en-US ] = "Graphics load faulty" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_FRM_KEYINPUT_A
 {
-    Text [ de ] = "Eingabe von Alphazeichen" ;
     Text [ en-US ] = "Input of alphanumeric characters" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_FRM_KEYINPUT_NOA
 {
-    Text [ de ] = "Eingabe von Nicht-Alphazeichen" ;
     Text [ en-US ] = "Input of non-alphanumeric characters" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_FRM_RESIZE
 {
     /* ### ACHTUNG: Neuer Text in Resource? Rahmengrˆﬂe ver‰ndern : Rahmengr˜òe verındern */
-    Text [ de ] = "Rahmengr√∂√üe ver√§ndern" ;
     Text [ en-US ] = "Resize frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_EVENT_FRM_MOVE
 {
-    Text [ de ] = "Rahmen verschieben" ;
     Text [ en-US ] = "Move frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_OUTLINE
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschriften : öberschriften */
-    Text [ de ] = "√úberschriften" ;
     Text [ en-US ] = "Headings" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_TABLE
 {
-    Text [ de ] = "Tabellen" ;
     Text [ en-US ] = "Tables" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_FRAME
 {
-    Text [ de ] = "Textrahmen" ;
     Text [ en-US ] = "Text frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_GRAPHIC
 {
-    Text [ de ] = "Grafiken" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_OLE
 {
-    Text [ de ] = "OLE-Objekte" ;
     Text [ en-US ] = "OLE objects" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_BOOKMARK
 {
-    Text [ de ] = "Textmarken" ;
     Text [ en-US ] = "Bookmarks" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_REGION
 {
-    Text [ de ] = "Bereiche" ;
     Text [ en-US ] = "Sections" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_URLFIELD
 {
-    Text [ de ] = "Hyperlinks" ;
     Text [ en-US ] = "Hyperlinks" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_REFERENCE
 {
-    Text [ de ] = "Referenzen" ;
     Text [ en-US ] = "References" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_INDEX
 {
-    Text [ de ] = "Verzeichnisse" ;
     Text [ en-US ] = "Indexes" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_DRAWOBJECT
 {
-    Text [ de ] = "Zeichenobjekte" ;
     Text [ en-US ] = "Draw objects" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_POSTIT
 {
-    Text [ de ] = "Notizen" ;
     Text [ en-US ] = "Notes" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_OUTLINE
 {
     /* ### ACHTUNG: Neuer Text in Resource? ‹berschrift : öberschrift */
-    Text [ de ] = "√úberschrift" ;
     Text [ en-US ] = "Heading" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_TABLE
 {
-    Text [ de ] = "Tabelle" ;
     Text [ en-US ] = "Table" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_FRAME
 {
-    Text [ de ] = "Textrahmen" ;
     Text [ en-US ] = "Text frame" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_GRAPHIC
 {
-    Text [ de ] = "Grafik" ;
     Text [ en-US ] = "Graphics" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_OLE
 {
-    Text [ de ] = "OLE-Objekt" ;
     Text [ en-US ] = "OLE object" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_BOOKMARK
 {
-    Text [ de ] = "Textmarke" ;
     Text [ en-US ] = "Bookmark" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_REGION
 {
-    Text [ de ] = "Bereich" ;
     Text [ en-US ] = "Section" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_URLFIELD
 {
-    Text [ de ] = "Hyperlink" ;
     Text [ en-US ] = "Hyperlink" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_REFERENCE
 {
-    Text [ de ] = "Referenz" ;
     Text [ en-US ] = "Reference" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_INDEX
 {
-    Text [ de ] = "Verzeichnis" ;
     Text [ en-US ] = "Index" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_POSTIT
 {
-    Text [ de ] = "Notiz" ;
     Text [ en-US ] = "Note" ;
-    Text [ x-comment ] = " ";
 };
 String STR_CONTENT_TYPE_SINGLE_DRAWOBJECT
 {
-    Text [ de ] = "Zeichenobjekt" ;
     Text [ en-US ] = "Draw object" ;
-    Text [ x-comment ] = " ";
 };
 String STR_DEFINE_NUMBERFORMAT
 {
-    Text [ de ] = "Weitere Formate..." ;
     Text [ en-US ] = "Additional formats..." ;
-    Text [ x-comment ] = " ";
 };
 String RID_STR_SYSTEM
 {
-    Text [ de ] = "[System]" ;
     Text [ en-US ] = "[System]";
 };
 String STR_MULT_INTERACT_SPELL_WARN
 {
-    Text [ de ] = "Die Interaktive Rechschreibpr√ºfung ist\nbereits in anderem Dokument aktiv" ;
     Text [ en-US ] = "The interactive spellcheck is already active\nin a different document";
 };
 String STR_MULT_INTERACT_HYPH_WARN
 {
-    Text [ de ] = "Die Interaktive Silbentrennung ist\nbereits in anderem Dokument aktiv" ;
     Text [ en-US ] = "The interactive hyphenation is already active\nin a different document";
 };
 String STR_SPELL_TITLE
 {
-    Text [ de ] = "Rechtschreibpr√ºfung" ;
     Text [ en-US ] = "Spellcheck";
 };
 String STR_HYPH_TITLE
 {
-    Text [ de ] = "Silbentrennung" ;
     Text [ en-US ] = "Hyphenation";
 };
 
@@ -500,12 +378,10 @@ Image IMG_ALL_RIGHT_HC
 };
 String STR_HYPERCTRL_SEL
 {
-    Text [ de ] = "SEL" ;
     Text [ en-US ] = "SEL";
 };
 String STR_HYPERCTRL_HYP
 {
-    Text [ de ] = "HYP" ;
     Text [ en-US ] = "HYP";
 };
 
