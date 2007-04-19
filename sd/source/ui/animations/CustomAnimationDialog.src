@@ -4,9 +4,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 15:52:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ TabDialog DLG_CUSTOMANIMATION
     SVLook = TRUE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text [ de ] = "Effektoptionen" ;
     Text [ en-US ] = "Effect Options";
 
     TabControl 1
@@ -65,7 +64,6 @@ TabDialog DLG_CUSTOMANIMATION
             {
                 PageResID = RID_TP_CUSTOMANIMATION_EFFECT ;
                 Identifier = RID_TP_CUSTOMANIMATION_EFFECT ;
-                Text [ de ] = "Effekte" ;
                 Text [ en-US ] = "Effect" ;
             };
 
@@ -73,7 +71,6 @@ TabDialog DLG_CUSTOMANIMATION
             {
                 PageResID = RID_TP_CUSTOMANIMATION_DURATION;
                 Identifier = RID_TP_CUSTOMANIMATION_DURATION;
-                Text [ de ] = "Anzeigedauer";
                 Text [ en-US ] = "Timing";
             };
 
@@ -81,7 +78,6 @@ TabDialog DLG_CUSTOMANIMATION
             {
                 PageResID = RID_TP_CUSTOMANIMATION_TEXT;
                 Identifier = RID_TP_CUSTOMANIMATION_TEXT;
-                Text [ de ] = "Textanimation";
                 Text [ en-US ] = "Text Animation";
             };
         };
@@ -110,7 +106,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
 {
     Hide = TRUE;
     Size = MAP_APPFONT ( WIDTH , 159 );
-    Text [ de ] = "Effekte" ;
     Text [ en-US ] = "Effect";
 
     FixedLine FL_SETTINGS
@@ -120,7 +115,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
-        Text [ de ] = "Einstellungen";
         Text [ en-US ] = "Settings";
     };
 
@@ -167,7 +161,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Size = MAP_APPFONT ( (W0 / 2) , 10 ) ;
         Hide = TRUE;
 
-        Text [ de ] = "Beschleunigter Start";
         Text [ en-US ] = "Accelerated start";
     };
 
@@ -177,7 +170,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Size = MAP_APPFONT ( (W0 / 2) , 10 ) ;
         Hide = TRUE;
 
-        Text [ de ] = "Verlangsamtes Ende";
         Text [ en-US ] = "Decelerated end";
     };
 
@@ -187,7 +179,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Size = MAP_APPFONT ( W0 , 10 ) ;
         Hide = TRUE;
 
-        Text [ de ] = "Automatisch umkehren";
         Text [ en-US ] = "Reverse automatically";
     };
 
@@ -202,7 +193,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
-        Text [ de ] = "Wiedergabe starten";
         Text [ en-US ] = "Play";
     };
 
@@ -214,7 +204,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         TabStop = TRUE ;
         Hide = TRUE;
 
-        Text [ de ] = "Von Beginn an";
         Text [ en-US ] = "From start";
     };
 
@@ -226,7 +215,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         TabStop = TRUE ;
         Hide = TRUE;
 
-        Text [ de ] = "Von letzter Position";
         Text [en-US ] = "From last";
     };
 
@@ -238,7 +226,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         TabStop = TRUE ;
         Hide = TRUE;
 
-        Text [ de ] = "Ab Zeit:";
         Text [ en-US ] = "From time:";
     };
 
@@ -257,7 +244,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Maximum = 9999 ;
         DecimalDigits = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = "Sek" ;
         CustomUnitText [ en-US ] = "sec";
         SpinSize = 5 ;
         Hide = TRUE;
@@ -270,7 +256,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
-        Text [ de ] = "Wiedergabe beenden";
         Text [ en-US ] = "Stop playback";
     };
 
@@ -282,7 +267,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         TabStop = TRUE ;
         Hide = TRUE;
 
-        Text [ de ] = "Beim Klicken";
         Text [ en-US ] = "On click";
     };
 
@@ -294,7 +278,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         TabStop = TRUE ;
         Hide = TRUE;
 
-        Text [ de ] = "Nach aktueller Folie";
         Text [ en-US ] = "After current slide";
     };
 
@@ -306,7 +289,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         TabStop = TRUE ;
         Hide = TRUE;
 
-        Text [ de ] = "Nach";
         Text [ en-US ] = "After";
     };
 
@@ -325,7 +307,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Maximum = 9999 ;
         DecimalDigits = 0 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = "Folien" ;
         CustomUnitText [ en-US ] = "Slides";
         SpinSize = 1 ;
         Hide = TRUE;
@@ -342,7 +323,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Size = MAP_APPFONT( W0, 8 );
         Hide = TRUE;
 
-        Text [ de ] = "Erweiterungen";
         Text [ en-US ] = "Enhancement";
     };
 
@@ -352,7 +332,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Pos = MAP_APPFONT ( X1 , 5  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Klang";
         Text [ en-US ] = "Sound";
     };
 
@@ -379,7 +358,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Pos = MAP_APPFONT ( X1 , 20  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Nach der Animation";
         Text [ en-US ] = "After animation ";
     };
 
@@ -391,13 +369,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Border = TRUE ;
         DropDown = TRUE ;
 
-        StringList [ de ] =
-        {
-            < "Nicht abblenden" ; > ;
-            < "Mit Farbe abblenden" ; > ;
-            < "Nach Animation ausblenden" ; > ;
-            < "Mit nächster Animation ausblenden" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "Don't dim" ; > ;
@@ -411,7 +382,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
     {
         Pos = MAP_APPFONT( X1, 35 );
         Size = MAP_APPFONT( W1, 8 );
-        Text [ de ] = "Abblendfarbe" ;
         Text [ en-US ] = "Dim Color";
     };
 
@@ -430,7 +400,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Pos = MAP_APPFONT ( X1 , 50  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Text animieren";
         Text [ en-US ] = "Text animation";
     };
 
@@ -442,12 +411,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Border = TRUE ;
         DropDown = TRUE ;
 
-        StringList [ de ] =
-        {
-            < "Alle gleichzeitig" ; > ;
-            < "Wortweise" ; > ;
-            < "Zeichenweise" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "All at once" ; > ;
@@ -462,7 +425,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Pos = MAP_APPFONT ( X2 + 45, 66  ) ;
         Size = MAP_APPFONT( W0 - X2 - 45, 8 );
 
-        Text [ de ] = "verzögerung zwischen Buchstaben";
         Text [ en-US ] = "delay between characters";
     };
 
@@ -478,7 +440,6 @@ TabPage RID_TP_CUSTOMANIMATION_EFFECT
         Maximum = 1024 ;
         DecimalDigits = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = "%" ;
         CustomUnitText [ en-US ] = "%";
         SpinSize = 1 ;
 
@@ -489,7 +450,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
 {
     Hide = TRUE;
     Size = MAP_APPFONT ( WIDTH , 159 );
-    Text [ de ] = "Anzeigedauer" ;
     Text [ en-US ] = "Timing";
 
     FixedText FT_START
@@ -498,7 +458,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( X0 , 5  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Starten";
         Text [ en-US ] = "Start";
     };
 
@@ -510,12 +469,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Border = TRUE ;
         DropDown = TRUE ;
 
-        StringList [ de ]=
-        {
-            < "Beim Klicken" ; > ;
-            < "Mit Vorheriger" ; > ;
-            < "Nach Vorheriger" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "On click" ; > ;
@@ -530,7 +483,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( X0 , 20  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Verzögerung";
         Text [ en-US ] = "Delay";
     };
 
@@ -547,7 +499,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Maximum = 9999 ;
         DecimalDigits = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = "Sek" ;
         CustomUnitText [ en-US ] = "sec";
         SpinSize = 5 ;
     };
@@ -558,7 +509,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( X0 , 35  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Geschwindigkeit";
         Text [ en-US ] = "Speed";
     };
 
@@ -577,7 +527,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( X0 , 50  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Wiederholen";
         Text [ en-US ] = "Repeat";
     };
 
@@ -595,7 +544,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( X0 , 66  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Nach der Wiedergabe zurückspulen" ;
         Text [ en-US ] = "Rewind when done playing" ;
     };
 
@@ -605,7 +553,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
         Pos = MAP_APPFONT ( X0 , 79  ) ;
         Size = MAP_APPFONT( W0, 8 );
 
-        Text [ de ] = "Auslösen";
         Text [ en-US ] = "Trigger";
     };
 
@@ -613,7 +560,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
     {
         Pos = MAP_APPFONT ( X1+6, 92  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
-        Text [ de ] = "Animation als Teil der Klickreihenfolge" ;
         Text [ en-US ] = "Animate as part of click sequence" ;
         TabStop = TRUE ;
     };
@@ -622,7 +568,6 @@ TabPage RID_TP_CUSTOMANIMATION_DURATION
     {
         Pos = MAP_APPFONT ( X1+6, 105  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
-        Text [ de ] = "Effekt starten beim Klicken auf" ;
         Text [ en-US ] = "Start effect on click of" ;
         TabStop = TRUE ;
     };
@@ -641,7 +586,6 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
 {
     Hide = TRUE;
     Size = MAP_APPFONT ( WIDTH , 159 );
-    Text [ de ] = "Textanimation" ;
     Text [ en-US ] = "Text Animation";
 
     FixedText FT_GROUP_TEXT
@@ -650,7 +594,6 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Pos = MAP_APPFONT ( X0 , 5  ) ;
         Size = MAP_APPFONT( W1, 8 );
 
-        Text [ de ] = "Texte gruppieren";
         Text [ en-US ] = "Group text";
     };
 
@@ -662,16 +605,6 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Border = TRUE ;
         DropDown = TRUE ;
 
-        StringList [ de ] =
-        {
-            < "Als einzelnes Objekt" ; > ;
-            < "Alle Absätze auf einmal" ; > ;
-            < "Nach 1. Abschnittsebene" ; > ;
-            < "Nach 2. Abschnittsebene" ; > ;
-            < "Nach 3. Abschnittsebene" ; > ;
-            < "Nach 4. Abschnittsebene" ; > ;
-            < "Nach 5. Abschnittsebene" ; > ;
-        };
         StringList [ en-US ] =
         {
             < "As one object" ; > ;
@@ -689,7 +622,6 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Pos = MAP_APPFONT ( X0 , 20  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Automatisch nach" ;
         Text [ en-US ] = "Automatically after" ;
     };
 
@@ -707,7 +639,6 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Maximum = 9999 ;
         DecimalDigits = 1 ;
         Unit = FUNIT_CUSTOM ;
-        CustomUnitText [ de ] = "Sek" ;
         CustomUnitText [ en-US ] = "sec";
         SpinSize = 5 ;
     };
@@ -717,7 +648,6 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Pos = MAP_APPFONT ( X0 , 33  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "Angefügte Form animieren" ;
         Text [ en-US ] = "Animate attached shape" ;
     };
 
@@ -726,7 +656,6 @@ TabPage RID_TP_CUSTOMANIMATION_TEXT
         Pos = MAP_APPFONT ( X0 , 46  ) ;
         Size = MAP_APPFONT ( W0 , 10 ) ;
         TabStop = TRUE ;
-        Text [ de ] = "In umgekehrter Reihenfolge" ;
         Text [ en-US ] = "In reverse order" ;
     };
 };
