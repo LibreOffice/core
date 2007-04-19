@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_TitleRotation.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 00:19:32 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:04:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,9 +63,7 @@ TabPage TP_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 93 , 32  ) ;
         Size = MAP_APPFONT ( 32 , 8 ) ;
-        Text [ de ] = "Gra~d" ;
         Text [ en-US ] = "~Degrees" ;
-        Text [ x-comment ] = " ";
     };
     NumericField NF_ORIENT
     {
@@ -85,33 +83,26 @@ TabPage TP_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schreibrichtung" ;
         Text [ en-US ] = "Text direction" ;
-        Text [ x-comment ] = " ";
     };
     /*
     FixedLine FL_ORDER
     {
         Pos = MAP_APPFONT ( 6 , 63  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Anordnung" ;
         Text [ en-US ] = "Arrangement" ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_SIDEBYSIDE
     {
         Pos = MAP_APPFONT ( 12 , 74  ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Nebeneinander" ;
         Text [ en-US ] = "~Tile" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     RadioButton RBT_UPDOWN
     {
         Pos = MAP_APPFONT ( 12 , 88  ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Hoch-tief versetzt" ;
         Text [ en-US ] = "Stagger ~odd" ;
         TabStop = TRUE ;
     };
@@ -119,7 +110,6 @@ TabPage TP_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 12 , 102  ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Tief-hoch versetzt" ;
         Text [ en-US ] = "Stagger ~even" ;
         TabStop = TRUE ;
     };
@@ -127,7 +117,6 @@ TabPage TP_ALIGNMENT
     {
         Pos = MAP_APPFONT ( 12 , 116  ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "~Automatisch" ;
         Text [ en-US ] = "A~utomatic" ;
         TabStop = TRUE ;
     };
@@ -138,27 +127,21 @@ TabPage TP_ALIGNMENT
         Pos = MAP_APPFONT ( 12 , 157  ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
 
-        Text [ de ] = "~Umbruch" ;
         Text [ en-US ] = "~Break" ;
-        Text [ x-comment ] = " ";
     };
     CheckBox CBX_TEXTOVERLAP
     {
         Pos = MAP_APPFONT ( 12 , 143  ) ;
         Size = MAP_APPFONT ( 69 , 10 ) ;
 
-        Text [ de ] = "~Überlappend" ;
         Text [ en-US ] = "~Overlap" ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_TEXTBREAK
     {
         Pos = MAP_APPFONT ( 6 , 132  ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
 
-        Text [ de ] = "Textfluss" ;
         Text [ en-US ] = "Text flow" ;
-        Text [ x-comment ] = " ";
     };
     */
 };
