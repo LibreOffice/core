@@ -4,9 +4,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 12:30:33 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 12:23:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,30 +40,23 @@ ModalDialog DLG_BREAK
     SVLook   = TRUE;
     Pos      = MAP_APPFONT( 84, 34 );
     Size     = MAP_APPFONT( 160, 74 );
-    Text [ de ] = "Aufbrechen";
     Moveable = TRUE;
     FixedText FT_OBJ_INFO
     {
         Pos = MAP_APPFONT( 6, 6 );
         Size = MAP_APPFONT( 85, 10 );
-        Text [ de ] = "Bearbeitetes Metafile:";
-        Text [ x-comment ] = "; EM Dec 2002: This string shows up in an error message at the time when the metafile is being worked on. To read like the answer to 'Which metafile am I processing?' \"processsing metafile: 2\"";
         Text [ en-US ] = "Processing metafile:";
     };
     FixedText FT_ACT_INFO
     {
         Pos = MAP_APPFONT( 6, 22 );
         Size = MAP_APPFONT( 106, 10 );
-        Text [ de ] = "Metaobjekte aufgebrochen:";
-        Text [ x-comment ] = "; EM Dec 2002: This string shows up in an error message. The colon is followed by the number of metaobjects that were broken down. (as in \"Break\" found in context menu of a selected metafile)";
         Text [ en-US ] = "Broken down metaobjects:";
     };
     FixedText FT_INS_INFO
     {
         Pos = MAP_APPFONT( 6, 38 );
         Size = MAP_APPFONT( 90, 10 );
-        Text [ de ] = "Zeichenobjekte eingefügt:";
-        Text [ x-comment ] = "; EM Dec 2002: This string shows up in a rare error message. The colon is followed by a number. How many inserted drawing objects? \"Inserted drawing objects: 3\"";
         Text [ en-US ] = "Inserted drawing objects:";
     };
     FixedText FI_OBJ_INFO
@@ -87,7 +80,6 @@ ModalDialog DLG_BREAK
         Size = MAP_APPFONT( 50, 14 );
         TabStop = TRUE;
     };
-    Text [ x-comment ] = "; EM Dec 2002: As in \"break\" found in context menu of a selected metafile inserted into a document.";
     Text [ en-US ] = "Break";
 };
 
