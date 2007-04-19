@@ -9,9 +9,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: hr $ $Date: 2006-08-14 17:09:07 $
+#   last change: $Author: ihi $ $Date: 2007-04-19 15:17:51 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -73,7 +73,7 @@ my $bVerbose="0";
 my $srcpath = '';
 my $WIN;
 my $languages;
-my %sl_modules;     # Contains all modules where en-US and de is source language
+#my %sl_modules;     # Contains all modules where en-US and de is source language
 my $use_default_date = '0';
 
          #         (                           leftpart                                                     )            (           rightpart                    )
@@ -93,7 +93,7 @@ if ( defined $ENV{USE_SHELL} && $ENV{USE_SHELL} eq '4nt' ) {
    $WIN = '';
 }
 
-%sl_modules = fetch_sourcelanguage_dirlist();
+#%sl_modules = fetch_sourcelanguage_dirlist();
 
 
 if   ( $mode eq "merge"    )    {
@@ -164,7 +164,7 @@ sub splitfile{
                 $last_sdffile = $cur_sdffile;
             }
 
-            if( ( $lang eq "en-US" || ( has_two_sourcelanguages( $prj )  && $lang eq "de") ) ){}
+            if( $lang eq "en-US" ){}
             elsif( $cur_sdffile eq $last_sdffile )
             {
                 $block{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ;
@@ -175,7 +175,10 @@ sub splitfile{
                 $lastFile = $currentFile; #?
                 $last_sdffile = $cur_sdffile;
                 %block = ();
-                if( !( $lang eq "en-US" || ( has_two_sourcelanguages( $prj )  && $lang eq "de") ) ){  $block{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ; }
+                #if( ! $lang eq "en-US"  ) {
+                $block{ "$prj\t$file\t$type\t$gid\t$lid\t$helpid\t$plattform\t$lang" } =  $line ;
+                #}
+
             }
         } #else { print STDOUT "splitfile REGEX kaputt\n";}
 
@@ -187,41 +190,41 @@ sub splitfile{
 }
 #########################################################
 
-sub fetch_sourcelanguage_dirlist
-{
+#sub fetch_sourcelanguage_dirlist
+#{
+#
+#    my $working_path = getcwd();
+#    my %sl_dirlist;
+#
+#    chdir $srcpath;
+#    my @all_dirs = csh_glob( "*" );
+#
+#    foreach my $file ( @all_dirs )
+#    {
+#        if( -d $file )
+#        {
+#            my $module = $file;
+#            $file .= "/prj/l10n";
+#            $file =~ s/\//\\/ , if( $WIN ) ;
+#
+#            if( -f $file )                                        # Test file <module>/prj/l10n
+#            {
+#                $sl_dirlist{ $module } = 1;
+#                if( $bVerbose eq "1" ) { print STDOUT "$module: de and en-US source language detected\n"; }
+#            }
+#        }
+#    }
+#
+#    chdir $working_path;
+#
+#    return %sl_dirlist;
+#}
 
-    my $working_path = getcwd();
-    my %sl_dirlist;
-
-    chdir $srcpath;
-    my @all_dirs = csh_glob( "*" );
-
-    foreach my $file ( @all_dirs )
-    {
-        if( -d $file )
-        {
-            my $module = $file;
-            $file .= "/prj/l10n";
-            $file =~ s/\//\\/ , if( $WIN ) ;
-
-            if( -f $file )                                        # Test file <module>/prj/l10n
-            {
-                $sl_dirlist{ $module } = 1;
-                if( $bVerbose eq "1" ) { print STDOUT "$module: de and en-US source language detected\n"; }
-            }
-        }
-    }
-
-    chdir $working_path;
-
-    return %sl_dirlist;
-}
-
-sub has_two_sourcelanguages
-{
-    my $module          = shift;
-    return defined $sl_modules{ $module } ;
-}
+#sub has_two_sourcelanguages
+#{
+#    my $module          = shift;
+#    return defined $sl_modules{ $module } ;
+#}
 sub writesdf{
 
     my $lastFile        = shift;
@@ -443,7 +446,7 @@ sub collectfiles{
             if( !$bVerbose  ){ $args .= " -QQ -skip_links "; }
             $args .= " -e -f $localizeSDF -l ";
             my $bFlag="";
-            if( $bAll ) {$args .= " en-US,de";}
+            if( $bAll ) {$args .= " en-US";}
             else{
               my @list;
               foreach my $isokey ( keys( %{ $langhash_ref } ) ){
@@ -455,13 +458,13 @@ sub collectfiles{
               remove_duplicates( \@list );
               foreach my $isokey ( @list ){
                 switch :{
-                        ( $isokey=~ /^de$/i  )
-                        && do{
-                                if( $bFlag eq "TRUE" ){ $args .= ",de"; }
-                                else  {
-                                    $args .=  "de";  $bFlag = "TRUE";
-                                 }
-                              };
+                    #( $isokey=~ /^de$/i  )
+                    #    && do{
+                    #            if( $bFlag eq "TRUE" ){ $args .= ",de"; }
+                    #            else  {
+                    #                $args .=  "de";  $bFlag = "TRUE";
+                    #             }
+                    #          };
                         ( $isokey=~ /^en-US$/i  )
                         && do{
                                 if( $bFlag eq "TRUE" ){ $args .= ",en-US"; }
@@ -525,9 +528,9 @@ sub collectfiles{
 
                             if ( $lang eq $cur_lang ){
                                 # Overwrite fallback strings with collected strings
-                                if( ( !has_two_sourcelanguages( $cur_lang) && $cur_lang eq "de" ) || $cur_lang ne "en-US" ){
+                                #if( ( !has_two_sourcelanguages( $cur_lang) && $cur_lang eq "de" ) || $cur_lang ne "en-US" ){
                                      $fallbackhashhash_ref->{ $cur_lang }{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } =  $line ;
-                               }
+                                     #}
 
                             }
                         }
@@ -601,10 +604,10 @@ sub collectfiles{
                                 push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } ,  $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
                                 #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;
                             }
-                            if( $sLang eq "de" && $lang eq "de" )       {
-                                push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } ,  $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
+                            #if( $sLang eq "de" && $lang eq "de" )       {
+                            #    push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } ,  $leftpart."\t".$lang."\t".$rightpart.$extract_date ;
                                 #print DESTFILE $leftpart."\t".$lang."\t".$rightpart.$extract_date;
-                            }
+                                #}
                             if( $sLang eq "en-US" && $lang eq "en-US" ) {
                                 push @order , $prj.$gid.$lid.$file.$type.$plattform.$helpid;
                                 if( !$bFakeEnglish ){ push @{ $output{ $prj.$gid.$lid.$file.$type.$plattform.$helpid } } ,  $leftpart."\t".$lang."\t".$rightpart.$extract_date ; }
@@ -851,7 +854,7 @@ sub fetch_fallback{
     }
     remove_duplicates( \@langlist );
     foreach  $cur_lang ( @langlist ){
-        if( $cur_lang eq "de" || $cur_lang eq "en-US" ){
+        if( $cur_lang eq "en-US" ){
             read_fallbacks_from_source( $localizeSDF , $cur_lang , \%fallbackhashhash );
         }
     }
@@ -1005,7 +1008,7 @@ sub parseLanguages{
                 $iso        = $1;
                 $fallback   = $4;
 
-                if( ( $iso && $iso=~ /(de|en-US)/i )  || ( $fallback && $fallback=~ /(de|en-US)/i ) ) {
+                if( ( $iso && $iso=~ /(en-US)/i )  || ( $fallback && $fallback=~ /(en-US)/i ) ) {
                     $bUseLocalize = "TRUE";
                 }
                 if( ( $iso && $iso=~ /(en-US)/i ) ) {
@@ -1022,7 +1025,7 @@ sub parseLanguages{
             $iso        = $1;
             $fallback   = $4;
 
-            if( ( $iso && $iso=~ /(de|en-US)/i )  || ( $fallback && $fallback=~ /(de|en-US)/i ) ) {
+            if( ( $iso && $iso=~ /(en-US)/i )  || ( $fallback && $fallback=~ /(en-US)/i ) ) {
                 $bUseLocalize = "TRUE";
 
             }
