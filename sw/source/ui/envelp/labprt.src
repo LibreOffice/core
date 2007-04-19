@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labprt.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 07:31:17 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 13:05:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,21 +49,18 @@ TabPage TP_LAB_PRT
         Size = MAP_APPFONT ( 70 , 10 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
-        Text [ de ] = "~Ganze Seite" ;
         Text [ en-US ] = "~Entire page" ;
     };
     RadioButton BTN_SINGLE
     {
         Pos = MAP_APPFONT ( 12 , 28 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text [ de ] = "Einzelnes Eti~kett" ;
         Text [ en-US ] = "~Single label" ;
     };
     FixedText TXT_COL
     {
         Pos = MAP_APPFONT ( 127 , 29 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "S~palte" ;
         Text [ en-US ] = "Colu~mn" ;
         Left = TRUE ;
     };
@@ -83,7 +80,6 @@ TabPage TP_LAB_PRT
     {
         Pos = MAP_APPFONT ( 191 , 29 ) ;
         Size = MAP_APPFONT ( 30 , 8 ) ;
-        Text [ de ] = "Zei~le" ;
         Text [ en-US ] = "Ro~w" ;
         Left = TRUE ;
     };
@@ -103,7 +99,6 @@ TabPage TP_LAB_PRT
     {
         Pos = MAP_APPFONT ( 12 , 43 ) ;
         Size = MAP_APPFONT ( 120 , 10 ) ;
-        Text [ de ] = "Inhalte ~synchronisieren" ;
         TabStop = TRUE ;
         Text [ en-US ] = "Synchroni~ze contents" ;
     };
@@ -111,14 +106,12 @@ TabPage TP_LAB_PRT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Verteilen" ;
         Text [ en-US ] = "Distribute";
     };
     FixedText INF_PRINTER
     {
         Pos = MAP_APPFONT ( 12 , 73 ) ;
         Size = MAP_APPFONT ( 182 , 8 ) ;
-        Text [ de ] = "Druckername" ;
         Left = TRUE ;
         Text [ en-US ] = "Printer Name" ;
     };
@@ -126,7 +119,6 @@ TabPage TP_LAB_PRT
     {
         Pos = MAP_APPFONT ( 198 , 70 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
-        Text [ de ] = "~Einrichten..." ;
         TabStop = TRUE ;
         Text [ en-US ] = "Setup..." ;
     };
@@ -134,7 +126,6 @@ TabPage TP_LAB_PRT
     {
         Pos = MAP_APPFONT ( 6 , 59 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = " Drucker " ;
         Text [ en-US ] = " Printer " ;
     };
 };
