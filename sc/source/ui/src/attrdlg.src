@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-23 15:04:35 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 16:35:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,7 +43,6 @@ TabDialog RID_SCDLG_ATTR
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 165 ) ;
-    Text [ de ] = "Zellen formatieren" ;
     Text [ en-US ] = "Format Cells" ;
     Moveable = TRUE ;
     Closeable = FALSE ;
@@ -58,63 +57,49 @@ TabDialog RID_SCDLG_ATTR
             {
                 Identifier = TP_NUMBER ;
                 PageResID = 256 ;
-                Text [ de ] = "Zahlen" ;
                 Text [ en-US ] = "Numbers" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FONT ;
                 PageResID = 257 ;
-                Text [ de ] = "Schrift" ;
                 Text [ en-US ] = "Font" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_FONTEFF ;
                 PageResID = 262 ;
-                Text [ de ] = "Schrifteffekt" ;
                 Text [ en-US ] = "Font Effects";
             };
             PageItem
             {
                 Identifier = TP_ALIGNMENT ;
                 PageResID = 258 ;
-                Text [ de ] = "Ausrichtung" ;
                 Text [ en-US ] = "Alignment" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_ASIAN ;
                 PageResID = 263 ;
-                Text [ de ] = "Asiatische Typographie" ;
                 Text [ en-US ] = "Asian Typography";
             };
             PageItem
             {
                 Identifier = TP_BORDER ;
                 PageResID = 259 ;
-                Text [ de ] = "Umrandung" ;
                 Text [ en-US ] = "Borders" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_BACKGROUND ;
                 PageResID = 260 ;
-                Text [ de ] = "Hintergrund" ;
                 Text [ en-US ] = "Background" ;
-                Text [ x-comment ] = " ";
             };
             PageItem
             {
                 Identifier = TP_PROTECTION ;
                 PageResID = 261 ;
-                Text [ de ] = "Zellschutz" ;
                 Text [ en-US ] = "Cell Protection" ;
-                Text [ x-comment ] = " ";
             };
         };
     };
@@ -134,71 +119,55 @@ TabPage RID_SCPAGE_PROTECTION
     {
         Pos = MAP_APPFONT ( 22 , 28 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "~Gesperrt" ;
         Text [ en-US ] = "~Protected" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox BTN_HIDE_FORMULAR
     {
         Pos = MAP_APPFONT ( 22 , 42 ) ;
         Size = MAP_APPFONT ( 90 , 10 ) ;
-        Text [ de ] = "~Formel ausblenden" ;
         Text [ en-US ] = "Hide ~formula" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox BTN_HIDE_ALL
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "~Alles ausblenden" ;
         Text [ en-US ] = "Hide ~all" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_HINT
     {
         Pos = MAP_APPFONT ( 114 , 14 ) ;
         Size = MAP_APPFONT ( 137 , 56 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Der Schutz von Zellen wird nur dann wirksam, wenn die aktive Tabelle geschützt ist.\n\nWählen Sie hierzu aus dem Menü 'Extras' den Befehl 'Dokument schützen' und dann den Befehl 'Tabelle'." ;
         Text [ en-US ] = "Cell protection is only effective after the current sheet has been protected. \n\nSelect 'Protect Document' from the 'Tools' menu, and specify 'Sheet'." ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_PROTECTION
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Schutz" ;
         Text [ en-US ] = "Protection" ;
-        Text [ x-comment ] = " ";
     };
     TriStateBox BTN_HIDE_PRINT
     {
         Pos = MAP_APPFONT ( 12 , 87 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text [ de ] = "Für Aus~druck ausblenden" ;
         Text [ en-US ] = "Hide ~when printing" ;
         TabStop = TRUE ;
-        Text [ x-comment ] = " ";
     };
     FixedText FT_HINT2
     {
         Pos = MAP_APPFONT ( 114 , 87 ) ;
         Size = MAP_APPFONT ( 137 , 24 ) ;
         WordBreak = TRUE ;
-        Text [ de ] = "Die Zellen der aktuellen Selektion werden beim Ausdruck nicht ausgegeben." ;
         Text [ en-US ] = "The cells selected will be omitted when printing." ;
-        Text [ x-comment ] = " ";
     };
     FixedLine FL_PRINT
     {
         Pos = MAP_APPFONT ( 6 , 76 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text [ de ] = "Ausdruck" ;
         Text [ en-US ] = "Print" ;
-        Text [ x-comment ] = " ";
     };
 };
 
