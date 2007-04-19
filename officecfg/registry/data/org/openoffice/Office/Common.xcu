@@ -5,9 +5,9 @@
  *
  *  $RCSfile: Common.xcu,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 15:33:36 $
+ *  last change: $Author: ihi $ $Date: 2007-04-19 11:14:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,6 @@
           <value >private:factory/swriter</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Textdokument</value>
           <value xml:lang="en-US">~Text Document</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -189,7 +188,6 @@
           <value >private:factory/scalc</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Tab~ellendokument</value>
           <value xml:lang="en-US">~Spreadsheet</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -201,7 +199,6 @@
           <value >private:factory/simpress?slot=6686</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Präsentation</value>
           <value xml:lang="en-US">~Presentation</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -213,7 +210,6 @@
           <value >private:factory/sdraw</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Zeichnung</value>
           <value xml:lang="en-US">~Drawing</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -225,7 +221,6 @@
           <value >private:factory/sdatabase?Interactive</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Datenbank</value>
           <value xml:lang="en-US">Database</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -248,7 +243,6 @@
           <value >private:factory/swriter/web</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~HTML-Dokument</value>
           <value xml:lang="en-US">~HTML Document</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -260,7 +254,6 @@
           <value>private:factory/swriter?slot=21053</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~XML-Formulardokument</value>
           <value xml:lang="en-US">~XML Form Document</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -272,7 +265,6 @@
           <value >private:factory/swriter/GlobalDocument</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Globaldokument</value>
           <value xml:lang="en-US">M~aster Document</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -292,7 +284,6 @@
           <value >private:factory/smath</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">F~ormel</value>
           <value xml:lang="en-US">F~ormula</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -304,7 +295,6 @@
           <value >private:factory/swriter?slot=21051</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Et~iketten</value>
           <value xml:lang="en-US">~Labels</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -319,7 +309,6 @@
           <value >private:factory/swriter?slot=21052</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Visitenkarten</value>
           <value xml:lang="en-US">B~usiness Cards</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -342,7 +331,6 @@
           <value >slot:5500</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Vorl~agen und Dokumente</value>
           <value xml:lang="en-US">Templates a~nd Documents</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -359,7 +347,6 @@
           <value >service:com.sun.star.wizards.letter.CallWizard?start</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Brief...</value>
           <value xml:lang="en-US">~Letter...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -374,7 +361,6 @@
           <value >service:com.sun.star.wizards.fax.CallWizard?start</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Fax...</value>
           <value xml:lang="en-US">~Fax...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -389,7 +375,6 @@
           <value >service:com.sun.star.wizards.agenda.CallWizard?start</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Agenda...</value>
           <value xml:lang="en-US">~Agenda...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -412,7 +397,6 @@
           <value >slot:10425</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Präsentation...</value>
           <value xml:lang="en-US">~Presentation...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -435,7 +419,6 @@
           <value >service:com.sun.star.wizards.web.CallWizard?start</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Web-Seite...</value>
           <value xml:lang="en-US">~Web Page...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -458,7 +441,6 @@
           <value >macro:///ImportWizard.Main.Main</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Dokumenten-~Konverter...</value>
           <value xml:lang="en-US">Document ~Converter...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -473,7 +455,6 @@
           <value >macro:///Euro.AutoPilotRun.StartAutoPilot</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">~Euro-Konverter...</value>
           <value xml:lang="en-US">~Euro Converter...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -496,7 +477,6 @@
           <value >slot:10934</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Adress-Datenquelle...</value>
           <value xml:lang="en-US">Address Data Source...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -511,7 +491,6 @@
           <value >macro:///Launcher.DicOOo.StartDicOOo</value>
         </prop>
         <prop oor:name="Title">
-          <value xml:lang="de">Weitere Wörterbücher installieren...</value>
           <value xml:lang="en-US">Install new dictionaries...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
@@ -527,7 +506,6 @@
         </prop>
         <prop oor:name="Title">
           <value>FontOOo Wizard...</value>
-          <value xml:lang="de">Schriftarten aus dem Internet installieren...</value>
           <value xml:lang="en-US">Install fonts from the web...</value>
         </prop>
         <prop oor:name="TargetName"  oor:type="xs:string">
