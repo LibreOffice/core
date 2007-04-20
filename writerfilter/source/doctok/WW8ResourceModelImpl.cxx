@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:37:27 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,7 +59,7 @@ string xmlify(string str)
     {
         char c = *aIt;
 
-        if (isprint(c))
+        if (isprint(c) && c != '\"')
             result += c;
         else
         {
