@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-17 15:05:38 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-20 11:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,6 +67,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 #include <hash_map>
+#include <stdio.h>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star;
 namespace dmapper
@@ -782,23 +784,23 @@ void StyleSheetTable::ApplyStyleSheets(uno::Reference< text::XTextDocument> xTex
                     }
                     if(bAddFollowStyle)
                     {
-                        beans::PropertyValue aNew;
-                        aNew.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
                         //find the name of the Next style
                         std::vector< StyleSheetEntry >::iterator aNextStyleIt = m_pImpl->m_aStyleSheetEntries.begin();
                         for( ; aNextStyleIt !=  m_pImpl->m_aStyleSheetEntries.end(); ++aNextStyleIt )
                             if(aNextStyleIt->nStyleIdentifierD == aIt->nNextStyleIdentifier)
                             {
+                                beans::PropertyValue aNew;
+                                aNew.Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
                                 aNew.Value = uno::makeAny(ConvertStyleName( aNextStyleIt->sStyleName/*, bParaStyle*/ ));
+                                aSortedPropVals.Insert( aNew );
                                 break;
                             }
-                        aSortedPropVals.Insert( aNew );
 //                        pNames[--nSetProperties] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("FollowStyle"));
 //                        pValues[nSetProperties] =  uno::makeAny(
 //                                m_pImpl->m_aStyleSheetEntries[aIt->nNextStyleIdentifier].sStyleName);
                     }
 
-                    uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW );
+                    uno::Reference< beans::XMultiPropertySet > xMultiPropertySet( xStyle, uno::UNO_QUERY_THROW);
 //                    xMultiPropertySet->setPropertyValues( aNames, aValues );
                     xMultiPropertySet->setPropertyValues( aSortedPropVals.getNames(), aSortedPropVals.getValues() );
                 }
@@ -964,7 +966,7 @@ const StyleSheetEntry* StyleSheetTable::FindParentStyleSheet(sal_Int32 nBaseStyl
            "Body Text Indent 3",        0,                //83
            "Block Text",                0,                //84
            "Hyperlink",                 "Internet link",   //85
-           "Followed Hyperlink",        "Visited Internet Link//86",
+           "Followed Hyperlink",        "Visited Internet Link", //86
            "Strong",                    "Strong Emphasis",    //87
            "Emphasis",                  "Emphasis",           //88
            "Document Map",              0,                //89

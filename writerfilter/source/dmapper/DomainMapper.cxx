@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-18 19:08:07 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-20 11:42:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2043,7 +2043,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         break;  // sprmCKcd
     case 0x0858:// sprmCFEmboss
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
-    case 060:// sprmCFBold
+    case 60:// sprmCFBold
     case 0x085C:// sprmCFBoldBi    (offset 0x27 to normal bold)
         /* WRITERFILTERSTATUS: done: 100, planned: , spent: 0.5 */
     case 0x085D:// sprmCFItalicBi  (offset 0x27 to normal italic)
@@ -2134,7 +2134,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                         OSL_ASSERT("what type was it");
                     }
                 }
-                sal_uInt16 nPropertyNameId = 0;
+
                 switch( nId )
                 {
                     case 060:/*sprmCFBold*/
@@ -2168,7 +2168,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                     case 0x838: /*sprmCFOutline*/
                     case 0x839: /*sprmCFShadow*/
                     case 0x83c: /*sprmCFVanish*/
-                        nPropertyNameId = static_cast<sal_uInt16>( ePropertyId );
+                        rContext->Insert(ePropertyId, uno::makeAny( nIntValue ? true : false ));
                     break;
                     case 0x83a: /*sprmCFSmallCaps*/
                         rContext->Insert(ePropertyId,
@@ -2184,8 +2184,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
                     break;
 
                 }
-                if(nPropertyNameId)
-                    rContext->Insert((PropertyIds)nPropertyNameId, uno::makeAny( nIntValue ? true : false ) );
             }
         }
         break;
@@ -2373,6 +2371,8 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmCPropRMark
     case 0x2859:
+        // The file-format has many character animations. We have only
+        // one, so we use it always. Suboptimal solution though.
         if (nIntValue)
             rContext->Insert(PROP_CHAR_FLASH, uno::makeAny( true ));
         else
@@ -3021,6 +3021,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_EG_RPrBase_bdr:
     case NS_ooxml::LN_EG_RPrBase_eastAsianLayout:
     case NS_ooxml::LN_EG_RPrBase_u:
+    case NS_ooxml::LN_EG_RPrBase_lang:
     case NS_ooxml::LN_CT_PPrBase_spacing:
     case NS_ooxml::LN_CT_PPrBase_ind:
     case NS_ooxml::LN_CT_PPrBase_tabs:
