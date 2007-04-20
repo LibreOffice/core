@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxbasemodel.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 15:30:51 $
+ *  last change: $Author: vg $ $Date: 2007-04-20 08:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -55,7 +55,6 @@
 #ifndef _COM_SUN_STAR_FRAME_XMODULE_HPP_
 #include <com/sun/star/frame/XModule.hpp>
 #endif
-
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -109,8 +108,8 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XMODEL_HPP_
-#include <com/sun/star/frame/XModel.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODEL2_HPP_
+#include <com/sun/star/frame/XModel2.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_DOUBLEINITIALIZATIONEXCEPTION_HPP_
@@ -242,6 +241,7 @@
 #define XINTERFACE              ::com::sun::star::uno::XInterface
 #define XCOMPONENT              ::com::sun::star::lang::XComponent
 #define XMODEL                  ::com::sun::star::frame::XModel
+#define XMODEL2                 ::com::sun::star::frame::XModel2
 #define XMODIFIABLE             ::com::sun::star::util::XModifiable
 #define XMODIFIABLE             ::com::sun::star::util::XModifiable
 #define XMODIFYBROADCASTER      ::com::sun::star::util::XModifyBroadcaster
@@ -859,7 +859,6 @@ public:
                css::uno::Exception                );
 
     //____________________________________________________________________________________________________
-
     //  XModifiable
     //____________________________________________________________________________________________________
 
@@ -1346,7 +1345,6 @@ public:
     virtual ::rtl::OUString SAL_CALL getIdentifier()
         throw (css::uno::RuntimeException);
 
-
     //____________________________________________________________________________________________________
     //  SfxListener
     //____________________________________________________________________________________________________
@@ -1479,8 +1477,6 @@ private:
 
 } ; // class SfxBaseModel
 
-
 #undef css
-
 
 #endif // _SFX_SFXBASEMODEL_HXX_
