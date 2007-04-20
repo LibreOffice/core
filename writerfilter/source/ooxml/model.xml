@@ -7376,7 +7376,7 @@
       </define>
       <define name="CT_TextDirection">
         <attribute name="val">
-          <text/>
+          <ref name="ST_TextDirection"/>
           <xs:documentation>Direction of Text Flow</xs:documentation>
         </attribute>
       </define>
@@ -8783,7 +8783,7 @@
       </define>
       <define name="CT_VerticalJc">
         <attribute name="val">
-          <text/>
+          <ref name="ST_VerticalJc"/>
           <xs:documentation>Vertical Alignment Setting</xs:documentation>
         </attribute>
       </define>
@@ -10458,11 +10458,11 @@
       </define>
       <define name="CT_TblWidth">
         <attribute name="w">
-          <text/>
+          <ref name="ST_DecimalNumber"/>
           <xs:documentation>Table Width Value</xs:documentation>
         </attribute>
         <attribute name="type">
-          <text/>
+          <ref name="ST_TblWidth"/>
           <xs:documentation>Table Width Type</xs:documentation>
         </attribute>
       </define>
@@ -10564,13 +10564,13 @@
       </define>
       <define name="CT_VMerge">
         <attribute name="val">
-          <text/>
+          <ref name="ST_Merge"/>
           <xs:documentation>Vertical Merge Type</xs:documentation>
         </attribute>
       </define>
       <define name="CT_HMerge">
         <attribute name="val">
-          <text/>
+          <ref name="ST_Merge"/>
           <xs:documentation>Horizontal Merge Type</xs:documentation>
         </attribute>
       </define>
@@ -10827,7 +10827,7 @@
       </define>
       <define name="CT_TblOverlap">
         <attribute name="val">
-          <text/>
+          <ref name="ST_TblOverlap"/>
           <xs:documentation>Floating Table Overlap Setting</xs:documentation>
         </attribute>
       </define>
@@ -14053,6 +14053,10 @@
         </zeroOrMore>
       </define>
     </grammar>
+    <resource name="CT_Tbl" resource="TextTable"/>
+    <resource name="CT_Row" resource="TextTableRow"/>
+    <resource name="CT_Tc" resource="TextTableCell"/>
+    <resource name="CT_TcPr" resource="Properties"/>
     <resource name="CT_Empty" resource="SingleElement"/>
     <resource name="ST_OnOff" resource="Boolean"/>
     <resource name="CT_OnOff" resource="BooleanValue"/>
@@ -14529,7 +14533,7 @@
     <resource name="CT_MailMergeDest" resource="StringValue" generated="yes"/>
     <resource name="CT_MailMergeOdsoFMDFieldType" resource="StringValue" generated="yes"/>
     <resource name="CT_Kinsoku" resource="StringValue" generated="yes"/>
-    <resource name="CT_TextDirection" resource="StringValue" generated="yes"/>
+    <resource name="CT_TextDirection" resource="ListValue"/>
     <resource name="CT_TextAlignment" resource="StringValue" generated="yes"/>
     <resource name="CT_NumPr" resource="Properties">
       <sprm name="ilvl" tokenid="0x260a"/>
@@ -14591,68 +14595,68 @@
     <resource name="CT_FFStatusText" resource="StringValue" generated="yes"/>
     <resource name="CT_SectType" resource="StringValue" generated="yes"/>
     <resource name="ST_NumberFormat" resource="List">
-    <value name="decimal" tokenid="ooxml:Value_ST_NumberFormat_decimal">decimal</value>
-    <value name="upperRoman" tokenid="ooxml:Value_ST_NumberFormat_upperRoman">upperRoman</value>
-    <value name="lowerRoman" tokenid="ooxml:Value_ST_NumberFormat_lowerRoman">lowerRoman</value>
-    <value name="upperLetter" tokenid="ooxml:Value_ST_NumberFormat_upperLetter">upperLetter</value>
-    <value name="lowerLetter" tokenid="ooxml:Value_ST_NumberFormat_lowerLetter">lowerLetter</value>
-    <value name="ordinal" tokenid="ooxml:Value_ST_NumberFormat_ordinal">ordinal</value>
-    <value name="cardinalText" tokenid="ooxml:Value_ST_NumberFormat_cardinalText">cardinalText</value>
-    <value name="ordinalText" tokenid="ooxml:Value_ST_NumberFormat_ordinalText">ordinalText</value>
-    <value name="hex" tokenid="ooxml:Value_ST_NumberFormat_hex">hex</value>
-    <value name="chicago" tokenid="ooxml:Value_ST_NumberFormat_chicago">chicago</value>
-    <value name="ideographDigital" tokenid="ooxml:Value_ST_NumberFormat_ideographDigital">ideographDigital</value>
-    <value name="japaneseCounting" tokenid="ooxml:Value_ST_NumberFormat_japaneseCounting">japaneseCounting</value>
-    <value name="aiueo" tokenid="ooxml:Value_ST_NumberFormat_aiueo">aiueo</value>
-    <value name="iroha" tokenid="ooxml:Value_ST_NumberFormat_iroha">iroha</value>
-    <value name="decimalFullWidth" tokenid="ooxml:Value_ST_NumberFormat_decimalFullWidth">decimalFullWidth</value>
-    <value name="decimalHalfWidth" tokenid="ooxml:Value_ST_NumberFormat_decimalHalfWidth">decimalHalfWidth</value>
-    <value name="japaneseLegal" tokenid="ooxml:Value_ST_NumberFormat_japaneseLegal">japaneseLegal</value>
-    <value name="japaneseDigitalTenThousand" tokenid="ooxml:Value_ST_NumberFormat_japaneseDigitalTenThousand">japaneseDigitalTenThousand</value>
-    <value name="decimalEnclosedCircle" tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedCircle">decimalEnclosedCircle</value>
-    <value name="decimalFullWidth2" tokenid="ooxml:Value_ST_NumberFormat_decimalFullWidth2">decimalFullWidth2</value>
-    <value name="aiueoFullWidth" tokenid="ooxml:Value_ST_NumberFormat_aiueoFullWidth">aiueoFullWidth</value>
-    <value name="irohaFullWidth" tokenid="ooxml:Value_ST_NumberFormat_irohaFullWidth">irohaFullWidth</value>
-    <value name="decimalZero" tokenid="ooxml:Value_ST_NumberFormat_decimalZero">decimalZero</value>
-    <value name="bullet" tokenid="ooxml:Value_ST_NumberFormat_bullet">bullet</value>
-    <value name="ganada" tokenid="ooxml:Value_ST_NumberFormat_ganada">ganada</value>
-    <value name="chosung" tokenid="ooxml:Value_ST_NumberFormat_chosung">chosung</value>
-    <value name="decimalEnclosedFullstop" tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedFullstop">decimalEnclosedFullstop</value>
-    <value name="decimalEnclosedParen" tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedParen">decimalEnclosedParen</value>
-    <value name="decimalEnclosedCircleChinese" tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedCircleChinese">decimalEnclosedCircleChinese</value>
-    <value name="ideographEnclosedCircle" tokenid="ooxml:Value_ST_NumberFormat_ideographEnclosedCircle">ideographEnclosedCircle</value>
-    <value name="ideographTraditional" tokenid="ooxml:Value_ST_NumberFormat_ideographTraditional">ideographTraditional</value>
-    <value name="ideographZodiac" tokenid="ooxml:Value_ST_NumberFormat_ideographZodiac">ideographZodiac</value>
-    <value name="ideographZodiacTraditional" tokenid="ooxml:Value_ST_NumberFormat_ideographZodiacTraditional">ideographZodiacTraditional</value>
-    <value name="taiwaneseCounting" tokenid="ooxml:Value_ST_NumberFormat_taiwaneseCounting">taiwaneseCounting</value>
-    <value name="ideographLegalTraditional" tokenid="ooxml:Value_ST_NumberFormat_ideographLegalTraditional">ideographLegalTraditional</value>
-    <value name="taiwaneseCountingThousand" tokenid="ooxml:Value_ST_NumberFormat_taiwaneseCountingThousand">taiwaneseCountingThousand</value>
-    <value name="taiwaneseDigital" tokenid="ooxml:Value_ST_NumberFormat_taiwaneseDigital">taiwaneseDigital</value>
-    <value name="chineseCounting" tokenid="ooxml:Value_ST_NumberFormat_chineseCounting">chineseCounting</value>
-    <value name="chineseLegalSimplified" tokenid="ooxml:Value_ST_NumberFormat_chineseLegalSimplified">chineseLegalSimplified</value>
-    <value name="chineseCountingThousand" tokenid="ooxml:Value_ST_NumberFormat_chineseCountingThousand">chineseCountingThousand</value>
-    <value name="koreanDigital" tokenid="ooxml:Value_ST_NumberFormat_koreanDigital">koreanDigital</value>
-    <value name="koreanCounting" tokenid="ooxml:Value_ST_NumberFormat_koreanCounting">koreanCounting</value>
-    <value name="koreanLegal" tokenid="ooxml:Value_ST_NumberFormat_koreanLegal">koreanLegal</value>
-    <value name="koreanDigital2" tokenid="ooxml:Value_ST_NumberFormat_koreanDigital2">koreanDigital2</value>
-    <value name="vietnameseCounting" tokenid="ooxml:Value_ST_NumberFormat_vietnameseCounting">vietnameseCounting</value>
-    <value name="russianLower" tokenid="ooxml:Value_ST_NumberFormat_russianLower">russianLower</value>
-    <value name="russianUpper" tokenid="ooxml:Value_ST_NumberFormat_russianUpper">russianUpper</value>
-    <value name="none" tokenid="ooxml:Value_ST_NumberFormat_none">none</value>
-    <value name="numberInDash" tokenid="ooxml:Value_ST_NumberFormat_numberInDash">numberInDash</value>
-    <value name="hebrew1" tokenid="ooxml:Value_ST_NumberFormat_hebrew1">hebrew1</value>
-    <value name="hebrew2" tokenid="ooxml:Value_ST_NumberFormat_hebrew2">hebrew2</value>
-    <value name="arabicAlpha" tokenid="ooxml:Value_ST_NumberFormat_arabicAlpha">arabicAlpha</value>
-    <value name="arabicAbjad" tokenid="ooxml:Value_ST_NumberFormat_arabicAbjad">arabicAbjad</value>
-    <value name="hindiVowels" tokenid="ooxml:Value_ST_NumberFormat_hindiVowels">hindiVowels</value>
-    <value name="hindiConsonants" tokenid="ooxml:Value_ST_NumberFormat_hindiConsonants">hindiConsonants</value>
-    <value name="hindiNumbers" tokenid="ooxml:Value_ST_NumberFormat_hindiNumbers">hindiNumbers</value>
-    <value name="hindiCounting" tokenid="ooxml:Value_ST_NumberFormat_hindiCounting">hindiCounting</value>
-    <value name="thaiLetters" tokenid="ooxml:Value_ST_NumberFormat_thaiLetters">thaiLetters</value>
-    <value name="thaiNumbers" tokenid="ooxml:Value_ST_NumberFormat_thaiNumbers">thaiNumbers</value>
-    <value name="thaiCounting" tokenid="ooxml:Value_ST_NumberFormat_thaiCounting">thaiCounting</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimal">decimal</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_upperRoman">upperRoman</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_lowerRoman">lowerRoman</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_upperLetter">upperLetter</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_lowerLetter">lowerLetter</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ordinal">ordinal</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_cardinalText">cardinalText</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ordinalText">ordinalText</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_hex">hex</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_chicago">chicago</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ideographDigital">ideographDigital</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_japaneseCounting">japaneseCounting</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_aiueo">aiueo</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_iroha">iroha</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalFullWidth">decimalFullWidth</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalHalfWidth">decimalHalfWidth</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_japaneseLegal">japaneseLegal</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_japaneseDigitalTenThousand">japaneseDigitalTenThousand</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedCircle">decimalEnclosedCircle</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalFullWidth2">decimalFullWidth2</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_aiueoFullWidth">aiueoFullWidth</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_irohaFullWidth">irohaFullWidth</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalZero">decimalZero</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_bullet">bullet</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ganada">ganada</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_chosung">chosung</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedFullstop">decimalEnclosedFullstop</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedParen">decimalEnclosedParen</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_decimalEnclosedCircleChinese">decimalEnclosedCircleChinese</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ideographEnclosedCircle">ideographEnclosedCircle</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ideographTraditional">ideographTraditional</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ideographZodiac">ideographZodiac</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ideographZodiacTraditional">ideographZodiacTraditional</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_taiwaneseCounting">taiwaneseCounting</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_ideographLegalTraditional">ideographLegalTraditional</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_taiwaneseCountingThousand">taiwaneseCountingThousand</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_taiwaneseDigital">taiwaneseDigital</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_chineseCounting">chineseCounting</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_chineseLegalSimplified">chineseLegalSimplified</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_chineseCountingThousand">chineseCountingThousand</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_koreanDigital">koreanDigital</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_koreanCounting">koreanCounting</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_koreanLegal">koreanLegal</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_koreanDigital2">koreanDigital2</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_vietnameseCounting">vietnameseCounting</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_russianLower">russianLower</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_russianUpper">russianUpper</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_none">none</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_numberInDash">numberInDash</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_hebrew1">hebrew1</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_hebrew2">hebrew2</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_arabicAlpha">arabicAlpha</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_arabicAbjad">arabicAbjad</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_hindiVowels">hindiVowels</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_hindiConsonants">hindiConsonants</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_hindiNumbers">hindiNumbers</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_hindiCounting">hindiCounting</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_thaiLetters">thaiLetters</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_thaiNumbers">thaiNumbers</value>
+    <value tokenid="ooxml:Value_ST_NumberFormat_thaiCounting">thaiCounting</value>
   </resource>
-    <resource name="CT_VerticalJc" resource="StringValue" generated="yes"/>
+    <resource name="CT_VerticalJc" resource="ListValue"/>
     <resource name="ST_BrType" resource="List">
       <value tokenid="ooxml:Value_ST_BrType_column">column</value>
       <value tokenid="ooxml:Value_ST_BrType_page">page</value>
@@ -14812,18 +14816,21 @@
       <action name="end" action="endOfParagraph"/>
       <action name="end" action="endParagraphGroup"/>
     </resource>
-    <resource name="CT_Height" resource="StringValue" generated="yes"/>
-    <resource name="CT_VMerge" resource="StringValue" generated="yes"/>
-    <resource name="CT_HMerge" resource="StringValue" generated="yes"/>
+    <resource name="CT_VMerge" resource="ListValue"/>
+    <resource name="CT_HMerge" resource="ListValue"/>
     <resource name="CT_Cnf" resource="StringValue" generated="yes"/>
-    <resource name="CT_TblOverlap" resource="StringValue" generated="yes"/>
+    <resource name="CT_TblOverlap" resource="ListValue"/>
+    <resource name="ST_TblOverlap" resource="List">
+      <value tokenid="ooxml:Value_ST_TblOverlap_never">never</value>
+      <value tokenid="ooxml:Value_ST_TblOverlap_overlap">overlap</value>
+    </resource>
     <resource name="CT_FtnPos" resource="StringValue" generated="yes"/>
     <resource name="CT_EdnPos" resource="StringValue" generated="yes"/>
     <resource name="CT_NumFmt" resource="ListValue"/>
     <resource name="ST_RestartNumber" resource="List">
-      <value name="continuous" tokenid="ooxml:Value_ST_RestartNumber_continuous">continuous</value>
-      <value name="eachSect" tokenid="ooxml:Value_ST_RestartNumber_eachSect">eachSect</value>
-      <value name="eachPage" tokenid="ooxml:Value_ST_RestartNumber_eachPage">eachPage</value>
+      <value tokenid="ooxml:Value_ST_RestartNumber_continuous">continuous</value>
+      <value tokenid="ooxml:Value_ST_RestartNumber_eachSect">eachSect</value>
+      <value tokenid="ooxml:Value_ST_RestartNumber_eachPage">eachPage</value>
     </resource>
     <resource name="CT_NumRestart" resource="ListValue"/>
     <resource name="CT_MailMergeSourceType" resource="StringValue" generated="yes"/>
@@ -14893,18 +14900,18 @@
     </resource>
     <resource name="CT_Panose" resource="HexValue"/>
     <resource name="ST_FontFamily" resource="List">
-      <value name="decorative" tokenid="ooxml:Value_ST_FontFamily_decorative">decorative</value>
-      <value name="modern" tokenid="ooxml:Value_ST_FontFamily_modern">modern</value>
-      <value name="roman" tokenid="ooxml:Value_ST_FontFamily_roman">roman</value>
-      <value name="script" tokenid="ooxml:Value_ST_FontFamily_script">script</value>
-      <value name="swiss" tokenid="ooxml:Value_ST_FontFamily_swiss">swiss</value>
-      <value name="auto" tokenid="ooxml:Value_ST_FontFamily_auto">auto</value>
+      <value tokenid="ooxml:Value_ST_FontFamily_decorative">decorative</value>
+      <value tokenid="ooxml:Value_ST_FontFamily_modern">modern</value>
+      <value tokenid="ooxml:Value_ST_FontFamily_roman">roman</value>
+      <value tokenid="ooxml:Value_ST_FontFamily_script">script</value>
+      <value tokenid="ooxml:Value_ST_FontFamily_swiss">swiss</value>
+      <value tokenid="ooxml:Value_ST_FontFamily_auto">auto</value>
     </resource>
     <resource name="CT_FontFamily" resource="ListValue"/>
     <resource name="ST_Pitch" resource="List">
-      <value name="fixed" tokenid="ooxml:Value_ST_Pitch_fixed">fixed</value>
-      <value name="variable" tokenid="ooxml:Value_ST_Pitch_variable">variable</value>
-      <value name="default" tokenid="ooxml:Value_ST_Pitch_default">default</value>
+      <value tokenid="ooxml:Value_ST_Pitch_fixed">fixed</value>
+      <value tokenid="ooxml:Value_ST_Pitch_variable">variable</value>
+      <value tokenid="ooxml:Value_ST_Pitch_default">default</value>
     </resource>
     <resource name="CT_Pitch" resource="ListValue"/>
     <resource name="CT_FontSig" resource="Properties">
@@ -14956,5 +14963,111 @@
     <resource name="numbering" resource="Stream"/>
     <resource name="CT_Document" resource="Stream"/>
     <resource name="document" resource="Stream"/>
+    <resource name="CT_TblPrBase" resource="Properties">
+      <sprm name="tblStyle" tokenid="ooxml:CT_TblPrBase_tblStyle"/>
+      <sprm name="tblpPr" tokenid="ooxml:CT_TblPrBase_tblpPr"/>
+      <sprm name="tblOverlap" tokenid="ooxml:CT_TblPrBase_tblOverlap"/>
+      <sprm name="bidiVisual" tokenid="ooxml:CT_TblPrBase_bidiVisual"/>
+      <sprm name="tblStyleRowBandSize" tokenid="ooxml:CT_TblPrBase_tblStyleRowBandSize"/>
+      <sprm name="tblStyleColBandSize" tokenid="ooxml:CT_TblPrBase_tblStyleColBandSize"/>
+      <sprm name="tblW" tokenid="ooxml:CT_TblPrBase_tblW"/>
+      <sprm name="jc" tokenid="ooxml:CT_TblPrBase_jc"/>
+      <sprm name="tblCellSpacing" tokenid="ooxml:CT_TblPrBase_tblCellSpacing"/>
+      <sprm name="tblInd" tokenid="ooxml:CT_TblPrBase_tblInd"/>
+      <sprm name="tblBorders" tokenid="ooxml:CT_TblPrBase_tblBorders"/>
+      <sprm name="shd" tokenid="ooxml:CT_TblPrBase_shd"/>
+      <sprm name="tblLayout" tokenid="ooxml:CT_TblPrBase_tblLayout"/>
+      <sprm name="tblCellMar" tokenid="ooxml:CT_TblPrBase_tblCellMar"/>
+      <sprm name="tblLook" tokenid="ooxml:CT_TblPrBase_tblLook"/>
+    </resource>
+    <resource name="CT_TblPr" resource="Properties">
+      <sprm name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>
+    </resource>
+    <resource name="CT_TblBorders" resource="Properties">
+      <sprm name="top" tokenid="ooxml:CT_TblBorders_top"/>
+      <sprm name="left" tokenid="ooxml:CT_TblBorders_left"/>
+      <sprm name="bottom" tokenid="ooxml:CT_TblBorders_bottom"/>
+      <sprm name="right" tokenid="ooxml:CT_TblBorders_right"/>
+      <sprm name="insideH" tokenid="ooxml:CT_TblBorders_insideH"/>
+      <sprm name="insideV" tokenid="ooxml:CT_TblBorders_insideV"/>
+    </resource>
+    <resource name="CT_TblWidth" resource="Properties">
+      <attribute name="w" tokenid="ooxml:CT_TblWidth_w"/>
+      <attribute name="type" tokenid="ooxml:CT_TblWidth_type"/>
+    </resource>
+    <resource name="ST_TblWidth" resource="List">
+      <value tokenid="ooxml:Value_ST_TblWidth_nil">nil</value>
+      <value tokenid="ooxml:Value_ST_TblWidth_pct">pct</value>
+      <value tokenid="ooxml:Value_ST_TblWidth_dxa">dxa</value>
+      <value tokenid="ooxml:Value_ST_TblWidth_auto">auto</value>
+    </resource>
+    <resource name="CT_TcPrBase" resource="Properties">
+      <sprm name="cnfStyle" tokenid="ooxml:CT_TcPrBase_cnfStyle"/>
+      <sprm name="tcW" tokenid="ooxml:CT_TcPrBase_tcW"/>
+      <sprm name="gridSpan" tokenid="ooxml:CT_TcPrBase_gridSpan"/>
+      <sprm name="hMerge" tokenid="ooxml:CT_TcPrBase_hMerge"/>
+      <sprm name="vMerge" tokenid="ooxml:CT_TcPrBase_vMerge"/>
+      <sprm name="tcBorders" tokenid="ooxml:CT_TcPrBase_tcBorders"/>
+      <sprm name="shd" tokenid="ooxml:CT_TcPrBase_shd"/>
+      <sprm name="noWrap" tokenid="ooxml:CT_TcPrBase_noWrap"/>
+      <sprm name="tcMar" tokenid="ooxml:CT_TcPrBase_tcMar"/>
+      <sprm name="textDirection" tokenid="ooxml:CT_TcPrBase_textDirection"/>
+      <sprm name="tcFitText" tokenid="ooxml:CT_TcPrBase_tcFitText"/>
+      <sprm name="vAlign" tokenid="ooxml:CT_TcPrBase_vAlign"/>
+      <sprm name="hideMark" tokenid="ooxml:CT_TcPrBase_hideMark"/>
+    </resource>
+    <resource name="CT_Height" resource="Properties">
+      <attribute name="val" tokenid="ooxml:CT_Height_val"/>
+      <attribute name="hRule" tokenid="ooxml:CT_Height_hRule"/>
+    </resource>
+    <resource name="ST_Merge" resource="List">
+      <value tokenid="ooxml:Value_ST_Merge_continue">continue</value>
+      <value tokenid="ooxml:Value_ST_Merge_restart">restart</value>
+    </resource>
+    <resource name="CT_TcBorders" resource="Properties">
+      <sprm name="top" tokenid="ooxml:CT_TcBorders_top"/>
+      <sprm name="left" tokenid="ooxml:CT_TcBorders_left"/>
+      <sprm name="bottom" tokenid="ooxml:CT_TcBorders_bottom"/>
+      <sprm name="right" tokenid="ooxml:CT_TcBorders_right"/>
+      <sprm name="insideH" tokenid="ooxml:CT_TcBorders_insideH"/>
+      <sprm name="insideV" tokenid="ooxml:CT_TcBorders_insideV"/>
+      <sprm name="tl2br" tokenid="ooxml:CT_TcBorders_tl2br"/>
+      <sprm name="tr2bl" tokenid="ooxml:CT_TcBorders_tr2bl"/>
+    </resource>
+    <resource name="CT_TcMar" resource="Properties">
+      <sprm name="top" tokenid="ooxml:CT_TcMar_top"/>
+      <sprm name="left" tokenid="ooxml:CT_TcMar_left"/>
+      <sprm name="bottom" tokenid="ooxml:CT_TcMar_bottom"/>
+      <sprm name="right" tokenid="ooxml:CT_TcMar_right"/>
+    </resource>
+    <resource name="ST_TextDirection" resource="List">
+      <value tokenid="ooxml:Value_ST_TextDirection_lrTb">lrTb</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_tbRl">tbRl</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_btLr">btLr</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_lrTbV">lrTbV</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_tbRlV">tbRlV</value>
+      <value tokenid="ooxml:Value_ST_TextDirection_tbLrV">tbLrV</value>
+    </resource>
+    <resource name="ST_VerticalJc" resource="List">
+      <value tokenid="ooxml:Value_ST_VerticalJc_top">top</value>
+      <value tokenid="ooxml:Value_ST_VerticalJc_center">center</value>
+      <value tokenid="ooxml:Value_ST_VerticalJc_both">both</value>
+      <value tokenid="ooxml:Value_ST_VerticalJc_bottom">bottom</value>
+    </resource>
+    <resource name="CT_TrPr" resource="Properties"/>
+    <resource name="CT_TrPrBase" resource="Properties">
+      <sprm name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
+      <sprm name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
+      <sprm name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
+      <sprm name="gridAfter" tokenid="ooxml:CT_TrPrBase_gridAfter"/>
+      <sprm name="wBefore" tokenid="ooxml:CT_TrPrBase_wBefore"/>
+      <sprm name="wAfter" tokenid="ooxml:CT_TrPrBase_wAfter"/>
+      <sprm name="cantSplit" tokenid="0x3644"/>
+      <sprm name="trHeight" tokenid="ooxml:CT_TrPrBase_trHeight"/>
+      <sprm name="tblHeader" tokenid="ooxml:CT_TrPrBase_tblHeader"/>
+      <sprm name="tblCellSpacing" tokenid="ooxml:CT_TrPrBase_tblCellSpacing"/>
+      <sprm name="jc" tokenid="ooxml:CT_TrPrBase_jc"/>
+      <sprm name="hidden" tokenid="ooxml:CT_TrPrBase_hidden"/>
+    </resource>
   </namespace>
 </model>
