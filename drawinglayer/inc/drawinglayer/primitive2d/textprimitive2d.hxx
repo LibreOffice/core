@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hdu $ $Date: 2007-02-21 11:28:48 $
+ *  last change: $Author: hdu $ $Date: 2007-04-20 08:09:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,8 +85,8 @@ namespace drawinglayer
                     && mnWeight == rCompare.mnWeight
                     && mbSymbol == rCompare.mbSymbol
                     && mbVertical == rCompare.mbVertical
-                    && mbOutline == rCompare.mbOutline
-                    && mbItalic == rCompare.mbItalic);
+                    && mbItalic == rCompare.mbItalic
+                    && mbOutline == rCompare.mbOutline);
             }
         };
 
@@ -205,6 +205,7 @@ namespace drawinglayer
         class TextDecoratedPortionPrimitive2D : public TextSimplePortionPrimitive2D
         {
         private:
+            basegfx::BColor                             maTextlineColor;
             FontUnderline                               meFontUnderline;
             FontStrikeout                               meFontStrikeout;
             FontEmphasisMark                            meFontEmphasisMark;
@@ -228,6 +229,7 @@ namespace drawinglayer
                 const ::std::vector< double >& rDXArray,
                 const FontAttributes& rFontAttributes,
                 const basegfx::BColor& rFontColor,
+                const basegfx::BColor& rTextlineColor,
                 FontUnderline eFontUnderline = FONT_UNDERLINE_NONE,
                 bool bUnderlineAbove = false,
                 FontStrikeout eFontStrikeout = FONT_STRIKEOUT_NONE,
@@ -243,6 +245,7 @@ namespace drawinglayer
             FontStrikeout getFontStrikeout() const { return meFontStrikeout; }
             FontEmphasisMark getFontEmphasisMark() const { return meFontEmphasisMark; }
             FontRelief getFontRelief() const { return meFontRelief; }
+            basegfx::BColor getTextlineColor() const { return maTextlineColor; }
             bool getUnderlineAbove() const { return mbUnderlineAbove; }
             bool getWordLineMode() const { return mbWordLineMode; }
             bool getEmphasisMarkAbove() const { return mbEmphasisMarkAbove; }

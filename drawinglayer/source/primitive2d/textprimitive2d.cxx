@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textprimitive2d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2007-03-06 12:34:31 $
+ *  last change: $Author: hdu $ $Date: 2007-04-20 08:09:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -476,7 +476,7 @@ namespace drawinglayer
                     fUnderlineHeight *= 0.5;
                 }
 
-                const basegfx::BColor& rLineColor = getFontColor();
+                const basegfx::BColor& rLineColor = getTextlineColor();
                 attribute::StrokeAttribute aStrokeAttr( rLineColor, fUnderlineHeight, eLineJoin );
                 if( pDashDotArray != NULL )
                 {
@@ -553,7 +553,7 @@ namespace drawinglayer
                     aStrikeoutLine.append( aPoint + ::basegfx::B2DPoint( fTextWidth, 0.0 ) );
                 }
 
-                const basegfx::BColor& rStrikeoutColor = getFontColor();
+                const basegfx::BColor& rStrikeoutColor = getTextlineColor();
                 attribute::StrokeAttribute aStrokeAttr( rStrikeoutColor, fStrikeoutHeight, eLineJoin );
                 aStrikeoutLine.transform( aUnscaledTransform );
                 aRetval[3] = new PolygonStrokePrimitive2D( aStrikeoutLine, aStrokeAttr );
@@ -603,6 +603,7 @@ namespace drawinglayer
             const ::std::vector< double >& rDXArray,
             const FontAttributes& rFontAttributes,
             const basegfx::BColor& rFontColor,
+            const basegfx::BColor& rTextlineColor,
             FontUnderline eFontUnderline,
             bool bUnderlineAbove,
             FontStrikeout eFontStrikeout,
@@ -613,6 +614,7 @@ namespace drawinglayer
             FontRelief eFontRelief,
             bool bShadow)
         :   TextSimplePortionPrimitive2D(rNewTransform, rText, rDXArray, rFontAttributes, rFontColor),
+            maTextlineColor(rTextlineColor),
             meFontUnderline(eFontUnderline),
             meFontStrikeout(eFontStrikeout),
             meFontEmphasisMark(eFontEmphasisMark),
@@ -631,7 +633,8 @@ namespace drawinglayer
             {
                 const TextDecoratedPortionPrimitive2D& rCompare = (TextDecoratedPortionPrimitive2D&)rPrimitive;
 
-                return (getFontUnderline() == rCompare.getFontUnderline()
+                return (getTextlineColor() == rCompare.getTextlineColor()
+                    && getFontUnderline() == rCompare.getFontUnderline()
                     && getFontStrikeout() == rCompare.getFontStrikeout()
                     && getUnderlineAbove() == rCompare.getUnderlineAbove()
                     && getWordLineMode() == rCompare.getWordLineMode()
