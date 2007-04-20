@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLDocumentImpl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:08:11 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:36:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,8 +113,8 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
             resolveSubStream(rStream, OOXMLStream::FONTTABLE);
             resolveSubStream(rStream, OOXMLStream::STYLES);
 
-            uno::Reference<io::XInputStream> xInputStream =
-                mpStream->getInputStream();
+            uno::Reference<io::XInputStream> xInputStream
+                (mpStream->getInputStream());
 
             struct xml::sax::InputSource oInputSource;
             oInputSource.aInputStream = xInputStream;
