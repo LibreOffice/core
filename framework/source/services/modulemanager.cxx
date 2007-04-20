@@ -4,9 +4,9 @@
  *
  *  $RCSfile: modulemanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:44:41 $
+ *  last change: $Author: ihi $ $Date: 2007-04-20 14:11:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -364,7 +364,6 @@ sal_Bool SAL_CALL ModuleManager::hasElements()
 css::uno::Reference< css::container::XEnumeration > SAL_CALL ModuleManager::createSubSetEnumerationByQuery(const ::rtl::OUString&)
     throw(css::uno::RuntimeException)
 {
-    throw css::uno::RuntimeException(::rtl::OUString::createFromAscii("Not implemented yet!"), static_cast< css::frame::XModuleManager* >(this));
     return css::uno::Reference< css::container::XEnumeration >();
 }
 
