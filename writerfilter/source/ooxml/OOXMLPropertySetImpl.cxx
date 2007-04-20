@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:10:31 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:37:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,10 +131,8 @@ string OOXMLPropertyImpl::getName() const
 string OOXMLPropertyImpl::toString() const
 {
     string sResult = "(";
-    static char buffer[256];
 
-    snprintf(buffer, sizeof(buffer), "0x%x", mId);
-    sResult += buffer;
+    sResult += getName();
     sResult += ", ";
     if (mpValue.get() != NULL)
         sResult += mpValue->toString();
