@@ -29413,6 +29413,29 @@
           </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPIstdPermute-->
+        <!--SPRM sprmTCantSpilt-->
+        <UML:Class xmi.id="sprmTCantSplit" name="sprmTCantSplit">
+          <UML:ModelElement.stereotype>
+            <UML:Stereotype xmi.idref="ww8sprm"/>
+          </UML:ModelElement.stereotype>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>0x3644</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmcode"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+          <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>rtf:sprmTCantSplit</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        </UML:Class>
+        <!--SPRM sprmPIstdPermute-->
         <!--SPRM sprmPIncLvl-->
         <UML:Class xmi.id="sprmPIncLvl" name="sprmPIncLvl">
           <UML:ModelElement.stereotype>
