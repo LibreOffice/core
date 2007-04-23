@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-20 11:42:49 $
+ *  last change: $Author: os $ $Date: 2007-04-23 09:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -211,7 +211,6 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_FHIDDEN:
         case NS_rtf::LN_UNUSED8_3:
             //noone seems to care about it
-        break;
         break;
 //        case NS_rtf::LN_CSTD: break;
 //        case NS_rtf::LN_CBSTDBASEINFILE: break;

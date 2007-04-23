@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyMap.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2007-04-13 09:35:20 $
+ *  last change: $Author: os $ $Date: 2007-04-23 09:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,7 @@ namespace com{namespace sun{namespace star{
     namespace text{
         class XTextRange;
         class XTextColumns;
-    };
+    }
     namespace table{
         struct BorderLine;
     }
@@ -92,6 +92,7 @@ typedef std::map < ::rtl::OUString, ::com::sun::star::uno::Any > _PropertyMap;
 class PropertyMap : public _PropertyMap
 {
     ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >   m_aValues;
+    using _PropertyMap::insert;
 
     public:
         PropertyMap();
@@ -101,7 +102,6 @@ class PropertyMap : public _PropertyMap
     /** Add property, usually overwrites already available attributes. It shouldn't overwrite in case of default attributes
      */
     void Insert( PropertyIds eId, const ::com::sun::star::uno::Any& rAny, bool bOverwrite = true );
-
     void insert(const boost::shared_ptr<PropertyMap> pMap);
 
     void Invalidate()

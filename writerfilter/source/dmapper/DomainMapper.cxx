@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-20 11:42:49 $
+ *  last change: $Author: os $ $Date: 2007-04-23 09:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -588,7 +588,6 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             {
                 m_pImpl->GetFIB().SetLNCHS( nIntValue );
             }
-            break;
             break;
         case NS_rtf::LN_IXCHSZALT:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: GraphicImport.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2006-12-13 14:51:20 $
+ *  last change: $Author: os $ $Date: 2007-04-23 09:11:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,7 +515,7 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
 
                     case 0x6E0 :            break;// One byte tag then PNG data
 
-                    case 0x7A8 : m_pImpl->bIsBitmap = true;    break;
+                    case 0x7A8 : m_pImpl->bIsBitmap = true;
 //                        nSkip += 1;         // One byte tag then DIB data
                     break;
 
@@ -636,7 +636,6 @@ void GraphicImport::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_FFRAME:            // ignored
         /* WRITERFILTERSTATUS: done: 100, planned: 0, spent: 0 */
         case NS_rtf::LN_UNUSED2_15: break;// ignored
-        break;
 
 //    const QName_t LN_shpoptextraoffset = 20028;
 //    const QName_t LN_shptypename = 20029;
@@ -1780,7 +1779,7 @@ void GraphicImport::data(const sal_uInt8* buf, size_t len, doctok::Reference<Pro
     }
     catch( const uno::Exception& )
     {
-        clog << __FUNCTION__ << " failed!" << endl;
+        clog << __FILE__ << __LINE__ << " failed!" << endl;
     }
 
 }
