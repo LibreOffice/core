@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ScannerTestService.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:38 $
+ *  last change: $Author: os $ $Date: 2007-04-23 09:52:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,17 +155,17 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
             rtl_uString_release(dir);
 */
                 comphelper::ByteSequence seq(binLen);
-                unsigned char *data=binBufferStr;
-                memcpy(seq.getArray(), data+o, binLen);
+                unsigned char *data0=binBufferStr;
+                memcpy(seq.getArray(), data0+o, binLen);
                 uno::Reference<io::XInputStream> myStream=new comphelper::SequenceInputStream(seq);
 //          uno::Reference<io::XStream> myStream=xFileAccess->openFileReadWrite(absFileUrl);
 //          uno::Reference<io::XStream> myStream(new MyStreamImpl(binBuffer, o));
-            uno::Sequence< uno::Any > aArgs( 1 );
-            aArgs[0] <<= myStream;
+            uno::Sequence< uno::Any > aArgs0( 1 );
+            aArgs0[0] <<= myStream;
             uno::Reference< container::XNameContainer > xNameContainer(
             xServiceFactory->createInstanceWithArguments(
                     ::rtl::OUString::createFromAscii("com.sun.star.embed.OLESimpleStorage" ),
-                    aArgs ),
+                    aArgs0 ),
             uno::UNO_QUERY_THROW );
             try {
                 printf("TRY\n");
@@ -183,25 +183,25 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
                 uno::Reference<beans::XPropertySet> xContentStreamPropSet(xContentStream, uno::UNO_QUERY_THROW);
                 xContentStreamPropSet->setPropertyValue(rtl::OUString::createFromAscii("MediaType"), uno::makeAny(rtl::OUString::createFromAscii("application/vnd.sun.star.oleobject")));
                 uno::Reference<io::XOutputStream> myOutStream=xContentStream->getOutputStream();
-                uno::Sequence< ::sal_Int8 > seq(binLen);
-                unsigned char *data=binBufferStr;
-                memcpy(seq.getArray(), data+o, binLen);
-                myOutStream->writeBytes(seq);
+                uno::Sequence< ::sal_Int8 > seq1(binLen);
+                unsigned char *data1=binBufferStr;
+                memcpy(seq1.getArray(), data1+o, binLen);
+                myOutStream->writeBytes(seq1);
                 myOutStream->closeOutput();
             }
 
             } catch(com::sun::star::uno::RuntimeException &)
             {
                 printf("NOT OK\n");
-                comphelper::ByteSequence seq(4+binLen);
-                //              memcpy(seq.getArray(), &binLen, 4); assert(0); //TODO linux
-                seq[0]= sal::static_int_cast<sal_Int8>(binLen&0xFF);
-                seq[1]= sal::static_int_cast<sal_Int8>((binLen>>8)&0xFF);
-                seq[2]= sal::static_int_cast<sal_Int8>((binLen>>16)&0xFF);
-                seq[3]= sal::static_int_cast<sal_Int8>((binLen>>24)&0xFF);
-                unsigned char *data=binBufferStr;
-                memcpy(seq.getArray()+4, data+o, binLen);
-                uno::Reference<io::XInputStream> myInStream=new comphelper::SequenceInputStream(seq);
+                comphelper::ByteSequence seq2(4+binLen);
+                //              memcpy(seq2.getArray(), &binLen, 4); assert(0); //TODO linux
+                seq2[0]= sal::static_int_cast<sal_Int8>(binLen&0xFF);
+                seq2[1]= sal::static_int_cast<sal_Int8>((binLen>>8)&0xFF);
+                seq2[2]= sal::static_int_cast<sal_Int8>((binLen>>16)&0xFF);
+                seq2[3]= sal::static_int_cast<sal_Int8>((binLen>>24)&0xFF);
+                unsigned char *data2=binBufferStr;
+                memcpy(seq2.getArray()+4, data2+o, binLen);
+                uno::Reference<io::XInputStream> myInStream=new comphelper::SequenceInputStream(seq2);
                 printf("SEQ OK\n");
 
                 uno::Reference< io::XStream > xContentStream = xStorage->openStreamElement(
@@ -210,12 +210,12 @@ class MyRtfScannerHandler : public writerfilter::rtftok::RTFScannerHandler
                 xContentStreamPropSet->setPropertyValue(rtl::OUString::createFromAscii("MediaType"), uno::makeAny(rtl::OUString::createFromAscii("application/vnd.sun.star.oleobject")));
                 printf("CONTENT STREAM OK\n");
 
-                uno::Sequence< uno::Any > aArgs( 1 );
-                aArgs[0] <<= xContentStream;
+                uno::Sequence< uno::Any > aArgs1( 1 );
+                aArgs1[0] <<= xContentStream;
                 uno::Reference< container::XNameContainer > xNameContainer2(
                     xServiceFactory->createInstanceWithArguments(
                     ::rtl::OUString::createFromAscii("com.sun.star.embed.OLESimpleStorage" ),
-                    aArgs ),
+                    aArgs1 ),
                     uno::UNO_QUERY_THROW );
                 printf("OLE STORAGE OK\n");
 
@@ -406,10 +406,10 @@ sal_Int32 SAL_CALL ScannerTestService::run( const uno::Sequence< rtl::OUString >
             rtl_uString_release(dir1);
             }
 
-            uno::Sequence< uno::Any > aArgs( 2 );
-            aArgs[0] <<= outFileUrl;
-            aArgs[1] <<= embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
-            uno::Reference<embed::XStorage> xStorage(xStorageFactory->createInstanceWithArguments(aArgs), uno::UNO_QUERY_THROW);
+            uno::Sequence< uno::Any > aArgs2( 2 );
+            aArgs2[0] <<= outFileUrl;
+            aArgs2[1] <<= embed::ElementModes::READWRITE | embed::ElementModes::TRUNCATE;
+            uno::Reference<embed::XStorage> xStorage(xStorageFactory->createInstanceWithArguments(aArgs2), uno::UNO_QUERY_THROW);
             uno::Reference<beans::XPropertySet> xPropSet(xStorage, uno::UNO_QUERY_THROW);
             xPropSet->setPropertyValue(rtl::OUString::createFromAscii("MediaType"), uno::makeAny(rtl::OUString::createFromAscii("application/vnd.oasis.opendocument.text")));
             uno::Reference<io::XInputStream> xInputStream = xFileAccess->openFileRead(absFileUrl);

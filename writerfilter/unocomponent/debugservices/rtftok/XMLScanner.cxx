@@ -4,9 +4,9 @@
  *
  *  $RCSfile: XMLScanner.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-01 09:14:38 $
+ *  last change: $Author: os $ $Date: 2007-04-23 09:57:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include <rtl/string.hxx>
 #include <hash_set>
 #include <assert.h>
+#include <string>
 #include <cppuhelper/implbase2.hxx>
 #include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
