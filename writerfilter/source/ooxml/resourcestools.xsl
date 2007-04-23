@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-19 13:03:07 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-23 10:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1348,7 +1348,7 @@ namespace writerfilter { namespace NS_ooxml
 
 namespace ooxml { namespace tokenmap { namespace elements {
 %}
-struct token { char * name; TokenEnum_t nToken; };
+struct token { const char * name; TokenEnum_t nToken; };
 %%</xsl:text>
     <xsl:for-each select=".//rng:element[@enumname]">
       <xsl:if test="generate-id(.) = generate-id(key('same-element-enum', @enumname)[1])">
@@ -1371,7 +1371,7 @@ struct token { char * name; TokenEnum_t nToken; };
 
 namespace ooxml { namespace tokenmap { namespace attributes {
 %}
-struct token { char * name; TokenEnum_t nToken; };
+struct token { const char * name; TokenEnum_t nToken; };
 %%</xsl:text>
     <xsl:for-each select=".//rng:attribute[@enumname]">
       <xsl:if test="generate-id(.) = generate-id(key('same-attribute-enum', @enumname)[1])">
