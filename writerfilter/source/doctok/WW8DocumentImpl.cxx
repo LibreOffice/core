@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:31:32 $
+ *  last change: $Author: os $ $Date: 2007-04-23 07:37:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1063,8 +1063,6 @@ CpAndFc WW8DocumentImpl::getHeaderCpAndFc(sal_uInt32 nPos)
         return aCpAndFc;
     }
 
-    // never reached
-    return CpAndFc();
 }
 
 doctok::Reference<Stream>::Pointer_t WW8DocumentImpl::getHeader(sal_uInt32 nPos)
