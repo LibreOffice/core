@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.155 $
+ *  $Revision: 1.156 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:59:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-24 16:09:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,6 +63,16 @@
     /* list boxes */    ( ADVANCED_LISTBOX_OPTIONS * ( LISTBOX_HEIGHT + RELATED_CONTROLS ) ) + \
     /* bottom space */  START_Y - RELATED_CONTROLS
 //#define ADVANCED_PAGE_Y       (105 + 5*CHECKBOX_HEIGHT + 4*RELATED_CONTROLS)
+
+#define _LB_BOOLEANCOMPARISON                                   \
+        StringList [ en-US ] =                                  \
+        {                                                       \
+            < "Default" ; Default ; > ;                         \
+            < "SQL" ; Default ; > ;                             \
+            < "Mixed" ; Default ; > ;                           \
+            < "MS Access" ; Default ; > ;                       \
+        };
+
 
 //-------------------------------------------------------------------------
 
@@ -192,13 +202,7 @@
         DropDown = TRUE;                                        \
         Border = TRUE;                                          \
         HelpId = HID_DSADMIN_BOOLEANCOMPARISON;                 \
-        StringList [ en-US ] =                                  \
-        {                                                       \
-            < "Default" ; Default ; > ;                         \
-            < "SQL" ; Default ; > ;                             \
-            < "Mixed" ; Default ; > ;                           \
-            < "MS Access" ; Default ; > ;                       \
-        };                                                      \
+        _LB_BOOLEANCOMPARISON                                   \
     };                                                          \
 
 
