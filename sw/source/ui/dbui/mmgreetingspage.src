@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmgreetingspage.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 12:55:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-24 16:07:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,13 @@
 #include <mmgreetingspage.hrc>
 #include <dbui.hrc>
 #include <helpid.h>
+
+#define _LB_FEMALECOLUMN                \
+        StringList [en-US]=             \
+        {                               \
+            < "< not available >" ; > ; \
+        };
+
 
 #define GREETINGS_BODY  \
     CheckBox CB_PERSONALIZED                                                    \
@@ -99,10 +106,7 @@
         Size = MAP_APPFONT ( 121 , 50 ) ;                                           \
         DropDown = TRUE;                                                            \
         Border = TRUE;                                                              \
-        StringList [en-US]=    \
-        {                           \
-            < "< not available >" ; > ;        \
-        };                          \
+        _LB_FEMALECOLUMN                                                           \
     };                                                                              \
     FixedText   FT_FEMALEFIELD                                                       \
     {                                                                               \
