@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 14:16:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-24 15:57:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,7 +209,7 @@ TabPage OFA_TP_MEMORY
     };
     String STR_QUICKLAUNCH_UNX
     {
-    Text[ en-US ] = "Enable systray quickstarter";
+    Text[ en-US ] = "Enable systray Quickstarter";
     };
 };
 
