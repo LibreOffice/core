@@ -23929,7 +23929,7 @@
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="mask"/>
         </UML:TaggedValue.type>
@@ -23963,7 +23963,7 @@
   <UML:Attribute name="hpsCheckbox">
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="comment"/>
         </UML:TaggedValue.type>
@@ -23987,7 +23987,7 @@
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="mask"/>
         </UML:TaggedValue.type>
@@ -24037,7 +24037,7 @@
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="bits"/>
         </UML:TaggedValue.type>
@@ -24045,7 +24045,7 @@
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="mask"/>
         </UML:TaggedValue.type>
@@ -24076,7 +24076,7 @@
   </UML:Attribute>
 </UML:Classifier.feature>
 <UML:Classifier.feature>
-  <UML:Operation name="FLT" >
+  <UML:Operation name="FLT">
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
         <UML:TaggedValue.dataValue>rtf:FLT</UML:TaggedValue.dataValue>
@@ -24088,17 +24088,17 @@
     <UML:BehavioralFeature.parameter>
       <UML:Parameter kind="return" name="return">
         <UML:Parameter.type>
-          <UML:Class xmi.idref="U32" />
+          <UML:Class xmi.idref="U32"/>
         </UML:Parameter.type>
       </UML:Parameter>
     </UML:BehavioralFeature.parameter>
     <UML:ModelElement.stereotype>
-      <UML:Stereotype xmi.idref="attribute" />
+      <UML:Stereotype xmi.idref="attribute"/>
     </UML:ModelElement.stereotype>
   </UML:Operation>
 </UML:Classifier.feature>
 <UML:Classifier.feature>
-  <UML:Operation name="default" >
+  <UML:Operation name="default">
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
         <UML:TaggedValue.dataValue>rtf:ffdefault</UML:TaggedValue.dataValue>
@@ -24110,17 +24110,17 @@
     <UML:BehavioralFeature.parameter>
       <UML:Parameter kind="return" name="return">
         <UML:Parameter.type>
-          <UML:Class xmi.idref="String" />
+          <UML:Class xmi.idref="String"/>
         </UML:Parameter.type>
       </UML:Parameter>
     </UML:BehavioralFeature.parameter>
     <UML:ModelElement.stereotype>
-      <UML:Stereotype xmi.idref="attribute" />
+      <UML:Stereotype xmi.idref="attribute"/>
     </UML:ModelElement.stereotype>
   </UML:Operation>
 </UML:Classifier.feature>
 <UML:Classifier.feature>
-  <UML:Operation name="checked" >
+  <UML:Operation name="checked">
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
         <UML:TaggedValue.dataValue>rtf:ffchecked</UML:TaggedValue.dataValue>
@@ -24132,17 +24132,17 @@
     <UML:BehavioralFeature.parameter>
       <UML:Parameter kind="return" name="return">
         <UML:Parameter.type>
-          <UML:Class xmi.idref="U16" />
+          <UML:Class xmi.idref="U16"/>
         </UML:Parameter.type>
       </UML:Parameter>
     </UML:BehavioralFeature.parameter>
     <UML:ModelElement.stereotype>
-      <UML:Stereotype xmi.idref="attribute" />
+      <UML:Stereotype xmi.idref="attribute"/>
     </UML:ModelElement.stereotype>
   </UML:Operation>
 </UML:Classifier.feature>
 <UML:Classifier.feature>
-  <UML:Operation name="formatting" >
+  <UML:Operation name="formatting">
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
         <UML:TaggedValue.dataValue>rtf:ffformatting</UML:TaggedValue.dataValue>
@@ -24154,17 +24154,17 @@
     <UML:BehavioralFeature.parameter>
       <UML:Parameter kind="return" name="return">
         <UML:Parameter.type>
-          <UML:Class xmi.idref="String" />
+          <UML:Class xmi.idref="String"/>
         </UML:Parameter.type>
       </UML:Parameter>
     </UML:BehavioralFeature.parameter>
     <UML:ModelElement.stereotype>
-      <UML:Stereotype xmi.idref="attribute" />
+      <UML:Stereotype xmi.idref="attribute"/>
     </UML:ModelElement.stereotype>
   </UML:Operation>
 </UML:Classifier.feature>
 <UML:Classifier.feature>
-  <UML:Operation name="help" >
+  <UML:Operation name="help">
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
         <UML:TaggedValue.dataValue>rtf:ffhelp</UML:TaggedValue.dataValue>
@@ -24176,17 +24176,17 @@
     <UML:BehavioralFeature.parameter>
       <UML:Parameter kind="return" name="return">
         <UML:Parameter.type>
-          <UML:Class xmi.idref="String" />
+          <UML:Class xmi.idref="String"/>
         </UML:Parameter.type>
       </UML:Parameter>
     </UML:BehavioralFeature.parameter>
     <UML:ModelElement.stereotype>
-      <UML:Stereotype xmi.idref="attribute" />
+      <UML:Stereotype xmi.idref="attribute"/>
     </UML:ModelElement.stereotype>
   </UML:Operation>
 </UML:Classifier.feature>
 <UML:Classifier.feature>
-  <UML:Operation name="tooltip" >
+  <UML:Operation name="tooltip">
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
         <UML:TaggedValue.dataValue>rtf:fftooltip</UML:TaggedValue.dataValue>
@@ -24198,22 +24198,22 @@
     <UML:BehavioralFeature.parameter>
       <UML:Parameter kind="return" name="return">
         <UML:Parameter.type>
-          <UML:Class xmi.idref="String" />
+          <UML:Class xmi.idref="String"/>
         </UML:Parameter.type>
       </UML:Parameter>
     </UML:BehavioralFeature.parameter>
     <UML:ModelElement.stereotype>
-      <UML:Stereotype xmi.idref="attribute" />
+      <UML:Stereotype xmi.idref="attribute"/>
     </UML:ModelElement.stereotype>
   </UML:Operation>
 </UML:Classifier.feature>
 </UML:Class>
-<UML:Generalization isSpecification="false" xmi.id="FFDATA-Properties" >
+<UML:Generalization isSpecification="false" xmi.id="FFDATA-Properties">
   <UML:Generalization.child>
-    <UML:Class xmi.idref="FFDATA" />
+    <UML:Class xmi.idref="FFDATA"/>
   </UML:Generalization.child>
   <UML:Generalization.parent>
-    <UML:Class xmi.idref="Properties" />
+    <UML:Class xmi.idref="Properties"/>
   </UML:Generalization.parent>
 </UML:Generalization>
         <!--Class PICF-->
@@ -29411,6 +29411,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPIstdPermute-->
         <!--SPRM sprmTCantSpilt-->
@@ -29431,6 +29439,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTCantSplit</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29457,6 +29473,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPIncLvl-->
         <!--SPRM sprmPJcExtra-->
@@ -29477,6 +29501,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPJcExtra</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29503,6 +29535,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPJc-->
         <!--SPRM sprmPFSideBySide-->
@@ -29523,6 +29563,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFSideBySide</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29549,6 +29597,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFKeep-->
         <!--SPRM sprmPFKeepFollow-->
@@ -29569,6 +29625,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFKeepFollow</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29595,6 +29659,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFPageBreakBefore-->
         <!--SPRM sprmPBrcl-->
@@ -29615,6 +29687,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPBrcl</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29641,6 +29721,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPBrcp-->
         <!--SPRM sprmPIlvl-->
@@ -29661,6 +29749,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPIlvl</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29687,6 +29783,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPIlfo-->
         <!--SPRM sprmPFNoLineNumb-->
@@ -29707,6 +29811,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFNoLineNumb</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29822,6 +29934,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPChgTabsPapx-Properties">
           <UML:Generalization.child>
@@ -29853,6 +29973,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDxaRight-->
         <!--SPRM sprmPDxaLeft-->
@@ -29873,6 +30001,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPDxaLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29899,6 +30035,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPNest-->
         <!--SPRM sprmPDxaLeft1-->
@@ -29919,6 +30063,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPDxaLeft1</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29945,6 +30097,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDyaLine-->
         <!--SPRM sprmPDyaBefore-->
@@ -29965,6 +30125,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPDyaBefore</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -29991,6 +30159,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDyaAfter-->
         <!--SPRM sprmPChgTabs-->
@@ -30011,6 +30187,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPChgTabs</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30037,6 +30221,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFInTable-->
         <!--SPRM sprmPCell-->
@@ -30057,6 +30249,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPCell</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30083,6 +30283,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPRow-->
         <!--SPRM sprmPFTtp-->
@@ -30103,6 +30311,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFTtp</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30129,6 +30345,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDxaAbs-->
         <!--SPRM sprmPDyaAbs-->
@@ -30149,6 +30373,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPDyaAbs</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30175,6 +30407,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDxaWidth-->
         <!--SPRM sprmPPc-->
@@ -30195,6 +30435,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPPc</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30221,6 +30469,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPBrcTop10-->
         <!--SPRM sprmPBrcLeft10-->
@@ -30241,6 +30497,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPBrcLeft10</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30267,6 +30531,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPBrcBottom10-->
         <!--SPRM sprmPBrcRight10-->
@@ -30287,6 +30559,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPBrcRight10</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30313,6 +30593,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPBrcBetween10-->
         <!--SPRM sprmPBrcBar10-->
@@ -30333,6 +30621,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPBrcBar10</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30359,6 +30655,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDxaFromText10-->
         <!--SPRM sprmPWr-->
@@ -30382,39 +30686,16 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPWr-->
-        <!--SPRM sprmPBrcBetween-->
-        <UML:Class xmi.id="sprmPBrcBetween" name="sprmPBrcBetween">
-          <UML:ModelElement.stereotype>
-            <UML:Stereotype xmi.idref="ww8sprm"/>
-          </UML:ModelElement.stereotype>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>0x6428</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmcode"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-          <UML:ModelElement.taggedValue>
-            <UML:TaggedValue>
-              <UML:TaggedValue.dataValue>rtf:sprmPBrcBetween</UML:TaggedValue.dataValue>
-              <UML:TaggedValue.type>
-                <UML:TagDefinition xmi.idref="sprmid"/>
-              </UML:TaggedValue.type>
-            </UML:TaggedValue>
-          </UML:ModelElement.taggedValue>
-        </UML:Class>
-        <UML:Generalization isSpecification="false" xmi.id="sprmPBrcBetween-Properties">
-          <UML:Generalization.child>
-            <UML:Class xmi.idref="sprmPBrcBetween"/>
-          </UML:Generalization.child>
-          <UML:Generalization.parent>
-            <UML:Class xmi.idref="Properties"/>
-          </UML:Generalization.parent>
-        </UML:Generalization>
-        <!--SPRM sprmPBrcBetween-->
         <!--SPRM sprmPBrcBar-->
         <UML:Class xmi.id="sprmPBrcBar" name="sprmPBrcBar">
           <UML:ModelElement.stereotype>
@@ -30433,6 +30714,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPBrcBar</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30467,6 +30756,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFNoAutoHyph-->
         <!--SPRM sprmPWHeightAbs-->
@@ -30487,6 +30784,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPWHeightAbs</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30513,6 +30818,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDcs-->
         <!--SPRM sprmPShd-->
@@ -30533,6 +30846,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPShd</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30559,6 +30880,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPDyaFromText-->
         <!--SPRM sprmPDxaFromText-->
@@ -30579,6 +30908,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPDxaFromText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30605,6 +30942,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFLocked-->
         <!--SPRM sprmPFWidowControl-->
@@ -30625,6 +30970,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFWidowControl</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30651,6 +31004,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPRuler-->
         <!--SPRM sprmPFKinsoku-->
@@ -30671,6 +31032,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFKinsoku</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30697,6 +31066,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFWordWrap-->
         <!--SPRM sprmPFOverflowPunct-->
@@ -30717,6 +31094,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFOverflowPunct</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30743,6 +31128,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFTopLinePunct-->
         <!--SPRM sprmPFAutoSpaceDE-->
@@ -30763,6 +31156,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFAutoSpaceDE</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30789,6 +31190,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFAutoSpaceDN-->
         <!--SPRM sprmPWAlignFont-->
@@ -30809,6 +31218,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPWAlignFont</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30835,6 +31252,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFrameTextFlow-->
         <!--SPRM sprmPISnapBaseLine-->
@@ -30855,6 +31280,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPISnapBaseLine</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30881,6 +31314,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPAnld-->
         <!--SPRM sprmPPropRMark-->
@@ -30901,6 +31342,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPPropRMark</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30927,6 +31376,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPOutLvl-->
         <!--SPRM sprmPFBiDi-->
@@ -30947,6 +31404,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFBiDi</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -30973,6 +31438,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFNumRMIns-->
         <!--SPRM sprmPCrLf-->
@@ -30993,6 +31466,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPCrLf</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31019,6 +31500,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPNumRM-->
         <!--SPRM sprmPHugePapx-->
@@ -31039,6 +31528,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPHugePapx</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31065,6 +31562,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPFUsePgsuSettings-->
         <!--SPRM sprmPFAdjustRight-->
@@ -31085,6 +31590,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPFAdjustRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31111,6 +31624,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFRMarkDel-->
         <!--SPRM sprmCFRMark-->
@@ -31134,6 +31655,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFRMark-->
         <!--SPRM sprmCFFldVanish-->
@@ -31154,6 +31683,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFFldVanish</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31241,6 +31778,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmCPicLocation-Properties">
           <UML:Generalization.child>
@@ -31272,6 +31817,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCIbstRMark-->
         <!--SPRM sprmCDttmRMark-->
@@ -31292,6 +31845,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCDttmRMark</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31318,6 +31879,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFData-->
         <!--SPRM sprmCIdslRMark-->
@@ -31338,6 +31907,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCIdslRMark</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31364,6 +31941,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCChs-->
         <!--SPRM sprmCSymbol-->
@@ -31384,6 +31969,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCSymbol</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31410,6 +32003,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFOle2-->
         <!--SPRM sprmCIdCharType-->
@@ -31430,6 +32031,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCIdCharType</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31456,6 +32065,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCHighlight-->
         <!--SPRM sprmCObjLocation-->
@@ -31476,6 +32093,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCObjLocation</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31502,6 +32127,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFFtcAsciSymb-->
         <!--SPRM sprmCIstd-->
@@ -31522,6 +32155,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCIstd</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31548,6 +32189,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCIstdPermute-->
         <!--SPRM sprmCDefault-->
@@ -31568,6 +32217,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCDefault</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31594,6 +32251,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCPlain-->
         <!--SPRM sprmCKcd-->
@@ -31614,6 +32279,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCKcd</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31640,6 +32313,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFBold-->
         <!--SPRM sprmCFItalic-->
@@ -31660,6 +32341,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFItalic</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31686,6 +32375,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFStrike-->
         <!--SPRM sprmCFOutline-->
@@ -31706,6 +32403,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFOutline</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31732,6 +32437,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFShadow-->
         <!--SPRM sprmCFSmallCaps-->
@@ -31752,6 +32465,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFSmallCaps</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31778,6 +32499,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFCaps-->
         <!--SPRM sprmCFVanish-->
@@ -31798,6 +32527,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFVanish</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31824,6 +32561,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFtcDefault-->
         <!--SPRM sprmCKul-->
@@ -31844,6 +32589,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCKul</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31870,6 +32623,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCSizePos-->
         <!--SPRM sprmCDxaSpace-->
@@ -31890,6 +32651,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCDxaSpace</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31916,6 +32685,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCLid-->
         <!--SPRM sprmCIco-->
@@ -31936,6 +32713,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCIco</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -31962,6 +32747,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCHps-->
         <!--SPRM sprmCHpsInc-->
@@ -31982,6 +32775,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCHpsInc</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32008,6 +32809,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCHpsPos-->
         <!--SPRM sprmCHpsPosAdj-->
@@ -32028,6 +32837,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCHpsPosAdj</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32054,6 +32871,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCMajority-->
         <!--SPRM sprmCIss-->
@@ -32074,6 +32899,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCIss</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32100,6 +32933,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCHpsNew50-->
         <!--SPRM sprmCHpsInc1-->
@@ -32120,6 +32961,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCHpsInc1</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32146,6 +32995,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCHpsKern-->
         <!--SPRM sprmCMajority50-->
@@ -32166,6 +33023,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCMajority50</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32192,6 +33057,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCHpsMul-->
         <!--SPRM sprmCYsri-->
@@ -32212,6 +33085,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCYsri</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32238,6 +33119,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCRgFtc0-->
         <!--SPRM sprmCRgFtc1-->
@@ -32258,6 +33147,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCRgFtc1</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32284,6 +33181,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCRgFtc2-->
         <!--SPRM sprmCCharScale-->
@@ -32304,6 +33209,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCCharScale</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32330,6 +33243,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFDStrike-->
         <!--SPRM sprmCFImprint-->
@@ -32350,6 +33271,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFImprint</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32375,6 +33304,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Class xmi.id="sprmCFspecVanish" name="sprmCFspecVanish">
           <UML:ModelElement.stereotype>
@@ -32393,6 +33330,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFspecVanish</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32417,6 +33362,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Class xmi.id="sprmCComplexScript" name="sprmCComplexScript">
           <UML:ModelElement.stereotype>
@@ -32435,6 +33388,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCComplexScript</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32459,6 +33420,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFSpec-->
         <UML:Class xmi.id="sprmCFSpec" name="sprmCFSpec">
@@ -32478,6 +33447,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFSpec</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32504,6 +33481,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFObj-->
         <!--SPRM sprmCPropRMark-->
@@ -32524,6 +33509,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCPropRMark</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32550,6 +33543,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFEmboss-->
         <!--SPRM sprmCSfxText-->
@@ -32570,6 +33571,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCSfxText</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32596,6 +33605,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFBiDi-->
         <!--SPRM sprmCFDiacColor-->
@@ -32616,6 +33633,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFDiacColor</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32642,6 +33667,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFBoldBi-->
         <!--SPRM sprmCFItalicBi-->
@@ -32662,6 +33695,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCFItalicBi</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32688,6 +33729,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFtcBi-->
         <!--SPRM sprmCLidBi-->
@@ -32708,6 +33757,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCLidBi</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32734,6 +33791,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCIcoBi-->
         <!--SPRM sprmCHpsBi-->
@@ -32754,6 +33819,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCHpsBi</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32780,6 +33853,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCDispFldRMark-->
         <!--SPRM sprmCIbstRMarkDel-->
@@ -32800,6 +33881,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCIbstRMarkDel</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32826,6 +33915,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCDttmRMarkDel-->
         <!--SPRM sprmCBrc-->
@@ -32846,6 +33943,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCBrc</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32872,6 +33977,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCShd-->
         <!--SPRM sprmCIdslRMarkDel-->
@@ -32892,6 +34005,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCIdslRMarkDel</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32918,6 +34039,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCFUsePgsuSettings-->
         <!--SPRM sprmCCpg-->
@@ -32938,6 +34067,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCCpg</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -32964,6 +34101,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCRgLid0-->
         <!--SPRM sprmCRgLid1-->
@@ -32984,6 +34129,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmCRgLid1</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33010,6 +34163,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCIdctHint-->
         <!--SPRM sprmPicBrcl-->
@@ -33030,6 +34191,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPicBrcl</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33056,6 +34225,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPicScale-->
         <!--SPRM sprmPicBrcTop-->
@@ -33076,6 +34253,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPicBrcTop</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33102,6 +34287,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPicBrcLeft-->
         <!--SPRM sprmPicBrcBottom-->
@@ -33122,6 +34315,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPicBrcBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33148,6 +34349,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmPicBrcRight-->
         <!--SPRM sprmScnsPgn-->
@@ -33168,6 +34377,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmScnsPgn</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33194,6 +34411,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSiHeadingPgn-->
         <!--SPRM sprmSOlstAnm-->
@@ -33214,6 +34439,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSOlstAnm</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33240,6 +34473,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDxaColWidth-->
         <!--SPRM sprmSDxaColSpacing-->
@@ -33260,6 +34501,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDxaColSpacing</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33286,6 +34535,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSFEvenlySpaced-->
         <!--SPRM sprmSFProtected-->
@@ -33306,6 +34563,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSFProtected</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33332,6 +34597,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDmBinFirst-->
         <!--SPRM sprmSDmBinOther-->
@@ -33352,6 +34625,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDmBinOther</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33378,6 +34659,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSBkc-->
         <!--SPRM sprmSFTitlePage-->
@@ -33398,6 +34687,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSFTitlePage</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33424,6 +34721,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSCcolumns-->
         <!--SPRM sprmSDxaColumns-->
@@ -33444,6 +34749,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDxaColumns</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33470,6 +34783,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSFAutoPgn-->
         <!--SPRM sprmSNfcPgn-->
@@ -33490,6 +34811,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSNfcPgn</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33516,6 +34845,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDyaPgn-->
         <!--SPRM sprmSDxaPgn-->
@@ -33536,6 +34873,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDxaPgn</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33562,6 +34907,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSFPgnRestart-->
         <!--SPRM sprmSFEndnote-->
@@ -33582,6 +34935,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSFEndnote</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33608,6 +34969,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSLnc-->
         <!--SPRM sprmSGprfIhdt-->
@@ -33628,6 +34997,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSGprfIhdt</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33654,6 +35031,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSNLnnMod-->
         <!--SPRM sprmSDxaLnn-->
@@ -33674,6 +35059,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDxaLnn</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33700,6 +35093,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDyaHdrTop-->
         <!--SPRM sprmSDyaHdrBottom-->
@@ -33720,6 +35121,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDyaHdrBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33746,6 +35155,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSLBetween-->
         <!--SPRM sprmSVjc-->
@@ -33766,6 +35183,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSVjc</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33792,6 +35217,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSLnnMin-->
         <!--SPRM sprmSPgnStart-->
@@ -33812,6 +35245,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSPgnStart</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33838,6 +35279,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSBOrientation-->
         <!--SPRM sprmSBCustomize-->
@@ -33858,6 +35307,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSBCustomize</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33884,6 +35341,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSXaPage-->
         <!--SPRM sprmSYaPage-->
@@ -33904,6 +35369,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSYaPage</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33930,6 +35403,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDxaLeft-->
         <!--SPRM sprmSDxaRight-->
@@ -33950,6 +35431,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDxaRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -33976,6 +35465,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDyaTop-->
         <!--SPRM sprmSDyaBottom-->
@@ -33996,6 +35493,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDyaBottom</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34022,6 +35527,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDzaGutter-->
         <!--SPRM sprmSDmPaperReq-->
@@ -34042,6 +35555,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDmPaperReq</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34068,6 +35589,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSPropRMark-->
         <!--SPRM sprmSFBiDi-->
@@ -34088,6 +35617,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSFBiDi</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34114,6 +35651,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSFFacingCol-->
         <!--SPRM sprmSFRTLGutter-->
@@ -34134,6 +35679,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSFRTLGutter</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34160,6 +35713,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSBrcTop-->
         <!--SPRM sprmSBrcLeft-->
@@ -34180,6 +35741,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSBrcLeft</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34206,6 +35775,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSBrcBottom-->
         <!--SPRM sprmSBrcRight-->
@@ -34226,6 +35803,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSBrcRight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34252,6 +35837,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSPgbProp-->
         <!--SPRM sprmSDxtCharSpace-->
@@ -34272,6 +35865,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSDxtCharSpace</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34298,6 +35899,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSDyaLinePitch-->
         <!--SPRM sprmSClm-->
@@ -34318,6 +35927,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmSClm</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34344,6 +35961,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>unknown</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmSTextFlow-->
         <!--SPRM sprmTJc-->
@@ -34364,6 +35989,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTJc</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34390,6 +36023,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTDxaLeft-->
         <!--SPRM sprmTDxaGapHalf-->
@@ -34410,6 +36051,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTDxaGapHalf</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34436,6 +36085,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTFCantSplit-->
         <!--SPRM sprmTTableHeader-->
@@ -34456,6 +36113,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTTableHeader</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34507,6 +36172,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTTableBorders-Properties">
           <UML:Generalization.child>
@@ -34538,6 +36211,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTDefTable10-->
         <!--SPRM sprmTDyaRowHeight-->
@@ -34558,6 +36239,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTDyaRowHeight</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34635,6 +36324,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTDefTable-Properties">
           <UML:Generalization.child>
@@ -34691,6 +36388,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTDefTableShd-Properties">
           <UML:Generalization.child>
@@ -34747,6 +36452,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTCelShd-Properties">
           <UML:Generalization.child>
@@ -34778,6 +36491,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTTlp-->
         <!--SPRM sprmTFBiDi-->
@@ -34798,6 +36519,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTFBiDi</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34824,6 +36553,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTHTMLProps-->
         <!--SPRM sprmTSetBrc-->
@@ -34844,6 +36581,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTSetBrc</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34870,6 +36615,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTInsert-->
         <!--SPRM sprmTDelete-->
@@ -34890,6 +36643,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTDelete</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34916,6 +36677,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTDxaCol-->
         <!--SPRM sprmTMerge-->
@@ -34936,6 +36705,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTMerge</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -34962,6 +36739,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTSplit-->
         <!--SPRM sprmTSetBrc10-->
@@ -34982,6 +36767,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTSetBrc10</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -35008,6 +36801,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTSetShd-->
         <!--SPRM sprmTSetShdOdd-->
@@ -35028,6 +36829,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTSetShdOdd</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -35054,6 +36863,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTTextFlow-->
         <!--SPRM sprmTDiagLine-->
@@ -35074,6 +36891,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTDiagLine</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -35100,6 +36925,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmTVertMerge-->
         <!--SPRM sprmTVertAlign-->
@@ -35120,6 +36953,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmTVertAlign</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -35171,6 +37012,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTCellTopColor-Properties">
           <UML:Generalization.child>
@@ -35227,6 +37076,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTCellLeftColor-Properties">
           <UML:Generalization.child>
@@ -35283,6 +37140,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTCellBottomColor-Properties">
           <UML:Generalization.child>
@@ -35339,6 +37204,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTCellRightColor-Properties">
           <UML:Generalization.child>
@@ -35751,6 +37624,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTGridLineProps-Properties">
           <UML:Generalization.child>
@@ -35782,6 +37663,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCInsrsid-->
         <!--SPRM sprmCdelrsid-->
@@ -35805,6 +37694,14 @@
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <!--SPRM sprmCdelrsid-->
         <!--SPRM sprmPTableDepth-->
@@ -35825,6 +37722,14 @@
               <UML:TaggedValue.dataValue>rtf:sprmPTableDepth</UML:TaggedValue.dataValue>
               <UML:TaggedValue.type>
                 <UML:TagDefinition xmi.idref="sprmid"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
               </UML:TaggedValue.type>
             </UML:TaggedValue>
           </UML:ModelElement.taggedValue>
@@ -35876,6 +37781,14 @@
               </UML:ModelElement.stereotype>
             </UML:Operation>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTCellShadow-Properties">
           <UML:Generalization.child>
@@ -35968,6 +37881,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBrcTop-Properties">
           <UML:Generalization.child>
@@ -36060,6 +37981,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBrcLeft-Properties">
           <UML:Generalization.child>
@@ -36152,6 +38081,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBrcBottom-Properties">
           <UML:Generalization.child>
@@ -36244,6 +38181,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBrcRight-Properties">
           <UML:Generalization.child>
@@ -36336,6 +38281,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBrcBetween-Properties">
           <UML:Generalization.child>
@@ -36428,6 +38381,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBrcBar-Properties">
           <UML:Generalization.child>
@@ -36520,6 +38481,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBorderTop-Properties">
           <UML:Generalization.child>
@@ -36612,6 +38581,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBorderLeft-Properties">
           <UML:Generalization.child>
@@ -36704,6 +38681,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBorderBottom-Properties">
           <UML:Generalization.child>
@@ -36796,6 +38781,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBorderRight-Properties">
           <UML:Generalization.child>
@@ -36888,6 +38881,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>paragraph</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmPBorderBetween-Properties">
           <UML:Generalization.child>
@@ -36980,6 +38981,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmCBorder-Properties">
           <UML:Generalization.child>
@@ -37138,6 +39147,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTTPreferredWidth-Properties">
           <UML:Generalization.child>
@@ -37299,6 +39316,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>table</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmTTRLeft-Properties">
           <UML:Generalization.child>
@@ -37391,6 +39416,14 @@
               </UML:ModelElement.stereotype>
             </UML:Attribute>
           </UML:Classifier.feature>
+        <UML:ModelElement.taggedValue>
+            <UML:TaggedValue>
+              <UML:TaggedValue.dataValue>character</UML:TaggedValue.dataValue>
+              <UML:TaggedValue.type>
+                <UML:TagDefinition xmi.idref="kind"/>
+              </UML:TaggedValue.type>
+            </UML:TaggedValue>
+          </UML:ModelElement.taggedValue>
         </UML:Class>
         <UML:Generalization isSpecification="false" xmi.id="sprmCEastAsianLayout-Properties">
           <UML:Generalization.child>
@@ -37419,12 +39452,12 @@
       </UML:TaggedValue>
     </UML:ModelElement.taggedValue>
 </UML:Class>
-<UML:Generalization isSpecification="false" xmi.id="UDefProp-Properties" >
+<UML:Generalization isSpecification="false" xmi.id="UDefProp-Properties">
   <UML:Generalization.child>
-    <UML:Class xmi.idref="UDefProp" />
+    <UML:Class xmi.idref="UDefProp"/>
   </UML:Generalization.child>
   <UML:Generalization.parent>
-    <UML:Class xmi.idref="Properties" />
+    <UML:Class xmi.idref="Properties"/>
   </UML:Generalization.parent>
 </UML:Generalization>
         <!--DFF FSPGR-->
@@ -38792,12 +40825,12 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.stereotype>
   </UML:Attribute>
 </UML:Classifier.feature>
-<UML:Generalization isSpecification="false" xmi.id="BlipPng-Properties" >
+<UML:Generalization isSpecification="false" xmi.id="BlipPng-Properties">
   <UML:Generalization.child>
-    <UML:Class xmi.idref="BlipPng" />
+    <UML:Class xmi.idref="BlipPng"/>
   </UML:Generalization.child>
   <UML:Generalization.parent>
-    <UML:Class xmi.idref="Properties" />
+    <UML:Class xmi.idref="Properties"/>
   </UML:Generalization.parent>
 </UML:Generalization>
 </UML:Class>
@@ -38850,12 +40883,12 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.stereotype>
   </UML:Attribute>
 </UML:Classifier.feature>
-<UML:Generalization isSpecification="false" xmi.id="BlipDib-Properties" >
+<UML:Generalization isSpecification="false" xmi.id="BlipDib-Properties">
   <UML:Generalization.child>
-    <UML:Class xmi.idref="BlipDib" />
+    <UML:Class xmi.idref="BlipDib"/>
   </UML:Generalization.child>
   <UML:Generalization.parent>
-    <UML:Class xmi.idref="Properties" />
+    <UML:Class xmi.idref="Properties"/>
   </UML:Generalization.parent>
 </UML:Generalization>
 </UML:Class>
@@ -52684,7 +54717,7 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="mask"/>
         </UML:TaggedValue.type>
@@ -52692,7 +54725,7 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="shift"/>
         </UML:TaggedValue.type>
@@ -52742,7 +54775,7 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="mask"/>
         </UML:TaggedValue.type>
@@ -52750,7 +54783,7 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="shift"/>
         </UML:TaggedValue.type>
@@ -52773,12 +54806,12 @@ g          </UML:Classifier.feature>
   </UML:Attribute>
 </UML:Classifier.feature>
 </UML:Class>
-<UML:Generalization isSpecification="false" xmi.id="FDG-Properties" >
+<UML:Generalization isSpecification="false" xmi.id="FDG-Properties">
   <UML:Generalization.child>
-    <UML:Class xmi.idref="FDG" />
+    <UML:Class xmi.idref="FDG"/>
   </UML:Generalization.child>
   <UML:Generalization.parent>
-    <UML:Class xmi.idref="Properties" />
+    <UML:Class xmi.idref="Properties"/>
   </UML:Generalization.parent>
 </UML:Generalization>
 <UML:Class xmi.id="Dg" name="Dg">
@@ -52821,7 +54854,7 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="mask"/>
         </UML:TaggedValue.type>
@@ -52829,7 +54862,7 @@ g          </UML:Classifier.feature>
     </UML:ModelElement.taggedValue>
     <UML:ModelElement.taggedValue>
       <UML:TaggedValue>
-        <UML:TaggedValue.dataValue></UML:TaggedValue.dataValue>
+        <UML:TaggedValue.dataValue/>
         <UML:TaggedValue.type>
           <UML:TagDefinition xmi.idref="shift"/>
         </UML:TaggedValue.type>
@@ -52852,12 +54885,12 @@ g          </UML:Classifier.feature>
   </UML:Attribute>
 </UML:Classifier.feature>
 </UML:Class>
-<UML:Generalization isSpecification="false" xmi.id="Dg-Properties" >
+<UML:Generalization isSpecification="false" xmi.id="Dg-Properties">
   <UML:Generalization.child>
-    <UML:Class xmi.idref="Dg" />
+    <UML:Class xmi.idref="Dg"/>
   </UML:Generalization.child>
   <UML:Generalization.parent>
-    <UML:Class xmi.idref="Properties" />
+    <UML:Class xmi.idref="Properties"/>
   </UML:Generalization.parent>
 </UML:Generalization>
       </UML:Namespace.ownedElement>

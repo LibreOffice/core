@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:32:20 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -346,6 +346,11 @@ doctok::Reference<Properties>::Pointer_t WW8Sprm::getProps()
     }
 
     return pResult;
+}
+
+Sprm::Kind WW8Sprm::getKind()
+{
+    return SprmKind(getId());
 }
 
 string WW8Sprm::getName() const

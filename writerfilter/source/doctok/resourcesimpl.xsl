@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:14 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,9 +49,9 @@
  *
  *  $RCSfile: resourcesimpl.xsl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:14 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,6 +94,7 @@ extern WW8OutputWithDepth output;
 
 using namespace ::std;
 </xsl:text>
+<xsl:apply-templates select='//UML:Model' mode="sprmkind"/>
 <xsl:apply-templates select='.//UML:Class' mode='class'/>
 <xsl:apply-templates select='//UML:Model' mode='createsprmprops'/>
 <xsl:apply-templates select='//UML:Model' mode='createsprmbinary'/>

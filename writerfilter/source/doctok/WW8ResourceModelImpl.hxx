@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:37:27 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,6 +159,7 @@ public:
     virtual doctok::Reference<BinaryObj>::Pointer_t getBinary();
     virtual doctok::Reference<Stream>::Pointer_t getStream();
     virtual doctok::Reference<Properties>::Pointer_t getProps();
+    virtual Kind getKind();
 
     virtual sal_uInt32 getId() const;
     virtual string toString() const;
@@ -399,6 +400,8 @@ public:
 
     void entry(int pos, doctok::Reference<Properties>::Pointer_t ref);
 };
+
+Sprm::Kind SprmKind(sal_uInt32 sprmCode);
 
 void dump(OutputWithDepth<string> & o, const char * name, doctok::Reference<Properties>::Pointer_t props);
 void dump(OutputWithDepth<string> & o, const char * name, sal_uInt32 n);

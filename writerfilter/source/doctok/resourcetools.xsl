@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcetools.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:02:14 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,6 +156,60 @@ SprmIdToString::SprmIdToString()
 <xsl:for-each select='.//UML:Class[.//UML:Stereotype/@xmi.idref="ww8sprm"]'>
     mMap[<xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="sprmcode"]//UML:TaggedValue.dataValue'/>] = "<xsl:value-of select='.//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref="sprmid"]//UML:TaggedValue.dataValue'/>";</xsl:for-each>
 }
+</xsl:template>
+
+<xsl:key name="classes-with-kind" match="UML:TagDefinition[@xmi.idref='kind']"
+         use="ancestor::UML:TaggedValue/UML:TaggedValue.dataValue"/>
+
+<xsl:template name="sprmCodeOfClass">
+  <xsl:value-of select=".//UML:TaggedValue[.//UML:TagDefinition/@xmi.idref='sprmcode']/UML:TaggedValue.dataValue"/>
+</xsl:template>
+
+<xsl:template name="sprmkindcase">
+  <xsl:param name="kind"/>
+  <xsl:for-each select="key('classes-with-kind', $kind)/ancestor::UML:Class">
+    <xsl:text>
+    case </xsl:text>
+    <xsl:call-template name="sprmCodeOfClass"/>
+    <xsl:text>: //</xsl:text>
+    <xsl:value-of select="@xmi.id"/>
+  </xsl:for-each>
+</xsl:template>
+
+<xsl:template match="UML:Model" mode='sprmkind'>
+<xsl:text>
+Sprm::Kind SprmKind(sal_uInt32 sprmCode)
+{
+    Sprm::Kind nResult = Sprm::UNKNOWN;
+
+    switch(sprmCode)
+    {</xsl:text>
+    <xsl:call-template name="sprmkindcase">
+      <xsl:with-param name="kind">paragraph</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>
+      nResult = Sprm::PARAGRAPH;
+      break;</xsl:text>
+    <xsl:call-template name="sprmkindcase">
+      <xsl:with-param name="kind">character</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>
+      nResult = Sprm::CHARACTER;
+      break;</xsl:text>
+    <xsl:call-template name="sprmkindcase">
+      <xsl:with-param name="kind">table</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>
+      nResult = Sprm::TABLE;
+      break;</xsl:text>
+    <xsl:text>
+    default:
+      break;
+    }
+
+    return nResult;
+}
+</xsl:text>
 </xsl:template>
 
 </xsl:stylesheet>

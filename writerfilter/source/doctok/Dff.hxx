@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:17:09 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -37,9 +37,9 @@
  *
  *  $RCSfile: Dff.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-11-23 09:17:09 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:41 $
  *
  ******************************************************************/
 
@@ -114,6 +114,8 @@ public:
 
     virtual string toString() const;
     virtual string getName() const;
+
+    virtual Kind getKind();
 
     friend class DffBlock;
 };

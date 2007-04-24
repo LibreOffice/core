@@ -4,9 +4,9 @@
  *
  *  $RCSfile: Dff.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2006-12-05 15:04:40 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,6 +35,7 @@
 
 #include "Dff.hxx"
 #include <doctok/resourceids.hxx>
+#include <doctok/WW8ResourceModel.hxx>
 #include "resources.hxx"
 
 namespace doctok {
@@ -362,6 +363,11 @@ string DffRecord::toString() const
 string DffRecord::getName() const
 {
     return "";
+}
+
+Sprm::Kind DffRecord::getKind()
+{
+    return Sprm::UNKNOWN;
 }
 
 DffBlock::DffBlock(WW8Stream & rStream, sal_uInt32 nOffset,
