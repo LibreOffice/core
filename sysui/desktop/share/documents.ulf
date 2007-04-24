@@ -1,93 +1,70 @@
 [text]
 en-US = "%PRODUCTNAME Text Document"
-de = "%PRODUCTNAME Textdokument"
 
 [text-template]
 en-US = "%PRODUCTNAME Text Document Template"
-de = "%PRODUCTNAME Textdokumentvorlage"
 
 [master-document]
 en-US = "%PRODUCTNAME Master Document"
-de = "%PRODUCTNAME Globaldokument"
 
 [formula]
 en-US = "%PRODUCTNAME Formula"
-de = "%PRODUCTNAME Formel"
 
 [presentation]
 en-US = "%PRODUCTNAME Presentation"
-de = "%PRODUCTNAME Präsentation"
 
 [presentation-template]
 en-US = "%PRODUCTNAME Presentation Template"
-de = "%PRODUCTNAME Präsentationsvorlage"
 
 [drawing]
 en-US = "%PRODUCTNAME Drawing"
-de = "%PRODUCTNAME Zeichnung"
 
 [drawing-template]
 en-US = "%PRODUCTNAME Drawing Template"
-de = "%PRODUCTNAME Zeichnungsvorlage"
 
 [spreadsheet]
 en-US = "%PRODUCTNAME Spreadsheet"
-de = "%PRODUCTNAME Tabelle"
 
 [spreadsheet-template]
 en-US = "%PRODUCTNAME Spreadsheet Template"
-de = "%PRODUCTNAME Tabellenvorlage"
 
 [oasis-text]
 en-US = "OpenDocument Text"
-de = "OpenDocument Text"
 
 [oasis-text-template]
 en-US = "OpenDocument Text Template"
-de = "OpenDocument Textdokumentvorlage"
 
 [oasis-master-document]
 en-US = "OpenDocument Master Document"
-de = "OpenDocument Globaldokument"
 
 [oasis-formula]
 en-US = "OpenDocument Formula"
-de = "OpenDocument Formel"
 
 [oasis-presentation]
 en-US = "OpenDocument Presentation"
-de = "OpenDocument Präsentation"
 
 [oasis-presentation-template]
 en-US = "OpenDocument Presentation Template"
-de = "OpenDocument Präsentationsdokumentvorlage"
 
 [oasis-drawing]
 en-US = "OpenDocument Drawing"
-de = "OpenDocument Zeichnung"
 
 [oasis-drawing-template]
 en-US = "OpenDocument Drawing Template"
-de = "OpenDocument Zeichnungsdokumentvorlage"
 
 [oasis-spreadsheet]
 en-US = "OpenDocument Spreadsheet"
-de = "OpenDocument Tabellendokument"
 
 [oasis-spreadsheet-template]
 en-US = "OpenDocument Spreadsheet Template"
-de = "OpenDocument Tabellendoukumentvorlage"
 
 [oasis-database]
 en-US = "OpenDocument Database"
-de = "OpenDocument Datenbank"
 
 [oasis-web-template]
 en-US = "HTML Document Template"
-de = "HTML-Dokumentvorlage"
 
 [extension]
 en-US = "%PRODUCTNAME Extension"
-de = "%PRODUCTNAME Extension"
 
 
