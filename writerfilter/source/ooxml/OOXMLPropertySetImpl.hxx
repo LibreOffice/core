@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-16 09:09:23 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ public:
     virtual doctok::Reference<Stream>::Pointer_t getStream();
     virtual doctok::Reference<Properties>::Pointer_t getProps();
     virtual string getName() const;
+    virtual Kind getKind();
     virtual string toString() const;
     virtual Sprm * clone();
     virtual void resolve(doctok::Properties & rProperties);
@@ -206,6 +207,8 @@ public:
     virtual string getType() const;
     virtual OOXMLTable * clone() const;
 };
+
+Sprm::Kind SprmKind(sal_uInt32 nSprmCode);
 
 }  // namespace ooxml
 

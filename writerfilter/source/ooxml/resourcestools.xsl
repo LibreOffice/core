@@ -5,9 +5,9 @@
  *
  *  $RCSfile: resourcestools.xsl,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-23 10:00:47 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:52:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1324,6 +1324,63 @@ namespace writerfilter { namespace NS_ooxml
         </xsl:if>
       </xsl:for-each>
     </xsl:for-each>
+  </xsl:template>
+
+  <xsl:key name="resources-with-kind" match="resource[.//kind]"
+           use=".//kind/@name"/>
+  
+  <xsl:key name="sprms-with-code" match="sprm" use="@tokenid"/>
+
+  <xsl:template name="sprmkindcase">
+    <xsl:param name="kind"/>
+    <xsl:for-each select="key('resources-with-kind', $kind)/sprm">
+      <xsl:if test="generate-id(.) = generate-id(key('sprms-with-code', @tokenid))">
+      <xsl:text>
+     case </xsl:text>
+     <xsl:call-template name="idtoqname">
+       <xsl:with-param name="id" select="@tokenid"/>
+     </xsl:call-template>
+     <xsl:text>: //</xsl:text>
+     <xsl:value-of select="ancestor::resource/@name"/>
+     <xsl:text>, </xsl:text>
+     <xsl:value-of select="@name"/>
+      </xsl:if>
+    </xsl:for-each>
+  </xsl:template>
+
+  <xsl:template name="sprmkind">
+    <xsl:text>
+Sprm::Kind SprmKind(sal_uInt32 nSprmCode)
+{
+    Sprm::Kind nResult = Sprm::UNKNOWN;
+
+    switch (nSprmCode)
+    {</xsl:text>
+    <xsl:call-template name="sprmkindcase">
+      <xsl:with-param name="kind">paragraph</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>
+      nResult = Sprm::PARAGRAPH;
+      break;</xsl:text>
+    <xsl:call-template name="sprmkindcase">
+      <xsl:with-param name="kind">character</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>
+      nResult = Sprm::CHARACTER;
+      break;</xsl:text>
+    <xsl:call-template name="sprmkindcase">
+      <xsl:with-param name="kind">table</xsl:with-param>
+    </xsl:call-template>
+    <xsl:text>
+      nResult = Sprm::TABLE;
+      break;</xsl:text>
+    <xsl:text>
+    default:
+      break;
+    }
+
+    return nResult;
+}</xsl:text>
   </xsl:template>
 
   <xsl:template name='idtoqname'>

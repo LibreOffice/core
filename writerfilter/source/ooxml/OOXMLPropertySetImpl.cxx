@@ -4,9 +4,9 @@
  *
  *  $RCSfile: OOXMLPropertySetImpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-20 14:37:51 $
+ *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:52:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,6 +141,11 @@ string OOXMLPropertyImpl::toString() const
     sResult +=")";
 
     return sResult;
+}
+
+Sprm::Kind OOXMLPropertyImpl::getKind()
+{
+    return SprmKind(getId());
 }
 
 Sprm * OOXMLPropertyImpl::clone()
