@@ -9,9 +9,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: localize.pl,v $
 #
-#   $Revision: 1.15 $
+#   $Revision: 1.16 $
 #
-#   last change: $Author: ihi $ $Date: 2007-04-19 15:17:51 $
+#   last change: $Author: rt $ $Date: 2007-04-24 16:08:18 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -375,7 +375,7 @@ sub merge_gsicheck{
         $command = "gsicheck";
     }
     my $errfile = $sdffile.".err";
-    $command .= " -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
+    $command .= " -k -c -wcf $tmpfile -wef $errfile -l \"\" $sdffile";
     #my $rc = system( $command );
     my $output = `$command`;
     my $rc = $? << 8;
