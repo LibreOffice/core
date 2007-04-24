@@ -14438,6 +14438,7 @@
       <attribute name="vertCompress" tokenid="ooxml:CT_EastAsianLayout_vertCompress"/>
     </resource>
     <resource name="CT_FramePr" resource="Properties">
+      <kind name="paragraph"/>
       <attribute name="dropCap" tokenid="ooxml:CT_FramePr_dropCap"/>
       <attribute name="lines" tokenid="ooxml:CT_FramePr_lines"/>
       <sprm name="w" tokenid="0x841a"/>
@@ -14529,12 +14530,14 @@
     <resource name="CT_TextDirection" resource="ListValue"/>
     <resource name="CT_TextAlignment" resource="StringValue" generated="yes"/>
     <resource name="CT_NumPr" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="ilvl" tokenid="0x260a"/>
       <sprm name="numId" tokenid="0x460b"/>
       <attribute name="numberingChange" tokenid="ooxml:CT_NumPr_numberingChange"/>
       <attribute name="ins" tokenid="ooxml:CT_NumPr_ins"/>
     </resource>
     <resource name="CT_PBdr" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="top" tokenid="0x6424"/>
       <sprm name="left" tokenid="0x6425"/>
       <sprm name="bottom" tokenid="0x6426"/>
@@ -14547,6 +14550,7 @@
     </resource>
     <resource name="CT_TextboxTightWrap" resource="StringValue" generated="yes"/>
     <resource name="CT_PPrBase" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="pStyle" tokenid="0x0"/>
       <sprm name="keepNext" tokenid="0x2406"/>
       <sprm name="keepLines" tokenid="0x2405"/>
@@ -14805,6 +14809,7 @@
       <attribute name="cstheme" tokenid="ooxml:CT_Fonts_cstheme"/>
     </resource>
     <resource name="EG_RPrBase" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="rStyle" tokenid="0x0"/>
       <sprm name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
       <sprm name="b" tokenid="0x835"/>
@@ -14871,6 +14876,7 @@
       <attribute name="type" tokenid="ooxml:CT_TblWidth_type"/>
     </resource>
     <resource name="CT_TcBorders" resource="Properties">
+      <kind name="table"/>
       <sprm name="top" tokenid="ooxml:CT_TcBorders_top"/>
       <sprm name="left" tokenid="ooxml:CT_TcBorders_left"/>
       <sprm name="bottom" tokenid="ooxml:CT_TcBorders_bottom"/>
@@ -14881,6 +14887,7 @@
       <sprm name="tr2bl" tokenid="ooxml:CT_TcBorders_tr2bl"/>
     </resource>
     <resource name="CT_TcMar" resource="Properties">
+      <kind name="table"/>
       <sprm name="top" tokenid="ooxml:CT_TcMar_top"/>
       <sprm name="left" tokenid="ooxml:CT_TcMar_left"/>
       <sprm name="bottom" tokenid="ooxml:CT_TcMar_bottom"/>
@@ -14893,6 +14900,7 @@
     <resource name="CT_VMerge" resource="ListValue"/>
     <resource name="CT_HMerge" resource="ListValue"/>
     <resource name="CT_TcPrBase" resource="Properties">
+      <kind name="table"/>
       <sprm name="cnfStyle" tokenid="ooxml:CT_TcPrBase_cnfStyle"/>
       <sprm name="tcW" tokenid="ooxml:CT_TcPrBase_tcW"/>
       <sprm name="gridSpan" tokenid="ooxml:CT_TcPrBase_gridSpan"/>
@@ -14908,9 +14916,13 @@
       <sprm name="hideMark" tokenid="ooxml:CT_TcPrBase_hideMark"/>
     </resource>
     <resource name="CT_TcPr" resource="Properties"/>
-    <resource name="CT_Tc" resource="TextTableCell"/>
+    <resource name="CT_Tc" resource="TextTableCell">
+      <action name="start" action="startParagraphGroup"/>
+      <action name="end" action="endParagraphGroup"/>
+    </resource>
     <resource name="CT_Cnf" resource="StringValue" generated="yes"/>
     <resource name="CT_TrPrBase" resource="Properties">
+      <kind name="table"/>
       <sprm name="cnfStyle" tokenid="ooxml:CT_TrPrBase_cnfStyle"/>
       <sprm name="divId" tokenid="ooxml:CT_TrPrBase_divId"/>
       <sprm name="gridBefore" tokenid="ooxml:CT_TrPrBase_gridBefore"/>
@@ -14932,6 +14944,7 @@
     </resource>
     <resource name="CT_TblOverlap" resource="ListValue"/>
     <resource name="CT_TblBorders" resource="Properties">
+      <kind name="table"/>
       <sprm name="top" tokenid="ooxml:CT_TblBorders_top"/>
       <sprm name="left" tokenid="ooxml:CT_TblBorders_left"/>
       <sprm name="bottom" tokenid="ooxml:CT_TblBorders_bottom"/>
@@ -14940,6 +14953,7 @@
       <sprm name="insideV" tokenid="ooxml:CT_TblBorders_insideV"/>
     </resource>
     <resource name="CT_TblPrBase" resource="Properties">
+      <kind name="table"/>
       <sprm name="tblStyle" tokenid="ooxml:CT_TblPrBase_tblStyle"/>
       <sprm name="tblpPr" tokenid="ooxml:CT_TblPrBase_tblpPr"/>
       <sprm name="tblOverlap" tokenid="ooxml:CT_TblPrBase_tblOverlap"/>
@@ -14957,6 +14971,7 @@
       <sprm name="tblLook" tokenid="ooxml:CT_TblPrBase_tblLook"/>
     </resource>
     <resource name="CT_TblPr" resource="Properties">
+      <kind name="table"/>
       <sprm name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>
     </resource>
     <resource name="CT_Tbl" resource="TextTable"/>
@@ -14986,6 +15001,7 @@
       <attribute name="legacyIndent" tokenid="ooxml:CT_LvlLegacy_legacyIndent"/>
     </resource>
     <resource name="CT_Lvl" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="start" tokenid="rtf:ISTARTAT"/>
       <sprm name="numFmt" tokenid="rtf:NFC"/>
       <sprm name="lvlRestart" tokenid="ooxml:CT_Lvl_lvlRestart"/>
@@ -15009,6 +15025,7 @@
     </resource>
     <resource name="CT_MultiLevelType" resource="ListValue"/>
     <resource name="CT_AbstractNum" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="nsid" tokenid="rtf:LSID"/>
       <sprm name="multiLevelType" tokenid="ooxml:CT_AbstractNum_multiLevelType"/>
       <sprm name="tmpl" tokenid="rtf:TPLC"/>
@@ -15019,16 +15036,19 @@
       <attribute name="abstractNumId" tokenid="ooxml:CT_AbstractNum_abstractNumId"/>
     </resource>
     <resource name="CT_NumLvl" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="startOverride" tokenid="ooxml:CT_NumLvl_startOverride"/>
       <sprm name="lvl" tokenid="ooxml:CT_NumLvl_lvl"/>
       <attribute name="ilvl" tokenid="ooxml:CT_NumLvl_ilvl"/>
     </resource>
     <resource name="CT_Num" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="abstractNumId" tokenid="ooxml:CT_Num_abstractNumId"/>
       <sprm name="lvlOverride" tokenid="ooxml:CT_Num_lvlOverride"/>
       <attribute name="numId" tokenid="ooxml:CT_Num_numId"/>
     </resource>
     <resource name="CT_Numbering" resource="Properties">
+      <kind name="paragraph"/>
       <sprm name="numPicBullet" tokenid="ooxml:CT_Numbering_numPicBullet"/>
       <sprm name="abstractNum" tokenid="ooxml:CT_Numbering_abstractNum"/>
       <sprm name="num" tokenid="ooxml:CT_Numbering_num"/>
@@ -15059,6 +15079,7 @@
       <attribute name="csb1" tokenid="ooxml:CT_FontSig_csb1"/>
     </resource>
     <resource name="CT_Font" resource="Properties">
+      <kind name="character"/>
       <sprm name="altName" tokenid="ooxml:CT_Font_altName"/>
       <sprm name="panose1" tokenid="ooxml:CT_Font_panose1"/>
       <sprm name="charset" tokenid="ooxml:CT_Font_charset"/>
