@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:51:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:12:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,7 @@ class SdrView;
 class SfxJSArray;
 class HelpEvent;
 
-class SVX_DLLPUBLIC FmFormPage :
-#if SUPD < 396
-    public VCDrawPage
-#else
-    public SdrPage
-#endif
+class SVX_DLLPUBLIC FmFormPage : public SdrPage
 {
     friend class FmFormObj;
     FmFormPageImpl*     m_pImpl;
@@ -77,21 +72,19 @@ public:
     FmFormPage(const FmFormPage& rPage);
     ~FmFormPage();
 
+    using SdrPage::NbcInsertObject;
+    using SdrPage::NbcRemoveObject;
+    using SdrPage::NbcReplaceObject;
+    using SdrPage::ReplaceObject;
+
     virtual void    SetModel(SdrModel* pNewModel);
 
     virtual SdrPage* Clone() const;
-    using SdrPage::Clone;
 
-    virtual void    NbcInsertObject(SdrObject* pObj, sal_uInt32 nPos=CONTAINER_APPEND,
-                                    const SdrInsertReason* pReason=NULL);
-    virtual void    InsertObject(SdrObject* pObj, sal_uInt32 nPos=CONTAINER_APPEND,
+    virtual void    InsertObject(SdrObject* pObj, ULONG nPos = CONTAINER_APPEND,
                                     const SdrInsertReason* pReason=NULL);
 
-    virtual SdrObject* NbcRemoveObject(sal_uInt32 nObjNum);
-    virtual SdrObject* RemoveObject(sal_uInt32 nObjNum);
-
-    virtual SdrObject* NbcReplaceObject(SdrObject* pNewObj, sal_uInt32 nObjNum);
-    virtual SdrObject* ReplaceObject(SdrObject* pNewObj, sal_uInt32 nObjNum);
+    virtual SdrObject* RemoveObject(ULONG nObjNum);
 
     // Zugriff auf alle Formulare
     const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer>& GetForms( bool _bForceCreate = true ) const;
