@@ -4,9 +4,9 @@
  *
  *  $RCSfile: barcfg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:38:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:15:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,6 @@ public:
     virtual void            Commit();
 
     void        SetTopToolbar( sal_Int32 nSelType, sal_uInt16 nBarId );
-    sal_uInt16  GetTopToolbar( sal_Int32 nSelType );    //USHRT_MAX: noch nicht eingetragen
 };
 
 #endif
