@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:08:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:02:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -539,18 +539,6 @@ SwFlyDrawContact::SwFlyDrawContact( SwFlyFrmFmt *pToRegisterIn, SdrModel *pMod )
     // drawing object of type <SwFlyDrawObj> on its own.
     mpMasterObj = new SwFlyDrawObj;
     mpMasterObj->SetOrdNum( 0xFFFFFFFE );
-    mpMasterObj->SetUserCall( this );
-}
-
-SwFlyDrawContact::SwFlyDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj ):
-    SwContact( pToRegisterIn )
-{
-#if OSL_DEBUG_LEVEL > 1
-    ASSERT( pObj, "<SwFlyDrawContact::SwFlyDrawContact(..)> - no <SdrObject> provided. Please inform OD." );
-#endif
-    ASSERT( !pObj || pObj->ISA(SwFlyDrawObj),
-            "<SwFlyDrawContact::SwFlyDrawContact(..)> - wrong type of <SdrObject>." );
-    mpMasterObj = static_cast<SwFlyDrawObj*>(pObj);
     mpMasterObj->SetUserCall( this );
 }
 
@@ -2316,12 +2304,6 @@ SwAnchoredObject* SwDrawVirtObj::AnchoredObj()
     return &maAnchoredDrawObj;
 }
 
-void SwDrawVirtObj::SetAnchorFrm( SwFrm* _pNewAnchorFrm )
-{
-    // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
-    maAnchoredDrawObj.ChgAnchorFrm( _pNewAnchorFrm );
-}
-
 const SwFrm* SwDrawVirtObj::GetAnchorFrm() const
 {
     // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
@@ -2332,18 +2314,6 @@ SwFrm* SwDrawVirtObj::AnchorFrm()
 {
     // OD 2004-03-29 #i26791# - use new member <maAnchoredDrawObj>
     return maAnchoredDrawObj.AnchorFrm();
-}
-
-void SwDrawVirtObj::SetPageFrm( SwPageFrm* _pNewPageFrm )
-{
-    // --> OD 2004-06-30 #i28701# - page frame is now stored at member <maAnchoredDrawObj>
-    maAnchoredDrawObj.SetPageFrm( _pNewPageFrm );
-}
-
-SwPageFrm* SwDrawVirtObj::GetPageFrm()
-{
-    // --> OD 2004-06-30 #i28701# - page frame is now stored at member <maAnchoredDrawObj>
-    return maAnchoredDrawObj.GetPageFrm();
 }
 
 void SwDrawVirtObj::RemoveFromWriterLayout()
