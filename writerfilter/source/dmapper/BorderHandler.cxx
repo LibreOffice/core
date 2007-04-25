@@ -4,9 +4,9 @@
  *
  *  $RCSfile: BorderHandler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:28:48 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 14:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,6 +51,7 @@
 namespace dmapper {
 
 using namespace ::com::sun::star;
+using namespace writerfilter;
 //using namespace ::std;
 
 /*-- 24.04.2007 09:06:35---------------------------------------------------
