@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8ResourceModelImpl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2007-04-24 12:44:42 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:40:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -152,7 +152,7 @@ public:
     WW8TableManager();
     virtual ~WW8TableManager() {}
     virtual void endParagraphGroup();
-    virtual void sprm(Sprm & rSprm);
+    virtual bool sprm(Sprm & rSprm);
 };
 
 WW8TableManager::WW8TableManager()
@@ -161,10 +161,11 @@ WW8TableManager::WW8TableManager()
     setHandler(pHandler);
 }
 
-void WW8TableManager::sprm(Sprm & rSprm)
+bool WW8TableManager::sprm(Sprm & rSprm)
 {
     TableManager<string, TablePropsPointer_t>::sprm(rSprm);
     output.setDepth(getTableDepthNew());
+    return true;
 }
 
 void WW8TableManager::endParagraphGroup()

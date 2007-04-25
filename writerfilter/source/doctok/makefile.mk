@@ -4,9 +4,9 @@
 #
 #  $RCSfile: makefile.mk,v $
 #
-#  $Revision: 1.4 $
+#  $Revision: 1.5 $
 #
-#  last change: $Author: hbrinkm $ $Date: 2007-04-13 10:34:16 $
+#  last change: $Author: os $ $Date: 2007-04-25 11:40:45 $
 #
 #  The Contents of this file are made available subject to
 #  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,12 +38,12 @@ TARGET=doctok
 #LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 #USE_DEFFILE=TRUE
-
+EXTERNAL_WARNINGS_NOT_ERRORS=TRUE
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
 
-#CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501 
+#CFLAGS+=-DISOLATION_AWARE_ENABLED -DWIN32_LEAN_AND_MEAN -DXML_UNICODE -D_NTSDK -DUNICODE -D_UNICODE -D_WIN32_WINNT=0x0501
 #CFLAGS+=-wd4710 -wd4711 -wd4514 -wd4619 -wd4217 -wd4820
 CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION #-DDEBUG_DOCTOK_DUMP
 
@@ -95,7 +95,7 @@ SHL1IMPLIB=i$(SHL1TARGET)
 #SHL1USE_EXPORTS=name
 SHL1USE_EXPORTS=ordinal
 
-SHL1OBJS=$(SLOFILES) 
+SHL1OBJS=$(SLOFILES)
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 DEF1NAME=$(SHL1TARGET)
