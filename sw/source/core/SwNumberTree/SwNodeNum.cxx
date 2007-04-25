@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:36:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:58:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -406,17 +406,6 @@ void SwNodeNum::SetLevel(unsigned int nLevel)
                 pRule->AddNumber(this, nLevel);
         }
     }
-}
-
-const SwNumFmt * SwNodeNum::GetNumFmt() const
-{
-    const SwNumFmt * pResult = NULL;
-
-    unsigned int nLevel = GetLevel();
-    if (mpNumRule && nLevel >= 0 && nLevel < MAXLEVEL)
-        pResult = &mpNumRule->Get(nLevel);
-
-    return pResult;
 }
 
 // --> OD 2006-03-07 #131436#
