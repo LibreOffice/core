@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2005-11-10 16:36:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:56:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -141,7 +141,7 @@ class ScTableSheetObj;
 class SvxFmDrawPage;
 class SvxDrawPage;
 
-class ScModelObj : public SfxBaseModel,
+class SC_DLLPUBLIC ScModelObj : public SfxBaseModel,
                     public com::sun::star::sheet::XSpreadsheetDocument,
                     public com::sun::star::document::XActionLockable,
                     public com::sun::star::sheet::XCalculatable,
