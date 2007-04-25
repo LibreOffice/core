@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: kz $ $Date: 2007-02-12 14:32:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:00:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1080,22 +1080,6 @@ SwFieldType *SwDoc::GetSysFldType( const USHORT eWhich ) const
             return (*pFldTypes)[i];
     return 0;
 }
-
-//----- Macro ---------------------------------------------------------
-
-void SwDoc::SetGlobalMacro( USHORT nEvent, const SvxMacro& rMacro )
-{
-    SvxMacro *pMacro;
-    SetModified();
-    if ( 0 != (pMacro=pMacroTable->Get(nEvent)) )
-    {
-        delete pMacro;
-        pMacroTable->Replace(nEvent, new SvxMacro(rMacro));
-        return;
-    }
-    pMacroTable->Insert(nEvent, new SvxMacro(rMacro));
-}
-
 /*************************************************************************
  *             void SetDocStat( const SwDocStat& rStat );
  *************************************************************************/
