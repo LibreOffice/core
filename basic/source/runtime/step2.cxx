@@ -4,9 +4,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-03 15:10:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:52:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,7 +47,9 @@
 
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/script/XDefaultMethod.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uno/Any.hxx>
+#include <comphelper/processfactory.hxx>
 
 using namespace com::sun::star::container;
 using namespace com::sun::star::lang;
@@ -57,22 +59,25 @@ const static String aVBAHook( RTL_CONSTASCII_USTRINGPARAM( "VBAGlobals" ) );
 //  i#i68894#
 SbxArray* getVBAGlobals( StarBASIC* pSBasic )
 {
-    SbxVariableRef pThisComp = pSBasic->Find( aThisComponent, SbxCLASS_OBJECT );
     static SbxArrayRef pArray;
     static bool isInitialised = false;
     if ( isInitialised )
         return pArray;
+    Reference < XComponentContext > xCtx;
+    Reference < XPropertySet > xProps(
+    ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+    xCtx.set( xProps->getPropertyValue( rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))),
+            UNO_QUERY_THROW );
+    SbUnoObject dGlobs( String( RTL_CONSTASCII_USTRINGPARAM("ExcelGlobals") ), xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/org.openoffice.vba.theGlobals") ) );
 
-    if (pThisComp && pThisComp->IsObject())
+    SbxVariable *vba = dGlobs.Find( String( RTL_CONSTASCII_USTRINGPARAM("getGlobals") ) , SbxCLASS_DONTCARE );
+
+    if ( vba )
     {
-        SbxObject *pObj = static_cast<SbxObject *>(pThisComp->GetObject());
-        SbxVariable *vba = pObj->Find( aVBAHook, SbxCLASS_DONTCARE/* SbxCLASS_PROPERTY */ );
-        if ( vba && (vba->GetType() & SbxARRAY) )
-        {
-            pArray = static_cast<SbxArray *>(vba->GetObject());
-            isInitialised = true;
-            return pArray;
-        }
+        pArray = static_cast<SbxArray *>(vba->GetObject());
+        isInitialised = true;
+        return pArray;
     }
     return NULL;
 }
