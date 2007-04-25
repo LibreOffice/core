@@ -3,7 +3,7 @@ dnl *     vi:set sw=3 ts=3 et:
 dnl *
 dnl * Name: configure.in
 dnl * Auth: Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems Ireland
-dnl * Date: $Date: 2007-04-16 14:18:38 $
+dnl * Date: $Date: 2007-04-25 14:58:10 $
 dnl *
 dnl * Desc: This file serves as input for the GNU autoconf package
 dnl *       in order to create a configure script.
@@ -12,7 +12,7 @@ dnl *       necessary to build OpenOffice.org
 dnl *
 dnl *
 dnl ******************************************************************/
-AC_REVISION( $Revision: 1.199 $ )
+AC_REVISION( $Revision: 1.200 $ )
 AC_PREREQ(2.50)
 AC_INIT()
 echo "$@" >config.parms
@@ -2209,8 +2209,8 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_RESULT([checked (BEA JDK $_jdk)])
 	
         if test "$with_jdk_home" = ""; then
-             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the BEA JDK,])
-	     AC_MSG_ERROR([you must use the "--with-jdk-home" configure option explicitly])
+             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the BEA JDK,
+you must use the "--with-jdk-home" configure option explicitly])
         fi
 
 	AC_MSG_WARN([A bug in certain BEA JREs can prevent you from successfully compiling some modules])
@@ -2232,8 +2232,8 @@ if test "$SOLAR_JAVA" != ""; then
         AC_MSG_RESULT([checked (IBM JDK $_jdk)])
 
         if test "$with_jdk_home" = ""; then
-             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,])
-	     AC_MSG_ERROR([you must use the "--with-jdk-home" configure option explicitly])
+             AC_MSG_ERROR([In order to successfully build OpenOffice.org using the IBM JDK,
+you must use the "--with-jdk-home" configure option explicitly])
         fi
         if test "$_jdk_ver" -gt 10402; then
              AC_MSG_WARN([IBM JDK might be too recent, maximum version tested is 1.4.2])
