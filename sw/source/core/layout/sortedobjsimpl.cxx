@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sortedobjsimpl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:31:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:08:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,30 +334,5 @@ sal_uInt32 SwSortedObjsImpl::ListPosOf( const SwAnchoredObject& _rAnchoredObj ) 
     }
 
     return nRetLstPos;
-}
-
-sal_uInt32 SwSortedObjsImpl::IndexOfObjAnchoredAfterFrm( const SwTxtFrm& _rTxtFrm ) const
-{
-    sal_uInt32 nRetIdx = Count();
-
-    SwNodeIndex pTxtNodeIdx( *_rTxtFrm.GetTxtNode() );
-
-    tConstIter aIter = maSortedObjLst.begin();
-    for ( ; aIter != maSortedObjLst.end(); ++aIter )
-    {
-        SwAnchoredObject* pAnchoredObj = *(aIter);
-
-        const SwFmtAnchor* pAnchor = &(pAnchoredObj->GetFrmFmt().GetAnchor());
-
-        if ( ( pAnchor->GetAnchorId() == FLY_AT_CNTNT ||
-               pAnchor->GetAnchorId() == FLY_AUTO_CNTNT ) &&
-             pAnchor->GetCntntAnchor()->nNode > pTxtNodeIdx )
-        {
-            nRetIdx = aIter - maSortedObjLst.begin();
-            break;
-        }
-    }
-
-    return nRetIdx;
 }
 
