@@ -4,9 +4,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:32:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:11:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1735,35 +1735,6 @@ BOOL SwpHints::CalcHiddenParaField()
     }
     SetHiddenParaField( bNewHasHiddenParaField );
     return bOldHasHiddenParaField != bNewHasHiddenParaField;
-}
-
-
-/*************************************************************************
- *                      SwpHints::Resort()
- *************************************************************************/
-
-// Ein Hint hat seinen Anfangswert geaendert.
-// Hat sich dadurch die Sortierreihenfolge
-// geaendert, so wird solange umsortiert, bis
-// sie wieder stimmt.
-
-BOOL SwpHints::Resort( const USHORT nPos )
-{
-    const SwTxtAttr *pTmp;
-
-    if ( ( nPos+1 < Count() &&
-           *(*this)[nPos]->GetStart() > *(*this)[nPos+1]->GetStart() ) ||
-         ( nPos > 0 &&
-           *(*this)[nPos]->GetStart() < *(*this)[nPos-1]->GetStart() ) )
-    {
-        pTmp = (*this)[nPos];
-        DeleteAtPos( nPos );
-        SwpHintsArr::Insert( pTmp );
-        // Wenn tatsaechlich umsortiert wurde, muss die
-        // Position i nochmal bearbeitet werden.
-        return TRUE;
-    }
-    return FALSE;
 }
 
 
