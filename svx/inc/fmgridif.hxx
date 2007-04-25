@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 17:39:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:51:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -288,7 +288,7 @@ public:
     virtual void SAL_CALL setDesignMode(sal_Bool bOn) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::awt::XView
-    virtual void SAL_CALL draw( long x, long y ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::form::XBoundComponent
     virtual void SAL_CALL addUpdateListener(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XUpdateListener >& l) throw(::com::sun::star::uno::RuntimeException);
@@ -527,7 +527,7 @@ public:
     void columnHidden(DbGridColumn* pColumn);
 
 // ::com::sun::star::awt::XView
-    virtual void SAL_CALL draw( long x, long y ) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL draw( sal_Int32 x, sal_Int32 y ) throw(::com::sun::star::uno::RuntimeException);
 
 // ::com::sun::star::frame::XDispatchProvider
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch >  SAL_CALL queryDispatch(const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw(::com::sun::star::uno::RuntimeException);
