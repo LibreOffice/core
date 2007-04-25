@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.172 $
+ *  $Revision: 1.173 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:57:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:47:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2240,7 +2240,7 @@ WW8FlySet::WW8FlySet(SwWW8ImplReader& rReader, const WW8FlyPara* pFW,
     Put(SvxFrameDirectionItem(FRMDIR_HORI_LEFT_TOP));
 
 /*Below can all go when we have from left in rtl mode*/
-    long nXPos = pFS->nXPos;
+    SwTwips nXPos = pFS->nXPos;
     SwRelationOrient eHRel = pFS->eHRel;
     rReader.MiserableRTLGraphicsHack(nXPos, pFS->nWidth, pFS->eHAlign, eHRel);
 /*Above can all go when we have from left in rtl mode*/
