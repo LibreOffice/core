@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:51:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:02:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,9 @@ struct SfxObjectUI_Impl
     BOOL    bVisible;
     BOOL    bContext;
     String* pName;
-    ULONG   nFeature;
+    sal_uInt32  nFeature;
 
-    SfxObjectUI_Impl(USHORT n, const ResId& rResId, BOOL bVis, ULONG nFeat) :
+    SfxObjectUI_Impl(USHORT n, const ResId& rResId, BOOL bVis, sal_uInt32 nFeat) :
         nPos(n),
         aResId(rResId.GetId(), rResId.GetResMgr()),
         bVisible(bVis),
@@ -140,7 +140,7 @@ struct SfxInterface_Impl
     }
 };
 
-static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr );
+static SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, sal_uInt32 nFeature, const String *pStr );
 
 //====================================================================
 
@@ -432,14 +432,14 @@ void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId,
 }
 
 
-void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
+void SfxInterface::RegisterObjectBar( USHORT nPos, const ResId& rResId, sal_uInt32 nFeature, const String *pStr )
 {
     SfxObjectUI_Impl* pUI = CreateObjectBarUI_Impl( nPos, rResId, nFeature, pStr );
     if ( pUI )
         pImpData->pObjectBars->Append(pUI);
 }
 
-SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, ULONG nFeature, const String *pStr )
+SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, sal_uInt32 nFeature, const String *pStr )
 {
     if ((nPos & SFX_VISIBILITY_MASK) == 0)
         nPos |= SFX_VISIBILITY_STANDARD;
@@ -524,7 +524,7 @@ void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, const String* 
     RegisterChildWindow( nId, bContext, 0UL, pChildWinName );
 }
 
-void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, ULONG nFeature, const String*)
+void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, sal_uInt32 nFeature, const String*)
 {
     SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, TRUE, nFeature);
     pUI->bContext = bContext;
@@ -537,7 +537,7 @@ void SfxInterface::RegisterStatusBar(const ResId& rResId)
 }
 
 
-ULONG SfxInterface::GetChildWindowId (USHORT nNo) const
+sal_uInt32 SfxInterface::GetChildWindowId (USHORT nNo) const
 {
     if ( pGenoType )
     {
@@ -554,13 +554,13 @@ ULONG SfxInterface::GetChildWindowId (USHORT nNo) const
     USHORT nCWCount = pImpData->pChildWindows->Count();
     DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
 #endif
-    ULONG nRet = (ULONG) (*pImpData->pChildWindows)[nNo]->aResId.GetId();
+    sal_uInt32 nRet = (*pImpData->pChildWindows)[nNo]->aResId.GetId();
     if ( (*pImpData->pChildWindows)[nNo]->bContext )
-        nRet += ( (ULONG) nClassId ) << 16;
+        nRet += sal_uInt32( nClassId ) << 16;
     return nRet;
 }
 
-ULONG SfxInterface::GetChildWindowFeature (USHORT nNo) const
+sal_uInt32 SfxInterface::GetChildWindowFeature (USHORT nNo) const
 {
     if ( pGenoType )
     {
@@ -577,8 +577,7 @@ ULONG SfxInterface::GetChildWindowFeature (USHORT nNo) const
     USHORT nCWCount = pImpData->pChildWindows->Count();
     DBG_ASSERT( nNo<nCWCount,"ChildWindow ist unbekannt!" );
 #endif
-    ULONG nRet = (ULONG) (*pImpData->pChildWindows)[nNo]->nFeature;
-    return nRet;
+    return (*pImpData->pChildWindows)[nNo]->nFeature;
 }
 
 //--------------------------------------------------------------------
@@ -630,7 +629,7 @@ const String* SfxInterface::GetObjectBarName ( USHORT nNo ) const
     return (*pImpData->pObjectBars)[nNo]->pName;
 }
 
-ULONG SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
+sal_uInt32 SfxInterface::GetObjectBarFeature ( USHORT nNo ) const
 {
     BOOL bGenoType = (pGenoType != 0 && !pGenoType->HasName());
     if ( bGenoType )
