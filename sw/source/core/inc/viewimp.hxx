@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:28:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:06:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -365,8 +365,6 @@ public:
 
     // Fire all accessible events that have been collected so far
     void FireAccessibleEvents();
-
-    String GetMarkListDescription() const;
 };
 
 //Kann auf dem Stack angelegt werden, wenn etwas ausgegeben oder
