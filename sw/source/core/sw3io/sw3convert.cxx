@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sw3convert.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:44:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:09:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -461,112 +461,3 @@ void sw3io_ConvertToOldField( const SwField* pFld, USHORT& rWhich,
         }
     }
 }
-void lcl_sw3io__ConvertNumTabStop( SvxTabStopItem& rTStop, long nOffset )
-{
-    for( USHORT n = 0; n < rTStop.Count(); ++n )
-    {
-        SvxTabStop& rTab = (SvxTabStop&)rTStop[ n ];
-        if( SVX_TAB_ADJUST_DEFAULT != rTab.GetAdjustment() &&
-            rTab.GetTabPos() )
-        {
-            rTab.GetTabPos() += nOffset;
-        }
-    }
-}
-void lcl_sw3io__ConvertNumTabStop( SwTxtNode& rTxtNd, long nOffset,
-                                   BOOL bDeep )
-{
-    const SfxPoolItem* pItem;
-    if( SFX_ITEM_SET == rTxtNd.GetSwAttrSet().GetItemState( RES_PARATR_TABSTOP,
-                                                            bDeep, &pItem ) )
-    {
-        SvxTabStopItem aTStop( *(SvxTabStopItem*)pItem );
-        lcl_sw3io__ConvertNumTabStop( aTStop, nOffset );
-        rTxtNd.SwCntntNode::SetAttr( aTStop );
-    }
-}
-
-void lcl_sw3io_ChkHiddenExp( String& rCond )
-{
-    // die Expression wurde bei 4.0 Export einmal gedreht, beim erneuten
-    // Einlesen sollte diese nicht noch mal gedreht werden.
-    xub_StrLen nLen = rCond.Len(), nPos = nLen, nCnt = 1;
-    if( 3 < nPos-- && ')' == rCond.GetChar( nPos ) &&
-        '!' == rCond.GetChar( nPos = 0 ) && '(' == rCond.GetChar( ++nPos ))
-    {
-        // dann teste mal ob es dann eine komplette Klammerung ist
-        --nLen; ++nPos;
-        nCnt = 0;
-        while( nPos < nLen )
-            switch( rCond.GetChar( nPos++ ) )
-            {
-            case '(':       ++nCnt;     break;
-            case ')':       if( !nCnt-- )
-                                nPos = nLen;
-                            break;
-            }
-    }
-
-    if( !nCnt )
-        rCond = rCond.Copy( 2, rCond.Len() - 3);
-    else
-        rCond.InsertAscii( "!(", 0 ) += ')';
-}
-
-void lcl_sw3io__ConvertNumLRSpace( SwTxtNode& rTxtNd, const SwNumRule& rNumRule,
-                                   BYTE nLevel, BOOL bTabStop )
-{
-    if( nLevel == NO_NUMBERING )
-        return;
-
-    nLevel = GetRealLevel( nLevel );
-    USHORT nNumLSpace = rNumRule.Get( nLevel ).GetAbsLSpace();
-
-    // Wenn im Absatz der Einzug eingestellt ist, dann will
-    // man den wieder Erreichen, sonst den der NumRule.
-    const SfxPoolItem *pItem;
-    const SvxLRSpaceItem *pParaLRSpace = 0;
-    const SfxItemSet *pAttrSet = rTxtNd.GetpSwAttrSet();
-    if( pAttrSet &&
-        SFX_ITEM_SET == pAttrSet->GetItemState( RES_LR_SPACE, FALSE, &pItem ) )
-        pParaLRSpace = (const SvxLRSpaceItem *)pItem;
-    USHORT nWishLSpace = pParaLRSpace ? pParaLRSpace->GetTxtLeft() : nNumLSpace;
-
-    // Dazu muss man den folgenden Wert im Absatz einstellen
-    const SvxLRSpaceItem& rCollLRSpace = rTxtNd.GetAnyFmtColl().GetLRSpace();
-    USHORT nOldLSpace = pParaLRSpace ? pParaLRSpace->GetTxtLeft()
-                                     : rCollLRSpace.GetTxtLeft();
-    USHORT nNewLSpace;
-    if( rNumRule.IsAbsSpaces() )
-        nNewLSpace = rCollLRSpace.GetTxtLeft();
-    else
-        nNewLSpace = nWishLSpace > nNumLSpace ? nWishLSpace - nNumLSpace : 0U;
-
-    // Wenn der neue Wert zufaellig der der Vorlage ist und der
-    // rechte Einzug auch mit dem der Vorlage ueberseinstimmt,
-    // dann braucht bzw. darf man das Absatz-Attribut nicht
-    // setzen, sonst muss man es setzen.
-    if( nNewLSpace == rCollLRSpace.GetTxtLeft() &&
-        (!pParaLRSpace || pParaLRSpace->GetRight() == rCollLRSpace.GetRight()) )
-    {
-        if( pParaLRSpace )
-            rTxtNd.ResetAttr( RES_LR_SPACE );
-    }
-    else
-    {
-        if( !pParaLRSpace )
-            pParaLRSpace = &rCollLRSpace;
-        SvxLRSpaceItem aLRSpace( *pParaLRSpace );
-        short nFirst = aLRSpace.GetTxtFirstLineOfst();
-        if( nFirst < 0 && (USHORT)-nFirst > nNewLSpace )
-            aLRSpace.SetTxtFirstLineOfst( -(short)nNewLSpace );
-        aLRSpace.SetTxtLeft( nNewLSpace );
-        ((SwCntntNode&)rTxtNd).SetAttr( aLRSpace );
-    }
-
-    if( bTabStop && nOldLSpace != nNewLSpace )
-        lcl_sw3io__ConvertNumTabStop( rTxtNd,
-                                      (long)nOldLSpace - (long)nNewLSpace,
-                                      TRUE );
-}
-
