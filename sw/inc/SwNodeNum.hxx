@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNodeNum.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:31:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:50:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,8 +104,6 @@ public:
     void SetLevel(unsigned int nLevel);
 
     SwPosition GetPosition() const;
-
-    const SwNumFmt * GetNumFmt() const;
 
     friend class SwTxtNode;
     friend class SwNumRule;
