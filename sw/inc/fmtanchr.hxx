@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtanchr.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:47:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:54:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,8 +98,6 @@ public:
     void SetType( RndStdIds nRndId ) { nAnchorId = nRndId; }
     void SetPageNum( USHORT nNew ) { nPageNum = nNew; }
     void SetAnchor( const SwPosition *pPos );
-    // OD 2004-05-05 #i28701#
-    void SetOrder( const sal_uInt32 _nNewOrder );
 };
 
 inline const SwFmtAnchor &SwAttrSet::GetAnchor(BOOL bInP) const
