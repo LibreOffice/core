@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:46:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:59:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -161,11 +161,6 @@ public:
     // get (a) boundary for attribut change
     void GetAttributeBoundary( com::sun::star::i18n::Boundary& rBound,
                                sal_Int32 nPos );
-
-    /// Determine whether this portion should have a gray background
-    /// accoridng to the view options
-    sal_Bool IsInGrayPortion( sal_Int32 nPos );
-
 
     /// Convert start and end positions into core positions.
     /// @returns true if 'special' portions are included either completely
