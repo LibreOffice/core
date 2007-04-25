@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2007-01-25 13:28:39 $
+#   last change: $Author: rt $ $Date: 2007-04-25 14:57:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -55,12 +55,6 @@ CFLAGS += -DLEAK_STATIC_DATA
 # In case someone enabled the non-standard -fomit-frame-pointer which does not
 # work with the .cxx sources in this directory:
 CFLAGSCXX += -fno-omit-frame-pointer
-
-NOOPTFILES= \
-    $(SLO)$/uno2cpp.obj
-
-
-CFLAGSNOOPT=-O0
 
 SLOFILES= \
     $(SLO)$/abi.obj			\
