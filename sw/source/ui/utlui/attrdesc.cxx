@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:59:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:17:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -174,16 +174,6 @@ static sal_Char __READONLY_DATA sKomma[] = ", ";
             aIter.NextItem();
         }
     }
-}
-
-
-void SwPageDesc::GetPresentation(
-        SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric,
-        SfxMapUnit ePresMetric,
-        String &rText ) const
-{
-    rText = GetName();
 }
 
 
