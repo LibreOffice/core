@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.116 $
+ *  $Revision: 1.117 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:17:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:15:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2697,43 +2697,6 @@ SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL 
     return pFound;
 }
 
-/* -----------------------------17.07.00 14:31--------------------------------
-    rDBName: <Source> + DB_DELIM + <Table>; + <Statement>
- ---------------------------------------------------------------------------*/
-void    SwNewDBMgr::AddDSData(const SwDBData& rData, long nSelStart, long nSelEnd)
-{
-    SwDSParam* pFound = FindDSData(rData, TRUE);
-    if(nSelStart > 0)
-    {
-        if(nSelEnd < nSelStart)
-        {
-            sal_uInt32 nZw = nSelEnd;
-            nSelEnd = nSelStart;
-            nSelStart = nZw;
-        }
-
-        pFound->aSelection.realloc(nSelEnd - nSelStart + 1);
-        Any* pSelection = pFound->aSelection.getArray();
-        for (long i = nSelStart; i <= nSelEnd; i++, ++pSelection)
-            *pSelection <<= i;
-    }
-    else
-        pFound->aSelection.realloc(0);
-}
-/* -----------------------------17.07.00 14:31--------------------------------
-
- ---------------------------------------------------------------------------*/
-void    SwNewDBMgr::GetDSSelection(const SwDBData& rData, long& rSelStart, long& rSelEnd)
-{
-    SwDSParam* pFound = FindDSData(rData, FALSE);
-    if(!pFound || !pFound->aSelection.getLength())
-        rSelStart = -1L;
-    else
-    {
-        pFound->aSelection.getConstArray()[0] >>= rSelStart;
-        pFound->aSelection.getConstArray()[pFound->aSelection.getLength() - 1] >>= rSelEnd;
-    }
-}
 /* -----------------------------17.07.00 14:34--------------------------------
 
  ---------------------------------------------------------------------------*/
