@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 13:28:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3046,6 +3046,11 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case NS_ooxml::LN_CT_PPrBase_spacing:
     case NS_ooxml::LN_CT_PPrBase_ind:
     case NS_ooxml::LN_CT_PPrBase_tabs:
+    case NS_ooxml::LN_EG_SectPrContents_footnotePr:
+    case NS_ooxml::LN_EG_SectPrContents_endnotePr:
+    case NS_ooxml::LN_EG_SectPrContents_pgSz:
+    case NS_ooxml::LN_EG_SectPrContents_pgMar:
+//    case NS_ooxml::LN_CT_PPr_rPr:
         resolveSprmProps(sprm_);
         break;
 

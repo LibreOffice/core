@@ -11094,7 +11094,7 @@
       </define>
       <define name="CT_FtnPos">
         <attribute name="val">
-          <text/>
+          <ref name="ST_FtnPos"/>
           <xs:documentation>Footnote Position Type</xs:documentation>
         </attribute>
       </define>
@@ -11111,7 +11111,7 @@
       </define>
       <define name="CT_EdnPos">
         <attribute name="val">
-          <text/>
+          <ref name="ST_EdnPos"/>
           <xs:documentation>Endnote Position Type</xs:documentation>
         </attribute>
       </define>
@@ -14554,7 +14554,7 @@
     <resource name="CT_TextboxTightWrap" resource="StringValue" generated="yes"/>
     <resource name="CT_PPrBase" resource="Properties">
       <kind name="paragraph"/>
-      <sprm name="pStyle" tokenid="0x0"/>
+      <sprm name="pStyle" tokenid="ooxml:CT_PPrBase_pStyle"/>
       <sprm name="keepNext" tokenid="0x2406"/>
       <sprm name="keepLines" tokenid="0x2405"/>
       <sprm name="pageBreakBefore" tokenid="0x2407"/>
@@ -14588,7 +14588,11 @@
       <sprm name="divId" tokenid="ooxml:CT_PPrBase_divId"/>
       <sprm name="cnfStyle" tokenid="ooxml:CT_PPrBase_cnfStyle"/>
     </resource>
-    <resource name="CT_PPr" resource="Properties"/>
+    <resource name="CT_PPr" resource="Properties">
+      <attribute name="rPr" tokenid="ooxml:CT_PPr_rPr"/>
+      <attribute name="sectPr" tokenid="ooxml:CT_PPr_sectPr"/>
+      <attribute name="pPrChange" tokenid="ooxml:CT_PPr_pPrChange"/>
+    </resource>
     <resource name="CT_FFTextType" resource="StringValue" generated="yes"/>
     <resource name="CT_FFName" resource="StringValue" generated="yes"/>
     <resource name="CT_FFHelpText" resource="StringValue" generated="yes"/>
@@ -14838,8 +14842,8 @@
       <sprm name="w" tokenid="0x4852"/>
       <sprm name="kern" tokenid="0x484b"/>
       <sprm name="position" tokenid="0x4845"/>
-      <sprm name="sz" tokenid="0x4843"/>
-      <sprm name="szCs" tokenid="0x4861"/>
+      <sprm name="sz" tokenid="0x4a43"/>
+      <sprm name="szCs" tokenid="0x4a61"/>
       <sprm name="highlight" tokenid="0x2a0c"/>
       <sprm name="u" tokenid="ooxml:EG_RPrBase_u"/>
       <sprm name="effect" tokenid="0x2859"/>
@@ -14856,6 +14860,9 @@
       <sprm name="oMath" tokenid="0x0"/>
     </resource>
     <resource name="CT_RPr" resource="Properties"/>
+    <resource name="CT_ParaRPr" resource="Properties">
+      <attribute name="rPrChange" tokenid="ooxml:CT_ParaRPr_rPrChange"/>
+    </resource>
     <resource name="CT_RubyAlign" resource="StringValue" generated="yes"/>
     <resource name="CT_Lock" resource="StringValue" generated="yes"/>
     <resource name="CT_SdtDateMappingType" resource="StringValue" generated="yes"/>
@@ -14980,15 +14987,35 @@
       <sprm name="tblPrChange" tokenid="ooxml:CT_TblPr_tblPrChange"/>
     </resource>
     <resource name="CT_Tbl" resource="TextTable"/>
-    <resource name="CT_FtnPos" resource="StringValue" generated="yes"/>
-    <resource name="CT_EdnPos" resource="StringValue" generated="yes"/>
+    <resource name="ST_FtnPos" resource="List">
+      <value tokenid="ooxml:Value_ST_FtnPos_pageBottom">pageBottom</value>
+      <value tokenid="ooxml:Value_ST_FtnPos_beneathText">beneathText</value>
+      <value tokenid="ooxml:Value_ST_FtnPos_sectEnd">sectEnd</value>
+      <value tokenid="ooxml:Value_ST_FtnPos_docEnd">docEnd</value>
+    </resource>
+    <resource name="CT_FtnPos" resource="ListValue">
+      <attribute name="val" tokenid="ooxml:CT_FtnPos_val"/>
+    </resource>
+    <resource name="ST_EdnPos" resource="List">
+      <value tokenid="ooxml:Value_ST_EdnPos_sectEnd">sectEnd</value>
+      <value tokenid="ooxml:Value_ST_EdnPos_docEnd">docEnd</value>
+    </resource>
+    <resource name="CT_EdnPos" resource="ListValue">
+      <attribute name="val" tokenid="ooxml:CT_EdnPos_val"/>
+    </resource>
     <resource name="CT_NumFmt" resource="ListValue"/>
     <resource name="ST_RestartNumber" resource="List">
       <value tokenid="ooxml:Value_ST_RestartNumber_continuous">continuous</value>
       <value tokenid="ooxml:Value_ST_RestartNumber_eachSect">eachSect</value>
       <value tokenid="ooxml:Value_ST_RestartNumber_eachPage">eachPage</value>
     </resource>
-    <resource name="CT_NumRestart" resource="ListValue"/>
+    <resource name="CT_NumRestart" resource="ListValue">
+      <attribute name="val" tokenid="ooxml:CT_NumRestart_val"/>
+    </resource>
+    <resource name="EG_FtnEdnNumProps" resource="Properties">
+      <attribute name="numStart" tokenid="ooxml:EG_FtnEdnNumProps_numStart"/>
+      <attribute name="numRestart" tokenid="ooxml:EG_FtnEdnNumProps_numRestart"/>
+    </resource>
     <resource name="CT_FtnProps" resource="Properties">
       <attribute name="pos" tokenid="ooxml:CT_FtnProps_pos"/>
       <attribute name="numFmt" tokenid="ooxml:CT_FtnProps_numFmt"/>
