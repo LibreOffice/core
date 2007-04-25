@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:10:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:04:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,29 +293,6 @@ void SwDBField::InitContent(const String& rExpansion)
         }
     }
     SetExpansion( rExpansion );
-}
-
-//------------------------------------------------------------------------------
-
-String SwDBField::GetOldContent()
-{
-    String sOldExpand = Expand();
-    String sNewExpand = sOldExpand;
-    BOOL bOldInit = bInitialized;
-
-    bInitialized = FALSE;
-    InitContent();
-    bInitialized = bOldInit;
-
-    if( ::GetAppCmpStrIgnore().isEqual( sNewExpand, Expand() ) )
-    {
-        sNewExpand = '<';
-        sNewExpand += ((SwDBFieldType *)GetTyp())->GetColumnName();
-        sNewExpand += '>';
-    }
-    SetExpansion( sOldExpand );
-
-    return sNewExpand;
 }
 
 //------------------------------------------------------------------------------
