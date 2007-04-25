@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WW8DocumentImpl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2007-04-23 07:37:29 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:37:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1781,7 +1781,7 @@ void WW8DocumentImpl::resolve(Stream & rStream)
             rStream.startCharacterGroup();
             bInCharacterGroup = true;
 
-            if (pItChp.get() != NULL)
+            if (pItChp.get() != NULL && pItChp->getProperties().get() != NULL)
                 rStream.props(pItChp->getProperties());
         }
 
