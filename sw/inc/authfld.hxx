@@ -4,9 +4,9 @@
  *
  *  $RCSfile: authfld.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:16:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:51:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,6 @@ public:
     SwAuthEntry( const SwAuthEntry& rCopy );
     BOOL            operator==(const SwAuthEntry& rComp);
 
-    BOOL                    GetFirstAuthorField(USHORT& nPos, String& rToFill)const;
-    BOOL                    GetNextAuthorField(USHORT& nPos, String& rToFill)const;
     inline const String&    GetAuthorField(ToxAuthorityField ePos)const;
     inline void             SetAuthorField(ToxAuthorityField ePos,
                                             const String& rField);
@@ -137,10 +135,6 @@ public:
     // import interface
     USHORT              AppendField(const SwAuthEntry& rInsert);
     long                GetHandle(USHORT nPos);
-    USHORT              GetPosition(long nHandle);
-
-    USHORT              GetEntryCount() const;
-    const SwAuthEntry*  GetEntryByPosition(USHORT nPos) const;
 
     USHORT              GetSequencePos(long nHandle);
 
@@ -205,8 +199,6 @@ public:
 
     long                GetHandle() const       { return nHandle; }
 
-    //import interface
-    USHORT              GetHandlePosition() const;
     virtual String GetDescription() const;
 };
 
