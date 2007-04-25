@@ -4,9 +4,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:27:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:56:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -554,7 +554,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            SnapVisArea( Rectangle& rRect ) const;          // 1/100 mm
 
     SC_DLLPUBLIC BOOL           ValidTabName( const String& rName ) const;
-    static void      ConvertToValidTabName( String& rName, sal_Unicode cReplaceChar );
+    static SC_DLLPUBLIC void      ConvertToValidTabName( String& rName, sal_Unicode cReplaceChar );
     SC_DLLPUBLIC BOOL           ValidNewTabName( const String& rName ) const;
     SC_DLLPUBLIC void           CreateValidTabName(String& rName) const;
     BOOL            InsertTab( SCTAB nPos, const String& rName,
@@ -585,7 +585,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            GetScenarioFlags( SCTAB nTab, USHORT& rFlags ) const;
     BOOL            IsActiveScenario( SCTAB nTab ) const;
     void            SetActiveScenario( SCTAB nTab, BOOL bActive );      // nur fuer Undo etc.
-    ScAddress::Convention GetAddressConvention() const;
+    SC_DLLPUBLIC ScAddress::Convention GetAddressConvention() const;
     void            SetAddressConvention( ScAddress::Convention eConv );
     BYTE            GetLinkMode( SCTAB nTab ) const;
     BOOL            IsLinked( SCTAB nTab ) const;
@@ -1013,7 +1013,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
                                             const ScAddress& rCursor, const ScMarkData& rMark,
                                             double& rResult );
 
-    const SfxPoolItem*      GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nWhich ) const;
+    SC_DLLPUBLIC const SfxPoolItem*         GetAttr( SCCOL nCol, SCROW nRow, SCTAB nTab, USHORT nWhich ) const;
     const ScPatternAttr*    GetPattern( SCCOL nCol, SCROW nRow, SCTAB nTab ) const;
     const ScPatternAttr*    GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, SCROW nEndRow, SCTAB nTab ) const;
     const ScPatternAttr*    GetSelectionPattern( const ScMarkData& rMark, BOOL bDeep = TRUE );
@@ -1068,7 +1068,7 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     ScValidationDataList* GetValidationList() const
                     { return pValidationList; }
 
-    void            ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    SC_DLLPUBLIC void           ApplyAttr( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                 const SfxPoolItem& rAttr );
     void            ApplyPattern( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const ScPatternAttr& rAttr );
@@ -1161,8 +1161,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     ULONG           GetColOffset( SCCOL nCol, SCTAB nTab ) const;
     ULONG           GetRowOffset( SCROW nRow, SCTAB nTab ) const;
 
-    USHORT          GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const;
-    USHORT          GetOriginalHeight( SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC USHORT         GetOriginalWidth( SCCOL nCol, SCTAB nTab ) const;
+    SC_DLLPUBLIC USHORT         GetOriginalHeight( SCROW nRow, SCTAB nTab ) const;
 
     USHORT          GetCommonWidth( SCCOL nEndCol, SCTAB nTab ) const;
 
@@ -1208,8 +1208,8 @@ SC_DLLPUBLIC    ScDBCollection* GetDBCollection() const;
     void            SetRowFlags( SCROW nRow, SCTAB nTab, BYTE nNewFlags );
     void            SetRowFlags( SCROW nStartRow, SCROW nEndRow, SCTAB nTab, BYTE nNewFlags );
 
-    BYTE            GetColFlags( SCCOL nCol, SCTAB nTab ) const;
-    BYTE            GetRowFlags( SCROW nRow, SCTAB nTab ) const;
+    SC_DLLPUBLIC BYTE           GetColFlags( SCCOL nCol, SCTAB nTab ) const;
+    SC_DLLPUBLIC BYTE           GetRowFlags( SCROW nRow, SCTAB nTab ) const;
 
     const ScBitMaskCompressedArray< SCROW, BYTE> & GetRowFlagsArray( SCTAB nTab ) const;
           ScBitMaskCompressedArray< SCROW, BYTE> & GetRowFlagsArrayModifiable( SCTAB nTab );
@@ -1344,9 +1344,9 @@ SC_DLLPUBLIC    SvNumberFormatter*  GetFormatTable() const;
 
     BOOL            HasAutoFilter( SCCOL nCol, SCROW nRow, SCTAB nTab );
 
-    BOOL            HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+    SC_DLLPUBLIC BOOL           HasColHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab );
-    BOOL            HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
+    SC_DLLPUBLIC BOOL           HasRowHeader( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow,
                                     SCTAB nTab );
 
     SfxPrinter*     GetPrinter( BOOL bCreateIfNotExist = TRUE );
