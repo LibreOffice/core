@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfunc.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-10-18 12:27:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:58:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,7 +129,7 @@ public:
 
     BOOL            SetAddressConvention( ScAddress::Convention eConv );
 
-    BOOL            SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
+    SC_DLLPUBLIC BOOL           SetWidthOrHeight( BOOL bWidth, SCCOLROW nRangeCnt, SCCOLROW* pRanges,
                                     SCTAB nTab, ScSizeMode eMode, USHORT nSizeTwips,
                                     BOOL bRecord, BOOL bApi );
 
