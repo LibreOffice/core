@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dispatch.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 13:37:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:02:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1832,7 +1832,7 @@ long SfxDispatcher::Update_Impl( sal_Bool bForce )
 
 sal_uInt32 SfxDispatcher::_Update_Impl( sal_Bool bUIActive, sal_Bool bIsMDIApp, sal_Bool bIsIPOwner, SfxWorkWindow *pTaskWin )
 {
-    sal_uInt32 nHelpId = 0L;
+    sal_uInt32 nHelpId = 0;
     SFX_APP();
     SfxWorkWindow *pWorkWin = pImp->pFrame->GetFrame()->GetWorkWindow_Impl();
     sal_Bool bIsActive = sal_False;
