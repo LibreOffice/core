@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scmod.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:57:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:57:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -252,7 +252,7 @@ SC_DLLPUBLIC    void                    SetAppOptions   ( const ScAppOptions& rO
     BOOL                IsInputMode();  // auch bei SC_INPUT_TYPE
     void                SetInputMode( ScInputMode eMode );
     BOOL                InputKeyEvent( const KeyEvent& rKEvt, BOOL bStartEdit = FALSE );
-    void                InputEnterHandler( BYTE nBlockMode = 0 );
+    SC_DLLPUBLIC void                InputEnterHandler( BYTE nBlockMode = 0 );
     void                InputCancelHandler();
     void                InputSelection( EditView* pView );
     void                InputChanged( EditView* pView );
