@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:36:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:14:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,9 +230,6 @@
 #endif
 #ifndef _WTABSH_HXX
 #include <wtabsh.hxx>
-#endif
-#ifndef _WDRWBASE_HXX
-#include <wdrwbase.hxx>
 #endif
 #ifndef _NAVIPI_HXX //autogen
 #include <navipi.hxx>
@@ -514,7 +511,6 @@ void SwDLL::RegisterInterfaces()
     SwWebGrfShell::RegisterInterface(pMod);
     SwWebListShell::RegisterInterface(pMod);
     SwWebTableShell::RegisterInterface(pMod);
-    SwWebDrawBaseShell::RegisterInterface(pMod);
     SwWebDrawFormShell::RegisterInterface(pMod);
     SwWebOleShell::RegisterInterface(pMod);
     SwMediaShell::RegisterInterface(pMod);
