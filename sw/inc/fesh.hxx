@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:12:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:53:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -548,8 +548,6 @@ public:
 
     //Auskunft ueber naechstliegenden Inhalt zum uebergebenen Point
     Point GetCntntPos( const Point& rPoint, BOOL bNext ) const;
-
-    Point GetContentFromPos( const Point &rPoint, int offset ) const;
 
     //convert document position into position relative to the current page
     Point GetRelativePagePosition(const Point& rDocPos);
