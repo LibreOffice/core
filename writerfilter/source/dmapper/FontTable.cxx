@@ -4,9 +4,9 @@
  *
  *  $RCSfile: FontTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 09:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,7 @@
 #include <doctok/resourceids.hxx>
 #endif
 #include <vector>
+#include <stdio.h>
 
 namespace dmapper
 {
@@ -75,6 +76,8 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
     if(!m_pImpl->pCurrentEntry)
         return ;
     int nIntValue = val.getInt();
+    ::rtl::OUString sValue = val.getString();
+    // printf ( "FontTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     switch(Name)
     {
 //        case NS_rtf::LN_ISTD: break;
@@ -107,7 +110,7 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
 //        case NS_rtf::LN_UNUSED8: break;
 //        case NS_rtf::LN_CLFOLVL: break;
         case NS_rtf::LN_CBFFNM1:
-            m_pImpl->pCurrentEntry->sFontName1 = val.getString();
+            m_pImpl->pCurrentEntry->sFontName1 = sValue;
         break;
         case NS_rtf::LN_PRQ:
             m_pImpl->pCurrentEntry->nPitchRequest = static_cast<sal_Int16>( nIntValue );
@@ -128,10 +131,10 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_IXCHSZALT:
         break;
         case NS_rtf::LN_PANOSE:
-            m_pImpl->pCurrentEntry->sPanose += val.getString();
+            m_pImpl->pCurrentEntry->sPanose += sValue;
         break;
         case NS_rtf::LN_FS:
-            m_pImpl->pCurrentEntry->sFontSignature += val.getString();
+            m_pImpl->pCurrentEntry->sFontSignature += sValue;
         break;
 //        case NS_rtf::LN_STI: break;
 //        case NS_rtf::LN_FSCRATCH: break;
@@ -489,10 +492,10 @@ void FontTable::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_F:
         break;
         case NS_rtf::LN_ALTFONTNAME:
-            m_pImpl->pCurrentEntry->sAlternativeFont = val.getString();
+            m_pImpl->pCurrentEntry->sAlternativeFont = sValue;
         break;
         case NS_rtf::LN_XSZFFN:
-            m_pImpl->pCurrentEntry->sFontName = val.getString();
+            m_pImpl->pCurrentEntry->sFontName = sValue;
         break;
 //        case NS_rtf::LN_XSTZNAME: break;
 //        case NS_rtf::LN_XSTZNAME1: break;

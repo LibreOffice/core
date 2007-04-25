@@ -4,9 +4,9 @@
  *
  *  $RCSfile: StyleSheetTable.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2007-04-23 09:11:31 $
+ *  last change: $Author: fridrich_strba $ $Date: 2007-04-25 09:06:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -145,6 +145,7 @@ void StyleSheetTable::attribute(doctok::Id Name, doctok::Value & val)
         return ;
     int nIntValue = val.getInt();
     ::rtl::OUString sValue = val.getString();
+    // printf ( "StyleSheetTable::attribute(0x%.4x, 0x%.4x) [%s]\n", (unsigned int)Name, (unsigned int)nIntValue, ::rtl::OUStringToOString(sValue, RTL_TEXTENCODING_DONTKNOW).getStr());
     switch(Name)
     {
         case NS_rtf::LN_ISTD:
