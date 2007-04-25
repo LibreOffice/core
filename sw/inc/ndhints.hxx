@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndhints.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:33:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:55:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,7 +127,6 @@ private:
     BOOL    bDDEFlds : 1;       // es sind DDE-Felder am TextNode vorhanden
     BOOL    bCalcHiddenParaField : 1; // bHasHiddenParaField ist invalid, CalcHiddenParaField() rufen
 
-    BOOL Resort( const USHORT nPos );
     // Haelt ein neues Attribut in pHistory fest.
     void NoteInHistory( SwTxtAttr *pAttr, const BOOL bNew = FALSE );
 
