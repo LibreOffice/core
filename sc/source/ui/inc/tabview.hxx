@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 14:06:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:59:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -339,9 +339,9 @@ public:
 
     void            ClickCursor( SCCOL nPosX, SCROW nPosY, BOOL bControl );
 
-    void            SetCursor( SCCOL nPosX, SCROW nPosY, BOOL bNew = FALSE );
+    SC_DLLPUBLIC void           SetCursor( SCCOL nPosX, SCROW nPosY, BOOL bNew = FALSE );
 
-    void            CellContentChanged();
+    SC_DLLPUBLIC void           CellContentChanged();
     void            SelectionChanged();
     void            CursorPosChanged();
     void            UpdateInputContext();
@@ -378,7 +378,7 @@ public:
                     //  MoveCursorArea      - Datenblock
                     //  MoveCursorEnd       - links oben / benutzter Bereich
 
-    void            MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
+    SC_DLLPUBLIC void           MoveCursorAbs( SCsCOL nCurX, SCsROW nCurY, ScFollowMode eMode,
                                     BOOL bShift, BOOL bControl,
                                     BOOL bKeepOld = FALSE, BOOL bKeepSel = FALSE );
     void            MoveCursorRel( SCsCOL nMovX, SCsROW nMovY, ScFollowMode eMode,
@@ -411,7 +411,7 @@ public:
 
     void            ScrollX( long nDeltaX, ScHSplitPos eWhich, BOOL bUpdBars = TRUE );
     void            ScrollY( long nDeltaY, ScVSplitPos eWhich, BOOL bUpdBars = TRUE );
-    void            ScrollLines( long nDeltaX, long nDeltaY );              // aktives
+    SC_DLLPUBLIC void           ScrollLines( long nDeltaX, long nDeltaY );              // aktives
 
     BOOL            ScrollCommand( const CommandEvent& rCEvt, ScSplitPos ePos );
 
