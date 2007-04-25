@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:44:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:52:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -340,10 +340,6 @@ public:
     // check if a data source is open
     BOOL            IsDataSourceOpen(const String& rDataSource,
                                     const String& rTableOrQuery, sal_Bool bMergeOnly);
-
-    // add data source information to the data source array - was PreInitDBData
-    void            AddDSData(const SwDBData& rData, long nSelStart, long nSelEnd);
-    void            GetDSSelection(const SwDBData& rData, long& rSelStart, long& rSelEnd);
 
     // open the source while fields are updated - for the calculator only!
     BOOL            OpenDataSource(const String& rDataSource, const String& rTableOrQuery,
