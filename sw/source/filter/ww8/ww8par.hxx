@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.148 $
+ *  $Revision: 1.149 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-09 13:17:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:47:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1290,7 +1290,7 @@ private:
     SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
     RndStdIds ProcessEscherAlign(SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
         SfxItemSet &rFlySet, bool bOrgObjectWasReplace);
-    bool MiserableRTLGraphicsHack(long &rLeft, long nWidth,
+    bool MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
         SwHoriOrient eHoriOri, SwRelationOrient eHoriRel);
     SwFrmFmt* Read_GrafLayer( long nGrafAnchorCp );
     SwFlyFrmFmt* ImportReplaceableDrawables( SdrObject* &rpObject,
@@ -1563,7 +1563,7 @@ void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFmt &rFmt);
 void SyncIndentWithList(SvxLRSpaceItem &rLR, const SwNumFmt &rFmt);
 long GetListFirstLineIndent(const SwNumFmt &rFmt);
 String BookmarkToWriter(const String &rBookmark);
-bool RTLGraphicsHack(long &rLeft, long nWidth,
+bool RTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, SwTwips nPageLeft,
     SwTwips nPageRight, SwTwips nPageSize);
 void MatchEscherMirrorIntoFlySet(const SvxMSDffImportRec &rRecord,
