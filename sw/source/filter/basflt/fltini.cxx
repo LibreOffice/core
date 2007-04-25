@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fltini.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:29:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:12:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,37 +242,6 @@ SwRead SwIoSystem::GetReader( const String& rFltName )
     return pRead;
 }
 
-        // suche ueber den Filtertext den Filtereintrag
-const SfxFilter* SwIoSystem::GetFilterOfFilterTxt( const String& rFilterNm,
-                                const SfxFilterContainer* pCnt )
-{
-    const SfxFilterContainer* pFltCnt = pCnt ? pCnt :
-        ( IsDocShellRegistered()
-            ? SwDocShell::Factory().GetFilterContainer()
-            : SwWebDocShell::Factory().GetFilterContainer() );
-
-    do {
-        if( pFltCnt )
-        {
-            SfxFilterMatcher aMatcher( pFltCnt->GetName() );
-            SfxFilterMatcherIter aIter( &aMatcher );
-            const SfxFilter* pFilter = aIter.First();
-            while ( pFilter )
-            {
-                if( pFilter->GetFilterName() == rFilterNm )
-                    return pFilter;
-                pFilter = aIter.Next();
-            }
-        }
-        if( pCnt || pFltCnt == SwWebDocShell::Factory().GetFilterContainer())
-            break;
-        pFltCnt = SwWebDocShell::Factory().GetFilterContainer();
-    } while( TRUE );
-
-    return 0;
-}
-
-
 /*  */
 
 /////////////// die Storage Reader/Writer ////////////////////////////////
@@ -459,11 +428,6 @@ BOOL SwReader::CheckPasswd( const String& rPasswd, const Reader& rOptions )
 #define FILTER_OPTION_ROOT      String::CreateFromAscii( \
                 RTL_CONSTASCII_STRINGPARAM( "Office.Writer/FilterFlags" ) )
 
-SwFilterOptions::SwFilterOptions()
-    : ConfigItem( FILTER_OPTION_ROOT )
-{
-}
-
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
                                   sal_uInt32* pValues )
     : ConfigItem( FILTER_OPTION_ROOT )
@@ -493,22 +457,6 @@ void SwFilterOptions::GetValues( sal_uInt16 nCnt, const sal_Char** ppNames,
     else
         for( n = 0; n < nCnt; ++n )
             pValues[ n ] = 0;
-}
-
-sal_Bool SwFilterOptions::CheckNodeContentExist( const sal_Char* pNode,
-                                                   const sal_Char* pCntnt )
-{
-    Sequence<OUString> aNames( GetNodeNames(
-                                        OUString::createFromAscii( pNode )));
-    sal_Bool bExist = sal_False;
-    const OUString* pNames = aNames.getConstArray();
-    for( long n = 0, nEnd = aNames.getLength(); n < nEnd; ++n, ++pNames )
-        if( !pNames->compareToAscii( pCntnt ))
-        {
-            bExist = sal_True;
-            break;
-        }
-    return bExist;
 }
 
 /*  */
