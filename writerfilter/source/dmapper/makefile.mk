@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: os $ $Date: 2006-11-02 12:37:25 $
+#   last change: $Author: os $ $Date: 2007-04-25 11:29:43 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -46,10 +46,12 @@ CDEFS+=-DWRITERFILTER_DLLIMPLEMENTATION
 
 # --- Files -------------------------------------
 
-SLOFILES=           $(SLO)$/ConversionHelper.obj \
+SLOFILES=           $(SLO)$/BorderHandler.obj \
+                    $(SLO)$/ConversionHelper.obj \
                     $(SLO)$/DomainMapper.obj \
                     $(SLO)$/DomainMapper_Impl.obj \
                     $(SLO)$/DomainMapperTableHandler.obj \
+                    $(SLO)$/DomainMapperTableManager.obj \
                     $(SLO)$/PropertyMap.obj  \
                     $(SLO)$/PropertyIds.obj  \
                     $(SLO)$/FontTable.obj   \
