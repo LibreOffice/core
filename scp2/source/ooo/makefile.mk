@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.49 $
+#   $Revision: 1.50 $
 #
-#   last change: $Author: vg $ $Date: 2007-01-10 11:28:13 $
+#   last change: $Author: rt $ $Date: 2007-04-25 16:19:06 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -197,6 +197,13 @@ SCPDEFS+=-DISOLANG_MAJOR=$(ISOLANG_MAJOR)
 
 .IF "$(DISABLE_NEON)" == "TRUE"
 SCPDEFS+=-DDISABLE_NEON
+.ENDIF
+
+.IF "$(ENABLE_VBA)" == "YES"
+    .IF "$(VBA_EXTENSION)" == "YES"
+        SCPDEFS+=-DVBA_EXTENSION
+    .ENDIF
+SCPDEFS+=-DENABLE_VBA
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
