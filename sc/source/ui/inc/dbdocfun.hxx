@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbdocfun.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 21:19:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:58:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,7 +117,7 @@ public:
     BOOL            Sort( SCTAB nTab, const ScSortParam& rSortParam,
                             BOOL bRecord, BOOL bPaint, BOOL bApi );
 
-    BOOL            Query( SCTAB nTab, const ScQueryParam& rQueryParam,
+    SC_DLLPUBLIC BOOL           Query( SCTAB nTab, const ScQueryParam& rQueryParam,
                             const ScRange* pAdvSource, BOOL bRecord, BOOL bApi );
 
     BOOL            DoSubTotals( SCTAB nTab, const ScSubTotalParam& rParam,
