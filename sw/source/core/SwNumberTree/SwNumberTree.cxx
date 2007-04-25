@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:36:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:58:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -928,21 +928,6 @@ SwNumberTreeNode::GetChildCount() const
     return mChildren.size();
 }
 
-bool SwNumberTreeNode::Contains(const SwNumberTreeNode * pChild) const
-{
-    bool bResult = false;
-
-    if (GetChildCount() > 0)
-    {
-        tSwNumberTreeChildren::const_iterator aIt = GetIterator(pChild);
-
-        if (aIt != mChildren.end())
-            bResult = true;
-    }
-
-    return bResult;
-}
-
 #ifdef __SW_NUMBER_TREE_SANITY_CHECK
 bool SwNumberTreeNode::IsSane(bool bRecursive) const
 {
@@ -1273,26 +1258,6 @@ void SwNumberTreeNode::ValidateMe()
 {
     if (mpParent)
         mpParent->Validate(this);
-}
-
-void SwNumberTreeNode::Notify(SwNumberTreeNode * pChild)
-{
-    tSwNumberTreeChildren::iterator aIt = GetIterator(pChild);
-
-    if (aIt != mChildren.end())
-    {
-        aIt++;
-
-        while (aIt != mChildren.end())
-        {
-            (*aIt)->Notify();
-
-            aIt++;
-        }
-    }
-
-    if (mpParent && IsContinuous())
-        mpParent->Notify(this);
 }
 
 void SwNumberTreeNode::NotifyNode()
