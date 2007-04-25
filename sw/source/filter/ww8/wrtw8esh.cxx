@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtw8esh.cxx,v $
  *
- *  $Revision: 1.95 $
+ *  $Revision: 1.96 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-19 13:21:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:23:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -676,11 +676,6 @@ void SwWW8Writer::DoFormText(const SwInputField * pFld)
 
     OutField(0, ww::eFORMTEXT, aEmptyStr, WRITEFIELD_CLOSE);
 }
-
-namespace wwUtility
-{
-    Graphic MakeSafeGDIMetaFile(const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj );
-};
 
 
 PlcDrawObj::~PlcDrawObj()
@@ -2998,61 +2993,6 @@ void SwEscherEx::WriteOCXControl( const SwFrmFmt& rFmt, UINT32 nShapeId )
 
         CloseContainer();   // ESCHER_SpContainer
     }
-}
-
-/*
- I actually want to use EMF not PNG but until issue #i2192# is resolved then I
- can't risk having a math object using starsymbol exported to word as it'll
- not render correctly :-(
-
- Optionally perhaps detect if a GDIMetafile is using {Open|Star}Symbol and if
- it is then use PNG, and if not use EMF. That would be a very acceptable
- compromise in my view.
-
- But currently just use wmf as we have always done :-(
-*/
-Graphic wwUtility::MakeSafeGDIMetaFile( const com::sun::star::uno::Reference < com::sun::star::embed::XEmbeddedObject >& xObj )
-{
-#if 1
-    if (xObj.is())
-    {
-        // TODO/LATER: not used currently, it's completely unclear if this is a problem
-        //xObj->GetGDIMetaFile(aMtf);
-        //return Graphic(aMtf);
-
-        // It would be better to retrieve the last representation from the storage (it could still be the original one!)
-        /*
-        embed::VisualRepresentation aRep = xObj->getPreferredVisualRepresentation( embed::Aspects::MSOLE_CONTENT );
-        uno::Sequence < sal_Int8 > aSeq;
-        aRep.Data >>= aSeq;
-        uno::Reference < io::XInputStream > xStream = new ::comphelper::SequenceInputStream( aSeq );
-        SvStream* pGraphicStream = ::utl::UcbStreamHelper::CreateStream( xStream );
-        if ( pGraphicStream && !pGraphicStream->GetError() )
-        {
-            GraphicFilter* pGF = GraphicFilter::GetGraphicFilter();
-            Graphic aGraphic;
-            String aEmptyStr;
-            pGF->ImportGraphic( aGraphic, aEmptyStr, *pGraphicStream, GRFILTER_FORMAT_DONTKNOW );
-            delete pGraphicStream;
-            return aGraphic;
-        }*/
-    }
-
-    return Graphic();
-#else
-    Graphic aGraphic;
-    if (xObj.Is())
-    {
-        GDIMetaFile aMtf;
-        xObj->GetGDIMetaFile(aMtf);
-        Size aSize(xObj->GetVisArea().GetSize());
-        MapUnit aUnit(xObj->GetMapUnit());
-        aMtf.SetPrefSize(aSize);
-        aMtf.SetPrefMapMode(aUnit);
-        aGraphic = Graphic(aMtf);
-    }
-    return aGraphic;
-#endif
 }
 
 void SwEscherEx::MakeZOrderArrAndFollowIds(
