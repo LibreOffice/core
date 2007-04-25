@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:46:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:58:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -547,8 +547,6 @@ public:
         @author OD
     */
     void InvalidateAccessibleParaTextSelection();
-
-    String GetMarkListDescription() const ;
 
     ViewShell( ViewShell&, Window *pWin = 0, OutputDevice *pOut = 0,
                 long nFlags = 0 );
