@@ -4,9 +4,9 @@
  *
  *  $RCSfile: atrfrm.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:16:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:07:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -638,49 +638,6 @@ BOOL SwFmtFrmSize::PutValue( const uno::Any& rVal, BYTE nMemberId )
     }
     return bRet;
 }
-
-Size  SwFmtFrmSize::GetSizeConvertedToSw31(
-                const SvxLRSpaceItem *pLRSpace,
-                const SvxULSpaceItem *pULSpace ) const
-{
-    // Sw4.0: Groesse enthaelt keine Raender
-    // Sw3.x: Groesse enthaelt Raender
-    // ==> Raender addieren
-    Size aNewSize = GetSize();
-    if( pLRSpace )
-    {
-        aNewSize.Width() += pLRSpace->GetLeft();
-        aNewSize.Width() += pLRSpace->GetRight();
-    }
-    if( pULSpace )
-    {
-        aNewSize.Height() += pULSpace->GetUpper();
-        aNewSize.Height() +=  pULSpace->GetLower();
-    }
-    return aNewSize;
-}
-
-Size  SwFmtFrmSize::GetSizeConvertedFromSw31(
-                const SvxLRSpaceItem *pLRSpace,
-                const SvxULSpaceItem *pULSpace ) const
-{
-    // Sw4.0: Groesse enthaelt keine Raender
-    // Sw3.x: Groesse enthaelt Raender
-    // ==> Raender subtrahieren
-    Size aNewSize = GetSize();
-    if( pLRSpace )
-    {
-        aNewSize.Width() -= pLRSpace->GetLeft();
-        aNewSize.Width() -= pLRSpace->GetRight();
-    }
-    if( pULSpace )
-    {
-        aNewSize.Height() -= pULSpace->GetUpper();
-        aNewSize.Height() -=  pULSpace->GetLower();
-    }
-    return aNewSize;
-}
-
 
 //  class SwFmtFillOrder
 //  Implementierung teilweise inline im hxx
@@ -1415,33 +1372,6 @@ SfxPoolItem*  SwFmtVertOrient::Clone( SfxItemPool* ) const
 }
 
 
-SwTwips  SwFmtVertOrient::GetPosConvertedToSw31(
-    const SvxULSpaceItem *pULSpace ) const
-{
-    SwTwips nNewPos = GetPos();
-
-    if( VERT_NONE==GetVertOrient() && pULSpace )
-    {
-        nNewPos -= pULSpace->GetUpper();
-    }
-
-    return nNewPos;
-}
-
-SwTwips  SwFmtVertOrient::GetPosConvertedFromSw31(
-    const SvxULSpaceItem *pULSpace ) const
-{
-    SwTwips nNewPos = GetPos();
-
-    if( VERT_NONE==GetVertOrient() && pULSpace )
-    {
-        nNewPos += pULSpace->GetUpper();
-    }
-
-    return nNewPos;
-}
-
-
 BOOL SwFmtVertOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
     // hier wird immer konvertiert!
@@ -1555,32 +1485,6 @@ SfxPoolItem*  SwFmtHoriOrient::Clone( SfxItemPool* ) const
     return new SwFmtHoriOrient( nXPos, eOrient, eRelation, bPosToggle );
 }
 
-
-SwTwips  SwFmtHoriOrient::GetPosConvertedToSw31(
-    const SvxLRSpaceItem *pLRSpace ) const
-{
-    SwTwips nNewPos = GetPos();
-
-    if( HORI_NONE==GetHoriOrient() && pLRSpace )
-    {
-        nNewPos -= pLRSpace->GetLeft();
-    }
-
-    return nNewPos;
-}
-
-SwTwips  SwFmtHoriOrient::GetPosConvertedFromSw31(
-    const SvxLRSpaceItem *pLRSpace ) const
-{
-    SwTwips nNewPos = GetPos();
-
-    if( HORI_NONE==GetHoriOrient() && pLRSpace )
-    {
-        nNewPos += pLRSpace->GetLeft();
-    }
-
-    return nNewPos;
-}
 
 BOOL SwFmtHoriOrient::QueryValue( uno::Any& rVal, BYTE nMemberId ) const
 {
@@ -1757,12 +1661,6 @@ sal_uInt32 SwFmtAnchor::mnOrderCounter = 0;
 sal_uInt32 SwFmtAnchor::GetOrder() const
 {
     return mnOrder;
-}
-
-// OD 2004-05-05 #i28701#
-void SwFmtAnchor::SetOrder( const sal_uInt32 _nNewOrder )
-{
-    mnOrder = _nNewOrder;
 }
 
 /*-----------------16.02.98 15:21-------------------
