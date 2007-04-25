@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:07:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:52:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,15 +209,7 @@ SdrPage* FmFormPage::Clone() const
 }
 
 //------------------------------------------------------------------
-void FmFormPage::NbcInsertObject(SdrObject* pObj,
-                                 sal_uInt32 nPos,
-                                 const SdrInsertReason* pReason)
-{
-    SdrPage::NbcInsertObject(pObj, nPos, pReason);
-}
-
-//------------------------------------------------------------------
-void FmFormPage::InsertObject(SdrObject* pObj, sal_uInt32 nPos,
+void FmFormPage::InsertObject(SdrObject* pObj, ULONG nPos,
                               const SdrInsertReason* pReason)
 {
     SdrPage::InsertObject( pObj, nPos, pReason );
@@ -308,13 +300,7 @@ sal_Bool FmFormPage::RequestHelp( Window* pWindow, SdrView* pView,
 }
 
 //------------------------------------------------------------------
-SdrObject* FmFormPage::NbcRemoveObject(sal_uInt32 nObjNum)
-{
-    return SdrPage::NbcRemoveObject(nObjNum);
-}
-
-//------------------------------------------------------------------
-SdrObject* FmFormPage::RemoveObject(sal_uInt32 nObjNum)
+SdrObject* FmFormPage::RemoveObject(ULONG nObjNum)
 {
     SdrObject* pObj = SdrPage::RemoveObject(nObjNum);
 #ifndef SVX_LIGHT
@@ -323,16 +309,3 @@ SdrObject* FmFormPage::RemoveObject(sal_uInt32 nObjNum)
 #endif
     return pObj;
 }
-
-//------------------------------------------------------------------
-SdrObject* FmFormPage::NbcReplaceObject(SdrObject* pNewObj, sal_uInt32 nObjNum)
-{
-    return SdrPage::NbcReplaceObject(pNewObj, nObjNum);
-}
-
-//------------------------------------------------------------------
-SdrObject* FmFormPage::ReplaceObject(SdrObject* pNewObj, sal_uInt32 nObjNum)
-{
-    return SdrPage::ReplaceObject(pNewObj, nObjNum);
-}
-
