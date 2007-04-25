@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvruler.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:01:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:59:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,7 +65,7 @@ ScCsvRuler::ScCsvRuler( ScCsvControl& rParent ) :
 // common ruler handling ------------------------------------------------------
 
 void ScCsvRuler::SetPosSizePixel(
-        sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_uInt16 nFlags )
+        long nX, long nY, long nWidth, long nHeight, USHORT nFlags )
 {
     if( nFlags & WINDOW_POSSIZE_HEIGHT )
         nHeight = GetTextHeight() + mnSplitSize + 2;
