@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleOutlineView.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:48:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:39:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -192,7 +192,7 @@ sal_Int32 SAL_CALL
 
 
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleOutlineView::getAccessibleChild (long nIndex)
+    AccessibleOutlineView::getAccessibleChild (sal_Int32 nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
     // Forward request to children manager.
