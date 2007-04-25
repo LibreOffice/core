@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:15:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2399,11 +2399,6 @@ ShellResource* ViewShell::GetShellRes()
 void ViewShell::SetCareWin( Window* pNew )
 {
     pCareWindow = pNew;
-}
-
-String ViewShell::GetMarkListDescription() const
-{
-    return Imp()->GetMarkListDescription();
 }
 
 
