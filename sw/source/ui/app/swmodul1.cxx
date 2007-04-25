@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swmodul1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:35:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:14:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -236,35 +236,6 @@ SwView* SwModule::GetNextView(SwView* pView)
     SwView* pNView = (SwView*)SfxViewShell::GetNext(*pView, &aTypeId, TRUE);
     return pNView;
 }
-
-/*------------------------------------------------------------------------
- Beschreibung:  Liefert UsrPref mit den Einstellungen des aktuellen
-                Fensters
-------------------------------------------------------------------------*/
-
-
-void SwModule::MakeUsrPref( SwViewOption &rToFill, sal_Bool bWeb ) const
-{
-        // Einstellungen Ansicht der Core setzen
-    SwView* pView = ::GetActiveView();
-    SwPagePreView* pPPView;
-
-    if(pView)
-    {
-        rToFill = *(pView->GetWrtShell().GetViewOptions());
-        SfxFrame* pTopFrame = pView->GetViewFrame()->GetTopFrame();
-        if( pTopFrame->GetChildFrameCount() != 0 )
-        {
-            rToFill.SetViewHRuler(pUsrPref->IsViewHRuler());
-            rToFill.SetViewVRuler(pUsrPref->IsViewVRuler());
-        }
-    }
-    else if( 0 != (pPPView = PTR_CAST( SwPagePreView, SfxViewShell::Current())) )
-        rToFill = *(pPPView->GetViewShell()->GetViewOptions());
-    else
-        rToFill = *((SwModule*)this)->GetUsrPref( bWeb );
-}
-
 
 /*------------------------------------------------------------------------
  Beschreibung:  Neuer Master fuer die Einstellungen wird gesetzt;
