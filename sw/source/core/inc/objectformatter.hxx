@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objectformatter.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2005-09-28 11:09:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:05:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,15 +234,6 @@ class SwObjectFormatter
         static bool FormatObjsAtFrm( SwFrm& _rAnchorFrm,
                                      const SwPageFrm& _rPageFrm,
                                      SwLayAction* _pLayAction = 0L );
-
-        /** method to format all as-character anchored floating screen objects
-            at the given anchor frame
-
-            @author OD
-        */
-        static bool FormatAsCharAnchoredObjsAtFrm( SwFrm& _rAnchorFrm,
-                                                   const SwPageFrm& _rPageFrm,
-                                                   SwLayAction* _pLayAction = 0L );
 
         /** method to format a given floating screen object
 
