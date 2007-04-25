@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 02:03:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -242,9 +242,6 @@ public:
     void SetPoolHelpId( USHORT nId )    { aMaster.SetPoolHelpId( nId ); }
     BYTE GetPoolHlpFileId() const       { return aMaster.GetPoolHlpFileId(); }
     void SetPoolHlpFileId( BYTE nId )   { aMaster.SetPoolHlpFileId( nId ); }
-    // erfrage die Attribut-Beschreibung, returnt den reingereichten String
-    void GetPresentation( SfxItemPresentation ePres,
-        SfxMapUnit eCoreMetric, SfxMapUnit ePresMetric, String &rText ) const;
 
         // erfrage vom Client Informationen
     virtual BOOL GetInfo( SfxPoolItem& ) const;
