@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:09:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:59:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -696,11 +696,6 @@ USHORT SwAccessiblePortionData::FillSpecialPos(
     }
 
     return static_cast<USHORT>( nModelPos );
-}
-
-sal_Bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
-{
-    return IsGrayPortion( FindBreak( aAccessiblePositions, nPos ) );
 }
 
 void SwAccessiblePortionData::AdjustAndCheck(
