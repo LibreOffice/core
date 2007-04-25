@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:52:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,8 +89,6 @@ protected:
             const USHORT* pWhichRanges, SwFmt *pDrvdFrm, USHORT nFmtWhich );
     SwFmt( SwAttrPool& rPool, const String &rFmtNm, const USHORT* pWhichRanges,
             SwFmt *pDrvdFrm, USHORT nFmtWhich );
-    SwFmt( SwAttrPool& rPool, const String &rFmtNm, USHORT nWhich1,
-            USHORT nWhich2, SwFmt *pDrvdFrm, USHORT nFmtWhich );
     SwFmt( const SwFmt& rFmt );
 
 public:
