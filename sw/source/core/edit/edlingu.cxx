@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edlingu.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:47:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:03:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -740,15 +740,6 @@ void SwHyphIter::InsertSoftHyph( const xub_StrLen nHyphPos )
 }
 
 // --------------------- Methoden der SwEditShell ------------------------
-
-/*************************************************************************
- *                      SwEditShell::HasSpellIter
- *************************************************************************/
-
-BOOL SwEditShell::HasSpellIter() const
-{
-    return 0 != pSpellIter;
-}
 
 /*************************************************************************
  *                      SwEditShell::HasConvIter
