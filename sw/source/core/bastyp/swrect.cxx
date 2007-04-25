@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:43:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:00:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,61 +257,6 @@ void SwRect::Justify()
     }
 }
 
-/*************************************************************************
-|*
-|*  SwRect::GetDistance()
-|*
-|*  Ersterstellung      MB 24. Mov. 04
-|*
-|*************************************************************************/
-
-float SwRect::GetDistance( const Point &rPOINT, Point rClosest ) const {
-
-    // 2d intervall or rectangle area
-    const long fXMin = Left();
-    const long fXMax = Right();
-    const long fYMin = Top();
-    const long fYMax = Bottom();
-
-    float fSqrDistance = 0.0f;
-    rClosest = rPOINT;
-
-    // A point is in the box whenever xmin <= x <= xmax and
-    // ymin <= y <= ymax and zmin <= z <= zmax.
-    if(!(IsInside(rPOINT))) {
-
-        if(rPOINT.X() < fXMin) {
-            long fDelta = rPOINT.X() - fXMin;
-            fSqrDistance += fDelta*fDelta;
-            rClosest.X() = fXMin;
-        }
-        else if(rPOINT.X() > fXMax) {
-            long fDelta = rPOINT.X() - fXMax;
-            fSqrDistance += fDelta*fDelta;
-            rClosest.X() = fXMax;
-        }
-        else {
-            rClosest.X() = rPOINT.X();
-        }
-
-        if(rPOINT.Y() < fYMin ) {
-            long fDelta = rPOINT.Y() - fYMin;
-            fSqrDistance += fDelta*fDelta;
-            rClosest.Y() = fYMin;
-        }
-        else if(rPOINT.Y() > fYMax) {
-            long fDelta = rPOINT.Y() - fYMax;
-            fSqrDistance += fDelta*fDelta;
-            rClosest.Y() = fYMax;
-        }
-        else {
-            rClosest.Y() = rPOINT.Y();
-        }
-    }
-
-    return sqrt(fSqrDistance);
-}
-
 
 // Similiar to the inline methods, but we need the function pointers
 
@@ -337,9 +282,7 @@ void SwRect::SubTop( const long nSub ){ nHeight += nSub; nY -= nSub; }
 void SwRect::AddBottom( const long nAdd ){ nHeight += nAdd; }
 void SwRect::SetPosX( const long nNew ){ nX = nNew; }
 void SwRect::SetPosY( const long nNew ){ nY = nNew; }
-const Point SwRect::_Pos()  const { return Pos(); }
 const Size  SwRect::_Size() const { return SSize(); }
-const Point SwRect::SwappedPos()  const { return Point( nY, nX ); }
 const Size  SwRect::SwappedSize() const { return Size( nHeight, nWidth ); }
 const Point SwRect::TopLeft() const { return Pos(); }
 const Point SwRect::TopRight() const { return Point( nX + nWidth, nY ); }
@@ -372,8 +315,6 @@ void SwRect::SetUpperRightCorner(  const Point& rNew )
     { nX = rNew.nA - nWidth; nY = rNew.nB; }
 void SwRect::SetLowerLeftCorner(  const Point& rNew )
     { nX = rNew.nA; nY = rNew.nB - nHeight; }
-void SwRect::SetLowerRightCorner(  const Point& rNew )
-    { nX = rNew.nA - nWidth; nY = rNew.nB - nHeight; }
 
 #ifndef PRODUCT
 /*************************************************************************
