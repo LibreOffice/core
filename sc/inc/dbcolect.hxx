@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbcolect.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:55:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:56:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ public:
             void        GetName(String& rName) const    { rName = aName; }
             void        SetName(const String& rName)    { aName = rName; }
             void        GetArea(SCTAB& rTab, SCCOL& rCol1, SCROW& rRow1, SCCOL& rCol2, SCROW& rRow2) const;
-            void        GetArea(ScRange& rRange) const;
+            SC_DLLPUBLIC void       GetArea(ScRange& rRange) const;
             void        SetArea(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
             void        MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
             BOOL        IsByRow() const                 { return bByRow; }
@@ -190,7 +190,7 @@ public:
             void        GetSortParam(ScSortParam& rSortParam) const;
             void        SetSortParam(const ScSortParam& rSortParam);
 
-            void        GetQueryParam(ScQueryParam& rQueryParam) const;
+            SC_DLLPUBLIC void       GetQueryParam(ScQueryParam& rQueryParam) const;
             void        SetQueryParam(const ScQueryParam& rQueryParam);
             BOOL        GetAdvancedQuerySource(ScRange& rSource) const;
             void        SetAdvancedQuerySource(const ScRange* pSource);
