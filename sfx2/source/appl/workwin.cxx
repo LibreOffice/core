@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:26:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:02:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2142,7 +2142,7 @@ void SfxWorkWindow::ConfigChild_Impl(SfxChildIdentifier eChild,
 
 //--------------------------------------------------------------------
 
-void SfxWorkWindow::SetChildWindowVisible_Impl( ULONG lId, BOOL bEnabled, USHORT nMode )
+void SfxWorkWindow::SetChildWindowVisible_Impl( sal_uInt32 lId, BOOL bEnabled, USHORT nMode )
 {
     USHORT nInter = (USHORT) ( lId >> 16 );
     USHORT nId = (USHORT) ( lId & 0xFFFF );
