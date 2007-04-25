@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 08:02:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:10:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,29 +66,6 @@ sal_Bool SwWrongList::InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const
     return sal_False;
 }
 
-sal_Bool SwWrongList::InWrongWordSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn ) const
-{
-   MSHORT nPos = GetPos( rChk );
-   xub_StrLen nWrPos;
-   if( nPos < Count() && ( nWrPos = Pos( nPos ) ) <= rChk )
-   {
-       rLn = Len( nPos );
-       if( nWrPos + rLn <= rChk )
-           return sal_False;
-       rChk = nWrPos;
-
-       // check subposition
-       SwWrongList* pWrongList = SubList(nPos);
-       if (pWrongList)
-       {
-         return pWrongList->InWrongWord(sub_rChk, sub_rLn);
-       }
-
-       return sal_True;
-   }
-   return sal_False;
-}
-
 /*************************************************************************
  * sal_Bool SwWrongList::Check() liefert den ersten falschen Bereich
  *************************************************************************/
@@ -126,59 +103,6 @@ sal_Bool SwWrongList::Check( xub_StrLen &rChk, xub_StrLen &rLn ) const
     return sal_False;
 }
 
-sal_Bool SwWrongList::CheckSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn  ) const
-{
-    MSHORT nPos = GetPos( rChk );
-    rLn += rChk;
-    xub_StrLen nWrPos;
-    sal_Bool subListResult = sal_False;
-
-    if( nPos == Count() )
-        return sal_False;
-
-    xub_StrLen nEnd = Len( nPos );
-    nEnd += ( nWrPos = Pos( nPos ) );
-
-    // Check sublist at current position
-    SwWrongList *pWrongList = SubList(nPos);
-    if (pWrongList)
-    {
-        subListResult = pWrongList->Check(sub_rChk, sub_rLn);
-    }
-
-    if( nEnd == rChk )
-    {
-        ++nPos;
-        if( nPos == Count() )
-            return sal_False;
-        else
-        {
-            nEnd = Len( nPos );
-            nEnd += ( nWrPos = Pos( nPos ) );
-
-            pWrongList = SubList(nPos);
-            if (pWrongList)
-            {
-                subListResult = pWrongList->Check(sub_rChk, sub_rLn);
-            }
-        }
-    }
-
-    if( nEnd > rChk && nWrPos < rLn )
-    {
-        if( nWrPos > rChk )
-            rChk = nWrPos;
-        if( nEnd < rLn )
-            rLn = nEnd;
-        rLn -= rChk;
-        if (pWrongList)
-            return subListResult;
-        else
-            return (0 != rLn);
-    }
-    return sal_False;
-}
-
 /*************************************************************************
  * xub_StrLen SwWrongList::NextWrong() liefert die naechste Fehlerposition
  *************************************************************************/
@@ -203,38 +127,6 @@ xub_StrLen SwWrongList::NextWrong( xub_StrLen nChk ) const
     if( nRet > GetBeginInv() && nChk < GetEndInv() )
         nRet = nChk > GetBeginInv() ? nChk : GetBeginInv();
     return nRet;
-}
-
-void SwWrongList::NextWrongSub( xub_StrLen &nChk, xub_StrLen &nSubChk ) const
-{
-    xub_StrLen nRet;
-    xub_StrLen nSubRet = STRING_LEN;
-    xub_StrLen nPos = GetPos( nChk );
-    if( nPos < Count() )
-    {
-        nRet = Pos( nPos );
-        if( nRet < nChk && nRet + Len( nPos ) <= nChk )
-        {
-            if( ++nPos < Count() )
-                nRet = Pos( nPos );
-            else
-                nRet = STRING_LEN;
-        }
-    }
-    else
-        nRet = STRING_LEN;
-
-    SwWrongList* pWrongList = SubList(nPos);
-    if (pWrongList)
-    {
-        nSubRet = pWrongList->NextWrong(nSubChk);
-    }
-
-    if( nRet > GetBeginInv() && nChk < GetEndInv() )
-        nRet = nChk > GetBeginInv() ? nChk : GetBeginInv();
-
-    nChk = nRet;
-    nSubChk = nSubRet;
 }
 
 /*************************************************************************
