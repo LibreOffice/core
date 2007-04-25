@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvruler.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:21:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:00:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,9 +92,9 @@ public:
     using Window::SetPosSizePixel;
     /** Sets position and size of the ruler. The height is calculated internally. */
     virtual void                SetPosSizePixel(
-                                    sal_Int32 nX, sal_Int32 nY,
-                                    sal_Int32 nWidth, sal_Int32 nHeight,
-                                    sal_uInt16 nFlags = WINDOW_POSSIZE_ALL );
+                                    long nX, long nY,
+                                    long nWidth, long nHeight,
+                                    USHORT nFlags = WINDOW_POSSIZE_ALL );
 
     /** Apply current layout data to the ruler. */
     void                        ApplyLayout( const ScCsvLayoutData& rOldData );
