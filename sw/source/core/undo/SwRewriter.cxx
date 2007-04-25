@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwRewriter.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:48:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -80,37 +80,6 @@ String SwRewriter::Apply(const String & rStr) const
 
     for (aIt = mRules.begin(); aIt != mRules.end(); aIt++)
         aResult.SearchAndReplaceAll(aIt->first, aIt->second);
-
-    return aResult;
-}
-
-vector<String> SwRewriter::Apply(const vector<String> & rStrs) const
-{
-    vector<String> aResult;
-    vector<String>::const_iterator aIt;
-
-    for (aIt = rStrs.begin(); aIt != rStrs.end(); aIt++)
-        aResult.push_back(Apply(*aIt));
-
-    return aResult;
-}
-
-String SwRewriter::ToString() const
-{
-    String aResult("[ \n", RTL_TEXTENCODING_ASCII_US);
-
-    vector<SwRewriteRule>::const_iterator aIt;
-
-    for (aIt = mRules.begin(); aIt != mRules.end(); aIt++)
-    {
-        aResult += String("  \"", RTL_TEXTENCODING_ASCII_US);
-        aResult += aIt->first;
-        aResult += String("\" -> \"", RTL_TEXTENCODING_ASCII_US);
-        aResult += aIt->second;
-        aResult += String("\"\n", RTL_TEXTENCODING_ASCII_US);
-    }
-
-    aResult += String("]", RTL_TEXTENCODING_ASCII_US);
 
     return aResult;
 }
