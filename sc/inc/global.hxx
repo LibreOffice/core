@@ -4,9 +4,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:00:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:57:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -579,8 +579,8 @@ SC_DLLPUBLIC    static ::utl::TransliterationWrapper* GetpTransliteration(); //C
 
     static const String&        GetClipDocName();
     static void                 SetClipDocName( const String& rNew );
-    static const SvxSearchItem& GetSearchItem();
-    static void                 SetSearchItem( const SvxSearchItem& rNew );
+    static SC_DLLPUBLIC const SvxSearchItem&    GetSearchItem();
+    static SC_DLLPUBLIC void                    SetSearchItem( const SvxSearchItem& rNew );
 SC_DLLPUBLIC    static ScAutoFormat*        GetAutoFormat();
     static void                 ClearAutoFormat(); //BugId 54209
     static FuncCollection*      GetFuncCollection();
