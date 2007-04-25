@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrong.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 16:53:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:06:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,6 @@ public:
     sal_Bool Check( xub_StrLen &rChk, xub_StrLen &rLn ) const;
     sal_Bool InWrongWord( xub_StrLen &rChk, xub_StrLen &rLn ) const;
     xub_StrLen NextWrong( xub_StrLen nChk ) const;
-
-    // used for sub positions check
-    sal_Bool CheckSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn  ) const;
-    sal_Bool InWrongWordSub( xub_StrLen &rChk, xub_StrLen &rLn, xub_StrLen &sub_rChk, xub_StrLen &sub_rLn ) const;
-    void NextWrongSub( xub_StrLen &nChk, xub_StrLen &nSubChk ) const;
 
     void Move( xub_StrLen nPos, long nDiff );
 
