@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfld.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:18:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:52:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,7 +119,6 @@ public:
     void                ChangeExpansion( const SwFrm*, const SwTxtFld* );
     void                InitContent();
     void                InitContent(const String& rExpansion);
-    String              GetOldContent();
 
     inline void         ChgBodyTxtFlag( BOOL bIsInBody );
 
