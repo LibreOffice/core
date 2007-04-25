@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2007-03-01 15:40:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:00:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -179,23 +179,6 @@ FASTBOOL SwCrsrShell::GoPrevCell()
     return bRet;
 }
 
-
-FASTBOOL SwCrsrShell::GotoTblBox( const String& rName )
-{
-    SwShellCrsr* pCrsr = pTblCrsr ? pTblCrsr : pCurCrsr;
-    SwCallLink aLk( *this );        // Crsr-Moves ueberwachen,
-
-    FASTBOOL bRet = pCrsr->GotoTblBox( rName );
-    if( bRet )
-    {
-        //JP 28.10.97: Bug 45028 - die "oberste" Position setzen fuer
-        //              wiederholte Kopfzeilen
-        pCrsr->GetPtPos() = Point();
-        UpdateCrsr( SwCrsrShell::SCROLLWIN | SwCrsrShell::CHKRANGE |
-                    SwCrsrShell::READONLY ); // und den akt. Updaten
-    }
-    return bRet;
-}
 
 const SwFrm* lcl_FindMostUpperCellFrm( const SwFrm* pFrm )
 {
