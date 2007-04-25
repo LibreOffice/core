@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DTable.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-16 12:17:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:32:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ namespace connectivity
             struct DBFColumn {                       /* Feldbezeichner               */
                                 BYTE    db_fnm[11];                     /* Feldname                     */
                                 BYTE    db_typ;                         /* Feldtyp                      */
-                                ULONG   db_adr;                         /* Feldadresse                  */
+                                UINT32  db_adr;                         /* Feldadresse                  */
                                 BYTE    db_flng;                        /* Feldlaenge                   */
                                 BYTE    db_dez;                         /* Dezimalstellen fuer N        */
                                 BYTE    db_frei2[14];                   /* reserviert                   */
