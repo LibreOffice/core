@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:58:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:40:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,7 +84,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (long nIndex)
+        getAccessibleChild (sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException);
 
 
