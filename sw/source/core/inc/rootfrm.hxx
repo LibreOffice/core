@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:20:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,12 +197,6 @@ public:
 #endif
 
     Point  GetNextPrevCntntPos( const Point &rPoint, BOOL bNext ) const;
-
-    //! Searches for the content frame that is closest to
-    //! the passed position. Additionally the parameter 'offset'
-    //! defines a direction [+/-] in which to step relative to
-    //! frame we found.
-    Point GetContentFromPos( const Point &rPoint, int offset ) const;
 
     virtual Size ChgSize( const Size& aNewSize );
 
