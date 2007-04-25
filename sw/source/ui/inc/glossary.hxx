@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 17:41:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:48:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,12 +115,12 @@ class SwGlTreeListBox : public SvTreeListBox
     virtual sal_Bool    NotifyMoving(   SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    sal_uInt32&        rNewChildPos
+                                    ULONG&        rNewChildPos
                                 );
     virtual sal_Bool    NotifyCopying(  SvLBoxEntry*  pTarget,
                                     SvLBoxEntry*  pEntry,
                                     SvLBoxEntry*& rpNewParent,
-                                    sal_uInt32&       rNewChildPos);
+                                    ULONG&        rNewChildPos);
 public:
     SwGlTreeListBox(Window* pParent, const ResId& rResId);
 
