@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gen.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:11:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:21:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -42,6 +42,8 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
+
+#include <limits.h>
 
 class SvStream;
 
@@ -254,8 +256,8 @@ inline Size::Size( long nWidth, long nHeight ) :
 // - Range -
 // ---------
 
-#define RANGE_MIN   ((long)0x80000000L)
-#define RANGE_MAX   0x7FFFFFFFL
+#define RANGE_MIN   LONG_MIN
+#define RANGE_MAX   LONG_MAX
 
 class Range : public Pair
 {
@@ -302,8 +304,8 @@ inline void Range::Justify()
 // - Selection -
 // -------------
 
-#define SELECTION_MIN   ((long)0x80000000L)
-#define SELECTION_MAX   0x7FFFFFFFL
+#define SELECTION_MIN   LONG_MIN
+#define SELECTION_MAX   LONG_MAX
 
 class Selection : public Pair
 {
