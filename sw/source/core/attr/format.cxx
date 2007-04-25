@@ -4,9 +4,9 @@
  *
  *  $RCSfile: format.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 10:52:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:59:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,24 +104,6 @@ SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm,
     bWritten = bFmtInDTOR = bAutoUpdateFmt = FALSE; // LAYER_IMPL
     bAutoFmt = TRUE;
 
-    if( pDrvdFrm )
-        aSet.SetParent( &pDrvdFrm->aSet );
-}
-
-
-SwFmt::SwFmt( SwAttrPool& rPool, const String &rFmtNm, USHORT nWhich1,
-                USHORT nWhich2, SwFmt *pDrvdFrm, USHORT nFmtWhich )
-    : SwModify( pDrvdFrm ),
-    aFmtName( rFmtNm ),
-    aSet( rPool, nWhich1, nWhich2 ),
-    nWhichId( nFmtWhich ),
-    nFmtId( 0 ),
-    nPoolFmtId( USHRT_MAX ),
-    nPoolHelpId( USHRT_MAX ),
-    nPoolHlpFileId( UCHAR_MAX )
-{
-    bWritten = bFmtInDTOR = bAutoUpdateFmt = FALSE; // LAYER_IMPL
-    bAutoFmt = TRUE;
     if( pDrvdFrm )
         aSet.SetParent( &pDrvdFrm->aSet );
 }
