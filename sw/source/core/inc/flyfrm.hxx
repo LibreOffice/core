@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flyfrm.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:13:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:05:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -237,7 +237,6 @@ public:
     BOOL GetContour( PolyPolygon&   rContour,
                      const sal_Bool _bForPaint = sal_False ) const;
 
-    BOOL ConvertHoriTo40( SwHoriOrient &rHori, SwRelationOrient &rRel, SwTwips &rPos ) const;
 
     //Auf dieser Shell painten (PreView, Print-Flag usw. rekursiv beachten)?.
     static BOOL IsPaint( SdrObject *pObj, const ViewShell *pSh );
