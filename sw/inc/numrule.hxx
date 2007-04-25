@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-22 09:18:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:55:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,8 +115,6 @@ public:
     SwNumFmt& operator=( const SwNumFmt& );
     BOOL operator==( const SwNumFmt& ) const;
     BOOL operator!=( const SwNumFmt& r ) const { return !(*this == r); }
-
-    const Graphic* GetGraphic() const;
 
     SwCharFmt* GetCharFmt() const { return (SwCharFmt*)pRegisteredIn; }
     void SetCharFmt( SwCharFmt* );
@@ -306,13 +304,6 @@ public:
     BYTE GetPoolHlpFileId() const       { return nPoolHlpFileId; }
     void SetPoolHlpFileId( BYTE nId )   { nPoolHlpFileId = nId; }
 
-    /**
-        #109308# Sets adjustment in all formats of the numbering rule.
-
-        @param eNum adjustment to be set
-    */
-    void SetNumAdjust(SvxAdjust eNum);
-
     void        SetSvxRule(const SvxNumRule&, SwDoc* pDoc);
     SvxNumRule  MakeSvxNumRule() const;
 
@@ -348,8 +339,6 @@ public:
     void Validate();
     void NewNumberRange(const SwPaM & rPam);
     void AddNumber(SwNodeNum * pNdNum, unsigned int nLevel);
-
-    String ToString() const;
 };
 
 // --> OD 2006-06-27 #b6440955#
