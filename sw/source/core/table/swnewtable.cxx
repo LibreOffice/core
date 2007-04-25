@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swnewtable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-07 13:23:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:10:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,61 +113,6 @@ BOOL SwTable::NewMerge( SwDoc* pDoc, const SwSelBoxes& rBoxes,
     return TRUE;
 }
 
-/** lcl_ExpandMinMax(..) examines the given table line.
-
-All boxes will be checked if they overlap to the given (horizontal) range (rMin, rMax)
-If a box overlaps only partial the range will be expanded.
-
-@param rMin
-if a box starts before rMin but ends behind, rMin will be decremented
-to the left border of this box
-
-@param rMax
-if a box starts before rMax but ends behind, rMax will be incremented
-to the right border of this box
-
-@param rLine
-the row (table line) to examine
-
-@return true if the range has been expanded, false otherwise
-
-*/
-
-bool lcl_ExpandMinMax( long& rMin, long& rMax, const SwTableLine& rLine )
-{
-    // nNewMin will become the left border of the first box which overlaps
-    // bLookForMin will be set to false, if it has been found
-    bool bLookForMin = true;
-    long nNewMin = 0;
-    // nNewMax will become the right border of the last overlapping box
-    long nNewMax = 0;
-
-    USHORT nCount = rLine.GetTabBoxes().Count();
-    for( USHORT nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
-    {
-        SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
-        ASSERT( pBox, "Missing table box" );
-        long nWidth = pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-        if( bLookForMin && nNewMin + nWidth <= rMin )
-            nNewMin += nWidth; // boxes with right border before rMin
-        else
-            bLookForMin = false; // boxes with right border behind rMin
-        if( nNewMax < rMax ) // left border before rMax
-            nNewMax += nWidth;
-        else
-            break; // right border behind rMax => Done.
-    }
-    ASSERT( nNewMax >= rMax, "Funny widths" );
-    bool bRet = nNewMin < rMin; // Left border has to be expanded
-    rMin = nNewMin;
-    if( rMax < nNewMax ) // right border has to be expanded
-    {
-        rMax = nNewMax;
-        bRet = true;
-    }
-    return bRet;
-}
-
 /** lcl_CheckMinMax helps evaluating (horizontal) min/max of boxes
 
 lcl_CheckMinMax(..) compares the left border and the right border
@@ -215,45 +160,6 @@ void lcl_CheckMinMax( long& rMin, long& rMax, const SwTableLine& rLine, USHORT n
     nNew -= nWidth; // nNew becomes the left border of the wished box
     if( bSet || nNew < rMin )
         rMin = nNew;
-}
-
-/** lcl_CheckRowSpan(..) looks for row span in a given range
-
-given the range (logical x-values), the boxes in the given line were examined,
-if they overlap with the range and if they have a row span < 0
-
-@param nMin
-the left border of the interesting area
-
-@param
-the right border
-
-@param rLine
-the row (table line) to check
-
-@return the most negativ row span in the line which overlaps completely within the range
-
-*/
-
-long lcl_CheckRowSpan( long nMin, long nMax, const SwTableLine& rLine )
-{
-    long nSpan = 0;
-    long nLeft = 0; // the left border of the current box
-    long nRight = 0; // the right border of the current box
-    USHORT nCount = rLine.GetTabBoxes().Count();
-    for( USHORT nCurrBox = 0; nCurrBox < nCount; ++nCurrBox )
-    {
-        nLeft = nRight;
-        SwTableBox* pBox = rLine.GetTabBoxes()[nCurrBox];
-        ASSERT( pBox, "Missing table box" );
-        nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-        if( nLeft >= nMin && nRight <= nMax && pBox->getRowSpan() < 1 &&
-            nSpan > pBox->getRowSpan() )
-            nSpan = pBox->getRowSpan(); // overlapping box with row span found
-        if( nRight > nMax )
-            return nSpan; // the next boxes will start behind nMax => done.
-    }
-    return nSpan;
 }
 
 /** lcl_Box2LeftBorder(..) delivers the left (logical) border of a table box
@@ -698,14 +604,6 @@ void lcl_InvalidateCellFrm( const SwTableBox& rBox )
                 pLower->_InvalidateSize();
         }
     }
-}
-
-long lcl_SumBoxWidth( const SwTableBoxes& rBoxes )
-{
-    long nSum = 0;
-    for( USHORT i = 0; i < rBoxes.Count(); ++i )
-        nSum += rBoxes[i]->GetFrmFmt()->GetFrmSize().GetWidth();
-    return nSum;
 }
 
 long lcl_InsertPosition( SwTable &rTable, std::vector<USHORT>& rInsPos,
@@ -1965,62 +1863,6 @@ void SwTable::PrepareDeleteCol( long nMin, long nMax )
             }
         }
     }
-}
-
-bool SwTable::IsSelectionRectangular( const SwSelBoxes& rBoxes ) const
-{
-    ASSERT( IsNewModel(), "Don't call me for old tables" );
-    if( !aLines.Count() || !rBoxes.Count() || !IsNewModel() )
-        return true;
-    bool bRet = true;
-    long nMin = -1;
-    long nMax = -1;
-    USHORT nBox = 0;
-    USHORT nLineCnt = aLines.Count();
-    USHORT nBoxCnt = rBoxes.Count();
-    SwTableLine* pLine = rBoxes[0]->GetUpper();
-    USHORT nLinePos = aLines.C40_GETPOS( SwTableLine, pLine );
-
-    for( USHORT nRow = nLinePos; bRet && nRow < nLineCnt && nBox < nBoxCnt; ++nRow )
-    {
-        pLine = aLines[nRow];
-        USHORT nCols = pLine->GetTabBoxes().Count();
-        long nLeft = 0;
-        long nRight = 0;
-        for( USHORT nCurrBox = 0; bRet && nCurrBox < nCols; ++nCurrBox )
-        {
-            nLeft = nRight;
-            SwTableBox* pBox = pLine->GetTabBoxes()[nCurrBox];
-            nRight += pBox->GetFrmFmt()->GetFrmSize().GetWidth();
-            if( pBox == rBoxes[nBox] )
-            {
-                if( nRow == nLinePos )
-                {
-                    if( nMin < 0 )
-                    {
-                        nMin = nLeft;
-                        nMax = nRight;
-                    }
-                    else
-                    {
-                        bRet = nLeft == nMax;
-                        nMax = nRight;
-                    }
-                }
-                else
-                    bRet = nLeft >= nMin && nRight <= nMax;
-                if( ++nBox >= nBoxCnt )
-                {
-                    if( nRight != nMax )
-                        bRet = false;
-                    break;
-                }
-            }
-            else if( nMin >= 0 )
-                bRet = nLeft >= nMax || nRight <= nMin;
-        }
-    }
-    return bRet;
 }
 
 void SwTable::ExpandSelection( SwSelBoxes& rBoxes ) const
