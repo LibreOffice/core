@@ -4,9 +4,9 @@
  *
  *  $RCSfile: PropertyIds.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-04-10 09:31:01 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,6 +187,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_RIGHT_BORDER          :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RightBorder"));break;
             case PROP_TOP_BORDER            :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopBorder"));break;
             case PROP_BOTTOM_BORDER         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("BottomBorder"));break;
+            case PROP_TABLE_BORDER         :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TableBorder"));break;
             case PROP_LEFT_BORDER_DISTANCE  :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("LeftBorderDistance")); break;
             case PROP_RIGHT_BORDER_DISTANCE :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RightBorderDistance")); break;
             case PROP_TOP_BORDER_DISTANCE   :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopBorderDistance"));break;
@@ -292,7 +293,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_CREATE_FROM_OUTLINE    :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromOutline")); break;
             case PROP_CREATE_FROM_MARKS      :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CreateFromMarks")); break;
             case PROP_STANDARD               :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Standard")); break;
-//            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
+            case PROP_IS_SPLIT_ALLOWED       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("IsSplitAllowed")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;
 //            case       :    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("")); break;

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper_Impl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fridrich_strba $ $Date: 2007-03-29 15:44:45 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:35:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,8 +51,8 @@
 #include <doctok/resourceids.hxx>
 #include <ooxml/resourceids.hxx>
 #endif
-#ifndef INCLUDED_TABLE_MANAGER_HXX
-#include <doctok/TableManager.hxx>
+#ifndef INCLUDED_DOMAIN_MAPPER_TABLE_MANAGER_HXX
+#include <DomainMapperTableManager.hxx>
 #endif
 #ifndef INCLUDED_DMAPPER_PROPERTYMAP_HXX
 #include <PropertyMap.hxx>
@@ -208,7 +208,7 @@ private:
     bool                                                                            m_bSetUserFieldContent;
     bool                                                                            m_bIsFirstSection;
 
-    TableManager_t m_TableManager;
+    DomainMapperTableManager m_TableManager;
 
     //each context needs a stack of currently used attributes
     FIB                     m_aFIB;

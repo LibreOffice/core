@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapper.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2007-04-23 09:11:31 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,19 +127,19 @@ DomainMapper::~DomainMapper()
 /*-- 09.06.2006 09:52:12---------------------------------------------------
 
 -----------------------------------------------------------------------*/
-void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
+void DomainMapper::attribute(doctok::Id nName, doctok::Value & val)
 {
 
     sal_Int32 nIntValue = val.getInt();
     rtl::OUString sStringValue = val.getString();
     // printf("*** attribute *** 0x%.8x *** 0x%.8x *** %s *** attribute ***\n", (unsigned int)Name, (unsigned int)nIntValue, OUStringToOString(sStringValue, RTL_TEXTENCODING_UTF8).getStr());
-    if( Name >= NS_rtf::LN_WIDENT && Name <= NS_rtf::LN_LCBSTTBFUSSR )
-        m_pImpl->GetFIB().SetData( Name, nIntValue );
+    if( nName >= NS_rtf::LN_WIDENT && nName <= NS_rtf::LN_LCBSTTBFUSSR )
+        m_pImpl->GetFIB().SetData( nName, nIntValue );
     else
     {
 
         /* WRITERFILTERSTATUS: table: attributedata */
-        switch( Name )
+        switch( nName )
         {
             /* attributes to be ignored */
         case NS_rtf::LN_UNUSED4:
@@ -1109,7 +1109,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_LCBSTTBFUSSR:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             {
-                m_pImpl->GetFIB().SetData( Name, nIntValue );
+                m_pImpl->GetFIB().SetData( nName, nIntValue );
             }
             break;
         case NS_rtf::LN_FN:
@@ -1194,16 +1194,43 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
             break;
         case NS_rtf::LN_BRCTOP:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
         case NS_rtf::LN_BRCLEFT:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
         case NS_rtf::LN_BRCBOTTOM:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
         case NS_rtf::LN_BRCRIGHT:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
-            break;
+        {
+            table::BorderLine aBorderLine;
+            sal_Int32 nLineDistance = ConversionHelper::MakeBorderLine( nIntValue, aBorderLine );
+            (void)nLineDistance;
+            PropertyIds eBorderId = PROP_LEFT_BORDER;
+            PropertyIds eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
+            switch( nName )
+            {
+                case NS_rtf::LN_BRCTOP:
+                    eBorderId = PROP_TOP_BORDER            ;
+                    eBorderDistId = PROP_TOP_BORDER_DISTANCE;
+                break;
+                case NS_rtf::LN_BRCLEFT:
+//                    eBorderId = PROP_LEFT_BORDER;
+//                    eBorderDistId = PROP_LEFT_BORDER_DISTANCE  ;
+                break;
+                case NS_rtf::LN_BRCBOTTOM:
+                    eBorderId = PROP_BOTTOM_BORDER         ;
+                    eBorderDistId = PROP_BOTTOM_BORDER_DISTANCE;
+                break;
+                case NS_rtf::LN_BRCRIGHT:
+                    eBorderId = PROP_RIGHT_BORDER          ;
+                    eBorderDistId = PROP_RIGHT_BORDER_DISTANCE ;
+                break;
+                default:;
+            }
+            //todo: where to put the border properties
+            //rContext->Insert(eBorderId, uno::makeAny( aBorderLine ));
+            //rContext->Insert(eBorderDistId, uno::makeAny( nLineDistance ));
+        }
+        break;
         case NS_rtf::LN_IBKL:
             /* WRITERFILTERSTATUS: done: 0, planned: 0.5, spent: 0 */
             break;
@@ -1391,7 +1418,7 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
         case NS_rtf::LN_JC:
             /* WRITERFILTERSTATUS: done: 100, planned: 0.5, spent: 0 */
             //tab justification
-            m_pImpl->ModifyCurrentTabStop(Name, nIntValue);
+            m_pImpl->ModifyCurrentTabStop(nName, nIntValue);
             break;
         case NS_rtf::LN_UNUSED0_6:
             /* WRITERFILTERSTATUS: done: 0, planned: 0, spent: 0 */
@@ -1582,9 +1609,8 @@ void DomainMapper::attribute(doctok::Id Name, doctok::Value & val)
 -----------------------------------------------------------------------*/
 void DomainMapper::sprm(doctok::Sprm & sprm_)
 {
-    m_pImpl->getTableManager().sprm(sprm_);
-
-    DomainMapper::sprm( sprm_, m_pImpl->GetTopContext() );
+    if( !m_pImpl->getTableManager().sprm(sprm_) )
+        DomainMapper::sprm( sprm_, m_pImpl->GetTopContext() );
 }
 /*-- 20.06.2006 09:58:33---------------------------------------------------
 
@@ -1772,6 +1798,10 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0x2416:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmPFInTable
+    case 0x6649: //sprmPTableDepth
+        /* WRITERFILTERSTATUS: done: 1, planned: 0, spent: 0 */
+        //not handled via sprm but via text( 0x07 )
+    break;
     case 25: // "sprmPTtp" pap.fTtp
     case 0x2417:   // sprmPFTtp  was: Read_TabRowEnd
         break;
@@ -2667,7 +2697,6 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         rContext->Insert( PROP_HEIGHT, uno::makeAny( ConversionHelper::convertToMM100( nHeight ) ) );
     }
     break;
-    case 164:
     case 0xB01F:   // sprmSXaPage
     {
         /* WRITERFILTERSTATUS: done: 1, planned: 0.5, spent: 0 */
@@ -2875,24 +2904,16 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
         rContext->Insert(PROP_WRITING_MODE, uno::makeAny( nDirection ) );
     }
     break;  // sprmSTextFlow
-    case 0x5400:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmTJc
+    case 0x5400: // sprmTJc
     case 0x9601:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmTDxaLeft
     case 0x9602:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmTDxaGapHalf
     case 0x3403:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmTFCantSplit
     case 0x3404:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmTTableHeader
-    case 0xD605:
-        /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
-        break;  // sprmTTableBorders
+    case 0xD605: // sprmTTableBorders
+    {
+        OSL_ASSERT("table propeties should be handled by the table manager");
+    }
+    break;
     case 0xD606:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmTDefTable10
@@ -2935,6 +2956,7 @@ void DomainMapper::sprm( doctok::Sprm& sprm_, PropertyMapPtr rContext, SprmType 
     case 0xD626:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmTSetBrc10
+    case 164: // sprmTSetShd
     case 0x7627:
         /* WRITERFILTERSTATUS: done: 0, planned: 2, spent: 0 */
         break;  // sprmTSetShd
@@ -3105,7 +3127,7 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
 {
     try
     {
-        m_pImpl->getTableManager().text(data_, len);
+
 
         bool bContinue = true;
         //TODO: Determine the right text encoding (FIB?)
@@ -3117,6 +3139,7 @@ void DomainMapper::text(const sal_uInt8 * data_, size_t len)
             {
                 case 0x0c: break; //page break
                 case 0x07:
+                    m_pImpl->getTableManager().text(data_, len);
                 case 0x0d:
                     m_pImpl->finishParagraph(m_pImpl->GetTopContextOfType(CONTEXT_PARAGRAPH)); break;
                 case 0x13: m_pImpl->PushFieldContext();break;

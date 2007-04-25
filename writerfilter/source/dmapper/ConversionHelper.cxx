@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ConversionHelper.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2006-12-13 14:51:19 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -131,10 +131,11 @@ sal_Int32 MakeBorderLine( sal_Int32 nSprmValue, table::BorderLine& rToFill )
     sal_Int32 nLineColor    = (nSprmValue & 0xff0000)>>16;
     sal_Int32 nLineDistance = (((nSprmValue & 0x3f000000)>>24) * 2540 + 36)/72L;
     sal_Int32 nLineThickness = TWIP_TO_MM100(nLineThicknessTwip);
-    return MakeBorderLine( nLineThickness, nLineType, nLineColor, nLineDistance, rToFill);
+    MakeBorderLine( nLineThickness, nLineType, nLineColor, rToFill);
+    return nLineDistance;
 }
-sal_Int32 MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
-                                            sal_Int32 nLineColor,       sal_Int32 nLineDistance,
+void MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
+                                            sal_Int32 nLineColor,
                                             table::BorderLine& rToFill )
 {
     static const sal_Int32 aBorderDefColor[] =
@@ -323,7 +324,6 @@ sal_Int32 MakeBorderLine( sal_Int32 nLineThickness,   sal_Int32 nLineType,
     rToFill.InnerLineWidth = aLineTab[eCodeIdx].nIn;
     rToFill.OuterLineWidth = aLineTab[eCodeIdx].nOut;
     rToFill.LineDistance = aLineTab[eCodeIdx].nDist;
-    return nLineDistance;
 }
 
 void lcl_SwapQuotesInField(::rtl::OUString &rFmt)

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DomainMapperTableHandler.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:30:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,29 +48,37 @@ namespace dmapper {
 
 typedef ::com::sun::star::text::XTextRange TextRange_t;
 typedef ::com::sun::star::uno::Reference< TextRange_t > Handle_t;
-typedef ::com::sun::star::uno::Sequence< Handle_t> HandleSequence_t;
-typedef boost::shared_ptr<HandleSequence_t> HandleSequencePointer_t;
-typedef ::com::sun::star::uno::Sequence< HandleSequence_t> HandleSequence2_t;
-typedef boost::shared_ptr<HandleSequence2_t> HandleSequence2Pointer_t;
-typedef ::com::sun::star::uno::Sequence< HandleSequence2_t> HandleSequence3_t;
-typedef boost::shared_ptr<HandleSequence3_t> HandleSequence3Pointer_t;
+typedef ::com::sun::star::uno::Sequence< Handle_t> CellSequence_t;
+typedef boost::shared_ptr<CellSequence_t> CellSequencePointer_t;
+typedef ::com::sun::star::uno::Sequence< CellSequence_t > RowSequence_t;
+typedef boost::shared_ptr<RowSequence_t> RowSequencePointer_t;
+typedef ::com::sun::star::uno::Sequence< RowSequence_t> TableSequence_t;
+typedef boost::shared_ptr<TableSequence_t> TableSequencePointer_t;
 typedef ::com::sun::star::text::XTextAppendAndConvert Text_t;
 typedef ::com::sun::star::uno::Reference<Text_t> TextReference_t;
 
-typedef ::com::sun::star::beans::PropertyValues PropertyValues_t;
-typedef ::com::sun::star::uno::Sequence< PropertyValues_t > PropertyValuesSeq_t;
-typedef ::com::sun::star::uno::Sequence< PropertyValuesSeq_t>
-PropertyValuesSeq2_t;
+typedef ::com::sun::star::beans::PropertyValues                     TablePropertyValues_t;
+typedef ::com::sun::star::uno::Sequence< TablePropertyValues_t >    RowPropertyValuesSeq_t;
+typedef ::com::sun::star::uno::Sequence< RowPropertyValuesSeq_t>    CellPropertyValuesSeq_t;
+
+typedef std::vector<PropertyMapPtr>     PropertyMapVector1;
+typedef std::vector<PropertyMapVector1> PropertyMapVector2;
 
 class DomainMapperTableHandler : public doctok::TableDataHandler<Handle_t , PropertyMapPtr >
 {
-    TextReference_t m_xText;
-    HandleSequencePointer_t m_pHandleSeq;
-    HandleSequence2Pointer_t m_pHandleSeq2;
-    HandleSequence3Pointer_t m_pHandleSeq3;
-    sal_Int32 m_nHandleIndex;
-    sal_Int32 m_nHandle2Index;
-    sal_Int32 m_nHandle3Index;
+    TextReference_t         m_xText;
+    CellSequencePointer_t   m_pCellSeq;
+    RowSequencePointer_t    m_pRowSeq;
+    TableSequencePointer_t  m_pTableSeq;
+
+    // properties
+    PropertyMapVector2      m_aCellProperties;
+    PropertyMapVector1      m_aRowProperties;
+    PropertyMapPtr          m_aTableProperties;
+
+    //sal_Int32 m_nHandleIndex;
+    sal_Int32 m_nRowIndex;
+    sal_Int32 m_nTableIndex;
 
 public:
     typedef boost::shared_ptr<DomainMapperTableHandler> Pointer_t;
