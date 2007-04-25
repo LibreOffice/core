@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:52:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:12:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -862,12 +862,6 @@ SwWriter::SwWriter(SvStream& rStrm,SwDoc &rDoc)
 SwWriter::SwWriter(SvStream& rStrm, SwPaM& rPam, BOOL bInWriteAll)
     : pStrm(&rStrm), pMedium(0), pOutPam(&rPam), pShell(0),
     rDoc(*rPam.GetDoc()), bWriteAll(bInWriteAll)
-{
-}
-
-SwWriter::SwWriter(SvStorage& rStg,SwDoc &rDoc)
-    : pStrm(0), pStg(&rStg), pMedium(0), pOutPam(0), pShell(0), rDoc(rDoc),
-    bWriteAll(true)
 {
 }
 
