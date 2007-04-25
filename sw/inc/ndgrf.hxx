@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:26:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:55:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -198,13 +198,9 @@ public:
     short SwapIn( BOOL bWaitForData = FALSE );
         // Entfernen der Grafik, um Speicher freizugeben
     short SwapOut();
-        // Schreiben der Grafik
-    BOOL StoreGraphics( SvStorage* pDocStg = NULL );
         // Zugriff auf den Storage-Streamnamen
-    String GetStreamName() const;
     void SetStreamName( const String& r ) { aGrfObj.SetUserData( r ); }
     void SetNewStreamName( const String& r ) { aNewStrmName = r; }
-    void SaveCompleted( BOOL bClear );
     // is this node selected by any shell?
     BOOL IsSelected() const;
 #endif
