@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:45:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:53:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -255,7 +255,6 @@ public:
     void SetNumberingRestart();
 
     // embedded alle lokalen Links (Bereiche/Grafiken)
-    BOOL EmbedAllLinks();
     USHORT GetLinkUpdMode(BOOL bDocSettings = FALSE) const;
     void SetLinkUpdMode( USHORT nMode );
 
@@ -391,7 +390,6 @@ public:
                         const DateTime* pNewDateTime = 0 );
     void LockExpFlds();
     void UnlockExpFlds();
-    BOOL IsExpFldsLocked() const;
 
     USHORT GetFldUpdateFlags(BOOL bDocSettings = FALSE) const;
     void SetFldUpdateFlags( USHORT eFlags );
@@ -465,8 +463,6 @@ public:
     // Numerierung Aufzaehlunglisten
     // liefert Regelwerk der aktuellen Aufzaehlung (FALSE sonst)
     const SwNumRule* GetCurNumRule() const;
-
-    BYTE GetCurOutlineLevel() const;
 
     // setzt, wenn noch keine Numerierung, sonst wird geaendert
     // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
@@ -744,8 +740,6 @@ public:
     //applies a changed sentence
     void ApplyChangedSentence(const ::svx::SpellPortions& rNewPortions);
 
-    // Is spelling active somewhere else?
-    BOOL HasSpellIter() const;
     // Is text conversion active somewhere else?
     BOOL HasConvIter() const;
     // Is hyphenation active somewhere else?
