@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:26:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,13 +273,3 @@ Point SwToLayoutAnchoredObjectPosition::GetRelPos() const
     return maRelPos;
 }
 
-/** determined offset to frame anchor position
-
-    --> OD 2004-06-17 #i26791#
-
-    @author OD
-*/
-Point SwToLayoutAnchoredObjectPosition::GetOffsetToFrmAnchorPos() const
-{
-    return maOffsetToFrmAnchorPos;
-}
