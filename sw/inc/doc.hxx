@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.133 $
+ *  $Revision: 1.134 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:36:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1081,7 +1081,6 @@ public:
     void SetGlossDoc( bool bGlssDc = true ) { mbGlossDoc = bGlssDc; }
     bool IsInsOnlyTextGlossary() const      { return mbInsOnlyTxtGlssry; }
 
-    void SetGlobalMacro(sal_uInt16 nEvent, const SvxMacro&);
     // Abstakt fuellen
     void Summary( SwDoc* pExtDoc, sal_uInt8 nLevel, sal_uInt8 nPara, sal_Bool bImpress );
 
@@ -1400,7 +1399,6 @@ public:
         // zu diesem Gliederungspunkt
     sal_Bool GotoOutline( SwPosition& rPos, const String& rName ) const;
     // die Aenderungen an den Gliederungsvorlagen in die OutlineRule uebernehmen
-    void SetOutlineLSpace( sal_uInt8 nLevel, short nFirstLnOfst, sal_uInt16 nLSpace );
 
         // setzt, wenn noch keine Numerierung, sonst wird geaendert
         // arbeitet mit alten und neuen Regeln, nur Differenzen aktualisieren
@@ -1424,7 +1422,6 @@ public:
     void SetNodeNumStart( const SwPosition& rPos, sal_uInt16 nStt = USHRT_MAX );
 
     SwNumRule* GetCurrNumRule( const SwPosition& rPos ) const;
-    BYTE GetCurOutlineLevel( const SwPosition& rPos) const;
 
     const SwNumRuleTbl& GetNumRuleTbl() const { return *pNumRuleTbl; }
 
@@ -1440,7 +1437,6 @@ public:
                             BOOL bBroadcast = FALSE);
     sal_uInt16 FindNumRule( const String& rName ) const;
     SwNumRule* FindNumRulePtr( const String& rName ) const;
-    SwNumRule* FindNumRulePtrWithPool( const String& rName );
 
     // loeschen geht nur, wenn die ::com::sun::star::chaos::Rule niemand benutzt!
     // #106897#
@@ -1685,7 +1681,6 @@ public:
     // fuer die TextBausteine - diese habe nur ein SvPersist zur
     // Verfuegung
     SfxObjectShell* GetPersist() const;
-    void SetPersist( SfxObjectShell* );
 
     // Pointer auf den Storage des SfxDocShells, kann 0 sein !!!
     ::com::sun::star::uno::Reference< ::com::sun::star::embed::XStorage > GetDocStorage();
@@ -1893,16 +1888,6 @@ public:
 
     // Change a format undoable.
     void ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet);
-    void ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem);
-
-    // #i36903#
-    /**
-       Propagates numbering rule from a SwFmt to all text nodes
-       registered in the SwFmt,
-
-       @param rFmt    SwFmt whose numbering rule shall be propagated
-     */
-    void SetNumRuleFromColl(SwFmt & rFmt);
 
     void RenameFmt(SwFmt & rFmt, const String & sNewName,
                    BOOL bBroadcast = FALSE);
@@ -1932,7 +1917,6 @@ public:
 
     // -> #i23726#
     BOOL IsFirstOfNumRule(SwPosition & rPos);
-    void IndentNumRule(SwPosition & rPos, short nAmount);
     // <- #i23726#
 
     // --> #i31958# access methods for XForms model(s)
