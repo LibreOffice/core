@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rangelst.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:57:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 16:22:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -51,7 +51,7 @@ class ScDocument;
 
 typedef ScRange* ScRangePtr;
 DECLARE_LIST( ScRangeListBase, ScRangePtr )
-class ScRangeList : public ScRangeListBase, public SvRefBase
+class SC_DLLPUBLIC ScRangeList : public ScRangeListBase, public SvRefBase
 {
 private:
     using ScRangeListBase::operator==;
