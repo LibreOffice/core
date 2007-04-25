@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:11:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:04:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,12 +194,6 @@ const String& SwFieldType::GetTypeStr(USHORT nTypeId)
         return aEmptyStr;
 }
 
-SvStringsDtor* SwFieldType::GetFldNames()
-{
-    if( !SwFieldType::pFldNames )
-        SwFieldType::_GetFldName();
-    return SwFieldType::pFldNames;
-}
 
 /*---------------------------------------------------
  Jedes Feld referenziert einen Feldtypen, der fuer
