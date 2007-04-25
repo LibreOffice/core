@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:08:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:52:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -781,7 +781,7 @@ void SAL_CALL FmXGridControl::removeModifyListener(const Reference< ::com::sun::
 }
 
 //------------------------------------------------------------------------------
-void SAL_CALL FmXGridControl::draw( long x, long y ) throw( RuntimeException )
+void SAL_CALL FmXGridControl::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException )
 {
     ::vos::OGuard aGuard( Application::GetSolarMutex() );
     m_bInDraw = sal_True;
@@ -2507,7 +2507,7 @@ void FmXGridPeer::columnHidden(DbGridColumn* pColumn)
 }
 
 //------------------------------------------------------------------------------
-void FmXGridPeer::draw( long x, long y ) throw( RuntimeException )
+void FmXGridPeer::draw( sal_Int32 x, sal_Int32 y ) throw( RuntimeException )
 {
     FmGridControl* pGrid = (FmGridControl*) GetWindow();
     sal_Int32 nOldFlags = pGrid->GetBrowserFlags();
