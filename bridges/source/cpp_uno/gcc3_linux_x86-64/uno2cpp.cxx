@@ -4,9 +4,9 @@
  *
  *  $RCSfile: uno2cpp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:17:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:57:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -38,6 +38,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <rtl/alloc.h>
 
 #include <com/sun/star/uno/genfunc.hxx>
@@ -55,265 +56,188 @@
 using namespace ::rtl;
 using namespace ::com::sun::star::uno;
 
-void dummy_can_throw_anything( char const * );
-
-// 6 integral parameters are passed in registers
-const sal_uInt32 GPR_COUNT = 6;
-
-// 8 floating point parameters are passed in SSE registers
-const sal_uInt32 FPR_COUNT = 8;
-
-static inline void
-invoke_count_words(char *       pPT,      // Parameter Types
-                   sal_uInt32 & nr_gpr,   // Number of arguments in GPRs
-                   sal_uInt32 & nr_fpr,   // Number of arguments in FPRs
-                   sal_uInt32 & nr_stack) // Number of arguments in stack
-{
-    nr_gpr = 0;
-    nr_fpr = 0;
-    nr_stack = 0;
-    char c;
-
-    while ((c = *pPT++) != 'X')
-    {
-        if (c == 'F' || c == 'D')
-        {
-            if (nr_fpr < FPR_COUNT)
-                nr_fpr++;
-            else
-                nr_stack++;
-        }
-        else
-        {
-            if (nr_gpr < GPR_COUNT)
-                nr_gpr++;
-            else
-                nr_stack++;
-        }
-    }
-}
-
-static void
-invoke_copy_to_stack(sal_uInt64 * pDS,  // Stack Storage
-                     char *       pPT,  // Parameter Types
-                     sal_uInt64 * pSV,  // Source Values
-                     sal_uInt64 * pGPR, // General Purpose Registers
-                     double *     pFPR) // Floating-Point Registers
-{
-    sal_uInt32 nr_gpr = 0;
-    sal_uInt32 nr_fpr = 0;
-    sal_uInt64 value;
-    char c;
-
-    while ((c = *pPT++) != 'X')
-    {
-        switch (c)
-        {
-        case 'D': // Double
-            if (nr_fpr < FPR_COUNT)
-                pFPR[nr_fpr++] = *reinterpret_cast<double *>( pSV++ );
-            else
-                *pDS++ = *pSV++;
-            break;
-
-        case 'F': // Float
-            if (nr_fpr < FPR_COUNT)
-                // The value in %xmm register is already prepared to
-                // be retrieved as a float. Therefore, we pass the
-                // value verbatim, as a double without conversion.
-                pFPR[nr_fpr++] = *reinterpret_cast<double *>( pSV++ );
-            else
-                *pDS++ = *pSV++;
-            break;
-
-        case 'H': // 64-bit Word
-            if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *pSV++;
-            else
-                *pDS++ = *pSV++;
-            break;
-
-        case 'I': // 32-bit Word
-            if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *reinterpret_cast<sal_uInt32 *>( pSV++ );
-            else
-                *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV++ );
-            break;
-
-        case 'S': // 16-bit Word
-            if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *reinterpret_cast<sal_uInt16 *>( pSV++ );
-            else
-                *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV++ );
-            break;
-
-        case 'B': // Byte
-            if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *reinterpret_cast<sal_uInt8 *>( pSV++ );
-            else
-                *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV++ );
-            break;
-
-        default: // Default, assume 64-bit values
-            if (nr_gpr < GPR_COUNT)
-                pGPR[nr_gpr++] = *pSV++;
-            else
-                *pDS++ = *pSV++;
-            break;
-        }
-    }
-}
-
 //==================================================================================================
 static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
                               void * pRegisterReturn, typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
-                              char * pPT, sal_uInt64 * pStackLongs, sal_uInt32 nStackLongs)
+                              sal_uInt64 *pStack, sal_uInt32 nStack,
+                              sal_uInt64 *pGPR, sal_uInt32 nGPR,
+                              double *pFPR, sal_uInt32 nFPR) __attribute__((noinline));
+
+static void callVirtualMethod(void * pThis, sal_uInt32 nVtableIndex,
+                              void * pRegisterReturn, typelib_TypeDescription * pReturnTypeDescr, bool bSimpleReturn,
+                              sal_uInt64 *pStack, sal_uInt32 nStack,
+                              sal_uInt64 *pGPR, sal_uInt32 nGPR,
+                              double *pFPR, sal_uInt32 nFPR)
 {
-    sal_uInt32 nr_gpr, nr_fpr, nr_stack;
-    invoke_count_words(pPT, nr_gpr, nr_fpr, nr_stack);
-
-    // Stack, if used, must be 16-bytes aligned
-    if (nr_stack)
-        nr_stack = (nr_stack + 1) & ~1;
-
 #if OSL_DEBUG_LEVEL > 1
     // Let's figure out what is really going on here
-    fprintf(stderr,"callVirtualMethod() parameters string is %s\n", pPT);
     {
-        sal_uInt32  k = nStackLongs;
-        sal_uInt64 *q = pStackLongs;
-        while (k > 0)
-        {
-            fprintf(stderr, "uno stack is: %lx\n", *q);
-            k--;
-            q++;
-        }
+        fprintf( stderr, "= callVirtualMethod() =\nGPR's (%d): ", nGPR );
+        for ( int i = 0; i < nGPR; ++i )
+            fprintf( stderr, "0x%lx, ", pGPR[i] );
+        fprintf( stderr, "\nFPR's (%d): ", nFPR );
+        for ( int i = 0; i < nFPR; ++i )
+            fprintf( stderr, "%f, ", pFPR[i] );
+        fprintf( stderr, "\nStack (%d): ", nStack );
+        for ( int i = 0; i < nStack; ++i )
+            fprintf( stderr, "0x%lx, ", pStack[i] );
+        fprintf( stderr, "\n" );
     }
 #endif
 
-    // Load parameters to stack, if necessary
-    sal_uInt64 *stack = (sal_uInt64 *) __builtin_alloca(nr_stack * 8);
-    sal_uInt64 gpregs[GPR_COUNT];
-    double fpregs[FPR_COUNT];
-    invoke_copy_to_stack(stack, pPT, pStackLongs, gpregs, fpregs);
+    // The call instruction within the asm section of callVirtualMethod may throw
+    // exceptions.  So that the compiler handles this correctly, it is important
+    // that (a) callVirtualMethod might call dummy_can_throw_anything (although this
+    // never happens at runtime), which in turn can throw exceptions, and (b)
+    // callVirtualMethod is not inlined at its call site (so that any exceptions are
+    // caught which are thrown from the instruction calling callVirtualMethod):
+    if ( !pThis )
+        CPPU_CURRENT_NAMESPACE::dummy_can_throw_anything( "xxx" ); // address something
 
-    // Load FPR registers from fpregs[]
-    register double d0 asm("xmm0");
-    register double d1 asm("xmm1");
-    register double d2 asm("xmm2");
-    register double d3 asm("xmm3");
-    register double d4 asm("xmm4");
-    register double d5 asm("xmm5");
-    register double d6 asm("xmm6");
-    register double d7 asm("xmm7");
-
-    switch (nr_fpr) {
-#define ARG_FPR(N) \
-    case N+1: d##N = fpregs[N];
-        ARG_FPR(7);
-        ARG_FPR(6);
-        ARG_FPR(5);
-        ARG_FPR(4);
-        ARG_FPR(3);
-        ARG_FPR(2);
-        ARG_FPR(1);
-        ARG_FPR(0);
-    case 0:;
-#undef ARG_FPR
-    }
-
-    // Load GPR registers from gpregs[]
-    register sal_uInt64 a0 asm("rdi");
-    register sal_uInt64 a1 asm("rsi");
-    register sal_uInt64 a2 asm("rdx");
-    register sal_uInt64 a3 asm("rcx");
-    register sal_uInt64 a4 asm("r8");
-    register sal_uInt64 a5 asm("r9");
-
-    switch (nr_gpr) {
-#define ARG_GPR(N) \
-    case N+1: a##N = gpregs[N];
-        ARG_GPR(5);
-        ARG_GPR(4);
-        ARG_GPR(3);
-        ARG_GPR(2);
-        ARG_GPR(1);
-        ARG_GPR(0);
-    case 0:;
-#undef ARG_GPR
-    }
-
-    if ( bSimpleReturn )
-        a0 = (sal_uInt64) pThis;
-    else
-        a1 = (sal_uInt64) pThis;
-
-    // Ensure that assignments to SSE registers won't be optimized away
-    asm("" ::
-        "x" (d0), "x" (d1), "x" (d2), "x" (d3),
-        "x" (d4), "x" (d5), "x" (d6), "x" (d7));
+    // Should not happen, but...
+    if ( nFPR > x86_64::MAX_SSE_REGS )
+        nFPR = x86_64::MAX_SSE_REGS;
+    if ( nGPR > x86_64::MAX_GPR_REGS )
+        nGPR = x86_64::MAX_GPR_REGS;
 
     // Get pointer to method
     sal_uInt64 pMethod = *((sal_uInt64 *)pThis);
     pMethod += 8 * nVtableIndex;
     pMethod = *((sal_uInt64 *)pMethod);
 
-    union ReturnValue {
-        struct {
-            sal_uInt64 rax;
-            sal_uInt64 rdx;
-        } i;
-        struct {
-            double xmm0;
-            double xmm1;
-        } f;
-    };
+    // Load parameters to stack, if necessary
+    if ( nStack )
+    {
+        // 16-bytes aligned
+        sal_uInt32 nStackBytes = ( ( nStack + 1 ) >> 1 ) * 16;
+        sal_uInt64 *pCallStack = (sal_uInt64 *) __builtin_alloca( nStackBytes );
+        memcpy( pCallStack, pStack, nStackBytes );
+    }
 
-    typedef ReturnValue (* FunctionCall )( sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64, sal_uInt64 );
+    // Return values
+    sal_uInt64 rax;
+    sal_uInt64 rdx;
+    double xmm0;
 
-    // Perform the call
-    ReturnValue aRet = ( ( FunctionCall ) pMethod )( a0, a1, a2, a3, a4, a5 );
+    asm volatile (
+
+        // Fill the xmm registers
+        "movq %2, %%rax\n\t"
+
+        "movsd   (%%rax), %%xmm0\n\t"
+        "movsd  8(%%rax), %%xmm1\n\t"
+        "movsd 16(%%rax), %%xmm2\n\t"
+        "movsd 24(%%rax), %%xmm3\n\t"
+        "movsd 32(%%rax), %%xmm4\n\t"
+        "movsd 40(%%rax), %%xmm5\n\t"
+        "movsd 48(%%rax), %%xmm6\n\t"
+        "movsd 56(%%rax), %%xmm7\n\t"
+
+        // Fill the general purpose registers
+        "movq %1, %%rax\n\t"
+
+        "movq    (%%rax), %%rdi\n\t"
+        "movq   8(%%rax), %%rsi\n\t"
+        "movq  16(%%rax), %%rdx\n\t"
+        "movq  24(%%rax), %%rcx\n\t"
+        "movq  32(%%rax), %%r8\n\t"
+        "movq  40(%%rax), %%r9\n\t"
+
+        // Perform the call
+        "movq %0, %%r11\n\t"
+        "movq %3, %%rax\n\t"
+        "call *%%r11\n\t"
+
+        // Fill the return values
+        "movq   %%rax, %4\n\t"
+        "movq   %%rdx, %5\n\t"
+        "movsd %%xmm0, %6\n\t"
+        :
+        : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR ),
+          "m" ( rax ), "m" ( rdx ), "m" ( xmm0 )
+        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"
+    );
 
     switch (pReturnTypeDescr->eTypeClass)
     {
     case typelib_TypeClass_HYPER:
     case typelib_TypeClass_UNSIGNED_HYPER:
-        *reinterpret_cast<sal_uInt64 *>( pRegisterReturn ) = aRet.i.rax;
+        *reinterpret_cast<sal_uInt64 *>( pRegisterReturn ) = rax;
         break;
     case typelib_TypeClass_LONG:
     case typelib_TypeClass_UNSIGNED_LONG:
     case typelib_TypeClass_ENUM:
-        *reinterpret_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &aRet.i.rax );
+        *reinterpret_cast<sal_uInt32 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt32*>( &rax );
         break;
     case typelib_TypeClass_CHAR:
     case typelib_TypeClass_SHORT:
     case typelib_TypeClass_UNSIGNED_SHORT:
-        *reinterpret_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &aRet.i.rax );
+        *reinterpret_cast<sal_uInt16 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt16*>( &rax );
         break;
     case typelib_TypeClass_BOOLEAN:
     case typelib_TypeClass_BYTE:
-        *reinterpret_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &aRet.i.rax );
+        *reinterpret_cast<sal_uInt8 *>( pRegisterReturn ) = *reinterpret_cast<sal_uInt8*>( &rax );
         break;
     case typelib_TypeClass_FLOAT:
-        *reinterpret_cast<float *>( pRegisterReturn ) = *reinterpret_cast<float*>( &aRet.f.xmm0 );
-        break;
     case typelib_TypeClass_DOUBLE:
-        *reinterpret_cast<double *>( pRegisterReturn ) = *reinterpret_cast<double*>( &aRet.f.xmm0 );
+        *reinterpret_cast<double *>( pRegisterReturn ) = xmm0;
         break;
-    default: {
-        sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
-        if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0) {
-            if (nRetSize > 8)
-                static_cast<sal_uInt64 *>(pRegisterReturn)[1] = aRet.i.rdx;
-            static_cast<sal_uInt64 *>(pRegisterReturn)[0] = aRet.i.rax;
+    default:
+        {
+            sal_Int32 const nRetSize = pReturnTypeDescr->nSize;
+            if (bSimpleReturn && nRetSize <= 16 && nRetSize > 0)
+            {
+                if (nRetSize > 8)
+                    static_cast<sal_uInt64 *>(pRegisterReturn)[1] = rdx;
+                static_cast<sal_uInt64 *>(pRegisterReturn)[0] = rax;
+            }
+            break;
         }
-        break;
-    }
     }
 }
 
+//==================================================================================================
+
+// Macros for easier insertion of values to registers or stack
+// pSV - pointer to the source
+// nr - order of the value [will be increased if stored to register]
+// pFPR, pGPR - pointer to the registers
+// pDS - pointer to the stack [will be increased if stored here]
+
+// The value in %xmm register is already prepared to be retrieved as a float,
+// thus we treat float and double the same
+#define INSERT_FLOAT_DOUBLE( pSV, nr, pFPR, pDS ) \
+    if ( nr < x86_64::MAX_SSE_REGS ) \
+        pFPR[nr++] = *reinterpret_cast<double *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV ); // verbatim!
+
+#define INSERT_INT64( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt64 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt64 *>( pSV );
+
+#define INSERT_INT32( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt32 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt32 *>( pSV );
+
+#define INSERT_INT16( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt16 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt16 *>( pSV );
+
+#define INSERT_INT8( pSV, nr, pGPR, pDS ) \
+    if ( nr < x86_64::MAX_GPR_REGS ) \
+        pGPR[nr++] = *reinterpret_cast<sal_uInt8 *>( pSV ); \
+    else \
+        *pDS++ = *reinterpret_cast<sal_uInt8 *>( pSV );
 
 //==================================================================================================
+
 static void cpp_call(
     bridges::cpp_uno::shared::UnoInterfaceProxy * pThis,
     bridges::cpp_uno::shared::VtableSlot aVtableSlot,
@@ -322,54 +246,52 @@ static void cpp_call(
     void * pUnoReturn, void * pUnoArgs[], uno_Any ** ppUnoExc )
 {
     // Maxium space for [complex ret ptr], values | ptr ...
-      char * pCppStack      = (char *)__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) );
-      char * pCppStackStart = pCppStack;
+    // (but will be used less - some of the values will be in pGPR and pFPR)
+      sal_uInt64 *pStack = (sal_uInt64 *)__builtin_alloca( (nParams + 3) * sizeof(sal_uInt64) );
+      sal_uInt64 *pStackStart = pStack;
 
-    // We need to know parameter types for callVirtualMethod() so generate a signature string
-    char * pParamType       = (char *)__builtin_alloca( nParams + 3 );
-    char * pPT              = pParamType;
+    sal_uInt64 pGPR[x86_64::MAX_GPR_REGS];
+    sal_uInt32 nGPR = 0;
+
+    double pFPR[x86_64::MAX_SSE_REGS];
+    sal_uInt32 nFPR = 0;
 
     // Return
     typelib_TypeDescription * pReturnTypeDescr = 0;
     TYPELIB_DANGER_GET( &pReturnTypeDescr, pReturnTypeRef );
     OSL_ENSURE( pReturnTypeDescr, "### expected return type description!" );
 
-    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion
+    void * pCppReturn = 0; // if != 0 && != pUnoReturn, needs reconversion (see below)
 
     bool bSimpleReturn = true;
-    if (pReturnTypeDescr)
+    if ( pReturnTypeDescr )
     {
         if ( x86_64::return_in_hidden_param( pReturnTypeRef ) )
             bSimpleReturn = false;
 
-        if (bSimpleReturn)
+        if ( bSimpleReturn )
             pCppReturn = pUnoReturn; // direct way for simple types
         else
         {
             // complex return via ptr
-            pCppReturn = *(void **)pCppStack = (bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )
-                                                ? __builtin_alloca( pReturnTypeDescr->nSize )
-                                                : pUnoReturn); // direct way
-            *pPT++ = 'H';
-            pCppStack += sizeof(void *);
+            pCppReturn = bridges::cpp_uno::shared::relatesToInterfaceType( pReturnTypeDescr )?
+                         __builtin_alloca( pReturnTypeDescr->nSize ) : pUnoReturn;
+            INSERT_INT64( &pCppReturn, nGPR, pGPR, pStack );
         }
     }
 
     // Push "this" pointer
     void * pAdjustedThisPtr = reinterpret_cast< void ** >( pThis->getCppI() ) + aVtableSlot.offset;
-    *(void **)pCppStack = pAdjustedThisPtr;
-    *pPT++ = 'H';
-    pCppStack += sizeof(void *);
+    INSERT_INT64( &pAdjustedThisPtr, nGPR, pGPR, pStack );
 
-    // stack space
     // Args
-    void ** pCppArgs  = (void **)alloca( 3 * sizeof(void *) * nParams );
+    void ** pCppArgs = (void **)alloca( 3 * sizeof(void *) * nParams );
     // Indizes of values this have to be converted (interface conversion cpp<=>uno)
     sal_Int32 * pTempIndizes = (sal_Int32 *)(pCppArgs + nParams);
     // Type descriptions for reconversions
     typelib_TypeDescription ** ppTempParamTypeDescr = (typelib_TypeDescription **)(pCppArgs + (2 * nParams));
 
-    sal_Int32 nTempIndizes   = 0;
+    sal_Int32 nTempIndizes = 0;
 
     for ( sal_Int32 nPos = 0; nPos < nParams; ++nPos )
     {
@@ -379,45 +301,32 @@ static void cpp_call(
 
         if (!rParam.bOut && bridges::cpp_uno::shared::isSimpleType( pParamTypeDescr ))
         {
-            uno_copyAndConvertData( pCppArgs[nPos] = pCppStack, pUnoArgs[nPos], pParamTypeDescr,
+            uno_copyAndConvertData( pCppArgs[nPos] = alloca( 8 ), pUnoArgs[nPos], pParamTypeDescr,
                                     pThis->getBridge()->getUno2Cpp() );
 
             switch (pParamTypeDescr->eTypeClass)
             {
-
-                // we need to know type of each param so that we know whether to use
-                // gpr or fpr to pass in parameters:
-                // Key: I - 32-bit value passed in gpr
-                //      B - byte value passed in gpr
-                //      S - short value passed in gpr
-                //      F - float value pass in fpr
-                //      D - double value pass in fpr
-                //      H - long value passed in gpr
-                //      X - indicates end of parameter description string
-
+            case typelib_TypeClass_HYPER:
+            case typelib_TypeClass_UNSIGNED_HYPER:
+                INSERT_INT64( pCppArgs[nPos], nGPR, pGPR, pStack );
+                break;
             case typelib_TypeClass_LONG:
             case typelib_TypeClass_UNSIGNED_LONG:
             case typelib_TypeClass_ENUM:
-                *pPT++ = 'I';
+                INSERT_INT32( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_SHORT:
             case typelib_TypeClass_CHAR:
             case typelib_TypeClass_UNSIGNED_SHORT:
-                *pPT++ = 'S';
+                INSERT_INT16( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_BOOLEAN:
             case typelib_TypeClass_BYTE:
-                *pPT++ = 'B';
+                INSERT_INT8( pCppArgs[nPos], nGPR, pGPR, pStack );
                 break;
             case typelib_TypeClass_FLOAT:
-                *pPT++ = 'F';
-                break;
             case typelib_TypeClass_DOUBLE:
-                *pPT++ = 'D';
-                break;
-            case typelib_TypeClass_HYPER:
-            case typelib_TypeClass_UNSIGNED_HYPER:
-                *pPT++ = 'H';
+                INSERT_FLOAT_DOUBLE( pCppArgs[nPos], nFPR, pFPR, pStack );
                 break;
             }
 
@@ -430,7 +339,7 @@ static void cpp_call(
             {
                 // cpp out is constructed mem, uno out is not!
                 uno_constructData(
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pParamTypeDescr );
                 pTempIndizes[nTempIndizes] = nPos; // default constructed for cpp call
                 // will be released at reconversion
@@ -440,7 +349,7 @@ static void cpp_call(
             else if (bridges::cpp_uno::shared::relatesToInterfaceType( pParamTypeDescr ))
             {
                 uno_copyAndConvertData(
-                    *(void **)pCppStack = pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
+                    pCppArgs[nPos] = alloca( pParamTypeDescr->nSize ),
                     pUnoArgs[nPos], pParamTypeDescr, pThis->getBridge()->getUno2Cpp() );
 
                 pTempIndizes[nTempIndizes] = nPos; // has to be reconverted
@@ -449,27 +358,22 @@ static void cpp_call(
             }
             else // direct way
             {
-                *(void **)pCppStack = pCppArgs[nPos] = pUnoArgs[nPos];
+                pCppArgs[nPos] = pUnoArgs[nPos];
                 // no longer needed
                 TYPELIB_DANGER_RELEASE( pParamTypeDescr );
             }
-            // FIXME: is this the right way to pass these?
-            *pPT++='H';
+            INSERT_INT64( &(pCppArgs[nPos]), nGPR, pGPR, pStack );
         }
-        pCppStack += sizeof(sal_uInt64); // standard parameter length
     }
-
-    // terminate the signature string
-    *pPT++ = 'X';
-    *pPT = 0;
 
     try
     {
-        OSL_ENSURE( !( (pCppStack - pCppStackStart ) & 7), "UNALIGNED STACK !!! (Please DO panic)" );
         callVirtualMethod(
             pAdjustedThisPtr, aVtableSlot.index,
-            pCppReturn, pReturnTypeDescr, bSimpleReturn, pParamType,
-            (sal_uInt64 *)pCppStackStart, (pCppStack - pCppStackStart) / sizeof(sal_uInt64) );
+            pCppReturn, pReturnTypeDescr, bSimpleReturn,
+            pStackStart, ( pStack - pStackStart ),
+            pGPR, nGPR,
+            pFPR, nFPR );
         // NO exception occured...
         *ppUnoExc = 0;
 
@@ -525,8 +429,8 @@ static void cpp_call(
     }
 }
 
-
 //==================================================================================================
+
 namespace bridges { namespace cpp_uno { namespace shared {
 
 void unoInterfaceProxyDispatch(
