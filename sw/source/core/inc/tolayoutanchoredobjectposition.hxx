@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tolayoutanchoredobjectposition.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:23:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:06:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,14 +77,6 @@ namespace objectpositioning
                 @author OD
             */
             Point GetRelPos() const;
-
-            /** determined offset to frame anchor position
-
-                --> OD 2004-06-17 #i26791#
-
-                @author OD
-            */
-            Point GetOffsetToFrmAnchorPos() const;
     };
 };
 
