@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:09:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:51:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -356,7 +356,6 @@ class SwAnchoredObject
 
         // accessors to member <maLastCharRect>
         const SwRect& GetLastCharRect() const;
-        SwTwips GetLastCharX() const;
         SwTwips GetRelCharX( const SwFrm* pFrm ) const;
         SwTwips GetRelCharY( const SwFrm* pFrm ) const;
         void AddLastCharY( long nDiff );
