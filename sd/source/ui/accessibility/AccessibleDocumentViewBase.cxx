@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:47:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:38:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -311,7 +311,7 @@ sal_Int32 SAL_CALL
 
 
 Reference<XAccessible> SAL_CALL
-    AccessibleDocumentViewBase::getAccessibleChild (long nIndex)
+    AccessibleDocumentViewBase::getAccessibleChild (sal_Int32 nIndex)
     throw (uno::RuntimeException)
 {
     ::osl::MutexGuard aGuard (maMutex);
