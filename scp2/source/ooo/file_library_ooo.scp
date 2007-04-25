@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_library_ooo.scp,v $
  *
- *  $Revision: 1.229 $
+ *  $Revision: 1.230 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 11:54:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 16:18:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -724,6 +724,25 @@ File gid_File_Lib_Stringresource
     Name = STRING(CONCAT5(stringresource,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
   #endif
 End
+
+#ifdef ENABLE_VBA
+#ifndef VBA_EXTENSION
+
+File gid_File_Lib_Vbaobj
+    TXT_FILE_BODY;
+    Styles = (PACKED,UNO_COMPONENT,PATCH);
+    RegistryID = gid_Starregistry_Services_Rdb;
+    Dir = gid_Dir_Program;
+  #ifdef UNX
+    Name = STRING(CONCAT5(libvbaobj,OFFICEUPD,DLLPOSTFIX,.uno,UNXSUFFIX));
+  #else
+    Name = STRING(CONCAT5(vbaobj,OFFICEUPD,DLLPOSTFIX,.uno,.dll));
+  #endif
+End
+
+#endif // VBA_EXTENSION
+#endif // ENABLE_VBA
+
 
 #ifdef WNT
 
