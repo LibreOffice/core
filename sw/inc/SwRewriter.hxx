@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwRewriter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:46:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:50:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,9 +53,6 @@ public:
     void AddRule(const String & rWhat, const String & rWith);
 
     String Apply(const String & rStr) const;
-    std::vector<String> Apply(const std::vector<String> & rStrs) const;
-
-    String ToString() const;
 };
 
 #endif // _SW_REWRITER_HXX
