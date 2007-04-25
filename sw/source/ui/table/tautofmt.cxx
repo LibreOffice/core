@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tautofmt.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:22:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:17:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,6 @@ private:
 
     BYTE                GetFormatIndex( size_t nCol, size_t nRow ) const;
     const SvxBoxItem&   GetBoxItem( size_t nCol, size_t nRow ) const;
-    const SvxLineItem&  GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const;
 
     void                DrawString( size_t nCol, size_t nRow );
     void                DrawStrings();
@@ -715,12 +714,6 @@ BYTE AutoFmtPreview::GetFormatIndex( size_t nCol, size_t nRow ) const
 const SvxBoxItem& AutoFmtPreview::GetBoxItem( size_t nCol, size_t nRow ) const
 {
     return aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) ).GetBox();
-}
-
-const SvxLineItem& AutoFmtPreview::GetDiagItem( size_t nCol, size_t nRow, bool bTLBR ) const
-{
-    const SwBoxAutoFmt& rBoxFmt = aCurData.GetBoxFmt( GetFormatIndex( nCol, nRow ) );
-    return bTLBR ? rBoxFmt.GetTLBR() : rBoxFmt.GetBLTR();
 }
 
 //------------------------------------------------------------------------
