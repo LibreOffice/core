@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:02:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -376,18 +376,6 @@ void SwBaseLink::DataChanged( const String& rMimeType,
     }
 }
 
-FASTBOOL SwBaseLink::IsShowQuickDrawBmp() const
-{
-    return pCntntNode && pCntntNode->IsGrfNode() &&
-#ifdef NEW_GRFOBJ
-            ((SwGrfNode*)pCntntNode)->HasMagicId()
-#else
-            // wie kommt man an die Info dran, das eine Grafik im Cache steht?
-            FALSE
-#endif
-        ;
-}
-
 
 BOOL SetGrfFlySize( const Size& rGrfSz, const Size& rFrmSz, SwGrfNode* pGrfNd )
 {
@@ -497,13 +485,6 @@ public:
 
     friend class DelCondition;
 
-    ReReadThread(
-        SwBaseLink* pSwBaseLink,
-        const String& rGrfName,
-        BOOL bWaitForData,
-        BOOL bNativFormat
-    );
-
     ~ReReadThread();
 
     String getGrfName() {
@@ -565,20 +546,6 @@ private:
     sal_Bool m_bIsReadOnly;
     uno::Reference<io::XInputStream> m_xInputStream;
 };
-
-
-ReReadThread::ReReadThread(
-    SwBaseLink* pSwBaseLink,
-    const String& rGrfName,
-    BOOL bWaitForData,BOOL bNativFormat )
-    : m_aCond(*this),
-      m_bIsRead(false),
-      m_pSwBaseLink(pSwBaseLink),
-      m_rGrfName(rGrfName),
-      m_bWaitForData(bWaitForData),
-      m_bNativFormat(bNativFormat)
-{
-}
 
 
 ReReadThread::~ReReadThread() {
