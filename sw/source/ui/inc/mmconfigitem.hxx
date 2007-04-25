@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-03-29 08:08:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:15:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -216,9 +216,6 @@ public:
 
     sal_Int16           GetMailPort() const;
     void                SetMailPort(sal_Int16 nSet);
-
-    sal_Bool            IsDefaultPort() const;
-    void                SetPortToDefault();
 
     sal_Bool            IsSecureConnection() const;
     void                SetSecureConnection(sal_Bool bSet);
