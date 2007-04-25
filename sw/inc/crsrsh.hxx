@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:18:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:51:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,9 +338,6 @@ protected:
     // Setzt alle PaMs in OldNode auf NewPos + Offset
     void PaMCorrAbs(const SwNodeIndex &rOldNode, const SwPosition &rNewPos,
                     const xub_StrLen nOffset = 0 );
-    // Setzt alle PaMs im Bereich von [StartNode, EndNode] nach NewPos
-    void PaMCorrAbs(const SwNodeIndex &rStartNode, const SwNodeIndex &rEndNode,
-                    const SwPosition &rNewPos );
 
     // --> FME 2004-07-30 #i32329# Enhanced table selection
     FASTBOOL _SelTblRowOrCol( bool bRow, bool bRowSimple = false );
@@ -645,7 +642,6 @@ public:
     FASTBOOL GoPrevCell();
     // gehe zu dieser Box (wenn vorhanden und in Tabelle!)
     FASTBOOL GotoTable( const String& rName );
-    FASTBOOL GotoTblBox( const String& rName );
 
     // select a table row, column or box (based on the current cursor)
     FASTBOOL SelTblRow() { return _SelTblRowOrCol( true  ); }
