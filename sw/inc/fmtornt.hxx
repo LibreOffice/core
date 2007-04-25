@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtornt.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:52:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:54:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,9 +87,6 @@ public:
 
     SwTwips GetPos() const { return nYPos; }
     void    SetPos( SwTwips nNew ) { nYPos = nNew; }
-
-    SwTwips GetPosConvertedToSw31( const SvxULSpaceItem *pULSpace ) const;
-    SwTwips GetPosConvertedFromSw31( const SvxULSpaceItem *pULSpace ) const;
 };
 
 //SwFmtHoriOrient, wie und woran orientiert --
@@ -128,9 +125,6 @@ public:
 
     SwTwips GetPos() const { return nXPos; }
     void    SetPos( SwTwips nNew ) { nXPos = nNew; }
-
-    SwTwips GetPosConvertedToSw31( const SvxLRSpaceItem *pLRSpace ) const;
-    SwTwips GetPosConvertedFromSw31( const SvxLRSpaceItem *pLRSpace ) const;
 
     BOOL IsPosToggle() const { return bPosToggle; }
     void SetPosToggle( BOOL bNew ) { bPosToggle = bNew; }
