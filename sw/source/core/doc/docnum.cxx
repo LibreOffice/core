@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnum.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:30:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:01:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -843,22 +843,6 @@ BOOL SwDoc::GotoOutline( SwPosition& rPos, const String& rName ) const
         // <--
     }
     return FALSE;
-}
-
-void SwDoc::SetOutlineLSpace( BYTE nLevel, short nFirstLnOfst, USHORT nLSpace )
-{
-    if( MAXLEVEL >= nLevel )
-    {
-        const SwNumFmt& rNFmt = pOutlineRule->Get( nLevel );
-        if( nLSpace != rNFmt.GetAbsLSpace() ||
-            nFirstLnOfst != rNFmt.GetFirstLineOffset() )
-        {
-            SwNumFmt aFmt( rNFmt );
-            aFmt.SetAbsLSpace( nLSpace );
-            aFmt.SetFirstLineOffset( nFirstLnOfst );
-            pOutlineRule->Set( nLevel, aFmt );
-        }
-    }
 }
 
 /*  */
@@ -2321,18 +2305,6 @@ SwNumRule* SwDoc::GetCurrNumRule( const SwPosition& rPos ) const
     return pRet;
 }
 
-BYTE SwDoc::GetCurOutlineLevel(const SwPosition & rPos) const
-{
-    BYTE nRet = NO_NUMBERING;
-
-    SwTxtNode* pTNd = rPos.nNode.GetNode().GetTxtNode();
-
-    if( pTNd )
-        nRet = pTNd->GetOutlineLevel();
-
-    return nRet;
-}
-
 USHORT SwDoc::FindNumRule( const String& rName ) const
 {
     for( USHORT n = pNumRuleTbl->Count(); n; )
@@ -2359,22 +2331,6 @@ SwNumRule* SwDoc::FindNumRulePtr( const String& rName ) const
                 break;
             }
         }
-    }
-
-    return pResult;
-}
-
-SwNumRule * SwDoc::FindNumRulePtrWithPool(const String & rName)
-{
-    SwNumRule * pResult = FindNumRulePtr(rName);
-
-    if (!pResult)
-    {
-        USHORT nPoolId =
-            SwStyleNameMapper::GetPoolIdFromProgName(rName,
-                                                     GET_POOLID_NUMRULE );
-        if( USHRT_MAX != nPoolId )
-            pResult = GetNumRuleFromPool(nPoolId);
     }
 
     return pResult;
@@ -2531,21 +2487,6 @@ String SwDoc::GetUniqueNumRuleName( const String* pChkStr, BOOL bAutoNum ) const
     return aName += String::CreateFromInt32( ++nNum );
 }
 
-const SwNode* lcl_FindBaseNode( const SwNode& rNd )
-{
-    const SwNodes& rNds = rNd.GetNodes();
-    ULONG nNdIdx = rNd.GetIndex();
-    if( nNdIdx > rNds.GetEndOfExtras().GetIndex() )
-        return rNds.GetEndOfContent().StartOfSectionNode();
-
-    const SwNode* pSttNd = rNds[ ULONG(0) ]->StartOfSectionNode();
-    const SwNode* pNd = rNd.StartOfSectionNode();
-    while( pSttNd != pNd->StartOfSectionNode()->StartOfSectionNode() )
-        pNd = pNd->StartOfSectionNode();
-    return pNd;
-}
-
-
 void SwDoc::UpdateNumRule()
 {
     const SwNumRuleTbl& rNmTbl = GetNumRuleTbl();
@@ -2602,17 +2543,4 @@ BOOL SwDoc::IsFirstOfNumRule(SwPosition & rPos)
     }
 
     return bResult;
-}
-
-// #i23726#
-void SwDoc::IndentNumRule(SwPosition & rPos, short nAmount)
-{
-    if (SwTxtNode * pTxtNode = rPos.nNode.GetNode().GetTxtNode())
-    {
-        if (SwNumRule * pNumRule = pTxtNode->GetNumRule())
-        {
-            pNumRule->Indent(nAmount);
-            UpdateNumRule();
-        }
-    }
 }
