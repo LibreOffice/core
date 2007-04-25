@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basides1.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:53:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:53:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1030,15 +1030,15 @@ void __EXPORT BasicIDEShell::GetState(SfxItemSet &rSet)
         pCurWin->GetState( rSet );
 }
 
-BOOL BasicIDEShell::HasUIFeature( ULONG nFeature )
+sal_Bool BasicIDEShell::HasUIFeature( sal_uInt32 nFeature )
 {
-    BOOL bResult = FALSE;
+    sal_Bool bResult = sal_False;
 
     if ( (nFeature & BASICIDE_UI_FEATURE_SHOW_BROWSER) == BASICIDE_UI_FEATURE_SHOW_BROWSER )
     {
         // fade out (in) property browser in module (dialog) windows
         if ( pCurWin && pCurWin->IsA( TYPE( DialogWindow ) ) && !pCurWin->IsReadOnly() )
-            bResult = TRUE;
+            bResult = sal_True;
     }
 
     return bResult;
