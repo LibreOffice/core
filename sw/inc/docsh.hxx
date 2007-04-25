@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:44:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:53:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,7 +190,6 @@ public:
     inline SwDoc*                   GetDoc() { return pDoc; }
     IDocumentDeviceAccess*          getIDocumentDeviceAccess();
     const IDocumentSettingAccess*   getIDocumentSettingAccess() const;
-    IDocumentTimerAccess*           getIDocumentTimerAccess();
 
     void                    UpdateFontList();
     void                    UpdateChildWindows();
