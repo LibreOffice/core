@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:04:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:16:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,26 +63,6 @@
 #ifndef _GLOBALS_HRC
 #include <globals.hrc>
 #endif
-
-/*-----------------23.01.98 07:41-------------------
-    Standard - Verzeichnisnamen herausreichen
---------------------------------------------------*/
-const String&   SwTOXBase::GetTOXName(TOXTypes eType)
-{
-    const String* pRet;
-    ShellResource* pShellRes = ViewShell::GetShellRes();
-    switch(eType)
-    {
-        case  TOX_CONTENT      :    pRet = &pShellRes->aTOXContentName;       break;
-        case  TOX_INDEX        :    pRet = &pShellRes->aTOXIndexName;         break;
-        case  TOX_USER         :    pRet = &pShellRes->aTOXUserName;          break;
-        case  TOX_ILLUSTRATIONS:    pRet = &pShellRes->aTOXIllustrationsName; break;
-        case  TOX_OBJECTS      :    pRet = &pShellRes->aTOXObjectsName;       break;
-        case  TOX_TABLES       :    pRet = &pShellRes->aTOXTablesName;        break;
-        case  TOX_AUTHORITIES :     pRet = &pShellRes->aTOXAuthoritiesName;   break;
-    }
-    return *pRet;
-}
 
 /*--------------------------------------------------------------------
     Beschreibung: Handhabung der Verzeichnisse durch TOXMgr
