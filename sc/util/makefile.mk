@@ -4,9 +4,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.38 $
+#   $Revision: 1.39 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 14:54:14 $
+#   last change: $Author: rt $ $Date: 2007-04-25 16:15:20 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -266,11 +266,46 @@ LIB8OBJFILES = \
         $(SLO)$/dpgroupdlg.obj	\
         $(SLO)$/editfield.obj
 
+.IF "$(ENABLE_VBA)"=="YES"
+
+TARGET_VBA=vbaobj
+SHL9TARGET=$(TARGET_VBA)$(UPD)$(DLLPOSTFIX).uno
+SHL9IMPLIB=	i$(TARGET_VBA)
+
+SHL9VERSIONMAP=$(TARGET_VBA).map
+SHL9DEF=$(MISC)$/$(SHL9TARGET).def
+DEF9NAME=$(SHL9TARGET)
+
+SHL9STDLIBS= \
+        $(CPPUHELPERLIB) \
+        $(CPPULIB) \
+        $(COMPHELPERLIB) \
+        $(SVLIB) \
+        $(TOOLSLIB) \
+        $(SALLIB)\
+        $(BASICLIB)	\
+        $(SFXLIB)	\
+        $(SVXLIB)	\
+        $(SVTOOLLIB)    \
+        $(SVLLIB) \
+        $(ISCLIB) \
+
+
+SHL9DEPN=$(SHL1TARGETN) $(SHL8TARGETN)
+SHL9LIBS=$(SLB)$/$(TARGET_VBA).lib
+
+.ENDIF
+ 
+
 # --- Targets -------------------------------------------------------------
 
 .INCLUDE :  target.mk
 
-ALLTAR:	$(MISC)$/linkinc.ls
+.IF "$(VBA_EXTENSION)"=="YES"
+    COMP=build_extn
+.ENDIF
 
+ALLTAR:	$(MISC)$/linkinc.ls  $(COMP)
 
-
+build_extn : $(SLB)$/$(TARGET_VBA).lib
+    $(PERL) createExtPackage.pl $(COMMONBIN)$/vbaapi.oxt  $(SOLARBINDIR)$/oovbaapi.rdb $(LIBCOMPNAME)
