@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-08 13:22:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:56:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -649,7 +649,6 @@ public:
     SwWriter( SvStream&, SwPaM &, BOOL bWriteAll = FALSE );
 
 //  SwWriter( SotStorage&, SwCrsrShell &,BOOL bWriteAll = FALSE );
-    SwWriter( SotStorage&, SwDoc & );
     SwWriter( const com::sun::star::uno::Reference < com::sun::star::embed::XStorage >&, SwDoc& );
 //  SwWriter( SotStorage&, SwPaM&, BOOL bWriteAll = FALSE );
 
@@ -678,9 +677,6 @@ void GetXMLWriter( const String&, const String&, WriterRef& );
 class SW_DLLPUBLIC SwIoSystem
 {
 public:
-        // suche ueber den Filtertext den Filtereintrag
-    static const SfxFilter* GetFilterOfFilterTxt( const String& rFilterNm,
-                                const SfxFilterContainer* pCnt = 0 );
         // suche ueber den internen FormatNamen den Filtereintrag
     static const SfxFilter* GetFilterOfFormat( const String& rFormat,
                                 const SfxFilterContainer* pCnt = 0 );
