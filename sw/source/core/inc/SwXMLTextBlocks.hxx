@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 16:16:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:05:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,7 +91,6 @@ public:
     virtual ULONG OpenFile( BOOL bReadOnly = TRUE );
     virtual void  CloseFile();
 
-    ULONG SetConvertMode( BOOL );
     static BOOL IsFileUCBStorage( const String & rFileName);
 
     // Methods for the new Autocorrecter
