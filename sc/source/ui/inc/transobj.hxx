@@ -4,9 +4,9 @@
  *
  *  $RCSfile: transobj.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 22:01:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:59:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ public:
     void                SetDragSourceFlags( USHORT nFlags );
     void                SetDragWasInternal();
 
-    static ScTransferObj* GetOwnClipboard( Window* pUIWin );
+    static SC_DLLPUBLIC ScTransferObj* GetOwnClipboard( Window* pUIWin );
 
     static SfxObjectShell*  SetDrawClipDoc( BOOL bAnyOle );     // update ScGlobal::pDrawClipDocShellRef
 };
