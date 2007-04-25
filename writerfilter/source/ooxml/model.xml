@@ -14819,7 +14819,7 @@
     </resource>
     <resource name="EG_RPrBase" resource="Properties">
       <kind name="paragraph"/>
-      <sprm name="rStyle" tokenid="0x0"/>
+      <sprm name="rStyle" tokenid="ooxml:EG_RPrBase_rStyle"/>
       <sprm name="rFonts" tokenid="ooxml:EG_RPrBase_rFonts"/>
       <sprm name="b" tokenid="0x835"/>
       <sprm name="bCs" tokenid="0x85c"/>
@@ -14850,14 +14850,14 @@
       <sprm name="bdr" tokenid="ooxml:EG_RPrBase_bdr"/>
       <sprm name="shd" tokenid="ooxml:EG_RPrBase_shd"/>
       <sprm name="fitText" tokenid="0xca76"/>
-      <sprm name="vertAlign" tokenid="0x0"/>
-      <sprm name="rtl" tokenid="0x0"/>
+      <sprm name="vertAlign" tokenid="ooxml:EG_RPrBase_vertAlign"/>
+      <sprm name="rtl" tokenid="ooxml:EG_RPrBase_rtl"/>
       <sprm name="cs" tokenid="0x882"/>
       <sprm name="em" tokenid="0x2a34"/>
       <sprm name="lang" tokenid="ooxml:EG_RPrBase_lang"/>
       <sprm name="eastAsianLayout" tokenid="ooxml:EG_RPrBase_eastAsianLayout"/>
       <sprm name="specVanish" tokenid="0x818"/>
-      <sprm name="oMath" tokenid="0x0"/>
+      <sprm name="oMath" tokenid="ooxml:EG_RPrBase_oMath"/>
     </resource>
     <resource name="CT_RPr" resource="Properties"/>
     <resource name="CT_ParaRPr" resource="Properties">
