@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:51:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1443,16 +1443,6 @@ sal_Bool SwFtnPortion::GetExpTxt( const SwTxtSizeInfo &, XubString &rTxt ) const
     rTxt = aExpand;
     return sal_True;
 }
-
-void SwFtnPortion::ClearFtn()
-{
-    if( pFrm && (!pFrm->IsInSct() ||
-        !SwLayouter::Collecting( pFrm->GetNode()->GetDoc(),
-                                 pFrm->FindSctFrm(), NULL ) ) )
-        pFrm->FindFtnBossFrm( !pFtn->GetFtn().IsEndNote() )
-                              ->RemoveFtn( pFrm, pFtn );
-}
-
 
 /*************************************************************************
  *                 virtual SwFtnPortion::Format()
