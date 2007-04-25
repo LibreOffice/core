@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:36:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 16:00:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,10 +117,10 @@ public:
 
     void            EnterDataAtCursor( const String& rString );         //! nicht benutzt ?
 
-    void            CutToClip( ScDocument* pClipDoc = NULL, BOOL bIncludeObjects = FALSE );
-    BOOL            CopyToClip( ScDocument* pClipDoc = NULL, BOOL bCut = FALSE, BOOL bApi = FALSE,
+    SC_DLLPUBLIC void           CutToClip( ScDocument* pClipDoc = NULL, BOOL bIncludeObjects = FALSE );
+    SC_DLLPUBLIC BOOL           CopyToClip( ScDocument* pClipDoc = NULL, BOOL bCut = FALSE, BOOL bApi = FALSE,
                                 BOOL bIncludeObjects = FALSE, BOOL bStopEdit = TRUE );
-    BOOL            PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
+    SC_DLLPUBLIC BOOL           PasteFromClip( USHORT nFlags, ScDocument* pClipDoc,
                                     USHORT nFunction = PASTE_NOFUNC, BOOL bSkipEmpty = FALSE,
                                     BOOL bTranspose = FALSE, BOOL bAsLink = FALSE,
                                     InsCellCmd eMoveMode = INS_NONE,
@@ -129,8 +129,8 @@ public:
 
     void            FillTab( USHORT nFlags, USHORT nFunction, BOOL bSkipEmpty, BOOL bAsLink );
 
-    void            PasteFromSystem();
-    BOOL            PasteFromSystem( ULONG nFormatId, BOOL bApi = FALSE );
+    SC_DLLPUBLIC void           PasteFromSystem();
+    SC_DLLPUBLIC BOOL           PasteFromSystem( ULONG nFormatId, BOOL bApi = FALSE );
 
     void            PasteDraw();
     void            PasteDraw( const Point& rLogicPos, SdrModel* pModel,
@@ -228,10 +228,10 @@ public:
 
     void            ModifyCellSize( ScDirection eDir, BOOL bOptimal );
 
-    void            InsertPageBreak( BOOL bColumn, BOOL bRecord = TRUE,
+    SC_DLLPUBLIC void           InsertPageBreak( BOOL bColumn, BOOL bRecord = TRUE,
                                         const ScAddress* pPos = NULL,
                                         BOOL bSetModified = TRUE );
-    void            DeletePageBreak( BOOL bColumn, BOOL bRecord = TRUE,
+    SC_DLLPUBLIC void           DeletePageBreak( BOOL bColumn, BOOL bRecord = TRUE,
                                         const ScAddress* pPos = NULL,
                                         BOOL bSetModified = TRUE );
 
