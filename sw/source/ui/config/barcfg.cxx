@@ -4,9 +4,9 @@
  *
  *  $RCSfile: barcfg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:39:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:14:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,17 +129,6 @@ void SwToolbarConfigItem::SetTopToolbar( sal_Int32 nSelType, USHORT nBarId )
         aTbxIdArray[nProp] = nBarId;
         SetModified();
     }
-}
-/* ---------------------------------------------------------------------------
-
- ---------------------------------------------------------------------------*/
-sal_uInt16 SwToolbarConfigItem::GetTopToolbar( sal_Int32 nSelType )
-{
-    sal_Int32 nProp = lcl_getArrayIndex(nSelType);
-    if(nProp >= 0)
-        return aTbxIdArray[nProp];
-    else
-        return 0xffff;
 }
 /* -----------------------------10.10.00 13:33--------------------------------
 
