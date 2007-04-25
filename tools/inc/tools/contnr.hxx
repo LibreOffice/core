@@ -4,9 +4,9 @@
  *
  *  $RCSfile: contnr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:09:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:18:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,8 @@
 #include <tools/solar.h>
 #endif
 
+#include <limits.h>
+
 class CBlock;
 
 // -------------
@@ -52,8 +54,8 @@ class CBlock;
 // Maximale Blockgroesse
 #define CONTAINER_MAXBLOCKSIZE      ((USHORT)0x3FF0)
 
-#define CONTAINER_APPEND            ((ULONG)0xFFFFFFFF)
-#define CONTAINER_ENTRY_NOTFOUND    ((ULONG)0xFFFFFFFF)
+#define CONTAINER_APPEND            ULONG_MAX
+#define CONTAINER_ENTRY_NOTFOUND    ULONG_MAX
 
 class TOOLS_DLLPUBLIC Container
 {
