@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doccorr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:50:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:00:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,15 +166,6 @@ void PaMCorrAbs( const SwNodeIndex &rOldNode,
     }
 }
 
-
-void SwCrsrShell::PaMCorrAbs( const SwNodeIndex &rOldNode,
-                              const SwPosition &rNewPos,
-                              const xub_StrLen nOffset )
-{
-    // alle Verzeichnisse/Bookmarks/.. verschieben.
-    GetDoc()->CorrAbs( rOldNode, rNewPos, nOffset );
-    ::PaMCorrAbs( rOldNode, rNewPos, nOffset );
-}
 
 void SwDoc::CorrAbs( const SwNodeIndex& rOldNode,
                      const SwPosition& rNewPos,
@@ -337,15 +328,6 @@ void PaMCorrAbs( const SwNodeIndex &rStartNode,
     }
 }
 
-
-void SwCrsrShell::PaMCorrAbs( const SwNodeIndex &rStartNode,
-                              const SwNodeIndex &rEndNode,
-                              const SwPosition &rNewPos )
-{
-    // alle Verzeichnisse/Bookmarks/.. verschieben.
-    GetDoc()->CorrAbs( rStartNode, rEndNode, rNewPos );
-    ::PaMCorrAbs( rStartNode, rEndNode, rNewPos );
-}
 
 void SwDoc::CorrAbs( const SwNodeIndex& rStartNode,
                      const SwNodeIndex& rEndNode,
