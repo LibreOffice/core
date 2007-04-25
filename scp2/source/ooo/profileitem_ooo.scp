@@ -4,9 +4,9 @@
  *
  *  $RCSfile: profileitem_ooo.scp,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-12 11:01:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 16:19:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,7 +711,12 @@ ProfileItem gid_Profileitem_Uno_Uno_Types
     Section = "Bootstrap";
     Order = 7;
     Key = "UNO_TYPES";
+#if defined( ENABLE_VBA ) && !defined( VBA_EXTENSION )
+    Value = "$ORIGIN/oovbaapi.rdb $ORIGIN/types.rdb ${$PKG_SharedUnoFile:UNO_TYPES} ${$PKG_UserUnoFile:UNO_TYPES}";
+#else
     Value = "$ORIGIN/types.rdb ${$PKG_SharedUnoFile:UNO_TYPES} ${$PKG_UserUnoFile:UNO_TYPES}";
+#endif
+
 End
 
 ProfileItem gid_Profileitem_Uno_Uno_Services
