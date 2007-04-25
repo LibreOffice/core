@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imgprod.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:13:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,10 +73,10 @@ public:
                         ImgProdLockBytes( ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > & rStreamRef );
     virtual             ~ImgProdLockBytes();
 
-    virtual ErrCode     ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCount, sal_Size* pRead ) const;
-    virtual ErrCode     WriteAt( sal_uInt32 nPos, const void* pBuffer, sal_uInt32 nCount, sal_Size* pWritten );
+    virtual ErrCode     ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const;
+    virtual ErrCode     WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten );
     virtual ErrCode     Flush() const;
-    virtual ErrCode     SetSize( sal_uInt32 nSize );
+    virtual ErrCode     SetSize( sal_Size nSize );
     virtual ErrCode     Stat( SvLockBytesStat*, SvLockBytesStatFlag ) const;
 };
 
@@ -122,7 +122,7 @@ ImgProdLockBytes::~ImgProdLockBytes()
 
 // ------------------------------------------------------------------------
 
-ErrCode ImgProdLockBytes::ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCount, sal_Size* pRead ) const
+ErrCode ImgProdLockBytes::ReadAt( sal_Size nPos, void* pBuffer, sal_Size nCount, sal_Size* pRead ) const
 {
     if( GetStream() )
     {
@@ -133,7 +133,7 @@ ErrCode ImgProdLockBytes::ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCo
     }
     else
     {
-        const sal_uInt32 nSeqLen = maSeq.getLength();
+        const sal_Size nSeqLen = maSeq.getLength();
         ErrCode nErr = ERRCODE_NONE;
 
         if( nPos < nSeqLen )
@@ -153,7 +153,7 @@ ErrCode ImgProdLockBytes::ReadAt( sal_uInt32 nPos, void* pBuffer, sal_uInt32 nCo
 
 // ------------------------------------------------------------------------
 
-ErrCode ImgProdLockBytes::WriteAt( sal_uInt32 nPos, const void* pBuffer, sal_uInt32 nCount, sal_Size* pWritten )
+ErrCode ImgProdLockBytes::WriteAt( sal_Size nPos, const void* pBuffer, sal_Size nCount, sal_Size* pWritten )
 {
     if( GetStream() )
         return SvLockBytes::WriteAt( nPos, pBuffer, nCount, pWritten );
@@ -173,7 +173,7 @@ ErrCode ImgProdLockBytes::Flush() const
 
 // ------------------------------------------------------------------------
 
-ErrCode ImgProdLockBytes::SetSize( sal_uInt32 nSize )
+ErrCode ImgProdLockBytes::SetSize( sal_Size nSize )
 {
     if( GetStream() )
         return SvLockBytes::SetSize( nSize );
