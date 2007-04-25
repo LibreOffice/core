@@ -4,9 +4,9 @@
  *
  *  $RCSfile: compiler.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:53:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:56:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -180,7 +180,7 @@ public:
     void        IncRef()                { nRefCnt++;       }
     void        DecRef()                { if( !--nRefCnt ) Delete(); }
     USHORT      GetRef() const          { return nRefCnt; }
-    void        Delete();
+    SC_DLLPUBLIC void       Delete();
 
     // Use these methods only on tokens that are not part of a token array,
     // since the reference count is cleared!
@@ -225,7 +225,7 @@ struct ScStringHashCode
 typedef ::std::hash_map< String, OpCode, ScStringHashCode, ::std::equal_to< String > > ScOpCodeHashMap;
 
 using namespace ::com::sun::star::i18n;
-class ScCompiler
+class SC_DLLPUBLIC ScCompiler
 {
 public:
     struct Convention
