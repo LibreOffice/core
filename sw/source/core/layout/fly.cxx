@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:14:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:07:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2732,18 +2732,6 @@ BOOL SwFlyFrm::GetContour( PolyPolygon&   rContour,
         }
     }
     return bRet;
-}
-
-BOOL SwFlyFrm::ConvertHoriTo40( SwHoriOrient &rHori, SwRelationOrient &rRel,
-                                SwTwips &rPos ) const
-{
-    ASSERT( rHori > PRTAREA, "ConvertHoriTo40: Why?" );
-    if( !GetAnchorFrm() )
-        return FALSE;
-    rHori = HORI_NONE;
-    rRel = FRAME;
-    rPos = Frm().Left() - GetAnchorFrm()->Frm().Left();
-    return TRUE;
 }
 
 // OD 2004-03-25 #i26791#
