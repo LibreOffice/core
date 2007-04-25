@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:22:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:59:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -865,14 +865,6 @@ sal_Bool SwAccessibleParagraph::GetGlyphBoundary(
     }
 
     return bRet;
-}
-
-
-sal_Bool SwAccessibleParagraph::GetEmptyBoundary( Boundary& rBound )
-{
-    rBound.startPos = 0;
-    rBound.endPos = 0;
-    return sal_True;
 }
 
 
