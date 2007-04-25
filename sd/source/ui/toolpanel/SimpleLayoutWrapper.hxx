@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SimpleLayoutWrapper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:41:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:41:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,8 +59,8 @@ public:
     virtual ~SimpleLayoutWrapper (void);
 
     virtual Size GetPreferredSize (void);
-    virtual int GetPreferredWidth (int nHeight);
-    virtual int GetPreferredHeight (int nWidth);
+    virtual sal_Int32 GetPreferredWidth (sal_Int32 nHeight);
+    virtual sal_Int32 GetPreferredHeight (sal_Int32 nWidth);
     virtual bool IsResizable (void);
     virtual ::Window* GetWindow (void);
 

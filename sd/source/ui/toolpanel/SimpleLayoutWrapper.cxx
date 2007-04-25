@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SimpleLayoutWrapper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 18:41:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:41:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,7 +72,7 @@ Size SimpleLayoutWrapper::GetPreferredSize (void)
 
 
 
-int SimpleLayoutWrapper::GetPreferredWidth (int )
+sal_Int32 SimpleLayoutWrapper::GetPreferredWidth (sal_Int32)
 {
     return mnPreferredWidth;
 }
@@ -80,7 +80,7 @@ int SimpleLayoutWrapper::GetPreferredWidth (int )
 
 
 
-int SimpleLayoutWrapper::GetPreferredHeight (int )
+sal_Int32 SimpleLayoutWrapper::GetPreferredHeight (sal_Int32)
 {
     return mnPreferredHeight;
 }
