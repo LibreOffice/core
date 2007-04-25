@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmconfigitem.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:45:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:15:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1699,24 +1699,6 @@ void     SwMailMergeConfigItem::SetMailPort(sal_Int16 nSet)
     {
         m_pImpl->nMailPort = nSet;
         m_pImpl->bIsDefaultPort = sal_False;
-        m_pImpl->SetModified();
-    }
-}
-/*-- 05.05.2004 16:10:11---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-sal_Bool SwMailMergeConfigItem::IsDefaultPort() const
-{
-    return m_pImpl->bIsDefaultPort;
-}
-/*-- 05.05.2004 16:10:11---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-void     SwMailMergeConfigItem::SetPortToDefault()
-{
-    if(!m_pImpl->bIsDefaultPort)
-    {
-        m_pImpl->bIsDefaultPort = sal_True;
         m_pImpl->SetModified();
     }
 }
