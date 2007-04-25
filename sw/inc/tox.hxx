@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tox.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:35:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:57:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -380,11 +380,6 @@ public:
     void    SetPattern(USHORT nLevel, const String& rStr);
     const SwFormTokens& GetPattern(USHORT nLevel) const;
 
-    //convert pattern string from old to new format or vice versa
-    // #i21237#
-    static String           ConvertPatternTo51(const SwFormTokens& rSource);
-    static String           ConvertPatternFrom51(const String& rSource, TOXTypes eType);
-
     // fill tab stop positions from template to pattern
     // #i21237#
     void                    AdjustTabStops(SwDoc& rDoc,
@@ -392,11 +387,6 @@ public:
 
     inline USHORT   GetTOXType() const;
     inline USHORT   GetFormMax() const;
-
-    USHORT GetFirstTabPos() const  ;    //{ return nFirstTabPos; }
-    void SetFirstTabPos( USHORT n );    //{ nFirstTabPos = n; }
-
-    BOOL IsFirstTabPosFlag() const  ;   //{ return bHasFirstTabPos; }
 
     BOOL IsRelTabPos() const    {   return bIsRelTabPos; }
     void SetRelTabPos( BOOL b ) {   bIsRelTabPos = b;       }
@@ -588,8 +578,6 @@ public:
 
     const SfxItemSet*       GetAttrSet() const;
     void                    SetAttrSet( const SfxItemSet& );
-
-    static const String&    GetTOXName(TOXTypes eType);           // toxmgr.cxx
 
     LanguageType    GetLanguage() const {return eLanguage;}
     void            SetLanguage(LanguageType nLang)  {eLanguage = nLang;}
