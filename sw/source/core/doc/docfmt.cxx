@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 14:57:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:00:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2391,33 +2391,6 @@ void SwDoc::SetFmtItemByAutoFmt( const SwPaM& rPam, const SfxItemSet& rSet )
     SetRedlineMode_intern( eOld );
 }
 
-void SwDoc::SetNumRuleFromColl(SwFmt & rFmt)
-{
-    const SfxPoolItem * pItem = NULL;
-
-    if (SFX_ITEM_SET == rFmt.GetItemState(RES_PARATR_NUMRULE, TRUE, &pItem))
-    {
-        SwNumRule * pRule =
-            FindNumRulePtr(((const SwNumRuleItem *) pItem)->GetValue());
-
-        if (pRule)
-        {
-            SwClientIter aIter(rFmt);
-
-            const SwClient * pClient = aIter.First(TYPE(SwTxtNode));
-            while (pClient)
-            {
-                SwTxtNode * pTxtNode = ((SwTxtNode *) pClient);
-
-                const SwPaM aPam(*pTxtNode);
-                SetNumRule(aPam, *pRule);
-
-                pClient = aIter.Next();
-            }
-        }
-    }
-}
-
 void SwDoc::ChgFmt(SwFmt & rFmt, const SfxItemSet & rSet)
 {
     if (DoesUndo())
@@ -2483,19 +2456,6 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName,
 
     if (bBroadcast)
         BroadcastStyleOperation(sNewName, eFamily, SFX_STYLESHEET_MODIFIED);
-}
-
-void SwDoc::ChgFmt(SwFmt & rFmt, const SfxPoolItem & rItem)
-{
-    if (DoesUndo())
-    {
-        SwUndo * pUndo = new SwUndoFmtAttr(rFmt.GetAttr(rItem.Which()), rFmt);
-
-        AppendUndo(pUndo);
-    }
-
-    rFmt.SetAttr(rItem);
-
 }
 
 // --> OD 2006-09-27 #i69627#
