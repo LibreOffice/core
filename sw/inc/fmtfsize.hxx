@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmtfsize.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 01:50:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:54:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,12 +122,6 @@ public:
     BYTE    GetWidthPercent() const { return nWidthPercent;  }
     void    SetHeightPercent( BYTE n ) { nHeightPercent = n; }
     void    SetWidthPercent ( BYTE n ) { nWidthPercent  = n; }
-
-    // Umrechnung der Groesse zwischen SW31/SW40
-    Size    GetSizeConvertedToSw31( const SvxLRSpaceItem *pLRSpace,
-                                    const SvxULSpaceItem *pULSpace ) const;
-    Size    GetSizeConvertedFromSw31( const SvxLRSpaceItem *pLRSpace,
-                                      const SvxULSpaceItem *pULSpace ) const;
 };
 
 inline const SwFmtFrmSize &SwAttrSet::GetFrmSize(BOOL bInP) const
