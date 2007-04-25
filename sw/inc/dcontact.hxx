@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:06:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:52:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -273,7 +273,6 @@ public:
 
     //Legt das DrawObjekt an und meldet es beim Model an.
     SwFlyDrawContact( SwFlyFrmFmt* pToRegisterIn, SdrModel* pMod );
-    SwFlyDrawContact( SwFrmFmt* pToRegisterIn, SdrObject* pObj );
     virtual ~SwFlyDrawContact();
 
     // OD 2004-03-29 #i26791#
@@ -339,11 +338,8 @@ class SwDrawVirtObj : public SdrVirtObj
         // OD 2004-03-29 #i26791#
         const SwAnchoredObject* GetAnchoredObj() const;
         SwAnchoredObject* AnchoredObj();
-        void SetAnchorFrm( SwFrm* _pNewAnchorFrm );
         const SwFrm* GetAnchorFrm() const;
         SwFrm* AnchorFrm();
-        void SetPageFrm( SwPageFrm* _pNewPageFrm );
-        SwPageFrm* GetPageFrm();
         void RemoveFromWriterLayout();
 
         // connection to drawing layer
