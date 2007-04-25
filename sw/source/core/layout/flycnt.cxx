@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:18:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:07:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -399,33 +399,6 @@ bool SwOszControl::ChkOsz()
 
     return bOscillationDetected;
 }
-
-//
-// SwFlyAtCntFrm::MakeAll wants to calculate the section, if it contains
-// the anchor frame. We do not want to calculate the section, if there
-// is a table between the anchor frame and the section frame
-//
-void lcl_CalcUpperSection( const SwFrm& rFrm )
-{
-    if( rFrm.IsInSct() )
-    {
-        // Do not calculate the section, if there is a table between
-        // the anchor and the section.
-        ASSERT( rFrm.IsInSct(), "lcl_SectionBeforeTable without section" )
-        const SwFrm* pUpper = rFrm.GetUpper();
-        while ( pUpper )
-        {
-            if ( pUpper->IsSctFrm() || pUpper->IsCellFrm() )
-                break;
-            pUpper = pUpper->GetUpper();
-        }
-
-        ASSERT( pUpper, "lcl_SectionBeforeTable without section" )
-        if ( pUpper->IsSctFrm() )
-            pUpper->Calc();
-    }
-}
-
 
 void SwFlyAtCntFrm::MakeAll()
 {
