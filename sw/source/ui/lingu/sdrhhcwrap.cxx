@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdrhhcwrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:17:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:16:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,9 +88,6 @@
 #endif
 #ifndef _FRMFMT_HXX //autogen
 #include <frmfmt.hxx>
-#endif
-#ifndef _SDRSPELL_HXX
-#include <sdrspell.hxx>
 #endif
 #ifndef _DOCSH_HXX
 #include <docsh.hxx>        //     "     "     "
