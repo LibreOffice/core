@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:25:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:22:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,19 +107,19 @@ public:
     const SfxInterface*     GetRealInterfaceForSlot( const SfxSlot* ) const;
 
     void                    RegisterObjectBar( USHORT, const ResId&, const String* pST=0 );
-    void                    RegisterObjectBar( USHORT, const ResId&, ULONG nFeature, const String* pST=0 );
+    void                    RegisterObjectBar( USHORT, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
     void                    RegisterChildWindow( USHORT, BOOL bContext, const String* pST=0 );
-    void                    RegisterChildWindow( USHORT, BOOL bContext, ULONG nFeature, const String* pST=0 );
+    void                    RegisterChildWindow( USHORT, BOOL bContext, sal_uInt32 nFeature, const String* pST=0 );
     void                    RegisterStatusBar( const ResId& );
     const ResId&            GetObjectBarResId( USHORT nNo ) const;
     USHORT                  GetObjectBarPos( USHORT nNo ) const;
-    ULONG                   GetObjectBarFeature( USHORT nNo ) const;
+    sal_uInt32              GetObjectBarFeature( USHORT nNo ) const;
     USHORT                  GetObjectBarCount() const;
     void                    SetObjectBarPos( USHORT nPos, USHORT nId );
     const String*           GetObjectBarName( USHORT nNo ) const;
     BOOL                    IsObjectBarVisible( USHORT nNo) const;
-    ULONG                   GetChildWindowFeature( USHORT nNo ) const;
-    ULONG                   GetChildWindowId( USHORT nNo ) const;
+    sal_uInt32              GetChildWindowFeature( USHORT nNo ) const;
+    sal_uInt32              GetChildWindowId( USHORT nNo ) const;
     USHORT                  GetChildWindowCount() const;
     void                    RegisterPopupMenu( const ResId& );
     const ResId&            GetPopupMenuResId() const;
@@ -164,7 +164,7 @@ public:
                     SfxIFConfig_Impl();
                     ~SfxIFConfig_Impl();
     BOOL            Store(SvStream&);
-    void            RegisterObjectBar( USHORT, const ResId&, ULONG nFeature, const String* pST=0 );
+    void            RegisterObjectBar( USHORT, const ResId&, sal_uInt32 nFeature, const String* pST=0 );
     USHORT          GetType();
 };
 //#endif
