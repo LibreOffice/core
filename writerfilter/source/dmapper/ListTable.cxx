@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListTable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -257,7 +257,7 @@ void ListTable_Impl::AddLevel()
   -----------------------------------------------------------------------*/
 ListTable::ListTable(
         DomainMapper& rDMapper,
-        uno::Reference< lang::XMultiServiceFactory > xFactory) :
+        const uno::Reference< lang::XMultiServiceFactory > xFactory) :
     m_pImpl( new ListTable_Impl(rDMapper, xFactory) )
 {
 }
@@ -790,7 +790,7 @@ void ListTable::entry(int, doctok::Reference<Properties>::Pointer_t ref)
 /*-- 26.06.2006 10:27:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-sal_uInt32 ListTable::size()
+sal_uInt32 ListTable::size() const
 {
     return m_pImpl->m_aListEntries.size();
 }

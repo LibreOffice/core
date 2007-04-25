@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ListTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2006-11-02 12:37:24 $
+ *  last change: $Author: os $ $Date: 2007-04-25 11:31:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,7 +67,7 @@ class WRITERFILTER_DLLPRIVATE ListTable :
 public:
     ListTable(
             DomainMapper& rDMapper,
-            ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory);
+            const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory);
     virtual ~ListTable();
 
     // Properties
@@ -81,7 +81,7 @@ public:
 //    virtual void data(const sal_Int8* buf, size_t len,
 //                      doctok::Reference<Properties>::Pointer_t ref);
 
-    sal_uInt32          size();
+    sal_uInt32          size() const;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
             GetNumberingRules(sal_Int32 nListId);
 };
