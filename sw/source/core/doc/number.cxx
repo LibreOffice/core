@@ -4,9 +4,9 @@
  *
  *  $RCSfile: number.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-26 14:19:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:01:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -367,16 +367,6 @@ BOOL SwNumFmt::operator==( const SwNumFmt& rNumFmt) const
     return bRet;
 }
 
-/* -----------------------------22.02.01 13:42--------------------------------
-
- ---------------------------------------------------------------------------*/
-const Graphic* SwNumFmt::GetGraphic() const
-{
-    const Graphic* pGrf = 0;
-    if( GetBrush() && GetCharFmt() )
-        pGrf = GetBrush()->GetGraphic( GetCharFmt()->GetDoc()->GetDocShell() );
-    return pGrf;
-}
 /* -----------------------------22.02.01 13:44--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -930,13 +920,6 @@ void SwNumRule::SetInvalidRule(BOOL bFlag)
     bInvalidRuleFlag = bFlag;
 }
 
-/* #109308# */
-void SwNumRule::SetNumAdjust(SvxAdjust eNumAdjust)
-{
-    for (int i = 0; i < MAXLEVEL; i++)
-        aFmts[i]->SetNumAdjust(eNumAdjust);
-}
-
 // #i27615#
 SwBitArray SwNumRule::SetLevelMarked(BYTE nLvl, BOOL bVal)
 {
@@ -1082,22 +1065,6 @@ bool SwNumRule::IsCountPhantoms() const
 void SwNumRule::SetCountPhantoms(bool bCountPhantoms)
 {
     mbCountPhantoms = bCountPhantoms;
-}
-
-String SwNumRule::ToString() const
-{
-    String aResult("[ ", RTL_TEXTENCODING_ASCII_US);
-
-    aResult += GetName();
-    aResult += String("\n", RTL_TEXTENCODING_ASCII_US);
-
-    tPamAndNums::const_iterator aIt;
-    for (aIt = aNumberRanges.begin(); aIt != aNumberRanges.end(); aIt++)
-        aResult += aIt->second->print();
-
-    aResult += String("]\n", RTL_TEXTENCODING_ASCII_US);
-
-    return aResult;
 }
 
 // --> OD 2006-06-27 #b6440955#
