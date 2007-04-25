@@ -4,9 +4,9 @@
  *
  *  $RCSfile: writerhelper.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:51:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:13:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -662,26 +662,6 @@ namespace sw
         const SwNumRule* GetNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
         {
             return GetNormalNumRuleFromTxtNode(rTxtNode);
-        }
-
-        const SwNumRule* GetOutlineNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
-        {
-            const SwNumRule *pRet = 0;
-            const SwNumRule *pRule = 0;
-
-            ASSERT(rTxtNode.GetDoc(), "No document for node?, suspicious");
-            if (!rTxtNode.GetDoc())
-                return 0;
-
-            if (
-                rTxtNode.IsNumbered() && rTxtNode.IsCounted() &&
-                (pRule = rTxtNode.GetDoc()->GetOutlineNumRule())
-                )
-            {
-                return pRule;
-            }
-
-            return 0;
         }
 
         const SwNumRule* GetNormalNumRuleFromTxtNode(const SwTxtNode &rTxtNode)
