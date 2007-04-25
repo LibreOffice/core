@@ -4,9 +4,9 @@
  *
  *  $RCSfile: csvtablebox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:01:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:00:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,10 +148,10 @@ void ScCsvTableBox::InitControls()
 {
     maGrid.UpdateLayoutData();
 
-    sal_Int32 nScrollBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
+    long nScrollBarSize = GetSettings().GetStyleSettings().GetScrollBarSize();
     Size aWinSize = CalcOutputSize( GetSizePixel() );
-    sal_Int32 nDataWidth = aWinSize.Width() - nScrollBarSize;
-    sal_Int32 nDataHeight = aWinSize.Height() - nScrollBarSize;
+    long nDataWidth = aWinSize.Width() - nScrollBarSize;
+    long nDataHeight = aWinSize.Height() - nScrollBarSize;
 
     maData.mnWinWidth = nDataWidth;
     maData.mnWinHeight = nDataHeight;
