@@ -1,8 +1,8 @@
 #!@PERL@ -w
 #
 # Program:     set_soenv.in
-# Version:     $Revision: 1.140 $
-# Date:        $Date: 2007-04-19 20:42:58 $
+# Version:     $Revision: 1.141 $
+# Date:        $Date: 2007-04-25 15:54:09 $
 # Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
 #
 #---------------------------------------------------------------------------
@@ -1540,6 +1540,8 @@ ToFile( "PREBUILD_MOZAB",    $PREBUILD_MOZAB,    "e" );
 ToFile( "MOZILLA_VERSION",   $MOZILLA_VERSION,   "e" );
 ToFile( "DEFAULT_MOZILLA_TOOLKIT", $MOZILLA_TOOLKIT, "e" );
 ToFile( "BUILD_VER_STRING",  "@BUILD_VER_STRING@", "e" );
+ToFile( "ENABLE_VBA",  "@ENABLE_VBA@", "e" );
+ToFile( "VBA_EXTENSION",  "@VBA_EXTENSION@", "e" );
 if ($platform =~ m/linux-gnu/ && $platform =~ m/powerpc/) {
 ToFile( "JITC_PROCESSOR_TYPE","6",                 "e" );
 }
