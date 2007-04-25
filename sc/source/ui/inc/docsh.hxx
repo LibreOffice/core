@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:21:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:59:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -432,7 +432,7 @@ SO2_IMPL_REF(ScDocShell)
 // SetDocumentModified hierdran aufrufen statt an der ScDocShell.
 // Im Dtor wird wenn ScDocShell bDocumentModifiedPending gesetzt ist und
 // bAutoCalcShellDisabled nicht gesetzt ist ein SetDocumentModified gerufen.
-class ScDocShellModificator
+class SC_DLLPUBLIC ScDocShellModificator
 {
             ScDocShell&     rDocShell;
     ScRefreshTimerProtector aProtector;
