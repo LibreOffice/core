@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:03:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:02:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -175,37 +175,6 @@ SwDrawDocument::SwDrawDocument( SwDoc* pD ) :
     SetForbiddenCharsTable( pD->getForbiddenCharacterTable() );
     // #87795# Implementation for asian compression
     SetCharCompressType( pD->getCharacterCompressionType() );
-}
-
-/*************************************************************************
-|*
-|* Konstruktor, fuer einfuegen Document
-|*
-\************************************************************************/
-
-
-SwDrawDocument::SwDrawDocument( SfxItemPool *pPool, SwDocShell *pDocSh )
-    : FmFormModel( ::GetPalettePath(), pPool, pDocSh, TRUE ),
-    pDoc( pDocSh->GetDoc() )
-{
-    SetScaleUnit( MAP_TWIP );
-    SetDefaultFontHeight( 240 );
-    SetSwapGraphics( TRUE );
-
-    ASSERT( pDocSh, "DocShell not found" );
-    SvxColorTableItem* pColItem = ( SvxColorTableItem* )
-                                ( pDocSh->GetItem( ITEMID_COLOR_TABLE ) );
-    XColorTable *pXCol = pColItem ? pColItem->GetColorTable() :
-                                    XColorTable::GetStdColorTable();
-    SetColorTable( pXCol );
-
-    if ( !pColItem )
-        pDocSh->PutItem( SvxColorTableItem( pXCol ) );
-
-    // Bug 35371:
-    //  fuers "Datei einfuegen" NIE die anderen Items an der DocShell setzen!!!
-    // Diese zeigen sonst immer in das temporaere SdrModel !
-    SetObjectShell( pDocSh );
 }
 
 /*************************************************************************
