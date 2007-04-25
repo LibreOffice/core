@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxmsbas.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:59:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 16:18:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -96,10 +96,26 @@ using namespace com::sun::star;
 
 using rtl::OUString;
 
+bool lcl_hasVBAEnabled()
+{
+    try
+    {
+        Reference< XPropertySet > xProps( ::comphelper::getProcessServiceFactory(), UNO_QUERY_THROW );
+        // test if vba service is present
+        Reference< XComponentContext > xCtx( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "DefaultContext" ))), UNO_QUERY_THROW );
+        Reference< XInterface > xGlobals( xCtx->getValueByName( ::rtl::OUString::createFromAscii( "/singletons/org.openoffice.vba.theGlobals") ), UNO_QUERY_THROW );
+        return true;
+    }
+    catch( Exception& ) {}
+    return false;
+}
+
 int SvxImportMSVBasic::Import( const String& rStorageName,
                                 const String &rSubStorageName,
                                 BOOL bAsComment, BOOL bStripped )
 {
+    if ( lcl_hasVBAEnabled() )
+        bAsComment = FALSE;
     int nRet = 0;
     if( bImport && ImportCode_Impl( rStorageName, rSubStorageName,
                                     bAsComment, bStripped ))
@@ -352,7 +368,8 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         break;
                 }
                 static ::rtl::OUString sVBAOption( RTL_CONSTASCII_USTRINGPARAM( "Option VBASupport 1\n" ) );
-                modeTypeComment = modeTypeComment + sVBAOption;
+                if ( !bAsComment )
+                    modeTypeComment = modeTypeComment + sVBAOption;
 
                 String sModule(sBasicModule); //#i52606# no need to split Macros in 64KB blocks any more!
                 String sTemp;
@@ -411,15 +428,17 @@ BOOL SvxImportMSVBasic::ImportCode_Impl( const String& rStorageName,
                         aSource += rtl::OUString::createFromAscii("\nEnd Sub");
                 }
                 ::rtl::OUString aModName( sModule );
+                if ( aSource.getLength() )
+                {
+                    aSource = modeTypeComment + aSource;
 
-                aSource = modeTypeComment + aSource;
-
-                Any aSourceAny;
-                aSourceAny <<= aSource;
-                if( xLib->hasByName( aModName ) )
-                    xLib->replaceByName( aModName, aSourceAny );
-                else
-                    xLib->insertByName( aModName, aSourceAny );
+                    Any aSourceAny;
+                    aSourceAny <<= aSource;
+                    if( xLib->hasByName( aModName ) )
+                        xLib->replaceByName( aModName, aSourceAny );
+                    else
+                        xLib->insertByName( aModName, aSourceAny );
+                }
 
                 bRet = true;
             }
