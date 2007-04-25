@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 18:28:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:03:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ struct SfxChildWin_Impl
     BOOL                            bEnable;
     BOOL                            bDisabled;
 
-    SfxChildWin_Impl( ULONG nID ) :
+    SfxChildWin_Impl( sal_uInt32 nID ) :
         nSaveId((USHORT) (nID & 0xFFFF) ),
         nInterfaceId((USHORT) (nID >> 16)),
         nId(nSaveId),
@@ -375,7 +375,7 @@ public:
     // Methoden f"ur ChildWindows
     void                    UpdateChildWindows_Impl();
     void                    ResetChildWindows_Impl();
-    void                    SetChildWindowVisible_Impl( ULONG, BOOL, USHORT );
+    void                    SetChildWindowVisible_Impl( sal_uInt32, BOOL, USHORT );
     void                    ToggleChildWindow_Impl(USHORT,BOOL);
     BOOL                    HasChildWindow_Impl(USHORT);
     BOOL                    KnowsChildWindow_Impl(USHORT);
