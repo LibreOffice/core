@@ -4,9 +4,9 @@
  *
  *  $RCSfile: attrib.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:52:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:55:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -113,7 +113,7 @@ public:
 
 //------------------------------------------------------------------------
 
-class ScMergeFlagAttr: public SfxInt16Item
+class SC_DLLPUBLIC ScMergeFlagAttr: public SfxInt16Item
 {
 public:
             ScMergeFlagAttr();
