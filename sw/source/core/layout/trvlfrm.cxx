@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:49:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:09:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1583,125 +1583,6 @@ Point SwRootFrm::GetNextPrevCntntPos( const Point& rPoint, BOOL bNext ) const
         pCnt = pNxt;
     }
     return Point( 0, 0 );
-}
-
-// MB 22.11.2004
-Point SwRootFrm::GetContentFromPos( const Point &rPoint, int offset ) const {
-
-    // First of all we search for the page which
-    // corrosponds to the given position
-    SwLayoutFrm *pPage = (SwLayoutFrm*)Lower();
-    if( pPage )
-        while( pPage->GetNext() && pPage->Frm().Bottom() < rPoint.Y() )
-            pPage = (SwLayoutFrm*)pPage->GetNext();
-
-    // Retrieve the first content frame on the page in question
-    const SwCntntFrm *pCnt = pPage ? pPage->ContainsCntnt() : ContainsCntnt();
-    if(!pCnt)
-        return Point( 0, 0 );
-
-    ViewShell *pSh = GetShell();
-    const SwRect &visArea = pSh->VisArea();
-
-    // Initial search distance
-    float fDistance = FLT_MAX;
-    const SwCntntFrm *pGuess = pCnt;
-
-    // Now search for the content frame which is located
-    // as close as possible to the given postion.
-    do {
-
-        // Found if the position is contained in this frame
-        pCnt->Calc();
-        SwRect aCntFrm(pCnt->UnionFrm());
-        if(aCntFrm.IsInside(rPoint))
-            break;
-
-        // Step to the next frame.
-        const SwCntntFrm *pNxt = pCnt->GetNextCntntFrm();
-        while(pNxt && !pNxt->IsInDocBody())
-            pNxt = pNxt->GetNextCntntFrm();
-        if(pNxt) {
-
-            // stop if the next content frame
-            // is on a page that is not visible...
-            const SwPageFrm *pPageFrm = pNxt->FindPageFrm();
-            if(visArea.GetIntersection(pPageFrm->UnionFrm()).IsEmpty())
-                break;
-
-            Point pkClosest;
-            float fCurrentDistance = aCntFrm.GetDistance(rPoint,pkClosest);
-            if(fCurrentDistance < fDistance) {
-                pGuess = pCnt;
-                fDistance = fCurrentDistance;
-            }
-        }
-
-        pCnt = pNxt;
-
-    } while(pCnt);
-
-    // In case we found the "closest frame",
-    // step one frame back (if possible)
-    if(pCnt = pGuess) {
-
-        // step right?
-        if(offset & 1) {
-            const SwCntntFrm *pNext = pCnt->GetNextCntntFrm();
-            if(pNext) {
-                SwRect aNextCntFrm(pNext->UnionFrm());
-                if(pNext->IsInDocBody())
-                    if(aNextCntFrm.Left() > rPoint.X())
-                        pCnt=pNext;
-            }
-        }
-
-        // step left?
-        else if(offset & 2) {
-            const SwCntntFrm *pPrev = pCnt->GetPrevCntntFrm();
-            if(pPrev) {
-                SwRect aPrevCntFrm(pPrev->UnionFrm());
-                if(pPrev->IsInDocBody())
-                    if(aPrevCntFrm.Right() < rPoint.X())
-                        pCnt=pPrev;
-            }
-        }
-
-        // step up?
-        if(offset & 8) {
-            const SwCntntFrm *pPrev = pCnt->GetPrevCntntFrm();
-            while(pPrev) {
-                SwRect aPrevCntFrm(pPrev->UnionFrm());
-                if(pPrev->IsInDocBody()) {
-                    if(aPrevCntFrm.Top() < rPoint.Y()) {
-                        pCnt=pPrev;
-                        break;
-                    }
-                }
-                pPrev = pPrev->GetPrevCntntFrm();
-            }
-        }
-
-        // step down?
-        else if(offset & 4) {
-            const SwCntntFrm *pNext = pCnt->GetNextCntntFrm();
-            while(pNext) {
-                SwRect aNextCntFrm(pNext->UnionFrm());
-                if(pNext->IsInDocBody()) {
-                    if(aNextCntFrm.Bottom() > rPoint.Y()) {
-                        pCnt=pNext;
-                        break;
-                    }
-                }
-                pNext = pNext->GetNextCntntFrm();
-            }
-        }
-
-        SwRect aCntFrm(pCnt->UnionFrm());
-        return aCntFrm.Pos();
-    }
-
-    return rPoint;
 }
 
 /*************************************************************************
