@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numhead.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:20:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:56:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ SvNumWriteHeader::~SvNumWriteHeader()
     if ( nPos - nDataPos != nDataSize )             // Default getroffen?
     {
         nDataSize = nPos - nDataPos;
-        rStream.Seek(nDataPos - sizeof(ULONG));
+        rStream.Seek(nDataPos - sizeof(sal_uInt32));
         rStream << nDataSize;                       // Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
@@ -236,7 +236,7 @@ ImpSvNumMultipleWriteHeader::~ImpSvNumMultipleWriteHeader()
     {
         nDataSize = nDataEnd - nDataPos;
         ULONG nPos = rStream.Tell();
-        rStream.Seek(nDataPos-sizeof(ULONG));
+        rStream.Seek(nDataPos-sizeof(sal_uInt32));
         rStream << nDataSize;                               // Groesse am Anfang eintragen
         rStream.Seek(nPos);
     }
