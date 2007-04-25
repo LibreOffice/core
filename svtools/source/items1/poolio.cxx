@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolio.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:22:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:55:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -788,7 +788,7 @@ SvStream &SfxItemPool::Load1_Impl(SvStream &rStream)
     if ( pImp->nMajorVer > 1 || pImp->nMinorVer >= 3 )
     {
         // Version-Map finden (letztes ULONG der Size-Table gibt Pos an)
-        rStream.Seek( nEndOfSizes - sizeof(ULONG) );
+        rStream.Seek( nEndOfSizes - sizeof(sal_uInt32) );
         sal_uInt32 nVersionMapPos;
         rStream >> nVersionMapPos;
         rStream.Seek( nVersionMapPos );
