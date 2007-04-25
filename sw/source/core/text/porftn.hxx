@@ -4,9 +4,9 @@
  *
  *  $RCSfile: porftn.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 04:58:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:10:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,6 @@ class SwFtnPortion : public SwFldPortion
 public:
     SwFtnPortion( const XubString &rExpand, SwTxtFrm *pFrm, SwTxtFtn *pFtn,
                   KSHORT nOrig = KSHRT_MAX );
-    void ClearFtn();
     inline KSHORT& Orig() { return nOrigHeight; }
 
     virtual void Paint( const SwTxtPaintInfo &rInf ) const;
