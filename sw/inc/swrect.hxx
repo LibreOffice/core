@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:34:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:57:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -97,13 +97,6 @@ public:
            SwRect &_Intersection( const SwRect &rRect );
     inline SwRect  GetIntersection( const SwRect& rRect ) const;
 
-    // MB: 24.11.2004
-    // Returns the true distance between point and rectangle.
-    // If the point is inside the rectangle, the result is 0.0f.
-    // The function also returns the point closest point inside
-    // the rectangle relative to the point passed as argument.
-    float GetDistance( const Point &rPOINT, Point rClosest ) const;
-
            BOOL IsInside( const Point& rPOINT ) const;
            BOOL IsNear(const Point& rPoint, long nTolerance ) const;
            BOOL IsInside( const SwRect& rRect ) const;
@@ -161,14 +154,11 @@ public:
     void SetUpperLeftCorner(  const Point& rNew );
     void SetUpperRightCorner(  const Point& rNew );
     void SetLowerLeftCorner(  const Point& rNew );
-    void SetLowerRightCorner(  const Point& rNew );
-    const Point _Pos()  const;
     const Size  _Size() const;
     const Point TopLeft()  const;
     const Point TopRight()  const;
     const Point BottomLeft()  const;
     const Point BottomRight()  const;
-    const Point SwappedPos()  const;
     const Size  SwappedSize() const;
     long GetLeftDistance( long ) const;
     long GetBottomDistance( long ) const;
