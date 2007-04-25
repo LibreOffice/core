@@ -4,9 +4,9 @@
  *
  *  $RCSfile: authfld.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:09:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:03:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,38 +136,6 @@ BOOL    SwAuthEntry::operator==(const SwAuthEntry& rComp)
             return FALSE;
     return TRUE;
 }
-// --------------------------------------------------------
-BOOL    SwAuthEntry::GetFirstAuthorField(USHORT& nPos, String& rToFill)const
-{
-    BOOL bRet = FALSE;
-        for(USHORT i = 0; i < AUTH_FIELD_END; i++)
-            if(aAuthFields[i].Len())
-            {
-                rToFill = aAuthFields[i];
-                nPos = i;
-                bRet = TRUE;
-                break;
-            }
-    return bRet;
-}
-// --------------------------------------------------------
-BOOL    SwAuthEntry::GetNextAuthorField(USHORT& nPos, String& rToFill)const
-{
-    BOOL bRet = FALSE;
-    if(AUTH_FIELD_END > ++nPos)
-    {
-        for(USHORT i = nPos; i < AUTH_FIELD_END; i++)
-            if(aAuthFields[i].Len())
-            {
-                rToFill = aAuthFields[i];
-                nPos = i;
-                bRet = TRUE;
-                break;
-            }
-    }
-    return bRet;
-}
-
 // --------------------------------------------------------
 
 /* -----------------14.09.99 16:15-------------------
@@ -410,43 +378,6 @@ long    SwAuthorityFieldType::GetHandle(USHORT nPos)
         nRet = (long)(void*)pTemp;
     }
     return nRet;
-}
-/* -----------------20.10.99 13:38-------------------
-
- --------------------------------------------------*/
-USHORT  SwAuthorityFieldType::GetPosition(long nHandle)
-{
-    USHORT j = 0;
-    for( ; j < m_pDataArr->Count(); ++j )
-    {
-        const SwAuthEntry* pTemp = m_pDataArr->GetObject(j);
-        long nTmp = (long)(void*)pTemp;
-        if( nTmp == nHandle )
-            break;
-    }
-    if( j == m_pDataArr->Count() )
-        j = USHRT_MAX;
-
-    ASSERT( USHRT_MAX != j, "handle not found" );
-    return j;
-}
-
-/*-- 11.10.99 08:51:03---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-USHORT  SwAuthorityFieldType::GetEntryCount() const
-{
-    return m_pDataArr->Count();
-}
-/*-- 11.10.99 08:51:03---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-const SwAuthEntry*  SwAuthorityFieldType::GetEntryByPosition(USHORT nPos) const
-{
-    if(nPos < m_pDataArr->Count())
-        return m_pDataArr->GetObject(nPos);
-    DBG_ERROR("wrong index")
-    return 0;
 }
 /* -----------------19.10.99 13:46-------------------
 
@@ -802,13 +733,6 @@ void    SwAuthorityField::SetPar1(const String& rStr)
 /* -----------------11.10.99 09:43-------------------
 
  --------------------------------------------------*/
-USHORT  SwAuthorityField::GetHandlePosition() const
-{
-    SwAuthorityFieldType* pAuthType = (SwAuthorityFieldType*)GetTyp();
-    DBG_ASSERT(pAuthType, "no field type")
-    return pAuthType->GetPosition(nHandle);
-}
-
 String SwAuthorityField::GetDescription() const
 {
     return SW_RES(STR_AUTHORITY);
