@@ -23,10 +23,12 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\scalc\statusbar
 ..\%__SRC%\bin\scui?????.dll %_DEST%\bin%_EXT%\scui?????.dll
 ..\%__SRC%\bin\dfa?????.dll %_DEST%\bin%_EXT%\dfa?????.dll
 ..\%__SRC%\bin\rot?????.dll %_DEST%\bin%_EXT%\rot?????.dll
+..\%__SRC%\bin\vba*.* %_DEST%\bin%_EXT%\vba*.*
 ..\%__SRC%\bin\addin.zip %_DEST%\bin%_EXT%\addin.zip
 ..\%__SRC%\misc\*.map %_DEST%\bin%_EXT%\*.map
 ..\%__SRC%\misc\sc.csv %_DEST%\inc%_EXT%\sc.csv
 ..\%__SRC%\lib\sci.lib %_DEST%\lib%_EXT%\sci.lib
+..\%__SRC%\lib\vba*.* %_DEST%\lib%_EXT%\vba*.*
 ..\%__SRC%\slb\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\%__SRC%\lib\lib*.* %_DEST%\lib%_EXT%\lib*.*
 ..\xml\*.xml %_DEST%\xml%_EXT%\*.xml
