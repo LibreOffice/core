@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8struc.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2006-04-19 13:43:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:47:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -834,25 +834,25 @@ struct WW8_TablePos
 struct WW8_FSPA
 {
 public:
-    long nSpId;     //Shape Identifier. Used in conjunction with the office art data (found via fcDggInfo in the FIB) to find the actual data for this shape.
-    long nXaLeft;   //left of rectangle enclosing shape relative to the origin of the shape
-    long nYaTop;        //top of rectangle enclosing shape relative to the origin of the shape
-    long nXaRight;  //right of rectangle enclosing shape relative to the origin of the shape
-    long nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
-    USHORT bHdr:1;
+    sal_Int32 nSpId;     //Shape Identifier. Used in conjunction with the office art data (found via fcDggInfo in the FIB) to find the actual data for this shape.
+    sal_Int32 nXaLeft;   //left of rectangle enclosing shape relative to the origin of the shape
+    sal_Int32 nYaTop;        //top of rectangle enclosing shape relative to the origin of the shape
+    sal_Int32 nXaRight;  //right of rectangle enclosing shape relative to the origin of the shape
+    sal_Int32 nYaBottom;//bottom of the rectangle enclosing shape relative to the origin of the shape
+    sal_uInt16 bHdr:1;
     //0001 1 in the undo doc when shape is from the header doc, 0 otherwise (undefined when not in the undo doc)
-    USHORT nbx:2;
+    sal_uInt16 nbx:2;
     //0006 x position of shape relative to anchor CP
     //0 relative to page margin
     //1 relative to top of page
     //2 relative to text (column for horizontal text; paragraph for vertical text)
     //3 reserved for future use
-    USHORT nby:2;
+    sal_uInt16 nby:2;
     //0018 y position of shape relative to anchor CP
     //0 relative to page margin
     //1 relative to top of page
     //2 relative to text (paragraph for horizontal text; column for vertical text)
-    USHORT nwr:4;
+    sal_uInt16 nwr:4;
     //01E0 text wrapping mode
     //0 like 2, but doesn't require absolute object
     //1 no text next to shape
@@ -861,22 +861,22 @@ public:
     //4 wrap tightly around object
     //5 wrap tightly, but allow holes
     //6-15 reserved for future use
-    USHORT nwrk:4;
+    sal_uInt16 nwrk:4;
     //1E00 text wrapping mode type (valid only for wrapping modes 2 and 4
     //0 wrap both sides
     //1 wrap only on left
     //2 wrap only on right
     //3 wrap only on largest side
-    USHORT bRcaSimple:1;
+    sal_uInt16 bRcaSimple:1;
     //2000 when set, temporarily overrides bx, by, forcing the xaLeft, xaRight, yaTop, and yaBottom fields to all be page relative.
-    USHORT bBelowText:1;
+    sal_uInt16 bBelowText:1;
     //4000
     //1 shape is below text
     //0 shape is above text
-    USHORT bAnchorLock:1;
+    sal_uInt16 bAnchorLock:1;
     //8000  1 anchor is locked
     //      0 anchor is not locked
-    long nTxbx; //count of textboxes in shape (undo doc only)
+    sal_Int32 nTxbx; //count of textboxes in shape (undo doc only)
 public:
     enum FSPAOrient {RelPgMargin, RelPageBorder, RelText};
 };
