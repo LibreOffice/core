@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-12-14 14:47:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:58:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,7 +70,6 @@ public:
 
     String                  GetContent( sal_uInt32 nFmt = 0 );
            void             SetContent( const String& rStr, sal_uInt32 nFmt = 0 );
-           void             CtrlSetContent( const String& rStr );
 
     inline BOOL             IsValid() const;
     inline void             ChgValid( BOOL bNew );
