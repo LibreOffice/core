@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewimp.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 13:15:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:11:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -636,32 +636,3 @@ IMPL_LINK(SwViewImp, SetStopPrt, void *, EMPTYARG)
     return 0;
 }
 
-String SwViewImp::GetMarkListDescription() const
-{
-    String aResult;
-    const SdrMarkList & rMarkList = GetDrawView()->GetMarkedObjectList();
-
-    if (rMarkList.GetMarkCount() == 1)
-    {
-        SdrObject * pSdrObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-
-        if (pSdrObj != pSdrObjCached)
-        {
-            SdrObject * pSdrObjCopy = pSdrObj->Clone();
-            SdrUndoNewObj * pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
-            sSdrObjCachedComment = pSdrUndo->GetComment();
-
-            delete pSdrUndo;
-
-            pSdrObjCached = pSdrObj;
-        }
-
-        aResult = sSdrObjCachedComment;
-    }
-    else if (rMarkList.GetMarkCount() > 1)
-    {
-        aResult = SW_RES(STR_MULTISEL);
-    }
-
-    return aResult;
-}
