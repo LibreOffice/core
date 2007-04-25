@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accpara.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 14:22:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:59:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,9 +231,6 @@ protected:
     sal_Bool GetGlyphBoundary( com::sun::star::i18n::Boundary& rBound,
                                const rtl::OUString& rText,
                                sal_Int32 nPos );
-
-    /// generate an empty boundary
-    sal_Bool GetEmptyBoundary( com::sun::star::i18n::Boundary& rBound );
 
     /// get boundaries of word/sentence/etc. for specified text type
     /// Does all argument checking, and then delegates to helper methods above.
