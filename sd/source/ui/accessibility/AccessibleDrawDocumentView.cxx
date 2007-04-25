@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 14:23:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:39:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -276,7 +276,7 @@ sal_Int32 SAL_CALL
 
 
 uno::Reference<XAccessible> SAL_CALL
-    AccessibleDrawDocumentView::getAccessibleChild (long nIndex)
+    AccessibleDrawDocumentView::getAccessibleChild (sal_Int32 nIndex)
     throw (::com::sun::star::uno::RuntimeException)
 {
     ::osl::ClearableMutexGuard aGuard (maMutex);
