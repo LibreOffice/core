@@ -4,9 +4,9 @@
  *
  *  $RCSfile: usrfld.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:13:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:04:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,35 +338,6 @@ void SwUserFieldType::SetContent( const String& rStr, sal_uInt32 nFmt )
     }
 }
 
-void SwUserFieldType::CtrlSetContent( const String& rStr )
-{
-    if( aContent != rStr )
-    {
-        aContent = rStr;
-        bValidValue = sal_False;
-
-        sal_Bool bModified = GetDoc()->IsModified();
-        GetDoc()->SetModified();
-        if( !bModified )    // Bug 57028
-            GetDoc()->SetUndoNoResetModified();
-
-        // dann mal alle Feldern updaten
-        if( GetDepends() )
-        {
-            SwEditShell* pSh = GetDoc()->GetEditShell();
-            if( pSh )
-                pSh->StartAllAction();
-
-            Modify( 0, 0 );
-            GetDoc()->UpdateUsrFlds();
-            GetDoc()->UpdateExpFlds(NULL, true);
-
-            GetDoc()->SetModified();
-            if( pSh )
-                pSh->EndAllAction();
-        }
-    }
-}
 /*-----------------04.03.98 17:05-------------------
 
 --------------------------------------------------*/
