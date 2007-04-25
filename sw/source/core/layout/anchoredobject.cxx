@@ -4,9 +4,9 @@
  *
  *  $RCSfile: anchoredobject.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-01 15:12:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:07:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -275,11 +275,6 @@ void SwAnchoredObject::SetPageFrm( SwPageFrm* _pNewPageFrm )
 const SwRect& SwAnchoredObject::GetLastCharRect() const
 {
     return maLastCharRect;
-}
-
-SwTwips SwAnchoredObject::GetLastCharX() const
-{
-    return maLastCharRect.Left() - GetObjRect().Left();
 }
 
 SwTwips SwAnchoredObject::GetRelCharX( const SwFrm* pFrm ) const
