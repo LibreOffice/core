@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:01:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:13:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -918,6 +918,5 @@ void SwDocShell::SubInitNew()
  * Document Interface Access
  */
 IDocumentDeviceAccess* SwDocShell::getIDocumentDeviceAccess() { return pDoc; }
-IDocumentTimerAccess* SwDocShell::getIDocumentTimerAccess() { return pDoc; }
 const IDocumentSettingAccess* SwDocShell::getIDocumentSettingAccess() const { return pDoc; }
 
