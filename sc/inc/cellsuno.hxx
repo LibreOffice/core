@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 11:52:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:55:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,7 +260,7 @@ public:
                         const SvxBoxItem& rOuter, const SvxBoxInfoItem& rInner );
 };
 
-class ScCellRangesBase : public com::sun::star::beans::XPropertySet,
+class SC_DLLPUBLIC ScCellRangesBase : public com::sun::star::beans::XPropertySet,
                          public com::sun::star::beans::XMultiPropertySet,
                          public com::sun::star::beans::XPropertyState,
                          public com::sun::star::sheet::XSheetOperation,
@@ -583,7 +583,7 @@ public:
 };
 
 
-class ScCellRangesObj : public ScCellRangesBase,
+class SC_DLLPUBLIC ScCellRangesObj : public ScCellRangesBase,
                         public com::sun::star::sheet::XSheetCellRangeContainer,
                         public com::sun::star::container::XNameContainer,
                         public com::sun::star::container::XEnumerationAccess
@@ -691,7 +691,7 @@ public:
 };
 
 
-class ScCellRangeObj : public ScCellRangesBase,
+class SC_DLLPUBLIC ScCellRangeObj : public ScCellRangesBase,
                        public com::sun::star::sheet::XCellRangeAddressable,
                        public com::sun::star::sheet::XSheetCellRange,
                        public com::sun::star::sheet::XArrayFormulaRange,
