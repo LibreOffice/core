@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwNumberTree.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:31:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 08:50:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -279,13 +279,6 @@ protected:
        Notifies this node (NotifyNode) and all descendants.
      */
     void Notify();
-
-    /**
-       Notifies a child and its descendants.
-
-       @param pNode    the child to be notifed
-     */
-    void Notify(SwNumberTreeNode * pNode);
 
     /**
        Notifies all invalid children of this node.
@@ -639,16 +632,6 @@ public:
      */
     bool IsSane(bool bRecursive) const;
 #endif // __SW_NUMBER_TREE_SANITY_CHECK
-
-    /**
-       Returns if this node contains a node as a child.
-
-       @param pChild      node to search
-
-       @retval true    pChild is a child of this node
-       @retval false   else
-     */
-    bool Contains(const SwNumberTreeNode * pChild) const;
 
     /**
        Returns a string representation of this node.
