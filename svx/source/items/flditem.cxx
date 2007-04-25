@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flditem.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:53:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:52:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -402,7 +402,7 @@ void SvxURLField::Load( SvPersistStream & rStm )
 {
     USHORT nFormat;
     sal_uInt32 nFrameMarker, nCharSetMarker;
-    long nUlongSize = (long)sizeof(ULONG);
+    long nUlongSize = (long)sizeof(sal_uInt32);
     String aTmpURL;
 
     rStm >> nFormat;
