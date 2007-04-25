@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:39:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 09:01:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -777,21 +777,6 @@ SfxObjectShell* SwDoc::GetPersist() const
 }
 
 
-
-void SwDoc::SetPersist( SfxObjectShell* pPersist )
-{
-    if( !pDocShell )
-    {
-        ASSERT( ( !pPersist && pLinkMgr->GetPersist() ) ||
-                ( pPersist && !pLinkMgr->GetPersist() ),
-                "doppeltes setzen von Persist-Pointer?" )
-        pLinkMgr->SetPersist( pPersist );
-    }
-#ifndef PRODUCT
-    else
-        ASSERT( !this, "DocShell existiert schon!" )
-#endif
-}
 
 const SfxDocumentInfo* SwDoc::GetpInfo() const
 {
