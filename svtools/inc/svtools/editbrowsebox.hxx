@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editbrowsebox.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:16:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 15:16:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,7 +526,7 @@ namespace svt
         CellControllerRef        aController,
                                  aOldController;
 
-        sal_uInt32  nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
+        ULONG   nStartEvent, nEndEvent, nCellModifiedEvent;     // event ids
         Window* m_pFocusWhileRequest;
             // In ActivateCell, we grab the focus asynchronously, but if between requesting activation
             // and the asynchornous event the focus has changed, we won't grab it for ourself.
