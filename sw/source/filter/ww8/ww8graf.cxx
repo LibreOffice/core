@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.145 $
+ *  $Revision: 1.146 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-14 18:27:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-25 14:47:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2344,7 +2344,7 @@ SdrObject* SwWW8ImplReader::CreateContactObject(SwFrmFmt* pFlyFmt)
 
 //#109311# Miserable miserable hack to fudge word's graphic layout in
 //RTL mode to ours.
-bool SwWW8ImplReader::MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
+bool SwWW8ImplReader::MiserableRTLGraphicsHack(SwTwips &rLeft, SwTwips nWidth,
     SwHoriOrient eHoriOri, SwRelationOrient eHoriRel)
 {
     if (!IsRightToLeft())
@@ -2517,10 +2517,12 @@ RndStdIds SwWW8ImplReader::ProcessEscherAlign(SvxMSDffImportRec* pRecord,
         // floating screen objects, which are imported.
         {
             //#109311# Miserable miserable hack.
-            long nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
-            if (MiserableRTLGraphicsHack(pFSPA->nXaLeft, nWidth, eHoriOri,
+            SwTwips nWidth = (pFSPA->nXaRight - pFSPA->nXaLeft);
+            SwTwips nLeft = pFSPA->nXaLeft;
+            if (MiserableRTLGraphicsHack(nLeft, nWidth, eHoriOri,
                 eHoriRel))
             {
+                pFSPA->nXaLeft = nLeft;
                 pFSPA->nXaRight = pFSPA->nXaLeft + nWidth;
             }
         }
