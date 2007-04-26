@@ -4,9 +4,9 @@
  *
  *  $RCSfile: editsh.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:51:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:56:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -375,7 +375,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), ResId(RID_SCDLG_NAMES_PASTE), FALSE );
+                AbstractScNamePasteDlg* pDlg = pFact->CreateScNamePasteDlg( pViewData->GetDialogParent(), pDoc->GetRangeName(), RID_SCDLG_NAMES_PASTE, FALSE );
                 DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
@@ -413,7 +413,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
                 SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg( pViewData->GetDialogParent(), &aAttrs,
-                                                                     pObjSh,ResId(RID_SCDLG_CHAR) );
+                                                                     pObjSh, RID_SCDLG_CHAR );
                 DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 short nRet = pDlg->Execute();
                 // pDlg is needed below
