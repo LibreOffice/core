@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-05 15:19:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:48:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,44 +132,9 @@ static osl::Mutex& getResMgrMutex()
     return *pResMgrMutex;
 }
 
-// fallback to first resource ever; can only work for
-// global resource id's. this concept is broken beyond measure,
-// but still used by basic scripting
-static ResMgr* pGlobalFallbackResMgr = NULL;
-
-/* ImplSVResourceData
-
-   This class aims to mimic the stateful fallback behaviour from
-   old single threaded days. This is so you can create a Resource
-   without providing the correct ResMgr in which case the last ResMgr
-   in use will be taken instead. This is conceptually completely broken
-   in a threaded environment, however this sadly is where we currently are.
-
-   each thread will have its own current ResMgr in the assumption that this
-   will more often be the correct one than it would be if every thread
-   could set the current ResMgr anytime. However since the current ResMgr will
-   be destroyed in one thread but could be current in more than one thread,
-   ImplSVResourceData::getThreadResMgr will need to check whether the
-   current ResMgr is still alive. This is implemented using a set that contains
-   pointers to the ResMgr objects currently used as "current" ResMgr in any thread.
-*/
-struct ImplSVResourceData
-{
-    oslThreadKey        pThreadKey;
-    ImplSVResourceData()
-    {
-        pThreadKey = osl_createThreadKey( NULL );
-    }
-
-    // caution: these methods expect to be protected by getResMgrMutex()
-    ResMgr* getThreadResMgr();
-    void setThreadResMgr( ResMgr* pResMgr );
-};
-
 struct ImpContent;
 class InternalResMgr
 {
-    friend void ImplSVResourceData::setThreadResMgr(ResMgr*);
     friend class ResMgr;
     friend class SimpleResMgr;
     friend class ResMgrContainer;
@@ -537,61 +502,10 @@ void ResMgrContainer::freeResMgr( InternalResMgr* pResMgr )
 
 // =======================================================================
 
-struct ResData : public rtl::Static< ImplSVResourceData, ResData > {};
-
-static std::set<ResMgr*> aThreadMgrs;
-
-// caution: this method expect to be protect by getResMgrMutex()
-ResMgr* ImplSVResourceData::getThreadResMgr()
-{
-    ResMgr* pRet = (ResMgr*)osl_getThreadKeyData( pThreadKey );
-    // check whether pRet is still alive
-    if( pRet && aThreadMgrs.find( pRet ) == aThreadMgrs.end() )
-        pRet = NULL;
-    if( ! pRet )
-    {
-        pRet = pGlobalFallbackResMgr;
-        if( pRet )
-            setThreadResMgr( pRet );
-    }
-    return pRet;
-}
-// caution: this method expect to be protect by getResMgrMutex()
-void ImplSVResourceData::setThreadResMgr( ResMgr* pResMgr )
-{
-    if( ! pGlobalFallbackResMgr && pResMgr )
-    {
-        com::sun::star::lang::Locale aLoc( pResMgr->ImplGetLocale() );
-        InternalResMgr* pImpl = ResMgrContainer::get().getResMgr( pResMgr->ImplGetPrefix(), aLoc, true );
-        if( pImpl )
-            pGlobalFallbackResMgr = ResMgr::ImplCreateResMgr( pImpl );
-    }
-    aThreadMgrs.insert( pResMgr );
-    osl_setThreadKeyData( pThreadKey, pResMgr );
-}
-
 void Resource::TestRes()
 {
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    ResMgr* pMgr = ResData::get().getThreadResMgr();
-    if( pMgr )
-        pMgr->TestStack( this );
-}
-
-// -----------------------------------------------------------------------
-
-void Resource::SetResManager( ResMgr* pNewResMgr )
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    ResData::get().setThreadResMgr( pNewResMgr );
-}
-
-// -----------------------------------------------------------------------
-
-ResMgr* Resource::GetResManager()
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    return ResData::get().getThreadResMgr();
+    if( m_pResMgr )
+        m_pResMgr->TestStack( this );
 }
 
 struct ImpContent
@@ -871,7 +785,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
     {
         bInUse = TRUE;
 
-        ResId aResId( sal_uInt32(RSCVERSION_ID) );
+        ResId aResId( sal_uInt32(RSCVERSION_ID), *rTypeId.GetResMgr() );
         aResId.SetRT( RSC_VERSIONCONTROL );
 
         if ( rTypeId.GetResMgr()->GetResource( aResId ) )
@@ -881,7 +795,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
             {
                 aTypStr = UniString( rTypeId );
                 // Versions Resource Klassenzeiger ans Ende setzen
-                Resource::GetResManager()->Increment( sizeof( RSHEADER_TYPE ) );
+                rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }
         }
         bInUse = FALSE;
@@ -910,7 +824,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
         aStr += '\n';
 
     aStr.Append( "Class: " );
-    aStr.Append( ByteString( GetTypeRes_Impl( ResId( nRT, pNewResMgr ) ), RTL_TEXTENCODING_UTF8 ) );
+    aStr.Append( ByteString( GetTypeRes_Impl( ResId( nRT, *pNewResMgr ) ), RTL_TEXTENCODING_UTF8 ) );
     aStr.Append( ", Id: " );
     aStr.Append( ByteString::CreateFromInt32( (long)nId ) );
     aStr.Append( ". " );
@@ -920,7 +834,7 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     while( nDepth > 0 )
     {
         aStr.Append( "Class: " );
-        aStr.Append( ByteString( GetTypeRes_Impl( ResId( rResStack[nDepth].pResource->GetRT(), pNewResMgr ) ), RTL_TEXTENCODING_UTF8 ) );
+        aStr.Append( ByteString( GetTypeRes_Impl( ResId( rResStack[nDepth].pResource->GetRT(), *pNewResMgr ) ), RTL_TEXTENCODING_UTF8 ) );
         aStr.Append( ", Id: " );
         aStr.Append( ByteString::CreateFromInt32( (long)rResStack[nDepth].pResource->GetId() ) );
         nDepth--;
@@ -930,8 +844,6 @@ void ResMgr::RscError_Impl( const sal_Char* pMessage, ResMgr* pResMgr,
     delete pNewResMgr;
 
     DBG_ERROR( aStr.GetBuffer() );
-
-    ResData::get().setThreadResMgr( pResMgr );
 }
 
 #endif
@@ -1027,9 +939,6 @@ void ResMgr::DestroyAllResMgr()
 {
     {
         osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-
-        delete pGlobalFallbackResMgr, pGlobalFallbackResMgr = NULL;
-
         if( pEmptyBuffer )
         {
             rtl_freeMemory( pEmptyBuffer );
@@ -1105,9 +1014,6 @@ ResMgr::~ResMgr()
                                     aStack[nCurStack].pResource );
         nCurStack--;
     }
-    if( ResData::get().getThreadResMgr() == this )
-        ResData::get().setThreadResMgr( NULL );
-    aThreadMgrs.erase( this );
 }
 
 
@@ -1141,7 +1047,6 @@ void ResMgr::decStack()
             #endif
             delete pFallbackResMgr;
             pFallbackResMgr = NULL;
-            ResData::get().setThreadResMgr( rTop.pResMgr );
         }
         nCurStack--;
     }
@@ -1270,13 +1175,9 @@ BOOL ResMgr::GetResource( const ResId& rId, const Resource* pResObj )
     RESOURCE_TYPE   nRT = rId.GetRT2();
     sal_uInt32      nId = rId.GetId();
 
-    ResMgr* pLastMgr = ResData::get().getThreadResMgr();
-    if ( pLastMgr != this )
-        ResData::get().setThreadResMgr( this );
-
     incStack();
     pTop = &aStack[nCurStack];
-    pTop->Init( pLastMgr, pResObj, nId |
+    pTop->Init( pMgr, pResObj, nId |
                 (rId.IsAutoRelease() ? 0 : RSC_DONTRELEASE) );
 
     if ( pClassRes )
@@ -1352,16 +1253,15 @@ void * ResMgr::GetResourceSkipHeader( const ResId& rResId, ResMgr ** ppResMgr )
 {
     osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
 
-    if ( rResId.GetResMgr() )
-        *ppResMgr = rResId.GetResMgr();
-    else
-        *ppResMgr = ResData::get().getThreadResMgr();
+    DBG_ASSERT( rResId.GetResMgr(), "illegal ResId without ResMgr" );
+    *ppResMgr = rResId.GetResMgr();
     if( *ppResMgr )
     {
         (*ppResMgr)->GetResource( rResId );
         (*ppResMgr)->Increment( sizeof( RSHEADER_TYPE ) );
+        return (*ppResMgr)->GetClass();
     }
-    return *ppResMgr ? (*ppResMgr)->GetClass() : getEmptyBuffer();
+    return getEmptyBuffer();
 }
 
 // -----------------------------------------------------------------------
@@ -1410,9 +1310,6 @@ void ResMgr::PopContext( const Resource* pResObj )
         if( (pTop->Flags & (RC_GLOBAL | RC_NOTFOUND)) == RC_GLOBAL )
             // kann auch Fremd-Ressource sein
             pImpRes->FreeGlobalRes( pTop->aResHandle, pTop->pResource );
-        if ( pTop->pResMgr != this )
-            // wurde durch ResId gesetzt, automatisch zuruecksetzen
-            ResData::get().setThreadResMgr( pTop->pResMgr );
         decStack();
     }
 }
@@ -1579,7 +1476,6 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
                 return NULL;
             }
             OSL_TRACE( "trying fallback: %s\n", OUStringToOString( pRes->aFileName, osl_getThreadTextEncoding() ).getStr() );
-            ResMgr* pCurThreadMgr = ResData::get().getThreadResMgr();
             pFallback = new ResMgr( pRes );
             pFallback->pOriginalResMgr = this;
             // try to recreate the resource stack
@@ -1591,7 +1487,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
                     bHaveStack = false;
                     break;
                 }
-                ResId aId( aStack[i].pResource->GetId() );
+                ResId aId( aStack[i].pResource->GetId(), *pFallbackResMgr );
                 aId.SetRT( aStack[i].pResource->GetRT() );
                 if( !pFallback->GetResource( aId ) )
                 {
@@ -1601,7 +1497,7 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             }
             if( bHaveStack )
             {
-                ResId aId( rId.GetId() );
+                ResId aId( rId.GetId(), *pFallbackResMgr );
                 aId.SetRT( rId.GetRT() );
                 if( !pFallback->GetResource( aId, pResource ) )
                     bHaveStack = false;
@@ -1612,9 +1508,6 @@ ResMgr* ResMgr::CreateFallbackResMgr( const ResId& rId, const Resource* pResourc
             {
                 delete pFallback;
                 pFallback = NULL;
-                // ResMgr::GetResource has set pFallback as ThreadResMgr
-                // the destructor sets NULL, so set the original ResMgr again
-                ResData::get().setThreadResMgr( pCurThreadMgr );
             }
         }
     }
