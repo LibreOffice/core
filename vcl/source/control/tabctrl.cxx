@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:55:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:28:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -292,7 +292,7 @@ void TabControl::ImplLoadRes( const ResId& rResId )
         // Item hinzufuegen
         for( ULONG i = 0; i < nEle; i++ )
         {
-            InsertPage( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+            InsertPage( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
         }
     }
