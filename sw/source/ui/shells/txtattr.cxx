@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtattr.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:18:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:18:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -600,7 +600,7 @@ void SwTextShell::ExecParaAttrArgs(SfxRequest &rReq)
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(), aSet,ResId( DLG_SWDROPCAPS ));
+                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(), aSet, DLG_SWDROPCAPS );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if (pDlg->Execute() == RET_OK)
                 {
