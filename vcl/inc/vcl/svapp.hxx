@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svapp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:12:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:34:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -401,6 +401,11 @@ public:
     static Rectangle            GetWorkAreaPosSizePixel( unsigned int nScreen );
     static rtl::OUString        GetScreenName( unsigned int nScreen );
     static unsigned int         GetDefaultDisplayNumber();
+    // if IsMultiDisplay() == false the return value will be
+    // nearest screen of the target rectangle
+    // in case of IsMultiDisplay() == true the return value
+    // will always be GetDefaultDisplayNumber()
+    static unsigned int         GetBestScreen( const Rectangle& );
 
     static const LocaleDataWrapper& GetAppLocaleDataWrapper();
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svdata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:12:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:35:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -312,6 +312,7 @@ struct ImplSVNWFData
     bool                    mbFlatMenu;                   // no popup 3D border
     Color                   maMenuBarHighlightTextColor;  // override higlight text color
                                                           // in menubar if not transparent
+    bool                    mbOpenMenuOnF10;              // on gnome the first menu opens on F10
 };
 
 

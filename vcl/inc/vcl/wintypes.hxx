@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wintypes.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:17:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:35:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,10 +210,14 @@ typedef sal_Int64 WinBits;
 #define WB_NOMULTILINE          ((WinBits)0x10000000)
 #define WB_INFO                 ((WinBits)0x20000000)
 
+// Window-Bits for CheckBox
+#define WB_CBLINESTYLE          ((WinBits)SAL_CONST_INT64(0x2000000000))
+
 // Window-Bits for Edit
 #define WB_PASSWORD             ((WinBits)0x01000000)
 #define WB_READONLY             ((WinBits)0x02000000)
 #define WB_NOHIDESELECTION      ((WinBits)0x40000000)
+#define WB_FORCECTRLBACKGROUND  ((WinBits)0x80000000)
 
 // Window-Bits for MultiLineEdit
 #define WB_IGNORETAB            ((WinBits)0x20000000)
