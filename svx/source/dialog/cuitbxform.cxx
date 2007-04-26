@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuitbxform.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:15:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:28:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,10 +112,10 @@
 
 FmInputRecordNoDialog::FmInputRecordNoDialog(Window * pParent)
     :ModalDialog( pParent, SVX_RES(RID_SVX_DLG_INPUTRECORDNO))
-    ,m_aLabel(this, ResId(1))
-    ,m_aRecordNo(this, ResId(1))
-    ,m_aOk(this, ResId(1))
-    ,m_aCancel(this, ResId(1))
+    ,m_aLabel(this, SVX_RES(1))
+    ,m_aRecordNo(this, SVX_RES(1))
+    ,m_aOk(this, SVX_RES(1))
+    ,m_aCancel(this, SVX_RES(1))
 {
     m_aRecordNo.SetMin(1);
     m_aRecordNo.SetMax(0x7FFFFFFF);
