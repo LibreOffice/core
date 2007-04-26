@@ -4,9 +4,9 @@
  *
  *  $RCSfile: macrosecurity.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:16:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:17:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,11 +103,11 @@ IMPL_LINK( MacroSecurity, OkBtnHdl, void*, EMPTYARG )
 
 MacroSecurity::MacroSecurity( Window* _pParent, const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment )
     :TabDialog          ( _pParent, XMLSEC_RES( RID_XMLSECTP_MACROSEC ) )
-    ,maTabCtrl          ( this, ResId( 1 ) )
-    ,maOkBtn            ( this, ResId( BTN_OK ) )
-    ,maCancelBtn        ( this, ResId( BTN_CANCEL ) )
-    ,maHelpBtn          ( this, ResId( BTN_HELP ) )
-    ,maResetBtn         ( this, ResId( BTN_RESET ) )
+    ,maTabCtrl          ( this, XMLSEC_RES( 1 ) )
+    ,maOkBtn            ( this, XMLSEC_RES( BTN_OK ) )
+    ,maCancelBtn        ( this, XMLSEC_RES( BTN_CANCEL ) )
+    ,maHelpBtn          ( this, XMLSEC_RES( BTN_HELP ) )
+    ,maResetBtn         ( this, XMLSEC_RES( BTN_RESET ) )
 {
     FreeResource();
 
@@ -138,12 +138,12 @@ MacroSecurityTP::MacroSecurityTP( Window* _pParent, const ResId& _rResId, MacroS
 
 MacroSecurityLevelTP::MacroSecurityLevelTP( Window* _pParent, MacroSecurity* _pDlg )
     :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_SECLEVEL ), _pDlg )
-    ,maSecLevelFL       ( this, ResId( FL_SECLEVEL ) )
-    ,maSecReadonlyFI    ( this, ResId( FI_SEC_READONLY ))
-    ,maVeryHighRB       ( this, ResId( RB_VERYHIGH ) )
-    ,maHighRB           ( this, ResId( RB_HIGH ) )
-    ,maMediumRB         ( this, ResId( RB_MEDIUM ) )
-    ,maLowRB            ( this, ResId( RB_LOW ) )
+    ,maSecLevelFL       ( this, XMLSEC_RES( FL_SECLEVEL ) )
+    ,maSecReadonlyFI    ( this, XMLSEC_RES( FI_SEC_READONLY ))
+    ,maVeryHighRB       ( this, XMLSEC_RES( RB_VERYHIGH ) )
+    ,maHighRB           ( this, XMLSEC_RES( RB_HIGH ) )
+    ,maMediumRB         ( this, XMLSEC_RES( RB_MEDIUM ) )
+    ,maLowRB            ( this, XMLSEC_RES( RB_LOW ) )
 {
     FreeResource();
 
@@ -360,22 +360,22 @@ void MacroSecurityTrustedSourcesTP::FillCertLB( void )
 
 MacroSecurityTrustedSourcesTP::MacroSecurityTrustedSourcesTP( Window* _pParent, MacroSecurity* _pDlg )
     :MacroSecurityTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_TRUSTSOURCES ), _pDlg )
-    ,maTrustCertFL      ( this, ResId( FL_TRUSTCERT ) )
-    ,maTrustCertROFI    ( this, ResId( FI_TRUSTCERT_RO ) )
-    ,maTrustCertLB      ( this, ResId( LB_TRUSTCERT ) )
-    ,maAddCertPB        ( this, ResId( PB_ADD_TRUSTCERT ) )
-    ,maViewCertPB       ( this, ResId( PB_VIEW_TRUSTCERT ) )
-    ,maRemoveCertPB     ( this, ResId( PB_REMOVE_TRUSTCERT ) )
-    ,maTrustFileLocFL   ( this, ResId( FL_TRUSTFILELOC ) )
-    ,maTrustFileROFI    ( this, ResId( FI_TRUSTFILE_RO ) )
-    ,maTrustFileLocFI   ( this, ResId( FI_TRUSTFILELOC ) )
-    ,maTrustFileLocLB   ( this, ResId( LB_TRUSTFILELOC ) )
-    ,maAddLocPB         ( this, ResId( FL_ADD_TRUSTFILELOC ) )
-    ,maRemoveLocPB      ( this, ResId( FL_REMOVE_TRUSTFILELOC ) )
+    ,maTrustCertFL      ( this, XMLSEC_RES( FL_TRUSTCERT ) )
+    ,maTrustCertROFI    ( this, XMLSEC_RES( FI_TRUSTCERT_RO ) )
+    ,maTrustCertLB      ( this, XMLSEC_RES( LB_TRUSTCERT ) )
+    ,maAddCertPB        ( this, XMLSEC_RES( PB_ADD_TRUSTCERT ) )
+    ,maViewCertPB       ( this, XMLSEC_RES( PB_VIEW_TRUSTCERT ) )
+    ,maRemoveCertPB     ( this, XMLSEC_RES( PB_REMOVE_TRUSTCERT ) )
+    ,maTrustFileLocFL   ( this, XMLSEC_RES( FL_TRUSTFILELOC ) )
+    ,maTrustFileROFI    ( this, XMLSEC_RES( FI_TRUSTFILE_RO ) )
+    ,maTrustFileLocFI   ( this, XMLSEC_RES( FI_TRUSTFILELOC ) )
+    ,maTrustFileLocLB   ( this, XMLSEC_RES( LB_TRUSTFILELOC ) )
+    ,maAddLocPB         ( this, XMLSEC_RES( FL_ADD_TRUSTFILELOC ) )
+    ,maRemoveLocPB      ( this, XMLSEC_RES( FL_REMOVE_TRUSTFILELOC ) )
 {
     static long nTabs[] = { 3, 0, 35*CS_LB_WIDTH/100, 70*CS_LB_WIDTH/100 };
     maTrustCertLB.SetTabs( &nTabs[ 0 ] );
-    maTrustCertLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
+    maTrustCertLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
 
     FreeResource();
 
