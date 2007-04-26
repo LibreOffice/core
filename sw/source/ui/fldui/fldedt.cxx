@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldedt.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:57:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:10:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -420,7 +420,7 @@ IMPL_LINK( SwFldEditDlg, AddressHdl, PushButton *, pButton )
     SwAbstractDialogFactory* pFact = swui::GetFactory();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-    AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aSet,ResId( RC_DLG_ADDR ));
+    AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( this, aSet, RC_DLG_ADDR );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if(RET_OK == pDlg->Execute())
     {
