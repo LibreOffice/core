@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galmisc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 12:38:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:23:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,7 +64,7 @@
 
 #define USERDATA_HDL()          (LINK(this,SgaUserDataFactory,MakeUserData))
 
-#define GAL_RESID( nId )        ResId( nId, GetGalleryResMgr() )
+#define GAL_RESID( nId )        ResId( nId, *GetGalleryResMgr() )
 #define STREAMBUF_SIZE          16384L
 
 #define SGA_IMPORT_NONE         0x0000
