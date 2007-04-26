@@ -4,9 +4,9 @@
  *
  *  $RCSfile: AdabasStatDlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:03:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:55:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -116,7 +116,7 @@ DBG_NAME(OAdabasStatPageDlg)
         switch ( eType )
         {
             case DST_ADABAS:
-                AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ResId(STR_PAGETITLE_ADABAS_STATISTIC)), ODriversSettings::CreateAdabas,0, sal_False, 1);
+                AddTabPage(TAB_PAG_ADABAS_SETTINGS, String(ModuleRes(STR_PAGETITLE_ADABAS_STATISTIC)), ODriversSettings::CreateAdabas,0, sal_False, 1);
                 break;
             default:
                 OSL_ENSURE(0,"Not supported for other types thasn adabas!");
