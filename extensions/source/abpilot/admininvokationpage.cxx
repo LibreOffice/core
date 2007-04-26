@@ -4,9 +4,9 @@
  *
  *  $RCSfile: admininvokationpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:52:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:04:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,9 +56,9 @@ namespace abp
     //=====================================================================
     AdminDialogInvokationPage::AdminDialogInvokationPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_ADMININVOKATION))
-        ,m_aExplanation         (this, ResId(FT_ADMINEXPLANATION))
-        ,m_aInvokeAdminDialog   (this, ResId(PB_INVOKE_ADMIN_DIALOG))
-        ,m_aErrorMessage        (this, ResId(FT_ERROR))
+        ,m_aExplanation         (this, ModuleRes(FT_ADMINEXPLANATION))
+        ,m_aInvokeAdminDialog   (this, ModuleRes(PB_INVOKE_ADMIN_DIALOG))
+        ,m_aErrorMessage        (this, ModuleRes(FT_ERROR))
         ,m_bSuccessfullyExecutedDialog(sal_False)
     {
         FreeResource();
