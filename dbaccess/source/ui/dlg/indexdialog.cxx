@@ -4,9 +4,9 @@
  *
  *  $RCSfile: indexdialog.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:10:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:00:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -220,16 +220,16 @@ DBG_NAME(DbaIndexDialog)
         :ModalDialog( _pParent, ModuleRes(DLG_INDEXDESIGN))
         ,m_xConnection(_rxConnection)
         ,m_aGeometrySettings(E_DIALOG, ::rtl::OUString::createFromAscii("dbaccess.tabledesign.indexdialog"))
-        ,m_aActions                         (this, ResId(TLB_ACTIONS))
-        ,m_aIndexes                         (this, ResId(CTR_INDEXLIST))
-        ,m_aIndexDetails                    (this, ResId(FL_INDEXDETAILS))
-        ,m_aDescriptionLabel                (this, ResId(FT_DESC_LABEL))
-        ,m_aDescription                     (this, ResId(FT_DESCRIPTION))
-        ,m_aUnique                          (this, ResId(CB_UNIQUE))
-        ,m_aFieldsLabel                     (this, ResId(FT_FIELDS))
-        ,m_pFields(new IndexFieldsControl   (this, ResId(CTR_FIELDS),_nMaxColumnsInIndex))
-        ,m_aClose                           (this, ResId(PB_CLOSE))
-        ,m_aHelp                            (this, ResId(HB_HELP))
+        ,m_aActions                         (this, ModuleRes(TLB_ACTIONS))
+        ,m_aIndexes                         (this, ModuleRes(CTR_INDEXLIST))
+        ,m_aIndexDetails                    (this, ModuleRes(FL_INDEXDETAILS))
+        ,m_aDescriptionLabel                (this, ModuleRes(FT_DESC_LABEL))
+        ,m_aDescription                     (this, ModuleRes(FT_DESCRIPTION))
+        ,m_aUnique                          (this, ModuleRes(CB_UNIQUE))
+        ,m_aFieldsLabel                     (this, ModuleRes(FT_FIELDS))
+        ,m_pFields(new IndexFieldsControl   (this, ModuleRes(CTR_FIELDS),_nMaxColumnsInIndex))
+        ,m_aClose                           (this, ModuleRes(PB_CLOSE))
+        ,m_aHelp                            (this, ModuleRes(HB_HELP))
         ,m_pIndexes(NULL)
         ,m_pPreviousSelection(NULL)
         ,m_bEditAgain(sal_False)
