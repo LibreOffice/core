@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swtypes.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2006-08-14 15:34:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:48:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -201,8 +201,8 @@ enum RndStdIds
 
 
 extern ResMgr* pSwResMgr;           // steht in swapp0.cxx
-#define SW_RES(i)       ResId(i,pSwResMgr)
-#define SW_RESSTR(i)    UniString(ResId(i,pSwResMgr))
+#define SW_RES(i)       ResId(i,*pSwResMgr)
+#define SW_RESSTR(i)    UniString(ResId(i,*pSwResMgr))
 
 #define DDE_AVAILABLE
 
