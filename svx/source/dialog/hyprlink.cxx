@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyprlink.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:24:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:34:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,20 +126,20 @@ SearchDefaultConfigItem_Impl::~SearchDefaultConfigItem_Impl()
 
 SvxHyperlinkDlg::SvxHyperlinkDlg( SfxBindings *_pBindings, Window* pParent) :
 
-    ToolBox             ( pParent, ResId( RID_SVXDLG_HYPERLINK, DIALOG_MGR() ) ),
+    ToolBox             ( pParent, SVX_RES( RID_SVXDLG_HYPERLINK ) ),
     SfxControllerItem   ( SID_HYPERLINK_SETLINK, *_pBindings ),
 
     aForwarder          ( SID_HYPERLINK_GETLINK, *this ),
     aHyperlinkDlgForward( SID_HYPERLINK_DIALOG , *this),
 
-    aNameCB             ( this, ResId( CB_NAME ) ),
-    aUrlFT              ( this, ResId( FT_URL ) ),
-    aUrlCB              ( this, ResId( CB_URL ) ),
+    aNameCB             ( this, SVX_RES( CB_NAME ) ),
+    aUrlFT              ( this, SVX_RES( FT_URL ) ),
+    aUrlCB              ( this, SVX_RES( CB_URL ) ),
     aSearchConfig       (sal_True),
-    sAddress            ( ResId( STR_ADDRESS ) ),
-    sExplorer           ( ResId( STR_EXPLORER ) ),
-    sSearchTitle        ( ResId( STR_BOOKMARK_SEARCH ) ),
-    aLinkPopup          ( ResId( RID_SVXMN_HYPERLINK, DIALOG_MGR() ) ),
+    sAddress            ( SVX_RES( STR_ADDRESS ) ),
+    sExplorer           ( SVX_RES( STR_EXPLORER ) ),
+    sSearchTitle        ( SVX_RES( STR_BOOKMARK_SEARCH ) ),
+    aLinkPopup          ( SVX_RES( RID_SVXMN_HYPERLINK ) ),
     pTargetMenu         ( NULL ),
 
     bNoDoc              ( TRUE ),
@@ -700,7 +700,7 @@ void SvxHyperlinkDlg::SendToApp(USHORT nType)
         if ( aMedium.Exists( FALSE ) == FALSE )
         {
             LeaveWait();
-            QueryBox aBox( this, ResId( RID_SVXQB_DONTEXIST, DIALOG_MGR() ) );
+            QueryBox aBox( this, SVX_RES( RID_SVXQB_DONTEXIST ) );
             if ( aBox.Execute() == RET_NO )
                 return;
         }
