@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 16:54:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -572,7 +572,7 @@ void SwView::HyphenateDocument()
     }
 
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_HYPHENATION, aEmptyStr, pEditWin,
-         RID_SVXERRCTX, DIALOG_MGR() );
+         RID_SVXERRCTX, &DIALOG_MGR() );
 
     Reference< XHyphenator >  xHyph( ::GetHyphenator() );
     if (!xHyph.is())
@@ -647,7 +647,7 @@ void SwView::StartThesaurus()
         return;
 
     SfxErrorContext aContext( ERRCTX_SVX_LINGU_THESAURUS, aEmptyStr, pEditWin,
-         RID_SVXERRCTX, DIALOG_MGR() );
+         RID_SVXERRCTX, &DIALOG_MGR() );
 
     // Sprache rausholen
     //
@@ -666,7 +666,7 @@ void SwView::StartThesaurus()
     pVOpt->SetIdle( sal_False );
 
 #ifdef TL_NEVER
-//!!! hier muß noch was getan werden... (Umsetzung der Funktionalitaet)
+//!!! hier muï¿½ noch was getan werden... (Umsetzung der Funktionalitaet)
     // ErrorLink setzen, alten merken
     Link aOldLnk = pSpell->ChgErrorLink(LINK(this, SwView, SpellError));
 #endif
