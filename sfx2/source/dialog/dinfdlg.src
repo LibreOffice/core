@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.src,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 17:09:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 11:34:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,7 +143,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Type:" ;
     };
-    FixedText FT_FILE_SHOW_TYP
+    Edit FT_FILE_SHOW_TYP
     {
         Pos = MAP_APPFONT ( 78 , 37 ) ;
         Size = MAP_APPFONT ( 106 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -160,7 +160,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Location:" ;
     };
-    FixedText FT_FILE_VAL
+    Edit FT_FILE_VAL
     {
         Pos = MAP_APPFONT ( 78 , 49 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -171,7 +171,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Size:" ;
     };
-    FixedText FT_FILE_SHOW_SIZE
+    Edit FT_FILE_SHOW_SIZE
     {
         Pos = MAP_APPFONT ( 78 , 61 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -187,7 +187,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Created:" ;
     };
-    FixedText FT_CREATE_VAL
+    Edit FT_CREATE_VAL
     {
         Pos = MAP_APPFONT ( 78 , 80 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -198,7 +198,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Modified:" ;
     };
-    FixedText FT_CHANGE_VAL
+    Edit FT_CHANGE_VAL
     {
         Pos = MAP_APPFONT ( 78 , 92 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -209,7 +209,7 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Digitally signed:" ;
     };
-    FixedText FT_SIGNED_VAL
+    Edit FT_SIGNED_VAL
     {
         Pos = MAP_APPFONT ( 78 , 104 ) ;
         Size = MAP_APPFONT ( 123 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -229,8 +229,8 @@ TabPage TP_DOCINFODOC
         Pos = MAP_APPFONT ( 6 , 116 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Last printed:" ;
-        };
-    FixedText FT_PRINT_VAL
+    };
+    Edit FT_PRINT_VAL
     {
         Pos = MAP_APPFONT ( 78 , 116 ) ;
         Size = MAP_APPFONT ( 176 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -240,8 +240,8 @@ TabPage TP_DOCINFODOC
         Pos = MAP_APPFONT ( 6 , 128 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Total editing time:" ;
-        };
-    FixedText FT_TIMELOG_VAL
+    };
+    Edit FT_TIMELOG_VAL
     {
         Pos = MAP_APPFONT ( 78 , 128 ) ;
         Size = MAP_APPFONT ( 30 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -251,8 +251,8 @@ TabPage TP_DOCINFODOC
         Pos = MAP_APPFONT ( 6 , 140 ) ;
         Size = MAP_APPFONT ( 70 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Revision number:" ;
-        };
-    FixedText FT_DOCNO_VAL
+    };
+    Edit FT_DOCNO_VAL
     {
         Pos = MAP_APPFONT ( 78 , 140 ) ;
         Size = MAP_APPFONT ( 30 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -263,14 +263,14 @@ TabPage TP_DOCINFODOC
         Size = MAP_APPFONT ( RSC_CD_PUSHBUTTON_WIDTH , RSC_CD_PUSHBUTTON_HEIGHT ) ;
         Hide = TRUE;
         Text [ en-US ] = "~Delete";
-        };
+    };
     CheckBox CB_USE_USERDATA
     {
         Pos = MAP_APPFONT ( 6 , 152 ) ;
         Size = MAP_APPFONT ( 192 , RSC_CD_CHECKBOX_HEIGHT ) ;
         Hide = TRUE;
         Text [ en-US ] = "~Apply user data";
-        };
+    };
     FixedLine FL_FILE_3
     {
         Pos = MAP_APPFONT ( 5 , 167 ) ;
@@ -281,8 +281,8 @@ TabPage TP_DOCINFODOC
         Pos = MAP_APPFONT ( 5 , 172 ) ;
         Size = MAP_APPFONT ( 45 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text [ en-US ] = "Template:" ;
-        };
-    FixedText FT_TEMPL_VAL
+    };
+    Edit FT_TEMPL_VAL
     {
         Pos = MAP_APPFONT ( 78 , 172 ) ;
         Size = MAP_APPFONT ( 180 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
@@ -290,7 +290,7 @@ TabPage TP_DOCINFODOC
     String STR_UNKNOWNSIZE
     {
         Text [ en-US ] = "unknown" ;
-        };
+    };
 };
 
  // TP_DOCINFOUSER --------------------------------------------------------
