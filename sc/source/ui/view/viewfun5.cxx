@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfun5.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 16:59:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:58:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -360,7 +360,7 @@ BOOL ScViewFunc::PasteDataFormat( ULONG nFormatId,
                         ScAbstractDialogFactory::Create();
                     AbstractScImportAsciiDlg *pDlg =
                         pFact->CreateScImportAsciiDlg( NULL, String(), &aStrm,
-                                ResId( RID_SCDLG_ASCII));
+                                RID_SCDLG_ASCII);
 
                     if (pDlg->Execute() == RET_OK)
                     {
