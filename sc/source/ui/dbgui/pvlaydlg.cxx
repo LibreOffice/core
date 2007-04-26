@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:04:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:51:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -979,7 +979,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
                         ((aDataFieldNames.size() > 1) || ((nFieldIndex + 1 < pArr->size()) && (*pArr)[nFieldIndex+1].get()));
 
                     AbstractScDPSubtotalDlg* pDlg = pFact->CreateScDPSubtotalDlg(
-                        this, ScResId( RID_SCDLG_PIVOTSUBT ),
+                        this, RID_SCDLG_PIVOTSUBT,
                         *xDlgDPObject, *pData, *(*pArr)[nFieldIndex], aDataFieldNames, bLayout );
 
                     if ( pDlg->Execute() == RET_OK )
@@ -994,7 +994,7 @@ void ScDPLayoutDlg::NotifyDoubleClick( ScDPFieldType eType, size_t nFieldIndex )
                 case TYPE_DATA:
                 {
                     AbstractScDPFunctionDlg* pDlg = pFact->CreateScDPFunctionDlg(
-                        this, ScResId( RID_SCDLG_DPDATAFIELD ),
+                        this, RID_SCDLG_DPDATAFIELD,
                         aLabelDataArr, *pData, *(*pArr)[nFieldIndex] );
 
                     if ( pDlg->Execute() == RET_OK )
