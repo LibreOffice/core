@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:51:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:48:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -217,7 +217,7 @@ OutputDevice* GlobalEditData::GetStdRefDevice()
 }
 
 EditResId::EditResId( USHORT nId ):
-    ResId( nId, EE_DLL()->GetResMgr() )
+    ResId( nId, *EE_DLL()->GetResMgr() )
 {
 }
 
