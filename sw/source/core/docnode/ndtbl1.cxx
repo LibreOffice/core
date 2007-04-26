@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 21:01:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:38:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -614,7 +614,8 @@ void lcl_CollectCells( SvPtrarr &rArr, const SwRect &rUnion,
 
 void SwDoc::SetTabBorders( const SwCursor& rCursor, const SfxItemSet& rSet )
 {
-    SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwCntntNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetCntntNode();
+    SwTableNode* pTblNd = pCntNd ? pCntNd->FindTableNode() : 0;
     if( !pTblNd )
         return ;
 
@@ -862,7 +863,8 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
                              const Color* pColor, BOOL bSetLine,
                              const SvxBorderLine* pBorderLine )
 {
-    SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwCntntNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetCntntNode();
+    SwTableNode* pTblNd = pCntNd ? pCntNd->FindTableNode() : 0;
     if( !pTblNd )
         return ;
 
@@ -937,7 +939,8 @@ void SwDoc::SetTabLineStyle( const SwCursor& rCursor,
 
 void SwDoc::GetTabBorders( const SwCursor& rCursor, SfxItemSet& rSet ) const
 {
-    SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwCntntNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetCntntNode();
+    SwTableNode* pTblNd = pCntNd ? pCntNd->FindTableNode() : 0;
     if( !pTblNd )
         return ;
 
@@ -1480,7 +1483,8 @@ void lcl_CalcColValues( SvUShorts &rToFill, const SwTabCols &rCols,
 void SwDoc::AdjustCellWidth( const SwCursor& rCursor, BOOL bBalance )
 {
     // pruefe ob vom aktuellen Crsr der Point/Mark in einer Tabelle stehen
-    SwTableNode* pTblNd = rCursor.GetPoint()->nNode.GetNode().FindTableNode();
+    SwCntntNode* pCntNd = rCursor.GetPoint()->nNode.GetNode().GetCntntNode();
+    SwTableNode* pTblNd = pCntNd ? pCntNd->FindTableNode() : 0;
     if( !pTblNd )
         return ;
 
