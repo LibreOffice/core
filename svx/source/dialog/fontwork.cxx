@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fontwork.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:34:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:30:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -251,24 +251,24 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
                                       const ResId& rResId ) :
     SfxDockingWindow( pBindinx, pCW, _pParent, rResId ),
 
-    aFormSet        (this, ResId(VS_FORMS)),
+    aFormSet        (this, ResId(VS_FORMS,*rResId.GetResMgr())),
 
-    aTbxStyle       (this, ResId(TBX_STYLE)),
-    aTbxAdjust      (this, ResId(TBX_ADJUST)),
+    aTbxStyle       (this, ResId(TBX_STYLE,*rResId.GetResMgr())),
+    aTbxAdjust      (this, ResId(TBX_ADJUST,*rResId.GetResMgr())),
 
-    aFbDistance     (this, ResId(FB_DISTANCE)),
-    aMtrFldDistance (this, ResId(MTR_FLD_DISTANCE)),
-    aFbTextStart    (this, ResId(FB_TEXTSTART)),
-    aMtrFldTextStart(this, ResId(MTR_FLD_TEXTSTART)),
+    aFbDistance     (this, ResId(FB_DISTANCE,*rResId.GetResMgr())),
+    aMtrFldDistance (this, ResId(MTR_FLD_DISTANCE,*rResId.GetResMgr())),
+    aFbTextStart    (this, ResId(FB_TEXTSTART,*rResId.GetResMgr())),
+    aMtrFldTextStart(this, ResId(MTR_FLD_TEXTSTART,*rResId.GetResMgr())),
 
-    aTbxShadow      (this, ResId(TBX_SHADOW)),
+    aTbxShadow      (this, ResId(TBX_SHADOW,*rResId.GetResMgr())),
 
-    aFbShadowX      (this, ResId(FB_SHADOW_X)),
-    aMtrFldShadowX  (this, ResId(MTR_FLD_SHADOW_X)),
-    aFbShadowY      (this, ResId(FB_SHADOW_Y)),
-    aMtrFldShadowY  (this, ResId(MTR_FLD_SHADOW_Y)),
+    aFbShadowX      (this, ResId(FB_SHADOW_X,*rResId.GetResMgr())),
+    aMtrFldShadowX  (this, ResId(MTR_FLD_SHADOW_X,*rResId.GetResMgr())),
+    aFbShadowY      (this, ResId(FB_SHADOW_Y,*rResId.GetResMgr())),
+    aMtrFldShadowY  (this, ResId(MTR_FLD_SHADOW_Y,*rResId.GetResMgr())),
 
-    aShadowColorLB  (this, ResId(CLB_SHADOW_COLOR)),
+    aShadowColorLB  (this, ResId(CLB_SHADOW_COLOR,*rResId.GetResMgr())),
     rBindings       (*pBindinx),
 
     nLastStyleTbxId(0),
@@ -279,8 +279,8 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     nSaveShadowAngle(450),
     nSaveShadowSize (100),
 
-    maImageList     (ResId(IL_FONTWORK)),
-    maImageListH    (ResId(ILH_FONTWORK)),
+    maImageList     (ResId(IL_FONTWORK,*rResId.GetResMgr())),
+    maImageListH    (ResId(ILH_FONTWORK,*rResId.GetResMgr())),
 
     pColorTable     (NULL)
 {
@@ -353,8 +353,7 @@ SvxFontWorkDialog::SvxFontWorkDialog( SfxBindings *pBindinx,
     aFormSet.SetColCount(4);
     aFormSet.SetLineCount(2);
 
-    ResMgr* _pMgr = DIALOG_MGR();
-    Bitmap aBmp(ResId(RID_SVXBMP_FONTWORK_FORM1,_pMgr));
+    Bitmap aBmp(SVX_RES(RID_SVXBMP_FONTWORK_FORM1));
     aSize.Height() = aFormSet.CalcWindowSizePixel(aBmp.GetSizePixel()).Height() + 2;
     aFormSet.SetSizePixel(aSize);
 }
@@ -1262,7 +1261,7 @@ void SvxFontWorkDialog::ApplyImageList()
         (GetSettings().GetStyleSettings().GetHighContrastMode() != 0) &&
         (GetDisplayBackground().GetColor().IsDark() != 0);
 
-    ResMgr* _pMgr = DIALOG_MGR();
+    ResMgr* _pMgr = &DIALOG_MGR();
 
     USHORT nBitmapResId = bHighContrast ? RID_SVXBMP_FONTWORK_FORM1_H : RID_SVXBMP_FONTWORK_FORM1;
     USHORT nTextResId = RID_SVXSTR_FONTWORK_FORM1;
@@ -1284,12 +1283,12 @@ void SvxFontWorkDialog::ApplyImageList()
     {
         if( bInit )
         {
-            aFormSet.InsertItem( i, Bitmap(ResId(nBitmapResId,_pMgr)),
-                                    String(ResId(nTextResId,_pMgr)));
+            aFormSet.InsertItem( i, Bitmap(ResId(nBitmapResId,*_pMgr)),
+                                    String(ResId(nTextResId,*_pMgr)));
         }
         else
         {
-            aFormSet.SetItemImage( i, Bitmap(ResId(nBitmapResId,_pMgr)) );
+            aFormSet.SetItemImage( i, Bitmap(ResId(nBitmapResId,*_pMgr)) );
         }
     }
 
