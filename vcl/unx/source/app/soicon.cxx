@@ -4,9 +4,9 @@
  *
  *  $RCSfile: soicon.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:05:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:32:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ BOOL SelectAppIconPixmap( SalDisplay *pDisplay, int nScreen,USHORT nIcon, USHORT
     else
         return FALSE;
 
-    BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, ImplGetResMgr()));
+    BitmapEx aIcon( ResId(nIconSizeOffset + nIcon, *ImplGetResMgr()));
     if( TRUE == aIcon.IsEmpty() )
         return FALSE;
 
