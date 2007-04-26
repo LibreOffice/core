@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:59:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:06:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -331,15 +331,15 @@ namespace dbp
     //---------------------------------------------------------------------
     OGridFieldsSelection::OGridFieldsSelection( OGridWizard* _pParent )
         :OGridPage(_pParent, ModuleRes(RID_PAGE_GW_FIELDSELECTION))
-        ,m_aFrame               (this, ResId(FL_FRAME))
-        ,m_aExistFieldsLabel    (this, ResId(FT_EXISTING_FIELDS))
-        ,m_aExistFields         (this, ResId(LB_EXISTING_FIELDS))
-        ,m_aSelectOne           (this, ResId(PB_FIELDRIGHT))
-        ,m_aSelectAll           (this, ResId(PB_ALLFIELDSRIGHT))
-        ,m_aDeselectOne         (this, ResId(PB_FIELDLEFT))
-        ,m_aDeselectAll         (this, ResId(PB_ALLFIELDSLEFT))
-        ,m_aSelFieldsLabel      (this, ResId(FT_SELECTED_FIELDS))
-        ,m_aSelFields           (this, ResId(LB_SELECTED_FIELDS))
+        ,m_aFrame               (this, ModuleRes(FL_FRAME))
+        ,m_aExistFieldsLabel    (this, ModuleRes(FT_EXISTING_FIELDS))
+        ,m_aExistFields         (this, ModuleRes(LB_EXISTING_FIELDS))
+        ,m_aSelectOne           (this, ModuleRes(PB_FIELDRIGHT))
+        ,m_aSelectAll           (this, ModuleRes(PB_ALLFIELDSRIGHT))
+        ,m_aDeselectOne         (this, ModuleRes(PB_FIELDLEFT))
+        ,m_aDeselectAll         (this, ModuleRes(PB_ALLFIELDSLEFT))
+        ,m_aSelFieldsLabel      (this, ModuleRes(FT_SELECTED_FIELDS))
+        ,m_aSelFields           (this, ModuleRes(LB_SELECTED_FIELDS))
     {
         FreeResource();
 
