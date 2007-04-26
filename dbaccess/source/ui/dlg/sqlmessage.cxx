@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlmessage.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:38:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:01:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -348,18 +348,18 @@ DBG_NAME(OExceptionChainDialog)
 //------------------------------------------------------------------------------
 OExceptionChainDialog::OExceptionChainDialog( Window* pParent, const ExceptionDisplayChain& _rExceptions )
     :ModalDialog(pParent, ModuleRes(DLG_SQLEXCEPTIONCHAIN))
-    ,m_aFrame           (this, ResId(FL_DETAILS))
-    ,m_aListLabel       (this, ResId(FT_ERRORLIST))
-    ,m_aExceptionList   (this, ResId(CTL_ERRORLIST))
-    ,m_aDescLabel       (this, ResId(FT_DESCRIPTION))
-    ,m_aExceptionText   (this, ResId(ME_DESCRIPTION))
-    ,m_aOK              (this, ResId(PB_OK))
+    ,m_aFrame           (this, ModuleRes(FL_DETAILS))
+    ,m_aListLabel       (this, ModuleRes(FT_ERRORLIST))
+    ,m_aExceptionList   (this, ModuleRes(CTL_ERRORLIST))
+    ,m_aDescLabel       (this, ModuleRes(FT_DESCRIPTION))
+    ,m_aExceptionText   (this, ModuleRes(ME_DESCRIPTION))
+    ,m_aOK              (this, ModuleRes(PB_OK))
     ,m_aExceptions( _rExceptions )
 {
     DBG_CTOR(OExceptionChainDialog,NULL);
 
-    m_sStatusLabel = String( ResId( STR_EXCEPTION_STATUS ) );
-    m_sErrorCodeLabel = String( ResId( STR_EXCEPTION_ERRORCODE ) );
+    m_sStatusLabel = String( ModuleRes( STR_EXCEPTION_STATUS ) );
+    m_sErrorCodeLabel = String( ModuleRes( STR_EXCEPTION_ERRORCODE ) );
 
     FreeResource();
 
