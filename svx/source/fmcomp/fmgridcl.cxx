@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmgridcl.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:08:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1048,7 +1048,7 @@ void FmGridHeader::PostExecuteColumnContextMenu(sal_uInt16 nColId, const PopupMe
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL, ResId(RID_SVX_DLG_SHOWGRIDCOLUMNS));
+                AbstractFmShowColsDialog* pDlg = pFact->CreateFmShowColsDialog(NULL, RID_SVX_DLG_SHOWGRIDCOLUMNS);
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->SetColumns(xCols);
                 pDlg->Execute();
@@ -1735,7 +1735,7 @@ void FmGridControl::ColumnMoved(sal_uInt16 nId)
         DbGridColumn* pCol = DbGridControl::GetColumns().GetObject(GetModelColumnPos(nId));
         Reference< ::com::sun::star::beans::XPropertySet >  xCol;
 
-        // Einfuegen muß sich an den Column Positionen orientieren
+        // Einfuegen muï¿½ sich an den Column Positionen orientieren
         sal_Int32 i;
         Reference< XInterface > xCurrent;
         for (i = 0; !xCol.is() && i < xColumns->getCount(); i++)
@@ -1778,7 +1778,7 @@ void FmGridControl::InitColumnsByModels(const Reference< ::com::sun::star::conta
 
     SetUpdateMode(sal_False);
 
-    // Einfuegen muß sich an den Column Positionen orientieren
+    // Einfuegen muï¿½ sich an den Column Positionen orientieren
     sal_Int32 i;
     String aName;
     Any aWidth;
@@ -1901,7 +1901,7 @@ void FmGridControl::InitColumnsByFields(const Reference< ::com::sun::star::conta
     Reference< XIndexContainer > xColumns( GetPeer()->getColumns() );
     Reference< XNameAccess > xFieldsAsNames( _rxFields, UNO_QUERY );
 
-    // Einfuegen muß sich an den Column Positionen orientieren
+    // Einfuegen muï¿½ sich an den Column Positionen orientieren
     for (sal_Int32 i = 0; i < xColumns->getCount(); i++)
     {
         DbGridColumn* pCol = GetColumns().GetObject(i);
