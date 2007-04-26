@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connpooloptions.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:33:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:27:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -132,8 +132,8 @@ namespace offapp
 //      :DriverListControl_Base(_pParent, _rId, DBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_COLUMNSELECTION | BROWSER_HLINESFULL | BROWSER_VLINESFULL | BROWSER_HIDESELECT | BROWSER_CURSOR_WO_FOCUS)
         :DriverListControl_Base(_pParent, _rId, EBBF_NOROWPICTURE, BROWSER_AUTO_VSCROLL | BROWSER_AUTO_HSCROLL | BROWSER_HIDECURSOR | BROWSER_AUTOSIZE_LASTCOL)
         ,m_aSeekRow(m_aSettings.end())
-        ,m_sYes(ResId(STR_YES))
-        ,m_sNo(ResId(STR_NO))
+        ,m_sYes(ResId(STR_YES,*_rId.GetResMgr()))
+        ,m_sNo(ResId(STR_NO,*_rId.GetResMgr()))
     {
         SetStyle((GetStyle() & ~WB_HSCROLL) | WB_AUTOHSCROLL);
 
@@ -172,11 +172,11 @@ namespace offapp
         DriverListControl_Base::Init();
 
         Size aColWidth = LogicToPixel(Size(160, 0), MAP_APPFONT);
-        InsertDataColumn(1, String(ResId(STR_DRIVER_NAME)), aColWidth.Width());
+        InsertDataColumn(1, String(SVX_RES(STR_DRIVER_NAME)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(30, 0), MAP_APPFONT);
-        InsertDataColumn(2, String(ResId(STR_POOLED_FLAG)), aColWidth.Width());
+        InsertDataColumn(2, String(SVX_RES(STR_POOLED_FLAG)), aColWidth.Width());
         aColWidth = LogicToPixel(Size(60, 0), MAP_APPFONT);
-        InsertDataColumn(3, String(ResId(STR_POOL_TIMEOUT)), aColWidth.Width());
+        InsertDataColumn(3, String(SVX_RES(STR_POOL_TIMEOUT)), aColWidth.Width());
             // Attention: the resource of the string is local to the resource of the enclosing dialog!
     }
 
@@ -352,16 +352,16 @@ namespace offapp
     //====================================================================
     //--------------------------------------------------------------------
     ConnectionPoolOptionsPage::ConnectionPoolOptionsPage(Window* _pParent, const SfxItemSet& _rAttrSet)
-        :SfxTabPage(_pParent, ResId(RID_OFAPAGE_CONNPOOLOPTIONS, DIALOG_MGR() ), _rAttrSet)
-        ,m_aFrame               (this,              ResId(FL_POOLING))
-        ,m_aEnablePooling       (this,      ResId(CB_POOL_CONNS))
-        ,m_aDriversLabel        (this,      ResId(FT_DRIVERS))
-        ,m_pDriverList(new DriverListControl(this, ResId(CTRL_DRIVER_LIST)))
-        ,m_aDriverLabel         (this,      ResId(FT_DRIVERLABEL))
-        ,m_aDriver              (this,      ResId(FT_DRIVER))
-        ,m_aDriverPoolingEnabled(this,      ResId(CB_DRIVERPOOLING))
-        ,m_aTimeoutLabel        (this,      ResId(FT_TIMEOUT))
-        ,m_aTimeout             (this,      ResId(NF_TIMEOUT))
+        :SfxTabPage(_pParent, SVX_RES(RID_OFAPAGE_CONNPOOLOPTIONS ), _rAttrSet)
+        ,m_aFrame               (this,              SVX_RES(FL_POOLING))
+        ,m_aEnablePooling       (this,      SVX_RES(CB_POOL_CONNS))
+        ,m_aDriversLabel        (this,      SVX_RES(FT_DRIVERS))
+        ,m_pDriverList(new DriverListControl(this, SVX_RES(CTRL_DRIVER_LIST)))
+        ,m_aDriverLabel         (this,      SVX_RES(FT_DRIVERLABEL))
+        ,m_aDriver              (this,      SVX_RES(FT_DRIVER))
+        ,m_aDriverPoolingEnabled(this,      SVX_RES(CB_DRIVERPOOLING))
+        ,m_aTimeoutLabel        (this,      SVX_RES(FT_TIMEOUT))
+        ,m_aTimeout             (this,      SVX_RES(NF_TIMEOUT))
     {
         m_pDriverList->Init();
         m_pDriverList->Show();
