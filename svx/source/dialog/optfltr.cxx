@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optfltr.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:12:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:37:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,16 +67,16 @@ enum MSFltrPg2_CheckBoxEntries {
 // -----------------------------------------------------------------------
 
 OfaMSFilterTabPage::OfaMSFilterTabPage(Window* pParent, const SfxItemSet& rSet)
-    : SfxTabPage( pParent, ResId( RID_OFAPAGE_MSFILTEROPT, DIALOG_MGR() ), rSet ),
-    aMSWordGB       ( this, ResId( GB_WORD      ) ),
-    aWBasicCodeCB   ( this, ResId( CB_WBAS_CODE ) ),
-    aWBasicStgCB    ( this, ResId( CB_WBAS_STG  ) ),
-    aMSExcelGB      ( this, ResId( GB_EXCEL     ) ),
-    aEBasicCodeCB   ( this, ResId( CB_EBAS_CODE ) ),
-    aEBasicStgCB    ( this, ResId( CB_EBAS_STG  ) ),
-    aMSPPointGB     ( this, ResId( GB_PPOINT    ) ),
-    aPBasicCodeCB   ( this, ResId( CB_PBAS_CODE ) ),
-    aPBasicStgCB    ( this, ResId( CB_PBAS_STG  ) )
+    : SfxTabPage( pParent, SVX_RES( RID_OFAPAGE_MSFILTEROPT ), rSet ),
+    aMSWordGB       ( this, SVX_RES( GB_WORD        ) ),
+    aWBasicCodeCB   ( this, SVX_RES( CB_WBAS_CODE ) ),
+    aWBasicStgCB    ( this, SVX_RES( CB_WBAS_STG  ) ),
+    aMSExcelGB      ( this, SVX_RES( GB_EXCEL     ) ),
+    aEBasicCodeCB   ( this, SVX_RES( CB_EBAS_CODE ) ),
+    aEBasicStgCB    ( this, SVX_RES( CB_EBAS_STG  ) ),
+    aMSPPointGB     ( this, SVX_RES( GB_PPOINT    ) ),
+    aPBasicCodeCB   ( this, SVX_RES( CB_PBAS_CODE ) ),
+    aPBasicStgCB    ( this, SVX_RES( CB_PBAS_STG  ) )
 {
     FreeResource();
 }
@@ -144,22 +144,22 @@ void OfaMSFilterTabPage::Reset( const SfxItemSet& )
  * --------------------------------------------------*/
 OfaMSFilterTabPage2::OfaMSFilterTabPage2( Window* pParent,
                                         const SfxItemSet& rSet )
-    : SfxTabPage( pParent, ResId( RID_OFAPAGE_MSFILTEROPT2, DIALOG_MGR() ), rSet ),
-    aCheckLB            ( this, ResId( CLB_SETTINGS )),
-    aHeader1FT          ( this, ResId( FT_HEADER1_EXPLANATION )),
-    aHeader2FT          ( this, ResId( FT_HEADER2_EXPLANATION )),
-    aChkunBmp           ( ResId( CHKBUT_UNCHECKED )),
-    aChkchBmp           ( ResId( CHKBUT_CHECKED )),
-    aChkchhiBmp         ( ResId( CHKBUT_HICHECKED )),
-    aChkunhiBmp         ( ResId( CHKBUT_HIUNCHECKED )),
-    aChktriBmp          ( ResId( CHKBUT_TRISTATE    )),
-    aChktrihiBmp        ( ResId( CHKBUT_HITRISTATE )),
-    sHeader1            ( ResId( ST_HEADER1 )),
-    sHeader2            ( ResId( ST_HEADER2 )),
-    sChgToFromMath      ( ResId( ST_CHG_MATH    )),
-    sChgToFromWriter    ( ResId( ST_CHG_WRITER )),
-    sChgToFromCalc      ( ResId( ST_CHG_CALC )),
-    sChgToFromImpress   ( ResId( ST_CHG_IMPRESS )),
+    : SfxTabPage( pParent, SVX_RES( RID_OFAPAGE_MSFILTEROPT2 ), rSet ),
+    aCheckLB            ( this, SVX_RES( CLB_SETTINGS   )),
+    aHeader1FT          ( this, SVX_RES( FT_HEADER1_EXPLANATION )),
+    aHeader2FT          ( this, SVX_RES( FT_HEADER2_EXPLANATION )),
+    aChkunBmp           ( SVX_RES( CHKBUT_UNCHECKED )),
+    aChkchBmp           ( SVX_RES( CHKBUT_CHECKED )),
+    aChkchhiBmp         ( SVX_RES( CHKBUT_HICHECKED )),
+    aChkunhiBmp         ( SVX_RES( CHKBUT_HIUNCHECKED )),
+    aChktriBmp          ( SVX_RES( CHKBUT_TRISTATE    )),
+    aChktrihiBmp        ( SVX_RES( CHKBUT_HITRISTATE )),
+    sHeader1            ( SVX_RES( ST_HEADER1 )),
+    sHeader2            ( SVX_RES( ST_HEADER2 )),
+    sChgToFromMath      ( SVX_RES( ST_CHG_MATH  )),
+    sChgToFromWriter    ( SVX_RES( ST_CHG_WRITER )),
+    sChgToFromCalc      ( SVX_RES( ST_CHG_CALC )),
+    sChgToFromImpress   ( SVX_RES( ST_CHG_IMPRESS )),
     pCheckButtonData(0)
 {
     FreeResource();
