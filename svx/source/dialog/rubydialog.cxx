@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rubydialog.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:25:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:41:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -261,30 +261,30 @@ void  SvxRubyData_Impl::AssertOneEntry()
 SvxRubyDialog::SvxRubyDialog( SfxBindings *pBind, SfxChildWindow *pCW,
                                     Window* _pParent, const ResId& rResId ) :
     SfxModelessDialog( pBind, pCW, _pParent, rResId ),
-    aLeftFT(this,               ResId(FT_LEFT )),
-    aLeft1ED(this,              ResId(ED_LEFT_1  )),
-    aRightFT(this,              ResId(FT_RIGHT  )),
-    aRight1ED(this,             ResId(ED_RIGHT_1 )),
-    aLeft2ED(this,              ResId(ED_LEFT_2  )),
-    aRight2ED(this,             ResId(ED_RIGHT_2 )),
-    aLeft3ED(this,              ResId(ED_LEFT_3  )),
-    aRight3ED(this,             ResId(ED_RIGHT_3 )),
-    aLeft4ED(this,              ResId(ED_LEFT_4  )),
-    aRight4ED(this,             ResId(ED_RIGHT_4 )),
-    aScrollSB(this,             ResId(SB_SCROLL  )),
-    aAutoDetectionCB(this,      ResId(CB_AUTO_DETECT    )),
-    aAdjustFT(this,             ResId(FT_ADJUST     )),
-    aAdjustLB(this,             ResId(LB_ADJUST     )),
-    aPositionFT(this,           ResId(FT_POSITION     )),
-    aPositionLB(this,           ResId(LB_POSITION     )),
-    aCharStyleFT(this,          ResId(FT_CHAR_STYLE     )),
-    aCharStyleLB(this,          ResId(LB_CHAR_STYLE     )),
-    aStylistPB(this,            ResId(PB_STYLIST        )),
-    aPreviewFT(this,            ResId(FT_PREVIEW        )),
-    aPreviewWin(*this,          ResId(WIN_PREVIEW       )),
-    aApplyPB(this,              ResId(PB_APPLY          )),
-    aClosePB(this,              ResId(PB_CLOSE          )),
-    aHelpPB(this,               ResId(PB_HELP           )),
+    aLeftFT(this,               ResId(FT_LEFT,*rResId.GetResMgr() )),
+    aLeft1ED(this,              ResId(ED_LEFT_1,*rResId.GetResMgr()  )),
+    aRightFT(this,              ResId(FT_RIGHT,*rResId.GetResMgr()  )),
+    aRight1ED(this,             ResId(ED_RIGHT_1,*rResId.GetResMgr() )),
+    aLeft2ED(this,              ResId(ED_LEFT_2,*rResId.GetResMgr()  )),
+    aRight2ED(this,             ResId(ED_RIGHT_2,*rResId.GetResMgr() )),
+    aLeft3ED(this,              ResId(ED_LEFT_3,*rResId.GetResMgr()  )),
+    aRight3ED(this,             ResId(ED_RIGHT_3,*rResId.GetResMgr() )),
+    aLeft4ED(this,              ResId(ED_LEFT_4,*rResId.GetResMgr()  )),
+    aRight4ED(this,             ResId(ED_RIGHT_4,*rResId.GetResMgr() )),
+    aScrollSB(this,             ResId(SB_SCROLL,*rResId.GetResMgr()  )),
+    aAutoDetectionCB(this,      ResId(CB_AUTO_DETECT,*rResId.GetResMgr()    )),
+    aAdjustFT(this,             ResId(FT_ADJUST,*rResId.GetResMgr()     )),
+    aAdjustLB(this,             ResId(LB_ADJUST,*rResId.GetResMgr()     )),
+    aPositionFT(this,           ResId(FT_POSITION,*rResId.GetResMgr()     )),
+    aPositionLB(this,           ResId(LB_POSITION,*rResId.GetResMgr()     )),
+    aCharStyleFT(this,          ResId(FT_CHAR_STYLE,*rResId.GetResMgr()     )),
+    aCharStyleLB(this,          ResId(LB_CHAR_STYLE,*rResId.GetResMgr()     )),
+    aStylistPB(this,            ResId(PB_STYLIST,*rResId.GetResMgr()        )),
+    aPreviewFT(this,            ResId(FT_PREVIEW,*rResId.GetResMgr()        )),
+    aPreviewWin(*this,          ResId(WIN_PREVIEW,*rResId.GetResMgr()       )),
+    aApplyPB(this,              ResId(PB_APPLY,*rResId.GetResMgr()          )),
+    aClosePB(this,              ResId(PB_CLOSE,*rResId.GetResMgr()          )),
+    aHelpPB(this,               ResId(PB_HELP,*rResId.GetResMgr()           )),
     nLastPos(0),
     nCurrentEdit(0),
     bModified(FALSE),
