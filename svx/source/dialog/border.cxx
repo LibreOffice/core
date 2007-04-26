@@ -4,9 +4,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:32:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:25:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -203,47 +203,47 @@ Color TpBorderRGBColor( const Color& rColor )
 SvxBorderTabPage::SvxBorderTabPage( Window* pParent,
                                     const SfxItemSet& rCoreAttrs )
 
-    :   SfxTabPage( pParent, ResId( RID_SVXPAGE_BORDER, DIALOG_MGR() ), rCoreAttrs ),
+    :   SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_BORDER ), rCoreAttrs ),
 
-        aFlBorder       ( this, ResId( FL_BORDER ) ),
-        aDefaultFT      ( this, ResId( FT_DEFAULT ) ),
-        aWndPresets     ( this, ResId( WIN_PRESETS ) ),
-        aUserDefFT      ( this, ResId( FT_USERDEF ) ),
-        aFrameSel       ( this, ResId( WIN_FRAMESEL ) ),
+        aFlBorder       ( this, SVX_RES( FL_BORDER ) ),
+        aDefaultFT      ( this, SVX_RES( FT_DEFAULT ) ),
+        aWndPresets     ( this, SVX_RES( WIN_PRESETS ) ),
+        aUserDefFT      ( this, SVX_RES( FT_USERDEF ) ),
+        aFrameSel       ( this, SVX_RES( WIN_FRAMESEL ) ),
 
-        aFlSep1         ( this, ResId( FL_SEPARATOR1 ) ),
-        aFlLine         ( this, ResId( FL_LINE ) ),
-        aStyleFT        ( this, ResId( FT_STYLE ) ),
-        aLbLineStyle    ( this, ResId( LB_LINESTYLE ) ),
-        aColorFT        ( this, ResId( FT_COLOR ) ),
-        aLbLineColor    ( this, ResId( LB_LINECOLOR ) ),
+        aFlSep1         ( this, SVX_RES( FL_SEPARATOR1 ) ),
+        aFlLine         ( this, SVX_RES( FL_LINE ) ),
+        aStyleFT        ( this, SVX_RES( FT_STYLE ) ),
+        aLbLineStyle    ( this, SVX_RES( LB_LINESTYLE ) ),
+        aColorFT        ( this, SVX_RES( FT_COLOR ) ),
+        aLbLineColor    ( this, SVX_RES( LB_LINECOLOR ) ),
 
-        aFlSep2         ( this, ResId( FL_SEPARATOR2 ) ),
-        aDistanceFL     ( this, ResId( FL_DISTANCE ) ),
-        aLeftFT         ( this, ResId( FT_LEFT ) ),
-        aLeftMF         ( this, ResId( MF_LEFT ) ),
-        aRightFT        ( this, ResId( FT_RIGHT ) ),
-        aRightMF        ( this, ResId( MF_RIGHT ) ),
-        aTopFT          ( this, ResId( FT_TOP ) ),
-        aTopMF          ( this, ResId( MF_TOP ) ),
-        aBottomFT       ( this, ResId( FT_BOTTOM ) ),
-        aBottomMF       ( this, ResId( MF_BOTTOM ) ),
-        aSynchronizeCB  ( this, ResId( CB_SYNC ) ),
+        aFlSep2         ( this, SVX_RES( FL_SEPARATOR2 ) ),
+        aDistanceFL     ( this, SVX_RES( FL_DISTANCE ) ),
+        aLeftFT         ( this, SVX_RES( FT_LEFT ) ),
+        aLeftMF         ( this, SVX_RES( MF_LEFT ) ),
+        aRightFT        ( this, SVX_RES( FT_RIGHT ) ),
+        aRightMF        ( this, SVX_RES( MF_RIGHT ) ),
+        aTopFT          ( this, SVX_RES( FT_TOP ) ),
+        aTopMF          ( this, SVX_RES( MF_TOP ) ),
+        aBottomFT       ( this, SVX_RES( FT_BOTTOM ) ),
+        aBottomMF       ( this, SVX_RES( MF_BOTTOM ) ),
+        aSynchronizeCB  ( this, SVX_RES( CB_SYNC ) ),
 
-        aFlShadow       ( this, ResId( FL_SHADOW ) ),
-        aFtShadowPos    ( this, ResId( FT_SHADOWPOS ) ),
-        aWndShadows     ( this, ResId( WIN_SHADOWS ) ),
-        aFtShadowSize   ( this, ResId( FT_SHADOWSIZE ) ),
-        aEdShadowSize   ( this, ResId( ED_SHADOWSIZE ) ),
-        aFtShadowColor  ( this, ResId( FT_SHADOWCOLOR ) ),
-        aLbShadowColor  ( this, ResId( LB_SHADOWCOLOR ) ),
-        aPropertiesFL   ( this, ResId( FL_PROPERTIES ) ),
-        aMergeWithNextCB( this, ResId( CB_MERGEWITHNEXT ) ),
-        aMergeAdjacentBordersCB( this, ResId( CB_MERGEADJACENTBORDERS ) ),
-        aShadowImgLstH( ResId(ILH_SDW_BITMAPS)),
-        aShadowImgLst( ResId(IL_SDW_BITMAPS)),
-        aBorderImgLstH( ResId(ILH_PRE_BITMAPS)),
-        aBorderImgLst( ResId(IL_PRE_BITMAPS)),
+        aFlShadow       ( this, SVX_RES( FL_SHADOW ) ),
+        aFtShadowPos    ( this, SVX_RES( FT_SHADOWPOS ) ),
+        aWndShadows     ( this, SVX_RES( WIN_SHADOWS ) ),
+        aFtShadowSize   ( this, SVX_RES( FT_SHADOWSIZE ) ),
+        aEdShadowSize   ( this, SVX_RES( ED_SHADOWSIZE ) ),
+        aFtShadowColor  ( this, SVX_RES( FT_SHADOWCOLOR ) ),
+        aLbShadowColor  ( this, SVX_RES( LB_SHADOWCOLOR ) ),
+        aPropertiesFL   ( this, SVX_RES( FL_PROPERTIES ) ),
+        aMergeWithNextCB( this, SVX_RES( CB_MERGEWITHNEXT ) ),
+        aMergeAdjacentBordersCB( this, SVX_RES( CB_MERGEADJACENTBORDERS ) ),
+        aShadowImgLstH( SVX_RES(ILH_SDW_BITMAPS)),
+        aShadowImgLst( SVX_RES(IL_SDW_BITMAPS)),
+        aBorderImgLstH( SVX_RES(ILH_PRE_BITMAPS)),
+        aBorderImgLst( SVX_RES(IL_PRE_BITMAPS)),
         nMinValue(0),
         nSWMode(0),
         mbHorEnabled( false ),
