@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwStyleNameMapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 20:48:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:48:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -907,7 +907,7 @@ SvStringsDtor* SwStyleNameMapper::NewUINameArray( SvStringsDtor*& pNameArray, sa
         pNameArray = new SvStringsDtor( static_cast < sal_Int8 > (nEnd - nStt), 1 );
         while( nStt < nEnd )
         {
-            const ResId rRId( nStt, pSwResMgr );
+            const ResId rRId( nStt, *pSwResMgr );
             String* pStr = new String( rRId );
             pNameArray->Insert( pStr, pNameArray->Count() );
             ++nStt;
