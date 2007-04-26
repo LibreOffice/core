@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabsh.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-14 08:05:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:17:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -794,8 +794,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 //CHINA001 pDlg = new SwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-                pDlg = pFact->CreateSwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh,ResId( DLG_FORMAT_TABLE ));
+                pDlg = pFact->CreateSwTableTabDlg( GetView().GetWindow(), GetPool(), &aCoreSet, &rSh, DLG_FORMAT_TABLE );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             }
             aCoreSet.Put(SfxUInt16Item(SID_HTML_MODE, ::GetHtmlMode(GetView().GetDocShell())));
@@ -873,8 +872,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 //CHINA001              aCoreSet );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(),aCoreSet,ResId( RC_DLG_SWNUMFMTDLG ));
+                AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog( GetView().GetWindow(),aCoreSet, RC_DLG_SWNUMFMTDLG );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
                 if (RET_OK == pDlg->Execute())
@@ -1021,8 +1019,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             //CHINA001              &GetView().GetViewFrame()->GetWindow(), &rSh );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-            AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(&GetView().GetViewFrame()->GetWindow(), &rSh ,ResId( DLG_AUTOFMT_TABLE ) );
+            AbstractSwAutoFormatDlg* pDlg = pFact->CreateSwAutoFormatDlg(&GetView().GetViewFrame()->GetWindow(), &rSh , DLG_AUTOFMT_TABLE );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
@@ -1034,8 +1031,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             //CHINA001                          GetView().GetWindow(), rSh );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh,ResId( DLG_ROW_HEIGHT ));
+            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh, DLG_ROW_HEIGHT );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
@@ -1115,7 +1111,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
 //CHINA001              FN_TABLE_INSERT_COL_DLG == nSlot );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( ResId(DLG_INS_ROW_COL),
+                VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_INS_ROW_COL,
                                                         GetView(), FN_TABLE_INSERT_COL_DLG == nSlot );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 pDlg->Execute();
@@ -1144,8 +1140,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                 //CHINA001 SwSplitTableDlg *pDlg = new SwSplitTableDlg( GetView().GetWindow(), rSh );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-                AbstractSwSplitTableDlg* pDlg = pFact->CreateSwSplitTableDlg( GetView().GetWindow(), rSh,ResId( DLG_SPLIT ));
+                AbstractSwSplitTableDlg* pDlg = pFact->CreateSwSplitTableDlg( GetView().GetWindow(), rSh, DLG_SPLIT );
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if ( pDlg->Execute() == RET_OK )
                 {
@@ -1175,8 +1170,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
             //CHINA001 SwSplitTblDlg *pDlg = new SwSplitTblDlg( GetView().GetWindow(), rSh );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
             DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-
-            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh ,ResId( DLG_SPLIT_TABLE ));
+            VclAbstractDialog* pDlg = pFact->CreateVclAbstractDialog( GetView().GetWindow(), rSh , DLG_SPLIT_TABLE );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
@@ -1195,7 +1189,7 @@ void SwTableShell::Execute(SfxRequest &rReq)
                     //CHINA001 GetView().GetWindow(), bPrev );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                 DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
-                VclAbstractDialog* pDlg = pFact->CreateSwVclDialog( ResId( DLG_MERGE_TABLE ), GetView().GetWindow(), bPrev );
+                VclAbstractDialog* pDlg = pFact->CreateSwVclDialog( DLG_MERGE_TABLE, GetView().GetWindow(), bPrev );
                 DBG_ASSERT(pDlg, "dialogdiet pDlg fail!");//CHINA001
                 if( RET_OK != pDlg->Execute())
                     bPrev = bNext = FALSE;
