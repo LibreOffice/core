@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:23:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:19:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -143,13 +143,13 @@ bool ErrorResource::getString(ErrCode nErrorCode, rtl::OUString * pString)
     const SAL_THROW(())
 {
     OSL_ENSURE(pString, "specification violation");
-    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK));
+    ResId aResId(static_cast< USHORT >(nErrorCode & ERRCODE_RES_MASK), *m_pResMgr);
     aResId.SetRT(RSC_STRING);
     if (!IsAvailableRes(aResId))
         return false;
     aResId.SetAutoRelease(false);
     *pString = UniString(aResId);
-    Resource::GetResManager()->PopContext();
+    m_pResMgr->PopContext();
     return true;
 }
 
@@ -1235,7 +1235,7 @@ void UUIInteractionHelper::executeLoginDialog(LoginErrorInfo & rInfo,
                 SetSavePasswordText(ResId(rInfo.GetIsPersistentPassword() ?
                                               RID_SAVE_PASSWORD :
                                               RID_KEEP_PASSWORD,
-                                          xManager.get()));
+                                          *xManager.get()));
             xDialog->SetSavePassword(rInfo.GetIsSavePassword());
         }
 
@@ -2509,7 +2509,7 @@ UUIInteractionHelper::handleErrorRequest(
             if (!xManager.get())
                 return;
         }
-        ResId aResId(aId[eSource], xManager.get());
+        ResId aResId(aId[eSource], *xManager.get());
         if (!ErrorResource(aResId).  getString(nErrorCode, &aMessage))
             return;
     }
@@ -2677,7 +2677,7 @@ UUIInteractionHelper::handleBrokenPackageRequest(
         if (!xManager.get())
             return;
 
-        ResId aResId( RID_UUI_ERRHDL, xManager.get() );
+        ResId aResId( RID_UUI_ERRHDL, *xManager.get() );
         if ( !ErrorResource(aResId).getString(nErrorCode, &aMessage) )
             return;
     }
