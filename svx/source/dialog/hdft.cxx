@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hdft.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:34:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:32:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,23 +171,23 @@ SvxFooterPage::SvxFooterPage( Window* pParent, const SfxItemSet& rAttr ) :
 
 SvxHFPage::SvxHFPage( Window* pParent, USHORT nResId, const SfxItemSet& rAttr, USHORT nSetId ) :
 
-    SfxTabPage( pParent, ResId( nResId, DIALOG_MGR() ), rAttr ),
+    SfxTabPage( pParent, SVX_RES( nResId ), rAttr ),
 
-    aTurnOnBox      ( this, ResId( CB_TURNON ) ),
-    aCntSharedBox   ( this, ResId( CB_SHARED ) ),
-    aLMLbl          ( this, ResId( FT_LMARGIN ) ),
-    aLMEdit         ( this, ResId( ED_LMARGIN ) ),
-    aRMLbl          ( this, ResId( FT_RMARGIN ) ),
-    aRMEdit         ( this, ResId( ED_RMARGIN ) ),
-    aDistFT         ( this, ResId( FT_DIST ) ),
-    aDistEdit       ( this, ResId( ED_DIST ) ),
-    aDynSpacingCB   ( this, ResId( CB_DYNSPACING ) ),
-    aHeightFT       ( this, ResId( FT_HEIGHT ) ),
-    aHeightEdit     ( this, ResId( ED_HEIGHT ) ),
-    aHeightDynBtn   ( this, ResId( CB_HEIGHT_DYN ) ),
-    aFrm            ( this, ResId( FL_FRAME ) ),
-    aBspWin         ( this, ResId( WN_BSP ) ),
-    aBackgroundBtn  ( this, ResId( BTN_EXTRAS ) ),
+    aTurnOnBox      ( this, SVX_RES( CB_TURNON ) ),
+    aCntSharedBox   ( this, SVX_RES( CB_SHARED ) ),
+    aLMLbl          ( this, SVX_RES( FT_LMARGIN ) ),
+    aLMEdit         ( this, SVX_RES( ED_LMARGIN ) ),
+    aRMLbl          ( this, SVX_RES( FT_RMARGIN ) ),
+    aRMEdit         ( this, SVX_RES( ED_RMARGIN ) ),
+    aDistFT         ( this, SVX_RES( FT_DIST ) ),
+    aDistEdit       ( this, SVX_RES( ED_DIST ) ),
+    aDynSpacingCB   ( this, SVX_RES( CB_DYNSPACING ) ),
+    aHeightFT       ( this, SVX_RES( FT_HEIGHT ) ),
+    aHeightEdit     ( this, SVX_RES( ED_HEIGHT ) ),
+    aHeightDynBtn   ( this, SVX_RES( CB_HEIGHT_DYN ) ),
+    aFrm            ( this, SVX_RES( FL_FRAME ) ),
+    aBspWin         ( this, SVX_RES( WN_BSP ) ),
+    aBackgroundBtn  ( this, SVX_RES( BTN_EXTRAS ) ),
 
     nId                         ( nSetId ),
     pBBSet                      ( NULL ),
@@ -483,7 +483,7 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
         BOOL bDelete = TRUE;
 
         if ( !bDisableQueryBox && pBox && aTurnOnBox.GetSavedValue() == TRUE )
-            bDelete = ( QueryBox( this, ResId( RID_SVXQBX_DELETE_HEADFOOT, DIALOG_MGR() ) ).Execute() == RET_YES );
+            bDelete = ( QueryBox( this, SVX_RES( RID_SVXQBX_DELETE_HEADFOOT ) ).Execute() == RET_YES );
 
         if ( bDelete )
         {
@@ -575,7 +575,7 @@ IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, ResId(RID_SVXDLG_BBDLG),bEnableBackgroundSelector );
+        SfxAbstractTabDialog* pDlg = pFact->CreateSvxBorderBackgroundDlg( this, *pBBSet, RID_SVXDLG_BBDLG,bEnableBackgroundSelector );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK && pDlg->GetOutputItemSet() )
         {
