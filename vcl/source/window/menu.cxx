@@ -4,9 +4,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.147 $
+ *  $Revision: 1.148 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:30:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:38:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3539,6 +3539,16 @@ USHORT PopupMenu::ImplExecute( Window* pW, const Rectangle& rRect, ULONG nPopupM
     Size aSz = ImplCalcSize( pWin );
 
     long nMaxHeight = pWin->GetDesktopRectPixel().GetHeight();
+    if( Application::GetScreenCount() > 1 && ! Application::IsMultiDisplay() )
+    {
+        Window* pDeskW = pWindow->GetWindow( WINDOW_REALPARENT );
+        if( ! pDeskW )
+            pDeskW = pWindow;
+        Point aDesktopTL( pDeskW->OutputToAbsoluteScreenPixel( aRect.TopLeft() ) );
+        nMaxHeight = Application::GetWorkAreaPosSizePixel(
+            Application::GetBestScreen( Rectangle( aDesktopTL, aRect.GetSize() ) )
+            ).GetHeight();
+    }
     if ( pStartedFrom && pStartedFrom->bIsMenuBar )
         nMaxHeight -= pW->GetSizePixel().Height();
     sal_Int32 nLeft, nTop, nRight, nBottom;
@@ -5415,7 +5425,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
 
     if ( nCode == KEY_MENU && !rKEvent.GetKeyCode().IsShift() ) // only F10, not Shift-F10
     {
-        mbAutoPopup = FALSE;
+        mbAutoPopup = ImplGetSVData()->maNWFData.mbOpenMenuOnF10;
         if ( nHighlightedItem == ITEMPOS_INVALID )
         {
             ChangeHighlightItem( 0, FALSE );
