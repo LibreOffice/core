@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:27:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:36:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -238,6 +238,45 @@ static BOOL ImplNumericGetValue( const XubString& rStr, double& rValue,
     rValue = nValue;
 
     return TRUE;
+}
+
+static void ImplUpdateSeparators( const String& rOldDecSep, const String& rNewDecSep,
+                                  const String& rOldThSep, const String& rNewThSep,
+                                  Edit* pEdit )
+{
+    bool bChangeDec = (rOldDecSep != rNewDecSep);
+    bool bChangeTh = (rOldThSep != rNewThSep );
+
+    if( bChangeDec || bChangeTh )
+    {
+        BOOL bUpdateMode = pEdit->IsUpdateMode();
+        pEdit->SetUpdateMode( FALSE );
+        String aText = pEdit->GetText();
+        if( bChangeDec )
+            aText.SearchAndReplaceAll( rNewDecSep, rOldDecSep );
+        if( bChangeTh )
+            aText.SearchAndReplaceAll( rNewThSep, rOldThSep );
+        pEdit->SetText( aText );
+
+        ComboBox* pCombo = dynamic_cast<ComboBox*>(pEdit);
+        if( pCombo )
+        {
+            // update box entries
+            USHORT nEntryCount = pCombo->GetEntryCount();
+            for ( USHORT i=0; i < nEntryCount; i++ )
+            {
+                aText = pCombo->GetEntry( i );
+                if( bChangeDec )
+                    aText.SearchAndReplaceAll( rNewDecSep, rOldDecSep );
+                if( bChangeTh )
+                    aText.SearchAndReplaceAll( rNewThSep, rOldThSep );
+                pCombo->RemoveEntry( i );
+                pCombo->InsertEntry( aText, i );
+            }
+        }
+        if( bUpdateMode )
+            pEdit->SetUpdateMode( bUpdateMode );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -833,8 +872,13 @@ void NumericField::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
+        String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+        String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
+        ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
         ReformatAll();
     }
 }
@@ -948,8 +992,13 @@ void NumericBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
+        String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+        String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
+        ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
         ReformatAll();
     }
 }
@@ -1761,8 +1810,13 @@ void MetricField::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
+        String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+        String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
+        ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
         ReformatAll();
     }
 }
@@ -1883,8 +1937,13 @@ void MetricBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
+        String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+        String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
+        ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
         ReformatAll();
     }
 }
@@ -2220,8 +2279,13 @@ void CurrencyField::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
+        String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+        String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
+        ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
         ReformatAll();
     }
 }
@@ -2335,8 +2399,13 @@ void CurrencyBox::DataChanged( const DataChangedEvent& rDCEvt )
 
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_LOCALE) )
     {
+        String sOldDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sOldThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
         if ( IsDefaultLocale() )
             ImplGetLocaleDataWrapper().setLocale( GetSettings().GetLocale() );
+        String sNewDecSep = ImplGetLocaleDataWrapper().getNumDecimalSep();
+        String sNewThSep = ImplGetLocaleDataWrapper().getNumThousandSep();
+        ImplUpdateSeparators( sOldDecSep, sNewDecSep, sOldThSep, sNewThSep, this );
         ReformatAll();
     }
 }
