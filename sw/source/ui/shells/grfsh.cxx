@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfsh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:28:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:16:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -308,7 +308,7 @@ void SwGrfShell::Execute(SfxRequest &rReq)
 //CHINA001          aSet, FALSE, DLG_FRM_GRF );
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( ResId(DLG_FRM_GRF),
+            SfxAbstractTabDialog* pDlg = pFact->CreateFrmTabDialog( DLG_FRM_GRF,
                                                     GetView().GetViewFrame(),
                                                     GetView().GetWindow(),
                                                     aSet, FALSE, DLG_FRM_GRF);
