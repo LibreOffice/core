@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabdialog.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:35:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:13:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,10 +71,10 @@ using namespace com::sun::star::beans;
 using namespace com::sun::star::lang;
 
 XMLFilterTabDialog::XMLFilterTabDialog( Window *pParent, ResMgr& rResMgr, const Reference< XMultiServiceFactory >& rxMSF, const filter_info_impl* pInfo ) :
-    TabDialog( pParent, ResId( DLG_XML_FILTER_TABDIALOG, &rResMgr ) ),
+    TabDialog( pParent, ResId( DLG_XML_FILTER_TABDIALOG, rResMgr ) ),
     mxMSF( rxMSF ),
     mrResMgr( rResMgr ),
-    maTabCtrl( this, ResId( 1, &rResMgr ) ),
+    maTabCtrl( this, ResId( 1, rResMgr ) ),
     maOKBtn( this ),
     maCancelBtn( this ),
     maHelpBtn( this )
@@ -320,7 +320,7 @@ bool XMLFilterTabDialog::onOk()
         maTabCtrl.SetCurPageId( (USHORT)nErrorPage );
         ActivatePageHdl( &maTabCtrl );
 
-        ResId aResId( nErrorId, &mrResMgr );
+        ResId aResId( nErrorId, mrResMgr );
         String aMessage( aResId );
 
         if( aReplace2.Len() )

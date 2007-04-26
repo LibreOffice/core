@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfileview.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:33:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:12:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -559,12 +559,12 @@ void XMLFileWindow::showLine( sal_Int32 nLine )
 
 
 XMLSourceFileDialog::XMLSourceFileDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF  )
-:   WorkWindow( pParent, ResId( DLG_XML_SOURCE_FILE_DIALOG, &rResMgr ) ),
+:   WorkWindow( pParent, ResId( DLG_XML_SOURCE_FILE_DIALOG, rResMgr ) ),
     mnOutputHeight( LogicToPixel( Size( 80, 80 ), MAP_APPFONT ).Height() ),
     mxMSF( rxMSF ),
     mrResMgr( rResMgr ),
     maLBOutput( this ),
-    maPBValidate( this, ResId( PB_VALIDATE, &rResMgr ) )
+    maPBValidate( this, ResId( PB_VALIDATE, rResMgr ) )
 {
 
     FreeResource();
