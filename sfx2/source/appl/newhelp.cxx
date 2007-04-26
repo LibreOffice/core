@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.121 $
+ *  $Revision: 1.122 $
  *
- *  last change: $Author: rt $ $Date: 2006-11-28 13:27:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:07:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -569,7 +569,7 @@ ContentTabPage_Impl::ContentTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Im
 
     HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_CONTENT ) ),
 
-    aContentBox( this, ResId( LB_CONTENTS ) )
+    aContentBox( this, SfxResId( LB_CONTENTS ) )
 
 {
     FreeResource();
@@ -675,9 +675,9 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* 
 
     HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_INDEX ) ),
 
-    aExpressionFT   ( this, ResId( FT_EXPRESSION ) ),
-    aIndexCB        ( this, ResId( CB_INDEX ) ),
-    aOpenBtn        ( this, ResId( PB_OPEN_INDEX ) ),
+    aExpressionFT   ( this, SfxResId( FT_EXPRESSION ) ),
+    aIndexCB        ( this, SfxResId( CB_INDEX ) ),
+    aOpenBtn        ( this, SfxResId( PB_OPEN_INDEX ) ),
 
     bIsActivated    ( sal_False )
 
@@ -1091,13 +1091,13 @@ SearchTabPage_Impl::SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl
 
     HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_SEARCH ) ),
 
-    aSearchFT       ( this, ResId( FT_SEARCH ) ),
-    aSearchED       ( this, ResId( ED_SEARCH ) ),
-    aSearchBtn      ( this, ResId( PB_SEARCH ) ),
-    aFullWordsCB    ( this, ResId( CB_FULLWORDS ) ),
-    aScopeCB        ( this, ResId( CB_SCOPE ) ),
-    aResultsLB      ( this, ResId( LB_RESULT ) ),
-    aOpenBtn        ( this, ResId( PB_OPEN_SEARCH ) ),
+    aSearchFT       ( this, SfxResId( FT_SEARCH ) ),
+    aSearchED       ( this, SfxResId( ED_SEARCH ) ),
+    aSearchBtn      ( this, SfxResId( PB_SEARCH ) ),
+    aFullWordsCB    ( this, SfxResId( CB_FULLWORDS ) ),
+    aScopeCB        ( this, SfxResId( CB_SCOPE ) ),
+    aResultsLB      ( this, SfxResId( LB_RESULT ) ),
+    aOpenBtn        ( this, SfxResId( PB_OPEN_SEARCH ) ),
     xBreakIterator  ( vcl::unohelper::CreateBreakIterator() )
 
 {
@@ -1494,9 +1494,9 @@ BookmarksTabPage_Impl::BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindo
 
     HelpTabPage_Impl( pParent, _pIdxWin, SfxResId( TP_HELP_BOOKMARKS ) ),
 
-    aBookmarksFT    ( this, ResId( FT_BOOKMARKS ) ),
-    aBookmarksBox   ( this, ResId( LB_BOOKMARKS ) ),
-    aBookmarksPB    ( this, ResId( PB_BOOKMARKS ) )
+    aBookmarksFT    ( this, SfxResId( FT_BOOKMARKS ) ),
+    aBookmarksBox   ( this, SfxResId( LB_BOOKMARKS ) ),
+    aBookmarksPB    ( this, SfxResId( PB_BOOKMARKS ) )
 
 {
     FreeResource();
@@ -1680,9 +1680,9 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent )
 
     Window( _pParent, SfxResId( WIN_HELPINDEX ) ),
 
-    aActiveLB           ( this, ResId( LB_ACTIVE ) ),
-    aActiveLine         ( this, ResId( FL_ACTIVE ) ),
-    aTabCtrl            ( this, ResId( TC_INDEX ) ),
+    aActiveLB           ( this, SfxResId( LB_ACTIVE ) ),
+    aActiveLine         ( this, SfxResId( FL_ACTIVE ) ),
+    aTabCtrl            ( this, SfxResId( TC_INDEX ) ),
 
     aIndexKeywordLink   ( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) ),
     pParentWin          ( _pParent ),
@@ -3542,15 +3542,15 @@ SfxAddHelpBookmarkDialog_Impl::SfxAddHelpBookmarkDialog_Impl( Window* pParent, s
 
     ModalDialog( pParent, SfxResId( DLG_HELP_ADDBOOKMARK ) ),
 
-    aTitleFT    ( this, ResId( FT_BOOKMARK_TITLE ) ),
-    aTitleED    ( this, ResId( ED_BOOKMARK_TITLE ) ),
-    aOKBtn      ( this, ResId( PB_BOOKMARK_OK ) ),
-    aEscBtn     ( this, ResId( PB_BOOKMARK_CANCEL ) ),
-    aHelpBtn    ( this, ResId( PB_BOOKMARK_HELP ) )
+    aTitleFT    ( this, SfxResId( FT_BOOKMARK_TITLE ) ),
+    aTitleED    ( this, SfxResId( ED_BOOKMARK_TITLE ) ),
+    aOKBtn      ( this, SfxResId( PB_BOOKMARK_OK ) ),
+    aEscBtn     ( this, SfxResId( PB_BOOKMARK_CANCEL ) ),
+    aHelpBtn    ( this, SfxResId( PB_BOOKMARK_HELP ) )
 
 {
     if ( bRename )
-        SetText( String( ResId( STR_BOOKMARK_RENAME ) ) );
+        SetText( String( SfxResId( STR_BOOKMARK_RENAME ) ) );
 
     FreeResource();
 }
