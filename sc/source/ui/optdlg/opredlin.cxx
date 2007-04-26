@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opredlin.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:35:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:54:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,16 +68,16 @@
 ScRedlineOptionsTabPage::ScRedlineOptionsTabPage( Window* pParent,
                                                     const SfxItemSet& rSet )
     : SfxTabPage(pParent, ScResId(RID_SCPAGE_OPREDLINE), rSet),
-    aContentFT      ( this, ResId(FT_CONTENT    )),
-    aContentColorLB ( this, ResId(CLB_CONTENT   )),
-    aRemoveFT       ( this, ResId(FT_REMOVE )),
-    aRemoveColorLB  ( this, ResId(CLB_REMOVE    )),
-    aInsertFT       ( this, ResId(FT_INSERT )),
-    aInsertColorLB  ( this, ResId(CLB_INSERT    )),
-    aMoveFT         ( this, ResId(FT_MOVE       )),
-    aMoveColorLB    ( this, ResId(CLB_MOVE  )),
-    aChangedGB      ( this, ResId(GB_COLORCHGS)),
-    aAuthorStr      (ResId(STR_AUTHOR))
+    aContentFT      ( this, ScResId(FT_CONTENT  )),
+    aContentColorLB ( this, ScResId(CLB_CONTENT )),
+    aRemoveFT       ( this, ScResId(FT_REMOVE   )),
+    aRemoveColorLB  ( this, ScResId(CLB_REMOVE  )),
+    aInsertFT       ( this, ScResId(FT_INSERT   )),
+    aInsertColorLB  ( this, ScResId(CLB_INSERT  )),
+    aMoveFT         ( this, ScResId(FT_MOVE     )),
+    aMoveColorLB    ( this, ScResId(CLB_MOVE    )),
+    aChangedGB      ( this, ScResId(GB_COLORCHGS)),
+    aAuthorStr      (ScResId(STR_AUTHOR))
 {
     FreeResource();
 
