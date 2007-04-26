@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chinese_translationdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:24:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:53:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,17 +74,17 @@ using namespace ::com::sun::star::uno;
 
 ChineseTranslationDialog::ChineseTranslationDialog( Window* pParent )
     : ModalDialog( pParent, TextConversionDlgs_ResId( DLG_CHINESETRANSLATION ) )
-    , m_aFL_Direction( this, ResId( FL_DIRECTION ) )
-    , m_aRB_To_Simplified( this, ResId( RB_TO_SIMPLIFIED ) )
-    , m_aRB_To_Traditional( this, ResId( RB_TO_TRADITIONAL ) )
-    , m_aCB_Use_Variants( this, ResId( CB_USE_VARIANTS ) )
-    , m_aFL_Commonterms( this, ResId( FL_COMMONTERMS ) )
-    , m_aCB_Translate_Commonterms( this, ResId( CB_TRANSLATE_COMMONTERMS ) )
-    , m_aPB_Editterms( this, ResId( PB_EDITTERMS ) )
-    , m_aFL_Bottomline( this, ResId( FL_BOTTOMLINE ) )
-    , m_aBP_OK( this, ResId( PB_OK ) )
-    , m_aBP_Cancel( this, ResId( PB_CANCEL ) )
-    , m_aBP_Help( this, ResId( PB_HELP ) )
+    , m_aFL_Direction( this, TextConversionDlgs_ResId( FL_DIRECTION ) )
+    , m_aRB_To_Simplified( this, TextConversionDlgs_ResId( RB_TO_SIMPLIFIED ) )
+    , m_aRB_To_Traditional( this, TextConversionDlgs_ResId( RB_TO_TRADITIONAL ) )
+    , m_aCB_Use_Variants( this, TextConversionDlgs_ResId( CB_USE_VARIANTS ) )
+    , m_aFL_Commonterms( this, TextConversionDlgs_ResId( FL_COMMONTERMS ) )
+    , m_aCB_Translate_Commonterms( this, TextConversionDlgs_ResId( CB_TRANSLATE_COMMONTERMS ) )
+    , m_aPB_Editterms( this, TextConversionDlgs_ResId( PB_EDITTERMS ) )
+    , m_aFL_Bottomline( this, TextConversionDlgs_ResId( FL_BOTTOMLINE ) )
+    , m_aBP_OK( this, TextConversionDlgs_ResId( PB_OK ) )
+    , m_aBP_Cancel( this, TextConversionDlgs_ResId( PB_CANCEL ) )
+    , m_aBP_Help( this, TextConversionDlgs_ResId( PB_HELP ) )
     , m_pDictionaryDialog(0)
 {
     FreeResource();
