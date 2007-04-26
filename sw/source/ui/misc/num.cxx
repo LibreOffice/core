@@ -4,9 +4,9 @@
  *
  *  $RCSfile: num.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:08:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:13:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -164,20 +164,20 @@ static BOOL bLastRelative = FALSE;
 SwNumPositionTabPage::SwNumPositionTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SW_RES( TP_NUM_POSITION ), rSet ),
-    aLevelFL(       this, ResId(FL_LEVEL    )),
-    aLevelLB(       this, ResId(LB_LEVEL    )),
-    aPositionFL(    this, ResId(FL_POSITION )),
-    aAlignFT(       this, ResId(FT_ALIGN    )),
-    aAlignLB(       this, ResId(LB_ALIGN    )),
-    aDistBorderFT(  this, ResId(FT_BORDERDIST   )),
-    aDistBorderMF(  this, ResId(MF_BORDERDIST   )),
-    aDistNumFT(     this, ResId(FT_NUMDIST      )),
-    aDistNumMF(     this, ResId(MF_NUMDIST      )),
-    aRelativeCB(    this, ResId(CB_RELATIVE     )),
-    aIndentFT(      this, ResId(FT_INDENT       )),
-    aIndentMF(      this, ResId(MF_INDENT       )),
-    aStandardPB(    this, ResId(PB_STANDARD     )),
-    aPreviewWIN(    this, ResId(WIN_PREVIEW     )),
+    aLevelFL(       this, SW_RES(FL_LEVEL    )),
+    aLevelLB(       this, SW_RES(LB_LEVEL   )),
+    aPositionFL(    this, SW_RES(FL_POSITION )),
+    aAlignFT(       this, SW_RES(FT_ALIGN   )),
+    aAlignLB(       this, SW_RES(LB_ALIGN   )),
+    aDistBorderFT(  this, SW_RES(FT_BORDERDIST  )),
+    aDistBorderMF(  this, SW_RES(MF_BORDERDIST  )),
+    aDistNumFT(     this, SW_RES(FT_NUMDIST     )),
+    aDistNumMF(     this, SW_RES(MF_NUMDIST     )),
+    aRelativeCB(    this, SW_RES(CB_RELATIVE        )),
+    aIndentFT(      this, SW_RES(FT_INDENT      )),
+    aIndentMF(      this, SW_RES(MF_INDENT      )),
+    aStandardPB(    this, SW_RES(PB_STANDARD        )),
+    aPreviewWIN(    this, SW_RES(WIN_PREVIEW        )),
     bInInintControl(FALSE),
     pActNum(0),
     pOutlineDlg(0),
@@ -785,7 +785,7 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(Window* pParent,
     SfxTabDialog(pParent, SW_RES(DLG_SVXTEST_NUM_BULLET), pSwItemSet, FALSE, &aEmptyStr),
     rWrtSh(rSh),
     nRetOptionsDialog(USHRT_MAX),
-    sRemoveText(ResId(ST_RESET))
+    sRemoveText(SW_RES(ST_RESET))
 {
     FreeResource();
     GetUserButton()->SetText(sRemoveText);
