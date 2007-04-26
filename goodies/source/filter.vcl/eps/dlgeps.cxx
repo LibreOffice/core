@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgeps.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:44:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:01:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,23 +52,23 @@
 \************************************************************************/
 
 DlgExportEPS::DlgExportEPS( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPS, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPS, *rPara.pResMgr ) ),
                 rFltCallPara        ( rPara ),
-                aGrpPreview         ( this, ResId( GRP_PREVIEW ) ),
-                aCBPreviewTiff      ( this, ResId( CB_PREVIEW_TIFF ) ),
-                aCBPreviewEPSI      ( this, ResId( CB_PREVIEW_EPSI ) ),
-                aGrpVersion         ( this, ResId( GRP_VERSION ) ),
-                aRBLevel1           ( this, ResId( RB_LEVEL1 ) ),
-                aRBLevel2           ( this, ResId( RB_LEVEL2 ) ),
-                aGrpColor           ( this, ResId( GRP_COLOR ) ),
-                aRBColor            ( this, ResId( RB_COLOR ) ),
-                aRBGrayscale        ( this, ResId( RB_GRAYSCALE ) ),
-                aGrpCompression     ( this, ResId( GRP_COMPRESSION ) ),
-                aRBCompressionLZW   ( this, ResId( RB_COMPRESSION_LZW ) ),
-                aRBCompressionNone  ( this, ResId( RB_COMPRESSION_NONE ) ),
-                aBtnOK              ( this, ResId( BTN_OK ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) ),
+                aGrpPreview         ( this, ResId( GRP_PREVIEW, *rPara.pResMgr ) ),
+                aCBPreviewTiff      ( this, ResId( CB_PREVIEW_TIFF, *rPara.pResMgr ) ),
+                aCBPreviewEPSI      ( this, ResId( CB_PREVIEW_EPSI, *rPara.pResMgr ) ),
+                aGrpVersion         ( this, ResId( GRP_VERSION, *rPara.pResMgr ) ),
+                aRBLevel1           ( this, ResId( RB_LEVEL1, *rPara.pResMgr ) ),
+                aRBLevel2           ( this, ResId( RB_LEVEL2, *rPara.pResMgr ) ),
+                aGrpColor           ( this, ResId( GRP_COLOR, *rPara.pResMgr ) ),
+                aRBColor            ( this, ResId( RB_COLOR, *rPara.pResMgr ) ),
+                aRBGrayscale        ( this, ResId( RB_GRAYSCALE, *rPara.pResMgr ) ),
+                aGrpCompression     ( this, ResId( GRP_COMPRESSION, *rPara.pResMgr ) ),
+                aRBCompressionLZW   ( this, ResId( RB_COMPRESSION_LZW, *rPara.pResMgr ) ),
+                aRBCompressionNone  ( this, ResId( RB_COMPRESSION_NONE, *rPara.pResMgr ) ),
+                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
