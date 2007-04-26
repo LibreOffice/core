@@ -4,9 +4,9 @@
  *
  *  $RCSfile: iodlgimp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:51:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:26:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -166,7 +166,7 @@ namespace
 
     struct SvtSimpleResId : public ResId
     {
-        SvtSimpleResId (USHORT nId) : ResId (nId, ResMgrHolder::getOrCreate()) {}
+        SvtSimpleResId (USHORT nId) : ResId (nId, *ResMgrHolder::getOrCreate()) {}
     };
 }
 
