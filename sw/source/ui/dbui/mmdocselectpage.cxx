@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:08:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:03:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -105,16 +105,16 @@ using namespace svt;
 SwMailMergeDocSelectPage::SwMailMergeDocSelectPage( SwMailMergeWizard* _pParent ) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_DOCSELECT_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI(this,          ResId(  FI_HEADER           ) ),
-    m_aHowToFT          (this, ResId( FT_HOWTO )),
-    m_aCurrentDocRB     (this, ResId( RB_CURRENTDOC )),
-    m_aNewDocRB         (this, ResId( RB_NEWDOC )),
-    m_aLoadDocRB        (this, ResId( RB_LOADDOC )),
-    m_aBrowseDocPB      (this, ResId( PB_LOADDOC )),
-    m_aLoadTemplateRB   (this, ResId( RB_LOADTEMPLATE )),
-    m_aBrowseTemplatePB (this, ResId( PB_BROWSETEMPLATE )),
-    m_aRecentDocRB      (this, ResId( RB_RECENTDOC )),
-    m_aRecentDocLB      (this, ResId( LB_RECENTDOC )),
+    m_aHeaderFI(this,          SW_RES(  FI_HEADER           ) ),
+    m_aHowToFT          (this, SW_RES( FT_HOWTO )),
+    m_aCurrentDocRB     (this, SW_RES( RB_CURRENTDOC )),
+    m_aNewDocRB         (this, SW_RES( RB_NEWDOC )),
+    m_aLoadDocRB        (this, SW_RES( RB_LOADDOC )),
+    m_aBrowseDocPB      (this, SW_RES( PB_LOADDOC )),
+    m_aLoadTemplateRB   (this, SW_RES( RB_LOADTEMPLATE )),
+    m_aBrowseTemplatePB (this, SW_RES( PB_BROWSETEMPLATE )),
+    m_aRecentDocRB      (this, SW_RES( RB_RECENTDOC )),
+    m_aRecentDocLB      (this, SW_RES( LB_RECENTDOC )),
 #pragma warning (default : 4355)
     m_pWizard(_pParent)
 {
