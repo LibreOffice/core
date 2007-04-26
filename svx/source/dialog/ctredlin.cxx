@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ctredlin.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:10:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:27:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,18 +645,18 @@ void SvxRedlinTable::InitEntry( SvLBoxEntry* pEntry, const XubString& rStr,
 
 SvxTPView::SvxTPView( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_VIEW_PAGE)),
-    aViewData   ( this, ResId( DG_VIEW) ),
-    PbAccept    ( this, ResId(PB_ACCEPT  ) ),
-    PbReject    ( this, ResId(PB_REJECT  ) ),
-    PbAcceptAll ( this, ResId(PB_ACCEPTALL  ) ),
-    PbRejectAll ( this, ResId(PB_REJECTALL  ) ),
-    PbUndo      ( this, ResId(PB_UNDO  ) ),
-    aTitle1     ( ResId( STR_TITLE1 ) ),        // lokale Resource
-    aTitle2     ( ResId( STR_TITLE2 ) ),
-    aTitle3     ( ResId( STR_TITLE3 ) ),
-    aTitle4     ( ResId( STR_TITLE4 ) ),
-    aTitle5     ( ResId( STR_TITLE5 ) ),
-    aStrMyName  ( ResId( STR_VIEW) )
+    aViewData   ( this, SVX_RES( DG_VIEW) ),
+    PbAccept    ( this, SVX_RES(PB_ACCEPT    ) ),
+    PbReject    ( this, SVX_RES(PB_REJECT  ) ),
+    PbAcceptAll ( this, SVX_RES(PB_ACCEPTALL  ) ),
+    PbRejectAll ( this, SVX_RES(PB_REJECTALL  ) ),
+    PbUndo      ( this, SVX_RES(PB_UNDO  ) ),
+    aTitle1     ( SVX_RES( STR_TITLE1 ) ),      // lokale Resource
+    aTitle2     ( SVX_RES( STR_TITLE2 ) ),
+    aTitle3     ( SVX_RES( STR_TITLE3 ) ),
+    aTitle4     ( SVX_RES( STR_TITLE4 ) ),
+    aTitle5     ( SVX_RES( STR_TITLE5 ) ),
+    aStrMyName  ( SVX_RES( STR_VIEW) )
 {
     FreeResource();
 
@@ -829,28 +829,28 @@ IMPL_LINK( SvxTPView, PbClickHdl, PushButton*, pPushB )
 SvxTPFilter::SvxTPFilter( Window * pParent)
     : TabPage( pParent, SVX_RES(SID_REDLIN_FILTER_PAGE)),
     pRedlinTable(NULL),
-    aCbDate     ( this, ResId( CB_DATE ) ),
-    aLbDate     ( this, ResId( LB_DATE ) ),
-    aDfDate     ( this, ResId( DF_DATE ) ),
-    aTfDate     ( this, ResId( TF_DATE ) ),
-    aIbClock    ( this, ResId( IB_CLOCK ) ),
-    aFtDate2    ( this, ResId( FT_DATE2 ) ),
-    aDfDate2    ( this, ResId( DF_DATE2 ) ),
-    aTfDate2    ( this, ResId( TF_DATE2 ) ),
-    aIbClock2   ( this, ResId( IB_CLOCK2) ),
-    aCbAuthor   ( this, ResId( CB_AUTOR ) ),
-    aLbAuthor   ( this, ResId( LB_AUTOR ) ),
-    aCbRange    ( this, ResId( CB_RANGE ) ),
-    aEdRange    ( this, ResId( ED_RANGE ) ),
-    aBtnRange   ( this, ResId( BTN_REF ) ),
-    aLbAction   ( this, ResId( LB_ACTION ) ),
-    aCbComment  ( this, ResId( CB_COMMENT) ),
-    aEdComment  ( this, ResId( ED_COMMENT) ),
-    aActionStr  (       ResId( STR_ACTION) ),
-    aStrMyName  (       ResId( STR_FILTER) ),
+    aCbDate     ( this, SVX_RES( CB_DATE ) ),
+    aLbDate     ( this, SVX_RES( LB_DATE ) ),
+    aDfDate     ( this, SVX_RES( DF_DATE ) ),
+    aTfDate     ( this, SVX_RES( TF_DATE ) ),
+    aIbClock    ( this, SVX_RES( IB_CLOCK ) ),
+    aFtDate2    ( this, SVX_RES( FT_DATE2 ) ),
+    aDfDate2    ( this, SVX_RES( DF_DATE2 ) ),
+    aTfDate2    ( this, SVX_RES( TF_DATE2 ) ),
+    aIbClock2   ( this, SVX_RES( IB_CLOCK2) ),
+    aCbAuthor   ( this, SVX_RES( CB_AUTOR ) ),
+    aLbAuthor   ( this, SVX_RES( LB_AUTOR ) ),
+    aCbRange    ( this, SVX_RES( CB_RANGE ) ),
+    aEdRange    ( this, SVX_RES( ED_RANGE ) ),
+    aBtnRange   ( this, SVX_RES( BTN_REF ) ),
+    aLbAction   ( this, SVX_RES( LB_ACTION ) ),
+    aCbComment  ( this, SVX_RES( CB_COMMENT) ),
+    aEdComment  ( this, SVX_RES( ED_COMMENT) ),
+    aActionStr  (       SVX_RES( STR_ACTION) ),
+    aStrMyName  (       SVX_RES( STR_FILTER) ),
     bModified   (FALSE)
 {
-    Image aImgTimeHC( ResId( IMG_TIME_H ) );
+    Image aImgTimeHC( SVX_RES( IMG_TIME_H ) );
     FreeResource();
 
     aIbClock.SetModeImage( aImgTimeHC, BMP_COLOR_HIGHCONTRAST );
