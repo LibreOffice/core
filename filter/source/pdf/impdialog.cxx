@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:19:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:11:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,7 +87,7 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
                                   const Reference< XComponent >& rxDoc,
                                   const Reference< lang::XMultiServiceFactory >& xFact
                                   ) :
-    SfxTabDialog( pParent, ResId( RID_PDF_EXPORT_DLG, &rResMgr ), 0, FALSE, 0 ),
+    SfxTabDialog( pParent, ResId( RID_PDF_EXPORT_DLG, rResMgr ), 0, FALSE, 0 ),
     mxMSF( xFact ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
     maConfigI18N( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/I18N/CTL/" ) ) ),
@@ -247,16 +247,13 @@ ImpPDFTabDialog::ImpPDFTabDialog( Window* pParent,
 //last queued is the first to be displayed (or so it seems..)
     AddTabPage( RID_PDF_TAB_GENER, ImpPDFTabGeneralPage::Create, 0 );
 
-//change test on the Ok button: get the relevant string from resources, update it on the button
-    GetOKButton().SetText( OUString( String( ResId( STR_PDF_EXPORT, &rResMgr ) ) ) );
-
 //get the string property value (from sfx2/source/dialog/mailmodel.cxx) to overwrite the text for the Ok button
     ::rtl::OUString sOkButtonText = maConfigItem.ReadString( OUString( RTL_CONSTASCII_USTRINGPARAM( "_OkButtonString" ) ), OUString() );
 
-//change test on the Ok button: get the relevant string from resources, update it on the button
+//change text on the Ok button: get the relevant string from resources, update it on the button
 //according to the exported pdf file destination: send as e-mail or write to file?
     GetOKButton().SetText( ( sOkButtonText.getLength() > 0 ) ?
-                            sOkButtonText : OUString( String( ResId( STR_PDF_EXPORT, &rResMgr ) ) ));
+                            sOkButtonText : OUString( String( ResId( STR_PDF_EXPORT, rResMgr ) ) ));
 
 //remove the reset button, not needed in this tabbed dialog
     RemoveResetButton();
@@ -407,32 +404,32 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 ImpPDFTabGeneralPage::ImpPDFTabGeneralPage( Window* pParent,
                                             const SfxItemSet& rCoreSet,
                                             ResMgr* paResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_GENER, paResMgr ), rCoreSet ),
+    SfxTabPage( pParent, ResId( RID_PDF_TAB_GENER, *paResMgr ), rCoreSet ),
 
-    maFlPages( this, ResId( FL_PAGES, paResMgr ) ),
-    maRbAll( this, ResId( RB_ALL, paResMgr) ),
-    maRbRange( this, ResId( RB_RANGE, paResMgr ) ),
-    maRbSelection( this, ResId( RB_SELECTION, paResMgr ) ),
-    maEdPages( this, ResId( ED_PAGES, paResMgr ) ),
+    maFlPages( this, ResId( FL_PAGES, *paResMgr ) ),
+    maRbAll( this, ResId( RB_ALL, *paResMgr) ),
+    maRbRange( this, ResId( RB_RANGE, *paResMgr ) ),
+    maRbSelection( this, ResId( RB_SELECTION, *paResMgr ) ),
+    maEdPages( this, ResId( ED_PAGES, *paResMgr ) ),
 
-    maFlCompression( this, ResId( FL_IMAGES, paResMgr ) ),
-    maRbLosslessCompression( this, ResId( RB_LOSSLESSCOMPRESSION, paResMgr ) ),
-    maRbJPEGCompression( this, ResId( RB_JPEGCOMPRESSION, paResMgr ) ),
-    maFtQuality( this, ResId( FT_QUALITY, paResMgr ) ),
-    maNfQuality( this, ResId( NF_QUALITY, paResMgr ) ),
-    maCbReduceImageResolution( this, ResId( CB_REDUCEIMAGERESOLUTION, paResMgr ) ),
-    maCoReduceImageResolution( this, ResId( CO_REDUCEIMAGERESOLUTION, paResMgr ) ),
+    maFlCompression( this, ResId( FL_IMAGES, *paResMgr ) ),
+    maRbLosslessCompression( this, ResId( RB_LOSSLESSCOMPRESSION, *paResMgr ) ),
+    maRbJPEGCompression( this, ResId( RB_JPEGCOMPRESSION, *paResMgr ) ),
+    maFtQuality( this, ResId( FT_QUALITY, *paResMgr ) ),
+    maNfQuality( this, ResId( NF_QUALITY, *paResMgr ) ),
+    maCbReduceImageResolution( this, ResId( CB_REDUCEIMAGERESOLUTION, *paResMgr ) ),
+    maCoReduceImageResolution( this, ResId( CO_REDUCEIMAGERESOLUTION, *paResMgr ) ),
 
-    maFlGeneral( this, ResId( FL_GENERAL, paResMgr ) ),
-    maCbTaggedPDF( this, ResId( CB_TAGGEDPDF, paResMgr ) ),
-    maCbExportNotes( this, ResId( CB_EXPORTNOTES, paResMgr ) ),
-    maCbExportBookmarks( this, ResId( CB_EXPORTBOOKMARKS, paResMgr ) ),
+    maFlGeneral( this, ResId( FL_GENERAL, *paResMgr ) ),
+    maCbTaggedPDF( this, ResId( CB_TAGGEDPDF, *paResMgr ) ),
+    maCbExportNotes( this, ResId( CB_EXPORTNOTES, *paResMgr ) ),
+    maCbExportBookmarks( this, ResId( CB_EXPORTBOOKMARKS, *paResMgr ) ),
 
-    maCbExportFormFields( this, ResId( CB_EXPORTFORMFIELDS, paResMgr ) ),
-    maFtFormsFormat( this, ResId( FT_FORMSFORMAT, paResMgr ) ),
-    maLbFormsFormat( this, ResId( LB_FORMSFORMAT, paResMgr ) ),
-    maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES, paResMgr ) ),
-    maCbAddStream( this, ResId( CB_ADDSTREAM, paResMgr ) ),
+    maCbExportFormFields( this, ResId( CB_EXPORTFORMFIELDS, *paResMgr ) ),
+    maFtFormsFormat( this, ResId( FT_FORMSFORMAT, *paResMgr ) ),
+    maLbFormsFormat( this, ResId( LB_FORMSFORMAT, *paResMgr ) ),
+    maCbExportEmptyPages( this, ResId( CB_EXPORTEMPTYPAGES, *paResMgr ) ),
+    maCbAddStream( this, ResId( CB_ADDSTREAM, *paResMgr ) ),
     mbIsPresentation( sal_False ),
     mbIsWriter( sal_False)
 {
@@ -624,29 +621,29 @@ IMPL_LINK( ImpPDFTabGeneralPage, ToggleAddStreamHdl, void*, EMPTYARG )
 ImpPDFTabOpnFtrPage::ImpPDFTabOpnFtrPage( Window* pParent,
                                           const SfxItemSet& rCoreSet,
                                           ResMgr* paResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_OPNFTR, paResMgr ), rCoreSet ),
+    SfxTabPage( pParent, ResId( RID_PDF_TAB_OPNFTR, *paResMgr ), rCoreSet ),
 
-    maFlInitialView( this, ResId( FL_INITVIEW, paResMgr ) ),
-    maRbOpnPageOnly( this, ResId( RB_OPNMODE_PAGEONLY, paResMgr ) ),
-    maRbOpnOutline( this, ResId( RB_OPNMODE_OUTLINE, paResMgr ) ),
-    maRbOpnThumbs( this, ResId( RB_OPNMODE_THUMBS, paResMgr ) ),
-    maFtInitialPage( this, ResId( FT_MAGNF_INITIAL_PAGE, paResMgr ) ),
-    maNumInitialPage( this, ResId( NUM_MAGNF_INITIAL_PAGE, paResMgr ) ),
+    maFlInitialView( this, ResId( FL_INITVIEW, *paResMgr ) ),
+    maRbOpnPageOnly( this, ResId( RB_OPNMODE_PAGEONLY, *paResMgr ) ),
+    maRbOpnOutline( this, ResId( RB_OPNMODE_OUTLINE, *paResMgr ) ),
+    maRbOpnThumbs( this, ResId( RB_OPNMODE_THUMBS, *paResMgr ) ),
+    maFtInitialPage( this, ResId( FT_MAGNF_INITIAL_PAGE, *paResMgr ) ),
+    maNumInitialPage( this, ResId( NUM_MAGNF_INITIAL_PAGE, *paResMgr ) ),
 
-    maFlMagnification( this, ResId( FL_MAGNIFICATION, paResMgr ) ),
-    maRbMagnDefault( this, ResId( RB_MAGNF_DEFAULT, paResMgr ) ),
-    maRbMagnFitWin( this, ResId( RB_MAGNF_WIND, paResMgr ) ),
-    maRbMagnFitWidth( this, ResId( RB_MAGNF_WIDTH, paResMgr ) ),
-    maRbMagnFitVisible( this, ResId( RB_MAGNF_VISIBLE, paResMgr ) ),
-    maRbMagnZoom( this, ResId( RB_MAGNF_ZOOM, paResMgr ) ),
-    maNumZoom( this, ResId( NUM_MAGNF_ZOOM, paResMgr ) ),
+    maFlMagnification( this, ResId( FL_MAGNIFICATION, *paResMgr ) ),
+    maRbMagnDefault( this, ResId( RB_MAGNF_DEFAULT, *paResMgr ) ),
+    maRbMagnFitWin( this, ResId( RB_MAGNF_WIND, *paResMgr ) ),
+    maRbMagnFitWidth( this, ResId( RB_MAGNF_WIDTH, *paResMgr ) ),
+    maRbMagnFitVisible( this, ResId( RB_MAGNF_VISIBLE, *paResMgr ) ),
+    maRbMagnZoom( this, ResId( RB_MAGNF_ZOOM, *paResMgr ) ),
+    maNumZoom( this, ResId( NUM_MAGNF_ZOOM, *paResMgr ) ),
 
-    maFlPageLayout( this, ResId( FL_PAGE_LAYOUT, paResMgr ) ),
-    maRbPgLyDefault( this, ResId( RB_PGLY_DEFAULT, paResMgr ) ),
-    maRbPgLySinglePage( this, ResId( RB_PGLY_SINGPG, paResMgr ) ),
-    maRbPgLyContinue( this, ResId( RB_PGLY_CONT, paResMgr ) ),
-    maRbPgLyContinueFacing( this, ResId( RB_PGLY_CONTFAC, paResMgr ) ),
-    maCbPgLyFirstOnLeft( this, ResId( CB_PGLY_FIRSTLEFT, paResMgr ) ),
+    maFlPageLayout( this, ResId( FL_PAGE_LAYOUT, *paResMgr ) ),
+    maRbPgLyDefault( this, ResId( RB_PGLY_DEFAULT, *paResMgr ) ),
+    maRbPgLySinglePage( this, ResId( RB_PGLY_SINGPG, *paResMgr ) ),
+    maRbPgLyContinue( this, ResId( RB_PGLY_CONT, *paResMgr ) ),
+    maRbPgLyContinueFacing( this, ResId( RB_PGLY_CONTFAC, *paResMgr ) ),
+    maCbPgLyFirstOnLeft( this, ResId( CB_PGLY_FIRSTLEFT, *paResMgr ) ),
     mbUseCTLFont( sal_False )
 {
     mpaResMgr = paResMgr;
@@ -802,25 +799,25 @@ IMPL_LINK( ImpPDFTabOpnFtrPage, ToggleRbMagnHdl, void*, )
 ImpPDFTabViewerPage::ImpPDFTabViewerPage( Window* pParent,
                                           const SfxItemSet& rCoreSet,
                                           ResMgr* paResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_VPREFER, paResMgr ), rCoreSet ),
+    SfxTabPage( pParent, ResId( RID_PDF_TAB_VPREFER, *paResMgr ), rCoreSet ),
 
-    maFlWindowOptions( this, ResId( FL_WINOPT, paResMgr ) ),
-    maCbResWinInit( this, ResId( CB_WNDOPT_RESINIT, paResMgr ) ),
-    maCbCenterWindow( this, ResId( CB_WNDOPT_CNTRWIN, paResMgr ) ),
-    maCbOpenFullScreen( this, ResId( CB_WNDOPT_OPNFULL, paResMgr ) ),
-    maCbDispDocTitle( this, ResId( CB_DISPDOCTITLE, paResMgr ) ),
+    maFlWindowOptions( this, ResId( FL_WINOPT, *paResMgr ) ),
+    maCbResWinInit( this, ResId( CB_WNDOPT_RESINIT, *paResMgr ) ),
+    maCbCenterWindow( this, ResId( CB_WNDOPT_CNTRWIN, *paResMgr ) ),
+    maCbOpenFullScreen( this, ResId( CB_WNDOPT_OPNFULL, *paResMgr ) ),
+    maCbDispDocTitle( this, ResId( CB_DISPDOCTITLE, *paResMgr ) ),
 
-    maFlUIOptions( this, ResId( FL_USRIFOPT, paResMgr ) ),
-    maCbHideViewerMenubar( this, ResId( CB_UOP_HIDEVMENUBAR, paResMgr ) ),
-    maCbHideViewerToolbar( this, ResId( CB_UOP_HIDEVTOOLBAR, paResMgr ) ),
-    maCbHideViewerWindowControls( this, ResId( CB_UOP_HIDEVWINCTRL, paResMgr ) ),
-    maFlTransitions( this, ResId( FL_TRANSITIONS, paResMgr ) ),
-    maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS, paResMgr ) ),
+    maFlUIOptions( this, ResId( FL_USRIFOPT, *paResMgr ) ),
+    maCbHideViewerMenubar( this, ResId( CB_UOP_HIDEVMENUBAR, *paResMgr ) ),
+    maCbHideViewerToolbar( this, ResId( CB_UOP_HIDEVTOOLBAR, *paResMgr ) ),
+    maCbHideViewerWindowControls( this, ResId( CB_UOP_HIDEVWINCTRL, *paResMgr ) ),
+    maFlTransitions( this, ResId( FL_TRANSITIONS, *paResMgr ) ),
+    maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS, *paResMgr ) ),
     mbIsPresentation( sal_True ),
-    maFlBookmarks( this, ResId( FL_BOOKMARKS, paResMgr ) ),
-    maRbAllBookmarkLevels( this, ResId( RB_ALLBOOKMARKLEVELS, paResMgr ) ),
-    maRbVisibleBookmarkLevels( this, ResId( RB_VISIBLEBOOKMARKLEVELS, paResMgr ) ),
-    maNumBookmarkLevels( this, ResId( NUM_BOOKMARKLEVELS, paResMgr ) )
+    maFlBookmarks( this, ResId( FL_BOOKMARKS, *paResMgr ) ),
+    maRbAllBookmarkLevels( this, ResId( RB_ALLBOOKMARKLEVELS, *paResMgr ) ),
+    maRbVisibleBookmarkLevels( this, ResId( RB_VISIBLEBOOKMARKLEVELS, *paResMgr ) ),
+    maNumBookmarkLevels( this, ResId( NUM_BOOKMARKLEVELS, *paResMgr ) )
 {
     mpaResMgr = paResMgr;
     FreeResource();
@@ -898,39 +895,39 @@ void ImpPDFTabViewerPage::SetFilterConfigItem( const  ImpPDFTabDialog* paParent 
 ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* pParent,
                                               const SfxItemSet& rCoreSet,
                                               ResMgr* paResMgr ) :
-    SfxTabPage( pParent, ResId( RID_PDF_TAB_SECURITY, paResMgr ), rCoreSet ),
-    maCbEncrypt( this, ResId( CB_SEC_ENCRYPT , paResMgr ) ),
+    SfxTabPage( pParent, ResId( RID_PDF_TAB_SECURITY, *paResMgr ), rCoreSet ),
+    maCbEncrypt( this, ResId( CB_SEC_ENCRYPT , *paResMgr ) ),
 
-    maPbUserPwd( this, ResId( BTN_USER_PWD , paResMgr ) ),
-    maFtUserPwdEmpty( this, ResId( FT_USER_PWD_EMPTY , paResMgr ) ),
+    maPbUserPwd( this, ResId( BTN_USER_PWD , *paResMgr ) ),
+    maFtUserPwdEmpty( this, ResId( FT_USER_PWD_EMPTY , *paResMgr ) ),
 
-    maFlPermissions( this, ResId( FL_PERMISSIONS, paResMgr ) ),
-    maCbPermissions( this, ResId( CB_SEL_PERMISSIONS, paResMgr ) ),
+    maFlPermissions( this, ResId( FL_PERMISSIONS, *paResMgr ) ),
+    maCbPermissions( this, ResId( CB_SEL_PERMISSIONS, *paResMgr ) ),
 
-    maPbOwnerPwd( this, ResId( BTN_OWNER_PWD , paResMgr ) ),
-    maFtOwnerPwdEmpty( this, ResId( FT_OWNER_PWD_EMPTY , paResMgr ) ),
+    maPbOwnerPwd( this, ResId( BTN_OWNER_PWD , *paResMgr ) ),
+    maFtOwnerPwdEmpty( this, ResId( FT_OWNER_PWD_EMPTY , *paResMgr ) ),
 
-    maFlPrintPermissions( this, ResId( FL_PRINT_PERMISSIONS , paResMgr ) ),
-    maRbPrintNone( this, ResId( RB_PRINT_NONE, paResMgr ) ),
-    maRbPrintLowRes( this, ResId( RB_PRINT_LOWRES , paResMgr ) ),
-    maRbPrintHighRes( this, ResId( RB_PRINT_HIGHRES , paResMgr ) ),
+    maFlPrintPermissions( this, ResId( FL_PRINT_PERMISSIONS , *paResMgr ) ),
+    maRbPrintNone( this, ResId( RB_PRINT_NONE, *paResMgr ) ),
+    maRbPrintLowRes( this, ResId( RB_PRINT_LOWRES , *paResMgr ) ),
+    maRbPrintHighRes( this, ResId( RB_PRINT_HIGHRES , *paResMgr ) ),
 
-    maFlChangesAllowed( this, ResId( FL_CHANGES_ALLOWED , paResMgr ) ),
-    maRbChangesNone( this, ResId( RB_CHANGES_NONE , paResMgr ) ),
-    maRbChangesInsDel( this, ResId( RB_CHANGES_INSDEL , paResMgr ) ),
-    maRbChangesFillForm( this, ResId( RB_CHANGES_FILLFORM , paResMgr ) ),
-    maRbChangesComment( this, ResId( RB_CHANGES_COMMENT , paResMgr ) ),
-    maRbChangesAnyNoCopy( this, ResId( RB_CHANGES_ANY_NOCOPY , paResMgr ) ),
+    maFlChangesAllowed( this, ResId( FL_CHANGES_ALLOWED , *paResMgr ) ),
+    maRbChangesNone( this, ResId( RB_CHANGES_NONE , *paResMgr ) ),
+    maRbChangesInsDel( this, ResId( RB_CHANGES_INSDEL , *paResMgr ) ),
+    maRbChangesFillForm( this, ResId( RB_CHANGES_FILLFORM , *paResMgr ) ),
+    maRbChangesComment( this, ResId( RB_CHANGES_COMMENT , *paResMgr ) ),
+    maRbChangesAnyNoCopy( this, ResId( RB_CHANGES_ANY_NOCOPY , *paResMgr ) ),
 
-    maCbEnableCopy( this, ResId( CB_ENDAB_COPY , paResMgr ) ),
-    maCbEnableAccessibility( this, ResId( CB_ENAB_ACCESS , paResMgr ) ),
+    maCbEnableCopy( this, ResId( CB_ENDAB_COPY , *paResMgr ) ),
+    maCbEnableAccessibility( this, ResId( CB_ENAB_ACCESS , *paResMgr ) ),
 
-    msSetUserPwd( ResId( STR_PDF_EXPORT_USPWD, paResMgr ) ),
-    msUserPwdTitle( ResId( STR_PDF_EXPORT_UDPWD, paResMgr ) ),
+    msSetUserPwd( ResId( STR_PDF_EXPORT_USPWD, *paResMgr ) ),
+    msUserPwdTitle( ResId( STR_PDF_EXPORT_UDPWD, *paResMgr ) ),
 
-    msRestrPermissions( ResId( STR_PDF_EXPORT_CB_PERM, paResMgr ) ),
-    msSetOwnerPwd( ResId( STR_PDF_EXPORT_OSPWD, paResMgr ) ),
-    msOwnerPwdTitle( ResId( STR_PDF_EXPORT_ODPWD, paResMgr ) )
+    msRestrPermissions( ResId( STR_PDF_EXPORT_CB_PERM, *paResMgr ) ),
+    msSetOwnerPwd( ResId( STR_PDF_EXPORT_OSPWD, *paResMgr ) ),
+    msOwnerPwdTitle( ResId( STR_PDF_EXPORT_ODPWD, *paResMgr ) )
 {
     mpaResMgr = paResMgr;
     FreeResource();
