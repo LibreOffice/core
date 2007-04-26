@@ -4,9 +4,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:49:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:05:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -187,7 +187,7 @@ void SwBaseShell::InsertRegionDialog(SfxRequest& rReq)
         //CHINA001 SwInsertSectionTabDialog aTabDlg(&GetView().GetViewFrame()->GetWindow(),aSet , rSh);
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( ResId(DLG_INSERT_SECTION),
+        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
                                                         &GetView().GetViewFrame()->GetWindow(), aSet , rSh);
         DBG_ASSERT(aTabDlg, "Dialogdiet fail!");//CHINA001
         aTabDlg->Execute(); //CHINA001 aTabDlg.Execute();
@@ -300,7 +300,7 @@ IMPL_STATIC_LINK( SwWrtShell, InsertRegionDialog, SwSection*, pSect )
         //CHINA001 SwInsertSectionTabDialog aTabDlg(&pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( ResId(DLG_INSERT_SECTION),
+        AbstractInsertSectionTabDialog* aTabDlg = pFact->CreateInsertSectionTabDialog( DLG_INSERT_SECTION,
                                                         &pThis->GetView().GetViewFrame()->GetWindow(),aSet , *pThis);
         DBG_ASSERT(aTabDlg, "Dialogdiet fail!");//CHINA001
         aTabDlg->SetSection(*pSect); //CHINA001 aTabDlg.SetSection(*pSect);
@@ -337,7 +337,7 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
 //CHINA001              pParentWin, rWrtShell );
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                AbstractEditRegionDlg* pEditRegionDlg = pFact->CreateEditRegionDlg( ResId(MD_EDIT_REGION),
+                AbstractEditRegionDlg* pEditRegionDlg = pFact->CreateEditRegionDlg( MD_EDIT_REGION,
                                                         pParentWin, rWrtShell);
                 DBG_ASSERT(pEditRegionDlg, "Dialogdiet fail!");//CHINA001
                 if(pItem && pItem->ISA(SfxStringItem))
