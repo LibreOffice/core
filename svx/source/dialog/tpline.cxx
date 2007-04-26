@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpline.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:37:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:46:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,32 +177,32 @@ SvxLineTabPage::SvxLineTabPage
     const SfxItemSet& rInAttrs
 ) :
     SvxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_LINE ), rInAttrs ),
-    aFtLineStyle        ( this, ResId( FT_LINE_STYLE ) ),
-    aLbLineStyle        ( this, ResId( LB_LINE_STYLE ) ),
-    aFtColor            ( this, ResId( FT_COLOR ) ),
-    aLbColor            ( this, ResId( LB_COLOR ) ),
-    aFtLineWidth        ( this, ResId( FT_LINE_WIDTH ) ),
-    aMtrLineWidth       ( this, ResId( MTR_FLD_LINE_WIDTH ) ),
-    aFtTransparent      ( this, ResId( FT_TRANSPARENT ) ),
-    aMtrTransparent     ( this, ResId( MTR_LINE_TRANSPARENT ) ),
-    aFlLine             ( this, ResId( FL_LINE ) ),
-    aFtLineEndsStyle    ( this, ResId( FT_LINE_ENDS_STYLE ) ),
-    aLbStartStyle       ( this, ResId( LB_START_STYLE ) ),
-    aFtLineEndsWidth    ( this, ResId( FT_LINE_ENDS_WIDTH ) ),
-    aMtrStartWidth      ( this, ResId( MTR_FLD_START_WIDTH ) ),
-    aTsbCenterStart     ( this, ResId( TSB_CENTER_START ) ),
-    aLbEndStyle         ( this, ResId( LB_END_STYLE ) ),
-    aMtrEndWidth        ( this, ResId( MTR_FLD_END_WIDTH ) ),
-    aTsbCenterEnd       ( this, ResId( TSB_CENTER_END ) ),
-    aCbxSynchronize     ( this, ResId( CBX_SYNCHRONIZE ) ),
-    aFlLineEnds         ( this, ResId( FL_LINE_ENDS ) ),
-    aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
-    aFLSeparator        ( this, ResId( FL_SEPARATOR ) ),
+    aFtLineStyle        ( this, SVX_RES( FT_LINE_STYLE ) ),
+    aLbLineStyle        ( this, SVX_RES( LB_LINE_STYLE ) ),
+    aFtColor            ( this, SVX_RES( FT_COLOR ) ),
+    aLbColor            ( this, SVX_RES( LB_COLOR ) ),
+    aFtLineWidth        ( this, SVX_RES( FT_LINE_WIDTH ) ),
+    aMtrLineWidth       ( this, SVX_RES( MTR_FLD_LINE_WIDTH ) ),
+    aFtTransparent      ( this, SVX_RES( FT_TRANSPARENT ) ),
+    aMtrTransparent     ( this, SVX_RES( MTR_LINE_TRANSPARENT ) ),
+    aFlLine             ( this, SVX_RES( FL_LINE ) ),
+    aFtLineEndsStyle    ( this, SVX_RES( FT_LINE_ENDS_STYLE ) ),
+    aLbStartStyle       ( this, SVX_RES( LB_START_STYLE ) ),
+    aFtLineEndsWidth    ( this, SVX_RES( FT_LINE_ENDS_WIDTH ) ),
+    aMtrStartWidth      ( this, SVX_RES( MTR_FLD_START_WIDTH ) ),
+    aTsbCenterStart     ( this, SVX_RES( TSB_CENTER_START ) ),
+    aLbEndStyle         ( this, SVX_RES( LB_END_STYLE ) ),
+    aMtrEndWidth        ( this, SVX_RES( MTR_FLD_END_WIDTH ) ),
+    aTsbCenterEnd       ( this, SVX_RES( TSB_CENTER_END ) ),
+    aCbxSynchronize     ( this, SVX_RES( CBX_SYNCHRONIZE ) ),
+    aFlLineEnds         ( this, SVX_RES( FL_LINE_ENDS ) ),
+    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
+    aFLSeparator        ( this, SVX_RES( FL_SEPARATOR ) ),
 
     // #116827#
-    maFLEdgeStyle       ( this, ResId( FL_EDGE_STYLE ) ),
-    maFTEdgeStyle       ( this, ResId( FT_EDGE_STYLE ) ),
-    maLBEdgeStyle       ( this, ResId( LB_EDGE_STYLE ) ),
+    maFLEdgeStyle       ( this, SVX_RES( FL_EDGE_STYLE ) ),
+    maFTEdgeStyle       ( this, SVX_RES( FT_EDGE_STYLE ) ),
+    maLBEdgeStyle       ( this, SVX_RES( LB_EDGE_STYLE ) ),
 
     pSymbolList(NULL),
     bNewSize(false),
@@ -210,13 +210,13 @@ SvxLineTabPage::SvxLineTabPage
     nSymbolType(SVX_SYMBOLTYPE_UNKNOWN), //unbekannt bzw. unchanged
     pSymbolAttr(NULL),
     //#58425# Symbole auf einer Linie (z.B. StarChart)
-    aFlSymbol           ( this, ResId(FL_SYMBOL_FORMAT)),
-    aSymbolMB           ( this, ResId(MB_SYMBOL_BITMAP)),
-    aSymbolWidthFT      ( this, ResId(FT_SYMBOL_WIDTH)),
-    aSymbolWidthMF      ( this, ResId(MF_SYMBOL_WIDTH)),
-    aSymbolHeightFT     ( this, ResId(FT_SYMBOL_HEIGHT)),
-    aSymbolHeightMF     ( this, ResId(MF_SYMBOL_HEIGHT)),
-    aSymbolRatioCB      ( this, ResId(CB_SYMBOL_RATIO)),
+    aFlSymbol           ( this, SVX_RES(FL_SYMBOL_FORMAT)),
+    aSymbolMB           ( this, SVX_RES(MB_SYMBOL_BITMAP)),
+    aSymbolWidthFT      ( this, SVX_RES(FT_SYMBOL_WIDTH)),
+    aSymbolWidthMF      ( this, SVX_RES(MF_SYMBOL_WIDTH)),
+    aSymbolHeightFT     ( this, SVX_RES(FT_SYMBOL_HEIGHT)),
+    aSymbolHeightMF     ( this, SVX_RES(MF_SYMBOL_HEIGHT)),
+    aSymbolRatioCB      ( this, SVX_RES(CB_SYMBOL_RATIO)),
 
     bLastWidthModified(FALSE),
     aSymbolLastSize(Size(0,0)),
@@ -357,12 +357,12 @@ void SvxLineTabPage::FillListboxes()
 {
 //  aCtlPreview.SetDrawMode( GetDisplayBackground().GetColor().IsDark() ? OUTPUT_DRAWMODE_CONTRAST : OUTPUT_DRAWMODE_COLOR );
 
-    ResMgr* pMgr = DIALOG_MGR();
+    ResMgr& rMgr = DIALOG_MGR();
 
     // Linienstile
     USHORT nOldSelect = aLbLineStyle.GetSelectEntryPos();
     aLbLineStyle.Clear();
-    aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_INVISIBLE, pMgr ) ) );
+    aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_INVISIBLE, rMgr ) ) );
 
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
     Bitmap aBitmap ( SVX_RES ( RID_SVXCTRL_LINECTRL ) );
@@ -377,12 +377,12 @@ void SvxLineTabPage::FillListboxes()
 
     aBitmap.Replace ( aSourceColors, aDestColors, 2 );
     Image aSolidLine ( aBitmap );
-    aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_SOLID, pMgr ) ), aSolidLine );
+    aLbLineStyle.InsertEntry( String( ResId( RID_SVXSTR_SOLID, rMgr ) ), aSolidLine );
     aLbLineStyle.Fill( pDashList );
     aLbLineStyle.SelectEntryPos( nOldSelect );
 
     // LinienEndenStile
-    String sNone( ResId( RID_SVXSTR_NONE, pMgr ) );
+    String sNone( ResId( RID_SVXSTR_NONE, rMgr ) );
     nOldSelect = aLbStartStyle.GetSelectEntryPos();
     aLbStartStyle.Clear();
     aLbStartStyle.InsertEntry( sNone );
@@ -404,7 +404,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         SetPageType(pPageTypeItem->GetValue()); //add CHINA001 end
     if( nDlgType == 0 && pDashList )  //CHINA001 if( *pDlgType == 0 && pDashList ) // Linien-Dialog
     {
-        ResMgr* pMgr = DIALOG_MGR();
+        ResMgr& rMgr = DIALOG_MGR();
         USHORT nPos;
         USHORT nCount;
 
@@ -422,9 +422,9 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
 
             aLbLineStyle.Clear();
             aLbLineStyle.InsertEntry(
-                String( ResId( RID_SVXSTR_INVISIBLE, pMgr ) ) );
+                String( ResId( RID_SVXSTR_INVISIBLE, rMgr ) ) );
             aLbLineStyle.InsertEntry(
-                String( ResId( RID_SVXSTR_SOLID, pMgr ) ) );
+                String( ResId( RID_SVXSTR_SOLID, rMgr ) ) );
             aLbLineStyle.Fill( pDashList );
             nCount = aLbLineStyle.GetEntryCount();
 
@@ -465,7 +465,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
             *pnLineEndListState = CT_NONE;
 
             nPos = aLbLineStyle.GetSelectEntryPos();
-            String sNone( ResId( RID_SVXSTR_NONE, pMgr ) );
+            String sNone( ResId( RID_SVXSTR_NONE, rMgr ) );
             aLbStartStyle.Clear();
             aLbStartStyle.InsertEntry( sNone );
 
