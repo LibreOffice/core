@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertestdialog.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 14:35:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:13:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -210,29 +210,29 @@ static bool checkComponent( Reference< XComponent >& rxComponent, const OUString
 }
 
 XMLFilterTestDialog::XMLFilterTestDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF ) :
-    ModalDialog( pParent, ResId( DLG_XML_FILTER_TEST_DIALOG, &rResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_XML_FILTER_TEST_DIALOG, rResMgr ) ),
     mxMSF( rxMSF ),
     mrResMgr( rResMgr ),
 
-    maFLExport( this, ResId( FL_EXPORT, &rResMgr ) ),
-    maFTExportXSLT( this, ResId( FT_EXPORT_XSLT, &rResMgr ) ),
-    maFTExportXSLTFile( this, ResId( FT_EXPORT_XSLT_FILE, &rResMgr ) ),
-    maFTTransformDocument( this, ResId( FT_TRANSFORM_DOCUMENT, &rResMgr ) ),
-    maPBExportBrowse( this, ResId( PB_EXPORT_BROWSE, &rResMgr ) ),
-    maPBCurrentDocument( this, ResId( PB_CURRENT_DOCUMENT, &rResMgr ) ),
-    maFTNameOfCurentFile( this, ResId( FT_NAME_OF_CURRENT_FILE, &rResMgr ) ),
-    maFLImport( this, ResId( FL_IMPORT, &rResMgr ) ),
-    maFTImportXSLT( this, ResId( FT_IMPORT_XSLT, &rResMgr ) ),
-    maFTImportXSLTFile( this, ResId( FT_IMPORT_XSLT_FILE, &rResMgr ) ),
-    maFTImportTemplate( this, ResId( FT_IMPORT_TEMPLATE, &rResMgr ) ),
-    maFTImportTemplateFile( this, ResId( FT_IMPORT_TEMPLATE_FILE, &rResMgr ) ),
-    maFTTransformFile( this, ResId( FT_TRANSFORM_FILE, &rResMgr ) ),
-    maCBXDisplaySource( this, ResId( CBX_DISPLAY_SOURCE, &rResMgr ) ),
-    maPBImportBrowse( this, ResId( PB_IMPORT_BROWSE, &rResMgr ) ),
-    maPBRecentDocument( this, ResId( PB_RECENT_DOCUMENT, &rResMgr ) ),
-    maFTNameOfRecentFile( this, ResId( FT_NAME_OF_RECENT_FILE, &rResMgr ) ),
-    maPBClose( this, ResId( PB_CLOSE, &rResMgr ) ),
-    maPBHelp( this, ResId( PB_HELP, &rResMgr ) ),
+    maFLExport( this, ResId( FL_EXPORT, rResMgr ) ),
+    maFTExportXSLT( this, ResId( FT_EXPORT_XSLT, rResMgr ) ),
+    maFTExportXSLTFile( this, ResId( FT_EXPORT_XSLT_FILE, rResMgr ) ),
+    maFTTransformDocument( this, ResId( FT_TRANSFORM_DOCUMENT, rResMgr ) ),
+    maPBExportBrowse( this, ResId( PB_EXPORT_BROWSE, rResMgr ) ),
+    maPBCurrentDocument( this, ResId( PB_CURRENT_DOCUMENT, rResMgr ) ),
+    maFTNameOfCurentFile( this, ResId( FT_NAME_OF_CURRENT_FILE, rResMgr ) ),
+    maFLImport( this, ResId( FL_IMPORT, rResMgr ) ),
+    maFTImportXSLT( this, ResId( FT_IMPORT_XSLT, rResMgr ) ),
+    maFTImportXSLTFile( this, ResId( FT_IMPORT_XSLT_FILE, rResMgr ) ),
+    maFTImportTemplate( this, ResId( FT_IMPORT_TEMPLATE, rResMgr ) ),
+    maFTImportTemplateFile( this, ResId( FT_IMPORT_TEMPLATE_FILE, rResMgr ) ),
+    maFTTransformFile( this, ResId( FT_TRANSFORM_FILE, rResMgr ) ),
+    maCBXDisplaySource( this, ResId( CBX_DISPLAY_SOURCE, rResMgr ) ),
+    maPBImportBrowse( this, ResId( PB_IMPORT_BROWSE, rResMgr ) ),
+    maPBRecentDocument( this, ResId( PB_RECENT_DOCUMENT, rResMgr ) ),
+    maFTNameOfRecentFile( this, ResId( FT_NAME_OF_RECENT_FILE, rResMgr ) ),
+    maPBClose( this, ResId( PB_CLOSE, rResMgr ) ),
+    maPBHelp( this, ResId( PB_HELP, rResMgr ) ),
     mpSourceDLG( NULL ),
     mpFilterInfo( NULL ),
     sDTDPath( RTL_CONSTASCII_USTRINGPARAM( "$(inst)/share/dtd/officedocument/1_0/office.dtd" ) )
