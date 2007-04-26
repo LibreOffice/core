@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SpellDialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-30 15:26:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:24:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -246,30 +246,30 @@ SpellDialog::SpellDialog(
                                     pParent,
                                     SVX_RES(RID_SVXDLG_SPELLCHECK)),
 
-    aNotInDictFT    ( this, ResId( FT_NOTINDICT ) ),
-    aSentenceED      ( this, ResId( ED_NEWWORD ) ),
-    aSuggestionFT   ( this, ResId( FT_SUGGESTION ) ),
-    aSuggestionLB   ( this, ResId( LB_SUGGESTION ) ),
-    aLanguageFT     ( this, ResId( FT_LANGUAGE ) ),
-    aLanguageLB     ( this, ResId( LB_LANGUAGE ) ),
+    aNotInDictFT    ( this, SVX_RES( FT_NOTINDICT ) ),
+    aSentenceED      ( this, SVX_RES( ED_NEWWORD ) ),
+    aSuggestionFT   ( this, SVX_RES( FT_SUGGESTION ) ),
+    aSuggestionLB   ( this, SVX_RES( LB_SUGGESTION ) ),
+    aLanguageFT     ( this, SVX_RES( FT_LANGUAGE ) ),
+    aLanguageLB     ( this, SVX_RES( LB_LANGUAGE ) ),
 
-    aIgnorePB       ( this, ResId( PB_IGNORE ) ),
-    aIgnoreAllPB    ( this, ResId( PB_IGNOREALL ) ),
-    aAddToDictMB    ( this, ResId( MB_ADDTODICT ) ),
+    aIgnorePB       ( this, SVX_RES( PB_IGNORE ) ),
+    aIgnoreAllPB    ( this, SVX_RES( PB_IGNOREALL ) ),
+    aAddToDictMB    ( this, SVX_RES( MB_ADDTODICT ) ),
 
-    aChangePB       ( this, ResId( PB_CHANGE ) ),
-    aChangeAllPB    ( this, ResId( PB_CHANGEALL ) ),
-    aAutoCorrPB     ( this, ResId( PB_AUTOCORR ) ),
+    aChangePB       ( this, SVX_RES( PB_CHANGE ) ),
+    aChangeAllPB    ( this, SVX_RES( PB_CHANGEALL ) ),
+    aAutoCorrPB     ( this, SVX_RES( PB_AUTOCORR ) ),
 
-    aOptionsPB      ( this, ResId( PB_OPTIONS ) ),
-    aHelpPB         ( this, ResId( PB_HELP ) ),
-    aUndoPB         ( this, ResId( PB_UNDO ) ),
-    aClosePB        ( this, ResId( PB_CLOSE ) ),
-    aBackgroundGB   ( this, ResId( GB_BACKGROUND ) ),
+    aOptionsPB      ( this, SVX_RES( PB_OPTIONS ) ),
+    aHelpPB         ( this, SVX_RES( PB_HELP ) ),
+    aUndoPB         ( this, SVX_RES( PB_UNDO ) ),
+    aClosePB        ( this, SVX_RES( PB_CLOSE ) ),
+    aBackgroundGB   ( this, SVX_RES( GB_BACKGROUND ) ),
 
-    aResumeST       ( ResId(ST_RESUME )),
+    aResumeST       ( SVX_RES(ST_RESUME )),
     aIgnoreOnceST   ( aIgnorePB.GetText()),
-    aNoSuggestionsST( ResId(ST_NOSUGGESTIONS)),
+    aNoSuggestionsST( SVX_RES(ST_NOSUGGESTIONS)),
     aDialogUndoLink( LINK (this, SpellDialog, DialogUndoHdl)),
     bModified( false ),
     bFocusLocked( false ),
