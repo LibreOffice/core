@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fldfunc.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:58:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:10:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,16 +117,16 @@ SwFldFuncPage::SwFldFuncPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aCond2FT    (this, SW_RES(FT_FUNCCOND2)),
     aCond2ED    (this, SW_RES(ED_FUNCCOND2)),
     aMacroBT    (this, SW_RES(BT_FUNCMACRO)),
-    aListItemFT(    this, ResId( FT_LISTITEM    )),
-    aListItemED(    this, ResId( ED_LISTITEM    )),
-    aListAddPB(     this, ResId( PB_LISTADD     )),
-    aListItemsFT(   this, ResId( FT_LISTITEMS   )),
-    aListItemsLB(   this, ResId( LB_LISTITEMS   )),
-    aListRemovePB(  this, ResId( PB_LISTREMOVE  )),
-    aListUpPB(      this, ResId( PB_LISTUP      )),
-    aListDownPB(    this, ResId( PB_LISTDOWN    )),
-    aListNameFT(    this, ResId( FT_LISTNAME    )),
-    aListNameED(    this, ResId( ED_LISTNAME    )),
+    aListItemFT(    this, SW_RES( FT_LISTITEM    )),
+    aListItemED(    this, SW_RES( ED_LISTITEM    )),
+    aListAddPB(     this, SW_RES( PB_LISTADD     )),
+    aListItemsFT(   this, SW_RES( FT_LISTITEMS   )),
+    aListItemsLB(   this, SW_RES( LB_LISTITEMS   )),
+    aListRemovePB(  this, SW_RES( PB_LISTREMOVE  )),
+    aListUpPB(      this, SW_RES( PB_LISTUP      )),
+    aListDownPB(    this, SW_RES( PB_LISTDOWN    )),
+    aListNameFT(    this, SW_RES( FT_LISTNAME    )),
+    aListNameED(    this, SW_RES( ED_LISTNAME    )),
     bDropDownLBChanged(false)
 {
     FreeResource();

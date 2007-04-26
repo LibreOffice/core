@@ -4,9 +4,9 @@
  *
  *  $RCSfile: flddb.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:57:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:09:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,8 +91,8 @@ SwFldDBPage::SwFldDBPage(Window* pParent, const SfxItemSet& rCoreSet ) :
     aTypeLB     (this, SW_RES(LB_DBTYPE)),
     aSelectionFT(this, SW_RES(FT_DBSELECTION)),
     aDatabaseTLB(this, SW_RES(TLB_DBLIST), 0, aEmptyStr, FALSE),
-    aAddDBFT(this,      ResId(FT_ADDDB)),
-    aAddDBPB(this,      ResId(PB_ADDDB)),
+    aAddDBFT(this,      SW_RES(FT_ADDDB)),
+    aAddDBPB(this,      SW_RES(PB_ADDDB)),
     aConditionFT(this, SW_RES(FT_DBCONDITION)),
     aConditionED(this, SW_RES(ED_DBCONDITION)),
     aValueFT    (this, SW_RES(FT_DBSETNUMBER)),
