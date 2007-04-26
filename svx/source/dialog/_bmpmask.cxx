@@ -4,9 +4,9 @@
  *
  *  $RCSfile: _bmpmask.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:32:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:24:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -435,42 +435,42 @@ SvxBmpMask::SvxBmpMask( SfxBindings *pBindinx,
                         Window* pParent,
                         const ResId& rResId ) :
         SfxDockingWindow    ( pBindinx, pCW, pParent, rResId ),
-        aTbxPipette         ( this, ResId( TBX_PIPETTE ) ),
-        pCtlPipette         ( new ColorWindow( this, ResId( WND_PIPETTE ) ) ),
-        aBtnExec            ( this, ResId( BTN_EXEC ) ),
-        aGrpQ               ( this, ResId( GRP_Q ) ),
+        aTbxPipette         ( this, BMP_RESID( TBX_PIPETTE ) ),
+        pCtlPipette         ( new ColorWindow( this, BMP_RESID( WND_PIPETTE ) ) ),
+        aBtnExec            ( this, BMP_RESID( BTN_EXEC ) ),
+        aGrpQ               ( this, BMP_RESID( GRP_Q ) ),
 
-        aCbx1               ( this, ResId( CBX_1 ) ),
-        pQSet1              ( new MaskSet( this, ResId( QCOL_1 ) ) ),
-        aSp1                ( this, ResId( SP_1 ) ),
-        aLbColor1           ( this, ResId ( LB_1 ) ),
+        aCbx1               ( this, BMP_RESID( CBX_1 ) ),
+        pQSet1              ( new MaskSet( this, BMP_RESID( QCOL_1 ) ) ),
+        aSp1                ( this, BMP_RESID( SP_1 ) ),
+        aLbColor1           ( this, BMP_RESID ( LB_1 ) ),
 
-        aCbx2               ( this, ResId( CBX_2 ) ),
-        pQSet2              ( new MaskSet( this, ResId( QCOL_2 ) ) ),
-        aSp2                ( this, ResId( SP_2 ) ),
-        aLbColor2           ( this, ResId ( LB_2 ) ),
+        aCbx2               ( this, BMP_RESID( CBX_2 ) ),
+        pQSet2              ( new MaskSet( this, BMP_RESID( QCOL_2 ) ) ),
+        aSp2                ( this, BMP_RESID( SP_2 ) ),
+        aLbColor2           ( this, BMP_RESID ( LB_2 ) ),
 
-        aCbx3               ( this, ResId( CBX_3 ) ),
-        pQSet3              ( new MaskSet( this, ResId( QCOL_3 ) ) ),
-        aSp3                ( this, ResId( SP_3 ) ),
-        aLbColor3           ( this, ResId ( LB_3 ) ),
+        aCbx3               ( this, BMP_RESID( CBX_3 ) ),
+        pQSet3              ( new MaskSet( this, BMP_RESID( QCOL_3 ) ) ),
+        aSp3                ( this, BMP_RESID( SP_3 ) ),
+        aLbColor3           ( this, BMP_RESID ( LB_3 ) ),
 
-        aCbx4               ( this, ResId( CBX_4 ) ),
-        pQSet4              ( new MaskSet( this, ResId( QCOL_4 ) ) ),
-        aSp4                ( this, ResId( SP_4 ) ),
-        aLbColor4           ( this, ResId ( LB_4 ) ),
+        aCbx4               ( this, BMP_RESID( CBX_4 ) ),
+        pQSet4              ( new MaskSet( this, BMP_RESID( QCOL_4 ) ) ),
+        aSp4                ( this, BMP_RESID( SP_4 ) ),
+        aLbColor4           ( this, BMP_RESID ( LB_4 ) ),
 
         pData               ( new MaskData( this, *pBindinx ) ),
-        aCbxTrans           ( this, ResId( CBX_TRANS ) ),
-        aLbColorTrans       ( this, ResId ( LB_TRANS ) ),
-        aFt1                ( this, ResId ( FT_1 ) ),
-        aFt2                ( this, ResId ( FT_2 ) ),
-        aFt3                ( this, ResId ( FT_3 ) ),
+        aCbxTrans           ( this, BMP_RESID( CBX_TRANS ) ),
+        aLbColorTrans       ( this, BMP_RESID ( LB_TRANS ) ),
+        aFt1                ( this, BMP_RESID ( FT_1 ) ),
+        aFt2                ( this, BMP_RESID ( FT_2 ) ),
+        aFt3                ( this, BMP_RESID ( FT_3 ) ),
         pColTab             ( NULL ),
         aPipetteColor       ( COL_WHITE ),
         aSelItem            ( SID_BMPMASK_EXEC, *this, *pBindinx ),
-        maImgPipette        ( ResId ( IMG_PIPETTE ) ),
-        maImgPipetteH       ( ResId ( IMG_PIPETTE_H ) )
+        maImgPipette        ( BMP_RESID ( IMG_PIPETTE ) ),
+        maImgPipetteH       ( BMP_RESID ( IMG_PIPETTE_H ) )
 {
     FreeResource();
 
