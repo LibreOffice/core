@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sb.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 15:04:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:33:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1201,7 +1201,7 @@ struct BasicStringList_Impl : private Resource
     ResId aResId;
 
     BasicStringList_Impl( ResId& rErrIdP,  USHORT nId)
-        : Resource( rErrIdP ),aResId(nId){}
+        : Resource( rErrIdP ),aResId(nId, *rErrIdP.GetResMgr() ){}
     ~BasicStringList_Impl() { FreeResource(); }
 
     String GetString(){ return String( aResId ); }
@@ -1238,7 +1238,7 @@ void StarBASIC::MakeErrorText( SbError nId, const String& aMsg )
     USHORT nOldID = GetVBErrorCode( nId );
 
     // Hilfsklasse instanzieren
-    BasicResId aId( RID_BASIC_START );
+    BasResId aId( RID_BASIC_START );
     BasicStringList_Impl aMyStringList( aId, USHORT(nId & ERRCODE_RES_MASK) );
 
     if( aMyStringList.IsErrorTextAvailable() )
