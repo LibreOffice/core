@@ -4,9 +4,9 @@
  *
  *  $RCSfile: file_resource_ooo.scp,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:09:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:20:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,6 +123,7 @@ STD_RES_FILE_PATCH( gid_File_Res_Spa, spa )
 #endif
 
 STD_RES_FILE_PATCH( gid_File_Res_Stt, stt )
+STD_RES_FILE_PATCH( gid_File_Res_Sb, sb )
 
 STD_RES_FILE( gid_File_Res_Svs, svs )
 
