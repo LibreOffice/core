@@ -4,9 +4,9 @@
  *
  *  $RCSfile: oemwiz.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:12:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:07:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,13 +144,13 @@ namespace preload
     OEMPreloadDialog::OEMPreloadDialog( Window* _pParent,
             const Reference< XPropertySet >& _rxObjectModel, const Reference< XMultiServiceFactory >& _rxORB )
         :WizardDialog(_pParent, ModuleRes(RID_DLG_OEMWIZARD)/*, _rxObjectModel, _rxORB*/)
-        ,aPrevPB(this,      ResId(PB_PREV   ))
-        ,aNextPB(this,      ResId(PB_NEXT   ))
-        ,aCancelPB(this,    ResId(PB_CANCEL ))
-        ,aAcceptST(ResId(ST_ACCEPT))
-        ,aFinishST(ResId(ST_FINISH))
-        ,aLicense(ResId(ST_LICENSE_AGREEMENT))
-        ,aUserData(ResId(ST_INSERT_USER_DATA))
+        ,aPrevPB(this,      ModuleRes(PB_PREV   ))
+        ,aNextPB(this,      ModuleRes(PB_NEXT   ))
+        ,aCancelPB(this,    ModuleRes(PB_CANCEL ))
+        ,aAcceptST(ModuleRes(ST_ACCEPT))
+        ,aFinishST(ModuleRes(ST_FINISH))
+        ,aLicense(ModuleRes(ST_LICENSE_AGREEMENT))
+        ,aUserData(ModuleRes(ST_INSERT_USER_DATA))
         ,pImpl(new OEMPreloadDialog_Impl(this))
     {
           FreeResource();
@@ -261,7 +261,7 @@ namespace preload
  ---------------------------------------------------------------------------*/
     OEMWelcomeTabPage::OEMWelcomeTabPage(Window* pParent) :
         TabPage(pParent, ModuleRes(RID_TP_WELCOME)),
-        aInfoFT(this, ResId(FT_INFO))
+        aInfoFT(this, ModuleRes(FT_INFO))
     {
         FreeResource();
     }
@@ -276,17 +276,17 @@ namespace preload
  ---------------------------------------------------------------------------*/
     OEMLicenseTabPage::OEMLicenseTabPage(OEMPreloadDialog* pParent) :
         TabPage(pParent, ModuleRes(RID_TP_LICENSE)),
-        aLicenseML(this, ResId(ML_LICENSE)),
-        aInfo1FT(this, ResId(FT_INFO1)),
-        aInfo2FT(this, ResId(FT_INFO2)),
-        aInfo3FT(this, ResId(FT_INFO3)),
-        aInfo2_1FT(this, ResId(FT_INFO2_1)),
-        aInfo3_1FT(this, ResId(FT_INFO3_1)),
-        aCBAccept(this, ResId(CB_ACCEPT)),
-        aPBPageDown(this, ResId(PB_PAGEDOWN)),
-        aArrow(this, ResId(IMG_ARROW)),
-        aStrAccept( ResId(LICENCE_ACCEPT) ),
-        aStrNotAccept( ResId(LICENCE_NOTACCEPT) ),
+        aLicenseML(this, ModuleRes(ML_LICENSE)),
+        aInfo1FT(this, ModuleRes(FT_INFO1)),
+        aInfo2FT(this, ModuleRes(FT_INFO2)),
+        aInfo3FT(this, ModuleRes(FT_INFO3)),
+        aInfo2_1FT(this, ModuleRes(FT_INFO2_1)),
+        aInfo3_1FT(this, ModuleRes(FT_INFO3_1)),
+        aCBAccept(this, ModuleRes(CB_ACCEPT)),
+        aPBPageDown(this, ModuleRes(PB_PAGEDOWN)),
+        aArrow(this, ModuleRes(IMG_ARROW)),
+        aStrAccept( ModuleRes(LICENCE_ACCEPT) ),
+        aStrNotAccept( ModuleRes(LICENCE_NOTACCEPT) ),
         bEndReached(FALSE),
         pPreloadDialog(pParent)
     {
