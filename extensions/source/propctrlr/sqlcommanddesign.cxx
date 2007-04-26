@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sqlcommanddesign.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-15 14:40:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:08:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,7 @@ namespace pcr
             if ( xFrameProps.is() && xFrameProps->getPropertySetInfo().is() && xFrameProps->getPropertySetInfo()->hasPropertyByName( PROPERTY_TITLE ) )
             {
                 ::svt::OLocalResourceAccess aEnumStrings( PcrRes( RID_RSC_ENUM_COMMAND_TYPE ), RSC_RESOURCE );
-                ::rtl::OUString sDisplayName = String( ResId( 3 ) );
+                ::rtl::OUString sDisplayName = String( PcrRes( 3 ) );
                 xFrameProps->setPropertyValue( PROPERTY_TITLE, makeAny( sDisplayName ) );
             }
         }
