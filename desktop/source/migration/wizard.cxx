@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wizard.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 07:49:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:25:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ const FirstStartWizard::WizardState FirstStartWizard::STATE_UPDATE_CHECK = 4;
 const FirstStartWizard::WizardState FirstStartWizard::STATE_REGISTRATION = 5;
 
 WizardResId::WizardResId( USHORT nId ) :
-    ResId( nId, FirstStartWizard::GetResManager() )
+    ResId( nId, *FirstStartWizard::GetResManager() )
 {
 }
 
