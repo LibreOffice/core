@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresslistdialog.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:42:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:52:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -224,23 +224,23 @@ struct AddressUserData_Impl
 SwAddressListDialog::SwAddressListDialog(SwMailMergeAddressBlockPage* pParent) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADDRESSLISTDIALOG)),
 #pragma warning (disable : 4355)
-    m_aDescriptionFI( this, ResId(  FI_DESCRIPTION    )),
-    m_aListFT( this, ResId(         FT_LIST           )),
-    m_aLoadListPB( this, ResId(     PB_LOADLIST       )),
-    m_aCreateListPB(this, ResId(    PB_CREATELIST     )),
+    m_aDescriptionFI( this, SW_RES(  FI_DESCRIPTION    )),
+    m_aListFT( this, SW_RES(         FT_LIST           )),
+    m_aLoadListPB( this, SW_RES(     PB_LOADLIST       )),
+    m_aCreateListPB(this, SW_RES(    PB_CREATELIST     )),
     m_aListHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aListLB( this, ResId(         LB_LIST           )),
-    m_aFilterPB( this, ResId(       PB_FILTER         )),
-    m_aEditPB(this, ResId(          PB_EDIT           )),
-    m_aTablePB(this, ResId(         PB_TABLE          )),
-    m_aSeparatorFL(this, ResId(    FL_SEPARATOR      )),
-    m_aOK( this, ResId(             PB_OK             )),
-    m_aCancel( this, ResId(         PB_CANCEL         )),
-    m_aHelp( this, ResId(           PB_HELP           )),
+    m_aListLB( this, SW_RES(         LB_LIST           )),
+    m_aFilterPB( this, SW_RES(       PB_FILTER         )),
+    m_aEditPB(this, SW_RES(          PB_EDIT           )),
+    m_aTablePB(this, SW_RES(         PB_TABLE          )),
+    m_aSeparatorFL(this, SW_RES(    FL_SEPARATOR      )),
+    m_aOK( this, SW_RES(             PB_OK             )),
+    m_aCancel( this, SW_RES(         PB_CANCEL         )),
+    m_aHelp( this, SW_RES(           PB_HELP           )),
 #pragma warning (default : 4355)
-    m_sName(        ResId( ST_NAME )),
-    m_sTable(       ResId( ST_TABLE )),
-    m_sConnecting(  ResId( ST_CONNECTING )),
+    m_sName(        SW_RES( ST_NAME )),
+    m_sTable(       SW_RES( ST_TABLE )),
+    m_sConnecting(  SW_RES( ST_CONNECTING )),
     m_pCreatedDataSource(0),
     m_pAddressPage(pParent),
     m_bInSelectHdl(false)
