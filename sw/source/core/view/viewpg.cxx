@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:46:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:39:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -660,7 +660,7 @@ void ViewShell::PrintProspect( SwPrtOptions& rOptions,
             SwTwips nMaxRowSz, nMaxColSz;
             pStPage = (SwPageFrm*)aArr[ nSPg ];
             const SwPageFrm* pNxtPage = nEPg < aArr.Count()
-                                ? pNxtPage = (SwPageFrm*)aArr[ nEPg ]
+                                ? (SwPageFrm*)aArr[ nEPg ]
                                 : 0;
 
             // OD 05.05.2003 #i14016# - consider empty pages on calculation
