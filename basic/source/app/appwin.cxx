@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:55:42 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -54,6 +54,7 @@
 #include "appwin.hxx"
 #include "dataedit.hxx"
 #include "dialogs.hxx"
+#include "basrid.hxx"
 
 String *AppWin::pNoName = NULL;     // enthaelt den "Untitled"-String
 short AppWin::nNumber = 0;          // fortlaufende Nummer
@@ -71,7 +72,7 @@ AppWin::AppWin( BasicFrame* pParent )
 {
     // evtl. den Untitled-String laden:
     if( !pNoName )
-        pNoName = new String( ResId( IDS_NONAME ) );
+        pNoName = new String( SttResId( IDS_NONAME ) );
     nCount++;
 
     // Maximized Status von aktuellem Fenster holen
@@ -436,8 +437,8 @@ void AppWin::CheckReload()
         UpdateFileInfo( ASKED_RELOAD );
         ToTop();
         Update();
-        if ( (IsModified() && QueryBox( this, ResId( IDS_ASKDIRTYRELOAD ) ).Execute() == RET_YES )
-            || ( !IsModified() && ( pFrame->IsAutoReload() || QueryBox( this, ResId( IDS_ASKRELOAD ) ).Execute() == RET_YES ) ) )
+        if ( (IsModified() && QueryBox( this, SttResId( IDS_ASKDIRTYRELOAD ) ).Execute() == RET_YES )
+            || ( !IsModified() && ( pFrame->IsAutoReload() || QueryBox( this, SttResId( IDS_ASKRELOAD ) ).Execute() == RET_YES ) ) )
         {
             Reload();
         }
@@ -469,7 +470,7 @@ BOOL AppWin::Load( const String& aName )
     bErr = !pDataEdit->Load( aName );
     if( bErr )
     {
-        ErrorBox aBox( this, ResId( IDS_READERROR ) );
+        ErrorBox aBox( this, SttResId( IDS_READERROR ) );
         String aMsg = aBox.GetMessText();
         aMsg.AppendAscii("\n\"");
         aMsg.Append( aName );
@@ -517,7 +518,7 @@ USHORT AppWin::ImplSave()
         else
         {
             nResult = SAVE_RES_ERROR;
-            ErrorBox( this, ResId( IDS_WRITEERROR ) ).Execute();
+            ErrorBox( this, SttResId( IDS_WRITEERROR ) ).Execute();
         }
         UpdateFileInfo( HAS_BEEN_LOADED );
     }
@@ -570,11 +571,11 @@ USHORT AppWin::QuerySave( QueryBits nBits )
         ToTop();
         if ( ( ( IsModified() && bQueryDirty ) && DiskFileChanged( SINCE_LAST_LOAD ) )
             || ( IsModified() && ( DiskFileChanged( SINCE_LAST_LOAD ) && bQueryDiskChanged ) ) )
-            nResult = QueryBox( this, ResId( IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE ) ).Execute();
+            nResult = QueryBox( this, SttResId( IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE ) ).Execute();
         else if ( ( IsModified() && bQueryDirty ) )
-            nResult = QueryBox( this, ResId( IDS_ASK_DIRTY_SAVE ) ).Execute();
+            nResult = QueryBox( this, SttResId( IDS_ASK_DIRTY_SAVE ) ).Execute();
         else
-            nResult = QueryBox( this, ResId( IDS_ASK_DISKCHANGE_SAVE ) ).Execute();
+            nResult = QueryBox( this, SttResId( IDS_ASK_DISKCHANGE_SAVE ) ).Execute();
     }
     pFrame->AlwaysEnableInput( bAlwaysEnableInput );
 
@@ -629,7 +630,7 @@ BOOL AppWin::Close()
 
 void AppWin::Find()
 {
-    ResId aResId( IDD_FIND_DIALOG );
+    SttResId aResId( IDD_FIND_DIALOG );
     FindDialog aDlg( this, aResId, aFind );
     if( aDlg.Execute() ) {
         bFind = TRUE;
@@ -641,7 +642,7 @@ void AppWin::Find()
 
 void AppWin::Replace()
 {
-    ResId aResId( IDD_REPLACE_DIALOG );
+    SttResId aResId( IDD_REPLACE_DIALOG );
     ReplaceDialog* pDlg = new ReplaceDialog
                         (this, aResId, aFind, aReplace );
     if( pDlg->Execute() ) {
@@ -654,7 +655,7 @@ void AppWin::Replace()
 
 void AppWin::Repeat()
 {
-    if( (aFind.Len() != 0 ) && ( pDataEdit->Find( aFind ) || (ErrorBox(this,ResId(IDS_PATTERNNOTFOUND)).Execute() && FALSE) ) && !bFind )
+    if( (aFind.Len() != 0 ) && ( pDataEdit->Find( aFind ) || (ErrorBox(this,SttResId(IDS_PATTERNNOTFOUND)).Execute() && FALSE) ) && !bFind )
       pDataEdit->ReplaceSelected( aReplace );
 }
 

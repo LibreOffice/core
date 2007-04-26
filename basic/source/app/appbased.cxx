@@ -4,9 +4,9 @@
  *
  *  $RCSfile: appbased.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:55:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:31:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,6 +65,7 @@
 #include "appbased.hxx"
 #include "brkpnts.hxx"
 #include "testtool.hxx"     // defines für das Syntaxhighlighting
+#include "basrid.hxx"
 
 
 TYPEINIT1(AppBasEd,AppEdit);
@@ -236,7 +237,7 @@ void AppBasEd::LoadSource()
     bErr = !pDataEdit->Load( aName );
     pBreakpoints->LoadBreakpoints( GetText() );
     if( bErr )
-        ErrorBox( this, ResId( IDS_READERROR ) ).Execute();
+        ErrorBox( this, SttResId( IDS_READERROR ) ).Execute();
     else
         UpdateFileInfo( HAS_BEEN_LOADED );
     bCompiled = FALSE;  // because the code might have changed in the meantime
@@ -304,7 +305,7 @@ void AppBasEd::Run()
     {
         pMain->SetDebugFlags( pFrame->nFlags );
         // Loest Call aus!
-        pFrame->SetAppMode( String( ResId ( IDS_APPMODE_RUN ) ) );
+        pFrame->SetAppMode( String( SttResId( IDS_APPMODE_RUN ) ) );
         pMain->Run();
         if (aBasicApp.pFrame)
         {
