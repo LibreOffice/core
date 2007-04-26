@@ -4,9 +4,9 @@
  *
  *  $RCSfile: bmpgui.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 18:24:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:41:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,6 +101,8 @@ static LangInfo aLangEntries[] =
 
 class BmpWin;
 
+static ResMgr* pAppResMgr = NULL;
+
 class BmpApp : public Application
 {
 private:
@@ -173,21 +175,21 @@ Pathes::Pathes( Window* pParent,
                 const String& rResPath,
                 const String& rOutPath,
                 const USHORT nLang ) :
-            ModalDialog ( pParent, ResId( DLG_PATH ) ),
-            aBtnOk      ( this, ResId( BTN_OK ) ),
-            aBtnCancel  ( this, ResId( BTN_CANCEL ) ),
-            aGrpPath    ( this, ResId( GRP_PATH ) ),
-            aFtSrs      ( this, ResId( FT_SRS ) ),
-            aFtRes      ( this, ResId( FT_RES ) ),
-            aFtOut      ( this, ResId( FT_OUT ) ),
-            aEdtSrs     ( this, ResId( EDT_SRS ) ),
-            aBtnSrs     ( this, ResId( BTN_SRS ) ),
-            aEdtRes     ( this, ResId( EDT_RES ) ),
-            aBtnRes     ( this, ResId( BTN_RES ) ),
-            aEdtOut     ( this, ResId( EDT_OUT ) ),
-            aBtnOut     ( this, ResId( BTN_OUT ) ),
-            aGrpLang    ( this, ResId( GRP_LANG ) ),
-            aLbLang     ( this, ResId( LB_LANG ) )
+            ModalDialog ( pParent, ResId( DLG_PATH, *pAppResMgr ) ),
+            aBtnOk      ( this, ResId( BTN_OK, *pAppResMgr ) ),
+            aBtnCancel  ( this, ResId( BTN_CANCEL, *pAppResMgr ) ),
+            aGrpPath    ( this, ResId( GRP_PATH, *pAppResMgr ) ),
+            aFtSrs      ( this, ResId( FT_SRS, *pAppResMgr ) ),
+            aFtRes      ( this, ResId( FT_RES, *pAppResMgr ) ),
+            aFtOut      ( this, ResId( FT_OUT, *pAppResMgr ) ),
+            aEdtSrs     ( this, ResId( EDT_SRS, *pAppResMgr ) ),
+            aBtnSrs     ( this, ResId( BTN_SRS, *pAppResMgr ) ),
+            aEdtRes     ( this, ResId( EDT_RES, *pAppResMgr ) ),
+            aBtnRes     ( this, ResId( BTN_RES, *pAppResMgr ) ),
+            aEdtOut     ( this, ResId( EDT_OUT, *pAppResMgr ) ),
+            aBtnOut     ( this, ResId( BTN_OUT, *pAppResMgr ) ),
+            aGrpLang    ( this, ResId( GRP_LANG, *pAppResMgr ) ),
+            aLbLang     ( this, ResId( LB_LANG, *pAppResMgr ) )
 {
     FreeResource();
 
@@ -331,13 +333,11 @@ void BmpApp::Main( )
     // Param3: output directory
     // Param4: Langugage dependent directory
 
-    ResMgr*     pAppResMgr = ResMgr::CreateResMgr( "bmp" );
+    pAppResMgr = ResMgr::CreateResMgr( "bmp" );
     MenuBar*    pMB = new MenuBar();
     PopupMenu*  pPB = new PopupMenu();
     String      aLangDir;
     String      aOutName;
-
-    Resource::SetResManager( pAppResMgr );
 
     cExitCode = EXIT_NOERROR;
 
@@ -359,8 +359,8 @@ void BmpApp::Main( )
     delete pMB;
     delete pBmpWin;
 
-    Resource::SetResManager( NULL );
     delete pAppResMgr;
+    pAppResMgr = NULL;
 
     if( ( EXIT_NOERROR == cExitCode ) && aOutputFileName.Len() && aOutName.Len() )
     {
