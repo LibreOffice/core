@@ -4,9 +4,9 @@
  *
  *  $RCSfile: UserAdmin.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:06:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:57:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,16 +139,16 @@ OPasswordDialog::OPasswordDialog(Window* _pParent,const String& _sUserName) :
 
     ModalDialog( _pParent, ModuleRes( DLG_PASSWORD) ),
 
-    aFLUser             ( this, ResId( FL_USER ) ),
-    aFTOldPassword      ( this, ResId( FT_OLDPASSWORD ) ),
-    aEDOldPassword      ( this, ResId( ED_OLDPASSWORD ) ),
-    aFTPassword         ( this, ResId( FT_PASSWORD ) ),
-    aEDPassword         ( this, ResId( ED_PASSWORD ) ),
-    aFTPasswordRepeat   ( this, ResId( FT_PASSWORD_REPEAT ) ),
-    aEDPasswordRepeat   ( this, ResId( ED_PASSWORD_REPEAT ) ),
-    aOKBtn              ( this, ResId( BTN_PASSWORD_OK ) ),
-    aCancelBtn          ( this, ResId( BTN_PASSWORD_CANCEL ) ),
-    aHelpBtn            ( this, ResId( BTN_PASSWORD_HELP ) )
+    aFLUser             ( this, ModuleRes( FL_USER ) ),
+    aFTOldPassword      ( this, ModuleRes( FT_OLDPASSWORD ) ),
+    aEDOldPassword      ( this, ModuleRes( ED_OLDPASSWORD ) ),
+    aFTPassword         ( this, ModuleRes( FT_PASSWORD ) ),
+    aEDPassword         ( this, ModuleRes( ED_PASSWORD ) ),
+    aFTPasswordRepeat   ( this, ModuleRes( FT_PASSWORD_REPEAT ) ),
+    aEDPasswordRepeat   ( this, ModuleRes( ED_PASSWORD_REPEAT ) ),
+    aOKBtn              ( this, ModuleRes( BTN_PASSWORD_OK ) ),
+    aCancelBtn          ( this, ModuleRes( BTN_PASSWORD_CANCEL ) ),
+    aHelpBtn            ( this, ModuleRes( BTN_PASSWORD_HELP ) )
 {
     // hide until a help is avalable
     aHelpBtn.Hide();
@@ -191,14 +191,14 @@ DBG_NAME(OUserAdmin);
 //================================================================================
 OUserAdmin::OUserAdmin(Window* pParent,const SfxItemSet& _rAttrSet)
     : OGenericAdministrationPage( pParent, ModuleRes(TAB_PAGE_USERADMIN), _rAttrSet)
-    ,m_FL_USER(         this , ResId(FL_USER))
-    ,m_FT_USER(         this , ResId(FT_USER))
-    ,m_LB_USER(         this , ResId(LB_USER))
-    ,m_PB_NEWUSER(      this , ResId(PB_NEWUSER))
-    ,m_PB_CHANGEPWD(    this , ResId(PB_CHANGEPWD))
-    ,m_PB_DELETEUSER(   this , ResId(PB_DELETEUSER))
-    ,m_FL_TABLE_GRANTS( this , ResId(FL_TABLE_GRANTS))
-    ,m_TableCtrl(       this , ResId(CTRL_TABLE_GRANTS))
+    ,m_FL_USER(         this , ModuleRes(FL_USER))
+    ,m_FT_USER(         this , ModuleRes(FT_USER))
+    ,m_LB_USER(         this , ModuleRes(LB_USER))
+    ,m_PB_NEWUSER(      this , ModuleRes(PB_NEWUSER))
+    ,m_PB_CHANGEPWD(    this , ModuleRes(PB_CHANGEPWD))
+    ,m_PB_DELETEUSER(   this , ModuleRes(PB_DELETEUSER))
+    ,m_FL_TABLE_GRANTS( this , ModuleRes(FL_TABLE_GRANTS))
+    ,m_TableCtrl(       this , ModuleRes(CTRL_TABLE_GRANTS))
 {
     DBG_CTOR(OUserAdmin,NULL);
     m_LB_USER.SetSelectHdl(LINK(this, OUserAdmin, ListDblClickHdl));
