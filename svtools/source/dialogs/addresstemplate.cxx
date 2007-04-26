@@ -4,9 +4,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:13:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:43:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ public:
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        String sLogicalFieldNames( ResId( STR_LOCAGICAL_FIELD_NAMES ) );
+        String sLogicalFieldNames( SvtResId( STR_LOCAGICAL_FIELD_NAMES ) );
         sal_Int32 nTokenCount = sLogicalFieldNames.GetTokenCount(';');
         for (sal_Int32 i = 0; i<nTokenCount; ++i)
             aKnownNames.insert(sLogicalFieldNames.GetToken((sal_uInt16)i, ';'));
@@ -587,19 +587,19 @@ public:
     // ===================================================================
 #define INIT_FIELDS()   \
          ModalDialog(_pParent, SvtResId( DLG_ADDRESSBOOKSOURCE ))\
-        ,m_aDatasourceFrame         (this, ResId(FL_DATASOURCEFRAME))\
-        ,m_aDatasourceLabel         (this, ResId(FT_DATASOURCE))\
-        ,m_aDatasource              (this, ResId(CB_DATASOURCE))\
-        ,m_aAdministrateDatasources (this, ResId(PB_ADMINISTATE_DATASOURCES))\
-        ,m_aTableLabel              (this, ResId(FT_TABLE))\
-        ,m_aTable                   (this, ResId(CB_TABLE))\
-        ,m_aFieldsTitle             (this, ResId(FT_FIELDS))\
-        ,m_aFieldsFrame             (this, ResId(CT_BORDER))\
-        ,m_aFieldScroller           (&m_aFieldsFrame, ResId(SB_FIELDSCROLLER))\
-        ,m_aOK                      (this, ResId(PB_OK))\
-        ,m_aCancel                  (this, ResId(PB_CANCEL))\
-        ,m_aHelp                    (this, ResId(PB_HELP))\
-        ,m_sNoFieldSelection(ResId(STR_NO_FIELD_SELECTION))\
+        ,m_aDatasourceFrame         (this, SvtResId(FL_DATASOURCEFRAME))\
+        ,m_aDatasourceLabel         (this, SvtResId(FT_DATASOURCE))\
+        ,m_aDatasource              (this, SvtResId(CB_DATASOURCE))\
+        ,m_aAdministrateDatasources (this, SvtResId(PB_ADMINISTATE_DATASOURCES))\
+        ,m_aTableLabel              (this, SvtResId(FT_TABLE))\
+        ,m_aTable                   (this, SvtResId(CB_TABLE))\
+        ,m_aFieldsTitle             (this, SvtResId(FT_FIELDS))\
+        ,m_aFieldsFrame             (this, SvtResId(CT_BORDER))\
+        ,m_aFieldScroller           (&m_aFieldsFrame, SvtResId(SB_FIELDSCROLLER))\
+        ,m_aOK                      (this, SvtResId(PB_OK))\
+        ,m_aCancel                  (this, SvtResId(PB_CANCEL))\
+        ,m_aHelp                    (this, SvtResId(PB_HELP))\
+        ,m_sNoFieldSelection(SvtResId(STR_NO_FIELD_SELECTION))\
         ,m_xORB(_rxORB)
 
     // -------------------------------------------------------------------
@@ -629,9 +629,9 @@ public:
             for (sal_Int32 column=0; column<2; ++column)
             {
                 // the label
-                m_pImpl->pFieldLabels[row * 2 + column] = new FixedText(&m_aFieldsFrame, ResId((USHORT)(FT_FIELD_BASE + row * 2 + column)));
+                m_pImpl->pFieldLabels[row * 2 + column] = new FixedText(&m_aFieldsFrame, SvtResId((USHORT)(FT_FIELD_BASE + row * 2 + column)));
                 // the listbox
-                m_pImpl->pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, ResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
+                m_pImpl->pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, SvtResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
                 m_pImpl->pFields[row * 2 + column]->SetDropDownLineCount(15);
                 m_pImpl->pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
 
@@ -656,37 +656,37 @@ public:
         // should be adjustable with a rather small effort.)
 
         // initialize the strings for the field labels
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_FIRSTNAME )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_LASTNAME )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_COMPANY)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_DEPARTMENT )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_STREET )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_ZIPCODE )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_CITY )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_STATE)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_COUNTRY )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_HOMETEL )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_WORKTEL )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_OFFICETEL)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_MOBILE)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_TELOTHER)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_PAGER)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_FAX )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_EMAIL )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_URL )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_TITLE )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_POSITION )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_INITIALS )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_ADDRFORM )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_SALUTATION )) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_ID)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_CALENDAR)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_INVITE)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_NOTE)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER1)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER2)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER3)) );
-        m_pImpl->aFieldLabels.push_back( String(ResId( STR_FIELD_USER4)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_FIRSTNAME )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_LASTNAME )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_COMPANY)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_DEPARTMENT )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_STREET )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_ZIPCODE )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_CITY )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_STATE)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_COUNTRY )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_HOMETEL )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_WORKTEL )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_OFFICETEL)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_MOBILE)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_TELOTHER)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_PAGER)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_FAX )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_EMAIL )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_URL )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_TITLE )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_POSITION )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_INITIALS )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_ADDRFORM )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_SALUTATION )) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_ID)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_CALENDAR)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_INVITE)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_NOTE)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER1)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER2)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER3)) );
+        m_pImpl->aFieldLabels.push_back( String(SvtResId( STR_FIELD_USER4)) );
 
         // force a even number of known fields
         m_pImpl->bOddFieldNumber = (m_pImpl->aFieldLabels.size() % 2) != 0;
@@ -725,7 +725,7 @@ public:
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
-        String sLogicalFieldNames(ResId(STR_LOCAGICAL_FIELD_NAMES));
+        String sLogicalFieldNames(SvtResId(STR_LOCAGICAL_FIELD_NAMES));
         sal_Int32 nAdjustedTokenCount = sLogicalFieldNames.GetTokenCount(';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
