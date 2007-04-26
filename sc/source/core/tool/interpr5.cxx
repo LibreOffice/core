@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr5.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:16:53 $
+ *  last change: $Author: gm $ $Date: 2007-04-26 07:38:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 
 #include <string.h>
 #include <math.h>
+
+#if OSL_DEBUG_LEVEL > 1
+#include <stdio.h>
+#endif
 
 #ifndef _UTL_BOOTSTRAP_HXX
 #include <unotools/bootstrap.hxx>
