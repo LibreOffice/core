@@ -4,9 +4,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.201 $
+ *  $Revision: 1.202 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 18:35:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:21:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -410,7 +410,7 @@ OUString Desktop::GetMsgString( USHORT nId, const OUString& aFaultBackMsg )
     if ( !resMgr )
         return aFaultBackMsg;
     else
-        return OUString( String( ResId( nId, resMgr )));
+        return OUString( String( ResId( nId, *resMgr )));
 }
 
 OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
@@ -419,7 +419,7 @@ OUString MakeStartupErrorMessage(OUString const & aErrorMessage)
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
-        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CANNOT_START, pResMgr))) );
+        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CANNOT_START, *pResMgr))) );
     else
         aDiagnosticMessage.appendAscii( "The program cannot be started." );
 
@@ -436,7 +436,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
 
     ResMgr* pResMgr = Desktop::GetDesktopResManager();
     if ( pResMgr )
-        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, pResMgr ))) );
+        aDiagnosticMessage.append( OUString(String(ResId(STR_BOOTSTRAP_ERR_CFG_DATAACCESS, *pResMgr ))) );
     else
         aDiagnosticMessage.appendAscii( "The program cannot be started." );
 
@@ -444,7 +444,7 @@ OUString MakeStartupConfigAccessErrorMessage( OUString const & aInternalErrMsg )
     {
         aDiagnosticMessage.appendAscii( "\n\n" );
         if ( pResMgr )
-            aDiagnosticMessage.append( OUString(String(ResId(STR_INTERNAL_ERRMSG, pResMgr ))) );
+            aDiagnosticMessage.append( OUString(String(ResId(STR_INTERNAL_ERRMSG, *pResMgr ))) );
         else
             aDiagnosticMessage.appendAscii( "The following internal error has occured:\n\n" );
         aDiagnosticMessage.append( aInternalErrMsg );
@@ -1529,7 +1529,7 @@ void Desktop::Main()
             aMgrName += String::CreateFromInt32(SUPD); // current build version
             pLabelResMgr = ResMgr::SearchCreateResMgr( U2S( aMgrName ), aLocale);
         }
-        String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, pLabelResMgr ) ) : String();
+        String aTitle = pLabelResMgr ? String( ResId( RID_APPTITLE, *pLabelResMgr ) ) : String();
         delete pLabelResMgr;
 
         // set UI language and locale
@@ -1586,11 +1586,6 @@ void Desktop::Main()
             String aWorkPath = aUnrestrictedFolders[0];
             SvtPathOptions().SetWorkPath( aWorkPath );
         }
-
-        aMgrName = String::CreateFromAscii("ofa");
-        aMgrName += String::CreateFromInt32(SOLARUPD); // aktuelle Versionsnummer
-         ResMgr* pOffResMgr = ResMgr::CreateResMgr(U2S(aMgrName));
-        Resource::SetResManager( pOffResMgr );
 
         // create service for loadin SFX (still needed in startup)
         Reference < css::document::XEventListener > xGlobalBroadcaster( xSMgr->createInstance(
@@ -1826,7 +1821,6 @@ void Desktop::Main()
         // and we have to do some further work (e.g. removing temp. directories)
     }
 
-    Resource::SetResManager( NULL );
     delete pResMgr;
 
     // Restore old value
@@ -2693,7 +2687,7 @@ void Desktop::OpenClients()
                 ResMgr* pDtResMgr = GetDesktopResManager();
                 if( pDtResMgr )
                 {
-                    ErrorBox aBox( NULL, ResId( EBX_ERR_PRINTDISABLED, pDtResMgr ) );
+                    ErrorBox aBox( NULL, ResId( EBX_ERR_PRINTDISABLED, *pDtResMgr ) );
                     aBox.Execute();
                 }
             }
