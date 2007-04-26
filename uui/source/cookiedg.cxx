@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cookiedg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:17:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:18:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,17 +67,17 @@ CookiesDialog::CookiesDialog( Window* pParent,
                               CntHTTPCookieRequest* pRequest,
                               ResMgr* pResMgr ) :
 
-    ModalDialog( pParent, ResId( DLG_COOKIES, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_COOKIES, *pResMgr ) ),
 
-    maCookieFB              ( this, ResId( FB_COOKIES ) ),
-    maCookieFT              ( this, ResId( FT_COOKIES ) ),
-    maInFutureLine          ( this, ResId( FL_COOKIES ) ),
-    maInFutureSendBtn       ( this, ResId( RB_INFUTURE_SEND ) ),
-    maInFutureIgnoreBtn     ( this, ResId( RB_INFUTURE_IGNORE ) ),
-    maInFutureInteractiveBtn( this, ResId( RB_INFUTURE_INTERACTIVE ) ),
-    maInFutureGB            ( this, ResId( GB_INFUTURE ) ),
-    maIgnoreBtn             ( this, ResId( BTN_COOKIES_CANCEL ) ),
-    maSendBtn               ( this, ResId( BTN_COOKIES_OK ) ),
+    maCookieFB              ( this, ResId( FB_COOKIES, *pResMgr ) ),
+    maCookieFT              ( this, ResId( FT_COOKIES, *pResMgr ) ),
+    maInFutureLine          ( this, ResId( FL_COOKIES, *pResMgr ) ),
+    maInFutureSendBtn       ( this, ResId( RB_INFUTURE_SEND, *pResMgr ) ),
+    maInFutureIgnoreBtn     ( this, ResId( RB_INFUTURE_IGNORE, *pResMgr ) ),
+    maInFutureInteractiveBtn( this, ResId( RB_INFUTURE_INTERACTIVE, *pResMgr ) ),
+    maInFutureGB            ( this, ResId( GB_INFUTURE, *pResMgr ) ),
+    maIgnoreBtn             ( this, ResId( BTN_COOKIES_CANCEL, *pResMgr ) ),
+    maSendBtn               ( this, ResId( BTN_COOKIES_OK, *pResMgr ) ),
 
     mpCookieRequest         ( pRequest )
 
@@ -99,11 +99,11 @@ CookiesDialog::CookiesDialog( Window* pParent,
     USHORT nOffset = CNTHTTP_COOKIE_REQUEST_RECV == mpCookieRequest->m_eType
         ? 0 : STR_COOKIES_SEND_START - STR_COOKIES_RECV_START;
     INetURLObject aObj( mpCookieRequest->m_rURL );
-    SetText( String( ResId( STR_COOKIES_RECV_TITLE + nOffset, pResMgr ) ) );
-    String aMsg( ResId( STR_COOKIES_RECV_START + nOffset, pResMgr ) );
+    SetText( String( ResId( STR_COOKIES_RECV_TITLE + nOffset, *pResMgr ) ) );
+    String aMsg( ResId( STR_COOKIES_RECV_START + nOffset, *pResMgr ) );
     aMsg.SearchAndReplaceAscii( "${HOST}", aObj.GetHost() );
     aMsg.SearchAndReplaceAscii( "${PATH}", aObj.GetPath() );
-    String aTemplate( ResId( STR_COOKIES_RECV_COOKIES, pResMgr ) );
+    String aTemplate( ResId( STR_COOKIES_RECV_COOKIES, *pResMgr ) );
     List& rList =mpCookieRequest->m_rCookieList;
     String aPair, aCookie;
 
