@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tpprint.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:36:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:54:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,10 +63,10 @@ ScTpPrintOptions::ScTpPrintOptions( Window*           pParent,
     :   SfxTabPage      ( pParent,
                           ScResId( RID_SCPAGE_PRINT ),
                           rCoreAttrs ),
-        aPagesFL         ( this, ResId( FL_PAGES ) ),
-        aSkipEmptyPagesCB( this, ResId( BTN_SKIPEMPTYPAGES ) ),
-        aSheetsFL        ( this, ResId( FL_SHEETS ) ),
-        aSelectedSheetsCB( this, ResId( BTN_SELECTEDSHEETS ) )
+        aPagesFL         ( this, ScResId( FL_PAGES ) ),
+        aSkipEmptyPagesCB( this, ScResId( BTN_SKIPEMPTYPAGES ) ),
+        aSheetsFL        ( this, ScResId( FL_SHEETS ) ),
+        aSelectedSheetsCB( this, ScResId( BTN_SELECTEDSHEETS ) )
 {
     FreeResource();
 }
