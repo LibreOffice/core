@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:42:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:27:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -448,33 +448,35 @@ NumericFormatter::NumericFormatter()
 
 // -----------------------------------------------------------------------
 
-void NumericFormatter::ImplLoadRes( const ResId& )
+void NumericFormatter::ImplLoadRes( const ResId& rResId )
 {
-    ResMgr*     pMgr = Resource::GetResManager();
-    ULONG       nMask;
+    ResMgr*     pMgr = rResId.GetResMgr();
 
-    nMask = pMgr->ReadLong();
-
-    if ( NUMERICFORMATTER_MIN & nMask )
-        mnMin = pMgr->ReadLong();
-
-    if ( NUMERICFORMATTER_MAX & nMask )
-        mnMax = pMgr->ReadLong();
-
-    if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
-        SetStrictFormat( (BOOL)pMgr->ReadShort() );
-
-    if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
-        SetDecimalDigits( pMgr->ReadShort() );
-
-    if ( NUMERICFORMATTER_VALUE & nMask )
+    if( pMgr )
     {
-        mnFieldValue = pMgr->ReadLong();
-        if ( mnFieldValue > mnMax )
-            mnFieldValue = mnMax;
-        else if ( mnFieldValue < mnMin )
-            mnFieldValue = mnMin;
-        mnLastValue = mnFieldValue;
+        ULONG nMask = pMgr->ReadLong();
+
+        if ( NUMERICFORMATTER_MIN & nMask )
+            mnMin = pMgr->ReadLong();
+
+        if ( NUMERICFORMATTER_MAX & nMask )
+            mnMax = pMgr->ReadLong();
+
+        if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
+            SetStrictFormat( (BOOL)pMgr->ReadShort() );
+
+        if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
+            SetDecimalDigits( pMgr->ReadShort() );
+
+        if ( NUMERICFORMATTER_VALUE & nMask )
+        {
+            mnFieldValue = pMgr->ReadLong();
+            if ( mnFieldValue > mnMax )
+                mnFieldValue = mnMax;
+            else if ( mnFieldValue < mnMin )
+                mnFieldValue = mnMin;
+            mnLastValue = mnFieldValue;
+        }
     }
 }
 
@@ -774,7 +776,7 @@ NumericField::NumericField( Window* pParent, const ResId& rResId ) :
 void NumericField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
     ULONG      nMask = ReadLongRes();
 
@@ -896,7 +898,7 @@ NumericBox::NumericBox( Window* pParent, const ResId& rResId ) :
     ComboBox::ImplInit( pParent, nStyle );
     SetField( this );
     ComboBox::ImplLoadRes( rResId );
-    NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    NumericFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
     Reformat();
 
     if ( !(nStyle & WB_HIDE ) )
@@ -1072,7 +1074,7 @@ static String ImplMetricToString( FieldUnit rUnit )
     if( !strAllUnits )
     {
         ResMgr* pResMgr = ImplGetResMgr();
-        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, pResMgr) );
+        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, *pResMgr) );
     }
     // return unit's default string (ie, the first one )
     for( USHORT i=0; i < strAllUnits->Count(); i++ )
@@ -1087,7 +1089,7 @@ static FieldUnit ImplStringToMetric( const String &rMetricString )
     if( !strAllUnits )
     {
         ResMgr* pResMgr = ImplGetResMgr();
-        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, pResMgr) );
+        strAllUnits = new ResStringArray( ResId (SV_FUNIT_STRINGS, *pResMgr) );
     }
     // return FieldUnit
     String aStr( rMetricString );
@@ -1430,14 +1432,17 @@ void MetricFormatter::ImplLoadRes( const ResId& rResId )
 {
     NumericFormatter::ImplLoadRes( rResId );
 
-    ResMgr*     pMgr = Resource::GetResManager();
-    ULONG       nMask = pMgr->ReadLong();
+    ResMgr*     pMgr = rResId.GetResMgr();
+    if( pMgr )
+    {
+        ULONG       nMask = pMgr->ReadLong();
 
-    if ( METRICFORMATTER_UNIT & nMask )
-        meUnit = (FieldUnit)pMgr->ReadLong();
+        if ( METRICFORMATTER_UNIT & nMask )
+            meUnit = (FieldUnit)pMgr->ReadLong();
 
-    if ( METRICFORMATTER_CUSTOMUNITTEXT & nMask )
-        maCustomUnitText = pMgr->ReadString();
+        if ( METRICFORMATTER_CUSTOMUNITTEXT & nMask )
+            maCustomUnitText = pMgr->ReadString();
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -1659,7 +1664,7 @@ MetricField::MetricField( Window* pParent, const ResId& rResId ) :
 void MetricField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
     ULONG      nMask = ReadLongRes();
 
@@ -1829,7 +1834,7 @@ MetricBox::MetricBox( Window* pParent, const ResId& rResId ) :
     SetField( this );
     Reformat();
     ComboBox::ImplLoadRes( rResId );
-    MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    MetricFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
     if ( !(nStyle & WB_HIDE ) )
         Show();
@@ -2156,7 +2161,7 @@ CurrencyField::CurrencyField( Window* pParent, const ResId& rResId ) :
 void CurrencyField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
     ULONG      nMask = ReadLongRes();
 
@@ -2278,7 +2283,7 @@ CurrencyBox::CurrencyBox( Window* pParent, const ResId& rResId ) :
     rResId.SetRT( RSC_CURRENCYBOX );
     WinBits nStyle = ImplInitRes( rResId );
     ComboBox::ImplInit( pParent, nStyle );
-    CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    CurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
     SetField( this );
     ComboBox::ImplLoadRes( rResId );
     Reformat();
