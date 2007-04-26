@@ -4,9 +4,9 @@
  *
  *  $RCSfile: zoom.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:47:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:48:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,20 +234,20 @@ SvxZoomDialog::SvxZoomDialog( Window* pParent, const SfxItemSet& rCoreSet ) :
 
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_ZOOM ) ),
 
-    aZoomFl         ( this, ResId( FL_ZOOM ) ),
-    aWholePageBtn   ( this, ResId( BTN_WHOLE_PAGE ) ),
-    aPageWidthBtn   ( this, ResId( BTN_PAGE_WIDTH ) ),
-    aOptimalBtn     ( this, ResId( BTN_OPTIMAL ) ),
-    a200Btn         ( this, ResId( BTN_200 ) ),
-    a150Btn         ( this, ResId( BTN_150 ) ),
-    a100Btn         ( this, ResId( BTN_100 ) ),
-    a75Btn          ( this, ResId( BTN_75 ) ),
-    a50Btn          ( this, ResId( BTN_50 ) ),
-    aUserBtn        ( this, ResId( BTN_USER ) ),
-    aUserEdit       ( this, ResId( ED_USER ) ),
-    aOKBtn          ( this, ResId( BTN_ZOOM_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_ZOOM_CANCEL ) ),
-    aHelpBtn        ( this, ResId( BTN_ZOOM_HELP ) ),
+    aZoomFl         ( this, SVX_RES( FL_ZOOM ) ),
+    aWholePageBtn   ( this, SVX_RES( BTN_WHOLE_PAGE ) ),
+    aPageWidthBtn   ( this, SVX_RES( BTN_PAGE_WIDTH ) ),
+    aOptimalBtn     ( this, SVX_RES( BTN_OPTIMAL ) ),
+    a200Btn         ( this, SVX_RES( BTN_200 ) ),
+    a150Btn         ( this, SVX_RES( BTN_150 ) ),
+    a100Btn         ( this, SVX_RES( BTN_100 ) ),
+    a75Btn          ( this, SVX_RES( BTN_75 ) ),
+    a50Btn          ( this, SVX_RES( BTN_50 ) ),
+    aUserBtn        ( this, SVX_RES( BTN_USER ) ),
+    aUserEdit       ( this, SVX_RES( ED_USER ) ),
+    aOKBtn          ( this, SVX_RES( BTN_ZOOM_OK ) ),
+    aCancelBtn      ( this, SVX_RES( BTN_ZOOM_CANCEL ) ),
+    aHelpBtn        ( this, SVX_RES( BTN_ZOOM_HELP ) ),
 
     rSet        ( rCoreSet ),
     pOutSet     ( NULL ),
