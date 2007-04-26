@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listselectiondlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:19:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:08:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,11 +75,11 @@ namespace pcr
     ListSelectionDialog::ListSelectionDialog( Window* _pParent, const Reference< XPropertySet >& _rxListBox,
             const ::rtl::OUString& _rPropertyName, const String& _rPropertyUIName )
         :ModalDialog( _pParent, PcrRes( RID_DLG_SELECTION ) )
-        ,m_aLabel   ( this, ResId( FT_ENTRIES ) )
-        ,m_aEntries ( this, ResId( LB_ENTRIES ) )
-        ,m_aOK      ( this, ResId( PB_OK      ) )
-        ,m_aCancel  ( this, ResId( PB_CANCEL  ) )
-        ,m_aHelp    ( this, ResId( PB_HELP    ) )
+        ,m_aLabel   ( this, PcrRes( FT_ENTRIES ) )
+        ,m_aEntries ( this, PcrRes( LB_ENTRIES ) )
+        ,m_aOK      ( this, PcrRes( PB_OK      ) )
+        ,m_aCancel  ( this, PcrRes( PB_CANCEL  ) )
+        ,m_aHelp    ( this, PcrRes( PB_HELP    ) )
         ,m_xListBox     ( _rxListBox     )
         ,m_sPropertyName( _rPropertyName )
     {
