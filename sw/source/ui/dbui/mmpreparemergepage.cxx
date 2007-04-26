@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:47:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:04:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,18 +90,18 @@ using namespace ::rtl;
 SwMailMergePrepareMergePage::SwMailMergePrepareMergePage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_PREPAREMERGE_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI(this,  ResId(     FI_HEADER ) ),
-    m_aPreviewFI(this, ResId(     FI_PREVIEW ) ),
-    m_aRecipientFT(this, ResId(   FT_RECIPIENT ) ),
-    m_aFirstPB(this, ResId(       PB_FIRST   ) ),
-    m_aPrevPB(this, ResId(        PB_PREV    ) ),
-    m_aRecordED(this, ResId(      ED_RECORD  ) ),
-    m_aNextPB(this, ResId(        PB_NEXT    ) ),
-    m_aLastPB(this, ResId(        PB_LAST    ) ),
-    m_ExcludeCB(this, ResId(      CB_EXCLUDE    ) ),
-    m_aNoteHeaderFL(this, ResId(  FL_NOTEHEADER ) ),
-    m_aEditFI(this, ResId(        FI_EDIT       ) ),
-    m_aEditPB(this, ResId(        PB_EDIT       ) ),
+    m_aHeaderFI(this,  SW_RES(     FI_HEADER ) ),
+    m_aPreviewFI(this, SW_RES(     FI_PREVIEW ) ),
+    m_aRecipientFT(this, SW_RES(   FT_RECIPIENT ) ),
+    m_aFirstPB(this, SW_RES(       PB_FIRST   ) ),
+    m_aPrevPB(this, SW_RES(        PB_PREV    ) ),
+    m_aRecordED(this, SW_RES(      ED_RECORD  ) ),
+    m_aNextPB(this, SW_RES(        PB_NEXT    ) ),
+    m_aLastPB(this, SW_RES(        PB_LAST    ) ),
+    m_ExcludeCB(this, SW_RES(      CB_EXCLUDE    ) ),
+    m_aNoteHeaderFL(this, SW_RES(  FL_NOTEHEADER ) ),
+    m_aEditFI(this, SW_RES(        FI_EDIT       ) ),
+    m_aEditPB(this, SW_RES(        PB_EDIT       ) ),
 #pragma warning (disable : 4355)
     m_pWizard(_pParent)
 {

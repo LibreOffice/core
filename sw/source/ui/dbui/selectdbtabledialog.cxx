@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectdbtabledialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:47:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:05:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -90,19 +90,19 @@ SwSelectDBTableDialog::SwSelectDBTableDialog(Window* pParent,
         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& rConnection) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTDBTABLEDDIALOG)),
 #pragma warning (disable : 4355)
-    m_aSelectFI( this, ResId(       FI_SELECT     )),
+    m_aSelectFI( this, SW_RES(       FI_SELECT     )),
     m_aTableHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aTableLB( this, ResId(        LB_TABLE      )),
-    m_aPreviewPB( this, ResId(      PB_PREVIEW    )),
-    m_aSeparatorFL(this, ResId(    FL_SEPARATOR      )),
-    m_aOK( this, ResId(             PB_OK         )),
-    m_aCancel( this, ResId(         PB_CANCEL     )),
-    m_aHelp( this, ResId(           PB_HELP       )),
+    m_aTableLB( this, SW_RES(        LB_TABLE      )),
+    m_aPreviewPB( this, SW_RES(      PB_PREVIEW    )),
+    m_aSeparatorFL(this, SW_RES(    FL_SEPARATOR      )),
+    m_aOK( this, SW_RES(             PB_OK         )),
+    m_aCancel( this, SW_RES(         PB_CANCEL     )),
+    m_aHelp( this, SW_RES(           PB_HELP       )),
 #pragma warning (default : 4355)
-    m_sName( ResId( ST_NAME )),
-    m_sType( ResId( ST_TYPE )),
-    m_sTable( ResId( ST_TABLE )),
-    m_sQuery( ResId( ST_QUERY )),
+    m_sName( SW_RES( ST_NAME )),
+    m_sType( SW_RES( ST_TYPE )),
+    m_sTable( SW_RES( ST_TABLE )),
+    m_sQuery( SW_RES( ST_QUERY )),
     m_xConnection(rConnection)
 {
     FreeResource();
