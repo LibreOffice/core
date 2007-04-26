@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdresid.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 18:32:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -36,11 +36,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sd.hxx"
 
-
-#ifndef _SHL_HXX //autogen
-#include <tools/shl.hxx>
-#endif
-
 #include "sddll.hxx"
 #include "sdresid.hxx"
 
@@ -52,23 +47,8 @@
 \************************************************************************/
 
 SdResId::SdResId(USHORT nId) :
-    ResId(nId, SD_MOD()->GetResMgr())
-//    ResId(nId, *(ResMgr**) GetAppData(SHL_DRAW))
+    ResId(nId, *SD_MOD()->GetResMgr())
 {
 }
-
-
-/*************************************************************************
-|*
-|* 2.Ctor (kann entfallen)
-|*
-\************************************************************************/
-
-SdResId::SdResId(USHORT nId, ResMgr* pMgr) :
-    ResId(nId, pMgr)
-{
-}
-
-
 
 
