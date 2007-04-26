@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cmdstrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:18:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:40:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,13 +48,21 @@
 #include "cmdstrm.hxx"
 #include "rcontrol.hxx"
 #include "objtest.hxx"
+#include "sttresid.hxx"
 #include "svcommstream.hxx"
 #include <basic/testtool.hrc>
-
 
 ControlDefLoad __READONLY_DATA CmdStream::arKeyCodes [] =
 #include <keycodes.hxx>
 CNames *CmdStream::pKeyCodes = NULL;
+
+ResMgr* SttResId::getSttResMgr()
+{
+    static ResMgr* pMgr = NULL;
+    if( ! pMgr )
+        pMgr = CREATEVERSIONRESMGR( stt );
+    return pMgr;
+}
 
 CmdStream::CmdStream()
 {
@@ -157,7 +165,7 @@ String CmdStream::WandleKeyEventString( String aKeys )
                     Result += '<';
                     Result += Token;
                     Result += ' ';
-                    Result += String( ResId( S_INVALID_KEYCODE ) );
+                    Result += String( SttResId( S_INVALID_KEYCODE ) );
                     Result += '>';
                 }
             }
@@ -186,7 +194,7 @@ void CmdStream::WriteSortedParams( SbxArray* rPar, BOOL IsKeyString )
         {
             switch (rPar->Get( i )->GetType())
             {
-                case SbxLONG:       // alles immer als Short übertragen
+                case SbxLONG:       // alles immer als Short ï¿½bertragen
                 case SbxULONG:
                 case SbxLONG64:
                 case SbxULONG64:
@@ -331,9 +339,9 @@ void CmdStream::GenCmdSlot( USHORT nNr, SbxArray* rPar )
 
         for (USHORT n = 1 ; n <= nAnz ; n++)
         {
-            /// #59513# nicht mehr benötigt
+            /// #59513# nicht mehr benï¿½tigt
 //          ULONG nUserData = rPar->Get( 2*n-1 )->GetUserData();
-//          rPar->Get( 2*n-1 )->SetUserData(ID_DoNothing);  // Verhindert Ausführung der Slots, die als Parameter übergeben sind.
+//          rPar->Get( 2*n-1 )->SetUserData(ID_DoNothing);  // Verhindert Ausfï¿½hrung der Slots, die als Parameter ï¿½bergeben sind.
 
             if ( bWriteUnoSlot )
                 Write(rPar->Get( 2*n-1 )->GetString());
@@ -364,7 +372,7 @@ void CmdStream::GenCmdSlot( USHORT nNr, SbxArray* rPar )
                 case SbxCHAR:
                     if ( !bWriteUnoSlot )
                         Write( (USHORT)BinString);
-                    Write((String)rPar->Get( 2*n )->GetString());    // Cast für OS/2
+                    Write((String)rPar->Get( 2*n )->GetString());    // Cast fï¿½r OS/2
                     break;
                 case SbxBOOL:
                     if ( !bWriteUnoSlot )
@@ -376,8 +384,8 @@ void CmdStream::GenCmdSlot( USHORT nNr, SbxArray* rPar )
                     break;
             }
 
-            /// #59513# nicht mehr benötigt ( siehe oben )
-//          rPar->Get( 2*n-1 )->SetUserData(nUserData); // Und wieder zurücksetzen, so daß auch alles sauber ist.
+            /// #59513# nicht mehr benï¿½tigt ( siehe oben )
+//          rPar->Get( 2*n-1 )->SetUserData(nUserData); // Und wieder zurï¿½cksetzen, so daï¿½ auch alles sauber ist.
         }
     }
     else
@@ -388,17 +396,17 @@ void CmdStream::GenCmdUNOSlot( const String &aURL )
 {
     Write( USHORT(SIUnoSlot) );
 /*  Write( USHORT(0) );     // Hier wird im Office die SID_OPENURL Eingetragen.
-                            // Dies muß natürlich im Office hart verdratet werden und nicht hier,
-                            // da sich die ID ja mal ändern kann.
+                            // Dies muï¿½ natï¿½rlich im Office hart verdratet werden und nicht hier,
+                            // da sich die ID ja mal ï¿½ndern kann.
 
-    // Da auch die ID für das PoolItem im Office entnommen werden muß hier also kein PoolItem
+    // Da auch die ID fï¿½r das PoolItem im Office entnommen werden muï¿½ hier also kein PoolItem
     // gesendet werden.
 
     Write( USHORT(0) );     // Anzahl PoolItems
 
     // Stattdessen wird noch eine extra String gesendet, der dann Officeseitig in ein
     // SfxStringItem mit entsprechender ID gewandelt wird.
-    Write( aURL );          // String für das PoolItem*/
+    Write( aURL );          // String fï¿½r das PoolItem*/
 
     Write( aURL );          // Die UNO URL eben
 }
