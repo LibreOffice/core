@@ -4,9 +4,9 @@
  *
  *  $RCSfile: listcombowizard.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:00:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:06:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -330,9 +330,9 @@ namespace dbp
     //---------------------------------------------------------------------
     OContentTableSelection::OContentTableSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_TABLE))
-        ,m_aFrame               (this, ResId(FL_FRAME))
-        ,m_aSelectTableLabel    (this, ResId(FT_SELECTTABLE_LABEL))
-        ,m_aSelectTable         (this, ResId(LB_SELECTTABLE))
+        ,m_aFrame               (this, ModuleRes(FL_FRAME))
+        ,m_aSelectTableLabel    (this, ModuleRes(FT_SELECTTABLE_LABEL))
+        ,m_aSelectTable         (this, ModuleRes(LB_SELECTTABLE))
     {
         FreeResource();
 
@@ -417,14 +417,14 @@ namespace dbp
     //---------------------------------------------------------------------
     OContentFieldSelection::OContentFieldSelection( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_CONTENTSELECTION_FIELD))
-        ,m_aFrame               (this, ResId(FL_FRAME))
-        ,m_aTableFields         (this, ResId(FT_TABLEFIELDS))
-        ,m_aSelectTableField    (this, ResId(LB_SELECTFIELD))
-        ,m_aDisplayedFieldLabel (this, ResId(FT_DISPLAYEDFIELD))
-        ,m_aDisplayedField      (this, ResId(ET_DISPLAYEDFIELD))
-        ,m_aInfo                (this, ResId(FT_CONTENTFIELD_INFO))
+        ,m_aFrame               (this, ModuleRes(FL_FRAME))
+        ,m_aTableFields         (this, ModuleRes(FT_TABLEFIELDS))
+        ,m_aSelectTableField    (this, ModuleRes(LB_SELECTFIELD))
+        ,m_aDisplayedFieldLabel (this, ModuleRes(FT_DISPLAYEDFIELD))
+        ,m_aDisplayedField      (this, ModuleRes(ET_DISPLAYEDFIELD))
+        ,m_aInfo                (this, ModuleRes(FT_CONTENTFIELD_INFO))
     {
-        m_aInfo.SetText(String(ResId( isListBox() ? STR_FIELDINFO_LISTBOX : STR_FIELDINFO_COMBOBOX)));
+        m_aInfo.SetText(String(ModuleRes( isListBox() ? STR_FIELDINFO_LISTBOX : STR_FIELDINFO_COMBOBOX)));
         FreeResource();
         m_aSelectTableField.SetSelectHdl(LINK(this, OContentFieldSelection, OnFieldSelected));
         m_aSelectTableField.SetDoubleClickHdl(LINK(this, OContentFieldSelection, OnTableDoubleClicked));
@@ -491,12 +491,12 @@ namespace dbp
     //---------------------------------------------------------------------
     OLinkFieldsPage::OLinkFieldsPage( OListComboWizard* _pParent )
         :OLCPage(_pParent, ModuleRes(RID_PAGE_LCW_FIELDLINK))
-        ,m_aDescription         (this, ResId(FT_FIELDLINK_DESC))
-        ,m_aFrame               (this, ResId(FL_FRAME))
-        ,m_aValueListFieldLabel (this, ResId(FT_VALUELISTFIELD))
-        ,m_aValueListField      (this, ResId(CMB_VALUELISTFIELD))
-        ,m_aTableFieldLabel     (this, ResId(FT_TABLEFIELD))
-        ,m_aTableField          (this, ResId(CMB_TABLEFIELD))
+        ,m_aDescription         (this, ModuleRes(FT_FIELDLINK_DESC))
+        ,m_aFrame               (this, ModuleRes(FL_FRAME))
+        ,m_aValueListFieldLabel (this, ModuleRes(FT_VALUELISTFIELD))
+        ,m_aValueListField      (this, ModuleRes(CMB_VALUELISTFIELD))
+        ,m_aTableFieldLabel     (this, ModuleRes(FT_TABLEFIELD))
+        ,m_aTableField          (this, ModuleRes(CMB_TABLEFIELD))
     {
         FreeResource();
 

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:58:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:06:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,13 +254,13 @@ namespace dbp
         ModuleRes aModuleRes(RID_PAGE_FORM_DATASOURCE_STATUS);
         OLocalResourceAccess aLocalControls(aModuleRes, RSC_TABPAGE);
 
-        m_pFormSettingsSeparator    = new FixedLine(this,  ResId(FL_FORMSETINGS));
-        m_pFormDatasourceLabel      = new FixedText(this,  ResId(FT_FORMDATASOURCELABEL));
-        m_pFormDatasource           = new FixedText(this,  ResId(FT_FORMDATASOURCE));
-        m_pFormContentTypeLabel     = new FixedText(this,  ResId(FT_FORMCONTENTTYPELABEL));
-        m_pFormContentType          = new FixedText(this,  ResId(FT_FORMCONTENTTYPE));
-        m_pFormTableLabel           = new FixedText(this,  ResId(FT_FORMTABLELABEL));
-        m_pFormTable                = new FixedText(this,  ResId(FT_FORMTABLE));
+        m_pFormSettingsSeparator    = new FixedLine(this,  ModuleRes(FL_FORMSETINGS));
+        m_pFormDatasourceLabel      = new FixedText(this,  ModuleRes(FT_FORMDATASOURCELABEL));
+        m_pFormDatasource           = new FixedText(this,  ModuleRes(FT_FORMDATASOURCE));
+        m_pFormContentTypeLabel     = new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPELABEL));
+        m_pFormContentType          = new FixedText(this,  ModuleRes(FT_FORMCONTENTTYPE));
+        m_pFormTableLabel           = new FixedText(this,  ModuleRes(FT_FORMTABLELABEL));
+        m_pFormTable                = new FixedText(this,  ModuleRes(FT_FORMTABLE));
 
         const OControlWizardContext& rContext = getContext();
         if ( rContext.bEmbedded )
