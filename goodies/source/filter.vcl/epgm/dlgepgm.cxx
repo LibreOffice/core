@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepgm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:42:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:00:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,14 +52,14 @@
 \************************************************************************/
 
 DlgExportEPGM::DlgExportEPGM( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPGM, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPGM, *rPara.pResMgr ) ),
                 rFltCallPara        ( rPara ),
-                aGrpFormat          ( this, ResId( GRP_FORMAT ) ),
-                aRBRaw              ( this, ResId( RB_RAW ) ),
-                aRBASCII            ( this, ResId( RB_ASCII ) ),
-                aBtnOK              ( this, ResId( BTN_OK ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) ),
+                aGrpFormat          ( this, ResId( GRP_FORMAT, *rPara.pResMgr ) ),
+                aRBRaw              ( this, ResId( RB_RAW, *rPara.pResMgr ) ),
+                aRBASCII            ( this, ResId( RB_ASCII, *rPara.pResMgr ) ),
+                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
@@ -68,7 +68,7 @@ DlgExportEPGM::DlgExportEPGM( FltCallDialogParameter& rPara ) :
 
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PGM" ) );
     pConfigItem = new FilterConfigItem( aFilterConfigPath, &rPara.aFilterData );
-    sal_Int32   nFormat = pConfigItem->ReadInt32( String( ResId( KEY_FORMAT, pMgr ) ), 0 );
+    sal_Int32   nFormat = pConfigItem->ReadInt32( String( ResId( KEY_FORMAT, *pMgr ) ), 0 );
 
     BOOL bCheck = FALSE;
     if ( !nFormat )
@@ -97,7 +97,7 @@ IMPL_LINK( DlgExportEPGM, OK, void *, EMPTYARG )
     sal_Int32 nFormat = 0;
     if ( aRBASCII.IsChecked() )
         nFormat++;
-    pConfigItem->WriteInt32( String( ResId( KEY_FORMAT, pMgr ) ), nFormat );
+    pConfigItem->WriteInt32( String( ResId( KEY_FORMAT, *pMgr ) ), nFormat );
     rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
