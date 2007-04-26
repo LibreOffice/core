@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 11:14:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:12:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -804,7 +804,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                         sal_Int32 nTotalPageCount = aMultiSelection.GetSelectCount();
                         if ( bSecondPassForImpressNotes )
                             nTotalPageCount *= 2;
-                        mxStatusIndicator->start( String( ResId( PDF_PROGRESS_BAR, pResMgr ) ), nTotalPageCount );
+                        mxStatusIndicator->start( String( ResId( PDF_PROGRESS_BAR, *pResMgr ) ), nTotalPageCount );
                         delete pResMgr;
                     }
                 }
