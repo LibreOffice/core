@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvltbl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:00:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:37:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -241,7 +241,8 @@ FASTBOOL SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
     {
         const SwShellCrsr *pCrsr = _GetCrsr();
         const SwFrm* pStartFrm = pFrm;
-        const SwFrm* pEndFrm   = pCrsr->GetCntntNode( FALSE )->GetFrm( &pCrsr->GetMkPos() );
+        const SwCntntNode *pCNd = pCrsr->GetCntntNode( FALSE );
+        const SwFrm* pEndFrm   = pCNd ? pCNd->GetFrm( &pCrsr->GetMkPos() ) : 0;
 
         if ( bRow )
         {
@@ -706,7 +707,10 @@ String SwCrsrShell::GetBoxNms() const
 
     if( IsTableMode() )
     {
-        pFrm = pTblCrsr->Start()->nNode.GetNode().GetCntntNode()->GetFrm();
+        SwCntntNode *pCNd = pTblCrsr->Start()->nNode.GetNode().GetCntntNode();
+        pFrm = pCNd ? pCNd->GetFrm() : 0;
+        if( !pFrm )
+            return sNm;
 
         do {
             pFrm = pFrm->GetUpper();
@@ -725,16 +729,18 @@ String SwCrsrShell::GetBoxNms() const
         pPos = GetCrsr()->GetPoint();
     }
 
-    pFrm = pPos->nNode.GetNode().GetCntntNode()->GetFrm();
-
-    while( pFrm && !pFrm->IsCellFrm() )
-    {
-        pFrm = pFrm->GetUpper();
-    }
+    SwCntntNode* pCNd = pPos->nNode.GetNode().GetCntntNode();
+    pFrm = pCNd ? pCNd->GetFrm() : 0;
 
     if( pFrm )
-        sNm += ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
+    {
+        do {
+            pFrm = pFrm->GetUpper();
+        } while ( pFrm && !pFrm->IsCellFrm() );
 
+        if( pFrm )
+            sNm += ((SwCellFrm*)pFrm)->GetTabBox()->GetName();
+    }
     return sNm;
 }
 
