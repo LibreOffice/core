@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mergetbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:20:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:19:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,12 +58,12 @@
 
 SwMergeTblDlg::SwMergeTblDlg( Window *pParent, BOOL& rWithPrev )
     : SvxStandardDialog(pParent, SW_RES(DLG_MERGE_TABLE)),
-    aOKPB(                  this, ResId(PB_OK       )),
-    aCancelPB(              this, ResId(PB_CANCEL   )),
-    aHelpPB(                this, ResId(PB_HELP     )),
-    aMergeFL(               this, ResId(FL_MERGE    )),
-    aMergePrevRB(           this, ResId(RB_MERGE_PREV)),
-    aMergeNextRB(           this, ResId(RB_MERGE_NEXT)),
+    aOKPB(                  this, SW_RES(PB_OK      )),
+    aCancelPB(              this, SW_RES(PB_CANCEL  )),
+    aHelpPB(                this, SW_RES(PB_HELP        )),
+    aMergeFL(               this, SW_RES(FL_MERGE    )),
+    aMergePrevRB(           this, SW_RES(RB_MERGE_PREV)),
+    aMergeNextRB(           this, SW_RES(RB_MERGE_NEXT)),
     rMergePrev(             rWithPrev )
 {
     FreeResource();
