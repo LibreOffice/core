@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objface.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:02:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:09:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -92,7 +92,7 @@ struct SfxObjectUI_Impl
 
     SfxObjectUI_Impl(USHORT n, const ResId& rResId, BOOL bVis, sal_uInt32 nFeat) :
         nPos(n),
-        aResId(rResId.GetId(), rResId.GetResMgr()),
+        aResId(rResId.GetId(), *rResId.GetResMgr()),
         bVisible(bVis),
         bContext(FALSE),
         pName(0),
@@ -119,8 +119,8 @@ struct SfxInterface_Impl
     BOOL                    bRegistered;
 
     SfxInterface_Impl() :
-        aPopupRes((USHORT)0),
-        aStatBarRes((USHORT)0)
+        aPopupRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager()),
+        aStatBarRes(0,*SfxApplication::GetOrCreate()->GetSfxResManager())
     , bRegistered(FALSE)
     {
         pObjectBars   = new SfxObjectUIArr_Impl;
@@ -155,10 +155,9 @@ SfxInterface::SfxInterface( const char *pClassName,
     pName(pClassName),
     pGenoType(pParent),
     nClassId(nId),
-    aNameResId(rNameResId.GetId()),
+    aNameResId(rNameResId.GetId(),*rNameResId.GetResMgr()),
     pImpData(0)
 {
-    aNameResId.SetResMgr(rNameResId.GetResMgr());
     pImpData = new SfxInterface_Impl;
     SetSlotMap( rSlotMap, nSlotCount );
 }
@@ -451,7 +450,9 @@ SfxObjectUI_Impl* CreateObjectBarUI_Impl( USHORT nPos, const ResId& rResId, sal_
         ResId aResId(rResId);
         aResId.SetRT(RSC_STRING);
         aResId.SetResMgr(rResId.GetResMgr());
-        if ( !Resource::GetResManager()->IsAvailable(aResId) )
+        if( ! aResId.GetResMgr() )
+            aResId.SetResMgr( SfxApplication::GetOrCreate()->GetOffResManager_Impl() );
+        if ( !aResId.GetResMgr()->IsAvailable(aResId) )
             pUI->pName = new String (DEFINE_CONST_UNICODE("NoName"));
         else
             pUI->pName = new String(aResId);
@@ -526,7 +527,7 @@ void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, const String* 
 
 void SfxInterface::RegisterChildWindow(USHORT nId, BOOL bContext, sal_uInt32 nFeature, const String*)
 {
-    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, nId, TRUE, nFeature);
+    SfxObjectUI_Impl* pUI = new SfxObjectUI_Impl(0, ResId(nId, *SfxApplication::GetOrCreate()->GetOffResManager_Impl()), TRUE, nFeature);
     pUI->bContext = bContext;
     pImpData->pChildWindows->Append(pUI);
 }
