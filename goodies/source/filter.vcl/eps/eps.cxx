@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 16:11:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:01:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -459,7 +459,7 @@ BOOL PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
         pResMgr = ResMgr::CreateResMgr( aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
         if( pResMgr )
         {
-            InfoBox aInfoBox( NULL, String( ResId( KEY_VERSION_CHECK, pResMgr ) ) );
+            InfoBox aInfoBox( NULL, String( ResId( KEY_VERSION_CHECK, *pResMgr ) ) );
             aInfoBox.Execute();
             delete pResMgr;
         }
