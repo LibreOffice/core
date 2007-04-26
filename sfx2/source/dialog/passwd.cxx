@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwd.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:34:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:11:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,17 +94,17 @@ SfxPasswordDialog::SfxPasswordDialog( Window* pParent, const String* pGroupText 
 
     ModalDialog( pParent, SfxResId ( DLG_PASSWD ) ),
 
-    maUserFT        ( this, ResId( FT_PASSWD_USER ) ),
-    maUserED        ( this, ResId( ED_PASSWD_USER ) ),
-    maPasswordFT    ( this, ResId( FT_PASSWD_PASSWORD ) ),
-    maPasswordED    ( this, ResId( ED_PASSWD_PASSWORD ) ),
-    maConfirmFT     ( this, ResId( FT_PASSWD_CONFIRM ) ),
-    maConfirmED     ( this, ResId( ED_PASSWD_CONFIRM ) ),
-    maPasswordBox   ( this, ResId( GB_PASSWD_PASSWORD ) ),
-    maOKBtn         ( this, ResId( BTN_PASSWD_OK ) ),
-    maCancelBtn     ( this, ResId( BTN_PASSWD_CANCEL ) ),
-    maHelpBtn       ( this, ResId( BTN_PASSWD_HELP ) ),
-    maConfirmStr    (       ResId( STR_PASSWD_CONFIRM ) ),
+    maUserFT        ( this, SfxResId( FT_PASSWD_USER ) ),
+    maUserED        ( this, SfxResId( ED_PASSWD_USER ) ),
+    maPasswordFT    ( this, SfxResId( FT_PASSWD_PASSWORD ) ),
+    maPasswordED    ( this, SfxResId( ED_PASSWD_PASSWORD ) ),
+    maConfirmFT     ( this, SfxResId( FT_PASSWD_CONFIRM ) ),
+    maConfirmED     ( this, SfxResId( ED_PASSWD_CONFIRM ) ),
+    maPasswordBox   ( this, SfxResId( GB_PASSWD_PASSWORD ) ),
+    maOKBtn         ( this, SfxResId( BTN_PASSWD_OK ) ),
+    maCancelBtn     ( this, SfxResId( BTN_PASSWD_CANCEL ) ),
+    maHelpBtn       ( this, SfxResId( BTN_PASSWD_HELP ) ),
+    maConfirmStr    (       SfxResId( STR_PASSWD_CONFIRM ) ),
 
     mnMinLen        ( 5 ),
     mnExtras        ( 0 )
