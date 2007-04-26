@@ -4,9 +4,9 @@
  *
  *  $RCSfile: license_dialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:08:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:24:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,19 +239,19 @@ LicenseDialogImpl::LicenseDialogImpl(
     const ::rtl::OUString & sLicenseText):
         ModalDialog(pParent, DpGuiResId(RID_DLG_LICENSE))
         ,m_xComponentContext(xContext)
-        ,m_sTitle(String(ResId(RID_STR_LICENSE_TITLE)))
-        ,m_ftHead(this, ResId(FT_LICENSE_HEADER))
-        ,m_ftBody1(this, ResId(FT_LICENSE_BODY_1))
-        ,m_ftBody1Txt(this, ResId(FT_LICENSE_BODY_1_TXT))
-        ,m_ftBody2(this, ResId(FT_LICENSE_BODY_2))
-        ,m_ftBody2Txt(this, ResId(FT_LICENSE_BODY_2_TXT))
-        ,m_fiArrow1(this, ResId(FI_LICENSE_ARROW1))
-        ,m_fiArrow2(this, ResId(FI_LICENSE_ARROW2))
-        ,m_mlLicense(this, ResId(ML_LICENSE))
-        ,m_pbDown(this, ResId(PB_LICENSE_DOWN))
-        ,m_flBottom(this, ResId(FL_LICENSE))
-        ,m_acceptButton(this, ResId(BTN_LICENSE_ACCEPT))
-        ,m_declineButton(this, ResId(BTN_LICENSE_DECLINE))
+        ,m_sTitle(String(DpGuiResId(RID_STR_LICENSE_TITLE)))
+        ,m_ftHead(this, DpGuiResId(FT_LICENSE_HEADER))
+        ,m_ftBody1(this, DpGuiResId(FT_LICENSE_BODY_1))
+        ,m_ftBody1Txt(this, DpGuiResId(FT_LICENSE_BODY_1_TXT))
+        ,m_ftBody2(this, DpGuiResId(FT_LICENSE_BODY_2))
+        ,m_ftBody2Txt(this, DpGuiResId(FT_LICENSE_BODY_2_TXT))
+        ,m_fiArrow1(this, DpGuiResId(FI_LICENSE_ARROW1))
+        ,m_fiArrow2(this, DpGuiResId(FI_LICENSE_ARROW2))
+        ,m_mlLicense(this, DpGuiResId(ML_LICENSE))
+        ,m_pbDown(this, DpGuiResId(PB_LICENSE_DOWN))
+        ,m_flBottom(this, DpGuiResId(FL_LICENSE))
+        ,m_acceptButton(this, DpGuiResId(BTN_LICENSE_ACCEPT))
+        ,m_declineButton(this, DpGuiResId(BTN_LICENSE_DECLINE))
         ,m_bLicenseRead(false)
 
 {
@@ -259,8 +259,8 @@ LicenseDialogImpl::LicenseDialogImpl(
     if (GetBackground().GetColor().IsDark())
     {
         // high contrast mode needs other images
-        m_fiArrow1.SetImage(Image(ResId(IMG_LICENCE_ARROW_HC)));
-        m_fiArrow2.SetImage(Image(ResId(IMG_LICENCE_ARROW_HC)));
+        m_fiArrow1.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
+        m_fiArrow2.SetImage(Image(DpGuiResId(IMG_LICENCE_ARROW_HC)));
     }
 
     FreeResource();
