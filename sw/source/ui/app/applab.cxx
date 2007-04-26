@@ -4,9 +4,9 @@
  *
  *  $RCSfile: applab.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:33:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:50:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -293,7 +293,7 @@ static sal_uInt16 nBCTitleNo = 0;
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-    AbstarctSwLabDlg* pDlg = pFact->CreateSwLabDlg( 0, aSet, pNewDBMgr, bLabel,ResId( DLG_LAB ));
+    AbstarctSwLabDlg* pDlg = pFact->CreateSwLabDlg( 0, aSet, pNewDBMgr, bLabel, DLG_LAB );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
     if ( RET_OK == pDlg->Execute() )
