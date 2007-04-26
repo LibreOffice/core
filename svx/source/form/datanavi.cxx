@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datanavi.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:44:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -377,13 +377,13 @@ namespace svxform
 
         TabPage( pParent, SVX_RES( RID_SVX_XFORMS_TABPAGES ) ),
 
-        m_aToolBox      ( this, ResId( TB_ITEMS ) ),
-        m_aItemList     ( this, _eGroup, ResId( LB_ITEMS ) ),
+        m_aToolBox      ( this, SVX_RES( TB_ITEMS ) ),
+        m_aItemList     ( this, _eGroup, SVX_RES( LB_ITEMS ) ),
         m_pNaviWin      ( _pNaviWin ),
         m_bHasModel     ( false ),
         m_eGroup        ( _eGroup ),
-        m_TbxImageList  ( ResId( IL_TBX_BMPS ) ),
-        m_TbxHCImageList( ResId( IL_TBX_BMPS_HC ) )
+        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) ),
+        m_TbxHCImageList( SVX_RES( IL_TBX_BMPS_HC ) )
 
     {
         FreeResource();
@@ -880,13 +880,13 @@ namespace svxform
 
             // load the resources for the AddSubmission modal dialog.
             // This will create our own resource context.
-            ResId aRes( RID_SVXDLG_ADD_SUBMISSION, pResMgr );
+            ResId aRes( RID_SVXDLG_ADD_SUBMISSION, *pResMgr );
             aRes.SetRT( RSC_MODALDIALOG );
             pResMgr->GetResource( aRes );
 
             // now, we can access the local resources from the dialog's
             // resource context
-            _initResources();
+            _initResources(pResMgr);
 
             // clean up: remove context, and delete the resource manager
             // ( Increment(..) is needed since PopContext() requires that
@@ -897,7 +897,7 @@ namespace svxform
         }
 
         // load resources... to be overloaded in sub-classes
-        virtual void _initResources() = 0;
+        virtual void _initResources( ResMgr* pMgr ) = 0;
     };
 
     class lcl_ReplaceString : public lcl_ResourceString
@@ -926,13 +926,13 @@ namespace svxform
         }
 
         // load UI resources from resource file
-        virtual void _initResources()
+        virtual void _initResources( ResMgr * pMgr )
         {
             // now, we can access the local resources from the dialog's
             // resource context
-            m_sDoc_UI      = String( ResId( STR_REPLACE_DOC ) );
-            m_sInstance_UI = String( ResId( STR_REPLACE_INST ) );
-            m_sNone_UI     = String( ResId( STR_REPLACE_NONE ) );
+            m_sDoc_UI      = String( ResId( STR_REPLACE_DOC, *pMgr ) );
+            m_sInstance_UI = String( ResId( STR_REPLACE_INST, *pMgr ) );
+            m_sNone_UI     = String( ResId( STR_REPLACE_NONE, *pMgr ) );
         }
 
     public:
@@ -999,11 +999,11 @@ namespace svxform
         }
 
         // load UI resources from resource file
-        virtual void _initResources()
+        virtual void _initResources(ResMgr* pMgr)
         {
-            m_sPost_UI = String( ResId( STR_METHOD_POST ) );
-            m_sPut_UI  = String( ResId( STR_METHOD_PUT ) );
-            m_sGet_UI  = String( ResId( STR_METHOD_GET ) );
+            m_sPost_UI = String( ResId( STR_METHOD_POST, *pMgr ) );
+            m_sPut_UI  = String( ResId( STR_METHOD_PUT, *pMgr ) );
+            m_sGet_UI  = String( ResId( STR_METHOD_GET, *pMgr ) );
         }
 
     public:
@@ -1603,10 +1603,10 @@ namespace svxform
 
         Window( pParent, SVX_RES( RID_SVXWIN_DATANAVIGATOR ) ),
 
-        m_aModelsBox        ( this, ResId( LB_MODELS ) ),
-        m_aModelBtn         ( this, ResId( MB_MODELS ) ),
-        m_aTabCtrl          ( this, ResId( TC_ITEMS ) ),
-        m_aInstanceBtn      ( this, ResId( MB_INSTANCES ) ),
+        m_aModelsBox        ( this, SVX_RES( LB_MODELS ) ),
+        m_aModelBtn         ( this, SVX_RES( MB_MODELS ) ),
+        m_aTabCtrl          ( this, SVX_RES( TC_ITEMS ) ),
+        m_aInstanceBtn      ( this, SVX_RES( MB_INSTANCES ) ),
 
         m_pInstPage         ( NULL ),
         m_pSubmissionPage   ( NULL ),
@@ -1619,8 +1619,8 @@ namespace svxform
         m_bShowDetails      ( false ),
         m_bIsNotifyDisabled ( false ),
 
-        m_aItemImageList    (       ResId( IL_ITEM_BMPS ) ),
-        m_aItemHCImageList  (       ResId( IL_ITEM_BMPS_HC ) ),
+        m_aItemImageList    (       SVX_RES( IL_ITEM_BMPS ) ),
+        m_aItemHCImageList  (       SVX_RES( IL_ITEM_BMPS_HC ) ),
         m_xDataListener     ( new DataListener( this ) )
 
     {
@@ -2525,37 +2525,37 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_DATAITEM ) ),
 
-        m_aItemFL       ( this, ResId( FL_ITEM ) ),
-        m_aNameFT       ( this, ResId( FT_NAME ) ),
-        m_aNameED       ( this, ResId( ED_NAME ) ),
-        m_aDefaultFT    ( this, ResId( FT_DEFAULT ) ),
-        m_aDefaultED    ( this, ResId( ED_DEFAULT ) ),
-        m_aDefaultBtn   ( this, ResId( PB_DEFAULT ) ),
-        m_aSettingsFL   ( this, ResId( FL_SETTINGS ) ),
-        m_aDataTypeFT   ( this, ResId( FT_DATATYPE ) ),
-        m_aDataTypeLB   ( this, ResId( LB_DATATYPE ) ),
-        m_aRequiredCB   ( this, ResId( CB_REQUIRED ) ),
-        m_aRequiredBtn  ( this, ResId( PB_REQUIRED ) ),
-        m_aRelevantCB   ( this, ResId( CB_RELEVANT ) ),
-        m_aRelevantBtn  ( this, ResId( PB_RELEVANT ) ),
-        m_aConstraintCB ( this, ResId( CB_CONSTRAINT ) ),
-        m_aConstraintBtn( this, ResId( PB_CONSTRAINT ) ),
-        m_aReadonlyCB   ( this, ResId( CB_READONLY ) ),
-        m_aReadonlyBtn  ( this, ResId( PB_READONLY ) ),
-        m_aCalculateCB  ( this, ResId( CB_CALCULATE ) ),
-        m_aCalculateBtn ( this, ResId( PB_CALCULATE ) ),
-        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) ),
+        m_aItemFL       ( this, SVX_RES( FL_ITEM ) ),
+        m_aNameFT       ( this, SVX_RES( FT_NAME ) ),
+        m_aNameED       ( this, SVX_RES( ED_NAME ) ),
+        m_aDefaultFT    ( this, SVX_RES( FT_DEFAULT ) ),
+        m_aDefaultED    ( this, SVX_RES( ED_DEFAULT ) ),
+        m_aDefaultBtn   ( this, SVX_RES( PB_DEFAULT ) ),
+        m_aSettingsFL   ( this, SVX_RES( FL_SETTINGS ) ),
+        m_aDataTypeFT   ( this, SVX_RES( FT_DATATYPE ) ),
+        m_aDataTypeLB   ( this, SVX_RES( LB_DATATYPE ) ),
+        m_aRequiredCB   ( this, SVX_RES( CB_REQUIRED ) ),
+        m_aRequiredBtn  ( this, SVX_RES( PB_REQUIRED ) ),
+        m_aRelevantCB   ( this, SVX_RES( CB_RELEVANT ) ),
+        m_aRelevantBtn  ( this, SVX_RES( PB_RELEVANT ) ),
+        m_aConstraintCB ( this, SVX_RES( CB_CONSTRAINT ) ),
+        m_aConstraintBtn( this, SVX_RES( PB_CONSTRAINT ) ),
+        m_aReadonlyCB   ( this, SVX_RES( CB_READONLY ) ),
+        m_aReadonlyBtn  ( this, SVX_RES( PB_READONLY ) ),
+        m_aCalculateCB  ( this, SVX_RES( CB_CALCULATE ) ),
+        m_aCalculateBtn ( this, SVX_RES( PB_CALCULATE ) ),
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
         m_xUIHelper     ( _rUIHelper ),
         m_pItemNode     ( _pNode ),
         m_eItemType     ( DITNone ),
-        m_sFL_Element   ( ResId( STR_FIXEDLINE_ELEMENT ) ),
-        m_sFL_Attribute ( ResId( STR_FIXEDLINE_ATTRIBUTE ) ),
-        m_sFL_Binding   ( ResId( STR_FIXEDLINE_BINDING ) ),
-        m_sFT_BindingExp( ResId( STR_FIXEDTEXT_BINDING ) )
+        m_sFL_Element   ( SVX_RES( STR_FIXEDLINE_ELEMENT ) ),
+        m_sFL_Attribute ( SVX_RES( STR_FIXEDLINE_ATTRIBUTE ) ),
+        m_sFL_Binding   ( SVX_RES( STR_FIXEDLINE_BINDING ) ),
+        m_sFT_BindingExp( SVX_RES( STR_FIXEDTEXT_BINDING ) )
 
     {
         FreeResource();
@@ -3044,15 +3044,15 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_CONDITION ) ),
 
-        m_aConditionFT      ( this, ResId( FT_CONDITION ) ),
-        m_aConditionED      ( this, ResId( ED_CONDITION ) ),
-        m_aResultFT         ( this, ResId( FT_RESULT ) ),
-        m_aResultWin        ( this, ResId( FT_RESULT_PREVIEW ) ),
-        m_aEditNamespacesBtn( this, ResId( PB_EDIT_NAMESPACES ) ),
-        m_aButtonsFL        ( this, ResId( FL_DATANAV_BTN ) ),
-        m_aOKBtn            ( this, ResId( BTN_DATANAV_OK ) ),
-        m_aEscBtn           ( this, ResId( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn          ( this, ResId( BTN_DATANAV_HELP ) ),
+        m_aConditionFT      ( this, SVX_RES( FT_CONDITION ) ),
+        m_aConditionED      ( this, SVX_RES( ED_CONDITION ) ),
+        m_aResultFT         ( this, SVX_RES( FT_RESULT ) ),
+        m_aResultWin        ( this, SVX_RES( FT_RESULT_PREVIEW ) ),
+        m_aEditNamespacesBtn( this, SVX_RES( PB_EDIT_NAMESPACES ) ),
+        m_aButtonsFL        ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn            ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn           ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn          ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
         m_sPropertyName     ( _rPropertyName ),
         m_xBinding          ( _rPropSet )
@@ -3183,15 +3183,15 @@ namespace svxform
 
         ModalDialog( _pCondDlg, SVX_RES( RID_SVXDLG_NAMESPACE_ITEM ) ),
 
-        m_aNamespacesFT         ( this, ResId( FT_NAMESPACES ) ),
-        m_aNamespacesList       ( this, ResId( LB_NAMESPACES ) ),
-        m_aAddNamespaceBtn      ( this, ResId( PB_ADD_NAMESPACE ) ),
-        m_aEditNamespaceBtn     ( this, ResId( PB_EDIT_NAMESPACE ) ),
-        m_aDeleteNamespaceBtn   ( this, ResId( PB_DELETE_NAMESPACE ) ),
-        m_aButtonsFL            ( this, ResId( FL_DATANAV_BTN ) ),
-        m_aOKBtn                ( this, ResId( BTN_DATANAV_OK ) ),
-        m_aEscBtn               ( this, ResId( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn              ( this, ResId( BTN_DATANAV_HELP ) ),
+        m_aNamespacesFT         ( this, SVX_RES( FT_NAMESPACES ) ),
+        m_aNamespacesList       ( this, SVX_RES( LB_NAMESPACES ) ),
+        m_aAddNamespaceBtn      ( this, SVX_RES( PB_ADD_NAMESPACE ) ),
+        m_aEditNamespaceBtn     ( this, SVX_RES( PB_EDIT_NAMESPACE ) ),
+        m_aDeleteNamespaceBtn   ( this, SVX_RES( PB_DELETE_NAMESPACE ) ),
+        m_aButtonsFL            ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn                ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn               ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn              ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
         m_pConditionDlg         ( _pCondDlg ),
         m_rNamespaces           ( _rContainer )
@@ -3199,9 +3199,9 @@ namespace svxform
     {
         static long aStaticTabs[]= { 3, 0, 35, 200 };
         m_aNamespacesList.SvxSimpleTable::SetTabs( aStaticTabs );
-        String sHeader = String( ResId( STR_HEADER_PREFIX ) );
+        String sHeader = String( SVX_RES( STR_HEADER_PREFIX ) );
         sHeader += '\t';
-        sHeader += String( ResId( STR_HEADER_URL ) );
+        sHeader += String( SVX_RES( STR_HEADER_URL ) );
         m_aNamespacesList.InsertHeaderEntry(
             sHeader, HEADERBAR_APPEND, HIB_LEFT /*| HIB_FIXEDPOS | HIB_FIXED*/ );
 
@@ -3356,20 +3356,20 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_MANAGE_NAMESPACE ) ),
 
-        m_aPrefixFT     ( this, ResId( FT_PREFIX ) ),
-        m_aPrefixED     ( this, ResId( ED_PREFIX ) ),
-        m_aUrlFT        ( this, ResId( FT_URL ) ),
-        m_aUrlED        ( this, ResId( ED_URL ) ),
-        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) ),
+        m_aPrefixFT     ( this, SVX_RES( FT_PREFIX ) ),
+        m_aPrefixED     ( this, SVX_RES( ED_PREFIX ) ),
+        m_aUrlFT        ( this, SVX_RES( FT_URL ) ),
+        m_aUrlED        ( this, SVX_RES( ED_URL ) ),
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
         m_pConditionDlg ( _pCondDlg )
 
     {
         if ( _bIsEdit )
-            SetText( String( ResId( STR_EDIT_TEXT ) ) );
+            SetText( String( SVX_RES( STR_EDIT_TEXT ) ) );
 
         FreeResource();
 
@@ -3418,25 +3418,25 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_SUBMISSION ) ),
 
-        m_aSubmissionFL ( this, ResId( FL_SUBMISSION ) ),
-        m_aNameFT       ( this, ResId( FT_SUBMIT_NAME ) ),
-        m_aNameED       ( this, ResId( ED_SUBMIT_NAME ) ),
-        m_aActionFT     ( this, ResId( FT_SUBMIT_ACTION ) ),
-        m_aActionED     ( this, ResId( ED_SUBMIT_ACTION ) ),
-        m_aMethodFT     ( this, ResId( FT_SUBMIT_METHOD ) ),
-        m_aMethodLB     ( this, ResId( LB_SUBMIT_METHOD ) ),
-        m_aRefFT        ( this, ResId( FT_SUBMIT_REF ) ),
-        m_aRefED        ( this, ResId( ED_SUBMIT_REF ) ),
-        m_aRefBtn       ( this, ResId( PB_SUBMIT_REF ) ),
-        m_aBindFT       ( this, ResId( FT_SUBMIT_BIND ) ),
-        m_aBindLB       ( this, ResId( LB_SUBMIT_BIND ) ),
-        m_aReplaceFT    ( this, ResId( FT_SUBMIT_REPLACE ) ),
-        m_aReplaceLB    ( this, ResId( LB_SUBMIT_REPLACE ) ),
+        m_aSubmissionFL ( this, SVX_RES( FL_SUBMISSION ) ),
+        m_aNameFT       ( this, SVX_RES( FT_SUBMIT_NAME ) ),
+        m_aNameED       ( this, SVX_RES( ED_SUBMIT_NAME ) ),
+        m_aActionFT     ( this, SVX_RES( FT_SUBMIT_ACTION ) ),
+        m_aActionED     ( this, SVX_RES( ED_SUBMIT_ACTION ) ),
+        m_aMethodFT     ( this, SVX_RES( FT_SUBMIT_METHOD ) ),
+        m_aMethodLB     ( this, SVX_RES( LB_SUBMIT_METHOD ) ),
+        m_aRefFT        ( this, SVX_RES( FT_SUBMIT_REF ) ),
+        m_aRefED        ( this, SVX_RES( ED_SUBMIT_REF ) ),
+        m_aRefBtn       ( this, SVX_RES( PB_SUBMIT_REF ) ),
+        m_aBindFT       ( this, SVX_RES( FT_SUBMIT_BIND ) ),
+        m_aBindLB       ( this, SVX_RES( LB_SUBMIT_BIND ) ),
+        m_aReplaceFT    ( this, SVX_RES( FT_SUBMIT_REPLACE ) ),
+        m_aReplaceLB    ( this, SVX_RES( LB_SUBMIT_REPLACE ) ),
 
-        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) ),
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) ),
 
         m_pItemNode     ( _pNode ),
         m_xUIHelper     ( _rUIHelper )
@@ -3535,9 +3535,9 @@ namespace svxform
     void AddSubmissionDialog::FillAllBoxes()
     {
         // method box
-        m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_POST ) ) );
-        m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_PUT ) ) );
-        m_aMethodLB.InsertEntry( String( ResId( STR_METHOD_GET ) ) );
+        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_POST   ) ) );
+        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_PUT ) ) );
+        m_aMethodLB.InsertEntry( String( SVX_RES( STR_METHOD_GET ) ) );
         m_aMethodLB.SelectEntryPos(0);
 
         // binding box
@@ -3594,9 +3594,9 @@ namespace svxform
         }
 
         // replace box
-        m_aReplaceLB.InsertEntry( String( ResId( STR_REPLACE_NONE ) ) );
-        m_aReplaceLB.InsertEntry( String( ResId( STR_REPLACE_INST ) ) );
-        m_aReplaceLB.InsertEntry( String( ResId( STR_REPLACE_DOC ) ) );
+        m_aReplaceLB.InsertEntry( String( SVX_RES( STR_REPLACE_NONE ) ) );
+        m_aReplaceLB.InsertEntry( String( SVX_RES( STR_REPLACE_INST ) ) );
+        m_aReplaceLB.InsertEntry( String( SVX_RES( STR_REPLACE_DOC ) ) );
 
 
         // init the controls with the values of the submission
@@ -3652,17 +3652,17 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_MODEL ) ),
 
-        m_aModelFL      ( this, ResId( FL_MODEL ) ),
-        m_aNameFT       ( this, ResId( FT_MODEL_NAME ) ),
-        m_aNameED       ( this, ResId( ED_MODEL_NAME ) ),
-        m_aButtonsFL    ( this, ResId( FL_DATANAV_BTN ) ),
-        m_aOKBtn        ( this, ResId( BTN_DATANAV_OK ) ),
-        m_aEscBtn       ( this, ResId( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn      ( this, ResId( BTN_DATANAV_HELP ) )
+        m_aModelFL      ( this, SVX_RES( FL_MODEL ) ),
+        m_aNameFT       ( this, SVX_RES( FT_MODEL_NAME ) ),
+        m_aNameED       ( this, SVX_RES( ED_MODEL_NAME ) ),
+        m_aButtonsFL    ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn        ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn       ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn      ( this, SVX_RES( BTN_DATANAV_HELP ) )
 
     {
         if ( _bEdit )
-            SetText( String( ResId( STR_EDIT_TEXT ) ) );
+            SetText( String( SVX_RES( STR_EDIT_TEXT ) ) );
 
         FreeResource();
     }
@@ -3679,21 +3679,21 @@ namespace svxform
 
         ModalDialog( pParent, SVX_RES( RID_SVXDLG_ADD_INSTANCE ) ),
 
-        m_aInstanceFL       ( this, ResId( FL_INSTANCE ) ),
-        m_aNameFT           ( this, ResId( FT_INST_NAME ) ),
-        m_aNameED           ( this, ResId( ED_INST_NAME ) ),
-        m_aURLFT            ( this, ResId( FT_INST_URL ) ),
-        m_aURLED            ( this, ResId( ED_INST_URL ) ),
-        m_aFilePickerBtn    ( this, ResId( PB_FILEPICKER ) ),
-        m_aLinkInstanceCB   ( this, ResId( CB_INST_LINKINST ) ),
-        m_aButtonsFL        ( this, ResId( FL_DATANAV_BTN ) ),
-        m_aOKBtn            ( this, ResId( BTN_DATANAV_OK ) ),
-        m_aEscBtn           ( this, ResId( BTN_DATANAV_ESC ) ),
-        m_aHelpBtn          ( this, ResId( BTN_DATANAV_HELP ) )
+        m_aInstanceFL       ( this, SVX_RES( FL_INSTANCE ) ),
+        m_aNameFT           ( this, SVX_RES( FT_INST_NAME ) ),
+        m_aNameED           ( this, SVX_RES( ED_INST_NAME ) ),
+        m_aURLFT            ( this, SVX_RES( FT_INST_URL ) ),
+        m_aURLED            ( this, SVX_RES( ED_INST_URL ) ),
+        m_aFilePickerBtn    ( this, SVX_RES( PB_FILEPICKER ) ),
+        m_aLinkInstanceCB   ( this, SVX_RES( CB_INST_LINKINST ) ),
+        m_aButtonsFL        ( this, SVX_RES( FL_DATANAV_BTN ) ),
+        m_aOKBtn            ( this, SVX_RES( BTN_DATANAV_OK ) ),
+        m_aEscBtn           ( this, SVX_RES( BTN_DATANAV_ESC ) ),
+        m_aHelpBtn          ( this, SVX_RES( BTN_DATANAV_HELP ) )
 
     {
         if ( _bEdit )
-            SetText( String( ResId( STR_EDIT_TEXT ) ) );
+            SetText( String( SVX_RES( STR_EDIT_TEXT ) ) );
 
         FreeResource();
 
@@ -3705,7 +3705,7 @@ namespace svxform
         aResMgrName += ByteString::CreateFromInt32( SOLARUPD );
         ResMgr* pSvtResMgr = ResMgr::CreateResMgr(
             aResMgrName.GetBuffer(), Application::GetSettings().GetUILocale() );
-        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, pSvtResMgr ) );
+        m_sAllFilterName = String( ResId( STR_FILTERNAME_ALL, *pSvtResMgr ) );
     }
 
     AddInstanceDialog::~AddInstanceDialog()
