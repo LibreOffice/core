@@ -4,9 +4,9 @@
  *
  *  $RCSfile: passwd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:34:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:41:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,19 +106,19 @@ IMPL_LINK( SvxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
 
 SvxPasswordDialog::SvxPasswordDialog( Window* pParent, BOOL bAllowEmptyPasswords, BOOL bDisableOldPassword ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_PASSWORD ) ),
-    aOldFL          ( this, ResId( FL_OLD_PASSWD ) ),
-    aOldPasswdFT    ( this, ResId( FT_OLD_PASSWD ) ),
-    aOldPasswdED    ( this, ResId( ED_OLD_PASSWD ) ),
-    aNewFL          ( this, ResId( FL_NEW_PASSWD ) ),
-    aNewPasswdFT    ( this, ResId( FT_NEW_PASSWD ) ),
-    aNewPasswdED    ( this, ResId( ED_NEW_PASSWD ) ),
-    aRepeatPasswdFT ( this, ResId( FT_REPEAT_PASSWD ) ),
-    aRepeatPasswdED ( this, ResId( ED_REPEAT_PASSWD ) ),
-    aOKBtn          ( this, ResId( BTN_PASSWD_OK ) ),
-    aEscBtn         ( this, ResId( BTN_PASSWD_ESC ) ),
-    aHelpBtn        ( this, ResId( BTN_PASSWD_HELP ) ),
-    aOldPasswdErrStr    ( ResId( STR_ERR_OLD_PASSWD ) ),
-    aRepeatPasswdErrStr ( ResId( STR_ERR_REPEAT_PASSWD ) ),
+    aOldFL          ( this, SVX_RES( FL_OLD_PASSWD ) ),
+    aOldPasswdFT    ( this, SVX_RES( FT_OLD_PASSWD ) ),
+    aOldPasswdED    ( this, SVX_RES( ED_OLD_PASSWD ) ),
+    aNewFL          ( this, SVX_RES( FL_NEW_PASSWD ) ),
+    aNewPasswdFT    ( this, SVX_RES( FT_NEW_PASSWD ) ),
+    aNewPasswdED    ( this, SVX_RES( ED_NEW_PASSWD ) ),
+    aRepeatPasswdFT ( this, SVX_RES( FT_REPEAT_PASSWD ) ),
+    aRepeatPasswdED ( this, SVX_RES( ED_REPEAT_PASSWD ) ),
+    aOKBtn          ( this, SVX_RES( BTN_PASSWD_OK ) ),
+    aEscBtn         ( this, SVX_RES( BTN_PASSWD_ESC ) ),
+    aHelpBtn        ( this, SVX_RES( BTN_PASSWD_HELP ) ),
+    aOldPasswdErrStr    ( SVX_RES( STR_ERR_OLD_PASSWD ) ),
+    aRepeatPasswdErrStr ( SVX_RES( STR_ERR_REPEAT_PASSWD ) ),
     bEmpty  ( bAllowEmptyPasswords )
 {
     FreeResource();
