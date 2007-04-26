@@ -4,9 +4,9 @@
  *
  *  $RCSfile: connect.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:07:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:27:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,31 +112,31 @@ SvxConnectionDialog::~SvxConnectionDialog()
 \************************************************************************/
 
 SvxConnectionPage::SvxConnectionPage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SfxTabPage      ( pWindow, ResId( RID_SVXPAGE_CONNECTION, DIALOG_MGR() ),
+                SfxTabPage      ( pWindow, SVX_RES( RID_SVXPAGE_CONNECTION ),
                                   rInAttrs ),
 
-        aFtType                 ( this, ResId( FT_TYPE ) ),
-        aLbType                 ( this, ResId( LB_TYPE ) ),
+        aFtType                 ( this, SVX_RES( FT_TYPE ) ),
+        aLbType                 ( this, SVX_RES( LB_TYPE ) ),
 
-        aFlDelta                ( this, ResId( FL_DELTA ) ),
-        aFtLine1                ( this, ResId( FT_LINE_1 ) ),
-        aMtrFldLine1            ( this, ResId( MTR_FLD_LINE_1 ) ),
-        aFtLine2                ( this, ResId( FT_LINE_2 ) ),
-        aMtrFldLine2            ( this, ResId( MTR_FLD_LINE_2 ) ),
-        aFtLine3                ( this, ResId( FT_LINE_3 ) ),
-        aMtrFldLine3            ( this, ResId( MTR_FLD_LINE_3 ) ),
+        aFlDelta                ( this, SVX_RES( FL_DELTA ) ),
+        aFtLine1                ( this, SVX_RES( FT_LINE_1 ) ),
+        aMtrFldLine1            ( this, SVX_RES( MTR_FLD_LINE_1 ) ),
+        aFtLine2                ( this, SVX_RES( FT_LINE_2 ) ),
+        aMtrFldLine2            ( this, SVX_RES( MTR_FLD_LINE_2 ) ),
+        aFtLine3                ( this, SVX_RES( FT_LINE_3 ) ),
+        aMtrFldLine3            ( this, SVX_RES( MTR_FLD_LINE_3 ) ),
 
-        aFlDistance             ( this, ResId( FL_DISTANCE ) ),
-        aFtHorz1                ( this, ResId( FT_HORZ_1 ) ),
-        aMtrFldHorz1            ( this, ResId( MTR_FLD_HORZ_1 ) ),
-        aFtVert1                ( this, ResId( FT_VERT_1 ) ),
-        aMtrFldVert1            ( this, ResId( MTR_FLD_VERT_1 ) ),
-        aFtHorz2                ( this, ResId( FT_HORZ_2 ) ),
-        aMtrFldHorz2            ( this, ResId( MTR_FLD_HORZ_2 ) ),
-        aFtVert2                ( this, ResId( FT_VERT_2 ) ),
-        aMtrFldVert2            ( this, ResId( MTR_FLD_VERT_2 ) ),
+        aFlDistance             ( this, SVX_RES( FL_DISTANCE ) ),
+        aFtHorz1                ( this, SVX_RES( FT_HORZ_1 ) ),
+        aMtrFldHorz1            ( this, SVX_RES( MTR_FLD_HORZ_1 ) ),
+        aFtVert1                ( this, SVX_RES( FT_VERT_1 ) ),
+        aMtrFldVert1            ( this, SVX_RES( MTR_FLD_VERT_1 ) ),
+        aFtHorz2                ( this, SVX_RES( FT_HORZ_2 ) ),
+        aMtrFldHorz2            ( this, SVX_RES( MTR_FLD_HORZ_2 ) ),
+        aFtVert2                ( this, SVX_RES( FT_VERT_2 ) ),
+        aMtrFldVert2            ( this, SVX_RES( MTR_FLD_VERT_2 ) ),
 
-        aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs ),
+        aCtlPreview             ( this, SVX_RES( CTL_PREVIEW ), rInAttrs ),
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() )
 {
