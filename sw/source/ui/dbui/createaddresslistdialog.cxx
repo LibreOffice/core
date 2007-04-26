@@ -4,9 +4,9 @@
  *
  *  $RCSfile: createaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 11:07:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:52:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,8 +144,8 @@ public:
 SwAddressControl_Impl::SwAddressControl_Impl(Window* pParent, const ResId& rResId ) :
     Control(pParent, rResId),
 #pragma warning (disable : 4355)
-    m_aScrollBar(this, ResId(SCR_1)),
-    m_aWindow(this, ResId(WIN_DATA)),
+    m_aScrollBar(this, ResId(SCR_1,*rResId.GetResMgr())),
+    m_aWindow(this, ResId(WIN_DATA,*rResId.GetResMgr())),
 #pragma warning (default : 4355)
     m_pData(0),
     m_nLineHeight(0),
@@ -416,27 +416,27 @@ SwCreateAddressListDialog::SwCreateAddressListDialog(
         Window* pParent, const String& rURL, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CREATEADDRESSLIST)),
 #pragma warning (disable : 4355)
-    m_aAddressInformation( this, ResId(  FI_ADDRESSINFORMATION)),
-    m_pAddressControl(new SwAddressControl_Impl(this, ResId(CT_ADDRESS))),
-    m_aNewPB( this, ResId(               PB_NEW)),
-    m_aDeletePB( this, ResId(            PB_DELETE)),
-    m_aFindPB( this, ResId(              PB_FIND)),
-    m_aCustomizePB( this, ResId(         PB_CUSTOMIZE)),
+    m_aAddressInformation( this, SW_RES(  FI_ADDRESSINFORMATION)),
+    m_pAddressControl(new SwAddressControl_Impl(this, SW_RES(CT_ADDRESS))),
+    m_aNewPB( this, SW_RES(               PB_NEW)),
+    m_aDeletePB( this, SW_RES(            PB_DELETE)),
+    m_aFindPB( this, SW_RES(              PB_FIND)),
+    m_aCustomizePB( this, SW_RES(         PB_CUSTOMIZE)),
 
-    m_aViewEntriesFI( this, ResId(       FI_VIEWENTRIES)),
-    m_aStartPB( this, ResId(             PB_START)),
-    m_aPrevPB( this, ResId(              PB_PREV)),
-    m_aSetNoNF( this, ResId(             NF_SETNO)),
-    m_aNextPB( this, ResId(              PB_NEXT  )),
-    m_aEndPB( this, ResId(               PB_END)),
+    m_aViewEntriesFI( this, SW_RES(       FI_VIEWENTRIES)),
+    m_aStartPB( this, SW_RES(             PB_START)),
+    m_aPrevPB( this, SW_RES(              PB_PREV)),
+    m_aSetNoNF( this, SW_RES(             NF_SETNO)),
+    m_aNextPB( this, SW_RES(              PB_NEXT  )),
+    m_aEndPB( this, SW_RES(               PB_END)),
 
-    m_aSeparatorFL( this, ResId(         FL_SEPARATOR)),
+    m_aSeparatorFL( this, SW_RES(         FL_SEPARATOR)),
 
-    m_aOK( this, ResId(                  PB_OK)),
-    m_aCancel( this, ResId(              PB_CANCEL)),
-    m_aHelp( this, ResId(                PB_HELP)),
+    m_aOK( this, SW_RES(                  PB_OK)),
+    m_aCancel( this, SW_RES(              PB_CANCEL)),
+    m_aHelp( this, SW_RES(                PB_HELP)),
 #pragma warning (default : 4355)
-    m_sAddressListFilterName( ResId(    ST_FILTERNAME)),
+    m_sAddressListFilterName( SW_RES(    ST_FILTERNAME)),
     m_sURL(rURL),
     m_pCSVData( new SwCSVData ),
     m_pFindDlg(0)
@@ -807,13 +807,13 @@ void SwCreateAddressListDialog::Find(const String& rSearch, sal_Int32 nColumn)
 SwFindEntryDialog::SwFindEntryDialog(SwCreateAddressListDialog* pParent) :
     ModelessDialog(pParent, SW_RES(DLG_MM_FIND_ENTRY)),
 #pragma warning (disable : 4355)
-    m_aFindFT( this, ResId(      FT_FIND      )),
-    m_aFindED( this, ResId(      ED_FIND      )),
-    m_aFindOnlyCB( this, ResId(  CB_FINDONLY )),
-    m_aFindOnlyLB( this, ResId(  LB_FINDONLY  )),
-    m_aFindPB( this, ResId(      PB_FIND)),
-    m_aCancel( this, ResId(      PB_CANCEL)),
-    m_aHelp( this, ResId(        PB_HELP)),
+    m_aFindFT( this, SW_RES(      FT_FIND      )),
+    m_aFindED( this, SW_RES(      ED_FIND      )),
+    m_aFindOnlyCB( this, SW_RES(  CB_FINDONLY )),
+    m_aFindOnlyLB( this, SW_RES(  LB_FINDONLY  )),
+    m_aFindPB( this, SW_RES(      PB_FIND)),
+    m_aCancel( this, SW_RES(      PB_CANCEL)),
+    m_aHelp( this, SW_RES(        PB_HELP)),
 #pragma warning (default : 4355)
     m_pParent(pParent)
 {
