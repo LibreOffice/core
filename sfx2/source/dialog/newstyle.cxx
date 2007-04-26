@@ -4,9 +4,9 @@
  *
  *  $RCSfile: newstyle.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:34:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:11:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -88,11 +88,11 @@ SfxNewStyleDlg::SfxNewStyleDlg( Window* pParent, SfxStyleSheetBasePool& rInPool 
 
     ModalDialog( pParent, SfxResId( DLG_NEW_STYLE_BY_EXAMPLE ) ),
 
-    aColFL              ( this, ResId( FL_COL ) ),
-    aColBox             ( this, ResId( LB_COL ) ),
-    aOKBtn              ( this, ResId( BT_OK ) ),
-    aCancelBtn          ( this, ResId( BT_CANCEL ) ),
-    aQueryOverwriteBox  ( this, ResId( MSG_OVERWRITE ) ),
+    aColFL              ( this, SfxResId( FL_COL ) ),
+    aColBox             ( this, SfxResId( LB_COL ) ),
+    aOKBtn              ( this, SfxResId( BT_OK ) ),
+    aCancelBtn          ( this, SfxResId( BT_CANCEL ) ),
+    aQueryOverwriteBox  ( this, SfxResId( MSG_OVERWRITE ) ),
 
     rPool( rInPool )
 
