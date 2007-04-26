@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabdlg.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:57:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:12:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -480,7 +480,7 @@ void SfxTabPage::AddItemConnection( sfx::ItemConnectionBase* pConnection )
 // class SfxTabDialog ----------------------------------------------------
 
 #define INI_LIST(ItemSetPtr) \
-    aTabCtrl    ( this, ResId(ID_TABCONTROL ) ),\
+    aTabCtrl    ( this, ResId(ID_TABCONTROL,*rResId.GetResMgr() ) ),\
     aOKBtn      ( this ),\
     pUserBtn    ( pUserButtonText? new PushButton(this): 0 ),\
     aCancelBtn  ( this ),\
