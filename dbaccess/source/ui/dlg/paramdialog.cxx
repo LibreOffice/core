@@ -4,9 +4,9 @@
  *
  *  $RCSfile: paramdialog.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:11:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:00:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -99,13 +99,13 @@ namespace dbaui
     //------------------------------------------------------------------------------
     #define INIT_MEMBERS()                                          \
         :ModalDialog( pParent, ModuleRes(DLG_PARAMETERS))           \
-        ,m_aNamesFrame  (this, ResId(FL_PARAMS))                    \
-        ,m_aAllParams   (this, ResId(LB_ALLPARAMS))                 \
-        ,m_aValueFrame  (this, ResId(FT_VALUE))                     \
-        ,m_aParam       (this, ResId(ET_PARAM))                     \
-        ,m_aTravelNext  (this, ResId(BT_TRAVELNEXT))                \
-        ,m_aOKBtn       (this, ResId(BT_OK))                        \
-        ,m_aCancelBtn   (this, ResId(BT_CANCEL))                    \
+        ,m_aNamesFrame  (this, ModuleRes(FL_PARAMS))                    \
+        ,m_aAllParams   (this, ModuleRes(LB_ALLPARAMS))                 \
+        ,m_aValueFrame  (this, ModuleRes(FT_VALUE))                     \
+        ,m_aParam       (this, ModuleRes(ET_PARAM))                     \
+        ,m_aTravelNext  (this, ModuleRes(BT_TRAVELNEXT))                \
+        ,m_aOKBtn       (this, ModuleRes(BT_OK))                        \
+        ,m_aCancelBtn   (this, ModuleRes(BT_CANCEL))                    \
         ,m_nCurrentlySelected(LISTBOX_ENTRY_NOTFOUND)               \
         ,m_xConnection(_rxConnection)                               \
         ,m_aPredicateInput( _rxORB, _rxConnection, getParseContext() )  \
@@ -260,7 +260,7 @@ DBG_NAME(OParameterDialog)
                     String sMessage;
                     {
                         LocalResourceAccess aDummy(DLG_PARAMETERS, RSC_MODALDIALOG);
-                        sMessage = String(ResId(STR_COULD_NOT_CONVERT_PARAM));
+                        sMessage = String(ModuleRes(STR_COULD_NOT_CONVERT_PARAM));
                     }
                     sMessage.SearchAndReplaceAll(String::CreateFromAscii("$name$"), sName.getStr());
                     ErrorBox(NULL, WB_OK, sMessage).Execute();
