@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdmod.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 16:54:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -122,7 +122,7 @@ TYPEINIT1( SdModule, SfxModule );
 
 SFX_IMPL_INTERFACE(SdModule, SfxModule, SdResId(STR_APPLICATIONOBJECTBAR))
 {
-    SFX_STATUSBAR_REGISTRATION(RID_DRAW_STATUSBAR);
+    SFX_STATUSBAR_REGISTRATION(SdResId(RID_DRAW_STATUSBAR));
 }
 
 /*************************************************************************
