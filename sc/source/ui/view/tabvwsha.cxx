@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsha.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:59:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:58:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -430,7 +430,7 @@ void ScTabViewShell::ExecuteCellFormatDlg( SfxRequest& rReq, USHORT nTabPage )
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-    pDlg = pFact->CreateScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet,ResId(RID_SCDLG_ATTR));
+    pDlg = pFact->CreateScAttrDlg( GetViewFrame(), GetDialogParent(), pOldSet, RID_SCDLG_ATTR);
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     if ( nTabPage != 0xffff )
         pDlg->SetCurPageId( nTabPage );
