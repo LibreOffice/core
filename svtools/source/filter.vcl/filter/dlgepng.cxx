@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgepng.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:44:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:44:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,16 +50,16 @@ using namespace ::com::sun::star::uno;
 \************************************************************************/
 
 DlgExportEPNG::DlgExportEPNG( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPNG, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EPNG, *rPara.pResMgr ) ),
                 FilterConfigItem    ( OUString( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/PNG" ) ), &rPara.aFilterData ),
                 rFltCallPara        ( rPara ),
-                aGrpCompression     ( this, ResId( GRP_COMPRESSION ) ),
-                aFiCompression      ( this, ResId( FI_COMPRESSION ) ),
-                aNumCompression     ( this, ResId( NUM_COMPRESSION ) ),
-                aCbxInterlaced      ( this, ResId( CBX_INTERLACED ) ),
-                aBtnOK              ( this, ResId( BTN_OK ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) ),
+                aGrpCompression     ( this, ResId( GRP_COMPRESSION, *rPara.pResMgr ) ),
+                aFiCompression      ( this, ResId( FI_COMPRESSION, *rPara.pResMgr ) ),
+                aNumCompression     ( this, ResId( NUM_COMPRESSION, *rPara.pResMgr ) ),
+                aCbxInterlaced      ( this, ResId( CBX_INTERLACED, *rPara.pResMgr ) ),
+                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
