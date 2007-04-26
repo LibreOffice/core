@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:23:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:31:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -632,14 +632,14 @@ void ToolBox::InsertItem( const ResId& rResId, USHORT nPos )
 
     if ( nObjMask & RSC_TOOLBOXITEM_BITMAP )
     {
-        Bitmap aBmp = Bitmap( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
+        Bitmap aBmp = Bitmap( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
         aItem.maImage = Image( aBmp, IMAGE_STDBTN_COLOR );
         bImage = TRUE;
     }
     if ( nObjMask & RSC_TOOLBOXITEM_IMAGE )
     {
-        aItem.maImage = Image( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
+        aItem.maImage = Image( ResId( (RSHEADER_TYPE*)GetClassRes(), *rResId.GetResMgr() ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
         bImage = TRUE;
     }
