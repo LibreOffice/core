@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splwrap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:27:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:42:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -560,7 +560,7 @@ sal_Bool SvxSpellWrapper::SpellNext( )
         return sal_False;
     }
 
-    ResMgr* pMgr = DIALOG_MGR();
+    ResMgr& rMgr = DIALOG_MGR();
     sal_Bool bGoOn = sal_False;
 
     if ( bOtherCntnt )
@@ -604,7 +604,7 @@ sal_Bool SvxSpellWrapper::SpellNext( )
         if( bDontWrapAround )
 #else
         sal_uInt16 nResId = bReverse ? RID_SVXQB_BW_CONTINUE : RID_SVXQB_CONTINUE;
-        QueryBox aBox( pWin, ResId( nResId, pMgr ) );
+        QueryBox aBox( pWin, ResId( nResId, rMgr ) );
         if ( aBox.Execute() != RET_YES )
 #endif
 
