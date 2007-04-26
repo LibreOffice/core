@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuigaldlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-05 12:07:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:28:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -262,11 +262,11 @@ void SearchThread::ImplSearch( const INetURLObject& rStartURL,
 
 SearchProgress::SearchProgress( Window* pParent, const INetURLObject& rStartURL ) :
     ModalDialog     ( pParent, GAL_RESID(RID_SVXDLG_GALLERY_SEARCH_PROGRESS ) ),
-    aFtSearchDir    ( this, ResId( FT_SEARCH_DIR ) ),
-    aFLSearchDir   ( this, ResId( FL_SEARCH_DIR ) ),
-    aFtSearchType   ( this, ResId( FT_SEARCH_TYPE ) ),
-    aFLSearchType  ( this, ResId( FL_SEARCH_TYPE ) ),
-    aBtnCancel      ( this, ResId( BTN_CANCEL ) ),
+    aFtSearchDir    ( this, GAL_RESID( FT_SEARCH_DIR ) ),
+    aFLSearchDir   ( this, GAL_RESID( FL_SEARCH_DIR ) ),
+    aFtSearchType   ( this, GAL_RESID( FT_SEARCH_TYPE ) ),
+    aFLSearchType  ( this, GAL_RESID( FL_SEARCH_TYPE ) ),
+    aBtnCancel      ( this, GAL_RESID( BTN_CANCEL ) ),
     maSearchThread  ( this, (TPGalleryThemeProperties*) pParent, rStartURL )
 {
     FreeResource();
@@ -392,9 +392,9 @@ void SAL_CALL TakeThread::onTerminated()
 
 TakeProgress::TakeProgress( Window* pWindow ) :
     ModalDialog     ( pWindow, GAL_RESID( RID_SVXDLG_GALLERY_TAKE_PROGRESS ) ),
-    aFtTakeFile     ( this, ResId( FT_TAKE_FILE ) ),
-    aFLTakeProgress( this, ResId( FL_TAKE_PROGRESS ) ),
-    aBtnCancel      ( this, ResId( BTN_CANCEL ) ),
+    aFtTakeFile     ( this, GAL_RESID( FT_TAKE_FILE ) ),
+    aFLTakeProgress( this, GAL_RESID( FL_TAKE_PROGRESS ) ),
+    aBtnCancel      ( this, GAL_RESID( BTN_CANCEL ) ),
     maTakeThread    ( this, (TPGalleryThemeProperties*) pWindow, maTakenList )
 
 {
@@ -497,9 +497,9 @@ void TakeProgress::StartExecuteModal( const Link& rEndDialogHdl )
 
 ActualizeProgress::ActualizeProgress( Window* pWindow, GalleryTheme* pThm ) :
     ModalDialog             ( pWindow, GAL_RESID( RID_SVXDLG_GALLERY_ACTUALIZE_PROGRESS ) ),
-    aFtActualizeFile        ( this, ResId( FT_ACTUALIZE_FILE ) ),
-    aFLActualizeProgress   ( this, ResId( FL_ACTUALIZE_PROGRESS ) ),
-    aBtnCancel              ( this, ResId( BTN_CANCEL ) ),
+    aFtActualizeFile        ( this, GAL_RESID( FT_ACTUALIZE_FILE ) ),
+    aFLActualizeProgress   ( this, GAL_RESID( FL_ACTUALIZE_PROGRESS ) ),
+    aBtnCancel              ( this, GAL_RESID( BTN_CANCEL ) ),
     pTheme                  ( pThm )
 {
     FreeResource();
