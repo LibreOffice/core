@@ -4,9 +4,9 @@
  *
  *  $RCSfile: servres.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:34:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:39:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -44,18 +44,18 @@
 
 ModalDialogGROSSER_TEST_DLG::ModalDialogGROSSER_TEST_DLG( Window * pParent, const ResId & rResId, BOOL bFreeRes )
     : ModalDialog( pParent, rResId ),
-    aCheckBox1( this, ResId( 1 ) ),
-    aTriStateBox1( this, ResId( 1 ) ),
-    aOKButton1( this, ResId( 1 ) ),
-    aTimeField1( this, ResId( 1 ) ),
-    aMultiLineEdit1( this, ResId( 1 ) ),
-    aGroupBox1( this, ResId( 1 ) ),
-    aRadioButton1( this, ResId( 1 ) ),
-    aRadioButton2( this, ResId( 2 ) ),
-    aMultiListBox1( this, ResId( 1 ) ),
-    aComboBox1( this, ResId( 1 ) ),
-    aDateBox1( this, ResId( 1 ) ),
-    aFixedText1( this, ResId( 1 ) )
+    aCheckBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aTriStateBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aOKButton1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aTimeField1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aMultiLineEdit1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aGroupBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aRadioButton1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aRadioButton2( this, ResId( 2, *rResId.GetResMgr() ) ),
+    aMultiListBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aComboBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aDateBox1( this, ResId( 1, *rResId.GetResMgr() ) ),
+    aFixedText1( this, ResId( 1, *rResId.GetResMgr() ) )
 {
     if( bFreeRes ) FreeResource();
 }
