@@ -4,9 +4,9 @@
  *
  *  $RCSfile: commonpagesdbp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:58:41 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:05:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -119,13 +119,13 @@ namespace dbp
     //---------------------------------------------------------------------
     OTableSelectionPage::OTableSelectionPage(OControlWizard* _pParent)
         :OControlWizardPage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION))
-        ,m_aData            (this, ResId(FL_DATA))
-        ,m_aExplanation     (this, ResId(FT_EXPLANATION))
-        ,m_aDatasourceLabel (this, ResId(FT_DATASOURCE))
-        ,m_aDatasource      (this, ResId(LB_DATASOURCE))
-        ,m_aSearchDatabase  (this, ResId(PB_FORMDATASOURCE))
-        ,m_aTableLabel      (this, ResId(FT_TABLE))
-        ,m_aTable           (this, ResId(LB_TABLE))
+        ,m_aData            (this, ModuleRes(FL_DATA))
+        ,m_aExplanation     (this, ModuleRes(FT_EXPLANATION))
+        ,m_aDatasourceLabel (this, ModuleRes(FT_DATASOURCE))
+        ,m_aDatasource      (this, ModuleRes(LB_DATASOURCE))
+        ,m_aSearchDatabase  (this, ModuleRes(PB_FORMDATASOURCE))
+        ,m_aTableLabel      (this, ModuleRes(FT_TABLE))
+        ,m_aTable           (this, ModuleRes(LB_TABLE))
     {
         FreeResource();
 
@@ -419,8 +419,8 @@ namespace dbp
             ::svt::OLocalResourceAccess aLocalResAccess( ModuleRes( RID_PAGE_TABLESELECTION ), RSC_TABPAGE );
 
             bool bIsHiContrast = m_aTable.GetBackground().GetColor().IsDark();
-            aTableImage = Image( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE );
-            aQueryImage = Image( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY );
+            aTableImage = Image( ModuleRes( bIsHiContrast ? IMG_TABLE_HC : IMG_TABLE ) );
+            aQueryImage = Image( ModuleRes( bIsHiContrast ? IMG_QUERY_HC : IMG_QUERY ) );
         }
         lcl_fillEntries( m_aTable, aTableNames, aTableImage, CommandType::TABLE );
         lcl_fillEntries( m_aTable, aQueryNames, aQueryImage, CommandType::QUERY );
@@ -514,12 +514,12 @@ namespace dbp
     //---------------------------------------------------------------------
     ODBFieldPage::ODBFieldPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_OPTION_DBFIELD))
-        ,m_aFrame           (this, ResId(FL_DATABASEFIELD_EXPL))
-        ,m_aDescription     (this, ResId(FT_DATABASEFIELD_EXPL))
-        ,m_aQuestion        (this, ResId(FT_DATABASEFIELD_QUEST))
-        ,m_aStoreYes        (this, ResId(RB_STOREINFIELD_YES))
-        ,m_aStoreNo         (this, ResId(LB_STOREINFIELD))
-        ,m_aStoreWhere      (this, ResId(RB_STOREINFIELD_NO))
+        ,m_aFrame           (this, ModuleRes(FL_DATABASEFIELD_EXPL))
+        ,m_aDescription     (this, ModuleRes(FT_DATABASEFIELD_EXPL))
+        ,m_aQuestion        (this, ModuleRes(FT_DATABASEFIELD_QUEST))
+        ,m_aStoreYes        (this, ModuleRes(RB_STOREINFIELD_YES))
+        ,m_aStoreNo         (this, ModuleRes(LB_STOREINFIELD))
+        ,m_aStoreWhere      (this, ModuleRes(RB_STOREINFIELD_NO))
     {
         FreeResource();
         announceControls(m_aStoreYes, m_aStoreNo, m_aStoreWhere);
