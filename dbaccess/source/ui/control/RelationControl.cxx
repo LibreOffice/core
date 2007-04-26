@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationControl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:00:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:54:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -510,10 +510,10 @@ OTableListBoxControl::OTableListBoxControl(Window* _pParent,
                                                const OJoinTableView::OTableWindowMap* _pTableMap,
                                                IRelationControlInterface* _pParentDialog)
      : Window(_pParent,_rResId)
-     , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES))
-     , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE))
-     , m_lmbRightTable(         this, ResId(LB_RIGHT_TABLE))
-     , m_aFL_InvolvedFields(    this, ResId(FL_INVOLVED_FIELDS))
+     , m_aFL_InvolvedTables(    this, ResId(FL_INVOLVED_TABLES,*_rResId.GetResMgr()))
+     , m_lmbLeftTable(          this, ResId(LB_LEFT_TABLE,*_rResId.GetResMgr()))
+     , m_lmbRightTable(         this, ResId(LB_RIGHT_TABLE,*_rResId.GetResMgr()))
+     , m_aFL_InvolvedFields(    this, ResId(FL_INVOLVED_FIELDS,*_rResId.GetResMgr()))
      , m_pTableMap(_pTableMap)
      , m_pParentDialog(_pParentDialog)
     {
