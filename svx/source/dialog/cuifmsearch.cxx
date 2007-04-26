@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cuifmsearch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:08:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:27:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -128,38 +128,38 @@ using namespace ::com::sun::star::util;
 
 //========================================================================
 #define INIT_MEMBERS()  \
-     m_flSearchFor              (this, ResId(FL_SEARCHFOR))         \
-    ,m_rbSearchForText          (this, ResId(RB_SEARCHFORTEXT))     \
-    ,m_rbSearchForNull          (this, ResId(RB_SEARCHFORNULL))     \
-    ,m_rbSearchForNotNull       (this, ResId(RB_SEARCHFORNOTNULL))  \
-    ,m_cmbSearchText            (this, ResId(CMB_SEARCHTEXT))       \
-    ,m_flWhere                  (this, ResId(FL_WHERE))             \
-    ,m_ftForm                   (this, ResId(FT_FORM))              \
-    ,m_lbForm                   (this, ResId(LB_FORM))              \
-    ,m_rbAllFields              (this, ResId(RB_ALLFIELDS))         \
-    ,m_rbSingleField            (this, ResId(RB_SINGLEFIELD))       \
-    ,m_lbField                  (this, ResId(LB_FIELD))             \
-    ,m_flOptions                (this, ResId(FL_OPTIONS))           \
-    ,m_ftPosition               (this, ResId(FT_POSITION))          \
-    ,m_lbPosition               (this, ResId(LB_POSITION))          \
-    ,m_cbUseFormat              (this, ResId(CB_USEFORMATTER))      \
-    ,m_cbCase                   (this, ResId(CB_CASE))              \
-    ,m_cbBackwards              (this, ResId(CB_BACKWARD))          \
-    ,m_cbStartOver              (this, ResId(CB_STARTOVER))         \
-    ,m_cbWildCard               (this, ResId(CB_WILDCARD))          \
-    ,m_cbRegular                (this, ResId(CB_REGULAR))           \
-    ,m_cbApprox                 (this, ResId(CB_APPROX))            \
-    ,m_pbApproxSettings         (this, ResId(PB_APPROXSETTINGS))    \
-    ,m_aHalfFullFormsCJK        (this, ResId(CB_HALFFULLFORMS))     \
-    ,m_aSoundsLikeCJK           (this, ResId(CB_SOUNDSLIKECJK))     \
-    ,m_aSoundsLikeCJKSettings   (this, ResId(PB_SOUNDSLIKESETTINGS))    \
-    ,m_flState                  (this, ResId(FL_STATE))             \
-    ,m_ftRecordLabel            (this, ResId(FT_RECORDLABEL))       \
-    ,m_ftRecord                 (this, ResId(FT_RECORD))            \
-    ,m_ftHint                   (this, ResId(FT_HINT))              \
-    ,m_pbSearchAgain            (this, ResId(PB_SEARCH))            \
-    ,m_pbClose                  (this, ResId(1))                    \
-    ,m_pbHelp                   (this, ResId(1))                    \
+     m_flSearchFor              (this, SVX_RES(FL_SEARCHFOR))         \
+    ,m_rbSearchForText          (this, SVX_RES(RB_SEARCHFORTEXT))       \
+    ,m_rbSearchForNull          (this, SVX_RES(RB_SEARCHFORNULL))       \
+    ,m_rbSearchForNotNull       (this, SVX_RES(RB_SEARCHFORNOTNULL))    \
+    ,m_cmbSearchText            (this, SVX_RES(CMB_SEARCHTEXT))     \
+    ,m_flWhere                  (this, SVX_RES(FL_WHERE))             \
+    ,m_ftForm                   (this, SVX_RES(FT_FORM))                \
+    ,m_lbForm                   (this, SVX_RES(LB_FORM))                \
+    ,m_rbAllFields              (this, SVX_RES(RB_ALLFIELDS))           \
+    ,m_rbSingleField            (this, SVX_RES(RB_SINGLEFIELD))     \
+    ,m_lbField                  (this, SVX_RES(LB_FIELD))               \
+    ,m_flOptions                (this, SVX_RES(FL_OPTIONS))           \
+    ,m_ftPosition               (this, SVX_RES(FT_POSITION))            \
+    ,m_lbPosition               (this, SVX_RES(LB_POSITION))            \
+    ,m_cbUseFormat              (this, SVX_RES(CB_USEFORMATTER))        \
+    ,m_cbCase                   (this, SVX_RES(CB_CASE))                \
+    ,m_cbBackwards              (this, SVX_RES(CB_BACKWARD))            \
+    ,m_cbStartOver              (this, SVX_RES(CB_STARTOVER))           \
+    ,m_cbWildCard               (this, SVX_RES(CB_WILDCARD))            \
+    ,m_cbRegular                (this, SVX_RES(CB_REGULAR))         \
+    ,m_cbApprox                 (this, SVX_RES(CB_APPROX))          \
+    ,m_pbApproxSettings         (this, SVX_RES(PB_APPROXSETTINGS))  \
+    ,m_aHalfFullFormsCJK        (this, SVX_RES(CB_HALFFULLFORMS))       \
+    ,m_aSoundsLikeCJK           (this, SVX_RES(CB_SOUNDSLIKECJK))       \
+    ,m_aSoundsLikeCJKSettings   (this, SVX_RES(PB_SOUNDSLIKESETTINGS))  \
+    ,m_flState                  (this, SVX_RES(FL_STATE))             \
+    ,m_ftRecordLabel            (this, SVX_RES(FT_RECORDLABEL))     \
+    ,m_ftRecord                 (this, SVX_RES(FT_RECORD))          \
+    ,m_ftHint                   (this, SVX_RES(FT_HINT))                \
+    ,m_pbSearchAgain            (this, SVX_RES(PB_SEARCH))          \
+    ,m_pbClose                  (this, SVX_RES(1))                  \
+    ,m_pbHelp                   (this, SVX_RES(1))                  \
     ,m_pPreSearchFocus( NULL )
 
 //------------------------------------------------------------------------
@@ -516,7 +516,7 @@ IMPL_LINK(FmSearchDialog, OnClickedSpecialSettings, Button*, pButton )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, m_pSearchEngine->GetTransliterationFlags(), ResId(RID_SVXPAGE_JSEARCH_OPTIONS) );
+            AbstractSvxJSearchOptionsDialog* aDlg = pFact->CreateSvxJSearchOptionsDialog( this, aSet, RID_SVXPAGE_JSEARCH_OPTIONS, m_pSearchEngine->GetTransliterationFlags(), RID_SVXPAGE_JSEARCH_OPTIONS );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
             aDlg->Execute(); //CHINA001 aDlg.Execute();
 
