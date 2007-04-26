@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfedt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:31:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:10:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -59,14 +59,14 @@ SfxDocInfoEditDlg::SfxDocInfoEditDlg( Window* pParent ) :
 
     ModalDialog( pParent, SfxResId( DLG_DOCINFO_EDT ) ),
 
-    aInfoFL     ( this, ResId( FL_INFO ) ),
-    aInfo1ED    ( this, ResId( ED_INFO1 ) ),
-    aInfo2ED    ( this, ResId( ED_INFO2 ) ),
-    aInfo3ED    ( this, ResId( ED_INFO3 ) ),
-    aInfo4ED    ( this, ResId( ED_INFO4 ) ),
-    aOkBT       ( this, ResId( BT_OK ) ),
-    aCancelBT   ( this, ResId( BT_CANCEL ) ),
-    aHelpBtn    ( this, ResId( BTN_HELP ) )
+    aInfoFL     ( this, SfxResId( FL_INFO ) ),
+    aInfo1ED    ( this, SfxResId( ED_INFO1 ) ),
+    aInfo2ED    ( this, SfxResId( ED_INFO2 ) ),
+    aInfo3ED    ( this, SfxResId( ED_INFO3 ) ),
+    aInfo4ED    ( this, SfxResId( ED_INFO4 ) ),
+    aOkBT       ( this, SfxResId( BT_OK ) ),
+    aCancelBT   ( this, SfxResId( BT_CANCEL ) ),
+    aHelpBtn    ( this, SfxResId( BTN_HELP ) )
 
 {
     FreeResource();
