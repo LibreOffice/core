@@ -4,9 +4,9 @@
  *
  *  $RCSfile: msgpool.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:27:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:09:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,7 +98,7 @@ SfxSlotPool::SfxSlotPool( SfxSlotPool *pParent, ResMgr* pResManager )
  , _pUnoSlots( 0 )
 {
     if ( !_pResMgr )
-        _pResMgr = Resource::GetResManager();
+        _pResMgr = SfxApplication::GetOrCreate()->GetOffResManager_Impl();
 }
 
 //====================================================================
