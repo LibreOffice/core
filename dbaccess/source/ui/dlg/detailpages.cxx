@@ -4,9 +4,9 @@
  *
  *  $RCSfile: detailpages.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:41:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:58:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -154,16 +154,16 @@ DBG_NAME(OCommonBehaviourTabPage)
 
         if ((m_nControlFlags & CBTP_USE_OPTIONS) == CBTP_USE_OPTIONS)
         {
-            m_pOptionsLabel = new FixedText(this, ResId(FT_OPTIONS));
-            m_pOptions = new Edit(this, ResId(ET_OPTIONS));
+            m_pOptionsLabel = new FixedText(this, ModuleRes(FT_OPTIONS));
+            m_pOptions = new Edit(this, ModuleRes(ET_OPTIONS));
             m_pOptions->SetModifyHdl(getControlModifiedLink());
         }
 
         if ((m_nControlFlags & CBTP_USE_CHARSET) == CBTP_USE_CHARSET)
         {
-            m_pDataConvertFixedLine = new FixedLine(this, ResId(FL_DATACONVERT));
-            m_pCharsetLabel = new FixedText(this, ResId(FT_CHARSET));
-            m_pCharset = new ListBox(this, ResId(LB_CHARSET));
+            m_pDataConvertFixedLine = new FixedLine(this, ModuleRes(FL_DATACONVERT));
+            m_pCharsetLabel = new FixedText(this, ModuleRes(FT_CHARSET));
+            m_pCharset = new ListBox(this, ModuleRes(LB_CHARSET));
             m_pCharset->SetSelectHdl(getControlModifiedLink());
             m_pCharset->SetDropDownLineCount( 14 );
 
@@ -177,37 +177,37 @@ DBG_NAME(OCommonBehaviourTabPage)
 
         if ((m_nControlFlags & CBTP_USE_AUTOINCREMENT) == CBTP_USE_AUTOINCREMENT)
         {
-            m_pAutoFixedLine = new FixedLine(this, ResId(FL_SEPARATORAUTO));
-            m_pAutoRetrievingEnabled = new CheckBox(this, ResId(CB_RETRIEVE_AUTO));
+            m_pAutoFixedLine = new FixedLine(this, ModuleRes(FL_SEPARATORAUTO));
+            m_pAutoRetrievingEnabled = new CheckBox(this, ModuleRes(CB_RETRIEVE_AUTO));
             m_pAutoRetrievingEnabled->SetClickHdl(LINK(this, OCommonBehaviourTabPage,OnCheckBoxClick));
 
-            m_pAutoIncrementLabel = new FixedText(this, ResId(FT_AUTOINCREMENTVALUE));
-            m_pAutoIncrement = new Edit(this, ResId(ET_AUTOINCREMENTVALUE));
+            m_pAutoIncrementLabel = new FixedText(this, ModuleRes(FT_AUTOINCREMENTVALUE));
+            m_pAutoIncrement = new Edit(this, ModuleRes(ET_AUTOINCREMENTVALUE));
             m_pAutoIncrement->SetModifyHdl(getControlModifiedLink());
 
-            m_pAutoRetrievingLabel = new FixedText(this, ResId(FT_RETRIEVE_AUTO));
-            m_pAutoRetrieving = new Edit(this, ResId(ET_RETRIEVE_AUTO));
+            m_pAutoRetrievingLabel = new FixedText(this, ModuleRes(FT_RETRIEVE_AUTO));
+            m_pAutoRetrieving = new Edit(this, ModuleRes(ET_RETRIEVE_AUTO));
             m_pAutoRetrieving->SetModifyHdl(getControlModifiedLink());
         }
 
         if ((m_nControlFlags & CBTP_USE_SQL92CHECK) == CBTP_USE_SQL92CHECK)
         {
             createBehaviourFixedLine();
-            m_pIsSQL92Check = new CheckBox(this, ResId(CB_SQL92CHECK));
+            m_pIsSQL92Check = new CheckBox(this, ModuleRes(CB_SQL92CHECK));
             m_pIsSQL92Check->SetClickHdl(getControlModifiedLink());
         }
 
         if ( ( m_nControlFlags & CBTP_USE_APPENDTABLEALIAS ) == CBTP_USE_APPENDTABLEALIAS )
         {
             createBehaviourFixedLine();
-            m_pAppendTableAlias = new CheckBox(this, ResId( CB_APPENDTABLEALIAS ) );
+            m_pAppendTableAlias = new CheckBox(this, ModuleRes( CB_APPENDTABLEALIAS ) );
             m_pAppendTableAlias->SetClickHdl(getControlModifiedLink());
         }
 
         if ( ( m_nControlFlags & CBTP_AS_BEFORE_CORRELATION_NAME ) == CBTP_AS_BEFORE_CORRELATION_NAME )
         {
             createBehaviourFixedLine();
-            m_pAsBeforeCorrelationName = new CheckBox( this, ResId( CB_AS_BEFORE_CORR_NAME ) );
+            m_pAsBeforeCorrelationName = new CheckBox( this, ModuleRes( CB_AS_BEFORE_CORR_NAME ) );
             m_pAsBeforeCorrelationName->SetClickHdl(getControlModifiedLink());
 
             if ( m_pAppendTableAlias )
@@ -218,62 +218,62 @@ DBG_NAME(OCommonBehaviourTabPage)
         if ( (m_nControlFlags & CBTP_USE_PARAMETERNAMESUBST) == CBTP_USE_PARAMETERNAMESUBST )
         {
             createBehaviourFixedLine();
-            m_pParameterSubstitution = new CheckBox(this, ResId(CB_PARAMETERNAMESUBST));
+            m_pParameterSubstitution = new CheckBox(this, ModuleRes(CB_PARAMETERNAMESUBST));
             m_pParameterSubstitution->SetClickHdl(getControlModifiedLink());
         }
         if ( (m_nControlFlags & CBTP_USE_IGNOREDRIVER_PRIV) == CBTP_USE_IGNOREDRIVER_PRIV )
         {
             createBehaviourFixedLine();
-            m_pIgnoreDriverPrivileges = new CheckBox(this, ResId(CB_IGNOREDRIVER_PRIV));
+            m_pIgnoreDriverPrivileges = new CheckBox(this, ModuleRes(CB_IGNOREDRIVER_PRIV));
             m_pIgnoreDriverPrivileges->SetClickHdl(getControlModifiedLink());
         }
 
         if ( (m_nControlFlags & CBTP_USE_SUPPRESS_VERSION_COLUMN) == CBTP_USE_SUPPRESS_VERSION_COLUMN )
         {
             createBehaviourFixedLine();
-            m_pSuppressVersionColumn = new CheckBox(this, ResId(CB_SUPPRESVERSIONCL));
+            m_pSuppressVersionColumn = new CheckBox(this, ModuleRes(CB_SUPPRESVERSIONCL));
             m_pSuppressVersionColumn->SetClickHdl(getControlModifiedLink());
         }
 
         if ( (m_nControlFlags & CBTP_USE_ENABLEOUTERJOIN) == CBTP_USE_ENABLEOUTERJOIN )
         {
             createBehaviourFixedLine();
-            m_pEnableOuterJoin = new CheckBox(this, ResId(CB_ENABLEOUTERJOIN));
+            m_pEnableOuterJoin = new CheckBox(this, ModuleRes(CB_ENABLEOUTERJOIN));
             m_pEnableOuterJoin->SetClickHdl(getControlModifiedLink());
         }
 
         if ( (m_nControlFlags & CBTP_USE_CATALOG) == CBTP_USE_CATALOG )
         {
             createBehaviourFixedLine();
-            m_pCatalog = new CheckBox(this, ResId(CB_CATALOG));
+            m_pCatalog = new CheckBox(this, ModuleRes(CB_CATALOG));
             m_pCatalog->SetClickHdl(getControlModifiedLink());
         }
 
         if ( (m_nControlFlags & CBTP_USE_SCHEMA) == CBTP_USE_SCHEMA )
         {
             createBehaviourFixedLine();
-            m_pSchema = new CheckBox(this, ResId(CB_SCHEMA));
+            m_pSchema = new CheckBox(this, ModuleRes(CB_SCHEMA));
             m_pSchema->SetClickHdl(getControlModifiedLink());
         }
 
         if ( (m_nControlFlags & CBTP_USE_INDEXAPPENDIX) == CBTP_USE_INDEXAPPENDIX )
         {
             createBehaviourFixedLine();
-            m_pIndexAppendix = new CheckBox(this, ResId(CB_IGNOREINDEXAPPENDIX));
+            m_pIndexAppendix = new CheckBox(this, ModuleRes(CB_IGNOREINDEXAPPENDIX));
             m_pIndexAppendix->SetClickHdl(getControlModifiedLink());
         }
 
         if ( (m_nControlFlags & CBTP_USE_DOSLINEENDS) == CBTP_USE_DOSLINEENDS )
         {
             createBehaviourFixedLine();
-            m_pDosLineEnds = new CheckBox(this, ResId(CB_DOSLINEENDS));
+            m_pDosLineEnds = new CheckBox(this, ModuleRes(CB_DOSLINEENDS));
             m_pDosLineEnds->SetClickHdl(getControlModifiedLink());
         }
 
         if ( (m_nControlFlags & CBTP_USE_BOOLEANCOMPARISON) == CBTP_USE_BOOLEANCOMPARISON )
         {
-            m_pBooleanComprisonModeLabel = new FixedText(this, ResId(FT_BOOLEANCOMPARISON));
-            m_pBooleanComprisonMode = new ListBox(this, ResId(LB_BOOLEANCOMPARISON));
+            m_pBooleanComprisonModeLabel = new FixedText(this, ModuleRes(FT_BOOLEANCOMPARISON));
+            m_pBooleanComprisonMode = new ListBox(this, ModuleRes(LB_BOOLEANCOMPARISON));
             m_pBooleanComprisonMode->SetDropDownLineCount(4);
             m_pBooleanComprisonMode->SetSelectHdl(getControlModifiedLink());
         }
@@ -362,7 +362,7 @@ DBG_NAME(OCommonBehaviourTabPage)
     void OCommonBehaviourTabPage::createBehaviourFixedLine()
     {
         if ( !m_pDSFixedLine )
-            m_pDSFixedLine = new FixedLine(this, ResId(FL_DATAHANDLING));
+            m_pDSFixedLine = new FixedLine(this, ModuleRes(FL_DATAHANDLING));
     }
 
     // -----------------------------------------------------------------------
@@ -660,10 +660,10 @@ DBG_NAME(ODbaseDetailsPage)
 //------------------------------------------------------------------------
     ODbaseDetailsPage::ODbaseDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_DBASE, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aShowDeleted     (this, ResId(CB_SHOWDELETEDROWS))
-        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
-        ,m_aFT_Message      (this, ResId( FT_SPECIAL_MESSAGE) )
-        ,m_aIndexes         (this, ResId(PB_INDICIES))
+        ,m_aShowDeleted     (this, ModuleRes(CB_SHOWDELETEDROWS))
+        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
+        ,m_aFT_Message      (this, ModuleRes( FT_SPECIAL_MESSAGE) )
+        ,m_aIndexes         (this, ModuleRes(PB_INDICIES))
     {
         DBG_CTOR(ODbaseDetailsPage,NULL);
 
@@ -785,8 +785,8 @@ DBG_NAME(OAdoDetailsPage)
     //========================================================================
     OOdbcDetailsPage::OOdbcDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ODBC, _rCoreAttrs, CBTP_USE_CHARSET | CBTP_USE_OPTIONS,false)
-        ,m_aFL_1        (this, ResId(FL_SEPARATOR1))
-        ,m_aUseCatalog  (this, ResId(CB_USECATALOG))
+        ,m_aFL_1        (this, ModuleRes(FL_SEPARATOR1))
+        ,m_aUseCatalog  (this, ModuleRes(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
         FreeResource();
@@ -845,12 +845,12 @@ DBG_NAME(OAdoDetailsPage)
     OUserDriverDetailsPage::OUserDriverDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_USERDRIVER, _rCoreAttrs,
         CBTP_USE_CHARSET | CBTP_USE_OPTIONS ,false)
-        ,m_aFTHostname      (this, ResId(FT_HOSTNAME))
-        ,m_aEDHostname      (this, ResId(ET_HOSTNAME))
-        ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
-        ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
-        ,m_aSeparator2      (this, ResId(FL_DATAHANDLING))
-        ,m_aUseCatalog      (this, ResId(CB_USECATALOG))
+        ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
+        ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
+        ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
+        ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
+        ,m_aSeparator2      (this, ModuleRes(FL_DATAHANDLING))
+        ,m_aUseCatalog      (this, ModuleRes(CB_USECATALOG))
     {
         m_aUseCatalog.SetToggleHdl(getControlModifiedLink());
         FreeResource();
@@ -932,14 +932,14 @@ DBG_NAME(OAdoDetailsPage)
     //========================================================================
     OGeneralSpecialJDBCDetailsPage::OGeneralSpecialJDBCDetailsPage( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, const char* _pDriverName)
         :OCommonBehaviourTabPage(pParent, _nResId, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
-        ,m_aFTHostname      (this, ResId(FT_HOSTNAME))
-        ,m_aEDHostname      (this, ResId(ET_HOSTNAME))
-        ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
-        ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
-        ,m_aFTDriverClass   (this, ResId(FT_JDBCDRIVERCLASS))
-        ,m_aEDDriverClass   (this, ResId(ET_JDBCDRIVERCLASS))
-        ,m_aTestJavaDriver  (this, ResId(PB_TESTDRIVERCLASS))
+        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
+        ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
+        ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
+        ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
+        ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
+        ,m_aFTDriverClass   (this, ModuleRes(FT_JDBCDRIVERCLASS))
+        ,m_aEDDriverClass   (this, ModuleRes(ET_JDBCDRIVERCLASS))
+        ,m_aTestJavaDriver  (this, ModuleRes(PB_TESTDRIVERCLASS))
         ,m_nPortId(_nPortId)
     {
         m_aEDDriverClass.SetModifyHdl(getControlModifiedLink());
@@ -1081,20 +1081,20 @@ DBG_NAME(OAdoDetailsPage)
     //========================================================================
     OAdabasDetailsPage::OAdabasDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_ADABAS, _rCoreAttrs, CBTP_USE_CHARSET ,false)
-        ,m_aFTHostname      (this, ResId(FT_HOSTNAME))
-        ,m_aEDHostname      (this, ResId(ET_HOSTNAME))
-        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
-        ,m_FT_CACHE_SIZE(       this, ResId( FT_CACHE_SIZE      ) )
-        ,m_NF_CACHE_SIZE(       this, ResId( NF_CACHE_SIZE      ) )
-        ,m_FT_DATA_INCREMENT(   this, ResId( FT_DATA_INCREMENT  ) )
-        ,m_NF_DATA_INCREMENT(   this, ResId( NF_DATA_INCREMENT  ) )
-        ,m_aFL_2(               this, ResId( FL_SEPARATOR2      ) )
-        ,m_FT_CTRLUSERNAME(     this, ResId( FT_CTRLUSERNAME    ) )
-        ,m_ET_CTRLUSERNAME(     this, ResId( ET_CTRLUSERNAME    ) )
-        ,m_FT_CTRLPASSWORD(     this, ResId( FT_CTRLPASSWORD    ) )
-        ,m_ET_CTRLPASSWORD(     this, ResId( ET_CTRLPASSWORD    ) )
-        ,m_CB_SHUTDB(           this, ResId( CB_SHUTDB          ) )
-        ,m_PB_STAT(             this, ResId( PB_STAT            ) )
+        ,m_aFTHostname      (this, ModuleRes(FT_HOSTNAME))
+        ,m_aEDHostname      (this, ModuleRes(ET_HOSTNAME))
+        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
+        ,m_FT_CACHE_SIZE(       this, ModuleRes( FT_CACHE_SIZE      ) )
+        ,m_NF_CACHE_SIZE(       this, ModuleRes( NF_CACHE_SIZE      ) )
+        ,m_FT_DATA_INCREMENT(   this, ModuleRes( FT_DATA_INCREMENT  ) )
+        ,m_NF_DATA_INCREMENT(   this, ModuleRes( NF_DATA_INCREMENT  ) )
+        ,m_aFL_2(               this, ModuleRes( FL_SEPARATOR2      ) )
+        ,m_FT_CTRLUSERNAME(     this, ModuleRes( FT_CTRLUSERNAME    ) )
+        ,m_ET_CTRLUSERNAME(     this, ModuleRes( ET_CTRLUSERNAME    ) )
+        ,m_FT_CTRLPASSWORD(     this, ModuleRes( FT_CTRLPASSWORD    ) )
+        ,m_ET_CTRLPASSWORD(     this, ModuleRes( ET_CTRLPASSWORD    ) )
+        ,m_CB_SHUTDB(           this, ModuleRes( CB_SHUTDB          ) )
+        ,m_PB_STAT(             this, ModuleRes( PB_STAT            ) )
     {
         m_aEDHostname.SetModifyHdl(getControlModifiedLink());
 
@@ -1250,14 +1250,14 @@ DBG_NAME(OAdoDetailsPage)
     //========================================================================
     OLDAPDetailsPage::OLDAPDetailsPage( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OCommonBehaviourTabPage(pParent, PAGE_LDAP, _rCoreAttrs,0,false)
-        ,m_aFL_1            (this, ResId( FL_SEPARATOR1) )
-        ,m_aBaseDN          (this, ResId(FT_BASEDN))
-        ,m_aETBaseDN        (this, ResId(ET_BASEDN))
-         ,m_aCBUseSSL        (this, ResId(CB_USESSL))
-        ,m_aPortNumber      (this, ResId(FT_PORTNUMBER))
-        ,m_aNFPortNumber    (this, ResId(NF_PORTNUMBER))
-        ,m_aFTRowCount      (this, ResId(FT_LDAPROWCOUNT))
-        ,m_aNFRowCount      (this, ResId(NF_LDAPROWCOUNT))
+        ,m_aFL_1            (this, ModuleRes( FL_SEPARATOR1) )
+        ,m_aBaseDN          (this, ModuleRes(FT_BASEDN))
+        ,m_aETBaseDN        (this, ModuleRes(ET_BASEDN))
+         ,m_aCBUseSSL        (this, ModuleRes(CB_USESSL))
+        ,m_aPortNumber      (this, ModuleRes(FT_PORTNUMBER))
+        ,m_aNFPortNumber    (this, ModuleRes(NF_PORTNUMBER))
+        ,m_aFTRowCount      (this, ModuleRes(FT_LDAPROWCOUNT))
+        ,m_aNFRowCount      (this, ModuleRes(NF_LDAPROWCOUNT))
     {
         m_aETBaseDN.SetModifyHdl(getControlModifiedLink());
         m_aCBUseSSL.SetToggleHdl(getControlModifiedLink());
