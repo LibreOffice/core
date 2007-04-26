@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 10:10:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 13:09:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -650,19 +650,19 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     aLine2FL        ( this, SfxResId( FL_FILE_2 ) ),
     aCreateFt       ( this, SfxResId( FT_CREATE ) ),
     aCreateValFt    ( this, SfxResId( FT_CREATE_VAL ) ),
-    aTimeLogFt      ( this, SfxResId( FT_TIMELOG ) ),
-    aTimeLogValFt   ( this, SfxResId( FT_TIMELOG_VAL ) ),
     aChangeFt       ( this, SfxResId( FT_CHANGE ) ),
     aChangeValFt    ( this, SfxResId( FT_CHANGE_VAL ) ),
     aSignedFt       ( this, SfxResId( FT_SIGNED ) ),
     aSignedValFt    ( this, SfxResId( FT_SIGNED_VAL ) ),
     aSignatureBtn   ( this, SfxResId( BTN_SIGNATURE ) ),
-    aDocNoFt        ( this, SfxResId( FT_DOCNO ) ),
-    aDocNoValFt     ( this, SfxResId( FT_DOCNO_VAL ) ),
     aPrintFt        ( this, SfxResId( FT_PRINT ) ),
     aPrintValFt     ( this, SfxResId( FT_PRINT_VAL ) ),
-    aDeleteBtn      ( this, SfxResId( BTN_DELETE ) ),
+    aTimeLogFt      ( this, SfxResId( FT_TIMELOG ) ),
+    aTimeLogValFt   ( this, SfxResId( FT_TIMELOG_VAL ) ),
+    aDocNoFt        ( this, SfxResId( FT_DOCNO ) ),
+    aDocNoValFt     ( this, SfxResId( FT_DOCNO_VAL ) ),
     aUseUserDataCB  ( this, SfxResId( CB_USE_USERDATA ) ),
+    aDeleteBtn      ( this, SfxResId( BTN_DELETE ) ),
 
     aLine3FL        ( this, SfxResId( FL_FILE_3 ) ),
     aTemplFt        ( this, SfxResId( FT_TEMPL ) ),
@@ -678,12 +678,8 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
     FreeResource();
 
     ImplUpdateSignatures();
-
     aDeleteBtn.SetClickHdl( LINK( this, SfxDocumentPage, DeleteHdl ) );
     aSignatureBtn.SetClickHdl( LINK( this, SfxDocumentPage, SignatureHdl ) );
-    WinBits nStyle = aFileValFt.GetStyle();
-    nStyle |= WB_PATHELLIPSIS;
-    aFileValFt.SetStyle( nStyle );
 
     // if the button text is too wide, then broaden it
     const long nOffset = 12;
@@ -744,8 +740,6 @@ IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
 
         ImplUpdateSignatures();
     }
-
-
 
     return 0;
 }
