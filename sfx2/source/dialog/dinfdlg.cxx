@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:49:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:10:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -494,14 +494,14 @@ SfxDocumentDescPage::SfxDocumentDescPage( Window * pParent, const SfxItemSet& rI
 
     SfxTabPage( pParent, SfxResId( TP_DOCINFODESC ), rItemSet ),
 
-    aTitleFt    ( this, ResId( FT_TITLE ) ),
-    aTitleEd    ( this, ResId( ED_TITLE ) ),
-    aThemaFt    ( this, ResId( FT_THEMA ) ),
-    aThemaEd    ( this, ResId( ED_THEMA ) ),
-    aKeywordsFt ( this, ResId( FT_KEYWORDS ) ),
-    aKeywordsEd ( this, ResId( ED_KEYWORDS ) ),
-    aCommentFt  ( this, ResId( FT_COMMENT ) ),
-    aCommentEd  ( this, ResId( ED_COMMENT ) ),
+    aTitleFt    ( this, SfxResId( FT_TITLE ) ),
+    aTitleEd    ( this, SfxResId( ED_TITLE ) ),
+    aThemaFt    ( this, SfxResId( FT_THEMA ) ),
+    aThemaEd    ( this, SfxResId( ED_THEMA ) ),
+    aKeywordsFt ( this, SfxResId( FT_KEYWORDS ) ),
+    aKeywordsEd ( this, SfxResId( ED_KEYWORDS ) ),
+    aCommentFt  ( this, SfxResId( FT_COMMENT ) ),
+    aCommentEd  ( this, SfxResId( ED_COMMENT ) ),
 
     pInfoItem   ( NULL )
 
@@ -635,41 +635,41 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
     SfxTabPage( pParent, SfxResId( TP_DOCINFODOC ), rItemSet ),
 
-    aBmp1           ( this, ResId( BMP_FILE_1 ) ),
-    aNameED         ( this, ResId( ED_FILE_NAME ) ),
+    aBmp1           ( this, SfxResId( BMP_FILE_1 ) ),
+    aNameED         ( this, SfxResId( ED_FILE_NAME ) ),
 
-    aLine1FL        ( this, ResId( FL_FILE_1 ) ),
-    aTypeFT         ( this, ResId( FT_FILE_TYP ) ),
-    aShowTypeFT     ( this, ResId( FT_FILE_SHOW_TYP ) ),
-    aReadOnlyCB     ( this, ResId( CB_FILE_READONLY ) ),
-    aFileFt         ( this, ResId( FT_FILE ) ),
-    aFileValFt      ( this, ResId( FT_FILE_VAL ) ),
-    aSizeFT         ( this, ResId( FT_FILE_SIZE ) ),
-    aShowSizeFT     ( this, ResId( FT_FILE_SHOW_SIZE ) ),
+    aLine1FL        ( this, SfxResId( FL_FILE_1 ) ),
+    aTypeFT         ( this, SfxResId( FT_FILE_TYP ) ),
+    aShowTypeFT     ( this, SfxResId( FT_FILE_SHOW_TYP ) ),
+    aReadOnlyCB     ( this, SfxResId( CB_FILE_READONLY ) ),
+    aFileFt         ( this, SfxResId( FT_FILE ) ),
+    aFileValFt      ( this, SfxResId( FT_FILE_VAL ) ),
+    aSizeFT         ( this, SfxResId( FT_FILE_SIZE ) ),
+    aShowSizeFT     ( this, SfxResId( FT_FILE_SHOW_SIZE ) ),
 
-    aLine2FL        ( this, ResId( FL_FILE_2 ) ),
-    aCreateFt       ( this, ResId( FT_CREATE ) ),
-    aCreateValFt    ( this, ResId( FT_CREATE_VAL ) ),
-    aTimeLogFt      ( this, ResId( FT_TIMELOG ) ),
-    aTimeLogValFt   ( this, ResId( FT_TIMELOG_VAL ) ),
-    aChangeFt       ( this, ResId( FT_CHANGE ) ),
-    aChangeValFt    ( this, ResId( FT_CHANGE_VAL ) ),
-    aSignedFt       ( this, ResId( FT_SIGNED ) ),
-    aSignedValFt    ( this, ResId( FT_SIGNED_VAL ) ),
-    aSignatureBtn   ( this, ResId( BTN_SIGNATURE ) ),
-    aDocNoFt        ( this, ResId( FT_DOCNO ) ),
-    aDocNoValFt     ( this, ResId( FT_DOCNO_VAL ) ),
-    aPrintFt        ( this, ResId( FT_PRINT ) ),
-    aPrintValFt     ( this, ResId( FT_PRINT_VAL ) ),
-    aDeleteBtn      ( this, ResId( BTN_DELETE ) ),
-    aUseUserDataCB  ( this, ResId( CB_USE_USERDATA ) ),
+    aLine2FL        ( this, SfxResId( FL_FILE_2 ) ),
+    aCreateFt       ( this, SfxResId( FT_CREATE ) ),
+    aCreateValFt    ( this, SfxResId( FT_CREATE_VAL ) ),
+    aTimeLogFt      ( this, SfxResId( FT_TIMELOG ) ),
+    aTimeLogValFt   ( this, SfxResId( FT_TIMELOG_VAL ) ),
+    aChangeFt       ( this, SfxResId( FT_CHANGE ) ),
+    aChangeValFt    ( this, SfxResId( FT_CHANGE_VAL ) ),
+    aSignedFt       ( this, SfxResId( FT_SIGNED ) ),
+    aSignedValFt    ( this, SfxResId( FT_SIGNED_VAL ) ),
+    aSignatureBtn   ( this, SfxResId( BTN_SIGNATURE ) ),
+    aDocNoFt        ( this, SfxResId( FT_DOCNO ) ),
+    aDocNoValFt     ( this, SfxResId( FT_DOCNO_VAL ) ),
+    aPrintFt        ( this, SfxResId( FT_PRINT ) ),
+    aPrintValFt     ( this, SfxResId( FT_PRINT_VAL ) ),
+    aDeleteBtn      ( this, SfxResId( BTN_DELETE ) ),
+    aUseUserDataCB  ( this, SfxResId( CB_USE_USERDATA ) ),
 
-    aLine3FL        ( this, ResId( FL_FILE_3 ) ),
-    aTemplFt        ( this, ResId( FT_TEMPL ) ),
-    aTemplValFt     ( this, ResId( FT_TEMPL_VAL ) ),
+    aLine3FL        ( this, SfxResId( FL_FILE_3 ) ),
+    aTemplFt        ( this, SfxResId( FT_TEMPL ) ),
+    aTemplValFt     ( this, SfxResId( FT_TEMPL_VAL ) ),
 
-    aUnknownSize    ( ResId( STR_UNKNOWNSIZE ) ),
-    aMultiSignedStr ( ResId( STR_MULTSIGNED ) ),
+    aUnknownSize    ( SfxResId( STR_UNKNOWNSIZE ) ),
+    aMultiSignedStr ( SfxResId( STR_MULTSIGNED ) ),
 
     bEnableUseUserData  ( FALSE ),
     bHandleDelete       ( FALSE )
@@ -997,24 +997,24 @@ SfxInternetPage::SfxInternetPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
     SfxTabPage( pParent, SfxResId( TP_DOCINFORELOAD ), rItemSet ),
 
-    aRBNoAutoUpdate     ( this, ResId( RB_NOAUTOUPDATE      ) ),
+    aRBNoAutoUpdate     ( this, SfxResId( RB_NOAUTOUPDATE       ) ),
 
-    aRBReloadUpdate     ( this, ResId( RB_RELOADUPDATE      ) ),
+    aRBReloadUpdate     ( this, SfxResId( RB_RELOADUPDATE       ) ),
 
-    aRBForwardUpdate    ( this, ResId( RB_FORWARDUPDATE     ) ),
-    aFTEvery            ( this, ResId( FT_EVERY             ) ),
-    aNFReload           ( this, ResId( ED_RELOAD            ) ),
-    aFTReloadSeconds    ( this, ResId( FT_RELOADSECS        ) ),
-    aFTAfter            ( this, ResId( FT_AFTER             ) ),
-    aNFAfter            ( this, ResId( ED_FORWARD           ) ),
-    aFTAfterSeconds     ( this, ResId( FT_FORWARDSECS       ) ),
-    aFTURL              ( this, ResId( FT_URL               ) ),
-    aEDForwardURL       ( this, ResId( ED_URL               ) ),
-    aPBBrowseURL        ( this, ResId( PB_BROWSEURL         ) ),
-    aFTFrame            ( this, ResId( FT_FRAME             ) ),
-    aCBFrame            ( this, ResId( CB_FRAME             ) ),
+    aRBForwardUpdate    ( this, SfxResId( RB_FORWARDUPDATE      ) ),
+    aFTEvery            ( this, SfxResId( FT_EVERY              ) ),
+    aNFReload           ( this, SfxResId( ED_RELOAD         ) ),
+    aFTReloadSeconds    ( this, SfxResId( FT_RELOADSECS     ) ),
+    aFTAfter            ( this, SfxResId( FT_AFTER              ) ),
+    aNFAfter            ( this, SfxResId( ED_FORWARD            ) ),
+    aFTAfterSeconds     ( this, SfxResId( FT_FORWARDSECS        ) ),
+    aFTURL              ( this, SfxResId( FT_URL                ) ),
+    aEDForwardURL       ( this, SfxResId( ED_URL                ) ),
+    aPBBrowseURL        ( this, SfxResId( PB_BROWSEURL          ) ),
+    aFTFrame            ( this, SfxResId( FT_FRAME              ) ),
+    aCBFrame            ( this, SfxResId( CB_FRAME              ) ),
 
-    aForwardErrorMessg  (       ResId( STR_FORWARD_ERRMSSG  ) ),
+    aForwardErrorMessg  (       SfxResId( STR_FORWARD_ERRMSSG   ) ),
     pInfoItem           ( NULL ),
     pFileDlg            ( NULL ),
     eState              ( S_Init )
@@ -1339,15 +1339,15 @@ SfxDocumentUserPage::SfxDocumentUserPage( Window* pParent,
     SfxTabPage( pParent, SfxResId( TP_DOCINFOUSER ), rItemSet ),
 
     bLabelModified  ( FALSE ),
-    aInfo1Ft        ( this, ResId( FT_INFO1 ) ),
-    aInfo1Ed        ( this, ResId( ED_INFO1 ) ),
-    aInfo2Ft        ( this, ResId( FT_INFO2 ) ),
-    aInfo2Ed        ( this, ResId( ED_INFO2 ) ),
-    aInfo3Ft        ( this, ResId( FT_INFO3 ) ),
-    aInfo3Ed        ( this, ResId( ED_INFO3 ) ),
-    aInfo4Ft        ( this, ResId( FT_INFO4 ) ),
-    aInfo4Ed        ( this, ResId( ED_INFO4 ) ),
-    aEditLabelBtn   ( this, ResId( BTN_EDITLABEL ) ),
+    aInfo1Ft        ( this, SfxResId( FT_INFO1 ) ),
+    aInfo1Ed        ( this, SfxResId( ED_INFO1 ) ),
+    aInfo2Ft        ( this, SfxResId( FT_INFO2 ) ),
+    aInfo2Ed        ( this, SfxResId( ED_INFO2 ) ),
+    aInfo3Ft        ( this, SfxResId( FT_INFO3 ) ),
+    aInfo3Ed        ( this, SfxResId( ED_INFO3 ) ),
+    aInfo4Ft        ( this, SfxResId( FT_INFO4 ) ),
+    aInfo4Ed        ( this, SfxResId( ED_INFO4 ) ),
+    aEditLabelBtn   ( this, SfxResId( BTN_EDITLABEL ) ),
 
     pInfoItem       ( NULL )
 
