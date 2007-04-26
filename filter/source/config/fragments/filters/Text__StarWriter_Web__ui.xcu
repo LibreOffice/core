@@ -1,7 +1,6 @@
     <node oor:name="Text (StarWriter/Web)">
         <prop oor:name="UIName">
             <value xml:lang="en-US">Text (%productname% Writer/Web)</value>
-            <value xml:lang="de">Text (%productname% Writer/Web)</value>
-            <value xml:lang="x-translate">Text (%productname% Writer/Web)</value>
+                        <value xml:lang="x-translate">Text (%productname% Writer/Web)</value>
         </prop>
     </node>
