@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 17:52:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:34:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -125,6 +125,7 @@ private:
     SAL_DLLPRIVATE void        ImplModified();
     SAL_DLLPRIVATE XubString   ImplGetText() const;
     SAL_DLLPRIVATE void        ImplRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN, bool bLayout = false );
+    SAL_DLLPRIVATE void        ImplInvalidateOrRepaint( xub_StrLen nStart = 0, xub_StrLen nEnd = STRING_LEN );
     SAL_DLLPRIVATE void        ImplDelete( const Selection& rSelection, BYTE nDirection, BYTE nMode );
     SAL_DLLPRIVATE void        ImplSetText( const XubString& rStr, const Selection* pNewSelection = 0 );
     SAL_DLLPRIVATE void        ImplInsertText( const XubString& rStr, const Selection* pNewSelection = 0, sal_Bool bIsUserInput = sal_False );
