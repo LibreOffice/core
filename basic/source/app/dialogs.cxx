@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialogs.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:11:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:31:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,15 +106,16 @@
 #include "basic.hrc"
 
 #include "app.hxx"
+#include "basrid.hxx"
 
 #include "_version.h"
 
 AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 : ModalDialog( pParent, id )
-, a1( this, ResId( 1 ) )
-, a4( this, ResId( 4 ) )
-, aVersionString( this, ResId( RID_VERSIONSTRING ) )
-, aOk  ( this, ResId( RID_OK ) )
+, a1( this, ResId( 1, *id.GetResMgr() ) )
+, a4( this, ResId( 4, *id.GetResMgr() ) )
+, aVersionString( this, ResId( RID_VERSIONSTRING, *id.GetResMgr() ) )
+, aOk  ( this, ResId( RID_OK, *id.GetResMgr() ) )
 {
     FreeResource();
 }
@@ -123,10 +124,10 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& id )
 
 FindDialog::FindDialog( Window* pParent, const ResId& id, String& Text )
 : ModalDialog( pParent, id )
-, aFT1( this, ResId( RID_FIXEDTEXT1 ) )
-, aFind( this, ResId( RID_FIND ) )
-, aOk( this, ResId( RID_OK ) )
-, aCancel( this, ResId( RID_CANCEL ) )
+, aFT1( this, ResId( RID_FIXEDTEXT1, *id.GetResMgr() ) )
+, aFind( this, ResId( RID_FIND, *id.GetResMgr() ) )
+, aOk( this, ResId( RID_OK, *id.GetResMgr() ) )
+, aCancel( this, ResId( RID_CANCEL, *id.GetResMgr() ) )
 {
     FreeResource();
     pFind = &Text;
@@ -148,12 +149,12 @@ IMPL_LINK_INLINE_END( FindDialog, ButtonClick, Button *, pB )
 
 ReplaceDialog::ReplaceDialog(Window* pParent, const ResId& id, String& Old, String& New )
 : ModalDialog( pParent, id )
-, aFT1( this, ResId( RID_FIXEDTEXT1 ) )
-, aFT2( this, ResId( RID_FIXEDTEXT2 ) )
-, aFind( this, ResId( RID_FIND ) )
-, aReplace(this, ResId( RID_REPLACE ) )
-, aOk( this, ResId( RID_OK ) )
-, aCancel( this, ResId( RID_CANCEL ) )
+, aFT1( this, ResId( RID_FIXEDTEXT1, *id.GetResMgr() ) )
+, aFT2( this, ResId( RID_FIXEDTEXT2, *id.GetResMgr() ) )
+, aFind( this, ResId( RID_FIND, *id.GetResMgr() ) )
+, aReplace(this, ResId( RID_REPLACE, *id.GetResMgr() ) )
+, aOk( this, ResId( RID_OK, *id.GetResMgr() ) )
+, aCancel( this, ResId( RID_CANCEL, *id.GetResMgr() ) )
 {
     FreeResource();
     pFind = &Old;
@@ -186,9 +187,9 @@ void CheckButtons( ComboBox &aCB, Button &aNewB, Button &aDelB )
 
 
 ConfEdit::ConfEdit( Window* pParent, USHORT nResText, USHORT nResEdit, USHORT nResButton, const ByteString& aKN, Config &aConf )
-: PushButton( pParent, ResId(nResButton) )
-, aText( pParent, ResId(nResText) )
-, aEdit( pParent, ResId(nResEdit) )
+: PushButton( pParent, SttResId(nResButton) )
+, aText( pParent, SttResId(nResText) )
+, aEdit( pParent, SttResId(nResEdit) )
 , aKeyName(aKN)
 {
     aConf.SetGroup("Misc");
@@ -227,7 +228,7 @@ void ConfEdit::Click()
 
 OptionsDialog::OptionsDialog( Window* pParent, const ResId& aResId )
 : TabDialog( pParent, aResId )
-, aTabCtrl( this, ResId( RES_TC_OPTIONS ) )
+, aTabCtrl( this, ResId( RES_TC_OPTIONS, *aResId.GetResMgr() ) )
 , aOK( this )
 , aCancel( this )
 , aConfig( Config::GetConfigName( Config::GetDefDirectory(), CUniString("testtool") ) )
@@ -329,22 +330,22 @@ const ByteString ProfilePrefix("_profile_");
 const USHORT ProfilePrefixLen = ProfilePrefix.Len();
 
 ProfileOptions::ProfileOptions( Window* pParent, Config &rConfig )
-: TabPage( pParent, ResId( RID_TP_PROFILE ) )
+: TabPage( pParent, SttResId( RID_TP_PROFILE ) )
 , rConf( rConfig )
 
-, aFlProfile( this, ResId( RID_FL_PROFILE ) )
-, aCbProfile( this, ResId( RID_CB_PROFILE ) )
-, aPbNewProfile( this, ResId( RID_PB_NEW_PROFILE ) )
-, aPbDelProfile( this, ResId( RID_PD_DEL_PROFILE ) )
+, aFlProfile( this, SttResId( RID_FL_PROFILE ) )
+, aCbProfile( this, SttResId( RID_CB_PROFILE ) )
+, aPbNewProfile( this, SttResId( RID_PB_NEW_PROFILE ) )
+, aPbDelProfile( this, SttResId( RID_PD_DEL_PROFILE ) )
 
-, aDirs( this, ResId(FL_DIRECTORIES) )
+, aDirs( this, SttResId(FL_DIRECTORIES) )
 , aLog( this, LOG_TEXT, LOG_NAME, LOG_SET ,"LogBaseDir", rConfig )
 , aBasis( this, BASIS_TEXT, BASIS_NAME, BASIS_SET ,"BaseDir", rConfig )
 , aHID( this, HID_TEXT, HID_NAME, HID_SET ,"HIDDir", rConfig )
 
-, aAutoReload( this, ResId(CB_AUTORELOAD) )
-, aAutoSave( this, ResId(CB_AUTOSAVE) )
-, aStopOnSyntaxError( this, ResId(CB_STOPONSYNTAXERRORS) )
+, aAutoReload( this, SttResId(CB_AUTORELOAD) )
+, aAutoSave( this, SttResId(CB_AUTOSAVE) )
+, aStopOnSyntaxError( this, SttResId(CB_STOPONSYNTAXERRORS) )
 {
     FreeResource();
 
@@ -471,19 +472,19 @@ void ProfileOptions::Save( Config &rConfig )
 }
 
 MiscOptions::MiscOptions( Window* pParent, Config &aConfig )
-: TabPage( pParent, ResId( RID_TP_MISC ) )
-, aFLCommunication( this, ResId(FL_COMMUNICATION) )
-, aFTHost( this, ResId(FT_HOST) )
-, aEDHost( this, ResId(ED_HOST) )
-, aFTTTPort( this, ResId(FT_TTPORT) )
-, aNFTTPort( this, ResId(NF_TTPORT) )
-, aFTUNOPort( this, ResId(FT_UNOPORT) )
-, aNFUNOPort( this, ResId(NF_UNOPORT) )
-, aOther( this, ResId(FL_OTHER) )
-, aTimeoutText( this, ResId(TIMEOUT_TEXT) )
-, aServerTimeout( this, ResId(SERVER_TIMEOUT) )
-, aFTLRU( this, ResId(FT_LRU) )
-, aTFMaxLRU( this, ResId(TF_MAX_LRU) )
+: TabPage( pParent, SttResId( RID_TP_MISC ) )
+, aFLCommunication( this, SttResId(FL_COMMUNICATION) )
+, aFTHost( this, SttResId(FT_HOST) )
+, aEDHost( this, SttResId(ED_HOST) )
+, aFTTTPort( this, SttResId(FT_TTPORT) )
+, aNFTTPort( this, SttResId(NF_TTPORT) )
+, aFTUNOPort( this, SttResId(FT_UNOPORT) )
+, aNFUNOPort( this, SttResId(NF_UNOPORT) )
+, aOther( this, SttResId(FL_OTHER) )
+, aTimeoutText( this, SttResId(TIMEOUT_TEXT) )
+, aServerTimeout( this, SttResId(SERVER_TIMEOUT) )
+, aFTLRU( this, SttResId(FT_LRU) )
+, aTFMaxLRU( this, SttResId(TF_MAX_LRU) )
 {
     FreeResource();
 
@@ -532,14 +533,14 @@ void MiscOptions::Save( Config &aConfig )
 
 
 FontOptions::FontOptions( Window* pParent, Config &aConfig )
-: TabPage( pParent, ResId( RID_TP_FONT ) )
-, aFTFontName( this, ResId(FT_FONTNAME) )
-, aFontName( this, ResId(CB_FONTNAME) )
-, aFTStyle( this, ResId(FT_FONTSTYLE) )
-, aFontStyle( this, ResId(CB_FONTSTYLE) )
-, aFTSize( this, ResId(FT_FONTSIZE) )
-, aFontSize( this, ResId(MB_FONTSIZE) )
-, aFTPreview( this, ResId(FT_PREVIEW) )
+: TabPage( pParent, SttResId( RID_TP_FONT ) )
+, aFTFontName( this, SttResId(FT_FONTNAME) )
+, aFontName( this, SttResId(CB_FONTNAME) )
+, aFTStyle( this, SttResId(FT_FONTSTYLE) )
+, aFontStyle( this, SttResId(CB_FONTSTYLE) )
+, aFTSize( this, SttResId(FT_FONTSIZE) )
+, aFontSize( this, SttResId(MB_FONTSIZE) )
+, aFTPreview( this, SttResId(FT_PREVIEW) )
 , aFontList( this )
 {
     FreeResource();
@@ -612,20 +613,20 @@ void FontOptions::Save( Config &aConfig )
 
 
 GenericOptions::GenericOptions( Window* pParent, Config &aConfig )
-: TabPage( pParent, ResId( RID_TP_GENERIC ) )
+: TabPage( pParent, SttResId( RID_TP_GENERIC ) )
 , aConf( aConfig )
 
-, aFlArea( this, ResId( RID_FL_AREA ) )
-, aCbArea( this, ResId( RID_CB_AREA ) )
-, aPbNewArea( this, ResId( RID_PB_NEW_AREA ) )
-, aPbDelArea( this, ResId( RID_PD_DEL_AREA ) )
+, aFlArea( this, SttResId( RID_FL_AREA ) )
+, aCbArea( this, SttResId( RID_CB_AREA ) )
+, aPbNewArea( this, SttResId( RID_PB_NEW_AREA ) )
+, aPbDelArea( this, SttResId( RID_PD_DEL_AREA ) )
 
-, aFlValue( this, ResId( RID_FL_VALUE ) )
-, aCbValue( this, ResId( RID_CB_VALUE ) )
+, aFlValue( this, SttResId( RID_FL_VALUE ) )
+, aCbValue( this, SttResId( RID_CB_VALUE ) )
 
-, aPbSelectPath( this, ResId( RID_PB_SELECT_FILE ) )
-, aPbNewValue( this, ResId( RID_PB_NEW_VALUE ) )
-, aPbDelValue( this, ResId( RID_PB_DEL_VALUE ) )
+, aPbSelectPath( this, SttResId( RID_PB_SELECT_FILE ) )
+, aPbNewValue( this, SttResId( RID_PB_NEW_VALUE ) )
+, aPbDelValue( this, SttResId( RID_PB_DEL_VALUE ) )
 
 , nMoveButtons( 0 )
 , bShowSelectPath( FALSE )
@@ -940,16 +941,16 @@ void TextAndWin::Resize()
 }
 
 DisplayHidDlg::DisplayHidDlg( Window * pParent )
-: FloatingWindow( pParent, ResId( IDD_DISPLAY_HID ) )
-, aTbConf( this, ResId( RID_TB_CONF ) )
-, aFtControls( this, ResId( RID_FT_CONTROLS ) )
-, aMlbControls( this, ResId( RID_MLB_CONTROLS ) )
-, aFtSlots( this, ResId( RID_FT_SLOTS ) )
-, aMlbSlots( this, ResId( RID_MLB_SLOTS ) )
-, aPbKopieren( this, ResId( RID_PB_KOPIEREN ) )
-, aPbBenennen( this, ResId( RID_PB_BENENNEN ) )
-, aPbSelectAll( this, ResId( RID_PB_SELECTALL ) )
-, aOKClose( this, ResId( RID_OK_CLOSE ) )
+: FloatingWindow( pParent, SttResId( IDD_DISPLAY_HID ) )
+, aTbConf( this, SttResId( RID_TB_CONF ) )
+, aFtControls( this, SttResId( RID_FT_CONTROLS ) )
+, aMlbControls( this, SttResId( RID_MLB_CONTROLS ) )
+, aFtSlots( this, SttResId( RID_FT_SLOTS ) )
+, aMlbSlots( this, SttResId( RID_MLB_SLOTS ) )
+, aPbKopieren( this, SttResId( RID_PB_KOPIEREN ) )
+, aPbBenennen( this, SttResId( RID_PB_BENENNEN ) )
+, aPbSelectAll( this, SttResId( RID_PB_SELECTALL ) )
+, aOKClose( this, SttResId( RID_OK_CLOSE ) )
 , nDisplayMode( DH_MODE_KURZNAME | DH_MODE_LANGNAME )   // Falls wir ein altes Office haben diesen Default verwenden
 {
     FreeResource();
@@ -1089,7 +1090,7 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
         if ( pWinInfo->aLangname.Len() > 0 )
             aMsg += pWinInfo->aLangname;
         else
-            aMsg += String( ResId( IDS_NO_LONGNAME ) );
+            aMsg += String( SttResId( IDS_NO_LONGNAME ) );
     }
 
     aMlbControls.InsertEntry( aMsg );
@@ -1107,7 +1108,7 @@ void DisplayHidDlg::AddData( WinInfoRec* pWinInfo )
             if ( pWinInfo->aLangname.Len() > 0 )
                 aMsg += pWinInfo->aLangname;
             else
-                aMsg += String( ResId( IDS_NO_LONGNAME ) );
+                aMsg += String( SttResId( IDS_NO_LONGNAME ) );
         }
 
         aMlbSlots.InsertEntry( aMsg );
@@ -1188,21 +1189,21 @@ void DisplayHidDlg::Resize()
 
 
 VarEditDialog::VarEditDialog( Window * pParent, SbxVariable *pPVar )
-: ModelessDialog( pParent, ResId( IDD_EDIT_VAR ) )
-, aFixedTextRID_FT_NAME( this, ResId( RID_FT_NAME ) )
-, aFixedTextRID_FT_CONTENT( this, ResId( RID_FT_CONTENT ) )
-, aFixedTextRID_FT_NEW_CONTENT( this, ResId( RID_FT_NEW_CONTENT ) )
-, aFixedTextRID_FT_NAME_VALUE( this, ResId( RID_FT_NAME_VALUE ) )
-, aFixedTextRID_FT_CONTENT_VALUE( this, ResId( RID_FT_CONTENT_VALUE ) )
+: ModelessDialog( pParent, SttResId( IDD_EDIT_VAR ) )
+, aFixedTextRID_FT_NAME( this, SttResId( RID_FT_NAME ) )
+, aFixedTextRID_FT_CONTENT( this, SttResId( RID_FT_CONTENT ) )
+, aFixedTextRID_FT_NEW_CONTENT( this, SttResId( RID_FT_NEW_CONTENT ) )
+, aFixedTextRID_FT_NAME_VALUE( this, SttResId( RID_FT_NAME_VALUE ) )
+, aFixedTextRID_FT_CONTENT_VALUE( this, SttResId( RID_FT_CONTENT_VALUE ) )
 
-, aRadioButtonRID_RB_NEW_BOOL_T( this, ResId( RID_RB_NEW_BOOL_T ) )
-, aRadioButtonRID_RB_NEW_BOOL_F( this, ResId( RID_RB_NEW_BOOL_F ) )
-, aNumericFieldRID_NF_NEW_INTEGER( this, ResId( RID_NF_NEW_INTEGER ) )
-, aNumericFieldRID_NF_NEW_LONG( this, ResId( RID_NF_NEW_LONG ) )
-, aEditRID_ED_NEW_STRING( this, ResId( RID_ED_NEW_STRING ) )
+, aRadioButtonRID_RB_NEW_BOOL_T( this, SttResId( RID_RB_NEW_BOOL_T ) )
+, aRadioButtonRID_RB_NEW_BOOL_F( this, SttResId( RID_RB_NEW_BOOL_F ) )
+, aNumericFieldRID_NF_NEW_INTEGER( this, SttResId( RID_NF_NEW_INTEGER ) )
+, aNumericFieldRID_NF_NEW_LONG( this, SttResId( RID_NF_NEW_LONG ) )
+, aEditRID_ED_NEW_STRING( this, SttResId( RID_ED_NEW_STRING ) )
 
-, aOKButtonRID_OK( this, ResId( RID_OK ) )
-, aCancelButtonRID_CANCEL( this, ResId( RID_CANCEL ) )
+, aOKButtonRID_OK( this, SttResId( RID_OK ) )
+, aCancelButtonRID_CANCEL( this, SttResId( RID_CANCEL ) )
 , pVar( pPVar )
 {
     aFixedTextRID_FT_NAME_VALUE.SetText( pVar->GetName() );
@@ -1347,7 +1348,7 @@ SvNumberformat::
     if ( bError )
     {
 //      ErrorBox( this, WB_OK | WB_DEF_OK, "Der Wert ist ung�ltig und kann daher nicht gesetzt werden" ).Execute();
-        ErrorBox( this, ResId( IDS_INVALID_VALUE ) ).Execute();
+        ErrorBox( this, SttResId( IDS_INVALID_VALUE ) ).Execute();
         return 1;
     }
 
