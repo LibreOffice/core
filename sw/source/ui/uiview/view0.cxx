@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view0.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:24:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:39:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -369,7 +369,7 @@ void SwView::StateViewOptions(SfxItemSet &rSet)
  --------------------------------------------------------------------*/
 void SwView::ExecViewOptions(SfxRequest &rReq)
 {
-    SwViewOption* pOpt = pOpt = new SwViewOption( *GetWrtShell().GetViewOptions() );
+    SwViewOption* pOpt = new SwViewOption( *GetWrtShell().GetViewOptions() );
     sal_Bool bModified = GetWrtShell().IsModified();
 
     int eState = STATE_TOGGLE;
