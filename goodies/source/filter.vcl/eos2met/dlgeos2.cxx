@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgeos2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:41:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:59:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,19 +53,19 @@
 \************************************************************************/
 
 DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EMET, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_EMET, *rPara.pResMgr ) ),
                 rFltCallPara        ( rPara ),
-                aBtnOK              ( this, ResId( BTN_OK ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) ),
-                aRbOriginal         ( this, ResId( RB_ORIGINAL ) ),
-                aRbSize             ( this, ResId( RB_SIZE ) ),
-                aGrpMode            ( this, ResId( GRP_MODE ) ),
-                aFtSizeX            ( this, ResId( FT_SIZEX ) ),
-                aMtfSizeX           ( this, ResId( MTF_SIZEX ) ),
-                aFtSizeY            ( this, ResId( FT_SIZEY ) ),
-                aMtfSizeY           ( this, ResId( MTF_SIZEY ) ),
-                aGrpSize            ( this, ResId( GRP_SIZE ) ),
+                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) ),
+                aRbOriginal         ( this, ResId( RB_ORIGINAL, *rPara.pResMgr ) ),
+                aRbSize             ( this, ResId( RB_SIZE, *rPara.pResMgr ) ),
+                aGrpMode            ( this, ResId( GRP_MODE, *rPara.pResMgr ) ),
+                aFtSizeX            ( this, ResId( FT_SIZEX, *rPara.pResMgr ) ),
+                aMtfSizeX           ( this, ResId( MTF_SIZEX, *rPara.pResMgr ) ),
+                aFtSizeY            ( this, ResId( FT_SIZEY, *rPara.pResMgr ) ),
+                aMtfSizeY           ( this, ResId( MTF_SIZEY, *rPara.pResMgr ) ),
+                aGrpSize            ( this, ResId( GRP_SIZE, *rPara.pResMgr ) ),
                 pMgr                ( rPara.pResMgr )
 {
     FreeResource();
@@ -78,10 +78,10 @@ DlgExportEMET::DlgExportEMET( FltCallDialogParameter& rPara ) :
     aRbSize.SetClickHdl( LINK( this, DlgExportEMET, ClickRbSize ) );
 
     // Config-Parameter lesen
-    sal_Int32 nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, pMgr ) ), 0 );
+    sal_Int32 nMode = pConfigItem->ReadInt32( String( ResId( KEY_MODE, *pMgr ) ), 0 );
     ::com::sun::star::awt::Size aDefault( 10000, 10000 );
     ::com::sun::star::awt::Size aSize;
-    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, pMgr ) ), aDefault );
+    aSize = pConfigItem->ReadSize( String( ResId( KEY_SIZE, *pMgr ) ), aDefault );
 
     aMtfSizeX.SetDefaultUnit( FUNIT_MM );
     aMtfSizeY.SetDefaultUnit( FUNIT_MM );
@@ -144,8 +144,8 @@ IMPL_LINK( DlgExportEMET, OK, void *, EMPTYARG )
             (sal_Int32)MetricField::ConvertDoubleValue( aMtfSizeY.GetValue(), 2, aMtfSizeY.GetUnit(), MAP_100TH_MM ) );
     sal_Int32 nStrMode = ( aRbSize.IsChecked() ) ? 1 : 0;
 
-    pConfigItem->WriteInt32( String( ResId( KEY_MODE, pMgr ) ), nStrMode );
-    pConfigItem->WriteSize( String( ResId( KEY_SIZE, pMgr ) ), aSize );
+    pConfigItem->WriteInt32( String( ResId( KEY_MODE, *pMgr ) ), nStrMode );
+    pConfigItem->WriteSize( String( ResId( KEY_SIZE, *pMgr ) ), aSize );
     rFltCallPara.aFilterData = pConfigItem->GetFilterData();
     EndDialog( RET_OK );
 
