@@ -4,9 +4,9 @@
  *
  *  $RCSfile: filtuno.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:45:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:55:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -171,7 +171,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         //CHINA001 ScImportAsciiDlg* pDlg = new ScImportAsciiDlg( NULL, aPrivDatName, pInStream, cAsciiDel );
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
-        AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream,ResId(RID_SCDLG_ASCII), cAsciiDel);
+        AbstractScImportAsciiDlg* pDlg = pFact->CreateScImportAsciiDlg( NULL, aPrivDatName, pInStream, RID_SCDLG_ASCII, cAsciiDel);
         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
         if ( pDlg->Execute() == RET_OK )
         {
@@ -257,7 +257,7 @@ sal_Int16 SAL_CALL ScFilterOptionsObj::execute() throw(uno::RuntimeException)
         ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-        AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, ResId(RID_SCDLG_IMPORTOPT),
+        AbstractScImportOptionsDlg* pDlg = pFact->CreateScImportOptionsDlg( NULL, RID_SCDLG_IMPORTOPT,
                                                                             bAscii, &aOptions, &aTitle, bMultiByte, bDBEnc,
                                                                             !bExport);
         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
