@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numpara.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:38:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:50:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,17 +84,17 @@ static USHORT __FAR_DATA aPageRg[] = {
 SwParagraphNumTabPage::SwParagraphNumTabPage(Window* pParent,
                                                 const SfxItemSet& rAttr ) :
     SfxTabPage(pParent, SW_RES(TP_NUMPARA), rAttr),
-    aNumberStyleFT          ( this, ResId( FT_NUMBER_STYLE ) ),
-    aNumberStyleLB          ( this, ResId( LB_NUMBER_STYLE ) ),
-    aNewStartFL             ( this, ResId( FL_NEW_START ) ),
-    aNewStartCB             ( this, ResId( CB_NEW_START ) ),
-    aNewStartNumberCB       ( this, ResId( CB_NUMBER_NEW_START ) ),
-    aNewStartNF             ( this, ResId( NF_NEW_START ) ),
-    aCountParaFL            ( this, ResId( FL_COUNT_PARA        ) ),
-    aCountParaCB            ( this, ResId( CB_COUNT_PARA        ) ),
-    aRestartParaCountCB     ( this, ResId( CB_RESTART_PARACOUNT ) ),
-    aRestartFT              ( this, ResId( FT_RESTART_NO        ) ),
-    aRestartNF              ( this, ResId( NF_RESTART_PARA      ) ),
+    aNumberStyleFT          ( this, SW_RES( FT_NUMBER_STYLE ) ),
+    aNumberStyleLB          ( this, SW_RES( LB_NUMBER_STYLE ) ),
+    aNewStartFL             ( this, SW_RES( FL_NEW_START ) ),
+    aNewStartCB             ( this, SW_RES( CB_NEW_START ) ),
+    aNewStartNumberCB       ( this, SW_RES( CB_NUMBER_NEW_START ) ),
+    aNewStartNF             ( this, SW_RES( NF_NEW_START ) ),
+    aCountParaFL            ( this, SW_RES( FL_COUNT_PARA        ) ),
+    aCountParaCB            ( this, SW_RES( CB_COUNT_PARA        ) ),
+    aRestartParaCountCB     ( this, SW_RES( CB_RESTART_PARACOUNT ) ),
+    aRestartFT              ( this, SW_RES( FT_RESTART_NO        ) ),
+    aRestartNF              ( this, SW_RES( NF_RESTART_PARA      ) ),
     bModified(FALSE),
     bCurNumrule(FALSE)
 {
