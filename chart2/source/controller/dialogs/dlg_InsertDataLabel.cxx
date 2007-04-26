@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertDataLabel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:57:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:35:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -64,15 +64,15 @@ namespace chart
 
 SchDataDescrDlg::SchDataDescrDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
     ModalDialog(pWindow, SchResId(DLG_DATA_DESCR)),
-    aCbValue(this, ResId(CB_VALUE)),
-    aRbNumber(this, ResId(RB_NUMBER)),
-    aRbPercent(this, ResId(RB_PERCENT)),
-    aCbText(this, ResId(CB_TEXT)),
-    aFlDescr(this, ResId(FL_DESCR)),
-    aCbSymbol(this, ResId(CB_SYMBOL)),
-    aBtnOK(this, ResId(BTN_OK)),
-    aBtnCancel(this, ResId(BTN_CANCEL)),
-    aBtnHelp(this, ResId(BTN_HELP)),
+    aCbValue(this, SchResId(CB_VALUE)),
+    aRbNumber(this, SchResId(RB_NUMBER)),
+    aRbPercent(this, SchResId(RB_PERCENT)),
+    aCbText(this, SchResId(CB_TEXT)),
+    aFlDescr(this, SchResId(FL_DESCR)),
+    aCbSymbol(this, SchResId(CB_SYMBOL)),
+    aBtnOK(this, SchResId(BTN_OK)),
+    aBtnCancel(this, SchResId(BTN_CANCEL)),
+    aBtnHelp(this, SchResId(BTN_HELP)),
     m_rInAttrs(rInAttrs)
 {
     FreeResource();

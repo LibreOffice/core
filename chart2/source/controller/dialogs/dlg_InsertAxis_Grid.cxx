@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertAxis_Grid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:57:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:34:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,21 +75,21 @@ SchAxisDlg::SchAxisDlg( Window* pWindow
                        :
         ModalDialog( pWindow, SchResId( DLG_AXIS_OR_GRID )),
 
-        aFlPrimary( this, ResId( FL_PRIMARY_AXIS )),
-        aFlPrimaryGrid( this, ResId( FL_PRIMARY_GRID )),
-        aCbPrimaryX( this, ResId( CB_X_PRIMARY )),
-        aCbPrimaryY( this, ResId( CB_Y_PRIMARY )),
-        aCbPrimaryZ( this, ResId( CB_Z_PRIMARY )),
+        aFlPrimary( this, SchResId( FL_PRIMARY_AXIS )),
+        aFlPrimaryGrid( this, SchResId( FL_PRIMARY_GRID )),
+        aCbPrimaryX( this, SchResId( CB_X_PRIMARY )),
+        aCbPrimaryY( this, SchResId( CB_Y_PRIMARY )),
+        aCbPrimaryZ( this, SchResId( CB_Z_PRIMARY )),
 
-        aFlSecondary( this, ResId( FL_SECONDARY_AXIS )),
-        aFlSecondaryGrid( this, ResId( FL_SECONDARY_GRID )),
-        aCbSecondaryX( this, ResId( CB_X_SECONDARY )),
-        aCbSecondaryY( this, ResId( CB_Y_SECONDARY )),
-        aCbSecondaryZ( this, ResId( CB_Z_SECONDARY )),
+        aFlSecondary( this, SchResId( FL_SECONDARY_AXIS )),
+        aFlSecondaryGrid( this, SchResId( FL_SECONDARY_GRID )),
+        aCbSecondaryX( this, SchResId( CB_X_SECONDARY )),
+        aCbSecondaryY( this, SchResId( CB_Y_SECONDARY )),
+        aCbSecondaryZ( this, SchResId( CB_Z_SECONDARY )),
 
-        aPbOK( this, ResId( BTN_OK )),
-        aPbCancel( this, ResId( BTN_CANCEL )),
-        aPbHelp( this, ResId( BTN_HELP ))
+        aPbOK( this, SchResId( BTN_OK )),
+        aPbCancel( this, SchResId( BTN_CANCEL )),
+        aPbHelp( this, SchResId( BTN_HELP ))
 
         //rOutAttrs( rInAttrs )
 {
