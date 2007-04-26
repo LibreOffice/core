@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optasian.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:29:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:37:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,23 +194,23 @@ void SvxAsianLayoutPage_Impl::addForbiddenCharacters(
 static LanguageType eLastUsedLanguageTypeForForbiddenCharacters = USHRT_MAX;
 
 SvxAsianLayoutPage::SvxAsianLayoutPage( Window* pParent, const SfxItemSet& rSet ) :
-    SfxTabPage(pParent, ResId( RID_SVXPAGE_ASIAN_LAYOUT, DIALOG_MGR() ), rSet),
-    aKerningGB(             this, ResId(GB_KERNING          )),
-    aCharKerningRB(         this, ResId(RB_CHAR_KERNING     )),
-    aCharPunctKerningRB(    this, ResId(RB_CHAR_PUNCT       )),
-    aCharDistGB(            this, ResId(GB_CHAR_DIST        )),
-    aNoCompressionRB(       this, ResId(RB_NO_COMP          )),
-    aPunctCompressionRB(    this, ResId(RB_PUNCT_COMP       )),
-     aPunctKanaCompressionRB(this, ResId(RB_PUNCT_KANA_COMP )),
-    aStartEndGB(            this, ResId(GB_START_END        )),
-    aLanguageFT(            this, ResId(FT_LANGUAGE         )),
-    aLanguageLB(            this, ResId(LB_LANGUAGE         )),
-    aStandardCB(            this, ResId(CB_STANDARD         )),
-    aStartFT(               this, ResId(FT_START            )),
-    aStartED(               this, ResId(ED_START            )),
-    aEndFT(                 this, ResId(FT_END              )),
-    aEndED(                 this, ResId(ED_END              )),
-    aHintFT(                this, ResId(FT_HINT             )),
+    SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_ASIAN_LAYOUT ), rSet),
+    aKerningGB(             this, SVX_RES(GB_KERNING            )),
+    aCharKerningRB(         this, SVX_RES(RB_CHAR_KERNING       )),
+    aCharPunctKerningRB(    this, SVX_RES(RB_CHAR_PUNCT     )),
+    aCharDistGB(            this, SVX_RES(GB_CHAR_DIST      )),
+    aNoCompressionRB(       this, SVX_RES(RB_NO_COMP            )),
+    aPunctCompressionRB(    this, SVX_RES(RB_PUNCT_COMP     )),
+     aPunctKanaCompressionRB(this, SVX_RES(RB_PUNCT_KANA_COMP   )),
+    aStartEndGB(            this, SVX_RES(GB_START_END      )),
+    aLanguageFT(            this, SVX_RES(FT_LANGUAGE           )),
+    aLanguageLB(            this, SVX_RES(LB_LANGUAGE           )),
+    aStandardCB(            this, SVX_RES(CB_STANDARD           )),
+    aStartFT(               this, SVX_RES(FT_START          )),
+    aStartED(               this, SVX_RES(ED_START          )),
+    aEndFT(                 this, SVX_RES(FT_END                )),
+    aEndED(                 this, SVX_RES(ED_END                )),
+    aHintFT(                this, SVX_RES(FT_HINT               )),
     pImpl(new SvxAsianLayoutPage_Impl)
 {
     FreeResource();
