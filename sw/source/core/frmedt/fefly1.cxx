@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-19 09:13:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:38:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -202,7 +202,8 @@ sal_Bool lcl_SetNewFlyPos( const SwNode& rNode, SwFmtAnchor& rAnchor,
     }
     else
     {
-        const SwCntntFrm* pCFrm = rNode.GetCntntNode()->GetFrm( &rPt, 0, sal_False );
+        const SwCntntNode *pCntNd = rNode.GetCntntNode();
+        const SwCntntFrm* pCFrm = pCntNd ? pCntNd->GetFrm( &rPt, 0, sal_False ) : 0;
         const SwPageFrm *pPg = pCFrm ? pCFrm->FindPageFrm() : 0;
 
         rAnchor.SetPageNum( pPg ? pPg->GetPhyPageNum() : 1 );
@@ -1412,7 +1413,10 @@ const SwFrmFmt* SwFEShell::GetFlyFrmFmt() const
 {
     const SwFlyFrm* pFly = FindFlyFrm();
     if ( !pFly )
-        pFly = GetCurrFrm()->FindFlyFrm();
+    {
+        SwFrm* pCurrFrm = GetCurrFrm();
+        pFly = pCurrFrm ? pCurrFrm->FindFlyFrm() : 0;
+    }
     if( pFly )
         return pFly->GetFmt();
     return 0;
@@ -1422,7 +1426,10 @@ SwFrmFmt* SwFEShell::GetFlyFrmFmt()
 {
     SwFlyFrm* pFly = FindFlyFrm();
     if ( !pFly )
-        pFly = GetCurrFrm()->FindFlyFrm();
+    {
+        SwFrm* pCurrFrm = GetCurrFrm();
+        pFly = pCurrFrm ? pCurrFrm->FindFlyFrm() : 0;
+    }
     if( pFly )
         return pFly->GetFmt();
     return 0;
@@ -1440,7 +1447,7 @@ SwFrmFmt* SwFEShell::GetFlyFrmFmt()
 SwRect SwFEShell::GetFlyRect() const
 {
     SwCntntFrm *pCntnt = GetCurrFrm( sal_False );
-    SwFlyFrm *pFly = pCntnt->FindFlyFrm();
+    SwFlyFrm *pFly = pCntnt ? pCntnt->FindFlyFrm() : 0;
     if ( !pFly )
     {
         SwRect aRect;
