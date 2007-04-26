@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DropDownFieldDialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:56:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:09:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,13 +77,13 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
                               SwField* pField, BOOL bNextButton ) :
 
     SvxStandardDialog(pParent,  SW_RES(DLG_FLD_DROPDOWN)),
-    aItemsFL(       this, ResId( FL_ITEMS       )),
-    aListItemsLB(   this, ResId( LB_LISTITEMS   )),
-    aOKPB(          this, ResId( PB_OK          )),
-    aCancelPB(      this, ResId( PB_CANCEL      )),
-    aNextPB(        this, ResId( PB_NEXT        )),
-    aHelpPB(        this, ResId( PB_HELP        )),
-    aEditPB(        this, ResId( PB_EDIT        )),
+    aItemsFL(       this, SW_RES( FL_ITEMS       )),
+    aListItemsLB(   this, SW_RES( LB_LISTITEMS   )),
+    aOKPB(          this, SW_RES( PB_OK          )),
+    aCancelPB(      this, SW_RES( PB_CANCEL      )),
+    aNextPB(        this, SW_RES( PB_NEXT        )),
+    aHelpPB(        this, SW_RES( PB_HELP        )),
+    aEditPB(        this, SW_RES( PB_EDIT        )),
     pDropField(0),
     rSh( rS )
 {
