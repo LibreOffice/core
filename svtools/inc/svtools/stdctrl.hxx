@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdctrl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:35:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:31:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,9 @@
 #include "svtools/svtdllapi.h"
 #endif
 
+#ifndef _EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
 #ifndef _FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
@@ -51,8 +54,30 @@
 class SVT_DLLPUBLIC FixedInfo : public FixedText
 {
 public:
-            FixedInfo( Window* pParent, WinBits nWinStyle = WB_LEFT );
-            FixedInfo( Window* pParent, const ResId& rResId );
+    FixedInfo( Window* pParent, WinBits nWinStyle = WB_LEFT );
+    FixedInfo( Window* pParent, const ResId& rResId );
 };
 
+namespace svt
+{
+    // ----------------------------
+    // - svt::SelectableFixedText -
+    // ----------------------------
+
+    class SVT_DLLPUBLIC SelectableFixedText : public Edit
+    {
+    private:
+        void    Init();
+
+    public:
+                SelectableFixedText( Window* pParent, WinBits nWinStyle );
+                SelectableFixedText( Window* pParent, const ResId& rResId );
+        virtual ~SelectableFixedText();
+
+        virtual void    LoseFocus();
+    };
+
+} // namespace svt
+
 #endif  // _STDCTRL_HXX
+
