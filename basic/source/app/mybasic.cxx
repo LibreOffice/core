@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mybasic.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 09:57:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:32:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,6 +68,7 @@
 #include "object.hxx"
 
 #include "processw.hxx"
+#include "basrid.hxx"
 
 TYPEINIT1(MyBasic,StarBASIC)
 
@@ -280,7 +281,7 @@ USHORT MyBasic::BreakHdl()
 
 BasicError::BasicError
     ( AppBasEd* w, USHORT nE, const String& r, USHORT nL, USHORT nC1, USHORT nC2 )
-    : aText( ResId( IDS_ERROR1 ) )
+    : aText( SttResId( IDS_ERROR1 ) )
 {
     pWin  = w;
     nLine = nL;
