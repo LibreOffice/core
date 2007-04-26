@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltersettingsdialog.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:10:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:12:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -103,17 +103,17 @@ using namespace com::sun::star::util;
 ResMgr* XMLFilterSettingsDialog::mpResMgr = NULL;
 
 XMLFilterSettingsDialog::XMLFilterSettingsDialog( Window* pParent, ResMgr& rResMgr, const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& rxMSF ) :
-    WorkWindow( pParent, ResId( DLG_XML_FILTER_SETTINGS_DIALOG, &rResMgr ) ),
+    WorkWindow( pParent, ResId( DLG_XML_FILTER_SETTINGS_DIALOG, rResMgr ) ),
     mxMSF( rxMSF ),
-    maCtrlFilterList( this, ResId( CTRL_XML_FILTER_LIST, &rResMgr ) ),
-    maPBNew( this, ResId( PB_XML_FILTER_NEW, &rResMgr ) ),
-    maPBEdit( this, ResId( PB_XML_FILTER_EDIT, &rResMgr ) ),
-    maPBTest( this, ResId( PB_XML_FILTER_TEST, &rResMgr ) ),
-    maPBDelete( this, ResId( PB_XML_FILTER_DELETE, &rResMgr ) ),
-    maPBSave( this, ResId( PB_XML_FILTER_SAVE, &rResMgr ) ),
-    maPBOpen( this, ResId( PB_XML_FILTER_OPEN, &rResMgr ) ),
-    maPBHelp( this, ResId( BTN_XML_FILTER_HELP, &rResMgr ) ),
-    maPBClose( this, ResId( PB_XML_FILTER_CLOSE, &rResMgr ) ),
+    maCtrlFilterList( this, ResId( CTRL_XML_FILTER_LIST, rResMgr ) ),
+    maPBNew( this, ResId( PB_XML_FILTER_NEW, rResMgr ) ),
+    maPBEdit( this, ResId( PB_XML_FILTER_EDIT, rResMgr ) ),
+    maPBTest( this, ResId( PB_XML_FILTER_TEST, rResMgr ) ),
+    maPBDelete( this, ResId( PB_XML_FILTER_DELETE, rResMgr ) ),
+    maPBSave( this, ResId( PB_XML_FILTER_SAVE, rResMgr ) ),
+    maPBOpen( this, ResId( PB_XML_FILTER_OPEN, rResMgr ) ),
+    maPBHelp( this, ResId( BTN_XML_FILTER_HELP, rResMgr ) ),
+    maPBClose( this, ResId( PB_XML_FILTER_CLOSE, rResMgr ) ),
     mbIsClosable(true),
     sTemplatePath( RTL_CONSTASCII_USTRINGPARAM( "$(user)/template/") ),
     sDocTypePrefix( RTL_CONSTASCII_USTRINGPARAM( "doctype:") )
@@ -1320,28 +1320,28 @@ std::vector< application_info_impl* >& getApplicationInfos()
 
     if( aInfos.empty() )
     {
-        ResId aResId1( STR_APPL_NAME_WRITER, getXSLTDialogResMgr() );
+        ResId aResId1( STR_APPL_NAME_WRITER, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
             aResId1,
             "com.sun.star.comp.Writer.XMLImporter",
             "com.sun.star.comp.Writer.XMLExporter" ) );
 
-        ResId aResId2( STR_APPL_NAME_CALC, getXSLTDialogResMgr() );
+        ResId aResId2( STR_APPL_NAME_CALC, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.sheet.SpreadsheetDocument",
             aResId2,
             "com.sun.star.comp.Calc.XMLImporter",
             "com.sun.star.comp.Calc.XMLExporter" ) );
 
-        ResId aResId3( STR_APPL_NAME_IMPRESS, getXSLTDialogResMgr() );
+        ResId aResId3( STR_APPL_NAME_IMPRESS, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.presentation.PresentationDocument",
             aResId3,
             "com.sun.star.comp.Impress.XMLImporter",
             "com.sun.star.comp.Impress.XMLExporter" ) );
 
-        ResId aResId4( STR_APPL_NAME_DRAW, getXSLTDialogResMgr() );
+        ResId aResId4( STR_APPL_NAME_DRAW, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.drawing.DrawingDocument",
             aResId4,
@@ -1349,28 +1349,28 @@ std::vector< application_info_impl* >& getApplicationInfos()
             "com.sun.star.comp.Draw.XMLExporter" ) );
 
         // --- oasis file formats...
-        ResId aResId5( STR_APPL_NAME_OASIS_WRITER, getXSLTDialogResMgr() );
+        ResId aResId5( STR_APPL_NAME_OASIS_WRITER, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.text.TextDocument",
             aResId5,
             "com.sun.star.comp.Writer.XMLOasisImporter",
             "com.sun.star.comp.Writer.XMLOasisExporter" ) );
 
-        ResId aResId6( STR_APPL_NAME_OASIS_CALC, getXSLTDialogResMgr() );
+        ResId aResId6( STR_APPL_NAME_OASIS_CALC, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.sheet.SpreadsheetDocument",
             aResId6,
             "com.sun.star.comp.Calc.XMLOasisImporter",
             "com.sun.star.comp.Calc.XMLOasisExporter" ) );
 
-        ResId aResId7( STR_APPL_NAME_OASIS_IMPRESS, getXSLTDialogResMgr() );
+        ResId aResId7( STR_APPL_NAME_OASIS_IMPRESS, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.presentation.PresentationDocument",
             aResId7,
             "com.sun.star.comp.Impress.XMLOasisImporter",
             "com.sun.star.comp.Impress.XMLOasisExporter" ) );
 
-        ResId aResId8( STR_APPL_NAME_OASIS_DRAW, getXSLTDialogResMgr() );
+        ResId aResId8( STR_APPL_NAME_OASIS_DRAW, *getXSLTDialogResMgr() );
         aInfos.push_back( new application_info_impl(
             "com.sun.star.drawing.DrawingDocument",
             aResId8,
