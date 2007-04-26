@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optjsearch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:31:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:39:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,27 +71,27 @@ using namespace com::sun::star::i18n;
 SvxJSearchOptionsPage::SvxJSearchOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_JSEARCH_OPTIONS ), rSet ),
 
-    aTreatAsEqual               ( this, ResId( FL_TREAT_AS_EQUAL ) ),
-    aMatchCase                  ( this, ResId( CB_MATCH_CASE ) ),
-    aMatchFullHalfWidth         ( this, ResId( CB_MATCH_FULL_HALF_WIDTH ) ),
-    aMatchHiraganaKatakana      ( this, ResId( CB_MATCH_HIRAGANA_KATAKANA ) ),
-    aMatchContractions          ( this, ResId( CB_MATCH_CONTRACTIONS ) ),
-    aMatchMinusDashChoon        ( this, ResId( CB_MATCH_MINUS_DASH_CHOON ) ),
-    aMatchRepeatCharMarks       ( this, ResId( CB_MATCH_REPEAT_CHAR_MARKS ) ),
-    aMatchVariantFormKanji      ( this, ResId( CB_MATCH_VARIANT_FORM_KANJI ) ),
-    aMatchOldKanaForms          ( this, ResId( CB_MATCH_OLD_KANA_FORMS ) ),
-    aMatchDiziDuzu              ( this, ResId( CB_MATCH_DIZI_DUZU ) ),
-    aMatchBavaHafa              ( this, ResId( CB_MATCH_BAVA_HAFA ) ),
-    aMatchTsithichiDhizi        ( this, ResId( CB_MATCH_TSITHICHI_DHIZI ) ),
-    aMatchHyuiyuByuvyu          ( this, ResId( CB_MATCH_HYUFYU_BYUVYU ) ),
-    aMatchSesheZeje             ( this, ResId( CB_MATCH_SESHE_ZEJE ) ),
-    aMatchIaiya                 ( this, ResId( CB_MATCH_IAIYA ) ),
-    aMatchKiku                  ( this, ResId( CB_MATCH_KIKU ) ),
-    aMatchProlongedSoundMark    ( this, ResId( CB_MATCH_PROLONGED_SOUNDMARK ) ),
-    aIgnore                     ( this, ResId( FL_IGNORE ) ),
-    aIgnorePunctuation          ( this, ResId( CB_IGNORE_PUNCTUATION ) ),
-    aIgnoreWhitespace           ( this, ResId( CB_IGNORE_WHITESPACES ) ),
-    aIgnoreMiddleDot            ( this, ResId( CB_IGNORE_MIDDLE_DOT ) )
+    aTreatAsEqual               ( this, SVX_RES( FL_TREAT_AS_EQUAL ) ),
+    aMatchCase                  ( this, SVX_RES( CB_MATCH_CASE ) ),
+    aMatchFullHalfWidth         ( this, SVX_RES( CB_MATCH_FULL_HALF_WIDTH ) ),
+    aMatchHiraganaKatakana      ( this, SVX_RES( CB_MATCH_HIRAGANA_KATAKANA ) ),
+    aMatchContractions          ( this, SVX_RES( CB_MATCH_CONTRACTIONS ) ),
+    aMatchMinusDashChoon        ( this, SVX_RES( CB_MATCH_MINUS_DASH_CHOON ) ),
+    aMatchRepeatCharMarks       ( this, SVX_RES( CB_MATCH_REPEAT_CHAR_MARKS ) ),
+    aMatchVariantFormKanji      ( this, SVX_RES( CB_MATCH_VARIANT_FORM_KANJI ) ),
+    aMatchOldKanaForms          ( this, SVX_RES( CB_MATCH_OLD_KANA_FORMS ) ),
+    aMatchDiziDuzu              ( this, SVX_RES( CB_MATCH_DIZI_DUZU ) ),
+    aMatchBavaHafa              ( this, SVX_RES( CB_MATCH_BAVA_HAFA ) ),
+    aMatchTsithichiDhizi        ( this, SVX_RES( CB_MATCH_TSITHICHI_DHIZI ) ),
+    aMatchHyuiyuByuvyu          ( this, SVX_RES( CB_MATCH_HYUFYU_BYUVYU ) ),
+    aMatchSesheZeje             ( this, SVX_RES( CB_MATCH_SESHE_ZEJE ) ),
+    aMatchIaiya                 ( this, SVX_RES( CB_MATCH_IAIYA ) ),
+    aMatchKiku                  ( this, SVX_RES( CB_MATCH_KIKU ) ),
+    aMatchProlongedSoundMark    ( this, SVX_RES( CB_MATCH_PROLONGED_SOUNDMARK ) ),
+    aIgnore                     ( this, SVX_RES( FL_IGNORE ) ),
+    aIgnorePunctuation          ( this, SVX_RES( CB_IGNORE_PUNCTUATION ) ),
+    aIgnoreWhitespace           ( this, SVX_RES( CB_IGNORE_WHITESPACES ) ),
+    aIgnoreMiddleDot            ( this, SVX_RES( CB_IGNORE_MIDDLE_DOT ) )
 {
     FreeResource();
     bSaveOptions = TRUE;
