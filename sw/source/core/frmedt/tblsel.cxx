@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:43:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:38:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,7 +295,8 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
     // teste ob Tabelle komplex ist. Wenn ja, dann immer uebers Layout
     // die selektierten Boxen zusammen suchen. Andernfalls ueber die
     // Tabellen-Struktur (fuer Makros !!)
-    const SwTableNode* pTblNd = rCrsr.GetNode()->FindTableNode();
+    const SwCntntNode* pCntNd = rCrsr.GetNode()->GetCntntNode();
+    const SwTableNode* pTblNd = pCntNd ? pCntNd->FindTableNode() : 0;
     if( pTblNd && pTblNd->GetTable().IsNewModel() )
     {
         SwTable::SearchType eSearch;
@@ -358,11 +359,14 @@ void GetTblSel( const SwCursor& rCrsr, SwSelBoxes& rBoxes,
             aPtPos = pShCrsr->GetPtPos();
             aMkPos = pShCrsr->GetMkPos();
         }
-        const SwLayoutFrm *pStart = rCrsr.GetCntntNode()->GetFrm(
-                                    &aPtPos )->GetUpper(),
-                          *pEnd   = rCrsr.GetCntntNode(FALSE)->GetFrm(
-                                    &aMkPos )->GetUpper();
-        GetTblSel( pStart, pEnd, rBoxes, 0, eSearchType );
+        const SwCntntNode *pCntNd = rCrsr.GetCntntNode();
+        const SwLayoutFrm *pStart = pCntNd ?
+            pCntNd->GetFrm( &aPtPos )->GetUpper() : 0;
+        pCntNd = rCrsr.GetCntntNode(FALSE);
+        const SwLayoutFrm *pEnd = pCntNd ?
+            pCntNd->GetFrm( &aMkPos )->GetUpper() : 0;
+        if( pStart && pEnd )
+            GetTblSel( pStart, pEnd, rBoxes, 0, eSearchType );
     }
 }
 
