@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtundo.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:40:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:24:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,7 +149,7 @@ String SwWrtShell::GetDoString( DoType eDoType ) const
         break;
     }
 
-    aStr.Insert( String(ResId( nResStr, SFX_APP()->GetSfxResManager())), 0 );
+    aStr.Insert( String(ResId( nResStr, *SFX_APP()->GetSfxResManager())), 0 );
     aStr += aUndoStr;
 
     return aStr;
@@ -192,7 +192,7 @@ String SwWrtShell::GetRepeatString() const
 
     if (aUndoStr.Len() > 0)
     {
-        aStr.Insert( ResId( STR_REPEAT, SFX_APP()->GetSfxResManager()), 0 );
+        aStr.Insert( ResId( STR_REPEAT, *SFX_APP()->GetSfxResManager()), 0 );
         aStr += aUndoStr;
     }
 
