@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlmarkwn.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:14:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:33:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,9 +167,9 @@ void SvxHlmarkTreeLBox::Paint( const Rectangle& rRect )
 
 SvxHlinkDlgMarkWnd::SvxHlinkDlgMarkWnd( SvxHyperlinkTabPageBase *pParent )
 :   ModalDialog( (Window*)pParent, SVX_RES ( RID_SVXFLOAT_HYPERLINK_MARKWND ) ),
-    maBtApply( this, ResId (BT_APPLY) ),
-    maBtClose( this, ResId (BT_CLOSE) ),
-    maLbTree ( this, ResId (TLB_MARK) ),
+    maBtApply( this, SVX_RES (BT_APPLY) ),
+    maBtClose( this, SVX_RES (BT_CLOSE) ),
+    maLbTree ( this, SVX_RES (TLB_MARK) ),
     mbUserMoved ( FALSE ),
     mbFirst     ( TRUE ),
     mpParent    ( pParent ),
@@ -368,7 +368,7 @@ void SvxHlinkDlgMarkWnd::Error(int nNr)
         break;
         case 1:
             Rectangle aDrawRect( Point( 0, 0 ), maLbTree.GetSizePixel() );
-            maLbTree.DrawText( aDrawRect, "Das Dokument konnte nicht geöffnet werden.", TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
+            maLbTree.DrawText( aDrawRect, "Das Dokument konnte nicht geï¿½ffnet werden.", TEXT_DRAW_LEFT | TEXT_DRAW_MULTILINE | TEXT_DRAW_WORDBREAK );
             break;
     }
 }
