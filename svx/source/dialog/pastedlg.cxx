@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pastedlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:24:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:41:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,24 +57,25 @@
 #include <sot/formats.hxx>
 #include <sot/stg.hxx>
 #include <svtools/sores.hxx>
+#include <vcl/svapp.hxx>
 
 #include "dialmgr.hxx"
 
 SvPasteObjectDialog::SvPasteObjectDialog( Window* pParent )
 
-    : ModalDialog( pParent, ResId( MD_PASTE_OBJECT, DIALOG_MGR() ) ),
-    aFtSource( this, ResId( FT_SOURCE ) ),
-    aFtObjectSource( this, ResId( FT_OBJECT_SOURCE ) ),
-    aRbPaste( this, ResId( RB_PASTE ) ),
-    aRbPasteLink( this, ResId( RB_PASTE_LINK ) ),
-    aLbInsertList( this, ResId( LB_INSERT_LIST ) ),
-    aCbDisplayAsIcon( this, ResId( CB_DISPLAY_AS_ICON ) ),
-    aPbChangeIcon( this, ResId( PB_CHANGE_ICON ) ),
-    aFlChoice( this, ResId( FL_CHOICE ) ),
-    aOKButton1( this, ResId( 1 ) ),
-    aCancelButton1( this, ResId( 1 ) ),
-    aHelpButton1( this, ResId( 1 ) ),
-    aSObject( ResId( S_OBJECT ) )
+    : ModalDialog( pParent, SVX_RES( MD_PASTE_OBJECT ) ),
+    aFtSource( this, SVX_RES( FT_SOURCE ) ),
+    aFtObjectSource( this, SVX_RES( FT_OBJECT_SOURCE ) ),
+    aRbPaste( this, SVX_RES( RB_PASTE ) ),
+    aRbPasteLink( this, SVX_RES( RB_PASTE_LINK ) ),
+    aLbInsertList( this, SVX_RES( LB_INSERT_LIST ) ),
+    aCbDisplayAsIcon( this, SVX_RES( CB_DISPLAY_AS_ICON ) ),
+    aPbChangeIcon( this, SVX_RES( PB_CHANGE_ICON ) ),
+    aFlChoice( this, SVX_RES( FL_CHOICE ) ),
+    aOKButton1( this, SVX_RES( 1 ) ),
+    aCancelButton1( this, SVX_RES( 1 ) ),
+    aHelpButton1( this, SVX_RES( 1 ) ),
+    aSObject( SVX_RES( S_OBJECT ) )
 {
     FreeResource();
     SetHelpId( HID_PASTE_DLG );
@@ -274,8 +275,14 @@ ULONG SvPasteObjectDialog::GetFormat( const TransferableDataHelper& rHelper,
         }
 
         if( !aTypeName.Len() && !aSourceName.Len() )
+        {
+            com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
+            ResMgr* pMgr = ResMgr::CreateResMgr( CREATEVERSIONRESMGR_NAME(svt), aLocale );
             // global resource from svtools (former so3 resource)
-            aSourceName = String( ResId( STR_UNKNOWN_SOURCE ) );
+            if( pMgr )
+                aSourceName = String( ResId( STR_UNKNOWN_SOURCE, *pMgr ) );
+            delete pMgr;
+        }
     }
 
     ObjectLB().SetUpdateMode( TRUE );
