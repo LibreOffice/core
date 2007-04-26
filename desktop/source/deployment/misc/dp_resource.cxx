@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_resource.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-26 14:21:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:24:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -84,14 +84,14 @@ osl::Mutex s_mutex;
 ResId getResId( USHORT id )
 {
     const osl::MutexGuard guard( s_mutex );
-    return ResId( id, DeploymentResMgr::get() );
+    return ResId( id, *DeploymentResMgr::get() );
 }
 
 //==============================================================================
 String getResourceString( USHORT id )
 {
     const osl::MutexGuard guard( s_mutex );
-    String ret( ResId( id, DeploymentResMgr::get() ) );
+    String ret( ResId( id, *DeploymentResMgr::get() ) );
     if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
         static String s_brandName;
         if (s_brandName.Len() == 0) {
