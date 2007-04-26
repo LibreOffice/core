@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ehdl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 19:17:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:41:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,6 +83,7 @@ private:
     ULONG            lEnd;
     USHORT           nId;
     ResMgr          *pMgr;
+    ResMgr          *pFreeMgr;
 
 //#if 0 // _SOLAR__PRIVATE
     SVT_DLLPRIVATE BOOL             GetClassString(ULONG lErrId, String &) const;
