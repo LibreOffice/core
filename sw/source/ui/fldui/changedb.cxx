@@ -4,9 +4,9 @@
  *
  *  $RCSfile: changedb.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:56:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:09:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -126,7 +126,7 @@ SwChangeDBDlg::SwChangeDBDlg(SwView& rVw) :
     aAvailDBFT  (this, SW_RES(FT_AVAILDB    )),
     aUsedDBTLB  (this, SW_RES(TLB_USEDDB    )),
     aAvailDBTLB (this, SW_RES(TLB_AVAILDB   ), 0),
-    aAddDBPB    (this, ResId(PB_ADDDB)),
+    aAddDBPB    (this, SW_RES(PB_ADDDB)),
     aDescFT     (this, SW_RES(FT_DESC       )),
     aDocDBTextFT(this, SW_RES(FT_DOCDBTEXT  )),
     aDocDBNameFT(this, SW_RES(FT_DOCDBNAME  )),
