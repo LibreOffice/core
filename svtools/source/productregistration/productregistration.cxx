@@ -4,9 +4,9 @@
  *
  *  $RCSfile: productregistration.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:23:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:46:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -323,7 +323,7 @@ namespace svt
                     // execute it
                     RegistrationDialog aDialog (
                         lcl_getPreferredDialogParent( m_xORB ),
-                        ResId( DLG_REGISTRATION_REQUEST, pResMgr.get() ),
+                        ResId( DLG_REGISTRATION_REQUEST, *pResMgr.get() ),
                         lcl_isEvalVersion( m_xORB ) );
                     aDialog.Execute();
 
@@ -395,7 +395,7 @@ namespace svt
 
             ErrorBox aRegistrationError(
                 Application::GetDefDialogParent(),
-                ResId( ERRBOX_REG_NOSYSBROWSER, pResMgr.get() ));
+                ResId( ERRBOX_REG_NOSYSBROWSER, *pResMgr.get() ));
             aRegistrationError.Execute();
         }
     }

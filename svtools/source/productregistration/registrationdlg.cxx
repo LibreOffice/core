@@ -4,9 +4,9 @@
  *
  *  $RCSfile: registrationdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:23:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:46:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -85,15 +85,15 @@ namespace svt
     RegistrationDialog::RegistrationDialog( Window* _pWindow, const ResId& _rResId, bool _bEvalVersion )
         :ModalDialog( _pWindow, _rResId )
         ,m_eResponse        ( urRegisterLater )
-        ,m_aLogo            ( this, ResId( FI_LOGO ) )
-        ,m_aIntro           ( this, ResId( FT_INTRO ) )
-        ,m_aNow             ( this, ResId( RB_NOW ) )
-        ,m_aLater           ( this, ResId( RB_LATER ) )
-        ,m_aNever           ( this, ResId( RB_NEVER ) )
-        ,m_aAlreadyDone     ( this, ResId( RB_DONE ) )
-        ,m_aSeparator       ( this, ResId( FL_SEPARATOR ) )
-        ,m_aOK              ( this, ResId( BTN_OK ) )
-        ,m_aHelp            ( this, ResId( BTN_HELP ) )
+        ,m_aLogo            ( this, ResId( FI_LOGO, *_rResId.GetResMgr() ) )
+        ,m_aIntro           ( this, ResId( FT_INTRO, *_rResId.GetResMgr() ) )
+        ,m_aNow             ( this, ResId( RB_NOW, *_rResId.GetResMgr() ) )
+        ,m_aLater           ( this, ResId( RB_LATER, *_rResId.GetResMgr() ) )
+        ,m_aNever           ( this, ResId( RB_NEVER, *_rResId.GetResMgr() ) )
+        ,m_aAlreadyDone     ( this, ResId( RB_DONE, *_rResId.GetResMgr() ) )
+        ,m_aSeparator       ( this, ResId( FL_SEPARATOR, *_rResId.GetResMgr() ) )
+        ,m_aOK              ( this, ResId( BTN_OK, *_rResId.GetResMgr() ) )
+        ,m_aHelp            ( this, ResId( BTN_HELP, *_rResId.GetResMgr() ) )
     {
         if ( _bEvalVersion )
         {   // if we're an eval version, we need to hide two of the options
@@ -129,7 +129,7 @@ namespace svt
         {
             // the explanatory text needs to be completed
             String sCompleteIntro = m_aIntro.GetText( );
-            sCompleteIntro += String( ResId( STR_COMPLETE_INTRO ) );
+            sCompleteIntro += String( ResId( STR_COMPLETE_INTRO, *_rResId.GetResMgr() ) );
             m_aIntro.SetText( sCompleteIntro );
         }
 
