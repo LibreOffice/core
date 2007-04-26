@@ -4,9 +4,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:52:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:27:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -869,24 +869,27 @@ PatternFormatter::PatternFormatter()
 
 // -----------------------------------------------------------------------
 
-void PatternFormatter::ImplLoadRes( const ResId& )
+void PatternFormatter::ImplLoadRes( const ResId& rResId )
 {
     ByteString  aEditMask;
     XubString   aLiteralMask;
-    ResMgr*     pMgr = Resource::GetResManager();
-    ULONG       nMask = pMgr->ReadLong();
+    ResMgr*     pMgr = rResId.GetResMgr();
+    if( pMgr )
+    {
+        ULONG       nMask = pMgr->ReadLong();
 
-    if ( PATTERNFORMATTER_STRICTFORMAT & nMask )
-        SetStrictFormat( (BOOL)pMgr->ReadShort() );
+        if ( PATTERNFORMATTER_STRICTFORMAT & nMask )
+            SetStrictFormat( (BOOL)pMgr->ReadShort() );
 
-    if ( PATTERNFORMATTER_EDITMASK & nMask )
-        aEditMask = ByteString( pMgr->ReadString(), RTL_TEXTENCODING_ASCII_US );
+        if ( PATTERNFORMATTER_EDITMASK & nMask )
+            aEditMask = ByteString( pMgr->ReadString(), RTL_TEXTENCODING_ASCII_US );
 
-    if ( PATTERNFORMATTER_LITTERALMASK & nMask )
-        aLiteralMask = pMgr->ReadString();
+        if ( PATTERNFORMATTER_LITTERALMASK & nMask )
+            aLiteralMask = pMgr->ReadString();
 
-    if ( (PATTERNFORMATTER_EDITMASK | PATTERNFORMATTER_LITTERALMASK) & nMask )
-        ImplSetMask( aEditMask, aLiteralMask );
+        if ( (PATTERNFORMATTER_EDITMASK | PATTERNFORMATTER_LITTERALMASK) & nMask )
+            ImplSetMask( aEditMask, aLiteralMask );
+    }
 }
 
 // -----------------------------------------------------------------------
@@ -972,7 +975,7 @@ PatternField::PatternField( Window* pParent, const ResId& rResId ) :
     ImplInit( pParent, nStyle );
     SetField( this );
     SpinField::ImplLoadRes( rResId );
-    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
     Reformat();
 
     if ( !(nStyle & WB_HIDE ) )
@@ -1051,7 +1054,7 @@ PatternBox::PatternBox( Window* pParent, const ResId& rResId ) :
 
     SetField( this );
     ComboBox::ImplLoadRes( rResId );
-    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    PatternFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
     Reformat();
 
     if ( !(nStyle & WB_HIDE ) )
@@ -1681,36 +1684,39 @@ DateFormatter::DateFormatter() :
 
 // -----------------------------------------------------------------------
 
-void DateFormatter::ImplLoadRes( const ResId& )
+void DateFormatter::ImplLoadRes( const ResId& rResId )
 {
-    ResMgr*     pMgr = Resource::GetResManager();
-    ULONG       nMask = pMgr->ReadLong();
-
-    if ( DATEFORMATTER_MIN & nMask )
+    ResMgr*     pMgr = rResId.GetResMgr();
+    if( pMgr )
     {
-        maMin = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
-    }
-    if ( DATEFORMATTER_MAX & nMask )
-    {
-        maMax = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
-    }
-    if ( DATEFORMATTER_LONGFORMAT & nMask )
-        mbLongFormat = (BOOL)pMgr->ReadShort();
+        ULONG       nMask = pMgr->ReadLong();
 
-    if ( DATEFORMATTER_STRICTFORMAT & nMask )
-        SetStrictFormat( (BOOL)pMgr->ReadShort() );
+        if ( DATEFORMATTER_MIN & nMask )
+        {
+            maMin = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
+            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
+        }
+        if ( DATEFORMATTER_MAX & nMask )
+        {
+            maMax = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
+            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
+        }
+        if ( DATEFORMATTER_LONGFORMAT & nMask )
+            mbLongFormat = (BOOL)pMgr->ReadShort();
 
-    if ( DATEFORMATTER_VALUE & nMask )
-    {
-        maFieldDate = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
-        if ( maFieldDate > maMax )
-            maFieldDate = maMax;
-        if ( maFieldDate < maMin )
-            maFieldDate = maMin;
-        maLastDate = maFieldDate;
+        if ( DATEFORMATTER_STRICTFORMAT & nMask )
+            SetStrictFormat( (BOOL)pMgr->ReadShort() );
+
+        if ( DATEFORMATTER_VALUE & nMask )
+        {
+            maFieldDate = Date( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
+            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE*)pMgr->GetClass() ) );
+            if ( maFieldDate > maMax )
+                maFieldDate = maMax;
+            if ( maFieldDate < maMin )
+                maFieldDate = maMin;
+            maLastDate = maFieldDate;
+        }
     }
 }
 
@@ -2120,19 +2126,23 @@ DateField::DateField( Window* pParent, const ResId& rResId ) :
 void DateField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
 
-    ULONG  nMask = ReadLongRes();
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( pMgr )
+    {
+        DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
 
-    if ( DATEFIELD_FIRST & nMask )
-    {
-        maFirst = Date( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-    }
-    if ( DATEFIELD_LAST & nMask )
-    {
-        maLast = Date( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        ULONG  nMask = ReadLongRes();
+        if ( DATEFIELD_FIRST & nMask )
+        {
+            maFirst = Date( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
+            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        }
+        if ( DATEFIELD_LAST & nMask )
+        {
+            maLast = Date( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
+            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        }
     }
 
     Reformat();
@@ -2274,7 +2284,9 @@ DateBox::DateBox( Window* pParent, const ResId& rResId ) :
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getDate( ImplGetFieldDate() ) );
     ComboBox::ImplLoadRes( rResId );
-    DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( pMgr )
+        DateFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
     Reformat();
 
     if ( !( nStyle & WB_HIDE ) )
@@ -2841,42 +2853,45 @@ TimeFormatter::TimeFormatter() :
 
 // -----------------------------------------------------------------------
 
-void TimeFormatter::ImplLoadRes( const ResId& )
+void TimeFormatter::ImplLoadRes( const ResId& rResId )
 {
-    ResMgr* pMgr = Resource::GetResManager();
-    ULONG   nMask = pMgr->ReadLong();
-
-    if ( TIMEFORMATTER_MIN & nMask )
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( pMgr )
     {
-        SetMin( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) ) );
-        pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-    }
+        ULONG   nMask = pMgr->ReadLong();
 
-    if ( TIMEFORMATTER_MAX & nMask )
-    {
-        SetMax( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) ) );
-        pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-    }
+        if ( TIMEFORMATTER_MIN & nMask )
+        {
+            SetMin( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
+            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
+        }
 
-    if ( TIMEFORMATTER_TIMEFIELDFORMAT & nMask )
-        meFormat = (TimeFieldFormat)pMgr->ReadLong();
+        if ( TIMEFORMATTER_MAX & nMask )
+        {
+            SetMax( Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) ) );
+            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
+        }
 
-    if ( TIMEFORMATTER_DURATION & nMask )
-        mbDuration = (BOOL)pMgr->ReadShort();
+        if ( TIMEFORMATTER_TIMEFIELDFORMAT & nMask )
+            meFormat = (TimeFieldFormat)pMgr->ReadLong();
 
-    if ( TIMEFORMATTER_STRICTFORMAT & nMask )
-        SetStrictFormat( (BOOL)pMgr->ReadShort() );
+        if ( TIMEFORMATTER_DURATION & nMask )
+            mbDuration = (BOOL)pMgr->ReadShort();
 
-    if ( TIMEFORMATTER_VALUE & nMask )
-    {
-        maFieldTime = Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass() ) );
-        if ( maFieldTime > GetMax() )
-            maFieldTime = GetMax();
-        if ( maFieldTime < GetMin() )
-            maFieldTime = GetMin();
-        maLastTime = maFieldTime;
+        if ( TIMEFORMATTER_STRICTFORMAT & nMask )
+            SetStrictFormat( (BOOL)pMgr->ReadShort() );
 
-        pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
+        if ( TIMEFORMATTER_VALUE & nMask )
+        {
+            maFieldTime = Time( ResId( (RSHEADER_TYPE *)pMgr->GetClass(), *pMgr ) );
+            if ( maFieldTime > GetMax() )
+                maFieldTime = GetMax();
+            if ( maFieldTime < GetMin() )
+                maFieldTime = GetMin();
+            maLastTime = maFieldTime;
+
+            pMgr->Increment( pMgr->GetObjSize( (RSHEADER_TYPE *)pMgr->GetClass() ) );
+        }
     }
 }
 
@@ -3161,19 +3176,23 @@ TimeField::TimeField( Window* pParent, const ResId& rResId ) :
 void TimeField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
-
-    ULONG      nMask = ReadLongRes();
-
-    if ( TIMEFIELD_FIRST & nMask )
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( pMgr )
     {
-        maFirst = Time( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
-    }
-    if ( TIMEFIELD_LAST & nMask )
-    {
-        maLast = Time( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
-        IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
+
+        ULONG      nMask = ReadLongRes();
+
+        if ( TIMEFIELD_FIRST & nMask )
+        {
+            maFirst = Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
+            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        }
+        if ( TIMEFIELD_LAST & nMask )
+        {
+            maLast = Time( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
+            IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
+        }
     }
 
     Reformat();
@@ -3354,7 +3373,9 @@ TimeBox::TimeBox( Window* pParent, const ResId& rResId ) :
     SetField( this );
     SetText( ImplGetLocaleDataWrapper().getTime( maFieldTime, FALSE, FALSE ) );
     ComboBox::ImplLoadRes( rResId );
-    TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( pMgr )
+        TimeFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
     Reformat();
 
     if ( !(nStyle & WB_HIDE) )
