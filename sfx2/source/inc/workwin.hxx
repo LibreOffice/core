@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 15:03:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -359,9 +359,9 @@ public:
     // Methoden f"ur Objectbars
     virtual void            UpdateObjectBars_Impl();
     void                    ResetObjectBars_Impl();
-    void                    SetObjectBar_Impl( USHORT nPos, const ResId& rId,
+    void                    SetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId,
                                     SfxInterface *pIFace, const String* pName=0 );
-    Window*                 GetObjectBar_Impl( USHORT nPos, ResId& rResId );
+    Window*                 GetObjectBar_Impl( USHORT nPos, sal_uInt32 nResId );
     FASTBOOL                KnowsObjectBar_Impl( USHORT nPos ) const;
     BOOL                    IsVisible_Impl();
     void                    MakeVisible_Impl( BOOL );
@@ -396,7 +396,7 @@ public:
     // Methoden f"ur StatusBar
     void                    SetTempStatusBar_Impl( BOOL bSet );
     void                    ResetStatusBar_Impl();
-    void                    SetStatusBar_Impl(const ResId&, SfxShell *pShell, SfxBindings& );
+    void                    SetStatusBar_Impl(sal_uInt32 nResId, SfxShell *pShell, SfxBindings& );
     void                    UpdateStatusBar_Impl();
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XStatusIndicator > GetStatusIndicator();
     ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > GetFrameInterface();
