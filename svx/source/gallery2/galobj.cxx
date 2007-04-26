@@ -4,9 +4,9 @@
  *
  *  $RCSfile: galobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:26:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:49:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -215,7 +215,7 @@ const String SgaObject::GetTitle() const
                             Application::GetSettings().GetUILocale() );
                 if ( pResMgr )
                 {
-                    ResId aResId( (sal_uInt16)nResId, pResMgr );
+                    ResId aResId( (sal_uInt16)nResId, *pResMgr );
                     aResId.SetRT( RSC_STRING );
                     if ( pResMgr->IsAvailable( aResId ) )
                     {
