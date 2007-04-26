@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insrule.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:07:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:13:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,12 +73,12 @@
 
 SwInsertGrfRulerDlg::SwInsertGrfRulerDlg( Window* pParent ) :
     SfxModalDialog(pParent, SW_RES(DLG_INSERT_RULER)),
-    aSelectionFL(this, ResId(FL_SEL     )),
-    pExampleVS  (new SwRulerValueSet(this, ResId(VS_EXAMPLE ))),
-    aOkPB       (this, ResId(PB_OK      )),
-    aCancelPB   (this, ResId(PB_CANCEL  )),
-    aHelpPB     (this, ResId(PB_HELP    )),
-    sSimple (ResId(ST_SIMPLE)),
+    aSelectionFL(this, SW_RES(FL_SEL     )),
+    pExampleVS  (new SwRulerValueSet(this, SW_RES(VS_EXAMPLE ))),
+    aOkPB       (this, SW_RES(PB_OK     )),
+    aCancelPB   (this, SW_RES(PB_CANCEL )),
+    aHelpPB     (this, SW_RES(PB_HELP   )),
+    sSimple (SW_RES(ST_SIMPLE)),
     nSelPos(USHRT_MAX)
 {
     FreeResource();
