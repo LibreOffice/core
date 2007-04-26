@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 09:04:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:11:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ class SwOLENames : public Resource
 public:
     SwOLENames(const ResId& rResId) :
         Resource(rResId),
-        aNamesAry(ResId(1)){FreeResource();}
+        aNamesAry(ResId(1,*rResId.GetResMgr())){FreeResource();}
 
     ResStringArray&     GetNames() { return aNamesAry;}
 
