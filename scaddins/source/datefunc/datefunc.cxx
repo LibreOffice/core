@@ -4,9 +4,9 @@
  *
  *  $RCSfile: datefunc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2006-06-19 23:12:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:10:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -148,7 +148,7 @@ sal_Bool ScaStringList::Contains( const OUString& rSearch ) const
 //------------------------------------------------------------------
 
 ScaResId::ScaResId( sal_uInt16 nId, ResMgr& rResMgr ) :
-    ResId( nId, &rResMgr )
+    ResId( nId, rResMgr )
 {
 }
 
