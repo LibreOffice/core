@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:39:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:50:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -394,18 +394,18 @@ class OptionsBreakSet : public ModalDialog
 
 public:
     OptionsBreakSet(Window* pParent, int nRID) :
-            ModalDialog(pParent, ResId(RID_SVXDLG_LNG_ED_NUM_PREBREAK, DIALOG_MGR() )),
-            aOKPB       (this, ResId(BT_OK_PREBREAK)),
-            aCancelPB   (this, ResId(BT_CANCEL_PREBREAK)),
-            aValFL      (this, ResId(FL_NUMVAL_PREBREAK)),
-            aValNF      (this, ResId(ED_PREBREAK))
+            ModalDialog(pParent, SVX_RES(RID_SVXDLG_LNG_ED_NUM_PREBREAK )),
+            aOKPB       (this, SVX_RES(BT_OK_PREBREAK)),
+            aCancelPB   (this, SVX_RES(BT_CANCEL_PREBREAK)),
+            aValFL      (this, SVX_RES(FL_NUMVAL_PREBREAK)),
+            aValNF      (this, SVX_RES(ED_PREBREAK))
     {
         DBG_ASSERT( STR_NUM_PRE_BREAK_DLG   == nRID ||
                     STR_NUM_POST_BREAK_DLG  == nRID ||
                     STR_NUM_MIN_WORDLEN_DLG == nRID, "unexpected RID" );
 
         if (nRID != -1)
-            aValFL.SetText( String( ResId(nRID) ) );
+            aValFL.SetText( String( SVX_RES(nRID) ) );
         FreeResource();
     }
 
@@ -1124,33 +1124,33 @@ void SvxLinguData_Impl::Reconfigure( const OUString &rDisplayName, BOOL bEnable 
 SvxLinguTabPage::SvxLinguTabPage( Window* pParent,
                                   const SfxItemSet& rSet ):
 
-    SfxTabPage( pParent, ResId( RID_SFXPAGE_LINGU, DIALOG_MGR() ), rSet ),
+    SfxTabPage( pParent, SVX_RES( RID_SFXPAGE_LINGU ), rSet ),
 
-    aLinguisticFL       ( this, ResId( FL_LINGUISTIC ) ),
-    aLinguModulesFT     ( this, ResId( FT_LINGU_MODULES ) ),
-    aLinguModulesCLB    ( this, ResId( CLB_LINGU_MODULES ) ),
-    aLinguModulesEditPB ( this, ResId( PB_LINGU_MODULES_EDIT ) ),
-    aLinguDicsFT        ( this, ResId( FT_LINGU_DICS ) ),
-    aLinguDicsCLB       ( this, ResId( CLB_LINGU_DICS ) ),
-    aLinguDicsNewPB     ( this, ResId( PB_LINGU_DICS_NEW_DIC ) ),
-    aLinguDicsEditPB    ( this, ResId( PB_LINGU_DICS_EDIT_DIC ) ),
-    aLinguDicsDelPB     ( this, ResId( PB_LINGU_DICS_DEL_DIC ) ),
-    aLinguOptionsFT     ( this, ResId( FT_LINGU_OPTIONS ) ),
-    aLinguOptionsCLB    ( this, ResId( CLB_LINGU_OPTIONS ) ),
-    aLinguOptionsEditPB ( this, ResId( PB_LINGU_OPTIONS_EDIT ) ),
-    sCapitalWords       ( ResId( STR_CAPITAL_WORDS ) ),
-    sWordsWithDigits    ( ResId( STR_WORDS_WITH_DIGITS ) ),
-    sCapitalization     ( ResId( STR_CAPITALIZATION ) ),
-    sSpellSpecial       ( ResId( STR_SPELL_SPECIAL ) ),
-    sAllLanguages       ( ResId( STR_ALL_LANGUAGES ) ),
-    sSpellAuto          ( ResId( STR_SPELL_AUTO ) ),
-    sHideMarkings       ( ResId( STR_HIDE_MARKINGS ) ),
-    sOldGerman          ( ResId( STR_OLD_GERMAN ) ),
-    sNumMinWordlen      ( ResId( STR_NUM_MIN_WORDLEN ) ),
-    sNumPreBreak        ( ResId( STR_NUM_PRE_BREAK ) ),
-    sNumPostBreak       ( ResId( STR_NUM_POST_BREAK ) ),
-    sHyphAuto           ( ResId( STR_HYPH_AUTO ) ),
-    sHyphSpecial        ( ResId( STR_HYPH_SPECIAL ) ),
+    aLinguisticFL       ( this, SVX_RES( FL_LINGUISTIC ) ),
+    aLinguModulesFT     ( this, SVX_RES( FT_LINGU_MODULES ) ),
+    aLinguModulesCLB    ( this, SVX_RES( CLB_LINGU_MODULES ) ),
+    aLinguModulesEditPB ( this, SVX_RES( PB_LINGU_MODULES_EDIT ) ),
+    aLinguDicsFT        ( this, SVX_RES( FT_LINGU_DICS ) ),
+    aLinguDicsCLB       ( this, SVX_RES( CLB_LINGU_DICS ) ),
+    aLinguDicsNewPB     ( this, SVX_RES( PB_LINGU_DICS_NEW_DIC ) ),
+    aLinguDicsEditPB    ( this, SVX_RES( PB_LINGU_DICS_EDIT_DIC ) ),
+    aLinguDicsDelPB     ( this, SVX_RES( PB_LINGU_DICS_DEL_DIC ) ),
+    aLinguOptionsFT     ( this, SVX_RES( FT_LINGU_OPTIONS ) ),
+    aLinguOptionsCLB    ( this, SVX_RES( CLB_LINGU_OPTIONS ) ),
+    aLinguOptionsEditPB ( this, SVX_RES( PB_LINGU_OPTIONS_EDIT ) ),
+    sCapitalWords       ( SVX_RES( STR_CAPITAL_WORDS ) ),
+    sWordsWithDigits    ( SVX_RES( STR_WORDS_WITH_DIGITS ) ),
+    sCapitalization     ( SVX_RES( STR_CAPITALIZATION ) ),
+    sSpellSpecial       ( SVX_RES( STR_SPELL_SPECIAL ) ),
+    sAllLanguages       ( SVX_RES( STR_ALL_LANGUAGES ) ),
+    sSpellAuto          ( SVX_RES( STR_SPELL_AUTO ) ),
+    sHideMarkings       ( SVX_RES( STR_HIDE_MARKINGS ) ),
+    sOldGerman          ( SVX_RES( STR_OLD_GERMAN ) ),
+    sNumMinWordlen      ( SVX_RES( STR_NUM_MIN_WORDLEN ) ),
+    sNumPreBreak        ( SVX_RES( STR_NUM_PRE_BREAK ) ),
+    sNumPostBreak       ( SVX_RES( STR_NUM_POST_BREAK ) ),
+    sHyphAuto           ( SVX_RES( STR_HYPH_AUTO ) ),
+    sHyphSpecial        ( SVX_RES( STR_HYPH_SPECIAL ) ),
 
     pLinguData          ( NULL )
 {
@@ -1781,7 +1781,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            AbstractSvxNewDictionaryDialog* aDlg = pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1, ResId(RID_SFXDLG_NEWDICT) );
+            AbstractSvxNewDictionaryDialog* aDlg = pFact->CreateSvxNewDictionaryDialog( this, xSpellChecker1, RID_SFXDLG_NEWDICT );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
             Reference< XDictionary >  xNewDic;
             if ( aDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
@@ -1819,7 +1819,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        VclAbstractDialog* aDlg = pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), xSpellChecker1, ResId(RID_SFXDLG_EDITDICT) );
+                        VclAbstractDialog* aDlg = pFact->CreateSvxEditDictionaryDialog( this, xDic->getName(), xSpellChecker1, RID_SFXDLG_EDITDICT );
                         DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
                         aDlg->Execute(); //CHINA001 aDlg.Execute();
                         delete aDlg; //add by CHINA001
@@ -1831,7 +1831,7 @@ IMPL_LINK( SvxLinguTabPage, ClickHdl_Impl, PushButton *, pBtn )
     else if (&aLinguDicsDelPB == pBtn)
     {
         if ( RET_NO ==
-             QueryBox( this, ResId( RID_SFXQB_DELDICT, DIALOG_MGR() ) ).Execute() )
+             QueryBox( this, SVX_RES( RID_SFXQB_DELDICT ) ).Execute() )
             return 0;
 
         SvLBoxEntry *pEntry = aLinguDicsCLB.GetCurEntry();
@@ -2039,19 +2039,19 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
 --------------------------------------------------*/
 
 SvxEditModulesDlg::SvxEditModulesDlg(Window* pParent, SvxLinguData_Impl& rData) :
-        ModalDialog(pParent, ResId(RID_SVXDLG_EDIT_MODULES, DIALOG_MGR() )),
-        aClosePB    ( this, ResId( PB_OK ) ),
-        aHelpPB     ( this, ResId( PB_HELP ) ),
-        aModulesFL  ( this, ResId( FL_EDIT_MODULES_OPTIONS ) ),
-        aLanguageFT ( this, ResId( FT_EDIT_MODULES_LANGUAGE ) ),
-        aLanguageLB ( this, ResId( LB_EDIT_MODULES_LANGUAGE ), FALSE ),
-        aModulesCLB ( this, ResId( CLB_EDIT_MODULES_MODULES ) ),
-        aPrioUpPB   ( this, ResId( PB_EDIT_MODULES_PRIO_UP ) ),
-        aPrioDownPB ( this, ResId( PB_EDIT_MODULES_PRIO_DOWN ) ),
-        aBackPB     ( this, ResId( PB_EDIT_MODULES_PRIO_BACK ) ),
-        sSpell( ResId( ST_SPELL)),
-        sHyph( ResId( ST_HYPH)),
-        sThes( ResId( ST_THES)),
+        ModalDialog(pParent, SVX_RES(RID_SVXDLG_EDIT_MODULES )),
+        aClosePB    ( this, SVX_RES( PB_OK ) ),
+        aHelpPB     ( this, SVX_RES( PB_HELP ) ),
+        aModulesFL  ( this, SVX_RES( FL_EDIT_MODULES_OPTIONS ) ),
+        aLanguageFT ( this, SVX_RES( FT_EDIT_MODULES_LANGUAGE ) ),
+        aLanguageLB ( this, SVX_RES( LB_EDIT_MODULES_LANGUAGE ), FALSE ),
+        aModulesCLB ( this, SVX_RES( CLB_EDIT_MODULES_MODULES ) ),
+        aPrioUpPB   ( this, SVX_RES( PB_EDIT_MODULES_PRIO_UP ) ),
+        aPrioDownPB ( this, SVX_RES( PB_EDIT_MODULES_PRIO_DOWN ) ),
+        aBackPB     ( this, SVX_RES( PB_EDIT_MODULES_PRIO_BACK ) ),
+        sSpell( SVX_RES( ST_SPELL)),
+        sHyph( SVX_RES( ST_HYPH)),
+        sThes( SVX_RES( ST_THES)),
         rLinguData(rData)
 {
     pCheckButtonData = NULL;
