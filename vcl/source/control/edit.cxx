@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:27:25 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:36:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -392,17 +392,6 @@ void Edit::ImplInit( Window* pParent, WinBits nStyle )
     else if ( nStyle & WB_CENTER )
         mnAlign = EDIT_ALIGN_CENTER;
 
-    const StyleSettings& rStyleSettings = GetSettings().GetStyleSettings();
-    if ( ImplUseNativeBorder(nStyle) )
-    {
-        SetBackground();
-        SetFillColor();
-    }
-    else
-    {
-        SetBackground( Wallpaper( rStyleSettings.GetFieldColor() ) );
-        SetFillColor( rStyleSettings.GetFieldColor() );
-    }
     SetCursor( new Cursor );
 
     SetPointer( Pointer( POINTER_TEXT ) );
@@ -475,7 +464,7 @@ void Edit::ImplInitSettings( BOOL bFont, BOOL bForeground, BOOL bBackground )
 
     if ( bBackground )
     {
-        if ( ImplUseNativeBorder( GetStyle() ) )
+        if ( ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent() )
         {
             // Transparent background
             SetBackground();
@@ -526,6 +515,16 @@ XubString Edit::ImplGetText() const
     }
     else
         return maText;
+}
+
+// -----------------------------------------------------------------------
+
+void Edit::ImplInvalidateOrRepaint( xub_StrLen nStart, xub_StrLen nEnd )
+{
+    if( IsPaintTransparent() )
+        Invalidate();
+    else
+        ImplRepaint( nStart, nEnd );
 }
 
 // -----------------------------------------------------------------------
@@ -587,11 +586,30 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     else
         SetTextColor( rStyleSettings.GetDisableColor() );
 
-    // Set background color of the normal text
-    if ( ImplUseNativeBorder( GetStyle() ) )
+    if( IsPaintTransparent() )
         SetTextFillColor();
     else
-        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+    {
+        // Set background color of the normal text
+        if ( ImplUseNativeBorder( GetStyle() ) )
+        {
+            if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
+            {
+                // check if we need to set ControlBackground even in NWF case
+                Push( PUSH_FILLCOLOR | PUSH_LINECOLOR );
+                SetLineColor();
+                SetFillColor( GetControlBackground() );
+                DrawRect( Rectangle( aPos, Size( GetOutputSizePixel().Width() - 2*mnXOffset, nTH ) ) );
+                Pop();
+
+                SetTextFillColor( GetControlBackground() );
+            }
+            else
+                SetTextFillColor();
+        }
+        else
+            SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+    }
 
     BOOL bDrawSelection = maSelection.Len() && ( HasFocus() || ( GetStyle() & WB_NOHIDESELECTION ) || mbActivePopup );
 
@@ -636,11 +654,21 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
         Color aNormalTextColor = GetTextColor();
         SetClipRegion( aNormalClipRegion );
 
-        // Set background color when part of the text is selected
-        if ( ImplUseNativeBorder( GetStyle() ) )
+        if( IsPaintTransparent() )
             SetTextFillColor();
         else
-            SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+        {
+            // Set background color when part of the text is selected
+            if ( ImplUseNativeBorder( GetStyle() ) )
+            {
+                if( (GetStyle() & WB_FORCECTRLBACKGROUND) != 0 && IsControlBackground() )
+                    SetTextFillColor( GetControlBackground() );
+                else
+                    SetTextFillColor();
+            }
+            else
+                SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+        }
         DrawText( aPos, aText, nStart, nEnd - nStart );
 
         // draw highlighted text
@@ -658,7 +686,10 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                 if( n == 0 )
                 {
                     SetTextColor( aNormalTextColor );
-                    SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
+                    if( IsPaintTransparent() )
+                        SetTextFillColor();
+                    else
+                        SetTextFillColor( IsControlBackground() ? GetControlBackground() : rStyleSettings.GetFieldColor() );
                     aRegion = aNormalClipRegion;
                 }
                 else
@@ -1082,7 +1113,7 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
     aRect.Left() = nXStart;
     aRect.Right() = nXEnd;
 
-    if( ImplUseNativeBorder( GetStyle() ) )
+    if( ImplUseNativeBorder( GetStyle() ) || IsPaintTransparent() )
     {
         // draw the inner part by painting the whole control using its border window
         Window *pControl = this;
@@ -1092,6 +1123,8 @@ void Edit::ImplClearBackground( long nXStart, long nXEnd )
             // we have no border, use parent
             pControl = mbIsSubEdit ? GetParent() : this;
             pBorder = pControl->GetWindow( WINDOW_BORDER );
+            if( pBorder == this )
+                pBorder = GetParent();
         }
 
         if( pBorder )
@@ -1208,7 +1241,7 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
             nCursorPosX--;
 
         if ( mnXOffset != nOldXOffset )
-            ImplRepaint();
+            ImplInvalidateOrRepaint();
     }
 
     long nTextHeight = GetTextHeight();
@@ -1262,7 +1295,7 @@ void Edit::ImplAlign()
 void Edit::ImplAlignAndPaint()
 {
     ImplAlign();
-    ImplRepaint( 0, STRING_LEN );
+    ImplInvalidateOrRepaint( 0, STRING_LEN );
     ImplShowCursor();
 }
 
@@ -1892,7 +1925,7 @@ void Edit::GetFocus()
         {
             // Selektion malen
             if ( !HasPaintEvent() )
-                ImplRepaint();
+                ImplInvalidateOrRepaint();
             else
                 Invalidate();
         }
@@ -1920,7 +1953,7 @@ void Edit::LoseFocus()
     if ( !mpSubEdit )
     {
         if ( !mbActivePopup && !( GetStyle() & WB_NOHIDESELECTION ) && maSelection.Len() )
-            ImplRepaint();    // Selektion malen
+            ImplInvalidateOrRepaint();    // Selektion malen
     }
 
     Control::LoseFocus();
@@ -2178,13 +2211,15 @@ void Edit::StateChanged( StateChangedType nType )
             if ( !mpSubEdit )
                 ImplShowCursor( FALSE );
         }
+        // update background (eventual SetPaintTransparent)
+        ImplInitSettings( FALSE, FALSE, TRUE );
     }
     else if ( nType == STATE_CHANGE_ENABLE )
     {
         if ( !mpSubEdit )
         {
             // Es aendert sich nur die Textfarbe...
-            ImplRepaint( 0, 0xFFFF );
+            ImplInvalidateOrRepaint( 0, 0xFFFF );
         }
     }
     else if ( nType == STATE_CHANGE_STYLE )
@@ -2463,8 +2498,8 @@ void Edit::ImplSetSelection( const Selection& rSelection, BOOL bPaint )
                 delete mpLayoutData, mpLayoutData = NULL;
                 maSelection = aNew;
 
-                if ( bPaint && ( aOld.Len() || aNew.Len() ) )
-                    ImplRepaint( 0, maText.Len() );
+                if ( bPaint && ( aOld.Len() || aNew.Len() || IsPaintTransparent() ) )
+                    ImplInvalidateOrRepaint( 0, maText.Len() );
                 ImplShowCursor();
                 if ( mbIsSubEdit )
                     ((Edit*)GetParent())->ImplCallEventListeners( VCLEVENT_EDIT_SELECTIONCHANGED );
