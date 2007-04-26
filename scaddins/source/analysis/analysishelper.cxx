@@ -4,9 +4,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: vg $ $Date: 2006-09-25 12:47:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:10:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1969,7 +1969,7 @@ const FuncData* FuncDataList::Get(  const OUString& aProgrammaticName ) const
 }
 
 
-AnalysisResId::AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr ) : ResId( nId, &rResMgr )
+AnalysisResId::AnalysisResId( sal_uInt16 nId, ResMgr& rResMgr ) : ResId( nId, rResMgr )
 {
 }
 
