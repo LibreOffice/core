@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doctdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:40:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:13:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,19 +63,19 @@ SfxDocumentTemplateDlg::SfxDocumentTemplateDlg( Window * pParent, SfxDocumentTem
 
     ModalDialog( pParent, SfxResId( DLG_DOC_TEMPLATE ) ),
 
-    aEditFL     ( this, ResId( FL_EDIT ) ),
-    aNameEd     ( this, ResId( ED_NAME ) ),
-    aTemplateFL ( this, ResId( FL_STYLESHEETS ) ),
-    aRegionFt   ( this, ResId( FT_SECTION ) ),
-    aRegionLb   ( this, ResId( LB_SECTION ) ),
-    aTemplateFt ( this, ResId( FT_STYLESHEETS ) ),
-    aTemplateLb ( this, ResId( LB_STYLESHEETS ) ),
+    aEditFL     ( this, SfxResId( FL_EDIT ) ),
+    aNameEd     ( this, SfxResId( ED_NAME ) ),
+    aTemplateFL ( this, SfxResId( FL_STYLESHEETS ) ),
+    aRegionFt   ( this, SfxResId( FT_SECTION ) ),
+    aRegionLb   ( this, SfxResId( LB_SECTION ) ),
+    aTemplateFt ( this, SfxResId( FT_STYLESHEETS ) ),
+    aTemplateLb ( this, SfxResId( LB_STYLESHEETS ) ),
 
-    aOkBt       ( this, ResId( BT_OK ) ),
-    aCancelBt   ( this, ResId( BT_CANCEL ) ),
-    aHelpBt     ( this, ResId( BT_HELP ) ),
-    aEditBt     ( this, ResId( BT_EDIT ) ),
-    aOrganizeBt ( this, ResId( BT_ORGANIZE ) ),
+    aOkBt       ( this, SfxResId( BT_OK ) ),
+    aCancelBt   ( this, SfxResId( BT_CANCEL ) ),
+    aHelpBt     ( this, SfxResId( BT_HELP ) ),
+    aEditBt     ( this, SfxResId( BT_EDIT ) ),
+    aOrganizeBt ( this, SfxResId( BT_ORGANIZE ) ),
 
     pTemplates  ( pTempl ),
     pHelper     ( NULL )
