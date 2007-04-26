@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 14:03:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:23:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1047,7 +1047,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
 //CHINA001              TRUE);
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( ResId(DLG_MULTI_TOX),
+                AbstractMultiTOXTabDialog* pDlg = pFact->CreateMultiTOXTabDialog( DLG_MULTI_TOX,
                                                         this, aSet,
                                                         *pActiveShell,
                                                         0,
@@ -1102,7 +1102,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( USHORT nSelectedPopupEntry )
                 SfxObjectShell& rObj = *pFrame->GetObjectShell();
                 const SfxMedium* pMedium = rObj.GetMedium();
                 String sNewFile(pMedium->GetURLObject().GetMainURL(INetURLObject::DECODE_TO_IURI));
-                // Bereich mit dem Dok-Namen einfgen
+                // Bereich mit dem Dok-Namen einfï¿½gen
                 // eigenes Dok in den Vordergrund
 
                 if(aFrmListener.IsValid() && sNewFile.Len())
