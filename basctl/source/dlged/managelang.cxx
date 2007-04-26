@@ -4,9 +4,9 @@
  *
  *  $RCSfile: managelang.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2007-01-29 17:01:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:33:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -129,19 +129,19 @@ ManageLanguageDialog::ManageLanguageDialog( Window* pParent, LocalizationMgr* _p
 
     ModalDialog( pParent, IDEResId( RID_DLG_MANAGE_LANGUAGE ) ),
 
-    m_aLanguageFT       ( this, ResId( FT_LANGUAGE ) ),
-    m_aLanguageLB       ( this, ResId( LB_LANGUAGE ) ),
-    m_aAddPB            ( this, ResId( PB_ADD_LANG ) ),
-    m_aDeletePB         ( this, ResId( PB_DEL_LANG ) ),
-    m_aMakeDefPB        ( this, ResId( PB_MAKE_DEFAULT ) ),
-    m_aInfoFT           ( this, ResId( FT_INFO ) ),
-    m_aBtnLine          ( this, ResId( FL_BUTTONS ) ),
-    m_aHelpBtn          ( this, ResId( PB_HELP ) ),
-    m_aCloseBtn         ( this, ResId( PB_CLOSE ) ),
+    m_aLanguageFT       ( this, IDEResId( FT_LANGUAGE ) ),
+    m_aLanguageLB       ( this, IDEResId( LB_LANGUAGE ) ),
+    m_aAddPB            ( this, IDEResId( PB_ADD_LANG ) ),
+    m_aDeletePB         ( this, IDEResId( PB_DEL_LANG ) ),
+    m_aMakeDefPB        ( this, IDEResId( PB_MAKE_DEFAULT ) ),
+    m_aInfoFT           ( this, IDEResId( FT_INFO ) ),
+    m_aBtnLine          ( this, IDEResId( FL_BUTTONS ) ),
+    m_aHelpBtn          ( this, IDEResId( PB_HELP ) ),
+    m_aCloseBtn         ( this, IDEResId( PB_CLOSE ) ),
     m_pLocalizationMgr  ( _pLMgr ),
-    m_sDefLangStr       (       ResId( STR_DEF_LANG ) ),
-    m_sDeleteStr        (       ResId( STR_DELETE ) ),
-    m_sCreateLangStr    (       ResId( STR_CREATE_LANG ) )
+    m_sDefLangStr       (       IDEResId( STR_DEF_LANG ) ),
+    m_sDeleteStr        (       IDEResId( STR_DELETE ) ),
+    m_sCreateLangStr    (       IDEResId( STR_CREATE_LANG ) )
 
 {
     FreeResource();
@@ -334,14 +334,14 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
 
     ModalDialog( pParent, IDEResId( RID_DLG_SETDEF_LANGUAGE ) ),
 
-    m_aLanguageFT   ( this, ResId( FT_DEF_LANGUAGE ) ),
-    m_pLanguageLB   ( new SvxLanguageBox( this, ResId( LB_DEF_LANGUAGE ) ) ),
+    m_aLanguageFT   ( this, IDEResId( FT_DEF_LANGUAGE ) ),
+    m_pLanguageLB   ( new SvxLanguageBox( this, IDEResId( LB_DEF_LANGUAGE ) ) ),
     m_pCheckLangLB  ( NULL ),
-    m_aInfoFT       ( this, ResId( FT_DEF_INFO ) ),
-    m_aBtnLine      ( this, ResId( FL_DEF_BUTTONS ) ),
-    m_aOKBtn        ( this, ResId( PB_DEF_OK ) ),
-    m_aCancelBtn    ( this, ResId( PB_DEF_CANCEL ) ),
-    m_aHelpBtn      ( this, ResId( PB_DEF_HELP ) ),
+    m_aInfoFT       ( this, IDEResId( FT_DEF_INFO ) ),
+    m_aBtnLine      ( this, IDEResId( FL_DEF_BUTTONS ) ),
+    m_aOKBtn        ( this, IDEResId( PB_DEF_OK ) ),
+    m_aCancelBtn    ( this, IDEResId( PB_DEF_CANCEL ) ),
+    m_aHelpBtn      ( this, IDEResId( PB_DEF_HELP ) ),
 
     m_pLocalizationMgr( _pLMgr )
 
@@ -350,10 +350,10 @@ SetDefaultLanguageDialog::SetDefaultLanguageDialog( Window* pParent, Localizatio
     {
         // change to "Add Interface Language" mode
         SetHelpId( HID_BASICIDE_ADDNEW_LANGUAGE );
-        m_pCheckLangLB = new SvxCheckListBox( this, ResId( LB_ADD_LANGUAGE ) );
-        SetText( String( ResId( STR_ADDLANG_TITLE ) ) );
-        m_aLanguageFT.SetText( String( ResId( STR_ADDLANG_LABEL ) ) );
-        m_aInfoFT.SetText( String( ResId( STR_ADDLANG_INFO ) ) );
+        m_pCheckLangLB = new SvxCheckListBox( this, IDEResId( LB_ADD_LANGUAGE ) );
+        SetText( String( IDEResId( STR_ADDLANG_TITLE ) ) );
+        m_aLanguageFT.SetText( String( IDEResId( STR_ADDLANG_LABEL ) ) );
+        m_aInfoFT.SetText( String( IDEResId( STR_ADDLANG_INFO ) ) );
     }
 
     FreeResource();
