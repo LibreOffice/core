@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmaddressblockpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:45:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:03:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,32 +98,32 @@ void lcl_Move(Control* pCtrl, long nYOffset)
 SwMailMergeAddressBlockPage::SwMailMergeAddressBlockPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage(_pParent, SW_RES(DLG_MM_ADDRESSBLOCK_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI(        this, ResId(  FI_HEADER           ) ),
-    m_aFirstFI(         this, ResId( FI_FIRST ) ),
-    m_aAddressListFI(   this, ResId( FI_ADDRESSLIST ) ),
-    m_aAddressListPB(   this, ResId( PB_ADDRESSLIST ) ),
-    m_aCurrentAddressFI( this, ResId( FI_CURRENTADDRESS ) ),
-    m_aFirstFL(         this, ResId( FL_FIRST ) ),
-    m_aSecondFI(        this, ResId( FI_SECOND )),
-    m_aSettingsFI(      this, ResId( FI_SECOND    ) ),
-    m_aAddressCB(       this, ResId( CB_ADDRESS   ) ),
-    m_aSettingsWIN(     this, ResId( WIN_SETTINGS   ) ),
-    m_aSettingsPB(      this, ResId( PB_SETTINGS    ) ),
-    m_aHideEmptyParagraphsCB( this, ResId( CB_HIDE_EMPTY_PARA ) ),
-    m_aSecondFL(        this, ResId( FL_SECOND )),
-    m_aThirdFI(         this, ResId( FI_THIRD ) ),
-    m_aMatchFieldsFI(   this, ResId( FI_MATCH_FIELDS ) ),
-    m_aThirdFL(         this, ResId( FL_THIRD ) ),
-    m_aFourthFI(        this, ResId( FI_FOURTH ) ),
-    m_aPreviewFI(       this, ResId( FI_PREVIEW     ) ),
-    m_aPreviewWIN(      this, ResId( WIN_PREVIEW    ) ),
-    m_aAssignPB(        this, ResId( PB_ASSIGN      ) ),
-    m_aDocumentIndexFI( this, ResId( FI_DOCINDEX    ) ),
-    m_aPrevSetIB(       this, ResId( IB_PREVSET     ) ),
-    m_aNextSetIB(       this, ResId( IB_NEXTSET     ) ),
-    m_sDocument(        ResId(       STR_DOCUMENT  ) ),
+    m_aHeaderFI(        this, SW_RES(  FI_HEADER           ) ),
+    m_aFirstFI(         this, SW_RES( FI_FIRST ) ),
+    m_aAddressListFI(   this, SW_RES( FI_ADDRESSLIST ) ),
+    m_aAddressListPB(   this, SW_RES( PB_ADDRESSLIST ) ),
+    m_aCurrentAddressFI( this, SW_RES( FI_CURRENTADDRESS ) ),
+    m_aFirstFL(         this, SW_RES( FL_FIRST ) ),
+    m_aSecondFI(        this, SW_RES( FI_SECOND )),
+    m_aSettingsFI(      this, SW_RES( FI_SECOND    ) ),
+    m_aAddressCB(       this, SW_RES( CB_ADDRESS   ) ),
+    m_aSettingsWIN(     this, SW_RES( WIN_SETTINGS   ) ),
+    m_aSettingsPB(      this, SW_RES( PB_SETTINGS    ) ),
+    m_aHideEmptyParagraphsCB( this, SW_RES( CB_HIDE_EMPTY_PARA ) ),
+    m_aSecondFL(        this, SW_RES( FL_SECOND )),
+    m_aThirdFI(         this, SW_RES( FI_THIRD ) ),
+    m_aMatchFieldsFI(   this, SW_RES( FI_MATCH_FIELDS ) ),
+    m_aThirdFL(         this, SW_RES( FL_THIRD ) ),
+    m_aFourthFI(        this, SW_RES( FI_FOURTH ) ),
+    m_aPreviewFI(       this, SW_RES( FI_PREVIEW     ) ),
+    m_aPreviewWIN(      this, SW_RES( WIN_PREVIEW    ) ),
+    m_aAssignPB(        this, SW_RES( PB_ASSIGN      ) ),
+    m_aDocumentIndexFI( this, SW_RES( FI_DOCINDEX    ) ),
+    m_aPrevSetIB(       this, SW_RES( IB_PREVSET     ) ),
+    m_aNextSetIB(       this, SW_RES( IB_NEXTSET     ) ),
+    m_sDocument(        SW_RES(       STR_DOCUMENT  ) ),
 #pragma warning (default : 4355)
-    m_sChangeAddress(   ResId(      STR_CHANGEADDRESS )),
+    m_sChangeAddress(   SW_RES(      STR_CHANGEADDRESS )),
     m_pWizard(_pParent)
 {
     FreeResource();
@@ -399,20 +399,20 @@ SwSelectAddressBlockDialog::SwSelectAddressBlockDialog(
                 Window* pParent, SwMailMergeConfigItem& rConfig) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_SELECTADDRESSBLOCK)),
 #pragma warning (disable : 4355)
-    m_aSelectFT( this, ResId(         FT_SELECT)),
-    m_aPreview( this, ResId(          WIN_PREVIEW)),
-    m_aNewPB( this, ResId(            PB_NEW)),
-    m_aDeletePB( this, ResId(         PB_DELETE)),
-    m_aCustomizePB( this, ResId(      PB_CUSTOMIZE)),
-    m_aSettingsFI( this, ResId(       FI_SETTINGS)),
-    m_aNeverRB( this, ResId(          RB_NEVER)),
-    m_aAlwaysRB( this, ResId(         RB_ALWAYS)),
-    m_aDependentRB( this, ResId(      RB_DEPENDENT)),
-    m_aCountryED( this, ResId(        ED_COUNTRY)),
-    m_aSeparatorFL( this, ResId(      FL_SEPARATOR)),
-    m_aOK( this, ResId(               PB_OK)),
-    m_aCancel( this, ResId(           PB_CANCEL)),
-    m_aHelp( this, ResId(             PB_HELP)),
+    m_aSelectFT( this, SW_RES(         FT_SELECT)),
+    m_aPreview( this, SW_RES(          WIN_PREVIEW)),
+    m_aNewPB( this, SW_RES(            PB_NEW)),
+    m_aDeletePB( this, SW_RES(         PB_DELETE)),
+    m_aCustomizePB( this, SW_RES(      PB_CUSTOMIZE)),
+    m_aSettingsFI( this, SW_RES(       FI_SETTINGS)),
+    m_aNeverRB( this, SW_RES(          RB_NEVER)),
+    m_aAlwaysRB( this, SW_RES(         RB_ALWAYS)),
+    m_aDependentRB( this, SW_RES(      RB_DEPENDENT)),
+    m_aCountryED( this, SW_RES(        ED_COUNTRY)),
+    m_aSeparatorFL( this, SW_RES(      FL_SEPARATOR)),
+    m_aOK( this, SW_RES(               PB_OK)),
+    m_aCancel( this, SW_RES(           PB_CANCEL)),
+    m_aHelp( this, SW_RES(             PB_HELP)),
 #pragma warning (default : 4355)
     m_rConfig(rConfig)
 {
@@ -623,24 +623,24 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
         Window* pParent, SwMailMergeConfigItem& rConfig, DialogType eType) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZEADDRESSBLOCK)),
 #pragma warning (disable : 4355)
-    m_aAddressElementsFT( this, ResId(       FT_ADDRESSELEMENTS             )),
-    m_aAddressElementsLB( this, ResId(       LB_ADDRESSELEMENTS             )),
-    m_aInsertFieldIB( this, ResId(           IB_INSERTFIELD                 )),
-    m_aRemoveFieldIB( this, ResId(           IB_REMOVEFIELD                 )),
-    m_aDragFT( this, ResId(                  FT_DRAG                        )),
-    m_aDragED( this, ResId(                  ED_DRAG                        )),
-    m_aUpIB( this, ResId(                    IB_UP                          )),
-    m_aLeftIB( this, ResId(                  IB_LEFT                        )),
-    m_aRightIB( this, ResId(                 IB_RIGHT                       )),
-    m_aDownIB( this, ResId(                  IB_DOWN                        )),
-    m_aFieldFT( this, ResId(                 FT_FIELD                       )),
-    m_aFieldCB( this, ResId(                 CB_FIELD                       )),
-    m_aPreviewFI( this, ResId(               FI_PREVIEW                     )),
-    m_aPreviewWIN( this, ResId(               WIN_PREVIEW                    )),
-    m_aSeparatorFL( this, ResId(             FL_SEPARATOR                   )),
-    m_aOK( this, ResId(                      PB_OK                          )),
-    m_aCancel( this, ResId(                  PB_CANCEL                      )),
-    m_aHelp( this, ResId(                    PB_HELP                        )),
+    m_aAddressElementsFT( this, SW_RES(       FT_ADDRESSELEMENTS             )),
+    m_aAddressElementsLB( this, SW_RES(       LB_ADDRESSELEMENTS             )),
+    m_aInsertFieldIB( this, SW_RES(           IB_INSERTFIELD                 )),
+    m_aRemoveFieldIB( this, SW_RES(           IB_REMOVEFIELD                 )),
+    m_aDragFT( this, SW_RES(                  FT_DRAG                        )),
+    m_aDragED( this, SW_RES(                  ED_DRAG                        )),
+    m_aUpIB( this, SW_RES(                    IB_UP                          )),
+    m_aLeftIB( this, SW_RES(                  IB_LEFT                        )),
+    m_aRightIB( this, SW_RES(                 IB_RIGHT                       )),
+    m_aDownIB( this, SW_RES(                  IB_DOWN                        )),
+    m_aFieldFT( this, SW_RES(                 FT_FIELD                       )),
+    m_aFieldCB( this, SW_RES(                 CB_FIELD                       )),
+    m_aPreviewFI( this, SW_RES(               FI_PREVIEW                     )),
+    m_aPreviewWIN( this, SW_RES(               WIN_PREVIEW                    )),
+    m_aSeparatorFL( this, SW_RES(             FL_SEPARATOR                   )),
+    m_aOK( this, SW_RES(                      PB_OK                          )),
+    m_aCancel( this, SW_RES(                  PB_CANCEL                      )),
+    m_aHelp( this, SW_RES(                    PB_HELP                        )),
 #pragma warning (default : 4355)
     m_eType(eType),
     m_rConfigItem(rConfig)
@@ -651,31 +651,31 @@ SwCustomizeAddressBlockDialog::SwCustomizeAddressBlockDialog(
     {
         m_aFieldFT.Show();
         m_aFieldCB.Show();
-        SvLBoxEntry* pEntry = m_aAddressElementsLB.InsertEntry(String(ResId(ST_SALUTATION )));
+        SvLBoxEntry* pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_SALUTATION )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_SALUTATION );
-        pEntry = m_aAddressElementsLB.InsertEntry(String(ResId(ST_PUNCTUATION)));
+        pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_PUNCTUATION)));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_PUNCTUATION );
-        pEntry = m_aAddressElementsLB.InsertEntry(String(ResId(ST_TEXT       )));
+        pEntry = m_aAddressElementsLB.InsertEntry(String(SW_RES(ST_TEXT       )));
         pEntry->SetUserData((void*)(sal_Int32)USER_DATA_TEXT       );
-        ResStringArray aSalutArr(ResId(
+        ResStringArray aSalutArr(SW_RES(
                     eType == GREETING_MALE ? RA_SALUTATION_MALE : RA_SALUTATION_FEMALE));
         sal_uInt16 i;
         for(i = 0; i < aSalutArr.Count(); ++i)
             m_aSalutations.push_back(aSalutArr.GetString(i));
-        ResStringArray aPunctArr(ResId(RA_PUNCTUATION));
+        ResStringArray aPunctArr(SW_RES(RA_PUNCTUATION));
         for(i = 0; i < aPunctArr.Count(); ++i)
             m_aPunctuations.push_back(aPunctArr.GetString(i));
         m_aDragED.SetText(String::CreateFromAscii("            "));
-        SetText( String( ResId( eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE)));
-        m_aAddressElementsFT.SetText(String(ResId(ST_SALUTATIONELEMENTS)));
-        m_aInsertFieldIB.SetQuickHelpText(String(ResId(ST_INSERTSALUTATIONFIELD)));
-        m_aRemoveFieldIB.SetQuickHelpText(String(ResId(ST_REMOVESALUTATIONFIELD)));
-        m_aDragFT.SetText(String(ResId(ST_DRAGSALUTATION)));
+        SetText( String( SW_RES( eType == GREETING_MALE ? ST_TITLE_MALE : ST_TITLE_FEMALE)));
+        m_aAddressElementsFT.SetText(String(SW_RES(ST_SALUTATIONELEMENTS)));
+        m_aInsertFieldIB.SetQuickHelpText(String(SW_RES(ST_INSERTSALUTATIONFIELD)));
+        m_aRemoveFieldIB.SetQuickHelpText(String(SW_RES(ST_REMOVESALUTATIONFIELD)));
+        m_aDragFT.SetText(String(SW_RES(ST_DRAGSALUTATION)));
     }
     else
     {
         if(eType == ADDRESSBLOCK_EDIT)
-            SetText(String(ResId(ST_TITLE_EDIT)));
+            SetText(String(SW_RES(ST_TITLE_EDIT)));
 
         //resize the preview
         Point aFieldPos(m_aFieldFT.GetPosPixel());
@@ -1074,9 +1074,9 @@ SwAssignFieldsControl::SwAssignFieldsControl(
         Window* pParent, const ResId& rResId, SwMailMergeConfigItem& rConfigItem) :
     Control(pParent, rResId),
 #pragma warning (disable : 4355)
-    m_aVScroll(this,  ResId(SCR_1     )),
+    m_aVScroll(this,  ResId(SCR_1, *rResId.GetResMgr()     )),
     m_aHeaderHB(this, WB_BUTTONSTYLE | WB_BOTTOMBORDER),
-    m_aWindow(this, ResId(WIN_DATA)),
+    m_aWindow(this, ResId(WIN_DATA, *rResId.GetResMgr())),
 #pragma warning (default : 4355)
     m_rConfigItem(rConfigItem),
     m_nLBStartTopPos(0),
@@ -1115,17 +1115,17 @@ SwAssignFieldsControl::SwAssignFieldsControl(
     for(USHORT i = 0; i < rHeaders.Count(); ++i)
     {
         const XubString& rHeader = rHeaders.GetString( i );
-        FixedInfo* pNewText = new FixedInfo(&m_aWindow, ResId( FT_FIELDS));
+        FixedInfo* pNewText = new FixedInfo(&m_aWindow, ResId( FT_FIELDS, *rResId.GetResMgr()));
         String sLabel(String::CreateFromAscii("<>"));
         sLabel.Insert(rHeader, 1);
         pNewText->SetText(sLabel);
-        ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS));
+        ListBox* pNewLB = new ListBox(&m_aWindow, ResId(LB_FIELDS, *rResId.GetResMgr()));
         pNewLB->SetHelpId( HID_MM_HEADER_0 + i );
         pNewLB->SelectEntryPos(0);
         for(sal_Int32 nField = 0; nField < aFields.getLength(); ++nField)
             pNewLB->InsertEntry(pFields[nField]);
 
-        FixedInfo* pNewPreview = new FixedInfo(&m_aWindow, ResId( FT_PREVIEW ));
+        FixedInfo* pNewPreview = new FixedInfo(&m_aWindow, ResId( FT_PREVIEW, *rResId.GetResMgr() ));
         //select the ListBox
         //if there is an assignment
         if(aAssignments.getLength() > i && aAssignments[i].getLength())
@@ -1346,28 +1346,28 @@ SwAssignFieldsDialog::SwAssignFieldsDialog(
         bool bIsAddressBlock) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ASSIGNFIELDS)),
 #pragma warning (disable : 4355)
-    m_aMatchingFI( this, ResId(     FI_MATCHING)),
-    m_pFieldsControl( new SwAssignFieldsControl(this, ResId(  CT_FIELDS  ), rConfigItem)),
-    m_aPreviewFI( this, ResId(      FI_PREVIEW )),
-    m_aPreviewWIN( this, ResId(     WIN_PREVIEW )),
-    m_aSeparatorFL( this, ResId(    FL_SEPARATOR)),
-    m_aOK( this, ResId(             PB_OK       )),
-    m_aCancel( this, ResId(         PB_CANCEL   )),
-    m_aHelp( this, ResId(           PB_HELP     )),
+    m_aMatchingFI( this, SW_RES(     FI_MATCHING)),
+    m_pFieldsControl( new SwAssignFieldsControl(this, SW_RES(  CT_FIELDS  ), rConfigItem)),
+    m_aPreviewFI( this, SW_RES(      FI_PREVIEW )),
+    m_aPreviewWIN( this, SW_RES(     WIN_PREVIEW )),
+    m_aSeparatorFL( this, SW_RES(    FL_SEPARATOR)),
+    m_aOK( this, SW_RES(             PB_OK       )),
+    m_aCancel( this, SW_RES(         PB_CANCEL   )),
+    m_aHelp( this, SW_RES(           PB_HELP     )),
 #pragma warning (default : 4355)
-    m_sNone(ResId(ST_NONE)),
+    m_sNone(SW_RES(ST_NONE)),
     m_rConfigItem(rConfigItem),
     m_rPreviewString(rPreview)
 {
     //resize the HeaderBar
-    String sAddressElement(  ResId(ST_ADDRESSELEMENT ));
-    String sMatchesTo(       ResId(ST_MATCHESTO      ));
-    String sPreview(         ResId(ST_PREVIEW        ));
+    String sAddressElement(  SW_RES(ST_ADDRESSELEMENT ));
+    String sMatchesTo(       SW_RES(ST_MATCHESTO      ));
+    String sPreview(         SW_RES(ST_PREVIEW        ));
     if(!bIsAddressBlock)
     {
-        m_aPreviewFI.SetText(String(ResId(ST_SALUTATIONPREVIEW)));
-        m_aMatchingFI.SetText(String(ResId(ST_SALUTATIONMATCHING)));
-        sAddressElement = String(ResId(ST_SALUTATIONELEMENT));
+        m_aPreviewFI.SetText(String(SW_RES(ST_SALUTATIONPREVIEW)));
+        m_aMatchingFI.SetText(String(SW_RES(ST_SALUTATIONMATCHING)));
+        sAddressElement = String(SW_RES(ST_SALUTATIONELEMENT));
     }
     FreeResource();
     Size aOutputSize(m_pFieldsControl->m_aHeaderHB.GetSizePixel());
