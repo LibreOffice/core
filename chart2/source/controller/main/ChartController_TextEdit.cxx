@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ChartController_TextEdit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:31:27 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:38:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -167,7 +167,7 @@ void SAL_CALL ChartController::executeDispatch_InsertSpecialCharacter()
 {
     SvxAbstractDialogFactory * pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT( pFact, "No dialog factory" );
-    AbstractSvxCharacterMap * pDlg = pFact->CreateSvxCharacterMap( NULL,  ResId( RID_SVXDLG_CHARMAP ), FALSE );
+    AbstractSvxCharacterMap * pDlg = pFact->CreateSvxCharacterMap( NULL,  RID_SVXDLG_CHARMAP, FALSE );
     DBG_ASSERT( pDlg, "Couldn't create SvxCharacterMap dialog" );
 
     //set fixed current font
