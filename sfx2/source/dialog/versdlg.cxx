@@ -4,9 +4,9 @@
  *
  *  $RCSfile: versdlg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:10:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:13:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,20 +214,20 @@ SfxVersionsTabListBox_Impl::SfxVersionsTabListBox_Impl( Window* pParent, const R
 
 SfxVersionDialog::SfxVersionDialog ( SfxViewFrame* pVwFrame, Window *pParent )
     : SfxModalDialog( pParent, SfxResId( DLG_VERSIONS ) )
-    , aNewGroup( this, ResId( GB_NEWVERSIONS ) )
-    , aSaveButton( this, ResId( PB_SAVE ) )
-    , aSaveCheckBox( this, ResId( CB_SAVEONCLOSE ) )
-    , aExistingGroup( this, ResId( GB_OLDVERSIONS ) )
-    , aDateTimeText( this, ResId( FT_DATETIME ) )
-    , aSavedByText( this, ResId( FT_SAVEDBY ) )
-    , aCommentText( this, ResId( FT_COMMENTS ) )
-    , aVersionBox( this, ResId( TLB_VERSIONS ) )
-    , aCloseButton( this, ResId( PB_CLOSE ) )
-    , aOpenButton( this, ResId( PB_OPEN ) )
-    , aViewButton( this, ResId( PB_VIEW ) )
-    , aDeleteButton( this, ResId( PB_DELETE ) )
-    , aCompareButton( this, ResId( PB_COMPARE ) )
-    , aHelpButton( this, ResId ( PB_HELP ) )
+    , aNewGroup( this, SfxResId( GB_NEWVERSIONS ) )
+    , aSaveButton( this, SfxResId( PB_SAVE ) )
+    , aSaveCheckBox( this, SfxResId( CB_SAVEONCLOSE ) )
+    , aExistingGroup( this, SfxResId( GB_OLDVERSIONS ) )
+    , aDateTimeText( this, SfxResId( FT_DATETIME ) )
+    , aSavedByText( this, SfxResId( FT_SAVEDBY ) )
+    , aCommentText( this, SfxResId( FT_COMMENTS ) )
+    , aVersionBox( this, SfxResId( TLB_VERSIONS ) )
+    , aCloseButton( this, SfxResId( PB_CLOSE ) )
+    , aOpenButton( this, SfxResId( PB_OPEN ) )
+    , aViewButton( this, SfxResId( PB_VIEW ) )
+    , aDeleteButton( this, SfxResId( PB_DELETE ) )
+    , aCompareButton( this, SfxResId( PB_COMPARE ) )
+    , aHelpButton( this, SfxResId( PB_HELP ) )
     , pViewFrame( pVwFrame )
     , mpTable( NULL )
     , mpLocaleWrapper( NULL )
@@ -484,13 +484,13 @@ IMPL_LINK( SfxVersionDialog, ButtonHdl_Impl, Button*, pButton )
 
 SfxViewVersionDialog_Impl::SfxViewVersionDialog_Impl ( Window *pParent, SfxVersionInfo& rInfo, BOOL bEdit )
     : SfxModalDialog( pParent, SfxResId( DLG_COMMENTS ) )
-    , aDateTimeText( this, ResId( FT_DATETIME ) )
-    , aSavedByText( this, ResId( FT_SAVEDBY ) )
-    , aEdit( this, ResId ( ME_VERSIONS ) )
-    , aOKButton( this, ResId( PB_OK ) )
-    , aCancelButton( this, ResId( PB_CANCEL ) )
-    , aCloseButton( this, ResId( PB_CLOSE ) )
-    , aHelpButton( this, ResId ( PB_HELP ) )
+    , aDateTimeText( this, SfxResId( FT_DATETIME ) )
+    , aSavedByText( this, SfxResId( FT_SAVEDBY ) )
+    , aEdit( this, SfxResId( ME_VERSIONS ) )
+    , aOKButton( this, SfxResId( PB_OK ) )
+    , aCancelButton( this, SfxResId( PB_CANCEL ) )
+    , aCloseButton( this, SfxResId( PB_CLOSE ) )
+    , aHelpButton( this, SfxResId( PB_HELP ) )
     , pInfo( &rInfo )
 {
     FreeResource();
