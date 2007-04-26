@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basrdll.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 10:04:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:33:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,8 +57,13 @@
 #include <basrid.hxx>
 #include <sb.hrc>
 
-BasicResId::BasicResId( USHORT nId ):
-    ResId( nId, (*(BasicDLL**)GetAppData(SHL_BASIC))->GetResMgr() )
+SttResId::SttResId( sal_uInt32 nId ) :
+    ResId( nId, *((*(BasicDLL**)GetAppData(SHL_BASIC))->GetSttResMgr()) )
+{
+}
+
+BasResId::BasResId( sal_uInt32 nId ) :
+    ResId( nId, *((*(BasicDLL**)GetAppData(SHL_BASIC))->GetBasResMgr()) )
 {
 }
 
@@ -66,14 +71,16 @@ BasicDLL::BasicDLL()
 {
      *(BasicDLL**)GetAppData(SHL_BASIC) = this;
     ::com::sun::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
-    pResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(ofa), aLocale );
+    pSttResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(stt), aLocale );
+    pBasResMgr = ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(sb), aLocale );
     bDebugMode = FALSE;
     bBreakEnabled = TRUE;
 }
 
 BasicDLL::~BasicDLL()
 {
-    delete pResMgr;
+    delete pSttResMgr;
+    delete pBasResMgr;
 }
 
 void BasicDLL::EnableBreak( BOOL bEnable )
@@ -107,7 +114,7 @@ void BasicDLL::BasicBreak()
         {
             bJustStopping = TRUE;
             StarBASIC::Stop();
-            String aMessageStr( BasicResId( IDS_SBERR_TERMINATED ) );
+            String aMessageStr( BasResId( IDS_SBERR_TERMINATED ) );
             InfoBox( 0, aMessageStr ).Execute();
             bJustStopping = FALSE;
         }
