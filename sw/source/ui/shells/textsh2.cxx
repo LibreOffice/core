@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textsh2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:18:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:18:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -357,7 +357,7 @@ IMPL_STATIC_LINK( SwBaseShell, InsertDBTextHdl, DBTextStruct_Impl*, pDBStruct )
                                                                                                 xSource,
                                                                                                 xColSupp,
                                                                                                 aDBData,
-                                                                                                ResId( DLG_AP_INSERT_DB_SEL ))); //CHINA001
+                                                                                                DLG_AP_INSERT_DB_SEL )); //CHINA001
             if( RET_OK == pDlg->Execute() )
             {
                 Reference <XResultSet> xResSet = pDBStruct->xCursor;
