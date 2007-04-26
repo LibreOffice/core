@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:49:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:58:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -123,7 +123,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent
 
     m_pImpl = ::std::auto_ptr<ODbDataSourceAdministrationHelper>(new ODbDataSourceAdministrationHelper(_rxORB,this,this));
     // add the initial tab page
-    AddTabPage(PAGE_CONNECTION, String(ResId(STR_PAGETITLE_GENERAL)), OConnectionTabPage::Create, NULL);
+    AddTabPage(PAGE_CONNECTION, String(ModuleRes(STR_PAGETITLE_GENERAL)), OConnectionTabPage::Create, NULL);
 
     // remove the reset button - it's meaning is much too ambiguous in this dialog
     RemoveResetButton();
@@ -179,7 +179,7 @@ void ODbAdminDialog::addDetailPage(USHORT _nPageId, USHORT _nTextId, CreateTabPa
     // open our own resource block, as the page titles are strings local to this block
     LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
 
-    AddTabPage(_nPageId, String(ResId(_nTextId)), _pCreateFunc, NULL);
+    AddTabPage(_nPageId, String(ModuleRes(_nTextId)), _pCreateFunc, NULL);
     m_aCurrentDetailPages.push(_nPageId);
 }
 
@@ -248,7 +248,7 @@ void ODbAdminDialog::implSelectDatasource(const ::com::sun::star::uno::Any& _aDa
         case DST_USERDEFINE10:
             {
                 LocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
-                String aTitle(ResId(STR_PAGETITLE_ADVANCED));
+                String aTitle(ModuleRes(STR_PAGETITLE_ADVANCED));
                 AddTabPage(PAGE_USERDRIVER, aTitle, ODriversSettings::CreateUser, 0, sal_False, 1);
                 m_aCurrentDetailPages.push(PAGE_USERDRIVER);
             }
