@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourcemanager.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-04-07 14:25:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:18:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -78,6 +78,6 @@ namespace XmlSec
     void            AlignAndFitImageAndControl( FixedImage& _rImage, FixedInfo& _rFI, long _nXOffset = 0 );
 }
 
-#define XMLSEC_RES(id)      ResId(id,XmlSec::GetResMgr())
+#define XMLSEC_RES(id)      ResId(id,*XmlSec::GetResMgr())
 
 #endif
