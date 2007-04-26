@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificateviewer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:15:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:17:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -83,9 +83,9 @@ CertificateViewer::CertificateViewer(
         const cssu::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment,
         const cssu::Reference< dcss::security::XCertificate >& _rXCert, BOOL bCheckForPrivateKey )
     :TabDialog      ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTVIEWER ) )
-    ,maTabCtrl      ( this, ResId( 1 ) )
-    ,maOkBtn        ( this, ResId( BTN_OK ) )
-    ,maHelpBtn      ( this, ResId( BTN_HELP ) )
+    ,maTabCtrl      ( this, XMLSEC_RES( 1 ) )
+    ,maOkBtn        ( this, XMLSEC_RES( BTN_OK ) )
+    ,maHelpBtn      ( this, XMLSEC_RES( BTN_HELP ) )
 {
     FreeResource();
 
@@ -116,19 +116,19 @@ CertificateViewerTP::CertificateViewerTP( Window* _pParent, const ResId& _rResId
 
 CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_GENERAL ), _pDlg )
-    ,maFrameWin             ( this, ResId( WIN_FRAME ) )
-    ,maCertImg              ( this, ResId( IMG_CERT ) )
-    ,maCertInfoFI           ( this, ResId( FI_CERTINFO ) )
-    ,maSep1FL               ( this, ResId( FL_SEP1 ) )
-    ,maHintNotTrustedFI     ( this, ResId( FI_HINTNOTTRUST ) )
-    ,maSep2FL               ( this, ResId( FL_SEP2 ) )
-    ,maIssuedToLabelFI      ( this, ResId( FI_ISSTOLABEL ) )
-    ,maIssuedToFI           ( this, ResId( FI_ISSTO ) )
-    ,maIssuedByLabelFI      ( this, ResId( FI_ISSBYLABEL ) )
-    ,maIssuedByFI           ( this, ResId( FI_ISSBY ) )
-    ,maValidDateFI          ( this, ResId( FI_VALIDDATE ) )
-    ,maKeyImg               ( this, ResId( IMG_KEY ) )
-    ,maHintCorrespPrivKeyFI ( this, ResId( FI_CORRPRIVKEY ) )
+    ,maFrameWin             ( this, XMLSEC_RES( WIN_FRAME ) )
+    ,maCertImg              ( this, XMLSEC_RES( IMG_CERT ) )
+    ,maCertInfoFI           ( this, XMLSEC_RES( FI_CERTINFO ) )
+    ,maSep1FL               ( this, XMLSEC_RES( FL_SEP1 ) )
+    ,maHintNotTrustedFI     ( this, XMLSEC_RES( FI_HINTNOTTRUST ) )
+    ,maSep2FL               ( this, XMLSEC_RES( FL_SEP2 ) )
+    ,maIssuedToLabelFI      ( this, XMLSEC_RES( FI_ISSTOLABEL ) )
+    ,maIssuedToFI           ( this, XMLSEC_RES( FI_ISSTO ) )
+    ,maIssuedByLabelFI      ( this, XMLSEC_RES( FI_ISSBYLABEL ) )
+    ,maIssuedByFI           ( this, XMLSEC_RES( FI_ISSBY ) )
+    ,maValidDateFI          ( this, XMLSEC_RES( FI_VALIDDATE ) )
+    ,maKeyImg               ( this, XMLSEC_RES( IMG_KEY ) )
+    ,maHintCorrespPrivKeyFI ( this, XMLSEC_RES( FI_CORRPRIVKEY ) )
 {
     //Verify the certificate
     sal_Int32 certStatus = mpDlg->mxSecurityEnvironment->verifyCertificate(mpDlg->mxCert);
@@ -145,8 +145,8 @@ CertificateViewerGeneralTP::CertificateViewerGeneralTP( Window* _pParent, Certif
 
     if ( !bCertValid )
     {
-        maCertImg.SetImage( Image( ResId( IMG_STATE_NOT_VALIDATED ) ) );
-        maHintNotTrustedFI.SetText( String( ResId( STR_CERTIFICATE_NOT_VALIDATED ) ) );
+        maCertImg.SetImage( Image( XMLSEC_RES( IMG_STATE_NOT_VALIDATED ) ) );
+        maHintNotTrustedFI.SetText( String( XMLSEC_RES( STR_CERTIFICATE_NOT_VALIDATED ) ) );
     }
 
     FreeResource();
@@ -280,8 +280,8 @@ void CertificateViewerDetailsTP::InsertElement( const String& _rField, const Str
 
 CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_DETAILS ), _pDlg  )
-    ,maElementsLB           ( this, ResId( LB_ELEMENTS ) )
-    ,maElementML            ( this, ResId( ML_ELEMENT ) )
+    ,maElementsLB           ( this, XMLSEC_RES( LB_ELEMENTS ) )
+    ,maElementML            ( this, XMLSEC_RES( ML_ELEMENT ) )
     ,maStdFont              ( maElementML.GetControlFont() )
     ,maFixedWidthFont       ( OutputDevice::GetDefaultFont( DEFAULTFONT_UI_FIXED, LANGUAGE_DONTKNOW, DEFAULTFONT_FLAGS_ONLYONE, this ) )
 {
@@ -293,7 +293,7 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
 
     static long nTabs[] = { 2, 0, 30*CS_LB_WIDTH/100 };
     maElementsLB.SetTabs( &nTabs[ 0 ] );
-    maElementsLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
+    maElementsLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
 
     // fill list box
     Reference< security::XCertificate > xCert = mpDlg->mxCert;
@@ -305,20 +305,20 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = String::CreateFromAscii( "V" );
     aLBEntry += String::CreateFromInt32( xCert->getVersion() + 1 );
     // <--
-    InsertElement( String( ResId( STR_VERSION ) ), aLBEntry, aLBEntry );
+    InsertElement( String( XMLSEC_RES( STR_VERSION ) ), aLBEntry, aLBEntry );
     Sequence< sal_Int8 >    aSeq = xCert->getSerialNumber();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_SERIALNUM ) ), aLBEntry, aDetails, true );
+    InsertElement( String( XMLSEC_RES( STR_SERIALNUM ) ), aLBEntry, aDetails, true );
 
     aLBEntry = XmlSec::GetPureContent( xCert->getIssuerName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getIssuerName(), "\n", true );
-    InsertElement( String( ResId( STR_ISSUER ) ), aLBEntry, aDetails );
+    InsertElement( String( XMLSEC_RES( STR_ISSUER ) ), aLBEntry, aDetails );
     /*
     aSeq = xCert->getIssuerUniqueID();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_ISSUER_ID ) ), aLBEntry, aDetails, true );
+    InsertElement( String( XMLSEC_RES( STR_ISSUER_ID ) ), aLBEntry, aDetails, true );
     */
 
     DateTime aDateTime;
@@ -326,41 +326,41 @@ CertificateViewerDetailsTP::CertificateViewerDetailsTP( Window* _pParent, Certif
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += String::CreateFromAscii( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( String( ResId( STR_VALIDFROM ) ), aLBEntry, aLBEntry  );
+    InsertElement( String( XMLSEC_RES( STR_VALIDFROM ) ), aLBEntry, aLBEntry  );
     utl::typeConvert( xCert->getNotValidAfter(), aDateTime );
     aLBEntry = GetSettings().GetUILocaleDataWrapper().getDate( aDateTime.GetDate() );
     aLBEntry += String::CreateFromAscii( " " );
     aLBEntry += GetSettings().GetUILocaleDataWrapper().getTime( aDateTime.GetTime() );
-    InsertElement( String( ResId( STR_VALIDTO ) ), aLBEntry, aLBEntry );
+    InsertElement( String( XMLSEC_RES( STR_VALIDTO ) ), aLBEntry, aLBEntry );
 
     aLBEntry = XmlSec::GetPureContent( xCert->getSubjectName(), ", " );
     aDetails = XmlSec::GetPureContent( xCert->getSubjectName(), "\n", true );
-    InsertElement( String( ResId( STR_SUBJECT ) ), aLBEntry, aDetails );
+    InsertElement( String( XMLSEC_RES( STR_SUBJECT ) ), aLBEntry, aDetails );
     /*
     aSeq = xCert->getSubjectUniqueID();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_SUBJECT_ID ) ), aLBEntry, aDetails, true );
+    InsertElement( String( XMLSEC_RES( STR_SUBJECT_ID ) ), aLBEntry, aDetails, true );
     */
     aLBEntry = aDetails = xCert->getSubjectPublicKeyAlgorithm();
-    InsertElement( String( ResId( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
+    InsertElement( String( XMLSEC_RES( STR_SUBJECT_PUBKEY_ALGO ) ), aLBEntry, aDetails );
     aSeq = xCert->getSubjectPublicKeyValue();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_SUBJECT_PUBKEY_VAL ) ), aLBEntry, aDetails, true );
+    InsertElement( String( XMLSEC_RES( STR_SUBJECT_PUBKEY_VAL ) ), aLBEntry, aDetails, true );
 
     aLBEntry = aDetails = xCert->getSignatureAlgorithm();
-    InsertElement( String( ResId( STR_SIGNATURE_ALGO ) ), aLBEntry, aDetails );
+    InsertElement( String( XMLSEC_RES( STR_SIGNATURE_ALGO ) ), aLBEntry, aDetails );
 
     aSeq = xCert->getSHA1Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_THUMBPRINT_SHA1 ) ), aLBEntry, aDetails, true );
+    InsertElement( String( XMLSEC_RES( STR_THUMBPRINT_SHA1 ) ), aLBEntry, aDetails, true );
 
     aSeq = xCert->getMD5Thumbprint();
     aLBEntry = XmlSec::GetHexString( aSeq, pHexSep );
     aDetails = XmlSec::GetHexString( aSeq, pHexSep, nLineBreak );
-    InsertElement( String( ResId( STR_THUMBPRINT_MD5 ) ), aLBEntry, aDetails, true );
+    InsertElement( String( XMLSEC_RES( STR_THUMBPRINT_MD5 ) ), aLBEntry, aDetails, true );
 
     FreeResource();
 
@@ -413,17 +413,17 @@ struct CertPath_UserData
 
 CertificateViewerCertPathTP::CertificateViewerCertPathTP( Window* _pParent, CertificateViewer* _pDlg )
     :CertificateViewerTP    ( _pParent, XMLSEC_RES( RID_XMLSECTP_CERTPATH ), _pDlg  )
-    ,maCertPathFT           ( this, ResId( FT_CERTPATH ) )
-    ,maCertPathLB           ( this, ResId( LB_SIGNATURES ) )
-    ,maViewCertPB           ( this, ResId( BTN_VIEWCERT ) )
-    ,maCertStatusFT         ( this, ResId( FT_CERTSTATUS ) )
-    ,maCertStatusML         ( this, ResId( ML_CERTSTATUS ) )
+    ,maCertPathFT           ( this, XMLSEC_RES( FT_CERTPATH ) )
+    ,maCertPathLB           ( this, XMLSEC_RES( LB_SIGNATURES ) )
+    ,maViewCertPB           ( this, XMLSEC_RES( BTN_VIEWCERT ) )
+    ,maCertStatusFT         ( this, XMLSEC_RES( FT_CERTSTATUS ) )
+    ,maCertStatusML         ( this, XMLSEC_RES( ML_CERTSTATUS ) )
     ,mpParent               ( _pDlg )
     ,mbFirstActivateDone    ( false )
-    ,maCertImage            ( ResId( IMG_CERT_SMALL ) )
-    ,maCertNotValidatedImage( ResId( IMG_CERT_NOTVALIDATED_SMALL ) )
-    ,msCertOK               ( ResId( STR_PATH_CERT_OK ) )
-    ,msCertNotValidated     ( ResId( STR_PATH_CERT_NOT_VALIDATED ) )
+    ,maCertImage            ( XMLSEC_RES( IMG_CERT_SMALL ) )
+    ,maCertNotValidatedImage( XMLSEC_RES( IMG_CERT_NOTVALIDATED_SMALL ) )
+    ,msCertOK               ( XMLSEC_RES( STR_PATH_CERT_OK ) )
+    ,msCertNotValidated     ( XMLSEC_RES( STR_PATH_CERT_NOT_VALIDATED ) )
 
 {
 
