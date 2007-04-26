@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sbxscan.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:33:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -648,7 +648,7 @@ class SbxValueFormatResId : public ResId
 {
 public:
     SbxValueFormatResId( USHORT nId )
-        : ResId( nId, implGetResMgr() )
+        : ResId( nId, *implGetResMgr() )
     {}
 };
 
