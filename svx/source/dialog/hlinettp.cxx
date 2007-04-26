@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hlinettp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:23:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:33:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,25 +73,25 @@ SvxHyperlinkInternetTp::SvxHyperlinkInternetTp ( Window *pParent,
                                                  const SfxItemSet& rItemSet)
 :   SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_INTERNET ),
                               rItemSet ) ,
-    maGrpLinkTyp           ( this, ResId (GRP_LINKTYPE) ),
-    maRbtLinktypInternet    ( this, ResId (RB_LINKTYP_INTERNET) ),
-    maRbtLinktypFTP         ( this, ResId (RB_LINKTYP_FTP) ),
-    maRbtLinktypTelnet      ( this, ResId (RB_LINKTYP_TELNET) ),
-    maFtTarget              ( this, ResId (FT_TARGET_HTML) ),
+    maGrpLinkTyp           ( this, SVX_RES (GRP_LINKTYPE) ),
+    maRbtLinktypInternet    ( this, SVX_RES (RB_LINKTYP_INTERNET) ),
+    maRbtLinktypFTP         ( this, SVX_RES (RB_LINKTYP_FTP) ),
+    maRbtLinktypTelnet      ( this, SVX_RES (RB_LINKTYP_TELNET) ),
+    maFtTarget              ( this, SVX_RES (FT_TARGET_HTML) ),
     maCbbTarget             ( this, INET_PROT_HTTP ),
-    maFtLogin               ( this, ResId (FT_LOGIN) ),
-    maEdLogin               ( this, ResId (ED_LOGIN) ),
-    maFtPassword            ( this, ResId (FT_PASSWD) ),
-    maEdPassword            ( this, ResId (ED_PASSWD) ),
-    maCbAnonymous           ( this, ResId (CBX_ANONYMOUS) ),
-    maBtBrowse              ( this, ResId (BTN_BROWSE) ),
-    maBtTarget              ( this, ResId (BTN_TARGET) ),
+    maFtLogin               ( this, SVX_RES (FT_LOGIN) ),
+    maEdLogin               ( this, SVX_RES (ED_LOGIN) ),
+    maFtPassword            ( this, SVX_RES (FT_PASSWD) ),
+    maEdPassword            ( this, SVX_RES (ED_PASSWD) ),
+    maCbAnonymous           ( this, SVX_RES (CBX_ANONYMOUS) ),
+    maBtBrowse              ( this, SVX_RES (BTN_BROWSE) ),
+    maBtTarget              ( this, SVX_RES (BTN_TARGET) ),
     mbMarkWndOpen           ( FALSE )
 {
     // Set HC bitmaps and display display of bitmap names.
-    maBtBrowse.SetModeImage( Image( ResId( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtBrowse.SetModeImage( Image( SVX_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtBrowse.EnableTextDisplay (FALSE);
-    maBtTarget.SetModeImage( Image( ResId( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtTarget.SetModeImage( Image( SVX_RES( IMG_TARGET_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtTarget.EnableTextDisplay (FALSE);
 
     InitStdControls();
