@@ -4,9 +4,9 @@
  *
  *  $RCSfile: swabstdlg.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:24:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:48:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -384,35 +384,35 @@ class SwAbstractDialogFactory
 {
 public:
     static SwAbstractDialogFactory*     Create();
-//CHINA001  virtual AbstractSwSaveLabelDlg*             CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, const ResId& rResId ) = 0;
+//CHINA001  virtual AbstractSwSaveLabelDlg*             CreateSwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec, int nResId ) = 0;
 
     virtual AbstractSwWordCountDialog* CreateSwWordCountDialog( Window* pWindow ) = 0;
-    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, const ResId& rResId ) = 0; //CHINA001 add for SwInsertAbstractDlg
-    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,const ResId& rResId   ) = 0; //CHINA001 add for SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
+    virtual AbstractSwInsertAbstractDlg * CreateSwInsertAbstractDlg ( Window* pParent, int nResId ) = 0; //CHINA001 add for SwInsertAbstractDlg
+    virtual AbstractSfxSingleTabDialog*  CreateSfxSingleTabDialog ( Window* pParent, SfxItemSet& rSet,int nResId   ) = 0; //CHINA001 add for SwAddrDlg SwDropCapsDlg, SwBackgroundDlg,SwNumFmtDlg,
     virtual AbstractSwAsciiFilterDlg*  CreateSwAsciiFilterDlg ( Window* pParent, SwDocShell& rDocSh,
-                                                                SvStream* pStream, const ResId& rResId ) = 0;//CHINA001 add for SwAsciiFilterDlg
-    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, const ResId& rResId ) = 0;//CHINA001 add for SwInsertBookmarkDlg
+                                                                SvStream* pStream, int nResId ) = 0;//CHINA001 add for SwAsciiFilterDlg
+    virtual VclAbstractDialog * CreateSwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq, int nResId ) = 0;//CHINA001 add for SwInsertBookmarkDlg
 
-    virtual AbstractSwBreakDlg * CreateSwBreakDlg( Window *pParent, SwWrtShell &rSh,const ResId& rResId ) = 0; // add for SwBreakDlg
-    virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, const ResId& rResId ) = 0; //add for SwChangeDBDlg
-    virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, const ResId& rResId, // add for SwCharDlg
+    virtual AbstractSwBreakDlg * CreateSwBreakDlg( Window *pParent, SwWrtShell &rSh,int nResId ) = 0; // add for SwBreakDlg
+    virtual VclAbstractDialog   * CreateSwChangeDBDlg( SwView& rVw, int nResId ) = 0; //add for SwChangeDBDlg
+    virtual SfxAbstractTabDialog *  CreateSwCharDlg( Window* pParent, SwView& pVw, const SfxItemSet& rCoreSet, int nResId, // add for SwCharDlg
                                                 const String* pFmtStr = 0, BOOL bIsDrwTxtDlg = FALSE) = 0;
-    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView , const ResId& rResId, bool bToTable) = 0; //add for SwConvertTableDlg
-    virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,const ResId& rResId) = 0; //add for SwCaptionDialog
+    virtual AbstractSwConvertTableDlg* CreateSwConvertTableDlg ( SwView& rView , int nResId, bool bToTable) = 0; //add for SwConvertTableDlg
+    virtual VclAbstractDialog * CreateSwCaptionDialog ( Window *pParent, SwView &rV,int nResId) = 0; //add for SwCaptionDialog
 
     virtual AbstractSwInsertDBColAutoPilot* CreateSwInsertDBColAutoPilot( SwView& rView, // add for SwInsertDBColAutoPilot
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource> rxSource,
         com::sun::star::uno::Reference<com::sun::star::sdbcx::XColumnsSupplier> xColSupp,
-        const SwDBData& rData,  const ResId& rResId) = 0;
-    virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg( Window *pParent, SwWrtShell &rSh,const ResId& rResId) = 0;//add for  SwFootNoteOptionDlg
+        const SwDBData& rData,  int nResId) = 0;
+    virtual SfxAbstractTabDialog * CreateSwFootNoteOptionDlg( Window *pParent, SwWrtShell &rSh,int nResId) = 0;//add for  SwFootNoteOptionDlg
 
     virtual AbstractDropDownFieldDialog * CreateDropDownFieldDialog ( Window *pParent, SwWrtShell &rSh, //add for DropDownFieldDialog
-                                SwField* pField,const ResId& rResId, BOOL bNextButton = FALSE ) = 0;
-    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert,const ResId& rResId ) = 0; //add for SwEnvDlg
+                                SwField* pField,int nResId, BOOL bNextButton = FALSE ) = 0;
+    virtual SfxAbstractTabDialog* CreateSwEnvDlg ( Window* pParent, const SfxItemSet& rSet, SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert,int nResId ) = 0; //add for SwEnvDlg
 
 
     virtual AbstarctSwLabDlg* CreateSwLabDlg ( Window* pParent, const SfxItemSet& rSet, //add for SwLabDlg
-                                                     SwNewDBMgr* pNewDBMgr, BOOL bLabel,const ResId& rResId  ) = 0;
+                                                     SwNewDBMgr* pNewDBMgr, BOOL bLabel,int nResId  ) = 0;
 
     virtual SwLabDlgMethod GetSwLabDlgStaticMethod () =0;//add for SwLabDlg
 
@@ -420,39 +420,39 @@ public:
                                                     SwView& rVw,
                                                     const SfxItemSet& rCoreSet,
                                                     BYTE nDialogMode,
-                                                    const ResId& rResId,
+                                                    int nResId,
                                                     const String *pCollName = 0,
                                                     BOOL bDraw = FALSE,
                                                     UINT16 nDefPage = 0) = 0;
 
-    virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, const ResId& rResId ) = 0; //add for SwSelGlossaryDlg
+    virtual AbstarctSwSelGlossaryDlg * CreateSwSelGlossaryDlg ( Window * pParent, const String &rShortName, int nResId ) = 0; //add for SwSelGlossaryDlg
 
-    virtual AbstractSwSplitTableDlg * CreateSwSplitTableDlg ( Window *pParent, SwWrtShell& rShell,const ResId& rResId ) = 0; //add for SwSplitTableDlg
+    virtual AbstractSwSplitTableDlg * CreateSwSplitTableDlg ( Window *pParent, SwWrtShell& rShell,int nResId ) = 0; //add for SwSplitTableDlg
 
 
-    virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, const ResId& rResId ) = 0; //add for  SwTableHeightDlg SwSortDlg ,SwSplitTblDlg
+    virtual VclAbstractDialog * CreateVclAbstractDialog ( Window * pParent, SwWrtShell &rSh, int nResId ) = 0; //add for  SwTableHeightDlg SwSortDlg ,SwSplitTblDlg
 
     virtual AbstractSwAutoFormatDlg * CreateSwAutoFormatDlg( Window* pParent, SwWrtShell* pShell, //add for SwAutoFormatDlg
-                                                            const ResId& rResId,
+                                                            int nResId,
                                                             BOOL bSetAutoFmt = TRUE,
                                                             const SwTableAutoFmt* pSelFmt = 0 ) = 0;
-    virtual AbstractSfxSingleTabDialog * CreateSwBorderDlg ( Window* pParent, SfxItemSet& rSet, USHORT nType,const ResId& rResId ) = 0;//add for SwBorderDlg
-    virtual AbstractSfxSingleTabDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, const ResId& rResId ) = 0; //add for SwWrapDlg
+    virtual AbstractSfxSingleTabDialog * CreateSwBorderDlg ( Window* pParent, SfxItemSet& rSet, USHORT nType,int nResId ) = 0;//add for SwBorderDlg
+    virtual AbstractSfxSingleTabDialog * CreateSwWrapDlg ( Window* pParent, SfxItemSet& rSet, SwWrtShell* pSh, BOOL bDrawMode, int nResId ) = 0; //add for SwWrapDlg
 
-    virtual VclAbstractDialog * CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , const ResId& rResId ) = 0; //add for SwTableWidthDlg
+    virtual VclAbstractDialog * CreateSwTableWidthDlg ( Window *pParent, SwTableFUNC &rFnc , int nResId ) = 0; //add for SwTableWidthDlg
     virtual SfxAbstractTabDialog* CreateSwTableTabDlg( Window* pParent, SfxItemPool& Pool,
-                                                        const SfxItemSet* pItemSet, SwWrtShell* pSh,const ResId& rResId ) = 0; //add for SwTableTabDlg
+                                                        const SfxItemSet* pItemSet, SwWrtShell* pSh,int nResId ) = 0; //add for SwTableTabDlg
 
-    virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, const ResId& rResId ) = 0; //add for SwFldDlg
-    virtual AbstractSfxSingleTabDialog*  CreateSwFldEditDlg ( SwView& rVw, const ResId& rResId ) = 0; //add for SwFldEditDlg
+    virtual AbstractSwFldDlg * CreateSwFldDlg ( SfxBindings* pB, SwChildWinWrapper* pCW, Window *pParent, int nResId ) = 0; //add for SwFldDlg
+    virtual AbstractSfxSingleTabDialog*  CreateSwFldEditDlg ( SwView& rVw, int nResId ) = 0; //add for SwFldEditDlg
     virtual AbstractSwRenameXNamedDlg * CreateSwRenameXNamedDlg( Window* pParent, //add for SwRenameXNamedDlg
                                                                 STAR_REFERENCE( container::XNamed ) & xNamed,
-                                                                STAR_REFERENCE( container::XNameAccess ) & xNameAccess, const ResId& rResId ) = 0;
-    virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg ( Window *pParent, const ResId& rResId ) = 0; //add for SwModalRedlineAcceptDlg
+                                                                STAR_REFERENCE( container::XNameAccess ) & xNameAccess, int nResId ) = 0;
+    virtual AbstractSwModalRedlineAcceptDlg * CreateSwModalRedlineAcceptDlg ( Window *pParent, int nResId ) = 0; //add for SwModalRedlineAcceptDlg
 
-    virtual VclAbstractDialog*          CreateSwVclDialog( const ResId& rResId, Window* pParent, BOOL& rWithPrev ) = 0; //add for SwMergeTblDlg
-//CHINA001  virtual VclAbstractDialog*          CreateSwWrtShDialog( const ResId& rResId, Window* pParent, SwWrtShell& rSh ) = 0; //add for SwColumnDlg
-    virtual SfxAbstractTabDialog*       CreateFrmTabDialog( const ResId& rResId,
+    virtual VclAbstractDialog*          CreateSwVclDialog( int nResId, Window* pParent, BOOL& rWithPrev ) = 0; //add for SwMergeTblDlg
+//CHINA001  virtual VclAbstractDialog*          CreateSwWrtShDialog( int nResId, Window* pParent, SwWrtShell& rSh ) = 0; //add for SwColumnDlg
+    virtual SfxAbstractTabDialog*       CreateFrmTabDialog( int nResId,
                                                 SfxViewFrame *pFrame, Window *pParent,
                                                 const SfxItemSet& rCoreSet,
                                                 BOOL            bNewFrm  = TRUE,
@@ -460,69 +460,69 @@ public:
                                                 BOOL            bFmt     = FALSE,
                                                 UINT16          nDefPage = 0,
                                                 const String*   pFmtStr  = 0) = 0;  //add for SwFrmDlg
-    virtual SfxAbstractTabDialog*       CreateTemplateDialog( const ResId& rResId,
+    virtual SfxAbstractTabDialog*       CreateTemplateDialog( int nResId,
                                                 Window*             pParent,
                                                 SfxStyleSheetBase&  rBase,
                                                 USHORT              nRegion,
                                                 BOOL                bColumn = FALSE,
                                                 SwWrtShell*         pActShell = 0,
                                                 BOOL                bNew = FALSE ) = 0; //add for SwTemplateDlg
-    virtual AbstractGlossaryDlg*        CreateGlossaryDlg( const ResId& rResId,
+    virtual AbstractGlossaryDlg*        CreateGlossaryDlg( int nResId,
                                                 SfxViewFrame* pViewFrame,
                                                 SwGlossaryHdl* pGlosHdl,
                                                 SwWrtShell *pWrtShell) = 0; //add for SwGlossaryDlg
-    virtual AbstractFldInputDlg*        CreateFldInputDlg( const ResId& rResId,
+    virtual AbstractFldInputDlg*        CreateFldInputDlg( int nResId,
                                                 Window *pParent, SwWrtShell &rSh,
                                                 SwField* pField, BOOL bNextButton = FALSE ) = 0; //add for SwFldInputDlg
-    virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( const ResId& rResId,
+    virtual AbstractInsFootNoteDlg*     CreateInsFootNoteDlg( int nResId,
                                                 Window * pParent, SwWrtShell &rSh, BOOL bEd = FALSE) = 0; //add for SwInsFootNoteDlg
-    virtual VclAbstractDialog *         CreateVclSwViewDialog( const ResId& rResId,
+    virtual VclAbstractDialog *         CreateVclSwViewDialog( int nResId,
                                                 SwView& rView, BOOL bCol = FALSE ) = 0; //add for SwInsRowColDlg, SwLineNumberingDlg
-    virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( const ResId& rResId,
+    virtual AbstractInsertGrfRulerDlg*      CreateInsertGrfRulerDlg( int nResId,
                                                 Window * pParent ) = 0; //add for SwInsertGrfRulerDlg
-    virtual AbstractInsTableDlg*        CreateInsTableDlg( const ResId& rResId,
+    virtual AbstractInsTableDlg*        CreateInsTableDlg( int nResId,
                                                 SwView& rView ) = 0; //add for SwInsTableDlg
-    virtual AbstractJavaEditDialog*     CreateJavaEditDialog( const ResId& rResId,
+    virtual AbstractJavaEditDialog*     CreateJavaEditDialog( int nResId,
                                                 Window* pParent, SwWrtShell* pWrtSh ) = 0; //add for SwJavaEditDialog
-    virtual AbstractMailMergeDlg*       CreateMailMergeDlg( const ResId& rResId,
+    virtual AbstractMailMergeDlg*       CreateMailMergeDlg( int nResId,
                                                 Window* pParent, SwWrtShell& rSh,
                                                  const String& rSourceName,
                                                 const String& rTblName,
                                                 sal_Int32 nCommandType,
                                                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& xConnection,
                                                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >* pSelection = 0 ) = 0; //add for SwMailMergeDlg
-    virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg( const ResId& rResId,
+    virtual AbstractMailMergeCreateFromDlg*     CreateMailMergeCreateFromDlg( int nResId,
                                                     Window* pParent ) = 0; //add for SwMailMergeCreateFromDlg
-    virtual AbstractMailMergeFieldConnectionsDlg*       CreateMailMergeFieldConnectionsDlg( const ResId& rResId,
+    virtual AbstractMailMergeFieldConnectionsDlg*       CreateMailMergeFieldConnectionsDlg( int nResId,
                                                             Window* pParent ) = 0; //add for SwMailMergeFieldConnectionsDlg
-    virtual VclAbstractDialog*          CreateMultiTOXMarkDlg( const ResId& rResId,
+    virtual VclAbstractDialog*          CreateMultiTOXMarkDlg( int nResId,
                                                 Window* pParent, SwTOXMgr &rTOXMgr ) = 0; //add for SwMultiTOXMarkDlg
-    virtual SfxAbstractTabDialog*       CreateSwTabDialog( const ResId& rResId,
+    virtual SfxAbstractTabDialog*       CreateSwTabDialog( int nResId,
                                                 Window* pParent,
                                                 const SfxItemSet* pSwItemSet,
                                                 SwWrtShell &) = 0; //add for SwSvxNumBulletTabDialog, SwOutlineTabDialog
-    virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog( const ResId& rResId,
+    virtual AbstractMultiTOXTabDialog*      CreateMultiTOXTabDialog( int nResId,
                                                 Window* pParent, const SfxItemSet& rSet,
                                                 SwWrtShell &rShell,
                                                 SwTOXBase* pCurTOX, USHORT nToxType = USHRT_MAX,
                                                 BOOL bGlobal = FALSE) = 0; //add for SwMultiTOXTabDialog
-    virtual AbstractEditRegionDlg*      CreateEditRegionDlg( const ResId& rResId,
+    virtual AbstractEditRegionDlg*      CreateEditRegionDlg( int nResId,
                                                 Window* pParent, SwWrtShell& rWrtSh ) = 0; //add for SwEditRegionDlg
-    virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog( const ResId& rResId,
+    virtual AbstractInsertSectionTabDialog*     CreateInsertSectionTabDialog( int nResId,
                                                     Window* pParent, const SfxItemSet& rSet, SwWrtShell& rSh ) = 0; //add for SwInsertSectionTabDialog
-    virtual AbstractMarkFloatDlg*       CreateIndexMarkFloatDlg( const ResId& rResId,
+    virtual AbstractMarkFloatDlg*       CreateIndexMarkFloatDlg( int nResId,
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
                                                        sal_Bool bNew=sal_True) = 0; //add for SwIndexMarkFloatDlg
-    virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg( const ResId& rResId,
+    virtual AbstractMarkFloatDlg*       CreateAuthMarkFloatDlg( int nResId,
                                                     SfxBindings* pBindings,
                                                        SfxChildWindow* pChild,
                                                        Window *pParent,
                                                     SfxChildWinInfo* pInfo,
                                                        sal_Bool bNew=sal_True) = 0; //add for SwAuthMarkFloatDlg
-    virtual VclAbstractDialog *         CreateIndexMarkModalDlg( const ResId& rResId,
+    virtual VclAbstractDialog *         CreateIndexMarkModalDlg( int nResId,
                                                 Window *pParent, SwWrtShell& rSh, SwTOXMark* pCurTOXMark ) = 0; //add for SwIndexMarkModalDlg
 
     virtual AbstractMailMergeWizard*    CreateMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rConfigItem) = 0;
