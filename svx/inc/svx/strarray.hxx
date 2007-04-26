@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strarray.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 16:17:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,11 +50,11 @@
 class SVX_DLLPUBLIC SvxStringArray : public ResStringArray
 {
 public:
-    SvxStringArray( USHORT nResId );
+    SvxStringArray( sal_uInt32 nResId );
     SvxStringArray( const ResId& rResId );
     ~SvxStringArray();
 
-    const String&   GetStringByPos( USHORT nPos ) const;
+    const String&   GetStringByPos( sal_uInt32 nPos ) const;
     const String&   GetStringByType( long nType ) const;
     long            GetValueByStr( const String& rStr ) const;
 };

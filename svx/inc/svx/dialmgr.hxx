@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialmgr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 15:44:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:23:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -53,7 +53,7 @@ struct SVX_DLLPUBLIC DialogsResMgr
     static ResMgr*      GetResMgr();
 };
 
-#define DIALOG_MGR()    DialogsResMgr::GetResMgr()
+#define DIALOG_MGR()    (*DialogsResMgr::GetResMgr())
 #define SVX_RES(i)      ResId(i,DIALOG_MGR())
 #define SVX_RESSTR(i)   UniString(ResId(i,DIALOG_MGR()))
 #define SVX_RESSSTR(i)  String(ResId(i,DIALOG_MGR()))
