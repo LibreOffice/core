@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basrdll.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 12:50:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:30:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -45,10 +45,8 @@ class ResMgr;
 class BasicDLL
 {
 private:
-    ResMgr*     pResMgr;
-#if SUPD < 569
-    Accelerator aAcc;
-#endif
+    ResMgr*     pSttResMgr;
+    ResMgr*     pBasResMgr;
 
     BOOL        bDebugMode;
     BOOL        bBreakEnabled;
@@ -57,7 +55,8 @@ public:
                 BasicDLL();
                 ~BasicDLL();
 
-    ResMgr*     GetResMgr() const { return pResMgr; }
+    ResMgr*     GetSttResMgr() const { return pSttResMgr; }
+    ResMgr*     GetBasResMgr() const { return pBasResMgr; }
 
     static void BasicBreak();
 
