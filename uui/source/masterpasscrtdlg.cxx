@@ -4,9 +4,9 @@
  *
  *  $RCSfile: masterpasscrtdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:22:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:19:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,7 +69,7 @@ IMPL_LINK( MasterPasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
         EndDialog( RET_OK );
     else
     {
-        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, pResourceMgr ));
+        String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, *pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
         aEDMasterPasswordCrt.SetText( String() );
@@ -87,15 +87,15 @@ MasterPasswordCreateDialog::MasterPasswordCreateDialog
     ResMgr*                                     pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD_CRT, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD_CRT, *pResMgr ) ),
 
-    aFTMasterPasswordCrt        ( this, ResId( FT_MASTERPASSWORD_CRT ) ),
-    aEDMasterPasswordCrt        ( this, ResId( ED_MASTERPASSWORD_CRT ) ),
-    aFTMasterPasswordRepeat ( this, ResId( FT_MASTERPASSWORD_REPEAT ) ),
-    aEDMasterPasswordRepeat ( this, ResId( ED_MASTERPASSWORD_REPEAT ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSCRT_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSCRT_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP ) ),
+    aFTMasterPasswordCrt        ( this, ResId( FT_MASTERPASSWORD_CRT, *pResMgr ) ),
+    aEDMasterPasswordCrt        ( this, ResId( ED_MASTERPASSWORD_CRT, *pResMgr ) ),
+    aFTMasterPasswordRepeat ( this, ResId( FT_MASTERPASSWORD_REPEAT, *pResMgr ) ),
+    aEDMasterPasswordRepeat ( this, ResId( ED_MASTERPASSWORD_REPEAT, *pResMgr ) ),
+    aOKBtn                  ( this, ResId( BTN_MASTERPASSCRT_OK, *pResMgr ) ),
+    aCancelBtn              ( this, ResId( BTN_MASTERPASSCRT_CANCEL, *pResMgr ) ),
+    aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP, *pResMgr ) ),
     pResourceMgr            ( pResMgr ),
     nMinLen(5)
 {
