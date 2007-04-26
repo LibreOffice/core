@@ -4,9 +4,9 @@
  *
  *  $RCSfile: postdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:35:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:41:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,18 +107,18 @@ SvxPostItDialog::SvxPostItDialog( Window* pParent,
 
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_POSTIT ) ),
 
-    aPostItFL       ( this, ResId( FL_POSTIT ) ),
-    aLastEditLabelFT( this, ResId( FT_LASTEDITLABEL ) ),
-    aLastEditFT     ( this, ResId( FT_LASTEDIT ) ),
-    aEditFT         ( this, ResId( FT_EDIT ) ),
-    aEditED         ( this, ResId( ED_EDIT ) ),
-    aAuthorFT       ( this, ResId( FT_AUTHOR) ),
-    aAuthorBtn      ( this, ResId( BTN_AUTHOR ) ),
-    aOKBtn          ( this, ResId( BTN_POST_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_POST_CANCEL ) ),
-    aHelpBtn        ( this, ResId( BTN_POST_HELP ) ),
-    aPrevBtn        ( this, ResId( BTN_PREV ) ),
-    aNextBtn        ( this, ResId( BTN_NEXT ) ),
+    aPostItFL       ( this, SVX_RES( FL_POSTIT ) ),
+    aLastEditLabelFT( this, SVX_RES( FT_LASTEDITLABEL ) ),
+    aLastEditFT     ( this, SVX_RES( FT_LASTEDIT ) ),
+    aEditFT         ( this, SVX_RES( FT_EDIT ) ),
+    aEditED         ( this, SVX_RES( ED_EDIT ) ),
+    aAuthorFT       ( this, SVX_RES( FT_AUTHOR) ),
+    aAuthorBtn      ( this, SVX_RES( BTN_AUTHOR ) ),
+    aOKBtn          ( this, SVX_RES( BTN_POST_OK ) ),
+    aCancelBtn      ( this, SVX_RES( BTN_POST_CANCEL ) ),
+    aHelpBtn        ( this, SVX_RES( BTN_POST_HELP ) ),
+    aPrevBtn        ( this, SVX_RES( BTN_PREV ) ),
+    aNextBtn        ( this, SVX_RES( BTN_NEXT ) ),
 
     rSet        ( rCoreSet ),
     pOutSet     ( 0 )
