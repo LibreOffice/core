@@ -4,9 +4,9 @@
  *
  *  $RCSfile: charsets.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:15:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:02:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -74,7 +74,7 @@ namespace dbaui
     {
         {
             LocalResourceAccess aCharsetStrings( RSC_CHARSETS, RSC_RESOURCE );
-            m_aSystemDisplayName = String( ResId( 1 ) );
+            m_aSystemDisplayName = String( ModuleRes( 1 ) );
         }
     }
 
