@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:04:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:41:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,14 +239,17 @@ static void BuildSmPropertyList()
 
         pSmProps[ 2 ].name      = const_cast<char*>(SmRestartCommand);
         pSmProps[ 2 ].type      = const_cast<char*>(SmLISTofARRAY8);
-        pSmProps[ 2 ].num_vals  = 2;
-        pSmProps[ 2 ].vals      = new SmPropValue[2];
+        pSmProps[ 2 ].num_vals  = 3;
+        pSmProps[ 2 ].vals      = new SmPropValue[3];
         pSmProps[ 2 ].vals[0].length    = aExec.Len()+1;
-        pSmProps[ 2 ].vals[0].value     = strdup( aExec.GetBuffer() );
-        ByteString aRestartOption( "-session=" );
+        pSmProps[ 2 ].vals[0].value = strdup( aExec.GetBuffer() );
+            ByteString aRestartOption( "-session=" );
         aRestartOption.Append( SessionManagerClient::getSessionID() );
         pSmProps[ 2 ].vals[1].length    = aRestartOption.Len()+1;
-        pSmProps[ 2 ].vals[1].value     = strdup( aRestartOption.GetBuffer() );
+        pSmProps[ 2 ].vals[1].value = strdup( aRestartOption.GetBuffer() );
+            ByteString aRestartOptionNoLogo( "-nologo" );
+        pSmProps[ 2 ].vals[2].length    = aRestartOptionNoLogo.Len()+1;
+        pSmProps[ 2 ].vals[2].value = strdup( aRestartOptionNoLogo.GetBuffer() );
 
         rtl::OUString aUserName;
         rtl::OString aUser;
