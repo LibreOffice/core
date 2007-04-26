@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fwkresid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:47:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:15:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,7 +50,7 @@
 #include <vcl/svapp.hxx>
 #endif
 
-#define U2S(STRING)     ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
+#include <rtl/strbuf.hxx>
 
 namespace framework
 {
@@ -59,13 +59,14 @@ ResMgr* FwkResId::GetResManager()
 {
     static ResMgr*  pResMgr = NULL;
 
-    String aMgrName = String::CreateFromAscii( "fwe" );
-    aMgrName += String::CreateFromInt32(SUPD); // current version number
-
     if ( !pResMgr )
     {
+        rtl::OStringBuffer aBuf( 32 );
+        aBuf.append( "fwe" );
+        aBuf.append( sal_Int32( SUPD ) );  // current version number
+
         vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        pResMgr = ResMgr::CreateResMgr( U2S( aMgrName ));
+        pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
     }
 
     return pResMgr;
@@ -74,7 +75,7 @@ ResMgr* FwkResId::GetResManager()
 // -----------------------------------------------------------------------
 
 FwkResId::FwkResId( USHORT nId ) :
-    ResId( nId, FwkResId::GetResManager() )
+    ResId( nId, *FwkResId::GetResManager() )
 {
 }
 
