@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 15:41:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:49:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1484,7 +1484,7 @@ void SwSectionNode::NodesArrChgd()
 
 String SwDoc::GetUniqueSectionName( const String* pChkStr ) const
 {
-    ResId aId( STR_REGION_DEFNAME, pSwResMgr );
+    ResId aId( STR_REGION_DEFNAME, *pSwResMgr );
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
