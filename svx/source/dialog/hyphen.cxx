@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hyphen.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:15:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:34:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -144,15 +144,15 @@ SvxHyphenWordDialog::SvxHyphenWordDialog( const String &rWord, LanguageType nLan
                                           SvxSpellWrapper* pWrapper ) :
     SfxModalDialog( pParent, SVX_RES( RID_SVXDLG_HYPHENATE ) ),
 
-    aWordFT     ( this, ResId( FT_WORD ) ),
-    aWordEdit   ( this, ResId( ED_WORD ) ),
-    aLeftBtn    ( this, ResId( BTN_LEFT ) ),
-    aRightBtn   ( this, ResId( BTN_RIGHT ) ),
-    aOkBtn      ( this, ResId( BTN_HYPH_CUT ) ),
-    aCancelBtn  ( this, ResId( BTN_HYPH_CANCEL ) ),
-    aContBtn    ( this, ResId( BTN_HYPH_CONTINUE ) ),
-    aDelBtn     ( this, ResId( BTN_HYPH_DELETE ) ),
-    aHelpBtn    ( this, ResId( BTN_HYPH_HELP ) ),
+    aWordFT     ( this, SVX_RES( FT_WORD ) ),
+    aWordEdit   ( this, SVX_RES( ED_WORD ) ),
+    aLeftBtn    ( this, SVX_RES( BTN_LEFT ) ),
+    aRightBtn   ( this, SVX_RES( BTN_RIGHT ) ),
+    aOkBtn      ( this, SVX_RES( BTN_HYPH_CUT ) ),
+    aCancelBtn  ( this, SVX_RES( BTN_HYPH_CANCEL ) ),
+    aContBtn    ( this, SVX_RES( BTN_HYPH_CONTINUE ) ),
+    aDelBtn     ( this, SVX_RES( BTN_HYPH_DELETE ) ),
+    aHelpBtn    ( this, SVX_RES( BTN_HYPH_HELP ) ),
     aLabel          ( GetText() ),
     pHyphWrapper    ( pWrapper ),
     xHyphenator     ( xHyphen ),
