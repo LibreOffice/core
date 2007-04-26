@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:18:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:25:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -427,7 +427,7 @@ void SplashScreen::initBitmap()
             }
             if ( pLabelResMgr )
             {
-                ResId aIntroBmpRes( nResId, pLabelResMgr );
+                ResId aIntroBmpRes( nResId, *pLabelResMgr );
                 _aIntroBmp = Bitmap( aIntroBmpRes );
             }
             delete pLabelResMgr;
