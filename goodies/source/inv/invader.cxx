@@ -4,9 +4,9 @@
  *
  *  $RCSfile: invader.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:54:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:01:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,14 +98,14 @@ MyWindow::MyWindow(Window* pParent, ResMgr *pResMgr ) :
     pPauseWindow = new Window(this, 0);
 
     SetOutputSizePixel(Size(WINWIDTH,WINHEIGHT));
-    SetText(String(ResId(STR_APP_TITLE,GetResMgr())));
+    SetText(String(ResId(STR_APP_TITLE,*GetResMgr())));
 
     pPauseWindow->SetPosSizePixel(Point(100,190),Size(500,50));
     pPauseWindow->SetBackground();
 
     pScoreWindow->SetPosSizePixel(Point(0,0),Size(WINWIDTH,22));
     Size aSize(WINWIDTH,WINHEIGHT);
-    pFighter = new Fighter(aSize,GetResMgr());
+    pFighter = new Fighter(aSize, GetResMgr());
     pGegner  = new Gegner(pFighter, pBombe, GetResMgr());
 
     pVirtualDevice = new VirtualDevice(*this);
@@ -181,12 +181,12 @@ void MyWindow::Paint(const Rectangle&)
                 aFont.SetFillColor(COL_BLACK);
                 SetFont( aFont );
 
-                DrawText(Point(175,170),String(ResId(STR_CHOOSEHERO, GetResMgr())));
-                DrawText(Point(98,208),String(ResId(STR_NAME1,GetResMgr())));
-                DrawText(Point(98,252),String(ResId(STR_NAME2, GetResMgr())));
-                DrawText(Point(98,296),String(ResId(STR_NAME3, GetResMgr())));
-                DrawText(Point(98,340),String(ResId(STR_NAME4, GetResMgr())));
-                DrawText(Point(98,384),String(ResId(STR_NAME5, GetResMgr())));
+                DrawText(Point(175,170),String(ResId(STR_CHOOSEHERO, *GetResMgr())));
+                DrawText(Point(98,208),String(ResId(STR_NAME1, *GetResMgr())));
+                DrawText(Point(98,252),String(ResId(STR_NAME2, *GetResMgr())));
+                DrawText(Point(98,296),String(ResId(STR_NAME3, *GetResMgr())));
+                DrawText(Point(98,340),String(ResId(STR_NAME4, *GetResMgr())));
+                DrawText(Point(98,384),String(ResId(STR_NAME5, *GetResMgr())));
 
                 SetFont( aOldFont );
             }
@@ -252,7 +252,7 @@ void MyWindow::Paint(const Rectangle&)
                     break;
             }
             pVirtualDevice->SetFont(*&aFont);
-            String aString = String(ResId(STR_LEVELSTART, GetResMgr()));
+            String aString = String(ResId(STR_LEVELSTART, *GetResMgr()));
             aString += ' ';
             aString += String::CreateFromInt32(nLevel);
             if(nStartLevel < 3)
@@ -274,7 +274,7 @@ void MyWindow::Paint(const Rectangle&)
         if(!bStartLevel)
             Kollision();
     }
-    else pPauseWindow->DrawText(Point(20,20),String(ResId(STR_PAUSE, GetResMgr())));
+    else pPauseWindow->DrawText(Point(20,20),String(ResId(STR_PAUSE, *GetResMgr())));
 }
 
 void MyWindow::KeyInput( const KeyEvent& rKEvent)
@@ -349,7 +349,7 @@ void MyWindow::KeyInput( const KeyEvent& rKEvent)
                 bPause = TRUE;
                 SetBackground( Wallpaper( COL_WHITE ) );
                 pPauseWindow->Show();
-                pPauseWindow->DrawText(Point(20,20),String(ResId(STR_PAUSE, GetResMgr())));
+                pPauseWindow->DrawText(Point(20,20),String(ResId(STR_PAUSE, *GetResMgr())));
             }
             break;
         default:
@@ -374,11 +374,11 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTYARG )
     String  aString;
     if(!bFightDest)
     {
-        aString = String(ResId(STR_GRAT1,GetResMgr()));
+        aString = String(ResId(STR_GRAT1,*GetResMgr()));
         aString += String::CreateFromInt32(nLevel);
-        aString += String(ResId(STR_GRAT2,GetResMgr()));
+        aString += String(ResId(STR_GRAT2,*GetResMgr()));
 
-        pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
+        pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())),aString);
         PlaceDialog(pBox);
         ProgStatus=FALSE;
         SetBackground(Wallpaper( Color( COL_WHITE ) ) );
@@ -397,13 +397,13 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTYARG )
         pScoreWindow->SetLives(nFighter);
         if(nFighter > 0)
         {
-            aString = String(ResId(STR_FIGHTDEST1,GetResMgr()));
+            aString = String(ResId(STR_FIGHTDEST1,*GetResMgr()));
             aString += String::CreateFromInt32(nFighter);
-            aString += String(ResId(STR_FIGHTDEST2,GetResMgr()));
+            aString += String(ResId(STR_FIGHTDEST2,*GetResMgr()));
         }
         else
         {
-            aString = String(ResId(STR_GAMEOVER,GetResMgr()));
+            aString = String(ResId(STR_GAMEOVER,*GetResMgr()));
             ProgStatus = FALSE;
             nLevel     = 1;
             nFighter   = 3;
@@ -416,7 +416,7 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTYARG )
                 nTimeOut = TIMELOW;
         }
 
-        pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aString);
+        pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())),aString);
         PlaceDialog(pBox);
         BOOL aDummyStatus = ProgStatus;
         ProgStatus=FALSE;
@@ -435,13 +435,13 @@ IMPL_LINK( MyWindow, StartDlgTimer, Timer*, EMPTYARG )
             if (nScore > nHighScore)
             {
                 String  aHSString;
-                aHSString = String(ResId(STR_HIGHSCORE1,GetResMgr()));
+                aHSString = String(ResId(STR_HIGHSCORE1,*GetResMgr()));
                 aHSString += String::CreateFromInt32(nScore);
-                aHSString += String(ResId(STR_HIGHSCORE2,GetResMgr()));
+                aHSString += String(ResId(STR_HIGHSCORE2,*GetResMgr()));
                 aHSString += String::CreateFromInt32(nHighScore);
-                aHSString += String(ResId(STR_HIGHSCORE3,GetResMgr()));
+                aHSString += String(ResId(STR_HIGHSCORE3,*GetResMgr()));
                 nHighScore = nScore;
-                pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),aHSString);
+                pBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())),aHSString);
                 PlaceDialog(pBox);
                 Paint(Rectangle(Point(0,0),Point(640,480)));
                 SetBackground(Wallpaper( Color( COL_WHITE ) ) );
@@ -493,27 +493,27 @@ void MyWindow::MouseButtonDown(const MouseEvent& rMEvt)
                 {
                     case STR_NAME1:
                         {
-                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())),String(ResId(STR_HERO1, GetResMgr())));
+                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())),String(ResId(STR_HERO1, *GetResMgr())));
                         }
                         break;
                     case STR_NAME2:
                         {
-                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())), String(ResId(STR_HERO2, GetResMgr())));
+                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())), String(ResId(STR_HERO2, *GetResMgr())));
                         }
                         break;
                     case STR_NAME3:
                         {
-                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())), String(ResId(STR_HERO3, GetResMgr())));
+                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())), String(ResId(STR_HERO3, *GetResMgr())));
                         }
                         break;
                     case STR_NAME4:
                         {
-                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())), String(ResId(STR_HERO4,GetResMgr())));
+                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())), String(ResId(STR_HERO4, *GetResMgr())));
                         }
                         break;
                     case STR_NAME5:
                         {
-                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,GetResMgr())), String(ResId(STR_HERO5,GetResMgr())));
+                            pMessBox = new MessBox(this,WinBits(WB_OK),String(ResId(STR_APP_TITLE,*GetResMgr())), String(ResId(STR_HERO5, *GetResMgr())));
                         }
                         break;
                 }
