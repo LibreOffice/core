@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbfindex.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:07:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:58:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,20 +93,20 @@ DBG_NAME(ODbaseIndexDialog)
 //-------------------------------------------------------------------------
 ODbaseIndexDialog::ODbaseIndexDialog( Window * pParent, String aDataSrcName )
     : ModalDialog( pParent, ModuleRes(DLG_DBASE_INDEXES) ),
-    aPB_OK(             this, ResId( PB_OK ) ),
-    aPB_CANCEL(         this, ResId( PB_CANCEL ) ),
-    aPB_HELP(           this, ResId( PB_HELP ) ),
-    m_FT_Tables(        this, ResId( FT_TABLES ) ),
-    aCB_Tables(         this, ResId( CB_TABLES ) ),
-    m_FL_Indexes(       this, ResId( FL_INDEXES ) ),
-    m_FT_TableIndexes(  this, ResId( FT_TABLEINDEXES ) ),
-    aLB_TableIndexes(   this, ResId( LB_TABLEINDEXES ) ),
-    m_FT_AllIndexes(    this, ResId( FT_ALLINDEXES ) ),
-    aLB_FreeIndexes(    this, ResId( LB_FREEINDEXES ) ),
-    aIB_Add(            this, ResId( IB_ADD ) ),
-    aIB_Remove(         this, ResId( IB_REMOVE ) ),
-    aIB_AddAll(         this, ResId( IB_ADDALL ) ),
-    aIB_RemoveAll(      this, ResId( IB_REMOVEALL ) ),
+    aPB_OK(             this, ModuleRes( PB_OK ) ),
+    aPB_CANCEL(         this, ModuleRes( PB_CANCEL ) ),
+    aPB_HELP(           this, ModuleRes( PB_HELP ) ),
+    m_FT_Tables(        this, ModuleRes( FT_TABLES ) ),
+    aCB_Tables(         this, ModuleRes( CB_TABLES ) ),
+    m_FL_Indexes(       this, ModuleRes( FL_INDEXES ) ),
+    m_FT_TableIndexes(  this, ModuleRes( FT_TABLEINDEXES ) ),
+    aLB_TableIndexes(   this, ModuleRes( LB_TABLEINDEXES ) ),
+    m_FT_AllIndexes(    this, ModuleRes( FT_ALLINDEXES ) ),
+    aLB_FreeIndexes(    this, ModuleRes( LB_FREEINDEXES ) ),
+    aIB_Add(            this, ModuleRes( IB_ADD ) ),
+    aIB_Remove(         this, ModuleRes( IB_REMOVE ) ),
+    aIB_AddAll(         this, ModuleRes( IB_ADDALL ) ),
+    aIB_RemoveAll(      this, ModuleRes( IB_REMOVEALL ) ),
     m_aDSN(aDataSrcName),
     m_bCaseSensitiv(sal_True)
 {
