@@ -4,9 +4,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:01:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:10:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,11 +138,11 @@ inline BOOL IsMarkInSameSection( SwWrtShell& rWrtSh, const SwSection* pSect )
 
 SwColumnDlg::SwColumnDlg(Window* pParent, SwWrtShell& rSh) :
     SfxModalDialog(pParent, SW_RES(DLG_COLUMN)),
-    aOK(this,       ResId(PB_OK)),
-    aCancel(this,   ResId(PB_CANCEL)),
-    aHelp(this,     ResId(PB_HELP)),
-    aApplyToFT(this, ResId(FT_APPLY_TO)),
-    aApplyToLB(this, ResId(LB_APPLY_TO)),
+    aOK(this,       SW_RES(PB_OK)),
+    aCancel(this,   SW_RES(PB_CANCEL)),
+    aHelp(this,     SW_RES(PB_HELP)),
+    aApplyToFT(this, SW_RES(FT_APPLY_TO)),
+    aApplyToLB(this, SW_RES(LB_APPLY_TO)),
     rWrtShell(rSh),
     pPageSet(0),
     pSectionSet(0),
@@ -479,42 +479,42 @@ SwColumnPage::SwColumnPage(Window *pParent, const SfxItemSet &rSet)
 
     : SfxTabPage(pParent, SW_RES(TP_COLUMN), rSet),
 
-    aClNrLbl(this,          ResId(FT_NUMBER  )),
-    aCLNrEdt(this,          ResId(ED_NUMBER  )),
-    aAutoWidthBox(this,     ResId(CB_AUTO_WIDTH)),
-    aDefaultVS(this,        ResId(VS_DEFAULTS)),
-    aBalanceColsCB(this,    ResId(CB_BALANCECOLS)),
-    aFLGroup(this,          ResId(FL_COLUMNS )),
+    aClNrLbl(this,          SW_RES(FT_NUMBER  )),
+    aCLNrEdt(this,          SW_RES(ED_NUMBER  )),
+    aAutoWidthBox(this,     SW_RES(CB_AUTO_WIDTH)),
+    aDefaultVS(this,        SW_RES(VS_DEFAULTS)),
+    aBalanceColsCB(this,    SW_RES(CB_BALANCECOLS)),
+    aFLGroup(this,          SW_RES(FL_COLUMNS )),
 
-    aLineTypeLbl(this,      ResId(FT_STYLE)),
-    aLineTypeDLB(this,      ResId(LB_STYLE)),
-    aLineHeightLbl(this,    ResId(FT_HEIGHT)),
-    aLineHeightEdit(this,   ResId(ED_HEIGHT)),
-    aLinePosLbl(this,       ResId(FT_POSITION)),
-    aLinePosDLB(this,       ResId(LB_POSITION)),
-    aFLLineType(this,       ResId(FL_LINETYPE)),
-    aBtnUp(this,            ResId(BTN_DOWN)),
-    aBtnDown(this,          ResId(BTN_UP)),
+    aLineTypeLbl(this,      SW_RES(FT_STYLE)),
+    aLineTypeDLB(this,      SW_RES(LB_STYLE)),
+    aLineHeightLbl(this,    SW_RES(FT_HEIGHT)),
+    aLineHeightEdit(this,   SW_RES(ED_HEIGHT)),
+    aLinePosLbl(this,       SW_RES(FT_POSITION)),
+    aLinePosDLB(this,       SW_RES(LB_POSITION)),
+    aFLLineType(this,       SW_RES(FL_LINETYPE)),
+    aBtnUp(this,            SW_RES(BTN_DOWN)),
+    aBtnDown(this,          SW_RES(BTN_UP)),
 
-    aColumnFT(this,         ResId(FT_COLUMN)),
-    aWidthFT(this,          ResId(FT_WIDTH)),
-    aDistFT(this,           ResId(FT_DIST)),
-    aLbl1(this,             ResId(FT_1)),
-    aEd1(this,              ResId(ED_1)),
-    aDistEd1(this,          ResId(ED_DIST1)),
-    aLbl2(this,             ResId(FT_2)),
-    aEd2(this,              ResId(ED_2)),
-    aDistEd2(this,          ResId(ED_DIST2)),
-    aLbl3(this,             ResId(FT_3)),
-    aEd3(this,              ResId(ED_3)),
-    aFLLayout(this,         ResId(FL_LAYOUT)),
-    aVertFL(this,         ResId(FL_VERT)),
-    aPropertiesFL(  this,    ResId( FL_PROPERTIES    )),
-    aTextDirectionFT( this,  ResId( FT_TEXTDIRECTION )),
-    aTextDirectionLB( this,  ResId( LB_TEXTDIRECTION )),
+    aColumnFT(this,         SW_RES(FT_COLUMN)),
+    aWidthFT(this,          SW_RES(FT_WIDTH)),
+    aDistFT(this,           SW_RES(FT_DIST)),
+    aLbl1(this,             SW_RES(FT_1)),
+    aEd1(this,              SW_RES(ED_1)),
+    aDistEd1(this,          SW_RES(ED_DIST1)),
+    aLbl2(this,             SW_RES(FT_2)),
+    aEd2(this,              SW_RES(ED_2)),
+    aDistEd2(this,          SW_RES(ED_DIST2)),
+    aLbl3(this,             SW_RES(FT_3)),
+    aEd3(this,              SW_RES(ED_3)),
+    aFLLayout(this,         SW_RES(FL_LAYOUT)),
+    aVertFL(this,         SW_RES(FL_VERT)),
+    aPropertiesFL(  this,    SW_RES( FL_PROPERTIES    )),
+    aTextDirectionFT( this,  SW_RES( FT_TEXTDIRECTION )),
+    aTextDirectionLB( this,  SW_RES( LB_TEXTDIRECTION )),
 
-    aPgeExampleWN(this,     ResId(WN_BSP)),
-    aFrmExampleWN(this,     ResId(WN_BSP)),
+    aPgeExampleWN(this,     SW_RES(WN_BSP)),
+    aFrmExampleWN(this,     SW_RES(WN_BSP)),
 
     nFirstVis(0),
     bFrm(FALSE),
