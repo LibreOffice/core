@@ -3,7 +3,8 @@
  <node oor:name="Types">
   <node oor:name="TypeDetection6FileFormat" oor:op="replace">
    <prop oor:name="UIName">
-    <value xml:lang="en-US">TypeDetection 6 FileFormat</value>
+   <value xml:lang="x-no-translate">TypeDetection 6 FileFormat</value>
+   <value xml:lang="en-US">TypeDetection 6 FileFormat</value>
    </prop>
    <prop oor:name="Data">
     <value>1,,,,,,</value>
@@ -13,7 +14,8 @@
  <node oor:name="Filters">
   <node oor:name="TypeDetection6FileFormat" oor:op="replace">
    <prop oor:name="UIName">
-    <value xml:lang="en-US">FilterFactory 6 FileFormat</value>
+       <value xml:lang="x-no-translate">FilterFactory 6 FileFormat</value>
+       <value xml:lang="en-US">FilterFactory 6 FileFormat</value>
    </prop>
    <prop oor:name="Data">
     <value>0,TypeDetection6FileFormat,,,,,</value>
