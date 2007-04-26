@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dinfdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 21:17:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:33:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,49 +102,49 @@ public:
 class SfxDocumentPage : public SfxTabPage
 {
 private:
-    FixedImage  aBmp1;
-    Edit        aNameED;
+    FixedImage                  aBmp1;
+    Edit                        aNameED;
 
-    FixedLine   aLine1FL;
-    FixedText   aTypeFT;
-    FixedText   aShowTypeFT;
-    CheckBox    aReadOnlyCB;
-    FixedText   aFileFt;
-    FixedInfo   aFileValFt;
-    FixedText   aSizeFT;
-    FixedText   aShowSizeFT;
+    FixedLine                   aLine1FL;
+    FixedText                   aTypeFT;
+    svt::SelectableFixedText    aShowTypeFT;
+    CheckBox                    aReadOnlyCB;
+    FixedText                   aFileFt;
+    svt::SelectableFixedText    aFileValFt;
+    FixedText                   aSizeFT;
+    svt::SelectableFixedText    aShowSizeFT;
 
-    FixedLine   aLine2FL;
-    FixedText   aCreateFt;
-    FixedInfo   aCreateValFt;
-    FixedText   aTimeLogFt;
-    FixedInfo   aTimeLogValFt;
-    FixedText   aChangeFt;
-    FixedInfo   aChangeValFt;
-    FixedText   aSignedFt;
-    FixedInfo   aSignedValFt;
-    PushButton  aSignatureBtn;
-    FixedText   aDocNoFt;
-    FixedInfo   aDocNoValFt;
-    FixedText   aPrintFt;
-    FixedInfo   aPrintValFt;
-    PushButton  aDeleteBtn;
-    CheckBox    aUseUserDataCB;
+    FixedLine                   aLine2FL;
+    FixedText                   aCreateFt;
+    svt::SelectableFixedText    aCreateValFt;
+    FixedText                   aChangeFt;
+    svt::SelectableFixedText    aChangeValFt;
+    FixedText                   aSignedFt;
+    svt::SelectableFixedText    aSignedValFt;
+    PushButton                  aSignatureBtn;
+    FixedText                   aPrintFt;
+    svt::SelectableFixedText    aPrintValFt;
+    FixedText                   aTimeLogFt;
+    svt::SelectableFixedText    aTimeLogValFt;
+    FixedText                   aDocNoFt;
+    svt::SelectableFixedText    aDocNoValFt;
+    CheckBox                    aUseUserDataCB;
+    PushButton                  aDeleteBtn;
 
-    FixedLine   aLine3FL;
-    FixedText   aTemplFt;
-    FixedInfo   aTemplValFt;
+    FixedLine                   aLine3FL;
+    FixedText                   aTemplFt;
+    svt::SelectableFixedText    aTemplValFt;
 
-    String      aUnknownSize;
-    String      aMultiSignedStr;
+    String                      aUnknownSize;
+    String                      aMultiSignedStr;
 
-    BOOL        bEnableUseUserData  : 1,
-                bHandleDelete       : 1;
+    BOOL                        bEnableUseUserData  : 1,
+                                bHandleDelete       : 1;
 
 //#if 0 // _SOLAR__PRIVATE
-    DECL_LINK( DeleteHdl, PushButton * );
-    DECL_LINK( SignatureHdl, PushButton * );
-    void ImplUpdateSignatures();
+    DECL_LINK(          DeleteHdl, PushButton * );
+    DECL_LINK(          SignatureHdl, PushButton * );
+    void                ImplUpdateSignatures();
 //#endif
 
 protected:
