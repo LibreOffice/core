@@ -4,9 +4,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:46:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:21:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -675,7 +675,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetUndoActionCount();
                     if(nCount)
                     {
-                        String aStr(ResId( STR_UNDO, SFX_APP()->GetSfxResManager() ));;
+                        String aStr(ResId( STR_UNDO, *SFX_APP()->GetSfxResManager() ));;
                         aStr += rMgr.GetUndoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich, aStr));
                     }
@@ -687,7 +687,7 @@ void SwSrcView::GetState(SfxItemSet& rSet)
                     nCount = rMgr.GetRedoActionCount();
                     if(nCount)
                     {
-                        String aStr(ResId( STR_REDO, SFX_APP()->GetSfxResManager() ));;
+                        String aStr(ResId( STR_REDO, *SFX_APP()->GetSfxResManager() ));;
                         aStr += rMgr.GetRedoActionComment(--nCount);
                         rSet.Put(SfxStringItem(nWhich,aStr));
                     }
