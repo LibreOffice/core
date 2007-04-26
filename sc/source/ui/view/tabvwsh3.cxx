@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:58:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:58:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -645,7 +645,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet, ResId(RID_SVXDLG_ZOOM));
+                        pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet, RID_SVXDLG_ZOOM);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
@@ -756,7 +756,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), ResId(RID_SCDLG_SHOW_TAB));
+                AbstractScShowTabDlg* pDlg = pFact->CreateScShowTabDlg( GetDialogParent(), RID_SCDLG_SHOW_TAB);
                 DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 pDlg->SetDescription(
                     String( ScResId( STR_DLG_SELECTTABLES_TITLE ) ),
