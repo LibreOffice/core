@@ -5,9 +5,9 @@
  *
  *  $RCSfile: tpcolor.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:30:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:45:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,33 +115,33 @@ SvxColorTabPage::SvxColorTabPage
 
     SfxTabPage          ( pParent, SVX_RES( RID_SVXPAGE_COLOR ), rInAttrs ),
 
-    aFlProp             ( this, ResId( FL_PROP ) ),
-    aFtName             ( this, ResId( FT_NAME ) ),
-    aEdtName            ( this, ResId( EDT_NAME ) ),
-    aFtColor            ( this, ResId( FT_COLOR ) ),
-    aLbColor            ( this, ResId( LB_COLOR ) ),
+    aFlProp             ( this, SVX_RES( FL_PROP ) ),
+    aFtName             ( this, SVX_RES( FT_NAME ) ),
+    aEdtName            ( this, SVX_RES( EDT_NAME ) ),
+    aFtColor            ( this, SVX_RES( FT_COLOR ) ),
+    aLbColor            ( this, SVX_RES( LB_COLOR ) ),
 
-    aTableNameFT        ( this, ResId( FT_TABLE_NAME ) ),
-    aValSetColorTable   ( this, ResId( CTL_COLORTABLE ) ),
+    aTableNameFT        ( this, SVX_RES( FT_TABLE_NAME ) ),
+    aValSetColorTable   ( this, SVX_RES( CTL_COLORTABLE ) ),
 
-    aCtlPreviewOld      ( this, ResId( CTL_PREVIEW_OLD ), &XOutOld ),
-    aCtlPreviewNew      ( this, ResId( CTL_PREVIEW_NEW ), &XOutNew ),
+    aCtlPreviewOld      ( this, SVX_RES( CTL_PREVIEW_OLD ), &XOutOld ),
+    aCtlPreviewNew      ( this, SVX_RES( CTL_PREVIEW_NEW ), &XOutNew ),
 
-    aLbColorModel       ( this, ResId( LB_COLORMODEL ) ),
-    aFtColorModel1      ( this, ResId( FT_1 ) ),
-    aMtrFldColorModel1  ( this, ResId( MTR_FLD_1 ) ),
-    aFtColorModel2      ( this, ResId( FT_2 ) ),
-    aMtrFldColorModel2  ( this, ResId( MTR_FLD_2 ) ),
-    aFtColorModel3      ( this, ResId( FT_3 ) ),
-    aMtrFldColorModel3  ( this, ResId( MTR_FLD_3 ) ),
-    aFtColorModel4      ( this, ResId( FT_4 ) ),
-    aMtrFldColorModel4  ( this, ResId( MTR_FLD_4 ) ),
-    aBtnAdd             ( this, ResId( BTN_ADD ) ),
-    aBtnModify          ( this, ResId( BTN_MODIFY ) ),
-    aBtnWorkOn          ( this, ResId( BTN_WORK_ON ) ),
-    aBtnDelete          ( this, ResId( BTN_DELETE ) ),
-    aBtnLoad            ( this, ResId( BTN_LOAD ) ),
-    aBtnSave            ( this, ResId( BTN_SAVE ) ),
+    aLbColorModel       ( this, SVX_RES( LB_COLORMODEL ) ),
+    aFtColorModel1      ( this, SVX_RES( FT_1 ) ),
+    aMtrFldColorModel1  ( this, SVX_RES( MTR_FLD_1 ) ),
+    aFtColorModel2      ( this, SVX_RES( FT_2 ) ),
+    aMtrFldColorModel2  ( this, SVX_RES( MTR_FLD_2 ) ),
+    aFtColorModel3      ( this, SVX_RES( FT_3 ) ),
+    aMtrFldColorModel3  ( this, SVX_RES( MTR_FLD_3 ) ),
+    aFtColorModel4      ( this, SVX_RES( FT_4 ) ),
+    aMtrFldColorModel4  ( this, SVX_RES( MTR_FLD_4 ) ),
+    aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
+    aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
+    aBtnWorkOn          ( this, SVX_RES( BTN_WORK_ON ) ),
+    aBtnDelete          ( this, SVX_RES( BTN_DELETE ) ),
+    aBtnLoad            ( this, SVX_RES( BTN_LOAD ) ),
+    aBtnSave            ( this, SVX_RES( BTN_SAVE ) ),
 
     rOutAttrs           ( rInAttrs ),
     pColorTab( NULL ),
@@ -159,8 +159,8 @@ SvxColorTabPage::SvxColorTabPage
     eCM                 ( CM_RGB )
 
 {
-    aBtnLoad.SetModeImage( Image( ResId( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( ResId( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLoad.SetModeImage( Image( SVX_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( SVX_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -338,23 +338,23 @@ long SvxColorTabPage::CheckChanges_Impl()
             ColorToPercent_Impl( aTmpColor.GetBlue() ) != ColorToPercent_Impl( aColor.GetBlue() ) ||
             aString != aEdtName.GetText() )
         {
-            ResMgr* pMgr = DIALOG_MGR();
+            ResMgr& rMgr = DIALOG_MGR();
             Image aWarningBoxImage = WarningBox::GetStandardImage();
             //CHINA001 SvxMessDialog aMessDlg( DLGWIN,
-            //CHINA001  String( ResId( RID_SVXSTR_COLOR, pMgr ) ),
+            //CHINA001  String( SVX_RES( RID_SVXSTR_COLOR, pMgr ) ),
             //CHINA001  String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, pMgr ) ),
             //CHINA001  &aWarningBoxImage );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, ResId(RID_SVXDLG_MESSBOX),
-                                                        String( ResId( RID_SVXSTR_COLOR, pMgr ) ),
-                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, pMgr ) ),
+            AbstractSvxMessDialog* aMessDlg = pFact->CreateSvxMessDialog( DLGWIN, RID_SVXDLG_MESSBOX,
+                                                        String( ResId( RID_SVXSTR_COLOR, rMgr ) ),
+                                                        String( ResId( RID_SVXSTR_ASK_CHANGE_COLOR, rMgr ) ),
                                                         &aWarningBoxImage );
             DBG_ASSERT(aMessDlg, "Dialogdiet fail!");//CHINA001
             aMessDlg->SetButtonText( MESS_BTN_1, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_1,
-                                    String( ResId( RID_SVXSTR_CHANGE, pMgr ) ) );
+                                    String( ResId( RID_SVXSTR_CHANGE, rMgr ) ) );
             aMessDlg->SetButtonText( MESS_BTN_2, //CHINA001 aMessDlg.SetButtonText( MESS_BTN_2,
-                                    String( ResId( RID_SVXSTR_ADD, pMgr ) ) );
+                                    String( ResId( RID_SVXSTR_ADD, rMgr ) ) );
 
             short nRet = aMessDlg->Execute(); //CHINA001 short nRet = aMessDlg.Execute();
 
@@ -476,7 +476,7 @@ SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
 //------------------------------------------------------------------------
 
 //
-// Wird aufgerufen, wenn Inhalt der MtrFileds für Farbwerte verändert wird
+// Wird aufgerufen, wenn Inhalt der MtrFileds fï¿½r Farbwerte verï¿½ndert wird
 //
 IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
 {
@@ -501,7 +501,7 @@ IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
 //------------------------------------------------------------------------
 
 //
-// Button 'Hinzufügen'
+// Button 'Hinzufï¿½gen'
 //
 IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 {
@@ -513,8 +513,8 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         pWindow = pWindow->GetParent();
     }
 
-    ResMgr* pMgr = DIALOG_MGR();
-    String aDesc( ResId( RID_SVXSTR_DESC_COLOR, pMgr ) );
+    ResMgr rMgr = DIALOG_MGR();
+    String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
     String aName( aEdtName.GetText() );
     XColorEntry* pEntry;
     long nCount = pColorTab->Count();
@@ -529,14 +529,14 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
     if ( !bDifferent )
     {
         WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
-            String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+            String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
         aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
         aWarningBox.Execute();
 
         //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         BOOL bLoop = TRUE;
 
@@ -593,7 +593,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 //------------------------------------------------------------------------
 
 //
-// Button 'Ändern'
+// Button 'ï¿½ndern'
 //
 IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 {
@@ -601,8 +601,8 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr* pMgr = DIALOG_MGR();
-        String aDesc( ResId( RID_SVXSTR_DESC_COLOR, pMgr ) );
+        ResMgr& rMgr = DIALOG_MGR();
+        String aDesc( ResId( RID_SVXSTR_DESC_COLOR, rMgr ) );
         String aName( aEdtName.GetText() );
         long nCount = pColorTab->Count();
         BOOL bDifferent = TRUE;
@@ -616,14 +616,14 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         if ( !bDifferent )
         {
             WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
-                String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             BOOL bLoop = TRUE;
 
@@ -776,13 +776,13 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 //
 IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr* pMgr = DIALOG_MGR();
+    ResMgr& rMgr = DIALOG_MGR();
     USHORT nReturn = RET_YES;
 
     if( *pnColorTableState & CT_MODIFIED )
     {
         nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
-                    String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, pMgr ) ) ).Execute();
+                    String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
             pColorTab->Save();
@@ -834,7 +834,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
                     // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
+                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
                     if ( aURL.getBase().getLength() > 18 )
@@ -865,7 +865,7 @@ IMPL_LINK( SvxColorTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             {
                 //aIStream.Close();
                 ErrorBox aErrorBox( DLGWIN, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, pMgr ) ) );
+                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) );
                 aErrorBox.Execute();
             }
         }
@@ -1004,7 +1004,7 @@ IMPL_LINK( SvxColorTabPage, SelectValSetHdl_Impl, void *, EMPTYARG )
 //------------------------------------------------------------------------
 
 //
-// Farbwerte je nach übergebenes Farbmodell umrechnen
+// Farbwerte je nach ï¿½bergebenes Farbmodell umrechnen
 //
 void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
 {
