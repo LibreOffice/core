@@ -4,9 +4,9 @@
  *
  *  $RCSfile: wrtsh2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:40:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:24:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -244,7 +244,7 @@ BOOL SwWrtShell::StartInputFldDlg( SwField* pFld, BOOL bNextButton,
     //CHINA001 SwFldInputDlg* pDlg = new SwFldInputDlg( NULL, *this, pFld, bNextButton );
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( ResId(DLG_FLD_INPUT),
+    AbstractFldInputDlg* pDlg = pFact->CreateFldInputDlg( DLG_FLD_INPUT,
                                                         pParentWin, *this, pFld, bNextButton);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if(pWindowState && pWindowState->Len())
@@ -266,7 +266,7 @@ BOOL SwWrtShell::StartDropDownFldDlg(SwField* pFld, BOOL bNextButton, ByteString
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld,ResId( DLG_FLD_DROPDOWN ),bNextButton );
+    AbstractDropDownFieldDialog* pDlg = pFact->CreateDropDownFieldDialog( NULL, *this, pFld, DLG_FLD_DROPDOWN,bNextButton );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if(pWindowState && pWindowState->Len())
         pDlg->SetWindowState(*pWindowState);
