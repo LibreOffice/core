@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:51:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:16:10 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,7 +66,7 @@ SfxViewFactory::SfxViewFactory( SfxViewCtor fnC, SfxViewInit fnI,
     fnCreate(fnC),
     fnInit(fnI),
     nOrd(nOrdinal),
-    aDescription(aDescrResId.GetId(), aDescrResId.GetResMgr())
+    aDescription(aDescrResId.GetId(), *aDescrResId.GetResMgr())
 {
     aDescription.SetRT(aDescrResId.GetRT());
     DBG_CTOR(SfxViewFactory, 0);
