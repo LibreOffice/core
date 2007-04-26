@@ -4,9 +4,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 08:30:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:49:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -445,7 +445,7 @@ SwTxtFmtColl* SwDoc::GetTxtCollFromPool( USHORT nId, bool bRegardLanguage )
     if( !nResId )
         return GetTxtCollFromPool( RES_POOLCOLL_STANDARD );
 
-    ResId aResId( nResId + nId, pSwResMgr );
+    ResId aResId( nResId + nId, *pSwResMgr );
     String aNm( aResId );
 
     // ein Set fuer alle zusetzenden Attribute
@@ -1235,7 +1235,7 @@ SwFmt* SwDoc::GetFmtFromPool( USHORT nId )
                 return pNewFmt;
             }
 
-    ResId aResId( nRCId + nId, pSwResMgr );
+    ResId aResId( nRCId + nId, *pSwResMgr );
     String aNm( aResId );
     SwAttrSet aSet( GetAttrPool(), pWhichRange );
 
@@ -1553,7 +1553,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( sal_uInt16 nId, bool bRegardLanguage )
         nId = RES_POOLPAGE_BEGIN;
     }
 
-    ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), pSwResMgr );
+    ResId aResId( sal_uInt32(RC_POOLPAGEDESC_BEGIN + nId - RES_POOLPAGE_BEGIN), *pSwResMgr );
     String aNm( aResId );
     {
         BOOL bIsModified = IsModified();
@@ -1710,7 +1710,7 @@ SwNumRule* SwDoc::GetNumRuleFromPool( USHORT nId )
         nId = RES_POOLNUMRULE_BEGIN;
     }
 
-    ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), pSwResMgr );
+    ResId aResId( sal_uInt32(RC_POOLNUMRULE_BEGIN + nId - RES_POOLNUMRULE_BEGIN), *pSwResMgr );
     String aNm( aResId );
 
     SwCharFmt *pNumCFmt = 0, *pBullCFmt = 0;
