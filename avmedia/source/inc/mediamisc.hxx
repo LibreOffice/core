@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mediamisc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:39:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:49:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -35,7 +35,7 @@
 
 class ResMgr;
 
-#define AVMEDIA_RESID( nId ) ResId( nId, ::avmedia::GetResMgr() )
+#define AVMEDIA_RESID( nId ) ResId( nId, * ::avmedia::GetResMgr() )
 
 #ifdef WNT
 #define AVMEDIA_MANAGER_SERVICE_NAME "com.sun.star.media.Manager_DirectX"
