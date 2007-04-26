@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fumeasur.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:19:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:38:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,7 +93,7 @@ void FuMeasureDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ::std::auto_ptr<AbstractSfxSingleTabDialog> pDlg( pFact ? pFact->CreateSfxSingleTabDialog( NULL, aNewAttr, mpView, ResId(RID_SVXPAGE_MEASURE)) : 0 );
+        ::std::auto_ptr<AbstractSfxSingleTabDialog> pDlg( pFact ? pFact->CreateSfxSingleTabDialog( NULL, aNewAttr, mpView, RID_SVXPAGE_MEASURE) : 0 );
 
         if( pDlg.get() && (pDlg->Execute() == RET_OK) )
         {
