@@ -4,9 +4,9 @@
  *
  *  $RCSfile: numfmt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:28:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:36:26 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -278,38 +278,38 @@ SvxNumberFormatTabPage::SvxNumberFormatTabPage( Window*             pParent,
 
     :   SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_NUMBERFORMAT ), rCoreAttrs ),
 
-        aFtCategory     ( this, ResId( FT_CATEGORY ) ),
-        aLbCategory     ( this, ResId( LB_CATEGORY ) ),
-        aFtFormat       ( this, ResId( FT_FORMAT ) ),
-        aLbCurrency     ( this, ResId( LB_CURRENCY) ),
-        aLbFormat       ( this, ResId( LB_FORMAT ) ),
-        aFtLanguage     ( this, ResId( FT_LANGUAGE ) ),
-        aLbLanguage     ( this, ResId( LB_LANGUAGE ), FALSE ),
-        aCbSourceFormat ( this, ResId( CB_SOURCEFORMAT ) ),
-        aFtDecimals     ( this, ResId( FT_DECIMALS ) ),
-        aEdDecimals     ( this, ResId( ED_DECIMALS ) ),
-        aFtLeadZeroes   ( this, ResId( FT_LEADZEROES ) ),
-        aEdLeadZeroes   ( this, ResId( ED_LEADZEROES ) ),
-        aBtnNegRed      ( this, ResId( BTN_NEGRED ) ),
-        aBtnThousand    ( this, ResId( BTN_THOUSAND ) ),
-        aFlOptions      ( this, ResId( FL_OPTIONS ) ),
+        aFtCategory     ( this, SVX_RES( FT_CATEGORY ) ),
+        aLbCategory     ( this, SVX_RES( LB_CATEGORY ) ),
+        aFtFormat       ( this, SVX_RES( FT_FORMAT ) ),
+        aLbCurrency     ( this, SVX_RES( LB_CURRENCY) ),
+        aLbFormat       ( this, SVX_RES( LB_FORMAT ) ),
+        aFtLanguage     ( this, SVX_RES( FT_LANGUAGE ) ),
+        aLbLanguage     ( this, SVX_RES( LB_LANGUAGE ), FALSE ),
+        aCbSourceFormat ( this, SVX_RES( CB_SOURCEFORMAT ) ),
+        aFtDecimals     ( this, SVX_RES( FT_DECIMALS ) ),
+        aEdDecimals     ( this, SVX_RES( ED_DECIMALS ) ),
+        aFtLeadZeroes   ( this, SVX_RES( FT_LEADZEROES ) ),
+        aEdLeadZeroes   ( this, SVX_RES( ED_LEADZEROES ) ),
+        aBtnNegRed      ( this, SVX_RES( BTN_NEGRED ) ),
+        aBtnThousand    ( this, SVX_RES( BTN_THOUSAND ) ),
+        aFlOptions      ( this, SVX_RES( FL_OPTIONS ) ),
 
-        aFtEdFormat     ( this, ResId( FT_EDFORMAT ) ),
-        aEdFormat       ( this, ResId( ED_FORMAT ) ),
-        aIbAdd          ( this, ResId( IB_ADD       ) ),
-        aIbInfo         ( this, ResId( IB_INFO      ) ),
-        aIbRemove       ( this, ResId( IB_REMOVE    ) ),
-        aFtComment      ( this, ResId( FT_COMMENT ) ),
-        aEdComment      ( this, ResId( ED_COMMENT ) ),
+        aFtEdFormat     ( this, SVX_RES( FT_EDFORMAT ) ),
+        aEdFormat       ( this, SVX_RES( ED_FORMAT ) ),
+        aIbAdd          ( this, SVX_RES( IB_ADD       ) ),
+        aIbInfo         ( this, SVX_RES( IB_INFO      ) ),
+        aIbRemove       ( this, SVX_RES( IB_REMOVE    ) ),
+        aFtComment      ( this, SVX_RES( FT_COMMENT ) ),
+        aEdComment      ( this, SVX_RES( ED_COMMENT ) ),
 
-        aWndPreview     ( this, ResId( WND_NUMBER_PREVIEW ) ),
+        aWndPreview     ( this, SVX_RES( WND_NUMBER_PREVIEW ) ),
         pNumItem        ( NULL ),
         pNumFmtShell    ( NULL ),
         nInitFormat     ( ULONG_MAX ),
 
-        aStrEurope      ( ResId( STR_EUROPE) ),
-        sAutomaticEntry ( ResId( STR_AUTO_ENTRY)),
-//      aIconList       ( ResId( IL_ICON ) ),   -> done Init_Impl
+        aStrEurope      ( SVX_RES( STR_EUROPE) ),
+        sAutomaticEntry ( SVX_RES( STR_AUTO_ENTRY)),
+//      aIconList       ( SVX_RES( IL_ICON ) ), -> done Init_Impl
         pLastActivWindow( NULL )
 {
     Init_Impl();
@@ -358,8 +358,8 @@ SvxNumberFormatTabPage::~SvxNumberFormatTabPage()
 
 void SvxNumberFormatTabPage::Init_Impl()
 {
-    ImageList               aIconList( ResId( IL_ICON ) );
-    ImageList               aIconListHC( ResId( IL_ICON_HC ) );
+    ImageList               aIconList( SVX_RES( IL_ICON ) );
+    ImageList               aIconListHC( SVX_RES( IL_ICON_HC ) );
 
     bNumItemFlag=TRUE;
     bOneAreaFlag=FALSE;
