@@ -4,9 +4,9 @@
  *
  *  $RCSfile: moduledbu.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-08 15:59:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:01:59 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,7 +104,7 @@ public:
 class ModuleRes : public ::ResId
 {
 public:
-    ModuleRes(USHORT _nId) : ResId(_nId, OModule::getResManager()) { }
+    ModuleRes(USHORT _nId) : ResId(_nId, *OModule::getResManager()) { }
 };
 
 //.........................................................................
