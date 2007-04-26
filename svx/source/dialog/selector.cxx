@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 15:20:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:42:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -324,16 +324,16 @@ SvxConfigGroupListBox_Impl::SvxConfigGroupListBox_Impl(
     ULONG nConfigMode, const Reference< frame::XFrame >& xFrame )
         : SvTreeListBox( pParent, rResId )
         , nMode( nConfigMode ), bShowSF( TRUE ),
-    m_hdImage(ResId(IMG_HARDDISK)),
-    m_hdImage_hc(ResId(IMG_HARDDISK_HC)),
-    m_libImage(ResId(IMG_LIB)),
-    m_libImage_hc(ResId(IMG_LIB_HC)),
-    m_macImage(ResId(IMG_MACRO)),
-    m_macImage_hc(ResId(IMG_MACRO_HC)),
-    m_docImage(ResId(IMG_DOC)),
-    m_docImage_hc(ResId(IMG_DOC_HC)),
-    m_sMyMacros(String(ResId(STR_MYMACROS))),
-    m_sProdMacros(String(ResId(STR_PRODMACROS)))
+    m_hdImage(ResId(IMG_HARDDISK,*rResId.GetResMgr())),
+    m_hdImage_hc(ResId(IMG_HARDDISK_HC,*rResId.GetResMgr())),
+    m_libImage(ResId(IMG_LIB,*rResId.GetResMgr())),
+    m_libImage_hc(ResId(IMG_LIB_HC,*rResId.GetResMgr())),
+    m_macImage(ResId(IMG_MACRO,*rResId.GetResMgr())),
+    m_macImage_hc(ResId(IMG_MACRO_HC,*rResId.GetResMgr())),
+    m_docImage(ResId(IMG_DOC,*rResId.GetResMgr())),
+    m_docImage_hc(ResId(IMG_DOC_HC,*rResId.GetResMgr())),
+    m_sMyMacros(String(ResId(STR_MYMACROS,*rResId.GetResMgr()))),
+    m_sProdMacros(String(ResId(STR_PRODMACROS,*rResId.GetResMgr())))
 {
     FreeResource();
 
@@ -540,7 +540,7 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor * )
                     static_cast<void *>(rootNode.get()));
 
             String aTitle =
-                String( ResId( STR_SELECTOR_MACROS, DIALOG_MGR() ) );
+                String( SVX_RES( STR_SELECTOR_MACROS ) );
 
             SvLBoxEntry *pNewEntry = InsertEntry( aTitle, NULL );
             pNewEntry->SetUserData( pInfo );
@@ -1229,33 +1229,33 @@ SvxScriptSelectorDialog::SvxScriptSelectorDialog(
   Window* pParent, BOOL bShowSlots, const Reference< frame::XFrame >& xFrame )
     :
     ModelessDialog( pParent, SVX_RES( RID_DLG_SCRIPTSELECTOR ) ),
-    aDialogDescription( this, ResId( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
-    aGroupText( this, ResId( TXT_SELECTOR_CATEGORIES ) ),
-    aCategories( this, ResId( BOX_SELECTOR_CATEGORIES ),
+    aDialogDescription( this, SVX_RES( TXT_SELECTOR_DIALOG_DESCRIPTION ) ),
+    aGroupText( this, SVX_RES( TXT_SELECTOR_CATEGORIES ) ),
+    aCategories( this, SVX_RES( BOX_SELECTOR_CATEGORIES ),
         bShowSlots ? SFX_SLOT_MENUCONFIG : 0, xFrame ),
-    aFunctionText( this, ResId( TXT_SELECTOR_COMMANDS ) ),
-    aCommands( this, ResId( BOX_SELECTOR_COMMANDS ) ),
-    aOKButton( this, ResId( BTN_SELECTOR_OK ) ),
-    aCancelButton( this, ResId( BTN_SELECTOR_CANCEL ) ),
-    aHelpButton( this, ResId( BTN_SELECTOR_HELP ) ),
-    aDescription( this, ResId( GRP_SELECTOR_DESCRIPTION ) ),
-    aDescriptionText( this, ResId( TXT_SELECTOR_DESCRIPTION ) ),
+    aFunctionText( this, SVX_RES( TXT_SELECTOR_COMMANDS ) ),
+    aCommands( this, SVX_RES( BOX_SELECTOR_COMMANDS ) ),
+    aOKButton( this, SVX_RES( BTN_SELECTOR_OK ) ),
+    aCancelButton( this, SVX_RES( BTN_SELECTOR_CANCEL ) ),
+    aHelpButton( this, SVX_RES( BTN_SELECTOR_HELP ) ),
+    aDescription( this, SVX_RES( GRP_SELECTOR_DESCRIPTION ) ),
+    aDescriptionText( this, SVX_RES( TXT_SELECTOR_DESCRIPTION ) ),
     m_bShowSlots( bShowSlots )
 {
 
-    ResMgr* pMgr = DIALOG_MGR();
+    ResMgr& rMgr = DIALOG_MGR();
 
     // If we are showing Slot API commands update labels in the UI, and
     // enable drag'n'drop
     if ( m_bShowSlots )
     {
-        aGroupText.SetText( String( ResId( STR_SELECTOR_CATEGORIES, pMgr ) ) );
-        aOKButton.SetText( String( ResId( STR_SELECTOR_ADD, pMgr ) ) );
-        aCancelButton.SetText( String( ResId( STR_SELECTOR_CLOSE, pMgr ) ) );
-        aFunctionText.SetText( String( ResId( STR_SELECTOR_COMMANDS, pMgr ) ) );
+        aGroupText.SetText( String( ResId( STR_SELECTOR_CATEGORIES, rMgr ) ) );
+        aOKButton.SetText( String( ResId( STR_SELECTOR_ADD, rMgr ) ) );
+        aCancelButton.SetText( String( ResId( STR_SELECTOR_CLOSE, rMgr ) ) );
+        aFunctionText.SetText( String( ResId( STR_SELECTOR_COMMANDS, rMgr ) ) );
         SetDialogDescription(
-            String( ResId( STR_SELECTOR_ADD_COMMANDS_DESCRIPTION, pMgr ) ) );
-        SetText( String( ResId( STR_SELECTOR_ADD_COMMANDS, pMgr ) ) );
+            String( ResId( STR_SELECTOR_ADD_COMMANDS_DESCRIPTION, rMgr ) ) );
+        SetText( String( ResId( STR_SELECTOR_ADD_COMMANDS, rMgr ) ) );
 
         aCommands.SetDragDropMode( SV_DRAGDROP_APP_COPY );
     }
@@ -1421,7 +1421,7 @@ IMPL_LINK( SvxScriptSelectorDialog, ClickHdl, Button *, pButton )
 void
 SvxScriptSelectorDialog::SetRunLabel()
 {
-    aOKButton.SetText( String( ResId( STR_SELECTOR_RUN, DIALOG_MGR() ) ) );
+    aOKButton.SetText( String( SVX_RES( STR_SELECTOR_RUN ) ) );
 }
 
 void
