@@ -4,9 +4,9 @@
  *
  *  $RCSfile: certificatechooser.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 14:35:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:17:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,17 +81,17 @@ USHORT CertificateChooser::GetSelectedEntryPos( void ) const
 CertificateChooser::CertificateChooser( Window* _pParent, uno::Reference< dcss::xml::crypto::XSecurityEnvironment >& _rxSecurityEnvironment, const SignatureInformations& _rCertsToIgnore )
     :ModalDialog    ( _pParent, XMLSEC_RES( RID_XMLSECDLG_CERTCHOOSER ) )
     ,maCertsToIgnore( _rCertsToIgnore )
-    ,maHintFT       ( this, ResId( FT_HINT_SELECT ) )
-    ,maCertLB       ( this, ResId( LB_SIGNATURES ) )
-    ,maViewBtn      ( this, ResId( BTN_VIEWCERT ) )
-    ,maBottomSepFL  ( this, ResId( FL_BOTTOM_SEP ) )
-    ,maOKBtn        ( this, ResId( BTN_OK ) )
-    ,maCancelBtn    ( this, ResId( BTN_CANCEL ) )
-    ,maHelpBtn      ( this, ResId( BTN_HELP ) )
+    ,maHintFT       ( this, XMLSEC_RES( FT_HINT_SELECT ) )
+    ,maCertLB       ( this, XMLSEC_RES( LB_SIGNATURES ) )
+    ,maViewBtn      ( this, XMLSEC_RES( BTN_VIEWCERT ) )
+    ,maBottomSepFL  ( this, XMLSEC_RES( FL_BOTTOM_SEP ) )
+    ,maOKBtn        ( this, XMLSEC_RES( BTN_OK ) )
+    ,maCancelBtn    ( this, XMLSEC_RES( BTN_CANCEL ) )
+    ,maHelpBtn      ( this, XMLSEC_RES( BTN_HELP ) )
 {
     static long nTabs[] = { 3, 0, 30*CS_LB_WIDTH/100, 60*CS_LB_WIDTH/100 };
     maCertLB.SetTabs( &nTabs[0] );
-    maCertLB.InsertHeaderEntry( String( ResId( STR_HEADERBAR ) ) );
+    maCertLB.InsertHeaderEntry( String( XMLSEC_RES( STR_HEADERBAR ) ) );
     maCertLB.SetSelectHdl( LINK( this, CertificateChooser, CertificateHighlightHdl ) );
     maCertLB.SetDoubleClickHdl( LINK( this, CertificateChooser, CertificateSelectHdl ) );
     maViewBtn.SetClickHdl( LINK( this, CertificateChooser, ViewButtonHdl ) );
