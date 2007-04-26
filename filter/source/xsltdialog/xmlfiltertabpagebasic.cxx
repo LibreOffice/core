@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xmlfiltertabpagebasic.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:49:01 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:13:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -49,17 +49,17 @@
 using namespace rtl;
 
 XMLFilterTabPageBasic::XMLFilterTabPageBasic( Window* pParent, ResMgr& rResMgr ) :
-    TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_BASIC, &rResMgr ) ),
-    maFTFilterName( this, ResId( FT_XML_FILTER_NAME ) ),
-    maEDFilterName( this, ResId( ED_XML_FILTER_NAME ) ),
-    maFTApplication( this, ResId( FT_XML_APPLICATION ) ),
-    maCBApplication( this, ResId( CB_XML_APPLICATION ) ),
-    maFTInterfaceName( this, ResId( FT_XML_INTERFACE_NAME ) ),
-    maEDInterfaceName( this, ResId( ED_XML_INTERFACE_NAME ) ),
-    maFTExtension( this, ResId( FT_XML_EXTENSION ) ),
-    maEDExtension( this, ResId( ED_XML_EXTENSION ) ),
-    maFTDescription( this, ResId( FT_XML_DESCRIPTION ) ),
-    maEDDescription( this, ResId( ED_XML_DESCRIPTION ) )
+    TabPage( pParent, ResId( RID_XML_FILTER_TABPAGE_BASIC, rResMgr ) ),
+    maFTFilterName( this, ResId( FT_XML_FILTER_NAME, rResMgr ) ),
+    maEDFilterName( this, ResId( ED_XML_FILTER_NAME, rResMgr ) ),
+    maFTApplication( this, ResId( FT_XML_APPLICATION, rResMgr ) ),
+    maCBApplication( this, ResId( CB_XML_APPLICATION, rResMgr ) ),
+    maFTInterfaceName( this, ResId( FT_XML_INTERFACE_NAME, rResMgr ) ),
+    maEDInterfaceName( this, ResId( ED_XML_INTERFACE_NAME, rResMgr ) ),
+    maFTExtension( this, ResId( FT_XML_EXTENSION, rResMgr ) ),
+    maEDExtension( this, ResId( ED_XML_EXTENSION, rResMgr ) ),
+    maFTDescription( this, ResId( FT_XML_DESCRIPTION, rResMgr ) ),
+    maEDDescription( this, ResId( ED_XML_DESCRIPTION, rResMgr ) )
 {
     maCBApplication.SetHelpId( HID_XML_FILTER_APPLICATION );
     maEDDescription.SetHelpId( HID_XML_FILTER_DESCRIPTION );
