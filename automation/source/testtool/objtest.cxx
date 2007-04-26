@@ -4,9 +4,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-06 14:46:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:40:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -43,6 +43,7 @@ using namespace com::sun::star::devtools;
 
 #include "sysdir_win.hxx"
 #include "registry_win.hxx"
+#include "sttresid.hxx"
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -441,7 +442,7 @@ TestToolObj::TestToolObj( String aName, MyBasic* pBas )                // Aufruf
     pCommunicationManager->SetDataReceivedHdl( LINK( this, TestToolObj, ReturnResultsLink ));
 }
 
-void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die durch den ConfigDialog geändert werden können
+void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die durch den ConfigDialog geï¿½ndert werden kï¿½nnen
 {
 #define GETSET(aVar, KeyName, Dafault)                          \
     {                                                           \
@@ -560,7 +561,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
         StartListening( pMeth->GetBroadcaster(), TRUE );                                        \
     }
 
-// SetUserData muß irgendwas sein, sonst wird es im Find rausgefiltert!!!
+// SetUserData muï¿½ irgendwas sein, sonst wird es im Find rausgefiltert!!!
 #define MAKE_USHORT_CONSTANT(cName, nValue)                                                                         \
     {\
         SbxProperty *pVal = new SbxProperty( CUniString( cName) , SbxINTEGER );       \
@@ -573,7 +574,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
 void TestToolObj::InitTestToolObj()
 {
-    pImpl->nNumBorders = 0;                 // Für Profiling mit kästchen
+    pImpl->nNumBorders = 0;                 // Fï¿½r Profiling mit kï¿½stchen
 
     pImpl->nMinRemoteCommandDelay = 0;
     pImpl->nMaxRemoteCommandDelay = 0;
@@ -599,7 +600,7 @@ void TestToolObj::InitTestToolObj()
 
     pImpl->pChildEnv = new Environment;
 
-    pFehlerListe = new CErrors;             // Vor allem anderen. Wer weiss, wer alles einen Fehler auslöst.
+    pFehlerListe = new CErrors;             // Vor allem anderen. Wer weiss, wer alles einen Fehler auslï¿½st.
 
     In = new CmdStream();
 
@@ -651,13 +652,13 @@ void TestToolObj::InitTestToolObj()
 
 /*  Dialog Handler werden gebraucht, wenn im internen Testtool ein Dialog
     hochgerissen wird. Nach versenden der Remote-Kommandos wird IdleHandler aktiviert.
-    Er testet, ob das Reschedule zum WaitForAnswer zurückkehrt. Bleibt das aus, so
-    wird erst der RemoteHandler zurückgesetzt und dann die Handler-Sub im Basic
-    gerufen.(Entkoppelt über PostUserEvent.)
+    Er testet, ob das Reschedule zum WaitForAnswer zurï¿½ckkehrt. Bleibt das aus, so
+    wird erst der RemoteHandler zurï¿½ckgesetzt und dann die Handler-Sub im Basic
+    gerufen.(Entkoppelt ï¿½ber PostUserEvent.)
 
-    In returndaten_verarbeiten wird flag für ausführung des nächsten remote-befehls
-    rückgesetzt. Der Handler wird damit auch entwertet. Er gilt also nur für den
-    nächsten Remotebefehl.
+    In returndaten_verarbeiten wird flag fï¿½r ausfï¿½hrung des nï¿½chsten remote-befehls
+    rï¿½ckgesetzt. Der Handler wird damit auch entwertet. Er gilt also nur fï¿½r den
+    nï¿½chsten Remotebefehl.
 */
     MAKE_TT_KEYWORD( "DialogHandler", SbxCLASS_METHOD, SbxNULL, ID_DialogHandler );
 
@@ -701,11 +702,11 @@ void TestToolObj::InitTestToolObj()
         MAKE_REMOTE_COMMAND( pRCommands->GetObject( i )->pData->Kurzname, pRCommands->GetObject( i )->pData->aUId );
 
 
-// Konstanten für SetControlType
+// Konstanten fï¿½r SetControlType
     MAKE_USHORT_CONSTANT("CTBrowseBox",CONST_CTBrowseBox);
     MAKE_USHORT_CONSTANT("CTValueSet",CONST_CTValueSet);
 
-// Konstanten für das Alignment des gesuchten Splitters
+// Konstanten fï¿½r das Alignment des gesuchten Splitters
     MAKE_USHORT_CONSTANT("AlignLeft",CONST_ALIGN_LEFT);
     MAKE_USHORT_CONSTANT("AlignTop",CONST_ALIGN_TOP);
     MAKE_USHORT_CONSTANT("AlignRight",CONST_ALIGN_RIGHT);
@@ -867,7 +868,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
     {
         String aFileName = (pImpl->aHIDDir + DirEntry(CUniString("hid.lst"))).GetFull();
         {
-            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_LONGNAMES)), aFileName );
+            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_LONGNAMES)), aFileName );
             GetTTBroadcaster().Broadcast( aHint );
         }
         ReadFlat( aFileName ,pUIds, TRUE );
@@ -893,12 +894,12 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
 
     if ( bIsFlat && !pNames )
     {
-        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_SLOT_IDS)), Filename );
+        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_SLOT_IDS)), Filename );
         GetTTBroadcaster().Broadcast( aHint );
     }
     else
     {
-        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_CONTROLS)), Filename );
+        TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_CONTROLS)), Filename );
         GetTTBroadcaster().Broadcast( aHint );
     }
 
@@ -953,7 +954,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
         }
         if ( !bOK )
         {
-            ADD_WARNING_LOG2( CUniString("Zeile \"").Append(aLine).AppendAscii("\" enthält ungültige Zeichen."), Filename, nLineNr );
+            ADD_WARNING_LOG2( CUniString("Zeile \"").Append(aLine).AppendAscii("\" enthï¿½lt ungï¿½ltige Zeichen."), Filename, nLineNr );
             continue;
         }
 
@@ -1044,7 +1045,7 @@ void TestToolObj::ReadNames( String Filename, CNames *&pNames, CNames *&pUIds, B
                     if (!pNewDef->SonInsert( pNewDef2 ))         // Dialog in eigenen Namespace eintragen
                     {
                         delete pNewDef2;
-                        DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfügen in leere Liste!");
+                        DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen in leere Liste!");
                     }
                 }
 
@@ -1238,7 +1239,7 @@ void TestToolObj::WaitForAnswer ()
             else
                 aRun = BasicRuntime( NULL );
         }
-        if ( bWasRealWait && aDialogHandlerName.Len() > 0 )     // Damit das ganze auch im Testtool läuft
+        if ( bWasRealWait && aDialogHandlerName.Len() > 0 )     // Damit das ganze auch im Testtool lï¿½uft
             CallDialogHandler(GetpApp());
     }
     else
@@ -1292,10 +1293,10 @@ IMPL_LINK( TestToolObj, CallDialogHandler, Application*, EMPTYARG )
     String aHandlerName(aDialogHandlerName);
     aDialogHandlerName.Erase();
 
-    ULONG nRememberSequence = nSequence; // Da sich die Sequence im DialogHandler ändert
+    ULONG nRememberSequence = nSequence; // Da sich die Sequence im DialogHandler ï¿½ndert
     ((StarBASIC*)GetParent())->Call( aHandlerName );
     nSequence = nRememberSequence;
-    // Die Sequenznummern werden dann zwar doppelt vergeben, aber wen kümmerts.
+    // Die Sequenznummern werden dann zwar doppelt vergeben, aber wen kï¿½mmerts.
 
     nWindowHandlerCallLevel--;
     return 0;
@@ -1359,7 +1360,7 @@ void TestToolObj::EndBlock()
 {
     if (IsBlock)
     {
-        pImpl->LocalStarttime = Time::GetSystemTicks(); // Setzen der Anfangszeit für Performancemessung
+        pImpl->LocalStarttime = Time::GetSystemTicks(); // Setzen der Anfangszeit fï¿½r Performancemessung
 
         In->GenCmdFlow (F_EndCommandBlock);
 
@@ -1393,7 +1394,7 @@ void TestToolObj::EndBlock()
     }
     else
     {
-        DBG_ERROR("EndBlock außerhalb eines Blockes")
+        DBG_ERROR("EndBlock auï¿½erhalb eines Blockes")
     }
 }
 
@@ -1508,13 +1509,13 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
                 if (!pNewDef->SonInsert(pNewDef2))                              // Dialog in eigenen Namespace eintragen
                 {
                     delete pNewDef2;
-                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfügen in leere Liste!");
+                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen in leere Liste!");
                 }
             }
 
             if (! pNames->C40_PTR_INSERT(ControlItem, (ControlItem*&)pNewDef))
             {
-                DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfügen eines namens!");
+                DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen eines namens!");
                 delete pNewDef;
                 pFatherDef = NULL;
             }
@@ -1527,7 +1528,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
         {
             if (!pFatherDef)
             {
-                DBG_ERROR( "Internal Error: Erster Kurzname muß mit * beginnen. Überspringe." );
+                DBG_ERROR( "Internal Error: Erster Kurzname muï¿½ mit * beginnen. ï¿½berspringe." );
             }
             else
             {
@@ -1535,7 +1536,7 @@ BOOL TestToolObj::ReadNamesBin( String Filename, CNames *&pSIds, CNames *&pContr
                 if (! pFatherDef->SonInsert(pNewDef))
                 {
                     delete pNewDef;
-                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfügen eines namens!");
+                    DBG_ERROR(" !!!! ACHTUNG !!!!  Fehler beim einfï¿½gen eines namens!");
                 }
             }
         }
@@ -1624,7 +1625,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     {
                         m_pNameKontext = m_pControls;
 
-                        // So daß nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
+                        // So daï¿½ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
                         for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                         {
                             pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
@@ -1640,7 +1641,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             m_pNameKontext = ((ControlDef*)m_pControls->GetObject(nElement))->GetSons();
 
-                            // So daß nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
+                            // So daï¿½ nicht immer mal wieder was aus einem alten Kontext dazwischenhaut
                             for (USHORT i=0;i<VAR_POOL_SIZE;i++)
                             {
                                 pImpl->pMyVars[i]->SetName( CUniString("VarDummy").Append(UniString::CreateFromInt32(i)) );
@@ -1667,7 +1668,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         aTmpStr += ' ';
                         aTmpStr += pImpl->ProgParam;
                         {
-                            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_STARTING_APPLICATION)), aTmpStr );
+                            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_STARTING_APPLICATION)), aTmpStr );
                             GetTTBroadcaster().Broadcast( aHint );
                         }
 
@@ -1860,7 +1861,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         else if ( Ext.CompareIgnoreCaseToAscii("Inc") == COMPARE_EQUAL )
                         {
                             {
-                                TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_BASIC_MODULE)), FilePath.GetFull() );
+                                TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_BASIC_MODULE)), FilePath.GetFull() );
                                 GetTTBroadcaster().Broadcast( aHint );
                             }
                             String aFullPathname = FilePath.GetFull();
@@ -2095,7 +2096,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         SetError( SbxERR_NOTIMP );
                         break;
 
-//                                              Das ist total rotten und muß wohl komplett neu!!
+//                                              Das ist total rotten und muï¿½ wohl komplett neu!!
 
 
 /*                      BOOL bWasBlock = IsBlock;
@@ -2107,7 +2108,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 //                                              ((Controls*)pVar)->pMethodVar->nValue = 128;
 
                         ULONG nOldValue = ((Controls*)pVar)->GetULong();
-                        // Setzen, so daß beim Return der Wert stimmt
+                        // Setzen, so daï¿½ beim Return der Wert stimmt
                         ((Controls*)pVar)->PutULong( 128 );
                         pImpl->pNextReturn = ((Controls*)pVar)->pMethodVar;
                         if ( SingleCommandBlock )
@@ -2118,12 +2119,12 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                                 BeginBlock();
                         ((Controls*)pVar)->PutULong( nOldValue );
 
-                        // Rücksetzen, so daß beim nächsten Aufruf alles klappt
+                        // Rï¿½cksetzen, so daï¿½ beim nï¿½chsten Aufruf alles klappt
 //                                              ((Controls*)pVar)->SetUserData( 128 );
 
 
 //                                              ((Controls*)pVar)->SetName("xxx");
-                        // Setzen und rücksetzen der ID, so dass der Notify ohne Wirkung bleibt.
+                        // Setzen und rï¿½cksetzen der ID, so dass der Notify ohne Wirkung bleibt.
                         ((Controls*)pVar)->pMethodVar->SetUserData(ID_ErrorDummy);
                         ((Controls*)pVar)->PutULong( ((Controls*)pVar)->pMethodVar->GetULong() );
                         ((Controls*)pVar)->pMethodVar->SetUserData(ID_Control);
@@ -2175,7 +2176,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         {
                             WaitForAnswer();
                         }
-                        // für einige noch etwas Nachbehandlung
+                        // fï¿½r einige noch etwas Nachbehandlung
                         switch ( ((SbxTransportMethod*)pVar)->nValue )
                         {
                             case RC_WinTree:
@@ -2404,7 +2405,7 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                     {
                         switch (rPar->Get( 1 )->GetType())
                         {
-                            case SbxLONG:       // alles immer als Short übertragen
+                            case SbxLONG:       // alles immer als Short ï¿½bertragen
                             case SbxULONG:
                             case SbxLONG64:
                             case SbxULONG64:
@@ -2835,7 +2836,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
             return pMyVar;
         }
 
-        /// es kann sich noch um eine SlotID handeln, die numerisch abgefragt wird, statt ausgeführt zu werden
+        /// es kann sich noch um eine SlotID handeln, die numerisch abgefragt wird, statt ausgefï¿½hrt zu werden
         if ( aStr.Copy( aStr.Len()-3, 3 ).CompareIgnoreCaseToAscii("_ID") == COMPARE_EQUAL && m_pSIds )
         {
             delete pWhatName;
@@ -2858,7 +2859,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
         {
             ADD_ERROR(SbxERR_PROC_UNDEFINED,GEN_RES_STR1(S_UNKNOWN_SLOT_CONTROL, aStr) );
             if ( bQuietErrors )
-            {       // Vorsichtshalber Control, falls noch ´ne Methode Folgt.
+            {       // Vorsichtshalber Control, falls noch ï¿½ne Methode Folgt.
                 pImpl->pControlsObj->SetName(aStr);
                 pImpl->pControlsObj->SetUserData( ID_ErrorDummy );
                 return pImpl->pControlsObj;
@@ -2870,7 +2871,7 @@ SbxVariable* TestToolObj::Find( const String& aStr, SbxClassType aType)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.30 $
+    // search $Revision: 1.31 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
@@ -3084,7 +3085,7 @@ BOOL TestToolObj::WasPrecompilerError()
 
 String TestToolObj::PreCompile( String const &aSourceIn )
 {
-    // Im CTOR zu früh, und hier grade nicg rechtzeitig. Start und Stop von Programmausführung
+    // Im CTOR zu frï¿½h, und hier grade nicg rechtzeitig. Start und Stop von Programmausfï¿½hrung
     StartListening( ((StarBASIC*)GetParent())->GetBroadcaster(), TRUE );
 
     xub_StrLen nTestCase;
@@ -3094,7 +3095,7 @@ String TestToolObj::PreCompile( String const &aSourceIn )
     bWasPrecompilerError = FALSE;
 
 HACK("Ich gestehe alles: Ich war zu faul das richtig zu machen.")
-    aSource = String(' ').Append( aSource );        // Da Schlüsselworte an Position 0 sonst nicht gefunden werden
+    aSource = String(' ').Append( aSource );        // Da Schlï¿½sselworte an Position 0 sonst nicht gefunden werden
 
 
 //      Erstmal alle "'" Kommentare raus
@@ -3186,7 +3187,7 @@ void TestToolObj::AddToListByNr( CNames *&pControls, ControlItemUId *&pNewItem )
     {
         AddName( pControls->GetObject(nNr)->pData->Kurzname, pNewItem->pData->Kurzname );
         delete pNewItem;
-        pNewItem = (ControlItemUId*)pControls->GetObject(nNr);  // für einfügen der Söhne
+        pNewItem = (ControlItemUId*)pControls->GetObject(nNr);  // fï¿½r einfï¿½gen der Sï¿½hne
     }
     else
     {
@@ -3208,7 +3209,7 @@ void TestToolObj::ReadHidLstByNumber()
         String aName = (pImpl->aHIDDir + DirEntry(CUniString("hid.lst"))).GetFull();
 
         {
-            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(ResId(S_READING_LONGNAMES)), aName );
+            TTExecutionStatusHint aHint( TT_EXECUTION_SHOW_ACTION, String(SttResId(S_READING_LONGNAMES)), aName );
             GetTTBroadcaster().Broadcast( aHint );
         }
 
@@ -3238,7 +3239,7 @@ void TestToolObj::SortControlsByNumber( BOOL bIncludeActive )
             if (! ((ControlItemUIdSon*)pNewFather)->GetSons() )
                 ((ControlItemUIdSon*)pNewFather)->Sons( new CNames );
 
-            // Existieren Söhne, diese in beide Listen eintragen
+            // Existieren Sï¿½hne, diese in beide Listen eintragen
             CNames *pControlList = ((ControlItemSon*)m_pControls->GetObject(nWin))->GetSons();
             if ( pControlList )
                 for ( nCont = 0 ; nCont < pControlList->Count() ; nCont++ )
@@ -3428,7 +3429,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                             delete pNewItem;
                         }
 
-                        // Reset. Muß nach bestimmen des Kontext stehen, da sonst mit dem reset-record
+                        // Reset. Muï¿½ nach bestimmen des Kontext stehen, da sonst mit dem reset-record
                         // der Kontext falsch gesetzt wird.
                         if ( pWinInfo->bIsReset )
                             pReverseControlsKontext = NULL; // Reihenfolge wichtig!
@@ -3551,7 +3552,7 @@ BOOL TestToolObj::ReturnResults( SvStream *pIn )
                                 }
                                 case S_ProfileDump:     // Gibt die daten aus.
                                 {
-                                    if ( pImpl->nNumBorders == 0 )  // Also keine alte Rückmeldung vom Office
+                                    if ( pImpl->nNumBorders == 0 )  // Also keine alte Rï¿½ckmeldung vom Office
                                         break;
                                     DirEntry FilePath = pImpl->aLogFileBase + DirEntry(DirEntry(aLogFileName).GetBase().AppendAscii(".prf"));
                                     SvFileStream aStrm( FilePath.GetFull(), STREAM_STD_WRITE );
