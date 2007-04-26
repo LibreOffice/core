@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:44:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:02:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,7 +139,7 @@ SwMailMergeChildWin::SwMailMergeChildWin( SfxBindings* pBindings,
     m_aBackTB.SetSelectHdl(LINK(this, SwMailMergeChildWin, BackHdl));
     sal_uInt16 nIResId =  GetSettings().GetStyleSettings().GetWindowColor().IsDark() ?
         ILIST_TBX_HC : ILIST_TBX;
-    ResId aResId( nIResId );
+    ResId aResId( nIResId, *pSwResMgr );
     ImageList aIList(aResId);
     FreeResource();
 
@@ -338,12 +338,12 @@ public:
   -----------------------------------------------------------------------*/
 SwSendWarningBox_Impl::SwSendWarningBox_Impl(Window* pParent, const String& rDetails) :
     ModalDialog(pParent, SW_RES( DLG_MM_SENDWARNING )),
-    aWarningImageIM(this, ResId( IM_WARNING         )),
-    aWarningFI(     this, ResId( FI_WARNING         )),
-    aDetailFT(      this, ResId( FT_DETAILS         )),
-    aDetailED(      this, ResId( ED_DETAILS         )),
-    aSeparatorFL(   this, ResId( FL_SEPARATOR       )),
-    aOKPB(          this, ResId(PB_OK))
+    aWarningImageIM(this, SW_RES( IM_WARNING         )),
+    aWarningFI(     this, SW_RES( FI_WARNING         )),
+    aDetailFT(      this, SW_RES( FT_DETAILS         )),
+    aDetailED(      this, SW_RES( ED_DETAILS         )),
+    aSeparatorFL(   this, SW_RES( FL_SEPARATOR       )),
+    aOKPB(          this, SW_RES(PB_OK))
 {
     FreeResource();
     aWarningImageIM.SetImage(WarningBox::GetStandardImage());
@@ -365,33 +365,33 @@ SwSendWarningBox_Impl::~SwSendWarningBox_Impl()
 SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConfigItem) :
     ModelessDialog /*SfxModalDialog*/(pParent, SW_RES(DLG_MM_SENDMAILS)),
 #pragma warning (disable : 4355)
-    m_aStatusFL( this, ResId(             FL_STATUS             )),
-    m_aStatusFT( this, ResId(             FT_STATUS1            )),
-    m_PausedFI(this, ResId(               FI_PAUSED             )),
-    m_aTransferStatusFL( this, ResId(     FL_TRANSFERSTATUS     )),
-    m_aTransferStatusFT( this, ResId(     FT_TRANSFERSTATUS     )),
-    m_aProgressBar( this,      ResId(     PB_PROGRESS           )),
-    m_aErrorStatusFT( this, ResId(        FT_ERRORSTATUS        )),
-    m_aDetailsPB( this, ResId(            PB_DETAILS            )),
+    m_aStatusFL( this, SW_RES(             FL_STATUS             )),
+    m_aStatusFT( this, SW_RES(             FT_STATUS1            )),
+    m_PausedFI(this, SW_RES(               FI_PAUSED             )),
+    m_aTransferStatusFL( this, SW_RES(     FL_TRANSFERSTATUS     )),
+    m_aTransferStatusFT( this, SW_RES(     FT_TRANSFERSTATUS     )),
+    m_aProgressBar( this,      SW_RES(     PB_PROGRESS           )),
+    m_aErrorStatusFT( this, SW_RES(        FT_ERRORSTATUS        )),
+    m_aDetailsPB( this, SW_RES(            PB_DETAILS            )),
     m_aStatusHB( this, WB_BUTTONSTYLE | WB_BOTTOMBORDER         ),
-    m_aStatusLB( this, ResId(             LB_STATUS             )),
-    m_aSeparatorFL( this, ResId(          FL_SEPARATOR          )),
-    m_aStopPB( this, ResId(               PB_STOP               )),
-    m_aClosePB( this, ResId(              PB_CLOSE              )),
+    m_aStatusLB( this, SW_RES(             LB_STATUS             )),
+    m_aSeparatorFL( this, SW_RES(          FL_SEPARATOR          )),
+    m_aStopPB( this, SW_RES(               PB_STOP               )),
+    m_aClosePB( this, SW_RES(              PB_CLOSE              )),
 #pragma warning (default : 4355)
     m_sMore(m_aDetailsPB.GetText()),
-    m_sLess(ResId(ST_LESS)),
-    m_sContinue(ResId( ST_CONTINUE )),
+    m_sLess(SW_RES(ST_LESS)),
+    m_sContinue(SW_RES( ST_CONTINUE )),
     m_sStop(m_aStopPB.GetText()),
-    m_sSend(ResId(ST_SEND)),
+    m_sSend(SW_RES(ST_SEND)),
     m_sTransferStatus(m_aTransferStatusFT.GetText()),
     m_sErrorStatus(   m_aErrorStatusFT.GetText()),
-    m_sSendingTo(   ResId(ST_SENDINGTO )),
-    m_sCompleted(   ResId(ST_COMPLETED )),
-    m_sFailed(      ResId(ST_FAILED     )),
-    m_sTerminateQuery( ResId( ST_TERMINATEQUERY )),
-    m_aImageList( ResId( ILIST ) ),
-    m_aImageListHC( ResId( ILIST_HC ) ),
+    m_sSendingTo(   SW_RES(ST_SENDINGTO )),
+    m_sCompleted(   SW_RES(ST_COMPLETED )),
+    m_sFailed(      SW_RES(ST_FAILED     )),
+    m_sTerminateQuery( SW_RES( ST_TERMINATEQUERY )),
+    m_aImageList( SW_RES( ILIST ) ),
+    m_aImageListHC( SW_RES( ILIST_HC ) ),
     m_pImpl(new SwSendMailDialog_Impl),
     m_pConfigItem(&rConfigItem),
     m_bCancel(false),
@@ -400,8 +400,8 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_bDesctructionEnabled(false)
 {
     m_nStatusHeight =  m_aSeparatorFL.GetPosPixel().Y() - m_aStatusLB.GetPosPixel().Y();
-    String sTask(ResId(ST_TASK));
-    String sStatus(ResId(ST_STATUS));
+    String sTask(SW_RES(ST_TASK));
+    String sStatus(SW_RES(ST_STATUS));
     m_aStatusLB.SetHelpId(HID_MM_SENDMAILS_STATUSLB);
 
     FreeResource();
