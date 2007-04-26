@@ -4,9 +4,9 @@
  *
  *  $RCSfile: measure.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:35:21 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:35:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -115,35 +115,35 @@ SvxMeasureDialog::~SvxMeasureDialog()
 \************************************************************************/
 
 SvxMeasurePage::SvxMeasurePage( Window* pWindow, const SfxItemSet& rInAttrs ) :
-                SvxTabPage      ( pWindow, ResId( RID_SVXPAGE_MEASURE, DIALOG_MGR() ),
+                SvxTabPage      ( pWindow, SVX_RES( RID_SVXPAGE_MEASURE ),
                                   rInAttrs ),
 
-        aFlLine                 ( this, ResId( FL_LINE ) ),
-        aFtLineDist             ( this, ResId( FT_LINE_DIST ) ),
-        aMtrFldLineDist         ( this, ResId( MTR_LINE_DIST ) ),
-        aFtHelplineOverhang     ( this, ResId( FT_HELPLINE_OVERHANG ) ),
-        aMtrFldHelplineOverhang ( this, ResId( MTR_FLD_HELPLINE_OVERHANG ) ),
-        aFtHelplineDist         ( this, ResId( FT_HELPLINE_DIST ) ),
-        aMtrFldHelplineDist     ( this, ResId( MTR_FLD_HELPLINE_DIST ) ),
-        aFtHelpline1Len         ( this, ResId( FT_HELPLINE1_LEN ) ),
-        aMtrFldHelpline1Len     ( this, ResId( MTR_FLD_HELPLINE1_LEN ) ),
-        aFtHelpline2Len         ( this, ResId( FT_HELPLINE2_LEN ) ),
-        aMtrFldHelpline2Len     ( this, ResId( MTR_FLD_HELPLINE2_LEN ) ),
-        aTsbBelowRefEdge        ( this, ResId( TSB_BELOW_REF_EDGE ) ),
-        aFtDecimalPlaces        ( this, ResId( FT_DECIMALPLACES ) ),
-        aMtrFldDecimalPlaces    ( this, ResId( MTR_FLD_DECIMALPLACES ) ),
+        aFlLine                 ( this, SVX_RES( FL_LINE ) ),
+        aFtLineDist             ( this, SVX_RES( FT_LINE_DIST ) ),
+        aMtrFldLineDist         ( this, SVX_RES( MTR_LINE_DIST ) ),
+        aFtHelplineOverhang     ( this, SVX_RES( FT_HELPLINE_OVERHANG ) ),
+        aMtrFldHelplineOverhang ( this, SVX_RES( MTR_FLD_HELPLINE_OVERHANG ) ),
+        aFtHelplineDist         ( this, SVX_RES( FT_HELPLINE_DIST ) ),
+        aMtrFldHelplineDist     ( this, SVX_RES( MTR_FLD_HELPLINE_DIST ) ),
+        aFtHelpline1Len         ( this, SVX_RES( FT_HELPLINE1_LEN ) ),
+        aMtrFldHelpline1Len     ( this, SVX_RES( MTR_FLD_HELPLINE1_LEN ) ),
+        aFtHelpline2Len         ( this, SVX_RES( FT_HELPLINE2_LEN ) ),
+        aMtrFldHelpline2Len     ( this, SVX_RES( MTR_FLD_HELPLINE2_LEN ) ),
+        aTsbBelowRefEdge        ( this, SVX_RES( TSB_BELOW_REF_EDGE ) ),
+        aFtDecimalPlaces        ( this, SVX_RES( FT_DECIMALPLACES ) ),
+        aMtrFldDecimalPlaces    ( this, SVX_RES( MTR_FLD_DECIMALPLACES ) ),
 
-        aFlLabel                ( this, ResId( FL_LABEL ) ),
-        aFtPosition             ( this, ResId( FT_POSITION ) ),
-        aCtlPosition            ( this, ResId( CTL_POSITION ) ),
-        aTsbAutoPosV            ( this, ResId( TSB_AUTOPOSV ) ),
-        aTsbAutoPosH            ( this, ResId( TSB_AUTOPOSH ) ),
-        aTsbShowUnit            ( this, ResId( TSB_SHOW_UNIT ) ),
-        aLbUnit                 ( this, ResId( LB_UNIT ) ),
-        aTsbParallel            ( this, ResId( TSB_PARALLEL ) ),
-        aCtlPreview             ( this, ResId( CTL_PREVIEW ), rInAttrs ),
+        aFlLabel                ( this, SVX_RES( FL_LABEL ) ),
+        aFtPosition             ( this, SVX_RES( FT_POSITION ) ),
+        aCtlPosition            ( this, SVX_RES( CTL_POSITION ) ),
+        aTsbAutoPosV            ( this, SVX_RES( TSB_AUTOPOSV ) ),
+        aTsbAutoPosH            ( this, SVX_RES( TSB_AUTOPOSH ) ),
+        aTsbShowUnit            ( this, SVX_RES( TSB_SHOW_UNIT ) ),
+        aLbUnit                 ( this, SVX_RES( LB_UNIT ) ),
+        aTsbParallel            ( this, SVX_RES( TSB_PARALLEL ) ),
+        aCtlPreview             ( this, SVX_RES( CTL_PREVIEW ), rInAttrs ),
 
-        aFlVert                 ( this, ResId( FL_VERT ) ),
+        aFlVert                 ( this, SVX_RES( FL_VERT ) ),
         rOutAttrs               ( rInAttrs ),
         aAttrSet                ( *rInAttrs.GetPool() ),
         pView( 0 ),
@@ -870,7 +870,7 @@ void SvxMeasurePage::FillUnitLB()
     SvxStringArray aMetricArr( RID_SVXSTR_FIELDUNIT_TABLE );
 
     long nUnit = FUNIT_NONE;
-    String aStrMetric( ResId( STR_MEASURE_AUTOMATIC ) );
+    String aStrMetric( SVX_RES( STR_MEASURE_AUTOMATIC ) );
     USHORT nPos = aLbUnit.InsertEntry( aStrMetric );
     aLbUnit.SetEntryData( nPos, (void*)nUnit );
 
