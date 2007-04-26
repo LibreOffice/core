@@ -4,9 +4,9 @@
  *
  *  $RCSfile: selectlabeldialog.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:23:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:08:29 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,12 +91,12 @@ namespace pcr
     //------------------------------------------------------------------------
     OSelectLabelDialog::OSelectLabelDialog( Window* pParent, Reference< XPropertySet >  _xControlModel )
         :ModalDialog(pParent, PcrRes(RID_DLG_SELECTLABELCONTROL))
-        ,m_aMainDesc(this, ResId(1))
-        ,m_aControlTree(this, ResId(1))
-        ,m_aNoAssignment(this, ResId(1))
-        ,m_aSeparator(this, ResId(1))
-        ,m_aOk(this, ResId(1))
-        ,m_aCancel(this, ResId(1))
+        ,m_aMainDesc(this, PcrRes(1))
+        ,m_aControlTree(this, PcrRes(1))
+        ,m_aNoAssignment(this, PcrRes(1))
+        ,m_aSeparator(this, PcrRes(1))
+        ,m_aOk(this, PcrRes(1))
+        ,m_aCancel(this, PcrRes(1))
         ,m_aModelImages(PcrRes(RID_IL_FORMEXPLORER))
         ,m_xControlModel(_xControlModel)
         ,m_pInitialSelection(NULL)
