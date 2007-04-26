@@ -4,9 +4,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:17:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:17:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -239,7 +239,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(),ResId( RC_DLG_SWFLDEDITDLG ));
+                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwFldEditDlg( GetView(), RC_DLG_SWFLDEDITDLG );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                         pDlg->Execute();
                         delete pDlg;
@@ -459,7 +459,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     //CHINA001 pDlg = new SvxPostItDialog( pMDI, aSet, bTravel);
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact2, "Dialogdiet fail!");//CHINA001
-                    pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, ResId(RID_SVXDLG_POSTIT), bTravel );
+                    pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, RID_SVXDLG_POSTIT, bTravel );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     pDlg->SetReadonlyPostIt(rSh.IsReadOnlyAvailable() && rSh.HasReadonlySel());
 
@@ -568,7 +568,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     //CHINA001 SvxPostItDialog *pDlg = new SvxPostItDialog( pMDI, aSet, bTravel, TRUE);
                     SvxAbstractDialogFactory* pFact2 = SvxAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact2, "Dialogdiet fail!");//CHINA001
-                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, ResId(RID_SVXDLG_POSTIT), bTravel, TRUE );
+                    AbstractSvxPostItDialog* pDlg = pFact2->CreateSvxPostItDialog( pMDI, aSet, RID_SVXDLG_POSTIT, bTravel, TRUE );
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     pDlg->HideAuthor();
 
@@ -631,7 +631,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     //CHINA001 SwJavaEditDialog *pDlg = new SwJavaEditDialog( pMDI, &rSh);
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                    AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog( ResId(DLG_JAVAEDIT),
+                    AbstractJavaEditDialog* pDlg = pFact->CreateJavaEditDialog( DLG_JAVAEDIT,
                                                             pMDI, &rSh);
                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     if ( pDlg->Execute() )
