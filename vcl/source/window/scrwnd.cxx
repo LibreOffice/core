@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scrwnd.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 14:21:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:30:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,7 @@ ImplWheelWindow::ImplWheelWindow( Window* pParent ) :
     ResMgr* pResMgr = ImplGetResMgr();
     Bitmap aBmp;
     if( pResMgr )
-        aBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLMSK, ImplGetResMgr() ) );
+        aBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLMSK, *pResMgr ) );
     ImplSetRegion( aBmp );
 
     // set wheel mode
@@ -161,7 +161,7 @@ void ImplWheelWindow::ImplCreateImageList()
     Bitmap aImgBmp;
     ResMgr* pResMgr = ImplGetResMgr();
     if( pResMgr )
-        aImgBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLBMP, pResMgr ) );
+        aImgBmp = Bitmap( ResId( SV_RESID_BITMAP_SCROLLBMP, *pResMgr ) );
     maImgList = ImageList( aImgBmp, 6 );
 }
 
