@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:43:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:23:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -197,7 +197,7 @@ void ServiceImpl::startExecuteModal(
     {
         //Currently we do not support the case that if the Extension Manager is
         //open in an office an unopkg can be executed. This should be fixed in the future.
-        ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,DeploymentGuiResMgr::get() );
+        ResId warnId(WARNINGBOX_CONCURRENTINSTANCE,*DeploymentGuiResMgr::get() );
         WarningBox warn(NULL, warnId);
         warn.Execute();
     }
