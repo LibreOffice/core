@@ -4,9 +4,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:33:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:26:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -267,8 +267,8 @@ inline SvxFont& SvxCharBasePage::GetPreviewCTLFont()
 SvxCharBasePage::SvxCharBasePage( Window* pParent, const ResId& rResId, const SfxItemSet& rItemset,
                                  USHORT nResIdPrewievWin, USHORT nResIdFontTypeFT ):
     SfxTabPage( pParent, rResId, rItemset ),
-    m_aPreviewWin( this, ResId( nResIdPrewievWin ) ),
-    m_aFontTypeFT( this, ResId( nResIdFontTypeFT ) ),
+    m_aPreviewWin( this, ResId( nResIdPrewievWin, *rResId.GetResMgr() ) ),
+    m_aFontTypeFT( this, ResId( nResIdFontTypeFT, *rResId.GetResMgr() ) ),
     m_bPreviewBackgroundToCharacter( FALSE )
 {
 }
@@ -613,55 +613,55 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_NAME ), rInSet, WIN_CHAR_PREVIEW, FT_CHAR_FONTTYPE ),
     m_pImpl                 ( new SvxCharNamePage_Impl )
 {
-    m_pImpl->m_aNoStyleText = String( ResId( STR_CHARNAME_NOSTYLE ) );
-    m_pImpl->m_aTransparentText = String( ResId( STR_CHARNAME_TRANSPARENT ) );
+    m_pImpl->m_aNoStyleText = String( SVX_RES( STR_CHARNAME_NOSTYLE ) );
+    m_pImpl->m_aTransparentText = String( SVX_RES( STR_CHARNAME_TRANSPARENT ) );
 
     SvtLanguageOptions aLanguageOptions;
     sal_Bool bCJK = ( aLanguageOptions.IsCJKFontEnabled() || aLanguageOptions.IsCTLFontEnabled() );
 
-    m_pWestLine         = new FixedLine( this, ResId( FL_WEST ) );
-    m_pWestFontNameFT   = new FixedText( this, ResId( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
-    m_pWestFontNameLB   = new FontNameBox( this, ResId( bCJK ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
-    m_pWestFontStyleFT  = new FixedText( this, ResId( bCJK ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
-    m_pWestFontStyleLB  = new FontStyleBox( this, ResId( bCJK ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
-    m_pWestFontSizeFT   = new FixedText( this, ResId( bCJK ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
-    m_pWestFontSizeLB   = new FontSizeBox( this, ResId( bCJK ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
+    m_pWestLine         = new FixedLine( this, SVX_RES( FL_WEST ) );
+    m_pWestFontNameFT   = new FixedText( this, SVX_RES( bCJK ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
+    m_pWestFontNameLB   = new FontNameBox( this, SVX_RES( bCJK ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
+    m_pWestFontStyleFT  = new FixedText( this, SVX_RES( bCJK ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleLB  = new FontStyleBox( this, SVX_RES( bCJK ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
+    m_pWestFontSizeFT   = new FixedText( this, SVX_RES( bCJK ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeLB   = new FontSizeBox( this, SVX_RES( bCJK ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
 
     if( !bCJK )
     {
-        m_pColorFL  = new FixedLine( this, ResId( FL_COLOR2 ) );
-        m_pColorFT  = new FixedText( this, ResId( FT_COLOR2 ) );
-        m_pColorLB  = new ColorListBox( this, ResId( LB_COLOR2 ) );
+        m_pColorFL  = new FixedLine( this, SVX_RES( FL_COLOR2 ) );
+        m_pColorFT  = new FixedText( this, SVX_RES( FT_COLOR2 ) );
+        m_pColorLB  = new ColorListBox( this, SVX_RES( LB_COLOR2 ) );
     }
 
-    m_pWestFontLanguageFT   = new FixedText( this, ResId( bCJK ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
-    m_pWestFontLanguageLB   = new SvxLanguageBox( this, ResId( bCJK ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageFT   = new FixedText( this, SVX_RES( bCJK ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageLB   = new SvxLanguageBox( this, SVX_RES( bCJK ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
 
-    m_pEastLine             = new FixedLine( this, ResId( FL_EAST ) );
-    m_pEastFontNameFT       = new FixedText( this, ResId( FT_EAST_NAME ) );
-    m_pEastFontNameLB       = new FontNameBox( this, ResId( LB_EAST_NAME ) );
-    m_pEastFontStyleFT      = new FixedText( this, ResId( FT_EAST_STYLE ) );
-    m_pEastFontStyleLB      = new FontStyleBox( this, ResId( LB_EAST_STYLE ) );
-    m_pEastFontSizeFT       = new FixedText( this, ResId( FT_EAST_SIZE ) );
-    m_pEastFontSizeLB       = new FontSizeBox( this, ResId( LB_EAST_SIZE ) );
-    m_pEastFontLanguageFT   = new FixedText( this, ResId( FT_EAST_LANG ) );
-    m_pEastFontLanguageLB   = new SvxLanguageBox( this, ResId( LB_EAST_LANG ) );
+    m_pEastLine             = new FixedLine( this, SVX_RES( FL_EAST ) );
+    m_pEastFontNameFT       = new FixedText( this, SVX_RES( FT_EAST_NAME ) );
+    m_pEastFontNameLB       = new FontNameBox( this, SVX_RES( LB_EAST_NAME ) );
+    m_pEastFontStyleFT      = new FixedText( this, SVX_RES( FT_EAST_STYLE ) );
+    m_pEastFontStyleLB      = new FontStyleBox( this, SVX_RES( LB_EAST_STYLE ) );
+    m_pEastFontSizeFT       = new FixedText( this, SVX_RES( FT_EAST_SIZE ) );
+    m_pEastFontSizeLB       = new FontSizeBox( this, SVX_RES( LB_EAST_SIZE ) );
+    m_pEastFontLanguageFT   = new FixedText( this, SVX_RES( FT_EAST_LANG ) );
+    m_pEastFontLanguageLB   = new SvxLanguageBox( this, SVX_RES( LB_EAST_LANG ) );
 
-    m_pCTLLine              = new FixedLine( this, ResId( FL_CTL ) );
-    m_pCTLFontNameFT        = new FixedText( this, ResId( FT_CTL_NAME ) );
-    m_pCTLFontNameLB        = new FontNameBox( this, ResId( LB_CTL_NAME ) );
-    m_pCTLFontStyleFT       = new FixedText( this, ResId( FT_CTL_STYLE ) );
-    m_pCTLFontStyleLB       = new FontStyleBox( this, ResId( LB_CTL_STYLE ) );
-    m_pCTLFontSizeFT        = new FixedText( this, ResId( FT_CTL_SIZE ) );
-    m_pCTLFontSizeLB        = new FontSizeBox( this, ResId( LB_CTL_SIZE ) );
-    m_pCTLFontLanguageFT    = new FixedText( this, ResId( FT_CTL_LANG ) );
-    m_pCTLFontLanguageLB    = new SvxLanguageBox( this, ResId( LB_CTL_LANG ) );
+    m_pCTLLine              = new FixedLine( this, SVX_RES( FL_CTL ) );
+    m_pCTLFontNameFT        = new FixedText( this, SVX_RES( FT_CTL_NAME ) );
+    m_pCTLFontNameLB        = new FontNameBox( this, SVX_RES( LB_CTL_NAME ) );
+    m_pCTLFontStyleFT       = new FixedText( this, SVX_RES( FT_CTL_STYLE ) );
+    m_pCTLFontStyleLB       = new FontStyleBox( this, SVX_RES( LB_CTL_STYLE ) );
+    m_pCTLFontSizeFT        = new FixedText( this, SVX_RES( FT_CTL_SIZE ) );
+    m_pCTLFontSizeLB        = new FontSizeBox( this, SVX_RES( LB_CTL_SIZE ) );
+    m_pCTLFontLanguageFT    = new FixedText( this, SVX_RES( FT_CTL_LANG ) );
+    m_pCTLFontLanguageLB    = new SvxLanguageBox( this, SVX_RES( LB_CTL_LANG ) );
 
     if( bCJK )
     {
-        m_pColorFL  = new FixedLine( this, ResId( FL_COLOR2 ) );
-        m_pColorFT  = new FixedText( this, ResId( FT_COLOR2 ) );
-        m_pColorLB  = new ColorListBox( this, ResId( LB_COLOR2 ) );
+        m_pColorFL  = new FixedLine( this, SVX_RES( FL_COLOR2 ) );
+        m_pColorFT  = new FixedText( this, SVX_RES( FT_COLOR2 ) );
+        m_pColorLB  = new ColorListBox( this, SVX_RES( LB_COLOR2 ) );
     }
 
     m_pWestLine             ->Show( bCJK );
@@ -1830,34 +1830,34 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
 
     SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_EFFECTS ), rInSet, WIN_EFFECTS_PREVIEW, FT_EFFECTS_FONTTYPE ),
 
-    m_aUnderlineFT          ( this, ResId( FT_UNDERLINE ) ),
-    m_aUnderlineLB          ( this, ResId( LB_UNDERLINE ) ),
-    m_aColorFT              ( this, ResId( FT_UNDERLINE_COLOR ) ),
-    m_aColorLB              ( this, ResId( LB_UNDERLINE_COLOR ) ),
-    m_aStrikeoutFT          ( this, ResId( FT_STRIKEOUT ) ),
-    m_aStrikeoutLB          ( this, ResId( LB_STRIKEOUT ) ),
-    m_aIndividualWordsBtn   ( this, ResId( CB_INDIVIDUALWORDS ) ),
-    m_aEmphasisFT           ( this, ResId( FT_EMPHASIS ) ),
-    m_aEmphasisLB           ( this, ResId( LB_EMPHASIS ) ),
-    m_aPositionFT           ( this, ResId( FT_POSITION ) ),
-    m_aPositionLB           ( this, ResId( LB_POSITION ) ),
-    m_aFontColorFT          ( this, ResId( FT_FONTCOLOR ) ),
-    m_aFontColorLB          ( this, ResId( LB_FONTCOLOR ) ),
+    m_aUnderlineFT          ( this, SVX_RES( FT_UNDERLINE ) ),
+    m_aUnderlineLB          ( this, SVX_RES( LB_UNDERLINE ) ),
+    m_aColorFT              ( this, SVX_RES( FT_UNDERLINE_COLOR ) ),
+    m_aColorLB              ( this, SVX_RES( LB_UNDERLINE_COLOR ) ),
+    m_aStrikeoutFT          ( this, SVX_RES( FT_STRIKEOUT ) ),
+    m_aStrikeoutLB          ( this, SVX_RES( LB_STRIKEOUT ) ),
+    m_aIndividualWordsBtn   ( this, SVX_RES( CB_INDIVIDUALWORDS ) ),
+    m_aEmphasisFT           ( this, SVX_RES( FT_EMPHASIS ) ),
+    m_aEmphasisLB           ( this, SVX_RES( LB_EMPHASIS ) ),
+    m_aPositionFT           ( this, SVX_RES( FT_POSITION ) ),
+    m_aPositionLB           ( this, SVX_RES( LB_POSITION ) ),
+    m_aFontColorFT          ( this, SVX_RES( FT_FONTCOLOR ) ),
+    m_aFontColorLB          ( this, SVX_RES( LB_FONTCOLOR ) ),
 
-    m_aEffectsFT            ( this, ResId( FT_EFFECTS ) ),
+    m_aEffectsFT            ( this, SVX_RES( FT_EFFECTS ) ),
     m_aEffectsLB            ( this, 0 ),
 
-    m_aEffects2LB           ( this, ResId( LB_EFFECTS2 ) ),
+    m_aEffects2LB           ( this, SVX_RES( LB_EFFECTS2 ) ),
 
-    m_aReliefFT             ( this, ResId( FT_RELIEF ) ),
-    m_aReliefLB             ( this, ResId( LB_RELIEF ) ),
+    m_aReliefFT             ( this, SVX_RES( FT_RELIEF ) ),
+    m_aReliefLB             ( this, SVX_RES( LB_RELIEF ) ),
 
-    m_aOutlineBtn           ( this, ResId( CB_OUTLINE ) ),
-    m_aShadowBtn            ( this, ResId( CB_SHADOW ) ),
-    m_aBlinkingBtn          ( this, ResId( CB_BLINKING ) ),
-    m_aHiddenBtn            ( this, ResId( CB_CHARHIDDEN ) ),
+    m_aOutlineBtn           ( this, SVX_RES( CB_OUTLINE ) ),
+    m_aShadowBtn            ( this, SVX_RES( CB_SHADOW ) ),
+    m_aBlinkingBtn          ( this, SVX_RES( CB_BLINKING ) ),
+    m_aHiddenBtn            ( this, SVX_RES( CB_CHARHIDDEN ) ),
 
-    m_aTransparentColorName ( ResId( STR_CHARNAME_TRANSPARENT ) )
+    m_aTransparentColorName ( SVX_RES( STR_CHARNAME_TRANSPARENT ) )
 
 {
     m_aEffectsLB.Hide();
@@ -2980,29 +2980,29 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
 
     SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet, WIN_POS_PREVIEW, FT_POS_FONTTYPE ),
 
-    m_aPositionLine     ( this, ResId( FL_POSITION ) ),
-    m_aHighPosBtn       ( this, ResId( RB_HIGHPOS ) ),
-    m_aNormalPosBtn     ( this, ResId( RB_NORMALPOS ) ),
-    m_aLowPosBtn        ( this, ResId( RB_LOWPOS ) ),
-    m_aHighLowFT        ( this, ResId( FT_HIGHLOW ) ),
-    m_aHighLowEdit      ( this, ResId( ED_HIGHLOW ) ),
-    m_aHighLowRB        ( this, ResId( CB_HIGHLOW ) ),
-    m_aFontSizeFT       ( this, ResId( FT_FONTSIZE ) ),
-    m_aFontSizeEdit     ( this, ResId( ED_FONTSIZE ) ),
-    m_aRotationScalingFL( this, ResId( FL_ROTATION_SCALING ) ),
-    m_aScalingFL        ( this, ResId( FL_SCALING ) ),
-    m_a0degRB           ( this, ResId( RB_0_DEG ) ),
-    m_a90degRB          ( this, ResId( RB_90_DEG ) ),
-    m_a270degRB         ( this, ResId( RB_270_DEG ) ),
-    m_aFitToLineCB      ( this, ResId( CB_FIT_TO_LINE ) ),
-    m_aScaleWidthFT     ( this, ResId( FT_SCALE_WIDTH ) ),
-    m_aScaleWidthMF     ( this, ResId( MF_SCALE_WIDTH ) ),
+    m_aPositionLine     ( this, SVX_RES( FL_POSITION ) ),
+    m_aHighPosBtn       ( this, SVX_RES( RB_HIGHPOS ) ),
+    m_aNormalPosBtn     ( this, SVX_RES( RB_NORMALPOS ) ),
+    m_aLowPosBtn        ( this, SVX_RES( RB_LOWPOS ) ),
+    m_aHighLowFT        ( this, SVX_RES( FT_HIGHLOW ) ),
+    m_aHighLowEdit      ( this, SVX_RES( ED_HIGHLOW ) ),
+    m_aHighLowRB        ( this, SVX_RES( CB_HIGHLOW ) ),
+    m_aFontSizeFT       ( this, SVX_RES( FT_FONTSIZE ) ),
+    m_aFontSizeEdit     ( this, SVX_RES( ED_FONTSIZE ) ),
+    m_aRotationScalingFL( this, SVX_RES( FL_ROTATION_SCALING ) ),
+    m_aScalingFL        ( this, SVX_RES( FL_SCALING ) ),
+    m_a0degRB           ( this, SVX_RES( RB_0_DEG ) ),
+    m_a90degRB          ( this, SVX_RES( RB_90_DEG ) ),
+    m_a270degRB         ( this, SVX_RES( RB_270_DEG ) ),
+    m_aFitToLineCB      ( this, SVX_RES( CB_FIT_TO_LINE ) ),
+    m_aScaleWidthFT     ( this, SVX_RES( FT_SCALE_WIDTH ) ),
+    m_aScaleWidthMF     ( this, SVX_RES( MF_SCALE_WIDTH ) ),
 
-    m_aKerningLine      ( this, ResId( FL_KERNING2 ) ),
-    m_aKerningLB        ( this, ResId( LB_KERNING2 ) ),
-    m_aKerningFT        ( this, ResId( FT_KERNING2 ) ),
-    m_aKerningEdit      ( this, ResId( ED_KERNING2 ) ),
-    m_aPairKerningBtn   ( this, ResId( CB_PAIRKERNING ) ),
+    m_aKerningLine      ( this, SVX_RES( FL_KERNING2 ) ),
+    m_aKerningLB        ( this, SVX_RES( LB_KERNING2 ) ),
+    m_aKerningFT        ( this, SVX_RES( FT_KERNING2 ) ),
+    m_aKerningEdit      ( this, SVX_RES( ED_KERNING2 ) ),
+    m_aPairKerningBtn   ( this, SVX_RES( CB_PAIRKERNING ) ),
 
     m_nSuperEsc         ( (short)DFLT_ESC_SUPER ),
     m_nSubEsc           ( (short)DFLT_ESC_SUB ),
@@ -3762,14 +3762,14 @@ SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rIn
 
     SvxCharBasePage( pParent, SVX_RES( RID_SVXPAGE_CHAR_TWOLINES ), rInSet, WIN_TWOLINES_PREVIEW, FT_TWOLINES_FONTTYPE ),
 
-    m_aSwitchOnLine     ( this, ResId( FL_SWITCHON ) ),
-    m_aTwoLinesBtn      ( this, ResId( CB_TWOLINES ) ),
+    m_aSwitchOnLine     ( this, SVX_RES( FL_SWITCHON ) ),
+    m_aTwoLinesBtn      ( this, SVX_RES( CB_TWOLINES ) ),
 
-    m_aEncloseLine      ( this, ResId( FL_ENCLOSE ) ),
-    m_aStartBracketFT   ( this, ResId( FT_STARTBRACKET ) ),
-    m_aStartBracketLB   ( this, ResId( ED_STARTBRACKET ) ),
-    m_aEndBracketFT     ( this, ResId( FT_ENDBRACKET ) ),
-    m_aEndBracketLB     ( this, ResId( ED_ENDBRACKET ) )
+    m_aEncloseLine      ( this, SVX_RES( FL_ENCLOSE ) ),
+    m_aStartBracketFT   ( this, SVX_RES( FT_STARTBRACKET ) ),
+    m_aStartBracketLB   ( this, SVX_RES( ED_STARTBRACKET ) ),
+    m_aEndBracketFT     ( this, SVX_RES( FT_ENDBRACKET ) ),
+    m_aEndBracketLB     ( this, SVX_RES( ED_ENDBRACKET ) )
 {
     FreeResource();
     Initialize();
@@ -3824,7 +3824,7 @@ void SvxCharTwoLinesPage::SelectCharacter( ListBox* pBox )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxCharacterMap* aDlg = pFact->CreateSvxCharacterMap( this,  ResId(RID_SVXDLG_CHARMAP) );
+        AbstractSvxCharacterMap* aDlg = pFact->CreateSvxCharacterMap( this,  RID_SVXDLG_CHARMAP );
         DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
         aDlg->DisableFontSelection();//CHINA001 aDlg.DisableFontSelection();
 
