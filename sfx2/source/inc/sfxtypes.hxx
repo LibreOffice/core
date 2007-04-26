@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxtypes.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 19:11:19 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -176,7 +176,7 @@ struct StringList_Impl : private Resource
     ResId aResId;
 
     StringList_Impl( const ResId& rErrIdP,  USHORT nId)
-        : Resource( rErrIdP ),aResId(nId){}
+        : Resource( rErrIdP ),aResId(nId, *rErrIdP.GetResMgr()){}
     ~StringList_Impl() { FreeResource(); }
 
     String GetString(){ return String( aResId ); }
