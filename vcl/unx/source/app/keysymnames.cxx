@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:33:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:41:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -100,7 +100,9 @@ namespace vcl_sal {
         { XK_Control_L, "Ctrl" },
         { XK_Control_R, "Ctrl" },
         { XK_Escape, "Esc" },
-        { XK_space, "Space" }
+        { XK_space, "Space" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_German[] =
@@ -135,7 +137,9 @@ namespace vcl_sal {
         { SunXK_Open,  "Öffnen" },
         { SunXK_Paste, "Einsetzen" },
         { SunXK_Find,  "Suchen" },
-        { SunXK_Cut,   "Ausschneiden" }
+        { SunXK_Cut,   "Ausschneiden" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_French[] =
@@ -165,7 +169,9 @@ namespace vcl_sal {
         { SunXK_Open,  "Ouvrir" },
         { SunXK_Paste, "Coller" },
         { SunXK_Find,  "Cher." },
-        { SunXK_Cut,   "Couper" }
+        { SunXK_Cut,   "Couper" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Italian[] =
@@ -184,7 +190,7 @@ namespace vcl_sal {
         { XK_Down, "Sposta verso il basso" },
         { XK_BackSpace, "Backspace" },
         { XK_Return, "Invio" },
-        { XK_space, "Spaziatrice" },
+        { XK_space, "Spazio" },
         { SunXK_Stop,  "Stop" },
         { SunXK_Again, "Ancora" },
         { SunXK_Props, "Proprietà" },
@@ -194,7 +200,9 @@ namespace vcl_sal {
         { SunXK_Open,  "Apri" },
         { SunXK_Paste, "Incolla" },
         { SunXK_Find,  "Trova" },
-        { SunXK_Cut,   "Taglia" }
+        { SunXK_Cut,   "Taglia" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Dutch[] =
@@ -218,7 +226,9 @@ namespace vcl_sal {
         { SunXK_Open,  "Open" },
         { SunXK_Paste, "Paste" },
         { SunXK_Find,  "Find" },
-        { SunXK_Cut,   "Cut" }
+        { SunXK_Cut,   "Cut" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Norwegian[] =
@@ -243,7 +253,9 @@ namespace vcl_sal {
         { SunXK_Open,  "Åpne" },
         { SunXK_Paste, "Lim" },
         { SunXK_Find,  "Søk" },
-        { SunXK_Cut,   "Klipp" }
+        { SunXK_Cut,   "Klipp" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Swedish[] =
@@ -269,7 +281,9 @@ namespace vcl_sal {
         { SunXK_Open,  "Öppna" },
         { SunXK_Paste, "Klistra in" },
         { SunXK_Find,  "Sök" },
-        { SunXK_Cut,   "Klipp ut" }
+        { SunXK_Cut,   "Klipp ut" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Portuguese[] =
@@ -293,13 +307,15 @@ namespace vcl_sal {
         { SunXK_Open,  "Open" },
         { SunXK_Paste, "Paste" },
         { SunXK_Find,  "Find" },
-        { SunXK_Cut,   "Cut" }
+        { SunXK_Cut,   "Cut" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeysymNameReplacement aImplReplacements_Spanish[] =
     {
-        { XK_Shift_L, "Mayos" },
-        { XK_Shift_R, "Mayos" },
+        { XK_Shift_L, "Mayús" },
+        { XK_Shift_R, "Mayús" },
         { XK_Page_Up, "RePág" },
         { XK_Page_Down, "AvPág" },
         { XK_End, "Fin" },
@@ -323,7 +339,9 @@ namespace vcl_sal {
         { SunXK_Open,  "Abrir" },
         { SunXK_Paste, "Pegar" },
         { SunXK_Find,  "Buscar" },
-        { SunXK_Cut,   "Cortar" }
+        { SunXK_Cut,   "Cortar" },
+        { XK_minus, "-" },
+        { XK_plus, "+" }
     };
 
     static const struct KeyboardReplacements aKeyboards[] =
@@ -399,6 +417,13 @@ namespace vcl_sal {
                         return String( pRepl[m].pName, RTL_TEXTENCODING_UTF8 );
                 }
             }
+        }
+        // try english fallbacks
+        const struct KeysymNameReplacement* pRepl = aImplReplacements_English;
+        for( int m = sizeof(aImplReplacements_English)/sizeof(aImplReplacements_English[0]) ; m ; )
+        {
+            if( nSymbol == pRepl[--m].aSymbol )
+                return String( pRepl[m].pName, RTL_TEXTENCODING_UTF8 );
         }
         return String();
     }
@@ -601,11 +626,7 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
 #else
         int opcode, event, error;
         int major = XkbMajorVersion, minor = XkbMinorVersion;
-        if( ! m_aKeyboardName.Len() &&
-#ifdef _USE_PRINT_EXTENSION_
-            XSalIsDisplay( GetDisplay() ) &&
-#endif
-            XkbQueryExtension( GetDisplay(), &opcode, &event,&error, &major, &minor ) )
+        if( XkbQueryExtension( GetDisplay(), &opcode, &event,&error, &major, &minor ) )
         {
             XkbDescPtr pXkbDesc = NULL;
             // try X keyboard extension
@@ -653,9 +674,9 @@ const char* SalDisplay::GetKeyboardName( BOOL bRefresh )
                 XkbFreeKeyboard( pXkbDesc, XkbAllComponentsMask, True );
             }
         }
+#endif
         if( ! m_aKeyboardName.Len() )
             m_aKeyboardName = "<unknown keyboard>";
-#endif
     }
     return m_aKeyboardName.GetBuffer();
 }
