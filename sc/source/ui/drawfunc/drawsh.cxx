@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drawsh.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:10:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:52:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -453,7 +453,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if ( pFact )
                                 {
-                                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( pWin, pView, ResId( RID_SVXDLG_CAPTION ) );
+                                    SfxAbstractTabDialog *pDlg = pFact->CreateCaptionDialog( pWin, pView, RID_SVXDLG_CAPTION );
 
                                     const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -479,7 +479,7 @@ void ScDrawShell::ExecDrawAttr( SfxRequest& rReq )
                                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                                 if(pFact)
                                 {
-                                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView, ResId(RID_SVXDLG_TRANSFORM) );
+                                    SfxAbstractTabDialog* pDlg = pFact->CreateSvxTransformTabDialog( pWin, &aNewAttr,pView, RID_SVXDLG_TRANSFORM );
                                     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                                     if (pDlg->Execute() == RET_OK)
                                     {
@@ -529,7 +529,7 @@ void ScDrawShell::ExecuteLineDlg( SfxRequest& rReq, USHORT nTabPage )
         SfxAbstractTabDialog * pDlg = pFact->CreateSvxLineTabDialog( pViewData->GetDialogParent(),
                     &aNewAttr,
                 pViewData->GetDocument()->GetDrawLayer(),
-                ResId(RID_SVXDLG_LINE),
+                RID_SVXDLG_LINE,
                 pObj,
                 bHasMarked);
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
@@ -571,7 +571,7 @@ void ScDrawShell::ExecuteAreaDlg( SfxRequest& rReq, USHORT nTabPage )
     AbstractSvxAreaTabDialog * pDlg = pFact->CreateSvxAreaTabDialog( pViewData->GetDialogParent(),
                                                                     &aNewAttr,
                                                             pViewData->GetDocument()->GetDrawLayer(),
-                                                            ResId(RID_SVXDLG_AREA),
+                                                            RID_SVXDLG_AREA,
                                                             pView);
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
@@ -604,7 +604,7 @@ void ScDrawShell::ExecuteTextAttrDlg( SfxRequest& rReq, USHORT /* nTabPage */ )
         pView->MergeAttrFromMarked( aNewAttr, FALSE );
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, ResId( RID_SVXDLG_TEXT ), pView );
+    SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( pViewData->GetDialogParent(), &aNewAttr, RID_SVXDLG_TEXT, pView );
 
     USHORT nResult = pDlg->Execute();
 
