@@ -4,9 +4,9 @@
  *
  *  $RCSfile: strucvt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 13:54:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:48:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -190,11 +190,8 @@ UniString::UniString( const ResId& rResId )
 {
     rResId.SetRT( RSC_STRING );
     ResMgr* pResMgr = rResId.GetResMgr();
-    if ( !pResMgr )
-        pResMgr = Resource::GetResManager();
-
     mpData = NULL;
-    if ( pResMgr->GetResource( rResId ) )
+    if ( pResMgr && pResMgr->GetResource( rResId ) )
     {
         // String laden
         RSHEADER_TYPE * pResHdr = (RSHEADER_TYPE*)pResMgr->GetClass();
