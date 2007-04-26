@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resource.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 13:26:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:09:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -284,7 +284,7 @@ Any SAL_CALL ResourceService::invoke
 
             if( bGetBranch )
             {
-                ResId aId( (USHORT)nId, pResMgr );
+                ResId aId( (USHORT)nId, *pResMgr );
                 aId.SetRT( RSC_STRING );
                 if( pResMgr->IsAvailable( aId ) )
                 {
@@ -299,7 +299,7 @@ Any SAL_CALL ResourceService::invoke
                 sal_Bool bRet = sal_False;
                 if( pResMgr )
                 {
-                    ResId aId( (USHORT)nId, pResMgr );
+                    ResId aId( (USHORT)nId, *pResMgr );
                     aId.SetRT( RSC_STRING );
                     bRet = pResMgr->IsAvailable( aId );
                 }
@@ -335,7 +335,7 @@ Any SAL_CALL ResourceService::invoke
 
         if( FunctionName.equalsAscii("getStringList") )
         {
-            ResId aId( (USHORT)nId, pResMgr );
+            ResId aId( (USHORT)nId, *pResMgr );
             aId.SetRT( RSC_STRINGARRAY );
             if( pResMgr->IsAvailable( aId ) )
             {
@@ -360,7 +360,7 @@ Any SAL_CALL ResourceService::invoke
             sal_Bool bRet = sal_False;
             if( pResMgr )
             {
-                ResId aId( (USHORT)nId, pResMgr );
+                ResId aId( (USHORT)nId, *pResMgr );
                 aId.SetRT( RSC_STRINGARRAY );
                 bRet = pResMgr->IsAvailable( aId );
             }
