@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drwbassh.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:40:03 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:15:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -274,7 +274,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
                         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE,ResId( RC_DLG_SWWRAPDLG ));
+                        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSwWrapDlg( GetView().GetWindow(), aSet, pSh, TRUE, RC_DLG_SWWRAPDLG );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
                         if (pDlg->Execute() == RET_OK) //CHINA001 if (aDlg.Execute() == RET_OK)
@@ -335,7 +335,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             if ( pFact )
                             {
                                 AbstractSvxCaptionDialog* pCaptionDlg =
-                                        pFact->CreateCaptionDialog( NULL, pSdrView, ResId( RID_SVXDLG_CAPTION ), nAllowedAnchors );
+                                        pFact->CreateCaptionDialog( NULL, pSdrView, RID_SVXDLG_CAPTION, nAllowedAnchors );
                                 pCaptionDlg->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pCaptionDlg;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
@@ -349,7 +349,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
                             {
 
                                 AbstractSvxTransformTabDialog* pTransform =
-                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView,ResId( RID_SVXDLG_TRANSFORM ), nAllowedAnchors );
+                                            pFact->CreateSvxTransformTabDialog( NULL, NULL, pSdrView, RID_SVXDLG_TRANSFORM, nAllowedAnchors );
                                 pTransform->SetValidateFramePosLink( LINK(this, SwDrawBaseShell, ValidatePosition) );
                                 pDlg = pTransform;
                                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
@@ -666,7 +666,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, ResId(RID_SVXDLG_OBJECT_NAME));
+                AbstractSvxObjectNameDialog* pDlg = pFact->CreateSvxObjectNameDialog(NULL, aName, RID_SVXDLG_OBJECT_NAME);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 pDlg->SetCheckNameHdl(LINK(this, SwDrawBaseShell, CheckGroupShapeNameHdl));
@@ -698,7 +698,7 @@ void SwDrawBaseShell::Execute(SfxRequest &rReq)
 
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "Dialogdiet fail!");
-                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, ResId(RID_SVXDLG_OBJECT_TITLE_DESC));
+                AbstractSvxObjectTitleDescDialog* pDlg = pFact->CreateSvxObjectTitleDescDialog(NULL, aTitle, aDescription, RID_SVXDLG_OBJECT_TITLE_DESC);
                 OSL_ENSURE(pDlg, "Dialogdiet fail!");
 
                 if(RET_OK == pDlg->Execute())
