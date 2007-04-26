@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docfnote.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:06:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:12:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -151,38 +151,38 @@ IMPL_LINK( SwFootNoteOptionDlg, OkHdl, Button *, pBtn )
 SwEndNoteOptionPage::SwEndNoteOptionPage( Window *pParent, BOOL bEN,
                                           const SfxItemSet &rSet ) :
     SfxTabPage( pParent, SW_RES(bEN ? TP_ENDNOTEOPTION : TP_FOOTNOTEOPTION), rSet ),
-    aNumTypeFT      (this, ResId( FT_NUMTYPE    )),
-    aNumViewBox     (this, ResId( LB_NUMVIEW    ), INSERT_NUM_EXTENDED_TYPES),
-    aOffsetLbl      (this, ResId( FT_OFFSET )),
-    aOffsetFld      (this, ResId( FLD_OFFSET   )),
-    aNumCountFT     (this, ResId( FT_NUMCOUNT   )),
-    aNumCountBox    (this, ResId( LB_NUMCOUNT   )),
-    aPrefixFT       (this, ResId( FT_PREFIX     )),
-    aPrefixED       (this, ResId( ED_PREFIX    )),
-    aSuffixFT       (this, ResId( FT_SUFFIX    )),
-    aSuffixED       (this, ResId( ED_SUFFIX    )),
-    aPosFT          (this, ResId( FT_POS    )),
-    aPosPageBox     (this, ResId( RB_POS_PAGE    )),
-    aPosChapterBox  (this, ResId( RB_POS_CHAPTER)),
-    aNumFL         (this, ResId( FL_NUM        )),
+    aNumTypeFT      (this, SW_RES( FT_NUMTYPE   )),
+    aNumViewBox     (this, SW_RES( LB_NUMVIEW   ), INSERT_NUM_EXTENDED_TYPES),
+    aOffsetLbl      (this, SW_RES( FT_OFFSET    )),
+    aOffsetFld      (this, SW_RES( FLD_OFFSET   )),
+    aNumCountFT     (this, SW_RES( FT_NUMCOUNT   )),
+    aNumCountBox    (this, SW_RES( LB_NUMCOUNT  )),
+    aPrefixFT       (this, SW_RES( FT_PREFIX    )),
+    aPrefixED       (this, SW_RES( ED_PREFIX    )),
+    aSuffixFT       (this, SW_RES( FT_SUFFIX    )),
+    aSuffixED       (this, SW_RES( ED_SUFFIX    )),
+    aPosFT          (this, SW_RES( FT_POS    )),
+    aPosPageBox     (this, SW_RES( RB_POS_PAGE   )),
+    aPosChapterBox  (this, SW_RES( RB_POS_CHAPTER)),
+    aNumFL         (this, SW_RES( FL_NUM        )),
 
-    aParaTemplLbl   (this, ResId( FT_PARA_TEMPL)),
-    aParaTemplBox   (this, ResId( LB_PARA_TEMPL)),
-    aPageTemplLbl   (this, ResId( FT_PAGE_TEMPL)),
-    aPageTemplBox   (this, ResId( LB_PAGE_TEMPL)),
-    aTemplFL       (this, ResId( FL_TEMPL      )),
+    aParaTemplLbl   (this, SW_RES( FT_PARA_TEMPL)),
+    aParaTemplBox   (this, SW_RES( LB_PARA_TEMPL)),
+    aPageTemplLbl   (this, SW_RES( FT_PAGE_TEMPL)),
+    aPageTemplBox   (this, SW_RES( LB_PAGE_TEMPL)),
+    aTemplFL       (this, SW_RES( FL_TEMPL      )),
 
-    aFtnCharTextTemplLbl(   this, ResId( FT_TEXT_CHARFMT)),
-    aFtnCharTextTemplBox(   this, ResId( LB_TEXT_CHARFMT)),
-    aFtnCharAnchorTemplLbl( this, ResId( FT_ANCHR_CHARFMT)),
-    aFtnCharAnchorTemplBox( this, ResId( LB_ANCHR_CHARFMT)),
-    aCharTemplFL(          this, ResId(FL_CHAR_TEMPL)),
+    aFtnCharTextTemplLbl(   this, SW_RES( FT_TEXT_CHARFMT)),
+    aFtnCharTextTemplBox(   this, SW_RES( LB_TEXT_CHARFMT)),
+    aFtnCharAnchorTemplLbl( this, SW_RES( FT_ANCHR_CHARFMT)),
+    aFtnCharAnchorTemplBox( this, SW_RES( LB_ANCHR_CHARFMT)),
+    aCharTemplFL(          this, SW_RES(FL_CHAR_TEMPL)),
 
-    aContLbl        (this, ResId( FT_CONT       )),
-    aContEdit       (this, ResId( ED_CONT       )),
-    aContFromLbl    (this, ResId( FT_CONT_FROM )),
-    aContFromEdit   (this, ResId( ED_CONT_FROM )),
-    aContFL        (this, ResId( FL_CONT       )),
+    aContLbl        (this, SW_RES( FT_CONT      )),
+    aContEdit       (this, SW_RES( ED_CONT      )),
+    aContFromLbl    (this, SW_RES( FT_CONT_FROM )),
+    aContFromEdit   (this, SW_RES( ED_CONT_FROM )),
+    aContFL        (this, SW_RES( FL_CONT       )),
 
     aNumDoc(aNumCountBox.GetEntry(FTNNUM_DOC)),
     aNumPage(aNumCountBox.GetEntry(FTNNUM_PAGE)),
