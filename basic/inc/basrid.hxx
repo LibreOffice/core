@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basrid.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-07 21:00:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:30:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,10 +40,16 @@
 #include <tools/resid.hxx>
 #endif
 
-class BasicResId: public ResId
+class SttResId : public ResId
 {
-public:
-    BasicResId( USHORT nId );
+    public:
+    SttResId( sal_uInt32 nId );
+};
+
+class BasResId : public ResId
+{
+    public:
+    BasResId( sal_uInt32 nId );
 };
 
 #endif //_BASRID_HXX
