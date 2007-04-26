@@ -4,9 +4,9 @@
  *
  *  $RCSfile: initui.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:33:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:23:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -260,11 +260,11 @@ void ShellResource::_GetAutoFmtNameLst() const
 }
 
 ImpAutoFmtNameListLoader::ImpAutoFmtNameListLoader( SvStringsDtor& rLst )
-    : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, pSwResMgr) )
+    : Resource( ResId(RID_SHELLRES_AUTOFMTSTRS, *pSwResMgr) )
 {
     for( USHORT n = 0; n < STR_AUTOFMTREDL_END; ++n )
     {
-        String* p = new String( ResId( n + 1, pSwResMgr) );
+        String* p = new String( ResId( n + 1, *pSwResMgr) );
         if(STR_AUTOFMTREDL_TYPO == n)
         {
             LocaleDataWrapper& rLclD = GetAppLocaleData();
