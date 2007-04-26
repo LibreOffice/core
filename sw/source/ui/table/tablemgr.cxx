@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablemgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 11:12:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:21:00 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -76,7 +76,7 @@ void SwTableFUNC::ColWidthDlg( Window *pParent )
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
     DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-    VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg( pParent, *this ,ResId( DLG_COL_WIDTH ));
+    VclAbstractDialog* pDlg = pFact->CreateSwTableWidthDlg( pParent, *this , DLG_COL_WIDTH );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     pDlg->Execute();
     delete pDlg;
