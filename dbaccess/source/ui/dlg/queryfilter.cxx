@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryfilter.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:16:40 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:01:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,27 +138,27 @@ DlgFilterCrit::DlgFilterCrit(Window * pParent,
                              const Reference< XNameAccess>& _rxCols
                              )
     :ModalDialog( pParent, ModuleRes( DLG_FILTERCRIT ) )
-    ,aLB_WHEREFIELD1    ( this, ResId( LB_WHEREFIELD1 ) )
-    ,aLB_WHERECOMP1     ( this, ResId( LB_WHERECOMP1 ) )
-    ,aET_WHEREVALUE1    ( this, ResId( ET_WHEREVALUE1 ) )
-    ,aLB_WHERECOND2     ( this, ResId( LB_WHERECOND2 ) )
-    ,aLB_WHEREFIELD2    ( this, ResId( LB_WHEREFIELD2 ) )
-    ,aLB_WHERECOMP2     ( this, ResId( LB_WHERECOMP2 ) )
-    ,aET_WHEREVALUE2    ( this, ResId( ET_WHEREVALUE2 ) )
-    ,aLB_WHERECOND3     ( this, ResId( LB_WHERECOND3 ) )
-    ,aLB_WHEREFIELD3    ( this, ResId( LB_WHEREFIELD3 ) )
-    ,aLB_WHERECOMP3     ( this, ResId( LB_WHERECOMP3 ) )
-    ,aET_WHEREVALUE3    ( this, ResId( ET_WHEREVALUE3 ) )
-    ,aFT_WHEREFIELD     ( this, ResId( FT_WHEREFIELD ) )
-    ,aFT_WHERECOMP      ( this, ResId( FT_WHERECOMP ) )
-    ,aFT_WHEREVALUE     ( this, ResId( FT_WHEREVALUE ) )
-    ,aFT_WHEREOPER      ( this, ResId( FT_WHEREOPER ) )
-    ,aFL_FIELDS         ( this, ResId( FL_FIELDS ) )
-    ,aBT_OK             ( this, ResId( BT_OK ) )
-    ,aBT_CANCEL         ( this, ResId( BT_CANCEL ) )
-    ,aBT_HELP           ( this, ResId( BT_HELP ) )
-    ,aSTR_NOENTRY       ( ResId( STR_NOENTRY ) )
-    ,aSTR_COMPARE_OPERATORS( ResId( STR_COMPARE_OPERATORS ) )
+    ,aLB_WHEREFIELD1    ( this, ModuleRes( LB_WHEREFIELD1 ) )
+    ,aLB_WHERECOMP1     ( this, ModuleRes( LB_WHERECOMP1 ) )
+    ,aET_WHEREVALUE1    ( this, ModuleRes( ET_WHEREVALUE1 ) )
+    ,aLB_WHERECOND2     ( this, ModuleRes( LB_WHERECOND2 ) )
+    ,aLB_WHEREFIELD2    ( this, ModuleRes( LB_WHEREFIELD2 ) )
+    ,aLB_WHERECOMP2     ( this, ModuleRes( LB_WHERECOMP2 ) )
+    ,aET_WHEREVALUE2    ( this, ModuleRes( ET_WHEREVALUE2 ) )
+    ,aLB_WHERECOND3     ( this, ModuleRes( LB_WHERECOND3 ) )
+    ,aLB_WHEREFIELD3    ( this, ModuleRes( LB_WHEREFIELD3 ) )
+    ,aLB_WHERECOMP3     ( this, ModuleRes( LB_WHERECOMP3 ) )
+    ,aET_WHEREVALUE3    ( this, ModuleRes( ET_WHEREVALUE3 ) )
+    ,aFT_WHEREFIELD     ( this, ModuleRes( FT_WHEREFIELD ) )
+    ,aFT_WHERECOMP      ( this, ModuleRes( FT_WHERECOMP ) )
+    ,aFT_WHEREVALUE     ( this, ModuleRes( FT_WHEREVALUE ) )
+    ,aFT_WHEREOPER      ( this, ModuleRes( FT_WHEREOPER ) )
+    ,aFL_FIELDS         ( this, ModuleRes( FL_FIELDS ) )
+    ,aBT_OK             ( this, ModuleRes( BT_OK ) )
+    ,aBT_CANCEL         ( this, ModuleRes( BT_CANCEL ) )
+    ,aBT_HELP           ( this, ModuleRes( BT_HELP ) )
+    ,aSTR_NOENTRY       ( ModuleRes( STR_NOENTRY ) )
+    ,aSTR_COMPARE_OPERATORS( ModuleRes( STR_COMPARE_OPERATORS ) )
     ,m_xQueryComposer(_rxComposer)
     ,m_xColumns( _rxCols )
     ,m_xConnection( _rxConnection )
@@ -782,7 +782,7 @@ IMPL_LINK( DlgFilterCrit, ListSelectHdl, ListBox *, pListBox )
         }
         else
         {
-            DBG_ASSERT(0,"DlgFilterCrit::ListSelectHdl: Diese Column dürfte garnicht vorhanden sein!");
+            DBG_ASSERT(0,"DlgFilterCrit::ListSelectHdl: Diese Column dï¿½rfte garnicht vorhanden sein!");
         }
     }
     pComp->SelectEntryPos(0);
