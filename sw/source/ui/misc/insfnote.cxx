@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insfnote.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:07:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:13:05 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,7 +214,7 @@ IMPL_LINK( SwInsFootNoteDlg, NumberExtCharHdl, Button *, EMPTYARG )
     //CHINA001 SvxCharacterMap* pDlg = new SvxCharacterMap(this, FALSE);
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( this,  ResId(RID_SVXDLG_CHARMAP), FALSE );
+    AbstractSvxCharacterMap* pDlg = pFact->CreateSvxCharacterMap( this, RID_SVXDLG_CHARMAP, FALSE );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
     Font aDlgFont( pDlg->GetCharFont() );
