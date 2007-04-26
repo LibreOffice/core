@@ -4,9 +4,9 @@
  *
  *  $RCSfile: groupboxwiz.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:59:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:06:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -230,13 +230,13 @@ namespace dbp
     //---------------------------------------------------------------------
     ORadioSelectionPage::ORadioSelectionPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_GROUPRADIOSELECTION))
-        ,m_aFrame               (this, ResId(FL_DATA))
-        ,m_aRadioNameLabel      (this, ResId(FT_RADIOLABELS))
-        ,m_aRadioName           (this, ResId(ET_RADIOLABELS))
-        ,m_aMoveRight           (this, ResId(PB_MOVETORIGHT))
-        ,m_aMoveLeft            (this, ResId(PB_MOVETOLEFT))
-        ,m_aExistingRadiosLabel (this, ResId(FT_RADIOBUTTONS))
-        ,m_aExistingRadios      (this, ResId(LB_RADIOBUTTONS))
+        ,m_aFrame               (this, ModuleRes(FL_DATA))
+        ,m_aRadioNameLabel      (this, ModuleRes(FT_RADIOLABELS))
+        ,m_aRadioName           (this, ModuleRes(ET_RADIOLABELS))
+        ,m_aMoveRight           (this, ModuleRes(PB_MOVETORIGHT))
+        ,m_aMoveLeft            (this, ModuleRes(PB_MOVETOLEFT))
+        ,m_aExistingRadiosLabel (this, ModuleRes(FT_RADIOBUTTONS))
+        ,m_aExistingRadios      (this, ModuleRes(LB_RADIOBUTTONS))
     {
         FreeResource();
 
@@ -384,11 +384,11 @@ namespace dbp
     //---------------------------------------------------------------------
     ODefaultFieldSelectionPage::ODefaultFieldSelectionPage( OControlWizard* _pParent )
         :OMaybeListSelectionPage(_pParent, ModuleRes(RID_PAGE_DEFAULTFIELDSELECTION))
-        ,m_aFrame                   (this, ResId(FL_DEFAULTSELECTION))
-        ,m_aDefaultSelectionLabel   (this, ResId(FT_DEFAULTSELECTION))
-        ,m_aDefSelYes               (this, ResId(RB_DEFSELECTION_YES))
-        ,m_aDefSelection            (this, ResId(LB_DEFSELECTIONFIELD))
-        ,m_aDefSelNo                (this, ResId(RB_DEFSELECTION_NO))
+        ,m_aFrame                   (this, ModuleRes(FL_DEFAULTSELECTION))
+        ,m_aDefaultSelectionLabel   (this, ModuleRes(FT_DEFAULTSELECTION))
+        ,m_aDefSelYes               (this, ModuleRes(RB_DEFSELECTION_YES))
+        ,m_aDefSelection            (this, ModuleRes(LB_DEFSELECTIONFIELD))
+        ,m_aDefSelNo                (this, ModuleRes(RB_DEFSELECTION_NO))
     {
         FreeResource();
 
@@ -433,12 +433,12 @@ namespace dbp
     //---------------------------------------------------------------------
     OOptionValuesPage::OOptionValuesPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONVALUES))
-        ,m_aFrame               (this, ResId(FL_OPTIONVALUES))
-        ,m_aDescription         (this, ResId(FT_OPTIONVALUES_EXPL))
-        ,m_aValueLabel          (this, ResId(FT_OPTIONVALUES))
-        ,m_aValue               (this, ResId(ET_OPTIONVALUE))
-        ,m_aOptionsLabel        (this, ResId(FT_RADIOBUTTONS))
-        ,m_aOptions             (this, ResId(LB_RADIOBUTTONS))
+        ,m_aFrame               (this, ModuleRes(FL_OPTIONVALUES))
+        ,m_aDescription         (this, ModuleRes(FT_OPTIONVALUES_EXPL))
+        ,m_aValueLabel          (this, ModuleRes(FT_OPTIONVALUES))
+        ,m_aValue               (this, ModuleRes(ET_OPTIONVALUE))
+        ,m_aOptionsLabel        (this, ModuleRes(FT_RADIOBUTTONS))
+        ,m_aOptions             (this, ModuleRes(LB_RADIOBUTTONS))
         ,m_nLastSelection((WizardState)-1)
     {
         FreeResource();
@@ -540,10 +540,10 @@ namespace dbp
     //---------------------------------------------------------------------
     OFinalizeGBWPage::OFinalizeGBWPage( OControlWizard* _pParent )
         :OGBWPage(_pParent, ModuleRes(RID_PAGE_OPTIONS_FINAL))
-        ,m_aFrame           (this, ResId(FL_NAMEIT))
-        ,m_aNameLabel       (this, ResId(FT_NAMEIT))
-        ,m_aName            (this, ResId(ET_NAMEIT))
-        ,m_aThatsAll        (this, ResId(FT_THATSALL))
+        ,m_aFrame           (this, ModuleRes(FL_NAMEIT))
+        ,m_aNameLabel       (this, ModuleRes(FT_NAMEIT))
+        ,m_aName            (this, ModuleRes(ET_NAMEIT))
+        ,m_aThatsAll        (this, ModuleRes(FT_THATSALL))
     {
         FreeResource();
     }
