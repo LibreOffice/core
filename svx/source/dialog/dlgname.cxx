@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgname.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 17:45:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:29:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -68,12 +68,12 @@
 \************************************************************************/
 
 SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String& rDesc ) :
-    ModalDialog     ( pWindow, ResId( RID_SVXDLG_NAME, DIALOG_MGR() ) ),
-    aFtDescription      ( this, ResId( FT_DESCRIPTION ) ),
-    aEdtName            ( this, ResId( EDT_STRING ) ),
-    aBtnOK              ( this, ResId( BTN_OK ) ),
-    aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-    aBtnHelp            ( this, ResId( BTN_HELP ) )
+    ModalDialog     ( pWindow, SVX_RES( RID_SVXDLG_NAME ) ),
+    aFtDescription      ( this, SVX_RES( FT_DESCRIPTION ) ),
+    aEdtName            ( this, SVX_RES( EDT_STRING ) ),
+    aBtnOK              ( this, SVX_RES( BTN_OK ) ),
+    aBtnCancel          ( this, SVX_RES( BTN_CANCEL ) ),
+    aBtnHelp            ( this, SVX_RES( BTN_HELP ) )
 {
     FreeResource();
 
@@ -116,13 +116,13 @@ IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, EMPTYARG)
 SvxObjectNameDialog::SvxObjectNameDialog(
     Window* pWindow,
     const String& rName)
-:   ModalDialog(pWindow, ResId(RID_SVXDLG_OBJECT_NAME, DIALOG_MGR())),
-    aFtName(this, ResId(NTD_FT_NAME)),
-    aEdtName(this, ResId(NTD_EDT_NAME)),
-    aFlSeparator(this, ResId(FL_SEPARATOR_A)),
-    aBtnHelp(this, ResId(BTN_HELP)),
-    aBtnOK(this, ResId(BTN_OK)),
-    aBtnCancel(this, ResId(BTN_CANCEL))
+:   ModalDialog(pWindow, SVX_RES(RID_SVXDLG_OBJECT_NAME)),
+    aFtName(this, SVX_RES(NTD_FT_NAME)),
+    aEdtName(this, SVX_RES(NTD_EDT_NAME)),
+    aFlSeparator(this, SVX_RES(FL_SEPARATOR_A)),
+    aBtnHelp(this, SVX_RES(BTN_HELP)),
+    aBtnOK(this, SVX_RES(BTN_OK)),
+    aBtnCancel(this, SVX_RES(BTN_CANCEL))
 {
     FreeResource();
 
@@ -153,15 +153,15 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
     Window* pWindow,
     const String& rTitle,
     const String& rDescription)
-:   ModalDialog(pWindow, ResId(RID_SVXDLG_OBJECT_TITLE_DESC, DIALOG_MGR())),
-    aFtTitle(this, ResId(NTD_FT_TITLE)),
-    aEdtTitle(this, ResId(NTD_EDT_TITLE)),
-    aFtDescription(this, ResId(NTD_FT_DESC)),
-    aEdtDescription(this, ResId(NTD_EDT_DESC)),
-    aFlSeparator(this, ResId(FL_SEPARATOR_B)),
-    aBtnHelp(this, ResId(BTN_HELP)),
-    aBtnOK(this, ResId(BTN_OK)),
-    aBtnCancel(this, ResId(BTN_CANCEL))
+:   ModalDialog(pWindow, SVX_RES(RID_SVXDLG_OBJECT_TITLE_DESC)),
+    aFtTitle(this, SVX_RES(NTD_FT_TITLE)),
+    aEdtTitle(this, SVX_RES(NTD_EDT_TITLE)),
+    aFtDescription(this, SVX_RES(NTD_FT_DESC)),
+    aEdtDescription(this, SVX_RES(NTD_EDT_DESC)),
+    aFlSeparator(this, SVX_RES(FL_SEPARATOR_B)),
+    aBtnHelp(this, SVX_RES(BTN_HELP)),
+    aBtnOK(this, SVX_RES(BTN_OK)),
+    aBtnCancel(this, SVX_RES(BTN_CANCEL))
 {
     FreeResource();
 
@@ -182,11 +182,11 @@ SvxObjectTitleDescDialog::SvxObjectTitleDescDialog(
 \************************************************************************/
 
 SvxMessDialog::SvxMessDialog( Window* pWindow, const String& rText, const String& rDesc, Image* pImg ) :
-    ModalDialog     ( pWindow, ResId( RID_SVXDLG_MESSBOX, DIALOG_MGR() ) ),
-    aFtDescription      ( this, ResId( FT_DESCRIPTION ) ),
-    aBtn1               ( this, ResId( BTN_1 ) ),
-    aBtn2               ( this, ResId( BTN_2 ) ),
-    aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
+    ModalDialog     ( pWindow, SVX_RES( RID_SVXDLG_MESSBOX ) ),
+    aFtDescription      ( this, SVX_RES( FT_DESCRIPTION ) ),
+    aBtn1               ( this, SVX_RES( BTN_1 ) ),
+    aBtn2               ( this, SVX_RES( BTN_2 ) ),
+    aBtnCancel          ( this, SVX_RES( BTN_CANCEL ) ),
     aFtImage            ( this )
 {
     FreeResource();
