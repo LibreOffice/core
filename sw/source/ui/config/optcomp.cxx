@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optcomp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:40:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:51:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,15 +139,15 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
 
     SfxTabPage( pParent, SW_RES( TP_OPTCOMPATIBILITY_PAGE ), rSet ),
 
-    m_aMainFL           ( this, ResId( FL_MAIN ) ),
-    m_aFormattingFT     ( this, ResId( FT_FORMATTING ) ),
-    m_aFormattingLB     ( this, ResId( LB_FORMATTING ) ),
-    m_aOptionsFT        ( this, ResId( FT_OPTIONS ) ),
-    m_aOptionsLB        ( this, ResId( LB_OPTIONS ) ),
-    m_aResetPB          ( this, ResId( PB_RESET ) ),
-    m_aDefaultPB        ( this, ResId( PB_DEFAULT ) ),
-    m_sUserEntry        (       ResId( STR_USERENTRY ) ),
-    m_sUseAsDefaultQuery(       ResId( STR_QRYBOX_USEASDEFAULT ) ),
+    m_aMainFL           ( this, SW_RES( FL_MAIN ) ),
+    m_aFormattingFT     ( this, SW_RES( FT_FORMATTING ) ),
+    m_aFormattingLB     ( this, SW_RES( LB_FORMATTING ) ),
+    m_aOptionsFT        ( this, SW_RES( FT_OPTIONS ) ),
+    m_aOptionsLB        ( this, SW_RES( LB_OPTIONS ) ),
+    m_aResetPB          ( this, SW_RES( PB_RESET ) ),
+    m_aDefaultPB        ( this, SW_RES( PB_DEFAULT ) ),
+    m_sUserEntry        (       SW_RES( STR_USERENTRY ) ),
+    m_sUseAsDefaultQuery(       SW_RES( STR_QRYBOX_USEASDEFAULT ) ),
     m_pWrtShell         ( NULL ),
     m_pImpl             ( new SwCompatibilityOptPage_Impl ),
     m_nSavedOptions     ( 0 )
@@ -156,7 +156,7 @@ SwCompatibilityOptPage::SwCompatibilityOptPage( Window* pParent, const SfxItemSe
     // init options strings with local resource ids -> so do it before FreeResource()
     for ( USHORT nResId = STR_COMP_OPTIONS_START; nResId < STR_COMP_OPTIONS_END; ++nResId )
     {
-        String sEntry = String( ResId( nResId ) );
+        String sEntry = String( SW_RES( nResId ) );
         if ( STR_TAB_ALIGNMENT == nResId ||
              STR_LINE_SPACING == nResId ||
              STR_USE_OBJPOSITIONING == nResId ||
