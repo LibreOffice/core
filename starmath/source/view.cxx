@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-25 11:35:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:15:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1713,7 +1713,7 @@ void SmViewShell::Execute(SfxRequest& rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet, ResId(RID_SVXDLG_ZOOM));
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aSet, RID_SVXDLG_ZOOM);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
