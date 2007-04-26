@@ -4,9 +4,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-13 08:32:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:38:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -295,6 +295,9 @@ Point FloatingWindow::ImplCalcPos( Window* pWindow,
     if( bRTL )
         // create a rect that can be compared to desktop coordinates
         devRectRTL = pW->ImplOutputToUnmirroredAbsoluteScreenPixel( normRect );
+    if( Application::GetScreenCount() > 1 && ! Application::IsMultiDisplay() )
+        aScreenRect = Application::GetScreenPosSizePixel(
+            Application::GetBestScreen( bRTL ? devRectRTL : devRect ) );
 
 
     USHORT      nArrangeAry[5];
