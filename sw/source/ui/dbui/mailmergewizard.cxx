@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmergewizard.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:25:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:02:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,19 +107,19 @@ using namespace ::com::sun::star;
 SwMailMergeWizard::SwMailMergeWizard(SwView& rView, SwMailMergeConfigItem& rItem) :
         RoadmapWizard(&rView.GetViewFrame()->GetWindow(),
                         SW_RES(DLG_MAILMERGEWIZARD),
-                        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP, ResId( STR_ROADMAP_TITLE )),
+                        WZB_NEXT|WZB_PREVIOUS|WZB_FINISH|WZB_CANCEL|WZB_HELP, SW_RES( STR_ROADMAP_TITLE )),
         m_pSwView(&rView),
         m_rConfigItem(rItem),
-        m_sStarting(        ResId( ST_STARTING      )),
-        m_sDocumentType(    ResId( ST_DOCUMETNTYPE   )),
-        m_sAddressBlock(    ResId( ST_ADDRESSBLOCK   )),
-        m_sAddressList(     ResId( ST_ADDRESSLIST )),
-        m_sGreetingsLine(   ResId( ST_GREETINGSLINE   )),
-        m_sLayout(          ResId( ST_LAYOUT        )),
-        m_sPrepareMerge(    ResId( ST_PREPAREMERGE )),
-        m_sMerge(           ResId( ST_MERGE        )),
-        m_sOutput(          ResId( ST_OUTPUT       )),
-        m_sFinish(          ResId( ST_FINISH       )),
+        m_sStarting(        SW_RES( ST_STARTING      )),
+        m_sDocumentType(    SW_RES( ST_DOCUMETNTYPE   )),
+        m_sAddressBlock(    SW_RES( ST_ADDRESSBLOCK   )),
+        m_sAddressList(     SW_RES( ST_ADDRESSLIST )),
+        m_sGreetingsLine(   SW_RES( ST_GREETINGSLINE   )),
+        m_sLayout(          SW_RES( ST_LAYOUT        )),
+        m_sPrepareMerge(    SW_RES( ST_PREPAREMERGE )),
+        m_sMerge(           SW_RES( ST_MERGE        )),
+        m_sOutput(          SW_RES( ST_OUTPUT       )),
+        m_sFinish(          SW_RES( ST_FINISH       )),
         m_nRestartPage( MM_DOCUMENTSELECTPAGE )
 {
     FreeResource();
