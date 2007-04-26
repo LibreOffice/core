@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redcom.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:33:07 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:54:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,7 +60,7 @@ ScRedComDialog::ScRedComDialog( Window* pParent, const SfxItemSet& rCoreSet,
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, ResId(RID_SVXDLG_POSTIT), bPrevNext, TRUE );
+        pDlg = pFact->CreateSvxPostItDialog( pParent, rCoreSet, RID_SVXDLG_POSTIT, bPrevNext, TRUE );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         pDocShell=pShell;
         pDlg->DontChangeAuthor();
