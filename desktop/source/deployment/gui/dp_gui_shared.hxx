@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_shared.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 17:59:15 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:23:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -33,8 +33,8 @@
  *
  ************************************************************************/
 
-#if ! defined INCLUDED_DP_GUI_SHARED_H
-#define INCLUDED_DP_SHARED_H
+#if !defined INCLUDED_DP_GUI_SHARED_HXX
+#define INCLUDED_DP_GUI_SHARED_HXX
 
 #include "unotools/configmgr.hxx"
 #include "rtl/instance.hxx"
@@ -62,7 +62,7 @@ struct BrandName : public ::rtl::StaticWithInit<const ::rtl::OUString, BrandName
 class DpGuiResId : public ResId
 {
 public:
-    DpGuiResId( USHORT nId ):ResId( nId, DeploymentGuiResMgr::get() ) {}
+    DpGuiResId( USHORT nId ):ResId( nId, *DeploymentGuiResMgr::get() ) {}
 };
 
 } // namespace dp_gui
