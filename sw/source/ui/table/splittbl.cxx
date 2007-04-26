@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splittbl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:21:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:20:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,14 +58,14 @@
 --------------------------------------------------*/
 SwSplitTblDlg::SwSplitTblDlg( Window *pParent, SwWrtShell &rSh ) :
     SvxStandardDialog(pParent, SW_RES(DLG_SPLIT_TABLE)),
-    aOKPB(                  this, ResId(PB_OK       )),
-    aCancelPB(              this, ResId(PB_CANCEL   )),
-    aHelpPB(                this, ResId(PB_HELP     )),
-    aSplitFL(               this, ResId(FL_SPLIT    )),
-    aCntntCopyRB(           this, ResId(RB_CNTNT    )),
-    aBoxAttrCopyWithParaRB( this, ResId(RB_BOX_PARA )),
-    aBoxAttrCopyNoParaRB(   this, ResId(RB_BOX_NOPARA)),
-    aBorderCopyRB(          this, ResId(RB_BORDER   )),
+    aOKPB(                  this, SW_RES(PB_OK      )),
+    aCancelPB(              this, SW_RES(PB_CANCEL  )),
+    aHelpPB(                this, SW_RES(PB_HELP        )),
+    aSplitFL(               this, SW_RES(FL_SPLIT    )),
+    aCntntCopyRB(           this, SW_RES(RB_CNTNT   )),
+    aBoxAttrCopyWithParaRB( this, SW_RES(RB_BOX_PARA    )),
+    aBoxAttrCopyNoParaRB(   this, SW_RES(RB_BOX_NOPARA)),
+    aBorderCopyRB(          this, SW_RES(RB_BORDER  )),
     rShell(rSh)
 {
     FreeResource();
