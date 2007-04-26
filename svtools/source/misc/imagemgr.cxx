@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 11:34:50 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:45:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -628,7 +628,7 @@ static ImageList* CreateImageList_Impl( USHORT nResId )
     ImageList* pList = NULL;
     ResMgr* pResMgr = GetIsoResMgr_Impl();
     DBG_ASSERT( pResMgr, "SvFileInformationManager::CreateImageList_Impl(): no resmgr" );
-    ResId aResId( nResId, pResMgr );
+    ResId aResId( nResId, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
     if ( pResMgr->IsAvailable( aResId ) )
         pList = new ImageList( aResId );
