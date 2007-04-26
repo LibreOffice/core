@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_ChartType.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:56:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:34:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -334,23 +334,23 @@ SchDiagramTypeDlg::SchDiagramTypeDlg(
         ModalDialog(pWindow, SchResId(DLG_DIAGRAM_TYPE)),
 
         n3DGeometry(CHART_SHAPE3D_ANY),
-        aRbt2D(this, ResId(RBT_2D)),
-        aRbt3D(this, ResId(RBT_3D)),
-        aFlDimension(this, ResId(FL_DIMENSION)),
-        aFtDeep( this, ResId( FT_DEEP ) ),
-        aMtrFldDeep( this, ResId( MTR_FLD_DEEP ) ),
-        aFtGran( this, ResId( FT_GRAN ) ),
-        aMtrFldGran( this, ResId( MTR_FLD_GRAN ) ),
-        aFtNumLines( this, ResId( FT_NUM_OF_LINES ) ),
-        aMtrFldNumLines( this, ResId( MTR_FLD_NUM_OF_LINES ) ),
+        aRbt2D(this, SchResId(RBT_2D)),
+        aRbt3D(this, SchResId(RBT_3D)),
+        aFlDimension(this, SchResId(FL_DIMENSION)),
+        aFtDeep( this, SchResId( FT_DEEP ) ),
+        aMtrFldDeep( this, SchResId( MTR_FLD_DEEP ) ),
+        aFtGran( this, SchResId( FT_GRAN ) ),
+        aMtrFldGran( this, SchResId( MTR_FLD_GRAN ) ),
+        aFtNumLines( this, SchResId( FT_NUM_OF_LINES ) ),
+        aMtrFldNumLines( this, SchResId( MTR_FLD_NUM_OF_LINES ) ),
 
-        aFtType(this, ResId(FT_TYPE)),
-        aCtlType(this, ResId(CTL_TYPE)),
-        aFtVariant(this, ResId(FT_VARIANT)),
-        aCtlVariant(this, ResId(CTL_VARIANT)),
-        aBtnOK(this, ResId(BTN_OK)),
-        aBtnCancel(this, ResId(BTN_CANCEL)),
-        aBtnHelp(this, ResId(BTN_HELP)),
+        aFtType(this, SchResId(FT_TYPE)),
+        aCtlType(this, SchResId(CTL_TYPE)),
+        aFtVariant(this, SchResId(FT_VARIANT)),
+        aCtlVariant(this, SchResId(CTL_VARIANT)),
+        aBtnOK(this, SchResId(BTN_OK)),
+        aBtnCancel(this, SchResId(BTN_CANCEL)),
+        aBtnHelp(this, SchResId(BTN_HELP)),
         eDimension(CHDIM_2D),
         m_xDiagram( xDiagram ),
         m_xTemplateManager( xTemplateManager )
