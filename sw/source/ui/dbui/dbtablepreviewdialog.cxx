@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbtablepreviewdialog.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:43:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:02:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -82,9 +82,9 @@ using namespace rtl;
 SwDBTablePreviewDialog::SwDBTablePreviewDialog(Window* pParent, Sequence< PropertyValue>& rValues ) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_DBTABLEPREVIEWDIALOG)),
 #pragma warning (disable : 4355)
-    m_aDescriptionFI( this, ResId(        FI_DESCRIPTION)),
-    m_pBeamerWIN( new Window(this, ResId( WIN_BEAMER ))),
-    m_aOK( this, ResId(                   PB_OK  ))
+    m_aDescriptionFI( this, SW_RES(        FI_DESCRIPTION)),
+    m_pBeamerWIN( new Window(this, SW_RES( WIN_BEAMER ))),
+    m_aOK( this, SW_RES(                   PB_OK  ))
 #pragma warning (default : 4355)
 {
     FreeResource();
