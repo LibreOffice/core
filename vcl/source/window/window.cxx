@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.254 $
+ *  $Revision: 1.255 $
  *
- *  last change: $Author: ihi $ $Date: 2007-03-26 12:36:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:32:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1193,14 +1193,13 @@ void Window::ImplCallMove()
 
 // -----------------------------------------------------------------------
 
-static ULONG ImplAutoHelpID()
+static ULONG ImplAutoHelpID( ResMgr* pResMgr )
 {
     if ( !Application::IsAutoHelpIdEnabled() )
         return 0;
 
     ULONG nHID = 0;
 
-    ResMgr *pResMgr = Resource::GetResManager();
     DBG_ASSERT( pResMgr, "No res mgr for auto help id" );
     if( ! pResMgr )
         return 0;
@@ -1219,20 +1218,20 @@ WinBits Window::ImplInitRes( const ResId& rResId )
     char* pRes = (char*)GetClassRes();
     pRes += 8;
     sal_uInt32 nStyle = (sal_uInt32)GetLongRes( (void*)pRes );
-    ((ResId&)rResId).aWinBits = nStyle;
+    rResId.SetWinBits( nStyle );
     return nStyle;
 }
 
 // -----------------------------------------------------------------------
 
-void Window::ImplLoadRes( const ResId& /*rResId*/ )
+void Window::ImplLoadRes( const ResId& rResId )
 {
     // newer move this line after IncrementRes
     char* pRes = (char*)GetClassRes();
     pRes += 12;
     sal_uInt32 nHelpId = (sal_uInt32)GetLongRes( (void*)pRes );
     if ( !nHelpId )
-        nHelpId = ImplAutoHelpID();
+        nHelpId = ImplAutoHelpID( rResId.GetResMgr() );
     SetHelpId( nHelpId );
 
     ULONG nObjMask = ReadLongRes();
