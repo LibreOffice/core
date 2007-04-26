@@ -4,9 +4,9 @@
  *
  *  $RCSfile: keycod.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:19:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:30:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -137,9 +137,6 @@ KeyCode::KeyCode( const ResId& rResId )
     rResId.SetRT( RSC_KEYCODE );
 
     ResMgr* pResMgr = rResId.GetResMgr();
-    if ( !pResMgr )
-        pResMgr = Resource::GetResManager();
-
     if ( pResMgr && pResMgr->GetResource( rResId ) )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
