@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gloslst.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:33:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:23:24 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -139,11 +139,11 @@ class SwGlossDecideDlg : public ModalDialog
 
 SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_GLOSSARY_DECIDE_DLG)),
-    aOk(this,       ResId(PB_OK)),
-    aCancel(this,   ResId(PB_CANCEL)),
-    aHelp(this,     ResId(PB_HELP)),
-    aListLB(this,   ResId(LB_LIST)),
-    aFL(this,    ResId(FL_GLOSS))
+    aOk(this,       SW_RES(PB_OK)),
+    aCancel(this,   SW_RES(PB_CANCEL)),
+    aHelp(this,     SW_RES(PB_HELP)),
+    aListLB(this,   SW_RES(LB_LIST)),
+    aFL(this,    SW_RES(FL_GLOSS))
 {
     FreeResource();
     aListLB.SetDoubleClickHdl(LINK(this, SwGlossDecideDlg, DoubleClickHdl));
