@@ -4,9 +4,9 @@
  *
  *  $RCSfile: accel.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:15:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:29:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -338,7 +338,7 @@ void Accelerator::ImplLoadRes( const ResId& rResId )
 
     for( ULONG i = 0; i < nObjFollows; i++ )
     {
-        InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+        InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
     }
 }
@@ -406,14 +406,14 @@ void Accelerator::InsertItem( const ResId& rResId )
     {
         // es wird ein neuer Kontext aufgespannt
         RSHEADER_TYPE * pKeyCodeRes = (RSHEADER_TYPE *)GetClassRes();
-        ResId aResId( pKeyCodeRes );
+        ResId aResId( pKeyCodeRes, *rResId.GetResMgr());
         aKeyCode = KeyCode( aResId );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
     }
 
     if ( nObjMask & ACCELITEM_ACCEL )
     {
-        pAutoAccel = new Accelerator( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+        pAutoAccel = new Accelerator( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
     }
 
