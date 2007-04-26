@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hltpbase.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:49:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:33:49 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -156,7 +156,7 @@ sal_Int8 SvxHyperURLBox::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 /*
-Diese Methode parsed eine EMailadresse aus einem D&D-DataObjekt aus der Adreßdatenbank heraus
+Diese Methode parsed eine EMailadresse aus einem D&D-DataObjekt aus der Adreï¿½datenbank heraus
 
 #ifndef _OFF_OFADBMGR_HXX
 #include <offmgr/ofadbmgr.hxx>
@@ -371,20 +371,20 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
 {
     if ( !mbStdControlsInit )
     {
-        mpGrpMore     = new FixedLine           ( this, ResId (GRP_MORE) );
-        mpFtFrame     = new FixedText           ( this, ResId (FT_FRAME) );
-        mpCbbFrame    = new SvxFramesComboBox   ( this, ResId (CB_FRAME), GetDispatcher() );
-        mpFtForm      = new FixedText           ( this, ResId (FT_FORM) );
-        mpLbForm      = new ListBox             ( this, ResId (LB_FORM) );
-        mpFtIndication= new FixedText           ( this, ResId (FT_INDICATION) );
-        mpEdIndication= new Edit                ( this, ResId (ED_INDICATION) );
-        mpFtText      = new FixedText           ( this, ResId (FT_TEXT) );
-        mpEdText      = new Edit                ( this, ResId (ED_TEXT) );
-        mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT) );
+        mpGrpMore     = new FixedLine           ( this, ResId (GRP_MORE, *m_pResMgr) );
+        mpFtFrame     = new FixedText           ( this, ResId (FT_FRAME, *m_pResMgr) );
+        mpCbbFrame    = new SvxFramesComboBox   ( this, ResId (CB_FRAME, *m_pResMgr), GetDispatcher() );
+        mpFtForm      = new FixedText           ( this, ResId (FT_FORM, *m_pResMgr) );
+        mpLbForm      = new ListBox             ( this, ResId (LB_FORM, *m_pResMgr) );
+        mpFtIndication= new FixedText           ( this, ResId (FT_INDICATION, *m_pResMgr) );
+        mpEdIndication= new Edit                ( this, ResId (ED_INDICATION, *m_pResMgr) );
+        mpFtText      = new FixedText           ( this, ResId (FT_TEXT, *m_pResMgr) );
+        mpEdText      = new Edit                ( this, ResId (ED_TEXT, *m_pResMgr) );
+        mpBtScript    = new ImageButton         ( this, ResId (BTN_SCRIPT, *m_pResMgr) );
 
         mpBtScript->SetClickHdl ( LINK ( this, SvxHyperlinkTabPageBase, ClickScriptHdl_Impl ) );
 
-        mpBtScript->SetModeImage( Image( ResId( IMG_SCRIPT_HC ) ), BMP_COLOR_HIGHCONTRAST );
+        mpBtScript->SetModeImage( Image( ResId( IMG_SCRIPT_HC, *m_pResMgr ) ), BMP_COLOR_HIGHCONTRAST );
         mpBtScript->EnableTextDisplay (FALSE);
     }
 
