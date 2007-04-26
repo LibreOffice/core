@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cption.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:01:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:10:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     aPosText      (this, SW_RES(TXT_POS     )),
     aPosBox       (this, SW_RES(BOX_POS     )),
     aPrevWin      (this, SW_RES(WIN_SAMPLE  )),
-    sNone(      ResId( STR_CATEGORY_NONE )),
+    sNone(      SW_RES( STR_CATEGORY_NONE )),
     aSettingsFL  (this, SW_RES(FL_SETTINGS)),
     rView( rV ),
     bCopyAttributes( FALSE ),
