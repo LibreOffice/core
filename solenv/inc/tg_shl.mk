@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.108 $
+#   $Revision: 1.109 $
 #
-#   last change: $Author: vg $ $Date: 2007-03-26 15:27:57 $
+#   last change: $Author: rt $ $Date: 2007-04-26 13:57:33 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -181,16 +181,18 @@ USE_SHL$(TNR)VERSIONMAP=$(MISC)$/$(SHL$(TNR)VERSIONMAP:b)_$(SHL$(TNR)TARGET)$(SH
 SHL$(TNR)VERSIONMAPPARA=$(LINKVERSIONMAPFLAG) $(USE_SHL$(TNR)VERSIONMAP)
 .ENDIF
 
+.IF "$(OS)"=="MACOSX"
+$(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS)
+.ENDIF
+
 $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
     @@-$(RM) -f $@
-
 # The following files will only be generated and needed on Mac OS X as temporary files
 # in order to generate exported symbols list out of Linux/Solaris map files
 .IF "$(OS)"=="MACOSX"
     @-$(RM) -f $@.symregexp >& $(NULLDEV)
     @-$(RM) -f $@.expsymlist >& $(NULLDEV)
 .ENDIF
-
 # Its questionable if the following condition '.IF "$(COMID)"=="gcc3"' makes sense and what 
 # happens if somebody will change it in the future
 .IF "$(COMID)"=="gcc3"
@@ -199,13 +201,11 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
     tr -d "\015" < $(SHL$(TNR)VERSIONMAP) > $@
 .ENDIF          # "$(COMID)"=="gcc3"
     @chmod a+w $@
-
 # Mac OS X post-processing generate an exported symbols list from the generated map file
 # for details on exported symbols list see man ld on Mac OS X
 .IF "$(OS)"=="MACOSX"
     -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep -v "\*\|?" > $@.exported-symbols
     -cat $@ | $(AWK) -f $(SOLARENV)$/bin$/unxmap-to-macosx-explist.awk | grep "\*\|?" > $@.symbols-regexp
-
 # Shared libraries will be build out of the *.obj files specified in SHL?OBJS and SHL?LIBS
 # Extract RTTI symbols from all the objects that will be used to build a shared library
 .IF "$(SHL$(TNR)OBJS)"!=""
@@ -218,7 +218,6 @@ $(USE_SHL$(TNR)VERSIONMAP): $(SHL$(TNR)VERSIONMAP)
 # exported symbols list
     cp $@.exported-symbols $@ 
 .ENDIF # .IF "$(OS)"=="MACOSX"
-
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(USE_SHL$(TNR)VERSIONMAP)"!=""
 .ENDIF			# "$(GUI)" != "UNX"
