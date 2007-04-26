@@ -4,9 +4,9 @@
  *
  *  $RCSfile: treeopt.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-19 13:59:33 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:47:47 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -515,22 +515,22 @@ sal_Bool    OfaOptionsTreeListBox::Collapse( SvLBoxEntry* pParent )
 
 OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const Reference< XFrame >& _xFrame ) :
 
-    SfxModalDialog( pParent, ResId( RID_OFADLG_OPTIONS_TREE, DIALOG_MGR() ) ),
+    SfxModalDialog( pParent, SVX_RES( RID_OFADLG_OPTIONS_TREE ) ),
 
-    aOkPB           ( this, ResId( PB_OK ) ),
-    aCancelPB       ( this, ResId( PB_CANCEL ) ),
-    aHelpPB         ( this, ResId( PB_HELP ) ),
-    aBackPB         ( this, ResId( PB_BACK ) ),
-    aHiddenGB       ( this, ResId( FB_BORDER ) ),
-    aPageTitleFT    ( this, ResId( FT_PAGE_TITLE ) ),
-    aLine1FL        ( this, ResId( FL_LINE_1 ) ),
-    aHelpFT         ( this, ResId( FT_HELPTEXT ) ),
-    aHelpImg        ( this, ResId( IMG_HELP ) ),
-    aHelpTextsArr   (       ResId( STR_HELPTEXTS ) ),
-    aTreeLB         ( this, ResId( TLB_PAGES ) ),
+    aOkPB           ( this, SVX_RES( PB_OK ) ),
+    aCancelPB       ( this, SVX_RES( PB_CANCEL ) ),
+    aHelpPB         ( this, SVX_RES( PB_HELP ) ),
+    aBackPB         ( this, SVX_RES( PB_BACK ) ),
+    aHiddenGB       ( this, SVX_RES( FB_BORDER ) ),
+    aPageTitleFT    ( this, SVX_RES( FT_PAGE_TITLE ) ),
+    aLine1FL        ( this, SVX_RES( FL_LINE_1 ) ),
+    aHelpFT         ( this, SVX_RES( FT_HELPTEXT ) ),
+    aHelpImg        ( this, SVX_RES( IMG_HELP ) ),
+    aHelpTextsArr   (       SVX_RES( STR_HELPTEXTS ) ),
+    aTreeLB         ( this, SVX_RES( TLB_PAGES ) ),
 
     sTitle          ( GetText() ),
-    sNotLoadedError (       ResId( ST_LOAD_ERROR ) ),
+    sNotLoadedError (       SVX_RES( ST_LOAD_ERROR ) ),
     pCurrentPageEntry   ( NULL ),
     pColorPageItemSet   ( NULL ),
     pColorTab           ( NULL ),
@@ -548,14 +548,14 @@ OfaTreeOptionsDialog::OfaTreeOptionsDialog( Window* pParent, const Reference< XF
     FreeResource();
 
     ResMgr* pIsoRes = SFX_APP()->GetLabelResManager();
-    ResId aImgLstRes( RID_IMGLIST_TREEOPT );
+    ResId aImgLstRes( RID_IMGLIST_TREEOPT, *pIsoRes );
     aImgLstRes.SetRT( RSC_IMAGELIST );
     if ( pIsoRes->IsAvailable( aImgLstRes ) )
-        aPageImages = ImageList( ResId( RID_IMGLIST_TREEOPT, pIsoRes ) );
-    ResId aImgLstHCRes( RID_IMGLIST_TREEOPT_HC );
+        aPageImages = ImageList( ResId( RID_IMGLIST_TREEOPT, *pIsoRes ) );
+    ResId aImgLstHCRes( RID_IMGLIST_TREEOPT_HC, *pIsoRes );
     aImgLstHCRes.SetRT( RSC_IMAGELIST );
     if ( pIsoRes->IsAvailable( aImgLstHCRes ) )
-        aPageImagesHC = ImageList( ResId( RID_IMGLIST_TREEOPT_HC, pIsoRes ) );
+        aPageImagesHC = ImageList( ResId( RID_IMGLIST_TREEOPT_HC, *pIsoRes ) );
     aTreeLB.SetHelpId( HID_OFADLG_TREELISTBOX );
     aTreeLB.SetWindowBits( WB_HASBUTTONS | WB_HASBUTTONSATROOT |
                            WB_HASLINES | WB_HASLINESATROOT |
@@ -1230,19 +1230,19 @@ IMPL_LINK( OfaTreeOptionsDialog, SelectHdl_Impl, Timer*, EMPTYARG )
  * --------------------------------------------------*/
 
 OfaPageResource::OfaPageResource() :
-    Resource(ResId(RID_OFADLG_OPTIONS_TREE_PAGES, DIALOG_MGR())),
-    aGeneralDlgAry(ResId(SID_GENERAL_OPTIONS)),
-    aInetDlgAry(ResId(SID_INET_DLG)),
-    aLangDlgAry(ResId(SID_LANGUAGE_OPTIONS)),
-    aTextDlgAry(ResId(SID_SW_EDITOPTIONS)),
-    aHTMLDlgAry(ResId(SID_SW_ONLINEOPTIONS)),
-    aCalcDlgAry(ResId(SID_SC_EDITOPTIONS)),
-    aStarMathDlgAry(ResId(SID_SM_EDITOPTIONS)),
-    aImpressDlgAry(ResId(SID_SD_EDITOPTIONS)),
-    aDrawDlgAry(ResId(SID_SD_GRAPHIC_OPTIONS)),
-    aChartDlgAry(ResId(SID_SCH_EDITOPTIONS)),
-    aFilterDlgAry(ResId(SID_FILTER_DLG)),
-    aDatasourcesDlgAry(ResId(SID_SB_STARBASEOPTIONS))
+    Resource(SVX_RES(RID_OFADLG_OPTIONS_TREE_PAGES)),
+    aGeneralDlgAry(SVX_RES(SID_GENERAL_OPTIONS)),
+    aInetDlgAry(SVX_RES(SID_INET_DLG)),
+    aLangDlgAry(SVX_RES(SID_LANGUAGE_OPTIONS)),
+    aTextDlgAry(SVX_RES(SID_SW_EDITOPTIONS)),
+    aHTMLDlgAry(SVX_RES(SID_SW_ONLINEOPTIONS)),
+    aCalcDlgAry(SVX_RES(SID_SC_EDITOPTIONS)),
+    aStarMathDlgAry(SVX_RES(SID_SM_EDITOPTIONS)),
+    aImpressDlgAry(SVX_RES(SID_SD_EDITOPTIONS)),
+    aDrawDlgAry(SVX_RES(SID_SD_GRAPHIC_OPTIONS)),
+    aChartDlgAry(SVX_RES(SID_SCH_EDITOPTIONS)),
+    aFilterDlgAry(SVX_RES(SID_FILTER_DLG)),
+    aDatasourcesDlgAry(SVX_RES(SID_SB_STARBASEOPTIONS))
 {
     FreeResource();
 }
