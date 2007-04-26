@@ -4,9 +4,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.255 $
+ *  $Revision: 1.256 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 09:32:08 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:39:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5795,6 +5795,20 @@ void Window::UpdateSettings( const AllSettings& rSettings, BOOL bChild )
     // AppFont-Aufloesung und DPI-Aufloesung neu berechnen
     ImplInitResolutionSettings();
 
+    /* #i73785#
+    *  do not overwrite a NoWheelActionWithoutFocus with false
+    *  this looks kind of a hack, but NoWheelActionWithoutFocus
+    *  is always a local change, not a system property,
+    *  so we can spare all our users the hassel of reacting on
+    *  this in their respective DataChanged.
+    */
+    if( aOldSettings.GetMouseSettings().GetNoWheelActionWithoutFocus() )
+    {
+        MouseSettings aSet( maSettings.GetMouseSettings() );
+        aSet.SetNoWheelActionWithoutFocus( TRUE );
+        maSettings.SetMouseSettings( aSet );
+    }
+
     if( (nChangeFlags & SETTINGS_STYLE) && IsBackground() )
     {
         Wallpaper aWallpaper = GetBackground();
@@ -9632,13 +9646,7 @@ void Window::PaintToDevice( OutputDevice* pDev, const Point& rPos, const Size& /
     mpWindowImpl->mbVisible = TRUE;
 
     if( mpWindowImpl->mpBorderWindow )
-    {
-        sal_Int32 nDeltaX = GetOutOffXPixel() - mpWindowImpl->mpBorderWindow->GetOutOffXPixel();
-        sal_Int32 nDeltaY = GetOutOffYPixel() - mpWindowImpl->mpBorderWindow->GetOutOffYPixel();
-        aMF.Move( nDeltaX, nDeltaY );
         mpWindowImpl->mpBorderWindow->ImplPaintToMetaFile( &aMF, pDev );
-        aMF.Move( -nDeltaX, -nDeltaY );
-    }
     else
         ImplPaintToMetaFile( &aMF, pDev );
 
