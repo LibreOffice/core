@@ -4,9 +4,9 @@
  *
  *  $RCSfile: alienwarn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:30:32 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:10:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,13 +56,13 @@ SfxAlienWarningDialog::SfxAlienWarningDialog( Window* pParent, const String& _rF
 
     SfxModalDialog( pParent, SfxResId( RID_DLG_ALIEN_WARNING ) ),
 
-    m_aQueryImage   ( this, ResId( FI_QUERY ) ),
-    m_aInfoText     ( this, ResId( FT_INFOTEXT ) ),
-    m_aYesBtn       ( this, ResId( PB_YES ) ),
-    m_aNoBtn        ( this, ResId( PB_NO ) ),
-    m_aMoreInfoBtn  ( this, ResId( PB_MOREINFO ) ),
-    m_aOptionLine   ( this, ResId( FL_OPTION ) ),
-    m_aWarningOffBox( this, ResId( CB_WARNING_OFF ) )
+    m_aQueryImage   ( this, SfxResId( FI_QUERY ) ),
+    m_aInfoText     ( this, SfxResId( FT_INFOTEXT ) ),
+    m_aYesBtn       ( this, SfxResId( PB_YES ) ),
+    m_aNoBtn        ( this, SfxResId( PB_NO ) ),
+    m_aMoreInfoBtn  ( this, SfxResId( PB_MOREINFO ) ),
+    m_aOptionLine   ( this, SfxResId( FL_OPTION ) ),
+    m_aWarningOffBox( this, SfxResId( CB_WARNING_OFF ) )
 
 {
     FreeResource();
