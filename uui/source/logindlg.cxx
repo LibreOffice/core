@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-09-09 10:21:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:19:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -245,33 +245,33 @@ LoginDialog::LoginDialog
     ResMgr* pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_UUI_LOGIN, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_LOGIN, *pResMgr ) ),
 
-    aErrorInfo      ( this, ResId( INFO_LOGIN_ERROR ) ),
-    aErrorGB        ( this, ResId( GB_LOGIN_ERROR ) ),
-    aRequestInfo    ( this, ResId( INFO_LOGIN_REQUEST ) ),
-    aPathFT         ( this, ResId( FT_LOGIN_PATH ) ),
-    aPathED         ( this, ResId( ED_LOGIN_PATH ) ),
-    aPathInfo       ( this, ResId( INFO_LOGIN_PATH ) ),
-    aPathBtn        ( this, ResId( BTN_LOGIN_PATH ) ),
-    aNameFT         ( this, ResId( FT_LOGIN_USERNAME ) ),
-    aNameED         ( this, ResId( ED_LOGIN_USERNAME ) ),
-    aNameInfo       ( this, ResId( INFO_LOGIN_USERNAME ) ),
-    aPasswordFT     ( this, ResId( FT_LOGIN_PASSWORD ) ),
-    aPasswordED     ( this, ResId( ED_LOGIN_PASSWORD ) ),
-    aAccountFT      ( this, ResId( FT_LOGIN_ACCOUNT ) ),
-    aAccountED      ( this, ResId( ED_LOGIN_ACCOUNT ) ),
-    aSavePasswdBtn  ( this, ResId( CB_LOGIN_SAVEPASSWORD ) ),
-    aLoginGB        ( this, ResId( GB_LOGIN_LOGIN ) ),
-    aOKBtn          ( this, ResId( BTN_LOGIN_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_LOGIN_CANCEL ) ),
-    aHelpBtn        ( this, ResId( BTN_LOGIN_HELP ) )
+    aErrorInfo      ( this, ResId( INFO_LOGIN_ERROR, *pResMgr ) ),
+    aErrorGB        ( this, ResId( GB_LOGIN_ERROR, *pResMgr ) ),
+    aRequestInfo    ( this, ResId( INFO_LOGIN_REQUEST, *pResMgr ) ),
+    aPathFT         ( this, ResId( FT_LOGIN_PATH, *pResMgr ) ),
+    aPathED         ( this, ResId( ED_LOGIN_PATH, *pResMgr ) ),
+    aPathInfo       ( this, ResId( INFO_LOGIN_PATH, *pResMgr ) ),
+    aPathBtn        ( this, ResId( BTN_LOGIN_PATH, *pResMgr ) ),
+    aNameFT         ( this, ResId( FT_LOGIN_USERNAME, *pResMgr ) ),
+    aNameED         ( this, ResId( ED_LOGIN_USERNAME, *pResMgr ) ),
+    aNameInfo       ( this, ResId( INFO_LOGIN_USERNAME, *pResMgr ) ),
+    aPasswordFT     ( this, ResId( FT_LOGIN_PASSWORD, *pResMgr ) ),
+    aPasswordED     ( this, ResId( ED_LOGIN_PASSWORD, *pResMgr ) ),
+    aAccountFT      ( this, ResId( FT_LOGIN_ACCOUNT, *pResMgr ) ),
+    aAccountED      ( this, ResId( ED_LOGIN_ACCOUNT, *pResMgr ) ),
+    aSavePasswdBtn  ( this, ResId( CB_LOGIN_SAVEPASSWORD, *pResMgr ) ),
+    aLoginGB        ( this, ResId( GB_LOGIN_LOGIN, *pResMgr ) ),
+    aOKBtn          ( this, ResId( BTN_LOGIN_OK, *pResMgr ) ),
+    aCancelBtn      ( this, ResId( BTN_LOGIN_CANCEL, *pResMgr ) ),
+    aHelpBtn        ( this, ResId( BTN_LOGIN_HELP, *pResMgr ) )
 
 {
     UniString aRequest;
     if ((nFlags & LF_NO_ACCOUNT) != 0 && pRealm && pRealm->Len() != 0)
     {
-        aRequest = ResId(STR_LOGIN_REALM);
+        aRequest = ResId(STR_LOGIN_REALM, *pResMgr);
         aRequest.SearchAndReplaceAscii("%2", *pRealm);
     }
     else
