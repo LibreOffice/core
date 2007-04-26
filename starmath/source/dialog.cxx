@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dialog.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:52:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:14:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -146,9 +146,9 @@ public:
 
 
 SmFontStyles::SmFontStyles() :
-    aNormal ( ResId( RID_FONTREGULAR, SM_MOD()->GetResMgr() ) ),
-    aBold   ( ResId( RID_FONTBOLD,    SM_MOD()->GetResMgr() ) ),
-    aItalic ( ResId( RID_FONTITALIC,  SM_MOD()->GetResMgr() ) )
+    aNormal ( ResId( RID_FONTREGULAR, *SM_MOD()->GetResMgr() ) ),
+    aBold   ( ResId( RID_FONTBOLD,    *SM_MOD()->GetResMgr() ) ),
+    aItalic ( ResId( RID_FONTITALIC,  *SM_MOD()->GetResMgr() ) )
 {
 //    SM_MOD()->GetResMgr().FreeResource();
 
@@ -225,15 +225,15 @@ void SetFontStyle(const XubString &rStyleName, Font &rFont)
 
 SmAboutDialog::SmAboutDialog(Window *pParent, BOOL bFreeRes) :
     ModalDialog  (pParent, SmResId(RID_DEFAULTABOUT)),
-    aFixedText1  (this, ResId(1)),
-    aFixedText2  (this, ResId(2)),
-    aFixedText3  (this, ResId(3)),
-    aFixedText4  (this, ResId(4)),
-    aFixedText5  (this, ResId(5)),
-    aFixedText6  (this, ResId(6)),
-    aReleaseText (this, ResId(7)),
-    aFixedBitmap1(this, ResId(1)),
-    aOKButton1   (this, ResId(1))
+    aFixedText1  (this, SmResId(1)),
+    aFixedText2  (this, SmResId(2)),
+    aFixedText3  (this, SmResId(3)),
+    aFixedText4  (this, SmResId(4)),
+    aFixedText5  (this, SmResId(5)),
+    aFixedText6  (this, SmResId(6)),
+    aReleaseText (this, SmResId(7)),
+    aFixedBitmap1(this, SmResId(1)),
+    aOKButton1   (this, SmResId(1))
 {
     if (bFreeRes)
         FreeResource();
@@ -259,17 +259,17 @@ IMPL_LINK_INLINE_END( SmPrintOptionsTabPage, SizeButtonClickHdl, Button *, pButt
 
 SmPrintOptionsTabPage::SmPrintOptionsTabPage(Window *pParent, const SfxItemSet &rOptions)
     : SfxTabPage(pParent, SmResId(RID_PRINTOPTIONPAGE), rOptions),
-    aFixedLine1     (this, ResId( FL_PRINTOPTIONS )),
-    aTitle          (this, ResId( CB_TITLEROW )),
-    aText           (this, ResId( CB_EQUATION_TEXT )),
-    aFrame          (this, ResId( CB_FRAME )),
-    aFixedLine2     (this, ResId( FL_PRINT_FORMAT )),
-    aSizeNormal     (this, ResId( RB_ORIGINAL_SIZE )),
-    aSizeScaled     (this, ResId( RB_FIT_TO_PAGE )),
-    aSizeZoomed     (this, ResId( RB_ZOOM )),
-    aZoom           (this, ResId( MF_ZOOM )),
-    aFixedLine3      (this, ResId( FL_MISC_OPTIONS )),
-    aNoRightSpaces  (this, ResId( CB_IGNORE_SPACING ))
+    aFixedLine1     (this, SmResId( FL_PRINTOPTIONS )),
+    aTitle          (this, SmResId( CB_TITLEROW )),
+    aText           (this, SmResId( CB_EQUATION_TEXT )),
+    aFrame          (this, SmResId( CB_FRAME )),
+    aFixedLine2     (this, SmResId( FL_PRINT_FORMAT )),
+    aSizeNormal     (this, SmResId( RB_ORIGINAL_SIZE )),
+    aSizeScaled     (this, SmResId( RB_FIT_TO_PAGE )),
+    aSizeZoomed     (this, SmResId( RB_ZOOM )),
+    aZoom           (this, SmResId( MF_ZOOM )),
+    aFixedLine3      (this, SmResId( FL_MISC_OPTIONS )),
+    aNoRightSpaces  (this, SmResId( CB_IGNORE_SPACING ))
 {
     FreeResource();
 
@@ -409,14 +409,14 @@ void SmFontDialog::SetFont(const Font &rFont)
 SmFontDialog::SmFontDialog(Window * pParent,
         OutputDevice *pFntListDevice, BOOL bHideCheckboxes, BOOL bFreeRes)
     : ModalDialog(pParent,SmResId(RID_FONTDIALOG)),
-    aFixedText1     (this, ResId(1)),
-    aFontBox        (this, ResId(1)),
-    aBoldCheckBox   (this, ResId(1)),
-    aItalicCheckBox (this, ResId(2)),
-    aOKButton1      (this, ResId(1)),
-    aCancelButton1  (this, ResId(1)),
-    aShowFont       (this, ResId(1)),
-    aFixedText2     (this, ResId(2))
+    aFixedText1     (this, SmResId(1)),
+    aFontBox        (this, SmResId(1)),
+    aBoldCheckBox   (this, SmResId(1)),
+    aItalicCheckBox (this, SmResId(2)),
+    aOKButton1      (this, SmResId(1)),
+    aCancelButton1  (this, SmResId(1)),
+    aShowFont       (this, SmResId(1)),
+    aFixedText2     (this, SmResId(2))
 {
     if (bFreeRes)
         FreeResource();
@@ -520,22 +520,22 @@ IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, pButton )
 
 SmFontSizeDialog::SmFontSizeDialog(Window * pParent, BOOL bFreeRes)
     : ModalDialog(pParent, SmResId(RID_FONTSIZEDIALOG)),
-    aFixedText1(this, ResId(1)),
-    aBaseSize(this, ResId(1)),
-    aFixedText4(this, ResId(4)),
-    aTextSize(this, ResId(4)),
-    aFixedText5(this, ResId(5)),
-    aIndexSize(this, ResId(5)),
-    aFixedText6(this, ResId(6)),
-    aFunctionSize(this, ResId(6)),
-    aFixedText7(this, ResId(7)),
-    aOperatorSize(this, ResId(7)),
-    aFixedText8(this, ResId(8)),
-    aBorderSize(this, ResId(8)),
-    aFixedLine1(this, ResId(1)),
-    aOKButton1(this, ResId(1)),
-    aCancelButton1(this, ResId(1)),
-    aDefaultButton(this, ResId(1))
+    aFixedText1(this, SmResId(1)),
+    aBaseSize(this, SmResId(1)),
+    aFixedText4(this, SmResId(4)),
+    aTextSize(this, SmResId(4)),
+    aFixedText5(this, SmResId(5)),
+    aIndexSize(this, SmResId(5)),
+    aFixedText6(this, SmResId(6)),
+    aFunctionSize(this, SmResId(6)),
+    aFixedText7(this, SmResId(7)),
+    aOperatorSize(this, SmResId(7)),
+    aFixedText8(this, SmResId(8)),
+    aBorderSize(this, SmResId(8)),
+    aFixedLine1(this, SmResId(1)),
+    aOKButton1(this, SmResId(1)),
+    aCancelButton1(this, SmResId(1)),
+    aDefaultButton(this, SmResId(1))
 {
     if (bFreeRes)
         FreeResource();
@@ -628,26 +628,26 @@ IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton
 
 SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevice, BOOL bFreeRes)
     : ModalDialog(pParent, SmResId(RID_FONTTYPEDIALOG)),
-    aFixedText1    (this, ResId(1)),
-    aVariableFont  (this, ResId(1)),
-    aFixedText2    (this, ResId(2)),
-    aFunctionFont  (this, ResId(2)),
-    aFixedText3    (this, ResId(3)),
-    aNumberFont    (this, ResId(3)),
-    aFixedText4    (this, ResId(4)),
-    aTextFont      (this, ResId(4)),
-    aFixedText5    (this, ResId(5)),
-    aSerifFont     (this, ResId(5)),
-    aFixedText6    (this, ResId(6)),
-    aSansFont      (this, ResId(6)),
-    aFixedText7    (this, ResId(7)),
-    aFixedFont     (this, ResId(7)),
-    aFixedLine1    (this, ResId(1)),
-    aFixedLine2    (this, ResId(2)),
-    aOKButton1     (this, ResId(1)),
-    aCancelButton1 (this, ResId(1)),
-    aMenuButton    (this, ResId(1)),
-    aDefaultButton (this, ResId(2)),
+    aFixedText1    (this, SmResId(1)),
+    aVariableFont  (this, SmResId(1)),
+    aFixedText2    (this, SmResId(2)),
+    aFunctionFont  (this, SmResId(2)),
+    aFixedText3    (this, SmResId(3)),
+    aNumberFont    (this, SmResId(3)),
+    aFixedText4    (this, SmResId(4)),
+    aTextFont      (this, SmResId(4)),
+    aFixedText5    (this, SmResId(5)),
+    aSerifFont     (this, SmResId(5)),
+    aFixedText6    (this, SmResId(6)),
+    aSansFont      (this, SmResId(6)),
+    aFixedText7    (this, SmResId(7)),
+    aFixedFont     (this, SmResId(7)),
+    aFixedLine1    (this, SmResId(1)),
+    aFixedLine2    (this, SmResId(2)),
+    aOKButton1     (this, SmResId(1)),
+    aCancelButton1 (this, SmResId(1)),
+    aMenuButton    (this, SmResId(1)),
+    aDefaultButton (this, SmResId(2)),
     pFontListDev    (pFntListDevice)
 {
     if (bFreeRes)
@@ -740,20 +740,20 @@ SmCategoryDesc::SmCategoryDesc(const ResId& rResId, USHORT nCategoryIdx) :
     Resource(rResId),
     bIsHighContrast(FALSE)
 {
-    if (IsAvailableRes(ResId(1).SetRT(RSC_STRING)))
+    if (IsAvailableRes(ResId(1,*rResId.GetResMgr()).SetRT(RSC_STRING)))
     {
-        Name = XubString(ResId(1));
+        Name = XubString(ResId(1,*rResId.GetResMgr()));
 
         int i;
         for (i = 0; i < 4; i++)
         {
             int nI2 = i + 2;
 
-            if (IsAvailableRes(ResId(nI2).SetRT(RSC_STRING)))
+            if (IsAvailableRes(ResId(nI2,*rResId.GetResMgr()).SetRT(RSC_STRING)))
             {
-                Strings  [i] = new XubString(ResId(nI2));
-                Graphics [i] = new Bitmap(ResId(10*nI2));
-                GraphicsH[i] = new Bitmap(ResId(10*nI2+1));
+                Strings  [i] = new XubString(ResId(nI2,*rResId.GetResMgr()));
+                Graphics [i] = new Bitmap(ResId(10*nI2,*rResId.GetResMgr()));
+                GraphicsH[i] = new Bitmap(ResId(10*nI2+1,*rResId.GetResMgr()));
             }
             else
             {
@@ -990,21 +990,21 @@ void SmDistanceDialog::SetCategory(USHORT nCategory)
 
 SmDistanceDialog::SmDistanceDialog(Window *pParent, BOOL bFreeRes)
     : ModalDialog(pParent, SmResId(RID_DISTANCEDIALOG)),
-    aFixedText1    (this, ResId(1)),
-    aFixedText2    (this, ResId(2)),
-    aFixedText3    (this, ResId(3)),
-    aFixedText4    (this, ResId(4)),
-    aMetricField1  (this, ResId(1)),
-    aMetricField2  (this, ResId(2)),
-    aMetricField3  (this, ResId(3)),
-    aMetricField4  (this, ResId(4)),
-    aOKButton1     (this, ResId(1)),
-    aCancelButton1 (this, ResId(1)),
-    aMenuButton    (this, ResId(1)),
-    aDefaultButton (this, ResId(1)),
-    aCheckBox1     (this, ResId(1)),
-    aBitmap        (this, ResId(1)),
-    aFixedLine     (this, ResId(1))
+    aFixedText1    (this, SmResId(1)),
+    aFixedText2    (this, SmResId(2)),
+    aFixedText3    (this, SmResId(3)),
+    aFixedText4    (this, SmResId(4)),
+    aMetricField1  (this, SmResId(1)),
+    aMetricField2  (this, SmResId(2)),
+    aMetricField3  (this, SmResId(3)),
+    aMetricField4  (this, SmResId(4)),
+    aOKButton1     (this, SmResId(1)),
+    aCancelButton1 (this, SmResId(1)),
+    aMenuButton    (this, SmResId(1)),
+    aDefaultButton (this, SmResId(1)),
+    aCheckBox1     (this, SmResId(1)),
+    aBitmap        (this, SmResId(1)),
+    aFixedLine     (this, SmResId(1))
 {
     for (int i = 0; i < NOCATEGORIES; i++)
         Categories[i] = new SmCategoryDesc(SmResId(i + 1), i);
@@ -1151,13 +1151,13 @@ IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, pButton )
 
 SmAlignDialog::SmAlignDialog(Window * pParent, BOOL bFreeRes)
     : ModalDialog(pParent, SmResId(RID_ALIGNDIALOG)),
-    aLeft          (this, ResId(1)),
-    aCenter        (this, ResId(2)),
-    aRight         (this, ResId(3)),
-    aFixedLine1    (this, ResId(1)),
-    aOKButton1     (this, ResId(1)),
-    aCancelButton1 (this, ResId(1)),
-    aDefaultButton (this, ResId(1))
+    aLeft          (this, SmResId(1)),
+    aCenter        (this, SmResId(2)),
+    aRight         (this, SmResId(3)),
+    aFixedLine1    (this, SmResId(1)),
+    aOKButton1     (this, SmResId(1)),
+    aCancelButton1 (this, SmResId(1)),
+    aDefaultButton (this, SmResId(1))
 {
     if (bFreeRes)
         FreeResource();
@@ -1555,14 +1555,14 @@ IMPL_LINK_INLINE_END( SmSymbolDialog, CloseClickHdl, Button *, pButton )
 SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
         SmSymSetManager &rMgr, SmViewShell &rViewShell, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMBOLDIALOG)),
-    aSymbolSetText      (this, ResId(1)),
-    aSymbolSets         (this, ResId(1)),
-    aSymbolSetDisplay   (this, ResId(1)),
-    aSymbolName         (this, ResId(2)),
-    aSymbolDisplay      (this, ResId(2)),
-    aCloseBtn           (this, ResId(3)),
-    aEditBtn            (this, ResId(1)),
-    aGetBtn             (this, ResId(2)),
+    aSymbolSetText      (this, SmResId(1)),
+    aSymbolSets         (this, SmResId(1)),
+    aSymbolSetDisplay   (this, SmResId(1)),
+    aSymbolName         (this, SmResId(2)),
+    aSymbolDisplay      (this, SmResId(2)),
+    aCloseBtn           (this, SmResId(3)),
+    aEditBtn            (this, SmResId(1)),
+    aGetBtn             (this, SmResId(2)),
     rSymSetMgr          (rMgr),
     rViewSh             (rViewShell),
     pFontListDev        (pFntListDevice)
@@ -2097,33 +2097,33 @@ void SmSymDefineDialog::UpdateButtons()
 SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
         OutputDevice *pFntListDevice, SmSymSetManager &rMgr, BOOL bFreeRes) :
     ModalDialog         (pParent, SmResId(RID_SYMDEFINEDIALOG)),
-    aOldSymbolText      (this, ResId(1)),
-    aOldSymbols         (this, ResId(1)),
-    aOldSymbolSetText   (this, ResId(2)),
-    aOldSymbolSets      (this, ResId(2)),
-    aCharsetDisplay     (this, ResId(1)),
-    aSymbolText         (this, ResId(9)),
-    aSymbols            (this, ResId(4)),
-    aSymbolSetText      (this, ResId(10)),
-    aSymbolSets         (this, ResId(5)),
-    aFontText           (this, ResId(3)),
-    aFonts              (this, ResId(1)),
-    aFontsSubsetFT      (this, ResId( FT_FONTS_SUBSET )),
-    aFontsSubsetLB      (this, ResId( LB_FONTS_SUBSET )),
-    aStyleText          (this, ResId(4)),
-    aStyles             (this, ResId(3)),
-    aOldSymbolName      (this, ResId(7)),
-    aOldSymbolDisplay   (this, ResId(3)),
-    aOldSymbolSetName   (this, ResId(8)),
-    aSymbolName         (this, ResId(5)),
-    aSymbolDisplay      (this, ResId(2)),
-    aSymbolSetName      (this, ResId(6)),
-    aAddBtn             (this, ResId(1)),
-    aChangeBtn          (this, ResId(2)),
-    aDeleteBtn          (this, ResId(3)),
-    aOkBtn              (this, ResId(1)),
-    aCancelBtn          (this, ResId(1)),
-    aRightArrow         (this, ResId(1)),
+    aOldSymbolText      (this, SmResId(1)),
+    aOldSymbols         (this, SmResId(1)),
+    aOldSymbolSetText   (this, SmResId(2)),
+    aOldSymbolSets      (this, SmResId(2)),
+    aCharsetDisplay     (this, SmResId(1)),
+    aSymbolText         (this, SmResId(9)),
+    aSymbols            (this, SmResId(4)),
+    aSymbolSetText      (this, SmResId(10)),
+    aSymbolSets         (this, SmResId(5)),
+    aFontText           (this, SmResId(3)),
+    aFonts              (this, SmResId(1)),
+    aFontsSubsetFT      (this, SmResId( FT_FONTS_SUBSET )),
+    aFontsSubsetLB      (this, SmResId( LB_FONTS_SUBSET )),
+    aStyleText          (this, SmResId(4)),
+    aStyles             (this, SmResId(3)),
+    aOldSymbolName      (this, SmResId(7)),
+    aOldSymbolDisplay   (this, SmResId(3)),
+    aOldSymbolSetName   (this, SmResId(8)),
+    aSymbolName         (this, SmResId(5)),
+    aSymbolDisplay      (this, SmResId(2)),
+    aSymbolSetName      (this, SmResId(6)),
+    aAddBtn             (this, SmResId(1)),
+    aChangeBtn          (this, SmResId(2)),
+    aDeleteBtn          (this, SmResId(3)),
+    aOkBtn              (this, SmResId(1)),
+    aCancelBtn          (this, SmResId(1)),
+    aRightArrow         (this, SmResId(1)),
     pFontList           (NULL),
     pSubsetMap          (NULL),
     rSymSetMgr          (rMgr)
