@@ -4,9 +4,9 @@
  *
  *  $RCSfile: abpfinalpage.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:37:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:04:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,14 +91,14 @@ namespace abp
     //---------------------------------------------------------------------
     FinalPage::FinalPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_FINAL))
-        ,m_aExplanation         ( this, ResId( FT_FINISH_EXPL ) )
-        ,m_aLocationLabel       ( this, ResId( FT_LOCATION ) )
-        ,m_aLocation            ( this, ResId( CBB_LOCATION ) )
-        ,m_aBrowse              ( this, ResId( PB_BROWSE ) )
-        ,m_aRegisterName        ( this, ResId( CB_REGISTER_DS ) )
-        ,m_aNameLabel           ( this, ResId( FT_NAME_EXPL ) )
-        ,m_aName                ( this, ResId( ET_DATASOURCENAME ) )
-        ,m_aDuplicateNameError  ( this, ResId( FT_DUPLICATENAME ) )
+        ,m_aExplanation         ( this, ModuleRes( FT_FINISH_EXPL ) )
+        ,m_aLocationLabel       ( this, ModuleRes( FT_LOCATION ) )
+        ,m_aLocation            ( this, ModuleRes( CBB_LOCATION ) )
+        ,m_aBrowse              ( this, ModuleRes( PB_BROWSE ) )
+        ,m_aRegisterName        ( this, ModuleRes( CB_REGISTER_DS ) )
+        ,m_aNameLabel           ( this, ModuleRes( FT_NAME_EXPL ) )
+        ,m_aName                ( this, ModuleRes( ET_DATASOURCENAME ) )
+        ,m_aDuplicateNameError  ( this, ModuleRes( FT_DUPLICATENAME ) )
         ,m_bCheckFileName       (sal_True)
     {
         FreeResource();
