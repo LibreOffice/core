@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: kz $ $Date: 2006-11-07 14:49:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:32:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,22 +69,22 @@ sal_Char __READONLY_DATA sHTTPScheme[]    = INET_HTTP_SCHEME;
 
 SvxHyperlinkDocTp::SvxHyperlinkDocTp ( Window *pParent, const SfxItemSet& rItemSet)
     : SvxHyperlinkTabPageBase ( pParent, SVX_RES( RID_SVXPAGE_HYPERLINK_DOCUMENT ), rItemSet ),
-    maGrpDocument   ( this, ResId (GRP_DOCUMENT) ),
-    maFtPath        ( this, ResId (FT_PATH_DOC) ),
+    maGrpDocument   ( this, SVX_RES (GRP_DOCUMENT) ),
+    maFtPath        ( this, SVX_RES (FT_PATH_DOC) ),
     maCbbPath       ( this, INET_PROT_FILE ),
-    maBtFileopen    ( this, ResId (BTN_FILEOPEN) ),
-    maGrpTarget     ( this, ResId (GRP_TARGET) ),
-    maFtTarget      ( this, ResId (FT_TARGET_DOC) ),
-    maEdTarget      ( this, ResId (ED_TARGET_DOC) ),
-    maFtURL         ( this, ResId (FT_URL) ),
-    maFtFullURL     ( this, ResId (FT_FULL_URL) ),
-    maBtBrowse      ( this, ResId (BTN_BROWSE) ),
+    maBtFileopen    ( this, SVX_RES (BTN_FILEOPEN) ),
+    maGrpTarget     ( this, SVX_RES (GRP_TARGET) ),
+    maFtTarget      ( this, SVX_RES (FT_TARGET_DOC) ),
+    maEdTarget      ( this, SVX_RES (ED_TARGET_DOC) ),
+    maFtURL         ( this, SVX_RES (FT_URL) ),
+    maFtFullURL     ( this, SVX_RES (FT_FULL_URL) ),
+    maBtBrowse      ( this, SVX_RES (BTN_BROWSE) ),
     mbMarkWndOpen   ( FALSE )
 {
     // Set HC bitmaps and disable display of bitmap names.
-    maBtBrowse.SetModeImage( Image( ResId( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtBrowse.SetModeImage( Image( SVX_RES( IMG_BROWSE_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtBrowse.EnableTextDisplay (FALSE);
-    maBtFileopen.SetModeImage( Image( ResId( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
+    maBtFileopen.SetModeImage( Image( SVX_RES( IMG_FILEOPEN_HC ) ), BMP_COLOR_HIGHCONTRAST );
     maBtFileopen.EnableTextDisplay (FALSE);
 
     InitStdControls();
