@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tplneend.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:16:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:47:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -124,18 +124,18 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_LINEEND_DEF ), rInAttrs ),
 
-    aFlTip              ( this, ResId( FL_TIP ) ),
-    aFTTitle            ( this, ResId( FT_TITLE ) ),
-    aEdtName            ( this, ResId( EDT_NAME ) ),
-    aFTLineEndStyle     ( this, ResId( FT_LINE_END_STYLE ) ),
-    aLbLineEnds         ( this, ResId( LB_LINEENDS ) ),
-    aBtnAdd             ( this, ResId( BTN_ADD ) ),
-    aBtnModify          ( this, ResId( BTN_MODIFY ) ),
-    aBtnDelete          ( this, ResId( BTN_DELETE ) ),
-    aBtnLoad            ( this, ResId( BTN_LOAD ) ),
-    aBtnSave            ( this, ResId( BTN_SAVE ) ),
-    aFiTip              ( this, ResId( FI_TIP ) ),
-    aCtlPreview         ( this, ResId( CTL_PREVIEW ), &XOut ),
+    aFlTip              ( this, SVX_RES( FL_TIP ) ),
+    aFTTitle            ( this, SVX_RES( FT_TITLE ) ),
+    aEdtName            ( this, SVX_RES( EDT_NAME ) ),
+    aFTLineEndStyle     ( this, SVX_RES( FT_LINE_END_STYLE ) ),
+    aLbLineEnds         ( this, SVX_RES( LB_LINEENDS ) ),
+    aBtnAdd             ( this, SVX_RES( BTN_ADD ) ),
+    aBtnModify          ( this, SVX_RES( BTN_MODIFY ) ),
+    aBtnDelete          ( this, SVX_RES( BTN_DELETE ) ),
+    aBtnLoad            ( this, SVX_RES( BTN_LOAD ) ),
+    aBtnSave            ( this, SVX_RES( BTN_SAVE ) ),
+    aFiTip              ( this, SVX_RES( FI_TIP ) ),
+    aCtlPreview         ( this, SVX_RES( CTL_PREVIEW ), &XOut ),
 
     rOutAttrs           ( rInAttrs ),
     pPolyObj( NULL ),
@@ -149,8 +149,8 @@ SvxLineEndDefTabPage::SvxLineEndDefTabPage
     rXLSet              ( aXLineAttr.GetItemSet() ),
     pLineEndList( NULL )
 {
-    aBtnLoad.SetModeImage( Image( ResId( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
-    aBtnSave.SetModeImage( Image( ResId( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnLoad.SetModeImage( Image( SVX_RES( RID_SVXIMG_LOAD_H ) ), BMP_COLOR_HIGHCONTRAST );
+    aBtnSave.SetModeImage( Image( SVX_RES( RID_SVXIMG_SAVE_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 
@@ -405,8 +405,8 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
     {
-        ResMgr* pMgr = DIALOG_MGR();
-        String aDesc( ResId( RID_SVXSTR_DESC_LINEEND, pMgr ) );
+        ResMgr& rMgr = DIALOG_MGR();
+        String aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
         String aName( aEdtName.GetText() );
         long nCount = pLineEndList->Count();
         BOOL bDifferent = TRUE;
@@ -420,14 +420,14 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
         if ( !bDifferent )
         {
             WarningBox aWarningBox( DLGWIN, WinBits( WB_OK ),
-                String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
             aWarningBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
             aWarningBox.Execute();
 
             //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+            AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             BOOL bLoop = TRUE;
 
@@ -513,9 +513,9 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
         XLineEndEntry* pEntry;
 
-        ResMgr* pMgr = DIALOG_MGR();
-        String aNewName( ResId( RID_SVXSTR_LINEEND, pMgr ) );
-        String aDesc( ResId( RID_SVXSTR_DESC_LINEEND, pMgr ) );
+        ResMgr& rMgr = DIALOG_MGR();
+        String aNewName( ResId( RID_SVXSTR_LINEEND, rMgr ) );
+        String aDesc( ResId( RID_SVXSTR_DESC_LINEEND, rMgr ) );
         String aName;
 
         long nCount = pLineEndList->Count();
@@ -537,7 +537,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
         //CHINA001 SvxNameDialog* pDlg = new SvxNameDialog( DLGWIN, aName, aDesc );
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, ResId(RID_SVXDLG_NAME) );
+        AbstractSvxNameDialog* pDlg = pFact->CreateSvxNameDialog( DLGWIN, aName, aDesc, RID_SVXDLG_NAME );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         BOOL bLoop = TRUE;
 
@@ -572,7 +572,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
             }
             else
             {
-                WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, pMgr ) ) );
+                WarningBox aBox( DLGWIN, WinBits( WB_OK ),String( ResId( RID_SVXSTR_WARN_NAME_DUPLICATE, rMgr ) ) );
                 aBox.SetHelpId( HID_WARN_NAME_DUPLICATE );
                 aBox.Execute();
             }
@@ -633,13 +633,13 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 {
-    ResMgr* pMgr = DIALOG_MGR();
+    ResMgr& rMgr = DIALOG_MGR();
     USHORT nReturn = RET_YES;
 
     if ( *pnLineEndListState & CT_MODIFIED )
     {
         nReturn = WarningBox( DLGWIN, WinBits( WB_YES_NO_CANCEL ),
-            String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, pMgr ) ) ).Execute();
+            String( ResId( RID_SVXSTR_WARN_TABLE_OVERWRITE, rMgr ) ) ).Execute();
 
         if ( nReturn == RET_YES )
             pLineEndList->Save();
@@ -684,7 +684,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
 
 /*                  // Ermitteln (evtl. abschneiden) des Namens und in
                     // der GroupBox darstellen
-                    String aString( ResId( RID_SVXSTR_TABLE, pMgr ) );
+                    String aString( ResId( RID_SVXSTR_TABLE, rMgr ) );
                     aString.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
                     if( aURL.getBase().Len() > 18 )
                     {
@@ -704,7 +704,7 @@ IMPL_LINK( SvxLineEndDefTabPage, ClickLoadHdl_Impl, void *, EMPTYARG )
             }
             else
                 ErrorBox( DLGWIN, WinBits( WB_OK ),
-                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, pMgr ) ) ).Execute();
+                    String( ResId( RID_SVXSTR_READ_DATA_ERROR, rMgr ) ) ).Execute();
         }
     }
 
