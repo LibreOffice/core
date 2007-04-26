@@ -4,9 +4,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:35:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:35:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,23 +106,23 @@ static USHORT pCaptionRanges[] =
 SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs)
  :  SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_CAPTION ), rInAttrs ),
 
-    aCT_CAPTTYPE(       this, ResId( CT_CAPTTYPE ) ),
-    aFT_ABSTAND(        this, ResId( FT_ABSTAND ) ),
-    aMF_ABSTAND(        this, ResId( MF_ABSTAND ) ),
-    aFT_WINKEL(         this, ResId( FT_WINKEL ) ),
-    aLB_WINKEL(         this, ResId( LB_WINKEL ) ),
-    aFT_ANSATZ(         this, ResId( FT_ANSATZ ) ),
-    aLB_ANSATZ(         this, ResId( LB_ANSATZ ) ),
-    aFT_UM(             this, ResId( FT_UM ) ),
-    aMF_ANSATZ(         this, ResId( MF_ANSATZ ) ),
-    aFT_ANSATZ_REL(     this, ResId( FT_ANSATZ_REL ) ),
-    aLB_ANSATZ_REL(     this, ResId( LB_ANSATZ_REL ) ),
-    aFT_LAENGE(         this, ResId( FT_LAENGE ) ),
-    aMF_LAENGE(         this, ResId( MF_LAENGE ) ),
-    aCB_LAENGE(         this, ResId( CB_LAENGE ) ),
+    aCT_CAPTTYPE(       this, SVX_RES( CT_CAPTTYPE ) ),
+    aFT_ABSTAND(        this, SVX_RES( FT_ABSTAND ) ),
+    aMF_ABSTAND(        this, SVX_RES( MF_ABSTAND ) ),
+    aFT_WINKEL(         this, SVX_RES( FT_WINKEL ) ),
+    aLB_WINKEL(         this, SVX_RES( LB_WINKEL ) ),
+    aFT_ANSATZ(         this, SVX_RES( FT_ANSATZ ) ),
+    aLB_ANSATZ(         this, SVX_RES( LB_ANSATZ ) ),
+    aFT_UM(             this, SVX_RES( FT_UM ) ),
+    aMF_ANSATZ(         this, SVX_RES( MF_ANSATZ ) ),
+    aFT_ANSATZ_REL(     this, SVX_RES( FT_ANSATZ_REL ) ),
+    aLB_ANSATZ_REL(     this, SVX_RES( LB_ANSATZ_REL ) ),
+    aFT_LAENGE(         this, SVX_RES( FT_LAENGE ) ),
+    aMF_LAENGE(         this, SVX_RES( MF_LAENGE ) ),
+    aCB_LAENGE(         this, SVX_RES( CB_LAENGE ) ),
 
-    aStrHorzList( ResId(STR_HORZ_LIST) ),
-    aStrVertList( ResId(STR_VERT_LIST) ),
+    aStrHorzList( SVX_RES(STR_HORZ_LIST) ),
+    aStrVertList( SVX_RES(STR_VERT_LIST) ),
 
     rOutAttrs       ( rInAttrs )
 {
@@ -147,8 +147,8 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     sal_uInt16 nBitmap;
     for( nBitmap = 0; nBitmap < CAPTYPE_BITMAPS_COUNT; nBitmap++ )
     {
-        mpBmpCapTypes[nBitmap]  = new Image(Bitmap(ResId(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
-        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(ResId(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
+        mpBmpCapTypes[nBitmap]  = new Image(Bitmap(SVX_RES(BMP_CAPTTYPE_1   + nBitmap)), COL_LIGHTMAGENTA );
+        mpBmpCapTypesH[nBitmap] = new Image(Bitmap(SVX_RES(BMP_CAPTTYPE_1_H + nBitmap)), COL_LIGHTMAGENTA );
     }
 
     //------------ValueSet installieren--------------------------
@@ -158,9 +158,9 @@ SvxCaptionTabPage::SvxCaptionTabPage(Window* pParent, const SfxItemSet& rInAttrs
     aCT_CAPTTYPE.SetSelectHdl(LINK( this, SvxCaptionTabPage, SelectCaptTypeHdl_Impl));
 
     Image aImage;
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, String(ResId(STR_CAPTTYPE_1)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, String(ResId(STR_CAPTTYPE_2)));
-    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, String(ResId(STR_CAPTTYPE_3)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_1, aImage, String(SVX_RES(STR_CAPTTYPE_1)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_2, aImage, String(SVX_RES(STR_CAPTTYPE_2)));
+    aCT_CAPTTYPE.InsertItem(BMP_CAPTTYPE_3, aImage, String(SVX_RES(STR_CAPTTYPE_3)));
 
     FillValueSet();
 
