@@ -4,9 +4,9 @@
  *
  *  $RCSfile: frmsel.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:21:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:31:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -256,7 +256,7 @@ FrameBorderType FrameBorder::GetKeyboardNeighbor( USHORT nKeyCode ) const
 FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     Resource( SVX_RES( RID_SVXSTR_BORDER_CONTROL ) ),
     mrFrameSel( rFrameSel ),
-    maBmpArrows( ResId( BMP_FRMSEL_ARROWS ) ),
+    maBmpArrows( SVX_RES( BMP_FRMSEL_ARROWS ) ),
     maLeft( FRAMEBORDER_LEFT ),
     maRight( FRAMEBORDER_RIGHT ),
     maTop( FRAMEBORDER_TOP ),
