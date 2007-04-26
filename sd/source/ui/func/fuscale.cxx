@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fuscale.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:22:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:38:53 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,7 +177,7 @@ void FuScale::DoExecute( SfxRequest& rReq )
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
         if(pFact)
         {
-            pDlg = pFact->CreateSvxZoomDialog(NULL, aNewAttr, ResId(RID_SVXDLG_ZOOM));
+            pDlg = pFact->CreateSvxZoomDialog(NULL, aNewAttr, RID_SVXDLG_ZOOM);
         }
 
         if( pDlg )
