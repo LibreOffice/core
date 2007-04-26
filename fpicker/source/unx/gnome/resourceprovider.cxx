@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 17:52:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:26:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -209,12 +209,12 @@ public:
             // translate the control id to a resource id
             sal_Int16 aResId = CtrlIdToResId( aId );
             if ( aResId > -1 )
-                aResString = String( ResId( aResId, m_ResMgr ) );
+                aResString = String( ResId( aResId, *m_ResMgr ) );
         else
         {
                 aResId = OtherCtrlIdToResId( aId );
                 if ( aResId > -1 )
-                    aResString = String( ResId( aResId, m_OtherResMgr ) );
+                    aResString = String( ResId( aResId, *m_OtherResMgr ) );
         }
         if ( aResId > -1 )
                 aResOUString = OUString( aResString );
