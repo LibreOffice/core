@@ -4,9 +4,9 @@
  *
  *  $RCSfile: internationaloptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:26:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:35:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -79,12 +79,12 @@ namespace offapp
     };
 
     inline InternationalOptionsPage::IMPL::IMPL( Window* _pParent ) :
-        m_aFL_DefaultTextDirection  ( _pParent, ResId( FL_DEFTXTDIRECTION ) )
-        ,m_aRB_TxtDirLeft2Right     ( _pParent, ResId( RB_TXTDIR_LEFT2RIGHT ) )
-        ,m_aRB_TxtDirRight2Left     ( _pParent, ResId( RB_TXTDIR_RIGHT2LEFT ) )
-        ,m_aFL_SheetView            ( _pParent, ResId( FL_SHEETVIEW ) )
-        ,m_aCB_ShtVwRight2Left      ( _pParent, ResId( CB_SHTVW_RIGHT2LEFT ) )
-        ,m_aCB_ShtVwCurrentDocOnly  ( _pParent, ResId( CB_SHTVW_CURRENTDOCONLY ) )
+        m_aFL_DefaultTextDirection  ( _pParent, SVX_RES( FL_DEFTXTDIRECTION ) )
+        ,m_aRB_TxtDirLeft2Right     ( _pParent, SVX_RES( RB_TXTDIR_LEFT2RIGHT ) )
+        ,m_aRB_TxtDirRight2Left     ( _pParent, SVX_RES( RB_TXTDIR_RIGHT2LEFT ) )
+        ,m_aFL_SheetView            ( _pParent, SVX_RES( FL_SHEETVIEW ) )
+        ,m_aCB_ShtVwRight2Left      ( _pParent, SVX_RES( CB_SHTVW_RIGHT2LEFT ) )
+        ,m_aCB_ShtVwCurrentDocOnly  ( _pParent, SVX_RES( CB_SHTVW_CURRENTDOCONLY ) )
 
         ,m_bEnable_SheetView_Opt    ( FALSE )
     {
@@ -145,7 +145,7 @@ namespace offapp
     }
 
     InternationalOptionsPage::InternationalOptionsPage( Window* _pParent, const SfxItemSet& _rAttrSet ) :
-        SfxTabPage  ( _pParent, ResId( RID_OFA_TP_INTERNATIONAL, DIALOG_MGR() ), _rAttrSet )
+        SfxTabPage  ( _pParent, SVX_RES( RID_OFA_TP_INTERNATIONAL ), _rAttrSet )
 
         ,m_pImpl    ( new IMPL( this ) )
     {
