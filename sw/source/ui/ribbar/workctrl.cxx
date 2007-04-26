@@ -4,9 +4,9 @@
  *
  *  $RCSfile: workctrl.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:12:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:14:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -526,10 +526,10 @@ static USHORT __READONLY_DATA aNavigationHelpIds[ NAVI_ENTRIES ] =
 SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFrame )
     : SfxPopupWindow(nId, rFrame, SW_RES(RID_SCROLL_NAVIGATION_WIN) ),
     aToolBox(this, 0),
-    aSeparator(this, ResId(FL_SEP)),
-    aInfoField(this, ResId(FI_INFO)),
-    aIList(ResId(IL_VALUES)),
-    aIListH(ResId(ILH_VALUES)),
+    aSeparator(this, SW_RES(FL_SEP)),
+    aInfoField(this, SW_RES(FI_INFO)),
+    aIList(SW_RES(IL_VALUES)),
+    aIListH(SW_RES(ILH_VALUES)),
     nFwdId(FN_START_OF_NEXT_PAGE),
     nBackId(FN_START_OF_PREV_PAGE)
 {
@@ -547,7 +547,7 @@ SwScrollNaviPopup::SwScrollNaviPopup( USHORT nId, const Reference< XFrame >& rFr
         {
             // -2, there's no string for Next/Prev
             USHORT nResStr = ST_TBL - 2 + nId - NID_START;
-            sText = String(ResId(nResStr));
+            sText = String(SW_RES(nResStr));
             nTbxBits = TIB_CHECKABLE;
         }
         aToolBox.InsertItem(nId, sText, nTbxBits);
@@ -776,9 +776,9 @@ SwNaviImageButton::SwNaviImageButton(
     const Reference< XFrame >& rFrame ) :
     ImageButton(pParent, SW_RES(BTN_NAVI)),
         pPopup(0),
-        aImage(ResId(IMG_BTN)),
-        aImageH(ResId(IMG_BTN_H)),
-        sQuickText(ResId(ST_QUICK)),
+        aImage(SW_RES(IMG_BTN)),
+        aImageH(SW_RES(IMG_BTN_H)),
+        sQuickText(SW_RES(ST_QUICK)),
         m_xFrame( rFrame ),
         pPopupWindow(0),
         pFloatingWindow(0)
