@@ -4,9 +4,9 @@
  *
  *  $RCSfile: SwXFilterOptions.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:27:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:22:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -181,7 +181,7 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
         DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
 
-        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream, ResId( DLG_ASCII_FILTER ));
+        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream, DLG_ASCII_FILTER );
         DBG_ASSERT(pAsciiDlg, "Dialogdiet fail!");//CHINA001
         if(RET_OK == pAsciiDlg->Execute()) //CHINA001 if(RET_OK == aAsciiDlg.Execute())
         {
