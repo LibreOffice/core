@@ -4,9 +4,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.75 $
+#   $Revision: 1.76 $
 #
-#   last change: $Author: vg $ $Date: 2007-02-06 13:59:24 $
+#   last change: $Author: rt $ $Date: 2007-04-26 13:57:21 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -321,6 +321,7 @@ create_patch : $(MISC)$/$(TARFILE_ROOTDIR) $(P_ADDITIONAL_FILES) $(PACKAGE_DIR)$
     -cd $(PRJ)$/$(ROUT) && diff -rc misc$/$(TARFILE_ROOTDIR) misc$/build$/$(TARFILE_ROOTDIR) | $(PERL) $(SOLARENV)$/bin$/cleandiff.pl | tr -d "\015" > misc$/$(NEW_PATCH_FILE_NAME).tmp
     @@-mv $(NEW_PATCH_FILE_NAME) $(NEW_PATCH_FILE_NAME).bak
     @@-mv $(MISC)$/$(NEW_PATCH_FILE_NAME).tmp $(PRJ)$/$(NEW_PATCH_FILE_NAME)
+    $(MAKECMD) $(MAKEMACROS) patch
     @echo still some problems with win32 generated patches...
 
 create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
