@@ -4,9 +4,9 @@
  *
  *  $RCSfile: cellsh2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:48:47 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:56:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,7 +253,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                    pDlg = pFact->CreateScSubTotalDlg( pTabViewShell->GetDialogParent(), &aArgSet, ResId(RID_SCDLG_SUBTOTALS) );
+                    pDlg = pFact->CreateScSubTotalDlg( pTabViewShell->GetDialogParent(), &aArgSet, RID_SCDLG_SUBTOTALS );
                     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                     pDlg->SetCurPageId(1);
 
@@ -389,7 +389,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                    pDlg = pFact->CreateScSortDlg( pTabViewShell->GetDialogParent(),  &aArgSet, ResId(RID_SCDLG_SORT) );
+                    pDlg = pFact->CreateScSortDlg( pTabViewShell->GetDialogParent(),  &aArgSet, RID_SCDLG_SORT );
                     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                     pDlg->SetCurPageId(1);
 
@@ -627,7 +627,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                    AbstractScDataPilotSourceTypeDlg* pTypeDlg = pFact->CreateScDataPilotSourceTypeDlg( pTabViewShell->GetDialogParent(), bEnableExt,ResId(RID_SCDLG_DAPITYPE) );
+                    AbstractScDataPilotSourceTypeDlg* pTypeDlg = pFact->CreateScDataPilotSourceTypeDlg( pTabViewShell->GetDialogParent(), bEnableExt, RID_SCDLG_DAPITYPE );
                     DBG_ASSERT(pTypeDlg, "Dialog create fail!");//CHINA001
                     if ( pTypeDlg->Execute() == RET_OK )
                     {
@@ -636,7 +636,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             uno::Sequence<rtl::OUString> aSources = ScDPObject::GetRegisteredSources();
                             //CHINA001 ScDataPilotServiceDlg* pServDlg = new ScDataPilotServiceDlg(
                             //CHINA001                  pTabViewShell->GetDialogParent(), aSources );
-                            AbstractScDataPilotServiceDlg* pServDlg = pFact->CreateScDataPilotServiceDlg( pTabViewShell->GetDialogParent(), aSources,ResId(RID_SCDLG_DAPISERVICE) );
+                            AbstractScDataPilotServiceDlg* pServDlg = pFact->CreateScDataPilotServiceDlg( pTabViewShell->GetDialogParent(), aSources, RID_SCDLG_DAPISERVICE );
                             DBG_ASSERT(pServDlg, "Dialog create fail!");//CHINA001
                             if ( pServDlg->Execute() == RET_OK )
                             {
@@ -658,7 +658,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                             //ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                             DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                            AbstractScDataPilotDatabaseDlg* pDataDlg = pFact->CreateScDataPilotDatabaseDlg( pTabViewShell->GetDialogParent(),ResId(RID_SCDLG_DAPIDATA));
+                            AbstractScDataPilotDatabaseDlg* pDataDlg = pFact->CreateScDataPilotDatabaseDlg( pTabViewShell->GetDialogParent(), RID_SCDLG_DAPIDATA);
                             DBG_ASSERT(pDataDlg, "Dialog create fail!");//CHINA001
                             if ( pDataDlg->Execute() == RET_OK )
                             {
@@ -817,7 +817,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                                                                                 String(ScResId(SCSTR_SELECTDB)),
                                                                                 String(ScResId(SCSTR_AREAS)),
                                                                                 aList,
-                                                                                ResId(RID_SCDLG_SELECTDB));
+                                                                                RID_SCDLG_SELECTDB);
                         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                         if ( pDlg->Execute() == RET_OK )
                         {
@@ -917,7 +917,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     //CHINA001 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                     //CHINA001 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg( NULL, &aArgSet, ResId(TAB_DLG_VALIDATION) );
+                    SfxAbstractTabDialog* pDlg = pFact->CreateScValidationDlg( NULL, &aArgSet, TAB_DLG_VALIDATION );
                     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
 
                     if ( pDlg->Execute() == RET_OK )
