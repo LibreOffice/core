@@ -4,9 +4,9 @@
  *
  *  $RCSfile: printopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:34:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:11:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -75,29 +75,29 @@ static BOOL     bOutputForPrinter = TRUE;
 SfxCommonPrintOptionsTabPage::SfxCommonPrintOptionsTabPage( Window* pParent, const SfxItemSet& rSet ) :
     SfxTabPage( pParent, SfxResId( TP_COMMONPRINTOPTIONS ), rSet ),
 
-    aReduceGB( this, ResId( GB_REDUCE ) ),
-    aOutputTypeFT( this, ResId( FT_OUTPUTTYPE ) ),
-    aPrinterOutputRB( this, ResId( RB_PRINTEROUTPUT ) ),
-    aPrintFileOutputRB( this, ResId( RB_PRINTFILEOUTPUT ) ),
-    aOutputGB( this, ResId( GB_OUTPUT ) ),
-    aReduceTransparencyCB( this, ResId( CB_REDUCETRANSPARENCY ) ),
-    aReduceTransparencyAutoRB( this, ResId( RB_REDUCETRANSPARENCY_AUTO ) ),
-    aReduceTransparencyNoneRB( this, ResId( RB_REDUCETRANSPARENCY_NONE ) ),
-    aReduceGradientsCB( this, ResId( CB_REDUCEGRADIENTS ) ),
-    aReduceGradientsStripesRB( this, ResId( RB_REDUCEGRADIENTS_STRIPES ) ),
-    aReduceGradientsColorRB( this, ResId( RB_REDUCEGRADIENTS_COLOR ) ),
-    aReduceGradientsStepCountNF( this, ResId( NF_REDUCEGRADIENTS_STEPCOUNT ) ),
-    aReduceBitmapsCB( this, ResId( CB_REDUCEBITMAPS ) ),
-    aReduceBitmapsOptimalRB( this, ResId( RB_REDUCEBITMAPS_OPTIMAL ) ),
-    aReduceBitmapsNormalRB( this, ResId( RB_REDUCEBITMAPS_NORMAL ) ),
-    aReduceBitmapsResolutionRB( this, ResId( RB_REDUCEBITMAPS_RESOLUTION ) ),
-    aReduceBitmapsResolutionLB( this, ResId( LB_REDUCEBITMAPS_RESOLUTION ) ),
-    aReduceBitmapsTransparencyCB( this, ResId( CB_REDUCEBITMAPS_TRANSPARENCY ) ),
-    aConvertToGreyscalesCB( this, ResId( CB_CONVERTTOGREYSCALES ) ),
-    aWarnGB( this, ResId( GB_PRINT_WARN ) ),
-    aPaperSizeCB( this, ResId( CB_PAPERSIZE ) ),
-    aPaperOrientationCB( this, ResId( CB_PAPERORIENTATION ) ),
-    aTransparencyCB( this, ResId( CB_TRANSPARENCY ) )
+    aReduceGB( this, SfxResId( GB_REDUCE ) ),
+    aOutputTypeFT( this, SfxResId( FT_OUTPUTTYPE ) ),
+    aPrinterOutputRB( this, SfxResId( RB_PRINTEROUTPUT ) ),
+    aPrintFileOutputRB( this, SfxResId( RB_PRINTFILEOUTPUT ) ),
+    aOutputGB( this, SfxResId( GB_OUTPUT ) ),
+    aReduceTransparencyCB( this, SfxResId( CB_REDUCETRANSPARENCY ) ),
+    aReduceTransparencyAutoRB( this, SfxResId( RB_REDUCETRANSPARENCY_AUTO ) ),
+    aReduceTransparencyNoneRB( this, SfxResId( RB_REDUCETRANSPARENCY_NONE ) ),
+    aReduceGradientsCB( this, SfxResId( CB_REDUCEGRADIENTS ) ),
+    aReduceGradientsStripesRB( this, SfxResId( RB_REDUCEGRADIENTS_STRIPES ) ),
+    aReduceGradientsColorRB( this, SfxResId( RB_REDUCEGRADIENTS_COLOR ) ),
+    aReduceGradientsStepCountNF( this, SfxResId( NF_REDUCEGRADIENTS_STEPCOUNT ) ),
+    aReduceBitmapsCB( this, SfxResId( CB_REDUCEBITMAPS ) ),
+    aReduceBitmapsOptimalRB( this, SfxResId( RB_REDUCEBITMAPS_OPTIMAL ) ),
+    aReduceBitmapsNormalRB( this, SfxResId( RB_REDUCEBITMAPS_NORMAL ) ),
+    aReduceBitmapsResolutionRB( this, SfxResId( RB_REDUCEBITMAPS_RESOLUTION ) ),
+    aReduceBitmapsResolutionLB( this, SfxResId( LB_REDUCEBITMAPS_RESOLUTION ) ),
+    aReduceBitmapsTransparencyCB( this, SfxResId( CB_REDUCEBITMAPS_TRANSPARENCY ) ),
+    aConvertToGreyscalesCB( this, SfxResId( CB_CONVERTTOGREYSCALES ) ),
+    aWarnGB( this, SfxResId( GB_PRINT_WARN ) ),
+    aPaperSizeCB( this, SfxResId( CB_PAPERSIZE ) ),
+    aPaperOrientationCB( this, SfxResId( CB_PAPERORIENTATION ) ),
+    aTransparencyCB( this, SfxResId( CB_TRANSPARENCY ) )
 {
     FreeResource();
 
@@ -403,12 +403,12 @@ IMPL_LINK( SfxCommonPrintOptionsTabPage, ToggleOutputPrintFileRBHdl, RadioButton
 
 TransparencyPrintWarningBox::TransparencyPrintWarningBox( Window* pParent ) :
     ModalDialog( pParent, SfxResId( RID_WARN_PRINTTRANSPARENCY ) ),
-    aWarnFI     ( this, ResId( FI_PRINTTRANSWARN ) ),
-    aWarnFT     ( this, ResId( FT_PRINTTRANSWARN ) ),
-    aYesBtn     ( this, ResId( BTN_PRINTTRANS_YES ) ),
-    aNoBtn      ( this, ResId( BTN_PRINTTRANS_NO ) ),
-    aCancelBtn  ( this, ResId( BTN_PRINTTRANS_CANCEL ) ),
-    aNoWarnCB   ( this, ResId( CBX_NOPRINTTRANSWARN ) )
+    aWarnFI     ( this, SfxResId( FI_PRINTTRANSWARN ) ),
+    aWarnFT     ( this, SfxResId( FT_PRINTTRANSWARN ) ),
+    aYesBtn     ( this, SfxResId( BTN_PRINTTRANS_YES ) ),
+    aNoBtn      ( this, SfxResId( BTN_PRINTTRANS_NO ) ),
+    aCancelBtn  ( this, SfxResId( BTN_PRINTTRANS_CANCEL ) ),
+    aNoWarnCB   ( this, SfxResId( CBX_NOPRINTTRANSWARN ) )
 {
     FreeResource();
 
