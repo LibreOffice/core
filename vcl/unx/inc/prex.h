@@ -4,9 +4,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-06 10:00:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:40:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,11 +57,21 @@
 #if defined __cplusplus
 extern "C" {
 #endif
+
+#if defined(LINUX) || defined(FREEBSD) || defined(MACOSX) // should really check for xfree86 or for X11R6.1 and higher
+#define __XKeyboardExtension__ 1
+#else
+#define __XKeyboardExtension__ 0
+#endif
+
 #include <X11/X.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/StringDefs.h>
 #include <X11/extensions/Xrender.h>
+#if __XKeyboardExtension__
+#include <X11/XKBlib.h>
+#endif
 typedef unsigned long Pixel;
 
 #undef  DestroyAll
