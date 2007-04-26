@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resid.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 06:09:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -46,8 +46,15 @@ namespace textconversiondlgs
 {
 //.............................................................................
 
+static ResMgr* getTextConversionResMgr()
+{
+    static ResMgr* pMgr = NULL;
+    if( ! pMgr )
+        pMgr = ResMgr::CreateResMgr( "textconversiondlgs" MAKE_NUMSTR(SUPD) );
+    return pMgr;
+}
 TextConversionDlgs_ResId::TextConversionDlgs_ResId(USHORT nId)
-         : ResId( nId, ResMgr::CreateResMgr( "textconversiondlgs" MAKE_NUMSTR(SUPD) ) )
+         : ResId( nId, *getTextConversionResMgr() )
 {
 }
 
