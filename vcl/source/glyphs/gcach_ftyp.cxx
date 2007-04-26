@@ -972,7 +972,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
             rTo.mnIntLeading    = (long)( (+pOS2->usWinAscent + pOS2->usWinDescent - maFaceFT->units_per_EM) * fScale + 0.5 );
         }
         rTo.mnExtLeading = 0;
-        if( pHHEA != NULL )
+        if( (pHHEA != NULL) && (pOS2->usWinAscent || pOS2->usWinDescent) )
         {
             int nExtLeading = pHHEA->Line_Gap;
             nExtLeading -= (pOS2->usWinAscent + pOS2->usWinDescent);
@@ -986,7 +986,7 @@ void FreetypeServerFont::FetchFontMetric( ImplFontMetricData& rTo, long& rFactor
         // TODO: remove when ExtLeading fully implemented
         BOOL bCJKCapable = ((pOS2->ulUnicodeRange2 & 0x2DF00000) != 0);
 
-        if ( bCJKCapable )
+        if ( bCJKCapable && (pOS2->usWinAscent || pOS2->usWinDescent) )
         {
             rTo.mnIntLeading += rTo.mnExtLeading;
 
