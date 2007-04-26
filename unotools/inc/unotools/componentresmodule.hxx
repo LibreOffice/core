@@ -4,9 +4,9 @@
  *
  *  $RCSfile: componentresmodule.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2006-03-14 11:37:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:03:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -95,7 +95,7 @@ namespace utl
     class UNOTOOLS_DLLPUBLIC ModuleRes : public ::ResId
     {
     public:
-        ModuleRes( USHORT _nId, OComponentResourceModule& _rModule ) : ResId( _nId, _rModule.getResManager() ) { }
+        ModuleRes( USHORT _nId, OComponentResourceModule& _rModule ) : ResId( _nId, *_rModule.getResManager() ) { }
     };
 
     //====================================================================
