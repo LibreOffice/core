@@ -4,9 +4,9 @@
 #
 #   $RCSfile: wntmsci10.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: rt $ $Date: 2007-04-26 13:57:46 $
+#   last change: $Author: rt $ $Date: 2007-04-26 15:06:34 $
 #
 #   The Contents of this file are made available subject to
 #   the terms of GNU Lesser General Public License Version 2.1.
@@ -209,14 +209,10 @@ CFLAGSWERRCC=-WX
 # COMPILER_WARN_ERRORS=TRUE here instead of setting MODULES_WITH_WARNINGS (see
 # settings.mk):
 MODULES_WITH_WARNINGS := \
-    b_server \
-    basctl \
     chart2 \
     extensions \
     lingu \
     lingucomponent \
-    r_tools \
-    sc \
     soldep \
     starmath \
     sw \
