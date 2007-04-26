@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewcontactofgraphic.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:35:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:51:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -234,7 +234,7 @@ namespace sdr
             bRetval = PaintShadowedFrame(rDisplayInfo, rPaintRectangle, aUnrotatedRectangle, rGeometric, sal_False);
 
             // draw a draft bitmap
-            Bitmap aDraftBitmap(ResId(BMAP_GrafikEi, ImpGetResMgr()));
+            Bitmap aDraftBitmap(ResId(BMAP_GrafikEi, *ImpGetResMgr()));
             Rectangle aBitmapOutRect;
             bRetval |= PaintDraftBitmap(rDisplayInfo, aBitmapOutRect, aUnrotatedRectangle, rGeometric, aDraftBitmap);
             rPaintRectangle.Union(aBitmapOutRect);
