@@ -4,9 +4,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:32:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:40:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -247,7 +247,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1072 ff.
-            String aTmp(ResId(STR_UNDO, SFX_APP()->GetSfxResManager()));
+            String aTmp(ResId(STR_UNDO, *SFX_APP()->GetSfxResManager()));
             aTmp += pUndoManager->GetUndoActionComment(0);
             rSet.Put(SfxStringItem(SID_UNDO, aTmp));
         }
@@ -275,7 +275,7 @@ void  ViewShell::GetMenuState( SfxItemSet &rSet )
         {
             // #87229# Set the necessary string like in
             // sfx2/source/view/viewfrm.cxx ver 1.23 ln 1081 ff.
-            String aTmp(ResId(STR_REDO, SFX_APP()->GetSfxResManager()));
+            String aTmp(ResId(STR_REDO, *SFX_APP()->GetSfxResManager()));
             aTmp += pUndoManager->GetRedoActionComment(0);
             rSet.Put(SfxStringItem(SID_REDO, aTmp));
         }
