@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impswfdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:39:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:11:37 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,27 +48,27 @@ using namespace com::sun::star::beans;
 // ----------------
 
 ImpSWFDialog::ImpSWFDialog( Window* pParent, ResMgr& rResMgr, Sequence< PropertyValue >& rFilterData ) :
-    ModalDialog( pParent, ResId( DLG_OPTIONS, &rResMgr ) ),
-    maFiDescr( this, ResId( FI_DESCR ) ),
-    maNumFldQuality( this, ResId( NUM_FLD_QUALITY ) ),
-    maFiExportAllDescr( this, ResId( FI_EXPORT_ALL_DESCR ) ),
-    maCheckExportAll( this, ResId( BOOL_EXPORT_ALL ) ),
-    maFiExportBackgroundsDescr( this, ResId( FI_EXPORT_BACKGROUNDS_DESCR ) ),
-    maCheckExportBackgrounds( this, ResId( BOOL_EXPORT_BACKGROUNDS ) ),
-    maFiExportBackgroundObjectsDescr( this, ResId( FI_EXPORT_BACKGROUND_OBJECTS_DESCR ) ),
-    maCheckExportBackgroundObjects( this, ResId( BOOL_EXPORT_BACKGROUND_OBJECTS ) ),
-    maFiExportSlideContentsDescr( this, ResId( FI_EXPORT_SLIDE_CONTENTS_DESCR ) ),
-    maCheckExportSlideContents( this, ResId( BOOL_EXPORT_SLIDE_CONTENTS ) ),
-    maFiExportSoundDescr( this, ResId( FI_EXPORT_SOUND_DESCR ) ),
-    maCheckExportSound( this, ResId( BOOL_EXPORT_SOUND ) ),
-    maFiExportOLEAsJPEGDescr( this, ResId( FI_EXPORT_OLE_AS_JPEG_DESCR ) ),
-    maCheckExportOLEAsJPEG( this, ResId( BOOL_EXPORT_OLE_AS_JPEG ) ),
-    maFiExportMultipleFilesDescr( this, ResId( FI_EXPORT_MULTIPLE_FILES_DESCR ) ),
-    maCheckExportMultipleFiles( this, ResId( BOOL_EXPORT_MULTIPLE_FILES ) ),
+    ModalDialog( pParent, ResId( DLG_OPTIONS, rResMgr ) ),
+    maFiDescr( this, ResId( FI_DESCR, rResMgr ) ),
+    maNumFldQuality( this, ResId( NUM_FLD_QUALITY, rResMgr ) ),
+    maFiExportAllDescr( this, ResId( FI_EXPORT_ALL_DESCR, rResMgr ) ),
+    maCheckExportAll( this, ResId( BOOL_EXPORT_ALL, rResMgr ) ),
+    maFiExportBackgroundsDescr( this, ResId( FI_EXPORT_BACKGROUNDS_DESCR, rResMgr ) ),
+    maCheckExportBackgrounds( this, ResId( BOOL_EXPORT_BACKGROUNDS, rResMgr ) ),
+    maFiExportBackgroundObjectsDescr( this, ResId( FI_EXPORT_BACKGROUND_OBJECTS_DESCR, rResMgr ) ),
+    maCheckExportBackgroundObjects( this, ResId( BOOL_EXPORT_BACKGROUND_OBJECTS, rResMgr ) ),
+    maFiExportSlideContentsDescr( this, ResId( FI_EXPORT_SLIDE_CONTENTS_DESCR, rResMgr ) ),
+    maCheckExportSlideContents( this, ResId( BOOL_EXPORT_SLIDE_CONTENTS, rResMgr ) ),
+    maFiExportSoundDescr( this, ResId( FI_EXPORT_SOUND_DESCR, rResMgr ) ),
+    maCheckExportSound( this, ResId( BOOL_EXPORT_SOUND, rResMgr ) ),
+    maFiExportOLEAsJPEGDescr( this, ResId( FI_EXPORT_OLE_AS_JPEG_DESCR, rResMgr ) ),
+    maCheckExportOLEAsJPEG( this, ResId( BOOL_EXPORT_OLE_AS_JPEG, rResMgr ) ),
+    maFiExportMultipleFilesDescr( this, ResId( FI_EXPORT_MULTIPLE_FILES_DESCR, rResMgr ) ),
+    maCheckExportMultipleFiles( this, ResId( BOOL_EXPORT_MULTIPLE_FILES, rResMgr ) ),
 
-    maBtnOK( this, ResId( BTN_OK ) ),
-    maBtnCancel( this, ResId( BTN_CANCEL ) ),
-    maBtnHelp( this, ResId( BTN_HELP ) ),
+    maBtnOK( this, ResId( BTN_OK, rResMgr ) ),
+    maBtnCancel( this, ResId( BTN_CANCEL, rResMgr ) ),
+    maBtnHelp( this, ResId( BTN_HELP, rResMgr ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Flash/Export/" ) ), &rFilterData )
 {
     const ULONG nCompressMode = maConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "CompressMode" ) ), 75 );
