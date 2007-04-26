@@ -4,9 +4,9 @@
  *
  *  $RCSfile: score.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 15:55:39 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:01:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -73,17 +73,17 @@ void ScoreWindow::Paint(const Rectangle&)
     }
 
     if(nHero)
-        DrawText(Point(0,0),String(ResId(nHero, pRes)));
+        DrawText(Point(0,0),String(ResId(nHero, *pRes)));
 
-    DrawText(Point(180,0),String(ResId(STR_ROCKETS, pRes)));
+    DrawText(Point(180,0),String(ResId(STR_ROCKETS, *pRes)));
 
-    DrawText(Point(300,0),String(ResId(STR_FIGHTER, pRes)));
+    DrawText(Point(300,0),String(ResId(STR_FIGHTER, *pRes)));
     DrawText(Point(370,0),String::CreateFromInt32(nLives));
 
-    DrawText(Point(400,0),String(ResId(STR_LEVEL, pRes)));
+    DrawText(Point(400,0),String(ResId(STR_LEVEL, *pRes)));
     DrawText(Point(460,0),String::CreateFromInt32(nLevel));
 
-    DrawText(Point(500,0),String(ResId(STR_SCORE, pRes)));
+    DrawText(Point(500,0),String(ResId(STR_SCORE, *pRes)));
     String aString = String::CreateFromInt32(nScore);
     if ( aString.Len() < 7 )
     {
