@@ -4,9 +4,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 15:10:59 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:42:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -901,7 +901,7 @@ void SvtExtendedMultiLineEdit_Impl::InsertEntry( const String& rTitle, const Str
 
 const String& SvtDocInfoTable_Impl::GetString( long nId ) const
 {
-    USHORT nPos = static_cast< USHORT >( FindIndex( nId ) );
+    sal_uInt32 nPos( FindIndex( nId ) );
 
     if ( RESARRAY_INDEX_NOTFOUND != nPos )
         return ResStringArray::GetString( nPos );
@@ -1792,12 +1792,12 @@ uno::Reference< util::XOfficeInstallationDirectories > SvtTmplDlg_Impl::getOffic
 SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* _pParent, SelectOnly ) :
     ModalDialog( _pParent, SvtResId( DLG_DOCTEMPLATE ) ),
 
-    aLine       ( this, ResId( FL_DOCTEMPLATE ) ),
-    aManageBtn  ( this, ResId( BTN_DOCTEMPLATE_MANAGE ) ),
-    aEditBtn    ( this, ResId( BTN_DOCTEMPLATE_EDIT ) ),
-    aOKBtn      ( this, ResId( BTN_DOCTEMPLATE_OPEN ) ),
-    aCancelBtn  ( this, ResId( BTN_DOCTEMPLATE_CANCEL ) ),
-    aHelpBtn    ( this, ResId( BTN_DOCTEMPLATE_HELP ) ),
+    aLine       ( this, SvtResId( FL_DOCTEMPLATE ) ),
+    aManageBtn  ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
+    aEditBtn    ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
+    aOKBtn      ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
+    aCancelBtn  ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
+    aHelpBtn    ( this, SvtResId( BTN_DOCTEMPLATE_HELP ) ),
     pImpl       ( NULL )
 {
     FreeResource();
@@ -1815,12 +1815,12 @@ SvtDocumentTemplateDialog::SvtDocumentTemplateDialog( Window* pParent ) :
 
     ModalDialog( pParent, SvtResId( DLG_DOCTEMPLATE ) ),
 
-    aLine       ( this, ResId( FL_DOCTEMPLATE ) ),
-    aManageBtn  ( this, ResId( BTN_DOCTEMPLATE_MANAGE ) ),
-    aEditBtn    ( this, ResId( BTN_DOCTEMPLATE_EDIT ) ),
-    aOKBtn      ( this, ResId( BTN_DOCTEMPLATE_OPEN ) ),
-    aCancelBtn  ( this, ResId( BTN_DOCTEMPLATE_CANCEL ) ),
-    aHelpBtn    ( this, ResId( BTN_DOCTEMPLATE_HELP ) ),
+    aLine       ( this, SvtResId( FL_DOCTEMPLATE ) ),
+    aManageBtn  ( this, SvtResId( BTN_DOCTEMPLATE_MANAGE ) ),
+    aEditBtn    ( this, SvtResId( BTN_DOCTEMPLATE_EDIT ) ),
+    aOKBtn      ( this, SvtResId( BTN_DOCTEMPLATE_OPEN ) ),
+    aCancelBtn  ( this, SvtResId( BTN_DOCTEMPLATE_CANCEL ) ),
+    aHelpBtn    ( this, SvtResId( BTN_DOCTEMPLATE_HELP ) ),
     pImpl       ( NULL )
 {
     FreeResource();
