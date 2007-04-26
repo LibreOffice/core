@@ -4,9 +4,9 @@
  *
  *  $RCSfile: typeselectionpage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:53:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:04:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -66,18 +66,18 @@ namespace abp
     //---------------------------------------------------------------------
     TypeSelectionPage::TypeSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_SELECTABTYPE))
-        ,m_aHint            (this,  ResId(FT_TYPE_HINTS))
-        ,m_aTypeSep         (this,  ResId(FL_TYPE))
-        ,m_aMORK            (this,  ResId(RB_MORK))
-        ,m_aThunderbird     (this,  ResId(RB_THUNDERBIRD))
-        ,m_aEvolution       (this,  ResId(RB_EVOLUTION))
-        ,m_aEvolutionGroupwise (this,   ResId(RB_EVOLUTION_GROUPWISE))
-        ,m_aEvolutionLdap      (this,   ResId(RB_EVOLUTION_LDAP))
-        ,m_aKab             (this,  ResId(RB_KAB))
-        ,m_aLDAP            (this,  ResId(RB_LDAP))
-        ,m_aOutlook         (this,  ResId(RB_OUTLOOK))
-        ,m_aOE              (this,  ResId(RB_OUTLOOKEXPRESS))
-        ,m_aOther           (this,  ResId(RB_OTHER))
+        ,m_aHint            (this,  ModuleRes(FT_TYPE_HINTS))
+        ,m_aTypeSep         (this,  ModuleRes(FL_TYPE))
+        ,m_aMORK            (this,  ModuleRes(RB_MORK))
+        ,m_aThunderbird     (this,  ModuleRes(RB_THUNDERBIRD))
+        ,m_aEvolution       (this,  ModuleRes(RB_EVOLUTION))
+        ,m_aEvolutionGroupwise (this,   ModuleRes(RB_EVOLUTION_GROUPWISE))
+        ,m_aEvolutionLdap      (this,   ModuleRes(RB_EVOLUTION_LDAP))
+        ,m_aKab             (this,  ModuleRes(RB_KAB))
+        ,m_aLDAP            (this,  ModuleRes(RB_LDAP))
+        ,m_aOutlook         (this,  ModuleRes(RB_OUTLOOK))
+        ,m_aOE              (this,  ModuleRes(RB_OUTLOOKEXPRESS))
+        ,m_aOther           (this,  ModuleRes(RB_OTHER))
     {
         Point aTopLeft;
         Size  aItemSize;
