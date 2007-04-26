@@ -4,9 +4,9 @@
  *
  *  $RCSfile: controlmenucontroller.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 15:06:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:16:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,6 +106,9 @@
 #endif
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
+#endif
+#ifndef _RTL_STRBUF_HXX_
+#include <rtl/strbuf.hxx>
 #endif
 #ifndef _SOLAR_HRC
 #include <svtools/solar.hrc>
@@ -293,7 +296,7 @@ void ControlMenuController::updateImagesPopupMenu( PopupMenu* pPopupMenu )
     aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
 
     ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
-    ResId aResId( m_bWasHiContrast ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL, pResMgr );
+    ResId aResId( m_bWasHiContrast ? RID_SVXIMGLIST_FMEXPL_HC : RID_SVXIMGLIST_FMEXPL, *pResMgr );
     aResId.SetRT( RSC_IMAGELIST );
 
     if ( pResMgr->IsAvailable( aResId ))
@@ -492,13 +495,14 @@ void SAL_CALL ControlMenuController::setPopupMenu( const Reference< css::awt::XP
 
         if ( m_pResPopupMenu == 0 )
         {
-            rtl::OUString aResName( RTL_CONSTASCII_USTRINGPARAM( "svx" ));
-            aResName += rtl::OUString::valueOf( sal_Int32( SUPD ));
+            rtl::OStringBuffer aBuf( 32 );
+            aBuf.append( "svx" );
+            aBuf.append( sal_Int32( SUPD ) );
 
-            ResMgr* pResMgr = ResMgr::CreateResMgr( rtl::OUStringToOString( aResName, RTL_TEXTENCODING_ASCII_US ));
+            ResMgr* pResMgr = ResMgr::CreateResMgr( aBuf.getStr() );
             if ( pResMgr )
             {
-                ResId aResId( RID_FMSHELL_CONVERSIONMENU, pResMgr );
+                ResId aResId( RID_FMSHELL_CONVERSIONMENU, *pResMgr );
                 aResId.SetRT( RSC_MENU );
                 if ( pResMgr->IsAvailable( aResId ))
                     m_pResPopupMenu = new PopupMenu( aResId );
