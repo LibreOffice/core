@@ -4,9 +4,9 @@
  *
  *  $RCSfile: DBSetupConnectionPages.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:47:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:56:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -258,16 +258,16 @@ DBG_NAME(OTextConnectionPageSetup)
     //========================================================================
     OLDAPConnectionPageSetup::OLDAPConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_LDAP), _rCoreAttrs)
-        ,m_aFTHeaderText        (this, ResId(FT_LDAP_HEADERTEXT))
-        ,m_aFTHelpText          (this, ResId(FT_LDAP_HELPTEXT))
-        ,m_aFTHostServer        (this, ResId(FT_AUTOHOSTNAME))
-        ,m_aETHostServer        (this, ResId(ET_AUTOHOSTNAME))
-        ,m_aFTBaseDN            (this, ResId(FT_AUTOBASEDN))
-        ,m_aETBaseDN            (this, ResId(ET_AUTOBASEDN))
-        ,m_aFTPortNumber        (this, ResId(FT_AUTOPORTNUMBER))
-        ,m_aNFPortNumber        (this, ResId(NF_AUTOPORTNUMBER))
-        ,m_aFTDefaultPortNumber (this, ResId(FT_AUTOPORTNUMBERDEFAULT))
-        ,m_aCBUseSSL            (this, ResId(CB_USESSL))
+        ,m_aFTHeaderText        (this, ModuleRes(FT_LDAP_HEADERTEXT))
+        ,m_aFTHelpText          (this, ModuleRes(FT_LDAP_HELPTEXT))
+        ,m_aFTHostServer        (this, ModuleRes(FT_AUTOHOSTNAME))
+        ,m_aETHostServer        (this, ModuleRes(ET_AUTOHOSTNAME))
+        ,m_aFTBaseDN            (this, ModuleRes(FT_AUTOBASEDN))
+        ,m_aETBaseDN            (this, ModuleRes(ET_AUTOBASEDN))
+        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
+        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
+        ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
+        ,m_aCBUseSSL            (this, ModuleRes(CB_USESSL))
 
     {
         SetControlFontWeight(&m_aFTHeaderText);
@@ -370,11 +370,11 @@ DBG_NAME(OMySQLIntroPageSetup)
 
     OMySQLIntroPageSetup::OMySQLIntroPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
             :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_MYSQL_INTRO), _rCoreAttrs)
-            ,m_aRB_ODBCDatabase(this, ResId(RB_CONNECTVIAODBC))
-            ,m_aRB_JDBCDatabase(this, ResId(RB_CONNECTVIAJDBC))
-            ,m_aFT_ConnectionMode(this, ResId(FT_MYSQLCONNECTIONMODE))
-            ,m_aFT_Helptext(this, ResId(FT_MYSQL_HELPTEXT))
-            ,m_aFT_Headertext(this, ResId(FT_MYSQL_HEADERTEXT))
+            ,m_aRB_ODBCDatabase(this, ModuleRes(RB_CONNECTVIAODBC))
+            ,m_aRB_JDBCDatabase(this, ModuleRes(RB_CONNECTVIAJDBC))
+            ,m_aFT_ConnectionMode(this, ModuleRes(FT_MYSQLCONNECTIONMODE))
+            ,m_aFT_Helptext(this, ModuleRes(FT_MYSQL_HELPTEXT))
+            ,m_aFT_Headertext(this, ModuleRes(FT_MYSQL_HEADERTEXT))
     {
         DBG_CTOR(OMySQLIntroPageSetup,NULL);
 
@@ -469,17 +469,17 @@ DBG_NAME(OMySQLIntroPageSetup)
     OGeneralSpecialJDBCConnectionPageSetup::OGeneralSpecialJDBCConnectionPageSetup( Window* pParent,USHORT _nResId, const SfxItemSet& _rCoreAttrs ,USHORT _nPortId, USHORT _nDefaultPortResId, const sal_Char* _pDriverName, USHORT _nHelpTextResId, USHORT _nHeaderTextResId, USHORT _nDriverClassId)
         :OGenericAdministrationPage(pParent, ModuleRes(_nResId), _rCoreAttrs)
         ,m_pFTHeaderText        (NULL)
-        ,m_aFTHelpText          (this, ResId(FT_AUTOWIZARDHELPTEXT))
-        ,m_aFTDatabasename      (this, ResId(FT_AUTODATABASENAME))
-        ,m_aETDatabasename      (this, ResId(ET_AUTODATABASENAME))
-        ,m_aFTHostname          (this, ResId(FT_AUTOHOSTNAME))
-        ,m_aETHostname          (this, ResId(ET_AUTOHOSTNAME))
-        ,m_aFTPortNumber        (this, ResId(FT_AUTOPORTNUMBER))
-        ,m_aFTDefaultPortNumber (this, ResId(FT_AUTOPORTNUMBERDEFAULT))
-        ,m_aNFPortNumber        (this, ResId(NF_AUTOPORTNUMBER))
-        ,m_aFTDriverClass       (this, ResId(FT_AUTOJDBCDRIVERCLASS))
-        ,m_aETDriverClass       (this, ResId(ET_AUTOJDBCDRIVERCLASS))
-        ,m_aPBTestJavaDriver    (this, ResId(PB_AUTOTESTDRIVERCLASS))
+        ,m_aFTHelpText          (this, ModuleRes(FT_AUTOWIZARDHELPTEXT))
+        ,m_aFTDatabasename      (this, ModuleRes(FT_AUTODATABASENAME))
+        ,m_aETDatabasename      (this, ModuleRes(ET_AUTODATABASENAME))
+        ,m_aFTHostname          (this, ModuleRes(FT_AUTOHOSTNAME))
+        ,m_aETHostname          (this, ModuleRes(ET_AUTOHOSTNAME))
+        ,m_aFTPortNumber        (this, ModuleRes(FT_AUTOPORTNUMBER))
+        ,m_aFTDefaultPortNumber (this, ModuleRes(FT_AUTOPORTNUMBERDEFAULT))
+        ,m_aNFPortNumber        (this, ModuleRes(NF_AUTOPORTNUMBER))
+        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
+        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
+        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
         ,m_nPortId(_nPortId)
     {
         m_aFTDriverClass.SetText(String(ModuleRes(_nDriverClassId)));
@@ -619,9 +619,9 @@ DBG_NAME(OMySQLIntroPageSetup)
     //========================================================================
     OJDBCConnectionPageSetup::OJDBCConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs)
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_JDBC, _rCoreAttrs, STR_JDBC_HELPTEXT, STR_JDBC_HEADERTEXT, STR_COMMONURL)
-        ,m_aFTDriverClass       (this, ResId(FT_AUTOJDBCDRIVERCLASS))
-        ,m_aETDriverClass       (this, ResId(ET_AUTOJDBCDRIVERCLASS))
-        ,m_aPBTestJavaDriver    (this, ResId(PB_AUTOTESTDRIVERCLASS))
+        ,m_aFTDriverClass       (this, ModuleRes(FT_AUTOJDBCDRIVERCLASS))
+        ,m_aETDriverClass       (this, ModuleRes(ET_AUTOJDBCDRIVERCLASS))
+        ,m_aPBTestJavaDriver    (this, ModuleRes(PB_AUTOTESTDRIVERCLASS))
     {
         m_aETDriverClass.SetModifyHdl(LINK(this, OJDBCConnectionPageSetup, OnEditModified));
         m_aPBTestJavaDriver.SetClickHdl(LINK(this,OJDBCConnectionPageSetup,OnTestJavaClickHdl));
@@ -728,7 +728,7 @@ DBG_NAME(OSpreadSheetConnectionPageSetup)
 
     OSpreadSheetConnectionPageSetup::OSpreadSheetConnectionPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OConnectionTabPageSetup(pParent, PAGE_DBWIZARD_SPREADSHEET, _rCoreAttrs, STR_SPREADSHEET_HELPTEXT, STR_SPREADSHEET_HEADERTEXT, STR_SPREADSHEETPATH)
-            , m_aCBPasswordrequired(this, ResId(CB_SPREADSHEETPASSWORDREQUIRED))
+            , m_aCBPasswordrequired(this, ModuleRes(CB_SPREADSHEETPASSWORDREQUIRED))
     {
         DBG_CTOR(OSpreadSheetConnectionPageSetup,NULL);
 
@@ -780,12 +780,12 @@ DBG_NAME(OAuthentificationPageSetup)
 
     OAuthentificationPageSetup::OAuthentificationPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
         :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_AUTHENTIFICATION), _rCoreAttrs )
-        , m_aFTHelpText             (this, ResId(FT_AUTHENTIFICATIONHELPTEXT))
-        , m_aFTHeaderText           (this, ResId(FT_AUTHENTIFICATIONHEADERTEXT))
-        , m_aFTUserName             (this, ResId(FT_GENERALUSERNAME))
-        , m_aETUserName             (this, ResId(ET_GENERALUSERNAME))
-        , m_aCBPasswordRequired     (this, ResId(CB_GENERALPASSWORDREQUIRED))
-        , m_aPBTestConnection       (this, ResId(PB_TESTCONNECTION))
+        , m_aFTHelpText             (this, ModuleRes(FT_AUTHENTIFICATIONHELPTEXT))
+        , m_aFTHeaderText           (this, ModuleRes(FT_AUTHENTIFICATIONHEADERTEXT))
+        , m_aFTUserName             (this, ModuleRes(FT_GENERALUSERNAME))
+        , m_aETUserName             (this, ModuleRes(ET_GENERALUSERNAME))
+        , m_aCBPasswordRequired     (this, ModuleRes(CB_GENERALPASSWORDREQUIRED))
+        , m_aPBTestConnection       (this, ModuleRes(PB_TESTCONNECTION))
     {
         DBG_CTOR(OAuthentificationPageSetup,NULL);
 
@@ -859,14 +859,14 @@ DBG_NAME(OFinalDBPageSetup)
 
     OFinalDBPageSetup::OFinalDBPageSetup( Window* pParent, const SfxItemSet& _rCoreAttrs )
     :OGenericAdministrationPage(pParent, ModuleRes(PAGE_DBWIZARD_FINAL), _rCoreAttrs )
-    , m_aFTFinalHeader              (this, ResId(FT_FINALHEADER))
-    , m_aFTFinalHelpText            (this, ResId(FT_FINALHELPTEXT))
-    , m_aRBRegisterDataSource       (this, ResId(RB_REGISTERDATASOURCE))
-    , m_aRBDontregisterDataSource   (this, ResId(RB_DONTREGISTERDATASOURCE))
-    , m_aFTAdditionalSettings       (this, ResId(FT_ADDITIONALSETTINGS))
-    , m_aCBOpenAfterwards           (this, ResId(CB_OPENAFTERWARDS))
-    , m_aCBStartTableWizard         (this, ResId(CB_STARTTABLEWIZARD))
-    , m_aFTFinalText                (this, ResId(FT_FINALTEXT))
+    , m_aFTFinalHeader              (this, ModuleRes(FT_FINALHEADER))
+    , m_aFTFinalHelpText            (this, ModuleRes(FT_FINALHELPTEXT))
+    , m_aRBRegisterDataSource       (this, ModuleRes(RB_REGISTERDATASOURCE))
+    , m_aRBDontregisterDataSource   (this, ModuleRes(RB_DONTREGISTERDATASOURCE))
+    , m_aFTAdditionalSettings       (this, ModuleRes(FT_ADDITIONALSETTINGS))
+    , m_aCBOpenAfterwards           (this, ModuleRes(CB_OPENAFTERWARDS))
+    , m_aCBStartTableWizard         (this, ModuleRes(CB_STARTTABLEWIZARD))
+    , m_aFTFinalText                (this, ModuleRes(FT_FINALTEXT))
     {
         DBG_CTOR(OFinalDBPageSetup,NULL);
 
