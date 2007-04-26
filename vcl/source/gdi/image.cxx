@@ -4,9 +4,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:02:02 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:29:11 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,11 +106,7 @@ Image::Image( const ResId& rResId ) :
     rResId.SetRT( RSC_IMAGE );
 
     ResMgr* pResMgr = rResId.GetResMgr();
-
-    if( !pResMgr )
-        pResMgr = Resource::GetResManager();
-
-    if( pResMgr->GetResource( rResId ) )
+    if( pResMgr && pResMgr->GetResource( rResId ) )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
@@ -119,7 +115,7 @@ Image::Image( const ResId& rResId ) :
 
         if( nObjMask & RSC_IMAGE_IMAGEBITMAP )
         {
-            aBmpEx = BitmapEx( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+            aBmpEx = BitmapEx( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
             pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
         }
 
@@ -129,7 +125,7 @@ Image::Image( const ResId& rResId ) :
             {
                 if( aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
                 {
-                    const Bitmap aMaskBitmap( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+                    const Bitmap aMaskBitmap( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
                     aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskBitmap );
                 }
             }
@@ -143,7 +139,7 @@ Image::Image( const ResId& rResId ) :
             {
                 if( aBmpEx.GetTransparentType() == TRANSPARENT_NONE )
                 {
-                    const Color aMaskColor( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
+                    const Color aMaskColor( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) );
                     aBmpEx = BitmapEx( aBmpEx.GetBitmap(), aMaskColor );
                 }
             }
@@ -493,10 +489,7 @@ ImageList::ImageList( const ResId& rResId ) :
 
     ResMgr* pResMgr = rResId.GetResMgr();
 
-    if( !pResMgr )
-        pResMgr = Resource::GetResManager();
-
-    if( pResMgr->GetResource( rResId ) )
+    if( pResMgr && pResMgr->GetResource( rResId ) )
     {
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
 
@@ -505,7 +498,7 @@ ImageList::ImageList( const ResId& rResId ) :
         ::boost::scoped_ptr< Color >        spMaskColor;
 
         if( nObjMask & RSC_IMAGE_MASKCOLOR )
-            spMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass() ) ) );
+            spMaskColor.reset( new Color( ResId( (RSHEADER_TYPE*)pResMgr->GetClass(), *pResMgr ) ) );
 
         pResMgr->Increment( pResMgr->GetObjSize( (RSHEADER_TYPE*)pResMgr->GetClass() ) );
 
