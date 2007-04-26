@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fieldmappingpage.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:53:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:04:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,9 +60,9 @@ namespace abp
     //---------------------------------------------------------------------
     FieldMappingPage::FieldMappingPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage( _pParent, ModuleRes( RID_PAGE_FIELDMAPPING ) )
-        ,m_aExplanation     ( this, ResId( FT_FIELDASSIGMENTEXPL ) )
-        ,m_aInvokeDialog    ( this, ResId( PB_INVOKE_FIELDS_DIALOG ) )
-        ,m_aHint            ( this, ResId( FT_ASSIGNEDFIELDS ) )
+        ,m_aExplanation     ( this, ModuleRes( FT_FIELDASSIGMENTEXPL ) )
+        ,m_aInvokeDialog    ( this, ModuleRes( PB_INVOKE_FIELDS_DIALOG ) )
+        ,m_aHint            ( this, ModuleRes( FT_ASSIGNEDFIELDS ) )
     {
         FreeResource();
 
