@@ -4,9 +4,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:55:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:47:30 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -81,10 +81,7 @@ Color::Color( const ResId& rResId )
 {
     rResId.SetRT( RSC_COLOR );
     ResMgr* pResMgr = rResId.GetResMgr();
-    if ( !pResMgr )
-        pResMgr = Resource::GetResManager();
-
-    if ( pResMgr->GetResource( rResId ) )
+    if ( pResMgr && pResMgr->GetResource( rResId ) )
     {
         // Header ueberspringen
         pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
