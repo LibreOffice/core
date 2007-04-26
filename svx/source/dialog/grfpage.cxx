@@ -4,9 +4,9 @@
  *
  *  $RCSfile: grfpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:34:23 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,30 +107,30 @@ inline long lcl_GetValue( MetricField& rMetric, FieldUnit eUnit )
 
 SvxGrfCropPage::SvxGrfCropPage ( Window *pParent, const SfxItemSet &rSet )
     : SfxTabPage( pParent,  SVX_RES( RID_SVXPAGE_GRFCROP ), rSet ),
-    aCropFL(        this, ResId( FL_CROP    )),
-    aZoomConstRB(   this, ResId( RB_ZOOMCONST)),
-    aSizeConstRB(   this, ResId( RB_SIZECONST)),
-    aLeftFT(        this, ResId( FT_LEFT    )),
-    aLeftMF(        this, ResId( MF_LEFT    )),
-    aRightFT(       this, ResId( FT_RIGHT   )),
-    aRightMF(       this, ResId( MF_RIGHT   )),
-    aTopFT(         this, ResId( FT_TOP     )),
-    aTopMF(         this, ResId( MF_TOP     )),
-    aBottomFT(      this, ResId( FT_BOTTOM  )),
-    aBottomMF(      this, ResId( MF_BOTTOM  )),
-    aZoomFL(        this, ResId( FL_ZOOM    )),
-    aWidthZoomFT(   this, ResId( FT_WIDTHZOOM )),
-    aWidthZoomMF(   this, ResId( MF_WIDTHZOOM )),
-    aHeightZoomFT(  this, ResId( FT_HEIGHTZOOM)),
-    aHeightZoomMF(  this, ResId( MF_HEIGHTZOOM)),
-    aSizeFL(        this, ResId( FL_SIZE    )),
-    aWidthFT(       this, ResId( FT_WIDTH   )),
-    aWidthMF(       this, ResId( MF_WIDTH   )),
-    aHeightFT(      this, ResId( FT_HEIGHT  )),
-    aHeightMF(      this, ResId( MF_HEIGHT  )),
-    aOrigSizeFT(    this, ResId(FT_ORIG_SIZE)),
-    aOrigSizePB(    this, ResId( PB_ORGSIZE )),
-    aExampleWN(     this, ResId( WN_BSP     )),
+    aCropFL(        this, SVX_RES( FL_CROP    )),
+    aZoomConstRB(   this, SVX_RES( RB_ZOOMCONST)),
+    aSizeConstRB(   this, SVX_RES( RB_SIZECONST)),
+    aLeftFT(        this, SVX_RES( FT_LEFT    )),
+    aLeftMF(        this, SVX_RES( MF_LEFT    )),
+    aRightFT(       this, SVX_RES( FT_RIGHT   )),
+    aRightMF(       this, SVX_RES( MF_RIGHT   )),
+    aTopFT(         this, SVX_RES( FT_TOP     )),
+    aTopMF(         this, SVX_RES( MF_TOP     )),
+    aBottomFT(      this, SVX_RES( FT_BOTTOM  )),
+    aBottomMF(      this, SVX_RES( MF_BOTTOM  )),
+    aZoomFL(        this, SVX_RES( FL_ZOOM    )),
+    aWidthZoomFT(   this, SVX_RES( FT_WIDTHZOOM )),
+    aWidthZoomMF(   this, SVX_RES( MF_WIDTHZOOM )),
+    aHeightZoomFT(  this, SVX_RES( FT_HEIGHTZOOM)),
+    aHeightZoomMF(  this, SVX_RES( MF_HEIGHTZOOM)),
+    aSizeFL(        this, SVX_RES( FL_SIZE    )),
+    aWidthFT(       this, SVX_RES( FT_WIDTH   )),
+    aWidthMF(       this, SVX_RES( MF_WIDTH   )),
+    aHeightFT(      this, SVX_RES( FT_HEIGHT  )),
+    aHeightMF(      this, SVX_RES( MF_HEIGHT  )),
+    aOrigSizeFT(    this, SVX_RES(FT_ORIG_SIZE)),
+    aOrigSizePB(    this, SVX_RES( PB_ORGSIZE )),
+    aExampleWN(     this, SVX_RES( WN_BSP     )),
     pLastCropField(0),
     bInitialized(FALSE),
     bSetOrigSize(FALSE)
