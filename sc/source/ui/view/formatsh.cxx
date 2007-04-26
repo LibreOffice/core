@@ -4,9 +4,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:51:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:56:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -809,7 +809,7 @@ void __EXPORT ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-                pDlg = pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc,ResId(nRsc) );
+                pDlg = pFact->CreateScStyleDlg( pParent, *pStyleSheet, nRsc, nRsc );
                 DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
                 short nResult = pDlg->Execute();
                 pTabViewShell->SetInFormatDialog(FALSE);
