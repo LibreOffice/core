@@ -4,9 +4,9 @@
  *
  *  $RCSfile: eventdlg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:19:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:30:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -89,20 +89,20 @@ using namespace ::com::sun::star;
 SvxEventConfigPage::SvxEventConfigPage( Window* pParent, const SfxItemSet& rSet ) :
 
     _SvxMacroTabPage( pParent, SVX_RES(RID_SVXPAGE_EVENTS), rSet ),
-    aSaveInText( this, ResId( TXT_SAVEIN ) ),
-    aSaveInListBox( this, ResId( LB_SAVEIN ) ),
+    aSaveInText( this, SVX_RES( TXT_SAVEIN ) ),
+    aSaveInListBox( this, SVX_RES( LB_SAVEIN ) ),
     bAppConfig  ( TRUE )
 {
-    mpImpl->pStrEvent           = new String( ResId( STR_EVENT ));
-    mpImpl->pAssignedMacro      = new String( ResId( STR_ASSMACRO ));
-    mpImpl->pEventLB            = new _HeaderTabListBox( this, ResId( LB_EVENT ));
-    mpImpl->pAssignFT           = new FixedText( this,  ResId( FT_ASSIGN ));
-    mpImpl->pAssignPB           = new PushButton( this, ResId( PB_ASSIGN ));
-    mpImpl->pDeletePB           = new PushButton( this, ResId( PB_DELETE ));
-    mpImpl->pMacroImg           = new Image( ResId( IMG_MACRO) );
-    mpImpl->pComponentImg       = new Image( ResId( IMG_COMPONENT) );
-    mpImpl->pMacroImg_h         = new Image( ResId( IMG_MACRO_H) );
-    mpImpl->pComponentImg_h     = new Image( ResId( IMG_COMPONENT_H) );
+    mpImpl->pStrEvent           = new String( SVX_RES( STR_EVENT ));
+    mpImpl->pAssignedMacro      = new String( SVX_RES( STR_ASSMACRO ));
+    mpImpl->pEventLB            = new _HeaderTabListBox( this, SVX_RES( LB_EVENT ));
+    mpImpl->pAssignFT           = new FixedText( this,  SVX_RES( FT_ASSIGN ));
+    mpImpl->pAssignPB           = new PushButton( this, SVX_RES( PB_ASSIGN ));
+    mpImpl->pDeletePB           = new PushButton( this, SVX_RES( PB_DELETE ));
+    mpImpl->pMacroImg           = new Image( SVX_RES( IMG_MACRO) );
+    mpImpl->pComponentImg       = new Image( SVX_RES( IMG_COMPONENT) );
+    mpImpl->pMacroImg_h         = new Image( SVX_RES( IMG_MACRO_H) );
+    mpImpl->pComponentImg_h     = new Image( SVX_RES( IMG_COMPONENT_H) );
 
     FreeResource();
 
