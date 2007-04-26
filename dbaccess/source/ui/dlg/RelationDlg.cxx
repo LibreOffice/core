@@ -4,9 +4,9 @@
  *
  *  $RCSfile: RelationDlg.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:05:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:56:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -117,9 +117,9 @@ ORelationDialog::ORelationDialog( OJoinTableView* pParent,
     ,aRB_CascDelNull(       this, ModuleRes(RB_CASC_DEL_NULL) )
     ,aRB_CascDelDefault(    this, ModuleRes(RB_CASC_DEL_DEFAULT) )
 
-    ,aPB_OK( this, ResId( PB_OK ) )
-    ,aPB_CANCEL( this, ResId( PB_CANCEL ) )
-    ,aPB_HELP( this, ResId( PB_HELP ) )
+    ,aPB_OK( this, ModuleRes( PB_OK ) )
+    ,aPB_CANCEL( this, ModuleRes( PB_CANCEL ) )
+    ,aPB_HELP( this, ModuleRes( PB_HELP ) )
 
     ,m_pConnData(NULL)
     ,m_pOrigConnData( pConnectionData )
