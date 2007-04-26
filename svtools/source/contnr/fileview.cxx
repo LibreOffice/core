@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fileview.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:32:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:42:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2688,13 +2688,13 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
 
     ModalDialog( pParent, SvtResId( DLG_SVT_QUERYDELETE ) ),
 
-    _aEntryLabel    ( this, ResId( TXT_ENTRY ) ),
-    _aEntry     ( this, ResId( TXT_ENTRYNAME ) ),
-    _aQueryMsg  ( this, ResId( TXT_QUERYMSG ) ),
-    _aYesButton ( this, ResId( BTN_YES ) ),
-    _aAllButton ( this, ResId( BTN_ALL ) ),
-    _aNoButton  ( this, ResId( BTN_NO ) ),
-    _aCancelButton( this, ResId( BTN_CANCEL ) )
+    _aEntryLabel    ( this, SvtResId( TXT_ENTRY ) ),
+    _aEntry     ( this, SvtResId( TXT_ENTRYNAME ) ),
+    _aQueryMsg  ( this, SvtResId( TXT_QUERYMSG ) ),
+    _aYesButton ( this, SvtResId( BTN_YES ) ),
+    _aAllButton ( this, SvtResId( BTN_ALL ) ),
+    _aNoButton  ( this, SvtResId( BTN_NO ) ),
+    _aCancelButton( this, SvtResId( BTN_CANCEL ) )
 
 {
     FreeResource();
