@@ -4,9 +4,9 @@
  *
  *  $RCSfile: logindlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:44:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:43:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -253,25 +253,25 @@ LoginDialog::LoginDialog
 
     ModalDialog( pParent, SvtResId( DLG_LOGIN ) ),
 
-    aErrorInfo      ( this, ResId( INFO_LOGIN_ERROR ) ),
-    aErrorGB        ( this, ResId( GB_LOGIN_ERROR ) ),
-    aRequestInfo    ( this, ResId( INFO_LOGIN_REQUEST ) ),
-    aPathFT         ( this, ResId( FT_LOGIN_PATH ) ),
-    aPathED         ( this, ResId( ED_LOGIN_PATH ) ),
-    aPathInfo       ( this, ResId( INFO_LOGIN_PATH ) ),
-    aPathBtn        ( this, ResId( BTN_LOGIN_PATH ) ),
-    aNameFT         ( this, ResId( FT_LOGIN_USERNAME ) ),
-    aNameED         ( this, ResId( ED_LOGIN_USERNAME ) ),
-    aNameInfo       ( this, ResId( INFO_LOGIN_USERNAME ) ),
-    aPasswordFT     ( this, ResId( FT_LOGIN_PASSWORD ) ),
-    aPasswordED     ( this, ResId( ED_LOGIN_PASSWORD ) ),
-    aAccountFT      ( this, ResId( FT_LOGIN_ACCOUNT ) ),
-    aAccountED      ( this, ResId( ED_LOGIN_ACCOUNT ) ),
-    aSavePasswdBtn  ( this, ResId( CB_LOGIN_SAVEPASSWORD ) ),
-    aLoginGB        ( this, ResId( GB_LOGIN_LOGIN ) ),
-    aOKBtn          ( this, ResId( BTN_LOGIN_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_LOGIN_CANCEL ) ),
-    aHelpBtn        ( this, ResId( BTN_LOGIN_HELP ) )
+    aErrorInfo      ( this, SvtResId( INFO_LOGIN_ERROR ) ),
+    aErrorGB        ( this, SvtResId( GB_LOGIN_ERROR ) ),
+    aRequestInfo    ( this, SvtResId( INFO_LOGIN_REQUEST ) ),
+    aPathFT         ( this, SvtResId( FT_LOGIN_PATH ) ),
+    aPathED         ( this, SvtResId( ED_LOGIN_PATH ) ),
+    aPathInfo       ( this, SvtResId( INFO_LOGIN_PATH ) ),
+    aPathBtn        ( this, SvtResId( BTN_LOGIN_PATH ) ),
+    aNameFT         ( this, SvtResId( FT_LOGIN_USERNAME ) ),
+    aNameED         ( this, SvtResId( ED_LOGIN_USERNAME ) ),
+    aNameInfo       ( this, SvtResId( INFO_LOGIN_USERNAME ) ),
+    aPasswordFT     ( this, SvtResId( FT_LOGIN_PASSWORD ) ),
+    aPasswordED     ( this, SvtResId( ED_LOGIN_PASSWORD ) ),
+    aAccountFT      ( this, SvtResId( FT_LOGIN_ACCOUNT ) ),
+    aAccountED      ( this, SvtResId( ED_LOGIN_ACCOUNT ) ),
+    aSavePasswdBtn  ( this, SvtResId( CB_LOGIN_SAVEPASSWORD ) ),
+    aLoginGB        ( this, SvtResId( GB_LOGIN_LOGIN ) ),
+    aOKBtn          ( this, SvtResId( BTN_LOGIN_OK ) ),
+    aCancelBtn      ( this, SvtResId( BTN_LOGIN_CANCEL ) ),
+    aHelpBtn        ( this, SvtResId( BTN_LOGIN_HELP ) )
 
 {
     // Einlog-Ort eintragen
@@ -280,7 +280,7 @@ LoginDialog::LoginDialog
     if ( ( ( nFlags & LF_NO_ACCOUNT ) == LF_NO_ACCOUNT ) && pRealm && pRealm->Len() )
     {
         aServer = *pRealm;
-        ( ( aServer += ' ' ) += String( ResId( STR_LOGIN_AT ) ) ) += ' ';
+        ( ( aServer += ' ' ) += String( SvtResId( STR_LOGIN_AT ) ) ) += ' ';
     }
     aServer += rServer;
     String aTxt = aRequestInfo.GetText();
