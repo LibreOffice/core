@@ -4,9 +4,9 @@
  *
  *  $RCSfile: outdev2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 15:22:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:37:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -711,6 +711,54 @@ void OutputDevice::ImplDrawBitmap( const Point& rDestPt, const Size& rDestSize,
         {
             if ( nMirrFlags )
                 aBmp.Mirror( nMirrFlags );
+
+            /* #i75264#
+            * sometimes a bitmap is scaled to a ridiculous size and drawn
+            * to a quite normal VDev, so only a very small part of
+            * the scaled bitmap will be visible. However actually scaling
+            * the bitmap will use so much memory that we end with a crash.
+            * Workaround: since only a small part of the scaled bitmap will
+            * be actually drawn anyway (because of clipping on the device
+            * boundary), limit the destination and source rectangles so
+            * that the destination rectangle will overlap the device but only
+            * be reasonably (say factor 2) larger than the device itself.
+            */
+            if( aPosAry.mnDestWidth > 2048 || aPosAry.mnDestHeight > 2048 )
+            {
+                 if( meOutDevType == OUTDEV_WINDOW ||
+                     (meOutDevType == OUTDEV_VIRDEV && mpPDFWriter == 0 ) )
+                {
+                    // reduce scaling to something reasonable taking into account the output size
+                    if( aPosAry.mnDestWidth > 3*mnOutWidth )
+                    {
+                        int nFactor = aPosAry.mnDestWidth/(mnOutWidth*2);
+                        long nNewDestWidth = aPosAry.mnDestWidth/nFactor;
+                        long nNewSrcWidth = aPosAry.mnSrcWidth/nFactor;
+                        if( aPosAry.mnDestX + nNewDestWidth < (mnOutWidth*3/2) )
+                        {
+                            int nMoveTile = -aPosAry.mnDestX / nNewDestWidth;
+                            aPosAry.mnDestX += nMoveTile * nNewDestWidth;
+                            aPosAry.mnSrcX += nMoveTile * nNewSrcWidth;
+                        }
+                        aPosAry.mnDestWidth = nNewDestWidth;
+                        aPosAry.mnSrcWidth = nNewSrcWidth;
+                    }
+                    if( aPosAry.mnDestHeight > 3*mnOutHeight )
+                    {
+                        int nFactor = aPosAry.mnDestHeight/(mnOutHeight*2);
+                        long nNewDestHeight = aPosAry.mnDestHeight/nFactor;
+                        long nNewSrcHeight = aPosAry.mnSrcHeight/nFactor;
+                        if( aPosAry.mnDestY + nNewDestHeight < (mnOutHeight*3/2) )
+                        {
+                            int nMoveTile = -aPosAry.mnDestY / nNewDestHeight;
+                            aPosAry.mnDestY += nMoveTile * nNewDestHeight;
+                            aPosAry.mnSrcY += nMoveTile * nNewSrcHeight;
+                        }
+                        aPosAry.mnDestHeight = nNewDestHeight;
+                        aPosAry.mnSrcHeight = nNewSrcHeight;
+                    }
+                }
+            }
 
             mpGraphics->DrawBitmap( &aPosAry, *aBmp.ImplGetImpBitmap()->ImplGetSalBitmap(), this );
         }
