@@ -4,9 +4,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 12:16:19 $
+ *  last change: $Author: gm $ $Date: 2007-04-26 07:38:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2027,6 +2027,9 @@ void ScInterpreter::ScBase()
                     // Nach dem strange fDebug1 und fVal < fMult  ist eigentlich
                     // fDebug2 == fBase, trotzdem wird das mit einem Vergleich
                     // nicht erkannt, dann schlaegt bDirt zu und alles wird wieder gut..
+
+                    // prevent compiler warnings
+                    (void)fDebug1; (void)fDebug2; (void)fDebug3;
 #endif
                     size_t nDig;
                     if ( fVal < fMult )
