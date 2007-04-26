@@ -4,9 +4,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:39:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:37:27 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2054,7 +2054,8 @@ sal_Unicode SwCrsrShell::GetChar( BOOL bEnd, long nOffset )
     const SwPosition* pPos = !pCurCrsr->HasMark() ? pCurCrsr->GetPoint()
                                 : bEnd ? pCurCrsr->End() : pCurCrsr->Start();
     SwTxtNode* pTxtNd = pPos->nNode.GetNode().GetTxtNode();
-    ASSERT( pTxtNd, "kein TextNode, wie soll ein char returnt werden?" );
+    if( !pTxtNd )
+        return 0;
 
     xub_StrLen nPos = pPos->nContent.GetIndex();
     const String& rStr = pTxtNd->GetTxt();
