@@ -4,9 +4,9 @@
  *
  *  $RCSfile: new.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:42:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:14:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -655,33 +655,33 @@ void    SfxNewFileDialog_Impl::SetTemplateFlags(USHORT nSet)
 
 SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     SfxNewFileDialog* pAntiImplP, USHORT nFl)
-    :   aRegionFt( pAntiImplP, ResId( FT_REGION ) ),
-        aRegionLb( pAntiImplP, ResId( LB_REGION ) ),
-        aTemplateFt( pAntiImplP, ResId( FT_TEMPLATE ) ),
-        aTemplateLb( pAntiImplP, ResId( LB_TEMPLATE ) ),
-        aPreviewBtn( pAntiImplP, ResId( BTN_PREVIEW ) ),
-        aPreviewWin( pAntiImplP, ResId( WIN_PREVIEW ) ),
-        aTitleFt( pAntiImplP, ResId( FT_TITLE ) ),
-        aTitleEd( pAntiImplP, ResId( ED_TITLE ) ),
-        aThemaFt( pAntiImplP, ResId( FT_THEMA ) ),
-        aThemaEd( pAntiImplP, ResId( ED_THEMA ) ),
-        aKeywordsFt( pAntiImplP, ResId( FT_KEYWORDS ) ),
-        aKeywordsEd( pAntiImplP, ResId( ED_KEYWORDS ) ),
-        aDescFt( pAntiImplP, ResId( FT_DESC ) ),
-        aDescEd( pAntiImplP, ResId( ED_DESC ) ),
-        aDocinfoGb( pAntiImplP, ResId( GB_DOCINFO ) ),
-        aTextStyleCB( pAntiImplP, ResId(  CB_TEXT_STYLE )),
-        aFrameStyleCB( pAntiImplP, ResId( CB_FRAME_STYLE )),
-        aPageStyleCB( pAntiImplP, ResId(  CB_PAGE_STYLE )),
-        aNumStyleCB( pAntiImplP, ResId(   CB_NUM_STYLE  )),
-        aMergeStyleCB( pAntiImplP, ResId( CB_MERGE_STYLE )),
-        aLoadFilePB( pAntiImplP, ResId(   PB_LOAD_FILE )),
-        aOkBt( pAntiImplP, ResId( BT_OK ) ),
-        aCancelBt( pAntiImplP, ResId( BT_CANCEL ) ),
-        aHelpBt( pAntiImplP, ResId( BT_HELP ) ),
-        pMoreBt( new MoreButton( pAntiImplP, ResId( BT_MORE ) ) ),
-        aNone( ResId(STR_NONE) ),
-        sLoadTemplate( ResId(STR_LOAD_TEMPLATE)),
+    :   aRegionFt( pAntiImplP, SfxResId( FT_REGION ) ),
+        aRegionLb( pAntiImplP, SfxResId( LB_REGION ) ),
+        aTemplateFt( pAntiImplP, SfxResId( FT_TEMPLATE ) ),
+        aTemplateLb( pAntiImplP, SfxResId( LB_TEMPLATE ) ),
+        aPreviewBtn( pAntiImplP, SfxResId( BTN_PREVIEW ) ),
+        aPreviewWin( pAntiImplP, SfxResId( WIN_PREVIEW ) ),
+        aTitleFt( pAntiImplP, SfxResId( FT_TITLE ) ),
+        aTitleEd( pAntiImplP, SfxResId( ED_TITLE ) ),
+        aThemaFt( pAntiImplP, SfxResId( FT_THEMA ) ),
+        aThemaEd( pAntiImplP, SfxResId( ED_THEMA ) ),
+        aKeywordsFt( pAntiImplP, SfxResId( FT_KEYWORDS ) ),
+        aKeywordsEd( pAntiImplP, SfxResId( ED_KEYWORDS ) ),
+        aDescFt( pAntiImplP, SfxResId( FT_DESC ) ),
+        aDescEd( pAntiImplP, SfxResId( ED_DESC ) ),
+        aDocinfoGb( pAntiImplP, SfxResId( GB_DOCINFO ) ),
+        aTextStyleCB( pAntiImplP, SfxResId(  CB_TEXT_STYLE )),
+        aFrameStyleCB( pAntiImplP, SfxResId( CB_FRAME_STYLE )),
+        aPageStyleCB( pAntiImplP, SfxResId(  CB_PAGE_STYLE )),
+        aNumStyleCB( pAntiImplP, SfxResId(   CB_NUM_STYLE  )),
+        aMergeStyleCB( pAntiImplP, SfxResId( CB_MERGE_STYLE )),
+        aLoadFilePB( pAntiImplP, SfxResId(   PB_LOAD_FILE )),
+        aOkBt( pAntiImplP, SfxResId( BT_OK ) ),
+        aCancelBt( pAntiImplP, SfxResId( BT_CANCEL ) ),
+        aHelpBt( pAntiImplP, SfxResId( BT_HELP ) ),
+        pMoreBt( new MoreButton( pAntiImplP, SfxResId( BT_MORE ) ) ),
+        aNone( SfxResId(STR_NONE) ),
+        sLoadTemplate( SfxResId(STR_LOAD_TEMPLATE)),
         nFlags(nFl),
         pDocInfo(0),
         pAntiImpl( pAntiImplP )
