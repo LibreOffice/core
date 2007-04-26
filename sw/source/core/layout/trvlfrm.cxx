@@ -4,9 +4,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:09:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:39:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2019,6 +2019,11 @@ inline void Sub( SwRegionRects& rRegion, const SwRect& rRect )
 
 void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
 {
+    const SwNodes &rNds = GetFmt()->GetDoc()->GetNodes();
+    SwPosition *pStartPos = rCrsr.Start(),
+               *pEndPos   = rCrsr.GetPoint() == pStartPos ?
+                            rCrsr.GetMark() : rCrsr.GetPoint();
+
     ViewShell *pSh = GetShell();
 
 // --> FME 2004-06-08 #i12836# enhanced pdf
@@ -2026,13 +2031,30 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                            pSh->VisArea() :
                            Frm() );
 // <--
-    const SwNodes &rNds = GetFmt()->GetDoc()->GetNodes();
+    if( !pStartPos->nNode.GetNode().IsCntntNode() ||
+        !pStartPos->nNode.GetNode().GetCntntNode()->GetFrm() ||
+        ( pStartPos->nNode != pEndPos->nNode &&
+          ( !pEndPos->nNode.GetNode().IsCntntNode() ||
+            !pEndPos->nNode.GetNode().GetCntntNode()->GetFrm() ) ) )
+    {
+        /* For SelectAll we will need something like this later on...
+        const SwFrm* pPageFrm = GetLower();
+        while( pPageFrm )
+        {
+            SwRect aTmp( pPageFrm->Prt() );
+            aTmp.Pos() += pPageFrm->Frm().Pos();
+            Sub( aRegion, aTmp );
+            pPageFrm = pPageFrm->GetNext();
+        }
+        aRegion.Invert();
+        rCrsr.Remove( 0, rCrsr.Count() );
+        rCrsr.Insert( &aRegion, 0 );
+        */
+        return;
+    }
 
     //Erstmal die CntntFrms zum Start und End besorgen, die brauch ich auf
     //jedenfall.
-    SwPosition *pStartPos = rCrsr.Start(),
-               *pEndPos   = rCrsr.GetPoint() == pStartPos ?
-                                rCrsr.GetMark() : rCrsr.GetPoint();
     const SwCntntFrm *pStartFrm = rNds[ pStartPos->nNode ]->
         GetCntntNode()->GetFrm( &rCrsr.GetSttPos(), pStartPos );
 
