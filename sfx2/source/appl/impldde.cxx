@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impldde.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:54:56 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:06:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -93,15 +93,15 @@ public:
 
 SvDDELinkEditDialog::SvDDELinkEditDialog( Window* pParent, SvBaseLink* pLink )
     : ModalDialog( pParent, SfxResId( MD_DDE_LINKEDIT ) ),
-    aFtDdeApp( this, ResId( FT_DDE_APP ) ),
-    aEdDdeApp( this, ResId( ED_DDE_APP ) ),
-    aFtDdeTopic( this, ResId( FT_DDE_TOPIC ) ),
-    aEdDdeTopic( this, ResId( ED_DDE_TOPIC ) ),
-    aFtDdeItem( this, ResId( FT_DDE_ITEM ) ),
-    aEdDdeItem( this, ResId( ED_DDE_ITEM ) ),
-    aGroupDdeChg( this, ResId( GROUP_DDE_CHG ) ),
-    aOKButton1( this, ResId( 1 ) ),
-    aCancelButton1( this, ResId( 1 ) )
+    aFtDdeApp( this, SfxResId( FT_DDE_APP ) ),
+    aEdDdeApp( this, SfxResId( ED_DDE_APP ) ),
+    aFtDdeTopic( this, SfxResId( FT_DDE_TOPIC ) ),
+    aEdDdeTopic( this, SfxResId( ED_DDE_TOPIC ) ),
+    aFtDdeItem( this, SfxResId( FT_DDE_ITEM ) ),
+    aEdDdeItem( this, SfxResId( ED_DDE_ITEM ) ),
+    aGroupDdeChg( this, SfxResId( GROUP_DDE_CHG ) ),
+    aOKButton1( this, SfxResId( 1 ) ),
+    aCancelButton1( this, SfxResId( 1 ) )
 {
     FreeResource();
 
