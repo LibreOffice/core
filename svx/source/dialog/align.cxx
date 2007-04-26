@@ -4,9 +4,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:04:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:25:19 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,30 +155,30 @@ AlignmentTabPage::AlignmentTabPage( Window* pParent, const SfxItemSet& rCoreAttr
 
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_ALIGNMENT ), rCoreAttrs ),
 
-    maFlAlignment   ( this, ResId( FL_ALIGNMENT ) ),
-    maFtHorAlign    ( this, ResId( FT_HORALIGN ) ),
-    maLbHorAlign    ( this, ResId( LB_HORALIGN ) ),
-    maFtIndent      ( this, ResId( FT_INDENT ) ),
-    maEdIndent      ( this, ResId( ED_INDENT ) ),
-    maFtVerAlign    ( this, ResId( FT_VERALIGN ) ),
-    maLbVerAlign    ( this, ResId( LB_VERALIGN ) ),
+    maFlAlignment   ( this, SVX_RES( FL_ALIGNMENT ) ),
+    maFtHorAlign    ( this, SVX_RES( FT_HORALIGN ) ),
+    maLbHorAlign    ( this, SVX_RES( LB_HORALIGN ) ),
+    maFtIndent      ( this, SVX_RES( FT_INDENT ) ),
+    maEdIndent      ( this, SVX_RES( ED_INDENT ) ),
+    maFtVerAlign    ( this, SVX_RES( FT_VERALIGN ) ),
+    maLbVerAlign    ( this, SVX_RES( LB_VERALIGN ) ),
 
-    maFlOrient      ( this, ResId( FL_ORIENTATION ) ),
-    maCtrlDial      ( this, ResId( CTR_DIAL ) ),
-    maFtRotate      ( this, ResId( FT_DEGREES ) ),
-    maNfRotate      ( this, ResId( NF_DEGREES ) ),
-    maFtRefEdge     ( this, ResId( FT_BORDER_LOCK ) ),
-    maVsRefEdge     ( this, ResId( CTR_BORDER_LOCK ) ),
-    maCbStacked     ( this, ResId( BTN_TXTSTACKED ) ),
-    maCbAsianMode   ( this, ResId( BTN_ASIAN_VERTICAL ) ),
+    maFlOrient      ( this, SVX_RES( FL_ORIENTATION ) ),
+    maCtrlDial      ( this, SVX_RES( CTR_DIAL ) ),
+    maFtRotate      ( this, SVX_RES( FT_DEGREES ) ),
+    maNfRotate      ( this, SVX_RES( NF_DEGREES ) ),
+    maFtRefEdge     ( this, SVX_RES( FT_BORDER_LOCK ) ),
+    maVsRefEdge     ( this, SVX_RES( CTR_BORDER_LOCK ) ),
+    maCbStacked     ( this, SVX_RES( BTN_TXTSTACKED ) ),
+    maCbAsianMode   ( this, SVX_RES( BTN_ASIAN_VERTICAL ) ),
     maOrientHlp     ( this, maCtrlDial, maNfRotate, maCbStacked ),
 
-    maFlProperties  ( this, ResId( FL_WRAP ) ),
-    maBtnWrap       ( this, ResId( BTN_WRAP ) ),
-    maBtnHyphen     ( this, ResId( BTN_HYPH ) ),
-    maBtnShrink     ( this, ResId( BTN_SHRINK ) ),
-    maFtFrameDir    ( this, ResId( FT_TEXTFLOW ) ),
-    maLbFrameDir    ( this, ResId( LB_FRAMEDIR ) )
+    maFlProperties  ( this, SVX_RES( FL_WRAP ) ),
+    maBtnWrap       ( this, SVX_RES( BTN_WRAP ) ),
+    maBtnHyphen     ( this, SVX_RES( BTN_HYPH ) ),
+    maBtnShrink     ( this, SVX_RES( BTN_SHRINK ) ),
+    maFtFrameDir    ( this, SVX_RES( FT_TEXTFLOW ) ),
+    maLbFrameDir    ( this, SVX_RES( LB_FRAMEDIR ) )
 {
     InitVsRefEgde();
 
@@ -274,7 +274,7 @@ void AlignmentTabPage::InitVsRefEgde()
     // remember selection - is deleted in call to ValueSet::Clear()
     USHORT nSel = maVsRefEdge.GetSelectItemId();
 
-    ResId aResId( GetBackground().GetColor().IsDark() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS );
+    ResId aResId( GetBackground().GetColor().IsDark() ? IL_LOCK_BMPS_HC : IL_LOCK_BMPS, DIALOG_MGR() );
     ImageList aImageList( aResId );
     Size aItemSize( aImageList.GetImage( IID_BOTTOMLOCK ).GetSizePixel() );
 
@@ -282,9 +282,9 @@ void AlignmentTabPage::InitVsRefEgde()
     maVsRefEdge.SetStyle( maVsRefEdge.GetStyle() | WB_ITEMBORDER | WB_DOUBLEBORDER );
 
     maVsRefEdge.SetColCount( 3 );
-    maVsRefEdge.InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  String( ResId( STR_BOTTOMLOCK ) ) );
-    maVsRefEdge.InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     String( ResId( STR_TOPLOCK ) ) );
-    maVsRefEdge.InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    String( ResId( STR_CELLLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_BOTTOMLOCK, aImageList.GetImage( IID_BOTTOMLOCK ),  String( SVX_RES( STR_BOTTOMLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_TOPLOCK,    aImageList.GetImage( IID_TOPLOCK ),     String( SVX_RES( STR_TOPLOCK ) ) );
+    maVsRefEdge.InsertItem( IID_CELLLOCK,   aImageList.GetImage( IID_CELLLOCK ),    String( SVX_RES( STR_CELLLOCK ) ) );
 
     maVsRefEdge.SetSizePixel( maVsRefEdge.CalcWindowSizePixel( aItemSize ) );
 
