@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futxtatt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:26:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:39:38 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -94,7 +94,7 @@ void FuTextAttrDlg::DoExecute( SfxRequest& rReq )
     if( !pArgs )
     {
         SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, ResId( RID_SVXDLG_TEXT ), mpView );
+        SfxAbstractTabDialog *pDlg = pFact->CreateTextTabDialog( NULL, &aNewAttr, RID_SVXDLG_TEXT, mpView );
 
         USHORT nResult = pDlg->Execute();
 
