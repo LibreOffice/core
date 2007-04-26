@@ -4,9 +4,9 @@
  *
  *  $RCSfile: htmlex.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-09 11:22:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:36:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2784,7 +2784,7 @@ ULONG HtmlExport::CreateBitmap( ULONG nThemeId, INT16 nImage, const String& aNam
     return nErr;
 }
 
-/** Kantenglättung der übergebennen BitmapEx mit der angegebennen Hintergrundfarbe
+/** Kantenglï¿½ttung der ï¿½bergebennen BitmapEx mit der angegebennen Hintergrundfarbe
  */
 void HtmlExport::SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const
 {
@@ -2857,7 +2857,7 @@ void HtmlExport::SmoothBitmap( BitmapEx& aBmp, Color aBackCol ) const
         }
     }
 
-    // Kanten glätten
+    // Kanten glï¿½tten
     const Size          aSize( nWidth, nHeight );
     Bitmap              aDstBmp( aSize, 24 );
     BitmapWriteAccess*  pWAcc = aDstBmp.AcquireWriteAccess();
@@ -3232,7 +3232,7 @@ bool HtmlExport::CopyScript( const String& rPath, const String& rSource, const S
 
 static const char * ASP_Scripts[] = { "common.inc", "webcast.asp", "show.asp", "savepic.asp", "poll.asp", "editpic.asp" };
 
-/** erzeugt und speichert die für WebShow benötigte ASP Scripte */
+/** erzeugt und speichert die fï¿½r WebShow benï¿½tigte ASP Scripte */
 bool HtmlExport::CreateASPScripts()
 {
     for( USHORT n = 0; n < (sizeof( ASP_Scripts ) / sizeof(char *)); n++ )
@@ -3253,7 +3253,7 @@ bool HtmlExport::CreateASPScripts()
 
 static const char *PERL_Scripts[] = { "webcast.pl", "common.pl", "editpic.pl", "poll.pl", "savepic.pl", "show.pl" };
 
-/** erzeugt und speichert die für WebShow benötigte PERL Scripte */
+/** erzeugt und speichert die fï¿½r WebShow benï¿½tigte PERL Scripte */
 bool HtmlExport::CreatePERLScripts()
 {
     for( USHORT n = 0; n < (sizeof( PERL_Scripts ) / sizeof(char *)); n++ )
@@ -3417,7 +3417,7 @@ bool HtmlExport::checkForExistingFiles()
             ResMgr *pResMgr = CREATERESMGR( dbw );
             if( pResMgr )
             {
-                ResId aResId( 4077, pResMgr );
+                ResId aResId( 4077, *pResMgr );
                 String aMsg( aResId );
 
                 OUString aSystemPath;
