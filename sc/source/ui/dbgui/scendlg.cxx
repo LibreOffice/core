@@ -4,9 +4,9 @@
  *
  *  $RCSfile: scendlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:04:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:51:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -65,19 +65,19 @@
 ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL bEdit, BOOL bSheetProtected)
 
     :   ModalDialog     ( pParent, ScResId( RID_SCDLG_NEWSCENARIO ) ),
-        aFlName         ( this, ResId( FL_NAME )),
+        aFlName         ( this, ScResId( FL_NAME )),
         aEdName         ( this, ScResId( ED_NAME ) ),
-        aFlComment      ( this, ResId( FL_COMMENT ) ),
+        aFlComment      ( this, ScResId( FL_COMMENT ) ),
         aEdComment      ( this, ScResId( ED_COMMENT ) ),
-        aFlOptions      ( this, ResId( FL_OPTIONS ) ),
-        aCbShowFrame    ( this, ResId( CB_SHOWFRAME ) ),
-        aLbColor        ( this, ResId( LB_COLOR ) ),
-        //aCbPrintFrame ( this, ResId( CB_PRINTFRAME ) ),
-        aCbTwoWay       ( this, ResId( CB_TWOWAY ) ),
-        //aCbAttrib     ( this, ResId( CB_ATTRIB ) ),
-        //aCbValue      ( this, ResId( CB_VALUE ) ),
-        aCbCopyAll      ( this, ResId( CB_COPYALL ) ),
-        aCbProtect      ( this, ResId( CB_PROTECT ) ),
+        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
+        aCbShowFrame    ( this, ScResId( CB_SHOWFRAME ) ),
+        aLbColor        ( this, ScResId( LB_COLOR ) ),
+        //aCbPrintFrame ( this, ScResId( CB_PRINTFRAME ) ),
+        aCbTwoWay       ( this, ScResId( CB_TWOWAY ) ),
+        //aCbAttrib     ( this, ScResId( CB_ATTRIB ) ),
+        //aCbValue      ( this, ScResId( CB_VALUE ) ),
+        aCbCopyAll      ( this, ScResId( CB_COPYALL ) ),
+        aCbProtect      ( this, ScResId( CB_PROTECT ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -85,7 +85,7 @@ ScNewScenarioDlg::ScNewScenarioDlg( Window* pParent, const String& rName, BOOL b
         bIsEdit         ( bEdit )
 {
     if (bIsEdit)
-        SetText(String(ResId(STR_EDIT)));
+        SetText(String(ScResId(STR_EDIT)));
 
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
     if ( pDocSh )
