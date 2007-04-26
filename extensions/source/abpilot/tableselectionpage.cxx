@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tableselectionpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-01 17:34:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:04:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -63,8 +63,8 @@ namespace abp
     //---------------------------------------------------------------------
     TableSelectionPage::TableSelectionPage( OAddessBookSourcePilot* _pParent )
         :AddressBookSourcePage(_pParent, ModuleRes(RID_PAGE_TABLESELECTION_AB))
-        ,m_aLabel           ( this, ResId( FL_TOOMUCHTABLES ) )
-        ,m_aTableList       ( this, ResId( LB_TABLELIST ) )
+        ,m_aLabel           ( this, ModuleRes( FL_TOOMUCHTABLES ) )
+        ,m_aTableList       ( this, ModuleRes( LB_TABLELIST ) )
     {
         FreeResource();
 
