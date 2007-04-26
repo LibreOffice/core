@@ -86,7 +86,7 @@ static void menu_deactivate_cb( GtkWidget *pMenu )
 
 static GdkPixbuf * ResIdToPixbuf( USHORT nResId )
 {
-    ResId aResId( SV_ICON_SMALL_START + nResId, pVCLResMgr );
+    ResId aResId( SV_ICON_SMALL_START + nResId, *pVCLResMgr );
     BitmapEx aIcon( aResId );
     Bitmap pInSalBitmap = aIcon.GetBitmap();
     AlphaMask pInSalAlpha = aIcon.GetAlpha();
