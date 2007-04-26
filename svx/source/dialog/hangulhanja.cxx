@@ -4,9 +4,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 12:13:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:31:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -385,7 +385,7 @@ namespace svx
             SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
             if(pFact)
             {
-                m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection, ResId(RID_SVX_MDLG_HANGULHANJA));
+                m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection, RID_SVX_MDLG_HANGULHANJA);
                 DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");//CHINA001
 
                 m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
