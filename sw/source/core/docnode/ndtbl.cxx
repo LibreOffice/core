@@ -4,9 +4,9 @@
  *
  *  $RCSfile: ndtbl.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-28 15:42:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:49:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -3660,7 +3660,7 @@ BOOL SwDoc::GetTableAutoFmt( const SwSelBoxes& rBoxes, SwTableAutoFmt& rGet )
 
 String SwDoc::GetUniqueTblName() const
 {
-    ResId aId( STR_TABLE_DEFNAME, pSwResMgr );
+    ResId aId( STR_TABLE_DEFNAME, *pSwResMgr );
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
