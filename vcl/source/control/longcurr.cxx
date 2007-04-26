@@ -4,9 +4,9 @@
  *
  *  $RCSfile: longcurr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 11:54:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:28:31 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -362,33 +362,36 @@ LongCurrencyFormatter::LongCurrencyFormatter()
 
 // -----------------------------------------------------------------------
 
-void LongCurrencyFormatter::ImplLoadRes( const ResId& )
+void LongCurrencyFormatter::ImplLoadRes( const ResId& rResId )
 {
     ImpInit();
 
-    ResMgr*     pMgr = Resource::GetResManager();
-    ULONG       nMask = pMgr->ReadLong();
-
-    if ( NUMERICFORMATTER_MIN & nMask )
-        mnMin = pMgr->ReadLong();
-
-    if ( NUMERICFORMATTER_MAX & nMask )
-        mnMax = pMgr->ReadLong();
-
-    if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
-        SetStrictFormat(  (BOOL)pMgr->ReadShort() );
-
-    if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
-        SetDecimalDigits( pMgr->ReadShort() );
-
-    if ( NUMERICFORMATTER_VALUE & nMask )
+    ResMgr*     pMgr = rResId.GetResMgr();
+    if( pMgr )
     {
-        mnFieldValue = pMgr->ReadLong();
-        if ( mnFieldValue > mnMax )
-            mnFieldValue = mnMax;
-        else if ( mnFieldValue < mnMin )
-            mnFieldValue = mnMin;
-        mnLastValue = mnFieldValue;
+        ULONG       nMask = pMgr->ReadLong();
+
+        if ( NUMERICFORMATTER_MIN & nMask )
+            mnMin = pMgr->ReadLong();
+
+        if ( NUMERICFORMATTER_MAX & nMask )
+            mnMax = pMgr->ReadLong();
+
+        if ( NUMERICFORMATTER_STRICTFORMAT & nMask )
+            SetStrictFormat(  (BOOL)pMgr->ReadShort() );
+
+        if ( NUMERICFORMATTER_DECIMALDIGITS & nMask )
+            SetDecimalDigits( pMgr->ReadShort() );
+
+        if ( NUMERICFORMATTER_VALUE & nMask )
+        {
+            mnFieldValue = pMgr->ReadLong();
+            if ( mnFieldValue > mnMax )
+                mnFieldValue = mnMax;
+            else if ( mnFieldValue < mnMin )
+                mnFieldValue = mnMin;
+            mnLastValue = mnFieldValue;
+        }
     }
 }
 
@@ -646,7 +649,7 @@ LongCurrencyField::LongCurrencyField( Window* pParent, const ResId& rResId ) :
 void LongCurrencyField::ImplLoadRes( const ResId& rResId )
 {
     SpinField::ImplLoadRes( rResId );
-    LongCurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+    LongCurrencyFormatter::ImplLoadRes( ResId( (RSHEADER_TYPE *)GetClassRes(), *rResId.GetResMgr() ) );
 
     ULONG nMask = ReadLongRes();
     if ( CURRENCYFIELD_FIRST & nMask )
