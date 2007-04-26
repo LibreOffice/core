@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 10:56:38 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:26:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -185,7 +185,7 @@ public:
 
             if ( aResId > -1 )
             {
-                aResString = String( ResId( aResId, m_ResMgr ) );
+                aResString = String( ResId( aResId, *m_ResMgr ) );
                 aResOUString = OUString( aResString );
             }
         }
