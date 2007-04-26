@@ -4,9 +4,9 @@
  *
  *  $RCSfile: redlndlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 15:10:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:14:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -437,14 +437,14 @@ SwModelessRedlineAcceptDlg::~SwModelessRedlineAcceptDlg()
 
 SwRedlineAcceptDlg::SwRedlineAcceptDlg(Dialog *pParent, BOOL bAutoFmt) :
     pParentDlg      (pParent),
-    aTabPagesCTRL   (pParent, ResId(CTRL_TABPAGES)),
-    aPopup          (ResId(MN_REDLINE_POPUP)),
-    sInserted       (ResId(STR_REDLINE_INSERTED)),
-    sDeleted        (ResId(STR_REDLINE_DELETED)),
-    sFormated       (ResId(STR_REDLINE_FORMATED)),
-    sTableChgd      (ResId(STR_REDLINE_TABLECHG)),
-    sFmtCollSet     (ResId(STR_REDLINE_FMTCOLLSET)),
-    sAutoFormat     (ResId(STR_REDLINE_AUTOFMT)),
+    aTabPagesCTRL   (pParent, SW_RES(CTRL_TABPAGES)),
+    aPopup          (SW_RES(MN_REDLINE_POPUP)),
+    sInserted       (SW_RES(STR_REDLINE_INSERTED)),
+    sDeleted        (SW_RES(STR_REDLINE_DELETED)),
+    sFormated       (SW_RES(STR_REDLINE_FORMATED)),
+    sTableChgd      (SW_RES(STR_REDLINE_TABLECHG)),
+    sFmtCollSet     (SW_RES(STR_REDLINE_FMTCOLLSET)),
+    sAutoFormat     (SW_RES(STR_REDLINE_AUTOFMT)),
     bOnlyFormatedRedlines( FALSE ),
     bHasReadonlySel ( FALSE ),
     bRedlnAutoFmt   (bAutoFmt),
@@ -1481,7 +1481,7 @@ IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
                         //CHINA001 SvxPostItDialog *pDlg = new SvxPostItDialog(pParentDlg, aSet, FALSE);
                         //CHINA001 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                         //CHINA001 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, ResId(RID_SVXDLG_POSTIT), FALSE );
+                        AbstractSvxPostItDialog* pDlg = pFact->CreateSvxPostItDialog( pParentDlg, aSet, RID_SVXDLG_POSTIT, FALSE );
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
 
                         pDlg->HideAuthor();
