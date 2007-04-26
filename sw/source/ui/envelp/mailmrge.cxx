@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:56:13 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:08:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -231,7 +231,7 @@ SwMailMergeDlg::SwMailMergeDlg(Window* pParent, SwWrtShell& rShell,
         Sequence< Any >* pSelection) :
 
     SvxStandardDialog(pParent, SW_RES(DLG_MAILMERGE)),
-    pBeamerWin      (new Window(this, ResId(WIN_BEAMER))),
+    pBeamerWin      (new Window(this, SW_RES(WIN_BEAMER))),
     aAllRB          (this, SW_RES(RB_ALL)),
     aMarkedRB       (this, SW_RES(RB_MARKED)),
     aFromRB         (this, SW_RES(RB_FROM)),
@@ -737,7 +737,7 @@ IMPL_LINK( SwMailMergeDlg, AttachFileHdl, PushButton *, pBtn )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this, ResId(RID_SVXDLG_MULTIPATH) );
+        AbstractSvxMultiFileDialog* pFileDlg = pFact->CreateSvxMultiFileDialog( this, RID_SVXDLG_MULTIPATH );
         DBG_ASSERT(pFileDlg, "Dialogdiet fail!");//CHINA001
         pFileDlg->SetFiles(aAttachED.GetText());
         pFileDlg->SetHelpId(HID_FILEDLG_MAILMRGE2);
@@ -769,12 +769,12 @@ Reference<XResultSet> SwMailMergeDlg::GetResultSet() const
   -----------------------------------------------------------------------*/
 SwMailMergeCreateFromDlg::SwMailMergeCreateFromDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_MERGE_CREATE)),
-    aCreateFromFL(  this, ResId( FL_CREATEFROM  )),
-    aThisDocRB(     this, ResId( RB_THISDOC     )),
-    aUseTemplateRB( this, ResId( RB_TEMPLATE    )),
-    aOK(            this, ResId( BT_OK          )),
-    aCancel(        this, ResId( BT_CANCEL      )),
-    aHelp(          this, ResId( BT_HELP        ))
+    aCreateFromFL(  this, SW_RES( FL_CREATEFROM  )),
+    aThisDocRB(     this, SW_RES( RB_THISDOC     )),
+    aUseTemplateRB( this, SW_RES( RB_TEMPLATE    )),
+    aOK(            this, SW_RES( BT_OK          )),
+    aCancel(        this, SW_RES( BT_CANCEL      )),
+    aHelp(          this, SW_RES( BT_HELP        ))
 {
     FreeResource();
 }
@@ -789,13 +789,13 @@ SwMailMergeCreateFromDlg::~SwMailMergeCreateFromDlg()
  * --------------------------------------------------*/
 SwMailMergeFieldConnectionsDlg::SwMailMergeFieldConnectionsDlg(Window* pParent) :
     ModalDialog(pParent, SW_RES(DLG_MERGE_FIELD_CONNECTIONS)),
-    aConnectionsFL( this, ResId( FL_CONNECTIONS  )),
-    aUseExistingRB( this, ResId( RB_USEEXISTING )),
-    aCreateNewRB(   this, ResId( RB_CREATENEW    )),
-    aInfoFI(        this, ResId( FT_INFO        )),
-    aOK(            this, ResId( BT_OK          )),
-    aCancel(        this, ResId( BT_CANCEL      )),
-    aHelp(          this, ResId( BT_HELP        ))
+    aConnectionsFL( this, SW_RES( FL_CONNECTIONS  )),
+    aUseExistingRB( this, SW_RES( RB_USEEXISTING )),
+    aCreateNewRB(   this, SW_RES( RB_CREATENEW    )),
+    aInfoFI(        this, SW_RES( FT_INFO        )),
+    aOK(            this, SW_RES( BT_OK          )),
+    aCancel(        this, SW_RES( BT_CANCEL      )),
+    aHelp(          this, SW_RES( BT_HELP        ))
 {
     FreeResource();
 }
