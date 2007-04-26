@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:04:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:30:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -915,6 +915,40 @@ void SwFEShell::CalcBoundRect( SwRect& _orRect,
                 case REL_PG_PRTAREA: aPos.X() += pFrm->Prt().Left(); break;
             }
         }
+        // --> OD 2006-12-12 #i67221# - proposed patch
+        if( bVert )
+        {
+            switch ( _eVertRelOrient )
+            {
+                case PRTAREA:
+                case REL_PG_PRTAREA:
+                {
+                    aPos.X() -= pFrm->GetRightMargin();
+                }
+                break;
+            }
+        }
+        else
+        {
+            switch ( _eVertRelOrient )
+            {
+                case PRTAREA:
+                case REL_PG_PRTAREA:
+                {
+                    if ( pFrm->IsPageFrm() )
+                    {
+                        aPos.Y() =
+                            static_cast<const SwPageFrm*>(pFrm)->PrtWithoutHeaderAndFooter().Top();
+                    }
+                    else
+                    {
+                        aPos.Y() += pFrm->Prt().Top();
+                    }
+                }
+                break;
+            }
+        }
+        // <--
         if ( _opPercent )
             *_opPercent = pFrm->Prt().SSize();
     }
