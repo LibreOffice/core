@@ -4,9 +4,9 @@
  *
  *  $RCSfile: acredlin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:29:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:53:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,28 +127,28 @@ ScAcceptChgDlg::ScAcceptChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
 
     :   SfxModelessDialog( pB, pCW, pParent, ScResId(RID_SCDLG_CHANGES) ),
         //
-        aAcceptChgCtr           ( this, ResId( CTR_REDLINING ) ),
+        aAcceptChgCtr           ( this, ScResId( CTR_REDLINING ) ),
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
         aLocalRangeName ( *(pDoc->GetRangeName()) ),
         //
-        aStrInsertCols          ( ResId( STR_INSERT_COLS)),
-        aStrInsertRows          ( ResId( STR_INSERT_ROWS)),
-        aStrInsertTabs          ( ResId( STR_INSERT_TABS)),
-        aStrDeleteCols          ( ResId( STR_DELETE_COLS)),
-        aStrDeleteRows          ( ResId( STR_DELETE_ROWS)),
-        aStrDeleteTabs          ( ResId( STR_DELETE_TABS)),
-        aStrMove                ( ResId( STR_MOVE       )),
-        aStrContent             ( ResId( STR_CONTENT    )),
-        aStrReject              ( ResId( STR_REJECT     )),
-        aStrAllAccepted         ( ResId( STR_ACCEPTED   )),
-        aStrAllRejected         ( ResId( STR_REJECTED   )),
-        aStrNoEntry             ( ResId( STR_NO_ENTRY   )),
-        aStrContentWithChild    ( ResId( STR_CONTENT_WITH_CHILD)),
-        aStrChildContent        ( ResId( STR_CHILD_CONTENT)),
-        aStrChildOrgContent     ( ResId( STR_CHILD_ORGCONTENT)),
-        aStrEmpty               ( ResId( STR_EMPTY      ))
+        aStrInsertCols          ( ScResId( STR_INSERT_COLS)),
+        aStrInsertRows          ( ScResId( STR_INSERT_ROWS)),
+        aStrInsertTabs          ( ScResId( STR_INSERT_TABS)),
+        aStrDeleteCols          ( ScResId( STR_DELETE_COLS)),
+        aStrDeleteRows          ( ScResId( STR_DELETE_ROWS)),
+        aStrDeleteTabs          ( ScResId( STR_DELETE_TABS)),
+        aStrMove                ( ScResId( STR_MOVE     )),
+        aStrContent             ( ScResId( STR_CONTENT  )),
+        aStrReject              ( ScResId( STR_REJECT       )),
+        aStrAllAccepted         ( ScResId( STR_ACCEPTED )),
+        aStrAllRejected         ( ScResId( STR_REJECTED )),
+        aStrNoEntry             ( ScResId( STR_NO_ENTRY   )),
+        aStrContentWithChild    ( ScResId( STR_CONTENT_WITH_CHILD)),
+        aStrChildContent        ( ScResId( STR_CHILD_CONTENT)),
+        aStrChildOrgContent     ( ScResId( STR_CHILD_ORGCONTENT)),
+        aStrEmpty               ( ScResId( STR_EMPTY        ))
 {
     FreeResource();
 //  bScAcceptChgDlgIsDead=FALSE;
