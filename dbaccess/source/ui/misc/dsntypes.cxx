@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dsntypes.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:42:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:02:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,7 +102,7 @@ namespace dbaui
                 m_aStrings.reserve(STR_END);
                 for (int i = STR_MYSQL_ODBC; i < STR_END ; ++i)
                 {
-                    m_aStrings.push_back(String(ResId(i)));
+                    m_aStrings.push_back(String(ModuleRes(sal::static_int_cast<USHORT>(i))));
                 }
 
             }
@@ -129,7 +129,7 @@ namespace dbaui
             */
             String getString(USHORT _nResId)
             {
-                return String(ResId(_nResId));
+                return String(ModuleRes(_nResId));
             }
         };
     }
