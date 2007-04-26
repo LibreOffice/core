@@ -4,9 +4,9 @@
  *
  *  $RCSfile: opthtml.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:31:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:38:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -71,34 +71,34 @@ const USHORT aExportToPosArr[] =
 // -----------------------------------------------------------------------
 
 OfaHtmlTabPage::OfaHtmlTabPage(Window* pParent, const SfxItemSet& rSet) :
-        SfxTabPage( pParent, ResId( RID_OFAPAGE_HTMLOPT, DIALOG_MGR() ), rSet ),
-    aFontSizeGB     ( this, ResId( GB_FONTSIZE     ) ),
-    aSize1FT        ( this, ResId( FT_SIZE1        ) ),
-    aSize1NF        ( this, ResId( NF_SIZE1        ) ),
-    aSize2FT        ( this, ResId( FT_SIZE2        ) ),
-    aSize2NF        ( this, ResId( NF_SIZE2        ) ),
-    aSize3FT        ( this, ResId( FT_SIZE3        ) ),
-    aSize3NF        ( this, ResId( NF_SIZE3        ) ),
-    aSize4FT        ( this, ResId( FT_SIZE4        ) ),
-    aSize4NF        ( this, ResId( NF_SIZE4        ) ),
-    aSize5FT        ( this, ResId( FT_SIZE5        ) ),
-    aSize5NF        ( this, ResId( NF_SIZE5        ) ),
-    aSize6FT        ( this, ResId( FT_SIZE6        ) ),
-    aSize6NF        ( this, ResId( NF_SIZE6        ) ),
-    aSize7FT        ( this, ResId( FT_SIZE7        ) ),
-    aSize7NF        ( this, ResId( NF_SIZE7        ) ),
-    aImportGB       ( this, ResId( GB_IMPORT       ) ),
-    aNumbersEnglishUSCB ( this, ResId( CB_NUMBERS_ENGLISH_US ) ),
-    aUnknownTagCB   ( this, ResId( CB_UNKNOWN_TAGS ) ),
-    aIgnoreFontNamesCB( this, ResId( CB_IGNORE_FONTNAMES ) ),
-    aExportGB       ( this, ResId( GB_EXPORT       ) ),
-    aExportLB       ( this, ResId( LB_EXPORT       ) ),
-    aStarBasicCB    ( this, ResId( CB_STARBASIC    ) ),
-    aStarBasicWarningCB(this, ResId( CB_STARBASIC_WARNING    ) ),
-    aPrintExtensionCB( this,ResId(CB_PRINT_EXTENSION )),
-    aSaveGrfLocalCB ( this, ResId( CB_LOCAL_GRF    ) ),
-    aCharSetFT      ( this, ResId( FT_CHARSET      ) ),
-    aCharSetLB      ( this, ResId( LB_CHARSET      ) )
+        SfxTabPage( pParent, SVX_RES( RID_OFAPAGE_HTMLOPT ), rSet ),
+    aFontSizeGB     ( this, SVX_RES( GB_FONTSIZE       ) ),
+    aSize1FT        ( this, SVX_RES( FT_SIZE1          ) ),
+    aSize1NF        ( this, SVX_RES( NF_SIZE1          ) ),
+    aSize2FT        ( this, SVX_RES( FT_SIZE2          ) ),
+    aSize2NF        ( this, SVX_RES( NF_SIZE2          ) ),
+    aSize3FT        ( this, SVX_RES( FT_SIZE3          ) ),
+    aSize3NF        ( this, SVX_RES( NF_SIZE3          ) ),
+    aSize4FT        ( this, SVX_RES( FT_SIZE4          ) ),
+    aSize4NF        ( this, SVX_RES( NF_SIZE4          ) ),
+    aSize5FT        ( this, SVX_RES( FT_SIZE5          ) ),
+    aSize5NF        ( this, SVX_RES( NF_SIZE5          ) ),
+    aSize6FT        ( this, SVX_RES( FT_SIZE6          ) ),
+    aSize6NF        ( this, SVX_RES( NF_SIZE6          ) ),
+    aSize7FT        ( this, SVX_RES( FT_SIZE7          ) ),
+    aSize7NF        ( this, SVX_RES( NF_SIZE7          ) ),
+    aImportGB       ( this, SVX_RES( GB_IMPORT     ) ),
+    aNumbersEnglishUSCB ( this, SVX_RES( CB_NUMBERS_ENGLISH_US ) ),
+    aUnknownTagCB   ( this, SVX_RES( CB_UNKNOWN_TAGS ) ),
+    aIgnoreFontNamesCB( this, SVX_RES( CB_IGNORE_FONTNAMES ) ),
+    aExportGB       ( this, SVX_RES( GB_EXPORT       ) ),
+    aExportLB       ( this, SVX_RES( LB_EXPORT       ) ),
+    aStarBasicCB    ( this, SVX_RES( CB_STARBASIC    ) ),
+    aStarBasicWarningCB(this, SVX_RES( CB_STARBASIC_WARNING    ) ),
+    aPrintExtensionCB( this,SVX_RES(CB_PRINT_EXTENSION )),
+    aSaveGrfLocalCB ( this, SVX_RES( CB_LOCAL_GRF    ) ),
+    aCharSetFT      ( this, SVX_RES( FT_CHARSET      ) ),
+    aCharSetLB      ( this, SVX_RES( LB_CHARSET      ) )
 
 {
     FreeResource();
