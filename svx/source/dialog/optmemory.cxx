@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optmemory.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2007-01-23 11:35:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -214,30 +214,30 @@ int OfaMemoryOptionsPage::DeactivatePage( SfxItemSet* _pSet )
 
 OfaMemoryOptionsPage::OfaMemoryOptionsPage(Window* pParent, const SfxItemSet& rSet ) :
 
-    SfxTabPage( pParent, ResId( OFA_TP_MEMORY, DIALOG_MGR() ), rSet ),
+    SfxTabPage( pParent, SVX_RES( OFA_TP_MEMORY ), rSet ),
 
-    aUndoBox                ( this, ResId( GB_UNDO ) ),
-    aUndoText               ( this, ResId( FT_UNDO ) ),
-    aUndoEdit               ( this, ResId( ED_UNDO ) ),
-    aGbGraphicCache         ( this, ResId( GB_GRAPHICCACHE ) ),
-    aFtGraphicCache         ( this, ResId( FT_GRAPHICCACHE ) ),
-    aNfGraphicCache         ( this, ResId( NF_GRAPHICCACHE ) ),
-    aFtGraphicCacheUnit     ( this, ResId( FT_GRAPHICCACHE_UNIT         ) ),
-    aFtGraphicObjectCache   ( this, ResId( FT_GRAPHICOBJECTCACHE ) ),
-    aNfGraphicObjectCache   ( this, ResId( NF_GRAPHICOBJECTCACHE ) ),
-    aFtGraphicObjectCacheUnit(this, ResId( FT_GRAPHICOBJECTCACHE_UNIT ) ),
-    aFtGraphicObjectTime    ( this, ResId( FT_GRAPHICOBJECTTIME ) ),
-    aTfGraphicObjectTime    ( this, ResId( TF_GRAPHICOBJECTTIME ) ),
-    aFtGraphicObjectTimeUnit( this, ResId( FT_GRAPHICOBJECTTIME_UNIT     ) ),
+    aUndoBox                ( this, SVX_RES( GB_UNDO ) ),
+    aUndoText               ( this, SVX_RES( FT_UNDO ) ),
+    aUndoEdit               ( this, SVX_RES( ED_UNDO ) ),
+    aGbGraphicCache         ( this, SVX_RES( GB_GRAPHICCACHE ) ),
+    aFtGraphicCache         ( this, SVX_RES( FT_GRAPHICCACHE ) ),
+    aNfGraphicCache         ( this, SVX_RES( NF_GRAPHICCACHE ) ),
+    aFtGraphicCacheUnit     ( this, SVX_RES( FT_GRAPHICCACHE_UNIT         ) ),
+    aFtGraphicObjectCache   ( this, SVX_RES( FT_GRAPHICOBJECTCACHE ) ),
+    aNfGraphicObjectCache   ( this, SVX_RES( NF_GRAPHICOBJECTCACHE ) ),
+    aFtGraphicObjectCacheUnit(this, SVX_RES( FT_GRAPHICOBJECTCACHE_UNIT ) ),
+    aFtGraphicObjectTime    ( this, SVX_RES( FT_GRAPHICOBJECTTIME ) ),
+    aTfGraphicObjectTime    ( this, SVX_RES( TF_GRAPHICOBJECTTIME ) ),
+    aFtGraphicObjectTimeUnit( this, SVX_RES( FT_GRAPHICOBJECTTIME_UNIT     ) ),
 
-    aGbOLECache             ( this, ResId( GB_OLECACHE ) ),
-    aFtOLECache             ( this, ResId( FT_OLECACHE ) ),
-    aNfOLECache             ( this, ResId( NF_OLECACHE ) ),
-    aQuickLaunchFL          ( this, ResId( FL_QUICKLAUNCH ) ),
-    aQuickLaunchCB          ( this, ResId( CB_QUICKLAUNCH ) )//,
+    aGbOLECache             ( this, SVX_RES( GB_OLECACHE ) ),
+    aFtOLECache             ( this, SVX_RES( FT_OLECACHE ) ),
+    aNfOLECache             ( this, SVX_RES( NF_OLECACHE ) ),
+    aQuickLaunchFL          ( this, SVX_RES( FL_QUICKLAUNCH ) ),
+    aQuickLaunchCB          ( this, SVX_RES( CB_QUICKLAUNCH ) )//,
 {
 #if defined(UNX)
-    aQuickLaunchCB.SetText( ResId( STR_QUICKLAUNCH_UNX ) );
+    aQuickLaunchCB.SetText( SVX_RES( STR_QUICKLAUNCH_UNX ) );
 #endif
     FreeResource();
 
