@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgejpg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:51:12 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:44:13 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -50,17 +50,17 @@
 \************************************************************************/
 
 DlgExportEJPG::DlgExportEJPG( FltCallDialogParameter& rPara ) :
-                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_JPG, rPara.pResMgr ) ),
+                ModalDialog         ( rPara.pWindow, ResId( DLG_EXPORT_JPG, *rPara.pResMgr ) ),
                 rFltCallPara        ( rPara ),
-                aFiDescr            ( this, ResId( FI_DESCR ) ),
-                aNumFldQuality      ( this, ResId( NUM_FLD_QUALITY ) ),
-                aGrpQuality         ( this, ResId( GRP_QUALITY ) ),
-                aRbGray             ( this, ResId( RB_GRAY ) ),
-                aRbRGB              ( this, ResId( RB_RGB ) ),
-                aGrpColors          ( this, ResId( GRP_COLORS ) ),
-                aBtnOK              ( this, ResId( BTN_OK ) ),
-                aBtnCancel          ( this, ResId( BTN_CANCEL ) ),
-                aBtnHelp            ( this, ResId( BTN_HELP ) )
+                aFiDescr            ( this, ResId( FI_DESCR, *rPara.pResMgr ) ),
+                aNumFldQuality      ( this, ResId( NUM_FLD_QUALITY, *rPara.pResMgr ) ),
+                aGrpQuality         ( this, ResId( GRP_QUALITY, *rPara.pResMgr ) ),
+                aRbGray             ( this, ResId( RB_GRAY, *rPara.pResMgr ) ),
+                aRbRGB              ( this, ResId( RB_RGB, *rPara.pResMgr ) ),
+                aGrpColors          ( this, ResId( GRP_COLORS, *rPara.pResMgr ) ),
+                aBtnOK              ( this, ResId( BTN_OK, *rPara.pResMgr ) ),
+                aBtnCancel          ( this, ResId( BTN_CANCEL, *rPara.pResMgr ) ),
+                aBtnHelp            ( this, ResId( BTN_HELP, *rPara.pResMgr ) )
 {
     FreeResource();
     String  aFilterConfigPath( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) );
