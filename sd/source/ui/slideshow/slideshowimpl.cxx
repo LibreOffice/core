@@ -4,9 +4,9 @@
  *
  *  $RCSfile: slideshowimpl.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-03 16:16:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:39:51 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1521,7 +1521,7 @@ void SlideshowImpl::gotoNextSlide()
                                 DBG_ASSERT(pResMgr,"No ResMgr found");
                                 if(pResMgr.get())
                                 {
-                                    pGraphic.reset( new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, pResMgr.get() ) ) ) );
+                                    pGraphic.reset( new Graphic( Bitmap( ResId( RID_DEFAULT_ABOUT_BMP_LOGO, *pResMgr.get() ) ) ) );
                                     pGraphic->SetPrefMapMode(MAP_PIXEL);
                                 }
                             }
