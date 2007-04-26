@@ -4,9 +4,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-16 16:20:54 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:49:03 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -576,7 +576,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
                 {
                     QueryBox aQry(NULL, SVX_RES(RID_QRY_SAVEMODIFIED));
                     if (bForBrowsing)
-                        aQry.AddButton(ResId(RID_STR_NEW_TASK), RET_NEWTASK,
+                        aQry.AddButton(SVX_RES(RID_STR_NEW_TASK), RET_NEWTASK,
                             BUTTONDIALOG_DEFBUTTON | BUTTONDIALOG_FOCUSBUTTON);
 
                     switch (aQry.Execute())
@@ -1084,7 +1084,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 DBG_ASSERT( pFact, "no dialog factory!" );
                 if ( pFact )
                 {
-                    ::std::auto_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL, ResId( RID_SVX_DLG_INPUTRECORDNO ) ) );
+                    ::std::auto_ptr< AbstractFmInputRecordNoDialog > dlg( pFact->CreateFmInputRecordNoDialog( NULL, RID_SVX_DLG_INPUTRECORDNO ) );
                     DBG_ASSERT( dlg.get(), "Dialogdiet fail!" );
                     dlg->SetValue( rController->getCursor()->getRow() );
                     if ( dlg->Execute() == RET_OK )
@@ -1229,7 +1229,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     sal_Bool bLayerLocked = sal_False;
                     if (m_pFormView)
                     {
-                        // Ist der ::com::sun::star::drawing::Layer gelocked, so müssen die Slots disabled werden. #36897
+                        // Ist der ::com::sun::star::drawing::Layer gelocked, so mï¿½ssen die Slots disabled werden. #36897
                         SdrPageView* pPV = m_pFormView->GetSdrPageView();
                         if (pPV != NULL)
                             bLayerLocked = pPV->IsLayerLocked(m_pFormView->GetActiveLayer());
