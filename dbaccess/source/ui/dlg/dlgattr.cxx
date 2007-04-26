@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgattr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:37:28 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:59:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -101,7 +101,7 @@ DBG_NAME(SbaSbAttrDlg)
 //==================================================================
 SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumberFormatter* pFormatter, USHORT nFlags, BOOL bRow)
              : SfxTabDialog(pParent, ModuleRes( DLG_ATTR ), pCellAttrs )
-             ,aTitle(ResId(ST_ROW))
+             ,aTitle(ModuleRes(ST_ROW))
 {
     DBG_CTOR(SbaSbAttrDlg,NULL);
 
@@ -111,13 +111,13 @@ SbaSbAttrDlg::SbaSbAttrDlg(Window* pParent, const SfxItemSet* pCellAttrs, SvNumb
         SetText(aTitle);
     if( nFlags & TP_ATTR_CHAR )
     {
-//        AddTabPage( RID_SVXPAGE_CHAR_STD,String(ResId(TP_ATTR_CHAR)),SvxCharStdPage::Create,            0 );
+//        AddTabPage( RID_SVXPAGE_CHAR_STD,String(ModuleRes(TP_ATTR_CHAR)),SvxCharStdPage::Create,            0 );
         DBG_ERROR( "found flag TP_ATTR_CHAR" );
     }
     if( nFlags & TP_ATTR_NUMBER )
-        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ResId(TP_ATTR_NUMBER)) ); //CHINA001 AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ResId(TP_ATTR_NUMBER)),SvxNumberFormatTabPage::Create, 0 );
+        AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)) ); //CHINA001 AddTabPage( RID_SVXPAGE_NUMBERFORMAT,String(ModuleRes(TP_ATTR_NUMBER)),SvxNumberFormatTabPage::Create, 0 );
     if( nFlags & TP_ATTR_ALIGN )
-        AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ResId(TP_ATTR_ALIGN)) );//CHINA001 AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ResId(TP_ATTR_ALIGN)),SvxAlignmentTabPage::Create, 0 );
+        AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ModuleRes(TP_ATTR_ALIGN)) );//CHINA001 AddTabPage( RID_SVXPAGE_ALIGNMENT,String(ModuleRes(TP_ATTR_ALIGN)),SvxAlignmentTabPage::Create, 0 );
     FreeResource();
 }
 
