@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertLegend.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:57:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:35:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -58,15 +58,15 @@ namespace chart
 
 SchLegendDlg::SchLegendDlg(Window* pWindow, const SfxItemSet& rInAttrs) :
     ModalDialog(pWindow, SchResId(DLG_LEGEND)),
-    aCbxShow(this, ResId(CBX_SHOW)),
-    aRbtLeft(this, ResId(RBT_LEFT)),
-    aRbtTop(this, ResId(RBT_TOP)),
-    aRbtRight(this, ResId(RBT_RIGHT)),
-    aRbtBottom(this, ResId(RBT_BOTTOM)),
-    aFlLegend(this, ResId(FL_LEGEND)),
-    aBtnOK(this, ResId(BTN_OK)),
-    aBtnCancel(this, ResId(BTN_CANCEL)),
-    aBtnHelp(this, ResId(BTN_HELP)),
+    aCbxShow(this, SchResId(CBX_SHOW)),
+    aRbtLeft(this, SchResId(RBT_LEFT)),
+    aRbtTop(this, SchResId(RBT_TOP)),
+    aRbtRight(this, SchResId(RBT_RIGHT)),
+    aRbtBottom(this, SchResId(RBT_BOTTOM)),
+    aFlLegend(this, SchResId(FL_LEGEND)),
+    aBtnOK(this, SchResId(BTN_OK)),
+    aBtnCancel(this, SchResId(BTN_CANCEL)),
+    aBtnHelp(this, SchResId(BTN_HELP)),
     m_rInAttrs(rInAttrs)
 {
     FreeResource();

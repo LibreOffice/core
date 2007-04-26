@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_PointGeometry.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:59:20 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:37:01 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,14 +69,14 @@ namespace chart
 
 SchLayoutTabPage::SchLayoutTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_LAYOUT), rInAttrs),
-/*  aSquare(this, ResId(RBT_LY_CUBE)),
-    aCylinder(this, ResId(RBT_LY_CYLINDER)),
-    aCone(this, ResId(RBT_LY_CONE)),
-    aPyramid(this, ResId(RBT_LY_PYRAMID)),
-    aHanoi(this,ResId(RBT_LY_HANOI)),
+/*  aSquare(this, SchResId(RBT_LY_CUBE)),
+    aCylinder(this, SchResId(RBT_LY_CYLINDER)),
+    aCone(this, SchResId(RBT_LY_CONE)),
+    aPyramid(this, SchResId(RBT_LY_PYRAMID)),
+    aHanoi(this,SchResId(RBT_LY_HANOI)),
     */
-    aFtLayout(this, ResId(FT_LY_SHAPE)),
-    aListShapes(this,ResId(LB_LY_SHAPE))
+    aFtLayout(this, SchResId(FT_LY_SHAPE)),
+    aListShapes(this,SchResId(LB_LY_SHAPE))
 {
     FreeResource();
 }

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_LegendPosition.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:59:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:36:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -60,11 +60,11 @@ namespace chart
 SchLegendPosTabPage::SchLegendPosTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_LEGEND_POS), rInAttrs),
-    aGrpLegend(this, ResId(GRP_LEGEND)),
-    aRbtLeft(this, ResId(RBT_LEFT)),
-    aRbtTop(this, ResId(RBT_TOP)),
-    aRbtBottom(this, ResId(RBT_BOTTOM)),
-    aRbtRight(this, ResId(RBT_RIGHT))
+    aGrpLegend(this, SchResId(GRP_LEGEND)),
+    aRbtLeft(this, SchResId(RBT_LEFT)),
+    aRbtTop(this, SchResId(RBT_TOP)),
+    aRbtBottom(this, SchResId(RBT_BOTTOM)),
+    aRbtRight(this, SchResId(RBT_RIGHT))
 {
     FreeResource();
 }

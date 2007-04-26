@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_DataLabel.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:58:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:36:21 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -56,11 +56,11 @@ namespace chart
 SchDataDescrTabPage::SchDataDescrTabPage(Window* pWindow,
                                          const SfxItemSet& rInAttrs) :
         SfxTabPage(pWindow, SchResId(TP_DATA_DESCR), rInAttrs),
-        aCbValue(this, ResId(CB_VALUE)),
-        aRbNumber(this, ResId(RB_NUMBER)),
-        aRbPercent(this, ResId(RB_PERCENT)),
-        aCbText(this, ResId(CB_TEXT)),
-        aCbSymbol(this, ResId(CB_SYMBOL))
+        aCbValue(this, SchResId(CB_VALUE)),
+        aRbNumber(this, SchResId(RB_NUMBER)),
+        aRbPercent(this, SchResId(RB_PERCENT)),
+        aCbText(this, SchResId(CB_TEXT)),
+        aCbSymbol(this, SchResId(CB_SYMBOL))
 {
     FreeResource();
 

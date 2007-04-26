@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlg_InsertTitle.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:57:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:35:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -70,19 +70,19 @@ InsertTitleDialogData::InsertTitleDialogData()
 
 SchTitleDlg::SchTitleDlg(Window* pWindow, const InsertTitleDialogData& rInput ) :
     ModalDialog(pWindow, SchResId(DLG_TITLE)),
-    aCbxMain(this, ResId(CBX_MAINTITLE)),
-    aEdtMain(this, ResId(EDT_MAINTITLE)),
-    aCbxSub(this, ResId(CBX_SUBTITLE)),
-    aEdtSub(this, ResId(EDT_SUBTITLE)),
-    aCbxXAxis(this, ResId(CBX_TITLE_X_AXIS)),
-    aEdtXAxis(this, ResId(EDT_X_AXIS)),
-    aCbxYAxis(this, ResId(CBX_TITLE_Y_AXIS)),
-    aEdtYAxis(this, ResId(EDT_Y_AXIS)),
-    aCbxZAxis(this, ResId(CBX_TITLE_Z_AXIS)),
-    aEdtZAxis(this, ResId(EDT_Z_AXIS)),
-    aBtnOK(this, ResId(BTN_OK)),
-    aBtnCancel(this, ResId(BTN_CANCEL)),
-    aBtnHelp(this, ResId(BTN_HELP))
+    aCbxMain(this, SchResId(CBX_MAINTITLE)),
+    aEdtMain(this, SchResId(EDT_MAINTITLE)),
+    aCbxSub(this, SchResId(CBX_SUBTITLE)),
+    aEdtSub(this, SchResId(EDT_SUBTITLE)),
+    aCbxXAxis(this, SchResId(CBX_TITLE_X_AXIS)),
+    aEdtXAxis(this, SchResId(EDT_X_AXIS)),
+    aCbxYAxis(this, SchResId(CBX_TITLE_Y_AXIS)),
+    aEdtYAxis(this, SchResId(EDT_Y_AXIS)),
+    aCbxZAxis(this, SchResId(CBX_TITLE_Z_AXIS)),
+    aEdtZAxis(this, SchResId(EDT_Z_AXIS)),
+    aBtnOK(this, SchResId(BTN_OK)),
+    aBtnCancel(this, SchResId(BTN_CANCEL)),
+    aBtnHelp(this, SchResId(BTN_HELP))
 {
     FreeResource();
 
