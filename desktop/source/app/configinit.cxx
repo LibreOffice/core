@@ -4,9 +4,9 @@
  *
  *  $RCSfile: configinit.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 14:05:05 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:22:20 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -106,7 +106,7 @@ OUString getMsgString( USHORT nId, char const * aFallBackMsg )
     if ( !pResMgr || !nId )
         return OUString::createFromAscii(aFallBackMsg);
     else
-        return OUString( String(ResId( nId, pResMgr )));
+        return OUString( String(ResId( nId, *pResMgr )));
 }
 // ----------------------------------------------------------------------------
 /** Creates the normal configuration provider.
