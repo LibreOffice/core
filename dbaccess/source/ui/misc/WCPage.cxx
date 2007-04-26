@@ -4,9 +4,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-12 13:40:35 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:02:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -104,16 +104,16 @@ DBG_NAME(OCopyTable)
 //------------------------------------------------------------------------
 OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsView, OCopyTableWizard::Wizard_Create_Style nLastAction )
     : OWizardPage( pParent, ModuleRes(TAB_WIZ_COPYTABLE) ),
-    m_ftTableName(          this, ResId( FT_TABLENAME       ) ),
-    m_edTableName(          this, ResId( ET_TABLENAME       ) ),
-    m_aFL_Options(          this, ResId( FL_OPTIONS         ) ),
-    m_aRB_DefData(          this, ResId( RB_DEFDATA         ) ),
-    m_aRB_Def(              this, ResId( RB_DEF             ) ),
-    m_aRB_View(             this, ResId( RB_VIEW            ) ),
-    m_aRB_AppendData(       this, ResId( RB_APPENDDATA      ) ),
-    m_aCB_PrimaryColumn(    this, ResId( CB_PRIMARY_COLUMN  ) ),
-    m_aFT_KeyName(          this, ResId( FT_KEYNAME         ) ),
-    m_edKeyName(            this, ResId( ET_KEYNAME         ) ),
+    m_ftTableName(          this, ModuleRes( FT_TABLENAME       ) ),
+    m_edTableName(          this, ModuleRes( ET_TABLENAME       ) ),
+    m_aFL_Options(          this, ModuleRes( FL_OPTIONS         ) ),
+    m_aRB_DefData(          this, ModuleRes( RB_DEFDATA         ) ),
+    m_aRB_Def(              this, ModuleRes( RB_DEF             ) ),
+    m_aRB_View(             this, ModuleRes( RB_VIEW            ) ),
+    m_aRB_AppendData(       this, ModuleRes( RB_APPENDDATA      ) ),
+    m_aCB_PrimaryColumn(    this, ModuleRes( CB_PRIMARY_COLUMN  ) ),
+    m_aFT_KeyName(          this, ModuleRes( FT_KEYNAME         ) ),
+    m_edKeyName(            this, ModuleRes( ET_KEYNAME         ) ),
     m_pPage2(NULL),
     m_pPage3(NULL),
     m_bIsViewAllowed(bIsView)
