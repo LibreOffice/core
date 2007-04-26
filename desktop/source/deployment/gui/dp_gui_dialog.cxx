@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ihi $ $Date: 2007-04-17 10:31:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:23:08 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -658,7 +658,7 @@ struct StrAllFiles : public rtl::StaticWithInit<const OUString, StrAllFiles> {
         ::std::auto_ptr<ResMgr> const resmgr(
             ResMgr::CreateResMgr( "fps_office" LIBRARY_SOLARUPD() ) );
         OSL_ASSERT( resmgr.get() != 0 );
-        String ret( ResId( STR_FILTERNAME_ALL, resmgr.get() ) );
+        String ret( ResId( STR_FILTERNAME_ALL, *resmgr.get() ) );
         return ret;
     }
 };
@@ -1143,7 +1143,7 @@ DialogImpl::ThreadedPushButton::~ThreadedPushButton()
 ResId DialogImpl::getResId( USHORT id )
 {
     const ::vos::OGuard guard( Application::GetSolarMutex() );
-    return ResId( id, DeploymentGuiResMgr::get() );
+    return ResId( id, *DeploymentGuiResMgr::get() );
 }
 
 //==============================================================================
@@ -1152,7 +1152,7 @@ String DialogImpl::getResourceString( USHORT id )
     // init with non-acquired solar mutex:
     BrandName::get();
     const ::vos::OGuard guard( Application::GetSolarMutex() );
-    String ret( ResId( id, DeploymentGuiResMgr::get() ) );
+    String ret( ResId( id, *DeploymentGuiResMgr::get() ) );
     if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
         ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
     }
