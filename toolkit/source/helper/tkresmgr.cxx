@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tkresmgr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ihi $ $Date: 2006-12-20 13:54:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:20:33 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -109,7 +109,7 @@ Image TkResMgr::loadImage( sal_uInt16 nResId )
 
     ensureImplExists();
     if ( m_pResMgr )
-        aReturn = Image( ResId( nResId, m_pResMgr ) );
+        aReturn = Image( ResId( nResId, *m_pResMgr ) );
 
     return aReturn;
 }
