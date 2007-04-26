@@ -4,9 +4,9 @@
  *
  *  $RCSfile: headbar.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:38:37 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:42:41 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -153,7 +153,7 @@ HeaderBar::HeaderBar( Window* pParent, WinBits nWinStyle ) :
 HeaderBar::HeaderBar( Window* pParent, const ResId& rResId ) :
     Window( pParent, rResId )
 {
-    ImplInit( rResId.aWinBits );
+    ImplInit( rResId.GetWinBits() );
 }
 
 // -----------------------------------------------------------------------
