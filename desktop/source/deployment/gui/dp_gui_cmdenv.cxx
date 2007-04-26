@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dp_gui_cmdenv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-01-18 14:52:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:22:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -345,7 +345,7 @@ void ProgressCommandEnv::handle(
     else if (request >>= licAgreementExc)
     {
         vos::OGuard aSolarGuard( Application::GetSolarMutex() );
-        ResId warnId(WARNINGBOX_NOSHAREDALLOWED, DeploymentGuiResMgr::get());
+        ResId warnId(WARNINGBOX_NOSHAREDALLOWED, *DeploymentGuiResMgr::get());
         WarningBox warn(activeDialog(), warnId);
         String msgText = warn.GetMessText();
         msgText.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
@@ -387,7 +387,7 @@ void ProgressCommandEnv::handle(
         }
         {
             vos::OGuard guard(Application::GetSolarMutex());
-            InfoBox box(activeDialog(), ResId(id, DeploymentGuiResMgr::get()));
+            InfoBox box(activeDialog(), ResId(id, *DeploymentGuiResMgr::get()));
             String s(box.GetMessText());
             s.SearchAndReplaceAllAscii(
                 "$NAME", dp_misc::getIdentifier(verExc.New));
@@ -409,7 +409,7 @@ void ProgressCommandEnv::handle(
         else
         {
             vos::OGuard guard(Application::GetSolarMutex());
-            InfoBox box(activeDialog(), ResId(RID_QUERYBOX_INSTALL_EXTENSION, DeploymentGuiResMgr::get()));
+            InfoBox box(activeDialog(), ResId(RID_QUERYBOX_INSTALL_EXTENSION, *DeploymentGuiResMgr::get()));
             String s(box.GetMessText());
             s.SearchAndReplaceAllAscii("%NAME", instExc.New->getDisplayName());
             box.SetMessText(s);
