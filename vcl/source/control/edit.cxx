@@ -4,9 +4,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: hr $ $Date: 2007-01-02 15:47:45 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:27:25 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2698,7 +2698,7 @@ PopupMenu* Edit::CreatePopupMenu()
     if( ! pResMgr )
         return new PopupMenu();
 
-    PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, pResMgr ) );
+    PopupMenu* pPopup = new PopupMenu( ResId( SV_RESID_MENU_EDIT, *pResMgr ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, KeyCode( KEYFUNC_UNDO ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_CUT, KeyCode( KEYFUNC_CUT ) );
     pPopup->SetAccelKey( SV_MENU_EDIT_COPY, KeyCode( KEYFUNC_COPY ) );
