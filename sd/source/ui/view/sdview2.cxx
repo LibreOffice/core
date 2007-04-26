@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 19:20:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:40:46 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1030,7 +1030,7 @@ BOOL View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, USHORT n
                     String          aTitle( SdResId( STR_TITLE_NAMEGROUP ) );
                     String          aDesc( SdResId( STR_DESC_NAMEGROUP ) );
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc, ResId(RID_SVXDLG_NAME) ) : 0;
+                    AbstractSvxNameDialog* pDlg = pFact ? pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), *pNewName, aDesc, RID_SVXDLG_NAME ) : 0;
                     if( pDlg )
                     {
                         pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
