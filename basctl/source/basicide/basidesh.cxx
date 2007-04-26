@@ -4,9 +4,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: obo $ $Date: 2007-03-15 15:54:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:33:35 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ using ::rtl::OUString;
 
 TYPEINIT1( BasicIDEShell, SfxViewShell );
 
-SFX_IMPL_VIEWFACTORY( BasicIDEShell, SVX_INTERFACE_BASIDE_VIEWSH )
+SFX_IMPL_VIEWFACTORY( BasicIDEShell, IDEResId( SVX_INTERFACE_BASIDE_VIEWSH ) )
 {
     SFX_VIEW_REGISTRATION( BasicDocShell );
 }
