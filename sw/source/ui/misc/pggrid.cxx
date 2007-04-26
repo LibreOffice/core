@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pggrid.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:09:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:14:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -91,26 +91,26 @@
   -----------------------------------------------------------------------*/
 SwTextGridPage::SwTextGridPage(Window *pParent, const SfxItemSet &rSet) :
     SfxTabPage(pParent, SW_RES(TP_TEXTGRID_PAGE), rSet),
-    aGridTypeFL             (this, ResId(FL_GRID_TYPE       )),
-    aNoGridRB               (this, ResId(RB_NOGRID          )),
-    aLinesGridRB            (this, ResId(RB_LINESGRID       )),
-    aCharsGridRB            (this, ResId(RB_CHARSGRID       )),
-    aExampleWN              (this, ResId(WN_EXAMPLE         )),
-    aLayoutFL               (this, ResId(FL_LAYOUT          )),
-    aLinesPerPageFT         (this, ResId(FT_LINESPERPAGE    )),
-    aLinesPerPageNF         (this, ResId(NF_LINESPERPAGE    )),
-    aTextSizeFT             (this, ResId(FT_TEXTSIZE        )),
-    aTextSizeMF             (this, ResId(MF_TEXTSIZE        )),
-    aCharsPerLineFT         (this, ResId(FT_CHARSPERLINE    )),
-    aCharsPerLineNF         (this, ResId(NF_CHARSPERLINE    )),
-    aRubySizeFT             (this, ResId(FT_RUBYSIZE        )),
-    aRubySizeMF             (this, ResId(MF_RUBYSIZE        )),
-    aRubyBelowCB            (this, ResId(CB_RUBYBELOW       )),
-    aDisplayFL              (this, ResId(FL_DISPLAY         )),
-    aDisplayCB              (this, ResId(CB_DISPLAY         )),
-    aPrintCB                (this, ResId(CB_PRINT           )),
-    aColorFT                (this, ResId(FT_COLOR           )),
-    aColorLB                (this, ResId(LB_COLOR           )),
+    aGridTypeFL             (this, SW_RES(FL_GRID_TYPE       )),
+    aNoGridRB               (this, SW_RES(RB_NOGRID          )),
+    aLinesGridRB            (this, SW_RES(RB_LINESGRID       )),
+    aCharsGridRB            (this, SW_RES(RB_CHARSGRID       )),
+    aExampleWN              (this, SW_RES(WN_EXAMPLE         )),
+    aLayoutFL               (this, SW_RES(FL_LAYOUT          )),
+    aLinesPerPageFT         (this, SW_RES(FT_LINESPERPAGE    )),
+    aLinesPerPageNF         (this, SW_RES(NF_LINESPERPAGE    )),
+    aTextSizeFT             (this, SW_RES(FT_TEXTSIZE        )),
+    aTextSizeMF             (this, SW_RES(MF_TEXTSIZE        )),
+    aCharsPerLineFT         (this, SW_RES(FT_CHARSPERLINE    )),
+    aCharsPerLineNF         (this, SW_RES(NF_CHARSPERLINE    )),
+    aRubySizeFT             (this, SW_RES(FT_RUBYSIZE        )),
+    aRubySizeMF             (this, SW_RES(MF_RUBYSIZE        )),
+    aRubyBelowCB            (this, SW_RES(CB_RUBYBELOW       )),
+    aDisplayFL              (this, SW_RES(FL_DISPLAY         )),
+    aDisplayCB              (this, SW_RES(CB_DISPLAY         )),
+    aPrintCB                (this, SW_RES(CB_PRINT           )),
+    aColorFT                (this, SW_RES(FT_COLOR           )),
+    aColorLB                (this, SW_RES(LB_COLOR           )),
     m_nRubyUserValue(0),
     m_bRubyUserValue(sal_False),
     m_aPageSize(MM50, MM50),
