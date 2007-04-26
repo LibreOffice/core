@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optaccessibility.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:29:17 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:36:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -72,19 +72,19 @@ struct SvxAccessibilityOptionsTabPage_Impl
 };
 
 SvxAccessibilityOptionsTabPage::SvxAccessibilityOptionsTabPage( Window* pParent, const SfxItemSet& rSet )
-    :SfxTabPage(pParent, ResId( RID_SVXPAGE_ACCESSIBILITYCONFIG, DIALOG_MGR() ), rSet)
-    ,m_aMiscellaneousLabel      (this, ResId(FL_MISCELLANEOUS       ))
-    ,m_aAccessibilityTool       (this, ResId(CB_ACCESSIBILITY_TOOL  ))
-    ,m_aTextSelectionInReadonly (this, ResId(CB_TEXTSELECTION       ))
-    ,m_aAnimatedGraphics        (this, ResId(CB_ANIMATED_GRAPHICS   ))
-    ,m_aAnimatedTexts           (this, ResId(CB_ANIMATED_TEXTS      ))
-    ,m_aTipHelpCB               (this, ResId(CB_TIPHELP             ))
-    ,m_aTipHelpNF               (this, ResId(NF_TIPHELP             ))
-    ,m_aTipHelpFT               (this, ResId(FT_TIPHELP             ))
-    ,m_aHCOptionsLabel          (this, ResId(FL_HC_OPTIONS          ))
-    ,m_aAutoDetectHC            (this, ResId(CB_AUTO_DETECT_HC      ))
-    ,m_aAutomaticFontColor      (this, ResId(CB_AUTOMATIC_FONT_COLOR))
-    ,m_aPagePreviews            (this, ResId(CB_PAGE_PREVIEWS       ))
+    :SfxTabPage(pParent, SVX_RES( RID_SVXPAGE_ACCESSIBILITYCONFIG ), rSet)
+    ,m_aMiscellaneousLabel      (this, SVX_RES(FL_MISCELLANEOUS     ))
+    ,m_aAccessibilityTool       (this, SVX_RES(CB_ACCESSIBILITY_TOOL    ))
+    ,m_aTextSelectionInReadonly (this, SVX_RES(CB_TEXTSELECTION     ))
+    ,m_aAnimatedGraphics        (this, SVX_RES(CB_ANIMATED_GRAPHICS ))
+    ,m_aAnimatedTexts           (this, SVX_RES(CB_ANIMATED_TEXTS        ))
+    ,m_aTipHelpCB               (this, SVX_RES(CB_TIPHELP               ))
+    ,m_aTipHelpNF               (this, SVX_RES(NF_TIPHELP               ))
+    ,m_aTipHelpFT               (this, SVX_RES(FT_TIPHELP               ))
+    ,m_aHCOptionsLabel          (this, SVX_RES(FL_HC_OPTIONS            ))
+    ,m_aAutoDetectHC            (this, SVX_RES(CB_AUTO_DETECT_HC        ))
+    ,m_aAutomaticFontColor      (this, SVX_RES(CB_AUTOMATIC_FONT_COLOR))
+    ,m_aPagePreviews            (this, SVX_RES(CB_PAGE_PREVIEWS       ))
     ,m_pImpl(new SvxAccessibilityOptionsTabPage_Impl)
 {
     FreeResource();

@@ -4,9 +4,9 @@
  *
  *  $RCSfile: optdict.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:30:11 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:37:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -138,15 +138,15 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
 
     ModalDialog( pParent, SVX_RES( RID_SFXDLG_NEWDICT ) ),
 
-    aNameText       ( this, ResId( FT_DICTNAME ) ),
-    aNameEdit       ( this, ResId( ED_DICTNAME ) ),
-    aLanguageText   ( this, ResId( FT_DICTLANG ) ),
-    aLanguageLB     ( this, ResId( LB_DICTLANG ) ),
-    aExceptBtn      ( this, ResId( BTN_EXCEPT ) ),
-    aNewDictBox     ( this, ResId( GB_NEWDICT ) ),
-    aOKBtn          ( this, ResId( BTN_NEWDICT_OK ) ),
-    aCancelBtn      ( this, ResId( BTN_NEWDICT_ESC ) ),
-    aHelpBtn        ( this, ResId( BTN_NEWDICT_HLP ) ),
+    aNameText       ( this, SVX_RES( FT_DICTNAME ) ),
+    aNameEdit       ( this, SVX_RES( ED_DICTNAME ) ),
+    aLanguageText   ( this, SVX_RES( FT_DICTLANG ) ),
+    aLanguageLB     ( this, SVX_RES( LB_DICTLANG ) ),
+    aExceptBtn      ( this, SVX_RES( BTN_EXCEPT ) ),
+    aNewDictBox     ( this, SVX_RES( GB_NEWDICT ) ),
+    aOKBtn          ( this, SVX_RES( BTN_NEWDICT_OK ) ),
+    aCancelBtn      ( this, SVX_RES( BTN_NEWDICT_ESC ) ),
+    aHelpBtn        ( this, SVX_RES( BTN_NEWDICT_HLP ) ),
     xSpell( xSpl )
 {
     // Handler installieren
@@ -214,7 +214,7 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
 
         // Fehler: konnte neues W"orterbuch nicht anlegen
         SfxErrorContext aContext( ERRCTX_SVX_LINGU_DICTIONARY, String(),
-            this, RID_SVXERRCTX, DIALOG_MGR() );
+            this, RID_SVXERRCTX, &DIALOG_MGR() );
         ErrorHandler::HandleError( *new StringErrorInfo(
                 ERRCODE_SVX_LINGU_DICT_NOTWRITEABLE, sDict ) );
 
@@ -269,21 +269,21 @@ SvxEditDictionaryDialog::SvxEditDictionaryDialog(
 
     ModalDialog( pParent, SVX_RES( RID_SFXDLG_EDITDICT ) ),
 
-    aBookFT         ( this, ResId( FT_BOOK ) ),
-    aAllDictsLB     ( this, ResId( LB_ALLDICTS ) ),
-    aLangFT         ( this, ResId( FT_DICTLANG ) ),
-    aLangLB         ( this, ResId( LB_DICTLANG ) ),
-    aWordFT         ( this, ResId( FT_WORD ) ),
-    aWordED         ( this, ResId( ED_WORD ) ),
-    aReplaceFT      ( this, ResId( FT_REPLACE ) ),
-    aReplaceED      ( this, ResId( ED_REPLACE ) ),
-    aWordsLB        ( this, ResId( TLB_REPLACE ) ),
-    aNewReplacePB   ( this, ResId( PB_NEW_REPLACE ) ),
-    aDeletePB       ( this, ResId( PB_DELETE_REPLACE ) ),
-    aEditDictsBox   ( this, ResId( GB_EDITDICTS ) ),
-    aCloseBtn       ( this, ResId( BTN_EDITCLOSE ) ),
-    aHelpBtn        ( this, ResId( BTN_EDITHELP ) ),
-    sModify         (ResId(STR_MODIFY)),
+    aBookFT         ( this, SVX_RES( FT_BOOK ) ),
+    aAllDictsLB     ( this, SVX_RES( LB_ALLDICTS ) ),
+    aLangFT         ( this, SVX_RES( FT_DICTLANG ) ),
+    aLangLB         ( this, SVX_RES( LB_DICTLANG ) ),
+    aWordFT         ( this, SVX_RES( FT_WORD ) ),
+    aWordED         ( this, SVX_RES( ED_WORD ) ),
+    aReplaceFT      ( this, SVX_RES( FT_REPLACE ) ),
+    aReplaceED      ( this, SVX_RES( ED_REPLACE ) ),
+    aWordsLB        ( this, SVX_RES( TLB_REPLACE ) ),
+    aNewReplacePB   ( this, SVX_RES( PB_NEW_REPLACE ) ),
+    aDeletePB       ( this, SVX_RES( PB_DELETE_REPLACE ) ),
+    aEditDictsBox   ( this, SVX_RES( GB_EDITDICTS ) ),
+    aCloseBtn       ( this, SVX_RES( BTN_EDITCLOSE ) ),
+    aHelpBtn        ( this, SVX_RES( BTN_EDITHELP ) ),
+    sModify         (SVX_RES(STR_MODIFY)),
     sNew            (aNewReplacePB.GetText()),
     aDecoView       ( this),
     xSpell          ( xSpl ),
