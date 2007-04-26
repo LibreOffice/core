@@ -4,9 +4,9 @@
  *
  *  $RCSfile: docvor.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-22 10:57:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:13:56 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -254,18 +254,18 @@ SfxOrganizeDlg_Impl::SfxOrganizeDlg_Impl( SfxTemplateOrganizeDlg* pParent,
     bExecDropFinished   ( true ),
 
     aLeftLb     ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_TEMPLATES ),
-    aLeftTypLb  (  pParent, ResId( LB_LEFT_TYP ) ),
+    aLeftTypLb  (  pParent, SfxResId( LB_LEFT_TYP ) ),
 
     aRightLb    ( this, pParent, WB_BORDER | WB_TABSTOP | WB_HSCROLL, SfxOrganizeListBox_Impl::VIEW_FILES ),
-    aRightTypLb ( pParent, ResId( LB_RIGHT_TYP ) ),
+    aRightTypLb ( pParent, SfxResId( LB_RIGHT_TYP ) ),
 
-    aOkBtn              ( pParent, ResId( BTN_OK ) ),
-    aEditBtn            ( pParent, ResId( BTN_EDIT ) ),
-    aHelpBtn            ( pParent, ResId( BTN_HELP ) ),
-    aAddressTemplateBtn ( pParent, ResId( BTN_ADDRESSTEMPLATE ) ),
-    aFilesBtn           ( pParent, ResId( BTN_FILES ) ),
+    aOkBtn              ( pParent, SfxResId( BTN_OK ) ),
+    aEditBtn            ( pParent, SfxResId( BTN_EDIT ) ),
+    aHelpBtn            ( pParent, SfxResId( BTN_HELP ) ),
+    aAddressTemplateBtn ( pParent, SfxResId( BTN_ADDRESSTEMPLATE ) ),
+    aFilesBtn           ( pParent, SfxResId( BTN_FILES ) ),
 
-    aEditAcc    ( ResId( ACC_EDIT ) ),
+    aEditAcc    ( SfxResId( ACC_EDIT ) ),
     aMgr        ( &aLeftLb, &aRightLb, pTempl ),
     pFileDlg    ( NULL )
 
