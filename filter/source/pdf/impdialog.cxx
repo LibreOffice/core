@@ -4,9 +4,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-26 08:11:48 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 11:32:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -901,7 +901,6 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* pParent,
     maPbUserPwd( this, ResId( BTN_USER_PWD , *paResMgr ) ),
     maFtUserPwdEmpty( this, ResId( FT_USER_PWD_EMPTY , *paResMgr ) ),
 
-    maFlPermissions( this, ResId( FL_PERMISSIONS, *paResMgr ) ),
     maCbPermissions( this, ResId( CB_SEL_PERMISSIONS, *paResMgr ) ),
 
     maPbOwnerPwd( this, ResId( BTN_OWNER_PWD , *paResMgr ) ),
@@ -932,6 +931,7 @@ ImpPDFTabSecurityPage::ImpPDFTabSecurityPage( Window* pParent,
     mpaResMgr = paResMgr;
     FreeResource();
     maCbPermissions.SetText( OUString( msRestrPermissions ) );
+    maCbPermissions.SetStyle( maCbPermissions.GetStyle() | WB_CBLINESTYLE );
 }
 
 // -----------------------------------------------------------------------------
