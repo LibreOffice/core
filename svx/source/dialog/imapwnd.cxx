@@ -4,9 +4,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:16:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:34:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -941,7 +941,7 @@ void IMapWindow::DoPropertyDialog()
         if(pFact)
         {
             AbstractURLDlg* aDlg = pFact->CreateURLDialog( this, pIMapObj->GetURL(), pIMapObj->GetDescription(),
-                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList, ResId(RID_SVXDLG_IMAPURL) );
+                                            pIMapObj->GetTarget(), pIMapObj->GetName(), aTargetList, RID_SVXDLG_IMAPURL );
             DBG_ASSERT(aDlg, "Dialogdiet fail!");//CHINA001
             if ( aDlg->Execute() == RET_OK ) //CHINA001 if ( aDlg.Execute() == RET_OK )
             {
