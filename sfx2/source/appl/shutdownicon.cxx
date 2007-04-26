@@ -4,9 +4,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2007-03-28 08:31:29 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:07:39 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -373,12 +373,12 @@ OUString ShutdownIcon::GetResString( int id )
 
     if( ! m_pResMgr )
         m_pResMgr = SfxResId::GetResMgr();
-    ResId aResId( id, m_pResMgr );
+    ResId aResId( id, *m_pResMgr );
     aResId.SetRT( RSC_STRING );
     if( !m_pResMgr || !m_pResMgr->IsAvailable( aResId ) )
         return OUString();
 
-    UniString aRes( ResId(id, m_pResMgr) );
+    UniString aRes( ResId(id, *m_pResMgr) );
     return OUString( aRes );
 }
 
