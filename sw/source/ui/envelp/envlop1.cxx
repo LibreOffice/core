@@ -4,9 +4,9 @@
  *
  *  $RCSfile: envlop1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:54:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:07:58 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -177,8 +177,8 @@ SwEnvDlg::SwEnvDlg(Window* pParent, const SfxItemSet& rSet,
                     SwWrtShell* pWrtSh, Printer* pPrt, BOOL bInsert) :
 
     SfxTabDialog(pParent, SW_RES(DLG_ENV), &rSet, FALSE, &aEmptyStr),
-    sInsert(ResId(ST_INSERT)),
-    sChange(ResId(ST_CHANGE)),
+    sInsert(SW_RES(ST_INSERT)),
+    sChange(SW_RES(ST_CHANGE)),
     aEnvItem((const SwEnvItem&) rSet.Get(FN_ENVELOP)),
     pSh(pWrtSh),
     pPrinter(pPrt),
