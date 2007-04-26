@@ -4,9 +4,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-04 15:15:09 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:48:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2007,7 +2007,7 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
 
 static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 {
-    ResId aId( nDefStrId, pSwResMgr );
+    ResId aId( nDefStrId, *pSwResMgr );
     String aName( aId );
     xub_StrLen nNmLen = aName.Len();
 
@@ -2113,9 +2113,9 @@ void SwDoc::SetAllUniqueFlyNames()
 {
     sal_uInt16 n, nFlyNum = 0, nGrfNum = 0, nOLENum = 0;
 
-    ResId nFrmId( STR_FRAME_DEFNAME, pSwResMgr ),
-          nGrfId( STR_GRAPHIC_DEFNAME, pSwResMgr ),
-          nOLEId( STR_OBJECT_DEFNAME, pSwResMgr );
+    ResId nFrmId( STR_FRAME_DEFNAME, *pSwResMgr ),
+          nGrfId( STR_GRAPHIC_DEFNAME, *pSwResMgr ),
+          nOLEId( STR_OBJECT_DEFNAME, *pSwResMgr );
     String sFlyNm( nFrmId );
     String sGrfNm( nGrfId );
     String sOLENm( nOLEId );
