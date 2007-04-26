@@ -4,9 +4,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2006-11-21 17:16:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:01:12 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -98,22 +98,22 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XSingleSelectQueryComposer >& _rxComposer,
                             const Reference< XNameAccess>& _rxCols)
              :ModalDialog( pParent, ModuleRes(DLG_ORDERCRIT) )
-            ,aLB_ORDERFIELD1(   this, ResId( LB_ORDERFIELD1 ) )
-            ,aLB_ORDERVALUE1(   this, ResId( LB_ORDERVALUE1 ) )
-            ,aLB_ORDERFIELD2(   this, ResId( LB_ORDERFIELD2 ) )
-            ,aLB_ORDERVALUE2(   this, ResId( LB_ORDERVALUE2 ) )
-            ,aLB_ORDERFIELD3(   this, ResId( LB_ORDERFIELD3 ) )
-            ,aLB_ORDERVALUE3(   this, ResId( LB_ORDERVALUE3 ) )
-            ,aFT_ORDERFIELD(    this, ResId( FT_ORDERFIELD ) )
-            ,aFT_ORDERAFTER1(   this, ResId( FT_ORDERAFTER1 ) )
-            ,aFT_ORDERAFTER2(   this, ResId( FT_ORDERAFTER2 ) )
-            ,aFT_ORDEROPER(     this, ResId( FT_ORDEROPER ) )
-            ,aFT_ORDERDIR(      this, ResId( FT_ORDERDIR ) )
-            ,aBT_OK(            this, ResId( BT_OK ) )
-            ,aBT_CANCEL(        this, ResId( BT_CANCEL ) )
-            ,aBT_HELP(          this, ResId( BT_HELP ) )
-            ,aFL_ORDER(         this, ResId( FL_ORDER ) )
-            ,aSTR_NOENTRY(      ResId( STR_NOENTRY ) )
+            ,aLB_ORDERFIELD1(   this, ModuleRes( LB_ORDERFIELD1 ) )
+            ,aLB_ORDERVALUE1(   this, ModuleRes( LB_ORDERVALUE1 ) )
+            ,aLB_ORDERFIELD2(   this, ModuleRes( LB_ORDERFIELD2 ) )
+            ,aLB_ORDERVALUE2(   this, ModuleRes( LB_ORDERVALUE2 ) )
+            ,aLB_ORDERFIELD3(   this, ModuleRes( LB_ORDERFIELD3 ) )
+            ,aLB_ORDERVALUE3(   this, ModuleRes( LB_ORDERVALUE3 ) )
+            ,aFT_ORDERFIELD(    this, ModuleRes( FT_ORDERFIELD ) )
+            ,aFT_ORDERAFTER1(   this, ModuleRes( FT_ORDERAFTER1 ) )
+            ,aFT_ORDERAFTER2(   this, ModuleRes( FT_ORDERAFTER2 ) )
+            ,aFT_ORDEROPER(     this, ModuleRes( FT_ORDEROPER ) )
+            ,aFT_ORDERDIR(      this, ModuleRes( FT_ORDERDIR ) )
+            ,aBT_OK(            this, ModuleRes( BT_OK ) )
+            ,aBT_CANCEL(        this, ModuleRes( BT_CANCEL ) )
+            ,aBT_HELP(          this, ModuleRes( BT_HELP ) )
+            ,aFL_ORDER(         this, ModuleRes( FL_ORDER ) )
+            ,aSTR_NOENTRY(      ModuleRes( STR_NOENTRY ) )
             ,m_xQueryComposer( _rxComposer )
             ,m_xColumns(_rxCols)
             ,m_xConnection(_rxConnection)
