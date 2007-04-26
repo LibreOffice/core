@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dstribut.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 04:19:04 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:30:23 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -102,38 +102,38 @@ SvxDistributePage::SvxDistributePage(
     const SfxItemSet& rInAttrs,
     SvxDistributeHorizontal eHor,
     SvxDistributeVertical eVer)
-:   SvxTabPage(pWindow, ResId(RID_SVXPAGE_DISTRIBUTE, DIALOG_MGR()), rInAttrs),
+:   SvxTabPage(pWindow, SVX_RES(RID_SVXPAGE_DISTRIBUTE), rInAttrs),
     meDistributeHor(eHor),
     meDistributeVer(eVer),
-    maFlHorizontal      (this, ResId(FL_HORIZONTAL      )),
-    maBtnHorNone        (this, ResId(BTN_HOR_NONE       )),
-    maBtnHorLeft        (this, ResId(BTN_HOR_LEFT       )),
-    maBtnHorCenter      (this, ResId(BTN_HOR_CENTER     )),
-    maBtnHorDistance    (this, ResId(BTN_HOR_DISTANCE   )),
-    maBtnHorRight       (this, ResId(BTN_HOR_RIGHT      )),
-    maHorLow            (this, ResId(IMG_HOR_LOW        )),
-    maHorCenter         (this, ResId(IMG_HOR_CENTER     )),
-    maHorDistance       (this, ResId(IMG_HOR_DISTANCE   )),
-    maHorHigh           (this, ResId(IMG_HOR_HIGH       )),
-    maFlVertical        (this, ResId(FL_VERTICAL        )),
-    maBtnVerNone        (this, ResId(BTN_VER_NONE       )),
-    maBtnVerTop         (this, ResId(BTN_VER_TOP        )),
-    maBtnVerCenter      (this, ResId(BTN_VER_CENTER     )),
-    maBtnVerDistance    (this, ResId(BTN_VER_DISTANCE   )),
-    maBtnVerBottom      (this, ResId(BTN_VER_BOTTOM     )),
-    maVerLow            (this, ResId(IMG_VER_LOW        )),
-    maVerCenter         (this, ResId(IMG_VER_CENTER     )),
-    maVerDistance       (this, ResId(IMG_VER_DISTANCE   )),
-    maVerHigh           (this, ResId(IMG_VER_HIGH       ))
+    maFlHorizontal      (this, SVX_RES(FL_HORIZONTAL        )),
+    maBtnHorNone        (this, SVX_RES(BTN_HOR_NONE     )),
+    maBtnHorLeft        (this, SVX_RES(BTN_HOR_LEFT     )),
+    maBtnHorCenter      (this, SVX_RES(BTN_HOR_CENTER       )),
+    maBtnHorDistance    (this, SVX_RES(BTN_HOR_DISTANCE )),
+    maBtnHorRight       (this, SVX_RES(BTN_HOR_RIGHT        )),
+    maHorLow            (this, SVX_RES(IMG_HOR_LOW      )),
+    maHorCenter         (this, SVX_RES(IMG_HOR_CENTER       )),
+    maHorDistance       (this, SVX_RES(IMG_HOR_DISTANCE )),
+    maHorHigh           (this, SVX_RES(IMG_HOR_HIGH     )),
+    maFlVertical        (this, SVX_RES(FL_VERTICAL      )),
+    maBtnVerNone        (this, SVX_RES(BTN_VER_NONE     )),
+    maBtnVerTop         (this, SVX_RES(BTN_VER_TOP      )),
+    maBtnVerCenter      (this, SVX_RES(BTN_VER_CENTER       )),
+    maBtnVerDistance    (this, SVX_RES(BTN_VER_DISTANCE )),
+    maBtnVerBottom      (this, SVX_RES(BTN_VER_BOTTOM       )),
+    maVerLow            (this, SVX_RES(IMG_VER_LOW        )),
+    maVerCenter         (this, SVX_RES(IMG_VER_CENTER       )),
+    maVerDistance       (this, SVX_RES(IMG_VER_DISTANCE   )),
+    maVerHigh           (this, SVX_RES(IMG_VER_HIGH       ))
 {
-    maHorLow.SetModeImage( Image( ResId( IMG_HOR_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maHorCenter.SetModeImage( Image( ResId( IMG_HOR_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maHorDistance.SetModeImage( Image( ResId( IMG_HOR_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maHorHigh.SetModeImage( Image( ResId( IMG_HOR_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerDistance.SetModeImage( Image( ResId( IMG_VER_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerLow.SetModeImage( Image( ResId( IMG_VER_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerCenter.SetModeImage( Image( ResId( IMG_VER_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
-    maVerHigh.SetModeImage( Image( ResId( IMG_VER_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorLow.SetModeImage( Image( SVX_RES( IMG_HOR_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorCenter.SetModeImage( Image( SVX_RES( IMG_HOR_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorDistance.SetModeImage( Image( SVX_RES( IMG_HOR_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maHorHigh.SetModeImage( Image( SVX_RES( IMG_HOR_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerDistance.SetModeImage( Image( SVX_RES( IMG_VER_DISTANCE_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerLow.SetModeImage( Image( SVX_RES( IMG_VER_LOW_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerCenter.SetModeImage( Image( SVX_RES( IMG_VER_CENTER_H ) ), BMP_COLOR_HIGHCONTRAST );
+    maVerHigh.SetModeImage( Image( SVX_RES( IMG_VER_HIGH_H ) ), BMP_COLOR_HIGHCONTRAST );
 
     FreeResource();
 }
