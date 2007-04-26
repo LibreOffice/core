@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:37:36 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:55:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -531,7 +531,7 @@ void ScEditWindow::SetCharAttriutes()
         DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
         SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  GetParent(),  &aSet,
-                                                            pDocSh,ResId(RID_SCDLG_CHAR) );
+                                                            pDocSh,RID_SCDLG_CHAR );
         DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
