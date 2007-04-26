@@ -4,9 +4,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 12:56:30 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:05:45 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -263,72 +263,72 @@ BibGeneralPage::BibGeneralPage(Window* pParent, BibDataManager* pMan):
     BibTabPage(pParent,BibResId(RID_TP_GENERAL)),
     pDatMan(pMan),
     aControlParentWin(this, WB_DIALOGCONTROL),
-    aIdentifierFT(&aControlParentWin,   ResId(FT_IDENTIFIER     )),
-    aAuthTypeFT(&aControlParentWin,     ResId(FT_AUTHTYPE       )),
-    aAuthorFT(&aControlParentWin,       ResId(FT_AUTHOR         )),
-    aMonthFT(&aControlParentWin,        ResId(FT_MONTH          )),
-    aYearFT(&aControlParentWin,         ResId(FT_YEAR           )),
+    aIdentifierFT(&aControlParentWin,   BibResId(FT_IDENTIFIER  )),
+    aAuthTypeFT(&aControlParentWin,     BibResId(FT_AUTHTYPE        )),
+    aAuthorFT(&aControlParentWin,       BibResId(FT_AUTHOR      )),
+    aMonthFT(&aControlParentWin,        BibResId(FT_MONTH           )),
+    aYearFT(&aControlParentWin,         BibResId(FT_YEAR            )),
 
-    aPublisherFT(&aControlParentWin,    ResId(FT_PUBLISHER      )),
-    aISBNFT(&aControlParentWin,         ResId(FT_ISBN           )),
+    aPublisherFT(&aControlParentWin,    BibResId(FT_PUBLISHER       )),
+    aISBNFT(&aControlParentWin,         BibResId(FT_ISBN            )),
 
-    aAddressFT(&aControlParentWin,      ResId(FT_ADDRESS        )),
-    aAnnoteFT(&aControlParentWin,       ResId(FT_ANNOTE         )),
-    aBooktitleFT(&aControlParentWin,    ResId(FT_BOOKTITLE      )),
-    aChapterFT(&aControlParentWin,      ResId(FT_CHAPTER        )),
-    aEditionFT(&aControlParentWin,      ResId(FT_EDITION        )),
-    aEditorFT(&aControlParentWin,       ResId(FT_EDITOR         )),
-    aHowpublishedFT(&aControlParentWin, ResId(FT_HOWPUBLISHED   )),
-    aInstitutionFT(&aControlParentWin,  ResId(FT_INSTITUTION    )),
-    aJournalFT(&aControlParentWin,      ResId(FT_JOURNAL        )),
-    aNoteFT(&aControlParentWin,         ResId(FT_NOTE           )),
-    aNumberFT(&aControlParentWin,       ResId(FT_NUMBER         )),
-    aOrganizationsFT(&aControlParentWin,ResId(FT_ORGANIZATION   )),
-    aPagesFT(&aControlParentWin,        ResId(FT_PAGE           )),
-    aSchoolFT(&aControlParentWin,       ResId(FT_SCHOOL         )),
-    aSeriesFT(&aControlParentWin,       ResId(FT_SERIES         )),
-    aTitleFT(&aControlParentWin,        ResId(FT_TITLE          )),
-    aReportTypeFT(&aControlParentWin,   ResId(FT_REPORT         )),
-    aVolumeFT(&aControlParentWin,       ResId(FT_VOLUME         )),
-    aURLFT(&aControlParentWin,          ResId(FT_URL            )),
-    aCustom1FT(&aControlParentWin,      ResId(FT_CUSTOM1        )),
-    aCustom2FT(&aControlParentWin,      ResId(FT_CUSTOM2        )),
-    aCustom3FT(&aControlParentWin,      ResId(FT_CUSTOM3        )),
-    aCustom4FT(&aControlParentWin,      ResId(FT_CUSTOM4        )),
-    aCustom5FT(&aControlParentWin,      ResId(FT_CUSTOM5        )),
-    aFirstFL(&aControlParentWin,        ResId(FL_1        )),
-    aSecondFL(&aControlParentWin,       ResId(FL_2        )),
-    aThirdFL(&aControlParentWin,        ResId(FL_3        )),
+    aAddressFT(&aControlParentWin,      BibResId(FT_ADDRESS     )),
+    aAnnoteFT(&aControlParentWin,       BibResId(FT_ANNOTE      )),
+    aBooktitleFT(&aControlParentWin,    BibResId(FT_BOOKTITLE       )),
+    aChapterFT(&aControlParentWin,      BibResId(FT_CHAPTER     )),
+    aEditionFT(&aControlParentWin,      BibResId(FT_EDITION     )),
+    aEditorFT(&aControlParentWin,       BibResId(FT_EDITOR      )),
+    aHowpublishedFT(&aControlParentWin, BibResId(FT_HOWPUBLISHED    )),
+    aInstitutionFT(&aControlParentWin,  BibResId(FT_INSTITUTION )),
+    aJournalFT(&aControlParentWin,      BibResId(FT_JOURNAL     )),
+    aNoteFT(&aControlParentWin,         BibResId(FT_NOTE            )),
+    aNumberFT(&aControlParentWin,       BibResId(FT_NUMBER      )),
+    aOrganizationsFT(&aControlParentWin,BibResId(FT_ORGANIZATION    )),
+    aPagesFT(&aControlParentWin,        BibResId(FT_PAGE            )),
+    aSchoolFT(&aControlParentWin,       BibResId(FT_SCHOOL      )),
+    aSeriesFT(&aControlParentWin,       BibResId(FT_SERIES      )),
+    aTitleFT(&aControlParentWin,        BibResId(FT_TITLE           )),
+    aReportTypeFT(&aControlParentWin,   BibResId(FT_REPORT      )),
+    aVolumeFT(&aControlParentWin,       BibResId(FT_VOLUME      )),
+    aURLFT(&aControlParentWin,          BibResId(FT_URL         )),
+    aCustom1FT(&aControlParentWin,      BibResId(FT_CUSTOM1     )),
+    aCustom2FT(&aControlParentWin,      BibResId(FT_CUSTOM2     )),
+    aCustom3FT(&aControlParentWin,      BibResId(FT_CUSTOM3     )),
+    aCustom4FT(&aControlParentWin,      BibResId(FT_CUSTOM4     )),
+    aCustom5FT(&aControlParentWin,      BibResId(FT_CUSTOM5     )),
+    aFirstFL(&aControlParentWin,        BibResId(FL_1        )),
+    aSecondFL(&aControlParentWin,       BibResId(FL_2        )),
+    aThirdFL(&aControlParentWin,        BibResId(FL_3        )),
     aHoriScroll(this, WB_HORZ),
     aVertScroll(this, WB_VERT),
-    sErrorPrefix(ResId(ST_ERROR_PREFIX))
+    sErrorPrefix(BibResId(ST_ERROR_PREFIX))
 {
     aControlParentWin.Show();
     aControlParentWin.SetHelpId(HID_BIB_CONTROL_PARENT);
     aStdSize = GetOutputSizePixel();
 
-    aBibTypeArr[0] = String(ResId(ST_TYPE_ARTICLE));
-    aBibTypeArr[1] = String(ResId(ST_TYPE_BOOK));
-    aBibTypeArr[2] = String(ResId(ST_TYPE_BOOKLET));
-    aBibTypeArr[3] = String(ResId(ST_TYPE_CONFERENCE));
-    aBibTypeArr[4] = String(ResId(ST_TYPE_INBOOK    ));
-    aBibTypeArr[5] = String(ResId(ST_TYPE_INCOLLECTION));
-    aBibTypeArr[6] = String(ResId(ST_TYPE_INPROCEEDINGS));
-    aBibTypeArr[7] = String(ResId(ST_TYPE_JOURNAL      ));
-    aBibTypeArr[8] = String(ResId(ST_TYPE_MANUAL       ));
-    aBibTypeArr[9] = String(ResId(ST_TYPE_MASTERSTHESIS));
-    aBibTypeArr[10] = String(ResId(ST_TYPE_MISC         ));
-    aBibTypeArr[11] = String(ResId(ST_TYPE_PHDTHESIS    ));
-    aBibTypeArr[12] = String(ResId(ST_TYPE_PROCEEDINGS  ));
-    aBibTypeArr[13] = String(ResId(ST_TYPE_TECHREPORT   ));
-    aBibTypeArr[14] = String(ResId(ST_TYPE_UNPUBLISHED  ));
-    aBibTypeArr[15] = String(ResId(ST_TYPE_EMAIL        ));
-    aBibTypeArr[16] = String(ResId(ST_TYPE_WWW          ));
-    aBibTypeArr[17] = String(ResId(ST_TYPE_CUSTOM1      ));
-    aBibTypeArr[18] = String(ResId(ST_TYPE_CUSTOM2      ));
-    aBibTypeArr[19] = String(ResId(ST_TYPE_CUSTOM3      ));
-    aBibTypeArr[20] = String(ResId(ST_TYPE_CUSTOM4      ));
-    aBibTypeArr[21] = String(ResId(ST_TYPE_CUSTOM5      ));
+    aBibTypeArr[0] = String(BibResId(ST_TYPE_ARTICLE));
+    aBibTypeArr[1] = String(BibResId(ST_TYPE_BOOK));
+    aBibTypeArr[2] = String(BibResId(ST_TYPE_BOOKLET));
+    aBibTypeArr[3] = String(BibResId(ST_TYPE_CONFERENCE));
+    aBibTypeArr[4] = String(BibResId(ST_TYPE_INBOOK ));
+    aBibTypeArr[5] = String(BibResId(ST_TYPE_INCOLLECTION));
+    aBibTypeArr[6] = String(BibResId(ST_TYPE_INPROCEEDINGS));
+    aBibTypeArr[7] = String(BibResId(ST_TYPE_JOURNAL       ));
+    aBibTypeArr[8] = String(BibResId(ST_TYPE_MANUAL    ));
+    aBibTypeArr[9] = String(BibResId(ST_TYPE_MASTERSTHESIS));
+    aBibTypeArr[10] = String(BibResId(ST_TYPE_MISC      ));
+    aBibTypeArr[11] = String(BibResId(ST_TYPE_PHDTHESIS ));
+    aBibTypeArr[12] = String(BibResId(ST_TYPE_PROCEEDINGS   ));
+    aBibTypeArr[13] = String(BibResId(ST_TYPE_TECHREPORT    ));
+    aBibTypeArr[14] = String(BibResId(ST_TYPE_UNPUBLISHED   ));
+    aBibTypeArr[15] = String(BibResId(ST_TYPE_EMAIL     ));
+    aBibTypeArr[16] = String(BibResId(ST_TYPE_WWW           ));
+    aBibTypeArr[17] = String(BibResId(ST_TYPE_CUSTOM1       ));
+    aBibTypeArr[18] = String(BibResId(ST_TYPE_CUSTOM2       ));
+    aBibTypeArr[19] = String(BibResId(ST_TYPE_CUSTOM3       ));
+    aBibTypeArr[20] = String(BibResId(ST_TYPE_CUSTOM4       ));
+    aBibTypeArr[21] = String(BibResId(ST_TYPE_CUSTOM5       ));
 
     FreeResource();
 
