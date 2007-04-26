@@ -4,9 +4,9 @@
  *
  *  $RCSfile: sfxresid.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 16:25:22 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:08:44 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ static ResMgr* pMgr=NULL;
 
 SfxResId::SfxResId( USHORT nId ) :
 
-    ResId( nId, GetResMgr() )
+    ResId( nId, *GetResMgr() )
 {
 }
 
