@@ -4,9 +4,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: rt $ $Date: 2006-12-04 15:11:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:21:42 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -687,7 +687,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
             //CHINA001 SwLineNumberingDlg *pDlg = new SwLineNumberingDlg(this);
             SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
             DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-            VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( ResId(DLG_LINE_NUMBERING),  *this);
+            VclAbstractDialog* pDlg = pFact->CreateVclSwViewDialog( DLG_LINE_NUMBERING, *this);
             DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
             pDlg->Execute();
             delete pDlg;
@@ -1197,7 +1197,7 @@ void __EXPORT SwView::Execute(SfxRequest &rReq)
 //CHINA001              &pFrame->GetWindow());
                 SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                 DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-                AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( ResId(DLG_MERGE_CREATE),
+                AbstractMailMergeCreateFromDlg* pDlg = pFact->CreateMailMergeCreateFromDlg( DLG_MERGE_CREATE,
                                                         &pFrame->GetWindow());
                 DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                 if(RET_OK == pDlg->Execute())
@@ -1611,7 +1611,7 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, ResId(RID_SVXDLG_ZOOM));
+                        pDlg = pFact->CreateSvxZoomDialog(&GetViewFrame()->GetWindow(), aCoreSet, RID_SVXDLG_ZOOM);
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     }
 
@@ -2175,10 +2175,10 @@ class SwMergeSourceWarningBox_Impl : public ModalDialog
     public:
         SwMergeSourceWarningBox_Impl( Window* pParent ) :
             ModalDialog( pParent, SW_RES( DLG_MERGE_SOURCE_UNAVAILABLE   ) ),
-                    aMessageFI( this, ResId( ST_MERGE_SOURCE_UNAVAILABLE ) ),
-                    aOK(        this, ResId( PB_MERGE_OK                 ) ),
-                    aCancel(    this, ResId( PB_MERGE_CANCEL             ) ),
-                    aWarnImage( this, ResId( IMG_MERGE                   ) )
+                    aMessageFI( this, SW_RES( ST_MERGE_SOURCE_UNAVAILABLE ) ),
+                    aOK(        this, SW_RES( PB_MERGE_OK                 ) ),
+                    aCancel(    this, SW_RES( PB_MERGE_CANCEL             ) ),
+                    aWarnImage( this, SW_RES( IMG_MERGE                   ) )
                     {
                         FreeResource();
                         SetText( Application::GetDisplayName() );
@@ -2251,7 +2251,7 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
                     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
                     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
                     AbstractMailMergeFieldConnectionsDlg* pConnectionsDlg = pFact->CreateMailMergeFieldConnectionsDlg(
-                                                        ResId(DLG_MERGE_FIELD_CONNECTIONS),
+                                                        DLG_MERGE_FIELD_CONNECTIONS,
                                                         &GetViewFrame()->GetWindow());
                     DBG_ASSERT(pConnectionsDlg, "Dialogdiet fail!");//CHINA001
                     if(RET_OK == pConnectionsDlg->Execute())
@@ -2298,7 +2298,7 @@ void SwView::GenerateFormLetter(BOOL bUseCurrentDocument)
                     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
                     if ( pFact )
                     {
-                        VclAbstractDialog* pDlg = pFact->CreateVclDialog( NULL, ResId( SID_OPTIONS_DATABASES ) );
+                        VclAbstractDialog* pDlg = pFact->CreateVclDialog( NULL, SID_OPTIONS_DATABASES );
                         pDlg->Execute();
                         delete pDlg;
                     }
