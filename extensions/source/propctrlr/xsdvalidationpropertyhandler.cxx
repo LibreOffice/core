@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xsdvalidationpropertyhandler.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-13 16:59:14 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:09:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -391,8 +391,8 @@ namespace pcr
                 PcrRes aResId( RID_RSC_BUTTON_IMAGES );
                 ::svt::OLocalResourceAccess aEnumStrings( aResId, RSC_RESOURCE );
                 aDescriptor.HasPrimaryButton = aDescriptor.HasSecondaryButton = sal_True;
-                aDescriptor.PrimaryButtonImage = Image( ResId( IMG_PLUS ) ).GetXGraphic();
-                aDescriptor.SecondaryButtonImage = Image( ResId( IMG_MINUS ) ).GetXGraphic();
+                aDescriptor.PrimaryButtonImage = Image( PcrRes( IMG_PLUS ) ).GetXGraphic();
+                aDescriptor.SecondaryButtonImage = Image( PcrRes( IMG_MINUS ) ).GetXGraphic();
             }
             break;
 
