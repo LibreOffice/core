@@ -4,9 +4,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:31:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:53:36 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -87,16 +87,16 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_HIGHLIGHT_CHANGES ),
         //
-        aHighlightBox   ( this, ResId( CB_HIGHLIGHT)),
-        aFlFilter       ( this, ResId( FL_FILTER)),
+        aHighlightBox   ( this, ScResId( CB_HIGHLIGHT)),
+        aFlFilter       ( this, ScResId( FL_FILTER)),
         aFilterCtr      ( this),
-        aCbAccept       ( this, ResId( CB_HIGHLIGHT_ACCEPT)),
-        aCbReject       ( this, ResId( CB_HIGHLIGHT_REJECT)),
-        aOkButton       ( this, ResId( BTN_OK ) ),
-        aCancelButton   ( this, ResId( BTN_CANCEL ) ),
-        aHelpButton     ( this, ResId( BTN_HELP ) ),
-        aEdAssign       ( this, ResId( ED_ASSIGN ) ),
-        aRbAssign       ( this, ResId( RB_ASSIGN ), &aEdAssign ),
+        aCbAccept       ( this, ScResId( CB_HIGHLIGHT_ACCEPT)),
+        aCbReject       ( this, ScResId( CB_HIGHLIGHT_REJECT)),
+        aOkButton       ( this, ScResId( BTN_OK ) ),
+        aCancelButton   ( this, ScResId( BTN_CANCEL ) ),
+        aHelpButton     ( this, ScResId( BTN_HELP ) ),
+        aEdAssign       ( this, ScResId( ED_ASSIGN ) ),
+        aRbAssign       ( this, ScResId( RB_ASSIGN ), &aEdAssign ),
         //
         pViewData       ( ptrViewData ),
         pDoc            ( ptrViewData->GetDocument() ),
