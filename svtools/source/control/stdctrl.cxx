@@ -4,9 +4,9 @@
  *
  *  $RCSfile: stdctrl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:40:51 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:31:43 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,3 +52,55 @@ FixedInfo::FixedInfo( Window* pParent, const ResId& rResId ) :
 {
     SetStyle( GetStyle() | WB_INFO );
 }
+
+namespace svt
+{
+    // class svt::SelectableFixedText ----------------------------------------
+
+    SelectableFixedText::SelectableFixedText( Window* pParent, WinBits nWinStyle ) :
+        Edit( pParent, nWinStyle )
+    {
+        Init();
+    }
+
+    // -----------------------------------------------------------------------
+
+    SelectableFixedText::SelectableFixedText( Window* pParent, const ResId& rResId ) :
+        Edit( pParent, rResId )
+    {
+        Init();
+    }
+
+    // -----------------------------------------------------------------------
+
+    SelectableFixedText::~SelectableFixedText()
+    {
+    }
+
+    // -----------------------------------------------------------------------
+
+    void SelectableFixedText::Init()
+    {
+        // no tabstop
+        SetStyle( ( GetStyle() & ~WB_TABSTOP ) | WB_NOTABSTOP );
+        // no border
+        SetBorderStyle( WINDOW_BORDER_NOBORDER );
+        // read-only
+        SetReadOnly();
+        // make it transparent
+        SetControlBackground();
+        SetBackground();
+        SetPaintTransparent( TRUE );
+    }
+
+    // -----------------------------------------------------------------------
+
+    void SelectableFixedText::LoseFocus()
+    {
+        Edit::LoseFocus();
+        // clear cursor
+        Invalidate();
+    }
+
+} // namespace svt
+
