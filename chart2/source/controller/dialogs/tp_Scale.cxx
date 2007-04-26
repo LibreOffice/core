@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tp_Scale.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:59:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:37:14 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -112,32 +112,32 @@ namespace chart
 SchScaleYAxisTabPage::SchScaleYAxisTabPage(Window* pWindow,const SfxItemSet& rInAttrs) :
     SfxTabPage(pWindow, SchResId(TP_SCALE_Y), rInAttrs),
 
-    aFlScale(this, ResId(FL_SCALE_Y)),
-    aTxtMin (this, ResId (TXT_MIN)),
-    aFmtFldMin(this, ResId(EDT_MIN)),
-    aCbxAutoMin(this, ResId(CBX_AUTO_MIN)),
-    aTxtMax(this, ResId (TXT_MAX)),
-    aFmtFldMax(this, ResId(EDT_MAX)),
-    aCbxAutoMax(this, ResId(CBX_AUTO_MAX)),
-    aTxtMain (this, ResId (TXT_STEP_MAIN)),
-    aFmtFldStepMain(this, ResId(EDT_STEP_MAIN)),
-    aCbxAutoStepMain(this, ResId(CBX_AUTO_STEP_MAIN)),
-    aTxtHelp (this, ResId (TXT_STEP_HELP)),
-//  aFmtFldStepHelp(this, ResId(EDT_STEP_HELP)),
-    aMtStepHelp (this, ResId (MT_STEPHELP)),
-    aCbxAutoStepHelp(this, ResId(CBX_AUTO_STEP_HELP)),
-    aTxtOrigin (this, ResId (TXT_ORIGIN)),
-    aFmtFldOrigin(this, ResId(EDT_ORIGIN)),
-    aCbxAutoOrigin(this, ResId(CBX_AUTO_ORIGIN)),
-    aCbxLogarithm(this, ResId(CBX_LOGARITHM)),
+    aFlScale(this, SchResId(FL_SCALE_Y)),
+    aTxtMin (this, SchResId (TXT_MIN)),
+    aFmtFldMin(this, SchResId(EDT_MIN)),
+    aCbxAutoMin(this, SchResId(CBX_AUTO_MIN)),
+    aTxtMax(this, SchResId (TXT_MAX)),
+    aFmtFldMax(this, SchResId(EDT_MAX)),
+    aCbxAutoMax(this, SchResId(CBX_AUTO_MAX)),
+    aTxtMain (this, SchResId (TXT_STEP_MAIN)),
+    aFmtFldStepMain(this, SchResId(EDT_STEP_MAIN)),
+    aCbxAutoStepMain(this, SchResId(CBX_AUTO_STEP_MAIN)),
+    aTxtHelp (this, SchResId (TXT_STEP_HELP)),
+//  aFmtFldStepHelp(this, SchResId(EDT_STEP_HELP)),
+    aMtStepHelp (this, SchResId (MT_STEPHELP)),
+    aCbxAutoStepHelp(this, SchResId(CBX_AUTO_STEP_HELP)),
+    aTxtOrigin (this, SchResId (TXT_ORIGIN)),
+    aFmtFldOrigin(this, SchResId(EDT_ORIGIN)),
+    aCbxAutoOrigin(this, SchResId(CBX_AUTO_ORIGIN)),
+    aCbxLogarithm(this, SchResId(CBX_LOGARITHM)),
 
-    aFlTicks(this,ResId(FL_TICKS)),
-    aCbxTicksInner(this, ResId(CBX_TICKS_INNER)),
-    aCbxTicksOuter(this, ResId(CBX_TICKS_OUTER)),
+    aFlTicks(this,SchResId(FL_TICKS)),
+    aCbxTicksInner(this, SchResId(CBX_TICKS_INNER)),
+    aCbxTicksOuter(this, SchResId(CBX_TICKS_OUTER)),
 
-    aFlHelpTicks(this,ResId(FL_HELPTICKS)),
-    aCbxHelpTicksInner(this, ResId(CBX_HELPTICKS_INNER)),
-    aCbxHelpTicksOuter(this, ResId(CBX_HELPTICKS_OUTER)),
+    aFlHelpTicks(this,SchResId(FL_HELPTICKS)),
+    aCbxHelpTicksInner(this, SchResId(CBX_HELPTICKS_INNER)),
+    aCbxHelpTicksOuter(this, SchResId(CBX_HELPTICKS_OUTER)),
 
     fMin(0.0),
     fMax(0.0),
