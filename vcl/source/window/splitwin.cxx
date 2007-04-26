@@ -4,9 +4,9 @@
  *
  *  $RCSfile: splitwin.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:21:16 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:31:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1972,7 +1972,7 @@ void SplitWindow::ImplDrawAutoHide( BOOL bInPaint )
                 Bitmap aBmp;
                 ResMgr* pResMgr = ImplGetResMgr();
                 if( pResMgr )
-                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITHPIN, pResMgr ) );
+                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITHPIN, *pResMgr ) );
                 pSVData->maCtrlData.mpSplitHPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
             }
             pImageList = pSVData->maCtrlData.mpSplitHPinImgList;
@@ -1984,7 +1984,7 @@ void SplitWindow::ImplDrawAutoHide( BOOL bInPaint )
                 Bitmap aBmp;
                 ResMgr* pResMgr = ImplGetResMgr();
                 if( pResMgr )
-                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITVPIN, pResMgr ) );
+                    aBmp = Bitmap( ResId( SV_RESID_BITMAP_SPLITVPIN, *pResMgr ) );
                 pSVData->maCtrlData.mpSplitVPinImgList = new ImageList( aBmp, Color( 0x00, 0x00, 0xFF ), 4 );
             }
             pImageList = pSVData->maCtrlData.mpSplitVPinImgList;
@@ -2817,7 +2817,7 @@ void SplitWindow::RequestHelp( const HelpEvent& rHEvt )
             XubString aStr;
             ResMgr* pResMgr = ImplGetResMgr();
             if( pResMgr )
-                aStr = XubString( ResId( nHelpResId, pResMgr ) );
+                aStr = XubString( ResId( nHelpResId, *pResMgr ) );
             if ( rHEvt.GetMode() & HELPMODE_BALLOON )
                 Help::ShowBalloon( this, aHelpRect.Center(), aHelpRect, aStr );
             else
