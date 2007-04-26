@@ -4,9 +4,9 @@
  *
  *  $RCSfile: directsql.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:08:52 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:59:16 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -108,17 +108,17 @@ DBG_NAME(DirectSQLDialog)
 //--------------------------------------------------------------------
     DirectSQLDialog::DirectSQLDialog( Window* _pParent, const Reference< XConnection >& _rxConn )
         :ModalDialog(_pParent, ModuleRes(DLG_DIRECTSQL))
-        ,m_aFrame               (this, ResId(FL_SQL))
-        ,m_aSQLLabel            (this, ResId(FT_SQL))
-        ,m_aSQL                 (this, ResId(ME_SQL))
-        ,m_aExecute             (this, ResId(PB_EXECUTE))
-        ,m_aHistoryLabel        (this, ResId(FT_HISTORY))
-        ,m_pSQLHistory(new LargeEntryListBox(this, ResId(LB_HISTORY)))
-        ,m_aStatusFrame         (this, ResId(FL_STATUS))
-        ,m_aStatus              (this, ResId(ME_STATUS))
-        ,m_aButtonSeparator     (this, ResId(FL_BUTTONS))
-        ,m_aHelp                (this, ResId(PB_HELP))
-        ,m_aClose               (this, ResId(PB_CLOSE))
+        ,m_aFrame               (this, ModuleRes(FL_SQL))
+        ,m_aSQLLabel            (this, ModuleRes(FT_SQL))
+        ,m_aSQL                 (this, ModuleRes(ME_SQL))
+        ,m_aExecute             (this, ModuleRes(PB_EXECUTE))
+        ,m_aHistoryLabel        (this, ModuleRes(FT_HISTORY))
+        ,m_pSQLHistory(new LargeEntryListBox(this, ModuleRes(LB_HISTORY)))
+        ,m_aStatusFrame         (this, ModuleRes(FL_STATUS))
+        ,m_aStatus              (this, ModuleRes(ME_STATUS))
+        ,m_aButtonSeparator     (this, ModuleRes(FL_BUTTONS))
+        ,m_aHelp                (this, ModuleRes(PB_HELP))
+        ,m_aClose               (this, ModuleRes(PB_CLOSE))
         ,m_nHistoryLimit(20)
         ,m_nStatusCount(1)
         ,m_xConnection(_rxConn)
