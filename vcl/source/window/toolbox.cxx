@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.99 $
+ *  $Revision: 1.100 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 12:23:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:31:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1754,6 +1754,10 @@ void ToolBox::ImplInitSettings( BOOL bFont,
 
 void ToolBox::ImplLoadRes( const ResId& rResId )
 {
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( ! pMgr )
+        return;
+
     DockingWindow::ImplLoadRes( rResId );
 
     ULONG              nObjMask;
@@ -1786,7 +1790,7 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
 
     if ( nObjMask & RSC_TOOLBOX_ITEMIMAGELIST )
     {
-        maImageList = ImageList( ResId( (RSHEADER_TYPE*)GetClassRes() ) );
+        maImageList = ImageList( ResId( (RSHEADER_TYPE*)GetClassRes(), *pMgr ) );
         IncrementRes( GetObjSizeRes( (RSHEADER_TYPE*)GetClassRes() ) );
     }
 
@@ -1797,7 +1801,7 @@ void ToolBox::ImplLoadRes( const ResId& rResId )
         // Item hinzufuegen
         for ( ULONG i = 0; i < nEle; i++ )
         {
-            InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes() ) );
+            InsertItem( ResId( (RSHEADER_TYPE *)GetClassRes(), *pMgr ) );
             IncrementRes( GetObjSizeRes( (RSHEADER_TYPE *)GetClassRes() ) );
         }
     }
