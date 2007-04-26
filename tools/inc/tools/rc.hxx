@@ -4,9 +4,9 @@
  *
  *  $RCSfile: rc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:16:06 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:46:50 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -57,80 +57,71 @@
 
 class TOOLS_DLLPUBLIC Resource
 {
-protected:
-    // Ist eine Resource verfuegbar
-    BOOL                IsAvailableRes( const ResId& rId ) const;
+    protected:
+    ResMgr* m_pResMgr;
 
-    // Laedt eine Resource
+    // check availability of Resource
+    BOOL                IsAvailableRes( const ResId& rId ) const
+    { return m_pResMgr->IsAvailable( rId, this ); }
+
+    // Load a Resource
     void                GetRes( const ResId& rResId );
 
-    // Testet die Resource-Struktur
+    // check Resource state
     void                TestRes();
 
-    // Gibt einen Zeiger auf die Resource zurueck
-    static void*        GetClassRes()
-                            { return GetResManager()->GetClass(); }
+    // Get a pointer to the Resource's data
+    void* GetClassRes()
+    { return m_pResMgr->GetClass(); }
 
-    // Liefert einen String aus der Resource
+    // read a string from the resource
     static sal_uInt32   GetStringRes( UniString& rStr, const BYTE* pStr )
-                            { return ResMgr::GetString( rStr, pStr ); }
+    { return ResMgr::GetString( rStr, pStr ); }
 
-    // Erhoeht den Zeiger, der ueber GetClassRes geholt wird
-    static void*        IncrementRes( sal_uInt32 nBytes )
-                            { return GetResManager()->Increment( nBytes ); }
+    // increase the memory pointer gotten by GetClassRes()
+    void* IncrementRes( sal_uInt32 nBytes )
+    { return m_pResMgr->Increment( nBytes ); }
 
-    // Gibt die Groesse eines Objektes in der Resource zurueck
+    // return the memory size of a Resource data block
     static sal_uInt32   GetObjSizeRes( RSHEADER_TYPE * pHT )
-                            { return ResMgr::GetObjSize( pHT ); }
+    { return ResMgr::GetObjSize( pHT ); }
 
-    // Gibt die verbleibende Groesse zurueck
-    static sal_uInt32   GetRemainSizeRes()
-                            { return GetResManager()->GetRemainSize(); }
+    // return the remaining size of this Resource's data
+    sal_uInt32 GetRemainSizeRes()
+    { return m_pResMgr->GetRemainSize(); }
 
-    // Gibt einen long zurueck
-    static INT32        GetLongRes( void * pLong )
-                            { return ResMgr::GetLong( pLong ); }
-    // Gibt einen long zurueck
-    static INT16        GetShortRes( void * pShort )
-                            { return ResMgr::GetShort( pShort ); }
+    // get a 32bit value from Resource data
+    static sal_Int32    GetLongRes( void * pLong )
+    { return ResMgr::GetLong( pLong ); }
+    // get a 16bit value from Resource data
+    static sal_Int16    GetShortRes( void * pShort )
+    { return ResMgr::GetShort( pShort ); }
 
-    static INT32        ReadLongRes()
-                            { return GetResManager()->ReadLong(); }
-    static INT16        ReadShortRes()
-                            { return GetResManager()->ReadShort(); }
-    static UniString    ReadStringRes()
-                            { return GetResManager()->ReadString(); }
-
-    RSHEADER_TYPE*      CreateBlockRes( const ResId& rId );
+    // read a 32bit value from resource data and increment pointer
+    sal_Int32 ReadLongRes()
+    { return m_pResMgr->ReadLong(); }
+    // read a 16bit value from resource data and increment pointer
+    sal_Int16 ReadShortRes()
+    { return m_pResMgr->ReadShort(); }
+    // read a string from resource data and increment pointer
+    UniString ReadStringRes()
+    { return m_pResMgr->ReadString(); }
 
     // Gibt die Resource frei (this-Zeiger fuer Fehlerueberpruefung)
-    void                FreeResource()
-                            { GetResManager()->PopContext( this ); }
+    // free the resource from m_pResMgr's stack (pass this ptr for validation)
+    void FreeResource()
+    { m_pResMgr->PopContext( this ); }
 
-                        // Resource-Konstruktoren
-                        Resource() {}
-                        Resource( const ResId& rResId );
+    // constructors
+    Resource() : m_pResMgr( NULL ) {}
+    Resource( const ResId& rResId );
 
-public:
-#ifdef DBG_UTIL
-                        ~Resource() { TestRes(); }
-#else
-                        ~Resource() {}
-#endif
-
-    // neuen Resourcemanager setzen bzw. Manager zurueckgeben
-    static void         SetResManager( ResMgr* paResMgr );
-    static ResMgr*      GetResManager();
+    public:
+    #ifdef DBG_UTIL
+    ~Resource() { TestRes(); }
+    #else
+    ~Resource() {}
+    #endif
 };
-
-inline BOOL Resource::IsAvailableRes( const ResId& rId ) const
-{
-    return GetResManager()->IsAvailable( rId, this );
-}
-
-inline RSHEADER_TYPE* Resource::CreateBlockRes( const ResId& rId )
-{
-    return GetResManager()->CreateBlock( rId );
-}
 
 #endif // _SV_RC_HXX

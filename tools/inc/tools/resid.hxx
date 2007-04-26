@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resid.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:16:44 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:47:17 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -40,6 +40,10 @@
 #include <tools/solar.h>
 #endif
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
+
 struct RSHEADER_TYPE;
 typedef sal_uInt32 RESOURCE_TYPE;
 #define RSC_NOTYPE              0x100
@@ -53,145 +57,119 @@ class ResMgr;
 
 class ResId
 {
-    RSHEADER_TYPE*  pResource;     // Ist pResource == 0, dann nResId gueltig,
-                                   // sonst zeigt pResource auf die Resource
-                                   // Hoechstes Bit entscheidet ueber Freigabe
-                                   // der Resource in Increment
-    sal_uInt32      nResId;        // Resource Identifier
-    RESOURCE_TYPE   nRT;           // ResourceTyp zum Laden und Typ
-    ResMgr *        pResMgr;       // Ueber diesen ResMgr addressieren
-    RESOURCE_TYPE   nRT2;          // ResourceTyp zum Laden, "uberschreibt nRT
+    /*
+    consider two cases: either m_pResource is valid and points
+    two a resource data buffer; then m_nResId and m_pResMgr are
+    not used and may be 0 resp. NULL
+    or m_pResource is NULL, the m_nResId and m_pResMgr must be valid.
+    In this case the highest bit if set decides whether to
+    not to release the Resource context after loading this id
+    */
+    RSHEADER_TYPE*          m_pResource;
 
-public:
-    ULONG           aWinBits;
+    mutable sal_uInt32      m_nResId;      // Resource Identifier
+    mutable RESOURCE_TYPE   m_nRT;         // type for loading (mutable to be set later)
+    mutable ResMgr *        m_pResMgr;     // load from this ResMgr (mutable for setting on demand)
+    mutable RESOURCE_TYPE   m_nRT2;        // type for loading (supercedes m_nRT)
+    mutable sal_uInt32      m_nWinBits;    // container for original style bits on a window in a resource
 
-                    ResId( RSHEADER_TYPE * pRc )
-                    {
-                        nResId      = 0;
-                        pResource   = pRc;
-                        nRT = nRT2  = RSC_NOTYPE;
-                        pResMgr     = NULL;
-                    }
-                    ResId( sal_uInt32 nId, ResMgr * pMgr = NULL )
-                    {
-                        nResId      = nId;
-                        pResource   = NULL;
-                        nRT = nRT2  = RSC_NOTYPE;
-                        pResMgr     = pMgr;
-                    }
-                    // backwards compatibility; avoid ambiguities
-                    ResId( USHORT nId, ResMgr* pMgr = NULL )
-                    {
-                        nResId      = sal_uInt32(nId);
-                        pResource   = NULL;
-                        nRT = nRT2  = RSC_NOTYPE;
-                        pResMgr     = pMgr;
-                    }
-                    ResId( int nId, ResMgr* pMgr = NULL )
-                    {
-                        nResId      = sal_uInt32(nId);
-                        pResource   = NULL;
-                        nRT = nRT2  = RSC_NOTYPE;
-                        pResMgr     = pMgr;
-                    }
-                    ResId( long nId, ResMgr* pMgr = NULL )
-                    {
-                        nResId      = sal_uInt32(nId);
-                        pResource   = NULL;
-                        nRT = nRT2  = RSC_NOTYPE;
-                        pResMgr     = pMgr;
-                    }
+    void ImplInit( sal_uInt32 nId, ResMgr& rMgr, RSHEADER_TYPE* pRes )
+    {
+        m_pResource = pRes; m_nResId = nId; m_nRT = RSC_NOTYPE; m_pResMgr = &rMgr; m_nRT2 = RSC_NOTYPE; m_nWinBits = 0;
+        OSL_ENSURE( m_pResMgr != NULL, "ResId without ResMgr created" );
+    }
+    public:
+    ResId( RSHEADER_TYPE * pRc, ResMgr& rMgr )
+    {
+        ImplInit( 0, rMgr, pRc );
+    }
+    ResId( sal_uInt32 nId, ResMgr& rMgr )
+    {
+        ImplInit( nId, rMgr, NULL );
+    }
+    // backwards compatibility; avoid ambiguities
+    ResId( USHORT nId, ResMgr& rMgr )
+    {
+        ImplInit( sal_uInt32(nId), rMgr, NULL );
+    }
+    ResId( int nId, ResMgr& rMgr )
+    {
+        ImplInit( sal_uInt32(nId), rMgr, NULL );
+    }
+    ResId( long nId, ResMgr& rMgr )
+    {
+        ImplInit( sal_uInt32(nId), rMgr, NULL );
+    }
 
-    RESOURCE_TYPE   GetRT() const { return( nRT ); }
-    const ResId &   SetRT( RESOURCE_TYPE nTyp ) const
-                    /*  [Beschreibung]
+    sal_uInt32 GetWinBits() const
+    { return m_nWinBits; }
+    void SetWinBits( sal_uInt32 nBits ) const
+    { m_nWinBits = nBits; }
 
-                        Setzt den Typ, wenn er vorher noch nicht gesetzt
-                        wurde. Er kann mit <ResId::GetRT()> abgefragt werden.
+    RESOURCE_TYPE   GetRT() const { return( m_nRT ); }
+    const ResId &   SetRT( RESOURCE_TYPE nType ) const
+    /*
+    Set the type if not already set. Ask for tye with GetRT()
 
-                        [Anmerkung]
+    [Example]
+    ResId aId( 1000 );
+    aId.SetRT( RSC_WINDOW );    // settype window Window
+    aId.SetRT( RSC_BUTTON );    // will not set type Button
+    //aId.GetRT() == RSC_WINDOW is true
 
-                        Die Methode ist const, um die Compiler-Warning
-                        zu umgehen.
-
-                        [Beispiel]
-
-                        ResId aId( 1000 );
-                        aId.SetRT( RSC_WINDOW );    // setzt den Typ Window
-                        aId.SetRT( RSC_BUTTON );    // setzt nicht mehr Typ
-                        //aId.GetRT() == RSC_WINDOW ist wahr
-
-                        [Querverweise]
-
-                        <ResId::GetRT2()>, <ResId::GetRT()>
-                    */
-                    {
-                        if( RSC_NOTYPE == nRT )
-                            ((ResId *)this)->nRT = nTyp;
-                        return *this;
-                    }
+    @see
+    ResId::GetRT2(), ResId::GetRT()
+    */
+    {
+        if( RSC_NOTYPE == m_nRT )
+            m_nRT = nType;
+        return *this;
+    }
     RESOURCE_TYPE   GetRT2() const
-                    /*  [Beschreibung]
+    /*
+    Get the effective type (m_nRT2 or m_nRT1)
 
-                        Gibt den Typ zur"uck, der mit <ResId::SetRT2()>
-                        gesetzt wurde. Wurde damit kein Typ gesetzt,
-                        dann wird der Typ zur"uckgegeben, der mit
-                        <ResId::SetRT()> gesetzt wurde. Ansonsten wird
-                        RSC_NOTYPE zur"uckgegeben.
-
-                        [Anmerkung]
-
-                        Ein zweiter Ressourcetyp ist notwendig, da
-                        der erste in StarView zum Erzeugen der
-                        Systemfenster in der Klasse <Window> ben"otigt wird
-                        und deshalb nur bekannte Typen enthalten darf.
-                    */
-                    {
-                        if( RSC_NOTYPE == nRT2 )
-                            return( nRT );
-                        else
-                            return( nRT2 );
-                    }
+    A second resource type is used to supercede settings
+    of the base class ( e.g. Window )
+    */
+    {
+        return (RSC_NOTYPE == m_nRT2) ? m_nRT : m_nRT2;
+    }
     const ResId &   SetRT2( RESOURCE_TYPE nTyp ) const
-                    /*  [Beschreibung]
+    /*
+    Set the superceding type. Ask spcifically for it with GetRT2()
 
-                        Setzt den Typ, wenn er vorher noch nicht gesetzt
-                        wurde. Er kann mit <ResId::GetRT2()> abgefragt werden.
+    SetRT2() may only be called if no derived class calls SetRT in its
+    Resource constructor.
+    */
+    {
+        if( RSC_NOTYPE == m_nRT2 )
+            m_nRT2 = nTyp;
+        return *this;
+    }
 
-                        [Anmerkung]
-
-                        SetRT2() darf nur gerufen werden, wenn keine
-                        abgeleitete Klasse in ihrem Ressource-Konstruktor
-                        <ResId::SetRT()> ruft.
-                    */
-                    {
-                        if( RSC_NOTYPE == nRT2 )
-                            ((ResId *)this)->nRT2 = nTyp;
-                        return *this;
-                    }
-
-    ResMgr *        GetResMgr() const { return pResMgr; }
+    ResMgr *        GetResMgr() const { return m_pResMgr; }
     const ResId &   SetResMgr( ResMgr * pMgr ) const
-                    {
-                        // const, wegen Compiler warning
-                        ((ResId *)this)->pResMgr = pMgr;
-                        return *this;
-                    }
+    {
+        m_pResMgr = pMgr;
+        OSL_ENSURE( m_pResMgr != NULL, "invalid ResMgr set on ResId" );
+        return *this;
+    }
 
     const ResId &  SetAutoRelease(BOOL bRelease) const
-                   {
-                       if( bRelease )
-                           ((ResId *)this)->nResId &= ~RSC_DONTRELEASE;
-                       else
-                           ((ResId *)this)->nResId |= RSC_DONTRELEASE;
-                       return *this;
-                   }
+    {
+        if( bRelease )
+            m_nResId &= ~RSC_DONTRELEASE;
+        else
+            m_nResId |= RSC_DONTRELEASE;
+        return *this;
+    }
 
     BOOL           IsAutoRelease()  const
-                   { return !(nResId & RSC_DONTRELEASE); }
+    { return !(m_nResId & RSC_DONTRELEASE); }
 
-    sal_uInt32     GetId()          const { return nResId & ~RSC_DONTRELEASE; }
-    RSHEADER_TYPE* GetpResource()   const { return pResource; }
+    sal_uInt32     GetId()          const { return m_nResId & ~RSC_DONTRELEASE; }
+    RSHEADER_TYPE* GetpResource()   const { return m_pResource; }
 };
 
 #endif // _RESID_HXX

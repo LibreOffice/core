@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resary.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2007-04-11 20:16:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:47:04 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -67,28 +67,41 @@ struct ImplResStringItem
 // - ResStringArray -
 // ------------------
 
-#define RESARRAY_INDEX_NOTFOUND             ((USHORT)0xFFFF)
+#define RESARRAY_INDEX_NOTFOUND (0xffffffff)
 
-class TOOLS_DLLPUBLIC ResStringArray : public Resource
+class TOOLS_DLLPUBLIC ResStringArray
 {
-private:
-    ImplResStringItem** mpAry;
-    sal_uInt32          mnSize;
+    private:
+    // ---------------------
+    // - ImplResStringItem -
+    // ---------------------
+    struct ImplResStringItem
+    {
+        XubString   m_aStr;
+        long        m_nValue;
 
-public:
-                        ResStringArray( const ResId& rResId );
-                        ~ResStringArray();
+        ImplResStringItem( const XubString& rStr, long nValue = 0 ) :
+        m_aStr( rStr ),
+        m_nValue( nValue )
+        {}
+    };
+
+    std::vector< ImplResStringItem >    m_aStrings;
+
+    public:
+    ResStringArray( const ResId& rResId );
+    ~ResStringArray();
 
     const XubString&    GetString( sal_uInt32 nIndex ) const
-                            { return mpAry[nIndex]->maStr; }
+    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_aStr : String::EmptyString(); }
     long                GetValue( sal_uInt32 nIndex ) const
-                            { return mpAry[nIndex]->mnValue; }
-    sal_uInt32          Count() const { return mnSize; }
+    { return (nIndex < m_aStrings.size()) ? m_aStrings[nIndex].m_nValue : -1; }
+    sal_uInt32          Count() const { return sal_uInt32(m_aStrings.size()); }
 
     sal_uInt32          FindIndex( long nValue ) const;
 
-private:
-                        ResStringArray( const ResStringArray& );
+    private:
+    ResStringArray( const ResStringArray& );
     ResStringArray&     operator=( const ResStringArray& );
 };
 
