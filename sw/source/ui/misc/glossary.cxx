@@ -4,9 +4,9 @@
  *
  *  $RCSfile: glossary.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 14:48:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:12:54 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -1297,7 +1297,7 @@ IMPL_LINK( SwGlossaryDlg, PathHdl, Button *, pBtn )
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)
     {
-        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, ResId(RID_SVXDLG_MULTIPATH) );
+        AbstractSvxMultiPathDialog* pDlg = pFact->CreateSvxMultiPathDialog( pBtn, RID_SVXDLG_MULTIPATH );
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         SvtPathOptions aPathOpt;
         String sGlosPath( aPathOpt.GetAutoTextPath() );
