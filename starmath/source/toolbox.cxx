@@ -4,9 +4,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:55:46 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:15:07 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -159,8 +159,8 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
                                  SfxChildWindow *pChildWindow,
                                  Window *pParent) :
     SfxFloatingWindow(pBindings, pChildWindow, pParent, SmResId(RID_TOOLBOXWINDOW)),
-    aToolBoxCat(this, ResId(NUM_TBX_CATEGORIES + 1)),
-    aToolBoxCat_Delim(this, ResId( FL_TOOLBOX_CAT_DELIM ))
+    aToolBoxCat(this, SmResId(NUM_TBX_CATEGORIES + 1)),
+    aToolBoxCat_Delim(this, SmResId( FL_TOOLBOX_CAT_DELIM ))
 {
     RTL_LOGFILE_CONTEXT( aLog, "starmath: SmToolBoxWindow::SmToolBoxWindow" );
 
@@ -174,7 +174,7 @@ SmToolBoxWindow::SmToolBoxWindow(SfxBindings *pBindings,
     int i;
     for (i = 0;  i < NUM_TBX_CATEGORIES;  i++)
     {
-        ToolBox *pBox = new ToolBox(this, ResId (i+1));
+        ToolBox *pBox = new ToolBox(this, SmResId (i+1));
         vToolBoxCategories[i] = pBox;
         pBox->SetSelectHdl(LINK(this, SmToolBoxWindow, CmdSelectHdl));
     }
