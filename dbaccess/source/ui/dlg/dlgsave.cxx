@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dlgsave.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 07:09:18 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:59:40 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -127,18 +127,18 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
     :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
-    ,m_aDescription(this, ResId (FT_DESCRIPTION))
-    ,m_aCatalogLbl(this, ResId (FT_CATALOG))
-    ,m_aCatalog(this, ResId (ET_CATALOG), ::rtl::OUString())
-    ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
-    ,m_aSchema(this, ResId (ET_SCHEMA), ::rtl::OUString())
-    ,m_aLabel(this, ResId (FT_TITLE))
-    ,m_aTitle(this, ResId (ET_TITLE), ::rtl::OUString())
-    ,m_aPB_OK(this, ResId( PB_OK ) )
-    ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
-    ,m_aPB_HELP(this, ResId( PB_HELP))
-    ,m_aQryLabel(ResId(STR_QRY_LABEL))
-    ,m_sTblLabel(ResId(STR_TBL_LABEL))
+    ,m_aDescription(this, ModuleRes (FT_DESCRIPTION))
+    ,m_aCatalogLbl(this, ModuleRes (FT_CATALOG))
+    ,m_aCatalog(this, ModuleRes (ET_CATALOG), ::rtl::OUString())
+    ,m_aSchemaLbl(this, ModuleRes (FT_SCHEMA))
+    ,m_aSchema(this, ModuleRes (ET_SCHEMA), ::rtl::OUString())
+    ,m_aLabel(this, ModuleRes (FT_TITLE))
+    ,m_aTitle(this, ModuleRes (ET_TITLE), ::rtl::OUString())
+    ,m_aPB_OK(this, ModuleRes( PB_OK ) )
+    ,m_aPB_CANCEL(this, ModuleRes( PB_CANCEL ))
+    ,m_aPB_HELP(this, ModuleRes( PB_HELP))
+    ,m_aQryLabel(ModuleRes(STR_QRY_LABEL))
+    ,m_sTblLabel(ModuleRes(STR_TBL_LABEL))
     ,m_aName(rDefault)
     ,m_rObjectNameCheck( _rObjectNameCheck )
     ,m_xORB( _rxORB )
@@ -260,18 +260,18 @@ OSaveAsDlg::OSaveAsDlg( Window * pParent,
                         const IObjectNameCheck& _rObjectNameCheck,
                         sal_Int32 _nFlags)
              :ModalDialog( pParent, ModuleRes(DLG_SAVE_AS))
-             ,m_aDescription(this, ResId (FT_DESCRIPTION))
-             ,m_aCatalogLbl(this, ResId (FT_CATALOG))
-             ,m_aCatalog(this, ResId (ET_CATALOG))
-             ,m_aSchemaLbl(this, ResId (FT_SCHEMA))
-             ,m_aSchema(this, ResId (ET_SCHEMA))
-             ,m_aLabel(this, ResId (FT_TITLE))
-             ,m_aTitle(this, ResId (ET_TITLE))
-             ,m_aPB_OK(this, ResId( PB_OK ) )
-             ,m_aPB_CANCEL(this, ResId( PB_CANCEL ))
-             ,m_aPB_HELP(this, ResId( PB_HELP))
-             ,m_aQryLabel(ResId(STR_QRY_LABEL))
-             ,m_sTblLabel(ResId(STR_TBL_LABEL))
+             ,m_aDescription(this, ModuleRes (FT_DESCRIPTION))
+             ,m_aCatalogLbl(this, ModuleRes (FT_CATALOG))
+             ,m_aCatalog(this, ModuleRes (ET_CATALOG))
+             ,m_aSchemaLbl(this, ModuleRes (FT_SCHEMA))
+             ,m_aSchema(this, ModuleRes (ET_SCHEMA))
+             ,m_aLabel(this, ModuleRes (FT_TITLE))
+             ,m_aTitle(this, ModuleRes (ET_TITLE))
+             ,m_aPB_OK(this, ModuleRes( PB_OK ) )
+             ,m_aPB_CANCEL(this, ModuleRes( PB_CANCEL ))
+             ,m_aPB_HELP(this, ModuleRes( PB_HELP))
+             ,m_aQryLabel(ModuleRes(STR_QRY_LABEL))
+             ,m_sTblLabel(ModuleRes(STR_TBL_LABEL))
              ,m_aName(rDefault)
              ,m_rObjectNameCheck( _rObjectNameCheck )
              ,m_xORB( _rxORB )
