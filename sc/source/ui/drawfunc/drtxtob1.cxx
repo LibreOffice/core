@@ -4,9 +4,9 @@
  *
  *  $RCSfile: drtxtob1.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:10:55 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:52:57 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -77,7 +77,7 @@ BOOL ScDrawTextObjectBar::ExecuteCharDlg( const SfxItemSet& rArgs,
     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
     SfxAbstractTabDialog* pDlg = pFact->CreateScCharDlg(  pViewData->GetDialogParent(), &rArgs,
-                                                        pViewData->GetSfxDocShell(),ResId(RID_SCDLG_CHAR) );
+                                                        pViewData->GetSfxDocShell(),RID_SCDLG_CHAR );
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     BOOL bRet = ( pDlg->Execute() == RET_OK );
 
@@ -122,7 +122,7 @@ BOOL ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
     ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "ScAbstractFactory create fail!");//CHINA001
 
-    SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, ResId(RID_SCDLG_PARAGRAPH));
+    SfxAbstractTabDialog* pDlg = pFact->CreateScParagraphDlg( pViewData->GetDialogParent(), &aNewAttr, RID_SCDLG_PARAGRAPH);
     DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
     BOOL bRet = ( pDlg->Execute() == RET_OK );
 
