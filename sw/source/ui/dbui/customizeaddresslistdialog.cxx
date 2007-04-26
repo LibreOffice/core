@@ -4,9 +4,9 @@
  *
  *  $RCSfile: customizeaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:43:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:52:52 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -69,17 +69,17 @@ SwCustomizeAddressListDialog::SwCustomizeAddressListDialog(
         Window* pParent, const SwCSVData& rOldData) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_CUSTOMIZE_ADDRESS_LIST)),
 #pragma warning (disable : 4355)
-    m_aFieldsFT( this, ResId(    FT_FIELDS)),
-    m_aFieldsLB( this, ResId(    LB_FIELDS)),
-    m_aAddPB( this, ResId(       PB_ADD)),
-    m_aDeletePB( this, ResId(    PB_DELETE)),
-    m_aRenamePB( this, ResId(    PB_RENAME)),
-    m_aUpPB( this, ResId(        PB_UP)),
-    m_aDownPB( this, ResId(      PB_DOWN)),
-    m_aSeparatorFL( this, ResId( FL_SEPARATOR)),
-    m_aOK( this, ResId(          PB_OK)),
-    m_aCancel( this, ResId(      PB_CANCEL)),
-    m_aHelp( this, ResId(        PB_HELP)),
+    m_aFieldsFT( this, SW_RES(    FT_FIELDS)),
+    m_aFieldsLB( this, SW_RES(    LB_FIELDS)),
+    m_aAddPB( this, SW_RES(       PB_ADD)),
+    m_aDeletePB( this, SW_RES(    PB_DELETE)),
+    m_aRenamePB( this, SW_RES(    PB_RENAME)),
+    m_aUpPB( this, SW_RES(        PB_UP)),
+    m_aDownPB( this, SW_RES(      PB_DOWN)),
+    m_aSeparatorFL( this, SW_RES( FL_SEPARATOR)),
+    m_aOK( this, SW_RES(          PB_OK)),
+    m_aCancel( this, SW_RES(      PB_CANCEL)),
+    m_aHelp( this, SW_RES(        PB_HELP)),
 #pragma warning (default : 4355)
     m_pNewData( new SwCSVData(rOldData))
 {
@@ -239,18 +239,18 @@ SwAddRenameEntryDialog::SwAddRenameEntryDialog(
         Window* pParent, bool bRename, const ::std::vector< ::rtl::OUString >& rCSVHeader) :
     SfxModalDialog(pParent, SW_RES(DLG_MM_ADD_RENAME_ENTRY)),
 #pragma warning (disable : 4355)
-    m_aFieldNameFT( this, ResId( FT_FIELDNAME)),
-    m_aFieldNameED( this, ResId( ED_FIELDNAME)),
-    m_aOK( this, ResId(          PB_OK)),
-    m_aCancel( this, ResId(      PB_CANCEL)),
-    m_aHelp( this, ResId(        PB_HELP)),
+    m_aFieldNameFT( this, SW_RES( FT_FIELDNAME)),
+    m_aFieldNameED( this, SW_RES( ED_FIELDNAME)),
+    m_aOK( this, SW_RES(          PB_OK)),
+    m_aCancel( this, SW_RES(      PB_CANCEL)),
+    m_aHelp( this, SW_RES(        PB_HELP)),
 #pragma warning (default : 4355)
     m_rCSVHeader(rCSVHeader)
 {
     if(bRename)
-        SetText(String(ResId(ST_RENAME_TITLE)));
+        SetText(String(SW_RES(ST_RENAME_TITLE)));
     else
-        m_aOK.SetText(String(ResId(ST_ADD_BUTTON)));
+        m_aOK.SetText(String(SW_RES(ST_ADD_BUTTON)));
     FreeResource();
     m_aFieldNameED.SetModifyHdl(LINK(this, SwAddRenameEntryDialog, ModifyHdl_Impl));
     ModifyHdl_Impl( &m_aFieldNameED );
