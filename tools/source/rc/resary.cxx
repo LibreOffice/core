@@ -4,9 +4,9 @@
  *
  *  $RCSfile: resary.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 00:59:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:48:09 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -48,20 +48,25 @@
 // =======================================================================
 
 ResStringArray::ResStringArray( const ResId& rResId )
-    : Resource ( rResId.SetRT( RSC_STRINGARRAY ) ),
-      mpAry    ( 0 ),
-      mnSize   ( ReadLongRes() )
 {
-    if ( mnSize )
+    rResId.SetRT( RSC_STRINGARRAY );
+    ResMgr* pMgr = rResId.GetResMgr();
+    if( pMgr && pMgr->GetResource( rResId ) )
     {
-        mpAry = new ImplResStringItem*[mnSize];
-        for ( sal_uInt32 i = 0; i < mnSize; i++ )
+        pMgr->GetClass();
+        pMgr->Increment( sizeof( RSHEADER_TYPE ) );
+        const sal_uInt32 nItems = pMgr->ReadLong();
+        if ( nItems )
         {
-            // String laden
-            mpAry[i] = new ImplResStringItem( ReadStringRes() );
+            m_aStrings.reserve( nItems );
+            for ( sal_uInt32 i = 0; i < nItems; i++ )
+            {
+                // load string
+                m_aStrings.push_back( ImplResStringItem( pMgr->ReadString() ) );
 
-            // Value laden
-            mpAry[i]->mnValue = ReadLongRes();
+                // load value
+                m_aStrings[i].m_nValue = pMgr->ReadLong();
+            }
         }
     }
 }
@@ -70,18 +75,16 @@ ResStringArray::ResStringArray( const ResId& rResId )
 
 ResStringArray::~ResStringArray()
 {
-    for ( sal_uInt32 i = 0; i < mnSize; i++ )
-        delete mpAry[i];
-    delete[] mpAry;
 }
 
 // -----------------------------------------------------------------------
 
 sal_uInt32 ResStringArray::FindIndex( long nValue ) const
 {
-    for ( sal_uInt32 i = 0; i < mnSize; i++ )
+    const sal_uInt32 nItems = m_aStrings.size();
+    for ( sal_uInt32 i = 0; i < nItems; i++ )
     {
-        if ( mpAry[i]->mnValue == nValue )
+        if ( m_aStrings[i].m_nValue == nValue )
             return i;
     }
     return RESARRAY_INDEX_NOTFOUND;
