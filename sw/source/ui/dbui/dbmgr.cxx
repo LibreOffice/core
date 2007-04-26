@@ -4,9 +4,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.117 $
+ *  $Revision: 1.118 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-25 09:15:00 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:02:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -2936,7 +2936,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     }
     SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
     DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-    pImpl->pMergeDialog = pFact->CreateMailMergeDlg( ResId(DLG_MAILMERGE),
+    pImpl->pMergeDialog = pFact->CreateMailMergeDlg( DLG_MAILMERGE,
                                                         &rSh.GetView().GetViewFrame()->GetWindow(), rSh,
                                                         sDataSource,
                                                         sDataTableOrQuery,
@@ -3049,7 +3049,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
                                                                                 xSource,
                                                                                 xColSupp,
                                                                                 aDBData,
-                                                                                ResId( DLG_AP_INSERT_DB_SEL ));
+                                                                                DLG_AP_INSERT_DB_SEL );
     DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
     if( RET_OK == pDlg->Execute() )
     {
