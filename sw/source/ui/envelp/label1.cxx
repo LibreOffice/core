@@ -4,9 +4,9 @@
  *
  *  $RCSfile: label1.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:54:43 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:08:15 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -155,9 +155,9 @@ void SwLabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
 SwLabDlg::SwLabDlg(Window* pParent, const SfxItemSet& rSet,
                                 SwNewDBMgr* pDBMgr, sal_Bool bLabel) :
     SfxTabDialog( pParent, SW_RES(DLG_LAB), &rSet, sal_False ),
-    sBusinessCardDlg(ResId(ST_BUSINESSCARDDLG)),
-    sMedium(ResId(ST_FIRSTPAGE_BC)),
-    sFormat(ResId(ST_FIRSTPAGE_LAB)),
+    sBusinessCardDlg(SW_RES(ST_BUSINESSCARDDLG)),
+    sMedium(SW_RES(ST_FIRSTPAGE_BC)),
+    sFormat(SW_RES(ST_FIRSTPAGE_LAB)),
     aTypeIds( 50, 10 ),
     aMakes  (  5,  0 ),
     pRecs   ( new SwLabRecs() ),
@@ -746,12 +746,12 @@ void SwVisitingCardPage::SetUserData( sal_uInt32 nCnt,
 
 SwVisitingCardPage::SwVisitingCardPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_VISITING_CARDS), rSet),
-    aAutoTextLB(this,       ResId( LB_AUTO_TEXT         )),
-    aAutoTextGroupFT(this,  ResId( FT_AUTO_TEXT_GROUP   )),
-    aAutoTextGroupLB(this,  ResId( LB_AUTO_TEXT_GROUP   )),
-    aContentFL(this,        ResId( FL_CONTENT           )),
-    aExampleWIN(this,       ResId( WIN_EXAMPLE          )),
-    sVisCardGroup(ResId(ST_VISCARD_GROUP)),
+    aAutoTextLB(this,       SW_RES( LB_AUTO_TEXT            )),
+    aAutoTextGroupFT(this,  SW_RES( FT_AUTO_TEXT_GROUP  )),
+    aAutoTextGroupLB(this,  SW_RES( LB_AUTO_TEXT_GROUP  )),
+    aContentFL(this,        SW_RES( FL_CONTENT           )),
+    aExampleWIN(this,       SW_RES( WIN_EXAMPLE         )),
+    sVisCardGroup(SW_RES(ST_VISCARD_GROUP)),
     pExampleFrame(0)
 {
     FreeResource();
@@ -908,34 +908,34 @@ void SwVisitingCardPage::Reset(const SfxItemSet& rSet)
  --------------------------------------------------*/
 SwPrivateDataPage::SwPrivateDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_PRIVATE_DATA), rSet),
-    aDataFL             (this, ResId( FL_DATA       )),
-    aNameFT             (this, ResId( FT_NAME       )),
-    aFirstNameED        (this, ResId( ED_FIRSTNAME  )),
-    aNameED             (this, ResId( ED_NAME       )),
-    aShortCutED         (this, ResId( ED_SHORTCUT   )),
-    aName2FT            (this, ResId( FT_NAME_2     )),
-    aFirstName2ED       (this, ResId( ED_FIRSTNAME_2)),
-    aName2ED            (this, ResId( ED_NAME_2     )),
-    aShortCut2ED        (this, ResId( ED_SHORTCUT_2 )),
-    aStreetFT           (this, ResId( FT_STREET     )),
-    aStreetED           (this, ResId( ED_STREET     )),
-    aZipCityFT          (this, ResId( FT_ZIPCITY    )),
-    aZipED              (this, ResId( ED_ZIP        )),
-    aCityED             (this, ResId( ED_CITY       )),
-    aCountryStateFT     (this, ResId( FT_COUNTRYSTATE )),
-    aCountryED          (this, ResId( ED_COUNTRY    )),
-    aStateED            (this, ResId( ED_STATE      )),
-    aTitleProfessionFT  (this, ResId( FT_TITLEPROF  )),
-    aProfessionED       (this, ResId( ED_PROFESSION )),
-    aTitleED            (this, ResId( ED_TITLE      )),
-    aPhoneFT            (this, ResId( FT_PHONE_MOBILE   )),
-    aPhoneED            (this, ResId( ED_PHONE      )),
-    aMobilePhoneED      (this, ResId( ED_MOBILE     )),
-    aFaxFT              (this, ResId( FT_FAX        )),
-    aFaxED              (this, ResId( ED_FAX        )),
-    aWWWMailFT          (this, ResId( FT_WWWMAIL    )),
-    aHomePageED         (this, ResId( ED_WWW        )),
-    aMailED             (this, ResId( ED_MAIL       ))
+    aDataFL             (this, SW_RES( FL_DATA       )),
+    aNameFT             (this, SW_RES( FT_NAME      )),
+    aFirstNameED        (this, SW_RES( ED_FIRSTNAME )),
+    aNameED             (this, SW_RES( ED_NAME      )),
+    aShortCutED         (this, SW_RES( ED_SHORTCUT  )),
+    aName2FT            (this, SW_RES( FT_NAME_2        )),
+    aFirstName2ED       (this, SW_RES( ED_FIRSTNAME_2)),
+    aName2ED            (this, SW_RES( ED_NAME_2        )),
+    aShortCut2ED        (this, SW_RES( ED_SHORTCUT_2    )),
+    aStreetFT           (this, SW_RES( FT_STREET        )),
+    aStreetED           (this, SW_RES( ED_STREET        )),
+    aZipCityFT          (this, SW_RES( FT_ZIPCITY   )),
+    aZipED              (this, SW_RES( ED_ZIP       )),
+    aCityED             (this, SW_RES( ED_CITY      )),
+    aCountryStateFT     (this, SW_RES( FT_COUNTRYSTATE )),
+    aCountryED          (this, SW_RES( ED_COUNTRY   )),
+    aStateED            (this, SW_RES( ED_STATE     )),
+    aTitleProfessionFT  (this, SW_RES( FT_TITLEPROF )),
+    aProfessionED       (this, SW_RES( ED_PROFESSION    )),
+    aTitleED            (this, SW_RES( ED_TITLE     )),
+    aPhoneFT            (this, SW_RES( FT_PHONE_MOBILE  )),
+    aPhoneED            (this, SW_RES( ED_PHONE     )),
+    aMobilePhoneED      (this, SW_RES( ED_MOBILE        )),
+    aFaxFT              (this, SW_RES( FT_FAX       )),
+    aFaxED              (this, SW_RES( ED_FAX       )),
+    aWWWMailFT          (this, SW_RES( FT_WWWMAIL   )),
+    aHomePageED         (this, SW_RES( ED_WWW       )),
+    aMailED             (this, SW_RES( ED_MAIL      ))
 {
     FreeResource();
     SetExchangeSupport();
@@ -1029,31 +1029,31 @@ void SwPrivateDataPage::Reset(const SfxItemSet& rSet)
  --------------------------------------------------*/
 SwBusinessDataPage::SwBusinessDataPage(Window* pParent, const SfxItemSet& rSet) :
     SfxTabPage(pParent, SW_RES(TP_BUSINESS_DATA), rSet),
-    aDataFL             (this, ResId( FL_DATA       )),
-    aCompanyFT          (this, ResId( FT_COMP       )),
-    aCompanyED          (this, ResId( ED_COMP       )),
-    aCompanyExtFT       (this, ResId( FT_COMP_EXT   )),
-    aCompanyExtED       (this, ResId( ED_COMP_EXT   )),
-    aSloganFT           (this, ResId( FT_SLOGAN     )),
-    aSloganED           (this, ResId( ED_SLOGAN     )),
-    aStreetFT           (this, ResId( FT_STREET     )),
-    aStreetED           (this, ResId( ED_STREET     )),
-    aZipCityFT          (this, ResId( FT_ZIPCITY    )),
-    aZipED              (this, ResId( ED_ZIP        )),
-    aCityED             (this, ResId( ED_CITY       )),
-    aCountryStateFT     (this, ResId( FT_COUNTRYSTATE   )),
-    aCountryED          (this, ResId( ED_COUNTRY    )),
-    aStateED            (this, ResId( ED_STATE      )),
-    aPositionFT         (this, ResId( FT_POSITION   )),
-    aPositionED         (this, ResId( ED_POSITION   )),
-    aPhoneFT            (this, ResId( FT_PHONE_MOBILE   )),
-    aPhoneED            (this, ResId( ED_PHONE      )),
-    aMobilePhoneED      (this, ResId( ED_MOBILE     )),
-    aFaxFT              (this, ResId( FT_FAX        )),
-    aFaxED              (this, ResId( ED_FAX        )),
-    aWWWMailFT          (this, ResId( FT_WWWMAIL    )),
-    aHomePageED         (this, ResId( ED_WWW        )),
-    aMailED             (this, ResId( ED_MAIL       ))
+    aDataFL             (this, SW_RES( FL_DATA       )),
+    aCompanyFT          (this, SW_RES( FT_COMP      )),
+    aCompanyED          (this, SW_RES( ED_COMP      )),
+    aCompanyExtFT       (this, SW_RES( FT_COMP_EXT  )),
+    aCompanyExtED       (this, SW_RES( ED_COMP_EXT  )),
+    aSloganFT           (this, SW_RES( FT_SLOGAN        )),
+    aSloganED           (this, SW_RES( ED_SLOGAN        )),
+    aStreetFT           (this, SW_RES( FT_STREET        )),
+    aStreetED           (this, SW_RES( ED_STREET        )),
+    aZipCityFT          (this, SW_RES( FT_ZIPCITY   )),
+    aZipED              (this, SW_RES( ED_ZIP       )),
+    aCityED             (this, SW_RES( ED_CITY      )),
+    aCountryStateFT     (this, SW_RES( FT_COUNTRYSTATE  )),
+    aCountryED          (this, SW_RES( ED_COUNTRY   )),
+    aStateED            (this, SW_RES( ED_STATE     )),
+    aPositionFT         (this, SW_RES( FT_POSITION  )),
+    aPositionED         (this, SW_RES( ED_POSITION  )),
+    aPhoneFT            (this, SW_RES( FT_PHONE_MOBILE  )),
+    aPhoneED            (this, SW_RES( ED_PHONE     )),
+    aMobilePhoneED      (this, SW_RES( ED_MOBILE        )),
+    aFaxFT              (this, SW_RES( FT_FAX       )),
+    aFaxED              (this, SW_RES( ED_FAX       )),
+    aWWWMailFT          (this, SW_RES( FT_WWWMAIL   )),
+    aHomePageED         (this, SW_RES( ED_WWW       )),
+    aMailED             (this, SW_RES( ED_MAIL      ))
 {
     FreeResource();
     SetExchangeSupport();
