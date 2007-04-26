@@ -4,9 +4,9 @@
  *
  *  $RCSfile: txtnum.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 23:18:58 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:19:02 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -194,7 +194,7 @@ void SwTextShell::ExecEnterNum(SfxRequest &rReq)
 //CHINA001      GetView().GetWindow(), &aSet, GetShell() );
         SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();
         DBG_ASSERT(pFact, "Dialogdiet fail!");//CHINA001
-        SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( ResId(DLG_SVXTEST_NUM_BULLET),
+        SfxAbstractTabDialog* pDlg = pFact->CreateSwTabDialog( DLG_SVXTEST_NUM_BULLET,
                                                         GetView().GetWindow(), &aSet, GetShell());
         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         USHORT nRet = pDlg->Execute();
