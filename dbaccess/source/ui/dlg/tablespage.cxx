@@ -4,9 +4,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2006-10-05 13:04:34 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:01:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -149,9 +149,9 @@ DBG_NAME(OTableSubscriptionPage)
     OTableSubscriptionPage::OTableSubscriptionPage( Window* pParent, const SfxItemSet& _rCoreAttrs,OTableSubscriptionDialog* _pTablesDlg )
         :OGenericAdministrationPage( pParent, ModuleRes(PAGE_TABLESUBSCRIPTION), _rCoreAttrs )
         ,OContainerListener( m_aNotifierMutex )
-        ,m_aTables              (this, ResId(FL_SEPARATOR1))
-        ,m_aTablesList          (this, NULL,ResId(CTL_TABLESUBSCRIPTION),sal_True)
-        ,m_aExplanation         (this, ResId(FT_FILTER_EXPLANATION))
+        ,m_aTables              (this, ModuleRes(FL_SEPARATOR1))
+        ,m_aTablesList          (this, NULL,ModuleRes(CTL_TABLESUBSCRIPTION),sal_True)
+        ,m_aExplanation         (this, ModuleRes(FT_FILTER_EXPLANATION))
         ,m_bCheckedAll          ( sal_False )
         ,m_bCatalogAtStart      ( sal_True )
         ,m_pTablesDlg(_pTablesDlg)
