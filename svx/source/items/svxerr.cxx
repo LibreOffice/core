@@ -4,9 +4,9 @@
  *
  *  $RCSfile: svxerr.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 05:23:24 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:50:18 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -52,7 +52,7 @@ static SvxErrorHandler* pHandler=NULL;
 SvxErrorHandler::SvxErrorHandler() :
 
   SfxErrorHandler(
-      RID_SVXERRCODE, ERRCODE_AREA_SVX, ERRCODE_AREA_SVX_END, DIALOG_MGR() )
+      RID_SVXERRCODE, ERRCODE_AREA_SVX, ERRCODE_AREA_SVX_END, &DIALOG_MGR() )
 {
     pHandler = this;
 }
