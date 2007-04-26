@@ -4,9 +4,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2006-10-11 08:23:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:20:34 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -136,7 +136,7 @@ ResId padmin::PaResId( sal_uInt32 nId )
         aSettings.SetUILocale( aLocale );
         Application::SetSettings( aSettings );
     }
-    return ResId( nId, pPaResMgr );
+    return ResId( nId, *pPaResMgr );
 }
 
 /*
