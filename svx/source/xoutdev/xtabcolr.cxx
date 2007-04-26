@@ -4,9 +4,9 @@
  *
  *  $RCSfile: xtabcolr.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ihi $ $Date: 2006-11-14 13:57:57 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 07:53:48 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -183,7 +183,7 @@ BOOL XColorTable::Create()
 {
     XubString aStr;
     xub_StrLen nLen;
-    ResMgr* pRes = DIALOG_MGR();
+    ResMgr& rRes = DIALOG_MGR();
 
     static USHORT __READONLY_DATA aResId[] =
     {
@@ -237,7 +237,7 @@ BOOL XColorTable::Create()
     for( USHORT n = 0; n < 16; ++n )
     {
         Insert( n, new XColorEntry( Color( aColTab[n] ),
-                                    String( ResId( aResId[ n ], pRes )) ) );
+                                    String( ResId( aResId[ n ], rRes )) ) );
     }
 
     aStr = SVX_RESSTR( RID_SVXSTR_GREY );
