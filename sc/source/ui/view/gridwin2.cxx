@@ -4,9 +4,9 @@
  *
  *  $RCSfile: gridwin2.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2007-02-27 13:51:53 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:57:06 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -134,7 +134,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
 
             AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewData->GetViewShell()->GetDialogParent(),
                                                                             aArgSet, nSrcTab,
-                                                                            ResId(RID_SCDLG_PIVOTFILTER));
+                                                                            RID_SCDLG_PIVOTFILTER);
             DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
             if ( pDlg->Execute() == RET_OK )
             {
@@ -230,7 +230,7 @@ void ScGridWindow::DoPushButton( SCCOL nCol, SCROW nRow, const MouseEvent& rMEvt
 
             AbstractScPivotFilterDlg* pDlg = pFact->CreateScPivotFilterDlg( pViewData->GetViewShell()->GetDialogParent(),
                                                                             aArgSet, nSrcTab,
-                                                                            ResId(RID_SCDLG_PIVOTFILTER));
+                                                                            RID_SCDLG_PIVOTFILTER);
             DBG_ASSERT(pDlg, "Dialog create fail!");//CHINA001
             if ( pDlg->Execute() == RET_OK )
             {
