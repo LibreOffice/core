@@ -4,9 +4,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.107 $
+ *  $Revision: 1.108 $
  *
- *  last change: $Author: rt $ $Date: 2007-04-17 13:56:49 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 10:37:32 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -5589,6 +5589,7 @@ void PDFWriterImpl::registerGlyphs( int nGlyphs,
                     }
                 }
             }
+
             pMappedGlyphs[ i ] = (sal_Int8)cChar;
             pMappedFontObjects[ i ] = nCurFontID;
             pGlyphWidths[ i ] = m_aFontCache.getGlyphWidth( pCurrentFont,
@@ -6000,8 +6001,19 @@ void PDFWriterImpl::drawLayout( SalLayout& rLayout, const String& rText, bool bT
             else
                 pFallbackFonts[i] = NULL;
 
-            if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
+            if( (pGlyphs[i] & GF_ISCHAR) )
+                pUnicodes[i] = sal::static_int_cast<sal_Unicode>(pGlyphs[i] & GF_IDXMASK);
+            else if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
                 pUnicodes[i] = rText.GetChar( sal::static_int_cast<xub_StrLen>(pCharPosAry[i]) );
+                // #i36691# hack that is needed because currently the pGlyphs[]
+                // argument is ignored for embeddable fonts and so the layout
+                // engine's glyph work is ignored (i.e. char mirroring)
+                // TODO: a real solution would be to map the layout engine's
+                // glyphid (i.e. FreeType's synthetic glyphid for a Type1 font)
+                // back to unicode and then to embeddable font's encoding
+                if( getReferenceDevice()->GetLayoutMode() & TEXT_LAYOUT_BIDI_RTL )
+                    pUnicodes[i] = sal::static_int_cast<sal_Unicode>(GetMirroredChar(pUnicodes[i]));
+            }
             else
                 pUnicodes[i] = 0;
             // note: in case of ctl one character may result
