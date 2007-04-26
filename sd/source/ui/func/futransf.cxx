@@ -4,9 +4,9 @@
  *
  *  $RCSfile: futransf.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2006-12-12 17:26:10 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 08:39:28 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -107,7 +107,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if ( pFact )
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView, ResId( RID_SVXDLG_CAPTION ) ) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateCaptionDialog( NULL, mpView, RID_SVXDLG_CAPTION ) );
 
                     const USHORT* pRange = pDlg->GetInputRanges( *aNewAttr.GetPool() );
                     SfxItemSet aCombSet( *aNewAttr.GetPool(), pRange );
@@ -127,7 +127,7 @@ void FuTransform::DoExecute( SfxRequest& rReq )
                 SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                 if(pFact)
                 {
-                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet,mpView, ResId(RID_SVXDLG_TRANSFORM) ) );
+                    std::auto_ptr< SfxAbstractTabDialog > pDlg( pFact->CreateSvxTransformTabDialog( NULL, &aSet,mpView, RID_SVXDLG_TRANSFORM) );
                     if( pDlg.get() && (pDlg->Execute() == RET_OK) )
                     {
                         rReq.Done( *( pDlg->GetOutputItemSet() ) );
