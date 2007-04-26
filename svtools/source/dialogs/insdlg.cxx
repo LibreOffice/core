@@ -4,9 +4,9 @@
  *
  *  $RCSfile: insdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-17 14:44:31 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:43:22 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -47,6 +47,7 @@
 //#include <tools/debug.hxx>
 //#include <svtools/urihelper.hxx>
 #include "sores.hxx"
+#include "svtdata.hxx"
 
 #include <sot/clsids.hxx>
 #include <tools/rc.hxx>
@@ -257,7 +258,7 @@ void SvObjectServerList::FillInsertObjects()
 
 #ifdef WNT
     SvGlobalName aOleFact( SO3_OUT_CLASSID );
-    String aOleObj( ResId( STR_FURTHER_OBJECT ) );
+    String aOleObj( SvtResId( STR_FURTHER_OBJECT ) );
     Append( SvObjectServer( aOleFact, aOleObj ) );
 #endif
 
@@ -359,7 +360,7 @@ String SvPasteObjectHelper::GetSotFormatUIName( SotFormatStringId nId )
     }
 
     if( nResId )
-        aUIName = String( ResId( nResId ) );
+        aUIName = String( SvtResId( nResId ) );
     else
         aUIName = SotExchange::GetFormatName( nId );
 
@@ -417,7 +418,7 @@ sal_Bool SvPasteObjectHelper::GetEmbeddedName(const TransferableDataHelper& rDat
             }
             else
                 _rSource =
-                    String( ResId( STR_UNKNOWN_SOURCE ) );
+                    String( SvtResId( STR_UNKNOWN_SOURCE ) );
         }
         bRet = sal_True;
     }
