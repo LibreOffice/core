@@ -4,9 +4,9 @@
  *
  *  $RCSfile: mmlayoutpage.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2006-09-16 22:46:26 $
+ *  last change: $Author: rt $ $Date: 2007-04-26 09:03:55 $
  *
  *  The Contents of this file are made available subject to
  *  the terms of GNU Lesser General Public License Version 2.1.
@@ -160,22 +160,22 @@ using namespace ::com::sun::star::view;
 SwMailMergeLayoutPage::SwMailMergeLayoutPage( SwMailMergeWizard* _pParent) :
     svt::OWizardPage( _pParent, SW_RES(DLG_MM_LAYOUT_PAGE)),
 #pragma warning (disable : 4355)
-    m_aHeaderFI( this, ResId(         FI_HEADER             )),
-    m_aAlignToBodyCB( this, ResId(      CB_ALIGN              )),
-    m_aPositionFL( this, ResId(       FL_POSITION           )),
-    m_aLeftFT( this, ResId(           FT_LEFT               )),
-    m_aLeftMF( this, ResId(           MF_LEFT               )),
-    m_aTopFT( this, ResId(            FT_TOP                )),
-    m_aTopMF( this, ResId(            MF_TOP                )),
-    m_aGreetingLineFL( this, ResId(   FL_GREETINGLINE       )),
-    m_aUpFT( this, ResId(             FT_UP                 )),
-    m_aUpPB( this, ResId(             MF_UP                 )),
-    m_aDownFT( this, ResId(           FT_DOWN               )),
-    m_aDownPB( this, ResId(           PB_DOWN               )),
-    m_aExampleContainerWIN( this, ResId(  WIN_EXAMPLECONTAINER      )),
+    m_aHeaderFI( this, SW_RES(         FI_HEADER             )),
+    m_aAlignToBodyCB( this, SW_RES(      CB_ALIGN              )),
+    m_aPositionFL( this, SW_RES(       FL_POSITION           )),
+    m_aLeftFT( this, SW_RES(           FT_LEFT               )),
+    m_aLeftMF( this, SW_RES(           MF_LEFT               )),
+    m_aTopFT( this, SW_RES(            FT_TOP                )),
+    m_aTopMF( this, SW_RES(            MF_TOP                )),
+    m_aGreetingLineFL( this, SW_RES(   FL_GREETINGLINE       )),
+    m_aUpFT( this, SW_RES(             FT_UP                 )),
+    m_aUpPB( this, SW_RES(             MF_UP                 )),
+    m_aDownFT( this, SW_RES(           FT_DOWN               )),
+    m_aDownPB( this, SW_RES(           PB_DOWN               )),
+    m_aExampleContainerWIN( this, SW_RES(  WIN_EXAMPLECONTAINER      )),
     m_aExampleWIN( this, 0 ),
-    m_aZoomFT( this, ResId(           FT_ZOOM               )),
-    m_aZoomLB( this, ResId(           LB_ZOOM               )),
+    m_aZoomFT( this, SW_RES(           FT_ZOOM               )),
+    m_aZoomLB( this, SW_RES(           LB_ZOOM               )),
 #pragma warning (default : 4355)
     m_pWizard(_pParent),
     m_pAddressBlockFormat(0),
